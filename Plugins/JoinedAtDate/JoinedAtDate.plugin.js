@@ -1,237 +1,75 @@
 ﻿//META{"name":"JoinedAtDate","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/JoinedAtDate","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/JoinedAtDate/JoinedAtDate.plugin.js"}*//
 
-var JoinedAtDate = (_ => {
-	var loadedUsers, requestedUsers, languages;
-	var settings = {}, choices = {}, formats = {}, amounts = {};
-	
-	return class JoinedAtDate {
-		getName () {return "JoinedAtDate";}
-
-		getVersion () {return "1.2.4";}
-
-		getAuthor () {return "DevilBro";}
-
-		getDescription () {return "Displays the Joined At Date of the current Server for a Member in the UserPopout and UserModal.";}
-
-		constructor () {
-			this.patchedModules = {
-				after: {
-					UserPopout: "render",
-					AnalyticsContext: "render"
-				}
-			};
+module.exports = (_ => {
+    const config = {
+		"info": {
+			"name": "JoinedAtDate",
+			"author": "DevilBro",
+			"version": "1.2.4",
+			"description": "Displays the Joined At Date of the current Server for a Member in the UserPopout and UserModal."
 		}
-
-		initConstructor () {
-			loadedUsers = {};
-			requestedUsers = {};
-
-			this.defaults = {
-				settings: {
-					addInUserPopout:		{value:true, 			description:"Add in User Popouts"},
-					addInUserProfil:		{value:true, 			description:"Add in User Profile Modal"},
-					displayText:			{value:true, 			description:"Display 'Joined on' text in the timestamp"},
-					displayTime:			{value:true, 			description:"Display the time in the timestamp"},
-					displayDate:			{value:true, 			description:"Display the date in the timestamp"},
-					cutSeconds:				{value:false, 			description:"Cut off seconds of the time"},
-					forceZeros:				{value:false, 			description:"Force leading zeros"},
-					otherOrder:				{value:false, 			description:"Show the time before the date"}
-				},
-				choices: {
-					joinedAtDateLang:		{value:"$discord", 		description:"Joined At Date Format"}
-				},
-				formats: {
-					ownFormat:				{value:"$hour:$minute:$second, $day.$month.$year", 	description:"Own Format"}
-				},
-				amounts: {
-					maxDaysAgo:				{value:0, 	min:0,		description:"Maximum count of days displayed in the $daysago placeholder",	note:"0 equals no limit"}
-				}
-			};
-		}
-
-		getSettingsPanel (collapseStates = {}) {
-			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-			settings = BDFDB.DataUtils.get(this, "settings");
-			choices = BDFDB.DataUtils.get(this, "choices");
-			formats = BDFDB.DataUtils.get(this, "formats");
-			amounts = BDFDB.DataUtils.get(this, "amounts");
-			let settingsPanel, settingsItems = [], innerItems = [];
-			
-			for (let key in settings) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-				className: BDFDB.disCN.marginbottom8,
-				type: "Switch",
-				plugin: this,
-				keys: ["settings", key],
-				label: this.defaults.settings[key].description,
-				value: settings[key],
-				onChange: (value, instance) => {
-					settings[key] = value;
-					BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
-				}
-			}));
-			
-			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-				title: "Settings",
-				collapseStates: collapseStates,
-				children: innerItems
-			}));
-			
-			innerItems = [];
-			
-			for (let key in choices) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-				className: BDFDB.disCN.marginbottom8,
-				type: "Select",
-				plugin: this,
-				keys: ["choices", key],
-				label: this.defaults.choices[key].description,
-				basis: "70%",
-				value: choices[key],
-				options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value:id, label:lang.name}})),
-				searchable: true,
-				optionRenderer: lang => {
-					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-						align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-						children: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-								grow: 0,
-								shrink: 0,
-								basis: "40%",
-								children: lang.label
-							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-								grow: 0,
-								shrink: 0,
-								basis: "60%",
-								children: this.getTimestamp(languages[lang.value].id)
-							})
-						]
-					});
-				},
-				valueRenderer: lang => {
-					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-						align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-						children: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-								grow: 0,
-								shrink: 0,
-								children: lang.label
-							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-								grow: 1,
-								shrink: 0,
-								basis: "70%",
-								children: this.getTimestamp(languages[lang.value].id)
-							})
-						]
-					});
-				}
-			}));
-			
-			innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-				className: BDFDB.disCN.marginbottom8
-			}));
-			
-			for (let key in formats) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-				className: BDFDB.disCN.marginbottom8,
-				type: "TextInput",
-				plugin: this,
-				keys: ["formats", key],
-				label: this.defaults.formats[key].description,
-				basis: "70%",
-				value: formats[key],
-				onChange: (value, instance) => {
-					formats[key] = value;
-					BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
-				}
-			}));
-			
-			innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-				className: BDFDB.disCN.marginbottom8
-			}));
-			
-			for (let key in amounts) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-				className: BDFDB.disCN.marginbottom8,
-				type: "TextInput",
-				childProps: {
-					type: "number"
-				},
-				plugin: this,
-				keys: ["amounts", key],
-				label: this.defaults.amounts[key].description,
-				note: this.defaults.amounts[key].note,
-				basis: "20%",
-				min: this.defaults.amounts[key].min,
-				max: this.defaults.amounts[key].max,
-				value: amounts[key]
-			}));
-			
-			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-				title: "Format",
-				collapseStates: collapseStates,
-				children: innerItems
-			}));
-			
-			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-				title: "Placeholder Guide",
-				dividertop: true,
-				collapseStates: collapseStates,
-				children: [
-					"$hour will be replaced with the hour of the date",
-					"$minute will be replaced with the minutes of the date",
-					"$second will be replaced with the seconds of the date",
-					"$msecond will be replaced with the milliseconds",
-					"$timemode will change $hour to a 12h format and will be replaced with AM/PM",
-					"$year will be replaced with the year of the date",
-					"$yearS will be replaced with the year in short form",
-					"$month will be replaced with the month of the date",
-					"$day will be replaced with the day of the date",
-					"$monthnameL will be replaced with the monthname in long format based on the Discord Language",
-					"$monthnameS will be replaced with the monthname in short format based on the Discord Language",
-					"$weekdayL will be replaced with the weekday in long format based on the Discord Language",
-					"$weekdayS will be replaced with the weekday in short format based on the Discord Language",
-					"$daysago will be replaced with a string to tell you how many days ago the event occured. For Example: " + BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", 3)
-				].map(string => {
-					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
-						type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
-						children: string
-					});
-				})
-			}));
-			
-			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
-		}
-
-		// Legacy
-		load () {
-			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) BDFDB.PluginUtils.load(this);
-		}
-
-		start () {
-			if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
-			if (window.BDFDB && window.BDFDB.myPlugins && typeof window.BDFDB.myPlugins == "object") window.BDFDB.myPlugins[this.getName()] = this;
-			let libraryScript = document.querySelector("head script#BDFDBLibraryScript");
-			if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
-				if (libraryScript) libraryScript.remove();
-				libraryScript = document.createElement("script");
-				libraryScript.setAttribute("id", "BDFDBLibraryScript");
-				libraryScript.setAttribute("type", "text/javascript");
-				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
-				libraryScript.setAttribute("date", performance.now());
-				libraryScript.addEventListener("load", _ => {this.initialize();});
-				document.head.appendChild(libraryScript);
+	};
+    return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return config.info.description;}
+		
+        load() {
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global.downloadModal) {
+				window.BDFDB_Global.downloadModal = true;
+				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
+					confirmText: "Download Now",
+					cancelText: "Cancel",
+					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
+					onConfirm: _ => {delete window.BDFDB_Global.downloadModal;require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (error, response, body) => {require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), body, _ => {});});}
+				});
 			}
-			else if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-			this.startTimeout = setTimeout(_ => {
-				try {return this.initialize();}
-				catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
-			}, 30000);
-		}
+			if (!window.BDFDB_Global.pluginQueue.includes(config.info.name)) window.BDFDB_Global.pluginQueue.push(config.info.name);
+        }
+        start() {}
+        stop() {}
+    } : (([Plugin, BDFDB]) => {
+		var loadedUsers, requestedUsers, languages;
+		var settings = {}, choices = {}, formats = {}, amounts = {};
+		
+        return class JoinedAtDate extends Plugin {
+			onLoad() {
+				loadedUsers = {};
+				requestedUsers = {};
 
-		initialize () {
-			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				if (this.started) return;
-				BDFDB.PluginUtils.init(this);
-
+				this.defaults = {
+					settings: {
+						addInUserPopout:		{value:true, 			description:"Add in User Popouts"},
+						addInUserProfil:		{value:true, 			description:"Add in User Profile Modal"},
+						displayText:			{value:true, 			description:"Display 'Joined on' text in the timestamp"},
+						displayTime:			{value:true, 			description:"Display the time in the timestamp"},
+						displayDate:			{value:true, 			description:"Display the date in the timestamp"},
+						cutSeconds:				{value:false, 			description:"Cut off seconds of the time"},
+						forceZeros:				{value:false, 			description:"Force leading zeros"},
+						otherOrder:				{value:false, 			description:"Show the time before the date"}
+					},
+					choices: {
+						joinedAtDateLang:		{value:"$discord", 		description:"Joined At Date Format"}
+					},
+					formats: {
+						ownFormat:				{value:"$hour:$minute:$second, $day.$month.$year", 	description:"Own Format"}
+					},
+					amounts: {
+						maxDaysAgo:				{value:0, 	min:0,		description:"Maximum count of days displayed in the $daysago placeholder",	note:"0 equals no limit"}
+					}
+				};
+				
+				this.patchedModules = {
+					after: {
+						UserPopout: "render",
+						AnalyticsContext: "render"
+					}
+				};
+			}
+			
+			onStart() {
 				languages = BDFDB.ObjectUtils.deepAssign({
 					own: {
 						name: "Own",
@@ -241,226 +79,343 @@ var JoinedAtDate = (_ => {
 
 				this.forceUpdateAll();
 			}
-			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
-		}
-
-
-		stop () {
-			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				this.stopping = true;
-
-				this.forceUpdateAll();
-				
-				BDFDB.PluginUtils.clear(this);
-			}
-		}
-
-
-		// Begin of own functions
-
-		onSettingsClosed () {
-			if (this.SettingsUpdated) {
-				delete this.SettingsUpdated;
-				this.forceUpdateAll();
-			}
-		}
-
-		processUserPopout (e) {
-			if (e.instance.props.user && e.instance.props.guild && settings.addInUserPopout) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
-				if (index > -1) this.injectDate(e.instance, children, 2, e.instance.props.user, e.instance.props.guild.id);
-			}
-		}
-
-		processAnalyticsContext (e) {
-			if (typeof e.returnvalue.props.children == "function" && e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.PROFILE_MODAL && settings.addInUserProfil) {
-				let renderChildren = e.returnvalue.props.children;
-				e.returnvalue.props.children = (...args) => {
-					let renderedChildren = renderChildren(...args);
-					let [children, index] = BDFDB.ReactUtils.findParent(renderedChildren, {name: ["DiscordTag", "ColoredFluxTag"]});
-					if (index > -1) this.injectDate(e.instance, children, 1, children[index].props.user, BDFDB.ReactUtils.findValue(e.instance, "guildId", {up: true}));
-					return renderedChildren;
-				};
-			}
-		}
-
-		injectDate (instance, children, index, user, guildId) {
-			if (!guildId) guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-			if (!BDFDB.ArrayUtils.is(children) || !user || !guildId || user.discriminator == "0000" || !BDFDB.LibraryModules.MemberStore.getMember(guildId, user.id)) return;
-			if (!loadedUsers[guildId]) loadedUsers[guildId] = {};
-			if (!requestedUsers[guildId]) requestedUsers[guildId] = {};
-			if (!BDFDB.ArrayUtils.is(requestedUsers[guildId][user.id])) {
-				requestedUsers[guildId][user.id] = [instance];
-				BDFDB.LibraryModules.APIUtils.get(BDFDB.DiscordConstants.Endpoints.GUILD_MEMBER(guildId, user.id)).then(result => {
-					loadedUsers[guildId][user.id] = new Date(result.body.joined_at);
-					for (let queredinstance of requestedUsers[guildId][user.id]) BDFDB.ReactUtils.forceUpdate(queredinstance);
-				});
-			}
-			else if (!loadedUsers[guildId][user.id]) requestedUsers[guildId][user.id].push(instance);
-			else {
-				let timestamp = this.getTimestamp(languages[choices.joinedAtDateLang].id, loadedUsers[guildId][user.id]);
-				children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-					className: BDFDB.disCNS._joinedatdatedate + BDFDB.disCNS.userinfodate + BDFDB.disCN.textrow,
-					children: settings.displayText ? this.labels.joinedat_text.replace("{{time}}", timestamp) : timestamp
-				}));
-			}
-		}
-
-		getTimestamp (languageId, time) {
-			let timeObj = time || new Date();
-			if (typeof time == "string" || typeof time == "number") timeObj = new Date(time);
-			if (timeObj.toString() == "Invalid Date") timeObj = new Date(parseInt(time));
-			if (timeObj.toString() == "Invalid Date") return;
-			let timeString = "";
-			if (languageId != "own") {
-				let timestamp = [];
-				if (settings.displayDate) 	timestamp.push(timeObj.toLocaleDateString(languageId));
-				if (settings.displayTime) 	timestamp.push(settings.cutSeconds ? this.cutOffSeconds(timeObj.toLocaleTimeString(languageId)) : timeObj.toLocaleTimeString(languageId));
-				if (settings.otherOrder)	timestamp.reverse();
-				timeString = timestamp.length > 1 ? timestamp.join(", ") : (timestamp.length > 0 ? timestamp[0] : "");
-				if (timeString && settings.forceZeros) timeString = this.addLeadingZeros(timeString);
-			}
-			else {
-				languageId = BDFDB.LanguageUtils.getLanguage().id;
-				let now = new Date();
-				let hour = timeObj.getHours(), minute = timeObj.getMinutes(), second = timeObj.getSeconds(), msecond = timeObj.getMilliseconds(), day = timeObj.getDate(), month = timeObj.getMonth()+1, timemode = "", daysago = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(timeObj.getFullYear(), timeObj.getMonth(), timeObj.getDate()))/(1000*60*60*24));
-				if (formats.ownFormat.indexOf("$timemode") > -1) {
-					timemode = hour >= 12 ? "PM" : "AM";
-					hour = hour % 12;
-					hour = hour ? hour : 12;
-				}
-				timeString = formats.ownFormat
-					.replace(/\$hour/g, settings.forceZeros && hour < 10 ? "0" + hour : hour)
-					.replace(/\$minute/g, minute < 10 ? "0" + minute : minute)
-					.replace(/\$second/g, second < 10 ? "0" + second : second)
-					.replace(/\$msecond/g, settings.forceZeros ? (msecond < 10 ? "00" + msecond : (msecond < 100 ? "0" + msecond : msecond)) : msecond)
-					.replace(/\$timemode/g, timemode)
-					.replace(/\$weekdayL/g, timeObj.toLocaleDateString(languageId, {weekday: "long"}))
-					.replace(/\$weekdayS/g, timeObj.toLocaleDateString(languageId, {weekday: "short"}))
-					.replace(/\$monthnameL/g, timeObj.toLocaleDateString(languageId, {month: "long"}))
-					.replace(/\$monthnameS/g, timeObj.toLocaleDateString(languageId, {month: "short"}))
-					.replace(/\$daysago/g, amounts.maxDaysAgo == 0 || amounts.maxDaysAgo >= daysago ? (daysago > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", daysago) : BDFDB.LanguageUtils.LanguageStrings.SEARCH_SHORTCUT_TODAY) : "")
-					.replace(/\$day/g, settings.forceZeros && day < 10 ? "0" + day : day)
-					.replace(/\$month/g, settings.forceZeros && month < 10 ? "0" + month : month)
-					.replace(/\$yearS/g, parseInt(timeObj.getFullYear().toString().slice(-2)))
-					.replace(/\$year/g, timeObj.getFullYear())
-					.trim().split(" ").filter(n => n).join(" ");
-			}
-			return timeString;
-		}
-
-		cutOffSeconds (timeString) {
-			return timeString.replace(/(.{1,2}:.{1,2}):.{1,2}(.*)/, "$1$2").replace(/(.{1,2}\..{1,2})\..{1,2}(.*)/, "$1$2").replace(/(.{1,2} h .{1,2} min) .{1,2} s(.*)/, "$1$2");
-		}
-
-		addLeadingZeros (timeString) {
-			let charArray = timeString.split("");
-			let numreg = /[0-9]/;
-			for (let i = 0; i < charArray.length; i++) {
-				if (!numreg.test(charArray[i-1]) && numreg.test(charArray[i]) && !numreg.test(charArray[i+1])) charArray[i] = "0" + charArray[i];
-			}
-
-			return charArray.join("");
-		}
-		
-		forceUpdateAll() {
-			settings = BDFDB.DataUtils.get(this, "settings");
-			choices = BDFDB.DataUtils.get(this, "choices");
-			formats = BDFDB.DataUtils.get(this, "formats");
-			amounts = BDFDB.DataUtils.get(this, "amounts");
 			
-			BDFDB.PatchUtils.forceAllUpdates(this);
-		}
-
-		setLabelsByLanguage () {
-			switch (BDFDB.LanguageUtils.getLanguage().id) {
-				case "hr":		//croatian
-					return {
-						joinedat_text:				"Pridružio {{time}}"
-					};
-				case "da":		//danish
-					return {
-						joinedat_text:				"Tilmeldt den {{time}}"
-					};
-				case "de":		//german
-					return {
-						joinedat_text:				"Beigetreten am {{time}}"
-					};
-				case "es":		//spanish
-					return {
-						joinedat_text:				"Unido el {{time}}"
-					};
-				case "fr":		//french
-					return {
-						joinedat_text:				"Rejoint le {{time}}"
-					};
-				case "it":		//italian
-					return {
-						joinedat_text:				"Iscritto il {{time}}"
-					};
-				case "nl":		//dutch
-					return {
-						joinedat_text:				"Aangesloten op {{time}}"
-					};
-				case "no":		//norwegian
-					return {
-						joinedat_text:				"Ble med på {{time}}"
-					};
-				case "pl":		//polish
-					return {
-						joinedat_text:				"Dołączył {{time}}"
-					};
-				case "pt-BR":	//portuguese (brazil)
-					return {
-						joinedat_text:				"Inscreveu-se em {{time}}"
-					};
-				case "fi":		//finnish
-					return {
-						joinedat_text:				"Liittynyt {{time}}"
-					};
-				case "sv":		//swedish
-					return {
-						joinedat_text:				"Anlände den {{time}}"
-					};
-				case "tr":		//turkish
-					return {
-						joinedat_text:				"Katıldı {{time}}"
-					};
-				case "cs":		//czech
-					return {
-						joinedat_text:				"Přihlásil dne {{time}}"
-					};
-				case "bg":		//bulgarian
-					return {
-						joinedat_text:				"Се присъедини на {{time}}"
-					};
-				case "ru":		//russian
-					return {
-						joinedat_text:				"Присоединился {{time}}"
-					};
-				case "uk":		//ukrainian
-					return {
-						joinedat_text:				"Приєднався {{time}}"
-					};
-				case "ja":		//japanese
-					return {
-						joinedat_text:				"{{time}} に参加しました"
-					};
-				case "zh-TW":	//chinese (traditional)
-					return {
-						joinedat_text:				"加入於 {{time}}"
-					};
-				case "ko":		//korean
-					return {
-						joinedat_text:				"{{time}} 에 가입"
-					};
-				default:		//default: english
-					return {
-						joinedat_text:				"Joined on {{time}}"
-					};
+			onStop() {
+				this.forceUpdateAll();
 			}
-		}
-	}
-})();
 
-module.exports = JoinedAtDate;
+			getSettingsPanel (collapseStates = {}) {
+				let settingsPanel, settingsItems = [];
+				
+				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+					title: "Settings",
+					collapseStates: collapseStates,
+					children: Object.keys(settings => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+						className: BDFDB.disCN.marginbottom8,
+						type: "Switch",
+						plugin: this,
+						keys: ["settings", key],
+						label: this.defaults.settings[key].description,
+						value: settings[key],
+						onChange: (value, instance) => {
+							settings[key] = value;
+							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
+						}
+					}))
+				}));
+				
+				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+					title: "Format",
+					collapseStates: collapseStates,
+					children: Object.keys(choices).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+						className: BDFDB.disCN.marginbottom8,
+						type: "Select",
+						plugin: this,
+						keys: ["choices", key],
+						label: this.defaults.choices[key].description,
+						basis: "70%",
+						value: choices[key],
+						options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value:id, label:lang.name}})),
+						searchable: true,
+						optionRenderer: lang => {
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+								align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+										grow: 0,
+										shrink: 0,
+										basis: "40%",
+										children: lang.label
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+										grow: 0,
+										shrink: 0,
+										basis: "60%",
+										children: this.getTimestamp(languages[lang.value].id)
+									})
+								]
+							});
+						},
+						valueRenderer: lang => {
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+								align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+										grow: 0,
+										shrink: 0,
+										children: lang.label
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+										grow: 1,
+										shrink: 0,
+										basis: "70%",
+										children: this.getTimestamp(languages[lang.value].id)
+									})
+								]
+							});
+						}
+					})).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+						className: BDFDB.disCN.marginbottom8
+					})).concat(Object.keys(formats).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+						className: BDFDB.disCN.marginbottom8,
+						type: "TextInput",
+						plugin: this,
+						keys: ["formats", key],
+						label: this.defaults.formats[key].description,
+						basis: "70%",
+						value: formats[key],
+						onChange: (value, instance) => {
+							formats[key] = value;
+							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
+						}
+					}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+						className: BDFDB.disCN.marginbottom8
+					})).concat(Object.keys(amounts).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+						className: BDFDB.disCN.marginbottom8,
+						type: "TextInput",
+						childProps: {
+							type: "number"
+						},
+						plugin: this,
+						keys: ["amounts", key],
+						label: this.defaults.amounts[key].description,
+						note: this.defaults.amounts[key].note,
+						basis: "20%",
+						min: this.defaults.amounts[key].min,
+						max: this.defaults.amounts[key].max,
+						value: amounts[key]
+					})))
+				}));
+				
+				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+					title: "Placeholder Guide",
+					collapseStates: collapseStates,
+					children: [
+						"$hour will be replaced with the hour of the date",
+						"$minute will be replaced with the minutes of the date",
+						"$second will be replaced with the seconds of the date",
+						"$msecond will be replaced with the milliseconds of the date",
+						"$timemode will change $hour to a 12h format and will be replaced with AM/PM",
+						"$year will be replaced with the year of the date",
+						"$yearS will be replaced with the year in short form",
+						"$month will be replaced with the month of the date",
+						"$day will be replaced with the day of the date",
+						"$monthnameL will be replaced with the monthname in long format based on the Discord Language",
+						"$monthnameS will be replaced with the monthname in short format based on the Discord Language",
+						"$weekdayL will be replaced with the weekday in long format based on the Discord Language",
+						"$weekdayS will be replaced with the weekday in short format based on the Discord Language",
+						"$daysago will be replaced with a string to tell you how many days ago the event occured. For Example: " + BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", 3)
+					].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
+						type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
+						children: string
+					}))
+				}));
+				
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+			}
+
+			onSettingsClosed () {
+				if (this.SettingsUpdated) {
+					delete this.SettingsUpdated;
+					this.forceUpdateAll();
+				}
+			}
+		
+			forceUpdateAll() {
+				settings = BDFDB.DataUtils.get(this, "settings");
+				choices = BDFDB.DataUtils.get(this, "choices");
+				formats = BDFDB.DataUtils.get(this, "formats");
+				amounts = BDFDB.DataUtils.get(this, "amounts");
+				
+				BDFDB.PatchUtils.forceAllUpdates(this);
+			}
+
+			processUserPopout (e) {
+				if (e.instance.props.user && e.instance.props.guild && settings.addInUserPopout) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
+					if (index > -1) this.injectDate(e.instance, children, 2, e.instance.props.user, e.instance.props.guild.id);
+				}
+			}
+
+			processAnalyticsContext (e) {
+				if (typeof e.returnvalue.props.children == "function" && e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.PROFILE_MODAL && settings.addInUserProfil) {
+					let renderChildren = e.returnvalue.props.children;
+					e.returnvalue.props.children = (...args) => {
+						let renderedChildren = renderChildren(...args);
+						let [children, index] = BDFDB.ReactUtils.findParent(renderedChildren, {name: ["DiscordTag", "ColoredFluxTag"]});
+						if (index > -1) this.injectDate(e.instance, children, 1, children[index].props.user, BDFDB.ReactUtils.findValue(e.instance, "guildId", {up: true}));
+						return renderedChildren;
+					};
+				}
+			}
+
+			injectDate (instance, children, index, user, guildId) {
+				if (!guildId) guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
+				if (!BDFDB.ArrayUtils.is(children) || !user || !guildId || user.discriminator == "0000" || !BDFDB.LibraryModules.MemberStore.getMember(guildId, user.id)) return;
+				if (!loadedUsers[guildId]) loadedUsers[guildId] = {};
+				if (!requestedUsers[guildId]) requestedUsers[guildId] = {};
+				if (!BDFDB.ArrayUtils.is(requestedUsers[guildId][user.id])) {
+					requestedUsers[guildId][user.id] = [instance];
+					BDFDB.LibraryModules.APIUtils.get(BDFDB.DiscordConstants.Endpoints.GUILD_MEMBER(guildId, user.id)).then(result => {
+						loadedUsers[guildId][user.id] = new Date(result.body.joined_at);
+						for (let queredinstance of requestedUsers[guildId][user.id]) BDFDB.ReactUtils.forceUpdate(queredinstance);
+					});
+				}
+				else if (!loadedUsers[guildId][user.id]) requestedUsers[guildId][user.id].push(instance);
+				else {
+					let timestamp = this.getTimestamp(languages[choices.joinedAtDateLang].id, loadedUsers[guildId][user.id]);
+					children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+						className: BDFDB.disCNS._joinedatdatedate + BDFDB.disCNS.userinfodate + BDFDB.disCN.textrow,
+						children: settings.displayText ? this.labels.joinedat_text.replace("{{time}}", timestamp) : timestamp
+					}));
+				}
+			}
+
+			getTimestamp (languageId, time) {
+				let timeObj = time || new Date();
+				if (typeof time == "string" || typeof time == "number") timeObj = new Date(time);
+				if (timeObj.toString() == "Invalid Date") timeObj = new Date(parseInt(time));
+				if (timeObj.toString() == "Invalid Date") return;
+				let timeString = "";
+				if (languageId != "own") {
+					let timestamp = [];
+					if (settings.displayDate) 	timestamp.push(timeObj.toLocaleDateString(languageId));
+					if (settings.displayTime) 	timestamp.push(settings.cutSeconds ? this.cutOffSeconds(timeObj.toLocaleTimeString(languageId)) : timeObj.toLocaleTimeString(languageId));
+					if (settings.otherOrder)	timestamp.reverse();
+					timeString = timestamp.length > 1 ? timestamp.join(", ") : (timestamp.length > 0 ? timestamp[0] : "");
+					if (timeString && settings.forceZeros) timeString = this.addLeadingZeros(timeString);
+				}
+				else {
+					languageId = BDFDB.LanguageUtils.getLanguage().id;
+					let now = new Date();
+					let hour = timeObj.getHours(), minute = timeObj.getMinutes(), second = timeObj.getSeconds(), msecond = timeObj.getMilliseconds(), day = timeObj.getDate(), month = timeObj.getMonth()+1, timemode = "", daysago = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(timeObj.getFullYear(), timeObj.getMonth(), timeObj.getDate()))/(1000*60*60*24));
+					if (formats.ownFormat.indexOf("$timemode") > -1) {
+						timemode = hour >= 12 ? "PM" : "AM";
+						hour = hour % 12;
+						hour = hour ? hour : 12;
+					}
+					timeString = formats.ownFormat
+						.replace(/\$hour/g, settings.forceZeros && hour < 10 ? "0" + hour : hour)
+						.replace(/\$minute/g, minute < 10 ? "0" + minute : minute)
+						.replace(/\$second/g, second < 10 ? "0" + second : second)
+						.replace(/\$msecond/g, settings.forceZeros ? (msecond < 10 ? "00" + msecond : (msecond < 100 ? "0" + msecond : msecond)) : msecond)
+						.replace(/\$timemode/g, timemode)
+						.replace(/\$weekdayL/g, timeObj.toLocaleDateString(languageId, {weekday: "long"}))
+						.replace(/\$weekdayS/g, timeObj.toLocaleDateString(languageId, {weekday: "short"}))
+						.replace(/\$monthnameL/g, timeObj.toLocaleDateString(languageId, {month: "long"}))
+						.replace(/\$monthnameS/g, timeObj.toLocaleDateString(languageId, {month: "short"}))
+						.replace(/\$daysago/g, amounts.maxDaysAgo == 0 || amounts.maxDaysAgo >= daysago ? (daysago > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", daysago) : BDFDB.LanguageUtils.LanguageStrings.SEARCH_SHORTCUT_TODAY) : "")
+						.replace(/\$day/g, settings.forceZeros && day < 10 ? "0" + day : day)
+						.replace(/\$month/g, settings.forceZeros && month < 10 ? "0" + month : month)
+						.replace(/\$yearS/g, parseInt(timeObj.getFullYear().toString().slice(-2)))
+						.replace(/\$year/g, timeObj.getFullYear())
+						.trim().split(" ").filter(n => n).join(" ");
+				}
+				return timeString;
+			}
+
+			cutOffSeconds (timeString) {
+				return timeString.replace(/(.{1,2}:.{1,2}):.{1,2}(.*)/, "$1$2").replace(/(.{1,2}\..{1,2})\..{1,2}(.*)/, "$1$2").replace(/(.{1,2} h .{1,2} min) .{1,2} s(.*)/, "$1$2");
+			}
+
+			addLeadingZeros (timeString) {
+				let charArray = timeString.split("");
+				let numreg = /[0-9]/;
+				for (let i = 0; i < charArray.length; i++) {
+					if (!numreg.test(charArray[i-1]) && numreg.test(charArray[i]) && !numreg.test(charArray[i+1])) charArray[i] = "0" + charArray[i];
+				}
+
+				return charArray.join("");
+			}
+
+			setLabelsByLanguage () {
+				switch (BDFDB.LanguageUtils.getLanguage().id) {
+					case "hr":		//croatian
+						return {
+							joinedat_text:				"Pridružio {{time}}"
+						};
+					case "da":		//danish
+						return {
+							joinedat_text:				"Tilmeldt den {{time}}"
+						};
+					case "de":		//german
+						return {
+							joinedat_text:				"Beigetreten am {{time}}"
+						};
+					case "es":		//spanish
+						return {
+							joinedat_text:				"Unido el {{time}}"
+						};
+					case "fr":		//french
+						return {
+							joinedat_text:				"Rejoint le {{time}}"
+						};
+					case "it":		//italian
+						return {
+							joinedat_text:				"Iscritto il {{time}}"
+						};
+					case "nl":		//dutch
+						return {
+							joinedat_text:				"Aangesloten op {{time}}"
+						};
+					case "no":		//norwegian
+						return {
+							joinedat_text:				"Ble med på {{time}}"
+						};
+					case "pl":		//polish
+						return {
+							joinedat_text:				"Dołączył {{time}}"
+						};
+					case "pt-BR":	//portuguese (brazil)
+						return {
+							joinedat_text:				"Inscreveu-se em {{time}}"
+						};
+					case "fi":		//finnish
+						return {
+							joinedat_text:				"Liittynyt {{time}}"
+						};
+					case "sv":		//swedish
+						return {
+							joinedat_text:				"Anlände den {{time}}"
+						};
+					case "tr":		//turkish
+						return {
+							joinedat_text:				"Katıldı {{time}}"
+						};
+					case "cs":		//czech
+						return {
+							joinedat_text:				"Přihlásil dne {{time}}"
+						};
+					case "bg":		//bulgarian
+						return {
+							joinedat_text:				"Се присъедини на {{time}}"
+						};
+					case "ru":		//russian
+						return {
+							joinedat_text:				"Присоединился {{time}}"
+						};
+					case "uk":		//ukrainian
+						return {
+							joinedat_text:				"Приєднався {{time}}"
+						};
+					case "ja":		//japanese
+						return {
+							joinedat_text:				"{{time}} に参加しました"
+						};
+					case "zh-TW":	//chinese (traditional)
+						return {
+							joinedat_text:				"加入於 {{time}}"
+						};
+					case "ko":		//korean
+						return {
+							joinedat_text:				"{{time}} 에 가입"
+						};
+					default:		//default: english
+						return {
+							joinedat_text:				"Joined on {{time}}"
+						};
+				}
+			}
+		};
+    })(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+})();

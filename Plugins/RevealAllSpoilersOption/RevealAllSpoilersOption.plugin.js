@@ -1,96 +1,71 @@
 //META{"name":"RevealAllSpoilersOption","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RevealAllSpoilersOption","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/RevealAllSpoilersOption/RevealAllSpoilersOption.plugin.js"}*//
 
-var RevealAllSpoilersOption = (_ => {
-	return class RevealAllSpoilersOption {
-		getName () {return "RevealAllSpoilersOption";}
-
-		getVersion () {return "1.0.5";}
-
-		getAuthor () {return "DevilBro";}
-
-		getDescription () {return "Adds an entry to the message contextmenu to reveal all spoilers within a messageblock.";}
-
-		constructor () {
-			this.changelog = {
-				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
-			};
+module.exports = (_ => {
+    const config = {
+		"info": {
+			"name": "RevealAllSpoilersOption",
+			"author": "DevilBro",
+			"version": "1.0.5",
+			"description": "Adds an entry to the message contextmenu to reveal all spoilers within a messageblock."
 		}
-
-
-		// Legacy
-		load () {
-			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) BDFDB.PluginUtils.load(this);
-		}
-
-		start () {
-			if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
-			if (window.BDFDB && window.BDFDB.myPlugins && typeof window.BDFDB.myPlugins == "object") window.BDFDB.myPlugins[this.getName()] = this;
-			let libraryScript = document.querySelector("head script#BDFDBLibraryScript");
-			if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
-				if (libraryScript) libraryScript.remove();
-				libraryScript = document.createElement("script");
-				libraryScript.setAttribute("id", "BDFDBLibraryScript");
-				libraryScript.setAttribute("type", "text/javascript");
-				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
-				libraryScript.setAttribute("date", performance.now());
-				libraryScript.addEventListener("load", _ => {this.initialize();});
-				document.head.appendChild(libraryScript);
+	};
+    return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return config.info.description;}
+		
+        load() {
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global.downloadModal) {
+				window.BDFDB_Global.downloadModal = true;
+				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
+					confirmText: "Download Now",
+					cancelText: "Cancel",
+					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
+					onConfirm: _ => {delete window.BDFDB_Global.downloadModal;require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (error, response, body) => {require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), body, _ => {});});}
+				});
 			}
-			else if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-			this.startTimeout = setTimeout(_ => {
-				try {return this.initialize();}
-				catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
-			}, 30000);
-		}
+			if (!window.BDFDB_Global.pluginQueue.includes(config.info.name)) window.BDFDB_Global.pluginQueue.push(config.info.name);
+        }
+        start() {}
+        stop() {}
+    } : (([Plugin, BDFDB]) => {
+        return class RevealAllSpoilersOption extends Plugin {
+			onLoad() {}
+			
+			onStart() {}
+			
+			onStop() {}
 
-		initialize () {
-			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				if (this.started) return;
-				BDFDB.PluginUtils.init(this);
+			onMessageContextMenu (e) {
+				if (e.instance.props.message && e.instance.props.target) {
+					let messageDiv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.message, e.instance.props.target);
+					if (!messageDiv || !messageDiv.querySelector(BDFDB.dotCN.spoilerhidden)) return;
+					let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Reveal_Spoilers") : null;
+					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
+					children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							label: "Reveal all Spoilers",
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, "reveal-all"),
+							hint: hint && (_ => {
+								return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+									hint: hint
+								});
+							}),
+							action: _ => {
+								this.revealAllSpoilers(messageDiv);
+							}
+						})
+					}));
+				}
 			}
-			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
-		}
 
-		stop () {
-			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				this.stopping = true;
-
-				BDFDB.PluginUtils.clear(this);
+			revealAllSpoilers (target) {
+				let messageDiv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.message, target);
+				if (!messageDiv) return;
+				for (let spoiler of messageDiv.querySelectorAll(BDFDB.dotCN.spoilerhidden)) spoiler.click();
 			}
-		}
-
-
-		// Begin of own functions
-
-		onMessageContextMenu (e) {
-			if (e.instance.props.message && e.instance.props.target) {
-				let messageDiv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.message, e.instance.props.target);
-				if (!messageDiv || !messageDiv.querySelector(BDFDB.dotCN.spoilerhidden)) return;
-				let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Reveal_Spoilers") : null;
-				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: "Reveal all Spoilers",
-						id: BDFDB.ContextMenuUtils.createItemId(this.name, "reveal-all"),
-						hint: hint && (_ => {
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
-								hint: hint
-							});
-						}),
-						action: _ => {
-							this.revealAllSpoilers(messageDiv);
-						}
-					})
-				}));
-			}
-		}
-
-		revealAllSpoilers (target) {
-			let messageDiv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.message, target);
-			if (!messageDiv) return;
-			for (let spoiler of messageDiv.querySelectorAll(BDFDB.dotCN.spoilerhidden)) spoiler.click();
-		}
-	}
+		};
+    })(window.BDFDB_Global.PluginUtils.buildPlugin(config));
 })();
-
-module.exports = RevealAllSpoilersOption;

@@ -1,91 +1,68 @@
 //META{"name":"WriteUpperCase","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/WriteUpperCase","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/WriteUpperCase/WriteUpperCase.plugin.js"}*//
 
-var WriteUpperCase = (_ => {
-	return class WriteUpperCase {
-		getName () {return "WriteUpperCase";}
-
-		getVersion () {return "1.2.5";}
-
-		getAuthor () {return "DevilBro";}
-
-		getDescription () {return "Changes first letter in message input to uppercase.";}
-
-		constructor () {
-			this.changelog = {
-				"fixed":[["New WYSIWYG Textarea","Fixed for the new WYSIWYG Textarea that is hidden by experiments"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
-			};
-			
-			this.patchedModules = {
-				before: {
-					ChannelEditorContainer: "render"
-				}
-			};
+module.exports = (_ => {
+    const config = {
+		"info": {
+			"name": "WriteUpperCase",
+			"author": "DevilBro",
+			"version": "1.2.5",
+			"description": "Changes first letter in message input to uppercase."
 		}
-
-		// Legacy
-		load () {
-			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) BDFDB.PluginUtils.load(this);
-		}
-
-		start () {
-			if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
-			if (window.BDFDB && window.BDFDB.myPlugins && typeof window.BDFDB.myPlugins == "object") window.BDFDB.myPlugins[this.getName()] = this;
-			let libraryScript = document.querySelector("head script#BDFDBLibraryScript");
-			if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
-				if (libraryScript) libraryScript.remove();
-				libraryScript = document.createElement("script");
-				libraryScript.setAttribute("id", "BDFDBLibraryScript");
-				libraryScript.setAttribute("type", "text/javascript");
-				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
-				libraryScript.setAttribute("date", performance.now());
-				libraryScript.addEventListener("load", _ => {this.initialize();});
-				document.head.appendChild(libraryScript);
+	};
+    return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return config.info.description;}
+		
+        load() {
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global.downloadModal) {
+				window.BDFDB_Global.downloadModal = true;
+				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
+					confirmText: "Download Now",
+					cancelText: "Cancel",
+					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
+					onConfirm: _ => {delete window.BDFDB_Global.downloadModal;require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (error, response, body) => {require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), body, _ => {});});}
+				});
 			}
-			else if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-			this.startTimeout = setTimeout(_ => {
-				try {return this.initialize();}
-				catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
-			}, 30000);
-		}
-
-		initialize () {
-			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				if (this.started) return;
-				BDFDB.PluginUtils.init(this);
-
+			if (!window.BDFDB_Global.pluginQueue.includes(config.info.name)) window.BDFDB_Global.pluginQueue.push(config.info.name);
+        }
+        start() {}
+        stop() {}
+    } : (([Plugin, BDFDB]) => {
+        return class WriteUpperCase extends Plugin {
+			onLoad() {
+				this.patchedModules = {
+					before: {
+						ChannelEditorContainer: "render"
+					}
+				};
+			}
+			
+			onStart() {
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
-			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
-		}
-
-		stop () {
-			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				this.stopping = true;
-
-				BDFDB.PluginUtils.clear(this);
+			
+			onStop() {
+				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
-		}
 
-
-		// Begin of own functions
-
-		processChannelEditorContainer (e) {
-			if (e.instance.props.textValue && e.instance.state.focused) {
-				let string = e.instance.props.textValue;
-				if (string.length > 0) {
-					let newstring = string;
-					let first = string.charAt(0);
-					if (first === first.toUpperCase() && (string.toLowerCase().indexOf("http") == 0 || string.toLowerCase().indexOf("s/") == 0)) newstring = string.charAt(0).toLowerCase() + string.slice(1);
-					else if (first === first.toLowerCase() && first !== first.toUpperCase() && string.toLowerCase().indexOf("http") != 0 && string.toLowerCase().indexOf("s/") != 0) newstring = string.charAt(0).toUpperCase() + string.slice(1);
-					if (string != newstring) {
-						e.instance.props.textValue = newstring;
-						if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.copyRichValue(newstring, e.instance.props.richValue);
+			processChannelEditorContainer (e) {
+				if (e.instance.props.textValue && e.instance.state.focused) {
+					let string = e.instance.props.textValue;
+					if (string.length > 0) {
+						let newstring = string;
+						let first = string.charAt(0);
+						if (first === first.toUpperCase() && (string.toLowerCase().indexOf("http") == 0 || string.toLowerCase().indexOf("s/") == 0)) newstring = string.charAt(0).toLowerCase() + string.slice(1);
+						else if (first === first.toLowerCase() && first !== first.toUpperCase() && string.toLowerCase().indexOf("http") != 0 && string.toLowerCase().indexOf("s/") != 0) newstring = string.charAt(0).toUpperCase() + string.slice(1);
+						if (string != newstring) {
+							e.instance.props.textValue = newstring;
+							if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.copyRichValue(newstring, e.instance.props.richValue);
+						}
 					}
 				}
 			}
-		}
-	}
+		};
+    })(window.BDFDB_Global.PluginUtils.buildPlugin(config));
 })();
-
-module.exports = WriteUpperCase;

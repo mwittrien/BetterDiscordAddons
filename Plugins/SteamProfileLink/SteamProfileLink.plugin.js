@@ -1,116 +1,105 @@
 //META{"name":"SteamProfileLink","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SteamProfileLink","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/SteamProfileLink/SteamProfileLink.plugin.js"}*//
 
-var SteamProfileLink = (_ => {
-	var settings = {};
-	
-	return class SteamProfileLink {
-		getName () {return "SteamProfileLink";}
-
-		getVersion () {return "1.0.9";}
-
-		getAuthor () {return "DevilBro";}
-
-		getDescription () {return "Opens any Steam links in Steam instead of your internet browser.";}
-
-		constructor () {
-			this.changelog = {
-				"improved":[["Support links","Also works for support links now"]]
-			};
+module.exports = (_ => {
+    const config = {
+		"info": {
+			"name": "SteamProfileLink",
+			"author": "DevilBro",
+			"version": "1.0.9",
+			"description": "Opens any Steam links in Steam instead of your internet browser."
 		}
-
-		initConstructor () {
-			this.defaults = {
-				settings: {
-					useChromium: 			{value:false,			description:"Use inbuilt browser instead of default if fails to open Steam"}
-				}
-			};
-		}
-
-		getSettingsPanel (collapseStates = {}) {
-			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-			let settings = BDFDB.DataUtils.get(this, "settings");
-			let settingsPanel, settingsItems = [];
-			
-			settingsItems = settingsItems.concat(this.createSelects(false));
-			
-			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-				className: BDFDB.disCN.marginbottom8,
-				type: "Switch",
-				plugin: this,
-				keys: ["settings", key],
-				label: this.defaults.settings[key].description,
-				value: settings[key]
-			}));
-			
-			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
-		}
-
-		// Legacy
-		load () {
-			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) BDFDB.PluginUtils.load(this);
-		}
-
-		start () {
-			if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
-			if (window.BDFDB && window.BDFDB.myPlugins && typeof window.BDFDB.myPlugins == "object") window.BDFDB.myPlugins[this.getName()] = this;
-			let libraryScript = document.querySelector("head script#BDFDBLibraryScript");
-			if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
-				if (libraryScript) libraryScript.remove();
-				libraryScript = document.createElement("script");
-				libraryScript.setAttribute("id", "BDFDBLibraryScript");
-				libraryScript.setAttribute("type", "text/javascript");
-				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
-				libraryScript.setAttribute("date", performance.now());
-				libraryScript.addEventListener("load", _ => {this.initialize();});
-				document.head.appendChild(libraryScript);
+	};
+    return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return config.info.description;}
+		
+        load() {
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global.downloadModal) {
+				window.BDFDB_Global.downloadModal = true;
+				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
+					confirmText: "Download Now",
+					cancelText: "Cancel",
+					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
+					onConfirm: _ => {delete window.BDFDB_Global.downloadModal;require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (error, response, body) => {require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), body, _ => {});});}
+				});
 			}
-			else if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-			this.startTimeout = setTimeout(_ => {
-				try {return this.initialize();}
-				catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
-			}, 30000);
-		}
-
-		initialize () {
-			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				if (this.started) return;
-				BDFDB.PluginUtils.init(this);
-
-				BDFDB.ListenerUtils.add(this, document, "click", "a[href^='https://steamcommunity.'], a[href^='https://help.steampowered.'], a[href^='https://store.steampowered.'], a[href*='a.akamaihd.net/'][href*='steam']", e => {this.openInSteam(e, e.currentTarget.href);});
+			if (!window.BDFDB_Global.pluginQueue.includes(config.info.name)) window.BDFDB_Global.pluginQueue.push(config.info.name);
+        }
+        start() {}
+        stop() {}
+    } : (([Plugin, BDFDB]) => {
+		var settings = {};
+		
+		var urls = {
+			steam: ["https://steamcommunity.", "https://help.steampowered.", "https://store.steampowered.", "a.akamaihd.net/"]
+		};
+		
+        return class SteamProfileLink extends Plugin {
+			onLoad() {
+				this.defaults = {
+					settings: {
+						useChromium: 			{value:false,			description:"Use inbuilt browser instead of default if fails to open Steam"}
+					}
+				};
+			}
+			
+			onStart() {
+				for (let key in urls) BDFDB.ListenerUtils.add(this, document, "click", urls[key].map(url => url.indexOf("http") == 0 ? `a[href^="${url}"]` : `a[href*="${url}"][href*="${key}"]`).join(", "), e => {
+					this.openIn(e, key, e.currentTarget.href);
+				});
 				
 				this.forceUpdateAll();
 			}
-			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
-		}
+			
+			onStop() {}
 
-
-		stop () {
-			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				this.stopping = true;
-
-				BDFDB.PluginUtils.clear(this);
+			getSettingsPanel (collapseStates = {}) {
+				let settingsPanel, settingsItems = [];
+				
+				settingsItems = settingsItems.concat(this.createSelects(false));
+				
+				for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+					className: BDFDB.disCN.marginbottom8,
+					type: "Switch",
+					plugin: this,
+					keys: ["settings", key],
+					label: this.defaults.settings[key].description,
+					value: settings[key]
+				}));
+				
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 			}
-		}
 
-		onSettingsClosed () {
-			if (this.SettingsUpdated) {
-				delete this.SettingsUpdated;
-				this.forceUpdateAll();
+			onSettingsClosed () {
+				if (this.SettingsUpdated) {
+					delete this.SettingsUpdated;
+					this.forceUpdateAll();
+				}
 			}
-		}
-
-		openInSteam (e, url) {
-			BDFDB.ListenerUtils.stopEvent(e);
-			BDFDB.LibraryRequires.request(url, (error, response, body) => {
-				if (BDFDB.LibraryRequires.electron.shell.openExternal("steam://openurl/" + response.request.href));
-				else BDFDB.DiscordUtils.openLink(response.request.href, settings.useChromium);
-			});
-		}
 		
-		forceUpdateAll () {
-			settings = BDFDB.DataUtils.get(this, "settings");
-		}
-	}
-})();
+			forceUpdateAll () {
+				settings = BDFDB.DataUtils.get(this, "settings");
+			}
+		
+			openIn (e, key, url) {
+				let platform = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(key);
+				if (typeof this[`openIn${platform}`] == "function") {
+					BDFDB.ListenerUtils.stopEvent(e);
+					this[`openIn${platform}`](url);
+					return true;
+				}
+				return false;
+			}
 
-module.exports = SteamProfileLink;
+			openInSteam (url) {
+				BDFDB.LibraryRequires.request(url, (error, response, body) => {
+					if (BDFDB.LibraryRequires.electron.shell.openExternal("steam://openurl/" + response.request.href));
+					else BDFDB.DiscordUtils.openLink(response.request.href, settings.useChromium);
+				});
+			}
+		};
+    })(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+})();

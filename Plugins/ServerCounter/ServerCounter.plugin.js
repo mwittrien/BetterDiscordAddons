@@ -1,85 +1,63 @@
 //META{"name":"ServerCounter","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerCounter","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ServerCounter/ServerCounter.plugin.js"}*//
 
-var ServerCounter = (_ => {
-	return class ServerCounter {
-		getName () {return "ServerCounter";}
-
-		getVersion () {return "1.0.1";}
-
-		getAuthor () {return "DevilBro";}
-
-		getDescription () {return "Adds a server counter to the server list.";}
-
-		constructor () {
-			this.patchedModules = {
-				after: {
-					Guilds: "render"
-				}
-			};
+module.exports = (_ => {
+    const config = {
+		"info": {
+			"name": "ServerCounter",
+			"author": "DevilBro",
+			"version": "1.0.1",
+			"description": "Adds a server counter to the server list."
 		}
-
-		// Legacy
-		load () {
-			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) BDFDB.PluginUtils.load(this);
-		}
-
-		start () {
-			if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
-			if (window.BDFDB && window.BDFDB.myPlugins && typeof window.BDFDB.myPlugins == "object") window.BDFDB.myPlugins[this.getName()] = this;
-			let libraryScript = document.querySelector("head script#BDFDBLibraryScript");
-			if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
-				if (libraryScript) libraryScript.remove();
-				libraryScript = document.createElement("script");
-				libraryScript.setAttribute("id", "BDFDBLibraryScript");
-				libraryScript.setAttribute("type", "text/javascript");
-				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
-				libraryScript.setAttribute("date", performance.now());
-				libraryScript.addEventListener("load", _ => {this.initialize();});
-				document.head.appendChild(libraryScript);
+	};
+    return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return config.info.description;}
+		
+        load() {
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global.downloadModal) {
+				window.BDFDB_Global.downloadModal = true;
+				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
+					confirmText: "Download Now",
+					cancelText: "Cancel",
+					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
+					onConfirm: _ => {delete window.BDFDB_Global.downloadModal;require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (error, response, body) => {require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), body, _ => {});});}
+				});
 			}
-			else if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-			this.startTimeout = setTimeout(_ => {
-				try {return this.initialize();}
-				catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
-			}, 30000);
-		}
-
-		initialize () {
-			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				if (this.started) return;
-				BDFDB.PluginUtils.init(this);
-				
+			if (!window.BDFDB_Global.pluginQueue.includes(config.info.name)) window.BDFDB_Global.pluginQueue.push(config.info.name);
+        }
+        start() {}
+        stop() {}
+    } : (([Plugin, BDFDB]) => {
+        return class ServerCounter extends Plugin {
+			onLoad() {
+				this.patchedModules = {
+					after: {
+						Guilds: "render"
+					}
+				};
+			}
+			
+			onStart() {
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
-			else {
-				console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-			}
-		}
-
-		stop () {
-			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-				this.stopping = true;
-				
+			
+			onStop() {
 				BDFDB.PatchUtils.forceAllUpdates(this);
-
-				BDFDB.PluginUtils.clear(this);
 			}
-		}
-
 		
-		// Begin of own functions
-		
-		processGuilds (e) {
-			let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ConnectedUnreadDMs"});
-			if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCN.guildouter,
-				children: BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCNS.guildslabel + BDFDB.disCN._servercounterservercount,
-					children: `${BDFDB.LanguageUtils.LanguageStrings.SERVERS} - ${BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds().length}`
-				})
-			}));
-		}
-	}
+			processGuilds (e) {
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ConnectedUnreadDMs"});
+				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN.guildouter,
+					children: BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCNS.guildslabel + BDFDB.disCN._servercounterservercount,
+						children: `${BDFDB.LanguageUtils.LanguageStrings.SERVERS} – ${BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds().length}`
+					})
+				}));
+			}
+		};
+    })(window.BDFDB_Global.PluginUtils.buildPlugin(config));
 })();
-
-module.exports = ServerCounter;
