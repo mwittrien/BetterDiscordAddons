@@ -1096,7 +1096,7 @@ module.exports = (_ => {
 						for (let word of text.split(" ")) {
 							let encodedWord = BDFDB.StringUtils.htmlEscape(word);
 							link.href = word;
-							newText.push(link.host && link.host !== window.location.host ? `<label class="${BDFDB.disCN.textlink}">${encodedWord}</label>` : encodedWord);
+							newText.push(link.host && link.host !== window.location.host ? `<label class="${BDFDB.disCN.noticetextlink}">${encodedWord}</label>` : encodedWord);
 						}
 						noticeMessage.innerHTML = newText.join(" ");
 					}
