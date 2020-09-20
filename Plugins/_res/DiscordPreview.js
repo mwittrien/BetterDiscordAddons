@@ -182,11 +182,16 @@
 			if (userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', DiscordClasses[item][0] + ' not found in DiscordClassModules');
 			return className;
 		}
-		else if (DiscordClassModules[DiscordClasses[item][0]][DiscordClasses[item][1]] === undefined) {
+		else if ([DiscordClasses[item][1]].flat().every(prop => DiscordClassModules[DiscordClasses[item][0]][prop] === undefined)) {
 			if (userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', DiscordClasses[item][1] + ' not found in ' + DiscordClasses[item][0] + ' in DiscordClassModules');
 			return className;
 		}
 		else {
+			for (let prop of [DiscordClasses[item][1]].flat()) {
+				className = DiscordClassModules[DiscordClasses[item][0]][prop];
+				if (className) break;
+				else className = "Preview_undefined";
+			}
 			className = DiscordClassModules[DiscordClasses[item][0]][DiscordClasses[item][1]];
 			if (selector) {
 				className = className.split(" ").filter(n => n.indexOf("da-") != 0).join(selector ? "." : " ");
