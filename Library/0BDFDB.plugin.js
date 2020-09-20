@@ -5,7 +5,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.0.1",
+			"version": "1.0.2",
 			"description": "Gives other plugins utility functions."
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
@@ -38,7 +38,7 @@ module.exports = (_ => {
 	});
 	
 	const PluginStores = {
-		started: [],
+		started: {},
 		delayedLoad: [],
 		delayedStart: [],
 		updateTimeout: [],
@@ -462,7 +462,7 @@ module.exports = (_ => {
 	};
 	BDFDB.PluginUtils.init = function (plugin) {
 		BDFDB.PluginUtils.load(plugin);
-		if (!PluginStores.started.includes(plugin.name)) PluginStores.started.push(plugin.name);
+		PluginStores.started[plugin.name] = plugin;
 		
 		let startMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		BDFDB.LogUtils.log(startMsg, plugin.name);
@@ -493,7 +493,7 @@ module.exports = (_ => {
 			if (closeButton) closeButton.click();
 		}
 		
-		BDFDB.ArrayUtils.remove(PluginStores.started, plugin.name, true);
+		delete PluginStores.started[plugin.name];
 		delete Cache.data[plugin.name]
 		if (BDFDB.ObjectUtils.is(window.PluginUpdates) && BDFDB.ObjectUtils.is(window.PluginUpdates.plugins)) delete window.PluginUpdates.plugins[url];
 	};
@@ -522,7 +522,7 @@ module.exports = (_ => {
 				delete window.BDFDB_Global.loaded;
 				BDFDB.TimeUtils.interval((interval, count) => {
 					if (count > 60 || window.BDFDB_Global.loaded) BDFDB.TimeUtils.clear(interval);
-					if (window.BDFDB_Global.loaded) for (let pluginName of [].concat(PluginStores.started).sort()) BDFDB.TimeUtils.timeout(_ => BDFDB.BDUtils.reloadPlugin(pluginName));
+					if (window.BDFDB_Global.loaded) for (let pluginName in BDFDB_Global.ObjectUtils.sort(PluginStores.started)) BDFDB.TimeUtils.timeout(_ => BDFDB.BDUtils.reloadPlugin(pluginName));
 				}, 1000);
 			}
 			BDFDB.DOMUtils.removeLocalStyle(plugin.name);
@@ -7170,7 +7170,7 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(BDFDB, BDFDB.ObjectUtils.get(BDFDB.ModuleUtils.findByString("renderReactions", "canAddNewReactions", "showMoreUtilities", false), "exports.default"), "type", {after: e => {
-					if (document.querySelector(BDFDB.dotCN.emojipicker) || !BDFDB.ObjectUtils.toArray(BDFDB.myPlugins).some(p => p.onMessageOptionContextMenu || p.onMessageOptionToolbar)) return;
+					if (document.querySelector(BDFDB.dotCN.emojipicker) || !BDFDB.ObjectUtils.toArray(PluginStores.started).some(p => p.onMessageOptionContextMenu || p.onMessageOptionToolbar)) return;
 					let toolbar = BDFDB.ReactUtils.findChild(e.returnValue, {filter: c => c && c.props && c.props.showMoreUtilities != undefined && c.props.showEmojiPicker != undefined && c.props.setPopout != undefined});
 					if (toolbar) BDFDB.PatchUtils.patch(BDFDB, toolbar, "type", {after: e2 => {
 						let menu = BDFDB.ReactUtils.findChild(e2.returnValue, {filter: c => c && c.props && typeof c.props.onRequestClose == "function" && c.props.onRequestClose.toString().indexOf("moreUtilities") > -1});
