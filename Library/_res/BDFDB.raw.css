@@ -724,9 +724,6 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_noticewrapper] [REPLACE_CLASS_noticeplatformicon] svg {
 	max-height: 28px;
 }
-[REPLACE_CLASS_noticesurvey] {
-	background-color: #222;
-}
 
 .platform-osx [REPLACE_CLASS_noticewrapper] ~ * [REPLACE_CLASS_guildswrapper] {
 	margin-top: 0;

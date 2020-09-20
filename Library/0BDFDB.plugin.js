@@ -5,7 +5,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.0.0",
+			"version": "1.0.1",
 			"description": "Gives other plugins utility functions."
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
@@ -4013,12 +4013,16 @@ module.exports = (_ => {
 						BDFDB.LogUtils.warn(DiscordClasses[item][0] + " not found in DiscordClassModules");
 						return className;
 					}
-					else if (DiscordClassModules[DiscordClasses[item][0]][DiscordClasses[item][1]] === undefined) {
+					else if ([DiscordClasses[item][1]].flat().every(prop => DiscordClassModules[DiscordClasses[item][0]][prop] === undefined)) {
 						BDFDB.LogUtils.warn(DiscordClasses[item][1] + " not found in " + DiscordClasses[item][0] + " in DiscordClassModules");
 						return className;
 					}
 					else {
-						className = DiscordClassModules[DiscordClasses[item][0]][DiscordClasses[item][1]];
+						for (let prop of [DiscordClasses[item][1]].flat()) {
+							className = DiscordClassModules[DiscordClasses[item][0]][prop];
+							if (className) break;
+							else className = DiscordClassModules.BDFDB.BDFDBundefined;
+						}
 						if (selector) {
 							className = className.split(" ").filter(n => n.indexOf("da-") != 0).join(selector ? "." : " ");
 							className = className || DiscordClassModules.BDFDB.BDFDBundefined;
