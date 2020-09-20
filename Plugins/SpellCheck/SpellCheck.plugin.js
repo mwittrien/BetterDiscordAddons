@@ -5,7 +5,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpellCheck",
 			"author": "DevilBro",
-			"version": "1.5.3",
+			"version": "1.5.4",
 			"description": "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary."
 		}
 	};
@@ -179,7 +179,8 @@ module.exports = (_ => {
 				let textarea = BDFDB.DOMUtils.getParent(BDFDB.dotCN.textarea, e.instance.props.target), word = null;
 				if (textarea) for (let error of textarea.parentElement.querySelectorAll(BDFDB.dotCN._spellcheckerror)) {
 					let rects = BDFDB.DOMUtils.getRects(error);
-					if (BDFDB.InternalData.mousePosition.pageX > rects.x && BDFDB.InternalData.mousePosition.pageX < (rects.x + rects.width) && BDFDB.InternalData.mousePosition.pageY > rects.y && BDFDB.InternalData.mousePosition.pageY < (rects.y + rects.height)) {
+					let position = BDFDB.ListenerUtils.getPosition();
+					if (position.pageX > rects.x && position.pageX < (rects.x + rects.width) && position.pageY > rects.y && position.pageY < (rects.y + rects.height)) {
 						word = error.innerText;
 						break;
 					}
