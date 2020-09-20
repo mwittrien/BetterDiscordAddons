@@ -2004,7 +2004,7 @@
 		"noticedark": ["Notice", "colorDark"],
 		"noticedefault": ["Notice", ["noticeDefault", "colorDefault"]],
 		"noticedownload": ["Notice", ["noticeDownload", "colorDownload"]],
-		"noticedismiss": ["Notice", "dismiss"],
+		"noticedismiss": ["Notice", ["dismiss", "closeButton"]],
 		"noticeicon": ["NoticePlatform", "icon"],
 		"noticeiconandroid": ["NoticePlatform", "iconAndroid"],
 		"noticeiconapple": ["NoticePlatform", "iconApple"],
