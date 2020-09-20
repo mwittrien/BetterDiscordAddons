@@ -7486,7 +7486,7 @@ module.exports = (_ => {
 		getVersion () {return config.info.version;}
 		getDescription () {return config.info.description;}
 		
-		load () {}
+		load () {if (!BDFDB.BDUtils.isPluginEnabled(config.info.name)) BDFDB.BDUtils.enablePlugin(config.info.name);}
 		start() {}
 		stop() {}
 		

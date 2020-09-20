@@ -5,7 +5,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomQuoter",
 			"author": "DevilBro",
-			"version": "1.1.5",
+			"version": "1.1.6",
 			"description": "Let's you customize the output of the native quote feature of Discord."
 		}
 	};
@@ -156,7 +156,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 							className: BDFDB.disCN.marginbottom20
 						})
-					].concat(Object.keys(formats).map(key = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
+					].concat(Object.keys(formats).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
 						cardId: key,
 						noRemove: key == "Standard",
 						onRemove: _ => {
