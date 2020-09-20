@@ -16,7 +16,7 @@ if (window.BDFDB && window.BDFDB.myPlugins && Object.keys(window.BDFDB.myPlugins
 				setTimeout(_ => {
 					let url = typeof plugins[name].getRawUrl == "function" && typeof plugins[name].getRawUrl() == "string" ? plugins[name].getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${name}/${name}.plugin.js`;
 					request(url, (error, response, body) => {
-						if (!error && body) fs.writeFile(path.join(BdApi.Plugins.folder, name + ".plugin.js"), body, _ => {
+						if (!error && body && body.indexOf(`//META{"name":"`) > -1) fs.writeFile(path.join(BdApi.Plugins.folder, name + ".plugin.js"), body, _ => {
 							if (last) finish();
 						});
 						else if (last) finish();
