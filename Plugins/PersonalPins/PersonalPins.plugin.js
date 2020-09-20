@@ -5,7 +5,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "PersonalPins",
 			"author": "DevilBro",
-			"version": "1.9.7",
+			"version": "1.9.8",
 			"description": "Similar to normal pins. Lets you save messages as notes for yourself."
 		}
 	};
@@ -284,7 +284,7 @@ module.exports = (_ => {
 							]
 						})
 					}),
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerThin, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Scrollers.Thin, {
 						className: BDFDB.disCN.messagespopout,
 						children: this.filterMessages(buttonInstance, buttonInstance.props.selectedFilter.value, buttonInstance.props.selectedSort.value, buttonInstance.props.selectedOrder.value == "descending", buttonInstance.props.searchKey.toUpperCase())
 					})

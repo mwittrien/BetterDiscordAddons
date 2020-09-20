@@ -5,7 +5,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "6.8.4",
+			"version": "6.8.5",
 			"description": "Patches Discords native Folders in a way to open Servers within a Folder in a new bar to the right. Also adds a bunch of new features to more easily organize, customize and manage your Folders."
 		}
 	};
@@ -75,7 +75,7 @@ module.exports = (_ => {
 				}, 300);
 				return BDFDB.ReactUtils.createElement("nav", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guildswrapper, BDFDB.disCN.guilds, this.props.themeOverride && BDFDB.disCN.themedark, BDFDB.disCN._serverfoldersfoldercontent, (!folders.length || closing) && BDFDB.disCN._serverfoldersfoldercontentclosed),
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerNone, {
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Scrollers.None, {
 						className: BDFDB.disCN.guildsscroller,
 						children: this.props.folders.map(folder => {
 							let data = _this.getFolderConfig(folder.folderId);
