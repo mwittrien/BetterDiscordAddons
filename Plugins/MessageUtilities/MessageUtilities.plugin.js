@@ -5,7 +5,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
-			"version": "1.7.7",
+			"version": "1.7.8",
 			"description": "Offers a number of useful message options. Remap the keybindings in the settings."
 		}
 	};
@@ -140,20 +140,20 @@ module.exports = (_ => {
 							direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.KeybindRecorder, {
-									defaultValue: enabledBindings[action].keycombo.filter(n => n),
+									defaultValue: bindings[action].keycombo.filter(n => n),
 									reset: true,
 									onChange: keycombo => {
-										enabledBindings[action].keycombo = keycombo;
-										BDFDB.DataUtils.save(enabledBindings, this, "bindings");
+										bindings[action].keycombo = keycombo;
+										BDFDB.DataUtils.save(bindings, this, "bindings");
 										this.SettingsUpdated = true;
 									}
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
-									value: enabledBindings[action].click,
+									value: bindings[action].click,
 									options: clickMap.map((label, i) => {return {value:i, label:label}}),
 									onChange: choice => {
-										enabledBindings[action].click = choice.value;
-										BDFDB.DataUtils.save(enabledBindings, this, "bindings");
+										bindings[action].click = choice.value;
+										BDFDB.DataUtils.save(bindings, this, "bindings");
 										this.SettingsUpdated = true;
 									}
 								})
