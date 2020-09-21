@@ -26,7 +26,7 @@ if (window.BDFDB && window.BDFDB.myPlugins && Object.keys(window.BDFDB.myPlugins
 		};
 		if (BdApi.Plugins.get("BDFDB")) downloadPlugins();
 		else request.get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (error, response, body) => {
-			fs.writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), body, _ => {
+			fs.writeFile(path.join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), body, _ => {
 				let count = 0, interval = setInterval(_ => {
 					if (window.BDFDB_Global) {
 						clearInterval(interval);
