@@ -17,6 +17,7 @@ module.exports = (_ => {
 	const InternalComponents = {NativeSubComponents: {}, LibraryComponents: {}};
 	const Cache = {data: {}, modules: {}};
 	
+	var libraryInstance;
 	var settings = {};
 	
 	if (window.BDFDB_Global && window.BDFDB_Global.PluginUtils && typeof window.BDFDB_Global.PluginUtils.cleanUp == "function") {
@@ -729,18 +730,6 @@ module.exports = (_ => {
 			key: `${plugin.name}-settingsPanel`,
 			plugin: plugin,
 			title: plugin.name,
-			controls: [
-				plugin.changeLog && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
-					className: BDFDB.disCN.settingspanelheaderbutton,
-					children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-						text: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
-						children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-							name: InternalComponents.LibraryComponents.SvgIcon.Names.CHANGELOG,
-							onClick: _ => {BDFDB.PluginUtils.openChangeLog(plugin);}
-						})
-					})
-				})
-			],
 			children: children
 		}), settingsPanel);
 		return settingsPanel;
@@ -6936,6 +6925,38 @@ module.exports = (_ => {
 					else InternalComponents.LibraryComponents[type][key] = InternalComponents.NativeSubComponents[type][key];
 				}
 				BDFDB.LibraryComponents = Object.assign({}, InternalComponents.LibraryComponents);
+				
+				InternalBDFDB.createCustomControl = function (reactChild) {
+					let controlButton = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._repocontrolsbutton}"></div>`);
+					BDFDB.ReactUtils.render(reactChild, controlButton);
+					return controlButton;
+				};
+				InternalBDFDB.appendCustomControls = function (card) {
+					let checkbox = card.querySelector(BDFDB.dotCN._reposwitch);
+					if (!checkbox) return;
+					let addon = BDFDB.ObjectUtils.get(BDFDB.ReactUtils.getInstance(card), "return.stateNode.props.addon");
+					if (addon && addon.plugin && (addon.plugin == libraryInstance || addon.plugin.name && addon.plugin.name && PluginStores.started[addon.plugin.name] && PluginStores.started[addon.plugin.name] == addon.plugin)) {
+						let controls = [];
+						if (addon.plugin.changeLog) controls.push(InternalBDFDB.createCustomControl(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+							text: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
+							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN._repoicon,
+								name: InternalComponents.LibraryComponents.SvgIcon.Names.CHANGELOG,
+								onClick: _ => {BDFDB.PluginUtils.openChangeLog(addon.plugin);}
+							})
+						})));
+						for (let control of controls) checkbox.parentElement.insertBefore(control, checkbox.parentElement.firstElementChild);
+					}
+				};
+				const cardObserver = (new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
+					if (BDFDB.DOMUtils.containsClass(node, BDFDB.disCN._repocard)) InternalBDFDB.appendCustomControls(node);
+					if (node.nodeType != Node.TEXT_NODE) for (let child of node.querySelectorAll(BDFDB.dotCN._repocard)) InternalBDFDB.appendCustomControls(child);
+				});}});}));
+				BDFDB.ObserverUtils.connect(BDFDB, document.querySelector(`${BDFDB.dotCN.layer}[aria-label="${BDFDB.DiscordConstants.Layers.USER_SETTINGS}"]`), {name:"cardObserver", instance:cardObserver}, {childList: true, subtree:true});
+				BDFDB.ObserverUtils.connect(BDFDB, BDFDB.dotCN.applayers, {name:"appLayerObserver", instance:(new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
+					if (node.nodeType != Node.TEXT_NODE && node.getAttribute("aria-label") == BDFDB.DiscordConstants.Layers.USER_SETTINGS) BDFDB.ObserverUtils.connect(BDFDB, node, {name:"cardObserver", instance:cardObserver}, {childList: true, subtree:true});
+				});}});}))}, {childList: true});
+				for (let child of document.querySelectorAll(BDFDB.dotCN._repocard)) InternalBDFDB.appendCustomControls(child);
 
 				const keyDownTimeouts = {};
 				BDFDB.ListenerUtils.add(BDFDB, document, "keydown.BDFDBPressedKeys", e => {
@@ -7490,9 +7511,14 @@ module.exports = (_ => {
 		getVersion () {return config.info.version;}
 		getDescription () {return config.info.description;}
 		
-		load () {if (!BDFDB.BDUtils.isPluginEnabled(config.info.name)) BDFDB.BDUtils.enablePlugin(config.info.name);}
+		load () {
+			libraryInstance = this;
+			if (!BDFDB.BDUtils.isPluginEnabled(config.info.name)) BDFDB.BDUtils.enablePlugin(config.info.name);
+		}
 		start() {}
-		stop() {}
+		stop() {
+			if (!BDFDB.BDUtils.isPluginEnabled(config.info.name)) BDFDB.BDUtils.enablePlugin(config.info.name);
+		}
 		
 		getSettingsPanel (collapseStates = {}) {
 			let settingsPanel, settingsItems = [];
