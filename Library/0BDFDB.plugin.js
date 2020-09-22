@@ -5,7 +5,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.0.2",
+			"version": "1.0.3",
 			"description": "Gives other plugins utility functions."
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
@@ -1583,6 +1583,10 @@ module.exports = (_ => {
 					let ins = BDFDB.ReactUtils.getInstance(ele);
 					if (typeof config.specialFilter == "function") {
 						let component = config.specialFilter(ins);
+						console.log(ins);
+						console.log(component);
+						console.log(config.specialFilter);
+						console.log("___");
 						if (component) {
 							if (config.nonRender) {
 								let exports = (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports;
@@ -1621,14 +1625,14 @@ module.exports = (_ => {
 						}
 						if (!elementFound) {
 							if (!InternalBDFDB.patchObserverData.observer) {
-								let appmount = document.querySelector(BDFDB.dotCN.appmount);
-								if (appmount) {
+								let appMount = document.querySelector(BDFDB.dotCN.appmount);
+								if (appMount) {
 									InternalBDFDB.patchObserverData.observer = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
 										if (!n || !n.tagName) return;
 										for (let type in InternalBDFDB.patchObserverData.data) if (!InternalBDFDB.patchObserverData.data[type].found) {
 											let ele = null;
 											if ((ele = BDFDB.DOMUtils.containsClass(n, ...InternalBDFDB.patchObserverData.data[type].classes) ? n : n.querySelector(InternalBDFDB.patchObserverData.data[type].selector)) != null) {
-												InternalBDFDB.patchObserverData.data[type].found = InternalBDFDB.checkEle(InternalBDFDB.patchObserverData.data[type].plugins, ele, type, config);
+												InternalBDFDB.patchObserverData.data[type].found = InternalBDFDB.checkEle(InternalBDFDB.patchObserverData.data[type].plugins, ele, type, InternalBDFDB.patchObserverData.data[type].config);
 												if (InternalBDFDB.patchObserverData.data[type].found) {
 													delete InternalBDFDB.patchObserverData.data[type];
 													if (BDFDB.ObjectUtils.isEmpty(InternalBDFDB.patchObserverData.data)) {
@@ -1639,10 +1643,10 @@ module.exports = (_ => {
 											}
 										}
 									});});});
-									InternalBDFDB.patchObserverData.observer.observe(appmount, {childList:true, subtree:true});
+									InternalBDFDB.patchObserverData.observer.observe(appMount, {childList:true, subtree:true});
 								}
 							}
-							if (!InternalBDFDB.patchObserverData.data[type]) InternalBDFDB.patchObserverData.data[type] = {selector, classes, found:false, plugins:[]};
+							if (!InternalBDFDB.patchObserverData.data[type]) InternalBDFDB.patchObserverData.data[type] = {selector, classes, found:false, config, plugins:[]};
 							InternalBDFDB.patchObserverData.data[type].plugins.push(pluginData);
 						}
 					}
