@@ -5,7 +5,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeSettings",
 			"author": "DevilBro",
-			"version": "1.2.0",
+			"version": "1.2.1",
 			"description": "Allows you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page."
 		}
 	};
@@ -115,7 +115,6 @@ module.exports = (_ => {
 			}
 
 			createThemeSettings (wrapper, theme, vars) {
-				if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 				let settingsItems = [];
 				
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
