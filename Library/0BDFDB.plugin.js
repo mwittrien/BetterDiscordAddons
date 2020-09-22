@@ -7505,7 +7505,6 @@ module.exports = (_ => {
 				keys: ["settings", key],
 				label: InternalBDFDB.defaults.settings[key].description,
 				note: key == "showToasts" && bdToastSetting && "Disable BBDs general 'Show Toast' setting before disabling this",
-				dividerbottom: true,
 				value: settings[key] || key == "showToasts" && bdToastSetting
 			}));
 			
