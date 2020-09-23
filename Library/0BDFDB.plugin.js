@@ -2346,7 +2346,7 @@ module.exports = (_ => {
 				});
 				BDFDB.UserUtils.getStatus = function (id = BDFDB.UserUtils.me.id) {
 					id = typeof id == "number" ? id.toFixed() : id;
-					let activity = BDFDB.UserUtils.getActivitiy(id);
+					let activity = BDFDB.UserUtils.getActivity(id);
 					return activity && activity.type == BDFDB.DiscordConstants.ActivityTypes.STREAMING ? "streaming" : LibraryModules.StatusMetaUtils.getStatus(id);
 				};
 				BDFDB.UserUtils.getStatusColor = function (status) {
@@ -2362,7 +2362,7 @@ module.exports = (_ => {
 						default: return BDFDB.DiscordConstants.Colors.STATUS_GREY;
 					}
 				};
-				BDFDB.UserUtils.getActivitiy = function (id = BDFDB.UserUtils.me.id) {
+				BDFDB.UserUtils.getActivity = function (id = BDFDB.UserUtils.me.id) {
 					for (let activity of LibraryModules.StatusMetaUtils.getActivities(id)) if (activity.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS) return activity;
 					return null;
 				};

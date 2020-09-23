@@ -5,7 +5,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.5.0",
+			"version": "1.5.1",
 			"description": "Notifies you when a Friend or a User your choose to observe changes their online status, can be configured individually in the settings."
 		}
 	};
@@ -495,7 +495,7 @@ module.exports = (_ => {
 			getStatusWithMobileAndActivity (id, config) {
 				let statusName = BDFDB.UserUtils.getStatus(id);
 				let status = {statusName, isActivity:false};
-				let activity = BDFDB.UserUtils.getActivitiy(id);
+				let activity = BDFDB.UserUtils.getActivity(id);
 				if (activity && BDFDB.DiscordConstants.ActivityTypes[activity.type]) {
 					let activityName = BDFDB.DiscordConstants.ActivityTypes[activity.type].toLowerCase();
 					if (this.defaults.notificationstrings[activityName] && config[activityName]) {
