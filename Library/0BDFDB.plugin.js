@@ -1324,7 +1324,7 @@ module.exports = (_ => {
 						else if (type == "left" || type == "right") {
 							if (top < 0) {
 								const bRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.titlebar));
-								const barCorrection = (bRects.width || 0) >= Math.round(75 * window.outerWidth / aRects.width) ? bRects.height : 0;
+								const barCorrection = (bRects.width || 0) >= Math.round(75 * window.outerWidth / aRects.width) ? (bRects.height + 5) : 0;
 								itemLayer.style.setProperty("top", `${5 + barCorrection}px`, "important");
 								tooltipPointer.style.setProperty("margin-top", `${top - 10 - barCorrection}px`, "important");
 							}
