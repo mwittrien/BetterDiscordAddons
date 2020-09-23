@@ -1,5 +1,18 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/SupporterBadge.css);
 
+#pluginNotice[class=" "], #pluginNotice[class=""] {
+    z-index: 999;
+    background: black;
+	color: white;
+    text-align: center;
+    pointer-events: all;
+}
+#pluginNotice[class=" "] span, #pluginNotice[class=""] span {
+    position: relative;
+    top: 10px;
+    color: white;
+}
+
 img:not([src]), img[src=""], img[src="null"] {
 	opacity: 0;
 }
