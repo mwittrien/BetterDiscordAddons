@@ -5,8 +5,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
-			"version": "1.7.8",
+			"version": "1.7.9",
 			"description": "Offers a number of useful message options. Remap the keybindings in the settings."
+		},
+		"changeLog": {
+			"fixed": {
+				"Quick Action": "No longer interferes with quick action bar"
+			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -78,10 +83,10 @@ module.exports = (_ => {
 			
 			onStart() {
 				BDFDB.ListenerUtils.add(this, document, "click", BDFDB.dotCNC.message + BDFDB.dotCN.searchresultsgroupcozy, e => {
-					this.onClick(e, 0, "onSglClick");
+					if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagetoolbarbutton, e.target)) this.onClick(e, 0, "onSglClick");
 				});
 				BDFDB.ListenerUtils.add(this, document, "dblclick", BDFDB.dotCNC.message + BDFDB.dotCN.searchresultsgroupcozy, e => {
-					this.onClick(e, 1, "onDblClick");
+					if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagetoolbarbutton, e.target)) this.onClick(e, 1, "onDblClick");
 				});
 				BDFDB.ListenerUtils.add(this, document, "keydown", e => {
 					if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareawrapchat, document.activeElement)) this.onKeyDown(document.activeElement, e.which, "onKeyDown");

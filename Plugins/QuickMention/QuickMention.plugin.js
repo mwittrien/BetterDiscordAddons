@@ -45,7 +45,7 @@ module.exports = (_ => {
 			onStop() {}
 		
 			onMessageOptionToolbar (e) {
-				if (e.instance.props.message.author.id != BDFDB.UserUtils.me.id && e.instance.props.message.type == BDFDB.DiscordConstants.MessageTypes.DEFAULT && (BDFDB.UserUtils.can("SEND_MESSAGES") || e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM || e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.GROUP_DM)) e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+				if (!e.instance.props.expanded && e.instance.props.message.author.id != BDFDB.UserUtils.me.id && e.instance.props.message.type == BDFDB.DiscordConstants.MessageTypes.DEFAULT && (BDFDB.UserUtils.can("SEND_MESSAGES") || e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM || e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.GROUP_DM)) e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					key: "mention",
 					text: BDFDB.LanguageUtils.LanguageStrings.MENTION,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
@@ -56,7 +56,7 @@ module.exports = (_ => {
 							});
 						},
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-							className: BDFDB.disCNS.messagetoolbaricon,
+							className: BDFDB.disCN.messagetoolbaricon,
 							nativeClass: true,
 							name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_AT
 						})

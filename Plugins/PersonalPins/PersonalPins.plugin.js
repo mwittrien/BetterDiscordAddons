@@ -5,8 +5,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "PersonalPins",
 			"author": "DevilBro",
-			"version": "1.9.8",
+			"version": "1.9.9",
 			"description": "Similar to normal pins. Lets you save messages as notes for yourself."
+		},
+		"changeLog": {
+			"improved": {
+				"Quick Action": "Added Icon to quick action bar. Holding shift while hovering a message shows the quick action bar"
+			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -173,6 +178,40 @@ module.exports = (_ => {
 						action: _ => {
 							this.updateNoteData(note, e.instance.props.message);
 						}
+					}));
+				}
+			}
+		
+			onMessageOptionToolbar (e) {
+				if (e.instance.props.expanded && e.instance.props.message && e.instance.props.channel) {
+					let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
+					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						key: note ? "unpin-note" : "pin-note",
+						text: note ? this.labels.context_unpinoption_text : this.labels.context_pinoption_text,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.disCN.messagetoolbarbutton,
+							onClick: _ => {
+								this.addMessageToNotes(e.instance.props.message, e.instance.props.channel);
+							},
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.messagetoolbaricon,
+								iconSVG: note ? pinIconDelete : pinIcon
+							})
+						})
+					}));
+					if (this.isNoteOutdated(note, e.instance.props.message)) e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						key: "update-note",
+						text: this.labels.context_updateoption_text,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.disCN.messagetoolbarbutton,
+							onClick: _ => {
+								this.updateNoteData(note, e.instance.props.message);
+							},
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.messagetoolbaricon,
+								iconSVG: pinIconUpdate
+							})
+						})
 					}));
 				}
 			}

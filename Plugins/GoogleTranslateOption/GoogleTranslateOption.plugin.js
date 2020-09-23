@@ -5,8 +5,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.0.9",
+			"version": "2.1.0",
 			"description": "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send."
+		},
+		"changeLog": {
+			"improved": {
+				"Quick Action": "Added Icon to quick action bar. Holding shift while hovering a message shows the quick action bar"
+			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -249,6 +254,26 @@ module.exports = (_ => {
 						action: _ => {
 							this.translateMessage(e.instance.props.message, e.instance.props.channel);
 						}
+					}));
+				}
+			}
+		
+			onMessageOptionToolbar (e) {
+				if (e.instance.props.expanded && e.instance.props.message && e.instance.props.channel) {
+					let translated = !!translatedMessages[e.instance.props.message.id];
+					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						key: translated ? "untranslate-message" : "translate-message",
+						text: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.disCN.messagetoolbarbutton,
+							onClick: _ => {
+								if (!isTranslating) this.translateMessage(e.instance.props.message, e.instance.props.channel);
+							},
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.messagetoolbaricon,
+								iconSVG: translated ? translateIconUntranslate : translateIcon
+							})
+						})
 					}));
 				}
 			}

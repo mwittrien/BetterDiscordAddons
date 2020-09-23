@@ -5,8 +5,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "CopyRawMessage",
 			"author": "DevilBro",
-			"version": "1.1.1",
+			"version": "1.1.2",
 			"description": "Adds a entry in the contextmenu when you right click a message that allows you to copy the raw contents of a message."
+		},
+		"changeLog": {
+			"improved": {
+				"Quick Action": "Added Icon to quick action bar. Holding shift while hovering a message shows the quick action bar"
+			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -128,7 +133,7 @@ module.exports = (_ => {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mark-unread"});
 					children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
-						id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-message"),
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-message-raw"),
 						icon: _ => {
 							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 								className: BDFDB.disCN.menuicon,
@@ -138,6 +143,25 @@ module.exports = (_ => {
 						action: _ => {
 							BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
 						}
+					}));
+				}
+			}
+		
+			onMessageOptionToolbar (e) {
+				if (e.instance.props.expanded && e.instance.props.message && e.instance.props.channel) {
+					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						key: "copy-message-raw",
+						text: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.disCN.messagetoolbarbutton,
+							onClick: _ => {
+								BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
+							},
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.messagetoolbaricon,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
+							})
+						})
 					}));
 				}
 			}
