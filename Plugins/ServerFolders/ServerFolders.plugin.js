@@ -359,13 +359,13 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						closeOtherFolders:	{value:false, 	description:"Close other Folders when opening a Folder."},
-						closeTheFolder:		{value:false, 	description:"Close the Folder when selecting a Server."},
-						closeAllFolders:	{value:false, 	description:"Close All Folders when selecting a Server."},
-						forceOpenFolder:	{value:false, 	description:"Force a Folder to open when switching to a Server of that Folder."},
-						showCountBadge:		{value:true, 	description:"Display Badge for Amount of Servers in a Folder."},
-						extraColumn:		{value:true, 	description:"Moves the Servers from opened Folders in an extra column."},
-						addSeparators:		{value:true, 	description:"Adds separators between Servers of different Folders in extra column."}
+						closeOtherFolders:	{value:false, 	description:"Close other folders when opening a folder"},
+						closeTheFolder:		{value:false, 	description:"Close the folder when selecting a server"},
+						closeAllFolders:	{value:false, 	description:"Close all folders when selecting a server"},
+						forceOpenFolder:	{value:false, 	description:"Force a folder to open when switching to a server of that folder"},
+						showCountBadge:		{value:true, 	description:"Display badge for amount of servers in a folder"},
+						extraColumn:		{value:true, 	description:"Moves the servers from opened folders in an extra column"},
+						addSeparators:		{value:true, 	description:"Adds separators between servers of different folders in extra column"}
 					}
 				};
 			
