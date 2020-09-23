@@ -3006,6 +3006,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"159762323907543040": {"active": true},
 		"363785301195358221": {"active": true,		"t3": false,	"custom": false,	"id": "TRENT"},
 		"106938698938978304": {"active": false,		"t3": false,	"custom": false,	"id": "GABRIEL"},
 		"174868361040232448": {"active": true,		"t3": false,	"custom": false,	"id": "GIBBU"},
