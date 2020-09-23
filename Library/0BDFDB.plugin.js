@@ -3968,8 +3968,8 @@ module.exports = (_ => {
 				
 				const DiscordClasses = Object.assign({}, InternalData.DiscordClasses);
 				BDFDB.DiscordClasses = Object.assign({}, DiscordClasses);
-				InternalBDFDB.getDiscordClass = (item, selector) => {
-					let className = DiscordClassModules.BDFDB.BDFDBundefined;
+				InternalBDFDB.getDiscordClass = function (item, selector) {
+					let className = fallbackClassName = DiscordClassModules.BDFDB.BDFDBundefined + "-" + InternalBDFDB.generateClassId();
 					if (DiscordClasses[item] === undefined) {
 						BDFDB.LogUtils.warn(item + " not found in DiscordClasses");
 						return className;
@@ -3990,17 +3990,23 @@ module.exports = (_ => {
 						for (let prop of [DiscordClasses[item][1]].flat()) {
 							className = DiscordClassModules[DiscordClasses[item][0]][prop];
 							if (className) break;
-							else className = DiscordClassModules.BDFDB.BDFDBundefined;
+							else className = fallbackClassName;
 						}
 						if (selector) {
 							className = className.split(" ").filter(n => n.indexOf("da-") != 0).join(selector ? "." : " ");
-							className = className || DiscordClassModules.BDFDB.BDFDBundefined;
+							className = className || fallbackClassName;
 						}
 						else {
 							if (BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.normalizedClasses)) className = className.split(" ").filter(n => n.indexOf("da-") != 0).map(n => n.replace(/^([A-z0-9]+?)-([A-z0-9_-]{6})$/g, "$1-$2 da-$1")).join(" ");
 						}
-						return BDFDB.ArrayUtils.removeCopies(className.split(" ")).join(" ");
+						return BDFDB.ArrayUtils.removeCopies(className.split(" ")).join(" ") || fallbackClassName;
 					}
+				};
+				const generationChars = "0123456789ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_".split("");
+				InternalBDFDB.generateClassId = function () {
+					let id = "";
+					while (id.length < 6) id += generationChars[Math.floor(Math.random() * generationChars.length)];
+					return id;
 				};
 				BDFDB.disCN = new Proxy(DiscordClasses, {
 					get: function (list, item) {
@@ -7339,11 +7345,7 @@ module.exports = (_ => {
 					for (let component in InternalComponents.LibraryComponents) if (!InternalComponents.LibraryComponents[component]) BDFDB.LogUtils.warn(component + " not initialized in LibraryComponents");
 
 					BDFDB.DevUtils = {};
-					BDFDB.DevUtils.generateClassId = function () {
-						let id = "", chars = "0123456789ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_".split("");
-						while (id.length < 6) id += chars[Math.floor(Math.random() * chars.length)];
-						return id;
-					};
+					BDFDB.DevUtils.generateClassId = InternalBDFDB.generateClassId;
 					BDFDB.DevUtils.findByIndex = function (index) {
 						return BDFDB.DevUtils.req.c[index];
 					};

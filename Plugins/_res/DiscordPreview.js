@@ -169,7 +169,7 @@
 		}
 	});
 	let getDiscordClass = function (item, selector) {
-		let className = "Preview_undefined";
+		let className = fallbackClassName = "Preview_undefined";
 		if (DiscordClasses[item] === undefined) {
 			if (userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', item + ' not found in DiscordClasses');
 			return className;
@@ -190,14 +190,14 @@
 			for (let prop of [DiscordClasses[item][1]].flat()) {
 				className = DiscordClassModules[DiscordClasses[item][0]][prop];
 				if (className) break;
-				else className = "Preview_undefined";
+				else className = fallbackClassName;
 			}
 			className = DiscordClassModules[DiscordClasses[item][0]][DiscordClasses[item][1]];
 			if (selector) {
 				className = className.split(" ").filter(n => n.indexOf("da-") != 0).join(selector ? "." : " ");
-				className = className || "Preview_undefined";
+				className = className || fallbackClassName;
 			}
-			return className || "Preview_undefined";
+			return className || fallbackClassName;
 		}
 	};
 	
