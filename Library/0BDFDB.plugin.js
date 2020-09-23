@@ -611,7 +611,6 @@ module.exports = (_ => {
 					updateNoticeList.hasTooltip = true;
 					updateNotice.tooltip = BDFDB.TooltipUtils.create(updateNoticeList, BDFDB.LanguageUtils.LibraryStrings.update_notice_click, {
 						type: "bottom",
-						unhideable: true,
 						zIndex: 100001,
 						delay: 500,
 						onHide: _ => {updateNoticeList.hasTooltip = false;}
@@ -1144,12 +1143,12 @@ module.exports = (_ => {
 					text = typeof text == "function" ? text() : text;
 					if (typeof text != "string" && !BDFDB.ReactUtils.isValidElement(text) && !BDFDB.ObjectUtils.is(options.guild)) return null;
 					let id = BDFDB.NumberUtils.generateId(Tooltips);
-					let zIndexed = typeof options.zIndex == "number" || options.unhideable;
+					let zIndexed = typeof options.zIndex == "number";
 					let itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltippointer}"></div><div class="${BDFDB.disCN.tooltipcontent}"></div></div></div>`);
 					if (zIndexed) {
 						let itemLayerContainerClone = itemLayerContainer.cloneNode();
 						itemLayerContainerClone.style.setProperty("z-index", options.zIndex || 1002, "important");
-						itemLayerContainer.parentElement.insertBefore(itemLayerContainerClone, itemLayerContainer.nextElementChild);
+						itemLayerContainer.parentElement.insertBefore(itemLayerContainerClone, itemLayerContainer.nextElementSibling);
 						itemLayerContainer = itemLayerContainerClone;
 					}
 					itemLayerContainer.appendChild(itemLayer);
@@ -1189,7 +1188,7 @@ module.exports = (_ => {
 					if (typeof options.maxWidth == "number" && options.maxWidth > 196) {
 						tooltip.style.setProperty("max-width", `${options.maxWidth}px`, "important");
 					}
-					if (customBackgroundColor || options.unhideable) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipcustom);
+					if (customBackgroundColor) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipcustom);
 					else if (options.color && BDFDB.disCN["tooltip" + options.color.toLowerCase()]) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + options.color.toLowerCase()]);
 					else BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipblack);
 					
@@ -1279,7 +1278,12 @@ module.exports = (_ => {
 					});
 					(tooltip.update = itemLayer.update = newText => {
 						if (newText) tooltip.setText(newText);
-						let left, top, tRects = BDFDB.DOMUtils.getRects(anker), iRects = BDFDB.DOMUtils.getRects(itemLayer), aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionOffsets = {height: 10, width: 10}, offset = typeof options.offset == "number" ? options.offset : 0;
+						let left, top;
+						const tRects = BDFDB.DOMUtils.getRects(anker);
+						const iRects = BDFDB.DOMUtils.getRects(itemLayer);
+						const aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
+						const positionOffsets = {height: 10, width: 10};
+						const offset = typeof options.offset == "number" ? options.offset : 0;
 						switch (type) {
 							case "top":
 								top = tRects.top - iRects.height - positionOffsets.height + 2 - offset;
@@ -1310,7 +1314,7 @@ module.exports = (_ => {
 								tooltipPointer.style.setProperty("margin-left", `${left - 10}px`, "important");
 							}
 							else {
-								let rightMargin = aRects.width - (left + iRects.width);
+								const rightMargin = aRects.width - (left + iRects.width);
 								if (rightMargin < 0) {
 									itemLayer.style.setProperty("left", `${aRects.width - iRects.width - 5}px`, "important");
 									tooltipPointer.style.setProperty("margin-left", `${-1*rightMargin}px`, "important");
@@ -1319,42 +1323,18 @@ module.exports = (_ => {
 						}
 						else if (type == "left" || type == "right") {
 							if (top < 0) {
-								itemLayer.style.setProperty("top", "5px");
-								tooltipPointer.style.setProperty("margin-top", `${top - 10}px`, "important");
+								const bRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.titlebar));
+								const barCorrection = (bRects.width || 0) >= Math.round(75 * window.outerWidth / aRects.width) ? bRects.height : 0;
+								itemLayer.style.setProperty("top", `${5 + barCorrection}px`, "important");
+								tooltipPointer.style.setProperty("margin-top", `${top - 10 - barCorrection}px`, "important");
 							}
 							else {
-								let bottomMargin = aRects.height - (top + iRects.height);
+								const bottomMargin = aRects.height - (top + iRects.height);
 								if (bottomMargin < 0) {
 									itemLayer.style.setProperty("top", `${aRects.height - iRects.height - 5}px`, "important");
 									tooltipPointer.style.setProperty("margin-top", `${-1*bottomMargin}px`, "important");
 								}
 							}
-						}
-						if (options.unhideable) {
-							for (let node of [itemLayer, tooltip, tooltipContent]) {
-								node.style.setProperty("position", "absolute", "important");
-								node.style.setProperty("right", "unset", "important");
-								node.style.setProperty("bottom", "unset", "important");
-								node.style.setProperty("display", "block", "important");
-								node.style.setProperty("opacity", "1", "important");
-								node.style.setProperty("visibility", "visible", "important");
-								node.style.setProperty("max-width", "unset", "important");
-								node.style.setProperty("min-width", "50px", "important");
-								node.style.setProperty("width", "unset", "important");
-								node.style.setProperty("max-height", "unset", "important");
-								node.style.setProperty("min-height", "14px", "important");
-								node.style.setProperty("height", "unset", "important");
-								node.style.setProperty("animation", "unset", "important");
-								node.style.setProperty("transform", "unset", "important");
-							}
-							for (let node of [tooltip, tooltipContent]) {
-								node.style.setProperty("position", "static", "important");
-								node.style.setProperty("top", "unset", "important");
-								node.style.setProperty("left", "unset", "important");
-							}
-							tooltip.style.setProperty("background", "#000", "important");
-							tooltipContent.style.setProperty("color", "#dcddde", "important");
-							tooltipPointer.style.setProperty(`border-top-color`, "#000", "important");
 						}
 					})();
 					
@@ -1583,10 +1563,6 @@ module.exports = (_ => {
 					let ins = BDFDB.ReactUtils.getInstance(ele);
 					if (typeof config.specialFilter == "function") {
 						let component = config.specialFilter(ins);
-						console.log(ins);
-						console.log(component);
-						console.log(config.specialFilter);
-						console.log("___");
 						if (component) {
 							if (config.nonRender) {
 								let exports = (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports;
