@@ -466,7 +466,6 @@ module.exports = (_ => {
 	BDFDB.PluginUtils.init = function (plugin) {
 		BDFDB.PluginUtils.load(plugin);
 		PluginStores.started[plugin.name] = plugin;
-		console.log(plugin);
 		
 		let startMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		BDFDB.LogUtils.log(startMsg, plugin.name);
