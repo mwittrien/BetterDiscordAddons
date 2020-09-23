@@ -197,7 +197,7 @@
 				className = className.split(" ").filter(n => n.indexOf("da-") != 0).join(selector ? "." : " ");
 				className = className || "Preview_undefined";
 			}
-			return className;
+			return className || "Preview_undefined";
 		}
 	};
 	
