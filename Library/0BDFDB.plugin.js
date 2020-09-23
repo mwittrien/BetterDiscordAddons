@@ -5,7 +5,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.0.3",
+			"version": "1.0.4",
 			"description": "Gives other plugins utility functions."
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
@@ -52,6 +52,7 @@ module.exports = (_ => {
 			getVersion() {return config.info.version;}
 			getDescription() {return config.info.description;}
 			load() {
+				this.loaded = true;
 				if (window.BDFDB_Global.loading) {
 					if (!PluginStores.delayedLoad.includes(this)) PluginStores.delayedLoad.push(this);
 				}
@@ -64,6 +65,7 @@ module.exports = (_ => {
 				}
 			}
 			start() {
+				if (!this.loaded) this.load();
 				if (window.BDFDB_Global.loading) {
 					if (!PluginStores.delayedStart.includes(this)) PluginStores.delayedStart.push(this);
 				}
@@ -464,6 +466,7 @@ module.exports = (_ => {
 	BDFDB.PluginUtils.init = function (plugin) {
 		BDFDB.PluginUtils.load(plugin);
 		PluginStores.started[plugin.name] = plugin;
+		console.log(plugin);
 		
 		let startMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		BDFDB.LogUtils.log(startMsg, plugin.name);
