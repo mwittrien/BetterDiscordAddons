@@ -138,6 +138,7 @@
 			"GuildIcon"
 		],
 		"MemoComponent": [
+			"ChannelAutoComplete",
 			"EmojiPicker",
 			"ExpressionPicker",
 			"InviteGuildName",
@@ -158,6 +159,7 @@
 			"Avatar": {"props": ["AnimatedAvatar"]},
 			"BannedCard": {"class": "guildsettingsbannedcard"},
 			"Category": {"class": "categorycontainerdefault"},
+			"ChannelAutoComplete": {"strings": ["hidePersonalInformation", "canExecuteCommands"]},
 			"ChannelCall": {"class": "callcurrentcontainer"},
 			"ChannelMember": {"class": "member"},
 			"Channels": {"class": "guildchannels"},
