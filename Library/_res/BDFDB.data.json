@@ -148,6 +148,7 @@
 			"NowPlayingHeader"
 		],
 		"NonPrototype": [
+			"ChannelAutoComplete",
 			"ChannelTextAreaContainer"
 		],
 		"Finder": {
