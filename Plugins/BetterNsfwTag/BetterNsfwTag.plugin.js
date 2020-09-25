@@ -5,7 +5,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterNsfwTag",
 			"author": "DevilBro",
-			"version": "1.2.4",
+			"version": "1.2.5",
 			"description": "Adds a more noticeable tag to NSFW channels."
 		}
 	};
@@ -56,11 +56,12 @@ module.exports = (_ => {
 
 			processChannelItem (e) {
 				if (e.instance.props.channel && e.instance.props.channel.nsfw) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props:[["className", BDFDB.disCN.channelchildren]]});
-					if (index > -1 && children[index].props && children[index].props.children) {
-						let [oldTagParent, oldTagIndex] = BDFDB.ReactUtils.findParent(children[index], {key: "NSFW-badge"});
+					let children = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.channelchildren]]});
+					let childrenChilds = BDFDB.ObjectUtils.get(children, "props.children.props.children");
+					if (BDFDB.ArrayUtils.is(childrenChilds)) {
+						let [oldTagParent, oldTagIndex] = BDFDB.ReactUtils.findParent(childrenChilds, {key: "NSFW-badge"});
 						if (oldTagIndex > -1) oldTagParent.splice(oldTagIndex, 1);
-						children[index].props.children.push(BDFDB.ReactUtils.createElement("div", {
+						childrenChilds.push(BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCNS._betternsfwtagtag + BDFDB.disCN.channelchildiconbase,
 							key: "NSFW-badge",
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
