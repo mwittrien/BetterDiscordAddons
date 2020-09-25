@@ -49,7 +49,7 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						downloadDictionary:			{value:false, 	description:"Use local dictionary file (downloads dictionary on first useage)"}
+						downloadDictionary:			{value:false, 	description:"Use local dictionary file (downloads dictionary on first usage)"}
 					},
 					choices: {
 						dictionaryLanguage:			{value:"en", 	force:true,		description:"Primary Language:"},
