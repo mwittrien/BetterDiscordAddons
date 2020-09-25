@@ -18,6 +18,7 @@
 		"AnimationUtils": {"props": ["spring", "decay"]},
 		"ArrayUtils": {"props": ["isArrayLike", "zipObject"]},
 		"AssetUtils": {"props": ["getAssetImage", "getAssetIds"]},
+		"AutocompleteOptions": {"props": ["AUTOCOMPLETE_OPTIONS"]},
 		"BadgeUtils": {"props": ["getBadgeCountString", "getBadgeWidthForValue"]},
 		"CallUtils": {"props": ["getCalls", "isCallActive"]},
 		"CategoryCollapseStore": {"props": ["getCollapsedCategories", "isCollapsed"]},
