@@ -1074,7 +1074,7 @@ module.exports = (_ => {
 						BDFDB.DOMUtils.removeClass(icon, BDFDB.disCN.noticeicon);
 						notice.insertBefore(icon, noticeMessage);
 					}
-					if (options.btn || options.button) notice.appendChild(BDFDB.DOMUtils.create(`<button class="${BDFDB.disCNS.noticebutton + BDFDB.disCN.titlesize14}">${options.btn || options.button}</button>`));
+					if (options.btn || options.button) notice.appendChild(BDFDB.DOMUtils.create(`<button class="${BDFDB.disCN.noticebutton}">${options.btn || options.button}</button>`));
 					if (options.id) notice.id = options.id.split(" ").join("");
 					if (options.selector) BDFDB.DOMUtils.addClass(notice, options.selector);
 					if (options.css) BDFDB.DOMUtils.appendLocalStyle("BDFDBcustomNotificationBar" + id, options.css);
