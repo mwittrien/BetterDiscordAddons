@@ -5,7 +5,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterNsfwTag",
 			"author": "DevilBro",
-			"version": "1.2.5",
+			"version": "1.2.6",
 			"description": "Adds a more noticeable tag to NSFW channels."
 		}
 	};
@@ -57,7 +57,7 @@ module.exports = (_ => {
 			processChannelItem (e) {
 				if (e.instance.props.channel && e.instance.props.channel.nsfw) {
 					let children = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.channelchildren]]});
-					let childrenChilds = BDFDB.ObjectUtils.get(children, "props.children.props.children");
+					let childrenChilds = children && BDFDB.ArrayUtils.is(children.props.children) ? children.props.children : BDFDB.ObjectUtils.get(children, "props.children.props.children");
 					if (BDFDB.ArrayUtils.is(childrenChilds)) {
 						let [oldTagParent, oldTagIndex] = BDFDB.ReactUtils.findParent(childrenChilds, {key: "NSFW-badge"});
 						if (oldTagIndex > -1) oldTagParent.splice(oldTagIndex, 1);
