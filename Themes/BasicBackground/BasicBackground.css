@@ -2754,6 +2754,15 @@ body:before {
 .featureCard-1RR4Tl {										/* communitysettings	intro		featurecard				*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
+.featureIcon-3p1TC_ {										/* communitysettings	intro		featureicon				*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.checklistContainer-mFJZEJ {								/* communitysettings	intro		checklist				*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.checklistHeader-1KWcEY {									/* communitysettings	intro		checklist header		*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
 
 .upsellContainer-L9xv7w {									/* communitysettings	general		upsellcontainer			*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
@@ -6050,7 +6059,11 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.5);
 	color: rgb(var(--fontwhite1));
 }
+.role-3ulsK-:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
 #app-mount .popout-2sKjHu,
+.container-3LUQwT,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"] {
 	background: transparent;
 	border: 1px solid rgba(var(--vtransparencycolor), 0.3);
@@ -6059,6 +6072,8 @@ body:before {
 }
 #app-mount .popout-2sKjHu:after,
 #app-mount .popout-2sKjHu:before,
+.container-3LUQwT:after,
+.container-3LUQwT:before,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]:after,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]:before {
 	content: "";
@@ -6073,10 +6088,12 @@ body:before {
 	z-index: -1;
 }
 #app-mount .popout-2sKjHu:after,
+.container-3LUQwT:after,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]:after {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
 }
 #app-mount .popout-2sKjHu:before,
+.container-3LUQwT:before,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]:before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	filter: blur(var(--vpopoutblur));
