@@ -5,8 +5,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "DisplayServersAsChannels",
 			"author": "DevilBro",
-			"version": "1.4.1",
+			"version": "1.4.2",
 			"description": "Display servers in a similar way as channels."
+		},
+		"changeLog": {
+			"improved": {
+				"Server Tooltip": "No longer removes the server tooltip if the plugin ServerDetails is enabled"
+			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -165,7 +170,7 @@ module.exports = (_ => {
 			
 			processGuild (e) {
 				if (e.instance.props.guild) {
-					this.removeTooltip(e.returnvalue);
+					if (!BDFDB_Global.BDUtils.isPluginEnabled("ServerDetails")) this.removeTooltip(e.returnvalue);
 					this.removeMask(e.returnvalue);
 					this.addElementName(e.returnvalue, e.instance.props.guild.name, {
 						badges: [
