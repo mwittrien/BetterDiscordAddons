@@ -46,6 +46,7 @@ https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/Transi
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/UserBirthdays.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/VoiceChatNotifications.plugin.js
 https://raw.githubusercontent.com/MKSx/Send-Audio-Plugin-BetterDiscord/master/SendAudio.plugin.js
+https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Library/0BDFDB.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BadgesEverywhere/BadgesEverywhere.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterFriendList/BetterFriendList.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterNsfwTag/BetterNsfwTag.plugin.js
