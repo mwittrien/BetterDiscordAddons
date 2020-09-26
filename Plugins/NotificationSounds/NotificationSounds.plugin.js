@@ -79,7 +79,7 @@ module.exports = (_ => {
 			"message3":				{implemented:false,	name:"New Chatmessage 3",		src:"/assets/53ce6a92d3c233e8b4ac529d34d374e4.mp3",	mute:true,	focus:null,	include:true},
 			"human_man":			{implemented:false,	name:"Human Man Voice",			src:"/assets/a37dcd6272ae41cf49295d58c9806fe3.mp3",	mute:true,	focus:null,	include:true},
 			"robot_man":			{implemented:false,	name:"Robot Man Voice",			src:"/assets/66598bea6e59eb8acdf32cf2d9d75ba9.mp3",	mute:true,	focus:null,	include:true},
-			"discodo":				{implemented:false,	name:"Unknown",					src:"/assets/ae7d16bb2eea76b9b9977db0fad66658.mp3",	mute:true,	focus:null,	include:true},
+			"discodo":				{implemented:false,	name:"Discodo Launch",			src:"/assets/ae7d16bb2eea76b9b9977db0fad66658.mp3",	mute:true,	focus:null,	include:true},
 			"overlayunlock":		{implemented:false,	name:"Overlay Unlocked",		src:"/assets/ad322ffe0a88436296158a80d5d11baa.mp3",	mute:true,	focus:null,	include:true}
 		};
 
