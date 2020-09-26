@@ -170,7 +170,7 @@ module.exports = (_ => {
 			
 			processGuild (e) {
 				if (e.instance.props.guild) {
-					if (!BDFDB_Global.BDUtils.isPluginEnabled("ServerDetails")) this.removeTooltip(e.returnvalue);
+					if (!BDFDB.BDUtils.isPluginEnabled("ServerDetails")) this.removeTooltip(e.returnvalue);
 					this.removeMask(e.returnvalue);
 					this.addElementName(e.returnvalue, e.instance.props.guild.name, {
 						badges: [
