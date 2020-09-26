@@ -5,8 +5,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.1.6",
+			"version": "4.1.7",
 			"description": "Allows you to rename and recolor channelnames."
+		},
+		"changeLog": {
+			"fixed": {
+				"Autocomplete Menu": "Works again"
+			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -91,6 +96,24 @@ module.exports = (_ => {
 			onStart() {
 				let observer = new MutationObserver(_ => {this.changeAppTitle();});
 				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name:"appTitleObserver",instance:observer}, {childList:true});
+				
+				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.CHANNELS, "queryResults", {after: e => {
+					let channelArray = [];
+					for (let id in changedChannels) if (changedChannels[id] && changedChannels[id].name) {
+						let channel = BDFDB.LibraryModules.ChannelStore.getChannel(id);
+						let category = channel && channel.parent_id && BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id);
+						let catData = category && changedChannels[category.id] || {};
+						if (BDFDB.ChannelUtils.isTextChannel(channel) && channel.guild_id == e.methodArguments[0].guild_id) channelArray.push(Object.assign({
+							lowerCaseName: changedChannels[id].name.toLowerCase(),
+							lowerCaseCatName: catData && catData.name && catData.name.toLowerCase(),
+							channel,
+							category,
+							catData
+						}, changedChannels[id]));
+					}
+					channelArray = BDFDB.ArrayUtils.keySort(channelArray.filter(n => e.returnValue.channels.every(channel => channel.id != n.channel.id) && (n.lowerCaseName.indexOf(e.methodArguments[1]) != -1 || (n.lowerCaseCatName && n.lowerCaseCatName.indexOf(e.methodArguments[1]) != -1))), "lowerCaseName");
+					e.returnValue.channels = [].concat(e.returnValue.channels, channelArray.map(n => n.channel)).slice(0, BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS);
+				}});
 				
 				this.forceUpdateAll();
 			}
@@ -191,28 +214,6 @@ module.exports = (_ => {
 				if (!e.instance.props.disabled && e.instance.props.channel && BDFDB.ChannelUtils.isTextChannel(e.instance.props.channel) && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && settings.changeInChatTextarea) {
 					let data = changedChannels[e.instance.props.channel.id];
 					e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `#${data && data.name || e.instance.props.channel.name}`);
-				}
-			}
-
-			processChannelAutoComplete (e) {
-				if (e.instance.state.autocompleteType == "CHANNELS" && BDFDB.ArrayUtils.is(e.instance.state.autocompletes.channels) && e.instance.props.channel && e.instance.props.channel.guild_id) {
-					let lastWord = (e.instance.props.textValue || "").slice(1).toLowerCase();
-					if (!lastWord) return;
-					let channelArray = [];
-					for (let id in changedChannels) if (changedChannels[id] && changedChannels[id].name) {
-						let channel = BDFDB.LibraryModules.ChannelStore.getChannel(id);
-						let category = channel && channel.parent_id && BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id);
-						let catdata = category && changedChannels[category.id] || {};
-						if (BDFDB.ChannelUtils.isTextChannel(channel) && channel.guild_id == e.instance.props.channel.guild_id) channelArray.push(Object.assign({
-							lowerCaseName: changedChannels[id].name.toLowerCase(),
-							lowerCaseCatName: catdata && catdata.name && catdata.name.toLowerCase(),
-							channel,
-							category,
-							catdata
-						}, changedChannels[id]));
-					}
-					channelArray = BDFDB.ArrayUtils.keySort(channelArray.filter(n => e.instance.state.autocompletes.channels.every(channel => channel.id != n.channel.id) && (n.lowerCaseName.indexOf(lastWord) != -1 || (n.lowerCaseCatName && n.lowerCaseCatName.indexOf(lastWord) != -1))), "lowerCaseName");
-					e.instance.state.autocompletes.channels = [].concat(e.instance.state.autocompletes.channels, channelArray.map(n => n.channel)).slice(0, BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS);
 				}
 			}
 

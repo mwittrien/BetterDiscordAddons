@@ -5,8 +5,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "3.9.5",
+			"version": "3.9.6",
 			"description": "Allows you to change the icon, name, tag and color of users."
+		},
+		"changeLog": {
+			"fixed": {
+				"Autocomplete Menu": "Works again"
+			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -178,6 +183,18 @@ module.exports = (_ => {
 						}
 					}});
 				}
+				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.MENTIONS, "queryResults", {after: e => {
+					let userArray = [];
+					for (let id in changedUsers) if (changedUsers[id] && changedUsers[id].name) {
+						let user = BDFDB.LibraryModules.UserStore.getUser(id);
+						if (user && (e.methodArguments[0].recipients.includes(id) || (e.methodArguments[0].guild_id && BDFDB.LibraryModules.MemberStore.getMember(e.methodArguments[0].guild_id, id)))) userArray.push(Object.assign({
+							lowerCaseName: changedUsers[id].name.toLowerCase(),
+							user
+						}, changedUsers[id]));
+					}
+					userArray = BDFDB.ArrayUtils.keySort(userArray.filter(n => e.returnValue.users.every(comp => comp.user.id != n.user.id) && n.lowerCaseName.indexOf(e.methodArguments[1]) != -1), "lowerCaseName");
+					e.returnValue.users = [].concat(e.returnValue.users, userArray.map(n => {return {user: n.user};})).slice(0, BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS);
+				}});
 				
 				this.forceUpdateAll();
 			}
@@ -187,7 +204,7 @@ module.exports = (_ => {
 			}
 
 			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [], innerItems = [];
+				let settingsPanel, settingsItems = [];
 				
 				for (let key in settings) if (!this.defaults.settings[key].inner) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 					className: BDFDB.disCN.marginbottom8,
@@ -291,23 +308,6 @@ module.exports = (_ => {
 				if (!e.instance.props.disabled && e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && settings.changeInChatTextarea) {
 					let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channel.recipients[0]);
 					if (user) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `@${changedUsers[user.id] && changedUsers[user.id].name || user.username}`);
-				}
-			}
-
-			processChannelAutoComplete (e) {
-				if (e.instance.state.autocompleteType == "MENTIONS" && BDFDB.ArrayUtils.is(e.instance.state.autocompletes.users) && e.instance.props.channel) {
-					let lastWord = (e.instance.props.textValue || "").slice(1).toLowerCase();
-					if (!lastWord) return;
-					let userArray = [];
-					for (let id in changedUsers) if (changedUsers[id] && changedUsers[id].name) {
-						let user = BDFDB.LibraryModules.UserStore.getUser(id);
-						if (user && (e.instance.props.channel.recipients.includes(id) || (e.instance.props.channel.guild_id && BDFDB.LibraryModules.MemberStore.getMember(e.instance.props.channel.guild_id, id)))) userArray.push(Object.assign({
-							lowerCaseName: changedUsers[id].name.toLowerCase(),
-							user
-						}, changedUsers[id]));
-					}
-					userArray = BDFDB.ArrayUtils.keySort(userArray.filter(n => e.instance.state.autocompletes.users.every(comp => comp.user.id != n.user.id) && n.lowerCaseName.indexOf(lastWord) != -1), "lowerCaseName");
-					e.instance.state.autocompletes.users = [].concat(e.instance.state.autocompletes.users, userArray.map(n => {return {user: n.user};})).slice(0, BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS);
 				}
 			}
 
