@@ -5,7 +5,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.0.6",
+			"version": "1.0.7",
 			"description": "Gives other plugins utility functions."
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
@@ -3599,7 +3599,8 @@ module.exports = (_ => {
 					return string || original;
 				};
 				BDFDB.StringUtils.findMatchCaseless = function (match, string, any) {
-					if (typeof match != "string" || typeof string != "string") return "";
+					if (typeof match != "string" || typeof string != "string" || !match || !string) return "";
+					match = BDFDB.StringUtils.regEscape(match);
 					let exec = (new RegExp(any ? `([\\n\\r\\s]+${match})|(^${match})` : `([\\n\\r\\s]+${match}[\\n\\r\\s]+)|([\\n\\r\\s]+${match}$)|(^${match}[\\n\\r\\s]+)|(^${match}$)`, "i")).exec(string);
 					return exec && typeof exec[0] == "string" && exec[0].replace(/[\n\r\s]/g, "") || "";
 				};
