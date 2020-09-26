@@ -3598,9 +3598,9 @@ module.exports = (_ => {
 					});
 					return string || original;
 				};
-				BDFDB.StringUtils.findMatchCaseless = function (match, string) {
+				BDFDB.StringUtils.findMatchCaseless = function (match, string, any) {
 					if (typeof match != "string" || typeof string != "string") return "";
-					let exec = (new RegExp(`([\n\r\s]+${match}[\n\r\s]+)|([\n\r\s]+${match}$)|(^${match}[\n\r\s]+)|(^${match}$)`, "i")).exec(string);
+					let exec = (new RegExp(any ? `([\\n\\r\\s]+${match})|(^${match})` : `([\\n\\r\\s]+${match}[\\n\\r\\s]+)|([\\n\\r\\s]+${match}$)|(^${match}[\\n\\r\\s]+)|(^${match}$)`, "i")).exec(string);
 					return exec && typeof exec[0] == "string" && exec[0].replace(/[\n\r\s]/g, "") || "";
 				};
 				BDFDB.StringUtils.extractSelection = function (original, selection) {
