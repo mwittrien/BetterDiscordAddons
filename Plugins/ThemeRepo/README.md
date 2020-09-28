@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.
+Allows you to preview all themes from the theme repo and download them on the fly.

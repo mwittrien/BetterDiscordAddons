@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
 			"version": "2.0.7",
-			"description": "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings."
+			"description": "Allows you to preview all themes from the theme repo and download them on the fly."
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
