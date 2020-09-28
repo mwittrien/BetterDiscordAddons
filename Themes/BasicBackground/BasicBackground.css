@@ -3188,108 +3188,40 @@ body:before {
 
 /* ----		13.2.	GUILDADD/CREATION				----- */
 
-#app-mount .wrapper-2ZbzR9 {								/* modal				wrapper								*/
-	background: transparent;
+.container-UC8Ug1 {											/* modal				item								*/
+	background-color: rgb(var(--vtransparencycolor), 0.2);
+	border: none;
 }
-.wrapper-2ZbzR9 > * > * {
-	top: unset !important;
-	transform: unset !important;
+.container-UC8Ug1:hover {
+	background-color: rgb(var(--vtransparencycolor), 0.4);
 }
-#app-mount .slide-2pHaq5 {									/* modal				slide								*/
-	background: transparent;
-}
-#app-mount .action-1lSjCi {
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-	border-color: rgba(var(--vtransparencycolor), 0.2);
-	box-shadow: 0 2px 4px rgba(var(--vtransparencycolor), 0.1);
-}
-#app-mount .actionBody-1qj65C {								/* modal				actiontext							*/
+.text-1FOLJS {												/* modal				text								*/
 	color: rgb(var(--fontwhite2));
 }
-#app-mount .actionButton-2PeQbJ {							/* modal				actionbutton						*/
+.container-UC8Ug1:hover .text-1FOLJS {
 	color: rgb(var(--fontwhite1));
 }
-#app-mount .or-3THJsp {										/* modal				oricon								*/
-	-webkit-mask: url(https://discordapp.com/assets/b9cf5548cc5a23a6943f194a0ace88f8.svg) center/52px 52px no-repeat;
-	background: none;
-	color: rgb(var(--fontwhite1));
-	line-height: 306px;
-    order: unset;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    border-radius: unset;
-    border: unset;
-}
-.or-3THJsp:after,
-.or-3THJsp:before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
-.or-3THJsp:after {
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
-}
-.or-3THJsp:before {
-	background: var(--vpopout) center/var(--vpopoutsize);
-	filter: blur(var(--vpopoutblur));
-	background-attachment: fixed;
-}
-#app-mount .cancelButton-RGXhAE {							/* modal				cancelbutton						*/
-	color: rgb(var(--fontwhite2));
-}
-#app-mount .cancelButton-RGXhAE:hover {
-	color: rgb(var(--fontwhite1));
-	border-bottom-color: rgb(var(--fontwhite1));
-}
-#app-mount .cancelButton-RGXhAE:before {
-	-webkit-mask: url(https://discordapp.com/assets/eb57a76361c43375bf23207ad2acc631.svg) 0/18px 12px no-repeat;
+.arrow-hynWUl {												/* modal				arrow								*/
+	object-position: -9999999px -9999999px;
+	-webkit-mask: url(https://discordapp.com/assets/69a0ea5dbf79a129c81a0cb171b60b7a.svg) center/cover no-repeat;
 	background: rgb(var(--fontwhite2));
+	opacity: 1;
 }
-#app-mount .cancelButton-RGXhAE:hover:before {
+.container-UC8Ug1:hover .arrow-hynWUl {
 	background: rgb(var(--fontwhite1));
 }
-
-#app-mount .description-QF3836 {							/* create				description							*/
+.input--jS-j2 {												/* modal				invite input						*/
+	background: transparent;
+}
+.inputInner-2akrSS {										/* modal				invite input inner					*/
+	border-width: 1px;
+	border-style: solid;
+}
+.container-1CE3eW .footer-2gL1pp .lookBlank-3eh9lL {
 	color: rgb(var(--fontwhite2));
 }
-#app-mount .helpText-h3r3wC {								/* create				helptext							*/
-	color: rgb(var(--fontwhite2));
-}
-.avatar-21196O {											/* create				avataruploader						*/
-	border-color: rgb(var(--fontwhite1));
-}
-.avatarUploaderAcronym-3SioMc,								/* create				avataruploaderacronym				*/
-.avatarUploaderHint-3SN212 {								/* create				avataruploaderhint					*/
+.container-1CE3eW .footer-2gL1pp .lookBlank-3eh9lL:hover {
 	color: rgb(var(--fontwhite1));
-}
-.avatarUploader-3XDtmn .sizeInfo-SKMPPw {					/* create				avatarsizeinfo						*/
-	color: rgb(var(--fontwhite2));
-}
-#app-mount .regionSelect-3lf4eE .regionSelectInner-24f4Ce,	/* create				regionselect						*/
-#app-mount .regionSelect-3lf4eE button {
-	border-color: rgb(var(--fontwhite1));
-}
-#app-mount .regionSelect-3lf4eE:hover button {
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .regionSelectName-2-2FWh {						/* create				regionselectname					*/
-	color: rgb(var(--fontwhite2));
-}
-
-#app-mount .description-Bw8krY {							/* join					description							*/
-	color: rgb(var(--fontwhite2));
-}
-#app-mount .inputLabel-vJ2Z0B {								/* join					inputlabel							*/
-	color: rgb(var(--fontwhite2));
 }
 
 /* ----		13.3.	REGIONSELECTMODAL				---- */
@@ -6411,7 +6343,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	background-color: rgb(var(--fontwhite1));
 }
 #app-mount .dismiss-SCAH9H {
-	-webkit-mask: url(https://discordapp.com/assets/7731c77d99babca1a8faec204d98c380.svg) 50% 55%/10px 10px no-repeat;
+	-webkit-mask: url(https://discordapp.com/assets/69a0ea5dbf79a129c81a0cb171b60b7a.svg) 50% 55%/10px 10px no-repeat;
 	background: rgb(var(--fontwhite1));
 }
 #app-mount .icon-KgjVwm:empty,
