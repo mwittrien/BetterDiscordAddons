@@ -6367,20 +6367,20 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	width: 4px;
 	height: 4px;
 }
- ::-webkit-scrollbar,
- ::-webkit-scrollbar-track,
- ::-webkit-scrollbar-track-piece,
+::-webkit-scrollbar,
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-track-piece,
 #app-mount ::-webkit-scrollbar,
 #app-mount ::-webkit-scrollbar-track,
 #app-mount ::-webkit-scrollbar-track-piece {
-	border-color: transparent;
-	background: transparent;
+	border-color: transparent !important;
+	background: transparent !important;
 }
 ::-webkit-scrollbar-thumb,
 #app-mount ::-webkit-scrollbar-thumb {
 	border-radius: 10px;
 	border: none;
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--vaccentcolor)) !important;
 }
 ::-webkit-scrollbar-corner,
 #app-mount ::-webkit-scrollbar-corner {
