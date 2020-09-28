@@ -10,9 +10,10 @@ if (window.BDFDB && window.BDFDB.myPlugins && Object.keys(window.BDFDB.myPlugins
 		};
 		let downloadPlugins = _ => {
 			let plugins = Object.assign({}, window.BDFDB.myPlugins), i = 0;
-			for (let name in plugins) {
+			for (let name in plugins) if (plugins[name]) {
 				i++;
 				let last = i >= Object.keys(plugins).length;
+				clearTimeout(plugins[name].startTimeout);
 				setTimeout(_ => {
 					let url = typeof plugins[name].getRawUrl == "function" && typeof plugins[name].getRawUrl() == "string" ? plugins[name].getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${name}/${name}.plugin.js`;
 					request(url, (error, response, body) => {
