@@ -3205,7 +3205,6 @@ body:before {
 	object-position: -9999999px -9999999px;
 	-webkit-mask: url(https://discordapp.com/assets/69a0ea5dbf79a129c81a0cb171b60b7a.svg) center/cover no-repeat;
 	background: rgb(var(--fontwhite2));
-	opacity: 1;
 }
 .container-UC8Ug1:hover .arrow-hynWUl {
 	background: rgb(var(--fontwhite1));
