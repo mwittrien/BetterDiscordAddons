@@ -2718,7 +2718,8 @@ module.exports = (_ => {
 				BDFDB.DataUtils.save = function (data, plugin, key, id) {
 					plugin = plugin == BDFDB && InternalBDFDB || plugin;
 					let pluginName = typeof plugin === "string" ? plugin : plugin.name;
-					let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
+					let fileName = pluginName == "BDFDB" ? "0BDFDB" : pluginName;
+					let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".config.json");
 					
 					let config = Cache.data[pluginName] !== undefined ? Cache.data[pluginName] : (InternalBDFDB.readConfig(configPath) || {});
 					
@@ -2747,7 +2748,8 @@ module.exports = (_ => {
 				BDFDB.DataUtils.load = function (plugin, key, id) {
 					plugin = plugin == BDFDB && InternalBDFDB || plugin;
 					let pluginName = typeof plugin === "string" ? plugin : plugin.name;
-					let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
+					let fileName = pluginName == "BDFDB" ? "0BDFDB" : pluginName;
+					let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".config.json");
 					
 					let config = Cache.data[pluginName] !== undefined ? Cache.data[pluginName] : (InternalBDFDB.readConfig(configPath) || {});
 					let configIsObject = BDFDB.ObjectUtils.is(config);
@@ -2763,7 +2765,8 @@ module.exports = (_ => {
 				BDFDB.DataUtils.remove = function (plugin, key, id) {
 					plugin = plugin == BDFDB && InternalBDFDB || plugin;
 					let pluginName = typeof plugin === "string" ? plugin : plugin.name;
-					let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
+					let fileName = pluginName == "BDFDB" ? "0BDFDB" : pluginName;
+					let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".config.json");
 					
 					let config = Cache.data[pluginName] !== undefined ? Cache.data[pluginName] : (InternalBDFDB.readConfig(configPath) || {});
 					let configIsObject = BDFDB.ObjectUtils.is(config);
