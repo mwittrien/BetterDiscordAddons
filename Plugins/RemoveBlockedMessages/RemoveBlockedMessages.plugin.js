@@ -5,8 +5,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.0.5",
+			"version": "1.0.6",
 			"description": "Completely removes blocked messages."
+		},
+		"changeLog": {
+			"improved": {
+				"Unread Markers": "No longer marks channels and servers that only contain unread blocked messages as unread"
+			},
+			"fixed": {
+				"Date Deviders": "No longer shows date deviders of blocked messages"
+			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -48,6 +56,32 @@ module.exports = (_ => {
 			
 			onStart() {
 				BDFDB.MessageUtils.rerenderAll();
+				
+				/* PATCH GUILD UNREAD */
+				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
+					if (e.returnValue) {
+						let count = BDFDB.LibraryModules.UnreadChannelUtils.getUnreadCount(e.methodArguments[0]);
+						if (count < BDFDB.DiscordConstants.MAX_MESSAGES_PER_CHANNEL) {
+							let id = BDFDB.LibraryModules.UnreadChannelUtils.lastMessageId(e.methodArguments[0]);
+							let message = id && BDFDB.LibraryModules.MessageStore.getMessage(e.methodArguments[0], id);
+							if (message && message.blocked) {
+								let oldestId = BDFDB.LibraryModules.UnreadChannelUtils.getOldestUnreadMessageId(e.methodArguments[0]);
+								let messages = BDFDB.LibraryModules.MessageStore.getMessages(e.methodArguments[0]);
+								if (messages && oldestId) {
+									let index = messages._array.indexOf(messages._array.find(c => c.id == oldestId));
+									if (index > -1) return messages._array.slice(index).some(c => !c.blocked);
+								}
+							}
+						}
+					}
+				}});
+				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadGuildUtils, "hasUnread", {after: e => {
+					if (e.returnValue && e.methodArguments[0] == "377831025201512448") {
+						return BDFDB.LibraryModules.GuildChannelStore.getChannels(e.methodArguments[0]).SELECTABLE.map(n => n.channel && n.channel.id).filter(n => n && n != "null").some(BDFDB.LibraryModules.UnreadChannelUtils.hasUnread);
+					}
+				}});
 			}
 			
 			onStop() {
