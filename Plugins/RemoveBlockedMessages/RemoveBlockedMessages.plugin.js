@@ -55,10 +55,6 @@ module.exports = (_ => {
 			}
 			
 			onStart() {
-				BDFDB.MessageUtils.rerenderAll();
-				
-				/* PATCH GUILD UNREAD */
-				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
 					if (e.returnValue) {
 						let count = BDFDB.LibraryModules.UnreadChannelUtils.getUnreadCount(e.methodArguments[0]);
@@ -82,6 +78,8 @@ module.exports = (_ => {
 						return BDFDB.LibraryModules.GuildChannelStore.getChannels(e.methodArguments[0]).SELECTABLE.map(n => n.channel && n.channel.id).filter(n => n && n != "null").some(BDFDB.LibraryModules.UnreadChannelUtils.hasUnread);
 					}
 				}});
+				
+				BDFDB.MessageUtils.rerenderAll();
 			}
 			
 			onStop() {
