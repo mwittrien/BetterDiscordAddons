@@ -3876,13 +3876,13 @@ module.exports = (_ => {
 					}
 				};
 				BDFDB.DiscordUtils.isDevModeEnabled = function () {
-					return LibraryModules.StoreChangeUtils.get("UserSettingsStore").developerMode;
+					return (LibraryModules.StoreChangeUtils.get("UserSettingsStore") || {}).developerMode;
 				};
 				BDFDB.DiscordUtils.getTheme = function () {
-					return LibraryModules.StoreChangeUtils.get("UserSettingsStore").theme == "dark" ? BDFDB.disCN.themedark : BDFDB.disCN.themelight;
+					return (LibraryModules.StoreChangeUtils.get("UserSettingsStore") || {}).theme != "dark" ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
 				};
 				BDFDB.DiscordUtils.getMode = function () {
-					return LibraryModules.StoreChangeUtils.get("UserSettingsStore").message_display_compact ? "compact" : "cozy";
+					return (LibraryModules.StoreChangeUtils.get("UserSettingsStore") || {}).message_display_compact ? "compact" : "cozy";
 				};
 				BDFDB.DiscordUtils.getZoomFactor = function () {
 					let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
