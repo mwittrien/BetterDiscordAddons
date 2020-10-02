@@ -12,7 +12,7 @@ https://raw.githubusercontent.com/codedotspectra/themes/master/nocturnal/nocturn
 https://raw.githubusercontent.com/codedotspectra/themes/master/themes-files/neutron.theme.css
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/Red.n.Black.theme.css
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/ReZero.theme.css
-https://raw.githubusercontent.com/DarkKillerXL/Red-n-Black/master/Red 'n Black.theme.css
+https://raw.githubusercontent.com/DarkKillerXL/Red-n-Black/master/Red_n_Black.theme.css
 https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/ClearDiscord.theme.css
 https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/JustBlack.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/AkameGaKill.theme.css
@@ -133,7 +133,6 @@ https://raw.githubusercontent.com/Tropix126/BetterDiscordStuff/master/midnight/M
 https://raw.githubusercontent.com/Twiistrz/TransparencyTheme/master/TransparencyConfig.theme.css
 https://raw.githubusercontent.com/VaporousCreeper/BetterDiscord-ThemesAndPlugins/master/Themes/GGO_Kirito/GGO_Kirito.theme.css
 https://raw.githubusercontent.com/Vaxuuu/Indigo-Theme/master/Indigo.theme.css
-https://raw.githubusercontent.com/Wahrandz/NieR-Automata-/master/Theme css/Final; Nier_Automata By AbdelBouklech.theme.css
 https://raw.githubusercontent.com/XYZenix/XYZenixThemes/master/DTM-16.theme.css
 https://raw.githubusercontent.com/YuraBrm/BetterDiscordThemes/master/Avis/Avis.theme.css
 https://raw.githubusercontent.com/Zerthox/Discord-Color-Accent/master/CustomColorAccent.theme.css
