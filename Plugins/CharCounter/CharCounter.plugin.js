@@ -5,8 +5,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "CharCounter",
 			"author": "DevilBro",
-			"version": "1.4.9",
+			"version": "1.5.0",
 			"description": "Adds a charcounter in the chat."
+		},
+		"changeLog": {
+			"fixed": {
+				"Message Input": "Works again for the message textarea"
+			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -145,7 +150,11 @@ module.exports = (_ => {
 			
 			injectCounter (parent, children, type, refClass, parsing) {
 				if (!children) return;
-				parent.props.className = BDFDB.DOMUtils.formatClassName(parent.props.className, BDFDB.disCN._charcountercounteradded);
+				if (parent.props.className) parent.props.className = BDFDB.DOMUtils.formatClassName(parent.props.className, BDFDB.disCN._charcountercounteradded);
+				else parent.props.children = BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN._charcountercounteradded,
+					children: parent.props.children
+				});
 				children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CharCounter, {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._charcountercounter, type && BDFDB.disCN[`_charcounter${typeMap[type] || type}counter`]),
 					refClass: refClass,
