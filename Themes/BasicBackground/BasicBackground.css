@@ -5210,6 +5210,10 @@ body:before {
 	background-color: transparent;
 }
 
+.guildSection-1EoFKd {										/* popout				emojisection						*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+
 .loading-1lSwpg {											/* popout				loading placeholder					*/
 	background: rgba(var(--vtransparencycolor), 0.3);
 }
