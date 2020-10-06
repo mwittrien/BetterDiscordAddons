@@ -5,12 +5,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "3.9.6",
+			"version": "3.9.7",
 			"description": "Allows you to change the icon, name, tag and color of users."
 		},
 		"changeLog": {
-			"fixed": {
-				"Autocomplete Menu": "Works again"
+			"added": {
+				"Do not overwrite role color": "Added option to not overwrite rolecolor in chats and memberlist"
 			}
 		}
 	};
@@ -524,21 +524,24 @@ module.exports = (_ => {
 					if (header && header.props && header.props.message) {
 						let data = changedUsers[header.props.message.author.id];
 						if (data) {
+							let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(header.props.message.channel_id) || {}).guild_id, header.props.message.author.id) || {}).colorString || data.color1;
 							let message = new BDFDB.DiscordObjects.Message(Object.assign({}, header.props.message, {author: this.getUserData(header.props.message.author.id)}));
 							if (data.name) message.nick = data.name;
-							if (data.color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "HEX");
+							if (color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
 							header.props.message = message;
 						}
 					}
 					let content = e.instance.props.childrenMessageContent;
 					if (content && content.type && content.type.type) {
 						let data = changedUsers[content.props.message.author.id];
-						let messageColor = data && (data.color5 || (BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.coloredText) && data.color1));
-						if (messageColor) {
-							let message = new BDFDB.DiscordObjects.Message(Object.assign({}, content.props.message, {author: this.getUserData(content.props.message.author.id)}));
-							if (data.name) message.nick = data.name;
-							message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(messageColor) ? messageColor[0] : messageColor, "HEX");
-							content.props.message = message;
+						if (data) {
+							let messageColor = data.color5 || (BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.coloredText) && (data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(content.props.message.channel_id) || {}).guild_id, content.props.message.author.id) || {}).colorString || data.color1));
+							if (messageColor) {
+								let message = new BDFDB.DiscordObjects.Message(Object.assign({}, content.props.message, {author: this.getUserData(content.props.message.author.id)}));
+								if (data.name) message.nick = data.name;
+								message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(messageColor) ? messageColor[0] : messageColor, "HEX");
+								content.props.message = message;
+							}
 						}
 					}
 				}
@@ -554,11 +557,11 @@ module.exports = (_ => {
 								let renderChildren = children[index].props.children;
 								children[index].props.children = (...args) => {
 									let renderedChildren = renderChildren(...args);
-									this.changeUserColor(renderedChildren, e.instance.props.message.author.id);
+									this.changeUserColor(renderedChildren, e.instance.props.message.author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
 									return renderedChildren;
 								}
 							}
-							else this.changeUserColor(children[index], e.instance.props.message.author.id);
+							else this.changeUserColor(children[index], e.instance.props.message.author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
 						}
 						this.injectBadge(children, e.instance.props.message.author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, 2, {
 							tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
@@ -575,8 +578,9 @@ module.exports = (_ => {
 							let message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {author: this.getUserData(e.instance.props.message.author.id)}));
 							let data = changedUsers[e.instance.props.message.author.id];
 							if (data) {
+								let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.message.author.id) || {}).colorString || data.color1;
 								if (data.name) message.nick = data.name;
-								if (data.color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "HEX");
+								if (color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
 							}
 							e.instance.props.message = message;
 							e.instance.props.children.props.message = e.instance.props.message;
@@ -584,7 +588,7 @@ module.exports = (_ => {
 					}
 					else {
 						let data = changedUsers[e.instance.props.message.author.id];
-						let messageColor = data && (data.color5 || (BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.coloredText) && data.color1));
+						let messageColor = data && (data.color5 || (BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.coloredText) && (data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.message.author.id) || {}).colorString || data.color1)));
 						if (messageColor) e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {color: BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(messageColor) ? messageColor[0] : messageColor, "RGBA")});
 					}
 				}
@@ -675,7 +679,7 @@ module.exports = (_ => {
 						}
 					}
 					else {
-						this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true, modify: BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "hovered", "selected")});
+						this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true, guildId:e.instance.props.channel.guild_id});
 						this.injectBadge(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
 							tagClass: BDFDB.disCN.bottagmember
 						});
@@ -901,7 +905,8 @@ module.exports = (_ => {
 					let data = changedUsers[userId] || {};
 					if (data.color1 || (data.color2 && options.changeBackground)) {
 						let childProp = child.props.children ? "children" : "text";
-						let fontColor = options.modify ? this.chooseColor(data.color1, options.modify) : data.color1;
+						let color1 = data.color1 && data.useRoleColor && options.guildId && (BDFDB.LibraryModules.MemberStore.getMember(options.guildId, userId) || {}).colorString || data.color1;
+						let fontColor = options.modify && !(data.useRoleColor && options.guildId) ? this.chooseColor(color1, options.modify) : color1;
 						let backgroundColor = options.changeBackground && data.color2;
 						let fontGradient = BDFDB.ObjectUtils.is(fontColor);
 						if (BDFDB.ObjectUtils.is(child.props.style)) {
@@ -1177,6 +1182,13 @@ module.exports = (_ => {
 										color: data.color2,
 										number: 2
 									})
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+									type: "Switch",
+									className: BDFDB.disCN.marginbottom20 + " input-userolecolor",
+									label: this.labels.modal_userolecolor_text,
+									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+									value: data.useRoleColor
 								})
 							]
 						}),
@@ -1245,6 +1257,7 @@ module.exports = (_ => {
 							let userStatusInput = modal.querySelector(".input-userstatus " + BDFDB.dotCN.input);
 							let userStatusEmojiPicker = modal.querySelector(".input-useremojistatus " + BDFDB.dotCN.emojiold);
 							let removeStatusInput = modal.querySelector(".input-removestatus " + BDFDB.dotCN.switchinner);
+							let useRoleColorInput = modal.querySelector(".input-userolecolor " + BDFDB.dotCN.switchinner);
 							let ignoreTagColorInput = modal.querySelector(".input-ignoretagcolor " + BDFDB.dotCN.switchinner);
 							
 							data.name = userNameInput.value.trim() || null;
@@ -1254,6 +1267,7 @@ module.exports = (_ => {
 							data.status = !data.removeStatus && userStatusInput.value.trim() || null;
 							data.statusEmoji = !data.removeStatus && BDFDB.ReactUtils.findValue(userStatusEmojiPicker, "emoji", {up: true}) || null;
 							data.removeStatus = removeStatusInput.checked;
+							data.useRoleColor = useRoleColorInput.checked;
 							data.ignoreTagColor = ignoreTagColorInput.checked;
 
 							data.color1 = BDFDB.ColorUtils.getSwatchColor(modal, 1);
@@ -1314,6 +1328,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Boja oznaka",
 							modal_colorpicker4_text:			"Boja fonta",
 							modal_colorpicker5_text:			"Boja fonta",
+							modal_userolecolor_text:			"Nemojte prepisivati boju uloge",
 							modal_ignoretagcolor_text:			"Upotrijebite boju uloga",
 							modal_invalidurl_text:				"Nevažeći URL"
 						};
@@ -1335,6 +1350,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Etiketfarve",
 							modal_colorpicker4_text:			"Skriftfarve",
 							modal_colorpicker5_text:			"Skriftfarve",
+							modal_userolecolor_text:			"Overskriv ikke rollefarven",
 							modal_ignoretagcolor_text:			"Brug rollefarve",
 							modal_invalidurl_text:				"Ugyldig URL"
 						};
@@ -1356,6 +1372,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Etikettfarbe",
 							modal_colorpicker4_text:			"Schriftfarbe",
 							modal_colorpicker5_text:			"Schriftfarbe",
+							modal_userolecolor_text:			"Überschreibe nicht die Rollenfarbe",
 							modal_ignoretagcolor_text:			"Benutze Rollenfarbe",
 							modal_invalidurl_text:				"Ungültige URL"
 						};
@@ -1377,6 +1394,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Color de la etiqueta",
 							modal_colorpicker4_text:			"Color de fuente",
 							modal_colorpicker5_text:			"Color de fuente",
+							modal_userolecolor_text:			"No sobrescriba el color del rol",
 							modal_ignoretagcolor_text:			"Usar color de rol",
 							modal_invalidurl_text:				"URL inválida"
 						};
@@ -1398,6 +1416,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Couleur de l'étiquette",
 							modal_colorpicker4_text:			"Couleur de la police",
 							modal_colorpicker5_text:			"Couleur de la police",
+							modal_userolecolor_text:			"Ne pas écraser la couleur du rôle",
 							modal_ignoretagcolor_text:			"Utiliser la couleur de rôle",
 							modal_invalidurl_text:				"URL invalide"
 						};
@@ -1419,6 +1438,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Colore della etichetta",
 							modal_colorpicker4_text:			"Colore del carattere",
 							modal_colorpicker5_text:			"Colore del carattere",
+							modal_userolecolor_text:			"Non sovrascrivere il colore del ruolo",
 							modal_ignoretagcolor_text:			"Usa il colore del ruolo",
 							modal_invalidurl_text:				"URL non valido"
 						};
@@ -1440,6 +1460,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Etiketkleur",
 							modal_colorpicker4_text:			"Doopvontkleur",
 							modal_colorpicker5_text:			"Doopvontkleur",
+							modal_userolecolor_text:			"Overschrijf de rolkleur niet",
 							modal_ignoretagcolor_text:			"Gebruik rolkleur",
 							modal_invalidurl_text:				"Ongeldige URL"
 						};
@@ -1461,6 +1482,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Stikkordfarge",
 							modal_colorpicker4_text:			"Skriftfarge",
 							modal_colorpicker5_text:			"Skriftfarge",
+							modal_userolecolor_text:			"Ikke overskriv rollefarge",
 							modal_ignoretagcolor_text:			"Bruk rollefarge",
 							modal_invalidurl_text:				"Ugyldig URL"
 						};
@@ -1482,6 +1504,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Kolor etykiety",
 							modal_colorpicker4_text:			"Kolor czcionki",
 							modal_colorpicker5_text:			"Kolor czcionki",
+							modal_userolecolor_text:			"Nie nadpisuj kolor roli",
 							modal_ignoretagcolor_text:			"Użyj kolor roli",
 							modal_invalidurl_text:				"Nieprawidłowe URL"
 						};
@@ -1503,6 +1526,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Cor da etiqueta",
 							modal_colorpicker4_text:			"Cor da fonte",
 							modal_colorpicker5_text:			"Cor da fonte",
+							modal_userolecolor_text:			"Não sobrescrever a cor da papel",
 							modal_ignoretagcolor_text:			"Use a cor do papel",
 							modal_invalidurl_text:				"URL inválida"
 						};
@@ -1524,6 +1548,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Merkkiväri",
 							modal_colorpicker4_text:			"Fontinväri",
 							modal_colorpicker5_text:			"Fontinväri",
+							modal_userolecolor_text:			"Älä korvaa rooliväriä",
 							modal_ignoretagcolor_text:			"Käytä rooliväriä",
 							modal_invalidurl_text:				"Virheellinen URL"
 						};
@@ -1545,6 +1570,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Märkafärg",
 							modal_colorpicker4_text:			"Fontfärg",
 							modal_colorpicker5_text:			"Fontfärg",
+							modal_userolecolor_text:			"Skriv inte över rollfärg",
 							modal_ignoretagcolor_text:			"Använd rollfärg",
 							modal_invalidurl_text:				"Ogiltig URL"
 						};
@@ -1566,6 +1592,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Etiket rengi",
 							modal_colorpicker4_text:			"Yazı rengi",
 							modal_colorpicker5_text:			"Yazı rengi",
+							modal_userolecolor_text:			"Rol rengini üzerine yazmayın",
 							modal_ignoretagcolor_text:			"Rol rengini kullan",
 							modal_invalidurl_text:				"Geçersiz URL"
 						};
@@ -1587,6 +1614,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Barva štítek",
 							modal_colorpicker4_text:			"Barva fontu",
 							modal_colorpicker5_text:			"Barva fontu",
+							modal_userolecolor_text:			"Nepřepisujte barva role",
 							modal_ignoretagcolor_text:			"Použijte barva role",
 							modal_invalidurl_text:				"Neplatná URL"
 						};
@@ -1608,6 +1636,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Цвят на свободен край",
 							modal_colorpicker4_text:			"Цвят на шрифта",
 							modal_colorpicker5_text:			"Цвят на шрифта",
+							modal_userolecolor_text:			"Не презаписвайте цвят на ролята",
 							modal_ignoretagcolor_text:			"Използвайте цвят на ролите",
 							modal_invalidurl_text:				"Невалиден URL"
 						};
@@ -1629,6 +1658,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Цвет тег",
 							modal_colorpicker4_text:			"Цвет шрифта",
 							modal_colorpicker5_text:			"Цвет шрифта",
+							modal_userolecolor_text:			"Не перезаписывать цвет роли",
 							modal_ignoretagcolor_text:			"Использовать цвет ролей",
 							modal_invalidurl_text:				"Неверная URL"
 						};
@@ -1650,6 +1680,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Колір тег",
 							modal_colorpicker4_text:			"Колір шрифту",
 							modal_colorpicker5_text:			"Колір шрифту",
+							modal_userolecolor_text:			"Не переписуйте колір ролі",
 							modal_ignoretagcolor_text:			"Використовуйте рольовий колір",
 							modal_invalidurl_text:				"Недійсна URL"
 						};
@@ -1671,6 +1702,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"タグの色",
 							modal_colorpicker4_text:			"フォントの色",
 							modal_colorpicker5_text:			"フォントの色",
+							modal_userolecolor_text:			"役割の色を上書きしないでください",
 							modal_ignoretagcolor_text:			"ロールカラーを使用する",
 							modal_invalidurl_text:				"無効な URL"
 						};
@@ -1692,6 +1724,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"標籤顏色",
 							modal_colorpicker4_text:			"字體顏色",
 							modal_colorpicker5_text:			"字體顏色",
+							modal_userolecolor_text:			"不要覆蓋角色顏色",
 							modal_ignoretagcolor_text:			"使用角色",
 							modal_invalidurl_text:				"無效的 URL"
 						};
@@ -1713,6 +1746,7 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"꼬리표 색깔",
 							modal_colorpicker4_text:			"글꼴 색깔",
 							modal_colorpicker5_text:			"글꼴 색깔",
+							modal_userolecolor_text:			"역할 색상을 덮어 쓰지 마십시오",
 							modal_ignoretagcolor_text:			"역할 색상 사용",
 							modal_invalidurl_text:				"잘못된 URL"
 						};
@@ -1734,7 +1768,8 @@ module.exports = (_ => {
 							modal_colorpicker3_text:			"Tagcolor",
 							modal_colorpicker4_text:			"Fontcolor",
 							modal_colorpicker5_text:			"Fontcolor",
-							modal_ignoretagcolor_text:			"Use Rolecolor",
+							modal_userolecolor_text:			"Do not overwrite rolecolor",
+							modal_ignoretagcolor_text:			"Use rolecolor",
 							modal_invalidurl_text:				"Invalid URL"
 						};
 				}
