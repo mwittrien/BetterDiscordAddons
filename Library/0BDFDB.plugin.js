@@ -813,7 +813,7 @@ module.exports = (_ => {
 				BDFDB.StoreChangeUtils.add = function (plugin, store, callback) {
 					plugin = plugin == BDFDB && InternalBDFDB || plugin;
 					if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ObjectUtils.is(store) || typeof store.addChangeListener != "function" ||  typeof callback != "function") return;
-					BDFDB.ListenerUtils.remove(plugin, store, callback);
+					BDFDB.StoreChangeUtils.remove(plugin, store, callback);
 					if (!BDFDB.ArrayUtils.is(plugin.changeListeners)) plugin.changeListeners = [];
 					plugin.changeListeners.push({store, callback});
 					store.addChangeListener(callback);

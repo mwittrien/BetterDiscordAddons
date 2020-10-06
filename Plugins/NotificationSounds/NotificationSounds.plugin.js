@@ -5,8 +5,14 @@ module.exports = (_ => {
 		"info": {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
-			"version": "3.4.9",
+			"version": "3.5.0",
 			"description": "Allows you to replace the native sounds of Discord with your own."
+		},
+		"changeLog": {
+			"fixed": {
+				"Streamer Mode": "No longer plays sound while in streamer mode",
+				"Output Device": "Now uses your choosen output device same as native discord"
+			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -37,10 +43,12 @@ module.exports = (_ => {
         start() {}
         stop() {}
     } : (([Plugin, BDFDB]) => {
-		var audios, choices, firedEvents, repatchIncoming, callAudio;
+		var audios, choices, firedEvents;
+		
 		const removeAllKey = "REMOVE_ALL_BDFDB_DEVILBRO_DO_NOT_COPY";
-				
-		const settingsAudio = new Audio();
+		const defaultDevice = "default";
+		
+		var currentDevice = defaultDevice, createdAudios = {}, repatchIncoming;
 		
 		/* NEVER CHANGE THE SRC LINKS IN THE PLUGIN FILE, TO ADD NEW SONGS ADD THEM IN THE SETTINGS GUI IN THE PLUGINS PAGE */
 		const types = {
@@ -101,6 +109,71 @@ module.exports = (_ => {
 		};
 		
 		for (let id in types) if (types[id].include) defaultAudios.Discord[types[id].name] = types[id].src;
+		
+		const WebAudioSound = class WebAudioSound {
+			constructor (type) {
+				this._name = type;
+				this._src = choices[type].src;
+				this._volume = choices[type].volume;
+			}
+			loop () {
+				this._ensureAudio().then(audio => {
+					audio.loop = true;
+					audio.play();
+				});
+			}
+			play () {
+				this._ensureAudio().then(audio => {
+					audio.loop = false;
+					audio.play();
+				});
+			}
+			pause () {
+				this._audio.then(audio => {
+					audio.pause();
+				});
+			}
+			stop () {
+				this._destroyAudio();
+			}
+			setTime (time) {
+				this._audio.then(audio => {
+					audio.currentTime = time;
+				});
+			}
+			setLoop (loop) {
+				this._audio.then(audio => {
+					audio.loop = loop;
+				});
+			}
+			_destroyAudio () {
+				if (this._audio) {
+					this._audio.then(audio => {
+						audio.pause();
+						audio.src = "";
+					});
+					this._audio = null;
+				}
+			}
+			_ensureAudio () {
+				return this._audio = this._audio || new Promise((callback, errorCallback) => {
+					let audio = new Audio;
+					audio.src = this._src;
+					audio.onloadeddata = _ => {
+						audio.volume = Math.min((BDFDB.LibraryModules.MediaDeviceUtils.getOutputVolume() / 100) * (this._volume / 100), 1);
+						BDFDB.LibraryModules.PlatformUtils.embedded && audio.setSinkId(currentDevice || defaultDevice);
+						callback(audio);
+					};
+					audio.onerror = _ => {
+						return errorCallback(new Error("could not play audio"))
+					};
+					audio.onended = _ => {
+						return this._destroyAudio()
+					};
+					audio.load();
+				}), this._audio;
+			}
+		};
 	
         return class NotificationSounds extends Plugin {
 			onLoad() {
@@ -116,6 +189,27 @@ module.exports = (_ => {
 			}
 			
 			onStart() {
+				if (BDFDB.LibraryModules.PlatformUtils.embedded) {
+					let change = _ => {
+						if (window.navigator.mediaDevices && window.navigator.mediaDevices.enumerateDevices) {
+							window.navigator.mediaDevices.enumerateDevices().then(enumeratedDevices => {
+								let id = BDFDB.LibraryModules.MediaDeviceUtils.getOutputDeviceId();
+								let allDevices = BDFDB.LibraryModules.MediaDeviceUtils.getOutputDevices();
+								let filteredDevices = enumeratedDevices.filter(d => d.kind == "audiooutput" && d.deviceId != "communications");
+								let deviceIndex = BDFDB.LibraryModules.ArrayUtils(allDevices).sortBy(d => d.index).findIndex(d => d.id == id);
+								let deviceViaId = allDevices[id];
+								let deviceViaIndex = filteredDevices[deviceIndex];
+								if (deviceViaId && deviceViaIndex && deviceViaIndex.label != deviceViaId.name) deviceViaIndex = filteredDevices.find(d => d.label == deviceViaId.name);
+								currentDevice = deviceViaIndex ? deviceViaIndex.deviceId : defaultDevice;
+							}).catch(_ => {
+								currentDevice = defaultDevice;
+							});
+						}
+					};
+					BDFDB.StoreChangeUtils.add(this, BDFDB.LibraryModules.MediaDeviceUtils, change);
+					change();
+				}
+				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dirtyDispatch", {before: e => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.MESSAGE_CREATE && e.methodArguments[0].message) {
 						let message = e.methodArguments[0].message;
@@ -174,22 +268,9 @@ module.exports = (_ => {
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "createSound", {after: e => {
 					let type = e.methodArguments[0];
-					let audio = new Audio();
-					audio.src = choices[type].src;
-					audio.volume = choices[type].volume/100;
-					e.returnValue.play = _ => {
-						if (!audio.paused || this.dontPlayAudio(type)) return;
-						audio.currentTime = 0;
-						audio.loop = false;
-						audio.play();
-					};
-					e.returnValue.loop = _ => {
-						if (!audio.paused || this.dontPlayAudio(type)) return;
-						audio.currentTime = 0;
-						audio.loop = true;
-						audio.play();
-					};
-					e.returnValue.stop = _ => {audio.pause();}
+					let audio = new WebAudioSound(type);
+					createdAudios[type] = audio;
+					return audio;
 				}});
 				
 				
@@ -202,7 +283,10 @@ module.exports = (_ => {
 				if (callListenerModule) {
 					callListenerModule.terminate();
 					BDFDB.PatchUtils.patch(this, callListenerModule, "handleRingUpdate", {instead: e => {
-						BDFDB.LibraryModules.CallUtils.getCalls().filter(call => call.ringing.length > 0 && BDFDB.LibraryModules.VoiceUtils.getCurrentClientVoiceChannelId() === call.channelId).length > 0 && !BDFDB.LibraryModules.SoundStateUtils.isSoundDisabled("call_calling") && !BDFDB.LibraryModules.StreamerModeStore.disableSounds ? callAudio.loop() : callAudio.stop();
+						if (BDFDB.LibraryModules.CallUtils.getCalls().filter(call => call.ringing.length > 0 && BDFDB.LibraryModules.VoiceUtils.getCurrentClientVoiceChannelId() === call.channelId).length > 0 && !BDFDB.LibraryModules.SoundStateUtils.isSoundDisabled("call_calling") && !BDFDB.LibraryModules.StreamerModeStore.disableSounds) {
+							createdAudios["call_calling"].loop();
+						}
+						else createdAudios["call_calling"].stop();
 					}});
 					callListenerModule.initialize();
 				}
@@ -211,7 +295,7 @@ module.exports = (_ => {
 			}
 			
 			onStop() {
-				settingsAudio.pause();
+				for (let type in createdAudios) if (createdAudios[type]) createdAudios[type].stop();
 			}
 
 			getSettingsPanel (collapseStates = {}) {				
@@ -504,14 +588,15 @@ module.exports = (_ => {
 			onSettingsClosed () {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
-					settingsAudio.pause();
+					for (let type in createdAudios) if (createdAudios[type]) createdAudios[type].stop();
+					createdAudios = {};
 					this.forceUpdateAll();
 				}
 			}
 		
 			forceUpdateAll () {
 				repatchIncoming = true;
-				callAudio = BDFDB.LibraryModules.SoundUtils.createSound("call_calling");
+				createdAudios["call_calling"] = BDFDB.LibraryModules.SoundUtils.createSound("call_calling");
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 		
@@ -566,19 +651,15 @@ module.exports = (_ => {
 				BDFDB.DataUtils.save(choices[type], this, "choices", type);
 				if (play) {
 					this.SettingsUpdated = true;
-					this.playAudio(type, settingsAudio);
+					this.playAudio(type);
 				}
 			}
 
-			playAudio (type, audio) {
-				if (!audio) {
-					if (this.dontPlayAudio(type)) return;
-					audio = new Audio();
-				}
-				else audio.pause();
-				audio.src = choices[type].src;
-				audio.volume = choices[type].volume/100;
-				audio.play();
+			playAudio (type) {
+				if (this.dontPlayAudio(type) || BDFDB.LibraryModules.StreamerModeStore.disableSounds) return;
+				if (createdAudios[type]) createdAudios[type].stop();
+				createdAudios[type] = new WebAudioSound(type);
+				createdAudios[type].play();
 			}
 
 			isSuppressMentionEnabled (guildId, channelId) {
