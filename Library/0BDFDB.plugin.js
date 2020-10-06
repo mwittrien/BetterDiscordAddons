@@ -2333,11 +2333,11 @@ module.exports = (_ => {
 						}
 					}, instant ? 0 : 1000);
 				};
-				BDFDB.MessageUtils.openMenu = function (message, e = mousePosition) {
+				BDFDB.MessageUtils.openMenu = function (message, e = mousePosition, slim = false) {
 					if (!message) return;
 					let channel = LibraryModules.ChannelStore.getChannel(message.channel_id);
 					if (channel) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-						return BDFDB.ReactUtils.createElement((BDFDB.ModuleUtils.findByName("MessageContextMenu", false) || {exports:{}}).exports.default, Object.assign({}, e, {
+						return BDFDB.ReactUtils.createElement((BDFDB.ModuleUtils.findByName(slim ? "MessageSearchResultContextMenu" : "MessageContextMenu", false) || {exports:{}}).exports.default, Object.assign({}, e, {
 							message: message,
 							channel: channel
 						}));

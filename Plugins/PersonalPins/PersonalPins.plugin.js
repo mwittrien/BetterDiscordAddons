@@ -405,14 +405,14 @@ module.exports = (_ => {
 			
 			renderMessage (buttonInstance, note, message, channel, filter) {
 				if (!message || !channel) return null;
-				let channelname = channel.name;
+				let channelName = channel.name;
 				let guild = channel.guild_id && BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
 				let role = guild && BDFDB.LibraryModules.PermissionRoleUtils.getHighestRole(guild, message.author.id);
 				if (role) message.colorString = role.colorString;
-				if (filter != "channel" && !channelname && channel.recipients.length > 0) {
+				if (filter != "channel" && !channelName && channel.recipients.length > 0) {
 					for (let dmuser_id of channel.recipients) {
-						channelname = channelname ? channelname + ", @" : channelname;
-						channelname = channelname + ((BDFDB.LibraryModules.UserStore.getUser(dmuser_id) || {}).username || BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER);
+						channelName = channelName ? channelName + ", @" : channelName;
+						channelName = channelName + ((BDFDB.LibraryModules.UserStore.getUser(dmuser_id) || {}).username || BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER);
 					}
 				}
 				return [filter == "channel" ? null : BDFDB.ReactUtils.createElement("div", {
@@ -424,7 +424,7 @@ module.exports = (_ => {
 							onClick: _ => {
 								BDFDB.LibraryModules.SelectChannelUtils.selectChannel(channel.guild_id, channel.id);
 							},
-							children: channelname ? ((channel.guild_id ? "#" : "@") + channelname) : "???"
+							children: channelName ? ((channel.guild_id ? "#" : "@") + channelName) : "???"
 						}),
 						filter == "all" ? BDFDB.ReactUtils.createElement("span", {
 							className: BDFDB.disCN.messagespopoutguildname,
@@ -440,7 +440,7 @@ module.exports = (_ => {
 							message: message,
 							channel: channel,
 							onContextMenu: e => {
-								BDFDB.MessageUtils.openMenu(message, e);
+								BDFDB.MessageUtils.openMenu(message, e, true);
 							}
 						}),
 						BDFDB.ReactUtils.createElement("div", {
