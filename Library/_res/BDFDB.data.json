@@ -60,6 +60,7 @@
 		"LastGuildStore": {"props": ["getLastSelectedGuildId"]},
 		"LinkUtils": {"props": ["handleClick", "isLinkTrusted"]},
 		"LoginUtils": {"props": ["login", "logout"]},
+		"MediaDeviceUtils": {"props": ["getOutputDevices", "getInputDevices"]},
 		"MemberCountUtils": {"props": ["getMemberCount", "getMemberCounts"]},
 		"MemberStore": {"props": ["getMember", "getMembers"]},
 		"MentionUtils": {"props": ["isRawMessageMentioned", "isMentioned"]},
