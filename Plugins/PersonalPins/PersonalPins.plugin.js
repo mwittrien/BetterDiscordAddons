@@ -438,7 +438,10 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessageGroup, {
 							className: BDFDB.disCN.messagespopoutgroupcozy,
 							message: message,
-							channel: channel
+							channel: channel,
+							onContextMenu: e => {
+								BDFDB.MessageUtils.openMenu(message, e);
+							}
 						}),
 						BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.messagespopoutactionbuttons,
