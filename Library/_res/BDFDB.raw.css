@@ -927,19 +927,19 @@ img:not([src]), img[src=""], img[src="null"] {
 	}
 }
 .toast {
+	background-color: var(--background-primary);
+	border-radius: 5px;
+	box-shadow: var(--elevation-medium);
+	color: var(--header-primary);
+	margin-top: 10px;
+	padding: 10px;
+	opacity: 1;
+	font-size: 14px;
+	font-weight: 500;
+	user-select: text;
+	pointer-events: auto;
 	animation: toast-up 300ms ease;
 	transform: translateY(-10px);
-	background-color: #36393F;
-	padding: 10px;
-	border-radius: 5px;
-	box-shadow: 0 0 0 1px rgba(32,34,37,.6), 0 2px 10px 0 rgba(0,0,0,.2);
-	font-weight: 500;
-	color: #fff;
-	user-select: text;
-	font-size: 14px;
-	opacity: 1;
-	margin-top: 10px;
-	pointer-events: auto;
 }
 @keyframes toast-down {
 	to {

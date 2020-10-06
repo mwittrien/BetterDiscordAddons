@@ -6022,6 +6022,7 @@ module.exports = (_ => {
 					}
 				};
 				
+				let NativeSubSelectExport = (BDFDB.ModuleUtils.find(m => m == InternalComponents.NativeSubComponents.Select, false) || {exports: {}}).exports;
 				InternalComponents.LibraryComponents.Select = reactInitialized && class BDFDB_Select extends LibraryModules.React.Component {
 					handleChange(value) {
 						this.props.value = value.value || value;
@@ -6029,11 +6030,14 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.forceUpdate(this);
 					}
 					render() {
+						let lightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 							className: BDFDB.disCN.selectwrapper,
 							direction: InternalComponents.LibraryComponents.Flex.Direction.HORIZONTAL,
 							align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
 							children: BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.Select, Object.assign({}, this.props, {
+								lightThemeColorOverrides: NativeSubSelectExport[lightTheme ? "LIGHT_THEME_COLORS" : "DARK_THEME_COLORS"],
+								darkThemeColorOverrides: NativeSubSelectExport[lightTheme ? "LIGHT_THEME_COLORS" : "DARK_THEME_COLORS"],
 								onChange: this.handleChange.bind(this)
 							}))
 						});
@@ -6942,15 +6946,16 @@ module.exports = (_ => {
 				InternalBDFDB.appendCustomControls = function (card) {
 					let checkbox = card.querySelector(BDFDB.dotCN._reposwitch);
 					if (!checkbox) return;
-					let addon = BDFDB.ObjectUtils.get(BDFDB.ReactUtils.getInstance(card), "return.stateNode.props.addon");
-					if (addon && addon.plugin && (addon.plugin == libraryInstance || addon.plugin.name && addon.plugin.name && PluginStores.started[addon.plugin.name] && PluginStores.started[addon.plugin.name] == addon.plugin)) {
+					let props = BDFDB.ObjectUtils.get(BDFDB.ReactUtils.getInstance(card), "return.stateNode.props");
+					if (props && !props.hasCustomControls && props.addon && props.addon.plugin && (props.addon.plugin == libraryInstance || props.addon.plugin.name && props.addon.plugin.name && PluginStores.started[props.addon.plugin.name] && PluginStores.started[props.addon.plugin.name] == props.addon.plugin)) {
+						props.hasCustomControls = true;
 						let controls = [];
-						if (addon.plugin.changeLog) controls.push(InternalBDFDB.createCustomControl(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+						if (props.addon.plugin.changeLog) controls.push(InternalBDFDB.createCustomControl(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 							text: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
 							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 								className: BDFDB.disCN._repoicon,
 								name: InternalComponents.LibraryComponents.SvgIcon.Names.CHANGELOG,
-								onClick: _ => {BDFDB.PluginUtils.openChangeLog(addon.plugin);}
+								onClick: _ => {BDFDB.PluginUtils.openChangeLog(props.addon.plugin);}
 							})
 						})));
 						for (let control of controls) checkbox.parentElement.insertBefore(control, checkbox.parentElement.firstElementChild);
@@ -7517,6 +7522,7 @@ module.exports = (_ => {
 		
 		load () {
 			libraryInstance = this;
+			Object.assign(this, config.info, BDFDB.ObjectUtils.exclude(config, "info"));
 			if (!BDFDB.BDUtils.isPluginEnabled(config.info.name)) BDFDB.BDUtils.enablePlugin(config.info.name);
 		}
 		start() {}

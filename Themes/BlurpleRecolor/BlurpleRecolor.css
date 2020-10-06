@@ -18,6 +18,7 @@
 	--blurple: rgb(var(--vaccentcolor));
 }
 .theme-dark, .theme-light {
+	--logo-primary: rgb(var(--vaccentcolor));
 	--text-link: rgb(var(--vlinkcolor));
 	--focus-primary: rgb(var(--vlinkcolor));
 }
