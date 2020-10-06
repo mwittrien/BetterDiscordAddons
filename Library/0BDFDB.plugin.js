@@ -5622,6 +5622,7 @@ module.exports = (_ => {
 						let isString = typeof this.props.icon == "string";
 						return !this.props.icon ? null : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 							className: BDFDB.disCN.menuicon,
+							nativeClass: true,
 							iconSVG: isString ? this.props.icon : null,
 							name: !isString ? this.props.icon : null
 						});
