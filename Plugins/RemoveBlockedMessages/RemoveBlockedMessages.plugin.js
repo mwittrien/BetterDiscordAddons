@@ -5,15 +5,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.0.6",
+			"version": "1.0.7",
 			"description": "Completely removes blocked messages."
 		},
 		"changeLog": {
-			"improved": {
-				"Unread Markers": "No longer marks channels and servers that only contain unread blocked messages as unread"
+			"added": {
+				"Hide Users": "Added option to hide blocked users completely (hide them in memberlist, channelist, calls)"
 			},
-			"fixed": {
-				"Date Deviders": "No longer shows date deviders of blocked messages"
+			"improved": {
+				"Settings": "You can now disable certain features of the plugin"
 			}
 		}
 	};
@@ -45,18 +45,36 @@ module.exports = (_ => {
         start() {}
         stop() {}
     } : (([Plugin, BDFDB]) => {
+		var settings = {};
+		
         return class RemoveBlockedMessages extends Plugin {
 			onLoad() {
+				this.defaults = {
+					settings: {
+						removeMessages:			{value:true,			description:"Remove messages of blocked users"},
+						removeUsers:			{value:true,			description:"Remove blocked users (memberlist, voicechannels)"},
+						disableNotifications:	{value:true,			description:"Disable unread markers for messages of blocked users"},
+					}
+				};
+				
 				this.patchedModules = {
+					before: {
+						VoiceUsers: "render",
+						PrivateChannelCallParticipants: "render",
+						ChannelCall: "render",
+						UserSummaryItem: "render"
+					},
 					after: {
-						Messages: "type"
+						Messages: "type",
+						MemberListItem: "render",
+						VoiceUser: "render"
 					}
 				};
 			}
 			
 			onStart() {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
-					if (e.returnValue) {
+					if (e.returnValue && settings.disableNotifications) {
 						let count = BDFDB.LibraryModules.UnreadChannelUtils.getUnreadCount(e.methodArguments[0]);
 						if (count < BDFDB.DiscordConstants.MAX_MESSAGES_PER_CHANNEL) {
 							let id = BDFDB.LibraryModules.UnreadChannelUtils.lastMessageId(e.methodArguments[0]);
@@ -74,35 +92,90 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadGuildUtils, "hasUnread", {after: e => {
-					if (e.returnValue && e.methodArguments[0] == "377831025201512448") {
+					if (e.returnValue && settings.disableNotifications) {
 						return BDFDB.LibraryModules.GuildChannelStore.getChannels(e.methodArguments[0]).SELECTABLE.map(n => n.channel && n.channel.id).filter(n => n && n != "null").some(BDFDB.LibraryModules.UnreadChannelUtils.hasUnread);
 					}
 				}});
 				
-				BDFDB.MessageUtils.rerenderAll();
+				this.forceUpdateAll();
 			}
 			
 			onStop() {
+				this.forceUpdateAll();
+			}
+
+			getSettingsPanel (collapseStates = {}) {
+				let settingsPanel, settingsItems = [];
+				
+				for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+					className: BDFDB.disCN.marginbottom8,
+					type: "Switch",
+					plugin: this,
+					keys: ["settings", key],
+					label: this.defaults.settings[key].description,
+					value: settings[key]
+				}));
+				
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+			}
+
+			onSettingsClosed () {
+				if (this.SettingsUpdated) {
+					delete this.SettingsUpdated;
+					this.forceUpdateAll();
+				}
+			}
+		
+			forceUpdateAll () {
+				settings = BDFDB.DataUtils.get(this, "settings");
+				
+				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.MessageUtils.rerenderAll();
 			}
 		
 			processMessages (e) {
-				let messagesIns = e.returnvalue.props.children;
-				if (BDFDB.ArrayUtils.is(messagesIns.props.channelStream)) {
-					let oldStream = messagesIns.props.channelStream.filter(n => n.type != "MESSAGE_GROUP_BLOCKED"), newChannelStream = [];
-					for (let i in oldStream) {
-						let next = parseInt(i)+1;
-						if (oldStream[i].type != "DIVIDER" || (oldStream[next] && oldStream[i].type == "DIVIDER" && oldStream[next].type != "DIVIDER" && oldStream.slice(next).some(nextStream => nextStream.type != "DIVIDER"))) newChannelStream.push(oldStream[i]);
+				if (settings.removeMessages) {
+					let messagesIns = e.returnvalue.props.children;
+					if (BDFDB.ArrayUtils.is(messagesIns.props.channelStream)) {
+						let oldStream = messagesIns.props.channelStream.filter(n => n.type != "MESSAGE_GROUP_BLOCKED"), newChannelStream = [];
+						for (let i in oldStream) {
+							let next = parseInt(i)+1;
+							if (oldStream[i].type != "DIVIDER" || (oldStream[next] && oldStream[i].type == "DIVIDER" && oldStream[next].type != "DIVIDER" && oldStream.slice(next).some(nextStream => nextStream.type != "DIVIDER"))) newChannelStream.push(oldStream[i]);
+						}
+						messagesIns.props.channelStream = newChannelStream;
 					}
-					messagesIns.props.channelStream = newChannelStream;
+					if (BDFDB.ObjectUtils.is(messagesIns.props.messages) && BDFDB.ArrayUtils.is(messagesIns.props.messages._array)) {
+						let messages = messagesIns.props.messages;
+						messagesIns.props.messages = new BDFDB.DiscordObjects.Messages(messages);
+						for (let key in messages) messagesIns.props.messages[key] = messages[key];
+						messagesIns.props.messages._array = [].concat(messagesIns.props.messages._array.filter(n => n.author && !BDFDB.LibraryModules.FriendUtils.isBlocked(n.author.id)));
+						if (messagesIns.props.oldestUnreadMessageId && messagesIns.props.messages._array.every(n => n.id != messagesIns.props.oldestUnreadMessageId)) messagesIns.props.oldestUnreadMessageId = null;
+					}
 				}
-				if (BDFDB.ObjectUtils.is(messagesIns.props.messages) && BDFDB.ArrayUtils.is(messagesIns.props.messages._array)) {
-					let messages = messagesIns.props.messages;
-					messagesIns.props.messages = new BDFDB.DiscordObjects.Messages(messages);
-					for (let key in messages) messagesIns.props.messages[key] = messages[key];
-					messagesIns.props.messages._array = [].concat(messagesIns.props.messages._array.filter(n => n.author && !BDFDB.LibraryModules.FriendUtils.isBlocked(n.author.id)));
-					if (messagesIns.props.oldestUnreadMessageId && messagesIns.props.messages._array.every(n => n.id != messagesIns.props.oldestUnreadMessageId)) messagesIns.props.oldestUnreadMessageId = null;
-				}
+			}
+		
+			processMemberListItem (e) {
+				if (settings.removeUsers && e.instance.props.user && BDFDB.LibraryModules.FriendUtils.isBlocked(e.instance.props.user.id)) return null;
+			}
+		
+			processVoiceUser (e) {
+				if (settings.removeUsers && e.instance.props.user && BDFDB.LibraryModules.FriendUtils.isBlocked(e.instance.props.user.id)) return null;
+			}
+		
+			processVoiceUsers (e) {
+				if (settings.removeUsers && BDFDB.ArrayUtils.is(e.instance.props.voiceStates)) e.instance.props.voiceStates = [].concat(e.instance.props.voiceStates).filter(n => !n.user || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.user.id));
+			}
+
+			processPrivateChannelCallParticipants (e) {
+				if (settings.removeUsers && BDFDB.ArrayUtils.is(e.instance.props.participants)) e.instance.props.participants = [].concat(e.instance.props.participants).filter(n => !n.user || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.user.id));
+			}
+			
+			processChannelCall (e) {
+				if (settings.removeUsers && BDFDB.ArrayUtils.is(e.instance.props.participants)) e.instance.props.participants = [].concat(e.instance.props.participants).filter(n => !n.user || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.user.id));
+			}
+
+			processUserSummaryItem (e) {
+				if (settings.removeUsers && BDFDB.ArrayUtils.is(e.instance.props.users)) e.instance.props.users = [].concat(e.instance.props.users).filter(n => !n.user || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.user.id));
 			}
 		};
     })(window.BDFDB_Global.PluginUtils.buildPlugin(config));
