@@ -5,8 +5,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BadgesEverywhere",
 			"author": "DevilBro",
-			"version": "1.6.0",
+			"version": "1.6.1",
 			"description": "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout."
+		},
+		"changeLog": {
+			"fixed": {
+				"Chat": "Works again in chat"
+			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -48,7 +53,7 @@ module.exports = (_ => {
 				this.patchedModules = {
 					after: {
 						MemberListItem: "render",
-						MessageHeader: "default",
+						MessageUsername: "default",
 						UserPopout: "render"
 					}
 				};
@@ -372,10 +377,9 @@ module.exports = (_ => {
 				}
 			}
 
-			processMessageHeader (e) {
+			processMessageUsername (e) {
 				if (e.instance.props.message && settings.showInChat) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
-					if (index > -1) this.injectBadges(e.instance, children, e.instance.props.message.author, "chat");
+					this.injectBadges(e.instance, e.returnvalue.props.children, e.instance.props.message.author, "chat");
 				}
 			}
 

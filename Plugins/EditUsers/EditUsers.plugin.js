@@ -5,12 +5,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "3.9.7",
+			"version": "3.9.8",
 			"description": "Allows you to change the icon, name, tag and color of users."
 		},
 		"changeLog": {
-			"added": {
-				"Do not overwrite role color": "Added option to not overwrite rolecolor in chats and memberlist"
+			"fixed": {
+				"Chat": "Works again in chat"
 			}
 		}
 	};
@@ -118,6 +118,7 @@ module.exports = (_ => {
 						Account: "render",
 						PrivateChannelEmptyMessage: "default",
 						MessageHeader: "default",
+						MessageUsername: "default",
 						MessageContent: "type",
 						Reaction: "render",
 						Reactor: "render",
@@ -547,27 +548,27 @@ module.exports = (_ => {
 				}
 			}
 			
-			processMessageHeader (e) {
-				if (e.instance.props.message && settings.changeInChatWindow) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
-					if (index > -1) {
+			processMessageUsername (e) {
+				if (e.instance.props.message && settings.changeInChatWindow && e.returnvalue.props.children) {
+					let messageUsername = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
+					if (messageUsername) {
 						let data = changedUsers[e.instance.props.message.author.id];
 						if (data && (data.color1 || data.color2)) {
-							if (children[index].props && typeof children[index].props.children == "function") {
-								let renderChildren = children[index].props.children;
-								children[index].props.children = (...args) => {
+							if (messageUsername.props && typeof messageUsername.props.children == "function") {
+								let renderChildren = messageUsername.props.children;
+								messageUsername.props.children = (...args) => {
 									let renderedChildren = renderChildren(...args);
 									this.changeUserColor(renderedChildren, e.instance.props.message.author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
 									return renderedChildren;
 								}
 							}
-							else this.changeUserColor(children[index], e.instance.props.message.author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
+							else this.changeUserColor(messageUsername, e.instance.props.message.author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
 						}
-						this.injectBadge(children, e.instance.props.message.author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, 2, {
-							tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
-							useRem: true
-						});
 					}
+					this.injectBadge(e.returnvalue.props.children, e.instance.props.message.author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, 2, {
+						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
+						useRem: true
+					});
 				}
 			}
 			

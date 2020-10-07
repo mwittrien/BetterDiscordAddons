@@ -5,8 +5,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "OwnerTag",
 			"author": "DevilBro",
-			"version": "1.3.3",
+			"version": "1.3.4",
 			"description": "Adds a tag or crown to the server owner (or admins/management)."
+		},
+		"changeLog": {
+			"fixed": {
+				"Chat": "Works again in chat"
+			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -51,7 +56,7 @@ module.exports = (_ => {
 				this.patchedModules = {
 					after: {
 						MemberListItem: "render",
-						MessageHeader: "default",
+						MessageUsername: "default",
 						NameTag: "default",
 						UserPopout: "render"
 					}
@@ -186,16 +191,13 @@ module.exports = (_ => {
 				}
 			}
 
-			processMessageHeader (e) {
+			processMessageUsername (e) {
 				if (e.instance.props.message && settings.addInChatWindow) {
 					let userType = this.getUserType(e.instance.props.message.author, e.instance.props.message.channel_id);
-					if (userType) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
-						if (index > -1) this.injectOwnerTag(children, e.instance.props.message.author, userType, e.instance.props.compact ? 0 : 2, {
-							tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
-							useRem: true
-						});
-					}
+					if (userType) this.injectOwnerTag(e.returnvalue.props.children, e.instance.props.message.author, userType, e.instance.props.compact ? 0 : 2, {
+						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
+						useRem: true
+					});
 				}
 			}
 
