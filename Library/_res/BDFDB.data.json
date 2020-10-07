@@ -1230,6 +1230,7 @@
 		"changelogfixed": ["ChangeLog", "fixed"],
 		"changelogimproved": ["ChangeLog", "improved"],
 		"changelogprogress": ["ChangeLog", "progress"],
+		"changelogsociallink": ["ChangeLog", "socialLink"],
 		"changelogtitle": ["ChangeLog", "title"],
 		"channelactionicon": ["ChannelContainer", "actionIcon"],
 		"channelchildicon": ["ChannelContainer", "iconItem"],
