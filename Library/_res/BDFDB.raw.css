@@ -927,10 +927,10 @@ img:not([src]), img[src=""], img[src="null"] {
 	}
 }
 .toast {
-	background-color: var(--background-primary);
+	background-color: #36393f;
 	border-radius: 5px;
 	box-shadow: var(--elevation-medium);
-	color: var(--header-primary);
+	color: #FFF;
 	margin-top: 10px;
 	padding: 10px;
 	opacity: 1;
