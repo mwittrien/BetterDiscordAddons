@@ -1853,6 +1853,7 @@
 		"messagegroupblockedbtn": ["MessageElements", "messageGroupBlockedBtn"],
 		"messagegroupblockedrevealed": ["MessageElements", "revealed"],
 		"messageheader": ["MessageBody", "header"],
+		"messageheadertext": ["MessageBody", "headerText"],
 		"messagelocalbot": ["Message", "localBot"],
 		"messagelocalbotoperations": ["MessageLocalBot", "localBotMessage"],
 		"messagemarkup": ["MessageMarkup", "markup"],
