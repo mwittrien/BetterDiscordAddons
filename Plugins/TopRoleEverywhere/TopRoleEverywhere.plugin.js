@@ -7,11 +7,6 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "3.0.3",
 			"description": "Adds the highest role of a user as a tag."
-		},
-		"changeLog": {
-			"fixed": {
-				"Chat": "Works again in chat"
-			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -94,7 +89,6 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS.messagecompact + BDFDB.dotCNS.messageheader + BDFDB.dotCN._toproleseverywhererolestyle} {
 						margin-right: 0.3rem;
-						text-indent: 0;
 					}
 					${BDFDB.dotCN._toproleseverywhererolestyle} {
 						display: inline-flex;
@@ -102,6 +96,9 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS._toproleseverywhererolestyle + BDFDB.dotCN.userpopoutrolecircle} {
 						flex: 0 0 auto;
+					}
+					${BDFDB.dotCNS.messagecompact + BDFDB.dotCNS.messageheader + BDFDB.dotCN._toproleseverywhererolestyle} {
+						text-indent: 0;
 					}
 				`;
 			}
@@ -167,9 +164,8 @@ module.exports = (_ => {
 
 			processMessageHeader (e) {
 				if (e.instance.props.message) {
-					let headerText = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {props: [["className", BDFDB.disCN.messageheadertext]]});
-					if (headerText && headerText.props && headerText.props.children) {
-						let children = headerText.props.children && headerText.props.children.props ? headerText.props.children.props.children : headerText.props.children;
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
+					if (index > -1) {
 						if (settings.showInChat) this.injectRoleTag(children, e.instance.props.message.author, "chat", {
 							tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 							useRem: true
