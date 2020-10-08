@@ -39,7 +39,7 @@ module.exports = (_ => {
 	});
 	
 	const PluginStores = {
-		started: {},
+		loaded: {},
 		delayedLoad: [],
 		delayedStart: [],
 		updateTimeout: [],
@@ -59,6 +59,7 @@ module.exports = (_ => {
 				else {
 					Object.assign(this, config.info, BDFDB.ObjectUtils.exclude(config, "info"));
 					BDFDB.TimeUtils.suppress(_ => {
+						PluginStores.loaded[config.info.name] = this;
 						BDFDB.PluginUtils.load(this);
 						if (typeof this.onLoad == "function") this.onLoad();
 					}, "Failed to load plugin!", config.info.name)();
@@ -465,7 +466,6 @@ module.exports = (_ => {
 	};
 	BDFDB.PluginUtils.init = function (plugin) {
 		BDFDB.PluginUtils.load(plugin);
-		PluginStores.started[plugin.name] = plugin;
 		
 		let startMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		BDFDB.LogUtils.log(startMsg, plugin.name);
@@ -496,7 +496,6 @@ module.exports = (_ => {
 			if (closeButton) closeButton.click();
 		}
 		
-		delete PluginStores.started[plugin.name];
 		delete Cache.data[plugin.name]
 		if (BDFDB.ObjectUtils.is(window.PluginUpdates) && BDFDB.ObjectUtils.is(window.PluginUpdates.plugins)) delete window.PluginUpdates.plugins[url];
 	};
@@ -525,7 +524,9 @@ module.exports = (_ => {
 				delete window.BDFDB_Global.loaded;
 				BDFDB.TimeUtils.interval((interval, count) => {
 					if (count > 60 || window.BDFDB_Global.loaded) BDFDB.TimeUtils.clear(interval);
-					if (window.BDFDB_Global.loaded) for (let pluginName in BDFDB_Global.ObjectUtils.sort(PluginStores.started)) BDFDB.TimeUtils.timeout(_ => BDFDB.BDUtils.reloadPlugin(pluginName));
+					if (window.BDFDB_Global.loaded) for (let pluginName in BDFDB_Global.ObjectUtils.sort(PluginStores.loaded)) BDFDB.TimeUtils.timeout(_ => {
+						if (PluginStores.loaded[pluginName].started) BDFDB.BDUtils.reloadPlugin(pluginName);
+					});
 				}, 1000);
 			}
 			BDFDB.DOMUtils.removeLocalStyle(plugin.name);
@@ -707,7 +708,35 @@ module.exports = (_ => {
 				changeLogHTML += `</ul>`
 			}
 		}
-		if (changeLogHTML) BDFDB.ModalUtils.open(plugin, {header:`${plugin.name} ${BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG}`, subheader:`Version ${plugin.version}`, children:BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(changeLogHTML)), className:BDFDB.disCN.modalchangelogmodal, contentClassName:BDFDB.disCNS.changelogcontainer + BDFDB.disCN.modalminicontent});
+		if (changeLogHTML) BDFDB.ModalUtils.open(plugin, {
+			header: `${plugin.name} ${BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG}`,
+			subheader: `Version ${plugin.version}`,
+			className: BDFDB.disCN.modalchangelogmodal,
+			contentClassName: BDFDB.disCNS.changelogcontainer + BDFDB.disCN.modalminicontent,
+			footerDirection: InternalComponents.LibraryComponents.Flex.Direction.HORIZONTAL,
+			children: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(changeLogHTML)),
+			footerChildren: PluginStores.loaded[plugin.name] && PluginStores.loaded[plugin.name] == plugin && plugin.author == "DevilBro" && BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.changelogfooter,
+				children: [
+					{href: "https://www.paypal.me/MircoWittrien", name: "PayPal", icon: "PAYPAL"},
+					{href: "https://www.patreon.com/MircoWittrien", name: "Patreon", icon: "PATREON"}
+				].map(data => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Anchor, {
+					className: BDFDB.disCN.changelogsociallink,
+					href: data.href,
+					children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+						text: data.name,
+						children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+							name: InternalComponents.LibraryComponents.SvgIcon.Names[data.icon],
+							width: 16,
+							height: 16
+						})
+					})
+				})).concat(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
+					size: InternalComponents.LibraryComponents.TextElement.Sizes.SIZE_12,
+					children: "Support me to, to receive further updates!"
+				}))
+			})
+		});
 	};
 	BDFDB.PluginUtils.addLoadingIcon = function (icon) {
 		if (!Node.prototype.isPrototypeOf(icon)) return;
@@ -3470,6 +3499,7 @@ module.exports = (_ => {
 											}),
 											footerChildren.length ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ModalComponents.ModalFooter, {
 												className: config.footerClassName,
+												direction: config.footerDirection,
 												children: footerChildren
 											}) : null
 										]
@@ -5706,6 +5736,17 @@ module.exports = (_ => {
 				};
 				InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.ModalComponents.ModalTabContent, {tab:"unnamed", render:true});
 				
+				InternalComponents.LibraryComponents.ModalComponents.ModalFooter = reactInitialized && class BDFDB_ModalFooter extends LibraryModules.React.Component {
+					render() {
+						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.modalfooter),
+							direction: this.props.direction || InternalComponents.LibraryComponents.Flex.Direction.HORIZONTAL_REVERSE,
+							align: InternalComponents.LibraryComponents.Flex.Align.STRETCH,
+							children: this.props.children
+						});
+					}
+				};
+				
 				InternalComponents.LibraryComponents.PaginatedList = reactInitialized && class BDFDB_PaginatedList extends LibraryModules.React.Component {
 					constructor(props) {
 						super(props);
@@ -5725,71 +5766,71 @@ module.exports = (_ => {
 						return this.props.items.length > this.props.amount && BDFDB.ReactUtils.createElement("nav", {
 							className: BDFDB.disCN.paginationlistpagination,
 							children: [
-								this.props.first && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								this.props.first && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 									text: BDFDB.LanguageUtils.LibraryStrings.first,
 									"aria-label": BDFDB.LanguageUtils.LibraryStrings.first,
 									tooltipConfig: {zIndex: 3001},
 									onClick: _ => {if (this.state.offset > 0) this.jump(0);},
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.state.offset <= 0 && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 											className: BDFDB.disCN.searchresultspaginationicon,
-											name: BDFDB.LibraryComponents.SvgIcon.Names.LEFT_DOUBLE_CARET
+											name: InternalComponents.LibraryComponents.SvgIcon.Names.LEFT_DOUBLE_CARET
 										})
 									})
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 									text: BDFDB.LanguageUtils.LanguageStrings.PAGINATION_PREVIOUS,
 									"aria-label": BDFDB.LanguageUtils.LanguageStrings.PAGINATION_PREVIOUS,
 									tooltipConfig: {zIndex: 3001},
 									onClick: _ => {
 										if (this.state.offset > 0) this.jump(this.state.offset - 1);
 									},
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.state.offset <= 0 && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 											className: BDFDB.disCN.searchresultspaginationicon,
-											name: BDFDB.LibraryComponents.SvgIcon.Names.LEFT_CARET
+											name: InternalComponents.LibraryComponents.SvgIcon.Names.LEFT_CARET
 										})
 									})
 								}),
 								BDFDB.LanguageUtils.LanguageStringsFormat("PAGINATION_PAGE_OF", this.state.offset + 1, maxOffset + 1),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 									text: BDFDB.LanguageUtils.LanguageStrings.PAGINATION_NEXT,
 									"aria-label": BDFDB.LanguageUtils.LanguageStrings.PAGINATION_NEXT,
 									tooltipConfig: {zIndex: 3001},
 									onClick: _ => {if (this.state.offset < maxOffset) this.jump(this.state.offset + 1);},
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.state.offset >= maxOffset && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 											className: BDFDB.disCN.searchresultspaginationicon,
-											name: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET
+											name: InternalComponents.LibraryComponents.SvgIcon.Names.RIGHT_CARET
 										})
 									})
 								}),
-								this.props.last && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								this.props.last && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 									text: BDFDB.LanguageUtils.LibraryStrings.last,
 									"aria-label": BDFDB.LanguageUtils.LibraryStrings.last,
 									tooltipConfig: {zIndex: 3001},
 									onClick: _ => {if (this.state.offset < maxOffset) this.jump(maxOffset);},
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.state.offset >= maxOffset && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 											className: BDFDB.disCN.searchresultspaginationicon,
-											name: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_DOUBLE_CARET
+											name: InternalComponents.LibraryComponents.SvgIcon.Names.RIGHT_DOUBLE_CARET
 										})
 									})
 								}),
-								this.props.jump && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+								this.props.jump && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextInput, {
 									key: "pagination-list-jumpinput",
 									type: "number",
-									size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
+									size: InternalComponents.LibraryComponents.TextInput.Sizes.MINI,
 									value: this.state.offset + 1,
 									min: 1,
 									max: maxOffset + 1,
 									onKeyDown: (event, instance) => {if (event.which == 13) this.jump(isNaN(parseInt(instance.props.value)) ? -1 : instance.props.value - 1);}
 								}),
-								this.props.jump && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								this.props.jump && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 									text: BDFDB.LanguageUtils.LanguageStrings.JUMP,
 									"aria-label": BDFDB.LanguageUtils.LanguageStrings.JUMP,
 									tooltipConfig: {zIndex: 3001},
@@ -5797,12 +5838,12 @@ module.exports = (_ => {
 										let jumpInput = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key:"pagination-list-jumpinput"});
 										if (jumpInput) this.jump(isNaN(parseInt(jumpInput.props.value)) ? -1 : jumpInput.props.value - 1);
 									},
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
 										className: BDFDB.disCN.searchresultspaginationbutton,
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 											className: BDFDB.disCN.searchresultspaginationicon,
 											style: {transform: "rotate(90deg"},
-											name: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET
+											name: InternalComponents.LibraryComponents.SvgIcon.Names.RIGHT_CARET
 										})
 									})
 								})
@@ -5833,7 +5874,7 @@ module.exports = (_ => {
 								this.renderPagination(),
 								items.length > this.props.amount && this.props.alphabetKey && BDFDB.ReactUtils.createElement("nav", {
 									className: BDFDB.disCN.paginationlistalphabet,
-									children: Object.keys(alphabet).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									children: Object.keys(alphabet).map(key => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.paginationlistalphabetchar, alphabet[key].disabled &&BDFDB.disCN.paginationlistalphabetchardisabled),
 										onClick: _ => {if (!alphabet[key].disabled) this.jump(Math.floor(items.indexOf(alphabet[key].items[0])/this.props.amount));},
 										children: key
@@ -6047,16 +6088,16 @@ module.exports = (_ => {
 				InternalComponents.LibraryComponents.SettingsGuildList = reactInitialized && class BDFDB_SettingsGuildList extends LibraryModules.React.Component {
 					render() {
 						this.props.disabled = BDFDB.ArrayUtils.is(this.props.disabled) ? this.props.disabled : [];
-						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 							className: this.props.className,
-							wrap: BDFDB.LibraryComponents.Flex.Wrap.WRAP,
-							children: [this.props.includeDMs && {name:"Direct Messages", acronym:"DMs", id:BDFDB.DiscordConstants.ME, getIconURL: _ => {}}].concat(BDFDB.LibraryModules.FolderStore.getFlattenedGuilds()).filter(n => n).map(guild => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							wrap: InternalComponents.LibraryComponents.Flex.Wrap.WRAP,
+							children: [this.props.includeDMs && {name:"Direct Messages", acronym:"DMs", id:BDFDB.DiscordConstants.ME, getIconURL: _ => {}}].concat(BDFDB.LibraryModules.FolderStore.getFlattenedGuilds()).filter(n => n).map(guild => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 								text: guild.name,
 								children: BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.DOMUtils.formatClassName(this.props.guildClassName, BDFDB.disCN.settingsguild, this.props.disabled.includes(guild.id) && BDFDB.disCN.settingsguilddisabled),
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Icon, {
+									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.Icon, {
 										guild: guild,
-										size: this.props.size || BDFDB.LibraryComponents.GuildComponents.Icon.Sizes.MEDIUM
+										size: this.props.size || InternalComponents.LibraryComponents.GuildComponents.Icon.Sizes.MEDIUM
 									}),
 									onClick: e => {
 										let isDisabled = this.props.disabled.includes(guild.id);
@@ -6575,6 +6616,12 @@ module.exports = (_ => {
 					NOVA_TRASH: {
 						icon: `<svg name="Nova_Trash" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="%%color" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="%%color" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>`
 					},
+					PATREON: {
+						icon: `<svg name="Patreon" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><g fill="%%color"><path d="m 0,0.5 h 4.219 v 23 H 0 Z"></path><path d="m 15.384,0.5 c -4.767,0 -8.644,3.873 -8.644,8.633 0,4.75 3.877,8.61 8.644,8.61 C 20.138,17.743 24,13.878 24,9.133 24,4.374 20.137,0.5 15.384,0.5 Z"></path></g></svg>`
+					},
+					PAYPAL: {
+						icon: `<svg name="PayPal" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 32 32"><g fill="%%color" transform="matrix(0.96,0,0,0.96,-0.14,2)"><path d="M 25.772542,2.414 C 24.280605,0.724 21.580605,0 18.126542,0 H 8.1025423 c -0.706,0 -1.306,0.51 -1.418,1.2 L 2.5106048,27.462 c -0.082,0.518 0.322,0.986 0.85,0.986 h 6.188 l 1.5540002,-9.78 -0.048,0.308 c 0.11,-0.69 0.708,-1.2 1.414,-1.2 h 2.94 c 5.778,0 10.3,-2.328 11.622,-9.062 0.04,-0.2 0.102,-0.584 0.102,-0.584 0.375937,-2.492 -0.0021,-4.182 -1.360063,-5.716 z"></path><path d="m 30.199,10.906 c -1.436,6.63 -6.018,10.138 -13.29,10.138 H 14.273 L 12.305,33.5 h 4.276 c 0.618,0 1.144,-0.446 1.24,-1.052 l 0.05,-0.264 0.984,-6.182 0.064,-0.34 c 0.096,-0.606 0.622,-1.052 1.238,-1.052 h 0.782 c 5.054,0 9.01,-2.036 10.166,-7.926 0.464,-2.364 0.24,-4.346 -0.906,-5.778 z"></path></g></svg>`
+					},
 					PENCIL: {
 						defaultProps: {
 							width: 16,
@@ -6891,15 +6938,22 @@ module.exports = (_ => {
 						let childMouseEnter = child.props.onMouseEnter, childMouseLeave = child.props.onMouseLeave, childClick = child.props.onClick, childContextMenu = child.props.onContextMenu;
 						let shown = false;
 						child.props.onMouseEnter = (e, childThis) => {
-							if (!shown) {
-								shown = true;
-								this.tooltip = BDFDB.TooltipUtils.create(e.currentTarget, typeof this.props.text == "function" ? this.props.text(this) : this.props.text, Object.assign({delay: this.props.delay}, this.props.tooltipConfig));
+							if (!shown && !e.currentTarget.BDFDBtooltipShown) {
+								e.currentTarget.BDFDBtooltipShown = shown = true;
+								this.tooltip = BDFDB.TooltipUtils.create(e.currentTarget, typeof this.props.text == "function" ? this.props.text(this) : this.props.text, Object.assign({
+									delay: this.props.delayü
+								}, this.props.tooltipConfig, {
+									onHide: (tooltip, anker) => {
+										delete anker.BDFDBtooltipShown;
+										shown = false;
+										if (this.props.tooltipConfig && typeof this.props.tooltipConfig.onHide == "function") this.props.onHide(tooltip, anker);
+									}
+								}));
 								if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);
 								if (typeof childMouseEnter == "function") childMouseEnter(e, childThis);
 							}
 						};
 						child.props.onMouseLeave = (e, childThis) => {
-							shown = false;
 							if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
 							if (typeof childMouseLeave == "function") childMouseLeave(e, childThis);
 						};
@@ -6947,7 +7001,7 @@ module.exports = (_ => {
 					let checkbox = card.querySelector(BDFDB.dotCN._reposwitch);
 					if (!checkbox) return;
 					let props = BDFDB.ObjectUtils.get(BDFDB.ReactUtils.getInstance(card), "return.stateNode.props");
-					if (props && !props.hasCustomControls && props.addon && props.addon.plugin && (props.addon.plugin == libraryInstance || props.addon.plugin.name && props.addon.plugin.name && PluginStores.started[props.addon.plugin.name] && PluginStores.started[props.addon.plugin.name] == props.addon.plugin)) {
+					if (props && !props.hasCustomControls && props.addon && props.addon.plugin && (props.addon.plugin == libraryInstance || props.addon.plugin.name && props.addon.plugin.name && PluginStores.loaded[props.addon.plugin.name] && PluginStores.loaded[props.addon.plugin.name] == props.addon.plugin)) {
 						props.hasCustomControls = true;
 						let controls = [];
 						if (props.addon.plugin.changeLog) controls.push(InternalBDFDB.createCustomControl(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
@@ -7062,7 +7116,7 @@ module.exports = (_ => {
 						if (role) {
 							delete avatar.props["user_by_BDFDB"];
 							if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.AvatarComponents.default, Object.assign({}, avatar.props, {
-								size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
+								size: InternalComponents.LibraryComponents.AvatarComponents.Sizes.SIZE_40
 							}));
 							delete avatar.props.className;
 							avatar = BDFDB.ReactUtils.createElement("div", {
@@ -7204,7 +7258,7 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(BDFDB, BDFDB.ObjectUtils.get(BDFDB.ModuleUtils.findByString("renderReactions", "canAddNewReactions", "showMoreUtilities", false), "exports.default"), "type", {after: e => {
-					if (document.querySelector(BDFDB.dotCN.emojipicker) || !BDFDB.ObjectUtils.toArray(PluginStores.started).some(p => p.onMessageOptionContextMenu || p.onMessageOptionToolbar)) return;
+					if (document.querySelector(BDFDB.dotCN.emojipicker) || !BDFDB.ObjectUtils.toArray(PluginStores.loaded).filter(p => p.started).some(p => p.onMessageOptionContextMenu || p.onMessageOptionToolbar)) return;
 					let toolbar = BDFDB.ReactUtils.findChild(e.returnValue, {filter: c => c && c.props && c.props.showMoreUtilities != undefined && c.props.showEmojiPicker != undefined && c.props.setPopout != undefined});
 					if (toolbar) BDFDB.PatchUtils.patch(BDFDB, toolbar, "type", {after: e2 => {
 						let menu = BDFDB.ReactUtils.findChild(e2.returnValue, {filter: c => c && c.props && typeof c.props.onRequestClose == "function" && c.props.onRequestClose.toString().indexOf("moreUtilities") > -1});
@@ -7533,7 +7587,7 @@ module.exports = (_ => {
 		getSettingsPanel (collapseStates = {}) {
 			let settingsPanel, settingsItems = [];
 			let bdToastSetting = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts);
-			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Switch",
 				plugin: InternalBDFDB,

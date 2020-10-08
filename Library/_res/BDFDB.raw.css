@@ -643,6 +643,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	background: rgba(0, 0, 0, 0.2);
 	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
 }
+[REPLACE_CLASS_modalchangelogmodal] [REPLACE_CLASS_changelogsociallink] {
+	margin-right: 12px;
+}
 
 [REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutright][REPLACE_CLASS_popoutarrowalignmentmiddle]:before {
 	border-right-color: #2f3136;
