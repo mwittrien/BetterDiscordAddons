@@ -930,7 +930,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	}
 }
 .toast {
-	background-color: var(--background-primary);
+	background-color: var(--background-floating);
 	border-radius: 5px;
 	box-shadow: var(--elevation-medium);
 	color: var(--header-primary);

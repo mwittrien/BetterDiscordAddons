@@ -790,16 +790,6 @@
 
 /* ~~~~		8.		USERSETTINGS					~~~~ */
 
-#bd-settings-sidebar .ui-tab-bar-item {
-	margin-bottom: 2px;
-}
-#app-mount #bd-settings-sidebar .ui-tab-bar-item:hover {
-	background-color: var(--background-modifier-hover)
-}
-#app-mount #bd-settings-sidebar .ui-tab-bar-item.selected {
-	background-color: var(--background-modifier-selected);
-}
-
 .dot-2s_oHI {												/* settingsitems		dot									*/
 	background-color: rgb(var(--vaccentcolor));
 }
