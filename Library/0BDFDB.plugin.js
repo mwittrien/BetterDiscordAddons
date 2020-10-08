@@ -733,7 +733,7 @@ module.exports = (_ => {
 					})
 				})).concat(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
 					size: InternalComponents.LibraryComponents.TextElement.Sizes.SIZE_12,
-					children: "Support me to, to receive further updates!"
+					children: BDFDB.LanguageUtils.LibraryStrings.donate_message
 				}))
 			})
 		});
@@ -6935,7 +6935,7 @@ module.exports = (_ => {
 					render() {
 						let child = (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children) || BDFDB.ReactUtils.createElement("div", {});
 						child.props.className = BDFDB.DOMUtils.formatClassName(child.props.className, this.props.className);
-						let childMouseEnter = child.props.onMouseEnter, childMouseLeave = child.props.onMouseLeave, childClick = child.props.onClick, childContextMenu = child.props.onContextMenu;
+						let childProps = Object.assign({}, child.props);
 						let shown = false;
 						child.props.onMouseEnter = (e, childThis) => {
 							if (!shown && !e.currentTarget.BDFDBtooltipShown) {
@@ -6950,20 +6950,20 @@ module.exports = (_ => {
 									}
 								}));
 								if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);
-								if (typeof childMouseEnter == "function") childMouseEnter(e, childThis);
+								if (typeof childProps.onMouseEnter == "function") childProps.onMouseEnter(e, childThis);
 							}
 						};
 						child.props.onMouseLeave = (e, childThis) => {
 							if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
-							if (typeof childMouseLeave == "function") childMouseLeave(e, childThis);
+							if (typeof childProps.onMouseLeave == "function") childProps.onMouseLeave(e, childThis);
 						};
 						child.props.onClick = (e, childThis) => {
 							if (typeof this.props.onClick == "function") this.props.onClick(e, this);
-							if (typeof childClick == "function") childClick(e, childThis);
+							if (typeof childProps.onClick == "function") childProps.onClick(e, childThis);
 						};
 						child.props.onContextMenu = (e, childThis) => {
 							if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
-							if (typeof childContextMenu == "function") childContextMenu(e, childThis);
+							if (typeof childProps.onContextMenu == "function") childProps.onContextMenu(e, childThis);
 						};
 						return BDFDB.ReactUtils.createElement(LibraryModules.React.Fragment, {
 							children: child

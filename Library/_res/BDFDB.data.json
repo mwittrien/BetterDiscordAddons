@@ -2638,6 +2638,7 @@
 		"hr": {
 			"ascending": "Uzlazni",
 			"descending": "Silazni",
+			"donate_message": "Podržite me da primam daljnja ažuriranja!",
 			"file_navigator_text": "Pregledajte datoteku",
 			"first": "Prvi",
 			"last": "Zadnji",
@@ -2656,6 +2657,7 @@
 		"da": {
 			"ascending": "Stigende",
 			"descending": "Aftagende",
+			"donate_message": "Støt mig til at modtage yderligere opdateringer!",
 			"file_navigator_text": "Gennemse fil",
 			"first": "Første",
 			"last": "Sidste",
@@ -2674,6 +2676,7 @@
 		"de": {
 			"ascending": "Aufsteigend",
 			"descending": "Absteigend",
+			"donate_message": "Unterstütze mich, um weitere Updates zu erhalten!",
 			"file_navigator_text": "Datei durchsuchen",
 			"first": "Erste",
 			"last": "Letzte",
@@ -2692,6 +2695,7 @@
 		"es": {
 			"ascending": "Ascendente",
 			"descending": "Descendente",
+			"donate_message": "¡Apóyame para recibir más actualizaciones!",
 			"file_navigator_text": "Buscar archivo",
 			"first": "Primero",
 			"last": "Último",
@@ -2710,6 +2714,7 @@
 		"fr": {
 			"ascending": "Ascendant",
 			"descending": "Descendant",
+			"donate_message": "Soutenez-moi pour recevoir d'autres mises à jour!",
 			"file_navigator_text": "Parcourir le fichier",
 			"first": "Première",
 			"last": "Dernier",
@@ -2728,6 +2733,7 @@
 		"it": {
 			"ascending": "Ascendente",
 			"descending": "Discendente",
+			"donate_message": "Supportami a, per ricevere ulteriori aggiornamenti!",
 			"file_navigator_text": "Sfoglia file",
 			"first": "Primo",
 			"last": "Ultimo",
@@ -2746,6 +2752,7 @@
 		"nl": {
 			"ascending": "Oplopend",
 			"descending": "Aflopend",
+			"donate_message": "Steun mij om verdere updates te ontvangen!",
 			"file_navigator_text": "Bestand zoeken",
 			"first": "Eerste",
 			"last": "Laatste",
@@ -2764,6 +2771,7 @@
 		"no": {
 			"ascending": "Stigende",
 			"descending": "Synkende",
+			"donate_message": "Støtt meg til å motta ytterligere oppdateringer!",
 			"file_navigator_text": "Bla gjennom fil",
 			"first": "Første",
 			"last": "Siste",
@@ -2782,6 +2790,7 @@
 		"pl": {
 			"ascending": "Rosnąco",
 			"descending": "Malejąco",
+			"donate_message": "Wesprzyj mnie, aby otrzymywać dalsze aktualizacje!",
 			"file_navigator_text": "Przeglądać plik",
 			"first": "Pierwszy",
 			"last": "Ostatni",
@@ -2800,6 +2809,7 @@
 		"pt-BR": {
 			"ascending": "Crescente",
 			"descending": "Descendente",
+			"donate_message": "Apoie-me para receber mais atualizações!",
 			"file_navigator_text": "Procurar arquivo",
 			"first": "Primeiro",
 			"last": "Último",
@@ -2818,6 +2828,7 @@
 		"fi": {
 			"ascending": "Nouseva",
 			"descending": "Laskeva",
+			"donate_message": "Tue minua saadaksesi lisää päivityksiä!",
 			"file_navigator_text": "Selaa tiedostoa",
 			"first": "Ensimmäinen",
 			"last": "Viimeinen",
@@ -2836,6 +2847,7 @@
 		"sv": {
 			"ascending": "Stigande",
 			"descending": "Nedåtgående",
+			"donate_message": "Stöd mig till, för att få ytterligare uppdateringar!",
 			"file_navigator_text": "Bläddra i fil",
 			"first": "Första",
 			"last": "Sista",
@@ -2854,6 +2866,7 @@
 		"tr": {
 			"ascending": "Yükselen",
 			"descending": "Azalan",
+			"donate_message": "Daha fazla güncelleme almak için beni destekleyin!",
 			"file_navigator_text": "Dosyaya gözat",
 			"first": "Ilk",
 			"last": "Son",
@@ -2872,6 +2885,7 @@
 		"cs": {
 			"ascending": "Vzestupně",
 			"descending": "Klesající",
+			"donate_message": "Podpořte mě, abyste získali další aktualizace!",
 			"file_navigator_text": "Procházet soubor",
 			"first": "První",
 			"last": "Poslední",
@@ -2890,6 +2904,7 @@
 		"bg": {
 			"ascending": "Възходящ",
 			"descending": "Низходящ",
+			"donate_message": "Подкрепете ме, за да получавам допълнителни актуализации!",
 			"file_navigator_text": "Прегледайте файла",
 			"first": "Първият",
 			"last": "Последният",
@@ -2908,6 +2923,7 @@
 		"ru": {
 			"ascending": "По возрастанию",
 			"descending": "По убыванию",
+			"donate_message": "Поддержите меня, чтобы получать дальнейшие обновления!",
 			"file_navigator_text": "Просмотр файла",
 			"first": "Первый",
 			"last": "Последний",
@@ -2926,6 +2942,7 @@
 		"uk": {
 			"ascending": "Зростання",
 			"descending": "Спад",
+			"donate_message": "Підтримайте мене, щоб отримувати подальші оновлення!",
 			"file_navigator_text": "Перегляньте файл",
 			"first": "Перший",
 			"last": "Останній",
@@ -2944,6 +2961,7 @@
 		"ja": {
 			"ascending": "上昇",
 			"descending": "降順",
+			"donate_message": "さらなるアップデートを受け取るために、私をサポートしてください！",
 			"file_navigator_text": "ファイルを参照",
 			"first": "最初",
 			"last": "最後",
@@ -2962,6 +2980,7 @@
 		"zh-TW": {
 			"ascending": "上升",
 			"descending": "降序",
+			"donate_message": "支持我，以獲取進一步的更新！",
 			"file_navigator_text": "瀏覽文件",
 			"first": "首先",
 			"last": "最後",
@@ -2980,6 +2999,7 @@
 		"ko": {
 			"ascending": "오름차순",
 			"descending": "내림차순",
+			"donate_message": "추가 업데이트를 받으려면 저를 지원하십시오!",
 			"file_navigator_text": "파일 찾아보기",
 			"first": "첫번째",
 			"last": "마지막",
@@ -2998,6 +3018,7 @@
 		"default": {
 			"ascending": "Ascending",
 			"descending": "Descending",
+			"donate_message": "Support me to, to receive further updates!",
 			"file_navigator_text": "Browse File",
 			"first": "First",
 			"last": "Last",
