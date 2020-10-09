@@ -663,6 +663,7 @@
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5) 75.25%);
 }
 
+.tier1-UUxEBG,
 .headerTier1-2Ckjmd,										/* submodal				tier1 header						*/
 .tier1HeaderBackground-3LjWgU {								/* submodal				tier1 bg							*/
 	background-color: rgb(var(--vaccentcolor));
@@ -675,6 +676,7 @@
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5) 75.25%);
 }
 
+.tier2-3pW_6T,
 .headerTier2-3FKMxd,										/* submodal				tier2 header						*/
 .tier2HeaderBackground-2BUqcl {								/* submodal				tier2 bg							*/
 	background: #ffcd4b linear-gradient(45deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
