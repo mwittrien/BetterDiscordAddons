@@ -663,22 +663,19 @@
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5) 75.25%);
 }
 
-.headerTier1-2Ckjmd {										/* submodal				tier1 header						*/
-	background-color: rgb(var(--vaccentcolor));
-}
-.headerTier1-2Ckjmd .wrapper-1P_m9K image:not([width="170px"]) {
-	display: none !important;
-}
+.headerTier1-2Ckjmd,										/* submodal				tier1 header						*/
 .tier1HeaderBackground-3LjWgU {								/* submodal				tier1 bg							*/
 	background-color: rgb(var(--vaccentcolor));
+}
+.headerTier1-2Ckjmd .wrapper-1P_m9K image:not([width="170px"]),
+.tier1HeaderBackground-3LjWgU .wrapper-1P_m9K image:not([width="170px"]) {
+	display: none !important;
 }
 .tier1-1ttHRY.banner-3Kac2g {
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5) 75.25%);
 }
 
-.headerTier2-3FKMxd {										/* submodal				tier2 header						*/
-	background: #ffcd4b linear-gradient(45deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
-}
+.headerTier2-3FKMxd,										/* submodal				tier2 header						*/
 .tier2HeaderBackground-2BUqcl {								/* submodal				tier2 bg							*/
 	background: #ffcd4b linear-gradient(45deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
 }
