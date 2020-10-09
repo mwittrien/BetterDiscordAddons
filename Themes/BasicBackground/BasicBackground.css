@@ -6698,8 +6698,8 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	border: none;
 	border-radius: 4px;
 	box-shadow: rgba(var(--vtransparencycolor), 0.3) 0px 2px 5px 0px;
-    box-sizing: border-box;
-    padding: 6px 8px;
+	box-sizing: border-box;
+	padding: 6px 8px;
 	margin-left: -9px;
 }
 .bd-select .bd-select-options:after,
@@ -6725,18 +6725,18 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	background-attachment: fixed;
 }
 .bd-select .bd-select-option {								/* bd select			popout option						*/
-    display: flex;
-    align-items: center;
-    min-height: 32px;
-    border-radius: 2px;
-    box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	min-height: 32px;
+	border-radius: 2px;
+	box-sizing: border-box;
 	color: var(--interactive-normal);
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 18px;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    padding: 0 8px;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 18px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	padding: 0 8px;
 }
 .bd-select .bd-select-option:hover {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
@@ -6940,8 +6940,8 @@ body #ace_settingsmenu .ace_optionsMenuEntry button[ace_selected_button=true] {
 	background-color: rgb(var(--vaccentcolor));
 	box-shadow: none;
 	border: none;
-    color: rgb(var(--fontwhite1));
-    text-shadow: 1px 1px var(--vtextshadow);
+	color: rgb(var(--fontwhite1));
+	text-shadow: 1px 1px var(--vtextshadow);
 	cursor: default;
 }
 body #ace_settingsmenu .ace_optionsMenuEntry input[type="text"],
@@ -7414,9 +7414,9 @@ html .channelTabs-fav:active {
 html .channelTabs-tabName,
 html .channelTabs-favName {
 	font-size: 16px;
-    line-height: 20px;
-    font-weight: 500;
-    white-space: nowrap;
+	line-height: 20px;
+	font-weight: 500;
+	white-space: nowrap;
 }
 html .channelTabs-closeTab,
 html .channelTabs-selected .channelTabs-closeTab {

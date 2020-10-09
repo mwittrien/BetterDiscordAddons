@@ -105,9 +105,9 @@ body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]::befor
 	min-width: unset !important;
 	overflow: hidden !important;
 	position: absolute !important;
-    right: 0 !important;
+	right: 0 !important;
 	text-align: justify !important;
-    top: 0 !important;
+	top: 0 !important;
 	white-space: pre-wrap !important;
 	width: unset !important;
 	z-index: 2 !important;
@@ -190,47 +190,47 @@ body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdiscord.net" i]
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdiscord.net" i]::after,
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdiscordlibrary.com" i]::after,
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdiscordlibrary.com" i]::after {
-    background-repeat: no-repeat !important;
-    border-radius: 0 5px !important;
-    color: #FFF !important;
-    font-size: 12px !important;
-    font-weight: 400 !important;
-    line-height: 1.3 !important;
-    padding: 1px 4px 1px 18px !important;
-    pointer-events: none !important;
-    position: absolute !important;
-    right: 0 !important;
-    top: 0 !important;
+	background-repeat: no-repeat !important;
+	border-radius: 0 5px !important;
+	color: #FFF !important;
+	font-size: 12px !important;
+	font-weight: 400 !important;
+	line-height: 1.3 !important;
+	padding: 1px 4px 1px 18px !important;
+	pointer-events: none !important;
+	position: absolute !important;
+	right: 0 !important;
+	top: 0 !important;
 	z-index: 3 !important;
 }
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdiscord.net" i]::after,
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdiscord.net" i]::after,
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdiscordlibrary.com" i]::after,
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdiscordlibrary.com" i]::after {
-    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxOTIgMTkyIiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4Ij48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9Im5vbnplcm8iIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtbGluZWNhcD0iYnV0dCIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBzdHJva2UtZGFzaGFycmF5PSIiIHN0cm9rZS1kYXNob2Zmc2V0PSIwIiBmb250LWZhbWlseT0ibm9uZSIgZm9udC13ZWlnaHQ9Im5vbmUiIGZvbnQtc2l6ZT0ibm9uZSIgdGV4dC1hbmNob3I9Im5vbmUiIHN0eWxlPSJtaXgtYmxlbmQtbW9kZTogbm9ybWFsIj48cGF0aCBkPSJNMCwxOTJ2LTE5MmgxOTJ2MTkyeiIgZmlsbD0ibm9uZSIvPjxnIGZpbGw9IiNmZmZmZmYiPjxwYXRoIGQ9Ik05NiwxNmMtNDQuMTEyLDAgLTgwLDM1Ljg4OCAtODAsODBjMCw0NC4xMTIgMzUuODg4LDgwIDgwLDgwYzQ0LjExMiwwIDgwLC0zNS44ODggODAsLTgwYzAsLTkuMDA4IC0xLjU2ODEzLC0xNy42NDYzOCAtNC4zMjgxMywtMjUuNzM0MzhsLTEyLjk1MzEyLDEyLjk1MzEzYzAuODQsNC4xMjggMS4yODEyNSw4LjQwNTI1IDEuMjgxMjUsMTIuNzgxMjVjMCwzNS4yODggLTI4LjcxMiw2NCAtNjQsNjRjLTM1LjI4OCwwIC02NCwtMjguNzEyIC02NCwtNjRjMCwtMzUuMjg4IDI4LjcxMiwtNjQgNjQsLTY0YzEzLjA2NCwwIDI1LjIxNTM4LDMuOTUxMTIgMzUuMzU5MzgsMTAuNzAzMTJsMTEuNDUzMTIsLTExLjQ1MzEyYy0xMy4xODQsLTkuNTUyIC0yOS4zMzI1LC0xNS4yNSAtNDYuODEyNSwtMTUuMjV6TTE3MC4zNDM3NSwyNi4zNDM3NWwtODIuMzQzNzUsODIuMzQzNzVsLTI2LjM0Mzc1LC0yNi4zNDM3NWwtMTEuMzEyNSwxMS4zMTI1bDM3LjY1NjI1LDM3LjY1NjI1bDkzLjY1NjI1LC05My42NTYyNXoiLz48L2c+PC9nPjwvc3ZnPg==') !important;
-    background-position: 2px !important;
-    background-size: 15% !important;
+	background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxOTIgMTkyIiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4Ij48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9Im5vbnplcm8iIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtbGluZWNhcD0iYnV0dCIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBzdHJva2UtZGFzaGFycmF5PSIiIHN0cm9rZS1kYXNob2Zmc2V0PSIwIiBmb250LWZhbWlseT0ibm9uZSIgZm9udC13ZWlnaHQ9Im5vbmUiIGZvbnQtc2l6ZT0ibm9uZSIgdGV4dC1hbmNob3I9Im5vbmUiIHN0eWxlPSJtaXgtYmxlbmQtbW9kZTogbm9ybWFsIj48cGF0aCBkPSJNMCwxOTJ2LTE5MmgxOTJ2MTkyeiIgZmlsbD0ibm9uZSIvPjxnIGZpbGw9IiNmZmZmZmYiPjxwYXRoIGQ9Ik05NiwxNmMtNDQuMTEyLDAgLTgwLDM1Ljg4OCAtODAsODBjMCw0NC4xMTIgMzUuODg4LDgwIDgwLDgwYzQ0LjExMiwwIDgwLC0zNS44ODggODAsLTgwYzAsLTkuMDA4IC0xLjU2ODEzLC0xNy42NDYzOCAtNC4zMjgxMywtMjUuNzM0MzhsLTEyLjk1MzEyLDEyLjk1MzEzYzAuODQsNC4xMjggMS4yODEyNSw4LjQwNTI1IDEuMjgxMjUsMTIuNzgxMjVjMCwzNS4yODggLTI4LjcxMiw2NCAtNjQsNjRjLTM1LjI4OCwwIC02NCwtMjguNzEyIC02NCwtNjRjMCwtMzUuMjg4IDI4LjcxMiwtNjQgNjQsLTY0YzEzLjA2NCwwIDI1LjIxNTM4LDMuOTUxMTIgMzUuMzU5MzgsMTAuNzAzMTJsMTEuNDUzMTIsLTExLjQ1MzEyYy0xMy4xODQsLTkuNTUyIC0yOS4zMzI1LC0xNS4yNSAtNDYuODEyNSwtMTUuMjV6TTE3MC4zNDM3NSwyNi4zNDM3NWwtODIuMzQzNzUsODIuMzQzNzVsLTI2LjM0Mzc1LC0yNi4zNDM3NWwtMTEuMzEyNSwxMS4zMTI1bDM3LjY1NjI1LDM3LjY1NjI1bDkzLjY1NjI1LC05My42NTYyNXoiLz48L2c+PC9nPjwvc3ZnPg==') !important;
+	background-position: 2px !important;
+	background-size: 15% !important;
 }
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdiscord.net" i]::after,
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdiscord.net" i]::after {
-    content: "Official Source" !important;
-    background-color: #43B581 !important;
+	content: "Official Source" !important;
+	background-color: #43B581 !important;
 
 }
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdiscordlibrary.com" i]::after,
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdiscordlibrary.com" i]::after {
-    content: "Trusted Source" !important;
-    background-color: #FAA61A !important;
+	content: "Trusted Source" !important;
+	background-color: #FAA61A !important;
 }
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i]::after,
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://discordsource." i]::after,
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdocs." i]::after,
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]::after {
-    content: "Unsafe Source" !important;
-    background-color: #F04747 !important;
-    background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik01MDUuNDAzLDQwNi4zOTRMMjk1LjM4OSw1OC4xMDJjLTguMjc0LTEzLjcyMS0yMy4zNjctMjIuMjQ1LTM5LjM5LTIyLjI0NWMtMTYuMDIzLDAtMzEuMTE2LDguNTI0LTM5LjM5MSwyMi4yNDZMNi41OTUsNDA2LjM5NGMtOC41NTEsMTQuMTgyLTguODA0LDMxLjk1LTAuNjYxLDQ2LjM3YzguMTQ1LDE0LjQyLDIzLjQ5MSwyMy4zNzgsNDAuMDUxLDIzLjM3OGg0MjAuMDI4YzE2LjU2LDAsMzEuOTA3LTguOTU4LDQwLjA1Mi0yMy4zNzlDNTE0LjIwOCw0MzguMzQyLDUxMy45NTUsNDIwLjU3NCw1MDUuNDAzLDQwNi4zOTR6IE00NzcuMDM5LDQzNi4zNzJjLTIuMjQyLDMuOTY5LTYuNDY3LDYuNDM2LTExLjAyNiw2LjQzNkg0NS45ODVjLTQuNTU5LDAtOC43ODQtMi40NjYtMTEuMDI1LTYuNDM1Yy0yLjI0Mi0zLjk3LTIuMTcyLTguODYyLDAuMTgxLTEyLjc2NUwyNDUuMTU2LDc1LjMxNmMyLjI3OC0zLjc3Nyw2LjQzMy02LjEyNCwxMC44NDQtNi4xMjRjNC40MSwwLDguNTY1LDIuMzQ3LDEwLjg0Myw2LjEyNGwyMTAuMDEzLDM0OC4yOTJDNDc5LjIxMSw0MjcuNTEyLDQ3OS4yODEsNDMyLjQwMyw0NzcuMDM5LDQzNi4zNzJ6Ij48L3BhdGg+PHBhdGggZD0iTTI1Ni4xNTQsMTczLjAwNWMtMTIuNjgsMC0yMi41NzYsNi44MDQtMjIuNTc2LDE4Ljg2NmMwLDM2LjgwMiw0LjMyOSw4OS42ODYsNC4zMjksMTI2LjQ4OWMwLjAwMSw5LjU4Nyw4LjM1MiwxMy42MDcsMTguMjQ4LDEzLjYwN2M3LjQyMiwwLDE3LjkzNy00LjAyLDE3LjkzNy0xMy42MDdjMC0zNi44MDIsNC4zMjktODkuNjg2LDQuMzI5LTEyNi40ODlDMjc4LjQyMSwxNzkuODEsMjY4LjIxNiwxNzMuMDA1LDI1Ni4xNTQsMTczLjAwNXoiPjwvcGF0aD48cGF0aCBkPSJNMjU2LjQ2NSwzNTMuMzA2Yy0xMy42MDcsMC0yMy44MTQsMTAuODI0LTIzLjgxNCwyMy44MTRjMCwxMi42OCwxMC4yMDYsMjMuODE0LDIzLjgxNCwyMy44MTRjMTIuNjgsMCwyMy41MDUtMTEuMTM0LDIzLjUwNS0yMy44MTRDMjc5Ljk3LDM2NC4xMywyNjkuMTQ0LDM1My4zMDYsMjU2LjQ2NSwzNTMuMzA2eiI+PC9wYXRoPjwvc3ZnPg==') !important;
-    background-position: 3px !important;
-    background-size: 14% !important;
+	content: "Unsafe Source" !important;
+	background-color: #F04747 !important;
+	background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik01MDUuNDAzLDQwNi4zOTRMMjk1LjM4OSw1OC4xMDJjLTguMjc0LTEzLjcyMS0yMy4zNjctMjIuMjQ1LTM5LjM5LTIyLjI0NWMtMTYuMDIzLDAtMzEuMTE2LDguNTI0LTM5LjM5MSwyMi4yNDZMNi41OTUsNDA2LjM5NGMtOC41NTEsMTQuMTgyLTguODA0LDMxLjk1LTAuNjYxLDQ2LjM3YzguMTQ1LDE0LjQyLDIzLjQ5MSwyMy4zNzgsNDAuMDUxLDIzLjM3OGg0MjAuMDI4YzE2LjU2LDAsMzEuOTA3LTguOTU4LDQwLjA1Mi0yMy4zNzlDNTE0LjIwOCw0MzguMzQyLDUxMy45NTUsNDIwLjU3NCw1MDUuNDAzLDQwNi4zOTR6IE00NzcuMDM5LDQzNi4zNzJjLTIuMjQyLDMuOTY5LTYuNDY3LDYuNDM2LTExLjAyNiw2LjQzNkg0NS45ODVjLTQuNTU5LDAtOC43ODQtMi40NjYtMTEuMDI1LTYuNDM1Yy0yLjI0Mi0zLjk3LTIuMTcyLTguODYyLDAuMTgxLTEyLjc2NUwyNDUuMTU2LDc1LjMxNmMyLjI3OC0zLjc3Nyw2LjQzMy02LjEyNCwxMC44NDQtNi4xMjRjNC40MSwwLDguNTY1LDIuMzQ3LDEwLjg0Myw2LjEyNGwyMTAuMDEzLDM0OC4yOTJDNDc5LjIxMSw0MjcuNTEyLDQ3OS4yODEsNDMyLjQwMyw0NzcuMDM5LDQzNi4zNzJ6Ij48L3BhdGg+PHBhdGggZD0iTTI1Ni4xNTQsMTczLjAwNWMtMTIuNjgsMC0yMi41NzYsNi44MDQtMjIuNTc2LDE4Ljg2NmMwLDM2LjgwMiw0LjMyOSw4OS42ODYsNC4zMjksMTI2LjQ4OWMwLjAwMSw5LjU4Nyw4LjM1MiwxMy42MDcsMTguMjQ4LDEzLjYwN2M3LjQyMiwwLDE3LjkzNy00LjAyLDE3LjkzNy0xMy42MDdjMC0zNi44MDIsNC4zMjktODkuNjg2LDQuMzI5LTEyNi40ODlDMjc4LjQyMSwxNzkuODEsMjY4LjIxNiwxNzMuMDA1LDI1Ni4xNTQsMTczLjAwNXoiPjwvcGF0aD48cGF0aCBkPSJNMjU2LjQ2NSwzNTMuMzA2Yy0xMy42MDcsMC0yMy44MTQsMTAuODI0LTIzLjgxNCwyMy44MTRjMCwxMi42OCwxMC4yMDYsMjMuODE0LDIzLjgxNCwyMy44MTRjMTIuNjgsMCwyMy41MDUtMTEuMTM0LDIzLjUwNS0yMy44MTRDMjc5Ljk3LDM2NC4xMywyNjkuMTQ0LDM1My4zMDYsMjU2LjQ2NSwzNTMuMzA2eiI+PC9wYXRoPjwvc3ZnPg==') !important;
+	background-position: 3px !important;
+	background-size: 14% !important;
 }
 
 .publicServersOpen ~ #pubslayerroot:empty:before {

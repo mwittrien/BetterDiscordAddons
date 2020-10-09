@@ -1,7 +1,7 @@
 //META{"name":"WriteUpperCase","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/WriteUpperCase","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/WriteUpperCase/WriteUpperCase.plugin.js"}*//
 
 module.exports = (_ => {
-    const config = {
+	const config = {
 		"info": {
 			"name": "WriteUpperCase",
 			"author": "DevilBro",
@@ -9,13 +9,13 @@ module.exports = (_ => {
 			"description": "Changes first letter in message input to uppercase."
 		}
 	};
-    return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
 		getDescription () {return config.info.description;}
 		
-        load() {
+		load() {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
@@ -33,11 +33,11 @@ module.exports = (_ => {
 				});
 			}
 			if (!window.BDFDB_Global.pluginQueue.includes(config.info.name)) window.BDFDB_Global.pluginQueue.push(config.info.name);
-        }
-        start() {}
-        stop() {}
-    } : (([Plugin, BDFDB]) => {
-        return class WriteUpperCase extends Plugin {
+		}
+		start() {this.load();}
+		stop() {}
+	} : (([Plugin, BDFDB]) => {
+		return class WriteUpperCase extends Plugin {
 			onLoad() {
 				this.patchedModules = {
 					before: {
@@ -70,5 +70,5 @@ module.exports = (_ => {
 				}
 			}
 		};
-    })(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
 })();

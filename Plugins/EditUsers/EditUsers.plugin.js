@@ -1,7 +1,7 @@
 //META{"name":"EditUsers","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditUsers/EditUsers.plugin.js"}*//
 
 module.exports = (_ => {
-    const config = {
+	const config = {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
@@ -14,13 +14,13 @@ module.exports = (_ => {
 			}
 		}
 	};
-    return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
 		getDescription () {return config.info.description;}
 		
-        load() {
+		load() {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
@@ -38,13 +38,13 @@ module.exports = (_ => {
 				});
 			}
 			if (!window.BDFDB_Global.pluginQueue.includes(config.info.name)) window.BDFDB_Global.pluginQueue.push(config.info.name);
-        }
-        start() {}
-        stop() {}
-    } : (([Plugin, BDFDB]) => {
+		}
+		start() {this.load();}
+		stop() {}
+	} : (([Plugin, BDFDB]) => {
 		var changedUsers = {}, settings = {};
 	
-        return class EditUsers extends Plugin {
+		return class EditUsers extends Plugin {
 			onLoad() {
 				this.defaults = {
 					settings: {
@@ -1776,5 +1776,5 @@ module.exports = (_ => {
 				}
 			}
 		};
-    })(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
 })();

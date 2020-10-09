@@ -1596,8 +1596,8 @@
 	color: rgb(var(--vaccentcolor));
 }
 .lookGhost-2Fn_0-.colorBrand-3pXr91:hover {
-	color: rgb(var(--vaccentcolor));
 	background-color: rgba(var(--vaccentcolor), 0.15);
+	color: rgb(var(--vaccentcolor));
 }
 .lookGhost-2Fn_0-.colorBrand-3pXr91:active,
 #app-mount .lookGhost-2Fn_0-.hoverBrand-1_Fxlk.hasHover-3X1-zV:active {
@@ -1612,8 +1612,8 @@
 }
 .lookLink-9FtZy-.colorBrand-3pXr91:hover .contents-18-Yxp,
 #app-mount .lookLink-9FtZy-.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover .contents-18-Yxp {
-	color: rgb(var(--vaccentcolor));
 	background-image: linear-gradient(0deg, transparent, transparent 1px, rgb(var(--vaccentcolor)) 0, rgb(var(--vaccentcolor)) 2px, transparent 0);
+	color: rgb(var(--vaccentcolor));
 }
 
 /* ----		12.3.	INPUTS							---- */

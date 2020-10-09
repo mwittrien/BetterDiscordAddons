@@ -190,15 +190,15 @@ html {
 #app-mount .bd-addon-list .bd-addon-card.settings-open::-webkit-scrollbar-thumb,
 #app-mount .bda-description.scroller::-webkit-scrollbar-thumb {
 	background-clip: padding-box;
-    background-color: var(--scrollbar-thin-thumb);
-    border: 2px solid transparent;
-    border-radius: 4px;
-    min-height: 40px;
+	background-color: var(--scrollbar-thin-thumb);
+	border: 2px solid transparent;
+	border-radius: 4px;
+	min-height: 40px;
 }
 #app-mount .bd-addon-list .bd-addon-card.settings-open::-webkit-scrollbar-track,
 #app-mount .bda-description.scroller::-webkit-scrollbar-track {
-    background-color: var(--scrollbar-thin-track);
-    border: 2px solid var(--scrollbar-thin-track);
+	background-color: var(--scrollbar-thin-track);
+	border: 2px solid var(--scrollbar-thin-track);
 }
 
 body .ace_editor {
