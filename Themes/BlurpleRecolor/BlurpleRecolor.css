@@ -700,6 +700,9 @@
 .bannerPromotionLogoPremium-2cB301 {						/* bannerpromo			logo								*/
 	background: #ffcd4b linear-gradient(rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
 }
+.premiumLogo-1D3iJc {										/* bannerpromo			nitro logo							*/
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+}
 
 #app-mount .tag-HanR-9 {									/* tag														*/
 	background: rgb(255, 255, 255) linear-gradient(45deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
