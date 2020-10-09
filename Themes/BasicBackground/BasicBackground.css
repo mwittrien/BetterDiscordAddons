@@ -2039,6 +2039,15 @@ body:before {
 #app-mount .featureIcon-1f78KU {							/* features				featureicon							*/
 	color: rgb(var(--fontwhite3));
 }
+#app-mount .feature-2w65J5 {								/* features				feature								*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+.featureImage-2L9kA0 {										/* features				image								*/
+	opacity: 0.7;
+}
+.banner-WELp4M {											/* features				xbox promo							*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
 
 
 /* ~~~~		9.		LIBRARY							~~~~ */
