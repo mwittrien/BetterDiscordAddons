@@ -672,8 +672,10 @@ module.exports = (_ => {
 								this.cleanupListeners("Zoom");
 								document.removeEventListener("mousemove", dragging);
 								document.removeEventListener("mouseup", releasing);
-								document.removeImageUtilitiesZoomObserver.disconnect();
-								delete document.removeImageUtilitiesZoomObserver;
+								if (document.removeImageUtilitiesZoomObserver) {
+									document.removeImageUtilitiesZoomObserver.disconnect();
+									delete document.removeImageUtilitiesZoomObserver;
+								}
 								BDFDB.DOMUtils.remove(lense, backdrop);
 								BDFDB.DataUtils.save(zoomSettings, this, "zoomSettings");
 							};
