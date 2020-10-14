@@ -5,7 +5,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
-			"version": "2.0.7",
+			"version": "2.0.8",
 			"description": "Allows you to preview all themes from the theme repo and download them on the fly."
 		}
 	};
@@ -254,8 +254,8 @@ module.exports = (_ => {
 						render: false,
 						children: [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-								className: BDFDB.disCN.marginbottom20,
 								type: "Select",
+								margin: 20,
 								label: "Choose a Generator Theme",
 								basis: "60%",
 								value: this.props.currentGenerator && this.props.currentGenerator.value || "-----",
@@ -341,8 +341,7 @@ module.exports = (_ => {
 											let varDescription = varStr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
 											this.props.generatorValues[varName] = {value:oldValue, oldValue};
 											inputRefs.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-												className: BDFDB.disCN.marginbottom20,
-												dividerbottom: vars[vars.length-1] != varStr,
+												dividerBottom: vars[vars.length-1] != varStr,
 												type: "TextInput",
 												childProps: {
 													type: childType,
@@ -387,8 +386,8 @@ module.exports = (_ => {
 								})
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-								className: BDFDB.disCN.marginbottom20,
 								type: "Switch",
+								margin: 20,
 								label: "Preview in light mode",
 								value: this.props.useLightMode,
 								onChange: (value, instance) => {
@@ -401,8 +400,8 @@ module.exports = (_ => {
 								}
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-								className: BDFDB.disCN.marginbottom20,
 								type: "Switch",
+								margin: 20,
 								label: "Preview with useNormalizer classes",
 								value: this.props.useNormalizer,
 								onChange: (value, instance) => {
@@ -415,8 +414,8 @@ module.exports = (_ => {
 								}
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-								className: BDFDB.disCN.marginbottom20,
 								type: "Switch",
+								margin: 20,
 								label: "Include Custom CSS in Preview",
 								value: this.props.useCustomCSS,
 								onChange: (value, instance) => {
@@ -431,8 +430,8 @@ module.exports = (_ => {
 								}
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-								className: BDFDB.disCN.marginbottom20,
 								type: "Switch",
+								margin: 20,
 								label: "Include ThemeFixer CSS in Preview",
 								value: this.props.useThemeFixer,
 								onChange: (value, instance) => {
@@ -448,8 +447,8 @@ module.exports = (_ => {
 								}
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-								className: BDFDB.disCN.marginbottom20,
 								type: "Button",
+								margin: 20,
 								label: "Download ThemeFixer",
 								children: "Download",
 								onClick: _ => {
@@ -528,10 +527,14 @@ module.exports = (_ => {
 							value: list && list.props.currentTheme && list.props.currentTheme.url == this.props.theme.url,
 							onChange: (value, instance) => {
 								if (!list) return;
+								
+								if (list.props.currentTheme) for (let ins of BDFDB.ReactUtils.findOwner(this._reactInternalFiber.return, {name:"ThemeCard", all:true}).filter(ins => ins && ins.props && ins.props.theme && ins.props.theme.url == list.props.currentTheme.url)) BDFDB.ReactUtils.forceUpdate(ins);
+								
 								if (value) list.props.currentTheme = this.props.theme;
 								else delete list.props.currentTheme;
 								delete list.props.currentGenerator;
 								delete list.props.generatorValues;
+								
 								if (preview) preview.executeJavaScriptSafe(`window.onmessage({
 									origin: "ThemeRepo",
 									reason: "NewTheme",
@@ -539,6 +542,7 @@ module.exports = (_ => {
 									css: ${JSON.stringify(this.props.theme.css || "")}
 								})`);
 								else list.openPreview();
+								
 								BDFDB.ReactUtils.forceUpdate(this);
 							}
 						})
@@ -788,6 +792,7 @@ module.exports = (_ => {
 						}) : null,
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Button",
+							margin: 0,
 							color: BDFDB.LibraryComponents.Button.Colors.RED,
 							label: "Remove all custom added Themes",
 							onClick: _ => {
@@ -805,6 +810,7 @@ module.exports = (_ => {
 					collapseStates: collapseStates,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 						type: "Button",
+						margin: 0,
 						label: "Force all Themes to be fetched again",
 						onClick: _ => {
 							loading = {is:false, timeout:null, amount:0};
@@ -1051,7 +1057,7 @@ module.exports = (_ => {
 							if (url && BDFDB.ArrayUtils.getAllIndexes(foundThemes, url).length < 2) foundThemes.push(url);
 						}
 						else if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
-							let theme = {}, text = body;
+							let theme = {}, text = body.trim();
 							if ((text.split("*//").length > 1 || text.indexOf("/**") == 0) && text.split("\n").length > 1) {
 								let hasMETAline = text.replace(/\s/g, "").indexOf("//META{");
 								if (hasMETAline < 20 && hasMETAline > -1) {
