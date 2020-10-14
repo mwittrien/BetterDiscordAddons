@@ -11,6 +11,7 @@
 		"User": {"props": ["hasFlag", "isLocalBot", "isClaimed"]}
 	},
 	"LibraryModules": {
+		"AccessibilityPreferencesContext": {"props": ["AccessibilityPreferencesContext"]},
 		"AckUtils": {"props": ["localAck", "bulkAck"]},
 		"ActivityUtils": {"props": ["sendActivityInvite", "updateActivity"]},
 		"APIUtils": {"props": ["getAPIBaseURL"]},
