@@ -5,8 +5,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "CreationDate",
 			"author": "DevilBro",
-			"version": "1.3.9",
+			"version": "1.4.0",
 			"description": "Displays the Creation Date of an Account in the UserPopout and UserModal."
+		},
+		"changeLog": {
+			"fixed": {
+				"Settings": "Work again"
+			}
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -94,7 +99,7 @@ module.exports = (_ => {
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 					title: "Settings",
 					collapseStates: collapseStates,
-					children: Object.keys(settings => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+					children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 						type: "Switch",
 						plugin: this,
 						keys: ["settings", key],

@@ -2102,13 +2102,14 @@ module.exports = (_ => {
 				};
 				BDFDB.ReactUtils.findOwner = function (nodeOrInstance, config) {
 					if (!BDFDB.ObjectUtils.is(config)) return null;
-					if (!nodeOrInstance || !config.name && !config.type && !config.key && !config.props) return config.all ? (config.group ? {} : []) : null;
+					if (!nodeOrInstance || !config.name && !config.type && !config.key && !config.props && !config.filter) return config.all ? (config.group ? {} : []) : null;
 					let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 					if (!BDFDB.ObjectUtils.is(instance)) return config.all ? (config.group ? {} : []) : null;
 					config.name = config.name && [config.name].flat().filter(n => n);
 					config.type = config.type && [config.type].flat().filter(n => n);
 					config.key = config.key && [config.key].flat().filter(n => n);
 					config.props = config.props && [config.props].flat().filter(n => n);
+					config.filter = typeof config.filter == "function" && config.filter;
 					let depth = -1;
 					let start = performance.now();
 					let maxDepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
@@ -2131,7 +2132,7 @@ module.exports = (_ => {
 						let result = undefined;
 						if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxDepth && performance.now() - start < maxTime) {
 							let props = instance.stateNode ? instance.stateNode.props : instance.props;
-							if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => BDFDB.ReactUtils.isCorrectInstance(instance, name.split(" _ _ ")[0])) || instance.type && config.type && config.type.some(type => BDFDB.ArrayUtils.is(type) ? instance.type === type[1] : instance.type === type) || instance.key && config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkValue => BDFDB.equals(props[prop[0]], checkValue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined))) {
+							if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => BDFDB.ReactUtils.isCorrectInstance(instance, name.split(" _ _ ")[0])) || instance.type && config.type && config.type.some(type => BDFDB.ArrayUtils.is(type) ? instance.type === type[1] : instance.type === type) || instance.key && config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkValue => BDFDB.equals(props[prop[0]], checkValue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined)) || config.filter && config.filter(instance)) {
 								if (config.all === undefined || !config.all) result = instance.stateNode;
 								else if (config.all) {
 									if (!instance.stateNode.BDFDBreactSearch) {
@@ -6202,29 +6203,28 @@ module.exports = (_ => {
 						if (!childComponent) return null;
 						if (this.props.mini && childComponent.Sizes) this.props.size = childComponent.Sizes.MINI || childComponent.Sizes.MIN;
 						return BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(this.props.className,  BDFDB.disCN.settingsrow, this.props.disabled && BDFDB.disCN.settingsrowdisabled),
+							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.settingsrow, this.props.disabled && BDFDB.disCN.settingsrowdisabled),
 							id: this.props.id,
+							style: {marginBottom: this.props.margin != null ? this.props.mini : (this.props.mini ? 0 : 8)},
 							children: [
-								this.props.dividertop ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
+								this.props.dividerTop ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
 									className: this.props.mini ? BDFDB.disCN.marginbottom4 : BDFDB.disCN.marginbottom8
 								}) : null,
 								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-								className: BDFDB.disCN.settingsrowlabel,
+									align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
 									children: [
 										this.props.label ? (this.props.tag ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormTitle, {
-											className: BDFDB.DOMUtils.formatClassName(this.props.labelClassName, BDFDB.disCN.marginreset),
+											className: BDFDB.DOMUtils.formatClassName(this.props.labelClassName, BDFDB.disCN.flexchild, BDFDB.disCN.marginreset),
 											tag: this.props.tag,
 											children: this.props.label
-										}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
-											children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsLabel, {
-												className: this.props.labelClassName,
-												mini: this.props.mini,
-												label: this.props.label
-											})
+										}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsLabel, {
+											className: BDFDB.DOMUtils.formatClassName(this.props.labelClassName, BDFDB.disCN.flexchild),
+											mini: this.props.mini,
+											label: this.props.label
 										})) : null,
 										this.props.labelchildren,
 										BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
-											className: BDFDB.disCN.settingsrowcontrol,
+											className: BDFDB.disCNS.settingsrowcontrol + BDFDB.disCN.flexchild,
 											grow: 0,
 											shrink: this.props.basis ? 0 : 1,
 											basis: this.props.basis,
@@ -6232,7 +6232,7 @@ module.exports = (_ => {
 											children: BDFDB.ReactUtils.createElement(childComponent, BDFDB.ObjectUtils.exclude(Object.assign(BDFDB.ObjectUtils.exclude(this.props, "className", "id", "type"), this.props.childProps, {
 												onChange: this.handleChange.bind(this),
 												onValueChange: this.handleChange.bind(this)
-											}), "grow", "stretch", "basis", "dividerbottom", "dividertop", "label", "labelClassName", "labelchildren", "tag", "mini", "note", "childProps"))
+											}), "grow", "stretch", "basis", "dividerBottom", "dividerTop", "label", "labelClassName", "labelchildren", "tag", "mini", "note", "childProps"))
 										})
 									].flat(10).filter(n => n)
 								}),
@@ -6244,7 +6244,7 @@ module.exports = (_ => {
 										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextScroller, {speed: 2, children: this.props.note})
 									})
 								}) : null,
-								this.props.dividerbottom ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
+								this.props.dividerBottom ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
 									className: this.props.mini ? BDFDB.disCN.margintop4 : BDFDB.disCN.margintop8
 								}) : null
 							]
@@ -6799,7 +6799,12 @@ module.exports = (_ => {
 						}));
 					}
 				};
+				InternalComponents.LibraryComponents.Switch.Sizes = {
+					DEFAULT: "default",
+					MINI: "mini",
+				};
 				InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.Switch, {
+					size: InternalComponents.LibraryComponents.Switch.Sizes.DEFAULT,
 					uncheckedColor: BDFDB.DiscordConstants.Colors.PRIMARY_DARK_400,
 					checkedColor: BDFDB.DiscordConstants.Colors.BRAND
 				});
@@ -7721,7 +7726,6 @@ module.exports = (_ => {
 			let settingsPanel, settingsItems = [];
 			let bdToastSetting = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts);
 			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
-				className: BDFDB.disCN.marginbottom8,
 				type: "Switch",
 				plugin: InternalBDFDB,
 				disabled: key == "showToasts" && bdToastSetting,
