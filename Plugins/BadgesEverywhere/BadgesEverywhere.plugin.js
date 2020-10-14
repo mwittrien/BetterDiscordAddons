@@ -5,12 +5,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "BadgesEverywhere",
 			"author": "DevilBro",
-			"version": "1.6.1",
+			"version": "1.6.2",
 			"description": "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout."
 		},
 		"changeLog": {
 			"fixed": {
-				"Chat": "Works again in chat"
+				"Colored Badges": "Work again"
 			}
 		}
 	};
@@ -271,7 +271,7 @@ module.exports = (_ => {
 			}
 			
 			onStart() {
-				badgeClasses = BDFDB.ModuleUtils.findByProperties("profileBadgeStaff", "profileBadgePremium");
+				badgeClasses = BDFDB.DiscordClassModules.UserBadges || {};
 
 				requestedUsers = {}, loadedUsers = {};
 				requestQueue = {queue:[], timeout:null, id:null};
@@ -417,14 +417,12 @@ module.exports = (_ => {
 			}
 			
 			createWrapper (renderedBadges, type, uncolored) {
-				let colorWrapper = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="${uncolored ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;"></span>`));
-				colorWrapper.props.children = BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCN._badgeseverywherebadgesinner,
-					children: renderedBadges
-				});
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._badgeseverywherebadges, BDFDB.disCN[`_badgeseverywherebadges${type}`], miniTypes.includes(type) && BDFDB.disCN._badgeseverywheremini), 
-					children: colorWrapper
+					children: BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._badgeseverywherebadgesinner, !uncolored && badgeClasses.colored),
+						children: renderedBadges
+					})
 				});
 			}
 

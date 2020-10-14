@@ -5,10 +5,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.0.7",
+			"version": "1.0.8",
 			"description": "Gives other plugins utility functions."
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
+		"changeLog": {
+			"fixed": {
+				"Switches": "Switches for all my plugins work again"
+			}
+		}
 	};
 	
 	const DiscordObjects = {};
@@ -24,9 +29,10 @@ module.exports = (_ => {
 		window.BDFDB_Global.PluginUtils.cleanUp(window.BDFDB_Global);
 	}
 	
-	const BDFDB = Object.assign({
+	const BDFDB = {
 		started: true
-	}, config.info, {rawUrl: config.rawUrl});
+	};
+	for (let key in config) key == "info" ? Object.assign(BDFDB, config[key]) : (BDFDB[key] = config[key]);
 	
 	const InternalBDFDB = Object.assign({}, BDFDB, {
 		patchPriority: 0,
@@ -715,7 +721,7 @@ module.exports = (_ => {
 			contentClassName: BDFDB.disCNS.changelogcontainer + BDFDB.disCN.modalminicontent,
 			footerDirection: InternalComponents.LibraryComponents.Flex.Direction.HORIZONTAL,
 			children: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(changeLogHTML)),
-			footerChildren: PluginStores.loaded[plugin.name] && PluginStores.loaded[plugin.name] == plugin && plugin.author == "DevilBro" && BDFDB.ReactUtils.createElement("div", {
+			footerChildren: (plugin == BDFDB || PluginStores.loaded[plugin.name] && PluginStores.loaded[plugin.name] == plugin && plugin.author == "DevilBro") && BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN.changelogfooter,
 				children: [
 					{href: "https://www.paypal.me/MircoWittrien", name: "PayPal", icon: "PAYPAL"},
@@ -755,7 +761,7 @@ module.exports = (_ => {
 	BDFDB.PluginUtils.createSettingsPanel = function (plugin, children) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children))) return;
-		let settingsPanel = BDFDB.DOMUtils.create(`<div class="${plugin.name}-settings ${BDFDB.disCN.settingsPanel}"></div>`);
+		let settingsPanel = BDFDB.DOMUtils.create(`<div class="${plugin.name}-settings ${BDFDB.disCN.settingspanel}"></div>`);
 		BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, {
 			key: `${plugin.name}-settingsPanel`,
 			plugin: plugin,
@@ -6195,19 +6201,15 @@ module.exports = (_ => {
 						let childComponent = InternalComponents.LibraryComponents[this.props.type];
 						if (!childComponent) return null;
 						if (this.props.mini && childComponent.Sizes) this.props.size = childComponent.Sizes.MINI || childComponent.Sizes.MIN;
-						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-							className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.disabled && BDFDB.disCN.disabled),
+						return BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.DOMUtils.formatClassName(this.props.className,  BDFDB.disCN.settingsrow, this.props.disabled && BDFDB.disCN.settingsrowdisabled),
 							id: this.props.id,
-							direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
-							align: InternalComponents.LibraryComponents.Flex.Align.STRETCH,
-							grow: this.props.grow,
-							stretch: this.props.stretch,
 							children: [
 								this.props.dividertop ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
 									className: this.props.mini ? BDFDB.disCN.marginbottom4 : BDFDB.disCN.marginbottom8
 								}) : null,
 								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-									align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
+								className: BDFDB.disCN.settingsrowlabel,
 									children: [
 										this.props.label ? (this.props.tag ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormTitle, {
 											className: BDFDB.DOMUtils.formatClassName(this.props.labelClassName, BDFDB.disCN.marginreset),
@@ -6222,6 +6224,7 @@ module.exports = (_ => {
 										})) : null,
 										this.props.labelchildren,
 										BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
+											className: BDFDB.disCN.settingsrowcontrol,
 											grow: 0,
 											shrink: this.props.basis ? 0 : 1,
 											basis: this.props.basis,
@@ -6234,7 +6237,7 @@ module.exports = (_ => {
 									].flat(10).filter(n => n)
 								}),
 								typeof this.props.note == "string" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
-									className: BDFDB.disCN.note,
+									className: BDFDB.disCN.settingsrownote,
 									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormText, {
 										disabled: this.props.disabled,
 										type: InternalComponents.LibraryComponents.FormComponents.FormText.Types.DESCRIPTION,
@@ -6252,7 +6255,7 @@ module.exports = (_ => {
 				InternalComponents.LibraryComponents.SettingsLabel = reactInitialized && class BDFDB_SettingsLabel extends LibraryModules.React.Component {
 					render() {
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextScroller, {
-							className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.mini ? BDFDB.disCN.titlemini : BDFDB.disCN.titledefault, BDFDB.disCN.cursordefault),
+							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.settingsrowtitle, this.props.mini ? BDFDB.disCN.settingsrowtitlemini : BDFDB.disCN.settingsrowtitledefault, BDFDB.disCN.cursordefault),
 							speed: 2,
 							children: this.props.label
 						});
@@ -6527,9 +6530,6 @@ module.exports = (_ => {
 					CHANGELOG: {
 						icon: `<svg name="ChangeLog" fill="%%color" width="%%width" height="%%height" viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"></path></svg>`
 					},
-					WHATISTHIS: {
-						icon: `<svg name="ChangeLog" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="%%color" fill-rule="evenodd" clip-rule="evenodd" d="M11.383 3.07904C11.009 2.92504 10.579 3.01004 10.293 3.29604L6 8.00204H3C2.45 8.00204 2 8.45304 2 9.00204V15.002C2 15.552 2.45 16.002 3 16.002H6L10.293 20.71C10.579 20.996 11.009 21.082 11.383 20.927C11.757 20.772 12 20.407 12 20.002V4.00204C12 3.59904 11.757 3.23204 11.383 3.07904ZM14 5.00195V7.00195C16.757 7.00195 19 9.24595 19 12.002C19 14.759 16.757 17.002 14 17.002V19.002C17.86 19.002 21 15.863 21 12.002C21 8.14295 17.86 5.00195 14 5.00195ZM14 9.00195C15.654 9.00195 17 10.349 17 12.002C17 13.657 15.654 15.002 14 15.002V13.002C14.551 13.002 15 12.553 15 12.002C15 11.451 14.551 11.002 14 11.002V9.00195Z"></path></svg>`
-					},
 					CHECKBOX: {
 						defaultProps: {
 							background: "",
@@ -6660,6 +6660,133 @@ module.exports = (_ => {
 					}
 				};
 				
+				const SwitchIconPaths = {
+					a: {
+						TOP: "M5.13231 6.72963L6.7233 5.13864L14.855 13.2704L13.264 14.8614L5.13231 6.72963Z",
+						BOTTOM: "M13.2704 5.13864L14.8614 6.72963L6.72963 14.8614L5.13864 13.2704L13.2704 5.13864Z"
+					},
+					b: {
+						TOP: "M6.56666 11.0013L6.56666 8.96683L13.5667 8.96683L13.5667 11.0013L6.56666 11.0013Z",
+						BOTTOM: "M13.5582 8.96683L13.5582 11.0013L6.56192 11.0013L6.56192 8.96683L13.5582 8.96683Z"
+					},
+					c: {
+						TOP: "M7.89561 14.8538L6.30462 13.2629L14.3099 5.25755L15.9009 6.84854L7.89561 14.8538Z",
+						BOTTOM: "M4.08643 11.0903L5.67742 9.49929L9.4485 13.2704L7.85751 14.8614L4.08643 11.0903Z"
+					}
+				};
+				const SwitchInner = function(props) {
+					let reducedMotion = BDFDB.ReactUtils.useContext(LibraryModules.PreferencesContext.AccessibilityPreferencesContext).reducedMotion;
+					let ref = BDFDB.ReactUtils.useRef(null);
+					let state = BDFDB.ReactUtils.useState(false);
+					let animation = InternalComponents.LibraryComponents.Animations.useSpring({
+						config: {
+							mass: 1,
+							tension: 250
+						},
+						opacity: props.disabled ? .3 : 1,
+						state: state[0] ? (props.value ? .7 : .3) : (props.value ? 1 : 0)
+					});
+					let fill = animation.state.to({
+						output: [props.uncheckedColor, props.checkedColor]
+					});
+					
+					return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Animations.animated.div, {
+						className: BDFDB.DOMUtils.formatClassName(props.className, BDFDB.disCN.switch),
+						onMouseDown: _ => {
+							return !props.disabled && state[1](true);
+						},
+						onMouseUp: _ => {
+							return state[1](false);
+						},
+						onMouseLeave: _ => {
+							return state[1](false);
+						},
+						style: {
+							opacity: animation.opacity,
+							backgroundColor: animation.state.to({
+								output: [props.uncheckedColor, props.checkedColor]
+							})
+						},
+						tabIndex: -1,
+						children: [
+							BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Animations.animated.svg, {
+								className: BDFDB.disCN.switchslider,
+								viewBox: "0 0 28 20",
+								preserveAspectRatio: "xMinYMid meet",
+								style: {
+									left: animation.state.to({
+										range: [0, .3, .7, 1],
+										output: [-3, 1, 8, 12]
+									})
+								},
+								children: [
+									BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Animations.animated.rect, {
+										fill: "white",
+										x: animation.state.to({
+											range: [0, .3, .7, 1],
+											output: [4, 0, 0, 4]
+										}),
+										y: animation.state.to({
+											range: [0, .3, .7, 1],
+											output: [0, 1, 1, 0]
+										}),
+										height: animation.state.to({
+											range: [0, .3, .7, 1],
+											output: [20, 18, 18, 20]
+										}),
+										width: animation.state.to({
+											range: [0, .3, .7, 1],
+											output: [20, 28, 28, 20]
+										}),
+										rx: "10"
+									}),
+									BDFDB.ReactUtils.createElement("svg", {
+										viewBox: "0 0 20 20",
+										fill: "none",
+										children: [
+											BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Animations.animated.path, {
+												fill: fill,
+												d: animation.state.to({
+													range: [0, .3, .7, 1],
+													output: reducedMotion.enabled ? [SwitchIconPaths.a.TOP, SwitchIconPaths.a.TOP, SwitchIconPaths.c.TOP, SwitchIconPaths.c.TOP] : [SwitchIconPaths.a.TOP, SwitchIconPaths.b.TOP, SwitchIconPaths.b.TOP, SwitchIconPaths.c.TOP]
+												})
+											}),
+											BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Animations.animated.path, {
+												fill: fill,
+												d: animation.state.to({
+													range: [0, .3, .7, 1],
+													output: reducedMotion.enabled ? [SwitchIconPaths.a.BOTTOM, SwitchIconPaths.a.BOTTOM, SwitchIconPaths.c.BOTTOM, SwitchIconPaths.c.BOTTOM] : [SwitchIconPaths.a.BOTTOM, SwitchIconPaths.b.BOTTOM, SwitchIconPaths.b.BOTTOM, SwitchIconPaths.c.BOTTOM]
+												})
+											})
+										]
+									})
+								]
+							}),
+							BDFDB.ReactUtils.createElement("input", {
+								id: props.id,
+								type: "checkbox",
+								ref: ref,
+								className: BDFDB.DOMUtils.formatClassName(props.inputClassName, BDFDB.disCN.switchinner),
+								tabIndex: props.disabled ? -1 : 0,
+								onKeyDown: e => {
+									if (!props.disabled && !e.repeat && (e.key == " " || e.key == "Enter")) state[1](true);
+								},
+								onKeyUp: e => {
+									if (!props.disabled && !e.repeat) {
+										state[1](false);
+										if (e.key == "Enter" && ref.current) ref.current.click();
+									}
+								},
+								onChange: e => {
+									state[1](false);
+									if (typeof props.onChange == "function") props.onChange(e.currentTarget.checked, e);
+								},
+								checked: props.value,
+								disabled: props.disabled
+							})
+						]
+					});
+				};
 				InternalComponents.LibraryComponents.Switch = reactInitialized && class BDFDB_Switch extends LibraryModules.React.Component {
 					handleChange() {
 						this.props.value = !this.props.value;
@@ -6667,9 +6794,15 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.forceUpdate(this);
 					}
 					render() {
-						return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.Switch, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));
+						return BDFDB.ReactUtils.createElement(SwitchInner, Object.assign({}, this.props, {
+							onChange: this.handleChange.bind(this)
+						}));
 					}
 				};
+				InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.Switch, {
+					uncheckedColor: BDFDB.DiscordConstants.Colors.PRIMARY_DARK_400,
+					checkedColor: BDFDB.DiscordConstants.Colors.BRAND
+				});
 				
 				InternalComponents.LibraryComponents.TabBar = reactInitialized && class BDFDB_TabBar extends LibraryModules.React.Component {
 					handleItemSelect(item) {
