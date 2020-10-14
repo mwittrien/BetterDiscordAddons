@@ -875,6 +875,7 @@
 		"Typing": {"props": ["cooldownWrapper", "typing"]},
 		"UnreadBar": {"props": ["active", "bar", "unread"]},
 		"UploadModal": {"props": ["uploadModal", "bgScale"]},
+		"UserBadges": {"props": ["profileBadgeStaff", "profileBadgePremium"]},
 		"UserInfo": {"props": ["userInfo", "discordTag"]},
 		"UserPopout": {"props": ["userPopout", "headerPlaying"]},
 		"UserProfile": {"props": ["topSectionNormal", "tabBarContainer"]},
