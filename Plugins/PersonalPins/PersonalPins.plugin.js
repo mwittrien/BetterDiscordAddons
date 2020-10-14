@@ -83,7 +83,6 @@ module.exports = (_ => {
 				let settingsPanel, settingsItems = [];
 				
 				for (let key in choices) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					className: BDFDB.disCN.marginbottom8,
 					type: "Select",
 					plugin: this,
 					keys: ["choices", key],

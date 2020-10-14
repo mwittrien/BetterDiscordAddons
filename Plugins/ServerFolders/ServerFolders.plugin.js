@@ -473,7 +473,6 @@ module.exports = (_ => {
 				let settingsPanel, settingsItems = [];
 				
 				for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					className: BDFDB.disCN.marginbottom8,
 					type: "Switch",
 					plugin: this,
 					keys: ["settings", key],
@@ -482,7 +481,6 @@ module.exports = (_ => {
 				}));
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					type: "Button",
-					className: BDFDB.disCN.marginbottom8,
 					color: BDFDB.LibraryComponents.Button.Colors.RED,
 					label: "Reset all Folders",
 					onClick: _ => {
@@ -494,7 +492,6 @@ module.exports = (_ => {
 				}));
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					type: "Button",
-					className: BDFDB.disCN.marginbottom8,
 					color: BDFDB.LibraryComponents.Button.Colors.RED,
 					label: "Remove all custom Icons",
 					onClick: _ => {
@@ -810,7 +807,8 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
-									className: BDFDB.disCN.marginbottom20 + " input-usecloseicon",
+									className: "input-usecloseicon",
+									margin: 20,
 									label: this.labels.modal_usecloseicon_text,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: data.useCloseIcon
@@ -840,7 +838,8 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
-									className: BDFDB.disCN.marginbottom20 + " input-swapcolors",
+									className: "input-swapcolors",
+									margin: 20,
 									label: this.labels.modal_swapcolor_text,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: data.swapColors
@@ -868,7 +867,8 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
-									className: BDFDB.disCN.marginbottom20 + " input-copytooltipcolor",
+									className: "input-copytooltipcolor",
+									margin: 20,
 									label: this.labels.modal_copytooltipcolor_text,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: data.copyTooltipColor

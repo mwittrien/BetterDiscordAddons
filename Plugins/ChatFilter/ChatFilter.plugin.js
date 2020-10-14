@@ -92,14 +92,12 @@ module.exports = (_ => {
 					title: "Settings",
 					collapseStates: collapseStates,
 					children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "Switch",
 						plugin: this,
 						keys: ["settings", key],
 						label: this.defaults.settings[key].description,
 						value: settings[key]
 					})).concat(Object.keys(replaces).map(rType => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "TextInput",
 						plugin: this,
 						keys: ["replaces", rType],
@@ -179,7 +177,6 @@ module.exports = (_ => {
 					collapseStates: collapseStates,
 					children: Object.keys(replaces).map(rType => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 						type: "Button",
-						className: BDFDB.disCN.marginbottom8,
 						color: BDFDB.LibraryComponents.Button.Colors.RED,
 						label: `Remove all ${rType} words`,
 						onClick: _ => {
@@ -401,7 +398,7 @@ module.exports = (_ => {
 						this.createInputs(values),
 						BDFDB.ArrayUtils.remove(Object.keys(this.defaults.configs), "file").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Switch",
-							className: BDFDB.disCN.marginbottom8 + " input-config" + key,
+							className: "input-config" + key,
 							label: this.defaults.configs[key].description,
 							value: this.defaults.configs[key].value
 						}))
@@ -428,7 +425,7 @@ module.exports = (_ => {
 				return [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 						title: "Block/Censor:",
-						className: BDFDB.disCN.marginbottom8 + " input-wordvalue",
+						className: "input-wordvalue",
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 							key: "WORDVALUE",
 							value: values.wordvalue,
@@ -449,7 +446,7 @@ module.exports = (_ => {
 					}),
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 						title: "With:",
-						className: BDFDB.disCN.marginbottom8 + " input-replacevalue",
+						className: "input-replacevalue",
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 							value: values.replacevalue,
 							placeholder: values.replacevalue,

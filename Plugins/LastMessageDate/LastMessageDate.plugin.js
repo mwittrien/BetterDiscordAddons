@@ -107,7 +107,6 @@ module.exports = (_ => {
 					title: "Settings",
 					collapseStates: collapseStates,
 					children: Object.keys(settings => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "Switch",
 						plugin: this,
 						keys: ["settings", key],
@@ -124,7 +123,6 @@ module.exports = (_ => {
 					title: "Format",
 					collapseStates: collapseStates,
 					children: Object.keys(choices).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "Select",
 						plugin: this,
 						keys: ["choices", key],
@@ -173,7 +171,6 @@ module.exports = (_ => {
 					})).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 						className: BDFDB.disCN.marginbottom8
 					})).concat(Object.keys(formats).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "TextInput",
 						plugin: this,
 						keys: ["formats", key],
@@ -187,7 +184,6 @@ module.exports = (_ => {
 					}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 						className: BDFDB.disCN.marginbottom8
 					})).concat(Object.keys(amounts).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "TextInput",
 						childProps: {
 							type: "number"

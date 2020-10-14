@@ -102,7 +102,6 @@ module.exports = (_ => {
 					title: "Settings",
 					collapseStates: collapseStates,
 					children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "Switch",
 						plugin: this,
 						keys: ["settings", key],
@@ -174,7 +173,6 @@ module.exports = (_ => {
 							direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-									className: BDFDB.disCN.marginbottom8,
 									type: "TextInput",
 									plugin: this,
 									keys: ["formats", key],

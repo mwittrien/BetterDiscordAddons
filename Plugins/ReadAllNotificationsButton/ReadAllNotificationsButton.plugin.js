@@ -101,7 +101,6 @@ module.exports = (_ => {
 					title: "Settings",
 					collapseStates: collapseStates,
 					children: Object.keys(settings).filter(key => !this.defaults.settings[key].inner).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "Switch",
 						plugin: this,
 						keys: ["settings", key],
@@ -112,7 +111,6 @@ module.exports = (_ => {
 						first: false,
 						last: true,
 						children: Object.keys(settings).filter(key => this.defaults.settings[key].inner).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-							className: BDFDB.disCN.marginbottom8,
 							type: "Switch",
 							plugin: this,
 							keys: ["settings", key],

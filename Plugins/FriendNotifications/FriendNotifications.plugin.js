@@ -285,7 +285,6 @@ module.exports = (_ => {
 				BDFDB.DataUtils.save(nonFriendsData, this, "nonfriends");
 				
 				for (let key in settings) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					className: BDFDB.disCN.marginbottom8,
 					type: "Switch",
 					plugin: this,
 					keys: ["settings", key],
@@ -293,7 +292,6 @@ module.exports = (_ => {
 					value: settings[key]
 				}));
 				for (let key in amounts) if (key.indexOf("desktop") == -1 || "Notification" in window) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					className: BDFDB.disCN.marginbottom8,
 					type: "TextInput",
 					childProps: {
 						type: "number"
@@ -383,7 +381,6 @@ module.exports = (_ => {
 							]
 						})
 					})].concat(Object.keys(notificationStrings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "TextInput",
 						plugin: this,
 						keys: ["notificationstrings", key],

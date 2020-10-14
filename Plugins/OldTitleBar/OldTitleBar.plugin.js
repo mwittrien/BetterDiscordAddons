@@ -140,7 +140,6 @@ module.exports = (_ => {
 				for (let key in settings) {
 					let isNativeTitlebarSetting = key == "displayNative";
 					settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "Switch",
 						plugin: this,
 						keys: ["settings", key],

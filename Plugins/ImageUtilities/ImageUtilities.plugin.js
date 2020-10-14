@@ -240,14 +240,12 @@ module.exports = (_ => {
 					title: "Settings",
 					collapseStates: collapseStates,
 					children: Object.keys(settings).map(key => !this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "Switch",
 						plugin: this,
 						keys: ["settings", key],
 						label: this.defaults.settings[key].description,
 						value: settings[key]
 					})).concat(Object.keys(amounts).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "TextInput",
 						plugin: this,
 						keys: ["amounts", key],
@@ -258,7 +256,6 @@ module.exports = (_ => {
 						max: this.defaults.amounts[key].max,
 						value: amounts[key]
 					}))).concat(Object.keys(inputs).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "TextInput",
 						plugin: this,
 						keys: ["inputs", key],
@@ -276,7 +273,6 @@ module.exports = (_ => {
 						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
 						children: "Add additional Context Menu Entry for:"
 					})].concat(Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "Switch",
 						plugin: this,
 						keys: ["settings", key],
@@ -288,7 +284,6 @@ module.exports = (_ => {
 					title: "Search Engines",
 					collapseStates: collapseStates,
 					children: Object.keys(engines).filter(n => n && n != "_all").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "Switch",
 						plugin: this,
 						keys: ["engines", key],

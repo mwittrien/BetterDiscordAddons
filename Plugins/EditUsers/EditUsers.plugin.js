@@ -208,7 +208,6 @@ module.exports = (_ => {
 				let settingsPanel, settingsItems = [];
 				
 				for (let key in settings) if (!this.defaults.settings[key].inner) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					className: BDFDB.disCN.marginbottom8,
 					type: "Switch",
 					plugin: this,
 					keys: ["settings", key],
@@ -219,7 +218,6 @@ module.exports = (_ => {
 					title: "Change Users in:",
 					first: settingsItems.length == 0,
 					children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "Switch",
 						plugin: this,
 						keys: ["settings", key],
@@ -229,7 +227,6 @@ module.exports = (_ => {
 				}));
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					type: "Button",
-					className: BDFDB.disCN.marginbottom8,
 					color: BDFDB.LibraryComponents.Button.Colors.RED,
 					label: "Reset all Users",
 					onClick: _ => {
@@ -1056,17 +1053,18 @@ module.exports = (_ => {
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 													className: "input-removeicon",
 													type: "Switch",
+													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
 													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 													value: data.removeIcon,
 													onChange: (value, instance) => {
-														let avatarInputIins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "USERAVATAR"});
-														if (avatarInputIins) {
-															delete avatarInputIins.props.success;
-															delete avatarInputIins.props.errorMessage;
-															avatarInputIins.props.disabled = value;
-															BDFDB.ReactUtils.forceUpdate(avatarInputIins);
+														let avatarInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "USERAVATAR"});
+														if (avatarInputIns) {
+															delete avatarInputIns.props.success;
+															delete avatarInputIns.props.errorMessage;
+															avatarInputIns.props.disabled = value;
+															BDFDB.ReactUtils.forceUpdate(avatarInputIns);
 														}
 													}
 												})
@@ -1102,6 +1100,7 @@ module.exports = (_ => {
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 													className: "input-removestatus",
 													type: "Switch",
+													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
 													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
@@ -1186,7 +1185,8 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
-									className: BDFDB.disCN.marginbottom20 + " input-userolecolor",
+									className: "input-userolecolor",
+									margin: 20,
 									label: this.labels.modal_userolecolor_text,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: data.useRoleColor
@@ -1216,7 +1216,8 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
-									className: BDFDB.disCN.marginbottom20 + " input-ignoretagcolor",
+									className: "input-ignoretagcolor",
+									margin: 20,
 									label: this.labels.modal_ignoretagcolor_text,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: data.ignoreTagColor,

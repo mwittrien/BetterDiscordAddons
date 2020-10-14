@@ -233,7 +233,6 @@ module.exports = (_ => {
 					title: "Settings",
 					collapseStates: collapseStates,
 					children: Object.keys(settings).map(key => this.defaults.settings[key].cat == "settings" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "Switch",
 						plugin: this,
 						keys: ["settings", key],
@@ -254,7 +253,6 @@ module.exports = (_ => {
 						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
 						children: "Add additional details in the server tooltip for:"
 					})].concat(Object.keys(settings).map(key => this.defaults.settings[key].cat == "tooltip" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "Switch",
 						plugin: this,
 						keys: ["settings", key],
@@ -263,7 +261,6 @@ module.exports = (_ => {
 					}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 						className: BDFDB.disCN.marginbottom8
 					})).concat(Object.keys(amounts).map(key => this.defaults.amounts[key].cat == "tooltip" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "Slider",
 						plugin: this,
 						keys: ["amounts", key],
@@ -279,7 +276,6 @@ module.exports = (_ => {
 					}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 						className: BDFDB.disCN.marginbottom8
 					})).concat(Object.keys(colors).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "TextInput",
 						plugin: this,
 						keys: ["colors", key],
@@ -295,7 +291,6 @@ module.exports = (_ => {
 					title: "Time Format",
 					collapseStates: collapseStates,
 					children: Object.keys(choices).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "Select",
 						plugin: this,
 						keys: ["choices", key],
@@ -344,7 +339,6 @@ module.exports = (_ => {
 					})).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 						className: BDFDB.disCN.marginbottom8
 					})).concat(Object.keys(formats).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "TextInput",
 						plugin: this,
 						keys: ["formats", key],
@@ -358,7 +352,6 @@ module.exports = (_ => {
 					}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 						className: BDFDB.disCN.marginbottom8
 					})).concat(Object.keys(amounts).map(key => this.defaults.amounts[key].cat == "format" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "TextInput",
 						plugin: this,
 						keys: ["amounts", key],

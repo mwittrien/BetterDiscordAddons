@@ -82,7 +82,6 @@ module.exports = (_ => {
 				let settingsPanel, settingsItems = [], innerItems = [];
 				
 				for (let key in settings) (!this.defaults.settings[key].inner ? settingsItems : innerItems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					className: BDFDB.disCN.marginbottom8,
 					type: "Switch",
 					plugin: this,
 					keys: ["settings", key],

@@ -5,8 +5,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeSettings",
 			"author": "DevilBro",
-			"version": "1.2.1",
+			"version": "1.2.2",
 			"description": "Allows you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page."
+		},
+		"changeLog": {
+			"fixed": {
+				"Switch Fix": "Works again"
+			}
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -119,7 +124,6 @@ module.exports = (_ => {
 				
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					type: "Button",
-					className: BDFDB.disCN.marginbottom8,
 					color: BDFDB.LibraryComponents.Button.Colors.GREEN,
 					label: "Update all variables",
 					onClick: _ => {
@@ -170,9 +174,9 @@ module.exports = (_ => {
 						}
 						let varDescription = varStr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-							className: BDFDB.disCN.marginbottom20,
-							dividerbottom: vars[vars.length-1] != varStr,
 							type: "TextInput",
+							margin: 20,
+							dividerBottom: vars[vars.length-1] != varStr,
 							childProps: {
 								type: childType,
 								mode: childMode,
