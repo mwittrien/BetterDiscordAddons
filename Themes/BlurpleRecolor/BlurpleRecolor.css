@@ -1639,23 +1639,28 @@
 	border-color: rgb(var(--vaccentcolor));
 }
 
-.themeDefault-24hCdX.valueChecked-m-4IJZ {					/* switch				checked 							*/
-	background-color: rgba(var(--vaccentcolor), 0.8);
+.container-3auIfb {											/* switch				unchecked							*/
+	background-color: rgb(114, 118, 125) !important;
+	transition: background-color .1s ease-out;
+}															/* switch				checked								*/
+.container-3auIfb[style*="background-color: rgb(67, 181, 129)"],
+.container-3auIfb[style*="background-color: rgb(114, 137, 218)"] {
+	background-color: rgba(var(--vaccentcolor), 0.8) !important;
 }
-.themeDefault-24hCdX.valueChecked-m-4IJZ:hover {
+.container-3auIfb[style*="background-color: rgb(67, 181, 129)"]:hover,
+.container-3auIfb[style*="background-color: rgb(114, 137, 218)"]:hover {
 	background: var(--vaccentcolor-hover);
 }
-.themeDefault-24hCdX.valueChecked-m-4IJZ:active {
+.container-3auIfb[style*="background-color: rgb(67, 181, 129)"]:active,
+.container-3auIfb[style*="background-color: rgb(114, 137, 218)"]:active {
 	background: var(--vaccentcolor-active);
 }
-.themeClear-1EjkE4.valueChecked-m-4IJZ {					/* switch				checked clear						*/
-	background-color: rgba(var(--vaccentcolor), 0.8);
+.container-3auIfb path[fill] {
+	fill: rgb(114, 118, 125) !important;
 }
-.themeClear-1EjkE4.valueChecked-m-4IJZ:hover {
-	background: var(--vaccentcolor-hover);
-}
-.themeClear-1EjkE4.valueChecked-m-4IJZ:active {
-	background: var(--vaccentcolor-active);
+.container-3auIfb[style*="background-color: rgb(67, 181, 129)"] path[fill],
+.container-3auIfb[style*="background-color: rgb(114, 137, 218)"] path[fill] {
+	fill: rgb(var(--vaccentcolor)) !important;
 }
 
 .barFill-23-gu- {											/* slider				barfill								*/

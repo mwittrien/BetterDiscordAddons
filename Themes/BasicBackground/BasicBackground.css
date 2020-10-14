@@ -2312,45 +2312,8 @@ body:before {
 	color: rgb(var(--fontwhite2));
 }
 
-															/* connections			platforms							*/
-.connection-1fbD7X[style*="background-color: rgb(89, 54, 149)"] {
-	background-color: rgba(89, 54, 149, 0.8) !important;
-}
-.connection-1fbD7X[style*="background-color: rgb(25, 23, 23)"] {
-	background-color: rgba(25, 23, 23, 0.8) !important;
-}
-.connection-1fbD7X[style*="background-color: rgb(203, 33, 32)"] {
-	background-color: rgba(203, 33, 32, 0.8) !important;
-}
-.connection-1fbD7X[style*="background-color: rgb(0, 157, 215)"] {
-	background-color: rgba(0, 157, 215, 0.8) !important;
-}
-.connection-1fbD7X[style*="background-color: rgb(24, 35, 50)"] {
-	background-color: rgba(24, 35, 50, 0.8) !important;
-}
-.connection-1fbD7X[style*="background-color: rgb(2, 31, 37)"] {
-	background-color: rgba(2, 31, 37, 0.8) !important;
-}
-.connection-1fbD7X[style*="background-color: rgb(0, 154, 229)"] {
-	background-color: rgba(0, 154, 229, 0.8) !important;
-}
-.connection-1fbD7X[style*="background-color: rgb(255, 69, 0)"] {
-	background-color: rgba(255, 69, 0, 0.8) !important;
-}
-.connection-1fbD7X[style*="background-color: rgb(29, 161, 242)"] {
-	background-color: rgba(29, 161, 242, 0.8) !important;
-}
-.connection-1fbD7X[style*="background-color: rgb(29, 185, 84)"] {
-	background-color: rgba(29, 185, 84, 0.8) !important;
-}
-.connection-1fbD7X[style*="background-color: rgb(53, 80, 137)"] {
-	background-color: rgba(53, 80, 137, 0.8) !important;
-}
-.connection-1fbD7X[style*="background-color: rgb(16, 124, 16)"] {
-	background-color: rgba(16, 124, 16, 0.8) !important;
-}
-.connection-1fbD7X[style*="background-color: rgb(20, 41, 160)"] {
-	background-color: rgba(20, 41, 160, 0.8) !important;
+.accountList-33MS45 {										/* connections			container							*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
 .accountBtn-2Nozo3 .accountBtnInner-sj5jLs {				/* connections			connectioninner						*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
@@ -2358,8 +2321,11 @@ body:before {
 .accountBtn-2Nozo3 .accountBtnInner-sj5jLs:hover {
 	background-color: rgb(var(--vaccentcolor));
 }
-.connectionHeader-2MDqhu {									/* connections			header								*/
-	border-bottom-color: rgba(var(--vtransparencycolor), 0.15);
+.connection-1fbD7X {										/* connections			connection							*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.connectionHeader-2MDqhu {									/* connections			connection header					*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 .connectionHeader-2MDqhu .connectionAccountValue-3VdBGs {
 	color: rgb(var(--fontwhite1));
@@ -2370,20 +2336,6 @@ body:before {
 }
 .subEnabledTitle-2ElRo_ {
 	color: rgb(var(--fontwhite1));
-}
-.connectionDelete-2Odoln {									/* connections			delete								*/
-	border-color: rgba(var(--fontwhite1), 0.3);
-}
-.connectionDelete-2Odoln:hover {
-	border-color: rgb(var(--fontwhite1));
-}
-.connectionDelete-2Odoln:after,
-.connectionDelete-2Odoln:before {
-	background-color: rgba(var(--fontwhite1), 0.6);
-}
-.connectionDelete-2Odoln:hover:after,
-.connectionDelete-2Odoln:hover:before {
-	background-color: rgb(var(--fontwhite1));
 }
 
 #app-mount .codeRedemptionRedirect-1wVR4b {					/* payment				coderedem							*/
