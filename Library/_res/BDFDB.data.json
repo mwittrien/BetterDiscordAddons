@@ -11,7 +11,6 @@
 		"User": {"props": ["hasFlag", "isLocalBot", "isClaimed"]}
 	},
 	"LibraryModules": {
-		"AccessibilityPreferencesContext": {"props": ["AccessibilityPreferencesContext"]},
 		"AckUtils": {"props": ["localAck", "bulkAck"]},
 		"ActivityUtils": {"props": ["sendActivityInvite", "updateActivity"]},
 		"APIUtils": {"props": ["getAPIBaseURL"]},
@@ -78,6 +77,7 @@
 		"PlatformUtils": {"props": ["isWindows", "isLinux"]},
 		"PermissionUtils": {"props": ["getChannelPermissions", "can"]},
 		"PermissionRoleUtils": {"props": ["canEveryone", "can"]},
+		"PreferencesContext": {"props": ["AccessibilityPreferencesContext"]},
 		"QueryUtils": {"props": ["AutocompleterQuerySymbols", "AutocompleterResultTypes"]},
 		"QuoteUtils": {"props": ["canQuote", "createQuotedText"]},
 		"ReactionEmojiUtils": {"props": ["getReactionEmojiName", "getReactionEmojiName"]},
