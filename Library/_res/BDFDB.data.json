@@ -166,6 +166,7 @@
 			"ChannelAutoComplete": {"strings": ["hidePersonalInformation", "canExecuteCommands"]},
 			"ChannelCall": {"class": "callcurrentcontainer"},
 			"ChannelMember": {"class": "member"},
+			"ChannelMembers": {"class": "members"},
 			"Channels": {"class": "guildchannels"},
 			"ChannelTextAreaForm": {"class": "chatform"},
 			"ChannelWindow": {"class": "chatcontent"},
