@@ -5,12 +5,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.0.8",
+			"version": "1.0.9",
 			"description": "Completely removes blocked messages."
 		},
 		"changeLog": {
 			"fixed": {
-				"Hide Users": "Also hides user icons in the voice channel overview",
+				"Hide Users": "Also hides user icons in the voice channel overview & in the autocomplete menu & mentions",
 				"Role Group Count": "Fixes role group count for hidden banned users"
 			}
 		}
@@ -58,7 +58,9 @@ module.exports = (_ => {
 				this.patchedModules = {
 					before: {
 						ChannelMembers: "render",
+						PrivateChannelRecipients: "default",
 						VoiceUsers: "render",
+						PrivateChannel: "render",
 						PrivateChannelCallParticipants: "render",
 						ChannelCall: "render",
 						UserSummaryItem: "render"
@@ -66,9 +68,12 @@ module.exports = (_ => {
 					after: {
 						Messages: "type",
 						MemberListItem: "render",
-						VoiceUser: "render"
+						VoiceUser: "render",
+						Mention: "default"
 					}
 				};
+				
+				this.patchPriority = 10;
 			}
 			
 			onStart() {
@@ -94,6 +99,10 @@ module.exports = (_ => {
 					if (e.returnValue && settings.disableNotifications) {
 						return BDFDB.LibraryModules.GuildChannelStore.getChannels(e.methodArguments[0]).SELECTABLE.map(n => n.channel && n.channel.id).filter(n => n && n != "null").some(BDFDB.LibraryModules.UnreadChannelUtils.hasUnread);
 					}
+				}});
+				
+				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.MENTIONS, "queryResults", {after: e => {
+					if (settings.removeUsers) e.returnValue.users = e.returnValue.users.filter(n => !n.user || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.user.id));
 				}});
 				
 				this.forceUpdateAll();
@@ -146,7 +155,7 @@ module.exports = (_ => {
 						let messages = messagesIns.props.messages;
 						messagesIns.props.messages = new BDFDB.DiscordObjects.Messages(messages);
 						for (let key in messages) messagesIns.props.messages[key] = messages[key];
-						messagesIns.props.messages._array = [].concat(messagesIns.props.messages._array.filter(n => n.author && !BDFDB.LibraryModules.FriendUtils.isBlocked(n.author.id)));
+						messagesIns.props.messages._array = [].concat(messagesIns.props.messages._array.filter(n => !n.author || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.author.id)));
 						if (messagesIns.props.oldestUnreadMessageId && messagesIns.props.messages._array.every(n => n.id != messagesIns.props.oldestUnreadMessageId)) messagesIns.props.oldestUnreadMessageId = null;
 					}
 				}
@@ -155,7 +164,7 @@ module.exports = (_ => {
 			processChannelMembers (e) {
 				if (settings.removeUsers) {
 					e.instance.props.groups = [].concat(e.instance.props.groups);
-					let newRows = [];
+					let newRows = [], changedGroups = {};
 					for (let i in e.instance.props.rows) {
 						let row = e.instance.props.rows[i];
 						if (row.type != "MEMBER") newRows.push(row);
@@ -166,6 +175,7 @@ module.exports = (_ => {
 								if (newRows[checkIndex].type == "GROUP") {
 									found = true;
 									newRows[checkIndex] = Object.assign({}, newRows[checkIndex], {count: newRows[checkIndex].count - 1});
+									changedGroups[newRows[checkIndex].id] = true;
 								}
 								else checkIndex--;
 							}
@@ -173,12 +183,18 @@ module.exports = (_ => {
 					}
 					let indexSum = 0;
 					for (let i in e.instance.props.groups) {
-						let row = newRows.find(r => r.type == "GROUP" && r.id == e.instance.props.groups[i].id);
-						e.instance.props.groups[i] = Object.assign({}, e.instance.props.groups[i], {index: indexSum, count: row ? row.count : e.instance.props.groups[i].count});
+						if (changedGroups[e.instance.props.groups[i].id]) {
+							let row = newRows.find(r => r.type == "GROUP" && r.id == e.instance.props.groups[i].id);
+							e.instance.props.groups[i] = Object.assign({}, e.instance.props.groups[i], {index: indexSum, count: row ? row.count : e.instance.props.groups[i].count});
+						}
 						indexSum += (e.instance.props.groups[i].count + 1);
 					}
 					e.instance.props.rows = newRows;
 				}
+			}
+			
+			processPrivateChannelRecipients (e) {
+				if (settings.removeUsers && e.instance.props.channel && e.instance.props.channel.isGroupDM()) e.instance.props.channel = new BDFDB.DiscordObjects.Channel(Object.assign({}, e.instance.props.channel, {rawRecipients: e.instance.props.channel.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.id)), recipients: e.instance.props.channel.recipients.filter(id => !id || !BDFDB.LibraryModules.FriendUtils.isBlocked(id))}));
 			}
 			
 			processMemberListItem (e) {
@@ -193,6 +209,10 @@ module.exports = (_ => {
 				if (settings.removeUsers && e.instance.props.user && BDFDB.LibraryModules.FriendUtils.isBlocked(e.instance.props.user.id)) return null;
 			}
 
+			processPrivateChannel (e) {
+				if (settings.removeUsers && e.instance.props.channel && e.instance.props.channel.isGroupDM()) e.instance.props.channel = new BDFDB.DiscordObjects.Channel(Object.assign({}, e.instance.props.channel, {rawRecipients: e.instance.props.channel.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.id)), recipients: e.instance.props.channel.recipients.filter(id => !id || !BDFDB.LibraryModules.FriendUtils.isBlocked(id))}));
+			}
+
 			processPrivateChannelCallParticipants (e) {
 				if (settings.removeUsers && BDFDB.ArrayUtils.is(e.instance.props.participants)) e.instance.props.participants = [].concat(e.instance.props.participants).filter(n => !n.user || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.user.id));
 			}
@@ -203,6 +223,13 @@ module.exports = (_ => {
 
 			processUserSummaryItem (e) {
 				if (settings.removeUsers && BDFDB.ArrayUtils.is(e.instance.props.users)) e.instance.props.users = [].concat(e.instance.props.users).filter(n => !n || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.id));
+			}
+			
+			processMention (e) {
+				if (settings.removeUsers && e.instance.props.userId && BDFDB.LibraryModules.FriendUtils.isBlocked(e.instance.props.userId)) return BDFDB.ReactUtils.createElement("span", {
+					className: BDFDB.disCNS.mention + BDFDB.disCN.mentionwrapper,
+					children: ["@" + BDFDB_Global.LanguageUtils.LanguageStrings.UNKNOWN_USER]
+				});
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
