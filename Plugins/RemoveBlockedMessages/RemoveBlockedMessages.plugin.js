@@ -5,15 +5,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.0.7",
+			"version": "1.0.8",
 			"description": "Completely removes blocked messages."
 		},
 		"changeLog": {
-			"added": {
-				"Hide Users": "Added option to hide blocked users completely (hide them in memberlist, channelist, calls)"
-			},
-			"improved": {
-				"Settings": "You can now disable certain features of the plugin"
+			"fixed": {
+				"Hide Users": "Also hides user icons in the voice channel overview",
+				"Role Group Count": "Fixes role group count for hidden banned users"
 			}
 		}
 	};
@@ -59,6 +57,7 @@ module.exports = (_ => {
 				
 				this.patchedModules = {
 					before: {
+						ChannelMembers: "render",
 						VoiceUsers: "render",
 						PrivateChannelCallParticipants: "render",
 						ChannelCall: "render",
@@ -153,16 +152,45 @@ module.exports = (_ => {
 				}
 			}
 		
-			processMemberListItem (e) {
-				if (settings.removeUsers && e.instance.props.user && BDFDB.LibraryModules.FriendUtils.isBlocked(e.instance.props.user.id)) return null;
+			processChannelMembers (e) {
+				if (settings.removeUsers) {
+					e.instance.props.groups = [].concat(e.instance.props.groups);
+					let newRows = [];
+					for (let i in e.instance.props.rows) {
+						let row = e.instance.props.rows[i];
+						if (row.type != "MEMBER") newRows.push(row);
+						else if (!row.user || !BDFDB.LibraryModules.FriendUtils.isBlocked(row.user.id)) newRows.push(row);
+						else {
+							let found = false, checkIndex = i - 1;
+							while (!found && checkIndex > -1) {
+								if (newRows[checkIndex].type == "GROUP") {
+									found = true;
+									newRows[checkIndex] = Object.assign({}, newRows[checkIndex], {count: newRows[checkIndex].count - 1});
+								}
+								else checkIndex--;
+							}
+						}
+					}
+					let indexSum = 0;
+					for (let i in e.instance.props.groups) {
+						let row = newRows.find(r => r.type == "GROUP" && r.id == e.instance.props.groups[i].id);
+						e.instance.props.groups[i] = Object.assign({}, e.instance.props.groups[i], {index: indexSum, count: row ? row.count : e.instance.props.groups[i].count});
+						indexSum += (e.instance.props.groups[i].count + 1);
+					}
+					e.instance.props.rows = newRows;
+				}
 			}
-		
-			processVoiceUser (e) {
+			
+			processMemberListItem (e) {
 				if (settings.removeUsers && e.instance.props.user && BDFDB.LibraryModules.FriendUtils.isBlocked(e.instance.props.user.id)) return null;
 			}
 		
 			processVoiceUsers (e) {
 				if (settings.removeUsers && BDFDB.ArrayUtils.is(e.instance.props.voiceStates)) e.instance.props.voiceStates = [].concat(e.instance.props.voiceStates).filter(n => !n.user || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.user.id));
+			}
+		
+			processVoiceUser (e) {
+				if (settings.removeUsers && e.instance.props.user && BDFDB.LibraryModules.FriendUtils.isBlocked(e.instance.props.user.id)) return null;
 			}
 
 			processPrivateChannelCallParticipants (e) {
@@ -174,7 +202,7 @@ module.exports = (_ => {
 			}
 
 			processUserSummaryItem (e) {
-				if (settings.removeUsers && BDFDB.ArrayUtils.is(e.instance.props.users)) e.instance.props.users = [].concat(e.instance.props.users).filter(n => !n.user || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.user.id));
+				if (settings.removeUsers && BDFDB.ArrayUtils.is(e.instance.props.users)) e.instance.props.users = [].concat(e.instance.props.users).filter(n => !n || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.id));
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
