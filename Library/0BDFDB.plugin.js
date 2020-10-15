@@ -1028,8 +1028,11 @@ module.exports = (_ => {
 						if (icon) BDFDB.DOMUtils.addClass(toast, "icon");
 					}
 					else if (color) {
-						let rgbcolor = BDFDB.ColorUtils.convert(color, "RGB");
-						if (rgbcolor) toast.style.setProperty("background-color", rgbcolor);
+						let rgbColor = BDFDB.ColorUtils.convert(color, "RGB");
+						if (rgbColor) {
+							toast.style.setProperty("background-color", rgbColor);
+							BDFDB.DOMUtils.addClass(toast, "toast-custom");
+						}
 					}
 					BDFDB.DOMUtils.addClass(toast, selector);
 					toasts.appendChild(toast);
@@ -7349,7 +7352,7 @@ module.exports = (_ => {
 					delete e.returnvalue.props.userId;
 				};
 				
-				const ContextMenuTypes = ["UserSettingsCog", "User", "Developer", "Slate", "GuildFolder", "GroupDM", "SystemMessage", "Message", "Native", "Role", "Guild", "Channel"];
+				const ContextMenuTypes = ["UserSettingsCog", "UserProfileActions", "User", "Developer", "Slate", "GuildFolder", "GroupDM", "SystemMessage", "Message", "Native", "Role", "Guild", "Channel"];
 				const QueuedComponents = BDFDB.ArrayUtils.removeCopies([].concat(ContextMenuTypes.map(n => n + "ContextMenu"), ["GuildHeaderContextMenu", "MessageOptionContextMenu", "MessageOptionToolbar"]));	
 				InternalBDFDB.addContextListeners = function (plugin) {
 					plugin = plugin == BDFDB && InternalBDFDB || plugin;

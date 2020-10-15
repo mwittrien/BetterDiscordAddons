@@ -1018,6 +1018,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	background-size: 20px 20px;
 	background-repeat: no-repeat;
 }
+.toast.toast-custom {
+	color: #FFF;
+}
 .toast.toast-brand {
 	background-color: #7289DA;
 	color: #FFF;
