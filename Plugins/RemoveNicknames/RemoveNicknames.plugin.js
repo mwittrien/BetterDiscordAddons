@@ -5,8 +5,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveNicknames",
 			"author": "DevilBro",
-			"version": "1.3.0",
+			"version": "1.3.2",
 			"description": "Replace all nicknames with the actual accountnames."
+		},
+		"changeLog": {
+			"fixed": {
+				"Mentions": "Now also works for mentions inside quotes"
+			}
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -65,7 +70,8 @@ module.exports = (_ => {
 						MessageContent: "type",
 					},
 					after: {
-						TypingUsers: "render"
+						TypingUsers: "render",
+						Mention: "default"
 					}
 				};
 			}
@@ -155,20 +161,19 @@ module.exports = (_ => {
 			}
 			
 			processMessageContent (e) {
-				if (BDFDB.ArrayUtils.is(e.instance.props.content) && settings.changeInMentions) for (let ele of e.instance.props.content) {
-					if (BDFDB.ReactUtils.isValidElement(ele) && ele.type && (ele.type.displayName || "").toLowerCase().indexOf("popout") > -1 && typeof ele.props.render == "function") {
-						if (BDFDB.ObjectUtils.get(ele, "props.children.type.displayName") == "Mention") {
-							let newName = this.getNewName(BDFDB.LibraryModules.UserStore.getUser(ele.props.render().props.userId));
-							if (newName) ele.props.children.props.children[0] = "@" + newName;
-						}
-					}
-				}
 				if (e.instance.props.message.type != BDFDB.DiscordConstants.MessageTypes.DEFAULT && e.instance.props.message.nick && settings.changeInChatWindow) {
 					let newName = this.getNewName(e.instance.props.message.author);
 					if (newName) {
 						e.instance.props.message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {nick: newName}));
 						e.instance.props.children.props.message = e.instance.props.message;
 					}
+				}
+			}
+			
+			processMention (e) {
+				if (e.instance.props.userId && settings.changeInMentions) {
+					let newName = this.getNewName(BDFDB.LibraryModules.UserStore.getUser(e.instance.props.userId));
+					if (newName) e.returnvalue.props.children[0] = "@" + newName;
 				}
 			}
 
