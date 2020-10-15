@@ -927,7 +927,7 @@ module.exports = (_ => {
 			loadThemes () {
 				BDFDB.DOMUtils.remove(".themerepo-loadingicon");
 				let getThemeInfo, outdated = 0, newEntries = 0, i = 0, NFLDreplace = null;
-				let tags = ["name","description","author","version"];
+				let tags = ["name", "description", "author", "version"];
 				let newEntriesData = BDFDB.DataUtils.load(this, "newentriesdata");
 				cachedThemes = (newEntriesData.urlbase64 ? atob(newEntriesData.urlbase64).split("\n") : []).concat(customList);
 				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/_res/ThemeList.txt", (error, response, body) => {
@@ -1080,7 +1080,10 @@ module.exports = (_ => {
 								}
 								
 								let valid = true;
-								for (let tag of tags) if (theme[tag] === null) valid = false;
+								for (let tag of tags) if (theme[tag] === null) {
+									if (tag == "author") theme[tag] = "???";
+									else valid = false;
+								}
 								if (valid) {
 									theme.fullCSS = text;
 									theme.css = hasMETAline < 20 && hasMETAline > -1 ? text.split("\n").slice(1).join("\n").replace(/[\r|\n|\t]/g, "") : text.replace(/[\r|\n|\t]/g, "");
