@@ -5,12 +5,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.0.8",
+			"version": "1.0.9",
 			"description": "Completely removes blocked messages."
 		},
 		"changeLog": {
 			"fixed": {
-				"Hide Users": "Also hides user icons in the voice channel overview",
+				"Hide Users": "Also hides user icons in the voice channel overview & in the autocomplete menu",
 				"Role Group Count": "Fixes role group count for hidden banned users"
 			}
 		}
@@ -69,6 +69,8 @@ module.exports = (_ => {
 						VoiceUser: "render"
 					}
 				};
+				
+				this.patchPriority = 10;
 			}
 			
 			onStart() {
@@ -94,6 +96,10 @@ module.exports = (_ => {
 					if (e.returnValue && settings.disableNotifications) {
 						return BDFDB.LibraryModules.GuildChannelStore.getChannels(e.methodArguments[0]).SELECTABLE.map(n => n.channel && n.channel.id).filter(n => n && n != "null").some(BDFDB.LibraryModules.UnreadChannelUtils.hasUnread);
 					}
+				}});
+				
+				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.MENTIONS, "queryResults", {after: e => {
+					if (settings.removeUsers) e.returnValue.users = e.returnValue.users.filter(n => !n.user || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.user.id));
 				}});
 				
 				this.forceUpdateAll();
@@ -146,7 +152,7 @@ module.exports = (_ => {
 						let messages = messagesIns.props.messages;
 						messagesIns.props.messages = new BDFDB.DiscordObjects.Messages(messages);
 						for (let key in messages) messagesIns.props.messages[key] = messages[key];
-						messagesIns.props.messages._array = [].concat(messagesIns.props.messages._array.filter(n => n.author && !BDFDB.LibraryModules.FriendUtils.isBlocked(n.author.id)));
+						messagesIns.props.messages._array = [].concat(messagesIns.props.messages._array.filter(n => !n.author || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.author.id)));
 						if (messagesIns.props.oldestUnreadMessageId && messagesIns.props.messages._array.every(n => n.id != messagesIns.props.oldestUnreadMessageId)) messagesIns.props.oldestUnreadMessageId = null;
 					}
 				}
