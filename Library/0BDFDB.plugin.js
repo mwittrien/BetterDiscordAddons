@@ -6206,7 +6206,7 @@ module.exports = (_ => {
 						return BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.settingsrow, this.props.disabled && BDFDB.disCN.settingsrowdisabled),
 							id: this.props.id,
-							style: {marginBottom: this.props.margin != null ? this.props.mini : (this.props.mini ? 0 : 8)},
+							style: {marginBottom: this.props.margin != null ? this.props.margin : (this.props.mini ? 0 : 8)},
 							children: [
 								this.props.dividerTop ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
 									className: this.props.mini ? BDFDB.disCN.marginbottom4 : BDFDB.disCN.marginbottom8
@@ -6233,7 +6233,7 @@ module.exports = (_ => {
 											children: BDFDB.ReactUtils.createElement(childComponent, BDFDB.ObjectUtils.exclude(Object.assign(BDFDB.ObjectUtils.exclude(this.props, "className", "id", "type"), this.props.childProps, {
 												onChange: this.handleChange.bind(this),
 												onValueChange: this.handleChange.bind(this)
-											}), "grow", "stretch", "basis", "dividerBottom", "dividerTop", "label", "labelClassName", "labelchildren", "tag", "mini", "note", "childProps"))
+											}), "grow", "stretch", "basis", "margin", "dividerBottom", "dividerTop", "label", "labelClassName", "labelchildren", "tag", "mini", "note", "childProps"))
 										})
 									].flat(10).filter(n => n)
 								}),
