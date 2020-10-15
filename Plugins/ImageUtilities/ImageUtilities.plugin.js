@@ -5,10 +5,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.1.7",
+			"version": "4.1.8",
 			"description": "Adds a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode)"
+		},
+		"changeLog": {
+			"added": {
+				"Resize Image": "Added option to automatically resize images in the image to fit as much space as possible"
+			}
 		}
 	};
+	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
@@ -90,6 +96,7 @@ module.exports = (_ => {
 					
 				this.defaults = {
 					settings: {
+						resizeImage: 			{value:true,	inner:false,	description:"Always resize image to fit the whole image modal"},
 						addDetails: 			{value:true,	inner:false,	description:"Add image details (name, size, amount) in the image modal"},
 						showAsHeader:			{value:true, 	inner:false,	description:"Show image details as a details header above the image in the chat"},
 						showOnHover:			{value:false, 	inner:false,	description:"Show image details as Tooltip in the chat"},
@@ -623,7 +630,30 @@ module.exports = (_ => {
 
 			processLazyImage (e) {
 				if (e.node) {
-					if (settings.enableZoom && !e.node.querySelector("video") && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling) && BDFDB.ReactUtils.findOwner(BDFDB.DOMUtils.getParent(BDFDB.dotCNC.modal + BDFDB.dotCN.layermodal, e.node), {name: "ImageModal"})) {
+					if (settings.enableZoom && !e.node.querySelector("video") && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling) && BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagemodal, e.node)) {
+						if (settings.resizeImage) {
+							let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
+							let ratio = Math.min((aRects.width - 20) / e.instance.props.width, (aRects.height - (settings.addDetails ? 280 : 100)) / e.instance.props.height);
+							let width = Math.round(ratio * e.instance.props.width);
+							let height = Math.round(ratio * e.instance.props.height);
+							let img = e.node.querySelector("img");
+							e.node.style.setProperty("width", `${width}px`);
+							e.node.style.setProperty("height", `${height}px`);
+							let changeImg = _ => {
+								img.style.setProperty("width", `${width}px`);
+								img.style.setProperty("height", `${height}px`);
+								img.src = img.src.replace(/width=\d+/, `width=${width}`).replace(/height=\d+/, `height=${height}`);
+							};
+							if (img) changeImg();
+							else {
+								const loadObserver = (new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
+									img = e.node.querySelector("img");
+									if (img) changeImg();
+								});}});}));
+								loadObserver.observe(e.node, {childList: true, subtree:true});
+							}
+						}
+						
 						e.node.addEventListener("mousedown", event => {
 							if (event.which != 1) return;
 							BDFDB.ListenerUtils.stopEvent(event);
