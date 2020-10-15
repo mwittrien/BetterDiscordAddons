@@ -107,7 +107,7 @@ module.exports = (_ => {
 				let themes = Object.keys(loadedThemes).map(url => {
 					let theme = loadedThemes[url];
 					let instTheme = BDFDB.BDUtils.getTheme(theme.name);
-					if (instTheme && instTheme.author.toUpperCase() == theme.author.toUpperCase()) theme.state = instTheme.version != theme.version ? themeStates.OUTDATED : themeStates.UPDATED;
+					if (instTheme && instTheme.author && instTheme.author.toUpperCase() == theme.author.toUpperCase()) theme.state = instTheme.version != theme.version ? themeStates.OUTDATED : themeStates.UPDATED;
 					else theme.state = themeStates.DOWNLOADABLE;
 					return {
 						url: theme.url,
@@ -1091,7 +1091,7 @@ module.exports = (_ => {
 									theme.requestUrl = requestUrl;
 									loadedThemes[url] = theme;
 									let instTheme = BDFDB.BDUtils.getTheme(theme.name);
-									if (instTheme && instTheme.author.toUpperCase() == theme.author.toUpperCase() && instTheme.version != theme.version) outdated++;
+									if (instTheme && instTheme.author && instTheme.author.toUpperCase() == theme.author.toUpperCase() && instTheme.version != theme.version) outdated++;
 									if (!cachedThemes.includes(url)) newEntries++;
 								}
 							}
