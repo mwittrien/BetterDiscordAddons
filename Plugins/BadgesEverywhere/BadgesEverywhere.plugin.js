@@ -249,7 +249,7 @@ module.exports = (_ => {
 						width: 30px !important; min-width: 30px !important;
 					}
 					
-					${BDFDB.dotCNS.userprofiletopsectionplaying + BDFDB.dotCN._badgeseverywherebadge} svg {
+					${BDFDB.dotCN._badgeseverywherebadgesinner + BDFDB.notCNS.userbadgescolored + BDFDB.dotCN._badgeseverywherebadge} svg {
 						color: unset !important;
 					}
 
@@ -320,7 +320,6 @@ module.exports = (_ => {
 				let settingsPanel, settingsItems = [], innerItems = [];
 				
 				for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					className: BDFDB.disCN.marginbottom8,
 					type: "Switch",
 					plugin: this,
 					keys: ["settings", key],
@@ -328,7 +327,6 @@ module.exports = (_ => {
 					value: settings[key]
 				}));
 				for (let flag in badges) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					className: BDFDB.disCN.marginbottom8,
 					type: "Switch",
 					plugin: this,
 					keys: ["badges", flag],
@@ -337,7 +335,6 @@ module.exports = (_ => {
 					labelchildren: this.createSettingsBadges(flag)
 				}));
 				for (let flag in indicators) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					className: BDFDB.disCN.marginbottom8,
 					type: "Switch",
 					plugin: this,
 					keys: ["indicators", flag],
@@ -420,7 +417,7 @@ module.exports = (_ => {
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._badgeseverywherebadges, BDFDB.disCN[`_badgeseverywherebadges${type}`], miniTypes.includes(type) && BDFDB.disCN._badgeseverywheremini), 
 					children: BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._badgeseverywherebadgesinner, !uncolored && badgeClasses.colored),
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._badgeseverywherebadgesinner, !uncolored && BDFDB.disCN.userbadgescolored),
 						children: renderedBadges
 					})
 				});
