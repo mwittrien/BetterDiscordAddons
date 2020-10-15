@@ -7021,10 +7021,7 @@ module.exports = (_ => {
 									let maxWidth = BDFDB.DOMUtils.getInnerWidth(ele.parentElement);
 									if (maxWidth > 50) ele.style.setProperty("max-width", `${maxWidth}px`);
 									BDFDB.TimeUtils.timeout(_ => {
-										if (document.contains(ele.parentElement)) {
-											let newMaxWidth = BDFDB.DOMUtils.getInnerWidth(ele.parentElement);
-											if (newMaxWidth > maxWidth) ele.style.setProperty("max-width", `${newMaxWidth}px`);
-										}
+										if (document.contains(ele.parentElement)) BDFDB.ReactUtils.forceUpdate(this);
 									}, 3000);
 									let Animation = new LibraryModules.AnimationUtils.Value(0);
 									Animation
