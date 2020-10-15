@@ -84,6 +84,16 @@ img:not([src]), img[src=""], img[src="null"] {
 	font-weight: 400;
 }
 
+[REPLACE_CLASS_switch][REPLACE_CLASS_switchmini] {
+	width: 26px;
+	height: 16px;
+}
+[REPLACE_CLASS_switch][REPLACE_CLASS_switchmini] [REPLACE_CLASS_switchslider] {
+	width: 16px;
+	height: 14px;
+	margin: 1px;
+}
+
 [REPLACE_CLASS_collapsecontainer] {
 	margin-bottom: 20px;
 }
