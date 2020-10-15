@@ -6203,16 +6203,16 @@ module.exports = (_ => {
 						let childComponent = InternalComponents.LibraryComponents[this.props.type];
 						if (!childComponent) return null;
 						if (this.props.mini && childComponent.Sizes) this.props.size = childComponent.Sizes.MINI || childComponent.Sizes.MIN;
+						let margin = this.props.margin != null ? this.props.margin : (this.props.mini ? 0 : 8);
 						return BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.settingsrow, this.props.disabled && BDFDB.disCN.settingsrowdisabled),
+							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.settingsrow, BDFDB.disCN.settingsrowcontainer, this.props.disabled && BDFDB.disCN.settingsrowdisabled, margin != null && (BDFDB.DiscordClasses[`marginbottom${margin}`] && BDFDB.disCN[`marginbottom${margin}`] || margin == 0 && BDFDB.disCN.marginreset)),
 							id: this.props.id,
-							style: {marginBottom: this.props.margin != null ? this.props.margin : (this.props.mini ? 0 : 8)},
 							children: [
 								this.props.dividerTop ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
 									className: this.props.mini ? BDFDB.disCN.marginbottom4 : BDFDB.disCN.marginbottom8
 								}) : null,
-								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-									align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.settingsrowlabel,
 									children: [
 										this.props.label ? (this.props.tag ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormTitle, {
 											className: BDFDB.DOMUtils.formatClassName(this.props.labelClassName, BDFDB.disCN.flexchild, BDFDB.disCN.marginreset),
@@ -6690,9 +6690,10 @@ module.exports = (_ => {
 					let fill = animation.state.to({
 						output: [props.uncheckedColor, props.checkedColor]
 					});
+					let mini = props.size == InternalComponents.LibraryComponents.Switch.Sizes.MINI;
 					
 					return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Animations.animated.div, {
-						className: BDFDB.DOMUtils.formatClassName(props.className, BDFDB.disCN.switch),
+						className: BDFDB.DOMUtils.formatClassName(props.className, BDFDB.disCN.switch, mini && BDFDB.disCN.switchmini),
 						onMouseDown: _ => {
 							return !props.disabled && state[1](true);
 						},
@@ -6717,7 +6718,7 @@ module.exports = (_ => {
 								style: {
 									left: animation.state.to({
 										range: [0, .3, .7, 1],
-										output: [-3, 1, 8, 12]
+										output: mini ? [-1, 2, 6, 9] : [-3, 1, 8, 12]
 									})
 								},
 								children: [
