@@ -5749,6 +5749,7 @@ module.exports = (_ => {
 							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.modalfooter),
 							direction: this.props.direction || InternalComponents.LibraryComponents.Flex.Direction.HORIZONTAL_REVERSE,
 							align: InternalComponents.LibraryComponents.Flex.Align.STRETCH,
+							grow: 0,
 							children: this.props.children
 						});
 					}
