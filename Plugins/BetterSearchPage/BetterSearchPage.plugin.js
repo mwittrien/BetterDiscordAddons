@@ -43,9 +43,9 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						addFirstLast:	{value:true, 	description:"Adds a first and last page button"},
-						addJumpTo:		{value:true, 	description:"Adds a jump to input field (press enter to jump)"},
-						cloneToTheTop:	{value:true, 	description:"Clones the controls to the top of the results page"}
+						addFirstLast:	{value:true, 	description:"Add a first and last page button"},
+						addJumpTo:		{value:true, 	description:"Add a jump to input field (press enter to jump)"},
+						cloneToTheTop:	{value:true, 	description:"Clone the controls to the top of the results page"}
 					}
 				};
 				

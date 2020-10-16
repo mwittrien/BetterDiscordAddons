@@ -44,8 +44,8 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						addClearButton:	{value:true, 	inner:false,	description:"Adds a 'Clear Mentions' button to the recent mentions popout"},
-						confirmClear:	{value:false,	inner:false, 	description:"Asks for your confirmation before clearing reads"},
+						addClearButton:	{value:true, 	inner:false,	description:"Add a 'Clear Mentions' button to the recent mentions popout"},
+						confirmClear:	{value:false,	inner:false, 	description:"Ask for your confirmation before clearing reads"},
 						includeGuilds:	{value:true, 	inner:true,		description:"unread Servers"},
 						includeMuted:	{value:false, 	inner:true,		description:"muted unread Servers"},
 						includeDMs:		{value:false, 	inner:true,		description:"unread DMs"}

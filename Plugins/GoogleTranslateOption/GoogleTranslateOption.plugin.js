@@ -78,7 +78,7 @@ module.exports = (_ => {
 				this.defaults = {
 					settings: {
 						useChromium: 			{value:false,			description:"Use an inbuilt browser window instead of opening your default browser"},
-						addTranslateButton:		{value:true, 			description:"Adds an translate button to the chatbar"},
+						addTranslateButton:		{value:true, 			description:"Add an translate button to the chatbar"},
 						sendOriginalMessage:	{value:false, 			description:"Send the original message together with the translation"}
 					},
 					choices: {

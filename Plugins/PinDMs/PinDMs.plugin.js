@@ -48,9 +48,9 @@ module.exports = (_ => {
 					settings: {
 						sortInRecentOrder:		{value:false, 	inner:true,		description:"Channel List"},
 						sortInRecentOrderGuild:	{value:false, 	inner:true,		description:"Guild List"},
-						showPinIcon:			{value:true, 	inner:false,	description:"Shows a little 'Pin' icon for pinned DMs in the server list:"},
-						showCategoryUnread:		{value:true, 	inner:false,	description:"Shows the amount of unread Messages in a category in the channel list:"},
-						showCategoryAmount:		{value:true, 	inner:false,	description:"Shows the amount of pinned DMs in a category in the channel list:"}
+						showPinIcon:			{value:true, 	inner:false,	description:"Show a little 'Pin' icon for pinned DMs in the server list:"},
+						showCategoryUnread:		{value:true, 	inner:false,	description:"Show the amount of unread Messages in a category in the channel list:"},
+						showCategoryAmount:		{value:true, 	inner:false,	description:"Show the amount of pinned DMs in a category in the channel list:"}
 					}
 				};
 				

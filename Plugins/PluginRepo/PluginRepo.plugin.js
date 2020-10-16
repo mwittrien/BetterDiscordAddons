@@ -109,7 +109,7 @@ module.exports = (_ => {
 						name: plugin.getName,
 						version: plugin.getVersion,
 						author: plugin.getAuthor,
-						description: plugin.getDescription || "No Description found.",
+						description: plugin.getDescription || "No Description found",
 						fav: favorites.includes(url) ? favStates.FAVORIZED : favStates.NOT_FAVORIZED,
 						new: plugin.getState == pluginStates.DOWNLOADABLE && !cachedPlugins.includes(url) ? newStates.NEW : newStates.NOT_NEW,
 						state: plugin.getState
@@ -400,8 +400,8 @@ module.exports = (_ => {
 				this.defaults = {
 					settings: {
 						useChromium: 		{value:false,	description:"Use an inbuilt browser window instead of opening your default browser"},
-						notifyOutdated:		{value:true, 	description:"Notifies you when one of your Plugins is outdated"},
-						notifyNewEntries:	{value:true, 	description:"Notifies you when there are new entries in the Repo"}
+						notifyOutdated:		{value:true, 	description:"Get a notification when one of your Plugins is outdated"},
+						notifyNewEntries:	{value:true, 	description:"Get a notification when there are new entries in the Repo"}
 					},
 					modalSettings: {
 						updated: 			{value:true,	modify:true,	description:"Show updated Plugins",},

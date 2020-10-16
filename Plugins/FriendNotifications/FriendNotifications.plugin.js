@@ -70,8 +70,8 @@ module.exports = (_ => {
 
 				this.defaults = {
 					settings: {
-						addOnlineCount:		{value:true, 	description:"Adds an online friend counter to the server list (click to open logs)"},
-						showDiscriminator:	{value:false, 	description:"Adds the user discriminator"},
+						addOnlineCount:		{value:true, 	description:"Add an online friend counter to the server list (click to open logs)"},
+						showDiscriminator:	{value:false, 	description:"Add the user discriminator"},
 						disableForNew:		{value:false, 	description:"Disable Notifications for newly added Friends:"},
 						muteOnDND:			{value:false, 	description:"Do not notify me when I am DnD"},
 						openOnClick:		{value:false, 	description:"Open the DM when you click a Notification"}

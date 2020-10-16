@@ -364,8 +364,8 @@ module.exports = (_ => {
 						closeAllFolders:	{value:false, 	description:"Close all folders when selecting a server"},
 						forceOpenFolder:	{value:false, 	description:"Force a folder to open when switching to a server of that folder"},
 						showCountBadge:		{value:true, 	description:"Display badge for amount of servers in a folder"},
-						extraColumn:		{value:true, 	description:"Moves the servers from opened folders in an extra column"},
-						addSeparators:		{value:true, 	description:"Adds separators between servers of different folders in extra column"}
+						extraColumn:		{value:true, 	description:"Move the servers from opened folders in an extra column"},
+						addSeparators:		{value:true, 	description:"Add separators between servers of different folders in extra column"}
 					}
 				};
 			

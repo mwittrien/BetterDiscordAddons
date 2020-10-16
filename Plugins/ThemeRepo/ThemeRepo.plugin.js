@@ -116,7 +116,7 @@ module.exports = (_ => {
 						name: theme.name,
 						version: theme.version,
 						author: theme.author,
-						description: theme.description || "No Description found.",
+						description: theme.description || "No Description found",
 						fav: favorites.includes(url) ? favStates.FAVORIZED : favStates.NOT_FAVORIZED,
 						new: theme.state == themeStates.DOWNLOADABLE && !cachedThemes.includes(url) ? newStates.NEW : newStates.NOT_NEW,
 						state: theme.state,
@@ -693,8 +693,8 @@ module.exports = (_ => {
 					settings: {
 						useChromium: 		{value:false,		description:"Use an inbuilt browser window instead of opening your default browser"},
 						keepOnTop: 			{value:false,		description:"Keep the preview window always on top"},
-						notifyOutdated:		{value:true, 		description:"Notifies you when one of your Themes is outdated"},
-						notifyNewentries:	{value:true, 		description:"Notifies you when there are new entries in the Repo"}
+						notifyOutdated:		{value:true, 		description:"Get a notification when one of your Themes is outdated"},
+						notifyNewentries:	{value:true, 		description:"Get a notification when there are new entries in the Repo"}
 					},
 					modalSettings: {
 						updated: 			{value:true,	modify:true,	description:"Show updated Themes",},
@@ -972,7 +972,7 @@ module.exports = (_ => {
 								BDFDB.DOMUtils.remove(loadingicon, ".themerepo-loadingicon");
 								loading = {is:false, timeout:null, amount:loading.amount};
 								
-								BDFDB.LogUtils.log("Finished fetching Themes.", this.name);
+								BDFDB.LogUtils.log("Finished fetching Themes", this.name);
 								if (list) BDFDB.ReactUtils.forceUpdate(list);
 								
 								if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {

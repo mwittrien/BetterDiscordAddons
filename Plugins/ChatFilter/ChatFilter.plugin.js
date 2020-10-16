@@ -44,7 +44,7 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					configs: {
-						empty: 		{value:false,		description:"Allows the replacevalue to be empty (ignoring the default)"},
+						empty: 		{value:false,		description:"Allow the replacevalue to be empty (ignoring the default)"},
 						case: 		{value:false,		description:"Handle the wordvalue case sensitive"},
 						exact: 		{value:true,		description:"Handle the wordvalue as an exact word and not as part of a word"},
 						regex: 		{value:false,		description:"Handle the wordvalue as a RegExp string"}

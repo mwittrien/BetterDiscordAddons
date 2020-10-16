@@ -367,7 +367,7 @@ module.exports = (_ => {
 				
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 					title: "Placeholder Guide",
-					dividertop: true,
+					dividerTop: true,
 					collapseStates: collapseStates,
 					children: [
 						"$hour will be replaced with the hour of the date",
