@@ -50,6 +50,7 @@ https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/themes/hori
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/themes/showURLs.theme.css
 https://raw.githubusercontent.com/ivanivamar/Discord/master/MinimalCord.theme.css
 https://raw.githubusercontent.com/jadeonking/WitcherCord/master/Themes/Witcher3.theme.css
+https://raw.githubusercontent.com/JayWilson7/BorderShapes/master/BorderShapes.theme.css
 https://raw.githubusercontent.com/JimmyHere/Blurple/master/Blurple.theme.css
 https://raw.githubusercontent.com/Juicysteak117/MinimalImprovement/master/MinimalImprovement.theme.css
 https://raw.githubusercontent.com/Juicysteak117/MinimalImprovement/master/MinimalImprovementBorderless.theme.css
