@@ -7218,11 +7218,11 @@ module.exports = (_ => {
 							children: BDFDB.ReactUtils.createElement("button", {
 								className: `${BDFDB.disCNS._repobutton + BDFDB.disCN._repofolderbutton} bd-updatebtn`,
 								onClick: _ => {
-									let toast = BDFDB.NotificationUtils.toast("Plugin update check in progress.", {type: "info", timeout: 0});
+									let toast = BDFDB.NotificationUtils.toast("Plugin update check in progress", {type: "info", timeout: 0});
 									BDFDB.PluginUtils.checkAllUpdates().then(outdated => {
 										toast.close();
-										if (outdated > 0) BDFDB.NotificationUtils.toast(`Plugin update check complete. ${outdated} outdated!`, {type: "error"});
-										else BDFDB.NotificationUtils.toast(`Plugin update check complete.`, {type: "success"});
+										if (outdated > 0) BDFDB.NotificationUtils.toast(`Plugin update check complete - ${outdated} outdated!`, {type: "error"});
+										else BDFDB.NotificationUtils.toast(`Plugin update check complete`, {type: "success"});
 									});
 								},
 								children: "Check for Updates"

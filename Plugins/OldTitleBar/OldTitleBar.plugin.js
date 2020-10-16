@@ -48,10 +48,10 @@ module.exports = (_ => {
 
 				this.defaults = {
 					settings: {
-						displayNative:		{value:!!document.querySelector(".platform-linux"), 	description:"Displays the native Title Bar."},
-						addOldBar:			{value:true, 											description:"Displays the Title Bar in the old fashion."},
-						addToSettings:		{value:true, 											description:"Adds a Title Bar to Settings Windows."},
-						reloadButton:		{value:false, 											description:"Adds a Reload Button to the Title Bar."}
+						displayNative:		{value:!!document.querySelector(".platform-linux"), 	description:"Display the native title bar"},
+						addOldBar:			{value:true, 											description:"Display the title bar in the old fashion"},
+						addToSettings:		{value:true, 											description:"Add a title bar to settings windows"},
+						reloadButton:		{value:false, 											description:"Add a reload button to the title bar"}
 					}
 				};
 			
