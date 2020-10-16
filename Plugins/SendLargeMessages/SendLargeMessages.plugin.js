@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "SendLargeMessages",
 			"author": "DevilBro",
 			"version": "1.6.5",
-			"description": "Splits messages into several smaller messages when your message exceeds the limit."
+			"description": "Split messages into several smaller messages when your message exceeds the limit"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

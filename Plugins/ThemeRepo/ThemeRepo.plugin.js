@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
 			"version": "2.0.8",
-			"description": "Allows you to preview all themes from the theme repo and download them on the fly."
+			"description": "Allow you to preview all themes from the theme repo and download them on the fly"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -297,7 +297,7 @@ module.exports = (_ => {
 									children: "Download",
 									onClick: _ => {
 										if (this.props.currentGenerator.native) {
-											_this.createThemeFile("Discord.theme.css", `//META{"name":"Discord","description":"Allows you to easily customize discords native look","author":"DevilBro","version":"1.0.0","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien"}*//\n\n` + _this.generateTheme(nativeCSSvars, this.props.generatorValues));
+											_this.createThemeFile("Discord.theme.css", `//META{"name":"Discord","description":"Allow you to easily customize discords native look","author":"DevilBro","version":"1.0.0","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien"}*//\n\n` + _this.generateTheme(nativeCSSvars, this.props.generatorValues));
 										}
 										else if (loadedThemes[this.props.currentGenerator.value]) {
 											_this.createThemeFile(loadedThemes[this.props.currentGenerator.value].name + ".theme.css", _this.generateTheme(loadedThemes[this.props.currentGenerator.value].fullCSS, this.props.generatorValues));

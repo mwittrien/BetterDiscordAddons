@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "WriteUpperCase",
 			"author": "DevilBro",
 			"version": "1.2.5",
-			"description": "Changes first letter in message input to uppercase."
+			"description": "Change first letter in message input to uppercase"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

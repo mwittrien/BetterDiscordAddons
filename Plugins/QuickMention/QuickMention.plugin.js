@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "QuickMention",
 			"author": "DevilBro",
 			"version": "1.0.2",
-			"description": "Adds a mention entry to the message option toolbar."
+			"description": "Add a mention entry to the message option toolbar"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

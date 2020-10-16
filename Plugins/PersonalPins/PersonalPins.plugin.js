@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "PersonalPins",
 			"author": "DevilBro",
 			"version": "1.9.9",
-			"description": "Similar to normal pins. Lets you save messages as notes for yourself."
+			"description": "Similar to normal pins, save messages as notes for yourself"
 		},
 		"changeLog": {
 			"improved": {
@@ -95,7 +95,6 @@ module.exports = (_ => {
 				
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					type: "Button",
-					className: BDFDB.disCN.marginbottom8,
 					color: BDFDB.LibraryComponents.Button.Colors.RED,
 					label: "Delete all notes",
 					onClick: _ => {
@@ -575,9 +574,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Ažuriraj bilješku",
 							context_unpinoption_text:		"Uklonite bilješku",
 							popout_pinoption_text:			"Bilješka",
-							toast_noteadd_text:				"Poruka dodana u bilježnicu.",
-							toast_noteupdate_text:			"Poruka je ažurirana u bilježnici.",
-							toast_noteremove_text:			"Poruka uklonjena iz bilježnice."
+							toast_noteadd_text:				"Poruka dodana u bilježnicu",
+							toast_noteupdate_text:			"Poruka je ažurirana u bilježnici",
+							toast_noteremove_text:			"Poruka uklonjena iz bilježnice"
 						};
 					case "da":		//danish
 						return {
@@ -591,9 +590,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Opdater note",
 							context_unpinoption_text:		"Fjern note",
 							popout_pinoption_text:			"Noter",
-							toast_noteadd_text:				"Meddelelse tilføjet til notesbog.",
-							toast_noteupdate_text:			"Meddelelse opdateret i den notesbog.",
-							toast_noteremove_text:			"Meddelelse fjernet fra notesbog."
+							toast_noteadd_text:				"Meddelelse tilføjet til notesbog",
+							toast_noteupdate_text:			"Meddelelse opdateret i den notesbog",
+							toast_noteremove_text:			"Meddelelse fjernet fra notesbog"
 						};
 					case "de":		//german
 						return {
@@ -607,9 +606,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Notiz aktualisieren",
 							context_unpinoption_text:		"Notiz entfernen",
 							popout_pinoption_text:			"Notieren",
-							toast_noteadd_text:				"Nachricht zum Notizbuch hinzugefügt.",
-							toast_noteupdate_text:			"Nachricht im Notizbuch aktualisiert.",
-							toast_noteremove_text:			"Nachricht aus dem Notizbuch entfernt."
+							toast_noteadd_text:				"Nachricht zum Notizbuch hinzugefügt",
+							toast_noteupdate_text:			"Nachricht im Notizbuch aktualisiert",
+							toast_noteremove_text:			"Nachricht aus dem Notizbuch entfernt"
 						};
 					case "es":		//spanish
 						return {
@@ -623,9 +622,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Actualiza la nota",
 							context_unpinoption_text:		"Eliminar la nota",
 							popout_pinoption_text:			"Anotar",
-							toast_noteadd_text:				"Mensaje agregado al cuaderno.",
-							toast_noteupdate_text:			"Mensaje actualizado en el cuaderno.",
-							toast_noteremove_text:			"Mensaje eliminado del cuaderno."
+							toast_noteadd_text:				"Mensaje agregado al cuaderno",
+							toast_noteupdate_text:			"Mensaje actualizado en el cuaderno",
+							toast_noteremove_text:			"Mensaje eliminado del cuaderno"
 						};
 					case "fr":		//french
 						return {
@@ -639,9 +638,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Mettre à jour la note",
 							context_unpinoption_text:		"Enlevez la note",
 							popout_pinoption_text:			"Noter",
-							toast_noteadd_text:				"Message ajouté au cahier.",
-							toast_noteupdate_text:			"Message mis à jour dans le cahier.",
-							toast_noteremove_text:			"Message supprimé du cahier."
+							toast_noteadd_text:				"Message ajouté au cahier",
+							toast_noteupdate_text:			"Message mis à jour dans le cahier",
+							toast_noteremove_text:			"Message supprimé du cahier"
 						};
 					case "it":		//italian
 						return {
@@ -655,9 +654,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Aggiorna la nota",
 							context_unpinoption_text:		"Rimuovi la nota",
 							popout_pinoption_text:			"Annotare",
-							toast_noteadd_text:				"Messaggio aggiunto al blocco note.",
-							toast_noteupdate_text:			"Messaggio aggiornato nel blocco note.",
-							toast_noteremove_text:			"Messaggio rimosso dal blocco note."
+							toast_noteadd_text:				"Messaggio aggiunto al blocco note",
+							toast_noteupdate_text:			"Messaggio aggiornato nel blocco note",
+							toast_noteremove_text:			"Messaggio rimosso dal blocco note"
 						};
 					case "nl":		//dutch
 						return {
@@ -671,9 +670,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Update de notitie",
 							context_unpinoption_text:		"Verwijder de notitie",
 							popout_pinoption_text:			"Noteer",
-							toast_noteadd_text:				"Bericht toegevoegd aan notitieblok.",
-							toast_noteupdate_text:			"Bericht bijgewerkt in het notitieblok.",
-							toast_noteremove_text:			"Bericht verwijderd van notitieblok."
+							toast_noteadd_text:				"Bericht toegevoegd aan notitieblok",
+							toast_noteupdate_text:			"Bericht bijgewerkt in het notitieblok",
+							toast_noteremove_text:			"Bericht verwijderd van notitieblok"
 						};
 					case "no":		//norwegian
 						return {
@@ -687,9 +686,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Oppdater notatet",
 							context_unpinoption_text:		"Fjern notatet",
 							popout_pinoption_text:			"Notere",
-							toast_noteadd_text:				"Melding lagt til i notisboken.",
-							toast_noteupdate_text:			"Melding oppdatert i notisbok.",
-							toast_noteremove_text:			"Melding fjernet fra notatboken."
+							toast_noteadd_text:				"Melding lagt til i notisboken",
+							toast_noteupdate_text:			"Melding oppdatert i notisbok",
+							toast_noteremove_text:			"Melding fjernet fra notatboken"
 						};
 					case "pl":		//polish
 						return {
@@ -703,9 +702,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Zaktualizuj notatkę",
 							context_unpinoption_text:		"Usuń notatkę",
 							popout_pinoption_text:			"Notuj",
-							toast_noteadd_text:				"Wiadomość została dodana do notatnika.",
-							toast_noteupdate_text:			"Wiadomość zaktualizowana w notatniku.",
-							toast_noteremove_text:			"Wiadomość została usunięta z notatnika."
+							toast_noteadd_text:				"Wiadomość została dodana do notatnika",
+							toast_noteupdate_text:			"Wiadomość zaktualizowana w notatniku",
+							toast_noteremove_text:			"Wiadomość została usunięta z notatnika"
 						};
 					case "pt-BR":	//portuguese (brazil)
 						return {
@@ -719,9 +718,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Atualize a nota",
 							context_unpinoption_text:		"Remova a nota",
 							popout_pinoption_text:			"Anotar",
-							toast_noteadd_text:				"Mensagem adicionada ao caderno.",
-							toast_noteupdate_text:			"Mensagem atualizada no caderno.",
-							toast_noteremove_text:			"Mensagem removida do caderno."
+							toast_noteadd_text:				"Mensagem adicionada ao caderno",
+							toast_noteupdate_text:			"Mensagem atualizada no caderno",
+							toast_noteremove_text:			"Mensagem removida do caderno"
 						};
 					case "fi":		//finnish
 						return {
@@ -735,9 +734,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Päivitä muistiinpano",
 							context_unpinoption_text:		"Poista muistiinpano",
 							popout_pinoption_text:			"Huomaa",
-							toast_noteadd_text:				"Viesti lisätty muistikirjaan.",
-							toast_noteupdate_text:			"Viesti päivitetty muistikirjaan.",
-							toast_noteremove_text:			"Viesti poistettiin muistikirjaan."
+							toast_noteadd_text:				"Viesti lisätty muistikirjaan",
+							toast_noteupdate_text:			"Viesti päivitetty muistikirjaan",
+							toast_noteremove_text:			"Viesti poistettiin muistikirjaan"
 						};
 					case "sv":		//swedish
 						return {
@@ -751,9 +750,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Uppdatera noten",
 							context_unpinoption_text:		"Ta bort noten",
 							popout_pinoption_text:			"Anteckna",
-							toast_noteadd_text:				"Meddelandet läggs till i anteckningsboken.",
-							toast_noteupdate_text:			"Meddelandet uppdateras i anteckningsboken.",
-							toast_noteremove_text:			"Meddelande borttaget från anteckningsboken."
+							toast_noteadd_text:				"Meddelandet läggs till i anteckningsboken",
+							toast_noteupdate_text:			"Meddelandet uppdateras i anteckningsboken",
+							toast_noteremove_text:			"Meddelande borttaget från anteckningsboken"
 						};
 					case "tr":		//turkish
 						return {
@@ -767,9 +766,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Notu güncelle",
 							context_unpinoption_text:		"Notu kaldırmak",
 							popout_pinoption_text:			"Not almak",
-							toast_noteadd_text:				"Mesaj not defteri'ya eklendi.",
-							toast_noteupdate_text:			"Mesaj defterde güncellendi.",
-							toast_noteremove_text:			"Mesaj not defteri'dan kaldırıldı."
+							toast_noteadd_text:				"Mesaj not defteri'ya eklendi",
+							toast_noteupdate_text:			"Mesaj defterde güncellendi",
+							toast_noteremove_text:			"Mesaj not defteri'dan kaldırıldı"
 						};
 					case "cs":		//czech
 						return {
@@ -783,9 +782,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Aktualizujte poznámku",
 							context_unpinoption_text:		"Odstraňte poznámku",
 							popout_pinoption_text:			"Poznámka dolů",
-							toast_noteadd_text:				"Zpráva byla přidána do notebooku.",
-							toast_noteupdate_text:			"Zpráva byla v notebooku aktualizována.",
-							toast_noteremove_text:			"Zpráva byla odebrána z notebooku."
+							toast_noteadd_text:				"Zpráva byla přidána do notebooku",
+							toast_noteupdate_text:			"Zpráva byla v notebooku aktualizována",
+							toast_noteremove_text:			"Zpráva byla odebrána z notebooku"
 						};
 					case "bg":		//bulgarian
 						return {
@@ -799,9 +798,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Актуализирайте бележката",
 							context_unpinoption_text:		"Премахнете бележката",
 							popout_pinoption_text:			"Oтбележете",
-							toast_noteadd_text:				"Съобщението бе добавено към бележника.",
-							toast_noteupdate_text:			"Съобщението е актуализирано в бележника.",
-							toast_noteremove_text:			"Съобщението е премахнато от преносимия бележника."
+							toast_noteadd_text:				"Съобщението бе добавено към бележника",
+							toast_noteupdate_text:			"Съобщението е актуализирано в бележника",
+							toast_noteremove_text:			"Съобщението е премахнато от преносимия бележника"
 						};
 					case "ru":		//russian
 						return {
@@ -815,9 +814,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Обновить заметку",
 							context_unpinoption_text:		"Удалить заметку",
 							popout_pinoption_text:			"Записывать",
-							toast_noteadd_text:				"Сообщение добавлено в блокнот.",
-							toast_noteupdate_text:			"Сообщение обновлено в записной блокнот.",
-							toast_noteremove_text:			"Сообщение удалено из записной блокнот."
+							toast_noteadd_text:				"Сообщение добавлено в блокнот",
+							toast_noteupdate_text:			"Сообщение обновлено в записной блокнот",
+							toast_noteremove_text:			"Сообщение удалено из записной блокнот"
 						};
 					case "uk":		//ukrainian
 						return {
@@ -831,9 +830,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Оновіть нотатку",
 							context_unpinoption_text:		"Видаліть нотатку",
 							popout_pinoption_text:			"Занотуйте",
-							toast_noteadd_text:				"Повідомлення додається до ноутбука.",
-							toast_noteupdate_text:			"Повідомлення оновлено в ноутбука.",
-							toast_noteremove_text:			"Повідомлення видалено з ноутбука."
+							toast_noteadd_text:				"Повідомлення додається до ноутбука",
+							toast_noteupdate_text:			"Повідомлення оновлено в ноутбука",
+							toast_noteremove_text:			"Повідомлення видалено з ноутбука"
 						};
 					case "ja":		//japanese
 						return {
@@ -847,9 +846,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"メモを更新する",
 							context_unpinoption_text:		"メモを削除",
 							popout_pinoption_text:			"書き留める",
-							toast_noteadd_text:				"ノートブックにメッセージが追加されました.",
-							toast_noteupdate_text:			"ノートブックで更新されたメッセージ.",
-							toast_noteremove_text:			"ノートブックからメッセージが削除されました."
+							toast_noteadd_text:				"ノートブックにメッセージが追加されました",
+							toast_noteupdate_text:			"ノートブックで更新されたメッセージ",
+							toast_noteremove_text:			"ノートブックからメッセージが削除されました"
 						};
 					case "zh-TW":	//chinese (traditional)
 						return {
@@ -863,9 +862,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"更新說明",
 							context_unpinoption_text:		"刪除備註",
 							popout_pinoption_text:			"記下",
-							toast_noteadd_text:				"消息添加到筆記本.",
-							toast_noteupdate_text:			"消息在筆記本中更新.",
-							toast_noteremove_text:			"消息從筆記本中刪除."
+							toast_noteadd_text:				"消息添加到筆記本",
+							toast_noteupdate_text:			"消息在筆記本中更新",
+							toast_noteremove_text:			"消息從筆記本中刪除"
 						};
 					case "ko":		//korean
 						return {
@@ -879,9 +878,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"메모 업데이트",
 							context_unpinoption_text:		"메모 삭제",
 							popout_pinoption_text:			"메모하다",
-							toast_noteadd_text:				"노트북에 메시지 추가됨.",
-							toast_noteupdate_text:			"노트북에서 메시지가 업데이트되었습니다.",
-							toast_noteremove_text:			"노트에서 메시지 삭제됨."
+							toast_noteadd_text:				"노트북에 메시지 추가됨",
+							toast_noteupdate_text:			"노트북에서 메시지가 업데이트되었습니다",
+							toast_noteremove_text:			"노트에서 메시지 삭제됨"
 						};
 					default:		//default: english
 						return {
@@ -895,9 +894,9 @@ module.exports = (_ => {
 							context_updateoption_text:		"Update Note",
 							context_unpinoption_text:		"Remove Note",
 							popout_pinoption_text:			"Note",
-							toast_noteadd_text:				"Message added to notebook.",
-							toast_noteupdate_text:			"Message updated in the notebook.",
-							toast_noteremove_text:			"Message removed from notebook."
+							toast_noteadd_text:				"Message added to notebook",
+							toast_noteupdate_text:			"Message updated in the notebook",
+							toast_noteremove_text:			"Message removed from notebook"
 						};
 				}
 			}

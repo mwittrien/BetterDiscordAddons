@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
 			"version": "1.0.9",
-			"description": "Completely removes blocked messages."
+			"description": "Completely removes blocked messages"
 		},
 		"changeLog": {
 			"fixed": {

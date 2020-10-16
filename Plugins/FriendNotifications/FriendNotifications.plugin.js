@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
 			"version": "1.5.1",
-			"description": "Notifies you when a Friend or a User your choose to observe changes their online status, can be configured individually in the settings."
+			"description": "Get a notification when a Friend or a User your choose to observe changes their online status, can be configured individually in the settings"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

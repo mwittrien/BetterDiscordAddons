@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "DisplayServersAsChannels",
 			"author": "DevilBro",
 			"version": "1.4.2",
-			"description": "Display servers in a similar way as channels."
+			"description": "Display servers in a similar way as channels"
 		},
 		"changeLog": {
 			"improved": {

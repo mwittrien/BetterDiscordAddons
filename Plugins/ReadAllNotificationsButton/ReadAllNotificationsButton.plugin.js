@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "ReadAllNotificationsButton",
 			"author": "DevilBro",
 			"version": "1.6.0",
-			"description": "Adds a button to clear all notifications."
+			"description": "Add a button to clear all notifications"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

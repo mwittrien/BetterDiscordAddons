@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
 			"version": "4.1.8",
-			"description": "Adds a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode)"
+			"description": "Add a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode)"
 		},
 		"changeLog": {
 			"added": {

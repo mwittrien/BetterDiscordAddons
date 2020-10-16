@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "OldTitleBar",
 			"author": "DevilBro",
 			"version": "1.6.7",
-			"description": "Reverts the title bar back to its former self."
+			"description": "Revert the title bar back to its former self"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

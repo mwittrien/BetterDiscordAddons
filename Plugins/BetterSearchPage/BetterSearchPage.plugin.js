@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "BetterSearchPage",
 			"author": "DevilBro",
 			"version": "1.1.5",
-			"description": "Adds some extra controls to the search results page."
+			"description": "Add some extra controls to the search results page"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

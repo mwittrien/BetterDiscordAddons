@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
 			"version": "1.7.9",
-			"description": "Offers a number of useful message options. Remap the keybindings in the settings."
+			"description": "Offer a number of useful message options. Remap the keybindings in the settings"
 		},
 		"changeLog": {
 			"fixed": {

@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "EditServers",
 			"author": "DevilBro",
 			"version": "2.2.4",
-			"description": "Allows you to change the icon, name and color of servers."
+			"description": "Allow you to change the icon, name and color of servers"
 		},
 		"changeLog": {
 			"fixed": {

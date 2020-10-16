@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "GoogleSearchReplace",
 			"author": "DevilBro",
 			"version": "1.2.7",
-			"description": "Replaces the default Google Text Search with a selection menu of several search engines."
+			"description": "Replace the default Google Text Search with a selection menu of several search engines"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

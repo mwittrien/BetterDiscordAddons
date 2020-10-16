@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "CustomQuoter",
 			"author": "DevilBro",
 			"version": "1.1.6",
-			"description": "Let's you customize the output of the native quote feature of Discord."
+			"description": "Customize the output of the native quote feature of Discord"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

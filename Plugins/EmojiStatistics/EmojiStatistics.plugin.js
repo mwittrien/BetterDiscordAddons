@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "EmojiStatistics",
 			"author": "DevilBro",
 			"version": "2.9.5",
-			"description": "Adds some helpful options to show you more information about emojis and emojiservers."
+			"description": "Add some helpful options to show you more information about emojis and emojiservers"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "HideMutedCategories",
 			"author": "DevilBro",
 			"version": "1.0.2",
-			"description": "Hides muted categories the same way muted channels are hidden, when the server is set to hide muted channels."
+			"description": "Hide muted categories the same way muted channels are hidden, when the server is set to hide muted channels"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
 			"version": "2.8.2",
-			"description": "Displays channels that are hidden from you by role restrictions."
+			"description": "Display channels that are hidden from you by role restrictions"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

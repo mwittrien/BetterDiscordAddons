@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "ServerHider",
 			"author": "DevilBro",
 			"version": "6.1.6",
-			"description": "Hide Servers in your Serverlist."
+			"description": "Hide Servers in your Serverlist"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

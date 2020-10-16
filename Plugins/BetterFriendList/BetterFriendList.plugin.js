@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "BetterFriendList",
 			"author": "DevilBro",
 			"version": "1.2.9",
-			"description": "Adds extra controls to the friends page, like sort by name/status, search and all/request/blocked amount."
+			"description": "Add extra controls to the friends page, like sort by name/status, search and all/request/blocked amount"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "EditUsers",
 			"author": "DevilBro",
 			"version": "3.9.8",
-			"description": "Allows you to change the icon, name, tag and color of users."
+			"description": "Allow you to change the icon, name, tag and color of users"
 		},
 		"changeLog": {
 			"fixed": {

@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "BDFDB",
 			"author": "DevilBro",
 			"version": "1.0.8",
-			"description": "Gives other plugins utility functions."
+			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 		"changeLog": {

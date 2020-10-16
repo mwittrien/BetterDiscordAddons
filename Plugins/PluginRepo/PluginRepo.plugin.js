@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "PluginRepo",
 			"author": "DevilBro",
 			"version": "2.0.7",
-			"description": "Allows you to look at all plugins from the plugin repo and download them on the fly."
+			"description": "Allow you to look at all plugins from the plugin repo and download them on the fly"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

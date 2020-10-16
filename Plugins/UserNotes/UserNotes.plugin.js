@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "UserNotes",
 			"author": "DevilBro",
 			"version": "1.0.5",
-			"description": "Allows you to write your own user notes wihtout a character limit."
+			"description": "Allow you to write your own user notes wihtout a character limit"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "ServerCounter",
 			"author": "DevilBro",
 			"version": "1.0.1",
-			"description": "Adds a server counter to the server list."
+			"description": "Add a server counter to the server list"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

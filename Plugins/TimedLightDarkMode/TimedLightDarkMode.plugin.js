@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "TimedLightDarkMode",
 			"author": "DevilBro",
 			"version": "1.0.8",
-			"description": "Allows you to automatically change light/dark mode depending on the time of day. Slider is added to the 'Appearance' settings."
+			"description": "Allow you to automatically change light/dark mode depending on the time of day. Slider is added to the 'Appearance' settings"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "ServerFolders",
 			"author": "DevilBro",
 			"version": "6.8.5",
-			"description": "Patches Discords native Folders in a way to open Servers within a Folder in a new bar to the right. Also adds a bunch of new features to more easily organize, customize and manage your Folders."
+			"description": "Patch Discords native Folders in a way to open Servers within a Folder in a new bar to the right, also adds a bunch of new features to more easily organize, customize and manage your Folders"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -1626,7 +1626,7 @@ module.exports = (_ => {
 							modal_iconpicker_text:					"폴더 선택",
 							modal_usecloseicon_text:				"미니 서버 대신 닫힌 아이콘을 사용하십시오",
 							modal_swapcolor_text:					"원본 폴더에 두 번째 색상 사용",
-							modal_copytooltipcolor_text:			"폴더의 서버에 대해 동일한 색상을 사용하십시오.",
+							modal_copytooltipcolor_text:			"폴더의 서버에 대해 동일한 색상을 사용하십시오",
 							modal_colorpicker1_text:				"기본 폴더 색",
 							modal_colorpicker2_text:				"보조 폴더 색",
 							modal_colorpicker3_text:				"툴팁 색깔",

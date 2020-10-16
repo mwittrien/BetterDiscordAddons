@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "SpellCheck",
 			"author": "DevilBro",
 			"version": "1.5.4",
-			"description": "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary."
+			"description": "Add a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

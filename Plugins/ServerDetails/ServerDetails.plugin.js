@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "ServerDetails",
 			"author": "DevilBro",
 			"version": "1.0.2",
-			"description": "Shows details of a server when you hover over the icon in the server list."
+			"description": "Show details of a server when you hover over the icon in the server list"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

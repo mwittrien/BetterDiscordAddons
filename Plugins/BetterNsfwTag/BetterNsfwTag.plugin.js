@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "BetterNsfwTag",
 			"author": "DevilBro",
 			"version": "1.2.6",
-			"description": "Adds a more noticeable tag to NSFW channels."
+			"description": "Add a more noticeable tag to NSFW channels"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

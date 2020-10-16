@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
 			"version": "1.0.8",
-			"description": "Adds a control panel to discord when listening to spotify."
+			"description": "Add a control panel to discord when listening to spotify"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

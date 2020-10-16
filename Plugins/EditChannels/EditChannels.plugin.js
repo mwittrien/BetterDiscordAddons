@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "EditChannels",
 			"author": "DevilBro",
 			"version": "4.1.7",
-			"description": "Allows you to rename and recolor channelnames."
+			"description": "Allow you to rename and recolor channelnames"
 		},
 		"changeLog": {
 			"fixed": {

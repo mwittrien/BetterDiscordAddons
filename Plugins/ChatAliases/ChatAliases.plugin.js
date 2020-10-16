@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "ChatAliases",
 			"author": "DevilBro",
 			"version": "2.1.9",
-			"description": "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent."
+			"description": "Allow the user to configure their own chat-aliases which will automatically be replaced before the message is being sent"
 		},
 		"changeLog": {
 			"fixed": {

@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "SteamProfileLink",
 			"author": "DevilBro",
 			"version": "1.0.9",
-			"description": "Opens any Steam links in Steam instead of your internet browser."
+			"description": "Open any Steam links in Steam instead of your internet browser"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

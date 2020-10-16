@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "ChatFilter",
 			"author": "DevilBro",
 			"version": "3.4.4",
-			"description": "Allows the user to censor words or block complete messages based on words in the chatwindow."
+			"description": "Allow the user to censor words or block complete messages based on words in the chatwindow"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

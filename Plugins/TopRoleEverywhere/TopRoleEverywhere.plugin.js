@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "TopRoleEverywhere",
 			"author": "DevilBro",
 			"version": "3.0.4",
-			"description": "Adds the highest role of a user as a tag."
+			"description": "Add the highest role of a user as a tag"
 		},
 		"changeLog": {
 			"fixed": {

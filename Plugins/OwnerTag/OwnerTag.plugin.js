@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "OwnerTag",
 			"author": "DevilBro",
 			"version": "1.3.4",
-			"description": "Adds a tag or crown to the server owner (or admins/management)."
+			"description": "Add a tag or crown to the server owner (or admins/management)"
 		},
 		"changeLog": {
 			"fixed": {

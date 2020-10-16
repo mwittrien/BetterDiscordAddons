@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "ForceImagePreviews",
 			"author": "DevilBro",
 			"version": "1.2.0",
-			"description": "Forces embedded Image Previews, if Discord doesn't do it itself. Caution: Externals Images can contain malicious code and reveal your IP!"
+			"description": "Force embedded Image Previews, if Discord doesn't do it itself. Caution: Externals Images can contain malicious code and reveal your IP!"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

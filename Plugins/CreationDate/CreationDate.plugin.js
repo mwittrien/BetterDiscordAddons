@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "CreationDate",
 			"author": "DevilBro",
 			"version": "1.4.0",
-			"description": "Displays the Creation Date of an Account in the UserPopout and UserModal."
+			"description": "Display the Creation Date of an Account in the UserPopout and UserModal"
 		},
 		"changeLog": {
 			"fixed": {

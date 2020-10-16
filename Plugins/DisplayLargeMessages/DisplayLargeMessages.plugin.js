@@ -6,7 +6,7 @@ module.exports = (_ => {
 			"name": "DisplayLargeMessages",
 			"author": "DevilBro",
 			"version": "1.0.6",
-			"description": "Injects the contents of large messages that were sent by discord via 'message.txt'."
+			"description": "Inject the contents of large messages that were sent by discord via 'message.txt'"
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
