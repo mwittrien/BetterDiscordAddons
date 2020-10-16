@@ -5,7 +5,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.1.8",
+			"version": "4.1.9",
 			"description": "Add a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode)"
 		},
 		"changeLog": {
@@ -135,6 +135,9 @@ module.exports = (_ => {
 				};
 			
 				this.patchedModules = {
+					before: {
+						LazyImage: "render"
+					},
 					after: {
 						ImageModal: ["render", "componentDidMount"],
 						LazyImage: ["render", "componentDidMount"]
@@ -199,6 +202,9 @@ module.exports = (_ => {
 						margin-top: 5px;
 						font-size: 14px;
 						font-weight: 500;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
 					}
 					${BDFDB.dotCN._imageutilitiesdetailslabel} {
 						font-weight: 600;
@@ -567,22 +573,16 @@ module.exports = (_ => {
 					}
 					let imageIndex = 0, amount = 1;
 					if (messages.length) {
-						let images = messages.map(n => Array.from(n.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"))).flat().filter(img => !BDFDB.DOMUtils.getParent(BDFDB.dotCN.spoilerhidden, img));
-						amount = images.length;
-						let next, previous;
-						for (let i = 0; i < amount; i++) if (this.isSameImage(url, images[i])) {
-							imageIndex = i;
-							previous = images[i-1];
-							next = images[i+1];
-							break;
-						}
-						if (previous) {
+						let data = this.getSiblingsAndPosition(url, messages);
+						imageIndex = data.index;
+						amount = data.amount;
+						if (data.previous) {
 							if (e.instance.previousRef) e.returnvalue.props.children.push(this.createImageWrapper(e.instance, e.instance.previousRef, "previous", BDFDB.LibraryComponents.SvgIcon.Names.LEFT_CARET));
-							else this.loadImage(e.instance, previous, "previous");
+							else this.loadImage(e.instance, data.previous, "previous");
 						}
-						if (next) {
+						if (data.next) {
 							if (e.instance.nextRef) e.returnvalue.props.children.splice(1, 0, this.createImageWrapper(e.instance, e.instance.nextRef, "next", BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET));
-							else this.loadImage(e.instance, next, "next");
+							else this.loadImage(e.instance, data.next, "next");
 						}
 					}
 					if (settings.addDetails) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
@@ -631,29 +631,6 @@ module.exports = (_ => {
 			processLazyImage (e) {
 				if (e.node) {
 					if (settings.enableZoom && !e.node.querySelector("video") && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling) && BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagemodal, e.node)) {
-						if (settings.resizeImage) {
-							let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
-							let ratio = Math.min((aRects.width - 20) / e.instance.props.width, (aRects.height - (settings.addDetails ? 280 : 100)) / e.instance.props.height);
-							let width = Math.round(ratio * e.instance.props.width);
-							let height = Math.round(ratio * e.instance.props.height);
-							let img = e.node.querySelector("img");
-							e.node.style.setProperty("width", `${width}px`);
-							e.node.style.setProperty("height", `${height}px`);
-							let changeImg = _ => {
-								img.style.setProperty("width", `${width}px`);
-								img.style.setProperty("height", `${height}px`);
-								img.src = img.src.replace(/width=\d+/, `width=${width}`).replace(/height=\d+/, `height=${height}`);
-							};
-							if (img) changeImg();
-							else {
-								const loadObserver = (new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
-									img = e.node.querySelector("img");
-									if (img) changeImg();
-								});}});}));
-								loadObserver.observe(e.node, {childList: true, subtree:true});
-							}
-						}
-						
 						e.node.addEventListener("mousedown", event => {
 							if (event.which != 1) return;
 							BDFDB.ListenerUtils.stopEvent(event);
@@ -771,6 +748,20 @@ module.exports = (_ => {
 						}
 					}
 				}
+				else {
+					if (settings.resizeImage && BDFDB.ReactUtils.findOwner(e.instance._reactInternalFiber, {name: "ImageModal", up: true})) {
+						let data = settings.enableGallery ? this.getSiblingsAndPosition(e.instance.props.src, this.getMessageGroupOfImage(e.instance.props.src)) : {};
+						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
+						let ratio = Math.min((aRects.width * (data.previous || data.next ? 0.8 : 1) - 20) / e.instance.props.width, (aRects.height - (settings.addDetails ? 310 : 100)) / e.instance.props.height);
+						let width = Math.round(ratio * e.instance.props.width);
+						let height = Math.round(ratio * e.instance.props.height);
+						e.instance.props.width = width;
+						e.instance.props.maxWidth = width;
+						e.instance.props.height = height;
+						e.instance.props.maxHeight = height;
+						e.instance.props.src = e.instance.props.src.replace(/width=\d+/, `width=${width}`).replace(/height=\d+/, `height=${height}`);
+					}
+				}
 			}
 			
 			injectImageDetails (props, child) {
@@ -871,6 +862,18 @@ module.exports = (_ => {
 					return [].concat(previousSiblings.reverse(), message, nextSiblings).filter(n => n && BDFDB.DOMUtils.containsClass(n, BDFDB.disCN.message));
 				}
 				return [];
+			}
+			
+			getSiblingsAndPosition (url, messages) {
+				let images = messages.map(n => Array.from(n.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"))).flat().filter(img => !BDFDB.DOMUtils.getParent(BDFDB.dotCN.spoilerhidden, img));
+				let next, previous, index = 0, amount = images.length;
+				for (let i = 0; i < amount; i++) if (this.isSameImage(url, images[i])) {
+					index = i;
+					previous = images[i-1];
+					next = images[i+1];
+					break;
+				}
+				return {next, previous, index, amount};
 			}
 			
 			isSameImage (src, img) {
