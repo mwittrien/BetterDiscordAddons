@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Let's you customize the output of the native quote feature of Discord.
+Let's you customize the output of the native quote feature of Discord

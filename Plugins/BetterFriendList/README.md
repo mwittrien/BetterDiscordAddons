@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Adds extra controls to the friends page, like sort by name/status, search and all/request/blocked amount.
+Add extra controls to the friends page, like sort by name/status, search and all/request/blocked amount

@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Replaces the default Google Text Search with a selection menu of several search engines.
+Replace the default Google Text Search with a selection menu of several search engines

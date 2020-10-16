@@ -9,7 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Adds several options to get more information about emojis and emojiservers.
-
-- You can enable/disable the option to get the name and server of an emoji when you hover over it inside the emojipicker.
-- You can enable/disable the option to add a button in the emojipicker to open an overview of your servers with some information.
+Add some helpful options to show you more information about emojis and emojiservers

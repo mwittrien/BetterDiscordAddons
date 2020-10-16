@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Allows you to enter larger messages in the chattextarea, which allows you to automatically send the message in several smaller messages.
+Allow you to enter larger messages in the chattextarea, which allows you to automatically send the message in several smaller messages

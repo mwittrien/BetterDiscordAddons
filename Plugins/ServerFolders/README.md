@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Patches Discords native Folders in a way to open Servers within a Folder in a new bar to the right. Also adds a bunch of new features to more easily organize, customize and manage your Folders.
+Patche Discords native Folders in a way to open Servers within a Folder in a new bar to the right. Also adds a bunch of new features to more easily organize, customize and manage your Folders

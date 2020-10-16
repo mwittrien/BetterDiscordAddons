@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Replaces discords emojis with emojis of a provider of your choice.
+Replace discords emojis with emojis of a provider of your choice

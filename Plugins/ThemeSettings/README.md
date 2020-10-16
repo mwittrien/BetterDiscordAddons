@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Allows you to change Theme Variables within BetterDiscord.
+Allow you to change Theme Variables within BetterDiscord

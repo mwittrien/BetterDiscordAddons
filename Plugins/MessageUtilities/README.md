@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Offers a number of useful message options. Remap the keybindings in the settings.
+Offer a number of useful message options. Remap the keybindings in the settings

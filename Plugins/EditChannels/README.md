@@ -9,7 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Adds two options on your channel context menu.
-
-- You can open a popout, where you can change the local name and color for the selected channel.
-- You can set the selected channel back to its original state.
+Allow the user to locally change the name and color of channels

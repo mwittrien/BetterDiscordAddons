@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Allows you to look at all plugins from the plugin repo and download them on the fly.
+Allow you to look at all plugins from the plugin repo and download them on the fly
