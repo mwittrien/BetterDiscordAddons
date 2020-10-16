@@ -2299,17 +2299,23 @@ body:before {
 	border-color: rgba(var(--fontwhite1), 0.1);
 }
 
-#app-mount .userSettingsAccount-2eMFVR .viewBody-2Qz-jg {	/* myaccount			info								*/
+#app-mount .userSettingsAccount-2eMFVR .viewBody-2Qz-jg {	/* accountsettings		info								*/
 	color: rgb(var(--fontwhite3));
 }
-.questionMark-CWEQZn .icon-3a_Jgd {							/* myaccount			questionmark						*/
+.questionMark-3qBhGj .icon-3OA7an {							/* accountsettings		questionmark						*/
 	color: rgb(var(--fontwhite1));
 }
-#app-mount .avatarUploader-3XDtmn .removeButton-1hcZyG	{	/* myaccount			removeavatar						*/
+#app-mount .avatarUploader-3XDtmn .removeButton-1hcZyG	{	/* accountsettings		removeavatar						*/
 	color: rgb(var(--fontwhite3));
 }
 #app-mount .userSettingsSecurity-3IYeMF .codeCheckbox-1T0TTy {
 	color: rgb(var(--fontwhite2));
+}
+#app-mount .background-1QDuV2 {								/* accountsettings		container							*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+#app-mount .fieldList-21DyL8 {								/* accountsettings		settings							*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
 
 .accountList-33MS45 {										/* connections			container							*/
