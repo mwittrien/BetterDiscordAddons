@@ -60,10 +60,10 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						showInPopout:		{value:true, 	description:"Show Badge in User Popout."},
-						showInChat:			{value:true, 	description:"Show Badge in Chat Window."},
-						showInMemberList:	{value:true, 	description:"Show Badge in Member List."},
-						useColoredVersion:	{value:true, 	description:"Use colored version of the Badges for Chat and Members."},
+						showInPopout:		{value:true, 	description:"Show Badge in User Popout"},
+						showInChat:			{value:true, 	description:"Show Badge in Chat Window"},
+						showInMemberList:	{value:true, 	description:"Show Badge in Member List"},
+						useColoredVersion:	{value:true, 	description:"Use colored version of the Badges for Chat and Members"},
 						showNitroDate:		{value:true, 	description:"Show the subscription date for Nitro/Boost Badges"}
 					},
 					badges: {
