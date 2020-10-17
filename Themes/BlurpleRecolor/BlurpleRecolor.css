@@ -774,6 +774,10 @@
 .searchPage-3GKAdT .search-1iTphC .searchBox-2_mAlO:focus-within {
 	border-color: rgb(var(--vaccentcolor));
 }
+.search-1iTphC .searchBox-2_mAlO:focus,
+.search-1iTphC .searchBox-2_mAlO:focus-within {
+	box-shadow: 0 0 0 1px rgb(var(--vaccentcolor)), 0 0 0 2px rgba(var(--vaccentcolor), 0.6), 0 0 0 3px rgba(var(--vaccentcolor), 0.3);
+}
 
 #app-mount .activeButton-1BJAiN,							/* pagination			button								*/
 #app-mount .activeButton-1BJAiN:hover {
