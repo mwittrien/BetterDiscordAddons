@@ -513,12 +513,12 @@ module.exports = (_ => {
 								children: [{
 										title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_NAME,
 										text: channel.name
-									}, {
-										title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_TOPIC,
-										text: channel.topic || "---"
-									}, channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE && {
+									}, channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE ? {
 										title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_BITRATE,
 										text: channel.bitrate || "---"
+									} : {
+										title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_TOPIC,
+										text: channel.topic || "---"
 									}, {
 										title: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_TYPE,
 										text: BDFDB.LanguageUtils.LanguageStrings[typeNameMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]]
