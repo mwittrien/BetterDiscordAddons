@@ -5,8 +5,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "2.8.2",
+			"version": "2.8.3",
 			"description": "Display channels that are hidden from you by role restrictions"
+		},
+		"changeLog": {
+			"added": {
+				"Voice Bit-Rate": "Now shows the bit rate for voice channels in the access modal"
+			}
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -148,6 +153,14 @@ module.exports = (_ => {
 						ChannelItem: ["render", "componentDidMount", "componentDidUpdate"]
 					}
 				};
+				
+				this.css = `
+					${BDFDB.dotCNS._showhiddenchannelsaccessmodal + BDFDB.dotCN.messagespopoutemptyplaceholder} {
+						position: absolute;
+						bottom: 0;
+						width: 100%;
+					}
+				`;
 			}
 			
 			onStart() {
@@ -227,7 +240,6 @@ module.exports = (_ => {
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Button",
-							className: BDFDB.disCN.marginbottom8,
 							color: BDFDB.LibraryComponents.Button.Colors.GREEN,
 							label: "Enable for all Servers",
 							onClick: _ => {
@@ -237,7 +249,6 @@ module.exports = (_ => {
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Button",
-							className: BDFDB.disCN.marginbottom8,
 							color: BDFDB.LibraryComponents.Button.Colors.PRIMARY,
 							label: "Disable for all Servers",
 							onClick: _ => {
@@ -280,7 +291,7 @@ module.exports = (_ => {
 								label: BDFDB.LanguageUtils.LanguageStrings.CHANNEL + " " + BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY,
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "permissions"),
 								action: _ => {
-									this.showAccessModal(e.instance.props.channel, !isHidden);
+									this.openAccessModal(e.instance.props.channel, !isHidden);
 								}
 							})
 						}));
@@ -456,7 +467,7 @@ module.exports = (_ => {
 				BDFDB.DataUtils.save(savedCollapselist, this, "categorydata");
 			}
 			
-			showAccessModal (channel, allowed) {
+			openAccessModal (channel, allowed) {
 				let guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
 				let myMember = guild && BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id);
 				if (myMember) {
@@ -488,11 +499,12 @@ module.exports = (_ => {
 					for (let user of allowedUsers) allowedElements.push(BDFDB.ReactUtils.createElement(userRowComponent, {user: user, guildId: guild.id, channelId: channel.id}));
 					for (let role of deniedRoles) deniedElements.push(BDFDB.ReactUtils.createElement(roleRowComponent, {role: role, guildId: guild.id, channelId: channel.id}));
 					for (let user of deniedUsers) deniedElements.push(BDFDB.ReactUtils.createElement(userRowComponent, {user: user, guildId: guild.id, channelId: channel.id}));
-					
+
 					BDFDB.ModalUtils.open(this, {
 						size: "MEDIUM",
 						header: BDFDB.LanguageUtils.LanguageStrings.CHANNEL + " " + BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY,
 						subheader: "#" + channel.name,
+						className: BDFDB.disCN._showhiddenchannelsaccessmodal,
 						contentClassName: BDFDB.disCN.listscroller,
 						children: [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
@@ -504,22 +516,25 @@ module.exports = (_ => {
 									}, {
 										title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_TOPIC,
 										text: channel.topic || "---"
+									}, channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE && {
+										title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_BITRATE,
+										text: channel.bitrate || "---"
 									}, {
 										title: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_TYPE,
 										text: BDFDB.LanguageUtils.LanguageStrings[typeNameMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]]
 									}, {
 										title: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_NAME,
 										text: category && category.name || BDFDB.LanguageUtils.LanguageStrings.NO_CATEGORY
-									}].map((formlabel, i) => [,
+									}].map((formLabel, i) => formLabel && [
 										i == 0 ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 											className: BDFDB.disCN.marginbottom20
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-											title: `${formlabel.title}:`,
+											title: `${formLabel.title}:`,
 											className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.marginbottom20, i == 0 && BDFDB.disCN.margintop8),
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
 												className: BDFDB.disCN.marginleft8,
-												children: formlabel.text
+												children: formLabel.text
 											})
 										})
 									]).flat(10).filter(n => n)
