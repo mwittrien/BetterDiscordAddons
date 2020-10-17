@@ -273,6 +273,10 @@ img:not([src]), img[src=""], img[src="null"] {
 	filter: grayscale(100%) brightness(50%);
 }
 
+[REPLACE_CLASS_messagebottag] {
+	top: .15rem;
+}
+
 [REPLACE_CLASS_messageavatar][REPLACE_CLASS_bdfdbbadgeavatar] [REPLACE_CLASS_avatarwrapper] {
 	width: inherit !important;
 	height: inherit !important;

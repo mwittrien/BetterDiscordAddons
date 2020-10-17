@@ -5,11 +5,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "BadgesEverywhere",
 			"author": "DevilBro",
-			"version": "1.6.2",
+			"version": "1.6.3",
 			"description": "Display Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout"
 		},
 		"changeLog": {
 			"fixed": {
+				"Chat Margin": "Added margin between username and badges",
 				"Colored Badges": "Work again"
 			}
 		}
@@ -173,10 +174,6 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN._badgeseverywheremini} {
 						margin-left: 5px;
-					}
-					${BDFDB.dotCNS.messagecozy + BDFDB.dotCNS.messageusername} + ${BDFDB.dotCN._badgeseverywherebadges},
-					${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.messagetimestampseparator} + ${BDFDB.dotCN._badgeseverywherebadges} {
-						margin-left: 0;
 					}
 					${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.messageusername} ~ ${BDFDB.dotCN._badgeseverywherebadges} {
 						margin-right: .25rem;

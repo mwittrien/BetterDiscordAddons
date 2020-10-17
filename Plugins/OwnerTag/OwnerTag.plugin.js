@@ -96,9 +96,6 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.userprofile + BDFDB.dotCN.memberownericon} {
 						top: 0px;
 					}
-					${BDFDB.dotCNS.messagecozy + BDFDB.dotCN.memberownericon} {
-						margin-right: .25rem;
-					}
 				`;
 			}
 			
