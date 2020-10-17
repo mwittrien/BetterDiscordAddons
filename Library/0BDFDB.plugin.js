@@ -1242,7 +1242,6 @@ module.exports = (_ => {
 						if (nodes.indexOf(itemLayer) > -1 || nodes.indexOf(anker) > -1 || nodes.some(n => n.contains(anker))) {
 							BDFDB.ArrayUtils.remove(Tooltips, id);
 							observer.disconnect();
-							BDFDB.DOMUtils.removeLocalStyle("BDFDBhideOtherTooltips" + id, itemLayerContainer);
 							itemLayer.removeTooltip();
 							anker.removeEventListener("mouseleave", mouseLeave);
 							if (typeof options.onHide == "function") options.onHide(itemLayer, anker);
