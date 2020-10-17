@@ -2454,6 +2454,9 @@ body:before {
 .container-3PXSwK {											/* voicesettings		voicebarcontainer					*/
 	-webkit-mask: url('data:image/svg+xml;base64,PHN2ZyB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iOCIgaGVpZ2h0PSIyMCIgZmlsbD0iIzM2MzkzZiI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNNCAyYTIgMiAwIDAgMC0yIDJ2MTJhMiAyIDAgMSAwIDQgMFY0YTIgMiAwIDAgMC0yLTJ6Ii8+PC9zdmc+');
 }
+.notches-1sAcEM {
+	background: transparent !important;
+}
 #app-mount .progress-1IcQ3A {								/* voicesettings		voicebar							*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
@@ -6100,20 +6103,20 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 #app-mount .optionNormal-12VR9V,
-.css-1aymab5-option,
-.css-ddw2o3-option {
+.css-ru8b0x-option,
+.css-1yz4bi9-option {
 	background-color: rgba(var(--vtransparencycolor), 0.1);
 	color: rgb(var(--fontwhite2));
 }
 #app-mount .optionNormal-12VR9V:hover,
-.css-1gnr91b-option,
-.css-qgio2y-option {
+.css-1qxn4c5-option,
+.css-rzbxvl-option {
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite2));
 }
 #app-mount .optionActive-KkAdqq,
-.css-12o7ek3-option,
-.css-1kft5vg-option {
+.css-6qzljd-option,
+.css-1ba14n5-option {
 	background-color: rgba(var(--vtransparencycolor), 0.5);
 	color: rgb(var(--fontwhite1));
 }
