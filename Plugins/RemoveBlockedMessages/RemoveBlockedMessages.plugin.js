@@ -5,13 +5,14 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.0.9",
+			"version": "1.1.0",
 			"description": "Completely removes blocked messages"
 		},
 		"changeLog": {
 			"fixed": {
 				"Hide Users": "Also hides user icons in the voice channel overview & in the autocomplete menu & mentions",
-				"Role Group Count": "Fixes role group count for hidden banned users"
+				"Role Group Count": "Fixed role group count for hidden banned users",
+				"Member List": "Fixed issue where some none blocked users are hidden and groups with 0 ppl didn't get hidden",
 			}
 		}
 	};
@@ -164,32 +165,34 @@ module.exports = (_ => {
 			processChannelMembers (e) {
 				if (settings.removeUsers) {
 					e.instance.props.groups = [].concat(e.instance.props.groups);
-					let newRows = [], changedGroups = {};
+					e.instance.props.rows = [].concat(e.instance.props.rows);
+					let newRows = [], newGroups = [];
 					for (let i in e.instance.props.rows) {
 						let row = e.instance.props.rows[i];
 						if (row.type != "MEMBER") newRows.push(row);
 						else if (!row.user || !BDFDB.LibraryModules.FriendUtils.isBlocked(row.user.id)) newRows.push(row);
 						else {
-							let found = false, checkIndex = i - 1;
-							while (!found && checkIndex > -1) {
-								if (newRows[checkIndex].type == "GROUP") {
+							let found = false, rowIndex = i - 1;
+							while (!found && rowIndex > -1) {
+								if (newRows[rowIndex] && newRows[rowIndex].type == "GROUP") {
 									found = true;
-									newRows[checkIndex] = Object.assign({}, newRows[checkIndex], {count: newRows[checkIndex].count - 1});
-									changedGroups[newRows[checkIndex].id] = true;
+									let groupIndex = e.instance.props.groups.findIndex(r => r.id == newRows[rowIndex].id);
+									if (groupIndex) {
+										e.instance.props.groups[groupIndex] = Object.assign({}, e.instance.props.groups[groupIndex], {count: e.instance.props.groups[groupIndex].count - 1});
+										newRows[rowIndex] = Object.assign({}, newRows[rowIndex], {count: e.instance.props.groups[groupIndex].count});
+									}
 								}
-								else checkIndex--;
+								else rowIndex--;
 							}
 						}
 					}
 					let indexSum = 0;
 					for (let i in e.instance.props.groups) {
-						if (changedGroups[e.instance.props.groups[i].id]) {
-							let row = newRows.find(r => r.type == "GROUP" && r.id == e.instance.props.groups[i].id);
-							e.instance.props.groups[i] = Object.assign({}, e.instance.props.groups[i], {index: indexSum, count: row ? row.count : e.instance.props.groups[i].count});
-						}
-						indexSum += (e.instance.props.groups[i].count + 1);
+						newGroups[i] = Object.assign({}, e.instance.props.groups[i], {index: indexSum});
+						if (e.instance.props.groups[i].count > 0) indexSum += (e.instance.props.groups[i].count + 1);
 					}
-					e.instance.props.rows = newRows;
+					e.instance.props.groups = newGroups.filter(g => g && g.count > 0);
+					e.instance.props.rows = newRows.filter(r => r && (r.type != "GROUP" || r.count > 0));
 				}
 			}
 			
