@@ -103,7 +103,7 @@
 		4.	UPLOADMODAL
 		5.	KEYBOARDSHORTCUTSMODAL
 		6.	QUICKSWITCHER
-		7.	INVITEMODAL
+		7.	INVITEMODAL/GROUPCREATE
 		8.	LOGINSCREEN
 		9.	TERMACCEPTMODAL
 		10.	DOWNLOADAPPMODAL
@@ -1735,6 +1735,16 @@ body:before {
 }
 .emptyCard-1RJw8n {											/* playing				empty card							*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+#app-mount .partyMemberOverflow-lXnzvu {
+	background: rgba(var(--vtransparencycolor), 0.5);
+}
+#app-mount .partyMemberBackground-3XOgDv,
+#app-mount .partyMemberUnknown-fwK2DC {
+	background-color: rgba(var(--vtransparencycolor), 0.5);
+}
+#app-mount .partyMemberUnknownIcon-1eDbV6 {
+	color: color: rgb(var(--fontwhite4));
 }
 #app-mount .popout-38lTFE {									/* playing				popout								*/
 	background-color: transparent;
@@ -3465,7 +3475,7 @@ body:before {
 	background-color: rgba(var(--fontwhite4), 0.3);
 }
 
-/* ----		13.7.	INVITEMODAL						---- */
+/* ----		13.7.	INVITEMODAL/GROUPCREATE			---- */
 
 #app-mount .contentWrapper-3WC1ID {								/* modal				guildinvitemodal				*/
 	background-color: transparent;
