@@ -605,6 +605,9 @@
 			"error": "error-k9z2IV",
 			"overlay": "spellCheckOverlay-cNSap5"
 		},
+		"ShowHiddenChannels": {
+			"accessModal": "accessModal-w5HjsV"
+		},
 		"SpotifyControls": {
 			"bar": "bar-g2ZMIm",
 			"barGabber": "grabber-7sd5f5",
@@ -999,6 +1002,7 @@
 		"_serverfoldersiconswatchinner": ["ServerFolders", "iconSwatchInner"],
 		"_serverfoldersiconswatchpreview": ["ServerFolders", "iconSwatchPreview"],
 		"_serverfoldersiconswatchselected": ["ServerFolders", "iconSwatchSelected"],
+		"_showhiddenchannelsaccessmodal": ["ShowHiddenChannels", "accessModal"],
 		"_spellcheckerror": ["SpellCheck", "error"],
 		"_spellcheckoverlay": ["SpellCheck", "overlay"],
 		"_spotifycontrolsbar": ["SpotifyControls", "bar"],
