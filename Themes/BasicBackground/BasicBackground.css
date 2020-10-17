@@ -2938,6 +2938,43 @@ body:before {
 
 /* ~~~~		13.		MODALS							~~~~ */
 
+.layer-2KE1M9:nth-child(1),
+.backdropWithLayer-3_uhz4:nth-child(1) {
+	z-index: 1002;
+}
+.layer-2KE1M9:nth-child(2),
+.backdropWithLayer-3_uhz4:nth-child(2) {
+	z-index: 1003;
+}
+.layer-2KE1M9:nth-child(3),
+.backdropWithLayer-3_uhz4:nth-child(3) {
+	z-index: 1004;
+}
+.layer-2KE1M9:nth-child(4),
+.backdropWithLayer-3_uhz4:nth-child(4) {
+	z-index: 1005;
+}
+.layer-2KE1M9:nth-child(5),
+.backdropWithLayer-3_uhz4:nth-child(5) {
+	z-index: 1006;
+}
+.layer-2KE1M9:nth-child(6),
+.backdropWithLayer-3_uhz4:nth-child(6) {
+	z-index: 1007;
+}
+.layer-2KE1M9:nth-child(7),
+.backdropWithLayer-3_uhz4:nth-child(7) {
+	z-index: 1008;
+}
+.layer-2KE1M9:nth-child(8),
+.backdropWithLayer-3_uhz4:nth-child(8) {
+	z-index: 1009;
+}
+.layer-2KE1M9:nth-child(9),
+.backdropWithLayer-3_uhz4:nth-child(9) {
+	z-index: 1010;
+}
+
 #app-mount .root-1gCeng,									/* modal				container (foldersettings)			*/
 #app-mount .modal-yWgWj- {									/* modal				container							*/
 	background-color: transparent;
