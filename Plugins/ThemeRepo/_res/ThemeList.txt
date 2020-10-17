@@ -1,4 +1,5 @@
-https://raw.githubusercontent.com/AccraZed/YoRHA-UI-BetterDiscord/master/NieR-Automata-UI-import.theme.css
+https://raw.githubusercontent.com/AccraZed/YoRHA-UI-BetterDiscord/master/NieR-Dark-Source.theme.css
+https://raw.githubusercontent.com/AccraZed/YoRHA-UI-BetterDiscord/master/NieR-Light-Source.theme.css
 https://raw.githubusercontent.com/AltenGD/Altens-betterdiscord-Themes-Plugins/master/Themes/FrostedGlassRewrite.theme.css
 https://raw.githubusercontent.com/AltenGD/Altens-betterdiscord-Themes-Plugins/master/Themes/MiniTheme.theme.css
 https://raw.githubusercontent.com/archnemeziz/Discord/master/ElegantBlue.theme.css
