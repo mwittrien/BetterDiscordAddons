@@ -306,6 +306,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	visibility: visible;
 }
 [REPLACE_CLASS_sliderbubble] {
+	background-color: var(--background-floating);
 	border-radius: 3px;
 	top: -32px;
 	height: 22px;
@@ -328,23 +329,12 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 [REPLACE_CLASS_sliderbubble]:before {
 	border: 5px solid transparent;
+	border-top-color: var(--background-floating);
 	content: " ";
 	width: 0;
 	height: 0;
 	margin-left: -5px;
 	top: 100%;
-}
-[REPLACE_CLASS_themelight] [REPLACE_CLASS_sliderbubble] {
-	background-color: #4f545c;
-}
-[REPLACE_CLASS_themelight] [REPLACE_CLASS_sliderbubble]:before {
-	border-top-color: #4f545c;
-}
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_sliderbubble] {
-	background-color: #72767d;
-}
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_sliderbubble]:before {
-	border-top-color: #72767d;
 }
 
 [REPLACE_CLASS_selectwrapper] [REPLACE_CLASS_select] {
@@ -586,17 +576,11 @@ img:not([src]), img[src=""], img[src="null"] {
 	border-top-width: 2.5px;
 	display: inline-block;
 }
-[REPLACE_CLASS_themelight] [REPLACE_CLASS_inputnumberbutton] {
-	border-bottom-color: #dcddde;
+[REPLACE_CLASS_inputnumberbutton] {
+	border-bottom-color: var(--interactive-normal);
 }
-[REPLACE_CLASS_themelight] [REPLACE_CLASS_inputnumberbutton]:hover {
-	border-bottom-color: #4f545c;
-}
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_inputnumberbutton] {
-	border-bottom-color: #72767d;
-}
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_inputnumberbutton]:hover {
-	border-bottom-color: #f6f6f7;
+[REPLACE_CLASS_inputnumberbutton]:hover {
+	border-bottom-color: var(--interactive-active);
 }
 [REPLACE_CLASS_inputnumberbuttondown] {
 	transform: rotate(180deg);
