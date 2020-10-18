@@ -1336,29 +1336,6 @@ body:before {
 #app-mount .header-1TOWci {									/* autocomplete			header								*/
 	box-shadow: 0 1px 0 0 rgba(var(--vtransparencycolor), 0.2), 0 1px 2px 0 rgba(var(--vtransparencycolor), 0.2);
 }
-#app-mount .backButton-JyKGC1 {								/* autocomplete			backbutton							*/
-	color: rgb(var(--fontwhite3));
-}
-#app-mount .backButton-JyKGC1:hover {
-	color: rgb(var(--fontwhite2));
-}
-#app-mount .focused-1En8bG,									/* autocomplete			result								*/
-#app-mount .result-3w1ZcL:hover {
-	box-shadow: 0 11px 22px 1px rgba(var(--vtransparencycolor), 0.3);
-}
-#app-mount .emptyHintCard-2mUdMe {
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-}
-#app-mount .emptyHintText-1QDF9N {
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .endText-3SrwuD {
-	color: rgb(var(--fontwhite3));
-}
-#app-mount .endContainer-1ZDW8j:after {
-	background-image: url(https://discordapp.com/assets/0c735bf91232f2a2266e6ba9d6753565.svg);
-	opacity: 0.6;
-}
 #app-mount .contentTitle-2tG_sM {							/* autocomplete			searchtitle							*/
 	color: rgb(var(--fontwhite3));
 }
@@ -4612,6 +4589,30 @@ body:before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	filter: blur(var(--vpopoutblur));
 	background-attachment: fixed;
+}
+
+#app-mount .backButton-JyKGC1 {								/* gifpicker			backbutton							*/
+	color: rgb(var(--fontwhite3));
+}
+#app-mount .backButton-JyKGC1:hover {
+	color: rgb(var(--fontwhite2));
+}
+#app-mount .focused-1En8bG,									/* gifpicker			result								*/
+#app-mount .result-3w1ZcL:hover {
+	box-shadow: 0 11px 22px 1px rgba(var(--vtransparencycolor), 0.3);
+}
+#app-mount .emptyHintCard-2mUdMe {
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+#app-mount .emptyHintText-1QDF9N {
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .endText-3SrwuD {
+	color: rgb(var(--fontwhite3));
+}
+#app-mount .endContainer-1ZDW8j:after {
+	background-image: url(https://discordapp.com/assets/0c735bf91232f2a2266e6ba9d6753565.svg);
+	opacity: 0.6;
 }
 
 
