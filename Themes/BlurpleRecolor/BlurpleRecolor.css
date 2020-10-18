@@ -55,6 +55,7 @@
 		10.	STREAMSETTINGSMODAL
 		11.	DISPATCHERRORMODAL
 		12.	CHANGELOGMODAL
+		13.	SCREENSHAREMODAL
 	11.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -1394,6 +1395,21 @@
 
 .premiumBanner-rP6H1S {
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+}
+
+/* ----		10.13.	SCREENSHAREMODAL				---- */
+
+.tile-2w4k5N:hover .sourceThumbnail-27dolk {
+	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor));
+}
+.sourceThumbnail-27dolk.selected-1nOkyc {
+	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor));
+}
+.selectorButton-EEUWed:not(.selectorButtonPremiumRequired-mKMbIu):hover {
+	background-color: rgb(var(--vaccentcolor));
+}
+.selectorButtonSelected-t5V9On {
+	background-color: rgb(var(--vaccentcolor));
 }
 
 
