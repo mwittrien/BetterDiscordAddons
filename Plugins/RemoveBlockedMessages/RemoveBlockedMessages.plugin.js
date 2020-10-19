@@ -5,13 +5,14 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.1.0",
+			"version": "1.1.1",
 			"description": "Completely removes blocked messages"
 		},
 		"changeLog": {
+			"improved": {
+				"Pinned Messages": "Now also hides pinned messages of blocked ppl",
+			},
 			"fixed": {
-				"Hide Users": "Also hides user icons in the voice channel overview & in the autocomplete menu & mentions",
-				"Role Group Count": "Fixed role group count for hidden banned users",
 				"Member List": "Fixed issue where some none blocked users are hidden and groups with 0 ppl didn't get hidden",
 			}
 		}
@@ -58,6 +59,7 @@ module.exports = (_ => {
 				
 				this.patchedModules = {
 					before: {
+						MessagesPopout: "render",
 						ChannelMembers: "render",
 						PrivateChannelRecipients: "default",
 						VoiceUsers: "render",
@@ -160,6 +162,10 @@ module.exports = (_ => {
 						if (messagesIns.props.oldestUnreadMessageId && messagesIns.props.messages._array.every(n => n.id != messagesIns.props.oldestUnreadMessageId)) messagesIns.props.oldestUnreadMessageId = null;
 					}
 				}
+			}
+		
+			processMessagesPopout (e) {
+				if (settings.removeMessages) e.instance.props.messages = e.instance.props.messages.filter(n => !n || !n.author || !n.author.id || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.author.id));
 			}
 		
 			processChannelMembers (e) {
