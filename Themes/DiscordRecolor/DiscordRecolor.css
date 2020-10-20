@@ -355,10 +355,6 @@ html {
 
 /* ----		1.2.	BUTTONS							---- */
 
-#app-mount .item-3T2z1R {
-	border-color: var(--background-floating);
-}
-
 #app-mount .lookInverted-2D7oAl.colorPrimary-3b3xI6 .spinnerItem-3GlVyU {
 	background-color: var(--background-accent);
 }
@@ -1821,6 +1817,11 @@ html {
 #app-mount .userSettingsAccount-3wUMIP .viewBody-1l56Sd {
 	color: var(--header-secondary);
 }
+#app-mount .userSettingsSecurityImage-2_okeh {
+	background: url(https://discordapp.com/assets/cdea41ede63f61153e4a3c0531fa3873.svg) center/cover no-repeat;
+	opacity: .5;
+	object-position: -9999999px -9999999px;
+}
 
 #app-mount .authedApp-mj2Hmd {
 	background-color: var(--background-secondary);
@@ -1878,10 +1879,10 @@ html {
 }
 
 #app-mount .item-3eFBNF {
-	box-shadow: inset 0 -1px 0 0 var(--backgorund-accent);
+	box-shadow: inset 0 -1px 0 0 var(--background-accent);
 }
 #app-mount .gemIndicatorContainer-2jdECl {
-	background-color: var(--backgorund-floating);
+	background-color: var(--background-floating);
 }
 #app-mount .gemWithoutLabel-7-ZvB_ {
 	color: var(--header-primary);
@@ -2031,6 +2032,10 @@ html {
 #app-mount .dragged-2XvZ89 {
 	-webkit-mask: url(https://discordapp.com/assets/a8564dac0d728add0025be388f5ad7a2.svg) center/contain no-repeat;
 	background: var(--background-tertiary);
+}
+
+#app-mount .item-3T2z1R {
+	border-color: var(--channels-default);
 }
 #app-mount .passthroughSelected-1Eq0Kl {
 	background: var(--channels-default);
@@ -3058,10 +3063,10 @@ html {
 	box-shadow: 0 0 1px rgba(0,0,0,.82),0 1px 4px rgba(0,0,0,.1);
 }
 #app-mount .popoutRight-1veHKi.arrowAlignmentMiddle-NBGtsX::before {
-	border-right-color: var(--backgorund-floating) !important;
+	border-right-color: var(--background-floating) !important;
 }
 #app-mount .popoutLeft-3aViER.arrowAlignmentMiddle-NBGtsX::before {
-	border-left-color: var(--backgorund-floating) !important;
+	border-left-color: var(--background-floating) !important;
 }
 #app-mount .popoutBottom-2GAFPg.arrowAlignmentMiddle-NBGtsX::before,
 #app-mount .popoutBottom-2GAFPg.arrowAlignmentTop-1yftWI::before,
@@ -3069,7 +3074,7 @@ html {
 #app-mount .popoutBottomLeft-1pG8B4.arrowAlignmentTop-1yftWI::before,
 #app-mount .popoutBottomRight-2Rno5S.arrowAlignmentMiddle-NBGtsX::before,
 #app-mount .popoutBottomRight-2Rno5S.arrowAlignmentTop-1yftWI::before {
-	border-bottom-color: var(--backgorund-floating) !important;
+	border-bottom-color: var(--background-floating) !important;
 }
 #app-mount .popoutTop-3WSJtH::before,
 #app-mount .popoutTopLeft-3B0mFf::before,
@@ -3079,16 +3084,16 @@ html {
 #app-mount .popoutTop-3WSJtH::after,
 #app-mount .popoutTopLeft-3B0mFf::after,
 #app-mount .popoutTopRight-1lc8Mq::after {
-	border-top-color: var(--backgorund-floating) !important;
+	border-top-color: var(--background-floating) !important;
 }
 #app-mount .content-1nP7fx {
-	background-color: var(--backgorund-floating) !important;
+	background-color: var(--background-floating) !important;
 }
 #app-mount .leftArrow-fNTiNn::before {
-	border-right-color: var(--backgorund-floating) !important;
+	border-right-color: var(--background-floating) !important;
 }
 #app-mount .rightArrow-1u-p-_::before {
-	border-left-color: var(--backgorund-floating) !important;
+	border-left-color: var(--background-floating) !important;
 }
 #app-mount .contentNarrowNoMedia-Il01H1.topArrow-1B63md::before,
 #app-mount .contentWideNoMedia-22TIu6.topArrow-1B63md::before {
