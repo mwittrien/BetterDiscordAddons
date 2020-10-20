@@ -3645,6 +3645,7 @@ html {
 	background-color: var(--background-primary);
 }
 
+#app-mount #pubslayer .ui-tab-bar-header,
 #app-mount #bd-settings-sidebar .ui-tab-bar-header {
 	color: var(--channels-default);
 }
@@ -3657,19 +3658,32 @@ html {
 #app-mount #bd-settings-sidebar .ui-tab-bar-header .bd-changelog-button:active .bd-icon {
 	fill: var(--interactive-active);
 }
+#app-mount #pubslayer .ui-tab-bar-item,
 #bd-settings-sidebar .ui-tab-bar-item {
 	margin-bottom: 2px;
 }
+#app-mount #pubslayer .ui-tab-bar-item,
 #app-mount #bd-settings-sidebar .ui-tab-bar-item {
 	color: var(--interactive-normal);
 }
+#app-mount #pubslayer .ui-tab-bar-item:hover,
 #app-mount #bd-settings-sidebar .ui-tab-bar-item:hover {
 	background-color: var(--background-modifier-hover);
 	color: var(--interactive-hover);
 }
+#app-mount #pubslayer .ui-tab-bar-item.selected,
 #app-mount #bd-settings-sidebar .ui-tab-bar-item.selected {
 	background-color: var(--background-modifier-selected);
 	color: var(--interactive-active);
+}
+
+#app-mount #pubslayer input {
+	background-color: var(--deprecated-text-input-bg);
+	border-color: var(--deprecated-text-input-border);
+	color: var(--header-primary);
+}
+#app-mount #pubslayer input:hover {
+	border-color: var(--deprecated-text-input-border-hover);
 }
 
 #app-mount #bd-settingspane-container h2.ui-form-title {
