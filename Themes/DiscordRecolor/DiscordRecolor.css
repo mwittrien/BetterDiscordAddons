@@ -625,16 +625,25 @@ html {
 .select-2TCrqx [class*="css-"][class*="-indicatorContainer"] {
 	color: var(--text-normal);
 }
+#app-mount .optionNormal-12VR9V,
+.css-1gfjib6-option,
+.css-1yz4bi9-option,
 .css-ru8b0x-option,
 .css-1yz4bi9-option {
 	background-color: rgba(var(--vtransparencycolor), 0.1);
 	color: var(--interactive-normal);
 }
+#app-mount .optionNormal-12VR9V:hover,
+.css-pkcurw-option,
+.css-rzbxvl-option,
 .css-1qxn4c5-option,
 .css-rzbxvl-option {
 	background-color: var(--background-secondary);
 	color: var(--interactive-hover);
 }
+#app-mount .optionActive-KkAdqq,
+.css-1gxgi19-option,
+.css-1ba14n5-option,
 .css-6qzljd-option,
 .css-1ba14n5-option {
 	background-color: var(--background-primary);
