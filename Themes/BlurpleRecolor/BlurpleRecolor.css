@@ -815,9 +815,11 @@
 	background-color: rgb(var(--vaccentcolor));
 }
 
-#app-mount .questionMark-3qBhGj {							/* accountsettings		questionmark						*/
+#app-mount .questionMark-1E01_r,							/* accountsettings		questionmark						*/
+#app-mount .questionMark-3qBhGj {							/* accountsettings		questionmark new					*/
 	background-color: rgb(var(--vaccentcolor));
 }
+#app-mount .questionMark-1E01_r:hover,
 #app-mount .questionMark-3qBhGj:hover {
 	background: var(--vaccentcolor-hover);
 }
