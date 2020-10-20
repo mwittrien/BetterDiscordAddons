@@ -1,0 +1,27 @@
+//META{"name":"DiscordRecolor","description":"Easily customize discords native look","author":"DevilBro","version":"1.0.0","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/DiscordRecolor","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/DiscordRecolor/DiscordRecolor.theme.css"}*//{}
+
+/* To change stuff like the colors, transparency and background image, change the variables inside the root {}, do NOT change the @import url() */
+
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/DiscordRecolor/DiscordRecolor.css);
+
+/* All colors are in RGB format (red, green, blue) use: https://www.google.com/search?q=colorpicker	*/
+
+:root {
+	--accentcolor: 				114,137,218;			/*	blurple			-	default:	114,137,218		-	hex:	#7289da		*/
+	--linkcolor: 				0,176,244;				/*	link			-	default:	0,176,244		-	hex:	#00b0f4		*/
+	--mentioncolor: 			250,166,26;				/*	yellow			-	default:	250,166,26		-	hex:	#faa61a		*/
+	
+	--textbrightest: 			255,255,255;			/*	white			-	default:	255,255,255		-	hex:	#ffffff		*/
+	--textbrighter: 			220,221,222;			/*	darker white	-	default:	220,221,222		-	hex:	#dcddde		*/
+	--textbright: 				185,187,190;			/*	dark white		-	default:	185,187,190		-	hex:	#b9bbbe		*/
+	--textdark: 				142,146,151;			/*	bright grey		-	default:	142,146,151		-	hex:	#8e9297		*/
+	--textdarker: 				114,118,125;			/*	brighter grey	-	default:	114,118,125		-	hex:	#72767d		*/
+	--textdarkest: 				79,84,92;				/*	grey			-	default:	79,84,92		-	hex:	#4f545c		*/
+	
+	--backgroundaccent: 		64,68,75;				/*	darker grey		-	default:	64,68,75		-	hex:	#40444b		*/
+	--backgroundprimary: 		54,57,63;				/*	dark grey		-	default:	54,57,63		-	hex:	#36393f		*/
+	--backgroundsecondary: 		47,49,54;				/*	darkest grey	-	default:	47,49,54		-	hex:	#2f3136		*/
+	--backgroundsecondaryalt: 	41,43,47;				/*	grey-black		-	default:	41,43,47		-	hex:	#292b2f		*/
+	--backgroundtertiary: 		32,34,37;				/*	bright black	-	default:	32,34,37		-	hex:	#202225		*/
+	--backgroundfloating: 		24,25,28;				/*	brighter black	-	default:	24,25,28		-	hex:	#18191c		*/
+}

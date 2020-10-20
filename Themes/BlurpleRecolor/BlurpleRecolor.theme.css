@@ -1,8 +1,10 @@
 //META{"name":"BlurpleRecolor","description":"Replace discords native blurple with your own color, change color in themefile","author":"DevilBro","version":"1.0.0","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/BlurpleRecolor","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/BlurpleRecolor/BlurpleRecolor.theme.css"}*//{}
 
+/* To change stuff like the colors, transparency and background image, change the variables inside the root {}, do NOT change the @import url() */
+
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/BlurpleRecolor.css);
 
-/*	all colors are in RGB format (red, green, blue) use: https://www.google.com/search?q=colorpicker	*/
+/* All colors are in RGB format (red, green, blue) use: https://www.google.com/search?q=colorpicker	*/
 
 :root {
 	--accentcolor:			163,47,194;		/*	blurple	-	default:	114,137,218		*/
