@@ -651,6 +651,7 @@ html {
 }
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"] {
 	background-color: var(--background-tertiary);
+	border-color: var(--background-tertiary);
 	box-shadow: var(--elevation-high);
 	overflow: hidden;
 }
