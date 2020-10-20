@@ -1,4 +1,15 @@
-//META{"name":"ServerColumns","description":"Change the Server List to a gridlike container to allow servers to be displayed in columns. Amount of columns can be set in the .theme.css file","author":"DevilBro","version":"1.0.6","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/ServerColumns","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/ServerColumns/ServerColumns.theme.css"}*//{}
+/**
+ * @name ServerColumns
+ * @description Change the Server List to a gridlike container to allow servers to be displayed in columns. Amount of columns can be set in the .theme.css file
+ * @author DevilBro
+ * @version 1.0.6
+ * @authorId 278543574059057154
+ * @invite Jx3TjNS
+ * @donate https://www.paypal.me/MircoWittrien
+ * @patreon https://www.patreon.com/MircoWittrien
+ * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/ServerColumns
+ * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/ServerColumns/ServerColumns.theme.css
+}*//{}
 
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/ServerColumns/ServerColumns.css);
 
