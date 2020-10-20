@@ -5,12 +5,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "3.9.8",
+			"version": "3.9.9",
 			"description": "Allow you to change the icon, name, tag and color of users"
 		},
 		"changeLog": {
-			"fixed": {
-				"Chat": "Works again in chat"
+			"improved": {
+				"Message Color Gradient": "Color Gradient now also works for messages, kinda"
 			}
 		}
 	};
@@ -587,7 +587,13 @@ module.exports = (_ => {
 					else {
 						let data = changedUsers[e.instance.props.message.author.id];
 						let messageColor = data && (data.color5 || (BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.coloredText) && (data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.message.author.id) || {}).colorString || data.color1)));
-						if (messageColor) e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {color: BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(messageColor) ? messageColor[0] : messageColor, "RGBA")});
+						if (messageColor) {
+							if (BDFDB.ObjectUtils.is(messageColor)) e.returnvalue.props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
+								gradient: BDFDB.ColorUtils.createGradient(messageColor),
+								children: e.returnvalue.props.children
+							});
+							else e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {color: BDFDB.ColorUtils.convert(messageColor, "RGBA")});
+						}
 					}
 				}
 			}
@@ -1238,7 +1244,6 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color5,
-										pickerConfig: {gradient: false},
 										number: 5
 									})
 								})

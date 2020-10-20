@@ -3177,6 +3177,10 @@ html {
 #app-mount .wrapper-1GJGVj {
 	color: var(--text-muted);
 }
+.categoryItemDefaultCategory-aBZ6nJ:first-child,
+.categoryItemDefaultCategory-aBZ6nJ:first-child + .categoryItemDefaultCategory-aBZ6nJ {
+	margin-bottom: 8px;
+}
 #app-mount .sadImage-2ph8SI {
 	background-image: url(https://discordapp.com/assets/e25713e4eba8c1e069ceac8f90262f62.svg);
 	opacity: .5;
