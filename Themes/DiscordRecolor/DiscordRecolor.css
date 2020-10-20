@@ -3752,6 +3752,10 @@ html {
 	background-color: var(--background-secondary);
 }
 
+.bd-social-logo {
+	filter: drop-shadow(2px 2px var(--header-secondary));
+}
+
 
 /* ~~~~		13.		PLUGINSUPPPORT					~~~~ */
 
@@ -3894,4 +3898,48 @@ html .channelTabs-newTab {
 html .channelTabs-newTab:hover {
 	background-color: var(--background-primary);
 	color: var(--interactive-active);
+}
+
+
+/* ~~~~		14.		WATERMARK						~~~~ */
+
+html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.app-1q1i1E > div.app-2rEoOp > div.layers-3iHuyZ.layers-3q14ss > div.layer-3QrUeG.baseLayer-35bLyl + div.layer-3QrUeG > div.standardSidebarView-3F1I7i > div.sidebarRegion-VFTUkN > div.sidebarRegionScroller-3MXcoP.thin-1ybCId.scrollerBase-289Jih.fade-2kXiP2 > nav.sidebar-CFHs9e > div.side-8zPYf6 > div.info-1VyQPT {
+	position: relative !important;
+}
+html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.app-1q1i1E > div.app-2rEoOp > div.layers-3iHuyZ.layers-3q14ss > div.layer-3QrUeG.baseLayer-35bLyl + div.layer-3QrUeG > div.standardSidebarView-3F1I7i > div.sidebarRegion-VFTUkN > div.sidebarRegionScroller-3MXcoP.thin-1ybCId.scrollerBase-289Jih.fade-2kXiP2 > nav.sidebar-CFHs9e > div.side-8zPYf6 > div.info-1VyQPT::after {
+	content: "DiscordRecolor by" !important;
+	font-size: 12px !important;
+	color: var(--text-muted) !important;
+	cursor: pointer !important;
+	display: inline !important;
+	opacity: 1 !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	cursor: text !important;
+	visibility: visible !important;
+	position: relative !important;
+	top: unset !important;
+	left: unset !important;
+	bottom: unset !important;
+	right: unset !important;
+	transform: unset !important;
+	animation: unset !important;
+}
+html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.app-1q1i1E > div.app-2rEoOp > div.layers-3iHuyZ.layers-3q14ss > div.layer-3QrUeG.baseLayer-35bLyl + div.layer-3QrUeG > div.standardSidebarView-3F1I7i > div.sidebarRegion-VFTUkN > div.sidebarRegionScroller-3MXcoP.thin-1ybCId.scrollerBase-289Jih.fade-2kXiP2 > nav.sidebar-CFHs9e > div.side-8zPYf6 > div.info-1VyQPT::before {
+	content: "DevilBro" !important;
+	font-size: 12px !important;
+	color: rgb(var(--vaccentcolor)) !important;
+	display: inline !important;
+	opacity: 1 !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	cursor: pointer !important;
+	visibility: visible !important;
+	position: absolute !important;
+	top: unset !important;
+	left: 106px !important;
+	bottom: 9px !important;
+	right: unset !important;
+	transform: unset !important;
+	animation: unset !important;
 }
