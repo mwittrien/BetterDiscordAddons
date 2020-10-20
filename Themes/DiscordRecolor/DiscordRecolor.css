@@ -3721,6 +3721,37 @@ html {
 	fill: var(--interactive-active);
 }
 
+#bd-customcss-attach-controls {
+	background-color: var(--background-tertiary);
+	box-shadow: none;
+	border-radius: 0 0 5px 5px;
+}
+.contentRegion-3nDuYy #bd-customcss-attach-controls,
+#bd-customcss-detach-container #bd-customcss-attach-controls {
+	background-color: var(--background-tertiary);
+	color: var(--header-primary);
+}
+.standardSidebarView-3F1I7i #bd-customcss-attach-controls button,
+.bd-detached-css-editor #bd-customcss-attach-controls button {
+	background-color: var(--background-secondary);
+	border: none !important;
+	border-radius: 3px !important;
+	color: var(--header-secondary);
+	margin: 5px 5px 0 0;
+	transition: background-color 0.1s ease;
+}
+.standardSidebarView-3F1I7i #bd-customcss-attach-controls button:hover,
+.bd-detached-css-editor #bd-customcss-attach-controls button:hover {
+	background-color: var(--background-primary);
+	color: var(--header-primary);
+}
+.standardSidebarView-3F1I7i #editor-detached h3 {
+	color: var(--header-secondary);
+}
+#bd-customcss-attach-controls .help-text .inline {
+	background-color: var(--background-secondary);
+}
+
 
 /* ~~~~		13.		PLUGINSUPPPORT					~~~~ */
 
