@@ -998,6 +998,10 @@ html {
 	background-color: var(--background-floating);
 }
 
+#app-mount .metadata-3WGS0M {
+	color: var(--text-muted);
+}
+
 #app-mount .loadingBackground-3sVOML {
 	background-image: linear-gradient(90deg,var(--background-primary),var(--background-accent),var(--background-primary));
 }
@@ -1121,6 +1125,10 @@ html {
 #app-mount .active-2HPddW .icon-KgGMGo,
 #app-mount .hover-28QbSq:hover .icon-KgGMGo {
 	color: var(--interactive-active);
+}
+
+#app-mount .cooldownWrapper-3joyFc[style*="color: rgb(79, 84, 92)"] {
+	color: var(--text-muted) !important;
 }
 
 /* ----		3.4.	AUTOCOMPLETEMENU				---- */
@@ -1779,6 +1787,9 @@ html {
 	color: var(--header-secondary);
 }
 
+#app-mount .avatarUploader-3XDtmn .sizeInfo-SKMPPw {
+	color: var(--text-muted);
+}
 #app-mount .avatarUploader-3XDtmn .removeButton-1hcZyG {
 	color: var(--interactive-normal);
 }
@@ -3173,6 +3184,10 @@ html {
 }
 .premiumPromoClose-1w65km:active {
 	background: var(--interactive-active);
+}
+#app-mount .categoryItemDefaultCategorySelected-_HCKoz .categoryIcon-1SvUHG,
+#app-mount .categoryItemDefaultCategorySelected-_HCKoz:hover .categoryIcon-1SvUHG {
+	color: var(--interactive-active);
 }
 
 #app-mount .focused-1En8bG,
