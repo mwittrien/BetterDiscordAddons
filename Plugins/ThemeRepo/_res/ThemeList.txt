@@ -81,6 +81,7 @@ https://raw.githubusercontent.com/mrmaple240/ChatTextBubbles/master/ChatTextBubb
 https://raw.githubusercontent.com/mrmaple240/Full-Light-Theme/master/FullLightTheme.theme.css
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/BasicBackground/BasicBackground.theme.css
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/BlurpleRecolor/BlurpleRecolor.theme.css
+https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/DiscordRecolor/DiscordRecolor.theme.css
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/EmojiReplace/EmojiReplace.theme.css
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/FullThemeDark/FullThemeDark.theme.css
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/ServerColumns/ServerColumns.theme.css
