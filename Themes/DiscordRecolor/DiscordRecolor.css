@@ -526,6 +526,18 @@ html {
 	color: var(--text-muted);
 }
 
+#app-mount .container-1nZlH6 {
+	background-color: var(--deprecated-text-input-bg);
+	border-color: var(--deprecated-text-input-border);
+}
+#app-mount .container-1nZlH6:hover {
+	border-color: var(--deprecated-text-input-border-hover);
+}
+#app-mount .container-1nZlH6 .lookGhost-2Fn_0-.colorGrey-2DXtkV {
+	background-color: var(--background-modifier-hover);
+	color: var(--header-secondary);
+}
+
 #app-mount .container-OI6I9q {
 	color: var(--header-secondary);
 }
