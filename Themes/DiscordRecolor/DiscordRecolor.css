@@ -3766,10 +3766,6 @@ html {
 	background-color: var(--background-secondary);
 }
 
-.bd-social-logo {
-	filter: drop-shadow(2px 2px var(--header-secondary));
-}
-
 
 /* ~~~~		13.		PLUGINSUPPPORT					~~~~ */
 
