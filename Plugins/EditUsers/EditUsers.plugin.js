@@ -5,12 +5,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "3.9.9",
+			"version": "4.0.0",
 			"description": "Allow you to change the icon, name, tag and color of users"
 		},
 		"changeLog": {
 			"improved": {
 				"Message Color Gradient": "Color Gradient now also works for messages, kinda"
+			},
+			"fixed": {
+				"Message Color Gradient": "Fixed issue where some message components lost their text color when a gradient is used"
 			}
 		}
 	};
@@ -153,6 +156,11 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS.userinfohovered + BDFDB.dotCN.userinfodiscriminator} {
 						display: block;
+					}
+					${BDFDB.dotCN.messagemarkup} span[style*="linear-gradient"] code.inline,
+					${BDFDB.dotCN.messagemarkup} span[style*="linear-gradient"] blockquote,
+					${BDFDB.dotCN.messagemarkup} span[style*="linear-gradient"] ${BDFDB.dotCN.spoilertext} {
+						color: var(--text-normal);
 					}
 				`;
 			}
