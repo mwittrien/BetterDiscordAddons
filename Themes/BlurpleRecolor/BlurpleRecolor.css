@@ -1624,6 +1624,7 @@
 #app-mount .lookGhost-2Fn_0-.colorBrand-3pXr91,
 #app-mount .lookGhost-2Fn_0-.colorBrand-3pXr91:disabled {
 	background-color: rgba(var(--vaccentcolor), 0.1);
+	color: rgb(var(--vaccentcolor));
 }
 
 #app-mount .lookLink-9FtZy-.colorBrand-3pXr91 {
