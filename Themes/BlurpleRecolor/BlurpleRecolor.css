@@ -73,12 +73,13 @@
 		8.	TOOLTIPS
 		9.	TOASTS
 	13.	BDSUPPORT
-	14.	PLUGINSUPPORT
+	14.	POWERCORDSUPPORT
+	15.	PLUGINSUPPORT
 		1.	IMAGEZOOM
 		2.	HIDEUTILS
 		3.	READALLNOTIFICATIONSBUTTON
 		4.	SERVERSEARCH
-	15.	THEMESUPPORT
+	16.	THEMESUPPORT
 		1.	THEMEDEVBADGE
 */
 
@@ -1971,28 +1972,36 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 }
 
 
-/* ~~~~		14.		PLUGINSUPPORT					~~~~ */
 
-/* ----		14.1.	IMAGEZOOM						---- */
+/* ~~~~		14.		POWERCORDSUPPORT				~~~~ */
+
+.powercord-toast .progressBar-3u8FBM  {
+	background-color: rgb(var(--vaccentcolor);
+}
+
+
+/* ~~~~		15.		PLUGINSUPPORT					~~~~ */
+
+/* ----		15.1.	IMAGEZOOM						---- */
 
 .zoomLense-uOK8xV {
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
 
-/* ----		14.2.	HIDEUTILS						---- */
+/* ----		15.2.	HIDEUTILS						---- */
 
 #HideUtils-Settings button {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 
-/* ----		14.3.	READALLNOTIFICATIONSBUTTON		---- */
+/* ----		15.3.	READALLNOTIFICATIONSBUTTON		---- */
 
 .wrapper-1BJsBx:active .childWrapper-anI2G9.button-Jt-tIg{
 	background: var(--vaccentcolor-hover);
 	color: rgb(var(--fontwhite1, var(--dfontwhite1)));
 }
 
-/* ----		14.4.	SERVERSEARCH					---- */
+/* ----		15.4.	SERVERSEARCH					---- */
 
 #server-search .wrapper-25eVIn {
 	background-color: rgb(47, 49, 54) !important;
@@ -2003,9 +2012,9 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 }
 
 
-/* ~~~~		15.		THEMESUPPORT					~~~~ */
+/* ~~~~		16.		THEMESUPPORT					~~~~ */
 
-/* ----		15.1.	THEMEDEVBADGE					---- */
+/* ----		16.1.	THEMEDEVBADGE					---- */
 
 #app-mount .dev-A7f2Rx.hasBadge-4rT8_u .badge-7R_W3s {
 	background: rgb(var(--vaccentcolor)) !important;
