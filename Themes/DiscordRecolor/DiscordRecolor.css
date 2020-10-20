@@ -1793,6 +1793,10 @@ html {
 	color: var(--header-secondary);
 }
 
+#app-mount .authedApp-mj2Hmd {
+	background-color: var(--background-secondary);
+}
+
 #app-mount .emptyStateHeader-248f_b {
 	color: var(--header-primary);
 }
