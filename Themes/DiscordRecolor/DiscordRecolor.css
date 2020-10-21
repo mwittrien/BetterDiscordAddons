@@ -2328,6 +2328,7 @@ html {
 #app-mount .root-1gCeng,
 #app-mount .modal-yWgWj- {
 	background-color: var(--background-primary);
+	border: none;
 	box-shadow: 0 0 0 1px rgba(var(--vbackgroundtertiary),.3),0 2px 10px 0 rgba(0,0,0,.2);
 }
 #app-mount .separator-2-RRj_ {
@@ -3655,6 +3656,54 @@ html {
 
 #bd-pub-button {
 	background-color: var(--background-primary);
+}
+
+#app-mount .bd-modal-wrapper .bd-modal-inner {
+	background-color: var(--background-primary);
+	border: none;
+	box-shadow: 0 0 0 1px rgba(var(--vbackgroundtertiary),.3),0 2px 10px 0 rgba(0,0,0,.2);
+}
+#app-mount .bd-modal-wrapper .header,
+#app-mount .bd-modal-wrapper .bd-modal-body {
+	background: transparent;
+	box-shadow: none;
+	color: var(--header-primary);
+}
+#app-mount .bd-modal-wrapper .tab-bar-container {
+	background: rgba(0,0,0,.2);
+	box-shadow: 0 2px 3px 0 rgba(0,0,0,.1);
+}
+#app-mount .bd-modal-wrapper .tab-bar-container .tab-bar-item {
+	border-bottom-color: transparent !important;
+	color: var(--interactive-normal) !important;
+	opacity: 1 !important;
+}
+#app-mount .bd-modal-wrapper .tab-bar-container .tab-bar-item:hover {
+	border-bottom-color: var(--interactive-hover) !important;
+	color: var(--interactive-hover) !important;
+}
+#app-mount .bd-modal-wrapper .tab-bar-container .tab-bar-item:active,
+#app-mount .bd-modal-wrapper .tab-bar-container .tab-bar-item.selected {
+	border-bottom-color: var(--interactive-active) !important;
+	color: var(--interactive-active) !important;
+	cursor: default;
+}
+#app-mount .bd-modal-wrapper .table-header {
+	border: none;
+	color: var(--header-primary);
+	cursor: default;
+}
+#app-mount .bd-modal-wrapper .table-column {
+	border-right: 1px solid transparent;
+	margin-right: 20px;
+}
+#app-mount .bd-modal-wrapper .table-header .table-column:not(:last-child) {
+	border-right-color: var(--background-modifier-accent);
+}
+#app-mount .bd-modal-wrapper .error {
+	border-top: 1px solid var(--background-modifier-accent);
+	border-bottom: none;
+	color: var(--header-primary);
 }
 
 #app-mount #pubslayer .ui-tab-bar-header,
