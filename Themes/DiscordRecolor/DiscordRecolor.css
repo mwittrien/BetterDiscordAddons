@@ -2421,11 +2421,9 @@ html {
 /* ----		10.1.	USERMODAL						---- */
 
 #app-mount .topSectionNormal-2-vo2m {
-	color: #fff;
-}
-#app-mount .topSectionNormal-2-vo2m .header-QKLPzZ {
 	background: var(--user-background, var(--background-tertiary)) center/cover no-repeat;
-	color: var(--user-background, var(--header-primary));
+	border-color: #fff;
+	color: #fff;
 }
 #app-mount .topSectionNormal-2-vo2m .username-3gJmXY {
 	color: var(--user-background, var(--header-primary));
@@ -2438,9 +2436,6 @@ html {
 	color: var(--user-background, var(--header-primary));
 	opacity: .7;
 }
-#app-mount .topSectionNormal-2-vo2m .customStatusText-39gdCI {
-	color: var(--user-background, var(--header-primary));
-}
 #app-mount .topSectionNormal-2-vo2m .additionalActionsIcon-1FoUlE {
 	color: var(--user-background, var(--header-primary));
 	opacity: .7;
@@ -2448,15 +2443,39 @@ html {
 #app-mount .topSectionNormal-2-vo2m .additionalActionsIcon-1FoUlE:hover {
 	opacity: 1;
 }
+#app-mount .topSectionNormal-2-vo2m .activityHeader-1PExlk,
+#app-mount .topSectionNormal-2-vo2m .customStatusText-39gdCI {
+	color: var(--user-background, var(--header-primary));
+}
+#app-mount .topSectionNormal-2-vo2m .tabBarContainer-1s1u-z {
+	border-top-color: var(--user-background, var(--background-secondary));
+}
+#app-mount .topSectionNormal-2-vo2m .themed-OHr7kt.item-PXvHYJ {
+	color: var(--user-background, var(--interactive-active));
+	opacity: .5;
+}
+#app-mount .topSectionNormal-2-vo2m .themed-OHr7kt.item-PXvHYJ:hover {
+	border-bottom-color: var(--user-background, var(--interactive-active));
+	opacity: .7;
+}
+#app-mount .topSectionNormal-2-vo2m  .selected-3s45Ha.themed-OHr7kt.item-PXvHYJ,
+#app-mount .topSectionNormal-2-vo2m  .themed-OHr7kt.item-PXvHYJ:active {
+	border-bottom-color: var(--user-background, var(--interactive-active));
+	color: var(--user-background, var(--interactive-active));
+	opacity: 1;
+}
 
 #app-mount .emptyIconStreamerMode-3RfWOW {
 	background-image: url(https://discordapp.com/assets/e18336bc1141d8a5e88379e41e91cacb.svg);
+	opacity: .5;
 }
 #app-mount .emptyIconGuilds-3OViNh {
 	background-image: url(https://discordapp.com/assets/87ad02315e38924402c7fb5017cf11ab.svg);
+	opacity: .5;
 }
 #app-mount .emptyIconFriends-BrjhY9 {
 	background-image: url(https://discordapp.com/assets/ca3f5ec71bb86c6aeb015bb0d54a10fa.svg);
+	opacity: .5;
 }
 
 /* ----		10.2.	GUILDADD/CREATION				---- */
