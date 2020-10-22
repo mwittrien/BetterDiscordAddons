@@ -3122,7 +3122,7 @@ html {
 
 /* ----		11.1.	USERPOPOUT						---- */
 
-.userPopout-3XzG_A {
+#app-mount .userPopout-3XzG_A {
 	background-color: var(--background-tertiary);
 	box-shadow: 0 2px 10px 0 rgba(0,0,0,.2),0 0 0 1px rgba(var(--vbackgroundtertiary),.6);
 	color: #fff;
@@ -3131,18 +3131,36 @@ html {
 	background: var(--user-background, var(--background-tertiary)) center/cover no-repeat;
 	color: var(--user-background, var(--header-primary));
 }
-.headerNormal-T_seeN .headerName-fajvi9,
-.headerNormal-T_seeN .headerTagUsernameNoNickname-2_H881 {
+#app-mount .userPopout-3XzG_A .username-2b1r56 + span {
+	opacity: .7;
+}
+#app-mount .headerNormal-T_seeN .headerName-fajvi9,
+#app-mount .headerNormal-T_seeN .headerTagUsernameNoNickname-2_H881 {
 	color: var(--user-background, var(--header-primary));
 }
-.headerNormal-T_seeN .headerTag-2pZJzA {
+#app-mount .headerNormal-T_seeN .headerTag-2pZJzA {
 	color: var(--user-background, var(--header-primary));
 }
-.headerNormal-T_seeN .headerActivityText-gcopRr {
+#app-mount .headerNormal-T_seeN .headerActivityText-gcopRr {
 	color: var(--user-background, var(--header-primary));
 	opacity: .7;
 }
-.headerNormal-T_seeN .customStatus-1bh2V9 {
+#app-mount .headerNormal-T_seeN .customStatus-1bh2V9 {
+	color: var(--user-background, var(--header-primary));
+}
+#app-mount .headerNormal-T_seeN .text-AOoUen {
+	color: var(--user-background, var(--header-primary));
+	opacity: .7;
+}
+#app-mount .headerNormal-T_seeN .bar-3urHkF {
+	background-color: rgba(var(--vtextdarkest),.2);
+}
+#app-mount .headerNormal-T_seeN .barInner-3NDaY_ {
+	background-color: var(--user-background, var(--header-primary));
+}
+#app-mount .headerNormal-T_seeN .activityName-1IaRLn,
+#app-mount .headerNormal-T_seeN .nameNormal-2lqVQK,
+#app-mount .headerNormal-T_seeN .nameWrap-3Z4G_9 {
 	color: var(--user-background, var(--header-primary));
 }
 #app-mount .body-3iLsc4,
@@ -3160,21 +3178,6 @@ html {
 }
 #app-mount .wumpusTooltip-65YlMT::after {
 	border-color: transparent var(--background-floating) transparent transparent;
-}
-
-.headerNormal-T_seeN .text-AOoUen {
-	color: var(--header-secondary);
-}
-.headerNormal-T_seeN .bar-3urHkF {
-	background-color: rgba(var(--vtextdarkest),.2);
-}
-.headerNormal-T_seeN .barInner-3NDaY_ {
-	background-color: var(--header-primary);
-}
-.headerNormal-T_seeN .activityName-1IaRLn,
-.headerNormal-T_seeN .nameNormal-2lqVQK,
-.headerNormal-T_seeN .nameWrap-3Z4G_9 {
-	color: var(--header-primary);
 }
 
 .role-2irmRk[style*="border-color: rgba(185, 187, 190, 0.6)"],
