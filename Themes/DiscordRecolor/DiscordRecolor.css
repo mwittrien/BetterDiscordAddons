@@ -2420,21 +2420,25 @@ html {
 
 /* ----		10.1.	USERMODAL						---- */
 
-.topSectionNormal-2-vo2m {
+#app-mount .topSectionNormal-2-vo2m {
 	color: #fff;
 }
 #app-mount .topSectionNormal-2-vo2m .header-QKLPzZ {
 	background: var(--user-background, var(--background-tertiary)) center/cover no-repeat;
 	color: var(--user-background, var(--header-primary));
 }
-.topSectionNormal-2-vo2m .username-3gJmXY {
+#app-mount .topSectionNormal-2-vo2m .username-3gJmXY {
 	color: var(--user-background, var(--header-primary));
 }
-.topSectionNormal-2-vo2m .discriminator-xUhQkU {
+#app-mount .topSectionNormal-2-vo2m .discriminator-xUhQkU {
 	color: var(--user-background, var(--header-primary));
 	opacity: .7;
 }
-.topSectionNormal-2-vo2m .customStatusText-39gdCI {
+#app-mount .topSectionNormal-2-vo2m .date-YN6TCS {
+	color: var(--user-background, var(--header-primary));
+	opacity: .7;
+}
+#app-mount .topSectionNormal-2-vo2m .customStatusText-39gdCI {
 	color: var(--user-background, var(--header-primary));
 }
 #app-mount .topSectionNormal-2-vo2m .additionalActionsIcon-1FoUlE {
@@ -3142,6 +3146,10 @@ html {
 	color: var(--user-background, var(--header-primary));
 }
 #app-mount .headerNormal-T_seeN .headerActivityText-gcopRr {
+	color: var(--user-background, var(--header-primary));
+	opacity: .7;
+}
+#app-mount .headerNormal-T_seeN .date-YN6TCS {
 	color: var(--user-background, var(--header-primary));
 	opacity: .7;
 }
