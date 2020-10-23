@@ -543,13 +543,15 @@ module.exports = (_ => {
 					});
 				}, 1000);
 			}
-			BDFDB.DOMUtils.removeLocalStyle(plugin.name);
-			BDFDB.ListenerUtils.remove(plugin);
-			BDFDB.StoreChangeUtils.remove(plugin);
-			BDFDB.ObserverUtils.disconnect(plugin);
-			BDFDB.PatchUtils.unpatch(plugin);
-			BDFDB.WindowUtils.closeAll(plugin);
-			BDFDB.WindowUtils.removeListener(plugin);
+			if (BDFDB.DOMUtils) BDFDB.DOMUtils.removeLocalStyle(plugin.name);
+			if (BDFDB.ListenerUtils) BDFDB.ListenerUtils.remove(plugin);
+			if (BDFDB.StoreChangeUtils) BDFDB.StoreChangeUtils.remove(plugin);
+			if (BDFDB.ObserverUtils) BDFDB.ObserverUtils.disconnect(plugin);
+			if (BDFDB.PatchUtils) BDFDB.PatchUtils.unpatch(plugin);
+			if (BDFDB.WindowUtils) {
+				BDFDB.WindowUtils.closeAll(plugin);
+				BDFDB.WindowUtils.removeListener(plugin);
+			}
 		}, "Failed to clean up plugin!", plugin.name)();
 	};
 	BDFDB.PluginUtils.checkUpdate = function (pluginName, url) {
@@ -3098,14 +3100,13 @@ module.exports = (_ => {
 					function isRGB(comp) {return comp.slice(0, 3).every(rgb => rgb.toString().indexOf("%") == -1 && parseFloat(rgb) == parseInt(rgb));};
 					function isHSL(comp) {return comp.slice(1, 3).every(hsl => hsl.toString().indexOf("%") == hsl.length - 1);};
 				};
-				BDFDB.ColorUtils.createGradient = function (colorobj, direction = "to right") {
-					var sortedgradient = {};
-					var gradientstring = "linear-gradient(" + direction;
-					for (let pos of Object.keys(colorobj).sort()) {
-						let color = BDFDB.ColorUtils.convert(colorobj[pos], "RGBA");
-						gradientstring += color ? `, ${color} ${pos*100}%` : ''
+				BDFDB.ColorUtils.createGradient = function (colorObj, direction = "to right") {
+					let gradientString = "linear-gradient(" + direction;
+					for (let pos of Object.keys(colorObj).sort()) {
+						let color = BDFDB.ColorUtils.convert(colorObj[pos], "RGBA");
+						gradientString += color ? `, ${color} ${pos*100}%` : ''
 					}
-					return gradientstring += ")";
+					return gradientString += ")";
 				};
 				BDFDB.ColorUtils.getSwatchColor = function (container, number) {
 					if (!Node.prototype.isPrototypeOf(container)) return;

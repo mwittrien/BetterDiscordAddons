@@ -155,7 +155,7 @@ module.exports = (_ => {
 										for (let input of settingsPanel.querySelectorAll(".input-newquote " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new quote.", {type:"danger"});
 										let key = settingsPanel.querySelector(".input-name " + BDFDB.dotCN.input).value.trim();
 										let quote = settingsPanel.querySelector(".input-quote " + BDFDB.dotCN.input).value.trim();
-										if (formats[key]) return BDFDB.NotificationUtils.toast("A quote with the choosen name already exists. Please choose another name.", {type:"danger"});
+										if (formats[key]) return BDFDB.NotificationUtils.toast("A quote with the choosen name already exists, please choose another name", {type:"danger"});
 										else {
 											formats[key] = quote;
 											BDFDB.DataUtils.save(formats, this, "formats");
@@ -256,7 +256,7 @@ module.exports = (_ => {
 						format = choice;
 						if (copy || !BDFDB.LibraryModules.QuoteUtils.canQuote(e.instance.props.message, e.instance.props.channel)) {
 							BDFDB.LibraryRequires.electron.clipboard.write({text:this.parseQuote(e.instance.props.message, e.instance.props.channel)});
-							BDFDB.NotificationUtils.toast("Quote has been copied to clipboard.", {type:"success"});
+							BDFDB.NotificationUtils.toast("Quote has been copied to clipboard", {type:"success"});
 						}
 						else BDFDB.LibraryModules.MessageManageUtils.quoteMessage(e.instance.props.channel, e.instance.props.message);
 						format = null;
@@ -270,7 +270,7 @@ module.exports = (_ => {
 						item = BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.QUOTE,
 							id: "quote",
-							action: _ => {action(null, event.shiftKey);}
+							action: event => {action(null, event.shiftKey);}
 						});
 						let [unreadChildren, unreadIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mark-unread"});
 						unreadChildren.splice(unreadIndex > -1 ? unreadIndex - 1 : unreadChildren.length, 0, item);
