@@ -13,8 +13,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomQuoter",
 			"author": "DevilBro",
-			"version": "1.1.6",
+			"version": "1.1.7",
 			"description": "Customize the output of the native quote feature of Discord"
+		},
+		"changeLog": {
+			"added": {
+				"Shift Switch": "Added option to switch the shift behaviour, causing quotes to always get copied to the clipboard unless shift is pressed"
+			}
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -87,6 +92,7 @@ module.exports = (_ => {
 				this.defaults = {
 					settings: {
 						quoteOnlySelected:		{value:true, 				description:"Only insert selected text in a quoted message"},
+						alwaysCopy:				{value:false, 				description:"Always copy quote to clipboard without holding shift"},
 						ignoreMentionInDM:		{value:true, 				description:"Do not add a mention in DM channels"},
 						forceZeros:				{value:false, 				description:"Force leading Zeros"}
 					}
@@ -252,9 +258,9 @@ module.exports = (_ => {
 
 			onMessageContextMenu (e) {
 				if (e.instance.props.message && e.instance.props.channel) {
-					let item = null, action = (choice, copy) => {
+					let item = null, action = (choice, shift) => {
 						format = choice;
-						if (copy || !BDFDB.LibraryModules.QuoteUtils.canQuote(e.instance.props.message, e.instance.props.channel)) {
+						if (shift && !settings.alwaysCopy || !shift && settings.alwaysCopy || !BDFDB.LibraryModules.QuoteUtils.canQuote(e.instance.props.message, e.instance.props.channel)) {
 							BDFDB.LibraryRequires.electron.clipboard.write({text:this.parseQuote(e.instance.props.message, e.instance.props.channel)});
 							BDFDB.NotificationUtils.toast("Quote has been copied to clipboard", {type:"success"});
 						}
