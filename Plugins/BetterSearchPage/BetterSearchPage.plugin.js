@@ -13,7 +13,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterSearchPage",
 			"author": "DevilBro",
-			"version": "1.1.5",
+			"version": "1.1.6",
 			"description": "Add some extra controls to the search results page"
 		}
 	};
@@ -133,7 +133,7 @@ module.exports = (_ => {
 								"aria-label": BDFDB.LanguageUtils.LibraryStrings.first,
 								onClick: _ => {if (currentPage != 1) doJump(1);},
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, currentPage == 1 && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, currentPage == 1 && BDFDB.disCN.searchresultspaginationdisabled),
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 										className: BDFDB.disCN.searchresultspaginationicon,
 										name: BDFDB.LibraryComponents.SvgIcon.Names.LEFT_DOUBLE_CARET
@@ -146,7 +146,7 @@ module.exports = (_ => {
 								"aria-label": BDFDB.LanguageUtils.LibraryStrings.last,
 								onClick: _ => {if (currentPage != maxPage) doJump(maxPage);},
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, currentPage >= maxPage && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, currentPage >= maxPage && BDFDB.disCN.searchresultspaginationdisabled),
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 										className: BDFDB.disCN.searchresultspaginationicon,
 										name: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_DOUBLE_CARET

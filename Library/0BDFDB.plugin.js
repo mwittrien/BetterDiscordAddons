@@ -13,13 +13,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.0.8",
+			"version": "1.0.9",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 		"changeLog": {
 			"fixed": {
-				"Switches": "Switches for all my plugins work again"
+				"BD Beta": "Fixed some issues with the beta"
 			}
 		}
 	};
@@ -5792,7 +5792,7 @@ module.exports = (_ => {
 									tooltipConfig: {zIndex: 3001},
 									onClick: _ => {if (this.state.offset > 0) this.jump(0);},
 									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.state.offset <= 0 && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.state.offset <= 0 && BDFDB.disCN.searchresultspaginationdisabled),
 										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 											className: BDFDB.disCN.searchresultspaginationicon,
 											name: InternalComponents.LibraryComponents.SvgIcon.Names.LEFT_DOUBLE_CARET
@@ -5807,7 +5807,7 @@ module.exports = (_ => {
 										if (this.state.offset > 0) this.jump(this.state.offset - 1);
 									},
 									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.state.offset <= 0 && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.state.offset <= 0 && BDFDB.disCN.searchresultspaginationdisabled),
 										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 											className: BDFDB.disCN.searchresultspaginationicon,
 											name: InternalComponents.LibraryComponents.SvgIcon.Names.LEFT_CARET
@@ -5821,7 +5821,7 @@ module.exports = (_ => {
 									tooltipConfig: {zIndex: 3001},
 									onClick: _ => {if (this.state.offset < maxOffset) this.jump(this.state.offset + 1);},
 									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.state.offset >= maxOffset && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.state.offset >= maxOffset && BDFDB.disCN.searchresultspaginationdisabled),
 										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 											className: BDFDB.disCN.searchresultspaginationicon,
 											name: InternalComponents.LibraryComponents.SvgIcon.Names.RIGHT_CARET
@@ -5834,7 +5834,7 @@ module.exports = (_ => {
 									tooltipConfig: {zIndex: 3001},
 									onClick: _ => {if (this.state.offset < maxOffset) this.jump(maxOffset);},
 									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.state.offset >= maxOffset && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.state.offset >= maxOffset && BDFDB.disCN.searchresultspaginationdisabled),
 										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 											className: BDFDB.disCN.searchresultspaginationicon,
 											name: InternalComponents.LibraryComponents.SvgIcon.Names.RIGHT_DOUBLE_CARET
@@ -7156,16 +7156,17 @@ module.exports = (_ => {
 					let checkbox = card.querySelector(BDFDB.dotCN._reposwitch);
 					if (!checkbox) return;
 					let props = BDFDB.ObjectUtils.get(BDFDB.ReactUtils.getInstance(card), "return.stateNode.props");
-					if (props && !props.hasCustomControls && props.addon && props.addon.plugin && (props.addon.plugin == libraryInstance || props.addon.plugin.name && props.addon.plugin.name && PluginStores.loaded[props.addon.plugin.name] && PluginStores.loaded[props.addon.plugin.name] == props.addon.plugin)) {
+					let plugin = props && props.addon && (props.addon.plugin || props.addon.instance);
+					if (plugin && !props.hasCustomControls && (plugin == libraryInstance || plugin.name && plugin.name && PluginStores.loaded[plugin.name] && PluginStores.loaded[plugin.name] == plugin)) {
 						props.hasCustomControls = true;
-						let url = props.addon.plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${props.addon.plugin.name}/${props.addon.plugin.name}.plugin.js`;
+						let url = plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 						let controls = [];
-						if (props.addon.plugin.changeLog) controls.push(InternalBDFDB.createCustomControl(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+						if (plugin.changeLog) controls.push(InternalBDFDB.createCustomControl(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 							text: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
 							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 								className: BDFDB.disCN._repoicon,
 								name: InternalComponents.LibraryComponents.SvgIcon.Names.CHANGELOG,
-								onClick: _ => {BDFDB.PluginUtils.openChangeLog(props.addon.plugin);}
+								onClick: _ => {BDFDB.PluginUtils.openChangeLog(plugin);}
 							})
 						})));
 						if (window.PluginUpdates && window.PluginUpdates.plugins && window.PluginUpdates.plugins[url] && window.PluginUpdates.plugins[url].outdated) controls.push(InternalBDFDB.createCustomControl(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
@@ -7173,7 +7174,7 @@ module.exports = (_ => {
 							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 								className: BDFDB.disCN._repoicon,
 								name: InternalComponents.LibraryComponents.SvgIcon.Names.DOWNLOAD,
-								onClick: _ => {BDFDB.PluginUtils.downloadUpdate(props.addon.plugin.name, url);}
+								onClick: _ => {BDFDB.PluginUtils.downloadUpdate(plugin.name, url);}
 							})
 						})));
 						for (let control of controls) checkbox.parentElement.insertBefore(control, checkbox.parentElement.firstElementChild);
