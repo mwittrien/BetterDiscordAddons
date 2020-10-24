@@ -37,12 +37,13 @@
 		3.	MEMBERLIST
 		4.	SEARCHPAGE
 		5.	CALL
-	5.	STORE/NITRO
-	6.	PEOPLES
-	7.	DISCOVERY
-	8.	USERSETTINGS
-	9.	GUILDSETTINGS
-	10.	MODALS
+	5.	PEOPLES
+	6.	STORE/NITRO
+	7.	LIBRARY
+	8.	DISCOVERY
+	9.	USERSETTINGS
+	10.	GUILDSETTINGS
+	11.	MODALS
 		1.	USERMODAL
 		2.	GUILDADD/CREATION
 		3.	REGIONSELECTMODAL
@@ -56,13 +57,13 @@
 		11.	DISPATCHERRORMODAL
 		12.	CHANGELOGMODAL
 		13.	SCREENSHAREMODAL
-	11.	POPOUTS
+	12.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
 		3.	EMOJIPICKER
 		4.	PINS/MENTIONS
 		5.	SEARCHPOPOUT
-	12.	GENERAL
+	13.	GENERAL
 		1.	TEXT
 		2.	BUTTONS
 		3.	INPUTS
@@ -72,14 +73,14 @@
 		7.	NOTIFICATIONBAR
 		8.	TOOLTIPS
 		9.	TOASTS
-	13.	BDSUPPORT
-	14.	POWERCORDSUPPORT
-	15.	PLUGINSUPPORT
+	14.	BDSUPPORT
+	15.	POWERCORDSUPPORT
+	16.	PLUGINSUPPORT
 		1.	IMAGEZOOM
 		2.	HIDEUTILS
 		3.	READALLNOTIFICATIONSBUTTON
 		4.	SERVERSEARCH
-	16.	THEMESUPPORT
+	17.	THEMESUPPORT
 		1.	THEMEDEVBADGE
 */
 
@@ -632,7 +633,14 @@
 }
 
 
-/* ~~~~		5.		STORE/NITRO						~~~~ */
+/* ~~~~		5.		PEOPLES							~~~~ */
+
+.wrapper-1cBijl .btn:disabled {								/* addfriendpage		button								*/
+	background-color: rgb(var(--vaccentcolor));
+}
+
+
+/* ~~~~		6.		STORE/NITRO						~~~~ */
 
 #app-mount .premiumIndicator-1XvbfM {						/* premium				where?								*/
 	background-color: rgb(var(--vaccentcolor));
@@ -758,19 +766,19 @@
 	background-color: rgb(255, 255, 255) !important;
 	background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCI+PHBhdGggZmlsbD0iI0ZGRiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNywxMCkiIGQ9Ik03LjQ3NDE3NDQyLDIzLjM5NDcyOSBDNy40NzQxNzQ0MiwyNC40Mzk1NjE4IDYuNTg2MDczNjQsMjUuMzEwMTE2NSA1LjUyMDE4MjE3LDI1LjMxMDExNjUgTDQuNDU0MjkwNywyNS4zMTAxMTY1IEMzLjM4ODM5OTIyLDI1LjMxMDExNjUgMi40OTk4NzIwOSwyNC40Mzk1NjE4IDIuNDk5ODcyMDksMjMuMzk0NzI5IEMyLjQ5OTg3MjA5LDIyLjM0OTg5NjEgMy4zODgzOTkyMiwyMS40NzkzNDE0IDQuNDU0MjkwNywyMS40NzkzNDE0IEw1LjUyMDE4MjE3LDIxLjQ3OTM0MTQgQzYuNTg2MDczNjQsMjEuNDc5MzQxNCA3LjQ3NDE3NDQyLDIyLjM0OTg5NjEgNy40NzQxNzQ0MiwyMy4zOTQ3MjkgWiBNNTUuNjE2OTEwOSwyMi44NzIzMTI2IEM2MC4yMzU2MzE4LDMyLjQ1MDA4NjEgNTUuOTcyMDY1OSw0My45NDMyNDcyIDQ1Ljg0NjA5NjksNDguNDcwNzE2OCBDMzYuMDc1NzA5Myw1Mi44MjQzMjYyIDI0LjM1MDkwMzEsNDguNjQ0OTk0OSAxOS45MDk1NDY1LDM5LjA2NzIyMTQgQzE5LjAyMTQ0NTcsMzcuMTUxODMzOCAxOC40ODg1LDM1LjA2MjE2ODIgMTguMzEwNzA5MywzMi45NzI1MDI1IEwxNC40MDIyOTg0LDMyLjk3MjUwMjUgQzEzLjMzNjQwNywzMi45NzI1MDI1IDEyLjQ0ODMwNjIsMzIuMTAxNTI5OSAxMi40NDgzMDYyLDMxLjA1NjY5NzEgQzEyLjQ0ODMwNjIsMzAuMDExODY0MiAxMy4zMzY0MDcsMjkuMTQxMzA5NSAxNC40MDIyOTg0LDI5LjE0MTMwOTUgTDIwLjA4NzMzNzIsMjkuMTQxMzA5NSBDMjEuMTUzMjI4NywyOS4xNDEzMDk1IDIyLjA0MTMyOTUsMjguMjcwNzU0OCAyMi4wNDEzMjk1LDI3LjIyNTkyMiBDMjIuMDQxMzI5NSwyNi4xODEwODkyIDIxLjE1MzIyODcsMjUuMzEwMTE2NSAyMC4wODczMzcyLDI1LjMxMDExNjUgTDExLjAyNzI1OTcsMjUuMzEwMTE2NSBDOS45NjEzNjgyMiwyNS4zMTAxMTY1IDkuMDcyODQxMDksMjQuNDM5NTYxOCA5LjA3Mjg0MTA5LDIzLjM5NDcyOSBDOS4wNzI4NDEwOSwyMi4zNDk4OTYxIDkuOTYxMzY4MjIsMjEuNDc5MzQxNCAxMS4wMjcyNTk3LDIxLjQ3OTM0MTQgTDIzLjY0MDE2NjcsMjEuNDc5MzQxNCBDMjQuNzA2MDU4MSwyMS40NzkzNDE0IDI1LjU5NDE1ODksMjAuNjA4MzY4OCAyNS41OTQxNTg5LDE5LjU2MzUzNiBDMjUuNTk0MTU4OSwxOC41MTg3MDMxIDI0LjcwNjA1ODEsMTcuNjQ4MTQ4NCAyMy42NDAxNjY3LDE3LjY0ODE0ODQgTDE4LjQ4ODUsMTcuNjQ4MTQ4NCBDMTYuODg5NjYyOCwxNy42NDgxNDg0IDE1LjQ2ODE4OTksMTYuNDI5MDM3NSAxNS40NjgxODk5LDE0LjY4NzkyODEgQzE1LjQ2ODE4OTksMTMuMTIwNjc4OCAxNi43MTE4NzIxLDExLjcyNzI4OTggMTguNDg4NSwxMS43MjcyODk4IEwzOC41NjI2NDczLDExLjcyNzI4OTggQzQ1LjY2ODczMjYsMTIuMDc1ODQ2IDUyLjQxOTIzNjQsMTYuMDgwODk5MiA1NS42MTY5MTA5LDIyLjg3MjMxMjYgWiBNMzMuMTY1NzQwMywyMC45NTE0MDgzIEMyNy41NDg0OTIyLDIzLjQ3OTkwMzcgMjUuMDg1NDMwMiwyOS45OTMzOTE2IDI3LjY2NDg4NzYsMzUuNDk5NjYwNiBDMzAuMjQ0MzQ1LDQxLjAwNTkyOTYgMzYuODg5MTEyNCw0My40MjAzMjkzIDQyLjUwNjM2MDUsNDAuODkxODMzOCBDNDguMTI0MDM0OSwzOC4zNjMzMzg0IDUwLjU4NjY3MDUsMzEuODQ5ODUwNiA0OC4wMDcyMTMyLDI2LjM0MzU4MTYgQzQ1LjQyNzc1NTgsMjAuODM3MzEyNiAzOC43ODI5ODg0LDE4LjQyMjkxMjkgMzMuMTY1NzQwMywyMC45NTE0MDgzIFogTTQyLjExNTY0NzMsMjQuNjEzNzE0NSBMNDUuNjY4NDc2NywzMC41MzQ1NzMyIEM0NS44NDYyNjc0LDMwLjg4MjcxMTUgNDUuODQ2MjY3NCwzMS4wNTY5ODk2IDQ1LjY2ODQ3NjcsMzEuNDA1MTI3OSBMNDIuMTE1NjQ3MywzNy4zMjU5ODY2IEM0MS45Mzc4NTY2LDM3LjY3NDEyNDkgNDEuNTgyNzAxNiwzNy42NzQxMjQ5IDQxLjQwNDkxMDksMzcuNjc0MTI0OSBMMzQuNDc2NjE2MywzNy42NzQxMjQ5IEMzNC4xMjE0NjEyLDM3LjY3NDEyNDkgMzMuOTQzNjcwNSwzNy40OTk4NDY4IDMzLjc2NjMwNjIsMzcuMzI1OTg2NiBMMzAuMjEzMDUwNCwzMS40MDUxMjc5IEMzMC4wMzU2ODYsMzEuMDU2OTg5NiAzMC4wMzU2ODYsMzAuODgyNzExNSAzMC4yMTMwNTA0LDMwLjUzNDU3MzIgTDMzLjc2NjMwNjIsMjQuNjEzNzE0NSBDMzMuOTQzNjcwNSwyNC4yNjU1NzYyIDM0LjI5OTI1MTksMjQuMjY1NTc2MiAzNC40NzY2MTYzLDI0LjI2NTU3NjIgTDQxLjQwNDkxMDksMjQuMjY1NTc2MiBDNDEuNzYwNDkyMiwyNC4wOTEyOTgxIDQxLjkzNzg1NjYsMjQuMjY1NTc2MiA0Mi4xMTU2NDczLDI0LjYxMzcxNDUgWiIvPjwvc3ZnPg=='), linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5)) !important;
 }
-.pageWrapper-3F6owx {											/* store				pagewrapper						*/
+.pageWrapper-3F6owx {										/* store				pagewrapper							*/
 	background: rgb(255,255,255) linear-gradient(114deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.6));
 }
 
 
-/* ~~~~		6.		PEOPLES							~~~~ */
+/* ~~~~		7.		LIBRARY							~~~~ */
 
-.wrapper-1cBijl .btn:disabled {								/* addfriendpage		button								*/
-	background-color: rgb(var(--vaccentcolor));
+.foreground-2aE44H {										/* installationpath		fill								*/
+	stroke: rgb(var(--vaccentcolor));
 }
 
 
-/* ~~~~		7.		DISCOVERY						~~~~ */
+/* ~~~~		8.		DISCOVERY						~~~~ */
 
 .searchBox-3Y2Vi7:focus,									/* searchbox			focus								*/
 .searchBox-3Y2Vi7:focus-within,
@@ -798,7 +806,7 @@
 }
 
 
-/* ~~~~		8.		USERSETTINGS					~~~~ */
+/* ~~~~		9.		USERSETTINGS					~~~~ */
 
 .dot-2s_oHI {												/* settingsitems		dot									*/
 	background-color: rgb(var(--vaccentcolor));
@@ -960,7 +968,7 @@
 }
 
 
-/* ~~~~		9.		GUILDSETTINGS					~~~~ */
+/* ~~~~		10.		GUILDSETTINGS					~~~~ */
 
 															/* widgetsettings		widget placeholder image 			*/
 .layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type {
@@ -996,9 +1004,9 @@
 }
 
 
-/* ~~~~		10.		MODALS							~~~~ */
+/* ~~~~		11.		MODALS							~~~~ */
 
-/* ----		10.1.	USERMODAL						---- */
+/* ----		11.1.	USERMODAL						---- */
 
 .topSectionPlaying-1J5E4n {									/* modal				topsection playing					*/
 	background: rgb(var(--vaccentcolor));
@@ -1008,7 +1016,7 @@
 	background-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		10.2.	GUILDADD/CREATION				---- */
+/* ----		11.2.	GUILDADD/CREATION				---- */
 
 #app-mount .title-2Dc-Cb {									/* modal				create title						*/
 	color: rgb(var(--vaccentcolor));
@@ -1068,7 +1076,7 @@
 	background: rgb(var(--vaccentcolor)) !important;
 }
 
-/* ----		10.3.	REGIONSELECTMODAL				---- */
+/* ----		11.3.	REGIONSELECTMODAL				---- */
 
 .regionSelectFlag-3uwFtG,									/* modal				regionselect flag					*/
 .regionSelectFlag-1htPow {
@@ -1100,7 +1108,7 @@
 	background: rgb(var(--vaccentcolor));
 }
 
-/* ----		10.4.	UPLOADMODAL						---- */
+/* ----		11.4.	UPLOADMODAL						---- */
 															/* modal				background							*/
 .uploadModalIn-1z07Bv .uploadDropModal-2kTwbc .bgScale-1otPtc {
 	background-color: rgb(var(--vaccentcolor));
@@ -1172,7 +1180,7 @@
 	-webkit-mask: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTMwIiB2aWV3Qm94PSIwIDAgMTAwIDEzMCI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNNjEgMTdIMjIuOTg1Yy0yLjc2IDAtNC45OTcgMi4yMy00Ljk5NyA1LjAwMlYyOSIgc3Ryb2tlPSIjQzlEMkYwIiBzdHJva2Utd2lkdGg9IjIiIG9wYWNpdHk9Ii40Ii8+PHBhdGggZD0iTTY5IDE5djcuNTAyQzY5IDI3Ljg4MiA3MC4xMSAyOSA3MS41IDI5SDc0IiBzdHJva2Utb3BhY2l0eT0iLjQiIHN0cm9rZT0iI0M5RDJGMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTM5LjM3IDg5LjhoLTIuNThsOS44NC0yNi4xaDIuNThsLTkuODQgMjYuMXptMjUuMDYtMTMuNjhsLTExLjMxIDcuNTZ2LTIuNzlsOC43Ni01Ljc5di0uMTJsLTguNzYtNS43OVY2Ni40bDExLjMxIDcuNTZ2Mi4xNnoiIG9wYWNpdHk9Ii44IiBmaWxsPSIjNjk3RUM0Ii8+PC9nPjwvc3ZnPg==') center/cover no-repeat;
 }
 
-/* ----		10.5.	KEYBOARDSHORTCUTSMODAL			---- */
+/* ----		11.5.	KEYBOARDSHORTCUTSMODAL			---- */
 
 .ddrArrows-lSnH7P .arrow-2enltQ,							/* modal				arrows								*/
 .ddrArrows-lSnH7P .arrow-2enltQ::before,
@@ -1213,7 +1221,7 @@
 }
 
 
-/* ----		10.6.	LOGINSCREEN						---- */
+/* ----		11.6.	LOGINSCREEN						---- */
 
 .authBox-hW6HRx a {											/* authobox				links								*/
 	color: rgb(var(--vaccentcolor));
@@ -1223,7 +1231,7 @@
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		10.7.	DOWNLOADAPPMODAL				---- */
+/* ----		11.7.	DOWNLOADAPPMODAL				---- */
 
 .downloadApps-wbBFdZ .footer-1nkeBm a {
 	color: rgb(var(--vaccentcolor));
@@ -1265,7 +1273,7 @@
 	border-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		10.8.	GUILDBOOSTMODAL					---- */
+/* ----		11.8.	GUILDBOOSTMODAL					---- */
 
 .badgeIconWithSubscribers-3PlMu9 {							/* modal				sub badge icon						*/
 	color: rgb(var(--vaccentcolor));
@@ -1324,7 +1332,7 @@
 	filter: brightness(150%);
 }
 
-/* ----		10.9.	NEWUSERMODAL					---- */
+/* ----		11.9.	NEWUSERMODAL					---- */
 
 .form-236Xmo header {
 	color: rgb(var(--vaccentcolor));
@@ -1361,7 +1369,7 @@
 	background-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		10.10.	STREAMSETTINGSMODAL				---- */
+/* ----		11.10.	STREAMSETTINGSMODAL				---- */
 
 .selectorButtonSelected-336oUc,								/* modal				selectorselectedbutton				*/
 .selectorButtonSelected-1j4DmC {
@@ -1380,13 +1388,13 @@
 	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor));
 }
 
-/* ----		10.11.	DISPATCHERRORMODAL				---- */
+/* ----		11.11.	DISPATCHERRORMODAL				---- */
 
 .theme-light .closeLink-2MRAUp {							/* modal				closelink							*/
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		10.12.	CHANGELOGMODAL					---- */
+/* ----		11.12.	CHANGELOGMODAL					---- */
 
 .content-s2SEQO a {											/* modal				link								*/
 	color: var(--text-link);
@@ -1402,7 +1410,7 @@
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
 }
 
-/* ----		10.13.	SCREENSHAREMODAL				---- */
+/* ----		11.13.	SCREENSHAREMODAL				---- */
 
 .tile-2w4k5N:hover .sourceThumbnail-27dolk {
 	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor));
@@ -1418,7 +1426,7 @@
 }
 
 
-/* ~~~~		11.		POPOUTS							~~~~ */
+/* ~~~~		12.		POPOUTS							~~~~ */
 
 
 .popoutLeft-3aViER.arrowAlignmentTop-1yftWI::before {
@@ -1454,7 +1462,7 @@
 	border-bottom-color: #rgb(var(--vaccentcolor));
 }
 
-/* ----		11.1.	CONTEXTMENU						---- */
+/* ----		12.1.	CONTEXTMENU						---- */
 
 
 .colorBrand-ROmMP1,											/* contextmenu			brand								*/
@@ -1497,7 +1505,7 @@
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		11.2.	USERPOPOUT						---- */
+/* ----		12.2.	USERPOPOUT						---- */
 
 .headerPlaying-j0WQBV {
 	background: rgb(var(--vaccentcolor));
@@ -1506,20 +1514,20 @@
 	background: #593695;
 }
 
-/* ----		11.3.	EMOJIPICKER						---- */
+/* ----		12.3.	EMOJIPICKER						---- */
 
 
 .emojiPicker-3m1S-j .categories-1feg4n .selected-39BZ4S {	/* emojipicker			selected category					*/
 	border-bottom-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		11.4.	PINS/MENTIONS					---- */
+/* ----		12.4.	PINS/MENTIONS					---- */
 
 .hasMoreButton-1MELpI {										/* popout				hasmore button						*/
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		11.5.	SEARCHPOPOUT					---- */
+/* ----		12.5.	SEARCHPOPOUT					---- */
 
 															/* datepicker			day hover							*/
 #app-mount .calendarPicker-2yf6Ci .react-datepicker__day.react-datepicker__day--selected:hover,
@@ -1536,7 +1544,7 @@
 }
 
 
-/* ~~~~		12.		GENERAL							~~~~ */
+/* ~~~~		13.		GENERAL							~~~~ */
 
 .wanderingCubesItem-WPXqao {								/* loading				cubes								*/
 	background-color: rgb(var(--vaccentcolor));
@@ -1550,7 +1558,7 @@
 	stroke: rgb(var(--vaccentcolor));
 }
 
-/* ----		12.1.	TEXT							---- */
+/* ----		13.1.	TEXT							---- */
 
 .brand-2-tkdo {
 	color: rgb(var(--vaccentcolor));
@@ -1562,7 +1570,7 @@
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		12.2.	BUTTONS							---- */
+/* ----		13.2.	BUTTONS							---- */
 
 #app-mount .lookInverted-2D7oAl.colorBrand-3pXr91 .spinnerItem-3GlVyU,
 #app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91 .spinnerItem-3GlVyU,
@@ -1637,7 +1645,7 @@
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		12.3.	INPUTS							---- */
+/* ----		13.3.	INPUTS							---- */
 
 .input-cIJ7To.focused-1mmYsC,								/* textinput			focused								*/
 .input-cIJ7To:focus {
@@ -1721,7 +1729,7 @@
 	border-color: rgb(var(--vaccentcolor)) rgb(var(--vaccentcolor)) rgba(0, 0, 0, 0.3);
 }
 
-/* ----		12.4.	TAGS							---- */
+/* ----		13.4.	TAGS							---- */
 
 .botTagRegular-2HEhHi {										/* bottag				regular								*/
 	background-color: rgb(var(--vaccentcolor));
@@ -1740,7 +1748,7 @@
 	filter: brightness(75%);
 }
 
-/* ----		12.5.	ICONS							---- */
+/* ----		13.5.	ICONS							---- */
 
 
 [style*="/assets/6debd47ed13483642cf09e832ed0bc1b.png"],	/* blue no pfp icon											*/
@@ -1825,7 +1833,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 	background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNjAiIGhlaWdodD0iMjgwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIHN0cm9rZT0iIzIzMUYxRiIgc3Ryb2tlLXdpZHRoPSI2IiBkPSJNNzMuNTA2MiAzNC42NTE3czUuMzg1IDMwLjY5MyAzNi44NTYgMjcuNTQyYzMwLjE0NC0zLjAxNyA2MC4zOC0xMC41NzQgOTQuMTQ0LTEwLjU0MiAyOCAuMDI3IDU3Ljc0MiAxMS40MDMgNjAuNjc3LTguMzgzIDIuNjI1LTE3LjY5Ni0xMC4yNzItMzUuMjY5LTQ2LjIyNi0zNS4yNjlzLTg1LjExNSAxNS40ODQtMTA2LjM5NCAxOS43ODVjLTIxLjI3OCA0LjMwMS0zOS4wNTcgNi44NjctMzkuMDU3IDYuODY3eiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2UtZGFzaGFycmF5PSIyNjAgMjkiLz48cGF0aCBzdHJva2U9IiMyMzFGMUYiIHN0cm9rZS13aWR0aD0iNiIgZD0iTTEyNy4yMzg3IDExNS44NDAzbDIuMjAxLTEwLjI1MXMtMTUuODM3LTQuMy04LjgwNS0yMC41MDFjNS44NzItMTMuNTI2IDQ1LjQ5My0xNS43NyA1OC43LTcuMDk2IDEzLjIwOCA4LjY3MyAxMy45NDEgMjEuMjg5IDEzLjk0MSAyMS4yODlzMTA3LjEyOC0xOC4xMzUgMTE4LjEzNCAxOC45MjVjMTEuMDA2IDM3LjA1OS0yNy4xNDkgMjIuMDc4LTU0LjI5OCAyMi4wNzgtMjcuMTQ4IDAtNDQuMDI0IDMuOTQyLTQ0LjAyNCAzLjk0MnM1MC42MjggMTguOTI1IDgyLjkxMyAzOS40MjYgNzAuODQ2IDQ3LjU5NCA0Ny42OTQgNzcuMjc0Yy0yMy4xODggMjkuNzI1LTU0LjU4LTIuNDEtOTYuMTIxLTMwLjc1Mi01Mi4wNjctMzUuNTIzLTc0LjA2Ny00Ny41MjMtNzQuMDY3LTQ3LjUyM3MtMTkgNDEtNDUgNjYuMjI2Yy0zNS4xNDkgMzQuMS05MC43ODUgMjkuMzk2LTExOS40MDItMjQuMjIzIDAgMCAzMi41MzIuMTMzIDU1Ljc2NS0xNC45ODEgMjUuNjM3LTE2LjY3NyA0Mi41NTgtNDEuNzkxIDQyLjU1OC00MS43OTFzLTUzLjU2NCAyOS45NjMtODAuNzEzIDEwLjI1Yy0yNy4xNDgtMTkuNzEyLTIxLjI3OC0yNy41OTgtNC40MDItMzEuNTQgMTQuNS0zLjM4OCAxMDQuOTI2LTMwLjc1MiAxMDQuOTI2LTMwLjc1MnoiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWRhc2hhcnJheT0iNTEwIDIwIi8+PHBhdGggZmlsbD0iIzM2MzkzRSIgZD0iTTEyNy4yMzg3IDExNS44NDAzbC01LjczMiAxNi45NzYiLz48cGF0aCBzdHJva2U9IiMyMzFGMUYiIHN0cm9rZS13aWR0aD0iNiIgZD0iTTEyNy4yMzg3IDExNS44NDAzbC01LjczMiAxNi45NzYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWRhc2hhcnJheT0iNTAwIDIwIi8+PHBhdGggc3Ryb2tlPSIjMjMxRjFGIiBzdHJva2Utd2lkdGg9IjYiIGQ9Ik0xNzcuNTA2MiAxNzEuNzI3MnM2LTEyLjA0NSAxMS0zMS4zODgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWRhc2hhcnJheT0iMjMgMTAiLz48cGF0aCBmaWxsPSIjMzYzOTNFIiBkPSJNMjEzLjA4NzMgMTQ0LjIyNjdsLTYuNTgxIDEuNDg1Ii8+PHBhdGggc3Ryb2tlPSIjMjMxRjFGIiBzdHJva2Utd2lkdGg9IjYiIGQ9Ik0yMTMuMDg3MyAxNDQuMjI2N2wtNi41ODEgMS40ODUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWRhc2hhcnJheT0iNTAwIDIwIi8+PHBhdGggZD0iTTAgMGgzNjB2MjgwSDB6Ii8+PC9nPjwvc3ZnPg==') center/contain no-repeat !important;
 }
 
-/* ----		12.6.	SCROLLBARS						---- */
+/* ----		13.6.	SCROLLBARS						---- */
 
 .scrollerThemed-2oenus.themeLight-1_DWyY .scrollbar-2rkZSL .thumb-2JwNFC,
 .theme-dark .scrollerThemed-2oenus.themeLight-1_DWyY .scrollbar-2rkZSL .thumb-2JwNFC,
@@ -1835,7 +1843,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 	background-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		12.7.	NOTIFICATIONBAR					---- */
+/* ----		13.7.	NOTIFICATIONBAR					---- */
 
 .noticePremiumTier1-3Zywvl {
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.7));
@@ -1856,7 +1864,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		12.8.	TOOLTIPS						---- */
+/* ----		13.8.	TOOLTIPS						---- */
 
 #app-mount .tooltipBrand-g03Nz8 {
 	background-color: rgb(var(--vaccentcolor));
@@ -1875,14 +1883,14 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 	border-top-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		12.9.	TOASTS							---- */
+/* ----		13.9.	TOASTS							---- */
 
 .toast-brand {
 	background-color: rgb(var(--vaccentcolor));
 }
 
 
-/* ~~~~		13.		BDSUPPORT						~~~~ */
+/* ~~~~		14.		BDSUPPORT						~~~~ */
 
 #bd-pub-button {
 	color: var(--text-normal);
@@ -1972,49 +1980,48 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 }
 
 
-
-/* ~~~~		14.		POWERCORDSUPPORT				~~~~ */
+/* ~~~~		16.		POWERCORDSUPPORT				~~~~ */
 
 .powercord-toast .progressBar-3u8FBM {
 	background-color: rgb(var(--vaccentcolor));
 }
 
 
-/* ~~~~		15.		PLUGINSUPPORT					~~~~ */
+/* ~~~~		16.		PLUGINSUPPORT					~~~~ */
 
-/* ----		15.1.	IMAGEZOOM						---- */
+/* ----		16.1.	IMAGEZOOM						---- */
 
 .zoomLense-uOK8xV {
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
 
-/* ----		15.2.	HIDEUTILS						---- */
+/* ----		16.2.	HIDEUTILS						---- */
 
 #HideUtils-Settings button {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 
-/* ----		15.3.	READALLNOTIFICATIONSBUTTON		---- */
+/* ----		16.3.	READALLNOTIFICATIONSBUTTON		---- */
 
 .wrapper-1BJsBx:active .childWrapper-anI2G9.button-Jt-tIg{
 	background: var(--vaccentcolor-hover);
 	color: rgb(var(--fontwhite1, var(--dfontwhite1)));
 }
 
-/* ----		15.4.	SERVERSEARCH					---- */
+/* ----		16.4.	SERVERSEARCH					---- */
 
 #server-search .wrapper-25eVIn {
 	background-color: rgb(47, 49, 54) !important;
-	transition: background-color .15s ease-out;
+	transition: background-color .16s ease-out;
 }
 #server-search .wrapper-25eVIn:hover {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 
 
-/* ~~~~		16.		THEMESUPPORT					~~~~ */
+/* ~~~~		17.		THEMESUPPORT					~~~~ */
 
-/* ----		16.1.	THEMEDEVBADGE					---- */
+/* ----		17.1.	THEMEDEVBADGE					---- */
 
 #app-mount .dev-A7f2Rx.hasBadge-4rT8_u .badge-7R_W3s {
 	background: rgb(var(--vaccentcolor)) !important;
