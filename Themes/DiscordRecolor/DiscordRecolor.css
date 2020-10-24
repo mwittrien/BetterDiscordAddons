@@ -4025,13 +4025,15 @@ html .channelTabs-tabContainer,
 html .channelTabs-favContainer {
 	display: flex;
 	align-items: center;
-	min-height: unset;
-	height: 28px;
+	flex-wrap: wrap;
+	min-height: 28px;
+	height: unset;
 	overflow: hidden;
 	transition: height 0.3s linear;
 }
 html .channelTabs-tabContainer {
 	background-color: var(--background-secondary-alt);
+	border-bottom: 3px solid var(--background-tertiary);
 	padding-top: 6px;
 	padding-left: 4px;
 }
@@ -4041,9 +4043,9 @@ html .channelTabs-favContainer {
 	padding-bottom: 3px;
 	padding-left: 2px;
 }
-html .channelTabs-favContainer:empty {
-	height: 0;
-	padding: 0;
+html .channelTabs-noFavs {
+	background: transparent;
+	padding: 0 6px;
 }
 
 html .channelTabs-tab,

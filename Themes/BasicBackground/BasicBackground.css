@@ -7417,8 +7417,9 @@ html .channelTabs-tabContainer,
 html .channelTabs-favContainer {
 	display: flex;
 	align-items: center;
-	min-height: unset;
-	height: 28px;
+	flex-wrap: wrap;
+	min-height: 28px;
+	height: unset;
 	overflow: hidden;
 	transition: height 0.3s linear;
 }
@@ -7432,9 +7433,9 @@ html .channelTabs-favContainer {
 	padding-top: 3px;
 	padding-bottom: 3px;
 }
-html .channelTabs-favContainer:empty {
-	height: 0;
-	padding: 0;
+html .channelTabs-noFavs {
+	background: transparent;
+	padding: 0 6px;
 }
 
 html .channelTabs-tab,
