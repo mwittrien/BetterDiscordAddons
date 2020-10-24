@@ -18,7 +18,7 @@ module.exports = (_ => {
 		},
 		"changeLog": {
 			"fixed": {
-				"BD Beta": "Fixed start up error in plugin lit"
+				"BD Beta": "Fixed start up error in plugin list"
 			}
 		}
 	};

@@ -13,8 +13,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.0.7",
+			"version": "2.0.9",
 			"description": "Allow you to look at all plugins from the plugin repo and download them on the fly"
+		},
+		"changeLog": {
+			"fixed": {
+				"BD Beta": "Fixed some issues with the beta"
+			}
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -558,7 +563,7 @@ module.exports = (_ => {
 
 			onUserSettingsCogContextMenu (e) {
 				BDFDB.TimeUtils.timeout(_ => {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["label", "BandagedBD"]]});
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["label", ["BandagedBD", "BetterDiscord"]]]});
 					if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: "Plugin Repo",
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "repo"),
