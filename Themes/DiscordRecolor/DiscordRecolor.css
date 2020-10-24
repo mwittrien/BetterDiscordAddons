@@ -3808,6 +3808,9 @@ html .bd-select-wrapper .bd-label {
 html .bd-select {
 	color: var(--interactive-normal);
 }
+html .bd-select.bd-select-transparent {
+	align-items: center;
+}
 html .bd-select-arrow {
 	fill: var(--interactive-normal);
 }
