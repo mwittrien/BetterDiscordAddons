@@ -13,12 +13,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeSettings",
 			"author": "DevilBro",
-			"version": "1.2.2",
+			"version": "1.2.3",
 			"description": "Allow you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page"
 		},
 		"changeLog": {
 			"fixed": {
-				"Switch Fix": "Works again"
+				"BD Beta": "Fixed start up error in plugin lit"
 			}
 		}
 	};
@@ -76,7 +76,7 @@ module.exports = (_ => {
 			appendSettingsButton (card) {
 				if (card.querySelector(".theme-settings-button")) return;
 				let addon = BDFDB.ObjectUtils.get(BDFDB.ReactUtils.getInstance(card), "return.stateNode.props.addon");
-				if (addon && !addon.plugin) {
+				if (addon && !addon.plugin && !addon.instance && addon.css) {
 					let vars = this.getThemeVars(addon.css);
 					if (vars.length) {
 						let footer = card.querySelector("." + BDFDB.dotCN._repofooter.split(".").filter(n => n).join(",."));
