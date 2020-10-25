@@ -13,7 +13,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterFriendList",
 			"author": "DevilBro",
-			"version": "1.2.9",
+			"version": "1.3.0",
 			"description": "Add extra controls to the friends page, like sort by name/status, search and all/request/blocked amount"
 		}
 	};
@@ -74,10 +74,12 @@ module.exports = (_ => {
 				this.patchedModules = {
 					before: {
 						PeopleListSectionedLazy: "default",
+						PeopleListSectionedNonLazy: "default"
 					},
 					after: {
 						TabBar: "render",
 						PeopleListSectionedLazy: "default",
+						PeopleListSectionedNonLazy: "default",
 						FriendRow: "render",
 						PendingRow: "default",
 						BlockedRow: "render",
@@ -265,6 +267,10 @@ module.exports = (_ => {
 						].flat(10).filter(n => n)
 					});
 				};
+			}
+			
+			processPeopleListSectionedNonLazy (e) {
+				this.processPeopleListSectionedLazy(e);
 			}
 			
 			processFriendRow (e) {
