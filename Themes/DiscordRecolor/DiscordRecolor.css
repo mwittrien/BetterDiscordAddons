@@ -4074,11 +4074,13 @@ html .channelTabs-selected,
 html .channelTabs-fav:active {
 	background-color: var(--background-tertiary);
 	color: var(--interactive-active);
-	z-index: 2;
+	z-index: 2 !important;
 }
 html .channelTabs-tab > *,
 html .channelTabs-fav > * {
-	z-index: 3;
+	position: static !important;
+	transform: unset !important;
+	z-index: 3 !important;
 }
 html .channelTabs-tab::before,
 html .channelTabs-tab::after {
@@ -4110,28 +4112,29 @@ html .channelTabs-selected::before {
 }
 html .channelTabs-tabIcon,
 html .channelTabs-favIcon {
-	position: static;
-	margin-right: 6px;
+	margin-right: 6px !important;
 }
 html .channelTabs-tabName,
 html .channelTabs-favName {
+	margin: 0 !important;
 	font-size: 16px;
 	line-height: 20px;
 	font-weight: 500;
 	white-space: nowrap;
 }
-html .channelTabs-tabIcon ~ .channelTabs-tabName,
-html .channelTabs-favIcon ~ .channelTabs-favName {
-	margin: 0;
+html .channelTabs-tab .channelTabs-tabName ~ *,
+html .channelTabs-fav .channelTabs-favName ~ * {
+	margin: 0 0 0 4px !important;
 }
 html .channelTabs-closeTab,
 html .channelTabs-selected .channelTabs-closeTab {
-	position: static;
 	background-color: transparent;
 	color: var(--interactive-hover);
 	border-radius: 50%;
 	width: 14px;
 	height: 14px;
+	min-width: 14px;
+	min-height: 14px;
 	font-size: 14px;
 	line-height: unset;
 }
