@@ -2021,7 +2021,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 
 /* ----		16.5.	CHANNELTABS						---- */
 
-.channelTabs-unreadBadge {
+.channelTabs-unreadBadge:not(.channelTabs-noUnread) {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 
