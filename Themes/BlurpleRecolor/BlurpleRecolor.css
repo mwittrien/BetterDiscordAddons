@@ -80,6 +80,7 @@
 		2.	HIDEUTILS
 		3.	READALLNOTIFICATIONSBUTTON
 		4.	SERVERSEARCH
+		5.	CHANNELTABS
 	17.	THEMESUPPORT
 		1.	THEMEDEVBADGE
 */
@@ -2015,6 +2016,12 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 	transition: background-color .16s ease-out;
 }
 #server-search .wrapper-25eVIn:hover {
+	background-color: rgb(var(--vaccentcolor)) !important;
+}
+
+/* ----		16.5.	CHANNELTABS						---- */
+
+.channelTabs-unreadBadge {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 
