@@ -1004,6 +1004,17 @@
 	background: rgb(var(--vaccentcolor)) !important;
 }
 
+@-webkit-keyframes pulseBorder-1LZYy9 { 					/* intergrationsettings	new webhook							*/
+	0% {border-color: transparent;}
+	50% {border-color: rgb(var(--vaccentcolor));}
+	to {border-color: transparent;}
+}
+@keyframes pulseBorder-1LZYy9 { 
+	0% {border-color: transparent;}
+	50% {border-color: rgb(var(--vaccentcolor));}
+	to {border-color: transparent;}
+}
+
 
 /* ~~~~		11.		MODALS							~~~~ */
 
