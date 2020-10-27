@@ -414,15 +414,20 @@
 	color: rgb(var(--vaccentcolor));
 }
 
-.localBot-GrCgVt {											/* localbot				container							*/
+.localBot-GrCgVt,											/* localbot				container							*/
+.replying-1x3H0T {											/* replying				container							*/
 	background-color: rgba(var(--vaccentcolor), 0.05);
 }
-.localBot-GrCgVt::before {									/* localbot				before								*/
+.localBot-GrCgVt::before,									/* localbot				before								*/
+.replying-1x3H0T::before {									/* replying				before								*/
 	background-color: rgb(var(--vaccentcolor));
 }
 .message-2qnXI6.localBot-GrCgVt.selected-2P5D_Z,
 .mouse-mode.full-motion .localBot-GrCgVt:hover,
-.mouse-mode .localBot-GrCgVt:hover {
+.mouse-mode .localBot-GrCgVt:hover,
+.message-2qnXI6.replying-1x3H0T.selected-2P5D_Z,
+.mouse-mode.full-motion .replying-1x3H0T:hover,
+.mouse-mode .replying-1x3H0T:hover {
 	background-color: rgba(var(--vaccentcolor), 0.1);
 }
 

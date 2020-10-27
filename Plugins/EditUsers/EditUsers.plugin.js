@@ -13,15 +13,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.0.0",
+			"version": "4.0.1",
 			"description": "Allow you to change the icon, name, tag and color of users"
 		},
 		"changeLog": {
 			"improved": {
-				"Message Color Gradient": "Color Gradient now also works for messages, kinda"
-			},
-			"fixed": {
-				"Message Color Gradient": "Fixed issue where some message components lost their text color when a gradient is used"
+				"Inline Replies": "Works already for the yet to be released inline replies"
 			}
 		}
 	};
@@ -102,6 +99,7 @@ module.exports = (_ => {
 						Message: "default",
 						MessageContent: "type",
 						Reactor: "render",
+						ChannelReply: "default",
 						MemberListItem: "render",
 						AuditLog: "render",
 						GuildSettingsEmoji: "render",
@@ -134,6 +132,7 @@ module.exports = (_ => {
 						Reaction: "render",
 						Reactor: "render",
 						Mention: "default",
+						ChannelReply: "default",
 						MemberListItem: "render",
 						UserHook: "render",
 						InvitationCard: "render",
@@ -558,6 +557,18 @@ module.exports = (_ => {
 							}
 						}
 					}
+					let repliedMessage = e.instance.props.childrenRepliedMessage;
+					if (repliedMessage && repliedMessage.props && repliedMessage.props.children && repliedMessage.props.children.props && repliedMessage.props.children.props.referencedMessage && repliedMessage.props.children.props.referencedMessage.message) {
+						let referenceMessage = repliedMessage.props.children.props.referencedMessage.message;
+						let data = changedUsers[referenceMessage.author.id];
+						if (data) {
+							let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(referenceMessage.channel_id) || {}).guild_id, header.props.message.author.id) || {}).colorString || data.color1;
+							let message = new BDFDB.DiscordObjects.Message(Object.assign({}, referenceMessage, {author: this.getUserData(referenceMessage.author.id)}));
+							if (data.name) message.nick = data.name;
+							if (color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
+							repliedMessage.props.children.props.referencedMessage = Object.assign({}, repliedMessage.props.children.props.referencedMessage, {message: message});
+						}
+					}
 				}
 			}
 			
@@ -684,6 +695,25 @@ module.exports = (_ => {
 				}
 			}
 
+			processChannelReply (e) {
+				if (e.instance.props.reply && e.instance.props.reply.message && settings.changeInChatWindow) {
+					if (!e.returnvalue) {
+						let message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.reply.message, {author: this.getUserData(e.instance.props.reply.message.author.id)}));
+						let data = changedUsers[e.instance.props.reply.message.author.id];
+						if (data) {
+							let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.reply.message.channel_id) || {}).guild_id, e.instance.props.reply.message.author.id) || {}).colorString || data.color1;
+							if (data.name) message.nick = data.name;
+							if (color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
+						}
+						e.instance.props.reply = Object.assign({}, e.instance.props.reply, {message: message});
+					}
+					else {
+						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.messagereplyname]]});
+						if (userName) this.changeUserColor(userName, e.instance.props.reply.message.author.id);
+					}
+				}
+			}
+			
 			processMemberListItem (e) {
 				if (e.instance.props.user && settings.changeInMemberList) {
 					if (!e.returnvalue) {
