@@ -1862,23 +1862,29 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 
 /* ----		13.7.	NOTIFICATIONBAR					---- */
 
-.noticePremiumTier1-3Zywvl {
+.colorPremiumTier1-3D7SPt {
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.7));
 }
-.noticePremiumTier1-3Zywvl .button-1MICoQ:hover {
+.colorPremiumTier1-3D7SPt .button-2DhvE9:hover {
 	color: rgb(var(--vaccentcolor));
 }
-.noticePremiumTier2-s9Txmq {
+.colorPremiumTier2-dCdap5 {
 	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
 }
-.noticePremiumTier2-s9Txmq .button-1MICoQ:hover {
+.colorPremiumTier2-dCdap5 .button-2DhvE9:hover {
 	color: rgb(var(--vaccentcolor));
 }
-.noticeBrand-3nQBC_ {
+.colorBrand-2zeG8h {
 	background-color: rgb(var(--vaccentcolor));
 }
-.noticeBrand-3nQBC_ .button-1MICoQ:hover {
+.colorBrand-2zeG8h .button-2DhvE9:hover {
 	color: rgb(var(--vaccentcolor));
+}
+.notice-1tZwqv {
+	background: #000000 linear-gradient(90deg, rgba(var(--vaccentcolor), 0.5), rgba(var(--vaccentcolor), 0.5));
+}
+.button-3Ijpww:hover {
+	background-color: rgb(var(--vaccentcolor));
 }
 
 /* ----		13.8.	TOOLTIPS						---- */
