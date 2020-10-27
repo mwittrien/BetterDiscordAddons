@@ -3952,7 +3952,8 @@ html .floating-window-content {
 	background: var(--background-tertiary);
 	color: var(--header-primary);
 }
-html #bd-editor-controls {
+html #bd-editor-controls,
+html .floating-window #bd-editor-controls {
 	box-shadow: unset;
 	height: 32px;
 	padding: 0;
@@ -3960,7 +3961,7 @@ html #bd-editor-controls {
 html #bd-editor-panel #bd-editor-controls {
 	background: var(--background-primary);
 }
-html .floating-window #bd-editor-controls {
+html .floating-window #bd-editor-panel #bd-editor-controls {
 	background: var(--background-tertiary);
 }
 html .controls-section,
