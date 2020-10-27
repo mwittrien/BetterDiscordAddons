@@ -811,6 +811,7 @@
 		"MessageOperations": {"props": ["operations"], "length": 1},
 		"MessageReactions": {"props": ["reactions", "reactionMe"]},
 		"MessageReactionsModal": {"props": ["reactor", "reactionSelected"]},
+		"MessageReplies": {"props": ["container", "text", "closeButton"]},
 		"MessageSystem": {"props": ["container", "actionAnchor"]},
 		"MessageToolbar": {"props": ["container", "icon", "isHeader"]},
 		"MessageToolbarItems": {"props": ["wrapper", "button", "separator"]},
