@@ -916,6 +916,10 @@ html {
 
 /* ----		3.1.	CHANNELHEADER					---- */
 
+#app-mount .container-1r6BKw.themed-ANHk51 {
+	box-shadow: var(--elevation-low);
+}
+
 #app-mount .children-19S4PO::after {
 	background: linear-gradient(90deg,transparent 0,var(--background-primary));
 }
@@ -934,6 +938,10 @@ html {
 }
 
 /* ----		3.2.	MESSAGES						---- */
+
+.content-yTz4x3::before {
+	display: none;
+}
 
 #app-mount .noResultIcon-1bkvDZ {
 	background-image: url(https://discordapp.com/assets/1eed0d895df6e35f164d8ed5e84037d2.svg);
