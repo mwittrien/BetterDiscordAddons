@@ -597,7 +597,7 @@ module.exports = (_ => {
 								if (color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
 							}
 							e.instance.props.message = message;
-							e.instance.props.children.props.message = e.instance.props.message;
+							if (e.instance.props.children) e.instance.props.children.props.message = e.instance.props.message;
 						}
 					}
 					else {

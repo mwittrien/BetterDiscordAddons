@@ -877,14 +877,22 @@ body::before {
 #app-mount .avatar-1BDn8e,									/* message				container avatar					*/
 #app-mount .avatar-2daVqv {									/* message				loading avatar						*/
 	position: absolute;
-	top: 4px;
+	top: 2px;
 	left: calc(-70px * var(--vusechatbubbles) + 16px);
+}
+#app-mount .repliedMessage-VokQwo ~ * .avatar-1BDn8e {
+	top: 24px;
 }
 .container-3FojY8 .avatar-1BDn8e {
 	left: calc(-10px * var(--vusechatbubbles));
 }
+#app-mount .repliedMessage-VokQwo .replySpine-M8CUPF {
+	top: calc((8px * var(--vusechatbubbles)) + ((1 - var(--vusechatbubbles)) * (var(--line-height)/2 + 2px)));
+	left: calc((-35px * var(--vusechatbubbles)) + ((1 - var(--vusechatbubbles)) * (var(--gutter) + var(--avatar-size)/2 - 1px)));
+	border-color: rgba(var(--vtransparencycolor), 0.5);
+}
 .cozy-3raOZG .header-23xsNx::after,							/* message				container header					*/
-.cozy-12kSNU .header-1oLBbW::after {							/* message				loading header						*/
+.cozy-12kSNU .header-1oLBbW::after {						/* message				loading header						*/
 	content: "";
 	position: absolute;
 	top: 12px;
@@ -1219,6 +1227,12 @@ body::before {
 .channelTextArea-rNsIhG {									/* textarea				channeltextarea						*/
 	background-color: transparent;
 	border-top-color: rgba(var(--fontwhite1), 0.1);
+}
+
+.container-2fRDfG {											/* textarea				reply								*/
+	background: rgba(var(--vtransparencycolor), 0.3);
+	border: none;
+	border-bottom: 1px solid rgba(var(--fontwhite1), 0.1);
 }
 
 .scrollableContainer-2NUZem {								/* textarea				container							*/
