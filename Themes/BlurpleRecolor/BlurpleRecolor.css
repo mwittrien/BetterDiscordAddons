@@ -1020,6 +1020,10 @@
 	to {border-color: transparent;}
 }
 
+.defaultIcon-2NMkWn {										/* discoverysettings	default guildicon					*/
+	background-color: rgb(var(--vaccentcolor));
+}
+
 
 /* ~~~~		11.		MODALS							~~~~ */
 
