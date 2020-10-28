@@ -98,7 +98,7 @@ module.exports = (_ => {
 						Account: "render",
 						Message: "default",
 						MessageContent: "type",
-						Reactor: "render",
+						ReactorsComponent: "renders",
 						ChannelReply: "default",
 						MemberListItem: "render",
 						AuditLog: "render",
@@ -130,7 +130,6 @@ module.exports = (_ => {
 						MessageUsername: "default",
 						MessageContent: "type",
 						Reaction: "render",
-						Reactor: "render",
 						Mention: "default",
 						ChannelReply: "default",
 						MemberListItem: "render",
@@ -626,7 +625,6 @@ module.exports = (_ => {
 			}
 			
 			processReaction (e) {
-				if (!settings.changeInReactions) return;
 				if (e.instance.props.reactions) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id);
 					let guildId = null == channel || channel.isPrivate() ? null : channel.getGuildId();
@@ -651,16 +649,10 @@ module.exports = (_ => {
 				});
 			}
 			
-			processReactor (e) {
-				if (e.instance.props.user && settings.changeInReactions) {
-					if (!e.returnvalue) e.instance.props.user = this.getUserData(e.instance.props.user.id, true, !!BDFDB.LibraryModules.MemberStore.getNick(e.instance.props.guildId, e.instance.props.user.id));
-					else {
-						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.messagereactionsmodalnickname]]});
-						if (userName) {
-							if (changedUsers[e.instance.props.user.id] && changedUsers[e.instance.props.user.id].name) userName.props.children = changedUsers[e.instance.props.user.id].name;
-							this.changeUserColor(userName, e.instance.props.user.id);
-						}
-					}
+			processReactorsComponent (e) {
+				if (settings.changeInReactions && BDFDB.ArrayUtils.is(e.instance.props.reactors)) {
+					e.instance.props.reactors = [].concat(e.instance.props.reactors);
+					for (let i in e.instance.props.reactors) e.instance.props.reactors[i] = this.getUserData(e.instance.props.reactors[i].id);
 				}
 			}
 			
