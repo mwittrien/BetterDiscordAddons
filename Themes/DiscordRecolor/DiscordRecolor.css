@@ -195,6 +195,22 @@ html {
 [fill="#72767D"] {
 	fill: var(--text-muted) !important;
 }
+[style*="stroke: rgb(79, 84, 92)"],
+[style*="stroke: #4f545c"],
+[style*="stroke: #4F545C"],
+[stroke="rgb(79, 84, 92)"],
+[stroke="#4f545c"],
+[stroke="#4F545C"] {
+	stroke: var(--interactive-muted) !important;
+}
+[style*="fill: rgb(79, 84, 92)"],
+[style*="fill: #4f545c"],
+[style*="fill: #4F545C"],
+[fill="rgb(79, 84, 92)"],
+[fill="#4f545c"],
+[fill="#4F545C"] {
+	fill: var(--interactive-muted) !important;
+}
 
 ::selection {
 	background: rgb(var(--vmentioncolor));
