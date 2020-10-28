@@ -2375,6 +2375,7 @@
 		"unreadbartext": ["UnreadBar", "text"],
 		"unreadbarunread": ["UnreadBar", "unread"],
 		"uploadmodal": ["UploadModal", "uploadModal"],
+		"userbadges": ["UserBadges", "container"],
 		"userbadgescolored": ["UserBadges", "colored"],
 		"userinfo": ["UserInfo", "userInfo"],
 		"userinfoavatar": ["UserInfo", "avatar"],

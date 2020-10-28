@@ -52,11 +52,10 @@
 		6.	LOGINSCREEN
 		7.	DOWNLOADAPPMODAL
 		8.	GUILDBOOSTMODAL
-		9.	NEWUSERMODAL
-		10.	STREAMSETTINGSMODAL
-		11.	DISPATCHERRORMODAL
-		12.	CHANGELOGMODAL
-		13.	SCREENSHAREMODAL
+		9.	STREAMSETTINGSMODAL
+		10.	DISPATCHERRORMODAL
+		11.	CHANGELOGMODAL
+		12.	SCREENSHAREMODAL
 	12.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -1353,44 +1352,7 @@
 	filter: brightness(150%);
 }
 
-/* ----		11.9.	NEWUSERMODAL					---- */
-
-.form-236Xmo header {
-	color: rgb(var(--vaccentcolor));
-}
-.form-236Xmo .controlGroup-2GQ-D1 label a,
-.form-236Xmo .controlGroup-2GQ-D1 label a:hover {
-	color: rgb(var(--vaccentcolor));
-}
-.form-236Xmo .controlGroup-2GQ-D1 label a:hover {
-	filter: brightness(120%);
-}
-.form-236Xmo .controlGroup-2GQ-D1 input[type=email]:focus,
-.form-236Xmo .controlGroup-2GQ-D1 input[type=number]:focus,
-.form-236Xmo .controlGroup-2GQ-D1 input[type=password]:focus,
-.form-236Xmo .controlGroup-2GQ-D1 input[type=text]:focus,
-.form-236Xmo .controlGroup-2GQ-D1 textarea:focus {
-	border-color: rgb(var(--vaccentcolor));
-}
-.form-236Xmo .btnPrimary-346kfV {
-	background-color: rgb(var(--vaccentcolor));
-}
-.form-236Xmo .btnPrimary-346kfV:hover {
-	background: var(--vaccentcolor-hover);
-}
-.modalNewUser-3IRw8L h5 {
-	color: rgb(var(--vaccentcolor));
-}
-.modalNewUser-3IRw8L .stepsWrap-3bDM3D .steps-370EKx li.on-1OjN9V,
-.modalNewUser-3IRw8L .stepsWrap-3bDM3D .steps-370EKx li.on-1OjN9V + .divider-3Ozccb,
-.modalNewUser-3IRw8L .stepsWrap-3bDM3D .steps-370EKx li.on-1OjN9V::before {
-	background-color: rgb(var(--vaccentcolor));
-}
-.modalNewUser-3IRw8L .stepsWrap-3bDM3D .steps-370EKx li.active-yTwIO8 {
-	background-color: rgb(var(--vaccentcolor));
-}
-
-/* ----		11.10.	STREAMSETTINGSMODAL				---- */
+/* ----		11.9.	STREAMSETTINGSMODAL				---- */
 
 .selectorButtonSelected-336oUc,								/* modal				selectorselectedbutton				*/
 .selectorButtonSelected-1j4DmC {
@@ -1409,13 +1371,13 @@
 	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor));
 }
 
-/* ----		11.11.	DISPATCHERRORMODAL				---- */
+/* ----		11.10.	DISPATCHERRORMODAL				---- */
 
 .theme-light .closeLink-2MRAUp {							/* modal				closelink							*/
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		11.12.	CHANGELOGMODAL					---- */
+/* ----		11.11.	CHANGELOGMODAL					---- */
 
 .content-s2SEQO a {											/* modal				link								*/
 	color: var(--text-link);
@@ -1431,7 +1393,7 @@
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
 }
 
-/* ----		11.13.	SCREENSHAREMODAL				---- */
+/* ----		11.12.	SCREENSHAREMODAL				---- */
 
 .tile-2w4k5N:hover .sourceThumbnail-27dolk {
 	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor));

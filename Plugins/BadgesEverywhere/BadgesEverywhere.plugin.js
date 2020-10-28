@@ -422,7 +422,7 @@ module.exports = (_ => {
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._badgeseverywherebadges, BDFDB.disCN[`_badgeseverywherebadges${type}`], miniTypes.includes(type) && BDFDB.disCN._badgeseverywheremini), 
 					children: BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._badgeseverywherebadgesinner, !uncolored && BDFDB.disCN.userbadgescolored),
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._badgeseverywherebadgesinner, BDFDB.disCN.userbadges, !uncolored && BDFDB.disCN.userbadgescolored),
 						children: renderedBadges
 					})
 				});

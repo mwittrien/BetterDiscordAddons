@@ -4132,49 +4132,49 @@ html .ace_scrollbar.ace_scrollbar-h::-webkit-scrollbar-track {
 	background-color: var(--background-secondary-alt);
 }
 
-body .ace_closeButton {
+html .ace_closeButton {
 	display: none;
 }
-body #ace_settingsmenu {
+html #ace_settingsmenu {
 	background: var(--background-primary);
 	box-shadow: -5px 4px 5px rgba(var(--backgroundtertiary), 0.55);
 	color: var(--header-primary);
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
-body #ace_settingsmenu::-webkit-scrollbar {
+html #ace_settingsmenu::-webkit-scrollbar {
 	width: 16px;
 }
-body #ace_settingsmenu::-webkit-scrollbar-thumb {
+html #ace_settingsmenu::-webkit-scrollbar-thumb {
 	background-color: var(--background-secondary-alt);
 	min-height: 40px;
 }
-body #ace_settingsmenu::-webkit-scrollbar-thumb,
-body #ace_settingsmenu::-webkit-scrollbar-track {
+html #ace_settingsmenu::-webkit-scrollbar-thumb,
+html #ace_settingsmenu::-webkit-scrollbar-track {
 	border: 4px solid transparent;
 	background-clip: padding-box;
 	border-radius: 8px;
 }
-body #ace_settingsmenu::-webkit-scrollbar-track {
+html #ace_settingsmenu::-webkit-scrollbar-track {
 	background-color: var(--background-secondary);
 }
-body #ace_settingsmenu .ace_optionsMenuEntry {
+html #ace_settingsmenu .ace_optionsMenuEntry {
 	height: 40px;
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
 	margin-bottom: 10px;
 }
-body #ace_settingsmenu .ace_optionsMenuEntry:hover {
+html #ace_settingsmenu .ace_optionsMenuEntry:hover {
 	background: transparent;
 }
-body #ace_settingsmenu .ace_optionsMenuEntry + div:not([class]) {
+html #ace_settingsmenu .ace_optionsMenuEntry + div:not([class]) {
 	float: right;
 	color: var(--text-muted);
 	padding-right: 0 !important;
 	padding-bottom: 0 !important;
 }
-body #ace_settingsmenu .ace_optionsMenuEntry label {
+html #ace_settingsmenu .ace_optionsMenuEntry label {
 	flex: 1 0 auto;
 	color: var(--header-primary);
 	margin-right: 16px;
@@ -4183,7 +4183,7 @@ body #ace_settingsmenu .ace_optionsMenuEntry label {
 	line-height: 24px;
 	cursor: pointer;
 }
-body #ace_settingsmenu .ace_optionsMenuEntry button {
+html #ace_settingsmenu .ace_optionsMenuEntry button {
 	justify-content: center;
 	align-items: center;
 	text-align: center;
@@ -4196,22 +4196,22 @@ body #ace_settingsmenu .ace_optionsMenuEntry button {
 	margin: 0 8px;
 	padding: 2px 8px;
 }
-body #ace_settingsmenu .ace_optionsMenuEntry button:hover {
+html #ace_settingsmenu .ace_optionsMenuEntry button:hover {
 	background-color: rgba(0, 0, 0, 0.2);
 	box-shadow: none;
 	border: none;
 	color: var(--interactive-hover);
 }
-body #ace_settingsmenu .ace_optionsMenuEntry button[ace_selected_button=true] {
+html #ace_settingsmenu .ace_optionsMenuEntry button[ace_selected_button=true] {
 	background-color: rgb(var(--vaccentcolor));
 	box-shadow: none;
 	border: none;
 	color: var(--header-primary);
 	cursor: default;
 }
-body #ace_settingsmenu .ace_optionsMenuEntry input[type="text"],
-body #ace_settingsmenu .ace_optionsMenuEntry input[type="number"],
-body #ace_settingsmenu .ace_optionsMenuEntry select {
+html #ace_settingsmenu .ace_optionsMenuEntry input[type="text"],
+html #ace_settingsmenu .ace_optionsMenuEntry input[type="number"],
+html #ace_settingsmenu .ace_optionsMenuEntry select {
 	flex: 0 1 auto;
 	float: unset;
 	width: 200px;
@@ -4225,31 +4225,31 @@ body #ace_settingsmenu .ace_optionsMenuEntry select {
 	font-size: 16px;
 	transition: background-color .15s ease,border .15s ease;
 }
-body #ace_settingsmenu .ace_optionsMenuEntry input[type="number"] {
+html #ace_settingsmenu .ace_optionsMenuEntry input[type="number"] {
 	padding-right: 2px;
 }
-body #ace_settingsmenu .ace_optionsMenuEntry input[type="text"]:hover,
-body #ace_settingsmenu .ace_optionsMenuEntry input[type="number"]:hover,
-body #ace_settingsmenu .ace_optionsMenuEntry select:hover {
+html #ace_settingsmenu .ace_optionsMenuEntry input[type="text"]:hover,
+html #ace_settingsmenu .ace_optionsMenuEntry input[type="number"]:hover,
+html #ace_settingsmenu .ace_optionsMenuEntry select:hover {
 	border-color: var(--deprecated-text-input-border-hover);
 }
-body #ace_settingsmenu .ace_optionsMenuEntry input[type="text"]:focus,
-body #ace_settingsmenu .ace_optionsMenuEntry input[type="number"]:focus,
-body #ace_settingsmenu .ace_optionsMenuEntry select:focus {
+html #ace_settingsmenu .ace_optionsMenuEntry input[type="text"]:focus,
+html #ace_settingsmenu .ace_optionsMenuEntry input[type="number"]:focus,
+html #ace_settingsmenu .ace_optionsMenuEntry select:focus {
 	border-color: rgb(var(--vaccentcolor));
 }
-body #ace_settingsmenu .ace_optionsMenuEntry select option {
+html #ace_settingsmenu .ace_optionsMenuEntry select option {
 	background-color: var(--background-primary);
 	color: var(--header-primary);
 }
-body #ace_settingsmenu input[type="checkbox"] {
+html #ace_settingsmenu input[type="checkbox"] {
 	position: relative;
 	flex: 0 0 auto;
 	width: 42px;
 	height: 24px;
 	-webkit-appearance: none;
 }
-body #ace_settingsmenu input[type="checkbox"]::before {
+html #ace_settingsmenu input[type="checkbox"]::before {
 	content: "";
 	display: block;
 	position: relative;
@@ -4259,10 +4259,10 @@ body #ace_settingsmenu input[type="checkbox"]::before {
 	border-radius: 14px;
 	transition: background .15s ease-in-out,box-shadow .15s ease-in-out,border .15s ease-in-out;
 }
-body #ace_settingsmenu input[type="checkbox"]:checked::before {
+html #ace_settingsmenu input[type="checkbox"]:checked::before {
 	background: rgb(var(--vaccentcolor));
 }
-body #ace_settingsmenu input[type="checkbox"]::after {
+html #ace_settingsmenu input[type="checkbox"]::after {
 	content: "";
 	display: block;
 	position: absolute;
@@ -4276,7 +4276,7 @@ body #ace_settingsmenu input[type="checkbox"]::after {
 	border-radius: 10px;
 	transition: all .15s ease;
 }
-body #ace_settingsmenu input[type="checkbox"]:checked::after {
+html #ace_settingsmenu input[type="checkbox"]:checked::after {
 	transform: translateX(20px);
 }
 
