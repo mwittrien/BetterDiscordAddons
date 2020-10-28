@@ -3904,13 +3904,17 @@ html .bd-settings-group.collapsible .bd-settings-title::after {
 }
 
 #app-mount .bd-addon-list .bd-addon-card {
-	background: var(--deprecated-card-bg);
+	background-color: var(--deprecated-card-bg);
 	border-color: var(--background-tertiary);
 	color: var(--header-primary);
+	max-height: unset;
 }
-#app-mount .bd-addon-list .bda-header {
+#app-mount .bd-addon-list .bd-addon-header {
 	border-bottom: 1px solid var(--background-modifier-accent);
 	color: var(--header-primary);
+}
+#app-mount .bd-addon-card .bd-description::-webkit-scrollbar-track {
+	background-color: var(--background-secondary-alt);
 }
 #app-mount .bd-addon-button .bd-icon {
 	fill: var(--interactive-normal);
@@ -3921,20 +3925,49 @@ html .bd-settings-group.collapsible .bd-settings-title::after {
 #app-mount .bd-addon-button .bd-icon:active {
 	fill: var(--interactive-active);
 }
-#app-mount .bd-addon-list .bda-description {
+#app-mount .bd-addon-list .bd-description {
 	color: var(--header-secondary);
 }
-#app-mount .bd-addon-list .bd-card-footer {
+#app-mount .bd-addon-card .bd-description::-webkit-scrollbar {
+	width: 10px;
+}
+#app-mount .bd-addon-card .bd-description::-webkit-scrollbar-thumb {
+	background-color: var(--background-tertiary);
+	min-height: 40px;
+}
+#app-mount .bd-addon-card .bd-description::-webkit-scrollbar-thumb,
+#app-mount .bd-addon-card .bd-description::-webkit-scrollbar-track {
+	border: 2px solid transparent;
+	background-clip: padding-box;
+	border-radius: 18px;
+}
+#app-mount .bd-addon-list .bd-footer {
 	border-top: 1px solid var(--background-modifier-accent);
 }
-#app-mount .bd-card.settings-open svg .fill {
+#app-mount .bd-addon-card.settings-open svg .fill {
 	fill: var(--interactive-normal);
 }
-#app-mount .bd-card.settings-open svg:hover .fill {
+#app-mount .bd-addon-card.settings-open svg:hover .fill {
 	fill: var(--interactive-hover);
 }
-#app-mount .bd-card.settings-open svg:active .fill {
+#app-mount .bd-addon-card.settings-open svg:active .fill {
 	fill: var(--interactive-active);
+}
+#app-mount .bd-addon-card.settings-open::-webkit-scrollbar {
+	width: 16px;
+}
+#app-mount .bd-addon-card.settings-open::-webkit-scrollbar-thumb {
+	background-color: var(--background-tertiary);
+	min-height: 40px;
+}
+#app-mount .bd-addon-card.settings-open::-webkit-scrollbar-thumb,
+#app-mount .bd-addon-card.settings-open::-webkit-scrollbar-track {
+	border: 4px solid transparent;
+	background-clip: padding-box;
+	border-radius: 8px;
+}
+#app-mount .bd-addon-card.settings-open::-webkit-scrollbar-track {
+	background-color: var(--background-secondary-alt);
 }
 
 #bd-customcss-attach-controls {
@@ -4044,6 +4077,59 @@ html #bd-editor-controls button:hover {
 }
 html #bd-editor-controls button path:not([fill]) {
 	fill: currentColor;
+}
+
+html .ace_scroller {
+	right: 10px !important;
+	bottom: 10px !important;
+}
+html .ace_scrollbar.ace_scrollbar-v {
+	width: 10px !important;
+	bottom: 10px !important;
+}
+html .ace_scrollbar.ace_scrollbar-v .ace_scrollbar-inner {
+	width: 10px !important;
+}
+html .ace_scrollbar.ace_scrollbar-h {
+	height: 10px !important;
+	right: 10px !important;
+}
+html .ace_scrollbar.ace_scrollbar-h .ace_scrollbar-inner {
+	height: 10px !important;
+}
+
+html .ace_scrollbar.ace_scrollbar-v::-webkit-scrollbar {
+	width: 10px;
+}
+html .ace_scrollbar.ace_scrollbar-v::-webkit-scrollbar-thumb {
+	background-color: var(--background-tertiary);
+	min-height: 40px;
+}
+html .ace_scrollbar.ace_scrollbar-v::-webkit-scrollbar-thumb,
+html .ace_scrollbar.ace_scrollbar-v::-webkit-scrollbar-track {
+	border: 2px solid transparent;
+	background-clip: padding-box;
+	border-radius: 18px;
+}
+html .ace_scrollbar.ace_scrollbar-v::-webkit-scrollbar-track {
+	background-color: var(--background-secondary-alt);
+}
+
+html .ace_scrollbar.ace_scrollbar-h::-webkit-scrollbar {
+	height: 10px;
+}
+html .ace_scrollbar.ace_scrollbar-h::-webkit-scrollbar-thumb {
+	background-color: var(--background-tertiary);
+	min-width: 40px;
+}
+html .ace_scrollbar.ace_scrollbar-h::-webkit-scrollbar-thumb,
+html .ace_scrollbar.ace_scrollbar-h::-webkit-scrollbar-track {
+	border: 2px solid transparent;
+	background-clip: padding-box;
+	border-radius: 18px;
+}
+html .ace_scrollbar.ace_scrollbar-h::-webkit-scrollbar-track {
+	background-color: var(--background-secondary-alt);
 }
 
 /* ~~~~		13.		POWERCORDSUPPORT				~~~~ */

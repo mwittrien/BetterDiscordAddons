@@ -1864,6 +1864,11 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 	background-color: rgb(var(--vaccentcolor));
 }
 
+::-webkit-scrollbar-corner,
+#app-mount ::-webkit-scrollbar-corner {
+	background-color: transparent;
+}
+
 /* ----		13.7.	NOTIFICATIONBAR					---- */
 
 .colorPremiumTier1-3D7SPt {

@@ -6465,10 +6465,6 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	border: none;
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
-::-webkit-scrollbar-corner,
-#app-mount ::-webkit-scrollbar-corner {
-	visibility: hidden;
-}
 .none-2Eo-qx::-webkit-scrollbar-corner,
 .none-2Eo-qx::-webkit-scrollbar-thumb,
 .none-2Eo-qx::-webkit-scrollbar-track,
@@ -6881,31 +6877,32 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	border-color: transparent;
 	color: rgb(var(--fontwhite1));
+	max-height: unset;
 }
-#app-mount .bd-addon-list .bda-header {						/* addonlist			header								*/
+#app-mount .bd-addon-list .bd-addon-header {				/* addonlist			header								*/
 	color: rgb(var(--fontwhite1));
 	border-bottom-color: rgba(var(--fontwhite2), 0.3);
 }
-#app-mount .bd-addon-list .bd-addon-button svg[fill] {			/* addonlist			header button icon					*/
+#app-mount .bd-addon-list .bd-addon-button svg[fill] {		/* addonlist			header button icon					*/
 	fill: currentColor;
 }
-#app-mount .bd-addon-list .bd-addon-button svg {				/* addonlist			header button icon					*/
+#app-mount .bd-addon-list .bd-addon-button svg {			/* addonlist			header button icon					*/
 	color: rgb(var(--fontwhite3));
 }
 #app-mount .bd-addon-list .bd-addon-button svg:hover {
 	color: rgb(var(--fontwhite1));
 }
-#app-mount .bd-addon-list .bda-description {				/* addonlist			description							*/
+#app-mount .bd-addon-list .bd-description {					/* addonlist			description							*/
 	color: rgb(var(--fontwhite2));
 }
-#app-mount .bd-addon-list .bda-description::-webkit-scrollbar {
+#app-mount .bd-addon-list .bd-description::-webkit-scrollbar {
 	width: 4px;
 	height: 4px;
 }
-#app-mount .bd-addon-list .bda-footer {						/* addonlist			footer								*/
+#app-mount .bd-addon-list .bd-footer {						/* addonlist			footer								*/
 	border-top-color: rgba(var(--fontwhite2), 0.3);
 }
-.bd-addon-list .bda-footer button {							/* addonlist			footer button						*/
+.bd-addon-list .bd-footer button {							/* addonlist			footer button						*/
 	color: rgb(var(--fontwhite1));
 }
 
