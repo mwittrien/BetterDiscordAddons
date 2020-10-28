@@ -208,6 +208,7 @@
 			"QuickSwitchResult": {"class": "quickswitchresult"},
 			"Reaction": {"class": "messagereactionme"},
 			"Reactor": {"class": "messagereactionsmodalreactor"},
+			"ReactorsComponent": {"class": "messagereactionsmodalreactor"},
 			"RTCConnection": {"class": "voicedetails"},
 			"SearchResults": {"class": "searchresultswrap"},
 			"SearchResultsInner": {"strings": ["SEARCH_HIDE_BLOCKED_MESSAGES", "totalResults", "SEARCH_PAGE_SIZE"]},
