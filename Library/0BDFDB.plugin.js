@@ -5767,6 +5767,74 @@ module.exports = (_ => {
 					}
 				};
 				
+				InternalComponents.LibraryComponents.MultiInput = reactInitialized && class BDFDB_MultiInput extends LibraryModules.React.Component {
+					constructor(props) {
+						super(props);
+						this.state = {focused: false};
+					}
+					render() {
+						if (this.props.children && this.props.children.props) this.props.children.props.className = BDFDB.DOMUtils.formatClassName(this.props.children.props.className, BDFDB.disCN.inputmultifield);
+						return BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.inputwrapper, BDFDB.disCN.inputmultiwrapper),
+							children: BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.input, BDFDB.disCN.inputmulti, this.state.focused && BDFDB.disCN.inputfocused),
+								children: [
+									BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.DOMUtils.formatClassName(this.props.innerClassName, BDFDB.disCN.inputwrapper, BDFDB.disCN.inputmultifirst),
+										children: this.props.children
+									}),
+									BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextInput, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+										className: BDFDB.disCN.inputmultilast,
+										inputClassName: BDFDB.disCN.inputmultifield,
+										onFocus: e => {this.setState({focused: true})},
+										onBlur: e => {this.setState({focused: false})}
+									}), "children", "className", "innerClassName"))
+								]
+							})
+						});
+					}
+				};
+				
+				InternalComponents.LibraryComponents.ListInput = reactInitialized && class BDFDB_ListInput extends LibraryModules.React.Component {
+					handleChange() {
+						if (typeof this.props.onChange) this.props.onChange(this.props.items, this);
+					}
+					render() {
+						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.MultiInput, {
+							className: BDFDB.disCN.inputlist,
+							innerClassName: BDFDB.disCN.inputlistitems,
+							onKeyDown: e => {
+								if (e.which == 13 && e.target.value && e.target.value.trim()) {
+									let value = e.traget.value.trim();
+									this.props.value = "";
+									if (!this.props.items.includes(value)) {
+										this.props.items.push(value);
+										BDFDB.ReactUtils.forceUpdate(this);
+										this.handleChange.apply(this, []);
+									}
+								}
+							},
+							children: (BDFDB.ArrayUtils.is(this.props.items) ? this.props.items : []).map(item => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Badges.TextBadge, {
+								className: BDFDB.disCN.inputlistitem,
+								color: BDFDB.DiscordConstants.Colors.BRAND,
+								style: {borderRadius: "3px"},
+								text: [
+									item,
+									BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+										className: BDFDB.disCN.inputlistdelete,
+										name: InternalComponents.LibraryComponents.SvgIcon.Names.CLOSE,
+										onClick: _ => {
+											BDFDB.ArrayUtils.remove(this.props.items, item);
+											BDFDB.ReactUtils.forceUpdate(this);
+											this.handleChange.apply(this, []);
+										}
+									})
+								]
+							}))
+						});
+					}
+				};
+				
 				InternalComponents.LibraryComponents.PaginatedList = reactInitialized && class BDFDB_PaginatedList extends LibraryModules.React.Component {
 					constructor(props) {
 						super(props);
