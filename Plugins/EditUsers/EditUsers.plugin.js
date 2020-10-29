@@ -98,7 +98,7 @@ module.exports = (_ => {
 						Account: "render",
 						Message: "default",
 						MessageContent: "type",
-						ReactorsComponent: "renders",
+						ReactorsComponent: "render",
 						ChannelReply: "default",
 						MemberListItem: "render",
 						AuditLog: "render",
@@ -651,8 +651,7 @@ module.exports = (_ => {
 			
 			processReactorsComponent (e) {
 				if (settings.changeInReactions && BDFDB.ArrayUtils.is(e.instance.props.reactors)) {
-					e.instance.props.reactors = [].concat(e.instance.props.reactors);
-					for (let i in e.instance.props.reactors) e.instance.props.reactors[i] = this.getUserData(e.instance.props.reactors[i].id);
+					for (let i in e.instance.props.reactors) e.instance.props.reactors[i] = this.getUserData(e.instance.props.reactors[i].id, true, false, e.instance.props.reactors[i]);
 				}
 			}
 			
@@ -980,8 +979,9 @@ module.exports = (_ => {
 				return null;
 			}
 			
-			getUserData (userId, change = true, keepName = false) {
+			getUserData (userId, change = true, keepName = false, fallbackData) {
 				let user = BDFDB.LibraryModules.UserStore.getUser(userId);
+				if (!user && BDFDB.ObjectUtils.is(fallbackData)) user = fallbackData;
 				if (!user) return new BDFDB.DiscordObjects.User({});
 				let data = change && changedUsers[user.id];
 				if (data) {
