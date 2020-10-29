@@ -4095,8 +4095,10 @@ html #bd-editor-controls button path:not([fill]) {
 	fill: currentColor;
 }
 
-html .ace_scroller {
+html .ace_scroller:not([style*="right: 0px"]) {
 	right: 10px !important;
+}
+html .ace_scroller:not([style*="bottom: 0px"]) {
 	bottom: 10px !important;
 }
 html .ace_scrollbar.ace_scrollbar-v {
