@@ -2305,7 +2305,8 @@ body::before {
 #app-mount .userSettingsAccount-2eMFVR .viewBody-2Qz-jg {	/* accountsettings		info								*/
 	color: rgb(var(--fontwhite3));
 }
-.questionMark-3qBhGj .icon-3OA7an {							/* accountsettings		questionmark						*/
+.questionMark-CWEQZn .icon-3a_Jgd,							/* accountsettings		questionmark						*/
+.questionMark-3qBhGj .icon-3OA7an {							/* accountsettings		questionmark new					*/
 	color: rgb(var(--fontwhite1));
 }
 #app-mount .avatarUploader-3XDtmn .removeButton-1hcZyG	{	/* accountsettings		removeavatar						*/
@@ -5393,6 +5394,7 @@ body::before {
 .form-236Xmo .btnPrimary-346kfV,
 .button-22FETM,
 .questionMark-CWEQZn,
+.questionMark-3qBhGj,
 .btn-1PnLxm.btnPrimary-1jluZW,
 .btn-15Au6M.btnPrimary-ggBniE,
 .bd-modal-wrapper .footer button,
