@@ -536,16 +536,16 @@ img:not([src]), img[src=""], img[src="null"] {
 	color: var(--channels-default);
 }
 
-[REPLACE_CLASS_inputmultiinput] {
+[REPLACE_CLASS_inputmulti] {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 }
-[REPLACE_CLASS_inputmultiinputfirst] {
+[REPLACE_CLASS_inputmultifirst] {
 	flex-grow: 1;
 	padding: 0 8px;
 }
-[REPLACE_CLASS_inputmultiinputlast]::before {
+[REPLACE_CLASS_inputmultilast]::before {
 	content: "";
 	position: absolute;
 	border: 1px solid var(--header-primary);
@@ -554,11 +554,11 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-top: 5px;
 	opacity: .1;
 }
-[REPLACE_CLASS_inputmultiinputlast] input {
+[REPLACE_CLASS_inputmultilast] input {
 	width: 250px;
 	padding-left: 16px;
 }
-[REPLACE_CLASS_inputmultiinputfield] {
+[REPLACE_CLASS_inputmultifield] {
 	border: none !important;
 }
 
