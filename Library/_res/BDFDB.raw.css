@@ -562,6 +562,20 @@ img:not([src]), img[src=""], img[src="null"] {
 	border: none !important;
 }
 
+[REPLACE_CLASS_inputlistitems] {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+[REPLACE_CLASS_inputlistitem] {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+[REPLACE_CLASS_inputlistitemdelete] {
+	margin-left: 6px;
+}
+
 [REPLACE_CLASS_inputnumberwrapper] {
 	position: relative;
 }
