@@ -536,6 +536,32 @@ img:not([src]), img[src=""], img[src="null"] {
 	color: var(--channels-default);
 }
 
+[REPLACE_CLASS_inputmultiinput] {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+[REPLACE_CLASS_inputmultiinputfirst] {
+	flex-grow: 1;
+	padding: 0 8px;
+}
+[REPLACE_CLASS_inputmultiinputlast]::before {
+	content: "";
+	position: absolute;
+	border: 1px solid var(--header-primary);
+	width: 1px;
+	height: 30px;
+	margin-top: 5px;
+	opacity: .1;
+}
+[REPLACE_CLASS_inputmultiinputlast] input {
+	width: 250px;
+	padding-left: 16px;
+}
+[REPLACE_CLASS_inputmultiinputfield] {
+	border: none !important;
+}
+
 [REPLACE_CLASS_inputnumberwrapper] {
 	position: relative;
 }
