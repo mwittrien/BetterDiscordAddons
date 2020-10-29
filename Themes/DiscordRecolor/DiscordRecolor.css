@@ -4115,6 +4115,9 @@ html .ace_scrollbar.ace_scrollbar-h {
 html .ace_scrollbar.ace_scrollbar-h .ace_scrollbar-inner {
 	height: 10px !important;
 }
+html .editor-wrapper .bd-monokai .ace_marker-layer .ace_selection {
+	background-color: rgb(var(--vmentioncolor));
+}
 
 html .ace_scrollbar.ace_scrollbar-v::-webkit-scrollbar {
 	width: 10px;

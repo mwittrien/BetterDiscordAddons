@@ -1987,13 +1987,13 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 	color: var(--bd-blue);
 }
 
-.bd-addon-list .bd-card-footer button {
+.bd-addon-list .bd-footer button {
 	background: var(--bd-blue);
 }
-.bd-addon-list .bd-card-footer button:hover {
+.bd-addon-list .bd-footer button:hover {
 	background: var(--vaccentcolor-hover);
 }
-.bd-addon-list .bd-card-footer button:active {
+.bd-addon-list .bd-footer button:active {
 	background: var(--vaccentcolor-active);
 }
 
@@ -2011,6 +2011,10 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 }
 .bd-switch::before {
 	box-shadow: none;
+}
+
+html .editor-wrapper .bd-monokai .ace_marker-layer .ace_selection {
+	background-color: rgb(var(--vmentioncolor));
 }
 
 .embedFull-2tM8--[style*="border-color: rgb(62, 130, 229)"],
