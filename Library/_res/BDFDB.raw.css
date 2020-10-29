@@ -575,7 +575,7 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_inputlistitem] + [REPLACE_CLASS_inputlistitem] {
 	margin-left: 4px;
 }
-[REPLACE_CLASS_inputlistitemdelete] {
+[REPLACE_CLASS_inputlistdelete] {
 	margin-left: 6px;
 }
 
