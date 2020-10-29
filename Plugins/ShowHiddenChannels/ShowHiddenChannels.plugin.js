@@ -148,7 +148,7 @@ module.exports = (_ => {
 						showVoice:				{value:true, 	description:"Show hidden Voice Channels"},
 						showAnnouncement:		{value:true, 	description:"Show hidden Announcement Channels"},
 						showStore:				{value:true, 	description:"Show hidden Store Channels"},
-						showForNormal:			{value:false,	description:"Add Access-Overview ContextMenu Entry for non-hidden Channels"},
+						showForNormal:			{value:true,	description:"Add Access-Overview ContextMenu Entry for non-hidden Channels"},
 					}
 				};
 			
