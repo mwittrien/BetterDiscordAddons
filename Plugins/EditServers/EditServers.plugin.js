@@ -13,15 +13,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditServers",
 			"author": "DevilBro",
-			"version": "2.2.4",
+			"version": "2.2.5",
 			"description": "Allow you to change the icon, name and color of servers"
 		},
 		"changeLog": {
-			"fixed": {
-				"Server Invites": "No longer breaks server invites of non-joined servers"
+			"improved": {
+				"Welcome Message": "Now also changes the server name in the welcome message"
 			}
 		}
 	};
+	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
@@ -60,6 +61,7 @@ module.exports = (_ => {
 						changeInGuildList:		{value:true, 	inner:true,		description:"Server List"},
 						changeInGuildHeader:	{value:true, 	inner:true,		description:"Server Header"},
 						changeInGuildInvites:	{value:true, 	inner:true,		description:"Server Invites"},
+						changeInChat:			{value:true, 	inner:true,		description:"Chat (Welcome Message, etc.)"},
 						changeInMutualGuilds:	{value:true, 	inner:true,		description:"Mutual Servers"},
 						changeInRecentMentions:	{value:true, 	inner:true,		description:"Recent Mentions Popout"},
 						changeInQuickSwitcher:	{value:true, 	inner:true,		description:"Quick Switcher"}
@@ -83,7 +85,8 @@ module.exports = (_ => {
 						BlobMask: "render",
 						GuildIconWrapper: "render",
 						GuildIcon: "render",
-						GuildHeader: "render"
+						GuildHeader: "render",
+						WelcomeArea: "default"
 					}
 				};
 				
@@ -249,16 +252,16 @@ module.exports = (_ => {
 						let renderChildren = e.returnvalue.props.children;
 						e.returnvalue.props.children = (...args) => {
 							let renderedChildren = renderChildren(...args);
-							let [children, index] = BDFDB.ReactUtils.findParent(renderedChildren, {props:[["className", BDFDB.disCN.guildiconacronym]]});
-							if (index > -1) {
+							let guildAcronym = BDFDB.ReactUtils.findChild(renderedChildren, {props:[["className", BDFDB.disCN.guildiconacronym]]});
+							if (guildAcronym) {
 								let fontGradient = BDFDB.ObjectUtils.is(data.color2);
-								children[index].props.style = Object.assign({}, children[index].props.style, {
+								guildAcronym.props.style = Object.assign({}, guildAcronym.props.style, {
 									background: BDFDB.ObjectUtils.is(data.color1) ? BDFDB.ColorUtils.createGradient(data.color1) : BDFDB.ColorUtils.convert(data.color1, "RGBA"),
 									color: !fontGradient && BDFDB.ColorUtils.convert(data.color2, "RGBA")
 								});
-								if (fontGradient) children[index].props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
+								if (fontGradient) guildAcronym.props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
 									gradient: BDFDB.ColorUtils.createGradient(data.color2),
-									children: children[index].props.children
+									children: guildAcronym.props.children
 								});
 							}
 							return renderedChildren;
@@ -342,6 +345,19 @@ module.exports = (_ => {
 			processInviteGuildName (e) {
 				if (e.instance.props.guild && e.instance.props.guild.joinedAt && settings.changeInGuildInvites) {
 					e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
+				}
+			}
+			
+			processWelcomeArea (e) {
+				if (e.instance.props.channel && settings.changeInChat) {
+					let name = (BDFDB.LibraryModules.GuildStore.getGuild(e.instance.props.channel.guild_id) || {}).name;
+					let guildName = name && BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", "titleName-3-Lp3Z"]]});
+					if (guildName && guildName.props && BDFDB.ArrayUtils.is(guildName.props.children)) {
+						for (let child of guildName.props.children) if (child && child.props && BDFDB.ArrayUtils.is(child.props.children) && child.props.children[0] == name) {
+							child.props.children = [(this.getGuildData(e.instance.props.channel.guild_id) || {}).name || name];
+							break;
+						}
+					}
 				}
 			}
 			
