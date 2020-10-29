@@ -2451,7 +2451,7 @@
 		"usersettingsmultiinput": ["UserSettings", "multiInput"],
 		"usersettingsmultiinputfield": ["UserSettings", "multiInputField"],
 		"usersettingsmultiinputfirst": ["UserSettings", "multiInputFirst"],
-		"usersettingsmultiinputlast": ["UserSettings", "ultiInputLast"],
+		"usersettingsmultiinputlast": ["UserSettings", "multiInputLast"],
 		"usersummaryavatar": ["UserSummaryItem", "avatar"],
 		"usersummaryavatarcontainer": ["UserSummaryItem", "avatarContainer"],
 		"usersummaryavatarcontainermasked": ["UserSummaryItem", "avatarContainerMasked"],
