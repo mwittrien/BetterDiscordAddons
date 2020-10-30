@@ -13,12 +13,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.1.8",
+			"version": "4.1.7",
 			"description": "Allow you to rename and recolor channelnames"
 		},
 		"changeLog": {
 			"fixed": {
-				"Works again": "Yas"
+				"Autocomplete Menu": "Works again"
 			}
 		}
 	};
@@ -77,8 +77,8 @@ module.exports = (_ => {
 						AuditLog: "render",
 						SettingsInvites: "render",
 						HeaderBarContainer: "render",
-						ChannelCategoryItem: "default",
-						ChannelItem: "default",
+						ChannelCategoryItem: "render",
+						ChannelItem: "render",
 						QuickSwitchChannelResult: "render",
 						MessageContent: "type"
 					},
@@ -86,8 +86,8 @@ module.exports = (_ => {
 						AutocompleteChannelResult: "render",
 						AuditLog: "render",
 						HeaderBarContainer: "render",
-						ChannelCategoryItem: "default",
-						ChannelItem: "default",
+						ChannelCategoryItem: "render",
+						ChannelItem: "render",
 						QuickSwitchChannelResult: "render",
 						RecentsChannelHeader: "default"
 					}
@@ -174,13 +174,12 @@ module.exports = (_ => {
 				}
 			}
 		
-			forceUpdateAll (instant = false) {
+			forceUpdateAll () {
 				changedChannels = BDFDB.DataUtils.load(this, "channels");
 				settings = BDFDB.DataUtils.get(this, "settings");
 				
 				this.changeAppTitle();
 				BDFDB.PatchUtils.forceAllUpdates(this);
-				BDFDB.ChannelUtils.rerenderAll(instant);
 				BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"Channel", unlimited:true}));
 			}
 
@@ -206,7 +205,7 @@ module.exports = (_ => {
 										disabled: !changedChannels[e.instance.props.channel.id],
 										action: _ => {
 											BDFDB.DataUtils.remove(this, "channels", e.instance.props.channel.id);
-											this.forceUpdateAll(true);
+											this.forceUpdateAll();
 										}
 									})
 								]
@@ -291,15 +290,9 @@ module.exports = (_ => {
 					if (!e.returnvalue) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
 					else {
 						let onMouseEnter = e.returnvalue.props.onMouseEnter || ( _ => {});
-						e.returnvalue.props.onMouseEnter = event => {
-							onMouseEnter(event);
-							e.instance.setState({hovered: true});
-						};
+						e.returnvalue.props.onMouseEnter = event => {e.instance.setState({hovered: true});};
 						let onMouseLeave = e.returnvalue.props.onMouseLeave || ( _ => {});
-						e.returnvalue.props.onMouseLeave = event => {
-							onMouseLeave(event);
-							e.instance.setState({hovered: false});
-						};
+						e.returnvalue.props.onMouseLeave = event => {e.instance.setState({hovered: false});};
 						let modify = BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "muted", "locked", "selected", "unread", "connected", "hovered");
 						let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.categoryname]]});
 						if (categoryName) this.changeChannelColor(categoryName, e.instance.props.channel.id, modify);
@@ -314,15 +307,9 @@ module.exports = (_ => {
 					if (!e.returnvalue) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
 					else {
 						let onMouseEnter = e.returnvalue.props.onMouseEnter || ( _ => {});
-						e.returnvalue.props.onMouseEnter = event => {
-							onMouseEnter(event);
-							e.instance.setState({hovered: true});
-						};
+						e.returnvalue.props.onMouseEnter = event => {e.instance.setState({hovered: true});};
 						let onMouseLeave = e.returnvalue.props.onMouseLeave || ( _ => {});
-						e.returnvalue.props.onMouseLeave = event => {
-							onMouseLeave(event);
-							e.instance.setState({hovered: false});
-						};
+						e.returnvalue.props.onMouseLeave = event => {e.instance.setState({hovered: false});};
 						let modify = BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "muted", "locked", "selected", "unread", "connected", "hovered");
 						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.channelname]]});
 						if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id, modify);
@@ -556,7 +543,7 @@ module.exports = (_ => {
 							let changed = false;
 							if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.DataUtils.remove(this, "channels", channel.id);
 							else if (!BDFDB.equals(oldData, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "channels", channel.id);
-							if (changed) this.forceUpdateAll(true);
+							if (changed) this.forceUpdateAll();
 						}
 					}]
 				});

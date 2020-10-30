@@ -2559,14 +2559,14 @@ module.exports = (_ => {
 					if (unreadChannels.length) BDFDB.ChannelUtils.markAsRead(unreadChannels);
 				};
 				BDFDB.GuildUtils.rerenderAll = function (instant) {
-					return;
 					BDFDB.TimeUtils.clear(GuildsRerenderTimeout);
 					GuildsRerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
 						let GuildsIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"Guilds", unlimited:true});
 						let GuildsPrototype = BDFDB.ObjectUtils.get(GuildsIns, "_reactInternalFiber.type.prototype");
 						if (GuildsIns && GuildsPrototype) {
 							BDFDB.PatchUtils.patch(BDFDB, GuildsPrototype, "render", {after: e => {
-								e.returnValue.props.children = [];
+								let [children, index] = BDFDB.ReactUtils.findParent(e.returnValue, {name: "ConnectedUnreadDMs"});
+								if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {}));
 								BDFDB.ReactUtils.forceUpdate(GuildsIns);
 							}}, {once: true});
 							BDFDB.ReactUtils.forceUpdate(GuildsIns);
@@ -2612,7 +2612,6 @@ module.exports = (_ => {
 					return found;
 				};
 
-				let ChannelsRerenderTimeout;
 				BDFDB.ChannelUtils = {};
 				BDFDB.ChannelUtils.is = function (channel) {
 					if (!BDFDB.ObjectUtils.is(channel)) return false;
@@ -2685,20 +2684,6 @@ module.exports = (_ => {
 						});
 					}
 					if (unreadChannels.length) LibraryModules.AckUtils.bulkAck(unreadChannels);
-				};
-				BDFDB.ChannelUtils.rerenderAll = function (instant) {
-					BDFDB.TimeUtils.clear(ChannelsRerenderTimeout);
-					ChannelsRerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
-						let ChannelsIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guildchannels), {name:"Channels", unlimited:true});
-						let ChannelsPrototype = BDFDB.ObjectUtils.get(ChannelsIns, "_reactInternalFiber.type.prototype");
-						if (ChannelsIns && ChannelsPrototype) {
-							BDFDB.PatchUtils.patch(BDFDB, ChannelsPrototype, "render", {after: e => {
-								e.returnValue.props.children = [];
-								BDFDB.ReactUtils.forceUpdate(ChannelsIns);
-							}}, {once: true});
-							BDFDB.ReactUtils.forceUpdate(ChannelsIns);
-						}
-					}, instant ? 0 : 1000);
 				};
 				
 				BDFDB.DMUtils = {};
