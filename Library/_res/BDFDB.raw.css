@@ -578,6 +578,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-right: 4px;
 }
 [REPLACE_CLASS_inputlistdelete] {
+	cursor: pointer;
 	margin-left: 6px;
 }
 
