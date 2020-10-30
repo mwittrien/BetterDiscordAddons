@@ -13,12 +13,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CompleteTimestamps",
 			"author": "DevilBro",
-			"version": "1.4.9",
+			"version": "1.5.0",
 			"description": "Replace all timestamps with complete timestamps"
 		},
 		"changeLog": {
 			"fixed": {
-				"Settings": "Work again"
+				"Spoiler Embed Crash": "No longer crashes on spoilered embeds"
 			}
 		}
 	};
@@ -274,8 +274,19 @@ module.exports = (_ => {
 
 			processEmbed (e) {
 				if (e.instance.props.embed.timestamp && settings.showInEmbed) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props:[["className", BDFDB.disCN.embedfootertext]]});
-					if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children.splice(children[index].props.children.length - 1, 1, this.getTimestamp(languages[choices.timestampLang].id, e.instance.props.embed.timestamp._i));
+					let process = returnvalue => {
+						let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props:[["className", BDFDB.disCN.embedfootertext]]});
+						if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children.splice(children[index].props.children.length - 1, 1, this.getTimestamp(languages[choices.timestampLang].id, e.instance.props.embed.timestamp._i));
+					};
+					if (typeof e.returnvalue.props.children == "function") {
+						let childrenRender = e.returnvalue.props.children;
+						e.returnvalue.props.children = (...args) => {
+							let children = childrenRender(...args);
+							process(children);
+							return children;
+						};
+					}
+					else process(e.returnvalue);
 				}
 			}
 
