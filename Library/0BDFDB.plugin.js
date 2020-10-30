@@ -13,13 +13,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.0.9",
+			"version": "1.1.0",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 		"changeLog": {
 			"fixed": {
-				"BD Beta": "Fixed some issues with the beta"
+				"Crash on Canary": "Fixed the crash issue that occured one some plugins on canary"
 			}
 		}
 	};
@@ -2559,14 +2559,13 @@ module.exports = (_ => {
 					if (unreadChannels.length) BDFDB.ChannelUtils.markAsRead(unreadChannels);
 				};
 				BDFDB.GuildUtils.rerenderAll = function (instant) {
-					return;
 					BDFDB.TimeUtils.clear(GuildsRerenderTimeout);
 					GuildsRerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
 						let GuildsIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"Guilds", unlimited:true});
 						let GuildsPrototype = BDFDB.ObjectUtils.get(GuildsIns, "_reactInternalFiber.type.prototype");
 						if (GuildsIns && GuildsPrototype) {
 							BDFDB.PatchUtils.patch(BDFDB, GuildsPrototype, "render", {after: e => {
-								e.returnValue.props.children = [];
+								e.returnValue.props.children = typeof e.returnValue.props.children == "function" ? (_ => {return null;}) : [];
 								BDFDB.ReactUtils.forceUpdate(GuildsIns);
 							}}, {once: true});
 							BDFDB.ReactUtils.forceUpdate(GuildsIns);
@@ -2693,7 +2692,7 @@ module.exports = (_ => {
 						let ChannelsPrototype = BDFDB.ObjectUtils.get(ChannelsIns, "_reactInternalFiber.type.prototype");
 						if (ChannelsIns && ChannelsPrototype) {
 							BDFDB.PatchUtils.patch(BDFDB, ChannelsPrototype, "render", {after: e => {
-								e.returnValue.props.children = [];
+								e.returnValue.props.children = typeof e.returnValue.props.children == "function" ? (_ => {return null;}) : [];
 								BDFDB.ReactUtils.forceUpdate(ChannelsIns);
 							}}, {once: true});
 							BDFDB.ReactUtils.forceUpdate(ChannelsIns);
