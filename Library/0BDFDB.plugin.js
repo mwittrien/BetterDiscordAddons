@@ -1102,7 +1102,7 @@ module.exports = (_ => {
 				};
 				BDFDB.NotificationUtils.notice = function (text, options = {}) {
 					if (!text) return;
-					let layers = document.querySelector(BDFDB.dotCN.layers);
+					let layers = document.querySelector(BDFDB.dotCNC.layers + BDFDB.dotCN.appmount);
 					if (!layers) return;
 					let id = BDFDB.NumberUtils.generateId(NotificationBars);
 					let notice = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.notice + BDFDB.disCN.noticewrapper}" notice-id="${id}"><div class="${BDFDB.disCN.noticedismiss}" style="width: 36px !important; height: 36px !important; position: absolute !important; top: 0 !important; right: 0 !important; left: unset !important;"></div><span class="notice-message"></span></div>`);
