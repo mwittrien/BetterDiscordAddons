@@ -2564,9 +2564,21 @@ module.exports = (_ => {
 						let GuildsIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"Guilds", unlimited:true});
 						let GuildsPrototype = BDFDB.ObjectUtils.get(GuildsIns, "_reactInternalFiber.type.prototype");
 						if (GuildsIns && GuildsPrototype) {
-							BDFDB.PatchUtils.patch(BDFDB, GuildsPrototype, "render", {after: e => {
-								e.returnValue.props.children = typeof e.returnValue.props.children == "function" ? (_ => {return null;}) : [];
+							let injectPlaceholder = returnValue => {
+								let [children, index] = BDFDB.ReactUtils.findParent(returnValue, {name: "ConnectedUnreadDMs"});
+								if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {}));
 								BDFDB.ReactUtils.forceUpdate(GuildsIns);
+							};
+							BDFDB.PatchUtils.patch(BDFDB, GuildsPrototype, "render", {after: e => {
+								if (typeof e.returnValue.props.children == "function") {
+									let childrenRender = e.returnValue.props.children;
+									e.returnValue.props.children = (...args) => {
+										let children = childrenRender(...args);
+										injectPlaceholder(children);
+										return children;
+									};
+								}
+								else injectPlaceholder(e.returnValue);
 							}}, {once: true});
 							BDFDB.ReactUtils.forceUpdate(GuildsIns);
 						}
