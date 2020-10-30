@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "1.5.2",
 			"description": "Get a notification when a Friend or a User your choose to observe changes their online status, can be configured individually in the settings"
-		}
+		},
 		"changeLog": {
 			"fixed": {
 				"Crash on Canary": "Fixed the crash issue that occured one some plugins on canary"
