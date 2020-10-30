@@ -1611,6 +1611,7 @@
 		"guildsettingsrolesbuttonwrapper": ["GuildSettingsRoles", "buttonWrapper"],
 		"guildslabel": ["BDFDB", "guildsLabel"],
 		"guildsscroller": ["GuildsWrapper", "scroller"],
+		"guildstree": ["GuildsWrapper", "tree"],
 		"guildsummaryclickableicon": ["BDFDB", "guildSummaryClickableIcon"],
 		"guildsummarycontainer": ["BDFDB", "guildSummaryContainer"],
 		"guildsummaryemptyguild": ["BDFDB", "guildSummaryEmptyGuild"],
