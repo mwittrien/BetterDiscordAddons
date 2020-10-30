@@ -13,8 +13,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.5.1",
+			"version": "1.5.2",
 			"description": "Get a notification when a Friend or a User your choose to observe changes their online status, can be configured individually in the settings"
+		}
+		"changeLog": {
+			"fixed": {
+				"Crash on Canary": "Fixed the crash issue that occured one some plugins on canary"
+			}
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -251,7 +256,7 @@ module.exports = (_ => {
 					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 						title: title,
 						collapseStates: collapseStates,
-						dividertop: true,
+						dividerTop: true,
 						children: items
 					});
 				};
@@ -337,8 +342,8 @@ module.exports = (_ => {
 								onClick: _ => {
 									let userId = settingsPanel.querySelector(`.input-newstranger ` + BDFDB.dotCN.input).value.trim();
 									if (userId == BDFDB.UserUtils.me.id) BDFDB.NotificationUtils.toast("Are you seriously trying to stalk yourself?", {type:"error"});
-									else if (friendIds.includes(userId)) BDFDB.NotificationUtils.toast("User is already a friend of yours. Please use the 'Friend-List' area to configure them.", {type:"error"});
-									else if (Object.keys(nonFriends).includes(userId)) BDFDB.NotificationUtils.toast("User is already being observed as a 'Stranger'.", {type:"error"});
+									else if (friendIds.includes(userId)) BDFDB.NotificationUtils.toast("User is already a friend of yours, please use the 'Friend-List' area to configure them", {type:"error"});
+									else if (Object.keys(nonFriends).includes(userId)) BDFDB.NotificationUtils.toast("User is already being observed as a 'Stranger'", {type:"error"});
 									else {
 										let user = /.+#[0-9]{4}/.test(userId) ? BDFDB.LibraryModules.UserStore.findByTag(userId.split("#").slice(0, -1).join("#"), userId.split("#").pop()) : BDFDB.LibraryModules.UserStore.getUser(userId);
 										if (user) {
@@ -346,7 +351,7 @@ module.exports = (_ => {
 											BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 											this.SettingsUpdated = true;
 										}
-										else BDFDB.NotificationUtils.toast("Please enter a valid UserID of a user that has been loaded in your client.", {type:"error"});
+										else BDFDB.NotificationUtils.toast("Please enter a valid UserID of a user that has been loaded in your client", {type:"error"});
 									}
 								},
 								children: BDFDB.LanguageUtils.LanguageStrings.ADD
@@ -361,7 +366,6 @@ module.exports = (_ => {
 					collapseStates: collapseStates,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 						type: "Button",
-						className: BDFDB.disCN.marginbottom8,
 						label: "Overview of LogIns/-Outs of current Session",
 						onClick: _ => {this.showTimeLog()},
 						children: "Timelog"
@@ -455,10 +459,10 @@ module.exports = (_ => {
 													return;
 												}
 											}
-											BDFDB.NotificationUtils.toast("Use a valid direct link to a video or audio source. They usually end on something like .mp3, .mp4 or .wav.", {type:"danger"});
+											BDFDB.NotificationUtils.toast("Use a valid direct link to a video or audio source, they usually end on something like .mp3, .mp4 or .wav", {type:"danger"});
 										});
 										else BDFDB.LibraryRequires.fs.readFile(source, (error, response) => {
-											if (error) BDFDB.NotificationUtils.toast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
+											if (error) BDFDB.NotificationUtils.toast("Could not fetch file, please make sure the file exists", {type:"danger"});
 											else successSavedAudio(key, source, `data:audio/mpeg;base64,${response.toString("base64")}`);
 										});
 									},
@@ -483,11 +487,23 @@ module.exports = (_ => {
 		
 			processGuilds (e) {
 				if (settings.addOnlineCount) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ConnectedUnreadDMs"});
-					if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(FriendOnlineCounterComponent, {
-						amount: BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount()
-					}));
+					if (typeof e.returnvalue.props.children == "function") {
+						let childrenRender = e.returnvalue.props.children;
+						e.returnvalue.props.children = (...args) => {
+							let children = childrenRender(...args);
+							this.injectCounter(children);
+							return children;
+						};
+					}
+					else this.injectCounter(e.returnvalue);
 				}
+			}
+			
+			injectCounter (returnvalue) {
+				let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {name: "ConnectedUnreadDMs"});
+				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(FriendOnlineCounterComponent, {
+					amount: BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount()
+				}));
 			}
 
 			createDefaultConfig () {
