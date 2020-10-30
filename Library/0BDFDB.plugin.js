@@ -5814,7 +5814,7 @@ module.exports = (_ => {
 										inputClassName: BDFDB.disCN.inputmultifield,
 										onFocus: e => {this.setState({focused: true})},
 										onBlur: e => {this.setState({focused: false})}
-									}), "children", "className", "innerClassName"))
+									}), "children", "innerClassName"))
 								]
 							})
 						});

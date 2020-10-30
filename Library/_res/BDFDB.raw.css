@@ -564,16 +564,18 @@ img:not([src]), img[src=""], img[src="null"] {
 
 [REPLACE_CLASS_inputlistitems] {
 	display: flex;
-	justify-content: center;
+	flex-direction: row;
+	justify-content: flex-start;
 	align-items: center;
+	flex-wrap: wrap;
 }
 [REPLACE_CLASS_inputlistitem] {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
-[REPLACE_CLASS_inputlistitem] + [REPLACE_CLASS_inputlistitem] {
-	margin-left: 4px;
+[REPLACE_CLASS_inputlistitem]:not(:last-child) {
+	margin-right: 4px;
 }
 [REPLACE_CLASS_inputlistdelete] {
 	margin-left: 6px;
