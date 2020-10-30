@@ -2181,7 +2181,7 @@ module.exports = (_ => {
 				BDFDB.ReactUtils.findParent = function (nodeOrInstance, config) {
 					if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props && !config.filter) return [null, -1];
 					let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
-					if (!BDFDB.ObjectUtils.is(instance) && !BDFDB.ArrayUtils.is(instance)) return [null, -1];
+					if (!BDFDB.ObjectUtils.is(instance) && !BDFDB.ArrayUtils.is(instance) || instance.props && typeof instance.props.children == "function") return [null, -1];
 					config.name = config.name && [config.name].flat().filter(n => n);
 					config.key = config.key && [config.key].flat().filter(n => n);
 					config.props = config.props && [config.props].flat().filter(n => n);

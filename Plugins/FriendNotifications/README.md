@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Get a notification when a Friend or a User your choose to observe changes their online status, can be configured individually in the settings
+Get a notification when a Friend or a User you choose to observe changes their online status, can be configured individually in the settings
