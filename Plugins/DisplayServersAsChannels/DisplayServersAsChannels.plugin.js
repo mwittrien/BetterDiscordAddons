@@ -13,12 +13,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "DisplayServersAsChannels",
 			"author": "DevilBro",
-			"version": "1.4.2",
+			"version": "1.4.3",
 			"description": "Display servers in a similar way as channels"
 		},
 		"changeLog": {
-			"improved": {
-				"Server Tooltip": "No longer removes the server tooltip if the plugin ServerDetails is enabled"
+			"fixed": {
+				"Works again": "Yes"
 			}
 		}
 	};
@@ -140,13 +140,25 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.GuildUtils.rerenderAll();
 			}
-		
+
 			processGuilds (e) {
-				let [errorChildren, errorIndex] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FluxContainer(<Unknown>)"});
+				if (typeof e.returnvalue.props.children == "function") {
+					let childrenRender = e.returnvalue.props.children;
+					e.returnvalue.props.children = (...args) => {
+						let children = childrenRender(...args);
+						this.handleGuilds(children);
+						return children;
+					};
+				}
+				else this.handleGuilds(e.returnvalue);
+			}
+			
+			handleGuilds (returnvalue) {
+				let [errorChildren, errorIndex] = BDFDB.ReactUtils.findParent(returnvalue, {name: "FluxContainer(<Unknown>)"});
 				if (errorIndex > -1) errorChildren[errorIndex] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Items.UnavailableGuildsButton, {
 					unavailableGuilds: BDFDB.LibraryModules.GuildUnavailableStore.totalUnavailableGuilds
 				});
-				let scroller = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.guildsscroller]]});
+				let scroller = BDFDB.ReactUtils.findChild(returnvalue, {props:[["className", BDFDB.disCN.guildsscroller]]});
 				if (scroller) {
 					scroller.props.fade = true;
 					scroller.type = BDFDB.LibraryComponents.Scrollers.Thin;
