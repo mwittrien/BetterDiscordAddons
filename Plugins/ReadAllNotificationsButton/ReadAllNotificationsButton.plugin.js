@@ -13,8 +13,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ReadAllNotificationsButton",
 			"author": "DevilBro",
-			"version": "1.6.0",
+			"version": "1.6.1",
 			"description": "Add a button to clear all notifications"
+		},
+		"changeLog": {
+			"fixed": {
+				"Crash on Canary": "Fixed the crash issue that occured one some plugins on canary"
+			}
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -76,17 +81,22 @@ module.exports = (_ => {
 						margin-left: 10px;
 					}
 					${BDFDB.dotCN._readallnotificationsbuttonframe} {
+						height: 24px;
 						margin-bottom: 10px;
 					}
 					${BDFDB.dotCN._readallnotificationsbuttonframe}:active {
 						transform: translateY(1px);
 					}
+					${BDFDB.dotCN._readallnotificationsbuttoninner} {
+						height: 24px;
+					}
 					${BDFDB.dotCN._readallnotificationsbuttonbutton} {
-						cursor: pointer;
 						border-radius: 4px;
+						height: 24px;
 						font-size: 12px;
 						line-height: 1.3;
 						white-space: nowrap;
+						cursor: pointer;
 					}
 				`;
 			}
@@ -141,7 +151,6 @@ module.exports = (_ => {
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Button",
-							className: BDFDB.disCN.marginbottom8,
 							color: BDFDB.LibraryComponents.Button.Colors.GREEN,
 							label: "Enable for all Servers",
 							onClick: _ => {
@@ -151,7 +160,6 @@ module.exports = (_ => {
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Button",
-							className: BDFDB.disCN.marginbottom8,
 							color: BDFDB.LibraryComponents.Button.Colors.PRIMARY,
 							label: "Disable for all Servers",
 							onClick: _ => {
@@ -204,18 +212,27 @@ module.exports = (_ => {
 					})
 				}));
 			}
-			
+		
 			processGuilds (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ConnectedUnreadDMs"});
+				if (typeof e.returnvalue.props.children == "function") {
+					let childrenRender = e.returnvalue.props.children;
+					e.returnvalue.props.children = (...args) => {
+						let children = childrenRender(...args);
+						this.injectButton(children);
+						return children;
+					};
+				}
+				else this.injectButton(e.returnvalue);
+			}
+			
+			injectButton (returnvalue) {
+				let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {name: "ConnectedUnreadDMs"});
 				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCNS.guildouter + BDFDB.disCN._readallnotificationsbuttonframe,
-					style: {height: 20},
 					children: BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS.guildiconwrapper + BDFDB.disCN._readallnotificationsbuttoninner,
-						style: {height: 20},
 							children: BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN._readallnotificationsbuttonbutton,
-							style: {height: 20},
 							children: "read all",
 							onClick: _ => {
 								let clear = _ => {

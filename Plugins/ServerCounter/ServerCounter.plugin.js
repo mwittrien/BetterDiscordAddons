@@ -13,8 +13,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerCounter",
 			"author": "DevilBro",
-			"version": "1.0.1",
+			"version": "1.0.2",
 			"description": "Add a server counter to the server list"
+		},
+		"changeLog": {
+			"fixed": {
+				"Crash on Canary": "Fixed the crash issue that occured one some plugins on canary"
+			}
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -63,7 +68,19 @@ module.exports = (_ => {
 			}
 		
 			processGuilds (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ConnectedUnreadDMs"});
+				if (typeof e.returnvalue.props.children == "function") {
+					let childrenRender = e.returnvalue.props.children;
+					e.returnvalue.props.children = (...args) => {
+						let children = childrenRender(...args);
+						this.injectCounter(children);
+						return children;
+					};
+				}
+				else this.injectCounter(e.returnvalue);
+			}
+			
+			injectCounter (returnvalue) {
+				let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {name: "ConnectedUnreadDMs"});
 				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN.guildouter,
 					children: BDFDB.ReactUtils.createElement("div", {
