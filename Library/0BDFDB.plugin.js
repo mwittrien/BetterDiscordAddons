@@ -5826,12 +5826,12 @@ module.exports = (_ => {
 						if (typeof this.props.onChange) this.props.onChange(this.props.items, this);
 					}
 					render() {
-						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.MultiInput, {
+						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.MultiInput, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 							className: BDFDB.disCN.inputlist,
 							innerClassName: BDFDB.disCN.inputlistitems,
 							onKeyDown: e => {
 								if (e.which == 13 && e.target.value && e.target.value.trim()) {
-									let value = e.traget.value.trim();
+									let value = e.target.value.trim();
 									this.props.value = "";
 									if (!this.props.items.includes(value)) {
 										this.props.items.push(value);
@@ -5857,7 +5857,7 @@ module.exports = (_ => {
 									})
 								]
 							}))
-						});
+						}), "items"));
 					}
 				};
 				
