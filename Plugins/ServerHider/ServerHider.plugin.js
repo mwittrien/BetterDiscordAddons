@@ -13,8 +13,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerHider",
 			"author": "DevilBro",
-			"version": "6.1.6",
+			"version": "6.1.7",
 			"description": "Hide Servers in your Serverlist"
+		},
+		"changeLog": {
+			"fixed": {
+				"Crash": "Fixed the crash issue that occured one some plugins"
+			}
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -77,7 +82,6 @@ module.exports = (_ => {
 				
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					type: "Button",
-					className: BDFDB.disCN.marginbottom8,
 					color: BDFDB.LibraryComponents.Button.Colors.RED,
 					label: "Unhide all Servers/Folders",
 					onClick: _ => {
@@ -139,12 +143,25 @@ module.exports = (_ => {
 					]
 				}));
 			}
-
+		
 			processGuilds (e) {
-				let hiddenGuildIds = BDFDB.DataUtils.load(this, "hidden", "servers") || [];
-				let hiddenFolderIds = BDFDB.DataUtils.load(this, "hidden", "folders") || [];
+				if (typeof e.returnvalue.props.children == "function") {
+					let childrenRender = e.returnvalue.props.children;
+					e.returnvalue.props.children = (...args) => {
+						let children = childrenRender(...args);
+						this.handleGuilds(children);
+						return children;
+					};
+				}
+				else this.handleGuilds(e.returnvalue);
+			}
+
+			handleGuilds (returnvalue) {
+				let hiddenEles = BDFDB.DataUtils.load(this, "hidden");
+				let hiddenGuildIds = hiddenEles.servers || [];
+				let hiddenFolderIds = hiddenEles.folders || [];
 				if (hiddenGuildIds.length || hiddenFolderIds.length) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props:["folderId", "guildId"], someProps:true});
+					let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props:["folderId", "guildId"], someProps:true});
 					if (index > -1) for (let i in children) {
 						let child = children[i];
 						if (child.props.folderId) {

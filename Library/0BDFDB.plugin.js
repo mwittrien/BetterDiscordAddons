@@ -5807,6 +5807,7 @@ module.exports = (_ => {
 							direction: this.props.direction || InternalComponents.LibraryComponents.Flex.Direction.HORIZONTAL_REVERSE,
 							align: InternalComponents.LibraryComponents.Flex.Align.STRETCH,
 							grow: 0,
+							shrink: 0,
 							children: this.props.children
 						});
 					}
