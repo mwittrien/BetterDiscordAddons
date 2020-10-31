@@ -13,12 +13,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "DisplayServersAsChannels",
 			"author": "DevilBro",
-			"version": "1.4.3",
+			"version": "1.4.4",
 			"description": "Display servers in a similar way as channels"
 		},
 		"changeLog": {
 			"fixed": {
-				"Works again": "Yes"
+				"Crashes": "No longer causes crashes"
 			}
 		}
 	};
@@ -254,41 +254,68 @@ module.exports = (_ => {
 				let [children, index] = BDFDB.ReactUtils.findParent(parent, {name: "BlobMask"});
 				if (index > -1) {
 					let badges = [];
-					for (let key of Object.keys(children[index].props)) if (key && key.endsWith("Badge") && BDFDB.ReactUtils.isValidElement(children[index].props[key])) badges.push(children[index].props[key]);
-					(children[index].props.children[0] || children[index].props.children).props.children = [
-						(children[index].props.children[0] || children[index].props.children).props.children,
-						badges
-					].flat(10).filter(n => n);
+					for (let key of Object.keys(children[index].props)) {
+						if (key && key.endsWith("Badge") && BDFDB.ReactUtils.isValidElement(children[index].props[key])) badges.push(children[index].props[key]);
+					}
+					if (badges.length) {
+						let insertBadges = returnvalue => {
+							(returnvalue.props.children[0] || returnvalue.props.children).props.children = [
+								(returnvalue.props.children[0] || returnvalue.props.children).props.children,
+								badges
+							].flat(10).filter(n => n);
+						};
+						if (children[index].props.children && children[index].props.children.props && typeof children[index].props.children.props.children == "function") {
+							let childrenRender = children[index].props.children.props.children;
+							children[index].props.children.props.children = (...args) => {
+								let renderedChildren = childrenRender(...args);
+								insertBadges(renderedChildren);
+								return renderedChildren;
+							};
+						}
+						else insertBadges(children[index]);
+					}
 					children[index] = children[index].props.children;
 				}
 			}
 			
 			addElementName (parent, name, options = {}) {
-				let [children, index] = BDFDB.ReactUtils.findParent(parent, {name: ["NavItem", "Clickable"], props:[["className",BDFDB.disCN.guildserrorinner]]});
+				let [children, index] = BDFDB.ReactUtils.findParent(parent, {
+					someProps: true,
+					name: ["NavItem", "Clickable"],
+					props: [["className", BDFDB.disCN.guildserrorinner], ["id", "home"]]
+				});
 				if (index > -1) {
-					delete children[index].props.icon;
-					delete children[index].props.name;
-					let [children2, index2] = BDFDB.ReactUtils.findParent(children[index].props.children, {name:"FolderIcon", props:[["className",BDFDB.disCN.guildfoldericonwrapper]]});
-					if (index2 > -1) children2.splice(index2, 1);
-					let childEles = [
-						[options.badges].flat(10).filter(n => n).map(badge => BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN._displayserversaschannelsbadge,
-							children: badge
-						})),
-						BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN._displayserversaschannelsname,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-								children: name
-							})
-						}),
-						children[index].props.children
-					].flat().filter(n => n);
-					children[index].props.children = options.wrap ? BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.guildiconchildwrapper,
-						style: {backgroundColor: options.backgroundColor},
-						children: childEles
-					}) : childEles;
-					
+					let insertElements = returnvalue => {
+						delete returnvalue.props.icon;
+						delete returnvalue.props.name;
+						let childEles = [
+							[options.badges].flat(10).filter(n => n).map(badge => BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN._displayserversaschannelsbadge,
+								children: badge
+							})),
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN._displayserversaschannelsname,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+									children: name
+								})
+							}),
+							returnvalue.props.children && !(returnvalue.props.children.type && returnvalue.props.children.type.displayName == "FolderIcon") && returnvalue.props.children
+						].flat().filter(n => n);
+						returnvalue.props.children = options.wrap ? BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.guildiconchildwrapper,
+							style: {backgroundColor: options.backgroundColor},
+							children: childEles
+						}) : childEles;
+					};
+					if (typeof children[index].props.children == "function") {
+						let childrenRender = children[index].props.children;
+						children[index].props.children = (...args) => {
+							let renderedChildren = childrenRender(...args);
+							insertElements(renderedChildren);
+							return renderedChildren;
+						};
+					}
+					else insertElements(children[index]);
 				}
 			}
 
