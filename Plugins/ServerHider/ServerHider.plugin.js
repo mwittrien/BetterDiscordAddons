@@ -162,7 +162,7 @@ module.exports = (_ => {
 				let hiddenFolderIds = hiddenEles.folders || [];
 				if (hiddenGuildIds.length || hiddenFolderIds.length) {
 					let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props:["folderId", "guildId"], someProps:true});
-					if (index > -1) for (let i in children) if (children[i]) {
+					if (index > -1) for (let i in children) if (children[i] && children[i].props) {
 						if (children[i].props.folderId) {
 							if (hiddenFolderIds.includes(children[i].props.folderId))	children[i] = null;
 							else {
