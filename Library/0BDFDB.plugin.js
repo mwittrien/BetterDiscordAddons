@@ -5826,6 +5826,7 @@ module.exports = (_ => {
 						if (typeof this.props.onChange) this.props.onChange(this.props.items, this);
 					}
 					render() {
+						if (!BDFDB.ArrayUtils.is(this.props.items)) this.props.items = [];
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.MultiInput, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 							className: BDFDB.disCN.inputlist,
 							innerClassName: BDFDB.disCN.inputlistitems,
@@ -5840,7 +5841,7 @@ module.exports = (_ => {
 									}
 								}
 							},
-							children: (BDFDB.ArrayUtils.is(this.props.items) ? this.props.items : []).map(item => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Badges.TextBadge, {
+							children: this.props.items.map(item => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Badges.TextBadge, {
 								className: BDFDB.disCN.inputlistitem,
 								color: BDFDB.DiscordConstants.Colors.BRAND,
 								style: {borderRadius: "3px"},
@@ -7052,6 +7053,7 @@ module.exports = (_ => {
 								onMouseEnter: this.handleMouseEnter.bind(this),
 								onMouseLeave: this.handleMouseLeave.bind(this),
 								maxLength: this.props.type == "file" ? false : this.props.maxLength,
+								style: this.props.width ? {width: `${this.props.width}px`} : {},
 								ref: this.props.inputRef
 							}), "errorMessage", "focused", "error", "success", "inputClassName", "inputChildren", "valuePrefix", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "noAlpha", "filter", "useFilePath", "searchFolders")),
 							this.props.inputChildren,
