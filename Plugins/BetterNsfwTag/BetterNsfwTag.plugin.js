@@ -13,8 +13,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterNsfwTag",
 			"author": "DevilBro",
-			"version": "1.2.6",
+			"version": "1.2.7",
 			"description": "Add a more noticeable tag to NSFW channels"
+		},
+		"changeLog": {
+			"fixed": {
+				"Works again": "Yes"
+			}
 		}
 	};
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -49,7 +54,7 @@ module.exports = (_ => {
 			onLoad() {
 				this.patchedModules = {
 					after: {
-						ChannelItem: "render"
+						ChannelItem: "default"
 					}
 				};
 			}
