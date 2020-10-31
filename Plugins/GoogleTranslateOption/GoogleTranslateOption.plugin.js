@@ -13,15 +13,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.1.0",
+			"version": "2.1.1",
 			"description": "Add a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send"
 		},
 		"changeLog": {
-			"improved": {
-				"Quick Action": "Added Icon to quick action bar. Holding shift while hovering a message shows the quick action bar"
+			"fixed": {
+				"Crashes": "No longer causes crashes"
 			}
 		}
 	};
+	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
@@ -73,7 +74,7 @@ module.exports = (_ => {
 		};
 		
 		var languages, translating, isTranslating, translatedMessages, oldMessages;
-		var settings = {}, choices = {}, engines = {}, favorites = {};
+		var settings = {}, choices = {}, exceptions = {}, engines = {}, favorites = {};
 	
 		return class GoogleTranslateOption extends Plugin {
 			onLoad() {
@@ -94,6 +95,9 @@ module.exports = (_ => {
 						outputContext:			{value:"$discord", 		direction:"output",		place:"Context", 		description:"Output Language in received Messages:"},
 						inputMessage:			{value:"auto", 			direction:"input",		place:"Message", 		description:"Input Language in sent Messages:"},
 						outputMessage:			{value:"$discord", 		direction:"output",		place:"Message", 		description:"Output Language in sent Messages:"}
+					},
+					exceptions: {
+						wordStart:				{value:["!"],			max:1,		description:"Words starting with any of these will be ignored"}
 					},
 					engines: {
 						translator:				{value:"googleapi", 	description:"Translation Engine:"}
@@ -153,6 +157,24 @@ module.exports = (_ => {
 					value: settings[key]
 				}));
 				
+				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+					className: BDFDB.disCNS.dividerdefault + BDFDB.disCN.marginbottom8
+				}));
+				
+				for (let key in exceptions) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+					title: this.defaults.exceptions[key].description,
+					className: BDFDB.disCN.marginbottom8,
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListInput, {
+						placeholder: "New Exception",
+						maxLength: this.defaults.exceptions[key].max,
+						items: exceptions[key],
+						onChange: newExceptions => {
+							this.SettingsUpdated = true;
+							BDFDB.DataUtils.save(newExceptions, this, "exceptions", key);
+						}
+					})
+				}));
+				
 				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 			}
 		
@@ -166,6 +188,7 @@ module.exports = (_ => {
 			forceUpdateAll () {
 				settings = BDFDB.DataUtils.get(this, "settings");
 				choices = BDFDB.DataUtils.get(this, "choices");
+				exceptions = BDFDB.DataUtils.get(this, "exceptions");
 				engines = BDFDB.DataUtils.get(this, "engines");
 				favorites = BDFDB.DataUtils.load(this, "favorites");
 				
@@ -308,10 +331,10 @@ module.exports = (_ => {
 			
 			processChannelTextAreaContainer (e) {
 				if (settings.addTranslateButton) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ChannelEditorContainer"});
-					if (index > -1 && children[index].props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && !children[index].props.disabled) {
-						let [children2, index2] = BDFDB.ReactUtils.findParent(e.returnvalue, {props:[["className", BDFDB.disCN.textareapickerbuttons]]});
-						if (index2 > -1 && children2[index2].props && children2[index2].props.children) children2[index2].props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
+					let editor = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelEditorContainer"});
+					if (editor && editor.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && !editor.props.disabled) {
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props:[["className", BDFDB.disCN.textareapickerbuttons]]});
+						if (index > -1 && children[index].props && children[index].props.children) children[index].props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ChannelTextAreaButton, {
 								key: "translate-button",
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._googletranslateoptiontranslatebutton, translating && BDFDB.disCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton),
@@ -346,19 +369,20 @@ module.exports = (_ => {
 									BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
 								}
 								let popoutelements = [];
-								popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-									className: BDFDB.disCN.marginbottom8,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
-										label: `Words starting with "!" will be ignored`
-									})
-								}));
-								popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-									className: BDFDB.disCN.marginbottom8
-								}));
+								if (BDFDB.ArrayUtils.is(exceptions.wordStart) && exceptions.wordStart.length) {
+									popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+										className: BDFDB.disCN.marginbottom8,
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
+											label: `Words starting with ${exceptions.wordStart.map(n => '"' + n + '"').join(", ")} will be ignored`
+										})
+									}));
+									popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+										className: BDFDB.disCN.marginbottom8
+									}));
+								}
 								popoutelements = popoutelements.concat(this.createSelects(true));
 								popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
-									className: BDFDB.disCN.marginbottom8,
 									label: "Translate your Messages before sending",
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: translating,
@@ -599,14 +623,14 @@ module.exports = (_ => {
 			translateText (text, type, callback) {
 				let toast = null, finishTranslation = translation => {
 					isTranslating = false;
-					if (translation) translation = this.addExceptions(translation, exceptions);
+					if (translation) translation = this.addExceptions(translation, excepts);
 					if (toast) {
 						BDFDB.TimeUtils.clear(toast.interval);
 						toast.close();
 					}
 					callback(translation == text ? "" : translation, input, output);
 				};
-				let [newtext, exceptions, translate] = this.removeExceptions(text.trim(), type);
+				let [newText, excepts, translate] = this.removeExceptions(text.trim(), type);
 				let input = Object.assign({}, languages[this.getLanguageChoice("input", type)]);
 				let output = Object.assign({}, languages[this.getLanguageChoice("output", type)]);
 				if (translate) {
@@ -619,27 +643,27 @@ module.exports = (_ => {
 						}
 						else toast.textContent = toast.textContent.indexOf(".....") > -1 ? "Translating. Please wait" : toast.textContent + ".";
 					}, 500);
-					let specialcase = this.checkForSpecialCase(newtext, input);
+					let specialcase = this.checkForSpecialCase(newText, input);
 					if (specialcase) {
 						input.name = specialcase.name;
 						switch (specialcase.id) {
-							case "binary": newtext = this.binary2string(newtext); break;
-							case "braille": newtext = this.braille2string(newtext); break;
-							case "morse": newtext = this.morse2string(newtext); break;
+							case "binary": newText = this.binary2string(newText); break;
+							case "braille": newText = this.braille2string(newText); break;
+							case "morse": newText = this.morse2string(newText); break;
 						}
 					}
 					if (output.id == "binary" || output.id == "braille" || output.id == "morse") {
 						switch (output.id) {
-							case "binary": newtext = this.string2binary(newtext); break;
-							case "braille": newtext = this.string2braille(newtext); break;
-							case "morse": newtext = this.string2morse(newtext); break;
+							case "binary": newText = this.string2binary(newText); break;
+							case "braille": newText = this.string2braille(newText); break;
+							case "morse": newText = this.string2morse(newText); break;
 						}
-						finishTranslation(newtext);
+						finishTranslation(newText);
 					}
 					else {
 						if (translationEngines[engines.translator] && typeof this[translationEngines[engines.translator].funcName] == "function") {
 							isTranslating = true;
-							this[translationEngines[engines.translator].funcName].apply(this, [{input, output, text:newtext, specialcase, engine:translationEngines[engines.translator]}, finishTranslation]);
+							this[translationEngines[engines.translator].funcName].apply(this, [{input, output, text:newText, specialcase, engine:translationEngines[engines.translator]}, finishTranslation]);
 						}
 						else finishTranslation();
 					}
@@ -861,9 +885,9 @@ module.exports = (_ => {
 				return string.trim();
 			}
 
-			addExceptions (string, exceptions) {
-				for (let count in exceptions) {
-					let exception = exceptions[count].indexOf("!") == 0 ? exceptions[count].slice(1) : exceptions[count];
+			addExceptions (string, excepts) {
+				for (let count in excepts) {
+					let exception = BDFDB.ArrayUtils.is(exceptions.wordStart) && exceptions.wordStart.some(n => excepts[count].indexOf(n) == 0) ? excepts[count].slice(1) : excepts[count];
 					let newstring = string.replace(new RegExp(`\[/////[ ]*${count}\]`), exception);
 					if (newstring == string) string = newstring + " " + exception;
 					else string = newstring;
@@ -872,7 +896,7 @@ module.exports = (_ => {
 			}
 
 			removeExceptions (string, type) {
-				let exceptions = {}, newString = [], count = 0;
+				let excepts = {}, newString = [], count = 0;
 				if (type == "context") {
 					let text = [], i = 0;
 					string.split("").forEach(chara => { 
@@ -883,23 +907,24 @@ module.exports = (_ => {
 					for (let j in text) {
 						if (text[j].indexOf("<") == 0) {
 							newString.push(`[/////${count}]`);
-							exceptions[count] = text[j];
+							excepts[count] = text[j];
 							count++;
 						}
 						else newString.push(text[j]);
 					}
 				}
 				else {
+					let usedExceptions = BDFDB.ArrayUtils.is(exceptions.wordStart) ? exceptions.wordStart : [];
 					string.split(" ").forEach(word => {
-						if (word.indexOf("<@!") == 0 || word.indexOf("<#") == 0 || word.indexOf(":") == 0 || word.indexOf("<:") == 0 || word.indexOf("<a:") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || (word.indexOf("!") == 0 && word.length > 1)) {
+						if (word.indexOf("<@!") == 0 || word.indexOf("<#") == 0 || word.indexOf(":") == 0 || word.indexOf("<:") == 0 || word.indexOf("<a:") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || usedExceptions.some(n => word.indexOf(n) == 0 && word.length > 1)) {
 							newString.push(`[/////${count}]`);
-							exceptions[count] = word;
+							excepts[count] = word;
 							count++;
 						}
 						else newString.push(word);
 					});
 				}
-				return [newString.join(" "), exceptions, newString.length-count != 0];
+				return [newString.join(" "), excepts, newString.length-count != 0];
 			}
 
 			getGoogleTranslatePageURL (input, output, text) {
