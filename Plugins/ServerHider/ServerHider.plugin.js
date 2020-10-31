@@ -13,7 +13,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerHider",
 			"author": "DevilBro",
-			"version": "6.1.7",
+			"version": "6.1.8",
 			"description": "Hide Servers in your Serverlist"
 		},
 		"changeLog": {
@@ -162,20 +162,19 @@ module.exports = (_ => {
 				let hiddenFolderIds = hiddenEles.folders || [];
 				if (hiddenGuildIds.length || hiddenFolderIds.length) {
 					let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props:["folderId", "guildId"], someProps:true});
-					if (index > -1) for (let i in children) {
-						let child = children[i];
-						if (child.props.folderId) {
-							if (hiddenFolderIds.includes(child.props.folderId))	children[i] = null;
+					if (index > -1) for (let i in children) if (children[i]) {
+						if (children[i].props.folderId) {
+							if (hiddenFolderIds.includes(children[i].props.folderId))	children[i] = null;
 							else {
-								let guildIds = [].concat(child.props.guildIds.filter(guildId => !hiddenGuildIds.includes(guildId)));
+								let guildIds = [].concat(children[i].props.guildIds.filter(guildId => !hiddenGuildIds.includes(guildId)));
 								if (guildIds.length) {
-									child.props.hiddenGuildIds = [].concat(child.props.guildIds.filter(guildId => hiddenGuildIds.includes(guildId)));
-									child.props.guildIds = guildIds;
+									children[i].props.hiddenGuildIds = [].concat(children[i].props.guildIds.filter(guildId => hiddenGuildIds.includes(guildId)));
+									children[i].props.guildIds = guildIds;
 								}
 								else children[i] = null;
 							}
 						}
-						else if (child.props.guildId && hiddenGuildIds.includes(child.props.guildId)) children[i] = null;
+						else if (children[i].props.guildId && hiddenGuildIds.includes(children[i].props.guildId)) children[i] = null;
 					}
 				}
 			}
