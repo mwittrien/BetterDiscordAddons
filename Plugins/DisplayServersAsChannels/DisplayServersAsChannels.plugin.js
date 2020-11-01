@@ -13,12 +13,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "DisplayServersAsChannels",
 			"author": "DevilBro",
-			"version": "1.4.4",
+			"version": "1.4.5",
 			"description": "Display servers in a similar way as channels"
 		},
 		"changeLog": {
 			"fixed": {
-				"Crashes": "No longer causes crashes"
+				"Crashes": "No longer causes crashes when you got a DM"
 			}
 		}
 	};
@@ -174,7 +174,7 @@ module.exports = (_ => {
 			processDirectMessage (e) {
 				if (e.instance.props.channel.id) {
 					let text = BDFDB.ReactUtils.findValue(e.returnvalue, "text");
-					let icon = BDFDB.ReactUtils.findValue(e.returnvalue, "icon");
+					let icon = e.instance.props.channel.isGroupDM() ? BDFDB.LibraryModules.IconUtils.getChannelIconURL(e.instance.props.channel) : BDFDB.LibraryModules.IconUtils.getUserAvatarURL(BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channel.recipients[0]));
 					this.removeTooltip(e.returnvalue);
 					this.removeMask(e.returnvalue);
 					this.addElementName(e.returnvalue, text, {
@@ -259,10 +259,11 @@ module.exports = (_ => {
 					}
 					if (badges.length) {
 						let insertBadges = returnvalue => {
-							(returnvalue.props.children[0] || returnvalue.props.children).props.children = [
+							if (returnvalue.props.children) (returnvalue.props.children[0] || returnvalue.props.children).props.children = [
 								(returnvalue.props.children[0] || returnvalue.props.children).props.children,
 								badges
 							].flat(10).filter(n => n);
+							else returnvalue.props.children = [badges];
 						};
 						if (children[index].props.children && children[index].props.children.props && typeof children[index].props.children.props.children == "function") {
 							let childrenRender = children[index].props.children.props.children;
@@ -280,9 +281,9 @@ module.exports = (_ => {
 			
 			addElementName (parent, name, options = {}) {
 				let [children, index] = BDFDB.ReactUtils.findParent(parent, {
-					someProps: true,
 					name: ["NavItem", "Clickable"],
-					props: [["className", BDFDB.disCN.guildserrorinner], ["id", "home"]]
+					props: [["className", BDFDB.disCN.guildserrorinner]],
+					filter: c => c && c.props && (c.props.id == "home" || !isNaN(parseInt(c.props.id)))
 				});
 				if (index > -1) {
 					let insertElements = returnvalue => {
@@ -299,7 +300,7 @@ module.exports = (_ => {
 									children: name
 								})
 							}),
-							returnvalue.props.children && !(returnvalue.props.children.type && returnvalue.props.children.type.displayName == "FolderIcon") && returnvalue.props.children
+							[returnvalue.props.children].flat(10).filter(n => !(n && (n.type && n.type.displayName ==  "FolderIcon" || n.props && n.props.className && n.props.className.indexOf(BDFDB.disCN.guildfoldericonwrapper) > -1)))
 						].flat().filter(n => n);
 						returnvalue.props.children = options.wrap ? BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.guildiconchildwrapper,
