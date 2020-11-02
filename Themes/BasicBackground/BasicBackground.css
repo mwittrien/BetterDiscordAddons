@@ -4,8 +4,8 @@
 @import url(https://discord-custom-covers.github.io/usrbg/dist/usrbg.css);
 
 :root {
-	--dtransparencyalpha:			0,0,0;
-	--dgeneraltransparency:			0.15;
+	--dtransparencycolor:			0,0,0;
+	--dtransparencyalpha:			0.15;
 	--dmessagetransparency:			0.5;
 	--dguildchanneltransparency:	0.15;
 	--dmemberlisttransparency:		0.0;
