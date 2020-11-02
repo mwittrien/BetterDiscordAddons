@@ -3879,49 +3879,49 @@ module.exports = (_ => {
 						return id;
 					}
 				};
-				BDFDB.NumberUtils.compareVersions = function (newv, oldv) {
-					if (!newv || !oldv) return true;
-					newv = newv.toString().replace(/["'`]/g, "").split(/,|\./g).map(n => parseInt(n)).filter(n => (n || n == 0) && !isNaN(n));
-					oldv = oldv.toString().replace(/["'`]/g, "").split(/,|\./g).map(n => parseInt(n)).filter(n => (n || n == 0) && !isNaN(n));
-					var length = Math.max(newv.length, oldv.length);
+				BDFDB.NumberUtils.compareVersions = function (newV, oldV) {
+					if (!newV || !oldV) return true;
+					newV = newV.toString().replace(/["'`]/g, "").split(/,|\./g).map(n => parseInt(n)).filter(n => (n || n == 0) && !isNaN(n));
+					oldV = oldV.toString().replace(/["'`]/g, "").split(/,|\./g).map(n => parseInt(n)).filter(n => (n || n == 0) && !isNaN(n));
+					let length = Math.max(newV.length, oldV.length);
 					if (!length) return true;
-					if (newv.length > oldv.length) {
-						var temparray = new Array(newv.length - oldv.length);
-						for (let i = 0; i < temparray.length; i++) temparray[i] = 0;
-						oldv = temparray.concat(oldv);
+					if (newV.length > oldV.length) {
+						let tempArray = new Array(newV.length - oldV.length);
+						for (let i = 0; i < tempArray.length; i++) tempArray[i] = 0;
+						oldV = tempArray.concat(oldV);
 					}
-					else if (newv.length < oldv.length) {
-						var temparray = new Array(oldv.length - newv.length);
-						for (let i = 0; i < temparray.length; i++) temparray[i] = 0;
-						newv = temparray.concat(newv);
+					else if (newV.length < oldV.length) {
+						let tempArray = new Array(oldV.length - newV.length);
+						for (let i = 0; i < tempArray.length; i++) tempArray[i] = 0;
+						newV = tempArray.concat(newV);
 					}
 					for (let i = 0; i < length; i++) for (let ioutdated = false, j = 0; j <= i; j++) {
-						if (j == i && newv[j] < oldv[j]) return false;
-						if (j < i) ioutdated = newv[j] == oldv[j];
-						if ((j == 0 || ioutdated) && j == i && newv[j] > oldv[j]) return true;
+						if (j == i && newV[j] < oldV[j]) return false;
+						if (j < i) ioutdated = newV[j] == oldV[j];
+						if ((j == 0 || ioutdated) && j == i && newV[j] > oldV[j]) return true;
 					}
 					return false;
 				};
-				BDFDB.NumberUtils.getVersionDifference = function (newv, oldv) {
-					if (!newv || !oldv) return false;
-					newv = newv.toString().replace(/["'`]/g, "").split(/,|\./g).map(n => parseInt(n)).filter(n => (n || n == 0) && !isNaN(n));
-					oldv = oldv.toString().replace(/["'`]/g, "").split(/,|\./g).map(n => parseInt(n)).filter(n => (n || n == 0) && !isNaN(n));
-					var length = Math.max(newv.length, oldv.length);
+				BDFDB.NumberUtils.getVersionDifference = function (newV, oldV) {
+					if (!newV || !oldV) return false;
+					newV = newV.toString().replace(/["'`]/g, "").split(/,|\./g).map(n => parseInt(n)).filter(n => (n || n == 0) && !isNaN(n));
+					oldV = oldV.toString().replace(/["'`]/g, "").split(/,|\./g).map(n => parseInt(n)).filter(n => (n || n == 0) && !isNaN(n));
+					let length = Math.max(newV.length, oldV.length);
 					if (!length) return false;
-					if (newv.length > oldv.length) {
-						var temparray = new Array(newv.length - oldv.length);
-						for (let i = 0; i < temparray.length; i++) temparray[i] = 0;
-						oldv = temparray.concat(oldv);
+					if (newV.length > oldV.length) {
+						let tempArray = new Array(newV.length - oldV.length);
+						for (let i = 0; i < tempArray.length; i++) tempArray[i] = 0;
+						oldV = tempArray.concat(oldV);
 					}
-					else if (newv.length < oldv.length) {
-						var temparray = new Array(oldv.length - newv.length);
-						for (let i = 0; i < temparray.length; i++) temparray[i] = 0;
-						newv = temparray.concat(newv);
+					else if (newV.length < oldV.length) {
+						let tempArray = new Array(oldV.length - newV.length);
+						for (let i = 0; i < tempArray.length; i++) tempArray[i] = 0;
+						newV = tempArray.concat(newV);
 					}
-					var oldvvalue = 0, newvvalue = 0;
-					for (let i in oldv.reverse()) oldvvalue += (oldv[i] * (10 ** i));
-					for (let i in newv.reverse()) newvvalue += (newv[i] * (10 ** i));
-					return (newvvalue - oldvvalue) / (10 ** (length-1));
+					let oldvValue = 0, newValue = 0;
+					for (let i in oldV.reverse()) oldvValue += (oldV[i] * (10 ** i));
+					for (let i in newV.reverse()) newValue += (newV[i] * (10 ** i));
+					return (newValue - oldvValue) / (10 ** (length-1));
 				};
 
 				BDFDB.DiscordUtils = {};
@@ -7111,8 +7111,8 @@ module.exports = (_ => {
 											onClick: e => {
 												let min = parseInt(this.props.min);
 												let max = parseInt(this.props.max);
-												let newv = parseInt(this.props.value) + 1 || min || 0;
-												if (isNaN(max) || !isNaN(max) && newv <= max) this.handleNumberButton.bind(this)(e._targetInst, isNaN(min) || !isNaN(min) && newv >= min ? newv : min);
+												let newV = parseInt(this.props.value) + 1 || min || 0;
+												if (isNaN(max) || !isNaN(max) && newV <= max) this.handleNumberButton.bind(this)(e._targetInst, isNaN(min) || !isNaN(min) && newV >= min ? newV : min);
 											}
 										}),
 										BDFDB.ReactUtils.createElement("div", {
@@ -7120,8 +7120,8 @@ module.exports = (_ => {
 											onClick: e => {
 												let min = parseInt(this.props.min);
 												let max = parseInt(this.props.max);
-												let newv = parseInt(this.props.value) - 1 || min || 0;
-												if (isNaN(min) || !isNaN(min) && newv >= min) this.handleNumberButton.bind(this)(e._targetInst, isNaN(max) || !isNaN(max) && newv <= max ? newv : max);
+												let newV = parseInt(this.props.value) - 1 || min || 0;
+												if (isNaN(min) || !isNaN(min) && newV >= min) this.handleNumberButton.bind(this)(e._targetInst, isNaN(max) || !isNaN(max) && newV <= max ? newV : max);
 											}
 										})
 									]
