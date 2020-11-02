@@ -4387,7 +4387,7 @@ html .channelTabs-fav:hover {
 	background-color: var(--background-secondary);
 	color: var(--interactive-hover);
 }
-html .channelTabs-selected,
+html .channelTabs-tab.channelTabs-selected,
 html .channelTabs-fav:active {
 	background-color: var(--background-tertiary);
 	color: var(--interactive-active);
@@ -4421,10 +4421,10 @@ html .channelTabs-tab:not(.channelTabs-selected):hover::before {
 html .channelTabs-tab:not(.channelTabs-selected):hover::after {
 	box-shadow: -8px 0 0 0 var(--background-secondary);
 }
-html .channelTabs-selected::after {
+html .channelTabs-tab.channelTabs-selected::after {
 	box-shadow: -8px 0 0 0 var(--background-tertiary);
 }
-html .channelTabs-selected::before {
+html .channelTabs-tab.channelTabs-selected::before {
 	box-shadow: 8px 0 0 0 var(--background-tertiary);
 }
 html .channelTabs-tabIcon,
@@ -4444,7 +4444,7 @@ html .channelTabs-fav .channelTabs-favName ~ * {
 	margin: 0 0 0 4px !important;
 }
 html .channelTabs-closeTab,
-html .channelTabs-selected .channelTabs-closeTab {
+html .channelTabs-tab.channelTabs-selected .channelTabs-closeTab {
 	background-color: transparent;
 	color: var(--interactive-hover);
 	border-radius: 50%;
@@ -4456,7 +4456,7 @@ html .channelTabs-selected .channelTabs-closeTab {
 	line-height: unset;
 }
 html .channelTabs-closeTab:hover,
-html .channelTabs-selected .channelTabs-closeTab:hover {
+html .channelTabs-tab.channelTabs-selected .channelTabs-closeTab:hover {
 	background: #f04747;
 	color: var(--interactive-active);
 }

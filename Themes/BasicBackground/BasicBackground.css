@@ -7544,7 +7544,7 @@ html .channelTabs-fav:hover {
 	background: rgba(var(--vtransparencycolor), 0.4);
 	color: var(--interactive-hover);
 }
-html .channelTabs-selected,
+html .channelTabs-tab.channelTabs-selected,
 html .channelTabs-fav:active {
 	background: rgb(var(--vaccentcolor));
 	color: var(--interactive-active);
@@ -7571,7 +7571,7 @@ html .channelTabs-fav .channelTabs-favName ~ * {
 	margin: 0 0 0 4px !important;
 }
 html .channelTabs-closeTab,
-html .channelTabs-selected .channelTabs-closeTab {
+html .channelTabs-tab.channelTabs-selected .channelTabs-closeTab {
 	position: static;
 	background: rgba(var(--vtransparencycolor), 0.3);
 	color: var(--interactive-hover);
@@ -7584,7 +7584,7 @@ html .channelTabs-selected .channelTabs-closeTab {
 	line-height: unset;
 }
 html .channelTabs-closeTab:hover,
-html .channelTabs-selected .channelTabs-closeTab:hover {
+html .channelTabs-tab.channelTabs-selected .channelTabs-closeTab:hover {
 	background: #f04747;
 	color: var(--interactive-active);
 }
