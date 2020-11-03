@@ -3895,10 +3895,10 @@ module.exports = (_ => {
 						for (let i = 0; i < tempArray.length; i++) tempArray[i] = 0;
 						newV = tempArray.concat(newV);
 					}
-					for (let i = 0; i < length; i++) for (let ioutdated = false, j = 0; j <= i; j++) {
+					for (let i = 0; i < length; i++) for (let iOutdated = false, j = 0; j <= i; j++) {
 						if (j == i && newV[j] < oldV[j]) return false;
-						if (j < i) ioutdated = newV[j] == oldV[j];
-						if ((j == 0 || ioutdated) && j == i && newV[j] > oldV[j]) return true;
+						if (j < i) iOutdated = newV[j] == oldV[j];
+						if ((j == 0 || iOutdated) && j == i && newV[j] > oldV[j]) return true;
 					}
 					return false;
 				};
