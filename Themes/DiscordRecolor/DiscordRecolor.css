@@ -3926,7 +3926,7 @@ html .bd-settings-group.collapsible .bd-settings-title::after {
 	max-height: unset;
 }
 #app-mount .bd-addon-list .bd-addon-header {
-	border-bottom: 1px solid var(--background-modifier-accent);
+	border-bottom-color: var(--background-modifier-accent);
 	color: var(--header-primary);
 }
 #app-mount .bd-addon-card .bd-description::-webkit-scrollbar-track {
@@ -3958,7 +3958,7 @@ html .bd-settings-group.collapsible .bd-settings-title::after {
 	border-radius: 18px;
 }
 #app-mount .bd-addon-list .bd-footer {
-	border-top: 1px solid var(--background-modifier-accent);
+	border-top-color: var(--background-modifier-accent);
 }
 #app-mount .bd-addon-card.settings-open svg .fill {
 	fill: var(--interactive-normal);
