@@ -431,6 +431,7 @@
 		},
 		"BDrepo": {
 			"bdAddonCard": "bd-addon-card",
+			"bdAddonModal": "bd-addon-modal,
 			"bdButton": "bd-button",
 			"bdaAuthor": "bd-author author bda-author",
 			"bdaControls": "bd-controls bd-addon-controls bda-controls",
