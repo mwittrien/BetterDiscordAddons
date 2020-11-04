@@ -23,7 +23,7 @@
 		"CallUtils": {"props": ["getCalls", "isCallActive"]},
 		"CategoryCollapseStore": {"props": ["getCollapsedCategories", "isCollapsed"]},
 		"CategoryCollapseUtils": {"props": ["categoryCollapse", "categoryCollapseAll"]},
-		"ChannelStore": {"props": ["getChannel", "getChannels"]},
+		"ChannelStore": {"props": ["getChannel"]},
 		"ColorUtils": {"props": ["hex2int", "hex2rgb"]},
 		"ContextMenuUtils": {"props": ["closeContextMenu", "openContextMenu"]},
 		"CopyLinkUtils": {"props": ["SUPPORTS_COPY", "copy"]},
