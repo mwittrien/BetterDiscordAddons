@@ -13,12 +13,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeSettings",
 			"author": "DevilBro",
-			"version": "1.2.3",
+			"version": "1.2.4",
 			"description": "Allow you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page"
 		},
 		"changeLog": {
 			"fixed": {
-				"BD Beta": "Fixed start up error in plugin list"
+				"BD Beta": "Works with BD beta"
 			}
 		}
 	};
@@ -90,28 +90,80 @@ module.exports = (_ => {
 						}
 						let settingsButton = document.createElement("button");
 						settingsButton.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._reposettingsbutton, "theme-settings-button");
-						settingsButton.innerText = BDFDB.LanguageUtils.LanguageStrings.SETTINGS;
-						footer.appendChild(settingsButton);
-						settingsButton.addEventListener("click", _ => {
-							BDFDB.DOMUtils.addClass(card, BDFDB.disCN._reposettingsopen);
-							BDFDB.DOMUtils.removeClass(card, BDFDB.disCN._reposettingsclosed);
-							let children = [];
-							while (card.childElementCount) {
-								children.push(card.firstChild);
-								card.firstChild.remove();
-							}
-							let closeButton = BDFDB.DOMUtils.create(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
-							card.appendChild(closeButton);
-							closeButton.addEventListener("click", _ => {
-								BDFDB.DOMUtils.removeClass(card, BDFDB.disCN._reposettingsopen);
-								BDFDB.DOMUtils.addClass(card, BDFDB.disCN._reposettingsclosed);
-								while (card.childElementCount) card.firstChild.remove();
-								while (children.length) card.appendChild(children.shift());
+						let controls = footer.querySelector("." + BDFDB.disCN._repocontrols.split(" ")[0]);
+						if (controls) {
+							settingsButton.appendChild(BDFDB.DOMUtils.create(`<svg viewBox="0 0 20 20" style="width: 20px; height: 20px;">
+								<path fill="none" d="M0 0h20v20H0V0z"></path>
+								<path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"></path>
+							</svg>`));
+							controls.insertBefore(settingsButton, controls.firstElementChild);
+							settingsButton.addEventListener("click", _ => {
+								BDFDB.ModalUtils.open(this, {
+									header: `${addon.name} Settings`,
+									subheader: "",
+									className: BDFDB.disCN._repomodal,
+									size: "MEDIUM",
+									children: BDFDB.ReactUtils.elementToReact(this.createThemeVarInputs(addon, vars)),
+									buttons:[{contents: "Update", color: "GREEN", click: modal => {this.updateTheme(modal, addon);}}]
+								});
 							});
-							this.createThemeSettings(card, addon, vars);
-						});
+						}
+						else {
+							settingsButton.innerText = "Settings";
+							footer.appendChild(settingsButton);
+							settingsButton.addEventListener("click", _ => {
+								BDFDB.DOMUtils.addClass(card, BDFDB.disCN._reposettingsopen);
+								BDFDB.DOMUtils.removeClass(card, BDFDB.disCN._reposettingsclosed);
+								let children = [];
+								while (card.childElementCount) {
+									children.push(card.firstChild);
+									card.firstChild.remove();
+								}
+								let closeButton = BDFDB.DOMUtils.create(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
+								card.appendChild(closeButton);
+								closeButton.addEventListener("click", _ => {
+									BDFDB.DOMUtils.removeClass(card, BDFDB.disCN._reposettingsopen);
+									BDFDB.DOMUtils.addClass(card, BDFDB.disCN._reposettingsclosed);
+									while (card.childElementCount) card.firstChild.remove();
+									while (children.length) card.appendChild(children.shift());
+								});
+								wrapper.appendChild(this.createThemeVarInputs(addon, vars, [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+										type: "Button",
+										color: BDFDB.LibraryComponents.Button.Colors.GREEN,
+										label: "Update all variables",
+										onClick: _ => {this.updateTheme(wrapper, addon);},
+										children: "Update"
+									})
+								]));
+							});
+						}
 					}
 				}
+			}
+			
+			updateTheme (wrapper, addon) {
+				let path = BDFDB.LibraryRequires.path.join(dir, addon.filename);
+				let css = BDFDB.LibraryRequires.fs.readFileSync(path).toString();
+				if (css) {
+					let amount = 0;
+					for (let input of wrapper.querySelectorAll(BDFDB.dotCN.input)) {
+						let oldValue = input.getAttribute("placeholder");
+						let newValue = input.value;
+						if (newValue && newValue.trim() && newValue != oldValue) {
+							let varName = input.getAttribute("varName");
+							css = css.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(varName)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(oldValue)}`,"g"),`--${varName}$1:$2${newValue}`);
+							input.setAttribute("placeholder", newValue);
+							amount++;
+						}
+					}
+					if (amount > 0) {
+						BDFDB.LibraryRequires.fs.writeFileSync(path, css);
+						BDFDB.NotificationUtils.toast(`Updated ${amount} variable${amount == 1 ? "" : "s"} in ${addon.filename}`, {type:"success"});
+					}
+					else BDFDB.NotificationUtils.toast(`There are no changed variables to be updated in ${addon.filename}`, {type:"warning"});
+				}
+				else BDFDB.NotificationUtils.toast(`Could not find themefile: ${addon.filename}`, {type:"error"});
 			}
 
 			getThemeVars (css) {
@@ -127,38 +179,7 @@ module.exports = (_ => {
 				return [];
 			}
 
-			createThemeSettings (wrapper, theme, vars) {
-				let settingsItems = [];
-				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-					type: "Button",
-					color: BDFDB.LibraryComponents.Button.Colors.GREEN,
-					label: "Update all variables",
-					onClick: _ => {
-						let path = BDFDB.LibraryRequires.path.join(dir, theme.filename);
-						let css = BDFDB.LibraryRequires.fs.readFileSync(path).toString();
-						if (css) {
-							let amount = 0;
-							for (let input of wrapper.querySelectorAll(BDFDB.dotCN.input)) {
-								let oldvalue = input.getAttribute("placeholder");
-								let newvalue = input.value;
-								if (newvalue && newvalue.trim() && newvalue != oldvalue) {
-									let varName = input.getAttribute("varName");
-									css = css.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(varName)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(oldvalue)}`,"g"),`--${varName}$1:$2${newvalue}`);
-									amount++;
-								}
-							}
-							if (amount > 0) {
-								BDFDB.LibraryRequires.fs.writeFileSync(path, css);
-								BDFDB.NotificationUtils.toast(`Updated ${amount} variable${amount == 1 ? "" : "s"} in ${theme.filename}`, {type:"success"});
-							}
-							else BDFDB.NotificationUtils.toast(`There are no changed variables to be updated in ${theme.filename}`, {type:"warning"});
-						}
-						else BDFDB.NotificationUtils.toast(`Could not find themefile: ${theme.filename}`, {type:"error"});
-					},
-					children: "Update"
-				}));
-
+			createThemeVarInputs (theme, vars, settingsItems = []) {
 				for (let varStr of vars) {
 					varStr = varStr.split(":");
 					let varName = varStr.shift().trim();
@@ -200,7 +221,7 @@ module.exports = (_ => {
 					}
 				}
 				
-				wrapper.appendChild(BDFDB.PluginUtils.createSettingsPanel(Object.assign({}, theme, {noLibrary: true}), settingsItems));
+				return BDFDB.PluginUtils.createSettingsPanel(theme, settingsItems);
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
