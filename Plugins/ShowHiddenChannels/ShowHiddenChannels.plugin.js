@@ -13,7 +13,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "2.8.4",
+			"version": "2.8.5",
 			"description": "Display channels that are hidden from you by role restrictions"
 		},
 		"changeLog": {
@@ -209,7 +209,7 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.GuildChannelStore, "getTextChannelNameDisambiguations", {after: e => {
-					let all = BDFDB.LibraryModules.ChannelStore.getChannels();
+					let all = BDFDB.LibraryModules.ChannelStore.getGuildChannels();
 					for (let channel_id in all) if (all[channel_id].guild_id == e.methodArguments[0] && !e.returnValue[channel_id] && (all[channel_id].type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY && all[channel_id].type != BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE)) e.returnValue[channel_id] = {id: channel_id, name: all[channel_id].name};
 				}});
 
@@ -439,7 +439,7 @@ module.exports = (_ => {
 				let roles = (BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id) || {roles:[]}).roles.length;
 				if (hiddenChannelCache[guild.id] && hiddenChannelCache[guild.id].roles == roles) return [hiddenChannelCache[guild.id].hidden, hiddenChannelCache[guild.id].amount];
 				else {
-					let all = BDFDB.LibraryModules.ChannelStore.getChannels(), hidden = {}, amount = 0;
+					let all = BDFDB.LibraryModules.ChannelStore.getGuildChannels(), hidden = {}, amount = 0;
 					for (let type in BDFDB.DiscordConstants.ChannelTypes) hidden[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
 					for (let channel_id in all) {
 						let channel = all[channel_id];
