@@ -13,7 +13,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeSettings",
 			"author": "DevilBro",
-			"version": "1.2.4",
+			"version": "1.2.5",
 			"description": "Allow you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page"
 		},
 		"changeLog": {
@@ -128,12 +128,12 @@ module.exports = (_ => {
 									while (card.childElementCount) card.firstChild.remove();
 									while (children.length) card.appendChild(children.shift());
 								});
-								wrapper.appendChild(this.createThemeVarInputs(addon, vars, [
+								card.appendChild(this.createThemeVarInputs(addon, vars, [
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 										type: "Button",
 										color: BDFDB.LibraryComponents.Button.Colors.GREEN,
 										label: "Update all variables",
-										onClick: _ => {this.updateTheme(wrapper, addon);},
+										onClick: _ => {this.updateTheme(card, addon);},
 										children: "Update"
 									})
 								]));
@@ -143,12 +143,12 @@ module.exports = (_ => {
 				}
 			}
 			
-			updateTheme (wrapper, addon) {
+			updateTheme (card, addon) {
 				let path = BDFDB.LibraryRequires.path.join(dir, addon.filename);
 				let css = BDFDB.LibraryRequires.fs.readFileSync(path).toString();
 				if (css) {
 					let amount = 0;
-					for (let input of wrapper.querySelectorAll(BDFDB.dotCN.input)) {
+					for (let input of card.querySelectorAll(BDFDB.dotCN.input)) {
 						let oldValue = input.getAttribute("placeholder");
 						let newValue = input.value;
 						if (newValue && newValue.trim() && newValue != oldValue) {
