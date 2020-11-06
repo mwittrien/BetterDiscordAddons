@@ -898,7 +898,6 @@
 		"UserInfo": {"props": ["userInfo", "discordTag"]},
 		"UserPopout": {"props": ["userPopout", "headerPlaying"]},
 		"UserProfile": {"props": ["topSectionNormal", "tabBarContainer"]},
-		"UserSettings": {"props": ["multiInputField", "userInfoViewing"]},
 		"UserSummaryItem": {"props": ["avatarContainerMasked", "container"]},
 		"Video": {"props": ["video", "fullScreen"]},
 		"VoiceChannel": {"props": ["avatarSpeaking", "voiceUser"]},
