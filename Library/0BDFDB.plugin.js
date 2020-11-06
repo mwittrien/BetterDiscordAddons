@@ -7263,9 +7263,20 @@ module.exports = (_ => {
 				}
 				BDFDB.LibraryComponents = Object.assign({}, InternalComponents.LibraryComponents);
 				
-				InternalBDFDB.createCustomControl = function (reactChild) {
-					let controlButton = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._repocontrolsbutton}"></div>`);
-					BDFDB.ReactUtils.render(reactChild, controlButton);
+				InternalBDFDB.createCustomControl = function (data, beta) {
+					let child = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+						className: !beta && BDFDB.disCN._repoicon,
+						nativeClass: true,
+						name: data.svgName,
+						width: beta ? "20" : "24",
+						height: beta ? "20" : "24"
+					})
+					let controlButton = BDFDB.DOMUtils.create(`<${beta ? "button" : "div"} class="${BDFDB.DOMUtils.formatClassName(beta && BDFDB.disCN._repobutton, BDFDB.disCN._repocontrolsbutton)}"></${beta ? "button" : "div"}>`);
+					BDFDB.ReactUtils.render(data.tooltipText ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+						text: data.tooltipText,
+						children: child
+					}) : child, controlButton);
+					controlButton.addEventListener("click", _ => {if (typeof data.onClick == "function") data.onClick();});
 					return controlButton;
 				};
 				InternalBDFDB.appendCustomControls = function (card) {
@@ -7277,23 +7288,19 @@ module.exports = (_ => {
 						props.hasCustomControls = true;
 						let url = plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 						let controls = [];
-						if (plugin.changeLog) controls.push(InternalBDFDB.createCustomControl(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-							text: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
-							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCN._repoicon,
-								name: InternalComponents.LibraryComponents.SvgIcon.Names.CHANGELOG,
-								onClick: _ => {BDFDB.PluginUtils.openChangeLog(plugin);}
-							})
-						})));
-						if (window.PluginUpdates && window.PluginUpdates.plugins && window.PluginUpdates.plugins[url] && window.PluginUpdates.plugins[url].outdated) controls.push(InternalBDFDB.createCustomControl(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-							text: BDFDB.LanguageUtils.LanguageStrings.UPDATE_MANUALLY,
-							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCN._repoicon,
-								name: InternalComponents.LibraryComponents.SvgIcon.Names.DOWNLOAD,
-								onClick: _ => {BDFDB.PluginUtils.downloadUpdate(plugin.name, url);}
-							})
-						})));
-						for (let control of controls) checkbox.parentElement.insertBefore(control, checkbox.parentElement.firstElementChild);
+						let footerControls = card.querySelector("." + BDFDB.disCN._repofooter.split(" ")[0] + " ." + BDFDB.disCN._repocontrols.split(" ")[0]);
+						if (plugin.changeLog) controls.push(InternalBDFDB.createCustomControl({
+							tooltipText: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
+							svgName: InternalComponents.LibraryComponents.SvgIcon.Names.CHANGELOG,
+							onClick: _ => {BDFDB.PluginUtils.openChangeLog(plugin);}
+						}, !!footerControls));
+						if (window.PluginUpdates && window.PluginUpdates.plugins && window.PluginUpdates.plugins[url] && window.PluginUpdates.plugins[url].outdated) controls.push(InternalBDFDB.createCustomControl({
+							tooltipText: BDFDB.LanguageUtils.LanguageStrings.UPDATE_MANUALLY,
+							svgName: InternalComponents.LibraryComponents.SvgIcon.Names.DOWNLOAD,
+							onClick: _ => {BDFDB.PluginUtils.downloadUpdate(plugin.name, url);}
+						}, !!footerControls));
+						if (footerControls) for (let control of controls) footerControls.insertBefore(control, footerControls.firstElementChild);
+						else for (let control of controls) checkbox.parentElement.insertBefore(control, checkbox.parentElement.firstElementChild);
 					}
 				};
 				const cardObserver = (new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
