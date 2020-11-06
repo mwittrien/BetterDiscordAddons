@@ -430,6 +430,7 @@
 			"userInfoDate": "date-YN6TCS"
 		},
 		"BDrepo": {
+			"bdAddonButton": "bd-button bd-addon-button",
 			"bdAddonCard": "bd-addon-card",
 			"bdAddonModal": "bd-addon-modal",
 			"bdButton": "bd-button",
@@ -444,7 +445,7 @@
 			"bdaLink": "bd-link bda-link",
 			"bdaLinks": "bd-links bd-addon-links bda-links",
 			"bdaName": "bd-name name bda-name",
-			"bdaSettingsButton": "bd-button bd-addon-button bd-button-addon-settings bd-settings-button bda-settings-button",
+			"bdaSettingsButton": "bd-button bd-button-addon-settings bd-settings-button bda-settings-button",
 			"bdaSlist": "bda-slist bd-addon-list",
 			"bdaVersion": "bd-version version bda-version",
 			"bdGuild": "bd-guild",
@@ -1047,6 +1048,7 @@
 		"_repoauthor": ["BDrepo", "bdaAuthor"],
 		"_repobutton": ["BDrepo", "bdButton"],
 		"_repocard": ["BDrepo", "bdAddonCard"],
+		"_repocardbutton": ["BDrepo", "bdAddonButton"],
 		"_repocheckbox": ["BDrepo", "switchCheckbox"],
 		"_repocheckboxchecked": ["BDrepo", "switchChecked"],
 		"_repocheckboxinner": ["BDrepo", "switch"],
