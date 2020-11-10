@@ -13,12 +13,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
-			"version": "3.5.1",
+			"version": "3.5.2",
 			"description": "Allow you to replace the native sounds of Discord with your own"
 		},
 		"changeLog": {
 			"added": {
-				"Halloween": "Added discord's halloween call sound to the choices"
+				"Halloween": "Added discord's halloween call sound to the choices",
+				"Global Volume": "Added global volume slider affecting all sounds"
 			}
 		}
 	};
@@ -51,6 +52,7 @@ module.exports = (_ => {
 		stop() {}
 	} : (([Plugin, BDFDB]) => {
 		var audios, choices, firedEvents;
+		var volumes = {};
 		
 		const removeAllKey = "REMOVE_ALL_BDFDB_DEVILBRO_DO_NOT_COPY";
 		const defaultDevice = "default";
@@ -168,7 +170,7 @@ module.exports = (_ => {
 					let audio = new Audio;
 					audio.src = this._src;
 					audio.onloadeddata = _ => {
-						audio.volume = Math.min((BDFDB.LibraryModules.MediaDeviceUtils.getOutputVolume() / 100) * (this._volume / 100), 1);
+						audio.volume = Math.min((BDFDB.LibraryModules.MediaDeviceUtils.getOutputVolume() / 100) * (this._volume / 100) * (volumes.globalVolume / 100), 1);
 						BDFDB.LibraryModules.PlatformUtils.embedded && audio.setSinkId(currentDevice || defaultDevice);
 						callback(audio);
 					};
@@ -189,11 +191,19 @@ module.exports = (_ => {
 				choices = {};
 				firedEvents = {};
 				
+				this.defaults = {
+					volumes: {
+						globalVolume:				{value:100,				description:"Global Notification Sounds Volume"}
+					}
+				};
+				
 				this.patchedModules = {
 					after: {
 						Shakeable: "render"
 					}
 				};
+				
+				this.patchPriority = 10;
 			}
 			
 			onStart() {
@@ -422,6 +432,19 @@ module.exports = (_ => {
 				let settingsPanel, settingsItems = [];
 			
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+					title: "Settings",
+					collapseStates: collapseStates,
+					children: Object.keys(volumes).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+						type: "Slider",
+						plugin: this,
+						keys: ["volumes", key],
+						basis: "50%",
+						label: this.defaults.volumes[key].description,
+						value: volumes[key]
+					}))
+				}));
+			
+				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 					title: "Add new Sound",
 					collapseStates: collapseStates,
 					children: [
@@ -470,7 +493,7 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 									style: {marginBottom: 1},
 									onClick: _ => {
-										for (let input of settingsPanel.querySelectorAll(".input-newsound " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new sound.", {type:"danger"});
+										for (let input of settingsPanel.querySelectorAll(".input-newsound " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new sound", {type:"danger"});
 										let category = settingsPanel.querySelector(".input-category " + BDFDB.dotCN.input).value.trim();
 										let sound = settingsPanel.querySelector(".input-sound " + BDFDB.dotCN.input).value.trim();
 										let source = settingsPanel.querySelector(".input-source " + BDFDB.dotCN.input).value.trim();
@@ -479,10 +502,10 @@ module.exports = (_ => {
 												let type = response.headers["content-type"];
 												if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) return successSavedAudio({category, sound, source});
 											}
-											BDFDB.NotificationUtils.toast("Use a valid direct link to a video or audio source. They usually end on something like .mp3, .mp4 or .wav.", {type:"danger"});
+											BDFDB.NotificationUtils.toast("Use a valid direct link to a video or audio source, they usually end on something like .mp3, .mp4 or .wav", {type:"danger"});
 										});
 										else BDFDB.LibraryRequires.fs.readFile(source, (error, response) => {
-											if (error) BDFDB.NotificationUtils.toast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
+											if (error) BDFDB.NotificationUtils.toast("Could not fetch file. Please make sure the file exists", {type:"danger"});
 											else return successSavedAudio({category, sound, source:`data:audio/mpeg;base64,${response.toString("base64")}`});
 										});
 									},
@@ -551,7 +574,7 @@ module.exports = (_ => {
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 								grow: 0,
-								shrink: 0,
+								shrink: 1,
 								basis: "25%",
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 									style: {marginBottom: 1},
@@ -580,7 +603,7 @@ module.exports = (_ => {
 												this.loadChoices();
 												BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 											});
-											else BDFDB.NotificationUtils.toast("No sounds to delete.", {type:"danger"});
+											else BDFDB.NotificationUtils.toast("No sounds to delete", {type:"danger"});
 										}
 									},
 									children: BDFDB.LanguageUtils.LanguageStrings.DELETE
@@ -605,6 +628,7 @@ module.exports = (_ => {
 			forceUpdateAll () {
 				repatchIncoming = true;
 				createdAudios["call_calling"] = BDFDB.LibraryModules.SoundUtils.createSound("call_calling");
+				volumes = BDFDB.DataUtils.get(this, "volumes");
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 		
@@ -637,10 +661,6 @@ module.exports = (_ => {
 				let loadedChoices = BDFDB.DataUtils.load(this, "choices");
 				for (let type in types) {
 					let choice = loadedChoices[type] || {}, soundFound = false;
-					// REMOVE 06.10.2020
-					choice.sound = choice.song || choice.sound;
-					delete choice.song;
-					delete choice.src;
 					for (let category in audios) if (choice.category == category) for (let sound in audios[category]) if (choice.sound == sound) {
 						soundFound = true;
 						break;
