@@ -13,12 +13,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.0.1",
+			"version": "4.0.2",
 			"description": "Allow you to change the icon, name, tag and color of users"
 		},
 		"changeLog": {
-			"improved": {
-				"Inline Replies": "Works already for the yet to be released inline replies"
+			"fixed": {
+				"Direct Message Icons": "Gets changed again"
 			}
 		}
 	};
@@ -811,8 +811,15 @@ module.exports = (_ => {
 					let recipientId = e.instance.props.channel.getRecipientId();
 					let tooltip = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ListItemTooltip"});
 					if (tooltip) tooltip.props.text = this.getUserData(recipientId).username;
-					let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "NavItem"});
-					if (avatar) avatar.props.icon = this.getUserAvatar(recipientId);
+					let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: c => c && c.props && !isNaN(parseInt(c.props.id))});
+					if (avatar && typeof avatar.props.children == "function") {
+						let childrenRender = avatar.props.children;
+						avatar.props.children = (...args) => {
+							let renderedChildren = childrenRender(...args);
+							if (renderedChildren && renderedChildren.props) renderedChildren.props.icon = this.getUserAvatar(recipientId);
+							return renderedChildren;
+						};
+					}
 				}
 			}
 
