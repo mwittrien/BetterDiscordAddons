@@ -6274,6 +6274,7 @@ module.exports = (_ => {
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 							direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
 							children: headerItems.length ? ([
+								[
 									BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 										className: BDFDB.disCN.settingspanelheader,
 										align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
