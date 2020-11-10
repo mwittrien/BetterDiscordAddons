@@ -13,12 +13,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "2.8.5",
+			"version": "2.8.6",
 			"description": "Display channels that are hidden from you by role restrictions"
 		},
 		"changeLog": {
 			"fixed": {
-				"Works again": "Yes"
+				"Channel Accessibility": "Now also works with previewed servers"
 			}
 		}
 	};
@@ -475,94 +475,92 @@ module.exports = (_ => {
 			openAccessModal (channel, allowed) {
 				let guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
 				let myMember = guild && BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id);
-				if (myMember) {
-					let category = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.ChannelStore.getChannel(channel.id).parent_id);
-					let lightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
-					let allowedRoles = [], allowedUsers = [], deniedRoles = [], deniedUsers = [], everyoneDenied = false;
-					for (let id in channel.permissionOverwrites) {
-						if ((channel.permissionOverwrites[id].type == BDFDB.DiscordConstants.PermissionOverrideType.ROLE || overrideTypes[channel.permissionOverwrites[id].type] == BDFDB.DiscordConstants.PermissionOverrideType.ROLE) && (guild.roles[id] && guild.roles[id].name != "@everyone") && ((channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
-							allowedRoles.push(Object.assign({overwritten: myMember.roles.includes(id) && !allowed}, guild.roles[id]));
-						}
-						else if ((channel.permissionOverwrites[id].type == BDFDB.DiscordConstants.PermissionOverrideType.MEMBER || overrideTypes[channel.permissionOverwrites[id].type] == BDFDB.DiscordConstants.PermissionOverrideType.MEMBER) && ((channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
-							let user = BDFDB.LibraryModules.UserStore.getUser(id);
-							if (user) allowedUsers.push(Object.assign({}, user, BDFDB.LibraryModules.MemberStore.getMember(guild.id, id) || {}));
-							else allowedUsers.push({id: id, username: `UserId: ${id}`, fetchable: true});
-						}
-						if ((channel.permissionOverwrites[id].type == BDFDB.DiscordConstants.PermissionOverrideType.ROLE || overrideTypes[channel.permissionOverwrites[id].type] == BDFDB.DiscordConstants.PermissionOverrideType.ROLE) && ((channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
-							deniedRoles.push(guild.roles[id]);
-							if (guild.roles[id] && guild.roles[id].name == "@everyone") everyoneDenied = true;
-						}
-						else if ((channel.permissionOverwrites[id].type == BDFDB.DiscordConstants.PermissionOverrideType.MEMBER || overrideTypes[channel.permissionOverwrites[id].type] == BDFDB.DiscordConstants.PermissionOverrideType.MEMBER) && ((channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
-							let user = BDFDB.LibraryModules.UserStore.getUser(id);
-							if (user) deniedUsers.push(Object.assign({}, user, BDFDB.LibraryModules.MemberStore.getMember(guild.id, id) || {}));
-							else deniedUsers.push({id: id, username: `UserId: ${id}`, fetchable: true});
-						}
+				let category = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.ChannelStore.getChannel(channel.id).parent_id);
+				let lightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
+				let allowedRoles = [], allowedUsers = [], deniedRoles = [], deniedUsers = [], everyoneDenied = false;
+				for (let id in channel.permissionOverwrites) {
+					if ((channel.permissionOverwrites[id].type == BDFDB.DiscordConstants.PermissionOverrideType.ROLE || overrideTypes[channel.permissionOverwrites[id].type] == BDFDB.DiscordConstants.PermissionOverrideType.ROLE) && (guild.roles[id] && guild.roles[id].name != "@everyone") && ((channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
+						allowedRoles.push(Object.assign({overwritten: myMember && myMember.roles.includes(id) && !allowed}, guild.roles[id]));
 					}
-					if (allowed && !everyoneDenied) allowedRoles.push({name: "@everyone"});
-					let allowedElements = [], deniedElements = [];
-					for (let role of allowedRoles) allowedElements.push(BDFDB.ReactUtils.createElement(roleRowComponent, {role: role, guildId: guild.id, channelId: channel.id}));
-					for (let user of allowedUsers) allowedElements.push(BDFDB.ReactUtils.createElement(userRowComponent, {user: user, guildId: guild.id, channelId: channel.id}));
-					for (let role of deniedRoles) deniedElements.push(BDFDB.ReactUtils.createElement(roleRowComponent, {role: role, guildId: guild.id, channelId: channel.id}));
-					for (let user of deniedUsers) deniedElements.push(BDFDB.ReactUtils.createElement(userRowComponent, {user: user, guildId: guild.id, channelId: channel.id}));
-
-					BDFDB.ModalUtils.open(this, {
-						size: "MEDIUM",
-						header: BDFDB.LanguageUtils.LanguageStrings.CHANNEL + " " + BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY,
-						subheader: "#" + channel.name,
-						className: BDFDB.disCN._showhiddenchannelsaccessmodal,
-						contentClassName: BDFDB.disCN.listscroller,
-						children: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-								className: BDFDB.disCN.modalsubinner,
-								tab: BDFDB.LanguageUtils.LanguageStrings.OVERLAY_SETTINGS_GENERAL_TAB,
-								children: [{
-										title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_NAME,
-										text: channel.name
-									}, channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE ? {
-										title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_BITRATE,
-										text: channel.bitrate || "---"
-									} : {
-										title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_TOPIC,
-										text: channel.topic || "---"
-									}, {
-										title: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_TYPE,
-										text: BDFDB.LanguageUtils.LanguageStrings[typeNameMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]]
-									}, {
-										title: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_NAME,
-										text: category && category.name || BDFDB.LanguageUtils.LanguageStrings.NO_CATEGORY
-									}].map((formLabel, i) => formLabel && [
-										i == 0 ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-											className: BDFDB.disCN.marginbottom20
-										}),
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-											title: `${formLabel.title}:`,
-											className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.marginbottom20, i == 0 && BDFDB.disCN.margintop8),
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
-												className: BDFDB.disCN.marginleft8,
-												children: formLabel.text
-											})
-										})
-									]).flat(10).filter(n => n)
-							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-								tab: this.labels.modal_allowed_text,
-								children: allowedElements.length ? allowedElements :
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateBottom, {
-										msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
-										image: lightTheme ? "/assets/9b0d90147f7fab54f00dd193fe7f85cd.svg" : "/assets/308e587f3a68412f137f7317206e92c2.svg"
-									})
-							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-								tab: this.labels.modal_denied_text,
-								children: deniedElements.length ? deniedElements :
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateBottom, {
-										msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
-										image: lightTheme ? "/assets/9b0d90147f7fab54f00dd193fe7f85cd.svg" : "/assets/308e587f3a68412f137f7317206e92c2.svg"
-									})
-							})
-						]
-					});
+					else if ((channel.permissionOverwrites[id].type == BDFDB.DiscordConstants.PermissionOverrideType.MEMBER || overrideTypes[channel.permissionOverwrites[id].type] == BDFDB.DiscordConstants.PermissionOverrideType.MEMBER) && ((channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
+						let user = BDFDB.LibraryModules.UserStore.getUser(id);
+						if (user) allowedUsers.push(Object.assign({}, user, BDFDB.LibraryModules.MemberStore.getMember(guild.id, id) || {}));
+						else allowedUsers.push({id: id, username: `UserId: ${id}`, fetchable: true});
+					}
+					if ((channel.permissionOverwrites[id].type == BDFDB.DiscordConstants.PermissionOverrideType.ROLE || overrideTypes[channel.permissionOverwrites[id].type] == BDFDB.DiscordConstants.PermissionOverrideType.ROLE) && ((channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
+						deniedRoles.push(guild.roles[id]);
+						if (guild.roles[id] && guild.roles[id].name == "@everyone") everyoneDenied = true;
+					}
+					else if ((channel.permissionOverwrites[id].type == BDFDB.DiscordConstants.PermissionOverrideType.MEMBER || overrideTypes[channel.permissionOverwrites[id].type] == BDFDB.DiscordConstants.PermissionOverrideType.MEMBER) && ((channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
+						let user = BDFDB.LibraryModules.UserStore.getUser(id);
+						if (user) deniedUsers.push(Object.assign({}, user, BDFDB.LibraryModules.MemberStore.getMember(guild.id, id) || {}));
+						else deniedUsers.push({id: id, username: `UserId: ${id}`, fetchable: true});
+					}
 				}
+				if (allowed && !everyoneDenied) allowedRoles.push({name: "@everyone"});
+				let allowedElements = [], deniedElements = [];
+				for (let role of allowedRoles) allowedElements.push(BDFDB.ReactUtils.createElement(roleRowComponent, {role: role, guildId: guild.id, channelId: channel.id}));
+				for (let user of allowedUsers) allowedElements.push(BDFDB.ReactUtils.createElement(userRowComponent, {user: user, guildId: guild.id, channelId: channel.id}));
+				for (let role of deniedRoles) deniedElements.push(BDFDB.ReactUtils.createElement(roleRowComponent, {role: role, guildId: guild.id, channelId: channel.id}));
+				for (let user of deniedUsers) deniedElements.push(BDFDB.ReactUtils.createElement(userRowComponent, {user: user, guildId: guild.id, channelId: channel.id}));
+
+				BDFDB.ModalUtils.open(this, {
+					size: "MEDIUM",
+					header: BDFDB.LanguageUtils.LanguageStrings.CHANNEL + " " + BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY,
+					subheader: "#" + channel.name,
+					className: BDFDB.disCN._showhiddenchannelsaccessmodal,
+					contentClassName: BDFDB.disCN.listscroller,
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+							className: BDFDB.disCN.modalsubinner,
+							tab: BDFDB.LanguageUtils.LanguageStrings.OVERLAY_SETTINGS_GENERAL_TAB,
+							children: [{
+									title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_NAME,
+									text: channel.name
+								}, channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE ? {
+									title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_BITRATE,
+									text: channel.bitrate || "---"
+								} : {
+									title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_TOPIC,
+									text: channel.topic || "---"
+								}, {
+									title: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_TYPE,
+									text: BDFDB.LanguageUtils.LanguageStrings[typeNameMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]]
+								}, {
+									title: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_NAME,
+									text: category && category.name || BDFDB.LanguageUtils.LanguageStrings.NO_CATEGORY
+								}].map((formLabel, i) => formLabel && [
+									i == 0 ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+										className: BDFDB.disCN.marginbottom20
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+										title: `${formLabel.title}:`,
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.marginbottom20, i == 0 && BDFDB.disCN.margintop8),
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
+											className: BDFDB.disCN.marginleft8,
+											children: formLabel.text
+										})
+									})
+								]).flat(10).filter(n => n)
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+							tab: this.labels.modal_allowed_text,
+							children: allowedElements.length ? allowedElements :
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateBottom, {
+									msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
+									image: lightTheme ? "/assets/9b0d90147f7fab54f00dd193fe7f85cd.svg" : "/assets/308e587f3a68412f137f7317206e92c2.svg"
+								})
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+							tab: this.labels.modal_denied_text,
+							children: deniedElements.length ? deniedElements :
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateBottom, {
+									msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
+									image: lightTheme ? "/assets/9b0d90147f7fab54f00dd193fe7f85cd.svg" : "/assets/308e587f3a68412f137f7317206e92c2.svg"
+								})
+						})
+					]
+				});
 			}
 
 			setLabelsByLanguage () {
