@@ -9,6 +9,8 @@
  */
 
 module.exports = (_ => {
+	const isBeta = !(window.BdApi && !Array.isArray(BdApi.settings));
+	
 	const config = {
 		"info": {
 			"name": "BDFDB",
@@ -425,8 +427,7 @@ module.exports = (_ => {
 		}
 		return null;
 	};
-	let oldSettings = window.BdApi && !BDFDB.ArrayUtils.is(BdApi.settings);
-	BDFDB.BDUtils.settingsIds = oldSettings ? {
+	BDFDB.BDUtils.settingsIds = !isBeta ? {
 		automaticLoading: "fork-ps-5",
 		coloredText: "bda-gs-7",
 		normalizedClasses: "fork-ps-4",
@@ -794,7 +795,7 @@ module.exports = (_ => {
 		BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, {
 			key: `${plugin.name}-settingsPanel`,
 			plugin: plugin,
-			title: plugin.name,
+			title: !isBeta && plugin.name,
 			children: children
 		}), settingsPanel);
 		return settingsPanel;
@@ -6272,9 +6273,7 @@ module.exports = (_ => {
 						
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 							direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
-							grow: 1,
-							children: [
-								headerItems.length && [
+							children: headerItems.length ? ([
 									BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 										className: BDFDB.disCN.settingspanelheader,
 										align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
@@ -6289,7 +6288,7 @@ module.exports = (_ => {
 									direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
 									children: panelItems
 								})
-							].flat(10).filter(n => n)
+							].flat(10).filter(n => n)) : panelItems
 						});
 					}
 				};
@@ -6360,7 +6359,7 @@ module.exports = (_ => {
 											children: BDFDB.ReactUtils.createElement(childComponent, BDFDB.ObjectUtils.exclude(Object.assign(BDFDB.ObjectUtils.exclude(this.props, "className", "id", "type"), this.props.childProps, {
 												onChange: this.handleChange.bind(this),
 												onValueChange: this.handleChange.bind(this)
-											}), "grow", "stretch", "basis", "margin", "dividerBottom", "dividerTop", "label", "labelClassName", "labelchildren", "tag", "mini", "note", "childProps"))
+											}), "basis", "margin", "dividerBottom", "dividerTop", "label", "labelClassName", "labelchildren", "tag", "mini", "note", "childProps"))
 										})
 									].flat(10).filter(n => n)
 								}),
@@ -7263,15 +7262,15 @@ module.exports = (_ => {
 				}
 				BDFDB.LibraryComponents = Object.assign({}, InternalComponents.LibraryComponents);
 				
-				InternalBDFDB.createCustomControl = function (data, beta) {
+				InternalBDFDB.createCustomControl = function (data) {
 					let child = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-						className: !beta && BDFDB.disCN._repoicon,
+						className: !isBeta && BDFDB.disCN._repoicon,
 						nativeClass: true,
 						name: data.svgName,
-						width: beta ? "20" : "24",
-						height: beta ? "20" : "24"
+						width: isBeta ? "20" : "24",
+						height: isBeta ? "20" : "24"
 					})
-					let controlButton = BDFDB.DOMUtils.create(`<${beta ? "button" : "div"} class="${BDFDB.DOMUtils.formatClassName(beta && BDFDB.disCN._repobutton, BDFDB.disCN._repocontrolsbutton)}"></${beta ? "button" : "div"}>`);
+					let controlButton = BDFDB.DOMUtils.create(`<${isBeta ? "button" : "div"} class="${BDFDB.DOMUtils.formatClassName(isBeta && BDFDB.disCN._repobutton, BDFDB.disCN._repocontrolsbutton)}"></${isBeta ? "button" : "div"}>`);
 					BDFDB.ReactUtils.render(data.tooltipText ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 						text: data.tooltipText,
 						children: child
@@ -7293,12 +7292,12 @@ module.exports = (_ => {
 							tooltipText: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
 							svgName: InternalComponents.LibraryComponents.SvgIcon.Names.CHANGELOG,
 							onClick: _ => {BDFDB.PluginUtils.openChangeLog(plugin);}
-						}, !!footerControls));
+						}));
 						if (window.PluginUpdates && window.PluginUpdates.plugins && window.PluginUpdates.plugins[url] && window.PluginUpdates.plugins[url].outdated) controls.push(InternalBDFDB.createCustomControl({
 							tooltipText: BDFDB.LanguageUtils.LanguageStrings.UPDATE_MANUALLY,
 							svgName: InternalComponents.LibraryComponents.SvgIcon.Names.DOWNLOAD,
 							onClick: _ => {BDFDB.PluginUtils.downloadUpdate(plugin.name, url);}
-						}, !!footerControls));
+						}));
 						if (footerControls) for (let control of controls) footerControls.insertBefore(control, footerControls.firstElementChild);
 						else for (let control of controls) checkbox.parentElement.insertBefore(control, checkbox.parentElement.firstElementChild);
 					}
