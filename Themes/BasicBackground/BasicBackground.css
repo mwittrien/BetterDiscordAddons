@@ -2914,7 +2914,7 @@ body::before {
 
 #app-mount .root-1gCeng,									/* modal				container (foldersettings)			*/
 #app-mount .modal-yWgWj- {									/* modal				container							*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	border-radius: 5px;
@@ -2940,8 +2940,25 @@ body::before {
 	pointer-events: none;
 	z-index: -1;
 }
+.root-1gCeng::after,
+.modal-yWgWj-::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	width: unset;
+	height: unset;
+	border-radius: 5px;
+	pointer-events: none;
+	z-index: -1;
+}
 .root-1gCeng .modal-yWgWj-::before,
-.modal-qgFCbT::before {
+.modal-qgFCbT::before,
+.root-1gCeng .modal-yWgWj-::after,
+.modal-qgFCbT::after {
 	display: none;
 }
 #app-mount .footer-2gL1pp {									/* modal				footer							*/
