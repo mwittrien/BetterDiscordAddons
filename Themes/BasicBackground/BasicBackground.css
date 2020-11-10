@@ -16,7 +16,7 @@
 	
 	--dbackground:					url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/background.jpg);
 	--dbackgroundsize:				cover;
-	--dblur:						0px;
+	--dblur:						unset;
 	--dbackdrop:					rgba(0,0,0,0.85);
 
 	--vtransparencycolor:			var(--transparencycolor,			var(--dtransparencycolor));
