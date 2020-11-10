@@ -6637,8 +6637,9 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	max-height: unset;
 }
 #app-mount .bd-addon-list .bd-addon-header {				/* addonlist			header								*/
-	color: rgb(var(--fontwhite1));
+	background-color: rgba(var(--vtransparencycolor), 0.3);
 	border-bottom-color: rgba(var(--fontwhite2), 0.3);
+	color: rgb(var(--fontwhite1));
 }
 #app-mount .bd-addon-list .bd-addon-button svg[fill] {		/* addonlist			header button icon					*/
 	fill: currentColor;
@@ -6646,6 +6647,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 #app-mount .bd-addon-list .bd-addon-button svg {			/* addonlist			header button icon					*/
 	color: rgb(var(--fontwhite3));
 }
+#app-mount .bd-addon-list .bd-button.bd-addon-button svg,
 #app-mount .bd-addon-list .bd-addon-button svg:hover {
 	color: rgb(var(--fontwhite1));
 }
