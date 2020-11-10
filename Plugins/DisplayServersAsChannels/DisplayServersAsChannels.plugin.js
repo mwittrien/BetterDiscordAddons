@@ -174,14 +174,10 @@ module.exports = (_ => {
 			processDirectMessage (e) {
 				if (e.instance.props.channel.id) {
 					let text = BDFDB.ReactUtils.findValue(e.returnvalue, "text");
-					let icon = e.instance.props.channel.isGroupDM() ? BDFDB.LibraryModules.IconUtils.getChannelIconURL(e.instance.props.channel) : BDFDB.LibraryModules.IconUtils.getUserAvatarURL(BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channel.recipients[0]));
 					this.removeTooltip(e.returnvalue);
 					this.removeMask(e.returnvalue);
 					this.addElementName(e.returnvalue, text, {
-						badges: icon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
-							src: icon,
-							size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_24
-						})
+						isDm: true
 					});
 				}
 			}
@@ -287,10 +283,14 @@ module.exports = (_ => {
 				});
 				if (index > -1) {
 					let insertElements = returnvalue => {
-						delete returnvalue.props.icon;
-						delete returnvalue.props.name;
 						let childEles = [
-							[options.badges].flat(10).filter(n => n).map(badge => BDFDB.ReactUtils.createElement("div", {
+							[
+								options.isDm && returnvalue.props.icon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
+									src: returnvalue.props.icon,
+									size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_24
+								}),
+								options.badges,
+							].flat(10).filter(n => n).map(badge => BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN._displayserversaschannelsbadge,
 								children: badge
 							})),
@@ -302,6 +302,8 @@ module.exports = (_ => {
 							}),
 							[returnvalue.props.children].flat(10).filter(n => !(n && (n.type && n.type.displayName ==  "FolderIcon" || n.props && n.props.className && n.props.className.indexOf(BDFDB.disCN.guildfoldericonwrapper) > -1)))
 						].flat().filter(n => n);
+						delete returnvalue.props.icon;
+						delete returnvalue.props.name;
 						returnvalue.props.children = options.wrap ? BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.guildiconchildwrapper,
 							style: {backgroundColor: options.backgroundColor},
