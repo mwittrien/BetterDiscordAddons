@@ -4447,6 +4447,18 @@ module.exports = (_ => {
 						let controls = [].concat(this.props.controls).flat(10).filter(n => n);
 						let links = [].concat(this.props.links).flat(10).filter(n => n);
 						let buttons = [].concat(this.props.buttons).flat(10).filter(n => n);
+						let meta = [
+							" v",
+							BDFDB.ReactUtils.createElement("span", {
+								className: BDFDB.disCN._repoversion,
+								children: this.props.data.version
+							}),
+							" by ",
+							BDFDB.ReactUtils.createElement("span", {
+								className: BDFDB.disCN._repoauthor,
+								children: this.props.data.author
+							})
+						];
 						return !BDFDB.ObjectUtils.is(this.props.data) ? null : BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repoentry, this.props.className, BDFDB.disCN._repocard, BDFDB.disCN._reposettingsclosed, BDFDB.disCN._repocheckboxitem),
 							children: [
@@ -4461,16 +4473,10 @@ module.exports = (_ => {
 													className: BDFDB.disCN._reponame,
 													children: this.props.data.name
 												}),
-												" v",
-												BDFDB.ReactUtils.createElement("span", {
-													className: BDFDB.disCN._repoversion,
-													children: this.props.data.version
-												}),
-												" by ",
-												BDFDB.ReactUtils.createElement("span", {
-													className: BDFDB.disCN._repoauthor,
-													children: this.props.data.author
-												})
+												isBeta ? BDFDB.ReactUtils.createElement("div", {
+													className: BDFDB.disCN._repometa,
+													children: meta
+												}) : meta
 											]
 										}),
 										controls.length && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
