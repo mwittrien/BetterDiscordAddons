@@ -3305,8 +3305,7 @@ module.exports = (_ => {
 					let template = document.createElement("template");
 					try {template.innerHTML = html.replace(/(?<!pre)>[\t\r\n]+<(?!pre)/g, "><");}
 					catch (err) {template.innerHTML = html.replace(/>[\t\r\n]+<(?!pre)/g, "><");}
-					if (template.content.childNodes.length == 0) return template.innerHTML;
-					else if (template.content.childNodes.length == 1) return template.content.firstElementChild;
+					if (template.content.childNodes.length == 1) return template.content.firstElementChild || template.content.firstChild;
 					else {
 						let wrapper = document.createElement("span");
 						let nodes = Array.from(template.content.childNodes);
