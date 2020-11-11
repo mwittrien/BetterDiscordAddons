@@ -801,9 +801,13 @@ img:not([src]), img[src=""], img[src="null"] {
 	justify-content: center;
 	cursor: pointer;
 }
-[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repoheader] [REPLACE_CLASS__repocontrolsbutton] {
-	margin-left: 10px;
+[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repoheadercontrols] {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
 }
+[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repoheadercontrols] > *,
 [REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repocontrols] > * {
 	margin-left: 10px;
 }

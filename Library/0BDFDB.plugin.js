@@ -4479,11 +4479,8 @@ module.exports = (_ => {
 												}) : meta
 											]
 										}),
-										controls.length && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-											align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
-											justify: InternalComponents.LibraryComponents.Flex.Justify.CENTER,
-											grow: 0,
-											shrink: 0,
+										controls.length && BDFDB.ReactUtils.createElement("div", {
+											className: BDFDB.disCN._repoheadercontrols,
 											children: controls
 										})
 									]
