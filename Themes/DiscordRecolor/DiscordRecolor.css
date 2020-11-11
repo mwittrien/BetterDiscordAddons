@@ -3802,6 +3802,11 @@ html .bd-settings-group.collapsible .bd-settings-title::after {
 #app-mount .bd-modal-wrapper .table-column {
 	border-right: 1px solid transparent;
 	margin-right: 20px;
+	min-width: 20%;
+}
+#app-mount .bd-modal-wrapper .table-column.column-error {
+	margin-right: 0;
+	min-width: 50%;
 }
 #app-mount .bd-modal-wrapper .table-header .table-column:not(:last-child) {
 	border-right-color: var(--background-modifier-accent);

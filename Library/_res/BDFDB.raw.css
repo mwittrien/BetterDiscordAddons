@@ -795,6 +795,15 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS_settingswindowcontentcolumn] {
 	padding-top: 20px;
 }
+[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repocontrolsbutton] {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repoheader] [REPLACE_CLASS__repocontrolsbutton] {
+	margin-left: 10px;
+}
 [REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repocontrols] > * {
 	margin-left: 10px;
 }
