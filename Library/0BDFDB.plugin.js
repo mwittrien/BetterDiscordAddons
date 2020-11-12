@@ -4512,26 +4512,22 @@ module.exports = (_ => {
 													href: data.href,
 													children: data.icon || data.label
 												});
-												if (!isBeta) return [
+												return !isBeta ? [
 													i > 0 && " | ",
 													link
-												];
-												else {
-													let button = BDFDB.ReactUtils.createElement("div", {
-														className: BDFDB.disCN._repocontrolsbutton,
-														children: link,
-														onClick: e => {
-															if (typeof data.onClick == "function") {
-																BDFDB.ListenerUtils.stopEvent(e);
-																data.onClick();
-															}
+												] : BDFDB.ReactUtils.createElement("div", {
+													className: BDFDB.disCN._repocontrolsbutton,
+													onClick: e => {
+														if (typeof data.onClick == "function") {
+															BDFDB.ListenerUtils.stopEvent(e);
+															data.onClick();
 														}
-													});
-													return typeof data.label == "string" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+													},
+													children: typeof data.label == "string" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 														text: data.label,
-														children: button
-													}) : button;
-												}
+														children: link
+													}) : link
+												});
 											}).flat(10).filter(n => n)
 										}),
 										buttons.length && BDFDB.ReactUtils.createElement("div", {
@@ -6831,7 +6827,10 @@ module.exports = (_ => {
 					},
 					STREAM: {
 						icon: `<svg name="Stream" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="%%color" fill-rule="evenodd" clip-rule="evenodd" d="M20 3V4L23 3V7L20 6V7C20 7.553 19.552 8 19 8H15C14.448 8 14 7.553 14 7V3C14 2.447 14.448 2 15 2H19C19.552 2 20 2.447 20 3ZM18 15V10H19H20V17C20 18.104 19.103 19 18 19H11V21H15V23H5V21H9V19H2C0.897 19 0 18.104 0 17V6C0 4.897 0.897 4 2 4H12V6H2V15H7H10H13H18Z"></path></svg>`
-					}
+					},
+					TRASH: {
+						icon: `<svg name="Trash" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"></path><path fill="%%color" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"></path></svg>`
+					},
 				};
 				
 				const SwitchIconPaths = {
