@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.1.8",
+			"version": "4.1.9",
 			"description": "Allow you to rename and recolor channelnames"
 		},
 		"changeLog": {
 			"fixed": {
-				"Works again": "Yas"
+				"New Channel List": "Fixed for new update"
 			}
 		}
 	};
@@ -78,7 +78,7 @@ module.exports = (_ => {
 						AuditLog: "render",
 						SettingsInvites: "render",
 						HeaderBarContainer: "render",
-						ChannelCategoryItem: "default",
+						ChannelCategoryItem: "type",
 						ChannelItem: "default",
 						QuickSwitchChannelResult: "render",
 						MessageContent: "type"
@@ -87,7 +87,7 @@ module.exports = (_ => {
 						AutocompleteChannelResult: "render",
 						AuditLog: "render",
 						HeaderBarContainer: "render",
-						ChannelCategoryItem: "default",
+						FocusRing: "default",
 						ChannelItem: "default",
 						QuickSwitchChannelResult: "render",
 						RecentsChannelHeader: "default"
@@ -287,43 +287,28 @@ module.exports = (_ => {
 				}
 			}
 
-			processChannelCategoryItem (e) {
-				if (e.instance.props.channel && settings.changeInChannelList) {
-					if (!e.returnvalue) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
-					else {
-						let onMouseEnter = e.returnvalue.props.onMouseEnter || ( _ => {});
-						e.returnvalue.props.onMouseEnter = event => {
-							onMouseEnter(event);
-							e.instance.setState({hovered: true});
-						};
-						let onMouseLeave = e.returnvalue.props.onMouseLeave || ( _ => {});
-						e.returnvalue.props.onMouseLeave = event => {
-							onMouseLeave(event);
-							e.instance.setState({hovered: false});
-						};
-						let modify = BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "muted", "locked", "selected", "unread", "connected", "hovered");
+			processFocusRing (e) {
+				if (e.returnvalue && e.returnvalue.props && e.returnvalue.props.className && e.returnvalue.props.className.indexOf(BDFDB.disCN.categoryiconvisibility) > -1 && settings.changeInChannelList) {
+					let dataListId = BDFDB.ObjectUtils.get(e.returnvalue, "props.children.0.props.data-list-item-id");
+					if (dataListId) {
+						let channelId = dataListId.split("_").pop();
+						let modify = {muted: BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(BDFDB.LibraryModules.LastGuildStore.getGuildId(), channelId)};
 						let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.categoryname]]});
-						if (categoryName) this.changeChannelColor(categoryName, e.instance.props.channel.id, modify);
+						if (categoryName) this.changeChannelColor(categoryName, channelId, modify);
 						let categoryIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.categoryicon]]});
-						if (categoryIcon) this.changeChannelIconColor(categoryIcon, e.instance.props.channel.id, Object.assign({alpha: 0.6}, modify));
+						if (categoryIcon) this.changeChannelIconColor(categoryIcon, channelId, Object.assign({alpha: 0.6}, modify));
 					}
 				}
+			}
+			
+			processChannelCategoryItem (e) {
+				if (e.instance.props.channel && settings.changeInChannelList) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
 			}
 
 			processChannelItem (e) {
 				if (e.instance.props.channel && settings.changeInChannelList) {
 					if (!e.returnvalue) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
 					else {
-						let onMouseEnter = e.returnvalue.props.onMouseEnter || ( _ => {});
-						e.returnvalue.props.onMouseEnter = event => {
-							onMouseEnter(event);
-							e.instance.setState({hovered: true});
-						};
-						let onMouseLeave = e.returnvalue.props.onMouseLeave || ( _ => {});
-						e.returnvalue.props.onMouseLeave = event => {
-							onMouseLeave(event);
-							e.instance.setState({hovered: false});
-						};
 						let modify = BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "muted", "locked", "selected", "unread", "connected", "hovered");
 						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.channelname]]});
 						if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id, modify);
