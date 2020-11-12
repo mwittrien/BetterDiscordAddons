@@ -4527,7 +4527,7 @@ module.exports = (_ => {
 											}).flat(10).filter(n => n)
 										}),
 										buttons.length && BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN._repofootercontrols,
+											className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repofootercontrols, isBeta && BDFDB.disCN._repocontrols),
 											children: buttons
 										})
 									].flat(10).filter(n => n)

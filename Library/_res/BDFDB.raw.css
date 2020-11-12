@@ -801,7 +801,8 @@ img:not([src]), img[src=""], img[src="null"] {
 	justify-content: center;
 	cursor: pointer;
 }
-[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repoheadercontrols] {
+[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repoheadercontrols],
+[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofootercontrols] {
 	display: flex;
 	align-items: center;
 	justify-content: center;
