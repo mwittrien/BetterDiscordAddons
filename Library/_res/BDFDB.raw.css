@@ -817,6 +817,9 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repocontrols] > * {
 	margin-left: 10px;
 }
+[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofootercontrols] > * {
+	margin-left: 0;
+}
 
 [REPLACE_CLASS_noticewrapper] {
 	transition: height 0.5s ease !important;
