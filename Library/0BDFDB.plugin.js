@@ -4497,7 +4497,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN._repodescriptionwrap,
 									children: BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN._repodescription,
-										children: this.props.description && BDFDB.ReactUtils.markdownParse(this.props.description)
+										children: this.props.data.description && BDFDB.ReactUtils.markdownParse(this.props.data.description)
 									})
 								}),
 								(links.length || buttons.length) && BDFDB.ReactUtils.createElement("div", {
