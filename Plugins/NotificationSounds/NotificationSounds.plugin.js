@@ -14,13 +14,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
-			"version": "3.5.2",
+			"version": "3.5.3",
 			"description": "Allow you to replace the native sounds of Discord with your own"
 		},
 		"changeLog": {
 			"added": {
 				"Halloween": "Added discord's halloween call sound to the choices",
 				"Global Volume": "Added global volume slider affecting all sounds"
+			},
+			"fixed": {
+				"Removed Default Category": "Removed the category 'Default' since the audio files no longer exist on the webpage"
 			}
 		}
 	};
@@ -106,15 +109,6 @@ module.exports = (_ => {
 		const defaultAudios = {
 			"---": {
 				"---":						null
-			},
-			"Default": {
-				"Communication Channel": 	"https://notificationsounds.com/soundfiles/63538fe6ef330c13a05a3ed7e599d5f7/file-sounds-917-communication-channel.wav",
-				"Isn't it": 				"https://notificationsounds.com/soundfiles/ba2fd310dcaa8781a9a652a31baf3c68/file-sounds-969-isnt-it.wav",
-				"Job Done": 				"https://notificationsounds.com/soundfiles/5b69b9cb83065d403869739ae7f0995e/file-sounds-937-job-done.wav",
-				"Served": 					"https://notificationsounds.com/soundfiles/b337e84de8752b27eda3a12363109e80/file-sounds-913-served.wav",
-				"Solemn": 					"https://notificationsounds.com/soundfiles/53fde96fcc4b4ce72d7739202324cd49/file-sounds-882-solemn.wav",
-				"System Fault": 			"https://notificationsounds.com/soundfiles/ebd9629fc3ae5e9f6611e2ee05a31cef/file-sounds-990-system-fault.wav",
-				"You wouldn't believe": 	"https://notificationsounds.com/soundfiles/087408522c31eeb1f982bc0eaf81d35f/file-sounds-949-you-wouldnt-believe.wav"
 			},
 			"Discord": {}
 		};
@@ -654,8 +648,8 @@ module.exports = (_ => {
 			}
 			
 			loadAudios () {
-				audios = Object.assign({}, defaultAudios, BDFDB.DataUtils.load(this, "audios"));
-				BDFDB.DataUtils.save(audios, this, "audios");
+				audios = Object.assign({}, BDFDB.DataUtils.load(this, "audios"), defaultAudios);
+				BDFDB.DataUtils.save(BDFDB.ObjectUtils.exclude(audios, Object.keys(defaultAudios)), this, "audios");
 			}
 
 			loadChoices () {

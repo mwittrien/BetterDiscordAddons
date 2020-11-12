@@ -16,13 +16,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.1.1",
+			"version": "1.1.2",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 		"changeLog": {
 			"fixed": {
-				"Crash on Canary": "Fixed the crash issue that occured one some plugins on canary"
+				"BD Beta": "Fixed some issues with the BD Beta"
 			}
 		}
 	};

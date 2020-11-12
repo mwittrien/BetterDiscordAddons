@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.0.9",
+			"version": "2.1.0",
 			"description": "Allow you to look at all plugins from the plugin repo and download them on the fly"
 		},
 		"changeLog": {
@@ -51,6 +51,7 @@ module.exports = (_ => {
 		start() {this.load();}
 		stop() {}
 	} : (([Plugin, BDFDB]) => {
+		const isBeta = !(window.BdApi && !Array.isArray(BdApi.settings));
 		var _this;
 		var loading, cachedPlugins, grabbedPlugins, foundPlugins, loadedPlugins, updateInterval;
 		var list, header, searchTimeout, forcedSort, forcedOrder, showOnlyOutdated;
@@ -65,16 +66,19 @@ module.exports = (_ => {
 			UPDATED: {
 				colorClass: "GREEN",
 				backgroundColor: "STATUS_GREEN",
+				icon: "CHECKMARK",
 				text: "Updated"
 			},
 			OUTDATED: {
 				colorClass: "RED",
 				backgroundColor: "STATUS_RED",
+				icon: "CLOSE",
 				text: "Outdated"
 			},
 			DOWNLOADABLE: {
 				colorClass: "BRAND",
 				backgroundColor: "BRAND",
+				icon: "DOWNLOAD",
 				text: "Download"
 			}
 		};
@@ -100,7 +104,7 @@ module.exports = (_ => {
 			DESC:			"descending"
 		};
 		
-		const pluginRepoIcon = `<svg width="34" height="31" viewBox="0 0 400 382"><path d="M0.000 183.023 L 0.000 366.046 46.377 366.046 L 92.754 366.046 92.754 312.629 L 92.754 259.213 127.223 259.213 C 174.433 259.213,187.432 257.146,210.766 245.926 C 311.105 197.681,301.344 41.358,195.859 7.193 C 173.603 -0.015,173.838 0.000,80.846 0.000 L 0.000 0.000 0.000 183.023 M157.615 88.195 C 193.007 97.413,198.827 152.678,166.407 171.674 C 158.993 176.019,155.494 176.398,122.807 176.398 L 92.754 176.398 92.754 131.677 L 92.754 86.957 122.807 86.957 C 146.807 86.957,153.819 87.206,157.615 88.195" stroke="none" fill="#7289da" fill-rule="evenodd"></path><path d="M226.647 3.824 C 258.085 21.580,282.721 54.248,291.095 89.281 C 292.183 93.834,293.041 95.659,294.560 96.655 C 310.880 107.348,312.400 140.701,297.286 156.464 C 293.685 160.221,293.134 161.348,291.162 169.006 C 282.026 204.468,259.916 235.185,230.701 253.002 C 229.548 253.705,235.510 262.261,270.237 309.731 L 311.131 365.631 355.565 365.846 L 400.000 366.060 400.000 348.309 L 400.000 330.557 364.338 285.630 L 328.676 240.703 333.494 238.892 C 373.356 223.907,395.248 189.691,399.313 136.020 C 404.504 67.495,372.510 19.710,311.375 4.675 C 294.592 0.548,287.694 -0.000,252.482 0.000 L 219.876 0.000 226.647 3.824 M202.899 265.964 C 183.869 272.635,168.536 274.960,139.752 275.540 L 116.770 276.003 116.770 321.024 L 116.770 366.046 163.975 366.046 L 211.180 366.046 211.180 314.700 C 211.180 286.460,210.901 263.386,210.559 263.425 C 210.217 263.464,206.770 264.607,202.899 265.964" stroke="none" fill="#7f8186" fill-rule="evenodd"></path></svg>`;
+		const pluginRepoIcon = `<svg width="34" height="31" viewBox="0 0 400 382"><path d="M0.000 183.023 L 0.000 366.046 46.377 366.046 L 92.754 366.046 92.754 312.629 L 92.754 259.213 127.223 259.213 C 174.433 259.213,187.432 257.146,210.766 245.926 C 311.105 197.681,301.344 41.358,195.859 7.193 C 173.603 -0.015,173.838 0.000,80.846 0.000 L 0.000 0.000 0.000 183.023 M157.615 88.195 C 193.007 97.413,198.827 152.678,166.407 171.674 C 158.993 176.019,155.494 176.398,122.807 176.398 L 92.754 176.398 92.754 131.677 L 92.754 86.957 122.807 86.957 C 146.807 86.957,153.819 87.206,157.615 88.195" stroke="none" fill="#7289da" fill-rule="evenodd"></path><path d="M226.647 3.824 C 258.085 21.580,282.721 54.248,291.095 89.281 C 292.183 93.834,293.041 95.659,294.560 96.655 C 310.880 107.348,312.400 140.701,297.286 156.464 C 293.685 160.221,293.134 161.348,291.162 169.006 C 282.026 204.468,259.916 235.185,230.701 253.002 C 229.548 253.705,235.510 262.261,270.237 309.731 L 311.131 365.631 355.565 365.846 L 400.000 366.060 400.000 348.309 L 400.000 330.557 364.338 285.630 L 328.676 240.703 333.494 238.892 C 373.356 223.907,395.248 189.691,399.313 136.020 C 404.504 67.495,372.510 19.710,311.375 4.675 C 294.592 0.548,287.694 -0.000,252.482 0.000 L 219.876 0.000 226.647 3.824 M202.899 265.964 C 183.869 272.635,168.536 274.960,139.752 275.540 L 116.770 276.003 116.770 321.024 L 116.770 366.046 163.975 366.046 L 211.180 366.046 211.180 314.700 C 211.180 286.460,210.901 263.386,210.559 263.425 C 210.217 263.464,206.770 264.607,202.899 265.964" stroke="none" fill="#72767d" fill-rule="evenodd"></path></svg>`;
 		
 		const RepoListComponent = class PluginList extends BdApi.React.Component {
 			componentDidMount() {
@@ -134,12 +138,7 @@ module.exports = (_ => {
 				if (!this.props.downloadable)	plugins = plugins.filter(plugin => plugin.state != pluginStates.DOWNLOADABLE);
 				if (this.props.searchString) 	{
 					let searchString = this.props.searchString.toUpperCase();
-					plugins = plugins.filter(plugin => plugin.search.indexOf(searchString) > -1).map(plugin => Object.assign({}, plugin, {
-						name: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(plugin.name, searchString))) || plugin.name,
-						version: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(plugin.version, searchString))) || plugin.version,
-						author: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(plugin.author, searchString))) || plugin.author,
-						description: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(plugin.description, searchString))) || plugin.description
-					}));
+					plugins = plugins.filter(plugin => plugin.search.indexOf(searchString) > -1);
 				}
 
 				BDFDB.ArrayUtils.keySort(plugins, (!this.props.sortKey || this.props.sortKey == "NEW" && !plugins.some(plugin => plugin.new == newStates.NEW) ? Object.keys(sortKeys)[0] : this.props.sortKey).toLowerCase());
@@ -226,6 +225,11 @@ module.exports = (_ => {
 			render() {
 				let buttonConfig = buttonData[(Object.entries(pluginStates).find(n => n[1] == this.props.plugin.state) || [])[0]];
 				return buttonConfig && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AddonCard, {
+					icon: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+						className: BDFDB.disCN._repoicon,
+						nativeClass: true,
+						iconSVG: `<svg viewBox="0 0 24 24" fill="#FFFFFF" style="width: 18px; height: 18px;"><path d="M0 0h24v24H0z" fill="none"></path><path d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5C13 2.12 11.88 1 10.5 1S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7 1.49 0 2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"></path></svg>`
+					}),
 					data: this.props.plugin,
 					controls: [
 						this.props.plugin.new == newStates.NEW && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
@@ -246,7 +250,7 @@ module.exports = (_ => {
 								BDFDB.DataUtils.save(favorites, _this, "favorites");
 							}
 						}),
-						BDFDB.ReactUtils.createElement("div", {
+						!isBeta && BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN._repocontrolsbutton,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 								text: "Go to Source",
@@ -267,9 +271,72 @@ module.exports = (_ => {
 									}
 								})
 							})
-						}),
+						})
 					],
-					buttons: [
+					links: isBeta && [{
+						label: "Source",
+						icon: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+							name: BDFDB.LibraryComponents.SvgIcon.Names.GITHUB,
+							nativeClass: true,
+							width: 18,
+							height: 18
+						}),
+						onClick: _ => {
+							let gitUrl = null;
+							if (this.props.plugin.url.indexOf("https://raw.githubusercontent.com") == 0) {
+								let temp = this.props.plugin.url.replace("//raw.githubusercontent", "//github").split("/");
+								temp.splice(5, 0, "blob");
+								gitUrl = temp.join("/");
+							}
+							else if (this.props.plugin.url.indexOf("https://gist.githubusercontent.com/") == 0) {
+								gitUrl = this.props.plugin.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
+							}
+							if (gitUrl) BDFDB.DiscordUtils.openLink(gitUrl, settings.useChromium);
+						}
+					}],
+					buttons: isBeta ? [
+						this.props.plugin.state != pluginStates.DOWNLOADABLE && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							text: BDFDB.LanguageUtils.LanguageStrings.DELETE,
+							children: BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCNS._repobutton + BDFDB.disCNS._repocontrolsbutton + BDFDB.disCN._repobuttondanger,
+								onClick: _ => {
+									_this.stopPlugin(this.props.plugin);
+									_this.deletePluginFile(this.props.plugin);
+									this.props.plugin.state = pluginStates.DOWNLOADABLE;
+									BDFDB.ReactUtils.forceUpdate(this);
+								},
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+									name: BDFDB.LibraryComponents.SvgIcon.Names.TRASH,
+									nativeClass: true,
+									color: "#FFFFFF",
+									width: 20,
+									height: 20
+								})
+							})
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							text: buttonConfig.text,
+							children: BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCNS._repobutton + BDFDB.disCN._repocontrolsbutton,
+								style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor]},
+								onClick: _ => {
+									_this.downloadPlugin(this.props.plugin);
+									if (list && list.props.rnmStart) BDFDB.TimeUtils.timeout(_ => {
+										if (this.props.plugin.state == pluginStates.UPDATED) _this.startPlugin(this.props.plugin);
+									}, 3000);
+									this.props.plugin.state = pluginStates.UPDATED;
+									BDFDB.ReactUtils.forceUpdate(this);
+								},
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+									name: BDFDB.LibraryComponents.SvgIcon.Names[buttonConfig.icon],
+									nativeClass: true,
+									color: "#FFFFFF",
+									width: 20,
+									height: 20
+								})
+							})
+						})
+					] : [
 						this.props.plugin.state != pluginStates.DOWNLOADABLE && BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN._repocontrolsbutton,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
@@ -579,8 +646,7 @@ module.exports = (_ => {
 				if (BDFDB.ArrayUtils.is(e.instance.props.sections) && e.instance.props.sections[0] && e.instance.props.sections[0].label == BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS) {
 					e.instance.props.sections = e.instance.props.sections.filter(n => n.section != "pluginrepo");
 					let oldSettings = !e.instance.props.sections.find(n => n.section == "plugins");
-					let search = oldSettings ? n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS : n => n.section == BDFDB.DiscordConstants.UserSettingsSections.CHANGE_LOG || n.section == "changelog"
-					let index = e.instance.props.sections.indexOf(e.instance.props.sections.find(search));
+					let index = e.instance.props.sections.indexOf(e.instance.props.sections.find(oldSettings ? n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS : n => n.section == BDFDB.DiscordConstants.UserSettingsSections.CHANGE_LOG || n.section == "changelog"));
 					if (index > -1) {
 						e.instance.props.sections.splice(oldSettings ? index + 1 : index - 1, 0, {
 							label: "Plugin Repo",
@@ -644,7 +710,7 @@ module.exports = (_ => {
 								if (loading.is && loading.amount < 4) BDFDB.TimeUtils.timeout(_ => {this.loadPlugins();},10000);
 								loading = {is: false, timeout:null, amount:loading.amount};
 							}
-						},1200000), amount:loading.amount+1};
+						}, 1200000), amount:loading.amount+1};
 						
 						let loadingIcon = BDFDB.DOMUtils.create(pluginRepoIcon);
 						BDFDB.DOMUtils.addClass(loadingIcon, "pluginrepo-loadingicon");
@@ -683,7 +749,7 @@ module.exports = (_ => {
 												type: "danger",
 												btn: "PluginRepo",
 												selector: "pluginrepo-notice pluginrepo-outdate-notice",
-												customicon: pluginRepoIcon.replace(/#7289da/gi, "#FFF").replace(/#7f8186/gi, "#B9BBBE")
+												customicon: pluginRepoIcon.replace(/#7289da/gi, "#FFF").replace(/#72767d/gi, "#B9BBBE")
 											});
 											bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
 												showOnlyOutdated = true;
@@ -700,7 +766,7 @@ module.exports = (_ => {
 												type: "success",
 												btn: "PluginRepo",
 												selector: "pluginrepo-notice pluginrepo-newentries-notice",
-												customicon: pluginRepoIcon.replace(/#7289da/gi, "#FFF").replace(/#7f8186/gi, "#B9BBBE")
+												customicon: pluginRepoIcon.replace(/#7289da/gi, "#FFF").replace(/#72767d/gi, "#B9BBBE")
 											});
 											bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
 												forcedSort = "NEW";
@@ -718,7 +784,7 @@ module.exports = (_ => {
 													type: "danger",
 													btn: "List",
 													selector: "pluginrepo-notice pluginrepo-fail-notice",
-													customicon: pluginRepoIcon.replace(/#7289da/gi, "#FFF").replace(/#7f8186/gi, "#B9BBBE")
+													customicon: pluginRepoIcon.replace(/#7289da/gi, "#FFF").replace(/#72767d/gi, "#B9BBBE")
 												});
 												bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 													let toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"), {type: "error"});
@@ -785,7 +851,7 @@ module.exports = (_ => {
 										let separator = result[1];
 										result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
 										if (result.length > 2) {
-											result = result.slice(1, -1).join(separator).replace(/\\n/g, "<br>").replace(/\\/g, "");
+											result = result.slice(1, -1).join(separator).replace(/\\n/g, "\n").replace(/\\/g, "");
 											result = tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
 											plugin[tag] = result ? result.trim() : result;
 										}
