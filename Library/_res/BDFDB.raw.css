@@ -800,12 +800,6 @@ img:not([src]), img[src=""], img[src="null"] {
 	align-items: center;
 	justify-content: space-between;
 }
-[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repocontrolsbutton] {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
-}
 [REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repoheadercontrols],
 [REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofootercontrols] {
 	display: flex;
@@ -819,6 +813,15 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 [REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofootercontrols] > * {
 	margin-left: 0;
+}
+[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repocontrolsbutton] {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repocontrols] > [REPLACE_CLASS__repocontrolsbutton]:only-child {
+	border-radius: 3px;
 }
 
 [REPLACE_CLASS_noticewrapper] {
