@@ -4399,9 +4399,14 @@ html .channelTabs-fav:active {
 	z-index: 2 !important;
 }
 html .channelTabs-tab > *,
-html .channelTabs-fav > * {
+html .channelTabs-fav > *,
+html .channelTabs-tab .channelTabs-mentionBadge,
+html .channelTabs-fav .channelTabs-mentionBadge,
+html .channelTabs-tab .channelTabs-unreadBadge,
+html .channelTabs-fav .channelTabs-unreadBadge {
 	position: static !important;
 	transform: unset !important;
+	float: unset !important;
 	z-index: 3 !important;
 }
 html .channelTabs-tab::before,
