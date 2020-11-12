@@ -6658,6 +6658,9 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	border-bottom-color: rgba(var(--fontwhite2), 0.3);
 	color: rgb(var(--fontwhite1));
 }
+#app-mount .bd-addon-list .bda-header {						/* addonlist			header old							*/
+	background-color: transparent;
+}
 #app-mount .bd-addon-list .bd-addon-button svg[fill] {		/* addonlist			header button icon					*/
 	fill: currentColor;
 }

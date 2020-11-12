@@ -102,7 +102,7 @@ module.exports = (_ => {
 							});
 						}
 						else {
-							let footer = card.querySelector(BDFDB.dotCN._repofooter);
+							let footer = card.querySelector("." + BDFDB.disCN._repofooter.split(" ").join(",."));
 							if (!footer) {
 								footer = document.createElement("div");
 								footer.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repofooter);
