@@ -1941,6 +1941,13 @@ module.exports = (_ => {
 					else if (BDFDB.ArrayUtils.is(obj)) return obj.map(n => BDFDB.ReactUtils.objectToReact(n));
 					else return null;
 				};
+				BDFDB.ReactUtils.markdownParse = function (str) {
+					if (!BDFDB.ReactUtils.markdownParse.parser || !BDFDB.ReactUtils.markdownParse.render) {
+						BDFDB.ReactUtils.markdownParse.parser = LibraryModules.SimpleMarkdownParser.parserFor(LibraryModules.SimpleMarkdownParser.defaultRules);
+						BDFDB.ReactUtils.markdownParse.render = LibraryModules.SimpleMarkdownParser.reactFor(LibraryModules.SimpleMarkdownParser.ruleOutput(LibraryModules.SimpleMarkdownParser.defaultRules, "react"));
+					}
+					return BDFDB.ReactUtils.markdownParse.render(BDFDB.ReactUtils.markdownParse.parser(str, {inline: true}));
+				};
 				BDFDB.ReactUtils.elementToReact = function (node, ref) {
 					if (BDFDB.ReactUtils.isValidElement(node)) return node;
 					else if (!Node.prototype.isPrototypeOf(node)) return null;
@@ -4444,6 +4451,7 @@ module.exports = (_ => {
 				
 				InternalComponents.LibraryComponents.AddonCard = reactInitialized && class BDFDB_AddonCard extends LibraryModules.React.Component {
 					render() {
+						if (!BDFDB.ObjectUtils.is(this.props.data)) return null;
 						let controls = [].concat(this.props.controls).flat(10).filter(n => n);
 						let links = [].concat(this.props.links).flat(10).filter(n => n);
 						let buttons = [].concat(this.props.buttons).flat(10).filter(n => n);
@@ -4459,7 +4467,7 @@ module.exports = (_ => {
 								children: this.props.data.author
 							})
 						].filter(n => n);
-						return !BDFDB.ObjectUtils.is(this.props.data) ? null : BDFDB.ReactUtils.createElement("div", {
+						return BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repoentry, this.props.className, BDFDB.disCN._repocard, BDFDB.disCN._reposettingsclosed, BDFDB.disCN._repocheckboxitem),
 							children: [
 								BDFDB.ReactUtils.createElement("div", {
@@ -4489,7 +4497,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN._repodescriptionwrap,
 									children: BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN._repodescription,
-										children: this.props.data.description && BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(this.props.data.description))
+										children: this.props.description && BDFDB.ReactUtils.markdownParse(this.props.description)
 									})
 								}),
 								(links.length || buttons.length) && BDFDB.ReactUtils.createElement("div", {
