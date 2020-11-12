@@ -795,6 +795,11 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS_settingswindowcontentcolumn] {
 	padding-top: 20px;
 }
+[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofooter] {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
 [REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repocontrolsbutton] {
 	display: flex;
 	align-items: center;
@@ -811,12 +816,6 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repoheadercontrols] > *,
 [REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repocontrols] > * {
 	margin-left: 10px;
-}
-[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofooter] > * {
-	margin-left: 10px;
-}
-[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofooter] > *:first-child {
-	margin-left: auto;
 }
 
 [REPLACE_CLASS_noticewrapper] {
