@@ -142,6 +142,7 @@
 		],
 		"MemoComponent": [
 			"ChannelAutoComplete",
+			"ChannelCategoryItem",
 			"EmojiPicker",
 			"ExpressionPicker",
 			"InviteGuildName",
@@ -165,6 +166,7 @@
 			"Category": {"class": "categorycontainerdefault"},
 			"ChannelAutoComplete": {"strings": ["hidePersonalInformation", "canExecuteCommands"]},
 			"ChannelCall": {"class": "callcurrentcontainer"},
+			"ChannelCategoryItem": {"strings": ["muted", "channel", "collapsed"]},
 			"ChannelMember": {"class": "member"},
 			"ChannelMembers": {"class": "members"},
 			"Channels": {"class": "guildchannels"},
