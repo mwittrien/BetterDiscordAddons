@@ -13,12 +13,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "2.8.6",
+			"version": "2.8.7",
 			"description": "Display channels that are hidden from you by role restrictions"
 		},
 		"changeLog": {
 			"fixed": {
-				"Channel Accessibility": "Now also works with previewed servers"
+				"New Channel List": "Fixed for new update"
 			}
 		}
 	};
@@ -155,7 +155,7 @@ module.exports = (_ => {
 				this.patchedModules = {
 					before: {
 						Channels: "render",
-						ChannelCategoryItem: "default"
+						ChannelCategoryItem: "type"
 					},
 					after: {
 						ChannelItem: "default"
