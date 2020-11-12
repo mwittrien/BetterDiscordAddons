@@ -86,6 +86,7 @@
 		"SearchPageUtils": {"props": ["searchNextPage", "searchPreviousPage"]},
 		"SelectChannelUtils": {"props": ["selectChannel", "selectPrivateChannel"]},
 		"SettingsUtils": {"props": ["updateRemoteSettings", "updateLocalSettings"]},
+		"SimpleMarkdownParser": {"props": ["parseBlock", "parseInline", "defaultOutput"]},
 		"SlateUtils": {"props": ["serialize", "deserialize"], "notProps": ["getFlag"]},
 		"SlateSelectionUtils": {"props": ["serialize", "serializeSelection"]},
 		"SlowmodeUtils": {"props": ["getSlowmodeCooldownGuess"]},
