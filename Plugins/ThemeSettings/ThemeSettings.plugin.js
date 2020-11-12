@@ -50,6 +50,8 @@ module.exports = (_ => {
 		start() {this.load();}
 		stop() {}
 	} : (([Plugin, BDFDB]) => {
+		const isBeta = !(window.BdApi && !Array.isArray(BdApi.settings));
+		
 		var dir;
 	
 		return class ThemeSettings extends Plugin {
@@ -79,18 +81,9 @@ module.exports = (_ => {
 				if (addon && !addon.plugin && !addon.instance && addon.css) {
 					let vars = this.getThemeVars(addon.css);
 					if (vars.length) {
-						let footer = card.querySelector("." + BDFDB.dotCN._repofooter.split(".").filter(n => n).join(",."));
-						if (!footer) {
-							footer = document.createElement("div");
-							footer.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repofooter);
-							let links = document.createElement("span");
-							links.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repolinks);
-							footer.appendChild(links);
-							card.appendChild(footer);
-						}
-						let settingsButton = document.createElement("button");
-						let controls = footer.querySelector("." + BDFDB.disCN._repocontrols.split(" ")[0]);
-						if (controls) {
+						if (isBeta) {
+							let controls = card.querySelector("." + BDFDB.disCN._repofooter.split(" ")[0] + " " + BDFDB.dotCN._repocontrols);
+							let settingsButton = document.createElement("button");
 							settingsButton.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repobutton, BDFDB.disCN._repocontrolsbutton, "theme-settings-button");
 							settingsButton.appendChild(BDFDB.DOMUtils.create(`<svg viewBox="0 0 20 20" style="width: 20px; height: 20px;">
 								<path fill="none" d="M0 0h20v20H0V0z"></path>
@@ -109,6 +102,16 @@ module.exports = (_ => {
 							});
 						}
 						else {
+							let footer = card.querySelector(BDFDB.dotCN._repofooter);
+							if (!footer) {
+								footer = document.createElement("div");
+								footer.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repofooter);
+								let links = document.createElement("span");
+								links.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repolinks);
+								footer.appendChild(links);
+								card.appendChild(footer);
+							}
+							let settingsButton = document.createElement("button");
 							settingsButton.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._reposettingsbutton, "theme-settings-button");
 							settingsButton.innerText = "Settings";
 							footer.appendChild(settingsButton);

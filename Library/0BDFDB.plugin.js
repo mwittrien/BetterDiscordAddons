@@ -7320,7 +7320,7 @@ module.exports = (_ => {
 						props.hasCustomControls = true;
 						let url = plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 						let controls = [];
-						let footerControls = card.querySelector("." + BDFDB.disCN._repofooter.split(" ")[0] + " ." + BDFDB.disCN._repocontrols.split(" ")[0]);
+						let footerControls = card.querySelector("." + BDFDB.disCN._repofooter.split(" ")[0] + " " + BDFDB.dotCN._repocontrols);
 						if (plugin.changeLog) controls.push(InternalBDFDB.createCustomControl({
 							tooltipText: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
 							svgName: InternalComponents.LibraryComponents.SvgIcon.Names.CHANGELOG,
