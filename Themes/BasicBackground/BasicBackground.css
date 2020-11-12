@@ -1297,7 +1297,7 @@ body::before {
 /* ----		6.4.	AUTOCOMPLETEMENU				---- */
 
 #app-mount .autocomplete-1vrmpx {							/* autocomplete			container							*/
-	background-color: transparent
+	background-color: transparent;
 	overflow: hidden;
 }
 #app-mount .autocomplete-1vrmpx::before {
