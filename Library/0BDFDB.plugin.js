@@ -4474,6 +4474,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN._repoheader,
 									style: {overflow: "visible"},
 									children: [
+										isBeta && this.props.icon,
 										BDFDB.ReactUtils.createElement("span", {
 											className: BDFDB.disCN._repoheadertitle,
 											children: [
@@ -7255,7 +7256,7 @@ module.exports = (_ => {
 							if (!shown && !e.currentTarget.BDFDBtooltipShown) {
 								e.currentTarget.BDFDBtooltipShown = shown = true;
 								this.tooltip = BDFDB.TooltipUtils.create(e.currentTarget, typeof this.props.text == "function" ? this.props.text(this) : this.props.text, Object.assign({
-									delay: this.props.delayü
+									delay: this.props.delay
 								}, this.props.tooltipConfig, {
 									onHide: (tooltip, anker) => {
 										delete anker.BDFDBtooltipShown;
@@ -7307,19 +7308,16 @@ module.exports = (_ => {
 				BDFDB.LibraryComponents = Object.assign({}, InternalComponents.LibraryComponents);
 				
 				InternalBDFDB.createCustomControl = function (data) {
-					let child = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+					let controlButton = BDFDB.DOMUtils.create(`<${isBeta ? "button" : "div"} class="${BDFDB.DOMUtils.formatClassName(isBeta && BDFDB.disCN._repobutton, BDFDB.disCN._repocontrolsbutton)}"></${isBeta ? "button" : "div"}>`);
+					BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 						className: !isBeta && BDFDB.disCN._repoicon,
 						nativeClass: true,
 						name: data.svgName,
 						width: isBeta ? "20" : "24",
 						height: isBeta ? "20" : "24"
-					})
-					let controlButton = BDFDB.DOMUtils.create(`<${isBeta ? "button" : "div"} class="${BDFDB.DOMUtils.formatClassName(isBeta && BDFDB.disCN._repobutton, BDFDB.disCN._repocontrolsbutton)}"></${isBeta ? "button" : "div"}>`);
-					BDFDB.ReactUtils.render(data.tooltipText ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-						text: data.tooltipText,
-						children: child
-					}) : child, controlButton);
+					}), controlButton);
 					controlButton.addEventListener("click", _ => {if (typeof data.onClick == "function") data.onClick();});
+					if (data.tooltipText) controlButton.addEventListener("mouseenter", _ => {BDFDB.TooltipUtils.create(controlButton, data.tooltipText);});
 					return controlButton;
 				};
 				InternalBDFDB.appendCustomControls = function (card) {
