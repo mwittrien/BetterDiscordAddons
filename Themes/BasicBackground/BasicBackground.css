@@ -1297,7 +1297,7 @@ body::before {
 /* ----		6.4.	AUTOCOMPLETEMENU				---- */
 
 #app-mount .autocomplete-1vrmpx {							/* autocomplete			container							*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
+	background-color: transparent
 	overflow: hidden;
 }
 #app-mount .autocomplete-1vrmpx::before {
@@ -1315,11 +1315,25 @@ body::before {
 	pointer-events: none;
 	z-index: -1;
 }
+#app-mount .autocomplete-1vrmpx::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
+	width: unset;
+	height: unset;
+	border-radius: 5px;
+	pointer-events: none;
+	z-index: -1;
+}
 .theme-brand .autocomplete-1vrmpx {
 	background: rgb(var(--vaccentcolor)) linear-gradient(rgba(var(--vtransparencycolor), 0.2), rgba(var(--vtransparencycolor), 0.2)) !important;
 }
-.theme-brand .autocomplete-1vrmpx::after,
-.theme-brand .autocomplete-1vrmpx::before {
+.theme-brand .autocomplete-1vrmpx::before,
+.theme-brand .autocomplete-1vrmpx::after {
 	display: none;
 }
 #app-mount .container-3ISnnM::after {
@@ -6440,7 +6454,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 }
 
 #app-mount .bd-modal-inner {								/* modal				container							*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	background-color: transparent;
 	border: none;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
@@ -6458,6 +6472,20 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	filter: blur(var(--vpopoutblur));
 	width: unset;
 	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.bd-modal-inner::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	width: unset;
+	height: unset;
+	border-radius: 5px;
 	pointer-events: none;
 	z-index: -1;
 }
