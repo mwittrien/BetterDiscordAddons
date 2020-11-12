@@ -800,6 +800,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	align-items: center;
 	justify-content: space-between;
 }
+[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofooter] > *:only-child {
+	margin-left: auto;
+}
 [REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repoheadercontrols],
 [REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofootercontrols] {
 	display: flex;
@@ -811,7 +814,7 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repocontrols] > * {
 	margin-left: 10px;
 }
-[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofootercontrols] > * {
+[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofootercontrols][REPLACE_CLASS__repocontrols] > * {
 	margin-left: 0;
 }
 [REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repocontrolsbutton] {
