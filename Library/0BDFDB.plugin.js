@@ -4512,22 +4512,26 @@ module.exports = (_ => {
 													href: data.href,
 													children: data.icon || data.label
 												});
-												return !isBeta ? [
+												if (!isBeta) return [
 													i > 0 && " | ",
 													link
-												] : BDFDB.ReactUtils.createElement("div", {
-													className: BDFDB.disCN._repocontrolsbutton,
-													onClick: e => {
-														if (typeof data.onClick == "function") {
-															BDFDB.ListenerUtils.stopEvent(e);
-															data.onClick();
+												];
+												else {
+													let button = BDFDB.ReactUtils.createElement("div", {
+														className: BDFDB.disCN._repocontrolsbutton,
+														children: link,
+														onClick: e => {
+															if (typeof data.onClick == "function") {
+																BDFDB.ListenerUtils.stopEvent(e);
+																data.onClick();
+															}
 														}
-													},
-													children: typeof data.label == "string" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+													});
+													return typeof data.label == "string" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 														text: data.label,
-														children: link
-													}) : link
-												});
+														children: button
+													}) : button;
+												}
 											}).flat(10).filter(n => n)
 										}),
 										buttons.length && BDFDB.ReactUtils.createElement("div", {
