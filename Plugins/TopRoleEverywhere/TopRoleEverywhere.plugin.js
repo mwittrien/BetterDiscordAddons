@@ -6,6 +6,7 @@
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TopRoleEverywhere
  * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/TopRoleEverywhere/TopRoleEverywhere.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/TopRoleEverywhere/TopRoleEverywhere.plugin.js
  */
 
 module.exports = (_ => {

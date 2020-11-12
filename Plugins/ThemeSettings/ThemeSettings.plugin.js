@@ -6,6 +6,7 @@
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeSettings
  * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ThemeSettings/ThemeSettings.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ThemeSettings/ThemeSettings.plugin.js
  */
 
 module.exports = (_ => {

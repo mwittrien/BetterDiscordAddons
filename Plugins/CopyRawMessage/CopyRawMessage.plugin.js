@@ -6,6 +6,7 @@
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CopyRawMessage
  * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CopyRawMessage/CopyRawMessage.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CopyRawMessage/CopyRawMessage.plugin.js
  */
 
 module.exports = (_ => {
