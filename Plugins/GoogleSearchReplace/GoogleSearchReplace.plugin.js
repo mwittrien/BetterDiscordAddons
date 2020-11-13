@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleSearchReplace",
 			"author": "DevilBro",
-			"version": "1.2.7",
+			"version": "1.2.8",
 			"description": "Replace the default Google Text Search with a selection menu of several search engines"
 		}
 	};
@@ -66,7 +66,7 @@ module.exports = (_ => {
 						Quora: 				{value:true, 	name:"Quora", 				url:"https://www.quora.com/search?q=" + textUrlReplaceString},
 						Qwant: 				{value:true, 	name:"Qwant", 				url:"https://www.qwant.com/?t=all&q=" + textUrlReplaceString},
 						UrbanDictionary: 	{value:true, 	name:"Urban Dictionary", 	url:"https://www.urbandictionary.com/define.php?term=" + textUrlReplaceString},
-						Searx: 				{value:true, 	name:"Searx", 				url:"https://searx.me/?q=" + textUrlReplaceString},
+						Searx: 				{value:true, 	name:"Searx", 				url:"https://searx.info/?q=" + textUrlReplaceString},
 						WolframAlpha:		{value:true, 	name:"Wolfram Alpha", 		url:"https://www.wolframalpha.com/input/?i=" + textUrlReplaceString},
 						Yandex: 			{value:true, 	name:"Yandex", 				url:"https://yandex.com/search/?text=" + textUrlReplaceString},
 						Yahoo: 				{value:true, 	name:"Yahoo", 				url:"https://search.yahoo.com/search?p=" + textUrlReplaceString},
