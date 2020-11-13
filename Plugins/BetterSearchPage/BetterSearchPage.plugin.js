@@ -18,6 +18,7 @@ module.exports = (_ => {
 			"description": "Add some extra controls to the search results page"
 		}
 	};
+
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}

@@ -18,6 +18,7 @@ module.exports = (_ => {
 			"description": "Add extra controls to the friends page, like sort by name/status, search and all/request/blocked amount"
 		}
 	};
+
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}

@@ -18,6 +18,7 @@ module.exports = (_ => {
 			"description": "Show details of a server when you hover over the icon in the server list"
 		}
 	};
+
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}

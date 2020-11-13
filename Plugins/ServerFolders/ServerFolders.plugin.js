@@ -18,6 +18,7 @@ module.exports = (_ => {
 			"description": "Patch Discords native Folders in a way to open Servers within a Folder in a new bar to the right, also adds a bunch of new features to more easily organize, customize and manage your Folders"
 		}
 	};
+
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}

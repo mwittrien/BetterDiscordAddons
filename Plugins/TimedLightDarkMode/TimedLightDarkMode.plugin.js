@@ -18,6 +18,7 @@ module.exports = (_ => {
 			"description": "Allow you to automatically change light/dark mode depending on the time of day - Slider is added to the 'Appearance' settings"
 		}
 	};
+
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}

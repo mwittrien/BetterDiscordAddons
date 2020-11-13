@@ -18,6 +18,7 @@ module.exports = (_ => {
 			"description": "Hide muted categories the same way muted channels are hidden, when the server is set to hide muted channels"
 		}
 	};
+
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}

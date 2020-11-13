@@ -18,6 +18,7 @@ module.exports = (_ => {
 			"description": "Allow you to pin DMs, making them appear at the top of your DMs/Server-List"
 		}
 	};
+
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}

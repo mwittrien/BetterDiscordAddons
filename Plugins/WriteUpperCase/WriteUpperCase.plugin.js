@@ -18,6 +18,7 @@ module.exports = (_ => {
 			"description": "Change first letter in message input to uppercase"
 		}
 	};
+
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}

@@ -18,6 +18,7 @@ module.exports = (_ => {
 			"description": "Allow the user to censor words or block complete messages based on words in the chatwindow"
 		}
 	};
+
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
