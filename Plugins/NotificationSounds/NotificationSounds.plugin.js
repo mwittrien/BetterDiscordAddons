@@ -267,7 +267,8 @@ module.exports = (_ => {
 
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
 					let type = e.methodArguments[0];
-					if (choices[type]) BDFDB.TimeUtils.timeout(_ => {
+					if (!type) return;
+					else if (choices[type]) BDFDB.TimeUtils.timeout(_ => {
 						e.stopOriginalMethodCall();
 						if (type == "message1") {
 							if (firedEvents["dm"]) firedEvents["dm"] = false;
