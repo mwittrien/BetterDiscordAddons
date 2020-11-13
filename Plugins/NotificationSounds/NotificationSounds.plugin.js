@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
-			"version": "3.5.3",
+			"version": "3.5.4",
 			"description": "Allow you to replace the native sounds of Discord with your own"
 		},
 		"changeLog": {
@@ -268,6 +268,7 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
 					let type = e.methodArguments[0];
 					if (choices[type]) BDFDB.TimeUtils.timeout(_ => {
+						e.stopOriginalMethodCall();
 						if (type == "message1") {
 							if (firedEvents["dm"]) firedEvents["dm"] = false;
 							else if (firedEvents["mentioned"]) firedEvents["mentioned"] = false;
@@ -278,7 +279,7 @@ module.exports = (_ => {
 						}
 						else this.playAudio(type);
 					});
-					else e.callOriginalMethod();
+					else e.callOriginalMethodAfterwards();
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "createSound", {after: e => {
 					if (choices[e.methodArguments[0]]) {
