@@ -61,6 +61,7 @@
 		"LinkUtils": {"props": ["handleClick", "isLinkTrusted"]},
 		"LoginUtils": {"props": ["login", "logout"]},
 		"MediaDeviceUtils": {"props": ["getOutputDevices", "getInputDevices"]},
+		"MediaDeviceSetUtils": {"props": ["setOutputDevice", "setInputDevice"]},
 		"MemberCountUtils": {"props": ["getMemberCount", "getMemberCounts"]},
 		"MemberStore": {"props": ["getMember", "getMembers"]},
 		"MentionUtils": {"props": ["isRawMessageMentioned", "isMentioned"]},
