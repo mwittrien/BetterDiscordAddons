@@ -14,15 +14,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.1.1",
+			"version": "1.1.2",
 			"description": "Completely removes blocked messages"
 		},
 		"changeLog": {
 			"improved": {
-				"Pinned Messages": "Now also hides pinned messages of blocked ppl",
+				"Voice Channels": "No longer plays voice notifications for blocked users and localy mutes them when they join the same voice channel as you"
 			},
 			"fixed": {
-				"Member List": "Fixed issue where some none blocked users are hidden and groups with 0 ppl didn't get hidden",
+				"Message Groups": "No longer keeps message groups split if a blocked message between the was removed"
 			}
 		}
 	};
@@ -87,7 +87,7 @@ module.exports = (_ => {
 					}
 				};
 				
-				this.patchPriority = 10;
+				this.patchPriority = 8;
 			}
 			
 			onStart() {
@@ -117,6 +117,31 @@ module.exports = (_ => {
 				
 				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.MENTIONS, "queryResults", {after: e => {
 					if (settings.removeUsers) e.returnValue.users = e.returnValue.users.filter(n => !n.user || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.user.id));
+				}});
+				
+				let muteTimeout;
+				let channelId = BDFDB.LibraryModules.CurrentVoiceUtils.getChannelId();
+				let connectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryModules.VoiceUtils.getVoiceStates(BDFDB.LibraryModules.CurrentVoiceUtils.getGuildId()), n => n && n.channelId == channelId && !BDFDB.LibraryModules.FriendUtils.isBlocked(n.userId));
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
+					let type = e.methodArguments[0];
+					if (settings.removeUsers && type == "user_join" || type == "user_leave" || type == "user_moved") {
+						channelId = BDFDB.LibraryModules.CurrentVoiceUtils.getChannelId();
+						let allConnectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryModules.VoiceUtils.getVoiceStates(BDFDB.LibraryModules.CurrentVoiceUtils.getGuildId()), n => n && n.channelId == channelId);
+						let unblockedUsers = BDFDB.ObjectUtils.filter(allConnectedUsers, n => n && !BDFDB.LibraryModules.FriendUtils.isBlocked(n.userId));
+						let unmutedBlockedUsers = BDFDB.ObjectUtils.toArray(allConnectedUsers).filter(n => n && BDFDB.LibraryModules.FriendUtils.isBlocked(n.userId) && !BDFDB.LibraryModules.MediaDeviceUtils.isLocalMute(n.userId));
+						if (unmutedBlockedUsers.length) {
+							BDFDB.TimeUtils.clear(muteTimeout);
+							muteTimeout = BDFDB.TimeUtils.timeout(_ => {
+								while (unmutedBlockedUsers.length) BDFDB.LibraryModules.MediaDeviceSetUtils.toggleLocalMute(unmutedBlockedUsers.pop().userId);
+							}, 1000);
+						}
+						if (Object.keys(unblockedUsers).length == Object.keys(connectedUsers).length) {
+							e.stopOriginalMethodCall();
+							e.methodArguments[0] = null;
+						}
+						connectedUsers = unblockedUsers;
+					}
+					else e.callOriginalMethodAfterwards();
 				}});
 				
 				this.forceUpdateAll();
@@ -158,12 +183,21 @@ module.exports = (_ => {
 				if (settings.removeMessages) {
 					let messagesIns = e.returnvalue.props.children;
 					if (BDFDB.ArrayUtils.is(messagesIns.props.channelStream)) {
-						let oldStream = messagesIns.props.channelStream.filter(n => n.type != "MESSAGE_GROUP_BLOCKED"), newChannelStream = [];
+						let oldStream = messagesIns.props.channelStream.filter(n => n.type != "MESSAGE_GROUP_BLOCKED"), newStream = [];
 						for (let i in oldStream) {
 							let next = parseInt(i)+1;
-							if (oldStream[i].type != "DIVIDER" || (oldStream[next] && oldStream[i].type == "DIVIDER" && oldStream[next].type != "DIVIDER" && oldStream.slice(next).some(nextStream => nextStream.type != "DIVIDER"))) newChannelStream.push(oldStream[i]);
+							if (oldStream[i].type != "DIVIDER" || (oldStream[next] && oldStream[i].type == "DIVIDER" && oldStream[next].type != "DIVIDER" && oldStream.slice(next).some(nextStream => nextStream.type != "DIVIDER"))) newStream.push(oldStream[i]);
 						}
-						messagesIns.props.channelStream = newChannelStream;
+						let groupId, authorId;
+						for (let i in newStream) {
+							if (newStream[i].type == "MESSAGE" && newStream[i].content.type == BDFDB.DiscordConstants.MessageTypes.DEFAULT && groupId != newStream[i].groupId) {
+								if (authorId == newStream[i].content.author.id) newStream[i] = Object.assign({}, newStream[i], {groupId: groupId});
+								authorId = newStream[i].content.author.id;
+							}
+							else authorId = null;
+							groupId = newStream[i].groupId;
+						}
+						messagesIns.props.channelStream = newStream;
 					}
 					if (BDFDB.ObjectUtils.is(messagesIns.props.messages) && BDFDB.ArrayUtils.is(messagesIns.props.messages._array)) {
 						let messages = messagesIns.props.messages;
