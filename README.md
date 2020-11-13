@@ -10,3 +10,5 @@ A series of plugins and themes for BetterDiscord. If you got any questions hit m
 
 ## [Plugins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/)
 ## [Themes](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/)
+
+Copyright (C) 2020 Mirco Wittrien
