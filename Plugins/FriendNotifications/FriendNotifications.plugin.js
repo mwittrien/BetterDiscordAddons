@@ -185,7 +185,7 @@ module.exports = (_ => {
 				let createUserList = (users, type, title) => {
 					let items = [];
 					items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-						className: BDFDB.disCNS.titledefault + BDFDB.disCN.cursordefault,
+						className: BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
 						children: [
 							"Click on an Icon to toggle",
 							BDFDB.ReactUtils.createElement("span", {
@@ -197,7 +197,7 @@ module.exports = (_ => {
 						]
 					}));
 					if ("Notification" in window) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-						className: BDFDB.disCNS.titledefault + BDFDB.disCN.cursordefault,
+						className: BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
 						children: [
 							"Right-Click on an Icon to toggle",
 							BDFDB.ReactUtils.createElement("span", {
@@ -379,7 +379,7 @@ module.exports = (_ => {
 					children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 						className: BDFDB.disCN.marginbottom8,
 						children: BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCNS.titledefault + BDFDB.disCN.cursordefault,
+							className: BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
 							children: [
 								"Allows you to configure your own message strings for the different statuses. ",
 								BDFDB.ReactUtils.createElement("strong", {children: "$user"}),

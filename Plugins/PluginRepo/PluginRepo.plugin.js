@@ -198,7 +198,7 @@ module.exports = (_ => {
 							!automaticLoading && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 								className: BDFDB.disCN.marginbottom20,
 								children: BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCNS.titledefault + BDFDB.disCN.cursordefault,
+									className: BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
 									children: "To experience PluginRepo in the best way. I would recommend you to enable BD intern reload function, that way all downloaded files are loaded into Discord without the need to reload."
 								})
 							}),
