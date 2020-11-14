@@ -34,7 +34,7 @@ module.exports = (_ => {
 	const Cache = {data: {}, modules: {}};
 	
 	var libraryInstance;
-	var settings = {};
+	var settings = {}, changeLogs = {};
 	
 	if (window.BDFDB_Global && window.BDFDB_Global.PluginUtils && typeof window.BDFDB_Global.PluginUtils.cleanUp == "function") {
 		window.BDFDB_Global.PluginUtils.cleanUp(window.BDFDB_Global);
@@ -721,10 +721,16 @@ module.exports = (_ => {
 	};
 	BDFDB.PluginUtils.checkChangeLog = function (plugin) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ObjectUtils.is(plugin.changeLog)) return;
+		// REMOVE 14.11.2020
 		let changeLog = BDFDB.DataUtils.load(plugin, "changeLog");
-		if (!changeLog.version || BDFDB.NumberUtils.compareVersions(plugin.version, changeLog.version)) {
-			changeLog.version = plugin.version;
-			BDFDB.DataUtils.save(changeLog, plugin, "changeLog");
+		if (changeLog && changeLog.version) {
+			BDFDB.DataUtils.remove(plugin, "changelog");
+			BDFDB.DataUtils.remove(plugin, "changeLog");
+			changeLogs[plugin.name] = changeLog.version;
+		}
+		if (!changeLogs[plugin.name] || BDFDB.NumberUtils.compareVersions(plugin.version, changeLogs[plugin.name])) {
+			changeLogs[plugin.name] = plugin.version;
+			BDFDB.DataUtils.save(changeLogs, BDFDB, "changeLogs");
 			BDFDB.PluginUtils.openChangeLog(plugin);
 		}
 	};
@@ -7566,6 +7572,7 @@ module.exports = (_ => {
 				};
 
 				BDFDB.PluginUtils.load(BDFDB);
+				changeLogs = BDFDB.DataUtils.load(BDFDB, "changeLogs");
 				BDFDB.PluginUtils.checkChangeLog(BDFDB);
 				
 				InternalBDFDB.patchPlugin(BDFDB);
@@ -7620,7 +7627,7 @@ module.exports = (_ => {
 				};
 				
 				InternalBDFDB.forceUpdateAll = function () {
-					if (LibraryRequires.path) settings = BDFDB.DataUtils.get(this, "settings");
+					if (LibraryRequires.path) settings = BDFDB.DataUtils.get(BDFDB, "settings");
 					
 					BDFDB.MessageUtils.rerenderAll();
 					BDFDB.PatchUtils.forceAllUpdates(BDFDB);
