@@ -1046,6 +1046,10 @@ body::before {
 	color: rgb(var(--fontwhite3));
 }
 
+.bumpBox-1r5p3c {											/* messageelement		publish box							*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+
 .markup-2BOw-j {											/* message				markup								*/
 	color: rgb(var(--fontwhite2));
 }
