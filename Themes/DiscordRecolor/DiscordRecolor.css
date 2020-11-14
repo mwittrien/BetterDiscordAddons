@@ -4072,12 +4072,6 @@ html .floating-window #bd-editor-controls {
 	height: 32px;
 	padding: 0;
 }
-html #bd-editor-panel #bd-editor-controls {
-	background: var(--background-primary);
-}
-html .floating-window #bd-editor-panel #bd-editor-controls {
-	background: var(--background-tertiary);
-}
 html .controls-section,
 html #bd-editor-controls button {
 	display: flex;
@@ -4100,6 +4094,44 @@ html #bd-editor-controls button path:not([fill]) {
 	fill: currentColor;
 }
 
+html #bd-editor-panel #bd-editor-controls {
+	background-color: var(--background-tertiary);
+	border-radius: 5px 5px 0 0;
+	overflow: hidden;
+}
+html #bd-editor-panel .editor-wrapper {
+	background-color: var(--background-secondary);
+	border-radius: 0 0 5px 5px;
+	overflow: hidden;
+}
+html .floating-window #bd-editor-panel .editor-wrapper:last-child {
+	border-radius: 0;
+}
+html .monaco-editor,
+html .monaco-editor-background,
+html .monaco-editor .inputarea.ime-input,
+html .monaco-editor .margin {
+	background-color: var(--background-secondary);
+}
+html .monaco-editor,
+html .monaco-editor .inputarea.ime-input {
+	color: var(--text-normal);
+}
+html .mtk9 {
+	color: var(--text-normal);
+}
+html .monaco-editor .line-numbers {
+	color: var(--channels-default);
+}
+html .monaco-editor .bracket-match {
+	border-color: var(--channels-default);
+}
+html .monaco-editor .lines-content .cigr {
+	box-shadow: 1px 0 0 0 var(--interactive-muted) inset;
+}
+html .monaco-editor .view-overlays .current-line {
+	border-color: var(--interactive-muted);
+}
 html .mtk8 {
 	background-color: rgb(var(--vmentioncolor));
 }
