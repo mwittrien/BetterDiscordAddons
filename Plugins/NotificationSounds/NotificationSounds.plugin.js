@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
-			"version": "3.5.4",
+			"version": "3.5.5",
 			"description": "Allow you to replace the native sounds of Discord with your own"
 		},
 		"changeLog": {
@@ -268,18 +268,20 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
 					let type = e.methodArguments[0];
 					if (!type) return;
-					else if (choices[type]) BDFDB.TimeUtils.timeout(_ => {
+					else if (choices[type]) {
 						e.stopOriginalMethodCall();
-						if (type == "message1") {
-							if (firedEvents["dm"]) firedEvents["dm"] = false;
-							else if (firedEvents["mentioned"]) firedEvents["mentioned"] = false;
-							else if (firedEvents["role"]) firedEvents["role"] = false;
-							else if (firedEvents["everyone"]) firedEvents["everyone"] = false;
-							else if (firedEvents["here"]) firedEvents["here"] = false;
+						BDFDB.TimeUtils.timeout(_ => {
+							if (type == "message1") {
+								if (firedEvents["dm"]) firedEvents["dm"] = false;
+								else if (firedEvents["mentioned"]) firedEvents["mentioned"] = false;
+								else if (firedEvents["role"]) firedEvents["role"] = false;
+								else if (firedEvents["everyone"]) firedEvents["everyone"] = false;
+								else if (firedEvents["here"]) firedEvents["here"] = false;
+								else this.playAudio(type);
+							}
 							else this.playAudio(type);
-						}
-						else this.playAudio(type);
-					});
+						});
+					}
 					else e.callOriginalMethodAfterwards();
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "createSound", {after: e => {
