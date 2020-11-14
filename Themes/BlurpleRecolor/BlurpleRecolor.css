@@ -2016,7 +2016,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 	box-shadow: none;
 }
 
-html .editor-wrapper .bd-monokai .ace_marker-layer .ace_selection {
+html .mtk8 {
 	background-color: rgb(var(--vaccentcolor));
 }
 
