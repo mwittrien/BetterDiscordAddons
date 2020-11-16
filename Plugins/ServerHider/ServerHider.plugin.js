@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerHider",
 			"author": "DevilBro",
-			"version": "6.1.8",
+			"version": "6.1.9",
 			"description": "Hide Servers in your Serverlist"
 		},
 		"changeLog": {
 			"fixed": {
-				"Crash": "Fixed the crash issue that occured one some plugins"
+				"Works again": "Can discord stop messing with the server list, jeez"
 			}
 		}
 	};
@@ -151,11 +151,24 @@ module.exports = (_ => {
 					let childrenRender = e.returnvalue.props.children;
 					e.returnvalue.props.children = (...args) => {
 						let children = childrenRender(...args);
+						this.checkTree(children);
+						return children;
+					};
+				}
+				else this.checkTree(e.returnvalue);
+			}
+			
+			checkTree (returnvalue) {
+				let tree = BDFDB.ReactUtils.findChild(returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
+				if (tree) {
+					let childrenRender = tree.props.children;
+					tree.props.children = (...args) => {
+						let children = childrenRender(...args);
 						this.handleGuilds(children);
 						return children;
 					};
 				}
-				else this.handleGuilds(e.returnvalue);
+				else this.handleGuilds(returnvalue);
 			}
 
 			handleGuilds (returnvalue) {
