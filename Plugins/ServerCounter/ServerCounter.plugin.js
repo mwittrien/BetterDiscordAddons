@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerCounter",
 			"author": "DevilBro",
-			"version": "1.0.2",
+			"version": "1.0.3",
 			"description": "Add a server counter to the server list"
 		},
 		"changeLog": {
 			"fixed": {
-				"Crash on Canary": "Fixed the crash issue that occured one some plugins on canary"
+				"Works again": "Can discord stop messing with the server list, jeez"
 			}
 		}
 	};
@@ -74,11 +74,24 @@ module.exports = (_ => {
 					let childrenRender = e.returnvalue.props.children;
 					e.returnvalue.props.children = (...args) => {
 						let children = childrenRender(...args);
-						this.injectCounter(children);
+						this.checkTree(children);
 						return children;
 					};
 				}
-				else this.injectCounter(e.returnvalue);
+				else this.checkTree(e.returnvalue);
+			}
+			
+			checkTree (returnvalue) {
+				let tree = BDFDB.ReactUtils.findChild(returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
+				if (tree) {
+					let childrenRender = tree.props.children;
+					tree.props.children = (...args) => {
+						let children = childrenRender(...args);
+						this.checkTree(children);
+						return children;
+					};
+				}
+				else this.injectCounter(returnvalue);
 			}
 			
 			injectCounter (returnvalue) {
