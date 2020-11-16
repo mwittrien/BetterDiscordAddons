@@ -153,6 +153,9 @@
 			"MessageContent",
 			"NowPlayingHeader"
 		],
+		"SubRender": [
+			"GuildFolder"
+		],
 		"NonPrototype": [
 			"ChannelAutoComplete",
 			"ChannelTextAreaContainer"
