@@ -16,13 +16,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.1.2",
+			"version": "1.1.3",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 		"changeLog": {
 			"fixed": {
-				"BD Beta": "Fixed some issues with the BD Beta"
+				"Works ": "Can discord stop messing with the server list, jeez"
 			}
 		}
 	};
@@ -1569,6 +1569,7 @@ module.exports = (_ => {
 							propertyFind: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].props,
 							specialFilter: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].special && InternalBDFDB.createFilter(InternalData.ModuleUtilsConfig.Finder[unmappedType].special),
 							memoComponent: InternalData.ModuleUtilsConfig.MemoComponent.includes(unmappedType),
+							subRender: InternalData.ModuleUtilsConfig.SubRender.includes(unmappedType) && Object.keys(pluginData.patchTypes)[0] == "type" && Object.keys(pluginData.patchTypes).length == 1,
 							forceObserve: InternalData.ModuleUtilsConfig.ForceObserve.includes(unmappedType),
 							nonRender: BDFDB.ObjectUtils.toArray(pluginData.patchTypes).flat(10).filter(n => n && !InternalData.ModuleUtilsConfig.InstanceFunctions.includes(n)).length > 0,
 							mapped: InternalData.ModuleUtilsConfig.PatchMap[type]
@@ -1613,6 +1614,7 @@ module.exports = (_ => {
 						if (instance) {
 							instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 							let toBePatched = config.nonPrototype ? instance : instance.prototype;
+							toBePatched = config.subRender && toBePatched ? toBePatched.type : toBePatched;
 							for (let pluginData of pluginDataObjs) for (let patchType in pluginData.patchTypes) {
 								let patchMethods = {};
 								patchMethods[patchType] = e => {
@@ -1623,7 +1625,7 @@ module.exports = (_ => {
 										patchtypes: [patchType]
 									});
 								};
-								BDFDB.PatchUtils.patch(pluginData.plugin, toBePatched, pluginData.patchTypes[patchType], patchMethods);
+								BDFDB.PatchUtils.patch(pluginData.plugin, toBePatched, config.subRender ? "render" : pluginData.patchTypes[patchType], patchMethods);
 							}
 						}
 					}
