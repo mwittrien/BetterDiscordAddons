@@ -83,7 +83,7 @@ module.exports = (_ => {
 							authorization: `Bearer ${socket.accessToken}`
 						}
 					}, (error, response, result) => {
-						if (response.statusCode == 401) {
+						if (response && response.statusCode == 401) {
 							BDFDB.LibraryModules.SpotifyUtils.getAccessToken(socket.accountId).then(promiseResult => {
 								let newSocketDevice = BDFDB.LibraryModules.SpotifyTrackUtils.getActiveSocketAndDevice();
 								this.request(newSocketDevice.socket, newSocketDevice.device, type, data).then(_ => {
