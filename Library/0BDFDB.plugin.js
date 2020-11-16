@@ -16,7 +16,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.1.3",
+			"version": "1.1.4",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
@@ -1569,7 +1569,7 @@ module.exports = (_ => {
 							propertyFind: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].props,
 							specialFilter: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].special && InternalBDFDB.createFilter(InternalData.ModuleUtilsConfig.Finder[unmappedType].special),
 							memoComponent: InternalData.ModuleUtilsConfig.MemoComponent.includes(unmappedType),
-							subRender: InternalData.ModuleUtilsConfig.SubRender.includes(unmappedType) && Object.keys(pluginData.patchTypes)[0] == "type" && Object.keys(pluginData.patchTypes).length == 1,
+							subRender: InternalData.ModuleUtilsConfig.SubRender.includes(unmappedType),
 							forceObserve: InternalData.ModuleUtilsConfig.ForceObserve.includes(unmappedType),
 							nonRender: BDFDB.ObjectUtils.toArray(pluginData.patchTypes).flat(10).filter(n => n && !InternalData.ModuleUtilsConfig.InstanceFunctions.includes(n)).length > 0,
 							mapped: InternalData.ModuleUtilsConfig.PatchMap[type]
