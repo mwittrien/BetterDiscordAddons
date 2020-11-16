@@ -87,7 +87,7 @@ module.exports = (_ => {
 					let childrenRender = tree.props.children;
 					tree.props.children = (...args) => {
 						let children = childrenRender(...args);
-						this.checkTree(children);
+						this.injectCounter(children);
 						return children;
 					};
 				}
