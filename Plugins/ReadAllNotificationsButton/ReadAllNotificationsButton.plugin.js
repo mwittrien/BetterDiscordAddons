@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ReadAllNotificationsButton",
 			"author": "DevilBro",
-			"version": "1.6.1",
+			"version": "1.6.2",
 			"description": "Add a button to clear all notifications"
 		},
 		"changeLog": {
 			"fixed": {
-				"Crash on Canary": "Fixed the crash issue that occured one some plugins on canary"
+				"Works again": "Can discord stop messing with the server list, jeez"
 			}
 		}
 	};
@@ -220,11 +220,24 @@ module.exports = (_ => {
 					let childrenRender = e.returnvalue.props.children;
 					e.returnvalue.props.children = (...args) => {
 						let children = childrenRender(...args);
+						this.checkTree(children);
+						return children;
+					};
+				}
+				else this.checkTree(e.returnvalue);
+			}
+			
+			checkTree (returnvalue) {
+				let tree = BDFDB.ReactUtils.findChild(returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
+				if (tree) {
+					let childrenRender = tree.props.children;
+					tree.props.children = (...args) => {
+						let children = childrenRender(...args);
 						this.injectButton(children);
 						return children;
 					};
 				}
-				else this.injectButton(e.returnvalue);
+				else this.injectButton(returnvalue);
 			}
 			
 			injectButton (returnvalue) {
