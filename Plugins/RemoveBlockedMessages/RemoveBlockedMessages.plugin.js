@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.1.2",
+			"version": "1.1.3",
 			"description": "Completely removes blocked messages"
 		},
 		"changeLog": {
@@ -22,6 +22,7 @@ module.exports = (_ => {
 				"Voice Channels": "No longer plays voice notifications for blocked users and localy mutes them when they join the same voice channel as you"
 			},
 			"fixed": {
+				"Voice Channels": "Fixed issue where sounds didn't play if non-blocked users joins/leaves channel",
 				"Message Groups": "No longer keeps message groups split if a blocked message between the was removed"
 			}
 		}
@@ -139,6 +140,7 @@ module.exports = (_ => {
 							e.stopOriginalMethodCall();
 							e.methodArguments[0] = null;
 						}
+						else e.callOriginalMethodAfterwards();
 						connectedUsers = unblockedUsers;
 					}
 					else e.callOriginalMethodAfterwards();
