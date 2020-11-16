@@ -1546,7 +1546,7 @@ body::before {
 
 #app-mount .incomingCallInner-2VmFiR,
 #app-mount .root-3JVdIJ {									/* popout				inner								*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
+	background-color: transparent;
 	border: none;
 }
 .incomingCallInner-2VmFiR::before,
@@ -1560,6 +1560,20 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.incomingCallInner-2VmFiR::after,
+.root-3JVdIJ::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -1725,7 +1739,7 @@ body::before {
 	color: color: rgb(var(--fontwhite4));
 }
 #app-mount .popout-38lTFE {									/* playing				popout								*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.3));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 8px 16px 0 rgba(var(--vtransparencycolor), 0.3);
 	overflow: hidden;
 }
@@ -1739,6 +1753,19 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.popout-38lTFE::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.3));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -2736,7 +2763,7 @@ body::before {
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 #app-mount .exampleModal-2X2Vf8 {							/* communitysettings	welcome		examplemodal			*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	border-radius: 5px;
@@ -2754,6 +2781,19 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	border-radius: 5px;
+	pointer-events: none;
+}
+.exampleModal-2X2Vf8::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	border-radius: 5px;
@@ -2835,7 +2875,7 @@ body::before {
 
 #app-mount .overflowRolesPopout-140n9i,						/* membersettings		roleoverflow popout					*/
 #app-mount .overflowRolesPopoutArrow-2O66oH {
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.1));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.2), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
 	border: none;
 	border-radius: 3px;
@@ -2852,6 +2892,20 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.overflowRolesPopout-140n9i::after,
+.overflowRolesPopoutArrow-2O66oH::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.1));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -3050,7 +3104,6 @@ body::before {
 	position: relative;
 	overflow: hidden;
 }
-.root-SR8cQa::after,
 .root-SR8cQa::before {
 	content: "";
 	position: absolute;
@@ -3058,18 +3111,26 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
+	background: var(--user-background, var(--vpopout)) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
 	width: unset;
 	height: unset;
 	pointer-events: none;
 	z-index: -1;
 }
 .root-SR8cQa::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
-}
-.root-SR8cQa::before {
-	background: var(--user-background, var(--vpopout)) center/var(--vpopoutsize);
-	filter: blur(var(--vpopoutblur));
-	background-attachment: fixed;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
 }
 #app-mount .topSectionNormal-2-vo2m {						/* modal				headernormal						*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
@@ -3194,7 +3255,7 @@ body::before {
 /* ----		13.3.	REGIONSELECTMODAL				---- */
 
 #app-mount .regionSelectModal-12e-57 {						/* modal				container							*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	overflow: hidden;
@@ -3214,6 +3275,19 @@ body::before {
 	pointer-events: none;
 	z-index: -1;
 }
+.regionSelectModal-12e-57::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
 #app-mount .regionSelectModal-12e-57 .regionSelectModalOption-2DSIZ3 {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	border-color: rgba(var(--vtransparencycolor), 0.1);
@@ -3228,7 +3302,7 @@ body::before {
 /* ----		13.4.	UPLOADMODAL						---- */
 
 #app-mount .uploadModal-2ifh8j {							/* modal				container							*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	border-radius: 10px;
@@ -3243,6 +3317,20 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	border-radius: 10px;
+	z-index: -1;
+}
+.uploadModal-2ifh8j::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -3292,7 +3380,7 @@ body::before {
 /* ----		13.5.	KEYBOARDSHORTCUTSMODAL			---- */
 
 #app-mount .keyboardShortcutsModal-3piNz7 {					/* modal				container							*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	overflow: hidden;
@@ -3307,6 +3395,19 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.keyboardShortcutsModal-3piNz7::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -3338,7 +3439,7 @@ body::before {
 /* ----		13.6.	QUICKSWITCHER					---- */
 
 #app-mount .quickswitcher-3JagVE {							/* modal				container							*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	overflow: hidden;
@@ -3353,6 +3454,19 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.quickswitcher-3JagVE::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -3407,7 +3521,7 @@ body::before {
 /* ----		13.7.	INVITEMODAL/GROUPCREATE			---- */
 
 #app-mount .contentWrapper-3WC1ID {								/* modal				guildinvitemodal				*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	overflow: hidden;
@@ -3422,6 +3536,19 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.contentWrapper-3WC1ID::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -3489,7 +3616,7 @@ body::before {
 /* ----		13.9.	TERMACCEPTMODAL					---- */
 
 #app-mount .modal-DRZfgq {									/* modal				container							*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	overflow: hidden;
@@ -3504,6 +3631,19 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.modal-DRZfgq::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -3533,7 +3673,7 @@ body::before {
 /* ----		13.10.	DOWNLOADAPPMODAL				---- */
 
 #app-mount .downloadApps-wbBFdZ {							/* modal				container							*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	overflow: hidden;
@@ -3548,6 +3688,19 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.downloadApps-wbBFdZ::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -3592,7 +3745,7 @@ body::before {
 }
 
 #app-mount .subscribersPopout-2CP6Ln {						/* subpopout			container							*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.35));
+	background-color: transparent;
 	box-shadow: 0 2px 10px rgba(var(--vtransparencycolor), 0.2);
 	overflow: hidden;
 }
@@ -3606,6 +3759,19 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.subscribersPopout-2CP6Ln::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.35));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -3940,7 +4106,7 @@ body::before {
 #app-mount .quickSelectPopout-X1hvgV,						/* quickselect			(for example regionselect)			*/
 #app-mount .themedPopout-1TrfdI,							/* themed popout		(for example mentionpopout)			*/
 #app-mount .popoutList-T9CKZQ {								/* listpopout			(for example auditlogs)				*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
+	background-color: transparent;
 	border: none;
 	border-radius: 5px;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
@@ -3960,6 +4126,23 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	border-radius: 5px;
+	z-index: -1;
+}
+.container-2x5lvQ::after,
+.quickSelectPopout-X1hvgV::after,
+.themedPopout-1TrfdI::after,
+.popoutList-T9CKZQ::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -4019,7 +4202,7 @@ body::before {
 }
 
 #app-mount .addGamePopout-2RY8Ju {							/* addgamepopout											*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.15));
+	background-color: transparent;
 }
 .addGamePopout-2RY8Ju::before {
 	content: "";
@@ -4036,13 +4219,26 @@ body::before {
 	pointer-events: none;
 	z-index: -1;
 }
+.addGamePopout-2RY8Ju::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.15));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
 
 /* ----		14.1.	CONTEXTMENU						---- */
 
 .styleFlexible-wGDiIL,										/* contextmenu			flexible							*/
 .styleFixed-sX-yHV,											/* contextmenu			fixed								*/
 .submenu-2-ysNh {											/* contextmenu			submenu								*/
-	background: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.3));
+	background: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 }
 .styleFlexible-wGDiIL::before,
@@ -4057,6 +4253,22 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	border-radius: 4px;
+	pointer-events: none;
+	z-index: -1;
+}
+.styleFlexible-wGDiIL::after,
+.styleFixed-sX-yHV::after,
+.submenu-2-ysNh::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.3));
 	width: unset;
 	height: unset;
 	border-radius: 4px;
@@ -4118,7 +4330,6 @@ body::before {
 .userPopout-3XzG_A {										/* popout				container							*/
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 }
-.userPopout-3XzG_A::after,
 .userPopout-3XzG_A::before {
 	content: "";
 	position: absolute;
@@ -4126,18 +4337,26 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
+	background: var(--user-background, var(--vpopout)) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
 	width: unset;
 	height: unset;
 	pointer-events: none;
 	z-index: -1;
 }
 .userPopout-3XzG_A::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
-}
-.userPopout-3XzG_A::before {
-	background: var(--user-background, var(--vpopout)) center/var(--vpopoutsize);
-	filter: blur(var(--vpopoutblur));
-	background-attachment: fixed;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
 }
 .header-2BwW8b {											/* popout				header								*/
 	color: rgb(var(--fontwhite1));
@@ -4283,7 +4502,7 @@ body::before {
 .contentWrapper-SvZHNd,										/* picker				expression wrapper					*/
 .emojiPicker-3PwZFl,										/* picker				inner								*/
 .diversitySelectorPopout-3FiGaM {							/* picker				diversityselector					*/
-	background: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
+	background: transparent;
 	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
 	overflow: hidden;
@@ -4300,6 +4519,21 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.contentWrapper-SvZHNd::after,
+.emojiPicker-3PwZFl::after,
+.diversitySelectorPopout-3FiGaM::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -4362,7 +4596,7 @@ body::before {
 
 .unicodeShortcut-15J8Ck,									/* picker				unicodeemojis shortcut				*/
 .stickerCategoryShopWrapper-3EnJdQ {						/* picker				unicodeemojis shortcut				*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.35));
+	background-color: transparent;
 	color: rgb(var(--fontwhite3));
 	border: none;
 	overflow: hidden;
@@ -4382,6 +4616,20 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.unicodeShortcut-15J8Ck::after,
+.stickerCategoryShopWrapper-3EnJdQ::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.35));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -4432,7 +4680,7 @@ body::before {
 }
 
 .premiumPromo-fVlLu- {										/* picker				premium warning						*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.29));
+	background-color: transparent;
 	opacity: 1;
 }
 .premiumPromo-fVlLu-::before {
@@ -4446,6 +4694,20 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.premiumPromo-fVlLu-::after {
+	content: "";
+	opacity: 0.9;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.29));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -4481,7 +4743,7 @@ body::before {
 
 .messagesPopoutWrap-1MQ1bW,								/* popout				wrapper								*/
 .container-enaOkj {										/* popout				wrapper	(inbox)						*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
+	background-color: transparent
 	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
 	overflow: hidden;
@@ -4501,6 +4763,20 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.messagesPopoutWrap-1MQ1bW::after,
+.container-enaOkj::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -4664,7 +4940,7 @@ body::before {
 /* ----		14.5.	SEARCHPOPOUT					---- */
 
 #app-mount .container-3ayLPN {								/* popout				wrapper								*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
+	background-color: transparent;
 	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
 	overflow: hidden;
@@ -4680,6 +4956,19 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.container-3ayLPN::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -4819,7 +5108,7 @@ body::before {
 /* ----		14.6.	COLORPICKER						---- */
 
 #app-mount .colorPickerCustom-2CWBn2 {						/* popout				wrapper								*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.35));
+	background-color: transparent
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
 	border-radius: 3px;
@@ -4835,6 +5124,19 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.colorPickerCustom-2CWBn2::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.35));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -4867,7 +5169,7 @@ body::before {
 /* ----		14.7.	ADDROLE							---- */
 
 #app-mount .container-VSDcQc {								/* popout				wrapper								*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.1));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
 	border-radius: 3px;
@@ -4883,6 +5185,19 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.container-VSDcQc::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.1));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -4925,7 +5240,7 @@ body::before {
 /* ----		14.8.	EVERYONEMENTION					---- */
 
 #app-mount .everyonePopout-nEbJY3 {							/* popout				wrapper								*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.1));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
 	border-radius: 3px;
@@ -4942,6 +5257,19 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.everyonePopout-nEbJY3::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.1));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -4992,7 +5320,7 @@ body::before {
 /* ----		14.10.	CHANNELFOLLOWINFO				---- */
 
 #app-mount .guildPopout-3CgKqR {							/* popout				wrapper								*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.1));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
 	border-radius: 3px;
@@ -5014,11 +5342,24 @@ body::before {
 	pointer-events: none;
 	z-index: -1;
 }
+.guildPopout-3CgKqR::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.1));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
 
 /* ----		14.11.	EMOJIINFO						---- */
 
 #app-mount .popoutContainer-1MXdqN {						/* popout				wrapper								*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
 	border-radius: 3px;
@@ -5040,6 +5381,19 @@ body::before {
 	pointer-events: none;
 	z-index: -1;
 }
+.popoutContainer-1MXdqN::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
 
 .emojiSection-3Fb9ix {										/* popout				emojisection						*/
 	background-color: transparent;
@@ -5056,7 +5410,7 @@ body::before {
 /* ----		14.12.	STREAMPREVIEW					---- */
 
 #app-mount .streamPreview-2-WUWT {							/* popout				wrapper								*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
 	border-radius: 3px;
@@ -5078,6 +5432,19 @@ body::before {
 	pointer-events: none;
 	z-index: -1;
 }
+.streamPreview-2-WUWT::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
 
 #app-mount .previewContainer-12UlHl	{						/* popout				preview								*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
@@ -5086,7 +5453,7 @@ body::before {
 /* ----		14.13.	PUBLICGUILDANNOUNCEMENT			---- */
 
 #app-mount .popout-6p6fkZ {									/* popout				wrapper								*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
 	border-radius: 3px;
@@ -5103,6 +5470,19 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.popout-6p6fkZ::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -5938,7 +6318,7 @@ body::before {
 #app-mount .popout-2sKjHu,
 .container-3LUQwT,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"] {
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	background-color: transparent;
 	border: 1px solid rgba(var(--vtransparencycolor), 0.3);
 	box-shadow: 0px 1px 5px 0px rgba(var(--vtransparencycolor), 0.3);
 	overflow: hidden;
@@ -5955,6 +6335,21 @@ body::before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+#app-mount .popout-2sKjHu::after,
+.container-3LUQwT::after,
+.select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -6614,7 +7009,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	fill: rgb(var(--fontwhite1));
 }
 .bd-select .bd-select-options {								/* bd select			popout								*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.3));
+	background-color: transparent;
 	border: none;
 	border-radius: 4px;
 	box-shadow: rgba(var(--vtransparencycolor), 0.3) 0px 2px 5px 0px;
@@ -6632,6 +7027,20 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	border-radius: 4px;
+	pointer-events: none;
+	z-index: -1;
+}
+.bd-select .bd-select-options::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.3));
 	width: unset;
 	height: unset;
 	border-radius: 4px;
@@ -6924,7 +7333,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 /* ----		17.9.	PERMISSIONVIEWER				---- */
 
 #permissions-modal-wrapper #permissions-modal {				/* modal				container							*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	background-color: transparent;
 	border: none;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
@@ -6940,6 +7349,19 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	background: var(--vpopout) center/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+#permissions-modal-wrapper #permissions-modal::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
