@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.1.3",
+			"version": "1.1.4",
 			"description": "Completely removes blocked messages"
 		},
 		"changeLog": {
@@ -23,7 +23,7 @@ module.exports = (_ => {
 			},
 			"fixed": {
 				"Voice Channels": "Fixed issue where sounds didn't play if non-blocked users joins/leaves channel",
-				"Message Groups": "No longer keeps message groups split if a blocked message between the was removed"
+				"Message Groups": "No longer keeps message groups split if a blocked message between the was removed and doesn't merge messages with different usernames"
 			}
 		}
 	};
@@ -190,13 +190,13 @@ module.exports = (_ => {
 							let next = parseInt(i)+1;
 							if (oldStream[i].type != "DIVIDER" || (oldStream[next] && oldStream[i].type == "DIVIDER" && oldStream[next].type != "DIVIDER" && oldStream.slice(next).some(nextStream => nextStream.type != "DIVIDER"))) newStream.push(oldStream[i]);
 						}
-						let groupId, authorId;
+						let groupId, author;
 						for (let i in newStream) {
 							if (newStream[i].type == "MESSAGE" && newStream[i].content.type == BDFDB.DiscordConstants.MessageTypes.DEFAULT && groupId != newStream[i].groupId) {
-								if (authorId == newStream[i].content.author.id) newStream[i] = Object.assign({}, newStream[i], {groupId: groupId});
-								authorId = newStream[i].content.author.id;
+								if (author && author.id == newStream[i].content.author.id && author.username == newStream[i].content.author.username) newStream[i] = Object.assign({}, newStream[i], {groupId: groupId});
+								author = newStream[i].content.author;
 							}
-							else authorId = null;
+							else author = null;;
 							groupId = newStream[i].groupId;
 						}
 						messagesIns.props.channelStream = newStream;
