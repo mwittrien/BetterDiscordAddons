@@ -4238,15 +4238,15 @@ html .codicon-x:hover {
 }
 
 html .monaco-menu .monaco-action-bar.vertical {
-    cursor: default;
-    background: var(--background-floating) !important;
-    border-radius: 4px;
-    box-shadow: var(--elevation-high);
-    box-sizing: border-box;
+	cursor: default;
+	background: var(--background-floating) !important;
+	border-radius: 4px;
+	box-shadow: var(--elevation-high);
+	box-sizing: border-box;
 	color: var(--text-normal) !important;
 	padding: 8px 6px;
-    height: auto;
-    max-height: calc(100vh - 32px);
+	height: auto;
+	max-height: calc(100vh - 32px);
 }
 html .monaco-menu .monaco-action-bar.vertical .action-label.separator {
 	border-bottom: 1px solid var(--background-modifier-accent) !important;
@@ -4256,22 +4256,54 @@ html .monaco-menu .monaco-action-bar.vertical .action-label.separator {
 	opacity: 1;
 }
 html .monaco-menu .monaco-action-bar.vertical .action-menu-item {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-color: var(--interactive-normal) !important;
-    border-radius: 2px;
-    box-sizing: border-box;
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-color: var(--interactive-normal) !important;
+	border-radius: 2px;
+	box-sizing: border-box;
 	color: var(--interactive-normal) !important;
-    cursor: pointer;
-    margin: 2px 0;
-    padding: 6px 8px;
-    line-height: 18px;
-    font-size: 14px;
-    font-weight: 500;
-    box-sizing: border-box;
-    min-height: 32px;
+	cursor: pointer;
+	margin: 2px 0;
+	padding: 6px 8px;
+	line-height: 18px;
+	font-size: 14px;
+	font-weight: 500;
+	box-sizing: border-box;
+	min-height: 32px;
+}
+html .monaco-menu .monaco-action-bar.vertical .action-menu-item[style*="color: rgb(255, 255, 255)"],
+html .monaco-menu .monaco-action-bar.vertical .action-menu-item:hover {
+	border-color: #ffffff !important;
+	color: #ffffff !important;
+}
+html .monaco-menu .monaco-action-bar.vertical .action-menu-item > * {
+	border-color: currentColor !important;
+	color: currentColor !important;
+}
+html .monaco-menu .monaco-action-bar.vertical .action-label {
+	flex: 1 1 auto;
+	white-space: nowrap;
+	overflow: hidden;
+	font-size: unset;
+	line-height: unset;
+	text-overflow: ellipsis;
+	padding: unset;
+}
+html .monaco-menu .monaco-action-bar.vertical .keybinding,
+html .monaco-menu .monaco-action-bar.vertical .submenu-indicator {
+	font-size: unset;
+	line-height: unset;
+	padding-left: unset;
+	flex: 0 0 auto;
+    max-height: 18px;
+    margin-left: 8px;
+}
+html .monaco-menu .monaco-action-bar.vertical .submenu-indicator.codicon::before {
+	margin-left: 0;
+	margin-right: -4px;
+	flex: 2 1 auto;
 }
 
 
