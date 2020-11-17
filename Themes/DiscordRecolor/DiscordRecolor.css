@@ -4150,8 +4150,107 @@ html .monaco-editor .view-overlays .current-line {
 html .mtk8 {
 	background-color: rgb(var(--vmentioncolor));
 }
+
+html .monaco-editor.rename-box {
+	background-color: var(--background-secondary) !important;
+	box-shadow: 0 0 0 1px rgba(var(--vbackgroundtertiary),.6),0 2px 10px 0 rgba(0,0,0,.2) !important;
+	color: var(--header-secondary) !important;
+}
+html .monaco-editor.rename-box .rename-input {
+	background-color: var(--background-primary) !important;
+	color: var(--text-normal) !important;
+}
+html .monaco-editor .find-widget {
+	background-color: var(--background-secondary);
+	box-shadow: 0 0 0 1px rgba(var(--vbackgroundtertiary),.6),0 2px 10px 0 rgba(0,0,0,.2);
+	color: var(--header-secondary);
+}
+html .monaco-editor .find-widget .monaco-sash {
+	background-color: var(--background-accent);
+}
+html .monaco-editor .find-widget .monaco-inputbox,
+html .monaco-editor .find-widget .monaco-inputbox textarea {
+	background-color: var(--background-primary) !important;
+	color: var(--text-normal) !important;
+}
+html .monaco-editor .find-widget .button:not(.disabled):hover,
+html .monaco-editor.hc-black .find-widget .button:not(.disabled):hover,
+html .monaco-editor.vs-dark .find-widget .button:not(.disabled):hover {
+	background-color: var(--background-modifier-hover);
+}
+
+html .monaco-editor .peekview-widget .head {
+    background: var(--background-tertiary) !important;
+}
+html .monaco-editor .peekview-widget .head .peekview-title .filename {
+    color: var(--header-primary) !important;
+}
+html .monaco-editor .peekview-widget .head .peekview-title .dirname {
+    color: var(--header-secondary) !important;
+}
+html .monaco-editor .reference-zone-widget .ref-tree {
+    background: var(--background-secondary) !important;
+    color: var(--header-secondary) !important;
+}
+html .monaco-drag-image,
+html .monaco-list:focus .monaco-list-row.selected.focused,
+html .monaco-list.list_id_3:focus .monaco-list-row.selected.focused {
+    color: var(--header-primary) !important;
+}
+html .monaco-editor .reference-zone-widget .preview .monaco-editor .margin {
+	background: var(--background-secondary) linear-gradient(0deg, rgba(var(--vaccentcolor), 0.1), rgba(var(--vaccentcolor), 0.1));
+}
+html .monaco-editor .reference-zone-widget .preview .monaco-editor .monaco-editor-background,
+html .monaco-editor .reference-zone-widget .preview .monaco-editor .inputarea.ime-input {
+	background: var(--background-secondary) linear-gradient(0deg, rgba(var(--vaccentcolor), 0.1), rgba(var(--vaccentcolor), 0.1));
+}
+html .monaco-list .monaco-list-rows,
+html .monaco-list.list_id_3 .monaco-list-rows {
+    background: var(--background-secondary) !important;
+}
+html .monaco-editor .reference-zone-widget .ref-tree .monaco-list:focus .monaco-list-rows > .monaco-list-row.selected:not(.highlighted) {
+    background: var(--background-primary) !important;
+    color: var(--header-primary) !important;
+}
 html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight {
 	background: rgb(var(--vmentioncolor));
+}
+
+html .monaco-menu .monaco-action-bar.vertical {
+    cursor: default;
+    background: var(--background-floating) !important;
+    border-radius: 4px;
+    box-shadow: var(--elevation-high);
+    box-sizing: border-box;
+	color: var(--text-normal) !important;
+	padding: 8px 6px;
+    height: auto;
+    max-height: calc(100vh - 32px);
+}
+html .monaco-menu .monaco-action-bar.vertical .action-label.separator {
+	border-bottom: 1px solid var(--background-modifier-accent) !important;
+	box-sizing: border-box;
+	margin: 4px;
+	padding: 0;
+	opacity: 1;
+}
+html .monaco-menu .monaco-action-bar.vertical .action-menu-item {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-color: var(--interactive-normal);
+    border-radius: 2px;
+    box-sizing: border-box;
+	color: var(--interactive-normal);
+    cursor: pointer;
+    margin: 2px 0;
+    padding: 6px 8px;
+    line-height: 18px;
+    font-size: 14px;
+    font-weight: 500;
+    box-sizing: border-box;
+    min-height: 32px;
 }
 
 

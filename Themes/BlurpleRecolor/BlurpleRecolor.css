@@ -2626,6 +2626,9 @@ html .mtk8 {
 html .monaco-editor .find-widget .monaco-inputbox.synthetic-focus {
 	outline-color: rgb(var(--vaccentcolor));
 }
+html .monaco-editor [class*="arrow-decoration"] {
+	border-bottom-color: rgb(var(--vaccentcolor));
+}
 
 .embedFull-2tM8--[style*="border-color: rgb(62, 130, 229)"],
 .embedFull-2tM8--[style*="border-color: rgb(62, 130, 226)"] {
