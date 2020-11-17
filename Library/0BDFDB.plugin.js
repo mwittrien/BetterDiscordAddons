@@ -948,14 +948,14 @@ module.exports = (_ => {
 									for (let child of e.path) if (typeof child.matches == "function" && child.matches(selector) && !child[namespace + "BDFDB" + origEventName]) {
 										child[namespace + "BDFDB" + origEventName] = true;
 										if (origEventName == "mouseenter") callback(BDFDB.ListenerUtils.copyEvent(e, child));
-										let mouseout = e2 => {
+										let mouseOut = e2 => {
 											if (e2.target.contains(child) || e2.target == child || !child.contains(e2.target)) {
 												if (origEventName == "mouseleave") callback(BDFDB.ListenerUtils.copyEvent(e, child));
 												delete child[namespace + "BDFDB" + origEventName];
-												document.removeEventListener("mouseout", mouseout);
+												document.removeEventListener("mouseout", mouseOut);
 											}
 										};
-										document.addEventListener("mouseout", mouseout);
+										document.addEventListener("mouseout", mouseOut);
 										break;
 									}
 								};
@@ -1272,18 +1272,19 @@ module.exports = (_ => {
 					
 					if (options.list || BDFDB.ObjectUtils.is(options.guild)) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltiplistitem);
 
-					let mouseLeave = _ => {itemLayer.removeTooltip();};
-					if (!options.perssist) anker.addEventListener("mouseleave", mouseLeave);
+					let mouseMove = e => {
+						let parent = e.target.parentElement.querySelector(":hover");
+						if (parent && anker != parent && !anker.contains(parent)) itemLayer.removeTooltip();
+					};
+					let mouseLeave = e => {itemLayer.removeTooltip();};
+					if (!options.perssist) {
+						document.addEventListener("mousemove", mouseMove);
+						document.addEventListener("mouseleave", mouseLeave);
+					}
 					
 					let observer = new MutationObserver(changes => changes.forEach(change => {
 						let nodes = Array.from(change.removedNodes);
-						if (nodes.indexOf(itemLayer) > -1 || nodes.indexOf(anker) > -1 || nodes.some(n => n.contains(anker))) {
-							BDFDB.ArrayUtils.remove(Tooltips, id);
-							observer.disconnect();
-							itemLayer.removeTooltip();
-							anker.removeEventListener("mouseleave", mouseLeave);
-							if (typeof options.onHide == "function") options.onHide(itemLayer, anker);
-						}
+						if (nodes.indexOf(itemLayer) > -1 || nodes.indexOf(anker) > -1 || nodes.some(n => n.contains(anker))) itemLayer.removeTooltip();
 					}));
 					observer.observe(document.body, {subtree:true, childList:true});
 					
@@ -1350,8 +1351,13 @@ module.exports = (_ => {
 						}
 					})(text);
 					(tooltip.removeTooltip = itemLayer.removeTooltip = _ => {
+						document.removeEventListener("mousemove", mouseMove);
+						document.removeEventListener("mouseleave", mouseLeave);
 						BDFDB.DOMUtils.remove(itemLayer);
+						BDFDB.ArrayUtils.remove(Tooltips, id);
+						observer.disconnect();
 						if (zIndexed) BDFDB.DOMUtils.remove(itemLayerContainer);
+						if (typeof options.onHide == "function") options.onHide(itemLayer, anker);
 					});
 					(tooltip.update = itemLayer.update = newText => {
 						if (newText) tooltip.setText(newText);
@@ -4739,24 +4745,24 @@ module.exports = (_ => {
 					}
 					handleSelection() {
 						if (!this.refElement) return;
-						let mousemove = _ => {
+						let mouseMove = _ => {
 							BDFDB.TimeUtils.timeout(this.forceUpdateCounter.bind(this), 10);
 						};
-						let mouseup = _ => {
-							document.removeEventListener("mousemove", mousemove);
-							document.removeEventListener("mouseup", mouseup);
+						let mouseUp = _ => {
+							document.removeEventListener("mousemove", mouseMove);
+							document.removeEventListener("mouseup", mouseUp);
 							if (this.refElement.selectionEnd - this.refElement.selectionStart) BDFDB.TimeUtils.timeout(_ => {
 								document.addEventListener("click", click);
 							});
 						};
 						let click = _ => {
 							BDFDB.TimeUtils.timeout(this.forceUpdateCounter.bind(this), 100);
-							document.removeEventListener("mousemove", mousemove);
-							document.removeEventListener("mouseup", mouseup);
+							document.removeEventListener("mousemove", mouseMove);
+							document.removeEventListener("mouseup", mouseUp);
 							document.removeEventListener("click", click);
 						};
-						document.addEventListener("mousemove", mousemove);
-						document.addEventListener("mouseup", mouseup);
+						document.addEventListener("mousemove", mouseMove);
+						document.addEventListener("mouseup", mouseUp);
 					}
 					componentDidMount() {
 						if (this.props.refClass) {
@@ -4898,18 +4904,18 @@ module.exports = (_ => {
 							let mousedown = event => {
 								if (!this.domElementRef.current || !document.contains(this.domElementRef.current)) document.removeEventListener("mousedown", mousedown);
 								else if (!this.domElementRef.current.contains(event.target)) {
-									let mouseup = event => {
+									let mouseUp = event => {
 										if (!this.domElementRef.current || !document.contains(this.domElementRef.current)) {
 											document.removeEventListener("mousedown", mousedown);
-											document.removeEventListener("mouseup", mouseup);
+											document.removeEventListener("mouseup", mouseUp);
 										}
 										else if (!this.domElementRef.current.contains(event.target)) {
 											document.removeEventListener("mousedown", mousedown);
-											document.removeEventListener("mouseup", mouseup);
+											document.removeEventListener("mouseup", mouseUp);
 											popoutContainerInstance.handleClick(event);
 										}
 									};
-									document.addEventListener("mouseup", mouseup);
+									document.addEventListener("mouseup", mouseUp);
 								}
 							};
 							document.addEventListener("mousedown", mousedown);
@@ -4948,17 +4954,17 @@ module.exports = (_ => {
 												onMouseDown: event => {
 													let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickersaturationcolor, event.target));
 													
-													let mouseup = _ => {
-														document.removeEventListener("mouseup", mouseup);
-														document.removeEventListener("mousemove", mousemove);
+													let mouseUp = _ => {
+														document.removeEventListener("mouseup", mouseUp);
+														document.removeEventListener("mousemove", mouseMove);
 													};
-													let mousemove = event2 => {
+													let mouseMove = event2 => {
 														let newS = BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 100], event2.clientX) + "%";
 														let newL = BDFDB.NumberUtils.mapRange([rects.top, rects.top + rects.height], [100, 0], event2.clientY) + "%";
 														this.handleColorChange(BDFDB.ColorUtils.convert([h, newS, newL, a], hslFormat));
 													};
-													document.addEventListener("mouseup", mouseup);
-													document.addEventListener("mousemove", mousemove);
+													document.addEventListener("mouseup", mouseUp);
+													document.addEventListener("mousemove", mouseMove);
 												},
 												children: [
 													BDFDB.ReactUtils.createElement("style", {
@@ -4999,16 +5005,16 @@ module.exports = (_ => {
 													onMouseDown: event => {
 														let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickerhuehorizontal, event.target));
 														
-														let mouseup = _ => {
-															document.removeEventListener("mouseup", mouseup);
-															document.removeEventListener("mousemove", mousemove);
+														let mouseUp = _ => {
+															document.removeEventListener("mouseup", mouseUp);
+															document.removeEventListener("mousemove", mouseMove);
 														};
-														let mousemove = event2 => {
+														let mouseMove = event2 => {
 															let newH = BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 360], event2.clientX);
 															this.handleColorChange(BDFDB.ColorUtils.convert([newH, s, l, a], hslFormat));
 														};
-														document.addEventListener("mouseup", mouseup);
-														document.addEventListener("mousemove", mousemove);
+														document.addEventListener("mouseup", mouseUp);
+														document.addEventListener("mousemove", mouseMove);
 													},
 													children: [
 														BDFDB.ReactUtils.createElement("style", {
@@ -5048,19 +5054,19 @@ module.exports = (_ => {
 														onMouseDown: event => {
 															let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickeralphahorizontal, event.target));
 															
-															let mouseup = _ => {
-																document.removeEventListener("mouseup", mouseup);
-																document.removeEventListener("mousemove", mousemove);
+															let mouseUp = _ => {
+																document.removeEventListener("mouseup", mouseUp);
+																document.removeEventListener("mousemove", mouseMove);
 																this.state.draggingAlphaCursor = false;
 																BDFDB.ReactUtils.forceUpdate(this);
 															};
-															let mousemove = event2 => {
+															let mouseMove = event2 => {
 																this.state.draggingAlphaCursor = true;
 																let newA = BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 1], event2.clientX);
 																this.handleColorChange(BDFDB.ColorUtils.setAlpha(selectedColor, newA, hslFormat));
 															};
-															document.addEventListener("mouseup", mouseup);
-															document.addEventListener("mousemove", mousemove);
+															document.addEventListener("mouseup", mouseUp);
+															document.addEventListener("mousemove", mouseMove);
 														},
 														children: BDFDB.ReactUtils.createElement("div", {
 															className: BDFDB.disCN.colorpickeralphacursor,
@@ -5109,10 +5115,10 @@ module.exports = (_ => {
 															style: {position: "absolute", cursor: "pointer", left: `${posAndColor[0] * 100}%`},
 															onMouseDown: posAndColor[0] == 0 || posAndColor[0] == 1 ? _ => {} : event => {
 																event = event.nativeEvent || event;
-																let mousemove = event2 => {
+																let mouseMove = event2 => {
 																	if (Math.sqrt((event.pageX - event2.pageX)**2) > 10) {
-																		document.removeEventListener("mousemove", mousemove);
-																		document.removeEventListener("mouseup", mouseup);
+																		document.removeEventListener("mousemove", mouseMove);
+																		document.removeEventListener("mouseup", mouseUp);
 																		
 																		this.state.draggingGradientCursor = true;
 																		let cursor = BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickergradientcursor, event.target);
@@ -5137,12 +5143,12 @@ module.exports = (_ => {
 																		document.addEventListener("mouseup", releasing);
 																	}
 																};
-																let mouseup = _ => {
-																	document.removeEventListener("mousemove", mousemove);
-																	document.removeEventListener("mouseup", mouseup);
+																let mouseUp = _ => {
+																	document.removeEventListener("mousemove", mouseMove);
+																	document.removeEventListener("mouseup", mouseUp);
 																};
-																document.addEventListener("mousemove", mousemove);
-																document.addEventListener("mouseup", mouseup);
+																document.addEventListener("mousemove", mouseMove);
+																document.addEventListener("mouseup", mouseUp);
 															},
 															onClick: event => {
 																BDFDB.ListenerUtils.stopEvent(event);
@@ -5205,18 +5211,18 @@ module.exports = (_ => {
 											let rects = BDFDB.DOMUtils.getRects(this.domElementRef.current);
 											let left = rects.left, top = rects.top;
 											let oldX = e.pageX, oldY = e.pageY;
-											let mouseup = _ => {
-												document.removeEventListener("mouseup", mouseup);
-												document.removeEventListener("mousemove", mousemove);
+											let mouseUp = _ => {
+												document.removeEventListener("mouseup", mouseUp);
+												document.removeEventListener("mousemove", mouseMove);
 											};
-											let mousemove = e2 => {
+											let mouseMove = e2 => {
 												left = left - (oldX - e2.pageX), top = top - (oldY - e2.pageY);
 												oldX = e2.pageX, oldY = e2.pageY;
 												this.domElementRef.current.style.setProperty("left", `${left}px`, "important");
 												this.domElementRef.current.style.setProperty("top", `${top}px`, "important");
 											};
-											document.addEventListener("mouseup", mouseup);
-											document.addEventListener("mousemove", mousemove);
+											document.addEventListener("mouseup", mouseUp);
+											document.addEventListener("mousemove", mouseMove);
 										},
 										style: Object.assign({}, pos, {width: 10, height: 10, cursor: "move", position: "absolute"})
 									}))
