@@ -208,6 +208,7 @@ module.exports = (_ => {
 						pointer-events: none;
 					}
 					${BDFDB.dotCN._imageutilitiesdetails} {
+						color: #dcddde;
 						margin-top: 5px;
 						font-size: 14px;
 						font-weight: 500;
