@@ -4260,10 +4260,10 @@ html .monaco-menu .monaco-action-bar.vertical .action-menu-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-color: var(--interactive-normal);
+    border-color: var(--interactive-normal) !important;
     border-radius: 2px;
     box-sizing: border-box;
-	color: var(--interactive-normal);
+	color: var(--interactive-normal) !important;
     cursor: pointer;
     margin: 2px 0;
     padding: 6px 8px;

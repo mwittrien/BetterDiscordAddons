@@ -110,6 +110,15 @@
 [color="rgb(14, 99, 156)"],
 [color="#0e639c"],
 [color="#0E639C"],
+[style^="color: rgba(9, 71, 113, 1)"],
+[style*=" color: rgba(9, 71, 113, 1)"],
+[style^="color: rgb(9, 71, 113)"],
+[style*=" color: rgb(9, 71, 113)"],
+[style^="color: #094771"],
+[style*=" color: #094771"],
+[color="rgba(9, 71, 113, 1)"],
+[color="rgb(9, 71, 113)"],
+[color="#094771"],
 [style^="color: rgba(255, 115, 250, 1)"],
 [style*=" color: rgba(255, 115, 250, 1)"],
 [style^="color: rgb(255, 115, 250)"],
@@ -140,6 +149,8 @@
 [style*=" color: rgba(0, 122, 204, 0.9"],
 [style^="color: rgba(14, 99, 156, 0.9"],
 [style*=" color: rgba(14, 99, 156, 0.9"],
+[style^="color: rgba(9, 71, 113, 0.9"],
+[style*=" color: rgba(9, 71, 113, 0.9"],
 [style^="color: rgba(255, 115, 250, 0.9"],
 [style*=" color: rgba(255, 115, 250, 0.9"],
 [style^="color: rgba(114, 137, 218, 0.9"],
@@ -150,6 +161,8 @@
 [style*=" color: rgba(0, 122, 204, 0.8"],
 [style^="color: rgba(14, 99, 156, 0.8"],
 [style*=" color: rgba(14, 99, 156, 0.8"],
+[style^="color: rgba(9, 71, 113, 0.8"],
+[style*=" color: rgba(9, 71, 113, 0.8"],
 [style^="color: rgba(255, 115, 250, 0.8"],
 [style*=" color: rgba(255, 115, 250, 0.8"],
 [style^="color: rgba(114, 137, 218, 0.8"],
@@ -160,6 +173,8 @@
 [style*=" color: rgba(0, 122, 204, 0.7"],
 [style^="color: rgba(14, 99, 156, 0.7"],
 [style*=" color: rgba(14, 99, 156, 0.7"],
+[style^="color: rgba(9, 71, 113, 0.7"],
+[style*=" color: rgba(9, 71, 113, 0.7"],
 [style^="color: rgba(255, 115, 250, 0.7"],
 [style*=" color: rgba(255, 115, 250, 0.7"],
 [style^="color: rgba(114, 137, 218, 0.7"],
@@ -170,6 +185,8 @@
 [style*=" color: rgba(0, 122, 204, 0.6"],
 [style^="color: rgba(14, 99, 156, 0.6"],
 [style*=" color: rgba(14, 99, 156, 0.6"],
+[style^="color: rgba(9, 71, 113, 0.6"],
+[style*=" color: rgba(9, 71, 113, 0.6"],
 [style^="color: rgba(255, 115, 250, 0.6"],
 [style*=" color: rgba(255, 115, 250, 0.6"],
 [style^="color: rgba(114, 137, 218, 0.6"],
@@ -180,6 +197,8 @@
 [style*=" color: rgba(0, 122, 204, 0.5"],
 [style^="color: rgba(14, 99, 156, 0.5"],
 [style*=" color: rgba(14, 99, 156, 0.5"],
+[style^="color: rgba(9, 71, 113, 0.5"],
+[style*=" color: rgba(9, 71, 113, 0.5"],
 [style^="color: rgba(255, 115, 250, 0.5"],
 [style*=" color: rgba(255, 115, 250, 0.5"],
 [style^="color: rgba(114, 137, 218, 0.5"],
@@ -190,6 +209,8 @@
 [style*=" color: rgba(0, 122, 204, 0.4"],
 [style^="color: rgba(14, 99, 156, 0.4"],
 [style*=" color: rgba(14, 99, 156, 0.4"],
+[style^="color: rgba(9, 71, 113, 0.4"],
+[style*=" color: rgba(9, 71, 113, 0.4"],
 [style^="color: rgba(255, 115, 250, 0.4"],
 [style*=" color: rgba(255, 115, 250, 0.4"],
 [style^="color: rgba(114, 137, 218, 0.4"],
@@ -200,6 +221,8 @@
 [style*=" color: rgba(0, 122, 204, 0.3"],
 [style^="color: rgba(14, 99, 156, 0.3"],
 [style*=" color: rgba(14, 99, 156, 0.3"],
+[style^="color: rgba(9, 71, 113, 0.3"],
+[style*=" color: rgba(9, 71, 113, 0.3"],
 [style^="color: rgba(255, 115, 250, 0.3"],
 [style*=" color: rgba(255, 115, 250, 0.3"],
 [style^="color: rgba(114, 137, 218, 0.3"],
@@ -210,6 +233,8 @@
 [style*=" color: rgba(0, 122, 204, 0.2"],
 [style^="color: rgba(14, 99, 156, 0.2"],
 [style*=" color: rgba(14, 99, 156, 0.2"],
+[style^="color: rgba(9, 71, 113, 0.2"],
+[style*=" color: rgba(9, 71, 113, 0.2"],
 [style^="color: rgba(255, 115, 250, 0.2"],
 [style*=" color: rgba(255, 115, 250, 0.2"],
 [style^="color: rgba(114, 137, 218, 0.2"],
@@ -220,6 +245,8 @@
 [style*=" color: rgba(0, 122, 204, 0.1"],
 [style^="color: rgba(14, 99, 156, 0.1"],
 [style*=" color: rgba(14, 99, 156, 0.1"],
+[style^="color: rgba(9, 71, 113, 0.1"],
+[style*=" color: rgba(9, 71, 113, 0.1"],
 [style^="color: rgba(255, 115, 250, 0.1"],
 [style*=" color: rgba(255, 115, 250, 0.1"],
 [style^="color: rgba(114, 137, 218, 0.1"],
@@ -230,6 +257,8 @@
 [style*=" color: rgba(0, 122, 204, 0.0"],
 [style^="color: rgba(14, 99, 156, 0.0"],
 [style*=" color: rgba(14, 99, 156, 0.0"],
+[style^="color: rgba(9, 71, 113, 0.0"],
+[style*=" color: rgba(9, 71, 113, 0.0"],
 [style^="color: rgba(255, 115, 250, 0.0"],
 [style*=" color: rgba(255, 115, 250, 0.0"],
 [style^="color: rgba(114, 137, 218, 0.0"],
@@ -269,6 +298,18 @@
 [background="#0e639c"],
 [background-color="#0E639C"],
 [background="#0E639C"],
+[style*="background-color: rgba(9, 71, 113, 1)"],
+[style*="background: rgba(9, 71, 113, 1)"],
+[style*="background-color: rgb(9, 71, 113)"],
+[style*="background: rgb(9, 71, 113)"],
+[style*="background-color: #094771"],
+[style*="background: #094771"],
+[background-color="rgba(9, 71, 113, 1)"],
+[background="rgba(9, 71, 113, 1)"],
+[background-color="rgb(9, 71, 113)"],
+[background="rgb(9, 71, 113)"],
+[background-color="#094771"],
+[background="#094771"],
 [style*="background-color: rgba(255, 115, 250, 1)"],
 [style*="background: rgba(255, 115, 250, 1)"],
 [style*="background-color: rgb(255, 115, 250)"],
@@ -307,6 +348,8 @@
 [style*="background: rgba(0, 122, 204, 0.9"],
 [style*="background-color: rgba(14, 99, 156, 0.9"],
 [style*="background: rgba(14, 99, 156, 0.9"],
+[style*="background-color: rgba(9, 71, 113, 0.9"],
+[style*="background: rgba(9, 71, 113, 0.9"],
 [style*="background-color: rgba(255, 115, 250, 0.9"],
 [style*="background: rgba(255, 115, 250, 0.9"],
 [style*="background-color: rgba(114, 137, 218, 0.9"],
@@ -317,6 +360,8 @@
 [style*="background: rgba(0, 122, 204, 0.8"],
 [style*="background-color: rgba(14, 99, 156, 0.8"],
 [style*="background: rgba(14, 99, 156, 0.8"],
+[style*="background-color: rgba(9, 71, 113, 0.8"],
+[style*="background: rgba(9, 71, 113, 0.8"],
 [style*="background-color: rgba(255, 115, 250, 0.8"],
 [style*="background: rgba(255, 115, 250, 0.8"],
 [style*="background-color: rgba(114, 137, 218, 0.8"],
@@ -327,6 +372,8 @@
 [style*="background: rgba(0, 122, 204, 0.7"],
 [style*="background-color: rgba(14, 99, 156, 0.7"],
 [style*="background: rgba(14, 99, 156, 0.7"],
+[style*="background-color: rgba(9, 71, 113, 0.7"],
+[style*="background: rgba(9, 71, 113, 0.7"],
 [style*="background-color: rgba(255, 115, 250, 0.7"],
 [style*="background: rgba(255, 115, 250, 0.7"],
 [style*="background-color: rgba(114, 137, 218, 0.7"],
@@ -337,6 +384,8 @@
 [style*="background: rgba(0, 122, 204, 0.6"],
 [style*="background-color: rgba(14, 99, 156, 0.6"],
 [style*="background: rgba(14, 99, 156, 0.6"],
+[style*="background-color: rgba(9, 71, 113, 0.6"],
+[style*="background: rgba(9, 71, 113, 0.6"],
 [style*="background-color: rgba(255, 115, 250, 0.6"],
 [style*="background: rgba(255, 115, 250, 0.6"],
 [style*="background-color: rgba(114, 137, 218, 0.6"],
@@ -347,6 +396,8 @@
 [style*="background: rgba(0, 122, 204, 0.5"],
 [style*="background-color: rgba(14, 99, 156, 0.5"],
 [style*="background: rgba(14, 99, 156, 0.5"],
+[style*="background-color: rgba(9, 71, 113, 0.5"],
+[style*="background: rgba(9, 71, 113, 0.5"],
 [style*="background-color: rgba(255, 115, 250, 0.5"],
 [style*="background: rgba(255, 115, 250, 0.5"],
 [style*="background-color: rgba(114, 137, 218, 0.5"],
@@ -357,6 +408,8 @@
 [style*="background: rgba(0, 122, 204, 0.4"],
 [style*="background-color: rgba(14, 99, 156, 0.4"],
 [style*="background: rgba(14, 99, 156, 0.4"],
+[style*="background-color: rgba(9, 71, 113, 0.4"],
+[style*="background: rgba(9, 71, 113, 0.4"],
 [style*="background-color: rgba(255, 115, 250, 0.4"],
 [style*="background: rgba(255, 115, 250, 0.4"],
 [style*="background-color: rgba(114, 137, 218, 0.4"],
@@ -367,6 +420,8 @@
 [style*="background: rgba(0, 122, 204, 0.3"],
 [style*="background-color: rgba(14, 99, 156, 0.3"],
 [style*="background: rgba(14, 99, 156, 0.3"],
+[style*="background-color: rgba(9, 71, 113, 0.3"],
+[style*="background: rgba(9, 71, 113, 0.3"],
 [style*="background-color: rgba(255, 115, 250, 0.3"],
 [style*="background: rgba(255, 115, 250, 0.3"],
 [style*="background-color: rgba(114, 137, 218, 0.3"],
@@ -377,6 +432,8 @@
 [style*="background: rgba(0, 122, 204, 0.2"],
 [style*="background-color: rgba(14, 99, 156, 0.2"],
 [style*="background: rgba(14, 99, 156, 0.2"],
+[style*="background-color: rgba(9, 71, 113, 0.2"],
+[style*="background: rgba(9, 71, 113, 0.2"],
 [style*="background-color: rgba(255, 115, 250, 0.2"],
 [style*="background: rgba(255, 115, 250, 0.2"],
 [style*="background-color: rgba(114, 137, 218, 0.2"],
@@ -387,6 +444,8 @@
 [style*="background: rgba(0, 122, 204, 0.1"],
 [style*="background-color: rgba(14, 99, 156, 0.1"],
 [style*="background: rgba(14, 99, 156, 0.1"],
+[style*="background-color: rgba(9, 71, 113, 0.1"],
+[style*="background: rgba(9, 71, 113, 0.1"],
 [style*="background-color: rgba(255, 115, 250, 0.1"],
 [style*="background: rgba(255, 115, 250, 0.1"],
 [style*="background-color: rgba(114, 137, 218, 0.1"],
@@ -397,6 +456,8 @@
 [style*="background: rgba(0, 122, 204, 0.0"],
 [style*="background-color: rgba(14, 99, 156, 0.0"],
 [style*="background: rgba(14, 99, 156, 0.0"],
+[style*="background-color: rgba(9, 71, 113, 0.0"],
+[style*="background: rgba(9, 71, 113, 0.0"],
 [style*="background-color: rgba(255, 115, 250, 0.0"],
 [style*="background: rgba(255, 115, 250, 0.0"],
 [style*="background-color: rgba(114, 137, 218, 0.0"],
@@ -420,6 +481,12 @@
 [border-color="rgb(14, 99, 156)"],
 [border-color="#0e639c"],
 [border-color="#0E639C"],
+[style*="border-color: rgba(9, 71, 113, 1)"],
+[style*="border-color: rgb(9, 71, 113)"],
+[style*="border-color: #094771"],
+[border-color="rgba(9, 71, 113, 1)"],
+[border-color="rgb(9, 71, 113)"],
+[border-color="#094771"],
 [style*="border-color: rgba(255, 115, 250, 1)"],
 [style*="border-color: rgb(255, 115, 250)"],
 [style*="border-color: #ff73fa"],
@@ -440,60 +507,70 @@
 }
 [style*="border-color: rgba(0, 122, 204, 0.9"],
 [style*="border-color: rgba(14, 99, 156, 0.9"],
+[style*="border-color: rgba(9, 71, 113, 0.9"],
 [style*="border-color: rgba(255, 115, 250, 0.9"],
 [style*="border-color: rgba(114, 137, 218, 0.9"] {
 	border-color: rgba(var(--vaccentcolor), 0.9) !important;
 }
 [style*="border-color: rgba(0, 122, 204, 0.8"],
 [style*="border-color: rgba(14, 99, 156, 0.8"],
+[style*="border-color: rgba(9, 71, 113, 0.8"],
 [style*="border-color: rgba(255, 115, 250, 0.8"],
 [style*="border-color: rgba(114, 137, 218, 0.8"] {
 	border-color: rgba(var(--vaccentcolor), 0.8) !important;
 }
 [style*="border-color: rgba(0, 122, 204, 0.7"],
 [style*="border-color: rgba(14, 99, 156, 0.7"],
+[style*="border-color: rgba(9, 71, 113, 0.7"],
 [style*="border-color: rgba(255, 115, 250, 0.7"],
 [style*="border-color: rgba(114, 137, 218, 0.7"] {
 	border-color: rgba(var(--vaccentcolor), 0.7) !important;
 }
 [style*="border-color: rgba(0, 122, 204, 0.6"],
 [style*="border-color: rgba(14, 99, 156, 0.6"],
+[style*="border-color: rgba(9, 71, 113, 0.6"],
 [style*="border-color: rgba(255, 115, 250, 0.6"],
 [style*="border-color: rgba(114, 137, 218, 0.6"] {
 	border-color: rgba(var(--vaccentcolor), 0.6) !important;
 }
 [style*="border-color: rgba(0, 122, 204, 0.5"],
 [style*="border-color: rgba(14, 99, 156, 0.5"],
+[style*="border-color: rgba(9, 71, 113, 0.5"],
 [style*="border-color: rgba(255, 115, 250, 0.5"],
 [style*="border-color: rgba(114, 137, 218, 0.5"] {
 	border-color: rgba(var(--vaccentcolor), 0.5) !important;
 }
 [style*="border-color: rgba(0, 122, 204, 0.4"],
 [style*="border-color: rgba(14, 99, 156, 0.4"],
+[style*="border-color: rgba(9, 71, 113, 0.4"],
 [style*="border-color: rgba(255, 115, 250, 0.4"],
 [style*="border-color: rgba(114, 137, 218, 0.4"] {
 	border-color: rgba(var(--vaccentcolor), 0.4) !important;
 }
 [style*="border-color: rgba(0, 122, 204, 0.3"],
 [style*="border-color: rgba(14, 99, 156, 0.3"],
+[style*="border-color: rgba(9, 71, 113, 0.3"],
 [style*="border-color: rgba(255, 115, 250, 0.3"],
 [style*="border-color: rgba(114, 137, 218, 0.3"] {
 	border-color: rgba(var(--vaccentcolor), 0.3) !important;
 }
 [style*="border-color: rgba(0, 122, 204, 0.2"],
 [style*="border-color: rgba(14, 99, 156, 0.2"],
+[style*="border-color: rgba(9, 71, 113, 0.2"],
 [style*="border-color: rgba(255, 115, 250, 0.2"],
 [style*="border-color: rgba(114, 137, 218, 0.2"] {
 	border-color: rgba(var(--vaccentcolor), 0.2) !important;
 }
 [style*="border-color: rgba(0, 122, 204, 0.1"],
 [style*="border-color: rgba(14, 99, 156, 0.1"],
+[style*="border-color: rgba(9, 71, 113, 0.1"],
 [style*="border-color: rgba(255, 115, 250, 0.1"],
 [style*="border-color: rgba(114, 137, 218, 0.1"] {
 	border-color: rgba(var(--vaccentcolor), 0.1) !important;
 }
 [style*="border-color: rgba(0, 122, 204, 0.0"],
 [style*="border-color: rgba(14, 99, 156, 0.0"],
+[style*="border-color: rgba(9, 71, 113, 0.0"],
 [style*="border-color: rgba(255, 115, 250, 0.0"],
 [style*="border-color: rgba(114, 137, 218, 0.0"] {
 	border-color: rgba(var(--vaccentcolor), 0) !important;
@@ -515,6 +592,12 @@
 [border-top-color="rgb(14, 99, 156)"],
 [border-top-color="#0e639c"],
 [border-top-color="#0E639C"],
+[style*="border-top-color: rgba(9, 71, 113, 1)"],
+[style*="border-top-color: rgb(9, 71, 113)"],
+[style*="border-top-color: #094771"],
+[border-top-color="rgba(9, 71, 113, 1)"],
+[border-top-color="rgb(9, 71, 113)"],
+[border-top-color="#094771"],
 [style*="border-top-color: rgba(255, 115, 250, 1)"],
 [style*="border-top-color: rgb(255, 115, 250)"],
 [style*="border-top-color: #ff73fa"],
@@ -535,60 +618,70 @@
 }
 [style*="border-top-color: rgba(0, 122, 204, 0.9"],
 [style*="border-top-color: rgba(14, 99, 156, 0.9"],
+[style*="border-top-color: rgba(9, 71, 113, 0.9"],
 [style*="border-top-color: rgba(255, 115, 250, 0.9"],
 [style*="border-top-color: rgba(114, 137, 218, 0.9"] {
 	border-top-color: rgba(var(--vaccentcolor), 0.9) !important;
 }
 [style*="border-top-color: rgba(0, 122, 204, 0.8"],
 [style*="border-top-color: rgba(14, 99, 156, 0.8"],
+[style*="border-top-color: rgba(9, 71, 113, 0.8"],
 [style*="border-top-color: rgba(255, 115, 250, 0.8"],
 [style*="border-top-color: rgba(114, 137, 218, 0.8"] {
 	border-top-color: rgba(var(--vaccentcolor), 0.8) !important;
 }
 [style*="border-top-color: rgba(0, 122, 204, 0.7"],
 [style*="border-top-color: rgba(14, 99, 156, 0.7"],
+[style*="border-top-color: rgba(9, 71, 113, 0.7"],
 [style*="border-top-color: rgba(255, 115, 250, 0.7"],
 [style*="border-top-color: rgba(114, 137, 218, 0.7"] {
 	border-top-color: rgba(var(--vaccentcolor), 0.7) !important;
 }
 [style*="border-top-color: rgba(0, 122, 204, 0.6"],
 [style*="border-top-color: rgba(14, 99, 156, 0.6"],
+[style*="border-top-color: rgba(9, 71, 113, 0.6"],
 [style*="border-top-color: rgba(255, 115, 250, 0.6"],
 [style*="border-top-color: rgba(114, 137, 218, 0.6"] {
 	border-top-color: rgba(var(--vaccentcolor), 0.6) !important;
 }
 [style*="border-top-color: rgba(0, 122, 204, 0.5"],
 [style*="border-top-color: rgba(14, 99, 156, 0.5"],
+[style*="border-top-color: rgba(9, 71, 113, 0.5"],
 [style*="border-top-color: rgba(255, 115, 250, 0.5"],
 [style*="border-top-color: rgba(114, 137, 218, 0.5"] {
 	border-top-color: rgba(var(--vaccentcolor), 0.5) !important;
 }
 [style*="border-top-color: rgba(0, 122, 204, 0.4"],
 [style*="border-top-color: rgba(14, 99, 156, 0.4"],
+[style*="border-top-color: rgba(9, 71, 113, 0.4"],
 [style*="border-top-color: rgba(255, 115, 250, 0.4"],
 [style*="border-top-color: rgba(114, 137, 218, 0.4"] {
 	border-top-color: rgba(var(--vaccentcolor), 0.4) !important;
 }
 [style*="border-top-color: rgba(0, 122, 204, 0.3"],
 [style*="border-top-color: rgba(14, 99, 156, 0.3"],
+[style*="border-top-color: rgba(9, 71, 113, 0.3"],
 [style*="border-top-color: rgba(255, 115, 250, 0.3"],
 [style*="border-top-color: rgba(114, 137, 218, 0.3"] {
 	border-top-color: rgba(var(--vaccentcolor), 0.3) !important;
 }
 [style*="border-top-color: rgba(0, 122, 204, 0.2"],
 [style*="border-top-color: rgba(14, 99, 156, 0.2"],
+[style*="border-top-color: rgba(9, 71, 113, 0.2"],
 [style*="border-top-color: rgba(255, 115, 250, 0.2"],
 [style*="border-top-color: rgba(114, 137, 218, 0.2"] {
 	border-top-color: rgba(var(--vaccentcolor), 0.2) !important;
 }
 [style*="border-top-color: rgba(0, 122, 204, 0.1"],
 [style*="border-top-color: rgba(14, 99, 156, 0.1"],
+[style*="border-top-color: rgba(9, 71, 113, 0.1"],
 [style*="border-top-color: rgba(255, 115, 250, 0.1"],
 [style*="border-top-color: rgba(114, 137, 218, 0.1"] {
 	border-top-color: rgba(var(--vaccentcolor), 0.1) !important;
 }
 [style*="border-top-color: rgba(0, 122, 204, 0.0"],
 [style*="border-top-color: rgba(14, 99, 156, 0.0"],
+[style*="border-top-color: rgba(9, 71, 113, 0.0"],
 [style*="border-top-color: rgba(255, 115, 250, 0.0"],
 [style*="border-top-color: rgba(114, 137, 218, 0.0"] {
 	border-top-color: rgba(var(--vaccentcolor), 0) !important;
@@ -610,6 +703,12 @@
 [border-right-color="rgb(14, 99, 156)"],
 [border-right-color="#0e639c"],
 [border-right-color="#0E639C"],
+[style*="border-right-color: rgba(9, 71, 113, 1)"],
+[style*="border-right-color: rgb(9, 71, 113)"],
+[style*="border-right-color: #094771"],
+[border-right-color="rgba(9, 71, 113, 1)"],
+[border-right-color="rgb(9, 71, 113)"],
+[border-right-color="#094771"],
 [style*="border-right-color: rgba(255, 115, 250, 1)"],
 [style*="border-right-color: rgb(255, 115, 250)"],
 [style*="border-right-color: #ff73fa"],
@@ -630,60 +729,70 @@
 }
 [style*="border-right-color: rgba(0, 122, 204, 0.9"],
 [style*="border-right-color: rgba(14, 99, 156, 0.9"],
+[style*="border-right-color: rgba(9, 71, 113, 0.9"],
 [style*="border-right-color: rgba(255, 115, 250, 0.9"],
 [style*="border-right-color: rgba(114, 137, 218, 0.9"] {
 	border-right-color: rgba(var(--vaccentcolor), 0.9) !important;
 }
 [style*="border-right-color: rgba(0, 122, 204, 0.8"],
 [style*="border-right-color: rgba(14, 99, 156, 0.8"],
+[style*="border-right-color: rgba(9, 71, 113, 0.8"],
 [style*="border-right-color: rgba(255, 115, 250, 0.8"],
 [style*="border-right-color: rgba(114, 137, 218, 0.8"] {
 	border-right-color: rgba(var(--vaccentcolor), 0.8) !important;
 }
 [style*="border-right-color: rgba(0, 122, 204, 0.7"],
 [style*="border-right-color: rgba(14, 99, 156, 0.7"],
+[style*="border-right-color: rgba(9, 71, 113, 0.7"],
 [style*="border-right-color: rgba(255, 115, 250, 0.7"],
 [style*="border-right-color: rgba(114, 137, 218, 0.7"] {
 	border-right-color: rgba(var(--vaccentcolor), 0.7) !important;
 }
 [style*="border-right-color: rgba(0, 122, 204, 0.6"],
 [style*="border-right-color: rgba(14, 99, 156, 0.6"],
+[style*="border-right-color: rgba(9, 71, 113, 0.6"],
 [style*="border-right-color: rgba(255, 115, 250, 0.6"],
 [style*="border-right-color: rgba(114, 137, 218, 0.6"] {
 	border-right-color: rgba(var(--vaccentcolor), 0.6) !important;
 }
 [style*="border-right-color: rgba(0, 122, 204, 0.5"],
 [style*="border-right-color: rgba(14, 99, 156, 0.5"],
+[style*="border-right-color: rgba(9, 71, 113, 0.5"],
 [style*="border-right-color: rgba(255, 115, 250, 0.5"],
 [style*="border-right-color: rgba(114, 137, 218, 0.5"] {
 	border-right-color: rgba(var(--vaccentcolor), 0.5) !important;
 }
 [style*="border-right-color: rgba(0, 122, 204, 0.4"],
 [style*="border-right-color: rgba(14, 99, 156, 0.4"],
+[style*="border-right-color: rgba(9, 71, 113, 0.4"],
 [style*="border-right-color: rgba(255, 115, 250, 0.4"],
 [style*="border-right-color: rgba(114, 137, 218, 0.4"] {
 	border-right-color: rgba(var(--vaccentcolor), 0.4) !important;
 }
 [style*="border-right-color: rgba(0, 122, 204, 0.3"],
 [style*="border-right-color: rgba(14, 99, 156, 0.3"],
+[style*="border-right-color: rgba(9, 71, 113, 0.3"],
 [style*="border-right-color: rgba(255, 115, 250, 0.3"],
 [style*="border-right-color: rgba(114, 137, 218, 0.3"] {
 	border-right-color: rgba(var(--vaccentcolor), 0.3) !important;
 }
 [style*="border-right-color: rgba(0, 122, 204, 0.2"],
 [style*="border-right-color: rgba(14, 99, 156, 0.2"],
+[style*="border-right-color: rgba(9, 71, 113, 0.2"],
 [style*="border-right-color: rgba(255, 115, 250, 0.2"],
 [style*="border-right-color: rgba(114, 137, 218, 0.2"] {
 	border-right-color: rgba(var(--vaccentcolor), 0.2) !important;
 }
 [style*="border-right-color: rgba(0, 122, 204, 0.1"],
 [style*="border-right-color: rgba(14, 99, 156, 0.1"],
+[style*="border-right-color: rgba(9, 71, 113, 0.1"],
 [style*="border-right-color: rgba(255, 115, 250, 0.1"],
 [style*="border-right-color: rgba(114, 137, 218, 0.1"] {
 	border-right-color: rgba(var(--vaccentcolor), 0.1) !important;
 }
 [style*="border-right-color: rgba(0, 122, 204, 0.0"],
 [style*="border-right-color: rgba(14, 99, 156, 0.0"],
+[style*="border-right-color: rgba(9, 71, 113, 0.0"],
 [style*="border-right-color: rgba(255, 115, 250, 0.0"],
 [style*="border-right-color: rgba(114, 137, 218, 0.0"] {
 	border-right-color: rgba(var(--vaccentcolor), 0) !important;
@@ -705,6 +814,12 @@
 [border-bottom-color="rgb(14, 99, 156)"],
 [border-bottom-color="#0e639c"],
 [border-bottom-color="#0E639C"],
+[style*="border-bottom-color: rgba(9, 71, 113, 1)"],
+[style*="border-bottom-color: rgb(9, 71, 113)"],
+[style*="border-bottom-color: #094771"],
+[border-bottom-color="rgba(9, 71, 113, 1)"],
+[border-bottom-color="rgb(9, 71, 113)"],
+[border-bottom-color="#094771"],
 [style*="border-bottom-color: rgba(255, 115, 250, 1)"],
 [style*="border-bottom-color: rgb(255, 115, 250)"],
 [style*="border-bottom-color: #ff73fa"],
@@ -725,60 +840,70 @@
 }
 [style*="border-bottom-color: rgba(0, 122, 204, 0.9"],
 [style*="border-bottom-color: rgba(14, 99, 156, 0.9"],
+[style*="border-bottom-color: rgba(9, 71, 113, 0.9"],
 [style*="border-bottom-color: rgba(255, 115, 250, 0.9"],
 [style*="border-bottom-color: rgba(114, 137, 218, 0.9"] {
 	border-bottom-color: rgba(var(--vaccentcolor), 0.9) !important;
 }
 [style*="border-bottom-color: rgba(0, 122, 204, 0.8"],
 [style*="border-bottom-color: rgba(14, 99, 156, 0.8"],
+[style*="border-bottom-color: rgba(9, 71, 113, 0.8"],
 [style*="border-bottom-color: rgba(255, 115, 250, 0.8"],
 [style*="border-bottom-color: rgba(114, 137, 218, 0.8"] {
 	border-bottom-color: rgba(var(--vaccentcolor), 0.8) !important;
 }
 [style*="border-bottom-color: rgba(0, 122, 204, 0.7"],
 [style*="border-bottom-color: rgba(14, 99, 156, 0.7"],
+[style*="border-bottom-color: rgba(9, 71, 113, 0.7"],
 [style*="border-bottom-color: rgba(255, 115, 250, 0.7"],
 [style*="border-bottom-color: rgba(114, 137, 218, 0.7"] {
 	border-bottom-color: rgba(var(--vaccentcolor), 0.7) !important;
 }
 [style*="border-bottom-color: rgba(0, 122, 204, 0.6"],
 [style*="border-bottom-color: rgba(14, 99, 156, 0.6"],
+[style*="border-bottom-color: rgba(9, 71, 113, 0.6"],
 [style*="border-bottom-color: rgba(255, 115, 250, 0.6"],
 [style*="border-bottom-color: rgba(114, 137, 218, 0.6"] {
 	border-bottom-color: rgba(var(--vaccentcolor), 0.6) !important;
 }
 [style*="border-bottom-color: rgba(0, 122, 204, 0.5"],
 [style*="border-bottom-color: rgba(14, 99, 156, 0.5"],
+[style*="border-bottom-color: rgba(9, 71, 113, 0.5"],
 [style*="border-bottom-color: rgba(255, 115, 250, 0.5"],
 [style*="border-bottom-color: rgba(114, 137, 218, 0.5"] {
 	border-bottom-color: rgba(var(--vaccentcolor), 0.5) !important;
 }
 [style*="border-bottom-color: rgba(0, 122, 204, 0.4"],
 [style*="border-bottom-color: rgba(14, 99, 156, 0.4"],
+[style*="border-bottom-color: rgba(9, 71, 113, 0.4"],
 [style*="border-bottom-color: rgba(255, 115, 250, 0.4"],
 [style*="border-bottom-color: rgba(114, 137, 218, 0.4"] {
 	border-bottom-color: rgba(var(--vaccentcolor), 0.4) !important;
 }
 [style*="border-bottom-color: rgba(0, 122, 204, 0.3"],
 [style*="border-bottom-color: rgba(14, 99, 156, 0.3"],
+[style*="border-bottom-color: rgba(9, 71, 113, 0.3"],
 [style*="border-bottom-color: rgba(255, 115, 250, 0.3"],
 [style*="border-bottom-color: rgba(114, 137, 218, 0.3"] {
 	border-bottom-color: rgba(var(--vaccentcolor), 0.3) !important;
 }
 [style*="border-bottom-color: rgba(0, 122, 204, 0.2"],
 [style*="border-bottom-color: rgba(14, 99, 156, 0.2"],
+[style*="border-bottom-color: rgba(9, 71, 113, 0.2"],
 [style*="border-bottom-color: rgba(255, 115, 250, 0.2"],
 [style*="border-bottom-color: rgba(114, 137, 218, 0.2"] {
 	border-bottom-color: rgba(var(--vaccentcolor), 0.2) !important;
 }
 [style*="border-bottom-color: rgba(0, 122, 204, 0.1"],
 [style*="border-bottom-color: rgba(14, 99, 156, 0.1"],
+[style*="border-bottom-color: rgba(9, 71, 113, 0.1"],
 [style*="border-bottom-color: rgba(255, 115, 250, 0.1"],
 [style*="border-bottom-color: rgba(114, 137, 218, 0.1"] {
 	border-bottom-color: rgba(var(--vaccentcolor), 0.1) !important;
 }
 [style*="border-bottom-color: rgba(0, 122, 204, 0.0"],
 [style*="border-bottom-color: rgba(14, 99, 156, 0.0"],
+[style*="border-bottom-color: rgba(9, 71, 113, 0.0"],
 [style*="border-bottom-color: rgba(255, 115, 250, 0.0"],
 [style*="border-bottom-color: rgba(114, 137, 218, 0.0"] {
 	border-bottom-color: rgba(var(--vaccentcolor), 0) !important;
@@ -800,6 +925,12 @@
 [border-left-color="rgb(14, 99, 156)"],
 [border-left-color="#0e639c"],
 [border-left-color="#0E639C"],
+[style*="border-left-color: rgba(9, 71, 113, 1)"],
+[style*="border-left-color: rgb(9, 71, 113)"],
+[style*="border-left-color: #094771"],
+[border-left-color="rgba(9, 71, 113, 1)"],
+[border-left-color="rgb(9, 71, 113)"],
+[border-left-color="#094771"],
 [style*="border-left-color: rgba(255, 115, 250, 1)"],
 [style*="border-left-color: rgb(255, 115, 250)"],
 [style*="border-left-color: #ff73fa"],
@@ -820,60 +951,70 @@
 }
 [style*="border-left-color: rgba(0, 122, 204, 0.9"],
 [style*="border-left-color: rgba(14, 99, 156, 0.9"],
+[style*="border-left-color: rgba(9, 71, 113, 0.9"],
 [style*="border-left-color: rgba(255, 115, 250, 0.9"],
 [style*="border-left-color: rgba(114, 137, 218, 0.9"] {
 	border-left-color: rgba(var(--vaccentcolor), 0.9) !important;
 }
 [style*="border-left-color: rgba(0, 122, 204, 0.8"],
 [style*="border-left-color: rgba(14, 99, 156, 0.8"],
+[style*="border-left-color: rgba(9, 71, 113, 0.8"],
 [style*="border-left-color: rgba(255, 115, 250, 0.8"],
 [style*="border-left-color: rgba(114, 137, 218, 0.8"] {
 	border-left-color: rgba(var(--vaccentcolor), 0.8) !important;
 }
 [style*="border-left-color: rgba(0, 122, 204, 0.7"],
 [style*="border-left-color: rgba(14, 99, 156, 0.7"],
+[style*="border-left-color: rgba(9, 71, 113, 0.7"],
 [style*="border-left-color: rgba(255, 115, 250, 0.7"],
 [style*="border-left-color: rgba(114, 137, 218, 0.7"] {
 	border-left-color: rgba(var(--vaccentcolor), 0.7) !important;
 }
 [style*="border-left-color: rgba(0, 122, 204, 0.6"],
 [style*="border-left-color: rgba(14, 99, 156, 0.6"],
+[style*="border-left-color: rgba(9, 71, 113, 0.6"],
 [style*="border-left-color: rgba(255, 115, 250, 0.6"],
 [style*="border-left-color: rgba(114, 137, 218, 0.6"] {
 	border-left-color: rgba(var(--vaccentcolor), 0.6) !important;
 }
 [style*="border-left-color: rgba(0, 122, 204, 0.5"],
 [style*="border-left-color: rgba(14, 99, 156, 0.5"],
+[style*="border-left-color: rgba(9, 71, 113, 0.5"],
 [style*="border-left-color: rgba(255, 115, 250, 0.5"],
 [style*="border-left-color: rgba(114, 137, 218, 0.5"] {
 	border-left-color: rgba(var(--vaccentcolor), 0.5) !important;
 }
 [style*="border-left-color: rgba(0, 122, 204, 0.4"],
 [style*="border-left-color: rgba(14, 99, 156, 0.4"],
+[style*="border-left-color: rgba(9, 71, 113, 0.4"],
 [style*="border-left-color: rgba(255, 115, 250, 0.4"],
 [style*="border-left-color: rgba(114, 137, 218, 0.4"] {
 	border-left-color: rgba(var(--vaccentcolor), 0.4) !important;
 }
 [style*="border-left-color: rgba(0, 122, 204, 0.3"],
 [style*="border-left-color: rgba(14, 99, 156, 0.3"],
+[style*="border-left-color: rgba(9, 71, 113, 0.3"],
 [style*="border-left-color: rgba(255, 115, 250, 0.3"],
 [style*="border-left-color: rgba(114, 137, 218, 0.3"] {
 	border-left-color: rgba(var(--vaccentcolor), 0.3) !important;
 }
 [style*="border-left-color: rgba(0, 122, 204, 0.2"],
 [style*="border-left-color: rgba(14, 99, 156, 0.2"],
+[style*="border-left-color: rgba(9, 71, 113, 0.2"],
 [style*="border-left-color: rgba(255, 115, 250, 0.2"],
 [style*="border-left-color: rgba(114, 137, 218, 0.2"] {
 	border-left-color: rgba(var(--vaccentcolor), 0.2) !important;
 }
 [style*="border-left-color: rgba(0, 122, 204, 0.1"],
 [style*="border-left-color: rgba(14, 99, 156, 0.1"],
+[style*="border-left-color: rgba(9, 71, 113, 0.1"],
 [style*="border-left-color: rgba(255, 115, 250, 0.1"],
 [style*="border-left-color: rgba(114, 137, 218, 0.1"] {
 	border-left-color: rgba(var(--vaccentcolor), 0.1) !important;
 }
 [style*="border-left-color: rgba(0, 122, 204, 0.0"],
 [style*="border-left-color: rgba(14, 99, 156, 0.0"],
+[style*="border-left-color: rgba(9, 71, 113, 0.0"],
 [style*="border-left-color: rgba(255, 115, 250, 0.0"],
 [style*="border-left-color: rgba(114, 137, 218, 0.0"] {
 	border-left-color: rgba(var(--vaccentcolor), 0) !important;
@@ -894,6 +1035,14 @@
 [style*="stroke: #0E639C"],
 [stroke="rgba(14, 99, 156, 1)"],
 [stroke="rgb(14, 99, 156)"],
+[stroke="#0e639c"],
+[stroke="#0E639C"],
+[style*="stroke: rgba(9, 71, 113, 1)"],
+[style*="stroke: rgb(9, 71, 113)"],
+[style*="stroke: #0e639c"],
+[style*="stroke: #0E639C"],
+[stroke="rgba(9, 71, 113, 1)"],
+[stroke="rgb(9, 71, 113)"],
 [stroke="#0e639c"],
 [stroke="#0E639C"],
 [style*="stroke: rgba(255, 115, 250, 1)"],
@@ -929,6 +1078,14 @@
 [style*="fill: #0E639C"],
 [fill="rgba(14, 99, 156, 1)"],
 [fill="rgb(14, 99, 156)"],
+[fill="#0e639c"],
+[fill="#0E639C"],
+[style*="fill: rgba(9, 71, 113, 1)"],
+[style*="fill: rgb(9, 71, 113)"],
+[style*="fill: #0e639c"],
+[style*="fill: #0E639C"],
+[fill="rgba(9, 71, 113, 1)"],
+[fill="rgb(9, 71, 113)"],
 [fill="#0e639c"],
 [fill="#0E639C"],
 [style*="fill: rgba(255, 115, 250, 1)"],
