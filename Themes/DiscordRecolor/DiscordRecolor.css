@@ -995,6 +995,21 @@ img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 #app-mount .description-2ydcYn {
 	color: var(--header-secondary);
 }
+#app-mount .emptyChannelIcon-cc932w {
+	position: relative;
+	background: var(--background-accent);
+	overflow: hidden;
+}
+#app-mount .emptyChannelIcon-cc932w::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: var(--header-primary);
+	-webkit-mask: url(https://discordapp.com/assets/a9847a74a2dac6e2b2958b195a8dad96.svg) center no-repeat;
+}
 
 /* ====		3.2.1.	MESSAGE							==== */
 
