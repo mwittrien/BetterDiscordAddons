@@ -282,6 +282,7 @@
 		"GuildComponents Items": {"props": ["Separator", "DragPlaceholder"]},
 		"GuildComponents Pill": {"strings": ["opacity:1,height:", "20:8", "default.item"]},
 		"HeaderBarComponents": {"name": "HeaderBarContainer"},
+		"Image": {"props": ["ImageReadyStates"]},
 		"ImageModal": {"name": "ImageModal"},
 		"LazyImage": {"name": "LazyImage"},
 		"ListHeader": {"name": "ListSectionItem"},
