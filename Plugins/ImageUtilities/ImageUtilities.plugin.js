@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.1.9",
+			"version": "4.2.0",
 			"description": "Add a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode)"
 		},
 		"changeLog": {
 			"added": {
-				"Resize Image": "Added option to automatically resize images in the image to fit as much space as possible"
+				"Infinite loading": "No longer loads images endlessly after opening it a second time"
 			}
 		}
 	};
@@ -639,6 +639,7 @@ module.exports = (_ => {
 
 			processLazyImage (e) {
 				if (e.node) {
+					if (e.instance.props.resized) e.instance.state.readyState = BDFDB.LibraryComponents.Image.ImageReadyStates.READY;
 					if (settings.enableZoom && !e.node.querySelector("video") && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling) && BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagemodal, e.node)) {
 						e.node.addEventListener("mousedown", event => {
 							if (event.which != 1) return;
@@ -758,7 +759,7 @@ module.exports = (_ => {
 					}
 				}
 				else {
-					if (settings.resizeImage && BDFDB.ReactUtils.findOwner(e.instance._reactInternalFiber, {name: "ImageModal", up: true})) {
+					if (settings.resizeImage && e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.imagemodalimage) > -1 && BDFDB.ReactUtils.findOwner(e.instance._reactInternalFiber, {name: "ImageModal", up: true})) {
 						let data = settings.enableGallery ? this.getSiblingsAndPosition(e.instance.props.src, this.getMessageGroupOfImage(e.instance.props.src)) : {};
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let ratio = Math.min((aRects.width * (data.previous || data.next ? 0.8 : 1) - 20) / e.instance.props.width, (aRects.height - (settings.addDetails ? 310 : 100)) / e.instance.props.height);
@@ -769,6 +770,7 @@ module.exports = (_ => {
 						e.instance.props.height = height;
 						e.instance.props.maxHeight = height;
 						e.instance.props.src = e.instance.props.src.replace(/width=\d+/, `width=${width}`).replace(/height=\d+/, `height=${height}`);
+						e.instance.props.resized = true;
 					}
 				}
 			}
