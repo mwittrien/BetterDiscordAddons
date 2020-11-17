@@ -86,39 +86,6 @@
 
 /* ~~~~		1.		INLINE							~~~~ */
 
-[style^="color: rgba(0, 122, 204, 1)"],
-[style*=" color: rgba(0, 122, 204, 1)"],
-[style^="color: rgb(0, 122, 204)"],
-[style*=" color: rgb(0, 122, 204)"],
-[style^="color: #007acc"],
-[style*=" color: #007acc"],
-[style^="color: #007ACC"],
-[style*=" color: #007ACC"],
-[color="rgba(0, 122, 204, 1)"],
-[color="rgb(0, 122, 204)"],
-[color="#007acc"],
-[color="#007ACC"],
-[style^="color: rgba(14, 99, 156, 1)"],
-[style*=" color: rgba(14, 99, 156, 1)"],
-[style^="color: rgb(14, 99, 156)"],
-[style*=" color: rgb(14, 99, 156)"],
-[style^="color: #0e639c"],
-[style*=" color: #0e639c"],
-[style^="color: #0E639C"],
-[style*=" color: #0E639C"],
-[color="rgba(14, 99, 156, 1)"],
-[color="rgb(14, 99, 156)"],
-[color="#0e639c"],
-[color="#0E639C"],
-[style^="color: rgba(9, 71, 113, 1)"],
-[style*=" color: rgba(9, 71, 113, 1)"],
-[style^="color: rgb(9, 71, 113)"],
-[style*=" color: rgb(9, 71, 113)"],
-[style^="color: #094771"],
-[style*=" color: #094771"],
-[color="rgba(9, 71, 113, 1)"],
-[color="rgb(9, 71, 113)"],
-[color="#094771"],
 [style^="color: rgba(255, 115, 250, 1)"],
 [style*=" color: rgba(255, 115, 250, 1)"],
 [style^="color: rgb(255, 115, 250)"],
@@ -145,171 +112,61 @@
 [color="#7289DA"] {
 	color: rgb(var(--vaccentcolor)) !important;
 }
-[style^="color: rgba(0, 122, 204, 0.9"],
-[style*=" color: rgba(0, 122, 204, 0.9"],
-[style^="color: rgba(14, 99, 156, 0.9"],
-[style*=" color: rgba(14, 99, 156, 0.9"],
-[style^="color: rgba(9, 71, 113, 0.9"],
-[style*=" color: rgba(9, 71, 113, 0.9"],
 [style^="color: rgba(255, 115, 250, 0.9"],
 [style*=" color: rgba(255, 115, 250, 0.9"],
 [style^="color: rgba(114, 137, 218, 0.9"],
 [style*=" color: rgba(114, 137, 218, 0.9"] {
 	color: rgba(var(--vaccentcolor), 0.9) !important;
 }
-[style^="color: rgba(0, 122, 204, 0.8"],
-[style*=" color: rgba(0, 122, 204, 0.8"],
-[style^="color: rgba(14, 99, 156, 0.8"],
-[style*=" color: rgba(14, 99, 156, 0.8"],
-[style^="color: rgba(9, 71, 113, 0.8"],
-[style*=" color: rgba(9, 71, 113, 0.8"],
 [style^="color: rgba(255, 115, 250, 0.8"],
 [style*=" color: rgba(255, 115, 250, 0.8"],
 [style^="color: rgba(114, 137, 218, 0.8"],
 [style*=" color: rgba(114, 137, 218, 0.8"] {
 	color: rgba(var(--vaccentcolor), 0.8) !important;
 }
-[style^="color: rgba(0, 122, 204, 0.7"],
-[style*=" color: rgba(0, 122, 204, 0.7"],
-[style^="color: rgba(14, 99, 156, 0.7"],
-[style*=" color: rgba(14, 99, 156, 0.7"],
-[style^="color: rgba(9, 71, 113, 0.7"],
-[style*=" color: rgba(9, 71, 113, 0.7"],
 [style^="color: rgba(255, 115, 250, 0.7"],
 [style*=" color: rgba(255, 115, 250, 0.7"],
 [style^="color: rgba(114, 137, 218, 0.7"],
 [style*=" color: rgba(114, 137, 218, 0.7"] {
 	color: rgba(var(--vaccentcolor), 0.7) !important;
 }
-[style^="color: rgba(0, 122, 204, 0.6"],
-[style*=" color: rgba(0, 122, 204, 0.6"],
-[style^="color: rgba(14, 99, 156, 0.6"],
-[style*=" color: rgba(14, 99, 156, 0.6"],
-[style^="color: rgba(9, 71, 113, 0.6"],
-[style*=" color: rgba(9, 71, 113, 0.6"],
 [style^="color: rgba(255, 115, 250, 0.6"],
 [style*=" color: rgba(255, 115, 250, 0.6"],
 [style^="color: rgba(114, 137, 218, 0.6"],
 [style*=" color: rgba(114, 137, 218, 0.6"] {
 	color: rgba(var(--vaccentcolor), 0.6) !important;
 }
-[style^="color: rgba(0, 122, 204, 0.5"],
-[style*=" color: rgba(0, 122, 204, 0.5"],
-[style^="color: rgba(14, 99, 156, 0.5"],
-[style*=" color: rgba(14, 99, 156, 0.5"],
-[style^="color: rgba(9, 71, 113, 0.5"],
-[style*=" color: rgba(9, 71, 113, 0.5"],
 [style^="color: rgba(255, 115, 250, 0.5"],
 [style*=" color: rgba(255, 115, 250, 0.5"],
 [style^="color: rgba(114, 137, 218, 0.5"],
 [style*=" color: rgba(114, 137, 218, 0.5"] {
 	color: rgba(var(--vaccentcolor), 0.5) !important;
 }
-[style^="color: rgba(0, 122, 204, 0.4"],
-[style*=" color: rgba(0, 122, 204, 0.4"],
-[style^="color: rgba(14, 99, 156, 0.4"],
-[style*=" color: rgba(14, 99, 156, 0.4"],
-[style^="color: rgba(9, 71, 113, 0.4"],
-[style*=" color: rgba(9, 71, 113, 0.4"],
 [style^="color: rgba(255, 115, 250, 0.4"],
 [style*=" color: rgba(255, 115, 250, 0.4"],
 [style^="color: rgba(114, 137, 218, 0.4"],
 [style*=" color: rgba(114, 137, 218, 0.4"] {
 	color: rgba(var(--vaccentcolor), 0.4) !important;
 }
-[style^="color: rgba(0, 122, 204, 0.3"],
-[style*=" color: rgba(0, 122, 204, 0.3"],
-[style^="color: rgba(14, 99, 156, 0.3"],
-[style*=" color: rgba(14, 99, 156, 0.3"],
-[style^="color: rgba(9, 71, 113, 0.3"],
-[style*=" color: rgba(9, 71, 113, 0.3"],
 [style^="color: rgba(255, 115, 250, 0.3"],
 [style*=" color: rgba(255, 115, 250, 0.3"],
 [style^="color: rgba(114, 137, 218, 0.3"],
 [style*=" color: rgba(114, 137, 218, 0.3"] {
 	color: rgba(var(--vaccentcolor), 0.3) !important;
 }
-[style^="color: rgba(0, 122, 204, 0.2"],
-[style*=" color: rgba(0, 122, 204, 0.2"],
-[style^="color: rgba(14, 99, 156, 0.2"],
-[style*=" color: rgba(14, 99, 156, 0.2"],
-[style^="color: rgba(9, 71, 113, 0.2"],
-[style*=" color: rgba(9, 71, 113, 0.2"],
 [style^="color: rgba(255, 115, 250, 0.2"],
 [style*=" color: rgba(255, 115, 250, 0.2"],
 [style^="color: rgba(114, 137, 218, 0.2"],
 [style*=" color: rgba(114, 137, 218, 0.2"] {
 	color: rgba(var(--vaccentcolor), 0.2) !important;
 }
-[style^="color: rgba(0, 122, 204, 0.1"],
-[style*=" color: rgba(0, 122, 204, 0.1"],
-[style^="color: rgba(14, 99, 156, 0.1"],
-[style*=" color: rgba(14, 99, 156, 0.1"],
-[style^="color: rgba(9, 71, 113, 0.1"],
-[style*=" color: rgba(9, 71, 113, 0.1"],
 [style^="color: rgba(255, 115, 250, 0.1"],
 [style*=" color: rgba(255, 115, 250, 0.1"],
 [style^="color: rgba(114, 137, 218, 0.1"],
 [style*=" color: rgba(114, 137, 218, 0.1"] {
 	color: rgba(var(--vaccentcolor), 0.1) !important;
 }
-[style^="color: rgba(0, 122, 204, 0.0"],
-[style*=" color: rgba(0, 122, 204, 0.0"],
-[style^="color: rgba(14, 99, 156, 0.0"],
-[style*=" color: rgba(14, 99, 156, 0.0"],
-[style^="color: rgba(9, 71, 113, 0.0"],
-[style*=" color: rgba(9, 71, 113, 0.0"],
-[style^="color: rgba(255, 115, 250, 0.0"],
-[style*=" color: rgba(255, 115, 250, 0.0"],
-[style^="color: rgba(114, 137, 218, 0.0"],
-[style*=" color: rgba(114, 137, 218, 0.0"] {
-	color: rgba(var(--vaccentcolor), 0) !important;
-}
 
-[style*="background-color: rgba(0, 122, 204, 1)"],
-[style*="background: rgba(0, 122, 204, 1)"],
-[style*="background-color: rgb(0, 122, 204)"],
-[style*="background: rgb(0, 122, 204)"],
-[style*="background-color: #007acc"],
-[style*="background: #007acc"],
-[style*="background-color: #007ACC"],
-[style*="background: #007ACC"],
-[background-color="rgba(0, 122, 204, 1)"],
-[background="rgba(0, 122, 204, 1)"],
-[background-color="rgb(0, 122, 204)"],
-[background="rgb(0, 122, 204)"],
-[background-color="#007acc"],
-[background="#007acc"],
-[background-color="#007ACC"],
-[background="#007ACC"],
-[style*="background-color: rgba(14, 99, 156, 1)"],
-[style*="background: rgba(14, 99, 156, 1)"],
-[style*="background-color: rgb(14, 99, 156)"],
-[style*="background: rgb(14, 99, 156)"],
-[style*="background-color: #0e639c"],
-[style*="background: #0e639c"],
-[style*="background-color: #0E639C"],
-[style*="background: #0E639C"],
-[background-color="rgba(14, 99, 156, 1)"],
-[background="rgba(14, 99, 156, 1)"],
-[background-color="rgb(14, 99, 156)"],
-[background="rgb(14, 99, 156)"],
-[background-color="#0e639c"],
-[background="#0e639c"],
-[background-color="#0E639C"],
-[background="#0E639C"],
-[style*="background-color: rgba(9, 71, 113, 1)"],
-[style*="background: rgba(9, 71, 113, 1)"],
-[style*="background-color: rgb(9, 71, 113)"],
-[style*="background: rgb(9, 71, 113)"],
-[style*="background-color: #094771"],
-[style*="background: #094771"],
-[background-color="rgba(9, 71, 113, 1)"],
-[background="rgba(9, 71, 113, 1)"],
-[background-color="rgb(9, 71, 113)"],
-[background="rgb(9, 71, 113)"],
-[background-color="#094771"],
-[background="#094771"],
 [style*="background-color: rgba(255, 115, 250, 1)"],
 [style*="background: rgba(255, 115, 250, 1)"],
 [style*="background-color: rgb(255, 115, 250)"],
@@ -344,149 +201,61 @@
 [background="#7289DA"] {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
-[style*="background-color: rgba(0, 122, 204, 0.9"],
-[style*="background: rgba(0, 122, 204, 0.9"],
-[style*="background-color: rgba(14, 99, 156, 0.9"],
-[style*="background: rgba(14, 99, 156, 0.9"],
-[style*="background-color: rgba(9, 71, 113, 0.9"],
-[style*="background: rgba(9, 71, 113, 0.9"],
 [style*="background-color: rgba(255, 115, 250, 0.9"],
 [style*="background: rgba(255, 115, 250, 0.9"],
 [style*="background-color: rgba(114, 137, 218, 0.9"],
 [style*="background: rgba(114, 137, 218, 0.9"] {
 	background-color: rgba(var(--vaccentcolor), 0.9) !important;
 }
-[style*="background-color: rgba(0, 122, 204, 0.8"],
-[style*="background: rgba(0, 122, 204, 0.8"],
-[style*="background-color: rgba(14, 99, 156, 0.8"],
-[style*="background: rgba(14, 99, 156, 0.8"],
-[style*="background-color: rgba(9, 71, 113, 0.8"],
-[style*="background: rgba(9, 71, 113, 0.8"],
 [style*="background-color: rgba(255, 115, 250, 0.8"],
 [style*="background: rgba(255, 115, 250, 0.8"],
 [style*="background-color: rgba(114, 137, 218, 0.8"],
 [style*="background: rgba(114, 137, 218, 0.8"] {
 	background-color: rgba(var(--vaccentcolor), 0.8) !important;
 }
-[style*="background-color: rgba(0, 122, 204, 0.7"],
-[style*="background: rgba(0, 122, 204, 0.7"],
-[style*="background-color: rgba(14, 99, 156, 0.7"],
-[style*="background: rgba(14, 99, 156, 0.7"],
-[style*="background-color: rgba(9, 71, 113, 0.7"],
-[style*="background: rgba(9, 71, 113, 0.7"],
 [style*="background-color: rgba(255, 115, 250, 0.7"],
 [style*="background: rgba(255, 115, 250, 0.7"],
 [style*="background-color: rgba(114, 137, 218, 0.7"],
 [style*="background: rgba(114, 137, 218, 0.7"] {
 	background-color: rgba(var(--vaccentcolor), 0.7) !important;
 }
-[style*="background-color: rgba(0, 122, 204, 0.6"],
-[style*="background: rgba(0, 122, 204, 0.6"],
-[style*="background-color: rgba(14, 99, 156, 0.6"],
-[style*="background: rgba(14, 99, 156, 0.6"],
-[style*="background-color: rgba(9, 71, 113, 0.6"],
-[style*="background: rgba(9, 71, 113, 0.6"],
 [style*="background-color: rgba(255, 115, 250, 0.6"],
 [style*="background: rgba(255, 115, 250, 0.6"],
 [style*="background-color: rgba(114, 137, 218, 0.6"],
 [style*="background: rgba(114, 137, 218, 0.6"] {
 	background-color: rgba(var(--vaccentcolor), 0.6) !important;
 }
-[style*="background-color: rgba(0, 122, 204, 0.5"],
-[style*="background: rgba(0, 122, 204, 0.5"],
-[style*="background-color: rgba(14, 99, 156, 0.5"],
-[style*="background: rgba(14, 99, 156, 0.5"],
-[style*="background-color: rgba(9, 71, 113, 0.5"],
-[style*="background: rgba(9, 71, 113, 0.5"],
 [style*="background-color: rgba(255, 115, 250, 0.5"],
 [style*="background: rgba(255, 115, 250, 0.5"],
 [style*="background-color: rgba(114, 137, 218, 0.5"],
 [style*="background: rgba(114, 137, 218, 0.5"] {
 	background-color: rgba(var(--vaccentcolor), 0.5) !important;
 }
-[style*="background-color: rgba(0, 122, 204, 0.4"],
-[style*="background: rgba(0, 122, 204, 0.4"],
-[style*="background-color: rgba(14, 99, 156, 0.4"],
-[style*="background: rgba(14, 99, 156, 0.4"],
-[style*="background-color: rgba(9, 71, 113, 0.4"],
-[style*="background: rgba(9, 71, 113, 0.4"],
 [style*="background-color: rgba(255, 115, 250, 0.4"],
 [style*="background: rgba(255, 115, 250, 0.4"],
 [style*="background-color: rgba(114, 137, 218, 0.4"],
 [style*="background: rgba(114, 137, 218, 0.4"] {
 	background-color: rgba(var(--vaccentcolor), 0.4) !important;
 }
-[style*="background-color: rgba(0, 122, 204, 0.3"],
-[style*="background: rgba(0, 122, 204, 0.3"],
-[style*="background-color: rgba(14, 99, 156, 0.3"],
-[style*="background: rgba(14, 99, 156, 0.3"],
-[style*="background-color: rgba(9, 71, 113, 0.3"],
-[style*="background: rgba(9, 71, 113, 0.3"],
 [style*="background-color: rgba(255, 115, 250, 0.3"],
 [style*="background: rgba(255, 115, 250, 0.3"],
 [style*="background-color: rgba(114, 137, 218, 0.3"],
 [style*="background: rgba(114, 137, 218, 0.3"] {
 	background-color: rgba(var(--vaccentcolor), 0.3) !important;
 }
-[style*="background-color: rgba(0, 122, 204, 0.2"],
-[style*="background: rgba(0, 122, 204, 0.2"],
-[style*="background-color: rgba(14, 99, 156, 0.2"],
-[style*="background: rgba(14, 99, 156, 0.2"],
-[style*="background-color: rgba(9, 71, 113, 0.2"],
-[style*="background: rgba(9, 71, 113, 0.2"],
 [style*="background-color: rgba(255, 115, 250, 0.2"],
 [style*="background: rgba(255, 115, 250, 0.2"],
 [style*="background-color: rgba(114, 137, 218, 0.2"],
 [style*="background: rgba(114, 137, 218, 0.2"] {
 	background-color: rgba(var(--vaccentcolor), 0.2) !important;
 }
-[style*="background-color: rgba(0, 122, 204, 0.1"],
-[style*="background: rgba(0, 122, 204, 0.1"],
-[style*="background-color: rgba(14, 99, 156, 0.1"],
-[style*="background: rgba(14, 99, 156, 0.1"],
-[style*="background-color: rgba(9, 71, 113, 0.1"],
-[style*="background: rgba(9, 71, 113, 0.1"],
 [style*="background-color: rgba(255, 115, 250, 0.1"],
 [style*="background: rgba(255, 115, 250, 0.1"],
 [style*="background-color: rgba(114, 137, 218, 0.1"],
 [style*="background: rgba(114, 137, 218, 0.1"] {
 	background-color: rgba(var(--vaccentcolor), 0.1) !important;
 }
-[style*="background-color: rgba(0, 122, 204, 0.0"],
-[style*="background: rgba(0, 122, 204, 0.0"],
-[style*="background-color: rgba(14, 99, 156, 0.0"],
-[style*="background: rgba(14, 99, 156, 0.0"],
-[style*="background-color: rgba(9, 71, 113, 0.0"],
-[style*="background: rgba(9, 71, 113, 0.0"],
-[style*="background-color: rgba(255, 115, 250, 0.0"],
-[style*="background: rgba(255, 115, 250, 0.0"],
-[style*="background-color: rgba(114, 137, 218, 0.0"],
-[style*="background: rgba(114, 137, 218, 0.0"] {
-	background-color: rgba(var(--vaccentcolor), 0) !important;
-}
 
-[style*="border-color: rgba(0, 122, 204, 1)"],
-[style*="border-color: rgb(0, 122, 204)"],
-[style*="border-color: #007acc"],
-[style*="border-color: #007ACC"],
-[border-color="rgba(0, 122, 204, 1)"],
-[border-color="rgb(0, 122, 204)"],
-[border-color="#007acc"],
-[border-color="#007ACC"],
-[style*="border-color: rgba(14, 99, 156, 1)"],
-[style*="border-color: rgb(14, 99, 156)"],
-[style*="border-color: #0e639c"],
-[style*="border-color: #0E639C"],
-[border-color="rgba(14, 99, 156, 1)"],
-[border-color="rgb(14, 99, 156)"],
-[border-color="#0e639c"],
-[border-color="#0E639C"],
-[style*="border-color: rgba(9, 71, 113, 1)"],
-[style*="border-color: rgb(9, 71, 113)"],
-[style*="border-color: #094771"],
-[border-color="rgba(9, 71, 113, 1)"],
-[border-color="rgb(9, 71, 113)"],
-[border-color="#094771"],
 [style*="border-color: rgba(255, 115, 250, 1)"],
 [style*="border-color: rgb(255, 115, 250)"],
 [style*="border-color: #ff73fa"],
@@ -505,546 +274,44 @@
 [border-color="#7289DA"] {
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
-[style*="border-color: rgba(0, 122, 204, 0.9"],
-[style*="border-color: rgba(14, 99, 156, 0.9"],
-[style*="border-color: rgba(9, 71, 113, 0.9"],
 [style*="border-color: rgba(255, 115, 250, 0.9"],
 [style*="border-color: rgba(114, 137, 218, 0.9"] {
 	border-color: rgba(var(--vaccentcolor), 0.9) !important;
 }
-[style*="border-color: rgba(0, 122, 204, 0.8"],
-[style*="border-color: rgba(14, 99, 156, 0.8"],
-[style*="border-color: rgba(9, 71, 113, 0.8"],
 [style*="border-color: rgba(255, 115, 250, 0.8"],
 [style*="border-color: rgba(114, 137, 218, 0.8"] {
 	border-color: rgba(var(--vaccentcolor), 0.8) !important;
 }
-[style*="border-color: rgba(0, 122, 204, 0.7"],
-[style*="border-color: rgba(14, 99, 156, 0.7"],
-[style*="border-color: rgba(9, 71, 113, 0.7"],
 [style*="border-color: rgba(255, 115, 250, 0.7"],
 [style*="border-color: rgba(114, 137, 218, 0.7"] {
 	border-color: rgba(var(--vaccentcolor), 0.7) !important;
 }
-[style*="border-color: rgba(0, 122, 204, 0.6"],
-[style*="border-color: rgba(14, 99, 156, 0.6"],
-[style*="border-color: rgba(9, 71, 113, 0.6"],
 [style*="border-color: rgba(255, 115, 250, 0.6"],
 [style*="border-color: rgba(114, 137, 218, 0.6"] {
 	border-color: rgba(var(--vaccentcolor), 0.6) !important;
 }
-[style*="border-color: rgba(0, 122, 204, 0.5"],
-[style*="border-color: rgba(14, 99, 156, 0.5"],
-[style*="border-color: rgba(9, 71, 113, 0.5"],
 [style*="border-color: rgba(255, 115, 250, 0.5"],
 [style*="border-color: rgba(114, 137, 218, 0.5"] {
 	border-color: rgba(var(--vaccentcolor), 0.5) !important;
 }
-[style*="border-color: rgba(0, 122, 204, 0.4"],
-[style*="border-color: rgba(14, 99, 156, 0.4"],
-[style*="border-color: rgba(9, 71, 113, 0.4"],
 [style*="border-color: rgba(255, 115, 250, 0.4"],
 [style*="border-color: rgba(114, 137, 218, 0.4"] {
 	border-color: rgba(var(--vaccentcolor), 0.4) !important;
 }
-[style*="border-color: rgba(0, 122, 204, 0.3"],
-[style*="border-color: rgba(14, 99, 156, 0.3"],
-[style*="border-color: rgba(9, 71, 113, 0.3"],
 [style*="border-color: rgba(255, 115, 250, 0.3"],
 [style*="border-color: rgba(114, 137, 218, 0.3"] {
 	border-color: rgba(var(--vaccentcolor), 0.3) !important;
 }
-[style*="border-color: rgba(0, 122, 204, 0.2"],
-[style*="border-color: rgba(14, 99, 156, 0.2"],
-[style*="border-color: rgba(9, 71, 113, 0.2"],
 [style*="border-color: rgba(255, 115, 250, 0.2"],
 [style*="border-color: rgba(114, 137, 218, 0.2"] {
 	border-color: rgba(var(--vaccentcolor), 0.2) !important;
 }
-[style*="border-color: rgba(0, 122, 204, 0.1"],
-[style*="border-color: rgba(14, 99, 156, 0.1"],
-[style*="border-color: rgba(9, 71, 113, 0.1"],
 [style*="border-color: rgba(255, 115, 250, 0.1"],
 [style*="border-color: rgba(114, 137, 218, 0.1"] {
 	border-color: rgba(var(--vaccentcolor), 0.1) !important;
 }
-[style*="border-color: rgba(0, 122, 204, 0.0"],
-[style*="border-color: rgba(14, 99, 156, 0.0"],
-[style*="border-color: rgba(9, 71, 113, 0.0"],
-[style*="border-color: rgba(255, 115, 250, 0.0"],
-[style*="border-color: rgba(114, 137, 218, 0.0"] {
-	border-color: rgba(var(--vaccentcolor), 0) !important;
-}
-
-[style*="border-top-color: rgba(0, 122, 204, 1)"],
-[style*="border-top-color: rgb(0, 122, 204)"],
-[style*="border-top-color: #007acc"],
-[style*="border-top-color: #007ACC"],
-[border-top-color="rgba(0, 122, 204, 1)"],
-[border-top-color="rgb(0, 122, 204)"],
-[border-top-color="#007acc"],
-[border-top-color="#007ACC"],
-[style*="border-top-color: rgba(14, 99, 156, 1)"],
-[style*="border-top-color: rgb(14, 99, 156)"],
-[style*="border-top-color: #0e639c"],
-[style*="border-top-color: #0E639C"],
-[border-top-color="rgba(14, 99, 156, 1)"],
-[border-top-color="rgb(14, 99, 156)"],
-[border-top-color="#0e639c"],
-[border-top-color="#0E639C"],
-[style*="border-top-color: rgba(9, 71, 113, 1)"],
-[style*="border-top-color: rgb(9, 71, 113)"],
-[style*="border-top-color: #094771"],
-[border-top-color="rgba(9, 71, 113, 1)"],
-[border-top-color="rgb(9, 71, 113)"],
-[border-top-color="#094771"],
-[style*="border-top-color: rgba(255, 115, 250, 1)"],
-[style*="border-top-color: rgb(255, 115, 250)"],
-[style*="border-top-color: #ff73fa"],
-[style*="border-top-color: #FF73FA"],
-[border-top-color="rgba(255, 115, 250, 1)"],
-[border-top-color="rgb(255, 115, 250)"],
-[border-top-color="#ff73fa"],
-[border-top-color="#FF73FA"],
-[style*="border-top-color: rgba(114, 137, 218, 1)"],
-[style*="border-top-color: rgb(114, 137, 218)"],
-[style*="border-top-color: #7289da"],
-[style*="border-top-color: #7289DA"],
-[border-top-color="rgba(114, 137, 218, 1)"],
-[border-top-color="rgb(114, 137, 218)"],
-[border-top-color="#7289da"],
-[border-top-color="#7289DA"] {
-	border-top-color: rgb(var(--vaccentcolor)) !important;
-}
-[style*="border-top-color: rgba(0, 122, 204, 0.9"],
-[style*="border-top-color: rgba(14, 99, 156, 0.9"],
-[style*="border-top-color: rgba(9, 71, 113, 0.9"],
-[style*="border-top-color: rgba(255, 115, 250, 0.9"],
-[style*="border-top-color: rgba(114, 137, 218, 0.9"] {
-	border-top-color: rgba(var(--vaccentcolor), 0.9) !important;
-}
-[style*="border-top-color: rgba(0, 122, 204, 0.8"],
-[style*="border-top-color: rgba(14, 99, 156, 0.8"],
-[style*="border-top-color: rgba(9, 71, 113, 0.8"],
-[style*="border-top-color: rgba(255, 115, 250, 0.8"],
-[style*="border-top-color: rgba(114, 137, 218, 0.8"] {
-	border-top-color: rgba(var(--vaccentcolor), 0.8) !important;
-}
-[style*="border-top-color: rgba(0, 122, 204, 0.7"],
-[style*="border-top-color: rgba(14, 99, 156, 0.7"],
-[style*="border-top-color: rgba(9, 71, 113, 0.7"],
-[style*="border-top-color: rgba(255, 115, 250, 0.7"],
-[style*="border-top-color: rgba(114, 137, 218, 0.7"] {
-	border-top-color: rgba(var(--vaccentcolor), 0.7) !important;
-}
-[style*="border-top-color: rgba(0, 122, 204, 0.6"],
-[style*="border-top-color: rgba(14, 99, 156, 0.6"],
-[style*="border-top-color: rgba(9, 71, 113, 0.6"],
-[style*="border-top-color: rgba(255, 115, 250, 0.6"],
-[style*="border-top-color: rgba(114, 137, 218, 0.6"] {
-	border-top-color: rgba(var(--vaccentcolor), 0.6) !important;
-}
-[style*="border-top-color: rgba(0, 122, 204, 0.5"],
-[style*="border-top-color: rgba(14, 99, 156, 0.5"],
-[style*="border-top-color: rgba(9, 71, 113, 0.5"],
-[style*="border-top-color: rgba(255, 115, 250, 0.5"],
-[style*="border-top-color: rgba(114, 137, 218, 0.5"] {
-	border-top-color: rgba(var(--vaccentcolor), 0.5) !important;
-}
-[style*="border-top-color: rgba(0, 122, 204, 0.4"],
-[style*="border-top-color: rgba(14, 99, 156, 0.4"],
-[style*="border-top-color: rgba(9, 71, 113, 0.4"],
-[style*="border-top-color: rgba(255, 115, 250, 0.4"],
-[style*="border-top-color: rgba(114, 137, 218, 0.4"] {
-	border-top-color: rgba(var(--vaccentcolor), 0.4) !important;
-}
-[style*="border-top-color: rgba(0, 122, 204, 0.3"],
-[style*="border-top-color: rgba(14, 99, 156, 0.3"],
-[style*="border-top-color: rgba(9, 71, 113, 0.3"],
-[style*="border-top-color: rgba(255, 115, 250, 0.3"],
-[style*="border-top-color: rgba(114, 137, 218, 0.3"] {
-	border-top-color: rgba(var(--vaccentcolor), 0.3) !important;
-}
-[style*="border-top-color: rgba(0, 122, 204, 0.2"],
-[style*="border-top-color: rgba(14, 99, 156, 0.2"],
-[style*="border-top-color: rgba(9, 71, 113, 0.2"],
-[style*="border-top-color: rgba(255, 115, 250, 0.2"],
-[style*="border-top-color: rgba(114, 137, 218, 0.2"] {
-	border-top-color: rgba(var(--vaccentcolor), 0.2) !important;
-}
-[style*="border-top-color: rgba(0, 122, 204, 0.1"],
-[style*="border-top-color: rgba(14, 99, 156, 0.1"],
-[style*="border-top-color: rgba(9, 71, 113, 0.1"],
-[style*="border-top-color: rgba(255, 115, 250, 0.1"],
-[style*="border-top-color: rgba(114, 137, 218, 0.1"] {
-	border-top-color: rgba(var(--vaccentcolor), 0.1) !important;
-}
-[style*="border-top-color: rgba(0, 122, 204, 0.0"],
-[style*="border-top-color: rgba(14, 99, 156, 0.0"],
-[style*="border-top-color: rgba(9, 71, 113, 0.0"],
-[style*="border-top-color: rgba(255, 115, 250, 0.0"],
-[style*="border-top-color: rgba(114, 137, 218, 0.0"] {
-	border-top-color: rgba(var(--vaccentcolor), 0) !important;
-}
-
-[style*="border-right-color: rgba(0, 122, 204, 1)"],
-[style*="border-right-color: rgb(0, 122, 204)"],
-[style*="border-right-color: #007acc"],
-[style*="border-right-color: #007ACC"],
-[border-right-color="rgba(0, 122, 204, 1)"],
-[border-right-color="rgb(0, 122, 204)"],
-[border-right-color="#007acc"],
-[border-right-color="#007ACC"],
-[style*="border-right-color: rgba(14, 99, 156, 1)"],
-[style*="border-right-color: rgb(14, 99, 156)"],
-[style*="border-right-color: #0e639c"],
-[style*="border-right-color: #0E639C"],
-[border-right-color="rgba(14, 99, 156, 1)"],
-[border-right-color="rgb(14, 99, 156)"],
-[border-right-color="#0e639c"],
-[border-right-color="#0E639C"],
-[style*="border-right-color: rgba(9, 71, 113, 1)"],
-[style*="border-right-color: rgb(9, 71, 113)"],
-[style*="border-right-color: #094771"],
-[border-right-color="rgba(9, 71, 113, 1)"],
-[border-right-color="rgb(9, 71, 113)"],
-[border-right-color="#094771"],
-[style*="border-right-color: rgba(255, 115, 250, 1)"],
-[style*="border-right-color: rgb(255, 115, 250)"],
-[style*="border-right-color: #ff73fa"],
-[style*="border-right-color: #FF73FA"],
-[border-right-color="rgba(255, 115, 250, 1)"],
-[border-right-color="rgb(255, 115, 250)"],
-[border-right-color="#ff73fa"],
-[border-right-color="#FF73FA"],
-[style*="border-right-color: rgba(114, 137, 218, 1)"],
-[style*="border-right-color: rgb(114, 137, 218)"],
-[style*="border-right-color: #7289da"],
-[style*="border-right-color: #7289DA"],
-[border-right-color="rgba(114, 137, 218, 1)"],
-[border-right-color="rgb(114, 137, 218)"],
-[border-right-color="#7289da"],
-[border-right-color="#7289DA"] {
-	border-right-color: rgb(var(--vaccentcolor)) !important;
-}
-[style*="border-right-color: rgba(0, 122, 204, 0.9"],
-[style*="border-right-color: rgba(14, 99, 156, 0.9"],
-[style*="border-right-color: rgba(9, 71, 113, 0.9"],
-[style*="border-right-color: rgba(255, 115, 250, 0.9"],
-[style*="border-right-color: rgba(114, 137, 218, 0.9"] {
-	border-right-color: rgba(var(--vaccentcolor), 0.9) !important;
-}
-[style*="border-right-color: rgba(0, 122, 204, 0.8"],
-[style*="border-right-color: rgba(14, 99, 156, 0.8"],
-[style*="border-right-color: rgba(9, 71, 113, 0.8"],
-[style*="border-right-color: rgba(255, 115, 250, 0.8"],
-[style*="border-right-color: rgba(114, 137, 218, 0.8"] {
-	border-right-color: rgba(var(--vaccentcolor), 0.8) !important;
-}
-[style*="border-right-color: rgba(0, 122, 204, 0.7"],
-[style*="border-right-color: rgba(14, 99, 156, 0.7"],
-[style*="border-right-color: rgba(9, 71, 113, 0.7"],
-[style*="border-right-color: rgba(255, 115, 250, 0.7"],
-[style*="border-right-color: rgba(114, 137, 218, 0.7"] {
-	border-right-color: rgba(var(--vaccentcolor), 0.7) !important;
-}
-[style*="border-right-color: rgba(0, 122, 204, 0.6"],
-[style*="border-right-color: rgba(14, 99, 156, 0.6"],
-[style*="border-right-color: rgba(9, 71, 113, 0.6"],
-[style*="border-right-color: rgba(255, 115, 250, 0.6"],
-[style*="border-right-color: rgba(114, 137, 218, 0.6"] {
-	border-right-color: rgba(var(--vaccentcolor), 0.6) !important;
-}
-[style*="border-right-color: rgba(0, 122, 204, 0.5"],
-[style*="border-right-color: rgba(14, 99, 156, 0.5"],
-[style*="border-right-color: rgba(9, 71, 113, 0.5"],
-[style*="border-right-color: rgba(255, 115, 250, 0.5"],
-[style*="border-right-color: rgba(114, 137, 218, 0.5"] {
-	border-right-color: rgba(var(--vaccentcolor), 0.5) !important;
-}
-[style*="border-right-color: rgba(0, 122, 204, 0.4"],
-[style*="border-right-color: rgba(14, 99, 156, 0.4"],
-[style*="border-right-color: rgba(9, 71, 113, 0.4"],
-[style*="border-right-color: rgba(255, 115, 250, 0.4"],
-[style*="border-right-color: rgba(114, 137, 218, 0.4"] {
-	border-right-color: rgba(var(--vaccentcolor), 0.4) !important;
-}
-[style*="border-right-color: rgba(0, 122, 204, 0.3"],
-[style*="border-right-color: rgba(14, 99, 156, 0.3"],
-[style*="border-right-color: rgba(9, 71, 113, 0.3"],
-[style*="border-right-color: rgba(255, 115, 250, 0.3"],
-[style*="border-right-color: rgba(114, 137, 218, 0.3"] {
-	border-right-color: rgba(var(--vaccentcolor), 0.3) !important;
-}
-[style*="border-right-color: rgba(0, 122, 204, 0.2"],
-[style*="border-right-color: rgba(14, 99, 156, 0.2"],
-[style*="border-right-color: rgba(9, 71, 113, 0.2"],
-[style*="border-right-color: rgba(255, 115, 250, 0.2"],
-[style*="border-right-color: rgba(114, 137, 218, 0.2"] {
-	border-right-color: rgba(var(--vaccentcolor), 0.2) !important;
-}
-[style*="border-right-color: rgba(0, 122, 204, 0.1"],
-[style*="border-right-color: rgba(14, 99, 156, 0.1"],
-[style*="border-right-color: rgba(9, 71, 113, 0.1"],
-[style*="border-right-color: rgba(255, 115, 250, 0.1"],
-[style*="border-right-color: rgba(114, 137, 218, 0.1"] {
-	border-right-color: rgba(var(--vaccentcolor), 0.1) !important;
-}
-[style*="border-right-color: rgba(0, 122, 204, 0.0"],
-[style*="border-right-color: rgba(14, 99, 156, 0.0"],
-[style*="border-right-color: rgba(9, 71, 113, 0.0"],
-[style*="border-right-color: rgba(255, 115, 250, 0.0"],
-[style*="border-right-color: rgba(114, 137, 218, 0.0"] {
-	border-right-color: rgba(var(--vaccentcolor), 0) !important;
-}
-
-[style*="border-bottom-color: rgba(0, 122, 204, 1)"],
-[style*="border-bottom-color: rgb(0, 122, 204)"],
-[style*="border-bottom-color: #007acc"],
-[style*="border-bottom-color: #007ACC"],
-[border-bottom-color="rgba(0, 122, 204, 1)"],
-[border-bottom-color="rgb(0, 122, 204)"],
-[border-bottom-color="#007acc"],
-[border-bottom-color="#007ACC"],
-[style*="border-bottom-color: rgba(14, 99, 156, 1)"],
-[style*="border-bottom-color: rgb(14, 99, 156)"],
-[style*="border-bottom-color: #0e639c"],
-[style*="border-bottom-color: #0E639C"],
-[border-bottom-color="rgba(14, 99, 156, 1)"],
-[border-bottom-color="rgb(14, 99, 156)"],
-[border-bottom-color="#0e639c"],
-[border-bottom-color="#0E639C"],
-[style*="border-bottom-color: rgba(9, 71, 113, 1)"],
-[style*="border-bottom-color: rgb(9, 71, 113)"],
-[style*="border-bottom-color: #094771"],
-[border-bottom-color="rgba(9, 71, 113, 1)"],
-[border-bottom-color="rgb(9, 71, 113)"],
-[border-bottom-color="#094771"],
-[style*="border-bottom-color: rgba(255, 115, 250, 1)"],
-[style*="border-bottom-color: rgb(255, 115, 250)"],
-[style*="border-bottom-color: #ff73fa"],
-[style*="border-bottom-color: #FF73FA"],
-[border-bottom-color="rgba(255, 115, 250, 1)"],
-[border-bottom-color="rgb(255, 115, 250)"],
-[border-bottom-color="#ff73fa"],
-[border-bottom-color="#FF73FA"],
-[style*="border-bottom-color: rgba(114, 137, 218, 1)"],
-[style*="border-bottom-color: rgb(114, 137, 218)"],
-[style*="border-bottom-color: #7289da"],
-[style*="border-bottom-color: #7289DA"],
-[border-bottom-color="rgba(114, 137, 218, 1)"],
-[border-bottom-color="rgb(114, 137, 218)"],
-[border-bottom-color="#7289da"],
-[border-bottom-color="#7289DA"] {
-	border-bottom-color: rgb(var(--vaccentcolor)) !important;
-}
-[style*="border-bottom-color: rgba(0, 122, 204, 0.9"],
-[style*="border-bottom-color: rgba(14, 99, 156, 0.9"],
-[style*="border-bottom-color: rgba(9, 71, 113, 0.9"],
-[style*="border-bottom-color: rgba(255, 115, 250, 0.9"],
-[style*="border-bottom-color: rgba(114, 137, 218, 0.9"] {
-	border-bottom-color: rgba(var(--vaccentcolor), 0.9) !important;
-}
-[style*="border-bottom-color: rgba(0, 122, 204, 0.8"],
-[style*="border-bottom-color: rgba(14, 99, 156, 0.8"],
-[style*="border-bottom-color: rgba(9, 71, 113, 0.8"],
-[style*="border-bottom-color: rgba(255, 115, 250, 0.8"],
-[style*="border-bottom-color: rgba(114, 137, 218, 0.8"] {
-	border-bottom-color: rgba(var(--vaccentcolor), 0.8) !important;
-}
-[style*="border-bottom-color: rgba(0, 122, 204, 0.7"],
-[style*="border-bottom-color: rgba(14, 99, 156, 0.7"],
-[style*="border-bottom-color: rgba(9, 71, 113, 0.7"],
-[style*="border-bottom-color: rgba(255, 115, 250, 0.7"],
-[style*="border-bottom-color: rgba(114, 137, 218, 0.7"] {
-	border-bottom-color: rgba(var(--vaccentcolor), 0.7) !important;
-}
-[style*="border-bottom-color: rgba(0, 122, 204, 0.6"],
-[style*="border-bottom-color: rgba(14, 99, 156, 0.6"],
-[style*="border-bottom-color: rgba(9, 71, 113, 0.6"],
-[style*="border-bottom-color: rgba(255, 115, 250, 0.6"],
-[style*="border-bottom-color: rgba(114, 137, 218, 0.6"] {
-	border-bottom-color: rgba(var(--vaccentcolor), 0.6) !important;
-}
-[style*="border-bottom-color: rgba(0, 122, 204, 0.5"],
-[style*="border-bottom-color: rgba(14, 99, 156, 0.5"],
-[style*="border-bottom-color: rgba(9, 71, 113, 0.5"],
-[style*="border-bottom-color: rgba(255, 115, 250, 0.5"],
-[style*="border-bottom-color: rgba(114, 137, 218, 0.5"] {
-	border-bottom-color: rgba(var(--vaccentcolor), 0.5) !important;
-}
-[style*="border-bottom-color: rgba(0, 122, 204, 0.4"],
-[style*="border-bottom-color: rgba(14, 99, 156, 0.4"],
-[style*="border-bottom-color: rgba(9, 71, 113, 0.4"],
-[style*="border-bottom-color: rgba(255, 115, 250, 0.4"],
-[style*="border-bottom-color: rgba(114, 137, 218, 0.4"] {
-	border-bottom-color: rgba(var(--vaccentcolor), 0.4) !important;
-}
-[style*="border-bottom-color: rgba(0, 122, 204, 0.3"],
-[style*="border-bottom-color: rgba(14, 99, 156, 0.3"],
-[style*="border-bottom-color: rgba(9, 71, 113, 0.3"],
-[style*="border-bottom-color: rgba(255, 115, 250, 0.3"],
-[style*="border-bottom-color: rgba(114, 137, 218, 0.3"] {
-	border-bottom-color: rgba(var(--vaccentcolor), 0.3) !important;
-}
-[style*="border-bottom-color: rgba(0, 122, 204, 0.2"],
-[style*="border-bottom-color: rgba(14, 99, 156, 0.2"],
-[style*="border-bottom-color: rgba(9, 71, 113, 0.2"],
-[style*="border-bottom-color: rgba(255, 115, 250, 0.2"],
-[style*="border-bottom-color: rgba(114, 137, 218, 0.2"] {
-	border-bottom-color: rgba(var(--vaccentcolor), 0.2) !important;
-}
-[style*="border-bottom-color: rgba(0, 122, 204, 0.1"],
-[style*="border-bottom-color: rgba(14, 99, 156, 0.1"],
-[style*="border-bottom-color: rgba(9, 71, 113, 0.1"],
-[style*="border-bottom-color: rgba(255, 115, 250, 0.1"],
-[style*="border-bottom-color: rgba(114, 137, 218, 0.1"] {
-	border-bottom-color: rgba(var(--vaccentcolor), 0.1) !important;
-}
-[style*="border-bottom-color: rgba(0, 122, 204, 0.0"],
-[style*="border-bottom-color: rgba(14, 99, 156, 0.0"],
-[style*="border-bottom-color: rgba(9, 71, 113, 0.0"],
-[style*="border-bottom-color: rgba(255, 115, 250, 0.0"],
-[style*="border-bottom-color: rgba(114, 137, 218, 0.0"] {
-	border-bottom-color: rgba(var(--vaccentcolor), 0) !important;
-}
-
-[style*="border-left-color: rgba(0, 122, 204, 1)"],
-[style*="border-left-color: rgb(0, 122, 204)"],
-[style*="border-left-color: #007acc"],
-[style*="border-left-color: #007ACC"],
-[border-left-color="rgba(0, 122, 204, 1)"],
-[border-left-color="rgb(0, 122, 204)"],
-[border-left-color="#007acc"],
-[border-left-color="#007ACC"],
-[style*="border-left-color: rgba(14, 99, 156, 1)"],
-[style*="border-left-color: rgb(14, 99, 156)"],
-[style*="border-left-color: #0e639c"],
-[style*="border-left-color: #0E639C"],
-[border-left-color="rgba(14, 99, 156, 1)"],
-[border-left-color="rgb(14, 99, 156)"],
-[border-left-color="#0e639c"],
-[border-left-color="#0E639C"],
-[style*="border-left-color: rgba(9, 71, 113, 1)"],
-[style*="border-left-color: rgb(9, 71, 113)"],
-[style*="border-left-color: #094771"],
-[border-left-color="rgba(9, 71, 113, 1)"],
-[border-left-color="rgb(9, 71, 113)"],
-[border-left-color="#094771"],
-[style*="border-left-color: rgba(255, 115, 250, 1)"],
-[style*="border-left-color: rgb(255, 115, 250)"],
-[style*="border-left-color: #ff73fa"],
-[style*="border-left-color: #FF73FA"],
-[border-left-color="rgba(255, 115, 250, 1)"],
-[border-left-color="rgb(255, 115, 250)"],
-[border-left-color="#ff73fa"],
-[border-left-color="#FF73FA"],
-[style*="border-left-color: rgba(114, 137, 218, 1)"],
-[style*="border-left-color: rgb(114, 137, 218)"],
-[style*="border-left-color: #7289da"],
-[style*="border-left-color: #7289DA"],
-[border-left-color="rgba(114, 137, 218, 1)"],
-[border-left-color="rgb(114, 137, 218)"],
-[border-left-color="#7289da"],
-[border-left-color="#7289DA"] {
-	border-left-color: rgb(var(--vaccentcolor)) !important;
-}
-[style*="border-left-color: rgba(0, 122, 204, 0.9"],
-[style*="border-left-color: rgba(14, 99, 156, 0.9"],
-[style*="border-left-color: rgba(9, 71, 113, 0.9"],
-[style*="border-left-color: rgba(255, 115, 250, 0.9"],
-[style*="border-left-color: rgba(114, 137, 218, 0.9"] {
-	border-left-color: rgba(var(--vaccentcolor), 0.9) !important;
-}
-[style*="border-left-color: rgba(0, 122, 204, 0.8"],
-[style*="border-left-color: rgba(14, 99, 156, 0.8"],
-[style*="border-left-color: rgba(9, 71, 113, 0.8"],
-[style*="border-left-color: rgba(255, 115, 250, 0.8"],
-[style*="border-left-color: rgba(114, 137, 218, 0.8"] {
-	border-left-color: rgba(var(--vaccentcolor), 0.8) !important;
-}
-[style*="border-left-color: rgba(0, 122, 204, 0.7"],
-[style*="border-left-color: rgba(14, 99, 156, 0.7"],
-[style*="border-left-color: rgba(9, 71, 113, 0.7"],
-[style*="border-left-color: rgba(255, 115, 250, 0.7"],
-[style*="border-left-color: rgba(114, 137, 218, 0.7"] {
-	border-left-color: rgba(var(--vaccentcolor), 0.7) !important;
-}
-[style*="border-left-color: rgba(0, 122, 204, 0.6"],
-[style*="border-left-color: rgba(14, 99, 156, 0.6"],
-[style*="border-left-color: rgba(9, 71, 113, 0.6"],
-[style*="border-left-color: rgba(255, 115, 250, 0.6"],
-[style*="border-left-color: rgba(114, 137, 218, 0.6"] {
-	border-left-color: rgba(var(--vaccentcolor), 0.6) !important;
-}
-[style*="border-left-color: rgba(0, 122, 204, 0.5"],
-[style*="border-left-color: rgba(14, 99, 156, 0.5"],
-[style*="border-left-color: rgba(9, 71, 113, 0.5"],
-[style*="border-left-color: rgba(255, 115, 250, 0.5"],
-[style*="border-left-color: rgba(114, 137, 218, 0.5"] {
-	border-left-color: rgba(var(--vaccentcolor), 0.5) !important;
-}
-[style*="border-left-color: rgba(0, 122, 204, 0.4"],
-[style*="border-left-color: rgba(14, 99, 156, 0.4"],
-[style*="border-left-color: rgba(9, 71, 113, 0.4"],
-[style*="border-left-color: rgba(255, 115, 250, 0.4"],
-[style*="border-left-color: rgba(114, 137, 218, 0.4"] {
-	border-left-color: rgba(var(--vaccentcolor), 0.4) !important;
-}
-[style*="border-left-color: rgba(0, 122, 204, 0.3"],
-[style*="border-left-color: rgba(14, 99, 156, 0.3"],
-[style*="border-left-color: rgba(9, 71, 113, 0.3"],
-[style*="border-left-color: rgba(255, 115, 250, 0.3"],
-[style*="border-left-color: rgba(114, 137, 218, 0.3"] {
-	border-left-color: rgba(var(--vaccentcolor), 0.3) !important;
-}
-[style*="border-left-color: rgba(0, 122, 204, 0.2"],
-[style*="border-left-color: rgba(14, 99, 156, 0.2"],
-[style*="border-left-color: rgba(9, 71, 113, 0.2"],
-[style*="border-left-color: rgba(255, 115, 250, 0.2"],
-[style*="border-left-color: rgba(114, 137, 218, 0.2"] {
-	border-left-color: rgba(var(--vaccentcolor), 0.2) !important;
-}
-[style*="border-left-color: rgba(0, 122, 204, 0.1"],
-[style*="border-left-color: rgba(14, 99, 156, 0.1"],
-[style*="border-left-color: rgba(9, 71, 113, 0.1"],
-[style*="border-left-color: rgba(255, 115, 250, 0.1"],
-[style*="border-left-color: rgba(114, 137, 218, 0.1"] {
-	border-left-color: rgba(var(--vaccentcolor), 0.1) !important;
-}
-[style*="border-left-color: rgba(0, 122, 204, 0.0"],
-[style*="border-left-color: rgba(14, 99, 156, 0.0"],
-[style*="border-left-color: rgba(9, 71, 113, 0.0"],
-[style*="border-left-color: rgba(255, 115, 250, 0.0"],
-[style*="border-left-color: rgba(114, 137, 218, 0.0"] {
-	border-left-color: rgba(var(--vaccentcolor), 0) !important;
-}
 
 [style*="stroke: slategray"],
-[style*="stroke: rgba(0, 122, 204, 1)"],
-[style*="stroke: rgb(0, 122, 204)"],
-[style*="stroke: #007acc"],
-[style*="stroke: #007ACC"],
-[stroke="rgba(0, 122, 204, 1)"],
-[stroke="rgb(0, 122, 204)"],
-[stroke="#007acc"],
-[stroke="#007ACC"],
-[style*="stroke: rgba(14, 99, 156, 1)"],
-[style*="stroke: rgb(14, 99, 156)"],
-[style*="stroke: #0e639c"],
-[style*="stroke: #0E639C"],
-[stroke="rgba(14, 99, 156, 1)"],
-[stroke="rgb(14, 99, 156)"],
-[stroke="#0e639c"],
-[stroke="#0E639C"],
-[style*="stroke: rgba(9, 71, 113, 1)"],
-[style*="stroke: rgb(9, 71, 113)"],
-[style*="stroke: #0e639c"],
-[style*="stroke: #0E639C"],
-[stroke="rgba(9, 71, 113, 1)"],
-[stroke="rgb(9, 71, 113)"],
-[stroke="#0e639c"],
-[stroke="#0E639C"],
 [style*="stroke: rgba(255, 115, 250, 1)"],
 [style*="stroke: rgb(255, 115, 250)"],
 [style*="stroke: #ff73fa"],
@@ -1064,30 +331,6 @@
 	stroke: rgb(var(--vaccentcolor)) !important;
 }
 [style*="fill: slategray"],
-[style*="fill: rgba(0, 122, 204, 1)"],
-[style*="fill: rgb(0, 122, 204)"],
-[style*="fill: #007acc"],
-[style*="fill: #007ACC"],
-[fill="rgba(0, 122, 204, 1)"],
-[fill="rgb(0, 122, 204)"],
-[fill="#007acc"],
-[fill="#007ACC"],
-[style*="fill: rgba(14, 99, 156, 1)"],
-[style*="fill: rgb(14, 99, 156)"],
-[style*="fill: #0e639c"],
-[style*="fill: #0E639C"],
-[fill="rgba(14, 99, 156, 1)"],
-[fill="rgb(14, 99, 156)"],
-[fill="#0e639c"],
-[fill="#0E639C"],
-[style*="fill: rgba(9, 71, 113, 1)"],
-[style*="fill: rgb(9, 71, 113)"],
-[style*="fill: #0e639c"],
-[style*="fill: #0E639C"],
-[fill="rgba(9, 71, 113, 1)"],
-[fill="rgb(9, 71, 113)"],
-[fill="#0e639c"],
-[fill="#0E639C"],
 [style*="fill: rgba(255, 115, 250, 1)"],
 [style*="fill: rgb(255, 115, 250)"],
 [style*="fill: #ff73fa"],
@@ -2790,6 +2033,41 @@ html .monaco-editor [class*="arrow-decoration"] {
 .embedFull-2tM8--[style*="border-color: rgb(62, 130, 229)"],
 .embedFull-2tM8--[style*="border-color: rgb(62, 130, 226)"] {
 	border-color: rgb(var(--vaccentcolor)) !important;
+}
+
+
+html .monaco-editor [style*="background-color: rgb(0, 122, 204)"],
+html .monaco-editor [style*="background: rgb(0, 122, 204)"],
+html .monaco-editor [style*="background-color: rgb(0, 122, 204)"],
+html .monaco-editor [style*="background: rgb(0, 122, 204)"],
+html .monaco-editor [style*="background-color: rgb(9, 71, 113)"],
+html .monaco-editor [style*="background: rgb(9, 71, 113)"] {
+	background: rgb(var(--vaccentcolor)) !important;
+}
+html .monaco-editor [style*="border-color: rgb(0, 122, 204)"],
+html .monaco-editor [style*="border-color: rgb(0, 122, 204)"],
+html .monaco-editor [style*="border-color: rgb(9, 71, 113)"] {
+	border-color: rgb(var(--vaccentcolor)) !important;
+}
+html .monaco-editor [style*="border-top-color: rgb(0, 122, 204)"],
+html .monaco-editor [style*="border-top-color: rgb(0, 122, 204)"],
+html .monaco-editor [style*="border-top-color: rgb(9, 71, 113)"] {
+	border-top-color: rgb(var(--vaccentcolor)) !important;
+}
+html .monaco-editor [style*="border-right-color: rgb(0, 122, 204)"],
+html .monaco-editor [style*="border-right-color: rgb(0, 122, 204)"],
+html .monaco-editor [style*="border-right-color: rgb(9, 71, 113)"] {
+	border-right-color: rgb(var(--vaccentcolor)) !important;
+}
+html .monaco-editor [style*="border-bottom-color: rgb(0, 122, 204)"],
+html .monaco-editor [style*="border-bottom-color: rgb(0, 122, 204)"],
+html .monaco-editor [style*="border-bottom-color: rgb(9, 71, 113)"] {
+	border-bottom-color: rgb(var(--vaccentcolor)) !important;
+}
+html .monaco-editor [style*="border-left-color: rgb(0, 122, 204)"],
+html .monaco-editor [style*="border-left-color: rgb(0, 122, 204)"],
+html .monaco-editor [style*="border-left-color: rgb(9, 71, 113)"] {
+	border-left-color: rgb(var(--vaccentcolor)) !important;
 }
 
 
