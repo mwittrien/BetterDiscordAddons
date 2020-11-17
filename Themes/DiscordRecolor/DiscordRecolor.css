@@ -4150,6 +4150,9 @@ html .monaco-editor .view-overlays .current-line {
 html .mtk8 {
 	background-color: rgb(var(--vmentioncolor));
 }
+html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight {
+	background: rgb(var(--vmentioncolor));
+}
 
 
 /* ~~~~		13.		POWERCORDSUPPORT				~~~~ */

@@ -5503,6 +5503,9 @@ body::before {
 ::selection {												/* selection												*/
 	background: rgb(var(--vaccentcolor));
 }
+.highlight {
+	background: rgb(var(--vaccentcolor));
+}
 
 #app-mount .elevationLow-2lY09M, #app-mount .elevationLow-126AxN, .lightElevationLow-3_Ybxi, .darkElevationLow-DABD7i {
 	box-shadow: 0 1px 5px 0 rgba(var(--vtransparencycolor), 0.3);
@@ -7162,6 +7165,10 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 #bd-customcss-attach-controls .help-text .inline {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
+html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight {
+	background: rgb(var(--vaccentcolor));
+}
+
 
 
 /* ~~~~		17.		PLUGINSUPPORT					~~~~ */
