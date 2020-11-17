@@ -4197,6 +4197,10 @@ html .monaco-list:focus .monaco-list-row.selected.focused,
 html .monaco-list.list_id_3:focus .monaco-list-row.selected.focused {
     color: var(--header-primary) !important;
 }
+html .monaco-list.list_id_3 .monaco-list-row.selected,
+html .monaco-list.list_id_3 .monaco-list-row.selected:hover {
+    background: var(--background-primary) !important;
+}
 html .monaco-editor .reference-zone-widget .preview .monaco-editor .margin {
 	background: var(--background-secondary) linear-gradient(0deg, rgba(var(--vaccentcolor), 0.1), rgba(var(--vaccentcolor), 0.1));
 }
@@ -4214,6 +4218,16 @@ html .monaco-editor .reference-zone-widget .ref-tree .monaco-list:focus .monaco-
 }
 html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight {
 	background: rgb(var(--vmentioncolor));
+}
+html .codicon-close,
+html .codicon-remove-close,
+html .codicon-x {
+    color: var(--interactive-normal) !important;
+}
+html .codicon-close:hover,
+html .codicon-remove-close:hover,
+html .codicon-x:hover {
+    color: var(--interactive-hover) !important;
 }
 
 html .monaco-menu .monaco-action-bar.vertical {
