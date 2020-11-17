@@ -3949,6 +3949,9 @@ html .bd-settings-group.collapsible .bd-settings-title::after {
 	border-bottom-color: var(--background-modifier-accent);
 	color: var(--header-primary);
 }
+#app-mount .bd-addon-list .bd-addon-header > .bd-icon {
+	fill: var(--header-primary);
+}
 #app-mount .bd-addon-card .bd-description::-webkit-scrollbar-track {
 	background-color: var(--background-secondary-alt);
 }
@@ -4062,9 +4065,11 @@ html .floating-window-buttons .button {
 }
 html .floating-window-buttons .button:hover {
 	background-color: var(--background-modifier-hover);
+	color: var(--interactive-hover);
 }
 html .floating-window-buttons .close-button:hover {
 	background-color: #f04747;
+	color: var(--interactive-hover);
 }
 html .floating-window-buttons .button svg {
 	margin: 0;
@@ -4073,8 +4078,10 @@ html .floating-window-buttons .close-button svg path.fill,
 html .floating-window-buttons .button:not(.close-button) svg path:not([fill]) {
 	fill: var(--interactive-normal);
 }
-html .floating-window-buttons .close-button:hover svg path.fill,
 html .floating-window-buttons .button:not(.close-button):hover svg path:not([fill]) {
+	fill: var(--interactive-hover);
+}
+html .floating-window-buttons .close-button:hover svg path.fill {
 	fill: #fff;
 }
 html .floating-window-content {
@@ -4103,7 +4110,7 @@ html #bd-editor-controls button {
 }
 html #bd-editor-controls button:hover {
 	background-color: var(--background-modifier-hover);
-	color: #fff;
+	color: var(--interactive-hover);
 }
 html #bd-editor-controls button path:not([fill]) {
 	fill: currentColor;
