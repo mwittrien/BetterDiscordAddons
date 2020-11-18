@@ -2048,94 +2048,94 @@ html .monaco-editor [style*="background-color: rgb(9, 71, 113)"],
 html .monaco-editor [style*="background: rgb(9, 71, 113)"] {
 	background: rgb(var(--vaccentcolor)) !important;
 }
-html .monaco-editor [style*="background-color: rgb(0, 122, 204, 0.9)"],
-html .monaco-editor [style*="background: rgb(0, 122, 204, 0.9)"],
-html .monaco-editor [style*="background-color: rgb(14, 122, 192, 0.9)"],
-html .monaco-editor [style*="background: rgb(14, 122, 192, 0.9)"],
-html .monaco-editor [style*="background-color: rgb(14, 99, 156, 0.9)"],
-html .monaco-editor [style*="background: rgb(14, 99, 156, 0.9)"],
-html .monaco-editor [style*="background-color: rgb(9, 71, 113, 0.9)"],
-html .monaco-editor [style*="background: rgb(9, 71, 113, 0.9)"] {
+html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.9)"],
+html .monaco-editor [style*="background: rgba(0, 122, 204, 0.9)"],
+html .monaco-editor [style*="background-color: rgba(14, 122, 192, 0.9)"],
+html .monaco-editor [style*="background: rgba(14, 122, 192, 0.9)"],
+html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.9)"],
+html .monaco-editor [style*="background: rgba(14, 99, 156, 0.9)"],
+html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.9)"],
+html .monaco-editor [style*="background: rgba(9, 71, 113, 0.9)"] {
 	background: rgba(var(--vaccentcolor), 0.9) !important;
 }
-html .monaco-editor [style*="background-color: rgb(0, 122, 204, 0.8)"],
-html .monaco-editor [style*="background: rgb(0, 122, 204, 0.8)"],
-html .monaco-editor [style*="background-color: rgb(14, 122, 192, 0.8)"],
-html .monaco-editor [style*="background: rgb(14, 122, 192, 0.8)"],
-html .monaco-editor [style*="background-color: rgb(14, 99, 156, 0.8)"],
-html .monaco-editor [style*="background: rgb(14, 99, 156, 0.8)"],
-html .monaco-editor [style*="background-color: rgb(9, 71, 113, 0.8)"],
-html .monaco-editor [style*="background: rgb(9, 71, 113, 0.8)"] {
+html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.8)"],
+html .monaco-editor [style*="background: rgba(0, 122, 204, 0.8)"],
+html .monaco-editor [style*="background-color: rgba(14, 122, 192, 0.8)"],
+html .monaco-editor [style*="background: rgba(14, 122, 192, 0.8)"],
+html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.8)"],
+html .monaco-editor [style*="background: rgba(14, 99, 156, 0.8)"],
+html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.8)"],
+html .monaco-editor [style*="background: rgba(9, 71, 113, 0.8)"] {
 	background: rgba(var(--vaccentcolor), 0.8) !important;
 }
-html .monaco-editor [style*="background-color: rgb(0, 122, 204, 0.7)"],
-html .monaco-editor [style*="background: rgb(0, 122, 204, 0.7)"],
-html .monaco-editor [style*="background-color: rgb(14, 122, 192, 0.7)"],
-html .monaco-editor [style*="background: rgb(14, 122, 192, 0.7)"],
-html .monaco-editor [style*="background-color: rgb(14, 99, 156, 0.7)"],
-html .monaco-editor [style*="background: rgb(14, 99, 156, 0.7)"],
-html .monaco-editor [style*="background-color: rgb(9, 71, 113, 0.7)"],
-html .monaco-editor [style*="background: rgb(9, 71, 113, 0.7)"] {
+html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.7)"],
+html .monaco-editor [style*="background: rgba(0, 122, 204, 0.7)"],
+html .monaco-editor [style*="background-color: rgba(14, 122, 192, 0.7)"],
+html .monaco-editor [style*="background: rgba(14, 122, 192, 0.7)"],
+html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.7)"],
+html .monaco-editor [style*="background: rgba(14, 99, 156, 0.7)"],
+html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.7)"],
+html .monaco-editor [style*="background: rgba(9, 71, 113, 0.7)"] {
 	background: rgba(var(--vaccentcolor), 0.7) !important;
 }
-html .monaco-editor [style*="background-color: rgb(0, 122, 204, 0.6)"],
-html .monaco-editor [style*="background: rgb(0, 122, 204, 0.6)"],
-html .monaco-editor [style*="background-color: rgb(14, 122, 192, 0.6)"],
-html .monaco-editor [style*="background: rgb(14, 122, 192, 0.6)"],
-html .monaco-editor [style*="background-color: rgb(14, 99, 156, 0.6)"],
-html .monaco-editor [style*="background: rgb(14, 99, 156, 0.6)"],
-html .monaco-editor [style*="background-color: rgb(9, 71, 113, 0.6)"],
-html .monaco-editor [style*="background: rgb(9, 71, 113, 0.6)"] {
+html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.6)"],
+html .monaco-editor [style*="background: rgba(0, 122, 204, 0.6)"],
+html .monaco-editor [style*="background-color: rgba(14, 122, 192, 0.6)"],
+html .monaco-editor [style*="background: rgba(14, 122, 192, 0.6)"],
+html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.6)"],
+html .monaco-editor [style*="background: rgba(14, 99, 156, 0.6)"],
+html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.6)"],
+html .monaco-editor [style*="background: rgba(9, 71, 113, 0.6)"] {
 	background: rgba(var(--vaccentcolor), 0.6) !important;
 }
-html .monaco-editor [style*="background-color: rgb(0, 122, 204, 0.5)"],
-html .monaco-editor [style*="background: rgb(0, 122, 204, 0.5)"],
-html .monaco-editor [style*="background-color: rgb(14, 122, 192, 0.5)"],
-html .monaco-editor [style*="background: rgb(14, 122, 192, 0.5)"],
-html .monaco-editor [style*="background-color: rgb(14, 99, 156, 0.5)"],
-html .monaco-editor [style*="background: rgb(14, 99, 156, 0.5)"],
-html .monaco-editor [style*="background-color: rgb(9, 71, 113, 0.5)"],
-html .monaco-editor [style*="background: rgb(9, 71, 113, 0.5)"] {
+html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.5)"],
+html .monaco-editor [style*="background: rgba(0, 122, 204, 0.5)"],
+html .monaco-editor [style*="background-color: rgba(14, 122, 192, 0.5)"],
+html .monaco-editor [style*="background: rgba(14, 122, 192, 0.5)"],
+html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.5)"],
+html .monaco-editor [style*="background: rgba(14, 99, 156, 0.5)"],
+html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.5)"],
+html .monaco-editor [style*="background: rgba(9, 71, 113, 0.5)"] {
 	background: rgba(var(--vaccentcolor), 0.5) !important;
 }
-html .monaco-editor [style*="background-color: rgb(0, 122, 204, 0.4)"],
-html .monaco-editor [style*="background: rgb(0, 122, 204, 0.4)"],
-html .monaco-editor [style*="background-color: rgb(14, 122, 192, 0.4)"],
-html .monaco-editor [style*="background: rgb(14, 122, 192, 0.4)"],
-html .monaco-editor [style*="background-color: rgb(14, 99, 156, 0.4)"],
-html .monaco-editor [style*="background: rgb(14, 99, 156, 0.4)"],
-html .monaco-editor [style*="background-color: rgb(9, 71, 113, 0.4)"],
-html .monaco-editor [style*="background: rgb(9, 71, 113, 0.4)"] {
+html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.4)"],
+html .monaco-editor [style*="background: rgba(0, 122, 204, 0.4)"],
+html .monaco-editor [style*="background-color: rgba(14, 122, 192, 0.4)"],
+html .monaco-editor [style*="background: rgba(14, 122, 192, 0.4)"],
+html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.4)"],
+html .monaco-editor [style*="background: rgba(14, 99, 156, 0.4)"],
+html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.4)"],
+html .monaco-editor [style*="background: rgba(9, 71, 113, 0.4)"] {
 	background: rgba(var(--vaccentcolor), 0.4) !important;
 }
-html .monaco-editor [style*="background-color: rgb(0, 122, 204, 0.3)"],
-html .monaco-editor [style*="background: rgb(0, 122, 204, 0.3)"],
-html .monaco-editor [style*="background-color: rgb(14, 122, 192, 0.3)"],
-html .monaco-editor [style*="background: rgb(14, 122, 192, 0.3)"],
-html .monaco-editor [style*="background-color: rgb(14, 99, 156, 0.3)"],
-html .monaco-editor [style*="background: rgb(14, 99, 156, 0.3)"],
-html .monaco-editor [style*="background-color: rgb(9, 71, 113, 0.3)"],
-html .monaco-editor [style*="background: rgb(9, 71, 113, 0.3)"] {
+html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.3)"],
+html .monaco-editor [style*="background: rgba(0, 122, 204, 0.3)"],
+html .monaco-editor [style*="background-color: rgba(14, 122, 192, 0.3)"],
+html .monaco-editor [style*="background: rgba(14, 122, 192, 0.3)"],
+html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.3)"],
+html .monaco-editor [style*="background: rgba(14, 99, 156, 0.3)"],
+html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.3)"],
+html .monaco-editor [style*="background: rgba(9, 71, 113, 0.3)"] {
 	background: rgba(var(--vaccentcolor), 0.3) !important;
 }
-html .monaco-editor [style*="background-color: rgb(0, 122, 204, 0.2)"],
-html .monaco-editor [style*="background: rgb(0, 122, 204, 0.2)"],
-html .monaco-editor [style*="background-color: rgb(14, 122, 192, 0.2)"],
-html .monaco-editor [style*="background: rgb(14, 122, 192, 0.2)"],
-html .monaco-editor [style*="background-color: rgb(14, 99, 156, 0.2)"],
-html .monaco-editor [style*="background: rgb(14, 99, 156, 0.2)"],
-html .monaco-editor [style*="background-color: rgb(9, 71, 113, 0.2)"],
-html .monaco-editor [style*="background: rgb(9, 71, 113, 0.2)"] {
+html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.2)"],
+html .monaco-editor [style*="background: rgba(0, 122, 204, 0.2)"],
+html .monaco-editor [style*="background-color: rgba(14, 122, 192, 0.2)"],
+html .monaco-editor [style*="background: rgba(14, 122, 192, 0.2)"],
+html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.2)"],
+html .monaco-editor [style*="background: rgba(14, 99, 156, 0.2)"],
+html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.2)"],
+html .monaco-editor [style*="background: rgba(9, 71, 113, 0.2)"] {
 	background: rgba(var(--vaccentcolor), 0.2) !important;
 }
-html .monaco-editor [style*="background-color: rgb(0, 122, 204, 0.1)"],
-html .monaco-editor [style*="background: rgb(0, 122, 204, 0.1)"],
-html .monaco-editor [style*="background-color: rgb(14, 122, 192, 0.1)"],
-html .monaco-editor [style*="background: rgb(14, 122, 192, 0.1)"],
-html .monaco-editor [style*="background-color: rgb(14, 99, 156, 0.1)"],
-html .monaco-editor [style*="background: rgb(14, 99, 156, 0.1)"],
-html .monaco-editor [style*="background-color: rgb(9, 71, 113, 0.1)"],
-html .monaco-editor [style*="background: rgb(9, 71, 113, 0.1)"] {
+html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.1)"],
+html .monaco-editor [style*="background: rgba(0, 122, 204, 0.1)"],
+html .monaco-editor [style*="background-color: rgba(14, 122, 192, 0.1)"],
+html .monaco-editor [style*="background: rgba(14, 122, 192, 0.1)"],
+html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.1)"],
+html .monaco-editor [style*="background: rgba(14, 99, 156, 0.1)"],
+html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.1)"],
+html .monaco-editor [style*="background: rgba(9, 71, 113, 0.1)"] {
 	background: rgba(var(--vaccentcolor), 0.1) !important;
 }
 html .monaco-editor [style*="border-color: rgb(0, 122, 204)"],
