@@ -325,7 +325,7 @@ module.exports = (_ => {
 							onClick: _ => {
 								let clear = _ => {
 									if (clearing) return BDFDB.NotificationUtils.toast("Already clearing some recent mentions, please wait...", {type: "error"});
-									let messages = [].concat(e.instance.props.messages);
+									let messages = [].concat(e.instance.props.messages).filter(n => n);
 									if (messages.length) {
 										clearing = true;
 										let toast = BDFDB.NotificationUtils.toast("Clearing all recent mentions, please wait...", {timeout:0});
