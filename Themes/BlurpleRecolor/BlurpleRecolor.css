@@ -2030,11 +2030,13 @@ html .monaco-editor [class*="arrow-decoration"] {
 	border-bottom-color: rgb(var(--vaccentcolor));
 }
 
-.embedFull-2tM8--[style*="border-color: rgb(62, 130, 229)"],
-.embedFull-2tM8--[style*="border-color: rgb(62, 130, 226)"] {
-	border-color: rgb(var(--vaccentcolor)) !important;
+html .monaco-tree[class*="monaco-tree-instance"].focused .monaco-tree-rows > .monaco-tree-row.focused:not(.highlighted) {
+	background-color: rgb(var(--vaccentcolor));
+	color: #ffffff;
 }
-
+html .monaco-tree[class*="monaco-tree-instance"].focused .monaco-tree-rows > .monaco-tree-row.focused:not(.highlighted) .results-group {
+	color: #ffffff !important;
+}
 
 html .monaco-editor [style*="background-color: rgb(0, 122, 204)"],
 html .monaco-editor [style*="background: rgb(0, 122, 204)"],
@@ -2075,6 +2077,11 @@ html .monaco-editor [style*="border-left-color: rgb(14, 122, 192)"],
 html .monaco-editor [style*="border-left-color: rgb(14, 99, 156)"],
 html .monaco-editor [style*="border-left-color: rgb(9, 71, 113)"] {
 	border-left-color: rgb(var(--vaccentcolor)) !important;
+}
+
+.embedFull-2tM8--[style*="border-color: rgb(62, 130, 229)"],
+.embedFull-2tM8--[style*="border-color: rgb(62, 130, 226)"] {
+	border-color: rgb(var(--vaccentcolor)) !important;
 }
 
 

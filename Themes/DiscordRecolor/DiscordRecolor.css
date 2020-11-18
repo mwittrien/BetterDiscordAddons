@@ -4198,21 +4198,12 @@ html .monaco-quick-open-widget input {
 html .monaco-quick-open-widget .results-group {
 	color: var(--text-muted) !important;
 }
-html .monaco-tree.monaco-tree-instance-2 .monaco-tree-rows > .monaco-tree-row:hover:not(.highlighted):not(.selected):not(.focused) {
+html .monaco-tree[class*="monaco-tree-instance"] .monaco-tree-rows > .monaco-tree-row:hover:not(.highlighted):not(.selected):not(.focused) {
 	background-color: var(--background-primary) !important;
 	color: var(--header-primary) !important;
 }
-html .monaco-tree.monaco-tree-instance-2 .monaco-tree-rows > .monaco-tree-row:hover:not(.highlighted):not(.selected):not(.focused) .results-group {
+html .monaco-tree[class*="monaco-tree-instance"] .monaco-tree-rows > .monaco-tree-row:hover:not(.highlighted):not(.selected):not(.focused) .results-group {
 	color: var(--header-primary) !important;
-}
-html .monaco-tree.focused .monaco-tree-rows > .monaco-tree-row.focused:not(.highlighted),
-html .monaco-tree.monaco-tree-instance-2.focused .monaco-tree-rows > .monaco-tree-row.focused:not(.highlighted) {
-	background-color: rgb(var(--vaccentcolor));
-	color: #ffffff;
-}
-html .monaco-tree.focused .monaco-tree-rows > .monaco-tree-row.focused:not(.highlighted) .results-group,
-html .monaco-tree.monaco-tree-instance-2.focused .monaco-tree-rows > .monaco-tree-row.focused:not(.highlighted) .results-group {
-	color: #ffffff !important;
 }
 
 html .monaco-editor .peekview-widget .head {
@@ -4229,12 +4220,11 @@ html .monaco-editor .reference-zone-widget .ref-tree {
     color: var(--header-secondary) !important;
 }
 html .monaco-drag-image,
-html .monaco-list:focus .monaco-list-row.selected.focused,
-html .monaco-list.list_id_3:focus .monaco-list-row.selected.focused {
+html .monaco-list[class*="list_id"]:focus .monaco-list-row.selected.focused {
     color: var(--header-primary) !important;
 }
-html .monaco-list.list_id_3 .monaco-list-row.selected,
-html .monaco-list.list_id_3 .monaco-list-row.selected:hover {
+html .monaco-list[class*="list_id"] .monaco-list-row.selected,
+html .monaco-list[class*="list_id"] .monaco-list-row.selected:hover {
     background: var(--background-primary) !important;
 }
 html .monaco-editor .reference-zone-widget .preview .monaco-editor .margin {
@@ -4244,8 +4234,7 @@ html .monaco-editor .reference-zone-widget .preview .monaco-editor .monaco-edito
 html .monaco-editor .reference-zone-widget .preview .monaco-editor .inputarea.ime-input {
 	background: var(--background-secondary) linear-gradient(0deg, rgba(var(--vaccentcolor), 0.1), rgba(var(--vaccentcolor), 0.1));
 }
-html .monaco-list .monaco-list-rows,
-html .monaco-list.list_id_3 .monaco-list-rows {
+html .monaco-list[class*="list_id"] .monaco-list-rows {
     background: var(--background-secondary) !important;
 }
 html .monaco-editor .reference-zone-widget .ref-tree .monaco-list:focus .monaco-list-rows > .monaco-list-row.selected:not(.highlighted) {
