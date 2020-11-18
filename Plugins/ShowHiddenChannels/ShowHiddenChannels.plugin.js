@@ -6,6 +6,7 @@
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowHiddenChannels
  * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ShowHiddenChannels/ShowHiddenChannels.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ShowHiddenChannels/ShowHiddenChannels.plugin.js
  */
 
 module.exports = (_ => {
@@ -22,6 +23,7 @@ module.exports = (_ => {
 			}
 		}
 	};
+
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
@@ -410,6 +412,8 @@ module.exports = (_ => {
 						channelChildren.props.children = [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							text: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_LOCKED_SHORT,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+								className: BDFDB.disCN.channeliconitem,
+								style: {display: "block"},
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 									className: BDFDB.disCN.channelactionicon,
 									name: BDFDB.LibraryComponents.SvgIcon.Names.LOCK_CLOSED
@@ -422,9 +426,10 @@ module.exports = (_ => {
 						wrapper.props.onMouseDown = _ => {};
 						wrapper.props.onMouseUp = _ => {};
 					}
-					let maincontent = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.channelmaincontent]]});
-					if (maincontent) {
-						maincontent.props.onClick = _ => {};
+					let mainContent = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.channelmaincontent]]});
+					if (mainContent) {
+						mainContent.props.onClick = _ => {};
+						mainContent.props.href = null;
 					}
 				}
 			}
