@@ -1298,6 +1298,7 @@
 		"channelheadertopic": ["HeaderBarTopic", "topic"],
 		"channelheadertopicexpandable": ["HeaderBarTopic", "expandable"],
 		"channelicon": ["Channel", "icon"],
+		"channeliconitem": ["ChannelContainer", "iconItem"],
 		"channeliconvisibility": ["ChannelContainer", "iconVisibility"],
 		"channelmaincontent": ["Channel", "mainContent"],
 		"channelmentionsbadge": ["ChannelContainer", "mentionsBadge"],
