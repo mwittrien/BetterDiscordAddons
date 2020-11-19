@@ -848,14 +848,14 @@ body::before {
 .mouse-mode.full-motion .wrapper-1F5TKx:hover {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vmessagetransparency) * 1.2 * var(--vusechatbubbles) + 0.3 * (1 - var(--vusechatbubbles))));
 }
-.message-2qnXI6.localBot-GrCgVt,							/* message				localbot							*/
+.message-2qnXI6.ephemeral-1PsL1r,							/* message				localbot							*/
 .message-2qnXI6.replying-1x3H0T {							/* message				replying							*/
 	background-image: linear-gradient(rgba(var(--vaccentcolor), calc(0.1 * (1 - var(--vusechatbubbles)))), rgba(var(--vaccentcolor), calc(0.2 * (1 - var(--vusechatbubbles)))));
 }
 .message-2qnXI6.mentioned-xhSam7 {							/* message				mentioned							*/
 	background-image: linear-gradient(rgba(var(--vaccentcolor), calc(0.2 * (1 - var(--vusechatbubbles)))), rgba(var(--vaccentcolor), calc(0.2 * (1 - var(--vusechatbubbles)))));
 }
-.message-2qnXI6.localBot-GrCgVt::before,
+.message-2qnXI6.ephemeral-1PsL1r::before,
 .message-2qnXI6.replying-1x3H0T::before,
 .message-2qnXI6.mentioned-xhSam7::before {
 	background-color: rgb(var(--vaccentcolor));
@@ -936,7 +936,7 @@ body::before {
 .mouse-mode.full-motion .message-2qnXI6.cozy-3raOZG:hover .iconContainer-3GkGRf::after {
 	border-right-color: rgba(var(--vtransparencycolor), calc(var(--vmessagetransparency) * 1.2));
 }
-#app-mount .localBot-GrCgVt.cozy-3raOZG .header-23xsNx::after,
+#app-mount .ephemeral-1PsL1r.cozy-3raOZG .header-23xsNx::after,
 #app-mount .replying-1x3H0T.cozy-3raOZG .header-23xsNx::after,
 #app-mount .mentioned-xhSam7.cozy-3raOZG .header-23xsNx::after {
 	border-right-color: rgba(var(--vaccentcolor), calc(var(--vmessagetransparency) * 100000000000000000000000000000));
@@ -1045,7 +1045,7 @@ body::before {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
 
-#app-mount .localBotMessage-3cUzun,							/* message				localbotoperations					*/
+#app-mount .ephemeralMessage-1fEWtQ,						/* message				localbotoperations					*/
 #app-mount .operations-36ENbA {								/* message				editoperations						*/
 	color: rgb(var(--fontwhite3));
 }
