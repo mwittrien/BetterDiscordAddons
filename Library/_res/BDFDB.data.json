@@ -227,6 +227,7 @@
 			"UserHook": {"class": "auditloguserhook"},
 			"UserPopout": {"class": "userpopout"},
 			"UserProfile": {"class": "userprofile"},
+			"UserSettingsAppearance": {"class": "settingswindowcontent"},
 			"V2C_ContentColumn": {"class": "settingswindowcontentcolumn", "special": [{"path": "return.stateNode.props.title", "value": ["PLUGINS", "THEMES"]}]}
 		},
 		"LoadedInComponents": {
