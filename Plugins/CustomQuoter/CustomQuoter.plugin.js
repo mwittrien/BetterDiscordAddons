@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomQuoter",
 			"author": "DevilBro",
-			"version": "1.1.8",
+			"version": "1.1.9",
 			"description": "Customize the output of the native quote feature of Discord"
 		},
 		"changeLog": {
@@ -315,7 +315,7 @@ module.exports = (_ => {
 			onMessageOptionToolbar (e) {
 				if (e.instance.props.expanded && e.instance.props.message && e.instance.props.channel) {
 					let quoteButton = BDFDB.ReactUtils.findChild(e.returnvalue, {key: "quote"});
-					if (!!quoteButton) {
+					if (!quoteButton) {
 						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: "mark-unread"});
 						children.splice(index > -1 ? index : 0, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							key: "quote",
