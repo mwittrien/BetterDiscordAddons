@@ -2,11 +2,11 @@
  * @name ForceImagePreviews
  * @authorId 278543574059057154
  * @invite Jx3TjNS
- * @donate https: //www.paypal.me/MircoWittrien
- * @patreon https: //www.patreon.com/MircoWittrien
- * @website https: //github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ForceImagePreviews
- * @source https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ForceImagePreviews/ForceImagePreviews.plugin.js
- * @updateUrl https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ForceImagePreviews/ForceImagePreviews.plugin.js
+ * @donate https://www.paypal.me/MircoWittrien
+ * @patreon https://www.patreon.com/MircoWittrien
+ * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ForceImagePreviews
+ * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ForceImagePreviews/ForceImagePreviews.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ForceImagePreviews/ForceImagePreviews.plugin.js
  */
 
 module.exports = (_ => {
@@ -26,7 +26,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -35,7 +35,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https: //mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
 							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
 						});
@@ -74,7 +74,7 @@ module.exports = (_ => {
 			processSimpleMessageAccessories (e) {
 				if (e.instance.props.message && e.instance.props.message.content) {
 					let message = new BDFDB.DiscordObjects.Message(e.instance.props.message);
-					for (let link of e.instance.props.message.content.split(/\n|\s|\r|\t|\0/g)) if (link.indexOf("https: //") > -1 || link.indexOf("http: //") > -1) {
+					for (let link of e.instance.props.message.content.split(/\n|\s|\r|\t|\0/g)) if (link.indexOf("https://") > -1 || link.indexOf("http://") > -1) {
 						link = link.indexOf("<") == 0 && link.indexOf(">") == link.length - 1 ? link.slice(1, -1) : link;
 						if (!this.isEmbedded(message.embeds, link)) {
 							if (!requestedEmbeds.includes(link)) {
@@ -109,15 +109,15 @@ module.exports = (_ => {
 											loadedEmbeds[link] = {
 												author: {
 													name: result.split(new RegExp(BDFDB.StringUtils.regEscape('<div class="yt-user-info"><a href="'), "i"))[1].split('>')[1].split('<')[0],
-													url: `https: //www.youtube.com${result.split(new RegExp(BDFDB.StringUtils.regEscape('<div class="yt-user-info"><a href="'), "i"))[1].split('"')[0]}`
+													url: `https://www.youtube.com${result.split(new RegExp(BDFDB.StringUtils.regEscape('<div class="yt-user-info"><a href="'), "i"))[1].split('"')[0]}`
 												},
 												color: "#ff0000",
 												provider: {
 													name: "YouTube",
-													url: "https: //www.youtube.com/"
+													url: "https://www.youtube.com/"
 												},
-												rawDescription: result.split(new RegExp(BDFDB.StringUtils.regEscape('<meta property="og: description" content="'), "i"))[1].split('"')[0],
-												rawTitle: result.split(new RegExp(BDFDB.StringUtils.regEscape('<meta property="og: title" content="'), "i"))[1].split('"')[0],
+												rawDescription: result.split(new RegExp(BDFDB.StringUtils.regEscape('<meta property="og:description" content="'), "i"))[1].split('"')[0],
+												rawTitle: result.split(new RegExp(BDFDB.StringUtils.regEscape('<meta property="og:title" content="'), "i"))[1].split('"')[0],
 												thumbnail: {
 													url: thumbnail,
 													proxyURL: thumbnail,

@@ -2,11 +2,11 @@
  * @name BetterSearchPage
  * @authorId 278543574059057154
  * @invite Jx3TjNS
- * @donate https: //www.paypal.me/MircoWittrien
- * @patreon https: //www.patreon.com/MircoWittrien
- * @website https: //github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterSearchPage
- * @source https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterSearchPage/BetterSearchPage.plugin.js
- * @updateUrl https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterSearchPage/BetterSearchPage.plugin.js
+ * @donate https://www.paypal.me/MircoWittrien
+ * @patreon https://www.patreon.com/MircoWittrien
+ * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterSearchPage
+ * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterSearchPage/BetterSearchPage.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterSearchPage/BetterSearchPage.plugin.js
  */
 
 module.exports = (_ => {
@@ -26,7 +26,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -35,7 +35,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https: //mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
 							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
 						});
@@ -53,9 +53,9 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						addFirstLast:	{value: true, 	description: "Add a first and last page button"},
-						addJumpTo:		{value: true, 	description: "Add a jump to input field (press enter to jump)"},
-						cloneToTheTop:	{value: true, 	description: "Clone the controls to the top of the results page"}
+						addFirstLast:	{value:true, 	description:"Add a first and last page button"},
+						addJumpTo:		{value:true, 	description:"Add a jump to input field (press enter to jump)"},
+						cloneToTheTop:	{value:true, 	description:"Clone the controls to the top of the results page"}
 					}
 				};
 				
@@ -104,7 +104,7 @@ module.exports = (_ => {
 
 			processSearchResultsInner (e) {
 				if (e.instance.props.search) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SearchPagination"});
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name:"SearchPagination"});
 					if (index > -1) {
 						let currentPage = parseInt(Math.floor(e.instance.props.search.offset / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) + 1;
 						let maxPage = e.instance.props.search.totalResults > 5000 ? parseInt(Math.ceil(5000 / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) : parseInt(Math.ceil(e.instance.props.search.totalResults / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE));
@@ -170,7 +170,7 @@ module.exports = (_ => {
 								text: BDFDB.LanguageUtils.LanguageStrings.JUMP,
 								"aria-label": BDFDB.LanguageUtils.LanguageStrings.JUMP,
 								onClick: (event, instance) => {
-									let jumpInput = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key: "BSP-pagination-jumpinput"});
+									let jumpInput = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key:"BSP-pagination-jumpinput"});
 									if (jumpInput) doJump(jumpInput.props.value);
 								},
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {

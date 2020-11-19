@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -59,11 +59,11 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						addClearButton:	{value: true, 	inner: false,	description: "Add a 'Clear Mentions' button to the recent mentions popout"},
-						confirmClear:	{value: false,	inner: false, 	description: "Ask for your confirmation before clearing reads"},
-						includeGuilds:	{value: true, 	inner: true,	description: "unread Servers"},
-						includeMuted:	{value: false, 	inner: true,	description: "muted unread Servers"},
-						includeDMs:		{value: false, 	inner: true,	description: "unread DMs"}
+						addClearButton:	{value:true, 	inner:false,	description:"Add a 'Clear Mentions' button to the recent mentions popout"},
+						confirmClear:	{value:false,	inner:false, 	description:"Ask for your confirmation before clearing reads"},
+						includeGuilds:	{value:true, 	inner:true,		description:"unread Servers"},
+						includeMuted:	{value:false, 	inner:true,		description:"muted unread Servers"},
+						includeDMs:		{value:false, 	inner:true,		description:"unread DMs"}
 					}
 				};
 				
@@ -328,7 +328,7 @@ module.exports = (_ => {
 									let messages = [].concat(e.instance.props.messages).filter(n => n);
 									if (messages.length) {
 										clearing = true;
-										let toast = BDFDB.NotificationUtils.toast("Clearing all recent mentions, please wait...", {timeout: 0});
+										let toast = BDFDB.NotificationUtils.toast("Clearing all recent mentions, please wait...", {timeout:0});
 										for (let i = 0; i < messages.length; i++) BDFDB.TimeUtils.timeout(_ => {
 											BDFDB.LibraryModules.RecentMentionUtils.deleteRecentMention(messages[i].id);
 											if (i == messages.length - 1) {

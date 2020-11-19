@@ -2,11 +2,11 @@
  * @name ImageUtilities
  * @authorId 278543574059057154
  * @invite Jx3TjNS
- * @donate https: //www.paypal.me/MircoWittrien
- * @patreon https: //www.patreon.com/MircoWittrien
- * @website https: //github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageUtilities
- * @source https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ImageUtilities/ImageUtilities.plugin.js
- * @updateUrl https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ImageUtilities/ImageUtilities.plugin.js
+ * @donate https://www.paypal.me/MircoWittrien
+ * @patreon https://www.patreon.com/MircoWittrien
+ * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageUtilities
+ * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ImageUtilities/ImageUtilities.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ImageUtilities/ImageUtilities.plugin.js
  */
 
 module.exports = (_ => {
@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -40,7 +40,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https: //mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
 							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
 						});
@@ -105,41 +105,41 @@ module.exports = (_ => {
 					
 				this.defaults = {
 					settings: {
-						resizeImage: 			{value: true,	inner: false,	description: "Always resize image to fit the whole image modal"},
-						addDetails: 			{value: true,	inner: false,	description: "Add image details (name, size, amount) in the image modal"},
-						showAsHeader:			{value: true, 	inner: false,	description: "Show image details as a details header above the image in the chat"},
-						showOnHover:			{value: false, 	inner: false,	description: "Show image details as Tooltip in the chat"},
-						enableGallery: 			{value: true,	inner: false,	description: "Display previous/next Images in the same message in the image modal"},
-						enableZoom: 			{value: true,	inner: false,	description: "Create a zoom lense if you press down on an image in the image modal"},
-						enableCopyImg: 			{value: true,	inner: false,	description: "Add a copy image option in the image modal"},
-						enableSaveImg: 			{value: true,	inner: false,	description: "Add a save image as option in the image modal"},
-						useChromium: 			{value: false, 	inner: false,	description: "Use an inbuilt browser window instead of opening your default browser"},
-						addUserAvatarEntry: 	{value: true, 	inner: true,		description: "User Avatars"},
-						addGuildIconEntry: 		{value: true, 	inner: true,		description: "Server Icons"},
-						addEmojiEntry: 			{value: true, 	inner: true,		description: "Custom Emojis/Emotes"}
+						resizeImage: 			{value:true,	inner:false,	description:"Always resize image to fit the whole image modal"},
+						addDetails: 			{value:true,	inner:false,	description:"Add image details (name, size, amount) in the image modal"},
+						showAsHeader:			{value:true, 	inner:false,	description:"Show image details as a details header above the image in the chat"},
+						showOnHover:			{value:false, 	inner:false,	description:"Show image details as Tooltip in the chat"},
+						enableGallery: 			{value:true,	inner:false,	description:"Display previous/next Images in the same message in the image modal"},
+						enableZoom: 			{value:true,	inner:false,	description:"Create a zoom lense if you press down on an image in the image modal"},
+						enableCopyImg: 			{value:true,	inner:false,	description:"Add a copy image option in the image modal"},
+						enableSaveImg: 			{value:true,	inner:false,	description:"Add a save image as option in the image modal"},
+						useChromium: 			{value:false, 	inner:false,	description:"Use an inbuilt browser window instead of opening your default browser"},
+						addUserAvatarEntry: 	{value:true, 	inner:true,		description:"User Avatars"},
+						addGuildIconEntry: 		{value:true, 	inner:true,		description:"Server Icons"},
+						addEmojiEntry: 			{value:true, 	inner:true,		description:"Custom Emojis/Emotes"}
 					},
 					amounts: {
-						hoverDelay:				{value: 0, 		min: 0,			description: "Image Tooltip delay (in millisec)"}
+						hoverDelay:				{value:0, 		min:0,			description:"Image Tooltip delay (in millisec)"}
 					},
 					inputs: {
-						downloadLocation:		{value: "",		childProps: {type: "file", searchFolders: true},		description: "Download Location"},
+						downloadLocation:		{value:"",		childProps:{type: "file", searchFolders:true},		description:"Download Location"},
 					},
 					zoomSettings: {
-						zoomlevel:				{value: 2,		digits: 1,		minValue: 1,	maxValue: 20,		unit: "x",	label: "ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
-						lensesize:				{value: 200,		digits: 0,		minValue: 50, 	maxValue: 5000,		unit: "px",	label: "context_lensesize_text"}
+						zoomlevel:				{value:2,		digits:1,		minValue: 1,	maxValue: 20,		unit:"x",	label:"ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
+						lensesize:				{value:200,		digits:0,		minValue: 50, 	maxValue: 5000,		unit:"px",	label:"context_lensesize_text"}
 					},
 					engines: {
-						_all: 		{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url: null},
-						Baidu: 		{value: true, 	name: "Baidu", 		url: "http: //image.baidu.com/pcdutu?queryImageUrl=" + imgUrlReplaceString},
-						Bing: 		{value: true, 	name: "Bing", 		url: "https: //www.bing.com/images/search?q=imgurl: " + imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
-						Google:		{value: true, 	name: "Google", 		url: "https: //images.google.com/searchbyimage?image_url=" + imgUrlReplaceString},
-						IQDB:		{value: true, 	name: "IQDB", 		url: "https: //iqdb.org/?url=" + imgUrlReplaceString},
-						Reddit: 	{value: true, 	name: "Reddit", 		url: "http: //karmadecay.com/search?q=" + imgUrlReplaceString},
-						SauceNAO: 	{value: true, 	name: "SauceNAO", 	url: "https: //saucenao.com/search.php?db=999&url=" + imgUrlReplaceString},
-						Sogou: 		{value: true, 	name: "Sogou", 		url: "http: //pic.sogou.com/ris?flag=1&drag=0&query=" + imgUrlReplaceString + "&flag=1"},
-						TinEye:		{value: true, 	name: "TinEye", 		url: "https: //tineye.com/search?url=" + imgUrlReplaceString},
-						WhatAnime:	{value: true,	name: "WhatAnime",	url: "https: //trace.moe/?url=" + imgUrlReplaceString},
-						Yandex: 	{value: true, 	name: "Yandex", 		url: "https: //yandex.com/images/search?url=" + imgUrlReplaceString + "&rpt=imageview"}
+						_all: 		{value:true, 	name:BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url:null},
+						Baidu: 		{value:true, 	name:"Baidu", 		url:"http://image.baidu.com/pcdutu?queryImageUrl=" + imgUrlReplaceString},
+						Bing: 		{value:true, 	name:"Bing", 		url:"https://www.bing.com/images/search?q=imgurl:" + imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
+						Google:		{value:true, 	name:"Google", 		url:"https://images.google.com/searchbyimage?image_url=" + imgUrlReplaceString},
+						IQDB:		{value:true, 	name:"IQDB", 		url:"https://iqdb.org/?url=" + imgUrlReplaceString},
+						Reddit: 	{value:true, 	name:"Reddit", 		url:"http://karmadecay.com/search?q=" + imgUrlReplaceString},
+						SauceNAO: 	{value:true, 	name:"SauceNAO", 	url:"https://saucenao.com/search.php?db=999&url=" + imgUrlReplaceString},
+						Sogou: 		{value:true, 	name:"Sogou", 		url:"http://pic.sogou.com/ris?flag=1&drag=0&query=" + imgUrlReplaceString + "&flag=1"},
+						TinEye:		{value:true, 	name:"TinEye", 		url:"https://tineye.com/search?url=" + imgUrlReplaceString},
+						WhatAnime:	{value:true,	name:"WhatAnime",	url:"https://trace.moe/?url=" + imgUrlReplaceString},
+						Yandex: 	{value:true, 	name:"Yandex", 		url:"https://yandex.com/images/search?url=" + imgUrlReplaceString + "&rpt=imageview"}
 					}
 				};
 			
@@ -243,7 +243,7 @@ module.exports = (_ => {
 				});
 				
 				BDFDB.PatchUtils.patch(this, (BDFDB.ModuleUtils.findByName("renderImageComponent", false).exports || {}), "renderImageComponent", {after: e => {
-					if (e.returnValue && e.returnValue.type && (e.returnValue.type.displayName == "LazyImageZoomable" || e.returnValue.type.displayName == "LazyImage") && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https: //media.discordapp.net/attachments") == 0 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedthumbnail) == -1) return this.injectImageDetails(e.methodArguments[0], e.returnValue);
+					if (e.returnValue && e.returnValue.type && (e.returnValue.type.displayName == "LazyImageZoomable" || e.returnValue.type.displayName == "LazyImage") && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedthumbnail) == -1) return this.injectImageDetails(e.methodArguments[0], e.returnValue);
 				}});
 
 				this.forceUpdateAll();
@@ -294,7 +294,7 @@ module.exports = (_ => {
 					children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 						className: BDFDB.disCN.marginbottom4,
 						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
-						children: "Add additional Context Menu Entry for: "
+						children: "Add additional Context Menu Entry for:"
 					})].concat(Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 						type: "Switch",
 						plugin: this,
@@ -377,9 +377,9 @@ module.exports = (_ => {
 				let types = [];
 				let validUrls = urls.filter(n => this.isValidImg(n)).map(n => {
 					let url = n.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "");
-					if (url.indexOf("https: //images-ext-1.discordapp.net/external/") > -1) {
-						if (url.split("/https/").length > 1) url = "https: //" + url.split("/https/").pop();
-						else if (url.split("/http/").length > 1) url = "http: //" + url.split("/http/").pop();
+					if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
+						if (url.split("/https/").length > 1) url = "https://" + url.split("/https/").pop();
+						else if (url.split("/http/").length > 1) url = "http://" + url.split("/http/").pop();
 					}
 					const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
 					const type = file && file.split(".").pop();
@@ -437,11 +437,11 @@ module.exports = (_ => {
 						action: _ => {
 							BDFDB.LibraryRequires.request(url, {encoding: null}, (error, response, body) => {
 								let path = this.getDownloadLocation();
-								if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type: "error"});
+								if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type:"error"});
 								else {
 									BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, url.split("/").pop().split(".").slice(0, -1).join("."), response.headers["content-type"].split("/").pop().split("+")[0], 0), body, error => {
-										if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type: "error"});
-										else BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_success.replace("{{path}}", path), {type: "success"});
+										if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type:"error"});
+										else BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_success.replace("{{path}}", path), {type:"success"});
 									});
 								}
 							});
@@ -530,7 +530,7 @@ module.exports = (_ => {
 								}, BDFDB.ObjectUtils.extract(this.defaults.zoomSettings[type], "digits", "minValue", "maxValue"))))
 							}));
 						};
-						let isVideo = (typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})) || {type: {}}).type.displayName == "Video";
+						let isVideo = (typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})) || {type:{}}).type.displayName == "Video";
 						children[index] = BDFDB.ReactUtils.createElement("span", {
 							className: BDFDB.disCN._imageutilitiesoperations,
 							children: [
@@ -737,13 +737,13 @@ module.exports = (_ => {
 									releasing();
 								}
 							}));
-							document.removeImageUtilitiesZoomObserver.observe(document.body, {subtree: true, childList: true});
+							document.removeImageUtilitiesZoomObserver.observe(document.body, {subtree:true, childList:true});
 						});
 					}
 				}
 				else if (e.returnvalue) {
-					if (settings.showOnHover && e.instance.props.original && e.instance.props.src.indexOf("https: //media.discordapp.net/attachments") == 0 && typeof e.returnvalue.props.children == "function") {
-						let attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up: true});
+					if (settings.showOnHover && e.instance.props.original && e.instance.props.src.indexOf("https://media.discordapp.net/attachments") == 0 && typeof e.returnvalue.props.children == "function") {
+						let attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up:true});
 						if (attachment) {
 							let renderChildren = e.returnvalue.props.children;
 							e.returnvalue.props.children = (...args) => {
@@ -799,17 +799,17 @@ module.exports = (_ => {
 			
 			isValidImg (url) {
 				const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
-				return file && (url.startsWith("https: //images-ext-2.discordapp.net/") || file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png") || file.endsWith(".gif") || file.endsWith(".apng") || file.endsWith(".webp") || file.endsWith(".svg"));
+				return file && (url.startsWith("https://images-ext-2.discordapp.net/") || file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png") || file.endsWith(".gif") || file.endsWith(".apng") || file.endsWith(".webp") || file.endsWith(".svg"));
 			}
 			
 			isCopyable (url) {
 				const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
-				return file && (url.startsWith("https: //images-ext-2.discordapp.net/") || file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png"));
+				return file && (url.startsWith("https://images-ext-2.discordapp.net/") || file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png"));
 			}
 			
 			isSearchable (url) {
 				const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
-				return file && (url.startsWith("https: //images-ext-2.discordapp.net/") || file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png") || file.endsWith(".gif") || file.endsWith(".apng") || file.endsWith(".webp"));
+				return file && (url.startsWith("https://images-ext-2.discordapp.net/") || file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png") || file.endsWith(".gif") || file.endsWith(".apng") || file.endsWith(".webp"));
 			}
 			
 			downloadImage (url) {

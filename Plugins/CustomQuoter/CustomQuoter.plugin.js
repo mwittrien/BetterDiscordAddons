@@ -2,11 +2,11 @@
  * @name CustomQuoter
  * @authorId 278543574059057154
  * @invite Jx3TjNS
- * @donate https: //www.paypal.me/MircoWittrien
- * @patreon https: //www.patreon.com/MircoWittrien
- * @website https: //github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CustomQuoter
- * @source https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CustomQuoter/CustomQuoter.plugin.js
- * @updateUrl https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CustomQuoter/CustomQuoter.plugin.js
+ * @donate https://www.paypal.me/MircoWittrien
+ * @patreon https://www.patreon.com/MircoWittrien
+ * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CustomQuoter
+ * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CustomQuoter/CustomQuoter.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CustomQuoter/CustomQuoter.plugin.js
  */
 
 module.exports = (_ => {
@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -40,7 +40,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https: //mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
 							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
 						});
@@ -93,10 +93,10 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						quoteOnlySelected:		{value: true, 				description: "Only insert selected text in a quoted message"},
-						alwaysCopy:				{value: false, 				description: "Always copy quote to clipboard without holding shift"},
-						ignoreMentionInDM:		{value: true, 				description: "Do not add a mention in DM channels"},
-						forceZeros:				{value: false, 				description: "Force leading Zeros"}
+						quoteOnlySelected:		{value:true, 				description:"Only insert selected text in a quoted message"},
+						alwaysCopy:				{value:false, 				description:"Always copy quote to clipboard without holding shift"},
+						ignoreMentionInDM:		{value:true, 				description:"Do not add a mention in DM channels"},
+						forceZeros:				{value:false, 				description:"Force leading Zeros"}
 					}
 				};
 			}
@@ -139,7 +139,7 @@ module.exports = (_ => {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-										title: "Name: ",
+										title: "Name:",
 										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 											className: "input-newquote input-name",
 											value: "",
@@ -149,7 +149,7 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-										title: "Quote: ",
+										title: "Quote:",
 										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 											className: "input-newquote input-quote",
 											value: "",
@@ -160,10 +160,10 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 									style: {marginBottom: 1},
 									onClick: _ => {
-										for (let input of settingsPanel.querySelectorAll(".input-newquote " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new quote.", {type: "danger"});
+										for (let input of settingsPanel.querySelectorAll(".input-newquote " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new quote.", {type:"danger"});
 										let key = settingsPanel.querySelector(".input-name " + BDFDB.dotCN.input).value.trim();
 										let quote = settingsPanel.querySelector(".input-quote " + BDFDB.dotCN.input).value.trim();
-										if (formats[key]) return BDFDB.NotificationUtils.toast("A quote with the choosen name already exists, please choose another name", {type: "danger"});
+										if (formats[key]) return BDFDB.NotificationUtils.toast("A quote with the choosen name already exists, please choose another name", {type:"danger"});
 										else {
 											formats[key] = quote;
 											BDFDB.DataUtils.save(formats, this, "formats");
@@ -263,8 +263,8 @@ module.exports = (_ => {
 					let item = null, action = (choice, shift) => {
 						format = choice;
 						if (shift && !settings.alwaysCopy || !shift && settings.alwaysCopy || !BDFDB.LibraryModules.QuoteUtils.canQuote(e.instance.props.message, e.instance.props.channel)) {
-							BDFDB.LibraryRequires.electron.clipboard.write({text: this.parseQuote(e.instance.props.message, e.instance.props.channel)});
-							BDFDB.NotificationUtils.toast("Quote has been copied to clipboard", {type: "success"});
+							BDFDB.LibraryRequires.electron.clipboard.write({text:this.parseQuote(e.instance.props.message, e.instance.props.channel)});
+							BDFDB.NotificationUtils.toast("Quote has been copied to clipboard", {type:"success"});
 						}
 						else BDFDB.LibraryModules.MessageManageUtils.quoteMessage(e.instance.props.channel, e.instance.props.message);
 						format = null;
@@ -330,7 +330,7 @@ module.exports = (_ => {
 				
 				return BDFDB.StringUtils.insertNRST(quoteFormat)
 					.replace("$mention", settings.ignoreMentionInDM && channel.isDM() ? "" : `<@!${message.author.id}>`)
-					.replace("$link", `<https: //discordapp.com/channels/${guild.id}/${channel.id}/${message.id}>`)
+					.replace("$link", `<https://discordapp.com/channels/${guild.id}/${channel.id}/${message.id}>`)
 					.replace("$authorName", member && member.nick || message.author.username || "")
 					.replace("$authorAccount", `${message.author.username}#${message.author.discriminator}`)
 					.replace("$authorId", message.author.id || "")
