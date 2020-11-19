@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomQuoter",
 			"author": "DevilBro",
-			"version": "1.1.7",
+			"version": "1.1.8",
 			"description": "Customize the output of the native quote feature of Discord"
 		},
 		"changeLog": {
-			"added": {
-				"Shift Switch": "Added option to switch the shift behaviour, causing quotes to always get copied to the clipboard unless shift is pressed"
+			"fixed": {
+				"Reply Feature": "Now adds the quote button in the message context menu if the reply feature replaced the quote feature"
 			}
 		}
 	};
@@ -262,11 +262,7 @@ module.exports = (_ => {
 				if (e.instance.props.message && e.instance.props.channel) {
 					let item = null, action = (choice, shift) => {
 						format = choice;
-						if (shift && !settings.alwaysCopy || !shift && settings.alwaysCopy || !BDFDB.LibraryModules.QuoteUtils.canQuote(e.instance.props.message, e.instance.props.channel)) {
-							BDFDB.LibraryRequires.electron.clipboard.write({text: this.parseQuote(e.instance.props.message, e.instance.props.channel)});
-							BDFDB.NotificationUtils.toast("Quote has been copied to clipboard", {type: "success"});
-						}
-						else BDFDB.LibraryModules.MessageManageUtils.quoteMessage(e.instance.props.channel, e.instance.props.message);
+						this.quote(e.instance.props.channel, e.instance.props.message, shift);
 						format = null;
 					};
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "quote"});
@@ -292,6 +288,59 @@ module.exports = (_ => {
 						}))
 					});
 				}
+			}
+			
+			onMessageOptionContextMenu (e) {
+				if (e.instance.props.message && e.instance.props.channel) {
+					let [quoteChildren, quoteIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "quote"});
+					if (quoteIndex == -1) {
+						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mark-unread"});
+						children.splice(index > -1 ? index : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							label: BDFDB.LanguageUtils.LanguageStrings.QUOTE,
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, "quote"),
+							icon: _ => {
+								return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+									className: BDFDB.disCN.menuicon,
+									name: BDFDB.LibraryComponents.SvgIcon.Names.QUOTE
+								});
+							},
+							action: event => {
+								this.quote(e.instance.props.channel, e.instance.props.message, event.shiftKey);
+							}
+						}));
+					}
+				}
+			}
+		
+			onMessageOptionToolbar (e) {
+				if (e.instance.props.expanded && e.instance.props.message && e.instance.props.channel) {
+					let quoteButton = BDFDB.ReactUtils.findChild(e.returnvalue, {key: "quote"});
+					if (!!quoteButton) {
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: "mark-unread"});
+						children.splice(index > -1 ? index : 0, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							key: "quote",
+							text: BDFDB.LanguageUtils.LanguageStrings.QUOTE,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+								className: BDFDB.disCN.messagetoolbarbutton,
+								onClick: _ => {
+									this.quote(e.instance.props.channel, e.instance.props.message);
+								},
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+									className: BDFDB.disCN.messagetoolbaricon,
+									name: BDFDB.LibraryComponents.SvgIcon.Names.QUOTE
+								})
+							})
+						}));
+					}
+				}
+			}
+			
+			quote (channel, message, shift) {
+				if (shift && !settings.alwaysCopy || !shift && settings.alwaysCopy || !BDFDB.LibraryModules.QuoteUtils.canQuote(message, channel)) {
+					BDFDB.LibraryRequires.electron.clipboard.write({text: this.parseQuote(message, channel)});
+					BDFDB.NotificationUtils.toast("Quote has been copied to clipboard", {type: "success"});
+				}
+				else BDFDB.LibraryModules.MessageManageUtils.quoteMessage(channel, message);
 			}
 
 			parseQuote (message, channel, choice = format) {
