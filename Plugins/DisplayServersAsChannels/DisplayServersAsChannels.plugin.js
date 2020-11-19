@@ -6,6 +6,7 @@
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayServersAsChannels
  * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/DisplayServersAsChannels/DisplayServersAsChannels.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/DisplayServersAsChannels/DisplayServersAsChannels.plugin.js
  */
 
 module.exports = (_ => {
@@ -13,15 +14,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "DisplayServersAsChannels",
 			"author": "DevilBro",
-			"version": "1.4.5",
+			"version": "1.4.6",
 			"description": "Display servers in a similar way as channels"
 		},
 		"changeLog": {
 			"fixed": {
-				"Crashes": "No longer causes crashes when you got a DM"
+				"Works again": "Can discord stop messing with the server list, jeez"
 			}
 		}
 	};
+
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
@@ -140,17 +142,30 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.GuildUtils.rerenderAll();
 			}
-
+		
 			processGuilds (e) {
 				if (typeof e.returnvalue.props.children == "function") {
 					let childrenRender = e.returnvalue.props.children;
 					e.returnvalue.props.children = (...args) => {
 						let children = childrenRender(...args);
+						this.checkTree(children);
+						return children;
+					};
+				}
+				else this.checkTree(e.returnvalue);
+			}
+			
+			checkTree (returnvalue) {
+				let tree = BDFDB.ReactUtils.findChild(returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
+				if (tree) {
+					let childrenRender = tree.props.children;
+					tree.props.children = (...args) => {
+						let children = childrenRender(...args);
 						this.handleGuilds(children);
 						return children;
 					};
 				}
-				else this.handleGuilds(e.returnvalue);
+				else this.handleGuilds(returnvalue);
 			}
 			
 			handleGuilds (returnvalue) {

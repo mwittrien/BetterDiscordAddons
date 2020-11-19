@@ -828,7 +828,7 @@ module.exports = (_ => {
 								catch (err) {
 									let i = 0, j = 0, configString = "";
 									try {
-										for (let c of (bodyWithoutSpecial.substring(configReg.index).split(configReg[0])[1].split("};")[0].split("}},")[0]).replace(/,/g, ',"').replace(/:/g, '":').replace(/{/g, '{"').replace(/""/g, '"').replace(/" /g, ' ').replace(/,"{/g, ',{').replace(/,"\[/g, ',[').replace(/":\/\//g, ':\/\/')) {
+										for (let c of (bodyWithoutSpecial.substring(configReg.index).split(configReg[0])[1].split("};")[0].split("}},")[0]).replace(/:\s*([\[\{"]+)/g, '":$1').replace(/([\]\}"]+)\s*,/g, '$1,"').replace(/\s*([\[\{]+)/g, '$1"')) {
 											configString += c;
 											if (c == "{") i++;
 											else if (c == "}") j++;
@@ -837,9 +837,7 @@ module.exports = (_ => {
 										extractConfigInfo(plugin, JSON.parse('{"info":' + configString + '}'));
 									}
 									catch (err2) {
-										try {
-											extractConfigInfo(plugin, JSON.parse(('{"info":' + configString + '}').replace(/'/g, "\"")));
-										}
+										try {extractConfigInfo(plugin, JSON.parse(('{"info":' + configString + '}').replace(/'/g, "\"")));}
 										catch (err3) {}
 									}
 								}
