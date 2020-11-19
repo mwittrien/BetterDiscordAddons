@@ -2,11 +2,11 @@
  * @name EditUsers
  * @authorId 278543574059057154
  * @invite Jx3TjNS
- * @donate https://www.paypal.me/MircoWittrien
- * @patreon https://www.patreon.com/MircoWittrien
- * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers
- * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditUsers/EditUsers.plugin.js
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditUsers/EditUsers.plugin.js
+ * @donate https: //www.paypal.me/MircoWittrien
+ * @patreon https: //www.patreon.com/MircoWittrien
+ * @website https: //github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers
+ * @source https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditUsers/EditUsers.plugin.js
+ * @updateUrl https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditUsers/EditUsers.plugin.js
  */
 
 module.exports = (_ => {
@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -40,7 +40,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+						require("request").get("https: //mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
 							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
 						});
@@ -58,31 +58,31 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						changeInContextMenu:	{value:true, 	inner:true,		description:"User ContextMenu"},
-						changeInChatTextarea:	{value:true, 	inner:true,		description:"Chat Textarea"},
-						changeInChatWindow:		{value:true, 	inner:true,		description:"Messages"},
-						changeInReactions:		{value:true, 	inner:true,		description:"Reactions"},
-						changeInMentions:		{value:true, 	inner:true,		description:"Mentions"},
-						changeInVoiceChat:		{value:true, 	inner:true,		description:"Voice Channels"},
-						changeInMemberList:		{value:true, 	inner:true,		description:"Member List"},
-						changeInRecentDms:		{value:true, 	inner:true,		description:"Direct Message Notifications"},
-						changeInDmsList:		{value:true, 	inner:true,		description:"Direct Message List"},
-						changeInDmHeader:		{value:true, 	inner:true,		description:"Direct Message Header"},
-						changeInDmCalls:		{value:true, 	inner:true,		description:"Calls/ScreenShares"},
-						changeInTyping:			{value:true, 	inner:true,		description:"Typing List"},
-						changeInFriendList:		{value:true, 	inner:true,		description:"Friend List"},
-						changeInInviteList:		{value:true, 	inner:true,		description:"Invite List"},
-						changeInActivity:		{value:true, 	inner:true,		description:"Activity Page"},
-						changeInUserPopout:		{value:true, 	inner:true,		description:"User Popouts"},
-						changeInUserProfile:	{value:true, 	inner:true,		description:"User Profile Modal"},
-						changeInAutoComplete:	{value:true, 	inner:true,		description:"Autocomplete Menu"},
-						changeInAuditLog:		{value:true, 	inner:true,		description:"Audit Log"},
-						changeInEmojiLog:		{value:true, 	inner:true,		description:"Emoji Upload Log"},
-						changeInMemberLog:		{value:true, 	inner:true,		description:"Member Log"},
-						changeInQuickSwitcher:	{value:true, 	inner:true,		description:"Quick Switcher"},
-						changeInSearchPopout:	{value:true, 	inner:true,		description:"Search Popout"},
-						changeInUserAccount:	{value:true, 	inner:true,		description:"Your Account Information"},
-						changeInAppTitle:		{value:true, 	inner:true,		description:"Discord App Title (DMs)"}
+						changeInContextMenu:	{value: true, 	inner: true,		description: "User ContextMenu"},
+						changeInChatTextarea:	{value: true, 	inner: true,		description: "Chat Textarea"},
+						changeInChatWindow:		{value: true, 	inner: true,		description: "Messages"},
+						changeInReactions:		{value: true, 	inner: true,		description: "Reactions"},
+						changeInMentions:		{value: true, 	inner: true,		description: "Mentions"},
+						changeInVoiceChat:		{value: true, 	inner: true,		description: "Voice Channels"},
+						changeInMemberList:		{value: true, 	inner: true,		description: "Member List"},
+						changeInRecentDms:		{value: true, 	inner: true,		description: "Direct Message Notifications"},
+						changeInDmsList:		{value: true, 	inner: true,		description: "Direct Message List"},
+						changeInDmHeader:		{value: true, 	inner: true,		description: "Direct Message Header"},
+						changeInDmCalls:		{value: true, 	inner: true,		description: "Calls/ScreenShares"},
+						changeInTyping:			{value: true, 	inner: true,		description: "Typing List"},
+						changeInFriendList:		{value: true, 	inner: true,		description: "Friend List"},
+						changeInInviteList:		{value: true, 	inner: true,		description: "Invite List"},
+						changeInActivity:		{value: true, 	inner: true,		description: "Activity Page"},
+						changeInUserPopout:		{value: true, 	inner: true,		description: "User Popouts"},
+						changeInUserProfile:	{value: true, 	inner: true,		description: "User Profile Modal"},
+						changeInAutoComplete:	{value: true, 	inner: true,		description: "Autocomplete Menu"},
+						changeInAuditLog:		{value: true, 	inner: true,		description: "Audit Log"},
+						changeInEmojiLog:		{value: true, 	inner: true,		description: "Emoji Upload Log"},
+						changeInMemberLog:		{value: true, 	inner: true,		description: "Member Log"},
+						changeInQuickSwitcher:	{value: true, 	inner: true,		description: "Quick Switcher"},
+						changeInSearchPopout:	{value: true, 	inner: true,		description: "Search Popout"},
+						changeInUserAccount:	{value: true, 	inner: true,		description: "Your Account Information"},
+						changeInAppTitle:		{value: true, 	inner: true,		description: "Discord App Title (DMs)"}
 					}
 				};
 			
@@ -175,7 +175,7 @@ module.exports = (_ => {
 			
 			onStart() {
 				let observer = new MutationObserver(_ => {this.changeAppTitle();});
-				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name:"appTitleObserver", instance:observer}, {childList:true});
+				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name: "appTitleObserver", instance: observer}, {childList: true});
 				
 				let searchGroupData = BDFDB.ObjectUtils.get(BDFDB.ModuleUtils.findByName("SearchPopoutComponent", false), "exports.GroupData");
 				if (BDFDB.ObjectUtils.is(searchGroupData)) {
@@ -231,7 +231,7 @@ module.exports = (_ => {
 					value: settings[key]
 				}));
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
-					title: "Change Users in:",
+					title: "Change Users in: ",
 					first: settingsItems.length == 0,
 					children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 						type: "Switch",
@@ -333,7 +333,7 @@ module.exports = (_ => {
 						if (data && data.name) e.instance.props.nick = data.name;
 					}
 					else {
-						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.marginleft8]]});
+						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.marginleft8]]});
 						if (userName) this.changeUserColor(userName, e.instance.props.user.id);
 					}
 				}
@@ -398,7 +398,7 @@ module.exports = (_ => {
 							break;
 					}
 					if (change) {
-						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.username]]});
+						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.username]]});
 						if (userName) this.changeUserColor(userName, e.instance.props.user.id, {
 							changeBackground: changeBackground
 						});
@@ -428,7 +428,7 @@ module.exports = (_ => {
 						if (data && (data.color1 || data.color2 || data.tag)) {
 							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
 							if (index > -1) {
-								this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground:true});
+								this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground: true});
 								this.injectBadge(children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
 									tagClass: BDFDB.disCN.bottagnametag,
 									inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
@@ -722,7 +722,7 @@ module.exports = (_ => {
 						}
 					}
 					else {
-						this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true, guildId:e.instance.props.channel.guild_id});
+						this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true, guildId: e.instance.props.channel.guild_id});
 						this.injectBadge(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
 							tagClass: BDFDB.disCN.bottagmember
 						});
@@ -849,7 +849,7 @@ module.exports = (_ => {
 				if (e.instance.props.user && settings.changeInQuickSwitcher) {
 					if (!e.returnvalue) e.instance.props.user = this.getUserData(e.instance.props.user.id);
 					else {
-						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.quickswitchresultmatch]]});
+						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.quickswitchresultmatch]]});
 						if (userName) {
 							let data = changedUsers[e.instance.props.user.id];
 							if (data && data.name) userName.props.children = data.name;
@@ -867,7 +867,7 @@ module.exports = (_ => {
 
 			processSearchPopoutUserResult (e) {
 				if (e.instance.props.result && e.instance.props.result.user && settings.changeInSearchPopout) {
-					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.searchpopoutdisplayednick]]});
+					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.searchpopoutdisplayednick]]});
 					if (userName) {
 						let data = changedUsers[e.instance.props.result.user.id];
 						if (data && data.name) userName.props.children = data.name;
@@ -884,13 +884,13 @@ module.exports = (_ => {
 						if (channel && channel.type == BDFDB.DiscordConstants.ChannelTypes.DM) user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
 					}
 					if (user) {
-						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.callincomingtitle]]});
+						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.callincomingtitle]]});
 						if (userName) {
 							let data = changedUsers[user.id];
 							if (data && data.name) userName.props.children = data.name;
 							this.changeUserColor(userName, user.id);
 						}
-						let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.callincomingicon]]});
+						let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.callincomingicon]]});
 						if (avatar) avatar.props.src = this.getUserAvatar(user.id);
 					}
 				}
@@ -1275,8 +1275,8 @@ module.exports = (_ => {
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: data.ignoreTagColor,
 									onChange: (value, instance) => {
-										let colorpicker3ins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["number",3]]});
-										let colorpicker4ins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["number",4]]});
+										let colorpicker3ins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props: [["number",3]]});
+										let colorpicker4ins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props: [["number",4]]});
 										if (colorpicker3ins) colorpicker3ins.setState({disabled: value});
 										if (colorpicker4ins) colorpicker4ins.setState({disabled: value});
 									}

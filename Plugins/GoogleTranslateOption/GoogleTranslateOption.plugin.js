@@ -2,11 +2,11 @@
  * @name GoogleTranslateOption
  * @authorId 278543574059057154
  * @invite Jx3TjNS
- * @donate https://www.paypal.me/MircoWittrien
- * @patreon https://www.patreon.com/MircoWittrien
- * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleTranslateOption
- * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/GoogleTranslateOption/GoogleTranslateOption.plugin.js
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/GoogleTranslateOption/GoogleTranslateOption.plugin.js
+ * @donate https: //www.paypal.me/MircoWittrien
+ * @patreon https: //www.patreon.com/MircoWittrien
+ * @website https: //github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleTranslateOption
+ * @source https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/GoogleTranslateOption/GoogleTranslateOption.plugin.js
+ * @updateUrl https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/GoogleTranslateOption/GoogleTranslateOption.plugin.js
  */
 
 module.exports = (_ => {
@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -40,7 +40,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+						require("request").get("https: //mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
 							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
 						});
@@ -67,11 +67,11 @@ module.exports = (_ => {
 		
 		const googleLanguages = ["af","am","ar","az","be","bg","bn","bs","ca","ceb","co","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fr","fy","ga","gd","gl","gu","ha","haw","hi","hmn","hr","ht","hu","hy","id","ig","is","it","iw","ja","jw","ka","kk","km","kn","ko","ku","ky","la","lb","lo","lt","lv","mg","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","ny","or","pa","pl","ps","pt","ro","ru","rw","sd","si","sk","sl","sm","sn","so","sq","sr","st","su","sv","sw","ta","te","tg","th","tk","tl","tr","tt","ug","uk","ur","uz","vi","xh","yi","yo","zh-CN","zu"];
 		const translationEngines = {
-			googleapi: 					{name:"GoogleApi",		auto:true,	funcName:"googleApiTranslate",		languages: googleLanguages},
-			google: 					{name:"Google",			auto:true,	funcName:"googleTranslate",			languages: googleLanguages},
-			itranslate: 				{name:"iTranslate",		auto:true,	funcName:"iTranslateTranslate",		languages: [...new Set(["af","ar","az","be","bg","bn","bs","ca","ceb","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fil","fr","ga","gl","gu","ha","he","hi","hmn","hr","ht","hu","hy","id","ig","is","it","ja","jw","ka","kk","km","kn","ko","la","lo","lt","lv","mg","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","ny","pa","pl","pt-BR","pt-PT","ro","ru","si","sk","sl","so","sq","sr","st","su","sv","sw","ta","te","tg","th","tr","uk","ur","uz","vi","we","yi","yo","zh-CN","zh-TW","zu"].concat(googleLanguages))].sort()},
-			yandex: 					{name:"Yandex",			auto:true,	funcName:"yandexTranslate",			languages: ["af","am","ar","az","ba","be","bg","bn","bs","ca","ceb","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fr","ga","gd","gl","gu","he","hi","hr","ht","hu","hy","id","is","it","ja","jv","ka","kk","km","kn","ko","ky","la","lb","lo","lt","lv","mg","mhr","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","pa","pap","pl","pt","ro","ru","si","sk","sl","sq","sr","su","sv","sw","ta","te","tg","th","tl","tr","tt","udm","uk","ur","uz","vi","xh","yi","zh"]},
-			papago: 					{name:"Papago",			auto:false,	funcName:"papagoTranslate",			languages: ["en","es","fr","id","ja","ko","th","vi","zh-CN","zh-TW"]}
+			googleapi: 					{name: "GoogleApi",		auto: true,	funcName: "googleApiTranslate",		languages: googleLanguages},
+			google: 					{name: "Google",			auto: true,	funcName: "googleTranslate",			languages: googleLanguages},
+			itranslate: 				{name: "iTranslate",		auto: true,	funcName: "iTranslateTranslate",		languages: [...new Set(["af","ar","az","be","bg","bn","bs","ca","ceb","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fil","fr","ga","gl","gu","ha","he","hi","hmn","hr","ht","hu","hy","id","ig","is","it","ja","jw","ka","kk","km","kn","ko","la","lo","lt","lv","mg","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","ny","pa","pl","pt-BR","pt-PT","ro","ru","si","sk","sl","so","sq","sr","st","su","sv","sw","ta","te","tg","th","tr","uk","ur","uz","vi","we","yi","yo","zh-CN","zh-TW","zu"].concat(googleLanguages))].sort()},
+			yandex: 					{name: "Yandex",			auto: true,	funcName: "yandexTranslate",			languages: ["af","am","ar","az","ba","be","bg","bn","bs","ca","ceb","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fr","ga","gd","gl","gu","he","hi","hr","ht","hu","hy","id","is","it","ja","jv","ka","kk","km","kn","ko","ky","la","lb","lo","lt","lv","mg","mhr","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","pa","pap","pl","pt","ro","ru","si","sk","sl","sq","sr","su","sv","sw","ta","te","tg","th","tl","tr","tt","udm","uk","ur","uz","vi","xh","yi","zh"]},
+			papago: 					{name: "Papago",			auto: false,	funcName: "papagoTranslate",			languages: ["en","es","fr","id","ja","ko","th","vi","zh-CN","zh-TW"]}
 		};
 		
 		var languages, translating, isTranslating, translatedMessages, oldMessages;
@@ -87,21 +87,21 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						useChromium: 			{value:false,			description:"Use an inbuilt browser window instead of opening your default browser"},
-						addTranslateButton:		{value:true, 			description:"Add an translate button to the chatbar"},
-						sendOriginalMessage:	{value:false, 			description:"Send the original message together with the translation"}
+						useChromium: 			{value: false,			description: "Use an inbuilt browser window instead of opening your default browser"},
+						addTranslateButton:		{value: true, 			description: "Add an translate button to the chatbar"},
+						sendOriginalMessage:	{value: false, 			description: "Send the original message together with the translation"}
 					},
 					choices: {
-						inputContext:			{value:"auto", 			direction:"input",		place:"Context", 		description:"Input Language in received Messages:"},
-						outputContext:			{value:"$discord", 		direction:"output",		place:"Context", 		description:"Output Language in received Messages:"},
-						inputMessage:			{value:"auto", 			direction:"input",		place:"Message", 		description:"Input Language in sent Messages:"},
-						outputMessage:			{value:"$discord", 		direction:"output",		place:"Message", 		description:"Output Language in sent Messages:"}
+						inputContext:			{value: "auto", 			direction: "input",		place: "Context", 		description: "Input Language in received Messages: "},
+						outputContext:			{value: "$discord", 		direction: "output",		place: "Context", 		description: "Output Language in received Messages: "},
+						inputMessage:			{value: "auto", 			direction: "input",		place: "Message", 		description: "Input Language in sent Messages: "},
+						outputMessage:			{value: "$discord", 		direction: "output",		place: "Message", 		description: "Output Language in sent Messages: "}
 					},
 					exceptions: {
-						wordStart:				{value:["!"],			max:1,		description:"Words starting with any of these will be ignored"}
+						wordStart:				{value: ["!"],			max: 1,		description: "Words starting with any of these will be ignored"}
 					},
 					engines: {
-						translator:				{value:"googleapi", 	description:"Translation Engine:"}
+						translator:				{value: "googleapi", 	description: "Translation Engine: "}
 					}
 				};
 			
@@ -244,7 +244,7 @@ module.exports = (_ => {
 								let item = BDFDB.DOMUtils.getParent(BDFDB.dotCN.menuitem, event.target);
 								if (item) {
 									let createTooltip = _ => {
-										BDFDB.TooltipUtils.create(item, `From ${foundInput.name}:\n${text}\n\nTo ${foundOutput.name}:\n${foundTranslation}`, {type:"right", selector:"googletranslate-tooltip"});
+										BDFDB.TooltipUtils.create(item, `From ${foundInput.name}:\n${text}\n\nTo ${foundOutput.name}:\n${foundTranslation}`, {type: "right", selector: "googletranslate-tooltip"});
 									};
 									if (foundTranslation && foundInput && foundOutput) {
 										if (document.querySelector(".googletranslate-tooltip")) {
@@ -334,7 +334,7 @@ module.exports = (_ => {
 				if (settings.addTranslateButton) {
 					let editor = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelEditorContainer"});
 					if (editor && editor.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && !editor.props.disabled) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props:[["className", BDFDB.disCN.textareapickerbuttons]]});
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.textareapickerbuttons]]});
 						if (index > -1 && children[index].props && children[index].props.children) children[index].props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ChannelTextAreaButton, {
 								key: "translate-button",
@@ -485,7 +485,7 @@ module.exports = (_ => {
 								choices["output" + place] = input;
 								BDFDB.DataUtils.save(choices, this, "choices");
 								
-								for (let selectIns of BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(e._targetInst, {name:["BDFDB_Popout", "BDFDB_SettingsPanel"], up:true}), {name:"BDFDB_Select", all:true, noCopies:true})) if (selectIns && selectIns.props && selectIns.props.id && this.defaults.choices[selectIns.props.id] && this.defaults.choices[selectIns.props.id].place == place) {
+								for (let selectIns of BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(e._targetInst, {name: ["BDFDB_Popout", "BDFDB_SettingsPanel"], up: true}), {name: "BDFDB_Select", all: true, noCopies: true})) if (selectIns && selectIns.props && selectIns.props.id && this.defaults.choices[selectIns.props.id] && this.defaults.choices[selectIns.props.id].place == place) {
 									selectIns.props.value = this.defaults.choices[selectIns.props.id].direction == "input" ? output : input;
 									BDFDB.ReactUtils.forceUpdate(selectIns);
 								}
@@ -501,7 +501,7 @@ module.exports = (_ => {
 							menuPlacement: inPopout ? BDFDB.LibraryComponents.Select.MenuPlacements.TOP : BDFDB.LibraryComponents.Select.MenuPlacements.BOTTOM,
 							value: this.getLanguageChoice(key),
 							id: key,
-							options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(isOutput ? BDFDB.ObjectUtils.filter(languages, lang => lang.id != "auto") : languages, (lang, id) => {return {value:id, label:this.getLanguageName(lang)}})),
+							options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(isOutput ? BDFDB.ObjectUtils.filter(languages, lang => lang.id != "auto") : languages, (lang, id) => {return {value: id, label: this.getLanguageName(lang)}})),
 							searchable: true,
 							optionRenderer: lang => {
 								return languages[lang.value] ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -540,13 +540,13 @@ module.exports = (_ => {
 						menuPlacement: inPopout ? BDFDB.LibraryComponents.Select.MenuPlacements.TOP : BDFDB.LibraryComponents.Select.MenuPlacements.BOTTOM,
 						value: engines[key],
 						id: key,
-						options: Object.keys(translationEngines).map(engineKey => {return {value:engineKey, label:translationEngines[engineKey].name}}),
+						options: Object.keys(translationEngines).map(engineKey => {return {value: engineKey, label: translationEngines[engineKey].name}}),
 						searchable: true,
 						onChange: (engine, instance) => {
 							engines[key] = engine.value;
 							BDFDB.DataUtils.save(engines, this, "engines");
 							this.setLanguages();
-							let popoutInstance = BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_PopoutContainer", up:true});
+							let popoutInstance = BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_PopoutContainer", up: true});
 							if (popoutInstance) {
 								popoutInstance.close();
 								popoutInstance.handleClick();
@@ -636,11 +636,11 @@ module.exports = (_ => {
 				let output = Object.assign({}, languages[this.getLanguageChoice("output", type)]);
 				if (translate) {
 					let timer = 0;
-					toast = BDFDB.NotificationUtils.toast("Translating. Please wait", {timeout:0});
+					toast = BDFDB.NotificationUtils.toast("Translating. Please wait", {timeout: 0});
 					toast.interval = BDFDB.TimeUtils.interval(_ => {
 						if (timer++ > 40) {
 							finishTranslation("");
-							BDFDB.NotificationUtils.toast("Failed to translate text. Try another Translate Engine.", {type:"error"});
+							BDFDB.NotificationUtils.toast("Failed to translate text. Try another Translate Engine.", {type: "error"});
 						}
 						else toast.textContent = toast.textContent.indexOf(".....") > -1 ? "Translating. Please wait" : toast.textContent + ".";
 					}, 500);
@@ -664,7 +664,7 @@ module.exports = (_ => {
 					else {
 						if (translationEngines[engines.translator] && typeof this[translationEngines[engines.translator].funcName] == "function") {
 							isTranslating = true;
-							this[translationEngines[engines.translator].funcName].apply(this, [{input, output, text:newText, specialcase, engine:translationEngines[engines.translator]}, finishTranslation]);
+							this[translationEngines[engines.translator].funcName].apply(this, [{input, output, text: newText, specialcase, engine: translationEngines[engines.translator]}, finishTranslation]);
 						}
 						else finishTranslation();
 					}
@@ -678,7 +678,7 @@ module.exports = (_ => {
 						googleTranslateWindow.executeJavaScriptSafe(`
 							require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "GTO-translation", [
 								(document.querySelector(".translation") || {}).innerText,
-								[(new RegExp("{code:'([^']*)',name:'" + [(new RegExp((window.source_language_detected || "").replace("%1$s", "([A-z]{2,})"), "g")).exec(document.body.innerHTML)].flat()[1] +"'}", "g")).exec(document.body.innerHTML)].flat(10)[1]
+								[(new RegExp("{code: '([^']*)',name: '" + [(new RegExp((window.source_language_detected || "").replace("%1$s", "([A-z]{2,})"), "g")).exec(document.body.innerHTML)].flat()[1] +"'}", "g")).exec(document.body.innerHTML)].flat(10)[1]
 							]);
 						`);
 					}
@@ -695,7 +695,7 @@ module.exports = (_ => {
 			}
 			
 			googleApiTranslate (data, callback) {
-				BDFDB.LibraryRequires.request(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${data.input.id}&tl=${data.output.id}&dt=t&dj=1&source=input&q=${encodeURIComponent(data.text)}`, (error, response, result) => {
+				BDFDB.LibraryRequires.request(`https: //translate.googleapis.com/translate_a/single?client=gtx&sl=${data.input.id}&tl=${data.output.id}&dt=t&dj=1&source=input&q=${encodeURIComponent(data.text)}`, (error, response, result) => {
 					if (!error && result && response.statusCode == 200) {
 						try {
 							result = JSON.parse(result);
@@ -708,7 +708,7 @@ module.exports = (_ => {
 						catch (err) {callback("");}
 					}
 					else {
-						BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or Request Limit per Hour is reached. Try another Translate Engine.", {type:"error"});
+						BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or Request Limit per Hour is reached. Try another Translate Engine.", {type: "error"});
 						callback("");
 					}
 				});
@@ -718,7 +718,7 @@ module.exports = (_ => {
 				let translate = _ => {
 					BDFDB.LibraryRequires.request({
 						method: "POST",
-						url: "https://web-api.itranslateapp.com/v3/texts/translate",
+						url: "https: //web-api.itranslateapp.com/v3/texts/translate",
 						headers: {
 							"API-KEY": data.engine.APIkey
 						},
@@ -744,13 +744,13 @@ module.exports = (_ => {
 							catch (err) {callback("");}
 						}
 						else {
-							BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or API-key outdated. Try another Translate Engine.", {type:"error"});
+							BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or API-key outdated. Try another Translate Engine.", {type: "error"});
 							callback("");
 						}
 					});
 				};
 				if (data.engine.APIkey) translate();
-				else BDFDB.LibraryRequires.request("https://www.itranslate.com/js/webapp/main.js", {gzip: true}, (error, response, result) => {
+				else BDFDB.LibraryRequires.request("https: //www.itranslate.com/js/webapp/main.js", {gzip: true}, (error, response, result) => {
 					if (!error && result) {
 						let APIkey = /var API_KEY = "(.+)"/.exec(result);
 						if (APIkey) {
@@ -764,7 +764,7 @@ module.exports = (_ => {
 			}
 			
 			yandexTranslate (data, callback) {
-				BDFDB.LibraryRequires.request(`https://translate.yandex.net/api/v1.5/tr/translate?key=trnsl.1.1.20191206T223907Z.52bd512eca953a5b.1ec123ce4dcab3ae859f312d27cdc8609ab280de&text=${encodeURIComponent(data.text)}&lang=${data.specialcase || data.input.id == "auto" ? data.output.id : (data.input.id + "-" + data.output.id)}&options=1`, (error, response, result) => {
+				BDFDB.LibraryRequires.request(`https: //translate.yandex.net/api/v1.5/tr/translate?key=trnsl.1.1.20191206T223907Z.52bd512eca953a5b.1ec123ce4dcab3ae859f312d27cdc8609ab280de&text=${encodeURIComponent(data.text)}&lang=${data.specialcase || data.input.id == "auto" ? data.output.id : (data.input.id + "-" + data.output.id)}&options=1`, (error, response, result) => {
 					if (!error && result && response.statusCode == 200) {
 						result = BDFDB.DOMUtils.create(result);
 						let translation = result.querySelector("text");
@@ -780,7 +780,7 @@ module.exports = (_ => {
 						else callback("");
 					}
 					else {
-						BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or API-key outdated. Try another Translate Engine.", {type:"error"});
+						BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or API-key outdated. Try another Translate Engine.", {type: "error"});
 						callback("");
 					}
 				});
@@ -788,7 +788,7 @@ module.exports = (_ => {
 			
 			papagoTranslate (data, callback) {
 				BDFDB.LibraryRequires.request.post({
-					url: "https://openapi.naver.com/v1/papago/n2mt",
+					url: "https: //openapi.naver.com/v1/papago/n2mt",
 					form: {
 						source: data.input.id,
 						target: data.output.id,
@@ -808,7 +808,7 @@ module.exports = (_ => {
 						catch (err) {callback("");}
 					}
 					else {
-						BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down, daily limited reached or API-key outdated. Try another Translate Engine.", {type:"error"});
+						BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down, daily limited reached or API-key outdated. Try another Translate Engine.", {type: "error"});
 						callback("");
 					}
 				});
@@ -867,7 +867,7 @@ module.exports = (_ => {
 						}
 					}
 				}
-				else BDFDB.NotificationUtils.toast("Invalid binary format. Only use 0s and 1s.", {type:"error"});
+				else BDFDB.NotificationUtils.toast("Invalid binary format. Only use 0s and 1s.", {type: "error"});
 				return string;
 			}
 
@@ -917,7 +917,7 @@ module.exports = (_ => {
 				else {
 					let usedExceptions = BDFDB.ArrayUtils.is(exceptions.wordStart) ? exceptions.wordStart : [];
 					string.split(" ").forEach(word => {
-						if (word.indexOf("<@!") == 0 || word.indexOf("<#") == 0 || word.indexOf(":") == 0 || word.indexOf("<:") == 0 || word.indexOf("<a:") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || usedExceptions.some(n => word.indexOf(n) == 0 && word.length > 1)) {
+						if (word.indexOf("<@!") == 0 || word.indexOf("<#") == 0 || word.indexOf(":") == 0 || word.indexOf("<:") == 0 || word.indexOf("<a: ") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || usedExceptions.some(n => word.indexOf(n) == 0 && word.length > 1)) {
 							newString.push(`[/////${count}]`);
 							excepts[count] = word;
 							count++;
@@ -929,7 +929,7 @@ module.exports = (_ => {
 			}
 
 			getGoogleTranslatePageURL (input, output, text) {
-				return `https://translate.google.com/#${BDFDB.LanguageUtils.languages[input] ? input : "auto"}/${output}/${encodeURIComponent(text)}`;
+				return `https: //translate.google.com/#${BDFDB.LanguageUtils.languages[input] ? input : "auto"}/${output}/${encodeURIComponent(text)}`;
 			}
 			
 			getLanguageName (language) {

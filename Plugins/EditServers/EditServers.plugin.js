@@ -2,11 +2,11 @@
  * @name EditServers
  * @authorId 278543574059057154
  * @invite Jx3TjNS
- * @donate https://www.paypal.me/MircoWittrien
- * @patreon https://www.patreon.com/MircoWittrien
- * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditServers
- * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditServers/EditServers.plugin.js
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditServers/EditServers.plugin.js
+ * @donate https: //www.paypal.me/MircoWittrien
+ * @patreon https: //www.patreon.com/MircoWittrien
+ * @website https: //github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditServers
+ * @source https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditServers/EditServers.plugin.js
+ * @updateUrl https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditServers/EditServers.plugin.js
  */
 
 module.exports = (_ => {
@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -40,7 +40,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+						require("request").get("https: //mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
 							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
 						});
@@ -58,14 +58,14 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						addOriginalTooltip:		{value:true, 	inner:false,	description:"Hovering over a changed Server Header shows the original Name as Tooltip"},
-						changeInGuildList:		{value:true, 	inner:true,		description:"Server List"},
-						changeInGuildHeader:	{value:true, 	inner:true,		description:"Server Header"},
-						changeInGuildInvites:	{value:true, 	inner:true,		description:"Server Invites"},
-						changeInChat:			{value:true, 	inner:true,		description:"Chat (Welcome Message, etc.)"},
-						changeInMutualGuilds:	{value:true, 	inner:true,		description:"Mutual Servers"},
-						changeInRecentMentions:	{value:true, 	inner:true,		description:"Recent Mentions Popout"},
-						changeInQuickSwitcher:	{value:true, 	inner:true,		description:"Quick Switcher"}
+						addOriginalTooltip:		{value: true, 	inner: false,	description: "Hovering over a changed Server Header shows the original Name as Tooltip"},
+						changeInGuildList:		{value: true, 	inner: true,		description: "Server List"},
+						changeInGuildHeader:	{value: true, 	inner: true,		description: "Server Header"},
+						changeInGuildInvites:	{value: true, 	inner: true,		description: "Server Invites"},
+						changeInChat:			{value: true, 	inner: true,		description: "Chat (Welcome Message, etc.)"},
+						changeInMutualGuilds:	{value: true, 	inner: true,		description: "Mutual Servers"},
+						changeInRecentMentions:	{value: true, 	inner: true,		description: "Recent Mentions Popout"},
+						changeInQuickSwitcher:	{value: true, 	inner: true,		description: "Quick Switcher"}
 					}
 				};
 			
@@ -95,7 +95,7 @@ module.exports = (_ => {
 			}
 			
 			onStart() {
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.IconUtils, "getGuildBannerURL", {instead:e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.IconUtils, "getGuildBannerURL", {instead: e => {
 					let guild = BDFDB.LibraryModules.GuildStore.getGuild(e.methodArguments[0].id);
 					if (guild) {
 						if (e.methodArguments[0].id == "410787888507256842") return guild.banner;
@@ -106,13 +106,13 @@ module.exports = (_ => {
 				}});
 
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryComponents.GuildComponents.Guild.prototype, "render", {
-					before: e => {this.processGuild({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});},
-					after: e => {this.processGuild({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});}
+					before: e => {this.processGuild({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"});},
+					after: e => {this.processGuild({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"});}
 				});
 
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryComponents.Connectors.Link.prototype, "render", {
 					after: e => {
-						if (e.thisObject.props.className && e.thisObject.props.className.indexOf(BDFDB.disCN.guildiconwrapper) > -1) this.processGuildAcronym({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
+						if (e.thisObject.props.className && e.thisObject.props.className.indexOf(BDFDB.disCN.guildiconwrapper) > -1) this.processGuildAcronym({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"});
 					}
 				});
 				
@@ -134,7 +134,7 @@ module.exports = (_ => {
 					value: settings[key]
 				}));
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
-					title: "Change Servers in:",
+					title: "Change Servers in: ",
 					first: settingsItems.length == 0,
 					children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 						type: "Switch",
@@ -253,7 +253,7 @@ module.exports = (_ => {
 						let renderChildren = e.returnvalue.props.children;
 						e.returnvalue.props.children = (...args) => {
 							let renderedChildren = renderChildren(...args);
-							let guildAcronym = BDFDB.ReactUtils.findChild(renderedChildren, {props:[["className", BDFDB.disCN.guildiconacronym]]});
+							let guildAcronym = BDFDB.ReactUtils.findChild(renderedChildren, {props: [["className", BDFDB.disCN.guildiconacronym]]});
 							if (guildAcronym) {
 								let fontGradient = BDFDB.ObjectUtils.is(data.color2);
 								guildAcronym.props.style = Object.assign({}, guildAcronym.props.style, {
@@ -310,7 +310,7 @@ module.exports = (_ => {
 						let oldType = child.type;
 						child.type = (...args) => {
 							let instance = oldType(...args);
-							let guildName = BDFDB.ReactUtils.findChild(instance, {props:[["className", BDFDB.disCN.recentmentionsguildname]]});
+							let guildName = BDFDB.ReactUtils.findChild(instance, {props: [["className", BDFDB.disCN.recentmentionsguildname]]});
 							if (guildName) guildName.props.children = (this.getGuildData(e.instance.props.channel.guild_id) || {}).name || guildName.props.children;
 							return instance;
 						};
@@ -352,7 +352,7 @@ module.exports = (_ => {
 			processWelcomeArea (e) {
 				if (e.instance.props.channel && settings.changeInChat) {
 					let name = (BDFDB.LibraryModules.GuildStore.getGuild(e.instance.props.channel.guild_id) || {}).name;
-					let guildName = name && BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", "titleName-3-Lp3Z"]]});
+					let guildName = name && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", "titleName-3-Lp3Z"]]});
 					if (guildName && guildName.props && BDFDB.ArrayUtils.is(guildName.props.children)) {
 						for (let child of guildName.props.children) if (child && child.props && BDFDB.ArrayUtils.is(child.props.children) && child.props.children[0] == name) {
 							child.props.children = [(this.getGuildData(e.instance.props.channel.guild_id) || {}).name || name];

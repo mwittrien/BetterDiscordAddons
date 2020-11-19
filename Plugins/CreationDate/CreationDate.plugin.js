@@ -2,11 +2,11 @@
  * @name CreationDate
  * @authorId 278543574059057154
  * @invite Jx3TjNS
- * @donate https://www.paypal.me/MircoWittrien
- * @patreon https://www.patreon.com/MircoWittrien
- * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CreationDate
- * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CreationDate/CreationDate.plugin.js
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CreationDate/CreationDate.plugin.js
+ * @donate https: //www.paypal.me/MircoWittrien
+ * @patreon https: //www.patreon.com/MircoWittrien
+ * @website https: //github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CreationDate
+ * @source https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CreationDate/CreationDate.plugin.js
+ * @updateUrl https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CreationDate/CreationDate.plugin.js
  */
 
 module.exports = (_ => {
@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -40,7 +40,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+						require("request").get("https: //mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
 							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
 						});
@@ -59,23 +59,23 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						addInUserPopout:		{value:true, 			description:"Add in User Popouts"},
-						addInUserProfil:		{value:true, 			description:"Add in User Profile Modal"},
-						displayText:			{value:true, 			description:"Display 'Created on' text in the timestamp"},
-						displayTime:			{value:true, 			description:"Display the time in the timestamp"},
-						displayDate:			{value:true, 			description:"Display the date in the timestamp"},
-						cutSeconds:				{value:false, 			description:"Cut off seconds of the time"},
-						forceZeros:				{value:false, 			description:"Force leading zeros"},
-						otherOrder:				{value:false, 			description:"Show the time before the date"}
+						addInUserPopout:		{value: true, 			description: "Add in User Popouts"},
+						addInUserProfil:		{value: true, 			description: "Add in User Profile Modal"},
+						displayText:			{value: true, 			description: "Display 'Created on' text in the timestamp"},
+						displayTime:			{value: true, 			description: "Display the time in the timestamp"},
+						displayDate:			{value: true, 			description: "Display the date in the timestamp"},
+						cutSeconds:				{value: false, 			description: "Cut off seconds of the time"},
+						forceZeros:				{value: false, 			description: "Force leading zeros"},
+						otherOrder:				{value: false, 			description: "Show the time before the date"}
 					},
 					choices: {
-						creationDateLang:		{value:"$discord", 		description:"Creation Date Format"}
+						creationDateLang:		{value: "$discord", 		description: "Creation Date Format"}
 					},
 					formats: {
-						ownFormat:				{value:"$hour:$minute:$second, $day.$month.$year", 	description:"Own Format"}
+						ownFormat:				{value: "$hour: $minute: $second, $day.$month.$year", 	description: "Own Format"}
 					},
 					amounts: {
-						maxDaysAgo:				{value:0, 	min:0,		description:"Maximum count of days displayed in the $daysago placeholder",	note:"0 equals no limit"}
+						maxDaysAgo:				{value: 0, 	min: 0,		description: "Maximum count of days displayed in the $daysago placeholder",	note: "0 equals no limit"}
 					}
 				};
 				
@@ -117,7 +117,7 @@ module.exports = (_ => {
 						value: settings[key],
 						onChange: (value, instance) => {
 							settings[key] = value;
-							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
+							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_SettingsPanel", up: true}), {name: "BDFDB_Select", all: true, noCopies: true}));
 						}
 					}))
 				}));
@@ -132,7 +132,7 @@ module.exports = (_ => {
 						label: this.defaults.choices[key].description,
 						basis: "70%",
 						value: choices[key],
-						options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value:id, label:lang.name}})),
+						options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value: id, label: lang.name}})),
 						searchable: true,
 						optionRenderer: lang => {
 							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -182,7 +182,7 @@ module.exports = (_ => {
 						value: formats[key],
 						onChange: (value, instance) => {
 							formats[key] = value;
-							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
+							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_SettingsPanel", up: true}), {name: "BDFDB_Select", all: true, noCopies: true}));
 						}
 					}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 						className: BDFDB.disCN.marginbottom8

@@ -2,11 +2,11 @@
  * @name CopyRawMessage
  * @authorId 278543574059057154
  * @invite Jx3TjNS
- * @donate https://www.paypal.me/MircoWittrien
- * @patreon https://www.patreon.com/MircoWittrien
- * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CopyRawMessage
- * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CopyRawMessage/CopyRawMessage.plugin.js
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CopyRawMessage/CopyRawMessage.plugin.js
+ * @donate https: //www.paypal.me/MircoWittrien
+ * @patreon https: //www.patreon.com/MircoWittrien
+ * @website https: //github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CopyRawMessage
+ * @source https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CopyRawMessage/CopyRawMessage.plugin.js
+ * @updateUrl https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CopyRawMessage/CopyRawMessage.plugin.js
  */
 
 module.exports = (_ => {
@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -40,7 +40,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+						require("request").get("https: //mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
 							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
 						});
@@ -58,7 +58,7 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						copyOnlySelected:		{value:true, 				description:"Only copy selected text of a message"}
+						copyOnlySelected:		{value: true, 				description: "Only copy selected text of a message"}
 					}
 				};
 			}
@@ -117,14 +117,14 @@ module.exports = (_ => {
 								});
 							}),
 							action: _ => {
-								BDFDB.LibraryRequires.electron.clipboard.write({text:messageString});
+								BDFDB.LibraryRequires.electron.clipboard.write({text: messageString});
 							}
 						}),
 						embedString && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw Embed)",
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-embed"),
 							action: _ => {
-								BDFDB.LibraryRequires.electron.clipboard.write({text:embedString});
+								BDFDB.LibraryRequires.electron.clipboard.write({text: embedString});
 							}
 						})
 					].filter(n => n);
@@ -150,7 +150,7 @@ module.exports = (_ => {
 							});
 						},
 						action: _ => {
-							BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
+							BDFDB.LibraryRequires.electron.clipboard.write({text: e.instance.props.message.content});
 						}
 					}));
 				}
@@ -164,7 +164,7 @@ module.exports = (_ => {
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 							className: BDFDB.disCN.messagetoolbarbutton,
 							onClick: _ => {
-								BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
+								BDFDB.LibraryRequires.electron.clipboard.write({text: e.instance.props.message.content});
 							},
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 								className: BDFDB.disCN.messagetoolbaricon,

@@ -2,11 +2,11 @@
  * @name EmojiStatistics
  * @authorId 278543574059057154
  * @invite Jx3TjNS
- * @donate https://www.paypal.me/MircoWittrien
- * @patreon https://www.patreon.com/MircoWittrien
- * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EmojiStatistics
- * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EmojiStatistics/EmojiStatistics.plugin.js
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EmojiStatistics/EmojiStatistics.plugin.js
+ * @donate https: //www.paypal.me/MircoWittrien
+ * @patreon https: //www.patreon.com/MircoWittrien
+ * @website https: //github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EmojiStatistics
+ * @source https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EmojiStatistics/EmojiStatistics.plugin.js
+ * @updateUrl https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EmojiStatistics/EmojiStatistics.plugin.js
  */
 
 module.exports = (_ => {
@@ -26,7 +26,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -35,7 +35,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+						require("request").get("https: //mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
 							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
 						});
@@ -91,7 +91,7 @@ module.exports = (_ => {
 
 			processEmojiPicker (e) {
 				this.loadEmojiList();
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name:"DiversitySelector"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "DiversitySelector"});
 				if (index > -1) children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: "Emoji Statistics",
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
@@ -126,7 +126,7 @@ module.exports = (_ => {
 						className: `${this.name}-table`,
 						stickyHeader: true,
 						sortData: false,
-						columns: [{key:"icon", sortkey:"index", cell:"icon"}, {key:"name", cell:"name"}, {key:"total", cell:"amount", reverse:true}, {key:"global", cell:"amount", reverse:true}, {key:"local", cell:"amount", reverse:true}, {key:"copies", cell:"amount", reverse:true}].map(data => {return {
+						columns: [{key: "icon", sortkey: "index", cell: "icon"}, {key: "name", cell: "name"}, {key: "total", cell: "amount", reverse: true}, {key: "global", cell: "amount", reverse: true}, {key: "local", cell: "amount", reverse: true}, {key: "copies", cell: "amount", reverse: true}].map(data => {return {
 							key: data.sortkey || data.key,
 							sort: true,
 							reverse: data.reverse,

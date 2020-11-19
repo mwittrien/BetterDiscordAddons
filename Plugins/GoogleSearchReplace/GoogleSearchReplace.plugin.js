@@ -2,11 +2,11 @@
  * @name GoogleSearchReplace
  * @authorId 278543574059057154
  * @invite Jx3TjNS
- * @donate https://www.paypal.me/MircoWittrien
- * @patreon https://www.patreon.com/MircoWittrien
- * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleSearchReplace
- * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/GoogleSearchReplace/GoogleSearchReplace.plugin.js
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/GoogleSearchReplace/GoogleSearchReplace.plugin.js
+ * @donate https: //www.paypal.me/MircoWittrien
+ * @patreon https: //www.patreon.com/MircoWittrien
+ * @website https: //github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleSearchReplace
+ * @source https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/GoogleSearchReplace/GoogleSearchReplace.plugin.js
+ * @updateUrl https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/GoogleSearchReplace/GoogleSearchReplace.plugin.js
  */
 
 module.exports = (_ => {
@@ -25,7 +25,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -34,7 +34,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+						require("request").get("https: //mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
 							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
 						});
@@ -53,24 +53,24 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						useChromium: 		{value:false,	description:"Use an inbuilt browser window instead of opening your default browser"},
+						useChromium: 		{value: false,	description: "Use an inbuilt browser window instead of opening your default browser"},
 					},
 					engines: {
-						_all: 				{value:true, 	name:BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url:null},
-						Ask: 				{value:true, 	name:"Ask", 				url:"https://ask.com/web?q=" + textUrlReplaceString},
-						Bing: 				{value:true, 	name:"Bing", 				url:"https://www.bing.com/search?q=" + textUrlReplaceString},
-						DogPile:			{value:true, 	name:"DogPile", 			url:"http://www.dogpile.com/search/web?q=" + textUrlReplaceString},
-						DuckDuckGo:			{value:true, 	name:"DuckDuckGo", 			url:"https://duckduckgo.com/?q=" + textUrlReplaceString},
-						Google: 			{value:true, 	name:"Google", 				url:"https://www.google.com/search?q=" + textUrlReplaceString},
-						GoogleScholar: 		{value:true, 	name:"Google Scholar", 		url:"https://scholar.google.com/scholar?q=" + textUrlReplaceString},
-						Quora: 				{value:true, 	name:"Quora", 				url:"https://www.quora.com/search?q=" + textUrlReplaceString},
-						Qwant: 				{value:true, 	name:"Qwant", 				url:"https://www.qwant.com/?t=all&q=" + textUrlReplaceString},
-						UrbanDictionary: 	{value:true, 	name:"Urban Dictionary", 	url:"https://www.urbandictionary.com/define.php?term=" + textUrlReplaceString},
-						Searx: 				{value:true, 	name:"Searx", 				url:"https://searx.info/?q=" + textUrlReplaceString},
-						WolframAlpha:		{value:true, 	name:"Wolfram Alpha", 		url:"https://www.wolframalpha.com/input/?i=" + textUrlReplaceString},
-						Yandex: 			{value:true, 	name:"Yandex", 				url:"https://yandex.com/search/?text=" + textUrlReplaceString},
-						Yahoo: 				{value:true, 	name:"Yahoo", 				url:"https://search.yahoo.com/search?p=" + textUrlReplaceString},
-						YouTube: 			{value:true, 	name:"YouTube", 			url:"https://www.youtube.com/results?q=" + textUrlReplaceString}
+						_all: 				{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url: null},
+						Ask: 				{value: true, 	name: "Ask", 				url: "https: //ask.com/web?q=" + textUrlReplaceString},
+						Bing: 				{value: true, 	name: "Bing", 				url: "https: //www.bing.com/search?q=" + textUrlReplaceString},
+						DogPile:			{value: true, 	name: "DogPile", 			url: "http: //www.dogpile.com/search/web?q=" + textUrlReplaceString},
+						DuckDuckGo:			{value: true, 	name: "DuckDuckGo", 			url: "https: //duckduckgo.com/?q=" + textUrlReplaceString},
+						Google: 			{value: true, 	name: "Google", 				url: "https: //www.google.com/search?q=" + textUrlReplaceString},
+						GoogleScholar: 		{value: true, 	name: "Google Scholar", 		url: "https: //scholar.google.com/scholar?q=" + textUrlReplaceString},
+						Quora: 				{value: true, 	name: "Quora", 				url: "https: //www.quora.com/search?q=" + textUrlReplaceString},
+						Qwant: 				{value: true, 	name: "Qwant", 				url: "https: //www.qwant.com/?t=all&q=" + textUrlReplaceString},
+						UrbanDictionary: 	{value: true, 	name: "Urban Dictionary", 	url: "https: //www.urbandictionary.com/define.php?term=" + textUrlReplaceString},
+						Searx: 				{value: true, 	name: "Searx", 				url: "https: //searx.info/?q=" + textUrlReplaceString},
+						WolframAlpha:		{value: true, 	name: "Wolfram Alpha", 		url: "https: //www.wolframalpha.com/input/?i=" + textUrlReplaceString},
+						Yandex: 			{value: true, 	name: "Yandex", 				url: "https: //yandex.com/search/?text=" + textUrlReplaceString},
+						Yahoo: 				{value: true, 	name: "Yahoo", 				url: "https: //search.yahoo.com/search?p=" + textUrlReplaceString},
+						YouTube: 			{value: true, 	name: "YouTube", 			url: "https: //www.youtube.com/results?q=" + textUrlReplaceString}
 					}
 				};
 			}
@@ -92,7 +92,7 @@ module.exports = (_ => {
 					value: settings[key]
 				}));
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
-					title: "Search Engines:",
+					title: "Search Engines: ",
 					first: settingsItems.length == 0,
 					last: true,
 					children: Object.keys(engines).filter(n => n && n != "_all").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {

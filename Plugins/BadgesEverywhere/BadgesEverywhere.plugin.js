@@ -2,11 +2,11 @@
  * @name BadgesEverywhere
  * @authorId 278543574059057154
  * @invite Jx3TjNS
- * @donate https://www.paypal.me/MircoWittrien
- * @patreon https://www.patreon.com/MircoWittrien
- * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BadgesEverywhere
- * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BadgesEverywhere/BadgesEverywhere.plugin.js
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BadgesEverywhere/BadgesEverywhere.plugin.js
+ * @donate https: //www.paypal.me/MircoWittrien
+ * @patreon https: //www.patreon.com/MircoWittrien
+ * @website https: //github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BadgesEverywhere
+ * @source https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BadgesEverywhere/BadgesEverywhere.plugin.js
+ * @updateUrl https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BadgesEverywhere/BadgesEverywhere.plugin.js
  */
 
 module.exports = (_ => {
@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -40,7 +40,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+						require("request").get("https: //mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
 							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
 						});
@@ -52,7 +52,7 @@ module.exports = (_ => {
 		start() {this.load();}
 		stop() {}
 	} : (([Plugin, BDFDB]) => {
-		var badgeClasses, requestedUsers = {}, loadedUsers = {}, requestQueue = {queue:[], timeout:null, id:null}, cacheTimeout;
+		var badgeClasses, requestedUsers = {}, loadedUsers = {}, requestQueue = {queue: [], timeout: null, id: null}, cacheTimeout;
 		var nitroFlag, boostFlag;
 		var settings = {}, badges = {}, indicators = {};
 		
@@ -70,11 +70,11 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						showInPopout:		{value:true, 	description:"Show Badge in User Popout"},
-						showInChat:			{value:true, 	description:"Show Badge in Chat Window"},
-						showInMemberList:	{value:true, 	description:"Show Badge in Member List"},
-						useColoredVersion:	{value:true, 	description:"Use colored version of the Badges for Chat and Members"},
-						showNitroDate:		{value:true, 	description:"Show the subscription date for Nitro/Boost Badges"}
+						showInPopout:		{value: true, 	description: "Show Badge in User Popout"},
+						showInChat:			{value: true, 	description: "Show Badge in Chat Window"},
+						showInMemberList:	{value: true, 	description: "Show Badge in Member List"},
+						useColoredVersion:	{value: true, 	description: "Use colored version of the Badges for Chat and Members"},
+						showNitroDate:		{value: true, 	description: "Show the subscription date for Nitro/Boost Badges"}
 					},
 					badges: {
 						"STAFF": {
@@ -280,7 +280,7 @@ module.exports = (_ => {
 				badgeClasses = BDFDB.DiscordClassModules.UserBadges || {};
 
 				requestedUsers = {}, loadedUsers = {};
-				requestQueue = {queue:[], timeout:null, id:null};
+				requestQueue = {queue: [], timeout: null, id: null};
 				
 				let badgeCache = BDFDB.DataUtils.load(this, "badgeCache");
 				if (badgeCache) {
@@ -349,7 +349,7 @@ module.exports = (_ => {
 					labelchildren: this.createSettingsBadges(flag)
 				}));
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
-					title: "Display Badges:",
+					title: "Display Badges: ",
 					first: settingsItems.length == 0,
 					last: true,
 					children: innerItems

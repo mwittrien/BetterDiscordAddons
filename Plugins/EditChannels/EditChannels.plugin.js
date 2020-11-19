@@ -2,11 +2,11 @@
  * @name EditChannels
  * @authorId 278543574059057154
  * @invite Jx3TjNS
- * @donate https://www.paypal.me/MircoWittrien
- * @patreon https://www.patreon.com/MircoWittrien
- * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditChannels
- * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditChannels/EditChannels.plugin.js
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditChannels/EditChannels.plugin.js
+ * @donate https: //www.paypal.me/MircoWittrien
+ * @patreon https: //www.patreon.com/MircoWittrien
+ * @website https: //github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditChannels
+ * @source https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditChannels/EditChannels.plugin.js
+ * @updateUrl https: //raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditChannels/EditChannels.plugin.js
  */
 
 module.exports = (_ => {
@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -40,7 +40,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+						require("request").get("https: //mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
 							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
 						});
@@ -58,16 +58,16 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						changeChannelIcon:		{value:true, 	inner:false,	description:"Change color of Channel Icon"},
-						changeInChatTextarea:	{value:true, 	inner:true,		description:"Chat Textarea"},
-						changeInMentions:		{value:true, 	inner:true,		description:"Mentions"},
-						changeInChannelList:	{value:true, 	inner:true,		description:"Channel List"},
-						changeInChannelHeader:	{value:true, 	inner:true,		description:"Channel Header"},
-						changeInRecentMentions:	{value:true, 	inner:true,		description:"Recent Mentions Popout"},
-						changeInAutoComplete:	{value:true, 	inner:true,		description:"Autocomplete Menu"},
-						changeInAuditLog:		{value:true, 	inner:true,		description:"Audit Log"},
-						changeInInviteLog:		{value:true, 	inner:true,		description:"Invite Log"},
-						changeInQuickSwitcher:	{value:true, 	inner:true,		description:"Quick Switcher"}
+						changeChannelIcon:		{value: true, 	inner: false,	description: "Change color of Channel Icon"},
+						changeInChatTextarea:	{value: true, 	inner: true,		description: "Chat Textarea"},
+						changeInMentions:		{value: true, 	inner: true,		description: "Mentions"},
+						changeInChannelList:	{value: true, 	inner: true,		description: "Channel List"},
+						changeInChannelHeader:	{value: true, 	inner: true,		description: "Channel Header"},
+						changeInRecentMentions:	{value: true, 	inner: true,		description: "Recent Mentions Popout"},
+						changeInAutoComplete:	{value: true, 	inner: true,		description: "Autocomplete Menu"},
+						changeInAuditLog:		{value: true, 	inner: true,		description: "Audit Log"},
+						changeInInviteLog:		{value: true, 	inner: true,		description: "Invite Log"},
+						changeInQuickSwitcher:	{value: true, 	inner: true,		description: "Quick Switcher"}
 					}
 				};
 			
@@ -105,7 +105,7 @@ module.exports = (_ => {
 			
 			onStart() {
 				let observer = new MutationObserver(_ => {this.changeAppTitle();});
-				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name:"appTitleObserver",instance:observer}, {childList:true});
+				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name: "appTitleObserver",instance: observer}, {childList: true});
 				
 				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.CHANNELS, "queryResults", {after: e => {
 					let channelArray = [];
@@ -143,7 +143,7 @@ module.exports = (_ => {
 					value: settings[key]
 				}));
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
-					title: "Change Channels in:",
+					title: "Change Channels in: ",
 					first: settingsItems.length == 0,
 					children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 						type: "Switch",
@@ -183,7 +183,7 @@ module.exports = (_ => {
 				this.changeAppTitle();
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.ChannelUtils.rerenderAll(instant);
-				BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"Channel", unlimited:true}));
+				BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name: "Channel", unlimited: true}));
 			}
 
 			onChannelContextMenu (e) {
@@ -232,12 +232,12 @@ module.exports = (_ => {
 						if (e.instance.props.category) e.instance.props.category = this.getChannelData(e.instance.props.category.id);
 					}
 					else {
-						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.marginleft4]]});
+						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.marginleft4]]});
 						if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id);
-						let channelIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.autocompleteicon]]});
+						let channelIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.autocompleteicon]]});
 						if (channelIcon) this.changeChannelIconColor(channelIcon, e.instance.props.channel.id, {alpha: 0.6});
 						if (e.instance.props.category) {
-							let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.autocompletedescription]]});
+							let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.autocompletedescription]]});
 							if (categoryName) this.changeChannelColor(categoryName, e.instance.props.category.id);
 						}
 					}
@@ -249,7 +249,7 @@ module.exports = (_ => {
 				if (channel && settings.changeInAuditLog) {
 					if (!e.returnvalue) e.instance.props.log.options.channel = this.getChannelData(channel.id);
 					else {
-						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["children", [["#" + channel.name]]]]});
+						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["children", [["#" + channel.name]]]]});
 						if (channelName) this.changeChannelColor(channelName, channel.id);
 					}
 				}
@@ -294,9 +294,9 @@ module.exports = (_ => {
 					if (dataListId) {
 						let channelId = dataListId.split("_").pop();
 						let modify = {muted: BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(BDFDB.LibraryModules.LastGuildStore.getGuildId(), channelId)};
-						let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.categoryname]]});
+						let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.categoryname]]});
 						if (categoryName) this.changeChannelColor(categoryName, channelId, modify);
-						let categoryIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.categoryicon]]});
+						let categoryIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.categoryicon]]});
 						if (categoryIcon) this.changeChannelIconColor(categoryIcon, channelId, Object.assign({alpha: 0.6}, modify));
 					}
 				}
@@ -311,9 +311,9 @@ module.exports = (_ => {
 					if (!e.returnvalue) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
 					else {
 						let modify = BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "muted", "locked", "selected", "unread", "connected", "hovered");
-						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.channelname]]});
+						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelname]]});
 						if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id, modify);
-						let channelIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.channelicon]]});
+						let channelIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelicon]]});
 						if (channelIcon) this.changeChannelIconColor(channelIcon, e.instance.props.channel.id, Object.assign({alpha: 0.6}, modify));
 					}
 				}
@@ -327,12 +327,12 @@ module.exports = (_ => {
 					}
 					else {
 						let modify = BDFDB.ObjectUtils.extract(e.instance.props, "focused", "unread", "mentions");
-						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.quickswitchresultmatch]]});
+						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.quickswitchresultmatch]]});
 						if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id, modify);
-						let channelIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.quickswitchresulticon]]});
+						let channelIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.quickswitchresulticon]]});
 						if (channelIcon) this.changeChannelIconColor(channelIcon, e.instance.props.channel.id, Object.assign({alpha: 0.6}, modify));
 						if (e.instance.props.category) {
-							let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.quickswitchresultnote]]});
+							let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.quickswitchresultnote]]});
 							if (categoryName) this.changeChannelColor(categoryName, e.instance.props.category.id);
 						}
 					}
@@ -346,7 +346,7 @@ module.exports = (_ => {
 						let oldType = child.type;
 						child.type = (...args) => {
 							let instance = oldType(...args);
-							let channelName = BDFDB.ReactUtils.findChild(instance, {props:[["className", BDFDB.disCN.recentmentionschannelname]]});
+							let channelName = BDFDB.ReactUtils.findChild(instance, {props: [["className", BDFDB.disCN.recentmentionschannelname]]});
 							if (channelName) this.changeChannelColor(channelName, child.props.channel.id);
 							return instance;
 						};
