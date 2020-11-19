@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -62,23 +62,23 @@ module.exports = (_ => {
 
 				this.defaults = {
 					settings: {
-						addInUserPopout:		{value:true, 			description:"Add in User Popouts"},
-						addInUserProfil:		{value:true, 			description:"Add in User Profile Modal"},
-						displayText:			{value:true, 			description:"Display 'Joined on' text in the timestamp"},
-						displayTime:			{value:true, 			description:"Display the time in the timestamp"},
-						displayDate:			{value:true, 			description:"Display the date in the timestamp"},
-						cutSeconds:				{value:false, 			description:"Cut off seconds of the time"},
-						forceZeros:				{value:false, 			description:"Force leading zeros"},
-						otherOrder:				{value:false, 			description:"Show the time before the date"}
+						addInUserPopout:		{value: true, 			description: "Add in User Popouts"},
+						addInUserProfil:		{value: true, 			description: "Add in User Profile Modal"},
+						displayText:			{value: true, 			description: "Display 'Joined on' text in the timestamp"},
+						displayTime:			{value: true, 			description: "Display the time in the timestamp"},
+						displayDate:			{value: true, 			description: "Display the date in the timestamp"},
+						cutSeconds:				{value: false, 			description: "Cut off seconds of the time"},
+						forceZeros:				{value: false, 			description: "Force leading zeros"},
+						otherOrder:				{value: false, 			description: "Show the time before the date"}
 					},
 					choices: {
-						joinedAtDateLang:		{value:"$discord", 		description:"Joined At Date Format"}
+						joinedAtDateLang:		{value: "$discord", 		description: "Joined At Date Format"}
 					},
 					formats: {
-						ownFormat:				{value:"$hour:$minute:$second, $day.$month.$year", 	description:"Own Format"}
+						ownFormat:				{value: "$hour: $minute: $second, $day.$month.$year", 	description: "Own Format"}
 					},
 					amounts: {
-						maxDaysAgo:				{value:0, 	min:0,		description:"Maximum count of days displayed in the $daysago placeholder",	note:"0 equals no limit"}
+						maxDaysAgo:				{value: 0, 	min: 0,		description: "Maximum count of days displayed in the $daysago placeholder",	note: "0 equals no limit"}
 					}
 				};
 				
@@ -119,7 +119,7 @@ module.exports = (_ => {
 						value: settings[key],
 						onChange: (value, instance) => {
 							settings[key] = value;
-							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
+							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_SettingsPanel", up: true}), {name: "BDFDB_Select", all: true, noCopies: true}));
 						}
 					}))
 				}));
@@ -134,7 +134,7 @@ module.exports = (_ => {
 						label: this.defaults.choices[key].description,
 						basis: "70%",
 						value: choices[key],
-						options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value:id, label:lang.name}})),
+						options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value: id, label: lang.name}})),
 						searchable: true,
 						optionRenderer: lang => {
 							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -184,7 +184,7 @@ module.exports = (_ => {
 						value: formats[key],
 						onChange: (value, instance) => {
 							formats[key] = value;
-							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
+							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_SettingsPanel", up: true}), {name: "BDFDB_Select", all: true, noCopies: true}));
 						}
 					}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 						className: BDFDB.disCN.marginbottom8

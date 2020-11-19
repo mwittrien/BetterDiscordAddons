@@ -30,7 +30,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -59,21 +59,21 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						"addHints":					{value:true, 	description:"Add keycombo hints to contextmenus:"},
-						"clearOnEscape":			{value:true, 	description:"Clear chat input when Escape is pressed:"}
+						"addHints":					{value: true, 	description: "Add keycombo hints to contextmenus: "},
+						"clearOnEscape":			{value: true, 	description: "Clear chat input when Escape is pressed: "}
 					},
 					toasts: {},
 					bindings: {
-						"Edit_Message":				{name:"Edit Message",			func:this.doEdit,			value:{click:1, 	keycombo:[]}		},
-						"Delete_Message":			{name:"Delete Message",			func:this.doDelete,			value:{click:0, 	keycombo:[46]}		},
-						"Pin/Unpin_Message":		{name:"Pin/Unpin Message",		func:this.doPinUnPin,		value:{click:0, 	keycombo:[17]}		},
-						"React_to_Message":			{name:"Open React Menu",		func:this.doOpenReact,		value:{click:0, 	keycombo:[17,83]}	},
-						"Copy_Raw":					{name:"Copy raw Message",		func:this.doCopyRaw,		value:{click:0, 	keycombo:[17,68]}	},
-						"Copy_Link":				{name:"Copy Message Link",		func:this.doCopyLink,		value:{click:0, 	keycombo:[17,81]}	},
-						"Quote_Message":			{name:"Quote Message",			func:this.doQuote,			value:{click:0, 	keycombo:[17,87]}	},
-						"__Note_Message":			{name:"Note Message",			func:this.doNote,			value:{click:0, 	keycombo:[16]}, 	plugin:"PersonalPins"},
-						"__Translate_Message":		{name:"Translate Message",		func:this.doTranslate,		value:{click:0, 	keycombo:[20]}, 	plugin:"GoogleTranslateOption"},
-						"__Reveal_Spoilers":		{name:"Reveal All Spoilers",	func:this.doReveal,			value:{click:0, 	keycombo:[17,74]}, 	plugin:"RevealAllSpoilersOption"}
+						"Edit_Message":				{name: "Edit Message",			func: this.doEdit,			value: {click: 1, 	keycombo: []}		},
+						"Delete_Message":			{name: "Delete Message",			func: this.doDelete,			value: {click: 0, 	keycombo: [46]}		},
+						"Pin/Unpin_Message":		{name: "Pin/Unpin Message",		func: this.doPinUnPin,		value: {click: 0, 	keycombo: [17]}		},
+						"React_to_Message":			{name: "Open React Menu",		func: this.doOpenReact,		value: {click: 0, 	keycombo: [17,83]}	},
+						"Copy_Raw":					{name: "Copy raw Message",		func: this.doCopyRaw,		value: {click: 0, 	keycombo: [17,68]}	},
+						"Copy_Link":				{name: "Copy Message Link",		func: this.doCopyLink,		value: {click: 0, 	keycombo: [17,81]}	},
+						"Quote_Message":			{name: "Quote Message",			func: this.doQuote,			value: {click: 0, 	keycombo: [17,87]}	},
+						"__Note_Message":			{name: "Note Message",			func: this.doNote,			value: {click: 0, 	keycombo: [16]}, 	plugin: "PersonalPins"},
+						"__Translate_Message":		{name: "Translate Message",		func: this.doTranslate,		value: {click: 0, 	keycombo: [20]}, 	plugin: "GoogleTranslateOption"},
+						"__Reveal_Spoilers":		{name: "Reveal All Spoilers",	func: this.doReveal,			value: {click: 0, 	keycombo: [17,74]}, 	plugin: "RevealAllSpoilersOption"}
 					}
 				};
 				
@@ -86,7 +86,7 @@ module.exports = (_ => {
 				for (let type in this.defaults.bindings) {
 					let nativeAction = type.indexOf("__") != 0;
 					this.defaults.settings[type] = {value: nativeAction};
-					if (nativeAction) this.defaults.toasts[type] = {value:type != "Edit_Message" && type != "React_to_Message" && type != "Quote_Message"};
+					if (nativeAction) this.defaults.toasts[type] = {value: type != "Edit_Message" && type != "React_to_Message" && type != "Quote_Message"};
 				}
 			}
 			
@@ -164,7 +164,7 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
 									value: bindings[action].click,
-									options: clickMap.map((label, i) => {return {value:i, label:label}}),
+									options: clickMap.map((label, i) => {return {value: i, label: label}}),
 									onChange: choice => {
 										bindings[action].click = choice.value;
 										BDFDB.DataUtils.save(bindings, this, "bindings");
@@ -298,7 +298,7 @@ module.exports = (_ => {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 					if ((channel && BDFDB.UserUtils.can("MANAGE_MESSAGES")) || message.author.id == BDFDB.UserUtils.me.id && message.type != 1 && message.type != 2 && message.type != 3) {
 						BDFDB.LibraryModules.MessageUtils.deleteMessage(message.channel_id, message.id, message.state != "SENT");
-						if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been deleted.", {type:"success"});
+						if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been deleted.", {type: "success"});
 					}
 				}
 			}
@@ -306,7 +306,7 @@ module.exports = (_ => {
 			doEdit ({messageDiv, message}, action) {
 				if (message.author.id == BDFDB.UserUtils.me.id && !messageDiv.querySelector("textarea")) {
 					BDFDB.LibraryModules.MessageUtils.startEditMessage(message.channel_id, message.id, message.content);
-					if (toasts[action]) BDFDB.NotificationUtils.toast("Started editing.", {type:"success"});
+					if (toasts[action]) BDFDB.NotificationUtils.toast("Started editing.", {type: "success"});
 				}
 			}
 
@@ -314,7 +314,7 @@ module.exports = (_ => {
 				let reactButton = messageDiv.querySelector(`${BDFDB.dotCN.messagetoolbarbutton}[aria-label="${BDFDB.LanguageUtils.LanguageStrings.ADD_REACTION}"]`);
 				if (reactButton) {
 					reactButton.click();
-					if (toasts[action]) BDFDB.NotificationUtils.toast("Reaction popout has been opened.", {type:"success"});
+					if (toasts[action]) BDFDB.NotificationUtils.toast("Reaction popout has been opened.", {type: "success"});
 				}
 			}
 
@@ -324,11 +324,11 @@ module.exports = (_ => {
 					if (channel && (channel.type == 1 || channel.type == 3 || BDFDB.UserUtils.can("MANAGE_MESSAGES")) && message.type == 0) {
 						if (message.pinned) {
 							BDFDB.LibraryModules.MessagePinUtils.unpinMessage(channel, message.id);
-							if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been unpinned.", {type:"error"});
+							if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been unpinned.", {type: "error"});
 						}
 						else {
 							BDFDB.LibraryModules.MessagePinUtils.pinMessage(channel, message.id);
-							if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been pinned.", {type:"success"});
+							if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been pinned.", {type: "success"});
 						}
 					}
 				}
@@ -336,8 +336,8 @@ module.exports = (_ => {
 
 			doCopyRaw ({messageDiv, message}, action) {
 				if (message.content) {
-					BDFDB.LibraryRequires.electron.clipboard.write({text:message.content});
-					if (toasts[action]) BDFDB.NotificationUtils.toast("Raw message content has been copied.", {type:"success"});
+					BDFDB.LibraryRequires.electron.clipboard.write({text: message.content});
+					if (toasts[action]) BDFDB.NotificationUtils.toast("Raw message content has been copied.", {type: "success"});
 				}
 			}
 
@@ -345,7 +345,7 @@ module.exports = (_ => {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 				if (channel) {
 					BDFDB.LibraryModules.MessageManageUtils.copyLink(channel, message);
-					if (toasts[action]) BDFDB.NotificationUtils.toast("Messagelink has been copied.", {type:"success"});
+					if (toasts[action]) BDFDB.NotificationUtils.toast("Messagelink has been copied.", {type: "success"});
 				}
 			}
 
@@ -353,7 +353,7 @@ module.exports = (_ => {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 				if (channel && BDFDB.LibraryModules.QuoteUtils.canQuote(message, channel)) {
 					BDFDB.LibraryModules.MessageManageUtils.quoteMessage(channel, message);
-					if (toasts[action]) BDFDB.NotificationUtils.toast("Quote has been created.", {type:"success"});
+					if (toasts[action]) BDFDB.NotificationUtils.toast("Quote has been created.", {type: "success"});
 				}
 			}
 
@@ -383,8 +383,8 @@ module.exports = (_ => {
 					if (key == 27 && settings.clearOnEscape) {
 						let chatform = BDFDB.DOMUtils.getParent(BDFDB.dotCN.chatform, target);
 						if (chatform) {
-							let instance = BDFDB.ReactUtils.findOwner(chatform, {name:"ChannelTextAreaForm"}) || BDFDB.ReactUtils.findOwner(chatform, {name:"ChannelTextAreaForm", up:true});
-							if (instance) instance.setState({textValue:"", richValue:BDFDB.LibraryModules.SlateUtils.deserialize("")});
+							let instance = BDFDB.ReactUtils.findOwner(chatform, {name: "ChannelTextAreaForm"}) || BDFDB.ReactUtils.findOwner(chatform, {name: "ChannelTextAreaForm", up: true});
+							if (instance) instance.setState({textValue: "", richValue: BDFDB.LibraryModules.SlateUtils.deserialize("")});
 						}
 					}
 					BDFDB.TimeUtils.timeout(_ => {BDFDB.ArrayUtils.remove(firedEvents, name, true)});

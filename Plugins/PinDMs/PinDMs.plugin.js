@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -61,11 +61,11 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						sortInRecentOrder:		{value:false, 	inner:true,		description:"Channel List"},
-						sortInRecentOrderGuild:	{value:false, 	inner:true,		description:"Guild List"},
-						showPinIcon:			{value:true, 	inner:false,	description:"Show a little 'Pin' icon for pinned DMs in the server list:"},
-						showCategoryUnread:		{value:true, 	inner:false,	description:"Show the amount of unread Messages in a category in the channel list:"},
-						showCategoryAmount:		{value:true, 	inner:false,	description:"Show the amount of pinned DMs in a category in the channel list:"}
+						sortInRecentOrder:		{value: false, 	inner: true,		description: "Channel List"},
+						sortInRecentOrderGuild:	{value: false, 	inner: true,		description: "Guild List"},
+						showPinIcon:			{value: true, 	inner: false,	description: "Show a little 'Pin' icon for pinned DMs in the server list: "},
+						showCategoryUnread:		{value: true, 	inner: false,	description: "Show the amount of unread Messages in a category in the channel list: "},
+						showCategoryAmount:		{value: true, 	inner: false,	description: "Show the amount of pinned DMs in a category in the channel list: "}
 					}
 				};
 				
@@ -155,7 +155,7 @@ module.exports = (_ => {
 			onStop() {
 				this.forceUpdateAll();
 				
-				let unreadDMsInstance = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"UnreadDMs", unlimited:true});
+				let unreadDMsInstance = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name: "UnreadDMs", unlimited: true});
 				if (unreadDMsInstance) {
 					delete unreadDMsInstance.props.pinnedPrivateChannelIds;
 					unreadDMsInstance.props.unreadPrivateChannelIds = BDFDB.LibraryModules.DirectMessageUnreadStore.getUnreadPrivateChannelIds();
@@ -211,7 +211,7 @@ module.exports = (_ => {
 			forceUpdateAll () {
 				settings = BDFDB.DataUtils.get(this, "settings");
 				
-				BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"FluxContainer(PrivateChannels)", all:true, unlimited:true}));
+				BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name: "FluxContainer(PrivateChannels)", all: true, unlimited: true}));
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 
@@ -320,7 +320,7 @@ module.exports = (_ => {
 								BDFDB.ArrayUtils.remove(categories, maybedDraggedCategory, true);
 								categories.splice(categories.indexOf(maybedReleasedCategory) + 1, 0, maybedDraggedCategory);
 								let newCategories = {}, newPos = 0;
-								for (let category of [].concat(categories).reverse()) newCategories[category.id] = Object.assign(category, {pos:newPos++});
+								for (let category of [].concat(categories).reverse()) newCategories[category.id] = Object.assign(category, {pos: newPos++});
 								BDFDB.DataUtils.save(newCategories, this, "dmCategories");
 							}
 							draggedCategory = null;
@@ -735,7 +735,7 @@ module.exports = (_ => {
 						BDFDB.PatchUtils.forceAllUpdates(this, "PrivateChannelsList");
 					}
 					if (e.returnvalue && this.isPinned(e.instance.props.channel.id, "pinnedRecents") && settings.showPinIcon) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name:"BlobMask"});
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "BlobMask"});
 						if (index > -1) children[index].props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.IconBadge, {
 							className: BDFDB.disCN.guildiconbadge,
 							disableColor: true,

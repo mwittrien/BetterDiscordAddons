@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -66,9 +66,9 @@ module.exports = (_ => {
 					if (BDFDB.DOMUtils.containsClass(node, BDFDB.disCN._repocard)) this.appendSettingsButton(node);
 					if (node.nodeType != Node.TEXT_NODE) for (let child of node.querySelectorAll(BDFDB.dotCN._repocard)) this.appendSettingsButton(child);
 				});}});}));
-				BDFDB.ObserverUtils.connect(this, document.querySelector(`${BDFDB.dotCN.layer}[aria-label="${BDFDB.DiscordConstants.Layers.USER_SETTINGS}"]`), {name:"cardObserver", instance:cardObserver}, {childList: true, subtree:true});
-				BDFDB.ObserverUtils.connect(this, BDFDB.dotCN.applayers, {name:"appLayerObserver", instance:(new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
-					if (node.nodeType != Node.TEXT_NODE && node.getAttribute("aria-label") == BDFDB.DiscordConstants.Layers.USER_SETTINGS) BDFDB.ObserverUtils.connect(this, node, {name:"cardObserver", instance:cardObserver}, {childList: true, subtree:true});
+				BDFDB.ObserverUtils.connect(this, document.querySelector(`${BDFDB.dotCN.layer}[aria-label="${BDFDB.DiscordConstants.Layers.USER_SETTINGS}"]`), {name: "cardObserver", instance: cardObserver}, {childList: true, subtree: true});
+				BDFDB.ObserverUtils.connect(this, BDFDB.dotCN.applayers, {name: "appLayerObserver", instance: (new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
+					if (node.nodeType != Node.TEXT_NODE && node.getAttribute("aria-label") == BDFDB.DiscordConstants.Layers.USER_SETTINGS) BDFDB.ObserverUtils.connect(this, node, {name: "cardObserver", instance: cardObserver}, {childList: true, subtree: true});
 				});}});}))}, {childList: true});
 				for (let child of document.querySelectorAll(BDFDB.dotCN._repocard)) this.appendSettingsButton(child);
 			}
@@ -99,7 +99,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN._repomodal,
 									size: "MEDIUM",
 									children: BDFDB.ReactUtils.elementToReact(this.createThemeVarInputs(addon, vars)),
-									buttons:[{contents: "Update", color: "GREEN", click: modal => {this.updateTheme(modal, addon);}}]
+									buttons: [{contents: "Update", color: "GREEN", click: modal => {this.updateTheme(modal, addon);}}]
 								});
 							});
 						}
@@ -158,18 +158,18 @@ module.exports = (_ => {
 						let newValue = input.value;
 						if (newValue && newValue.trim() && newValue != oldValue) {
 							let varName = input.getAttribute("varName");
-							css = css.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(varName)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(oldValue)}`,"g"),`--${varName}$1:$2${newValue}`);
+							css = css.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(varName)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(oldValue)}`,"g"),`--${varName}$1: $2${newValue}`);
 							input.setAttribute("placeholder", newValue);
 							amount++;
 						}
 					}
 					if (amount > 0) {
 						BDFDB.LibraryRequires.fs.writeFileSync(path, css);
-						BDFDB.NotificationUtils.toast(`Updated ${amount} variable${amount == 1 ? "" : "s"} in ${addon.filename}`, {type:"success"});
+						BDFDB.NotificationUtils.toast(`Updated ${amount} variable${amount == 1 ? "" : "s"} in ${addon.filename}`, {type: "success"});
 					}
-					else BDFDB.NotificationUtils.toast(`There are no changed variables to be updated in ${addon.filename}`, {type:"warning"});
+					else BDFDB.NotificationUtils.toast(`There are no changed variables to be updated in ${addon.filename}`, {type: "warning"});
 				}
-				else BDFDB.NotificationUtils.toast(`Could not find themefile: ${addon.filename}`, {type:"error"});
+				else BDFDB.NotificationUtils.toast(`Could not find themefile: ${addon.filename}`, {type: "error"});
 			}
 
 			getThemeVars (css) {

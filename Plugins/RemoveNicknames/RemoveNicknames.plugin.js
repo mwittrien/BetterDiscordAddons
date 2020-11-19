@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -58,16 +58,16 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						replaceOwn:				{value:false, 	inner:false,	description:"Replace your own name:"},
-						replaceBots:			{value:true, 	inner:false,	description:"Replace the nickname of bots:"},
-						addNickname:			{value:false, 	inner:false,	description:"Add nickname as parentheses:"},
-						swapPositions:			{value:false, 	inner:false,	description:"Swap the position of username and nickname:"},
-						changeInChatWindow:		{value:true, 	inner:true,		description:"Messages"},
-						changeInMentions:		{value:true, 	inner:true,		description:"Mentions"},
-						changeInVoiceChat:		{value:true, 	inner:true,		description:"Voice Channels"},
-						changeInMemberList:		{value:true, 	inner:true,		description:"Member List"},
-						changeInTyping:			{value:true, 	inner:true,		description:"Typing List"},
-						changeInAutoComplete:	{value:true, 	inner:true,		description:"Autocomplete Menu"}
+						replaceOwn:				{value: false, 	inner: false,	description: "Replace your own name: "},
+						replaceBots:			{value: true, 	inner: false,	description: "Replace the nickname of bots: "},
+						addNickname:			{value: false, 	inner: false,	description: "Add nickname as parentheses: "},
+						swapPositions:			{value: false, 	inner: false,	description: "Swap the position of username and nickname: "},
+						changeInChatWindow:		{value: true, 	inner: true,		description: "Messages"},
+						changeInMentions:		{value: true, 	inner: true,		description: "Mentions"},
+						changeInVoiceChat:		{value: true, 	inner: true,		description: "Voice Channels"},
+						changeInMemberList:		{value: true, 	inner: true,		description: "Member List"},
+						changeInTyping:			{value: true, 	inner: true,		description: "Typing List"},
+						changeInAutoComplete:	{value: true, 	inner: true,		description: "Autocomplete Menu"}
 					}
 				};
 			

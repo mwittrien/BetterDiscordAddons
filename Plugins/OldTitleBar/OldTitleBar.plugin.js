@@ -26,7 +26,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -58,10 +58,10 @@ module.exports = (_ => {
 
 				this.defaults = {
 					settings: {
-						displayNative:		{value:!!document.querySelector(".platform-linux"), 	description:"Display the native title bar"},
-						addOldBar:			{value:true, 											description:"Display the title bar in the old fashion"},
-						addToSettings:		{value:true, 											description:"Add a title bar to settings windows"},
-						reloadButton:		{value:false, 											description:"Add a reload button to the title bar"}
+						displayNative:		{value: !!document.querySelector(".platform-linux"), 	description: "Display the native title bar"},
+						addOldBar:			{value: true, 											description: "Display the title bar in the old fashion"},
+						addToSettings:		{value: true, 											description: "Add a title bar to settings windows"},
+						reloadButton:		{value: false, 											description: "Add a reload button to the title bar"}
 					}
 				};
 			
@@ -163,7 +163,7 @@ module.exports = (_ => {
 								let notifybar = document.querySelector("#OldTitleBarNotifyBar");
 								if (notifybar) notifybar.querySelector(BDFDB.dotCN.noticedismiss).click();
 								if (patched) {
-									notifybar = BDFDB.NotificationUtils.notice("Changed nativebar settings, relaunch to see changes:", {type:"danger",btn:"Relaunch",id:"OldTitleBarNotifyBar"});
+									notifybar = BDFDB.NotificationUtils.notice("Changed nativebar settings, relaunch to see changes:", {type: "danger",btn: "Relaunch",id: "OldTitleBarNotifyBar"});
 									notifybar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
 										BDFDB.LibraryRequires.electron.remote.app.relaunch();
 										BDFDB.LibraryRequires.electron.remote.app.quit();
@@ -192,7 +192,7 @@ module.exports = (_ => {
 			}
 
 			processApp (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {props:[["type",["WINDOWS", "MACOS"]]]});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {props: [["type",["WINDOWS", "MACOS"]]]});
 				if (index > -1) children[index] = null;
 			}
 

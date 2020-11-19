@@ -26,7 +26,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -54,17 +54,17 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					configs: {
-						empty: 		{value:false,		description:"Allow the replacevalue to be empty (ignoring the default)"},
-						case: 		{value:false,		description:"Handle the wordvalue case sensitive"},
-						exact: 		{value:true,		description:"Handle the wordvalue as an exact word and not as part of a word"},
-						regex: 		{value:false,		description:"Handle the wordvalue as a RegExp string"}
+						empty: 		{value: false,		description: "Allow the replacevalue to be empty (ignoring the default)"},
+						case: 		{value: false,		description: "Handle the wordvalue case sensitive"},
+						exact: 		{value: true,		description: "Handle the wordvalue as an exact word and not as part of a word"},
+						regex: 		{value: false,		description: "Handle the wordvalue as a RegExp string"}
 					},
 					replaces: {
-						blocked: 	{value:"~~BLOCKED~~",		description:"Default replaceword for blocked messages:"},
-						censored:	{value:"$!%&%!&",			description:"Default replaceword for censored messages:"}
+						blocked: 	{value: "~~BLOCKED~~",		description: "Default replaceword for blocked messages: "},
+						censored:	{value: "$!%&%!&",			description: "Default replaceword for censored messages: "}
 					},
 					settings: {
-						addContextMenu:			{value:true,	description:"Add a contextmenu entry to faster add new blocked/censored words:"}
+						addContextMenu:			{value: true,	description: "Add a contextmenu entry to faster add new blocked/censored words: "}
 					}
 				};
 			
@@ -116,7 +116,7 @@ module.exports = (_ => {
 						placeholder: this.defaults.replaces[rType].value
 					})))
 				}));
-				let values = {wordvalue:"", replacevalue:"", choice:"blocked"};
+				let values = {wordvalue: "", replacevalue: "", choice: "blocked"};
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 					title: `Add new blocked/censored word`,
 					collapseStates: collapseStates,
@@ -349,7 +349,7 @@ module.exports = (_ => {
 						}
 						if (blocked) break;
 					}
-					if (blocked) return {blocked, censored, content:blockedReplace};
+					if (blocked) return {blocked, censored, content: blockedReplace};
 					else {
 						content = content.replace(/([\n\t\r])/g, " $1 ");
 						for (let cWord in words.censored) {
@@ -399,7 +399,7 @@ module.exports = (_ => {
 			}
 
 			openAddModal (wordvalue) {
-				let values = {wordvalue, replacevalue:"", choice:"blocked"};
+				let values = {wordvalue, replacevalue: "", choice: "blocked"};
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: "Add to ChatAliases",
@@ -446,7 +446,7 @@ module.exports = (_ => {
 								if (!values.wordvalue) instance.props.errorMessage = "Choose a wordvalue";
 								else if (words[values.choice][values.wordvalue]) instance.props.errorMessage = `Wordvalue already used, saving will overwrite old ${values.choice} word`;
 								else delete instance.props.errorMessage;
-								let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:["BDFDB_Modal", "BDFDB_SettingsPanel"], up:true}), {key:"ADDBUTTON"});
+								let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: ["BDFDB_Modal", "BDFDB_SettingsPanel"], up: true}), {key: "ADDBUTTON"});
 								if (addButtonIns) {
 									addButtonIns.props.disabled = !values.wordvalue;
 									BDFDB.ReactUtils.forceUpdate(addButtonIns);
@@ -469,10 +469,10 @@ module.exports = (_ => {
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.RadioGroup, {
 						className: BDFDB.disCN.marginbottom8,
 						value: values.choice,
-						options: [{value:"blocked", name:"Block"}, {value:"censored", name:"Censor"}],
+						options: [{value: "blocked", name: "Block"}, {value: "censored", name: "Censor"}],
 						onChange: (value, instance) => {
 							values.choice = value.value;
-							let wordvalueInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:["BDFDB_Modal", "BDFDB_SettingsPanel"], up:true}), {key:"WORDVALUE"});
+							let wordvalueInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: ["BDFDB_Modal", "BDFDB_SettingsPanel"], up: true}), {key: "WORDVALUE"});
 							if (wordvalueInputIns) {
 								if (!values.wordvalue) wordvalueInputIns.props.errorMessage = "Choose a wordvalue";
 								else if (words[values.choice][values.wordvalue]) wordvalueInputIns.props.errorMessage = `Wordvalue already used, saving will overwrite old ${values.choice} word`;

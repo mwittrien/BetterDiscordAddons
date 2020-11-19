@@ -29,7 +29,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -69,7 +69,7 @@ module.exports = (_ => {
 
 			processChannelItem (e) {
 				if (e.instance.props.channel && e.instance.props.channel.nsfw) {
-					let children = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.channelchildren]]});
+					let children = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelchildren]]});
 					let childrenChilds = children && BDFDB.ArrayUtils.is(children.props.children) ? children.props.children : BDFDB.ObjectUtils.get(children, "props.children.props.children");
 					if (BDFDB.ArrayUtils.is(childrenChilds)) {
 						let [oldTagParent, oldTagIndex] = BDFDB.ReactUtils.findParent(childrenChilds, {key: "NSFW-badge"});

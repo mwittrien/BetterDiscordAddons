@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -58,22 +58,22 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					configs: {
-						case: 				{value:false,		description:"Handle the wordvalue case sensitive"},
-						exact: 				{value:true,		description:"Handle the wordvalue as an exact word and not as part of a word"},
-						autoc: 				{value:true,		description:"Add this alias in the autocomplete menu (not for RegExp)"},
-						regex: 				{value:false,		description:"Handle the wordvalue as a RegExp string"},
-						file: 				{value:false,		description:"Handle the replacevalue as a filepath"}
+						case: 				{value: false,		description: "Handle the wordvalue case sensitive"},
+						exact: 				{value: true,		description: "Handle the wordvalue as an exact word and not as part of a word"},
+						autoc: 				{value: true,		description: "Add this alias in the autocomplete menu (not for RegExp)"},
+						regex: 				{value: false,		description: "Handle the wordvalue as a RegExp string"},
+						file: 				{value: false,		description: "Handle the replacevalue as a filepath"}
 					},
 					settings: {
-						replaceBeforeSend:	{value:true, 		inner:false,	description:"Replace words with your aliases before a message is sent"},
-						addContextMenu:		{value:true, 		inner:false,	description:"Add a contextmenu entry to faster add new aliases"},
-						addAutoComplete:	{value:true, 		inner:false,	description:"Add an autocomplete-menu for non-RegExp aliases"},
-						triggerNormal:		{value:true, 		inner:true,		description:"Normal Message Textarea"},
-						triggerEdit:		{value:true, 		inner:true,		description:"Edit Message Textarea"},
-						triggerUpload:		{value:true, 		inner:true,		description:"Upload Message Prompt"}
+						replaceBeforeSend:	{value: true, 		inner: false,	description: "Replace words with your aliases before a message is sent"},
+						addContextMenu:		{value: true, 		inner: false,	description: "Add a contextmenu entry to faster add new aliases"},
+						addAutoComplete:	{value: true, 		inner: false,	description: "Add an autocomplete-menu for non-RegExp aliases"},
+						triggerNormal:		{value: true, 		inner: true,		description: "Normal Message Textarea"},
+						triggerEdit:		{value: true, 		inner: true,		description: "Edit Message Textarea"},
+						triggerUpload:		{value: true, 		inner: true,		description: "Upload Message Prompt"}
 					},
 					amounts: {
-						minAliasLength:		{value:2, 			min:1,	description:"Minimal Character Length to open Autocomplete-Menu:"}
+						minAliasLength:		{value: 2, 			min: 1,	description: "Minimal Character Length to open Autocomplete-Menu: "}
 					}
 				};
 				
@@ -153,7 +153,7 @@ module.exports = (_ => {
 							return [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteItems.Title, {
 									title: [
-										"Aliases: ",
+										"Aliases:",
 										BDFDB.ReactUtils.createElement("strong", {
 											children: wordLowercase
 										})
@@ -241,7 +241,7 @@ module.exports = (_ => {
 						}))
 					}))
 				}));
-				let values = {wordvalue:"", replacevalue:""};
+				let values = {wordvalue: "", replacevalue: ""};
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 					title: "Add new alias",
 					collapseStates: collapseStates,
@@ -449,7 +449,7 @@ module.exports = (_ => {
 				newText = newText.length == 1 ? newText[0] : newText.join(" ");
 				newText = newText.replace(/ ([\n\t\r]) /g, "$1");
 				newText = this.useAliases(newText, multiAliases, files, false);
-				return {text:newText, files};
+				return {text: newText, files};
 			}
 
 			useAliases (string, aliases, files, singleWord) {
@@ -468,7 +468,7 @@ module.exports = (_ => {
 							tempString1 = tempString1.slice(result.index + result[0].length);
 							if (config.file && typeof config.filedata == "string") {
 								let filedata = JSON.parse(config.filedata);
-								files.push(new File([Uint8Array.from(atob(filedata.data), c => c.charCodeAt(0))], filedata.name, {type:filedata.type}));
+								files.push(new File([Uint8Array.from(atob(filedata.data), c => c.charCodeAt(0))], filedata.name, {type: filedata.type}));
 							}
 							if (config.regex && regString.indexOf("^") == 0) result = null;
 						}
@@ -532,7 +532,7 @@ module.exports = (_ => {
 								if (!values.wordvalue) instance.props.errorMessage = "Choose a wordvalue";
 								else if (aliases[values.wordvalue]) instance.props.errorMessage = "Wordvalue already used, saving will overwrite old alias";
 								else delete instance.props.errorMessage;
-								let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:["BDFDB_Modal", "BDFDB_SettingsPanel"], up:true}), {key:"ADDBUTTON"});
+								let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: ["BDFDB_Modal", "BDFDB_SettingsPanel"], up: true}), {key: "ADDBUTTON"});
 								if (addButtonIns) {
 									addButtonIns.props.disabled = !Object.keys(values).every(valuename => values[valuename]);
 									BDFDB.ReactUtils.forceUpdate(addButtonIns);
@@ -554,7 +554,7 @@ module.exports = (_ => {
 								values.replacevalue = value.trim();
 								if (!values.replacevalue) instance.props.errorMessage = "Choose a replacevalue";
 								else delete instance.props.errorMessage;
-								let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:["BDFDB_Modal", "BDFDB_SettingsPanel"], up:true}), {key:"ADDBUTTON"});
+								let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: ["BDFDB_Modal", "BDFDB_SettingsPanel"], up: true}), {key: "ADDBUTTON"});
 								if (addButtonIns) {
 									addButtonIns.props.disabled = !Object.keys(values).every(valuename => values[valuename]);
 									BDFDB.ReactUtils.forceUpdate(addButtonIns);

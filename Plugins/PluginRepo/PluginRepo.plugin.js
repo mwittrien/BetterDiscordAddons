@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -420,7 +420,7 @@ module.exports = (_ => {
 										itemClassName: BDFDB.disCN.tabbaritem,
 										type: BDFDB.LibraryComponents.TabBar.Types.TOP,
 										selectedItem: this.props.tab,
-										items: [{value:"Plugins"}, {value:BDFDB.LanguageUtils.LanguageStrings.SETTINGS}],
+										items: [{value: "Plugins"}, {value: BDFDB.LanguageUtils.LanguageStrings.SETTINGS}],
 										onItemSelect: (value, instance) => {
 											this.props.tab = list.props.tab = value;
 											BDFDB.ReactUtils.forceUpdate(list);
@@ -472,7 +472,7 @@ module.exports = (_ => {
 			onLoad() {
 				_this = this;
 				
-				loading = {is:false, timeout:null, amount:0};
+				loading = {is: false, timeout: null, amount: 0};
 
 				cachedPlugins = [];
 				grabbedPlugins = [];
@@ -481,15 +481,15 @@ module.exports = (_ => {
 
 				this.defaults = {
 					settings: {
-						useChromium: 		{value:false,	description:"Use an inbuilt browser window instead of opening your default browser"},
-						notifyOutdated:		{value:true, 	description:"Get a notification when one of your Plugins is outdated"},
-						notifyNewEntries:	{value:true, 	description:"Get a notification when there are new entries in the Repo"}
+						useChromium: 		{value: false,	description: "Use an inbuilt browser window instead of opening your default browser"},
+						notifyOutdated:		{value: true, 	description: "Get a notification when one of your Plugins is outdated"},
+						notifyNewEntries:	{value: true, 	description: "Get a notification when there are new entries in the Repo"}
 					},
 					modalSettings: {
-						updated: 			{value:true,	modify:true,	description:"Show updated Plugins",},
-						outdated:			{value:true, 	modify:true,	description:"Show outdated Plugins"},
-						downloadable:		{value:true, 	modify:true,	description:"Show downloadable Plugins"},
-						rnmStart:			{value:true, 	modify:false,	description:"Start Plugin after Download"}
+						updated: 			{value: true,	modify: true,	description: "Show updated Plugins",},
+						outdated:			{value: true, 	modify: true,	description: "Show outdated Plugins"},
+						downloadable:		{value: true, 	modify: true,	description: "Show downloadable Plugins"},
+						rnmStart:			{value: true, 	modify: false,	description: "Start Plugin after Download"}
 					}
 				};
 			
@@ -602,7 +602,7 @@ module.exports = (_ => {
 						type: "Button",
 						label: "Force all Plugins to be fetched again",
 						onClick: _ => {
-							loading = {is:false, timeout:null, amount:0};
+							loading = {is: false, timeout: null, amount: 0};
 							this.loadPlugins();
 						},
 						children: BDFDB.LanguageUtils.LanguageStrings.ERRORS_RELOAD
@@ -705,13 +705,13 @@ module.exports = (_ => {
 						grabbedPlugins = result.split("\n").filter(n => n);
 						foundPlugins = grabbedPlugins.concat(customList);
 						
-						loading = {is:true, timeout:BDFDB.TimeUtils.timeout(_ => {
+						loading = {is: true, timeout: BDFDB.TimeUtils.timeout(_ => {
 							BDFDB.TimeUtils.clear(loading.timeout);
 							if (this.started) {
 								if (loading.is && loading.amount < 4) BDFDB.TimeUtils.timeout(_ => {this.loadPlugins();},10000);
-								loading = {is: false, timeout:null, amount:loading.amount};
+								loading = {is: false, timeout: null, amount: loading.amount};
 							}
-						}, 1200000), amount:loading.amount+1};
+						}, 1200000), amount: loading.amount+1};
 						
 						let loadingIcon = BDFDB.DOMUtils.create(pluginRepoIcon);
 						BDFDB.DOMUtils.addClass(loadingIcon, "pluginrepo-loadingicon");
@@ -738,7 +738,7 @@ module.exports = (_ => {
 										BDFDB.TimeUtils.clear(finishInterval);
 										BDFDB.WindowUtils.close(sandbox);
 										BDFDB.DOMUtils.remove(loadingIcon, ".pluginrepo-loadingicon");
-										loading = {is:false, timeout:null, amount:loading.amount};
+										loading = {is: false, timeout: null, amount: loading.amount};
 										
 										BDFDB.LogUtils.log("Finished fetching Plugins.", this.name);
 										if (list) BDFDB.ReactUtils.forceUpdate(list);
@@ -746,7 +746,7 @@ module.exports = (_ => {
 										if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
 											let oldBarButton = document.querySelector(".pluginrepo-outdate-notice " + BDFDB.dotCN.noticedismiss);
 											if (oldBarButton) oldBarButton.click();
-											let bar = BDFDB.NotificationUtils.notice(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`, {
+											let bar = BDFDB.NotificationUtils.notice(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check: `, {
 												type: "danger",
 												btn: "PluginRepo",
 												selector: "pluginrepo-notice pluginrepo-outdate-notice",
@@ -763,7 +763,7 @@ module.exports = (_ => {
 											let oldBarButton = document.querySelector(".pluginrepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
 											if (oldBarButton) oldBarButton.click();
 											let single = newEntries == 1;
-											let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Plugin${single ? "" : "s"} in the Repo. Check:`, {
+											let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Plugin${single ? "" : "s"} in the Repo. Check: `, {
 												type: "success",
 												btn: "PluginRepo",
 												selector: "pluginrepo-notice pluginrepo-newentries-notice",
@@ -990,7 +990,7 @@ module.exports = (_ => {
 			checkForNewPlugins () {
 				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/_res/PluginList.txt", (error, response, result) => {
 					if (response && !BDFDB.equals(result.replace(/\t|\r/g, "").split("\n").filter(n => n), grabbedPlugins)) {
-						loading = {is:false, timeout:null, amount:0};
+						loading = {is: false, timeout: null, amount: 0};
 						this.loadPlugins();
 					}
 				});
@@ -998,15 +998,15 @@ module.exports = (_ => {
 
 			downloadPlugin (data) {
 				BDFDB.LibraryRequires.request(data.url, (error, response, body) => {
-					if (error) BDFDB.NotificationUtils.toast(`Unable to download Plugin "${plugin.getName}".`, {type:"danger"});
+					if (error) BDFDB.NotificationUtils.toast(`Unable to download Plugin "${plugin.getName}".`, {type: "danger"});
 					else this.createPluginFile(data.url.split("/").pop(), body);
 				});
 			}
 
 			createPluginFile (filename, content) {
 				BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), filename), content, (error) => {
-					if (error) BDFDB.NotificationUtils.toast(`Unable to save Plugin "${filename}".`, {type:"danger"});
-					else BDFDB.NotificationUtils.toast(`Successfully saved Plugin "${filename}".`, {type:"success"});
+					if (error) BDFDB.NotificationUtils.toast(`Unable to save Plugin "${filename}".`, {type: "danger"});
+					else BDFDB.NotificationUtils.toast(`Successfully saved Plugin "${filename}".`, {type: "success"});
 				});
 			}
 
@@ -1020,7 +1020,7 @@ module.exports = (_ => {
 			deletePluginFile (data) {
 				let filename = data.url.split("/").pop();
 				BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), filename), (error) => {
-					if (error) BDFDB.NotificationUtils.toast(`Unable to delete Plugin "${filename}".`, {type:"danger"});
+					if (error) BDFDB.NotificationUtils.toast(`Unable to delete Plugin "${filename}".`, {type: "danger"});
 					else BDFDB.NotificationUtils.toast(`Successfully deleted Plugin "${filename}".`);
 				});
 			}

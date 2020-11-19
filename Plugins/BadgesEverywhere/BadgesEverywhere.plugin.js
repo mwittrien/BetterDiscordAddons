@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -52,7 +52,7 @@ module.exports = (_ => {
 		start() {this.load();}
 		stop() {}
 	} : (([Plugin, BDFDB]) => {
-		var badgeClasses, requestedUsers = {}, loadedUsers = {}, requestQueue = {queue:[], timeout:null, id:null}, cacheTimeout;
+		var badgeClasses, requestedUsers = {}, loadedUsers = {}, requestQueue = {queue: [], timeout: null, id: null}, cacheTimeout;
 		var nitroFlag, boostFlag;
 		var settings = {}, badges = {}, indicators = {};
 		
@@ -70,11 +70,11 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						showInPopout:		{value:true, 	description:"Show Badge in User Popout"},
-						showInChat:			{value:true, 	description:"Show Badge in Chat Window"},
-						showInMemberList:	{value:true, 	description:"Show Badge in Member List"},
-						useColoredVersion:	{value:true, 	description:"Use colored version of the Badges for Chat and Members"},
-						showNitroDate:		{value:true, 	description:"Show the subscription date for Nitro/Boost Badges"}
+						showInPopout:		{value: true, 	description: "Show Badge in User Popout"},
+						showInChat:			{value: true, 	description: "Show Badge in Chat Window"},
+						showInMemberList:	{value: true, 	description: "Show Badge in Member List"},
+						useColoredVersion:	{value: true, 	description: "Use colored version of the Badges for Chat and Members"},
+						showNitroDate:		{value: true, 	description: "Show the subscription date for Nitro/Boost Badges"}
 					},
 					badges: {
 						"STAFF": {
@@ -280,7 +280,7 @@ module.exports = (_ => {
 				badgeClasses = BDFDB.DiscordClassModules.UserBadges || {};
 
 				requestedUsers = {}, loadedUsers = {};
-				requestQueue = {queue:[], timeout:null, id:null};
+				requestQueue = {queue: [], timeout: null, id: null};
 				
 				let badgeCache = BDFDB.DataUtils.load(this, "badgeCache");
 				if (badgeCache) {

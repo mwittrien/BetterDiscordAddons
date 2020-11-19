@@ -26,7 +26,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -116,8 +116,8 @@ module.exports = (_ => {
 													name: "YouTube",
 													url: "https://www.youtube.com/"
 												},
-												rawDescription: result.split(new RegExp(BDFDB.StringUtils.regEscape('<meta property="og:description" content="'), "i"))[1].split('"')[0],
-												rawTitle: result.split(new RegExp(BDFDB.StringUtils.regEscape('<meta property="og:title" content="'), "i"))[1].split('"')[0],
+												rawDescription: result.split(new RegExp(BDFDB.StringUtils.regEscape('<meta property="og: description" content="'), "i"))[1].split('"')[0],
+												rawTitle: result.split(new RegExp(BDFDB.StringUtils.regEscape('<meta property="og: title" content="'), "i"))[1].split('"')[0],
 												thumbnail: {
 													url: thumbnail,
 													proxyURL: thumbnail,

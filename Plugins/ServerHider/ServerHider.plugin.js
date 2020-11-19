@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -176,7 +176,7 @@ module.exports = (_ => {
 				let hiddenGuildIds = hiddenEles.servers || [];
 				let hiddenFolderIds = hiddenEles.folders || [];
 				if (hiddenGuildIds.length || hiddenFolderIds.length) {
-					let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props:["folderId", "guildId"], someProps:true});
+					let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props: ["folderId", "guildId"], someProps: true});
 					if (index > -1) for (let i in children) if (children[i] && children[i].props) {
 						if (children[i].props.folderId) {
 							if (hiddenFolderIds.includes(children[i].props.folderId)) children[i] = null;
@@ -281,7 +281,7 @@ module.exports = (_ => {
 							BDFDB.DataUtils.save(hiddenGuildIds, this, "hidden", "servers");
 							hiddenFolderIds = [].concat(enabled ? [] : folders.map(n => n.folderId));
 							BDFDB.DataUtils.save(hiddenFolderIds, this, "hidden", "folders");
-							let switchInstances = BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_Switch", all:true, unlimited:true});
+							let switchInstances = BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_Switch", all: true, unlimited: true});
 							for (let switchIns of switchInstances) switchIns.props.value = enabled;
 							BDFDB.ReactUtils.forceUpdate(switchInstances);
 							BDFDB.PatchUtils.forceAllUpdates(this);

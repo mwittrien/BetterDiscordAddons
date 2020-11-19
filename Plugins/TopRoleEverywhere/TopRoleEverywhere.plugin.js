@@ -30,7 +30,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -57,14 +57,14 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						showInChat:			{value:true, 	inner:true, 	description:"Chat Window"},
-						showInMemberList:	{value:true, 	inner:true, 	description:"Member List"},
-						useOtherStyle:		{value:false, 	inner:false, 	description:"Use BotTag Style instead of the Role Style"},
-						useBlackFont:		{value:false, 	inner:false,	description:"Instead of darkening the color for BotTag Style on bright colors use black font"},
-						includeColorless:	{value:false, 	inner:false, 	description:"Include colorless roles"},
-						showOwnerRole:		{value:false, 	inner:false, 	description:`Display Role Tag of Serverowner as "${BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER}".`},
-						disableForBots:		{value:false, 	inner:false, 	description:"Disable Role Tag for Bots"},
-						addUserID:			{value:false, 	inner:false, 	description:"Add the UserID as a Tag to the Chat Window"}
+						showInChat:			{value: true, 	inner: true, 	description: "Chat Window"},
+						showInMemberList:	{value: true, 	inner: true, 	description: "Member List"},
+						useOtherStyle:		{value: false, 	inner: false, 	description: "Use BotTag Style instead of the Role Style"},
+						useBlackFont:		{value: false, 	inner: false,	description: "Instead of darkening the color for BotTag Style on bright colors use black font"},
+						includeColorless:	{value: false, 	inner: false, 	description: "Include colorless roles"},
+						showOwnerRole:		{value: false, 	inner: false, 	description: `Display Role Tag of Serverowner as "${BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER}".`},
+						disableForBots:		{value: false, 	inner: false, 	description: "Disable Role Tag for Bots"},
+						addUserID:			{value: false, 	inner: false, 	description: "Add the UserID as a Tag to the Chat Window"}
 					}
 				};
 				

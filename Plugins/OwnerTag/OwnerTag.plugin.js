@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -74,22 +74,22 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						addInChatWindow:		{value:true, 	inner:true,		description:"Messages"},
-						addInMemberList:		{value:true, 	inner:true,		description:"Member List"},
-						addInUserPopout:		{value:true, 	inner:true,		description:"User Popouts"},
-						addInUserProfile:		{value:true, 	inner:true,		description:"User Profile Modal"},
-						useRoleColor:			{value:true, 	inner:false,	description:"Use the Rolecolor instead of the default blue"},
-						useBlackFont:			{value:false, 	inner:false,	description:"Instead of darkening the Rolecolor on bright colors use black font"},
-						useCrown:				{value:false, 	inner:false,	description:"Use the Crown Icon instead of the Bot Tag Style"},
-						hideNativeCrown:		{value:true, 	inner:false,	description:"Hide the native Crown Icon (not the Plugin one)"},
-						addForAdmins:			{value:false, 	inner:false,	description:"Add an Admin Tag for users with admin permissions"},
-						addForManagement:		{value:false, 	inner:false,	description:"Add a Management Tag for users with management permissions"},
-						ignoreBotAdmins:		{value:false, 	inner:false,	description:"Do not add the Admin/Management tag for bots"}
+						addInChatWindow:		{value: true, 	inner: true,		description: "Messages"},
+						addInMemberList:		{value: true, 	inner: true,		description: "Member List"},
+						addInUserPopout:		{value: true, 	inner: true,		description: "User Popouts"},
+						addInUserProfile:		{value: true, 	inner: true,		description: "User Profile Modal"},
+						useRoleColor:			{value: true, 	inner: false,	description: "Use the Rolecolor instead of the default blue"},
+						useBlackFont:			{value: false, 	inner: false,	description: "Instead of darkening the Rolecolor on bright colors use black font"},
+						useCrown:				{value: false, 	inner: false,	description: "Use the Crown Icon instead of the Bot Tag Style"},
+						hideNativeCrown:		{value: true, 	inner: false,	description: "Hide the native Crown Icon (not the Plugin one)"},
+						addForAdmins:			{value: false, 	inner: false,	description: "Add an Admin Tag for users with admin permissions"},
+						addForManagement:		{value: false, 	inner: false,	description: "Add a Management Tag for users with management permissions"},
+						ignoreBotAdmins:		{value: false, 	inner: false,	description: "Do not add the Admin/Management tag for bots"}
 					},
 					inputs: {
-						ownTagName:				{value:"Owner", 		description:"Tag Text for Owners"},
-						ownAdminTagName:		{value:"Admin", 		description:"Tag Text for Admins"},
-						ownManagementTagName:	{value:"Management", 	description:"Tag Text for Management"}
+						ownTagName:				{value: "Owner", 		description: "Tag Text for Owners"},
+						ownAdminTagName:		{value: "Admin", 		description: "Tag Text for Admins"},
+						ownManagementTagName:	{value: "Management", 	description: "Tag Text for Management"}
 					}
 				};
 			
@@ -146,7 +146,7 @@ module.exports = (_ => {
 					children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 						className: BDFDB.disCN.marginbottom4,
 						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
-						children: "Add Tags in:"
+						children: "Add Tags in: "
 					})].concat(Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 						type: "Switch",
 						plugin: this,

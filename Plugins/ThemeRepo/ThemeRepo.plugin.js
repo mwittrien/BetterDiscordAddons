@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -272,7 +272,7 @@ module.exports = (_ => {
 								label: "Choose a Generator Theme",
 								basis: "60%",
 								value: this.props.currentGenerator && this.props.currentGenerator.value || "-----",
-								options: [{value:"-----", label:"-----"}, nativeCSSvars && {value:"nativediscord", label:"Discord", native:true}].concat((generatorThemes).map(url => ({value:url, label:(loadedThemes[url] || {}).name || "-----"})).sort((x, y) => (x.label < y.label ? -1 : x.label > y.label ? 1 : 0))).filter(n => n),
+								options: [{value: "-----", label: "-----"}, nativeCSSvars && {value: "nativediscord", label: "Discord", native: true}].concat((generatorThemes).map(url => ({value: url, label: (loadedThemes[url] || {}).name || "-----"})).sort((x, y) => (x.label < y.label ? -1 : x.label > y.label ? 1 : 0))).filter(n => n),
 								searchable: true,
 								onChange: (value, instance) => {
 									if (loadedThemes[value.value] || value.native) {
@@ -352,7 +352,7 @@ module.exports = (_ => {
 												}
 											}
 											let varDescription = varStr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
-											this.props.generatorValues[varName] = {value:oldValue, oldValue};
+											this.props.generatorValues[varName] = {value: oldValue, oldValue};
 											inputRefs.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 												dividerBottom: vars[vars.length-1] != varStr,
 												type: "TextInput",
@@ -546,7 +546,7 @@ module.exports = (_ => {
 							onChange: (value, instance) => {
 								if (!list) return;
 								
-								if (list.props.currentTheme) for (let ins of BDFDB.ReactUtils.findOwner(this._reactInternalFiber.return, {name:"ThemeCard", all:true}).filter(ins => ins && ins.props && ins.props.theme && ins.props.theme.url == list.props.currentTheme.url)) BDFDB.ReactUtils.forceUpdate(ins);
+								if (list.props.currentTheme) for (let ins of BDFDB.ReactUtils.findOwner(this._reactInternalFiber.return, {name: "ThemeCard", all: true}).filter(ins => ins && ins.props && ins.props.theme && ins.props.theme.url == list.props.currentTheme.url)) BDFDB.ReactUtils.forceUpdate(ins);
 								
 								if (value) list.props.currentTheme = this.props.theme;
 								else delete list.props.currentTheme;
@@ -711,7 +711,7 @@ module.exports = (_ => {
 										itemClassName: BDFDB.disCN.tabbaritem,
 										type: BDFDB.LibraryComponents.TabBar.Types.TOP,
 										selectedItem: this.props.tab,
-										items: [{value:"Themes"}, {value:"Generator"}, {value:BDFDB.LanguageUtils.LanguageStrings.SETTINGS}],
+										items: [{value: "Themes"}, {value: "Generator"}, {value: BDFDB.LanguageUtils.LanguageStrings.SETTINGS}],
 										onItemSelect: (value, instance) => {
 											this.props.tab = list.props.tab = value;
 											BDFDB.ReactUtils.forceUpdate(list);
@@ -762,7 +762,7 @@ module.exports = (_ => {
 			onLoad() {
 				_this = this;
 				
-				loading = {is:false, timeout:null, amount:0};
+				loading = {is: false, timeout: null, amount: 0};
 				
 				cachedThemes = [];
 				grabbedThemes = [];
@@ -772,16 +772,16 @@ module.exports = (_ => {
 
 				this.defaults = {
 					settings: {
-						useChromium: 		{value:false,		description:"Use an inbuilt browser window instead of opening your default browser"},
-						keepOnTop: 			{value:false,		description:"Keep the preview window always on top"},
-						notifyOutdated:		{value:true, 		description:"Get a notification when one of your Themes is outdated"},
-						notifyNewentries:	{value:true, 		description:"Get a notification when there are new entries in the Repo"}
+						useChromium: 		{value: false,		description: "Use an inbuilt browser window instead of opening your default browser"},
+						keepOnTop: 			{value: false,		description: "Keep the preview window always on top"},
+						notifyOutdated:		{value: true, 		description: "Get a notification when one of your Themes is outdated"},
+						notifyNewentries:	{value: true, 		description: "Get a notification when there are new entries in the Repo"}
 					},
 					modalSettings: {
-						updated: 			{value:true,	modify:true,	description:"Show updated Themes",},
-						outdated:			{value:true, 	modify:true,	description:"Show outdated Themes"},
-						downloadable:		{value:true, 	modify:true,	description:"Show downloadable Themes"},
-						rnmStart:			{value:true, 	modify:false,	description:"Apply Theme after Download"}
+						updated: 			{value: true,	modify: true,	description: "Show updated Themes",},
+						outdated:			{value: true, 	modify: true,	description: "Show outdated Themes"},
+						downloadable:		{value: true, 	modify: true,	description: "Show downloadable Themes"},
+						rnmStart:			{value: true, 	modify: false,	description: "Apply Theme after Download"}
 					}
 				};
 				
@@ -894,7 +894,7 @@ module.exports = (_ => {
 						margin: 0,
 						label: "Force all Themes to be fetched again",
 						onClick: _ => {
-							loading = {is:false, timeout:null, amount:0};
+							loading = {is: false, timeout: null, amount: 0};
 							this.loadThemes();
 						},
 						children: BDFDB.LanguageUtils.LanguageStrings.ERRORS_RELOAD
@@ -1001,7 +1001,7 @@ module.exports = (_ => {
 			
 			generateTheme (fullCSS, generatorValues) {
 				if (!fullCSS || !BDFDB.ObjectUtils.is(generatorValues)) return "";
-				for (let inputId in generatorValues) if (generatorValues[inputId].value && generatorValues[inputId].value.trim() && generatorValues[inputId].value != generatorValues[inputId].oldValue) fullCSS = fullCSS.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(inputId)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(generatorValues[inputId].oldValue)}`,"g"),`--${inputId}$1:$2${generatorValues[inputId].value}`);
+				for (let inputId in generatorValues) if (generatorValues[inputId].value && generatorValues[inputId].value.trim() && generatorValues[inputId].value != generatorValues[inputId].oldValue) fullCSS = fullCSS.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(inputId)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(generatorValues[inputId].oldValue)}`,"g"),`--${inputId}$1: $2${generatorValues[inputId].value}`);
 				return fullCSS;
 			}
 
@@ -1020,13 +1020,13 @@ module.exports = (_ => {
 						grabbedThemes = body.split("\n").filter(n => n);
 						foundThemes = grabbedThemes.concat(customList);
 
-						loading = {is:true, timeout:BDFDB.TimeUtils.timeout(_ => {
+						loading = {is: true, timeout: BDFDB.TimeUtils.timeout(_ => {
 							BDFDB.TimeUtils.clear(loading.timeout);
 							if (this.started) {
 								if (loading.is && loading.amount < 4) BDFDB.TimeUtils.timeout(_ => {this.loadThemes();}, 10000);
-								loading = {is: false, timeout:null, amount:loading.amount};
+								loading = {is: false, timeout: null, amount: loading.amount};
 							}
-						}, 1200000), amount:loading.amount+1};
+						}, 1200000), amount: loading.amount+1};
 					
 						let loadingIcon = BDFDB.DOMUtils.create(themeRepoIcon);
 						BDFDB.DOMUtils.addClass(loadingIcon, "themerepo-loadingicon");
@@ -1047,7 +1047,7 @@ module.exports = (_ => {
 							}
 							BDFDB.TimeUtils.clear(loading.timeout);
 							BDFDB.DOMUtils.remove(loadingIcon, ".themerepo-loadingicon");
-							loading = {is:false, timeout:null, amount:loading.amount};
+							loading = {is: false, timeout: null, amount: loading.amount};
 							
 							BDFDB.LogUtils.log("Finished fetching Themes", this.name);
 							if (list) BDFDB.ReactUtils.forceUpdate(list);
@@ -1055,7 +1055,7 @@ module.exports = (_ => {
 							if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
 								let oldBarButton = document.querySelector(".themerepo-outdate-notice " + BDFDB.dotCN.noticedismiss);
 								if (oldBarButton) oldBarButton.click();
-								let bar = BDFDB.NotificationUtils.notice(`${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check:`, {
+								let bar = BDFDB.NotificationUtils.notice(`${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check: `, {
 									type: "danger",
 									btn: "ThemeRepo",
 									selector: "themerepo-notice themerepo-outdate-notice",
@@ -1072,7 +1072,7 @@ module.exports = (_ => {
 								let oldBarButton = document.querySelector(".themerepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
 								if (oldBarButton) oldBarButton.click();
 								let single = newEntries == 1;
-								let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Theme${single ? "" : "s"} in the Repo. Check:`, {
+								let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Theme${single ? "" : "s"} in the Repo. Check: `, {
 									type: "success",
 									btn: "ThemeRepo",
 									selector: "themerepo-notice themerepo-newentries-notice",
@@ -1187,7 +1187,7 @@ module.exports = (_ => {
 			checkForNewThemes () {
 				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/_res/ThemeList.txt", (error, response, result) => {
 					if (response && !BDFDB.equals(result.replace(/\t|\r/g, "").split("\n").filter(n => n), grabbedThemes)) {
-						loading = {is:false, timeout:null, amount:0};
+						loading = {is: false, timeout: null, amount: 0};
 						this.loadThemes();
 					}
 				});
@@ -1195,15 +1195,15 @@ module.exports = (_ => {
 
 			downloadTheme (data) {
 				BDFDB.LibraryRequires.request(data.url, (error, response, body) => {
-					if (error) BDFDB.NotificationUtils.toast(`Unable to download Theme "${data.name}".`, {type:"danger"});
+					if (error) BDFDB.NotificationUtils.toast(`Unable to download Theme "${data.name}".`, {type: "danger"});
 					else this.createThemeFile(data.url.split("/").pop(), body);
 				});
 			}
 
 			createThemeFile (filename, content) {
 				BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getThemesFolder(), filename), content, (error) => {
-					if (error) BDFDB.NotificationUtils.toast(`Unable to save Theme "${filename}".`, {type:"danger"});
-					else BDFDB.NotificationUtils.toast(`Successfully saved Theme "${filename}".`, {type:"success"});
+					if (error) BDFDB.NotificationUtils.toast(`Unable to save Theme "${filename}".`, {type: "danger"});
+					else BDFDB.NotificationUtils.toast(`Successfully saved Theme "${filename}".`, {type: "success"});
 				});
 			}
 
@@ -1219,7 +1219,7 @@ module.exports = (_ => {
 			deleteThemeFile (data) {
 				let filename = data.url.split("/").pop();
 				BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getThemesFolder(), filename), (error) => {
-					if (error) BDFDB.NotificationUtils.toast(`Unable to delete Theme "${filename}".`, {type:"danger"});
+					if (error) BDFDB.NotificationUtils.toast(`Unable to delete Theme "${filename}".`, {type: "danger"});
 					else BDFDB.NotificationUtils.toast(`Successfully deleted Theme "${filename}".`);
 				});
 			}

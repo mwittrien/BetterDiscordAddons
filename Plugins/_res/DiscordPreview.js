@@ -171,19 +171,19 @@
 	let getDiscordClass = function (item, selector) {
 		let className = fallbackClassName = "Preview_undefined";
 		if (DiscordClasses[item] === undefined) {
-			if (userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', item + ' not found in DiscordClasses');
+			if (userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color: #3a71c1; font-weight: 700;', '', item + ' not found in DiscordClasses');
 			return className;
 		} 
 		else if (!Array.isArray(DiscordClasses[item]) || DiscordClasses[item].length != 2) {
-			if (userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', item + ' is not an Array of Length 2 in DiscordClasses');
+			if (userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color: #3a71c1; font-weight: 700;', '', item + ' is not an Array of Length 2 in DiscordClasses');
 			return className;
 		}
 		else if (DiscordClassModules[DiscordClasses[item][0]] === undefined) {
-			if (userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', DiscordClasses[item][0] + ' not found in DiscordClassModules');
+			if (userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color: #3a71c1; font-weight: 700;', '', DiscordClasses[item][0] + ' not found in DiscordClassModules');
 			return className;
 		}
 		else if ([DiscordClasses[item][1]].flat().every(prop => DiscordClassModules[DiscordClasses[item][0]][prop] === undefined)) {
-			if (userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', DiscordClasses[item][1] + ' not found in ' + DiscordClasses[item][0] + ' in DiscordClassModules');
+			if (userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color: #3a71c1; font-weight: 700;', '', DiscordClasses[item][1] + ' not found in ' + DiscordClasses[item][0] + ' in DiscordClassModules');
 			return className;
 		}
 		else {

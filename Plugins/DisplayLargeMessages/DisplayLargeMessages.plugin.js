@@ -26,7 +26,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -54,10 +54,10 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						onDemand:				{value:false, 	description:"Inject the content of 'message.txt' on demand instead of automatically"}
+						onDemand:				{value: false, 	description: "Inject the content of 'message.txt' on demand instead of automatically"}
 					},
 					amounts: {
-						maxFileSize:			{value:10, 	min:0,		description:"Max Filesize a fill will be read automatically",	note: "in KB / 0 = inject all / ignored in On-Demand"}
+						maxFileSize:			{value: 10, 	min: 0,		description: "Max Filesize a fill will be read automatically",	note: "in KB / 0 = inject all / ignored in On-Demand"}
 					}
 				};
 			

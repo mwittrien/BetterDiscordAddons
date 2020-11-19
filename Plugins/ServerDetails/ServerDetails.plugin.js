@@ -26,7 +26,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -148,32 +148,32 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						cutSeconds:			{value:false, 		cat:"settings",	description:"Cut off seconds of the time"},
-						forceZeros:			{value:false, 		cat:"settings",	description:"Force leading zeros"},
-						otherOrder:			{value:false, 		cat:"settings",	description:"Show the time before the date"},
-						addIcon:			{value:true, 		cat:"tooltip",	description:"GUILD_CREATE_UPLOAD_ICON_LABEL"},
-						addOwner:			{value:true, 		cat:"tooltip",	description:"GUILD_OWNER"},
-						addCreation:		{value:true, 		cat:"tooltip",	description:"creationdate_text"},
-						addJoin:			{value:true, 		cat:"tooltip",	description:"joindate_text"},
-						addMembers:			{value:true, 		cat:"tooltip",	description:"MEMBERS"},
-						addChannels:		{value:true, 		cat:"tooltip",	description:"CHANNELS"},
-						addRoles:			{value:true, 		cat:"tooltip",	description:"ROLES"},
-						addBoosters:		{value:true, 		cat:"tooltip",	description:"SUBSCRIPTIONS_TITLE"},
-						addRegion:			{value:true, 		cat:"tooltip",	description:"REGION"}
+						cutSeconds:			{value: false, 		cat: "settings",	description: "Cut off seconds of the time"},
+						forceZeros:			{value: false, 		cat: "settings",	description: "Force leading zeros"},
+						otherOrder:			{value: false, 		cat: "settings",	description: "Show the time before the date"},
+						addIcon:			{value: true, 		cat: "tooltip",	description: "GUILD_CREATE_UPLOAD_ICON_LABEL"},
+						addOwner:			{value: true, 		cat: "tooltip",	description: "GUILD_OWNER"},
+						addCreation:		{value: true, 		cat: "tooltip",	description: "creationdate_text"},
+						addJoin:			{value: true, 		cat: "tooltip",	description: "joindate_text"},
+						addMembers:			{value: true, 		cat: "tooltip",	description: "MEMBERS"},
+						addChannels:		{value: true, 		cat: "tooltip",	description: "CHANNELS"},
+						addRoles:			{value: true, 		cat: "tooltip",	description: "ROLES"},
+						addBoosters:		{value: true, 		cat: "tooltip",	description: "SUBSCRIPTIONS_TITLE"},
+						addRegion:			{value: true, 		cat: "tooltip",	description: "REGION"}
 					},
 					colors: {
-						tooltipColor:		{value:"", 					description:"Tooltip Color"}
+						tooltipColor:		{value: "", 					description: "Tooltip Color"}
 					},
 					choices: {
-						timeLang:			{value:"$discord", 			description:"Date Format"}
+						timeLang:			{value: "$discord", 			description: "Date Format"}
 					},
 					formats: {
-						ownFormat:			{value:"$hour:$minute:$second, $day.$month.$year", 	description:"Own Format"}
+						ownFormat:			{value: "$hour: $minute: $second, $day.$month.$year", 	description: "Own Format"}
 					},
 					amounts: {
-						tooltipDelay:		{value:0,	cat:"tooltip",	 min:0,		max:10,		digits:1,	unit:"s",	description:"Details Tooltip Delay"},
-						tooltipWidth:		{value:300,	cat:"tooltip",	 min:200,	max:600,	digits:0,	unit:"px",	description:"Details Tooltip Width"},
-						maxDaysAgo:			{value:0,	cat:"format",	 min:0,		description:"Maximum count of days displayed in the $daysago placeholder",	note:"0 equals no limit"}
+						tooltipDelay:		{value: 0,	cat: "tooltip",	 min: 0,		max: 10,		digits: 1,	unit: "s",	description: "Details Tooltip Delay"},
+						tooltipWidth:		{value: 300,	cat: "tooltip",	 min: 200,	max: 600,	digits: 0,	unit: "px",	description: "Details Tooltip Width"},
+						maxDaysAgo:			{value: 0,	cat: "format",	 min: 0,		description: "Maximum count of days displayed in the $daysago placeholder",	note: "0 equals no limit"}
 					}
 				};
 			
@@ -210,7 +210,7 @@ module.exports = (_ => {
 			
 			onStart() {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryComponents.GuildComponents.Guild.prototype, "render", {after: e => {
-					this.processGuild({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
+					this.processGuild({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"});
 				}});
 
 				languages = BDFDB.ObjectUtils.deepAssign({
@@ -250,7 +250,7 @@ module.exports = (_ => {
 						value: settings[key],
 						onChange: (value, instance) => {
 							settings[key] = value;
-							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
+							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_SettingsPanel", up: true}), {name: "BDFDB_Select", all: true, noCopies: true}));
 						}
 					}))
 				}));
@@ -261,7 +261,7 @@ module.exports = (_ => {
 					children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 						className: BDFDB.disCN.marginbottom4,
 						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
-						children: "Add additional details in the server tooltip for:"
+						children: "Add additional details in the server tooltip for: "
 					})].concat(Object.keys(settings).map(key => this.defaults.settings[key].cat == "tooltip" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 						type: "Switch",
 						plugin: this,
@@ -307,7 +307,7 @@ module.exports = (_ => {
 						label: this.defaults.choices[key].description,
 						basis: "70%",
 						value: choices[key],
-						options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value:id, label:lang.name}})),
+						options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value: id, label: lang.name}})),
 						searchable: true,
 						optionRenderer: lang => {
 							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -357,7 +357,7 @@ module.exports = (_ => {
 						value: formats[key],
 						onChange: (value, instance) => {
 							formats[key] = value;
-							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
+							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_SettingsPanel", up: true}), {name: "BDFDB_Select", all: true, noCopies: true}));
 						}
 					}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 						className: BDFDB.disCN.marginbottom8

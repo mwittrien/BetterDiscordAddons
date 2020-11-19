@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -145,12 +145,12 @@ module.exports = (_ => {
 				 
 				this.defaults = {
 					settings: {
-						sortNative:				{value:false, 	description:"Sort hidden Channels in the native Order"},
-						showText:				{value:true, 	description:"Show hidden Text Channels"},
-						showVoice:				{value:true, 	description:"Show hidden Voice Channels"},
-						showAnnouncement:		{value:true, 	description:"Show hidden Announcement Channels"},
-						showStore:				{value:true, 	description:"Show hidden Store Channels"},
-						showForNormal:			{value:true,	description:"Add Access-Overview ContextMenu Entry for non-hidden Channels"},
+						sortNative:				{value: false, 	description: "Sort hidden Channels in the native Order"},
+						showText:				{value: true, 	description: "Show hidden Text Channels"},
+						showVoice:				{value: true, 	description: "Show hidden Voice Channels"},
+						showAnnouncement:		{value: true, 	description: "Show hidden Announcement Channels"},
+						showStore:				{value: true, 	description: "Show hidden Store Channels"},
+						showForNormal:			{value: true,	description: "Add Access-Overview ContextMenu Entry for non-hidden Channels"},
 					}
 				};
 			
@@ -407,7 +407,7 @@ module.exports = (_ => {
 						nativeClass: true,
 						iconSVG: `<svg class="${BDFDB.disCN.channelicon}" width="24" height="24" viewBox="0 0 24 24"><mask id="${this.name + e.instance.props.channel.id}" fill="black"><path d="M 0 0 H 24 V 24 H 0 Z" fill="white"></path><path d="M24 0 H 13 V 12 H 24 Z" fill="black"></path></mask><path mask="url(#${this.name + e.instance.props.channel.id})" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="${this.channelIcons[BDFDB.DiscordConstants.ChannelTypes[e.instance.props.channel.type]] || this.channelIcons.DEFAULT}"></path><path fill="currentColor" d="M 21.025 5 V 4 C 21.025 2.88 20.05 2 19 2 C 17.95 2 17 2.88 17 4 V 5 C 16.4477 5 16 5.44772 16 6 V 9 C 16 9.55228 16.4477 10 17 10 H 19 H 21 C 21.5523 10 22 9.55228 22 9 V 5.975C22 5.43652 21.5635 5 21.025 5 Z M 20 5 H 18 V 4 C 18 3.42857 18.4667 3 19 3 C 19.5333 3 20 3.42857 20 4 V 5 Z"></path></svg>`
 					});
-					let channelChildren = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.channelchildren]]});
+					let channelChildren = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelchildren]]});
 					if (channelChildren && channelChildren.props && channelChildren.props.children) {
 						channelChildren.props.children = [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							text: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_LOCKED_SHORT,
@@ -421,12 +421,12 @@ module.exports = (_ => {
 							})
 						})];
 					}
-					let wrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.channelwrapper]]});
+					let wrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelwrapper]]});
 					if (wrapper) {
 						wrapper.props.onMouseDown = _ => {};
 						wrapper.props.onMouseUp = _ => {};
 					}
-					let mainContent = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.channelmaincontent]]});
+					let mainContent = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelmaincontent]]});
 					if (mainContent) {
 						mainContent.props.onClick = _ => {};
 						mainContent.props.href = null;
@@ -441,7 +441,7 @@ module.exports = (_ => {
 			
 			getHiddenChannels (guild) {
 				if (!guild) return [{}, 0];
-				let roles = (BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id) || {roles:[]}).roles.length;
+				let roles = (BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id) || {roles: []}).roles.length;
 				if (hiddenChannelCache[guild.id] && hiddenChannelCache[guild.id].roles == roles) return [hiddenChannelCache[guild.id].hidden, hiddenChannelCache[guild.id].amount];
 				else {
 					let all = BDFDB.LibraryModules.ChannelStore.getGuildChannels(), hidden = {}, amount = 0;

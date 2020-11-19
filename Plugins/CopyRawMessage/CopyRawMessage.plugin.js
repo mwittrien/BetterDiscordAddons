@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -58,7 +58,7 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						copyOnlySelected:		{value:true, 				description:"Only copy selected text of a message"}
+						copyOnlySelected:		{value: true, 				description: "Only copy selected text of a message"}
 					}
 				};
 			}
@@ -117,14 +117,14 @@ module.exports = (_ => {
 								});
 							}),
 							action: _ => {
-								BDFDB.LibraryRequires.electron.clipboard.write({text:messageString});
+								BDFDB.LibraryRequires.electron.clipboard.write({text: messageString});
 							}
 						}),
 						embedString && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw Embed)",
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-embed"),
 							action: _ => {
-								BDFDB.LibraryRequires.electron.clipboard.write({text:embedString});
+								BDFDB.LibraryRequires.electron.clipboard.write({text: embedString});
 							}
 						})
 					].filter(n => n);
@@ -150,7 +150,7 @@ module.exports = (_ => {
 							});
 						},
 						action: _ => {
-							BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
+							BDFDB.LibraryRequires.electron.clipboard.write({text: e.instance.props.message.content});
 						}
 					}));
 				}
@@ -164,7 +164,7 @@ module.exports = (_ => {
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 							className: BDFDB.disCN.messagetoolbarbutton,
 							onClick: _ => {
-								BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
+								BDFDB.LibraryRequires.electron.clipboard.write({text: e.instance.props.message.content});
 							},
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 								className: BDFDB.disCN.messagetoolbaricon,

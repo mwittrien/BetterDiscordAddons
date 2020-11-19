@@ -26,7 +26,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -91,7 +91,7 @@ module.exports = (_ => {
 
 			processEmojiPicker (e) {
 				this.loadEmojiList();
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name:"DiversitySelector"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "DiversitySelector"});
 				if (index > -1) children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: "Emoji Statistics",
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
@@ -126,7 +126,7 @@ module.exports = (_ => {
 						className: `${this.name}-table`,
 						stickyHeader: true,
 						sortData: false,
-						columns: [{key:"icon", sortkey:"index", cell:"icon"}, {key:"name", cell:"name"}, {key:"total", cell:"amount", reverse:true}, {key:"global", cell:"amount", reverse:true}, {key:"local", cell:"amount", reverse:true}, {key:"copies", cell:"amount", reverse:true}].map(data => {return {
+						columns: [{key: "icon", sortkey: "index", cell: "icon"}, {key: "name", cell: "name"}, {key: "total", cell: "amount", reverse: true}, {key: "global", cell: "amount", reverse: true}, {key: "local", cell: "amount", reverse: true}, {key: "copies", cell: "amount", reverse: true}].map(data => {return {
 							key: data.sortkey || data.key,
 							sort: true,
 							reverse: data.reverse,

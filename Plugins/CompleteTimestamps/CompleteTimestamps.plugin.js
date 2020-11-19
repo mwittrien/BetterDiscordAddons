@@ -31,7 +31,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -59,24 +59,24 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						showInChat:				{value:true, 			description:"Replace chat timestamp with complete timestamp"},
-						showInEmbed:			{value:true, 			description:"Replace embed timestamp with complete timestamp"},
-						changeForChat:			{value:true, 			description:"Change the time for the chat time tooltips"},
-						changeForEdit:			{value:true, 			description:"Change the time for the edited time tooltips"},
-						displayTime:			{value:true, 			description:"Display the time in the timestamp"},
-						displayDate:			{value:true, 			description:"Display the date in the timestamp"},
-						cutSeconds:				{value:false, 			description:"Cut off seconds of the time"},
-						forceZeros:				{value:false, 			description:"Force leading zeros"},
-						otherOrder:				{value:false, 			description:"Show the time before the date"}
+						showInChat:				{value: true, 			description: "Replace chat timestamp with complete timestamp"},
+						showInEmbed:			{value: true, 			description: "Replace embed timestamp with complete timestamp"},
+						changeForChat:			{value: true, 			description: "Change the time for the chat time tooltips"},
+						changeForEdit:			{value: true, 			description: "Change the time for the edited time tooltips"},
+						displayTime:			{value: true, 			description: "Display the time in the timestamp"},
+						displayDate:			{value: true, 			description: "Display the date in the timestamp"},
+						cutSeconds:				{value: false, 			description: "Cut off seconds of the time"},
+						forceZeros:				{value: false, 			description: "Force leading zeros"},
+						otherOrder:				{value: false, 			description: "Show the time before the date"}
 					},
 					choices: {
-						timestampLang:			{value:"$discord", 		description:"Timestamp Format"}
+						timestampLang:			{value: "$discord", 		description: "Timestamp Format"}
 					},
 					formats: {
-						ownFormat:				{value:"$hour:$minute:$second, $day.$month.$year", 	description:"Own Format"}
+						ownFormat:				{value: "$hour: $minute: $second, $day.$month.$year", 	description: "Own Format"}
 					},
 					amounts: {
-						maxDaysAgo:				{value:0, 	min:0,		description:"Maximum count of days displayed in the $daysago placeholder",	note:"0 equals no limit"}
+						maxDaysAgo:				{value: 0, 	min: 0,		description: "Maximum count of days displayed in the $daysago placeholder",	note: "0 equals no limit"}
 					}
 				};
 				
@@ -122,7 +122,7 @@ module.exports = (_ => {
 						value: settings[key],
 						onChange: (value, instance) => {
 							settings[key] = value;
-							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
+							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_SettingsPanel", up: true}), {name: "BDFDB_Select", all: true, noCopies: true}));
 						}
 					}))
 				}));
@@ -137,7 +137,7 @@ module.exports = (_ => {
 						label: this.defaults.choices[key].description,
 						basis: "70%",
 						value: choices[key],
-						options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value:id, label:lang.name}})),
+						options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value: id, label: lang.name}})),
 						searchable: true,
 						optionRenderer: lang => {
 							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -187,7 +187,7 @@ module.exports = (_ => {
 						value: formats[key],
 						onChange: (value, instance) => {
 							formats[key] = value;
-							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
+							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_SettingsPanel", up: true}), {name: "BDFDB_Select", all: true, noCopies: true}));
 						}
 					}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 						className: BDFDB.disCN.marginbottom8
@@ -255,14 +255,14 @@ module.exports = (_ => {
 			processMessage (e) {
 				if (settings.changeForChat && BDFDB.ObjectUtils.get(e, "instance.props.childrenHeader.type.type.displayName") == "MessageTimestamp") {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: e.instance.props.childrenHeader.type});
-					if (index > -1) this.changeTimestamp(children, index, {child:false, tooltip:true});
+					if (index > -1) this.changeTimestamp(children, index, {child: false, tooltip: true});
 				}
 			}
 			
 			processMessageHeader (e) {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "MessageTimestamp"});
 				if (index > -1) {
-					this.changeTimestamp(children, index, {child:settings.showInChat, tooltip:settings.changeForChat});
+					this.changeTimestamp(children, index, {child: settings.showInChat, tooltip: settings.changeForChat});
 					this.setMaxWidth(children[index], e.instance.props.compact);
 				}
 			}
@@ -270,14 +270,14 @@ module.exports = (_ => {
 			processMessageContent (e) {
 				if (e.instance.props.message.editedTimestamp && settings.changeForEdit) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SuffixEdited"});
-					if (index > -1) this.changeTimestamp(children, index, {child:false, tooltip:true});
+					if (index > -1) this.changeTimestamp(children, index, {child: false, tooltip: true});
 				}
 			}
 
 			processEmbed (e) {
 				if (e.instance.props.embed.timestamp && settings.showInEmbed) {
 					let process = returnvalue => {
-						let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props:[["className", BDFDB.disCN.embedfootertext]]});
+						let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props: [["className", BDFDB.disCN.embedfootertext]]});
 						if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children.splice(children[index].props.children.length - 1, 1, this.getTimestamp(languages[choices.timestampLang].id, e.instance.props.embed.timestamp._i));
 					};
 					if (typeof e.returnvalue.props.children == "function") {

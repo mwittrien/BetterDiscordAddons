@@ -26,7 +26,7 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load() {
-			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue:[]});
+			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
 				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
@@ -179,7 +179,7 @@ module.exports = (_ => {
 												onClick: _ => {
 													let url = BDFDB.ObjectUtils.get(playbackState, "item.external_urls.spotify") || BDFDB.ObjectUtils.get(playbackState, "context.external_urls.spotify");
 													if (url) {
-														BDFDB.LibraryRequires.electron.clipboard.write({text:url});
+														BDFDB.LibraryRequires.electron.clipboard.write({text: url});
 														BDFDB.NotificationUtils.toast("Song URL was copied to clipboard", {type: "success"});
 													}
 													else BDFDB.NotificationUtils.toast("Could not copy song URL to clipboard", {type: "error"});
@@ -401,16 +401,16 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						addTimeline: 		{value:true,		description:"Show the song timeline in the controls"}
+						addTimeline: 		{value: true,		description: "Show the song timeline in the controls"}
 					},
 					buttonConfigs: {
-						share: 				{value:{small:false, big:true},		icons: [""],						description:"Share"},
-						shuffle: 			{value:{small:false, big:true},		icons: [""],						description:"Shuffle"},
-						previous: 			{value:{small:true, big:true},		icons: [""],						description:"Previous"},
-						pauseplay: 			{value:{small:true, big:true},		icons: ["", ""],					description:"Pause/Play"},
-						next: 				{value:{small:true, big:true},		icons: [""],						description:"Next"},
-						repeat: 			{value:{small:false, big:true},		icons: ["", ""],					description:"Repeat"},
-						volume: 			{value:{small:false, big:true},		icons: ["", "", "", ""],		description:"Volume"}
+						share: 				{value: {small: false, big: true},		icons: [""],						description: "Share"},
+						shuffle: 			{value: {small: false, big: true},		icons: [""],						description: "Shuffle"},
+						previous: 			{value: {small: true, big: true},		icons: [""],						description: "Previous"},
+						pauseplay: 			{value: {small: true, big: true},		icons: ["", ""],					description: "Pause/Play"},
+						next: 				{value: {small: true, big: true},		icons: [""],						description: "Next"},
+						repeat: 			{value: {small: false, big: true},		icons: ["", ""],					description: "Repeat"},
+						volume: 			{value: {small: false, big: true},		icons: ["", "", "", ""],		description: "Volume"}
 					}
 				};
 				
@@ -650,7 +650,7 @@ module.exports = (_ => {
 					children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 						className: BDFDB.disCN.marginbottom4,
 						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
-						children: "Add control buttons in small and/or big player version:"
+						children: "Add control buttons in small and/or big player version: "
 					})].concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
 						settings: Object.keys(this.defaults.buttonConfigs[Object.keys(this.defaults.buttonConfigs)[0]].value),
 						data: Object.keys(buttonConfigs).map(key => Object.assign({}, buttonConfigs[key], {
