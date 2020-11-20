@@ -341,6 +341,7 @@ module.exports = (_ => {
 					BDFDB.NotificationUtils.toast("Quote has been copied to clipboard", {type: "success"});
 				}
 				else BDFDB.LibraryModules.MessageManageUtils.quoteMessage(channel, message);
+				//function(e,t){var n=(0,h.createQuotedText)(t,e);v.ComponentDispatch.dispatchToLastSubscribed(E.ComponentActions.INSERT_QUOTE_TEXT,{text:n}),p.default.track(E.AnalyticEvents.REPLY_STARTED,{channel_id:e.id,author_id:t.author.id})}
 			}
 
 			parseQuote (message, channel, choice = format) {
