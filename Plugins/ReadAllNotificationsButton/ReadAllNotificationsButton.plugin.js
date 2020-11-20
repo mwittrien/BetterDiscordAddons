@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ReadAllNotificationsButton",
 			"author": "DevilBro",
-			"version": "1.6.2",
+			"version": "1.6.3",
 			"description": "Add a button to clear all notifications"
 		},
 		"changeLog": {
 			"fixed": {
-				"Works again": "Can discord stop messing with the server list, jeez"
+				"Clear Mentions": "Works again"
 			}
 		}
 	};
@@ -70,7 +70,7 @@ module.exports = (_ => {
 				this.patchedModules = {
 					after: {
 						Guilds: "render",
-						MessagesPopout: "render",
+						RecentMentions: "default",
 						RecentsHeader: "default"
 					}
 				};
@@ -304,10 +304,8 @@ module.exports = (_ => {
 				}));
 			}
 
-			processMessagesPopout (e) {
-				if (e.instance.props.className == BDFDB.disCN.recentmentionspopout && e.returnvalue.props.children && e.returnvalue.props.children[0]) {
-					e.returnvalue.props.children[0].props.messages = e.instance.props.messages;
-				}
+			processRecentMentions (e) {
+				if (e.instance.props.header && e.instance.props.header.props) e.instance.props.header.props.messages = e.returnvalue.props.messages;
 			}
 
 			processRecentsHeader (e) {

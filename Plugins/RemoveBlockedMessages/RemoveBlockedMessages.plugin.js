@@ -70,7 +70,6 @@ module.exports = (_ => {
 				
 				this.patchedModules = {
 					before: {
-						MessagesPopout: "render",
 						ReactorsComponent: "render",
 						ChannelMembers: "render",
 						PrivateChannelRecipients: "default",
@@ -81,6 +80,8 @@ module.exports = (_ => {
 						UserSummaryItem: "render"
 					},
 					after: {
+						ChannelPins: "default",
+						RecentMentions: "default",
 						Messages: "type",
 						MemberListItem: "render",
 						VoiceUser: "render",
@@ -211,8 +212,11 @@ module.exports = (_ => {
 				}
 			}
 		
-			processMessagesPopout (e) {
-				if (settings.removeMessages && BDFDB.ArrayUtils.is(e.instance.props.messages)) e.instance.props.messages = e.instance.props.messages.filter(n => !n || !n.author || !n.author.id || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.author.id));
+			processChannelPins (e) {
+				if (settings.removeMessages && e.returnvalue.props && e.returnvalue.props.children && e.returnvalue.props.children.props && BDFDB.ArrayUtils.is(e.returnvalue.props.children.props.messages)) e.returnvalue.props.children.props.messages = e.returnvalue.props.children.props.messages.filter(n => !n || !n.author || !n.author.id || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.author.id));
+			}
+			processRecentMentions (e) {
+				if (settings.removeMessages && BDFDB.ArrayUtils.is(e.returnvalue.props.messages)) e.returnvalue.props.messages = e.returnvalue.props.messages.filter(n => !n || !n.author || !n.author.id || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.author.id));
 			}
 		
 			processReactorsComponent (e) {

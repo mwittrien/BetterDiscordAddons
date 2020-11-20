@@ -199,7 +199,6 @@
 			"MemberCard": {"class": "guildsettingsmembercard"},
 			"MessageHeader": {"props": ["MessageTimestamp"]},
 			"Messages": {"strings": ["group-spacing-", "canManageMessages"]},
-			"MessagesPopout": {"class": "messagespopout"},
 			"MessageUsername": {"strings": ["default.username", "colorString", "compact"]},
 			"ModalLayer": {"class": "layermodal"},
 			"MutualGuilds": {"class": "userprofilebody"},
