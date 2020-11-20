@@ -14,15 +14,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
-			"version": "1.7.9",
+			"version": "1.8.0",
 			"description": "Offer a number of useful message options. Remap the keybindings in the settings"
 		},
 		"changeLog": {
 			"fixed": {
-				"Quick Action": "No longer interferes with quick action bar"
+				"Replies": "Works with messages including a reply"
 			}
 		}
 	};
+
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
@@ -52,7 +53,7 @@ module.exports = (_ => {
 		stop() {}
 	} : (([Plugin, BDFDB]) => {
 		const clickMap = ["CLICK", "DBLCLICK"];
-		var firedEvents = [];
+		var firedEvents = [], clickTimeout;
 		var settings = {}, bindings = {}, enabledBindings = {}, toasts = {};
 		
 		return class MessageUtilities extends Plugin {
@@ -112,7 +113,6 @@ module.exports = (_ => {
 				let settingsPanel, settingsItems = [];
 				
 				for (let key in settings) if (this.defaults.settings[key].description) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					className: BDFDB.disCN.marginbottom8,
 					type: "Switch",
 					plugin: this,
 					keys: ["settings", key],
@@ -143,9 +143,8 @@ module.exports = (_ => {
 						].filter(n => n)
 					}));
 					settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "Switch",
-						dividerbottom: true,
+						dividerBottom: true,
 						mini: true,
 						plugin: this,
 						keys: ["settings", action],
@@ -177,7 +176,6 @@ module.exports = (_ => {
 				}
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					type: "Button",
-					className: BDFDB.disCN.marginbottom8,
 					color: BDFDB.LibraryComponents.Button.Colors.RED,
 					label: "Reset all Key Bindings",
 					onClick: (e, instance) => {
@@ -261,11 +259,11 @@ module.exports = (_ => {
 						let {messageDiv, message} = this.getMessageData(e.currentTarget);
 						if (messageDiv && message) {
 							BDFDB.ListenerUtils.stopEvent(e);
-							BDFDB.TimeUtils.clear(this.clickTimeout);
+							BDFDB.TimeUtils.clear(clickTimeout);
 							if (!this.hasDoubleClickOverwrite(enabledBindings[priorityAction])) {
 								this.defaults.bindings[priorityAction].func.apply(this, [{messageDiv, message}, priorityAction]);
 							}
-							else this.clickTimeout = BDFDB.TimeUtils.timeout(_ => {
+							else clickTimeout = BDFDB.TimeUtils.timeout(_ => {
 								this.defaults.bindings[priorityAction].func.apply(this, [{messageDiv, message}, priorityAction]);
 							}, 500);
 						}
@@ -298,7 +296,7 @@ module.exports = (_ => {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 					if ((channel && BDFDB.UserUtils.can("MANAGE_MESSAGES")) || message.author.id == BDFDB.UserUtils.me.id && message.type != 1 && message.type != 2 && message.type != 3) {
 						BDFDB.LibraryModules.MessageUtils.deleteMessage(message.channel_id, message.id, message.state != "SENT");
-						if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been deleted.", {type: "success"});
+						if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been deleted", {type: "success"});
 					}
 				}
 			}
@@ -314,7 +312,7 @@ module.exports = (_ => {
 				let reactButton = messageDiv.querySelector(`${BDFDB.dotCN.messagetoolbarbutton}[aria-label="${BDFDB.LanguageUtils.LanguageStrings.ADD_REACTION}"]`);
 				if (reactButton) {
 					reactButton.click();
-					if (toasts[action]) BDFDB.NotificationUtils.toast("Reaction popout has been opened.", {type: "success"});
+					if (toasts[action]) BDFDB.NotificationUtils.toast("Reaction popout has been opened", {type: "success"});
 				}
 			}
 
@@ -324,11 +322,11 @@ module.exports = (_ => {
 					if (channel && (channel.type == 1 || channel.type == 3 || BDFDB.UserUtils.can("MANAGE_MESSAGES")) && message.type == 0) {
 						if (message.pinned) {
 							BDFDB.LibraryModules.MessagePinUtils.unpinMessage(channel, message.id);
-							if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been unpinned.", {type: "error"});
+							if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been unpinned", {type: "error"});
 						}
 						else {
 							BDFDB.LibraryModules.MessagePinUtils.pinMessage(channel, message.id);
-							if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been pinned.", {type: "success"});
+							if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been pinned", {type: "success"});
 						}
 					}
 				}
@@ -337,7 +335,7 @@ module.exports = (_ => {
 			doCopyRaw ({messageDiv, message}, action) {
 				if (message.content) {
 					BDFDB.LibraryRequires.electron.clipboard.write({text: message.content});
-					if (toasts[action]) BDFDB.NotificationUtils.toast("Raw message content has been copied.", {type: "success"});
+					if (toasts[action]) BDFDB.NotificationUtils.toast("Raw message content has been copied", {type: "success"});
 				}
 			}
 
@@ -345,7 +343,7 @@ module.exports = (_ => {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 				if (channel) {
 					BDFDB.LibraryModules.MessageManageUtils.copyLink(channel, message);
-					if (toasts[action]) BDFDB.NotificationUtils.toast("Messagelink has been copied.", {type: "success"});
+					if (toasts[action]) BDFDB.NotificationUtils.toast("Messagelink has been copied", {type: "success"});
 				}
 			}
 
@@ -353,7 +351,7 @@ module.exports = (_ => {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 				if (channel && BDFDB.LibraryModules.QuoteUtils.canQuote(message, channel)) {
 					BDFDB.LibraryModules.MessageManageUtils.quoteMessage(channel, message);
-					if (toasts[action]) BDFDB.NotificationUtils.toast("Quote has been created.", {type: "success"});
+					if (toasts[action]) BDFDB.NotificationUtils.toast("Quote has been created", {type: "success"});
 				}
 			}
 
@@ -405,7 +403,7 @@ module.exports = (_ => {
 				let messageDiv = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.message + BDFDB.dotCN.searchresultsgroupcozy, target);
 				if (messageDiv && messageDiv.querySelector(BDFDB.dotCN.textarea)) return {messageDiv: null, message: null};
 				let instance = BDFDB.ReactUtils.getInstance(messageDiv);
-				let message = instance && BDFDB.ReactUtils.findValue(instance, "message");
+				let message = instance && (BDFDB.ReactUtils.findValue(instance, "baseMessage") || BDFDB.ReactUtils.findValue(instance, "message"));
 				return {messageDiv, message};
 			}
 		};
