@@ -309,7 +309,12 @@ html {
 	color: rgba(var(--vtextbrightest),.6);
 }
 
-.vbackgroundaccent-349kuI {
+html .backgroundaccent-349kuI {
+	color: var(--header-primary);
+}
+
+html .iconBadge-2wi9r4 {
+	background-color: var(--background-floating);
 	color: var(--header-primary);
 }
 
