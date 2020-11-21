@@ -226,7 +226,7 @@
 			"UserHook": {"class": "auditloguserhook"},
 			"UserPopout": {"class": "userpopout"},
 			"UserProfile": {"class": "userprofile"},
-			"UserSettingsAppearance": {"class": "radiogroup"},
+			"UserSettingsAppearance": {"class": "usersettingsappearancepreview"},
 			"V2C_ContentColumn": {"class": "settingswindowcontentcolumn", "special": [{"path": "return.stateNode.props.title", "value": ["PLUGINS", "THEMES"]}]}
 		},
 		"LoadedInComponents": {
@@ -1074,6 +1074,7 @@
 		"UserInfo": {"props": ["userInfo", "discordTag"]},
 		"UserPopout": {"props": ["userPopout", "headerPlaying"]},
 		"UserProfile": {"props": ["topSectionNormal", "tabBarContainer"]},
+		"UserSettingsAppearancePreview": {"props": ["preview", "firstMessage"]},
 		"UserSummaryItem": {"props": ["avatarContainerMasked", "container"]},
 		"Video": {"props": ["video", "fullScreen"]},
 		"VoiceChannel": {"props": ["avatarSpeaking", "voiceUser"]},
@@ -1784,6 +1785,9 @@
 		"guilds": ["AppBase", "guilds"],
 		"guildseparator": ["GuildsItems", "guildSeparator"],
 		"guildserror": ["GuildsItems", "guildsError"],
+		"usersettingsappearancepreview": ["UserSettingsAppearancePreview", "preview"],
+		"usersettingsappearancepreviewcompact": ["UserSettingsAppearancePreview", "compactpreview"],
+		"usersettingsappearancepreviewfirst": ["UserSettingsAppearancePreview", "firstMessage"],
 		"guildsettingsbannedcard": ["GuildSettingsBanned", "bannedUser"],
 		"guildsettingsbanneddiscrim": ["GuildSettingsBanned", "discrim"],
 		"guildsettingsbannedusername": ["GuildSettingsBanned", "username"],
