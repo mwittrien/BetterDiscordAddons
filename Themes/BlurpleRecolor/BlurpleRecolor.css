@@ -2027,6 +2027,9 @@ html .mtk8 {
 html .monaco-editor .find-widget .monaco-inputbox.synthetic-focus {
 	outline-color: rgb(var(--vaccentcolor));
 }
+html .monaco-editor .monaco-editor-hover a {
+	color: rgb(var(--vaccentcolor));
+}
 html .monaco-editor [class*="arrow-decoration"] {
 	border-bottom-color: rgb(var(--vaccentcolor));
 }

@@ -281,7 +281,7 @@ html {
 
 #app-mount .scrollbarGhost-2F9Zj2::-webkit-scrollbar-thumb {/* scrollers			old scrollers						*/
 	background-color: var(--scrollbar-thin-thumb);
-	border-color: transparent
+	border-color: transparent;
 }
 #app-mount .scrollbarGhost-2F9Zj2::-webkit-scrollbar-track {
 	background-color: var(--scrollbar-thin-track);
@@ -4189,6 +4189,19 @@ html .monaco-editor .find-widget .button:not(.disabled):hover,
 html .monaco-editor.hc-black .find-widget .button:not(.disabled):hover,
 html .monaco-editor.vs-dark .find-widget .button:not(.disabled):hover {
 	background-color: var(--background-modifier-hover);
+}
+
+html .monaco-editor .monaco-editor-hover {
+	background-color: var(--background-secondary) !important;
+	border: unset !important;
+	box-shadow: 0 0 0 1px rgba(var(--vbackgroundtertiary),.6),0 2px 10px 0 rgba(0,0,0,.2) !important;
+	color: var(--header-secondary) !important;
+}
+html .monaco-editor .monaco-editor-hover .hover-row:not(:first-child):not(:empty) {
+	border-color: var(--background-modifier-accent);
+}
+html .monaco-editor .monaco-editor-hover .hover-row .actions {
+	background-color: var(--background-floating);
 }
 
 html .monaco-quick-open-widget {
