@@ -4134,6 +4134,7 @@ html #bd-editor-panel .editor-wrapper {
 html .floating-window #bd-editor-panel .editor-wrapper:last-child {
 	border-radius: 0;
 }
+
 html .monaco-editor,
 html .monaco-editor-background,
 html .monaco-editor .inputarea.ime-input,
@@ -4159,8 +4160,9 @@ html .monaco-editor .lines-content .cigr {
 html .monaco-editor .view-overlays .current-line {
 	border-color: var(--interactive-muted);
 }
-html .mtk8 {
-	background-color: rgb(var(--vmentioncolor));
+
+html .monaco-editor .selected-text {
+	background-color: var(--background-tertiary);
 }
 
 html .monaco-editor.rename-box {

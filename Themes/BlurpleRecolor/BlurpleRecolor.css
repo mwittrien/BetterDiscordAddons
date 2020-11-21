@@ -2021,9 +2021,6 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 	box-shadow: none;
 }
 
-html .mtk8 {
-	background-color: rgb(var(--vaccentcolor));
-}
 html .monaco-editor .find-widget .monaco-inputbox.synthetic-focus {
 	outline-color: rgb(var(--vaccentcolor));
 }
@@ -2032,6 +2029,9 @@ html .monaco-editor .monaco-editor-hover a {
 }
 html .monaco-editor [class*="arrow-decoration"] {
 	border-bottom-color: rgb(var(--vaccentcolor));
+}
+html .monaco-editor .focused .selected-text {
+	background-color: rgb(var(--vaccentcolor));
 }
 
 html .monaco-tree[class*="monaco-tree-instance"].focused .monaco-tree-rows > .monaco-tree-row.focused:not(.highlighted) {
