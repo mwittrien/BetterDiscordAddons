@@ -14,16 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.1.4",
+			"version": "1.1.5",
 			"description": "Completely removes blocked messages"
 		},
 		"changeLog": {
 			"improved": {
-				"Voice Channels": "No longer plays voice notifications for blocked users and localy mutes them when they join the same voice channel as you"
-			},
-			"fixed": {
-				"Voice Channels": "Fixed issue where sounds didn't play if non-blocked users joins/leaves channel",
-				"Message Groups": "No longer keeps message groups split if a blocked message between the was removed and doesn't merge messages with different usernames"
+				"Replies": "Now hides the name of blocked users in the 'has replied' text and hides the referenced message"
 			}
 		}
 	};
@@ -70,6 +66,7 @@ module.exports = (_ => {
 				
 				this.patchedModules = {
 					before: {
+						Message: "default",
 						ReactorsComponent: "render",
 						ChannelMembers: "render",
 						PrivateChannelRecipients: "default",
@@ -212,9 +209,26 @@ module.exports = (_ => {
 				}
 			}
 		
+			processMessage (e) {
+				if (settings.removeMessages) {
+					let repliedMessage = e.instance.props.childrenRepliedMessage;
+					if (repliedMessage && repliedMessage.props && repliedMessage.props.children && repliedMessage.props.children.props && repliedMessage.props.children.props.referencedMessage && repliedMessage.props.children.props.referencedMessage.message && repliedMessage.props.children.props.referencedMessage.message.author && BDFDB.LibraryModules.FriendUtils.isBlocked(repliedMessage.props.children.props.referencedMessage.message.author.id)) {
+						delete e.instance.props.childrenRepliedMessage;
+						let header = e.instance.props.childrenHeader;
+						if (header && header.props) {
+							delete header.props.referencedMessage;
+							delete header.props.referencedUsernameProfile;
+							delete header.props.replyReference;
+							header.props.message = new BDFDB.DiscordObjects.Message(Object.assign({}, header.props.message, {messageReference: null}));
+						}
+					}
+				}
+			}
+		
 			processChannelPins (e) {
 				if (settings.removeMessages && e.returnvalue.props && e.returnvalue.props.children && e.returnvalue.props.children.props && BDFDB.ArrayUtils.is(e.returnvalue.props.children.props.messages)) e.returnvalue.props.children.props.messages = e.returnvalue.props.children.props.messages.filter(n => !n || !n.author || !n.author.id || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.author.id));
 			}
+			
 			processRecentMentions (e) {
 				if (settings.removeMessages && BDFDB.ArrayUtils.is(e.returnvalue.props.messages)) e.returnvalue.props.messages = e.returnvalue.props.messages.filter(n => !n || !n.author || !n.author.id || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.author.id));
 			}
