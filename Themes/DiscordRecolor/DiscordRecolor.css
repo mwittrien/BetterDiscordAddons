@@ -4243,12 +4243,26 @@ html .monaco-editor .reference-zone-widget .ref-tree {
     background: var(--background-secondary) !important;
     color: var(--header-secondary) !important;
 }
+html .monaco-list[class*="list_id"] .monaco-list-rows {
+    background: var(--background-secondary) !important;
+}
+html .monaco-list[class*="list_id"] .monaco-list-row {
+    color: var(--text-muted) !important;
+}
 html .monaco-drag-image,
-html .monaco-list[class*="list_id"]:focus .monaco-list-row.selected.focused {
+html .monaco-list[class*="list_id"] .monaco-list-row.focused,
+html .monaco-list[class*="list_id"] .monaco-list-row.focused:hover,
+html .monaco-list[class*="list_id"] .monaco-list-row.selected,
+html .monaco-list[class*="list_id"] .monaco-list-row.selected:hover,
+html .monaco-list[class*="list_id"]:focus .monaco-list-row.selected.focused,
+html .monaco-list[class*="list_id"]:not(.drop-target) .monaco-list-row:hover:not(.selected):not(.focused) {
     color: var(--header-primary) !important;
 }
+html .monaco-list[class*="list_id"] .monaco-list-row.focused,
+html .monaco-list[class*="list_id"] .monaco-list-row.focused:hover,
 html .monaco-list[class*="list_id"] .monaco-list-row.selected,
-html .monaco-list[class*="list_id"] .monaco-list-row.selected:hover {
+html .monaco-list[class*="list_id"] .monaco-list-row.selected:hover,
+html .monaco-list[class*="list_id"]:not(.drop-target) .monaco-list-row:hover:not(.selected):not(.focused) {
     background: var(--background-primary) !important;
 }
 html .monaco-editor .reference-zone-widget .preview .monaco-editor .margin {
@@ -4257,9 +4271,6 @@ html .monaco-editor .reference-zone-widget .preview .monaco-editor .margin {
 html .monaco-editor .reference-zone-widget .preview .monaco-editor .monaco-editor-background,
 html .monaco-editor .reference-zone-widget .preview .monaco-editor .inputarea.ime-input {
 	background: var(--background-secondary) linear-gradient(0deg, rgba(var(--vaccentcolor), 0.1), rgba(var(--vaccentcolor), 0.1));
-}
-html .monaco-list[class*="list_id"] .monaco-list-rows {
-    background: var(--background-secondary) !important;
 }
 html .monaco-editor .reference-zone-widget .ref-tree .monaco-list:focus .monaco-list-rows > .monaco-list-row.selected:not(.highlighted) {
     background: var(--background-primary) !important;
