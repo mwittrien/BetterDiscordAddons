@@ -4164,6 +4164,9 @@ html .monaco-editor .view-overlays .current-line {
 html .monaco-editor .selected-text {
 	background-color: var(--background-tertiary);
 }
+html .monaco-editor .focused .selected-text {
+	background-color: rgb(var(--vmentioncolor));
+}
 
 html .monaco-editor.rename-box {
 	background-color: var(--background-secondary) !important;
