@@ -4208,6 +4208,9 @@ html .monaco-editor .monaco-editor-hover .hover-row:not(:first-child):not(:empty
 html .monaco-editor .monaco-editor-hover .hover-row .actions {
 	background-color: var(--background-floating);
 }
+html .monaco-editor .monaco-editor-hover .monaco-editor-hover-content[style*="max-height"] {
+	max-height: 300px !important;
+}
 
 html .monaco-quick-open-widget {
 	background-color: var(--background-secondary) !important;
