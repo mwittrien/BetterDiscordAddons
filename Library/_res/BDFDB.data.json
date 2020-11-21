@@ -184,7 +184,7 @@
 			"Guild": {"class": "guildouter"},
 			"GuildFolder": {"class": "guildfolderwrapper", "special": [{"path": "return.memoizedProps.folderId"}, {"path": "return.memoizedProps.guildIds"}]},
 			"GuildIcon": {"class": "avataricon"},
-			"GuildRoleSettings": {"class": "settingswindowcontent"},
+			"GuildRoleSettings": {"class": "settingswindowcontentcolumn"},
 			"Guilds": {"class": "guildswrapper"},
 			"GuildSettings": {"class": "layer"},
 			"GuildSettingsBans": {"class": "guildsettingsbannedcard"},
@@ -226,7 +226,7 @@
 			"UserHook": {"class": "auditloguserhook"},
 			"UserPopout": {"class": "userpopout"},
 			"UserProfile": {"class": "userprofile"},
-			"UserSettingsAppearance": {"class": "settingswindowcontent"},
+			"UserSettingsAppearance": {"class": "settingswindowcontentcolumn"},
 			"V2C_ContentColumn": {"class": "settingswindowcontentcolumn", "special": [{"path": "return.stateNode.props.title", "value": ["PLUGINS", "THEMES"]}]}
 		},
 		"LoadedInComponents": {
