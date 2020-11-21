@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveNicknames",
 			"author": "DevilBro",
-			"version": "1.3.2",
+			"version": "1.3.3",
 			"description": "Replace all nicknames with the actual accountnames"
 		},
 		"changeLog": {
 			"fixed": {
-				"Mentions": "Now also works for mentions inside quotes"
+				"Replies": "Works for replies now too"
 			}
 		}
 	};
@@ -58,10 +58,10 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						replaceOwn:				{value: false, 	inner: false,	description: "Replace your own name: "},
-						replaceBots:			{value: true, 	inner: false,	description: "Replace the nickname of bots: "},
-						addNickname:			{value: false, 	inner: false,	description: "Add nickname as parentheses: "},
-						swapPositions:			{value: false, 	inner: false,	description: "Swap the position of username and nickname: "},
+						replaceOwn:				{value: false, 	inner: false,		description: "Replace your own name: "},
+						replaceBots:			{value: true, 	inner: false,		description: "Replace the nickname of bots: "},
+						addNickname:			{value: false, 	inner: false,		description: "Add nickname as parentheses: "},
+						swapPositions:			{value: false, 	inner: false,		description: "Swap the position of username and nickname: "},
 						changeInChatWindow:		{value: true, 	inner: true,		description: "Messages"},
 						changeInMentions:		{value: true, 	inner: true,		description: "Mentions"},
 						changeInVoiceChat:		{value: true, 	inner: true,		description: "Voice Channels"},
@@ -77,7 +77,8 @@ module.exports = (_ => {
 						VoiceUser: "render",
 						MemberListItem: "render",
 						Message: "default",
-						MessageContent: "type",
+						MessageUsername: "default",
+						MessageContent: "type"
 					},
 					after: {
 						TypingUsers: "render",
@@ -167,6 +168,18 @@ module.exports = (_ => {
 				if (header && header.props && header.props.message && header.props.message.nick) {
 					let newName = this.getNewName(header.props.message.author);
 					if (newName) header.props.message = new BDFDB.DiscordObjects.Message(Object.assign({}, header.props.message, {nick: newName}));
+				}
+				let repliedMessage = e.instance.props.childrenRepliedMessage;
+				if (repliedMessage && repliedMessage.props && repliedMessage.props.children && repliedMessage.props.children.props && repliedMessage.props.children.props.referencedMessage && repliedMessage.props.children.props.referencedMessage.message && repliedMessage.props.children.props.referencedMessage.message.nick) {
+					let newName = this.getNewName(repliedMessage.props.children.props.referencedMessage.message.author);
+					if (newName) repliedMessage.props.children.props.referencedMessage.message = new BDFDB.DiscordObjects.Message(Object.assign({}, repliedMessage.props.children.props.referencedMessage.message, {nick: newName}));
+				}
+			}
+			
+			processMessageUsername (e) {
+				if (e.instance.props.message.nick && settings.changeInChatWindow) {
+					let newName = this.getNewName(e.instance.props.message.author);
+					if (newName) e.instance.props.message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {nick: newName}));
 				}
 			}
 			
