@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.0.2",
+			"version": "4.0.3",
 			"description": "Allow you to change the icon, name, tag and color of users"
 		},
 		"changeLog": {
 			"fixed": {
-				"Direct Message Icons": "Gets changed again"
+				"Replies": "Works for replies now too"
 			}
 		}
 	};
@@ -99,6 +99,7 @@ module.exports = (_ => {
 						VoiceUser: "render",
 						Account: "render",
 						Message: "default",
+						MessageUsername: "default",
 						MessageContent: "type",
 						ReactorsComponent: "render",
 						ChannelReply: "default",
@@ -574,26 +575,37 @@ module.exports = (_ => {
 			}
 			
 			processMessageUsername (e) {
-				if (e.instance.props.message && settings.changeInChatWindow && e.returnvalue.props.children) {
-					let messageUsername = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
-					if (messageUsername) {
-						let data = changedUsers[e.instance.props.message.author.id];
-						if (data && (data.color1 || data.color2)) {
-							if (messageUsername.props && typeof messageUsername.props.children == "function") {
-								let renderChildren = messageUsername.props.children;
-								messageUsername.props.children = (...args) => {
-									let renderedChildren = renderChildren(...args);
-									this.changeUserColor(renderedChildren, e.instance.props.message.author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
-									return renderedChildren;
-								}
-							}
-							else this.changeUserColor(messageUsername, e.instance.props.message.author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
+				if (e.instance.props.message && settings.changeInChatWindow) {
+					let data = changedUsers[e.instance.props.message.author.id];
+					if (!e.returnvalue) {
+						let message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {author: this.getUserData(e.instance.props.message.author.id)}));
+						if (data) {
+							let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.message.author.id) || {}).colorString || data.color1;
+							if (data.name) message.nick = data.name;
+							if (color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
 						}
+						e.instance.props.message = message;
 					}
-					this.injectBadge(e.returnvalue.props.children, e.instance.props.message.author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, 2, {
-						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
-						useRem: true
-					});
+					else if (e.returnvalue.props.children) {
+						if (data && (data.color1 || data.color2)) {
+							let messageUsername = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
+							if (messageUsername) {
+								if (messageUsername.props && typeof messageUsername.props.children == "function") {
+									let renderChildren = messageUsername.props.children;
+									messageUsername.props.children = (...args) => {
+										let renderedChildren = renderChildren(...args);
+										this.changeUserColor(renderedChildren, e.instance.props.message.author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
+										return renderedChildren;
+									}
+								}
+								else this.changeUserColor(messageUsername, e.instance.props.message.author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
+							}
+						}
+						this.injectBadge(e.returnvalue.props.children, e.instance.props.message.author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, 2, {
+							tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
+							useRem: true
+						});
+					}
 				}
 			}
 			
