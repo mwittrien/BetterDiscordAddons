@@ -125,21 +125,24 @@ module.exports = (_ => {
 					let type = e.methodArguments[0];
 					if (settings.removeUsers && type == "user_join" || type == "user_leave" || type == "user_moved") {
 						channelId = BDFDB.LibraryModules.CurrentVoiceUtils.getChannelId();
-						let allConnectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryModules.VoiceUtils.getVoiceStates(BDFDB.LibraryModules.CurrentVoiceUtils.getGuildId()), n => n && n.channelId == channelId);
-						let unblockedUsers = BDFDB.ObjectUtils.filter(allConnectedUsers, n => n && !BDFDB.LibraryModules.FriendUtils.isBlocked(n.userId));
-						let unmutedBlockedUsers = BDFDB.ObjectUtils.toArray(allConnectedUsers).filter(n => n && BDFDB.LibraryModules.FriendUtils.isBlocked(n.userId) && !BDFDB.LibraryModules.MediaDeviceUtils.isLocalMute(n.userId));
-						if (unmutedBlockedUsers.length) {
-							BDFDB.TimeUtils.clear(muteTimeout);
-							muteTimeout = BDFDB.TimeUtils.timeout(_ => {
-								while (unmutedBlockedUsers.length) BDFDB.LibraryModules.MediaDeviceSetUtils.toggleLocalMute(unmutedBlockedUsers.pop().userId);
-							}, 1000);
-						}
-						if (Object.keys(unblockedUsers).length == Object.keys(connectedUsers).length) {
-							e.stopOriginalMethodCall();
-							e.methodArguments[0] = null;
+						if (channelId) {
+							let allConnectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryModules.VoiceUtils.getVoiceStates(BDFDB.LibraryModules.CurrentVoiceUtils.getGuildId()), n => n && n.channelId == channelId);
+							let unblockedUsers = BDFDB.ObjectUtils.filter(allConnectedUsers, n => n && !BDFDB.LibraryModules.FriendUtils.isBlocked(n.userId));
+							let unmutedBlockedUsers = BDFDB.ObjectUtils.toArray(allConnectedUsers).filter(n => n && BDFDB.LibraryModules.FriendUtils.isBlocked(n.userId) && !BDFDB.LibraryModules.MediaDeviceUtils.isLocalMute(n.userId));
+							if (unmutedBlockedUsers.length) {
+								BDFDB.TimeUtils.clear(muteTimeout);
+								muteTimeout = BDFDB.TimeUtils.timeout(_ => {
+									while (unmutedBlockedUsers.length) BDFDB.LibraryModules.MediaDeviceSetUtils.toggleLocalMute(unmutedBlockedUsers.pop().userId);
+								}, 1000);
+							}
+							if (Object.keys(unblockedUsers).length == Object.keys(connectedUsers).length) {
+								e.stopOriginalMethodCall();
+								e.methodArguments[0] = null;
+							}
+							else e.callOriginalMethodAfterwards();
+							connectedUsers = unblockedUsers;
 						}
 						else e.callOriginalMethodAfterwards();
-						connectedUsers = unblockedUsers;
 					}
 					else e.callOriginalMethodAfterwards();
 				}});
