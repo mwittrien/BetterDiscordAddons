@@ -226,7 +226,7 @@
 			"UserHook": {"class": "auditloguserhook"},
 			"UserPopout": {"class": "userpopout"},
 			"UserProfile": {"class": "userprofile"},
-			"UserSettingsAppearance": {"class": "settingswindowcontentregion"},
+			"UserSettingsAppearance": {"class": "radiogroup"},
 			"V2C_ContentColumn": {"class": "settingswindowcontentcolumn", "special": [{"path": "return.stateNode.props.title", "value": ["PLUGINS", "THEMES"]}]}
 		},
 		"LoadedInComponents": {
@@ -1033,6 +1033,7 @@
 		"QuickSelect": {"props": ["quickSelectArrow", "selected"]},
 		"QuickSwitch": {"props": ["resultFocused", "guildIconContainer"]},
 		"QuickSwitchWrap": {"props": ["container", "miscContainer"]},
+		"RadioGroup": {"props": ["radioBar", "item"]},
 		"Reactions": {"props": ["reactionBtn", "reaction"]},
 		"RecentMentions": {"props": ["recentMentionsPopout"]},
 		"RecentMentionsHeader": {"props": ["channelName", "channelHeader", "dmIcon"]},
@@ -2305,6 +2306,8 @@
 		"quickswitchresultname": ["QuickSwitch", "name"],
 		"quickswitchresultnote": ["QuickSwitch", "note"],
 		"quickswitchresultusername": ["QuickSwitch", "username"],
+		"radiogroup": ["RadioGroup", "item"],
+		"radiogroupinner": ["RadioGroup", "radioBar"],
 		"recentmentionschannelname": ["RecentMentionsHeader", "channelName"],
 		"recentmentionsclosebutton": ["RecentMentions", "closeButton"],
 		"recentmentionsdmicon": ["RecentMentionsHeader", "dmIcon"],
