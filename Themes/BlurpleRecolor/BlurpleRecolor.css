@@ -20,6 +20,7 @@
 .theme-dark, .theme-light {
 	--text-link: rgb(var(--vlinkcolor));
 	--focus-primary: rgb(var(--vlinkcolor));
+	--radio-group-dot-foreground: rgb(var(--vaccentcolor));
 }
 .theme-light {
 	--logo-primary: rgb(var(--vaccentcolor));
