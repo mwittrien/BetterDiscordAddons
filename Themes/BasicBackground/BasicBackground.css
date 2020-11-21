@@ -6152,22 +6152,17 @@ body::before {
 	fill: rgb(var(--vaccentcolor)) !important;
 }
 
-.radioGroup-1GBvlr {										/* radiogroup			container							*/
-	color: rgb(var(--fontwhite1));
-}
-.item-26Dhrx[style*="background-color: rgb(114, 137, 218)"] {
-	text-shadow: 1px 1px var(--vtextshadow);
-}
-.item-26Dhrx[style*="background-color: rgb(114, 137, 218)"] .checked-3_4uQ9[style*="border-color: rgb(114, 137, 218)"] {
-	border-color: var(--vtextshadow) !important;
-}
-.checkboxMute-14hTGS::before,
-.desc-2Dttbk {												/* radiogroup			description							*/
+#app-mount .item-26Dhrx {									/* radiogroup			container							*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
 	color: rgb(var(--fontwhite3));
 }
-.descChecked-XkfPsU, 
-.titleChecked-2wg0pd {
-	color: rgb(var(--fontwhite1)) !important;
+#app-mount .item-26Dhrx:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+	color: rgb(var(--fontwhite2));
+}
+#app-mount .item-26Dhrx[aria-checked=true] {
+	background-color: rgba(var(--vtransparencycolor), 0.6);
+	color: rgb(var(--fontwhite1));
 }
 
 #app-mount .checkboxContainer-2vV9zd::before {				/* checkbox				container							*/
