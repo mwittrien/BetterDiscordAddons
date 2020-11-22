@@ -821,9 +821,9 @@ module.exports = (_ => {
 	};
 	BDFDB.PluginUtils.refreshSettingsPanel = function (plugin, settingsPanel, ...args) {
 		if (BDFDB.ObjectUtils.is(plugin)) {
-			if (BDFDB.ReactUtils.isValidElement(settingsPanel)) {
-				settingsPanel.props = Object.assign({}, settingsPanel.props, ...args);
-				BDFDB.ReactUtils.forceUpdate(settingsPanel);
+			if (BDFDB.ReactUtils.isValidElement(settingsPanel) && settingsPanel.props && settingsPanel.props._instance) {
+				settingsPanel.props._instance.props = Object.assign({}, settingsPanel.props._instance.props, ...args);
+				BDFDB.ReactUtils.forceUpdate(settingsPanel.props._instance);
 			}
 			else if (typeof plugin.getSettingsPanel == "function" && Node.prototype.isPrototypeOf(settingsPanel) && settingsPanel.parentElement) {
 				settingsPanel.parentElement.appendChild(plugin.getSettingsPanel(...args));
@@ -6325,9 +6325,9 @@ module.exports = (_ => {
 				
 				InternalComponents.LibraryComponents.SettingsPanel = reactInitialized && class BDFDB_SettingsPanel extends LibraryModules.React.Component {
 					componentDidMount() {
-						this.props.instance = this;
+						this.props._instance = this;
 						let node = BDFDB.ReactUtils.findDOMNode(this);
-						if (node) this.node = node;
+						if (node) this.props._node = node;
 					}
 					componentWillUnmount() {
 						if (BDFDB.ObjectUtils.is(this.props.addon) && typeof this.props.addon.onSettingsClosed == "function") this.props.addon.onSettingsClosed();
