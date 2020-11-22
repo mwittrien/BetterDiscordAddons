@@ -465,7 +465,7 @@ module.exports = (_ => {
 										});
 										else BDFDB.LibraryRequires.fs.readFile(source, (error, response) => {
 											if (error) BDFDB.NotificationUtils.toast("Could not fetch file, please make sure the file exists", {type: "danger"});
-											else successSavedAudio(key, source, `data: audio/mpeg;base64,${response.toString("base64")}`);
+											else successSavedAudio(key, source, `data:audio/mpeg;base64,${response.toString("base64")}`);
 										});
 									},
 									children: BDFDB.LanguageUtils.LanguageStrings.SAVE
