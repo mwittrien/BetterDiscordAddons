@@ -547,9 +547,19 @@ html .iconBadge-2wi9r4 {
 	color: var(--text-muted);
 }
 
-#app-mount .item-26Dhrx[aria-checked=true] {
-	background-color: var(--background-tertiary);
-	color: var(--interactive-active);
+#app-mount .item-26Dhrx[aria-checked=true] .radioBar-bMNUI- {
+	background: rgb(var(--vaccentcolor));
+}
+#app-mount .item-26Dhrx[aria-checked=true] .radioBar-bMNUI- .radioIconForeground-XwlXQN {
+	color: #fff;
+}
+#app-mount .item-26Dhrx .radioBar-bMNUI-[style*="--radio-bar-accent-color"] {
+	background: var(--radio-bar-accent-color);
+	border: unset;
+	color: #fff;
+}
+#app-mount .item-26Dhrx[aria-checked=false]:hover .radioBar-bMNUI-[style*="--radio-bar-accent-color"] {
+	background: var(--radio-bar-accent-color) linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
 }
 
 #app-mount .container-1nZlH6 {

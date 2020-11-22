@@ -6160,9 +6160,19 @@ body::before {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	color: rgb(var(--fontwhite2));
 }
-#app-mount .item-26Dhrx[aria-checked=true] {
-	background-color: rgba(var(--vtransparencycolor), 0.6);
+#app-mount .item-26Dhrx[aria-checked=true] .radioBar-bMNUI- {
+	background: rgb(var(--vaccentcolor));
+}
+#app-mount .item-26Dhrx[aria-checked=true] .radioBar-bMNUI- .radioIconForeground-XwlXQN {
 	color: rgb(var(--fontwhite1));
+}
+#app-mount .item-26Dhrx .radioBar-bMNUI-[style*="--radio-bar-accent-color"] {
+	background: var(--radio-bar-accent-color);
+	border: unset;
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .item-26Dhrx[aria-checked=false]:hover .radioBar-bMNUI-[style*="--radio-bar-accent-color"] {
+	background: var(--radio-bar-accent-color) linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
 }
 
 #app-mount .checkboxContainer-2vV9zd::before {				/* checkbox				container							*/
