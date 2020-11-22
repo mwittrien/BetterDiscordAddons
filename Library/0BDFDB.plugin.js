@@ -6325,8 +6325,8 @@ module.exports = (_ => {
 				
 				InternalComponents.LibraryComponents.SettingsPanel = reactInitialized && class BDFDB_SettingsPanel extends LibraryModules.React.Component {
 					componentDidMount() {
-						let panel = BDFDB.ReactUtils.findDOMNode(this);
-						if (panel) this.panel = panel;
+						let node = BDFDB.ReactUtils.findDOMNode(this);
+						if (node) this.node = node;
 					}
 					componentWillUnmount() {
 						if (BDFDB.ObjectUtils.is(this.props.addon) && typeof this.props.addon.onSettingsClosed == "function") this.props.addon.onSettingsClosed();
