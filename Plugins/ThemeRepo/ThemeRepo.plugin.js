@@ -158,6 +158,7 @@ module.exports = (_ => {
 				preview = BDFDB.WindowUtils.open(this, "https://mwittrien.github.io/BetterDiscordAddons/Plugins/_res/DiscordPreview.html", {
 					alwaysOnTop: settings.keepOnTop,
 					showOnReady: true,
+					devTools: BDFDB.ListenerUtils.isPressed(16),
 					frame: false,
 					onLoad: _ => {
 						let titleBar = document.querySelector(BDFDB.dotCN.titlebar);
