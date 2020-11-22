@@ -112,138 +112,144 @@ module.exports = (_ => {
 			onStop() {}
 
 			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [];
-				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Settings",
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
 					collapseStates: collapseStates,
-					children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "Switch",
-						plugin: this,
-						keys: ["settings", key],
-						label: this.defaults.settings[key].description,
-						value: settings[key],
-						onChange: (value, instance) => {
-							settings[key] = value;
-						}
-					}))
-				}));
-				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Formats",
-					collapseStates: collapseStates,
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-							className: BDFDB.disCN.marginbottom8,
-							align: BDFDB.LibraryComponents.Flex.Align.END,
+					children: _ => {
+						let settingsItems = [];
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Settings",
+							collapseStates: collapseStates,
+							children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["settings", key],
+								label: this.defaults.settings[key].description,
+								value: settings[key],
+								onChange: (value, instance) => {
+									settings[key] = value;
+								}
+							}))
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Formats",
+							collapseStates: collapseStates,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-										title: "Name:",
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-											className: "input-newquote input-name",
-											value: "",
-											placeholder: "Formatname"
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+									className: BDFDB.disCN.marginbottom8,
+									align: BDFDB.LibraryComponents.Flex.Align.END,
+									children: [
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+												title: "Name:",
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+													className: "input-newquote input-name",
+													value: "",
+													placeholder: "Formatname"
+												})
+											})
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+												title: "Quote:",
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+													className: "input-newquote input-quote",
+													value: "",
+													placeholder: "Quote"
+												})
+											})
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+											style: {marginBottom: 1},
+											onClick: _ => {
+												for (let input of settingsPanel.props._node.querySelectorAll(".input-newquote " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new quote.", {type: "danger"});
+												let key = settingsPanel.props._node.querySelector(".input-name " + BDFDB.dotCN.input).value.trim();
+												let quote = settingsPanel.props._node.querySelector(".input-quote " + BDFDB.dotCN.input).value.trim();
+												if (formats[key]) return BDFDB.NotificationUtils.toast("A quote with the choosen name already exists, please choose another name", {type: "danger"});
+												else {
+													formats[key] = quote;
+													BDFDB.DataUtils.save(formats, this, "formats");
+													BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+												}
+											},
+											children: BDFDB.LanguageUtils.LanguageStrings.ADD
 										})
-									})
+									]
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-										title: "Quote:",
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-											className: "input-newquote input-quote",
-											value: "",
-											placeholder: "Quote"
-										})
-									})
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-									style: {marginBottom: 1},
-									onClick: _ => {
-										for (let input of settingsPanel.querySelectorAll(".input-newquote " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new quote.", {type: "danger"});
-										let key = settingsPanel.querySelector(".input-name " + BDFDB.dotCN.input).value.trim();
-										let quote = settingsPanel.querySelector(".input-quote " + BDFDB.dotCN.input).value.trim();
-										if (formats[key]) return BDFDB.NotificationUtils.toast("A quote with the choosen name already exists, please choose another name", {type: "danger"});
-										else {
-											formats[key] = quote;
-											BDFDB.DataUtils.save(formats, this, "formats");
-											BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
-										}
-									},
-									children: BDFDB.LanguageUtils.LanguageStrings.ADD
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+									className: BDFDB.disCN.marginbottom20
 								})
-							]
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-							className: BDFDB.disCN.marginbottom20
-						})
-					].concat(Object.keys(formats).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
-						cardId: key,
-						noRemove: key == "Standard",
-						onRemove: _ => {
-							delete formats[key];
-							BDFDB.DataUtils.save(formats, this, "formats");
-							BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
-						},
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-							direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+							].concat(Object.keys(formats).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
+								cardId: key,
+								noRemove: key == "Standard",
+								onRemove: _ => {
+									delete formats[key];
+									BDFDB.DataUtils.save(formats, this, "formats");
+									BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+								},
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+									direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+									children: [
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+											type: "TextInput",
+											plugin: this,
+											keys: ["formats", key],
+											label: key + ":",
+											basis: "70%",
+											value: formats[key],
+											onChange: (value, instance) => {
+												formats[key] = value;
+												BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key: "PREVIEW_MESSAGE_" + key.replace(/\s/g, "_")}));
+											}
+										}),
+										BDFDB.ReactUtils.createElement(PreviewMessageComponent, {
+											key: "PREVIEW_MESSAGE_" + key.replace(/\s/g, "_"),
+											format: key
+										})
+									]
+								})
+							})))
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Placeholder Guide",
+							collapseStates: collapseStates,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-									type: "TextInput",
-									plugin: this,
-									keys: ["formats", key],
-									label: key + ":",
-									basis: "70%",
-									value: formats[key],
-									onChange: (value, instance) => {
-										formats[key] = value;
-										BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key: "PREVIEW_MESSAGE_" + key.replace(/\s/g, "_")}));
-									}
-								}),
-								BDFDB.ReactUtils.createElement(PreviewMessageComponent, {
-									key: "PREVIEW_MESSAGE_" + key.replace(/\s/g, "_"),
-									format: key
-								})
-							]
-						})
-					})))
-				}));
-				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Placeholder Guide",
-					collapseStates: collapseStates,
-					children: [
-						"$quote will be replaced with the quoted message content",
-						"$rawQuote will be replaced with the raw quoted message content",
-						"$mention will be replaced with a mention of the message author",
-						"$link will be replaced with a discord direct link pointing to the message",
-						"$authorId will be replaced with the ID of the message author",
-						"$authorName will be replaced with the nickname or username of the message author",
-						"$authorAccount will be replaced with the accountname of the message author (username#discriminator)",
-						"$channel will be replaced with a mention of the channel (ignored for DMs)",
-						"$channelId will be replaced with the ID of the channel",
-						"$channelName will be replaced with the Name of the channel",
-						"$serverId will be replaced with the ID of the server",
-						"$serverName will be replaced with the name of the server",
-						"$hour will be replaced with the quote hour",
-						"$minute will be replaced with the quote minutes",
-						"$second will be replaced with the quote seconds",
-						"$msecond will be replaced with the quote milliseconds",
-						"$timemode will change $hour to a 12h format and will be replaced with AM/PM",
-						"$year will be replaced with the quote year",
-						"$month will be replaced with the quote month",
-						"$day will be replaced with the quote day",
-						"$monthnameL will be replaced with the monthname in long format based on the Discord Language",
-						"$monthnameS will be replaced with the monthname in short format based on the Discord Language",
-						"$weekdayL will be replaced with the weekday in long format based on the Discord Language",
-						"$weekdayS will be replaced with the weekday in short format based on the Discord Language"
-					].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
-						type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
-						children: string
-					}))
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+								"$quote will be replaced with the quoted message content",
+								"$rawQuote will be replaced with the raw quoted message content",
+								"$mention will be replaced with a mention of the message author",
+								"$link will be replaced with a discord direct link pointing to the message",
+								"$authorId will be replaced with the ID of the message author",
+								"$authorName will be replaced with the nickname or username of the message author",
+								"$authorAccount will be replaced with the accountname of the message author (username#discriminator)",
+								"$channel will be replaced with a mention of the channel (ignored for DMs)",
+								"$channelId will be replaced with the ID of the channel",
+								"$channelName will be replaced with the Name of the channel",
+								"$serverId will be replaced with the ID of the server",
+								"$serverName will be replaced with the name of the server",
+								"$hour will be replaced with the quote hour",
+								"$minute will be replaced with the quote minutes",
+								"$second will be replaced with the quote seconds",
+								"$msecond will be replaced with the quote milliseconds",
+								"$timemode will change $hour to a 12h format and will be replaced with AM/PM",
+								"$year will be replaced with the quote year",
+								"$month will be replaced with the quote month",
+								"$day will be replaced with the quote day",
+								"$monthnameL will be replaced with the monthname in long format based on the Discord Language",
+								"$monthnameS will be replaced with the monthname in short format based on the Discord Language",
+								"$weekdayL will be replaced with the weekday in long format based on the Discord Language",
+								"$weekdayS will be replaced with the weekday in short format based on the Discord Language"
+							].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
+								type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
+								children: string
+							}))
+						}));
+						
+						return settingsItems;
+					}
+				});
 			}
 
 			onSettingsClosed () {
