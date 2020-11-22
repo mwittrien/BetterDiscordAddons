@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.1.0",
+			"version": "2.1.1",
 			"description": "Allow you to look at all plugins from the plugin repo and download them on the fly"
 		},
 		"changeLog": {
 			"fixed": {
-				"BD Beta": "Fixed some issues with the beta"
+				"New Meta": "Fixed some issues with the meta parsing"
 			}
 		}
 	};
@@ -843,16 +843,28 @@ module.exports = (_ => {
 								}
 							}
 							else {
-								for (let tag of tags) {
-									let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(bodyCopy);
-									if (!result) result = new RegExp("get " + tag.replace("get", "").toLowerCase() + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(bodyCopy);
-									if (result) {
-										let separator = result[1];
-										result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
-										if (result.length > 2) {
-											result = result.slice(1, -1).join(separator).replace(/\\n/g, "\n").replace(/\\/g, "");
-											result = tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
-											plugin[tag] = result ? result.trim() : result;
+								let hasMETAline = bodyCopy.replace(/\s/g, "").indexOf("//META{");
+								if (!(hasMETAline < 20 && hasMETAline > -1)) {
+									let searchText = bodyCopy.replace(/[\r\t| ]*\*\s*/g, "*");
+									for (let tag of tags) {
+										let result = searchText.split('@' + tag.toLowerCase().slice(3) + ' ');
+										result = result.length > 1 ? result[1].split('\n')[0] : null;
+										result = result && tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
+										plugin[tag] = result ? result.trim() : result;
+									}
+								}
+								if (tags.some(tag => !plugin[tag])) {
+									for (let tag of tags) {
+										let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(bodyCopy);
+										if (!result) result = new RegExp("get " + tag.replace("get", "").toLowerCase() + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(bodyCopy);
+										if (result) {
+											let separator = result[1];
+											result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
+											if (result.length > 2) {
+												result = result.slice(1, -1).join(separator).replace(/\\n/g, "\n").replace(/\\/g, "");
+												result = tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
+												plugin[tag] = result ? result.trim() : result;
+											}
 										}
 									}
 								}

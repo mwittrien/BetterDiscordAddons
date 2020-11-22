@@ -1136,18 +1136,18 @@ module.exports = (_ => {
 							if ((text.split("*//").length > 1 || text.indexOf("/**") == 0) && text.split("\n").length > 1) {
 								let hasMETAline = text.replace(/\s/g, "").indexOf("//META{");
 								if (hasMETAline < 20 && hasMETAline > -1) {
-									let searchtext = text.replace(/\s*:\s*/g, ":").replace(/\s*}\s*/g, "}");
+									let searchText = text.replace(/\s*:\s*/g, ":").replace(/\s*}\s*/g, "}");
 									for (let tag of tags) {
-										let result = searchtext.split('"' + tag + '":"');
+										let result = searchText.split('"' + tag + '":"');
 										result = result.length > 1 ? result[1].split('",')[0].split('"}')[0] : null;
 										result = result && tag != "version" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
 										theme[tag] = result ? result.trim() : result;
 									}
 								}
 								else {
-									let searchtext = text.replace(/[\r\t| ]*\*\s*/g, "*");
+									let searchText = text.replace(/[\r\t| ]*\*\s*/g, "*");
 									for (let tag of tags) {
-										let result = searchtext.split('@' + tag + ' ');
+										let result = searchText.split('@' + tag + ' ');
 										result = result.length > 1 ? result[1].split('\n')[0] : null;
 										result = result && tag != "version" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
 										theme[tag] = result ? result.trim() : result;
