@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerDetails",
 			"author": "DevilBro",
-			"version": "1.0.2",
+			"version": "1.0.3",
 			"description": "Show details of a server when you hover over the icon in the server list"
+		},
+		"changeLog": {
+			"fixed": {
+				"BD Beta": "Works with BD beta"
+			}
 		}
 	};
 
@@ -237,172 +242,178 @@ module.exports = (_ => {
 			}
 
 			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [];
-				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Settings",
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
 					collapseStates: collapseStates,
-					children: Object.keys(settings).map(key => this.defaults.settings[key].cat == "settings" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "Switch",
-						plugin: this,
-						keys: ["settings", key],
-						label: this.defaults.settings[key].description,
-						value: settings[key],
-						onChange: (value, instance) => {
-							settings[key] = value;
-							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_SettingsPanel", up: true}), {name: "BDFDB_Select", all: true, noCopies: true}));
-						}
-					}))
-				}));
-				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Tooltip Settings",
-					collapseStates: collapseStates,
-					children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
-						className: BDFDB.disCN.marginbottom4,
-						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
-						children: "Add additional details in the server tooltip for: "
-					})].concat(Object.keys(settings).map(key => this.defaults.settings[key].cat == "tooltip" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "Switch",
-						plugin: this,
-						keys: ["settings", key],
-						label: this.labels[this.defaults.settings[key].description] || BDFDB.LanguageUtils.LanguageStrings[this.defaults.settings[key].description],
-						value: settings[key]
-					}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-						className: BDFDB.disCN.marginbottom8
-					})).concat(Object.keys(amounts).map(key => this.defaults.amounts[key].cat == "tooltip" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "Slider",
-						plugin: this,
-						keys: ["amounts", key],
-						label: this.defaults.amounts[key].description,
-						basis: "70%",
-						min: this.defaults.amounts[key].min,
-						max: this.defaults.amounts[key].max,
-						digits: this.defaults.amounts[key].digits,
-						markerAmount: 11,
-						onValueRender: value => value + this.defaults.amounts[key].unit,
-						childProps: {type: "number"},
-						value: amounts[key]
-					}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-						className: BDFDB.disCN.marginbottom8
-					})).concat(Object.keys(colors).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "TextInput",
-						plugin: this,
-						keys: ["colors", key],
-						basis: "70%",
-						label: this.defaults.colors[key].description,
-						value: colors[key],
-						childProps: {type: "color"},
-						placeholder: colors[key]
-					})))
-				}));
-				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Time Format",
-					collapseStates: collapseStates,
-					children: Object.keys(choices).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "Select",
-						plugin: this,
-						keys: ["choices", key],
-						label: this.defaults.choices[key].description,
-						basis: "70%",
-						value: choices[key],
-						options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value: id, label: lang.name}})),
-						searchable: true,
-						optionRenderer: lang => {
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-								align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-										grow: 0,
-										shrink: 0,
-										basis: "40%",
-										children: lang.label
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-										grow: 0,
-										shrink: 0,
-										basis: "60%",
-										children: this.getTimestamp(languages[lang.value].id)
-									})
-								]
-							});
-						},
-						valueRenderer: lang => {
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-								align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-										grow: 0,
-										shrink: 0,
-										children: lang.label
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-										grow: 1,
-										shrink: 0,
-										basis: "70%",
-										children: this.getTimestamp(languages[lang.value].id)
-									})
-								]
-							});
-						}
-					})).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-						className: BDFDB.disCN.marginbottom8
-					})).concat(Object.keys(formats).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "TextInput",
-						plugin: this,
-						keys: ["formats", key],
-						label: this.defaults.formats[key].description,
-						basis: "70%",
-						value: formats[key],
-						onChange: (value, instance) => {
-							formats[key] = value;
-							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_SettingsPanel", up: true}), {name: "BDFDB_Select", all: true, noCopies: true}));
-						}
-					}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-						className: BDFDB.disCN.marginbottom8
-					})).concat(Object.keys(amounts).map(key => this.defaults.amounts[key].cat == "format" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "TextInput",
-						plugin: this,
-						keys: ["amounts", key],
-						label: this.defaults.amounts[key].description,
-						note: this.defaults.amounts[key].note,
-						basis: "20%",
-						min: this.defaults.amounts[key].min,
-						max: this.defaults.amounts[key].max,
-						childProps: {type: "number"},
-						value: amounts[key]
-					}))).filter(n => n)
-				}));
-				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Placeholder Guide",
-					dividerTop: true,
-					collapseStates: collapseStates,
-					children: [
-						"$hour will be replaced with the hour of the date",
-						"$minute will be replaced with the minutes of the date",
-						"$second will be replaced with the seconds of the date",
-						"$msecond will be replaced with the milliseconds of the date",
-						"$timemode will change $hour to a 12h format and will be replaced with AM/PM",
-						"$year will be replaced with the year of the date",
-						"$yearS will be replaced with the year in short form",
-						"$month will be replaced with the month of the date",
-						"$day will be replaced with the day of the date",
-						"$monthnameL will be replaced with the monthname in long format based on the Discord Language",
-						"$monthnameS will be replaced with the monthname in short format based on the Discord Language",
-						"$weekdayL will be replaced with the weekday in long format based on the Discord Language",
-						"$weekdayS will be replaced with the weekday in short format based on the Discord Language",
-						"$daysago will be replaced with a string to tell you how many days ago the event occured. For Example: " + BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", 3)
-					].map(string => {
-						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
-							type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
-							children: string
-						});
-					})
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+					children: _ => {
+						let settingsItems = [];
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Settings",
+							collapseStates: collapseStates,
+							children: Object.keys(settings).map(key => this.defaults.settings[key].cat == "settings" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["settings", key],
+								label: this.defaults.settings[key].description,
+								value: settings[key],
+								onChange: (value, instance) => {
+									settings[key] = value;
+									BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_SettingsPanel", up: true}), {name: "BDFDB_Select", all: true, noCopies: true}));
+								}
+							}))
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Tooltip Settings",
+							collapseStates: collapseStates,
+							children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+								className: BDFDB.disCN.marginbottom4,
+								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
+								children: "Add additional details in the server tooltip for: "
+							})].concat(Object.keys(settings).map(key => this.defaults.settings[key].cat == "tooltip" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["settings", key],
+								label: this.labels[this.defaults.settings[key].description] || BDFDB.LanguageUtils.LanguageStrings[this.defaults.settings[key].description],
+								value: settings[key]
+							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								className: BDFDB.disCN.marginbottom8
+							})).concat(Object.keys(amounts).map(key => this.defaults.amounts[key].cat == "tooltip" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Slider",
+								plugin: this,
+								keys: ["amounts", key],
+								label: this.defaults.amounts[key].description,
+								basis: "70%",
+								min: this.defaults.amounts[key].min,
+								max: this.defaults.amounts[key].max,
+								digits: this.defaults.amounts[key].digits,
+								markerAmount: 11,
+								onValueRender: value => value + this.defaults.amounts[key].unit,
+								childProps: {type: "number"},
+								value: amounts[key]
+							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								className: BDFDB.disCN.marginbottom8
+							})).concat(Object.keys(colors).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "TextInput",
+								plugin: this,
+								keys: ["colors", key],
+								basis: "70%",
+								label: this.defaults.colors[key].description,
+								value: colors[key],
+								childProps: {type: "color"},
+								placeholder: colors[key]
+							})))
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Time Format",
+							collapseStates: collapseStates,
+							children: Object.keys(choices).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Select",
+								plugin: this,
+								keys: ["choices", key],
+								label: this.defaults.choices[key].description,
+								basis: "70%",
+								value: choices[key],
+								options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value: id, label: lang.name}})),
+								searchable: true,
+								optionRenderer: lang => {
+									return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+										children: [
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+												grow: 0,
+												shrink: 0,
+												basis: "40%",
+												children: lang.label
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+												grow: 0,
+												shrink: 0,
+												basis: "60%",
+												children: this.getTimestamp(languages[lang.value].id)
+											})
+										]
+									});
+								},
+								valueRenderer: lang => {
+									return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+										children: [
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+												grow: 0,
+												shrink: 0,
+												children: lang.label
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+												grow: 1,
+												shrink: 0,
+												basis: "70%",
+												children: this.getTimestamp(languages[lang.value].id)
+											})
+										]
+									});
+								}
+							})).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								className: BDFDB.disCN.marginbottom8
+							})).concat(Object.keys(formats).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "TextInput",
+								plugin: this,
+								keys: ["formats", key],
+								label: this.defaults.formats[key].description,
+								basis: "70%",
+								value: formats[key],
+								onChange: (value, instance) => {
+									formats[key] = value;
+									BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_SettingsPanel", up: true}), {name: "BDFDB_Select", all: true, noCopies: true}));
+								}
+							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								className: BDFDB.disCN.marginbottom8
+							})).concat(Object.keys(amounts).map(key => this.defaults.amounts[key].cat == "format" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "TextInput",
+								plugin: this,
+								keys: ["amounts", key],
+								label: this.defaults.amounts[key].description,
+								note: this.defaults.amounts[key].note,
+								basis: "20%",
+								min: this.defaults.amounts[key].min,
+								max: this.defaults.amounts[key].max,
+								childProps: {type: "number"},
+								value: amounts[key]
+							}))).filter(n => n)
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Placeholder Guide",
+							dividerTop: true,
+							collapseStates: collapseStates,
+							children: [
+								"$hour will be replaced with the hour of the date",
+								"$minute will be replaced with the minutes of the date",
+								"$second will be replaced with the seconds of the date",
+								"$msecond will be replaced with the milliseconds of the date",
+								"$timemode will change $hour to a 12h format and will be replaced with AM/PM",
+								"$year will be replaced with the year of the date",
+								"$yearS will be replaced with the year in short form",
+								"$month will be replaced with the month of the date",
+								"$day will be replaced with the day of the date",
+								"$monthnameL will be replaced with the monthname in long format based on the Discord Language",
+								"$monthnameS will be replaced with the monthname in short format based on the Discord Language",
+								"$weekdayL will be replaced with the weekday in long format based on the Discord Language",
+								"$weekdayS will be replaced with the weekday in short format based on the Discord Language",
+								"$daysago will be replaced with a string to tell you how many days ago the event occured. For Example: " + BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", 3)
+							].map(string => {
+								return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
+									type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
+									children: string
+								});
+							})
+						}));
+						
+						return settingsItems;
+					}
+				});
 			}
 
 			onSettingsClosed () {

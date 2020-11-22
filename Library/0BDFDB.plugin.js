@@ -16,13 +16,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.1.5",
+			"version": "1.1.6",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 		"changeLog": {
 			"fixed": {
-				"Works ": "Can discord stop messing with the server list, jeez"
+				"BD Beta": "Fixed some issues with BD Beta"
 			}
 		}
 	};
@@ -795,22 +795,41 @@ module.exports = (_ => {
 		}
 		loadingIconWrapper.appendChild(icon);
 	};
-	BDFDB.PluginUtils.createSettingsPanel = function (plugin, children) {
-		plugin = plugin == BDFDB && InternalBDFDB || plugin;
-		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children))) return;
-		let settingsPanel = BDFDB.DOMUtils.create(`<div class="${plugin.name}-settings ${BDFDB.disCN.settingspanel}"></div>`);
-		BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, {
-			key: `${plugin.name}-settingsPanel`,
-			plugin: plugin,
-			title: !isBeta && plugin.name,
-			children: children
-		}), settingsPanel);
-		return settingsPanel;
+	BDFDB.PluginUtils.createSettingsPanel = function (addon, props) {
+		addon = addon == BDFDB && InternalBDFDB || addon;
+		if (!BDFDB.ObjectUtils.is(addon)) return;
+		if (isBeta && BDFDB.ObjectUtils.is(props)) {
+			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, Object.assign({
+				className: BDFDB.DOMUtils.formatClassName(addon.name && `${addon.name}-settings`, BDFDB.disCN.settingspanel),
+				key: `${addon.name}-settingsPanel`,
+				addon: addon
+			}, props));
+		}
+		else {
+			let children = BDFDB.ReactUtils.isValidElement(props) || BDFDB.ArrayUtils.is(props) ? props : (props && typeof props.children == "function" && props.children());
+			if (!children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children))) return;
+			let settingsPanel = BDFDB.DOMUtils.create(`<div class="${addon.name}-settings ${BDFDB.disCN.settingspanel}"></div>`);
+			BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, {
+				key: `${addon.name}-settingsPanel`,
+				addon: addon,
+				title: !isBeta && addon.name,
+				collapseStates: props && props.collapseStates,
+				children: children
+			}), settingsPanel);
+			return settingsPanel;
+		}
 	};
 	BDFDB.PluginUtils.refreshSettingsPanel = function (plugin, settingsPanel, ...args) {
-		if (!BDFDB.ObjectUtils.is(plugin) || typeof plugin.getSettingsPanel != "function" || !Node.prototype.isPrototypeOf(settingsPanel) || !settingsPanel.parentElement) return;
-		settingsPanel.parentElement.appendChild(plugin.getSettingsPanel(...args));
-		settingsPanel.remove();
+		if (BDFDB.ObjectUtils.is(plugin)) {
+			if (BDFDB.ReactUtils.isValidElement(settingsPanel)) {
+				settingsPanel.props = Object.assign({}, settingsPanel.props, ...args);
+				BDFDB.ReactUtils.forceUpdate(settingsPanel);
+			}
+			else if (typeof plugin.getSettingsPanel == "function" && Node.prototype.isPrototypeOf(settingsPanel) && settingsPanel.parentElement) {
+				settingsPanel.parentElement.appendChild(plugin.getSettingsPanel(...args));
+				settingsPanel.remove();
+			}
+		}
 	};
 	InternalBDFDB.addSpecialListeners = function (plugin) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
@@ -6305,8 +6324,12 @@ module.exports = (_ => {
 				};
 				
 				InternalComponents.LibraryComponents.SettingsPanel = reactInitialized && class BDFDB_SettingsPanel extends LibraryModules.React.Component {
+					componentDidMount() {
+						let panel = BDFDB.ReactUtils.findDOMNode(this);
+						if (panel) this.panel = panel;
+					}
 					componentWillUnmount() {
-						if (BDFDB.ObjectUtils.is(this.props.plugin) && typeof this.props.plugin.onSettingsClosed == "function") this.props.plugin.onSettingsClosed();
+						if (BDFDB.ObjectUtils.is(this.props.addon) && typeof this.props.addon.onSettingsClosed == "function") this.props.addon.onSettingsClosed();
 					}
 					render() {
 						let headerItems = [
@@ -6324,10 +6347,14 @@ module.exports = (_ => {
 						].flat(10).filter(n => n);
 						
 						let panelItems = [
-							this.props.children
+							typeof this.props.children == "function" ? (_ => {
+								return this.props.children(this.props.collapseStates);
+							})() : this.props.children
 						].flat(10).filter(n => n);
 						
+						if (this.props.addon && this.props.addon.name) this.key = `${this.props.addon.name}-settingsPanel`;
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+							className: this.props.className,
 							direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
 							children: headerItems.length ? ([
 								[
@@ -7779,19 +7806,26 @@ module.exports = (_ => {
 		}
 		
 		getSettingsPanel (collapseStates = {}) {
-			let settingsPanel, settingsItems = [];
-			let bdToastSetting = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts);
-			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
-				type: "Switch",
-				plugin: InternalBDFDB,
-				disabled: key == "showToasts" && bdToastSetting,
-				keys: ["settings", key],
-				label: InternalBDFDB.defaults.settings[key].description,
-				note: key == "showToasts" && bdToastSetting && "Disable BBDs general 'Show Toast' setting before disabling this",
-				value: settings[key] || key == "showToasts" && bdToastSetting
-			}));
-			
-			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, settingsItems);
+			let settingsPanel;
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, {
+				collapseStates: collapseStates,
+				children: _ => {
+					let bdToastSetting = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts);
+					let settingsItems = [];
+					
+					for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
+						type: "Switch",
+						plugin: InternalBDFDB,
+						disabled: key == "showToasts" && bdToastSetting,
+						keys: ["settings", key],
+						label: InternalBDFDB.defaults.settings[key].description,
+						note: key == "showToasts" && bdToastSetting && "Disable BBDs general 'Show Toast' setting before disabling this",
+						value: settings[key] || key == "showToasts" && bdToastSetting
+					}));
+					
+					return settingsItems;
+				}
+			});
 		}
 	}
 })();

@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeSettings",
 			"author": "DevilBro",
-			"version": "1.2.5",
+			"version": "1.2.6",
 			"description": "Allow you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page"
 		},
 		"changeLog": {
@@ -98,7 +98,7 @@ module.exports = (_ => {
 									subheader: "",
 									className: BDFDB.disCN._repomodal,
 									size: "MEDIUM",
-									children: BDFDB.ReactUtils.elementToReact(this.createThemeVarInputs(addon, vars)),
+									children: this.createThemeVarInputs(addon, vars),
 									buttons: [{contents: "Update", color: "GREEN", click: modal => {this.updateTheme(modal, addon);}}]
 								});
 							});
@@ -186,48 +186,53 @@ module.exports = (_ => {
 			}
 
 			createThemeVarInputs (theme, vars, settingsItems = []) {
-				for (let varStr of vars) {
-					varStr = varStr.split(":");
-					let varName = varStr.shift().trim();
-					varStr = varStr.join(":").split(/;[^A-z0-9]|\/\*/);
-					let varValue = varStr.shift().trim();
-					if (varValue) {
-						let childType = "text", childMode = "";
-						let isColor = BDFDB.ColorUtils.getType(varValue);
-						let isComp = !isColor && /^[0-9 ]+,[0-9 ]+,[0-9 ]+$/g.test(varValue);
-						if (isColor || isComp) {
-							childType = "color";
-							childMode = isComp && "comp";
-						}
-						else {
-							let isUrlFile = /url\(.+\)/gi.test(varValue);
-							let isFile = !isUrlFile && /(http(s)?):\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(varValue);
-							if (isFile || isUrlFile) {
-								childType = "file";
-								childMode = isUrlFile && "url";
+				let props = {
+					children: _ => {
+						for (let varStr of vars) {
+							varStr = varStr.split(":");
+							let varName = varStr.shift().trim();
+							varStr = varStr.join(":").split(/;[^A-z0-9]|\/\*/);
+							let varValue = varStr.shift().trim();
+							if (varValue) {
+								let childType = "text", childMode = "";
+								let isColor = BDFDB.ColorUtils.getType(varValue);
+								let isComp = !isColor && /^[0-9 ]+,[0-9 ]+,[0-9 ]+$/g.test(varValue);
+								if (isColor || isComp) {
+									childType = "color";
+									childMode = isComp && "comp";
+								}
+								else {
+									let isUrlFile = /url\(.+\)/gi.test(varValue);
+									let isFile = !isUrlFile && /(http(s)?):\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(varValue);
+									if (isFile || isUrlFile) {
+										childType = "file";
+										childMode = isUrlFile && "url";
+									}
+								}
+								let varDescription = varStr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
+								settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+									type: "TextInput",
+									margin: 20,
+									dividerBottom: vars[vars.length-1] != varStr,
+									childProps: {
+										type: childType,
+										mode: childMode,
+										filter: childType == "file" && "image"
+									},
+									label: varName[0].toUpperCase() + varName.slice(1),
+									note: varDescription && varDescription.indexOf("*") == 0 ? varDescription.slice(1) : varDescription,
+									basis: "70%",
+									varName: varName,
+									value: varValue,
+									placeholder: varValue
+								}));
 							}
 						}
-						let varDescription = varStr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-							type: "TextInput",
-							margin: 20,
-							dividerBottom: vars[vars.length-1] != varStr,
-							childProps: {
-								type: childType,
-								mode: childMode,
-								filter: childType == "file" && "image"
-							},
-							label: varName[0].toUpperCase() + varName.slice(1),
-							note: varDescription && varDescription.indexOf("*") == 0 ? varDescription.slice(1) : varDescription,
-							basis: "70%",
-							varName: varName,
-							value: varValue,
-							placeholder: varValue
-						}));
+						return settingsItems;
 					}
-				}
+				};
 				
-				return BDFDB.PluginUtils.createSettingsPanel(theme, settingsItems);
+				return BDFDB.PluginUtils.createSettingsPanel(theme, isBeta ? props : props.children());
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
