@@ -3564,7 +3564,7 @@ module.exports = (_ => {
 						LibraryModules.ModalUtils.openModal(props => {
 							modalProps = props;
 							return BDFDB.ReactUtils.createElement(class BDFDB_Modal extends LibraryModules.React.Component {
-								render () {
+								render() {
 									return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ModalComponents.ModalRoot, {
 										className: BDFDB.DOMUtils.formatClassName(name && `${name}-modal`, BDFDB.disCN.modalwrapper, config.className),
 										size: typeof config.size == "string" && InternalComponents.LibraryComponents.ModalComponents.ModalSize[config.size.toUpperCase()] || InternalComponents.LibraryComponents.ModalComponents.ModalSize.SMALL,
@@ -3611,14 +3611,14 @@ module.exports = (_ => {
 										]
 									});
 								}
-								componentDidMount () {
+								componentDidMount() {
 									modalInstance = this;
 									modal = BDFDB.ReactUtils.findDOMNode(this);
 									modal = modal && modal.parentElement ? modal.parentElement.querySelector(BDFDB.dotCN.modalwrapper) : null;
 									if (modal && props.transitionState == 1 && props.transitionState > oldTransitionState) config.onOpen(modal, this);
 									oldTransitionState = props.transitionState;
 								}
-								componentWillUnmount () {
+								componentWillUnmount() {
 									if (modal && props.transitionState == 3) {
 										for (let cancel of cancels) cancel(modal);
 										config.onClose(modal, this);
@@ -6325,8 +6325,9 @@ module.exports = (_ => {
 				
 				InternalComponents.LibraryComponents.SettingsPanel = reactInitialized && class BDFDB_SettingsPanel extends LibraryModules.React.Component {
 					componentDidMount() {
+						this.props.instance = this;
 						let node = BDFDB.ReactUtils.findDOMNode(this);
-						if (node) this.props.node = node;
+						if (node) this.node = node;
 					}
 					componentWillUnmount() {
 						if (BDFDB.ObjectUtils.is(this.props.addon) && typeof this.props.addon.onSettingsClosed == "function") this.props.addon.onSettingsClosed();
