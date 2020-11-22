@@ -248,14 +248,14 @@ module.exports = (_ => {
 			checkImage(base64OrUrl, callback) {
 				if (base64OrUrl.indexOf("https://") == 0 || base64OrUrl.indexOf("http://") == 0) BDFDB.LibraryRequires.request(base64OrUrl.trim(), (error, response, body) => {
 					if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1 && response.headers["content-type"] != "image/gif") {
-						this.resizeImage("data: " + response.headers["content-type"] + ";base64," + (new Buffer(body).toString("base64")), callback);
+						this.resizeImage("data:" + response.headers["content-type"] + ";base64," + (new Buffer(body).toString("base64")), callback);
 					}
 					else callback(base64OrUrl);
 				});
 				else this.resizeImage(base64OrUrl, callback);
 			}
 			resizeImage(base64, callback) {
-				let type = base64.split("data: ").slice(1).join(" ").split(";")[0];
+				let type = base64.split("data:").slice(1).join(" ").split(";")[0];
 				if (type == "image/gif") callback(base64);
 				else {
 					let img = new Image();
