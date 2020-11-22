@@ -126,6 +126,7 @@ https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/Rol
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/SendButton/SendButton.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/ServerSearch/ServerSearch.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/StatusEverywhere/StatusEverywhere.plugin.js
+https://raw.githubusercontent.com/somebody1234/userscripts/master/NRM.plugin.js
 https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/LinkChannels/LinkChannels.plugin.js
 https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/OpenSpotifylinksInSpotify/OpenSpotifylinksInSpotify.plugin.js
 https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/QuickMuteChannels/QuickMuteChannels.plugin.js
