@@ -16,7 +16,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.1.6",
+			"version": "1.1.7",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
@@ -7211,7 +7211,7 @@ module.exports = (_ => {
 										subheader: "",
 										className: BDFDB.disCN._repomodal,
 										size: "MEDIUM",
-										children: plugin.getSettingsPanel,
+										children: plugin.getSettingsPanel(),
 										buttons: [{contents: BDFDB.LanguageUtils.LanguageStrings.DONE, color: "BRAND", close: true}]
 									});
 								});
