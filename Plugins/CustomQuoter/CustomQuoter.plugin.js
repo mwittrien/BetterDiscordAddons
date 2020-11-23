@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomQuoter",
 			"author": "DevilBro",
-			"version": "1.1.9",
+			"version": "1.2.0",
 			"description": "Customize the output of the native quote feature of Discord"
 		},
 		"changeLog": {
 			"fixed": {
-				"Reply Feature": "Now adds the quote button in the message context menu if the reply feature replaced the quote feature"
+				"New Settings Menu": "Fixed for new settings menu"
 			}
 		}
 	};
