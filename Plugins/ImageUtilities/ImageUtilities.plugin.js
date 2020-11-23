@@ -105,15 +105,15 @@ module.exports = (_ => {
 					
 				this.defaults = {
 					settings: {
-						resizeImage: 			{value: true,	inner: false,	description: "Always resize image to fit the whole image modal"},
-						addDetails: 			{value: true,	inner: false,	description: "Add image details (name, size, amount) in the image modal"},
-						showAsHeader:			{value: true, 	inner: false,	description: "Show image details as a details header above the image in the chat"},
-						showOnHover:			{value: false, 	inner: false,	description: "Show image details as Tooltip in the chat"},
-						enableGallery: 			{value: true,	inner: false,	description: "Display previous/next Images in the same message in the image modal"},
-						enableZoom: 			{value: true,	inner: false,	description: "Create a zoom lense if you press down on an image in the image modal"},
-						enableCopyImg: 			{value: true,	inner: false,	description: "Add a copy image option in the image modal"},
-						enableSaveImg: 			{value: true,	inner: false,	description: "Add a save image as option in the image modal"},
-						useChromium: 			{value: false, 	inner: false,	description: "Use an inbuilt browser window instead of opening your default browser"},
+						resizeImage: 			{value: true,	inner: false,		description: "Always resize image to fit the whole image modal"},
+						addDetails: 			{value: true,	inner: false,		description: "Add image details (name, size, amount) in the image modal"},
+						showAsHeader:			{value: true, 	inner: false,		description: "Show image details as a details header above the image in the chat"},
+						showOnHover:			{value: false, 	inner: false,		description: "Show image details as Tooltip in the chat"},
+						enableGallery: 			{value: true,	inner: false,		description: "Display previous/next Images in the same message in the image modal"},
+						enableZoom: 			{value: true,	inner: false,		description: "Create a zoom lense if you press down on an image in the image modal"},
+						enableCopyImg: 			{value: true,	inner: false,		description: "Add a copy image option in the image modal"},
+						enableSaveImg: 			{value: true,	inner: false,		description: "Add a save image as option in the image modal"},
+						useChromium: 			{value: false, 	inner: false,		description: "Use an inbuilt browser window instead of opening your default browser"},
 						addUserAvatarEntry: 	{value: true, 	inner: true,		description: "User Avatars"},
 						addGuildIconEntry: 		{value: true, 	inner: true,		description: "Server Icons"},
 						addEmojiEntry: 			{value: true, 	inner: true,		description: "Custom Emojis/Emotes"}
