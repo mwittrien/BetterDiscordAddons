@@ -5867,7 +5867,7 @@ module.exports = (_ => {
 				InternalComponents.LibraryComponents.ModalComponents.ModalFooter = reactInitialized && class BDFDB_ModalFooter extends LibraryModules.React.Component {
 					render() {
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.modalfooter),
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modalfooter, this.props.className),
 							direction: this.props.direction || InternalComponents.LibraryComponents.Flex.Direction.HORIZONTAL_REVERSE,
 							align: InternalComponents.LibraryComponents.Flex.Align.STRETCH,
 							grow: 0,
