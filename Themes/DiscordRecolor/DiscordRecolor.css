@@ -1179,6 +1179,9 @@ img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 #app-mount .helpIcon-2EyVTp {
 	background-color: var(--header-primary);
 }
+#app-mount .helpIcon-2EyVTp [fill] {
+	fill: var(--background-secondary);
+}
 #app-mount .textLink-3aPthL,
 #app-mount .message-group .textLink-3aPthL {
 	color: var(--header-primary);

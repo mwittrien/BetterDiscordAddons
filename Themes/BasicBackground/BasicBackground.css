@@ -1206,6 +1206,25 @@ body::before {
 	color: rgb(var(--fontwhite4));
 }
 
+#app-mount .invite-18yqGF {									/* invite				group invite						*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+	border-color: rgba(var(--vtransparencycolor), 0.1);
+}
+#app-mount .header-Hg_qNF {
+	color: rgb(var(--fontwhite3));
+}
+#app-mount .name-GG2Mcs,
+#app-mount .partyStatus-6AjDud {
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .moreUsers-1sZP3U {
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+	color: rgb(var(--fontwhite3));
+}
+#app-mount .partyMemberEmpty-2iyh5g {
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+
 
 /* ----		6.3.	TEXTAREA						---- */
 
