@@ -198,6 +198,10 @@ module.exports = (_ => {
 						grid-gap: 4px;
 					}
 					
+					${BDFDB.dotCN._badgeseverywherebadgessettings} {
+						color: var(--header-primary);
+					}
+					
 					${BDFDB.dotCN._badgeseverywherebadge} {
 						background-size: contain;
 						background-position: center;

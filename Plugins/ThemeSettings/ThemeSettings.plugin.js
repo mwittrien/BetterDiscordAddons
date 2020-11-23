@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeSettings",
 			"author": "DevilBro",
-			"version": "1.2.7",
+			"version": "1.2.8",
 			"description": "Allow you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page"
 		},
 		"changeLog": {
@@ -161,9 +161,10 @@ module.exports = (_ => {
 				return [];
 			}
 
-			createThemeVarInputs (theme, vars, settingsItems = []) {
+			createThemeVarInputs (theme, vars) {
 				let props = {
 					children: _ => {
+						let settingsItems = [];
 						for (let varStr of vars) {
 							varStr = varStr.split(":");
 							let varName = varStr.shift().trim();
