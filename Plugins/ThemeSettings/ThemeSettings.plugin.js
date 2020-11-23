@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeSettings",
 			"author": "DevilBro",
-			"version": "1.2.6",
+			"version": "1.2.7",
 			"description": "Allow you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page"
 		},
 		"changeLog": {
@@ -83,6 +83,16 @@ module.exports = (_ => {
 				if (addon && !addon.plugin && !addon.instance && addon.css) {
 					let vars = this.getThemeVars(addon.css);
 					if (vars.length) {
+						let open = _ => {
+							BDFDB.ModalUtils.open(this, {
+								header: `${addon.name} ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
+								subheader: "",
+								className: BDFDB.disCN._repomodal,
+								size: "MEDIUM",
+								children: this.createThemeVarInputs(addon, vars),
+								buttons: [{contents: "Update", color: "GREEN", click: modal => {this.updateTheme(modal, addon);}}]
+							});
+						};
 						if (isBeta) {
 							let controls = card.querySelector("." + BDFDB.disCN._repofooter.split(" ")[0] + " " + BDFDB.dotCN._repocontrols);
 							let settingsButton = document.createElement("button");
@@ -92,16 +102,7 @@ module.exports = (_ => {
 								<path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"></path>
 							</svg>`));
 							controls.insertBefore(settingsButton, controls.firstElementChild);
-							settingsButton.addEventListener("click", _ => {
-								BDFDB.ModalUtils.open(this, {
-									header: `${addon.name} Settings`,
-									subheader: "",
-									className: BDFDB.disCN._repomodal,
-									size: "MEDIUM",
-									children: this.createThemeVarInputs(addon, vars),
-									buttons: [{contents: "Update", color: "GREEN", click: modal => {this.updateTheme(modal, addon);}}]
-								});
-							});
+							settingsButton.addEventListener("click", open);
 						}
 						else {
 							let footer = card.querySelector("." + BDFDB.disCN._repofooter.split(" ").join(",."));
@@ -117,32 +118,7 @@ module.exports = (_ => {
 							settingsButton.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._reposettingsbutton, "theme-settings-button");
 							settingsButton.innerText = "Settings";
 							footer.appendChild(settingsButton);
-							settingsButton.addEventListener("click", _ => {
-								BDFDB.DOMUtils.addClass(card, BDFDB.disCN._reposettingsopen);
-								BDFDB.DOMUtils.removeClass(card, BDFDB.disCN._reposettingsclosed);
-								let children = [];
-								while (card.childElementCount) {
-									children.push(card.firstChild);
-									card.firstChild.remove();
-								}
-								let closeButton = BDFDB.DOMUtils.create(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
-								card.appendChild(closeButton);
-								closeButton.addEventListener("click", _ => {
-									BDFDB.DOMUtils.removeClass(card, BDFDB.disCN._reposettingsopen);
-									BDFDB.DOMUtils.addClass(card, BDFDB.disCN._reposettingsclosed);
-									while (card.childElementCount) card.firstChild.remove();
-									while (children.length) card.appendChild(children.shift());
-								});
-								card.appendChild(this.createThemeVarInputs(addon, vars, [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-										type: "Button",
-										color: BDFDB.LibraryComponents.Button.Colors.GREEN,
-										label: "Update all variables",
-										onClick: _ => {this.updateTheme(card, addon);},
-										children: "Update"
-									})
-								]));
-							});
+							settingsButton.addEventListener("click", open);
 						}
 					}
 				}
@@ -232,7 +208,7 @@ module.exports = (_ => {
 					}
 				};
 				
-				return BDFDB.PluginUtils.createSettingsPanel(theme, isBeta ? props : props.children());
+				return BDFDB.PluginUtils.createSettingsPanel(theme, props);
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));

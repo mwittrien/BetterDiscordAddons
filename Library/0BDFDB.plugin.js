@@ -16,7 +16,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.1.6",
+			"version": "1.1.7",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
@@ -798,26 +798,14 @@ module.exports = (_ => {
 	BDFDB.PluginUtils.createSettingsPanel = function (addon, props) {
 		addon = addon == BDFDB && InternalBDFDB || addon;
 		if (!BDFDB.ObjectUtils.is(addon)) return;
-		if (isBeta && BDFDB.ObjectUtils.is(props)) {
-			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, Object.assign({
-				className: BDFDB.DOMUtils.formatClassName(addon.name && `${addon.name}-settings`, BDFDB.disCN.settingspanel),
-				key: `${addon.name}-settingsPanel`,
-				addon: addon
-			}, props));
-		}
-		else {
-			let children = BDFDB.ReactUtils.isValidElement(props) || BDFDB.ArrayUtils.is(props) ? props : (props && typeof props.children == "function" && props.children());
-			if (!children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children))) return;
-			let settingsPanel = BDFDB.DOMUtils.create(`<div class="${addon.name}-settings ${BDFDB.disCN.settingspanel}"></div>`);
-			BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, {
-				key: `${addon.name}-settingsPanel`,
-				addon: addon,
-				title: !isBeta && addon.name,
-				collapseStates: props && props.collapseStates,
-				children: children
-			}), settingsPanel);
-			return settingsPanel;
-		}
+		let settingsProps = props;
+		if (settingsProps && !BDFDB.ObjectUtils.is(settingsProps) && (BDFDB.ReactUtils.isValidElement(settingsProps) || BDFDB.ArrayUtils.is(settingsProps))) settingsProps = {
+			children: settingsProps
+		};
+		return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, Object.assign({
+			addon: addon,
+			collapseStates: settingsProps && settingsProps.collapseStates
+		}, settingsProps));
 	};
 	BDFDB.PluginUtils.refreshSettingsPanel = function (plugin, settingsPanel, ...args) {
 		if (BDFDB.ObjectUtils.is(plugin)) {
@@ -6332,21 +6320,7 @@ module.exports = (_ => {
 					componentWillUnmount() {
 						if (BDFDB.ObjectUtils.is(this.props.addon) && typeof this.props.addon.onSettingsClosed == "function") this.props.addon.onSettingsClosed();
 					}
-					render() {
-						let headerItems = [
-							this.props.title && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormTitle, {
-								className: BDFDB.disCN.settingspaneltitle,
-								tag: InternalComponents.LibraryComponents.FormComponents.FormTitle.Tags.H2,
-								children: this.props.title
-							}),
-							this.props.controls && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-								className: BDFDB.disCN.settingspanelheadercontrols,
-								align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
-								grow: 0,
-								children: this.props.controls
-							})
-						].flat(10).filter(n => n);
-						
+					render() {						
 						let panelItems = [
 							typeof this.props.children == "function" ? (_ => {
 								return this.props.children(this.props.collapseStates);
@@ -6355,25 +6329,13 @@ module.exports = (_ => {
 						
 						if (this.props.addon && this.props.addon.name) this.key = `${this.props.addon.name}-settingsPanel`;
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-							className: this.props.className,
+							className: BDFDB.DOMUtils.formatClassName(this.props.addon && this.props.addon.name && `${this.props.addon.name}-settings`, BDFDB.disCN.settingspanel),
 							direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
-							children: headerItems.length ? ([
-								[
-									BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-										className: BDFDB.disCN.settingspanelheader,
-										align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
-										children: headerItems
-									}),
-									panelItems.length && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
-										className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom8
-									})
-								],
-								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-									className: BDFDB.disCN.settingspanelinner,
-									direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
-									children: panelItems
-								})
-							].flat(10).filter(n => n)) : panelItems
+							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+								className: BDFDB.disCN.settingspanelinner,
+								direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
+								children: panelItems
+							})
 						});
 					}
 				};
@@ -7234,6 +7196,27 @@ module.exports = (_ => {
 						}));
 						if (footerControls) for (let control of controls) footerControls.insertBefore(control, footerControls.firstElementChild);
 						else for (let control of controls) checkbox.parentElement.insertBefore(control, checkbox.parentElement.firstElementChild);
+						
+						if (!isBeta && typeof plugin.getSettingsPanel == "function") {
+							let footer = card.querySelector("." + BDFDB.disCN._repofooter.split(" ").join(",."));
+							if (footer) {
+								BDFDB.DOMUtils.remove(footer.querySelectorAll(BDFDB.dotCN._reposettingsbutton));
+								let settingsButton = document.createElement("button");
+								settingsButton.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._reposettingsbutton);
+								settingsButton.innerText = "Settings";
+								footer.appendChild(settingsButton);
+								settingsButton.addEventListener("click", _ => {
+									BDFDB.ModalUtils.open(plugin, {
+										header: `${plugin.name} ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
+										subheader: "",
+										className: BDFDB.disCN._repomodal,
+										size: "MEDIUM",
+										children: plugin.getSettingsPanel,
+										buttons: [{contents: BDFDB.LanguageUtils.LanguageStrings.DONE, color: "BRAND", close: true}]
+									});
+								});
+							}
+						}
 					}
 				};
 				const cardObserver = (new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
