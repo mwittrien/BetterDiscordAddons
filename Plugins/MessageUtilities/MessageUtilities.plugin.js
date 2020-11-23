@@ -20,7 +20,7 @@ module.exports = (_ => {
 		"changeLog": {
 			"added": {
 				"Replies": "Added option for replies",
-				"Quotes": "Now requires CustomQuoter plugin since Discord replaces Quotes with Replies",
+				"Quotes": "Now requires CustomQuoter plugin since Discord replaces Quotes with Replies"
 			},
 			"fixed": {
 				"Settings": "Fixed Settings"
