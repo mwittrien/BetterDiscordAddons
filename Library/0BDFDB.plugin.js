@@ -6396,12 +6396,12 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.settingsrowlabel,
 									children: [
-										label && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
+										label && !this.props.basis ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
 											grow: 1,
 											shrink: 1,
 											wrap: true,
 											children: label
-										}),
+										}) : label,
 										this.props.labelchildren,
 										BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
 											className: BDFDB.disCNS.settingsrowcontrol + BDFDB.disCN.flexchild,
@@ -7173,8 +7173,8 @@ module.exports = (_ => {
 						className: !isBeta && BDFDB.disCN._repoicon,
 						nativeClass: true,
 						name: data.svgName,
-						width: isBeta ? "20" : "24",
-						height: isBeta ? "20" : "24"
+						width: data.size,
+						height: data.size
 					}), controlButton);
 					controlButton.addEventListener("click", _ => {if (typeof data.onClick == "function") data.onClick();});
 					if (data.tooltipText) controlButton.addEventListener("mouseenter", _ => {BDFDB.TooltipUtils.create(controlButton, data.tooltipText);});
@@ -7193,11 +7193,13 @@ module.exports = (_ => {
 						if (plugin.changeLog) controls.push(InternalBDFDB.createCustomControl({
 							tooltipText: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
 							svgName: InternalComponents.LibraryComponents.SvgIcon.Names.CHANGELOG,
+							size: isBeta ? "19" : "24",
 							onClick: _ => {BDFDB.PluginUtils.openChangeLog(plugin);}
 						}));
 						if (window.PluginUpdates && window.PluginUpdates.plugins && window.PluginUpdates.plugins[url] && window.PluginUpdates.plugins[url].outdated) controls.push(InternalBDFDB.createCustomControl({
 							tooltipText: BDFDB.LanguageUtils.LanguageStrings.UPDATE_MANUALLY,
 							svgName: InternalComponents.LibraryComponents.SvgIcon.Names.DOWNLOAD,
+							size: isBeta ? "20" : "24",
 							onClick: _ => {BDFDB.PluginUtils.downloadUpdate(plugin.name, url);}
 						}));
 						if (footerControls) for (let control of controls) footerControls.insertBefore(control, footerControls.firstElementChild);
