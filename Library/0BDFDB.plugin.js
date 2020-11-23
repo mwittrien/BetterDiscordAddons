@@ -6376,6 +6376,15 @@ module.exports = (_ => {
 						let childComponent = InternalComponents.LibraryComponents[this.props.type];
 						if (!childComponent) return null;
 						if (this.props.mini && childComponent.Sizes) this.props.size = childComponent.Sizes.MINI || childComponent.Sizes.MIN;
+						let label = this.props.label ? (this.props.tag ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormTitle, {
+							className: BDFDB.DOMUtils.formatClassName(this.props.labelClassName, BDFDB.disCN.marginreset),
+							tag: this.props.tag,
+							children: this.props.label
+						}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsLabel, {
+							className: BDFDB.DOMUtils.formatClassName(this.props.labelClassName),
+							mini: this.props.mini,
+							label: this.props.label
+						})) : null;
 						let margin = this.props.margin != null ? this.props.margin : (this.props.mini ? 0 : 8);
 						return BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.settingsrow, BDFDB.disCN.settingsrowcontainer, this.props.disabled && BDFDB.disCN.settingsrowdisabled, margin != null && (BDFDB.DiscordClasses[`marginbottom${margin}`] && BDFDB.disCN[`marginbottom${margin}`] || margin == 0 && BDFDB.disCN.marginreset)),
@@ -6387,15 +6396,12 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.settingsrowlabel,
 									children: [
-										this.props.label ? (this.props.tag ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormTitle, {
-											className: BDFDB.DOMUtils.formatClassName(this.props.labelClassName, BDFDB.disCN.flexchild, BDFDB.disCN.marginreset),
-											tag: this.props.tag,
-											children: this.props.label
-										}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsLabel, {
-											className: BDFDB.DOMUtils.formatClassName(this.props.labelClassName, BDFDB.disCN.flexchild),
-											mini: this.props.mini,
-											label: this.props.label
-										})) : null,
+										label && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
+											grow: 1,
+											shrink: 1,
+											wrap: true,
+											children: label
+										}),
 										this.props.labelchildren,
 										BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
 											className: BDFDB.disCNS.settingsrowcontrol + BDFDB.disCN.flexchild,
