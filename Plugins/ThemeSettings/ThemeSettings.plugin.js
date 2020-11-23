@@ -88,6 +88,9 @@ module.exports = (_ => {
 								header: `${addon.name} ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
 								subheader: "",
 								className: BDFDB.disCN._repomodal,
+								headerClassName: BDFDB.disCN._repomodalheader,
+								contentClassName: BDFDB.disCN._repomodalsettings,
+								footerClassName: BDFDB.disCN._repomodalfooter,
 								size: "MEDIUM",
 								children: this.createThemeVarInputs(addon, vars),
 								buttons: [{contents: "Update", color: "GREEN", click: modal => {this.updateTheme(modal, addon);}}]

@@ -37,19 +37,6 @@ img:not([src]), img[src=""], img[src="null"] {
 	to {opacity: 0.1;}
 }
 
-[REPLACE_CLASS_settingspanelheader] {
-	padding-right: 5px;
-}
-[REPLACE_CLASS_settingspanelheadercontrols] > * {
-	margin-left: 8px;
-}
-[REPLACE_CLASS_settingspanelheaderbutton] {
-	height: 24px;
-}
-[REPLACE_CLASS_settingspanelinner] {
-	padding-left: 15px;
-	padding-right: 5px;
-}
 [REPLACE_CLASS_settingspanellist] {
 	padding-left: 15px;
 }

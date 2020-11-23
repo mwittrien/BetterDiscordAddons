@@ -6327,15 +6327,11 @@ module.exports = (_ => {
 							})() : this.props.children
 						].flat(10).filter(n => n);
 						
-						if (this.props.addon && this.props.addon.name) this.key = `${this.props.addon.name}-settingsPanel`;
-						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-							className: BDFDB.DOMUtils.formatClassName(this.props.addon && this.props.addon.name && `${this.props.addon.name}-settings`, BDFDB.disCN.settingspanel),
-							direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
-							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-								className: BDFDB.disCN.settingspanelinner,
-								direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
-								children: panelItems
-							})
+						return BDFDB.ReactUtils.createElement("div", {
+							key: this.props.addon && this.props.addon.name && `${this.props.addon.name}-settingsPanel`,
+							id: this.props.addon && this.props.addon.name && `${this.props.addon.name}-settings`,
+							className: BDFDB.disCN.settingspanel,
+							children: panelItems
 						});
 					}
 				};
@@ -7218,6 +7214,9 @@ module.exports = (_ => {
 										header: `${plugin.name} ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
 										subheader: "",
 										className: BDFDB.disCN._repomodal,
+										headerClassName: BDFDB.disCN._repomodalheader,
+										contentClassName: BDFDB.disCN._repomodalsettings,
+										footerClassName: BDFDB.disCN._repomodalfooter,
 										size: "MEDIUM",
 										children: plugin.getSettingsPanel(),
 										buttons: [{contents: BDFDB.LanguageUtils.LanguageStrings.DONE, color: "BRAND", close: true}]
