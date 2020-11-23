@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.5.3",
+			"version": "1.5.4",
 			"description": "Get a notification when a Friend or a User you choose to observe changes their online status, can be configured individually in the settings"
 		},
 		"changeLog": {
 			"fixed": {
-				"Works again": "Can discord stop messing with the server list, jeez"
+				"New Settings Menu": "Fixed for new settings menu"
 			}
 		}
 	};
@@ -153,11 +153,11 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 
-			getSettingsPanel (collapseStates = {}) {			
-				let changeNotificationType = (type, userId, desktopon, disableon) => {
+			getSettingsPanel (collapseStates = {}) {
+				let changeNotificationType = (type, userId, desktopOn, disableOn) => {
 					let data = BDFDB.DataUtils.load(this, type, userId) || this.createDefaultConfig();
-					data.desktop = desktopon;
-					data.disabled = disableon;
+					data.desktop = desktopOn;
+					data.disabled = disableOn;
 					BDFDB.DataUtils.save(data, this, type, userId);
 					this.SettingsUpdated = true;
 					BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
@@ -263,219 +263,225 @@ module.exports = (_ => {
 					});
 				};
 				
-				let settings = BDFDB.DataUtils.get(this, "settings");
-				let amounts = BDFDB.DataUtils.get(this, "amounts");
-				let notificationStrings = BDFDB.DataUtils.get(this, "notificationstrings");
-				let notificationSounds = BDFDB.DataUtils.get(this, "notificationsounds");
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
+					collapseStates: collapseStates,
+					children: _ => {
+						let settings = BDFDB.DataUtils.get(this, "settings");
+						let amounts = BDFDB.DataUtils.get(this, "amounts");
+						let notificationStrings = BDFDB.DataUtils.get(this, "notificationstrings");
+						let notificationSounds = BDFDB.DataUtils.get(this, "notificationsounds");
 
-				let friendIds = BDFDB.LibraryModules.FriendUtils.getFriendIDs();
-				let friendsData = BDFDB.DataUtils.load(this, "friends"), nonFriendsData = BDFDB.DataUtils.load(this, "nonfriends");
-				let friends = [], nonFriends = [];
-				
-				let settingsPanel, settingsItems = [], innerItems = [];
-				
-				for (let id of friendIds) {
-					let user = BDFDB.LibraryModules.UserStore.getUser(id);
-					if (user) {
-						friendsData[id] = Object.assign({}, friendsData[id] || nonFriendsData[id] || this.createDefaultConfig());
-						delete nonFriendsData[id];
-					}
-				}
-				for (let id in friendsData) {
-					let user = BDFDB.LibraryModules.UserStore.getUser(id);
-					if (user) {
-						if (!friendIds.includes(id)) {
-							nonFriendsData[id] = Object.assign({}, friendsData[id]);
-							delete friendsData[id];
+						let friendIds = BDFDB.LibraryModules.FriendUtils.getFriendIDs();
+						let friendsData = BDFDB.DataUtils.load(this, "friends"), nonFriendsData = BDFDB.DataUtils.load(this, "nonfriends");
+						let friends = [], nonFriends = [];
+						
+						let settingsItems = [], innerItems = [];
+						
+						for (let id of friendIds) {
+							let user = BDFDB.LibraryModules.UserStore.getUser(id);
+							if (user) {
+								friendsData[id] = Object.assign({}, friendsData[id] || nonFriendsData[id] || this.createDefaultConfig());
+								delete nonFriendsData[id];
+							}
 						}
-						else if (id != BDFDB.UserUtils.me.id) friends.push(Object.assign({}, user, friendsData[id], {key: id, className: friendsData[id].disabled ? "" : (friendsData[id].desktop ? BDFDB.disCN.cardsuccessoutline : BDFDB.disCN.cardbrandoutline)}));
-					}
-				}
-				for (let id in nonFriendsData) {
-					let user = BDFDB.LibraryModules.UserStore.getUser(id);
-					if (user && id != BDFDB.UserUtils.me.id) nonFriends.push(Object.assign({}, user, nonFriendsData[id], {key: id, className: nonFriendsData[id].disabled ? "" : (nonFriendsData[id].desktop ? BDFDB.disCN.cardsuccessoutline : BDFDB.disCN.cardbrandoutline)}));
-				}
+						for (let id in friendsData) {
+							let user = BDFDB.LibraryModules.UserStore.getUser(id);
+							if (user) {
+								if (!friendIds.includes(id)) {
+									nonFriendsData[id] = Object.assign({}, friendsData[id]);
+									delete friendsData[id];
+								}
+								else if (id != BDFDB.UserUtils.me.id) friends.push(Object.assign({}, user, friendsData[id], {key: id, className: friendsData[id].disabled ? "" : (friendsData[id].desktop ? BDFDB.disCN.cardsuccessoutline : BDFDB.disCN.cardbrandoutline)}));
+							}
+						}
+						for (let id in nonFriendsData) {
+							let user = BDFDB.LibraryModules.UserStore.getUser(id);
+							if (user && id != BDFDB.UserUtils.me.id) nonFriends.push(Object.assign({}, user, nonFriendsData[id], {key: id, className: nonFriendsData[id].disabled ? "" : (nonFriendsData[id].desktop ? BDFDB.disCN.cardsuccessoutline : BDFDB.disCN.cardbrandoutline)}));
+						}
 
-				BDFDB.DataUtils.save(friendsData, this, "friends");
-				BDFDB.DataUtils.save(nonFriendsData, this, "nonfriends");
-				
-				for (let key in settings) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					type: "Switch",
-					plugin: this,
-					keys: ["settings", key],
-					label: this.defaults.settings[key].description,
-					value: settings[key]
-				}));
-				for (let key in amounts) if (key.indexOf("desktop") == -1 || "Notification" in window) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					type: "TextInput",
-					childProps: {
-						type: "number"
-					},
-					plugin: this,
-					keys: ["amounts", key],
-					label: this.defaults.amounts[key].description,
-					basis: "20%",
-					min: this.defaults.amounts[key].min,
-					max: this.defaults.amounts[key].max,
-					value: amounts[key]
-				}));
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Settings",
-					collapseStates: collapseStates,
-					children: innerItems
-				}));
-				
-				if (friends.length) settingsItems.push(createUserList(friends, "friends", "Friend-List"));
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Add new Stranger",
-					collapseStates: collapseStates,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-						className: BDFDB.disCN.margintop8,
-						align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-						children: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									className: `input-newstranger`,
-									placeholder: "user (id or name#discriminator)",
-									value: ""
-								})
-							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-								onClick: _ => {
-									let userId = settingsPanel.querySelector(`.input-newstranger ` + BDFDB.dotCN.input).value.trim();
-									if (userId == BDFDB.UserUtils.me.id) BDFDB.NotificationUtils.toast("Are you seriously trying to stalk yourself?", {type: "error"});
-									else if (friendIds.includes(userId)) BDFDB.NotificationUtils.toast("User is already a friend of yours, please use the 'Friend-List' area to configure them", {type: "error"});
-									else if (Object.keys(nonFriends).includes(userId)) BDFDB.NotificationUtils.toast("User is already being observed as a 'Stranger'", {type: "error"});
-									else {
-										let user = /.+#[0-9]{4}/.test(userId) ? BDFDB.LibraryModules.UserStore.findByTag(userId.split("#").slice(0, -1).join("#"), userId.split("#").pop()) : BDFDB.LibraryModules.UserStore.getUser(userId);
-										if (user) {
-											BDFDB.DataUtils.save(this.createDefaultConfig(), this, "nonfriends", userId);
-											BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
-											this.SettingsUpdated = true;
-										}
-										else BDFDB.NotificationUtils.toast("Please enter a valid UserID of a user that has been loaded in your client", {type: "error"});
-									}
-								},
-								children: BDFDB.LanguageUtils.LanguageStrings.ADD
-							})
-						]
-					})
-				}));
-				if (nonFriends.length) settingsItems.push(createUserList(nonFriends, "nonfriends", "Stranger-List"));
-				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "LogIn/-Out Timelog",
-					collapseStates: collapseStates,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-						type: "Button",
-						label: "Overview of LogIns/-Outs of current Session",
-						onClick: _ => {this.showTimeLog()},
-						children: "Timelog"
-					})
-				}));
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Notification Messages",
-					collapseStates: collapseStates,
-					children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-						className: BDFDB.disCN.marginbottom8,
-						children: BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
-							children: [
-								"Allows you to configure your own message strings for the different statuses. ",
-								BDFDB.ReactUtils.createElement("strong", {children: "$user"}),
-								" is the placeholder for the username, ",
-								BDFDB.ReactUtils.createElement("strong", {children: "$status"}),
-								" for the statusName, ",
-								BDFDB.ReactUtils.createElement("strong", {children: "$game"}),
-								" for the gamename, ",
-								BDFDB.ReactUtils.createElement("strong", {children: "$song"}),
-								" for the songname and ",
-								BDFDB.ReactUtils.createElement("strong", {children: "$artist"}),
-								" for the songartist."
-							]
-						})
-					})].concat(Object.keys(notificationStrings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "TextInput",
-						plugin: this,
-						keys: ["notificationstrings", key],
-						placeholder: this.defaults.notificationstrings[key].value,
-						label: `${BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(key)} Message: `,
-						basis: "70%",
-						value: notificationStrings[key]
-					})))
-				}));
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Notification Sounds",
-					collapseStates: collapseStates,
-					children: Object.keys(notificationSounds).map((key, i) => (key.indexOf("desktop") == -1 || "Notification" in window) && [
-						i != 0 && key.indexOf("toast") == 0 && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-							className: BDFDB.disCN.marginbottom8
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-							className: BDFDB.disCN.marginbottom8,
-							align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-							direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
-									label: `${key.split(/(desktop)|(toast)/).filter(n => n).map(n => BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(n)).join("-")} Notification Sound: `,
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-									type: "Switch",
-									mini: true,
-									grow: 0,
-									label: "Mute:",
-									value: notificationSounds[key].mute,
-									onChange: value => {
-										notificationSounds[key].mute = value;
-										BDFDB.DataUtils.save(notificationSounds, this, "notificationsounds");
-									}
-								})
-							].filter(n => n)
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-							className: BDFDB.disCN.marginbottom8,
-							align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-										className: `input-${key}src`,
-										type: "file",
-										filter: ["audio", "video"],
-										useFilePath: true,
-										placeholder: "Url or Filepath",
-										value: notificationSounds[key].url
-									})
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-									onClick: _ => {
-										let source = settingsPanel.querySelector(`.input-${key}src ` + BDFDB.dotCN.input).value.trim();
-										if (!source.length) {
-											BDFDB.NotificationUtils.toast(`Sound file was removed.`, {type: "warn"});
-											successSavedAudio(key, source, source);
-										}
-										else if (source.indexOf("http") == 0) BDFDB.LibraryRequires.request(source, (error, response, result) => {
-											if (response) {
-												let type = response.headers["content-type"];
-												if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) {
-													successSavedAudio(key, source, source);
-													return;
+						BDFDB.DataUtils.save(friendsData, this, "friends");
+						BDFDB.DataUtils.save(nonFriendsData, this, "nonfriends");
+						
+						for (let key in settings) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							type: "Switch",
+							plugin: this,
+							keys: ["settings", key],
+							label: this.defaults.settings[key].description,
+							value: settings[key]
+						}));
+						for (let key in amounts) if (key.indexOf("desktop") == -1 || "Notification" in window) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							type: "TextInput",
+							childProps: {
+								type: "number"
+							},
+							plugin: this,
+							keys: ["amounts", key],
+							label: this.defaults.amounts[key].description,
+							basis: "20%",
+							min: this.defaults.amounts[key].min,
+							max: this.defaults.amounts[key].max,
+							value: amounts[key]
+						}));
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Settings",
+							collapseStates: collapseStates,
+							children: innerItems
+						}));
+						
+						if (friends.length) settingsItems.push(createUserList(friends, "friends", "Friend-List"));
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Add new Stranger",
+							collapseStates: collapseStates,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+								className: BDFDB.disCN.margintop8,
+								align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+											className: `input-newstranger`,
+											placeholder: "user (id or name#discriminator)",
+											value: ""
+										})
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+										onClick: _ => {
+											let userId = settingsPanel.props._node.querySelector(`.input-newstranger ` + BDFDB.dotCN.input).value.trim();
+											if (userId == BDFDB.UserUtils.me.id) BDFDB.NotificationUtils.toast("Are you seriously trying to stalk yourself?", {type: "error"});
+											else if (friendIds.includes(userId)) BDFDB.NotificationUtils.toast("User is already a friend of yours, please use the 'Friend-List' area to configure them", {type: "error"});
+											else if (Object.keys(nonFriends).includes(userId)) BDFDB.NotificationUtils.toast("User is already being observed as a 'Stranger'", {type: "error"});
+											else {
+												let user = /.+#[0-9]{4}/.test(userId) ? BDFDB.LibraryModules.UserStore.findByTag(userId.split("#").slice(0, -1).join("#"), userId.split("#").pop()) : BDFDB.LibraryModules.UserStore.getUser(userId);
+												if (user) {
+													BDFDB.DataUtils.save(this.createDefaultConfig(), this, "nonfriends", userId);
+													BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+													this.SettingsUpdated = true;
 												}
+												else BDFDB.NotificationUtils.toast("Please enter a valid UserID of a user that has been loaded in your client", {type: "error"});
 											}
-											BDFDB.NotificationUtils.toast("Use a valid direct link to a video or audio source, they usually end on something like .mp3, .mp4 or .wav", {type: "danger"});
-										});
-										else BDFDB.LibraryRequires.fs.readFile(source, (error, response) => {
-											if (error) BDFDB.NotificationUtils.toast("Could not fetch file, please make sure the file exists", {type: "danger"});
-											else successSavedAudio(key, source, `data:audio/mpeg;base64,${response.toString("base64")}`);
-										});
-									},
-									children: BDFDB.LanguageUtils.LanguageStrings.SAVE
+										},
+										children: BDFDB.LanguageUtils.LanguageStrings.ADD
+									})
+								]
+							})
+						}));
+						if (nonFriends.length) settingsItems.push(createUserList(nonFriends, "nonfriends", "Stranger-List"));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "LogIn/-Out Timelog",
+							collapseStates: collapseStates,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+								type: "Button",
+								label: "Overview of LogIns/-Outs of current Session",
+								onClick: _ => {this.showTimeLog()},
+								children: "Timelog"
+							})
+						}));
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Notification Messages",
+							collapseStates: collapseStates,
+							children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+								className: BDFDB.disCN.marginbottom8,
+								children: BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
+									children: [
+										"Allows you to configure your own message strings for the different statuses. ",
+										BDFDB.ReactUtils.createElement("strong", {children: "$user"}),
+										" is the placeholder for the username, ",
+										BDFDB.ReactUtils.createElement("strong", {children: "$status"}),
+										" for the statusName, ",
+										BDFDB.ReactUtils.createElement("strong", {children: "$game"}),
+										" for the gamename, ",
+										BDFDB.ReactUtils.createElement("strong", {children: "$song"}),
+										" for the songname and ",
+										BDFDB.ReactUtils.createElement("strong", {children: "$artist"}),
+										" for the songartist."
+									]
 								})
-							]
-						})
-					]).flat(10).filter(n => n)
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+							})].concat(Object.keys(notificationStrings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "TextInput",
+								plugin: this,
+								keys: ["notificationstrings", key],
+								placeholder: this.defaults.notificationstrings[key].value,
+								label: `${BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(key)} Message: `,
+								basis: "70%",
+								value: notificationStrings[key]
+							})))
+						}));
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Notification Sounds",
+							collapseStates: collapseStates,
+							children: Object.keys(notificationSounds).map((key, i) => (key.indexOf("desktop") == -1 || "Notification" in window) && [
+								i != 0 && key.indexOf("toast") == 0 && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+									className: BDFDB.disCN.marginbottom8
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+									className: BDFDB.disCN.marginbottom8,
+									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+									direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
+									children: [
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
+											label: `${key.split(/(desktop)|(toast)/).filter(n => n).map(n => BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(n)).join("-")} Notification Sound: `,
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+											type: "Switch",
+											mini: true,
+											grow: 0,
+											label: "Mute:",
+											value: notificationSounds[key].mute,
+											onChange: value => {
+												notificationSounds[key].mute = value;
+												BDFDB.DataUtils.save(notificationSounds, this, "notificationsounds");
+											}
+										})
+									].filter(n => n)
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+									className: BDFDB.disCN.marginbottom8,
+									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+									children: [
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+												className: `input-${key}src`,
+												type: "file",
+												filter: ["audio", "video"],
+												useFilePath: true,
+												placeholder: "Url or Filepath",
+												value: notificationSounds[key].url
+											})
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+											onClick: _ => {
+												let source = settingsPanel.props._node.querySelector(`.input-${key}src ` + BDFDB.dotCN.input).value.trim();
+												if (!source.length) {
+													BDFDB.NotificationUtils.toast(`Sound file was removed.`, {type: "warn"});
+													successSavedAudio(key, source, source);
+												}
+												else if (source.indexOf("http") == 0) BDFDB.LibraryRequires.request(source, (error, response, result) => {
+													if (response) {
+														let type = response.headers["content-type"];
+														if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) {
+															successSavedAudio(key, source, source);
+															return;
+														}
+													}
+													BDFDB.NotificationUtils.toast("Use a valid direct link to a video or audio source, they usually end on something like .mp3, .mp4 or .wav", {type: "danger"});
+												});
+												else BDFDB.LibraryRequires.fs.readFile(source, (error, response) => {
+													if (error) BDFDB.NotificationUtils.toast("Could not fetch file, please make sure the file exists", {type: "danger"});
+													else successSavedAudio(key, source, `data:audio/mpeg;base64,${response.toString("base64")}`);
+												});
+											},
+											children: BDFDB.LanguageUtils.LanguageStrings.SAVE
+										})
+									]
+								})
+							]).flat(10).filter(n => n)
+						}));
+						
+						return settingsItems;
+					}
+				});
 			}
 
 			onSettingsClosed () {

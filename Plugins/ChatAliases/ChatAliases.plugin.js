@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.1.9",
+			"version": "2.2.0",
 			"description": "Allow the user to configure their own chat-aliases which will automatically be replaced before the message is being sent"
 		},
 		"changeLog": {
 			"fixed": {
-				"Autocomplete Menu": "Works again"
+				"New Settings Menu": "Fixed for new settings menu"
 			}
 		}
 	};
@@ -207,146 +207,156 @@ module.exports = (_ => {
 			}
 
 			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [];
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Settings",
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
 					collapseStates: collapseStates,
-					children: Object.keys(settings).map(key => !this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "Switch",
-						plugin: this,
-						keys: ["settings", key],
-						label: this.defaults.settings[key].description,
-						value: settings[key]
-					})).concat(Object.keys(amounts).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "TextInput",
-						childProps: {
-							type: "number"
-						},
-						plugin: this,
-						keys: ["amounts", key],
-						label: this.defaults.amounts[key].description,
-						basis: "20%",
-						min: this.defaults.amounts[key].min,
-						max: this.defaults.amounts[key].max,
-						value: amounts[key]
-					}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
-						title: "Automatically replace aliases in:",
-						last: true,
-						children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-							type: "Switch",
-							plugin: this,
-							keys: ["settings", key],
-							label: this.defaults.settings[key].description,
-							value: settings[key]
-						}))
-					}))
-				}));
-				let values = {wordvalue: "", replacevalue: ""};
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Add new alias",
-					collapseStates: collapseStates,
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-							type: "Button",
-							label: "Pick a wordvalue and replacevalue:",
-							key: "ADDBUTTON",
-							disabled: !Object.keys(values).every(valuename => values[valuename]),
-							children: BDFDB.LanguageUtils.LanguageStrings.ADD,
-							onClick: _ => {
-								this.saveWord(values.wordvalue, values.replacevalue, settingsPanel.querySelector(".input-replacevalue input[type='file']"));
-								BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
-							}
-						}),
-						this.createInputs(values)
-					].flat(10).filter(n => n)
-				}));
-				if (!BDFDB.ObjectUtils.isEmpty(aliases)) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Added aliases",
-					collapseStates: collapseStates,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
-						settings: Object.keys(this.defaults.configs),
-						data: Object.keys(aliases).map((wordvalue, i) => Object.assign({}, aliases[wordvalue], {
-							key: wordvalue,
-							label: wordvalue
-						})),
-						renderLabel: data => BDFDB.ReactUtils.createElement("div", {
-							style: {width: "100%"},
+					children: _ => {
+						let settingsItems = [];
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Settings",
+							collapseStates: collapseStates,
+							children: Object.keys(settings).map(key => !this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["settings", key],
+								label: this.defaults.settings[key].description,
+								value: settings[key]
+							})).concat(Object.keys(amounts).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "TextInput",
+								childProps: {
+									type: "number"
+								},
+								plugin: this,
+								keys: ["amounts", key],
+								label: this.defaults.amounts[key].description,
+								basis: "20%",
+								min: this.defaults.amounts[key].min,
+								max: this.defaults.amounts[key].max,
+								value: amounts[key]
+							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+								title: "Automatically replace aliases in:",
+								last: true,
+								children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+									type: "Switch",
+									plugin: this,
+									keys: ["settings", key],
+									label: this.defaults.settings[key].description,
+									value: settings[key]
+								}))
+							}))
+						}));
+						
+						let values = {wordvalue: "", replacevalue: ""};
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Add new alias",
+							collapseStates: collapseStates,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									value: data.label,
-									placeholder: data.label,
-									size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
-									maxLength: 100000000000000000000,
-									onChange: value => {
-										aliases[value] = aliases[data.label];
-										delete aliases[data.label];
-										data.label = value;
-										BDFDB.DataUtils.save(aliases, this, "words");
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+									type: "Button",
+									label: "Pick a wordvalue and replacevalue:",
+									key: "ADDBUTTON",
+									disabled: !Object.keys(values).every(valuename => values[valuename]),
+									children: BDFDB.LanguageUtils.LanguageStrings.ADD,
+									onClick: _ => {
+										this.saveWord(values.wordvalue, values.replacevalue, settingsPanel.props._node.querySelector(".input-replacevalue input[type='file']"));
+										BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 									}
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									value: data.replace,
-									placeholder: data.replace,
-									size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
-									maxLength: 100000000000000000000,
-									onChange: value => {
-										aliases[data.label].replace = value;
-										BDFDB.DataUtils.save(aliases, this, "words");
-									}
-								})
-							]
-						}),
-						onCheckboxChange: (value, instance) => {
-							aliases[instance.props.cardId][instance.props.settingId] = value;
-							BDFDB.DataUtils.save(aliases, this, "words");
-						},
-						onRemove: (e, instance) => {
-							delete aliases[instance.props.cardId];
-							BDFDB.DataUtils.save(aliases, this, "words");
-							BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
-						}
-					})
-				}));
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Remove All",
-					collapseStates: collapseStates,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-						type: "Button",
-						className: BDFDB.disCN.marginbottom8,
-						color: BDFDB.LibraryComponents.Button.Colors.RED,
-						label: "Remove all added aliases",
-						onClick: _ => {
-							BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added aliases?", _ => {
-								aliases = {};
-								commandAliases = {};
-								BDFDB.DataUtils.remove(this, "words");
-								BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
-							});
-						},
-						children: BDFDB.LanguageUtils.LanguageStrings.REMOVE
-					})
-				}));
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Config Guide",
-					collapseStates: collapseStates,
-					children: [
-						"Case: Will replace words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe",
-						"Not Case: Will replace words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe",
-						"Exact: Will replace words that are exactly the replaceword. apple to pear => applepie stays applepie",
-						"Not Exact: Will replace words anywhere they appear. apple to pear => applepieapple to pearpiepear",
-						"Autoc: Will appear in the Autocomplete Menu (if enabled).",
-						[
-							"Regex: Will treat the entered wordvalue as a regular expression. ",
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {href: "https://regexr.com/", children: BDFDB.LanguageUtils.LanguageStrings.HELP + "?"})
-						],
-						"File: If the replacevalue is a filepath it will try to upload the file located at the filepath."
-					].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
-						type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
-						children: string
-					}))
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+								this.createInputs(values)
+							].flat(10).filter(n => n)
+						}));
+						
+						if (!BDFDB.ObjectUtils.isEmpty(aliases)) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Added aliases",
+							collapseStates: collapseStates,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
+								settings: Object.keys(this.defaults.configs),
+								data: Object.keys(aliases).map((wordvalue, i) => Object.assign({}, aliases[wordvalue], {
+									key: wordvalue,
+									label: wordvalue
+								})),
+								renderLabel: data => BDFDB.ReactUtils.createElement("div", {
+									style: {width: "100%"},
+									children: [
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+											value: data.label,
+											placeholder: data.label,
+											size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
+											maxLength: 100000000000000000000,
+											onChange: value => {
+												aliases[value] = aliases[data.label];
+												delete aliases[data.label];
+												data.label = value;
+												BDFDB.DataUtils.save(aliases, this, "words");
+											}
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+											value: data.replace,
+											placeholder: data.replace,
+											size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
+											maxLength: 100000000000000000000,
+											onChange: value => {
+												aliases[data.label].replace = value;
+												BDFDB.DataUtils.save(aliases, this, "words");
+											}
+										})
+									]
+								}),
+								onCheckboxChange: (value, instance) => {
+									aliases[instance.props.cardId][instance.props.settingId] = value;
+									BDFDB.DataUtils.save(aliases, this, "words");
+								},
+								onRemove: (e, instance) => {
+									delete aliases[instance.props.cardId];
+									BDFDB.DataUtils.save(aliases, this, "words");
+									BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+								}
+							})
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Remove All",
+							collapseStates: collapseStates,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+								type: "Button",
+								color: BDFDB.LibraryComponents.Button.Colors.RED,
+								label: "Remove all added aliases",
+								onClick: _ => {
+									BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added aliases?", _ => {
+										aliases = {};
+										commandAliases = {};
+										BDFDB.DataUtils.remove(this, "words");
+										BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+									});
+								},
+								children: BDFDB.LanguageUtils.LanguageStrings.REMOVE
+							})
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Config Guide",
+							collapseStates: collapseStates,
+							children: [
+								"Case: Will replace words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe",
+								"Not Case: Will replace words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe",
+								"Exact: Will replace words that are exactly the replaceword. apple to pear => applepie stays applepie",
+								"Not Exact: Will replace words anywhere they appear. apple to pear => applepieapple to pearpiepear",
+								"Autoc: Will appear in the Autocomplete Menu (if enabled)",
+								[
+									"Regex: Will treat the entered wordvalue as a regular expression - ",
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {href: "https://regexr.com/", children: BDFDB.LanguageUtils.LanguageStrings.HELP + "?"})
+								],
+								"File: If the replacevalue is a filepath it will try to upload the file located at the filepath"
+							].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
+								type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
+								children: string
+							}))
+						}));
+						
+						return settingsItems;
+					}
+				});
 			}
 
 			onSettingsClosed () {
