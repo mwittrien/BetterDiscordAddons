@@ -267,6 +267,8 @@ module.exports = (_ => {
 				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
 					collapseStates: collapseStates,
 					children: _ => {
+						let settingsItems = [], innerItems = [];
+						
 						let settings = BDFDB.DataUtils.get(this, "settings");
 						let amounts = BDFDB.DataUtils.get(this, "amounts");
 						let notificationStrings = BDFDB.DataUtils.get(this, "notificationstrings");
@@ -275,8 +277,6 @@ module.exports = (_ => {
 						let friendIds = BDFDB.LibraryModules.FriendUtils.getFriendIDs();
 						let friendsData = BDFDB.DataUtils.load(this, "friends"), nonFriendsData = BDFDB.DataUtils.load(this, "nonfriends");
 						let friends = [], nonFriends = [];
-						
-						let settingsItems = [], innerItems = [];
 						
 						for (let id of friendIds) {
 							let user = BDFDB.LibraryModules.UserStore.getUser(id);
@@ -310,6 +310,7 @@ module.exports = (_ => {
 							label: this.defaults.settings[key].description,
 							value: settings[key]
 						}));
+						
 						for (let key in amounts) if (key.indexOf("desktop") == -1 || "Notification" in window) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 							type: "TextInput",
 							childProps: {
@@ -323,6 +324,7 @@ module.exports = (_ => {
 							max: this.defaults.amounts[key].max,
 							value: amounts[key]
 						}));
+						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Settings",
 							collapseStates: collapseStates,
@@ -330,6 +332,7 @@ module.exports = (_ => {
 						}));
 						
 						if (friends.length) settingsItems.push(createUserList(friends, "friends", "Friend-List"));
+						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Add new Stranger",
 							collapseStates: collapseStates,
@@ -365,6 +368,7 @@ module.exports = (_ => {
 								]
 							})
 						}));
+						
 						if (nonFriends.length) settingsItems.push(createUserList(nonFriends, "nonfriends", "Stranger-List"));
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
@@ -377,6 +381,7 @@ module.exports = (_ => {
 								children: "Timelog"
 							})
 						}));
+						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Notification Messages",
 							collapseStates: collapseStates,
@@ -408,6 +413,7 @@ module.exports = (_ => {
 								value: notificationStrings[key]
 							})))
 						}));
+						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Notification Sounds",
 							collapseStates: collapseStates,
