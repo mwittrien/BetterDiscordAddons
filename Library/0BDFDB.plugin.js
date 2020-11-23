@@ -4670,7 +4670,7 @@ module.exports = (_ => {
 				
 				InternalComponents.LibraryComponents.Card = reactInitialized && class BDFDB_Card extends LibraryModules.React.Component {
 					render() {
-						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+						return BDFDB.ReactUtils.createElement("div", BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.hovercardwrapper, this.props.backdrop && BDFDB.disCN.hovercard, this.props.className),
 							onMouseEnter: e => {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);},
 							onMouseLeave: e => {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);},
