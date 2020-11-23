@@ -765,6 +765,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	border-color: transparent;
 }
 
+[REPLACE_CLASS__repomodal] {
+	min-height: unset;
+}
 #bd-settingspane-container .ui-form-title {
 	display: inline-block;
 }
