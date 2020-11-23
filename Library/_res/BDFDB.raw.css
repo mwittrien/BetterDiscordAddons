@@ -755,6 +755,10 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS__repomodal] {
 	min-height: unset;
 }
+[REPLACE_CLASS__repomodalsettings] {
+    padding: 0 16px 16px 16px;
+}
+
 #bd-settingspane-container .ui-form-title {
 	display: inline-block;
 }
