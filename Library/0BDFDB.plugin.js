@@ -4671,7 +4671,7 @@ module.exports = (_ => {
 				InternalComponents.LibraryComponents.Card = reactInitialized && class BDFDB_Card extends LibraryModules.React.Component {
 					render() {
 						return BDFDB.ReactUtils.createElement("div", BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.hovercardwrapper, this.props.backdrop && BDFDB.disCN.hovercard, this.props.className),
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.hovercardwrapper, this.props.horizontal && BDFDB.disCN.hovercardhorizontal, this.props.backdrop && BDFDB.disCN.hovercard, this.props.className),
 							onMouseEnter: e => {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);},
 							onMouseLeave: e => {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);},
 							onClick: e => {if (typeof this.props.onClick == "function") this.props.onClick(e, this);},
@@ -4688,7 +4688,7 @@ module.exports = (_ => {
 									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextScroller, {children: this.props.children})
 								}) : this.props.children
 							].flat(10).filter(n => n)
-						}), "backdrop", "noRemove"));
+						}), "backdrop", "horizontal", "noRemove"));
 					}
 				};
 				InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.Card, {backdrop: true, noRemove: false});
@@ -6483,6 +6483,7 @@ module.exports = (_ => {
 							className: BDFDB.DOMUtils.formatClassName([this.props.cardClassName, data.className].filter(n => n).join(" ").indexOf(BDFDB.disCN.card) == -1 && BDFDB.disCN.cardprimaryoutline, BDFDB.disCN.settingstablecard, this.props.cardClassName, data.className),
 							cardId: data.key,
 							backdrop: false,
+							horizontal: true,
 							style: Object.assign({}, this.props.cardStyle, data.style),
 							children: [
 								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
