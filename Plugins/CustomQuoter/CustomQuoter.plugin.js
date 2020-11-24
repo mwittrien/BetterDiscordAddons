@@ -189,27 +189,24 @@ module.exports = (_ => {
 									BDFDB.DataUtils.save(formats, this, "formats");
 									BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 								},
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-									direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
-									children: [
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-											type: "TextInput",
-											plugin: this,
-											keys: ["formats", key],
-											label: key + ":",
-											basis: "70%",
-											value: formats[key],
-											onChange: (value, instance) => {
-												formats[key] = value;
-												BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key: "PREVIEW_MESSAGE_" + key.replace(/\s/g, "_")}));
-											}
-										}),
-										BDFDB.ReactUtils.createElement(PreviewMessageComponent, {
-											key: "PREVIEW_MESSAGE_" + key.replace(/\s/g, "_"),
-											format: key
-										})
-									]
-								})
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+										type: "TextInput",
+										plugin: this,
+										keys: ["formats", key],
+										label: key + ":",
+										basis: "70%",
+										value: formats[key],
+										onChange: (value, instance) => {
+											formats[key] = value;
+											BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key: "PREVIEW_MESSAGE_" + key.replace(/\s/g, "_")}));
+										}
+									}),
+									BDFDB.ReactUtils.createElement(PreviewMessageComponent, {
+										key: "PREVIEW_MESSAGE_" + key.replace(/\s/g, "_"),
+										format: key
+									})
+								]
 							})))
 						}));
 						
@@ -293,6 +290,14 @@ module.exports = (_ => {
 							action: event => {action(key, event.shiftKey);}
 						}))
 					});
+					else {
+						let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Quote_Message") : null;
+						if (hint) item.props.hint = _ => {
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+								hint: hint
+							});
+						};
+					}
 				}
 			}
 			

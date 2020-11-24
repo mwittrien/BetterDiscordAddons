@@ -225,6 +225,7 @@ module.exports = (_ => {
 					if (group && group.type == BDFDB.LibraryComponents.MenuItems.MenuGroup && BDFDB.ArrayUtils.is(group.props.children)) for (let item of group.props.children) {
 						if (item && item.props && item.props.id && !item.props.hint && !item.props.children) {
 							let hint, action;
+							console.log(item.props.id);
 							if (item.props.id == "mark-unread") hint = settings.addHints && `${BDFDB.LibraryModules.KeyCodeUtils.getString(18)}+${clickMap[0]}`;
 							else {
 								switch (item.props.id) {
@@ -234,15 +235,15 @@ module.exports = (_ => {
 									case "edit":
 										action = "Edit_Message";
 										break;
+									case "reply":
+										action = "Reply_to_Message";
+										break;
 									case "pin":
 									case "unpin":
 										action = "Pin/Unpin_Message";
 										break;
 									case "delete":
 										action = "Delete_Message";
-										break;
-									case "quote":
-										action = "Quote_Message";
 										break;
 								}
 								if (action) hint = this.getActiveShortcutString(action);
