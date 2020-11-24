@@ -384,14 +384,8 @@ body::before {
 	color: rgb(var(--fontwhite1));
 }
 .bar-30k2ka:not(.mention-1f5kbO) {
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.1));
+	background-color: transparent;
 	overflow: hidden;
-}
-.sidebar-2K8pFh .bar-30k2ka:not(.mention-1f5kbO) {
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + var(--vguildchanneltransparency) * 0.85 + 0.1));
-}
-.wrapper-1Rf91z .bar-30k2ka:not(.mention-1f5kbO) {
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + var(--vguildchanneltransparency) * 1.9 + 0.1));
 }
 .bar-30k2ka:not(.mention-1f5kbO)::before {
 	content: "";
@@ -405,6 +399,23 @@ body::before {
 	filter: blur(var(--vbackgroundblur));
 	pointer-events: none;
 	z-index: -1;
+}
+.bar-30k2ka:not(.mention-1f5kbO)::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.1));
+	pointer-events: none;
+	z-index: -1;
+}
+.sidebar-2K8pFh .bar-30k2ka:not(.mention-1f5kbO)::after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + var(--vguildchanneltransparency) * 0.85 + 0.1));
+}
+.wrapper-1Rf91z .bar-30k2ka:not(.mention-1f5kbO)::after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + var(--vguildchanneltransparency) * 1.9 + 0.1));
 }
 
 
@@ -804,7 +815,7 @@ body::before {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 .jumpToPresentBar-G1R9s6 {									/* bar					jumptopresent						*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	background-color: transparent;
 	overflow: hidden;
 	opacity: 1;
 }
@@ -818,6 +829,17 @@ body::before {
 	background: var(--vbackground) center/var(--vbackgroundsize);
 	background-attachment: fixed;
 	filter: blur(var(--vbackgroundblur));
+	pointer-events: none;
+	z-index: -1;
+}
+.jumpToPresentBar-G1R9s6::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
 	pointer-events: none;
 	z-index: -1;
 }
@@ -1960,7 +1982,7 @@ body::before {
 	box-shadow: 0 0 0 rgba(var(--vtransparencycolor), 0.15);
 }
 .tile-PuWjfs div.splashPlaceholder-1ev-9c {					/* perkcard				imagecontainer						*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.3));
+	background-color: transparent;
 	position: relative;
 	z-index: 5;
 }
@@ -1974,6 +1996,17 @@ body::before {
 	background: var(--vbackground) center/var(--vbackgroundsize);
 	background-attachment: fixed;
 	filter: blur(var(--vbackgroundblur));
+	pointer-events: none;
+	z-index: -1;
+}
+.tile-PuWjfs div.splashPlaceholder-1ev-9c::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
 	pointer-events: none;
 	z-index: -1;
 }
@@ -2080,7 +2113,7 @@ body::before {
 /* ~~~~		9.		LIBRARY							~~~~ */
 
 .header-39GIC8 {											/* library				table header						*/
-	background-color: rgba(var(--vtransparencycolor), 0.4);
+	background-color: transparent;
 	border-bottom-color: rgba(var(--fontwhite4), 0.5);
 	color: rgb(var(--fontwhite3));
 	position: relative;
@@ -2095,6 +2128,19 @@ body::before {
 	background: var(--vbackground) center/var(--vbackgroundsize);
 	background-attachment: fixed;
 	filter: blur(var(--vbackgroundblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.header-39GIC8::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), 0.4);
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -6181,6 +6227,7 @@ body::before {
 }
 #app-mount .item-26Dhrx[aria-checked=true] .radioBar-bMNUI- {
 	background: rgb(var(--vaccentcolor));
+	color: rgb(var(--fontwhite1));
 }
 #app-mount .item-26Dhrx[aria-checked=true] .radioBar-bMNUI- .radioIconForeground-XwlXQN {
 	color: rgb(var(--fontwhite1));
