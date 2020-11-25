@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomQuoter",
 			"author": "DevilBro",
-			"version": "1.2.0",
+			"version": "1.2.1",
 			"description": "Customize the output of the native quote feature of Discord"
 		},
 		"changeLog": {
 			"fixed": {
-				"New Settings Menu": "Fixed for new settings menu"
+				"Canar": "Fixed for canary"
 			}
 		}
 	};
@@ -101,11 +101,7 @@ module.exports = (_ => {
 				};
 			}
 			
-			onStart() {
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.QuoteUtils, "createQuotedText", {instead: e => {
-					return this.parseQuote(e.methodArguments[0], e.methodArguments[1]);
-				}});
-				
+			onStart() {				
 				this.forceUpdateAll();
 			}
 			
@@ -347,12 +343,16 @@ module.exports = (_ => {
 			}
 			
 			quote (channel, message, shift) {
-				if (shift && !settings.alwaysCopy || !shift && settings.alwaysCopy || !BDFDB.LibraryModules.QuoteUtils.canQuote(message, channel)) {
-					BDFDB.LibraryRequires.electron.clipboard.write({text: this.parseQuote(message, channel)});
-					BDFDB.NotificationUtils.toast("Quote has been copied to clipboard", {type: "success"});
+				let text = this.parseQuote(message, channel);
+				if (text && text.length) {
+					if (shift && !settings.alwaysCopy || !shift && settings.alwaysCopy || !BDFDB.UserUtils.can("SEND_MESSAGES")) {
+						BDFDB.LibraryRequires.electron.clipboard.write({text: text});
+						BDFDB.NotificationUtils.toast("Quote has been copied to clipboard", {type: "success"});
+					}
+					else {
+						BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {content: text});
+					}
 				}
-				else BDFDB.LibraryModules.MessageManageUtils.quoteMessage(channel, message);
-				//function(e,t){var n=(0,h.createQuotedText)(t,e);v.ComponentDispatch.dispatchToLastSubscribed(E.ComponentActions.INSERT_QUOTE_TEXT,{text:n}),p.default.track(E.AnalyticEvents.REPLY_STARTED,{channel_id:e.id,author_id:t.author.id})}
 			}
 
 			parseQuote (message, channel, choice = format) {
