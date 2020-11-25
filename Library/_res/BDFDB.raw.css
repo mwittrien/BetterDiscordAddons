@@ -352,10 +352,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	justify-content: center;
 }
 [REPLACE_CLASS_hovercardwrapper][REPLACE_CLASS_hovercardhorizontal] {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+	flex-direction: row;
 }
 [REPLACE_CLASS_settingspanel] [REPLACE_CLASS_hovercardwrapper] {
 	width: calc(100% - 20px);
