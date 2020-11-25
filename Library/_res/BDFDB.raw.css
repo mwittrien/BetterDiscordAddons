@@ -487,6 +487,9 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 
 [REPLACE_CLASS_settingstableheaders] {
+	display: flex;
+	align-items: center;
+	flex: 1 0 auto;
 	margin-right: 10px;
 	margin-left: 10px;
 }
