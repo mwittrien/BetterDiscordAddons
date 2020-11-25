@@ -65,7 +65,7 @@
 		"MemberCountUtils": {"props": ["getMemberCount", "getMemberCounts"]},
 		"MemberStore": {"props": ["getMember", "getMembers"]},
 		"MentionUtils": {"props": ["isRawMessageMentioned", "isMentioned"]},
-		"MessageManageUtils": {"props": ["copyLink", "quoteMessage"]},
+		"MessageManageUtils": {"props": ["copyLink", "replyToMessage"]},
 		"MessagePinUtils": {"props": ["pinMessage", "unpinMessage"]},
 		"MessageStore": {"props": ["getMessage", "getMessages"]},
 		"MessageUtils": {"props": ["receiveMessage", "editMessage"]},
