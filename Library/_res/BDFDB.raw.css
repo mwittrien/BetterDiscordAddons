@@ -486,10 +486,16 @@ img:not([src]), img[src=""], img[src="null"] {
 	font-size: 15px;
 }
 
-[REPLACE_CLASS_settingstablelist] [REPLACE_CLASS_checkboxcontainer]:before {
-	display: none;
+[REPLACE_CLASS_settingstableheaders] {
+	margin-right: 10px;
+	margin-left: 10px;
 }
-
+[REPLACE_CLASS_settingstableheaderoptions] {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex: 0 0 auto;
+}
 [REPLACE_CLASS_settingstablelist] [REPLACE_CLASS_settingstableheader] {
 	min-height: 10px;
 }
@@ -529,9 +535,8 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_settingstablecard] [REPLACE_CLASS_settingstablecardconfigs] {
 	margin: 0;
 }
-[REPLACE_CLASS_settingstableheaders] {
-	margin-right: 10px;
-	margin-left: 10px;
+[REPLACE_CLASS_settingstablelist] [REPLACE_CLASS_checkboxcontainer]:before {
+	display: none;
 }
 
 [REPLACE_CLASS_popoutwrapper] [REPLACE_CLASS_messagespopouttabbarheader] {
