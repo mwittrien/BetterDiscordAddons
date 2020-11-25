@@ -16,13 +16,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.1.7",
+			"version": "1.1.8",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 		"changeLog": {
 			"fixed": {
-				"BD Beta": "Fixed some issues with BD Beta"
+				"Canary": "Fixed for canary"
 			}
 		}
 	};
@@ -2390,7 +2390,7 @@ module.exports = (_ => {
 				};
 				BDFDB.ReactUtils.getInstance = function (node) {
 					if (!BDFDB.ObjectUtils.is(node)) return null;
-					return node[Object.keys(node).find(key => key.startsWith("__reactInternalInstance"))];
+					return node[Object.keys(node).find(key => key.startsWith("__reactInternalInstance") || key.startsWith("__reactFiber"))];
 				};
 				BDFDB.ReactUtils.isCorrectInstance = function (instance, name) {
 					return instance && ((instance.type && (instance.type.render && instance.type.render.displayName === name || instance.type.displayName === name || instance.type.name === name || instance.type === name)) || instance.render && (instance.render.displayName === name || instance.render.name === name) || instance.displayName == name || instance.name === name);
