@@ -505,13 +505,16 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_settingstablelist] [REPLACE_CLASS_settingstableheaderoption] {
 	width: unset;
 }
+[REPLACE_CLASS_settingstablelist] [REPLACE_CLASS_settingstableheaderoption][REPLACE_CLASS_settingstableheadervertical] {
+	width: 24px;
+}
 [REPLACE_CLASS_settingstableheadervertical] {
 	position: relative;
 }
 [REPLACE_CLASS_settingstableheadervertical] > span {
 	position: absolute;
 	bottom: 50%;
-	right: calc(50% - 5px);
+	right: calc(50% - 4px);
 	margin-bottom: -5px;
 	writing-mode: vertical-rl;
 }
