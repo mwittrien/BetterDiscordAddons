@@ -80,7 +80,6 @@
 		"PermissionRoleUtils": {"props": ["canEveryone", "can"]},
 		"PreferencesContext": {"props": ["AccessibilityPreferencesContext"]},
 		"QueryUtils": {"props": ["AutocompleterQuerySymbols", "AutocompleterResultTypes"]},
-		"QuoteUtils": {"props": ["canQuote", "createQuotedText"]},
 		"ReactionEmojiUtils": {"props": ["getReactionEmojiName", "getReactionEmojiName"]},
 		"ReactionUtils": {"props": ["addReaction", "removeReaction"]},
 		"RecentMentionUtils": {"props": ["deleteRecentMention", "fetchRecentMentions"]},
