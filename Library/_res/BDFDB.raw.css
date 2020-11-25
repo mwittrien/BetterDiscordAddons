@@ -511,6 +511,17 @@ img:not([src]), img[src=""], img[src="null"] {
 	padding: 0 10px;
 	margin-bottom: 10px;
 }
+[REPLACE_CLASS_settingstablecardlabel] {
+	display: flex;
+	align-items: center;
+	flex: 1 0 auto;
+}
+[REPLACE_CLASS_settingstablecardconfigs] {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex: 0 0 auto;
+}
 [REPLACE_CLASS_settingstablecard] [REPLACE_CLASS_settingstablecardlabel] {
 	padding-right: 10px;
 }
