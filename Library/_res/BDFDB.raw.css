@@ -355,7 +355,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	flex-direction: row;
 }
 [REPLACE_CLASS_settingspanel] [REPLACE_CLASS_hovercardwrapper] {
-	width: calc(100% - 20px);
+	width: calc(100% - 22px);
 }
 [REPLACE_CLASS_hovercardwrapper][REPLACE_CLASS_hovercard] {
 	padding: 10px 0;
