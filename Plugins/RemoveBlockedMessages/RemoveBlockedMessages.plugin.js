@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.1.5",
+			"version": "1.1.6",
 			"description": "Completely removes blocked messages"
 		},
 		"changeLog": {
-			"improved": {
-				"Replies": "Now hides the name of blocked users in the 'has replied' text and hides the referenced message"
+			"fixed": {
+				"Members List": "Now properly hides the roles header if there are only blocked members online in it"
 			}
 		}
 	};
@@ -255,7 +255,7 @@ module.exports = (_ => {
 								if (newRows[rowIndex] && newRows[rowIndex].type == "GROUP") {
 									found = true;
 									let groupIndex = e.instance.props.groups.findIndex(r => r.id == newRows[rowIndex].id);
-									if (groupIndex) {
+									if (groupIndex > -1) {
 										e.instance.props.groups[groupIndex] = Object.assign({}, e.instance.props.groups[groupIndex], {count: e.instance.props.groups[groupIndex].count - 1});
 										newRows[rowIndex] = Object.assign({}, newRows[rowIndex], {count: e.instance.props.groups[groupIndex].count});
 									}
