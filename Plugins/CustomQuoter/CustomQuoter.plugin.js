@@ -19,7 +19,7 @@ module.exports = (_ => {
 		},
 		"changeLog": {
 			"fixed": {
-				"Canar": "Fixed for canary"
+				"Canary": "Fixed for canary"
 			}
 		}
 	};
