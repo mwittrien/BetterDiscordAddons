@@ -527,6 +527,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	display: flex;
 	align-items: center;
 	flex: 1 0 auto;
+	color: var(--header-primary);
 }
 [REPLACE_CLASS_settingstablecardconfigs] {
 	display: flex;
