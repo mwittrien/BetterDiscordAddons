@@ -6440,116 +6440,131 @@ module.exports = (_ => {
 				
 				InternalComponents.LibraryComponents.SettingsList = reactInitialized && class BDFDB_SettingsList extends LibraryModules.React.Component {
 					componentDidMount() {
+						this.checkList();
+					}
+					componentDidUpdate() {
+						this.checkList();
+					}
+					checkList() {
 						let list = BDFDB.ReactUtils.findDOMNode(this);
-						if (list && !this.props.maxWidth) {
+						if (list && !this.props.configWidth) {
 							let headers = Array.from(list.querySelectorAll(BDFDB.dotCN.settingstableheader));
 							headers.shift();
-							if (BDFDB.DOMUtils.getRects(headers[0]).width == 0) BDFDB.TimeUtils.timeout(_ => {this.resizeList(list, headers);});
-							else this.resizeList(list, headers);
+							if (BDFDB.DOMUtils.getRects(headers[0]).width == 0) BDFDB.TimeUtils.timeout(_ => {this.resizeList(headers);});
+							else this.resizeList(headers);
 						}
 					}
-					resizeList(list, headers) {
-						let maxWidth = 0, biggestWidth = 0;
-						if (!maxWidth) {
+					resizeList(headers) {
+						let configWidth = 0, biggestWidth = 0;
+						if (!configWidth) {
 							for (let header of headers) {
 								header.style = "";
 								let width = BDFDB.DOMUtils.getRects(header).width;
-								maxWidth = width > maxWidth ? width : maxWidth;
+								configWidth = width > configWidth ? width : configWidth;
 							}
-							maxWidth += 4;
-							biggestWidth = maxWidth;
+							configWidth += 4;
+							biggestWidth = configWidth;
 						}
-						if (headers.length * maxWidth > 300) {
+						if (headers.length * configWidth > 300) {
 							this.props.vertical = true;
-							maxWidth = parseInt(290 / headers.length);
+							configWidth = parseInt(290 / headers.length);
 						}
-						else if (maxWidth < 36) {
-							maxWidth = 36;
-							biggestWidth = maxWidth;
+						else if (configWidth < 36) {
+							configWidth = 36;
+							biggestWidth = configWidth;
 						}
-						this.props.maxWidth = maxWidth;
+						this.props.configWidth = configWidth;
 						this.props.biggestWidth = biggestWidth;
-						this.props.fullWidth = BDFDB.DOMUtils.getRects(list).width;
 						BDFDB.ReactUtils.forceUpdate(this);
 					}
-					render() {
-						this.props.settings = BDFDB.ArrayUtils.is(this.props.settings) ? this.props.settings : [];
-						this.props.renderLabel = typeof this.props.renderLabel == "function" ? this.props.renderLabel : data => data.label;
-						this.props.data = (BDFDB.ArrayUtils.is(this.props.data) ? this.props.data : [{}]).filter(n => n);
-						let labelWidth = this.props.maxWidth && this.props.fullWidth && (this.props.fullWidth - 20 - (this.props.maxWidth * this.props.settings.length));
-						let configWidth = this.props.maxWidth && this.props.maxWidth * this.props.settings.length;
-						let isHeaderClickable = typeof this.props.onHeaderClick == "function" || typeof this.props.onHeaderContextMenu == "function";
-						let renderItem = data => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Card, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-							className: BDFDB.DOMUtils.formatClassName([this.props.cardClassName, data.className].filter(n => n).join(" ").indexOf(BDFDB.disCN.card) == -1 && BDFDB.disCN.cardprimaryoutline, BDFDB.disCN.settingstablecard, this.props.cardClassName, data.className),
-							cardId: data.key,
+					renderHeaderOption(props) {
+						return BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.DOMUtils.formatClassName(props.className, BDFDB.disCN.colorbase, BDFDB.disCN.size10, props.clickable && BDFDB.disCN.cursorpointer),
+							onClick: _ => {if (typeof this.props.onHeaderClick == "function") this.props.onHeaderClick(props.label, this);},
+							onContextMenu: _ => {if (typeof this.props.onHeaderContextMenu == "function") this.props.onHeaderContextMenu(props.label, this);},
+							children: BDFDB.ReactUtils.createElement("span", {
+								children: props.label
+							})
+						});
+					}
+					renderItem(props) {
+						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Card, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+							className: BDFDB.DOMUtils.formatClassName([this.props.cardClassName, props.className].filter(n => n).join(" ").indexOf(BDFDB.disCN.card) == -1 && BDFDB.disCN.cardprimaryoutline, BDFDB.disCN.settingstablecard, this.props.cardClassName, props.className),
+							cardId: props.key,
 							backdrop: false,
 							horizontal: true,
-							style: Object.assign({}, this.props.cardStyle, data.style),
+							style: Object.assign({}, this.props.cardStyle, props.style),
 							children: [
-								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.settingstablecardlabel,
-									align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
-									grow: 0,
-									shrink: 0,
-									basis: labelWidth || "auto",
-									style: {maxWidth: labelWidth || null},
-									children: this.props.renderLabel(data)
+									children: this.props.renderLabel(props)
 								}),
-								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.settingstablecardconfigs,
-									justify: InternalComponents.LibraryComponents.Flex.Justify.AROUND,
-									align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
-									grow: 0,
-									shrink: 0,
-									basis: configWidth || "auto",
-									style: {maxWidth: configWidth || null},
-									children: this.props.settings.map(setting => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
+									style: {
+										width: props.wrapperWidth || null,
+										minWidth: props.wrapperWidth || null,
+										maxWidth: props.wrapperWidth || null
+									},
+									children: this.props.settings.map(setting => BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN.checkboxcontainer,
-										grow: 0,
-										shrink: 0,
-										wrap: true,
 										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Checkbox, {
-											disabled: data.disabled,
-											cardId: data.key,
+											disabled: props.disabled,
+											cardId: props.key,
 											settingId: setting,
 											shape: InternalComponents.LibraryComponents.Checkbox.Shapes.ROUND,
 											type: InternalComponents.LibraryComponents.Checkbox.Types.INVERTED,
-											value: data[setting],
+											value: props[setting],
 											onChange: this.props.onCheckboxChange
 										})
 									})).flat(10).filter(n => n)
 								})
 							]
 						}), "title", "data", "settings", "renderLabel", "cardClassName", "cardStyle", "onCheckboxChange", "maxWidth", "fullWidth", "biggestWidth", "pagination"));
-						let header = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+					}
+					render() {
+						this.props.settings = BDFDB.ArrayUtils.is(this.props.settings) ? this.props.settings : [];
+						this.props.renderLabel = typeof this.props.renderLabel == "function" ? this.props.renderLabel : data => data.label;
+						this.props.data = (BDFDB.ArrayUtils.is(this.props.data) ? this.props.data : [{}]).filter(n => n);
+						
+						let wrapperWidth = this.props.configWidth && this.props.configWidth * this.props.settings.length;
+						let isHeaderClickable = typeof this.props.onHeaderClick == "function" || typeof this.props.onHeaderContextMenu == "function";
+						let usePagination = BDFDB.ObjectUtils.is(this.props.pagination);
+						
+						let header = BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.settingstableheaders,
-							align: InternalComponents.LibraryComponents.Flex.Align.STRETCH,
 							style: this.props.vertical && this.props.biggestWidth ? {
 								marginTop: this.props.biggestWidth - 15 || 0
 							} : {},
-							children: [].concat(this.props.title || "", this.props.settings).map((setting, i) => BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.DOMUtils.formatClassName(i == 0 ? BDFDB.disCN.settingstableheadername : BDFDB.disCN.settingstableheaderoption, i != 0 && this.props.vertical && BDFDB.disCN.settingstableheadervertical, BDFDB.disCN.colorbase, BDFDB.disCN.size10, isHeaderClickable && BDFDB.disCN.cursorpointer),
-								onClick: _ => {if (typeof this.props.onHeaderClick == "function") this.props.onHeaderClick(setting, this);},
-								onContextMenu: _ => {if (typeof this.props.onHeaderContextMenu == "function") this.props.onHeaderContextMenu(setting, this);},
-								style: i != 0 && this.props.maxWidth ? {
-									maxWidth: this.props.maxWidth,
-									width: this.props.maxWidth,
-									flex: `0 0 ${this.props.maxWidth}px`
-								} : {},
-								children: BDFDB.ReactUtils.createElement("span", {
-									children: setting
+							children: [
+								this.renderHeaderOption({
+									className: BDFDB.disCN.settingstableheadername,
+									clickable: this.props.title && isHeaderClickable,
+									label: this.props.title || ""
+								}),
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.settingstableheaderoptions,
+									style: {
+										width: wrapperWidth || null,
+										minWidth: wrapperWidth || null,
+										maxWidth: wrapperWidth || null
+									},
+									children: this.props.settings.map(setting => this.renderHeaderOption({
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.settingstableheaderoption, this.props.vertical && BDFDB.disCN.settingstableheadervertical),
+										clickable: isHeaderClickable,
+										label: setting
+									}))
 								})
-							}))
+							]
 						});
-						let usePagination = BDFDB.ObjectUtils.is(this.props.pagination);
 						return !this.props.data.length ? null : BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.settingstablelist, this.props.className),
 							children: [
 								!usePagination && header,
-								!usePagination ? this.props.data.map(renderItem) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PaginatedList, Object.assign({}, this.props.pagination, {
+								!usePagination ? this.props.data.map(data => this.renderItem(Object.assign({}, data, {wrapperWidth}))) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PaginatedList, Object.assign({}, this.props.pagination, {
 									header: header,
 									items: this.props.data,
-									renderItem: renderItem,
+									renderItem: data => this.renderItem(Object.assign({}, data, {wrapperWidth})),
 									onJump: (offset, instance) => {
 										this.props.pagination.offset = offset;
 										if (typeof this.props.pagination.onJump == "function") this.props.pagination.onJump(offset, this, instance);
