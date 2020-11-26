@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditServers",
 			"author": "DevilBro",
-			"version": "2.2.5",
+			"version": "2.2.6",
 			"description": "Allow you to change the icon, name and color of servers"
 		},
 		"changeLog": {
-			"improved": {
-				"Welcome Message": "Now also changes the server name in the welcome message"
+			"fixed": {
+				"New React Structure": "Fixed for new internal react structure"
 			}
 		}
 	};
@@ -426,7 +426,7 @@ module.exports = (_ => {
 										autoFocus: true,
 										onChange: (value, instance) => {
 											if (!currentIgnoreCustomNameState) {
-												let acronymInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return.return, {key: "GUILDACRONYM"});
+												let acronymInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return.return`), {key: "GUILDACRONYM"});
 												if (acronymInputIns) {
 													acronymInputIns.props.placeholder = value && BDFDB.LibraryModules.StringUtils.getAcronym(value) || guild.acronym;
 													BDFDB.ReactUtils.forceUpdate(acronymInputIns);
@@ -454,8 +454,8 @@ module.exports = (_ => {
 									value: data.ignoreCustomName,
 									onChange: (value, instance) => {
 										currentIgnoreCustomNameState = value;
-										let nameInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key: "GUILDNAME"});
-										let acronymInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key: "GUILDACRONYM"});
+										let nameInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return`), {key: "GUILDNAME"});
+										let acronymInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return`), {key: "GUILDACRONYM"});
 										if (nameInputIns && acronymInputIns) {
 											acronymInputIns.props.placeholder = !value && nameInputIns.props.value && BDFDB.LibraryModules.StringUtils.getAcronym(nameInputIns.props.value) || guild.acronym;
 											BDFDB.ReactUtils.forceUpdate(acronymInputIns);
@@ -484,7 +484,7 @@ module.exports = (_ => {
 													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 													value: data.removeIcon,
 													onChange: (value, instance) => {
-														let iconInputIins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "GUILDICON"});
+														let iconInputIins = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return`), {key: "GUILDICON"});
 														if (iconInputIins) {
 															delete iconInputIins.props.success;
 															delete iconInputIins.props.errorMessage;
@@ -532,7 +532,7 @@ module.exports = (_ => {
 													value: data.removeBanner && guild.id != "410787888507256842",
 													disabled: guild.id == "410787888507256842",
 													onChange: (value, instance) => {
-														let bannerInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "GUILDBANNER"});
+														let bannerInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return`), {key: "GUILDBANNER"});
 														if (bannerInputIns) {
 															delete bannerInputIns.props.success;
 															delete bannerInputIns.props.errorMessage;

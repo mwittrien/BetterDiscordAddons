@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.2.0",
+			"version": "4.2.1",
 			"description": "Add a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode)"
 		},
 		"changeLog": {
-			"added": {
-				"Infinite loading": "No longer loads images endlessly after opening it a second time"
+			"fixed": {
+				"New React Structure": "Fixed for new internal react structure"
 			}
 		}
 	};
@@ -58,13 +58,13 @@ module.exports = (_ => {
 		
 		const ImageDetails = class ImageDetails extends BdApi.React.Component {
 			componentDidMount() {
-				this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, "_reactInternalFiber.return"), "attachment", {up: true});
+				this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "attachment", {up: true});
 				BDFDB.ReactUtils.forceUpdate(this);
 			}
 			componentDidUpdate() {
 				if ((!this.props.attachment || !this.props.attachment.size) && !this.props.loaded) {
 					this.props.loaded = true;
-					this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, "_reactInternalFiber.return"), "attachment", {up: true});
+					this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "attachment", {up: true});
 					BDFDB.ReactUtils.forceUpdate(this);
 				}
 			}
@@ -760,7 +760,7 @@ module.exports = (_ => {
 					}
 				}
 				else {
-					if (settings.resizeImage && e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.imagemodalimage) > -1 && BDFDB.ReactUtils.findOwner(e.instance._reactInternalFiber, {name: "ImageModal", up: true})) {
+					if (settings.resizeImage && e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.imagemodalimage) > -1 && BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), {name: "ImageModal", up: true})) {
 						let data = settings.enableGallery ? this.getSiblingsAndPosition(e.instance.props.src, this.getMessageGroupOfImage(e.instance.props.src)) : {};
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let ratio = Math.min((aRects.width * (data.previous || data.next ? 0.8 : 1) - 20) / e.instance.props.width, (aRects.height - (settings.addDetails ? 310 : 100)) / e.instance.props.height);

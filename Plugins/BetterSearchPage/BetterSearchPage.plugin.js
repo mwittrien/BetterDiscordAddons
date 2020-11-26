@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterSearchPage",
 			"author": "DevilBro",
-			"version": "1.1.6",
+			"version": "1.1.7",
 			"description": "Add some extra controls to the search results page"
+		},
+		"changeLog": {
+			"fixed": {
+				"New React Structure": "Fixed for new internal react structure"
+			}
 		}
 	};
 
@@ -170,7 +175,7 @@ module.exports = (_ => {
 								text: BDFDB.LanguageUtils.LanguageStrings.JUMP,
 								"aria-label": BDFDB.LanguageUtils.LanguageStrings.JUMP,
 								onClick: (event, instance) => {
-									let jumpInput = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key: "BSP-pagination-jumpinput"});
+									let jumpInput = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return`), {key: "BSP-pagination-jumpinput"});
 									if (jumpInput) doJump(jumpInput.props.value);
 								},
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {

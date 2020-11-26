@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomQuoter",
 			"author": "DevilBro",
-			"version": "1.2.1",
+			"version": "1.2.2",
 			"description": "Customize the output of the native quote feature of Discord"
 		},
 		"changeLog": {
 			"fixed": {
-				"Canary": "Fixed for canary"
+				"New React Structure": "Fixed for new internal react structure"
 			}
 		}
 	};
@@ -195,7 +195,7 @@ module.exports = (_ => {
 										value: formats[key],
 										onChange: (value, instance) => {
 											formats[key] = value;
-											BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key: "PREVIEW_MESSAGE_" + key.replace(/\s/g, "_")}));
+											BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return`), {key: "PREVIEW_MESSAGE_" + key.replace(/\s/g, "_")}));
 										}
 									}),
 									BDFDB.ReactUtils.createElement(PreviewMessageComponent, {

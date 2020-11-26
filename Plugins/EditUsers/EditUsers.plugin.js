@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.0.4",
+			"version": "4.0.5",
 			"description": "Allow you to change the icon, name, tag and color of users"
 		},
 		"changeLog": {
 			"fixed": {
-				"Replies": "Works for replies now too"
+				"New React Structure": "Fixed for new internal react structure"
 			}
 		}
 	};
@@ -1124,7 +1124,7 @@ module.exports = (_ => {
 													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 													value: data.removeIcon,
 													onChange: (value, instance) => {
-														let avatarInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "USERAVATAR"});
+														let avatarInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return`), {key: "USERAVATAR"});
 														if (avatarInputIns) {
 															delete avatarInputIns.props.success;
 															delete avatarInputIns.props.errorMessage;
@@ -1171,8 +1171,8 @@ module.exports = (_ => {
 													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 													value: data.removeStatus,
 													onChange: (value, instance) => {
-														let statusInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "USERSTATUS"});
-														let statusEmojiInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "USERSTATUSEMOJI"});
+														let statusInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return`), {key: "USERSTATUS"});
+														let statusEmojiInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return`), {key: "USERSTATUSEMOJI"});
 														if (statusInputIns && statusEmojiInputIns) {
 															delete statusInputIns.props.success;
 															delete statusInputIns.props.errorMessage;
@@ -1214,8 +1214,8 @@ module.exports = (_ => {
 														name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE_CIRCLE
 													}),
 													onClick: (e, instance) => {
-														let statusInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "USERSTATUS"});
-														let statusEmojiInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "USERSTATUSEMOJI"});
+														let statusInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return`), {key: "USERSTATUS"});
+														let statusEmojiInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return`), {key: "USERSTATUSEMOJI"});
 														if (statusInputIns && statusEmojiInputIns) {
 															statusInputIns.props.value = "";
 															delete statusEmojiInputIns.props.emoji;
@@ -1287,8 +1287,8 @@ module.exports = (_ => {
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: data.ignoreTagColor,
 									onChange: (value, instance) => {
-										let colorpicker3ins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props: [["number",3]]});
-										let colorpicker4ins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props: [["number",4]]});
+										let colorpicker3ins = BDFDB.ReactUtils.findOwner(instance._reactInternals.return, {props: [["number",3]]});
+										let colorpicker4ins = BDFDB.ReactUtils.findOwner(instance._reactInternals.return, {props: [["number",4]]});
 										if (colorpicker3ins) colorpicker3ins.setState({disabled: value});
 										if (colorpicker4ins) colorpicker4ins.setState({disabled: value});
 									}

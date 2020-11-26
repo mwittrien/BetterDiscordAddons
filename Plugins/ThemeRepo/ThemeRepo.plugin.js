@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
-			"version": "2.1.0",
+			"version": "2.1.1",
 			"description": "Allow you to preview all themes from the theme repo and download them on the fly"
 		},
 		"changeLog": {
 			"fixed": {
-				"BD Beta": "Fixed some issues with the beta"
+				"New React Structure": "Fixed for new internal react structure"
 			}
 		}
 	};
@@ -547,7 +547,7 @@ module.exports = (_ => {
 							onChange: (value, instance) => {
 								if (!list) return;
 								
-								if (list.props.currentTheme) for (let ins of BDFDB.ReactUtils.findOwner(this._reactInternalFiber.return, {name: "ThemeCard", all: true}).filter(ins => ins && ins.props && ins.props.theme && ins.props.theme.url == list.props.currentTheme.url)) BDFDB.ReactUtils.forceUpdate(ins);
+								if (list.props.currentTheme) for (let ins of BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), {name: "ThemeCard", all: true}).filter(ins => ins && ins.props && ins.props.theme && ins.props.theme.url == list.props.currentTheme.url)) BDFDB.ReactUtils.forceUpdate(ins);
 								
 								if (value) list.props.currentTheme = this.props.theme;
 								else delete list.props.currentTheme;

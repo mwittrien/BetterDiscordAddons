@@ -16,13 +16,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.1.8",
+			"version": "1.1.9",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 		"changeLog": {
 			"fixed": {
-				"Canary": "Fixed for canary"
+				"New React Structure": "Fixed for new internal react structure"
 			}
 		}
 	};
@@ -1622,10 +1622,10 @@ module.exports = (_ => {
 					pluginDataObjs = [pluginDataObjs].flat(10).filter(n => n);
 					if (pluginDataObjs.length && instance) {
 						let name = type.split(" _ _ ")[0];
-						instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
+						instance = instance[BDFDB.ReactUtils.instanceKey] && instance[BDFDB.ReactUtils.instanceKey].type ? instance[BDFDB.ReactUtils.instanceKey].type : instance;
 						instance = config.ignoreCheck || BDFDB.ReactUtils.isCorrectInstance(instance, name) || InternalData.ModuleUtilsConfig.LoadedInComponents[type] ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up: true}));
 						if (instance) {
-							instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
+							instance = instance[BDFDB.ReactUtils.instanceKey] && instance[BDFDB.ReactUtils.instanceKey].type ? instance[BDFDB.ReactUtils.instanceKey].type : instance;
 							let toBePatched = config.nonPrototype ? instance : instance.prototype;
 							toBePatched = config.subRender && toBePatched ? toBePatched.type : toBePatched;
 							for (let pluginData of pluginDataObjs) for (let patchType in pluginData.patchTypes) {
@@ -1722,7 +1722,7 @@ module.exports = (_ => {
 				
 				InternalBDFDB.isCorrectPatchInstance = function (instance, name) {
 					if (!instance) return false;
-					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
+					instance = instance[BDFDB.ReactUtils.instanceKey] && instance[BDFDB.ReactUtils.instanceKey].type ? instance[BDFDB.ReactUtils.instanceKey].type : instance;
 					instance = BDFDB.ReactUtils.isCorrectInstance(instance, name) ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up: true}));
 					return !!instance;
 				};
@@ -2111,7 +2111,16 @@ module.exports = (_ => {
 					let start = performance.now();
 					let maxDepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
 					let maxTime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
-					let whitelist = config.up ? {return: true, sibling: true, default: true, _reactInternalFiber: true} : {child: true, sibling: true, default: true, _reactInternalFiber: true};
+					let whitelist = config.up ? {
+						return: true,
+						sibling: true,
+						default: true
+					} : {
+						child: true,
+						sibling: true,
+						default: true
+					};
+					whitelist[BDFDB.ReactUtils.instanceKey] = true;
 					
 					let foundConstructors = config.group ? {} : [];
 					let singleConstructor = getConstructor(instance);
@@ -2176,7 +2185,16 @@ module.exports = (_ => {
 					let start = performance.now();
 					let maxDepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
 					let maxTime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
-					let whitelist = config.up ? {return: true, sibling: true, _reactInternalFiber: true} : {child: true, sibling: true, _reactInternalFiber: true};
+					let whitelist = config.up ? {
+						return: true,
+						sibling: true,
+						default: true
+					} : {
+						child: true,
+						sibling: true,
+						default: true
+					};
+					whitelist[BDFDB.ReactUtils.instanceKey] = true;
 					
 					let foundInstances = config.group ? {} : [];
 					let singleInstance = getOwner(instance);
@@ -2301,7 +2319,16 @@ module.exports = (_ => {
 					let start = performance.now();
 					let maxDepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
 					let maxTime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
-					let whitelist = config.up ? {return: true, sibling: true, _reactInternalFiber: true} : {child: true, sibling: true, _reactInternalFiber: true};
+					let whitelist = config.up ? {
+						return: true,
+						sibling: true,
+						default: true
+					} : {
+						child: true,
+						sibling: true,
+						default: true
+					};
+					whitelist[BDFDB.ReactUtils.instanceKey] = true;
 					return findProps(instance);
 
 					function findProps (instance) {
@@ -2326,7 +2353,7 @@ module.exports = (_ => {
 					if (!nodeOrInstance || typeof searchKey != "string") return config.all ? [] : null;
 					let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 					if (!BDFDB.ObjectUtils.is(instance)) return config.all ? [] : null;
-					instance = instance._reactInternalFiber || instance;
+					instance = instance[BDFDB.ReactUtils.instanceKey] || instance;
 					let depth = -1;
 					let start = performance.now();
 					let maxDepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
@@ -2388,9 +2415,10 @@ module.exports = (_ => {
 				BDFDB.ReactUtils.forceUpdate = function (...instances) {
 					for (let ins of instances.flat(10).filter(n => n)) if (ins.updater && typeof ins.updater.isMounted == "function" && ins.updater.isMounted(ins)) ins.forceUpdate();
 				};
+				BDFDB.ReactUtils.instanceKey = "_reactInternals";
 				BDFDB.ReactUtils.getInstance = function (node) {
 					if (!BDFDB.ObjectUtils.is(node)) return null;
-					return node[Object.keys(node).find(key => key.startsWith("__reactInternalInstance") || key.startsWith("__reactFiber"))];
+					return node[Object.keys(node).find(key => key.startsWith("__reactFiber"))];
 				};
 				BDFDB.ReactUtils.isCorrectInstance = function (instance, name) {
 					return instance && ((instance.type && (instance.type.render && instance.type.render.displayName === name || instance.type.displayName === name || instance.type.name === name || instance.type === name)) || instance.render && (instance.render.displayName === name || instance.render.name === name) || instance.displayName == name || instance.name === name);
@@ -2422,7 +2450,7 @@ module.exports = (_ => {
 							else BDFDB.ChannelUtils.markAsRead(channel);
 						}
 						let LayerProviderIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.messageswrapper), {name: "LayerProvider", unlimited: true, up: true});
-						let LayerProviderPrototype = BDFDB.ObjectUtils.get(LayerProviderIns, "_reactInternalFiber.type.prototype");
+						let LayerProviderPrototype = BDFDB.ObjectUtils.get(LayerProviderIns, `${BDFDB.ReactUtils.instanceKey}.type.prototype`);
 						if (LayerProviderIns && LayerProviderPrototype) {
 							BDFDB.PatchUtils.patch(BDFDB, LayerProviderPrototype, "render", {after: e => {
 								e.returnValue.props.children = [];
@@ -2611,7 +2639,7 @@ module.exports = (_ => {
 					BDFDB.TimeUtils.clear(GuildsRerenderTimeout);
 					GuildsRerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
 						let GuildsIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name: "Guilds", unlimited: true});
-						let GuildsPrototype = BDFDB.ObjectUtils.get(GuildsIns, "_reactInternalFiber.type.prototype");
+						let GuildsPrototype = BDFDB.ObjectUtils.get(GuildsIns, `${BDFDB.ReactUtils.instanceKey}.type.prototype`);
 						if (GuildsIns && GuildsPrototype) {
 							let injectPlaceholder = returnValue => {
 								let [children, index] = BDFDB.ReactUtils.findParent(returnValue, {name: "ConnectedUnreadDMs"});
@@ -2722,7 +2750,7 @@ module.exports = (_ => {
 				};
 				BDFDB.ChannelUtils.getAll = function () {
 					let found = [];
-					for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.channels), {name: ["ChannelCategoryItem", "ChannelItem", "PrivateChannel"], all: true, unlimited: true})) if (ins.props && !ins.props.ispin && ins.props.channel && ins._reactInternalFiber.return) {
+					for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.channels), {name: ["ChannelCategoryItem", "ChannelItem", "PrivateChannel"], all: true, unlimited: true})) if (ins.props && !ins.props.ispin && ins.props.channel && ins[BDFDB.ReactUtils.instanceKey] && ins[BDFDB.ReactUtils.instanceKey].return) {
 						let div = BDFDB.ReactUtils.findDOMNode(ins);
 						div = div && BDFDB.DOMUtils.containsClass(div.parentElement, BDFDB.disCN.categorycontainerdefault, BDFDB.disCN.channelcontainerdefault, false) ? div.parentElement : div;
 						found.push(Object.assign(new ins.props.channel.constructor(ins.props.channel), {div, instance: ins}));
@@ -2750,7 +2778,7 @@ module.exports = (_ => {
 					BDFDB.TimeUtils.clear(ChannelsRerenderTimeout);
 					ChannelsRerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
 						let ChannelsIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guildchannels), {name: "Channels", unlimited: true});
-						let ChannelsPrototype = BDFDB.ObjectUtils.get(ChannelsIns, "_reactInternalFiber.type.prototype");
+						let ChannelsPrototype = BDFDB.ObjectUtils.get(ChannelsIns, `${BDFDB.ReactUtils.instanceKey}.type.prototype`);
 						if (ChannelsIns && ChannelsPrototype) {
 							BDFDB.PatchUtils.patch(BDFDB, ChannelsPrototype, "render", {after: e => {
 								e.returnValue.props.children = typeof e.returnValue.props.children == "function" ? (_ => {return null;}) : [];
@@ -6034,7 +6062,7 @@ module.exports = (_ => {
 									"aria-label": BDFDB.LanguageUtils.LanguageStrings.JUMP,
 									tooltipConfig: {zIndex: 3001},
 									onClick: (event, instance) => {
-										let jumpInput = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key: "pagination-list-jumpinput"});
+										let jumpInput = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return`), {key: "pagination-list-jumpinput"});
 										if (jumpInput) this.jump(isNaN(parseInt(jumpInput.props.value)) ? -1 : jumpInput.props.value - 1);
 									},
 									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {

@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "OwnerTag",
 			"author": "DevilBro",
-			"version": "1.3.4",
+			"version": "1.3.5",
 			"description": "Add a tag or crown to the server owner (or admins/management)"
 		},
 		"changeLog": {
 			"fixed": {
-				"Chat": "Works again in chat"
+				"New React Structure": "Fixed for new internal react structure"
 			}
 		}
 	};
@@ -132,7 +132,7 @@ module.exports = (_ => {
 						label: this.defaults.settings[key].description,
 						value: settings[key],
 						onChange: key == "useCrown" ? (value, instance) => {
-							let hideNativeCrownInstance = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key: "hideNativeCrown"});
+							let hideNativeCrownInstance = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return`), {key: "hideNativeCrown"});
 							if (hideNativeCrownInstance) {
 								hideNativeCrownInstance.props.disabled = value;
 								BDFDB.ReactUtils.forceUpdate(hideNativeCrownInstance);

@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerDetails",
 			"author": "DevilBro",
-			"version": "1.0.3",
+			"version": "1.0.4",
 			"description": "Show details of a server when you hover over the icon in the server list"
 		},
 		"changeLog": {
 			"fixed": {
-				"BD Beta": "Works with BD beta"
+				"New React Structure": "Fixed for new internal react structure"
 			}
 		}
 	};
@@ -63,7 +63,7 @@ module.exports = (_ => {
 			componentDidUpdate() {
 				if (amounts.tooltipDelay && this.state.delayed && !this.state.repositioned) {
 					this.state.repositioned = true;
-					let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ObjectUtils.get(this, "_reactInternalFiber.return.return.stateNode.containerInfo"));
+					let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return.return.stateNode.containerInfo`));
 					if (tooltip) tooltip.update();
 				}
 			}
@@ -71,7 +71,7 @@ module.exports = (_ => {
 				if (amounts.tooltipDelay && !this.state.delayed) {
 					BDFDB.TimeUtils.timeout(_ => {
 						this.state.delayed = true;
-						let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ObjectUtils.get(this, "_reactInternalFiber.return.return.stateNode.containerInfo"));
+						let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return.return.stateNode.containerInfo`));
 						if (tooltip) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN._serverdetailstooltip);
 						BDFDB.ReactUtils.forceUpdate(this);
 					}, amounts.tooltipDelay * 1000);
