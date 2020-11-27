@@ -2582,6 +2582,13 @@ img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 	object-position: -9999999px -9999999px;
 }
 
+.input--jS-j2 {
+	background: transparent;
+}
+.inputInner-2akrSS {
+	border: 1px solid var(--deprecated-text-input-border);
+}
+
 /* ----		10.3.	REGIONSELECTMODAL				---- */
 
 #app-mount .regionSelect-3lf4eE.regionSelectLoading-34I21m {
