@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterFriendList",
 			"author": "DevilBro",
-			"version": "1.3.1",
+			"version": "1.3.2",
 			"description": "Add extra controls to the friends page, like sort by name/status, search and all/request/blocked amount"
 		},
 		"changeLog": {
 			"fixed": {
-				"Crash": "No longer crashes when pressing Ctrl in the friend list"
+				"Mutual Guilds": "Visible again"
 			}
 		}
 	};
@@ -301,15 +301,27 @@ module.exports = (_ => {
 				else {
 					if (e.instance.props.user.id == placeHolderId) return null;
 					else if (settings.addMutualGuild && e.instance.props.mutualGuilds && e.instance.props.mutualGuilds.length) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "UserInfo"});
-						if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildSummaryItem, {
-							className: BDFDB.disCN._betterfriendlistmutualguilds,
-							guilds: e.instance.props.mutualGuilds,
-							showTooltip: true,
-							max: 10
-						}, true));
+						if (typeof e.returnvalue.props.children == "function") {
+							let childrenRender = e.returnvalue.props.children;
+							e.returnvalue.props.children = (...args) => {
+								let children = childrenRender(...args);
+								this.injectMutualGuilds(children, e.instance.props.mutualGuilds);
+								return children;
+							};
+						}
+						else this.injectMutualGuilds(e.returnvalue, e.instance.props.mutualGuilds);
 					}
 				}
+			}
+			
+			injectMutualGuilds (returnvalue, mutualGuilds) {
+				let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {name: "UserInfo"});
+				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildSummaryItem, {
+					className: BDFDB.disCN._betterfriendlistmutualguilds,
+					guilds: mutualGuilds,
+					showTooltip: true,
+					max: 10
+				}, true));
 			}
 			
 			createBadge (amount) {
