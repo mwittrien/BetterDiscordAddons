@@ -16,7 +16,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.2.0",
+			"version": "1.2.1",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
@@ -7485,7 +7485,7 @@ module.exports = (_ => {
 					}
 				};
 				
-				BDFDB.ReactUtils.instanceKey = Object.keys(document.querySelector(BDFDB.dotCN.app) || {}).some(n => n.startsWith("__reactInternalInstance")) ? "_reactInternals" : "_reactInternalFiber";
+				BDFDB.ReactUtils.instanceKey = Object.keys(document.querySelector(BDFDB.dotCN.app) || {}).some(n => n.startsWith("__reactInternalInstance")) ? "_reactInternalFiber" : "_reactInternals";
 
 				BDFDB.PluginUtils.load(BDFDB);
 				changeLogs = BDFDB.DataUtils.load(BDFDB, "changeLogs");
