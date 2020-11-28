@@ -802,10 +802,30 @@ module.exports = (_ => {
 		if (settingsProps && !BDFDB.ObjectUtils.is(settingsProps) && (BDFDB.ReactUtils.isValidElement(settingsProps) || BDFDB.ArrayUtils.is(settingsProps))) settingsProps = {
 			children: settingsProps
 		};
-		return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, Object.assign({
+		if (isBeta || !document.querySelector("#bd-settingspane-container")) return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, Object.assign({
 			addon: addon,
 			collapseStates: settingsProps && settingsProps.collapseStates
 		}, settingsProps));
+		else {
+			BDFDB.TimeUtils.timeout(_ => {
+				BDFDB.ModalUtils.open(addon, {
+					header: `${addon.name} ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
+					subheader: "",
+					className: BDFDB.disCN._repomodal,
+					headerClassName: BDFDB.disCN._repomodalheader,
+					contentClassName: BDFDB.disCN._repomodalsettings,
+					footerClassName: BDFDB.disCN._repomodalfooter,
+					size: "MEDIUM",
+					children: typeof settingsProps.children == "function" ? settingsProps.children() : settingsProps.children,
+					buttons: [{contents: BDFDB.LanguageUtils.LanguageStrings.DONE, color: "BRAND", close: true}]
+				});
+			});
+			BDFDB.TimeUtils.timeout(_ => {
+				let settings = document.querySelector(`${BDFDB.dotCN._reposettingsopen} #plugin-settings-${addon.name}`);
+				if (settings && settings.previousElementSibling && !settings.previousElementSibling.className) settings.previousElementSibling.click();
+			}, 3000);
+			return document.createElement("div");
+		}
 	};
 	BDFDB.PluginUtils.refreshSettingsPanel = function (plugin, settingsPanel, ...args) {
 		if (BDFDB.ObjectUtils.is(plugin)) {
@@ -7244,30 +7264,6 @@ module.exports = (_ => {
 						}));
 						if (footerControls) for (let control of controls) footerControls.insertBefore(control, footerControls.firstElementChild);
 						else for (let control of controls) checkbox.parentElement.insertBefore(control, checkbox.parentElement.firstElementChild);
-						
-						if (!isBeta && typeof plugin.getSettingsPanel == "function") {
-							let footer = card.querySelector("." + BDFDB.disCN._repofooter.split(" ").join(",."));
-							if (footer) {
-								BDFDB.DOMUtils.remove(footer.querySelectorAll(BDFDB.dotCN._reposettingsbutton));
-								let settingsButton = document.createElement("button");
-								settingsButton.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._reposettingsbutton);
-								settingsButton.innerText = "Settings";
-								footer.appendChild(settingsButton);
-								settingsButton.addEventListener("click", _ => {
-									BDFDB.ModalUtils.open(plugin, {
-										header: `${plugin.name} ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
-										subheader: "",
-										className: BDFDB.disCN._repomodal,
-										headerClassName: BDFDB.disCN._repomodalheader,
-										contentClassName: BDFDB.disCN._repomodalsettings,
-										footerClassName: BDFDB.disCN._repomodalfooter,
-										size: "MEDIUM",
-										children: plugin.getSettingsPanel(),
-										buttons: [{contents: BDFDB.LanguageUtils.LanguageStrings.DONE, color: "BRAND", close: true}]
-									});
-								});
-							}
-						}
 					}
 				};
 				const cardObserver = (new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
