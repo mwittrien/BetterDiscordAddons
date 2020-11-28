@@ -823,7 +823,7 @@ module.exports = (_ => {
 			BDFDB.TimeUtils.timeout(_ => {
 				let settings = document.querySelector(`${BDFDB.dotCN._reposettingsopen} #plugin-settings-${addon.name}`);
 				if (settings && settings.previousElementSibling && !settings.previousElementSibling.className) settings.previousElementSibling.click();
-			}, 3000);
+			}, 1000);
 			return document.createElement("div");
 		}
 	};
