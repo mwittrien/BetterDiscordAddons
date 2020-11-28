@@ -16,7 +16,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.1.9",
+			"version": "1.2.0",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
@@ -2435,10 +2435,9 @@ module.exports = (_ => {
 				BDFDB.ReactUtils.forceUpdate = function (...instances) {
 					for (let ins of instances.flat(10).filter(n => n)) if (ins.updater && typeof ins.updater.isMounted == "function" && ins.updater.isMounted(ins)) ins.forceUpdate();
 				};
-				BDFDB.ReactUtils.instanceKey = "_reactInternals";
 				BDFDB.ReactUtils.getInstance = function (node) {
 					if (!BDFDB.ObjectUtils.is(node)) return null;
-					return node[Object.keys(node).find(key => key.startsWith("__reactFiber"))];
+					return node[Object.keys(node).find(key => key.startsWith("__reactInternalInstance") || key.startsWith("__reactFiber"))];
 				};
 				BDFDB.ReactUtils.isCorrectInstance = function (instance, name) {
 					return instance && ((instance.type && (instance.type.render && instance.type.render.displayName === name || instance.type.displayName === name || instance.type.name === name || instance.type === name)) || instance.render && (instance.render.displayName === name || instance.render.name === name) || instance.displayName == name || instance.name === name);
@@ -7485,6 +7484,8 @@ module.exports = (_ => {
 						for (let plugin of PluginStores.patchQueues[type].query) if(typeof plugin[`on${type}`] === "function") plugin[`on${type}`](e);
 					}
 				};
+				
+				BDFDB.ReactUtils.instanceKey = Object.keys(document.querySelector(BDFDB.dotCN.app) || {}).some(n => n.startsWith("__reactInternalInstance")) ? "_reactInternals" : "_reactInternalFiber";
 
 				BDFDB.PluginUtils.load(BDFDB);
 				changeLogs = BDFDB.DataUtils.load(BDFDB, "changeLogs");
