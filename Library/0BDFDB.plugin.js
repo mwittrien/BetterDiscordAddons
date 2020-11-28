@@ -16,7 +16,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.2.1",
+			"version": "1.2.2",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
@@ -802,11 +802,14 @@ module.exports = (_ => {
 		if (settingsProps && !BDFDB.ObjectUtils.is(settingsProps) && (BDFDB.ReactUtils.isValidElement(settingsProps) || BDFDB.ArrayUtils.is(settingsProps))) settingsProps = {
 			children: settingsProps
 		};
-		if (isBeta || !document.querySelector("#bd-settingspane-container")) return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, Object.assign({
+		let settingsPanel = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, Object.assign({
 			addon: addon,
 			collapseStates: settingsProps && settingsProps.collapseStates
 		}, settingsProps));
+		if (isBeta || !document.querySelector("#bd-settingspane-container")) return settingsPanel;
 		else {
+			let div = document.createElement("div");
+			div.props = settingsPanel.props;
 			BDFDB.TimeUtils.timeout(_ => {
 				BDFDB.ModalUtils.open(addon, {
 					header: `${addon.name} ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
@@ -816,7 +819,7 @@ module.exports = (_ => {
 					contentClassName: BDFDB.disCN._repomodalsettings,
 					footerClassName: BDFDB.disCN._repomodalfooter,
 					size: "MEDIUM",
-					children: typeof settingsProps.children == "function" ? settingsProps.children() : settingsProps.children,
+					children: settingsPanel,
 					buttons: [{contents: BDFDB.LanguageUtils.LanguageStrings.DONE, color: "BRAND", close: true}]
 				});
 			});
@@ -824,12 +827,12 @@ module.exports = (_ => {
 				let settings = document.querySelector(`${BDFDB.dotCN._reposettingsopen} #plugin-settings-${addon.name}`);
 				if (settings && settings.previousElementSibling && !settings.previousElementSibling.className) settings.previousElementSibling.click();
 			}, 1000);
-			return document.createElement("div");
+			return div;
 		}
 	};
 	BDFDB.PluginUtils.refreshSettingsPanel = function (plugin, settingsPanel, ...args) {
 		if (BDFDB.ObjectUtils.is(plugin)) {
-			if (BDFDB.ReactUtils.isValidElement(settingsPanel) && settingsPanel.props && settingsPanel.props._instance) {
+			if (settingsPanel && settingsPanel.props && BDFDB.ObjectUtils.is(settingsPanel.props._instance)) {
 				settingsPanel.props._instance.props = Object.assign({}, settingsPanel.props._instance.props, ...args);
 				BDFDB.ReactUtils.forceUpdate(settingsPanel.props._instance);
 			}

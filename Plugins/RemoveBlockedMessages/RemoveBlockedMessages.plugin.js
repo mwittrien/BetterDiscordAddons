@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.1.7",
+			"version": "1.1.8",
 			"description": "Completely removes blocked messages"
 		},
 		"changeLog": {
@@ -66,18 +66,10 @@ module.exports = (_ => {
 						removeReplies:				{value: true, 	inner: true,		description: "Replies"},
 						removeMentions:				{value: true, 	inner: true,		description: "Mentions"},
 						removeReactions:			{value: true, 	inner: true,		description: "Reactions"},
-						removeAutocomplete:			{value: true, 	inner: true,		description: "Autucomplete Entries"},
+						removeAutocomplete:			{value: true, 	inner: true,		description: "Autocomplete Entries"},
 						removeUsers:				{value: true, 	inner: true,		description: "Members in List"},
 						removeVoiceUser:			{value: true, 	inner: true,		description: "Members in Voice List"},
 						removeVoiceChats:			{value: true, 	inner: true,		description: "Members in Voice Chat"}
-					}
-				};
-				
-				this.defaults = {
-					settings: {
-						removeMessages:			{value: true,			description: "Remove messages of blocked users"},
-						removeUsers:			{value: true,			description: "Remove blocked users (memberlist, voicechannels)"},
-						disableNotifications:	{value: true,			description: "Disable unread markers for messages of blocked users"},
 					}
 				};
 				
