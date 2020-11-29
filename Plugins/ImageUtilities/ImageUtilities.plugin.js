@@ -121,7 +121,7 @@ module.exports = (_ => {
 						showAsHeader:			{value: true, 	inner: false,		description: "Show image details as a details header above the image in the chat"},
 						showOnHover:			{value: false, 	inner: false,		description: "Show image details as Tooltip in the chat"},
 						enableGallery: 			{value: true,	inner: false,		description: "Display previous/next Images in the same message in the image modal"},
-						enableZoom: 			{value: true,	inner: false,		description: "Create a zoom lense if you press down on an image in the image modal"},
+						enableZoom: 			{value: true,	inner: false,		description: "Create a zoom lens if you press down on an image in the image modal"},
 						enableCopyImg: 			{value: true,	inner: false,		description: "Add a copy image option in the image modal"},
 						enableSaveImg: 			{value: true,	inner: false,		description: "Add a save image as option in the image modal"},
 						useChromium: 			{value: false, 	inner: false,		description: "Use an inbuilt browser window instead of opening your default browser"},
@@ -137,7 +137,7 @@ module.exports = (_ => {
 					},
 					zoomSettings: {
 						zoomlevel:				{value: 2,		digits: 1,		minValue: 1,	maxValue: 20,		unit: "x",	label: "ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
-						lensesize:				{value: 200,		digits: 0,		minValue: 50, 	maxValue: 5000,		unit: "px",	label: "context_lensesize_text"}
+						lensesize:				{value: 200,		digits: 0,		minValue: 50, 	maxValue: 5000,		unit: "px",	label: "context_lenssize_text"}
 					},
 					engines: {
 						_all: 		{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url: null},
@@ -659,38 +659,38 @@ module.exports = (_ => {
 
 							let imgRects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
 
-							let lense = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${zoomSettings.lensesize}px !important; height: ${zoomSettings.lensesize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * zoomSettings.zoomlevel}px; height: ${imgRects.height * zoomSettings.zoomlevel}px; position: fixed !important;"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
-							let pane = lense.firstElementChild.firstElementChild;
+							let lens = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${zoomSettings.lensesize}px !important; height: ${zoomSettings.lensesize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * zoomSettings.zoomlevel}px; height: ${imgRects.height * zoomSettings.zoomlevel}px; position: fixed !important;"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
+							let pane = lens.firstElementChild.firstElementChild;
 							let backdrop = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslensebackdrop}" style="background: rgba(0, 0, 0, 0.3) !important; position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; pointer-events: none !important; z-index: 8000 !important;"></div>`);
 							let appMount = document.querySelector(BDFDB.dotCN.appmount);
-							appMount.appendChild(lense);
+							appMount.appendChild(lens);
 							appMount.appendChild(backdrop);
 
-							let lenseRects = BDFDB.DOMUtils.getRects(lense);
+							let lensRects = BDFDB.DOMUtils.getRects(lens);
 							
-							let halfW = lenseRects.width / 2, halfH = lenseRects.height / 2;
+							let halfW = lensRects.width / 2, halfH = lensRects.height / 2;
 							let minX = imgRects.left, maxX = minX + imgRects.width;
 							let minY = imgRects.top, maxY = minY + imgRects.height;
 							
-							lense.update = _ => {
+							lens.update = _ => {
 								let x = event.clientX > maxX ? maxX - halfW : event.clientX < minX ? minX - halfW : event.clientX - halfW;
 								let y = event.clientY > maxY ? maxY - halfH : event.clientY < minY ? minY - halfH : event.clientY - halfH;
-								lense.style.setProperty("left", x + "px", "important");
-								lense.style.setProperty("top", y + "px", "important");
-								lense.style.setProperty("width", zoomSettings.lensesize + "px", "important");
-								lense.style.setProperty("height", zoomSettings.lensesize + "px", "important");
-								lense.style.setProperty("clip-path", `circle(${(zoomSettings.lensesize/2) + 2}px at center)`, "important");
-								lense.firstElementChild.style.setProperty("clip-path", `circle(${zoomSettings.lensesize/2}px at center)`, "important");
+								lens.style.setProperty("left", x + "px", "important");
+								lens.style.setProperty("top", y + "px", "important");
+								lens.style.setProperty("width", zoomSettings.lensesize + "px", "important");
+								lens.style.setProperty("height", zoomSettings.lensesize + "px", "important");
+								lens.style.setProperty("clip-path", `circle(${(zoomSettings.lensesize/2) + 2}px at center)`, "important");
+								lens.firstElementChild.style.setProperty("clip-path", `circle(${zoomSettings.lensesize/2}px at center)`, "important");
 								pane.style.setProperty("left", imgRects.left + ((zoomSettings.zoomlevel - 1) * (imgRects.left - x - halfW)) + "px", "important");
 								pane.style.setProperty("top", imgRects.top + ((zoomSettings.zoomlevel - 1) * (imgRects.top - y - halfH)) + "px", "important");
 								pane.style.setProperty("width", imgRects.width * zoomSettings.zoomlevel + "px", "important");
 								pane.style.setProperty("height", imgRects.height * zoomSettings.zoomlevel + "px", "important");
 							};
-							lense.update();
+							lens.update();
 
 							let dragging = event2 => {
 								event = event2;
-								lense.update();
+								lens.update();
 							};
 							let releasing = _ => {
 								this.cleanupListeners("Zoom");
@@ -700,7 +700,7 @@ module.exports = (_ => {
 									document.removeImageUtilitiesZoomObserver.disconnect();
 									delete document.removeImageUtilitiesZoomObserver;
 								}
-								BDFDB.DOMUtils.remove(lense, backdrop);
+								BDFDB.DOMUtils.remove(lens, backdrop);
 								BDFDB.DataUtils.save(zoomSettings, this, "zoomSettings");
 							};
 							document.addEventListener("mousemove", dragging);
@@ -712,11 +712,11 @@ module.exports = (_ => {
 								else {
 									if (event2.deltaY < 0 && (zoomSettings.zoomlevel + 0.1) <= this.defaults.zoomSettings.zoomlevel.maxValue) {
 										zoomSettings.zoomlevel += 0.1;
-										lense.update();
+										lens.update();
 									}
 									else if (event2.deltaY > 0 && (zoomSettings.zoomlevel - 0.1) >= this.defaults.zoomSettings.zoomlevel.minValue) {
 										zoomSettings.zoomlevel -= 0.1;
-										lense.update();
+										lens.update();
 									}
 								}
 							};
@@ -726,11 +726,11 @@ module.exports = (_ => {
 									firedEvents.push("Zoom");
 									if (event2.keyCode == 187 && (zoomSettings.zoomlevel + 0.5) <= this.defaults.zoomSettings.zoomlevel.maxValue) {
 										zoomSettings.zoomlevel += 0.5;
-										lense.update();
+										lens.update();
 									}
 									else if (event2.keyCode == 189 && (zoomSettings.zoomlevel - 0.5) >= this.defaults.zoomSettings.zoomlevel.minValue) {
 										zoomSettings.zoomlevel -= 0.5;
-										lense.update();
+										lens.update();
 									}
 								}
 							};
@@ -984,7 +984,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Kopiraj sliku",
 							context_copyimagelink_text:			"Kopirajte vezu slike",
 							context_reverseimagesearch_text:	"Traži sliku ...",
-							context_lensesize_text:				"Veličina leće",
+							context_lenssize_text:				"Veličina leće",
 							submenu_disabled_text:				"Svi su onemogućeni"
 						};
 					case "da":		//danish
@@ -1000,7 +1000,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Kopier billede",
 							context_copyimagelink_text:			"Kopier billedlink",
 							context_reverseimagesearch_text:	"Søg billede med ...",
-							context_lensesize_text:				"Linsestørrelse",
+							context_lenssize_text:				"Linsestørrelse",
 							submenu_disabled_text:				"Alle deaktiveret"
 						};
 					case "de":		//german
@@ -1016,7 +1016,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Bild kopieren",
 							context_copyimagelink_text:			"Bildadresse kopieren",
 							context_reverseimagesearch_text:	"Bild suchen mit ...",
-							context_lensesize_text:				"Linsengröße",
+							context_lenssize_text:				"Linsengröße",
 							submenu_disabled_text:				"Alle deaktiviert"
 						};
 					case "es":		//spanish
@@ -1032,7 +1032,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Copiar imagen",
 							context_copyimagelink_text:			"Copiar enlace de imagen",
 							context_reverseimagesearch_text:	"Buscar imagen con ...",
-							context_lensesize_text:				"Tamaño de la lente",
+							context_lenssize_text:				"Tamaño de la lente",
 							submenu_disabled_text:				"Todo desactivado"
 						};
 					case "fr":		//french
@@ -1048,7 +1048,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Copier l'image",
 							context_copyimagelink_text:			"Copier le lien de l'image",
 							context_reverseimagesearch_text:	"Rechercher une image avec ...",
-							context_lensesize_text:				"Taille de la lentille",
+							context_lenssize_text:				"Taille de la lentille",
 							submenu_disabled_text:				"Tous désactivés"
 						};
 					case "it":		//italian
@@ -1064,7 +1064,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Copia l'immagine",
 							context_copyimagelink_text:			"Copia link immagine",
 							context_reverseimagesearch_text:	"Cerca immagine con ...",
-							context_lensesize_text:				"Dimensione dell'obiettivo",
+							context_lenssize_text:				"Dimensione dell'obiettivo",
 							submenu_disabled_text:				"Tutto disattivato"
 						};
 					case "nl":		//dutch
@@ -1080,7 +1080,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Kopieer afbeelding",
 							context_copyimagelink_text:			"Kopieer afbeeldingslink",
 							context_reverseimagesearch_text:	"Afbeelding zoeken met ...",
-							context_lensesize_text:				"Lensgrootte",
+							context_lenssize_text:				"Lensgrootte",
 							submenu_disabled_text:				"Alles gedeactiveerd"
 						};
 					case "no":		//norwegian
@@ -1096,7 +1096,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Kopier bilde",
 							context_copyimagelink_text:			"Kopier bildelink",
 							context_reverseimagesearch_text:	"Søk på bilde med ...",
-							context_lensesize_text:				"Linsestørrelse",
+							context_lenssize_text:				"Linsestørrelse",
 							submenu_disabled_text:				"Alle deaktivert"
 						};
 					case "pl":		//polish
@@ -1112,7 +1112,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Skopiuj obraz",
 							context_copyimagelink_text:			"Kopiuj łącze do obrazu",
 							context_reverseimagesearch_text:	"Wyszukaj obraz za pomocą ...",
-							context_lensesize_text:				"Rozmiar obiektywu",
+							context_lenssize_text:				"Rozmiar obiektywu",
 							submenu_disabled_text:				"Wszystkie wyłączone"
 						};
 					case "pt-BR":	//portuguese (brazil)
@@ -1128,7 +1128,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Copiar imagem",
 							context_copyimagelink_text:			"Copiar link da imagem",
 							context_reverseimagesearch_text:	"Pesquisar imagem com ...",
-							context_lensesize_text:				"Tamanho da lente",
+							context_lenssize_text:				"Tamanho da lente",
 							submenu_disabled_text:				"Todos desativados"
 						};
 					case "fi":		//finnish
@@ -1144,7 +1144,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Kopioi kuva",
 							context_copyimagelink_text:			"Kopioi kuvan linkki",
 							context_reverseimagesearch_text:	"Hae kuvaa ...",
-							context_lensesize_text:				"Linssin koko",
+							context_lenssize_text:				"Linssin koko",
 							submenu_disabled_text:				"Kaikki on poistettu käytöstä"
 						};
 					case "sv":		//swedish
@@ -1160,7 +1160,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Kopiera bild",
 							context_copyimagelink_text:			"Kopiera bildlänk",
 							context_reverseimagesearch_text:	"Sök bild med ...",
-							context_lensesize_text:				"Linsstorlek",
+							context_lenssize_text:				"Linsstorlek",
 							submenu_disabled_text:				"Alla avaktiverade"
 						};
 					case "tr":		//turkish
@@ -1176,7 +1176,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Resmi kopyala",
 							context_copyimagelink_text:			"Görüntü Bağlantısını kopyala",
 							context_reverseimagesearch_text:	"Görüntüyü şununla ara ...",
-							context_lensesize_text:				"Lens boyutu",
+							context_lenssize_text:				"Lens boyutu",
 							submenu_disabled_text:				"Hepsi deaktive"
 						};
 					case "cs":		//czech
@@ -1192,7 +1192,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Kopírovat obrázek",
 							context_copyimagelink_text:			"Kopírovat odkaz na obrázek",
 							context_reverseimagesearch_text:	"Vyhledat obrázek pomocí ...",
-							context_lensesize_text:				"Velikost objektivu",
+							context_lenssize_text:				"Velikost objektivu",
 							submenu_disabled_text:				"Všechny deaktivované"
 						};
 					case "bg":		//bulgarian
@@ -1208,7 +1208,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Копирай изображение",
 							context_copyimagelink_text:			"Копиране на изображението",
 							context_reverseimagesearch_text:	"Търсене на изображение с ...",
-							context_lensesize_text:				"Размер на обектива",
+							context_lenssize_text:				"Размер на обектива",
 							submenu_disabled_text:				"Всички са деактивирани"
 						};
 					case "ru":		//russian
@@ -1224,7 +1224,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Копировать изображение",
 							context_copyimagelink_text:			"Копировать ссылку на изображение",
 							context_reverseimagesearch_text:	"Поиск изображения с ...",
-							context_lensesize_text:				"Размер объектива",
+							context_lenssize_text:				"Размер объектива",
 							submenu_disabled_text:				"Все деактивированные"
 						};
 					case "uk":		//ukrainian
@@ -1240,7 +1240,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Скопіювати зображення",
 							context_copyimagelink_text:			"Скопіюйте посилання на зображення",
 							context_reverseimagesearch_text:	"Шукати зображення за допомогою ...",
-							context_lensesize_text:				"Розмір об'єктива",
+							context_lenssize_text:				"Розмір об'єктива",
 							submenu_disabled_text:				"Всі вимкнені"
 						};
 					case "ja":		//japanese
@@ -1256,7 +1256,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"画像をコピー",
 							context_copyimagelink_text:			"画像リンクをコピー",
 							context_reverseimagesearch_text:	"で画像を検索 ...",
-							context_lensesize_text:				"レンズサイズ",
+							context_lenssize_text:				"レンズサイズ",
 							submenu_disabled_text:				"すべて非アクティブ化"
 						};
 					case "zh-TW":	//chinese (traditional)
@@ -1271,7 +1271,7 @@ module.exports = (_ => {
 							context_saveimageas_text:			"將圖像另存為...",
 							context_copyimage_text:				"複製圖片",
 							context_copyimagelink_text:			"複製圖像鏈接",
-							context_lensesize_text:				"鏡片尺寸",
+							context_lenssize_text:				"鏡片尺寸",
 							context_reverseimagesearch_text:	"搜尋圖片...",
 							submenu_disabled_text:				"全部停用"
 						};
@@ -1288,7 +1288,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"복사 이미지",
 							context_copyimagelink_text:			"이미지 링크 복사",
 							context_reverseimagesearch_text:	"로 이미지 검색 ...",
-							context_lensesize_text:				"렌즈 크기",
+							context_lenssize_text:				"렌즈 크기",
 							submenu_disabled_text:				"모두 비활성화 됨"
 						};
 					default:		//default: english
@@ -1304,7 +1304,7 @@ module.exports = (_ => {
 							context_copyimage_text:				"Copy Image",
 							context_copyimagelink_text:			"Copy Image Link",
 							context_reverseimagesearch_text:	"Search Image with ...",
-							context_lensesize_text:				"Lense Size",
+							context_lenssize_text:				"Lens Size",
 							submenu_disabled_text:				"All disabled"
 						};
 				}
