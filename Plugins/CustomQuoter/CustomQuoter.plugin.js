@@ -19,7 +19,7 @@ module.exports = (_ => {
 		},
 		"changeLog": {
 			"fixed": {
-				"DMs": "No longer always copies quote to clipbard in DMs"
+				"DMs": "No longer always copies quote to clipboard in DMs"
 			}
 		}
 	};
