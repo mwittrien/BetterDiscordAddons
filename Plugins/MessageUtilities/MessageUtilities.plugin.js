@@ -357,7 +357,7 @@ module.exports = (_ => {
 			doReply ({messageDiv, message}, action) {
 				if (message.state == "SENT") {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
-					if (channel && BDFDB.UserUtils.can("SEND_MESSAGES") && message.type == 0) {
+					if (channel && (BDFDB.DMUtils.isDMChannel(channel) || BDFDB.UserUtils.can("SEND_MESSAGES")) && message.type == 0) {
 						BDFDB.LibraryModules.MessageManageUtils.replyToMessage(channel, message);
 						if (toasts[action]) BDFDB.NotificationUtils.toast("Added reply to message", {type: "success"});
 					}

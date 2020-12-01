@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomQuoter",
 			"author": "DevilBro",
-			"version": "1.2.2",
+			"version": "1.2.3",
 			"description": "Customize the output of the native quote feature of Discord"
 		},
 		"changeLog": {
 			"fixed": {
-				"New React Structure": "Fixed for new internal react structure"
+				"DMs": "No longer always copies quote to clipbard in DMs"
 			}
 		}
 	};
@@ -356,7 +356,7 @@ module.exports = (_ => {
 			quote (channel, message, shift) {
 				let text = this.parseQuote(message, channel);
 				if (text && text.length) {
-					if (shift && !settings.alwaysCopy || !shift && settings.alwaysCopy || !BDFDB.UserUtils.can("SEND_MESSAGES")) {
+					if (shift && !settings.alwaysCopy || !shift && settings.alwaysCopy || !(BDFDB.DMUtils.isDMChannel(channel) || BDFDB.UserUtils.can("SEND_MESSAGES"))) {
 						BDFDB.LibraryRequires.electron.clipboard.write({text: text});
 						BDFDB.NotificationUtils.toast("Quote has been copied to clipboard", {type: "success"});
 					}
