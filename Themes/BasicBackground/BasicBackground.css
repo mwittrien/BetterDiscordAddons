@@ -7585,13 +7585,16 @@ html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight 
 }
 /* ----		17.14	DISPLAYLARGEMESSAGES			---- */
 
-#app-mount .injectButton-8eKqGu {							/* attachment			injectbutton						*/
+#app-mount .injectButton-8eKqGu,							/* attachment			injectbutton						*/
+#app-mount .popoutButton-a26sRh {							/* attachment			popoutbutton						*/
 	color: rgb(var(--fontwhite4));
 }
-#app-mount .injectButton-8eKqGu:hover {
+#app-mount .injectButton-8eKqGu:hover,
+#app-mount .popoutButton-a26sRh:hover {
 	color: rgb(var(--fontwhite3));
 }
-#app-mount .injectButton-8eKqGu:active {
+#app-mount .injectButton-8eKqGu:active,
+#app-mount .popoutButton-a26sRh:active {
 	color: rgb(var(--fontwhite2));
 }
 

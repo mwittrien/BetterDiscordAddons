@@ -321,7 +321,7 @@
 			"icon": "<svg name='ArrowUp' aria-hidden='false' width='%%width' height='%%height' viewBox='0 0 18 18'><path fill='%%color' d='M4 11l5-5 5 5H4z'></path></svg>"
 		},
 		"CHANGELOG": {
-			"icon": "<svg name='ChangeLog' fill='%%color' width='%%width' height='%%height' viewBox='0 0 448 448'><polygon points='234.667, 138.667 234.667, 245.333 325.973, 299.52 341.333, 273.6 266.667, 229.333 266.667, 138.667'></polygon><path d='M 255.893, 32 C 149.76, 32, 64, 117.973, 64, 224 H 0 l 83.093, 83.093 l 1.493, 3.093 L 170.667, 224 h -64 c 0 -82.453, 66.88 -149.333, 149.333 -149.333 S 405.333, 141.547, 405.333, 224 S 338.453, 373.333, 256, 373.333 c -41.28, 0 -78.507 -16.853 -105.493 -43.84 L 120.32, 359.68 C 154.987, 394.453, 202.88, 416, 255.893, 416 C 362.027, 416, 448, 330.027, 448, 224 S 362.027, 32, 255.893, 32 z'></path></svg>"
+			"icon": "<svg name='ChangeLog' aria-hidden='false' width='%%width' height='%%height' viewBox='0 0 448 448'><g fill='%%color'><polygon points='234.667, 138.667 234.667, 245.333 325.973, 299.52 341.333, 273.6 266.667, 229.333 266.667, 138.667'></polygon><path d='M 255.893, 32 C 149.76, 32, 64, 117.973, 64, 224 H 0 l 83.093, 83.093 l 1.493, 3.093 L 170.667, 224 h -64 c 0 -82.453, 66.88 -149.333, 149.333 -149.333 S 405.333, 141.547, 405.333, 224 S 338.453, 373.333, 256, 373.333 c -41.28, 0 -78.507 -16.853 -105.493 -43.84 L 120.32, 359.68 C 154.987, 394.453, 202.88, 416, 255.893, 416 C 362.027, 416, 448, 330.027, 448, 224 S 362.027, 32, 255.893, 32 z'></path></g></svg>"
 		},
 		"CHECKBOX": {
 			"defaultProps": {
@@ -348,7 +348,7 @@
 				"width": 12,
 				"height": 12
 			},
-			"icon": "<svg name='Close' aria-hidden='false' width='%%width' height='%%height' viewBox='0 0 12 12'><g fill='none' fill-rule='evenodd' aria-hidden='true'><path d='M0 0h12v12H0'></path><path class='fill' fill='%%color' d='M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6'></path></g></svg>"
+			"icon": "<svg name='Close' aria-hidden='false' width='%%width' height='%%height' viewBox='0 0 12 12'><g fill='none' fill-rule='evenodd' aria-hidden='true'><path d='M0 0h12v12H0'></path><path fill='%%color' d='M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6'></path></g></svg>"
 		},
 		"CLOSE_CIRCLE": {
 			"icon": "<svg name='CloseCircle' aria-hidden='false' width='%%width' height='%%height' viewBox='0 0 14 14'><path fill='%%color' d='M7.02799 0.333252C3.346 0.333252 0.361328 3.31792 0.361328 6.99992C0.361328 10.6819 3.346 13.6666 7.02799 13.6666C10.71 13.6666 13.6947 10.6819 13.6947 6.99992C13.6947 3.31792 10.7093 0.333252 7.02799 0.333252ZM10.166 9.19525L9.22333 10.1379L7.02799 7.94325L4.83266 10.1379L3.89 9.19525L6.08466 6.99992L3.88933 4.80459L4.832 3.86259L7.02733 6.05792L9.22266 3.86259L10.1653 4.80459L7.97066 6.99992L10.166 9.19525Z'></path></svg>"
@@ -416,7 +416,10 @@
 			"icon": "<svg name='Nova_Pin' aria-hidden='false' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='M22 12L12.101 2.10101L10.686 3.51401L12.101 4.92901L7.15096 9.87801V9.88001L5.73596 8.46501L4.32196 9.88001L8.56496 14.122L2.90796 19.778L4.32196 21.192L9.97896 15.536L14.222 19.778L15.636 18.364L14.222 16.95L19.171 12H19.172L20.586 13.414L22 12Z'></path></svg>"
 		},
 		"NOVA_TRASH": {
-			"icon": "<svg name='Nova_Trash' aria-hidden='false' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z'></path><path fill='%%color' d='M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z'></path></svg>"
+			"icon": "<svg name='Nova_Trash' aria-hidden='false' width='%%width' height='%%height' viewBox='0 0 24 24'><g fill='%%color'><path d='M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z'></path><path d='M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z'></path></g></svg>"
+		},
+		"OPEN_EXTERNAL": {
+			"icon": "<svg name='OpenExternal' aria-hidden='false' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='none' d='M0 0h24v24H0z'></path><path fill='%%color' d='M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z'></path></svg>"
 		},
 		"PATREON": {
 			"icon": "<svg name='Patreon' aria-hidden='false' width='%%width' height='%%height' viewBox='0 0 24 24'><g fill='%%color'><path d='m 0,0.5 h 4.219 v 23 H 0 Z'></path><path d='m 15.384,0.5 c -4.767,0 -8.644,3.873 -8.644,8.633 0,4.75 3.877,8.61 8.644,8.61 C 20.138,17.743 24,13.878 24,9.133 24,4.374 20.137,0.5 15.384,0.5 Z'></path></g></svg>"
@@ -691,7 +694,9 @@
 		},
 		"DisplayLargeMessages": {
 			"injectButton": "injectButton-8eKqGu",
-			"injectButtonWrapper": "injectButtonWrapper-U462Rh"
+			"injectButtonWrapper": "injectButtonWrapper-U462Rh",
+			"popoutButton": "popoutButton-a26sRh",
+			"popoutButtonWrapper": "popoutButtonWrapper-p90FFs"
 		},
 		"DisplayServersAsChannels": {
 			"badge": "badge-fxFrUP",
@@ -1129,6 +1134,8 @@
 		"_creationdatedate": ["CreationDate", "date"],
 		"_displaylargemessagesinjectbutton": ["DisplayLargeMessages", "injectButton"],
 		"_displaylargemessagesinjectbuttonwrapper": ["DisplayLargeMessages", "injectButtonWrapper"],
+		"_displaylargemessagespopoutbutton": ["DisplayLargeMessages", "popoutButton"],
+		"_displaylargemessagespopoutbuttonwrapper": ["DisplayLargeMessages", "popoutButtonWrapper"],
 		"_displayserversaschannelsbadge": ["DisplayServersAsChannels", "badge"],
 		"_displayserversaschannelsname": ["DisplayServersAsChannels", "name"],
 		"_displayserversaschannelsstyled": ["DisplayServersAsChannels", "styled"],
