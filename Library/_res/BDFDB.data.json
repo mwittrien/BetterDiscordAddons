@@ -696,7 +696,8 @@
 			"injectButton": "injectButton-8eKqGu",
 			"injectButtonWrapper": "injectButtonWrapper-U462Rh",
 			"popoutButton": "popoutButton-a26sRh",
-			"popoutButtonWrapper": "popoutButtonWrapper-p90FFs"
+			"popoutButtonWrapper": "popoutButtonWrapper-p90FFs",
+			"previewMessage": "previewMessage-lM55Sw"
 		},
 		"DisplayServersAsChannels": {
 			"badge": "badge-fxFrUP",
@@ -1137,6 +1138,7 @@
 		"_displaylargemessagesinjectbuttonwrapper": ["DisplayLargeMessages", "injectButtonWrapper"],
 		"_displaylargemessagespopoutbutton": ["DisplayLargeMessages", "popoutButton"],
 		"_displaylargemessagespopoutbuttonwrapper": ["DisplayLargeMessages", "popoutButtonWrapper"],
+		"_displaylargemessagespreviewmessage": ["DisplayLargeMessages", "previewMessage"],
 		"_displayserversaschannelsbadge": ["DisplayServersAsChannels", "badge"],
 		"_displayserversaschannelsname": ["DisplayServersAsChannels", "name"],
 		"_displayserversaschannelsstyled": ["DisplayServersAsChannels", "styled"],
