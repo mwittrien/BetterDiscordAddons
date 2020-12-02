@@ -90,10 +90,13 @@ module.exports = (_ => {
 					channel_id: spoofChannel.id,
 					content: _this.parseQuote(spoofQuotedMessage, spoofChannel, this.props.format)
 				});
-				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessageGroup, {
-					className: BDFDB.disCNS.message + BDFDB.disCN.messagecozymessage,
-					message: spoofMessage,
-					channel: spoofChannel
+				return BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN.messagepopout,
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessageGroup, {
+						disableInteraction: true,
+						message: spoofMessage,
+						channel: spoofChannel
+					})
 				});
 			}
 		};
