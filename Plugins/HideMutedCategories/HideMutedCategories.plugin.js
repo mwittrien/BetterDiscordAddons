@@ -1,12 +1,12 @@
 /**
- * @name HideMutedCategories
+ * @name PluginTemplate
  * @authorId 278543574059057154
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
- * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/HideMutedCategories
- * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/HideMutedCategories/HideMutedCategories.plugin.js
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/HideMutedCategories/HideMutedCategories.plugin.js
+ * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PluginTemplate
+ * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginTemplate/PluginTemplate.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginTemplate/PluginTemplate.plugin.js
  */
 
 module.exports = (_ => {
@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "HideMutedCategories",
 			"author": "DevilBro",
-			"version": "1.0.2",
+			"version": "1.0.3",
 			"description": "Hide muted categories the same way muted channels are hidden, when the server is set to hide muted channels"
+		},
+		"changeLog": {
+			"fixed": {
+				"Hide Muted with Admin Perms": "Fixed issue where muted categories weren't hidden if you got admin perms on the server"
+			}
 		}
 	};
 
@@ -60,8 +65,6 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		return class HideMutedCategories extends Plugin {
 			onLoad() {
-				this.patchPriority = 10;
-				
 				this.patchedModules = {
 					before: {
 						Channels: "render"
@@ -70,6 +73,8 @@ module.exports = (_ => {
 						Channels: "render"
 					}
 				};
+				
+				this.patchPriority = 10;
 			}
 			
 			onStart() {
@@ -89,15 +94,28 @@ module.exports = (_ => {
 					for (let catId in e.instance.props.categories) if (BDFDB.LibraryModules.MutedUtils.isChannelMuted(e.instance.props.guild.id, catId)) e.instance.props.categories[catId] = [];
 				}
 				else {
-					let list = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelsscroller]]});
-					if (list) {
-						let renderSection = list.props.renderSection;
-						list.props.renderSection = (...args) => {
-							let section = renderSection(...args);
-							if (section && section.props && section.props.channel && BDFDB.LibraryModules.MutedUtils.isChannelMuted(e.instance.props.guild.id, section.props.channel.id))return null;
-							else return section;
+					let tree = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
+					if (tree) {
+						let childrenRender = tree.props.children;
+						tree.props.children = (...args) => {
+							let children = childrenRender(...args);
+							this.patchList(e.instance.props.guild.id, children);
+							return children;
 						};
 					}
+					else this.patchList(e.instance.props.guild.id, e.returnvalue);
+				}
+			}
+		
+			patchList (guildId, returnvalue) {
+				let list = BDFDB.ReactUtils.findChild(returnvalue, {props: [["className", BDFDB.disCN.channelsscroller]]});
+				if (list) {
+					let renderSection = list.props.renderSection;
+					list.props.renderSection = (...args) => {
+						let section = renderSection(...args);
+						if (section && section.props && section.props.channel && BDFDB.LibraryModules.MutedUtils.isChannelMuted(guildId, section.props.channel.id)) return null;
+						else return section;
+					};
 				}
 			}
 		};
