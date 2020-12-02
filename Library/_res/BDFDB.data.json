@@ -2685,6 +2685,7 @@
 		"voicedetailsbuttonactive": ["VoiceDetails", "buttonActive"],
 		"voicedetailsbuttoncolor": ["VoiceDetails", "buttonColor"],
 		"voicedetailsbuttonicon": ["VoiceDetails", "buttonIcon"],
+		"voicedetailsbuttonwithtext": ["VoiceDetails", "withText"],
 		"voicedetailschannel": ["VoiceDetails", "channel"],
 		"voicedetailscustomstatuscontainer": ["VoiceDetails", "customStatusContainer"],
 		"voicedetailshotspot": ["VoiceDetails", "hotspot"],
