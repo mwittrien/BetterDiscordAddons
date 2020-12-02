@@ -114,6 +114,7 @@ https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Themes/Main/Winte
 https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Themes/Main/X-Miss.theme.css
 https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Themes/Transparent/Frosted.theme.css
 https://raw.githubusercontent.com/nirewen/Discordify/master/Discordify.theme.css
+https://raw.githubusercontent.com/NYRI4/Comfy-theme/main/BetterDiscord/comfy.theme.css
 https://raw.githubusercontent.com/ObserverOfTime/DiscordThemes/master/NewNihilism/dist/NewNihilism.theme.css
 https://raw.githubusercontent.com/Pierce01/Opacity/master/OpacityMaxBun.theme.css
 https://raw.githubusercontent.com/puckzxz/NotAnotherAnimeTheme/master/NotAnotherAnimeThemeSCSL.theme.css
