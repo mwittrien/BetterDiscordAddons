@@ -235,13 +235,6 @@ module.exports = (_ => {
 						id: "own"
 					}
 				}, BDFDB.LanguageUtils.languages);
-				
-				let amounts = BDFDB.DataUtils.load(this, "amounts"); // REMOVE 07.09.2020
-				if (amounts && amounts.hoverDelay !== undefined) {
-					amounts.tooltipDelay = parseFloat(amounts.hoverDelay)/1000;
-					delete amounts.hoverDelay;
-					BDFDB.DataUtils.save(amounts, this, "amounts");
-				}
 
 				this.forceUpdateAll();
 			}
