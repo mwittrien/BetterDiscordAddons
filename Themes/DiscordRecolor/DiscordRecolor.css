@@ -4180,6 +4180,11 @@ html .floating-window #bd-editor-panel .editor-wrapper:last-child {
 	border-radius: 0;
 }
 
+html .monaco-editor .minimap,
+html .monaco-editor .decorationsOverviewRuler {
+	display: none;
+}
+
 html .monaco-editor,
 html .monaco-editor-background,
 html .monaco-editor .inputarea.ime-input,
