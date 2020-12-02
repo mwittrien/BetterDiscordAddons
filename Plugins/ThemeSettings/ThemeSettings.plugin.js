@@ -104,7 +104,7 @@ module.exports = (_ => {
 								footerClassName: BDFDB.disCN._repomodalfooter,
 								size: "MEDIUM",
 								children: this.createThemeVarInputs(addon, vars),
-								buttons: [{contents: "Update", color: "GREEN", click: modal => {this.updateTheme(modal, addon);}}]
+								buttons: [{contents: BDFDB.LanguageUtils.LanguageStrings.SAVE, color: "GREEN", click: modal => {this.updateTheme(modal, addon);}}]
 							});
 						};
 						if (isBeta) {
