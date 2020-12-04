@@ -722,6 +722,7 @@ module.exports = (_ => {
 									return children;
 								};
 							}
+							else this.changeMention(e.returnvalue, data);
 						}
 					}
 				}
@@ -730,7 +731,10 @@ module.exports = (_ => {
 			changeMention (mention, data) {
 				if (data.name) {
 					if (typeof mention.props.children == "string") mention.props.children = "@" + data.name;
-					else if (BDFDB.ArrayUtils.is(mention.props.children)) mention.props.children[0] = "@" + data.name;
+					else if (BDFDB.ArrayUtils.is(mention.props.children)) {
+						if (mention.props.children[0] == "@") mention.props.children[1] = data.name;
+						else mention.props.children[0] = "@" + data.name;
+					}
 				}
 				if (data.color1) {
 					let color1_0 = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "RGBA");

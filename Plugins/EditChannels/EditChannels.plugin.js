@@ -14,13 +14,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.1.9",
+			"version": "4.2.0",
 			"description": "Allow you to rename and recolor channelnames"
-		},
-		"changeLog": {
-			"fixed": {
-				"New Channel List": "Fixed for new update"
-			}
 		}
 	};
 
@@ -69,7 +64,7 @@ module.exports = (_ => {
 			onLoad() {
 				this.defaults = {
 					settings: {
-						changeChannelIcon:		{value: true, 	inner: false,	description: "Change color of Channel Icon"},
+						changeChannelIcon:		{value: true, 	inner: false,		description: "Change color of Channel Icon"},
 						changeInChatTextarea:	{value: true, 	inner: true,		description: "Chat Textarea"},
 						changeInMentions:		{value: true, 	inner: true,		description: "Mentions"},
 						changeInChannelList:	{value: true, 	inner: true,		description: "Channel List"},
@@ -102,7 +97,8 @@ module.exports = (_ => {
 						FocusRing: "default",
 						ChannelItem: "default",
 						QuickSwitchChannelResult: "render",
-						RecentsChannelHeader: "default"
+						RecentsChannelHeader: "default",
+						ChannelMention: "ChannelMention"
 					}
 				};
 				
@@ -387,30 +383,9 @@ module.exports = (_ => {
 										if (name || color) {
 											let renderChildren = ele.props.children;
 											ele.props.children = (...args) => {
-												let renderedChildren = renderChildren(...args);
-												if (name) renderedChildren.props.children[0] = "#" + name;
-												if (color) {
-													let color1_0 = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color) ? color[0] : color, "RGBA");
-													let color0_1 = BDFDB.ColorUtils.setAlpha(color1_0, 0.1, "RGBA");
-													let color0_7 = BDFDB.ColorUtils.setAlpha(color1_0, 0.7, "RGBA");
-													renderedChildren.props.style = Object.assign({}, renderedChildren.props.style, {
-														background: color0_1,
-														color: color1_0
-													});
-													let onMouseEnter = renderedChildren.props.onMouseEnter || ( _ => {});
-													renderedChildren.props.onMouseEnter = event => {
-														onMouseEnter(event);
-														event.target.style.setProperty("background", color0_7, "important");
-														event.target.style.setProperty("color", "#FFFFFF", "important");
-													};
-													let onMouseLeave = renderedChildren.props.onMouseLeave || ( _ => {});
-													renderedChildren.props.onMouseLeave = event => {
-														onMouseLeave(event);
-														event.target.style.setProperty("background", color0_1, "important");
-														event.target.style.setProperty("color", color1_0, "important");
-													};
-												}
-												return renderedChildren;
+												let children = renderChildren(...args);
+												this.changeMention(children, {name, color});
+												return children;
 											}
 										}
 										break;
@@ -419,6 +394,56 @@ module.exports = (_ => {
 							}
 						}
 					}
+				}
+			}
+			
+			processChannelMention (e) {
+				if (e.instance.props.id && settings.changeInMentions) {
+					let name = (changedChannels[e.instance.props.id] || {}).name;
+					let color = this.getChannelDataColor(e.instance.props.id);
+					if (name || color) {
+						if (typeof e.returnvalue.props.children == "function") {
+							let renderChildren = e.returnvalue.props.children;
+							e.returnvalue.props.children = (...args) => {
+								let children = renderChildren(...args);
+								this.changeMention(children, {name, color});
+								return children;
+							};
+						}
+						else this.changeMention(e.returnvalue, {name, color});
+					}
+				}
+			}
+			
+			changeMention (mention, data) {
+				if (data.name) {
+					if (typeof mention.props.children == "string") mention.props.children = "#" + data.name;
+					else if (BDFDB.ArrayUtils.is(mention.props.children)) {
+						if (mention.props.children[0] == "#") mention.props.children[1] = data.name;
+						else mention.props.children[0] = "#" + data.name;
+					}
+				}
+				if (data.color) {
+					let color1_0 = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color) ? data.color[0] : data.color, "RGBA");
+					let color0_1 = mention.props.mentioned ? "transparent" : BDFDB.ColorUtils.setAlpha(color1_0, 0.1, "RGBA");
+					let color0_7 = mention.props.mentioned ? "transparent" : BDFDB.ColorUtils.setAlpha(color1_0, 0.7, "RGBA");
+					let white = mention.props.mentioned ? color1_0 : "#FFFFFF";
+					mention.props.style = Object.assign({}, mention.props.style, {
+						background: color0_1,
+						color: color1_0
+					});
+					let onMouseEnter = mention.props.onMouseEnter || ( _ => {});
+					mention.props.onMouseEnter = event => {
+						onMouseEnter(event);
+						event.target.style.setProperty("background", color0_7, "important");
+						event.target.style.setProperty("color", white, "important");
+					};
+					let onMouseLeave = mention.props.onMouseLeave || ( _ => {});
+					mention.props.onMouseLeave = event => {
+						onMouseLeave(event);
+						event.target.style.setProperty("background", color0_1, "important");
+						event.target.style.setProperty("color", color1_0, "important");
+					};
 				}
 			}
 
