@@ -91,14 +91,10 @@ div[style^="color: rgba(255, 115, 250, 1)"],
 div[style*=" color: rgba(255, 115, 250, 1)"],
 div[style^="color: rgb(255, 115, 250)"],
 div[style*=" color: rgb(255, 115, 250)"],
-div[color="rgba(255, 115, 250, 1)"],
-div[color="rgb(255, 115, 250)"],
 div[style^="color: rgba(114, 137, 218, 1)"],
 div[style*=" color: rgba(114, 137, 218, 1)"],
 div[style^="color: rgb(114, 137, 218)"],
-div[style*=" color: rgb(114, 137, 218)"],
-div[color="rgba(114, 137, 218, 1)"],
-div[color="rgb(114, 137, 218)"] {
+div[style*=" color: rgb(114, 137, 218)"] {
 	color: rgb(var(--vaccentcolor)) !important;
 }
 div[style^="color: rgba(255, 115, 250, 0.9"],
@@ -160,18 +156,10 @@ div[style*="background-color: rgba(255, 115, 250, 1)"],
 div[style*="background: rgba(255, 115, 250, 1)"],
 div[style*="background-color: rgb(255, 115, 250)"],
 div[style*="background: rgb(255, 115, 250)"],
-div[background-color="rgba(255, 115, 250, 1)"],
-div[background="rgba(255, 115, 250, 1)"],
-div[background-color="rgb(255, 115, 250)"],
-div[background="rgb(255, 115, 250)"],
 div[style*="background-color: rgba(114, 137, 218, 1)"],
 div[style*="background: rgba(114, 137, 218, 1)"],
 div[style*="background-color: rgb(114, 137, 218)"],
-div[style*="background: rgb(114, 137, 218)"],
-div[background-color="rgba(114, 137, 218, 1)"],
-div[background="rgba(114, 137, 218, 1)"],
-div[background-color="rgb(114, 137, 218)"],
-div[background="rgb(114, 137, 218)"] {
+div[style*="background: rgb(114, 137, 218)"] {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 div[style*="background-color: rgba(255, 115, 250, 0.9"],
@@ -231,12 +219,8 @@ div[style*="background: rgba(114, 137, 218, 0.1"] {
 
 div[style*="border-color: rgba(255, 115, 250, 1)"],
 div[style*="border-color: rgb(255, 115, 250)"],
-div[border-color="rgba(255, 115, 250, 1)"],
-div[border-color="rgb(255, 115, 250)"],
 div[style*="border-color: rgba(114, 137, 218, 1)"],
-div[style*="border-color: rgb(114, 137, 218)"],
-div[border-color="rgba(114, 137, 218, 1)"],
-div[border-color="rgb(114, 137, 218)"] {
+div[style*="border-color: rgb(114, 137, 218)"] {
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
 div[style*="border-color: rgba(255, 115, 250, 0.9"],
@@ -277,6 +261,7 @@ div[style*="border-color: rgba(114, 137, 218, 0.1"] {
 }
 
 svg [style*="stroke: slategray"],
+svg [stroke="slategray"],
 svg [style*="stroke: rgba(255, 115, 250, 1)"],
 svg [style*="stroke: rgb(255, 115, 250)"],
 svg [stroke="rgba(255, 115, 250, 1)"],
@@ -288,6 +273,7 @@ svg [stroke="rgb(114, 137, 218)"] {
 	stroke: rgb(var(--vaccentcolor)) !important;
 }
 svg [style*="fill: slategray"],
+svg [fill="slategray"],
 svg [style*="fill: rgba(255, 115, 250, 1)"],
 svg [style*="fill: rgb(255, 115, 250)"],
 svg [fill="rgba(255, 115, 250, 1)"],
