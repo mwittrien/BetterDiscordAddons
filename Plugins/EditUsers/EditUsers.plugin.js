@@ -144,6 +144,7 @@ module.exports = (_ => {
 						MessageUsername: "default",
 						MessageContent: "type",
 						Reaction: "render",
+						ReactorsComponent: "render",
 						Mention: "default",
 						ChannelReply: "default",
 						MemberListItem: "render",
@@ -198,7 +199,7 @@ module.exports = (_ => {
 								let result = renderResult(...args);
 								this.processSearchPopoutUserResult({instance: {props: e.methodArguments[0]}, returnvalue: result});
 								return result;
-							}
+							};
 						}
 					}});
 					BDFDB.PatchUtils.patch(this, searchGroupData.FILTER_MENTIONS, "component", {after: e => {
@@ -208,7 +209,7 @@ module.exports = (_ => {
 								let result = renderResult(...args);
 								this.processSearchPopoutUserResult({instance: {props: e.methodArguments[0]}, returnvalue: result});
 								return result;
-							}
+							};
 						}
 					}});
 				}
@@ -676,7 +677,28 @@ module.exports = (_ => {
 			
 			processReactorsComponent (e) {
 				if (settings.changeInReactions && BDFDB.ArrayUtils.is(e.instance.props.reactors)) {
-					for (let i in e.instance.props.reactors) e.instance.props.reactors[i] = this.getUserData(e.instance.props.reactors[i].id, true, false, e.instance.props.reactors[i]);
+					if (!e.returnvalue) {
+						for (let i in e.instance.props.reactors) if (!BDFDB.LibraryModules.MemberStore.getNick(e.instance.props.guildId, e.instance.props.reactors[i].id)) e.instance.props.reactors[i] = this.getUserData(e.instance.props.reactors[i].id, true, false, e.instance.props.reactors[i]);
+					}
+					else {
+						let renderRow = e.returnvalue.props.renderRow;
+						e.returnvalue.props.renderRow = (...args) => {
+							let row = renderRow(...args);
+							if (row && row.props && row.props.user && changedUsers[row.props.user.id]) {
+								let type = row.type;
+								row.type = (...args2) => {
+									let result = type(...args2);
+									let nickName = BDFDB.LibraryModules.MemberStore.getNick(row.props.guildId, row.props.user.id) && BDFDB.ReactUtils.findChild(result, {props: [["className", BDFDB.disCN.messagereactionsmodalnickname]]});
+									if (nickName) {
+										if (changedUsers[row.props.user.id].name) BDFDB.ReactUtils.setChild(nickName, changedUsers[row.props.user.id].name);
+										this.changeUserColor(nickName, row.props.user.id);
+									}
+									return result;
+								};
+							}
+							return row;
+						};
+					}
 				}
 			}
 			
