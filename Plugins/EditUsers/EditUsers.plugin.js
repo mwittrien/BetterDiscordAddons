@@ -700,7 +700,7 @@ module.exports = (_ => {
 			
 			processMention (e) {
 				if (e.instance.props.userId && settings.changeInMentions && changedUsers[e.instance.props.userId]) {
-					this.changeMention(e.returnvalue, changedUsers[e.instance.props.userId], e.instance.props);
+					this.changeMention(e.returnvalue, changedUsers[e.instance.props.userId]);
 				}
 			}
 			
@@ -718,7 +718,7 @@ module.exports = (_ => {
 								let renderChildren = e.returnvalue.props.children;
 								e.returnvalue.props.children = (...args) => {
 									let children = renderChildren(...args);
-									this.changeMention(children, data, {});
+									this.changeMention(children, data);
 									return children;
 								};
 							}
@@ -727,16 +727,16 @@ module.exports = (_ => {
 				}
 			}
 			
-			changeMention (mention, data, props) {
+			changeMention (mention, data) {
 				if (data.name) {
 					if (typeof mention.props.children == "string") mention.props.children = "@" + data.name;
 					else if (BDFDB.ArrayUtils.is(mention.props.children)) mention.props.children[0] = "@" + data.name;
 				}
 				if (data.color1) {
 					let color1_0 = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "RGBA");
-					let color0_1 = props.mentioned ? "transparent" : BDFDB.ColorUtils.setAlpha(color1_0, 0.1, "RGBA");
-					let color0_7 = props.mentioned ? "transparent" : BDFDB.ColorUtils.setAlpha(color1_0, 0.7, "RGBA");
-					let white = props.mentioned ? color1_0 : "#FFFFFF";
+					let color0_1 = mention.props.mentioned ? "transparent" : BDFDB.ColorUtils.setAlpha(color1_0, 0.1, "RGBA");
+					let color0_7 = mention.props.mentioned ? "transparent" : BDFDB.ColorUtils.setAlpha(color1_0, 0.7, "RGBA");
+					let white = mention.props.mentioned ? color1_0 : "#FFFFFF";
 					mention.props.style = Object.assign({}, mention.props.style, {
 						background: color0_1,
 						color: color1_0
