@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveNicknames",
 			"author": "DevilBro",
-			"version": "1.3.3",
+			"version": "1.3.4",
 			"description": "Replace all nicknames with the actual accountnames"
 		},
 		"changeLog": {
-			"fixed": {
-				"Replies": "Works for replies now too"
+			"improved": {
+				"Reactions": "Removes the nicknames in the tooltip of a reaction in the messages window"
 			}
 		}
 	};
@@ -74,6 +74,7 @@ module.exports = (_ => {
 						addNickname:			{value: false, 	inner: false,		description: "Add nickname as parentheses: "},
 						swapPositions:			{value: false, 	inner: false,		description: "Swap the position of username and nickname: "},
 						changeInChatWindow:		{value: true, 	inner: true,		description: "Messages"},
+						changeInReactions:		{value: true, 	inner: true,		description: "Reactions"},
 						changeInMentions:		{value: true, 	inner: true,		description: "Mentions"},
 						changeInVoiceChat:		{value: true, 	inner: true,		description: "Voice Channels"},
 						changeInMemberList:		{value: true, 	inner: true,		description: "Member List"},
@@ -89,10 +90,11 @@ module.exports = (_ => {
 						MemberListItem: "render",
 						Message: "default",
 						MessageUsername: "default",
-						MessageContent: "type"
+						MessageContent: "type",
 					},
 					after: {
 						TypingUsers: "render",
+						Reaction: "render",
 						Mention: "default"
 					}
 				};
@@ -204,6 +206,31 @@ module.exports = (_ => {
 				}
 			}
 			
+			processReaction (e) {
+				if (e.instance.props.reactions) {
+					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id);
+					let guildId = null == channel || channel.isPrivate() ? null : channel.getGuildId();
+					let users = e.instance.props.reactions.filter(user => !BDFDB.LibraryModules.FriendUtils.isBlocked(user.id)).slice(0, 3).map(user => this.getNewName(user) || guildId && BDFDB.LibraryModules.MemberStore.getNick(guildId, user.id) || user.username).filter(user => user);
+					if (users.length) {
+						let reaction = e.instance.props.message.getReaction(e.instance.props.emoji);
+						let others = Math.max(0, (reaction && reaction.count || 0) - users.length);
+						let emojiName = BDFDB.LibraryModules.ReactionEmojiUtils.getReactionEmojiName(e.instance.props.emoji);
+						e.returnvalue.props.text = 
+							users.length == 1 ? others > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_1_N", users[0], others, emojiName) :
+							BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_1", users[0], emojiName) :
+							users.length == 2 ? others > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_2_N", users[0], users[1], others, emojiName) :
+							BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_2", users[0], users[1], emojiName) :
+							users.length == 3 ? others > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_3_N", users[0], users[1], users[2], others, emojiName) :
+							BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_3", users[0], users[1], users[2], emojiName) :
+							BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_N", others, emojiName);
+					}
+				}
+				else BDFDB.LibraryModules.ReactionUtils.getReactions(e.instance.props.message.channel_id, e.instance.props.message.id, e.instance.props.emoji).then(reactions => {
+					e.instance.props.reactions = reactions;
+					BDFDB.ReactUtils.forceUpdate(e.instance);
+				});
+			}
+			
 			processMention (e) {
 				if (e.instance.props.userId && settings.changeInMentions) {
 					let newName = this.getNewName(BDFDB.LibraryModules.UserStore.getUser(e.instance.props.userId));
@@ -211,11 +238,13 @@ module.exports = (_ => {
 				}
 			}
 
-			getNewName (user, wrapper) {
+			getNewName (user) {
 				if (!user) return null;
 				let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), user.id) || {};
-				if (!member.nick || user.id == BDFDB.UserUtils.me.id && !settings.replaceOwn || user.bot && !settings.replaceBots) return null;
-				let username = (BDFDB.BDUtils.isPluginEnabled("EditUsers") && BDFDB.DataUtils.load("EditUsers", "users", user.id) || {}).name || user.username;
+				let origUser = BDFDB.LibraryModules.UserStore.getUser(user.id) || {};
+				let EditUsers = BDFDB.BDUtils.getPlugin("EditUsers", true);
+				let username = EditUsers && EditUsers.getUserData(user, true, false, origUser).username || user.username;
+				if (!member.nick || user.id == BDFDB.UserUtils.me.id && !settings.replaceOwn || user.bot && !settings.replaceBots) return username != origUser.username ? username : (member.nick || username);
 				return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + username + ")") : (username + " (" + member.nick + ")")) : username;
 			}
 		};
