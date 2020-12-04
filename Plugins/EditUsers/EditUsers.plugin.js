@@ -14,13 +14,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.0.5",
+			"version": "4.0.6",
 			"description": "Allow you to change the icon, name, tag and color of users"
-		},
-		"changeLog": {
-			"fixed": {
-				"New React Structure": "Fixed for new internal react structure"
-			}
 		}
 	};
 
@@ -146,6 +141,7 @@ module.exports = (_ => {
 						Reaction: "render",
 						ReactorsComponent: "render",
 						Mention: "default",
+						UserMention: "UserMention",
 						ChannelReply: "default",
 						MemberListItem: "render",
 						UserHook: "render",
@@ -703,33 +699,60 @@ module.exports = (_ => {
 			}
 			
 			processMention (e) {
-				if (e.instance.props.userId && settings.changeInMentions) {
-					let data = changedUsers[e.instance.props.userId];
+				if (e.instance.props.userId && settings.changeInMentions && changedUsers[e.instance.props.userId]) {
+					this.changeMention(e.returnvalue, changedUsers[e.instance.props.userId], e.instance.props);
+				}
+			}
+			
+			processUserMention (e) {
+				if (e.instance.props.id && settings.changeInMentions) {
+					let data = changedUsers[e.instance.props.id];
 					if (data) {
-						if (data.name) e.returnvalue.props.children[0] = "@" + data.name;
-						if (data.color1) {
-							let color1_0 = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "RGBA");
-							let color0_1 = e.instance.props.mentioned ? "transparent" : BDFDB.ColorUtils.setAlpha(color1_0, 0.1, "RGBA");
-							let color0_7 = e.instance.props.mentioned ? "transparent" : BDFDB.ColorUtils.setAlpha(color1_0, 0.7, "RGBA");
-							let white = e.instance.props.mentioned ? color1_0 : "#FFFFFF";
-							e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {
-								background: color0_1,
-								color: color1_0
-							});
-							let onMouseEnter = e.returnvalue.props.onMouseEnter || ( _ => {});
-							e.returnvalue.props.onMouseEnter = event => {
-								onMouseEnter(event);
-								event.target.style.setProperty("background", color0_7, "important");
-								event.target.style.setProperty("color", white, "important");
-							};
-							let onMouseLeave = e.returnvalue.props.onMouseLeave || ( _ => {});
-							e.returnvalue.props.onMouseLeave = event => {
-								onMouseLeave(event);
-								event.target.style.setProperty("background", color0_1, "important");
-								event.target.style.setProperty("color", color1_0, "important");
-							};
+						let tooltipChildren = BDFDB.ObjectUtils.get(e, "returnvalue.props.text.props.children");
+						if (tooltipChildren) {
+							if (tooltipChildren[0] && tooltipChildren[0].props && tooltipChildren[0].props.user) tooltipChildren[0].props.user = this.getUserData(tooltipChildren[0].props.user.id);
+							if (data.name && typeof tooltipChildren[1] == "string") tooltipChildren[1] = data.name;
+						}
+						if (data.name || data.color1) {
+							if (typeof e.returnvalue.props.children == "function") {
+								let renderChildren = e.returnvalue.props.children;
+								e.returnvalue.props.children = (...args) => {
+									let children = renderChildren(...args);
+									this.changeMention(children, data, {});
+									return children;
+								};
+							}
 						}
 					}
+				}
+			}
+			
+			changeMention (mention, data, props) {
+				if (data.name) {
+					if (typeof mention.props.children == "string") mention.props.children = "@" + data.name;
+					else if (BDFDB.ArrayUtils.is(mention.props.children)) mention.props.children[0] = "@" + data.name;
+				}
+				if (data.color1) {
+					let color1_0 = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "RGBA");
+					let color0_1 = props.mentioned ? "transparent" : BDFDB.ColorUtils.setAlpha(color1_0, 0.1, "RGBA");
+					let color0_7 = props.mentioned ? "transparent" : BDFDB.ColorUtils.setAlpha(color1_0, 0.7, "RGBA");
+					let white = props.mentioned ? color1_0 : "#FFFFFF";
+					mention.props.style = Object.assign({}, mention.props.style, {
+						background: color0_1,
+						color: color1_0
+					});
+					let onMouseEnter = mention.props.onMouseEnter || ( _ => {});
+					mention.props.onMouseEnter = event => {
+						onMouseEnter(event);
+						event.target.style.setProperty("background", color0_7, "important");
+						event.target.style.setProperty("color", white, "important");
+					};
+					let onMouseLeave = mention.props.onMouseLeave || ( _ => {});
+					mention.props.onMouseLeave = event => {
+						onMouseLeave(event);
+						event.target.style.setProperty("background", color0_1, "important");
+						event.target.style.setProperty("color", color1_0, "important");
+					};
 				}
 			}
 

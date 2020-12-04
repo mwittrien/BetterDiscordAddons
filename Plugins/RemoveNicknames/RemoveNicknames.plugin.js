@@ -95,7 +95,8 @@ module.exports = (_ => {
 					after: {
 						TypingUsers: "render",
 						Reaction: "render",
-						Mention: "default"
+						Mention: "default",
+						UserMention: "UserMention"
 					}
 				};
 			}
@@ -201,7 +202,7 @@ module.exports = (_ => {
 					let newName = this.getNewName(e.instance.props.message.author);
 					if (newName) {
 						e.instance.props.message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {nick: newName}));
-						e.instance.props.children.props.message = e.instance.props.message;
+						if (e.instance.props.children && e.instance.props.children.props) e.instance.props.children.props.message = e.instance.props.message;
 					}
 				}
 			}
@@ -237,6 +238,20 @@ module.exports = (_ => {
 					if (newName) e.returnvalue.props.children[0] = "@" + newName;
 				}
 			}
+			
+			processUserMention (e) {
+				if (e.instance.props.id && settings.changeInMentions && typeof e.returnvalue.props.children == "function") {
+					let newName = this.getNewName(BDFDB.LibraryModules.UserStore.getUser(e.instance.props.id));
+					if (newName) {
+						let renderChildren = e.returnvalue.props.children;
+						e.returnvalue.props.children = (...args) => {
+							let children = renderChildren(...args);
+							children.props.children = "@" + newName;
+							return children;
+						};
+					}
+				}
+			}
 
 			getNewName (user) {
 				if (!user) return null;
@@ -244,7 +259,7 @@ module.exports = (_ => {
 				let origUser = BDFDB.LibraryModules.UserStore.getUser(user.id) || {};
 				let EditUsers = BDFDB.BDUtils.getPlugin("EditUsers", true);
 				let username = EditUsers && EditUsers.getUserData(user, true, false, origUser).username || user.username;
-				if (!member.nick || user.id == BDFDB.UserUtils.me.id && !settings.replaceOwn || user.bot && !settings.replaceBots) return username != origUser.username ? username : (member.nick || username);
+				if (!member.nick || user.id == BDFDB.UserUtils.me.id && !!settings.replaceOwn || user.bot && !settings.replaceBots) return username != origUser.username ? username : (member.nick || username);
 				return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + username + ")") : (username + " (" + member.nick + ")")) : username;
 			}
 		};
