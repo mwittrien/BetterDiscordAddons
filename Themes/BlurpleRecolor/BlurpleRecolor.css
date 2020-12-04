@@ -262,6 +262,8 @@ div[style*="border-color: rgba(114, 137, 218, 0.1"] {
 
 svg [style*="stroke: slategray"],
 svg [stroke="slategray"],
+svg [style*="stroke: #7289da"],
+svg [stroke="#7289da"],
 svg [style*="stroke: rgba(255, 115, 250, 1)"],
 svg [style*="stroke: rgb(255, 115, 250)"],
 svg [stroke="rgba(255, 115, 250, 1)"],
@@ -274,6 +276,8 @@ svg [stroke="rgb(114, 137, 218)"] {
 }
 svg [style*="fill: slategray"],
 svg [fill="slategray"],
+svg [style*="fill: #7289da"],
+svg [fill="#7289da"],
 svg [style*="fill: rgba(255, 115, 250, 1)"],
 svg [style*="fill: rgb(255, 115, 250)"],
 svg [fill="rgba(255, 115, 250, 1)"],
