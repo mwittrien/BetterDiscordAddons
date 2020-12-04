@@ -259,7 +259,7 @@ module.exports = (_ => {
 				let origUser = BDFDB.LibraryModules.UserStore.getUser(user.id) || {};
 				let EditUsers = BDFDB.BDUtils.getPlugin("EditUsers", true);
 				let username = EditUsers && EditUsers.getUserData(user, true, false, origUser).username || user.username;
-				if (!member.nick || user.id == BDFDB.UserUtils.me.id && !!settings.replaceOwn || user.bot && !settings.replaceBots) return username != origUser.username ? username : (member.nick || username);
+				if (!member.nick || user.id == BDFDB.UserUtils.me.id && !settings.replaceOwn || user.bot && !settings.replaceBots) return username != origUser.username ? username : (member.nick || username);
 				return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + username + ")") : (username + " (" + member.nick + ")")) : username;
 			}
 		};
