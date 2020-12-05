@@ -427,8 +427,7 @@ module.exports = (_ => {
 					.replace("$month", settings.forceZeros && month < 10 ? "0" + month : month)
 					.replace("$year", timestamp.getFullYear())
 					.replace("$quote", quotedLines || "")
-					.replace("$rawQuote", unquotedLines.join("\n") || "")
-					.replace(/\$/g, "$$$$");
+					.replace("$rawQuote", unquotedLines.join("\n") || "");
 			}
 
 			addLeadingZeros (timestring) {
