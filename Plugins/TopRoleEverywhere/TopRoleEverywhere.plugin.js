@@ -102,20 +102,14 @@ module.exports = (_ => {
 					${BDFDB.dotCN._toproleseverywheremembertag} {
 						max-width: 50%;
 					}
-					${BDFDB.dotCN._toproleseverywherebadgestyle} {
-						margin-left: 0.3rem;
-					}
 					${BDFDB.dotCNS.themelight + BDFDB.dotCN._toproleseverywhererolestyle} {
 						color: rgba(79, 84, 92, 0.8);
 					}
 					${BDFDB.dotCNS.themedark + BDFDB.dotCN._toproleseverywhererolestyle} {
 						color: hsla(0, 0%, 100%, 0.8);
 					}
-					${BDFDB.dotCNS.messagecompact + BDFDB.dotCNS.messageheader + BDFDB.dotCN._toproleseverywherebadgestyle} {
-						margin-left: 0.1rem;
-						margin-right: 0.2rem;
-					}
-					${BDFDB.dotCNS.messagecompact + BDFDB.dotCNS.messageheader + BDFDB.dotCN._toproleseverywhererolestyle} {
+					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN._toproleseverywhererolestyle},
+					${BDFDB.dotCNS.messagecompact + BDFDB.dotCN._toproleseverywhererolestyle} {
 						margin-right: 0.3rem;
 						text-indent: 0;
 					}
