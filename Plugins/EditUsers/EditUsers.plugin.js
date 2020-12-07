@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.0.6",
+			"version": "4.0.7",
 			"description": "Allow you to change the icon, name, tag and color of users"
+		},
+		"changeLog": {
+			"fixed": {
+				"Compact": "Fixed some issues with compact mode"
+			}
 		}
 	};
 
@@ -155,6 +160,8 @@ module.exports = (_ => {
 						IncomingCallModal: "default"
 					}
 				};
+				
+				this.patchPriority = 3;
 				
 				this.css = `
 					${BDFDB.dotCNS.chat + BDFDB.dotCN.messageusername}:hover > span[style*="color"],
@@ -609,7 +616,7 @@ module.exports = (_ => {
 								else this.changeUserColor(messageUsername, e.instance.props.message.author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
 							}
 						}
-						this.injectBadge(e.returnvalue.props.children, e.instance.props.message.author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, 2, {
+						this.injectBadge(e.returnvalue.props.children, e.instance.props.message.author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.compact ? 0 : 2, {
 							tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 							useRem: true
 						});

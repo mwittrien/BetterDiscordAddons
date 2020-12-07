@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "OwnerTag",
 			"author": "DevilBro",
-			"version": "1.3.5",
+			"version": "1.3.6",
 			"description": "Add a tag or crown to the server owner (or admins/management)"
 		},
 		"changeLog": {
 			"fixed": {
-				"New React Structure": "Fixed for new internal react structure"
+				"Compact": "Fixed some issues with compact mode"
 			}
 		}
 	};
@@ -113,6 +113,10 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS.message + BDFDB.dotCN.memberownericon} {
 						top: 2px;
+					}
+					${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.memberownericon} {
+						margin-left: 0;
+						margin-right: 4px;
 					}
 					${BDFDB.dotCNS.userprofile + BDFDB.dotCN.memberownericon} {
 						top: 0px;

@@ -14,15 +14,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "TopRoleEverywhere",
 			"author": "DevilBro",
-			"version": "3.0.4",
+			"version": "3.0.5",
 			"description": "Add the highest role of a user as a tag"
 		},
 		"changeLog": {
 			"fixed": {
-				"Chat": "Works again in chat"
+				"Compact": "Fixed some issues with compact mode"
 			}
 		}
 	};
+
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
@@ -86,6 +87,8 @@ module.exports = (_ => {
 					}
 				};
 				
+				this.patchPriority = 4;
+				
 				this.css = `
 					${BDFDB.dotCNS.member + BDFDB.dotCN.namecontainercontent} {
 						overflow: visible;
@@ -138,7 +141,6 @@ module.exports = (_ => {
 				let settingsPanel, settingsItems = [];
 				
 				for (let key in settings) if (!this.defaults.settings[key].inner) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					className: BDFDB.disCN.marginbottom8,
 					type: "Switch",
 					plugin: this,
 					keys: ["settings", key],
@@ -151,7 +153,6 @@ module.exports = (_ => {
 					first: settingsItems.length == 0,
 					last: true,
 					children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						className: BDFDB.disCN.marginbottom8,
 						type: "Switch",
 						plugin: this,
 						keys: ["settings", key],
@@ -179,7 +180,7 @@ module.exports = (_ => {
 
 			processMemberListItem (e) {
 				if (e.instance.props.user && settings.showInMemberList) {
-					this.injectRoleTag(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, "member", {
+					this.injectRoleTag(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, "member", 2, {
 						tagClass: BDFDB.disCN.bottagmember
 					});
 				}
@@ -187,18 +188,18 @@ module.exports = (_ => {
 
 			processMessageUsername (e) {
 				if (e.instance.props.message) {
-					if (settings.showInChat) this.injectRoleTag(e.returnvalue.props.children, e.instance.props.message.author, "chat", {
+					if (settings.showInChat) this.injectRoleTag(e.returnvalue.props.children, e.instance.props.message.author, "chat", e.instance.props.compact ? 0 : 2, {
 						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 						useRem: true
 					});
-					if (settings.addUserID) this.injectIdTag(e.returnvalue.props.children, e.instance.props.message.author, "chat", {
+					if (settings.addUserID) this.injectIdTag(e.returnvalue.props.children, e.instance.props.message.author, "chat", e.instance.props.compact ? 0 : 2, {
 						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 						useRem: true
 					});
 				}
 			}
 
-			injectRoleTag (children, user, type, config = {}) {
+			injectRoleTag (children, user, type, insertIndex, config = {}) {
 				if (!BDFDB.ArrayUtils.is(children) || !user) return;
 				let guild = BDFDB.LibraryModules.GuildStore.getGuild(BDFDB.LibraryModules.LastGuildStore.getGuildId());
 				if (!guild || user.bot && settings.disableForBots) return;
@@ -210,14 +211,14 @@ module.exports = (_ => {
 						break;
 					}
 				}
-				if (role && (role.colorString || settings.includeColorless)) children.push(this.createTag(Object.assign({}, role, {
+				if (role && (role.colorString || settings.includeColorless)) children.splice(insertIndex, 0, this.createTag(Object.assign({}, role, {
 					name: settings.showOwnerRole && user.id == guild.ownerId ? BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER : role.name
 				}), type, config));
 			}
 
-			injectIdTag (children, user, type, config = {}) {
+			injectIdTag (children, user, type, insertIndex, config = {}) {
 				if (!BDFDB.ArrayUtils.is(children) || !user) return;
-				children.push(this.createTag({
+				children.splice(insertIndex, 0, this.createTag({
 					name: user.id
 				}, type, config));
 			}
