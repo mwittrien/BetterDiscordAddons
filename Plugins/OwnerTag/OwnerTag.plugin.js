@@ -114,6 +114,7 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.message + BDFDB.dotCN.memberownericon} {
 						top: 2px;
 					}
+					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN.memberownericon},
 					${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.memberownericon} {
 						margin-left: 0;
 						margin-right: 4px;
