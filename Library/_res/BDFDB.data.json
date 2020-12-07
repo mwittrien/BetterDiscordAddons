@@ -2112,7 +2112,7 @@
 		"messagereactionsmodalnickname": ["MessageReactionsModal", "nickname"],
 		"messagereactionsmodalreactor": ["MessageReactionsModal", "reactor"],
 		"messagereactionsmodalusername": ["MessageReactionsModal", "username"],
-		"messagerepliedmessage": ["MessageBlocked", "repliedMessage"],
+		"messagerepliedmessage": ["MessageBody", "repliedMessage"],
 		"messagereply": ["MessageReply", "container"],
 		"messagereplyname": ["MessageReply", "name"],
 		"messagereplytext": ["MessageReply", "text"],
