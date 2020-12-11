@@ -19,6 +19,7 @@
 		"ArrayUtils": {"props": ["isArrayLike", "zipObject"]},
 		"AssetUtils": {"props": ["getAssetImage", "getAssetIds"]},
 		"AutocompleteOptions": {"props": ["AUTOCOMPLETE_OPTIONS"]},
+		"AutocompleteSentinels": {"props": ["CHANNEL_SENTINEL", "COMMAND_SENTINEL"]},
 		"BadgeUtils": {"props": ["getBadgeCountString", "getBadgeWidthForValue"]},
 		"CallUtils": {"props": ["getCalls", "isCallActive"]},
 		"CategoryCollapseStore": {"props": ["getCollapsedCategories", "isCollapsed"]},
