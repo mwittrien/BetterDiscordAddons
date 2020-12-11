@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.2.0",
+			"version": "2.2.1",
 			"description": "Allow the user to configure their own chat-aliases which will automatically be replaced before the message is being sent"
 		},
 		"changeLog": {
 			"fixed": {
-				"New Settings Menu": "Fixed for new settings menu"
+				"Crashes": "No longer crashes"
 			}
 		}
 	};
@@ -63,7 +63,7 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var settings = {}, amounts = {}, configs = {}, aliases = {}, commandAliases = {};
+		var settings = {}, amounts = {}, configs = {}, aliases = {}, commandAliases = {}, commandSentinel;
 	
 		return class ChatAliases extends Plugin {
 			onLoad() {
@@ -93,9 +93,6 @@ module.exports = (_ => {
 						ChannelTextAreaForm: "render",
 						MessageEditor: "render",
 						Upload: "render"
-					},
-					after: {
-						ChannelAutoComplete: "render"
 					}
 				};
 				
@@ -108,7 +105,8 @@ module.exports = (_ => {
 			
 			onStart() {
 				aliases = BDFDB.DataUtils.load(this, "words");
-				commandAliases = BDFDB.ObjectUtils.filter(aliases, key => key.startsWith("/"), true);
+				commandSentinel = BDFDB.LibraryModules.AutocompleteSentinels && BDFDB.LibraryModules.AutocompleteSentinels.COMMAND_SENTINEL || "/";
+				commandAliases = BDFDB.ObjectUtils.filter(aliases, key => key.startsWith(commandSentinel), true);
 				
 				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) {
 					BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.ALIASES = {
@@ -121,7 +119,7 @@ module.exports = (_ => {
 							let aliasData = eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.alias : typeof eventOrIndex == "number" && autocompletes.aliases[eventOrIndex];
 							return aliasData.file ? aliasData.word : BDFDB.StringUtils.insertNRST(aliasData.replace);
 						},
-						getSentinel: () => {
+						getSentinel: _ => {
 							return "";
 						},
 						matches: (channel, what, wordLowercase, what2, config, rawValue) => {
@@ -160,11 +158,11 @@ module.exports = (_ => {
 							}
 							if (matches.length) return {aliases: matches};
 						},
-						renderResults: (channel, wordLowercase, currentSelected, setSelected, chooseSelected, config, autocompletes) => {
-							return [
+						renderResults: (channel, wordLowercase, currentSelected, setSelected, chooseSelected, state, config, autocompletes) => {
+							return autocompletes && autocompletes.aliases && [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteItems.Title, {
 									title: [
-										"Aliases:",
+										"Aliases: ",
 										BDFDB.ReactUtils.createElement("strong", {
 											children: wordLowercase
 										})
@@ -177,30 +175,33 @@ module.exports = (_ => {
 									selected: currentSelected === i,
 									alias: aliasData,
 									text: aliasData.word,
-									description: aliasData.replace,
+									description: BDFDB.StringUtils.insertNRST(aliasData.replace)
 								}))
 							].flat(10).filter(n => n);
 						}
 					};
-					BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.COMMANDS, "queryResults", {after: e => {
-						let currentLastWord = BDFDB.StringUtils.findMatchCaseless(e.thisObject.getSentinel() + e.methodArguments[1], e.methodArguments[3], true);
-						if (currentLastWord.length >= amounts.minAliasLength) for (let word in commandAliases) {
-							if (e.returnValue.commands.length >= BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS) break;
-							let aliasData = commandAliases[word];
-							let name = word.slice(1);
-							let command = {
-								id: "chatalias-" + name,
-								name: name,
-								description: BDFDB.StringUtils.insertNRST(aliasData.replace)
-							};
-							if (!aliasData.regex && aliasData.autoc) {
-								if (aliasData.exact) {
-									if (aliasData.case && word.indexOf(currentLastWord) == 0) e.returnValue.commands.push(command);
-									else if (!aliasData.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) e.returnValue.commands.push(command);
-								}
-								else {
-									if (aliasData.case && word.indexOf(currentLastWord) > -1) e.returnValue.commands.push(command);
-									else if (!aliasData.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) e.returnValue.commands.push(command);
+					BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.COMMANDS, "renderResults", {before: e => {
+						let m = Array.from(e.methodArguments).find(n => n && n.commands);
+						if (m) {
+							let currentLastWord = commandSentinel + e.methodArguments[1];
+							if (currentLastWord.length >= amounts.minAliasLength) for (let word in commandAliases) {
+								if (m.commands.length >= BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS) break;
+								let aliasData = commandAliases[word];
+								let name = word.slice(1);
+								let command = {
+									id: "chatalias-" + name,
+									name: name,
+									description: BDFDB.StringUtils.insertNRST(aliasData.replace)
+								};
+								if (!aliasData.regex && aliasData.autoc) {
+									if (aliasData.exact) {
+										if (aliasData.case && word.indexOf(currentLastWord) == 0) m.commands.push(command);
+										else if (!aliasData.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) m.commands.push(command);
+									}
+									else {
+										if (aliasData.case && word.indexOf(currentLastWord) > -1) m.commands.push(command);
+										else if (!aliasData.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) m.commands.push(command);
+									}
 								}
 							}
 						}
@@ -412,11 +413,6 @@ module.exports = (_ => {
 						}
 					})
 				}));
-			}
-
-			processChannelAutoComplete (e) {
-				if (false && settings.addAutoComplete) {
-				}
 			}
 			
 			processChannelTextAreaForm (e) {
