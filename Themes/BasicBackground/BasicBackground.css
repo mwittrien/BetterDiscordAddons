@@ -16,6 +16,7 @@
 	
 	--dbackground:					url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/background.jpg);
 	--dbackgroundsize:				cover;
+	--dbackgroundposition:			center;
 	--dblur:						unset;
 	--dbackdrop:					rgba(0,0,0,0.85);
 
@@ -32,14 +33,17 @@
 	--vtextshadow:					var(--textshadow,					var(--dtextshadow));
 	
 	--vbackground:					var(--background,					var(--dbackground));
+	--vbackgroundposition:			var(--backgroundposition,			var(--dbackgroundposition));
 	--vbackgroundsize:				var(--backgroundsize,				var(--dbackgroundsize));
 	--vbackgroundblur:				var(--backgroundblur,				var(--dblur));
 	
 	--vpopout:						var(--popout,						var(--vbackground));
+	--vpopoutposition:				var(--backgroundposition,			var(--vbackgroundposition));
 	--vpopoutsize:					var(--popoutsize,					var(--vbackgroundsize));
 	--vpopoutblur:					var(--popoutblur,					var(--vbackgroundblur));
 	
 	--vbackdrop:					var(--backdrop,						var(--dbackdrop));
+	--vbackdropposition:			var(--backgroundposition,			var(--vbackgroundposition));
 	--vbackdropsize:				var(--backdropsize,					var(--vbackgroundsize));
 	--vbackdropblur:				var(--backdropblur,					var(--vbackgroundblur));
 
@@ -235,14 +239,14 @@ body::before {
 	right: 0;
 	bottom: 0;
 	position: fixed;
-	background: var(--vbackground) center/var(--vbackgroundsize);
+	background: var(--vbackground) var(--vbackgroundposition)/var(--vbackgroundsize);
 	filter: blur(var(--vbackgroundblur));
 }
 #ace_settingsmenu_container,
 .uploadArea-3QgLtW,
 .backdropWithLayer-3_uhz4,
 .backdrop-1wrmKB {
-	background: var(--vbackdrop) center/var(--vbackdropsize) !important;
+	background: var(--vbackdrop) var(--vbackdropposition)/var(--vbackdropsize) !important;
 	filter: blur(var(--vbackdropblur));
 	opacity: 1;
 	animation: none;
@@ -394,7 +398,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vbackground) center/var(--vbackgroundsize);
+	background: var(--vbackground) var(--vbackgroundposition)/var(--vbackgroundsize);
 	background-attachment: fixed;
 	filter: blur(var(--vbackgroundblur));
 	pointer-events: none;
@@ -826,7 +830,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vbackground) center/var(--vbackgroundsize);
+	background: var(--vbackground) var(--vbackgroundposition)/var(--vbackgroundsize);
 	background-attachment: fixed;
 	filter: blur(var(--vbackgroundblur));
 	pointer-events: none;
@@ -1048,7 +1052,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -1356,7 +1360,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -1602,7 +1606,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -1795,7 +1799,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -1993,7 +1997,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vbackground) center/var(--vbackgroundsize);
+	background: var(--vbackground) var(--vbackgroundposition)/var(--vbackgroundsize);
 	background-attachment: fixed;
 	filter: blur(var(--vbackgroundblur));
 	pointer-events: none;
@@ -2125,7 +2129,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vbackground) center/var(--vbackgroundsize);
+	background: var(--vbackground) var(--vbackgroundposition)/var(--vbackgroundsize);
 	background-attachment: fixed;
 	filter: blur(var(--vbackgroundblur));
 	width: unset;
@@ -2654,7 +2658,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vbackground) center/var(--vbackgroundsize);
+	background: var(--vbackground) var(--vbackgroundposition)/var(--vbackgroundsize);
 	background-attachment: fixed;
 	filter: blur(var(--vbackgroundblur));
 	pointer-events: none;
@@ -2847,7 +2851,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -2958,7 +2962,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -3072,7 +3076,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -3180,7 +3184,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--user-background, var(--vpopout)) center/var(--vpopoutsize);
+	background: var(--user-background, var(--vpopout)) var(--vpopoutposition)/var(--vpopoutsize);
 	filter: blur(var(--vpopoutblur));
 	background-attachment: fixed;
 	width: unset;
@@ -3336,7 +3340,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -3383,7 +3387,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -3461,7 +3465,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -3520,7 +3524,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -3602,7 +3606,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -3697,7 +3701,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -3754,7 +3758,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -3825,7 +3829,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -4192,7 +4196,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -4280,7 +4284,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -4319,7 +4323,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -4406,7 +4410,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--user-background, var(--vpopout)) center/var(--vpopoutsize);
+	background: var(--user-background, var(--vpopout)) var(--vpopoutposition)/var(--vpopoutsize);
 	filter: blur(var(--vpopoutblur));
 	background-attachment: fixed;
 	width: unset;
@@ -4585,7 +4589,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -4682,7 +4686,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -4760,7 +4764,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -4829,7 +4833,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -5022,7 +5026,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -5190,7 +5194,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -5251,7 +5255,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -5323,7 +5327,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -5403,7 +5407,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -5442,7 +5446,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -5493,7 +5497,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -5536,7 +5540,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -6410,7 +6414,7 @@ body::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -6944,7 +6948,7 @@ html .toast.icon:not(.toast-brand):not(.toast-danger):not(.toast-error):not(.toa
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -7102,7 +7106,7 @@ html .toast.icon:not(.toast-brand):not(.toast-danger):not(.toast-error):not(.toa
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -7289,7 +7293,7 @@ html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight 
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + var(--vmemberlisttransparency) * 0.85));
 }
 #MemberCount::before {
-	background: var(--vbackground) center/var(--vbackgroundsize);
+	background: var(--vbackground) var(--vbackgroundposition)/var(--vbackgroundsize);
 	background-attachment: fixed;
 	filter: blur(var(--vbackgroundblur));
 }
@@ -7428,7 +7432,7 @@ html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight 
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
@@ -7539,7 +7543,7 @@ html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight 
 	transition: all 200ms cubic-bezier(0,0,0,1);
 }
 .bf-toolbar::before {
-	background: var(--vpopout) center/var(--vpopoutsize);
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	z-index: 100;
@@ -7732,7 +7736,7 @@ html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://discor
 html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdocs." i]::after,
 html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]::after {
 	content: "" !important;
-	background: var(--vbackground) center/var(--vbackgroundsize) !important;
+	background: var(--vbackground) var(--vbackgroundposition)/var(--vbackgroundsize) !important;
 	background-attachment: fixed !important;
 	border-radius: 5px !important;
 	position: absolute !important;
