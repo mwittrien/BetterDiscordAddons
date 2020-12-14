@@ -14,12 +14,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.1.1",
+			"version": "2.1.2",
 			"description": "Add a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send"
 		},
 		"changeLog": {
 			"fixed": {
-				"Crashes": "No longer causes crashes"
+				"Google Engine": "Works again"
+			},
+			"improved": {
+				"Yandex Engine": "Warns you if rate limit was reached"
 			}
 		}
 	};
@@ -645,7 +648,7 @@ module.exports = (_ => {
 				let [newText, excepts, translate] = this.removeExceptions(text.trim(), type);
 				let input = Object.assign({}, languages[this.getLanguageChoice("input", type)]);
 				let output = Object.assign({}, languages[this.getLanguageChoice("output", type)]);
-				if (translate) {
+				if (translate && input.id != output.id) {
 					let timer = 0;
 					toast = BDFDB.NotificationUtils.toast("Translating. Please wait", {timeout: 0});
 					toast.interval = BDFDB.TimeUtils.interval(_ => {
@@ -655,10 +658,10 @@ module.exports = (_ => {
 						}
 						else toast.textContent = toast.textContent.indexOf(".....") > -1 ? "Translating. Please wait" : toast.textContent + ".";
 					}, 500);
-					let specialcase = this.checkForSpecialCase(newText, input);
-					if (specialcase) {
-						input.name = specialcase.name;
-						switch (specialcase.id) {
+					let specialCase = this.checkForSpecialCase(newText, input);
+					if (specialCase) {
+						input.name = specialCase.name;
+						switch (specialCase.id) {
 							case "binary": newText = this.binary2string(newText); break;
 							case "braille": newText = this.braille2string(newText); break;
 							case "morse": newText = this.morse2string(newText); break;
@@ -675,7 +678,7 @@ module.exports = (_ => {
 					else {
 						if (translationEngines[engines.translator] && typeof this[translationEngines[engines.translator].funcName] == "function") {
 							isTranslating = true;
-							this[translationEngines[engines.translator].funcName].apply(this, [{input, output, text: newText, specialcase, engine: translationEngines[engines.translator]}, finishTranslation]);
+							this[translationEngines[engines.translator].funcName].apply(this, [{input, output, text: newText, specialCase, engine: translationEngines[engines.translator]}, finishTranslation]);
 						}
 						else finishTranslation();
 					}
@@ -688,8 +691,8 @@ module.exports = (_ => {
 					onLoad: _ => {
 						googleTranslateWindow.executeJavaScriptSafe(`
 							require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "GTO-translation", [
-								(document.querySelector(".translation") || {}).innerText,
-								[(new RegExp("{code: '([^']*)',name: '" + [(new RegExp((window.source_language_detected || "").replace("%1$s", "([A-z]{2,})"), "g")).exec(document.body.innerHTML)].flat()[1] +"'}", "g")).exec(document.body.innerHTML)].flat(10)[1]
+								(document.querySelector("[data-language-to-translate-into] span") || {}).innerText,
+								(document.querySelector("h2 ~ [lang]") || {}).lang
 							]);
 						`);
 					}
@@ -697,7 +700,7 @@ module.exports = (_ => {
 				BDFDB.WindowUtils.addListener(this, "GTO-translation", (event, messageData) => {
 					BDFDB.WindowUtils.close(googleTranslateWindow);
 					BDFDB.WindowUtils.removeListener(this, "GTO-translation");
-					if (!data.specialcase && messageData[1] && languages[messageData[1]]) {
+					if (!data.specialCase && messageData[1] && languages[messageData[1]]) {
 						data.input.name = languages[messageData[1]].name;
 						data.input.ownlang = languages[messageData[1]].ownlang;
 					}
@@ -710,7 +713,7 @@ module.exports = (_ => {
 					if (!error && result && response.statusCode == 200) {
 						try {
 							result = JSON.parse(result);
-							if (!data.specialcase && result.src && result.src && languages[result.src]) {
+							if (!data.specialCase && result.src && result.src && languages[result.src]) {
 								data.input.name = languages[result.src].name;
 								data.input.ownlang = languages[result.src].ownlang;
 							}
@@ -746,7 +749,7 @@ module.exports = (_ => {
 						if (!error && response && response.statusCode == 200) {
 							try {
 								result = JSON.parse(result);
-								if (!data.specialcase && result.source && result.source.dialect && languages[result.source.dialect]) {
+								if (!data.specialCase && result.source && result.source.dialect && languages[result.source.dialect]) {
 									data.input.name = languages[result.source.dialect].name;
 									data.input.ownlang = languages[result.source.dialect].ownlang;
 								}
@@ -775,20 +778,24 @@ module.exports = (_ => {
 			}
 			
 			yandexTranslate (data, callback) {
-				BDFDB.LibraryRequires.request(`https://translate.yandex.net/api/v1.5/tr/translate?key=trnsl.1.1.20191206T223907Z.52bd512eca953a5b.1ec123ce4dcab3ae859f312d27cdc8609ab280de&text=${encodeURIComponent(data.text)}&lang=${data.specialcase || data.input.id == "auto" ? data.output.id : (data.input.id + "-" + data.output.id)}&options=1`, (error, response, result) => {
+				BDFDB.LibraryRequires.request(`https://translate.yandex.net/api/v1.5/tr/translate?key=trnsl.1.1.20191206T223907Z.52bd512eca953a5b.1ec123ce4dcab3ae859f312d27cdc8609ab280de&text=${encodeURIComponent(data.text)}&lang=${data.specialCase || data.input.id == "auto" ? data.output.id : (data.input.id + "-" + data.output.id)}&options=1`, (error, response, result) => {
 					if (!error && result && response.statusCode == 200) {
 						result = BDFDB.DOMUtils.create(result);
 						let translation = result.querySelector("text");
 						let detected = result.querySelector("detected");
 						if (translation && detected) {
 							let detectedLang = detected.getAttribute("lang");
-							if (!data.specialcase && detectedLang && languages[detectedLang]) {
+							if (!data.specialCase && detectedLang && languages[detectedLang]) {
 								data.input.name = languages[detectedLang].name;
 								data.input.ownlang = languages[detectedLang].ownlang;
 							}
 							callback(translation.innerText);
 						}
 						else callback("");
+					}
+					if (result && result.indexOf('code="408"') > -1) {
+						BDFDB.NotificationUtils.toast("Failed to translate text. Monthly rate limit reached. Choose another Translate Engine", {type: "error"});
+						callback("");
 					}
 					else {
 						BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or API-key outdated. Try another Translate Engine.", {type: "error"});
