@@ -14,13 +14,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ReadAllNotificationsButton",
 			"author": "DevilBro",
-			"version": "1.6.3",
+			"version": "1.6.4",
 			"description": "Add a button to clear all notifications"
-		},
-		"changeLog": {
-			"fixed": {
-				"Clear Mentions": "Works again"
-			}
 		}
 	};
 
@@ -139,6 +134,8 @@ module.exports = (_ => {
 						value: settings[key]
 					})).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 						title: "When left clicking the 'read all' button mark following Elements as read:",
+						first: false,
+						last: true,
 						children: Object.keys(settings).filter(key => this.defaults.settings[key].inner).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 							type: "Switch",
 							plugin: this,
@@ -195,33 +192,6 @@ module.exports = (_ => {
 				settings = BDFDB.DataUtils.get(this, "settings");
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
-			}
-
-			onUserContextMenu (e) {
-				if (e.instance.props.channel && e.type == "DMUserContextMenu") {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: BDFDB.LibraryComponents.MenuItems.MenuGroup});
-					if (index > -1) this.injectItem(children, e.instance.props.channel.id);
-				}
-			}
-
-			onGroupDMContextMenu (e) {
-				if (e.instance.props.channel) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: BDFDB.LibraryComponents.MenuItems.MenuGroup});
-					if (index > -1) this.injectItem(children, e.instance.props.channel.id);
-				}
-			}
-			
-			injectItem (children, channelId) {
-				children.unshift(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: BDFDB.LanguageUtils.LanguageStrings.MARK_AS_READ,
-						id: "mark-dm-read",
-						disabled: !BDFDB.LibraryModules.DirectMessageUnreadStore.getUnreadPrivateChannelIds().includes(channelId),
-						action: _ => {
-							BDFDB.DMUtils.markAsRead(channelId);
-						}
-					})
-				}));
 			}
 		
 			processGuilds (e) {

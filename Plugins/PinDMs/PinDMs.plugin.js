@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "PinDMs",
 			"author": "DevilBro",
-			"version": "1.7.7",
+			"version": "1.7.8",
 			"description": "Allow you to pin DMs, making them appear at the top of your DMs/Server-List"
 		},
 		"changeLog": {
-			"fixed": {
-				"Works again": "Some of you really need to learn how to be a little bit more patient and give plugin devs some time to fix their stuff if discord breaks it..."
+			"added": {
+				"Predefined Categories": "Added the option to enable predefined categories for the channel list in the settings that will automatically add the dms fitting the category topic"
 			}
 		}
 	};
@@ -66,7 +66,7 @@ module.exports = (_ => {
 		var hoveredCategory, draggedCategory, releasedCategory;
 		var hoveredChannel, draggedChannel, releasedChannel;
 		
-		var settings = {};
+		var settings = {}, preCategories = {}, preCollapseStates = {};
 		
 		return class PinDMs extends Plugin {
 			onLoad() {
@@ -74,9 +74,14 @@ module.exports = (_ => {
 					settings: {
 						sortInRecentOrder:		{value: false, 	inner: true,		description: "Channel List"},
 						sortInRecentOrderGuild:	{value: false, 	inner: true,		description: "Guild List"},
-						showPinIcon:			{value: true, 	inner: false,	description: "Show a little 'Pin' icon for pinned DMs in the server list: "},
-						showCategoryUnread:		{value: true, 	inner: false,	description: "Show the amount of unread Messages in a category in the channel list: "},
-						showCategoryAmount:		{value: true, 	inner: false,	description: "Show the amount of pinned DMs in a category in the channel list: "}
+						showPinIcon:			{value: true, 	inner: false,		description: "Show a little 'Pin' icon for pinned DMs in the server list: "},
+						showCategoryUnread:		{value: true, 	inner: false,		description: "Show the amount of unread Messages in a category in the channel list: "},
+						showCategoryAmount:		{value: true, 	inner: false,		description: "Show the amount of pinned DMs in a category in the channel list: "}
+					},
+					preCategories: {
+						friends:				{value: false,						description: "FRIENDS"},
+						blocked:				{value: false,						description: "BLOCKED"},
+						groups:					{value: false,						description: "GROUPS"}
 					}
 				};
 				
@@ -177,7 +182,6 @@ module.exports = (_ => {
 			getSettingsPanel (collapseStates = {}) {
 				let settingsPanel, settingsItems = [];
 				
-				
 				for (let key in settings) if (!this.defaults.settings[key].inner) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 					type: "Switch",
 					plugin: this,
@@ -186,13 +190,26 @@ module.exports = (_ => {
 					value: settings[key]
 				}));
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-					title: "Sort pinned DMs in the recent message order instead of the pinned at order in:",
+					title: "Sort pinned DMs in the 'recent message' order instead of the 'pinned at' order in:",
+					dividerTop: true,
+					dividerBottom: true,
 					children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 						type: "Switch",
 						plugin: this,
 						keys: ["settings", key],
 						label: this.defaults.settings[key].description,
 						value: settings[key]
+					}))
+				}));
+				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+					title: "Add predefined category for:",
+					dividerBottom: true,
+					children: Object.keys(preCategories).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+						type: "Switch",
+						plugin: this,
+						keys: ["preCategories", key],
+						label: BDFDB.LanguageUtils.LanguageStrings[this.defaults.preCategories[key].description],
+						value: preCategories[key]
 					}))
 				}));
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -220,6 +237,8 @@ module.exports = (_ => {
 
 			forceUpdateAll () {
 				settings = BDFDB.DataUtils.get(this, "settings");
+				preCategories = BDFDB.DataUtils.get(this, "preCategories");
+				preCollapseStates = BDFDB.DataUtils.load(this, "preCollapseStates");
 				
 				BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name: "FluxContainer(PrivateChannels)", all: true, unlimited: true}));
 				BDFDB.PatchUtils.forceAllUpdates(this);
@@ -243,6 +262,7 @@ module.exports = (_ => {
 			}
 
 			injectItem (instance, id, children, index) {
+				if (!id) return;
 				let pinnedInGuild = this.isPinned(id, "pinnedRecents");
 				
 				let categories = this.sortAndUpdateCategories("dmCategories", true);
@@ -255,7 +275,11 @@ module.exports = (_ => {
 						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_pinchannel_text,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-channelist"),
-							children: [
+							children: this.getPredefinedCategory(id) ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									label: this.labels.context_inpredefined_text,
+									id: BDFDB.ContextMenuUtils.createItemId(this.name, "in-predefined"),
+									disabled: true
+								}) : [
 								BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 									children: currentCategory ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.context_unpinchannel_text,
@@ -281,7 +305,7 @@ module.exports = (_ => {
 									})
 								}),
 								categories.length ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-									children: categories.map(category => currentCategory && currentCategory.id == category.id ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									children: categories.map(category => currentCategory && currentCategory.id == category.id || category.predefined ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: category.name || this.labels.header_pinneddms_text,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "pin-channellist", category.id),
 										action: _ => {
@@ -301,7 +325,7 @@ module.exports = (_ => {
 								else this.removePin(id, "pinnedRecents");
 							}
 						})
-					]
+					].filter(n => n)
 				}));
 			}
 			
@@ -330,7 +354,7 @@ module.exports = (_ => {
 								BDFDB.ArrayUtils.remove(categories, maybedDraggedCategory, true);
 								categories.splice(categories.indexOf(maybedReleasedCategory) + 1, 0, maybedDraggedCategory);
 								let newCategories = {}, newPos = 0;
-								for (let category of [].concat(categories).reverse()) newCategories[category.id] = Object.assign(category, {pos: newPos++});
+								for (let category of [].concat(categories).reverse()) if (!category.predefined) newCategories[category.id] = Object.assign(category, {pos: newPos++});
 								BDFDB.DataUtils.save(newCategories, this, "dmCategories");
 							}
 							draggedCategory = null;
@@ -339,7 +363,7 @@ module.exports = (_ => {
 						e.instance.props.pinnedChannelIds = {};
 						for (let category of [].concat(categories).reverse()) {
 							e.instance.props.pinnedChannelIds[category.id] = [];
-							for (let id of this.sortDMsByTime(this.filterDMs(category.dms), "dmCategories").reverse()) {
+							for (let id of this.sortDMsByTime(this.filterDMs(category.dms, !category.predefined), "dmCategories").reverse()) {
 								BDFDB.ArrayUtils.remove(e.instance.props.privateChannelIds, id, true);
 								if (!category.collapsed || e.instance.props.selectedChannelId == id) {
 									e.instance.props.privateChannelIds.unshift(id);
@@ -438,30 +462,30 @@ module.exports = (_ => {
 						let category = categories[args[0].section - 1];
 						if (category && draggedCategory != category.id) {
 							let color = BDFDB.ColorUtils.convert(category.color, "RGBA");
-							let foundDMs = this.filterDMs(category.dms);
+							let foundDMs = this.filterDMs(category.dms, !category.predefined);
 							let unreadAmount = settings.showCategoryUnread && BDFDB.ArrayUtils.sum(foundDMs.map(id => BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id)));
-							return [
+							return category.predefined && foundDMs.length < 1 ? null : [
 								BDFDB.ReactUtils.createElement("h2", {
 									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.dmchannelheadercontainer, BDFDB.disCN._pindmspinnedchannelsheadercontainer, category.collapsed && BDFDB.disCN._pindmspinnedchannelsheadercollapsed, color && BDFDB.disCN._pindmspinnedchannelsheadercolored, BDFDB.disCN.namecontainernamecontainer),
 									categoryId: category.id,
-									onMouseDown: event => {
+									onMouseDown: category.predefined ? null : event => {
 										event = event.nativeEvent || event;
 										let node = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmspinnedchannelsheadercontainer, event.target).cloneNode(true);
-										let mousemove = event2 => {
+										let mouseMove = event2 => {
 											if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 												BDFDB.ListenerUtils.stopEvent(event);
 												draggedCategory = category.id;
 												this.updateContainer("dmCategories");
 												let dragPreview = this.createDragPreview(node, event2);
-												document.removeEventListener("mousemove", mousemove);
-												document.removeEventListener("mouseup", mouseup);
+												document.removeEventListener("mousemove", mouseMove);
+												document.removeEventListener("mouseup", mouseUp);
 												let dragging = event3 => {
 													this.updateDragPreview(dragPreview, event3);
 													let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsdmchannelplaceholder, event3.target);
 													let categoryNode = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmspinnedchannelsheadercontainer, placeholder ? placeholder.previousSibling : event3.target);
 													let maybeHoveredCategory = categoryNode && categoryNode.getAttribute("categoryId");
 													let update = maybeHoveredCategory != hoveredCategory;
-													if (maybeHoveredCategory) hoveredCategory = maybeHoveredCategory;
+													if (maybeHoveredCategory && !preCategories[maybeHoveredCategory]) hoveredCategory = maybeHoveredCategory;
 													else hoveredCategory = null;
 													if (update) this.updateContainer("dmCategories");
 												};
@@ -478,27 +502,39 @@ module.exports = (_ => {
 												document.addEventListener("mouseup", releasing);
 											}
 										};
-										let mouseup = _ => {
-											document.removeEventListener("mousemove", mousemove);
-											document.removeEventListener("mouseup", mouseup);
+										let mouseUp = _ => {
+											document.removeEventListener("mousemove", mouseMove);
+											document.removeEventListener("mouseup", mouseUp);
 										};
-										document.addEventListener("mousemove", mousemove);
-										document.addEventListener("mouseup", mouseup);
+										document.addEventListener("mousemove", mouseMove);
+										document.addEventListener("mouseup", mouseUp);
 									},
 									onClick: _ => {
 										if (foundDMs.length || !category.collapsed) {
 											category.collapsed = !category.collapsed;
-											BDFDB.DataUtils.save(category, this, "dmCategories", category.id);
+											if (category.predefined) {
+												preCollapseStates[category.id] = category.collapsed;
+												BDFDB.DataUtils.save(category.collapsed, this, "preCollapseStates", category.id);
+											}
+											else BDFDB.DataUtils.save(category, this, "dmCategories", category.id);
 											this.updateContainer("dmCategories");
 										}
 									},
 									onContextMenu: event => {
 										BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-											children: [
+											children: category.predefined ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+												label: this.labels.context_disablepredefined_text,
+												id: BDFDB.ContextMenuUtils.createItemId(this.name, "disable-predefined"),
+												action: _ => {
+													preCategories[category.id] = false;
+													BDFDB.DataUtils.save(preCategories, this, "preCategories");
+													this.updateContainer("dmCategories");
+												}
+											}) : [
 												BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 													label: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_SETTINGS,
 													id: BDFDB.ContextMenuUtils.createItemId(this.name, "category-settings"),
-													action: event2 => {
+													action: _ => {
 														this.openCategorySettingsModal(category, "dmCategories");
 													}
 												}),
@@ -506,7 +542,7 @@ module.exports = (_ => {
 													label: BDFDB.LanguageUtils.LanguageStrings.DELETE_CATEGORY,
 													id: BDFDB.ContextMenuUtils.createItemId(this.name, "remove-category"),
 													color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
-													action: event2 => {
+													action: _ => {
 														BDFDB.DataUtils.remove(this, "dmCategories", category.id);
 														this.updateContainer("dmCategories");
 													}
@@ -603,7 +639,7 @@ module.exports = (_ => {
 			}
 
 			processPrivateChannel (e) {
-				if (e.instance.props.channel) {
+				if (e.instance.props.channel && !this.getPredefinedCategory(e.instance.props.channel.id)) {
 					let category = this.getCategory(e.instance.props.channel.id, "dmCategories");
 					if (category) {
 						if (e.node) {
@@ -612,17 +648,17 @@ module.exports = (_ => {
 							if (!settings.sortInRecentOrder) {
 								e.node.setAttribute("draggable", false);
 								e.node.PinDMsMouseDownListener = event => {
-									if (!BDFDB.BDUtils.isPluginEnabled("PinDMs")) e.node.removeEventListener("mousedown", e.node.PinDMsMouseDownListener);
+									if (!this.started) e.node.removeEventListener("mousedown", e.node.PinDMsMouseDownListener);
 									else {
 										event = event.nativeEvent || event;
-										let mousemove = event2 => {
+										let mouseMove = event2 => {
 											if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 												BDFDB.ListenerUtils.stopEvent(event);
 												draggedChannel = e.instance.props.channel.id;
 												this.updateContainer("dmCategories");
 												let dragPreview = this.createDragPreview(e.node, event2);
-												document.removeEventListener("mousemove", mousemove);
-												document.removeEventListener("mouseup", mouseup);
+												document.removeEventListener("mousemove", mouseMove);
+												document.removeEventListener("mouseup", mouseUp);
 												let dragging = event3 => {
 													this.updateDragPreview(dragPreview, event3);
 													let maybeHoveredChannel = null;
@@ -655,12 +691,12 @@ module.exports = (_ => {
 												document.addEventListener("mouseup", releasing);
 											}
 										};
-										let mouseup = _ => {
-											document.removeEventListener("mousemove", mousemove);
-											document.removeEventListener("mouseup", mouseup);
+										let mouseUp = _ => {
+											document.removeEventListener("mousemove", mouseMove);
+											document.removeEventListener("mouseup", mouseUp);
 										};
-										document.addEventListener("mousemove", mousemove);
-										document.addEventListener("mouseup", mouseup);
+										document.addEventListener("mousemove", mouseMove);
+										document.addEventListener("mouseup", mouseUp);
 									}
 								};
 								e.node.addEventListener("mousedown", e.node.PinDMsMouseDownListener);
@@ -763,8 +799,8 @@ module.exports = (_ => {
 				return categories[id] ? this.generateID() : id;
 			}
 			
-			filterDMs (dms) {
-				return dms.filter(id => BDFDB.LibraryModules.ChannelStore.getChannel(id));
+			filterDMs (dms, removePredefined) {
+				return dms.filter(id => BDFDB.LibraryModules.ChannelStore.getChannel(id) && !(removePredefined && this.getPredefinedCategory(id)));
 			}
 
 			addToCategory (id, category, type) {
@@ -790,6 +826,16 @@ module.exports = (_ => {
 				for (let catId in categories) if (categories[catId].dms.includes(id)) return categories[catId];
 				return null;
 			}
+			
+			getPredefinedCategory (id) {
+				if (!id) return "";
+				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(id);
+				if (!channel) return "";
+				else if (preCategories.friends && channel.isDM() && BDFDB.LibraryModules.FriendUtils.isFriend(channel.recipients[0])) return "friends";
+				else if (preCategories.blocked && channel.isDM() && BDFDB.LibraryModules.FriendUtils.isBlocked(channel.recipients[0])) return "blocked";
+				else if (preCategories.groups && channel.isGroupDM()) return "groups";
+				return "";
+			}
 
 			sortAndUpdateCategories (type, reverse) {
 				let data = BDFDB.ObjectUtils.sort(BDFDB.DataUtils.load(this, type), "pos"), newData = {};
@@ -805,6 +851,24 @@ module.exports = (_ => {
 				};
 				for (let id in data) sort(id);
 				if (!BDFDB.equals(data, newData)) BDFDB.DataUtils.save(newData, this, type);
+				if (type == "dmCategories" && Object.keys(preCategories).some(type => preCategories[type])) {
+					let predefinedDMs = {};
+					for (let channelId of BDFDB.LibraryModules.DirectMessageStore.getPrivateChannelIds()) {
+						let category = this.getPredefinedCategory(channelId);
+						if (category) {
+							if (!predefinedDMs[category]) predefinedDMs[category] = [];
+							predefinedDMs[category].push(channelId);
+						}
+					}
+					for (let type in predefinedDMs) if (predefinedDMs[type].length) sorted.unshift({
+						predefined: true,
+						collapsed: preCollapseStates[type],
+						color: null,
+						dms: predefinedDMs[type],
+						id: type,
+						name: BDFDB.LanguageUtils.LanguageStrings[this.defaults.preCategories[type].description]
+					});
+				}
 				return (reverse ? sorted.reverse() : sorted).filter(n => n);
 			}
 			
@@ -943,6 +1007,8 @@ module.exports = (_ => {
 					case "hr":		//croatian
 						return {
 							context_pindm_text:				"Prikljucite Izravnu Poruku",
+							context_disablepredefined_text:	"Onemogući unaprijed definiranu kategoriju",
+							context_inpredefined_text:		"Prikvačeno u unaprijed definiranoj kategoriji",
 							context_pinchannel_text:		"Priložite popisu kanala",
 							context_unpinchannel_text:		"Ukloni s popisa kanala",
 							context_addtonewcategory_text:	"Dodavanje u novu kategoriju",
@@ -954,6 +1020,8 @@ module.exports = (_ => {
 					case "da":		//danish
 						return {
 							context_pindm_text:				"Fastgør PB",
+							context_disablepredefined_text:	"Deaktiver foruddefineret kategori",
+							context_inpredefined_text:		"Fastgjort i foruddefineret kategori",
 							context_pinchannel_text:		"Vedhæft til kanalliste",
 							context_unpinchannel_text:		"Fjern fra kanalliste",
 							context_addtonewcategory_text:	"Føj til ny kategori",
@@ -965,6 +1033,8 @@ module.exports = (_ => {
 					case "de":		//german
 						return {
 							context_pindm_text:				"Direktnachricht anheften",
+							context_disablepredefined_text:	"Vordefinierte Kategorie deaktivieren",
+							context_inpredefined_text:		"In vordefinierter Kategorie angeheftet",
 							context_pinchannel_text:		"An Kanalliste anheften",
 							context_unpinchannel_text:		"Von Kanalliste loslösen",
 							context_addtonewcategory_text:	"Zur neuen Kategorie hinzufügen",
@@ -976,6 +1046,8 @@ module.exports = (_ => {
 					case "es":		//spanish
 						return {
 							context_pindm_text:				"Anclar MD",
+							context_disablepredefined_text:	"Deshabilitar categoría predefinida",
+							context_inpredefined_text:		"Anclado en una categoría predefinida",
 							context_pinchannel_text:		"Adjuntar a la lista de canales",
 							context_unpinchannel_text:		"Deshazte de la lista de canales",
 							context_addtonewcategory_text:	"Agregar a nueva categoría",
@@ -987,6 +1059,8 @@ module.exports = (_ => {
 					case "fr":		//french
 						return {
 							context_pindm_text:				"Épingler MP",
+							context_disablepredefined_text:	"Désactiver la catégorie prédéfinie",
+							context_inpredefined_text:		"Épinglé dans une catégorie prédéfinie",
 							context_pinchannel_text:		"Épingler à la liste des salons",
 							context_unpinchannel_text:		"Détacher de la liste des salons",
 							context_addtonewcategory_text:	"Ajouter à une nouvelle catégorie",
@@ -998,6 +1072,8 @@ module.exports = (_ => {
 					case "it":		//italian
 						return {
 							context_pindm_text:				"Fissa il messaggio diretto",
+							context_disablepredefined_text:	"Disabilita la categoria predefinita",
+							context_inpredefined_text:		"Bloccato in una categoria predefinita",
 							context_pinchannel_text:		"Allega alla lista dei canali",
 							context_unpinchannel_text:		"Rimuovi dalla lista dei canali",
 							context_addtonewcategory_text:	"Aggiungi a nuova categoria",
@@ -1009,6 +1085,8 @@ module.exports = (_ => {
 					case "nl":		//dutch
 						return {
 							context_pindm_text:				"PB pinnen",
+							context_disablepredefined_text:	"Schakel voorgedefinieerde categorie uit",
+							context_inpredefined_text:		"Vastgemaakt in vooraf gedefinieerde categorie",
 							context_pinchannel_text:		"Pin naar de kanalenlijst",
 							context_unpinchannel_text:		"Losmaken van kanalenlijst",
 							context_addtonewcategory_text:	"Toevoegen aan nieuwe categorie",
@@ -1020,6 +1098,8 @@ module.exports = (_ => {
 					case "no":		//norwegian
 						return {
 							context_pindm_text:				"Fest DM",
+							context_disablepredefined_text:	"Deaktiver forhåndsdefinert kategori",
+							context_inpredefined_text:		"Festet i forhåndsdefinert kategori",
 							context_pinchannel_text:		"Fest på kanalliste",
 							context_unpinchannel_text:		"Fjern fra kanalliste",
 							context_addtonewcategory_text:	"Legg til i ny kategori",
@@ -1031,6 +1111,8 @@ module.exports = (_ => {
 					case "pl":		//polish
 						return {
 							context_pindm_text:				"Przypnij PW",
+							context_disablepredefined_text:	"Wyłącz wstępnie zdefiniowaną kategorię",
+							context_inpredefined_text:		"Przypięty w predefiniowanej kategorii",
 							context_pinchannel_text:		"Dołącz do listy kanałów",
 							context_unpinchannel_text:		"Usuń z listy kanałów",
 							context_addtonewcategory_text:	"Dodaj do nowej kategorii",
@@ -1042,6 +1124,8 @@ module.exports = (_ => {
 					case "pt-BR":	//portuguese (brazil)
 						return {
 							context_pindm_text:				"Fixar MD",
+							context_disablepredefined_text:	"Desativar categoria predefinida",
+							context_inpredefined_text:		"Fixado na categoria predefinida",
 							context_pinchannel_text:		"Anexar à lista de canais",
 							context_unpinchannel_text:		"Remover da lista de canais",
 							context_addtonewcategory_text:	"Adicionar à nova categoria",
@@ -1053,6 +1137,8 @@ module.exports = (_ => {
 					case "fi":		//finnish
 						return {
 							context_pindm_text:				"Kiinnitä yksityisviestit",
+							context_disablepredefined_text:	"Poista ennalta määritetty luokka käytöstä",
+							context_inpredefined_text:		"Kiinnitetty ennalta määritettyyn luokkaan",
 							context_pinchannel_text:		"Liitä kanavaluetteloon",
 							context_unpinchannel_text:		"Poista kanavaluettelosta",
 							context_addtonewcategory_text:	"Lisää uuteen luokkaan",
@@ -1064,6 +1150,8 @@ module.exports = (_ => {
 					case "sv":		//swedish
 						return {
 							context_pindm_text:				"Fäst DM",
+							context_disablepredefined_text:	"Inaktivera fördefinierad kategori",
+							context_inpredefined_text:		"Fäst i fördefinierad kategori",
 							context_pinchannel_text:		"Fäst till kanallista",
 							context_unpinchannel_text:		"Ta bort från kanallistan",
 							context_addtonewcategory_text:	"Lägg till i ny kategori",
@@ -1075,6 +1163,8 @@ module.exports = (_ => {
 					case "tr":		//turkish
 						return {
 							context_pindm_text:				"DM'yi Sabitle",
+							context_disablepredefined_text:	"Önceden tanımlanmış kategoriyi devre dışı bırakın",
+							context_inpredefined_text:		"Önceden tanımlanmış kategoriye sabitlendi",
 							context_pinchannel_text:		"Kanal listesine ekle",
 							context_unpinchannel_text:		"Kanal listesinden kaldır",
 							context_addtonewcategory_text:	"Yeni kategoriye ekle",
@@ -1086,6 +1176,8 @@ module.exports = (_ => {
 					case "cs":		//czech
 						return {
 							context_pindm_text:				"Připnout PZ",
+							context_disablepredefined_text:	"Zakázat předdefinovanou kategorii",
+							context_inpredefined_text:		"Připnuto v předdefinované kategorii",
 							context_pinchannel_text:		"Připojení k seznamu kanálů",
 							context_unpinchannel_text:		"Odstranit ze seznamu kanálů",
 							context_addtonewcategory_text:	"Přidat do nové kategorie",
@@ -1097,6 +1189,8 @@ module.exports = (_ => {
 					case "bg":		//bulgarian
 						return {
 							context_pindm_text:				"Закачени ДС",
+							context_disablepredefined_text:	"Деактивирайте предварително дефинираната категория",
+							context_inpredefined_text:		"Фиксирано в предварително дефинирана категория",
 							context_pinchannel_text:		"Прикачете към списъка с канали",
 							context_unpinchannel_text:		"Премахване от списъка с канали",
 							context_addtonewcategory_text:	"Добавяне към нова категория",
@@ -1108,6 +1202,8 @@ module.exports = (_ => {
 					case "ru":		//russian
 						return {
 							context_pindm_text:				"Закрепить ЛС",
+							context_disablepredefined_text:	"Отключить предопределенную категорию",
+							context_inpredefined_text:		"Закреплено в предопределенной категории",
 							context_pinchannel_text:		"Прикрепить к списку каналов",
 							context_unpinchannel_text:		"Удалить из списка каналов",
 							context_addtonewcategory_text:	"Добавить в новую категорию",
@@ -1119,6 +1215,8 @@ module.exports = (_ => {
 					case "uk":		//ukrainian
 						return {
 							context_pindm_text:				"Закріпити ОП",
+							context_disablepredefined_text:	"Вимкнути заздалегідь визначену категорію",
+							context_inpredefined_text:		"Закріплено в наперед визначеній категорії",
 							context_pinchannel_text:		"Додайте до списку каналів",
 							context_unpinchannel_text:		"Видалити зі списку каналів",
 							context_addtonewcategory_text:	"Додати до нової категорії",
@@ -1130,6 +1228,8 @@ module.exports = (_ => {
 					case "ja":		//japanese
 						return {
 							context_pindm_text:				"DMピン",
+							context_disablepredefined_text:	"事前定義されたカテゴリを無効にする",
+							context_inpredefined_text:		"事前定義されたカテゴリに固定",
 							context_pinchannel_text:		"チャンネルリストに添付",
 							context_unpinchannel_text:		"チャンネルリストから削除",
 							context_addtonewcategory_text:	"新しいカテゴリに追加",
@@ -1141,6 +1241,8 @@ module.exports = (_ => {
 					case "zh-TW":	//chinese (traditional)
 						return {
 							context_pindm_text:				"引腳直接留言",
+							context_disablepredefined_text:	"禁用預定義類別",
+							context_inpredefined_text:		"固定在預定義的類別中",
 							context_pinchannel_text:		"附加到頻道列表",
 							context_unpinchannel_text:		"從頻道列表中刪除",
 							context_addtonewcategory_text:	"添加到新類別",
@@ -1152,6 +1254,8 @@ module.exports = (_ => {
 					case "ko":		//korean
 						return {
 							context_pindm_text:				"비공개 메시지 고정",
+							context_disablepredefined_text:	"사전 정의 된 카테고리 비활성화",
+							context_inpredefined_text:		"사전 정의 된 카테고리에 고정됨",
 							context_pinchannel_text:		"채널 목록에 첨부",
 							context_unpinchannel_text:		"채널 목록에서 삭제",
 							context_addtonewcategory_text:	"새 카테고리에 추가",
@@ -1163,6 +1267,8 @@ module.exports = (_ => {
 					default:		//default: english
 						return {
 							context_pindm_text:				"Pin DM",
+							context_disablepredefined_text:	"Disable predefined Category",
+							context_inpredefined_text:		"Pinned in predefined Category",
 							context_pinchannel_text:		"Pin to Channellist",
 							context_unpinchannel_text:		"Unpin from Channellist",
 							context_addtonewcategory_text:	"Add to new Category",
