@@ -1539,7 +1539,7 @@ module.exports = (_ => {
 							modal_username_text:				"Nom local d'utilisateur",
 							modal_usertag_text:					"Étiquette",
 							modal_useravatar_text:				"Icône",
-							modal_tabheader1_text:				"Serveur",
+							modal_tabheader1_text:				"Utilisateur",
 							modal_tabheader2_text:				"Couleur du nom",
 							modal_tabheader3_text:				"Couleur de l'étiquette",
 							modal_tabheader4_text:				"Couleur du message",
