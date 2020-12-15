@@ -6386,11 +6386,10 @@ module.exports = (_ => {
 					}
 				};
 				
-				InternalComponents.LibraryComponents.SettingsPanelInner = reactInitialized && class BDFDB_SettingsPanelInner extends LibraryModules.React.Component {
+				InternalComponents.LibraryComponents.SettingsPanelList = InternalComponents.LibraryComponents.SettingsPanelInner = reactInitialized && class BDFDB_SettingsPanelInner extends LibraryModules.React.Component {
 					render() {
-						return this.props.children ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-							className: this.props.className,
-							direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
+						return this.props.children ? BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.settingspanellistwrapper, this.props.mini && BDFDB.disCN.settingspanellistwrappermini),
 							children: [
 								this.props.dividerTop ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
 									className: this.props.mini ? BDFDB.disCN.marginbottom4 : BDFDB.disCN.marginbottom8
@@ -6400,9 +6399,8 @@ module.exports = (_ => {
 									tag: InternalComponents.LibraryComponents.FormComponents.FormTitle.Tags.H3,
 									children: this.props.title
 								}) : null,
-								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.settingspanellist,
-									direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
 									children: this.props.children
 								}),
 								this.props.dividerBottom ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {

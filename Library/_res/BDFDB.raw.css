@@ -37,8 +37,17 @@ img:not([src]), img[src=""], img[src="null"] {
 	to {opacity: 0.1;}
 }
 
+[REPLACE_CLASS_settingspanellistwrapper] {
+	margin-bottom: 8px;
+}
+[REPLACE_CLASS_settingspanellistwrapper][REPLACE_CLASS_settingspanellistwrappermini] {
+	margin-bottom: 4px;
+}
 [REPLACE_CLASS_settingspanellist] {
 	padding-left: 15px;
+}
+[REPLACE_CLASS_settingspanellistwrapper][REPLACE_CLASS_settingspanellistwrappermini] [REPLACE_CLASS_settingspanellist] {
+	padding-left: 10px;
 }
 
 [REPLACE_CLASS_settingsrowcontainer][REPLACE_CLASS_marginreset] {
