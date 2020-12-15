@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveNicknames",
 			"author": "DevilBro",
-			"version": "1.3.4",
+			"version": "1.3.5",
 			"description": "Replace all nicknames with the actual accountnames"
 		},
 		"changeLog": {
-			"improved": {
-				"Reactions": "Removes the nicknames in the tooltip of a reaction in the messages window"
+			"fixed": {
+				"Replies": "Works in the reply header"
 			}
 		}
 	};
@@ -87,10 +87,11 @@ module.exports = (_ => {
 					before: {
 						AutocompleteUserResult: "render",
 						VoiceUser: "render",
-						MemberListItem: "render",
 						Message: "default",
 						MessageUsername: "default",
 						MessageContent: "type",
+						ChannelReply: "default",
+						MemberListItem: "render"
 					},
 					after: {
 						TypingUsers: "render",
@@ -152,13 +153,6 @@ module.exports = (_ => {
 
 			processVoiceUser (e) {
 				if (e.instance.props.user && e.instance.props.nick && settings.changeInVoiceChat) {
-					let newName = this.getNewName(e.instance.props.user);
-					if (newName) e.instance.props.nick = newName;
-				}
-			}
-
-			processMemberListItem (e) {
-				if (e.instance.props.user && e.instance.props.nick && settings.changeInMemberList) {
 					let newName = this.getNewName(e.instance.props.user);
 					if (newName) e.instance.props.nick = newName;
 				}
@@ -250,6 +244,20 @@ module.exports = (_ => {
 							return children;
 						};
 					}
+				}
+			}
+
+			processChannelReply (e) {
+				if (e.instance.props.reply && e.instance.props.reply.message && settings.changeInChatWindow) {
+					let newName = this.getNewName(e.instance.props.reply.message.author);
+					if (newName) e.instance.props.reply.message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.reply.message, {nick: newName}));
+				}
+			}
+
+			processMemberListItem (e) {
+				if (e.instance.props.user && e.instance.props.nick && settings.changeInMemberList) {
+					let newName = this.getNewName(e.instance.props.user);
+					if (newName) e.instance.props.nick = newName;
 				}
 			}
 
