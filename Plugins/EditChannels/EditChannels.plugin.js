@@ -621,7 +621,7 @@ module.exports = (_ => {
 							context_localchannelsettings_text:		"Ajustes local de canal",
 							submenu_channelsettings_text:			"Cambiar ajustes",
 							submenu_resetsettings_text:				"Restablecer canal",
-							modal_header_text:						"Ajustes local de canal",
+							modal_header_text:						"Ajustes locales de canal",
 							modal_channelname_text:					"Nombre local del canal",
 							modal_colorpicker1_text:				"Color local del canal",
 							modal_inheritcolor_text:				"Heredar color a sub-canales"
@@ -631,7 +631,7 @@ module.exports = (_ => {
 							context_localchannelsettings_text:		"Paramètres locale du salon",
 							submenu_channelsettings_text:			"Modifier les paramètres",
 							submenu_resetsettings_text:				"Réinitialiser le salon",
-							modal_header_text:						"Paramètres locale du salon",
+							modal_header_text:						"Paramètres locaux du salon",
 							modal_channelname_text:					"Nom local du salon",
 							modal_colorpicker1_text:				"Couleur locale du salon",
 							modal_inheritcolor_text:				"Hériter de la couleur sur les sous-salons"
@@ -641,7 +641,7 @@ module.exports = (_ => {
 							context_localchannelsettings_text:		"Impostazioni locale canale",
 							submenu_channelsettings_text:			"Cambia impostazioni",
 							submenu_resetsettings_text:				"Ripristina canale",
-							modal_header_text:						"Impostazioni locale canale",
+							modal_header_text:						"Impostazioni locali canale",
 							modal_channelname_text:					"Nome locale canale",
 							modal_colorpicker1_text:				"Colore locale canale",
 							modal_inheritcolor_text:				"Eredita colore per sub-canali"
