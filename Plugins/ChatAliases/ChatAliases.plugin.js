@@ -248,7 +248,6 @@ module.exports = (_ => {
 								value: amounts[key]
 							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 								title: "Automatically replace aliases in:",
-								last: true,
 								children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 									type: "Switch",
 									plugin: this,

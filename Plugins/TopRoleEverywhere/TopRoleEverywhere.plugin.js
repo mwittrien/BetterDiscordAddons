@@ -144,8 +144,6 @@ module.exports = (_ => {
 				
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 					title: "Add Role Tags in:",
-					first: settingsItems.length == 0,
-					last: true,
 					children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 						type: "Switch",
 						plugin: this,

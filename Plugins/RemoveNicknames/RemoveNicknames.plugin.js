@@ -122,8 +122,6 @@ module.exports = (_ => {
 				}));
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 					title: "Remove Nicknames in:",
-					first: settingsItems.length == 0,
-					last: true,
 					children: innerItems
 				}));
 				

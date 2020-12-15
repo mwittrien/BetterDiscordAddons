@@ -168,8 +168,6 @@ module.exports = (_ => {
 				
 				if (ownDictionary.length) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 					title: "Your own Dictionary:",
-					first: settingsItems.length == 0,
-					last: true,
 					children: ownDictionary.map(word => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
 						children: word.toLowerCase(),
 						onRemove: _ => {

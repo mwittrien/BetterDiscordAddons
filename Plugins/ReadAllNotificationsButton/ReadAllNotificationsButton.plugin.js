@@ -139,8 +139,6 @@ module.exports = (_ => {
 						value: settings[key]
 					})).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 						title: "When left clicking the 'read all' button mark following Elements as read:",
-						first: false,
-						last: true,
 						children: Object.keys(settings).filter(key => this.defaults.settings[key].inner).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 							type: "Switch",
 							plugin: this,

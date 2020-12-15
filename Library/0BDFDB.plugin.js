@@ -6392,8 +6392,8 @@ module.exports = (_ => {
 							className: this.props.className,
 							direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
 							children: [
-								!this.props.first ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
-									className: BDFDB.disCN.marginbottom8
+								this.props.dividerTop ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
+									className: this.props.mini ? BDFDB.disCN.marginbottom4 : BDFDB.disCN.marginbottom8
 								}) : null,
 								typeof this.props.title == "string" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormTitle, {
 									className: BDFDB.disCN.marginbottom4,
@@ -6405,8 +6405,8 @@ module.exports = (_ => {
 									direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
 									children: this.props.children
 								}),
-								!this.props.last ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
-									className: BDFDB.disCN.marginbottom20
+								this.props.dividerBottom ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
+									className: this.props.mini ? BDFDB.disCN.margintop4 : BDFDB.disCN.margintop8
 								}) : null
 							]
 						}) : null;

@@ -187,7 +187,6 @@ module.exports = (_ => {
 				}));
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 					title: "Sort pinned DMs in the recent message order instead of the pinned at order in:",
-					first: settingsItems.length == 0,
 					children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 						type: "Switch",
 						plugin: this,

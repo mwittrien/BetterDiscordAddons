@@ -179,7 +179,6 @@ module.exports = (_ => {
 				
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 					title: "Remove Elements:",
-					first: settingsItems.length == 0,
 					children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 						type: "Switch",
 						plugin: this,

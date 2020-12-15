@@ -104,8 +104,6 @@ module.exports = (_ => {
 				}));
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 					title: "Search Engines:",
-					first: settingsItems.length == 0,
-					last: true,
 					children: Object.keys(engines).filter(n => n && n != "_all").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 						type: "Switch",
 						plugin: this,

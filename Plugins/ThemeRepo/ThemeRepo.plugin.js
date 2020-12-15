@@ -872,8 +872,6 @@ module.exports = (_ => {
 						customList.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 							title: "Custom Theme List:",
 							className: BDFDB.disCNS.margintop8 + BDFDB.disCN.marginbottom20,
-							first: true,
-							last: true,
 							children: customList.map(url => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
 								children: url,
 								onRemove: _ => {

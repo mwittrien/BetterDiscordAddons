@@ -365,8 +365,6 @@ module.exports = (_ => {
 				}));
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 					title: "Display Badges:",
-					first: settingsItems.length == 0,
-					last: true,
 					children: innerItems
 				}));
 				
