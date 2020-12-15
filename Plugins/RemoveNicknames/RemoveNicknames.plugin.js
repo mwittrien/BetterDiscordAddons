@@ -120,7 +120,7 @@ module.exports = (_ => {
 					label: this.defaults.settings[key].description,
 					value: settings[key]
 				}));
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 					title: "Remove Nicknames in:",
 					children: innerItems
 				}));

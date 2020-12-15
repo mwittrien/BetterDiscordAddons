@@ -578,7 +578,7 @@ module.exports = (_ => {
 								]
 							})
 						}),
-						customList.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+						customList.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 							title: "Custom Plugin List:",
 							className: BDFDB.disCNS.margintop8 + BDFDB.disCN.marginbottom20,
 							children: customList.map(url => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {

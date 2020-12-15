@@ -363,7 +363,7 @@ module.exports = (_ => {
 					value: indicators[flag],
 					labelchildren: this.createSettingsBadges(flag)
 				}));
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 					title: "Display Badges:",
 					children: innerItems
 				}));

@@ -246,7 +246,7 @@ module.exports = (_ => {
 								min: this.defaults.amounts[key].min,
 								max: this.defaults.amounts[key].max,
 								value: amounts[key]
-							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 								title: "Automatically replace aliases in:",
 								children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 									type: "Switch",
