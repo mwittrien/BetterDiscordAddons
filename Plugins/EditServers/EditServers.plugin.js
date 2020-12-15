@@ -755,7 +755,7 @@ module.exports = (_ => {
 							context_localserversettings_text:	"Ajustes local de servidor",
 							submenu_serversettings_text:		"Cambiar ajustes",
 							submenu_resetsettings_text:			"Restablecer servidor",
-							modal_header_text:					"Ajustes local de servidor",
+							modal_header_text:					"Ajustes locales de servidor",
 							modal_guildname_text:				"Nombre local del servidor",
 							modal_guildacronym_text:			"Acrónimo local del servidor",
 							modal_ignorecustomname_text:		"Use el nombre del servidor original para el acrónimo del servidor",
@@ -772,10 +772,10 @@ module.exports = (_ => {
 						};
 					case "fr":		//french
 						return {
-							context_localserversettings_text:	"Paramètres locale du serveur",
+							context_localserversettings_text:	"Paramètres locaux du serveur",
 							submenu_serversettings_text:		"Modifier les paramètres",
 							submenu_resetsettings_text:			"Réinitialiser le serveur",
-							modal_header_text:					"Paramètres locale du serveur",
+							modal_header_text:					"Paramètres locaux du serveur",
 							modal_guildname_text:				"Nom local du serveur",
 							modal_guildacronym_text:			"Acronyme local de serveur",
 							modal_ignorecustomname_text:		"Utilisez le nom de serveur d'origine pour l'acronyme de serveur",
@@ -795,7 +795,7 @@ module.exports = (_ => {
 							context_localserversettings_text:	"Impostazioni locale server",
 							submenu_serversettings_text:		"Cambia impostazioni",
 							submenu_resetsettings_text:			"Ripristina server",
-							modal_header_text:					"Impostazioni locale server",
+							modal_header_text:					"Impostazioni locali server",
 							modal_guildname_text:				"Nome locale server",
 							modal_guildacronym_text:			"Acronimo locale server",
 							modal_ignorecustomname_text:		"Utilizzare il nome del server originale per l'acronimo del server",
