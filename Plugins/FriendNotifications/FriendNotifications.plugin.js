@@ -201,7 +201,7 @@ module.exports = (_ => {
 							"Click on an Icon to toggle",
 							BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.disCN._friendnotificationstypelabel,
-								style: {backgroundColor: BDFDB.DiscordConstants.Colors.BRAND},
+								style: {backgroundColor: "var(--bdfdb-blurple)"},
 								children: "Toast"
 							}),
 							"Notifications for that User: "

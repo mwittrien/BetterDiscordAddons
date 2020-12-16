@@ -2507,14 +2507,14 @@ module.exports = (_ => {
 					let activity = BDFDB.UserUtils.getActivity(id);
 					return activity && activity.type == BDFDB.DiscordConstants.ActivityTypes.STREAMING ? "streaming" : LibraryModules.StatusMetaUtils.getStatus(id);
 				};
-				BDFDB.UserUtils.getStatusColor = function (status) {
+				BDFDB.UserUtils.getStatusColor = function (status, useColor) {
 					status = typeof status == "string" ? status.toLowerCase() : null;
 					switch (status) {
 						case "online": return BDFDB.DiscordConstants.Colors.STATUS_GREEN;
 						case "mobile": return BDFDB.DiscordConstants.Colors.STATUS_GREEN;
 						case "idle": return BDFDB.DiscordConstants.Colors.STATUS_YELLOW;
 						case "dnd": return BDFDB.DiscordConstants.Colors.STATUS_RED;
-						case "playing": return BDFDB.DiscordConstants.Colors.BRAND;
+						case "playing": return useColor ? BDFDB.DiscordConstants.Colors.BRAND : "var(--bdfdb-blurple)";
 						case "listening": return BDFDB.DiscordConstants.Colors.SPOTIFY;
 						case "streaming": return BDFDB.DiscordConstants.Colors.TWITCH;
 						default: return BDFDB.DiscordConstants.Colors.STATUS_GREY;
@@ -5977,7 +5977,7 @@ module.exports = (_ => {
 							},
 							children: this.props.items.map(item => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Badges.TextBadge, {
 								className: BDFDB.disCN.inputlistitem,
-								color: BDFDB.DiscordConstants.Colors.BRAND,
+								color: "var(--bdfdb-blurple)",
 								style: {borderRadius: "3px"},
 								text: [
 									item,

@@ -235,7 +235,7 @@ module.exports = (_ => {
 				if (e.instance.props.folderId) {
 					this.removeTooltip(e.returnvalue);
 					this.removeMask(e.returnvalue);
-					let folderColor = BDFDB.ColorUtils.convert(e.instance.props.folderColor, "HEX") || BDFDB.DiscordConstants.Colors.BRAND;
+					let folderColor = BDFDB.ColorUtils.convert(e.instance.props.folderColor, "HEX") || "var(--bdfdb-blurple)";
 					let folderSize = Math.round(amounts.serverElementHeight * 0.6);
 					this.addElementName(e.returnvalue, e.instance.props.folderName || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER, {
 						wrap: true,

@@ -242,7 +242,7 @@ module.exports = (_ => {
 														className: BDFDB.disCN.guildfoldericonwrapperexpanded,
 														children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 															name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
-															color: BDFDB.ColorUtils.convert(folder.folderColor, "RGB") || BDFDB.DiscordConstants.Colors.BRAND
+															color: BDFDB.ColorUtils.convert(folder.folderColor, "RGB") || "var(--bdfdb-blurple)"
 														})
 													})
 												})

@@ -725,7 +725,7 @@ module.exports = (_ => {
 						children[index].props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.getBadgeWidthForValue(e.instance.props.guildIds.length);
 						children[index].props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
 							count: e.instance.props.guildIds.length,
-							style: {backgroundColor: BDFDB.DiscordConstants.Colors.BRAND}
+							style: {backgroundColor: "var(--bdfdb-blurple)"}
 						});
 					}
 				}
