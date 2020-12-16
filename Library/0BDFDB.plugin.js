@@ -7343,9 +7343,20 @@ module.exports = (_ => {
 				};
 				
 				let MessageHeaderExport = BDFDB.ModuleUtils.findByProperties("MessageTimestamp", false);
-				if (MessageHeaderExport) InternalBDFDB.processMessage = function (e) {
-					if (BDFDB.ObjectUtils.get(e, "instance.props.childrenHeader.type.type.name") && BDFDB.ObjectUtils.get(e, "instance.props.childrenHeader.props.message")) {
+				InternalBDFDB.processMessage = function (e) {
+					if (MessageHeaderExport && BDFDB.ObjectUtils.get(e, "instance.props.childrenHeader.type.type.name") && BDFDB.ObjectUtils.get(e, "instance.props.childrenHeader.props.message")) {
 						e.instance.props.childrenHeader.type = MessageHeaderExport.exports.default;
+					}
+					if (e.returnvalue && e.returnvalue.props && e.returnvalue.props.children && e.returnvalue.props.children.props) {
+						let message;
+						for (let key in e.instance.props) {
+							let data = BDFDB.ObjectUtils.get(e.instance.props[key], "props.message");
+							if (data) {
+								message = data;
+								break;
+							}
+						}
+						if (message) e.returnvalue.props.children.props["user_by_BDFDB"] = message.author.id;
 					}
 				};
 
