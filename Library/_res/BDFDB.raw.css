@@ -1,5 +1,13 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/SupporterBadge.css);
 
+:root {
+	--bdfdb-blurple: rgb(114, 137, 218);
+	--bdfdb-red: rgb(240, 71, 71);
+	--bdfdb-yellow: rgb(250, 166, 26);
+	--bdfdb-green: rgb(67, 181, 129);
+	--bdfdb-grey: rgb(116, 127, 141);
+}
+
 #pluginNotice[class=" "], #pluginNotice[class=""] {
 	z-index: 999;
 	background: black;
@@ -1116,7 +1124,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	color: #FFF;
 }
 .toast.toast-brand {
-	background-color: #7289DA;
+	background-color: var(--bdfdb-blurple);
 	color: #FFF;
 }
 .toast.toast-brand.icon {
