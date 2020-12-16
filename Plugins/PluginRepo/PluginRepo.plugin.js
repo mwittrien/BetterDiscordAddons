@@ -722,7 +722,7 @@ module.exports = (_ => {
 							}
 						}, 1200000), amount: loading.amount+1};
 						
-						let loadingIcon = BDFDB.DOMUtils.create(pluginRepoIcon.replace(/COLOR_1/gi, "#7289da").replace(/COLOR_2/gi, "#72767d"));
+						let loadingIcon = BDFDB.DOMUtils.create(pluginRepoIcon.replace(/COLOR_1/gi, "var(--bdfdb-blurple)").replace(/COLOR_2/gi, "#72767d"));
 						BDFDB.DOMUtils.addClass(loadingIcon, "pluginrepo-loadingicon");
 						loadingIcon.addEventListener("mouseenter", _ => {
 							BDFDB.TooltipUtils.create(loadingIcon, this.getLoadingTooltipText(), {
@@ -757,7 +757,7 @@ module.exports = (_ => {
 											if (oldBarButton) oldBarButton.click();
 											let bar = BDFDB.NotificationUtils.notice(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check: `, {
 												type: "danger",
-												btn: "PluginRepo",#7289da #72767d
+												btn: "PluginRepo",
 												selector: "pluginrepo-notice pluginrepo-outdate-notice",
 												customicon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
 											});

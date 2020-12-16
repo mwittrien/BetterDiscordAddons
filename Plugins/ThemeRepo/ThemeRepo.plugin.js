@@ -1038,7 +1038,7 @@ module.exports = (_ => {
 							}
 						}, 1200000), amount: loading.amount+1};
 					
-						let loadingIcon = BDFDB.DOMUtils.create(themeRepoIcon.replace(/COLOR_1/gi, "#7289da").replace(/COLOR_2/gi, "#72767d"));
+						let loadingIcon = BDFDB.DOMUtils.create(themeRepoIcon.replace(/COLOR_1/gi, "var(--bdfdb-blurple)").replace(/COLOR_2/gi, "#72767d"));
 						BDFDB.DOMUtils.addClass(loadingIcon, "themerepo-loadingicon");
 						loadingIcon.addEventListener("mouseenter", _ => {
 							BDFDB.TooltipUtils.create(loadingIcon, this.getLoadingTooltipText(), {
