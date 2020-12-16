@@ -1,4 +1,11 @@
-﻿@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
+﻿/**
+ * @name Test
+ * @description Test
+ * @author DevilBro
+ * @version 1.0.0
+ */
+
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
 
 :root {
 	--daccentcolor: 114,137,218;
@@ -11,10 +18,11 @@
 	--vaccentcolor-hover: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15));
 	--vaccentcolor-active: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
 	
-	--bd-blue: rgb(var(--vaccentcolor));
-	--bd-blue-hover: var(--vaccentcolor-hover);
-	--bd-blue-active: var(--vaccentcolor-active);
-	--blurple: rgb(var(--vaccentcolor));
+	--bdfdb-blurple: rgb(var(--vaccentcolor)) !important;
+	--bd-blue: rgb(var(--vaccentcolor)) !important;
+	--bd-blue-hover: var(--vaccentcolor-hover) !important;
+	--bd-blue-active: var(--vaccentcolor-active) !important;
+	--blurple: rgb(var(--vaccentcolor)) !important;
 }
 .theme-dark, .theme-light {
 	--text-link: rgb(var(--vlinkcolor));
@@ -28,22 +36,21 @@
 
 /* ~~~~		0.		TABLE OF CONTENTS				~~~~ */
 /*
-	1.	INLINE
-	2.	GUILDLIST
-	3.	CHANNELLIST
-	4.	CHAT
+	1.	GUILDLIST
+	2.	CHANNELLIST
+	3.	CHAT
 		1.	MESSAGES
 		2.	AUTOCOMPLETEMENU
 		3.	MEMBERLIST
 		4.	SEARCHPAGE
 		5.	CALL
-	5.	PEOPLES
-	6.	STORE/NITRO
-	7.	LIBRARY
-	8.	DISCOVERY
-	9.	USERSETTINGS
-	10.	GUILDSETTINGS
-	11.	MODALS
+	4.	PEOPLES
+	5.	STORE/NITRO
+	6.	LIBRARY
+	7.	DISCOVERY
+	8.	USERSETTINGS
+	9.	GUILDSETTINGS
+	10.	MODALS
 		1.	USERMODAL
 		2.	GUILDADD/CREATION
 		3.	REGIONSELECTMODAL
@@ -56,13 +63,13 @@
 		10.	DISPATCHERRORMODAL
 		11.	CHANGELOGMODAL
 		12.	SCREENSHAREMODAL
-	12.	POPOUTS
+	11.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
 		3.	EMOJIPICKER
 		4.	PINS/MENTIONS
 		5.	SEARCHPOPOUT
-	13.	GENERAL
+	12.	GENERAL
 		1.	TEXT
 		2.	BUTTONS
 		3.	INPUTS
@@ -72,224 +79,20 @@
 		7.	NOTIFICATIONBAR
 		8.	TOOLTIPS
 		9.	TOASTS
-	14.	BDSUPPORT
-	15.	POWERCORDSUPPORT
-	16.	PLUGINSUPPORT
+	13.	BDSUPPORT
+	14.	POWERCORDSUPPORT
+	15.	PLUGINSUPPORT
 		1.	IMAGEZOOM
 		2.	HIDEUTILS
 		3.	READALLNOTIFICATIONSBUTTON
 		4.	SERVERSEARCH
 		5.	CHANNELTABS
-	17.	THEMESUPPORT
+	16.	THEMESUPPORT
 		1.	THEMEDEVBADGE
 */
 
-/* ~~~~		1.		INLINE							~~~~ */
 
-div[style^="color: rgba(255, 115, 250, 1)"],
-div[style*=" color: rgba(255, 115, 250, 1)"],
-div[style^="color: rgb(255, 115, 250)"],
-div[style*=" color: rgb(255, 115, 250)"],
-div[style^="color: rgba(114, 137, 218, 1)"],
-div[style*=" color: rgba(114, 137, 218, 1)"],
-div[style^="color: rgb(114, 137, 218)"],
-div[style*=" color: rgb(114, 137, 218)"] {
-	color: rgb(var(--vaccentcolor)) !important;
-}
-div[style^="color: rgba(255, 115, 250, 0.9"],
-div[style*=" color: rgba(255, 115, 250, 0.9"],
-div[style^="color: rgba(114, 137, 218, 0.9"],
-div[style*=" color: rgba(114, 137, 218, 0.9"] {
-	color: rgba(var(--vaccentcolor), 0.9) !important;
-}
-div[style^="color: rgba(255, 115, 250, 0.8"],
-div[style*=" color: rgba(255, 115, 250, 0.8"],
-div[style^="color: rgba(114, 137, 218, 0.8"],
-div[style*=" color: rgba(114, 137, 218, 0.8"] {
-	color: rgba(var(--vaccentcolor), 0.8) !important;
-}
-div[style^="color: rgba(255, 115, 250, 0.7"],
-div[style*=" color: rgba(255, 115, 250, 0.7"],
-div[style^="color: rgba(114, 137, 218, 0.7"],
-div[style*=" color: rgba(114, 137, 218, 0.7"] {
-	color: rgba(var(--vaccentcolor), 0.7) !important;
-}
-div[style^="color: rgba(255, 115, 250, 0.6"],
-div[style*=" color: rgba(255, 115, 250, 0.6"],
-div[style^="color: rgba(114, 137, 218, 0.6"],
-div[style*=" color: rgba(114, 137, 218, 0.6"] {
-	color: rgba(var(--vaccentcolor), 0.6) !important;
-}
-div[style^="color: rgba(255, 115, 250, 0.5"],
-div[style*=" color: rgba(255, 115, 250, 0.5"],
-div[style^="color: rgba(114, 137, 218, 0.5"],
-div[style*=" color: rgba(114, 137, 218, 0.5"] {
-	color: rgba(var(--vaccentcolor), 0.5) !important;
-}
-div[style^="color: rgba(255, 115, 250, 0.4"],
-div[style*=" color: rgba(255, 115, 250, 0.4"],
-div[style^="color: rgba(114, 137, 218, 0.4"],
-div[style*=" color: rgba(114, 137, 218, 0.4"] {
-	color: rgba(var(--vaccentcolor), 0.4) !important;
-}
-div[style^="color: rgba(255, 115, 250, 0.3"],
-div[style*=" color: rgba(255, 115, 250, 0.3"],
-div[style^="color: rgba(114, 137, 218, 0.3"],
-div[style*=" color: rgba(114, 137, 218, 0.3"] {
-	color: rgba(var(--vaccentcolor), 0.3) !important;
-}
-div[style^="color: rgba(255, 115, 250, 0.2"],
-div[style*=" color: rgba(255, 115, 250, 0.2"],
-div[style^="color: rgba(114, 137, 218, 0.2"],
-div[style*=" color: rgba(114, 137, 218, 0.2"] {
-	color: rgba(var(--vaccentcolor), 0.2) !important;
-}
-div[style^="color: rgba(255, 115, 250, 0.1"],
-div[style*=" color: rgba(255, 115, 250, 0.1"],
-div[style^="color: rgba(114, 137, 218, 0.1"],
-div[style*=" color: rgba(114, 137, 218, 0.1"] {
-	color: rgba(var(--vaccentcolor), 0.1) !important;
-}
-
-div[style*="background-color: rgba(255, 115, 250, 1)"],
-div[style*="background: rgba(255, 115, 250, 1)"],
-div[style*="background-color: rgb(255, 115, 250)"],
-div[style*="background: rgb(255, 115, 250)"],
-div[style*="background-color: rgba(114, 137, 218, 1)"],
-div[style*="background: rgba(114, 137, 218, 1)"],
-div[style*="background-color: rgb(114, 137, 218)"],
-div[style*="background: rgb(114, 137, 218)"] {
-	background-color: rgb(var(--vaccentcolor)) !important;
-}
-div[style*="background-color: rgba(255, 115, 250, 0.9"],
-div[style*="background: rgba(255, 115, 250, 0.9"],
-div[style*="background-color: rgba(114, 137, 218, 0.9"],
-div[style*="background: rgba(114, 137, 218, 0.9"] {
-	background-color: rgba(var(--vaccentcolor), 0.9) !important;
-}
-div[style*="background-color: rgba(255, 115, 250, 0.8"],
-div[style*="background: rgba(255, 115, 250, 0.8"],
-div[style*="background-color: rgba(114, 137, 218, 0.8"],
-div[style*="background: rgba(114, 137, 218, 0.8"] {
-	background-color: rgba(var(--vaccentcolor), 0.8) !important;
-}
-div[style*="background-color: rgba(255, 115, 250, 0.7"],
-div[style*="background: rgba(255, 115, 250, 0.7"],
-div[style*="background-color: rgba(114, 137, 218, 0.7"],
-div[style*="background: rgba(114, 137, 218, 0.7"] {
-	background-color: rgba(var(--vaccentcolor), 0.7) !important;
-}
-div[style*="background-color: rgba(255, 115, 250, 0.6"],
-div[style*="background: rgba(255, 115, 250, 0.6"],
-div[style*="background-color: rgba(114, 137, 218, 0.6"],
-div[style*="background: rgba(114, 137, 218, 0.6"] {
-	background-color: rgba(var(--vaccentcolor), 0.6) !important;
-}
-div[style*="background-color: rgba(255, 115, 250, 0.5"],
-div[style*="background: rgba(255, 115, 250, 0.5"],
-div[style*="background-color: rgba(114, 137, 218, 0.5"],
-div[style*="background: rgba(114, 137, 218, 0.5"] {
-	background-color: rgba(var(--vaccentcolor), 0.5) !important;
-}
-div[style*="background-color: rgba(255, 115, 250, 0.4"],
-div[style*="background: rgba(255, 115, 250, 0.4"],
-div[style*="background-color: rgba(114, 137, 218, 0.4"],
-div[style*="background: rgba(114, 137, 218, 0.4"] {
-	background-color: rgba(var(--vaccentcolor), 0.4) !important;
-}
-div[style*="background-color: rgba(255, 115, 250, 0.3"],
-div[style*="background: rgba(255, 115, 250, 0.3"],
-div[style*="background-color: rgba(114, 137, 218, 0.3"],
-div[style*="background: rgba(114, 137, 218, 0.3"] {
-	background-color: rgba(var(--vaccentcolor), 0.3) !important;
-}
-div[style*="background-color: rgba(255, 115, 250, 0.2"],
-div[style*="background: rgba(255, 115, 250, 0.2"],
-div[style*="background-color: rgba(114, 137, 218, 0.2"],
-div[style*="background: rgba(114, 137, 218, 0.2"] {
-	background-color: rgba(var(--vaccentcolor), 0.2) !important;
-}
-div[style*="background-color: rgba(255, 115, 250, 0.1"],
-div[style*="background: rgba(255, 115, 250, 0.1"],
-div[style*="background-color: rgba(114, 137, 218, 0.1"],
-div[style*="background: rgba(114, 137, 218, 0.1"] {
-	background-color: rgba(var(--vaccentcolor), 0.1) !important;
-}
-
-div[style*="border-color: rgba(255, 115, 250, 1)"],
-div[style*="border-color: rgb(255, 115, 250)"],
-div[style*="border-color: rgba(114, 137, 218, 1)"],
-div[style*="border-color: rgb(114, 137, 218)"] {
-	border-color: rgb(var(--vaccentcolor)) !important;
-}
-div[style*="border-color: rgba(255, 115, 250, 0.9"],
-div[style*="border-color: rgba(114, 137, 218, 0.9"] {
-	border-color: rgba(var(--vaccentcolor), 0.9) !important;
-}
-div[style*="border-color: rgba(255, 115, 250, 0.8"],
-div[style*="border-color: rgba(114, 137, 218, 0.8"] {
-	border-color: rgba(var(--vaccentcolor), 0.8) !important;
-}
-div[style*="border-color: rgba(255, 115, 250, 0.7"],
-div[style*="border-color: rgba(114, 137, 218, 0.7"] {
-	border-color: rgba(var(--vaccentcolor), 0.7) !important;
-}
-div[style*="border-color: rgba(255, 115, 250, 0.6"],
-div[style*="border-color: rgba(114, 137, 218, 0.6"] {
-	border-color: rgba(var(--vaccentcolor), 0.6) !important;
-}
-div[style*="border-color: rgba(255, 115, 250, 0.5"],
-div[style*="border-color: rgba(114, 137, 218, 0.5"] {
-	border-color: rgba(var(--vaccentcolor), 0.5) !important;
-}
-div[style*="border-color: rgba(255, 115, 250, 0.4"],
-div[style*="border-color: rgba(114, 137, 218, 0.4"] {
-	border-color: rgba(var(--vaccentcolor), 0.4) !important;
-}
-div[style*="border-color: rgba(255, 115, 250, 0.3"],
-div[style*="border-color: rgba(114, 137, 218, 0.3"] {
-	border-color: rgba(var(--vaccentcolor), 0.3) !important;
-}
-div[style*="border-color: rgba(255, 115, 250, 0.2"],
-div[style*="border-color: rgba(114, 137, 218, 0.2"] {
-	border-color: rgba(var(--vaccentcolor), 0.2) !important;
-}
-div[style*="border-color: rgba(255, 115, 250, 0.1"],
-div[style*="border-color: rgba(114, 137, 218, 0.1"] {
-	border-color: rgba(var(--vaccentcolor), 0.1) !important;
-}
-
-svg [style*="stroke: slategray"],
-svg [stroke="slategray"],
-svg [style*="stroke: #7289da"],
-svg [stroke="#7289da"],
-svg [style*="stroke: rgba(255, 115, 250, 1)"],
-svg [style*="stroke: rgb(255, 115, 250)"],
-svg [stroke="rgba(255, 115, 250, 1)"],
-svg [stroke="rgb(255, 115, 250)"],
-svg [style*="stroke: rgba(114, 137, 218, 1)"],
-svg [style*="stroke: rgb(114, 137, 218)"],
-svg [stroke="rgba(114, 137, 218, 1)"],
-svg [stroke="rgb(114, 137, 218)"] {
-	stroke: rgb(var(--vaccentcolor)) !important;
-}
-svg [style*="fill: slategray"],
-svg [fill="slategray"],
-svg [style*="fill: #7289da"],
-svg [fill="#7289da"],
-svg [style*="fill: rgba(255, 115, 250, 1)"],
-svg [style*="fill: rgb(255, 115, 250)"],
-svg [fill="rgba(255, 115, 250, 1)"],
-svg [fill="rgb(255, 115, 250)"],
-svg [style*="fill: rgba(114, 137, 218, 1)"],
-svg [style*="fill: rgb(114, 137, 218)"],
-svg [fill="rgba(114, 137, 218, 1)"],
-svg [fill="rgb(114, 137, 218)"] {
-	fill: rgb(var(--vaccentcolor)) !important;
-}
-
-
-/* ~~~~		2.		GUILDLIST						~~~~ */
+/* ~~~~		1.		GUILDLIST						~~~~ */
 
 .wrapper-1BJsBx.selected-bZ3Lue .childWrapper-anI2G9,		/* home/acronym												*/
 .wrapper-1BJsBx:hover .childWrapper-anI2G9 {
@@ -297,7 +100,7 @@ svg [fill="rgb(114, 137, 218)"] {
 }
 
 
-/* ~~~~		3.		CHANNELLIST						~~~~ */
+/* ~~~~		2.		CHANNELLIST						~~~~ */
 
 
 .background-2uufRq {										/* guildheader			partnerbadge						*/
@@ -343,9 +146,9 @@ svg [fill="rgb(114, 137, 218)"] {
 }
 
 
-/* ~~~~		4.		CHAT							~~~~ */
+/* ~~~~		3.		CHAT							~~~~ */
 
-/* ----		4.1.	MESSAGES						---- */
+/* ----		3.1.	MESSAGES						---- */
 
 .newMessagesBar-265mhP {									/* newmessagesbar											*/
 	background-color: rgb(var(--vaccentcolor));
@@ -505,7 +308,7 @@ svg [fill="rgb(114, 137, 218)"] {
 	-webkit-mask: url(https://discordapp.com/assets/326d79eb53886c88437e99a3754b1cd0.svg) 50% no-repeat;
 }
 
-/* ----		4.2.	AUTOCOMPLETEMENU				---- */
+/* ----		3.2.	AUTOCOMPLETEMENU				---- */
 
 #app-mount .searchSuggestion-2K8OBX:hover {					/* gifpicker			suggestions							*/
 	border-color: rgb(var(--vaccentcolor));
@@ -538,13 +341,13 @@ svg [fill="rgb(114, 137, 218)"] {
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		4.3.	MEMBERLIST						---- */
+/* ----		3.3.	MEMBERLIST						---- */
 
 .premiumIcon-1rDbWQ {
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		4.4.	SEARCHPAGE						---- */
+/* ----		3.4.	SEARCHPAGE						---- */
 
 .noResultsImage-3Y0eCI.alt-3EpRdH {
 	display: flex;
@@ -564,7 +367,7 @@ svg [fill="rgb(114, 137, 218)"] {
 	background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIyIDcuNTczKSI+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMUUyMTI2IiBzdHJva2Utd2lkdGg9IjIiIGQ9Ik00OS44NjM1IDcwLjIwOTFDNTEuNTY1NSA3Ni43NzgxIDQ5Ljg0NTUgODIuOTA2MSA0Ni4wMjQ1IDgzLjg5NjEgNDIuMjAxNSA4NC44ODYxIDM3LjcyMzUgODAuMzY0MSAzNi4wMjI1IDczLjc5NDEgMzQuMzIwNSA2Ny4yMjYxIDM2LjAzOTUgNjEuMDk4MSAzOS44NjE1IDYwLjEwNzEgNDMuNjgzNSA1OS4xMTgxIDQ4LjE2MTUgNjMuNjQwMSA0OS44NjM1IDcwLjIwOTF6TTc0LjYxMzEgMTAyLjU2MTZDNzYuOTU1MSAxMDUuMjY3NiA3OS42MDIxIDEwOC4wMzU2IDgyLjU4ODEgMTEwLjgwMzZNNTcuNzk0MiA3My42MDMxQzU3Ljc5NDIgNzMuNjAzMSA2MC43MzIyIDg1LjE3MTEgNzEuODE4MiA5OS4xODUxTTY1Ljk3ODggOC4zMTk5QzY2LjE4OTggOC4zOTY5IDY2LjQwNjggOC40NzE5IDY2LjYzMTggOC41NDU5Ii8+PC9nPjwvc3ZnPg==') center/cover no-repeat;
 }
 
-/* ----		4.5.	CALL							---- */
+/* ----		3.5.	CALL							---- */
 
 .sparkleBlurple-awNnsZ {
 	background-image: url(https://discordapp.com/assets/c7539bb38577495f5021c8ea455c7145.png);
@@ -580,14 +383,14 @@ svg [fill="rgb(114, 137, 218)"] {
 }
 
 
-/* ~~~~		5.		PEOPLES							~~~~ */
+/* ~~~~		4.		PEOPLES							~~~~ */
 
 .wrapper-1cBijl .btn:disabled {								/* addfriendpage		button								*/
 	background-color: rgb(var(--vaccentcolor));
 }
 
 
-/* ~~~~		6.		STORE/NITRO						~~~~ */
+/* ~~~~		5.		STORE/NITRO						~~~~ */
 
 #app-mount .premiumIndicator-1XvbfM {						/* premium				where?								*/
 	background-color: rgb(var(--vaccentcolor));
@@ -718,14 +521,14 @@ svg [fill="rgb(114, 137, 218)"] {
 }
 
 
-/* ~~~~		7.		LIBRARY							~~~~ */
+/* ~~~~		6.		LIBRARY							~~~~ */
 
 .foreground-2aE44H {										/* installationpath		fill								*/
 	stroke: rgb(var(--vaccentcolor));
 }
 
 
-/* ~~~~		8.		DISCOVERY						~~~~ */
+/* ~~~~		7.		DISCOVERY						~~~~ */
 
 .searchBox-3Y2Vi7:focus,									/* searchbox			focus								*/
 .searchBox-3Y2Vi7:focus-within,
@@ -753,7 +556,19 @@ svg [fill="rgb(114, 137, 218)"] {
 }
 
 
-/* ~~~~		9.		USERSETTINGS					~~~~ */
+/* ~~~~		8.		USERSETTINGS					~~~~ */
+
+.item-PXvHYJ[style^="color: rgb(114, 137, 218)"],
+.item-PXvHYJ[style*=" color: rgb(114, 137, 218)"] {			/* settingsitems		list item							*/
+	color: rgb(var(--vaccentcolor)) !important;
+}
+.item-PXvHYJ[style*="background-color: rgb(114, 137, 218)"] {
+	background-color: rgb(var(--vaccentcolor)) !important;
+}
+.item-PXvHYJ[style*="background-color: rgba(114, 137, 218, 0.1)"] {
+	background-color: rgb(var(--vaccentcolor), 0.1) !important;
+}
+
 
 .dot-2s_oHI {												/* settingsitems		dot									*/
 	background-color: rgb(var(--vaccentcolor));
@@ -915,8 +730,7 @@ svg [fill="rgb(114, 137, 218)"] {
 }
 
 
-/* ~~~~		10.		GUILDSETTINGS					~~~~ */
-
+/* ~~~~		9.		GUILDSETTINGS					~~~~ */
 															/* widgetsettings		widget placeholder image 			*/
 .layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type {
 	position: relative !important;
@@ -965,10 +779,14 @@ svg [fill="rgb(114, 137, 218)"] {
 	background-color: rgb(var(--vaccentcolor));
 }
 
+.featureIcon-3p1TC_ [fill="#7289da" i] {					/* communitysettings	intro		featureicon				*/
+	fill: rgb(var(--vaccentcolor));
+}
 
-/* ~~~~		11.		MODALS							~~~~ */
 
-/* ----		11.1.	USERMODAL						---- */
+/* ~~~~		10.		MODALS							~~~~ */
+
+/* ----		10.1.	USERMODAL						---- */
 
 .topSectionPlaying-1J5E4n {									/* modal				topsection playing					*/
 	background: rgb(var(--vaccentcolor));
@@ -1023,67 +841,13 @@ svg [fill="rgb(114, 137, 218)"] {
 	background-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		11.2.	GUILDADD/CREATION				---- */
+/* ----		10.2.	GUILDADD/CREATION				---- */
 
-#app-mount .title-2Dc-Cb {									/* modal				create title						*/
-	color: rgb(var(--vaccentcolor));
-}
-#app-mount .create-3jownz .actionButton-2PeQbJ {			/* modal				create actionbutton					*/
-	background-color: rgb(var(--vaccentcolor));
-}
-#app-mount .create-3jownz:hover .actionButton-2PeQbJ {
-	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
-}
-#app-mount .create-3jownz .actionHeader-2CT5c7 {			/* modal				create actionheader					*/
-	color: rgb(var(--vaccentcolor));
-}
-.templateSelected-3nmENR {									/* modal				create template selected			*/
-	border-color: rgb(var(--vaccentcolor));
-}
-#app-mount .sampleLink-KPFu3I {								/* modal				join samplelink						*/
-	color: rgb(var(--vaccentcolor));
-}
-#app-mount .actionIcon-2IISM_ {
-	filter: none;
-}
-#app-mount .create-3jownz .actionIcon-2IISM_ {
-	-webkit-mask: url('data:image/svg+xml;base64,PHN2ZyB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSItMjkwIDM4MiA0MCAzMCIgdmVyc2lvbj0iMS4xIj48cGF0aCBkPSJNLTI3Myw0MDkuNUwtMjczLDQwOS41Yy00LjEsMC02LjgtMC42LTcuOS0xLjdjLTAuNS0wLjYtMC42LTEuMS0wLjYtMS4zYzAtMC43LDAuMS0yLjksMC42LTMuOGMwLjEtMC4zLDAuNS0xLDQuNS0yLjRjLTEuNi0xLjQtMi42LTQtMi42LTcuMWMwLTQuMiwyLjMtNyw1LjktNy4xbDAuMSwwYzMuNiwwLjEsNS45LDIuOCw1LjksNy4xYzAsMy4xLTEsNS43LTIuNiw3LjFjNCwxLjQsNC40LDIuMSw0LjUsMi40YzAuNCwwLjksMC41LDMuMSwwLjYsMy44YzAsMC4yLDAsMC43LTAuNiwxLjNDLTI2Ni4zLDQwOC45LTI2OC45LDQwOS41LTI3Myw0MDkuNXogTS0yNzMsNDA3LjVMLTI3Myw0MDcuNWM1LjEsMCw2LjItMC45LDYuNC0xLjFjLTAuMS0xLjEtMC4yLTIuMy0wLjMtMi43Yy0wLjYtMC40LTIuOS0xLjMtNC44LTEuOWwtMC43LTAuMmwtMC4xLTJsMC43LTAuM2MxLjctMC42LDIuOC0zLjEsMi44LTYuMWMwLTMuMS0xLjUtNS0zLjktNS4xYy0yLjUsMC00LDItNCw1LjFjMCwzLDEuMSw1LjUsMi44LDYuMWwwLjcsMC4zbC0wLjEsMmwtMC43LDAuMmMtMS45LDAuNi00LjIsMS41LTQuOCwxLjljLTAuMSwwLjQtMC4zLDEuNi0wLjMsMi43Qy0yNzkuMiw0MDYuNi0yNzgsNDA3LjUtMjczLDQwNy41eiIvPjxnIG9wYWNpdHk9IjAuNiI+PHBhdGggY2xhc3M9InN0MCIgZD0iTS0yNTcsNDAyLjhjMC0wLjctMC4xLTIuOS0wLjYtMy44Yy0wLjEtMC4zLTAuNS0xLTQuNS0yLjRjMS42LTEuNCwyLjYtNCwyLjYtNy4xYzAtNC4yLTIuMy03LTUuOS03LjFsLTAuMSwwYy0xLjksMC0zLjUsMC44LTQuNSwyLjJjMC42LDAuMywxLjIsMC42LDEuOCwxYzAuNy0wLjgsMS42LTEuMywyLjgtMS4zYzIuNCwwLDMuOSwyLDMuOSw1LjFjMCwzLTEuMSw1LjUtMi44LDYuMWwtMC43LDAuM2wwLjEsMmwwLjcsMC4yYzEuOSwwLjYsNC4zLDEuNSw0LjgsMS45YzAuMSwwLjQsMC4zLDEuNiwwLjMsMi43Yy0wLjIsMC4yLTEsMC44LTMuOCwxYzAuMSwwLjYsMC4yLDEuMiwwLjIsMmMyLjUtMC4yLDQuMi0wLjgsNS0xLjZDLTI1Nyw0MDMuNS0yNTcsNDAzLTI1Nyw0MDIuOHoiLz48cGF0aCBkPSJNLTI4Nyw0MDIuN2MwLjEtMS4xLDAuMi0yLjMsMC4zLTIuN2MwLjYtMC40LDIuOS0xLjMsNC44LTEuOWwwLjctMC4ybDAuMS0ybC0wLjctMC4zYy0xLjYtMC42LTIuOC0zLjEtMi44LTYuMWMwLTMuMSwxLjUtNSw0LTUuMWMxLjIsMCwyLjEsMC41LDIuOCwxLjNjMC41LTAuNCwxLjEtMC44LDEuOC0xYy0xLTEuNC0yLjYtMi4yLTQuNS0yLjJsLTAuMSwwYy0zLjYsMC01LjksMi44LTUuOSw3LjFjMCwzLjEsMSw1LjcsMi42LDcuMWMtNCwxLjQtNC40LDIuMS00LjUsMi40Yy0wLjQsMC45LTAuNSwzLjEtMC42LDMuOGMwLDAuMiwwLDAuNywwLjYsMS4zYzAuOCwwLjksMi41LDEuNCw1LjEsMS42YzAtMC43LDAuMS0xLjQsMC4yLTJDLTI4Niw0MDMuNS0yODYuOCw0MDIuOS0yODcsNDAyLjd6Ii8+PC9nPjxwYXRoIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZD0iTS0yNjAsMzg3IGw0LDAgbDAsLTQgbDIsMCBsMCw0IGw0LDAgbDAsMiBsLTQsMCBsMCw0IGwtMiwwIGwwLC00IGwtNCwwIGwwLC0yIi8+PC9zdmc+') 58% no-repeat;
-	background: rgb(var(--vaccentcolor)) !important;
-}
-#app-mount .join-33Tr-7 .actionIcon-2IISM_ {
-	-webkit-mask: url('data:image/svg+xml;base64,PHN2ZyB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSItMzMwIDM4MiA4MCAzMCIgdmVyc2lvbj0iMS4xIj48cGF0aCB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGQ9Ik0tMjczLDQwOS41TC0yNzMsNDA5LjVjLTQuMSwwLTYuOC0wLjYtNy45LTEuN2MtMC41LTAuNi0wLjYtMS4xLTAuNi0xLjNjMC0wLjcsMC4xLTIuOSwwLjYtMy44YzAuMS0wLjMsMC41LTEsNC41LTIuNGMtMS42LTEuNC0yLjYtNC0yLjYtNy4xYzAtNC4yLDIuMy03LDUuOS03LjFsMC4xLDBjMy42LDAuMSw1LjksMi44LDUuOSw3LjFjMCwzLjEtMSw1LjctMi42LDcuMWM0LDEuNCw0LjQsMi4xLDQuNSwyLjRjMC40LDAuOSwwLjUsMy4xLDAuNiwzLjhjMCwwLjIsMCwwLjctMC42LDEuM0MtMjY2LjMsNDA4LjktMjY4LjksNDA5LjUtMjczLDQwOS41eiBNLTI3Myw0MDcuNUwtMjczLDQwNy41YzUuMSwwLDYuMi0wLjksNi40LTEuMWMtMC4xLTEuMS0wLjItMi4zLTAuMy0yLjdjLTAuNi0wLjQtMi45LTEuMy00LjgtMS45bC0wLjctMC4ybC0wLjEtMmwwLjctMC4zYzEuNy0wLjYsMi44LTMuMSwyLjgtNi4xYzAtMy4xLTEuNS01LTMuOS01LjFjLTIuNSwwLTQsMi00LDUuMWMwLDMsMS4xLDUuNSwyLjgsNi4xbDAuNywwLjNsLTAuMSwybC0wLjcsMC4yYy0xLjksMC42LTQuMiwxLjUtNC44LDEuOWMtMC4xLDAuNC0wLjMsMS42LTAuMywyLjdDLTI3OS4yLDQwNi42LTI3OCw0MDcuNS0yNzMsNDA3LjV6IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNDMsLTIpIi8+PHBhdGggeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBkPSJNLTMwNywzOTUgbDE1LDAgbC00LC00IGwyLjY2LDAgbDUsNSBsLTUsNSBsLTIuNjYsMCBsNC00IGwtMTUsMCBsMCwtMiIvPjxwYXRoIGQ9Ik0tMjczLDQwOS41TC0yNzMsNDA5LjVjLTQuMSwwLTYuOC0wLjYtNy45LTEuN2MtMC41LTAuNi0wLjYtMS4xLTAuNi0xLjNjMC0wLjcsMC4xLTIuOSwwLjYtMy44YzAuMS0wLjMsMC41LTEsNC41LTIuNGMtMS42LTEuNC0yLjYtNC0yLjYtNy4xYzAtNC4yLDIuMy03LDUuOS03LjFsMC4xLDBjMy42LDAuMSw1LjksMi44LDUuOSw3LjFjMCwzLjEtMSw1LjctMi42LDcuMWM0LDEuNCw0LjQsMi4xLDQuNSwyLjRjMC40LDAuOSwwLjUsMy4xLDAuNiwzLjhjMCwwLjIsMCwwLjctMC42LDEuM0MtMjY2LjMsNDA4LjktMjY4LjksNDA5LjUtMjczLDQwOS41eiBNLTI3Myw0MDcuNUwtMjczLDQwNy41YzUuMSwwLDYuMi0wLjksNi40LTEuMWMtMC4xLTEuMS0wLjItMi4zLTAuMy0yLjdjLTAuNi0wLjQtMi45LTEuMy00LjgtMS45bC0wLjctMC4ybC0wLjEtMmwwLjctMC4zYzEuNy0wLjYsMi44LTMuMSwyLjgtNi4xYzAtMy4xLTEuNS01LTMuOS01LjFjLTIuNSwwLTQsMi00LDUuMWMwLDMsMS4xLDUuNSwyLjgsNi4xbDAuNywwLjNsLTAuMSwybC0wLjcsMC4yYy0xLjksMC42LTQuMiwxLjUtNC44LDEuOWMtMC4xLDAuNC0wLjMsMS42LTAuMywyLjdDLTI3OS4yLDQwNi42LTI3OCw0MDcuNS0yNzMsNDA3LjV6Ii8+PGcgb3BhY2l0eT0iMC42Ij48cGF0aCBjbGFzcz0ic3QwIiBkPSJNLTI1Nyw0MDIuOGMwLTAuNy0wLjEtMi45LTAuNi0zLjhjLTAuMS0wLjMtMC41LTEtNC41LTIuNGMxLjYtMS40LDIuNi00LDIuNi03LjFjMC00LjItMi4zLTctNS45LTcuMWwtMC4xLDBjLTEuOSwwLTMuNSwwLjgtNC41LDIuMmMwLjYsMC4zLDEuMiwwLjYsMS44LDFjMC43LTAuOCwxLjYtMS4zLDIuOC0xLjNjMi40LDAsMy45LDIsMy45LDUuMWMwLDMtMS4xLDUuNS0yLjgsNi4xbC0wLjcsMC4zbDAuMSwybDAuNywwLjJjMS45LDAuNiw0LjMsMS41LDQuOCwxLjljMC4xLDAuNCwwLjMsMS42LDAuMywyLjdjLTAuMiwwLjItMSwwLjgtMy44LDFjMC4xLDAuNiwwLjIsMS4yLDAuMiwyYzIuNS0wLjIsNC4yLTAuOCw1LTEuNkMtMjU3LDQwMy41LTI1Nyw0MDMtMjU3LDQwMi44eiIvPjxwYXRoIGQ9Ik0tMjg3LDQwMi43YzAuMS0xLjEsMC4yLTIuMywwLjMtMi43YzAuNi0wLjQsMi45LTEuMyw0LjgtMS45bDAuNy0wLjJsMC4xLTJsLTAuNy0wLjNjLTEuNi0wLjYtMi44LTMuMS0yLjgtNi4xYzAtMy4xLDEuNS01LDQtNS4xYzEuMiwwLDIuMSwwLjUsMi44LDEuM2MwLjUtMC40LDEuMS0wLjgsMS44LTFjLTEtMS40LTIuNi0yLjItNC41LTIuMmwtMC4xLDBjLTMuNiwwLTUuOSwyLjgtNS45LDcuMWMwLDMuMSwxLDUuNywyLjYsNy4xYy00LDEuNC00LjQsMi4xLTQuNSwyLjRjLTAuNCwwLjktMC41LDMuMS0wLjYsMy44YzAsMC4yLDAsMC43LDAuNiwxLjNjMC44LDAuOSwyLjUsMS40LDUuMSwxLjZjMC0wLjcsMC4xLTEuNCwwLjItMkMtMjg2LDQwMy41LTI4Ni44LDQwMi45LTI4Nyw0MDIuN3oiLz48L2c+PC9zdmc+') center/cover no-repeat;
-	background: #3ca374 !important;
-}
-#app-mount .slideBody-2nMrnU {								/* modal				container slider					*/
-	background: none;
-}
-#app-mount .refresh-1riPrX .slideBody-2nMrnU::before,
-#app-mount .refresh-1riPrX .slideBody-2nMrnU::after {
-	display: none;
-}
-#app-mount .slideBody-2nMrnU::before,
-#app-mount .slideBody-2nMrnU::after {
-	content: "";
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background: rgb(var(--vaccentcolor));
-	pointer-events: none;
-	z-index: -1;
-}
-#app-mount .slideBody-2nMrnU::before {
-	-webkit-mask: url(https://discordapp.com/assets/19494428f3a5649ffd64818fc75d0e76.png) 0 100%/155px auto no-repeat;
-}
-#app-mount .slideBody-2nMrnU::after {
-	-webkit-mask: url(https://discordapp.com/assets/6906eb345e3aeb89322c5167db31c1f6.png) 100% 100%/75px auto no-repeat;
-}
-.container-2mW3-n foreignObject {
-	background: rgb(var(--vaccentcolor)) !important;
+.uploadIcon-2IFzZU [fill="#7289da" i] {						/* create guild			upload icon							*/
+	fill: rgb(var(--vaccentcolor));
 }
 
-/* ----		11.3.	REGIONSELECTMODAL				---- */
+/* ----		10.3.	REGIONSELECTMODAL				---- */
 
 .regionSelectFlag-3uwFtG,									/* modal				regionselect flag					*/
 .regionSelectFlag-1htPow {
@@ -1115,7 +879,7 @@ svg [fill="rgb(114, 137, 218)"] {
 	background: rgb(var(--vaccentcolor));
 }
 
-/* ----		11.4.	UPLOADMODAL						---- */
+/* ----		10.4.	UPLOADMODAL						---- */
 															/* modal				background							*/
 .uploadModalIn-1z07Bv .uploadDropModal-2kTwbc .bgScale-1otPtc {
 	background-color: rgb(var(--vaccentcolor));
@@ -1187,7 +951,7 @@ svg [fill="rgb(114, 137, 218)"] {
 	-webkit-mask: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTMwIiB2aWV3Qm94PSIwIDAgMTAwIDEzMCI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNNjEgMTdIMjIuOTg1Yy0yLjc2IDAtNC45OTcgMi4yMy00Ljk5NyA1LjAwMlYyOSIgc3Ryb2tlPSIjQzlEMkYwIiBzdHJva2Utd2lkdGg9IjIiIG9wYWNpdHk9Ii40Ii8+PHBhdGggZD0iTTY5IDE5djcuNTAyQzY5IDI3Ljg4MiA3MC4xMSAyOSA3MS41IDI5SDc0IiBzdHJva2Utb3BhY2l0eT0iLjQiIHN0cm9rZT0iI0M5RDJGMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTM5LjM3IDg5LjhoLTIuNThsOS44NC0yNi4xaDIuNThsLTkuODQgMjYuMXptMjUuMDYtMTMuNjhsLTExLjMxIDcuNTZ2LTIuNzlsOC43Ni01Ljc5di0uMTJsLTguNzYtNS43OVY2Ni40bDExLjMxIDcuNTZ2Mi4xNnoiIG9wYWNpdHk9Ii44IiBmaWxsPSIjNjk3RUM0Ii8+PC9nPjwvc3ZnPg==') center/cover no-repeat;
 }
 
-/* ----		11.5.	KEYBOARDSHORTCUTSMODAL			---- */
+/* ----		10.5.	KEYBOARDSHORTCUTSMODAL			---- */
 
 .ddrArrows-lSnH7P .arrow-2enltQ,							/* modal				arrows								*/
 .ddrArrows-lSnH7P .arrow-2enltQ::before,
@@ -1228,7 +992,7 @@ svg [fill="rgb(114, 137, 218)"] {
 }
 
 
-/* ----		11.6.	LOGINSCREEN						---- */
+/* ----		10.6.	LOGINSCREEN						---- */
 
 .authBox-hW6HRx a {											/* authobox				links								*/
 	color: rgb(var(--vaccentcolor));
@@ -1238,7 +1002,7 @@ svg [fill="rgb(114, 137, 218)"] {
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		11.7.	DOWNLOADAPPMODAL				---- */
+/* ----		10.7.	DOWNLOADAPPMODAL				---- */
 
 .downloadApps-wbBFdZ .footer-1nkeBm a {
 	color: rgb(var(--vaccentcolor));
@@ -1280,7 +1044,7 @@ svg [fill="rgb(114, 137, 218)"] {
 	border-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		11.8.	GUILDBOOSTMODAL					---- */
+/* ----		10.8.	GUILDBOOSTMODAL					---- */
 
 .badgeIconWithSubscribers-3PlMu9 {							/* modal				sub badge icon						*/
 	color: rgb(var(--vaccentcolor));
@@ -1339,7 +1103,7 @@ svg [fill="rgb(114, 137, 218)"] {
 	filter: brightness(150%);
 }
 
-/* ----		11.9.	STREAMSETTINGSMODAL				---- */
+/* ----		10.9.	STREAMSETTINGSMODAL				---- */
 
 .selectorButtonSelected-336oUc,								/* modal				selectorselectedbutton				*/
 .selectorButtonSelected-1j4DmC {
@@ -1358,13 +1122,13 @@ svg [fill="rgb(114, 137, 218)"] {
 	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor));
 }
 
-/* ----		11.10.	DISPATCHERRORMODAL				---- */
+/* ----		10.10.	DISPATCHERRORMODAL				---- */
 
 .theme-light .closeLink-2MRAUp {							/* modal				closelink							*/
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		11.11.	CHANGELOGMODAL					---- */
+/* ----		10.11.	CHANGELOGMODAL					---- */
 
 .content-s2SEQO a {											/* modal				link								*/
 	color: var(--text-link);
@@ -1380,7 +1144,7 @@ svg [fill="rgb(114, 137, 218)"] {
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
 }
 
-/* ----		11.12.	SCREENSHAREMODAL				---- */
+/* ----		10.12.	SCREENSHAREMODAL				---- */
 
 .tile-2w4k5N:hover .sourceThumbnail-27dolk {
 	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor));
@@ -1396,7 +1160,7 @@ svg [fill="rgb(114, 137, 218)"] {
 }
 
 
-/* ~~~~		12.		POPOUTS							~~~~ */
+/* ~~~~		11.		POPOUTS							~~~~ */
 
 
 .popoutLeft-3aViER.arrowAlignmentTop-1yftWI::before {
@@ -1432,7 +1196,7 @@ svg [fill="rgb(114, 137, 218)"] {
 	border-bottom-color: #rgb(var(--vaccentcolor));
 }
 
-/* ----		12.1.	CONTEXTMENU						---- */
+/* ----		11.1.	CONTEXTMENU						---- */
 
 
 .colorBrand-ROmMP1,											/* contextmenu			brand								*/
@@ -1475,7 +1239,7 @@ svg [fill="rgb(114, 137, 218)"] {
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		12.2.	USERPOPOUT						---- */
+/* ----		11.2.	USERPOPOUT						---- */
 
 .headerPlaying-j0WQBV {
 	background: rgb(var(--vaccentcolor));
@@ -1484,20 +1248,20 @@ svg [fill="rgb(114, 137, 218)"] {
 	background: #593695;
 }
 
-/* ----		12.3.	EMOJIPICKER						---- */
+/* ----		11.3.	EMOJIPICKER						---- */
 
 
 .emojiPicker-3m1S-j .categories-1feg4n .selected-39BZ4S {	/* emojipicker			selected category					*/
 	border-bottom-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		12.4.	PINS/MENTIONS					---- */
+/* ----		11.4.	PINS/MENTIONS					---- */
 
 .hasMoreButton-1MELpI {										/* popout				hasmore button						*/
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		12.5.	SEARCHPOPOUT					---- */
+/* ----		11.5.	SEARCHPOPOUT					---- */
 
 															/* datepicker			day hover							*/
 #app-mount .calendarPicker-2yf6Ci .react-datepicker__day.react-datepicker__day--selected:hover,
@@ -1514,7 +1278,7 @@ svg [fill="rgb(114, 137, 218)"] {
 }
 
 
-/* ~~~~		13.		GENERAL							~~~~ */
+/* ~~~~		12.		GENERAL							~~~~ */
 
 .wanderingCubesItem-WPXqao {								/* loading				cubes								*/
 	background-color: rgb(var(--vaccentcolor));
@@ -1528,7 +1292,7 @@ svg [fill="rgb(114, 137, 218)"] {
 	stroke: rgb(var(--vaccentcolor));
 }
 
-/* ----		13.1.	TEXT							---- */
+/* ----		12.1.	TEXT							---- */
 
 .brand-2-tkdo {
 	color: rgb(var(--vaccentcolor));
@@ -1540,7 +1304,7 @@ svg [fill="rgb(114, 137, 218)"] {
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		13.2.	BUTTONS							---- */
+/* ----		12.2.	BUTTONS							---- */
 
 #app-mount .lookInverted-2D7oAl.colorBrand-3pXr91 .spinnerItem-3GlVyU,
 #app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91 .spinnerItem-3GlVyU,
@@ -1615,7 +1379,7 @@ svg [fill="rgb(114, 137, 218)"] {
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		13.3.	INPUTS							---- */
+/* ----		12.3.	INPUTS							---- */
 
 .input-cIJ7To.focused-1mmYsC,								/* textinput			focused								*/
 .input-cIJ7To:focus {
@@ -1641,6 +1405,13 @@ svg [fill="rgb(114, 137, 218)"] {
 															/* checkbox				checked alt							*/
 .checkbox-3kaeSU .checkboxInner-3yjcPe.alt-6FvZrq .checkboxElement-1qV33p:checked + span::after {
 	border-color: rgb(var(--vaccentcolor));
+}
+
+.checked-3_4uQ9[style*="background-color: rgb(114, 137, 218)"] {
+	background-color: rgb(var(--vaccentcolor)) !important;
+}
+.checked-3_4uQ9[style*="border-color: rgb(114, 137, 218)"] {
+	border-color: rgb(var(--vaccentcolor)) !important;
 }
 
 .container-3auIfb {											/* switch				unchecked							*/
@@ -1699,7 +1470,7 @@ svg [fill="rgb(114, 137, 218)"] {
 	border-color: rgb(var(--vaccentcolor)) rgb(var(--vaccentcolor)) rgba(0, 0, 0, 0.3);
 }
 
-/* ----		13.4.	TAGS							---- */
+/* ----		12.4.	TAGS							---- */
 
 .botTagRegular-2HEhHi {										/* bottag				regular								*/
 	background-color: rgb(var(--vaccentcolor));
@@ -1718,7 +1489,7 @@ svg [fill="rgb(114, 137, 218)"] {
 	filter: brightness(75%);
 }
 
-/* ----		13.5.	ICONS							---- */
+/* ----		12.5.	ICONS							---- */
 
 
 [style*="/assets/6debd47ed13483642cf09e832ed0bc1b.png"],	/* blue no pfp icon											*/
@@ -1803,7 +1574,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 	background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNjAiIGhlaWdodD0iMjgwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIHN0cm9rZT0iIzIzMUYxRiIgc3Ryb2tlLXdpZHRoPSI2IiBkPSJNNzMuNTA2MiAzNC42NTE3czUuMzg1IDMwLjY5MyAzNi44NTYgMjcuNTQyYzMwLjE0NC0zLjAxNyA2MC4zOC0xMC41NzQgOTQuMTQ0LTEwLjU0MiAyOCAuMDI3IDU3Ljc0MiAxMS40MDMgNjAuNjc3LTguMzgzIDIuNjI1LTE3LjY5Ni0xMC4yNzItMzUuMjY5LTQ2LjIyNi0zNS4yNjlzLTg1LjExNSAxNS40ODQtMTA2LjM5NCAxOS43ODVjLTIxLjI3OCA0LjMwMS0zOS4wNTcgNi44NjctMzkuMDU3IDYuODY3eiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2UtZGFzaGFycmF5PSIyNjAgMjkiLz48cGF0aCBzdHJva2U9IiMyMzFGMUYiIHN0cm9rZS13aWR0aD0iNiIgZD0iTTEyNy4yMzg3IDExNS44NDAzbDIuMjAxLTEwLjI1MXMtMTUuODM3LTQuMy04LjgwNS0yMC41MDFjNS44NzItMTMuNTI2IDQ1LjQ5My0xNS43NyA1OC43LTcuMDk2IDEzLjIwOCA4LjY3MyAxMy45NDEgMjEuMjg5IDEzLjk0MSAyMS4yODlzMTA3LjEyOC0xOC4xMzUgMTE4LjEzNCAxOC45MjVjMTEuMDA2IDM3LjA1OS0yNy4xNDkgMjIuMDc4LTU0LjI5OCAyMi4wNzgtMjcuMTQ4IDAtNDQuMDI0IDMuOTQyLTQ0LjAyNCAzLjk0MnM1MC42MjggMTguOTI1IDgyLjkxMyAzOS40MjYgNzAuODQ2IDQ3LjU5NCA0Ny42OTQgNzcuMjc0Yy0yMy4xODggMjkuNzI1LTU0LjU4LTIuNDEtOTYuMTIxLTMwLjc1Mi01Mi4wNjctMzUuNTIzLTc0LjA2Ny00Ny41MjMtNzQuMDY3LTQ3LjUyM3MtMTkgNDEtNDUgNjYuMjI2Yy0zNS4xNDkgMzQuMS05MC43ODUgMjkuMzk2LTExOS40MDItMjQuMjIzIDAgMCAzMi41MzIuMTMzIDU1Ljc2NS0xNC45ODEgMjUuNjM3LTE2LjY3NyA0Mi41NTgtNDEuNzkxIDQyLjU1OC00MS43OTFzLTUzLjU2NCAyOS45NjMtODAuNzEzIDEwLjI1Yy0yNy4xNDgtMTkuNzEyLTIxLjI3OC0yNy41OTgtNC40MDItMzEuNTQgMTQuNS0zLjM4OCAxMDQuOTI2LTMwLjc1MiAxMDQuOTI2LTMwLjc1MnoiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWRhc2hhcnJheT0iNTEwIDIwIi8+PHBhdGggZmlsbD0iIzM2MzkzRSIgZD0iTTEyNy4yMzg3IDExNS44NDAzbC01LjczMiAxNi45NzYiLz48cGF0aCBzdHJva2U9IiMyMzFGMUYiIHN0cm9rZS13aWR0aD0iNiIgZD0iTTEyNy4yMzg3IDExNS44NDAzbC01LjczMiAxNi45NzYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWRhc2hhcnJheT0iNTAwIDIwIi8+PHBhdGggc3Ryb2tlPSIjMjMxRjFGIiBzdHJva2Utd2lkdGg9IjYiIGQ9Ik0xNzcuNTA2MiAxNzEuNzI3MnM2LTEyLjA0NSAxMS0zMS4zODgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWRhc2hhcnJheT0iMjMgMTAiLz48cGF0aCBmaWxsPSIjMzYzOTNFIiBkPSJNMjEzLjA4NzMgMTQ0LjIyNjdsLTYuNTgxIDEuNDg1Ii8+PHBhdGggc3Ryb2tlPSIjMjMxRjFGIiBzdHJva2Utd2lkdGg9IjYiIGQ9Ik0yMTMuMDg3MyAxNDQuMjI2N2wtNi41ODEgMS40ODUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWRhc2hhcnJheT0iNTAwIDIwIi8+PHBhdGggZD0iTTAgMGgzNjB2MjgwSDB6Ii8+PC9nPjwvc3ZnPg==') center/contain no-repeat !important;
 }
 
-/* ----		13.6.	SCROLLBARS						---- */
+/* ----		12.6.	SCROLLBARS						---- */
 
 .scrollerThemed-2oenus.themeLight-1_DWyY .scrollbar-2rkZSL .thumb-2JwNFC,
 .theme-dark .scrollerThemed-2oenus.themeLight-1_DWyY .scrollbar-2rkZSL .thumb-2JwNFC,
@@ -1818,7 +1589,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 	background-color: transparent;
 }
 
-/* ----		13.7.	NOTIFICATIONBAR					---- */
+/* ----		12.7.	NOTIFICATIONBAR					---- */
 
 .colorPremiumTier1-3D7SPt {
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.7));
@@ -1851,7 +1622,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 	background: #000000 linear-gradient(90deg, rgba(var(--vaccentcolor), 0.7), rgba(var(--vaccentcolor), 0.7));
 }
 
-/* ----		13.8.	TOOLTIPS						---- */
+/* ----		12.8.	TOOLTIPS						---- */
 
 #app-mount .tooltipBrand-g03Nz8 {
 	background-color: rgb(var(--vaccentcolor));
@@ -1870,14 +1641,14 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *::before {
 	border-top-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		13.9.	TOASTS							---- */
+/* ----		12.9.	TOASTS							---- */
 
 .toast-brand {
 	background-color: rgb(var(--vaccentcolor));
 }
 
 
-/* ~~~~		14.		BDSUPPORT						~~~~ */
+/* ~~~~		13.		BDSUPPORT						~~~~ */
 
 #bd-pub-button {
 	color: var(--text-normal);
@@ -2116,35 +1887,35 @@ html .monaco-editor [style*="border-left-color: rgb(9, 71, 113)"] {
 }
 
 
-/* ~~~~		16.		POWERCORDSUPPORT				~~~~ */
+/* ~~~~		14.		POWERCORDSUPPORT				~~~~ */
 
 .powercord-toast .progressBar-3u8FBM {
 	background-color: rgb(var(--vaccentcolor));
 }
 
 
-/* ~~~~		16.		PLUGINSUPPORT					~~~~ */
+/* ~~~~		15.		PLUGINSUPPORT					~~~~ */
 
-/* ----		16.1.	IMAGEZOOM						---- */
+/* ----		15.1.	IMAGEZOOM						---- */
 
 .zoomLens-uOK8xV {
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
 
-/* ----		16.2.	HIDEUTILS						---- */
+/* ----		15.2.	HIDEUTILS						---- */
 
 #HideUtils-Settings button {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 
-/* ----		16.3.	READALLNOTIFICATIONSBUTTON		---- */
+/* ----		15.3.	READALLNOTIFICATIONSBUTTON		---- */
 
 .wrapper-1BJsBx:active .childWrapper-anI2G9.button-Jt-tIg{
 	background: var(--vaccentcolor-hover);
 	color: rgb(var(--fontwhite1, var(--dfontwhite1)));
 }
 
-/* ----		16.4.	SERVERSEARCH					---- */
+/* ----		15.4.	SERVERSEARCH					---- */
 
 #server-search .wrapper-25eVIn {
 	background-color: rgb(47, 49, 54) !important;
@@ -2154,16 +1925,16 @@ html .monaco-editor [style*="border-left-color: rgb(9, 71, 113)"] {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 
-/* ----		16.5.	CHANNELTABS						---- */
+/* ----		15.5.	CHANNELTABS						---- */
 
 .channelTabs-unreadBadge:not(.channelTabs-noUnread) {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 
 
-/* ~~~~		17.		THEMESUPPORT					~~~~ */
+/* ~~~~		16.		THEMESUPPORT					~~~~ */
 
-/* ----		17.1.	THEMEDEVBADGE					---- */
+/* ----		16.1.	THEMEDEVBADGE					---- */
 
 #app-mount .dev-A7f2Rx.hasBadge-4rT8_u .badge-7R_W3s {
 	background: rgb(var(--vaccentcolor)) !important;
