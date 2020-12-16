@@ -30,7 +30,7 @@
 	--background:					url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/background.jpg);	/* general background image						*/
 	--backgroundposition:			center;						/* default: center				(position of background - values: [center/top/right/bottom/left])				*/
 	--backgroundsize:				cover;						/* default: cover				(sizefit of background - values: [cover/contain/auto])							*/
-	--backgroundblur:				unset;						/* default: 0px					(only works when --background is set to an image)								*/
+	--backgroundblur:				unset;						/* default: unset				(only works when --background is set to an image)								*/
 	
 	--popout:						var(--background);			/* default: var(--background)	(change to use another background/color for modals/popouts)						*/
 	--popoutposition:				var(--backgroundposition);	/* default: center				(position of popout - values: [center/top/right/bottom/left])					*/
