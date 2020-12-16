@@ -358,7 +358,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	align-items: center;
 }
 [REPLACE_CLASS_hovercardwrapper][REPLACE_CLASS_hovercardhorizontal] {
 	flex-direction: row;
