@@ -1,11 +1,4 @@
-﻿/**
- * @name Test
- * @description Test
- * @author DevilBro
- * @version 1.0.0
- */
-
-@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
+﻿@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
 
 :root {
 	--daccentcolor: 114,137,218;

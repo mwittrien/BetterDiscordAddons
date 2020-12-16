@@ -178,36 +178,36 @@ html {
 
 /* ~~~~		1.		GENERAL							~~~~ */
 
-[style*="stroke: rgb(114, 118, 125)"],
-[style*="stroke: #72767d"],
-[style*="stroke: #72767D"],
-[stroke="rgb(114, 137, 218)"],
-[stroke="#72767d"],
-[stroke="#72767D"] {
+svg [style*="stroke: rgb(114, 118, 125)"],
+svg [style*="stroke: #72767d"],
+svg [style*="stroke: #72767D"],
+svg [stroke="rgb(114, 137, 218)"],
+svg [stroke="#72767d"],
+svg [stroke="#72767D"] {
 	stroke: var(--text-muted) !important;
 }
-[style*="fill: rgb(114, 118, 125)"],
-[style*="fill: #72767d"],
-[style*="fill: #72767D"],
-[fill="rgb(114, 137, 218)"],
-[fill="#72767d"],
-[fill="#72767D"] {
+svg [style*="fill: rgb(114, 118, 125)"],
+svg [style*="fill: #72767d"],
+svg [style*="fill: #72767D"],
+svg [fill="rgb(114, 137, 218)"],
+svg [fill="#72767d"],
+svg [fill="#72767D"] {
 	fill: var(--text-muted) !important;
 }
-[style*="stroke: rgb(79, 84, 92)"],
-[style*="stroke: #4f545c"],
-[style*="stroke: #4F545C"],
-[stroke="rgb(79, 84, 92)"],
-[stroke="#4f545c"],
-[stroke="#4F545C"] {
+svg [style*="stroke: rgb(79, 84, 92)"],
+svg [style*="stroke: #4f545c"],
+svg [style*="stroke: #4F545C"],
+svg [stroke="rgb(79, 84, 92)"],
+svg [stroke="#4f545c"],
+svg [stroke="#4F545C"] {
 	stroke: var(--interactive-muted) !important;
 }
-[style*="fill: rgb(79, 84, 92)"],
-[style*="fill: #4f545c"],
-[style*="fill: #4F545C"],
-[fill="rgb(79, 84, 92)"],
-[fill="#4f545c"],
-[fill="#4F545C"] {
+svg [style*="fill: rgb(79, 84, 92)"],
+svg [style*="fill: #4f545c"],
+svg [style*="fill: #4F545C"],
+svg [fill="rgb(79, 84, 92)"],
+svg [fill="#4f545c"],
+svg [fill="#4F545C"] {
 	fill: var(--interactive-muted) !important;
 }
 
