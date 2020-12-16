@@ -14,12 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.2.2",
+			"version": "4.2.3",
 			"description": "Add a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode)"
 		},
 		"changeLog": {
 			"improved": {
-				"Download locations": "Merged 'save' and 'save as' entry, clicking it opens the save as modal, and hovering over it opens a submenu for preset paths, you can add your own download locations in the plugin settings"
+				"Download locations": "Merged 'save' and 'save as' entry, clicking it opens the save as modal, and hovering over it opens a submenu for preset paths, you can add your own download locations in the plugin settings",
+				"Toggle": "You can now toggle the download locations"
 			},
 			"fixed": {
 				"Slow modal transitions": "Fixed issue where the css of the plugin would cause render slow downds for modals"
@@ -136,8 +137,8 @@ module.exports = (_ => {
 						hoverDelay:				{value: 0, 		min: 0,				description: "Image Tooltip delay (in millisec)"}
 					},
 					zoomSettings: {
-						zoomlevel:				{value: 2,		digits: 1,		minValue: 1,	maxValue: 20,		unit: "x",	label: "ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
-						lensesize:				{value: 200,	digits: 0,		minValue: 50, 	maxValue: 5000,		unit: "px",	label: "context_lenssize_text"}
+						zoomlevel:				{value: 2,		digits: 1,			minValue: 1,	maxValue: 20,		unit: "x",	label: "ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
+						lensesize:				{value: 200,	digits: 0,			minValue: 50, 	maxValue: 5000,		unit: "px",	label: "context_lenssize_text"}
 					},
 					engines: {
 						_all: 		{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url: null},
@@ -245,6 +246,14 @@ module.exports = (_ => {
 			}
 			
 			onStart() {
+				// REMOVE 16.12.2020
+				let oL = BDFDB.DataUtils.load(this, "ownLocations"), c = false;
+				for (let i in oL) if (!BDFDB.ObjectUtils.is(oL[i])) {
+					oL[i] = {enabled: true, location: oL[i]};
+					c = true;
+				}
+				if (c) BDFDB.DataUtils.save(oL, this, "ownLocations")
+				
 				BDFDB.ListenerUtils.add(this, document.body, "click", BDFDB.dotCNS.message + BDFDB.dotCNS.imagewrapper + "img", e => {
 					clickedImage = e.target;
 					BDFDB.TimeUtils.timeout(_ => {clickedImage = null;});
@@ -372,13 +381,24 @@ module.exports = (_ => {
 											}),
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-													value: ownLocations[name],
-													placeholder: ownLocations[name],
+													value: ownLocations[name].location,
+													placeholder: ownLocations[name].location,
 													size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
 													maxLength: 100000000000000000000,
+													style: {marginRight: 10},
 													disabled: !editable,
 													onChange: !editable ? null : value => {
-														ownLocations[name] = value;
+														ownLocations[name].location = value;
+														BDFDB.DataUtils.save(ownLocations, this, "ownLocations");
+													}
+												})
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
+													value: ownLocations[name].enabled,
+													size: BDFDB.LibraryComponents.Switch.Sizes.MINI,
+													onChange: value => {
+														ownLocations[name].enabled = value;
 														BDFDB.DataUtils.save(ownLocations, this, "ownLocations");
 													}
 												})
@@ -443,7 +463,7 @@ module.exports = (_ => {
 				zoomSettings = BDFDB.DataUtils.get(this, "zoomSettings");
 				engines = BDFDB.DataUtils.get(this, "engines");
 				enabledEngines = BDFDB.ObjectUtils.filter(engines, n => n);
-				ownLocations = Object.assign({"Downloads": this.getDownloadLocation()}, BDFDB.DataUtils.load(this, "ownLocations"));
+				ownLocations = Object.assign({"Downloads": {enabled:true, location: this.getDownloadLocation()}}, BDFDB.DataUtils.load(this, "ownLocations"));
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.MessageUtils.rerenderAll();
@@ -515,6 +535,7 @@ module.exports = (_ => {
 			createUrlMenu (e, url) {
 				let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
 				let engineKeys = Object.keys(enginesWithoutAll);
+				let locations = Object.keys(ownLocations).filter(n => ownLocations[n].enabled);
 				return [
 					BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.context_viewimage_text,
@@ -549,12 +570,12 @@ module.exports = (_ => {
 						action: _ => {
 							this.downloadImageAs(url);
 						},
-						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-							children: Object.keys(ownLocations).map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						children: locations.length && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+							children: locations.map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, i),
 								label: name,
 								action: _ => {
-									this.downloadImage(url, ownLocations[name]);
+									this.downloadImage(url, ownLocations[name].location);
 								}
 							}))
 						})
@@ -654,12 +675,13 @@ module.exports = (_ => {
 											this.downloadImageAs(url);
 										},
 										onContextMenu: event => {
-											BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-												children: Object.keys(ownLocations).map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+											let locations = Object.keys(ownLocations).filter(n => ownLocations[n].enabled);
+											if (locations.length) BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+												children: Object.keys(locations).map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 													id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, i),
 													label: name,
 													action: _ => {
-														this.downloadImage(url, ownLocations[name]);
+														this.downloadImage(url, ownLocations[name].location);
 													}
 												}))
 											}));
