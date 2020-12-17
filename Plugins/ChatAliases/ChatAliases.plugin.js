@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.2.1",
+			"version": "2.2.2",
 			"description": "Allow the user to configure their own chat-aliases which will automatically be replaced before the message is being sent"
 		},
 		"changeLog": {
 			"fixed": {
-				"Crashes": "No longer crashes"
+				"File aliases with replies": "Now properly adds the reply to a file alias if the rest of the message is empty"
 			}
 		}
 	};
@@ -429,6 +429,7 @@ module.exports = (_ => {
 			processUpload (e) {
 				if (!BDFDB.PatchUtils.isPatched(this, e.instance, "submitUpload")) BDFDB.PatchUtils.patch(this, e.instance, "submitUpload", {before: e2 => {
 					if (settings.triggerUpload) this.handleSubmit(e, e2, 1);
+					console.log(e, e2);
 				}}, {force: true, noCache: true});
 			}
 			
@@ -447,6 +448,8 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.forceUpdate(e.instance);
 					}
 					if (messageData.files.length > 0 && (BDFDB.DMUtils.isDMChannel(e.instance.props.channel.id) || BDFDB.UserUtils.can("ATTACH_FILES"))) {
+						let reply = BDFDB.LibraryModules.MessageReplyStore.getPendingReply(e.instance.props.channel.id);
+						if (reply && !messageData.text) BDFDB.LibraryModules.UploadUtils.upload(e.instance.props.channel.id, messageData.files.shift(), "", false);
 						BDFDB.LibraryModules.UploadUtils.instantBatchUpload(e.instance.props.channel.id, messageData.files);
 					}
 				}
