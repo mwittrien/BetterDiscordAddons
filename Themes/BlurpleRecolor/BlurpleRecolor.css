@@ -303,6 +303,10 @@
 
 /* ----		3.2.	AUTOCOMPLETEMENU				---- */
 
+#app-mount .active-2awTSY {									/* autocomplete			option active						*/
+	background-color: rgb(var(--vaccentcolor));
+}
+
 #app-mount .searchSuggestion-2K8OBX:hover {					/* gifpicker			suggestions							*/
 	border-color: rgb(var(--vaccentcolor));
 	background-color: rgb(var(--vaccentcolor));
@@ -316,7 +320,7 @@
 .result-3w1ZcL[style*="background-color: rgb(179, 174, 255)"] {
 	background: var(--vaccentcolor-active) !important;
 }
-.theme-light .focused-1En8bG::after,							/* gifpicker			result hover						*/
+.theme-light .focused-1En8bG::after,						/* gifpicker			result hover						*/
 .theme-light .result-3w1ZcL:hover::after {
 	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor)), inset 0 0 0 3px #dcddde;
 }
