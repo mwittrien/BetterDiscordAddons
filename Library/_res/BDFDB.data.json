@@ -68,6 +68,8 @@
 		"MentionUtils": {"props": ["isRawMessageMentioned", "isMentioned"]},
 		"MessageManageUtils": {"props": ["copyLink", "replyToMessage"]},
 		"MessagePinUtils": {"props": ["pinMessage", "unpinMessage"]},
+		"MessageReplyStore": {"props": ["getPendingReply"]},
+		"MessageReplyUtils": {"props": ["createPendingReply", "deletePendingReply"]},
 		"MessageStore": {"props": ["getMessage", "getMessages"]},
 		"MessageUtils": {"props": ["receiveMessage", "editMessage"]},
 		"ModalUtils": {"props": ["openModal", "hasModalOpen"]},
