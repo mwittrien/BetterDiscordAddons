@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.2.3",
+			"version": "4.2.4",
 			"description": "Add a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode)"
 		},
 		"changeLog": {
@@ -23,7 +23,8 @@ module.exports = (_ => {
 				"Toggle": "You can now toggle the download locations"
 			},
 			"fixed": {
-				"Slow modal transitions": "Fixed issue where the css of the plugin would cause render slow downds for modals"
+				"Slow modal transitions": "Fixed issue where the css of the plugin would cause render slow downds for modals",
+				"New download locations": "Fixed issue where you needed to restart plugin for new locations to be editable"
 			}
 		}
 	};
@@ -345,7 +346,7 @@ module.exports = (_ => {
 												if (ownLocations[name] || name == "Downloads") return BDFDB.NotificationUtils.toast("A location with the choosen name already exists, please choose another name", {type: "danger"});
 												else if (!BDFDB.LibraryRequires.fs.existsSync(location)) return BDFDB.NotificationUtils.toast("The choosen download location is not a valid path to a folder", {type: "danger"});
 												else {
-													ownLocations[name] = location;
+													ownLocations[name] = {enabled: true, location: location};
 													BDFDB.DataUtils.save(ownLocations, this, "ownLocations");
 													BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 												}
