@@ -1417,6 +1417,9 @@ body::before {
 #app-mount .descriptionDiscriminator-3vUOCc {				/* autocomplete			discriminator						*/
 	color: rgb(var(--fontwhite3));
 }
+#app-mount .option-1B5ZV8 {									/* autocomplete			option								*/
+	background-color: rgba(var(--vtransparencycolor), 0.5);
+}
 #app-mount .selected-1Tbx07 .content-Qb0rXO {
 	color: rgb(var(--fontwhite1));
 }
@@ -1429,6 +1432,14 @@ body::before {
 }
 #app-mount .selected-1Tbx07 .descriptionDiscriminator-3vUOCc {
 	color: rgb(var(--fontwhite2));
+}
+
+#app-mount .wrapper-uf3cnO {								/* autocomplete			categories							*/
+	background-color: transparent;
+}
+#app-mount .selected-3xBBKs,								/* autocomplete			category selected					*/
+#app-mount .selected-3xBBKs:hover {
+	background-color: rgb(var(--vaccentcolor));
 }
 
 #app-mount .searchSuggestion-2K8OBX:hover {					/* gifpicker			suggestions							*/
