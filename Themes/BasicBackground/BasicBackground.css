@@ -904,7 +904,7 @@ body::before {
 }
 #app-mount .repliedMessage-VokQwo::before {
 	border-color: rgba(var(--vtransparencycolor), 0.5);
-	left: calc((-35px * var(--vusechatbubbles)) + ((1 - var(--vusechatbubbles)) * (-1*(var(--avatar-size)/2 + var(--gutter)))));
+	left: calc((-41px * var(--vusechatbubbles)) + ((1 - var(--vusechatbubbles)) * (-1*(var(--avatar-size)/2 + var(--gutter)))));
 	right: unset;
 	width: 32px;
 }
