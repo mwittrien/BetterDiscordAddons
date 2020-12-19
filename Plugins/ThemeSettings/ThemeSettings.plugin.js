@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeSettings",
 			"author": "DevilBro",
-			"version": "1.2.9",
+			"version": "1.3.0",
 			"description": "Allow you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page"
 		},
 		"changeLog": {
-			"fixed": {
-				"Works again": "Yes"
+			"added": {
+				"Imports": "You can now enable/disable imports in the settings"
 			}
 		}
 	};
@@ -92,8 +92,10 @@ module.exports = (_ => {
 				if (card.querySelector(".theme-settings-button")) return;
 				let addon = BDFDB.ObjectUtils.get(BDFDB.ReactUtils.getInstance(card), "return.stateNode.props.addon");
 				if (addon && !addon.plugin && !addon.instance && addon.css) {
-					let vars = this.getThemeVars(addon.css);
-					if (vars.length) {
+					let css = addon.css.replace(/\r/g, "");
+					let imports = this.getThemeImports(css);
+					let vars = this.getThemeVars(css);
+					if (imports.length || vars.length) {
 						let open = _ => {
 							BDFDB.ModalUtils.open(this, {
 								header: `${addon.name} ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
@@ -103,8 +105,8 @@ module.exports = (_ => {
 								contentClassName: BDFDB.disCN._repomodalsettings,
 								footerClassName: BDFDB.disCN._repomodalfooter,
 								size: "MEDIUM",
-								children: this.createThemeVarInputs(addon, vars),
-								buttons: [{contents: BDFDB.LanguageUtils.LanguageStrings.SAVE, color: "GREEN", click: modal => {this.updateTheme(modal, addon);}}]
+								children: this.createThemeInputs(addon, imports, vars),
+								buttons: [{contents: BDFDB.LanguageUtils.LanguageStrings.SAVE, color: "BRAND", click: modal => {this.updateTheme(modal, addon);}}]
 							});
 						};
 						if (isBeta) {
@@ -143,12 +145,24 @@ module.exports = (_ => {
 				let css = BDFDB.LibraryRequires.fs.readFileSync(path).toString();
 				if (css) {
 					let amount = 0;
+					for (let input of card.querySelectorAll(BDFDB.dotCN.switchinner)) {
+						let oldValue = input.getAttribute("oldvalue");
+						let newValue = input.checked;
+						if (newValue.toString() != oldValue.toString()) {
+							let importUrl = input.getAttribute("name");
+							if (newValue) css = css.replace(new RegExp(`\\n${BDFDB.StringUtils.regEscape("/* @import url(" + importUrl + "); */")}`, "g"), `\n@import url(${importUrl});`);
+							else css = css.replace(new RegExp(`\\n${BDFDB.StringUtils.regEscape("@import url(" + importUrl + ");")}`, "g"), `\n/* @import url(${importUrl}); */`);
+							input.setAttribute("oldvalue", newValue);
+							amount++;
+						}
+					}
 					for (let input of card.querySelectorAll(BDFDB.dotCN.input)) {
-						let oldValue = input.getAttribute("placeholder");
+						let oldValue = input.getAttribute("oldvalue");
 						let newValue = input.value;
 						if (newValue && newValue.trim() && newValue != oldValue) {
-							let varName = input.getAttribute("varName");
-							css = css.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(varName)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(oldValue)}`,"g"),`--${varName}$1: $2${newValue}`);
+							let varName = input.getAttribute("name");
+							css = css.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(varName)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(oldValue)}`,"g"), `--${varName}$1: $2${newValue}`);
+							input.setAttribute("oldvalue", newValue);
 							input.setAttribute("placeholder", newValue);
 							amount++;
 						}
@@ -162,10 +176,14 @@ module.exports = (_ => {
 				else BDFDB.NotificationUtils.toast(`Could not find themefile: ${addon.filename}`, {type: "error"});
 			}
 
+			getThemeImports (css) {
+				return css.split("\n@import url(").splice(1).map(n => [n.split(");")[0], true]).concat(css.split("\n/* @import url(").splice(1).map(n => [n.split("); */")[0], false]));
+			}
+
 			getThemeVars (css) {
 				let vars = css.split(":root");
 				if (vars.length > 1) {
-					vars = vars[1].replace(/\t\(/g, " (").replace(/\r|\t| {2,}/g, "").replace(/\/\*\n*((?!\/\*|\*\/).|\n)*\n+((?!\/\*|\*\/).|\n)*\n*\*\//g, "").replace(/\n\/\*.*?\*\//g, "").replace(/\n/g, "");
+					vars = vars[1].replace(/\t\(/g, " (").replace(/\t| {2,}/g, "").replace(/\/\*\n*((?!\/\*|\*\/).|\n)*\n+((?!\/\*|\*\/).|\n)*\n*\*\//g, "").replace(/\n\/\*.*?\*\//g, "").replace(/\n/g, "");
 					vars = vars.split("{");
 					vars.shift();
 					vars = vars.join("{").replace(/\s*(:|;|--|\*)\s*/g, "$1");
@@ -175,8 +193,25 @@ module.exports = (_ => {
 				return [];
 			}
 
-			createThemeVarInputs (theme, vars) {
+			createThemeInputs (theme, imports, vars) {
 				let settingsItems = [];
+				if (imports.length) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+					title: "Imports:",
+					dividerBottom: vars.length,
+					children: imports.map(impo => {
+						let name = impo[0].split("/").pop().replace(/"/g, "");
+						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							type: "Switch",
+							margin: 8,
+							label: name[0].toUpperCase() + name.slice(1),
+							note: impo[0].replace(/"/g, ""),
+							name: impo[0],
+							value: impo[1],
+							oldvalue: impo[1].toString()
+						});
+					})
+				}));
+				let varInputs = [];
 				for (let varStr of vars) {
 					varStr = varStr.split(":");
 					let varName = varStr.shift().trim();
@@ -199,10 +234,9 @@ module.exports = (_ => {
 							}
 						}
 						let varDescription = varStr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+						varInputs.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "TextInput",
-							margin: 20,
-							dividerBottom: vars[vars.length-1] != varStr,
+							margin: 8,
 							childProps: {
 								type: childType,
 								mode: childMode,
@@ -211,12 +245,17 @@ module.exports = (_ => {
 							label: varName[0].toUpperCase() + varName.slice(1),
 							note: varDescription && varDescription.indexOf("*") == 0 ? varDescription.slice(1) : varDescription,
 							basis: "70%",
-							varName: varName,
+							name: varName,
 							value: varValue,
+							oldvalue: varValue,
 							placeholder: varValue
 						}));
 					}
 				};
+				if (varInputs.length) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+					title: "Variables:",
+					children: varInputs
+				}));
 				
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanel, {
 					addon: theme,
