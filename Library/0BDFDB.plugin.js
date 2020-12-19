@@ -6882,7 +6882,7 @@ module.exports = (_ => {
 								},
 								checked: props.value,
 								disabled: props.disabled
-							}), "uncheckedColor", "checkedColor", "size"))
+							}), "uncheckedColor", "checkedColor", "size", "value"))
 						]
 					});
 				};
