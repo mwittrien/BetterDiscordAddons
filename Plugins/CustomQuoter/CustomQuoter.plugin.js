@@ -384,19 +384,20 @@ module.exports = (_ => {
 					hour = hour % 12;
 					hour = hour ? hour : 12;
 				}
-				
+				const wordjoiner = "⁠"
 				let content = message.content;
 				let selectedText = settings.quoteOnlySelected && document.getSelection().toString().trim();
 				if (selectedText) content = BDFDB.StringUtils.extractSelection(content, selectedText);
 				if (content) {
-					content = content.replace(/(@everyone|@here)/g, "`$1`").replace(/``(@everyone|@here)``/g, "`$1`");
+					content = content.replace(/@everyone/g, `@${wordjoiner}everyone`);
+					content = content.replace(/@here/g, `@${wordjoiner}here`);
 					content = content.replace(/<@[!&]{0,1}([0-9]{10,})>/g, (string, match) => {
 						let user = BDFDB.LibraryModules.UserStore.getUser(match);
 						if (user) {
 							let userMember = channel.guild_id && BDFDB.LibraryModules.MemberStore.getMember(guild.id, match);
-							return `\`@${userMember && userMember.nick || user.username}\``;
+							return `@${wordjoiner}${userMember && userMember.nick || user.username}`;
 						}
-						else if (channel.guild_id && guild.roles[match] && guild.roles[match].name) return `\`${guild.roles[match].name.indexOf("@") == 0 ? "" : "@"}${guild.roles[match].name}\``;
+						else if (channel.guild_id && guild.roles[match] && guild.roles[match].name) return `${guild.roles[match].name.indexOf("@") == 0 ? "" : "@"}${wordjoiner}${guild.roles[match].name}`;
 						return string;
 					});
 				}
