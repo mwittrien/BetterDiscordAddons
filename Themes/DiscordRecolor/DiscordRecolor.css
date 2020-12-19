@@ -1789,7 +1789,7 @@ img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 }
 #app-mount .search-1iTphC .searchBox-2_mAlO:focus,
 #app-mount .search-1iTphC .searchBox-2_mAlO:focus-within {
-	box-shadow: 0 0 0 1px #5b43f0,0 0 0 2px #bdb3f9,0 0 0 3px #bdb3f9;
+	box-shadow: 0 0 0 1px rgb(91,67,240),0 0 0 2px rgba(91,67,240,.6),0 0 0 3px rgba(91,67,240,.3);
 	border-color: transparent;
 }
 #app-mount .search-1iTphC .searchBox-2_mAlO .searchBoxInput-K6mkng {
