@@ -6861,7 +6861,7 @@ module.exports = (_ => {
 									})
 								]
 							}),
-							BDFDB.ReactUtils.createElement("input", {
+							BDFDB.ReactUtils.createElement("input", BDFDB.ObjectUtils.exclude(Object.assign({}, props, {
 								id: props.id,
 								type: "checkbox",
 								ref: ref,
@@ -6882,7 +6882,7 @@ module.exports = (_ => {
 								},
 								checked: props.value,
 								disabled: props.disabled
-							})
+							}), "uncheckedColor", "checkedColor", "size"))
 						]
 					});
 				};
