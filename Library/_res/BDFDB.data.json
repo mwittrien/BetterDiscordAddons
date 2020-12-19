@@ -1041,7 +1041,7 @@
 		"PillWrapper": {"props": ["item", "wrapper"], "length": 2},
 		"PrivateChannel": {"props": ["channel", "closeButton"]},
 		"PrivateChannelList": {"props": ["privateChannels", "searchBar"]},
-		"PrivateChannelListScroller": {"props": ["scroller", "empty"]},
+		"PrivateChannelListScroller": {"props": ["privateChannelsHeaderContainer", "headerText"]},
 		"Popout": {"props": ["popout", "arrowAlignmentTop"]},
 		"PopoutActivity": {"props": ["ellipsis", "activityActivityFeed"]},
 		"QuickMessage": {"props": ["input"], "length": 1},
