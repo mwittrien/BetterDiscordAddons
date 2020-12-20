@@ -7793,7 +7793,7 @@ module.exports = (_ => {
 						if (typeof BDFDB.DevUtils.listen.p == "function") BDFDB.DevUtils.listen.p();
 					};
 					BDFDB.DevUtils.generateLanguageStrings = function (strings, useBackup = false) {
-						const languages = Object.keys(BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.Languages, n => n.discord)).filter(n => !n.startsWith("en-")).sort();
+						const languages = Object.keys(BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, n => n.discord)).filter(n => !n.startsWith("en-")).sort();
 						let translations = {};
 						strings = BDFDB.ObjectUtils.sort(strings);
 						let text = Object.keys(strings).map(k => strings[k]).join("\n\n");
