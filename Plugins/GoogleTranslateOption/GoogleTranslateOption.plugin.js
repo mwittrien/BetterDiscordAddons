@@ -722,7 +722,8 @@ module.exports = (_ => {
 						catch (err) {callback("");}
 					}
 					else {
-						BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or Request Limit per Hour is reached. Try another Translate Engine.", {type: "error"});
+						if (response.statusCode == 429) BDFDB_Global.NotificationUtils.toast("Failed to translate text. Request Limit per Hour is reached. Choose another Translate Engine.", {type: "error"});
+						else BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server might be down. Try another Translate Engine.", {type: "error"});
 						callback("");
 					}
 				});

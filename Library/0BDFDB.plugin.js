@@ -7792,6 +7792,66 @@ module.exports = (_ => {
 					BDFDB.DevUtils.listenStop = function () {
 						if (typeof BDFDB.DevUtils.listen.p == "function") BDFDB.DevUtils.listen.p();
 					};
+					BDFDB.DevUtils.generateLanguageStrings = function (strings, useBackup = false) {
+						const languages = Object.keys(BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.Languages, n => n.discord)).filter(n => !n.startsWith("en-")).sort();
+						let translations = {};
+						strings = BDFDB.ObjectUtils.sort(strings);
+						let text = Object.keys(strings).map(k => strings[k]).join("\n\n");
+						
+						let gt = (lang, callback) => {
+							let googleTranslateWindow = BDFDB.WindowUtils.open(BDFDB, `https://translate.google.com/#en/${lang}/${encodeURIComponent(text)}`, {
+								onLoad: _ => {
+									googleTranslateWindow.executeJavaScriptSafe(`
+										require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "GTO-translation", [
+											(document.querySelector("[data-language-to-translate-into] span") || {}).innerText,
+											(document.querySelector("h2 ~ [lang]") || {}).lang
+										]);
+									`);
+								}
+							});
+							BDFDB.WindowUtils.addListener(BDFDB, "GTO-translation", (event, messageData) => {
+								BDFDB.WindowUtils.close(googleTranslateWindow);
+								BDFDB.WindowUtils.removeListener(BDFDB, "GTO-translation");
+								callback(messageData[0]);
+							});
+						};
+						let gt2 = (lang, callback) => {
+							BDFDB.LibraryRequires.request(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&dj=1&source=input&q=${encodeURIComponent(text)}`, (error, response, result) => {
+								if (!error && result && response.statusCode == 200) {
+									try {callback(JSON.parse(result).sentences.map(n => n && n.trans).filter(n => n).join(""));}
+									catch (err) {callback("");}
+								}
+								else {
+									if (response.statusCode == 429) {
+										BDFDB.NotificationUtils.toast("Too many requests. Switching to backup.", {type: "error"});
+										translate(strings, true);
+									}
+									else {
+										BDFDB.NotificationUtils.toast("Failed to translate text.", {type: "error"});
+										callback("");
+									}
+								}
+							});
+						};
+						let next = lang => {
+							if (!lang) {
+								let result = Object.keys(translations).sort().map(l => `\n\t\t\t\t\tcase "${l}":${l.length > 2 ? "\t" : "\t\t"}// ${BDFDB.LanguageUtils.languages[l].name}\n\t\t\t\t\t\treturn {${translations[l].map((s, i) => `\n\t\t\t\t\t\t\t${Object.keys(strings)[i]}:${"\t".repeat(10 - ((Object.keys(strings)[i].length + 1) / 4))}"${s}"\n\t\t\t\t\t\t`).join("\n")}};`).join("");
+								result += `\n\t\t\t\t\tdefault:\t\t// English\n\t\t\t\t\t\treturn {${Object.keys(strings).map(s => `\n\t\t\t\t\t\t\t${s}:${"\t".repeat(10 - ((s.length + 1) / 4))}"${strings[s]}"\n\t\t\t\t\t\t`).join("\n")}};`
+								console.log(result);
+								BDFDB.LibraryRequires.electron.clipboard.write({text: result});
+							}
+							else (useBackup ? gt : gt2)(lang, translation => {
+								console.log(lang);
+								if (!translation) {
+									console.warn("no translation");
+									languages.push(lang);
+								}
+								else translations[lang] = translation.split("\n\n");
+								next(languages.shift());
+							});
+						};
+						next(languages.shift());
+					};
 					BDFDB.DevUtils.req = InternalBDFDB.getWebModuleReq();
 					
 					window.BDFDB_Global = BDFDB;
