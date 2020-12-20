@@ -14,13 +14,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "HideMutedCategories",
 			"author": "DevilBro",
-			"version": "1.0.3",
+			"version": "1.0.4",
 			"description": "Hide muted categories the same way muted channels are hidden, when the server is set to hide muted channels"
-		},
-		"changeLog": {
-			"fixed": {
-				"Hide Muted with Admin Perms": "Fixed issue where muted categories weren't hidden if you got admin perms on the server"
-			}
 		}
 	};
 
