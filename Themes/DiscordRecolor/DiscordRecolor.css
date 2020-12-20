@@ -3816,7 +3816,8 @@ img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 
 /* ~~~~		12.		BDSUPPORT						~~~~ */
 
-.bd-toast {
+html .toast,
+html .bd-toast {
 	background-color: var(--background-floating);
 	box-shadow: var(--elevation-medium);
 	color: var(--header-primary);
