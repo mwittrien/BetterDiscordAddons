@@ -7792,18 +7792,19 @@ module.exports = (_ => {
 					BDFDB.DevUtils.listenStop = function () {
 						if (typeof BDFDB.DevUtils.listen.p == "function") BDFDB.DevUtils.listen.p();
 					};
-					BDFDB.DevUtils.generateLanguageStrings = function (strings, useBackup = false) {
-						const languages = Object.keys(BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, n => n.discord)).filter(n => !n.startsWith("en-")).sort();
+					BDFDB.DevUtils.generateLanguageStrings = function (strings, config = {}) {
+						const languages = Object.keys(BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, n => n.discord)).filter(n => !n.startsWith("en-") && !n.startsWith("$")).sort();
 						let translations = {};
 						strings = BDFDB.ObjectUtils.sort(strings);
 						let text = Object.keys(strings).map(k => strings[k]).join("\n\n");
 						
 						let gt = (lang, callback) => {
-							let googleTranslateWindow = BDFDB.WindowUtils.open(BDFDB, `https://translate.google.com/#en/${lang}/${encodeURIComponent(text)}`, {
+							let usedLang = {"zh": "zh-CN", "pt-BR": "pt"}[lang] || lang;
+							let googleTranslateWindow = BDFDB.WindowUtils.open(BDFDB, `https://translate.google.com/#en/${usedLang}/${encodeURIComponent(text)}`, {
 								onLoad: _ => {
 									googleTranslateWindow.executeJavaScriptSafe(`
 										require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "GTO-translation", [
-											(document.querySelector("[data-language-to-translate-into] span") || {}).innerText,
+											Array.from(document.querySelectorAll("[data-language-to-translate-into] span:not([class])")).map(n => n.innerText).join(""),
 											(document.querySelector("h2 ~ [lang]") || {}).lang
 										]);
 									`);
@@ -7824,7 +7825,8 @@ module.exports = (_ => {
 								else {
 									if (response.statusCode == 429) {
 										BDFDB.NotificationUtils.toast("Too many requests. Switching to backup.", {type: "error"});
-										translate(strings, true);
+										config.useBackup = true;
+										BDFDB.DevUtils.generateLanguageStrings(strings, config);
 									}
 									else {
 										BDFDB.NotificationUtils.toast("Failed to translate text.", {type: "error"});
@@ -7835,16 +7837,16 @@ module.exports = (_ => {
 						};
 						let next = lang => {
 							if (!lang) {
-								let result = Object.keys(translations).sort().map(l => `\t\t\t\t\tcase "${l}":${l.length > 2 ? "\t" : "\t\t"}// ${BDFDB.LanguageUtils.languages[l].name}\n\t\t\t\t\t\treturn {${translations[l].map((s, i) => `\n\t\t\t\t\t\t\t${Object.keys(strings)[i]}:${"\t".repeat(10 - ((Object.keys(strings)[i].length + 2) / 4))}"${s}"`).join(",")}\n\t\t\t\t\t\t};\n`).join("");
-								result += `\t\t\t\t\tdefault:\t\t// English\n\t\t\t\t\t\treturn {${Object.keys(strings).map(s => `\n\t\t\t\t\t\t\t${s}:${"\t".repeat(10 - ((s.length + 2) / 4))}"${strings[s]}"`).join(",")}\n\t\t\t\t\t\t};\n`
+								let result = Object.keys(translations).sort().map(l => `\n\t\t\t\t\tcase "${l}":${l.length > 2 ? "\t" : "\t\t"}// ${BDFDB.LanguageUtils.languages[l].name}\n\t\t\t\t\t\treturn {${translations[l].map((s, i) => `\n\t\t\t\t\t\t\t${Object.keys(strings)[i]}:${"\t".repeat(10 - ((Object.keys(strings)[i].length + 2) / 4))}"${s}"`).join(",")}\n\t\t\t\t\t\t};`).join("");
+								result += `\n\t\t\t\t\tdefault:\t\t// English\n\t\t\t\t\t\treturn {${Object.keys(strings).map(s => `\n\t\t\t\t\t\t\t${s}:${"\t".repeat(10 - ((s.length + 2) / 4))}"${strings[s]}"`).join(",")}\n\t\t\t\t\t\t};`
 								BDFDB.NotificationUtils.toast("Translation copied to clipboard.", {type: "success"});
 								BDFDB.LibraryRequires.electron.clipboard.write({text: result});
 							}
-							else (useBackup ? gt : gt2)(lang, translation => {
+							else (config.useBackup ? gt : gt2)(lang, translation => {
 								console.log(lang);
 								if (!translation) {
 									console.warn("no translation");
-									languages.push(lang);
+									languages.unshift(lang);
 								}
 								else translations[lang] = translation.split("\n\n");
 								next(languages.shift());
