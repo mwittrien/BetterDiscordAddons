@@ -7835,8 +7835,8 @@ module.exports = (_ => {
 						};
 						let next = lang => {
 							if (!lang) {
-								let result = Object.keys(translations).sort().map(l => `\n\t\t\t\t\tcase "${l}":${l.length > 2 ? "\t" : "\t\t"}// ${BDFDB.LanguageUtils.languages[l].name}\n\t\t\t\t\t\treturn {${translations[l].map((s, i) => `\n\t\t\t\t\t\t\t${Object.keys(strings)[i]}:${"\t".repeat(10 - ((Object.keys(strings)[i].length + 1) / 4))}"${s}"\n\t\t\t\t\t\t`).join("\n")}};`).join("");
-								result += `\n\t\t\t\t\tdefault:\t\t// English\n\t\t\t\t\t\treturn {${Object.keys(strings).map(s => `\n\t\t\t\t\t\t\t${s}:${"\t".repeat(10 - ((s.length + 1) / 4))}"${strings[s]}"\n\t\t\t\t\t\t`).join("\n")}};`
+								let result = Object.keys(translations).sort().map(l => `\t\t\t\t\tcase "${l}":${l.length > 2 ? "\t" : "\t\t"}// ${BDFDB.LanguageUtils.languages[l].name}\n\t\t\t\t\t\treturn {${translations[l].map((s, i) => `\n\t\t\t\t\t\t\t${Object.keys(strings)[i]}:${"\t".repeat(10 - ((Object.keys(strings)[i].length + 2) / 4))}"${s}"`).join(",")}\n\t\t\t\t\t\t};\n`).join("");
+								result += `\t\t\t\t\tdefault:\t\t// English\n\t\t\t\t\t\treturn {${Object.keys(strings).map(s => `\n\t\t\t\t\t\t\t${s}:${"\t".repeat(10 - ((s.length + 2) / 4))}"${strings[s]}"`).join(",")}\n\t\t\t\t\t\t};\n`
 								BDFDB.NotificationUtils.toast("Translation copied to clipboard.", {type: "success"});
 								BDFDB.LibraryRequires.electron.clipboard.write({text: result});
 							}
