@@ -570,7 +570,7 @@ module.exports = (_ => {
 										settings.showCategoryAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
 											className: BDFDB.disCN._pindmspinnedchannelsheaderamount,
 											count: foundDMs.length,
-											style: {backgroundColor: BDFDB.DiscordConstants.Colors.BRAND}
+											style: {backgroundColor: "var(--bdfdb-blurple)"}
 										}) : null,
 										BDFDB.ReactUtils.createElement("div", {
 											className: BDFDB.disCNS._pindmspinnedchannelsheaderarrow + BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
