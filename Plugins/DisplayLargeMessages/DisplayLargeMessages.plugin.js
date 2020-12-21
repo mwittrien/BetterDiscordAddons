@@ -193,7 +193,7 @@ module.exports = (_ => {
 						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 						children.splice(index > -1 ? index : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 							children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-								label: this.labels.context_uninjectattchment_text,
+								label: this.labels.context_uninjectattachment,
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "uninject-attachment"),
 								action: _ => {
 									delete encodedMessages[e.instance.props.message.id];
@@ -251,7 +251,7 @@ module.exports = (_ => {
 				if (e.instance.props.filename == "message.txt" && (settings.onDemand || amounts.maxFileSize && (amounts.maxFileSize < e.instance.props.size/1024))) {
 					e.returnvalue.props.children.splice(2, 0, [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: this.labels.button_injectattchment_text,
+							text: this.labels.button_injectattachment,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
 								className: BDFDB.disCN._displaylargemessagesinjectbuttonwrapper,
 								rel: "noreferrer noopener",
@@ -328,110 +328,140 @@ module.exports = (_ => {
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "hr":		//croatian
+					case "bg":		// Bulgarian
 						return {
-							context_uninjectattchment_text:		"Uklonite učitani sadržaj poruke",
-							button_injectattchment_text:		"Učitajte sadržaj poruke"
+							button_injectattachmenty:			"Заредете съдържанието на съобщението",
+							context_uninjectattachment:			"Премахнете зареденото съдържание на съобщението"
 						};
-					case "da":		//danish
+					case "da":		// Danish
 						return {
-							context_uninjectattchment_text:		"Fjern indlæst meddelelsesindhold",
-							button_injectattchment_text:		"Indlæs meddelelsesindhold"
+							button_injectattachmenty:			"Indlæs beskedindhold",
+							context_uninjectattachment:			"Fjern indlæst beskedindhold"
 						};
-					case "de":		//german
+					case "de":		// German
 						return {
-							context_uninjectattchment_text:		"Geladenen Nachrichteninhalt entfernen",
-							button_injectattchment_text:		"Nachrichteninhalt laden"
+							button_injectattachment:			"Nachrichteninhalt laden",
+							context_uninjectattachment:			"Geladenen Nachrichteninhalt entfernen",
 						};
-					case "es":		//spanish
+					case "el":		// Greek
 						return {
-							context_uninjectattchment_text:		"Eliminar contenido del mensaje cargado",
-							button_injectattchment_text:		"Cargar contenido del mensaje"
+							button_injectattachmenty:			"Φόρτωση περιεχομένου μηνύματος",
+							context_uninjectattachment:			"Καταργήστε το φορτωμένο περιεχόμενο μηνυμάτων"
 						};
-					case "fr":		//french
+					case "es":		// Spanish
 						return {
-							context_uninjectattchment_text:		"Supprimer le contenu du message chargé",
-							button_injectattchment_text:		"Charger le contenu du message"
+							button_injectattachmenty:			"Cargar el contenido del mensaje",
+							context_uninjectattachment:			"Eliminar el contenido del mensaje cargado"
 						};
-					case "it":		//italian
+					case "fi":		// Finnish
 						return {
-							context_uninjectattchment_text:		"Rimuovi il contenuto del messaggio caricato",
-							button_injectattchment_text:		"Carica il contenuto del messaggio"
+							button_injectattachmenty:			"Lataa viestin sisältö",
+							context_uninjectattachment:			"Poista ladattu viestin sisältö"
 						};
-					case "nl":		//dutch
+					case "fr":		// French
 						return {
-							context_uninjectattchment_text:		"Verwijder geladen berichtinhoud",
-							button_injectattchment_text:		"Laad berichtinhoud"
+							button_injectattachmenty:			"Charger le contenu du message",
+							context_uninjectattachment:			"Supprimer le contenu du message chargé"
 						};
-					case "no":		//norwegian
+					case "hr":		// Croatian
 						return {
-							context_uninjectattchment_text:		"Fjern lastet meldingens innhold",
-							button_injectattchment_text:		"Last inn meldingens innhold"
+							button_injectattachmenty:			"Učitaj sadržaj poruke",
+							context_uninjectattachment:			"Uklonite učitani sadržaj poruke"
 						};
-					case "pl":		//polish
+					case "hu":		// Hungarian
 						return {
-							context_uninjectattchment_text:		"Usuń załadowaną treść wiadomości",
-							button_injectattchment_text:		"Załaduj treść wiadomości"
+							button_injectattachmenty:			"Üzenet tartalmának betöltése",
+							context_uninjectattachment:			"Távolítsa el a betöltött üzenet tartalmát"
 						};
-					case "pt-BR":	//portuguese (brazil)
+					case "it":		// Italian
 						return {
-							context_uninjectattchment_text:		"Remover o conteúdo da mensagem carregada",
-							button_injectattchment_text:		"Carregar conteúdo da mensagem"
+							button_injectattachmenty:			"Carica il contenuto del messaggio",
+							context_uninjectattachment:			"Rimuovi il contenuto del messaggio caricato"
 						};
-					case "fi":		//finnish
+					case "ja":		// Japanese
 						return {
-							context_uninjectattchment_text:		"Poista ladattu viestin sisältö",
-							button_injectattchment_text:		"Lataa viestin sisältö"
+							button_injectattachmenty:			"メッセージコンテンツをロードする",
+							context_uninjectattachment:			"ロードされたメッセージコンテンツを削除する"
 						};
-					case "sv":		//swedish
+					case "ko":		// Korean
 						return {
-							context_uninjectattchment_text:		"Ta bort laddat meddelandeinnehåll",
-							button_injectattchment_text:		"Ladda meddelandets innehåll"
+							button_injectattachmenty:			"메시지 내용로드",
+							context_uninjectattachment:			"로드 된 메시지 내용 제거"
 						};
-					case "tr":		//turkish
+					case "lt":		// Lithuanian
 						return {
-							context_uninjectattchment_text:		"Yüklenen mesaj içeriğini kaldır",
-							button_injectattchment_text:		"Mesaj içeriğini yükle"
+							button_injectattachmenty:			"Įkelti pranešimo turinį",
+							context_uninjectattachment:			"Pašalinkite įkeltą pranešimo turinį"
 						};
-					case "cs":		//czech
+					case "nl":		// Dutch
 						return {
-							context_uninjectattchment_text:		"Odebrat načtený obsah zprávy",
-							button_injectattchment_text:		"Načíst obsah zprávy"
+							button_injectattachmenty:			"Laad berichtinhoud",
+							context_uninjectattachment:			"Verwijder de geladen berichtinhoud"
 						};
-					case "bg":		//bulgarian
+					case "no":		// Norwegian
 						return {
-							context_uninjectattchment_text:		"Премахнете зареденото съдържание на съобщението",
-							button_injectattchment_text:		"Заредете съдържание на съобщението"
+							button_injectattachmenty:			"Last inn meldingsinnhold",
+							context_uninjectattachment:			"Fjern innlastet meldingsinnhold"
 						};
-					case "ru":		//russian
+					case "pl":		// Polish
 						return {
-							context_uninjectattchment_text:		"Удалить загруженное содержимое сообщения",
-							button_injectattchment_text:		"Загрузить содержимое сообщения"
+							button_injectattachmenty:			"Załaduj treść wiadomości",
+							context_uninjectattachment:			"Usuń wczytaną treść wiadomości"
 						};
-					case "uk":		//ukrainian
+					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							context_uninjectattchment_text:		"Видаліть завантажений вміст повідомлення",
-							button_injectattchment_text:		"Завантажте вміст повідомлення"
+							button_injectattachmenty:			"Carregar o conteúdo da mensagem",
+							context_uninjectattachment:			"Remover o conteúdo da mensagem carregada"
 						};
-					case "ja":		//japanese
+					case "ro":		// Romanian
 						return {
-							context_uninjectattchment_text:		"ロードされたメッセージコンテンツを削除する",
-							button_injectattchment_text:		"メッセージの内容を読み込む"
+							button_injectattachmenty:			"Încărcați conținutul mesajului",
+							context_uninjectattachment:			"Eliminați conținutul mesajului încărcat"
 						};
-					case "zh-TW":	//chinese (traditional)
+					case "ru":		// Russian
 						return {
-							context_uninjectattchment_text:		"刪除已加載的郵件內容",
-							button_injectattchment_text:		"加載消息內容"
+							button_injectattachmenty:			"Загрузить содержимое сообщения",
+							context_uninjectattachment:			"Удалить загруженное содержимое сообщения"
 						};
-					case "ko":		//korean
+					case "sv":		// Swedish
 						return {
-							context_uninjectattchment_text:		"로드 된 메시지 내용 제거",
-							button_injectattchment_text:		"메시지 내용로드"
+							button_injectattachmenty:			"Ladda meddelandens innehåll",
+							context_uninjectattachment:			"Ta bort laddat meddelandeinnehåll"
 						};
-					default:		//default: english
+					case "th":		// Thai
 						return {
-							context_uninjectattchment_text:		"Remove loaded message content",
-							button_injectattchment_text:		"Load message content"
+							button_injectattachmenty:			"โหลดเนื้อหาข้อความ",
+							context_uninjectattachment:			"ลบเนื้อหาข้อความที่โหลด"
+						};
+					case "tr":		// Turkish
+						return {
+							button_injectattachmenty:			"Mesaj içeriğini yükle",
+							context_uninjectattachment:			"Yüklenen mesaj içeriğini kaldırın"
+						};
+					case "uk":		// Ukrainian
+						return {
+							button_injectattachmenty:			"Завантажити вміст повідомлення",
+							context_uninjectattachment:			"Видалити завантажений вміст повідомлення"
+						};
+					case "vi":		// Vietnamese
+						return {
+							button_injectattachmenty:			"Tải nội dung tin nhắn",
+							context_uninjectattachment:			"Xóa nội dung tin nhắn đã tải"
+						};
+					case "zh":		// Chinese
+						return {
+							button_injectattachmenty:			"加载消息内容",
+							context_uninjectattachment:			"删除已加载的邮件内容"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							button_injectattachmenty:			"加載消息內容",
+							context_uninjectattachment:			"刪除已加載的郵件內容"
+						};
+					default:		// English
+						return {
+							button_injectattachmenty:			"Load message content",
+							context_uninjectattachment:			"Remove loaded message content"
 						};
 				}
 			}

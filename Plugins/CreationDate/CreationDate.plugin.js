@@ -279,7 +279,7 @@ module.exports = (_ => {
 				let timestamp = this.getTimestamp(languages[choices.creationDateLang].id, user.createdAt);
 				children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 					className: BDFDB.disCNS._creationdatedate + BDFDB.disCNS.userinfodate + BDFDB.disCN.textrow,
-					children: settings.displayText ? this.labels.createdat_text.replace("{{time}}", timestamp) : timestamp
+					children: settings.displayText ? this.labels.created_at.replace("{{time}}", timestamp) : timestamp
 				}));
 			}
 
@@ -336,95 +336,118 @@ module.exports = (_ => {
 				for (let i = 0; i < charArray.length; i++) {
 					if (!numreg.test(charArray[i-1]) && numreg.test(charArray[i]) && !numreg.test(charArray[i+1])) charArray[i] = "0" + charArray[i];
 				}
-
 				return charArray.join("");
 			}
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "hr":		//croatian
+					case "bg":		// Bulgarian
 						return {
-							createdat_text:				"Izrađen {{time}}"
+							created_at:							"Създадено на {{time}}"
 						};
-					case "da":		//danish
+					case "da":		// Danish
 						return {
-							createdat_text:				"Oprettet den {{time}}"
+							created_at:							"Oprettet den {{time}}"
 						};
-					case "de":		//german
+					case "de":		// German
 						return {
-							createdat_text:				"Erstellt am {{time}}"
+							created_at:							"Erstellt am {{time}}"
 						};
-					case "es":		//spanish
+					case "el":		// Greek
 						return {
-							createdat_text:				"Creado el {{time}}"
+							created_at:							"Δημιουργήθηκε στις {{time}}"
 						};
-					case "fr":		//french
+					case "es":		// Spanish
 						return {
-							createdat_text:				"Créé le {{time}}"
+							created_at:							"Creado el {{time}}"
 						};
-					case "it":		//italian
+					case "fi":		// Finnish
 						return {
-							createdat_text:				"Creato il {{time}}"
+							created_at:							"Luotu {{time}}"
 						};
-					case "nl":		//dutch
+					case "fr":		// French
 						return {
-							createdat_text:				"Gemaakt op {{time}}"
+							created_at:							"Créé le {{time}}"
 						};
-					case "no":		//norwegian
+					case "hr":		// Croatian
 						return {
-							createdat_text:				"Opprettet på {{time}}"
+							created_at:							"Izrađeno {{time}}"
 						};
-					case "pl":		//polish
+					case "hu":		// Hungarian
 						return {
-							createdat_text:				"Utworzono {{time}}"
+							created_at:							"Létrehozva: {{time}}"
 						};
-					case "pt-BR":	//portuguese (brazil)
+					case "it":		// Italian
 						return {
-							createdat_text:				"Criado em {{time}}"
+							created_at:							"Creato il {{time}}"
 						};
-					case "fi":		//finnish
+					case "ja":		// Japanese
 						return {
-							createdat_text:				"Luotu {{time}}"
+							created_at:							"{{time}}に作成"
 						};
-					case "sv":		//swedish
+					case "ko":		// Korean
 						return {
-							createdat_text:				"Skapat den {{time}}"
+							created_at:							"{{time}}에 생성됨"
 						};
-					case "tr":		//turkish
+					case "lt":		// Lithuanian
 						return {
-							createdat_text:				"Oluşturma tarihi {{time}}"
+							created_at:							"Sukurta {{time}}"
 						};
-					case "cs":		//czech
+					case "nl":		// Dutch
 						return {
-							createdat_text:				"Vytvořeno dne {{time}}"
+							created_at:							"Gemaakt op {{time}}"
 						};
-					case "bg":		//bulgarian
+					case "no":		// Norwegian
 						return {
-							createdat_text:				"Създадена на {{time}}"
+							created_at:							"Opprettet {{time}}"
 						};
-					case "ru":		//russian
+					case "pl":		// Polish
 						return {
-							createdat_text:				"Создан {{time}}"
+							created_at:							"Utworzono {{time}}"
 						};
-					case "uk":		//ukrainian
+					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							createdat_text:				"Створено {{time}}"
+							created_at:							"Criado em {{time}}"
 						};
-					case "ja":		//japanese
+					case "ro":		// Romanian
 						return {
-							createdat_text:				"{{time}} に登録"
+							created_at:							"Creat la {{time}}"
 						};
-					case "zh-TW":	//chinese (traditional)
+					case "ru":		// Russian
 						return {
-							createdat_text:				"創建於 {{time}}"
+							created_at:							"Создано {{time}}"
 						};
-					case "ko":		//korean
+					case "sv":		// Swedish
 						return {
-							createdat_text:				"{{time}} 생성 일"
+							created_at:							"Skapad {{time}}"
 						};
-					default:		//default: english
+					case "th":		// Thai
 						return {
-							createdat_text:				"Created on {{time}}"
+							created_at:							"สร้างเมื่อ {{time}}"
+						};
+					case "tr":		// Turkish
+						return {
+							created_at:							"{{time}} tarihinde oluşturuldu"
+						};
+					case "uk":		// Ukrainian
+						return {
+							created_at:							"Створено {{time}}"
+						};
+					case "vi":		// Vietnamese
+						return {
+							created_at:							"Được tạo vào {{time}}"
+						};
+					case "zh":		// Chinese
+						return {
+							created_at:							"创建于{{time}}"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							created_at:							"創建於{{time}}"
+						};
+					default:		// English
+						return {
+							created_at:							"Created on {{time}}"
 						};
 				}
 			}

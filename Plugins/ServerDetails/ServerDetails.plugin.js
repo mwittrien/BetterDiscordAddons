@@ -111,11 +111,11 @@ module.exports = (_ => {
 							string: `${owner ? owner.username : "Unknown"}#${owner ? owner.discriminator : "0000"}`
 						}),
 						settings.addCreation && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
-							prefix: _this.labels.creationdate_text,
+							prefix: _this.labels.creation_date,
 							string: _this.getTimestamp(languages[choices.timeLang].id, BDFDB.LibraryModules.TimestampUtils.extractTimestamp(this.props.guild.id))
 						}),
 						settings.addJoin && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
-							prefix: _this.labels.joindate_text,
+							prefix: _this.labels.join_date,
 							string: _this.getTimestamp(languages[choices.timeLang].id, this.props.guild.joinedAt)
 						}),
 						settings.addMembers && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
@@ -169,8 +169,8 @@ module.exports = (_ => {
 						otherOrder:			{value: false, 		cat: "settings",	description: "Show the time before the date"},
 						addIcon:			{value: true, 		cat: "tooltip",	description: "GUILD_CREATE_UPLOAD_ICON_LABEL"},
 						addOwner:			{value: true, 		cat: "tooltip",	description: "GUILD_OWNER"},
-						addCreation:		{value: true, 		cat: "tooltip",	description: "creationdate_text"},
-						addJoin:			{value: true, 		cat: "tooltip",	description: "joindate_text"},
+						addCreation:		{value: true, 		cat: "tooltip",	description: "creation_date"},
+						addJoin:			{value: true, 		cat: "tooltip",	description: "join_date"},
 						addMembers:			{value: true, 		cat: "tooltip",	description: "MEMBERS"},
 						addChannels:		{value: true, 		cat: "tooltip",	description: "CHANNELS"},
 						addRoles:			{value: true, 		cat: "tooltip",	description: "ROLES"},
@@ -528,110 +528,140 @@ module.exports = (_ => {
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "hr":		//croatian
+					case "bg":		// Bulgarian
 						return {
-							creationdate_text:			"Datum stvaranja",
-							joindate_text:				"Datum pridruživanja"
+							creation_date:						"Дата на създаване",
+							join_date:							"Дата на присъединяване"
 						};
-					case "da":		//danish
+					case "da":		// Danish
 						return {
-							creationdate_text:			"Oprettelsesdato",
-							joindate_text:				"Tilmeldingsdato"
+							creation_date:						"Oprettelsesdato",
+							join_date:							"Deltag i dato"
 						};
-					case "de":		//german
+					case "de":		// German
 						return {
-							creationdate_text:			"Erstellungsdatum",
-							joindate_text:				"Beitrittsdatum"
+							creation_date:						"Erstellungsdatum",
+							join_date:							"Beitrittsdatum"
 						};
-					case "es":		//spanish
+					case "el":		// Greek
 						return {
-							creationdate_text:			"Fecha de creación",
-							joindate_text:				"Fecha de inscripción"
+							creation_date:						"Ημερομηνία δημιουργίας",
+							join_date:							"Ημερομηνία προσχώρησης"
 						};
-					case "fr":		//french
+					case "es":		// Spanish
 						return {
-							creationdate_text:			"Date de création",
-							joindate_text:				"Date d'adhésion"
+							creation_date:						"Fecha de creación",
+							join_date:							"Fecha de Ingreso"
 						};
-					case "it":		//italian
+					case "fi":		// Finnish
 						return {
-							creationdate_text:			"Data di creazione",
-							joindate_text:				"Data di adesione"
+							creation_date:						"Luomispäivä",
+							join_date:							"Liittymispäivä"
 						};
-					case "nl":		//dutch
+					case "fr":		// French
 						return {
-							creationdate_text:			"Aanmaakdatum",
-							joindate_text:				"Toetredingsdatum"
+							creation_date:						"Date de création",
+							join_date:							"Date d'inscription"
 						};
-					case "no":		//norwegian
+					case "hr":		// Croatian
 						return {
-							creationdate_text:			"Opprettelsesdato",
-							joindate_text:				"Påmeldingsdato"
+							creation_date:						"Datum stvaranja",
+							join_date:							"Datum pridruživanja"
 						};
-					case "pl":		//polish
+					case "hu":		// Hungarian
 						return {
-							creationdate_text:			"Data utworzenia",
-							joindate_text:				"Data dołączenia"
+							creation_date:						"Létrehozás dátuma",
+							join_date:							"Csatlakozás dátuma"
 						};
-					case "pt-BR":	//portuguese (brazil)
+					case "it":		// Italian
 						return {
-							creationdate_text:			"Data de criação",
-							joindate_text:				"Data de adesão"
+							creation_date:						"Data di creazione",
+							join_date:							"Data di iscrizione"
 						};
-					case "fi":		//finnish
+					case "ja":		// Japanese
 						return {
-							creationdate_text:			"Luomispäivä",
-							joindate_text:				"Liittymispäivämäärä"
+							creation_date:						"作成日",
+							join_date:							"参加日"
 						};
-					case "sv":		//swedish
+					case "ko":		// Korean
 						return {
-							creationdate_text:			"Skapelsedagen",
-							joindate_text:				"Anslutningsdagen"
+							creation_date:						"제작 일",
+							join_date:							"가입 날짜"
 						};
-					case "tr":		//turkish
+					case "lt":		// Lithuanian
 						return {
-							creationdate_text:			"Oluşturulma tarihi",
-							joindate_text:				"Katılım tarihi"
+							creation_date:						"Sukūrimo data",
+							join_date:							"Įstojimo data"
 						};
-					case "cs":		//czech
+					case "nl":		// Dutch
 						return {
-							creationdate_text:			"Datum vzniku",
-							joindate_text:				"Datum připojení"
+							creation_date:						"Aanmaakdatum",
+							join_date:							"Toetredingsdatum"
 						};
-					case "bg":		//bulgarian
+					case "no":		// Norwegian
 						return {
-							creationdate_text:			"Дата на създаване",
-							joindate_text:				"Дата на присъединяване"
+							creation_date:						"Opprettelsesdato",
+							join_date:							"Bli med på dato"
 						};
-					case "ru":		//russian
+					case "pl":		// Polish
 						return {
-							creationdate_text:			"Дата создания",
-							joindate_text:				"Дата присоединения"
+							creation_date:						"Data utworzenia",
+							join_date:							"Data dołączenia"
 						};
-					case "uk":		//ukrainian
+					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							creationdate_text:			"Дата створення",
-							joindate_text:				"Дата вступу"
+							creation_date:						"Data de criação",
+							join_date:							"Data de afiliação"
 						};
-					case "ja":		//japanese
+					case "ro":		// Romanian
 						return {
-							creationdate_text:			"作成日",
-							joindate_text:				"入社の日"
+							creation_date:						"Data crearii",
+							join_date:							"Data înscrierii"
 						};
-					case "zh-TW":	//chinese (traditional)
+					case "ru":		// Russian
 						return {
-							creationdate_text:			"創建日期",
-							joindate_text:				"入職日期"
+							creation_date:						"Дата создания",
+							join_date:							"Дате вступления"
 						};
-					case "ko":		//korean
+					case "sv":		// Swedish
 						return {
-							creationdate_text:			"제작 일",
-							joindate_text:				"입사일"
+							creation_date:						"Skapelsedagen",
+							join_date:							"Gå med datum"
 						};
-					default:		//default: english
+					case "th":		// Thai
 						return {
-							creationdate_text:			"Creationdate",
-							joindate_text:				"Joindate"
+							creation_date:						"วันที่สร้าง",
+							join_date:							"วันที่เข้าร่วม"
+						};
+					case "tr":		// Turkish
+						return {
+							creation_date:						"Oluşturulma tarihi",
+							join_date:							"Üyelik Tarihi"
+						};
+					case "uk":		// Ukrainian
+						return {
+							creation_date:						"Дата створення",
+							join_date:							"Дата приєднання"
+						};
+					case "vi":		// Vietnamese
+						return {
+							creation_date:						"Ngày thành lập",
+							join_date:							"Ngày tham gia"
+						};
+					case "zh":		// Chinese
+						return {
+							creation_date:						"创建日期",
+							join_date:							"参加日期"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							creation_date:						"創建日期",
+							join_date:							"參加日期"
+						};
+					default:		// English
+						return {
+							creation_date:						"Creation Date",
+							join_date:							"Join Date"
 						};
 				}
 			}

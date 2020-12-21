@@ -14,16 +14,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.1.2",
+			"version": "2.1.3",
 			"description": "Add a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send"
-		},
-		"changeLog": {
-			"fixed": {
-				"Google Engine": "Works again"
-			},
-			"improved": {
-				"Yandex Engine": "Warns you if rate limit was reached"
-			}
 		}
 	};
 	
@@ -219,7 +211,7 @@ module.exports = (_ => {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
 					if (index == -1) [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["edit", "add-reaction", "quote"]});
 					children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
+						label: translated ? this.labels.context_messageuntranslateoption : this.labels.context_messagetranslateoption,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, translated ? "untranslate-message" : "translate-message"),
 						hint: hint && (_ => {
 							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
@@ -252,7 +244,7 @@ module.exports = (_ => {
 						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "search-translation"),
 							disabled: isTranslating,
-							label: this.labels.context_googletranslateoption_text,
+							label: this.labels.context_googletranslateoption,
 							persisting: true,
 							action: event => {
 								let item = BDFDB.DOMUtils.getParent(BDFDB.dotCN.menuitem, event.target);
@@ -288,7 +280,7 @@ module.exports = (_ => {
 					let translated = !!translatedMessages[e.instance.props.message.id];
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
 					children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
+						label: translated ? this.labels.context_messageuntranslateoption : this.labels.context_messagetranslateoption,
 						disabled: isTranslating,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, translated ? "untranslate-message" : "translate-message"),
 						icon: _ => {
@@ -308,7 +300,7 @@ module.exports = (_ => {
 					let translated = !!translatedMessages[e.instance.props.message.id];
 					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						key: translated ? "untranslate-message" : "translate-message",
-						text: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
+						text: translated ? this.labels.context_messageuntranslateoption : this.labels.context_messagetranslateoption,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 							className: BDFDB.disCN.messagetoolbarbutton,
 							onClick: _ => {
@@ -447,7 +439,7 @@ module.exports = (_ => {
 						tooltipConfig: {style: "max-width: 400px"},
 						children: BDFDB.ReactUtils.createElement("time", {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.messageedited, BDFDB.disCN._googletranslateoptiontranslated),
-							children: `(${this.labels.translated_watermark_text})`
+							children: `(${this.labels.translated_watermark})`
 						})
 					}));
 				}
@@ -468,7 +460,7 @@ module.exports = (_ => {
 								tooltipConfig: {style: "max-width: 400px"},
 								children: BDFDB.ReactUtils.createElement("time", {
 									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.messageedited, BDFDB.disCN._googletranslateoptiontranslated),
-									children: `(${this.labels.translated_watermark_text})`
+									children: `(${this.labels.translated_watermark})`
 								})
 							}));
 						}
@@ -691,7 +683,7 @@ module.exports = (_ => {
 					onLoad: _ => {
 						googleTranslateWindow.executeJavaScriptSafe(`
 							require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "GTO-translation", [
-								(document.querySelector("[data-language-to-translate-into] span") || {}).innerText,
+								Array.from(document.querySelectorAll("[data-language-to-translate-into] span:not([class])")).map(n => n.innerText).join(""),
 								(document.querySelector("h2 ~ [lang]") || {}).lang
 							]);
 						`);
@@ -958,194 +950,248 @@ module.exports = (_ => {
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "hr":		//croatian
+					case "bg":		// Bulgarian
 						return {
-							context_messagetranslateoption_text:	"Prijevod poruke",
-							context_messageuntranslateoption_text:	"Prijenos poruke",
-							context_googletranslateoption_text:		"Traži prijevod",
-							popout_translateoption_text:			"Prevesti",
-							popout_untranslateoption_text:			"Prevesti natrag",
-							translated_watermark_text:				"preveo"
+							context_googletranslateoption:		"Търсене превод",
+							context_messagetranslateoption:		"Превод на съобщението",
+							context_messageuntranslateoption:	"Превод на съобщението",
+							popout_translateoption:				"Превод",
+							popout_untranslateoption:			"Непревод",
+							translated_watermark:				"преведено"
 						};
-					case "da":		//danish
+					case "da":		// Danish
 						return {
-							context_messagetranslateoption_text:	"Oversæt Besked",
-							context_messageuntranslateoption_text:	"Oversæt Besked tilbage",
-							context_googletranslateoption_text:		"Søg oversættelse",
-							popout_translateoption_text:			"Oversætte",
-							popout_untranslateoption_text:			"Oversæt tilbage",
-							translated_watermark_text:				"oversat"
+							context_googletranslateoption:		"Søg oversættelse",
+							context_messagetranslateoption:		"Oversæt besked",
+							context_messageuntranslateoption:	"Ikke-oversat besked",
+							popout_translateoption:				"Oversætte",
+							popout_untranslateoption:			"Untranslate",
+							translated_watermark:				"oversat"
 						};
-					case "de":		//german
+					case "de":		// German
 						return {
-							context_messagetranslateoption_text:	"Nachricht übersetzen",
-							context_messageuntranslateoption_text:	"Nachricht unübersetzen",
-							context_googletranslateoption_text:		"Suche Übersetzung",
-							popout_translateoption_text:			"Übersetzen",
-							popout_untranslateoption_text:			"Unübersetzen",
-							translated_watermark_text:				"übersetzt"
+							context_googletranslateoption:		"Übersetzung suchen",
+							context_messagetranslateoption:		"Nachricht übersetzen",
+							context_messageuntranslateoption:	"Nachricht unübersetzen",
+							popout_translateoption:				"Übersetzen",
+							popout_untranslateoption:			"Unübersetzen",
+							translated_watermark:				"übersetzt"
 						};
-					case "es":		//spanish
+					case "el":		// Greek
 						return {
-							context_messagetranslateoption_text:	"Traducir mensaje",
-							context_messageuntranslateoption_text:	"Traducir mensaje de vuelta",
-							context_googletranslateoption_text:		"Buscar traducción",
-							popout_translateoption_text:			"Traducir",
-							popout_untranslateoption_text:			"Traducir de vuelta",
-							translated_watermark_text:				"traducido"
+							context_googletranslateoption:		"Αναζήτηση μετάφρασης",
+							context_messagetranslateoption:		"Μετάφραση μηνύματος",
+							context_messageuntranslateoption:	"Μη μετάφραση μηνύματος",
+							popout_translateoption:				"Μεταφράζω",
+							popout_untranslateoption:			"Μη μετάφραση",
+							translated_watermark:				"μεταφρασμένο"
 						};
-					case "fr":		//french
+					case "es":		// Spanish
 						return {
-							context_messagetranslateoption_text:	"Traduire le message",
-							context_messageuntranslateoption_text:	"Traduire le message en retour",
-							context_googletranslateoption_text:		"Rechercher une traduction",
-							popout_translateoption_text:			"Traduire",
-							popout_untranslateoption_text:			"Traduire en arrière",
-							translated_watermark_text:				"traduit"
+							context_googletranslateoption:		"Buscar traducción",
+							context_messagetranslateoption:		"Traducir mensaje",
+							context_messageuntranslateoption:	"Mensaje sin traducir",
+							popout_translateoption:				"Traducir",
+							popout_untranslateoption:			"No traducir",
+							translated_watermark:				"traducido"
 						};
-					case "it":		//italian
+					case "fi":		// Finnish
 						return {
-							context_messagetranslateoption_text:	"Tradurre il messaggio",
-							context_messageuntranslateoption_text:	"Tradurre il messaggio indietro",
-							context_googletranslateoption_text:		"Cerca la traduzione",
-							popout_translateoption_text:			"Traduci",
-							popout_untranslateoption_text:			"Traduci indietro",
-							translated_watermark_text:				"tradotto"
+							context_googletranslateoption:		"Hae käännöstä",
+							context_messagetranslateoption:		"Käännä viesti",
+							context_messageuntranslateoption:	"Käännä viesti",
+							popout_translateoption:				"Kääntää",
+							popout_untranslateoption:			"Käännä",
+							translated_watermark:				"käännetty"
 						};
-					case "nl":		//dutch
+					case "fr":		// French
 						return {
-							context_messagetranslateoption_text:	"Vertaal bericht",
-							context_messageuntranslateoption_text:	"Vertaal bericht terug",
-							context_googletranslateoption_text:		"Zoek vertaling",
-							popout_translateoption_text:			"Vertaal",
-							popout_untranslateoption_text:			"Vertaal terug",
-							translated_watermark_text:				"vertaalde"
+							context_googletranslateoption:		"Recherche de traduction",
+							context_messagetranslateoption:		"Traduire le message",
+							context_messageuntranslateoption:	"Message non traduit",
+							popout_translateoption:				"Traduire",
+							popout_untranslateoption:			"Non traduit",
+							translated_watermark:				"traduit"
 						};
-					case "no":		//norwegian
+					case "hr":		// Croatian
 						return {
-							context_messagetranslateoption_text:	"Oversett melding",
-							context_messageuntranslateoption_text:	"Oversett melding tilbake",
-							context_googletranslateoption_text:		"Søk oversettelse",
-							popout_translateoption_text:			"Oversett",
-							popout_untranslateoption_text:			"Oversett tilbake",
-							translated_watermark_text:				"oversatt"
+							context_googletranslateoption:		"Pretraži prijevod",
+							context_messagetranslateoption:		"Prevedi poruku",
+							context_messageuntranslateoption:	"Prevedi poruku",
+							popout_translateoption:				"Prevedi",
+							popout_untranslateoption:			"Neprevedi",
+							translated_watermark:				"prevedeno"
 						};
-					case "pl":		//polish
+					case "hu":		// Hungarian
 						return {
-							context_messagetranslateoption_text:	"Przetłumacz wiadomość",
-							context_messageuntranslateoption_text:	"Przetłumacz wiadomość z powrotem",
-							context_googletranslateoption_text:		"Wyszukaj tłumaczenie",
-							popout_translateoption_text:			"Przetłumacz",
-							popout_untranslateoption_text:			"Przetłumacz ponownie",
-							translated_watermark_text:				"przetłumaczony"
+							context_googletranslateoption:		"Keresés a fordításban",
+							context_messagetranslateoption:		"Üzenet lefordítása",
+							context_messageuntranslateoption:	"Az üzenet lefordítása",
+							popout_translateoption:				"fordít",
+							popout_untranslateoption:			"Fordítás le",
+							translated_watermark:				"lefordított"
 						};
-					case "pt-BR":	//portuguese (brazil)
+					case "it":		// Italian
 						return {
-							context_messagetranslateoption_text:	"Traduzir mensagem",
-							context_messageuntranslateoption_text:	"Traduzir mensagem de volta",
-							context_googletranslateoption_text:		"Pesquisar tradução",
-							popout_translateoption_text:			"Traduzir",
-							popout_untranslateoption_text:			"Traduzir de volta",
-							translated_watermark_text:				"traduzido"
+							context_googletranslateoption:		"Cerca traduzione",
+							context_messagetranslateoption:		"Traduci messaggio",
+							context_messageuntranslateoption:	"Annulla traduzione messaggio",
+							popout_translateoption:				"Tradurre",
+							popout_untranslateoption:			"Non tradurre",
+							translated_watermark:				"tradotto"
 						};
-					case "fi":		//finnish
+					case "ja":		// Japanese
 						return {
-							context_messagetranslateoption_text:	"Käännä viesti",
-							context_messageuntranslateoption_text:	"Käännä viesti takaisin",
-							context_googletranslateoption_text:		"Etsi käännös",
-							popout_translateoption_text:			"Kääntää",
-							popout_untranslateoption_text:			"Käännä takaisin",
-							translated_watermark_text:				"käännetty"
+							context_googletranslateoption:		"翻訳を検索",
+							context_messagetranslateoption:		"メッセージの翻訳",
+							context_messageuntranslateoption:	"メッセージの翻訳解除",
+							popout_translateoption:				"翻訳する",
+							popout_untranslateoption:			"翻訳しない",
+							translated_watermark:				"翻訳済み"
 						};
-					case "sv":		//swedish
+					case "ko":		// Korean
 						return {
-							context_messagetranslateoption_text:	"Översätt meddelande",
-							context_messageuntranslateoption_text:	"Översätt meddelandet tillbaka",
-							context_googletranslateoption_text:		"Sök översättning",
-							popout_translateoption_text:			"Översätt",
-							popout_untranslateoption_text:			"Översätt tillbaka",
-							translated_watermark_text:				"översatt"
+							context_googletranslateoption:		"번역 검색",
+							context_messagetranslateoption:		"메시지 번역",
+							context_messageuntranslateoption:	"메시지 번역 취소",
+							popout_translateoption:				"옮기다",
+							popout_untranslateoption:			"번역 취소",
+							translated_watermark:				"번역"
 						};
-					case "tr":		//turkish
+					case "lt":		// Lithuanian
 						return {
-							context_messagetranslateoption_text:	"Mesajı çevir",
-							context_messageuntranslateoption_text:	"İletiyi geri çevir",
-							context_googletranslateoption_text:		"Arama tercümesi",
-							popout_translateoption_text:			"Çevirmek",
-							popout_untranslateoption_text:			"Geri çevir",
-							translated_watermark_text:				"tercüme"
+							context_googletranslateoption:		"Paieškos vertimas",
+							context_messagetranslateoption:		"Versti pranešimą",
+							context_messageuntranslateoption:	"Išversti pranešimą",
+							popout_translateoption:				"Išversti",
+							popout_untranslateoption:			"Neišversti",
+							translated_watermark:				"išverstas"
 						};
-					case "cs":		//czech
+					case "nl":		// Dutch
 						return {
-							context_messagetranslateoption_text:	"Přeposlat zprávu",
-							context_messageuntranslateoption_text:	"Přeposlat zprávu zpátky",
-							context_googletranslateoption_text:		"Hledat překlad",
-							popout_translateoption_text:			"Přeposlat",
-							popout_untranslateoption_text:			"Přeposlat zpět",
-							translated_watermark_text:				"přeloženo"
+							context_googletranslateoption:		"Zoek vertaling",
+							context_messagetranslateoption:		"Bericht vertalen",
+							context_messageuntranslateoption:	"Bericht onvertalen",
+							popout_translateoption:				"Vertalen",
+							popout_untranslateoption:			"Onvertalen",
+							translated_watermark:				"vertaald"
 						};
-					case "bg":		//bulgarian
+					case "no":		// Norwegian
 						return {
-							context_messagetranslateoption_text:	"Преведете на съобщението",
-							context_messageuntranslateoption_text:	"Преведете съобщението обратно",
-							context_googletranslateoption_text:		"Търсене на превод",
-							popout_translateoption_text:			"Превод",
-							popout_untranslateoption_text:			"Превод обратно",
-							translated_watermark_text:				"преведена"
+							context_googletranslateoption:		"Søk i oversettelse",
+							context_messagetranslateoption:		"Oversett melding",
+							context_messageuntranslateoption:	"Ikke oversett melding",
+							popout_translateoption:				"Oversette",
+							popout_untranslateoption:			"Ikke oversett",
+							translated_watermark:				"oversatt"
 						};
-					case "ru":		//russian
+					case "pl":		// Polish
 						return {
-							context_messagetranslateoption_text:	"Перевести сообщение",
-							context_messageuntranslateoption_text:	"Перевести сообщение обратно",
-							context_googletranslateoption_text:		"Поиск перевода",
-							popout_translateoption_text:			"Перевести",
-							popout_untranslateoption_text:			"Перевести обратно",
-							translated_watermark_text:				"переведенный"
+							context_googletranslateoption:		"Wyszukaj tłumaczenie",
+							context_messagetranslateoption:		"Przetłumacz wiadomość",
+							context_messageuntranslateoption:	"Nieprzetłumacz wiadomość",
+							popout_translateoption:				"Tłumaczyć",
+							popout_untranslateoption:			"Nie przetłumacz",
+							translated_watermark:				"przetłumaczony"
 						};
-					case "uk":		//ukrainian
+					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							context_messagetranslateoption_text:	"Перекласти повідомлення",
-							context_messageuntranslateoption_text:	"Перекласти повідомлення назад",
-							context_googletranslateoption_text:		"Пошук перекладу",
-							popout_translateoption_text:			"Перекласти",
-							popout_untranslateoption_text:			"Перекласти назад",
-							translated_watermark_text:				"перекладений"
+							context_googletranslateoption:		"Tradução de pesquisa",
+							context_messagetranslateoption:		"Traduzir mensagem",
+							context_messageuntranslateoption:	"Mensagem não traduzida",
+							popout_translateoption:				"Traduzir",
+							popout_untranslateoption:			"Não traduzido",
+							translated_watermark:				"traduzido"
 						};
-					case "ja":		//japanese
+					case "ro":		// Romanian
 						return {
-							context_messagetranslateoption_text:	"メッセージを翻訳する",
-							context_messageuntranslateoption_text:	"メッセージを翻訳する",
-							context_googletranslateoption_text:		"翻訳の検索",
-							popout_translateoption_text:			"翻訳",
-							popout_untranslateoption_text:			"翻訳する",
-							translated_watermark_text:				"翻訳された"
+							context_googletranslateoption:		"Căutare traducere",
+							context_messagetranslateoption:		"Traduceți mesajul",
+							context_messageuntranslateoption:	"Untraduceți mesajul",
+							popout_translateoption:				"Traduceți",
+							popout_untranslateoption:			"Netradus",
+							translated_watermark:				"tradus"
 						};
-					case "zh-TW":	//chinese (traditional)
+					case "ru":		// Russian
 						return {
-							context_messagetranslateoption_text:	"翻譯消息",
-							context_messageuntranslateoption_text:	"翻譯消息",
-							context_googletranslateoption_text:		"搜索翻譯",
-							popout_translateoption_text:			"翻譯",
-							popout_untranslateoption_text:			"翻譯回來",
-							translated_watermark_text:				"翻譯"
+							context_googletranslateoption:		"Искать перевод",
+							context_messagetranslateoption:		"Перевести сообщение",
+							context_messageuntranslateoption:	"Непереведенное сообщение",
+							popout_translateoption:				"Переведите",
+							popout_untranslateoption:			"Неперевести",
+							translated_watermark:				"переведено"
 						};
-					case "ko":		//korean
+					case "sv":		// Swedish
 						return {
-							context_messagetranslateoption_text:	"메시지 번역",
-							context_messageuntranslateoption_text:	"메시지 번역 뒤로",
-							context_googletranslateoption_text:		"검색 번역",
-							popout_translateoption_text:			"다시",
-							popout_untranslateoption_text:			"다시 번역",
-							translated_watermark_text:				"번역 된"
+							context_googletranslateoption:		"Sök översättning",
+							context_messagetranslateoption:		"Översätt meddelande",
+							context_messageuntranslateoption:	"Untranslate meddelande",
+							popout_translateoption:				"Översätt",
+							popout_untranslateoption:			"Untranslate",
+							translated_watermark:				"översatt"
 						};
-					default:		//default: english
+					case "th":		// Thai
 						return {
-							context_messagetranslateoption_text:	"Translate Message",
-							context_messageuntranslateoption_text:	"Untranslate Message",
-							context_googletranslateoption_text:		"Search translation",
-							popout_translateoption_text:			"Translate",
-							popout_untranslateoption_text:			"Untranslate",
-							translated_watermark_text:				"translated"
+							context_googletranslateoption:		"ค้นหาคำแปล",
+							context_messagetranslateoption:		"แปลข้อความ",
+							context_messageuntranslateoption:	"ยกเลิกการแปลข้อความ",
+							popout_translateoption:				"แปลภาษา",
+							popout_untranslateoption:			"ไม่แปล",
+							translated_watermark:				"แปล"
+						};
+					case "tr":		// Turkish
+						return {
+							context_googletranslateoption:		"Çeviri ara",
+							context_messagetranslateoption:		"Mesajı Çevir",
+							context_messageuntranslateoption:	"Çeviriyi Kaldır Mesajı",
+							popout_translateoption:				"Çevirmek",
+							popout_untranslateoption:			"Çevirmeyi kaldır",
+							translated_watermark:				"tercüme"
+						};
+					case "uk":		// Ukrainian
+						return {
+							context_googletranslateoption:		"Пошук перекладу",
+							context_messagetranslateoption:		"Перекласти повідомлення",
+							context_messageuntranslateoption:	"Неперекладене повідомлення",
+							popout_translateoption:				"Перекласти",
+							popout_untranslateoption:			"Неперекласти",
+							translated_watermark:				"переклав"
+						};
+					case "vi":		// Vietnamese
+						return {
+							context_googletranslateoption:		"Tìm kiếm bản dịch",
+							context_messagetranslateoption:		"Dịch tin nhắn",
+							context_messageuntranslateoption:	"Thư chưa dịch",
+							popout_translateoption:				"Phiên dịch",
+							popout_untranslateoption:			"Chưa dịch",
+							translated_watermark:				"đã dịch"
+						};
+					case "zh":		// Chinese
+						return {
+							context_googletranslateoption:		"搜索翻译",
+							context_messagetranslateoption:		"翻译讯息",
+							context_messageuntranslateoption:	"取消翻译邮件",
+							popout_translateoption:				"翻译",
+							popout_untranslateoption:			"取消翻译",
+							translated_watermark:				"已翻译"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							context_googletranslateoption:		"搜索翻譯",
+							context_messagetranslateoption:		"翻譯訊息",
+							context_messageuntranslateoption:	"取消翻譯郵件",
+							popout_translateoption:				"翻譯",
+							popout_untranslateoption:			"取消翻譯",
+							translated_watermark:				"已翻譯"
+						};
+					default:		// English
+						return {
+							context_googletranslateoption:		"Search translation",
+							context_messagetranslateoption:		"Translate Message",
+							context_messageuntranslateoption:	"Untranslate Message",
+							popout_translateoption:				"Translate",
+							popout_untranslateoption:			"Untranslate",
+							translated_watermark:				"translated"
 						};
 				}
 			}

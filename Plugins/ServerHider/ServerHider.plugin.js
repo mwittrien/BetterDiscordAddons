@@ -131,19 +131,19 @@ module.exports = (_ => {
 				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: [
 						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: this.labels.context_serverhider_text,
+							label: this.labels.context_serverhider,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-hide"),
 							children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 								children: [
 									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-										label: this.labels.submenu_openhidemenu_text,
+										label: this.labels.submenu_openhidemenu,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "openmenu"),
 										action: _ => {
 											this.showHideModal();
 										}
 									}),
 									!instance.props.guild && !instance.props.folderId ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-										label: instance.props.guild ? this.labels.submenu_hideserver_text : this.labels.submenu_hidefolder_text,
+										label: instance.props.guild ? this.labels.submenu_hideserver : this.labels.submenu_hidefolder,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "hide"),
 										action: _ => {
 											if (instance.props.guild) this.toggleItem(BDFDB.DataUtils.load(this, "hidden", "servers") || [], instance.props.guild.id, "servers");
@@ -214,7 +214,7 @@ module.exports = (_ => {
 				
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
-					header: this.labels.modal_header_text,
+					header: this.labels.modal_header,
 					subheader: "",
 					contentClassName: BDFDB.disCN.listscroller,
 					children: guilds.map((guild, i) => {
@@ -311,173 +311,221 @@ module.exports = (_ => {
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "hr":		//croatian
+					case "bg":		// Bulgarian
 						return {
-							modal_header_text:				"Upravljanje popisom poslužitelja",
-							context_serverhider_text:		"Vidljivost poslužitelj",
-							submenu_hideserver_text:		"Sakrij poslužitelj",
-							submenu_hidefolder_text:		"Sakrij mapu",
-							submenu_openhidemenu_text:		"Upravljanje popisom poslužitelja"
+							context_serverhider:				"Видимост на сървъра",
+							modal_header:						"Управление на сървърния списък",
+							submenu_hidefolder:					"Скриване на папката",
+							submenu_hideserver:					"Скриване на сървъра",
+							submenu_openhidemenu:				"Управление на сървърния списък"
 						};
-					case "da":		//danish
+					case "da":		// Danish
 						return {
-							modal_header_text:				"Styring af serverliste",
-							context_serverhider_text:		"Server synlighed",
-							submenu_hideserver_text:		"Skjul server",
-							submenu_hidefolder_text:		"Skjul mappe",
-							submenu_openhidemenu_text:		"Styre serverliste"
+							context_serverhider:				"Server synlighed",
+							modal_header:						"Administration af serverliste",
+							submenu_hidefolder:					"Skjul mappe",
+							submenu_hideserver:					"Skjul server",
+							submenu_openhidemenu:				"Administrer serverliste"
 						};
-					case "de":		//german
+					case "de":		// German
 						return {
-							modal_header_text:				"Verwaltung der Serverliste",
-							context_serverhider_text:		"Serversichtbarkeit",
-							submenu_hideserver_text:		"Server verstecken",
-							submenu_hidefolder_text:		"Ordner verstecken",
-							submenu_openhidemenu_text:		"Serverliste verwalten"
+							context_serverhider:				"Serversichtbarkeit",
+							modal_header:						"Serverlistenverwaltung",
+							submenu_hidefolder:					"Ordner ausblenden",
+							submenu_hideserver:					"Server ausblenden",
+							submenu_openhidemenu:				"Serverliste verwalten"
 						};
-					case "es":		//spanish
+					case "el":		// Greek
 						return {
-							modal_header_text:				"Administración de lista de servidores",
-							context_serverhider_text:		"Visibilidad del servidor",
-							submenu_hideserver_text:		"Ocultar servidor",
-							submenu_hidefolder_text:		"Ocultar carpeta",
-							submenu_openhidemenu_text:		"Administrar lista de servidores"
+							context_serverhider:				"Ορατότητα διακομιστή",
+							modal_header:						"Διαχείριση λίστας διακομιστών",
+							submenu_hidefolder:					"Απόκρυψη φακέλου",
+							submenu_hideserver:					"Απόκρυψη διακομιστή",
+							submenu_openhidemenu:				"Διαχείριση λίστας διακομιστών"
 						};
-					case "fr":		//french
+					case "es":		// Spanish
 						return {
-							modal_header_text:				"Gestion de la liste des serveurs",
-							context_serverhider_text:		"Visibilité du serveur",
-							submenu_hideserver_text:		"Cacher le serveur",
-							submenu_hidefolder_text:		"Cacher le dossier",
-							submenu_openhidemenu_text:		"Gérer la liste des serveurs"
+							context_serverhider:				"Visibilidad del servidor",
+							modal_header:						"Gestión de la lista de servidores",
+							submenu_hidefolder:					"Ocultar carpeta",
+							submenu_hideserver:					"Ocultar servidor",
+							submenu_openhidemenu:				"Administrar lista de servidores"
 						};
-					case "it":		//italian
+					case "fi":		// Finnish
 						return {
-							modal_header_text:				"Gestione dell'elenco dei server",
-							context_serverhider_text:		"Visibilità del server",
-							submenu_hideserver_text:		"Nascondi il server",
-							submenu_hidefolder_text:		"Nascondi la cartella",
-							submenu_openhidemenu_text:		"Gestione elenco dei server"
+							context_serverhider:				"Palvelimen näkyvyys",
+							modal_header:						"Palvelinluettelon hallinta",
+							submenu_hidefolder:					"Piilota kansio",
+							submenu_hideserver:					"Piilota palvelin",
+							submenu_openhidemenu:				"Hallitse palvelinluetteloa"
 						};
-					case "nl":		//dutch
+					case "fr":		// French
 						return {
-							modal_header_text:				"Beheer van de Serverlijst",
-							context_serverhider_text:		"Server zichtbaarheid",
-							submenu_hideserver_text:		"Verberg server",
-							submenu_hidefolder_text:		"Verberg map",
-							submenu_openhidemenu_text:		"Beheer serverlijst"
+							context_serverhider:				"Visibilité du serveur",
+							modal_header:						"Gestion de la liste des serveurs",
+							submenu_hidefolder:					"Masquer le dossier",
+							submenu_hideserver:					"Masquer le serveur",
+							submenu_openhidemenu:				"Gérer la liste des serveurs"
 						};
-					case "no":		//norwegian
+					case "hr":		// Croatian
 						return {
-							modal_header_text:				"Administrasjon av serverlisten",
-							context_serverhider_text:		"Server synlighet",
-							submenu_hideserver_text:		"Skjul server",
-							submenu_hidefolder_text:		"Skjul mappe",
-							submenu_openhidemenu_text:		"Administrer serverliste"
+							context_serverhider:				"Vidljivost poslužitelja",
+							modal_header:						"Upravljanje popisom poslužitelja",
+							submenu_hidefolder:					"Sakrij mapu",
+							submenu_hideserver:					"Sakrij poslužitelj",
+							submenu_openhidemenu:				"Upravljanje popisom poslužitelja"
 						};
-					case "pl":		//polish
+					case "hu":		// Hungarian
 						return {
-							modal_header_text:				"Zarządzanie listą serwerów",
-							context_serverhider_text:		"Widoczność serwera",
-							submenu_hideserver_text:		"Ukryj serwer",
-							submenu_hidefolder_text:		"Ukryj folder",
-							submenu_openhidemenu_text:		"Zarządzaj listą serwerów"
+							context_serverhider:				"Szerver láthatósága",
+							modal_header:						"Szerverlista kezelése",
+							submenu_hidefolder:					"Mappa elrejtése",
+							submenu_hideserver:					"Szerver elrejtése",
+							submenu_openhidemenu:				"Szerverlista kezelése"
 						};
-					case "pt-BR":	//portuguese (brazil)
+					case "it":		// Italian
 						return {
-							modal_header_text:				"Gerenciamento da lista de servidores",
-							context_serverhider_text:		"Visibilidade do servidor",
-							submenu_hideserver_text:		"Ocultar servidor",
-							submenu_hidefolder_text:		"Ocultar pasta",
-							submenu_openhidemenu_text:		"Gerenciar lista de servidores"
+							context_serverhider:				"Visibilità del server",
+							modal_header:						"Gestione dell'elenco dei server",
+							submenu_hidefolder:					"Nascondi cartella",
+							submenu_hideserver:					"Nascondi server",
+							submenu_openhidemenu:				"Gestisci elenco server"
 						};
-					case "fi":		//finnish
+					case "ja":		// Japanese
 						return {
-							modal_header_text:				"Palvelinluettelon hallinta",
-							context_serverhider_text:		"Palvelimen näkyvyys",
-							submenu_hideserver_text:		"Piilota palvelin",
-							submenu_hidefolder_text:		"Piilota kansio",
-							submenu_openhidemenu_text:		"Hallinnoi palvelinluetteloa"
+							context_serverhider:				"サーバーの可視性",
+							modal_header:						"サーバーリストの管理",
+							submenu_hidefolder:					"フォルダを隠す",
+							submenu_hideserver:					"サーバーを隠す",
+							submenu_openhidemenu:				"サーバーリストの管理"
 						};
-					case "sv":		//swedish
+					case "ko":		// Korean
 						return {
-							modal_header_text:				"Hantering av serverlistan",
-							context_serverhider_text:		"Server sikt",
-							submenu_hideserver_text:		"Dölj server",
-							submenu_hidefolder_text:		"Dölj mapp",
-							submenu_openhidemenu_text:		"Hantera serverlistan"
+							context_serverhider:				"서버 가시성",
+							modal_header:						"서버 목록 관리",
+							submenu_hidefolder:					"폴더 숨기기",
+							submenu_hideserver:					"서버 숨기기",
+							submenu_openhidemenu:				"서버 목록 관리"
 						};
-					case "tr":		//turkish
+					case "lt":		// Lithuanian
 						return {
-							modal_header_text:				"Sunucu Listesinin Yönetimi",
-							context_serverhider_text:		"Sunucu görünürlüğü",
-							submenu_hideserver_text:		"Sunucuyu Gizle",
-							submenu_hidefolder_text:		"Klasörü Gizle",
-							submenu_openhidemenu_text:		"Sunucu Listesini Yönet"
+							context_serverhider:				"Serverio matomumas",
+							modal_header:						"Serverių sąrašo tvarkymas",
+							submenu_hidefolder:					"Slėpti aplanką",
+							submenu_hideserver:					"Slėpti serverį",
+							submenu_openhidemenu:				"Tvarkyti serverių sąrašą"
 						};
-					case "cs":		//czech
+					case "nl":		// Dutch
 						return {
-							modal_header_text:				"Správa seznamu serverů",
-							context_serverhider_text:		"Viditelnost serveru",
-							submenu_hideserver_text:		"Skrýt server",
-							submenu_hidefolder_text:		"Skrýt složky",
-							submenu_openhidemenu_text:		"Správa seznamu serverů"
+							context_serverhider:				"Zichtbaarheid van de server",
+							modal_header:						"Serverlijst beheren",
+							submenu_hidefolder:					"Verberg map",
+							submenu_hideserver:					"Verberg server",
+							submenu_openhidemenu:				"Beheer serverlijst"
 						};
-					case "bg":		//bulgarian
+					case "no":		// Norwegian
 						return {
-							modal_header_text:				"Управление на списъка със сървъри",
-							context_serverhider_text:		"Видимост на сървъра",
-							submenu_hideserver_text:		"Скриване на сървър",
-							submenu_hidefolder_text:		"Скриване на папка",
-							submenu_openhidemenu_text:		"Управление на списъка със сървъри"
+							context_serverhider:				"Server synlighet",
+							modal_header:						"Administrere serverliste",
+							submenu_hidefolder:					"Skjul mappe",
+							submenu_hideserver:					"Skjul server",
+							submenu_openhidemenu:				"Administrer serverliste"
 						};
-					case "ru":		//russian
+					case "pl":		// Polish
 						return {
-							modal_header_text:				"Управление списком серверов",
-							context_serverhider_text:		"Видимость сервера",
-							submenu_hideserver_text:		"Скрыть сервер",
-							submenu_hidefolder_text:		"Скрыть папки",
-							submenu_openhidemenu_text:		"Управление списком серверов"
+							context_serverhider:				"Widoczność serwera",
+							modal_header:						"Zarządzanie listą serwerów",
+							submenu_hidefolder:					"Ukryj folder",
+							submenu_hideserver:					"Ukryj serwer",
+							submenu_openhidemenu:				"Zarządzaj listą serwerów"
 						};
-					case "uk":		//ukrainian
+					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							modal_header_text:				"Управління списком серверів",
-							context_serverhider_text:		"Видимість сервера",
-							submenu_hideserver_text:		"Сховати сервер",
-							submenu_hidefolder_text:		"Сховати папки",
-							submenu_openhidemenu_text:		"Управління списком серверів"
+							context_serverhider:				"Visibilidade do servidor",
+							modal_header:						"Gerenciando a lista de servidores",
+							submenu_hidefolder:					"Ocultar pasta",
+							submenu_hideserver:					"Esconder Servidor",
+							submenu_openhidemenu:				"Gerenciar lista de servidores"
 						};
-					case "ja":		//japanese
+					case "ro":		// Romanian
 						return {
-							modal_header_text:				"サーバリストの管理",
-							context_serverhider_text:		"サーバーの可視性",
-							submenu_hideserver_text:		"サーバーを隠す",
-							submenu_hidefolder_text:		"フォルダーを非表示",
-							submenu_openhidemenu_text:		"サーバーリストを管理する"
+							context_serverhider:				"Vizibilitatea serverului",
+							modal_header:						"Gestionarea listei serverelor",
+							submenu_hidefolder:					"Ascundeți dosarul",
+							submenu_hideserver:					"Ascundeți serverul",
+							submenu_openhidemenu:				"Gestionați lista serverelor"
 						};
-					case "zh-TW":	//chinese (traditional)
+					case "ru":		// Russian
 						return {
-							modal_header_text:				"管理服务器列表",
-							context_serverhider_text:		"服務器可見性",
-							submenu_hideserver_text:		"隐藏服务器",
-							submenu_hidefolder_text:		"隱藏資料夾",
-							submenu_openhidemenu_text:		"管理服务器列表"
+							context_serverhider:				"Видимость сервера",
+							modal_header:						"Управление списком серверов",
+							submenu_hidefolder:					"Скрыть папку",
+							submenu_hideserver:					"Скрыть сервер",
+							submenu_openhidemenu:				"Управление списком серверов"
 						};
-					case "ko":		//korean
+					case "sv":		// Swedish
 						return {
-							modal_header_text:				"서버 목록 관리",
-							context_serverhider_text:		"서버 가시성",
-							submenu_hideserver_text:		"서버 숨기기",
-							submenu_hidefolder_text:		"폴더 숨기기",
-							submenu_openhidemenu_text:		"서버 목록 관리"
+							context_serverhider:				"Servers synlighet",
+							modal_header:						"Hantera serverlista",
+							submenu_hidefolder:					"Dölj mapp",
+							submenu_hideserver:					"Dölj server",
+							submenu_openhidemenu:				"Hantera serverlista"
 						};
-					default:		//default: english
+					case "th":		// Thai
 						return {
-							modal_header_text:				"Managing Serverlist",
-							context_serverhider_text:		"Server Visibility",
-							submenu_hideserver_text:		"Hide Server",
-							submenu_hidefolder_text:		"Hide Folder",
-							submenu_openhidemenu_text:		"Manage Serverlist"
+							context_serverhider:				"การเปิดเผยเซิร์ฟเวอร์",
+							modal_header:						"การจัดการรายชื่อเซิร์ฟเวอร์",
+							submenu_hidefolder:					"ซ่อนโฟลเดอร์",
+							submenu_hideserver:					"ซ่อนเซิร์ฟเวอร์",
+							submenu_openhidemenu:				"จัดการรายชื่อเซิร์ฟเวอร์"
+						};
+					case "tr":		// Turkish
+						return {
+							context_serverhider:				"Sunucu Görünürlüğü",
+							modal_header:						"Sunucu Listesini Yönetme",
+							submenu_hidefolder:					"Klasörü Gizle",
+							submenu_hideserver:					"Sunucuyu Gizle",
+							submenu_openhidemenu:				"Sunucu Listesini Yönetin"
+						};
+					case "uk":		// Ukrainian
+						return {
+							context_serverhider:				"Видимість сервера",
+							modal_header:						"Керування списком серверів",
+							submenu_hidefolder:					"Сховати папку",
+							submenu_hideserver:					"Сховати сервер",
+							submenu_openhidemenu:				"Керування списком серверів"
+						};
+					case "vi":		// Vietnamese
+						return {
+							context_serverhider:				"Hiển thị Máy chủ",
+							modal_header:						"Quản lý danh sách máy chủ",
+							submenu_hidefolder:					"Ẩn thư mục",
+							submenu_hideserver:					"Ẩn máy chủ",
+							submenu_openhidemenu:				"Quản lý danh sách máy chủ"
+						};
+					case "zh":		// Chinese
+						return {
+							context_serverhider:				"服务器可见性",
+							modal_header:						"管理服务器列表",
+							submenu_hidefolder:					"隐藏资料夹",
+							submenu_hideserver:					"隐藏服务器",
+							submenu_openhidemenu:				"管理服务器列表"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							context_serverhider:				"服務器可見性",
+							modal_header:						"管理服務器列表",
+							submenu_hidefolder:					"隱藏資料夾",
+							submenu_hideserver:					"隱藏服務器",
+							submenu_openhidemenu:				"管理服務器列表"
+						};
+					default:		// English
+						return {
+							context_serverhider:				"Server Visibility",
+							modal_header:						"Managing Server List",
+							submenu_hidefolder:					"Hide Folder",
+							submenu_hideserver:					"Hide Server",
+							submenu_openhidemenu:				"Manage Server List"
 						};
 				}
 			}

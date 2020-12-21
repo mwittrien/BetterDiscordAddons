@@ -294,7 +294,7 @@ module.exports = (_ => {
 					let timestamp = this.getTimestamp(languages[choices.joinedAtDateLang].id, loadedUsers[guildId][user.id]);
 					children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 						className: BDFDB.disCNS._joinedatdatedate + BDFDB.disCNS.userinfodate + BDFDB.disCN.textrow,
-						children: settings.displayText ? this.labels.joinedat_text.replace("{{time}}", timestamp) : timestamp
+						children: settings.displayText ? this.labels.joined_at.replace("{{time}}", timestamp) : timestamp
 					}));
 				}
 			}
@@ -358,89 +358,113 @@ module.exports = (_ => {
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "hr":		//croatian
+					case "bg":		// Bulgarian
 						return {
-							joinedat_text:				"Pridružio {{time}}"
+							joined_at:							"Присъединил се на {{time}}"
 						};
-					case "da":		//danish
+					case "da":		// Danish
 						return {
-							joinedat_text:				"Tilmeldt den {{time}}"
+							joined_at:							"Deltog den {{time}}"
 						};
-					case "de":		//german
+					case "de":		// German
 						return {
-							joinedat_text:				"Beigetreten am {{time}}"
+							joined_at:							"Beitritt zu {{time}}"
 						};
-					case "es":		//spanish
+					case "el":		// Greek
 						return {
-							joinedat_text:				"Unido el {{time}}"
+							joined_at:							"Έγινε μέλος στις {{time}}"
 						};
-					case "fr":		//french
+					case "es":		// Spanish
 						return {
-							joinedat_text:				"Rejoint le {{time}}"
+							joined_at:							"Se unió el {{time}}"
 						};
-					case "it":		//italian
+					case "fi":		// Finnish
 						return {
-							joinedat_text:				"Iscritto il {{time}}"
+							joined_at:							"Liittyi {{time}}"
 						};
-					case "nl":		//dutch
+					case "fr":		// French
 						return {
-							joinedat_text:				"Aangesloten op {{time}}"
+							joined_at:							"Inscription le {{time}}"
 						};
-					case "no":		//norwegian
+					case "hr":		// Croatian
 						return {
-							joinedat_text:				"Ble med på {{time}}"
+							joined_at:							"Pridružio se {{time}}"
 						};
-					case "pl":		//polish
+					case "hu":		// Hungarian
 						return {
-							joinedat_text:				"Dołączył {{time}}"
+							joined_at:							"Csatlakozott: {{time}}"
 						};
-					case "pt-BR":	//portuguese (brazil)
+					case "it":		// Italian
 						return {
-							joinedat_text:				"Inscreveu-se em {{time}}"
+							joined_at:							"Iscritto il {{time}}"
 						};
-					case "fi":		//finnish
+					case "ja":		// Japanese
 						return {
-							joinedat_text:				"Liittynyt {{time}}"
+							joined_at:							"{{time}}に参加しました"
 						};
-					case "sv":		//swedish
+					case "ko":		// Korean
 						return {
-							joinedat_text:				"Anlände den {{time}}"
+							joined_at:							"{{time}}에 가입했습니다."
 						};
-					case "tr":		//turkish
+					case "lt":		// Lithuanian
 						return {
-							joinedat_text:				"Katıldı {{time}}"
+							joined_at:							"Prisijungė {{time}}"
 						};
-					case "cs":		//czech
+					case "nl":		// Dutch
 						return {
-							joinedat_text:				"Přihlásil dne {{time}}"
+							joined_at:							"Aangesloten op {{time}}"
 						};
-					case "bg":		//bulgarian
+					case "no":		// Norwegian
 						return {
-							joinedat_text:				"Се присъедини на {{time}}"
+							joined_at:							"Ble med {{time}}"
 						};
-					case "ru":		//russian
+					case "pl":		// Polish
 						return {
-							joinedat_text:				"Присоединился {{time}}"
+							joined_at:							"Dołączono {{time}}"
 						};
-					case "uk":		//ukrainian
+					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							joinedat_text:				"Приєднався {{time}}"
+							joined_at:							"Entrou em {{time}}"
 						};
-					case "ja":		//japanese
+					case "ro":		// Romanian
 						return {
-							joinedat_text:				"{{time}} に参加しました"
+							joined_at:							"S-a înscris pe {{time}}"
 						};
-					case "zh-TW":	//chinese (traditional)
+					case "ru":		// Russian
 						return {
-							joinedat_text:				"加入於 {{time}}"
+							joined_at:							"Присоединился {{time}}"
 						};
-					case "ko":		//korean
+					case "sv":		// Swedish
 						return {
-							joinedat_text:				"{{time}} 에 가입"
+							joined_at:							"Gick med den {{time}}"
 						};
-					default:		//default: english
+					case "th":		// Thai
 						return {
-							joinedat_text:				"Joined on {{time}}"
+							joined_at:							"เข้าร่วมเมื่อ {{time}}"
+						};
+					case "tr":		// Turkish
+						return {
+							joined_at:							"{{time}} tarihinde katıldı"
+						};
+					case "uk":		// Ukrainian
+						return {
+							joined_at:							"Приєднався {{time}}"
+						};
+					case "vi":		// Vietnamese
+						return {
+							joined_at:							"Đã tham gia vào {{time}}"
+						};
+					case "zh":		// Chinese
+						return {
+							joined_at:							"已于{{time}}加入"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							joined_at:							"已於{{time}}加入"
+						};
+					default:		// English
+						return {
+							joined_at:							"Joined on {{time}}"
 						};
 				}
 			}

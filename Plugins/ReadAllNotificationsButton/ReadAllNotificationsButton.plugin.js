@@ -240,28 +240,28 @@ module.exports = (_ => {
 								BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 									children: [
 										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-											label: this.labels.context_unreadguilds_text,
+											label: this.labels.context_unreadguilds,
 											id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-unread-read"),
 											action: event2 => {
 												this.markGuildsAsRead(BDFDB.GuildUtils.getUnread());
 											}
 										}),
 										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-											label: this.labels.context_pingedguilds_text,
+											label: this.labels.context_pingedguilds,
 											id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-pinged-read"),
 											action: event2 => {
 												this.markGuildsAsRead(BDFDB.GuildUtils.getPinged());
 											}
 										}),
 										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-											label: this.labels.context_mutedguilds_text,
+											label: this.labels.context_mutedguilds,
 											id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-muted-read"),
 											action: event2 => {
 												this.markGuildsAsRead(BDFDB.GuildUtils.getMuted());
 											}
 										}),
 										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-											label: this.labels.context_guilds_text,
+											label: this.labels.context_guilds,
 											id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-all-read"),
 											action: event2 => {
 												this.addPinnedRecent(instance.props.channel.id);
@@ -269,7 +269,7 @@ module.exports = (_ => {
 											}
 										}),
 										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-											label: this.labels.context_dms_text,
+											label: this.labels.context_dms,
 											id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-dms-read"),
 											action: event2 => {
 												BDFDB.DMUtils.markAsRead(BDFDB.DMUtils.getAll());
@@ -344,173 +344,221 @@ module.exports = (_ => {
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "hr":		//croatian
+					case "bg":		// Bulgarian
 						return {
-							context_unreadguilds_text:	"Nepročitani poslužitelje",
-							context_pingedguilds_text:	"Zvižduci poslužitelje",
-							context_mutedguilds_text:	"Prigušeni poslužitelje",
-							context_guilds_text:		"Sve poslužitelje",
-							context_dms_text:			"Prikvacene izravne"
+							context_dms:						"Директно съобщение",
+							context_guilds:						"Всички сървъри",
+							context_mutedguilds:				"Приглушени сървъри",
+							context_pingedguilds:				"Pinged сървъри",
+							context_unreadguilds:				"Непрочетени сървъри"
 						};
-					case "da":		//danish
+					case "da":		// Danish
 						return {
-							context_unreadguilds_text:	"Ulæste servere",
-							context_pingedguilds_text:	"Pinget servere",
-							context_mutedguilds_text:	"Dæmpede servere",
-							context_guilds_text:		"Alle servere",
-							context_dms_text:			"Private beskeder"
+							context_dms:						"Direkte beskeder",
+							context_guilds:						"Alle servere",
+							context_mutedguilds:				"Dæmpede servere",
+							context_pingedguilds:				"Pingede servere",
+							context_unreadguilds:				"Ulæste servere"
 						};
-					case "de":		//german
+					case "de":		// German
 						return {
-							context_unreadguilds_text:	"Ungelesene Server",
-							context_pingedguilds_text:	"Gepingte Server",
-							context_mutedguilds_text:	"Stummgeschaltene Server",
-							context_guilds_text:		"Alle Server",
-							context_dms_text:			"Direktnachrichten"
+							context_dms:						"Direktnachrichten",
+							context_guilds:						"Alle Server",
+							context_mutedguilds:				"Stummgeschaltete Server",
+							context_pingedguilds:				"Gepingte Server",
+							context_unreadguilds:				"Ungelesene Server"
 						};
-					case "es":		//spanish
+					case "el":		// Greek
 						return {
-							context_unreadguilds_text:	"Servidores no leídos",
-							context_pingedguilds_text:	"Servidores mencionados",
-							context_mutedguilds_text:	"Servidores silenciados",
-							context_guilds_text:		"Todos los servidores",
-							context_dms_text:			"Mensajes directos"
+							context_dms:						"Αμεσα μηνύματα",
+							context_guilds:						"Όλοι οι διακομιστές",
+							context_mutedguilds:				"Σίγαση διακομιστών",
+							context_pingedguilds:				"Διακομιστές Ping",
+							context_unreadguilds:				"Μη αναγνωσμένοι διακομιστές"
 						};
-					case "fr":		//french
+					case "es":		// Spanish
 						return {
-							context_unreadguilds_text:	"Serveurs non lus",
-							context_pingedguilds_text:	"Serveurs mentionnés",
-							context_mutedguilds_text:	"Serveurs en sourdine",
-							context_guilds_text:		"Tous les serveurs",
-							context_dms_text:			"Messages privés"
+							context_dms:						"Mensajes directos",
+							context_guilds:						"Todos los servidores",
+							context_mutedguilds:				"Servidores silenciados",
+							context_pingedguilds:				"Servidores con ping",
+							context_unreadguilds:				"Servidores no leídos"
 						};
-					case "it":		//italian
+					case "fi":		// Finnish
 						return {
-							context_unreadguilds_text:	"Server non letti",
-							context_pingedguilds_text:	"Server pingato",
-							context_mutedguilds_text:	"Server mutate",
-							context_guilds_text:		"Tutti i server",
-							context_dms_text:			"Messaggi diretti"
+							context_dms:						"Suorat viestit",
+							context_guilds:						"Kaikki palvelimet",
+							context_mutedguilds:				"Mykistetyt palvelimet",
+							context_pingedguilds:				"Pinged-palvelimet",
+							context_unreadguilds:				"Lukemattomat palvelimet"
 						};
-					case "nl":		//dutch
+					case "fr":		// French
 						return {
-							context_unreadguilds_text:	"Ongelezen servers",
-							context_pingedguilds_text:	"Gepingde servers",
-							context_mutedguilds_text:	"Gedempte servers",
-							context_guilds_text:		"Alle servers",
-							context_dms_text:			"Prive berichten"
+							context_dms:						"Messages directs",
+							context_guilds:						"Tous les serveurs",
+							context_mutedguilds:				"Serveurs muets",
+							context_pingedguilds:				"Serveurs ping",
+							context_unreadguilds:				"Serveurs non lus"
 						};
-					case "no":		//norwegian
+					case "hr":		// Croatian
 						return {
-							context_unreadguilds_text:	"Uleste servere",
-							context_pingedguilds_text:	"Pinget servere",
-							context_mutedguilds_text:	"Dempet servere",
-							context_guilds_text:		"Alle servere",
-							context_dms_text:			"Direktemeldinger"
+							context_dms:						"Direktna poruka",
+							context_guilds:						"Svi poslužitelji",
+							context_mutedguilds:				"Prigušeni poslužitelji",
+							context_pingedguilds:				"Pingirani poslužitelji",
+							context_unreadguilds:				"Nepročitani poslužitelji"
 						};
-					case "pl":		//polish
+					case "hu":		// Hungarian
 						return {
-							context_unreadguilds_text:	"Nieprzeczytane serwery",
-							context_pingedguilds_text:	"Pingowany serwery",
-							context_mutedguilds_text:	"Wyciszone serwery",
-							context_guilds_text:		"Wszystkie serwery",
-							context_dms_text:			"Prywatne wiadomości"
+							context_dms:						"Közvetlen üzenet",
+							context_guilds:						"Minden szerver",
+							context_mutedguilds:				"Némított szerverek",
+							context_pingedguilds:				"Pingelt szerverek",
+							context_unreadguilds:				"Olvasatlan szerverek"
 						};
-					case "pt-BR":	//portuguese (brazil)
+					case "it":		// Italian
 						return {
-							context_unreadguilds_text:	"Servidores não lidos",
-							context_pingedguilds_text:	"Servidores com ping",
-							context_mutedguilds_text:	"Servidores silenciosos",
-							context_guilds_text:		"Todos os servidores",
-							context_dms_text:			"Mensagens diretas"
+							context_dms:						"Messaggi diretti",
+							context_guilds:						"Tutti i server",
+							context_mutedguilds:				"Server disattivati",
+							context_pingedguilds:				"Server sottoposti a ping",
+							context_unreadguilds:				"Server non letti"
 						};
-					case "fi":		//finnish
+					case "ja":		// Japanese
 						return {
-							context_unreadguilds_text:	"Lukemattomia palvelimet",
-							context_pingedguilds_text:	"Tapitut palvelimet",
-							context_mutedguilds_text:	"Mykistetyt palvelimet",
-							context_guilds_text:		"Kaikki palvelimet",
-							context_dms_text:			"Yksityisviestit"
+							context_dms:						"ダイレクトメッセージ",
+							context_guilds:						"すべてのサーバー",
+							context_mutedguilds:				"ミュートされたサーバー",
+							context_pingedguilds:				"pingされたサーバー",
+							context_unreadguilds:				"未読サーバー"
 						};
-					case "sv":		//swedish
+					case "ko":		// Korean
 						return {
-							context_unreadguilds_text:	"Olästa servrar",
-							context_pingedguilds_text:	"Pingade servrar",
-							context_mutedguilds_text:	"Dämpade servrar",
-							context_guilds_text:		"Alla servrar",
-							context_dms_text:			"Direktmeddelanden"
+							context_dms:						"쪽지",
+							context_guilds:						"모든 서버",
+							context_mutedguilds:				"음소거 된 서버",
+							context_pingedguilds:				"핑된 서버",
+							context_unreadguilds:				"읽지 않은 서버"
 						};
-					case "tr":		//turkish
+					case "lt":		// Lithuanian
 						return {
-							context_unreadguilds_text:	"Okunmamış sunucular",
-							context_pingedguilds_text:	"Ping sunucular",
-							context_mutedguilds_text:	"Sessiz sunucular",
-							context_guilds_text:		"Tüm sunucular",
-							context_dms_text:			"Özel mesajlar"
+							context_dms:						"Tiesioginiai pranešimai",
+							context_guilds:						"Visi serveriai",
+							context_mutedguilds:				"Nutildyti serveriai",
+							context_pingedguilds:				"„Pinged“ serveriai",
+							context_unreadguilds:				"Neskaityti serveriai"
 						};
-					case "cs":		//czech
+					case "nl":		// Dutch
 						return {
-							context_unreadguilds_text:	"Nepřečtené servery",
-							context_pingedguilds_text:	"Pinged servery",
-							context_mutedguilds_text:	"Tlumené servery",
-							context_guilds_text:		"Všechny servery",
-							context_dms_text:			"Přímé zpráva"
+							context_dms:						"Directe berichten",
+							context_guilds:						"Alle servers",
+							context_mutedguilds:				"Gedempte servers",
+							context_pingedguilds:				"Gepingde servers",
+							context_unreadguilds:				"Ongelezen servers"
 						};
-					case "bg":		//bulgarian
+					case "no":		// Norwegian
 						return {
-							context_unreadguilds_text:	"Непрочетени сървъри",
-							context_pingedguilds_text:	"Споменатите сървъри",
-							context_mutedguilds_text:	"Приглушени сървъри",
-							context_guilds_text:		"Всички сървъри",
-							context_dms_text:			"Директно съобщение"
+							context_dms:						"Direktemeldinger",
+							context_guilds:						"Alle servere",
+							context_mutedguilds:				"Dempede servere",
+							context_pingedguilds:				"Pingede servere",
+							context_unreadguilds:				"Uleste servere"
 						};
-					case "ru":		//russian
+					case "pl":		// Polish
 						return {
-							context_unreadguilds_text:	"Непрочитанные серверы",
-							context_pingedguilds_text:	"Проверенные серверы",
-							context_mutedguilds_text:	"Отключенные серверы",
-							context_guilds_text:		"Все серверы",
-							context_dms_text:			"Прямые сообщения"
+							context_dms:						"Bezpośrednie wiadomości",
+							context_guilds:						"Wszystkie serwery",
+							context_mutedguilds:				"Wyciszone serwery",
+							context_pingedguilds:				"Serwery pingowane",
+							context_unreadguilds:				"Nieprzeczytane serwery"
 						};
-					case "uk":		//ukrainian
+					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							context_unreadguilds_text:	"Непрочитаних сервери",
-							context_pingedguilds_text:	"Згадані сервери",
-							context_mutedguilds_text:	"Приглушені сервери",
-							context_guilds_text:		"Всі сервери",
-							context_dms_text:			"Прямі Повідомлення"
+							context_dms:						"Mensagens diretas",
+							context_guilds:						"Todos os servidores",
+							context_mutedguilds:				"Servidores Silenciados",
+							context_pingedguilds:				"Servidores com ping",
+							context_unreadguilds:				"Servidores não lidos"
 						};
-					case "ja":		//japanese
+					case "ro":		// Romanian
 						return {
-							context_unreadguilds_text:	"未読サーバー",
-							context_pingedguilds_text:	"",
-							context_mutedguilds_text:	"ミュートサーバー",
-							context_guilds_text:		"すべてのサーバー",
-							context_dms_text:			"ダイレクトメッセージ"
+							context_dms:						"Mesaje directe",
+							context_guilds:						"Toate serverele",
+							context_mutedguilds:				"Servere mutate",
+							context_pingedguilds:				"Servere pinged",
+							context_unreadguilds:				"Servere necitite"
 						};
-					case "zh-TW":	//chinese (traditional)
+					case "ru":		// Russian
 						return {
-							context_unreadguilds_text:	"未讀服務器",
-							context_pingedguilds_text:	"言及されたサーバー",
-							context_mutedguilds_text:	"靜音服務器",
-							context_guilds_text:		"所有服務器",
-							context_dms_text:			"直接消息",
+							context_dms:						"Прямые сообщения",
+							context_guilds:						"Все серверы",
+							context_mutedguilds:				"Отключенные серверы",
+							context_pingedguilds:				"Проверенные серверы",
+							context_unreadguilds:				"Непрочитанные серверы"
 						};
-					case "ko":		//korean
+					case "sv":		// Swedish
 						return {
-							context_unreadguilds_text:	"읽지 않은 서버",
-							context_pingedguilds_text:	"언급 된 서버",
-							context_mutedguilds_text:	"음소거 된 서버",
-							context_guilds_text:		"모든 서버",
-							context_dms_text:			"직접 메시지"
+							context_dms:						"Direktmeddelanden",
+							context_guilds:						"Alla servrar",
+							context_mutedguilds:				"Dämpade servrar",
+							context_pingedguilds:				"Pingade servrar",
+							context_unreadguilds:				"Olästa servrar"
 						};
-					default:		//default: english
+					case "th":		// Thai
 						return {
-							context_unreadguilds_text:	"Unread Servers",
-							context_pingedguilds_text:	"Pinged Servers",
-							context_mutedguilds_text:	"Muted Servers",
-							context_guilds_text:		"All Servers",
-							context_dms_text:			"Direct Messages"
+							context_dms:						"ข้อความโดยตรง",
+							context_guilds:						"เซิร์ฟเวอร์ทั้งหมด",
+							context_mutedguilds:				"เซิร์ฟเวอร์ที่ปิดเสียง",
+							context_pingedguilds:				"เซิร์ฟเวอร์ Pinged",
+							context_unreadguilds:				"เซิร์ฟเวอร์ที่ยังไม่ได้อ่าน"
+						};
+					case "tr":		// Turkish
+						return {
+							context_dms:						"Direkt Mesajlar",
+							context_guilds:						"Tüm Sunucular",
+							context_mutedguilds:				"Sessiz Sunucular",
+							context_pingedguilds:				"Ping Gönderilen Sunucular",
+							context_unreadguilds:				"Okunmamış Sunucular"
+						};
+					case "uk":		// Ukrainian
+						return {
+							context_dms:						"Прямі повідомлення",
+							context_guilds:						"Усі сервери",
+							context_mutedguilds:				"Приглушені сервери",
+							context_pingedguilds:				"Pinged сервери",
+							context_unreadguilds:				"Непрочитані сервери"
+						};
+					case "vi":		// Vietnamese
+						return {
+							context_dms:						"Tin nhắn trực tiếp",
+							context_guilds:						"Tất cả máy chủ",
+							context_mutedguilds:				"Máy chủ bị tắt tiếng",
+							context_pingedguilds:				"Máy chủ Pinged",
+							context_unreadguilds:				"Máy chủ chưa đọc"
+						};
+					case "zh":		// Chinese
+						return {
+							context_dms:						"直接讯息",
+							context_guilds:						"所有服务器",
+							context_mutedguilds:				"静音服务器",
+							context_pingedguilds:				"绑定服务器",
+							context_unreadguilds:				"未读服务器"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							context_dms:						"直接訊息",
+							context_guilds:						"所有服務器",
+							context_mutedguilds:				"靜音服務器",
+							context_pingedguilds:				"綁定服務器",
+							context_unreadguilds:				"未讀服務器"
+						};
+					default:		// English
+						return {
+							context_dms:						"Direct Messages",
+							context_guilds:						"All Servers",
+							context_mutedguilds:				"Muted Servers",
+							context_pingedguilds:				"Pinged Servers",
+							context_unreadguilds:				"Unread Servers"
 						};
 				}
 			}

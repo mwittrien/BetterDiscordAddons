@@ -269,33 +269,33 @@ module.exports = (_ => {
 				let currentCategory = this.getCategory(id, "dmCategories");
 				
 				children.splice(index, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-					label: this.labels.context_pindm_text,
+					label: this.labels.context_pindm,
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-pin"),
 					children: [
 						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: this.labels.context_pinchannel_text,
+							label: this.labels.context_pinchannel,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-channelist"),
 							children: this.getPredefinedCategory(id) ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-									label: this.labels.context_inpredefined_text,
+									label: this.labels.context_inpredefined,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "in-predefined"),
 									disabled: true
 								}) : [
 								BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 									children: currentCategory ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-										label: this.labels.context_unpinchannel_text,
+										label: this.labels.context_unpinchannel,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "unpin-channellist"),
 										color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
 										action: _ => {
 											this.removeFromCategory(id, currentCategory, "dmCategories");
 										}
 									}) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-										label: this.labels.context_addtonewcategory_text,
+										label: this.labels.context_addtonewcategory,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "new-channellist"),
 										color: BDFDB.LibraryComponents.MenuItems.Colors.BRAND,
 										action: _ => {
 											this.openCategorySettingsModal({
 												id: this.generateID("dmCategories").toString(),
-												name: `${this.labels.header_pinneddms_text} #${categories.length + 1}`,
+												name: `${this.labels.header_pinneddms} #${categories.length + 1}`,
 												dms: [id],
 												pos: categories.length,
 												collapsed: false,
@@ -306,7 +306,7 @@ module.exports = (_ => {
 								}),
 								categories.length ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 									children: categories.map(category => currentCategory && currentCategory.id == category.id || category.predefined ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-										label: category.name || this.labels.header_pinneddms_text,
+										label: category.name || this.labels.header_pinneddms,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "pin-channellist", category.id),
 										action: _ => {
 											if (currentCategory) this.removeFromCategory(id, currentCategory, "dmCategories");
@@ -317,7 +317,7 @@ module.exports = (_ => {
 							].filter(n => n)
 						}),
 						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: this.labels[pinnedInGuild ? "context_unpinguild_text" : "context_pinguild_text"],
+							label: this.labels[pinnedInGuild ? "context_unpinguild" : "context_pinguild"],
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, pinnedInGuild ? "unpin-serverlist" : "pin-serverlist"),
 							danger: pinnedInGuild,
 							action: _ => {
@@ -523,7 +523,7 @@ module.exports = (_ => {
 									onContextMenu: event => {
 										BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 											children: category.predefined ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-												label: this.labels.context_disablepredefined_text,
+												label: this.labels.context_disablepredefined,
 												id: BDFDB.ContextMenuUtils.createItemId(this.name, "disable-predefined"),
 												action: _ => {
 													preCategories[category.id] = false;
@@ -901,7 +901,7 @@ module.exports = (_ => {
 							]
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-							title: this.labels.modal_colorpicker1_text,
+							title: this.labels.modal_colorpicker1,
 							className: BDFDB.disCN.marginbottom20,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -1004,278 +1004,356 @@ module.exports = (_ => {
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "hr":		//croatian
+					case "bg":		// Bulgarian
 						return {
-							context_pindm_text:				"Prikljucite Izravnu Poruku",
-							context_disablepredefined_text:	"Onemogući unaprijed definiranu kategoriju",
-							context_inpredefined_text:		"Prikvačeno u unaprijed definiranoj kategoriji",
-							context_pinchannel_text:		"Priložite popisu kanala",
-							context_unpinchannel_text:		"Ukloni s popisa kanala",
-							context_addtonewcategory_text:	"Dodavanje u novu kategoriju",
-							context_pinguild_text:			"Priložite popisu poslužitelja",
-							context_unpinguild_text:		"Ukloni s popisa poslužitelja",
-							header_pinneddms_text:			"Prikvačene Izravne Poruke",
-							modal_colorpicker1_text:		"Boja kategorije"
+							context_addtonewcategory:			"Добавяне към нова категория",
+							context_disablepredefined:			"Деактивирайте предварително определена категория",
+							context_inpredefined:				"Фиксирано в предварително дефинирана категория",
+							context_pinchannel:					"Фиксиране към списъка с канали",
+							context_pindm:						"Закачете директно съобщение",
+							context_pinguild:					"Фиксиране към списъка със сървъри",
+							context_unpinchannel:				"Отделяне от списъка с канали",
+							context_unpinguild:					"Отделете от списъка със сървъри",
+							header_pinneddms:					"Закачени директни съобщения",
+							modal_colorpicker1:					"Категория цвят"
 						};
-					case "da":		//danish
+					case "da":		// Danish
 						return {
-							context_pindm_text:				"Fastgør PB",
-							context_disablepredefined_text:	"Deaktiver foruddefineret kategori",
-							context_inpredefined_text:		"Fastgjort i foruddefineret kategori",
-							context_pinchannel_text:		"Vedhæft til kanalliste",
-							context_unpinchannel_text:		"Fjern fra kanalliste",
-							context_addtonewcategory_text:	"Føj til ny kategori",
-							context_pinguild_text:			"Vedhæft til serverliste",
-							context_unpinguild_text:		"Fjern fra serverliste",
-							header_pinneddms_text:			"Pinned Privat Beskeder",
-							modal_colorpicker1_text:		"Kategori farve"
+							context_addtonewcategory:			"Føj til ny kategori",
+							context_disablepredefined:			"Deaktiver foruddefineret kategori",
+							context_inpredefined:				"Fastgjort i en foruddefineret kategori",
+							context_pinchannel:					"Fastgør til kanallisten",
+							context_pindm:						"Pin direkte besked",
+							context_pinguild:					"Fastgør til serverlisten",
+							context_unpinchannel:				"Fjern fra kanallisten",
+							context_unpinguild:					"Fjern fra serverlisten",
+							header_pinneddms:					"Fastgjorte direkte beskeder",
+							modal_colorpicker1:					"Kategorifarve"
 						};
-					case "de":		//german
+					case "de":		// German
 						return {
-							context_pindm_text:				"Direktnachricht anheften",
-							context_disablepredefined_text:	"Vordefinierte Kategorie deaktivieren",
-							context_inpredefined_text:		"In vordefinierter Kategorie angeheftet",
-							context_pinchannel_text:		"An Kanalliste anheften",
-							context_unpinchannel_text:		"Von Kanalliste loslösen",
-							context_addtonewcategory_text:	"Zur neuen Kategorie hinzufügen",
-							context_pinguild_text:			"An Serverliste anheften",
-							context_unpinguild_text:		"Von Serverliste loslösen",
-							header_pinneddms_text:			"Gepinnte Direktnachrichten",
-							modal_colorpicker1_text:		"Kategoriefarbe"
+							context_addtonewcategory:			"Zur neuen Kategorie hinzufügen",
+							context_disablepredefined:			"Vordefinierte Kategorie deaktivieren",
+							context_inpredefined:				"In vordefinierter Kategorie angeheftet",
+							context_pinchannel:					"An Kanalliste anheften",
+							context_pindm:						"Direktnachricht anheften",
+							context_pinguild:					"An Serverliste anheften",
+							context_unpinchannel:				"Von Kanalliste loslösen",
+							context_unpinguild:					"Von Serverliste loslösen",
+							header_pinneddms:					"Gepinnte Direktnachrichten",
+							modal_colorpicker1:					"Kategoriefarbe"
 						};
-					case "es":		//spanish
+					case "el":		// Greek
 						return {
-							context_pindm_text:				"Anclar MD",
-							context_disablepredefined_text:	"Deshabilitar categoría predefinida",
-							context_inpredefined_text:		"Anclado en una categoría predefinida",
-							context_pinchannel_text:		"Adjuntar a la lista de canales",
-							context_unpinchannel_text:		"Deshazte de la lista de canales",
-							context_addtonewcategory_text:	"Agregar a nueva categoría",
-							context_pinguild_text:			"Adjuntar a la lista de servidores",
-							context_unpinguild_text:		"Deshazte de la lista de servidores",
-							header_pinneddms_text:			"Mensajes Directos Fijados",
-							modal_colorpicker1_text:		"Color de la categoría"
+							context_addtonewcategory:			"Προσθήκη σε νέα κατηγορία",
+							context_disablepredefined:			"Απενεργοποίηση προκαθορισμένης κατηγορίας",
+							context_inpredefined:				"Καρφιτσώθηκε σε μια προκαθορισμένη κατηγορία",
+							context_pinchannel:					"Καρφίτσωμα στη λίστα καναλιών",
+							context_pindm:						"Καρφιτσώστε το άμεσο μήνυμα",
+							context_pinguild:					"Καρφίτσωμα στη λίστα διακομιστών",
+							context_unpinchannel:				"Αποσύνδεση από τη λίστα καναλιών",
+							context_unpinguild:					"Αποσύνδεση από τη λίστα διακομιστών",
+							header_pinneddms:					"Καρφιτσωμένα άμεσα μηνύματα",
+							modal_colorpicker1:					"Χρώμα κατηγορίας"
 						};
-					case "fr":		//french
+					case "es":		// Spanish
 						return {
-							context_pindm_text:				"Épingler MP",
-							context_disablepredefined_text:	"Désactiver la catégorie prédéfinie",
-							context_inpredefined_text:		"Épinglé dans une catégorie prédéfinie",
-							context_pinchannel_text:		"Épingler à la liste des salons",
-							context_unpinchannel_text:		"Détacher de la liste des salons",
-							context_addtonewcategory_text:	"Ajouter à une nouvelle catégorie",
-							context_pinguild_text:			"Épingler à la liste de serveurs",
-							context_unpinguild_text:		"Détacher de la liste de serveurs",
-							header_pinneddms_text:			"Messages Prives Épinglés",
-							modal_colorpicker1_text:		"Couleur de la catégorie"
+							context_addtonewcategory:			"Agregar a una nueva categoría",
+							context_disablepredefined:			"Desactivar categoría predefinida",
+							context_inpredefined:				"Anclado en una categoría predefinida",
+							context_pinchannel:					"Anclar a la lista de canales",
+							context_pindm:						"Pin de mensaje directo",
+							context_pinguild:					"Anclar a la lista de servidores",
+							context_unpinchannel:				"Separar de la lista de canales",
+							context_unpinguild:					"Separar de la lista de servidores",
+							header_pinneddms:					"Mensajes directos fijados",
+							modal_colorpicker1:					"Color de categoría"
 						};
-					case "it":		//italian
+					case "fi":		// Finnish
 						return {
-							context_pindm_text:				"Fissa il messaggio diretto",
-							context_disablepredefined_text:	"Disabilita la categoria predefinita",
-							context_inpredefined_text:		"Bloccato in una categoria predefinita",
-							context_pinchannel_text:		"Allega alla lista dei canali",
-							context_unpinchannel_text:		"Rimuovi dalla lista dei canali",
-							context_addtonewcategory_text:	"Aggiungi a nuova categoria",
-							context_pinguild_text:			"Allega alla lista dei server",
-							context_unpinguild_text:		"Rimuovi dalla lista dei server",
-							header_pinneddms_text:			"Messaggi Diretti Aggiunti",
-							modal_colorpicker1_text:		"Colore della categoria"
+							context_addtonewcategory:			"Lisää uuteen luokkaan",
+							context_disablepredefined:			"Poista ennalta määritetty luokka käytöstä",
+							context_inpredefined:				"Kiinnitetty ennalta määritettyyn luokkaan",
+							context_pinchannel:					"Kiinnitä kanavaluetteloon",
+							context_pindm:						"Kiinnitä suora viesti",
+							context_pinguild:					"Kiinnitä palvelinluetteloon",
+							context_unpinchannel:				"Irrota kanavaluettelosta",
+							context_unpinguild:					"Irrota palvelinluettelosta",
+							header_pinneddms:					"Kiinnitetyt suorat viestit",
+							modal_colorpicker1:					"Luokan väri"
 						};
-					case "nl":		//dutch
+					case "fr":		// French
 						return {
-							context_pindm_text:				"PB pinnen",
-							context_disablepredefined_text:	"Schakel voorgedefinieerde categorie uit",
-							context_inpredefined_text:		"Vastgemaakt in vooraf gedefinieerde categorie",
-							context_pinchannel_text:		"Pin naar de kanalenlijst",
-							context_unpinchannel_text:		"Losmaken van kanalenlijst",
-							context_addtonewcategory_text:	"Toevoegen aan nieuwe categorie",
-							context_pinguild_text:			"Pin naar de serverlijst",
-							context_unpinguild_text:		"Losmaken van serverlijst",
-							header_pinneddms_text:			"Vastgezette Persoonluke Berichten",
-							modal_colorpicker1_text:		"Categorie kleur"
+							context_addtonewcategory:			"Ajouter à une nouvelle catégorie",
+							context_disablepredefined:			"Désactiver la catégorie prédéfinie",
+							context_inpredefined:				"Épinglé dans une catégorie prédéfinie",
+							context_pinchannel:					"Épingler à la liste des salons",
+							context_pindm:						"Épingler le message privé",
+							context_pinguild:					"Épingler à la liste des serveurs",
+							context_unpinchannel:				"Détacher de la liste des salons",
+							context_unpinguild:					"Détacher de la liste des serveurs",
+							header_pinneddms:					"Messages privés épinglés",
+							modal_colorpicker1:					"Couleur de la catégorie"
 						};
-					case "no":		//norwegian
+					case "hr":		// Croatian
 						return {
-							context_pindm_text:				"Fest DM",
-							context_disablepredefined_text:	"Deaktiver forhåndsdefinert kategori",
-							context_inpredefined_text:		"Festet i forhåndsdefinert kategori",
-							context_pinchannel_text:		"Fest på kanalliste",
-							context_unpinchannel_text:		"Fjern fra kanalliste",
-							context_addtonewcategory_text:	"Legg til i ny kategori",
-							context_pinguild_text:			"Fest på serverliste",
-							context_unpinguild_text:		"Fjern fra serverlisten",
-							header_pinneddms_text:			"Pinned Direktemeldinger",
-							modal_colorpicker1_text:		"Kategorifarge"
+							context_addtonewcategory:			"Dodaj u novu kategoriju",
+							context_disablepredefined:			"Deaktivirajte unaprijed definiranu kategoriju",
+							context_inpredefined:				"Prikvačeno u unaprijed definiranoj kategoriji",
+							context_pinchannel:					"Prikvači na popis kanala",
+							context_pindm:						"Prikvači izravnu poruku",
+							context_pinguild:					"Prikvači na popis poslužitelja",
+							context_unpinchannel:				"Odvojite se od popisa kanala",
+							context_unpinguild:					"Odvojite se od popisa poslužitelja",
+							header_pinneddms:					"Prikvačene izravne poruke",
+							modal_colorpicker1:					"Boja kategorije"
 						};
-					case "pl":		//polish
+					case "hu":		// Hungarian
 						return {
-							context_pindm_text:				"Przypnij PW",
-							context_disablepredefined_text:	"Wyłącz wstępnie zdefiniowaną kategorię",
-							context_inpredefined_text:		"Przypięty w predefiniowanej kategorii",
-							context_pinchannel_text:		"Dołącz do listy kanałów",
-							context_unpinchannel_text:		"Usuń z listy kanałów",
-							context_addtonewcategory_text:	"Dodaj do nowej kategorii",
-							context_pinguild_text:			"Dołącz do listy serwerów",
-							context_unpinguild_text:		"Usuń z listy serwerów",
-							header_pinneddms_text:			"Prywatne Wiadomości Bezpośrednie",
-							modal_colorpicker1_text:		"Kolor kategorii"
+							context_addtonewcategory:			"Hozzáadás új kategóriához",
+							context_disablepredefined:			"Deaktiválja az előre definiált kategóriát",
+							context_inpredefined:				"Előre meghatározott kategóriában rögzítve",
+							context_pinchannel:					"Rögzítés a csatornalistához",
+							context_pindm:						"Közvetlen üzenet rögzítése",
+							context_pinguild:					"Rögzítés a kiszolgáló listához",
+							context_unpinchannel:				"Leválasztás a csatornalistáról",
+							context_unpinguild:					"Leválasztás a kiszolgáló listáról",
+							header_pinneddms:					"Rögzített közvetlen üzenetek",
+							modal_colorpicker1:					"Kategória színe"
 						};
-					case "pt-BR":	//portuguese (brazil)
+					case "it":		// Italian
 						return {
-							context_pindm_text:				"Fixar MD",
-							context_disablepredefined_text:	"Desativar categoria predefinida",
-							context_inpredefined_text:		"Fixado na categoria predefinida",
-							context_pinchannel_text:		"Anexar à lista de canais",
-							context_unpinchannel_text:		"Remover da lista de canais",
-							context_addtonewcategory_text:	"Adicionar à nova categoria",
-							context_pinguild_text:			"Anexar à lista de servidores",
-							context_unpinguild_text:		"Remover da lista de servidores",
-							header_pinneddms_text:			"Mensagens diretas fixadas",
-							modal_colorpicker1_text:		"Cor da categoria"
+							context_addtonewcategory:			"Aggiungi a una nuova categoria",
+							context_disablepredefined:			"Disattiva la categoria predefinita",
+							context_inpredefined:				"Bloccato in una categoria predefinita",
+							context_pinchannel:					"Fissa all'elenco dei canali",
+							context_pindm:						"Metti il ​​messaggio diretto",
+							context_pinguild:					"Aggiungi all'elenco dei server",
+							context_unpinchannel:				"Scollega dall'elenco dei canali",
+							context_unpinguild:					"Scollega dall'elenco dei server",
+							header_pinneddms:					"Messaggi diretti appuntati",
+							modal_colorpicker1:					"Colore della categoria"
 						};
-					case "fi":		//finnish
+					case "ja":		// Japanese
 						return {
-							context_pindm_text:				"Kiinnitä yksityisviestit",
-							context_disablepredefined_text:	"Poista ennalta määritetty luokka käytöstä",
-							context_inpredefined_text:		"Kiinnitetty ennalta määritettyyn luokkaan",
-							context_pinchannel_text:		"Liitä kanavaluetteloon",
-							context_unpinchannel_text:		"Poista kanavaluettelosta",
-							context_addtonewcategory_text:	"Lisää uuteen luokkaan",
-							context_pinguild_text:			"Liitä palvelinluetteloon",
-							context_unpinguild_text:		"Poista palvelinluettelosta",
-							header_pinneddms_text:			"Liitetyt yksityisviestit",
-							modal_colorpicker1_text:		"Luokan väri"
+							context_addtonewcategory:			"新しいカテゴリに追加",
+							context_disablepredefined:			"事前定義されたカテゴリを非アクティブ化",
+							context_inpredefined:				"事前定義されたカテゴリに固定",
+							context_pinchannel:					"チャネルリストに固定",
+							context_pindm:						"ダイレクトメッセージを固定する",
+							context_pinguild:					"サーバーリストに固定する",
+							context_unpinchannel:				"チャネルリストから切り離す",
+							context_unpinguild:					"サーバーリストから切り離す",
+							header_pinneddms:					"固定されたダイレクトメッセージ",
+							modal_colorpicker1:					"カテゴリカラー"
 						};
-					case "sv":		//swedish
+					case "ko":		// Korean
 						return {
-							context_pindm_text:				"Fäst DM",
-							context_disablepredefined_text:	"Inaktivera fördefinierad kategori",
-							context_inpredefined_text:		"Fäst i fördefinierad kategori",
-							context_pinchannel_text:		"Fäst till kanallista",
-							context_unpinchannel_text:		"Ta bort från kanallistan",
-							context_addtonewcategory_text:	"Lägg till i ny kategori",
-							context_pinguild_text:			"Fäst till servernlista",
-							context_unpinguild_text:		"Ta bort från servernlista",
-							header_pinneddms_text:			"Inlagda Direktmeddelanden",
-							modal_colorpicker1_text:		"Kategori färg"
+							context_addtonewcategory:			"새 카테고리에 추가",
+							context_disablepredefined:			"사전 정의 된 카테고리 비활성화",
+							context_inpredefined:				"사전 정의 된 카테고리에 고정됨",
+							context_pinchannel:					"채널 목록에 고정",
+							context_pindm:						"쪽지 고정",
+							context_pinguild:					"서버 목록에 고정",
+							context_unpinchannel:				"채널 목록에서 분리",
+							context_unpinguild:					"서버 목록에서 분리",
+							header_pinneddms:					"고정 된 쪽지",
+							modal_colorpicker1:					"카테고리 색상"
 						};
-					case "tr":		//turkish
+					case "lt":		// Lithuanian
 						return {
-							context_pindm_text:				"DM'yi Sabitle",
-							context_disablepredefined_text:	"Önceden tanımlanmış kategoriyi devre dışı bırakın",
-							context_inpredefined_text:		"Önceden tanımlanmış kategoriye sabitlendi",
-							context_pinchannel_text:		"Kanal listesine ekle",
-							context_unpinchannel_text:		"Kanal listesinden kaldır",
-							context_addtonewcategory_text:	"Yeni kategoriye ekle",
-							context_pinguild_text:			"Sunucu listesine ekle",
-							context_unpinguild_text:		"Sunucu listesinden kaldır",
-							header_pinneddms_text:			"Direkt Mesajlar Sabitleyin",
-							modal_colorpicker1_text:		"Kategori rengi"
+							context_addtonewcategory:			"Pridėti prie naujos kategorijos",
+							context_disablepredefined:			"Išjunkite iš anksto nustatytą kategoriją",
+							context_inpredefined:				"Prisegta iš anksto nustatytoje kategorijoje",
+							context_pinchannel:					"Prisegti prie kanalų sąrašo",
+							context_pindm:						"Prisegti tiesioginį pranešimą",
+							context_pinguild:					"Prisegti prie serverio sąrašo",
+							context_unpinchannel:				"Atsijungti nuo kanalų sąrašo",
+							context_unpinguild:					"Atsijungti nuo serverio sąrašo",
+							header_pinneddms:					"Prisegti tiesioginiai pranešimai",
+							modal_colorpicker1:					"Kategorijos spalva"
 						};
-					case "cs":		//czech
+					case "nl":		// Dutch
 						return {
-							context_pindm_text:				"Připnout PZ",
-							context_disablepredefined_text:	"Zakázat předdefinovanou kategorii",
-							context_inpredefined_text:		"Připnuto v předdefinované kategorii",
-							context_pinchannel_text:		"Připojení k seznamu kanálů",
-							context_unpinchannel_text:		"Odstranit ze seznamu kanálů",
-							context_addtonewcategory_text:	"Přidat do nové kategorie",
-							context_pinguild_text:			"Připojit ke seznamu serverů",
-							context_unpinguild_text:		"Odstranit ze seznamu serverů",
-							header_pinneddms_text:			"Připojené Přímá Zpráva",
-							modal_colorpicker1_text:		"Barva kategorie"
+							context_addtonewcategory:			"Toevoegen aan nieuwe categorie",
+							context_disablepredefined:			"Schakel de voorgedefinieerde categorie uit",
+							context_inpredefined:				"Vastgezet in een vooraf gedefinieerde categorie",
+							context_pinchannel:					"Vastzetten op kanalenlijst",
+							context_pindm:						"Direct bericht vastzetten",
+							context_pinguild:					"Vastzetten op serverlijst",
+							context_unpinchannel:				"Maak los van de zenderlijst",
+							context_unpinguild:					"Maak los van de serverlijst",
+							header_pinneddms:					"Vastgezette directe berichten",
+							modal_colorpicker1:					"Categorie kleur"
 						};
-					case "bg":		//bulgarian
+					case "no":		// Norwegian
 						return {
-							context_pindm_text:				"Закачени ДС",
-							context_disablepredefined_text:	"Деактивирайте предварително дефинираната категория",
-							context_inpredefined_text:		"Фиксирано в предварително дефинирана категория",
-							context_pinchannel_text:		"Прикачете към списъка с канали",
-							context_unpinchannel_text:		"Премахване от списъка с канали",
-							context_addtonewcategory_text:	"Добавяне към нова категория",
-							context_pinguild_text:			"Прикачване към списъка със сървъри",
-							context_unpinguild_text:		"Премахване от списъка със сървъри",
-							header_pinneddms_text:			"Свързани директни съобщения",
-							modal_colorpicker1_text:		"Цвят на категорията"
+							context_addtonewcategory:			"Legg til i ny kategori",
+							context_disablepredefined:			"Deaktiver forhåndsdefinert kategori",
+							context_inpredefined:				"Festet i en forhåndsdefinert kategori",
+							context_pinchannel:					"Fest til kanallisten",
+							context_pindm:						"Fest direkte melding",
+							context_pinguild:					"Fest til serverlisten",
+							context_unpinchannel:				"Koble fra kanallisten",
+							context_unpinguild:					"Koble fra serverlisten",
+							header_pinneddms:					"Festede direktemeldinger",
+							modal_colorpicker1:					"Kategorifarge"
 						};
-					case "ru":		//russian
+					case "pl":		// Polish
 						return {
-							context_pindm_text:				"Закрепить ЛС",
-							context_disablepredefined_text:	"Отключить предопределенную категорию",
-							context_inpredefined_text:		"Закреплено в предопределенной категории",
-							context_pinchannel_text:		"Прикрепить к списку каналов",
-							context_unpinchannel_text:		"Удалить из списка каналов",
-							context_addtonewcategory_text:	"Добавить в новую категорию",
-							context_pinguild_text:			"Присоединить к списку серверов",
-							context_unpinguild_text:		"Удалить из списка серверов",
-							header_pinneddms_text:			"Прикрепленные Личные Сообщения",
-							modal_colorpicker1_text:		"Цвет категории"
+							context_addtonewcategory:			"Dodaj do nowej kategorii",
+							context_disablepredefined:			"Dezaktywuj predefiniowaną kategorię",
+							context_inpredefined:				"Przypięty w predefiniowanej kategorii",
+							context_pinchannel:					"Przypnij do listy kanałów",
+							context_pindm:						"Przypnij bezpośrednią wiadomość",
+							context_pinguild:					"Przypnij do listy serwerów",
+							context_unpinchannel:				"Odłącz od listy kanałów",
+							context_unpinguild:					"Odłącz od listy serwerów",
+							header_pinneddms:					"Przypięte czaty",
+							modal_colorpicker1:					"Kolor kategorii"
 						};
-					case "uk":		//ukrainian
+					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							context_pindm_text:				"Закріпити ОП",
-							context_disablepredefined_text:	"Вимкнути заздалегідь визначену категорію",
-							context_inpredefined_text:		"Закріплено в наперед визначеній категорії",
-							context_pinchannel_text:		"Додайте до списку каналів",
-							context_unpinchannel_text:		"Видалити зі списку каналів",
-							context_addtonewcategory_text:	"Додати до нової категорії",
-							context_pinguild_text:			"Додайте до списку серверів",
-							context_unpinguild_text:		"Видалити зі списку серверів",
-							header_pinneddms_text:			"Прикріплені oсобисті повідомлення",
-							modal_colorpicker1_text:		"Колір категорії"
+							context_addtonewcategory:			"Adicionar à nova categoria",
+							context_disablepredefined:			"Desativar categoria predefinida",
+							context_inpredefined:				"Fixado em uma categoria predefinida",
+							context_pinchannel:					"Fixar na lista de canais",
+							context_pindm:						"Fixar mensagem direta",
+							context_pinguild:					"Fixar na lista de servidores",
+							context_unpinchannel:				"Desanexar da lista de canais",
+							context_unpinguild:					"Desanexar da lista de servidores",
+							header_pinneddms:					"Mensagens diretas fixadas",
+							modal_colorpicker1:					"Cor da categoria"
 						};
-					case "ja":		//japanese
+					case "ro":		// Romanian
 						return {
-							context_pindm_text:				"DMピン",
-							context_disablepredefined_text:	"事前定義されたカテゴリを無効にする",
-							context_inpredefined_text:		"事前定義されたカテゴリに固定",
-							context_pinchannel_text:		"チャンネルリストに添付",
-							context_unpinchannel_text:		"チャンネルリストから削除",
-							context_addtonewcategory_text:	"新しいカテゴリに追加",
-							context_pinguild_text:			"サーバーリストに添付",
-							context_unpinguild_text:		"サーバーリストから削除",
-							header_pinneddms_text:			"固定された直接メッセージ",
-							modal_colorpicker1_text:		"カテゴリーの色"
+							context_addtonewcategory:			"Adăugați la o nouă categorie",
+							context_disablepredefined:			"Dezactivați categoria predefinită",
+							context_inpredefined:				"Fixat într-o categorie predefinită",
+							context_pinchannel:					"Fixați în lista de canale",
+							context_pindm:						"Fixați mesajul direct",
+							context_pinguild:					"Fixați pe lista serverului",
+							context_unpinchannel:				"Desprindeți din lista de canale",
+							context_unpinguild:					"Desprindeți din lista serverelor",
+							header_pinneddms:					"Mesaje directe fixate",
+							modal_colorpicker1:					"Culoarea categoriei"
 						};
-					case "zh-TW":	//chinese (traditional)
+					case "ru":		// Russian
 						return {
-							context_pindm_text:				"引腳直接留言",
-							context_disablepredefined_text:	"禁用預定義類別",
-							context_inpredefined_text:		"固定在預定義的類別中",
-							context_pinchannel_text:		"附加到頻道列表",
-							context_unpinchannel_text:		"從頻道列表中刪除",
-							context_addtonewcategory_text:	"添加到新類別",
-							context_pinguild_text:			"附加到服務器列表",
-							context_unpinguild_text:		"從服務器列表中刪除",
-							header_pinneddms_text:			"固定私人信息",
-							modal_colorpicker1_text:		"類別顏色"
+							context_addtonewcategory:			"Добавить в новую категорию",
+							context_disablepredefined:			"Отключить предопределенную категорию",
+							context_inpredefined:				"Закреплено в предопределенной категории",
+							context_pinchannel:					"Закрепить в списке каналов",
+							context_pindm:						"Закрепить прямую переписку",
+							context_pinguild:					"Закрепить в списке серверов",
+							context_unpinchannel:				"Отключить от списка каналов",
+							context_unpinguild:					"Отключить от списка серверов",
+							header_pinneddms:					"Закрепленные личные сообщения",
+							modal_colorpicker1:					"Цвет категории"
 						};
-					case "ko":		//korean
+					case "sv":		// Swedish
 						return {
-							context_pindm_text:				"비공개 메시지 고정",
-							context_disablepredefined_text:	"사전 정의 된 카테고리 비활성화",
-							context_inpredefined_text:		"사전 정의 된 카테고리에 고정됨",
-							context_pinchannel_text:		"채널 목록에 첨부",
-							context_unpinchannel_text:		"채널 목록에서 삭제",
-							context_addtonewcategory_text:	"새 카테고리에 추가",
-							context_pinguild_text:			"서버 목록에 첨부",
-							context_unpinguild_text:		"서버 목록에서 제거",
-							header_pinneddms_text:			"고정 된 비공개 메시지",
-							modal_colorpicker1_text:		"카테고리 색상"
+							context_addtonewcategory:			"Lägg till i ny kategori",
+							context_disablepredefined:			"Inaktivera fördefinierad kategori",
+							context_inpredefined:				"Fästs i en fördefinierad kategori",
+							context_pinchannel:					"Fäst i kanallistan",
+							context_pindm:						"Fäst direktmeddelande",
+							context_pinguild:					"Fäst i serverlistan",
+							context_unpinchannel:				"Ta bort från kanallistan",
+							context_unpinguild:					"Ta bort från serverlistan",
+							header_pinneddms:					"Fästa direktmeddelanden",
+							modal_colorpicker1:					"Kategorifärg"
 						};
-					default:		//default: english
+					case "th":		// Thai
 						return {
-							context_pindm_text:				"Pin DM",
-							context_disablepredefined_text:	"Disable predefined Category",
-							context_inpredefined_text:		"Pinned in predefined Category",
-							context_pinchannel_text:		"Pin to Channellist",
-							context_unpinchannel_text:		"Unpin from Channellist",
-							context_addtonewcategory_text:	"Add to new Category",
-							context_pinguild_text:			"Pin to Serverlist",
-							context_unpinguild_text:		"Unpin from Serverlist",
-							header_pinneddms_text:			"Pinned Direct Messages",
-							modal_colorpicker1_text:		"Categorycolor"
+							context_addtonewcategory:			"เพิ่มในหมวดหมู่ใหม่",
+							context_disablepredefined:			"ปิดใช้งานหมวดหมู่ที่กำหนดไว้ล่วงหน้า",
+							context_inpredefined:				"ตรึงไว้ในหมวดหมู่ที่กำหนดไว้ล่วงหน้า",
+							context_pinchannel:					"ตรึงในรายการช่อง",
+							context_pindm:						"ตรึงข้อความโดยตรง",
+							context_pinguild:					"ปักหมุดรายการเซิร์ฟเวอร์",
+							context_unpinchannel:				"แยกออกจากรายการช่อง",
+							context_unpinguild:					"แยกออกจากรายการเซิร์ฟเวอร์",
+							header_pinneddms:					"ข้อความโดยตรงที่ตรึงไว้",
+							modal_colorpicker1:					"สีหมวดหมู่"
+						};
+					case "tr":		// Turkish
+						return {
+							context_addtonewcategory:			"Yeni kategoriye ekle",
+							context_disablepredefined:			"Önceden tanımlanmış kategoriyi devre dışı bırakın",
+							context_inpredefined:				"Önceden tanımlanmış bir kategoriye sabitlenmiş",
+							context_pinchannel:					"Kanal listesine sabitle",
+							context_pindm:						"Doğrudan mesajı sabitle",
+							context_pinguild:					"Sunucu listesine sabitle",
+							context_unpinchannel:				"Kanal listesinden çıkar",
+							context_unpinguild:					"Sunucu listesinden ayır",
+							header_pinneddms:					"Sabitlenmiş doğrudan mesajlar",
+							modal_colorpicker1:					"Kategori rengi"
+						};
+					case "uk":		// Ukrainian
+						return {
+							context_addtonewcategory:			"Додати до нової категорії",
+							context_disablepredefined:			"Вимкнути заздалегідь визначену категорію",
+							context_inpredefined:				"Закріплено в наперед визначеній категорії",
+							context_pinchannel:					"Закріпити в списку каналів",
+							context_pindm:						"Закріпити пряме повідомлення",
+							context_pinguild:					"Закріпити на списку серверів",
+							context_unpinchannel:				"Від’єднати від списку каналів",
+							context_unpinguild:					"Від'єднати від списку серверів",
+							header_pinneddms:					"Закріплені прямі повідомлення",
+							modal_colorpicker1:					"Колір категорії"
+						};
+					case "vi":		// Vietnamese
+						return {
+							context_addtonewcategory:			"Thêm vào danh mục mới",
+							context_disablepredefined:			"Hủy kích hoạt danh mục xác định trước",
+							context_inpredefined:				"Được ghim trong một danh mục xác định trước",
+							context_pinchannel:					"Ghim vào danh sách kênh",
+							context_pindm:						"Ghim tin nhắn trực tiếp",
+							context_pinguild:					"Ghim vào danh sách máy chủ",
+							context_unpinchannel:				"Tách khỏi danh sách kênh",
+							context_unpinguild:					"Tách khỏi danh sách máy chủ",
+							header_pinneddms:					"Tin nhắn trực tiếp được ghim",
+							modal_colorpicker1:					"Màu sắc"
+						};
+					case "zh":		// Chinese
+						return {
+							context_addtonewcategory:			"添加到新类别",
+							context_disablepredefined:			"停用预定义类别",
+							context_inpredefined:				"固定在预定义的类别中",
+							context_pinchannel:					"固定到频道列表",
+							context_pindm:						"固定直接讯息",
+							context_pinguild:					"固定到服务器列表",
+							context_unpinchannel:				"从频道列表中分离",
+							context_unpinguild:					"从服务器列表中分离",
+							header_pinneddms:					"固定直接讯息",
+							modal_colorpicker1:					"类别颜色"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							context_addtonewcategory:			"添加到新類別",
+							context_disablepredefined:			"停用預定義類別",
+							context_inpredefined:				"固定在預定義的類別中",
+							context_pinchannel:					"固定到頻道列表",
+							context_pindm:						"固定直接訊息",
+							context_pinguild:					"固定到服務器列表",
+							context_unpinchannel:				"從頻道列表中分離",
+							context_unpinguild:					"從服務器列表中分離",
+							header_pinneddms:					"固定直接訊息",
+							modal_colorpicker1:					"類別顏色"
+						};
+					default:		// English
+						return {
+							context_addtonewcategory:			"Add to new Category",
+							context_disablepredefined:			"Deactivate predefined Category",
+							context_inpredefined:				"Pinned in a predefined Category",
+							context_pinchannel:					"Pin to Channel List",
+							context_pindm:						"Pin DM",
+							context_pinguild:					"Pin to Server List",
+							context_unpinchannel:				"Detach from Channel List",
+							context_unpinguild:					"Detach from Server List",
+							header_pinneddms:					"Pinned Direct Messages",
+							modal_colorpicker1:					"Category Color"
 						};
 				}
 			}

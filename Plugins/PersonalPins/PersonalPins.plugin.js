@@ -149,7 +149,7 @@ module.exports = (_ => {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
 					if (index == -1) [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["edit", "add-reaction", "quote"]});
 					children.splice(index > -1 ? index + 1: 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: note ? this.labels.context_unpinoption_text : this.labels.context_pinoption_text,
+						label: note ? this.labels.context_unpinoption : this.labels.context_pinoption,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, note ? "unpin-note" : "pin-note"),
 						hint: hint && (_ => {
 							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
@@ -161,7 +161,7 @@ module.exports = (_ => {
 						}
 					}));
 					if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index > -1 ? index + 1: 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.labels.context_updateoption_text,
+						label: this.labels.context_updateoption,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "update-note"),
 						action: _ => {
 							this.updateNoteData(note, e.instance.props.message);
@@ -175,7 +175,7 @@ module.exports = (_ => {
 					let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
 					children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: note ? this.labels.context_unpinoption_text : this.labels.context_pinoption_text,
+						label: note ? this.labels.context_unpinoption : this.labels.context_pinoption,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, note ? "unpin-note" : "pin-note"),
 						icon: _ => {
 							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
@@ -187,7 +187,7 @@ module.exports = (_ => {
 						}
 					}));
 					if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.labels.context_updateoption_text,
+						label: this.labels.context_updateoption,
 						id: "update-note",
 						icon: _ => {
 							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
@@ -206,7 +206,7 @@ module.exports = (_ => {
 					let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
 					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						key: note ? "unpin-note" : "pin-note",
-						text: note ? this.labels.context_unpinoption_text : this.labels.context_pinoption_text,
+						text: note ? this.labels.context_unpinoption : this.labels.context_pinoption,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 							className: BDFDB.disCN.messagetoolbarbutton,
 							onClick: _ => {
@@ -220,7 +220,7 @@ module.exports = (_ => {
 					}));
 					if (this.isNoteOutdated(note, e.instance.props.message)) e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						key: "update-note",
-						text: this.labels.context_updateoption_text,
+						text: this.labels.context_updateoption,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 							className: BDFDB.disCN.messagetoolbarbutton,
 							onClick: _ => {
@@ -239,7 +239,7 @@ module.exports = (_ => {
 				let [children, index] = BDFDB.ReactUtils.findParent(BDFDB.ObjectUtils.get(e.returnvalue, "props.toolbar"), {name: "FluxContainer(Search)"});
 				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						text: this.labels.popout_note_text,
+						text: this.labels.popout_note,
 						tooltipConfig: {type: "bottom"},
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 							className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
@@ -286,7 +286,7 @@ module.exports = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 											className: BDFDB.disCN.messagespopouttitle,
-											children: this.labels.popout_note_text
+											children: this.labels.popout_note
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
 											query: buttonInstance.props.searchKey,
@@ -351,7 +351,7 @@ module.exports = (_ => {
 			
 			getValue (key, type) {
 				return {
-					label: type == "order" ? BDFDB.LanguageUtils.LibraryStrings[key] : this.labels[`popout_${type}_${key}_text`],
+					label: type == "order" ? BDFDB.LanguageUtils.LibraryStrings[key] : this.labels[`popout_${type}_${key}`],
 					value: key
 				};
 			}
@@ -536,7 +536,7 @@ module.exports = (_ => {
 						timestamp: message.timestamp._i.getTime()
 					};
 					BDFDB.DataUtils.save(notes, this, "notes");
-					BDFDB.NotificationUtils.toast(this.labels.toast_noteadd_text, {type: "success"});
+					BDFDB.NotificationUtils.toast(this.labels.toast_noteadd, {type: "success"});
 				}
 				else this.removeNoteData(notes[guild_id][channel.id][message.id]);
 			}
@@ -562,7 +562,7 @@ module.exports = (_ => {
 				let notes = BDFDB.DataUtils.load(this, "notes");
 				notes[guild_id][channel.id][note.id].message = JSON.stringify(newmessage);
 				BDFDB.DataUtils.save(notes, this, "notes");
-				BDFDB.NotificationUtils.toast(this.labels.toast_noteupdate_text, {type: "info"});
+				BDFDB.NotificationUtils.toast(this.labels.toast_noteupdate, {type: "info"});
 			}
 
 			removeNoteData (note) {
@@ -577,347 +577,443 @@ module.exports = (_ => {
 					if (BDFDB.ObjectUtils.isEmpty(notes[guild_id])) delete notes[guild_id];
 				}
 				BDFDB.DataUtils.save(notes, this, "notes");
-				BDFDB.NotificationUtils.toast(this.labels.toast_noteremove_text, {type: "danger"});
+				BDFDB.NotificationUtils.toast(this.labels.toast_noteremove, {type: "danger"});
 			}
 
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "hr":		//croatian
+					case "bg":		// Bulgarian
 						return {
-							popout_note_text:				"Bilješke",
-							popout_filter_channel_text:		"Kanal",
-							popout_filter_server_text:		"Poslužavnik",
-							popout_filter_all_text:			"Svi poslužitelji",
-							popout_sort_messagetime_text:	"Vijesti-Datum",
-							popout_sort_notetime_text:		"Bilješka-Datum",
-							context_pinoption_text:			"Napominjemo poruku",
-							context_updateoption_text:		"Ažuriraj bilješku",
-							context_unpinoption_text:		"Uklonite bilješku",
-							popout_pinoption_text:			"Bilješka",
-							toast_noteadd_text:				"Poruka dodana u bilježnicu",
-							toast_noteupdate_text:			"Poruka je ažurirana u bilježnici",
-							toast_noteremove_text:			"Poruka uklonjena iz bilježnice"
+							context_pinoption:					"Запишете съобщението",
+							context_unpinoption:				"Премахване на бележката",
+							context_updateoption:				"Бележка за актуализация",
+							popout_filter_all:					"Всички сървъри",
+							popout_filter_channel:				"Канал",
+							popout_filter_server:				"Сървър",
+							popout_note:						"Бележки",
+							popout_pinoption:					"Забележка",
+							popout_sort_messagetime:			"Дата на съобщението",
+							popout_sort_notetime:				"Дата на бележка",
+							toast_noteadd:						"Съобщението е добавено към бележника",
+							toast_noteremove:					"Съобщението е премахнато от бележника",
+							toast_noteupdate:					"Актуализира съобщението в бележника"
 						};
-					case "da":		//danish
+					case "da":		// Danish
 						return {
-							popout_note_text:				"Noter",
-							popout_filter_channel_text:		"Kanal",
-							popout_filter_server_text:		"Server",
-							popout_filter_all_text:			"Alle servere",
-							popout_sort_messagetime_text:	"Meddelelse-Dato",
-							popout_sort_notetime_text:		"Note-Dato",
-							context_pinoption_text:			"Noter besked",
-							context_updateoption_text:		"Opdater note",
-							context_unpinoption_text:		"Fjern note",
-							popout_pinoption_text:			"Noter",
-							toast_noteadd_text:				"Meddelelse tilføjet til notesbog",
-							toast_noteupdate_text:			"Meddelelse opdateret i den notesbog",
-							toast_noteremove_text:			"Meddelelse fjernet fra notesbog"
+							context_pinoption:					"Skriv beskeden ned",
+							context_unpinoption:				"Fjern noten",
+							context_updateoption:				"Opdater note",
+							popout_filter_all:					"Alle servere",
+							popout_filter_channel:				"Kanal",
+							popout_filter_server:				"Server",
+							popout_note:						"Noter",
+							popout_pinoption:					"Bemærk",
+							popout_sort_messagetime:			"Meddelelsesdato",
+							popout_sort_notetime:				"Bemærkdato",
+							toast_noteadd:						"Besked føjet til notesbog",
+							toast_noteremove:					"Besked fjernet fra notesbog",
+							toast_noteupdate:					"Opdateret meddelelsen i notesbogen"
 						};
-					case "de":		//german
+					case "de":		// German
 						return {
-							popout_note_text:				"Notizen",
-							popout_filter_channel_text:		"Kanal",
-							popout_filter_server_text:		"Server",
-							popout_filter_all_text:			"Alle Server",
-							popout_sort_messagetime_text:	"Nachrichten-Datum",
-							popout_sort_notetime_text:		"Notiz-Datum",
-							context_pinoption_text:			"Nachricht notieren",
-							context_updateoption_text:		"Notiz aktualisieren",
-							context_unpinoption_text:		"Notiz entfernen",
-							popout_pinoption_text:			"Notieren",
-							toast_noteadd_text:				"Nachricht zum Notizbuch hinzugefügt",
-							toast_noteupdate_text:			"Nachricht im Notizbuch aktualisiert",
-							toast_noteremove_text:			"Nachricht aus dem Notizbuch entfernt"
+							context_pinoption:					"Nachricht notieren",
+							context_unpinoption:				"Notiz entfernen",
+							context_updateoption:				"Notiz aktualisieren",
+							popout_filter_all:					"Alle Server",
+							popout_filter_channel:				"Kanal",
+							popout_filter_server:				"Server",
+							popout_note:						"Notizen",
+							popout_pinoption:					"Notieren",
+							popout_sort_messagetime:			"Nachrichtendatum",
+							popout_sort_notetime:				"Notizdatum",
+							toast_noteadd:						"Nachricht zum Notizbuch hinzugefügt",
+							toast_noteremove:					"Nachricht aus dem Notizbuch entfernt",
+							toast_noteupdate:					"Nachricht im Notizbuch aktualisiert"
 						};
-					case "es":		//spanish
+					case "el":		// Greek
 						return {
-							popout_note_text:				"Notas",
-							popout_filter_channel_text:		"Canal",
-							popout_filter_server_text:		"Servidor",
-							popout_filter_all_text:			"Todos los servidores",
-							popout_sort_messagetime_text:	"Mensaje-Fecha",
-							popout_sort_notetime_text:		"Nota-Fecha",
-							context_pinoption_text:			"Anotar mensaje",
-							context_updateoption_text:		"Actualiza la nota",
-							context_unpinoption_text:		"Eliminar la nota",
-							popout_pinoption_text:			"Anotar",
-							toast_noteadd_text:				"Mensaje agregado al cuaderno",
-							toast_noteupdate_text:			"Mensaje actualizado en el cuaderno",
-							toast_noteremove_text:			"Mensaje eliminado del cuaderno"
+							context_pinoption:					"Γράψτε το μήνυμα",
+							context_unpinoption:				"Αφαιρέστε τη σημείωση",
+							context_updateoption:				"Ενημέρωση σημείωσης",
+							popout_filter_all:					"Όλοι οι διακομιστές",
+							popout_filter_channel:				"Κανάλι",
+							popout_filter_server:				"Υπηρέτης",
+							popout_note:						"Σημειώσεις",
+							popout_pinoption:					"Σημείωση",
+							popout_sort_messagetime:			"Ημερομηνία μηνύματος",
+							popout_sort_notetime:				"Σημείωση ημερομηνίας",
+							toast_noteadd:						"Το μήνυμα προστέθηκε στο σημειωματάριο",
+							toast_noteremove:					"Το μήνυμα καταργήθηκε από το σημειωματάριο",
+							toast_noteupdate:					"Ενημερώθηκε το μήνυμα στο σημειωματάριο"
 						};
-					case "fr":		//french
+					case "es":		// Spanish
 						return {
-							popout_note_text:				"Notes",
-							popout_filter_channel_text:		"Canal",
-							popout_filter_server_text:		"Serveur",
-							popout_filter_all_text:			"Tous les serveurs",
-							popout_sort_messagetime_text:	"Message-Date",
-							popout_sort_notetime_text:		"Note-Date",
-							context_pinoption_text:			"Noter le message",
-							context_updateoption_text:		"Mettre à jour la note",
-							context_unpinoption_text:		"Enlevez la note",
-							popout_pinoption_text:			"Noter",
-							toast_noteadd_text:				"Message ajouté au cahier",
-							toast_noteupdate_text:			"Message mis à jour dans le cahier",
-							toast_noteremove_text:			"Message supprimé du cahier"
+							context_pinoption:					"Escribe el mensaje",
+							context_unpinoption:				"Eliminar nota",
+							context_updateoption:				"Nota de actualización",
+							popout_filter_all:					"Todos los servidores",
+							popout_filter_channel:				"Canal",
+							popout_filter_server:				"Servidor",
+							popout_note:						"Notas",
+							popout_pinoption:					"Nota",
+							popout_sort_messagetime:			"Fecha del mensaje",
+							popout_sort_notetime:				"Fecha della nota",
+							toast_noteadd:						"Mensaje agregado al cuaderno",
+							toast_noteremove:					"Mensaje eliminado de la libreta",
+							toast_noteupdate:					"Se actualizó el mensaje en el cuaderno."
 						};
-					case "it":		//italian
+					case "fi":		// Finnish
 						return {
-							popout_note_text:				"Note",
-							popout_filter_channel_text:		"Canale",
-							popout_filter_server_text:		"Server",
-							popout_filter_all_text:			"Tutti i server",
-							popout_sort_messagetime_text:	"Messaggio-Data",
-							popout_sort_notetime_text:		"Nota-Data",
-							context_pinoption_text:			"Annotare il messaggio",
-							context_updateoption_text:		"Aggiorna la nota",
-							context_unpinoption_text:		"Rimuovi la nota",
-							popout_pinoption_text:			"Annotare",
-							toast_noteadd_text:				"Messaggio aggiunto al blocco note",
-							toast_noteupdate_text:			"Messaggio aggiornato nel blocco note",
-							toast_noteremove_text:			"Messaggio rimosso dal blocco note"
+							context_pinoption:					"Kirjoita viesti muistiin",
+							context_unpinoption:				"Poista muistiinpano",
+							context_updateoption:				"Päivitä muistiinpano",
+							popout_filter_all:					"Kaikki palvelimet",
+							popout_filter_channel:				"Kanava",
+							popout_filter_server:				"Palvelin",
+							popout_note:						"Muistiinpanoja",
+							popout_pinoption:					"Merkintä",
+							popout_sort_messagetime:			"Viestin päivämäärä",
+							popout_sort_notetime:				"Muistiinpanon päivämäärä",
+							toast_noteadd:						"Viesti lisättiin muistikirjaan",
+							toast_noteremove:					"Viesti poistettu muistikirjasta",
+							toast_noteupdate:					"Päivitetty muistikirjan viesti"
 						};
-					case "nl":		//dutch
+					case "fr":		// French
 						return {
-							popout_note_text:				"Notities",
-							popout_filter_channel_text:		"Kanaal",
-							popout_filter_server_text:		"Server",
-							popout_filter_all_text:			"Alle servers",
-							popout_sort_messagetime_text:	"Bericht-Datum",
-							popout_sort_notetime_text:		"Notitie-Datum",
-							context_pinoption_text:			"Noteer bericht",
-							context_updateoption_text:		"Update de notitie",
-							context_unpinoption_text:		"Verwijder de notitie",
-							popout_pinoption_text:			"Noteer",
-							toast_noteadd_text:				"Bericht toegevoegd aan notitieblok",
-							toast_noteupdate_text:			"Bericht bijgewerkt in het notitieblok",
-							toast_noteremove_text:			"Bericht verwijderd van notitieblok"
+							context_pinoption:					"Écrivez le message",
+							context_unpinoption:				"Supprimer la note",
+							context_updateoption:				"Mettre à jour la note",
+							popout_filter_all:					"Tous les serveurs",
+							popout_filter_channel:				"Salon",
+							popout_filter_server:				"Serveur",
+							popout_note:						"Remarques",
+							popout_pinoption:					"Remarque",
+							popout_sort_messagetime:			"Date du message",
+							popout_sort_notetime:				"Date de la note",
+							toast_noteadd:						"Message ajouté au notebook",
+							toast_noteremove:					"Message supprimé du notebook",
+							toast_noteupdate:					"Mise à jour du message dans le cahier"
 						};
-					case "no":		//norwegian
+					case "hr":		// Croatian
 						return {
-							popout_note_text:				"Notatene",
-							popout_filter_channel_text:		"Kanal",
-							popout_filter_server_text:		"Server",
-							popout_filter_all_text:			"Alle servere",
-							popout_sort_messagetime_text:	"Melding-Dato",
-							popout_sort_notetime_text:		"Merknad-Dato",
-							context_pinoption_text:			"Notat ned meldingen",
-							context_updateoption_text:		"Oppdater notatet",
-							context_unpinoption_text:		"Fjern notatet",
-							popout_pinoption_text:			"Notere",
-							toast_noteadd_text:				"Melding lagt til i notisboken",
-							toast_noteupdate_text:			"Melding oppdatert i notisbok",
-							toast_noteremove_text:			"Melding fjernet fra notatboken"
+							context_pinoption:					"Zapišite poruku",
+							context_unpinoption:				"Ukloni bilješku",
+							context_updateoption:				"Napomena o ažuriranju",
+							popout_filter_all:					"Svi poslužitelji",
+							popout_filter_channel:				"Kanal",
+							popout_filter_server:				"Poslužitelju",
+							popout_note:						"Bilješke",
+							popout_pinoption:					"Bilješka",
+							popout_sort_messagetime:			"Datum poruke",
+							popout_sort_notetime:				"Datum bilješke",
+							toast_noteadd:						"Poruka dodana u bilježnicu",
+							toast_noteremove:					"Poruka uklonjena iz bilježnice",
+							toast_noteupdate:					"Ažurirana je poruka u bilježnici"
 						};
-					case "pl":		//polish
+					case "hu":		// Hungarian
 						return {
-							popout_note_text:				"Notatki",
-							popout_filter_channel_text:		"Kanał",
-							popout_filter_server_text:		"Serwer",
-							popout_filter_all_text:			"Wszystkie serwery",
-							popout_sort_messagetime_text:	"Wiadomość-Data",
-							popout_sort_notetime_text:		"Notatka-Data",
-							context_pinoption_text:			"Notuj wiadomość",
-							context_updateoption_text:		"Zaktualizuj notatkę",
-							context_unpinoption_text:		"Usuń notatkę",
-							popout_pinoption_text:			"Notuj",
-							toast_noteadd_text:				"Wiadomość została dodana do notatnika",
-							toast_noteupdate_text:			"Wiadomość zaktualizowana w notatniku",
-							toast_noteremove_text:			"Wiadomość została usunięta z notatnika"
+							context_pinoption:					"Írja le az üzenetet",
+							context_unpinoption:				"Megjegyzés eltávolítása",
+							context_updateoption:				"Frissítse a jegyzetet",
+							popout_filter_all:					"Minden szerver",
+							popout_filter_channel:				"Csatorna",
+							popout_filter_server:				"Szerver",
+							popout_note:						"Jegyzetek",
+							popout_pinoption:					"Jegyzet",
+							popout_sort_messagetime:			"Üzenet dátuma",
+							popout_sort_notetime:				"Jegyzet dátuma",
+							toast_noteadd:						"Üzenet hozzáadva a jegyzetfüzethez",
+							toast_noteremove:					"Üzenet eltávolítva a jegyzetfüzetből",
+							toast_noteupdate:					"Frissítette az üzenetet a jegyzetfüzetben"
 						};
-					case "pt-BR":	//portuguese (brazil)
+					case "it":		// Italian
 						return {
-							popout_note_text:				"Notas",
-							popout_filter_channel_text:		"Canal",
-							popout_filter_server_text:		"Servidor",
-							popout_filter_all_text:			"Todos os servidores",
-							popout_sort_messagetime_text:	"Mensagem-Data",
-							popout_sort_notetime_text:		"Nota-Data",
-							context_pinoption_text:			"Anote a mensagem",
-							context_updateoption_text:		"Atualize a nota",
-							context_unpinoption_text:		"Remova a nota",
-							popout_pinoption_text:			"Anotar",
-							toast_noteadd_text:				"Mensagem adicionada ao caderno",
-							toast_noteupdate_text:			"Mensagem atualizada no caderno",
-							toast_noteremove_text:			"Mensagem removida do caderno"
+							context_pinoption:					"Annota il messaggio",
+							context_unpinoption:				"Rimuovi nota",
+							context_updateoption:				"Aggiorna nota",
+							popout_filter_all:					"Tutti i server",
+							popout_filter_channel:				"Canale",
+							popout_filter_server:				"Server",
+							popout_note:						"Appunti",
+							popout_pinoption:					"Nota",
+							popout_sort_messagetime:			"Messaggio data",
+							popout_sort_notetime:				"Nota data",
+							toast_noteadd:						"Messaggio aggiunto al taccuino",
+							toast_noteremove:					"Messaggio rimosso dal taccuino",
+							toast_noteupdate:					"Aggiornato il messaggio nel taccuino"
 						};
-					case "fi":		//finnish
+					case "ja":		// Japanese
 						return {
-							popout_note_text:				"Muistiinpanot",
-							popout_filter_channel_text:		"Kanava",
-							popout_filter_server_text:		"Palvelin",
-							popout_filter_all_text:			"Kaikki palvelimet",
-							popout_sort_messagetime_text:	"Viesti-Päivämäärä",
-							popout_sort_notetime_text:		"Huomaa-Päivämäärä",
-							context_pinoption_text:			"Huomaa viesti",
-							context_updateoption_text:		"Päivitä muistiinpano",
-							context_unpinoption_text:		"Poista muistiinpano",
-							popout_pinoption_text:			"Huomaa",
-							toast_noteadd_text:				"Viesti lisätty muistikirjaan",
-							toast_noteupdate_text:			"Viesti päivitetty muistikirjaan",
-							toast_noteremove_text:			"Viesti poistettiin muistikirjaan"
+							context_pinoption:					"メッセージを書き留めます",
+							context_unpinoption:				"メモを削除",
+							context_updateoption:				"更新メモ",
+							popout_filter_all:					"すべてのサーバー",
+							popout_filter_channel:				"チャネル",
+							popout_filter_server:				"サーバ",
+							popout_note:						"ノート",
+							popout_pinoption:					"注意",
+							popout_sort_messagetime:			"メッセージの日付",
+							popout_sort_notetime:				"メモ日",
+							toast_noteadd:						"ノートブックにメッセージを追加",
+							toast_noteremove:					"ノートブックからメッセージが削除されました",
+							toast_noteupdate:					"ノートブックのメッセージを更新しました"
 						};
-					case "sv":		//swedish
+					case "ko":		// Korean
 						return {
-							popout_note_text:				"Anteckningarna",
-							popout_filter_channel_text:		"Kanal",
-							popout_filter_server_text:		"Server",
-							popout_filter_all_text:			"Alla servrar",
-							popout_sort_messagetime_text:	"Meddelande-Datum",
-							popout_sort_notetime_text:		"Anteckningen-Datum",
-							context_pinoption_text:			"Anteckna meddelande",
-							context_updateoption_text:		"Uppdatera noten",
-							context_unpinoption_text:		"Ta bort noten",
-							popout_pinoption_text:			"Anteckna",
-							toast_noteadd_text:				"Meddelandet läggs till i anteckningsboken",
-							toast_noteupdate_text:			"Meddelandet uppdateras i anteckningsboken",
-							toast_noteremove_text:			"Meddelande borttaget från anteckningsboken"
+							context_pinoption:					"메시지를 적어",
+							context_unpinoption:				"메모 제거",
+							context_updateoption:				"메모 업데이트",
+							popout_filter_all:					"모든 서버",
+							popout_filter_channel:				"채널",
+							popout_filter_server:				"섬기는 사람",
+							popout_note:						"메모",
+							popout_pinoption:					"노트",
+							popout_sort_messagetime:			"메시지 날짜",
+							popout_sort_notetime:				"메모 날짜",
+							toast_noteadd:						"노트북에 추가 된 메시지",
+							toast_noteremove:					"노트북에서 메시지가 제거되었습니다.",
+							toast_noteupdate:					"노트북의 메시지를 업데이트했습니다."
 						};
-					case "tr":		//turkish
+					case "lt":		// Lithuanian
 						return {
-							popout_note_text:				"Notlar",
-							popout_filter_channel_text:		"Kanal",
-							popout_filter_server_text:		"Sunucu",
-							popout_filter_all_text:			"Tüm Sunucular",
-							popout_sort_messagetime_text:	"Mesaj-Tarih",
-							popout_sort_notetime_text:		"Not-Tarih",
-							context_pinoption_text:			"Mesajı not alın",
-							context_updateoption_text:		"Notu güncelle",
-							context_unpinoption_text:		"Notu kaldırmak",
-							popout_pinoption_text:			"Not almak",
-							toast_noteadd_text:				"Mesaj not defteri'ya eklendi",
-							toast_noteupdate_text:			"Mesaj defterde güncellendi",
-							toast_noteremove_text:			"Mesaj not defteri'dan kaldırıldı"
+							context_pinoption:					"Užrašykite žinutę",
+							context_unpinoption:				"Pašalinti užrašą",
+							context_updateoption:				"Atnaujinti pastabą",
+							popout_filter_all:					"Visi serveriai",
+							popout_filter_channel:				"Kanalą",
+							popout_filter_server:				"Serverio",
+							popout_note:						"Pastabos",
+							popout_pinoption:					"Pastaba",
+							popout_sort_messagetime:			"Pranešimo data",
+							popout_sort_notetime:				"Užrašo data",
+							toast_noteadd:						"Pranešimas pridėtas prie užrašų knygelės",
+							toast_noteremove:					"Pranešimas pašalintas iš užrašų knygelės",
+							toast_noteupdate:					"Atnaujino pranešimą užrašų knygutėje"
 						};
-					case "cs":		//czech
+					case "nl":		// Dutch
 						return {
-							popout_note_text:				"Poznámky",
-							popout_filter_channel_text:		"Kanál",
-							popout_filter_server_text:		"Server",
-							popout_filter_all_text:			"Všechny servery",
-							popout_sort_messagetime_text:	"Zpráva-datum",
-							popout_sort_notetime_text:		"Poznámka-datum",
-							context_pinoption_text:			"Poznámka dolů zprávu",
-							context_updateoption_text:		"Aktualizujte poznámku",
-							context_unpinoption_text:		"Odstraňte poznámku",
-							popout_pinoption_text:			"Poznámka dolů",
-							toast_noteadd_text:				"Zpráva byla přidána do notebooku",
-							toast_noteupdate_text:			"Zpráva byla v notebooku aktualizována",
-							toast_noteremove_text:			"Zpráva byla odebrána z notebooku"
+							context_pinoption:					"Schrijf het bericht op",
+							context_unpinoption:				"Notitie verwijderen",
+							context_updateoption:				"Update notitie",
+							popout_filter_all:					"Alle servers",
+							popout_filter_channel:				"Kanaal",
+							popout_filter_server:				"Server",
+							popout_note:						"Notities",
+							popout_pinoption:					"Notitie",
+							popout_sort_messagetime:			"Datum bericht",
+							popout_sort_notetime:				"Datum notitie",
+							toast_noteadd:						"Bericht toegevoegd aan notitieblok",
+							toast_noteremove:					"Bericht verwijderd uit notitieblok",
+							toast_noteupdate:					"Het bericht in het notitieblok bijgewerkt"
 						};
-					case "bg":		//bulgarian
+					case "no":		// Norwegian
 						return {
-							popout_note_text:				"бележките",
-							popout_filter_channel_text:		"Канал",
-							popout_filter_server_text:		"Сървър",
-							popout_filter_all_text:			"Всички сървъри",
-							popout_sort_messagetime_text:	"Съобщение-Дата",
-							popout_sort_notetime_text:		"Забележка-Дата",
-							context_pinoption_text:			"Oтбележете съобщението",
-							context_updateoption_text:		"Актуализирайте бележката",
-							context_unpinoption_text:		"Премахнете бележката",
-							popout_pinoption_text:			"Oтбележете",
-							toast_noteadd_text:				"Съобщението бе добавено към бележника",
-							toast_noteupdate_text:			"Съобщението е актуализирано в бележника",
-							toast_noteremove_text:			"Съобщението е премахнато от преносимия бележника"
+							context_pinoption:					"Skriv ned meldingen",
+							context_unpinoption:				"Fjern notatet",
+							context_updateoption:				"Oppdateringsnotat",
+							popout_filter_all:					"Alle servere",
+							popout_filter_channel:				"Kanal",
+							popout_filter_server:				"Server",
+							popout_note:						"Notater",
+							popout_pinoption:					"Merk",
+							popout_sort_messagetime:			"Meldingsdato",
+							popout_sort_notetime:				"Merkdato",
+							toast_noteadd:						"Melding lagt til notatbok",
+							toast_noteremove:					"Melding fjernet fra notatblokken",
+							toast_noteupdate:					"Oppdaterte meldingen i notatboken"
 						};
-					case "ru":		//russian
+					case "pl":		// Polish
 						return {
-							popout_note_text:				"Заметки",
-							popout_filter_channel_text:		"Канал",
-							popout_filter_server_text:		"Cервер",
-							popout_filter_all_text:			"Все серверы",
-							popout_sort_messagetime_text:	"Сообщение-дата",
-							popout_sort_notetime_text:		"Заметки-Дата",
-							context_pinoption_text:			"Записывать вниз",
-							context_updateoption_text:		"Обновить заметку",
-							context_unpinoption_text:		"Удалить заметку",
-							popout_pinoption_text:			"Записывать",
-							toast_noteadd_text:				"Сообщение добавлено в блокнот",
-							toast_noteupdate_text:			"Сообщение обновлено в записной блокнот",
-							toast_noteremove_text:			"Сообщение удалено из записной блокнот"
+							context_pinoption:					"Zapisz wiadomość",
+							context_unpinoption:				"Usuń notatkę",
+							context_updateoption:				"Uwaga dotycząca aktualizacji",
+							popout_filter_all:					"Wszystkie serwery",
+							popout_filter_channel:				"Kanał",
+							popout_filter_server:				"Serwer",
+							popout_note:						"Notatki",
+							popout_pinoption:					"Uwaga",
+							popout_sort_messagetime:			"Data wiadomości",
+							popout_sort_notetime:				"Data notatki",
+							toast_noteadd:						"Wiadomość dodana do notatnika",
+							toast_noteremove:					"Wiadomość została usunięta z notatnika",
+							toast_noteupdate:					"Zaktualizowano wiadomość w notatniku"
 						};
-					case "uk":		//ukrainian
+					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							popout_note_text:				"Замітки",
-							popout_filter_channel_text:		"Канал",
-							popout_filter_server_text:		"Сервер",
-							popout_filter_all_text:			"Всі сервери",
-							popout_sort_messagetime_text:	"Повідомлення-дата",
-							popout_sort_notetime_text:		"Примітка-дата",
-							context_pinoption_text:			"Зверніть увагу на повідомлення",
-							context_updateoption_text:		"Оновіть нотатку",
-							context_unpinoption_text:		"Видаліть нотатку",
-							popout_pinoption_text:			"Занотуйте",
-							toast_noteadd_text:				"Повідомлення додається до ноутбука",
-							toast_noteupdate_text:			"Повідомлення оновлено в ноутбука",
-							toast_noteremove_text:			"Повідомлення видалено з ноутбука"
+							context_pinoption:					"Escreva a mensagem",
+							context_unpinoption:				"Remover nota",
+							context_updateoption:				"Atualizar nota",
+							popout_filter_all:					"Todos os servidores",
+							popout_filter_channel:				"Canal",
+							popout_filter_server:				"Servidor",
+							popout_note:						"Notas",
+							popout_pinoption:					"Nota",
+							popout_sort_messagetime:			"Data da mensagem",
+							popout_sort_notetime:				"Data da nota",
+							toast_noteadd:						"Mensagem adicionada ao caderno",
+							toast_noteremove:					"Mensagem removida do bloco de notas",
+							toast_noteupdate:					"Atualizou a mensagem no notebook"
 						};
-					case "ja":		//japanese
+					case "ro":		// Romanian
 						return {
-							popout_note_text:				"ノート",
-							popout_filter_channel_text:		"チャネル",
-							popout_filter_server_text:		"サーバ",
-							popout_filter_all_text:			"すべてのサーバー",
-							popout_sort_messagetime_text:	"メッセージ-日付",
-							popout_sort_notetime_text:		"注-日付",
-							context_pinoption_text:			"ノートダウンメッセージ",
-							context_updateoption_text:		"メモを更新する",
-							context_unpinoption_text:		"メモを削除",
-							popout_pinoption_text:			"書き留める",
-							toast_noteadd_text:				"ノートブックにメッセージが追加されました",
-							toast_noteupdate_text:			"ノートブックで更新されたメッセージ",
-							toast_noteremove_text:			"ノートブックからメッセージが削除されました"
+							context_pinoption:					"Notează mesajul",
+							context_unpinoption:				"Eliminați nota",
+							context_updateoption:				"Notă de actualizare",
+							popout_filter_all:					"Toate serverele",
+							popout_filter_channel:				"Canal",
+							popout_filter_server:				"Server",
+							popout_note:						"Note",
+							popout_pinoption:					"Notă",
+							popout_sort_messagetime:			"Mesajului data",
+							popout_sort_notetime:				"Notați data",
+							toast_noteadd:						"Mesaj adăugat în caiet",
+							toast_noteremove:					"Mesaj eliminat din caiet",
+							toast_noteupdate:					"Am actualizat mesajul din caiet"
 						};
-					case "zh-TW":	//chinese (traditional)
+					case "ru":		// Russian
 						return {
-							popout_note_text:				"筆記",
-							popout_filter_channel_text:		"渠道",
-							popout_filter_server_text:		"服務器",
-							popout_filter_all_text:			"所有服務器",
-							popout_sort_messagetime_text:	"消息-日期",
-							popout_sort_notetime_text:		"注-日期",
-							context_pinoption_text:			"記下下來的消息",
-							context_updateoption_text:		"更新說明",
-							context_unpinoption_text:		"刪除備註",
-							popout_pinoption_text:			"記下",
-							toast_noteadd_text:				"消息添加到筆記本",
-							toast_noteupdate_text:			"消息在筆記本中更新",
-							toast_noteremove_text:			"消息從筆記本中刪除"
+							context_pinoption:					"Запишите сообщение",
+							context_unpinoption:				"Удалить заметку",
+							context_updateoption:				"Обновить примечание",
+							popout_filter_all:					"Все серверы",
+							popout_filter_channel:				"Канал",
+							popout_filter_server:				"Сервер",
+							popout_note:						"Ноты",
+							popout_pinoption:					"Запись",
+							popout_sort_messagetime:			"Дата сообщения",
+							popout_sort_notetime:				"Дата записи",
+							toast_noteadd:						"Сообщение добавлено в блокнот",
+							toast_noteremove:					"Сообщение удалено из записной книжки",
+							toast_noteupdate:					"Обновил сообщение в блокноте"
 						};
-					case "ko":		//korean
+					case "sv":		// Swedish
 						return {
-							popout_note_text:				"노트",
-							popout_filter_channel_text:		"채널",
-							popout_filter_server_text:		"섬기는 사람",
-							popout_filter_all_text:			"모든 서버",
-							popout_sort_messagetime_text:	"메시지-날짜",
-							popout_sort_notetime_text:		"주-날짜",
-							context_pinoption_text:			"메모 다운 메시지",
-							context_updateoption_text:		"메모 업데이트",
-							context_unpinoption_text:		"메모 삭제",
-							popout_pinoption_text:			"메모하다",
-							toast_noteadd_text:				"노트북에 메시지 추가됨",
-							toast_noteupdate_text:			"노트북에서 메시지가 업데이트되었습니다",
-							toast_noteremove_text:			"노트에서 메시지 삭제됨"
+							context_pinoption:					"Skriv ner meddelandet",
+							context_unpinoption:				"Ta bort anteckningen",
+							context_updateoption:				"Uppdatera anteckning",
+							popout_filter_all:					"Alla servrar",
+							popout_filter_channel:				"Kanal",
+							popout_filter_server:				"Server",
+							popout_note:						"Anteckningar",
+							popout_pinoption:					"Notera",
+							popout_sort_messagetime:			"Meddelandedatum",
+							popout_sort_notetime:				"Noteradatum",
+							toast_noteadd:						"Meddelande tillagt anteckningsbok",
+							toast_noteremove:					"Meddelandet har tagits bort från anteckningsboken",
+							toast_noteupdate:					"Uppdaterat meddelandet i anteckningsboken"
 						};
-					default:		//default: english
+					case "th":		// Thai
 						return {
-							popout_note_text:				"Notes",
-							popout_filter_channel_text:		"Channel",
-							popout_filter_server_text:		"Server",
-							popout_filter_all_text:			"All Servers",
-							popout_sort_messagetime_text:	"Message-Date",
-							popout_sort_notetime_text:		"Note-Date",
-							context_pinoption_text:			"Note Message",
-							context_updateoption_text:		"Update Note",
-							context_unpinoption_text:		"Remove Note",
-							popout_pinoption_text:			"Note",
-							toast_noteadd_text:				"Message added to notebook",
-							toast_noteupdate_text:			"Message updated in the notebook",
-							toast_noteremove_text:			"Message removed from notebook"
+							context_pinoption:					"จดข้อความ",
+							context_unpinoption:				"ลบบันทึก",
+							context_updateoption:				"อัปเดตบันทึก",
+							popout_filter_all:					"เซิร์ฟเวอร์ทั้งหมด",
+							popout_filter_channel:				"ช่อง",
+							popout_filter_server:				"เซิร์ฟเวอร์",
+							popout_note:						"หมายเหตุ",
+							popout_pinoption:					"บันทึก",
+							popout_sort_messagetime:			"วันที่ส่งข้อความ",
+							popout_sort_notetime:				"วันที่หมายเหตุ",
+							toast_noteadd:						"เพิ่มข้อความในสมุดบันทึกแล้ว",
+							toast_noteremove:					"ข้อความถูกลบออกจากสมุดบันทึก",
+							toast_noteupdate:					"อัปเดตข้อความในสมุดบันทึก"
+						};
+					case "tr":		// Turkish
+						return {
+							context_pinoption:					"Mesajı yazın",
+							context_unpinoption:				"Notu kaldır",
+							context_updateoption:				"Notu güncelle",
+							popout_filter_all:					"Tüm sunucular",
+							popout_filter_channel:				"Kanal",
+							popout_filter_server:				"Sunucu",
+							popout_note:						"Notlar",
+							popout_pinoption:					"Not",
+							popout_sort_messagetime:			"Mesaj tarihi",
+							popout_sort_notetime:				"Not tarihi",
+							toast_noteadd:						"Not defterine mesaj eklendi",
+							toast_noteremove:					"Mesaj not defterinden kaldırıldı",
+							toast_noteupdate:					"Defterdeki mesaj güncellendi"
+						};
+					case "uk":		// Ukrainian
+						return {
+							context_pinoption:					"Запишіть повідомлення",
+							context_unpinoption:				"Вилучити примітку",
+							context_updateoption:				"Примітка до оновлення",
+							popout_filter_all:					"Усі сервери",
+							popout_filter_channel:				"Каналу",
+							popout_filter_server:				"Сервер",
+							popout_note:						"Нотатки",
+							popout_pinoption:					"Примітка",
+							popout_sort_messagetime:			"Дата повідомлення",
+							popout_sort_notetime:				"Дата примітки",
+							toast_noteadd:						"Повідомлення додано до блокнота",
+							toast_noteremove:					"Повідомлення видалено з блокнота",
+							toast_noteupdate:					"Оновлено повідомлення в блокноті"
+						};
+					case "vi":		// Vietnamese
+						return {
+							context_pinoption:					"Viết lại tin nhắn",
+							context_unpinoption:				"Xóa ghi chú",
+							context_updateoption:				"Cập nhật ghi chú",
+							popout_filter_all:					"Tất cả các máy chủ",
+							popout_filter_channel:				"Kênh",
+							popout_filter_server:				"Người phục vụ",
+							popout_note:						"Ghi chú",
+							popout_pinoption:					"Ghi chú",
+							popout_sort_messagetime:			"Ngày nhắn tin",
+							popout_sort_notetime:				"Ghi chú ngày",
+							toast_noteadd:						"Đã thêm tin nhắn vào sổ tay",
+							toast_noteremove:					"Đã xóa tin nhắn khỏi sổ ghi chép",
+							toast_noteupdate:					"Đã cập nhật tin nhắn trong sổ tay"
+						};
+					case "zh":		// Chinese
+						return {
+							context_pinoption:					"写下消息",
+							context_unpinoption:				"删除笔记",
+							context_updateoption:				"更新说明",
+							popout_filter_all:					"所有服务器",
+							popout_filter_channel:				"渠道",
+							popout_filter_server:				"服务器",
+							popout_note:						"笔记",
+							popout_pinoption:					"注意",
+							popout_sort_messagetime:			"留言日期",
+							popout_sort_notetime:				"备注日期",
+							toast_noteadd:						"邮件已添加到笔记本",
+							toast_noteremove:					"邮件已从笔记本中删除",
+							toast_noteupdate:					"更新了笔记本中的消息"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							context_pinoption:					"寫下消息",
+							context_unpinoption:				"刪除筆記",
+							context_updateoption:				"更新說明",
+							popout_filter_all:					"所有服務器",
+							popout_filter_channel:				"渠道",
+							popout_filter_server:				"服務器",
+							popout_note:						"筆記",
+							popout_pinoption:					"注意",
+							popout_sort_messagetime:			"留言日期",
+							popout_sort_notetime:				"備註日期",
+							toast_noteadd:						"郵件已添加到筆記本",
+							toast_noteremove:					"郵件已從筆記本中刪除",
+							toast_noteupdate:					"更新了筆記本中的消息"
+						};
+					default:		// English
+						return {
+							context_pinoption:					"Note Message",
+							context_unpinoption:				"Remove Note",
+							context_updateoption:				"Update Note",
+							popout_filter_all:					"All Servers",
+							popout_filter_channel:				"Channel",
+							popout_filter_server:				"Server",
+							popout_note:						"Notes",
+							popout_pinoption:					"Note",
+							popout_sort_messagetime:			"Message Date",
+							popout_sort_notetime:				"Note Date",
+							toast_noteadd:						"Message added to Notebook",
+							toast_noteremove:					"Message removed from Notebook",
+							toast_noteupdate:					"Message updated in the Notebook"
 						};
 				}
 			}

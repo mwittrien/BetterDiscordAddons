@@ -89,7 +89,7 @@ module.exports = (_ => {
 						messages.filter(n => n).forEach((message, i) => {
 							BDFDB.TimeUtils.timeout(_ => {
 								e2.originalMethod(message);
-								if (i >= messages.length-1) BDFDB.NotificationUtils.toast(this.labels.toast_allsent_text, {type: "success"});
+								if (i >= messages.length-1) BDFDB.NotificationUtils.toast(this.labels.toast_allsent, {type: "success"});
 							}, messageDelay * i);
 						});
 						return Promise.resolve({
@@ -170,89 +170,113 @@ module.exports = (_ => {
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "hr":		//croatian
+					case "bg":		// Bulgarian
 						return {
-							toast_allsent_text:					"Sve veliku poslane."
+							toast_allsent:						"Всички изпратени съобщения"
 						};
-					case "da":		//danish
+					case "da":		// Danish
 						return {
-							toast_allsent_text:					"Alle beskeder sendes."
+							toast_allsent:						"Alle beskeder sendt"
 						};
-					case "de":		//german
+					case "de":		// German
 						return {
-							toast_allsent_text:					"Alle Nachrichten versendet."
+							toast_allsent:						"Alle Nachrichten gesendet"
 						};
-					case "es":		//spanish
+					case "el":		// Greek
 						return {
-							toast_allsent_text:					"Todos los mensajes enviados."
+							toast_allsent:						"Όλα τα μηνύματα εστάλησαν"
 						};
-					case "fr":		//french
+					case "es":		// Spanish
 						return {
-							toast_allsent_text:					"Tous les messages envoyés"
+							toast_allsent:						"Todos los mensajes enviados"
 						};
-					case "it":		//italian
+					case "fi":		// Finnish
 						return {
-							toast_allsent_text:					"Tutti i messaggi inviati."
+							toast_allsent:						"Kaikki viestit lähetetty"
 						};
-					case "nl":		//dutch
+					case "fr":		// French
 						return {
-							toast_allsent_text:					"Alle berichten verzonden."
+							toast_allsent:						"Tous les messages envoyés"
 						};
-					case "no":		//norwegian
+					case "hr":		// Croatian
 						return {
-							toast_allsent_text:					"Alle meldinger sendt."
+							toast_allsent:						"Sve poruke poslane"
 						};
-					case "pl":		//polish
+					case "hu":		// Hungarian
 						return {
-							toast_allsent_text:					"Wszystkie wiadomości zostały wysłane."
+							toast_allsent:						"Minden üzenet elküldve"
 						};
-					case "pt-BR":	//portuguese (brazil)
+					case "it":		// Italian
 						return {
-							toast_allsent_text:					"Todas as mensagens enviadas."
+							toast_allsent:						"Tutti i messaggi inviati"
 						};
-					case "fi":		//finnish
+					case "ja":		// Japanese
 						return {
-							toast_allsent_text:					"Kaikki lähetetyt viestit."
+							toast_allsent:						"送信されたすべてのメッセージ"
 						};
-					case "sv":		//swedish
+					case "ko":		// Korean
 						return {
-							toast_allsent_text:					"Alla meddelanden skickade."
+							toast_allsent:						"보낸 모든 메시지"
 						};
-					case "tr":		//turkish
+					case "lt":		// Lithuanian
 						return {
-							toast_allsent_text:					"Tüm mesajlar gönderildi."
+							toast_allsent:						"Visi pranešimai išsiųsti"
 						};
-					case "cs":		//czech
+					case "nl":		// Dutch
 						return {
-							toast_allsent_text:					"Všechny zprávy byly odeslány."
+							toast_allsent:						"Alle berichten zijn verzonden"
 						};
-					case "bg":		//bulgarian
+					case "no":		// Norwegian
 						return {
-							toast_allsent_text:					"Всички изпратени съобщения."
+							toast_allsent:						"Alle meldinger sendt"
 						};
-					case "ru":		//russian
+					case "pl":		// Polish
 						return {
-							toast_allsent_text:					"Все отправленные сообщения."
+							toast_allsent:						"Wszystkie wiadomości wysłane"
 						};
-					case "uk":		//ukrainian
+					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							toast_allsent_text:					"Всі повідомлення надіслано."
+							toast_allsent:						"Todas as mensagens enviadas"
 						};
-					case "ja":		//japanese
+					case "ro":		// Romanian
 						return {
-							toast_allsent_text:					"すべてのメッセージが送信されました。"
+							toast_allsent:						"Toate mesajele trimise"
 						};
-					case "zh-TW":	//chinese (traditional)
+					case "ru":		// Russian
 						return {
-							toast_allsent_text:					"發送的所有消息。"
+							toast_allsent:						"Все сообщения отправлены"
 						};
-					case "ko":		//korean
+					case "sv":		// Swedish
 						return {
-							toast_allsent_text:					"모든 메시지가 전송되었습니다."
+							toast_allsent:						"Alla meddelanden skickade"
 						};
-					default:		//default: english
+					case "th":		// Thai
 						return {
-							toast_allsent_text:					"All messages sent."
+							toast_allsent:						"ส่งข้อความทั้งหมดแล้ว"
+						};
+					case "tr":		// Turkish
+						return {
+							toast_allsent:						"Tüm mesajlar gönderildi"
+						};
+					case "uk":		// Ukrainian
+						return {
+							toast_allsent:						"Усі повідомлення надіслано"
+						};
+					case "vi":		// Vietnamese
+						return {
+							toast_allsent:						"Tất cả tin nhắn đã gửi"
+						};
+					case "zh":		// Chinese
+						return {
+							toast_allsent:						"已发送所有消息"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							toast_allsent:						"已發送所有消息"
+						};
+					default:		// English
+						return {
+							toast_allsent:						"All messages sent"
 						};
 				}
 			}

@@ -189,19 +189,19 @@ module.exports = (_ => {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 					children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: this.labels.context_localserversettings_text,
+							label: this.labels.context_localserversettings,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-submenu"),
 							children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 								children: [
 									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-										label: this.labels.submenu_serversettings_text,
+										label: this.labels.submenu_serversettings,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
 										action: _ => {
 											this.openGuildSettingsModal(e.instance.props.guild.id);
 										}
 									}),
 									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-										label: this.labels.submenu_resetsettings_text,
+										label: this.labels.submenu_resetsettings,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
 										disabled: !changedGuilds[e.instance.props.guild.id],
 										action: _ => {
@@ -419,14 +419,14 @@ module.exports = (_ => {
 				
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
-					header: this.labels.modal_header_text,
+					header: this.labels.modal_header,
 					subheader: guild.name,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-							tab: this.labels.modal_tabheader1_text,
+							tab: this.labels.modal_tabheader1,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: this.labels.modal_guildname_text,
+									title: this.labels.modal_guildname,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 										className: "input-guildname",
@@ -446,7 +446,7 @@ module.exports = (_ => {
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: this.labels.modal_guildacronym_text,
+									title: this.labels.modal_guildacronym,
 									className: BDFDB.disCN.marginbottom8,
 									children: 
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
@@ -459,7 +459,7 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
 									className: BDFDB.disCN.marginbottom20 + " input-ignorecustomname",
-									label: this.labels.modal_ignorecustomname_text,
+									label: this.labels.modal_ignorecustomname,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: data.ignoreCustomName,
 									onChange: (value, instance) => {
@@ -483,7 +483,7 @@ module.exports = (_ => {
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 													className: BDFDB.disCN.marginreset,
 													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-													children: this.labels.modal_guildicon_text
+													children: this.labels.modal_guildicon
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 													className: "input-removeicon",
@@ -530,7 +530,7 @@ module.exports = (_ => {
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 													className: BDFDB.disCN.marginreset,
 													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-													children: this.labels.modal_guildbanner_text
+													children: this.labels.modal_guildbanner
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 													className: "input-removebanner",
@@ -570,10 +570,10 @@ module.exports = (_ => {
 							]
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-							tab: this.labels.modal_tabheader2_text,
+							tab: this.labels.modal_tabheader2,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: this.labels.modal_colorpicker1_text,
+									title: this.labels.modal_colorpicker1,
 									className: BDFDB.disCN.marginbottom20,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -583,7 +583,7 @@ module.exports = (_ => {
 									]
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: this.labels.modal_colorpicker2_text,
+									title: this.labels.modal_colorpicker2,
 									className: BDFDB.disCN.marginbottom20,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -595,10 +595,10 @@ module.exports = (_ => {
 							]
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-							tab: this.labels.modal_tabheader3_text,
+							tab: this.labels.modal_tabheader3,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: this.labels.modal_colorpicker3_text,
+									title: this.labels.modal_colorpicker3,
 									className: BDFDB.disCN.marginbottom20,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -608,7 +608,7 @@ module.exports = (_ => {
 									]
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: this.labels.modal_colorpicker4_text,
+									title: this.labels.modal_colorpicker4,
 									className: BDFDB.disCN.marginbottom20,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -672,7 +672,7 @@ module.exports = (_ => {
 						}
 						else {
 							delete instance.props.success;
-							instance.props.errorMessage = this.labels.modal_invalidurl_text;
+							instance.props.errorMessage = this.labels.modal_invalidurl;
 						}
 						delete instance.checkTimeout;
 						instance.forceUpdate();
@@ -690,425 +690,545 @@ module.exports = (_ => {
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "hr":		//croatian
+					case "bg":		// Bulgarian
 						return {
-							context_localserversettings_text:	"Lokalne postavke poslužitelja",
-							submenu_serversettings_text:		"Promijeni postavke",
-							submenu_resetsettings_text:			"Ponovno postavite poslužitelj",
-							modal_header_text:					"Lokalne postavke poslužitelja",
-							modal_guildname_text:				"Naziv lokalnog poslužitelja",
-							modal_guildacronym_text:			"Akronim lokalnog poslužitelja",
-							modal_ignorecustomname_text:		"Koristite izvorno ime poslužitelja za akronim poslužitelja",
-							modal_guildicon_text:				"Ikona",
-							modal_guildbanner_text:				"Baner",
-							modal_tabheader1_text:				"Poslužitelja",
-							modal_tabheader2_text:				"Boja ikona",
-							modal_tabheader3_text:				"Boja tooltip",
-							modal_colorpicker1_text:			"Boja ikona",
-							modal_colorpicker2_text:			"Boja fonta",
-							modal_colorpicker3_text:			"Boja tooltip",
-							modal_colorpicker4_text:			"Boja fonta",
-							modal_invalidurl_text:				"Nevažeći URL"
+							context_localserversettings:		"Настройки на локалния сървър",
+							modal_colorpicker1:					"Цвят на иконата",
+							modal_colorpicker2:					"Цвят на шрифта",
+							modal_colorpicker3:					"Цвят на подсказка",
+							modal_colorpicker4:					"Цвят на шрифта",
+							modal_guildacronym:					"Локален сървър Акроним",
+							modal_guildbanner:					"Банер",
+							modal_guildicon:					"Икона",
+							modal_guildname:					"Име на локален сървър",
+							modal_header:						"Настройки на локалния сървър",
+							modal_ignorecustomname:				"Използвайте оригиналното име на сървъра за съкращението на сървъра",
+							modal_invalidurl:					"Невалиден адрес",
+							modal_tabheader1:					"Сървър",
+							modal_tabheader2:					"Цвят на иконата",
+							modal_tabheader3:					"Цвят на подсказка",
+							submenu_resetsettings:				"Нулиране на сървъра",
+							submenu_serversettings:				"Промяна на настройките"
 						};
-					case "da":		//danish
+					case "da":		// Danish
 						return {
-							context_localserversettings_text:	"Lokal serverindstillinger",
-							submenu_serversettings_text:		"Skift indstillinger",
-							submenu_resetsettings_text:			"Nulstil server",
-							modal_header_text:	 				"Lokal serverindstillinger",
-							modal_guildname_text:				"Lokalt servernavn",
-							modal_guildacronym_text:			"Lokalt serverakronym",
-							modal_ignorecustomname_text:		"Brug det originale servernavn til serverens akronym",
-							modal_guildicon_text:				"Ikon",
-							modal_guildbanner_text:				"Banner",
-							modal_tabheader1_text:				"Server",
-							modal_tabheader2_text:				"Ikonfarve",
-							modal_tabheader3_text:				"Tooltipfarve",
-							modal_colorpicker1_text:			"Ikonfarve",
-							modal_colorpicker2_text:			"Skriftfarve",
-							modal_colorpicker3_text:			"Tooltipfarve",
-							modal_colorpicker4_text:			"Skriftfarve",
-							modal_invalidurl_text:				"Ugyldig URL"
+							context_localserversettings:		"Lokale serverindstillinger",
+							modal_colorpicker1:					"Ikonfarve",
+							modal_colorpicker2:					"Skriftfarve",
+							modal_colorpicker3:					"Værktøjstipfarve",
+							modal_colorpicker4:					"Skriftfarve",
+							modal_guildacronym:					"Lokale serverakronymet",
+							modal_guildbanner:					"Banner",
+							modal_guildicon:					"Ikon",
+							modal_guildname:					"Lokalt servernavn",
+							modal_header:						"Lokale serverindstillinger",
+							modal_ignorecustomname:				"Brug det originale servernavn til serverakronymet",
+							modal_invalidurl:					"Ugyldig URL",
+							modal_tabheader1:					"Server",
+							modal_tabheader2:					"Ikonfarve",
+							modal_tabheader3:					"Værktøjstipfarve",
+							submenu_resetsettings:				"Nulstil server",
+							submenu_serversettings:				"Ændre indstillinger"
 						};
-					case "de":		//german
+					case "de":		// German
 						return {
-							context_localserversettings_text:	"Lokale Servereinstellungen",
-							submenu_serversettings_text:		"Einstellungen ändern",
-							submenu_resetsettings_text:			"Server zurücksetzen",
-							modal_header_text:					"Lokale Servereinstellungen",
-							modal_guildname_text:				"Lokaler Servername",
-							modal_guildacronym_text:			"Lokales Serverkürzel",
-							modal_ignorecustomname_text:		"Benutze den ursprünglichen Servernamen für das Serverkürzel",
-							modal_guildicon_text:				"Icon",
-							modal_guildbanner_text:				"Banner",
-							modal_tabheader1_text:				"Server",
-							modal_tabheader2_text:				"Iconfarbe",
-							modal_tabheader3_text:				"Tooltipfarbe",
-							modal_colorpicker1_text:			"Iconfarbe",
-							modal_colorpicker2_text:			"Schriftfarbe",
-							modal_colorpicker3_text:			"Tooltipfarbe",
-							modal_colorpicker4_text:			"Schriftfarbe",
-							modal_invalidurl_text:				"Ungültige URL"
+							context_localserversettings:		"Lokale Servereinstellungen",
+							modal_colorpicker1:					"Symbolfarbe",
+							modal_colorpicker2:					"Schriftfarbe",
+							modal_colorpicker3:					"Tooltipfarbe",
+							modal_colorpicker4:					"Schriftfarbe",
+							modal_guildacronym:					"Lokales Serverakronym",
+							modal_guildbanner:					"Banner",
+							modal_guildicon:					"Symbol",
+							modal_guildname:					"Lokaler Servername",
+							modal_header:						"Lokale Servereinstellungen",
+							modal_ignorecustomname:				"Ursprünglichen Servernamen für das Serverakronym verwenden",
+							modal_invalidurl:					"Ungültige URL",
+							modal_tabheader1:					"Server",
+							modal_tabheader2:					"Symbolfarbe",
+							modal_tabheader3:					"Tooltipfarbe",
+							submenu_resetsettings:				"Server zurücksetzen",
+							submenu_serversettings:				"Einstellungen ändern"
 						};
-					case "es":		//spanish
+					case "el":		// Greek
 						return {
-							context_localserversettings_text:	"Ajustes local de servidor",
-							submenu_serversettings_text:		"Cambiar ajustes",
-							submenu_resetsettings_text:			"Restablecer servidor",
-							modal_header_text:					"Ajustes locales de servidor",
-							modal_guildname_text:				"Nombre local del servidor",
-							modal_guildacronym_text:			"Acrónimo local del servidor",
-							modal_ignorecustomname_text:		"Use el nombre del servidor original para el acrónimo del servidor",
-							modal_guildicon_text:				"Icono",
-							modal_guildbanner_text:				"Bandera",
-							modal_tabheader1_text:				"Servidor",
-							modal_tabheader2_text:				"Color del icono",
-							modal_tabheader3_text:				"Color de tooltip",
-							modal_colorpicker1_text:			"Color del icono",
-							modal_colorpicker2_text:			"Color de fuente",
-							modal_colorpicker3_text:			"Color de tooltip",
-							modal_colorpicker4_text:			"Color de fuente",
-							modal_invalidurl_text:				"URL inválida"
+							context_localserversettings:		"Ρυθμίσεις τοπικού διακομιστή",
+							modal_colorpicker1:					"Χρώμα εικονιδίου",
+							modal_colorpicker2:					"Χρώμα γραμματοσειράς",
+							modal_colorpicker3:					"Χρώμα επεξήγησης εργαλείου",
+							modal_colorpicker4:					"Χρώμα γραμματοσειράς",
+							modal_guildacronym:					"Τοπικό αρκτικόλεξο διακομιστή",
+							modal_guildbanner:					"Πανό",
+							modal_guildicon:					"Εικόνισμα",
+							modal_guildname:					"Τοπικό όνομα διακομιστή",
+							modal_header:						"Ρυθμίσεις τοπικού διακομιστή",
+							modal_ignorecustomname:				"Χρησιμοποιήστε το αρχικό όνομα διακομιστή για το αρκτικόλεξο διακομιστή",
+							modal_invalidurl:					"Μη έγκυρη διεύθυνση URL",
+							modal_tabheader1:					"Υπηρέτης",
+							modal_tabheader2:					"Χρώμα εικονιδίου",
+							modal_tabheader3:					"Χρώμα επεξήγησης εργαλείου",
+							submenu_resetsettings:				"Επαναφορά διακομιστή",
+							submenu_serversettings:				"Αλλαξε ρυθμίσεις"
 						};
-					case "fr":		//french
+					case "es":		// Spanish
 						return {
-							context_localserversettings_text:	"Paramètres locaux du serveur",
-							submenu_serversettings_text:		"Modifier les paramètres",
-							submenu_resetsettings_text:			"Réinitialiser le serveur",
-							modal_header_text:					"Paramètres locaux du serveur",
-							modal_guildname_text:				"Nom local du serveur",
-							modal_guildacronym_text:			"Acronyme local de serveur",
-							modal_ignorecustomname_text:		"Utilisez le nom de serveur d'origine pour l'acronyme de serveur",
-							modal_guildicon_text:				"Icône",
-							modal_guildbanner_text:				"Bannière",
-							modal_tabheader1_text:				"Serveur",
-							modal_tabheader2_text:				"Couleur de l'icône",
-							modal_tabheader3_text:				"Couleur de tooltip",
-							modal_colorpicker1_text:			"Couleur de l'icône",
-							modal_colorpicker2_text:			"Couleur de la police",
-							modal_colorpicker3_text:			"Couleur de tooltip",
-							modal_colorpicker4_text:			"Couleur de la police",
-							modal_invalidurl_text:				"URL invalide"
+							context_localserversettings:		"Configuración del servidor local",
+							modal_colorpicker1:					"Color del icono",
+							modal_colorpicker2:					"Color de fuente",
+							modal_colorpicker3:					"Color de información sobre herramientas",
+							modal_colorpicker4:					"Color de fuente",
+							modal_guildacronym:					"Acrónimo del servidor local",
+							modal_guildbanner:					"Bandera",
+							modal_guildicon:					"Icono",
+							modal_guildname:					"Nombre del servidor local",
+							modal_header:						"Configuración del servidor local",
+							modal_ignorecustomname:				"Utilice el nombre del servidor original para el acrónimo del servidor",
+							modal_invalidurl:					"URL invalida",
+							modal_tabheader1:					"Servidor",
+							modal_tabheader2:					"Color del icono",
+							modal_tabheader3:					"Color de información sobre herramientas",
+							submenu_resetsettings:				"Restablecer servidor",
+							submenu_serversettings:				"Cambiar ajustes"
 						};
-					case "it":		//italian
+					case "fi":		// Finnish
 						return {
-							context_localserversettings_text:	"Impostazioni locale server",
-							submenu_serversettings_text:		"Cambia impostazioni",
-							submenu_resetsettings_text:			"Ripristina server",
-							modal_header_text:					"Impostazioni locali server",
-							modal_guildname_text:				"Nome locale server",
-							modal_guildacronym_text:			"Acronimo locale server",
-							modal_ignorecustomname_text:		"Utilizzare il nome del server originale per l'acronimo del server",
-							modal_guildicon_text:				"Icona",
-							modal_guildbanner_text:				"Bandiera",
-							modal_tabheader1_text:				"Server",
-							modal_tabheader2_text:				"Colore dell'icona",
-							modal_tabheader3_text:				"Colore della tooltip",
-							modal_colorpicker1_text:			"Colore dell'icona",
-							modal_colorpicker2_text:			"Colore del carattere",
-							modal_colorpicker3_text:			"Colore della tooltip",
-							modal_colorpicker4_text:			"Colore del carattere",
-							modal_invalidurl_text:				"URL non valido"
+							context_localserversettings:		"Paikallisen palvelimen asetukset",
+							modal_colorpicker1:					"Kuvakkeen väri",
+							modal_colorpicker2:					"Fontin väri",
+							modal_colorpicker3:					"Työkaluvihjeen väri",
+							modal_colorpicker4:					"Fontin väri",
+							modal_guildacronym:					"Paikallisen palvelimen lyhenne",
+							modal_guildbanner:					"Banneri",
+							modal_guildicon:					"Kuvake",
+							modal_guildname:					"Paikallisen palvelimen nimi",
+							modal_header:						"Paikallisen palvelimen asetukset",
+							modal_ignorecustomname:				"Käytä palvelimen lyhenteessä alkuperäistä palvelimen nimeä",
+							modal_invalidurl:					"Virheellinen URL",
+							modal_tabheader1:					"Palvelin",
+							modal_tabheader2:					"Kuvakkeen väri",
+							modal_tabheader3:					"Työkaluvihjeen väri",
+							submenu_resetsettings:				"Nollaa palvelin",
+							submenu_serversettings:				"Vaihda asetuksia"
 						};
-					case "nl":		//dutch
+					case "fr":		// French
 						return {
-							context_localserversettings_text:	"Lokale serverinstellingen",
-							submenu_serversettings_text:		"Verandere instellingen",
-							submenu_resetsettings_text:			"Reset server",
-							modal_header_text:					"Lokale serverinstellingen",
-							modal_guildname_text:				"Lokale servernaam",
-							modal_guildacronym_text:			"Lokale server acroniem",
-							modal_ignorecustomname_text:		"Gebruik de oorspronkelijke servernaam voor het serveracrononiem",
-							modal_guildicon_text:				"Icoon",
-							modal_guildbanner_text:				"Banier",
-							modal_tabheader1_text:				"Server",
-							modal_tabheader2_text:				"Icoonkleur",
-							modal_tabheader3_text:				"Tooltipkleur",
-							modal_colorpicker1_text:			"Icoonkleur",
-							modal_colorpicker2_text:			"Doopvontkleur",
-							modal_colorpicker3_text:			"Tooltipkleur",
-							modal_colorpicker4_text:			"Doopvontkleur",
-							modal_invalidurl_text:				"Ongeldige URL"
+							context_localserversettings:		"Paramètres du serveur local",
+							modal_colorpicker1:					"Couleur de l'icône",
+							modal_colorpicker2:					"Couleur de la police",
+							modal_colorpicker3:					"Couleur de l'info-bulle",
+							modal_colorpicker4:					"Couleur de la police",
+							modal_guildacronym:					"Acronyme du serveur local",
+							modal_guildbanner:					"Bannière",
+							modal_guildicon:					"Icône",
+							modal_guildname:					"Nom du serveur local",
+							modal_header:						"Paramètres du serveur local",
+							modal_ignorecustomname:				"Utilisez le nom de serveur d'origine pour l'acronyme de serveur",
+							modal_invalidurl:					"URL invalide",
+							modal_tabheader1:					"Serveur",
+							modal_tabheader2:					"Couleur de l'icône",
+							modal_tabheader3:					"Couleur de l'info-bulle",
+							submenu_resetsettings:				"Réinitialiser le serveur",
+							submenu_serversettings:				"Modifier les paramètres"
 						};
-					case "no":		//norwegian
+					case "hr":		// Croatian
 						return {
-							context_localserversettings_text:	"Lokal serverinnstillinger",
-							submenu_serversettings_text:		"Endre innstillinger",
-							submenu_resetsettings_text:			"Tilbakestill server",
-							modal_header_text:					"Lokal serverinnstillinger",
-							modal_guildname_text:				"Lokalt servernavn",
-							modal_guildacronym_text:			"Lokalt serverforkortelse",
-							modal_ignorecustomname_text:		"Bruk det originale servernavnet til serverforkortelsen",
-							modal_guildicon_text:				"Ikon",
-							modal_guildbanner_text:				"Banner",
-							modal_tabheader1_text:				"Server",
-							modal_tabheader2_text:				"Ikonfarge",
-							modal_tabheader3_text:				"Tooltipfarge",
-							modal_colorpicker1_text:			"Ikonfarge",
-							modal_colorpicker2_text:			"Skriftfarge",
-							modal_colorpicker3_text:			"Tooltipfarge",
-							modal_colorpicker4_text:			"Skriftfarge",
-							modal_invalidurl_text:				"Ugyldig URL"
+							context_localserversettings:		"Postavke lokalnog poslužitelja",
+							modal_colorpicker1:					"Boja ikona",
+							modal_colorpicker2:					"Boja fonta",
+							modal_colorpicker3:					"Boja opisa",
+							modal_colorpicker4:					"Boja fonta",
+							modal_guildacronym:					"Skraćenica lokalnog poslužitelja",
+							modal_guildbanner:					"Natpis",
+							modal_guildicon:					"Ikona",
+							modal_guildname:					"Naziv lokalnog poslužitelja",
+							modal_header:						"Postavke lokalnog poslužitelja",
+							modal_ignorecustomname:				"Koristite izvorno ime poslužitelja za kraticu poslužitelja",
+							modal_invalidurl:					"Neispravna poveznica",
+							modal_tabheader1:					"Poslužitelj",
+							modal_tabheader2:					"Boja ikona",
+							modal_tabheader3:					"Boja opisa",
+							submenu_resetsettings:				"Resetiraj poslužitelj",
+							submenu_serversettings:				"Promijeniti postavke"
 						};
-					case "pl":		//polish
+					case "hu":		// Hungarian
 						return {
-							context_localserversettings_text:	"Lokalne ustawienia serwera",
-							submenu_serversettings_text:		"Zmień ustawienia",
-							submenu_resetsettings_text:			"Resetuj ustawienia",
-							modal_header_text:					"Lokalne ustawienia serwera",
-							modal_guildname_text:				"Lokalna nazwa serwera",
-							modal_guildacronym_text:			"Akronim lokalnego serwera",
-							modal_ignorecustomname_text:		"Użyj oryginalnej nazwy serwera dla akronimu serwera",
-							modal_guildicon_text:				"Ikona",
-							modal_guildbanner_text:				"Baner",
-							modal_tabheader1_text:				"Serwer",
-							modal_tabheader2_text:				"Kolor ikony",
-							modal_tabheader3_text:				"Kolor podpowiedzi",
-							modal_colorpicker1_text:			"Kolor ikony",
-							modal_colorpicker2_text:			"Kolor czcionki",
-							modal_colorpicker3_text:			"Kolor podpowiedzi",
-							modal_colorpicker4_text:			"Kolor czcionki",
-							modal_invalidurl_text:				"Nieprawidłowe URL"
+							context_localserversettings:		"Helyi kiszolgáló beállításai",
+							modal_colorpicker1:					"Ikon szín",
+							modal_colorpicker2:					"Betű szín",
+							modal_colorpicker3:					"Tooltip szín",
+							modal_colorpicker4:					"Betű szín",
+							modal_guildacronym:					"Helyi szerver betűszó",
+							modal_guildbanner:					"Transzparens",
+							modal_guildicon:					"Ikon",
+							modal_guildname:					"Helyi kiszolgáló neve",
+							modal_header:						"Helyi kiszolgáló beállításai",
+							modal_ignorecustomname:				"A kiszolgáló rövidítéshez használja az eredeti kiszolgáló nevet",
+							modal_invalidurl:					"Érvénytelen URL",
+							modal_tabheader1:					"Szerver",
+							modal_tabheader2:					"Ikon szín",
+							modal_tabheader3:					"Tooltip szín",
+							submenu_resetsettings:				"Szerver visszaállítása",
+							submenu_serversettings:				"Beállítások megváltoztatása"
 						};
-					case "pt-BR":	//portuguese (brazil)
+					case "it":		// Italian
 						return {
-							context_localserversettings_text:	"Configurações local do servidor",
-							submenu_serversettings_text:		"Mudar configurações",
-							submenu_resetsettings_text:			"Redefinir servidor",
-							modal_header_text:					"Configurações local do servidor",
-							modal_guildname_text:				"Nome local do servidor",
-							modal_guildacronym_text:			"Acrônimo local de servidor",
-							modal_ignorecustomname_text:		"Use o nome do servidor original para a sigla do servidor",
-							modal_guildicon_text:				"Icone",
-							modal_guildbanner_text:				"Bandeira",
-							modal_tabheader1_text:				"Servidor",
-							modal_tabheader2_text:				"Cor do ícone",
-							modal_tabheader3_text:				"Cor da tooltip",
-							modal_colorpicker1_text:			"Cor do ícone",
-							modal_colorpicker2_text:			"Cor da fonte",
-							modal_colorpicker3_text:			"Cor da tooltip",
-							modal_colorpicker4_text:			"Cor da fonte",
-							modal_invalidurl_text:				"URL inválida"
+							context_localserversettings:		"Impostazioni del server locale",
+							modal_colorpicker1:					"Colore dell'icona",
+							modal_colorpicker2:					"Colore del carattere",
+							modal_colorpicker3:					"Colore della descrizione comando",
+							modal_colorpicker4:					"Colore del carattere",
+							modal_guildacronym:					"Acronimo del server locale",
+							modal_guildbanner:					"Banner",
+							modal_guildicon:					"Icona",
+							modal_guildname:					"Nome server locale",
+							modal_header:						"Impostazioni del server locale",
+							modal_ignorecustomname:				"Utilizzare il nome del server originale per l'acronimo del server",
+							modal_invalidurl:					"URL non valido",
+							modal_tabheader1:					"Server",
+							modal_tabheader2:					"Colore icona",
+							modal_tabheader3:					"Colore della descrizione comando",
+							submenu_resetsettings:				"Reimposta server",
+							submenu_serversettings:				"Cambia impostazioni"
 						};
-					case "fi":		//finnish
+					case "ja":		// Japanese
 						return {
-							context_localserversettings_text:	"Paikallinen palvelimen asetukset",
-							submenu_serversettings_text:		"Vaihda asetuksia",
-							submenu_resetsettings_text:			"Nollaa palvelimen",
-							modal_header_text:					"Paikallinen palvelimen asetukset",
-							modal_guildname_text:				"Paikallinen palvelimenimi",
-							modal_guildacronym_text:			"Paikallisen palvelimen lyhenne",
-							modal_ignorecustomname_text:		"Käytä alkuperäistä palvelimen nimeä palvelimen lyhenteessä",
-							modal_guildicon_text:				"Ikonin",
-							modal_guildbanner_text:				"Banneri",
-							modal_tabheader1_text:				"Palvelimen",
-							modal_tabheader2_text:				"Ikoninväri",
-							modal_tabheader3_text:				"Tooltipväri",
-							modal_colorpicker1_text:			"Ikoninväri",
-							modal_colorpicker2_text:			"Fontinväri",
-							modal_colorpicker3_text:			"Tooltipväri",
-							modal_colorpicker4_text:			"Fontinväri",
-							modal_invalidurl_text:				"Virheellinen URL"
+							context_localserversettings:		"ローカルサーバー設定",
+							modal_colorpicker1:					"アイコンの色",
+							modal_colorpicker2:					"フォントの色",
+							modal_colorpicker3:					"ツールチップの色",
+							modal_colorpicker4:					"フォントの色",
+							modal_guildacronym:					"ローカルサーバーの頭字語",
+							modal_guildbanner:					"バナー",
+							modal_guildicon:					"アイコン",
+							modal_guildname:					"ローカルサーバー名",
+							modal_header:						"ローカルサーバー設定",
+							modal_ignorecustomname:				"サーバーの頭字語には元のサーバー名を使用します",
+							modal_invalidurl:					"無効なURL",
+							modal_tabheader1:					"サーバ",
+							modal_tabheader2:					"アイコンの色",
+							modal_tabheader3:					"ツールチップの色",
+							submenu_resetsettings:				"サーバーのリセット",
+							submenu_serversettings:				"設定を変更する"
 						};
-					case "sv":		//swedish
+					case "ko":		// Korean
 						return {
-							context_localserversettings_text:	"Lokal serverinställningar",
-							submenu_serversettings_text:		"Ändra inställningar",
-							submenu_resetsettings_text:			"Återställ server",
-							modal_header_text:					"Lokal serverinställningar",
-							modal_guildname_text:				"Lokalt servernamn",
-							modal_guildacronym_text:			"Lokal server förkortning",
-							modal_ignorecustomname_text:		"Använd det ursprungliga servernamnet för serverförkortningen",
-							modal_guildicon_text:				"Ikon",
-							modal_guildbanner_text:				"Banderoll",
-							modal_tabheader1_text:				"Server",
-							modal_tabheader2_text:				"Ikonfärg",
-							modal_tabheader3_text:				"Tooltipfärg",
-							modal_colorpicker1_text:			"Ikonfärg",
-							modal_colorpicker2_text:			"Fontfärg",
-							modal_colorpicker3_text:			"Tooltipfärg",
-							modal_colorpicker4_text:			"Fontfärg",
-							modal_invalidurl_text:				"Ogiltig URL"
+							context_localserversettings:		"로컬 서버 설정",
+							modal_colorpicker1:					"아이콘 색상",
+							modal_colorpicker2:					"글자 색",
+							modal_colorpicker3:					"툴팁 색상",
+							modal_colorpicker4:					"글자 색",
+							modal_guildacronym:					"로컬 서버 약어",
+							modal_guildbanner:					"배너",
+							modal_guildicon:					"상",
+							modal_guildname:					"로컬 서버 이름",
+							modal_header:						"로컬 서버 설정",
+							modal_ignorecustomname:				"서버 약어에 원래 서버 이름 사용",
+							modal_invalidurl:					"잘못된 URL",
+							modal_tabheader1:					"섬기는 사람",
+							modal_tabheader2:					"아이콘 색상",
+							modal_tabheader3:					"툴팁 색상",
+							submenu_resetsettings:				"서버 재설정",
+							submenu_serversettings:				"설정 변경"
 						};
-					case "tr":		//turkish
+					case "lt":		// Lithuanian
 						return {
-							context_localserversettings_text:	"Yerel Sunucu Ayarları",
-							submenu_serversettings_text:		"Ayarları Değiştir",
-							submenu_resetsettings_text:			"Sunucu Sıfırla",
-							modal_header_text:					"Yerel sunucu ayarları",
-							modal_guildname_text:				"Yerel sunucu adı",
-							modal_guildacronym_text:			"Yerel sunucu kısaltması",
-							modal_ignorecustomname_text:		"Sunucu kısaltması için orijinal sunucu adını kullanın",
-							modal_guildicon_text:				"Simge",
-							modal_guildbanner_text:				"Afişi",
-							modal_tabheader1_text:				"Sunucu",
-							modal_tabheader2_text:				"Simge rengi",
-							modal_tabheader3_text:				"Tooltip rengi",
-							modal_colorpicker1_text:			"Simge rengi",
-							modal_colorpicker2_text:			"Yazı rengi",
-							modal_colorpicker3_text:			"Tooltip rengi",
-							modal_colorpicker4_text:			"Yazı rengi",
-							modal_invalidurl_text:				"Geçersiz URL"
+							context_localserversettings:		"Vietinio serverio nustatymai",
+							modal_colorpicker1:					"Piktogramos spalva",
+							modal_colorpicker2:					"Šrifto spalva",
+							modal_colorpicker3:					"Patarimo spalva",
+							modal_colorpicker4:					"Šrifto spalva",
+							modal_guildacronym:					"Vietinio serverio santrumpa",
+							modal_guildbanner:					"Reklamjuostė",
+							modal_guildicon:					"Piktograma",
+							modal_guildname:					"Vietinio serverio pavadinimas",
+							modal_header:						"Vietinio serverio nustatymai",
+							modal_ignorecustomname:				"Serverio akronimui naudokite originalų serverio pavadinimą",
+							modal_invalidurl:					"Neteisingas URL",
+							modal_tabheader1:					"Serveris",
+							modal_tabheader2:					"Piktogramos spalva",
+							modal_tabheader3:					"Patarimo spalva",
+							submenu_resetsettings:				"Iš naujo nustatyti serverį",
+							submenu_serversettings:				"Pakeisti nustatymus"
 						};
-					case "cs":		//czech
+					case "nl":		// Dutch
 						return {
-							context_localserversettings_text:	"Místní nastavení serveru",
-							submenu_serversettings_text:		"Změnit nastavení",
-							submenu_resetsettings_text:			"Obnovit server",
-							modal_header_text:					"Místní nastavení serveru",
-							modal_guildname_text:				"Místní název serveru",
-							modal_guildacronym_text:			"Zkratka místního serveru",
-							modal_ignorecustomname_text:		"Pro zkratku serveru použijte původní název serveru",
-							modal_guildicon_text:				"Ikony",
-							modal_guildbanner_text:				"Prapor",
-							modal_tabheader1_text:				"Server",
-							modal_tabheader2_text:				"Barva ikony",
-							modal_tabheader3_text:				"Barva tooltip",
-							modal_colorpicker1_text:			"Barva ikony",
-							modal_colorpicker2_text:			"Barva fontu",
-							modal_colorpicker3_text:			"Barva tooltip",
-							modal_colorpicker4_text:			"Barva fontu",
-							modal_invalidurl_text:				"Neplatná URL"
+							context_localserversettings:		"Lokale serverinstellingen",
+							modal_colorpicker1:					"Icoonkleur",
+							modal_colorpicker2:					"Letterkleur",
+							modal_colorpicker3:					"Tooltipkleur",
+							modal_colorpicker4:					"Letterkleur",
+							modal_guildacronym:					"Lokale serveracroniem",
+							modal_guildbanner:					"Banner",
+							modal_guildicon:					"Icoon",
+							modal_guildname:					"Lokale servernaam",
+							modal_header:						"Lokale serverinstellingen",
+							modal_ignorecustomname:				"Gebruik de oorspronkelijke servernaam voor het serveracroniem",
+							modal_invalidurl:					"Ongeldige URL",
+							modal_tabheader1:					"Server",
+							modal_tabheader2:					"Icoonkleur",
+							modal_tabheader3:					"Tooltipkleur",
+							submenu_resetsettings:				"Reset server",
+							submenu_serversettings:				"Instellingen veranderen"
 						};
-					case "bg":		//bulgarian
+					case "no":		// Norwegian
 						return {
-							context_localserversettings_text:	"Настройки за локални cървър",
-							submenu_serversettings_text:		"Промяна на настройките",
-							submenu_resetsettings_text:			"Възстановяване на cървър",
-							modal_header_text:					"Настройки за локални cървър",
-							modal_guildname_text:				"Локално име на cървър",
-							modal_guildacronym_text:			"Акроним на локалния сървър",
-							modal_ignorecustomname_text:		"Използвайте оригиналното име на сървъра за съкращението на сървъра",
-							modal_guildicon_text:				"Икона",
-							modal_guildbanner_text:				"Знаме",
-							modal_tabheader1_text:				"Cървър",
-							modal_tabheader2_text:				"Цвят на иконата",
-							modal_tabheader3_text:				"Цвят на подсказка",
-							modal_colorpicker1_text:			"Цвят на иконата",
-							modal_colorpicker2_text:			"Цвят на шрифта",
-							modal_colorpicker3_text:			"Цвят на подсказка",
-							modal_colorpicker4_text:			"Цвят на шрифта",
-							modal_invalidurl_text:				"Невалиден URL"
+							context_localserversettings:		"Lokale serverinnstillinger",
+							modal_colorpicker1:					"Ikonfarge",
+							modal_colorpicker2:					"Skriftfarge",
+							modal_colorpicker3:					"Verktøytips Farge",
+							modal_colorpicker4:					"Skriftfarge",
+							modal_guildacronym:					"Lokal server akronym",
+							modal_guildbanner:					"Banner",
+							modal_guildicon:					"Ikon",
+							modal_guildname:					"Lokalt servernavn",
+							modal_header:						"Lokale serverinnstillinger",
+							modal_ignorecustomname:				"Bruk det originale servernavnet for serverakronymet",
+							modal_invalidurl:					"Ugyldig URL",
+							modal_tabheader1:					"Server",
+							modal_tabheader2:					"Ikonfarge",
+							modal_tabheader3:					"Verktøytips Farge",
+							submenu_resetsettings:				"Tilbakestill server",
+							submenu_serversettings:				"Endre innstillinger"
 						};
-					case "ru":		//russian
+					case "pl":		// Polish
 						return {
-							context_localserversettings_text:	"Настройки локального cервер",
-							submenu_serversettings_text:		"Изменить настройки",
-							submenu_resetsettings_text:			"Сбросить cервер",
-							modal_header_text:					"Настройки локального cервер",
-							modal_guildname_text:				"Имя локального cервер",
-							modal_guildacronym_text:			"Акроним локального сервера",
-							modal_ignorecustomname_text:		"Используйте оригинальное имя сервера для сокращения сервера",
-							modal_guildicon_text:				"Значок",
-							modal_guildbanner_text:				"Баннер",
-							modal_tabheader1_text:				"Cервер",
-							modal_tabheader2_text:				"Цвет значков",
-							modal_tabheader3_text:				"Цвет подсказка",
-							modal_colorpicker1_text:			"Цвет значков",
-							modal_colorpicker2_text:			"Цвет шрифта",
-							modal_colorpicker3_text:			"Цвет подсказка",
-							modal_colorpicker4_text:			"Цвет шрифта",
-							modal_invalidurl_text:				"Неверная URL"
+							context_localserversettings:		"Ustawienia serwera lokalnego",
+							modal_colorpicker1:					"Kolor ikony",
+							modal_colorpicker2:					"Kolor czcionki",
+							modal_colorpicker3:					"Kolor etykiety narzędzi",
+							modal_colorpicker4:					"Kolor czcionki",
+							modal_guildacronym:					"Akronim serwera lokalnego",
+							modal_guildbanner:					"Transparent",
+							modal_guildicon:					"Ikona",
+							modal_guildname:					"Nazwa serwera lokalnego",
+							modal_header:						"Ustawienia serwera lokalnego",
+							modal_ignorecustomname:				"Użyj oryginalnej nazwy serwera dla akronimu serwera",
+							modal_invalidurl:					"Nieprawidłowy URL",
+							modal_tabheader1:					"Serwer",
+							modal_tabheader2:					"Kolor ikony",
+							modal_tabheader3:					"Kolor etykiety narzędzi",
+							submenu_resetsettings:				"Zresetuj serwer",
+							submenu_serversettings:				"Zmień ustawienia"
 						};
-					case "uk":		//ukrainian
+					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							context_localserversettings_text:	"Налаштування локального cервер",
-							submenu_serversettings_text:		"Змінити налаштування",
-							submenu_resetsettings_text:			"Скидання cервер",
-							modal_header_text:					"Налаштування локального cервер",
-							modal_guildname_text:				"Локальне ім'я cервер",
-							modal_guildacronym_text:			"Акронім локального сервера",
-							modal_ignorecustomname_text:		"Використовуйте оригінальне ім'я сервера для абревіатури сервера",
-							modal_guildicon_text:				"Іконка",
-							modal_guildbanner_text:				"Банер",
-							modal_tabheader1_text:				"Cервер",
-							modal_tabheader2_text:				"Колір ікони",
-							modal_tabheader3_text:				"Колір підказка",
-							modal_colorpicker1_text:			"Колір ікони",
-							modal_colorpicker2_text:			"Колір шрифту",
-							modal_colorpicker3_text:			"Колір підказка",
-							modal_colorpicker4_text:			"Колір шрифту",
-							modal_invalidurl_text:				"Недійсна URL"
+							context_localserversettings:		"Configurações do servidor local",
+							modal_colorpicker1:					"Cor do ícone",
+							modal_colorpicker2:					"Cor da fonte",
+							modal_colorpicker3:					"Cor da dica de ferramenta",
+							modal_colorpicker4:					"Cor da fonte",
+							modal_guildacronym:					"Acrônimo de servidor local",
+							modal_guildbanner:					"Bandeira",
+							modal_guildicon:					"Ícone",
+							modal_guildname:					"Nome do servidor local",
+							modal_header:						"Configurações do servidor local",
+							modal_ignorecustomname:				"Use o nome do servidor original para o acrônimo do servidor",
+							modal_invalidurl:					"URL inválida",
+							modal_tabheader1:					"Servidor",
+							modal_tabheader2:					"Cor do ícone",
+							modal_tabheader3:					"Cor da dica de ferramenta",
+							submenu_resetsettings:				"Reiniciar Servidor",
+							submenu_serversettings:				"Mudar configurações"
 						};
-					case "ja":		//japanese
+					case "ro":		// Romanian
 						return {
-							context_localserversettings_text:	"ローカルサーバー設定",
-							submenu_serversettings_text:		"設定を変更する",
-							submenu_resetsettings_text:			"サーバーをリセットする",
-							modal_header_text:					"ローカルサーバー設定",
-							modal_guildname_text:				"ローカルサーバー名",
-							modal_guildacronym_text:			"ローカルサーバーの頭字語",
-							modal_ignorecustomname_text:		"サーバーの頭字語に元のサーバー名を使用する",
-							modal_guildicon_text:				"アイコン",
-							modal_guildbanner_text:				"バナー",
-							modal_tabheader1_text:				"サーバー",
-							modal_tabheader2_text:				"アイコンの色",
-							modal_tabheader3_text:				"ツールチップの色",
-							modal_colorpicker1_text:			"アイコンの色",
-							modal_colorpicker2_text:			"フォントの色",
-							modal_colorpicker3_text:			"ツールチップの色",
-							modal_colorpicker4_text:			"フォントの色",
-							modal_invalidurl_text:				"無効な URL"
+							context_localserversettings:		"Setări locale ale serverului",
+							modal_colorpicker1:					"Culoare pictogramă",
+							modal_colorpicker2:					"Culoarea fontului",
+							modal_colorpicker3:					"Culoare sfat",
+							modal_colorpicker4:					"Culoarea fontului",
+							modal_guildacronym:					"Acronim de server local",
+							modal_guildbanner:					"Banner",
+							modal_guildicon:					"Pictogramă",
+							modal_guildname:					"Numele serverului local",
+							modal_header:						"Setări locale ale serverului",
+							modal_ignorecustomname:				"Utilizați numele serverului original pentru acronimul serverului",
+							modal_invalidurl:					"URL invalid",
+							modal_tabheader1:					"Server",
+							modal_tabheader2:					"Culoare pictogramă",
+							modal_tabheader3:					"Culoare sfat",
+							submenu_resetsettings:				"Resetați serverul",
+							submenu_serversettings:				"Schimbă setările"
 						};
-					case "zh-TW":	//chinese (traditional)
+					case "ru":		// Russian
 						return {
-							context_localserversettings_text:	"本地服務器設置",
-							submenu_serversettings_text:		"更改設置",
-							submenu_resetsettings_text:			"重置服務器",
-							modal_header_text:					"本地服務器設置",
-							modal_guildname_text:				"服務器名稱",
-							modal_guildacronym_text:			"本地服務器縮寫",
-							modal_ignorecustomname_text:		"使用原始服務器名稱作為服務器首字母縮寫",
-							modal_guildicon_text:				"圖標",
-							modal_guildbanner_text:				"旗幟",
-							modal_tabheader1_text:				"服務器",
-							modal_tabheader2_text:				"圖標顏色",
-							modal_tabheader3_text:				"工具提示顏色",
-							modal_colorpicker1_text:			"圖標顏色",
-							modal_colorpicker2_text:			"字體顏色",
-							modal_colorpicker3_text:			"工具提示顏色",
-							modal_colorpicker4_text:			"字體顏色",
-							modal_invalidurl_text:				"無效的 URL"
+							context_localserversettings:		"Настройки локального сервера",
+							modal_colorpicker1:					"Цвет значка",
+							modal_colorpicker2:					"Цвет шрифта",
+							modal_colorpicker3:					"Цвет всплывающей подсказки",
+							modal_colorpicker4:					"Цвет шрифта",
+							modal_guildacronym:					"Акроним локального сервера",
+							modal_guildbanner:					"Баннер",
+							modal_guildicon:					"Икона",
+							modal_guildname:					"Имя локального сервера",
+							modal_header:						"Настройки локального сервера",
+							modal_ignorecustomname:				"Используйте исходное имя сервера для аббревиатуры сервера",
+							modal_invalidurl:					"Неверная ссылка",
+							modal_tabheader1:					"Сервер",
+							modal_tabheader2:					"Цвет значка",
+							modal_tabheader3:					"Цвет всплывающей подсказки",
+							submenu_resetsettings:				"Сбросить сервер",
+							submenu_serversettings:				"Изменить настройки"
 						};
-					case "ko":		//korean
+					case "sv":		// Swedish
 						return {
-							context_localserversettings_text:	"로컬 서버 설정",
-							submenu_serversettings_text:		"설정 변경",
-							submenu_resetsettings_text:			"서버 재설정",
-							modal_header_text:					"로컬 서버 설정",
-							modal_guildname_text:				"로컬 서버 이름",
-							modal_guildacronym_text:			"로컬 서버 약어",
-							modal_ignorecustomname_text:		"서버 약어에 원래 서버 이름을 사용하십시오",
-							modal_guildicon_text:				"상",
-							modal_guildbanner_text:				"기치",
-							modal_tabheader1_text:				"서버",
-							modal_tabheader2_text:				"상 색깔",
-							modal_tabheader3_text:				"툴팁 색깔",
-							modal_colorpicker1_text:			"상 색깔",
-							modal_colorpicker2_text:			"글꼴 색깔",
-							modal_colorpicker3_text:			"툴팁 색깔",
-							modal_colorpicker4_text:			"글꼴 색깔",
-							modal_invalidurl_text:				"잘못된 URL"
+							context_localserversettings:		"Lokala serverinställningar",
+							modal_colorpicker1:					"Ikonfärg",
+							modal_colorpicker2:					"Fontfärg",
+							modal_colorpicker3:					"Verktygstipsfärg",
+							modal_colorpicker4:					"Fontfärg",
+							modal_guildacronym:					"Lokal server akronym",
+							modal_guildbanner:					"Baner",
+							modal_guildicon:					"Ikon",
+							modal_guildname:					"Lokalt servernamn",
+							modal_header:						"Lokala serverinställningar",
+							modal_ignorecustomname:				"Använd det ursprungliga servernamnet för serverns akronym",
+							modal_invalidurl:					"Ogiltig URL",
+							modal_tabheader1:					"Server",
+							modal_tabheader2:					"Ikonfärg",
+							modal_tabheader3:					"Verktygstipsfärg",
+							submenu_resetsettings:				"Återställ server",
+							submenu_serversettings:				"Ändra inställningar"
 						};
-					default:		//default: english
+					case "th":		// Thai
 						return {
-							context_localserversettings_text:	"Local Serversettings",
-							submenu_serversettings_text:		"Change Settings",
-							submenu_resetsettings_text:			"Reset Server",
-							modal_header_text:					"Local Serversettings",
-							modal_guildname_text:				"Local Servername",
-							modal_guildacronym_text:			"Local Serveracronym",
-							modal_ignorecustomname_text:		"Use the original Servername for the Serveracronym",
-							modal_guildicon_text:				"Icon",
-							modal_guildbanner_text:				"Banner",
-							modal_tabheader1_text:				"Server",
-							modal_tabheader2_text:				"Iconcolor",
-							modal_tabheader3_text:				"Tooltipcolor",
-							modal_colorpicker1_text:			"Iconcolor",
-							modal_colorpicker2_text:			"Fontcolor",
-							modal_colorpicker3_text:			"Tooltipcolor",
-							modal_colorpicker4_text:			"Fontcolor",
-							modal_invalidurl_text:				"Invalid URL"
+							context_localserversettings:		"การตั้งค่าเซิร์ฟเวอร์ภายใน",
+							modal_colorpicker1:					"ไอคอนสี",
+							modal_colorpicker2:					"สีตัวอักษร",
+							modal_colorpicker3:					"คำแนะนำเครื่องมือสี",
+							modal_colorpicker4:					"สีตัวอักษร",
+							modal_guildacronym:					"ตัวย่อเซิร์ฟเวอร์ภายใน",
+							modal_guildbanner:					"แบนเนอร์",
+							modal_guildicon:					"ไอคอน",
+							modal_guildname:					"ชื่อเซิร์ฟเวอร์ภายใน",
+							modal_header:						"การตั้งค่าเซิร์ฟเวอร์ภายใน",
+							modal_ignorecustomname:				"ใช้ชื่อเซิร์ฟเวอร์เดิมสำหรับตัวย่อเซิร์ฟเวอร์",
+							modal_invalidurl:					"URL ไม่ถูกต้อง",
+							modal_tabheader1:					"เซิร์ฟเวอร์",
+							modal_tabheader2:					"ไอคอนสี",
+							modal_tabheader3:					"เคล็ดลับเครื่องมือสี",
+							submenu_resetsettings:				"รีเซ็ตเซิร์ฟเวอร์",
+							submenu_serversettings:				"เปลี่ยนการตั้งค่า"
+						};
+					case "tr":		// Turkish
+						return {
+							context_localserversettings:		"Yerel Sunucu Ayarları",
+							modal_colorpicker1:					"Simge Rengi",
+							modal_colorpicker2:					"Yazı rengi",
+							modal_colorpicker3:					"Araç İpucu Rengi",
+							modal_colorpicker4:					"Yazı rengi",
+							modal_guildacronym:					"Yerel Sunucu Kısaltması",
+							modal_guildbanner:					"Afiş",
+							modal_guildicon:					"Simge",
+							modal_guildname:					"Yerel Sunucu Adı",
+							modal_header:						"Yerel Sunucu Ayarları",
+							modal_ignorecustomname:				"Sunucu Kısaltması için orijinal Sunucu Adını kullanın",
+							modal_invalidurl:					"Geçersiz URL",
+							modal_tabheader1:					"Sunucu",
+							modal_tabheader2:					"Simge Rengi",
+							modal_tabheader3:					"Araç İpucu Rengi",
+							submenu_resetsettings:				"Sunucuyu Sıfırla",
+							submenu_serversettings:				"Ayarları değiştir"
+						};
+					case "uk":		// Ukrainian
+						return {
+							context_localserversettings:		"Налаштування локального сервера",
+							modal_colorpicker1:					"Значок Колір",
+							modal_colorpicker2:					"Колір шрифту",
+							modal_colorpicker3:					"Колір підказки",
+							modal_colorpicker4:					"Колір шрифту",
+							modal_guildacronym:					"Акронім локального сервера",
+							modal_guildbanner:					"Банер",
+							modal_guildicon:					"Піктограма",
+							modal_guildname:					"Назва локального сервера",
+							modal_header:						"Налаштування локального сервера",
+							modal_ignorecustomname:				"Використовуйте оригінальне ім’я сервера для абревіатури сервера",
+							modal_invalidurl:					"Недійсна URL-адреса",
+							modal_tabheader1:					"Сервер",
+							modal_tabheader2:					"Значок Колір",
+							modal_tabheader3:					"Колір підказки",
+							submenu_resetsettings:				"Скинути сервер",
+							submenu_serversettings:				"Змінити налаштування"
+						};
+					case "vi":		// Vietnamese
+						return {
+							context_localserversettings:		"Cài đặt máy chủ cục bộ",
+							modal_colorpicker1:					"Màu biểu tượng",
+							modal_colorpicker2:					"Màu phông chữ",
+							modal_colorpicker3:					"Màu chú giải công cụ",
+							modal_colorpicker4:					"Màu phông chữ",
+							modal_guildacronym:					"Từ viết tắt của máy chủ cục bộ",
+							modal_guildbanner:					"Ảnh bìa",
+							modal_guildicon:					"Biểu tượng",
+							modal_guildname:					"Tên máy chủ cục bộ",
+							modal_header:						"Cài đặt máy chủ cục bộ",
+							modal_ignorecustomname:				"Sử dụng tên máy chủ ban đầu cho từ viết tắt máy chủ",
+							modal_invalidurl:					"URL không hợp lệ",
+							modal_tabheader1:					"Người phục vụ",
+							modal_tabheader2:					"Màu biểu tượng",
+							modal_tabheader3:					"Màu chú giải công cụ",
+							submenu_resetsettings:				"Đặt lại máy chủ",
+							submenu_serversettings:				"Thay đổi cài đặt"
+						};
+					case "zh":		// Chinese
+						return {
+							context_localserversettings:		"本地服务器设置",
+							modal_colorpicker1:					"图标颜色",
+							modal_colorpicker2:					"字体颜色",
+							modal_colorpicker3:					"工具提示颜色",
+							modal_colorpicker4:					"字体颜色",
+							modal_guildacronym:					"本地服务器缩写",
+							modal_guildbanner:					"旗帜",
+							modal_guildicon:					"图标",
+							modal_guildname:					"本地服务器名称",
+							modal_header:						"本地服务器设置",
+							modal_ignorecustomname:				"使用原始服务器名称作为服务器首字母缩写词",
+							modal_invalidurl:					"无效的网址",
+							modal_tabheader1:					"服务器",
+							modal_tabheader2:					"图标颜色",
+							modal_tabheader3:					"工具提示颜色",
+							submenu_resetsettings:				"重置服务器",
+							submenu_serversettings:				"更改设置"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							context_localserversettings:		"本地服務器設置",
+							modal_colorpicker1:					"圖標顏色",
+							modal_colorpicker2:					"字體顏色",
+							modal_colorpicker3:					"工具提示顏色",
+							modal_colorpicker4:					"字體顏色",
+							modal_guildacronym:					"本地服務器縮寫",
+							modal_guildbanner:					"旗幟",
+							modal_guildicon:					"圖標",
+							modal_guildname:					"本地服務器名稱",
+							modal_header:						"本地服務器設置",
+							modal_ignorecustomname:				"使用原始服務器名稱作為服務器首字母縮寫詞",
+							modal_invalidurl:					"無效的網址",
+							modal_tabheader1:					"服務器",
+							modal_tabheader2:					"圖標顏色",
+							modal_tabheader3:					"工具提示顏色",
+							submenu_resetsettings:				"重置服務器",
+							submenu_serversettings:				"更改設置"
+						};
+					default:		// English
+						return {
+							context_localserversettings:		"Local Server Settings",
+							modal_colorpicker1:					"Icon Color",
+							modal_colorpicker2:					"Font Color",
+							modal_colorpicker3:					"Tooltip Color",
+							modal_colorpicker4:					"Font Color",
+							modal_guildacronym:					"Local Server Acronym",
+							modal_guildbanner:					"Banner",
+							modal_guildicon:					"Icon",
+							modal_guildname:					"Local Server Name",
+							modal_header:						"Local Server Settings",
+							modal_ignorecustomname:				"Use the original Server Name for the Server Acronym",
+							modal_invalidurl:					"Invalid URL",
+							modal_tabheader1:					"Server",
+							modal_tabheader2:					"Icon Color",
+							modal_tabheader3:					"Tooltip Color",
+							submenu_resetsettings:				"Reset Server",
+							submenu_serversettings:				"Change Settings"
 						};
 				}
 			}

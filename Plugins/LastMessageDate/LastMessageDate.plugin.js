@@ -318,7 +318,7 @@ module.exports = (_ => {
 					let timestamp = loadedUsers[guildId][user.id] ? this.getTimestamp(languages[choices.lastMessageDateLang].id, loadedUsers[guildId][user.id]) : "---";
 					children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 						className: BDFDB.disCNS._lastmessagedatedate + BDFDB.disCNS.userinfodate + BDFDB.disCN.textrow,
-						children: settings.displayText ? this.labels.lastmessage_text.replace("{{time}}", timestamp) : timestamp
+						children: settings.displayText ? this.labels.last_message.replace("{{time}}", timestamp) : timestamp
 					}));
 				}
 			}
@@ -382,89 +382,113 @@ module.exports = (_ => {
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "hr":		//croatian
+					case "bg":		// Bulgarian
 						return {
-							lastmessage_text:				"Posljednja poruka dana {{time}}"
+							last_message:						"Последно съобщение на {{time}}"
 						};
-					case "da":		//danish
+					case "da":		// Danish
 						return {
-							lastmessage_text:				"Sidste besked den {{time}}"
+							last_message:						"Sidste besked den {{time}}"
 						};
-					case "de":		//german
+					case "de":		// German
 						return {
-							lastmessage_text:				"Letzte Nachricht am {{time}}"
+							last_message:						"Letzte Nachricht am {{time}}"
 						};
-					case "es":		//spanish
+					case "el":		// Greek
 						return {
-							lastmessage_text:				"Último mensaje el {{time}}"
+							last_message:						"Τελευταίο μήνυμα στις {{time}}"
 						};
-					case "fr":		//french
+					case "es":		// Spanish
 						return {
-							lastmessage_text:				"Dernier message le {{time}}"
+							last_message:						"Último mensaje el {{time}}"
 						};
-					case "it":		//italian
+					case "fi":		// Finnish
 						return {
-							lastmessage_text:				"Ultimo messaggio il {{time}}"
+							last_message:						"Viimeinen viesti {{time}}"
 						};
-					case "nl":		//dutch
+					case "fr":		// French
 						return {
-							lastmessage_text:				"Laatste bericht op {{time}}"
+							last_message:						"Dernier message le {{time}}"
 						};
-					case "no":		//norwegian
+					case "hr":		// Croatian
 						return {
-							lastmessage_text:				"Siste melding på {{time}}"
+							last_message:						"Posljednja poruka {{time}}"
 						};
-					case "pl":		//polish
+					case "hu":		// Hungarian
 						return {
-							lastmessage_text:				"Ostatnia wiadomość z {{time}}"
+							last_message:						"Utolsó üzenet: {{time}}"
 						};
-					case "pt-BR":	//portuguese (brazil)
+					case "it":		// Italian
 						return {
-							lastmessage_text:				"Última mensagem em {{time}}"
+							last_message:						"Ultimo messaggio il {{time}}"
 						};
-					case "fi":		//finnish
+					case "ja":		// Japanese
 						return {
-							lastmessage_text:				"Viimeisin viesti {{time}}"
+							last_message:						"{{time}}の最後のメッセージ"
 						};
-					case "sv":		//swedish
+					case "ko":		// Korean
 						return {
-							lastmessage_text:				"Senaste meddelandet den {{time}}"
+							last_message:						"{{time}}의 마지막 메시지"
 						};
-					case "tr":		//turkish
+					case "lt":		// Lithuanian
 						return {
-							lastmessage_text:				"Son mesajı {{time}}"
+							last_message:						"Paskutinis pranešimas {{time}}"
 						};
-					case "cs":		//czech
+					case "nl":		// Dutch
 						return {
-							lastmessage_text:				"Poslední zpráva dne {{time}}"
+							last_message:						"Laatste bericht op {{time}}"
 						};
-					case "bg":		//bulgarian
+					case "no":		// Norwegian
 						return {
-							lastmessage_text:				"Последно съобщение на {{time}}"
+							last_message:						"Siste melding {{time}}"
 						};
-					case "ru":		//russian
+					case "pl":		// Polish
 						return {
-							lastmessage_text:				"Последнее сообщение {{time}}"
+							last_message:						"Ostatnia wiadomość {{time}}"
 						};
-					case "uk":		//ukrainian
+					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							lastmessage_text:				"Останнє повідомлення {{time}}"
+							last_message:						"Última mensagem em {{time}}"
 						};
-					case "ja":		//japanese
+					case "ro":		// Romanian
 						return {
-							lastmessage_text:				"{{time}} 最後のメッセージ"
+							last_message:						"Ultimul mesaj pe {{time}}"
 						};
-					case "zh-TW":	//chinese (traditional)
+					case "ru":		// Russian
 						return {
-							lastmessage_text:				"最後消息於 {{time}}"
+							last_message:						"Последнее сообщение в {{time}}"
 						};
-					case "ko":		//korean
+					case "sv":		// Swedish
 						return {
-							lastmessage_text:				"{{time}} 마지막 메시지"
+							last_message:						"Senaste meddelandet {{time}}"
 						};
-					default:		//default: english
+					case "th":		// Thai
 						return {
-							lastmessage_text:				"Last message on {{time}}"
+							last_message:						"ข้อความล่าสุดเมื่อ {{time}}"
+						};
+					case "tr":		// Turkish
+						return {
+							last_message:						"{{time}} tarihindeki son mesaj"
+						};
+					case "uk":		// Ukrainian
+						return {
+							last_message:						"Останнє повідомлення {{time}}"
+						};
+					case "vi":		// Vietnamese
+						return {
+							last_message:						"Tin nhắn cuối cùng vào {{time}}"
+						};
+					case "zh":		// Chinese
+						return {
+							last_message:						"{{time}}上的最后一条消息"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							last_message:						"{{time}}上的最後一條消息"
+						};
+					default:		// English
+						return {
+							last_message:						"Last message on {{time}}"
 						};
 				}
 			}

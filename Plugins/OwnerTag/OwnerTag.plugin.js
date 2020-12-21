@@ -279,7 +279,7 @@ module.exports = (_ => {
 							className = BDFDB.disCN._ownertagadminicon;
 							break;
 						case userTypes.MANAGEMENT:
-							label = `${this.labels.management_text} (${[BDFDB.UserUtils.can("MANAGE_GUILD", user.id) && BDFDB.LanguageUtils.LibraryStrings.server, BDFDB.UserUtils.can("MANAGE_CHANNELS", user.id) && BDFDB.LanguageUtils.LanguageStrings.CHANNELS, BDFDB.UserUtils.can("MANAGE_ROLES", user.id) && BDFDB.LanguageUtils.LanguageStrings.ROLES].filter(n => n).join(", ")})`;
+							label = `${this.labels.management} (${[BDFDB.UserUtils.can("MANAGE_GUILD", user.id) && BDFDB.LanguageUtils.LibraryStrings.server, BDFDB.UserUtils.can("MANAGE_CHANNELS", user.id) && BDFDB.LanguageUtils.LanguageStrings.CHANNELS, BDFDB.UserUtils.can("MANAGE_ROLES", user.id) && BDFDB.LanguageUtils.LanguageStrings.ROLES].filter(n => n).join(", ")})`;
 							className = BDFDB.disCN._ownertagmanagementicon;
 							break;
 					}
@@ -341,89 +341,113 @@ module.exports = (_ => {
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "hr":		//croatian
+					case "bg":		// Bulgarian
 						return {
-							management_text:					"Upravljanje"
+							management:							"Управление"
 						};
-					case "da":		//danish
+					case "da":		// Danish
 						return {
-							management_text:					"Ledelse"
+							management:							"Ledelse"
 						};
-					case "de":		//german
+					case "de":		// German
 						return {
-							management_text:					"Verwaltung"
+							management:							"Verwaltung"
 						};
-					case "es":		//spanish
+					case "el":		// Greek
 						return {
-							management_text:					"Administración"
+							management:							"Διαχείριση"
 						};
-					case "fr":		//french
+					case "es":		// Spanish
 						return {
-							management_text:					"Gestion"
+							management:							"Administración"
 						};
-					case "it":		//italian
+					case "fi":		// Finnish
 						return {
-							management_text:					"Gestione"
+							management:							"Johto"
 						};
-					case "nl":		//dutch
+					case "fr":		// French
 						return {
-							management_text:					"Beheer"
+							management:							"La gestion"
 						};
-					case "no":		//norwegian
+					case "hr":		// Croatian
 						return {
-							management_text:					"Ledelse"
+							management:							"Upravljanje"
 						};
-					case "pl":		//polish
+					case "hu":		// Hungarian
 						return {
-							management_text:					"Zarządzanie"
+							management:							"Menedzsment"
 						};
-					case "pt-BR":	//portuguese (brazil)
+					case "it":		// Italian
 						return {
-							management_text:					"Gestão"
+							management:							"Gestione"
 						};
-					case "fi":		//finnish
+					case "ja":		// Japanese
 						return {
-							management_text:					"Johto"
+							management:							"管理"
 						};
-					case "sv":		//swedish
+					case "ko":		// Korean
 						return {
-							management_text:					"Förvaltning"
+							management:							"조치"
 						};
-					case "tr":		//turkish
+					case "lt":		// Lithuanian
 						return {
-							management_text:					"Yönetim"
+							management:							"Valdymas"
 						};
-					case "cs":		//czech
+					case "nl":		// Dutch
 						return {
-							management_text:					"Řízení"
+							management:							"Beheer"
 						};
-					case "bg":		//bulgarian
+					case "no":		// Norwegian
 						return {
-							management_text:					"Управление"
+							management:							"Ledelse"
 						};
-					case "ru":		//russian
+					case "pl":		// Polish
 						return {
-							management_text:					"Управление"
+							management:							"Zarządzanie"
 						};
-					case "uk":		//ukrainian
+					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							management_text:					"Управління"
+							management:							"Gestão"
 						};
-					case "ja":		//japanese
+					case "ro":		// Romanian
 						return {
-							management_text:					"管理"
+							management:							"Administrare"
 						};
-					case "zh-TW":	//chinese (traditional)
+					case "ru":		// Russian
 						return {
-							management_text:					"管理"
+							management:							"Управление"
 						};
-					case "ko":		//korean
+					case "sv":		// Swedish
 						return {
-							management_text:					"관리"
+							management:							"Förvaltning"
 						};
-					default:		//default: english
+					case "th":		// Thai
 						return {
-							management_text:					"Management"
+							management:							"การจัดการ"
+						};
+					case "tr":		// Turkish
+						return {
+							management:							"Yönetim"
+						};
+					case "uk":		// Ukrainian
+						return {
+							management:							"Управління"
+						};
+					case "vi":		// Vietnamese
+						return {
+							management:							"Sự quản lý"
+						};
+					case "zh":		// Chinese
+						return {
+							management:							"管理"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							management:							"管理"
+						};
+					default:		// English
+						return {
+							management:							"Management"
 						};
 				}
 			}

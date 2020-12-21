@@ -57,7 +57,7 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		const textUrlReplaceString = "DEVILBRO_BD_GOOGLESEARCHREPLACE_REPLACE_TEXTURL";
+		const textUrlReplaceString = "DEVILBRO_BD_GOOGLESEARCHREPLACE_REPLACEURL";
 		var settings = {}, engines = {}, enabledEngines = {};
 	
 		return class GoogleSearchReplace extends Plugin {
@@ -145,7 +145,7 @@ module.exports = (_ => {
 					let engineKeys = Object.keys(enginesWithoutAll);
 					if (engineKeys.length == 1) {
 						children.splice(index, 1, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: this.labels.context_googlesearchreplace_text.replace("...", this.defaults.engines[engineKeys[0]].name),
+							label: this.labels.context_googlesearchreplace.replace("...", this.defaults.engines[engineKeys[0]].name),
 							id: children[index].props.id,
 							persisting: true,
 							action: event => {
@@ -170,12 +170,12 @@ module.exports = (_ => {
 							}
 						}));
 						if (!items.length) items.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: this.labels.submenu_disabled_text,
+							label: this.labels.submenu_disabled,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "disabled"),
 							disabled: true
 						}));
 						children.splice(index, 1, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: this.labels.context_googlesearchreplace_text,
+							label: this.labels.context_googlesearchreplace,
 							id: children[index].props.id,
 							children: items
 						}));
@@ -185,110 +185,140 @@ module.exports = (_ => {
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "hr":		//croatian
+					case "bg":		// Bulgarian
 						return {
-							context_googlesearchreplace_text:	"Pretražujte s ...",
-							submenu_disabled_text:				"Svi su onemogućeni"
+							context_googlesearchreplace:		"Търсене с ...",
+							submenu_disabled:					"Всички инвалиди"
 						};
-					case "da":		//danish
+					case "da":		// Danish
 						return {
-							context_googlesearchreplace_text:	"Søg med ...",
-							submenu_disabled_text:				"Alle deaktiveret"
+							context_googlesearchreplace:		"Søg med ...",
+							submenu_disabled:					"Alle handicappede"
 						};
-					case "de":		//german
+					case "de":		// German
 						return {
-							context_googlesearchreplace_text:	"Suche mit ...",
-							submenu_disabled_text:				"Alle deaktiviert"
+							context_googlesearchreplace:		"Suche mit ...",
+							submenu_disabled:					"Alle deaktiviert"
 						};
-					case "es":		//spanish
+					case "el":		// Greek
 						return {
-							context_googlesearchreplace_text:	"Buscar con ...",
-							submenu_disabled_text:				"Todo desactivado"
+							context_googlesearchreplace:		"Αναζήτηση με ...",
+							submenu_disabled:					"Όλα τα άτομα με ειδικές ανάγκες"
 						};
-					case "fr":		//french
+					case "es":		// Spanish
 						return {
-							context_googlesearchreplace_text:	"Rechercher avec ...",
-							submenu_disabled_text:				"Tous désactivés"
+							context_googlesearchreplace:		"Buscar con ...",
+							submenu_disabled:					"Todos discapacitados"
 						};
-					case "it":		//italian
+					case "fi":		// Finnish
 						return {
-							context_googlesearchreplace_text:	"Cerca con ...",
-							submenu_disabled_text:				"Tutto disattivato"
+							context_googlesearchreplace:		"Hae ...",
+							submenu_disabled:					"Kaikki vammaiset"
 						};
-					case "nl":		//dutch
+					case "fr":		// French
 						return {
-							context_googlesearchreplace_text:	"Zoeken met ...",
-							submenu_disabled_text:				"Alles gedeactiveerd"
+							context_googlesearchreplace:		"Rechercher avec ...",
+							submenu_disabled:					"Tout désactivé"
 						};
-					case "no":		//norwegian
+					case "hr":		// Croatian
 						return {
-							context_googlesearchreplace_text:	"Søk med ...",
-							submenu_disabled_text:				"Alle deaktivert"
+							context_googlesearchreplace:		"Traži sa ...",
+							submenu_disabled:					"Svi invalidi"
 						};
-					case "pl":		//polish
+					case "hu":		// Hungarian
 						return {
-							context_googlesearchreplace_text:	"Szukaj za pomocą ...",
-							submenu_disabled_text:				"Wszystkie wyłączone"
+							context_googlesearchreplace:		"Keresés a következővel:",
+							submenu_disabled:					"Minden fogyatékkal él"
 						};
-					case "pt-BR":	//portuguese (brazil)
+					case "it":		// Italian
 						return {
-							context_googlesearchreplace_text:	"Pesquisar com ...",
-							submenu_disabled_text:				"Todos desativados"
+							context_googlesearchreplace:		"Cerca con ...",
+							submenu_disabled:					"Tutti disabilitati"
 						};
-					case "fi":		//finnish
+					case "ja":		// Japanese
 						return {
-							context_googlesearchreplace_text:	"Etsi ...",
-							submenu_disabled_text:				"Kaikki on poistettu käytöstä"
+							context_googlesearchreplace:		"で検索 ...",
+							submenu_disabled:					"すべて無効"
 						};
-					case "sv":		//swedish
+					case "ko":		// Korean
 						return {
-							context_googlesearchreplace_text:	"Sök med ...",
-							submenu_disabled_text:				"Alla avaktiverade"
+							context_googlesearchreplace:		"다음으로 검색 ...",
+							submenu_disabled:					"모두 비활성화 됨"
 						};
-					case "tr":		//turkish
+					case "lt":		// Lithuanian
 						return {
-							context_googlesearchreplace_text:	"Ile ara ...",
-							submenu_disabled_text:				"Hepsi deaktive"
+							context_googlesearchreplace:		"Ieškoti naudojant ...",
+							submenu_disabled:					"Visi neįgalūs"
 						};
-					case "cs":		//czech
+					case "nl":		// Dutch
 						return {
-							context_googlesearchreplace_text:	"Hledat s ...",
-							submenu_disabled_text:				"Všechny deaktivované"
+							context_googlesearchreplace:		"Zoeken met ...",
+							submenu_disabled:					"Allemaal uitgeschakeld"
 						};
-					case "bg":		//bulgarian
+					case "no":		// Norwegian
 						return {
-							context_googlesearchreplace_text:	"Търсене с ...",
-							submenu_disabled_text:				"Всички са деактивирани"
+							context_googlesearchreplace:		"Søk med ...",
+							submenu_disabled:					"Alle funksjonshemmede"
 						};
-					case "ru":		//russian
+					case "pl":		// Polish
 						return {
-							context_googlesearchreplace_text:	"Поиск с ...",
-							submenu_disabled_text:				"Все деактивированные"
+							context_googlesearchreplace:		"Szukaj za pomocą ...",
+							submenu_disabled:					"Wszystkie wyłączone"
 						};
-					case "uk":		//ukrainian
+					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							context_googlesearchreplace_text:	"Пошук з ...",
-							submenu_disabled_text:				"Всі вимкнені"
+							context_googlesearchreplace:		"Pesquise com ...",
+							submenu_disabled:					"Todos desativados"
 						};
-					case "ja":		//japanese
+					case "ro":		// Romanian
 						return {
-							context_googlesearchreplace_text:	"で検索する ...",
-							submenu_disabled_text:				"すべて非アクティブ化"
+							context_googlesearchreplace:		"Căutați cu ...",
+							submenu_disabled:					"Toate sunt dezactivate"
 						};
-					case "zh-TW":	//chinese (traditional)
+					case "ru":		// Russian
 						return {
-							context_googlesearchreplace_text:	"搜索 ...",
-							submenu_disabled_text:				"全部停用"
+							context_googlesearchreplace:		"Искать с ...",
+							submenu_disabled:					"Все отключены"
 						};
-					case "ko":		//korean
+					case "sv":		// Swedish
 						return {
-							context_googlesearchreplace_text:	"다음으로 검색 ...",
-							submenu_disabled_text:				"모두 비활성화 됨"
+							context_googlesearchreplace:		"Sök med ...",
+							submenu_disabled:					"Alla funktionshindrade"
 						};
-					default:		//default: english
+					case "th":		// Thai
 						return {
-							context_googlesearchreplace_text:	"Search with ...",
-							submenu_disabled_text:				"All disabled"
+							context_googlesearchreplace:		"ค้นหาด้วย ...",
+							submenu_disabled:					"ปิดใช้งานทั้งหมด"
+						};
+					case "tr":		// Turkish
+						return {
+							context_googlesearchreplace:		"Şununla ara ...",
+							submenu_disabled:					"Hepsi devre dışı"
+						};
+					case "uk":		// Ukrainian
+						return {
+							context_googlesearchreplace:		"Шукати за допомогою ...",
+							submenu_disabled:					"Всі інваліди"
+						};
+					case "vi":		// Vietnamese
+						return {
+							context_googlesearchreplace:		"Tìm kiếm với ...",
+							submenu_disabled:					"Tất cả đã bị vô hiệu hóa"
+						};
+					case "zh":		// Chinese
+						return {
+							context_googlesearchreplace:		"用 ... 搜索",
+							submenu_disabled:					"全部禁用"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							context_googlesearchreplace:		"用 ... 搜索",
+							submenu_disabled:					"全部禁用"
+						};
+					default:		// English
+						return {
+							context_googlesearchreplace:		"Search with ...",
+							submenu_disabled:					"All disabled"
 						};
 				}
 			}

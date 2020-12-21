@@ -218,7 +218,7 @@ module.exports = (_ => {
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "spellcheck"),
 							children: [
 								BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-									label: this.labels.context_spellcheck_text,
+									label: this.labels.context_spellcheck,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "add-to-spellcheck"),
 									hint: _ => {
 										return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
@@ -231,7 +231,7 @@ module.exports = (_ => {
 								}),
 								BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSeparator, {}),
 								!similarWords.length ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-									label: this.labels.context_nosimilarwords_text,
+									label: this.labels.context_nosimilarwords,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "no-suggestions"),
 									disabled: true
 								}) : similarWords.sort().map(suggestion => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -321,7 +321,7 @@ module.exports = (_ => {
 						if (!ownDictionary.includes(wordLow)) {
 							ownDictionary.push(wordLow);
 							BDFDB.DataUtils.save(ownDictionary, this, "owndics", choices.dictionaryLanguage);
-							BDFDB.NotificationUtils.toast(this.labels.toast_wordadd_text.replace("${word}", word).replace("${dicName}", this.getLanguageName(languages[choices.dictionaryLanguage])), {type: "success"});
+							BDFDB.NotificationUtils.toast(this.labels.toast_wordadd.replace("{{word}}", word).replace("{{dicName}}", this.getLanguageName(languages[choices.dictionaryLanguage])), {type: "success"});
 							dictionaries.dictionaryLanguage = this.formatDictionary(langDictionaries.dictionaryLanguage.concat(ownDictionary));
 						}
 					}
@@ -458,131 +458,167 @@ module.exports = (_ => {
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "hr":		//croatian
+					case "bg":		// Bulgarian
 						return {
-							context_spellcheck_text:				"Dodaj u rječnik",
-							context_nosimilarwords_text:			"Nema sličnih riječi",
-							toast_wordadd_text:						"Riječ ${word} dodana je u rječnik ${dicName}."
+							context_nosimilarwords:				"Няма подобни думи",
+							context_spellcheck:					"Добавяне към речника",
+							toast_wordadd:						"Думата '{{word}}' е добавена към речника '{{dicName}}'."
 						};
-					case "da":		//danish
+					case "da":		// Danish
 						return {
-							context_spellcheck_text:				"Tilføj til ordbog",
-							context_nosimilarwords_text:			"Ingen lignende ord",
-							toast_wordadd_text:						"Ord ${word} tilføjet til ordbog ${dicName}."
+							context_nosimilarwords:				"Ingen lignende ord",
+							context_spellcheck:					"Føj til ordbog",
+							toast_wordadd:						"Ordet '{{word}}' blev føjet til ordbogen '{{dicName}}'."
 						};
-					case "de":		//german
+					case "de":		// German
 						return {
-							context_spellcheck_text:				"Zum Wörterbuch hinzufügen",
-							context_nosimilarwords_text:			"Keine ähnlichen Wörter",
-							toast_wordadd_text:						"Wort ${word} wurde zum Wörterbuch ${dicName} hinzugefügt."
+							context_nosimilarwords:				"Keine ähnlichen Wörter",
+							context_spellcheck:					"Zum Wörterbuch hinzufügen",
+							toast_wordadd:						"Wort '{{word}}' zum Wörterbuch '{{dicName}}' hinzugefügt."
 						};
-					case "es":		//spanish
+					case "el":		// Greek
 						return {
-							context_spellcheck_text:				"Agregar al diccionario",
-							context_nosimilarwords_text:			"No hay palabras similares",
-							toast_wordadd_text:						"Se agregó la palabra ${word} al diccionario ${dicName}."
+							context_nosimilarwords:				"Δεν υπάρχουν παρόμοιες λέξεις",
+							context_spellcheck:					"Προσθήκη στο λεξικό",
+							toast_wordadd:						"Προστέθηκε η λέξη '{{word}}' στο λεξικό '{{dicName}}'."
 						};
-					case "fr":		//french
+					case "es":		// Spanish
 						return {
-							context_spellcheck_text:				"Ajouter au dictionnaire",
-							context_nosimilarwords_text:			"Pas de mots similaires",
-							toast_wordadd_text:						"Le mot ${word} a été ajouté au dictionnaire ${dicName}."
+							context_nosimilarwords:				"No hay palabras similares",
+							context_spellcheck:					"Agregar al diccionario",
+							toast_wordadd:						"Se agregó la palabra '{{word}}' al diccionario '{{dicName}}'."
 						};
-					case "it":		//italian
+					case "fi":		// Finnish
 						return {
-							context_spellcheck_text:				"Aggiungi al dizionario",
-							context_nosimilarwords_text:			"Nessuna parola simile",
-							toast_wordadd_text:						"Parola ${word} aggiunta al dizionario ${dicName}."
+							context_nosimilarwords:				"Ei vastaavia sanoja",
+							context_spellcheck:					"Lisää sanakirjaan",
+							toast_wordadd:						"Sana '{{word}}' lisättiin sanakirjaan '{{dicName}}'."
 						};
-					case "nl":		//dutch
+					case "fr":		// French
 						return {
-							context_spellcheck_text:				"Toevoegen aan woordenboek",
-							context_nosimilarwords_text:			"Geen vergelijkbare woorden",
-							toast_wordadd_text:						"Word ${word} toegevoegd aan woordenboek ${dicName}."
+							context_nosimilarwords:				"Pas de mots similaires",
+							context_spellcheck:					"Ajouter au dictionnaire",
+							toast_wordadd:						"Mot '{{word}}' ajouté au dictionnaire '{{dicName}}'."
 						};
-					case "no":		//norwegian
+					case "hr":		// Croatian
 						return {
-							context_spellcheck_text:				"Legg til i ordbok",
-							context_nosimilarwords_text:			"Ingen lignende ord",
-							toast_wordadd_text:						"Ord ${word} legges til ordbok ${dicName}."
+							context_nosimilarwords:				"Nema sličnih riječi",
+							context_spellcheck:					"Dodaj u rječnik",
+							toast_wordadd:						"Riječ '{{word}}' dodana je u rječnik '{{dicName}}'."
 						};
-					case "pl":		//polish
+					case "hu":		// Hungarian
 						return {
-							context_spellcheck_text:				"Dodaj do słownika",
-							context_nosimilarwords_text:			"Brak podobnych słów",
-							toast_wordadd_text:						"Słowo ${word} dodane do słownika ${dicName}."
+							context_nosimilarwords:				"Nincsenek hasonló szavak",
+							context_spellcheck:					"Hozzáadás a szótárhoz",
+							toast_wordadd:						"A '{{word}}' szó hozzáadva a '{{dicName}}' szótárhoz."
 						};
-					case "pt-BR":	//portuguese (brazil)
+					case "it":		// Italian
 						return {
-							context_spellcheck_text:				"Adicionar ao dicionário",
-							context_nosimilarwords_text:			"Sem palavras semelhantes",
-							toast_wordadd_text:						"Palavra ${word} adicionado ao dicionário ${dicName}."
+							context_nosimilarwords:				"Nessuna parola simile",
+							context_spellcheck:					"Aggiungi al dizionario",
+							toast_wordadd:						"Parola '{{word}}' aggiunta al dizionario '{{dicName}}'."
 						};
-					case "fi":		//finnish
+					case "ja":		// Japanese
 						return {
-							context_spellcheck_text:				"Lisää sanakirjaan",
-							context_nosimilarwords_text:			"Ei vastaavia sanoja",
-							toast_wordadd_text:						"Sana ${word} lisättiin sanakirjaan ${dicName}."
+							context_nosimilarwords:				"同様の言葉はありません",
+							context_spellcheck:					"辞書に追加",
+							toast_wordadd:						"単語'{{word}}'が辞書'{{dicName}}'に追加されました。"
 						};
-					case "sv":		//swedish
+					case "ko":		// Korean
 						return {
-							context_spellcheck_text:				"Lägg till i ordbok",
-							context_nosimilarwords_text:			"Inga liknande ord",
-							toast_wordadd_text:						"Ord ${word} läggs till ordbok ${dicName}."
+							context_nosimilarwords:				"유사한 단어 없음",
+							context_spellcheck:					"사전에 추가",
+							toast_wordadd:						"단어 '{{word}}'이 '{{dicName}}' 사전에 추가되었습니다."
 						};
-					case "tr":		//turkish
+					case "lt":		// Lithuanian
 						return {
-							context_spellcheck_text:				"Sözlükye Ekle",
-							context_nosimilarwords_text:			"Benzer kelime yoktur",
-							toast_wordadd_text:						"Sözcük ${word} sözlük ${dicName}'ye eklendi."
+							context_nosimilarwords:				"Jokių panašių žodžių",
+							context_spellcheck:					"Pridėti prie žodyno",
+							toast_wordadd:						"Žodis '{{word}}' pridėtas prie žodyno '{{dicName}}'."
 						};
-					case "cs":		//czech
+					case "nl":		// Dutch
 						return {
-							context_spellcheck_text:				"Přidat do slovníku",
-							context_nosimilarwords_text:			"Žádné podobné slova",
-							toast_wordadd_text:						"Slovo ${word} bylo přidáno do slovníku ${dicName}."
+							context_nosimilarwords:				"Geen vergelijkbare woorden",
+							context_spellcheck:					"Toevoegen aan woordenboek",
+							toast_wordadd:						"Woord '{{word}}' toegevoegd aan woordenboek '{{dicName}}'."
 						};
-					case "bg":		//bulgarian
+					case "no":		// Norwegian
 						return {
-							context_spellcheck_text:				"Добави в речника",
-							context_nosimilarwords_text:			"Няма подобни думи",
-							toast_wordadd_text:						"Думата ${word} е добавена към речника ${dicName}."
+							context_nosimilarwords:				"Ingen lignende ord",
+							context_spellcheck:					"Legg til ordbok",
+							toast_wordadd:						"Ordet '{{word}}' ble lagt til ordboken '{{dicName}}'."
 						};
-					case "ru":		//russian
+					case "pl":		// Polish
 						return {
-							context_spellcheck_text:				"Добавить в словарь",
-							context_nosimilarwords_text:			"Нет похожих слов",
-							toast_wordadd_text:						"Слово ${word} добавлено в словарь ${dicName}."
+							context_nosimilarwords:				"Brak podobnych słów",
+							context_spellcheck:					"Dodaj do słownika",
+							toast_wordadd:						"Słowo '{{word}}' zostało dodane do słownika '{{dicName}}'."
 						};
-					case "uk":		//ukrainian
+					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							context_spellcheck_text:				"Додати до словника",
-							context_nosimilarwords_text:			"Немає подібних слів",
-							toast_wordadd_text:						"Словник ${word} додається до словника ${dicName}."
+							context_nosimilarwords:				"Sem palavras semelhantes",
+							context_spellcheck:					"Adicionar ao Dicionário",
+							toast_wordadd:						"Palavra '{{word}}' adicionada ao dicionário '{{dicName}}'."
 						};
-					case "ja":		//japanese
+					case "ro":		// Romanian
 						return {
-							context_spellcheck_text:				"辞書に追加",
-							context_nosimilarwords_text:			"類似の単語はありません",
-							toast_wordadd_text:						"単語 ${word} が辞書 ${dicName} に追加されました。"
+							context_nosimilarwords:				"Fără cuvinte similare",
+							context_spellcheck:					"Adăugați la dicționar",
+							toast_wordadd:						"Cuvântul '{{word}}' a fost adăugat în dicționar '{{dicName}}'."
 						};
-					case "zh-TW":	//chinese (traditional)
+					case "ru":		// Russian
 						return {
-							context_spellcheck_text:				"添加到詞典",
-							context_nosimilarwords_text:			"沒有類似的詞",
-							toast_wordadd_text:						"單詞 ${word} 添加到字典 ${dicName}。"
+							context_nosimilarwords:				"Нет похожих слов",
+							context_spellcheck:					"Добавить в словарь",
+							toast_wordadd:						"Слово '{{word}}' добавлено в словарь '{{dicName}}'."
 						};
-					case "ko":		//korean
+					case "sv":		// Swedish
 						return {
-							context_spellcheck_text:				"사전에 추가",
-							context_nosimilarwords_text:			"유사한 단어 없음",
-							toast_wordadd_text:						"단어 ${word} 사전 ${dicName} 에 추가되었습니다."
+							context_nosimilarwords:				"Inga liknande ord",
+							context_spellcheck:					"Lägg till ordbok",
+							toast_wordadd:						"Ordet '{{word}}' har lagts till i ordboken '{{dicName}}'."
 						};
-					default:		//default: english
+					case "th":		// Thai
 						return {
-							context_spellcheck_text:				"Add to Dictionary",
-							context_nosimilarwords_text:			"No similar Words",
-							toast_wordadd_text:						"Word ${word} added to dictionary ${dicName}."
+							context_nosimilarwords:				"ไม่มีคำที่คล้ายกัน",
+							context_spellcheck:					"เพิ่มในพจนานุกรม",
+							toast_wordadd:						"เพิ่มคำ '{{word}}' ในพจนานุกรม '{{dicName}}' แล้ว"
+						};
+					case "tr":		// Turkish
+						return {
+							context_nosimilarwords:				"Benzer kelime yok",
+							context_spellcheck:					"Sözlüğe Ekle",
+							toast_wordadd:						"'{{word}}' kelimesi, '{{dicName}}' sözlüğüne eklendi."
+						};
+					case "uk":		// Ukrainian
+						return {
+							context_nosimilarwords:				"Немає подібних слів",
+							context_spellcheck:					"Додати до словника",
+							toast_wordadd:						"Слово '{{word}}' додано до словника '{{dicName}}'."
+						};
+					case "vi":		// Vietnamese
+						return {
+							context_nosimilarwords:				"Không có từ tương tự",
+							context_spellcheck:					"Thêm vào từ điển",
+							toast_wordadd:						"Đã thêm từ '{{word}}' vào từ điển '{{dicName}}'."
+						};
+					case "zh":		// Chinese
+						return {
+							context_nosimilarwords:				"没有类似的词",
+							context_spellcheck:					"添加到字典",
+							toast_wordadd:						"将单词'{{word}}'添加到字典'{{dicName}}'中。"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							context_nosimilarwords:				"沒有類似的詞",
+							context_spellcheck:					"添加到字典",
+							toast_wordadd:						"將單詞'{{word}}'添加到字典'{{dicName}}'中。"
+						};
+					default:		// English
+						return {
+							context_nosimilarwords:				"No similar Words",
+							context_spellcheck:					"Add to Dictionary",
+							toast_wordadd:						"Word '{{word}}' added to dictionary '{{dicName}}'."
 						};
 				}
 			}

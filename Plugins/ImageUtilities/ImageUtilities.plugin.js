@@ -139,7 +139,7 @@ module.exports = (_ => {
 					},
 					zoomSettings: {
 						zoomlevel:				{value: 2,		digits: 1,			minValue: 1,	maxValue: 20,		unit: "x",	label: "ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
-						lensesize:				{value: 200,	digits: 0,			minValue: 50, 	maxValue: 5000,		unit: "px",	label: "context_lenssize_text"}
+						lensesize:				{value: 200,	digits: 0,			minValue: 50, 	maxValue: 5000,		unit: "px",	label: "context_lenssize"}
 					},
 					engines: {
 						_all: 		{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url: null},
@@ -522,7 +522,7 @@ module.exports = (_ => {
 				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: "Image Utilities",
+						label: BDFDB.LanguageUtils.LanguageStrings.IMAGE,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-subitem"),
 						children: validUrls.length == 1 ? this.createUrlMenu(e, validUrls[0].url) : validUrls.map((urlData, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: urlData.type.toUpperCase(),
@@ -539,7 +539,7 @@ module.exports = (_ => {
 				let locations = Object.keys(ownLocations).filter(n => ownLocations[n].enabled);
 				return [
 					BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.labels.context_viewimage_text,
+						label: this.labels.context_viewimage,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "view-image"),
 						action: _ => {
 							let img = new Image();
@@ -566,7 +566,7 @@ module.exports = (_ => {
 						}
 					}),
 					BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.labels.context_saveimageas_text,
+						label: this.labels.context_saveimageas,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "download-image-as"),
 						action: _ => {
 							this.downloadImageAs(url);
@@ -582,14 +582,14 @@ module.exports = (_ => {
 						})
 					}),
 					!this.isCopyable(url) ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.labels.context_copyimage_text,
+						label: this.labels.context_copyimage,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-image"),
 						action: _ => {
 							this.copyImage(url);
 						}
 					}),
 					BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.labels.context_copyimagelink_text,
+						label: this.labels.context_copyimagelink,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-src"),
 						action: _ => {
 							BDFDB.LibraryRequires.electron.clipboard.write({text: url});
@@ -597,7 +597,7 @@ module.exports = (_ => {
 						}
 					}),
 					!this.isSearchable(url) ? null : engineKeys.length == 1 ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.labels.context_reverseimagesearch_text.replace("...", this.defaults.engines[engineKeys[0]].name),
+						label: this.labels.context_reverseimagesearch.replace("...", this.defaults.engines[engineKeys[0]].name),
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "single-search"),
 						persisting: true,
 						action: event => {
@@ -605,10 +605,10 @@ module.exports = (_ => {
 							BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(imgUrlReplaceString, encodeURIComponent(url)), settings.useChromium, event.shiftKey);
 						}
 					}) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.labels.context_reverseimagesearch_text,
+						label: this.labels.context_reverseimagesearch,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-search"),
 						children: !engineKeys.length ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: this.labels.submenu_disabled_text,
+							label: this.labels.submenu_disabled,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "disabled"),
 							disabled: true
 						}) : Object.keys(enabledEngines).map(key => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -670,7 +670,7 @@ module.exports = (_ => {
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
 										className: BDFDB.disCN.downloadlink, 
-										children: this.labels.context_saveimageas_text,
+										children: this.labels.context_saveimageas,
 										onClick: event => {
 											BDFDB.ListenerUtils.stopEvent(event);
 											this.downloadImageAs(url);
@@ -697,7 +697,7 @@ module.exports = (_ => {
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
 										className: BDFDB.disCN.downloadlink, 
-										children: this.labels.context_copyimage_text,
+										children: this.labels.context_copyimage,
 										onClick: event => {
 											BDFDB.ListenerUtils.stopEvent(event);
 											this.copyImage(url);
@@ -1113,320 +1113,410 @@ module.exports = (_ => {
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					case "hr":		//croatian
+					case "bg":		// Bulgarian
 						return {
-							toast_copyimage_success:			"Kopirana je slika u međuspremnik",
-							toast_copyimage_failed:				"Kopiranje slike u međuspremnik nije uspjelo",
-							toast_copyimagelink_success:		"Kopirana slika povezana na međuspremnik",
-							toast_saveimage_success:			"Slika je spremljena u '{{path}}'",
-							toast_saveimage_failed:				"Spremanje slike na '{{path}}' nije uspjelo",
-							context_viewimage_text:				"Pogledati sliku",
-							context_saveimageas_text:			"Spremi sliku kao ...",
-							context_copyimage_text:				"Kopiraj sliku",
-							context_copyimagelink_text:			"Kopirajte vezu slike",
-							context_reverseimagesearch_text:	"Traži sliku ...",
-							context_lenssize_text:				"Veličina leće",
-							submenu_disabled_text:				"Svi su onemogućeni"
-						};
-					case "da":		//danish
-						return {
-							toast_copyimage_success:			"Kopieret billede til udklipsholder",
-							toast_copyimage_failed:				"Kunne ikke kopiere billedet til udklipsholderen",
-							toast_copyimagelink_success:		"Kopieret billedlink til udklipsholder",
-							toast_saveimage_success:			"Billedet er gemt i '{{path}}'",
-							toast_saveimage_failed:				"Kunne ikke gemme billedet i '{{path}}'",
-							context_viewimage_text:				"Se billede",
-							context_saveimageas_text:			"Gem billede som ...",
-							context_copyimage_text:				"Kopier billede",
-							context_copyimagelink_text:			"Kopier billedlink",
-							context_reverseimagesearch_text:	"Søg billede med ...",
-							context_lenssize_text:				"Linsestørrelse",
-							submenu_disabled_text:				"Alle deaktiveret"
-						};
-					case "de":		//german
-						return {
-							toast_copyimage_success:			"Bild in Zwischenablage kopiert",
-							toast_copyimage_failed:				"Bild konnte nicht in die Zwischenablage kopiert werden",
-							toast_copyimagelink_success:		"Bildadresse in Zwischenablage kopiert",
-							toast_saveimage_success:			"Bild wurde in '{{path}}' gespeichert",
-							toast_saveimage_failed:				"Bild konnte nicht in '{{path}}' gespeichert werden",
-							context_viewimage_text:				"Bild ansehen",
-							context_saveimageas_text:			"Bild speichern unter ...",
-							context_copyimage_text:				"Bild kopieren",
-							context_copyimagelink_text:			"Bildadresse kopieren",
-							context_reverseimagesearch_text:	"Bild suchen mit ...",
-							context_lenssize_text:				"Linsengröße",
-							submenu_disabled_text:				"Alle deaktiviert"
-						};
-					case "es":		//spanish
-						return {
-							toast_copyimage_success:			"Imagen copiada al portapapeles",
-							toast_copyimage_failed:				"No se pudo copiar la imagen al portapapeles",
-							toast_copyimagelink_success:		"Enlace de imagen copiado al portapapeles",
-							toast_saveimage_success:			"Imagen guardada en '{{path}}'",
-							toast_saveimage_failed:				"No se pudo guardar la imagen en '{{path}}'",
-							context_viewimage_text:				"Ver imagen",
-							context_saveimageas_text:			"Guardar imagen como ...",
-							context_copyimage_text:				"Copiar imagen",
-							context_copyimagelink_text:			"Copiar enlace de imagen",
-							context_reverseimagesearch_text:	"Buscar imagen con ...",
-							context_lenssize_text:				"Tamaño de la lente",
-							submenu_disabled_text:				"Todo desactivado"
-						};
-					case "fr":		//french
-						return {
-							toast_copyimage_success:			"Image copiée dans le presse-papiers",
-							toast_copyimage_failed:				"Échec de la copie de l'image dans le presse-papiers",
-							toast_copyimagelink_success:		"Lien d'image copié dans le presse-papiers",
-							toast_saveimage_success:			"Image enregistrée dans '{{path}}'",
-							toast_saveimage_failed:				"Échec de l'enregistrement de l'image dans '{{path}}'",
-							context_viewimage_text:				"Voir l'image",
-							context_saveimageas_text:			"Enregistrer l'image sous ...",
-							context_copyimage_text:				"Copier l'image",
-							context_copyimagelink_text:			"Copier le lien de l'image",
-							context_reverseimagesearch_text:	"Rechercher une image avec ...",
-							context_lenssize_text:				"Taille de la lentille",
-							submenu_disabled_text:				"Tous désactivés"
-						};
-					case "it":		//italian
-						return {
-							toast_copyimage_success:			"Immagine copiata negli appunti",
-							toast_copyimage_failed:				"Impossibile copiare l'immagine negli appunti",
-							toast_copyimagelink_success:		"Collegamento dell'immagine copiato negli appunti",
-							toast_saveimage_success:			"Immagine salvata in '{{path}}'",
-							toast_saveimage_failed:				"Impossibile salvare l'immagine in '{{path}}'",
-							context_viewimage_text:				"Guarda l'immagine",
-							context_saveimageas_text:			"Salva l'immagine come ...",
-							context_copyimage_text:				"Copia l'immagine",
-							context_copyimagelink_text:			"Copia link immagine",
-							context_reverseimagesearch_text:	"Cerca immagine con ...",
-							context_lenssize_text:				"Dimensione dell'obiettivo",
-							submenu_disabled_text:				"Tutto disattivato"
-						};
-					case "nl":		//dutch
-						return {
-							toast_copyimage_success:			"Gekopieerde afbeelding naar klembord",
-							toast_copyimage_failed:				"Kan afbeelding niet naar klembord kopiëren",
-							toast_copyimagelink_success:		"Gekopieerde afbeeldingslink naar klembord",
-							toast_saveimage_success:			"Afbeelding opgeslagen in '{{path}}'",
-							toast_saveimage_failed:				"Kan afbeelding niet opslaan in '{{path}}'",
-							context_viewimage_text:				"Bekijk afbeelding",
-							context_saveimageas_text:			"Sla afbeelding op als ...",
-							context_copyimage_text:				"Kopieer afbeelding",
-							context_copyimagelink_text:			"Kopieer afbeeldingslink",
-							context_reverseimagesearch_text:	"Afbeelding zoeken met ...",
-							context_lenssize_text:				"Lensgrootte",
-							submenu_disabled_text:				"Alles gedeactiveerd"
-						};
-					case "no":		//norwegian
-						return {
-							toast_copyimage_success:			"Kopiert bilde til utklippstavlen",
-							toast_copyimage_failed:				"Kunne ikke kopiere bildet til utklippstavlen",
-							toast_copyimagelink_success:		"Kopiert bildelink til utklippstavlen",
-							toast_saveimage_success:			"Bilde lagret i '{{path}}'",
-							toast_saveimage_failed:				"Kunne ikke lagre bildet i '{{path}}'",
-							context_viewimage_text:				"Vis bilde",
-							context_saveimageas_text:			"Lagre bildet som ...",
-							context_copyimage_text:				"Kopier bilde",
-							context_copyimagelink_text:			"Kopier bildelink",
-							context_reverseimagesearch_text:	"Søk på bilde med ...",
-							context_lenssize_text:				"Linsestørrelse",
-							submenu_disabled_text:				"Alle deaktivert"
-						};
-					case "pl":		//polish
-						return {
-							toast_copyimage_success:			"Skopiowany obraz do schowka",
-							toast_copyimage_failed:				"Nie udało się skopiować obrazu do schowka",
-							toast_copyimagelink_success:		"Link do skopiowanego obrazu do schowka",
-							toast_saveimage_success:			"Obraz zapisany w '{{path}}'",
-							toast_saveimage_failed:				"Nie udało się zapisać obrazu w '{{path}}'",
-							context_viewimage_text:				"Zobacz obraz",
-							context_saveimageas_text:			"Zapisz obraz jako ...",
-							context_copyimage_text:				"Skopiuj obraz",
-							context_copyimagelink_text:			"Kopiuj łącze do obrazu",
-							context_reverseimagesearch_text:	"Wyszukaj obraz za pomocą ...",
-							context_lenssize_text:				"Rozmiar obiektywu",
-							submenu_disabled_text:				"Wszystkie wyłączone"
-						};
-					case "pt-BR":	//portuguese (brazil)
-						return {
-							toast_copyimage_success:			"Imagem copiada para a área de transferência",
-							toast_copyimage_failed:				"Falha ao copiar imagem para a área de transferência",
-							toast_copyimagelink_success:		"Link da imagem copiada para a área de transferência",
-							toast_saveimage_success:			"Imagem salva em '{{path}}'",
-							toast_saveimage_failed:				"Falha ao salvar imagem em '{{path}}'",
-							context_viewimage_text:				"Ver imagem",
-							context_saveimageas_text:			"Salvar imagem como ...",
-							context_copyimage_text:				"Copiar imagem",
-							context_copyimagelink_text:			"Copiar link da imagem",
-							context_reverseimagesearch_text:	"Pesquisar imagem com ...",
-							context_lenssize_text:				"Tamanho da lente",
-							submenu_disabled_text:				"Todos desativados"
-						};
-					case "fi":		//finnish
-						return {
-							toast_copyimage_success:			"Kopioitu kuva leikepöydälle",
-							toast_copyimage_failed:				"Kuvan kopiointi leikepöydälle epäonnistui",
-							toast_copyimagelink_success:		"Kopioitu kuvan linkki leikepöydälle",
-							toast_saveimage_success:			"Kuva tallennettu '{{path}}'",
-							toast_saveimage_failed:				"Kuvan tallentaminen epäonnistui '{{path}}'",
-							context_viewimage_text:				"Näytä kuva",
-							context_saveimageas_text:			"Tallenna kuva nimellä ...",
-							context_copyimage_text:				"Kopioi kuva",
-							context_copyimagelink_text:			"Kopioi kuvan linkki",
-							context_reverseimagesearch_text:	"Hae kuvaa ...",
-							context_lenssize_text:				"Linssin koko",
-							submenu_disabled_text:				"Kaikki on poistettu käytöstä"
-						};
-					case "sv":		//swedish
-						return {
-							toast_copyimage_success:			"Kopierad bild till urklipp",
-							toast_copyimage_failed:				"Det gick inte att kopiera bilden till urklipp",
-							toast_copyimagelink_success:		"Kopierad bildlänk till urklipp",
-							toast_saveimage_success:			"Bild sparad i '{{path}}'",
-							toast_saveimage_failed:				"Det gick inte att spara bilden i '{{path}}'",
-							context_viewimage_text:				"Se bild",
-							context_saveimageas_text:			"Spara bild som ...",
-							context_copyimage_text:				"Kopiera bild",
-							context_copyimagelink_text:			"Kopiera bildlänk",
-							context_reverseimagesearch_text:	"Sök bild med ...",
-							context_lenssize_text:				"Linsstorlek",
-							submenu_disabled_text:				"Alla avaktiverade"
-						};
-					case "tr":		//turkish
-						return {
-							toast_copyimage_success:			"Görüntü panoya kopyalandı",
-							toast_copyimage_failed:				"Görüntü panoya kopyalanamadı",
-							toast_copyimagelink_success:		"Görsel bağlantısı panoya kopyalandı",
-							toast_saveimage_success:			"Resim '{{path}}' konumuna kaydedildi",
-							toast_saveimage_failed:				"'{{path}}' konumuna resim kaydedilemedi",
-							context_viewimage_text:				"Resmi görüntüle",
-							context_saveimageas_text:			"Resmi farklı kaydet ...",
-							context_copyimage_text:				"Resmi kopyala",
-							context_copyimagelink_text:			"Görüntü Bağlantısını kopyala",
-							context_reverseimagesearch_text:	"Görüntüyü şununla ara ...",
-							context_lenssize_text:				"Lens boyutu",
-							submenu_disabled_text:				"Hepsi deaktive"
-						};
-					case "cs":		//czech
-						return {
-							toast_copyimage_success:			"Zkopírován obrázek do schránky",
-							toast_copyimage_failed:				"Nepodařilo se kopírovat obrázek do schránky",
-							toast_copyimagelink_success:		"Odkaz na zkopírovaný obrázek do schránky",
-							toast_saveimage_success:			"Obrázek uložený v '{{path}}'",
-							toast_saveimage_failed:				"Nepodařilo se uložit obrázek do '{{path}}'",
-							context_viewimage_text:				"Zobrazit obrázek",
-							context_saveimageas_text:			"Uložit obrázek jako ...",
-							context_copyimage_text:				"Kopírovat obrázek",
-							context_copyimagelink_text:			"Kopírovat odkaz na obrázek",
-							context_reverseimagesearch_text:	"Vyhledat obrázek pomocí ...",
-							context_lenssize_text:				"Velikost objektivu",
-							submenu_disabled_text:				"Všechny deaktivované"
-						};
-					case "bg":		//bulgarian
-						return {
+							context_copyimage:					"Копирай изображение",
+							context_copyimagelink:				"Копирайте Image Link",
+							context_lenssize:					"Размер на обектива",
+							context_reverseimagesearch:			"Търсене на изображение с ...",
+							context_saveimageas:				"Запазете изображението като ...",
+							context_viewimage:					"Преглед на изображението",
+							submenu_disabled:					"Всички инвалиди",
+							toast_copyimage_failed:				"Копирането на изображението в клипборда не бе успешно",
 							toast_copyimage_success:			"Копирано изображение в клипборда",
-							toast_copyimage_failed:				"Копирането на изображение в буферната памет не бе успешно",
-							toast_copyimagelink_success:		"Копирано изображение за връзка в клипборда",
-							toast_saveimage_success:			"Изображението е запазено в '{{path}}'",
-							toast_saveimage_failed:				"Неуспешно запазване на изображението в '{{path}}'",
-							context_viewimage_text:				"Вижте изображението",
-							context_saveimageas_text:			"Запази изображението като ...",
-							context_copyimage_text:				"Копирай изображение",
-							context_copyimagelink_text:			"Копиране на изображението",
-							context_reverseimagesearch_text:	"Търсене на изображение с ...",
-							context_lenssize_text:				"Размер на обектива",
-							submenu_disabled_text:				"Всички са деактивирани"
+							toast_copyimagelink_success:		"Копирана връзка към изображение в клипборда",
+							toast_saveimage_failed:				"Запазването на изображението в „{{path}}“ не бе успешно",
+							toast_saveimage_success:			"Запазено изображение в „{{path}}“"
 						};
-					case "ru":		//russian
+					case "da":		// Danish
 						return {
-							toast_copyimage_success:			"Изображение скопировано в буфер обмена",
-							toast_copyimage_failed:				"Не удалось скопировать изображение в буфер обмена",
-							toast_copyimagelink_success:		"Ссылка на скопированное изображение в буфер обмена",
-							toast_saveimage_success:			"Изображение сохранено в '{{path}}'",
-							toast_saveimage_failed:				"Не удалось сохранить изображение в '{{path}}'",
-							context_viewimage_text:				"Просмотр изображения",
-							context_saveimageas_text:			"Сохранить изображение как ...",
-							context_copyimage_text:				"Копировать изображение",
-							context_copyimagelink_text:			"Копировать ссылку на изображение",
-							context_reverseimagesearch_text:	"Поиск изображения с ...",
-							context_lenssize_text:				"Размер объектива",
-							submenu_disabled_text:				"Все деактивированные"
+							context_copyimage:					"Kopier billede",
+							context_copyimagelink:				"Kopier billedlink",
+							context_lenssize:					"Objektivstørrelse",
+							context_reverseimagesearch:			"Søg i billede med ...",
+							context_saveimageas:				"Gem billede som ...",
+							context_viewimage:					"Se billede",
+							submenu_disabled:					"Alle handicappede",
+							toast_copyimage_failed:				"Kunne ikke kopiere billedet til udklipsholderen",
+							toast_copyimage_success:			"Kopieret billede til udklipsholderen",
+							toast_copyimagelink_success:		"Kopieret billedlink til udklipsholder",
+							toast_saveimage_failed:				"Kunne ikke gemme billedet i '{{path}}'",
+							toast_saveimage_success:			"Gemt billede i '{{path}}'"
 						};
-					case "uk":		//ukrainian
+					case "de":		// German
 						return {
-							toast_copyimage_success:			"Скопійоване зображення в буфер обміну",
-							toast_copyimage_failed:				"Не вдалося скопіювати зображення в буфер обміну",
-							toast_copyimagelink_success:		"Скопійоване зображення посилання на буфер обміну",
-							toast_saveimage_success:			"Зображення збережено на '{{path}}'",
-							toast_saveimage_failed:				"Не вдалося зберегти зображення на '{{path}}'",
-							context_viewimage_text:				"Переглянути зображення",
-							context_saveimageas_text:			"Зберегти зображення як ...",
-							context_copyimage_text:				"Скопіювати зображення",
-							context_copyimagelink_text:			"Скопіюйте посилання на зображення",
-							context_reverseimagesearch_text:	"Шукати зображення за допомогою ...",
-							context_lenssize_text:				"Розмір об'єктива",
-							submenu_disabled_text:				"Всі вимкнені"
+							context_copyimage:					"Bild kopieren",
+							context_copyimagelink:				"Bildadresse kopieren",
+							context_lenssize:					"Linsengröße",
+							context_reverseimagesearch:			"Bild suchen mit ...",
+							context_saveimageas:				"Bild speichern unter ...",
+							context_viewimage:					"Bild ansehen",
+							submenu_disabled:					"Alle deaktiviert",
+							toast_copyimage_failed:				"Bild konnte nicht in die Zwischenablage kopiert werden",
+							toast_copyimage_success:			"Kopiertes Bild in die Zwischenablage",
+							toast_copyimagelink_success:		"Bildadresse in die Zwischenablage kopieren",
+							toast_saveimage_failed:				"Bild konnte nicht in '{{path}}' gespeichert werden",
+							toast_saveimage_success:			"Bild wurde in '{{path}}' gespeichert"
 						};
-					case "ja":		//japanese
+					case "el":		// Greek
 						return {
-							toast_copyimage_success:			"画像をクリップボードにコピー",
+							context_copyimage:					"Αντιγραφή εικόνας",
+							context_copyimagelink:				"Αντιγραφή συνδέσμου εικόνας",
+							context_lenssize:					"Μέγεθος φακού",
+							context_reverseimagesearch:			"Αναζήτηση εικόνας με ...",
+							context_saveimageas:				"Αποθήκευση εικόνας ως ...",
+							context_viewimage:					"Προβολή εικόνας",
+							submenu_disabled:					"Όλα τα άτομα με ειδικές ανάγκες",
+							toast_copyimage_failed:				"Αποτυχία αντιγραφής εικόνας στο Πρόχειρο",
+							toast_copyimage_success:			"Αντιγράφηκε η εικόνα στο Πρόχειρο",
+							toast_copyimagelink_success:		"Αντιγράφηκε σύνδεσμος εικόνας στο Πρόχειρο",
+							toast_saveimage_failed:				"Αποτυχία αποθήκευσης εικόνας στο "{{path}}"",
+							toast_saveimage_success:			"Αποθηκευμένη εικόνα στο "{{path}}""
+						};
+					case "es":		// Spanish
+						return {
+							context_copyimage:					"Copiar imagen",
+							context_copyimagelink:				"Copiar enlace de imagen",
+							context_lenssize:					"Tamaño de la lente",
+							context_reverseimagesearch:			"Buscar imagen con ...",
+							context_saveimageas:				"Guardar imagen como ...",
+							context_viewimage:					"Ver imagen",
+							submenu_disabled:					"Todos discapacitados",
+							toast_copyimage_failed:				"No se pudo copiar la imagen al portapapeles",
+							toast_copyimage_success:			"Imagen copiada al portapapeles",
+							toast_copyimagelink_success:		"Enlace de imagen copiado al portapapeles",
+							toast_saveimage_failed:				"No se pudo guardar la imagen en '{{ruta}}'",
+							toast_saveimage_success:			"Imagen guardada en '{{ruta}}'"
+						};
+					case "fi":		// Finnish
+						return {
+							context_copyimage:					"Kopioi kuva",
+							context_copyimagelink:				"Kopioi kuvalinkki",
+							context_lenssize:					"Linssin koko",
+							context_reverseimagesearch:			"Hae kuvaa ...",
+							context_saveimageas:				"Tallenna kuva nimellä ...",
+							context_viewimage:					"Näytä kuva",
+							submenu_disabled:					"Kaikki vammaiset",
+							toast_copyimage_failed:				"Kuvan kopioiminen leikepöydälle epäonnistui",
+							toast_copyimage_success:			"Kopioitu kuva leikepöydälle",
+							toast_copyimagelink_success:		"Kopioitu kuvalinkki leikepöydälle",
+							toast_saveimage_failed:				"Kuvan tallentaminen kohteeseen {{path}} epäonnistui",
+							toast_saveimage_success:			"Tallennettu kuva kansioon {{path}}"
+						};
+					case "fr":		// French
+						return {
+							context_copyimage:					"Copier l'image",
+							context_copyimagelink:				"Copier le lien de l'image",
+							context_lenssize:					"Taille de l'objectif",
+							context_reverseimagesearch:			"Rechercher une image avec ...",
+							context_saveimageas:				"Enregistrer l'image sous ...",
+							context_viewimage:					"Voir l'image",
+							submenu_disabled:					"Tout désactivé",
+							toast_copyimage_failed:				"Échec de la copie de l'image dans le presse-papiers",
+							toast_copyimage_success:			"Image copiée dans le presse-papiers",
+							toast_copyimagelink_success:		"Lien d'image copié vers le presse-papiers",
+							toast_saveimage_failed:				"Échec de l'enregistrement de l'image dans «{{path}}»",
+							toast_saveimage_success:			"Image enregistrée dans "{{path}}""
+						};
+					case "hr":		// Croatian
+						return {
+							context_copyimage:					"Kopiraj sliku",
+							context_copyimagelink:				"Kopiraj vezu slike",
+							context_lenssize:					"Veličina leće",
+							context_reverseimagesearch:			"Traži sliku pomoću ...",
+							context_saveimageas:				"Spremi sliku kao ...",
+							context_viewimage:					"Pogledati sliku",
+							submenu_disabled:					"Svi invalidi",
+							toast_copyimage_failed:				"Kopiranje slike u međuspremnik nije uspjelo",
+							toast_copyimage_success:			"Kopirana slika u međuspremnik",
+							toast_copyimagelink_success:		"Veza slike kopirana je u međuspremnik",
+							toast_saveimage_failed:				"Spremanje slike u "{{path}}" nije uspjelo",
+							toast_saveimage_success:			"Spremljena slika na "{{path}}""
+						};
+					case "hu":		// Hungarian
+						return {
+							context_copyimage:					"Képmásolat",
+							context_copyimagelink:				"Képlink másolása",
+							context_lenssize:					"Lencse mérete",
+							context_reverseimagesearch:			"Kép keresése a következővel:",
+							context_saveimageas:				"Kép mentése másként ...",
+							context_viewimage:					"Kép megtekintése",
+							submenu_disabled:					"Minden fogyatékkal él",
+							toast_copyimage_failed:				"Nem sikerült másolni a képet a vágólapra",
+							toast_copyimage_success:			"Kép másolása a vágólapra",
+							toast_copyimagelink_success:		"Képlink linkre másolva a vágólapra",
+							toast_saveimage_failed:				"Nem sikerült menteni a képet a (z) „{{path}}” mappába",
+							toast_saveimage_success:			"Mentett kép itt: „{{path}}”"
+						};
+					case "it":		// Italian
+						return {
+							context_copyimage:					"Copia l'immagine",
+							context_copyimagelink:				"Copia link immagine",
+							context_lenssize:					"Dimensione della lente",
+							context_reverseimagesearch:			"Cerca immagine con ...",
+							context_saveimageas:				"Salva l'immagine come ...",
+							context_viewimage:					"Guarda l'immagine",
+							submenu_disabled:					"Tutti disabilitati",
+							toast_copyimage_failed:				"Impossibile copiare l'immagine negli Appunti",
+							toast_copyimage_success:			"Immagine copiata negli Appunti",
+							toast_copyimagelink_success:		"Collegamento immagine copiato negli Appunti",
+							toast_saveimage_failed:				"Impossibile salvare l'immagine in "{{path}}"",
+							toast_saveimage_success:			"Immagine salvata in "{{path}}""
+						};
+					case "ja":		// Japanese
+						return {
+							context_copyimage:					"画像をコピーする",
+							context_copyimagelink:				"画像リンクをコピー",
+							context_lenssize:					"レンズサイズ",
+							context_reverseimagesearch:			"で画像を検索...",
+							context_saveimageas:				"画像を保存します ...",
+							context_viewimage:					"画像を見る",
+							submenu_disabled:					"すべて無効",
 							toast_copyimage_failed:				"画像をクリップボードにコピーできませんでした",
-							toast_copyimagelink_success:		"クリップボードへの画像リンクのコピー",
-							toast_saveimage_success:			"画像は'{{path}}'に保存されました",
-							toast_saveimage_failed:				"画像を'{{path}}'に保存できませんでした",
-							context_viewimage_text:				"画像を見る",
-							context_saveimageas_text:			"画像を保存します ...",
-							context_copyimage_text:				"画像をコピー",
-							context_copyimagelink_text:			"画像リンクをコピー",
-							context_reverseimagesearch_text:	"で画像を検索 ...",
-							context_lenssize_text:				"レンズサイズ",
-							submenu_disabled_text:				"すべて非アクティブ化"
+							toast_copyimage_success:			"画像をクリップボードにコピー",
+							toast_copyimagelink_success:		"クリップボードへのコピーされた画像リンク",
+							toast_saveimage_failed:				"'{{path}}'に画像を保存できませんでした",
+							toast_saveimage_success:			"'{{path}}'に保存された画像"
 						};
-					case "zh-TW":	//chinese (traditional)
+					case "ko":		// Korean
 						return {
-							toast_copyimage_success:			"複製的圖像到剪貼板",
-							toast_copyimage_failed:				"無法將圖像複製到剪貼板",
-							toast_copyimagelink_success:		"複製的圖像鏈接到剪貼板",
-							toast_saveimage_success:			"圖片保存在'{{path}}'中",
-							toast_saveimage_failed:				"無法將圖像保存到'{{path}}'中",
-							context_viewimage_text:				"看圖片",
-							context_saveimageas_text:			"將圖像另存為...",
-							context_copyimage_text:				"複製圖片",
-							context_copyimagelink_text:			"複製圖像鏈接",
-							context_lenssize_text:				"鏡片尺寸",
-							context_reverseimagesearch_text:	"搜尋圖片...",
-							submenu_disabled_text:				"全部停用"
-						};
-					case "ko":		//korean
-						return {
+							context_copyimage:					"복사 이미지",
+							context_copyimagelink:				"이미지 링크 복사",
+							context_lenssize:					"렌즈 크기",
+							context_reverseimagesearch:			"이미지 검색 ...",
+							context_saveimageas:				"다른 이름으로 이미지 저장 ...",
+							context_viewimage:					"이미지보기",
+							submenu_disabled:					"모두 비활성화 됨",
+							toast_copyimage_failed:				"이미지를 클립 보드로 복사하지 못했습니다.",
 							toast_copyimage_success:			"클립 보드에 복사 된 이미지",
-							toast_copyimage_failed:				"이미지를 클립 보드로 복사하지 못했습니다",
 							toast_copyimagelink_success:		"클립 보드에 복사 된 이미지 링크",
-							toast_saveimage_success:			"'{{path}}'에 저장된 이미지",
-							toast_saveimage_failed:				"'{{path}}'에 이미지를 저장하지 못했습니다",
-							context_viewimage_text:				"이미지보기",
-							context_saveimageas_text:			"다른 이름으로 이미지 저장 ...",
-							context_copyimage_text:				"복사 이미지",
-							context_copyimagelink_text:			"이미지 링크 복사",
-							context_reverseimagesearch_text:	"로 이미지 검색 ...",
-							context_lenssize_text:				"렌즈 크기",
-							submenu_disabled_text:				"모두 비활성화 됨"
+							toast_saveimage_failed:				"'{{path}}'에 이미지를 저장하지 못했습니다.",
+							toast_saveimage_success:			"'{{path}}'에 저장된 이미지"
 						};
-					default:		//default: english
+					case "lt":		// Lithuanian
 						return {
-							toast_copyimage_success:			"Copied image to clipboard",
-							toast_copyimage_failed:				"Failed to copy image to clipboard",
-							toast_copyimagelink_success:		"Copied image link to clipboard",
-							toast_saveimage_success:			"Saved image in '{{path}}'",
-							toast_saveimage_failed:				"Failed to save image in '{{path}}'",
-							context_viewimage_text:				"View Image",
-							context_saveimageas_text:			"Save Image as ...",
-							context_copyimage_text:				"Copy Image",
-							context_copyimagelink_text:			"Copy Image Link",
-							context_reverseimagesearch_text:	"Search Image with ...",
-							context_lenssize_text:				"Lens Size",
-							submenu_disabled_text:				"All disabled"
+							context_copyimage:					"Kopijuoti paveiksliuką",
+							context_copyimagelink:				"Kopijuoti vaizdo nuorodą",
+							context_lenssize:					"Objektyvo dydis",
+							context_reverseimagesearch:			"Ieškoti vaizde su ...",
+							context_saveimageas:				"Išsaugoti paveikslėlį kaip ...",
+							context_viewimage:					"Peržiūrėti Nuotrauka",
+							submenu_disabled:					"Visi neįgalūs",
+							toast_copyimage_failed:				"Nepavyko nukopijuoti vaizdo į iškarpinę",
+							toast_copyimage_success:			"Nukopijuotas vaizdas į mainų sritį",
+							toast_copyimagelink_success:		"Nukopijuota vaizdo nuoroda į iškarpinę",
+							toast_saveimage_failed:				"Nepavyko išsaugoti vaizdo „{{path}}“",
+							toast_saveimage_success:			"Išsaugotas vaizdas „{{path}}“"
+						};
+					case "nl":		// Dutch
+						return {
+							context_copyimage:					"Kopieer afbeelding",
+							context_copyimagelink:				"Kopieer afbeeldingslink",
+							context_lenssize:					"Lens Maat",
+							context_reverseimagesearch:			"Zoek afbeelding met ...",
+							context_saveimageas:				"Sla afbeelding op als ...",
+							context_viewimage:					"Bekijk afbeelding",
+							submenu_disabled:					"Allemaal uitgeschakeld",
+							toast_copyimage_failed:				"Het kopiëren van de afbeelding naar het klembord is mislukt",
+							toast_copyimage_success:			"Gekopieerde afbeelding naar klembord",
+							toast_copyimagelink_success:		"Gekopieerde afbeeldingslink naar het klembord",
+							toast_saveimage_failed:				"Kan afbeelding niet opslaan in '{{path}}'",
+							toast_saveimage_success:			"Opgeslagen afbeelding in '{{path}}'"
+						};
+					case "no":		// Norwegian
+						return {
+							context_copyimage:					"Kopier bilde",
+							context_copyimagelink:				"Kopier bildelink",
+							context_lenssize:					"Linsestørrelse",
+							context_reverseimagesearch:			"Søk i bilde med ...",
+							context_saveimageas:				"Lagre bildet som ...",
+							context_viewimage:					"Vis bilde",
+							submenu_disabled:					"Alle funksjonshemmede",
+							toast_copyimage_failed:				"Kunne ikke kopiere bildet til utklippstavlen",
+							toast_copyimage_success:			"Kopiert bilde til utklippstavlen",
+							toast_copyimagelink_success:		"Kopiert bildekobling til utklippstavlen",
+							toast_saveimage_failed:				"Kunne ikke lagre bildet i '{{path}}'",
+							toast_saveimage_success:			"Lagret bilde i '{{path}}'"
+						};
+					case "pl":		// Polish
+						return {
+							context_copyimage:					"Skopiuj obraz",
+							context_copyimagelink:				"Kopiuj łącze do obrazu",
+							context_lenssize:					"Rozmiar soczewki",
+							context_reverseimagesearch:			"Szukaj obrazu za pomocą ...",
+							context_saveimageas:				"Zapisz obraz jako ...",
+							context_viewimage:					"Zobacz obrazek",
+							submenu_disabled:					"Wszystkie wyłączone",
+							toast_copyimage_failed:				"Nie udało się skopiować obrazu do schowka",
+							toast_copyimage_success:			"Skopiowany obraz do schowka",
+							toast_copyimagelink_success:		"Link do skopiowanego obrazu do schowka",
+							toast_saveimage_failed:				"Nie udało się zapisać obrazu w „{{path}}”",
+							toast_saveimage_success:			"Zapisany obraz w „{{path}}”"
+						};
+					case "pt-BR":	// Portuguese (Brazil)
+						return {
+							context_copyimage:					"Copiar imagem",
+							context_copyimagelink:				"Copiar link da imagem",
+							context_lenssize:					"Tamanho da lente",
+							context_reverseimagesearch:			"Pesquisar imagem com ...",
+							context_saveimageas:				"Salvar imagem como ...",
+							context_viewimage:					"Ver imagem",
+							submenu_disabled:					"Todos desativados",
+							toast_copyimage_failed:				"Falha ao copiar a imagem para a área de transferência",
+							toast_copyimage_success:			"Imagem copiada para a área de transferência",
+							toast_copyimagelink_success:		"Link da imagem copiada para a área de transferência",
+							toast_saveimage_failed:				"Falha ao salvar a imagem em '{{path}}'",
+							toast_saveimage_success:			"Imagem salva em '{{path}}'"
+						};
+					case "ro":		// Romanian
+						return {
+							context_copyimage:					"Copiază imaginea",
+							context_copyimagelink:				"Copiați linkul de imagine",
+							context_lenssize:					"Dimensiunea obiectivului",
+							context_reverseimagesearch:			"Căutați imaginea cu ...",
+							context_saveimageas:				"Salveaza imaginea ca ...",
+							context_viewimage:					"Vezi imaginea",
+							submenu_disabled:					"Toate sunt dezactivate",
+							toast_copyimage_failed:				"Copierea imaginii în clipboard nu a reușit",
+							toast_copyimage_success:			"Copiat imaginea în Clipboard",
+							toast_copyimagelink_success:		"Link copiat pentru imagine în Clipboard",
+							toast_saveimage_failed:				"Salvarea imaginii în „{{path}}” nu a reușit",
+							toast_saveimage_success:			"Imagine salvată în „{{path}}”"
+						};
+					case "ru":		// Russian
+						return {
+							context_copyimage:					"Копировать изображение",
+							context_copyimagelink:				"Копировать ссылку на изображение",
+							context_lenssize:					"Размер линзы",
+							context_reverseimagesearch:			"Искать изображение с помощью ...",
+							context_saveimageas:				"Сохранить изображение как ...",
+							context_viewimage:					"Просмотр изображения",
+							submenu_disabled:					"Все отключены",
+							toast_copyimage_failed:				"Не удалось скопировать изображение в буфер обмена",
+							toast_copyimage_success:			"Изображение скопировано в буфер обмена",
+							toast_copyimagelink_success:		"Ссылка на скопированное изображение в буфер обмена",
+							toast_saveimage_failed:				"Не удалось сохранить изображение в '{{path}}'",
+							toast_saveimage_success:			"Сохраненное изображение в '{{path}}'"
+						};
+					case "sv":		// Swedish
+						return {
+							context_copyimage:					"Kopiera bild",
+							context_copyimagelink:				"Kopiera bildlänk",
+							context_lenssize:					"Linsstorlek",
+							context_reverseimagesearch:			"Sök bild med ...",
+							context_saveimageas:				"Spara bild som ...",
+							context_viewimage:					"Se bild",
+							submenu_disabled:					"Alla funktionshindrade",
+							toast_copyimage_failed:				"Det gick inte att kopiera bilden till Urklipp",
+							toast_copyimage_success:			"Kopierad bild till Urklipp",
+							toast_copyimagelink_success:		"Kopierad bildlänk till Urklipp",
+							toast_saveimage_failed:				"Det gick inte att spara bilden i "{{path}}"",
+							toast_saveimage_success:			"Sparad bild i "{{path}}""
+						};
+					case "th":		// Thai
+						return {
+							context_copyimage:					"คัดลอกรูปภาพ",
+							context_copyimagelink:				"คัดลอกลิงค์รูปภาพ",
+							context_lenssize:					"ขนาดเลนส์",
+							context_reverseimagesearch:			"ค้นหาภาพด้วย ...",
+							context_saveimageas:				"บันทึกภาพเป็น ...",
+							context_viewimage:					"ดูภาพ",
+							submenu_disabled:					"ปิดใช้งานทั้งหมด",
+							toast_copyimage_failed:				"คัดลอกรูปภาพไปยังคลิปบอร์ดไม่สำเร็จ",
+							toast_copyimage_success:			"คัดลอกรูปภาพไปยังคลิปบอร์ดแล้ว",
+							toast_copyimagelink_success:		"ลิงก์รูปภาพที่คัดลอกไปยังคลิปบอร์ด",
+							toast_saveimage_failed:				"บันทึกภาพใน "{{path}}" ไม่สำเร็จ",
+							toast_saveimage_success:			"ภาพที่บันทึกไว้ใน "{{path}}""
+						};
+					case "tr":		// Turkish
+						return {
+							context_copyimage:					"Resmi kopyala",
+							context_copyimagelink:				"Resim Bağlantısını Kopyala",
+							context_lenssize:					"Lens Boyutu",
+							context_reverseimagesearch:			"Şununla Resim Ara ...",
+							context_saveimageas:				"Resmi farklı kaydet ...",
+							context_viewimage:					"Görseli göster",
+							submenu_disabled:					"Hepsi devre dışı",
+							toast_copyimage_failed:				"Görüntü Panoya kopyalanamadı",
+							toast_copyimage_success:			"Görüntü panoya kopyalandı",
+							toast_copyimagelink_success:		"Görüntü bağlantısı panoya kopyalandı",
+							toast_saveimage_failed:				"Resim '{{yol}}' içine kaydedilemedi",
+							toast_saveimage_success:			"Resim '{{yol}}' içine kaydedildi"
+						};
+					case "uk":		// Ukrainian
+						return {
+							context_copyimage:					"Скопіювати зображення",
+							context_copyimagelink:				"Скопіювати посилання на зображення",
+							context_lenssize:					"Розмір лінзи",
+							context_reverseimagesearch:			"Шукати зображення за допомогою ...",
+							context_saveimageas:				"Зберегти зображення як ...",
+							context_viewimage:					"Переглянути зображення",
+							submenu_disabled:					"Всі інваліди",
+							toast_copyimage_failed:				"Не вдалося скопіювати зображення в буфер обміну",
+							toast_copyimage_success:			"Скопійовано зображення в буфер обміну",
+							toast_copyimagelink_success:		"Скопійовано посилання на зображення в буфер обміну",
+							toast_saveimage_failed:				"Не вдалося зберегти зображення у "{{path}}"",
+							toast_saveimage_success:			"Збережене зображення у "{{path}}""
+						};
+					case "vi":		// Vietnamese
+						return {
+							context_copyimage:					"Sao chép hình ảnh",
+							context_copyimagelink:				"Sao chép liên kết hình ảnh",
+							context_lenssize:					"Kích thước ống kính",
+							context_reverseimagesearch:			"Tìm kiếm Hình ảnh bằng ...",
+							context_saveimageas:				"Lưu ảnh dưới dạng ...",
+							context_viewimage:					"Xem hình ảnh",
+							submenu_disabled:					"Tất cả đã bị vô hiệu hóa",
+							toast_copyimage_failed:				"Không sao chép được hình ảnh vào Clipboard",
+							toast_copyimage_success:			"Đã sao chép hình ảnh vào Clipboard",
+							toast_copyimagelink_success:		"Liên kết hình ảnh được sao chép vào Clipboard",
+							toast_saveimage_failed:				"Không lưu được Hình ảnh trong '{{path}}'",
+							toast_saveimage_success:			"Hình ảnh đã Lưu trong '{{path}}'"
+						};
+					case "zh":		// Chinese
+						return {
+							context_copyimage:					"复制图片",
+							context_copyimagelink:				"复制图像链接",
+							context_lenssize:					"镜片尺寸",
+							context_reverseimagesearch:			"用...搜索图像",
+							context_saveimageas:				"将图像另存为...",
+							context_viewimage:					"看图",
+							submenu_disabled:					"全部禁用",
+							toast_copyimage_failed:				"无法将图像复制到剪贴板",
+							toast_copyimage_success:			"复制到剪贴板的图像",
+							toast_copyimagelink_success:		"复制的图像链接到剪贴板",
+							toast_saveimage_failed:				"无法将图片保存到“ {{path}}”中",
+							toast_saveimage_success:			"已将图像保存在“ {{path}}”中"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							context_copyimage:					"複製圖片",
+							context_copyimagelink:				"複製圖像鏈接",
+							context_lenssize:					"鏡片尺寸",
+							context_reverseimagesearch:			"用...搜索圖像",
+							context_saveimageas:				"將圖像另存為...",
+							context_viewimage:					"看圖",
+							submenu_disabled:					"全部禁用",
+							toast_copyimage_failed:				"無法將圖像複製到剪貼板",
+							toast_copyimage_success:			"複製到剪貼板的圖像",
+							toast_copyimagelink_success:		"複製的圖像鏈接到剪貼板",
+							toast_saveimage_failed:				"無法將圖片保存到“ {{path}}”中",
+							toast_saveimage_success:			"已將圖像保存在“ {{path}}”中"
+						};
+					default:		// English
+						return {
+							context_copyimage:					"Copy Image",
+							context_copyimagelink:				"Copy Image Link",
+							context_lenssize:					"Lens Size",
+							context_reverseimagesearch:			"Search Image with ...",
+							context_saveimageas:				"Save Image as ...",
+							context_viewimage:					"View Image",
+							submenu_disabled:					"All disabled",
+							toast_copyimage_failed:				"Failed to copy image to Clipboard",
+							toast_copyimage_success:			"Copied image to Clipboard",
+							toast_copyimagelink_success:		"Copied image link to Clipboard",
+							toast_saveimage_failed:				"Failed to save Image in '{{path}}'",
+							toast_saveimage_success:			"Saved Image in '{{path}}'"
 						};
 				}
 			}
