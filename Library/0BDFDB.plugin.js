@@ -16,13 +16,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.2.3",
+			"version": "1.2.4",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 		"changeLog": {
-			"fixed": {
-				"Small Fixes": ""
+			"improved": {
+				"Languages": "Added support for all languages used by discord"
 			}
 		}
 	};
@@ -3583,6 +3583,7 @@ module.exports = (_ => {
 						}
 					}
 					contentChildren = contentChildren.concat(config.contentChildren).filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
+					titleChildren = titleChildren.concat(config.titleChildren).filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
 					headerChildren = headerChildren.concat(config.headerChildren).filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
 					footerChildren = footerChildren.concat(config.footerChildren).filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
 					if (contentChildren.length) {
@@ -3617,10 +3618,11 @@ module.exports = (_ => {
 															})
 														]
 													}),
+													titleChildren,
 													BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ModalComponents.ModalCloseButton, {
 														onClick: closeModal
 													})
-												]
+												].flat(10).filter(n => n)
 											}),
 											headerChildren.length ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 												grow: 0,
