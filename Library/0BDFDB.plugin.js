@@ -721,13 +721,6 @@ module.exports = (_ => {
 	};
 	BDFDB.PluginUtils.checkChangeLog = function (plugin) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ObjectUtils.is(plugin.changeLog)) return;
-		// REMOVE 14.11.2020
-		let changeLog = BDFDB.DataUtils.load(plugin, "changeLog");
-		if (changeLog && changeLog.version) {
-			BDFDB.DataUtils.remove(plugin, "changelog");
-			BDFDB.DataUtils.remove(plugin, "changeLog");
-			changeLogs[plugin.name] = changeLog.version;
-		}
 		if (!changeLogs[plugin.name] || BDFDB.NumberUtils.compareVersions(plugin.version, changeLogs[plugin.name])) {
 			changeLogs[plugin.name] = plugin.version;
 			BDFDB.DataUtils.save(changeLogs, BDFDB, "changeLogs");

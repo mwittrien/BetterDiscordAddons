@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CompleteTimestamps",
 			"author": "DevilBro",
-			"version": "1.5.0",
+			"version": "1.5.1",
 			"description": "Replace all timestamps with complete timestamps"
 		},
 		"changeLog": {
-			"fixed": {
-				"Spoiler Embed Crash": "No longer crashes on spoilered embeds"
+			"added": {
+				"Format for Tooltips": "Added an option to set up and select a custom format for timestamps inside tooltips"
 			}
 		}
 	};
@@ -81,10 +81,12 @@ module.exports = (_ => {
 						otherOrder:				{value: false, 			description: "Show the time before the date"}
 					},
 					choices: {
-						timestampLang:			{value: "$discord", 		description: "Timestamp Format"}
+						timestampLang:			{value: "$discord", 		description: "Chat Timestamp Format"},
+						timestampToolLang:		{value: "$discord", 		description: "Tooltip Timestamp Format"}
 					},
 					formats: {
-						ownFormat:				{value: "$hour: $minute: $second, $day.$month.$year", 	description: "Own Format"}
+						ownFormat:				{value: "$hour:$minute:$second, $day.$month.$year", 	description: "Own Chat Format"},
+						ownFormatTool:			{value: "$hour:$minute:$second, $day.$month.$year", 	description: "Own Tooltip Format"}
 					},
 					amounts: {
 						maxDaysAgo:				{value: 0, 	min: 0,		description: "Maximum count of days displayed in the $daysago placeholder",	note: "0 equals no limit"}
@@ -109,6 +111,15 @@ module.exports = (_ => {
 						id: "own"
 					}
 				}, BDFDB.LanguageUtils.languages);
+				
+				// REMOVE 21.12.2020
+				let oC = BDFDB.DataUtils.load(this, "choices"), oF = BDFDB.DataUtils.load(this, "formats");
+				if (!oC.timestampToolLang || !oF.ownFormatTool) {
+					oC.timestampToolLang = oC.timestampLang;
+					oF.ownFormatTool = oF.ownFormat;
+					BDFDB.DataUtils.save(oC, this, "choices");
+					BDFDB.DataUtils.save(oF, this, "formats");
+				}
 				
 				this.forceUpdateAll();
 			}
@@ -146,7 +157,7 @@ module.exports = (_ => {
 						plugin: this,
 						keys: ["choices", key],
 						label: this.defaults.choices[key].description,
-						basis: "70%",
+						basis: "65%",
 						value: choices[key],
 						options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value: id, label: lang.name}})),
 						searchable: true,
@@ -164,7 +175,7 @@ module.exports = (_ => {
 										grow: 0,
 										shrink: 0,
 										basis: "60%",
-										children: this.getTimestamp(languages[lang.value].id)
+										children: this.getTimestamp(languages[lang.value].id, null, key == "timestampToolLang")
 									})
 								]
 							});
@@ -182,7 +193,7 @@ module.exports = (_ => {
 										grow: 1,
 										shrink: 0,
 										basis: "70%",
-										children: this.getTimestamp(languages[lang.value].id)
+										children: this.getTimestamp(languages[lang.value].id, null, key == "timestampToolLang")
 									})
 								]
 							});
@@ -194,7 +205,7 @@ module.exports = (_ => {
 						plugin: this,
 						keys: ["formats", key],
 						label: this.defaults.formats[key].description,
-						basis: "70%",
+						basis: "65%",
 						value: formats[key],
 						onChange: (value, instance) => {
 							formats[key] = value;
@@ -322,11 +333,11 @@ module.exports = (_ => {
 				if (tooltipWrapper) {
 					let timestamp = this.getTimestamp(languages[choices.timestampLang].id, parent[index].props.timestamp._i);
 					if (change.tooltip) {
-						tooltipWrapper.props.text = timestamp;
+						tooltipWrapper.props.text = this.getTimestamp(languages[choices.timestampToolLang].id, parent[index].props.timestamp._i, true);
 						tooltipWrapper.props.delay = 0;
 					}
 					if (change.child && typeof tooltipWrapper.props.children == "function") {
-						tooltipWrapper.props.delay = 99999999999999999999;
+						if (choices.timestampLang == choices.timestampToolLang && formats.ownFormat == formats.ownFormatTool) tooltipWrapper.props.delay = 99999999999999999999;
 						let renderChildren = tooltipWrapper.props.children;
 						tooltipWrapper.props.children = (...args) => {
 							let renderedChildren = renderChildren(...args);
@@ -339,7 +350,7 @@ module.exports = (_ => {
 				parent[index] = stamp;
 			}
 
-			getTimestamp (languageId, time) {
+			getTimestamp (languageId, time, isTooltip) {
 				let timeObj = time || new Date();
 				if (typeof time == "string" || typeof time == "number") timeObj = new Date(time);
 				if (timeObj.toString() == "Invalid Date") timeObj = new Date(parseInt(time));
@@ -357,12 +368,12 @@ module.exports = (_ => {
 					languageId = BDFDB.LanguageUtils.getLanguage().id;
 					let now = new Date();
 					let hour = timeObj.getHours(), minute = timeObj.getMinutes(), second = timeObj.getSeconds(), msecond = timeObj.getMilliseconds(), day = timeObj.getDate(), month = timeObj.getMonth()+1, timemode = "", daysago = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(timeObj.getFullYear(), timeObj.getMonth(), timeObj.getDate()))/(1000*60*60*24));
-					if (formats.ownFormat.indexOf("$timemode") > -1) {
+					if (formats[isTooltip ? "ownFormatTool" : "ownFormat"].indexOf("$timemode") > -1) {
 						timemode = hour >= 12 ? "PM" : "AM";
 						hour = hour % 12;
 						hour = hour ? hour : 12;
 					}
-					timeString = formats.ownFormat
+					timeString = formats[isTooltip ? "ownFormatTool" : "ownFormat"]
 						.replace(/\$hour/g, settings.forceZeros && hour < 10 ? "0" + hour : hour)
 						.replace(/\$minute/g, minute < 10 ? "0" + minute : minute)
 						.replace(/\$second/g, second < 10 ? "0" + second : second)

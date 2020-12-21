@@ -522,7 +522,7 @@ module.exports = (_ => {
 				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: BDFDB.LanguageUtils.LanguageStrings.IMAGE,
+						label: BDFDB.LanguageUtils.LanguageStrings.IMAGE + " " + BDFDB.LanguageUtils.LanguageStrings.ACTIONS,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-subitem"),
 						children: validUrls.length == 1 ? this.createUrlMenu(e, validUrls[0].url) : validUrls.map((urlData, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: urlData.type.toUpperCase(),
@@ -1125,8 +1125,8 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"Копирането на изображението в клипборда не бе успешно",
 							toast_copyimage_success:			"Копирано изображение в клипборда",
 							toast_copyimagelink_success:		"Копирана връзка към изображение в клипборда",
-							toast_saveimage_failed:				"Запазването на изображението в „{{path}}“ не бе успешно",
-							toast_saveimage_success:			"Запазено изображение в „{{path}}“"
+							toast_saveimage_failed:				"Запазването на изображението в '{{path}}' не бе успешно",
+							toast_saveimage_success:			"Запазено изображение в '{{path}}'"
 						};
 					case "da":		// Danish
 						return {
@@ -1170,8 +1170,8 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"Αποτυχία αντιγραφής εικόνας στο Πρόχειρο",
 							toast_copyimage_success:			"Αντιγράφηκε η εικόνα στο Πρόχειρο",
 							toast_copyimagelink_success:		"Αντιγράφηκε σύνδεσμος εικόνας στο Πρόχειρο",
-							toast_saveimage_failed:				"Αποτυχία αποθήκευσης εικόνας στο "{{path}}"",
-							toast_saveimage_success:			"Αποθηκευμένη εικόνα στο "{{path}}""
+							toast_saveimage_failed:				"Αποτυχία αποθήκευσης εικόνας στο '{{path}}'",
+							toast_saveimage_success:			"Αποθηκευμένη εικόνα στο '{{path}}'"
 						};
 					case "es":		// Spanish
 						return {
@@ -1185,8 +1185,8 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"No se pudo copiar la imagen al portapapeles",
 							toast_copyimage_success:			"Imagen copiada al portapapeles",
 							toast_copyimagelink_success:		"Enlace de imagen copiado al portapapeles",
-							toast_saveimage_failed:				"No se pudo guardar la imagen en '{{ruta}}'",
-							toast_saveimage_success:			"Imagen guardada en '{{ruta}}'"
+							toast_saveimage_failed:				"No se pudo guardar la imagen en '{{path}}'",
+							toast_saveimage_success:			"Imagen guardada en '{{path}}'"
 						};
 					case "fi":		// Finnish
 						return {
@@ -1200,8 +1200,8 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"Kuvan kopioiminen leikepöydälle epäonnistui",
 							toast_copyimage_success:			"Kopioitu kuva leikepöydälle",
 							toast_copyimagelink_success:		"Kopioitu kuvalinkki leikepöydälle",
-							toast_saveimage_failed:				"Kuvan tallentaminen kohteeseen {{path}} epäonnistui",
-							toast_saveimage_success:			"Tallennettu kuva kansioon {{path}}"
+							toast_saveimage_failed:				"Kuvan tallentaminen kohteeseen '{{path}}' epäonnistui",
+							toast_saveimage_success:			"Tallennettu kuva kansioon '{{path}}'"
 						};
 					case "fr":		// French
 						return {
@@ -1215,8 +1215,8 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"Échec de la copie de l'image dans le presse-papiers",
 							toast_copyimage_success:			"Image copiée dans le presse-papiers",
 							toast_copyimagelink_success:		"Lien d'image copié vers le presse-papiers",
-							toast_saveimage_failed:				"Échec de l'enregistrement de l'image dans «{{path}}»",
-							toast_saveimage_success:			"Image enregistrée dans "{{path}}""
+							toast_saveimage_failed:				"Échec de l'enregistrement de l'image dans '{{path}}'",
+							toast_saveimage_success:			"Image enregistrée dans '{{path}}'"
 						};
 					case "hr":		// Croatian
 						return {
@@ -1230,8 +1230,8 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"Kopiranje slike u međuspremnik nije uspjelo",
 							toast_copyimage_success:			"Kopirana slika u međuspremnik",
 							toast_copyimagelink_success:		"Veza slike kopirana je u međuspremnik",
-							toast_saveimage_failed:				"Spremanje slike u "{{path}}" nije uspjelo",
-							toast_saveimage_success:			"Spremljena slika na "{{path}}""
+							toast_saveimage_failed:				"Spremanje slike u '{{path}}' nije uspjelo",
+							toast_saveimage_success:			"Spremljena slika na '{{path}}'"
 						};
 					case "hu":		// Hungarian
 						return {
@@ -1245,8 +1245,8 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"Nem sikerült másolni a képet a vágólapra",
 							toast_copyimage_success:			"Kép másolása a vágólapra",
 							toast_copyimagelink_success:		"Képlink linkre másolva a vágólapra",
-							toast_saveimage_failed:				"Nem sikerült menteni a képet a (z) „{{path}}” mappába",
-							toast_saveimage_success:			"Mentett kép itt: „{{path}}”"
+							toast_saveimage_failed:				"Nem sikerült menteni a képet a (z) '{{path}}” mappába",
+							toast_saveimage_success:			"Mentett kép itt: '{{path}}”"
 						};
 					case "it":		// Italian
 						return {
@@ -1260,8 +1260,8 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"Impossibile copiare l'immagine negli Appunti",
 							toast_copyimage_success:			"Immagine copiata negli Appunti",
 							toast_copyimagelink_success:		"Collegamento immagine copiato negli Appunti",
-							toast_saveimage_failed:				"Impossibile salvare l'immagine in "{{path}}"",
-							toast_saveimage_success:			"Immagine salvata in "{{path}}""
+							toast_saveimage_failed:				"Impossibile salvare l'immagine in '{{path}}'",
+							toast_saveimage_success:			"Immagine salvata in '{{path}}'"
 						};
 					case "ja":		// Japanese
 						return {
@@ -1305,8 +1305,8 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"Nepavyko nukopijuoti vaizdo į iškarpinę",
 							toast_copyimage_success:			"Nukopijuotas vaizdas į mainų sritį",
 							toast_copyimagelink_success:		"Nukopijuota vaizdo nuoroda į iškarpinę",
-							toast_saveimage_failed:				"Nepavyko išsaugoti vaizdo „{{path}}“",
-							toast_saveimage_success:			"Išsaugotas vaizdas „{{path}}“"
+							toast_saveimage_failed:				"Nepavyko išsaugoti vaizdo '{{path}}'",
+							toast_saveimage_success:			"Išsaugotas vaizdas '{{path}}'"
 						};
 					case "nl":		// Dutch
 						return {
@@ -1350,8 +1350,8 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"Nie udało się skopiować obrazu do schowka",
 							toast_copyimage_success:			"Skopiowany obraz do schowka",
 							toast_copyimagelink_success:		"Link do skopiowanego obrazu do schowka",
-							toast_saveimage_failed:				"Nie udało się zapisać obrazu w „{{path}}”",
-							toast_saveimage_success:			"Zapisany obraz w „{{path}}”"
+							toast_saveimage_failed:				"Nie udało się zapisać obrazu w '{{path}}”",
+							toast_saveimage_success:			"Zapisany obraz w '{{path}}”"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
@@ -1380,8 +1380,8 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"Copierea imaginii în clipboard nu a reușit",
 							toast_copyimage_success:			"Copiat imaginea în Clipboard",
 							toast_copyimagelink_success:		"Link copiat pentru imagine în Clipboard",
-							toast_saveimage_failed:				"Salvarea imaginii în „{{path}}” nu a reușit",
-							toast_saveimage_success:			"Imagine salvată în „{{path}}”"
+							toast_saveimage_failed:				"Salvarea imaginii în '{{path}}” nu a reușit",
+							toast_saveimage_success:			"Imagine salvată în '{{path}}”"
 						};
 					case "ru":		// Russian
 						return {
@@ -1410,8 +1410,8 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"Det gick inte att kopiera bilden till Urklipp",
 							toast_copyimage_success:			"Kopierad bild till Urklipp",
 							toast_copyimagelink_success:		"Kopierad bildlänk till Urklipp",
-							toast_saveimage_failed:				"Det gick inte att spara bilden i "{{path}}"",
-							toast_saveimage_success:			"Sparad bild i "{{path}}""
+							toast_saveimage_failed:				"Det gick inte att spara bilden i '{{path}}'",
+							toast_saveimage_success:			"Sparad bild i '{{path}}'"
 						};
 					case "th":		// Thai
 						return {
@@ -1425,8 +1425,8 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"คัดลอกรูปภาพไปยังคลิปบอร์ดไม่สำเร็จ",
 							toast_copyimage_success:			"คัดลอกรูปภาพไปยังคลิปบอร์ดแล้ว",
 							toast_copyimagelink_success:		"ลิงก์รูปภาพที่คัดลอกไปยังคลิปบอร์ด",
-							toast_saveimage_failed:				"บันทึกภาพใน "{{path}}" ไม่สำเร็จ",
-							toast_saveimage_success:			"ภาพที่บันทึกไว้ใน "{{path}}""
+							toast_saveimage_failed:				"บันทึกภาพใน '{{path}}' ไม่สำเร็จ",
+							toast_saveimage_success:			"ภาพที่บันทึกไว้ใน '{{path}}'"
 						};
 					case "tr":		// Turkish
 						return {
@@ -1455,8 +1455,8 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"Не вдалося скопіювати зображення в буфер обміну",
 							toast_copyimage_success:			"Скопійовано зображення в буфер обміну",
 							toast_copyimagelink_success:		"Скопійовано посилання на зображення в буфер обміну",
-							toast_saveimage_failed:				"Не вдалося зберегти зображення у "{{path}}"",
-							toast_saveimage_success:			"Збережене зображення у "{{path}}""
+							toast_saveimage_failed:				"Не вдалося зберегти зображення у '{{path}}'",
+							toast_saveimage_success:			"Збережене зображення у '{{path}}'"
 						};
 					case "vi":		// Vietnamese
 						return {
