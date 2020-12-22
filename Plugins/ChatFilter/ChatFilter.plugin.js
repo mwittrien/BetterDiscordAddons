@@ -271,7 +271,7 @@ module.exports = (_ => {
 				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: "Add to ChatFilter",
+						label: BDFDB.LanguageUtils.LibraryStringsFormat("add_to", "ChatFilter"),
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "add-filter"),
 						action: _ => {
 							this.openAddModal(text.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t"));
@@ -413,7 +413,7 @@ module.exports = (_ => {
 				let values = {wordvalue, replacevalue: "", choice: "blocked"};
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
-					header: "Add to ChatAliases",
+					header: BDFDB.LanguageUtils.LibraryStringsFormat("add_to", "ChatFilter"),
 					subheader: "",
 					children: [
 						this.createInputs(values),

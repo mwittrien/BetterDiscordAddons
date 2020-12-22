@@ -405,7 +405,7 @@ module.exports = (_ => {
 				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: "Add to ChatAliases",
+						label: BDFDB.LanguageUtils.LibraryStringsFormat("add_to", "ChatAliases"),
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "add-alias"),
 						action: _ => {
 							this.openAddModal(text.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t"));
@@ -508,7 +508,7 @@ module.exports = (_ => {
 				};
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
-					header: "Add to ChatAliases",
+					header: BDFDB.LanguageUtils.LibraryStringsFormat("add_to", "ChatAliases"),
 					subheader: "",
 					children: [
 						this.createInputs(values),
