@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditServers",
 			"author": "DevilBro",
-			"version": "2.2.6",
+			"version": "2.2.7",
 			"description": "Allow you to change the icon, name and color of servers"
 		},
 		"changeLog": {
-			"fixed": {
-				"New React Structure": "Fixed for new internal react structure"
+			"improved": {
+				"Reset Confirmation": "Trying to reset a server will first ask for permission, holding Shift will skip this"
 			}
 		}
 	};
@@ -159,7 +159,7 @@ module.exports = (_ => {
 					color: BDFDB.LibraryComponents.Button.Colors.RED,
 					label: "Reset all Servers",
 					onClick: _ => {
-						BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all Servers?", _ => {
+						BDFDB.ModalUtils.confirm(this, this.labels.confirm_resetall, _ => {
 							BDFDB.DataUtils.remove(this, "servers");
 							this.forceUpdateAll();;
 						});
@@ -203,10 +203,15 @@ module.exports = (_ => {
 									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.submenu_resetsettings,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
+										color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
 										disabled: !changedGuilds[e.instance.props.guild.id],
-										action: _ => {
-											BDFDB.DataUtils.remove(this, "servers", e.instance.props.guild.id);
-											this.forceUpdateAll();
+										action: event => {
+											let remove = _ => {
+												BDFDB.DataUtils.remove(this, "servers", e.instance.props.guild.id);
+												this.forceUpdateAll(true);
+											};
+											if (event.shiftKey) remove();
+											else BDFDB.ModalUtils.confirm(this, this.labels.confirm_reset, remove);
 										}
 									})
 								]
@@ -692,6 +697,8 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
+							confirm_reset:						"Наистина ли искате да нулирате този сървър?",
+							confirm_resetall:					"Наистина ли искате да нулирате всички сървъри?",
 							context_localserversettings:		"Настройки на локалния сървър",
 							modal_colorpicker1:					"Цвят на иконата",
 							modal_colorpicker2:					"Цвят на шрифта",
@@ -712,12 +719,14 @@ module.exports = (_ => {
 						};
 					case "da":		// Danish
 						return {
+							confirm_reset:						"Er du sikker på, at du vil nulstille denne server?",
+							confirm_resetall:					"Er du sikker på, at du vil nulstille alle servere?",
 							context_localserversettings:		"Lokale serverindstillinger",
 							modal_colorpicker1:					"Ikonfarve",
-							modal_colorpicker2:					"Skriftfarve",
-							modal_colorpicker3:					"Værktøjstipfarve",
-							modal_colorpicker4:					"Skriftfarve",
-							modal_guildacronym:					"Lokale serverakronymet",
+							modal_colorpicker2:					"Skrift farve",
+							modal_colorpicker3:					"Værktøjstip farve",
+							modal_colorpicker4:					"Skrift farve",
+							modal_guildacronym:					"Lokal server akronym",
 							modal_guildbanner:					"Banner",
 							modal_guildicon:					"Ikon",
 							modal_guildname:					"Lokalt servernavn",
@@ -726,12 +735,14 @@ module.exports = (_ => {
 							modal_invalidurl:					"Ugyldig URL",
 							modal_tabheader1:					"Server",
 							modal_tabheader2:					"Ikonfarve",
-							modal_tabheader3:					"Værktøjstipfarve",
+							modal_tabheader3:					"Værktøjstip farve",
 							submenu_resetsettings:				"Nulstil server",
 							submenu_serversettings:				"Ændre indstillinger"
 						};
 					case "de":		// German
 						return {
+							confirm_reset:						"Möchtest du diesen Server wirklich zurücksetzen?",
+							confirm_resetall:					"Möchtest du wirklich alle Server zurücksetzen?",
 							context_localserversettings:		"Lokale Servereinstellungen",
 							modal_colorpicker1:					"Symbolfarbe",
 							modal_colorpicker2:					"Schriftfarbe",
@@ -742,7 +753,7 @@ module.exports = (_ => {
 							modal_guildicon:					"Symbol",
 							modal_guildname:					"Lokaler Servername",
 							modal_header:						"Lokale Servereinstellungen",
-							modal_ignorecustomname:				"Ursprünglichen Servernamen für das Serverakronym verwenden",
+							modal_ignorecustomname:				"Verwenden Sie den ursprünglichen Servernamen für das Serverakronym",
 							modal_invalidurl:					"Ungültige URL",
 							modal_tabheader1:					"Server",
 							modal_tabheader2:					"Symbolfarbe",
@@ -752,6 +763,8 @@ module.exports = (_ => {
 						};
 					case "el":		// Greek
 						return {
+							confirm_reset:						"Είστε βέβαιοι ότι θέλετε να επαναφέρετε αυτόν τον διακομιστή;",
+							confirm_resetall:					"Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλους τους διακομιστές;",
 							context_localserversettings:		"Ρυθμίσεις τοπικού διακομιστή",
 							modal_colorpicker1:					"Χρώμα εικονιδίου",
 							modal_colorpicker2:					"Χρώμα γραμματοσειράς",
@@ -772,6 +785,8 @@ module.exports = (_ => {
 						};
 					case "es":		// Spanish
 						return {
+							confirm_reset:						"¿Está seguro de que desea restablecer este servidor?",
+							confirm_resetall:					"¿Está seguro de que desea restablecer todos los servidores?",
 							context_localserversettings:		"Configuración del servidor local",
 							modal_colorpicker1:					"Color del icono",
 							modal_colorpicker2:					"Color de fuente",
@@ -792,6 +807,8 @@ module.exports = (_ => {
 						};
 					case "fi":		// Finnish
 						return {
+							confirm_reset:						"Haluatko varmasti nollata tämän palvelimen?",
+							confirm_resetall:					"Haluatko varmasti nollata kaikki palvelimet?",
 							context_localserversettings:		"Paikallisen palvelimen asetukset",
 							modal_colorpicker1:					"Kuvakkeen väri",
 							modal_colorpicker2:					"Fontin väri",
@@ -812,16 +829,18 @@ module.exports = (_ => {
 						};
 					case "fr":		// French
 						return {
-							context_localserversettings:		"Paramètres du serveur local",
+							confirm_reset:						"Êtes-vous sûr de vouloir réinitialiser ce serveur?",
+							confirm_resetall:					"Voulez-vous vraiment réinitialiser tous les serveurs?",
+							context_localserversettings:		"Paramètres locaux du serveur",
 							modal_colorpicker1:					"Couleur de l'icône",
 							modal_colorpicker2:					"Couleur de la police",
 							modal_colorpicker3:					"Couleur de l'info-bulle",
 							modal_colorpicker4:					"Couleur de la police",
-							modal_guildacronym:					"Acronyme du serveur local",
+							modal_guildacronym:					"Acronyme local du serveur",
 							modal_guildbanner:					"Bannière",
 							modal_guildicon:					"Icône",
-							modal_guildname:					"Nom du serveur local",
-							modal_header:						"Paramètres du serveur local",
+							modal_guildname:					"Nom local du serveur",
+							modal_header:						"Paramètres locaux du serveur",
 							modal_ignorecustomname:				"Utilisez le nom de serveur d'origine pour l'acronyme de serveur",
 							modal_invalidurl:					"URL invalide",
 							modal_tabheader1:					"Serveur",
@@ -832,12 +851,14 @@ module.exports = (_ => {
 						};
 					case "hr":		// Croatian
 						return {
+							confirm_reset:						"Jeste li sigurni da želite resetirati ovaj poslužitelj?",
+							confirm_resetall:					"Jeste li sigurni da želite resetirati sve poslužitelje?",
 							context_localserversettings:		"Postavke lokalnog poslužitelja",
-							modal_colorpicker1:					"Boja ikona",
+							modal_colorpicker1:					"Ikona Boja",
 							modal_colorpicker2:					"Boja fonta",
 							modal_colorpicker3:					"Boja opisa",
 							modal_colorpicker4:					"Boja fonta",
-							modal_guildacronym:					"Skraćenica lokalnog poslužitelja",
+							modal_guildacronym:					"Lokalni poslužitelj kratica",
 							modal_guildbanner:					"Natpis",
 							modal_guildicon:					"Ikona",
 							modal_guildname:					"Naziv lokalnog poslužitelja",
@@ -845,17 +866,19 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Koristite izvorno ime poslužitelja za kraticu poslužitelja",
 							modal_invalidurl:					"Neispravna poveznica",
 							modal_tabheader1:					"Poslužitelj",
-							modal_tabheader2:					"Boja ikona",
+							modal_tabheader2:					"Ikona Boja",
 							modal_tabheader3:					"Boja opisa",
 							submenu_resetsettings:				"Resetiraj poslužitelj",
 							submenu_serversettings:				"Promijeniti postavke"
 						};
 					case "hu":		// Hungarian
 						return {
+							confirm_reset:						"Biztosan visszaállítja ezt a szervert?",
+							confirm_resetall:					"Biztosan visszaállítja az összes szervert?",
 							context_localserversettings:		"Helyi kiszolgáló beállításai",
-							modal_colorpicker1:					"Ikon szín",
+							modal_colorpicker1:					"Ikon színe",
 							modal_colorpicker2:					"Betű szín",
-							modal_colorpicker3:					"Tooltip szín",
+							modal_colorpicker3:					"Tooltip Color",
 							modal_colorpicker4:					"Betű szín",
 							modal_guildacronym:					"Helyi szerver betűszó",
 							modal_guildbanner:					"Transzparens",
@@ -865,33 +888,37 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"A kiszolgáló rövidítéshez használja az eredeti kiszolgáló nevet",
 							modal_invalidurl:					"Érvénytelen URL",
 							modal_tabheader1:					"Szerver",
-							modal_tabheader2:					"Ikon szín",
-							modal_tabheader3:					"Tooltip szín",
-							submenu_resetsettings:				"Szerver visszaállítása",
+							modal_tabheader2:					"Ikon színe",
+							modal_tabheader3:					"Tooltip Color",
+							submenu_resetsettings:				"Reset Server",
 							submenu_serversettings:				"Beállítások megváltoztatása"
 						};
 					case "it":		// Italian
 						return {
-							context_localserversettings:		"Impostazioni del server locale",
+							confirm_reset:						"Sei sicuro di voler reimpostare questo server?",
+							confirm_resetall:					"Sei sicuro di voler ripristinare tutti i server?",
+							context_localserversettings:		"Impostazioni locale del server",
 							modal_colorpicker1:					"Colore dell'icona",
 							modal_colorpicker2:					"Colore del carattere",
 							modal_colorpicker3:					"Colore della descrizione comando",
 							modal_colorpicker4:					"Colore del carattere",
-							modal_guildacronym:					"Acronimo del server locale",
+							modal_guildacronym:					"Acronimo locale del server",
 							modal_guildbanner:					"Banner",
 							modal_guildicon:					"Icona",
-							modal_guildname:					"Nome server locale",
-							modal_header:						"Impostazioni del server locale",
+							modal_guildname:					"Nome locale server",
+							modal_header:						"Impostazioni locale del server",
 							modal_ignorecustomname:				"Utilizzare il nome del server originale per l'acronimo del server",
 							modal_invalidurl:					"URL non valido",
 							modal_tabheader1:					"Server",
-							modal_tabheader2:					"Colore icona",
+							modal_tabheader2:					"Colore dell'icona",
 							modal_tabheader3:					"Colore della descrizione comando",
 							submenu_resetsettings:				"Reimposta server",
 							submenu_serversettings:				"Cambia impostazioni"
 						};
 					case "ja":		// Japanese
 						return {
+							confirm_reset:						"このサーバーをリセットしてもよろしいですか？",
+							confirm_resetall:					"すべてのサーバーをリセットしてもよろしいですか？",
 							context_localserversettings:		"ローカルサーバー設定",
 							modal_colorpicker1:					"アイコンの色",
 							modal_colorpicker2:					"フォントの色",
@@ -912,6 +939,8 @@ module.exports = (_ => {
 						};
 					case "ko":		// Korean
 						return {
+							confirm_reset:						"이 서버를 재설정 하시겠습니까?",
+							confirm_resetall:					"모든 서버를 재설정 하시겠습니까?",
 							context_localserversettings:		"로컬 서버 설정",
 							modal_colorpicker1:					"아이콘 색상",
 							modal_colorpicker2:					"글자 색",
@@ -932,6 +961,8 @@ module.exports = (_ => {
 						};
 					case "lt":		// Lithuanian
 						return {
+							confirm_reset:						"Ar tikrai norite iš naujo nustatyti šį serverį?",
+							confirm_resetall:					"Ar tikrai norite iš naujo nustatyti visus serverius?",
 							context_localserversettings:		"Vietinio serverio nustatymai",
 							modal_colorpicker1:					"Piktogramos spalva",
 							modal_colorpicker2:					"Šrifto spalva",
@@ -952,6 +983,8 @@ module.exports = (_ => {
 						};
 					case "nl":		// Dutch
 						return {
+							confirm_reset:						"Weet u zeker dat u deze server opnieuw wilt instellen?",
+							confirm_resetall:					"Weet u zeker dat u alle servers wilt resetten?",
 							context_localserversettings:		"Lokale serverinstellingen",
 							modal_colorpicker1:					"Icoonkleur",
 							modal_colorpicker2:					"Letterkleur",
@@ -972,12 +1005,14 @@ module.exports = (_ => {
 						};
 					case "no":		// Norwegian
 						return {
+							confirm_reset:						"Er du sikker på at du vil tilbakestille denne serveren?",
+							confirm_resetall:					"Er du sikker på at du vil tilbakestille alle serverne?",
 							context_localserversettings:		"Lokale serverinnstillinger",
 							modal_colorpicker1:					"Ikonfarge",
 							modal_colorpicker2:					"Skriftfarge",
-							modal_colorpicker3:					"Verktøytips Farge",
+							modal_colorpicker3:					"Verktøytipsfarge",
 							modal_colorpicker4:					"Skriftfarge",
-							modal_guildacronym:					"Lokal server akronym",
+							modal_guildacronym:					"Lokal serverakronymet",
 							modal_guildbanner:					"Banner",
 							modal_guildicon:					"Ikon",
 							modal_guildname:					"Lokalt servernavn",
@@ -986,18 +1021,20 @@ module.exports = (_ => {
 							modal_invalidurl:					"Ugyldig URL",
 							modal_tabheader1:					"Server",
 							modal_tabheader2:					"Ikonfarge",
-							modal_tabheader3:					"Verktøytips Farge",
+							modal_tabheader3:					"Verktøytipsfarge",
 							submenu_resetsettings:				"Tilbakestill server",
 							submenu_serversettings:				"Endre innstillinger"
 						};
 					case "pl":		// Polish
 						return {
+							confirm_reset:						"Czy na pewno chcesz zresetować ten serwer?",
+							confirm_resetall:					"Czy na pewno chcesz zresetować wszystkie serwery?",
 							context_localserversettings:		"Ustawienia serwera lokalnego",
 							modal_colorpicker1:					"Kolor ikony",
 							modal_colorpicker2:					"Kolor czcionki",
 							modal_colorpicker3:					"Kolor etykiety narzędzi",
 							modal_colorpicker4:					"Kolor czcionki",
-							modal_guildacronym:					"Akronim serwera lokalnego",
+							modal_guildacronym:					"Akronim lokalnego serwera",
 							modal_guildbanner:					"Transparent",
 							modal_guildicon:					"Ikona",
 							modal_guildname:					"Nazwa serwera lokalnego",
@@ -1012,6 +1049,8 @@ module.exports = (_ => {
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
+							confirm_reset:						"Tem certeza que deseja redefinir este servidor?",
+							confirm_resetall:					"Tem certeza de que deseja redefinir todos os servidores?",
 							context_localserversettings:		"Configurações do servidor local",
 							modal_colorpicker1:					"Cor do ícone",
 							modal_colorpicker2:					"Cor da fonte",
@@ -1032,10 +1071,12 @@ module.exports = (_ => {
 						};
 					case "ro":		// Romanian
 						return {
+							confirm_reset:						"Sigur doriți să resetați acest server?",
+							confirm_resetall:					"Sigur doriți să resetați toate serverele?",
 							context_localserversettings:		"Setări locale ale serverului",
 							modal_colorpicker1:					"Culoare pictogramă",
 							modal_colorpicker2:					"Culoarea fontului",
-							modal_colorpicker3:					"Culoare sfat",
+							modal_colorpicker3:					"Culoare sfat de instrumente",
 							modal_colorpicker4:					"Culoarea fontului",
 							modal_guildacronym:					"Acronim de server local",
 							modal_guildbanner:					"Banner",
@@ -1052,6 +1093,8 @@ module.exports = (_ => {
 						};
 					case "ru":		// Russian
 						return {
+							confirm_reset:						"Вы уверены, что хотите сбросить этот сервер?",
+							confirm_resetall:					"Вы уверены, что хотите сбросить все серверы?",
 							context_localserversettings:		"Настройки локального сервера",
 							modal_colorpicker1:					"Цвет значка",
 							modal_colorpicker2:					"Цвет шрифта",
@@ -1072,17 +1115,19 @@ module.exports = (_ => {
 						};
 					case "sv":		// Swedish
 						return {
+							confirm_reset:						"Är du säker på att du vill återställa den här servern?",
+							confirm_resetall:					"Är du säker på att du vill återställa alla servrar?",
 							context_localserversettings:		"Lokala serverinställningar",
 							modal_colorpicker1:					"Ikonfärg",
 							modal_colorpicker2:					"Fontfärg",
 							modal_colorpicker3:					"Verktygstipsfärg",
 							modal_colorpicker4:					"Fontfärg",
-							modal_guildacronym:					"Lokal server akronym",
+							modal_guildacronym:					"Lokal servernakronym",
 							modal_guildbanner:					"Baner",
 							modal_guildicon:					"Ikon",
 							modal_guildname:					"Lokalt servernamn",
 							modal_header:						"Lokala serverinställningar",
-							modal_ignorecustomname:				"Använd det ursprungliga servernamnet för serverns akronym",
+							modal_ignorecustomname:				"Använd det ursprungliga servernamnet för servernakronym",
 							modal_invalidurl:					"Ogiltig URL",
 							modal_tabheader1:					"Server",
 							modal_tabheader2:					"Ikonfärg",
@@ -1092,10 +1137,12 @@ module.exports = (_ => {
 						};
 					case "th":		// Thai
 						return {
+							confirm_reset:						"แน่ใจไหมว่าต้องการรีเซ็ตเซิร์ฟเวอร์นี้",
+							confirm_resetall:					"แน่ใจไหมว่าต้องการรีเซ็ตเซิร์ฟเวอร์ทั้งหมด",
 							context_localserversettings:		"การตั้งค่าเซิร์ฟเวอร์ภายใน",
 							modal_colorpicker1:					"ไอคอนสี",
 							modal_colorpicker2:					"สีตัวอักษร",
-							modal_colorpicker3:					"คำแนะนำเครื่องมือสี",
+							modal_colorpicker3:					"เคล็ดลับเครื่องมือสี",
 							modal_colorpicker4:					"สีตัวอักษร",
 							modal_guildacronym:					"ตัวย่อเซิร์ฟเวอร์ภายใน",
 							modal_guildbanner:					"แบนเนอร์",
@@ -1112,6 +1159,8 @@ module.exports = (_ => {
 						};
 					case "tr":		// Turkish
 						return {
+							confirm_reset:						"Bu Sunucuyu sıfırlamak istediğinizden emin misiniz?",
+							confirm_resetall:					"Tüm Sunucuları sıfırlamak istediğinizden emin misiniz?",
 							context_localserversettings:		"Yerel Sunucu Ayarları",
 							modal_colorpicker1:					"Simge Rengi",
 							modal_colorpicker2:					"Yazı rengi",
@@ -1132,6 +1181,8 @@ module.exports = (_ => {
 						};
 					case "uk":		// Ukrainian
 						return {
+							confirm_reset:						"Справді скинути цей сервер?",
+							confirm_resetall:					"Ви впевнені, що хочете скинути всі сервери?",
 							context_localserversettings:		"Налаштування локального сервера",
 							modal_colorpicker1:					"Значок Колір",
 							modal_colorpicker2:					"Колір шрифту",
@@ -1152,6 +1203,8 @@ module.exports = (_ => {
 						};
 					case "vi":		// Vietnamese
 						return {
+							confirm_reset:						"Bạn có chắc chắn muốn đặt lại Máy chủ này không?",
+							confirm_resetall:					"Bạn có chắc chắn muốn đặt lại tất cả Máy chủ không?",
 							context_localserversettings:		"Cài đặt máy chủ cục bộ",
 							modal_colorpicker1:					"Màu biểu tượng",
 							modal_colorpicker2:					"Màu phông chữ",
@@ -1172,6 +1225,8 @@ module.exports = (_ => {
 						};
 					case "zh":		// Chinese
 						return {
+							confirm_reset:						"您确定要重置此服务器吗？",
+							confirm_resetall:					"您确定要重置所有服务器吗？",
 							context_localserversettings:		"本地服务器设置",
 							modal_colorpicker1:					"图标颜色",
 							modal_colorpicker2:					"字体颜色",
@@ -1192,12 +1247,14 @@ module.exports = (_ => {
 						};
 					case "zh-TW":	// Chinese (Traditional)
 						return {
+							confirm_reset:						"您確定要重置此服務器嗎？",
+							confirm_resetall:					"您確定要重置所有服務器嗎？",
 							context_localserversettings:		"本地服務器設置",
 							modal_colorpicker1:					"圖標顏色",
 							modal_colorpicker2:					"字體顏色",
 							modal_colorpicker3:					"工具提示顏色",
 							modal_colorpicker4:					"字體顏色",
-							modal_guildacronym:					"本地服務器縮寫",
+							modal_guildacronym:					"本地服務器縮​​寫",
 							modal_guildbanner:					"旗幟",
 							modal_guildicon:					"圖標",
 							modal_guildname:					"本地服務器名稱",
@@ -1212,6 +1269,8 @@ module.exports = (_ => {
 						};
 					default:		// English
 						return {
+							confirm_reset:						"Are you sure you want to reset this Server?",
+							confirm_resetall:					"Are you sure you want to reset all Servers?",
 							context_localserversettings:		"Local Server Settings",
 							modal_colorpicker1:					"Icon Color",
 							modal_colorpicker2:					"Font Color",

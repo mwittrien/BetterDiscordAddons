@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.2.0",
+			"version": "4.2.1",
 			"description": "Allow you to rename and recolor channelnames"
+		},
+		"changeLog": {
+			"improved": {
+				"Reset Confirmation": "Trying to reset a channel will first ask for permission, holding Shift will skip this"
+			}
 		}
 	};
 
@@ -164,7 +169,7 @@ module.exports = (_ => {
 					color: BDFDB.LibraryComponents.Button.Colors.RED,
 					label: "Reset all Channels",
 					onClick: _ => {
-						BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all channels?", _ => {
+						BDFDB.ModalUtils.confirm(this, this.labels.confirm_resetall, _ => {
 							BDFDB.DataUtils.remove(this, "channels");
 							this.forceUpdateAll();
 						});
@@ -211,10 +216,15 @@ module.exports = (_ => {
 									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.submenu_resetsettings,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
+										color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
 										disabled: !changedChannels[e.instance.props.channel.id],
-										action: _ => {
-											BDFDB.DataUtils.remove(this, "channels", e.instance.props.channel.id);
-											this.forceUpdateAll(true);
+										action: event => {
+											let remove = _ => {
+												BDFDB.DataUtils.remove(this, "channels", e.instance.props.channel.id);
+												this.forceUpdateAll(true);
+											};
+											if (event.shiftKey) remove();
+											else BDFDB.ModalUtils.confirm(this, this.labels.confirm_reset, remove);
 										}
 									})
 								]
@@ -588,16 +598,20 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
+							confirm_reset:						"Наистина ли искате да нулирате този канал?",
+							confirm_resetall:					"Наистина ли искате да нулирате всички канали?",
 							context_localchannelsettings:		"Настройки на местния канал",
 							modal_channelname:					"Име на местния канал",
 							modal_colorpicker1:					"Локален цвят на канала",
 							modal_header:						"Настройки на местния канал",
-							modal_inheritcolor:					"Наследете цвят на подканали",
+							modal_inheritcolor:					"Наследете цвета на подканали",
 							submenu_channelsettings:			"Промяна на настройките",
 							submenu_resetsettings:				"Нулиране на канала"
 						};
 					case "da":		// Danish
 						return {
+							confirm_reset:						"Er du sikker på, at du vil nulstille denne kanal?",
+							confirm_resetall:					"Er du sikker på, at du vil nulstille alle kanaler?",
 							context_localchannelsettings:		"Lokale kanalindstillinger",
 							modal_channelname:					"Lokalt kanalnavn",
 							modal_colorpicker1:					"Lokal kanalfarve",
@@ -608,6 +622,8 @@ module.exports = (_ => {
 						};
 					case "de":		// German
 						return {
+							confirm_reset:						"Möchtest du diesen Kanal wirklich zurücksetzen?",
+							confirm_resetall:					"Möchtest du wirklich alle Kanäle zurücksetzen?",
 							context_localchannelsettings:		"Lokale Kanaleinstellungen",
 							modal_channelname:					"Lokaler Kanalname",
 							modal_colorpicker1:					"Lokale Kanalfarbe",
@@ -618,6 +634,8 @@ module.exports = (_ => {
 						};
 					case "el":		// Greek
 						return {
+							confirm_reset:						"Είστε βέβαιοι ότι θέλετε να επαναφέρετε αυτό το κανάλι;",
+							confirm_resetall:					"Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλα τα κανάλια;",
 							context_localchannelsettings:		"Ρυθμίσεις τοπικού καναλιού",
 							modal_channelname:					"Τοπικό όνομα καναλιού",
 							modal_colorpicker1:					"Τοπικό χρώμα καναλιού",
@@ -628,16 +646,20 @@ module.exports = (_ => {
 						};
 					case "es":		// Spanish
 						return {
-							context_localchannelsettings:		"Configuración local de canal",
-							modal_channelname:					"Nombre local del canal",
-							modal_colorpicker1:					"Color local del canal",
-							modal_header:						"Configuración local de canal",
+							confirm_reset:						"¿Estás seguro de que deseas restablecer este canal?",
+							confirm_resetall:					"¿Está seguro de que desea restablecer todos los canales?",
+							context_localchannelsettings:		"Configuración de canal local",
+							modal_channelname:					"Nombre del canal local",
+							modal_colorpicker1:					"Color del canal local",
+							modal_header:						"Configuración de canal local",
 							modal_inheritcolor:					"Heredar color a subcanales",
 							submenu_channelsettings:			"Cambiar ajustes",
 							submenu_resetsettings:				"Restablecer canal"
 						};
 					case "fi":		// Finnish
 						return {
+							confirm_reset:						"Haluatko varmasti nollata tämän kanavan?",
+							confirm_resetall:					"Haluatko varmasti nollata kaikki kanavat?",
 							context_localchannelsettings:		"Paikallisen kanavan asetukset",
 							modal_channelname:					"Paikallisen kanavan nimi",
 							modal_colorpicker1:					"Paikallisen kanavan väri",
@@ -648,19 +670,23 @@ module.exports = (_ => {
 						};
 					case "fr":		// French
 						return {
-							context_localchannelsettings:		"Paramètres locale du salon",
-							modal_channelname:					"Nom local du salon",
-							modal_colorpicker1:					"Couleur locale du salon",
-							modal_header:						"Paramètres locale du salon",
-							modal_inheritcolor:					"Hériter de la couleur sur les sous-salons",
+							confirm_reset:						"Voulez-vous vraiment réinitialiser cette salon?",
+							confirm_resetall:					"Voulez-vous vraiment réinitialiser toutes les salons?",
+							context_localchannelsettings:		"Paramètres  de la salon",
+							modal_channelname:					"Nom local de la salon",
+							modal_colorpicker1:					"Couleur locale de la salon",
+							modal_header:						"Paramètres locaux de la salon",
+							modal_inheritcolor:					"Hériter de la couleur aux sous-canaux",
 							submenu_channelsettings:			"Modifier les paramètres",
-							submenu_resetsettings:				"Réinitialiser le salon"
+							submenu_resetsettings:				"Réinitialiser la salon"
 						};
 					case "hr":		// Croatian
 						return {
+							confirm_reset:						"Jeste li sigurni da želite resetirati ovaj kanal?",
+							confirm_resetall:					"Jeste li sigurni da želite resetirati sve kanale?",
 							context_localchannelsettings:		"Postavke lokalnog kanala",
 							modal_channelname:					"Naziv lokalnog kanala",
-							modal_colorpicker1:					"Boja lokalnog kanala",
+							modal_colorpicker1:					"Lokalna boja kanala",
 							modal_header:						"Postavke lokalnog kanala",
 							modal_inheritcolor:					"Naslijedi boju na podkanalima",
 							submenu_channelsettings:			"Promijeniti postavke",
@@ -668,6 +694,8 @@ module.exports = (_ => {
 						};
 					case "hu":		// Hungarian
 						return {
+							confirm_reset:						"Biztosan vissza akarja állítani ezt a csatornát?",
+							confirm_resetall:					"Biztosan visszaállítja az összes csatornát?",
 							context_localchannelsettings:		"Helyi csatorna beállításai",
 							modal_channelname:					"Helyi csatorna neve",
 							modal_colorpicker1:					"Helyi csatorna színe",
@@ -678,16 +706,20 @@ module.exports = (_ => {
 						};
 					case "it":		// Italian
 						return {
-							context_localchannelsettings:		"Impostazioni locale del canale",
-							modal_channelname:					"Nome locale canale",
-							modal_colorpicker1:					"Colore locale canale",
-							modal_header:						"Impostazioni locale del canale",
+							confirm_reset:						"Sei sicuro di voler ripristinare questo canale?",
+							confirm_resetall:					"Sei sicuro di voler ripristinare tutti i canali?",
+							context_localchannelsettings:		"Impostazioni del canale locale",
+							modal_channelname:					"Nome canale locale",
+							modal_colorpicker1:					"Colore canale locale",
+							modal_header:						"Impostazioni del canale locale",
 							modal_inheritcolor:					"Eredita colore ai canali secondari",
 							submenu_channelsettings:			"Cambia impostazioni",
 							submenu_resetsettings:				"Reimposta canale"
 						};
 					case "ja":		// Japanese
 						return {
+							confirm_reset:						"このチャンネルをリセットしてもよろしいですか？",
+							confirm_resetall:					"すべてのチャンネルをリセットしてもよろしいですか？",
 							context_localchannelsettings:		"ローカルチャンネル設定",
 							modal_channelname:					"ローカルチャネル名",
 							modal_colorpicker1:					"ローカルチャンネルの色",
@@ -698,6 +730,8 @@ module.exports = (_ => {
 						};
 					case "ko":		// Korean
 						return {
+							confirm_reset:						"이 채널을 재설정 하시겠습니까?",
+							confirm_resetall:					"모든 채널을 재설정 하시겠습니까?",
 							context_localchannelsettings:		"로컬 채널 설정",
 							modal_channelname:					"로컬 채널 이름",
 							modal_colorpicker1:					"로컬 채널 색상",
@@ -708,6 +742,8 @@ module.exports = (_ => {
 						};
 					case "lt":		// Lithuanian
 						return {
+							confirm_reset:						"Ar tikrai norite iš naujo nustatyti šį kanalą?",
+							confirm_resetall:					"Ar tikrai norite iš naujo nustatyti visus kanalus?",
 							context_localchannelsettings:		"Vietinio kanalo nustatymai",
 							modal_channelname:					"Vietinio kanalo pavadinimas",
 							modal_colorpicker1:					"Vietinio kanalo spalva",
@@ -718,16 +754,20 @@ module.exports = (_ => {
 						};
 					case "nl":		// Dutch
 						return {
+							confirm_reset:						"Weet u zeker dat u dit kanaal opnieuw wilt instellen?",
+							confirm_resetall:					"Weet u zeker dat u alle kanalen opnieuw wilt instellen?",
 							context_localchannelsettings:		"Lokale kanaalinstellingen",
 							modal_channelname:					"Lokale kanaalnaam",
-							modal_colorpicker1:					"Kleur lokaal kanaal",
+							modal_colorpicker1:					"Lokale kanaalkleur",
 							modal_header:						"Lokale kanaalinstellingen",
-							modal_inheritcolor:					"Overnemen van kleur naar subkanalen",
+							modal_inheritcolor:					"Overerf kleur naar subkanalen",
 							submenu_channelsettings:			"Instellingen veranderen",
 							submenu_resetsettings:				"Kanaal resetten"
 						};
 					case "no":		// Norwegian
 						return {
+							confirm_reset:						"Er du sikker på at du vil tilbakestille denne kanalen?",
+							confirm_resetall:					"Er du sikker på at du vil tilbakestille alle kanaler?",
 							context_localchannelsettings:		"Lokale kanalinnstillinger",
 							modal_channelname:					"Lokalt kanalnavn",
 							modal_colorpicker1:					"Lokal kanalfarge",
@@ -738,6 +778,8 @@ module.exports = (_ => {
 						};
 					case "pl":		// Polish
 						return {
+							confirm_reset:						"Czy na pewno chcesz zresetować ten kanał?",
+							confirm_resetall:					"Czy na pewno chcesz zresetować wszystkie kanały?",
 							context_localchannelsettings:		"Ustawienia kanału lokalnego",
 							modal_channelname:					"Nazwa kanału lokalnego",
 							modal_colorpicker1:					"Kolor kanału lokalnego",
@@ -748,9 +790,11 @@ module.exports = (_ => {
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
+							confirm_reset:						"Tem certeza que deseja redefinir este canal?",
+							confirm_resetall:					"Tem certeza de que deseja redefinir todos os canais?",
 							context_localchannelsettings:		"Configurações de canal local",
 							modal_channelname:					"Nome do canal local",
-							modal_colorpicker1:					"Cor do canal Local",
+							modal_colorpicker1:					"Cor do Canal Local",
 							modal_header:						"Configurações de canal local",
 							modal_inheritcolor:					"Herdar cor para subcanais",
 							submenu_channelsettings:			"Mudar configurações",
@@ -758,6 +802,8 @@ module.exports = (_ => {
 						};
 					case "ro":		// Romanian
 						return {
+							confirm_reset:						"Sigur doriți să resetați acest canal?",
+							confirm_resetall:					"Sigur doriți să resetați toate canalele?",
 							context_localchannelsettings:		"Setări canale locale",
 							modal_channelname:					"Numele canalului local",
 							modal_colorpicker1:					"Culoare canal local",
@@ -768,6 +814,8 @@ module.exports = (_ => {
 						};
 					case "ru":		// Russian
 						return {
+							confirm_reset:						"Вы уверены, что хотите сбросить этот канал?",
+							confirm_resetall:					"Вы уверены, что хотите сбросить все каналы?",
 							context_localchannelsettings:		"Настройки локального канала",
 							modal_channelname:					"Имя локального канала",
 							modal_colorpicker1:					"Цвет локального канала",
@@ -778,6 +826,8 @@ module.exports = (_ => {
 						};
 					case "sv":		// Swedish
 						return {
+							confirm_reset:						"Är du säker på att du vill återställa den här kanalen?",
+							confirm_resetall:					"Är du säker på att du vill återställa alla kanaler?",
 							context_localchannelsettings:		"Lokala kanalinställningar",
 							modal_channelname:					"Lokalt kanalnamn",
 							modal_colorpicker1:					"Lokal kanalfärg",
@@ -788,6 +838,8 @@ module.exports = (_ => {
 						};
 					case "th":		// Thai
 						return {
+							confirm_reset:						"แน่ใจไหมว่าต้องการรีเซ็ตช่องนี้",
+							confirm_resetall:					"แน่ใจไหมว่าต้องการรีเซ็ตช่องทั้งหมด",
 							context_localchannelsettings:		"การตั้งค่าช่องท้องถิ่น",
 							modal_channelname:					"ชื่อช่องท้องถิ่น",
 							modal_colorpicker1:					"ช่องท้องถิ่นสี",
@@ -798,6 +850,8 @@ module.exports = (_ => {
 						};
 					case "tr":		// Turkish
 						return {
+							confirm_reset:						"Bu kanalı sıfırlamak istediğinizden emin misiniz?",
+							confirm_resetall:					"Tüm kanalları sıfırlamak istediğinizden emin misiniz?",
 							context_localchannelsettings:		"Yerel Kanal Ayarları",
 							modal_channelname:					"Yerel Kanal Adı",
 							modal_colorpicker1:					"Yerel Kanal Rengi",
@@ -808,6 +862,8 @@ module.exports = (_ => {
 						};
 					case "uk":		// Ukrainian
 						return {
+							confirm_reset:						"Справді скинути цей канал?",
+							confirm_resetall:					"Ви впевнені, що хочете скинути всі канали?",
 							context_localchannelsettings:		"Налаштування локального каналу",
 							modal_channelname:					"Назва місцевого каналу",
 							modal_colorpicker1:					"Колір локального каналу",
@@ -818,6 +874,8 @@ module.exports = (_ => {
 						};
 					case "vi":		// Vietnamese
 						return {
+							confirm_reset:						"Bạn có chắc chắn muốn đặt lại kênh này không?",
+							confirm_resetall:					"Bạn có chắc chắn muốn đặt lại tất cả các kênh không?",
 							context_localchannelsettings:		"Cài đặt kênh cục bộ",
 							modal_channelname:					"Tên kênh địa phương",
 							modal_colorpicker1:					"Màu kênh địa phương",
@@ -828,6 +886,8 @@ module.exports = (_ => {
 						};
 					case "zh":		// Chinese
 						return {
+							confirm_reset:						"您确定要重置此频道吗？",
+							confirm_resetall:					"您确定要重置所有频道吗？",
 							context_localchannelsettings:		"本地频道设置",
 							modal_channelname:					"本地频道名称",
 							modal_colorpicker1:					"本地频道颜色",
@@ -838,6 +898,8 @@ module.exports = (_ => {
 						};
 					case "zh-TW":	// Chinese (Traditional)
 						return {
+							confirm_reset:						"您確定要重置此頻道嗎？",
+							confirm_resetall:					"您確定要重置所有頻道嗎？",
 							context_localchannelsettings:		"本地頻道設置",
 							modal_channelname:					"本地頻道名稱",
 							modal_colorpicker1:					"本地頻道顏色",
@@ -848,6 +910,8 @@ module.exports = (_ => {
 						};
 					default:		// English
 						return {
+							confirm_reset:						"Are you sure you want to reset this Channel?",
+							confirm_resetall:					"Are you sure you want to reset all Channels?",
 							context_localchannelsettings:		"Local Channel Settings",
 							modal_channelname:					"Local Channel Name",
 							modal_colorpicker1:					"Local Channel Color",
