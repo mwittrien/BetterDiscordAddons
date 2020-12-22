@@ -712,16 +712,17 @@
 			"styled": "styledGuildsAsChannels-DNHtg_"
 		},
 		"EmojiStatistics": {
-			"statisticsButton": "statisticsButton-nW2KoM",
 			"amountCell": "amountCell-g_W6Rx",
 			"iconCell": "iconCell--wniOu",
-			"nameCell": "nameCell-xyXENZ"
+			"nameCell": "nameCell-xyXENZ",
+			"statisticsButton": "statisticsButton-nW2KoM"
 		},
 		"FriendNotifications": {
+			"friendsOnline": "friendsOnline-2JkivW",
 			"logAvatar": "avatar-GgGssS",
 			"logContent": "content-_3_FFs",
 			"logTime": "time-00Fs44",
-			"friendsOnline": "friendsOnline-2JkivW",
+			"timeLogModal": "timeLogModal-9s4Rts",
 			"typeLabel": "label-9FgsSa"
 		},
 		"GoogleTranslateOption": {
@@ -1156,6 +1157,7 @@
 		"_friendnotificationslogcontent": ["FriendNotifications", "logContent"],
 		"_friendnotificationslogtime": ["FriendNotifications", "logTime"],
 		"_friendnotificationsfriendsonline": ["FriendNotifications", "friendsOnline"],
+		"_friendnotificationstimelogmodal": ["FriendNotifications", "timeLogModal"],
 		"_friendnotificationstypelabel": ["FriendNotifications", "typeLabel"],
 		"_imageutilitiesdetails": ["ImageUtilities", "details"],
 		"_imageutilitiesdetailsadded": ["ImageUtilities", "detailsAdded"],
