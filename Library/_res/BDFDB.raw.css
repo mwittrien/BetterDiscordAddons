@@ -714,6 +714,11 @@ img:not([src]), img[src=""], img[src="null"] {
 	flex: 1 1 auto;
 }
 
+[REPLACE_CLASS_modalwrapper] [REPLACE_CLASS_modalclose] [REPLACE_CLASS_buttoncontents] {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 [REPLACE_CLASS_modalsubinner] {
 	padding-left: 16px;
 	padding-right: 8px;
