@@ -231,6 +231,8 @@ svg [fill="#4F545C"] {
 	box-shadow: 0 0 0 1px rgba(var(--vbackgroundtertiary),.6),0 2px 10px 0 rgba(0,0,0,.2);
 }
 
+#app-mount .tooltip-3oByQd,
+#app-mount .tooltip-1_vJJI,
 #app-mount .tooltipBlack-PPG47z,
 #app-mount .tooltipGrey-1hnvTt {
 	background-color: var(--background-floating);
@@ -239,6 +241,10 @@ svg [fill="#4F545C"] {
 #app-mount .tooltipBlack-PPG47z .tooltipPointer-3ZfirK,
 #app-mount .tooltipGrey-1hnvTt .tooltipPointer-3ZfirK {
 	border-top-color: var(--background-floating);
+}
+#app-mount .tooltipPointer-22Q7m0,
+#app-mount .tooltipPointer-1awMxk {
+	border-right-color: var(--background-floating);
 }
 
 #app-mount .bubble-3qRl2J {

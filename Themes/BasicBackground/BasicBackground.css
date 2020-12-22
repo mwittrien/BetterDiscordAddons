@@ -114,7 +114,8 @@
 		12.	REACTIONSMODAL
 		13.	GUILDTEMPLATEMODAL
 		14.	GUILDWELCOMEMODAL
-		15.	SCREENSHAREMODAL
+		15.	GUILDRULESMODAL
+		16.	SCREENSHAREMODAL
 	14.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -2846,6 +2847,82 @@ body::before {
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 
+.exampleContainer-3ekFIr {									/* communitysettings	rules		example					*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+#app-mount .exampleModal-2oh58d {							/* communitysettings	rules		examplemodal			*/
+	background-color: transparent;
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
+	position: relative;
+	border-radius: 5px;
+}
+.exampleModal-2oh58d > * {
+	z-index: 1;
+}
+.exampleModal-2oh58d::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	border-radius: 5px;
+	pointer-events: none;
+}
+.exampleModal-2oh58d::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	width: unset;
+	height: unset;
+	border-radius: 5px;
+	pointer-events: none;
+}
+.guildSidebar-339BqP {										/* communitysettings	rules		example sidebar			*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+.content-BMIBeK {											/* communitysettings	rules		example inner			*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+#app-mount .footer-1JuRYY {									/* communitysettings	rules		example footer			*/
+	background: transparent;
+}
+.exampleTextSingleLine-1kvErc {								/* communitysettings	rules		example line			*/
+	background-color: rgba(var(--fontwhite1), 0.2);
+}
+
+.enableContainer-2DIT9Q {									/* communitysettings	rules		enablecontainer			*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.icon-1CGepy {												/* communitysettings	rules		category icon			*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.settingsFormItem-103g1I {									/* communitysettings	rules		form					*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.editButton-1MavoF {										/* communitysettings	rules		editbutton				*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+.editButton-1MavoF:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.6);
+}
+.formFieldWrapper-malor5,
+.settingsFormFieldWrapper-3Y77Pr {							/* communitysettings	rules		form field				*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	border-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.termsRow-2dS5nm {											/* communitysettings	rules		termsrow				*/
+	border-color: rgba(var(--fontwhite3), 0.2);
+}
+
 .exampleContainer-25sB-A {									/* communitysettings	welcome		examplecontainer		*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
@@ -2866,7 +2943,6 @@ body::before {
 	right: 0;
 	left: 0;
 	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
-	background-attachment: fixed;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
 	height: unset;
@@ -4109,7 +4185,16 @@ body::before {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
 
-/* ----		13.15.	SCREENSHAREMODAL				---- */
+/* ----		13.15.	GUILDRULESMODAL					---- */
+
+.guildSidebar-2OCzWB {										/* modal				sidebar								*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+.modal-f02hVt {												/* modal				inner								*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+
+/* ----		13.16.	SCREENSHAREMODAL				---- */
 
 #app-mount .sourceThumbnail-27dolk {						/* modal				preview tiles						*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
@@ -6842,10 +6927,14 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 .bodyText-3yi6Dj {
 	color: rgb(var(--fontwhite1));
 }
+#app-mount .tooltip-3oByQd,
+#app-mount .tooltip-1_vJJI,
 #app-mount .tooltip-2QfLtc {
 	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
 }
+#app-mount .tooltip-3oByQd,
+#app-mount .tooltip-1_vJJI,
 #app-mount .tooltipGrey-1hnvTt,
 #app-mount .tooltipBlack-PPG47z {
 	background-color: rgb(var(--vaccentcolor));
@@ -6854,6 +6943,10 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 #app-mount .tooltipGrey-1hnvTt .tooltipPointer-3ZfirK,
 #app-mount .tooltipBlack-PPG47z .tooltipPointer-3ZfirK {
 	border-top-color: rgb(var(--vaccentcolor));
+}
+#app-mount .tooltipPointer-22Q7m0,
+#app-mount .tooltipPointer-1awMxk {
+	border-right-color: rgb(var(--vaccentcolor));
 }
 .emptyUser-7txhlW {
 	background: rgba(var(--vtransparencycolor), 0.5);
