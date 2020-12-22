@@ -699,6 +699,7 @@ module.exports = (_ => {
 										autoFocus: true,
 										query: this.props.searchString,
 										onChange: (value, instance) => {
+											if (!loading.is) return;
 											BDFDB.TimeUtils.clear(searchTimeout);
 											searchTimeout = BDFDB.TimeUtils.timeout(_ => {
 												this.props.searchString = list.props.searchString = value.replace(/[<|>]/g, "");
@@ -706,6 +707,7 @@ module.exports = (_ => {
 											}, 1000);
 										},
 										onClear: instance => {
+											if (!loading.is) return;
 											this.props.searchString = list.props.searchString = "";
 											BDFDB.ReactUtils.forceUpdate(this, list);
 										}
