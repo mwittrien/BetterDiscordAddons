@@ -365,17 +365,16 @@ body::before {
 	border-radius: 15px 15px 24px 24px;
 	top: 0;
 	bottom: 0;
+	margin-bottom: 8px;
 	transition: border-radius 3s ease, background-color 1s ease;
 }
 .expandedFolderBackground-2sPsd-.hover-2ji_A7 {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
 
-.wrapper-1Rf91z .wrapper-21YSNc .expandedGuilds-1JMD4M,
 .wrapper-1Rf91z .wrapper-21YSNc [role="group"] {			/* folder				guildwrap							*/
-	height: auto !important;
+	margin-bottom: -8px;
 }
-.wrapper-1Rf91z .wrapper-21YSNc .expandedGuilds-1JMD4M .listItem-2P_4kh:last-child,
 .wrapper-1Rf91z .wrapper-21YSNc [role="group"] .listItem-2P_4kh:last-child {
 	margin-bottom: 0;
 }
