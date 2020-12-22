@@ -3665,7 +3665,7 @@ module.exports = (_ => {
 				};
 				BDFDB.ModalUtils.confirm = function (plugin, text, callback) {
 					if (!BDFDB.ObjectUtils.is(plugin) || typeof text != "string") return;
-					BDFDB.ModalUtils.open(plugin, {text, header: "Are you sure?", className: BDFDB.disCN.modalconfirmmodal, scroller: false, buttons: [
+					BDFDB.ModalUtils.open(plugin, {text, header: BDFDB.LanguageStrings.LibraryStrings.confirm, className: BDFDB.disCN.modalconfirmmodal, scroller: false, buttons: [
 						{contents: BDFDB.LanguageUtils.LanguageStrings.OKAY, close: true, color: "RED", click: typeof callback == "function" ? callback : _ => {}},
 						{contents: BDFDB.LanguageUtils.LanguageStrings.CANCEL, close: true}
 					]});

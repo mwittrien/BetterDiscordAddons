@@ -2896,6 +2896,7 @@
 	"LibraryStrings": {
 		"bg": {
 			"ascending": "Възходящ",
+			"confirm": "Сигурен ли си?",
 			"descending": "Низходящ",
 			"donate_message": "Подкрепете ме, за да получавам допълнителни актуализации!",
 			"file_navigator_text": "Преглед на файл",
@@ -2914,6 +2915,7 @@
 		},
 		"da": {
 			"ascending": "Stigende",
+			"confirm": "Er du sikker?",
 			"descending": "Aftagende",
 			"donate_message": "Støt mig for at modtage yderligere opdateringer!",
 			"file_navigator_text": "Gennemse fil",
@@ -2932,6 +2934,7 @@
 		},
 		"de": {
 			"ascending": "Aufsteigend",
+			"confirm": "Bist du sicher?",
 			"descending": "Absteigend",
 			"donate_message": "Unterstütze mich, um weitere Updates zu erhalten!",
 			"file_navigator_text": "Datei durchsuchen",
@@ -2950,6 +2953,7 @@
 		},
 		"el": {
 			"ascending": "Ανερχόμενος",
+			"confirm": "Είσαι σίγουρος?",
 			"descending": "Φθίνων",
 			"donate_message": "Υποστηρίξτε με για να λαμβάνω περαιτέρω ενημερώσεις!",
 			"file_navigator_text": "Αναζήτηση αρχείων",
@@ -2968,6 +2972,7 @@
 		},
 		"es": {
 			"ascending": "Ascendente",
+			"confirm": "¿Estas seguro?",
 			"descending": "Descendiendo",
 			"donate_message": "¡Apóyame para recibir más actualizaciones!",
 			"file_navigator_text": "Buscar Archivo",
@@ -2986,6 +2991,7 @@
 		},
 		"fi": {
 			"ascending": "Nouseva",
+			"confirm": "Oletko varma?",
 			"descending": "Laskeva",
 			"donate_message": "Tuki minulle päivitysten saamiseksi!",
 			"file_navigator_text": "Selaa tiedostoa",
@@ -3004,6 +3010,7 @@
 		},
 		"fr": {
 			"ascending": "Ascendant",
+			"confirm": "Êtes-vous sûr?",
 			"descending": "Descendant",
 			"donate_message": "Soutenez-moi pour recevoir d'autres mises à jour!",
 			"file_navigator_text": "Parcourir le fichier",
@@ -3022,6 +3029,7 @@
 		},
 		"hr": {
 			"ascending": "Uzlazni",
+			"confirm": "Jesi li siguran?",
 			"descending": "Silazni",
 			"donate_message": "Podržite me da primam daljnja ažuriranja!",
 			"file_navigator_text": "Pregledaj datoteku",
@@ -3040,6 +3048,7 @@
 		},
 		"hu": {
 			"ascending": "Növekvő",
+			"confirm": "Biztos vagy ebben?",
 			"descending": "Csökkenő",
 			"donate_message": "Támogasson további frissítésekhez!",
 			"file_navigator_text": "Tallózás a fájlban",
@@ -3058,6 +3067,7 @@
 		},
 		"it": {
 			"ascending": "Ascendente",
+			"confirm": "Sei sicuro?",
 			"descending": "Discendente",
 			"donate_message": "Supportami per ricevere ulteriori aggiornamenti!",
 			"file_navigator_text": "Sfoglia file",
@@ -3076,6 +3086,7 @@
 		},
 		"ja": {
 			"ascending": "上昇",
+			"confirm": "本気ですか？",
 			"descending": "降順",
 			"donate_message": "さらなるアップデートを受け取るために私をサポートしてください！",
 			"file_navigator_text": "ファイルを参照",
@@ -3094,6 +3105,7 @@
 		},
 		"ko": {
 			"ascending": "오름차순",
+			"confirm": "확실해?",
 			"descending": "내림차순",
 			"donate_message": "추가 업데이트를받을 수 있도록 저를 지원하십시오!",
 			"file_navigator_text": "파일 찾아보기",
@@ -3112,6 +3124,7 @@
 		},
 		"lt": {
 			"ascending": "Kylanti",
+			"confirm": "Ar tu tuo tikras?",
 			"descending": "Mažėjantis",
 			"donate_message": "Palaikykite mane, kad gautumėte tolesnių naujinių!",
 			"file_navigator_text": "Naršyti failą",
@@ -3130,6 +3143,7 @@
 		},
 		"nl": {
 			"ascending": "Oplopend",
+			"confirm": "Weet je zeker dat?",
 			"descending": "Aflopend",
 			"donate_message": "Steun mij om verdere updates te ontvangen!",
 			"file_navigator_text": "Bestand zoeken",
@@ -3148,6 +3162,7 @@
 		},
 		"no": {
 			"ascending": "Stigende",
+			"confirm": "Er du sikker?",
 			"descending": "Fallende",
 			"donate_message": "Støtt meg for å motta ytterligere oppdateringer!",
 			"file_navigator_text": "Bla gjennom fil",
@@ -3166,6 +3181,7 @@
 		},
 		"pl": {
 			"ascending": "Rosnąco",
+			"confirm": "Jesteś pewny?",
 			"descending": "Malejąco",
 			"donate_message": "Wesprzyj mnie, aby otrzymywać dalsze aktualizacje!",
 			"file_navigator_text": "Przeglądać plik",
@@ -3184,6 +3200,7 @@
 		},
 		"pt-BR": {
 			"ascending": "Ascendente",
+			"confirm": "Você tem certeza?",
 			"descending": "Descendente",
 			"donate_message": "Apoie-me para receber mais atualizações!",
 			"file_navigator_text": "Procurar arquivo",
@@ -3202,6 +3219,7 @@
 		},
 		"ro": {
 			"ascending": "Ascendent",
+			"confirm": "Esti sigur?",
 			"descending": "Descendentă",
 			"donate_message": "Ajută-mă să primesc actualizări suplimentare!",
 			"file_navigator_text": "Răsfoiți fișierul",
@@ -3220,6 +3238,7 @@
 		},
 		"ru": {
 			"ascending": "Восходящий",
+			"confirm": "Вы уверены?",
 			"descending": "По убыванию",
 			"donate_message": "Поддержите меня, чтобы получать обновления!",
 			"file_navigator_text": "Обзор файла",
@@ -3238,6 +3257,7 @@
 		},
 		"sv": {
 			"ascending": "Stigande",
+			"confirm": "Är du säker?",
 			"descending": "Nedåtgående",
 			"donate_message": "Stöd mig för att få fler uppdateringar!",
 			"file_navigator_text": "Bläddra i fil",
@@ -3256,6 +3276,7 @@
 		},
 		"th": {
 			"ascending": "จากน้อยไปมาก",
+			"confirm": "คุณแน่ใจไหม?",
 			"descending": "จากมากไปน้อย",
 			"donate_message": "สนับสนุนฉันเพื่อรับข้อมูลอัปเดตเพิ่มเติม!",
 			"file_navigator_text": "เรียกดูไฟล์",
@@ -3274,6 +3295,7 @@
 		},
 		"tr": {
 			"ascending": "Artan",
+			"confirm": "Emin misiniz?",
 			"descending": "Azalan",
 			"donate_message": "Daha fazla güncelleme almak için beni destekleyin!",
 			"file_navigator_text": "Dosyaya Gözat",
@@ -3292,6 +3314,7 @@
 		},
 		"uk": {
 			"ascending": "Висхідний",
+			"confirm": "Ти впевнений?",
 			"descending": "За спаданням",
 			"donate_message": "Підтримайте мене, щоб отримувати подальші оновлення!",
 			"file_navigator_text": "Переглянути файл",
@@ -3310,6 +3333,7 @@
 		},
 		"vi": {
 			"ascending": "Tăng dần",
+			"confirm": "Bạn có chắc không?",
 			"descending": "Giảm dần",
 			"donate_message": "Ủng hộ tôi để nhận thêm thông tin cập nhật!",
 			"file_navigator_text": "Chọn thư mục",
@@ -3328,6 +3352,7 @@
 		},
 		"zh": {
 			"ascending": "上升",
+			"confirm": "你确定吗？",
 			"descending": "降序",
 			"donate_message": "支持我以获取更多更新！",
 			"file_navigator_text": "浏览文件",
@@ -3346,6 +3371,7 @@
 		},
 		"zh-TW": {
 			"ascending": "上升",
+			"confirm": "你確定嗎？",
 			"descending": "降序",
 			"donate_message": "支持我以獲取更多更新！",
 			"file_navigator_text": "瀏覽文件",
@@ -3364,6 +3390,7 @@
 		},
 		"default": {
 			"ascending": "Ascending",
+			"confirm": "Are you sure?",
 			"descending": "Descending",
 			"donate_message": "Support me to receive further updates!",
 			"file_navigator_text": "Browse File",
