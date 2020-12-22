@@ -886,6 +886,15 @@
 			"hue": "hue-13HAGb",
 			"saturation": "saturation-1FDvtn",
 			"wrapper": "wrapper-2AQieU"
+		},
+		"Toast": {
+			"avatar": "toast-avatar",
+			"closing": "closing",
+			"custom": "toast-custom",
+			"icon": "icon",
+			"inner": "toast-inner",
+			"toast": "toast",
+			"toasts": "toasts"
 		}
 	},
 	"DiscordClassModules": {
@@ -2578,6 +2587,13 @@
 		"titlesize12": ["UserPopout", "size12"],
 		"titlesize14": ["UserPopout", "size14"],
 		"titlesize16": ["UserPopout", "size16"],
+		"toast": ["Toast", "toast"],
+		"toastavatar": ["Toast", "avatar"],
+		"toastclosing": ["Toast", "closing"],
+		"toastcustom": ["Toast", "custom"],
+		"toasticon": ["Toast", "icon"],
+		"toastinner": ["Toast", "inner"],
+		"toasts": ["Toast", "toasts"],
 		"tooltip": ["Tooltip", "tooltip"],
 		"tooltipactivityicon": ["TooltipGuild", "activityIcon"],
 		"tooltipblack": ["Tooltip", "tooltipBlack"],

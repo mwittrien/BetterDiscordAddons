@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.5.4",
+			"version": "1.5.5",
 			"description": "Get a notification when a Friend or a User you choose to observe changes their online status, can be configured individually in the settings"
 		},
 		"changeLog": {
-			"fixed": {
-				"New Settings Menu": "Fixed for new settings menu"
+			"added": {
+				"Search": "You can now search for a username in the time log modal"
 			}
 		}
 	};
@@ -64,7 +64,8 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var _this;
-		var userStatusStore, timeLog, lastTimes, friendCounter, checkInterval, paginationOffset = {};
+		var userStatusStore, timeLog, lastTimes, checkInterval, paginationOffset = {};
+		var friendCounter, timeLogList;
 		var settings = {}, amounts = {}, notificationStrings = {}, notificationSounds = {}, observedUsers = {};
 		
 		const FriendOnlineCounterComponent = class FriendOnlineCounter extends BdApi.React.Component {
@@ -82,6 +83,49 @@ module.exports = (_ => {
 						}
 					})
 				});
+			}
+		};
+		
+		const TimeLogComponent = class TimeLog extends BdApi.React.Component {
+			componentDidMount() {
+				timeLogList = this;
+			}
+			render() {
+				return this.props.entries.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PaginatedList, {
+					items: this.props.entries,
+					amount: 100,
+					copyToBottom: true,
+					renderItem: (log, i) => [
+						i > 0 ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+						className: BDFDB.disCNS.margintop8 + BDFDB.disCN.marginbottom8
+						}) : null,
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+							align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+							children: [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+									className: BDFDB.disCN._friendnotificationslogtime,
+									children: `[${log.timeString}]`
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
+									className: BDFDB.disCN._friendnotificationslogavatar,
+									src: log.avatar,
+									status: log.status,
+									size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+									className: BDFDB.disCN._friendnotificationslogcontent,
+									speed: 1,
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+										children: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(log.string))
+									})
+								})
+							]
+						})
+					]
+				}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateBottom, {
+					msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
+					image: BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight ? "/assets/9b0d90147f7fab54f00dd193fe7f85cd.svg" : "/assets/308e587f3a68412f137f7317206e92c2.svg"
+				})
 			}
 		};
 	
@@ -143,6 +187,11 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN._friendnotificationsfriendsonline} {
 						cursor: pointer;
+					}
+					${BDFDB.dotCNS._friendnotificationstimelogmodal + BDFDB.dotCN.messagespopoutemptyplaceholder} {
+						position: absolute;
+						bottom: 0;
+						width: 100%;
 					}
 				`;
 				
@@ -399,19 +448,19 @@ module.exports = (_ => {
 							children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 								className: BDFDB.disCN.marginbottom8,
 								children: BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
+									className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
 									children: [
 										"Allows you to configure your own message strings for the different statuses. ",
 										BDFDB.ReactUtils.createElement("strong", {children: "$user"}),
 										" is the placeholder for the username, ",
 										BDFDB.ReactUtils.createElement("strong", {children: "$status"}),
-										" for the statusName, ",
+										" for the status name, ",
 										BDFDB.ReactUtils.createElement("strong", {children: "$game"}),
-										" for the gamename, ",
+										" for the game name, ",
 										BDFDB.ReactUtils.createElement("strong", {children: "$song"}),
-										" for the songname and ",
+										" for the song name and ",
 										BDFDB.ReactUtils.createElement("strong", {children: "$artist"}),
-										" for the songartist."
+										" for the song artist."
 									]
 								})
 							})].concat(Object.keys(notificationStrings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
@@ -622,7 +671,7 @@ module.exports = (_ => {
 								};
 								if (!observedUsers[id].desktop) {
 									if (!document.querySelector(`.friendnotifications-${id}-toast`)) {
-										let toast = BDFDB.NotificationUtils.toast(`<div class="toast-inner"><div class="toast-avatar" style="background-image: url(${avatar});"></div><div>${toastString}</div></div>`, {html: true, timeout: toastTime, color: BDFDB.UserUtils.getStatusColor(status.statusName), icon: false, selector: `friendnotifications-${status.statusName}-toast friendnotifications-${id}-toast`});
+										let toast = BDFDB.NotificationUtils.toast(`<div class="${BDFDB.disCN.toastinner}"><div class="${BDFDB.disCN.toastavatar}" style="background-image: url(${avatar});"></div><div>${toastString}</div></div>`, {html: true, timeout: toastTime, color: BDFDB.UserUtils.getStatusColor(status.statusName), icon: false, selector: `friendnotifications-${status.statusName}-toast friendnotifications-${id}-toast`});
 										toast.addEventListener("click", openChannel);
 										let notificationsound = notificationSounds["toast" + status.statusName] || {};
 										if (!notificationsound.mute && notificationsound.song) {
@@ -646,43 +695,30 @@ module.exports = (_ => {
 			}	
 
 			showTimeLog () {
-				if (!timeLog.length) BDFDB.NotificationUtils.toast("No logs saved yet", {type: "error"});
-				else BDFDB.ModalUtils.open(this, {
+				let searchTimeout;
+				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: "LogIn/-Out Timelog",
 					subheader: "",
-					className: `${this.name}-Log-modal`,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PaginatedList, {
-						items: timeLog,
-						amount: 100,
-						copyToBottom: true,
-						renderItem: (log, i) => [
-							i > 0 ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-							className: BDFDB.disCNS.margintop8 + BDFDB.disCN.marginbottom8
-							}) : null,
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-								align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-										className: BDFDB.disCN._friendnotificationslogtime,
-										children: `[${log.timeString}]`
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
-										className: BDFDB.disCN._friendnotificationslogavatar,
-										src: log.avatar,
-										status: log.status,
-										size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-										className: BDFDB.disCN._friendnotificationslogcontent,
-										speed: 1,
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-											children: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(log.string))
-										})
-									})
-								]
-							})
-						]
+					className: BDFDB.disCN._friendnotificationstimelogmodal,
+					titleChildren: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
+						autoFocus: true,
+						query: "",
+						onChange: (value, instance) => {
+							BDFDB.TimeUtils.clear(searchTimeout);
+							searchTimeout = BDFDB.TimeUtils.timeout(_ => {
+								let searchString = value.toUpperCase();
+								timeLogList.props.entries = timeLog.filter(n => n && n.name && n.name.toUpperCase().indexOf(searchString) > -1);
+								BDFDB.ReactUtils.forceUpdate(timeLogList);
+							}, 1000);
+						},
+						onClear: instance => {
+							timeLogList.props.entries = timeLog;
+							BDFDB.ReactUtils.forceUpdate(timeLogList);
+						}
+					}),
+					children: BDFDB.ReactUtils.createElement(TimeLogComponent, {
+						entries: timeLog
 					})
 				});
 			}
