@@ -89,7 +89,7 @@ module.exports = (_ => {
 			},
 			DOWNLOADABLE: {
 				colorClass: "BRAND",
-				backgroundColor: "BRAND",
+				backgroundColor: "var(--bdfdb-blurple)",
 				icon: "DOWNLOAD",
 				text: "Download"
 			}
@@ -330,7 +330,7 @@ module.exports = (_ => {
 							text: buttonConfig.text,
 							children: BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCNS._repobutton + BDFDB.disCN._repocontrolsbutton,
-								style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor]},
+								style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor] || buttonConfig.backgroundColor},
 								onClick: _ => {
 									_this.downloadPlugin(this.props.plugin);
 									if (list && list.props.rnmStart) BDFDB.TimeUtils.timeout(_ => {
@@ -368,7 +368,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 							size: BDFDB.LibraryComponents.Button.Sizes.MIN,
 							color: BDFDB.LibraryComponents.Button.Colors[buttonConfig.colorClass],
-							style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor]},
+							style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor] || buttonConfig.backgroundColor},
 							children: buttonConfig.text,
 							onClick: (e, instance) => {
 								_this.downloadPlugin(this.props.plugin);
