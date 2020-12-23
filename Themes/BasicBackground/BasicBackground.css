@@ -2910,6 +2910,7 @@ body::before {
 
 .guildSidebar-339BqP {										/* communitysettings	rules		example sidebar			*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
+	margin-right: 0 !important;
 }
 .content-BMIBeK {											/* communitysettings	rules		example inner			*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
