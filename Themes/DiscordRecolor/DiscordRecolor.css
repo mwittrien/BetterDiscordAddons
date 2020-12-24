@@ -2550,6 +2550,10 @@ img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 	color: #fff;
 	text-shadow: 1px 1px var(--background-tertiary);
 }
+#app-mount .topSectionNormal-2-vo2m span[style*="color"],
+#app-mount .topSectionNormal-2-vo2m .botText-1526X_ {
+	text-shadow: 1px 1px transparent;
+}
 #app-mount .topSectionNormal-2-vo2m .username-3gJmXY {
 	color: var(--text-color);
 }
@@ -3317,6 +3321,10 @@ img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 	background: var(--user-background, var(--background-tertiary)) center/cover no-repeat;
 	color: var(--text-color);
 	text-shadow: 1px 1px var(--background-tertiary);
+}
+#app-mount .headerNormal-T_seeN span[style*="color"],
+#app-mount .headerNormal-T_seeN .botText-1526X_ {
+	text-shadow: 1px 1px transparent;
 }
 #app-mount .userPopout-3XzG_A .username-2b1r56 + span {
 	opacity: .7;
