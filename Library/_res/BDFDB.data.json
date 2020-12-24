@@ -2985,7 +2985,7 @@
 			"server": "Server",
 			"settings_showSupportBadges_description": "Zeigt kleine Abzeichen für Benutzer, die meinen Patreon unterstützen",
 			"settings_showToasts_description": "Zeigt Plugin Start und Stopp Toasts",
-			"settings_showToasts_note": "Deaktiviere die allgemeine BD Einstellung '{{var0}}', bevor du diese deaktivieren",
+			"settings_showToasts_note": "Deaktiviere die allgemeine BD Einstellung '{{var0}}', bevor du diese deaktivierst",
 			"sort_by": "Sortieren nach",
 			"toast_plugin_force_updated": "{{var0}} wurde automatisch aktualisiert, da deine Version stark veraltet war",
 			"toast_plugin_started": "{{var0}} wurde gestartet",
