@@ -7840,8 +7840,13 @@ module.exports = (_ => {
 						};
 						let fails = 0, next = lang => {
 							if (!lang) {
-								let result = Object.keys(translations).filter(n => n != "en").sort().map(l => `\n\t\t\t\t\tcase "${l}":${l.length > 2 ? "\t" : "\t\t"}// ${BDFDB.LanguageUtils.languages[l].name}\n\t\t\t\t\t\treturn {${translations[l].map((s, i) => `\n\t\t\t\t\t\t\t${Object.keys(strings)[i]}:${"\t".repeat(10 - ((Object.keys(strings)[i].length + 2) / 4))}"${translations[language][i][0] == translations[language][i][0].toUpperCase() ? BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(s) : s}"`).join(",")}\n\t\t\t\t\t\t};`).join("");
-								if (translations.en) result += `\n\t\t\t\t\tdefault:\t\t// English\n\t\t\t\t\t\treturn {${translations.en.map((s, i) => `\n\t\t\t\t\t\t\t${Object.keys(strings)[i]}:${"\t".repeat(10 - ((Object.keys(strings)[i].length + 2) / 4))}"${translations[language][i][0] == translations[language][i][0].toUpperCase() ? BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(s) : s}"`).join(",")}\n\t\t\t\t\t\t};`
+								let format = config.asObject ? ((l, isNotFirst) => {
+									return `${isNotFirst ? "," : ""}\n\t\t"${l == "en" ? "default" : l}": {${translations[l].map((s, i) => `\n\t\t\t"${Object.keys(strings)[i]}": "${translations[language][i][0] == translations[language][i][0].toUpperCase() ? BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(s) : s}"`).join(",")}\n\t\t}`;
+								}) : ((l, isNotFirst) => {
+									return `\n\t\t\t\t\t${l == "en" ? "default" : `case "${l}"`}:${l.length > 2 ? "\t" : "\t\t"}// ${BDFDB.LanguageUtils.languages[l].name}\n\t\t\t\t\t\treturn {${translations[l].map((s, i) => `\n\t\t\t\t\t\t\t${Object.keys(strings)[i]}:${"\t".repeat(10 - ((Object.keys(strings)[i].length + 2) / 4))}"${translations[language][i][0] == translations[language][i][0].toUpperCase() ? BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(s) : s}"`).join(",")}\n\t\t\t\t\t\t};`;
+								});
+								let result = Object.keys(translations).filter(n => n != "en").sort().map((l, i) => format(l, i)).join("");
+								if (translations.en) result += format("en", result ? 1 : 0);
 								BDFDB.NotificationUtils.toast("Translation copied to clipboard.", {type: "success"});
 								BDFDB.LibraryRequires.electron.clipboard.write({text: result});
 							}
