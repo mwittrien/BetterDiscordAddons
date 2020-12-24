@@ -4063,13 +4063,14 @@ html .bd-settings-group.collapsible .bd-settings-title::after {
 	background-color: var(--background-secondary-alt);
 }
 #app-mount .bd-addon-button .bd-icon {
-	fill: var(--interactive-normal);
+	fill: currentColor;
+	color: var(--interactive-normal);
 }
 #app-mount .bd-addon-button .bd-icon:hover {
-	fill: var(--interactive-hover);
+	color: var(--interactive-hover);
 }
 #app-mount .bd-addon-button .bd-icon:active {
-	fill: var(--interactive-active);
+	color: var(--interactive-active);
 }
 #app-mount .bd-addon-list .bd-description {
 	color: var(--header-secondary);
