@@ -348,7 +348,7 @@ module.exports = (_ => {
 								nativeClass: true,
 								iconSVG: translateIconGeneral
 							}),
-							width: 400,
+							width: 450,
 							padding: 10,
 							animation: BDFDB.LibraryComponents.PopoutContainer.Animation.SCALE,
 							position: BDFDB.LibraryComponents.PopoutContainer.Positions.TOP,
@@ -388,6 +388,17 @@ module.exports = (_ => {
 									}));
 								}
 								popoutelements = popoutelements.concat(this.createSelects(true));
+								popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+									type: "Switch",
+									plugin: this,
+									keys: ["settings", "sendOriginalMessage"],
+									label: this.defaults.settings.sendOriginalMessage.description,
+									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+									value: settings.sendOriginalMessage,
+									onChange: value => {
+										settings.sendOriginalMessage = value;
+									}
+								}));
 								popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
 									label: "Translate your Messages before sending",
