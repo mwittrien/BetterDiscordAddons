@@ -411,7 +411,7 @@ module.exports = (_ => {
 					.replace("$authorId", message.author.id || "")
 					.replace("$channelName", channel.name || "")
 					.replace("$channelId", channel.id || "")
-					.replace("$channel", channel.isDM() ? "" : `<#${channel.id}>`)
+					.replace("$channel", `<#${channel.id}>`)
 					.replace("$serverId", guild.id || "")
 					.replace("$serverName", guild.name || "")
 					.replace("$hour", settings.forceZeros && hour < 10 ? "0" + hour : hour)
