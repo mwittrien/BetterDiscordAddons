@@ -361,7 +361,7 @@ module.exports = (_ => {
 				if (text && text.length) {
 					if (shift && !settings.alwaysCopy || !shift && settings.alwaysCopy || !(BDFDB.DMUtils.isDMChannel(channel) || BDFDB.UserUtils.can("SEND_MESSAGES"))) {
 						BDFDB.LibraryRequires.electron.clipboard.write({text: text});
-						BDFDB.NotificationUtils.toast("Quote has been copied to clipboard", {type: "success"});
+						BDFDB.NotificationUtils.toast(this.labels.toast_quotecopied, {type: "success"});
 					}
 					else {
 						BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {content: text});
@@ -394,9 +394,9 @@ module.exports = (_ => {
 						let user = BDFDB.LibraryModules.UserStore.getUser(match);
 						if (user) {
 							let userMember = channel.guild_id && BDFDB.LibraryModules.MemberStore.getMember(guild.id, match);
-							return `\`@${userMember && userMember.nick || user.username}\``;
+							return `@ ${userMember && userMember.nick || user.username}`;
 						}
-						else if (channel.guild_id && guild.roles[match] && guild.roles[match].name) return `\`${guild.roles[match].name.indexOf("@") == 0 ? "" : "@"}${guild.roles[match].name}\``;
+						else if (channel.guild_id && guild.roles[match] && guild.roles[match].name) return `${guild.roles[match].name.indexOf("@") == 0 ? "" : "@"} ${guild.roles[match].name}`;
 						return string;
 					});
 				}
@@ -411,7 +411,7 @@ module.exports = (_ => {
 					.replace("$authorId", message.author.id || "")
 					.replace("$channelName", channel.name || "")
 					.replace("$channelId", channel.id || "")
-					.replace("$channel", `<#${channel.id}>`)
+					.replace("$channel", channel.isDM() && channel.rawRecipients[0] ? `@ ${channel.rawRecipients[0].username}` : `<#${channel.id}>`)
 					.replace("$serverId", guild.id || "")
 					.replace("$serverName", guild.name || "")
 					.replace("$hour", settings.forceZeros && hour < 10 ? "0" + hour : hour)
@@ -436,6 +436,119 @@ module.exports = (_ => {
 				for (let i = 0; i < charArray.length; i++) if (!numreg.test(charArray[i-1]) && numreg.test(charArray[i]) && !numreg.test(charArray[i+1])) charArray[i] = "0" + charArray[i];
 
 				return charArray.join("");
+			}
+
+			setLabelsByLanguage () {
+				switch (BDFDB.LanguageUtils.getLanguage().id) {
+					case "bg":		// Bulgarian
+						return {
+							toast_quotecopied:					"Цитатът е копиран в клипборда"
+						};
+					case "da":		// Danish
+						return {
+							toast_quotecopied:					"Citatet er kopieret til udklipsholderen"
+						};
+					case "de":		// German
+						return {
+							toast_quotecopied:					"Zitat wurde in die Zwischenablage kopiert"
+						};
+					case "el":		// Greek
+						return {
+							toast_quotecopied:					"Το απόσπασμα έχει αντιγραφεί στο πρόχειρο"
+						};
+					case "es":		// Spanish
+						return {
+							toast_quotecopied:					"La cita se copió al portapapeles"
+						};
+					case "fi":		// Finnish
+						return {
+							toast_quotecopied:					"Lainaus on kopioitu leikepöydälle"
+						};
+					case "fr":		// French
+						return {
+							toast_quotecopied:					"Le devis a été copié dans le presse-papiers"
+						};
+					case "hr":		// Croatian
+						return {
+							toast_quotecopied:					"Citat je kopiran u međuspremnik"
+						};
+					case "hu":		// Hungarian
+						return {
+							toast_quotecopied:					"Az árajánlatot a vágólapra másolta"
+						};
+					case "it":		// Italian
+						return {
+							toast_quotecopied:					"La citazione è stata copiata negli appunti"
+						};
+					case "ja":		// Japanese
+						return {
+							toast_quotecopied:					"見積もりがクリップボードにコピーされました"
+						};
+					case "ko":		// Korean
+						return {
+							toast_quotecopied:					"견적이 클립 보드에 복사되었습니다."
+						};
+					case "lt":		// Lithuanian
+						return {
+							toast_quotecopied:					"Citata nukopijuota į mainų sritį"
+						};
+					case "nl":		// Dutch
+						return {
+							toast_quotecopied:					"Citaat is naar het klembord gekopieerd"
+						};
+					case "no":		// Norwegian
+						return {
+							toast_quotecopied:					"Tilbudet er kopiert til utklippstavlen"
+						};
+					case "pl":		// Polish
+						return {
+							toast_quotecopied:					"Cytat został skopiowany do schowka"
+						};
+					case "pt-BR":	// Portuguese (Brazil)
+						return {
+							toast_quotecopied:					"A citação foi copiada para a área de transferência"
+						};
+					case "ro":		// Romanian
+						return {
+							toast_quotecopied:					"Citatul a fost copiat în clipboard"
+						};
+					case "ru":		// Russian
+						return {
+							toast_quotecopied:					"Цитата скопирована в буфер обмена"
+						};
+					case "sv":		// Swedish
+						return {
+							toast_quotecopied:					"Citatet har kopierats till Urklipp"
+						};
+					case "th":		// Thai
+						return {
+							toast_quotecopied:					"คัดลอกใบเสนอราคาไปยังคลิปบอร์ดแล้ว"
+						};
+					case "tr":		// Turkish
+						return {
+							toast_quotecopied:					"Alıntı panoya kopyalandı"
+						};
+					case "uk":		// Ukrainian
+						return {
+							toast_quotecopied:					"Цитата скопійована в буфер обміну"
+						};
+					case "vi":		// Vietnamese
+						return {
+							toast_quotecopied:					"Trích dẫn đã được sao chép vào khay nhớ tạm"
+						};
+					case "zh":		// Chinese
+						return {
+							toast_quotecopied:					"报价已复制到剪贴板"
+						};
+					case "zh-TW":	// Chinese (Traditional)
+						return {
+							toast_quotecopied:					"報價已復製到剪貼板"
+						};
+					default:		// English
+						return {
+							toast_quotecopied:					"Quote has been copied to clipboard"
+						};
+				}
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
