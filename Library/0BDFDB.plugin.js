@@ -49,8 +49,8 @@ module.exports = (_ => {
 		patchPriority: 0,
 		defaults: {
 			settings: {
-				showToasts:				{value: true,	description: "Show Plugin start and stop Toasts"},
-				showSupportBadges:		{value: true,	description: "Show little Badges for Users who support my Patreon"}
+				showToasts:				{value: true},
+				showSupportBadges:		{value: true}
 			}
 		},
 	});
@@ -457,6 +457,13 @@ module.exports = (_ => {
 		if (typeof key == "string") return BdApi.isSettingEnabled(...key.split("."));
 		else return oldSettings ? BDFDB.ReactUtils.getValue(BdApi.getBDData("settings"), `${BDFDB.DiscordUtils.getBuilt()}.settings`) : BdApi.settings.map(n => n.settings.map(m => m.settings.map(l => ({id: [n.id, m.id, l.id].join("."), value: l.value})))).flat(10).reduce((newObj, setting) => (newObj[setting.id] = setting.value, newObj), {});
 	};
+	BDFDB.BDUtils.getSettingsProperty = function (property, key) {
+		if (!window.BdApi || oldSettings) return key ? "" : {};
+		else {
+			let settingsMap = BdApi.settings.map(n => n.settings.map(m => m.settings.map(l => ({id: [n.id, m.id, l.id].join("."), value: l[property]})))).flat(10).reduce((newObj, setting) => (newObj[setting.id] = setting.value, newObj), {});
+			return key ? (settingsMap[key] != null ? settingsMap[key] : "") : "";
+		}
+	};
 	
 	
 	BDFDB.PluginUtils = {};
@@ -485,7 +492,9 @@ module.exports = (_ => {
 		
 		let startMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		BDFDB.LogUtils.log(startMsg, plugin.name);
-		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${plugin.name} ${startMsg}`, {nopointer: true});
+		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${plugin.name} ${startMsg}`, {
+			noPointer: true
+		});
 		
 		if (plugin.css) BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
 		
@@ -499,7 +508,9 @@ module.exports = (_ => {
 	BDFDB.PluginUtils.clear = function (plugin) {
 		let stopMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", "v" + plugin.version);
 		BDFDB.LogUtils.log(stopMsg, plugin.name);
-		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${plugin.name} ${stopMsg}`, {nopointer: true});
+		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${plugin.name} ${stopMsg}`, {
+			noPointer: true
+		});
 
 		let url = plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 
@@ -564,9 +575,9 @@ module.exports = (_ => {
 				let newVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
 				if (!newVersion) return callback(null);
 				if (pluginName == newName && BDFDB.NumberUtils.getVersionDifference(newVersion[0], window.PluginUpdates.plugins[url].version) > 0.2) {
-					BDFDB.NotificationUtils.toast(`${pluginName} will be force updated, because your version is heavily outdated.`, {
+					BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_force_updated", pluginName), {
 						type: "warn",
-						nopointer: true
+						noPointer: true
 					});
 					BDFDB.PluginUtils.downloadUpdate(pluginName, url);
 					return callback(2);
@@ -686,7 +697,10 @@ module.exports = (_ => {
 			if (error) {
 				let updateNotice = document.querySelector("#pluginNotice");
 				if (updateNotice) BDFDB.PluginUtils.removeUpdateNotice(pluginName, updateNotice);
-				BDFDB.LogUtils.warn("Unable to get update for " + pluginName);
+				BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_update_failed", pluginName), {
+					type: "error",
+					noPointer: true
+				});
 			}
 			else {
 				let wasEnabled = BDFDB.BDUtils.isPluginEnabled(pluginName);
@@ -705,7 +719,9 @@ module.exports = (_ => {
 						});
 						BDFDB.TimeUtils.timeout(_ => {if (wasEnabled && !BDFDB.BDUtils.isPluginEnabled(newName)) BDFDB.BDUtils.enablePlugin(newName);}, 3000);
 					}
-					BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_updated", pluginName, "v" + oldVersion, newName, "v" + newVersion), {nopointer: true, selector: "plugin-updated-toast"});
+					BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_updated", pluginName, "v" + oldVersion, newName, "v" + newVersion), {
+						noPointer: true
+					});
 					let updateNotice = document.querySelector("#pluginNotice");
 					if (updateNotice) {
 						if (updateNotice.querySelector(BDFDB.dotCN.noticebutton)) {
@@ -739,7 +755,7 @@ module.exports = (_ => {
 			type = type.toLowerCase();
 			let className = BDFDB.disCN["changelog" + type];
 			if (className) {
-				changeLogHTML += `<h1 class="${className} ${BDFDB.disCN.margintop20}"${changeLogHTML.indexOf("<h1") == -1 ? `style="margin-top: 0px !important;"` : ""}>${headers[type]}</h1><ul>`;
+				changeLogHTML += `<h1 class="${className} ${BDFDB.disCN.margintop20}"${changeLogHTML.indexOf("<h1") == -1 ? `style="margin-top: 0px !important;"` : ""}>${BDFDB.LanguageUtils && BDFDB.LanguageUtils.LibraryStrings ? BDFDB.LanguageUtils.LibraryStrings["changelog_" + type]  : headers[type]}</h1><ul>`;
 				for (let key in plugin.changeLog[type]) changeLogHTML += `<li><strong>${key}</strong>${plugin.changeLog[type][key] ? (": " + plugin.changeLog[type][key] + ".") : ""}</li>`;
 				changeLogHTML += `</ul>`
 			}
@@ -1081,7 +1097,7 @@ module.exports = (_ => {
 						toasts = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.toasts} bd-toasts" style="width: ${width}px; left: ${left}px; bottom: ${bottom}px;"></div>`);
 						(document.querySelector(BDFDB.dotCN.app) || document.body).appendChild(toasts);
 					}
-					const {type = "", icon = true, timeout = 3000, html = false, selector = "", nopointer = false, color = ""} = options;
+					const {type = "", icon = true, timeout = 3000, html = false, selector = "", noPointer = false, color = ""} = options;
 					let toast = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.toast} bd-toast">${html === true ? text : BDFDB.StringUtils.htmlEscape(text)}</div>`);
 					if (type) {
 						BDFDB.DOMUtils.addClass(toast, "toast-" + type);
@@ -1106,7 +1122,7 @@ module.exports = (_ => {
 							}, 3000);
 						}
 					};
-					if (nopointer) toast.style.setProperty("pointer-events", "none", "important");
+					if (noPointer) toast.style.setProperty("pointer-events", "none", "important");
 					else toast.addEventListener("click", toast.close);
 					BDFDB.TimeUtils.timeout(_ => {toast.close();}, timeout > 0 ? timeout : 600000);
 					return toast;
@@ -4332,7 +4348,7 @@ module.exports = (_ => {
 					}
 				});
 				BDFDB.LanguageUtils.LibraryStringsFormat = function (item, ...values) {
-					if (item && values.length) {
+					if (item) {
 						let languageId = BDFDB.LanguageUtils.getLanguage().id, string = null;
 						if (LibraryStrings[languageId] && LibraryStrings[languageId][item]) string = LibraryStrings[languageId][item];
 						else if (LibraryStrings.default[item]) string = LibraryStrings.default[item];
@@ -4342,7 +4358,7 @@ module.exports = (_ => {
 						}
 						else BDFDB.LogUtils.warn(item + " not found in BDFDB.LanguageUtils.LibraryStrings");
 					}
-					else BDFDB.LogUtils.warn(item + " enter a valid key and at least one value to format the string in BDFDB.LanguageUtils.LibraryStrings");
+					else BDFDB.LogUtils.warn(item + " enter a valid key to format the string in BDFDB.LanguageUtils.LibraryStrings");
 					return "";
 				};
 				BDFDB.TimeUtils.interval(interval => {
@@ -5235,7 +5251,7 @@ module.exports = (_ => {
 										if (hexRegex.test(value)) this.handleColorChange(value);
 									},
 									inputChildren: this.props.gradient && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-										text: "Gradient",
+										text: BDFDB.LanguageUtils.LibraryStrings.gradient,
 										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
 											className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickergradientbutton, this.state.gradientBarEnabled && BDFDB.disCN.colorpickergradientbuttonenabled),
 											children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
@@ -6335,7 +6351,7 @@ module.exports = (_ => {
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 							className: this.props.className,
 							wrap: InternalComponents.LibraryComponents.Flex.Wrap.WRAP,
-							children: [this.props.includeDMs && {name: "Direct Messages", acronym: "DMs", id: BDFDB.DiscordConstants.ME, getIconURL: _ => {}}].concat(BDFDB.LibraryModules.FolderStore.getFlattenedGuilds()).filter(n => n).map(guild => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+							children: [this.props.includeDMs && {name: BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES, acronym: "DMs", id: BDFDB.DiscordConstants.ME, getIconURL: _ => {}}].concat(BDFDB.LibraryModules.FolderStore.getFlattenedGuilds()).filter(n => n).map(guild => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 								text: guild.name,
 								children: BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.DOMUtils.formatClassName(this.props.guildClassName, BDFDB.disCN.settingsguild, this.props.disabled.includes(guild.id) && BDFDB.disCN.settingsguilddisabled),
@@ -7313,7 +7329,7 @@ module.exports = (_ => {
 					if (window.PluginUpdates && window.PluginUpdates.plugins && typeof e.instance.props.title == "string" && e.instance.props.title.toUpperCase().indexOf("PLUGINS") == 0) {
 						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: "folder-button"});
 						if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-							text: "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list of supported plugins. (Listed ≠ Outdated)",
+							text: BDFDB.LanguageUtils.LibraryStrings.update_check_info,
 							tooltipConfig: {
 								type: "bottom",
 								maxWidth: 420
@@ -7324,14 +7340,21 @@ module.exports = (_ => {
 							children: BDFDB.ReactUtils.createElement("button", {
 								className: `${BDFDB.disCNS._repobutton + BDFDB.disCN._repofolderbutton} bd-updatebtn`,
 								onClick: _ => {
-									let toast = BDFDB.NotificationUtils.toast("Plugin update check in progress", {type: "info", timeout: 0});
+									let toast = BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStrings.update_check_inprogress, {
+										type: "info",
+										timeout: 0
+									});
 									BDFDB.PluginUtils.checkAllUpdates().then(outdated => {
 										toast.close();
-										if (outdated > 0) BDFDB.NotificationUtils.toast(`Plugin update check complete - ${outdated} outdated!`, {type: "error"});
-										else BDFDB.NotificationUtils.toast(`Plugin update check complete`, {type: "success"});
+										if (outdated > 0) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("update_check_complete_outdated", outdated), {
+											type: "error"
+										});
+										else BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStrings.update_check_complete, {
+											type: "success"
+										});
 									});
 								},
-								children: "Check for Updates"
+								children: BDFDB.LanguageUtils.LibraryStrings.update_check
 							})
 						}));
 					}
@@ -7367,7 +7390,7 @@ module.exports = (_ => {
 						}
 						if (user.id == InternalData.myId) {
 							addBadge = true;
-							role = "Theme Developer";
+							role = `Theme ${BDFDB.LanguageUtils.LibraryStrings.developer}`;
 							className = BDFDB.DOMUtils.formatClassName(className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbdev);
 						}
 						if (role) {
@@ -7804,7 +7827,7 @@ module.exports = (_ => {
 											let translation = Array.from(document.querySelectorAll("[data-language-to-translate-into] span:not([class])")).map(n => n.innerText).join("");
 											if (translation || count > 50) {
 												clearInterval(interval);
-												require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "GTO-translation", [
+												require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "BDFDB-translation", [
 													translation,
 													(document.querySelector("h2 ~ [lang]") || {}).lang
 												]);
@@ -7813,9 +7836,9 @@ module.exports = (_ => {
 									`);
 								}
 							});
-							BDFDB.WindowUtils.addListener(BDFDB, "GTO-translation", (event, messageData) => {
+							BDFDB.WindowUtils.addListener(BDFDB, "BDFDB-translation", (event, messageData) => {
 								BDFDB.WindowUtils.close(googleTranslateWindow);
-								BDFDB.WindowUtils.removeListener(BDFDB, "GTO-translation");
+								BDFDB.WindowUtils.removeListener(BDFDB, "BDFDB-translation");
 								callback(messageData[0]);
 							});
 						};
@@ -7827,12 +7850,16 @@ module.exports = (_ => {
 								}
 								else {
 									if (response.statusCode == 429) {
-										BDFDB.NotificationUtils.toast("Too many requests. Switching to backup.", {type: "error"});
+										BDFDB.NotificationUtils.toast("Too many requests, switching to backup", {
+											type: "error"
+										});
 										config.useBackup = true;
 										BDFDB.DevUtils.generateLanguageStrings(strings, config);
 									}
 									else {
-										BDFDB.NotificationUtils.toast("Failed to translate text.", {type: "error"});
+										BDFDB.NotificationUtils.toast("Failed to translate text", {
+											type: "error"
+										});
 										callback("");
 									}
 								}
@@ -7847,7 +7874,9 @@ module.exports = (_ => {
 								});
 								let result = Object.keys(translations).filter(n => n != "en").sort().map((l, i) => format(l, i)).join("");
 								if (translations.en) result += format("en", result ? 1 : 0);
-								BDFDB.NotificationUtils.toast("Translation copied to clipboard.", {type: "success"});
+								BDFDB.NotificationUtils.toast("Translation copied to clipboard", {
+									type: "success"
+								});
 								BDFDB.LibraryRequires.electron.clipboard.write({text: result});
 							}
 							else (config.useBackup ? gt : gt2)(lang, translation => {
@@ -7926,6 +7955,9 @@ module.exports = (_ => {
 		
 		getSettingsPanel (collapseStates = {}) {
 			let settingsPanel;
+			let getString = (key, property) => {
+				return BDFDB.LanguageUtils.LibraryStringsCheck[`settings_${key}_${property}`] ? BDFDB.LanguageUtils.LibraryStringsFormat(`settings_${key}_${property}`, BDFDB.BDUtils.getSettingsProperty("name", BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds[key])) || BDFDB_Global.LibraryModules.StringUtils.upperCaseFirstChar(key.replace(/([A-Z])/g, " $1"))) : InternalBDFDB.defaults.settings[key][property];
+			};
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, {
 				collapseStates: collapseStates,
 				children: _ => {
@@ -7937,8 +7969,8 @@ module.exports = (_ => {
 						plugin: InternalBDFDB,
 						disabled: key == "showToasts" && bdToastSetting,
 						keys: ["settings", key],
-						label: InternalBDFDB.defaults.settings[key].description,
-						note: key == "showToasts" && bdToastSetting && "Disable BBDs general 'Show Toast' setting before disabling this",
+						label: getString(key, "description"),
+						note: key == "showToasts" && bdToastSetting && getString(key, "note"),
 						value: settings[key] || key == "showToasts" && bdToastSetting
 					}));
 					
