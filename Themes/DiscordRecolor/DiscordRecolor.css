@@ -4063,7 +4063,7 @@ html .bd-settings-group.collapsible .bd-settings-title::after {
 	background-color: var(--background-secondary-alt);
 }
 #app-mount .bd-addon-button .bd-icon {
-	fill: currentColor;
+	fill: currentColor !important;
 	color: var(--interactive-normal);
 }
 #app-mount .bd-addon-button .bd-icon:hover {
