@@ -167,6 +167,9 @@
 .mouse-mode .replying-1x3H0T:hover {
 	background-color: rgba(var(--vaccentcolor), 0.1);
 }
+.ephemeralMessage-1fEWtQ a {								/* localbot				operations							*/
+	color: rgb(var(--vaccentcolor));
+}
 
 .operations-36ENbA > a {									/* message				operations							*/
 	color: rgb(var(--vaccentcolor));
