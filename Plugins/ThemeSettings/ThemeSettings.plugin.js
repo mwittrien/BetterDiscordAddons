@@ -119,6 +119,9 @@ module.exports = (_ => {
 							</svg>`));
 							controls.insertBefore(settingsButton, controls.firstElementChild);
 							settingsButton.addEventListener("click", open);
+							settingsButton.addEventListener("mouseenter", _ => {
+								BDFDB.TooltipUtils.create(settingsButton, BDFDB.LanguageUtils.LanguageStrings.SETTINGS);
+							});
 						}
 						else {
 							let footer = card.querySelector("." + BDFDB.disCN._repofooter.split(" ").join(",."));

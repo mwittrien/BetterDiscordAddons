@@ -49,8 +49,8 @@ module.exports = (_ => {
 		patchPriority: 0,
 		defaults: {
 			settings: {
-				showToasts:				{value: true},
-				showSupportBadges:		{value: true}
+				showToasts:				{value: true,		disableIfNative: true,		noteIfNative: true},
+				showSupportBadges:		{value: true,		disableIfNative: false,		noteIfNative: true}
 			}
 		},
 	});
@@ -7961,18 +7961,20 @@ module.exports = (_ => {
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, {
 				collapseStates: collapseStates,
 				children: _ => {
-					let bdToastSetting = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts);
 					let settingsItems = [];
 					
-					for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
-						type: "Switch",
-						plugin: InternalBDFDB,
-						disabled: key == "showToasts" && bdToastSetting,
-						keys: ["settings", key],
-						label: getString(key, "description"),
-						note: key == "showToasts" && bdToastSetting && getString(key, "note"),
-						value: settings[key] || key == "showToasts" && bdToastSetting
-					}));
+					for (let key in settings) {
+						let nativeSetting = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds[key]);
+						settingsItems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
+							type: "Switch",
+							plugin: InternalBDFDB,
+							disabled: InternalBDFDB.defaults.settings[key].disableIfNative && nativeSetting,
+							keys: ["settings", key],
+							label: getString(key, "description"),
+							note: (InternalBDFDB.defaults.settings[key].noteAlways || InternalBDFDB.defaults.settings[key].noteIfNative && nativeSetting) && getString(key, "note"),
+							value: settings[key] || key == "showToasts" && bdToastSetting
+						}));
+					}
 					
 					return settingsItems;
 				}
