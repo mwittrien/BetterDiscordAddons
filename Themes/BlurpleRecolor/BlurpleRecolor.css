@@ -151,6 +151,40 @@
 	color: rgb(var(--vaccentcolor));
 }
 
+.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 1"] {
+	background-color: rgba(var(--vaccentcolor), 1) !important;
+}
+.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.9"] {
+	background-color: rgba(var(--vaccentcolor), 0.9) !important;
+}
+.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.8"] {
+	background-color: rgba(var(--vaccentcolor), 0.8) !important;
+}
+.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.7"] {
+	background-color: rgba(var(--vaccentcolor), 0.7) !important;
+}
+.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.6"] {
+	background-color: rgba(var(--vaccentcolor), 0.6) !important;
+}
+.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.5"] {
+	background-color: rgba(var(--vaccentcolor), 0.5) !important;
+}
+.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.4"] {
+	background-color: rgba(var(--vaccentcolor), 0.4) !important;
+}
+.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.3"] {
+	background-color: rgba(var(--vaccentcolor), 0.3) !important;
+}
+.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.2"] {
+	background-color: rgba(var(--vaccentcolor), 0.2) !important;
+}
+.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.1"] {
+	background-color: rgba(var(--vaccentcolor), 0.1) !important;
+}
+.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.0"] {
+	background-color: rgba(var(--vaccentcolor), 0.0) !important;
+}
+
 .ephemeral-1PsL1r,											/* localbot				container							*/
 .replying-1x3H0T {											/* replying				container							*/
 	background-color: rgba(var(--vaccentcolor), 0.05);
