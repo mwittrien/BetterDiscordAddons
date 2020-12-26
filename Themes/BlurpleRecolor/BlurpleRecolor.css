@@ -765,7 +765,6 @@
 
 
 /* ~~~~		9.		GUILDSETTINGS					~~~~ */
-
 															/* widgetsettings		widget placeholder image 			*/
 .layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type {
 	position: relative !important;
@@ -1061,17 +1060,9 @@
 /* ----		10.5.	KEYBOARDSHORTCUTSMODAL			---- */
 
 .ddrArrows-lSnH7P .arrow-2enltQ,							/* modal				arrows								*/
-.ddrArrows-lSnH7P .arrow-2enltQ::before,
 .ddrArrows-lSnH7P .arrow-2enltQ::after {
 	height: 50px;
 	width: 50px;
-}
-.ddrArrows-lSnH7P .arrow-2enltQ::before,
-.ddrArrows-lSnH7P .arrow-2enltQ::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	left: 0;
 }
 .ddrArrows-lSnH7P .arrow-2enltQ.active-2X6Ewx {
 	filter: brightness(130%);
@@ -1079,14 +1070,15 @@
 .ddrArrows-lSnH7P .arrow-2enltQ {
 	position: relative;
 	animation: none !important;
-	background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBmaWxsPSIjRkZGIiBkPSJNMy4yMjM4IDIyLjQ0MTlsLTEuMjI0IDEuMjI0djIuNjQxbDEuMjI0IDEuMjI0IDQuNDM4IDQuNDM4IDE3LjAzMSAxNy4wMzFoNC45NzhsMy40NzgtMy41ODkuMDEyLTQuNjktOC41MzItOC41MzFoMTcuNjAxbDMuOTMyLTMuOTMzIDIuMzY2LTIuMzY1di0xLjc5N2wtNi4yOTgtNi4yOTloLTE3LjU4N2w4LjUxOC04LjUxNy0uMDEyLTQuNjg5LTMuNDc4LTMuNTloLTQuOTc4Ii8+PHBhdGggc3Ryb2tlPSIjRkZGIiBzdHJva2Utd2lkdGg9IjIiIGQ9Ik0zLjIyMzggMjIuNDQxOWwtMS4yMjQgMS4yMjR2Mi42NDFsMS4yMjQgMS4yMjQgNC40MzggNC40MzggMTcuMDMxIDE3LjAzMWg0Ljk3OGwzLjQ3OC0zLjU4OS4wMTItNC42OS04LjUzMi04LjUzMWgxNy42MDFsMy45MzItMy45MzMgMi4zNjYtMi4zNjV2LTEuNzk3bC02LjI5OC02LjI5OWgtMTcuNTg3bDguNTE4LTguNTE3LS4wMTItNC42ODktMy40NzgtMy41OWgtNC45Nzh6IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBmaWxsPSIjRkZGIiBkPSJNMTAuMjA2MSAyMC41NDg0bC00LjQzOCA0LjQzOCA0LjQzOCA0LjQzOCAxNC4zNjcgMTQuMzY3aDMuNTk4di0yLjk3bC04LjYzNi04LjYzNnYtMi4zMDhsLTQuMTcxLTQuMTcxdi0xLjQ0bDQuMTcxLTQuMTcxdi0yLjMwOGw4LjYzNi04LjYzNnYtMi45N2gtMy41OTgiLz48cGF0aCBmaWxsPSIjRkZGIiBkPSJNMTcuMTYyOCAyNC4yNzM0djEuNDM5bDIuODc5IDIuODc5aDEwLjI1NWwtMi44NzktMi44Nzl2LTEuNDM5bDIuODc5LTIuODc5aC0xMC4yNTUiLz48cGF0aCBmaWxsPSIjRkZGIiBkPSJNMjkuMjc3MiAyNC4yNzM0djEuNDM5bDIuNDMyIDIuNDMzLjQ0Ny40NDZoNy44NjNsMi44NzktMi44Nzl2LTEuNDM5bC0yLjg3OS0yLjg3OWgtNy44NjNsLS40NDcuNDQ3Ii8+PHBhdGggZD0iTTAgMGg1MHY1MEgweiIvPjxwYXRoIGQ9Ik0wIDEwMGg1MHY1MEgweiIvPjwvZz48L3N2Zz4=') center/contain no-repeat !important;
-}
-.ddrArrows-lSnH7P .arrow-2enltQ::before {
-	-webkit-mask: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBvcGFjaXR5PSIuNiIgZmlsbD0iI0M2RDhGNSIgZD0iTTMuMjIzOCAyMi40NDE5bC0xLjIyNCAxLjIyNHYyLjY0MWwxLjIyNCAxLjIyNCA0LjQzOCA0LjQzOCAxNy4wMzEgMTcuMDMxaDQuOTc4bDMuNDc4LTMuNTg5LjAxMi00LjY5LTguNTMyLTguNTMxaDE3LjYwMWwzLjkzMi0zLjkzMyAyLjM2Ni0yLjM2NXYtMS43OTdsLTYuMjk4LTYuMjk5aC0xNy41ODdsOC41MTgtOC41MTctLjAxMi00LjY4OS0zLjQ3OC0zLjU5aC00Ljk3OCIvPjxwYXRoIHN0cm9rZT0iIzJGNDc3NyIgc3Ryb2tlLXdpZHRoPSIyIiBkPSJNMy4yMjM4IDIyLjQ0MTlsLTEuMjI0IDEuMjI0djIuNjQxbDEuMjI0IDEuMjI0IDQuNDM4IDQuNDM4IDE3LjAzMSAxNy4wMzFoNC45NzhsMy40NzgtMy41ODkuMDEyLTQuNjktOC41MzItOC41MzFoMTcuNjAxbDMuOTMyLTMuOTMzIDIuMzY2LTIuMzY1di0xLjc5N2wtNi4yOTgtNi4yOTloLTE3LjU4N2w4LjUxOC04LjUxNy0uMDEyLTQuNjg5LTMuNDc4LTMuNTloLTQuOTc4eiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9nPjwvc3ZnPg==') center/contain no-repeat;
-	background: rgb(var(--vaccentcolor));
+	background: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"><g transform="translate(0,-100)"><path fill="white" d="m 3.2238,122.4419 -1.224,1.224 v 2.641 l 1.224,1.224 4.438,4.438 17.031,17.031 h 4.978 l 3.478,-3.589 0.012,-4.69 -8.532,-8.531 h 17.601 l 3.932,-3.933 2.366,-2.365 v -1.797 l -6.298,-6.299 h -17.587 l 8.518,-8.517 -0.012,-4.689 -3.478,-3.59 h -4.978 z"/></g></svg>') center/contain no-repeat !important;
 }
 .ddrArrows-lSnH7P .arrow-2enltQ::after {
-	background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBmaWxsPSIjRkZGIiBkPSJNMTAuMjA2MSAyMC41NDg0bC00LjQzOCA0LjQzOCA0LjQzOCA0LjQzOCAxNC4zNjcgMTQuMzY3aDMuNTk4di0yLjk3bC04LjYzNi04LjYzNnYtMi4zMDhsLTQuMTcxLTQuMTcxdi0xLjQ0bDQuMTcxLTQuMTcxdi0yLjMwOGw4LjYzNi04LjYzNnYtMi45N2gtMy41OTgiLz48cGF0aCBmaWxsPSIjRkZGIiBkPSJNMTcuMTYyOCAyNC4yNzM0djEuNDM5bDIuODc5IDIuODc5aDEwLjI1NWwtMi44NzktMi44Nzl2LTEuNDM5bDIuODc5LTIuODc5aC0xMC4yNTUiLz48cGF0aCBmaWxsPSIjRkZGIiBkPSJNMjkuMjc3MiAyNC4yNzM0djEuNDM5bDIuNDMyIDIuNDMzLjQ0Ny40NDZoNy44NjNsMi44NzktMi44Nzl2LTEuNDM5bC0yLjg3OS0yLjg3OWgtNy44NjNsLS40NDcuNDQ3Ii8+PHBhdGggZD0iTTAgMGg1MHY1MEgweiIvPjwvZz48L3N2Zz4=') center/contain no-repeat;
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: rgb(var(--vaccentcolor));
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"><g transform="translate(0,-100)"><path opacity="0.5" fill="black" d="M 24.693359 1 L 3.2246094 22.441406 L 2 23.666016 L 2 26.306641 L 3.2246094 27.53125 L 7.6621094 31.96875 L 24.693359 49 L 29.669922 49 L 33.148438 45.410156 L 33.160156 40.720703 L 24.628906 32.189453 L 42.230469 32.189453 L 46.162109 28.257812 L 48.527344 25.892578 L 48.527344 24.095703 L 42.230469 17.796875 L 24.642578 17.796875 L 33.160156 9.2792969 L 33.148438 4.5898438 L 29.669922 1 L 24.693359 1 z M 24.572266 6.1816406 L 28.171875 6.1816406 L 28.171875 9.1523438 L 19.535156 17.787109 L 19.535156 20.095703 L 15.363281 24.265625 L 15.363281 25.707031 L 19.535156 29.876953 L 19.535156 32.185547 L 28.171875 40.822266 L 28.171875 43.791016 L 24.572266 43.791016 L 10.207031 29.423828 L 5.7675781 24.986328 L 10.207031 20.548828 L 24.572266 6.1816406 z M 20.041016 21.394531 L 30.296875 21.394531 L 27.417969 24.273438 L 27.417969 25.712891 L 30.296875 28.591797 L 20.041016 28.591797 L 17.162109 25.712891 L 17.162109 24.273438 L 20.041016 21.394531 z M 32.15625 21.394531 L 40.019531 21.394531 L 42.898438 24.273438 L 42.898438 25.712891 L 40.019531 28.591797 L 32.15625 28.591797 L 31.708984 28.144531 L 29.277344 25.712891 L 29.277344 24.273438 L 31.708984 21.841797 L 32.15625 21.394531 z" transform="translate(0,100)"/><path fill="none" stroke="black" stroke-width="2" d="m 3.2238,122.4419 -1.224,1.224 v 2.641 l 1.224,1.224 4.438,4.438 17.031,17.031 h 4.978 l 3.478,-3.589 0.012,-4.69 -8.532,-8.531 h 17.601 l 3.932,-3.933 2.366,-2.365 v -1.797 l -6.298,-6.299 h -17.587 l 8.518,-8.517 -0.012,-4.689 -3.478,-3.59 h -4.978 z"/></g></svg>') center/contain no-repeat;
 }
 .ddrArrows-lSnH7P .arrow-2enltQ.down-2Ju7Q_ {
 	transform: rotate(270deg);
