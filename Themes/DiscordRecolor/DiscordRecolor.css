@@ -842,7 +842,7 @@ img[src='/assets/9ad4d437577c5569dc231a787a5377f6.svg'],
 img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 	background-image: url(https://discordapp.com/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg);
 	opacity: .5;
-	object-position: -9999999px -9999999px;
+	object-position: -999999px -999999px;
 }
 
 .emptyStateImage-3SXmVX {
@@ -850,7 +850,7 @@ img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 }
 .emptyStateImage-3SXmVX[src='/assets/38defe07899a762bfc301ddddd206116.svg'] {
 	background-image: url(https://discordapp.com/assets/446a060321730a318ca1649b0cc40d44.svg);
-	object-position: -9999999px -9999999px;
+	object-position: -999999px -999999px;
 }
 
 #app-mount .image-3wZlK5 {
@@ -1921,7 +1921,7 @@ img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 #app-mount .userSettingsSecurityImage-2_okeh {
 	background: url(https://discordapp.com/assets/cdea41ede63f61153e4a3c0531fa3873.svg) center/cover no-repeat;
 	opacity: .5;
-	object-position: -9999999px -9999999px;
+	object-position: -999999px -999999px;
 }
 
 #app-mount .authedApp-mj2Hmd {
@@ -2013,13 +2013,13 @@ img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 .icon-4lJsMQ[src="/assets/c28317e203e00b2d7390d5ece2399228.svg"] {
 	-webkit-mask: url(https://discordapp.com/assets/c28317e203e00b2d7390d5ece2399228.svg) center/contain no-repeat;
 	background-color: var(--header-primary);
-	object-position: -9999999px -9999999px;
+	object-position: -999999px -999999px;
 }
 .icon-4lJsMQ[src="/assets/8c49c7d4a59675bb6ceaee1bb80b5803.png"],
 .icon-4lJsMQ[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {
 	-webkit-mask: url(https://discordapp.com/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png) center/contain no-repeat;
 	background-color: var(--header-primary);
-	object-position: -9999999px -9999999px;
+	object-position: -999999px -999999px;
 }
 #app-mount .userSettingsVoice-iwdUCU .previewOverlay-2O7_KC {
 	background-color: var(--background-secondary);
@@ -2129,7 +2129,7 @@ img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 .addRoleIcon-3YjErH {
 	-webkit-mask: url(https://discordapp.com/assets/cef02719c12d8aaf38894c16dca7fbe6.svg);
 	background: var(--header-secondary);
-	object-position: -9999999px -9999999px;
+	object-position: -999999px -999999px;
 }
 #app-mount .dragged-2XvZ89 {
 	-webkit-mask: url(https://discordapp.com/assets/a8564dac0d728add0025be388f5ad7a2.svg) center/contain no-repeat;
@@ -2288,7 +2288,7 @@ img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 .splashImage-352DQ1[src="/assets/d03d90cb6f12a7ea06274b278dfa4160.svg"] {
 	background: url(https://discordapp.com/assets/d03d90cb6f12a7ea06274b278dfa4160.svg) center/cover no-repeat;
 	opacity: .75;
-	object-position: -9999999px -9999999px;
+	object-position: -999999px -999999px;
 }
 #app-mount .avatarUploaderInnerSquare-2wsxgt {
 	background-image: url(https://discordapp.com/assets/d03d90cb6f12a7ea06274b278dfa4160.svg);
@@ -2620,7 +2620,7 @@ img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 .arrow-hynWUl {
 	-webkit-mask: url(https://discordapp.com/assets/69a0ea5dbf79a129c81a0cb171b60b7a.svg) center/cover no-repeat;
 	background: var(--text-normal);
-	object-position: -9999999px -9999999px;
+	object-position: -999999px -999999px;
 }
 
 .input--jS-j2 {
