@@ -239,6 +239,10 @@
 .reaction-1hd86g.reactionMe-wv5HKu {						/* reaction				wrapper me							*/
 	background-color: rgba(var(--vaccentcolor), 0.3);
 }
+															/* attachment			upload bar							*/
+.progressBar-3u8FBM[style*="background-color: rgb(114, 137, 218)"] {
+	background-color: rgb(var(--vaccentcolor)) !important;
+}
 
 /* ----		3.2.	AUTOCOMPLETEMENU				---- */
 

@@ -429,7 +429,6 @@ module.exports = (_ => {
 			processUpload (e) {
 				if (!BDFDB.PatchUtils.isPatched(this, e.instance, "submitUpload")) BDFDB.PatchUtils.patch(this, e.instance, "submitUpload", {before: e2 => {
 					if (settings.triggerUpload) this.handleSubmit(e, e2, 1);
-					console.log(e, e2);
 				}}, {force: true, noCache: true});
 			}
 			
