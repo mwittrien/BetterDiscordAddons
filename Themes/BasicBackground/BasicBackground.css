@@ -460,21 +460,23 @@ body::before {
 	box-shadow: inset 0 -1px 0 rgba(var(--fontwhite4), 0.3);
 }
 .channelNotice-1-XFjC.invite-OjTXrW,
-.channelNotice-1-XFjC.quickswitcher-35bYg4,
 .channelNotice-1-XFjC.guildMFAWarning-3GEzs8,
 .channelNotice-1-XFjC.maxMembersCount-3E4zND {
 	background: transparent;
 }
+.channelNotice-1-XFjC.quickswitcher-35bYg4::before {
+	opacity: 0.6;
+}
 .channelNotice-1-XFjC.invite-OjTXrW::before {
+	opacity: 0.6;
 	background: url(https://discord.com/assets/bf625d222187f542b9d7179109422e2c.svg) center 20px no-repeat;
 }
-.channelNotice-1-XFjC.quickswitcher-35bYg4::before {
-	background: url(https://discord.com/assets/8fdb69b7684b8e1ecb3fdde909daca41.svg) center 35px no-repeat;
-}
 .channelNotice-1-XFjC.guildMFAWarning-3GEzs8::before {
+	opacity: 0.6;
 	background: url(https://discord.com/assets/916a384814e3bbd2a84e2a1b352a17c3.svg) center 20px no-repeat;
 }
 .channelNotice-1-XFjC.maxMembersCount-3E4zND::before {
+	opacity: 0.6;
 	background: url(https://discord.com/assets/01f60394adffda20dc7270a1e3c727df.svg) center 16px no-repeat;
 }
 .close-relY5R {												/* notice				close								*/
