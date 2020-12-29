@@ -157,6 +157,7 @@
 	color: rgb(var(--vaccentcolor));
 }
 
+.backgroundFlash-24qWLN[style*="background-color: rgb(114, 137, 218)"],
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 1"] {
 	background-color: rgba(var(--vaccentcolor), 1) !important;
 }
