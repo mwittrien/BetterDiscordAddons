@@ -191,6 +191,10 @@
 	background-color: rgba(var(--vaccentcolor), 0.0) !important;
 }
 
+.embedFull-2tM8--[style*="border-color: rgb(114, 137, 218)"] {
+	border-color: rgb(var(--vaccentcolor)) !important;
+}
+
 .ephemeral-1PsL1r,											/* localbot				container							*/
 .replying-1x3H0T {											/* replying				container							*/
 	background-color: rgba(var(--vaccentcolor), 0.05);
