@@ -56,6 +56,7 @@
 		10.	DISPATCHERRORMODAL
 		11.	CHANGELOGMODAL
 		12.	SCREENSHAREMODAL
+		13.	PHONEVERIFICATIONMODAL
 	11.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -1225,6 +1226,12 @@
 }
 .selectorButtonSelected-t5V9On {
 	background-color: rgb(var(--vaccentcolor));
+}
+
+/* ----		10.13.	PHONEVERIFICATIONMODAL			---- */
+
+.phoneVerificationModal-OzcDc3 path[fill="rgb(118,134,177)"] {
+	fill: rgb(var(--vaccentcolor));
 }
 
 
