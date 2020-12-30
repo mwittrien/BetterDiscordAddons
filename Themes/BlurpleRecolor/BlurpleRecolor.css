@@ -1131,6 +1131,9 @@
 #app-mount .barForeground-3KglC8 {							/* modal				tierbarfill							*/
 	background-color: rgb(var(--vaccentcolor));
 }
+#app-mount .barSecondary-3B1aP2 {							/* modal				previewbarfill						*/
+	background: var(--interactive-hover) linear-gradient(90deg, rgba(var(--vaccentcolor), 0.3), rgba(var(--vaccentcolor), 0.3));
+}
 #app-mount .iconIncluded-24npcq {							/* modal				included perkicon					*/
 	color: rgb(var(--vaccentcolor));
 }
