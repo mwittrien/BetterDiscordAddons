@@ -965,7 +965,7 @@
 .uploadModal-2ifh8j .icon-kyxXVr.unknown-3TPTMr::after,
 .uploadModal-2ifh8j .icon-kyxXVr:not(.image-2yrs5j)::after,
 .uploadModalIn-1z07Bv .icon-kyxXVr:not(.image-2yrs5j)::after {
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/files_unknown_accent.svg) center/contain no-repeat;
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/empty.svg) center/contain no-repeat;
 }
 .attachment-33OFj0 .icon-1kp3fr[title="acrobat"] + *::after,
 .uploadModal-2ifh8j .icon-kyxXVr.acrobat-3K1PC6::after {
