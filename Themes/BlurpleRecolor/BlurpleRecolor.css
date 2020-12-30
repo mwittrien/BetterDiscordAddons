@@ -1164,11 +1164,11 @@
 	height: 88px;
 }
 .wrapper-3nSjSv::before {
-	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_boostangel_bg.svg) center/cover no-repeat;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_boostangel_bg.svg) center/cover no-repeat;
 }
 .wrapper-3nSjSv::after {
 	background: rgb(var(--vaccentcolor));
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_boostangel_accent.svg) center/cover no-repeat;
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_boostangel_accent.svg) center/cover no-repeat;
 }
 .tierMarkerLabelPlusIcon-1OS7E9 {							/* modal				prebuy icon							*/
 	color: rgb(var(--vaccentcolor));
