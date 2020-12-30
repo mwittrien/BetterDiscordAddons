@@ -591,6 +591,22 @@
 .guildSubscriptionSlotIcon-EVE04u {							/* boostsettings		slot icon							*/
 	color: rgb(var(--vaccentcolor));
 }
+.wrapper-3nSjSv:before,										/* boostsettings		boost angel							*/
+.wrapper-3nSjSv:after {
+	content: "";
+	position: absolute;
+	top: -44px;
+	right: -82px;
+	width: 168px;
+	height: 88px;
+}
+.wrapper-3nSjSv:before {
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_boostangel_bg.svg) center/cover no-repeat;
+}
+.wrapper-3nSjSv:after {
+	background: rgb(var(--vaccentcolor));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_boostangel_bg.svg) center/cover no-repeat;
+}
 
 .wrapper-3jrx9n {											/* overlaysettings		positionsettings wrapper			*/
 	border-color: rgb(var(--vaccentcolor));
