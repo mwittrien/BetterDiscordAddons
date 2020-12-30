@@ -1206,10 +1206,9 @@ body::before {
 	color: rgb(var(--fontwhite2));
 }
 #app-mount .twitchSectionPlayButton-2RamGG {
-	background-image: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M12.3333 10.002V22.002L22.3333 16.002L12.3333 10.002Z" fill="rgb(185,187,190)"/></svg>');
-	background-color: rgba(var(--vtransparencycolor), 0.4);
-	border-radius: 50%;
 	object-position: -999999px -999999px;
+	background: rgba(var(--vtransparencycolor), 0.4) url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M12.3333 10.002V22.002L22.3333 16.002L12.3333 10.002Z" fill="rgb(185,187,190)"/></svg>');
+	border-radius: 50%;
 }
 #app-mount .twitchSectionPlayButton-2RamGG:hover {
 	background-color: rgba(var(--vtransparencycolor), 0.8);
