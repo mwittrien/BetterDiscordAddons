@@ -1154,8 +1154,8 @@
 .wrapper-3nSjSv {											/* modal				boostaddwrapper						*/
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
 }
-.wrapper-3nSjSv:before,										/* modal				boostangel							*/
-.wrapper-3nSjSv:after {
+.wrapper-3nSjSv::before,										/* modal				boostangel							*/
+.wrapper-3nSjSv::after {
 	content: "";
 	position: absolute;
 	top: -44px;
@@ -1163,10 +1163,10 @@
 	width: 168px;
 	height: 88px;
 }
-.wrapper-3nSjSv:before {
+.wrapper-3nSjSv::before {
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_boostangel_bg.svg) center/cover no-repeat;
 }
-.wrapper-3nSjSv:after {
+.wrapper-3nSjSv::after {
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_boostangel_accent.svg) center/cover no-repeat;
 }
