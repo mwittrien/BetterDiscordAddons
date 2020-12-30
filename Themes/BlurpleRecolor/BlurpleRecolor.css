@@ -606,6 +606,38 @@
 	color: rgb(var(--vaccentcolor));
 }
 
+.icon-3j1dJB {												/* hypesettings			perk icon							*/
+	position: relative;
+}
+.icon-3j1dJB::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgb(var(--vaccentcolor));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/empty.svg) center/cover no-repeat;
+}
+.perkNewsletter-2lxlA1 {
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_hypeperk1_bg.svg) center/cover no-repeat;
+}
+.perkNewsletter-2lxlA1::after {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_hypeperk1_accent.svg) center/cover no-repeat;
+}
+.perkBadge-2la1kc {
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_hypeperk2_bg.svg) center/cover no-repeat;
+}
+.perkBadge-2la1kc::after {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_hypeperk2_accent.svg) center/cover no-repeat;
+}
+.perkChallenges-19qHzw {
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_hypeperk3_bg.svg) center/cover no-repeat;
+}
+.perkChallenges-19qHzw::after {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_hypeperk3_accent.svg) center/cover no-repeat;
+}
+
 .wrapper-3jrx9n {											/* overlaysettings		positionsettings wrapper			*/
 	border-color: rgb(var(--vaccentcolor));
 }
