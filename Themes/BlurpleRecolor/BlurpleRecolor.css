@@ -1154,7 +1154,7 @@
 .wrapper-3nSjSv {											/* modal				boostaddwrapper						*/
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
 }
-.wrapper-3nSjSv::before,										/* modal				boostangel							*/
+.wrapper-3nSjSv::before,									/* modal				boostangel							*/
 .wrapper-3nSjSv::after {
 	content: "";
 	position: absolute;
