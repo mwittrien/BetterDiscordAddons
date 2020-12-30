@@ -671,7 +671,7 @@
 
 
 .placeholderImage-37MstR {									/* discoverysettings	insight								*/
-	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_partnerprogram_bg.svg) center/cover no-repeat;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_insight_bg.svg) center/cover no-repeat;
 }
 .placeholderImage-37MstR::after {
 	content: "";
