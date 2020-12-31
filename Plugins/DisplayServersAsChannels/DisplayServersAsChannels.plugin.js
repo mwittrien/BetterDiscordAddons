@@ -381,6 +381,7 @@ module.exports = (_ => {
 						width: ${amounts.serverListWidth - 20}px;
 						padding: 0 8px;
 						box-sizing: border-box;
+						cursor: pointer;
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildiconchildwrapper + BDFDB.dotCN._displayserversaschannelsname} {
 						flex: 1 1 auto;
