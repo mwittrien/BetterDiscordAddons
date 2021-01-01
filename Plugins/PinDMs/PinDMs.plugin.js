@@ -728,7 +728,6 @@ module.exports = (_ => {
 					if (e.node && e.methodname == "componentDidMount") {
 						BDFDB.DOMUtils.removeClass(e.node, BDFDB.disCN._pindmsrecentpinned);
 						e.node.removeEventListener("contextmenu", e.node.PinDMsContextMenuListener);
-						e.node.PinDMsContextMenuListener = event => {BDFDB.DMUtils.openMenu(e.instance.props.channel.id, event);};
 						e.node.addEventListener("contextmenu", e.node.PinDMsContextMenuListener);
 						if (this.isPinned(e.instance.props.channel.id, "pinnedRecents")) {
 							BDFDB.DOMUtils.addClass(e.node, BDFDB.disCN._pindmsrecentpinned);
