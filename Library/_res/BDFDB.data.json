@@ -280,6 +280,7 @@
 		"EmojiPicker": {"strings": ["allowManagedEmojis", "EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"]},
 		"Flex": {"props": ["Wrap", "Direction", "Child"]},
 		"FlowerStarIcon": {"name": "FlowerStarIcon"},
+		"FocusRingScope": {"props": ["FocusRingScope"], "value": "default"},
 		"FormComponents": {"props": ["FormSection", "FormText"], "assign": true},
 		"GuildComponents Badge": {"name": "GuildBadge"},
 		"GuildComponents BlobMask": {"name": "BlobMask"},
