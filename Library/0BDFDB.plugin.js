@@ -16,15 +16,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.2.5",
+			"version": "1.2.6",
 			"description": "Give other plugins utility functions"
 		},
-		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
-		"changeLog": {
-			"improved": {
-				"Languages": "Added support for all languages used by discord"
-			}
-		}
+		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
 	};
 	
 	const DiscordObjects = {};
@@ -265,11 +260,11 @@ module.exports = (_ => {
 			return value;
 		}
 	};
-	BDFDB.ObjectUtils.map = function (obj, mapfunc) {
+	BDFDB.ObjectUtils.map = function (obj, mapFunc) {
 		if (!BDFDB.ObjectUtils.is(obj)) return {};
-		if (typeof mapfunc != "string" && typeof mapfunc != "function") return obj;
+		if (typeof mapFunc != "string" && typeof mapFunc != "function") return obj;
 		let newObj = {};
-		for (let key in obj) if (BDFDB.ObjectUtils.is(obj[key])) newObj[key] = typeof mapfunc == "string" ? obj[key][mapfunc] : mapfunc(obj[key], key);
+		for (let key in obj) if (BDFDB.ObjectUtils.is(obj[key])) newObj[key] = typeof mapFunc == "string" ? obj[key][mapFunc] : mapFunc(obj[key], key);
 		return newObj;
 	};
 	BDFDB.ObjectUtils.toArray = function (obj) {
@@ -3132,12 +3127,12 @@ module.exports = (_ => {
 				};
 				BDFDB.ColorUtils.setAlpha = function (color, a, conv) {
 					if (BDFDB.ObjectUtils.is(color)) {
-						var newcolor = {};
+						let newcolor = {};
 						for (let pos in color) newcolor[pos] = BDFDB.ColorUtils.setAlpha(color[pos], a, conv);
 						return newcolor;
 					}
 					else {
-						var comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
+						let comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
 						if (comp) {
 							a = a.toString();
 							a = (a.indexOf("%") > -1 ? 0.01 : 1) * parseFloat(a.replace(/[^0-9\.\-]/g, ""));
@@ -3151,7 +3146,7 @@ module.exports = (_ => {
 					return null;
 				};
 				BDFDB.ColorUtils.getAlpha = function (color) {
-					var comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
+					let comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
 					if (comp) {
 						if (comp.length == 3) return 1;
 						else if (comp.length == 4) {
@@ -3166,12 +3161,12 @@ module.exports = (_ => {
 					value = parseFloat(value);
 					if (color != null && typeof value == "number" && !isNaN(value)) {
 						if (BDFDB.ObjectUtils.is(color)) {
-							var newcolor = {};
-							for (let pos in color) newcolor[pos] = BDFDB.ColorUtils.change(color[pos], value, conv);
-							return newcolor;
+							let newColor = {};
+							for (let pos in color) newColor[pos] = BDFDB.ColorUtils.change(color[pos], value, conv);
+							return newColor;
 						}
 						else {
-							var comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
+							let comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
 							if (comp) {
 								if (parseInt(value) !== value) {
 									value = value.toString();
@@ -3187,12 +3182,12 @@ module.exports = (_ => {
 				};
 				BDFDB.ColorUtils.invert = function (color, conv) {
 					if (BDFDB.ObjectUtils.is(color)) {
-						var newcolor = {};
-						for (let pos in color) newcolor[pos] = BDFDB.ColorUtils.invert(color[pos], conv);
-						return newcolor;
+						let newColor = {};
+						for (let pos in color) newColor[pos] = BDFDB.ColorUtils.invert(color[pos], conv);
+						return newColor;
 					}
 					else {
-						var comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
+						let comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
 						if (comp) return BDFDB.ColorUtils.convert([255 - comp[0], 255 - comp[1], 255 - comp[2]], conv || BDFDB.ColorUtils.getType(color));
 					}
 					return null;
@@ -3221,7 +3216,7 @@ module.exports = (_ => {
 							else if (/^#[a-f\d]{4}$|^#[a-f\d]{8}$/i.test(color)) return "HEXA";
 							else {
 								color = color.toUpperCase();
-								var comp = color.replace(/[^0-9\.\-\,\%]/g, "").split(",");
+								let comp = color.replace(/[^0-9\.\-\,\%]/g, "").split(",");
 								if (color.indexOf("RGB(") == 0 && comp.length == 3 && isRGB(comp)) return "RGB";
 								else if (color.indexOf("RGBA(") == 0 && comp.length == 4 && isRGB(comp)) return "RGBA";
 								else if (color.indexOf("HSL(") == 0 && comp.length == 3 && isHSL(comp)) return "HSL";
@@ -4878,13 +4873,85 @@ module.exports = (_ => {
 				};
 				
 				InternalComponents.LibraryComponents.Checkbox = reactInitialized && class BDFDB_Checkbox extends LibraryModules.React.Component {
-					handleChange() {
-						this.props.value = !this.props.value;
+					handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
+					handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
+					handleMouseDown(e) {if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);}
+					handleMouseUp(e) {if (typeof this.props.onMouseUp == "function") this.props.onMouseUp(e, this);}
+					handleMouseEnter(e) {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);}
+					handleMouseLeave(e) {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);}
+					getInputMode() {
+						return this.props.disabled ? "disabled" : this.props.readOnly ? "readonly" : "default";
+					}
+					getStyle() {
+						let style = this.props.style || {};
+						if (!this.props.value) return style;
+						style = Object.assign({}, style);
+						this.props.color = typeof this.props.getColor == "function" ? this.props.getColor(this.props.value) : this.props.color;
+						switch (this.props.type) {
+							case InternalComponents.NativeSubComponents.Checkbox.Types.DEFAULT:
+								style.borderColor = this.props.color;
+								break;
+							case InternalComponents.NativeSubComponents.Checkbox.Types.GHOST:
+								let color = BDFDB.ColorUtils.setAlpha(this.props.color, 0.15, "RGB");
+								style.borderColor = color;
+								style.backgroundColor = color;
+								break;
+							case InternalComponents.NativeSubComponents.Checkbox.Types.INVERTED:
+								style.backgroundColor = this.props.color;
+								style.borderColor = this.props.color;
+						}
+						return style;
+					}
+					getColor() {
+						return this.props.value ? (this.props.type === InternalComponents.NativeSubComponents.Checkbox.Types.INVERTED ? BDFDB.DiscordConstants.Colors.WHITE : this.props.color) : "transparent";
+					}
+					handleChange(e) {
+						this.props.value = typeof this.props.getValue == "function" ? this.props.getValue(this.props.value, e) : !this.props.value;
 						if (typeof this.props.onChange == "function") this.props.onChange(this.props.value, this);
 						BDFDB.ReactUtils.forceUpdate(this);
 					}
 					render() {
-						return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.Checkbox, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));
+						let label = this.props.children ? BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.checkboxlabel, this.props.disabled ? BDFDB.disCN.checkboxlabeldisabled : BDFDB.disCN.checkboxlabelclickable, this.props.reverse ? BDFDB.disCN.checkboxlabelreversed : BDFDB.disCN.checkboxlabelforward),
+							style: {
+								lineHeight: this.props.size + "px"
+							},
+							children: this.props.children
+						}) : null;
+						return BDFDB.ReactUtils.createElement("label", {
+							className: BDFDB.DOMUtils.formatClassName(this.props.disabled ? BDFDB.disCN.checkboxwrapperdisabled : BDFDB.disCN.checkboxwrapper, this.props.align, this.props.className),
+							children: [
+								this.props.reverse && label,
+								!this.props.displayOnly && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FocusRingScope, {
+									children: BDFDB.ReactUtils.createElement("input", {
+										className: BDFDB.disCN["checkboxinput" + this.getInputMode()],
+										type: "checkbox",
+										onClick: this.props.disabled || this.props.readOnly ? (_ => {}) : this.handleChange.bind(this),
+										onContextMenu: this.props.disabled || this.props.readOnly ? (_ => {}) : this.handleChange.bind(this),
+										checked: this.props.value,
+										style: {
+											width: this.props.size,
+											height: this.props.size
+										}
+									})
+								}),
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.checkbox, this.props.shape, this.props.value && BDFDB.disCN.checkboxchecked),
+									style: Object.assign({
+										width: this.props.size,
+										height: this.props.size,
+										borderColor: this.props.checkboxColor
+									}, this.getStyle()),
+									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Checkmark, {
+										width: 18,
+										height: 18,
+										color: this.getColor(),
+										"aria-hidden": true
+									})
+								}),
+								!this.props.reverse && label
+							].filter(n => n)
+						});
 					}
 				};
 				
@@ -6574,13 +6641,15 @@ module.exports = (_ => {
 											shape: InternalComponents.LibraryComponents.Checkbox.Shapes.ROUND,
 											type: InternalComponents.LibraryComponents.Checkbox.Types.INVERTED,
 											color: this.props.checkboxColor,
+											getColor: this.props.getCheckboxColor,
 											value: props[setting],
+											getValue: this.props.getCheckboxValue,
 											onChange: this.props.onCheckboxChange
 										})
 									})).flat(10).filter(n => n)
 								})
 							]
-						}), "title", "data", "settings", "renderLabel", "cardClassName", "cardStyle", "checkboxColor", "onCheckboxChange", "maxWidth", "fullWidth", "biggestWidth", "pagination"));
+						}), "title", "data", "settings", "renderLabel", "cardClassName", "cardStyle", "checkboxColor", "getCheckboxColor",  "getCheckboxValue", "onCheckboxChange", "configWidth", "pagination"));
 					}
 					render() {
 						this.props.settings = BDFDB.ArrayUtils.is(this.props.settings) ? this.props.settings : [];

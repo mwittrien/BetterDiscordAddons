@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.5.5",
+			"version": "1.5.6",
 			"description": "Get a notification when a Friend or a User you choose to observe changes their online status, can be configured individually in the settings"
 		},
 		"changeLog": {
-			"added": {
-				"Search": "You can now search for a username in the time log modal"
+			"improved": {
+				"Toast/Desktop": "You can now set toast/desktop notifications for single status options instead of the whole user"
 			}
 		}
 	};
@@ -67,6 +67,24 @@ module.exports = (_ => {
 		var userStatusStore, timeLog, lastTimes, checkInterval, paginationOffset = {};
 		var friendCounter, timeLogList;
 		var settings = {}, amounts = {}, notificationStrings = {}, notificationSounds = {}, observedUsers = {};
+		
+		const notificationTypes = {
+			DISABLED: {
+				button: null,
+				value: 0,
+				color: ""
+			},
+			TOAST: {
+				button: 0,
+				value: 1,
+				color: "var(--bdfdb-blurple)"
+			},
+			DESKTOP: {
+				button: 2,
+				value: 2,
+				color: "STATUS_GREEN"
+			}
+		};
 		
 		const FriendOnlineCounterComponent = class FriendOnlineCounter extends BdApi.React.Component {
 			componentDidMount() {
@@ -140,27 +158,27 @@ module.exports = (_ => {
 
 				this.defaults = {
 					settings: {
-						addOnlineCount:		{value: true, 	description: "Add an online friend counter to the server list (click to open logs)"},
-						showDiscriminator:	{value: false, 	description: "Add the user discriminator"},
+						addOnlineCount:		{value: true, 	description: "Add an Online friend Counter to the Server List (click to open logs)"},
+						showDiscriminator:	{value: false, 	description: "Add the User Discriminator"},
 						disableForNew:		{value: false, 	description: "Disable Notifications for newly added Friends: "},
-						muteOnDND:			{value: false, 	description: "Do not notify me when I am DnD"},
+						muteOnDND:			{value: false, 	description: "Do not notify me when I am in DnD"},
 						openOnClick:		{value: false, 	description: "Open the DM when you click a Notification"}
 					},
 					notificationstrings: {
 						online: 			{value: "$user changed status to '$status'",			libString: "STATUS_ONLINE",			init: true},
 						mobile: 			{value: "$user changed status to '$status'",			libString: "STATUS_ONLINE_MOBILE",	init: true},
 						idle: 				{value: "$user changed status to '$status'",			libString: "STATUS_IDLE",			init: false},
-						dnd: 				{value: "$user changed status to '$status'",			libString: "STATUS_DND",				init: false},
+						dnd: 				{value: "$user changed status to '$status'",			libString: "STATUS_DND",			init: false},
 						playing: 			{value: "$user started playing '$game'",				statusName: "Playing",				init: false},
-						listening: 			{value: "$user started listening to '$song'",		statusName: "Listening",				init: false},
-						streaming: 			{value: "$user started streaming '$game'",			libString: "STATUS_STREAMING",		init: false},
-						offline: 			{value: "$user changed status to '$status'",			libString: "STATUS_OFFLINE",			init: true}
+						listening: 			{value: "$user started listening to '$song'",			statusName: "Listening",			init: false},
+						streaming: 			{value: "$user started streaming '$game'",				libString: "STATUS_STREAMING",		init: false},
+						offline: 			{value: "$user changed status to '$status'",			libString: "STATUS_OFFLINE",		init: true}
 					},
 					notificationsounds: {},
 					amounts: {
-						toastTime:			{value: 5, 		min: 1,		description: "Amount of seconds a toast notification stays on screen: "},
-						desktopTime:		{value: 5, 		min: 1,		description: "Amount of seconds a desktop notification stays on screen: "},
-						checkInterval:		{value: 10, 		min: 5,		description: "Check Users every X seconds: "}
+						toastTime:			{value: 5, 		min: 1,		description: "Amount of Seconds a Toast Notification stays on Screen: "},
+						desktopTime:		{value: 5, 		min: 1,		description: "Amount of Seconds a Desktop Notification stays on Screen: "},
+						checkInterval:		{value: 10, 	min: 5,		description: "Check Users every X Seconds: "}
 					}
 				};
 			
@@ -202,6 +220,20 @@ module.exports = (_ => {
 			}
 			
 			onStart() {
+				// REMOVE 1.1.2021
+				let convert = type => {
+					let data = BDFDB.DataUtils.load(this, type);
+					if (Object.keys(data).length) {
+						for (let id in data) if (data[id].desktop != undefined) {
+							for (let key of Object.keys(this.defaults.notificationstrings)) data[id][key] = notificationTypes[!data[id][key] ? "DISABLED" : (data[id].desktop ? "DESKTOP" : "TOAST")].value;
+							delete data[id].desktop;
+						}
+						BDFDB.DataUtils.save(data, this, type);
+					}
+				};
+				convert("friends");
+				convert("nonfriends");
+				
 				this.startInterval();
 
 				BDFDB.PatchUtils.forceAllUpdates(this);
@@ -214,23 +246,16 @@ module.exports = (_ => {
 			}
 
 			getSettingsPanel (collapseStates = {}) {
-				let changeNotificationType = (type, userId, desktopOn, disableOn) => {
-					let data = BDFDB.DataUtils.load(this, type, userId) || this.createDefaultConfig();
-					data.desktop = desktopOn;
-					data.disabled = disableOn;
-					BDFDB.DataUtils.save(data, this, type, userId);
-					this.SettingsUpdated = true;
-					BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
-				};
-				let changeAllConfigs = (type, config, enable) => {
+				let changeAllConfigs = (type, config, notificationType) => {
 					let allData = BDFDB.DataUtils.load(this, type);
-					if (config == "type") {
-						config = "desktop";
-						enable = !enable;
-						let disabled = BDFDB.ObjectUtils.toArray(allData).every(d => !d.disabled && d[config] == enable);
-						for (let id in allData) allData[id].disabled = disabled;
+					if (config == "all") {
+						config = "disabled";
+						for (let id in allData) allData[id][config] = notificationTypes[notificationType].button == 0 ? false : true;
 					}
-					for (let id in allData) allData[id][config] = enable;
+					else {
+						let disabled = BDFDB.ObjectUtils.toArray(allData).every(d => !d.disabled && d[config] == notificationTypes[notificationType].value);
+						for (let id in allData) allData[id][config] = notificationTypes[disabled ? "DISABLED" : notificationType].value;
+					}
 					BDFDB.DataUtils.save(allData, this, type);
 					this.SettingsUpdated = true;
 					BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
@@ -247,7 +272,7 @@ module.exports = (_ => {
 					items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
 						children: [
-							"Click on an Icon to toggle",
+							"Click on an Option to toggle",
 							BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.disCN._friendnotificationstypelabel,
 								style: {backgroundColor: "var(--bdfdb-blurple)"},
@@ -259,7 +284,7 @@ module.exports = (_ => {
 					if ("Notification" in window) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
 						children: [
-							"Right-Click on an Icon to toggle",
+							"Right-Click on an Option to toggle",
 							BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.disCN._friendnotificationstypelabel,
 								style: {backgroundColor: BDFDB.DiscordConstants.Colors.STATUS_GREEN},
@@ -270,7 +295,7 @@ module.exports = (_ => {
 					}));
 					items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
 						className: BDFDB.disCN.margintop20,
-						title: "type",
+						title: "all",
 						settings: Object.keys(this.defaults.notificationstrings),
 						data: users,
 						pagination: {
@@ -279,6 +304,14 @@ module.exports = (_ => {
 							offset: paginationOffset[title] || 0,
 							onJump: offset => {paginationOffset[title] = offset;}
 						},
+						getCheckboxColor: value => {
+							let color = (BDFDB.ObjectUtils.toArray(notificationTypes).find(n => n.value == value) || {}).color;
+							return BDFDB.DiscordConstants.Colors[color] || color;
+						},
+						getCheckboxValue: (value, event) => {
+							let eventValue = (BDFDB.ObjectUtils.toArray(notificationTypes).find(n => n.button == event.button) || {}).value;
+							return eventValue == value ? 0 : eventValue;
+						},
 						renderLabel: data => [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.listavatar, data.disabled && BDFDB.disCN.avatardisabled),
@@ -286,10 +319,11 @@ module.exports = (_ => {
 								status: BDFDB.UserUtils.getStatus(data.id),
 								size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40,
 								onClick: (e, instance) => {
-									changeNotificationType(type, data.id, false, !(data.disabled || data.desktop));
-								},
-								onContextMenu: (e, instance) => {
-									changeNotificationType(type, data.id, true, !(data.disabled || !data.desktop));
+									let saveData = BDFDB.DataUtils.load(this, type, data.id) || this.createDefaultConfig();
+									saveData.disabled = !saveData.disabled;
+									BDFDB.DataUtils.save(saveData, this, type, data.id);
+									this.SettingsUpdated = true;
+									BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 								}
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
@@ -297,10 +331,10 @@ module.exports = (_ => {
 							})
 						],
 						onHeaderClick: (config, instance) => {
-							changeAllConfigs(type, config, true);
+							changeAllConfigs(type, config, "TOAST");
 						},
 						onHeaderContextMenu: (config, instance) => {
-							changeAllConfigs(type, config, false);
+							changeAllConfigs(type, config, "DESKTOP");
 						},
 						onCheckboxChange: (value, instance) => {
 							let data = BDFDB.DataUtils.load(this, type, instance.props.cardId) || this.createDefaultConfig();
@@ -352,12 +386,18 @@ module.exports = (_ => {
 									nonFriendsData[id] = Object.assign({}, friendsData[id]);
 									delete friendsData[id];
 								}
-								else if (id != BDFDB.UserUtils.me.id) friends.push(Object.assign({}, user, friendsData[id], {key: id, className: friendsData[id].disabled ? "" : (friendsData[id].desktop ? BDFDB.disCN.cardsuccessoutline : BDFDB.disCN.cardbrandoutline)}));
+								else if (id != BDFDB.UserUtils.me.id) friends.push(Object.assign({}, user, friendsData[id], {
+									key: id,
+									className: friendsData[id].disabled ? "" : BDFDB.disCN.hovercarddisabled
+								}));
 							}
 						}
 						for (let id in nonFriendsData) {
 							let user = BDFDB.LibraryModules.UserStore.getUser(id);
-							if (user && id != BDFDB.UserUtils.me.id) nonFriends.push(Object.assign({}, user, nonFriendsData[id], {key: id, className: nonFriendsData[id].disabled ? "" : (nonFriendsData[id].desktop ? BDFDB.disCN.cardsuccessoutline : BDFDB.disCN.cardbrandoutline)}));
+							if (user && id != BDFDB.UserUtils.me.id) nonFriends.push(Object.assign({}, user, nonFriendsData[id], {
+								key: id,
+								className: nonFriendsData[id].disabled ? "" : BDFDB.disCN.hovercarddisabled
+							}));
 						}
 
 						BDFDB.DataUtils.save(friendsData, this, "friends");
@@ -595,9 +635,8 @@ module.exports = (_ => {
 
 			createDefaultConfig () {
 				return Object.assign({
-					desktop: false,
 					disabled: settings.disableForNew
-				}, BDFDB.ObjectUtils.map(this.defaults.notificationstrings, "init"));
+				}, BDFDB.ObjectUtils.map(this.defaults.notificationstrings, data => notificationTypes[data.init ? "TOAST" : "DISABLED"].value));
 			}
 
 			getStatusWithMobileAndActivity (id, config) {
@@ -669,23 +708,21 @@ module.exports = (_ => {
 										BDFDB.LibraryRequires.electron.remote.getCurrentWindow().focus();
 									}
 								};
-								if (!observedUsers[id].desktop) {
-									if (!document.querySelector(`.friendnotifications-${id}-toast`)) {
-										let toast = BDFDB.NotificationUtils.toast(`<div class="${BDFDB.disCN.toastinner}"><div class="${BDFDB.disCN.toastavatar}" style="background-image: url(${avatar});"></div><div>${toastString}</div></div>`, {html: true, timeout: toastTime, color: BDFDB.UserUtils.getStatusColor(status.statusName), icon: false, selector: `friendnotifications-${status.statusName}-toast friendnotifications-${id}-toast`});
-										toast.addEventListener("click", openChannel);
-										let notificationsound = notificationSounds["toast" + status.statusName] || {};
-										if (!notificationsound.mute && notificationsound.song) {
-											let audio = new Audio();
-											audio.src = notificationsound.song;
-											audio.play();
-										}
-									}
-								}
-								else {
+								if (observedUsers[id][status.statusName] == notificationTypes.DESKTOP.value) {
 									let desktopString = string.replace(/\$user/g, `${name}${settings.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/\$status/g, libString);
 									if (status.isActivity) desktopString = desktopString.replace(/\$song|\$game/g, status.name || status.details).replace(/\$artist/g, status.state);
 									let notificationsound = notificationSounds["desktop" + status.statusName] || {};
 									BDFDB.NotificationUtils.desktop(desktopString, {icon: avatar, timeout: desktopTime, click: openChannel, silent: notificationsound.mute, sound: notificationsound.song});
+								}
+								else if (!document.querySelector(`.friendnotifications-${id}-toast`)) {
+									let toast = BDFDB.NotificationUtils.toast(`<div class="${BDFDB.disCN.toastinner}"><div class="${BDFDB.disCN.toastavatar}" style="background-image: url(${avatar});"></div><div>${toastString}</div></div>`, {html: true, timeout: toastTime, color: BDFDB.UserUtils.getStatusColor(status.statusName), icon: false, selector: `friendnotifications-${status.statusName}-toast friendnotifications-${id}-toast`});
+									toast.addEventListener("click", openChannel);
+									let notificationsound = notificationSounds["toast" + status.statusName] || {};
+									if (!notificationsound.mute && notificationsound.song) {
+										let audio = new Audio();
+										audio.src = notificationsound.song;
+										audio.play();
+									}
 								}
 							}
 						}

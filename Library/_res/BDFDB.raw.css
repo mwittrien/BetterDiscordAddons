@@ -364,8 +364,12 @@ img:not([src]), img[src=""], img[src="null"] {
 	flex-direction: column;
 	align-items: center;
 }
-[REPLACE_CLASS_hovercardwrapper][REPLACE_CLASS_hovercardhorizontal] {
+[REPLACE_CLASS_hovercardhorizontal] {
 	flex-direction: row;
+}
+[REPLACE_CLASS_hovercarddisabled] {
+	opacity: 0.7;
+	filter: grayscale(0.2);
 }
 [REPLACE_CLASS_settingspanel] [REPLACE_CLASS_hovercardwrapper] {
 	width: calc(100% - 22px);
