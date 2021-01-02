@@ -2116,19 +2116,6 @@ img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 	background: var(--background-tertiary);
 }
 
-#app-mount .item-3T2z1R {
-	border-color: var(--interactive-muted);
-}
-#app-mount .passthroughSelected-1Eq0Kl {
-	background: var(--interactive-muted);
-}
-#app-mount .icon-17zDF5 {
-	fill: var(--header-primary);
-}
-#app-mount .notAllowedIcon-3j9AKY {
-	fill: var(--header-primary);
-}
-
 #app-mount .emojiAliasInput-1y-NBz .emojiInput-1aLNse {
 	background-color: var(--deprecated-text-input-bg);
 	border: 1px solid var(--deprecated-text-input-border);
