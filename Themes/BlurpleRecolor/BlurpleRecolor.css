@@ -93,6 +93,14 @@
 	background-color: rgb(var(--vaccentcolor));
 }
 
+.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.4)"] {
+	background-color: rgba(var(--vaccentcolor), 0.4) !important;
+}
+.folderIconWrapper-226oVY svg[style^="color: rgb(114, 137, 218)"],
+.folderIconWrapper-226oVY svg[style*=" color: rgb(114, 137, 218)"] {
+	color: rgb(var(--vaccentcolor)) !important;
+}
+
 
 /* ~~~~		2.		CHANNELLIST						~~~~ */
 
