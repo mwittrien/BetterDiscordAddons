@@ -115,7 +115,8 @@
 		13.	GUILDTEMPLATEMODAL
 		14.	GUILDWELCOMEMODAL
 		15.	GUILDRULESMODAL
-		16.	SCREENSHAREMODAL
+		16.	GUILDFEEDBACKMODAL
+		17.	SCREENSHAREMODAL
 	14.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -4213,7 +4214,23 @@ body::before {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 
-/* ----		13.16.	SCREENSHAREMODAL				---- */
+/* ----		13.16.	GUILDFEEDBACKMODAL				---- */
+
+.root-2IyrUe {												/* modal				items								*/
+	background-color: transparent;
+	border-radius: 0;
+}
+.option-3Ztn6N {											/* modal				item								*/
+	background-color: rgb(var(--vtransparencycolor), 0.2);
+	border: none;
+	border-radius: 8px;
+	margin-bottom: 8px;
+}
+.option-3Ztn6N:hover {
+	background-color: rgb(var(--vtransparencycolor), 0.4);
+}
+
+/* ----		13.17.	SCREENSHAREMODAL				---- */
 
 #app-mount .sourceThumbnail-27dolk {						/* modal				preview tiles						*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);

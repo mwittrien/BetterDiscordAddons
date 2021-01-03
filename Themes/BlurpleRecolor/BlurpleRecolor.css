@@ -1703,6 +1703,12 @@
 .colorBrand-2zeG8h .button-2DhvE9:hover {
 	color: rgb(var(--vaccentcolor));
 }
+.notice-3bPHh-[style*="background-color: rgb(114, 137, 218)"] {
+	background-color: rgb(var(--vaccentcolor)) !important;
+}
+.notice-3bPHh-[style*="background-color: rgb(114, 137, 218)"] .button-2DhvE9:hover {
+	color: rgb(var(--vaccentcolor)) !important;
+}
 .notice-2X5hT5 {											/* preview notice											*/
 	background: #000000 linear-gradient(90deg, rgba(var(--vaccentcolor), 0.5), rgba(var(--vaccentcolor), 0.5));
 }
