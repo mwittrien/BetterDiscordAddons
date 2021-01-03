@@ -33,10 +33,11 @@
 	2.	CHANNELLIST
 	3.	CHAT
 		1.	MESSAGES
-		2.	AUTOCOMPLETEMENU
-		3.	MEMBERLIST
-		4.	SEARCHPAGE
-		5.	CALL
+		2.	TEXTAREA
+		3.	AUTOCOMPLETEMENU
+		4.	MEMBERLIST
+		5.	SEARCHPAGE
+		6.	CALL
 	4.	PEOPLES
 	5.	STORE/NITRO
 	6.	LIBRARY
@@ -257,7 +258,28 @@
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 
-/* ----		3.2.	AUTOCOMPLETEMENU				---- */
+/* ----		3.2.	TEXTAREA				---- */
+															/* textarea				follow channel icon					*/
+.image-3XsqGc[src="/assets/dc7e9e55b3a6d39d24acdd650ecc2ef3.svg"] {
+	object-position: -999999px -999999px;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/chatnotice_followchannel_bg.svg) center/contain no-repeat;
+}
+.image-3XsqGc[src="/assets/dc7e9e55b3a6d39d24acdd650ecc2ef3.svg"] + * {
+	position: relative;
+	overflow: visible;
+}
+.image-3XsqGc[src="/assets/dc7e9e55b3a6d39d24acdd650ecc2ef3.svg"] + *::after {
+	content: "";
+	position: absolute;
+	bottom: 2px;
+	left: -59px;
+	width: 47px;
+	height: 60px;
+	background: rgb(var(--vaccentcolor));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/chatnotice_followchannel_accent.svg) center/contain no-repeat;
+}
+
+/* ----		3.3.	AUTOCOMPLETEMENU				---- */
 
 #app-mount .active-2awTSY {									/* autocomplete			option active						*/
 	background-color: rgb(var(--vaccentcolor));
@@ -294,13 +316,13 @@
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		3.3.	MEMBERLIST						---- */
+/* ----		3.4.	MEMBERLIST						---- */
 
 .premiumIcon-1rDbWQ {
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		3.4.	SEARCHPAGE						---- */
+/* ----		3.5.	SEARCHPAGE						---- */
 
 .noResultsImage-3Y0eCI.alt-3EpRdH {
 	display: flex;
@@ -314,7 +336,7 @@
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/searchpage_noresults_accent.svg) center/cover no-repeat;
 }
 
-/* ----		3.5.	CALL							---- */
+/* ----		3.6.	CALL							---- */
 
 .sparkleBlurple-awNnsZ {
 	background-image: url(https://discordapp.com/assets/c7539bb38577495f5021c8ea455c7145.png);
