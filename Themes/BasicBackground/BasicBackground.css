@@ -309,10 +309,6 @@ body::before {
 	color: rgb(var(--fontwhite2));
 	font-weight: 500;
 }
-.wrapper-1BJsBx:hover svg,
-.wrapper-1BJsBx.selected-bZ3Lue svg {
-	filter: drop-shadow(1px 1px var(--vtextshadow));
-}
 .wrapper-1BJsBx:hover .childWrapper-anI2G9,
 .wrapper-1BJsBx.selected-bZ3Lue .childWrapper-anI2G9,
 #bd-pub-button:hover {
