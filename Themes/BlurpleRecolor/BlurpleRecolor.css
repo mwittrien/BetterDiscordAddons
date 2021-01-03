@@ -923,6 +923,26 @@
 }
 
 /* ----		10.2.	GUILDADD/CREATION				---- */
+															/* create guild			create own icon						*/
+.icon-QM5383[src="/assets/79516499036b21acd5f56ccba0635c38.svg"] {
+	object-position: -999999px -999999px;
+	background: rgb(var(--vaccentcolor));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildcreate_createown_accent.svg) center/contain no-repeat;
+}
+.icon-QM5383[src="/assets/79516499036b21acd5f56ccba0635c38.svg"] + * {
+	position: relative;
+	display: flex;
+	align-items: center;
+	overflow: visible;
+}
+.icon-QM5383[src="/assets/79516499036b21acd5f56ccba0635c38.svg"] + *::after {
+	content: "";
+	position: absolute;
+	left: -56px;
+	width: 48px;
+	height: 48px;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildcreate_createown_bg.svg) center/contain no-repeat;
+}
 
 .uploadIcon-2IFzZU [fill="#7289da" i] {						/* create guild			upload icon							*/
 	fill: rgb(var(--vaccentcolor));
