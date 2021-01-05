@@ -130,6 +130,7 @@
 	right: 0;
 	bottom: 0;
 	left: 0;
+	pointer-events:none;
 }
 .channelNotice-1-XFjC.quickswitcher-35bYg4 {
 	background: transparent;
