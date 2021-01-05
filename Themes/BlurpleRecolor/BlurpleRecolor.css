@@ -130,6 +130,7 @@
 	right: 0;
 	bottom: 0;
 	left: 0;
+	pointer-events: none;
 }
 .channelNotice-1-XFjC.quickswitcher-35bYg4 {
 	background: transparent;
@@ -331,6 +332,7 @@
 	position: absolute;
 	width: 160px;
 	height: 160px;
+	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/searchpage_noresults_accent.svg) center/cover no-repeat;
 }
@@ -574,6 +576,7 @@
 	right: 0;
 	bottom: 0;
 	left: 0;
+	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_boostheader_accent.svg) center/cover no-repeat;
 }
@@ -616,6 +619,7 @@
 	right: 0;
 	bottom: 0;
 	left: 0;
+	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_boostbadge_accent.svg) center/contain no-repeat;
 }
@@ -645,6 +649,7 @@
 	right: 0;
 	bottom: 0;
 	left: 0;
+	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/empty.svg) center/cover no-repeat;
 }
@@ -693,6 +698,7 @@
 	right: -204px;
 	width: 184px;
 	height: 110px;
+	pointer-events: none;
 }
 .noticeIcon-1phvR2[src="/assets/616e078b351d0df460971441949c53a3.svg"] + *::before {
 	background: rgb(var(--vaccentcolor));
@@ -724,6 +730,7 @@
 	bottom: 0;
 	width: 320px;
 	height: 310px;
+	pointer-events: none;
 }
 .layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type::before {
 	background: rgb(var(--vaccentcolor));
@@ -756,6 +763,7 @@
 	right: 0;
 	bottom: 0;
 	left: 0;
+	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_insight_accent.svg) center/cover no-repeat;
 }
@@ -776,6 +784,7 @@
 	top: -281px;
     width: 428px;
     height: 241px;
+	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_partnerprogram_accent.svg) center/cover no-repeat;
 }
@@ -803,6 +812,7 @@
 	bottom: 10px;
 	width: 40px;
 	height: 40px;
+	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_requirements_accent.svg) center/cover no-repeat;
 }
@@ -826,6 +836,7 @@
 	position: absolute;
 	width: 82px;
 	height: 72px;
+	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_wumpus_accent.svg) center/cover no-repeat;
 }
@@ -859,6 +870,7 @@
 	content: "";
 	position: absolute;
 	border-radius: 10px;
+	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_wumpusicon_accent.svg) center/cover no-repeat;
 }
@@ -940,6 +952,7 @@
 	left: -56px;
 	width: 48px;
 	height: 48px;
+	pointer-events: none;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildcreate_createown_bg.svg) center/contain no-repeat;
 }
 
@@ -1002,6 +1015,7 @@
 .uploadModalIn-1z07Bv .icon-kyxXVr:not(.image-2yrs5j)::after {
 	content: "";
 	position: absolute;
+	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 }
 .attachment-33OFj0 .icon-1kp3fr {
@@ -1123,6 +1137,7 @@
 	position: absolute;
 	top: 0;
 	left: 0;
+	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/keybinds_arrows_accent.svg) center/contain no-repeat;
 }
@@ -1158,6 +1173,7 @@
 	top: -107px;
 	width: 124px;
 	height: 84px;
+	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/login_authbox_mask.svg) center/cover no-repeat;
 }
@@ -1229,6 +1245,7 @@
 	left: calc((100% - 96px) / 2);
 	width: 96px;
 	height: 60px;
+	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_boostheader_accent.svg) center/cover no-repeat;
 }
@@ -1282,6 +1299,7 @@
 	right: -82px;
 	width: 168px;
 	height: 88px;
+	pointer-events: none;
 }
 .wrapper-3nSjSv::before {
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_boostangel_bg.svg) center/cover no-repeat;
