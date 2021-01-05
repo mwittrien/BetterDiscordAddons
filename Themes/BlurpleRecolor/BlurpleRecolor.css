@@ -58,6 +58,7 @@
 		11.	CHANGELOGMODAL
 		12.	SCREENSHAREMODAL
 		13.	PHONEVERIFICATIONMODAL
+		14.	CUSTOMSTATUSMODAL
 	11.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -275,6 +276,7 @@
 	left: 16px;
 	width: 47px;
 	height: 60px;
+	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/chatnotice_followchannel_accent.svg) center/contain no-repeat;
 }
@@ -1388,6 +1390,23 @@
 	fill: rgb(var(--vaccentcolor));
 }
 
+/* ----		10.14.	CUSTOMSTATUSMODAL				---- */
+
+.art-347BZj {
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/customstatus_header_bg.svg) center/contain no-repeat;
+}
+.art-347BZj::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	pointer-events: none;
+	background: rgb(var(--vaccentcolor));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/customstatus_header_accent.svg) center/contain no-repeat;
+}
+
 
 /* ~~~~		11.		POPOUTS							~~~~ */
 
@@ -1693,6 +1712,9 @@
 .theme-dark .lookFilled-1h1y05.select-1Pkeg4:hover.selectOpen-hQuR6b,
 .theme-dark .lookFilled-1h1y05.selectOpen-hQuR6b {
 	border-color: rgb(var(--vaccentcolor)) rgb(var(--vaccentcolor)) rgba(0, 0, 0, 0.3);
+}
+.selectedIcon-3uS11H {										/* dropdown select		selected icon						*/
+	color: rgb(var(--vaccentcolor));
 }
 
 /* ----		12.4.	TAGS							---- */
