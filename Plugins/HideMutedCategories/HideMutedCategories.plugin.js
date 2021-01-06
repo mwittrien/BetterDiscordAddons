@@ -20,12 +20,12 @@ module.exports = (_ => {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
-		getName() {return config.info.name;}
-		getAuthor() {return config.info.author;}
-		getVersion() {return config.info.version;}
-		getDescription() {return config.info.description;}
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return config.info.description;}
 		
-		load() {
+		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
@@ -44,9 +44,9 @@ module.exports = (_ => {
 			}
 			if (!window.BDFDB_Global.pluginQueue.includes(config.info.name)) window.BDFDB_Global.pluginQueue.push(config.info.name);
 		}
-		start() {this.load();}
-		stop() {}
-		getSettingsPanel() {
+		start () {this.load();}
+		stop () {}
+		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The library plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
@@ -59,7 +59,7 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		return class HideMutedCategories extends Plugin {
-			onLoad() {
+			onLoad () {
 				this.patchedModules = {
 					before: {
 						Channels: "render"
@@ -72,11 +72,11 @@ module.exports = (_ => {
 				this.patchPriority = 10;
 			}
 			
-			onStart() {
+			onStart () {
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			
-			onStop() {
+			onStop () {
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 

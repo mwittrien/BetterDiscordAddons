@@ -59,11 +59,11 @@ module.exports = (_ => {
 	};
 	const Plugin = function(config) {
 		return class Plugin {
-			getName() {return config.info.name;}
-			getAuthor() {return config.info.author;}
-			getVersion() {return config.info.version;}
-			getDescription() {return config.info.description;}
-			load() {
+			getName () {return config.info.name;}
+			getAuthor () {return config.info.author;}
+			getVersion () {return config.info.version;}
+			getDescription () {return config.info.description;}
+			load () {
 				this.loaded = true;
 				if (window.BDFDB_Global.loading) {
 					if (!PluginStores.delayedLoad.includes(this)) PluginStores.delayedLoad.push(this);
@@ -77,7 +77,7 @@ module.exports = (_ => {
 					}, "Failed to load plugin!", config.info.name)();
 				}
 			}
-			start() {
+			start () {
 				if (!this.loaded) this.load();
 				if (window.BDFDB_Global.loading) {
 					if (!PluginStores.delayedStart.includes(this)) PluginStores.delayedStart.push(this);
@@ -92,7 +92,7 @@ module.exports = (_ => {
 					delete this.stopping;
 				}
 			}
-			stop() {
+			stop () {
 				if (this.stopping) return;
 				this.stopping = true;
 				BDFDB.TimeUtils.timeout(_ => {delete this.stopping;});
@@ -8009,18 +8009,18 @@ module.exports = (_ => {
 	loadLibrary(true);
 	
 	return class BDFDB_Frame {
-		getName() {return config.info.name;}
-		getAuthor() {return config.info.author;}
-		getVersion() {return config.info.version;}
-		getDescription() {return config.info.description;}
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return config.info.description;}
 		
-		load() {
+		load () {
 			libraryInstance = this;
 			Object.assign(this, config.info, BDFDB.ObjectUtils.exclude(config, "info"));
 			if (!BDFDB.BDUtils.isPluginEnabled(config.info.name)) BDFDB.BDUtils.enablePlugin(config.info.name);
 		}
-		start() {}
-		stop() {
+		start () {}
+		stop () {
 			if (!BDFDB.BDUtils.isPluginEnabled(config.info.name)) BDFDB.BDUtils.enablePlugin(config.info.name);
 		}
 		

@@ -25,12 +25,12 @@ module.exports = (_ => {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
-		getName() {return config.info.name;}
-		getAuthor() {return config.info.author;}
-		getVersion() {return config.info.version;}
-		getDescription() {return config.info.description;}
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return config.info.description;}
 		
-		load() {
+		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
@@ -49,9 +49,9 @@ module.exports = (_ => {
 			}
 			if (!window.BDFDB_Global.pluginQueue.includes(config.info.name)) window.BDFDB_Global.pluginQueue.push(config.info.name);
 		}
-		start() {this.load();}
-		stop() {}
-		getSettingsPanel() {
+		start () {this.load();}
+		stop () {}
+		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The library plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
@@ -87,10 +87,10 @@ module.exports = (_ => {
 		};
 		
 		const FriendOnlineCounterComponent = class FriendOnlineCounter extends BdApi.React.Component {
-			componentDidMount() {
+			componentDidMount () {
 				friendCounter = this;
 			}
-			render() {
+			render () {
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN.guildouter,
 					children: BDFDB.ReactUtils.createElement("div", {
@@ -105,10 +105,10 @@ module.exports = (_ => {
 		};
 		
 		const TimeLogComponent = class TimeLog extends BdApi.React.Component {
-			componentDidMount() {
+			componentDidMount () {
 				timeLogList = this;
 			}
-			render() {
+			render () {
 				return this.props.entries.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PaginatedList, {
 					items: this.props.entries,
 					amount: 100,
@@ -148,7 +148,7 @@ module.exports = (_ => {
 		};
 	
 		return class FriendNotifications extends Plugin {
-			onLoad() {
+			onLoad () {
 				_this = this;
 				
 				userStatusStore = {};
@@ -219,7 +219,7 @@ module.exports = (_ => {
 				}
 			}
 			
-			onStart() {
+			onStart () {
 				// REMOVE 1.1.2021
 				let convert = type => {
 					let data = BDFDB.DataUtils.load(this, type);
@@ -239,7 +239,7 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			
-			onStop() {
+			onStop () {
 				BDFDB.TimeUtils.clear(checkInterval);
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
@@ -590,7 +590,7 @@ module.exports = (_ => {
 				});
 			}
 
-			onSettingsClosed() {
+			onSettingsClosed () {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
 					
@@ -633,7 +633,7 @@ module.exports = (_ => {
 				}));
 			}
 
-			createDefaultConfig() {
+			createDefaultConfig () {
 				return Object.assign({
 					disabled: settings.disableForNew
 				}, BDFDB.ObjectUtils.map(this.defaults.notificationstrings, data => notificationTypes[data.init ? "TOAST" : "DISABLED"].value));
@@ -654,7 +654,7 @@ module.exports = (_ => {
 				return status;
 			}
 
-			startInterval() {
+			startInterval () {
 				BDFDB.TimeUtils.clear(checkInterval);
 				
 				settings = BDFDB.DataUtils.get(this, "settings");
@@ -731,7 +731,7 @@ module.exports = (_ => {
 				}, amounts.checkInterval * 1000);
 			}	
 
-			showTimeLog() {
+			showTimeLog () {
 				let searchTimeout;
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",

@@ -25,12 +25,12 @@ module.exports = (_ => {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
-		getName() {return config.info.name;}
-		getAuthor() {return config.info.author;}
-		getVersion() {return config.info.version;}
-		getDescription() {return config.info.description;}
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return config.info.description;}
 		
-		load() {
+		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
@@ -49,9 +49,9 @@ module.exports = (_ => {
 			}
 			if (!window.BDFDB_Global.pluginQueue.includes(config.info.name)) window.BDFDB_Global.pluginQueue.push(config.info.name);
 		}
-		start() {this.load();}
-		stop() {}
-		getSettingsPanel() {
+		start () {this.load();}
+		stop () {}
+		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The library plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
@@ -119,7 +119,7 @@ module.exports = (_ => {
 		const themeRepoIcon = `<svg width="36" height="31" viewBox="20 0 400 332"><path d="M0.000 39.479 L 0.000 78.957 43.575 78.957 L 87.151 78.957 87.151 204.097 L 87.151 329.236 129.609 329.236 L 172.067 329.236 172.067 204.097 L 172.067 78.957 215.642 78.957 L 259.218 78.957 259.218 39.479 L 259.218 0.000 129.609 0.000 L 0.000 0.000 0.000 39.479" stroke="none" fill="COLOR_1" fill-rule="evenodd"></path><path d="M274.115 38.624 L 274.115 77.248 280.261 77.734 C 309.962 80.083,325.986 106.575,313.378 132.486 C 305.279 149.131,295.114 152.700,255.800 152.700 L 230.168 152.700 230.168 123.277 L 230.168 93.855 208.566 93.855 L 186.965 93.855 186.965 211.546 L 186.965 329.236 208.566 329.236 L 230.168 329.236 230.168 277.068 L 230.168 224.899 237.268 225.113 L 244.368 225.326 282.215 277.095 L 320.062 328.864 360.031 329.057 L 400.000 329.249 400.000 313.283 L 400.000 297.317 367.924 256.908 L 335.848 216.499 340.182 214.869 C 376.035 201.391,395.726 170.616,399.382 122.342 C 405.008 48.071,360.214 0.000,285.379 0.000 L 274.115 0.000 274.115 38.624" stroke="none" fill="COLOR_2" fill-rule="evenodd"></path></svg>`;
 		
 		const RepoListComponent = class ThemeList extends BdApi.React.Component {
-			componentDidMount() {
+			componentDidMount () {
 				list = this;
 				BDFDB.TimeUtils.timeout(_ => {
 					forcedSort = null;
@@ -127,13 +127,13 @@ module.exports = (_ => {
 					showOnlyOutdated = false;
 				}, 5000);
 			}
-			componentWillUnmount() {
+			componentWillUnmount () {
 				if (preview) {
 					BDFDB.WindowUtils.close(preview);
 					preview = null;
 				}
 			}
-			filterThemes() {
+			filterThemes () {
 				let themes = Object.keys(loadedThemes).map(url => {
 					let theme = loadedThemes[url];
 					let instTheme = BDFDB.BDUtils.getTheme(theme.name);
@@ -165,7 +165,7 @@ module.exports = (_ => {
 				if (this.props.orderKey == "DESC") themes.reverse();
 				return themes;
 			}
-			openPreview() {
+			openPreview () {
 				preview = BDFDB.WindowUtils.open(this, "https://mwittrien.github.io/BetterDiscordAddons/Plugins/_res/DiscordPreview.html", {
 					alwaysOnTop: settings.keepOnTop,
 					showOnReady: true,
@@ -224,7 +224,7 @@ module.exports = (_ => {
 					}
 				});
 			}
-			render() {
+			render () {
 				let automaticLoading = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.automaticLoading);
 				if (!this.props.tab) this.props.tab = "Themes";
 				this.props.entries = (!loading.is && !BDFDB.ObjectUtils.isEmpty(loadedThemes) ? this.filterThemes() : []).map(theme => BDFDB.ReactUtils.createElement(RepoCardComponent, {
@@ -503,7 +503,7 @@ module.exports = (_ => {
 		};
 		
 		const RepoCardComponent = class ThemeCard extends BdApi.React.Component {
-			render() {
+			render () {
 				let buttonConfig = buttonData[(Object.entries(themeStates).find(n => n[1] == this.props.theme.state) || [])[0]];
 				return buttonConfig && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AddonCard, {
 					icon: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
@@ -677,10 +677,10 @@ module.exports = (_ => {
 		};
 		
 		const RepoListHeaderComponent = class ThemeListHeader extends BdApi.React.Component {
-			componentDidMount() {
+			componentDidMount () {
 				header = this;
 			}
-			render() {
+			render () {
 				if (!this.props.tab) this.props.tab = "Themes";
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN._repolistheader,
@@ -773,7 +773,7 @@ module.exports = (_ => {
 			}
 		};
 		return class ThemeRepo extends Plugin {
-			onLoad() {
+			onLoad () {
 				_this = this;
 				
 				loading = {is: false, timeout: null, amount: 0};
@@ -809,7 +809,7 @@ module.exports = (_ => {
 				};
 			}
 			
-			onStart() {
+			onStart () {
 				this.forceUpdateAll();
 
 				this.loadThemes();
@@ -817,7 +817,7 @@ module.exports = (_ => {
 				updateInterval = BDFDB.TimeUtils.interval(_ => {this.checkForNewThemes();}, 1000*60*30);
 			}
 			
-			onStop() {
+			onStop () {
 				BDFDB.TimeUtils.clear(updateInterval);
 				BDFDB.TimeUtils.clear(loading.timeout);
 
@@ -916,14 +916,14 @@ module.exports = (_ => {
 				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 			}
 
-			onSettingsClosed() {
+			onSettingsClosed () {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
 					this.forceUpdateAll();
 				}
 			}
 			
-			forceUpdateAll() {
+			forceUpdateAll () {
 				settings = BDFDB.DataUtils.get(this, "settings");
 				modalSettings = BDFDB.DataUtils.get(this, "modalSettings");
 				favorites = BDFDB.DataUtils.load(this, "favorites");
@@ -1017,7 +1017,7 @@ module.exports = (_ => {
 				return fullCSS;
 			}
 
-			loadThemes() {
+			loadThemes () {
 				BDFDB.DOMUtils.remove(".themerepo-loadingicon");
 				let getThemeInfo, outdated = 0, newEntries = 0, i = 0;
 				let tags = ["name", "description", "author", "version"];
@@ -1192,11 +1192,11 @@ module.exports = (_ => {
 				}
 			}
 
-			getLoadingTooltipText() {
+			getLoadingTooltipText () {
 				return `Loading ThemeRepo - [${Object.keys(loadedThemes).length}/${Object.keys(grabbedThemes).length}]`;
 			}
 
-			checkForNewThemes() {
+			checkForNewThemes () {
 				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/_res/ThemeList.txt", (error, response, result) => {
 					if (response && !BDFDB.equals(result.replace(/\t|\r/g, "").split("\n").filter(n => n), grabbedThemes)) {
 						loading = {is: false, timeout: null, amount: 0};

@@ -25,12 +25,12 @@ module.exports = (_ => {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
-		getName() {return config.info.name;}
-		getAuthor() {return config.info.author;}
-		getVersion() {return config.info.version;}
-		getDescription() {return config.info.description;}
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return config.info.description;}
 		
-		load() {
+		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
@@ -49,9 +49,9 @@ module.exports = (_ => {
 			}
 			if (!window.BDFDB_Global.pluginQueue.includes(config.info.name)) window.BDFDB_Global.pluginQueue.push(config.info.name);
 		}
-		start() {this.load();}
-		stop() {}
-		getSettingsPanel() {
+		start () {this.load();}
+		stop () {}
+		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The library plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
@@ -71,14 +71,14 @@ module.exports = (_ => {
 				super(props);
 				this.state = {fetchedOwner: false, delayed: false, repositioned: false};
 			}
-			componentDidUpdate() {
+			componentDidUpdate () {
 				if (amounts.tooltipDelay && this.state.delayed && !this.state.repositioned) {
 					this.state.repositioned = true;
 					let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return.return.stateNode.containerInfo`));
 					if (tooltip) tooltip.update();
 				}
 			}
-			render() {
+			render () {
 				if (amounts.tooltipDelay && !this.state.delayed) {
 					BDFDB.TimeUtils.timeout(_ => {
 						this.state.delayed = true;
@@ -144,7 +144,7 @@ module.exports = (_ => {
 		};
 		
 		const GuildDetailsRowComponent = class GuildDetailsRow extends BdApi.React.Component {
-			render() {
+			render () {
 				return (this.props.prefix.length + this.props.string.length) > Math.round(34 * (amounts.tooltipWidth/300)) ? [
 					BDFDB.ReactUtils.createElement("div", {
 						children: `${this.props.prefix}:`
@@ -159,7 +159,7 @@ module.exports = (_ => {
 		};
 		
 		return class ServerDetails extends Plugin {
-			onLoad() {
+			onLoad () {
 				_this = this;
 				
 				this.defaults = {
@@ -224,7 +224,7 @@ module.exports = (_ => {
 				`;
 			}
 			
-			onStart() {
+			onStart () {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryComponents.GuildComponents.Guild.prototype, "render", {after: e => {
 					this.processGuild({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"});
 				}});
@@ -239,7 +239,7 @@ module.exports = (_ => {
 				this.forceUpdateAll();
 			}
 			
-			onStop() {
+			onStop () {
 				this.forceUpdateAll();
 				
 				BDFDB.DOMUtils.removeLocalStyle(this.name + "TooltipWidth");
@@ -420,14 +420,14 @@ module.exports = (_ => {
 				});
 			}
 
-			onSettingsClosed() {
+			onSettingsClosed () {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
 					this.forceUpdateAll();
 				}
 			}
 		
-			forceUpdateAll() {
+			forceUpdateAll () {
 				settings = BDFDB.DataUtils.get(this, "settings");
 				colors = BDFDB.DataUtils.get(this, "colors");
 				choices = BDFDB.DataUtils.get(this, "choices");
@@ -526,7 +526,7 @@ module.exports = (_ => {
 				return charArray.join("");
 			}
 
-			setLabelsByLanguage() {
+			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {

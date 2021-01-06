@@ -20,12 +20,12 @@ module.exports = (_ => {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
-		getName() {return config.info.name;}
-		getAuthor() {return config.info.author;}
-		getVersion() {return config.info.version;}
-		getDescription() {return config.info.description;}
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return config.info.description;}
 		
-		load() {
+		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
@@ -44,9 +44,9 @@ module.exports = (_ => {
 			}
 			if (!window.BDFDB_Global.pluginQueue.includes(config.info.name)) window.BDFDB_Global.pluginQueue.push(config.info.name);
 		}
-		start() {this.load();}
-		stop() {}
-		getSettingsPanel() {
+		start () {this.load();}
+		stop () {}
+		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The library plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
@@ -71,7 +71,7 @@ module.exports = (_ => {
 		];
 	
 		const SpotifyControlsComponent = class SpotifyControls extends BdApi.React.Component {
-			componentDidMount() {
+			componentDidMount () {
 				controls = this;
 			}
 			request(socket, device, type, data) {
@@ -110,7 +110,7 @@ module.exports = (_ => {
 					});
 				});
 			}
-			render() {
+			render () {
 				let socketDevice = BDFDB.LibraryModules.SpotifyTrackUtils.getActiveSocketAndDevice();
 				if (!socketDevice) return null;
 				if (this.props.song) {
@@ -321,7 +321,7 @@ module.exports = (_ => {
 			}
 		};
 		const SpotifyControlsButtonComponent = class SpotifyControlsButton extends BdApi.React.Component {
-			render() {
+			render () {
 				if (!this.props.playerSize || !buttonConfigs[this.props.type] || !buttonConfigs[this.props.type][this.props.playerSize]) return null;
 				let button = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.accountinfobutton, this.props.disabled ? BDFDB.disCN.accountinfobuttondisabled : BDFDB.disCN.accountinfobuttonenabled, this.props.active && BDFDB.disCN._spotifycontrolsbuttonactive),
@@ -343,7 +343,7 @@ module.exports = (_ => {
 	}
 		};
 		const SpotifyControlsTimelineComponent = class SpotifyControlsTimeline extends BdApi.React.Component {
-			componentDidMount() {
+			componentDidMount () {
 				BDFDB.TimeUtils.clear(updateInterval);
 				updateInterval = BDFDB.TimeUtils.interval(_ => {
 					if (!this.updater || typeof this.updater.isMounted != "function" || !this.updater.isMounted(this)) BDFDB.TimeUtils.clear(updateInterval);
@@ -360,7 +360,7 @@ module.exports = (_ => {
 				let hours = Math.floor((time / (1000 * 60 * 60)) % 24);
 				return `${hours > 0 ? hours + ":" : ""}${hours > 0 && minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`
 			}
-			render() {
+			render () {
 				let maxTime = this.props.song.timestamps.end - this.props.song.timestamps.start;
 				let currentTime = (!playbackState.is_playing && stopTime ? stopTime : new Date()) - this.props.song.timestamps.start;
 				currentTime = currentTime > maxTime ? maxTime : currentTime;
@@ -407,7 +407,7 @@ module.exports = (_ => {
 		};
 	
 		return class SpotifyControls extends Plugin {
-			onLoad() {
+			onLoad () {
 				_this = this;
 				
 				this.defaults = {
@@ -600,7 +600,7 @@ module.exports = (_ => {
 				`;
 			}
 			
-			onStart() {
+			onStart () {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SpotifyTrackUtils, "getActivity", {after: e => {
 					if (e.methodArguments[0] !== false) {
 						if (e.returnValue && e.returnValue.name == "Spotify") this.updatePlayer(e.returnValue);
@@ -634,7 +634,7 @@ module.exports = (_ => {
 				this.forceUpdateAll();
 			}
 			
-			onStop() {
+			onStop () {
 				this.forceUpdateAll();
 				
 				if (typeof insertPatchCancel == "function") insertPatchCancel();
@@ -700,14 +700,14 @@ module.exports = (_ => {
 				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 			}
 
-			onSettingsClosed() {
+			onSettingsClosed () {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
 					this.forceUpdateAll();
 				}
 			}
 		
-			forceUpdateAll() {
+			forceUpdateAll () {
 				settings = BDFDB.DataUtils.get(this, "settings");
 				buttonConfigs = BDFDB.DataUtils.get(this, "buttonConfigs");
 				

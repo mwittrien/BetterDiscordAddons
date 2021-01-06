@@ -25,12 +25,12 @@ module.exports = (_ => {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
-		getName() {return config.info.name;}
-		getAuthor() {return config.info.author;}
-		getVersion() {return config.info.version;}
-		getDescription() {return config.info.description;}
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return config.info.description;}
 		
-		load() {
+		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
@@ -49,9 +49,9 @@ module.exports = (_ => {
 			}
 			if (!window.BDFDB_Global.pluginQueue.includes(config.info.name)) window.BDFDB_Global.pluginQueue.push(config.info.name);
 		}
-		start() {this.load();}
-		stop() {}
-		getSettingsPanel() {
+		start () {this.load();}
+		stop () {}
+		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The library plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
@@ -66,7 +66,7 @@ module.exports = (_ => {
 		var settings = {}, amounts = {};
 	
 		return class DisplayServersAsChannels extends Plugin {
-			onLoad() {
+			onLoad () {
 				this.defaults = {
 					settings: {
 						showGuildIcon:					{value: true, 	description: "Show a icon for servers"},
@@ -92,7 +92,7 @@ module.exports = (_ => {
 				};
 			}
 			
-			onStart() {
+			onStart () {
 				BDFDB.DOMUtils.addClass(document.body, BDFDB.disCN._displayserversaschannelsstyled);
 
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryComponents.GuildComponents.Guild.prototype, "render", {after: e => {
@@ -103,7 +103,7 @@ module.exports = (_ => {
 				this.addCSS();
 			}
 			
-			onStop() {
+			onStop () {
 				BDFDB.DOMUtils.removeClassFromDOM(BDFDB.disCN._displayserversaschannelsstyled);
 
 				BDFDB.DOMUtils.removeLocalStyle("DSACStyle" + this.name);
@@ -138,7 +138,7 @@ module.exports = (_ => {
 				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 			}
 
-			onSettingsClosed() {
+			onSettingsClosed () {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
 					this.forceUpdateAll();
@@ -146,7 +146,7 @@ module.exports = (_ => {
 				}
 			}
 		
-			forceUpdateAll() {
+			forceUpdateAll () {
 				settings = BDFDB.DataUtils.get(this, "settings");
 				amounts = BDFDB.DataUtils.get(this, "amounts");
 				
@@ -348,7 +348,7 @@ module.exports = (_ => {
 				}
 			}
 
-			addCSS() {
+			addCSS () {
 				BDFDB.DOMUtils.appendLocalStyle("DSACStyle" + this.name, `
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper},
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsscroller},

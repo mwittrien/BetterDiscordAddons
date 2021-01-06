@@ -30,12 +30,12 @@ module.exports = (_ => {
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
-		getName() {return config.info.name;}
-		getAuthor() {return config.info.author;}
-		getVersion() {return config.info.version;}
-		getDescription() {return config.info.description;}
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return config.info.description;}
 		
-		load() {
+		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
@@ -54,9 +54,9 @@ module.exports = (_ => {
 			}
 			if (!window.BDFDB_Global.pluginQueue.includes(config.info.name)) window.BDFDB_Global.pluginQueue.push(config.info.name);
 		}
-		start() {this.load();}
-		stop() {}
-		getSettingsPanel() {
+		start () {this.load();}
+		stop () {}
+		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The library plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
@@ -73,18 +73,18 @@ module.exports = (_ => {
 		var settings = {}, amounts = {}, zoomSettings = {}, engines = {}, enabledEngines = {}, ownLocations = {}, downloadsFolder;
 		
 		const ImageDetails = class ImageDetails extends BdApi.React.Component {
-			componentDidMount() {
+			componentDidMount () {
 				this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "attachment", {up: true});
 				BDFDB.ReactUtils.forceUpdate(this);
 			}
-			componentDidUpdate() {
+			componentDidUpdate () {
 				if ((!this.props.attachment || !this.props.attachment.size) && !this.props.loaded) {
 					this.props.loaded = true;
 					this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "attachment", {up: true});
 					BDFDB.ReactUtils.forceUpdate(this);
 				}
 			}
-			render() {
+			render () {
 				return !this.props.attachment ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 					className: BDFDB.disCN._imageutilitiesimagedetails,
 					children: [
@@ -115,7 +115,7 @@ module.exports = (_ => {
 		};
 		
 		return class ImageUtilities extends Plugin {
-			onLoad() {
+			onLoad () {
 				firedEvents = [];
 				clickedImage = null;
 					
@@ -246,7 +246,7 @@ module.exports = (_ => {
 				`;
 			}
 			
-			onStart() {
+			onStart () {
 				// REMOVE 16.12.2020
 				let oL = BDFDB.DataUtils.load(this, "ownLocations"), c = false;
 				for (let i in oL) if (!BDFDB.ObjectUtils.is(oL[i])) {
@@ -267,7 +267,7 @@ module.exports = (_ => {
 				this.forceUpdateAll();
 			}
 			
-			onStop() {
+			onStop () {
 				this.cleanupListeners("Gallery");
 				this.cleanupListeners("Zoom");
 
@@ -451,14 +451,14 @@ module.exports = (_ => {
 				});
 			}
 		
-			onSettingsClosed() {
+			onSettingsClosed () {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
 					this.forceUpdateAll();
 				}
 			}
 		
-			forceUpdateAll() {
+			forceUpdateAll () {
 				settings = BDFDB.DataUtils.get(this, "settings");
 				amounts = BDFDB.DataUtils.get(this, "amounts");
 				zoomSettings = BDFDB.DataUtils.get(this, "zoomSettings");
@@ -994,7 +994,7 @@ module.exports = (_ => {
 				});
 			}
 			
-			getDownloadLocation() {
+			getDownloadLocation () {
 				if (downloadsFolder && BDFDB.LibraryRequires.fs.existsSync(downloadsFolder)) return downloadsFolder;
 				let homePath = BDFDB.LibraryRequires.process.env.USERPROFILE || BDFDB.LibraryRequires.process.env.HOMEPATH || BDFDB.LibraryRequires.process.env.HOME;
 				let downloadPath = homePath && BDFDB.LibraryRequires.path.join(homePath, "Downloads");
@@ -1111,7 +1111,7 @@ module.exports = (_ => {
 				}
 			}
 
-			setLabelsByLanguage() {
+			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
