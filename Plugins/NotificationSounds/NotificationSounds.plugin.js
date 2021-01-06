@@ -25,10 +25,10 @@ module.exports = (_ => {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
-		getName () {return config.info.name;}
-		getAuthor () {return config.info.author;}
-		getVersion () {return config.info.version;}
-		getDescription () {return config.info.description;}
+		getName() {return config.info.name;}
+		getAuthor() {return config.info.author;}
+		getVersion() {return config.info.version;}
+		getDescription() {return config.info.description;}
 		
 		load() {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
@@ -129,24 +129,24 @@ module.exports = (_ => {
 				this._src = audios[choices[type].category][choices[type].sound] || types[type].src;
 				this._volume = choices[type].volume;
 			}
-			loop () {
+			loop() {
 				this._ensureAudio().then(audio => {
 					audio.loop = true;
 					audio.play();
 				});
 			}
-			play () {
+			play() {
 				this._ensureAudio().then(audio => {
 					audio.loop = false;
 					audio.play();
 				});
 			}
-			pause () {
+			pause() {
 				this._audio.then(audio => {
 					audio.pause();
 				});
 			}
-			stop () {
+			stop() {
 				this._destroyAudio();
 			}
 			setTime (time) {
@@ -159,7 +159,7 @@ module.exports = (_ => {
 					audio.loop = loop;
 				});
 			}
-			_destroyAudio () {
+			_destroyAudio() {
 				if (this._audio) {
 					this._audio.then(audio => {
 						audio.pause();
@@ -168,7 +168,7 @@ module.exports = (_ => {
 					this._audio = null;
 				}
 			}
-			_ensureAudio () {
+			_ensureAudio() {
 				return this._audio = this._audio || new Promise((callback, errorCallback) => {
 					let audio = new Audio;
 					audio.src = this._src && this._src.startsWith("data") ? this._src.replace(/ /g, "") : this._src;
@@ -631,7 +631,7 @@ module.exports = (_ => {
 				});
 			}
 
-			onSettingsClosed () {
+			onSettingsClosed() {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
 					for (let type in createdAudios) if (createdAudios[type]) createdAudios[type].stop();
@@ -640,7 +640,7 @@ module.exports = (_ => {
 				}
 			}
 		
-			forceUpdateAll () {
+			forceUpdateAll() {
 				repatchIncoming = true;
 				createdAudios["call_calling"] = BDFDB.LibraryModules.SoundUtils.createSound("call_calling");
 				volumes = BDFDB.DataUtils.get(this, "volumes");
@@ -667,12 +667,12 @@ module.exports = (_ => {
 				}
 			}
 			
-			loadAudios () {
+			loadAudios() {
 				audios = Object.assign({}, BDFDB.DataUtils.load(this, "audios"), defaultAudios);
 				BDFDB.DataUtils.save(BDFDB.ObjectUtils.exclude(audios, Object.keys(defaultAudios)), this, "audios");
 			}
 
-			loadChoices () {
+			loadChoices() {
 				let loadedChoices = BDFDB.DataUtils.load(this, "choices");
 				for (let type in types) {
 					let choice = loadedChoices[type] || {}, soundFound = false;

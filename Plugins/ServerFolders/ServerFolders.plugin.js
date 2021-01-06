@@ -20,10 +20,10 @@ module.exports = (_ => {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
-		getName () {return config.info.name;}
-		getAuthor () {return config.info.author;}
-		getVersion () {return config.info.version;}
-		getDescription () {return config.info.description;}
+		getName() {return config.info.name;}
+		getAuthor() {return config.info.author;}
+		getVersion() {return config.info.version;}
+		getDescription() {return config.info.description;}
 		
 		load() {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
@@ -489,7 +489,7 @@ module.exports = (_ => {
 				BDFDB.DOMUtils.removeClassFromDOM(BDFDB.disCN._serverfoldersfoldercontentisopen);
 			}
 
-			onSwitch () {
+			onSwitch() {
 				if (typeof BDFDB === "object" && settings.forceOpenFolder) {
 					let folder = BDFDB.GuildUtils.getFolder(BDFDB.LibraryModules.LastGuildStore.getGuildId());
 					if (folder && !BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folder.folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId);
@@ -532,7 +532,7 @@ module.exports = (_ => {
 				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 			}
 
-			onSettingsClosed () {
+			onSettingsClosed() {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
 					folderStates = {};
@@ -944,7 +944,7 @@ module.exports = (_ => {
 				}
 			}
 
-			loadAllIcons () {
+			loadAllIcons() {
 				let icons = {};
 				folderIcons.forEach((array, i) => {
 					icons[i] = {
@@ -1160,7 +1160,7 @@ module.exports = (_ => {
 				dragpreview.style.setProperty("top", event.clientY - 25 + "px", "important");
 			}
 
-			setLabelsByLanguage () {
+			setLabelsByLanguage() {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {

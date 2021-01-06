@@ -29,10 +29,10 @@ module.exports = (_ => {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
-		getName () {return config.info.name;}
-		getAuthor () {return config.info.author;}
-		getVersion () {return config.info.version;}
-		getDescription () {return config.info.description;}
+		getName() {return config.info.name;}
+		getAuthor() {return config.info.author;}
+		getVersion() {return config.info.version;}
+		getDescription() {return config.info.description;}
 		
 		load() {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
@@ -214,14 +214,14 @@ module.exports = (_ => {
 				});
 			}
 
-			onSettingsClosed () {
+			onSettingsClosed() {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
 					this.forceUpdateAll();
 				}
 			}
 			
-			forceUpdateAll () {
+			forceUpdateAll() {
 				settings = BDFDB.DataUtils.get(this, "settings");
 				bindings = BDFDB.DataUtils.get(this, "bindings");
 				enabledBindings = BDFDB.ObjectUtils.filter(bindings, action => settings[action], true);
