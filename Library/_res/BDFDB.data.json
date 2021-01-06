@@ -300,6 +300,7 @@
 		"MessagesPopoutComponents": {"props": ["Header", "EmptyStateBottom"]},
 		"ModalComponents": {"props": ["ModalContent", "ModalFooter"], "assign": true},
 		"NavItem": {"name": "NavItem"},
+		"PopoutCSSAnimator": {"name": "PopoutCSSAnimator"},
 		"PopoutFocusLock": {"strings": ["useFocusLock", "useImperativeHandle"]},
 		"PrivateChannelItems": {"props": ["DirectMessage", "GroupDM"]},
 		"QuickSwitchItems": {"props": ["Channel", "GroupDM", "Header"]},
@@ -308,6 +309,7 @@
 		"Scrollers None": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerNone"},
 		"Scrollers Thin": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerThin"},
 		"Spinner": {"name": "Spinner"},
+		"StatusPickerPopout": {"string": ["\"StatusPickerPopout\""], "value": "default"},
 		"TextElement": {"name": "Text"},
 		"UserPopout": {"name": "UserPopout"},
 		"UserSummaryItem": {"name": "UserSummaryItem"}
