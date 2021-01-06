@@ -309,7 +309,7 @@
 		"Scrollers None": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerNone"},
 		"Scrollers Thin": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerThin"},
 		"Spinner": {"name": "Spinner"},
-		"StatusPickerPopout": {"string": ["\"StatusPickerPopout\""], "value": "default"},
+		"StatusPickerPopout": {"strings": ["\"StatusPickerPopout\""], "value": "default"},
 		"TextElement": {"name": "Text"},
 		"UserPopout": {"name": "UserPopout"},
 		"UserSummaryItem": {"name": "UserSummaryItem"}
