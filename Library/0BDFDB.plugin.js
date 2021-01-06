@@ -1814,7 +1814,7 @@ module.exports = (_ => {
 								}
 								else BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${methodName} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`)();
 								callInstead = false, stopCall = false;
-								return methodName == "render" && data.returnValue === undefined ? null : data.returnValue;
+								return (methodName == "render" || methodName == "default") && data.returnValue === undefined ? null : data.returnValue;
 							};
 							for (let key of Object.keys(originalMethod)) module[methodName][key] = originalMethod[key];
 							if (!module[methodName].__originalFunction) {

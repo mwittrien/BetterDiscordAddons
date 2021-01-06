@@ -4,7 +4,7 @@
 		"Channel": {"props": ["getRecipientId", "isManaged", "getGuildId"]},
 		"Guild": {"props": ["getIconURL", "getMaxEmojiSlots", "getRole"]},
 		"Invite": {"props": ["getExpiresAt", "isExpired"]},
-		"Message": {"props": ["getReaction", "getAuthorName", "getChannelId"]},
+		"Message": {"props": ["getReaction", "isEdited", "getChannelId"]},
 		"Messages": {"props": ["jumpToMessage", "hasAfterCached", "forEach"]},
 		"Relationship": {"protos": ["comparator"], "array": true},
 		"Timestamp": {"props": ["add", "dayOfYear", "hasAlignedHourOffset"]},
