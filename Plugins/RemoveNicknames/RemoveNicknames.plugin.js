@@ -100,13 +100,13 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.PatchUtils.patch(this, BDFDB.ModuleUtils.findByProperties("getMessageAuthor"), "getMessageAuthor", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageAuthorUtils, "getMessageAuthor", {after: e => {
 					if (settings.changeInChatWindow && e.methodArguments[0] && e.methodArguments[0].id) {
 						let newName = this.getNewName(BDFDB.LibraryModules.UserStore.getUser(e.methodArguments[0].id));
 						if (newName) e.returnValue.nick = newName;
 					}
 				}});
-				BDFDB.PatchUtils.patch(this, BDFDB.ModuleUtils.findByProperties("getMessageAuthor"), "default", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageAuthorUtils, "default", {after: e => {
 					if (settings.changeInChatWindow && e.methodArguments[0] && e.methodArguments[0].author) {
 						let newName = this.getNewName(e.methodArguments[0].author);
 						if (newName) e.returnValue.nick = newName;
