@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveNicknames",
 			"author": "DevilBro",
-			"version": "1.3.5",
+			"version": "1.3.6",
 			"description": "Replace all nicknames with the actual accountnames"
 		},
 		"changeLog": {
 			"fixed": {
-				"Replies": "Works in the reply header"
+				"Messages": "Works in messages again"
 			}
 		}
 	};
@@ -87,9 +87,6 @@ module.exports = (_ => {
 					before: {
 						AutocompleteUserResult: "render",
 						VoiceUser: "render",
-						Message: "default",
-						MessageUsername: "default",
-						MessageContent: "type",
 						ChannelReply: "default",
 						MemberListItem: "render"
 					},
@@ -103,6 +100,19 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				BDFDB.PatchUtils.patch(this, BDFDB.ModuleUtils.findByProperties("getMessageAuthor"), "getMessageAuthor", {after: e => {
+					if (settings.changeInChatWindow && e.methodArguments[0] && e.methodArguments[0].id) {
+						let newName = this.getNewName(BDFDB.LibraryModules.UserStore.getUser(e.methodArguments[0].id));
+						if (newName) e.returnValue.nick = newName;
+					}
+				}});
+				BDFDB.PatchUtils.patch(this, BDFDB.ModuleUtils.findByProperties("getMessageAuthor"), "default", {after: e => {
+					if (settings.changeInChatWindow && e.methodArguments[0] && e.methodArguments[0].author) {
+						let newName = this.getNewName(e.methodArguments[0].author);
+						if (newName) e.returnValue.nick = newName;
+					}
+				}});
+				
 				this.forceUpdateAll();
 			}
 			
@@ -165,36 +175,6 @@ module.exports = (_ => {
 							let newName = this.getNewName(users.shift());
 							if (newName) BDFDB.ReactUtils.setChild(child, newName);
 						}
-					}
-				}
-			}
-
-			processMessage (e) {
-				let header = e.instance.props.childrenHeader;
-				if (header && header.props && header.props.message && header.props.message.nick) {
-					let newName = this.getNewName(header.props.message.author);
-					if (newName) header.props.message = new BDFDB.DiscordObjects.Message(Object.assign({}, header.props.message, {nick: newName}));
-				}
-				let repliedMessage = e.instance.props.childrenRepliedMessage;
-				if (repliedMessage && repliedMessage.props && repliedMessage.props.children && repliedMessage.props.children.props && repliedMessage.props.children.props.referencedMessage && repliedMessage.props.children.props.referencedMessage.message && repliedMessage.props.children.props.referencedMessage.message.nick) {
-					let newName = this.getNewName(repliedMessage.props.children.props.referencedMessage.message.author);
-					if (newName) repliedMessage.props.children.props.referencedMessage.message = new BDFDB.DiscordObjects.Message(Object.assign({}, repliedMessage.props.children.props.referencedMessage.message, {nick: newName}));
-				}
-			}
-			
-			processMessageUsername (e) {
-				if (e.instance.props.message.nick && settings.changeInChatWindow) {
-					let newName = this.getNewName(e.instance.props.message.author);
-					if (newName) e.instance.props.message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {nick: newName}));
-				}
-			}
-			
-			processMessageContent (e) {
-				if (e.instance.props.message.type != BDFDB.DiscordConstants.MessageTypes.DEFAULT && e.instance.props.message.nick && settings.changeInChatWindow) {
-					let newName = this.getNewName(e.instance.props.message.author);
-					if (newName) {
-						e.instance.props.message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {nick: newName}));
-						if (e.instance.props.children && e.instance.props.children.props) e.instance.props.children.props.message = e.instance.props.message;
 					}
 				}
 			}
