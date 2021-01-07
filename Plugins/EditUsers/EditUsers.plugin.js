@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.0.8",
+			"version": "4.0.9",
 			"description": "Allow you to change the icon, name, tag and color of users"
 		},
 		"changeLog": {
-			"improved": {
-				"Reset Confirmation": "Trying to reset a user will first ask for permission, holding Shift will skip this"
+			"fixed": {
+				"Messages": "Works in messages again"
 			}
 		}
 	};
@@ -193,6 +193,27 @@ module.exports = (_ => {
 				let observer = new MutationObserver(_ => {this.changeAppTitle();});
 				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name: "appTitleObserver", instance: observer}, {childList: true});
 				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageAuthorUtils, "getMessageAuthor", {after: e => {
+					if (settings.changeInChatWindow && e.methodArguments[0] && e.methodArguments[0].id && changedUsers[e.methodArguments[0].id]) {
+						let data = changedUsers[e.methodArguments[0].id];
+						if (data.name || data.color1) {
+							let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember(e.methodArguments[0].guild_id, e.methodArguments[0].id) || {}).colorString || data.color1;
+							if (data.name) e.returnValue.nick = data.name;
+							if (color1) e.returnValue.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
+						}
+					}
+				}});
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageAuthorUtils, "default", {after: e => {
+					if (settings.changeInChatWindow && e.methodArguments[0] && e.methodArguments[0].author && changedUsers[e.methodArguments[0].author.id]) {
+						let data = changedUsers[e.methodArguments[0].author.id];
+						if (data.name || data.color1) {
+							let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.methodArguments[0].channel_id) || {}).guild_id, e.methodArguments[0].author.id) || {}).colorString || data.color1;
+							if (data.name) e.returnValue.nick = data.name;
+							if (color1) e.returnValue.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
+						}
+					}
+				}});
+				
 				let searchGroupData = BDFDB.ObjectUtils.get(BDFDB.ModuleUtils.findByName("SearchPopoutComponent", false), "exports.GroupData");
 				if (BDFDB.ObjectUtils.is(searchGroupData)) {
 					BDFDB.PatchUtils.patch(this, searchGroupData.FILTER_FROM, "component", {after: e => {
@@ -303,37 +324,35 @@ module.exports = (_ => {
 					}
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 					children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-						children: [
-							BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-								label: this.labels.context_localusersettings,
-								id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-submenu"),
-								children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-									children: [
-										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-											label: this.labels.submenu_usersettings,
-											id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
-											action: _ => {
-												this.openUserSettingsModal(e.instance.props.user);
-											}
-										}),
-										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-											label: this.labels.submenu_resetsettings,
-											id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
-											color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
-											disabled: !changedUsers[e.instance.props.user.id],
-											action: event => {
-												let remove = _ => {
-													BDFDB.DataUtils.remove(this, "users", e.instance.props.user.id);
-													this.forceUpdateAll(true);
-												};
-												if (event.shiftKey) remove();
-												else BDFDB.ModalUtils.confirm(this, this.labels.confirm_reset, remove);
-											}
-										})
-									]
-								})
+						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							label: this.labels.context_localusersettings,
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-submenu"),
+							children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+								children: [
+									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+										label: this.labels.submenu_usersettings,
+										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
+										action: _ => {
+											this.openUserSettingsModal(e.instance.props.user);
+										}
+									}),
+									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+										label: this.labels.submenu_resetsettings,
+										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
+										color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
+										disabled: !changedUsers[e.instance.props.user.id],
+										action: event => {
+											let remove = _ => {
+												BDFDB.DataUtils.remove(this, "users", e.instance.props.user.id);
+												this.forceUpdateAll(true);
+											};
+											if (event.shiftKey) remove();
+											else BDFDB.ModalUtils.confirm(this, this.labels.confirm_reset, remove);
+										}
+									})
+								]
 							})
-						]
+						})
 					}));
 				}
 			}
@@ -560,7 +579,6 @@ module.exports = (_ => {
 						if (data) {
 							let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(header.props.message.channel_id) || {}).guild_id, header.props.message.author.id) || {}).colorString || data.color1;
 							let message = new BDFDB.DiscordObjects.Message(Object.assign({}, header.props.message, {author: this.getUserData(header.props.message.author.id, true, false, header.props.message.author)}));
-							if (data.name) message.nick = data.name;
 							if (color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
 							header.props.message = message;
 						}
@@ -572,7 +590,6 @@ module.exports = (_ => {
 							let messageColor = data.color5 || (BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.coloredText) && (data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(content.props.message.channel_id) || {}).guild_id, content.props.message.author.id) || {}).colorString || data.color1));
 							if (messageColor) {
 								let message = new BDFDB.DiscordObjects.Message(Object.assign({}, content.props.message, {author: this.getUserData(content.props.message.author.id, true, false, content.props.message.author)}));
-								if (data.name) message.nick = data.name;
 								message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(messageColor) ? messageColor[0] : messageColor, "HEX");
 								content.props.message = message;
 							}
@@ -585,7 +602,6 @@ module.exports = (_ => {
 						if (data) {
 							let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(referenceMessage.channel_id) || {}).guild_id, header.props.message.author.id) || {}).colorString || data.color1;
 							let message = new BDFDB.DiscordObjects.Message(Object.assign({}, referenceMessage, {author: this.getUserData(referenceMessage.author.id, true, false, referenceMessage.author)}));
-							if (data.name) message.nick = data.name;
 							if (color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
 							repliedMessage.props.children.props.referencedMessage = Object.assign({}, repliedMessage.props.children.props.referencedMessage, {message: message});
 						}
@@ -600,7 +616,6 @@ module.exports = (_ => {
 						let message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {author: this.getUserData(e.instance.props.message.author.id, true, false, e.instance.props.message.author)}));
 						if (data) {
 							let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.message.author.id) || {}).colorString || data.color1;
-							if (data.name) message.nick = data.name;
 							if (color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
 						}
 						e.instance.props.message = message;
@@ -636,7 +651,6 @@ module.exports = (_ => {
 							let data = changedUsers[e.instance.props.message.author.id];
 							if (data) {
 								let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.message.author.id) || {}).colorString || data.color1;
-								if (data.name) message.nick = data.name;
 								if (color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
 							}
 							e.instance.props.message = message;
@@ -778,7 +792,6 @@ module.exports = (_ => {
 						let data = changedUsers[e.instance.props.reply.message.author.id];
 						if (data) {
 							let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.reply.message.channel_id) || {}).guild_id, e.instance.props.reply.message.author.id) || {}).colorString || data.color1;
-							if (data.name) message.nick = data.name;
 							if (color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
 						}
 						e.instance.props.reply = Object.assign({}, e.instance.props.reply, {message: message});
