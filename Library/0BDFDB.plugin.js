@@ -3708,11 +3708,12 @@ module.exports = (_ => {
 				BDFDB.ContextMenuUtils.createItem = function (component, props = {}) {
 					if (!component) return null;
 					else {
-						if (props.persisting || BDFDB.ObjectUtils.is(props.popoutProps) || (typeof props.color == "string" && !DiscordClasses[`menu${props.color.toLowerCase()}`])) component = InternalComponents.MenuItem;
+						if (props.render || props.persisting || BDFDB.ObjectUtils.is(props.popoutProps) || (typeof props.color == "string" && !DiscordClasses[`menu${props.color.toLowerCase()}`])) component = InternalComponents.MenuItem;
 						if (BDFDB.ObjectUtils.toArray(RealMenuItems).some(c => c == component)) return BDFDB.ReactUtils.createElement(component, props);
 						else return BDFDB.ReactUtils.createElement(RealMenuItems.MenuItem, {
 							id: props.id,
 							disabled: props.disabled,
+							customItem: true,
 							render: menuItemProps => {
 								if (!props.state) props.state = BDFDB.ObjectUtils.extract(props, "checked", "value");
 								return BDFDB.ReactUtils.createElement(InternalComponents.CustomMenuItemWrapper, {
@@ -4408,7 +4409,7 @@ module.exports = (_ => {
 						let focused = !openedItem ? this.props.isFocused : openedItem == this.props.id;
 						let themeDark = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themedark;
 						let item = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, Object.assign({
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN.menulabelcontainer, color && (isCustomColor ? BDFDB.disCN.menucolorcustom : BDFDB.disCN[`menu${color}`]), this.props.disabled && BDFDB.disCN.menudisabled, focused && BDFDB.disCN.menufocused),
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, (this.props.label || this.props.subtext) && BDFDB.disCN.menulabelcontainer, color && (isCustomColor ? BDFDB.disCN.menucolorcustom : BDFDB.disCN[`menu${color}`]), this.props.disabled && BDFDB.disCN.menudisabled, focused && BDFDB.disCN.menufocused),
 							style: {
 								color: isCustomColor ? ((focused || this.state.hovered) ? (BDFDB.ColorUtils.isBright(color) ? "#000000" : "#ffffff") : color) : (this.state.hovered ? "#ffffff" : null),
 								background: isCustomColor && (focused || this.state.hovered) && color
@@ -4419,14 +4420,17 @@ module.exports = (_ => {
 								this.props.action(e, this);
 							},
 							onMouseEnter: this.props.disabled ? null : e => {
+								if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);
 								this.setState({hovered: true});
 							},
 							onMouseLeave: this.props.disabled ? null : e => {
+								if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
 								this.setState({hovered: false});
 							},
 							"aria-disabled": this.props.disabled,
 							children: [
-								BDFDB.ReactUtils.createElement("div", {
+								typeof this.props.render == "function" ? this.props.render(this) : this.props.render,
+								(this.props.label || this.props.subtext) && BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.menulabel,
 									children: [
 										typeof this.props.label == "function" ? this.props.label(this) : this.props.label,
@@ -4469,14 +4473,26 @@ module.exports = (_ => {
 						this.state = {hovered: false};
 					}
 					render() {
-						return BDFDB.ReactUtils.createElement("div", {
+						let isItem = this.props.children == InternalComponents.MenuItem;
+						let item = BDFDB.ReactUtils.createElement(this.props.children, Object.assign({}, this.props.childProps, {
+							onMouseEnter: isItem ? e => {
+								if (this.props.childProps && typeof this.props.childProps.onMouseEnter == "function") this.props.childProps.onMouseEnter(e, this);
+								this.setState({hovered: true});
+							} : this.props.childProps && this.props.childProps.onMouseEnter,
+							onMouseLeave: isItem ? e => {
+								if (this.props.childProps && typeof this.props.childProps.onMouseLeave == "function") this.props.childProps.onMouseLeave(e, this);
+								this.setState({hovered: false});
+							} : this.props.childProps && this.props.childProps.onMouseLeave,
+							isFocused: this.state.hovered && !this.props.disabled
+						}));
+						return isItem ? item : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
 							onMouseEnter: e => {
 								this.setState({hovered: true});
 							},
 							onMouseLeave: e => {
 								this.setState({hovered: false});
 							},
-							children: BDFDB.ReactUtils.createElement(this.props.children, Object.assign({}, this.props.childProps, {isFocused: this.state.hovered && !this.props.disabled}))
+							children: item
 						});
 					}
 				};
