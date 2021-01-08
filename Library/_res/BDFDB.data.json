@@ -1616,6 +1616,7 @@
 		"customstatusicon": ["CustomStatusIcon", "icon"],
 		"customstatusitem": ["CustomStatusPopout", "statusItem"],
 		"customstatusitemclearbutton": ["CustomStatusPopout", "clearStatusButton"],
+		"customstatusitemclearicon": ["CustomStatusPopout", "clearStatusIcon"],
 		"customstatusitemcustom": ["CustomStatusPopout", "customStatusItem"],
 		"customstatusitemcustomtext": ["CustomStatusPopout", "customText"],
 		"customstatusitemcustomwithemoji": ["CustomStatusPopout", "customStatusWithEmoji"],
