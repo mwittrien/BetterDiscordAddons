@@ -16,7 +16,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.2.7",
+			"version": "1.2.8",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
@@ -8048,7 +8048,7 @@ module.exports = (_ => {
 							keys: ["settings", key],
 							label: getString(key, "description"),
 							note: (InternalBDFDB.defaults.settings[key].noteAlways || InternalBDFDB.defaults.settings[key].noteIfNative && nativeSetting) && getString(key, "note"),
-							value: settings[key] || key == "showToasts" && bdToastSetting
+							value: settings[key] || nativeSetting
 						}));
 					}
 					
