@@ -19,7 +19,12 @@ module.exports = (_ => {
 			"version": "1.2.7",
 			"description": "Give other plugins utility functions"
 		},
-		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
+		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
+		"changeLog": {
+			"fixed": {
+				"Settings": "Work again"
+			}
+		}
 	};
 	
 	const DiscordObjects = {};
