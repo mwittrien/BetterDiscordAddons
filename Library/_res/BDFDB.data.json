@@ -26,6 +26,7 @@
 		"CategoryCollapseUtils": {"props": ["categoryCollapse", "categoryCollapseAll"]},
 		"ChannelStore": {"props": ["getChannel", "getDMFromUserId"]},
 		"ColorUtils": {"props": ["hex2int", "hex2rgb"]},
+		"CommandApplicationUtils": {"props": ["useApplicationCommandsDiscoveryState"]},
 		"CommandUtils": {"props": ["queryApplicationCommands", "setActiveCommand"]},
 		"ContextMenuUtils": {"props": ["closeContextMenu", "openContextMenu"]},
 		"CopyLinkUtils": {"props": ["SUPPORTS_COPY", "copy"]},
