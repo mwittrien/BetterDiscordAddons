@@ -30,6 +30,7 @@
 		"CopyLinkUtils": {"props": ["SUPPORTS_COPY", "copy"]},
 		"CurrentUserStore": {"props": ["getCurrentUser"]},
 		"CurrentVoiceUtils": {"props": ["getAveragePing", "isConnected"]},
+		"CustomStatusConstants": {"props": ["ClearAfterValues", "STATUS_MAX_LENGTH"]},
 		"DirectMessageStore": {"props": ["getPrivateChannelIds"]},
 		"DirectMessageUnreadStore": {"props": ["getUnreadPrivateChannelIds"]},
 		"DispatchApiUtils": {"props": ["dirtyDispatch", "isDispatching"]},

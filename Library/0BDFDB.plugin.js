@@ -4447,7 +4447,7 @@ module.exports = (_ => {
 								this.props.icon && BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.menuiconcontainer,
 									children: BDFDB.ReactUtils.createElement(this.props.icon, {
-										className: BDFDB.disCN.menuicon,
+										className: BDFDB.disCN.menuicon
 									})
 								}),
 								this.props.imageUrl && BDFDB.ReactUtils.createElement("div", {
