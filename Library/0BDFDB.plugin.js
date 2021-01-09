@@ -16,13 +16,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.2.8",
+			"version": "1.2.9",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 		"changeLog": {
 			"fixed": {
-				"Settings": "Work again"
+				"New Pagination": "Fixed issues with the new pagination style and logic"
 			}
 		}
 	};
@@ -6103,99 +6103,33 @@ module.exports = (_ => {
 							offset: props.offset
 						};
 					}
-					jump(offset) {
+					handleJump(offset) {
 						if (offset > -1 && offset < Math.ceil(this.props.items.length/this.props.amount) && this.state.offset != offset) {
 							this.state.offset = offset;
 							if (typeof this.props.onJump == "function") this.props.onJump(offset, this);
 							BDFDB.ReactUtils.forceUpdate(this);
 						}
 					}
-					renderPagination() {
+					renderPagination(bottom) {
 						let maxOffset = Math.ceil(this.props.items.length/this.props.amount) - 1;
 						return this.props.items.length > this.props.amount && BDFDB.ReactUtils.createElement("nav", {
-							className: BDFDB.disCN.paginationlistpagination,
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.pagination, bottom ? BDFDB.disCN.paginationbottom : BDFDB.disCN.paginationtop, this.props.mini && BDFDB.disCN.paginationmini),
 							children: [
-								this.props.first && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-									text: BDFDB.LanguageUtils.LibraryStrings.first,
-									"aria-label": BDFDB.LanguageUtils.LibraryStrings.first,
-									tooltipConfig: {zIndex: 3001},
-									onClick: _ => {if (this.state.offset > 0) this.jump(0);},
-									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.state.offset <= 0 && BDFDB.disCN.searchresultspaginationdisabled),
-										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-											className: BDFDB.disCN.searchresultspaginationicon,
-											name: InternalComponents.LibraryComponents.SvgIcon.Names.LEFT_DOUBLE_CARET
-										})
-									})
-								}),
-								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-									text: BDFDB.LanguageUtils.LanguageStrings.PAGINATION_PREVIOUS,
-									"aria-label": BDFDB.LanguageUtils.LanguageStrings.PAGINATION_PREVIOUS,
-									tooltipConfig: {zIndex: 3001},
-									onClick: _ => {
-										if (this.state.offset > 0) this.jump(this.state.offset - 1);
-									},
-									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.state.offset <= 0 && BDFDB.disCN.searchresultspaginationdisabled),
-										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-											className: BDFDB.disCN.searchresultspaginationicon,
-											name: InternalComponents.LibraryComponents.SvgIcon.Names.LEFT_CARET
-										})
-									})
-								}),
-								BDFDB.LanguageUtils.LanguageStringsFormat("PAGINATION_PAGE_OF", this.state.offset + 1, maxOffset + 1),
-								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-									text: BDFDB.LanguageUtils.LanguageStrings.PAGINATION_NEXT,
-									"aria-label": BDFDB.LanguageUtils.LanguageStrings.PAGINATION_NEXT,
-									tooltipConfig: {zIndex: 3001},
-									onClick: _ => {if (this.state.offset < maxOffset) this.jump(this.state.offset + 1);},
-									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.state.offset >= maxOffset && BDFDB.disCN.searchresultspaginationdisabled),
-										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-											className: BDFDB.disCN.searchresultspaginationicon,
-											name: InternalComponents.LibraryComponents.SvgIcon.Names.RIGHT_CARET
-										})
-									})
-								}),
-								this.props.last && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-									text: BDFDB.LanguageUtils.LibraryStrings.last,
-									"aria-label": BDFDB.LanguageUtils.LibraryStrings.last,
-									tooltipConfig: {zIndex: 3001},
-									onClick: _ => {if (this.state.offset < maxOffset) this.jump(maxOffset);},
-									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.state.offset >= maxOffset && BDFDB.disCN.searchresultspaginationdisabled),
-										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-											className: BDFDB.disCN.searchresultspaginationicon,
-											name: InternalComponents.LibraryComponents.SvgIcon.Names.RIGHT_DOUBLE_CARET
-										})
-									})
+								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Paginator, {
+									totalCount: this.props.items.length,
+									currentPage: this.state.offset + 1,
+									pageSize: this.props.amount,
+									maxVisiblePages: this.props.maxVisiblePages,
+									onPageChange: page => {this.handleJump(isNaN(parseInt(page)) ? -1 : page - 1);}
 								}),
 								this.props.jump && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextInput, {
-									key: "pagination-list-jumpinput",
 									type: "number",
 									size: InternalComponents.LibraryComponents.TextInput.Sizes.MINI,
 									value: this.state.offset + 1,
 									min: 1,
 									max: maxOffset + 1,
-									onKeyDown: (event, instance) => {if (event.which == 13) this.jump(isNaN(parseInt(instance.props.value)) ? -1 : instance.props.value - 1);}
+									onKeyDown: (event, instance) => {if (event.which == 13) this.handleJump(isNaN(parseInt(instance.props.value)) ? -1 : instance.props.value - 1);}
 								}),
-								this.props.jump && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-									text: BDFDB.LanguageUtils.LanguageStrings.JUMP,
-									"aria-label": BDFDB.LanguageUtils.LanguageStrings.JUMP,
-									tooltipConfig: {zIndex: 3001},
-									onClick: (event, instance) => {
-										let jumpInput = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return`), {key: "pagination-list-jumpinput"});
-										if (jumpInput) this.jump(isNaN(parseInt(jumpInput.props.value)) ? -1 : jumpInput.props.value - 1);
-									},
-									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
-										className: BDFDB.disCN.searchresultspaginationbutton,
-										children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-											className: BDFDB.disCN.searchresultspaginationicon,
-											style: {transform: "rotate(90deg"},
-											name: InternalComponents.LibraryComponents.SvgIcon.Names.RIGHT_CARET
-										})
-									})
-								})
 							].filter(n => n)
 						});
 					}
@@ -6217,7 +6151,7 @@ module.exports = (_ => {
 							}
 						}
 						return typeof this.props.renderItem != "function" || !items.length ? null : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Scrollers.Thin, {
-							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.paginationlist, this.props.mini, BDFDB.disCN.paginationlistmini),
+							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.paginationlist, this.props.mini && BDFDB.disCN.paginationlistmini),
 							fade: this.props.fade,
 							children: [
 								this.renderPagination(),
@@ -6225,7 +6159,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.paginationlistalphabet,
 									children: Object.keys(alphabet).map(key => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.paginationlistalphabetchar, alphabet[key].disabled &&BDFDB.disCN.paginationlistalphabetchardisabled),
-										onClick: _ => {if (!alphabet[key].disabled) this.jump(Math.floor(items.indexOf(alphabet[key].items[0])/this.props.amount));},
+										onClick: _ => {if (!alphabet[key].disabled) this.handleJump(Math.floor(items.indexOf(alphabet[key].items[0])/this.props.amount));},
 										children: key
 									}))
 								}),
@@ -6234,12 +6168,12 @@ module.exports = (_ => {
 									className: BDFDB.disCN.paginationlistcontent,
 									children: items.slice(this.state.offset * this.props.amount, (this.state.offset + 1) * this.props.amount).map((data, i) => {return this.props.renderItem(data, i);}).flat(10).filter(n => n)
 								}),
-								this.props.copyToBottom && this.renderPagination()
+								this.props.copyToBottom && this.renderPagination(true)
 							].flat(10).filter(n => n)
 						});
 					}
 				};
-				InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.PaginatedList, {amount: 50, offset: 0, jump: true, first: true, last: true, copyToBottom: false, fade: true});
+				InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.PaginatedList, {amount: 50, offset: 0, mini: true, jump: true, maxVisiblePages: 7, copyToBottom: false, fade: true});
 				
 				InternalComponents.LibraryComponents.Popout = reactInitialized && class BDFDB_Popout extends LibraryModules.React.Component {
 					componentWillUnmount() {
