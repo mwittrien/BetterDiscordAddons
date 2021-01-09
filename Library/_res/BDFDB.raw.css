@@ -210,16 +210,6 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_paginationlist] {
 	height: 100%;
 }
-[REPLACE_CLASS_paginationlistpagination] {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 16px;
-	line-height: 20px;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	color: var(--text-normal);
-}
 [REPLACE_CLASS_paginationlistalphabet] {
 	display: flex;
 	align-items: center;
