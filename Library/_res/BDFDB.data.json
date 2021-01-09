@@ -2635,6 +2635,7 @@
 		"tooltipleft": ["Tooltip", "tooltipLeft"],
 		"tooltiplistitem": ["GuildsItems", "listItemTooltip"],
 		"tooltippointer": ["Tooltip", "tooltipPointer"],
+		"tooltipprimary": ["Tooltip", "tooltipPrimary"],
 		"tooltipred": ["Tooltip", "tooltipRed"],
 		"tooltipright": ["Tooltip", "tooltipRight"],
 		"tooltiprow": ["TooltipGuild", "row"],
