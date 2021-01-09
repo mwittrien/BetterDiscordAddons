@@ -6975,13 +6975,11 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 #app-mount .tooltip-3oByQd,
 #app-mount .tooltip-1_vJJI,
 #app-mount .tooltipPrimary-1d1ph4,
-#app-mount .tooltipGrey-1hnvTt,
 #app-mount .tooltipBlack-PPG47z {
 	background-color: rgb(var(--vaccentcolor));
 	text-shadow: 1px 1px var(--vtextshadow);
 }
 #app-mount .tooltipPrimary-1d1ph4 .tooltipPointer-3ZfirK,
-#app-mount .tooltipGrey-1hnvTt .tooltipPointer-3ZfirK,
 #app-mount .tooltipBlack-PPG47z .tooltipPointer-3ZfirK {
 	border-top-color: rgb(var(--vaccentcolor));
 }
