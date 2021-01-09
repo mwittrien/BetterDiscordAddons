@@ -31,7 +31,6 @@
 		"CurrentUserStore": {"props": ["getCurrentUser"]},
 		"CurrentVoiceUtils": {"props": ["getAveragePing", "isConnected"]},
 		"CustomStatusConstants": {"props": ["ClearAfterValues", "STATUS_MAX_LENGTH"]},
-		"DateUtils": {"props": ["calendarFormat", "isDate"]},
 		"DirectMessageStore": {"props": ["getPrivateChannelIds"]},
 		"DirectMessageUnreadStore": {"props": ["getUnreadPrivateChannelIds"]},
 		"DispatchApiUtils": {"props": ["dirtyDispatch", "isDispatching"]},

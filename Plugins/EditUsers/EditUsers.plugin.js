@@ -933,7 +933,7 @@ module.exports = (_ => {
 					}
 					else {
 						e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getUserData(e.instance.props.user.id).username});
-						this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true, modify: BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "hovered", "selected", "hasUnreadMessages", "muted")});
+						this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {modify: BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "hovered", "selected", "hasUnreadMessages", "muted")});
 						e.returnvalue.props.name = [e.returnvalue.props.name];
 						e.returnvalue.props.avatar.props.src = this.getUserAvatar(e.instance.props.user.id);
 						this.injectBadge(e.returnvalue.props.name, e.instance.props.user.id, null, 1);

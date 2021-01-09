@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomStatusPresets",
 			"author": "DevilBro",
-			"version": "1.0.0",
+			"version": "1.0.1",
 			"description": "Allows you to save custom statuses as quick select"
 		}
 	};
@@ -171,18 +171,18 @@ module.exports = (_ => {
 									]
 								}),
 								imageUrl: presets[key].emojiInfo && (presets[key].emojiInfo.id ? BDFDB.LibraryModules.IconUtils.getEmojiURL(presets[key].emojiInfo.id) : BDFDB.LibraryModules.EmojiStateUtils.getURL(presets[key].emojiInfo.name)),
-								hint: !presets[key].clearAfter ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : presets[key].clearAfter == BDFDB_Global.ModuleUtils.findByProperties("ClearAfterValues").ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", presets[key].clearAfter/3600000),
+								hint: !presets[key].clearAfter ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : presets[key].clearAfter == BDFDB.LibraryModules.CustomStatusConstants.ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", presets[key].clearAfter/3600000),
 								action: _ => {
 									if (!presets[key]) return;
 									let expiresAt = presets[key].clearAfter ? presets[key].clearAfter : null;
-									if (presets[key].clearAfter === BDFDB_Global.ModuleUtils.findByProperties("ClearAfterValues").ClearAfterValues.TODAY) {
+									if (presets[key].clearAfter === BDFDB.LibraryModules.CustomStatusConstants.ClearAfterValues.TODAY) {
 										let date = new Date;
 										expiresAt = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime() - date.getTime();
 									}
 									BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({
 										customStatus: {
 											text: presets[key].text.length > 0 ? presets[key].text : null,
-											expiresAt: expiresAt ? BDFDB_Global.ModuleUtils.findByProperties("HTML5_FMT")().add(expiresAt, "ms").toISOString() : null,
+											expiresAt: expiresAt ? BDFDB_Global.DiscordObjects.Timestamp().add(expiresAt, "ms").toISOString() : null,
 											emojiId: presets[key].emojiInfo ? presets[key].emojiInfo.id : null,
 											emojiName: presets[key].emojiInfo ? presets[key].emojiInfo.name : null
 										}
