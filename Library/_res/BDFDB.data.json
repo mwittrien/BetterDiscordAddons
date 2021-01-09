@@ -315,7 +315,7 @@
 		"Spinner": {"name": "Spinner"},
 		"StatusPickerPopout": {"strings": ["\"StatusPickerPopout\""], "value": "default"},
 		"TextElement": {"name": "Text"},
-		"UserPopout": {"name": "UserPopout"},
+		"UserPopout": {"name": "ConnectedUserPopout"},
 		"UserSummaryItem": {"name": "UserSummaryItem"}
 	},
 	"SvgIcons": {
