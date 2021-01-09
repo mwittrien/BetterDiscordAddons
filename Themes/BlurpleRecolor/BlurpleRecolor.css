@@ -326,6 +326,10 @@
 
 /* ----		3.5.	SEARCHPAGE						---- */
 
+#app-mount .activeButton-rvKcqq,
+#app-mount .activeButton-rvKcqq:hover {
+	background-color: rgb(var(--vaccentcolor));
+}
 .noResultsImage-3Y0eCI.alt-3EpRdH {
 	display: flex;
 }
