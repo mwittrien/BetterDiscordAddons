@@ -14,12 +14,14 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomStatusPresets",
 			"author": "DevilBro",
-			"version": "1.0.3",
+			"version": "1.0.4",
 			"description": "Allows you to save custom statuses as quick select"
 		},
 		"changeLog": {
 			"fixed": {
-				"First Bugs": "All bugs in the first test phase should be fixed"
+				"First Bugs": "All bugs in the first test phase should be fixed",
+				"Server Emotes": "Properly shows server emotes in the context menu now",
+				"Textless Statuses": "Now also works with textless statuses"
 			}
 		}
 	};
@@ -186,7 +188,7 @@ module.exports = (_ => {
 									}
 									BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({
 										customStatus: {
-											text: presets[key].text.length > 0 ? presets[key].text : null,
+											text: presets[key].text && presets[key].text.length > 0 ? presets[key].text : null,
 											expiresAt: expiresAt ? BDFDB.DiscordObjects.Timestamp().add(expiresAt, "ms").toISOString() : null,
 											emojiId: presets[key].emojiInfo ? presets[key].emojiInfo.id : null,
 											emojiName: presets[key].emojiInfo ? presets[key].emojiInfo.name : null
