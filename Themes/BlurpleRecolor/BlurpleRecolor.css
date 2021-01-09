@@ -1024,6 +1024,9 @@
 	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 }
+.markup-2BOw-j > .attachment-33OFj0 {
+    position: relative;
+}
 .attachment-33OFj0 .icon-1kp3fr {
 	background-size: 120% !important;
 }
@@ -1037,6 +1040,11 @@
 	left: 8px;
 	width: 36px;
 	height: 48px;
+}
+.markup-2BOw-j > .attachment-33OFj0 .icon-1kp3fr + *::before,
+.markup-2BOw-j > .attachment-33OFj0 .icon-1kp3fr + *::after {
+	top: 6px;
+	left: 7px;
 }
 .audioMetadata-3zOuGv > *:first-child::before,
 .audioMetadata-3zOuGv > *:first-child::after {
