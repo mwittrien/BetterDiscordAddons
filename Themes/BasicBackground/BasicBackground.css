@@ -883,9 +883,12 @@ body::before {
 .message-2g38UB,											/* message				inbox popout						*/
 .message-2qRu38 .wrapper-2a6GCs,							/* message				settings preview					*/
 .messageGroupCozy-2iY6cT,									/* message				pin popout							*/
-.messageGroupCozy-2-Q370 {									/* message				searchpage							*/
+.message-1Ng5AR .wrapper-2a6GCs {							/* message				searchpage							*/
 	background-color: rgba(var(--vtransparencycolor), var(--vmessagetransparency));
 	contain: unset;
+}
+.message-1Ng5AR .wrapper-2a6GCs {							/* message				searchpage							*/
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vmessagetransparency) * 0.8));
 }
 .message-2qnXI6.selected-2P5D_Z,
 .mouse-mode .message-2qnXI6:hover,
@@ -943,9 +946,11 @@ body::before {
 .cozy-3raOZG .container-3FojY8 .header-23xsNx::after {
 	left: 40px;
 }
-.messageGroupWrapper-o-Zw7G .messageGroupCozy-2iY6cT .header-23xsNx::after,
-.searchResult-9tQ1uo .messageGroupCozy-2-Q370 .header-23xsNx::after {
+.messageGroupWrapper-o-Zw7G .messageGroupCozy-2iY6cT .header-23xsNx::after {
 	top: 2px;
+}
+.message-1Ng5AR .wrapper-2a6GCs .header-23xsNx::after {
+	border-right-color: rgba(var(--vtransparencycolor), calc(var(--vmessagetransparency) * 0.8));
 }
 .cozy-3raOZG .timestamp-3ZCmNB.alt-1uNpEt {
 	left: calc(-78px * var(--vusechatbubbles));
@@ -1017,7 +1022,7 @@ body::before {
 .messages-3G3erD .wrapper-2a6GCs,
 .message-2qRu38 .wrapper-2a6GCs,
 .messageGroupWrapper-o-Zw7G .messageGroupCozy-2iY6cT,
-.searchResult-9tQ1uo .messageGroupCozy-2-Q370 {
+.message-1Ng5AR .wrapper-2a6GCs {
 	border-radius: 5px;
 	margin-left: calc(60px * var(--vusechatbubbles));
 	padding-left: calc(1px * (10 * var(--vusechatbubbles) + 72 * (1 - var(--vusechatbubbles))));
@@ -1529,7 +1534,7 @@ body::before {
 	color: rgb(var(--fontwhite2));
 }
 
-.avatar-VxgULZ::before {										/* emptyavatar												*/
+.avatar-VxgULZ::before {									/* emptyavatar												*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 
@@ -1541,92 +1546,37 @@ body::before {
 
 /* ----		6.6.	SEARCHPAGE						---- */
 
-#app-mount .searchResultsWrap-3-pOjs {						/* searchpage			container							*/
+.searchResultsWrap-3-pOjs {									/* searchpage			container							*/
 	background-color: transparent;
 }
-#app-mount .searchHeader-2XoQg7 {							/* searchpage			header								*/
+.searchHeader-2XoQg7 {										/* searchpage			header								*/
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vguildchanneltransparency) * 0.8));
-	box-shadow: 0 1px 0 rgba(var(--vtransparencycolor), 0.2);
+	border-radius: 0 0 0 8px;
 }
-#app-mount .searchHeader-2XoQg7 .totalResults--dyAxF {		/* searchpage			results								*/
-	color: rgb(var(--fontwhite3));
-	opacity: 1;
-}
-#app-mount .searchHeader-2XoQg7 .tab-2j5AEF {				/* searchpage			tab									*/
-	color: rgb(var(--fontwhite3));
-	opacity: 1;
-}
-#app-mount .searchHeader-2XoQg7 .tab-2j5AEF:hover {
-	color: rgb(var(--fontwhite2));
-	border-bottom-color: rgb(var(--fontwhite2));
-}
-#app-mount .searchHeader-2XoQg7 .tab-2j5AEF.selected-2LAck8 {
-	color: rgb(var(--fontwhite1));
-	border-bottom-color: rgb(var(--fontwhite1));
-}
-#app-mount .scroller-3GIiMh {
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vguildchanneltransparency) * 0.5));
-}
-#app-mount .channelSeparator-1DOiGt {						/* searchpage			separator							*/
-	overflow: hidden;
-	width: 390px;
-}
-#app-mount .channelSeparator-1DOiGt:not(:empty)::before {
-	display: none;
-}
-#app-mount .channelSeparator-1DOiGt .channelName-1JRO3C {	/* searchpage			channelname							*/
-	background: transparent;
-	color: rgb(var(--fontwhite3));
-}
-#app-mount .channelSeparator-1DOiGt .channelName-1JRO3C::after {
-	content: "";
-	border-bottom: 1px solid rgba(var(--fontwhite3), 0.5);
-	height: 1px;
-	margin-left: 10px;
-	position: absolute;
-	pointer-events: none;
-	top: 50%;
-	width: 100vw;
-	z-index: 0;
-}
-.searchResult-9tQ1uo::before,								/* searchpage			result								*/
-.searchResult-9tQ1uo::after {
-	display: none;
-}
-#app-mount .searchResult-9tQ1uo .hit-1fVM9e {
-	background-color: rgba(var(--vtransparencycolor), 0.1);
-	border-color: rgba(var(--vtransparencycolor), 0.1);
-	box-shadow: none;
-}
-#app-mount .searchResult-9tQ1uo.expanded-w_LCGl {
-	background-color: rgba(var(--vtransparencycolor), 0.1);
-	border-color: rgba(var(--vtransparencycolor), 0.1);
-}
-#app-mount .searchResult-9tQ1uo:not(.expanded-w_LCGl) .before-2RL1Gz.sibling-1eJVjd {
-	-webkit-mask: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 50%, rgba(0,0,0,0.1) 85%, rgba(0,0,0,0) 100%);
-}
-#app-mount .searchResult-9tQ1uo:not(.expanded-w_LCGl) .after-20SH8W.sibling-1eJVjd {
-	-webkit-mask: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 30%, rgba(0,0,0,0.9) 50%, rgba(0,0,0,0.1) 85%, rgba(0,0,0,0) 100%);
-}
-#app-mount .searchResult-9tQ1uo:not(.expanded-w_LCGl) .before-2RL1Gz:not(.sibling-1eJVjd),
-#app-mount .searchResult-9tQ1uo:not(.expanded-w_LCGl) .after-20SH8W:not(.sibling-1eJVjd) {
-	display: none;
-}
-
-.jumpButton-JkYoYK {										/* message				jumpbutton							*/ 
-	background-color: rgba(var(--vtransparencycolor), 0.4);
-	color: rgb(var(--fontwhite2));
-}
-.jumpButton-JkYoYK:hover {
+#app-mount .tab-2j5AEF.selected-2LAck8 {					/* searchpage			selected tab						*/
 	background-color: rgb(var(--vaccentcolor));
+	text-shadow: 1px 1px var(--vtextshadow);
+}
+.channelName-1JRO3C {										/* searchpage			channelname							*/
+	background-color: transparent;
+}
+.searchResult-9tQ1uo {										/* searchpage			searchresult						*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.button-11zvza {											/* searchpage			jumpbutton							*/ 
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+.button-11zvza:hover {
+	background-color: rgb(var(--vaccentcolor));
+	text-shadow: 1px 1px var(--vtextshadow);
+}
+.pageButton-2ruNwd:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+#app-mount .activeButton-rvKcqq,
+#app-mount .activeButton-rvKcqq:hover {
 	color: rgb(var(--fontwhite1));
-}
-.jumpButton-JkYoYK + .jumpButton-JkYoYK {
-	margin-left: 2px;
-}
-
-#app-mount .pagination-2KMrRB {
-	color: rgb(var(--fontwhite3));
+	text-shadow: 1px 1px var(--vtextshadow);
 }
 
 /* ----		6.7.	CALL							---- */
