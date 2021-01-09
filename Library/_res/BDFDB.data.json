@@ -1058,7 +1058,7 @@
 		"NoteTextarea": {"props": ["textarea"], "length": 1},
 		"Notice": {"props": ["notice", "platformIcon"]},
 		"NoticePlatform": {"props": ["iconAndroid", "textLink"]},
-		"Pagination": {"props": ["paginationButton", "pagination"]},
+		"Pagination": {"props": ["paginationButton", "pageControl"]},
 		"PeopleItem": {"props": ["peopleListItem", "active"]},
 		"PeopleItemInfo": {"props": ["listItemContents", "actions"], "length": 2},
 		"Peoples": {"props": ["peopleColumn", "tabBar"]},
