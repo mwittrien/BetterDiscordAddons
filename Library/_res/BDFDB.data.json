@@ -694,8 +694,7 @@
 			"nsfwTag": "nsfwTag-666omg"
 		},
 		"BetterSearchPage": {
-			"pagination": "pagination-shit69",
-			"withJump": "withJump-oksus9"
+			"pagination": "pagination-shit69"
 		},
 		"ChatFilter": {
 			"blocked": "blocked-jUhayi",
@@ -1157,7 +1156,6 @@
 		"_betterfriendlisttitle": ["BetterFriendList", "title"],
 		"_betternsfwtagtag": ["BetterNsfwTag", "nsfwTag"],
 		"_bettersearchpagepagination": ["BetterSearchPage", "pagination"],
-		"_bettersearchpagewithjump": ["BetterSearchPage", "withJump"],
 		"_chatfilterblocked": ["ChatFilter", "blocked"],
 		"_chatfilterblockedstamp": ["ChatFilter", "blockedStamp"],
 		"_chatfiltercensored": ["ChatFilter", "censored"],
