@@ -358,7 +358,7 @@ module.exports = (_ => {
 			}
 			
 			processChannelEditorContainer (e) {
-				if (!e.instance.props.disabled && e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && settings.changeInChatTextarea) {
+				if (!e.instance.props.disabled && e.instance.props.channel && e.instance.props.channel.isDM() && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && settings.changeInChatTextarea) {
 					let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channel.recipients[0]);
 					if (user) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `@${changedUsers[user.id] && changedUsers[user.id].name || user.username}`);
 				}
@@ -380,7 +380,7 @@ module.exports = (_ => {
 
 			processHeaderBarContainer (e) {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
-				if (channel && channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInDmHeader) {
+				if (channel && channel.isDM() && settings.changeInDmHeader) {
 					let userName = BDFDB.ReactUtils.findChild(e.instance, {name: "Title"});
 					if (userName) {
 						let recipientId = channel.getRecipientId();
@@ -391,7 +391,7 @@ module.exports = (_ => {
 			}
 
 			processChannelCallHeader (e) {
-				if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInDmHeader) {
+				if (e.instance.props.channel && e.instance.props.channel.isDM() && settings.changeInDmHeader) {
 					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Title"});
 					if (userName) {
 						let recipientId = e.instance.props.channel.getRecipientId();
@@ -553,7 +553,7 @@ module.exports = (_ => {
 			}
 
 			processPrivateChannelEmptyMessage (e) {
-				if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInChatWindow) {
+				if (e.instance.props.channel && e.instance.props.channel.isDM() && settings.changeInChatWindow) {
 					let recipientId = e.instance.props.channel.getRecipientId();
 					let name = this.getUserData(recipientId).username;
 					let avatar = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {props: "src"});
@@ -905,7 +905,7 @@ module.exports = (_ => {
 			}
 
 			processDirectMessage (e) {
-				if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInRecentDms) {
+				if (e.instance.props.channel && e.instance.props.channel.isDM() && settings.changeInRecentDms) {
 					let recipientId = e.instance.props.channel.getRecipientId();
 					let tooltip = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ListItemTooltip"});
 					if (tooltip) tooltip.props.text = this.getUserData(recipientId).username;
@@ -977,7 +977,7 @@ module.exports = (_ => {
 					let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channelId);
 					if (!user) {
 						let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
-						if (channel && channel.type == BDFDB.DiscordConstants.ChannelTypes.DM) user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
+						if (channel && channel.isDM()) user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
 					}
 					if (user) {
 						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.callincomingtitle]]});
@@ -993,7 +993,7 @@ module.exports = (_ => {
 			}
 			
 			processRTCConnection (e) {
-				if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInRecentDms && typeof e.returnvalue.props.children == "function") {
+				if (e.instance.props.channel && e.instance.props.channel.isDM() && settings.changeInRecentDms && typeof e.returnvalue.props.children == "function") {
 					let recipientId = e.instance.props.channel.getRecipientId();
 					let renderChildren = e.returnvalue.props.children;
 					e.returnvalue.props.children = (...args) => {
@@ -1040,7 +1040,7 @@ module.exports = (_ => {
 			changeAppTitle () {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
 				let title = document.head.querySelector("title");
-				if (title && channel && channel.type == BDFDB.DiscordConstants.ChannelTypes.DM) {
+				if (title && channel && channel.isDM()) {
 					let user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
 					if (user) BDFDB.DOMUtils.setText(title, "@" + this.getUserData(user.id, settings.changeInAppTitle).username);
 				}
