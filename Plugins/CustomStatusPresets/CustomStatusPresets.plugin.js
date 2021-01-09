@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomStatusPresets",
 			"author": "DevilBro",
-			"version": "1.0.2",
+			"version": "1.0.3",
 			"description": "Allows you to save custom statuses as quick select"
 		},
 		"changeLog": {
@@ -175,7 +175,7 @@ module.exports = (_ => {
 										presets[key].text
 									]
 								}),
-								imageUrl: presets[key].emojiInfo && (presets[key].emojiInfo.id ? BDFDB.LibraryModules.IconUtils.getEmojiURL(presets[key].emojiInfo.id) : BDFDB.LibraryModules.EmojiStateUtils.getURL(presets[key].emojiInfo.name)),
+								imageUrl: presets[key].emojiInfo && (presets[key].emojiInfo.id ? BDFDB.LibraryModules.IconUtils.getEmojiURL(presets[key].emojiInfo) : BDFDB.LibraryModules.EmojiStateUtils.getURL(presets[key].emojiInfo.name)),
 								hint: !presets[key].clearAfter ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : presets[key].clearAfter == BDFDB.LibraryModules.CustomStatusConstants.ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", presets[key].clearAfter/3600000),
 								action: _ => {
 									if (!presets[key]) return;
