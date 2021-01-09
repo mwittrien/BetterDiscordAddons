@@ -14,16 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
-			"version": "1.8.1",
+			"version": "1.8.2",
 			"description": "Offer a number of useful message options. Remap the keybindings in the settings"
 		},
 		"changeLog": {
-			"added": {
-				"Replies": "Added option for replies",
-				"Quotes": "Now requires CustomQuoter plugin since Discord replaces Quotes with Replies"
-			},
 			"fixed": {
-				"Settings": "Fixed Settings"
+				"Search Results": "Fixed for search results"
 			}
 		}
 	};
@@ -108,10 +104,10 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.ListenerUtils.add(this, document, "click", BDFDB.dotCNC.message + BDFDB.dotCN.searchresultsgroupcozy, e => {
+				BDFDB.ListenerUtils.add(this, document, "click", BDFDB.dotCNC.message + BDFDB.dotCN.searchresultsmessage, e => {
 					if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagetoolbarbutton, e.target)) this.onClick(e, 0, "onSglClick");
 				});
-				BDFDB.ListenerUtils.add(this, document, "dblclick", BDFDB.dotCNC.message + BDFDB.dotCN.searchresultsgroupcozy, e => {
+				BDFDB.ListenerUtils.add(this, document, "dblclick", BDFDB.dotCNC.message + BDFDB.dotCN.searchresultsmessage, e => {
 					if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagetoolbarbutton, e.target)) this.onClick(e, 1, "onDblClick");
 				});
 				BDFDB.ListenerUtils.add(this, document, "keydown", e => {
@@ -431,7 +427,7 @@ module.exports = (_ => {
 			}
 
 			getMessageData (target) {
-				let messageDiv = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.message + BDFDB.dotCN.searchresultsgroupcozy, target);
+				let messageDiv = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.message + BDFDB.dotCN.searchresultsmessage, target);
 				if (messageDiv && messageDiv.querySelector(BDFDB.dotCN.textarea)) return {messageDiv: null, message: null};
 				let instance = BDFDB.ReactUtils.getInstance(messageDiv);
 				let message = instance && (BDFDB.ReactUtils.findValue(instance, "baseMessage") || BDFDB.ReactUtils.findValue(instance, "message"));
