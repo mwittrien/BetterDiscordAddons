@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
-			"version": "2.1.1",
+			"version": "2.1.2",
 			"description": "Allow you to preview all themes from the theme repo and download them on the fly"
 		},
 		"changeLog": {
 			"fixed": {
-				"New React Structure": "Fixed for new internal react structure"
+				"New Settings Order": "Fixed for new settings order"
 			}
 		}
 	};
@@ -950,13 +950,11 @@ module.exports = (_ => {
 			processSettingsView (e) {
 				if (BDFDB.ArrayUtils.is(e.instance.props.sections) && e.instance.props.sections[0] && e.instance.props.sections[0].label == BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS) {
 					e.instance.props.sections = e.instance.props.sections.filter(n => n.section != "themerepo");
-					let oldSettings = !e.instance.props.sections.find(n => n.section == "themes");
-					let isPRinjected = oldSettings && e.instance.props.sections.find(n => n.section == "pluginrepo");
-					let index = e.instance.props.sections.indexOf(e.instance.props.sections.find(oldSettings ? (isPRinjected ? n => n.section == "pluginrepo" : n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS) : n => n.section == BDFDB.DiscordConstants.UserSettingsSections.CHANGE_LOG || n.section == "changelog"));
+					let index = e.instance.props.sections.indexOf(e.instance.props.sections.find(n => n.section == "pluginrepo") || e.instance.props.sections.find(n => n.section == "themes") || e.instance.props.sections.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS));
 					if (index > -1) {
-						e.instance.props.sections.splice(oldSettings ? index + 1 : index - 1, 0, {
-							label: "Theme Repo",
+						e.instance.props.sections.splice(index + 1, 0, {
 							section: "themerepo",
+							label: "Theme Repo",
 							element: _ => {
 								let options = Object.assign({}, modalSettings);
 								options.updated = options.updated && !showOnlyOutdated;
@@ -973,7 +971,7 @@ module.exports = (_ => {
 								return BDFDB.ReactUtils.createElement(RepoListComponent, options);
 							}
 						});
-						if (oldSettings && !isPRinjected) e.instance.props.sections.splice(index + 1, 0, {section: "DIVIDER"});
+						if (!e.instance.props.sections.find(n => n.section == "plugins" || n.section == "pluginrepo")) e.instance.props.sections.splice(index + 1, 0, {section: "DIVIDER"});
 					}
 				}
 			}
