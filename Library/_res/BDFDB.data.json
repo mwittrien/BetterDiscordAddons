@@ -716,6 +716,7 @@
 			"date": "creationDate-CJwdKT"
 		},
 		"CustomStatusPresets": {
+			"customStatusItem": "customStatusItem-f5Trsa",
 			"deleteButton": "deleteButton-k8a4Sa",
 			"deleteIcon": "deleteIcon-22SgHa"
 		},
@@ -1173,6 +1174,7 @@
 		"_charcounterprofilenotecounter": ["CharCounter", "profileNoteCounter"],
 		"_charcounteruploadcounter": ["CharCounter", "uploadCounter"],
 		"_creationdatedate": ["CreationDate", "date"],
+		"_customstatuspresetscustomstatusitem": ["CustomStatusPresets", "customStatusItem"],
 		"_customstatuspresetsdeletebutton": ["CustomStatusPresets", "deleteButton"],
 		"_customstatuspresetsdeleteicon": ["CustomStatusPresets", "deleteIcon"],
 		"_displaylargemessagesinjectbutton": ["DisplayLargeMessages", "injectButton"],
