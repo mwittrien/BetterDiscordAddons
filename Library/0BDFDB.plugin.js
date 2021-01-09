@@ -7924,17 +7924,17 @@ module.exports = (_ => {
 					};
 					BDFDB.DevUtils.req = InternalBDFDB.getWebModuleReq();
 					
-					window.BDFDB_Global = BDFDB;
+					window.BDFDB = BDFDB;
 				}
-				else {
-					window.BDFDB_Global = Object.assign({
-						PluginUtils: {
-							buildPlugin: BDFDB.PluginUtils.buildPlugin,
-							cleanUp: BDFDB.PluginUtils.cleanUp
-						}
-					}, config);
-					Object.freeze(BDFDB);
-				}
+				
+				window.BDFDB_Global = Object.assign({
+					PluginUtils: {
+						buildPlugin: BDFDB.PluginUtils.buildPlugin,
+						cleanUp: BDFDB.PluginUtils.cleanUp
+					}
+				}, config);
+				Object.freeze(BDFDB);
+				
 				for (let obj in DiscordObjects) if (!DiscordObjects[obj]) {
 					DiscordObjects[obj] = function () {};
 					BDFDB.DiscordObjects[obj] = function () {};
