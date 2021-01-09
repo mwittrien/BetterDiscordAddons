@@ -1412,11 +1412,11 @@ module.exports = (_ => {
 							
 							data.name = userNameInput.value.trim() || null;
 							data.tag = userTagInput.value.trim() || null;
-							data.url = (!data.removeIcon && BDFDB.DOMUtils.containsClass(userAvatarInput, BDFDB.disCN.inputsuccess) ? userAvatarInput.value.trim() : null) || null;
 							data.removeIcon = removeIconInput.checked;
+							data.url = (!data.removeIcon && BDFDB.DOMUtils.containsClass(userAvatarInput, BDFDB.disCN.inputsuccess) ? userAvatarInput.value.trim() : null) || null;
+							data.removeStatus = removeStatusInput.checked;
 							data.status = !data.removeStatus && userStatusInput.value.trim() || null;
 							data.statusEmoji = !data.removeStatus && BDFDB.ReactUtils.findValue(userStatusEmojiPicker, "emoji", {up: true}) || null;
-							data.removeStatus = removeStatusInput.checked;
 							data.useRoleColor = useRoleColorInput.checked;
 							data.ignoreTagColor = ignoreTagColorInput.checked;
 
