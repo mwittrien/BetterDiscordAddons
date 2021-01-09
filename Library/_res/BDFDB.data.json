@@ -715,6 +715,10 @@
 		"CreationDate": {
 			"date": "creationDate-CJwdKT"
 		},
+		"CustomStatusPresets": {
+			"deleteButton": "deleteButton-k8a4Sa",
+			"deleteIcon": "deleteIcon-22SgHa"
+		},
 		"DisplayLargeMessages": {
 			"injectButton": "injectButton-8eKqGu",
 			"injectButtonWrapper": "injectButtonWrapper-U462Rh",
@@ -1169,6 +1173,8 @@
 		"_charcounterprofilenotecounter": ["CharCounter", "profileNoteCounter"],
 		"_charcounteruploadcounter": ["CharCounter", "uploadCounter"],
 		"_creationdatedate": ["CreationDate", "date"],
+		"_customstatuspresetsdeletebutton": ["CustomStatusPresets", "deleteButton"],
+		"_customstatuspresetsdeleteicon": ["CustomStatusPresets", "deleteIcon"],
 		"_displaylargemessagesinjectbutton": ["DisplayLargeMessages", "injectButton"],
 		"_displaylargemessagesinjectbuttonwrapper": ["DisplayLargeMessages", "injectButtonWrapper"],
 		"_displaylargemessagespopoutbutton": ["DisplayLargeMessages", "popoutButton"],
