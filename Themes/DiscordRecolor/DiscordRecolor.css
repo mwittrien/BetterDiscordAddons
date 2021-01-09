@@ -232,15 +232,9 @@ svg [fill="#4F545C"] {
 }
 
 #app-mount .tooltip-3oByQd,
-#app-mount .tooltip-1_vJJI,
-#app-mount .tooltipBlack-PPG47z,
-#app-mount .tooltipGrey-1hnvTt {
+#app-mount .tooltip-1_vJJI {
 	background-color: var(--background-floating);
 	color: var(--header-primary);
-}
-#app-mount .tooltipBlack-PPG47z .tooltipPointer-3ZfirK,
-#app-mount .tooltipGrey-1hnvTt .tooltipPointer-3ZfirK {
-	border-top-color: var(--background-floating);
 }
 #app-mount .tooltipPointer-22Q7m0,
 #app-mount .tooltipPointer-1awMxk {
