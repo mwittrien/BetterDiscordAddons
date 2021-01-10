@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.1.8",
+			"version": "1.1.9",
 			"description": "Completely removes blocked messages"
 		},
 		"changeLog": {
 			"improved": {
-				"Specific Settings": "Gives the user more options to configure the plugin"
+				"Remove Reactions": "Now decreases the count for reactions if one of them is by a blocked user and hides it if the reaction is 0"
 			}
 		}
 	};
@@ -63,6 +63,7 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
+		var cachedChannelId, cachedReactions;
 		var settings = {};
 		
 		return class RemoveBlockedMessages extends Plugin {
@@ -100,6 +101,7 @@ module.exports = (_ => {
 						ChannelPins: "default",
 						RecentMentions: "default",
 						Messages: "type",
+						Reactions: "render",
 						MemberListItem: "render",
 						VoiceUser: "render",
 						Mention: "default"
@@ -258,6 +260,68 @@ module.exports = (_ => {
 			processRecentMentions (e) {
 				if (settings.removeInbox && BDFDB.ArrayUtils.is(e.returnvalue.props.messages)) e.returnvalue.props.messages = e.returnvalue.props.messages.filter(n => !n || !n.author || !n.author.id || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.author.id));
 			}
+			
+			processReactions (e) {
+				if (settings.removeReactions && e.returnvalue.props.children && BDFDB.ArrayUtils.is(e.returnvalue.props.children[0])) {
+					let updateTimeout;
+					if (cachedChannelId != e.instance.props.message.channel_id) {
+						cachedReactions = {};
+						cachedChannelId = e.instance.props.message.channel_id;
+					}
+					if (!cachedReactions[e.instance.props.message.id]) cachedReactions[e.instance.props.message.id] = {};
+					for (let i in e.returnvalue.props.children[0]) {
+						let reaction = e.returnvalue.props.children[0][i];
+						let emojiId = reaction.props.emoji.name || reaction.props.emoji.id;
+						if (cachedReactions[reaction.props.message.id][emojiId] && reaction.props.me == cachedReactions[reaction.props.message.id][emojiId].me) {
+							reaction.props.count = cachedReactions[reaction.props.message.id][emojiId].reactions.length;
+							if (reaction.props.count < 1) e.returnvalue.props.children[0][i] = null;
+						}
+						else {
+							reaction.props.reactions = [];
+							BDFDB.LibraryModules.ReactionUtils.getReactions(reaction.props.message.channel_id, reaction.props.message.id, reaction.props.emoji).then(reactions => {
+								reaction.props.reactions = reactions.filter(n => !n || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.id));
+								reaction.props.count = reaction.props.reactions.length;
+								if (cachedReactions && cachedReactions[reaction.props.message.id]) cachedReactions[reaction.props.message.id][emojiId] = {
+									reactions: reaction.props.reactions,
+									me: reaction.props.me
+								};
+								BDFDB.TimeUtils.clear(updateTimeout);
+								updateTimeout = BDFDB.TimeUtils.timeout(_ => {
+									BDFDB.ReactUtils.forceUpdate(e.instance);
+								}, 1000);
+							});
+						}
+					}
+					if (!e.returnvalue.props.children[0].filter(n => n).length) return null;
+				}
+			}
+			
+			processReactiona (e) {
+				if (!settings.removeReactions) return;
+				if (!e.returnvalue) {
+					let emojiId = e.instance.props.emoji.name || e.instance.props.emoji.id;
+					if (e.instance.props.reactions && e.instance.props.reactions.length) {
+						e.instance.props.reactions = e.instance.props.reactions.filter(n => !n || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.id));
+						e.instance.props.count = e.instance.props.reactions.length;
+						if (cachedReactions && cachedReactions[e.instance.props.message.id]) cachedReactions[e.instance.props.message.id][emojiId] = e.instance.props.count;
+					}
+					else if (!e.instance.props.reactions) {
+						if (cachedChannelId != e.instance.props.message.channel_id) {
+							cachedReactions = {};
+							cachedChannelId = e.instance.props.message.channel_id;
+						}
+						if (!cachedReactions[e.instance.props.message.id]) cachedReactions[e.instance.props.message.id] = {};
+						if (cachedReactions[e.instance.props.message.id][emojiId] !== undefined) e.instance.props.count = cachedReactions[e.instance.props.message.id][emojiId];
+						
+						e.instance.props.reactions = [];
+						BDFDB.LibraryModules.ReactionUtils.getReactions(e.instance.props.message.channel_id, e.instance.props.message.id, e.instance.props.emoji).then(reactions => {
+							e.instance.props.reactions = reactions;
+							BDFDB.ReactUtils.forceUpdate(e.instance);
+						});
+					}
+				}
+				else if (!e.instance.props.count) return null;
+			}
 		
 			processReactorsComponent (e) {
 				if (settings.removeReactions && BDFDB.ArrayUtils.is(e.instance.props.reactors)) e.instance.props.reactors = e.instance.props.reactors.filter(n => !n || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.id));
@@ -332,7 +396,7 @@ module.exports = (_ => {
 			processMention (e) {
 				if (settings.removeMentions && e.instance.props.userId && BDFDB.LibraryModules.FriendUtils.isBlocked(e.instance.props.userId)) return BDFDB.ReactUtils.createElement("span", {
 					className: BDFDB.disCNS.mention + BDFDB.disCN.mentionwrapper,
-					children: ["@" + BDFDB_Global.LanguageUtils.LanguageStrings.UNKNOWN_USER]
+					children: ["@" + BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER]
 				});
 			}
 		};
