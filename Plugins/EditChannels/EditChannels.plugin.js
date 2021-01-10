@@ -14,12 +14,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.2.2",
+			"version": "4.2.3",
 			"description": "Allow you to rename and recolor channelnames"
 		},
 		"changeLog": {
 			"improved": {
 				"Groups": "You can now change the name/color/icon of group channels"
+			},
+			"fixed": {
+				"Categories": "Gradient works for categories again",
+				"Icons": "Colors icons properly again"
 			}
 		}
 	};
@@ -325,7 +329,7 @@ module.exports = (_ => {
 						let channelId = dataListId.split("_").pop();
 						let modify = {muted: BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(BDFDB.LibraryModules.LastGuildStore.getGuildId(), channelId)};
 						let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.categoryname]]});
-						if (categoryName) this.changeChannelColor(categoryName, channelId, modify);
+						if (categoryName) this.changeChannelColor(categoryName.props && categoryName.props.children || categoryName, channelId, modify);
 						let categoryIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.categoryicon]]});
 						if (categoryIcon) this.changeChannelIconColor(categoryIcon, channelId, Object.assign({alpha: 0.6}, modify));
 					}
@@ -343,8 +347,22 @@ module.exports = (_ => {
 						let modify = BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "muted", "locked", "selected", "unread", "connected", "hovered");
 						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelname]]});
 						if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id, modify);
-						let channelIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelicon]]});
-						if (channelIcon) this.changeChannelIconColor(channelIcon, e.instance.props.channel.id, Object.assign({alpha: 0.6}, modify));
+						let channelIcon = settings.changeChannelIcon && BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelItemIcon"});
+						if (channelIcon && typeof channelIcon.type == "function") {
+							let type = channelIcon.type;
+							channelIcon.type = (...args) => {
+								let returnValue = type(...args);
+								if (returnValue && typeof returnValue.props.children == "function") {
+									let childrenRender = returnValue.props.children;
+									returnValue.props.children = (...args2) => {
+										let renderedChildren = childrenRender(...args2);
+										this.changeChannelIconColor(renderedChildren.props.children, e.instance.props.channel.id, Object.assign({alpha: 0.6}, modify));
+										return renderedChildren;
+									};
+								}
+								return returnValue;
+							};
+						}
 					}
 				}
 			}
@@ -524,7 +542,7 @@ module.exports = (_ => {
 			}
 			
 			changeChannelIconColor (child, channelId, modify) {
-				let color = this.getChannelDataColor(channelId);
+				let color = child && this.getChannelDataColor(channelId);
 				if (color && settings.changeChannelIcon) {
 					color = modify ? this.chooseColor(BDFDB.ObjectUtils.is(color) ? color[0] : color, modify) : BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color) ? color[0] : color, "RGBA");
 					child.props.color = color || "currentColor";
@@ -627,7 +645,7 @@ module.exports = (_ => {
 							value: channel.isCategory() && data.inheritColor,
 							disabled: !channel.isCategory()
 						}),
-						!channel.isGroupDM() && BDFDB.ReactUtils.createElement("div", {
+						channel.isGroupDM() && BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.marginbottom20,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
