@@ -265,6 +265,8 @@
 .image-3XsqGc[src="/assets/dc7e9e55b3a6d39d24acdd650ecc2ef3.svg"] {
 	object-position: -999999px -999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/chatnotice_followchannel_bg.svg) center/contain no-repeat;
+	width: 47px;
+	height: 60px;
 	margin-bottom: -8px;
 }
 .image-3XsqGc[src="/assets/dc7e9e55b3a6d39d24acdd650ecc2ef3.svg"] + * {
@@ -285,6 +287,8 @@
 .image-3XsqGc[src="/assets/b0df989dede2e65a2d631874ffe04de0.svg"] {
 	object-position: -999999px -999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/chatnotice_verifyemail_bg.svg) center/contain no-repeat;
+	width: 65px;
+	height: 60px;
 	margin-bottom: -16px;
 }
 .image-3XsqGc[src="/assets/b0df989dede2e65a2d631874ffe04de0.svg"] + * {
