@@ -673,7 +673,7 @@ module.exports = (_ => {
 			
 			processReaction (e) {
 				if (!settings.changeInReactions) return;
-				if (e.instance.props.reactions) {
+				if (e.instance.props.reactions && e.instance.props.reactions.length) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id);
 					let guildId = null == channel || channel.isPrivate() ? null : channel.getGuildId();
 					let users = e.instance.props.reactions.filter(user => !BDFDB.LibraryModules.FriendUtils.isBlocked(user.id)).slice(0, 3).map(user => changedUsers[user.id] && changedUsers[user.id].name || guildId && BDFDB.LibraryModules.MemberStore.getNick(guildId, user.id) || user.username).filter(user => user);
@@ -691,7 +691,7 @@ module.exports = (_ => {
 							BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_N", others, emojiName);
 					}
 				}
-				else {
+				else if (!e.instance.props.reactions) {
 					e.instance.props.reactions = [];
 					BDFDB.LibraryModules.ReactionUtils.getReactions(e.instance.props.message.channel_id, e.instance.props.message.id, e.instance.props.emoji).then(reactions => {
 						e.instance.props.reactions = reactions;
