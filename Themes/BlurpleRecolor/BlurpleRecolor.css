@@ -280,6 +280,25 @@
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/chatnotice_followchannel_accent.svg) center/contain no-repeat;
 }
+															/* textarea				verify email icon					*/
+.image-3XsqGc[src="/assets/b0df989dede2e65a2d631874ffe04de0.svg"] {
+	object-position: -999999px -999999px;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/chatnotice_verifyemail_bg.svg) center/contain no-repeat;
+}
+.image-3XsqGc[src="/assets/b0df989dede2e65a2d631874ffe04de0.svg"] + * {
+	overflow: visible;
+}
+.image-3XsqGc[src="/assets/b0df989dede2e65a2d631874ffe04de0.svg"] + *::after {
+	content: "";
+	position: absolute;
+	bottom: 8px;
+	left: 16px;
+	width: 47px;
+	height: 60px;
+	pointer-events: none;
+	background: rgb(var(--vaccentcolor));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/chatnotice_verifyemail_accent.svg) center/contain no-repeat;
+}
 
 /* ----		3.3.	AUTOCOMPLETEMENU				---- */
 
