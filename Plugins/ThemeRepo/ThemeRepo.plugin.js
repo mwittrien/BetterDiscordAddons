@@ -548,7 +548,7 @@ module.exports = (_ => {
 										else if (this.props.theme.url.indexOf("https://gist.githubusercontent.com/") == 0) {
 											gitUrl = this.props.theme.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
 										}
-										if (gitUrl) BDFDB.DiscordUtils.openLink(gitUrl, settings.useChromium);
+										if (gitUrl) BDFDB.DiscordUtils.openLink(gitUrl);
 									}
 								})
 							})
@@ -595,7 +595,7 @@ module.exports = (_ => {
 							else if (this.props.theme.url.indexOf("https://gist.githubusercontent.com/") == 0) {
 								gitUrl = this.props.theme.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
 							}
-							if (gitUrl) BDFDB.DiscordUtils.openLink(gitUrl, settings.useChromium);
+							if (gitUrl) BDFDB.DiscordUtils.openLink(gitUrl);
 						}
 					}],
 					buttons: isBeta ? [
@@ -786,7 +786,6 @@ module.exports = (_ => {
 
 				this.defaults = {
 					settings: {
-						useChromium: 		{value: false,		description: "Use an inbuilt browser window instead of opening your default browser"},
 						keepOnTop: 			{value: false,		description: "Keep the preview window always on top"},
 						notifyOutdated:		{value: true, 		description: "Get a notification when one of your Themes is outdated"},
 						notifyNewentries:	{value: true, 		description: "Get a notification when there are new entries in the Repo"}

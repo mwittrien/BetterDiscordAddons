@@ -121,21 +121,20 @@ module.exports = (_ => {
 					
 				this.defaults = {
 					settings: {
-						resizeImage: 			{value: true,	inner: false,		description: "Always resize image to fit the whole image modal"},
-						addDetails: 			{value: true,	inner: false,		description: "Add image details (name, size, amount) in the image modal"},
-						showAsHeader:			{value: true, 	inner: false,		description: "Show image details as a details header above the image in the chat"},
-						showOnHover:			{value: false, 	inner: false,		description: "Show image details as Tooltip in the chat"},
-						enableGallery: 			{value: true,	inner: false,		description: "Display previous/next Images in the same message in the image modal"},
-						enableZoom: 			{value: true,	inner: false,		description: "Create a zoom lens if you press down on an image in the image modal"},
-						enableCopyImg: 			{value: true,	inner: false,		description: "Add a copy image option in the image modal"},
-						enableSaveImg: 			{value: true,	inner: false,		description: "Add a save image as option in the image modal"},
-						useChromium: 			{value: false, 	inner: false,		description: "Use an inbuilt browser window instead of opening your default browser"},
+						resizeImage: 			{value: true,	inner: false,		description: "Always resize Image to fit the whole Image Modal"},
+						addDetails: 			{value: true,	inner: false,		description: "Add Image Details (Name, Size, Amount) in the Image Modal"},
+						showAsHeader:			{value: true, 	inner: false,		description: "Show Image Details as a Details Header above the Image in the Chat"},
+						showOnHover:			{value: false, 	inner: false,		description: "Show Image Details as Tooltip in the Chat"},
+						enableGallery: 			{value: true,	inner: false,		description: "Display previous/next Images in the same message in the Image Modal"},
+						enableZoom: 			{value: true,	inner: false,		description: "Create a Zoom Lens if you press down on an Image in the Image Modal"},
+						enableCopyImg: 			{value: true,	inner: false,		description: "Add a copy Image option in the Image Modal"},
+						enableSaveImg: 			{value: true,	inner: false,		description: "Add a save Image as option in the Image Modal"},
 						addUserAvatarEntry: 	{value: true, 	inner: true,		description: "User Avatars"},
 						addGuildIconEntry: 		{value: true, 	inner: true,		description: "Server Icons"},
 						addEmojiEntry: 			{value: true, 	inner: true,		description: "Custom Emojis/Emotes"}
 					},
 					amounts: {
-						hoverDelay:				{value: 0, 		min: 0,				description: "Image Tooltip delay (in millisec)"}
+						hoverDelay:				{value: 0, 		min: 0,				description: "Image Tooltip Delay (in ms)"}
 					},
 					zoomSettings: {
 						zoomlevel:				{value: 2,		digits: 1,			minValue: 1,	maxValue: 20,		unit: "x",	label: "ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
@@ -602,7 +601,9 @@ module.exports = (_ => {
 						persisting: true,
 						action: event => {
 							if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
-							BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(imgUrlReplaceString, encodeURIComponent(url)), settings.useChromium, event.shiftKey);
+							BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(imgUrlReplaceString, encodeURIComponent(url)), {
+								minimized: event.shiftKey
+							});
 						}
 					}) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.context_reverseimagesearch,
@@ -619,9 +620,13 @@ module.exports = (_ => {
 							action: event => {
 								if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
 								if (key == "_all") {
-									for (let key2 in enginesWithoutAll) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(imgUrlReplaceString, encodeURIComponent(url)), settings.useChromium, event.shiftKey);
+									for (let key2 in enginesWithoutAll) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(imgUrlReplaceString, encodeURIComponent(url)), {
+										minimized: event.shiftKey
+									});
 								}
-								else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(imgUrlReplaceString, encodeURIComponent(url)), settings.useChromium, event.shiftKey);
+								else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(imgUrlReplaceString, encodeURIComponent(url)), {
+									minimized: event.shiftKey
+								});
 							}
 						}))
 					})
@@ -1485,8 +1490,8 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"无法将图像复制到剪贴板",
 							toast_copyimage_success:			"复制到剪贴板的图像",
 							toast_copyimagelink_success:		"复制的图像链接到剪贴板",
-							toast_saveimage_failed:				"无法将图片保存到“ {{path}}”中",
-							toast_saveimage_success:			"已将图像保存在“ {{path}}”中"
+							toast_saveimage_failed:				"无法将图片保存到'{{path}}'中",
+							toast_saveimage_success:			"已将图像保存在'{{path}}'中"
 						};
 					case "zh-TW":	// Chinese (Traditional)
 						return {
@@ -1500,8 +1505,8 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"無法將圖像複製到剪貼板",
 							toast_copyimage_success:			"複製到剪貼板的圖像",
 							toast_copyimagelink_success:		"複製的圖像鏈接到剪貼板",
-							toast_saveimage_failed:				"無法將圖片保存到“ {{path}}”中",
-							toast_saveimage_success:			"已將圖像保存在“ {{path}}”中"
+							toast_saveimage_failed:				"無法將圖片保存到'{{path}}'中",
+							toast_saveimage_success:			"已將圖像保存在'{{path}}'中"
 						};
 					default:		// English
 						return {

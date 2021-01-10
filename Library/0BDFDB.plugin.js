@@ -50,7 +50,8 @@ module.exports = (_ => {
 		defaults: {
 			settings: {
 				showToasts:				{value: true,		disableIfNative: true,		noteIfNative: true},
-				showSupportBadges:		{value: true,		disableIfNative: false,		noteIfNative: true}
+				showSupportBadges:		{value: true,		disableIfNative: false,		noteIfNative: true},
+				useChromium:			{value: false,		disableIfNative: false,		noteIfNative: true}
 			}
 		},
 	});
@@ -547,11 +548,11 @@ module.exports = (_ => {
 	BDFDB.PluginUtils.cleanUp = function (plugin) {
 		BDFDB.TimeUtils.suppress(_ => {
 			if (!BDFDB.ObjectUtils.is(plugin)) return;
-			if (plugin == BDFDB) {
+			if (plugin == window.BDFDB_Global) {
 				delete window.BDFDB_Global.loaded;
 				BDFDB.TimeUtils.interval((interval, count) => {
 					if (count > 60 || window.BDFDB_Global.loaded) BDFDB.TimeUtils.clear(interval);
-					if (window.BDFDB_Global.loaded) for (let pluginName in BDFDB_Global.ObjectUtils.sort(PluginStores.loaded)) BDFDB.TimeUtils.timeout(_ => {
+					if (window.BDFDB_Global.loaded) for (let pluginName in BDFDB.ObjectUtils.sort(PluginStores.loaded)) BDFDB.TimeUtils.timeout(_ => {
 						if (PluginStores.loaded[pluginName].started) BDFDB.BDUtils.reloadPlugin(pluginName);
 					});
 				}, 1000);
@@ -2951,9 +2952,9 @@ module.exports = (_ => {
 					
 					if (key === undefined) return config;
 					else {
-						let keydata = configIsObject ? (BDFDB.ObjectUtils.is(config[key]) || config[key] == undefined ? BDFDB.ObjectUtils.deepAssign({}, config[key]) : config[key]) : null;
-						if (id === undefined) return keydata;
-						else return !BDFDB.ObjectUtils.is(keydata) || keydata[id] === undefined ? null : keydata[id];
+						let keyData = configIsObject ? (BDFDB.ObjectUtils.is(config[key]) || config[key] === undefined ? BDFDB.ObjectUtils.deepAssign({}, config[key]) : config[key]) : null;
+						if (id === undefined) return keyData;
+						else return !BDFDB.ObjectUtils.is(keyData) || keyData[id] === undefined ? null : keyData[id];
 					}
 				};
 				BDFDB.DataUtils.remove = function (plugin, key, id) {
@@ -4011,16 +4012,15 @@ module.exports = (_ => {
 						for (let i = 0; i < tempArray.length; i++) tempArray[i] = 0;
 						newV = tempArray.concat(newV);
 					}
-					let oldvValue = 0, newValue = 0;
-					for (let i in oldV.reverse()) oldvValue += (oldV[i] * (10 ** i));
+					let oldValue = 0, newValue = 0;
+					for (let i in oldV.reverse()) oldValue += (oldV[i] * (10 ** i));
 					for (let i in newV.reverse()) newValue += (newV[i] * (10 ** i));
-					return (newValue - oldvValue) / (10 ** (length-1));
+					return (newValue - oldValue) / (10 ** (length-1));
 				};
 
 				BDFDB.DiscordUtils = {};
-				BDFDB.DiscordUtils.openLink = function (url, inbuilt, minimized) {
-					if (!inbuilt) window.open(url, "_blank");
-					else {
+				BDFDB.DiscordUtils.openLink = function (url, options = {}) {
+					if (options.inBuilt || options.inBuilt === undefined && settings.useChromium) {
 						let browserWindow = new LibraryRequires.electron.remote.BrowserWindow({
 							frame: true,
 							resizeable: true,
@@ -4033,8 +4033,9 @@ module.exports = (_ => {
 						});
 						browserWindow.setMenu(null);
 						browserWindow.loadURL(url);
-						if (minimized) browserWindow.minimize(null);
+						if (options.minimized) browserWindow.minimize(null);
 					}
+					else window.open(url, "_blank");
 				};
 				BDFDB.DiscordUtils.getFolder = function () {
 					var built = BDFDB.DiscordUtils.getBuilt();
@@ -5000,7 +5001,7 @@ module.exports = (_ => {
 				InternalComponents.LibraryComponents.CollapseContainer = reactInitialized && class BDFDB_CollapseContainer extends LibraryModules.React.Component {
 					render() {
 						if (!BDFDB.ObjectUtils.is(this.props.collapseStates)) this.props.collapseStates = {};
-						this.props.collapsed = this.props.collapsed && (this.props.collapseStates[this.props.title] || this.props.collapseStates[this.props.title] == undefined);
+						this.props.collapsed = this.props.collapsed && (this.props.collapseStates[this.props.title] || this.props.collapseStates[this.props.title] === undefined);
 						this.props.collapseStates[this.props.title] = this.props.collapsed;
 						return BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(this.props.collapsed && BDFDB.disCN.collapsecontainercollapsed, this.props.mini ? BDFDB.disCN.collapsecontainermini : BDFDB.disCN.collapsecontainer, this.props.className),
@@ -7841,6 +7842,7 @@ module.exports = (_ => {
 						const languages = BDFDB.ArrayUtils.removeCopies(BDFDB.ArrayUtils.is(config.languages) ? config.languages : ["en"].concat(Object.keys(BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, n => n.discord))).filter(n => !n.startsWith("en-") && !n.startsWith("$") && n != language)).sort();
 						let translations = {};
 						strings = BDFDB.ObjectUtils.sort(strings);
+						const stringKeys = Object.keys(strings);
 						translations[language] = BDFDB.ObjectUtils.toArray(strings);
 						let text = Object.keys(translations[language]).map(k => translations[language][k]).join("\n\n");
 						
@@ -7893,10 +7895,14 @@ module.exports = (_ => {
 						};
 						let fails = 0, next = lang => {
 							if (!lang) {
+								let formatTranslation = (l, s, i) => {
+									l = l == "en" ? "default" : l;
+									return config.cached && config.cached[l] && config.cached[l][stringKeys[i]] || (translations[language][i][0] == translations[language][i][0].toUpperCase() ? BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(s) : s);
+								};
 								let format = config.asObject ? ((l, isNotFirst) => {
-									return `${isNotFirst ? "," : ""}\n\t\t"${l == "en" ? "default" : l}": {${translations[l].map((s, i) => `\n\t\t\t"${Object.keys(strings)[i]}": "${translations[language][i][0] == translations[language][i][0].toUpperCase() ? BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(s) : s}"`).join(",")}\n\t\t}`;
+									return `${isNotFirst ? "," : ""}\n\t\t"${l == "en" ? "default" : l}": {${translations[l].map((s, i) => `\n\t\t\t"${stringKeys[i]}": "${formatTranslation(l, s, i)}"`).join(",")}\n\t\t}`;
 								}) : ((l, isNotFirst) => {
-									return `\n\t\t\t\t\t${l == "en" ? "default" : `case "${l}"`}:${l.length > 2 ? "\t" : "\t\t"}// ${BDFDB.LanguageUtils.languages[l].name}\n\t\t\t\t\t\treturn {${translations[l].map((s, i) => `\n\t\t\t\t\t\t\t${Object.keys(strings)[i]}:${"\t".repeat(10 - ((Object.keys(strings)[i].length + 2) / 4))}"${translations[language][i][0] == translations[language][i][0].toUpperCase() ? BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(s) : s}"`).join(",")}\n\t\t\t\t\t\t};`;
+									return `\n\t\t\t\t\t${l == "en" ? "default" : `case "${l}"`}:${l.length > 2 ? "\t" : "\t\t"}// ${BDFDB.LanguageUtils.languages[l].name}\n\t\t\t\t\t\treturn {${translations[l].map((s, i) => `\n\t\t\t\t\t\t\t${stringKeys[i]}:${"\t".repeat(10 - ((stringKeys[i].length + 2) / 4))}"${formatTranslation(l, s, i)}"`).join(",")}\n\t\t\t\t\t\t};`;
 								});
 								let result = Object.keys(translations).filter(n => n != "en").sort().map((l, i) => format(l, i)).join("");
 								if (translations.en) result += format("en", result ? 1 : 0);
@@ -7927,14 +7933,6 @@ module.exports = (_ => {
 					window.BDFDB = BDFDB;
 				}
 				
-				window.BDFDB_Global = Object.assign({
-					PluginUtils: {
-						buildPlugin: BDFDB.PluginUtils.buildPlugin,
-						cleanUp: BDFDB.PluginUtils.cleanUp
-					}
-				}, config);
-				Object.freeze(BDFDB);
-				
 				for (let obj in DiscordObjects) if (!DiscordObjects[obj]) {
 					DiscordObjects[obj] = function () {};
 					BDFDB.DiscordObjects[obj] = function () {};
@@ -7946,11 +7944,17 @@ module.exports = (_ => {
 				}
 				
 				if (css) BDFDB.DOMUtils.appendLocalStyle("BDFDB", css.replace(/[\n\t\r]/g, "").replace(/\[REPLACE_CLASS_([A-z0-9_]+?)\]/g, function(a, b) {return BDFDB.dotCN[b];}));
-				
-				window.BDFDB_Global.loaded = true;
-				delete window.BDFDB_Global.loading;
 			
 				BDFDB.LogUtils.log("Finished loading library.");
+				
+				window.BDFDB_Global = Object.assign({
+					started: true,
+					loaded: true,
+					PluginUtils: {
+						buildPlugin: BDFDB.PluginUtils.buildPlugin,
+						cleanUp: BDFDB.PluginUtils.cleanUp
+					}
+				}, config);
 				
 				while (PluginStores.delayedLoad.length) PluginStores.delayedLoad.shift().load();
 				while (PluginStores.delayedStart.length) PluginStores.delayedStart.shift().start();
