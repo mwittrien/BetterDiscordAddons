@@ -672,6 +672,7 @@ module.exports = (_ => {
 			}
 			
 			processReaction (e) {
+				if (!settings.changeInReactions) return;
 				if (e.instance.props.reactions) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id);
 					let guildId = null == channel || channel.isPrivate() ? null : channel.getGuildId();
@@ -690,10 +691,13 @@ module.exports = (_ => {
 							BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_N", others, emojiName);
 					}
 				}
-				else BDFDB.LibraryModules.ReactionUtils.getReactions(e.instance.props.message.channel_id, e.instance.props.message.id, e.instance.props.emoji).then(reactions => {
-					e.instance.props.reactions = reactions;
-					BDFDB.ReactUtils.forceUpdate(e.instance);
-				});
+				else {
+					e.instance.props.reactions = [];
+					BDFDB.LibraryModules.ReactionUtils.getReactions(e.instance.props.message.channel_id, e.instance.props.message.id, e.instance.props.emoji).then(reactions => {
+						e.instance.props.reactions = reactions;
+						BDFDB.ReactUtils.forceUpdate(e.instance);
+					});
+				}
 			}
 			
 			processReactorsComponent (e) {
