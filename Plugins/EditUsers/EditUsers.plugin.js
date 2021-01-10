@@ -672,7 +672,7 @@ module.exports = (_ => {
 			}
 			
 			processReaction (e) {
-				if (!settings.changeInReactions) return;
+				if (!settings.changeInReactions || !e.returnvalue) return;
 				if (e.instance.props.reactions && e.instance.props.reactions.length) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id);
 					let guildId = null == channel || channel.isPrivate() ? null : channel.getGuildId();
