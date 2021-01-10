@@ -4038,19 +4038,19 @@ module.exports = (_ => {
 					else window.open(url, "_blank");
 				};
 				BDFDB.DiscordUtils.getFolder = function () {
-					var built = BDFDB.DiscordUtils.getBuilt();
+					let built = BDFDB.DiscordUtils.getBuilt();
 					built = "discord" + (built == "stable" ? "" : built);
 					return LibraryRequires.path.resolve(LibraryRequires.electron.remote.app.getPath("appData"), built, BDFDB.DiscordUtils.getVersion());
 				};
 				BDFDB.DiscordUtils.getBuilt = function () {
 					if (BDFDB.DiscordUtils.getBuilt.built) return BDFDB.DiscordUtils.getBuilt.built;
 					else {
-						var built = null;
+						let built = null;
 						try {built = require(LibraryRequires.electron.remote.app.getAppPath() + "/build_info.json").releaseChannel.toLowerCase();} 
 						catch (err) {
 							try {built = require(LibraryRequires.electron.remote.app.getAppPath().replace("\app.asar", "") + "/build_info.json").releaseChannel.toLowerCase();} 
 							catch (err) {
-								var version = BDFDB.DiscordUtils.getVersion();
+								let version = BDFDB.DiscordUtils.getVersion();
 								if (version) {
 									version = version.split(".");
 									if (version.length == 3 && !isNaN(version = parseInt(version[2]))) built = version > 300 ? "stable" : da > 200 ? "canary" : "ptb";
