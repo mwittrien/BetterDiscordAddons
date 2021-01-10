@@ -13,6 +13,7 @@
 	"LibraryModules": {
 		"AckUtils": {"props": ["localAck", "bulkAck"]},
 		"ActivityUtils": {"props": ["sendActivityInvite", "updateActivity"]},
+		"APIEncodeUtils": {"props": ["stringify", "parse", "encode"]},
 		"APIUtils": {"props": ["getAPIBaseURL"]},
 		"AnalyticsUtils": {"props": ["isThrottled", "track"]},
 		"AnimationUtils": {"props": ["spring", "decay"]},
