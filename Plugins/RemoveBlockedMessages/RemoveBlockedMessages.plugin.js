@@ -14,12 +14,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.1.9",
+			"version": "1.2.0",
 			"description": "Completely removes blocked messages"
 		},
 		"changeLog": {
 			"improved": {
 				"Remove Reactions": "Now decreases the count for reactions if one of them is by a blocked user and hides it if the reaction is 0"
+			},
+			"fixed": {
+				"Update Reactions": "Fixed issue where reaction sometimes wouldn't get updated"
 			}
 		}
 	};
@@ -263,7 +266,7 @@ module.exports = (_ => {
 			
 			processReactions (e) {
 				if (settings.removeReactions && e.returnvalue.props.children && BDFDB.ArrayUtils.is(e.returnvalue.props.children[0])) {
-					let updateTimeout;
+					let updateTimeout, relationshipCount = BDFDB.LibraryModules.FriendUtils.getRelationshipCount();
 					if (cachedChannelId != e.instance.props.message.channel_id) {
 						cachedReactions = {};
 						cachedChannelId = e.instance.props.message.channel_id;
@@ -272,7 +275,7 @@ module.exports = (_ => {
 					for (let i in e.returnvalue.props.children[0]) {
 						let reaction = e.returnvalue.props.children[0][i];
 						let emojiId = reaction.props.emoji.name || reaction.props.emoji.id;
-						if (cachedReactions[reaction.props.message.id][emojiId] && reaction.props.me == cachedReactions[reaction.props.message.id][emojiId].me) {
+						if (cachedReactions[reaction.props.message.id][emojiId] && cachedReactions[reaction.props.message.id][emojiId].relationshipCount == relationshipCount && cachedReactions[reaction.props.message.id][emojiId].oldTotalCount == BDFDB.ArrayUtils.sum(reaction.props.message.reactions.map(n => n.count))) {
 							reaction.props.count = cachedReactions[reaction.props.message.id][emojiId].reactions.length;
 							if (reaction.props.count < 1) e.returnvalue.props.children[0][i] = null;
 						}
@@ -282,8 +285,9 @@ module.exports = (_ => {
 								reaction.props.reactions = reactions.filter(n => !n || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.id));
 								reaction.props.count = reaction.props.reactions.length;
 								if (cachedReactions && cachedReactions[reaction.props.message.id]) cachedReactions[reaction.props.message.id][emojiId] = {
-									reactions: reaction.props.reactions,
-									me: reaction.props.me
+									relationshipCount: relationshipCount,
+									oldTotalCount: BDFDB.ArrayUtils.sum(reaction.props.message.reactions.map(n => n.count)),
+									reactions: reaction.props.reactions
 								};
 								BDFDB.TimeUtils.clear(updateTimeout);
 								updateTimeout = BDFDB.TimeUtils.timeout(_ => {
