@@ -122,6 +122,10 @@ module.exports = (_ => {
 							prefix: BDFDB.LanguageUtils.LanguageStrings.MEMBERS,
 							string: BDFDB.LibraryModules.MemberCountUtils.getMemberCount(this.props.guild.id)
 						}),
+						settings.addBoosters && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+							prefix: _this.labels.boosters,
+							string: this.props.guild.premiumSubscriberCount
+						}),
 						settings.addChannels && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 							prefix: BDFDB.LanguageUtils.LanguageStrings.CHANNELS,
 							string: BDFDB.LibraryModules.GuildChannelStore.getChannels(this.props.guild.id).count
@@ -129,10 +133,6 @@ module.exports = (_ => {
 						settings.addRoles && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 							prefix: BDFDB.LanguageUtils.LanguageStrings.ROLES,
 							string: Object.keys(this.props.guild.roles).length
-						}),
-						settings.addBoosters && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
-							prefix: BDFDB.LanguageUtils.LanguageStrings.SUBSCRIPTIONS_TITLE,
-							string: this.props.guild.premiumSubscriberCount
 						}),
 						settings.addRegion && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 							prefix: BDFDB.LanguageUtils.LanguageStrings.REGION,
@@ -530,136 +530,163 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
+							boosters:							"Бустери",
 							creation_date:						"Дата на създаване",
 							join_date:							"Дата на присъединяване"
 						};
 					case "da":		// Danish
 						return {
+							boosters:							"Boosters",
 							creation_date:						"Oprettelsesdato",
 							join_date:							"Deltag i dato"
 						};
 					case "de":		// German
 						return {
+							boosters:							"Booster",
 							creation_date:						"Erstellungsdatum",
 							join_date:							"Beitrittsdatum"
 						};
 					case "el":		// Greek
 						return {
+							boosters:							"Ενισχυτές",
 							creation_date:						"Ημερομηνία δημιουργίας",
 							join_date:							"Ημερομηνία προσχώρησης"
 						};
 					case "es":		// Spanish
 						return {
+							boosters:							"Impulsores",
 							creation_date:						"Fecha de creación",
 							join_date:							"Fecha de Ingreso"
 						};
 					case "fi":		// Finnish
 						return {
+							boosters:							"Tehostimet",
 							creation_date:						"Luomispäivä",
 							join_date:							"Liittymispäivä"
 						};
 					case "fr":		// French
 						return {
+							boosters:							"Boosters",
 							creation_date:						"Date de création",
 							join_date:							"Date d'inscription"
 						};
 					case "hr":		// Croatian
 						return {
+							boosters:							"Pojačala",
 							creation_date:						"Datum stvaranja",
 							join_date:							"Datum pridruživanja"
 						};
 					case "hu":		// Hungarian
 						return {
+							boosters:							"Emlékeztetők",
 							creation_date:						"Létrehozás dátuma",
 							join_date:							"Csatlakozás dátuma"
 						};
 					case "it":		// Italian
 						return {
+							boosters:							"Booster",
 							creation_date:						"Data di creazione",
 							join_date:							"Data di iscrizione"
 						};
 					case "ja":		// Japanese
 						return {
+							boosters:							"ブースター",
 							creation_date:						"作成日",
 							join_date:							"参加日"
 						};
 					case "ko":		// Korean
 						return {
+							boosters:							"부스터",
 							creation_date:						"제작 일",
 							join_date:							"가입 날짜"
 						};
 					case "lt":		// Lithuanian
 						return {
+							boosters:							"Stiprintuvai",
 							creation_date:						"Sukūrimo data",
 							join_date:							"Įstojimo data"
 						};
 					case "nl":		// Dutch
 						return {
+							boosters:							"Boosters",
 							creation_date:						"Aanmaakdatum",
 							join_date:							"Toetredingsdatum"
 						};
 					case "no":		// Norwegian
 						return {
+							boosters:							"Boosters",
 							creation_date:						"Opprettelsesdato",
 							join_date:							"Bli med på dato"
 						};
 					case "pl":		// Polish
 						return {
+							boosters:							"Dopalacze",
 							creation_date:						"Data utworzenia",
 							join_date:							"Data dołączenia"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
+							boosters:							"Boosters",
 							creation_date:						"Data de criação",
 							join_date:							"Data de afiliação"
 						};
 					case "ro":		// Romanian
 						return {
+							boosters:							"Amplificatoare",
 							creation_date:						"Data crearii",
 							join_date:							"Data înscrierii"
 						};
 					case "ru":		// Russian
 						return {
+							boosters:							"Бустеры",
 							creation_date:						"Дата создания",
 							join_date:							"Дате вступления"
 						};
 					case "sv":		// Swedish
 						return {
+							boosters:							"Boosters",
 							creation_date:						"Skapelsedagen",
 							join_date:							"Gå med datum"
 						};
 					case "th":		// Thai
 						return {
+							boosters:							"บูสเตอร์",
 							creation_date:						"วันที่สร้าง",
 							join_date:							"วันที่เข้าร่วม"
 						};
 					case "tr":		// Turkish
 						return {
+							boosters:							"Güçlendiriciler",
 							creation_date:						"Oluşturulma tarihi",
 							join_date:							"Üyelik Tarihi"
 						};
 					case "uk":		// Ukrainian
 						return {
+							boosters:							"Підсилювачі",
 							creation_date:						"Дата створення",
 							join_date:							"Дата приєднання"
 						};
 					case "vi":		// Vietnamese
 						return {
+							boosters:							"Bộ tăng tốc",
 							creation_date:						"Ngày thành lập",
 							join_date:							"Ngày tham gia"
 						};
 					case "zh":		// Chinese
 						return {
+							boosters:							"助推器",
 							creation_date:						"创建日期",
 							join_date:							"参加日期"
 						};
 					case "zh-TW":	// Chinese (Traditional)
 						return {
+							boosters:							"助推器",
 							creation_date:						"創建日期",
 							join_date:							"參加日期"
 						};
 					default:		// English
 						return {
+							boosters:							"Boosters",
 							creation_date:						"Creation Date",
 							join_date:							"Join Date"
 						};
