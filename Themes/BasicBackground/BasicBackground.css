@@ -5295,6 +5295,7 @@ body::before {
 	left: 0;
 	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
 	background-attachment: fixed;
+	border-radius: 5px;
 	filter: blur(var(--vpopoutblur));
 	width: unset;
 	height: unset;
@@ -5309,6 +5310,7 @@ body::before {
 	right: 0;
 	left: 0;
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.35));
+	border-radius: 5px;
 	width: unset;
 	height: unset;
 	pointer-events: none;
