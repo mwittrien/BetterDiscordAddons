@@ -72,9 +72,9 @@ module.exports = (_ => {
 						showInChat:			{value: true, 	inner: true, 	description: "Chat Window"},
 						showInMemberList:	{value: true, 	inner: true, 	description: "Member List"},
 						useOtherStyle:		{value: false, 	inner: false, 	description: "Use BotTag Style instead of the Role Style"},
-						useBlackFont:		{value: false, 	inner: false,	description: "Instead of darkening the color for BotTag Style on bright colors use black font"},
-						includeColorless:	{value: false, 	inner: false, 	description: "Include colorless roles"},
-						showOwnerRole:		{value: false, 	inner: false, 	description: `Display Role Tag of Serverowner as "${BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER}".`},
+						useBlackFont:		{value: false, 	inner: false,	description: "Instead of darkening the Color for BotTag Style on bright Colors use black Font"},
+						includeColorless:	{value: false, 	inner: false, 	description: "Include colorless Roles"},
+						showOwnerRole:		{value: false, 	inner: false, 	description: `Display Role Tag of Server Owner as "${BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER}".`},
 						disableForBots:		{value: false, 	inner: false, 	description: "Disable Role Tag for Bots"},
 						addUserID:			{value: false, 	inner: false, 	description: "Add the UserID as a Tag to the Chat Window"}
 					}
