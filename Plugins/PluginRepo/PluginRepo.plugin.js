@@ -727,9 +727,9 @@ module.exports = (_ => {
 						loadingIcon.addEventListener("mouseenter", _ => {
 							BDFDB.TooltipUtils.create(loadingIcon, this.getLoadingTooltipText(), {
 								type: "left",
+								className: "pluginrepo-loadingtooltip",
 								delay: 500,
-								style: "max-width: unset;",
-								selector: "pluginrepo-loading-tooltip"
+								style: "max-width: unset;"
 							});
 						});
 						BDFDB.PluginUtils.addLoadingIcon(loadingIcon);
@@ -757,9 +757,9 @@ module.exports = (_ => {
 											if (oldBarButton) oldBarButton.click();
 											let bar = BDFDB.NotificationUtils.notice(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check: `, {
 												type: "danger",
+												className: "pluginrepo-notice pluginrepo-outdate-notice",
 												btn: "PluginRepo",
-												selector: "pluginrepo-notice pluginrepo-outdate-notice",
-												customicon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
+												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
 											});
 											bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
 												showOnlyOutdated = true;
@@ -774,9 +774,9 @@ module.exports = (_ => {
 											let single = newEntries == 1;
 											let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Plugin${single ? "" : "s"} in the Repo. Check: `, {
 												type: "success",
+												className: "pluginrepo-notice pluginrepo-newentries-notice",
 												btn: "PluginRepo",
-												selector: "pluginrepo-notice pluginrepo-newentries-notice",
-												customicon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
+												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
 											});
 											bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
 												forcedSort = "NEW";
@@ -792,9 +792,9 @@ module.exports = (_ => {
 											if (wrongUrls.length) {
 												let bar = BDFDB.NotificationUtils.notice(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {
 													type: "danger",
+													className: "pluginrepo-notice pluginrepo-fail-notice",
 													btn: "List",
-													selector: "pluginrepo-notice pluginrepo-fail-notice",
-													customicon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
+													customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
 												});
 												bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 													let toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"), {type: "error"});
@@ -892,7 +892,7 @@ module.exports = (_ => {
 						}
 						i++;
 						
-						let loadingTooltip = document.querySelector(".pluginrepo-loading-tooltip");
+						let loadingTooltip = document.querySelector(".pluginrepo-loadingtooltip");
 						if (loadingTooltip) loadingTooltip.update(this.getLoadingTooltipText());
 						
 						getPluginInfo(callback);

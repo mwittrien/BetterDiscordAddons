@@ -715,7 +715,13 @@ module.exports = (_ => {
 									BDFDB.NotificationUtils.desktop(desktopString, {icon: avatar, timeout: desktopTime, click: openChannel, silent: notificationsound.mute, sound: notificationsound.song});
 								}
 								else if (!document.querySelector(`.friendnotifications-${id}-toast`)) {
-									let toast = BDFDB.NotificationUtils.toast(`<div class="${BDFDB.disCN.toastinner}"><div class="${BDFDB.disCN.toastavatar}" style="background-image: url(${avatar});"></div><div>${toastString}</div></div>`, {html: true, timeout: toastTime, color: BDFDB.UserUtils.getStatusColor(status.statusName), icon: false, selector: `friendnotifications-${status.statusName}-toast friendnotifications-${id}-toast`});
+									let toast = BDFDB.NotificationUtils.toast(`<div class="${BDFDB.disCN.toastinner}"><div class="${BDFDB.disCN.toastavatar}" style="background-image: url(${avatar});"></div><div>${toastString}</div></div>`, {
+										className: `friendnotifications-${status.statusName}-toast friendnotifications-${id}-toast`,
+										html: true,
+										timeout: toastTime,
+										color: BDFDB.UserUtils.getStatusColor(status.statusName),
+										icon: false
+									});
 									toast.addEventListener("click", openChannel);
 									let notificationsound = notificationSounds["toast" + status.statusName] || {};
 									if (!notificationsound.mute && notificationsound.song) {

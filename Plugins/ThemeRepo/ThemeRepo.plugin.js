@@ -1042,9 +1042,9 @@ module.exports = (_ => {
 						loadingIcon.addEventListener("mouseenter", _ => {
 							BDFDB.TooltipUtils.create(loadingIcon, this.getLoadingTooltipText(), {
 								type: "left",
+								className: "themerepo-loadingtooltip",
 								delay: 500,
-								style: "max-width: unset;",
-								selector: "themerepo-loading-tooltip"
+								style: "max-width: unset;"
 							});
 						});
 						BDFDB.PluginUtils.addLoadingIcon(loadingIcon);
@@ -1066,9 +1066,9 @@ module.exports = (_ => {
 								if (oldBarButton) oldBarButton.click();
 								let bar = BDFDB.NotificationUtils.notice(`${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check: `, {
 									type: "danger",
+									className: "themerepo-notice themerepo-outdate-notice",
 									btn: "ThemeRepo",
-									selector: "themerepo-notice themerepo-outdate-notice",
-									customicon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
+									customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
 								});
 								bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
 									showOnlyOutdated = true;
@@ -1083,9 +1083,9 @@ module.exports = (_ => {
 								let single = newEntries == 1;
 								let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Theme${single ? "" : "s"} in the Repo. Check: `, {
 									type: "success",
+									className: "themerepo-notice themerepo-newentries-notice",
 									btn: "ThemeRepo",
-									selector: "themerepo-notice themerepo-newentries-notice",
-									customicon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
+									customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
 								});
 								bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
 									forcedSort = "NEW";
@@ -1101,9 +1101,9 @@ module.exports = (_ => {
 								if (wrongUrls.length) {
 									let bar = BDFDB.NotificationUtils.notice(`ThemeRepo: ${wrongUrls.length} Theme${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {
 										type: "danger",
+										className: "themerepo-notice themerepo-fail-notice",
 										btn: "List",
-										selector: "themerepo-notice themerepo-fail-notice",
-										customicon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
+										customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
 									});
 									bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 										let toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"), {type: "error"});
@@ -1181,7 +1181,7 @@ module.exports = (_ => {
 						}
 						i++;
 						
-						let loadingTooltip = document.querySelector(".themerepo-loading-tooltip");
+						let loadingTooltip = document.querySelector(".themerepo-loadingtooltip");
 						if (loadingTooltip) loadingTooltip.update(this.getLoadingTooltipText());
 						
 						getThemeInfo(callback);
