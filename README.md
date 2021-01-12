@@ -1,14 +1,9 @@
-# [BetterDiscord](https://github.com/rauenzi/BetterDiscordApp) Addons [![Paypal][paypal-badge]][paypal-link] [![Patreon][patreon-badge]][patreon-link]
+# [BetterDiscord](https://github.com/rauenzi/BetterDiscordApp) 
 
-[paypal-badge]: https://img.shields.io/badge/Paypal-Donate!-%23003087.svg?logo=paypal&style=flat
-[paypal-link]: https://paypal.me/MircoWittrien
 
-[patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
-[patreon-link]: https://patreon.com/MircoWittrien
+Personal branch for discord plugins
+~More control
+~Custom personal plugins
+~Stable and experimental options
 
-A series of plugins and themes for BetterDiscord. If you got any questions hit me up on Discord DevilBro#4401
-
-## [Plugins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/)
-## [Themes](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/)
-
-Copyright (C) 2020 Mirco Wittrien
+I didnt make 99% of these lol go check the original branch that I forked from as well as betterdiscord's site for more info 
