@@ -1248,8 +1248,11 @@ module.exports = (_ => {
 						notice.style.setProperty("max-width", `calc(100vw - ${sideMargin*2}px)`, "important");
 					}
 					notice.querySelector(BDFDB.dotCN.noticedismiss).addEventListener("click", _ => {
-						notice.style.setProperty("overflow", "hidden", "important");
-						notice.style.setProperty("height", "0px", "important");
+						BDFDB.DOMUtils.addClass(notice, BDFDB.disCN.noticeclosing);
+						if (options.forceStyle) {
+							notice.style.setProperty("overflow", "hidden", "important");
+							notice.style.setProperty("height", "0px", "important");
+						}
 						if (notice.tooltip && typeof notice.tooltip.removeTooltip == "function") notice.tooltip.removeTooltip();
 						BDFDB.TimeUtils.timeout(_ => {
 							if (typeof options.onClose == "function") options.onClose();

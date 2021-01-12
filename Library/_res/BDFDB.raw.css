@@ -892,6 +892,10 @@ img:not([src]), img[src=""], img[src="null"] {
 	border-radius: 0 !important;
 	transition: height 10s ease !important;
 }
+[REPLACE_CLASS_noticeclosing] {
+	height: 0 !important;
+	overflow: hidden !important;
+}
 [REPLACE_CLASS_noticewrapper] [REPLACE_CLASS_noticeplatformicon] {
 	margin-top: -7px;
 }
