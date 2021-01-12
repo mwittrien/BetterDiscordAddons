@@ -58,57 +58,20 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var settings = {};
-		
-		var urls = {
+		const urls = {
 			steam: ["https://steamcommunity.", "https://help.steampowered.", "https://store.steampowered.", "a.akamaihd.net/"]
 		};
 		
 		return class SteamProfileLink extends Plugin {
-			onLoad () {
-				this.defaults = {
-					settings: {
-						useChromium: 			{value: false,			description: "Use inbuilt browser instead of default if fails to open Steam"}
-					}
-				};
-			}
+			onLoad () {}
 			
 			onStart () {
 				for (let key in urls) BDFDB.ListenerUtils.add(this, document, "click", urls[key].map(url => url.indexOf("http") == 0 ? `a[href^="${url}"]` : `a[href*="${url}"][href*="${key}"]`).join(", "), e => {
 					this.openIn(e, key, e.currentTarget.href);
 				});
-				
-				this.forceUpdateAll();
 			}
 			
 			onStop () {}
-
-			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [];
-				
-				settingsItems = settingsItems.concat(this.createSelects(false));
-				
-				for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					type: "Switch",
-					plugin: this,
-					keys: ["settings", key],
-					label: this.defaults.settings[key].description,
-					value: settings[key]
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
-			}
-
-			onSettingsClosed () {
-				if (this.SettingsUpdated) {
-					delete this.SettingsUpdated;
-					this.forceUpdateAll();
-				}
-			}
-		
-			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
-			}
 		
 			openIn (e, key, url) {
 				let platform = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(key);
@@ -123,7 +86,7 @@ module.exports = (_ => {
 			openInSteam (url) {
 				BDFDB.LibraryRequires.request(url, (error, response, body) => {
 					if (BDFDB.LibraryRequires.electron.shell.openExternal("steam://openurl/" + response.request.href));
-					else BDFDB.DiscordUtils.openLink(response.request.href, settings.useChromium);
+					else BDFDB.DiscordUtils.openLink(response.request.href);
 				});
 			}
 		};

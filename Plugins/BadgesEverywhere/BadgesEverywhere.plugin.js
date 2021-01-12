@@ -14,13 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "BadgesEverywhere",
 			"author": "DevilBro",
-			"version": "1.6.3",
+			"version": "1.6.5",
 			"description": "Display Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout"
 		},
 		"changeLog": {
 			"fixed": {
-				"Chat Margin": "Added margin between username and badges",
-				"Colored Badges": "Work again"
+				"Styling Replies": "Fixed position and margins for badges in replied messages"
 			}
 		}
 	};
@@ -192,12 +191,19 @@ module.exports = (_ => {
 						position: relative;
 						top: 2px;
 					}
+					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN._badgeseverywherebadgeschat} {
+						top: 0;
+					}
 					${BDFDB.dotCN._badgeseverywheremini} {
 						margin-left: 5px;
 					}
-					${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.messageusername} ~ ${BDFDB.dotCN._badgeseverywherebadges} {
+					${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.messageusername} ~ ${BDFDB.dotCN._badgeseverywherebadges},
+					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN.messageusername} ~ ${BDFDB.dotCN._badgeseverywherebadges} {
 						margin-right: .25rem;
 						text-indent: 0;
+					}
+					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN.messageusername} ~ ${BDFDB.dotCN._badgeseverywherebadges} {
+						margin-left: 0;
 					}
 					
 					${BDFDB.dotCN._badgeseverywherebadgesinner} {

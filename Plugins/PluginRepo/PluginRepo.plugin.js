@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.1.1",
+			"version": "2.1.2",
 			"description": "Allow you to look at all plugins from the plugin repo and download them on the fly"
 		},
 		"changeLog": {
 			"fixed": {
-				"New Meta": "Fixed some issues with the meta parsing"
+				"New Settings Order": "Fixed for new settings order"
 			}
 		}
 	};
@@ -279,7 +279,7 @@ module.exports = (_ => {
 										else if (this.props.plugin.url.indexOf("https://gist.githubusercontent.com/") == 0) {
 											gitUrl = this.props.plugin.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
 										}
-										if (gitUrl) BDFDB.DiscordUtils.openLink(gitUrl, settings.useChromium);
+										if (gitUrl) BDFDB.DiscordUtils.openLink(gitUrl);
 									}
 								})
 							})
@@ -303,7 +303,7 @@ module.exports = (_ => {
 							else if (this.props.plugin.url.indexOf("https://gist.githubusercontent.com/") == 0) {
 								gitUrl = this.props.plugin.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
 							}
-							if (gitUrl) BDFDB.DiscordUtils.openLink(gitUrl, settings.useChromium);
+							if (gitUrl) BDFDB.DiscordUtils.openLink(gitUrl);
 						}
 					}],
 					buttons: isBeta ? [
@@ -494,7 +494,6 @@ module.exports = (_ => {
 
 				this.defaults = {
 					settings: {
-						useChromium: 		{value: false,	description: "Use an inbuilt browser window instead of opening your default browser"},
 						notifyOutdated:		{value: true, 	description: "Get a notification when one of your Plugins is outdated"},
 						notifyNewEntries:	{value: true, 	description: "Get a notification when there are new entries in the Repo"}
 					},
@@ -657,12 +656,11 @@ module.exports = (_ => {
 			processSettingsView (e) {
 				if (BDFDB.ArrayUtils.is(e.instance.props.sections) && e.instance.props.sections[0] && e.instance.props.sections[0].label == BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS) {
 					e.instance.props.sections = e.instance.props.sections.filter(n => n.section != "pluginrepo");
-					let oldSettings = !e.instance.props.sections.find(n => n.section == "plugins");
-					let index = e.instance.props.sections.indexOf(e.instance.props.sections.find(oldSettings ? n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS : n => n.section == BDFDB.DiscordConstants.UserSettingsSections.CHANGE_LOG || n.section == "changelog"));
+					let index = e.instance.props.sections.indexOf(e.instance.props.sections.find(n => n.section == "themes") || e.instance.props.sections.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS));
 					if (index > -1) {
-						e.instance.props.sections.splice(oldSettings ? index + 1 : index - 1, 0, {
-							label: "Plugin Repo",
+						e.instance.props.sections.splice(index + 1, 0, {
 							section: "pluginrepo",
+							label: "Plugin Repo",
 							element: _ => {
 								let options = Object.assign({}, modalSettings);
 								options.updated = options.updated && !showOnlyOutdated;
@@ -675,7 +673,7 @@ module.exports = (_ => {
 								return BDFDB.ReactUtils.createElement(RepoListComponent, options, true);
 							}
 						});
-						if (oldSettings) e.instance.props.sections.splice(index + 1, 0, {section: "DIVIDER"});
+						if (!e.instance.props.sections.find(n => n.section == "plugins")) e.instance.props.sections.splice(index + 1, 0, {section: "DIVIDER"});
 					}
 				}
 			}
@@ -729,9 +727,9 @@ module.exports = (_ => {
 						loadingIcon.addEventListener("mouseenter", _ => {
 							BDFDB.TooltipUtils.create(loadingIcon, this.getLoadingTooltipText(), {
 								type: "left",
+								className: "pluginrepo-loadingtooltip",
 								delay: 500,
-								style: "max-width: unset;",
-								selector: "pluginrepo-loading-tooltip"
+								style: "max-width: unset;"
 							});
 						});
 						BDFDB.PluginUtils.addLoadingIcon(loadingIcon);
@@ -759,9 +757,9 @@ module.exports = (_ => {
 											if (oldBarButton) oldBarButton.click();
 											let bar = BDFDB.NotificationUtils.notice(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check: `, {
 												type: "danger",
+												className: "pluginrepo-notice pluginrepo-outdate-notice",
 												btn: "PluginRepo",
-												selector: "pluginrepo-notice pluginrepo-outdate-notice",
-												customicon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
+												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
 											});
 											bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
 												showOnlyOutdated = true;
@@ -776,9 +774,9 @@ module.exports = (_ => {
 											let single = newEntries == 1;
 											let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Plugin${single ? "" : "s"} in the Repo. Check: `, {
 												type: "success",
+												className: "pluginrepo-notice pluginrepo-newentries-notice",
 												btn: "PluginRepo",
-												selector: "pluginrepo-notice pluginrepo-newentries-notice",
-												customicon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
+												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
 											});
 											bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
 												forcedSort = "NEW";
@@ -794,9 +792,9 @@ module.exports = (_ => {
 											if (wrongUrls.length) {
 												let bar = BDFDB.NotificationUtils.notice(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {
 													type: "danger",
+													className: "pluginrepo-notice pluginrepo-fail-notice",
 													btn: "List",
-													selector: "pluginrepo-notice pluginrepo-fail-notice",
-													customicon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
+													customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
 												});
 												bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 													let toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"), {type: "error"});
@@ -894,7 +892,7 @@ module.exports = (_ => {
 						}
 						i++;
 						
-						let loadingTooltip = document.querySelector(".pluginrepo-loading-tooltip");
+						let loadingTooltip = document.querySelector(".pluginrepo-loadingtooltip");
 						if (loadingTooltip) loadingTooltip.update(this.getLoadingTooltipText());
 						
 						getPluginInfo(callback);

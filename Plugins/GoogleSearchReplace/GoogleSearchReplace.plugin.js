@@ -64,14 +64,11 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		const textUrlReplaceString = "DEVILBRO_BD_GOOGLESEARCHREPLACE_REPLACEURL";
-		var settings = {}, engines = {}, enabledEngines = {};
+		var engines = {}, enabledEngines = {};
 	
 		return class GoogleSearchReplace extends Plugin {
 			onLoad () {
 				this.defaults = {
-					settings: {
-						useChromium: 		{value: false,	description: "Use an inbuilt browser window instead of opening your default browser"},
-					},
 					engines: {
 						_all: 				{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url: null},
 						Ask: 				{value: true, 	name: "Ask", 					url: "https://ask.com/web?q=" + textUrlReplaceString},
@@ -102,13 +99,6 @@ module.exports = (_ => {
 			getSettingsPanel (collapseStates = {}) {
 				let settingsPanel, settingsItems = [];
 				
-				for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					type: "Switch",
-					plugin: this,
-					keys: ["settings", key],
-					label: this.defaults.settings[key].description,
-					value: settings[key]
-				}));
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 					title: "Search Engines:",
 					children: Object.keys(engines).filter(n => n && n != "_all").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
@@ -131,7 +121,6 @@ module.exports = (_ => {
 			}
 			
 			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
 				engines = BDFDB.DataUtils.get(this, "engines");
 				enabledEngines = BDFDB.ObjectUtils.filter(engines, n => n);
 			}
@@ -157,7 +146,9 @@ module.exports = (_ => {
 							persisting: true,
 							action: event => {
 								if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
-								BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(textUrlReplaceString, encodeURIComponent(text)), !settings.useChromium, event.shiftKey);
+								BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(textUrlReplaceString, encodeURIComponent(text)), {
+									minimized: event.shiftKey
+								});
 							}
 						}));
 					}
@@ -171,9 +162,13 @@ module.exports = (_ => {
 							action: event => {
 								if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
 								if (key == "_all") {
-									for (let key2 in enginesWithoutAll) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(textUrlReplaceString, encodeURIComponent(text)), settings.useChromium, event.shiftKey);
+									for (let key2 in enginesWithoutAll) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(textUrlReplaceString, encodeURIComponent(text)), {
+										minimized: event.shiftKey
+									});
 								}
-								else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(textUrlReplaceString, encodeURIComponent(text)), settings.useChromium, event.shiftKey);
+								else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(textUrlReplaceString, encodeURIComponent(text)), {
+									minimized: event.shiftKey
+								});
 							}
 						}));
 						if (!items.length) items.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {

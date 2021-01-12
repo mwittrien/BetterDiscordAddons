@@ -17,6 +17,7 @@
  - [Copy Raw Message](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CopyRawMessage) - Add a entry in the contextmenu when you right click a message that allows you to copy the raw contents of a message
  - [Creation Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CreationDate) - Display the Creation Date of an Account in the UserPopout and UserModal
  - [Custom Quoter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CustomQuoter) - Customize the output of the native quote feature of Discord
+ - [Custom Status Presets](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CustomStatusPresets) - Allows you to save custom statuses as quick select
  - [Display Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayLargeMessages) - Inject the contents of large messages that were sent by discord via 'message.txt'
  - [Display Servers As Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayServersAsChannels) - Display servers in a similar way as channels
  - [Edit Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditChannels) - Allow the user to locally change the name and color of channels

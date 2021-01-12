@@ -358,7 +358,7 @@ module.exports = (_ => {
 			}
 			
 			processChannelEditorContainer (e) {
-				if (!e.instance.props.disabled && e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && settings.changeInChatTextarea) {
+				if (!e.instance.props.disabled && e.instance.props.channel && e.instance.props.channel.isDM() && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && settings.changeInChatTextarea) {
 					let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channel.recipients[0]);
 					if (user) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `@${changedUsers[user.id] && changedUsers[user.id].name || user.username}`);
 				}
@@ -380,7 +380,7 @@ module.exports = (_ => {
 
 			processHeaderBarContainer (e) {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
-				if (channel && channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInDmHeader) {
+				if (channel && channel.isDM() && settings.changeInDmHeader) {
 					let userName = BDFDB.ReactUtils.findChild(e.instance, {name: "Title"});
 					if (userName) {
 						let recipientId = channel.getRecipientId();
@@ -391,7 +391,7 @@ module.exports = (_ => {
 			}
 
 			processChannelCallHeader (e) {
-				if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInDmHeader) {
+				if (e.instance.props.channel && e.instance.props.channel.isDM() && settings.changeInDmHeader) {
 					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Title"});
 					if (userName) {
 						let recipientId = e.instance.props.channel.getRecipientId();
@@ -553,7 +553,7 @@ module.exports = (_ => {
 			}
 
 			processPrivateChannelEmptyMessage (e) {
-				if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInChatWindow) {
+				if (e.instance.props.channel && e.instance.props.channel.isDM() && settings.changeInChatWindow) {
 					let recipientId = e.instance.props.channel.getRecipientId();
 					let name = this.getUserData(recipientId).username;
 					let avatar = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {props: "src"});
@@ -672,7 +672,8 @@ module.exports = (_ => {
 			}
 			
 			processReaction (e) {
-				if (e.instance.props.reactions) {
+				if (!settings.changeInReactions || !e.returnvalue) return;
+				if (e.instance.props.reactions && e.instance.props.reactions.length) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id);
 					let guildId = null == channel || channel.isPrivate() ? null : channel.getGuildId();
 					let users = e.instance.props.reactions.filter(user => !BDFDB.LibraryModules.FriendUtils.isBlocked(user.id)).slice(0, 3).map(user => changedUsers[user.id] && changedUsers[user.id].name || guildId && BDFDB.LibraryModules.MemberStore.getNick(guildId, user.id) || user.username).filter(user => user);
@@ -690,10 +691,13 @@ module.exports = (_ => {
 							BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_N", others, emojiName);
 					}
 				}
-				else BDFDB.LibraryModules.ReactionUtils.getReactions(e.instance.props.message.channel_id, e.instance.props.message.id, e.instance.props.emoji).then(reactions => {
-					e.instance.props.reactions = reactions;
-					BDFDB.ReactUtils.forceUpdate(e.instance);
-				});
+				else if (!e.instance.props.reactions) {
+					e.instance.props.reactions = [];
+					BDFDB.LibraryModules.ReactionUtils.getReactions(e.instance.props.message.channel_id, e.instance.props.message.id, e.instance.props.emoji).then(reactions => {
+						e.instance.props.reactions = reactions;
+						BDFDB.ReactUtils.forceUpdate(e.instance);
+					});
+				}
 			}
 			
 			processReactorsComponent (e) {
@@ -905,7 +909,7 @@ module.exports = (_ => {
 			}
 
 			processDirectMessage (e) {
-				if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInRecentDms) {
+				if (e.instance.props.channel && e.instance.props.channel.isDM() && settings.changeInRecentDms) {
 					let recipientId = e.instance.props.channel.getRecipientId();
 					let tooltip = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ListItemTooltip"});
 					if (tooltip) tooltip.props.text = this.getUserData(recipientId).username;
@@ -933,7 +937,7 @@ module.exports = (_ => {
 					}
 					else {
 						e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getUserData(e.instance.props.user.id).username});
-						this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true, modify: BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "hovered", "selected", "hasUnreadMessages", "muted")});
+						this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {modify: BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "hovered", "selected", "hasUnreadMessages", "muted")});
 						e.returnvalue.props.name = [e.returnvalue.props.name];
 						e.returnvalue.props.avatar.props.src = this.getUserAvatar(e.instance.props.user.id);
 						this.injectBadge(e.returnvalue.props.name, e.instance.props.user.id, null, 1);
@@ -977,7 +981,7 @@ module.exports = (_ => {
 					let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channelId);
 					if (!user) {
 						let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
-						if (channel && channel.type == BDFDB.DiscordConstants.ChannelTypes.DM) user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
+						if (channel && channel.isDM()) user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
 					}
 					if (user) {
 						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.callincomingtitle]]});
@@ -993,7 +997,7 @@ module.exports = (_ => {
 			}
 			
 			processRTCConnection (e) {
-				if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInRecentDms && typeof e.returnvalue.props.children == "function") {
+				if (e.instance.props.channel && e.instance.props.channel.isDM() && settings.changeInRecentDms && typeof e.returnvalue.props.children == "function") {
 					let recipientId = e.instance.props.channel.getRecipientId();
 					let renderChildren = e.returnvalue.props.children;
 					e.returnvalue.props.children = (...args) => {
@@ -1040,7 +1044,7 @@ module.exports = (_ => {
 			changeAppTitle () {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
 				let title = document.head.querySelector("title");
-				if (title && channel && channel.type == BDFDB.DiscordConstants.ChannelTypes.DM) {
+				if (title && channel && channel.isDM()) {
 					let user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
 					if (user) BDFDB.DOMUtils.setText(title, "@" + this.getUserData(user.id, settings.changeInAppTitle).username);
 				}
@@ -1412,11 +1416,11 @@ module.exports = (_ => {
 							
 							data.name = userNameInput.value.trim() || null;
 							data.tag = userTagInput.value.trim() || null;
-							data.url = (!data.removeIcon && BDFDB.DOMUtils.containsClass(userAvatarInput, BDFDB.disCN.inputsuccess) ? userAvatarInput.value.trim() : null) || null;
 							data.removeIcon = removeIconInput.checked;
+							data.url = (!data.removeIcon && BDFDB.DOMUtils.containsClass(userAvatarInput, BDFDB.disCN.inputsuccess) ? userAvatarInput.value.trim() : null) || null;
+							data.removeStatus = removeStatusInput.checked;
 							data.status = !data.removeStatus && userStatusInput.value.trim() || null;
 							data.statusEmoji = !data.removeStatus && BDFDB.ReactUtils.findValue(userStatusEmojiPicker, "emoji", {up: true}) || null;
-							data.removeStatus = removeStatusInput.checked;
 							data.useRoleColor = useRoleColorInput.checked;
 							data.ignoreTagColor = ignoreTagColorInput.checked;
 

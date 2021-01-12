@@ -297,7 +297,10 @@ module.exports = (_ => {
 				if (!requestedUsers[guildId]) requestedUsers[guildId] = {};
 				if (!BDFDB.ArrayUtils.is(requestedUsers[guildId][user.id])) {
 					requestedUsers[guildId][user.id] = [instance];
-					BDFDB.LibraryModules.APIUtils.get((isGuild ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(guildId) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(guildId)) + "?author_id=" + user.id).then(result => {
+					BDFDB.LibraryModules.APIUtils.get({
+						url: isGuild ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(guildId) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(guildId),
+						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({author_id: user.id})
+					}).then(result => {
 						if (typeof result.body.retry_after != "number") {
 							if (result.body.messages && Array.isArray(result.body.messages[0])) {
 								for (let message of result.body.messages[0]) if (message.hit && message.author.id == user.id) {

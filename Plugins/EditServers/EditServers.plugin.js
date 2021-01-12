@@ -632,21 +632,21 @@ module.exports = (_ => {
 						click: modal => {
 							let oldData = Object.assign({}, data);
 							
-							let guildnameinput = modal.querySelector(".input-guildname " + BDFDB.dotCN.input);
-							let guildacronyminput = modal.querySelector(".input-guildacronym " + BDFDB.dotCN.input);
-							let ignorecustomnameinput = modal.querySelector(".input-ignorecustomname " + BDFDB.dotCN.switchinner);
-							let guildiconinput = modal.querySelector(".input-guildicon " + BDFDB.dotCN.input);
-							let removeiconinput = modal.querySelector(".input-removeicon " + BDFDB.dotCN.switchinner);
-							let guildbannerinput = modal.querySelector(".input-guildbanner " + BDFDB.dotCN.input);
-							let removebannerinput = modal.querySelector(".input-removebanner " + BDFDB.dotCN.switchinner);
+							let guildNameInput = modal.querySelector(".input-guildname " + BDFDB.dotCN.input);
+							let guildAcronymInput = modal.querySelector(".input-guildacronym " + BDFDB.dotCN.input);
+							let ignoreCustomNameInput = modal.querySelector(".input-ignorecustomname " + BDFDB.dotCN.switchinner);
+							let guildIconInput = modal.querySelector(".input-guildicon " + BDFDB.dotCN.input);
+							let removeIconInput = modal.querySelector(".input-removeicon " + BDFDB.dotCN.switchinner);
+							let guildBannerInput = modal.querySelector(".input-guildbanner " + BDFDB.dotCN.input);
+							let removeBannerInput = modal.querySelector(".input-removebanner " + BDFDB.dotCN.switchinner);
 							
-							data.name = guildnameinput.value.trim() || null;
-							data.shortName = guildacronyminput.value.trim() || null;
-							data.ignoreCustomName = ignorecustomnameinput.checked;
-							data.url = (!data.removeIcon && BDFDB.DOMUtils.containsClass(guildiconinput, BDFDB.disCN.inputsuccess) ? guildiconinput.value.trim() : null) || null;
-							data.removeIcon = removeiconinput.checked;
-							data.banner = (!data.removeBanner && BDFDB.DOMUtils.containsClass(guildbannerinput, BDFDB.disCN.inputsuccess) ? guildbannerinput.value.trim() : null) || null;
-							data.removeBanner = removebannerinput.checked && guild.id != "410787888507256842";
+							data.name = guildAcronymInput.value.trim() || null;
+							data.shortName = guildAcronymInput.value.trim() || null;
+							data.ignoreCustomName = ignoreCustomNameInput.checked;
+							data.removeIcon = removeIconInput.checked;
+							data.url = (!data.removeIcon && BDFDB.DOMUtils.containsClass(guildIconInput, BDFDB.disCN.inputsuccess) ? guildIconInput.value.trim() : null) || null;
+							data.removeBanner = removeBannerInput.checked && guild.id != "410787888507256842";
+							data.banner = (!data.removeBanner && BDFDB.DOMUtils.containsClass(guildBannerInput, BDFDB.disCN.inputsuccess) ? guildBannerInput.value.trim() : null) || null;
 
 							data.color1 = BDFDB.ColorUtils.getSwatchColor(modal, 1);
 							data.color2 = BDFDB.ColorUtils.getSwatchColor(modal, 2);

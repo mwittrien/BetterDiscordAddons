@@ -4,19 +4,6 @@
 	--bdfdb-blurple: rgb(114, 137, 218);
 }
 
-#pluginNotice[class=" "], #pluginNotice[class=""] {
-	z-index: 999;
-	background: black;
-	color: white;
-	text-align: center;
-	pointer-events: all;
-}
-#pluginNotice[class=" "] span, #pluginNotice[class=""] span {
-	position: relative;
-	top: 10px;
-	color: white;
-}
-
 img:not([src]), img[src=""], img[src="null"] {
 	opacity: 0;
 }
@@ -184,18 +171,42 @@ img:not([src]), img[src=""], img[src="null"] {
 	border-bottom: 1px solid var(--background-modifier-accent);
 }
 
+[REPLACE_CLASS_pagination] {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+[REPLACE_CLASS_paginationtop] {
+	margin-bottom: 10px;
+}
+[REPLACE_CLASS_paginationbottom] {
+	margin-top: 10px;
+}
+[REPLACE_CLASS_pagination] [REPLACE_CLASS_paginationcontainer] {
+	width: unset;
+	margin: 0;
+}
+[REPLACE_CLASS_paginationmini][REPLACE_CLASS_paginationtop] {
+	margin-bottom: 5px;
+}
+[REPLACE_CLASS_paginationmini][REPLACE_CLASS_paginationbottom] {
+	margin-top: 5px;
+}
+[REPLACE_CLASS_paginationmini] [REPLACE_CLASS_paginationbutton],
+[REPLACE_CLASS_paginationmini] [REPLACE_CLASS_paginationgap] {
+	font-size: 14px;
+	margin: 4px 2px;
+}
+[REPLACE_CLASS_paginationmini] [REPLACE_CLASS_paginationgap] {
+	width: 20px;
+}
+[REPLACE_CLASS_paginationmini] [REPLACE_CLASS_inputwrapper] {
+	min-width: 54px;
+}
+
 [REPLACE_CLASS_paginationlist] {
 	height: 100%;
-}
-[REPLACE_CLASS_paginationlistpagination] {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 16px;
-	line-height: 20px;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	color: var(--text-normal);
 }
 [REPLACE_CLASS_paginationlistalphabet] {
 	display: flex;
@@ -217,12 +228,6 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_paginationlistalphabetchar][REPLACE_CLASS_paginationlistalphabetchardisabled] {
 	color: var(--text-muted);
 }
-[REPLACE_CLASS_paginationlistmini] [REPLACE_CLASS_paginationlistpagination] {
-	font-size: 14px;
-	line-height: 18px;
-	margin-top: 5px;
-	margin-bottom: 5px;
-}
 [REPLACE_CLASS_paginationlistmini] [REPLACE_CLASS_paginationlistalphabet] {
 	font-size: 14px;
 	line-height: 18px;
@@ -231,15 +236,6 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_paginationlistmini] [REPLACE_CLASS_paginationlistalphabetchar] {
 	min-width: 10px;
 	margin: 0 3px;
-}
-[REPLACE_CLASS_paginationlistmini] [REPLACE_CLASS_searchresultspaginationbutton] {
-	height: 16px;
-	width: 16px;
-	margin: 0 6px;
-}
-[REPLACE_CLASS_paginationlistmini] [REPLACE_CLASS_searchresultspaginationicon] {
-	height: 12px;
-	width: 12px;
 }
 
 [REPLACE_CLASS_overflowellipsis] {
@@ -880,9 +876,25 @@ img:not([src]), img[src=""], img[src="null"] {
 	border-radius: 3px;
 }
 
+#pluginNotice .notice-message {
+	white-space: pre;
+}
+#pluginNotice #outdatedPlugins span {
+	-webkit-app-region: no-drag;
+	color: #FFF;
+	cursor: pointer;
+}
+#pluginNotice #outdatedPlugins span:hover {
+	text-decoration: underline;
+}
 [REPLACE_CLASS_noticewrapper] {
-	transition: height 0.5s ease !important;
+	height: 36px  !important;
 	border-radius: 0 !important;
+	transition: height 10s ease !important;
+}
+[REPLACE_CLASS_noticeclosing] {
+	height: 0 !important;
+	overflow: hidden !important;
 }
 [REPLACE_CLASS_noticewrapper] [REPLACE_CLASS_noticeplatformicon] {
 	margin-top: -7px;
@@ -898,8 +910,15 @@ img:not([src]), img[src=""], img[src="null"] {
 	padding-top: 4px;
 }
 
+[REPLACE_CLASS_tooltip][REPLACE_CLASS_tooltipcustom],
+[REPLACE_CLASS_tooltiplistitem][REPLACE_CLASS_tooltipcustom] {
+	color: #FFF;
+}
 [REPLACE_CLASS_tooltip][REPLACE_CLASS_tooltipcustom] [REPLACE_CLASS_tooltippointer] {
 	border-top-color: inherit !important;
+}
+[REPLACE_CLASS_tooltiplistitem][REPLACE_CLASS_tooltipcustom] [REPLACE_CLASS_tooltipguildnametext] {
+	color: inherit;
 }
 
 [REPLACE_CLASS_tooltiprowextra]:empty {
@@ -1049,18 +1068,6 @@ img:not([src]), img[src=""], img[src="null"] {
 	[REPLACE_CLASS_layermodalmedium], [REPLACE_CLASS_modalsizemedium] {
 		max-height: 75vh;
 	}
-}
-
-#pluginNotice .notice-message {
-	white-space: pre;
-}
-#pluginNotice #outdatedPlugins span {
-	-webkit-app-region: no-drag;
-	color: #FFF;
-	cursor: pointer;
-}
-#pluginNotice #outdatedPlugins span:hover {
-	text-decoration: underline;
 }
 
 [REPLACE_CLASS_toasts] {

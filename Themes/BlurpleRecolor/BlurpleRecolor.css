@@ -265,6 +265,9 @@
 .image-3XsqGc[src="/assets/dc7e9e55b3a6d39d24acdd650ecc2ef3.svg"] {
 	object-position: -999999px -999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/chatnotice_followchannel_bg.svg) center/contain no-repeat;
+	width: 47px;
+	height: 60px;
+	margin-bottom: -8px;
 }
 .image-3XsqGc[src="/assets/dc7e9e55b3a6d39d24acdd650ecc2ef3.svg"] + * {
 	overflow: visible;
@@ -279,6 +282,28 @@
 	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/chatnotice_followchannel_accent.svg) center/contain no-repeat;
+}
+															/* textarea				verify email icon					*/
+.image-3XsqGc[src="/assets/b0df989dede2e65a2d631874ffe04de0.svg"] {
+	object-position: -999999px -999999px;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/chatnotice_verifyemail_bg.svg) center/contain no-repeat;
+	width: 65px;
+	height: 60px;
+	margin-bottom: -16px;
+}
+.image-3XsqGc[src="/assets/b0df989dede2e65a2d631874ffe04de0.svg"] + * {
+	overflow: visible;
+}
+.image-3XsqGc[src="/assets/b0df989dede2e65a2d631874ffe04de0.svg"] + *::after {
+	content: "";
+	position: absolute;
+	bottom: 0px;
+	left: 16px;
+	width: 65px;
+	height: 60px;
+	pointer-events: none;
+	background: rgb(var(--vaccentcolor));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/chatnotice_verifyemail_accent.svg) center/contain no-repeat;
 }
 
 /* ----		3.3.	AUTOCOMPLETEMENU				---- */
@@ -326,6 +351,10 @@
 
 /* ----		3.5.	SEARCHPAGE						---- */
 
+#app-mount .activeButton-rvKcqq,
+#app-mount .activeButton-rvKcqq:hover {
+	background-color: rgb(var(--vaccentcolor));
+}
 .noResultsImage-3Y0eCI.alt-3EpRdH {
 	display: flex;
 }
@@ -1020,6 +1049,9 @@
 	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 }
+.markup-2BOw-j > .attachment-33OFj0 {
+    position: relative;
+}
 .attachment-33OFj0 .icon-1kp3fr {
 	background-size: 120% !important;
 }
@@ -1033,6 +1065,11 @@
 	left: 8px;
 	width: 36px;
 	height: 48px;
+}
+.markup-2BOw-j > .attachment-33OFj0 .icon-1kp3fr + *::before,
+.markup-2BOw-j > .attachment-33OFj0 .icon-1kp3fr + *::after {
+	top: 6px;
+	left: 7px;
 }
 .audioMetadata-3zOuGv > *:first-child::before,
 .audioMetadata-3zOuGv > *:first-child::after {

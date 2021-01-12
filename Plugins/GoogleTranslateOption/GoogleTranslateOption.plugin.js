@@ -93,7 +93,6 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						useChromium: 			{value: false,			description: "Use an inbuilt browser window instead of opening your default browser"},
 						addTranslateButton:		{value: true, 			description: "Add an translate button to the chatbar"},
 						sendOriginalMessage:	{value: false, 			description: "Send the original message together with the translation"}
 					},
@@ -250,12 +249,15 @@ module.exports = (_ => {
 								let item = BDFDB.DOMUtils.getParent(BDFDB.dotCN.menuitem, event.target);
 								if (item) {
 									let createTooltip = _ => {
-										BDFDB.TooltipUtils.create(item, `From ${foundInput.name}:\n${text}\n\nTo ${foundOutput.name}:\n${foundTranslation}`, {type: "right", selector: "googletranslate-tooltip"});
+										BDFDB.TooltipUtils.create(item, `From ${foundInput.name}:\n${text}\n\nTo ${foundOutput.name}:\n${foundTranslation}`, {
+											type: "right",
+											className: "googletranslate-tooltip"
+										});
 									};
 									if (foundTranslation && foundInput && foundOutput) {
 										if (document.querySelector(".googletranslate-tooltip")) {
 											BDFDB.ContextMenuUtils.close(e.instance);
-											BDFDB.DiscordUtils.openLink(this.getGoogleTranslatePageURL(foundInput.id, foundOutput.id, text), settings.useChromium);
+											BDFDB.DiscordUtils.openLink(this.getGoogleTranslatePageURL(foundInput.id, foundOutput.id, text));
 										}
 										else createTooltip();
 									}

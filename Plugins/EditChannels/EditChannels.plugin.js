@@ -14,12 +14,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.2.1",
+			"version": "4.2.3",
 			"description": "Allow you to rename and recolor channelnames"
 		},
 		"changeLog": {
 			"improved": {
-				"Reset Confirmation": "Trying to reset a channel will first ask for permission, holding Shift will skip this"
+				"Groups": "You can now change the name/color/icon of group channels"
+			},
+			"fixed": {
+				"Categories": "Gradient works for categories again",
+				"Icons": "Colors icons properly again"
 			}
 		}
 	};
@@ -72,8 +76,9 @@ module.exports = (_ => {
 						changeChannelIcon:		{value: true, 	inner: false,		description: "Change color of Channel Icon"},
 						changeInChatTextarea:	{value: true, 	inner: true,		description: "Chat Textarea"},
 						changeInMentions:		{value: true, 	inner: true,		description: "Mentions"},
-						changeInChannelList:	{value: true, 	inner: true,		description: "Channel List"},
-						changeInChannelHeader:	{value: true, 	inner: true,		description: "Channel Header"},
+						changeInChannelList:	{value: true, 	inner: true,		description: "Channel/Group List"},
+						changeInChannelHeader:	{value: true, 	inner: true,		description: "Channel/Group Header"},
+						changeInRecentDms:		{value: true, 	inner: true,		description: "Group Notifications"},
 						changeInRecentMentions:	{value: true, 	inner: true,		description: "Recent Mentions Popout"},
 						changeInAutoComplete:	{value: true, 	inner: true,		description: "Autocomplete Menu"},
 						changeInAuditLog:		{value: true, 	inner: true,		description: "Audit Log"},
@@ -101,6 +106,8 @@ module.exports = (_ => {
 						HeaderBarContainer: "render",
 						FocusRing: "default",
 						ChannelItem: "default",
+						DirectMessage: "render",
+						PrivateChannel: "render",
 						QuickSwitchChannelResult: "render",
 						RecentsChannelHeader: "default",
 						ChannelMention: "ChannelMention"
@@ -117,7 +124,7 @@ module.exports = (_ => {
 			
 			onStart () {
 				let observer = new MutationObserver(_ => {this.changeAppTitle();});
-				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name: "appTitleObserver",instance: observer}, {childList: true});
+				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name: "appTitleObserver", instance: observer}, {childList: true});
 				
 				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.CHANNELS, "queryResults", {after: e => {
 					let channelArray = [];
@@ -198,6 +205,14 @@ module.exports = (_ => {
 			}
 
 			onChannelContextMenu (e) {
+				this.injectItem(e);
+			}
+			
+			onGroupDMContextMenu (e) {
+				this.injectItem(e);
+			}
+			
+			injectItem (e) {
 				if (e.instance.props.channel) {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 					children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
@@ -280,12 +295,15 @@ module.exports = (_ => {
 
 			processHeaderBarContainer (e) {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
-				if (channel && BDFDB.ChannelUtils.isTextChannel(channel) && settings.changeInChannelHeader) {
+				if (channel && (BDFDB.ChannelUtils.isTextChannel(channel) || channel.isGroupDM())  && settings.changeInChannelHeader) {
 					if (!e.returnvalue) {
-						let channelName = BDFDB.ReactUtils.findChild(e.instance, {name: "Title"});
+						let channelName = BDFDB.ReactUtils.findChild(e.instance, {name: ["Title", "ChannelName"]});
 						if (channelName) {
-							channelName.props.children = this.getChannelData(channel.id).name;
-							this.changeChannelColor(channelName, channel.id);
+							if (channelName.props.children) {
+								channelName.props.children = channel.isGroupDM() ? this.getGroupName(channel.id) : this.getChannelData(channel.id).name;
+								this.changeChannelColor(channelName, channel.id);
+							}
+							if (channelName.props.channel) channelName.props.channel = this.getChannelData(channel.id);
 						}
 					}
 					else {
@@ -311,7 +329,7 @@ module.exports = (_ => {
 						let channelId = dataListId.split("_").pop();
 						let modify = {muted: BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(BDFDB.LibraryModules.LastGuildStore.getGuildId(), channelId)};
 						let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.categoryname]]});
-						if (categoryName) this.changeChannelColor(categoryName, channelId, modify);
+						if (categoryName) this.changeChannelColor(categoryName.props && categoryName.props.children || categoryName, channelId, modify);
 						let categoryIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.categoryicon]]});
 						if (categoryIcon) this.changeChannelIconColor(categoryIcon, channelId, Object.assign({alpha: 0.6}, modify));
 					}
@@ -329,9 +347,48 @@ module.exports = (_ => {
 						let modify = BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "muted", "locked", "selected", "unread", "connected", "hovered");
 						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelname]]});
 						if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id, modify);
-						let channelIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelicon]]});
-						if (channelIcon) this.changeChannelIconColor(channelIcon, e.instance.props.channel.id, Object.assign({alpha: 0.6}, modify));
+						let channelIcon = settings.changeChannelIcon && BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelItemIcon"});
+						if (channelIcon && typeof channelIcon.type == "function") {
+							let type = channelIcon.type;
+							channelIcon.type = (...args) => {
+								let returnValue = type(...args);
+								if (returnValue && typeof returnValue.props.children == "function") {
+									let childrenRender = returnValue.props.children;
+									returnValue.props.children = (...args2) => {
+										let renderedChildren = childrenRender(...args2);
+										this.changeChannelIconColor(renderedChildren.props.children, e.instance.props.channel.id, Object.assign({alpha: 0.6}, modify));
+										return renderedChildren;
+									};
+								}
+								return returnValue;
+							};
+						}
 					}
+				}
+			}
+
+			processDirectMessage (e) {
+				if (e.instance.props.channel && e.instance.props.channel.isGroupDM() && settings.changeInRecentDms) {
+					let tooltip = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ListItemTooltip"});
+					if (tooltip) tooltip.props.text = this.getGroupName(e.instance.props.channel.id);
+					let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: c => c && c.props && !isNaN(parseInt(c.props.id))});
+					if (avatar && typeof avatar.props.children == "function") {
+						let childrenRender = avatar.props.children;
+						avatar.props.children = (...args) => {
+							let renderedChildren = childrenRender(...args);
+							if (renderedChildren && renderedChildren.props) renderedChildren.props.icon = this.getGroupIcon(e.instance.props.channel.id);
+							return renderedChildren;
+						};
+					}
+				}
+			}
+
+			processPrivateChannel (e) {
+				if (e.instance.props.channel && e.instance.props.channel.isGroupDM() && settings.changeInChannelList) {
+					e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
+					this.changeChannelColor(e.returnvalue.props.name, e.instance.props.channel.id, {modify: BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "hovered", "selected", "hasUnreadMessages", "muted")});
+					e.returnvalue.props.name = [e.returnvalue.props.name];
+					e.returnvalue.props.avatar.props.src = this.getGroupIcon(e.instance.props.channel.id);
 				}
 			}
 			
@@ -459,7 +516,10 @@ module.exports = (_ => {
 			changeAppTitle () {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
 				let title = document.head.querySelector("title");
-				if (title && BDFDB.ChannelUtils.isTextChannel(channel)) BDFDB.DOMUtils.setText(title, "@" + this.getChannelData(channel.id, settings.changeAppTitle).name);
+				if (title) {
+					if (BDFDB.ChannelUtils.isTextChannel(channel)) BDFDB.DOMUtils.setText(title, "#" + this.getChannelData(channel.id, settings.changeAppTitle).name);
+					else if (channel.isGroupDM()) BDFDB.DOMUtils.setText(title, this.getGroupName(channel.id, settings.changeAppTitle));
+				}
 			}
 			
 			changeChannelColor (child, channelId, modify) {
@@ -482,7 +542,7 @@ module.exports = (_ => {
 			}
 			
 			changeChannelIconColor (child, channelId, modify) {
-				let color = this.getChannelDataColor(channelId);
+				let color = child && this.getChannelDataColor(channelId);
 				if (color && settings.changeChannelIcon) {
 					color = modify ? this.chooseColor(BDFDB.ObjectUtils.is(color) ? color[0] : color, modify) : BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color) ? color[0] : color, "RGBA");
 					child.props.color = color || "currentColor";
@@ -525,6 +585,24 @@ module.exports = (_ => {
 				}
 				return new BDFDB.DiscordObjects.Channel(channel);
 			}
+			
+			getGroupName (channelId, change = true) {
+				let channel = this.getChannelData(channelId, change);
+				if (channel.name) return channel.name;
+				let recipients = channel.recipients.map(BDFDB.LibraryModules.UserStore.getUser).filter(n => n);
+				return recipients.length > 0 ? recipients.map(u => u.toString()).join(", ") : BDFDB.LanguageUtils.LanguageStrings.UNNAMED;
+			}
+			
+			getGroupIcon (channelId, change = true) {
+				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
+				if (!channel) return "";
+				let data = change && changedChannels[channel.id];
+				if (data) {
+					if (data.removeIcon) return "";
+					else if (data.url) return data.url;
+				}
+				return BDFDB.LibraryModules.IconUtils.getChannelIconURL(channel);
+			}
 
 			openChannelSettingsModal (channel) {
 				let data = changedChannels[channel.id] || {};
@@ -558,14 +636,64 @@ module.exports = (_ => {
 								})
 							]
 						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+						!channel.isGroupDM() && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Switch",
 							className: "input-inheritcolor",
 							margin: 20,
 							label: this.labels.modal_inheritcolor,
 							tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-							value: channel.type == 4 && data.inheritColor,
-							disabled: channel.type != 4
+							value: channel.isCategory() && data.inheritColor,
+							disabled: !channel.isCategory()
+						}),
+						channel.isGroupDM() && BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.marginbottom20,
+							children: [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+									className: BDFDB.disCNS.dividerdefault + BDFDB.disCN.marginbottom20
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+									className: BDFDB.disCN.marginbottom8,
+									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+									direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
+									children: [
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+											className: BDFDB.disCN.marginreset,
+											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+											children: this.labels.modal_channelicon
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+											className: "input-removeicon",
+											type: "Switch",
+											margin: 0,
+											grow: 0,
+											label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
+											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+											value: data.removeIcon,
+											onChange: (value, instance) => {
+												let iconInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return`), {key: "CHANNELICON"});
+												if (iconInputIns) {
+													delete iconInputIns.props.success;
+													delete iconInputIns.props.errorMessage;
+													iconInputIns.props.disabled = value;
+													BDFDB.ReactUtils.forceUpdate(iconInputIns);
+												}
+											}
+										})
+									]
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+									className: "input-channelicon",
+									key: "CHANNELICON",
+									success: !data.removeIcon && data.url,
+									maxLength: 100000000000000000000,
+									value: data.url,
+									placeholder: BDFDB.DMUtils.getIcon(channel.id),
+									disabled: data.removeIcon,
+									onChange: (value, instance) => {
+										this.checkUrl(value, instance);
+									}
+								})
+							]
 						})
 					],
 					buttons: [{
@@ -575,7 +703,12 @@ module.exports = (_ => {
 						click: modal => {
 							let oldData = Object.assign({}, data);
 							
-							data.name = modal.querySelector(".input-channelname " + BDFDB.dotCN.input).value.trim() || null;
+							let channelNameInput = modal.querySelector(".input-channelname " + BDFDB.dotCN.input);
+							let inheritColorInput = modal.querySelector(".input-inheritcolor " + BDFDB.dotCN.switchinner);
+							let channelIconInput = modal.querySelector(".input-channelicon " + BDFDB.dotCN.input);
+							let removeIconInput = modal.querySelector(".input-removeicon " + BDFDB.dotCN.switchinner);
+							
+							data.name = channelNameInput.value.trim() || null;
 
 							data.color = BDFDB.ColorUtils.getSwatchColor(modal, 1);
 							if (data.color != null && !BDFDB.ObjectUtils.is(data.color)) {
@@ -583,7 +716,9 @@ module.exports = (_ => {
 								else if (data.color[0] > 225 && data.color[1] > 225 && data.color[2] > 225) data.color = BDFDB.ColorUtils.change(data.color, -30);
 							}
 
-							data.inheritColor = modal.querySelector(".input-inheritcolor " + BDFDB.dotCN.switchinner).checked;
+							data.inheritColor = inheritColorInput && inheritColorInput.checked;
+							data.removeIcon = removeIconInput && removeIconInput.checked;
+							data.url = channelIconInput && (!data.removeIcon && BDFDB.DOMUtils.containsClass(channelIconInput, BDFDB.disCN.inputsuccess) ? channelIconInput.value.trim() : null) || null;
 							
 							let changed = false;
 							if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.DataUtils.remove(this, "channels", channel.id);
@@ -592,6 +727,29 @@ module.exports = (_ => {
 						}
 					}]
 				});
+			}
+			
+			checkUrl (url, instance) {
+				BDFDB.TimeUtils.clear(instance.checkTimeout);
+				if (url == null || !url.trim()) {
+					delete instance.props.success;
+					delete instance.props.errorMessage;
+					instance.forceUpdate();
+				}
+				else instance.checkTimeout = BDFDB.TimeUtils.timeout(_ => {
+					BDFDB.LibraryRequires.request(url.trim(), (error, response, result) => {
+						if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
+							instance.props.success = true;
+							delete instance.props.errorMessage;
+						}
+						else {
+							delete instance.props.success;
+							instance.props.errorMessage = this.labels.modal_invalidurl;
+						}
+						delete instance.checkTimeout;
+						instance.forceUpdate();
+					});
+				}, 1000);
 			}
 
 			setLabelsByLanguage () {
@@ -602,6 +760,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Наистина ли искате да нулирате всички канали?",
 							context_localchannelsettings:		"Настройки на местния канал",
 							modal_channelname:					"Име на местния канал",
+							modal_channelicon:					"Икона",
 							modal_colorpicker1:					"Локален цвят на канала",
 							modal_header:						"Настройки на местния канал",
 							modal_inheritcolor:					"Наследете цвета на подканали",
@@ -614,6 +773,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Er du sikker på, at du vil nulstille alle kanaler?",
 							context_localchannelsettings:		"Lokale kanalindstillinger",
 							modal_channelname:					"Lokalt kanalnavn",
+							modal_channelicon:					"Ikon",
 							modal_colorpicker1:					"Lokal kanalfarve",
 							modal_header:						"Lokale kanalindstillinger",
 							modal_inheritcolor:					"Arv farve til underkanaler",
@@ -626,6 +786,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Möchtest du wirklich alle Kanäle zurücksetzen?",
 							context_localchannelsettings:		"Lokale Kanaleinstellungen",
 							modal_channelname:					"Lokaler Kanalname",
+							modal_channelicon:					"Symbol",
 							modal_colorpicker1:					"Lokale Kanalfarbe",
 							modal_header:						"Lokale Kanaleinstellungen",
 							modal_inheritcolor:					"Vererbung der Farbe an Unterkanäle",
@@ -638,6 +799,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλα τα κανάλια;",
 							context_localchannelsettings:		"Ρυθμίσεις τοπικού καναλιού",
 							modal_channelname:					"Τοπικό όνομα καναλιού",
+							modal_channelicon:					"Εικόνισμα",
 							modal_colorpicker1:					"Τοπικό χρώμα καναλιού",
 							modal_header:						"Ρυθμίσεις τοπικού καναλιού",
 							modal_inheritcolor:					"Κληρονομήστε το χρώμα στα δευτερεύοντα κανάλια",
@@ -650,6 +812,7 @@ module.exports = (_ => {
 							confirm_resetall:					"¿Está seguro de que desea restablecer todos los canales?",
 							context_localchannelsettings:		"Configuración de canal local",
 							modal_channelname:					"Nombre del canal local",
+							modal_channelicon:					"Icono",
 							modal_colorpicker1:					"Color del canal local",
 							modal_header:						"Configuración de canal local",
 							modal_inheritcolor:					"Heredar color a subcanales",
@@ -662,6 +825,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Haluatko varmasti nollata kaikki kanavat?",
 							context_localchannelsettings:		"Paikallisen kanavan asetukset",
 							modal_channelname:					"Paikallisen kanavan nimi",
+							modal_channelicon:					"Kuvake",
 							modal_colorpicker1:					"Paikallisen kanavan väri",
 							modal_header:						"Paikallisen kanavan asetukset",
 							modal_inheritcolor:					"Peri väri alikanaville",
@@ -674,6 +838,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Voulez-vous vraiment réinitialiser toutes les salons?",
 							context_localchannelsettings:		"Paramètres  de la salon",
 							modal_channelname:					"Nom local de la salon",
+							modal_channelicon:					"Icône",
 							modal_colorpicker1:					"Couleur locale de la salon",
 							modal_header:						"Paramètres locaux de la salon",
 							modal_inheritcolor:					"Hériter de la couleur aux sous-canaux",
@@ -686,6 +851,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Jeste li sigurni da želite resetirati sve kanale?",
 							context_localchannelsettings:		"Postavke lokalnog kanala",
 							modal_channelname:					"Naziv lokalnog kanala",
+							modal_channelicon:					"Ikona",
 							modal_colorpicker1:					"Lokalna boja kanala",
 							modal_header:						"Postavke lokalnog kanala",
 							modal_inheritcolor:					"Naslijedi boju na podkanalima",
@@ -698,6 +864,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Biztosan visszaállítja az összes csatornát?",
 							context_localchannelsettings:		"Helyi csatorna beállításai",
 							modal_channelname:					"Helyi csatorna neve",
+							modal_channelicon:					"Ikon",
 							modal_colorpicker1:					"Helyi csatorna színe",
 							modal_header:						"Helyi csatorna beállításai",
 							modal_inheritcolor:					"Örökli a színt az alcsatornákra",
@@ -710,6 +877,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Sei sicuro di voler ripristinare tutti i canali?",
 							context_localchannelsettings:		"Impostazioni del canale locale",
 							modal_channelname:					"Nome canale locale",
+							modal_channelicon:					"Icona",
 							modal_colorpicker1:					"Colore canale locale",
 							modal_header:						"Impostazioni del canale locale",
 							modal_inheritcolor:					"Eredita colore ai canali secondari",
@@ -722,6 +890,7 @@ module.exports = (_ => {
 							confirm_resetall:					"すべてのチャンネルをリセットしてもよろしいですか？",
 							context_localchannelsettings:		"ローカルチャンネル設定",
 							modal_channelname:					"ローカルチャネル名",
+							modal_channelicon:					"アイコン",
 							modal_colorpicker1:					"ローカルチャンネルの色",
 							modal_header:						"ローカルチャンネル設定",
 							modal_inheritcolor:					"サブチャネルに色を継承する",
@@ -734,6 +903,7 @@ module.exports = (_ => {
 							confirm_resetall:					"모든 채널을 재설정 하시겠습니까?",
 							context_localchannelsettings:		"로컬 채널 설정",
 							modal_channelname:					"로컬 채널 이름",
+							modal_channelicon:					"상",
 							modal_colorpicker1:					"로컬 채널 색상",
 							modal_header:						"로컬 채널 설정",
 							modal_inheritcolor:					"하위 채널에 색상 상속",
@@ -746,6 +916,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Ar tikrai norite iš naujo nustatyti visus kanalus?",
 							context_localchannelsettings:		"Vietinio kanalo nustatymai",
 							modal_channelname:					"Vietinio kanalo pavadinimas",
+							modal_channelicon:					"Piktograma",
 							modal_colorpicker1:					"Vietinio kanalo spalva",
 							modal_header:						"Vietinio kanalo nustatymai",
 							modal_inheritcolor:					"Paveldėkite spalvas subkanalams",
@@ -758,6 +929,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Weet u zeker dat u alle kanalen opnieuw wilt instellen?",
 							context_localchannelsettings:		"Lokale kanaalinstellingen",
 							modal_channelname:					"Lokale kanaalnaam",
+							modal_channelicon:					"Icoon",
 							modal_colorpicker1:					"Lokale kanaalkleur",
 							modal_header:						"Lokale kanaalinstellingen",
 							modal_inheritcolor:					"Overerf kleur naar subkanalen",
@@ -770,6 +942,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Er du sikker på at du vil tilbakestille alle kanaler?",
 							context_localchannelsettings:		"Lokale kanalinnstillinger",
 							modal_channelname:					"Lokalt kanalnavn",
+							modal_channelicon:					"Ikon",
 							modal_colorpicker1:					"Lokal kanalfarge",
 							modal_header:						"Lokale kanalinnstillinger",
 							modal_inheritcolor:					"Arv farge til underkanaler",
@@ -782,6 +955,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Czy na pewno chcesz zresetować wszystkie kanały?",
 							context_localchannelsettings:		"Ustawienia kanału lokalnego",
 							modal_channelname:					"Nazwa kanału lokalnego",
+							modal_channelicon:					"Ikona",
 							modal_colorpicker1:					"Kolor kanału lokalnego",
 							modal_header:						"Ustawienia kanału lokalnego",
 							modal_inheritcolor:					"Dziedzicz kolor do kanałów podrzędnych",
@@ -794,6 +968,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Tem certeza de que deseja redefinir todos os canais?",
 							context_localchannelsettings:		"Configurações de canal local",
 							modal_channelname:					"Nome do canal local",
+							modal_channelicon:					"Ícone",
 							modal_colorpicker1:					"Cor do Canal Local",
 							modal_header:						"Configurações de canal local",
 							modal_inheritcolor:					"Herdar cor para subcanais",
@@ -806,6 +981,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Sigur doriți să resetați toate canalele?",
 							context_localchannelsettings:		"Setări canale locale",
 							modal_channelname:					"Numele canalului local",
+							modal_channelicon:					"Pictogramă",
 							modal_colorpicker1:					"Culoare canal local",
 							modal_header:						"Setări canale locale",
 							modal_inheritcolor:					"Moșteniți culoarea la sub-canale",
@@ -818,6 +994,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Вы уверены, что хотите сбросить все каналы?",
 							context_localchannelsettings:		"Настройки локального канала",
 							modal_channelname:					"Имя локального канала",
+							modal_channelicon:					"Икона",
 							modal_colorpicker1:					"Цвет локального канала",
 							modal_header:						"Настройки локального канала",
 							modal_inheritcolor:					"Наследовать цвет для субканалов",
@@ -830,6 +1007,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Är du säker på att du vill återställa alla kanaler?",
 							context_localchannelsettings:		"Lokala kanalinställningar",
 							modal_channelname:					"Lokalt kanalnamn",
+							modal_channelicon:					"Ikon",
 							modal_colorpicker1:					"Lokal kanalfärg",
 							modal_header:						"Lokala kanalinställningar",
 							modal_inheritcolor:					"Ärva färg till underkanaler",
@@ -842,6 +1020,7 @@ module.exports = (_ => {
 							confirm_resetall:					"แน่ใจไหมว่าต้องการรีเซ็ตช่องทั้งหมด",
 							context_localchannelsettings:		"การตั้งค่าช่องท้องถิ่น",
 							modal_channelname:					"ชื่อช่องท้องถิ่น",
+							modal_channelicon:					"ไอคอน",
 							modal_colorpicker1:					"ช่องท้องถิ่นสี",
 							modal_header:						"การตั้งค่าช่องท้องถิ่น",
 							modal_inheritcolor:					"สืบทอดสีไปยังช่องย่อย",
@@ -854,6 +1033,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Tüm kanalları sıfırlamak istediğinizden emin misiniz?",
 							context_localchannelsettings:		"Yerel Kanal Ayarları",
 							modal_channelname:					"Yerel Kanal Adı",
+							modal_channelicon:					"Simge",
 							modal_colorpicker1:					"Yerel Kanal Rengi",
 							modal_header:						"Yerel Kanal Ayarları",
 							modal_inheritcolor:					"Renkleri Alt Kanallara Devral",
@@ -866,6 +1046,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Ви впевнені, що хочете скинути всі канали?",
 							context_localchannelsettings:		"Налаштування локального каналу",
 							modal_channelname:					"Назва місцевого каналу",
+							modal_channelicon:					"Піктограма",
 							modal_colorpicker1:					"Колір локального каналу",
 							modal_header:						"Налаштування локального каналу",
 							modal_inheritcolor:					"Успадковувати колір для підканалів",
@@ -878,6 +1059,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Bạn có chắc chắn muốn đặt lại tất cả các kênh không?",
 							context_localchannelsettings:		"Cài đặt kênh cục bộ",
 							modal_channelname:					"Tên kênh địa phương",
+							modal_channelicon:					"Biểu tượng",
 							modal_colorpicker1:					"Màu kênh địa phương",
 							modal_header:						"Cài đặt kênh cục bộ",
 							modal_inheritcolor:					"Kế thừa màu cho các kênh phụ",
@@ -890,6 +1072,7 @@ module.exports = (_ => {
 							confirm_resetall:					"您确定要重置所有频道吗？",
 							context_localchannelsettings:		"本地频道设置",
 							modal_channelname:					"本地频道名称",
+							modal_channelicon:					"图标",
 							modal_colorpicker1:					"本地频道颜色",
 							modal_header:						"本地频道设置",
 							modal_inheritcolor:					"继承颜色到子通道",
@@ -902,6 +1085,7 @@ module.exports = (_ => {
 							confirm_resetall:					"您確定要重置所有頻道嗎？",
 							context_localchannelsettings:		"本地頻道設置",
 							modal_channelname:					"本地頻道名稱",
+							modal_channelicon:					"圖標",
 							modal_colorpicker1:					"本地頻道顏色",
 							modal_header:						"本地頻道設置",
 							modal_inheritcolor:					"繼承顏色到子通道",
@@ -914,6 +1098,7 @@ module.exports = (_ => {
 							confirm_resetall:					"Are you sure you want to reset all Channels?",
 							context_localchannelsettings:		"Local Channel Settings",
 							modal_channelname:					"Local Channel Name",
+							modal_channelicon:					"Icon",
 							modal_colorpicker1:					"Local Channel Color",
 							modal_header:						"Local Channel Settings",
 							modal_inheritcolor:					"Inherit Color to Sub-Channels",

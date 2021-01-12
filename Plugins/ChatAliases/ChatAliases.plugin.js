@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.2.2",
+			"version": "2.2.3",
 			"description": "Allow the user to configure their own chat-aliases which will automatically be replaced before the message is being sent"
 		},
 		"changeLog": {
 			"fixed": {
-				"File aliases with replies": "Now properly adds the reply to a file alias if the rest of the message is empty"
+				"Command List": "Fixed issue where command list and autocomplete menu could be open at the same time on top of each other"
 			}
 		}
 	};
@@ -76,15 +76,15 @@ module.exports = (_ => {
 						file: 				{value: false,		description: "Handle the replacevalue as a filepath"}
 					},
 					settings: {
-						replaceBeforeSend:	{value: true, 		inner: false,	description: "Replace words with your aliases before a message is sent"},
-						addContextMenu:		{value: true, 		inner: false,	description: "Add a contextmenu entry to faster add new aliases"},
-						addAutoComplete:	{value: true, 		inner: false,	description: "Add an autocomplete-menu for non-RegExp aliases"},
+						replaceBeforeSend:	{value: true, 		inner: false,		description: "Replace words with your aliases before a message is sent"},
+						addContextMenu:		{value: true, 		inner: false,		description: "Add a contextmenu entry to faster add new aliases"},
+						addAutoComplete:	{value: true, 		inner: false,		description: "Add an autocomplete-menu for non-RegExp aliases"},
 						triggerNormal:		{value: true, 		inner: true,		description: "Normal Message Textarea"},
 						triggerEdit:		{value: true, 		inner: true,		description: "Edit Message Textarea"},
 						triggerUpload:		{value: true, 		inner: true,		description: "Upload Message Prompt"}
 					},
 					amounts: {
-						minAliasLength:		{value: 2, 			min: 1,	description: "Minimal Character Length to open Autocomplete-Menu: "}
+						minAliasLength:		{value: 2, 			min: 1,				description: "Minimal Character Length to open Autocomplete-Menu: "}
 					}
 				};
 				
@@ -140,6 +140,7 @@ module.exports = (_ => {
 							return false;
 						},
 						queryResults: (channel, wordLowercase, config, rawValue) => {
+							if (rawValue == commandSentinel) return;
 							let currentLastWord = BDFDB.StringUtils.findMatchCaseless(wordLowercase, rawValue, true);
 							let matches = [];
 							for (let word in aliases) {
