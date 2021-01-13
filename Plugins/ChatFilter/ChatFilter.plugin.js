@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatFilter",
 			"author": "DevilBro",
-			"version": "3.4.4",
+			"version": "3.4.5",
 			"description": "Allow the user to censor words or block complete messages based on words in the chatwindow"
+		},
+		"changeLog": {
+			"fixed": {
+				"Embeds": "Now also checks the description of embeds for blocked/censored words"
+			}
 		}
 	};
 
@@ -83,7 +88,8 @@ module.exports = (_ => {
 					after: {
 						Messages: "type",
 						Message: "default",
-						MessageContent: "type"
+						MessageContent: "type",
+						Embed: "render"
 					}
 				};
 				
@@ -295,39 +301,42 @@ module.exports = (_ => {
 			}
 			
 			checkMessage (stream, message) {
-				let {blocked, censored, content} = this.parseMessage(message);
-				if (blocked) {
-					if (!oldBlockedMessages[message.id]) oldBlockedMessages[message.id] = new BDFDB.DiscordObjects.Message(message);
-					stream.content.content = content;
-					stream.content.embeds = [];
-				}
-				else if (oldBlockedMessages[message.id] && Object.keys(message).some(key => !BDFDB.equals(oldBlockedMessages[message.id][key], message[key]))) {
-					stream.content.content = oldBlockedMessages[message.id].content;
-					stream.content.embeds = oldBlockedMessages[message.id].embeds;
-					delete oldBlockedMessages[message.id];
-				}
-				if (censored) {
-					if (!oldCensoredMessages[message.id]) oldCensoredMessages[message.id] = new BDFDB.DiscordObjects.Message(message);
-					stream.content.content = content;
-				}
-				else if (oldCensoredMessages[message.id] && Object.keys(message).some(key => !BDFDB.equals(oldCensoredMessages[message.id][key], message[key]))) {
-					stream.content.content = oldCensoredMessages[message.id].content;
-					delete oldCensoredMessages[message.id];
-				}
+				let {blocked, censored, content, embeds} = this.parseMessage(message);
+				let changeMessage = (change, cache) => {
+					if (change) {
+						if (!cache[message.id]) cache[message.id] = new BDFDB.DiscordObjects.Message(message);
+						stream.content.content = content;
+						stream.content.embeds = embeds;
+					}
+					else if (cache[message.id] && Object.keys(message).some(key => !BDFDB.equals(cache[message.id][key], message[key]))) {
+						stream.content.content = cache[message.id].content;
+						stream.content.embeds = cache[message.id].embeds;
+						delete cache[message.id];
+					}
+				};
+				changeMessage(blocked, oldBlockedMessages);
+				changeMessage(censored, oldCensoredMessages);
 			}
 
 			processMessage (e) {
 				let message = BDFDB.ObjectUtils.get(e, "instance.props.childrenMessageContent.props.message");
 				if (message) {
 					if (oldBlockedMessages[message.id]) e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._chatfilterblocked);
-					else if (oldCensoredMessages[message.id]) e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._chatfiltercensored);
+					if (oldCensoredMessages[message.id] && message.content != oldCensoredMessages[message.id].content) e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._chatfiltercensored);
 				}
 			}
 
 			processMessageContent (e) {
 				if (e.instance.props.message) {
 					if (oldBlockedMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldBlockedMessages[e.instance.props.message.id].content, "blocked"));
-					else if (oldCensoredMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldCensoredMessages[e.instance.props.message.id].content, "censored"));
+					if (oldCensoredMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldCensoredMessages[e.instance.props.message.id].content, "censored"));
+				}
+			}
+
+			processEmbed (e) {
+				if (e.instance.props.embed && e.instance.props.embed.censored && oldCensoredMessages[e.instance.props.embed.message_id]) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.embeddescription]]});
+					if (index > -1) children[index].props.children.push(this.createStamp(oldCensoredMessages[e.instance.props.embed.message_id].embeds[e.instance.props.embed.index].rawDescription, "censored"));
 				}
 			}
 			
@@ -343,16 +352,20 @@ module.exports = (_ => {
 			}
 
 			parseMessage (message) {			
-				let blocked = false, censored = false, content = (oldBlockedMessages[message.id] || oldCensoredMessages[message.id] || {}).content || message.content;
-				if (content && typeof content == "string") {
+				let blocked = false, censored = false;
+				let content = (oldBlockedMessages[message.id] || oldCensoredMessages[message.id] || {}).content || message.content;
+				let embeds = [].concat((oldBlockedMessages[message.id] || oldCensoredMessages[message.id] || {}).embeds || message.embeds);
+				let isContent = content && typeof content == "string";
+				if (isContent || embeds.length) {
 					let blockedReplace;
 					for (let bWord in words.blocked) {
+						let compareContent = [isContent && content, embeds.map(e => e.rawDescription)].flat(10).filter(n => n).join(" ");
 						blockedReplace = words.blocked[bWord].empty ? "" : (words.blocked[bWord].replace || replaces.blocked);
 						let reg = this.createReg(bWord, words.blocked[bWord]);
 						if (words.blocked[bWord].regex || bWord.indexOf(" ") > -1) {
-							if (this.testWord(content, reg)) blocked = true;
+							if (isContent && this.testWord(compareContent, reg)) blocked = true;
 						}
-						else for (let word of content.replace(/([\n\t\r])/g, " $1 ").split(" ")) {
+						else for (let word of compareContent.replace(/([\n\t\r])/g, " $1 ").split(" ")) {
 							if (this.testWord(word, reg)) {
 								blocked = true;
 								break;
@@ -360,33 +373,46 @@ module.exports = (_ => {
 						}
 						if (blocked) break;
 					}
-					if (blocked) return {blocked, censored, content: blockedReplace};
+					if (blocked) return {blocked, censored, content: blockedReplace, embeds: []};
 					else {
-						content = content.replace(/([\n\t\r])/g, " $1 ");
-						for (let cWord in words.censored) {
-							let censoredReplace = words.censored[cWord].empty ? "" : (words.censored[cWord].replace || replaces.censored);
-							let reg = this.createReg(cWord, words.censored[cWord]);
-							let newString = [];
-							if (words.censored[cWord].regex || cWord.indexOf(" ") > -1) {
-								if (this.testWord(content, reg)) {
-									censored = true;
-									newString = [content.replace(reg, censoredReplace)];
+						let checkCensor = string => {
+							let singleCensored = false;
+							string = string.replace(/([\n\t\r])/g, " $1 ");
+							for (let cWord in words.censored) {
+								let censoredReplace = words.censored[cWord].empty ? "" : (words.censored[cWord].replace || replaces.censored);
+								let reg = this.createReg(cWord, words.censored[cWord]);
+								let newString = [];
+								if (words.censored[cWord].regex || cWord.indexOf(" ") > -1) {
+									if (this.testWord(string, reg)) {
+										singleCensored = true;
+										censored = true;
+										newString = [string.replace(reg, censoredReplace)];
+									}
+									else newString = [string];
 								}
-								else newString = [content];
-							}
-							else for (let word of content.split(" ")) {
-								if (this.testWord(word, reg)) {
-									censored = true;
-									newString.push(censoredReplace);
+								else for (let word of string.split(" ")) {
+									if (this.testWord(word, reg)) {
+										singleCensored = true;
+										censored = true;
+										newString.push(censoredReplace);
+									}
+									else newString.push(word);
 								}
-								else newString.push(word);
+								string = newString.join(" ");
 							}
-							content = newString.join(" ");
+							return {parsedContent: string.replace(/ ([\n\t\r]) /g, "$1"), singleCensored: singleCensored};
+						};
+						if (isContent) {
+							let {parsedContent, singleCensored} = checkCensor(content);
+							if (singleCensored) content = parsedContent;
 						}
-						content = content.replace(/ ([\n\t\r]) /g, "$1");
+						for (let i in embeds) if (embeds[i].rawDescription) {
+							let {parsedContent, singleCensored} = checkCensor(embeds[i].rawDescription);
+							if (singleCensored) embeds[i] = Object.assign({}, embeds[i], {rawDescription: parsedContent, index: i, message_id: message.id, censored: true});
+						}
 					}
 				}
-				return {blocked, censored, content};
+				return {blocked, censored, content, embeds};
 			}
 			
 			testWord (word, reg) {
@@ -400,7 +426,7 @@ module.exports = (_ => {
 			}
 			
 			regTest (word, reg) {
-				let wordWithoutSpecial = word.replace(/[\?\¿\!\¡\.\"]/g, "");
+				let wordWithoutSpecial = word.replace(/[\?\¿\!\¡\.\"\*\-\_\~]/g, "");
 				return word && reg.test(word) || wordWithoutSpecial && reg.test(wordWithoutSpecial);
 			}
 
@@ -433,10 +459,11 @@ module.exports = (_ => {
 						click: modal => {
 							let newConfigs = {};
 							for (let key in this.defaults.configs) {
-								let configinput = modal.querySelector(`.input-config${key} ${BDFDB.dotCN.switchinner}`);
-								if (configinput) newConfigs[key] = configinput.checked;
+								let configInput = modal.querySelector(`.input-config${key} ${BDFDB.dotCN.switchinner}`);
+								if (configInput) newConfigs[key] = configInput.checked;
 							}
 							this.saveWord(values, newConfigs);
+							this.forceUpdateAll();
 						}
 					}]
 				});
@@ -446,7 +473,7 @@ module.exports = (_ => {
 				return [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 						title: "Block/Censor:",
-						className: "input-wordvalue",
+						className: BDFDB.disCN.marginbottom8,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 							key: "WORDVALUE",
 							value: values.wordvalue,
@@ -467,7 +494,7 @@ module.exports = (_ => {
 					}),
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 						title: "With:",
-						className: "input-replacevalue",
+						className: BDFDB.disCN.marginbottom8,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 							value: values.replacevalue,
 							placeholder: values.replacevalue,

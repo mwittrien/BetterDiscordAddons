@@ -528,10 +528,11 @@ module.exports = (_ => {
 						click: modal => {
 							let configs = {};
 							for (let key in this.defaults.configs) {
-								let configinput = modal.querySelector(`.input-config${key} ${BDFDB.dotCN.switchinner}`);
-								if (configinput) configs[key] = configinput.checked;
+								let configInput = modal.querySelector(`.input-config${key} ${BDFDB.dotCN.switchinner}`);
+								if (configInput) configs[key] = configInput.checked;
 							}
 							this.saveWord(values.wordvalue, values.replacevalue, modal.querySelector(".input-replacevalue input[type='file']"), configs);
+							this.forceUpdateAll();
 						}
 					}]
 				});
@@ -541,7 +542,7 @@ module.exports = (_ => {
 				return [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 						title: "Replace:",
-						className: "input-wordvalue",
+						className: BDFDB.disCN.marginbottom8,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 							value: values.wordvalue,
 							placeholder: values.wordvalue,
@@ -561,7 +562,7 @@ module.exports = (_ => {
 					}),
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 						title: "With:",
-						className: "input-replacevalue",
+						className: BDFDB.disCN.marginbottom8,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 							type: "file",
 							useFilePath: true,
