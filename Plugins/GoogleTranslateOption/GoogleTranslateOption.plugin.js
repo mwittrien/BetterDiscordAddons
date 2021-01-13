@@ -459,8 +459,8 @@ module.exports = (_ => {
 			}
 
 			processEmbed (e) {
-				if (e.instance.props.embed && e.instance.props.embed.messageId) {
-					let translation = translatedMessages[e.instance.props.embed.messageId];
+				if (e.instance.props.embed && e.instance.props.embed.message_id) {
+					let translation = translatedMessages[e.instance.props.embed.message_id];
 					if (translation) {
 						if (!e.returnvalue) e.instance.props.embed = Object.assign({}, e.instance.props.embed, {
 							rawDescription: translation.embeds[e.instance.props.embed.id],
@@ -630,7 +630,7 @@ module.exports = (_ => {
 							let strings = translation.split("\n__________________ __________________ __________________\n");
 							let content = strings.shift().trim(), embeds = {};
 							for (let i in message.embeds) {
-								message.embeds[i].messageId = message.id;
+								message.embeds[i].message_id = message.id;
 								embeds[message.embeds[i].id] = (strings.shift() || message.embeds[i].rawDescription).trim();
 							}
 							translatedMessages[message.id] = {content, embeds, input, output};
