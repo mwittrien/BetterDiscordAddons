@@ -14,12 +14,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "2.8.7",
+			"version": "2.8.8",
 			"description": "Display channels that are hidden from you by role restrictions"
 		},
 		"changeLog": {
+			"added": {
+				"Always Collapse": "You can now enable the plugin to always collapse the 'Hidden' Category at the bottom if you switch servers"
+			},
 			"fixed": {
-				"New Channel List": "Fixed for new update"
+				"Locked Voice Channels": "You can now open the voie channel window if you got moved into a locked voice channel by another user"
 			}
 		}
 	};
@@ -63,7 +66,7 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var blacklist = [], collapselist = [], hiddenCategory, overrideTypes = [];
+		var blackList = [], collapseList = [], hiddenCategory, lastGuildId, overrideTypes = [];
 		var hiddenChannelCache = {};
 		var settings = {};
 		
@@ -161,7 +164,8 @@ module.exports = (_ => {
 						showVoice:				{value: true, 	description: "Show hidden Voice Channels"},
 						showAnnouncement:		{value: true, 	description: "Show hidden Announcement Channels"},
 						showStore:				{value: true, 	description: "Show hidden Store Channels"},
-						showForNormal:			{value: true,	description: "Add Access-Overview ContextMenu Entry for non-hidden Channels"},
+						alwaysCollapse:			{value: false, 	description: "Always collapse 'Hidden' Category after switching Servers"},
+						showForNormal:			{value: true,	description: "Add Access-Overview ContextMenu Entry for non-hidden Channels"}
 					}
 				};
 			
@@ -185,11 +189,11 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				let loadedBlacklist = BDFDB.DataUtils.load(this, "blacklist");
-				this.saveBlacklist(!BDFDB.ArrayUtils.is(loadedBlacklist) ? [] : loadedBlacklist);
+				let loadedBlackList = BDFDB.DataUtils.load(this, "blacklist");
+				this.saveBlackList(!BDFDB.ArrayUtils.is(loadedBlackList) ? [] : loadedBlackList);
 				
-				let loadedCollapselist = BDFDB.DataUtils.load(this, "categorydata");
-				this.saveCollapselist(!BDFDB.ArrayUtils.is(loadedCollapselist) ? [] : loadedCollapselist);
+				let loadedCollapseList = BDFDB.DataUtils.load(this, "categorydata");
+				this.saveCollapseList(!BDFDB.ArrayUtils.is(loadedCollapseList) ? [] : loadedCollapseList);
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
 					return e.returnValue && !this.isChannelHidden(e.methodArguments[0]);
@@ -200,23 +204,30 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseStore, "isCollapsed", {after: e => {
-					if (e.methodArguments[0] && e.methodArguments[0].endsWith("hidden")) return collapselist.includes(e.methodArguments[0]);
+					if (e.methodArguments[0] && e.methodArguments[0].endsWith("hidden")) {
+						if (settings.alwaysCollapse && e.methodArguments[0] != lastGuildId && !collapseList.includes(e.methodArguments[0])) {
+							collapseList.push(e.methodArguments[0]);
+							this.saveCollapseList(BDFDB.ArrayUtils.removeCopies(collapseList));
+						}
+						lastGuildId = e.methodArguments[0];
+						return collapseList.includes(e.methodArguments[0]);
+					}
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseUtils, "categoryCollapse", {before: e => {
 					if (e.methodArguments[0] && e.methodArguments[0].endsWith("hidden")) {
-						if (!collapselist.includes(e.methodArguments[0])) {
-							collapselist.push(e.methodArguments[0]);
-							this.saveCollapselist(BDFDB.ArrayUtils.removeCopies(collapselist));
+						if (!collapseList.includes(e.methodArguments[0])) {
+							collapseList.push(e.methodArguments[0]);
+							this.saveCollapseList(BDFDB.ArrayUtils.removeCopies(collapseList));
 						}
 					}
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseUtils, "categoryExpand", {before: e => {
 					if (e.methodArguments[0] && e.methodArguments[0].endsWith("hidden")) {
-						if (collapselist.includes(e.methodArguments[0])) {
-							BDFDB.ArrayUtils.remove(collapselist, e.methodArguments[0], true);
-							this.saveCollapselist(BDFDB.ArrayUtils.removeCopies(collapselist));
+						if (collapseList.includes(e.methodArguments[0])) {
+							BDFDB.ArrayUtils.remove(collapseList, e.methodArguments[0], true);
+							this.saveCollapseList(BDFDB.ArrayUtils.removeCopies(collapseList));
 						}
 					}
 				}});
@@ -254,9 +265,9 @@ module.exports = (_ => {
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsGuildList, {
 							className: BDFDB.disCN.marginbottom20,
-							disabled: blacklist,
+							disabled: blackList,
 							onClick: disabledGuilds => {
-								this.saveBlacklist(disabledGuilds);
+								this.saveBlackList(disabledGuilds);
 							}
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -327,11 +338,11 @@ module.exports = (_ => {
 					if (index > -1) children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, {
 						label: this.labels.context_hidehidden,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "hide-locked-channels"),
-						checked: blacklist.includes(e.instance.props.guild.id),
+						checked: blackList.includes(e.instance.props.guild.id),
 						action: value => {
-							if (value) blacklist.push(e.instance.props.guild.id);
-							else BDFDB.ArrayUtils.remove(blacklist, e.instance.props.guild.id, true);
-							this.saveBlacklist(BDFDB.ArrayUtils.removeCopies(blacklist));
+							if (value) blackList.push(e.instance.props.guild.id);
+							else BDFDB.ArrayUtils.remove(blackList, e.instance.props.guild.id, true);
+							this.saveBlackList(BDFDB.ArrayUtils.removeCopies(blackList));
 
 							BDFDB.PatchUtils.forceAllUpdates(this);
 							BDFDB.ChannelUtils.rerenderAll(true);
@@ -345,7 +356,7 @@ module.exports = (_ => {
 			}
 			
 			processChannels (e) {
-				if (!e.instance.props.guild || blacklist.includes(e.instance.props.guild.id)) return;
+				if (!e.instance.props.guild || blackList.includes(e.instance.props.guild.id)) return;
 				let [hiddenChannels, amount] = this.getHiddenChannels(e.instance.props.guild);
 				if (amount) {
 					e.instance.props.categories = Object.assign({}, e.instance.props.categories);
@@ -432,15 +443,17 @@ module.exports = (_ => {
 							})
 						})];
 					}
-					let wrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelwrapper]]});
-					if (wrapper) {
-						wrapper.props.onMouseDown = _ => {};
-						wrapper.props.onMouseUp = _ => {};
-					}
-					let mainContent = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelmaincontent]]});
-					if (mainContent) {
-						mainContent.props.onClick = _ => {};
-						mainContent.props.href = null;
+					if (!(e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE && e.instance.props.connected)) {
+						let wrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelwrapper]]});
+						if (wrapper) {
+							wrapper.props.onMouseDown = _ => {};
+							wrapper.props.onMouseUp = _ => {};
+						}
+						let mainContent = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelmaincontent]]});
+						if (mainContent) {
+							mainContent.props.onClick = _ => {};
+							mainContent.props.href = null;
+						}
 					}
 				}
 			}
@@ -471,21 +484,21 @@ module.exports = (_ => {
 			
 			batchSetGuilds (settingsPanel, collapseStates, value) {
 				if (!value) {
-					for (let id of BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds()) blacklist.push(id);
-					this.saveBlacklist(BDFDB.ArrayUtils.removeCopies(blacklist));
+					for (let id of BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds()) blackList.push(id);
+					this.saveBlackList(BDFDB.ArrayUtils.removeCopies(blackList));
 				}
-				else this.saveBlacklist([]);
+				else this.saveBlackList([]);
 				BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 			}
 			
-			saveBlacklist (savedBlacklist) {
-				blacklist = savedBlacklist;
-				BDFDB.DataUtils.save(savedBlacklist, this, "blacklist");
+			saveBlackList (savedBlackList) {
+				blackList = savedBlackList;
+				BDFDB.DataUtils.save(savedBlackList, this, "blacklist");
 			}
 			
-			saveCollapselist (savedCollapselist) {
-				collapselist = savedCollapselist;
-				BDFDB.DataUtils.save(savedCollapselist, this, "categorydata");
+			saveCollapseList (savedCollapseList) {
+				collapseList = savedCollapseList;
+				BDFDB.DataUtils.save(savedCollapseList, this, "categorydata");
 			}
 			
 			openAccessModal (channel, allowed) {

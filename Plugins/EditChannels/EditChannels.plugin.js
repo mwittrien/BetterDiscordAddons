@@ -518,7 +518,7 @@ module.exports = (_ => {
 				let title = document.head.querySelector("title");
 				if (title) {
 					if (BDFDB.ChannelUtils.isTextChannel(channel)) BDFDB.DOMUtils.setText(title, "#" + this.getChannelData(channel.id, settings.changeAppTitle).name);
-					else if (channel.isGroupDM()) BDFDB.DOMUtils.setText(title, this.getGroupName(channel.id, settings.changeAppTitle));
+					else if (channel && channel.isGroupDM()) BDFDB.DOMUtils.setText(title, this.getGroupName(channel.id, settings.changeAppTitle));
 				}
 			}
 			
