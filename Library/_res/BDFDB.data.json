@@ -2169,6 +2169,7 @@
 		"messagereactionsmodalreactor": ["MessageReactionsModal", "reactor"],
 		"messagereactionsmodalusername": ["MessageReactionsModal", "username"],
 		"messagerepliedmessage": ["MessageBody", "repliedMessage"],
+		"messagerepliedmessagecontent": ["MessageBody", "repliedTextContent"],
 		"messagereply": ["MessageReply", "container"],
 		"messagereplyname": ["MessageReply", "name"],
 		"messagereplytext": ["MessageReply", "text"],
