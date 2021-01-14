@@ -2170,6 +2170,8 @@
 		"messagereactionsmodalusername": ["MessageReactionsModal", "username"],
 		"messagerepliedmessage": ["MessageBody", "repliedMessage"],
 		"messagerepliedmessagecontent": ["MessageBody", "repliedTextContent"],
+		"messagerepliedmessagecontentclickable": ["MessageBody", "clickable"],
+		"messagerepliedmessagepreview": ["MessageBody", "repliedTextPreview"],
 		"messagereply": ["MessageReply", "container"],
 		"messagereplyname": ["MessageReply", "name"],
 		"messagereplytext": ["MessageReply", "text"],
