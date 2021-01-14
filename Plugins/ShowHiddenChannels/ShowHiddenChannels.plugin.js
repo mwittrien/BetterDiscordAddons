@@ -22,7 +22,7 @@ module.exports = (_ => {
 				"Always Collapse": "You can now enable the plugin to always collapse the 'Hidden' Category at the bottom if you switch servers"
 			},
 			"fixed": {
-				"Locked Voice Channels": "You can now open the voie channel window if you got moved into a locked voice channel by another user",
+				"Locked Voice Channels": "You can now open the voice channel window if you got moved into a locked voice channel by another user",
 				"Locked Text Channels": "Setting to not show hidden text channels works again"
 			}
 		}
