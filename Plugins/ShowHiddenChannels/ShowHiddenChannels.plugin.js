@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "2.8.8",
+			"version": "2.8.9",
 			"description": "Display channels that are hidden from you by role restrictions"
 		},
 		"changeLog": {
@@ -22,7 +22,8 @@ module.exports = (_ => {
 				"Always Collapse": "You can now enable the plugin to always collapse the 'Hidden' Category at the bottom if you switch servers"
 			},
 			"fixed": {
-				"Locked Voice Channels": "You can now open the voie channel window if you got moved into a locked voice channel by another user"
+				"Locked Voice Channels": "You can now open the voie channel window if you got moved into a locked voice channel by another user",
+				"Locked Text Channels": "Setting to now show hidden text channels works again"
 			}
 		}
 	};
@@ -71,7 +72,7 @@ module.exports = (_ => {
 		var settings = {};
 		
 		const settingsMap = {
-			GUILD: "showText",
+			GUILD_TEXT: "showText",
 			GUILD_VOICE: "showVoice",
 			GUILD_ANNOUNCEMENT: "showAnnouncement",
 			GUILD_STORE: "showStore"
