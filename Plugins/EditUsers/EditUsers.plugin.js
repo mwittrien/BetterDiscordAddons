@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.1.0",
+			"version": "4.1.1",
 			"description": "Allow you to change the icon, name, tag and color of users"
 		},
 		"changeLog": {
@@ -198,18 +198,8 @@ module.exports = (_ => {
 				let observer = new MutationObserver(_ => {this.changeAppTitle();});
 				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name: "appTitleObserver", instance: observer}, {childList: true});
 				
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageAuthorUtils, "getMessageAuthor", {after: e => {
-					if (settings.changeInChatWindow && e.methodArguments[0] && e.methodArguments[0].id && changedUsers[e.methodArguments[0].id]) {
-						let data = changedUsers[e.methodArguments[0].id];
-						if (data.name || data.color1) {
-							let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember(e.methodArguments[0].guild_id, e.methodArguments[0].id) || {}).colorString || data.color1;
-							if (data.name) e.returnValue.nick = data.name;
-							if (color1) e.returnValue.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
-						}
-					}
-				}});
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageAuthorUtils, "default", {after: e => {
-					if (settings.changeInChatWindow && e.methodArguments[0] && e.methodArguments[0].author && changedUsers[e.methodArguments[0].author.id]) {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageAuthorUtils, ["default", "getMessageAuthor"], {after: e => {
+					if (settings.changeInChatWindow && e.methodArguments[0] && e.methodArguments[0].author && changedUsers[e.methodArguments[0].author.id] && this.shouldChangeInChat(e.methodArguments[0].channel_id)) {
 						let data = changedUsers[e.methodArguments[0].author.id];
 						if (data.name || data.color1) {
 							let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.methodArguments[0].channel_id) || {}).guild_id, e.methodArguments[0].author.id) || {}).colorString || data.color1;
