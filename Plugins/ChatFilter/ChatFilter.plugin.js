@@ -14,12 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatFilter",
 			"author": "DevilBro",
-			"version": "3.4.5",
+			"version": "3.4.6",
 			"description": "Allow the user to censor words or block complete messages based on words in the chatwindow"
 		},
 		"changeLog": {
 			"fixed": {
-				"Embeds": "Now also checks the description of embeds for blocked/censored words"
+				"Embeds": "Now also checks the description of embeds for blocked/censored words",
+				"Reply Previews": "Now also works for replied message previews"
 			}
 		}
 	};
@@ -70,32 +71,38 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					configs: {
-						empty: 		{value: false,		description: "Allow the replacevalue to be empty (ignoring the default)"},
-						case: 		{value: false,		description: "Handle the wordvalue case sensitive"},
-						exact: 		{value: true,		description: "Handle the wordvalue as an exact word and not as part of a word"},
-						regex: 		{value: false,		description: "Handle the wordvalue as a RegExp string"}
+						empty: 					{value: false,				description: "Allow the replacevalue to be empty (ignoring the default)"},
+						case: 					{value: false,				description: "Handle the wordvalue case sensitive"},
+						exact: 					{value: true,				description: "Handle the wordvalue as an exact word and not as part of a word"},
+						regex: 					{value: false,				description: "Handle the wordvalue as a RegExp string"}
 					},
 					replaces: {
-						blocked: 	{value: "~~BLOCKED~~",		description: "Default replaceword for blocked messages: "},
-						censored:	{value: "$!%&%!&",			description: "Default replaceword for censored messages: "}
+						blocked: 				{value: "~~BLOCKED~~",		description: "Default replaceword for blocked messages: "},
+						censored:				{value: "$!%&%!&",			description: "Default replaceword for censored messages: "}
 					},
 					settings: {
-						addContextMenu:			{value: true,	description: "Add a contextmenu entry to faster add new blocked/censored words: "}
+						addContextMenu:			{value: true,				description: "Add a contextmenu entry to faster add new blocked/censored words: "}
 					}
 				};
 			
 				this.patchedModules = {
+					before: {
+						Message: "default",
+						MessageContent: "type"
+					},
 					after: {
 						Messages: "type",
-						Message: "default",
 						MessageContent: "type",
 						Embed: "render"
 					}
 				};
 				
-				this.css = ` 
-					${BDFDB.dotCN.message + BDFDB.dotCNS._chatfilterblocked + BDFDB.dotCN.messagemarkup} {
-						color: ${BDFDB.DiscordConstants.Colors.STATUS_RED};
+				this.css = `
+					${BDFDB.dotCN._chatfilterblocked} {
+						color: ${BDFDB.DiscordConstants.Colors.STATUS_RED} !important;
+					}
+					${BDFDB.dotCN.messagerepliedmessagecontentclickable}:hover ${BDFDB.dotCN._chatfilterblocked} {
+						filter: saturate(2);
 					}
 				`;
 				
@@ -319,17 +326,23 @@ module.exports = (_ => {
 			}
 
 			processMessage (e) {
-				let message = BDFDB.ObjectUtils.get(e, "instance.props.childrenMessageContent.props.message");
-				if (message) {
-					if (oldBlockedMessages[message.id]) e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._chatfilterblocked);
-					if (oldCensoredMessages[message.id] && message.content != oldCensoredMessages[message.id].content) e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._chatfiltercensored);
+				let repliedMessage = e.instance.props.childrenRepliedMessage;
+				if (repliedMessage && repliedMessage.props && repliedMessage.props.children && repliedMessage.props.children.props && repliedMessage.props.children.props.referencedMessage && repliedMessage.props.children.props.referencedMessage.message && (oldBlockedMessages[repliedMessage.props.children.props.referencedMessage.message.id] || oldCensoredMessages[repliedMessage.props.children.props.referencedMessage.message.id])) {
+					let {blocked, censored, content, embeds} = this.parseMessage(repliedMessage.props.children.props.referencedMessage.message);
+					repliedMessage.props.children.props.referencedMessage.message = new BDFDB.DiscordObjects.Message(Object.assign({}, repliedMessage.props.children.props.referencedMessage.message, {content, embeds}));
 				}
 			}
 
 			processMessageContent (e) {
 				if (e.instance.props.message) {
-					if (oldBlockedMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldBlockedMessages[e.instance.props.message.id].content, "blocked"));
-					if (oldCensoredMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldCensoredMessages[e.instance.props.message.id].content, "censored"));
+					if (!e.returnvalue) {
+						if (oldBlockedMessages[e.instance.props.message.id]) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._chatfilterblocked);
+						if (oldCensoredMessages[e.instance.props.message.id] && e.instance.props.message.content != oldCensoredMessages[e.instance.props.message.id].content) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._chatfiltercensored);
+					}
+					else {
+						if (oldBlockedMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldBlockedMessages[e.instance.props.message.id].content, "blocked"));
+						if (oldCensoredMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldCensoredMessages[e.instance.props.message.id].content, "censored"));
+					}
 				}
 			}
 
