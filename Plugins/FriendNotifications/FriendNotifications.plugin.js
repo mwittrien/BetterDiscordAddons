@@ -14,12 +14,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.5.6",
+			"version": "1.5.7",
 			"description": "Get a notification when a Friend or a User, you choose to observe, changes their status"
 		},
 		"changeLog": {
 			"improved": {
-				"Toast/Desktop": "You can now set toast/desktop notifications for single status options instead of the whole user"
+				"Activity": "Now notifies you when the use also changes his activity and not only starts doing something"
+			},
+			"added": {
+				"Custom Status": "You can now get notified when a user changes his custom status"
 			}
 		}
 	};
@@ -67,6 +70,50 @@ module.exports = (_ => {
 		var userStatusStore, timeLog, lastTimes, checkInterval, paginationOffset = {};
 		var friendCounter, timeLogList;
 		var settings = {}, amounts = {}, notificationStrings = {}, notificationSounds = {}, observedUsers = {};
+		
+		const statuses = {
+			online: {
+				value: true,
+				name: "STATUS_ONLINE",
+				sound: true
+			},
+			idle: {
+				value: false,
+				name: "STATUS_IDLE",
+				sound: true
+			},
+			dnd: {
+				value: false,
+				name: "STATUS_DND",
+				sound: true
+			},
+			playing: {
+				value: false,
+				activity: true,
+				sound: true
+			},
+			listening: {
+				value: false,
+				activity: true,
+				sound: true
+			},
+			streaming: {
+				value: false,
+				activity: true,
+				sound: true
+			},
+			offline: {
+				value: true,
+				name: "STATUS_OFFLINE",
+				sound: true
+			},
+			mobile: {
+				value: false
+			},
+			custom: {
+				value: false
+			}
+		};
 		
 		const notificationTypes = {
 			DISABLED: {
@@ -165,14 +212,14 @@ module.exports = (_ => {
 						openOnClick:		{value: false, 	description: "Open the DM when you click a Notification"}
 					},
 					notificationstrings: {
-						online: 			{value: "$user changed status to '$status'",			libString: "STATUS_ONLINE",			init: true},
-						mobile: 			{value: "$user changed status to '$status'",			libString: "STATUS_ONLINE_MOBILE",	init: true},
-						idle: 				{value: "$user changed status to '$status'",			libString: "STATUS_IDLE",			init: false},
-						dnd: 				{value: "$user changed status to '$status'",			libString: "STATUS_DND",			init: false},
-						playing: 			{value: "$user started playing '$game'",				statusName: "Playing",				init: false},
-						listening: 			{value: "$user started listening to '$song'",			statusName: "Listening",			init: false},
-						streaming: 			{value: "$user started streaming '$game'",				libString: "STATUS_STREAMING",		init: false},
-						offline: 			{value: "$user changed status to '$status'",			libString: "STATUS_OFFLINE",		init: true}
+						online: 			{value: "$user changed status to '$status'"},
+						idle: 				{value: "$user changed status to '$status'"},
+						dnd: 				{value: "$user changed status to '$status'"},
+						playing: 			{value: "$user started playing '$game'"},
+						listening: 			{value: "$user started listening to '$song'"},
+						streaming: 			{value: "$user started streaming '$game'"},
+						offline: 			{value: "$user changed status to '$status'"},
+						custom: 			{value: "$user changed status to '$custom'"}
 					},
 					notificationsounds: {},
 					amounts: {
@@ -213,9 +260,9 @@ module.exports = (_ => {
 					}
 				`;
 				
-				for (let type in this.defaults.notificationstrings) {
-					this.defaults.notificationsounds["toast" + type] = {value: {url: null,song: null,mute: false}};
-					this.defaults.notificationsounds["desktop" + type] = {value: {url: null,song: null,mute: false}};
+				for (let type in statuses) if (statuses[type].sound) {
+					this.defaults.notificationsounds["toast" + type] = {value: {url: null, song: null, mute: false}};
+					this.defaults.notificationsounds["desktop" + type] = {value: {url: null, song: null, mute: false}};
 				}
 			}
 			
@@ -225,7 +272,7 @@ module.exports = (_ => {
 					let data = BDFDB.DataUtils.load(this, type);
 					if (Object.keys(data).length) {
 						for (let id in data) if (data[id].desktop != undefined) {
-							for (let key of Object.keys(this.defaults.notificationstrings)) data[id][key] = notificationTypes[!data[id][key] ? "DISABLED" : (data[id].desktop ? "DESKTOP" : "TOAST")].value;
+							for (let key of Object.keys(statuses)) data[id][key] = notificationTypes[!data[id][key] ? "DISABLED" : (data[id].desktop ? "DESKTOP" : "TOAST")].value;
 							delete data[id].desktop;
 						}
 						BDFDB.DataUtils.save(data, this, type);
@@ -296,7 +343,7 @@ module.exports = (_ => {
 					items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
 						className: BDFDB.disCN.margintop20,
 						title: "all",
-						settings: Object.keys(this.defaults.notificationstrings),
+						settings: Object.keys(statuses),
 						data: users,
 						pagination: {
 							alphabetKey: "username",
@@ -388,7 +435,7 @@ module.exports = (_ => {
 								}
 								else if (id != BDFDB.UserUtils.me.id) friends.push(Object.assign({}, user, friendsData[id], {
 									key: id,
-									className: friendsData[id].disabled ? "" : BDFDB.disCN.hovercarddisabled
+									className: friendsData[id].disabled ? BDFDB.disCN.hovercarddisabled : ""
 								}));
 							}
 						}
@@ -396,7 +443,7 @@ module.exports = (_ => {
 							let user = BDFDB.LibraryModules.UserStore.getUser(id);
 							if (user && id != BDFDB.UserUtils.me.id) nonFriends.push(Object.assign({}, user, nonFriendsData[id], {
 								key: id,
-								className: nonFriendsData[id].disabled ? "" : BDFDB.disCN.hovercarddisabled
+								className: nonFriendsData[id].disabled ? BDFDB.disCN.hovercarddisabled : ""
 							}));
 						}
 
@@ -495,6 +542,8 @@ module.exports = (_ => {
 										" is the placeholder for the username, ",
 										BDFDB.ReactUtils.createElement("strong", {children: "$status"}),
 										" for the status name, ",
+										BDFDB.ReactUtils.createElement("strong", {children: "$custom"}),
+										" for the custom status, ",
 										BDFDB.ReactUtils.createElement("strong", {children: "$game"}),
 										" for the game name, ",
 										BDFDB.ReactUtils.createElement("strong", {children: "$song"}),
@@ -508,8 +557,8 @@ module.exports = (_ => {
 								plugin: this,
 								keys: ["notificationstrings", key],
 								placeholder: this.defaults.notificationstrings[key].value,
-								label: `${BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(key)} Message: `,
-								basis: "70%",
+								label: `${BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(key)}: `,
+								basis: "80%",
 								value: notificationStrings[key]
 							})))
 						}));
@@ -636,21 +685,20 @@ module.exports = (_ => {
 			createDefaultConfig () {
 				return Object.assign({
 					disabled: settings.disableForNew
-				}, BDFDB.ObjectUtils.map(this.defaults.notificationstrings, data => notificationTypes[data.init ? "TOAST" : "DISABLED"].value));
+				}, BDFDB.ObjectUtils.map(statuses, init => notificationTypes[init ? "TOAST" : "DISABLED"].value));
 			}
 
 			getStatusWithMobileAndActivity (id, config) {
-				let statusName = BDFDB.UserUtils.getStatus(id);
-				let status = {statusName, isActivity: false};
-				let activity = BDFDB.UserUtils.getActivity(id);
+				let status = {name: BDFDB.UserUtils.getStatus(id), activity: null, custom: false, mobile: BDFDB.LibraryModules.StatusMetaUtils.isMobileOnline(id)};
+				let activity = BDFDB.UserUtils.getActivity(id) || BDFDB.UserUtils.getCustomStatus(id);
 				if (activity && BDFDB.DiscordConstants.ActivityTypes[activity.type]) {
-					let activityName = BDFDB.DiscordConstants.ActivityTypes[activity.type].toLowerCase();
-					if (this.defaults.notificationstrings[activityName] && config[activityName]) {
-						status = Object.assign({statusName: activityName, isActivity: true}, activity);
-						if (activityName == "listening" || activityName == "streaming") delete status.name;
+					let isCustom = activity.type == BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS;
+					let activityName = isCustom ? "custom" : BDFDB.DiscordConstants.ActivityTypes[activity.type].toLowerCase();
+					if (statuses[activityName] && config[activityName]) {
+						Object.assign(status, {name: isCustom ? status.name : activityName, activity: Object.assign({}, activity), custom: isCustom});
+						if (activityName == "listening" || activityName == "streaming") delete status.activity.name;
 					}
 				}
-				if (status.statusName == "online" && BDFDB.LibraryModules.StatusMetaUtils.isMobileOnline(id)) status.statusName = "mobile";
 				return status;
 			}
 
@@ -664,7 +712,7 @@ module.exports = (_ => {
 				
 				observedUsers = Object.assign({}, BDFDB.DataUtils.load(this, "nonfriends"), BDFDB.DataUtils.load(this, "friends"));
 				
-				for (let id in observedUsers) userStatusStore[id] = this.getStatusWithMobileAndActivity(id, observedUsers[id]).statusName;
+				for (let id in observedUsers) userStatusStore[id] = this.getStatusWithMobileAndActivity(id, observedUsers[id]);
 				
 				let toastTime = (amounts.toastTime > amounts.checkInterval ? amounts.checkInterval : amounts.toastTime) * 1000;
 				let desktopTime = (amounts.desktopTime > amounts.checkInterval ? amounts.checkInterval : amounts.desktopTime) * 1000;
@@ -678,16 +726,27 @@ module.exports = (_ => {
 					for (let id in observedUsers) if (!observedUsers[id].disabled) {
 						let user = BDFDB.LibraryModules.UserStore.getUser(id);
 						let status = this.getStatusWithMobileAndActivity(id, observedUsers[id]);
-						if (user && userStatusStore[id] != status.statusName && observedUsers[id][status.statusName]) {
+						let customChanged = false;
+						if (user && observedUsers[id][status.name] && (
+							userStatusStore[id].name != status.name ||
+							observedUsers[id].mobile && userStatusStore[id].mobile != status.mobile ||
+							observedUsers[id].custom && (
+								userStatusStore[id].custom != status.custom ||
+								(customChanged = status.custom && !BDFDB.equals(userStatusStore[id].activity, status.activity))
+							) ||
+							statuses[status.name].activity && !BDFDB.equals(userStatusStore[id].activity, status.activity)
+						)) {
 							let EUdata = BDFDB.BDUtils.isPluginEnabled("EditUsers") && BDFDB.DataUtils.load("EditUsers", "users", user.id) || {};
 							let name = EUdata.name || user.username;
 							let avatar = EUdata.removeIcon ? "" : (EUdata.url || BDFDB.UserUtils.getAvatar(user.id));
 							let timeString = (new Date()).toLocaleString();
 							
-							let libString = (this.defaults.notificationstrings[status.statusName].libString ? BDFDB.LanguageUtils.LanguageStrings[this.defaults.notificationstrings[status.statusName].libString] : (this.defaults.notificationstrings[status.statusName].statusName || "")).toLowerCase();
-							let string = notificationStrings[status.statusName] || "$user changed status to $status";
-							let toastString = BDFDB.StringUtils.htmlEscape(string).replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.StringUtils.htmlEscape(name)}</strong>${settings.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/'{0,1}\$status'{0,1}/g, `<strong>${libString}</strong>`);
-							if (status.isActivity) toastString = toastString.replace(/'{0,1}\$song'{0,1}|'{0,1}\$game'{0,1}/g, `<strong>${status.name || status.details}</strong>`).replace(/'{0,1}\$artist'{0,1}/g, `<strong>${status.state}</strong>`);
+							let statusName = (BDFDB.LanguageUtils.LanguageStringsCheck[statuses[status.name].name] && BDFDB.LanguageUtils.LanguageStrings[statuses[status.name].name] || this.labels["status_" + status.name] || statuses[status.name].name || "").toLowerCase();
+							if (status.mobile && observedUsers[id].mobile) statusName += ` (${BDFDB.LanguageUtils.LanguageStrings.ACTIVE_ON_MOBILE})`;
+							
+							let string = notificationStrings[customChanged ? "custom" : status.name] || "'$user' changed status to '$status'";
+							let toastString = BDFDB.StringUtils.htmlEscape(string).replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.StringUtils.htmlEscape(name)}</strong>${settings.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/'{0,1}\$status'{0,1}/g, `<strong>${statusName}</strong>`);
+							if (status.activity) toastString = toastString.replace(/'{0,1}\$song'{0,1}|'{0,1}\$game'{0,1}/g, `<strong>${status.activity.name || status.activity.details}</strong>`).replace(/'{0,1}\$artist'{0,1}|'{0,1}\$custom'{0,1}/g, `<strong>${status.activity.state}</strong>`);
 							
 							timeLog.unshift({
 								string: toastString,
@@ -708,22 +767,22 @@ module.exports = (_ => {
 										BDFDB.LibraryRequires.electron.remote.getCurrentWindow().focus();
 									}
 								};
-								if (observedUsers[id][status.statusName] == notificationTypes.DESKTOP.value) {
-									let desktopString = string.replace(/\$user/g, `${name}${settings.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/\$status/g, libString);
-									if (status.isActivity) desktopString = desktopString.replace(/\$song|\$game/g, status.name || status.details).replace(/\$artist/g, status.state);
-									let notificationsound = notificationSounds["desktop" + status.statusName] || {};
+								if (observedUsers[id][status.name] == notificationTypes.DESKTOP.value) {
+									let desktopString = string.replace(/\$user/g, `${name}${settings.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/\$status/g, statusName);
+									if (status.activity) desktopString = desktopString.replace(/\$song|\$game/g, status.activity.name || status.activity.details).replace(/\$artist|\$custom/g, status.activity.state);
+									let notificationsound = notificationSounds["desktop" + status.name] || {};
 									BDFDB.NotificationUtils.desktop(desktopString, {icon: avatar, timeout: desktopTime, click: openChannel, silent: notificationsound.mute, sound: notificationsound.song});
 								}
 								else if (!document.querySelector(`.friendnotifications-${id}-toast`)) {
 									let toast = BDFDB.NotificationUtils.toast(`<div class="${BDFDB.disCN.toastinner}"><div class="${BDFDB.disCN.toastavatar}" style="background-image: url(${avatar});"></div><div>${toastString}</div></div>`, {
-										className: `friendnotifications-${status.statusName}-toast friendnotifications-${id}-toast`,
+										className: `friendnotifications-${status.name}-toast friendnotifications-${id}-toast`,
 										html: true,
 										timeout: toastTime,
-										color: BDFDB.UserUtils.getStatusColor(status.statusName),
+										color: BDFDB.UserUtils.getStatusColor(status.name),
 										icon: false
 									});
 									toast.addEventListener("click", openChannel);
-									let notificationsound = notificationSounds["toast" + status.statusName] || {};
+									let notificationsound = notificationSounds["toast" + status.name] || {};
 									if (!notificationsound.mute && notificationsound.song) {
 										let audio = new Audio();
 										audio.src = notificationsound.song;
@@ -732,7 +791,7 @@ module.exports = (_ => {
 								}
 							}
 						}
-						userStatusStore[id] = status.statusName;
+						userStatusStore[id] = status;
 					}
 				}, amounts.checkInterval * 1000);
 			}	
@@ -764,6 +823,146 @@ module.exports = (_ => {
 						entries: timeLog
 					})
 				});
+			}
+
+			setLabelsByLanguage () {
+				switch (BDFDB.LanguageUtils.getLanguage().id) {
+					case "bg":		// Bulgarian
+						return {
+							status_listening:					"Слушане",
+							status_playing:						"Играе"
+						};
+					case "da":		// Danish
+						return {
+							status_listening:					"Hører efter",
+							status_playing:						"Spiller"
+						};
+					case "de":		// German
+						return {
+							status_listening:					"Hören",
+							status_playing:						"Spielen"
+						};
+					case "el":		// Greek
+						return {
+							status_listening:					"Ακούγοντας",
+							status_playing:						"Παιχνίδι"
+						};
+					case "es":		// Spanish
+						return {
+							status_listening:					"Escuchando",
+							status_playing:						"Jugando"
+						};
+					case "fi":		// Finnish
+						return {
+							status_listening:					"Kuunteleminen",
+							status_playing:						"Pelataan"
+						};
+					case "fr":		// French
+						return {
+							status_listening:					"Écoute",
+							status_playing:						"En jouant"
+						};
+					case "hr":		// Croatian
+						return {
+							status_listening:					"Slušanje",
+							status_playing:						"Sviranje"
+						};
+					case "hu":		// Hungarian
+						return {
+							status_listening:					"Hallgatás",
+							status_playing:						"Játék"
+						};
+					case "it":		// Italian
+						return {
+							status_listening:					"Ascoltando",
+							status_playing:						"Giocando"
+						};
+					case "ja":		// Japanese
+						return {
+							status_listening:					"聞いている",
+							status_playing:						"遊ぶ"
+						};
+					case "ko":		// Korean
+						return {
+							status_listening:					"청취",
+							status_playing:						"놀이"
+						};
+					case "lt":		// Lithuanian
+						return {
+							status_listening:					"Klausymas",
+							status_playing:						"Žaidžia"
+						};
+					case "nl":		// Dutch
+						return {
+							status_listening:					"Luisteren",
+							status_playing:						"Spelen"
+						};
+					case "no":		// Norwegian
+						return {
+							status_listening:					"Lytte",
+							status_playing:						"Spiller"
+						};
+					case "pl":		// Polish
+						return {
+							status_listening:					"Słuchający",
+							status_playing:						"Gra"
+						};
+					case "pt-BR":	// Portuguese (Brazil)
+						return {
+							status_listening:					"Ouvindo",
+							status_playing:						"Jogando"
+						};
+					case "ro":		// Romanian
+						return {
+							status_listening:					"Ascultare",
+							status_playing:						"Joc"
+						};
+					case "ru":		// Russian
+						return {
+							status_listening:					"Прослушивание",
+							status_playing:						"Играет"
+						};
+					case "sv":		// Swedish
+						return {
+							status_listening:					"Lyssnande",
+							status_playing:						"Spelar"
+						};
+					case "th":		// Thai
+						return {
+							status_listening:					"การฟัง",
+							status_playing:						"กำลังเล่น"
+						};
+					case "tr":		// Turkish
+						return {
+							status_listening:					"Dinleme",
+							status_playing:						"Çalma"
+						};
+					case "uk":		// Ukrainian
+						return {
+							status_listening:					"Слухання",
+							status_playing:						"Гра"
+						};
+					case "vi":		// Vietnamese
+						return {
+							status_listening:					"Lắng nghe",
+							status_playing:						"Đang chơi"
+						};
+					case "zh-CN":	// Chinese (China)
+						return {
+							status_listening:					"倾听",
+							status_playing:						"玩"
+						};
+					case "zh-TW":	// Chinese (Taiwan)
+						return {
+							status_listening:					"傾聽",
+							status_playing:						"玩"
+						};
+					default:		// English
+						return {
+							status_listening:					"Listening",
+							status_playing:						"Playing"
+						};
+				}
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
