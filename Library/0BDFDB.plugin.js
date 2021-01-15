@@ -16,15 +16,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.2.9",
+			"version": "1.3.0",
 			"description": "Give other plugins utility functions"
 		},
-		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
-		"changeLog": {
-			"fixed": {
-				"New Pagination": "Fixed issues with the new pagination style and logic"
-			}
-		}
+		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
 	};
 	
 	const DiscordObjects = {};
