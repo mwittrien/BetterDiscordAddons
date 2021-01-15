@@ -672,13 +672,13 @@ module.exports = (_ => {
 							creation_date:						"Ngày thành lập",
 							join_date:							"Ngày tham gia"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							boosters:							"助推器",
 							creation_date:						"创建日期",
 							join_date:							"参加日期"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							boosters:							"助推器",
 							creation_date:						"創建日期",

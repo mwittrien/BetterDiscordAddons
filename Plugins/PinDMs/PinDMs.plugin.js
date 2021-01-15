@@ -1315,7 +1315,7 @@ module.exports = (_ => {
 							header_pinneddms:					"Tin nhắn trực tiếp được ghim",
 							modal_colorpicker1:					"Màu sắc"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							context_addtonewcategory:			"添加到新类别",
 							context_disablepredefined:			"停用预定义类别",
@@ -1328,7 +1328,7 @@ module.exports = (_ => {
 							header_pinneddms:					"固定直接讯息",
 							modal_colorpicker1:					"类别颜色"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							context_addtonewcategory:			"添加到新類別",
 							context_disablepredefined:			"停用預定義類別",

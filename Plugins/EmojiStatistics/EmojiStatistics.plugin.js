@@ -422,7 +422,7 @@ module.exports = (_ => {
 							modal_titlesname:					"Tên máy chủ",
 							modal_titlestotal:					"Toàn bộ"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							modal_header:						"表情符号统计",
 							modal_titlescopies:					"份数",
@@ -432,7 +432,7 @@ module.exports = (_ => {
 							modal_titlesname:					"服务器名称",
 							modal_titlestotal:					"总"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							modal_header:						"表情符號統計",
 							modal_titlescopies:					"份數",

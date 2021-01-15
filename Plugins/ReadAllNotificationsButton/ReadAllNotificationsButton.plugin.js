@@ -536,7 +536,7 @@ module.exports = (_ => {
 							context_pingedguilds:				"Máy chủ Pinged",
 							context_unreadguilds:				"Máy chủ chưa đọc"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							context_dms:						"直接讯息",
 							context_guilds:						"所有服务器",
@@ -544,7 +544,7 @@ module.exports = (_ => {
 							context_pingedguilds:				"绑定服务器",
 							context_unreadguilds:				"未读服务器"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							context_dms:						"直接訊息",
 							context_guilds:						"所有服務器",

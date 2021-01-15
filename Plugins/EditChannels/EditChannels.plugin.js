@@ -1066,7 +1066,7 @@ module.exports = (_ => {
 							submenu_channelsettings:			"Thay đổi cài đặt",
 							submenu_resetsettings:				"Đặt lại kênh"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							confirm_reset:						"您确定要重置此频道吗？",
 							confirm_resetall:					"您确定要重置所有频道吗？",
@@ -1079,7 +1079,7 @@ module.exports = (_ => {
 							submenu_channelsettings:			"更改设置",
 							submenu_resetsettings:				"重置频道"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							confirm_reset:						"您確定要重置此頻道嗎？",
 							confirm_resetall:					"您確定要重置所有頻道嗎？",

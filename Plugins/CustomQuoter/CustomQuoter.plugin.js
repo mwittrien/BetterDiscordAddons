@@ -536,11 +536,11 @@ module.exports = (_ => {
 						return {
 							toast_quotecopied:					"Trích dẫn đã được sao chép vào khay nhớ tạm"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							toast_quotecopied:					"报价已复制到剪贴板"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							toast_quotecopied:					"報價已復製到剪貼板"
 						};

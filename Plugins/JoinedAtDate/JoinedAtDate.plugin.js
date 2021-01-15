@@ -454,11 +454,11 @@ module.exports = (_ => {
 						return {
 							joined_at:							"Đã tham gia vào {{time}}"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							joined_at:							"已于{{time}}加入"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							joined_at:							"已於{{time}}加入"
 						};

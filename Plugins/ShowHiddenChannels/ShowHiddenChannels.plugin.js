@@ -739,13 +739,13 @@ module.exports = (_ => {
 							modal_allowed:						"Được phép",
 							modal_denied:						"Phủ định"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							context_hidehidden:					"隐藏锁定的频道",
 							modal_allowed:						"允许的",
 							modal_denied:						"被拒绝"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							context_hidehidden:					"隱藏鎖定的頻道",
 							modal_allowed:						"允許的",

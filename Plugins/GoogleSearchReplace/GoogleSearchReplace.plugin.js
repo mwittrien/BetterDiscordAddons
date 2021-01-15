@@ -307,12 +307,12 @@ module.exports = (_ => {
 							context_googlesearchreplace:		"Tìm kiếm với ...",
 							submenu_disabled:					"Tất cả đã bị vô hiệu hóa"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							context_googlesearchreplace:		"用 ... 搜索",
 							submenu_disabled:					"全部禁用"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							context_googlesearchreplace:		"用 ... 搜索",
 							submenu_disabled:					"全部禁用"

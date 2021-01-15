@@ -602,13 +602,13 @@ module.exports = (_ => {
 							context_spellcheck:					"Thêm vào từ điển",
 							toast_wordadd:						"Đã thêm từ '{{word}}' vào từ điển '{{dicName}}'."
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							context_nosimilarwords:				"没有类似的词",
 							context_spellcheck:					"添加到字典",
 							toast_wordadd:						"将单词'{{word}}'添加到字典'{{dicName}}'中。"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							context_nosimilarwords:				"沒有類似的詞",
 							context_spellcheck:					"添加到字典",

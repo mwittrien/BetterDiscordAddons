@@ -437,11 +437,11 @@ module.exports = (_ => {
 						return {
 							created_at:							"Được tạo vào {{time}}"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							created_at:							"创建于{{time}}"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							created_at:							"創建於{{time}}"
 						};

@@ -1179,7 +1179,7 @@ module.exports = (_ => {
 							popout_untranslateoption:			"Chưa dịch",
 							translated_watermark:				"đã dịch"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							context_googletranslateoption:		"搜索翻译",
 							context_messagetranslateoption:		"翻译讯息",
@@ -1188,11 +1188,11 @@ module.exports = (_ => {
 							popout_untranslateoption:			"取消翻译",
 							translated_watermark:				"已翻译"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							context_googletranslateoption:		"搜索翻譯",
 							context_messagetranslateoption:		"翻譯訊息",
-							context_messageuntranslateoption:	"取消翻譯郵件",
+							context_messageuntranslateoption:	"取消翻譯訊息",
 							popout_translateoption:				"翻譯",
 							popout_untranslateoption:			"取消翻譯",
 							translated_watermark:				"已翻譯"

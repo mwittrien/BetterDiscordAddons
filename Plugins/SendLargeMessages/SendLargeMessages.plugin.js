@@ -266,11 +266,11 @@ module.exports = (_ => {
 						return {
 							toast_allsent:						"Tất cả tin nhắn đã gửi"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							toast_allsent:						"已发送所有消息"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							toast_allsent:						"已發送所有消息"
 						};

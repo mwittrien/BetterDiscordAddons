@@ -437,11 +437,11 @@ module.exports = (_ => {
 						return {
 							management:							"Sự quản lý"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							management:							"管理"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							management:							"管理"
 						};

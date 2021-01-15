@@ -315,11 +315,11 @@ module.exports = (_ => {
 						return {
 							modal_savepreset:					"Lưu dưới dạng Chọn nhanh"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							modal_savepreset:					"另存为快速选择"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							modal_savepreset:					"另存為快速選擇"
 						};

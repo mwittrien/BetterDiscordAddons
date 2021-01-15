@@ -1223,7 +1223,7 @@ module.exports = (_ => {
 							submenu_resetsettings:				"Đặt lại máy chủ",
 							submenu_serversettings:				"Thay đổi cài đặt"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							confirm_reset:						"您确定要重置此服务器吗？",
 							confirm_resetall:					"您确定要重置所有服务器吗？",
@@ -1245,7 +1245,7 @@ module.exports = (_ => {
 							submenu_resetsettings:				"重置服务器",
 							submenu_serversettings:				"更改设置"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							confirm_reset:						"您確定要重置此服務器嗎？",
 							confirm_resetall:					"您確定要重置所有服務器嗎？",

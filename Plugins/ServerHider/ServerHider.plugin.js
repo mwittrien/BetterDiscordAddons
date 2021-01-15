@@ -503,7 +503,7 @@ module.exports = (_ => {
 							submenu_hideserver:					"Ẩn máy chủ",
 							submenu_openhidemenu:				"Quản lý danh sách máy chủ"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							context_serverhider:				"服务器可见性",
 							modal_header:						"管理服务器列表",
@@ -511,7 +511,7 @@ module.exports = (_ => {
 							submenu_hideserver:					"隐藏服务器",
 							submenu_openhidemenu:				"管理服务器列表"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							context_serverhider:				"服務器可見性",
 							modal_header:						"管理服務器列表",

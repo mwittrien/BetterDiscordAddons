@@ -1762,7 +1762,7 @@ module.exports = (_ => {
 							serversubmenu_createfolder:			"Tạo thư mục",
 							serversubmenu_removefromfolder:		"Xóa máy chủ khỏi thư mục"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							foldercontext_autoreadfolder:		"自动：标记为已读",
 							foldercontext_mutefolder:			"静音文件夹",
@@ -1787,7 +1787,7 @@ module.exports = (_ => {
 							serversubmenu_createfolder:			"创建文件夹",
 							serversubmenu_removefromfolder:		"从文件夹中删除服务器"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							foldercontext_autoreadfolder:		"自動：標記為已讀",
 							foldercontext_mutefolder:			"靜音文件夾",

@@ -448,12 +448,12 @@ module.exports = (_ => {
 							button_injectattachmenty:			"Tải nội dung tin nhắn",
 							context_uninjectattachment:			"Xóa nội dung tin nhắn đã tải"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							button_injectattachmenty:			"加载消息内容",
 							context_uninjectattachment:			"删除已加载的邮件内容"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							button_injectattachmenty:			"加載消息內容",
 							context_uninjectattachment:			"刪除已加載的郵件內容"

@@ -481,11 +481,11 @@ module.exports = (_ => {
 						return {
 							last_message:						"Tin nhắn cuối cùng vào {{time}}"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							last_message:						"{{time}}上的最后一条消息"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							last_message:						"{{time}}上的最後一條消息"
 						};

@@ -2035,7 +2035,7 @@ module.exports = (_ => {
 							submenu_resetsettings:				"Đặt lại người dùng",
 							submenu_usersettings:				"Thay đổi cài đặt"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							confirm_reset:						"您确定要重置此用户吗？",
 							confirm_resetall:					"您确定要重置所有用户吗？",
@@ -2059,7 +2059,7 @@ module.exports = (_ => {
 							submenu_resetsettings:				"重置用户",
 							submenu_usersettings:				"更改设置"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							confirm_reset:						"您確定要重置此用戶嗎？",
 							confirm_resetall:					"您確定要重置所有用戶嗎？",

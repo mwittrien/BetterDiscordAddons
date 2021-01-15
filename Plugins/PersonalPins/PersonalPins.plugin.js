@@ -967,7 +967,7 @@ module.exports = (_ => {
 							toast_noteremove:					"Đã xóa tin nhắn khỏi sổ ghi chép",
 							toast_noteupdate:					"Đã cập nhật tin nhắn trong sổ tay"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							context_pinoption:					"写下消息",
 							context_unpinoption:				"删除笔记",
@@ -983,7 +983,7 @@ module.exports = (_ => {
 							toast_noteremove:					"邮件已从笔记本中删除",
 							toast_noteupdate:					"更新了笔记本中的消息"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							context_pinoption:					"寫下消息",
 							context_unpinoption:				"刪除筆記",

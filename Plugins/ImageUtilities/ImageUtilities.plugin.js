@@ -1478,7 +1478,7 @@ module.exports = (_ => {
 							toast_saveimage_failed:				"Không lưu được Hình ảnh trong '{{path}}'",
 							toast_saveimage_success:			"Hình ảnh đã Lưu trong '{{path}}'"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							context_copyimage:					"复制图片",
 							context_copyimagelink:				"复制图像链接",
@@ -1493,7 +1493,7 @@ module.exports = (_ => {
 							toast_saveimage_failed:				"无法将图片保存到'{{path}}'中",
 							toast_saveimage_success:			"已将图像保存在'{{path}}'中"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							context_copyimage:					"複製圖片",
 							context_copyimagelink:				"複製圖像鏈接",
