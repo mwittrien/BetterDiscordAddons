@@ -2536,7 +2536,6 @@ module.exports = (_ => {
 					status = typeof status == "string" ? status.toLowerCase() : null;
 					switch (status) {
 						case "online": return BDFDB.DiscordConstants.Colors.STATUS_GREEN;
-						case "mobile": return BDFDB.DiscordConstants.Colors.STATUS_GREEN;
 						case "idle": return BDFDB.DiscordConstants.Colors.STATUS_YELLOW;
 						case "dnd": return BDFDB.DiscordConstants.Colors.STATUS_RED;
 						case "playing": return useColor ? BDFDB.DiscordConstants.Colors.BRAND : "var(--bdfdb-blurple)";
@@ -2547,6 +2546,10 @@ module.exports = (_ => {
 				};
 				BDFDB.UserUtils.getActivity = function (id = BDFDB.UserUtils.me.id) {
 					for (let activity of LibraryModules.StatusMetaUtils.getActivities(id)) if (activity.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS) return activity;
+					return null;
+				};
+				BDFDB.UserUtils.getCustomStatus = function (id = BDFDB.UserUtils.me.id) {
+					for (let activity of LibraryModules.StatusMetaUtils.getActivities(id)) if (activity.type == BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS) return activity;
 					return null;
 				};
 				BDFDB.UserUtils.getAvatar = function (id = BDFDB.UserUtils.me.id) {
@@ -6620,7 +6623,7 @@ module.exports = (_ => {
 									})).flat(10).filter(n => n)
 								})
 							]
-						}), "title", "data", "settings", "renderLabel", "cardClassName", "cardStyle", "checkboxColor", "getCheckboxColor",  "getCheckboxValue", "onCheckboxChange", "configWidth", "pagination"));
+						}), "title", "data", "settings", "renderLabel", "cardClassName", "cardStyle", "checkboxColor", "getCheckboxColor",  "getCheckboxValue", "onCheckboxChange", "configWidth", "biggestWidth", "pagination"));
 					}
 					render() {
 						this.props.settings = BDFDB.ArrayUtils.is(this.props.settings) ? this.props.settings : [];

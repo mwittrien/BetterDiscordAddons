@@ -25,7 +25,7 @@
  - [Edit Users](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers) - Allow you to change the icon, name, tag and color of users
  - [Emoji Statistics](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EmojiStatistics) - Add some helpful options to show you more information about emojis and emojiservers
  - [Force Image Previews](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ForceImagePreviews) - Force embedded Image Previews, if Discord doesn't do it itself
- - [Friend Notifications](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FriendNotifications) - Get a notification when a Friend or a User you choose to observe changing his online status, can be configured individually in the settings
+ - [Friend Notifications](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FriendNotifications) - Get a notification when a Friend or a User, you choose to observe, changes their status
  - [Google Search Replace](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleSearchReplace) - Replace the default Google Text Search with a selection menu of several search engines
  - [Google Translate Option](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleTranslateOption) - Add a Google Translate option to your context menu, which will open the selected text in Google Translate
  - [Hide Muted Categories](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/HideMutedCategories) - Hide muted categories the same way muted channels are hidden, when the server is set to hide muted channels
