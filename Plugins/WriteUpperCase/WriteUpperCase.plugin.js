@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "WriteUpperCase",
 			"author": "DevilBro",
-			"version": "1.2.5",
-			"description": "Change first letter in message input to uppercase"
+			"version": "1.2.6",
+			"description": "Change first letter of each sentence in message input to uppercase"
+		},
+		"changeLog": {
+			"improved": {
+				"Sentences": "Now changes the first letter in every sentence and not just of the first word in a message"
+			}
 		}
 	};
 
@@ -58,6 +63,8 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
+		const symbols = [".", "!", "¡", "?", "¿"], spaces = ["\n", "\r", "\t", " "];
+		
 		return class WriteUpperCase extends Plugin {
 			onLoad () {
 				this.patchedModules = {
@@ -79,13 +86,21 @@ module.exports = (_ => {
 				if (e.instance.props.textValue && e.instance.state.focused) {
 					let string = e.instance.props.textValue;
 					if (string.length > 0) {
-						let newstring = string;
-						let first = string.charAt(0);
-						if (first === first.toUpperCase() && (string.toLowerCase().indexOf("http") == 0 || string.toLowerCase().indexOf("s/") == 0)) newstring = string.charAt(0).toLowerCase() + string.slice(1);
-						else if (first === first.toLowerCase() && first !== first.toUpperCase() && string.toLowerCase().indexOf("http") != 0 && string.toLowerCase().indexOf("s/") != 0) newstring = string.charAt(0).toUpperCase() + string.slice(1);
-						if (string != newstring) {
-							e.instance.props.textValue = newstring;
-							if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.copyRichValue(newstring, e.instance.props.richValue);
+						let newString = string, hasCodeBlock = false;
+						for (let space of spaces) for (let symbol of symbols) if (!hasCodeBlock) {
+							let sentences = newString.split(new RegExp(BDFDB.StringUtils.regEscape(symbol + space), "g"));
+							for (let i in sentences) {
+								let sentence = sentences[i];
+								let first = sentence.charAt(0);
+								if (first === first.toUpperCase() && (sentence.toLowerCase().indexOf("http") == 0 || sentence.toLowerCase().indexOf("s/") == 0)) sentences[i] = sentence.charAt(0).toLowerCase() + sentence.slice(1);
+								else if (first === first.toLowerCase() && first !== first.toUpperCase() && sentence.toLowerCase().indexOf("http") != 0 && sentence.toLowerCase().indexOf("s/") != 0) sentences[i] = sentence.charAt(0).toUpperCase() + sentence.slice(1);
+								if (sentence.indexOf("```") > -1) hasCodeBlock = true;
+							}
+							newString = sentences.join(symbol + space);
+						}
+						if (string != newString) {
+							e.instance.props.textValue = newString;
+							if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.copyRichValue(newString, e.instance.props.richValue);
 						}
 					}
 				}
