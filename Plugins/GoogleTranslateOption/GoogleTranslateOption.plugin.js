@@ -1182,8 +1182,8 @@ module.exports = (_ => {
 					case "zh-CN":	// Chinese (China)
 						return {
 							context_googletranslateoption:		"搜索翻译",
-							context_messagetranslateoption:		"翻译讯息",
-							context_messageuntranslateoption:	"取消翻译邮件",
+							context_messagetranslateoption:		"翻译消息",
+							context_messageuntranslateoption:	"取消翻译消息",
 							popout_translateoption:				"翻译",
 							popout_untranslateoption:			"取消翻译",
 							translated_watermark:				"已翻译"
