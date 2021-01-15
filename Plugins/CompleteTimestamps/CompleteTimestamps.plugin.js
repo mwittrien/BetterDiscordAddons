@@ -259,12 +259,13 @@ module.exports = (_ => {
 			onSettingsClosed () {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
-					currentMode = null;
 					this.forceUpdateAll();
 				}
 			}
 		
 			forceUpdateAll () {
+				currentMode = null;
+					
 				settings = BDFDB.DataUtils.get(this, "settings");
 				choices = BDFDB.DataUtils.get(this, "choices");
 				formats = BDFDB.DataUtils.get(this, "formats");

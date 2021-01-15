@@ -928,11 +928,47 @@ body::before {
 #app-mount .replyBadge-r1su3o {
 	background-color: rgba(var(--vtransparencycolor), 0.5);
 }
-#app-mount .repliedMessage-VokQwo::before {
-	border-color: rgba(var(--vtransparencycolor), 0.5);
-	left: calc((-41px * var(--vusechatbubbles)) + ((1 - var(--vusechatbubbles)) * (-1*(var(--avatar-size)/2 + var(--gutter)))));
+#app-mount .repliedMessage-VokQwo:before,
+#app-mount .repliedMessage-VokQwo:after {
+	--avatar-size: 40px;
+	--gutter: 16px;
+	--spine-width: 2px;
+	content: "";
+	display: block;
+	position: absolute;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	top: 50%;
 	right: unset;
-	width: 32px;
+	bottom: 0;
+	left: calc(-1*var(--avatar-size) - (6px*var(--vusechatbubbles)));
+	width: calc(var(--avatar-size) - 4px);
+	margin-right: var(--reply-spacing);
+	margin-top: calc(-1*var(--spine-width)/2);
+	margin-left: calc(-1*var(--spine-width)/2);
+	margin-bottom: calc(.125rem - 4px);
+	border-left: var(--spine-width) solid var(--background-accent);
+	border-bottom: 0 solid var(--background-accent);
+	border-right: 0 solid var(--background-accent);
+	border-top: var(--spine-width) solid var(--background-accent);
+	border-top-left-radius: 6px;
+}
+#app-mount .compact-T3H92H .repliedMessage-VokQwo::before,
+#app-mount .compact-T3H92H .repliedMessage-VokQwo::after {
+	--avatar-size: 20px;
+	left: calc(-1*var(--avatar-size));
+}
+#app-mount .repliedMessage-VokQwo::before {
+	border-color: rgba(var(--vtransparencycolor), calc(0.5 * var(--vusechatbubbles)));
+}
+#app-mount .repliedMessage-VokQwo::after {
+	border-color: rgba(var(--fontwhite2), calc(0.5 * (1 - var(--vusechatbubbles))));
+}
+#app-mount .compact-T3H92H .repliedMessage-VokQwo::before {
+	border-color: transparent;
+}
+#app-mount .compact-T3H92H .repliedMessage-VokQwo::after {
+	border-color: rgba(var(--fontwhite2), 0.3);
 }
 .cozy-3raOZG .header-23xsNx::after,							/* message				container header					*/
 .cozy-12kSNU .header-1oLBbW::after {						/* message				loading header						*/
