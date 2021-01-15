@@ -1182,17 +1182,35 @@ module.exports = (_ => {
 					case "zh":		// Chinese
 						return {
 							context_googletranslateoption:		"搜索翻译",
-							context_messagetranslateoption:		"翻译讯息",
-							context_messageuntranslateoption:	"取消翻译邮件",
+							context_messagetranslateoption:		"翻译消息",
+							context_messageuntranslateoption:	"取消翻译消息",
 							popout_translateoption:				"翻译",
 							popout_untranslateoption:			"取消翻译",
 							translated_watermark:				"已翻译"
+						};
+					case "zh-CN":	// Chinese (Simplified)
+						return {
+							context_googletranslateoption:		"搜索翻译",
+							context_messagetranslateoption:		"翻译消息",
+							context_messageuntranslateoption:	"取消翻译消息",
+							popout_translateoption:				"翻译",
+							popout_untranslateoption:			"取消翻译",
+							translated_watermark:				"已翻译"
+						};
+					case "zh-HK":	// Chinese (Traditional)
+						return {
+							context_googletranslateoption:		"搜索翻譯",
+							context_messagetranslateoption:		"翻譯訊息",
+							context_messageuntranslateoption:	"取消翻譯訊息",
+							popout_translateoption:				"翻譯",
+							popout_untranslateoption:			"取消翻譯",
+							translated_watermark:				"已翻譯"
 						};
 					case "zh-TW":	// Chinese (Traditional)
 						return {
 							context_googletranslateoption:		"搜索翻譯",
 							context_messagetranslateoption:		"翻譯訊息",
-							context_messageuntranslateoption:	"取消翻譯郵件",
+							context_messageuntranslateoption:	"取消翻譯訊息",
 							popout_translateoption:				"翻譯",
 							popout_untranslateoption:			"取消翻譯",
 							translated_watermark:				"已翻譯"
