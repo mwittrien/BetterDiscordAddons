@@ -66,22 +66,24 @@ module.exports = (_ => {
 			onStop () {}
 		
 			onMessageOptionToolbar (e) {
-				if (!e.instance.props.expanded && e.instance.props.message.author.id != BDFDB.UserUtils.me.id && (BDFDB.UserUtils.can("SEND_MESSAGES") || e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM || e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.GROUP_DM)) e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					key: "mention",
-					text: BDFDB.LanguageUtils.LanguageStrings.MENTION,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-						className: BDFDB.disCN.messagetoolbarbutton,
-						onClick: _ => {
-							BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {
-								content: `<@!${e.instance.props.message.author.id}>`
-							});
-						},
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-							className: BDFDB.disCN.messagetoolbaricon,
-							name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_AT
+				if (!e.instance.props.expanded && e.instance.props.message.author.id != BDFDB.UserUtils.me.id && (BDFDB.UserUtils.can("SEND_MESSAGES") || e.instance.props.channel && (e.instance.props.channel.isDM() || e.instance.props.channel.isGroupDM()))) {
+					e.returnvalue.props.children.splice(1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						key: "mention",
+						text: BDFDB.LanguageUtils.LanguageStrings.MENTION,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.disCN.messagetoolbarbutton,
+							onClick: _ => {
+								BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {
+									content: `<@!${e.instance.props.message.author.id}>`
+								});
+							},
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.messagetoolbaricon,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_AT
+							})
 						})
-					})
-				}));
+					}));
+				}
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));

@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomQuoter",
 			"author": "DevilBro",
-			"version": "1.2.3",
+			"version": "1.2.4",
 			"description": "Customize the output of the native quote feature of Discord"
 		},
 		"changeLog": {
-			"fixed": {
-				"DMs": "No longer always copies quote to clipboard in DMs"
+			"improved": {
+				"Quick Quote": "Quote button now shows in message toolbar even without holding shift, can be disabled"
 			}
 		}
 	};
@@ -107,9 +107,10 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						quoteOnlySelected:		{value: true, 				description: "Only insert selected text in a quoted message"},
-						alwaysCopy:				{value: false, 				description: "Always copy quote to clipboard without holding shift"},
-						ignoreMentionInDM:		{value: true, 				description: "Do not add a mention in DM channels"},
+						quoteOnlySelected:		{value: true, 				description: "Only insert selected Text in a Quoted Message"},
+						holdShiftToolbar:		{value: false, 				description: "Need to hold Shift on a Message to show Quick Quote"},
+						alwaysCopy:				{value: false, 				description: "Always copy Quote to Clipboard without holding Shift"},
+						ignoreMentionInDM:		{value: true, 				description: "Do not add a mention in Direct Messages"},
 						forceZeros:				{value: false, 				description: "Force leading Zeros"}
 					}
 				};
@@ -334,11 +335,11 @@ module.exports = (_ => {
 			}
 		
 			onMessageOptionToolbar (e) {
-				if (e.instance.props.expanded && e.instance.props.message && e.instance.props.channel) {
+				if ((e.instance.props.expanded || !settings.holdShiftToolbar) && e.instance.props.message && e.instance.props.channel) {
 					let quoteButton = BDFDB.ReactUtils.findChild(e.returnvalue, {key: "quote"});
 					if (!quoteButton) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: "mark-unread"});
-						children.splice(index > -1 ? index : 0, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: ["reply", "mark-unread"]});
+						children.splice(index > -1 ? index : (!e.instance.props.expanded ? 1 : 0), 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							key: "quote",
 							text: BDFDB.LanguageUtils.LanguageStrings.QUOTE,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
