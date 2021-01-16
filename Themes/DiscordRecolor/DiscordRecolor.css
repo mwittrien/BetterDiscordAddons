@@ -3,6 +3,8 @@
 @import url(https://discord-custom-covers.github.io/usrbg/dist/usrbg.css);
 
 :root {
+	--dfont:					Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
+	
 	--daccentcolor: 			114,137,218;
 	--dlinkcolor: 				0,176,244;
 	--dmentioncolor: 			250,166,26;
@@ -20,6 +22,9 @@
 	--dbackgroundsecondaryalt: 	41,43,47;
 	--dbackgroundtertiary: 		32,34,37;
 	--dbackgroundfloating: 		24,25,28;
+	
+	
+	--vfont:					var(--font,									var(--dfont));
 	
 	--vaccentcolor:				var(--accentcolor,							var(--daccentcolor));
 	--vlinkcolor:				var(--linkcolor,							var(--dlinkcolor));
@@ -177,6 +182,10 @@ html {
 
 
 /* ~~~~		1.		GENERAL							~~~~ */
+
+::-webkit-input-placeholder, body, button, input, select, textarea {
+	font-family: var(--vfont);
+}
 
 svg [style*="stroke: rgb(114, 118, 125)"],
 svg [style*="stroke: #72767d"],
