@@ -848,6 +848,13 @@ img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 	object-position: -999999px -999999px;
 }
 
+img[src='/assets/c2c982c416a67d43d72d182f079a8d22.svg'],
+img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
+	background-image: url(https://discordapp.com/assets/58957d928db6fb9d4658eb882f33d7bc.svg);
+	opacity: .5;
+	object-position: -999999px -999999px;
+}
+
 .emptyStateImage-3SXmVX {
 	opacity: .5;
 }
