@@ -7300,6 +7300,12 @@ html .bd-toast.toast-warn.icon::before {
 
 .bd-pfbtn {													/* addonlist			folderbutton						*/
 	color: rgb(var(--fontwhite1));
+	text-shadow: 1px 1px var(--vtextshadow);
+}
+
+.bd-server-tag {											/* addonlist			public list tag						*/
+	color: rgb(var(--fontwhite1));
+	text-shadow: 1px 1px var(--vtextshadow);
 }
 
 .bd-search-wrapper {										/* addonlist			searchbar container					*/
