@@ -20,6 +20,7 @@
 
 :root {
 	--font:						Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;					/*	General Font				*/
+	--settingsicons:			1;						/*	Use Settings Icons in User/Server/Channel Settings: 1 = yes, 0 = no			*/
 	
 	--accentcolor: 				114,137,218;			/*	Blurple				 - 	default:	114,137,218		 - 	hex:	#7289da		*/
 	--linkcolor: 				0,176,244;				/*	Link Color			 - 	default:	0,176,244		 - 	hex:	#00b0f4		*/

@@ -1,4 +1,5 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/SettingsIcons.css);
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/BlurpleRecolor.css);
 @import url(https://discord-custom-covers.github.io/usrbg/dist/usrbg.css);
 
@@ -7177,6 +7178,17 @@ html .bd-toast.toast-warn.icon::before {
 	color: rgb(var(--fontwhite4)) !important;
 }
 
+#app-mount .bd-server-card {								/* pubslayer			guildcard							*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+#app-mount .bd-server-icon {								/* pubslayer			guildicon							*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	border-color: transparent;
+}
+#app-mount .bd-server-card:hover,
+#app-mount .bd-server-icon:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
 .bd-server-description-container {							/* pubslayer			guilddescription					*/
 	border-color: rgba(var(--fontwhite4), 0.3);
 	color: rgb(var(--fontwhite3));
