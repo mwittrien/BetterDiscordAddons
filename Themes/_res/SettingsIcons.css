@@ -2,10 +2,12 @@
 	--dsettingsicons: 1;
 	--vsettingsicons: var(--settingsicons, var(--dsettingsicons));
 	--usesettingsicons: calc(var(--settingsicons) / (var(--settingsicons) + 0.00000000000000000000001));
+	--settingsiconssize: 18px;
+	--settingsiconsgap: 14px;
 }
 
 .sidebar-CFHs9e {
-	width: calc(218px + (var(--usesettingsicons)*28px));
+	width: calc(218px + (var(--usesettingsicons)*(var(--settingsiconssize)+var(--settingsiconsgap))));
 }
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ {
 	display: flex;
@@ -15,9 +17,9 @@
 	content: "";
 	position: relative;
 	flex: 0 0 auto;
-	width: calc(var(--usesettingsicons)*18px);
-	height: calc(var(--usesettingsicons)*18px);
-	margin-right: calc(var(--usesettingsicons)*10px);
+	width: calc(var(--usesettingsicons)*var(--settingsiconssize));
+	height: calc(var(--usesettingsicons)*var(--settingsiconssize));
+	margin-right: calc(var(--usesettingsicons)*var(--settingsiconsgap));
 	background: currentColor;
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settings_icons_questionmark.svg) center/contain no-repeat;
 }
