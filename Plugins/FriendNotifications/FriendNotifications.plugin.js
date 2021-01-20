@@ -14,15 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.5.7",
+			"version": "1.5.9",
 			"description": "Get a notification when a Friend or a User, you choose to observe, changes their status"
 		},
 		"changeLog": {
 			"improved": {
-				"Activity": "Now notifies you when the use also changes his activity and not only starts doing something"
-			},
-			"added": {
-				"Custom Status": "You can now get notified when a user changes his custom status"
+				"Activities": "No longer shows status changes for users that still got the same activity"
 			}
 		}
 	};
@@ -89,17 +86,17 @@ module.exports = (_ => {
 			},
 			playing: {
 				value: false,
-				activity: true,
+				checkActivity: true,
 				sound: true
 			},
 			listening: {
 				value: false,
-				activity: true,
+				checkActivity: true,
 				sound: true
 			},
 			streaming: {
 				value: false,
-				activity: true,
+				checkActivity: true,
 				sound: true
 			},
 			offline: {
@@ -701,6 +698,10 @@ module.exports = (_ => {
 				}
 				return status;
 			}
+			
+			compareActivity (id, status) {
+				return BDFDB.equals(BDFDB.ObjectUtils.extract(userStatusStore[id].activity, "name", "details", "state", "emoji"), status && BDFDB.ObjectUtils.extract(status.activity, "name", "details", "state", "emoji"));
+			}
 
 			startInterval () {
 				BDFDB.TimeUtils.clear(checkInterval);
@@ -732,9 +733,9 @@ module.exports = (_ => {
 							observedUsers[id].mobile && userStatusStore[id].mobile != status.mobile ||
 							observedUsers[id].custom && (
 								userStatusStore[id].custom != status.custom ||
-								(customChanged = status.custom && !BDFDB.equals(userStatusStore[id].activity, status.activity))
+								(customChanged = status.custom && !this.compareActivity(id, status))
 							) ||
-							statuses[status.name].activity && !BDFDB.equals(userStatusStore[id].activity, status.activity)
+							statuses[status.name].checkActivity && !this.compareActivity(id, status)
 						)) {
 							let EUdata = BDFDB.BDUtils.isPluginEnabled("EditUsers") && BDFDB.DataUtils.load("EditUsers", "users", user.id) || {};
 							let name = EUdata.name || user.username;
@@ -746,7 +747,7 @@ module.exports = (_ => {
 							
 							let string = notificationStrings[customChanged ? "custom" : status.name] || "'$user' changed status to '$status'";
 							let toastString = BDFDB.StringUtils.htmlEscape(string).replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.StringUtils.htmlEscape(name)}</strong>${settings.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/'{0,1}\$status'{0,1}/g, `<strong>${statusName}</strong>`);
-							if (status.activity) toastString = toastString.replace(/'{0,1}\$song'{0,1}|'{0,1}\$game'{0,1}/g, `<strong>${status.activity.name || status.activity.details}</strong>`).replace(/'{0,1}\$artist'{0,1}|'{0,1}\$custom'{0,1}/g, `<strong>${status.activity.state}</strong>`);
+							if (status.activity) toastString = toastString.replace(/'{0,1}\$song'{0,1}|'{0,1}\$game'{0,1}/g, `<strong>${status.activity.name || status.activity.details || ""}</strong>`).replace(/'{0,1}\$artist'{0,1}|'{0,1}\$custom'{0,1}/g, `<strong>${[status.activity.emoji && status.activity.emoji.name, status.activity.state].filter(n => n).join(" ") || ""}</strong>`);
 							
 							timeLog.unshift({
 								string: toastString,
@@ -769,7 +770,7 @@ module.exports = (_ => {
 								};
 								if (observedUsers[id][status.name] == notificationTypes.DESKTOP.value) {
 									let desktopString = string.replace(/\$user/g, `${name}${settings.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/\$status/g, statusName);
-									if (status.activity) desktopString = desktopString.replace(/\$song|\$game/g, status.activity.name || status.activity.details).replace(/\$artist|\$custom/g, status.activity.state);
+									if (status.activity) desktopString = desktopString.replace(/\$song|\$game/g, status.activity.name || status.activity.details || "").replace(/\$artist|\$custom/g, [status.activity.emoji && status.activity.emoji.name, status.activity.state].filter(n => n).join(" ") || "");
 									let notificationsound = notificationSounds["desktop" + status.name] || {};
 									BDFDB.NotificationUtils.desktop(desktopString, {icon: avatar, timeout: desktopTime, click: openChannel, silent: notificationsound.mute, sound: notificationsound.song});
 								}
