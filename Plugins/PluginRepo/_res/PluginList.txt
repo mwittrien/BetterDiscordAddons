@@ -102,7 +102,6 @@ https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/T
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/WriteUpperCase/WriteUpperCase.plugin.js
 https://raw.githubusercontent.com/noodlebox/betterdiscord-plugins/master/SilentTyping.plugin.js
 https://raw.githubusercontent.com/noodlebox/betterdiscord-plugins/master/StaticAvatars.plugin.js
-https://raw.githubusercontent.com/orblazer/discord-nordic/master/nordic.theme.css
 https://raw.githubusercontent.com/Orrielel/BetterDiscordAddons/master/Plugins/BetterImagePopups/BetterImagePopups.plugin.js
 https://raw.githubusercontent.com/planetarian/BetterDiscordPlugins/master/DefaultChannels.plugin.js
 https://raw.githubusercontent.com/planetarian/BetterDiscordPlugins/master/Zalgo.plugin.js
