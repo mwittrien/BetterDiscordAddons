@@ -722,6 +722,7 @@
 			"customStatusItem": "customStatusItem-f5Trsa",
 			"deleteButton": "deleteButton-k8a4Sa",
 			"deleteIcon": "deleteIcon-22SgHa",
+			"dragPreview": "dragPreview-3F0ssT",
 			"sortableCard": "sortableCard-oF6sTT",
 			"sortDivider": "sortDivider-d8SzzU"
 		},
@@ -1181,6 +1182,7 @@
 		"_customstatuspresetscustomstatusitem": ["CustomStatusPresets", "customStatusItem"],
 		"_customstatuspresetsdeletebutton": ["CustomStatusPresets", "deleteButton"],
 		"_customstatuspresetsdeleteicon": ["CustomStatusPresets", "deleteIcon"],
+		"_customstatuspresetsdragpreview": ["CustomStatusPresets", "dragPreview"],
 		"_customstatuspresetssortablecard": ["CustomStatusPresets", "sortableCard"],
 		"_customstatuspresetssortdivider": ["CustomStatusPresets", "sortDivider"],
 		"_displaylargemessagesinjectbutton": ["DisplayLargeMessages", "injectButton"],

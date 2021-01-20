@@ -141,12 +141,12 @@ module.exports = (_ => {
 													if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 														BDFDB.ListenerUtils.stopEvent(event);
 														this.draggedGuild = guildId;
-														let dragpreview = _this.createDragPreview(BDFDB.ReactUtils.findDOMNode(instance).cloneNode(true), event2);
+														let dragPreview = _this.createDragPreview(BDFDB.ReactUtils.findDOMNode(instance).cloneNode(true), event2);
 														BDFDB.ReactUtils.forceUpdate(this);
 														document.removeEventListener("mousemove", mouseMove);
 														document.removeEventListener("mouseup", mouseUp);
 														let dragging = event3 => {
-															_this.updateDragPreview(dragpreview, event3);
+															_this.updateDragPreview(dragPreview, event3);
 															let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._serverfoldersguildplaceholder, event3.target);
 															let hoveredGuild = (BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildouter, placeholder ? placeholder.previousSibling : event3.target), "guild", {up: true}) || {}).id;
 															if (hoveredGuild) {
@@ -160,7 +160,7 @@ module.exports = (_ => {
 														};
 														let releasing = event3 => {
 															BDFDB.ListenerUtils.stopEvent(event3);
-															BDFDB.DOMUtils.remove(dragpreview);
+															BDFDB.DOMUtils.remove(dragPreview);
 															if (this.hoveredGuild) {
 																let guildIds = [].concat(folder.guildIds);
 																BDFDB.ArrayUtils.remove(guildIds, this.draggedGuild, true);
@@ -1147,22 +1147,22 @@ module.exports = (_ => {
 
 			createDragPreview (div, event) {
 				if (!Node.prototype.isPrototypeOf(div)) return;
-				let dragpreview = div.cloneNode(true);
-				BDFDB.DOMUtils.addClass(dragpreview, BDFDB.disCN._serverfoldersdragpreview);
-				BDFDB.DOMUtils.remove(dragpreview.querySelector(BDFDB.dotCNC.guildlowerbadge + BDFDB.dotCNC.guildupperbadge + BDFDB.dotCN.guildpillwrapper));
-				BDFDB.DOMUtils.hide(dragpreview);
-				dragpreview.style.setProperty("pointer-events", "none", "important");
-				dragpreview.style.setProperty("left", event.clientX - 25 + "px", "important");
-				dragpreview.style.setProperty("top", event.clientY - 25 + "px", "important");
-				document.querySelector(BDFDB.dotCN.appmount).appendChild(dragpreview);
-				return dragpreview;
+				let dragPreview = div.cloneNode(true);
+				BDFDB.DOMUtils.addClass(dragPreview, BDFDB.disCN._serverfoldersdragpreview);
+				BDFDB.DOMUtils.remove(dragPreview.querySelector(BDFDB.dotCNC.guildlowerbadge + BDFDB.dotCNC.guildupperbadge + BDFDB.dotCN.guildpillwrapper));
+				BDFDB.DOMUtils.hide(dragPreview);
+				dragPreview.style.setProperty("pointer-events", "none", "important");
+				dragPreview.style.setProperty("left", event.clientX - 25 + "px", "important");
+				dragPreview.style.setProperty("top", event.clientY - 25 + "px", "important");
+				document.querySelector(BDFDB.dotCN.appmount).appendChild(dragPreview);
+				return dragPreview;
 			}
 
-			updateDragPreview (dragpreview, event) {
-				if (!Node.prototype.isPrototypeOf(dragpreview)) return;
-				BDFDB.DOMUtils.show(dragpreview);
-				dragpreview.style.setProperty("left", event.clientX - 25 + "px", "important");
-				dragpreview.style.setProperty("top", event.clientY - 25 + "px", "important");
+			updateDragPreview (dragPreview, event) {
+				if (!Node.prototype.isPrototypeOf(dragPreview)) return;
+				BDFDB.DOMUtils.show(dragPreview);
+				dragPreview.style.setProperty("left", event.clientX - 25 + "px", "important");
+				dragPreview.style.setProperty("top", event.clientY - 25 + "px", "important");
 			}
 
 			setLabelsByLanguage () {
