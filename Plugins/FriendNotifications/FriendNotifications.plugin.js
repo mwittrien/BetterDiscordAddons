@@ -131,10 +131,10 @@ module.exports = (_ => {
 		};
 		
 		const FriendOnlineCounterComponent = class FriendOnlineCounter extends BdApi.React.Component {
-			componentDidMount () {
+			componentDidMount() {
 				friendCounter = this;
 			}
-			render () {
+			render() {
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN.guildouter,
 					children: BDFDB.ReactUtils.createElement("div", {
@@ -149,10 +149,10 @@ module.exports = (_ => {
 		};
 		
 		const TimeLogComponent = class TimeLog extends BdApi.React.Component {
-			componentDidMount () {
+			componentDidMount() {
 				timeLogList = this;
 			}
-			render () {
+			render() {
 				return this.props.entries.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PaginatedList, {
 					items: this.props.entries,
 					amount: 100,

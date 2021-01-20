@@ -71,14 +71,14 @@ module.exports = (_ => {
 				super(props);
 				this.state = {fetchedOwner: false, delayed: false, repositioned: false};
 			}
-			componentDidUpdate () {
+			componentDidUpdate() {
 				if (amounts.tooltipDelay && this.state.delayed && !this.state.repositioned) {
 					this.state.repositioned = true;
 					let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return.return.stateNode.containerInfo`));
 					if (tooltip) tooltip.update();
 				}
 			}
-			render () {
+			render() {
 				if (amounts.tooltipDelay && !this.state.delayed) {
 					BDFDB.TimeUtils.timeout(_ => {
 						this.state.delayed = true;
@@ -144,7 +144,7 @@ module.exports = (_ => {
 		};
 		
 		const GuildDetailsRowComponent = class GuildDetailsRow extends BdApi.React.Component {
-			render () {
+			render() {
 				return (this.props.prefix.length + this.props.string.length) > Math.round(34 * (amounts.tooltipWidth/300)) ? [
 					BDFDB.ReactUtils.createElement("div", {
 						children: `${this.props.prefix}:`

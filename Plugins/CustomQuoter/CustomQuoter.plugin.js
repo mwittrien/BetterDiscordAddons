@@ -67,7 +67,7 @@ module.exports = (_ => {
 		var settings = {}, formats = {}, format = null;
 		
 		const PreviewMessageComponent = class PreviewMessage extends BdApi.React.Component {
-			render () {
+			render() {
 				let spoofChannel = new BDFDB.DiscordObjects.Channel({
 					id: "126223823845647771",
 					guild_id: "850725684241078788",

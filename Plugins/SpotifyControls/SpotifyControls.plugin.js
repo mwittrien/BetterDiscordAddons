@@ -71,7 +71,7 @@ module.exports = (_ => {
 		];
 	
 		const SpotifyControlsComponent = class SpotifyControls extends BdApi.React.Component {
-			componentDidMount () {
+			componentDidMount() {
 				controls = this;
 			}
 			request(socket, device, type, data) {
@@ -110,7 +110,7 @@ module.exports = (_ => {
 					});
 				});
 			}
-			render () {
+			render() {
 				let socketDevice = BDFDB.LibraryModules.SpotifyTrackUtils.getActiveSocketAndDevice();
 				if (!socketDevice) return null;
 				if (this.props.song) {
@@ -321,7 +321,7 @@ module.exports = (_ => {
 			}
 		};
 		const SpotifyControlsButtonComponent = class SpotifyControlsButton extends BdApi.React.Component {
-			render () {
+			render() {
 				if (!this.props.playerSize || !buttonConfigs[this.props.type] || !buttonConfigs[this.props.type][this.props.playerSize]) return null;
 				let button = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.accountinfobutton, this.props.disabled ? BDFDB.disCN.accountinfobuttondisabled : BDFDB.disCN.accountinfobuttonenabled, this.props.active && BDFDB.disCN._spotifycontrolsbuttonactive),
@@ -343,7 +343,7 @@ module.exports = (_ => {
 	}
 		};
 		const SpotifyControlsTimelineComponent = class SpotifyControlsTimeline extends BdApi.React.Component {
-			componentDidMount () {
+			componentDidMount() {
 				BDFDB.TimeUtils.clear(updateInterval);
 				updateInterval = BDFDB.TimeUtils.interval(_ => {
 					if (!this.updater || typeof this.updater.isMounted != "function" || !this.updater.isMounted(this)) BDFDB.TimeUtils.clear(updateInterval);
@@ -360,7 +360,7 @@ module.exports = (_ => {
 				let hours = Math.floor((time / (1000 * 60 * 60)) % 24);
 				return `${hours > 0 ? hours + ":" : ""}${hours > 0 && minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`
 			}
-			render () {
+			render() {
 				let maxTime = this.props.song.timestamps.end - this.props.song.timestamps.start;
 				let currentTime = (!playbackState.is_playing && stopTime ? stopTime : new Date()) - this.props.song.timestamps.start;
 				currentTime = currentTime > maxTime ? maxTime : currentTime;

@@ -119,7 +119,7 @@ module.exports = (_ => {
 		const themeRepoIcon = `<svg width="36" height="31" viewBox="20 0 400 332"><path d="M0.000 39.479 L 0.000 78.957 43.575 78.957 L 87.151 78.957 87.151 204.097 L 87.151 329.236 129.609 329.236 L 172.067 329.236 172.067 204.097 L 172.067 78.957 215.642 78.957 L 259.218 78.957 259.218 39.479 L 259.218 0.000 129.609 0.000 L 0.000 0.000 0.000 39.479" stroke="none" fill="COLOR_1" fill-rule="evenodd"></path><path d="M274.115 38.624 L 274.115 77.248 280.261 77.734 C 309.962 80.083,325.986 106.575,313.378 132.486 C 305.279 149.131,295.114 152.700,255.800 152.700 L 230.168 152.700 230.168 123.277 L 230.168 93.855 208.566 93.855 L 186.965 93.855 186.965 211.546 L 186.965 329.236 208.566 329.236 L 230.168 329.236 230.168 277.068 L 230.168 224.899 237.268 225.113 L 244.368 225.326 282.215 277.095 L 320.062 328.864 360.031 329.057 L 400.000 329.249 400.000 313.283 L 400.000 297.317 367.924 256.908 L 335.848 216.499 340.182 214.869 C 376.035 201.391,395.726 170.616,399.382 122.342 C 405.008 48.071,360.214 0.000,285.379 0.000 L 274.115 0.000 274.115 38.624" stroke="none" fill="COLOR_2" fill-rule="evenodd"></path></svg>`;
 		
 		const RepoListComponent = class ThemeList extends BdApi.React.Component {
-			componentDidMount () {
+			componentDidMount() {
 				list = this;
 				BDFDB.TimeUtils.timeout(_ => {
 					forcedSort = null;
@@ -224,7 +224,7 @@ module.exports = (_ => {
 					}
 				});
 			}
-			render () {
+			render() {
 				let automaticLoading = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.automaticLoading);
 				if (!this.props.tab) this.props.tab = "Themes";
 				this.props.entries = (!loading.is && !BDFDB.ObjectUtils.isEmpty(loadedThemes) ? this.filterThemes() : []).map(theme => BDFDB.ReactUtils.createElement(RepoCardComponent, {
@@ -503,7 +503,7 @@ module.exports = (_ => {
 		};
 		
 		const RepoCardComponent = class ThemeCard extends BdApi.React.Component {
-			render () {
+			render() {
 				let buttonConfig = buttonData[(Object.entries(themeStates).find(n => n[1] == this.props.theme.state) || [])[0]];
 				return buttonConfig && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AddonCard, {
 					icon: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
@@ -677,10 +677,10 @@ module.exports = (_ => {
 		};
 		
 		const RepoListHeaderComponent = class ThemeListHeader extends BdApi.React.Component {
-			componentDidMount () {
+			componentDidMount() {
 				header = this;
 			}
-			render () {
+			render() {
 				if (!this.props.tab) this.props.tab = "Themes";
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN._repolistheader,

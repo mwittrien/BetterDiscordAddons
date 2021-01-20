@@ -95,7 +95,7 @@ module.exports = (_ => {
 		};
 		
 		const userRowComponent = class UserRow extends BdApi.React.Component {
-			componentDidMount () {
+			componentDidMount() {
 				if (this.props.user.fetchable) {
 					this.props.user.fetchable = false;
 					BDFDB.LibraryModules.UserFetchUtils.getUser(this.props.user.id).then(fetchedUser => {
@@ -104,7 +104,7 @@ module.exports = (_ => {
 					});
 				}
 			}
-			render () {
+			render() {
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
 					prefix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
 						className: BDFDB.disCN.listavatar,
@@ -128,7 +128,7 @@ module.exports = (_ => {
 		};
 		
 		const roleRowComponent = class RoleRow extends BdApi.React.Component {
-			render () {
+			render() {
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
 					prefix: BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS.avataricon + BDFDB.disCNS.listavatar + BDFDB.disCNS.avatariconsizemedium + BDFDB.disCN.avatariconinactive,

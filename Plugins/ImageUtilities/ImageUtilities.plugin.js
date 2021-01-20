@@ -74,18 +74,18 @@ module.exports = (_ => {
 		var settings = {}, amounts = {}, zoomSettings = {}, engines = {}, enabledEngines = {}, ownLocations = {}, downloadsFolder;
 		
 		const ImageDetails = class ImageDetails extends BdApi.React.Component {
-			componentDidMount () {
+			componentDidMount() {
 				this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "attachment", {up: true});
 				BDFDB.ReactUtils.forceUpdate(this);
 			}
-			componentDidUpdate () {
+			componentDidUpdate() {
 				if ((!this.props.attachment || !this.props.attachment.size) && !this.props.loaded) {
 					this.props.loaded = true;
 					this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "attachment", {up: true});
 					BDFDB.ReactUtils.forceUpdate(this);
 				}
 			}
-			render () {
+			render() {
 				return !this.props.attachment ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 					className: BDFDB.disCN._imageutilitiesimagedetails,
 					children: [

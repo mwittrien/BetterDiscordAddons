@@ -86,10 +86,10 @@ module.exports = (_ => {
 		
 		var folderGuildContent = null;
 		const folderGuildContentComponent = class FolderGuildsContent extends BdApi.React.Component {
-			componentDidMount () {
+			componentDidMount() {
 				folderGuildContent = this;
 			}
-			render () {
+			render() {
 				let closing = this.props.closing;
 				delete this.props.closing;
 				let folders = Array.from(BDFDB.LibraryModules.FolderUtils.getExpandedFolders()).map(folderId => BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderId)).filter(folder => folder && folder.guildIds);
@@ -201,7 +201,7 @@ module.exports = (_ => {
 		};
 		
 		const folderIconPickerComponent = class FolderIconPicker extends BdApi.React.Component {
-			render () {
+			render() {
 				let folderIcons = _this.loadAllIcons();
 				for (let id in folderIcons) if (!folderIcons[id].customID) {
 					folderIcons[id].openicon = _this.createBase64SVG(folderIcons[id].openicon);
@@ -252,7 +252,7 @@ module.exports = (_ => {
 		var redCross = `'data:image/svg+xml; base64, PHN2ZyB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48cGF0aCBkPSJNNDAuNDAwIDE3LjE3OCBDIDM5Ljg1MCAxNy4zNjYsMzguNzkzIDE3LjUzOCwzOC4wNTAgMTcuNTYwIEMgMzMuMzUxIDE3LjY5OSwyMy4zOTcgMjQuNzg4LDIxLjM4MSAyOS40MzIgQyAyMS4wODcgMzAuMTA5LDIwLjU2NiAzMC44OTYsMjAuMjIzIDMxLjE4MSBDIDE5Ljg4MCAzMS40NjUsMTkuNjAwIDMxLjg2NiwxOS42MDAgMzIuMDcxIEMgMTkuNjAwIDMyLjI3NiwxOS4yMzYgMzMuMjQyLDE4Ljc5MiAzNC4yMTggQyAxNi4zNDUgMzkuNTg5LDE2LjM0NSA0OS42MTEsMTguNzkyIDU0Ljk4MiBDIDE5LjIzNiA1NS45NTgsMTkuNjAwIDU2LjkxOCwxOS42MDAgNTcuMTE2IEMgMTkuNjAwIDU3LjMxNCwxOS45NjAgNTcuODAyLDIwLjQwMCA1OC4yMDAgQyAyMC44NDAgNTguNTk4LDIxLjIwMCA1OS4xMzEsMjEuMjAwIDU5LjM4NSBDIDIxLjIwMCA2MC4zOTEsMjUuNjgwIDY0Ljk0Miw5MS41MDUgMTMwLjgwMCBDIDEyOC45OTUgMTY4LjMxMCwxNTkuODQ5IDE5OS4zMjYsMTYwLjA2OCAxOTkuNzI0IEMgMTYwLjQwOSAyMDAuMzQ0LDE1MC45NTAgMjA5Ljk2NCw5My45ODkgMjY2LjkyNCBDIDE4Ljc5OCAzNDIuMTEzLDE5LjYwMCAzNDEuMjkyLDE5LjYwMCAzNDMuMTI2IEMgMTkuNjAwIDM0My4yODMsMTkuMjUwIDM0NC4wNjUsMTguODIyIDM0NC44NjQgQyAxNS40MjkgMzUxLjE5NSwxNS45NTggMzYyLjkxOCwxOS45MzIgMzY5LjQ0MCBDIDIyLjA5NCAzNzIuOTkwLDI3LjQ3NCAzNzguODAwLDI4LjU5OCAzNzguODAwIEMgMjguODYxIDM3OC44MDAsMjkuNDAyIDM3OS4xNjAsMjkuODAwIDM3OS42MDAgQyAzMC4xOTggMzgwLjA0MCwzMC43MDMgMzgwLjQwMCwzMC45MjIgMzgwLjQwMCBDIDMxLjE0MSAzODAuNDAwLDMyLjIzOCAzODAuODMxLDMzLjM2MCAzODEuMzU4IEMgMzQuNDgyIDM4MS44ODYsMzYuNDgwIDM4Mi41MzMsMzcuODAwIDM4Mi43OTcgQyA0My43ODYgMzgzLjk5NCw0NC4zMjMgMzg0LjAyNyw0Ny4yOTkgMzgzLjM4NiBDIDQ4Ljg5NSAzODMuMDQyLDUxLjAxMCAzODIuNjE5LDUyLjAwMCAzODIuNDQ2IEMgNTIuOTkwIDM4Mi4yNzQsNTQuNTE3IDM4MS43NDMsNTUuMzk0IDM4MS4yNjYgQyA1Ni4yNzEgMzgwLjc5MCw1Ny4xODggMzgwLjQwMCw1Ny40MzIgMzgwLjQwMCBDIDU3LjY3NiAzODAuNDAwLDU4LjIwMiAzODAuMDQwLDU4LjYwMCAzNzkuNjAwIEMgNTguOTk4IDM3OS4xNjAsNTkuNTk4IDM3OC44MDAsNTkuOTMyIDM3OC44MDAgQyA2MC4yNjcgMzc4LjgwMCw5MS43MjUgMzQ3LjYxNSwxMjkuODM5IDMwOS41MDAgQyAxNjkuMDU3IDI3MC4yODEsMTk5LjQ5NiAyNDAuMTQ1LDE5OS45NjQgMjQwLjA3MyBDIDIwMC42MDIgMjM5Ljk3NSwyMTYuMDAxIDI1NS4xOTMsMjY3LjQ5NSAzMDYuODE0IEMgMzI3LjA0NiAzNjYuNTExLDMzOS41MzEgMzc4LjgwMCwzNDAuNjI3IDM3OC44MDAgQyAzNDAuNzk4IDM3OC44MDAsMzQxLjI2NSAzNzkuMDk3LDM0MS42NjcgMzc5LjQ2MSBDIDM0NS43MjggMzgzLjEzNiwzNjEuMDEzIDM4NC40MDksMzY1LjY4NSAzODEuNDYxIEMgMzY2LjE4OCAzODEuMTQzLDM2Ny4wMjQgMzgwLjc1NywzNjcuNTQxIDM4MC42MDIgQyAzNzAuNTgzIDM3OS42OTEsMzc2LjYyMyAzNzQuMjAwLDM3OS4zODIgMzY5LjgzNiBDIDM4NS4xMDUgMzYwLjc4NSwzODQuMDM5IDM0Ni40MDksMzc3LjAzOSAzMzguMjI4IEMgMzc2LjA4NCAzMzcuMTEzLDM0NC44NDYgMzA1Ljc0MywzMDcuNjIxIDI2OC41MTcgQyAyNTUuMzI5IDIxNi4yMjQsMjM5Ljk2OSAyMDAuNjQ3LDI0MC4wNzAgMjAwLjAwOSBDIDI0MC4xNDMgMTk5LjU0NSwyNzAuMDYyIDE2OS4yODgsMzA4LjIxNiAxMzEuMDkxIEMgMzQ1LjYyNSA5My42NDEsMzc2LjcyMyA2Mi4zNzAsMzc3LjMyNCA2MS42MDAgQyAzODQuMjg2IDUyLjY3OCwzODUuMDM2IDQwLjYyMSwzNzkuMjc3IDMwLjE3MSBDIDM3Ni4xMzYgMjQuNDY5LDM2Ny45MDYgMTguNTM3LDM2MS42NjggMTcuNDc3IEMgMzU0LjY1NiAxNi4yODYsMzQ1LjA5NSAxNy42NjUsMzQxLjg4MyAyMC4zMzEgQyAzNDEuNTY3IDIwLjU5NCwzNDAuNTQ5IDIxLjMxOCwzMzkuNjIyIDIxLjk0MSBDIDMzOC42OTUgMjIuNTYzLDMwNy4wMzEgNTMuOTcyLDI2OS4yNTkgOTEuNzM3IEMgMjMxLjQ4NiAxMjkuNTAxLDIwMC4zMzAgMTYwLjQwMCwyMDAuMDIyIDE2MC40MDAgQyAxOTkuNzE0IDE2MC40MDAsMTY4LjkzOCAxMjkuODY5LDEzMS42MzEgOTIuNTU0IEMgNTYuMjI1IDE3LjEzMSw2MC4yODggMjEuMDQ3LDU1LjIwMCAxOC44ODcgQyA1MS41OTEgMTcuMzU0LDQyLjgzNiAxNi4zNDMsNDAuNDAwIDE3LjE3OHoiIGZpbGw9InJnYigyNDAsIDcxLCA3MSkiPjwvcGF0aD48L3N2Zz4='`;
 		
 		const folderIconCustomPreviewComponent = class FolderIconCustomPreview extends BdApi.React.Component {
-			componentDidMount () {
+			componentDidMount() {
 				this._previewInterval = BDFDB.TimeUtils.interval(_ => {
 					this.props.tick = !this.props.tick;
 					BDFDB.ReactUtils.forceUpdate(this);
@@ -299,7 +299,7 @@ module.exports = (_ => {
 					img.src = base64;
 				}
 			}
-			render () {
+			render() {
 				return [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 						title: _this.labels.modal_customopen,
