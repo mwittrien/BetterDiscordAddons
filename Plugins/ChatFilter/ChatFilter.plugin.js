@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatFilter",
 			"author": "DevilBro",
-			"version": "3.4.5",
+			"version": "3.4.7",
 			"description": "Allow the user to censor words or block complete messages based on words in the chatwindow"
 		},
 		"changeLog": {
-			"fixed": {
-				"Embeds": "Now also checks the description of embeds for blocked/censored words"
+			"added": {
+				"Segment Option": "You can now enable the Segment option for censored Words to only replace Segments of Words"
 			}
 		}
 	};
@@ -28,13 +28,13 @@ module.exports = (_ => {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
-		getDescription () {return config.info.description;}
+		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it.\n\n${config.info.description}`;}
 		
 		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -42,7 +42,7 @@ module.exports = (_ => {
 						delete window.BDFDB_Global.downloadModal;
 						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
+							else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
 						});
 					}
 				});
@@ -53,11 +53,11 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The library plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
 				require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 					if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-					else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
+					else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
 				});
 			});
 			return template.content.firstElementChild;
@@ -70,32 +70,39 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					configs: {
-						empty: 		{value: false,		description: "Allow the replacevalue to be empty (ignoring the default)"},
-						case: 		{value: false,		description: "Handle the wordvalue case sensitive"},
-						exact: 		{value: true,		description: "Handle the wordvalue as an exact word and not as part of a word"},
-						regex: 		{value: false,		description: "Handle the wordvalue as a RegExp string"}
+						empty: 					{value: false,				noBlocked: false,		description: "Allow the Replacement Value to be empty (ignoring the default)"},
+						case: 					{value: false,				noBlocked: false,		description: "Handle the Word Value case sensitive"},
+						exact: 					{value: true,				noBlocked: false,		description: "Handle the Word Value as an exact Word and not as part of a Word"},
+						segment: 				{value: false,				noBlocked: true,		description: "Only replace the caught Segment of the Word with the Replacement"},
+						regex: 					{value: false,				noBlocked: false,		description: "Handle the Word Value as a RegExp String"}
 					},
 					replaces: {
-						blocked: 	{value: "~~BLOCKED~~",		description: "Default replaceword for blocked messages: "},
-						censored:	{value: "$!%&%!&",			description: "Default replaceword for censored messages: "}
+						blocked: 				{value: "~~BLOCKED~~",		description: "Default Replacement Word for blocked Messages: "},
+						censored:				{value: "$!%&%!&",			description: "Default Replacement Word for censored Messages: "}
 					},
 					settings: {
-						addContextMenu:			{value: true,	description: "Add a contextmenu entry to faster add new blocked/censored words: "}
+						addContextMenu:			{value: true,				description: "Add a Context Menu Entry to faster add new blocked/censored Words: "}
 					}
 				};
 			
 				this.patchedModules = {
+					before: {
+						Message: "default",
+						MessageContent: "type"
+					},
 					after: {
 						Messages: "type",
-						Message: "default",
 						MessageContent: "type",
 						Embed: "render"
 					}
 				};
 				
-				this.css = ` 
-					${BDFDB.dotCN.message + BDFDB.dotCNS._chatfilterblocked + BDFDB.dotCN.messagemarkup} {
-						color: ${BDFDB.DiscordConstants.Colors.STATUS_RED};
+				this.css = `
+					${BDFDB.dotCN._chatfilterblocked} {
+						color: ${BDFDB.DiscordConstants.Colors.STATUS_RED} !important;
+					}
+					${BDFDB.dotCN.messagerepliedmessagecontentclickable}:hover ${BDFDB.dotCN._chatfilterblocked} {
+						filter: saturate(2);
 					}
 				`;
 				
@@ -140,7 +147,7 @@ module.exports = (_ => {
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Button",
-							label: "Pick a wordvalue and replacevalue:",
+							label: "Pick a Word Value and Replacement Value:",
 							key: "ADDBUTTON",
 							disabled: !Object.keys(values).every(valuename => values[valuename]),
 							children: BDFDB.LanguageUtils.LanguageStrings.ADD,
@@ -153,10 +160,10 @@ module.exports = (_ => {
 					].flat(10).filter(n => n)
 				}));
 				for (let rType in replaces) if (!BDFDB.ObjectUtils.isEmpty(words[rType])) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: `Added ${rType} words`,
+					title: `Added ${rType} Words`,
 					collapseStates: collapseStates,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
-						settings: Object.keys(this.defaults.configs),
+						settings: Object.keys(this.defaults.configs).filter(n => !this.defaults.configs[n]["no" + BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(rType)]),
 						data: Object.keys(words[rType]).map(wordvalue => Object.assign({}, words[rType][wordvalue], {
 							key: wordvalue,
 							label: wordvalue
@@ -205,9 +212,9 @@ module.exports = (_ => {
 					children: Object.keys(replaces).map(rType => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 						type: "Button",
 						color: BDFDB.LibraryComponents.Button.Colors.RED,
-						label: `Remove all ${rType} words`,
+						label: `Remove all ${rType} Words`,
 						onClick: _ => {
-							BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove all ${rType} words?`, _ => {
+							BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove all ${rType} Words?`, _ => {
 								words[rType] = {};
 								BDFDB.DataUtils.remove(this, "words", rType);
 								BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
@@ -220,11 +227,13 @@ module.exports = (_ => {
 					title: "Config Guide",
 					collapseStates: collapseStates,
 					children: [
-						"Case: Will block/censor words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe",
-						"Not Case: Will block/censor words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe",
-						"Exact: Will block/censor words that are exactly the selected word. apple => apple, not applepie or pineapple",
-						"Not Exact: Will block/censor all words containing the selected word. apple => apple, applepie and pineapple",
-						"Empty: Ignores the default and set replace word and removes the word/message instead.",
+						"Case: Will block/censor Words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe",
+						"Not Case: Will block/censor Words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe",
+						"Exact: Will block/censor Words that are exactly the selected Word. apple => apple, not applepie or pineapple",
+						"Not Exact: Will block/censor all Words containing the selected Word. apple => apple, applepie and pineapple",
+						"Segment: Will only replace the caught segment in the censored Word. apple with peach => applepie => peachpie",
+						"Not Segment: Will replae the whole censored Word. apple with peach => applepie => peach",
+						"Empty: Ignores the default/choosen Replacement Word and removes the Word/Message instead.",
 						[
 							"Regex: Will treat the entered wordvalue as a regular expression. ",
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {href: "https://regexr.com/", children: BDFDB.LanguageUtils.LanguageStrings.HELP + "?"})
@@ -319,17 +328,23 @@ module.exports = (_ => {
 			}
 
 			processMessage (e) {
-				let message = BDFDB.ObjectUtils.get(e, "instance.props.childrenMessageContent.props.message");
-				if (message) {
-					if (oldBlockedMessages[message.id]) e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._chatfilterblocked);
-					if (oldCensoredMessages[message.id] && message.content != oldCensoredMessages[message.id].content) e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._chatfiltercensored);
+				let repliedMessage = e.instance.props.childrenRepliedMessage;
+				if (repliedMessage && repliedMessage.props && repliedMessage.props.children && repliedMessage.props.children.props && repliedMessage.props.children.props.referencedMessage && repliedMessage.props.children.props.referencedMessage.message && (oldBlockedMessages[repliedMessage.props.children.props.referencedMessage.message.id] || oldCensoredMessages[repliedMessage.props.children.props.referencedMessage.message.id])) {
+					let {blocked, censored, content, embeds} = this.parseMessage(repliedMessage.props.children.props.referencedMessage.message);
+					repliedMessage.props.children.props.referencedMessage.message = new BDFDB.DiscordObjects.Message(Object.assign({}, repliedMessage.props.children.props.referencedMessage.message, {content, embeds}));
 				}
 			}
 
 			processMessageContent (e) {
 				if (e.instance.props.message) {
-					if (oldBlockedMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldBlockedMessages[e.instance.props.message.id].content, "blocked"));
-					if (oldCensoredMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldCensoredMessages[e.instance.props.message.id].content, "censored"));
+					if (!e.returnvalue) {
+						if (oldBlockedMessages[e.instance.props.message.id]) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._chatfilterblocked);
+						if (oldCensoredMessages[e.instance.props.message.id] && e.instance.props.message.content != oldCensoredMessages[e.instance.props.message.id].content) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._chatfiltercensored);
+					}
+					else {
+						if (oldBlockedMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldBlockedMessages[e.instance.props.message.id].content, "blocked"));
+						if (oldCensoredMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldCensoredMessages[e.instance.props.message.id].content, "censored"));
+					}
 				}
 			}
 
@@ -382,7 +397,7 @@ module.exports = (_ => {
 								let censoredReplace = words.censored[cWord].empty ? "" : (words.censored[cWord].replace || replaces.censored);
 								let reg = this.createReg(cWord, words.censored[cWord]);
 								let newString = [];
-								if (words.censored[cWord].regex || cWord.indexOf(" ") > -1) {
+								if (words.censored[cWord].segment || words.censored[cWord].regex || cWord.indexOf(" ") > -1) {
 									if (this.testWord(string, reg)) {
 										singleCensored = true;
 										censored = true;
@@ -478,11 +493,11 @@ module.exports = (_ => {
 							key: "WORDVALUE",
 							value: values.wordvalue,
 							placeholder: values.wordvalue,
-							errorMessage: !values.wordvalue && "Choose a wordvalue" || words[values.choice][values.wordvalue] && `Wordvalue already used, saving will overwrite old ${values.choice} word`,
+							errorMessage: !values.wordvalue && "Choose a Word Value" || words[values.choice][values.wordvalue] && `Word Value already used, saving will overwrite old ${values.choice} Word`,
 							onChange: (value, instance) => {
 								values.wordvalue = value.trim();
-								if (!values.wordvalue) instance.props.errorMessage = "Choose a wordvalue";
-								else if (words[values.choice][values.wordvalue]) instance.props.errorMessage = `Wordvalue already used, saving will overwrite old ${values.choice} word`;
+								if (!values.wordvalue) instance.props.errorMessage = "Choose a Word Value";
+								else if (words[values.choice][values.wordvalue]) instance.props.errorMessage = `Word Value already used, saving will overwrite old ${values.choice} word`;
 								else delete instance.props.errorMessage;
 								let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: ["BDFDB_Modal", "BDFDB_SettingsPanel"], up: true}), {key: "ADDBUTTON"});
 								if (addButtonIns) {
@@ -512,8 +527,8 @@ module.exports = (_ => {
 							values.choice = value.value;
 							let wordvalueInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: ["BDFDB_Modal", "BDFDB_SettingsPanel"], up: true}), {key: "WORDVALUE"});
 							if (wordvalueInputIns) {
-								if (!values.wordvalue) wordvalueInputIns.props.errorMessage = "Choose a wordvalue";
-								else if (words[values.choice][values.wordvalue]) wordvalueInputIns.props.errorMessage = `Wordvalue already used, saving will overwrite old ${values.choice} word`;
+								if (!values.wordvalue) wordvalueInputIns.props.errorMessage = "Choose a Word Value";
+								else if (words[values.choice][values.wordvalue]) wordvalueInputIns.props.errorMessage = `Word Value already used, saving will overwrite old ${values.choice} Word`;
 								else delete wordvalueInputIns.props.errorMessage;
 								BDFDB.ReactUtils.forceUpdate(wordvalueInputIns);
 							}

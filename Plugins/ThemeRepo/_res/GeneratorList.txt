@@ -3,5 +3,4 @@ https://raw.githubusercontent.com/codedotspectra/themes/master/themes-files/neut
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/FrostedGlass/FrostedGlass.theme.css
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/BasicBackground/BasicBackground.theme.css
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/DiscordRecolor/DiscordRecolor.theme.css
-https://raw.githubusercontent.com/NFLD99/Better-Discord/master/Themes/Main/Anti_Lag.theme.css
 https://raw.githubusercontent.com/Tropix126/BetterDiscordStuff/master/midnight/Midnight.theme.css

@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomQuoter",
 			"author": "DevilBro",
-			"version": "1.2.3",
+			"version": "1.2.4",
 			"description": "Customize the output of the native quote feature of Discord"
 		},
 		"changeLog": {
-			"fixed": {
-				"DMs": "No longer always copies quote to clipboard in DMs"
+			"improved": {
+				"Quick Quote": "Quote button now shows in message toolbar even without holding shift, can be disabled"
 			}
 		}
 	};
@@ -28,13 +28,13 @@ module.exports = (_ => {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
-		getDescription () {return config.info.description;}
+		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it.\n\n${config.info.description}`;}
 		
 		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -42,7 +42,7 @@ module.exports = (_ => {
 						delete window.BDFDB_Global.downloadModal;
 						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
+							else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
 						});
 					}
 				});
@@ -53,11 +53,11 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The library plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
 				require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 					if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-					else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
+					else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
 				});
 			});
 			return template.content.firstElementChild;
@@ -67,7 +67,7 @@ module.exports = (_ => {
 		var settings = {}, formats = {}, format = null;
 		
 		const PreviewMessageComponent = class PreviewMessage extends BdApi.React.Component {
-			render () {
+			render() {
 				let spoofChannel = new BDFDB.DiscordObjects.Channel({
 					id: "126223823845647771",
 					guild_id: "850725684241078788",
@@ -107,9 +107,10 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						quoteOnlySelected:		{value: true, 				description: "Only insert selected text in a quoted message"},
-						alwaysCopy:				{value: false, 				description: "Always copy quote to clipboard without holding shift"},
-						ignoreMentionInDM:		{value: true, 				description: "Do not add a mention in DM channels"},
+						quoteOnlySelected:		{value: true, 				description: "Only insert selected Text in a Quoted Message"},
+						holdShiftToolbar:		{value: false, 				description: "Need to hold Shift on a Message to show Quick Quote"},
+						alwaysCopy:				{value: false, 				description: "Always copy Quote to Clipboard without holding Shift"},
+						ignoreMentionInDM:		{value: true, 				description: "Do not add a mention in Direct Messages"},
 						forceZeros:				{value: false, 				description: "Force leading Zeros"}
 					}
 				};
@@ -334,11 +335,11 @@ module.exports = (_ => {
 			}
 		
 			onMessageOptionToolbar (e) {
-				if (e.instance.props.expanded && e.instance.props.message && e.instance.props.channel) {
+				if ((e.instance.props.expanded || !settings.holdShiftToolbar) && e.instance.props.message && e.instance.props.channel) {
 					let quoteButton = BDFDB.ReactUtils.findChild(e.returnvalue, {key: "quote"});
 					if (!quoteButton) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: "mark-unread"});
-						children.splice(index > -1 ? index : 0, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: ["reply", "mark-unread"]});
+						children.splice(index > -1 ? index : (!e.instance.props.expanded ? 1 : 0), 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							key: "quote",
 							text: BDFDB.LanguageUtils.LanguageStrings.QUOTE,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
@@ -536,11 +537,11 @@ module.exports = (_ => {
 						return {
 							toast_quotecopied:					"Trích dẫn đã được sao chép vào khay nhớ tạm"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							toast_quotecopied:					"报价已复制到剪贴板"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							toast_quotecopied:					"報價已復製到剪貼板"
 						};

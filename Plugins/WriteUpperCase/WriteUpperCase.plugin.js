@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "WriteUpperCase",
 			"author": "DevilBro",
-			"version": "1.2.5",
-			"description": "Change first letter in message input to uppercase"
+			"version": "1.2.6",
+			"description": "Change first letter of each sentence in message input to uppercase"
+		},
+		"changeLog": {
+			"improved": {
+				"Sentences": "Now changes the first letter in every sentence and not just of the first word in a message"
+			}
 		}
 	};
 
@@ -23,13 +28,13 @@ module.exports = (_ => {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
-		getDescription () {return config.info.description;}
+		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it.\n\n${config.info.description}`;}
 		
 		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -37,7 +42,7 @@ module.exports = (_ => {
 						delete window.BDFDB_Global.downloadModal;
 						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
+							else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
 						});
 					}
 				});
@@ -48,16 +53,18 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The library plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
 				require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 					if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-					else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
+					else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
 				});
 			});
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
+		const symbols = [".", "!", "¡", "?", "¿"], spaces = ["\n", "\r", "\t", " "];
+		
 		return class WriteUpperCase extends Plugin {
 			onLoad () {
 				this.patchedModules = {
@@ -79,13 +86,21 @@ module.exports = (_ => {
 				if (e.instance.props.textValue && e.instance.state.focused) {
 					let string = e.instance.props.textValue;
 					if (string.length > 0) {
-						let newstring = string;
-						let first = string.charAt(0);
-						if (first === first.toUpperCase() && (string.toLowerCase().indexOf("http") == 0 || string.toLowerCase().indexOf("s/") == 0)) newstring = string.charAt(0).toLowerCase() + string.slice(1);
-						else if (first === first.toLowerCase() && first !== first.toUpperCase() && string.toLowerCase().indexOf("http") != 0 && string.toLowerCase().indexOf("s/") != 0) newstring = string.charAt(0).toUpperCase() + string.slice(1);
-						if (string != newstring) {
-							e.instance.props.textValue = newstring;
-							if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.copyRichValue(newstring, e.instance.props.richValue);
+						let newString = string, hasCodeBlock = false;
+						for (let space of spaces) for (let symbol of symbols) if (!hasCodeBlock) {
+							let sentences = newString.split(new RegExp(BDFDB.StringUtils.regEscape(symbol + space), "g"));
+							for (let i in sentences) {
+								let sentence = sentences[i];
+								let first = sentence.charAt(0);
+								if (first === first.toUpperCase() && (sentence.toLowerCase().indexOf("http") == 0 || sentence.toLowerCase().indexOf("s/") == 0)) sentences[i] = sentence.charAt(0).toLowerCase() + sentence.slice(1);
+								else if (first === first.toLowerCase() && first !== first.toUpperCase() && sentence.toLowerCase().indexOf("http") != 0 && sentence.toLowerCase().indexOf("s/") != 0) sentences[i] = sentence.charAt(0).toUpperCase() + sentence.slice(1);
+								if (sentence.indexOf("```") > -1) hasCodeBlock = true;
+							}
+							newString = sentences.join(symbol + space);
+						}
+						if (string != newString) {
+							e.instance.props.textValue = newString;
+							if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.copyRichValue(newString, e.instance.props.richValue);
 						}
 					}
 				}

@@ -1937,6 +1937,10 @@
 	color: var(--bd-blue);
 }
 
+.bd-server-tag {
+	background: var(--bd-blue);
+}
+
 #bd-settingspane-container .ui-switch-item .ui-switch-wrapper .ui-switch.checked,
 .bd-switch-checked {
 	background-color: rgba(var(--vaccentcolor), 0.8);
@@ -2113,8 +2117,12 @@ html .monaco-editor [style*="border-left-color: rgb(9, 71, 113)"] {
 
 /* ~~~~		14.		POWERCORDSUPPORT				~~~~ */
 
-.powercord-toast .progressBar-3u8FBM {
+html .powercord-toast .progressBar-3u8FBM {
 	background-color: rgb(var(--vaccentcolor));
+}
+
+html .powercord-updater .debug-info b {
+	color: rgb(var(--vaccentcolor));
 }
 
 

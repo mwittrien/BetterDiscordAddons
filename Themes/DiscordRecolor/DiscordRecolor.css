@@ -1,8 +1,11 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/SettingsIcons.css);
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/BlurpleRecolor.css);
 @import url(https://discord-custom-covers.github.io/usrbg/dist/usrbg.css);
 
 :root {
+	--dfont:					Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
+	
 	--daccentcolor: 			114,137,218;
 	--dlinkcolor: 				0,176,244;
 	--dmentioncolor: 			250,166,26;
@@ -20,6 +23,9 @@
 	--dbackgroundsecondaryalt: 	41,43,47;
 	--dbackgroundtertiary: 		32,34,37;
 	--dbackgroundfloating: 		24,25,28;
+	
+	
+	--vfont:					var(--font,									var(--dfont));
 	
 	--vaccentcolor:				var(--accentcolor,							var(--daccentcolor));
 	--vlinkcolor:				var(--linkcolor,							var(--dlinkcolor));
@@ -178,6 +184,10 @@ html {
 
 /* ~~~~		1.		GENERAL							~~~~ */
 
+::-webkit-input-placeholder, body, button, input, select, textarea {
+	font-family: var(--vfont);
+}
+
 svg [style*="stroke: rgb(114, 118, 125)"],
 svg [style*="stroke: #72767d"],
 svg [style*="stroke: #72767D"],
@@ -234,7 +244,7 @@ svg [fill="#4F545C"] {
 #app-mount .tooltip-3oByQd,
 #app-mount .tooltip-1_vJJI {
 	background-color: var(--background-floating);
-	color: var(--header-primary);
+	color: var(--text-normal);
 }
 #app-mount .tooltipPointer-22Q7m0,
 #app-mount .tooltipPointer-1awMxk {
@@ -243,7 +253,7 @@ svg [fill="#4F545C"] {
 
 #app-mount .bubble-3qRl2J {
 	background-color: var(--background-floating);
-	color: var(--header-primary);
+	color: var(--text-normal);
 }
 #app-mount .bubble-3qRl2J::before {
 	border: 5px solid transparent;
@@ -835,6 +845,13 @@ html .iconBadge-2wi9r4 {
 img[src='/assets/9ad4d437577c5569dc231a787a5377f6.svg'],
 img[src='/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg'] {
 	background-image: url(https://discordapp.com/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg);
+	opacity: .5;
+	object-position: -999999px -999999px;
+}
+
+img[src='/assets/c2c982c416a67d43d72d182f079a8d22.svg'],
+img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
+	background-image: url(https://discordapp.com/assets/58957d928db6fb9d4658eb882f33d7bc.svg);
 	opacity: .5;
 	object-position: -999999px -999999px;
 }

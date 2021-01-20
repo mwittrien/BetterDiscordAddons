@@ -33,13 +33,13 @@ module.exports = (_ => {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
-		getDescription () {return config.info.description;}
+		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it.\n\n${config.info.description}`;}
 		
 		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -47,7 +47,7 @@ module.exports = (_ => {
 						delete window.BDFDB_Global.downloadModal;
 						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
+							else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
 						});
 					}
 				});
@@ -58,33 +58,34 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The library plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
 				require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 					if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-					else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
+					else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
 				});
 			});
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
 		const imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
-		var firedEvents = [], clickedImage;
+		var firedEvents = [], clickedImage, loadedImages = [], searching = false;
+		
 		var settings = {}, amounts = {}, zoomSettings = {}, engines = {}, enabledEngines = {}, ownLocations = {}, downloadsFolder;
 		
 		const ImageDetails = class ImageDetails extends BdApi.React.Component {
-			componentDidMount () {
+			componentDidMount() {
 				this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "attachment", {up: true});
 				BDFDB.ReactUtils.forceUpdate(this);
 			}
-			componentDidUpdate () {
+			componentDidUpdate() {
 				if ((!this.props.attachment || !this.props.attachment.size) && !this.props.loaded) {
 					this.props.loaded = true;
 					this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "attachment", {up: true});
 					BDFDB.ReactUtils.forceUpdate(this);
 				}
 			}
-			render () {
+			render() {
 				return !this.props.attachment ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 					className: BDFDB.disCN._imageutilitiesimagedetails,
 					children: [
@@ -358,6 +359,7 @@ module.exports = (_ => {
 								title: "Your own Download Locations:",
 								dividerTop: true,
 								children: Object.keys(ownLocations).map(name => {
+									let locationName = name;
 									let editable = name != "Downloads";
 									return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
 										horizontal: true,
@@ -366,39 +368,38 @@ module.exports = (_ => {
 												grow: 0,
 												basis: "180px",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-													value: name,
-													placeholder: name,
+													value: locationName,
+													placeholder: locationName,
 													size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
 													maxLength: 100000000000000000000,
-													style: {marginRight: 6},
 													disabled: !editable,
 													onChange: !editable ? null : value => {
-														ownLocations[value] = ownLocations[name];
-														delete ownLocations[name];
+														ownLocations[value] = ownLocations[locationName];
+														delete ownLocations[locationName];
+														locationName = value;
 														BDFDB.DataUtils.save(ownLocations, this, "ownLocations");
 													}
 												})
 											}),
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-													value: ownLocations[name].location,
-													placeholder: ownLocations[name].location,
+													value: ownLocations[locationName].location,
+													placeholder: ownLocations[locationName].location,
 													size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
 													maxLength: 100000000000000000000,
-													style: {marginRight: 10},
 													disabled: !editable,
 													onChange: !editable ? null : value => {
-														ownLocations[name].location = value;
+														ownLocations[locationName].location = value;
 														BDFDB.DataUtils.save(ownLocations, this, "ownLocations");
 													}
 												})
 											}),
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
-													value: ownLocations[name].enabled,
+													value: ownLocations[locationName].enabled,
 													size: BDFDB.LibraryComponents.Switch.Sizes.MINI,
 													onChange: value => {
-														ownLocations[name].enabled = value;
+														ownLocations[locationName].enabled = value;
 														BDFDB.DataUtils.save(ownLocations, this, "ownLocations");
 													}
 												})
@@ -406,7 +407,7 @@ module.exports = (_ => {
 										],
 										noRemove: !editable,
 										onRemove: !editable ? null : _ => {
-											delete ownLocations[name];
+											delete ownLocations[locationName];
 											BDFDB.DataUtils.save(ownLocations, this, "ownLocations");
 											BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel);
 										}
@@ -637,13 +638,37 @@ module.exports = (_ => {
 				if (clickedImage) e.instance.props.cachedImage = clickedImage;
 				let url = e.instance.props.cachedImage && e.instance.props.cachedImage.src ? e.instance.props.cachedImage : e.instance.props.src;
 				url = url.src || url;
-				let messages = this.getMessageGroupOfImage(url);
 				if (e.returnvalue) {
+					let message = !searching && BDFDB.ReactUtils.findValue(e.instance.props.cachedImage, "message", {up: true});
+					if (message) {
+						searching = true;
+						BDFDB.LibraryModules.APIUtils.get({
+							url: BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(message.channel_id),
+							oldFormErrors: true,
+							query: this.createQuery(message, true)
+						}).then(result => {
+							BDFDB.LibraryModules.APIUtils.get({
+								url: BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(message.channel_id),
+								oldFormErrors: true,
+								query: this.createQuery(message, false)
+							}).then(result2 => {
+								searching = false;
+								let found = [], messages = BDFDB.ArrayUtils.keySort([
+									message,
+									[].concat(result.body.messages).reverse(),
+									[].concat(result2.body.messages)
+								].flat(10).filter(m => {
+									if (!found.includes(m.id) && m.attachments.length || m.embeds.filter(embed => embed.type == "image").length) {
+										found.push(m.id);
+										return m;
+									}
+								}), "id");
+								console.log(messages);
+							});
+						});
+					}
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.downloadlink]]});
 					if (index > -1) {
-						children[index].props.onClick = event => {
-							return event.shiftKey;
-						};
 						let openContext = event => {
 							BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 								children: Object.keys(zoomSettings).map(type => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSliderItem, Object.assign({
@@ -726,8 +751,8 @@ module.exports = (_ => {
 						});
 					}
 					let imageIndex = 0, amount = 1;
-					if (messages.length) {
-						let data = this.getSiblingsAndPosition(url, messages);
+					if (loadedImages.length) {
+						let data = this.getSiblingsAndPosition(url);
 						imageIndex = data.index;
 						amount = data.amount;
 						if (data.previous) {
@@ -760,9 +785,9 @@ module.exports = (_ => {
 				if (e.node) {
 					let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.modal + BDFDB.dotCN.layermodal, e.node);
 					if (modal) {
-						modal.className = BDFDB.DOMUtils.formatClassName(modal.className, messages.length && BDFDB.disCN._imageutilitiesgallery, settings.addDetails && BDFDB.disCN._imageutilitiesdetailsadded);
+						modal.className = BDFDB.DOMUtils.formatClassName(modal.className, loadedImages.length && BDFDB.disCN._imageutilitiesgallery, settings.addDetails && BDFDB.disCN._imageutilitiesdetailsadded);
 						this.cleanupListeners("Gallery");
-						if (messages.length) {
+						if (loadedImages.length) {
 							document.keydownImageUtilitiesGalleryListener = event => {
 								if (!document.contains(e.node)) this.cleanupListeners("Gallery");
 								else if (!firedEvents.includes("Gallery")) {
@@ -905,7 +930,7 @@ module.exports = (_ => {
 				}
 				else {
 					if (settings.resizeImage && e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.imagemodalimage) > -1 && BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), {name: "ImageModal", up: true})) {
-						let data = settings.enableGallery ? this.getSiblingsAndPosition(e.instance.props.src, this.getMessageGroupOfImage(e.instance.props.src)) : {};
+						let data = settings.enableGallery ? this.getSiblingsAndPosition(e.instance.props.src) : {};
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let ratio = Math.min((aRects.width * (data.previous || data.next ? 0.8 : 1) - 20) / e.instance.props.width, (aRects.height - (settings.addDetails ? 310 : 100)) / e.instance.props.height);
 						let width = Math.round(ratio * e.instance.props.width);
@@ -939,6 +964,16 @@ module.exports = (_ => {
 					});
 				}
 				return child;
+			}
+			
+			createQuery (message, before) {
+				return BDFDB.LibraryModules.APIEncodeUtils.stringify(BDFDB.ObjectUtils.filter({
+					has: ["image", "embed"],
+					include_nsfw: true,
+					min_id: !before && message.id,
+					max_id: before && message.id,
+					sort_order: before ? "desc" : "asc"
+				}, n => n));
 			}
 			
 			isValidImg (url) {
@@ -1013,6 +1048,9 @@ module.exports = (_ => {
 				else return wholePath;
 			}
 
+			getImages (src, instance) {
+			}
+
 			getMessageGroupOfImage (src) {
 				if (src && settings.enableGallery) for (let message of document.querySelectorAll(BDFDB.dotCN.message)) for (let img of message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")) if (this.isSameImage(src, img)) {
 					let previousSiblings = [], nextSiblings = [];
@@ -1034,8 +1072,8 @@ module.exports = (_ => {
 				return [];
 			}
 			
-			getSiblingsAndPosition (url, messages) {
-				let images = messages.map(n => Array.from(n.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"))).flat().filter(img => !BDFDB.DOMUtils.getParent(BDFDB.dotCN.spoilerhidden, img));
+			getSiblingsAndPosition (url) {
+				let images = loadedImages.map(n => Array.from(n.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"))).flat().filter(img => !BDFDB.DOMUtils.getParent(BDFDB.dotCN.spoilerhidden, img));
 				let next, previous, index = 0, amount = images.length;
 				for (let i = 0; i < amount; i++) if (this.isSameImage(url, images[i])) {
 					index = i;
@@ -1478,7 +1516,7 @@ module.exports = (_ => {
 							toast_saveimage_failed:				"Không lưu được Hình ảnh trong '{{path}}'",
 							toast_saveimage_success:			"Hình ảnh đã Lưu trong '{{path}}'"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							context_copyimage:					"复制图片",
 							context_copyimagelink:				"复制图像链接",
@@ -1493,7 +1531,7 @@ module.exports = (_ => {
 							toast_saveimage_failed:				"无法将图片保存到'{{path}}'中",
 							toast_saveimage_success:			"已将图像保存在'{{path}}'中"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							context_copyimage:					"複製圖片",
 							context_copyimagelink:				"複製圖像鏈接",

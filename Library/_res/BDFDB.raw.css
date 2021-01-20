@@ -363,6 +363,9 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_hovercardhorizontal] {
 	flex-direction: row;
 }
+[REPLACE_CLASS_hovercardhorizontal] > [REPLACE_CLASS_flexchild] + [REPLACE_CLASS_flexchild] {
+	margin-left: 8px;
+}
 [REPLACE_CLASS_hovercarddisabled] {
 	opacity: 0.7;
 	filter: grayscale(0.2);
@@ -914,10 +917,10 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_tooltiplistitem][REPLACE_CLASS_tooltipcustom] {
 	color: #FFF;
 }
-[REPLACE_CLASS_tooltip][REPLACE_CLASS_tooltipcustom] [REPLACE_CLASS_tooltippointer] {
+[REPLACE_CLASS_tooltipcustom] [REPLACE_CLASS_tooltippointer] {
 	border-top-color: inherit !important;
 }
-[REPLACE_CLASS_tooltiplistitem][REPLACE_CLASS_tooltipcustom] [REPLACE_CLASS_tooltipguildnametext] {
+[REPLACE_CLASS_tooltipcustom] [REPLACE_CLASS_tooltipguildnametext] {
 	color: inherit;
 }
 

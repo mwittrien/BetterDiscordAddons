@@ -16,15 +16,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.2.9",
+			"version": "1.3.1",
 			"description": "Give other plugins utility functions"
 		},
-		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
-		"changeLog": {
-			"fixed": {
-				"New Pagination": "Fixed issues with the new pagination style and logic"
-			}
-		}
+		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
 	};
 	
 	const DiscordObjects = {};
@@ -2536,7 +2531,6 @@ module.exports = (_ => {
 					status = typeof status == "string" ? status.toLowerCase() : null;
 					switch (status) {
 						case "online": return BDFDB.DiscordConstants.Colors.STATUS_GREEN;
-						case "mobile": return BDFDB.DiscordConstants.Colors.STATUS_GREEN;
 						case "idle": return BDFDB.DiscordConstants.Colors.STATUS_YELLOW;
 						case "dnd": return BDFDB.DiscordConstants.Colors.STATUS_RED;
 						case "playing": return useColor ? BDFDB.DiscordConstants.Colors.BRAND : "var(--bdfdb-blurple)";
@@ -2547,6 +2541,10 @@ module.exports = (_ => {
 				};
 				BDFDB.UserUtils.getActivity = function (id = BDFDB.UserUtils.me.id) {
 					for (let activity of LibraryModules.StatusMetaUtils.getActivities(id)) if (activity.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS) return activity;
+					return null;
+				};
+				BDFDB.UserUtils.getCustomStatus = function (id = BDFDB.UserUtils.me.id) {
+					for (let activity of LibraryModules.StatusMetaUtils.getActivities(id)) if (activity.type == BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS) return activity;
 					return null;
 				};
 				BDFDB.UserUtils.getAvatar = function (id = BDFDB.UserUtils.me.id) {
@@ -5617,7 +5615,7 @@ module.exports = (_ => {
 									onChange: e => {
 										let file = e.currentTarget.files[0];
 										if (this.refInput && file && (!filter.length || filter.some(n => file.type.indexOf(n) == 0))) {
-											this.refInput.props.value = this.props.searchFolders ? file.path.split(file.name).slice(0, -1).join(file.name) : `${this.props.mode == "url" ? "url('" : ""}${(this.props.useFilePath) ? file.path : `data: ${file.type};base64,${BDFDB.LibraryRequires.fs.readFileSync(file.path).toString("base64")}`}${this.props.mode ? "')" : ""}`;
+											this.refInput.props.value = this.props.searchFolders ? file.path.split(file.name).slice(0, -1).join(file.name) : `${this.props.mode == "url" ? "url('" : ""}${(this.props.useFilePath) ? file.path : `data:${file.type};base64,${BDFDB.LibraryRequires.fs.readFileSync(file.path).toString("base64")}`}${this.props.mode ? "')" : ""}`;
 											BDFDB.ReactUtils.forceUpdate(this.refInput);
 											this.refInput.handleChange(this.refInput.props.value);
 										}
@@ -6620,7 +6618,7 @@ module.exports = (_ => {
 									})).flat(10).filter(n => n)
 								})
 							]
-						}), "title", "data", "settings", "renderLabel", "cardClassName", "cardStyle", "checkboxColor", "getCheckboxColor",  "getCheckboxValue", "onCheckboxChange", "configWidth", "pagination"));
+						}), "title", "data", "settings", "renderLabel", "cardClassName", "cardStyle", "checkboxColor", "getCheckboxColor",  "getCheckboxValue", "onCheckboxChange", "configWidth", "biggestWidth", "pagination"));
 					}
 					render() {
 						this.props.settings = BDFDB.ArrayUtils.is(this.props.settings) ? this.props.settings : [];

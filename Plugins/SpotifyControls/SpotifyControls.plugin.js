@@ -23,13 +23,13 @@ module.exports = (_ => {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
-		getDescription () {return config.info.description;}
+		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it.\n\n${config.info.description}`;}
 		
 		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -37,7 +37,7 @@ module.exports = (_ => {
 						delete window.BDFDB_Global.downloadModal;
 						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
+							else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
 						});
 					}
 				});
@@ -48,11 +48,11 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The library plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
 				require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 					if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-					else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
+					else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
 				});
 			});
 			return template.content.firstElementChild;
@@ -71,7 +71,7 @@ module.exports = (_ => {
 		];
 	
 		const SpotifyControlsComponent = class SpotifyControls extends BdApi.React.Component {
-			componentDidMount () {
+			componentDidMount() {
 				controls = this;
 			}
 			request(socket, device, type, data) {
@@ -110,7 +110,7 @@ module.exports = (_ => {
 					});
 				});
 			}
-			render () {
+			render() {
 				let socketDevice = BDFDB.LibraryModules.SpotifyTrackUtils.getActiveSocketAndDevice();
 				if (!socketDevice) return null;
 				if (this.props.song) {
@@ -321,7 +321,7 @@ module.exports = (_ => {
 			}
 		};
 		const SpotifyControlsButtonComponent = class SpotifyControlsButton extends BdApi.React.Component {
-			render () {
+			render() {
 				if (!this.props.playerSize || !buttonConfigs[this.props.type] || !buttonConfigs[this.props.type][this.props.playerSize]) return null;
 				let button = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.accountinfobutton, this.props.disabled ? BDFDB.disCN.accountinfobuttondisabled : BDFDB.disCN.accountinfobuttonenabled, this.props.active && BDFDB.disCN._spotifycontrolsbuttonactive),
@@ -343,7 +343,7 @@ module.exports = (_ => {
 	}
 		};
 		const SpotifyControlsTimelineComponent = class SpotifyControlsTimeline extends BdApi.React.Component {
-			componentDidMount () {
+			componentDidMount() {
 				BDFDB.TimeUtils.clear(updateInterval);
 				updateInterval = BDFDB.TimeUtils.interval(_ => {
 					if (!this.updater || typeof this.updater.isMounted != "function" || !this.updater.isMounted(this)) BDFDB.TimeUtils.clear(updateInterval);
@@ -360,7 +360,7 @@ module.exports = (_ => {
 				let hours = Math.floor((time / (1000 * 60 * 60)) % 24);
 				return `${hours > 0 ? hours + ":" : ""}${hours > 0 && minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`
 			}
-			render () {
+			render() {
 				let maxTime = this.props.song.timestamps.end - this.props.song.timestamps.start;
 				let currentTime = (!playbackState.is_playing && stopTime ? stopTime : new Date()) - this.props.song.timestamps.start;
 				currentTime = currentTime > maxTime ? maxTime : currentTime;

@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "6.8.5",
+			"version": "6.8.6",
 			"description": "Patch Discords native Folders in a way to open Servers within a Folder in a new bar to the right, also adds a bunch of new features to more easily organize, customize and manage your Folders"
+		},
+		"changeLog": {
+			"fixed": {
+				"Custom Icons": "You can now add custom icons again"
+			}
 		}
 	};
 
@@ -23,13 +28,13 @@ module.exports = (_ => {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
-		getDescription () {return config.info.description;}
+		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it.\n\n${config.info.description}`;}
 		
 		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
 			if (!window.BDFDB_Global.downloadModal) {
 				window.BDFDB_Global.downloadModal = true;
-				BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
+				BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
 					confirmText: "Download Now",
 					cancelText: "Cancel",
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
@@ -37,7 +42,7 @@ module.exports = (_ => {
 						delete window.BDFDB_Global.downloadModal;
 						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-							else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
+							else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
 						});
 					}
 				});
@@ -48,11 +53,11 @@ module.exports = (_ => {
 		stop () {}
 		getSettingsPanel () {
 			let template = document.createElement("template");
-			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The library plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
 			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
 				require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
 					if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-					else BdApi.alert("Error", "Could not download BDFDB library plugin, try again some time later.");
+					else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
 				});
 			});
 			return template.content.firstElementChild;
@@ -81,10 +86,10 @@ module.exports = (_ => {
 		
 		var folderGuildContent = null;
 		const folderGuildContentComponent = class FolderGuildsContent extends BdApi.React.Component {
-			componentDidMount () {
+			componentDidMount() {
 				folderGuildContent = this;
 			}
-			render () {
+			render() {
 				let closing = this.props.closing;
 				delete this.props.closing;
 				let folders = Array.from(BDFDB.LibraryModules.FolderUtils.getExpandedFolders()).map(folderId => BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderId)).filter(folder => folder && folder.guildIds);
@@ -132,16 +137,16 @@ module.exports = (_ => {
 											},
 											onMouseDown: (event, instance) => {
 												event = event.nativeEvent || event;
-												let mousemove = event2 => {
+												let mouseMove = event2 => {
 													if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 														BDFDB.ListenerUtils.stopEvent(event);
 														this.draggedGuild = guildId;
-														let dragpreview = _this.createDragPreview(BDFDB.ReactUtils.findDOMNode(instance).cloneNode(true), event2);
+														let dragPreview = _this.createDragPreview(BDFDB.ReactUtils.findDOMNode(instance).cloneNode(true), event2);
 														BDFDB.ReactUtils.forceUpdate(this);
-														document.removeEventListener("mousemove", mousemove);
-														document.removeEventListener("mouseup", mouseup);
+														document.removeEventListener("mousemove", mouseMove);
+														document.removeEventListener("mouseup", mouseUp);
 														let dragging = event3 => {
-															_this.updateDragPreview(dragpreview, event3);
+															_this.updateDragPreview(dragPreview, event3);
 															let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._serverfoldersguildplaceholder, event3.target);
 															let hoveredGuild = (BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildouter, placeholder ? placeholder.previousSibling : event3.target), "guild", {up: true}) || {}).id;
 															if (hoveredGuild) {
@@ -155,7 +160,7 @@ module.exports = (_ => {
 														};
 														let releasing = event3 => {
 															BDFDB.ListenerUtils.stopEvent(event3);
-															BDFDB.DOMUtils.remove(dragpreview);
+															BDFDB.DOMUtils.remove(dragPreview);
 															if (this.hoveredGuild) {
 																let guildIds = [].concat(folder.guildIds);
 																BDFDB.ArrayUtils.remove(guildIds, this.draggedGuild, true);
@@ -172,12 +177,12 @@ module.exports = (_ => {
 														document.addEventListener("mouseup", releasing);
 													}
 												};
-												let mouseup = _ => {
-													document.removeEventListener("mousemove", mousemove);
-													document.removeEventListener("mouseup", mouseup);
+												let mouseUp = _ => {
+													document.removeEventListener("mousemove", mouseMove);
+													document.removeEventListener("mouseup", mouseUp);
 												};
-												document.addEventListener("mousemove", mousemove);
-												document.addEventListener("mouseup", mouseup);
+												document.addEventListener("mousemove", mouseMove);
+												document.addEventListener("mouseup", mouseUp);
 											}
 										}),
 										this.hoveredGuild != guildId ? null : BDFDB.ReactUtils.createElement("div", {
@@ -196,7 +201,7 @@ module.exports = (_ => {
 		};
 		
 		const folderIconPickerComponent = class FolderIconPicker extends BdApi.React.Component {
-			render () {
+			render() {
 				let folderIcons = _this.loadAllIcons();
 				for (let id in folderIcons) if (!folderIcons[id].customID) {
 					folderIcons[id].openicon = _this.createBase64SVG(folderIcons[id].openicon);
@@ -247,7 +252,7 @@ module.exports = (_ => {
 		var redCross = `'data:image/svg+xml; base64, PHN2ZyB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48cGF0aCBkPSJNNDAuNDAwIDE3LjE3OCBDIDM5Ljg1MCAxNy4zNjYsMzguNzkzIDE3LjUzOCwzOC4wNTAgMTcuNTYwIEMgMzMuMzUxIDE3LjY5OSwyMy4zOTcgMjQuNzg4LDIxLjM4MSAyOS40MzIgQyAyMS4wODcgMzAuMTA5LDIwLjU2NiAzMC44OTYsMjAuMjIzIDMxLjE4MSBDIDE5Ljg4MCAzMS40NjUsMTkuNjAwIDMxLjg2NiwxOS42MDAgMzIuMDcxIEMgMTkuNjAwIDMyLjI3NiwxOS4yMzYgMzMuMjQyLDE4Ljc5MiAzNC4yMTggQyAxNi4zNDUgMzkuNTg5LDE2LjM0NSA0OS42MTEsMTguNzkyIDU0Ljk4MiBDIDE5LjIzNiA1NS45NTgsMTkuNjAwIDU2LjkxOCwxOS42MDAgNTcuMTE2IEMgMTkuNjAwIDU3LjMxNCwxOS45NjAgNTcuODAyLDIwLjQwMCA1OC4yMDAgQyAyMC44NDAgNTguNTk4LDIxLjIwMCA1OS4xMzEsMjEuMjAwIDU5LjM4NSBDIDIxLjIwMCA2MC4zOTEsMjUuNjgwIDY0Ljk0Miw5MS41MDUgMTMwLjgwMCBDIDEyOC45OTUgMTY4LjMxMCwxNTkuODQ5IDE5OS4zMjYsMTYwLjA2OCAxOTkuNzI0IEMgMTYwLjQwOSAyMDAuMzQ0LDE1MC45NTAgMjA5Ljk2NCw5My45ODkgMjY2LjkyNCBDIDE4Ljc5OCAzNDIuMTEzLDE5LjYwMCAzNDEuMjkyLDE5LjYwMCAzNDMuMTI2IEMgMTkuNjAwIDM0My4yODMsMTkuMjUwIDM0NC4wNjUsMTguODIyIDM0NC44NjQgQyAxNS40MjkgMzUxLjE5NSwxNS45NTggMzYyLjkxOCwxOS45MzIgMzY5LjQ0MCBDIDIyLjA5NCAzNzIuOTkwLDI3LjQ3NCAzNzguODAwLDI4LjU5OCAzNzguODAwIEMgMjguODYxIDM3OC44MDAsMjkuNDAyIDM3OS4xNjAsMjkuODAwIDM3OS42MDAgQyAzMC4xOTggMzgwLjA0MCwzMC43MDMgMzgwLjQwMCwzMC45MjIgMzgwLjQwMCBDIDMxLjE0MSAzODAuNDAwLDMyLjIzOCAzODAuODMxLDMzLjM2MCAzODEuMzU4IEMgMzQuNDgyIDM4MS44ODYsMzYuNDgwIDM4Mi41MzMsMzcuODAwIDM4Mi43OTcgQyA0My43ODYgMzgzLjk5NCw0NC4zMjMgMzg0LjAyNyw0Ny4yOTkgMzgzLjM4NiBDIDQ4Ljg5NSAzODMuMDQyLDUxLjAxMCAzODIuNjE5LDUyLjAwMCAzODIuNDQ2IEMgNTIuOTkwIDM4Mi4yNzQsNTQuNTE3IDM4MS43NDMsNTUuMzk0IDM4MS4yNjYgQyA1Ni4yNzEgMzgwLjc5MCw1Ny4xODggMzgwLjQwMCw1Ny40MzIgMzgwLjQwMCBDIDU3LjY3NiAzODAuNDAwLDU4LjIwMiAzODAuMDQwLDU4LjYwMCAzNzkuNjAwIEMgNTguOTk4IDM3OS4xNjAsNTkuNTk4IDM3OC44MDAsNTkuOTMyIDM3OC44MDAgQyA2MC4yNjcgMzc4LjgwMCw5MS43MjUgMzQ3LjYxNSwxMjkuODM5IDMwOS41MDAgQyAxNjkuMDU3IDI3MC4yODEsMTk5LjQ5NiAyNDAuMTQ1LDE5OS45NjQgMjQwLjA3MyBDIDIwMC42MDIgMjM5Ljk3NSwyMTYuMDAxIDI1NS4xOTMsMjY3LjQ5NSAzMDYuODE0IEMgMzI3LjA0NiAzNjYuNTExLDMzOS41MzEgMzc4LjgwMCwzNDAuNjI3IDM3OC44MDAgQyAzNDAuNzk4IDM3OC44MDAsMzQxLjI2NSAzNzkuMDk3LDM0MS42NjcgMzc5LjQ2MSBDIDM0NS43MjggMzgzLjEzNiwzNjEuMDEzIDM4NC40MDksMzY1LjY4NSAzODEuNDYxIEMgMzY2LjE4OCAzODEuMTQzLDM2Ny4wMjQgMzgwLjc1NywzNjcuNTQxIDM4MC42MDIgQyAzNzAuNTgzIDM3OS42OTEsMzc2LjYyMyAzNzQuMjAwLDM3OS4zODIgMzY5LjgzNiBDIDM4NS4xMDUgMzYwLjc4NSwzODQuMDM5IDM0Ni40MDksMzc3LjAzOSAzMzguMjI4IEMgMzc2LjA4NCAzMzcuMTEzLDM0NC44NDYgMzA1Ljc0MywzMDcuNjIxIDI2OC41MTcgQyAyNTUuMzI5IDIxNi4yMjQsMjM5Ljk2OSAyMDAuNjQ3LDI0MC4wNzAgMjAwLjAwOSBDIDI0MC4xNDMgMTk5LjU0NSwyNzAuMDYyIDE2OS4yODgsMzA4LjIxNiAxMzEuMDkxIEMgMzQ1LjYyNSA5My42NDEsMzc2LjcyMyA2Mi4zNzAsMzc3LjMyNCA2MS42MDAgQyAzODQuMjg2IDUyLjY3OCwzODUuMDM2IDQwLjYyMSwzNzkuMjc3IDMwLjE3MSBDIDM3Ni4xMzYgMjQuNDY5LDM2Ny45MDYgMTguNTM3LDM2MS42NjggMTcuNDc3IEMgMzU0LjY1NiAxNi4yODYsMzQ1LjA5NSAxNy42NjUsMzQxLjg4MyAyMC4zMzEgQyAzNDEuNTY3IDIwLjU5NCwzNDAuNTQ5IDIxLjMxOCwzMzkuNjIyIDIxLjk0MSBDIDMzOC42OTUgMjIuNTYzLDMwNy4wMzEgNTMuOTcyLDI2OS4yNTkgOTEuNzM3IEMgMjMxLjQ4NiAxMjkuNTAxLDIwMC4zMzAgMTYwLjQwMCwyMDAuMDIyIDE2MC40MDAgQyAxOTkuNzE0IDE2MC40MDAsMTY4LjkzOCAxMjkuODY5LDEzMS42MzEgOTIuNTU0IEMgNTYuMjI1IDE3LjEzMSw2MC4yODggMjEuMDQ3LDU1LjIwMCAxOC44ODcgQyA1MS41OTEgMTcuMzU0LDQyLjgzNiAxNi4zNDMsNDAuNDAwIDE3LjE3OHoiIGZpbGw9InJnYigyNDAsIDcxLCA3MSkiPjwvcGF0aD48L3N2Zz4='`;
 		
 		const folderIconCustomPreviewComponent = class FolderIconCustomPreview extends BdApi.React.Component {
-			componentDidMount () {
+			componentDidMount() {
 				this._previewInterval = BDFDB.TimeUtils.interval(_ => {
 					this.props.tick = !this.props.tick;
 					BDFDB.ReactUtils.forceUpdate(this);
@@ -294,7 +299,7 @@ module.exports = (_ => {
 					img.src = base64;
 				}
 			}
-			render () {
+			render() {
 				return [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 						title: _this.labels.modal_customopen,
@@ -353,7 +358,7 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 									children: BDFDB.LanguageUtils.LanguageStrings.ADD,
 									onClick: (e, instance) => {
-										let inputIns = BDFDB.ReactUtils.findOwner(this, {name: "BDFDBInput", all: true, unlimited: true});
+										let inputIns = BDFDB.ReactUtils.findOwner(this, {name: "BDFDB_TextInput", all: true, unlimited: true});
 										if (inputIns.length == 2 && inputIns[0].props.value && inputIns[1].props.value) {
 											this.checkImage(inputIns[0].props.value, openIcon => {
 												this.checkImage(inputIns[1].props.value, closedIcon => {
@@ -362,11 +367,11 @@ module.exports = (_ => {
 													this.props.open = null;
 													this.props.closed = null;
 													BDFDB.PatchUtils.forceAllUpdates(_this, "GuildFolderSettingsModal");
-													BDFDB.NotificationUtils.toast("Custom Icon was added to selection", {type: "success"});
+													BDFDB.NotificationUtils.toast("Custom Icon was added to Selection", {type: "success"});
 												});
 											})
 										}
-										else BDFDB.NotificationUtils.toast("Add an image for the open and the closed icon", {type: "danger"});
+										else BDFDB.NotificationUtils.toast("Add an Image for the open and closed Icon", {type: "danger"});
 									}
 								})
 							]
@@ -1142,22 +1147,22 @@ module.exports = (_ => {
 
 			createDragPreview (div, event) {
 				if (!Node.prototype.isPrototypeOf(div)) return;
-				let dragpreview = div.cloneNode(true);
-				BDFDB.DOMUtils.addClass(dragpreview, BDFDB.disCN._serverfoldersdragpreview);
-				BDFDB.DOMUtils.remove(dragpreview.querySelector(BDFDB.dotCNC.guildlowerbadge + BDFDB.dotCNC.guildupperbadge + BDFDB.dotCN.guildpillwrapper));
-				BDFDB.DOMUtils.hide(dragpreview);
-				dragpreview.style.setProperty("pointer-events", "none", "important");
-				dragpreview.style.setProperty("left", event.clientX - 25 + "px", "important");
-				dragpreview.style.setProperty("top", event.clientY - 25 + "px", "important");
-				document.querySelector(BDFDB.dotCN.appmount).appendChild(dragpreview);
-				return dragpreview;
+				let dragPreview = div.cloneNode(true);
+				BDFDB.DOMUtils.addClass(dragPreview, BDFDB.disCN._serverfoldersdragpreview);
+				BDFDB.DOMUtils.remove(dragPreview.querySelector(BDFDB.dotCNC.guildlowerbadge + BDFDB.dotCNC.guildupperbadge + BDFDB.dotCN.guildpillwrapper));
+				BDFDB.DOMUtils.hide(dragPreview);
+				dragPreview.style.setProperty("pointer-events", "none", "important");
+				dragPreview.style.setProperty("left", event.clientX - 25 + "px", "important");
+				dragPreview.style.setProperty("top", event.clientY - 25 + "px", "important");
+				document.querySelector(BDFDB.dotCN.appmount).appendChild(dragPreview);
+				return dragPreview;
 			}
 
-			updateDragPreview (dragpreview, event) {
-				if (!Node.prototype.isPrototypeOf(dragpreview)) return;
-				BDFDB.DOMUtils.show(dragpreview);
-				dragpreview.style.setProperty("left", event.clientX - 25 + "px", "important");
-				dragpreview.style.setProperty("top", event.clientY - 25 + "px", "important");
+			updateDragPreview (dragPreview, event) {
+				if (!Node.prototype.isPrototypeOf(dragPreview)) return;
+				BDFDB.DOMUtils.show(dragPreview);
+				dragPreview.style.setProperty("left", event.clientX - 25 + "px", "important");
+				dragPreview.style.setProperty("top", event.clientY - 25 + "px", "important");
 			}
 
 			setLabelsByLanguage () {
@@ -1762,7 +1767,7 @@ module.exports = (_ => {
 							serversubmenu_createfolder:			"Tạo thư mục",
 							serversubmenu_removefromfolder:		"Xóa máy chủ khỏi thư mục"
 						};
-					case "zh":		// Chinese
+					case "zh-CN":	// Chinese (China)
 						return {
 							foldercontext_autoreadfolder:		"自动：标记为已读",
 							foldercontext_mutefolder:			"静音文件夹",
@@ -1787,7 +1792,7 @@ module.exports = (_ => {
 							serversubmenu_createfolder:			"创建文件夹",
 							serversubmenu_removefromfolder:		"从文件夹中删除服务器"
 						};
-					case "zh-TW":	// Chinese (Traditional)
+					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							foldercontext_autoreadfolder:		"自動：標記為已讀",
 							foldercontext_mutefolder:			"靜音文件夾",
@@ -1821,7 +1826,7 @@ module.exports = (_ => {
 							modal_colorpicker2:					"Secondary Folder Color",
 							modal_colorpicker3:					"Tooltip Color",
 							modal_colorpicker4:					"Font Color",
-							modal_copytooltipcolor:				"Use the same Color for all servers in a Folder",
+							modal_copytooltipcolor:				"Use the same Color for all Servers in a Folder",
 							modal_customclosed:					"Closed icon",
 							modal_customopen:					"Open icon",
 							modal_custompreview:				"Icon preview",
