@@ -372,7 +372,6 @@ module.exports = (_ => {
 													placeholder: locationName,
 													size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
 													maxLength: 100000000000000000000,
-													style: {marginRight: 6},
 													disabled: !editable,
 													onChange: !editable ? null : value => {
 														ownLocations[value] = ownLocations[locationName];
@@ -388,7 +387,6 @@ module.exports = (_ => {
 													placeholder: ownLocations[locationName].location,
 													size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
 													maxLength: 100000000000000000000,
-													style: {marginRight: 10},
 													disabled: !editable,
 													onChange: !editable ? null : value => {
 														ownLocations[locationName].location = value;

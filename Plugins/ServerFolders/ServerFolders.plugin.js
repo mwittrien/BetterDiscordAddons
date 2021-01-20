@@ -137,14 +137,14 @@ module.exports = (_ => {
 											},
 											onMouseDown: (event, instance) => {
 												event = event.nativeEvent || event;
-												let mousemove = event2 => {
+												let mouseMove = event2 => {
 													if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 														BDFDB.ListenerUtils.stopEvent(event);
 														this.draggedGuild = guildId;
 														let dragpreview = _this.createDragPreview(BDFDB.ReactUtils.findDOMNode(instance).cloneNode(true), event2);
 														BDFDB.ReactUtils.forceUpdate(this);
-														document.removeEventListener("mousemove", mousemove);
-														document.removeEventListener("mouseup", mouseup);
+														document.removeEventListener("mousemove", mouseMove);
+														document.removeEventListener("mouseup", mouseUp);
 														let dragging = event3 => {
 															_this.updateDragPreview(dragpreview, event3);
 															let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._serverfoldersguildplaceholder, event3.target);
@@ -177,12 +177,12 @@ module.exports = (_ => {
 														document.addEventListener("mouseup", releasing);
 													}
 												};
-												let mouseup = _ => {
-													document.removeEventListener("mousemove", mousemove);
-													document.removeEventListener("mouseup", mouseup);
+												let mouseUp = _ => {
+													document.removeEventListener("mousemove", mouseMove);
+													document.removeEventListener("mouseup", mouseUp);
 												};
-												document.addEventListener("mousemove", mousemove);
-												document.addEventListener("mouseup", mouseup);
+												document.addEventListener("mousemove", mouseMove);
+												document.addEventListener("mouseup", mouseUp);
 											}
 										}),
 										this.hoveredGuild != guildId ? null : BDFDB.ReactUtils.createElement("div", {
