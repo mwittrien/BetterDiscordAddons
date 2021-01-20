@@ -2117,8 +2117,12 @@ html .monaco-editor [style*="border-left-color: rgb(9, 71, 113)"] {
 
 /* ~~~~		14.		POWERCORDSUPPORT				~~~~ */
 
-.powercord-toast .progressBar-3u8FBM {
+html .powercord-toast .progressBar-3u8FBM {
 	background-color: rgb(var(--vaccentcolor));
+}
+
+html .powercord-updater .debug-info b {
+	color: rgb(var(--vaccentcolor));
 }
 
 
