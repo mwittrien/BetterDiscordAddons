@@ -721,7 +721,9 @@
 		"CustomStatusPresets": {
 			"customStatusItem": "customStatusItem-f5Trsa",
 			"deleteButton": "deleteButton-k8a4Sa",
-			"deleteIcon": "deleteIcon-22SgHa"
+			"deleteIcon": "deleteIcon-22SgHa",
+			"sortableCard": "sortableCard-oF6sTT",
+			"sortDivider": "sortDivider-d8SzzU"
 		},
 		"DisplayLargeMessages": {
 			"injectButton": "injectButton-8eKqGu",
@@ -1179,6 +1181,8 @@
 		"_customstatuspresetscustomstatusitem": ["CustomStatusPresets", "customStatusItem"],
 		"_customstatuspresetsdeletebutton": ["CustomStatusPresets", "deleteButton"],
 		"_customstatuspresetsdeleteicon": ["CustomStatusPresets", "deleteIcon"],
+		"_customstatuspresetssortablecard": ["CustomStatusPresets", "sortableCard"],
+		"_customstatuspresetssortdivider": ["CustomStatusPresets", "sortDivider"],
 		"_displaylargemessagesinjectbutton": ["DisplayLargeMessages", "injectButton"],
 		"_displaylargemessagesinjectbuttonwrapper": ["DisplayLargeMessages", "injectButtonWrapper"],
 		"_displaylargemessagespopoutbutton": ["DisplayLargeMessages", "popoutButton"],
