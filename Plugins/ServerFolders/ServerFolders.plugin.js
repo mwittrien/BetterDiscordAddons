@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "6.8.5",
+			"version": "6.8.6",
 			"description": "Patch Discords native Folders in a way to open Servers within a Folder in a new bar to the right, also adds a bunch of new features to more easily organize, customize and manage your Folders"
+		},
+		"changeLog": {
+			"fixed": {
+				"Custom Icons": "You can now add custom icons again"
+			}
 		}
 	};
 
@@ -353,7 +358,7 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 									children: BDFDB.LanguageUtils.LanguageStrings.ADD,
 									onClick: (e, instance) => {
-										let inputIns = BDFDB.ReactUtils.findOwner(this, {name: "BDFDBInput", all: true, unlimited: true});
+										let inputIns = BDFDB.ReactUtils.findOwner(this, {name: "BDFDB_TextInput", all: true, unlimited: true});
 										if (inputIns.length == 2 && inputIns[0].props.value && inputIns[1].props.value) {
 											this.checkImage(inputIns[0].props.value, openIcon => {
 												this.checkImage(inputIns[1].props.value, closedIcon => {
@@ -362,11 +367,11 @@ module.exports = (_ => {
 													this.props.open = null;
 													this.props.closed = null;
 													BDFDB.PatchUtils.forceAllUpdates(_this, "GuildFolderSettingsModal");
-													BDFDB.NotificationUtils.toast("Custom Icon was added to selection", {type: "success"});
+													BDFDB.NotificationUtils.toast("Custom Icon was added to Selection", {type: "success"});
 												});
 											})
 										}
-										else BDFDB.NotificationUtils.toast("Add an image for the open and the closed icon", {type: "danger"});
+										else BDFDB.NotificationUtils.toast("Add an Image for the open and closed Icon", {type: "danger"});
 									}
 								})
 							]
@@ -1821,7 +1826,7 @@ module.exports = (_ => {
 							modal_colorpicker2:					"Secondary Folder Color",
 							modal_colorpicker3:					"Tooltip Color",
 							modal_colorpicker4:					"Font Color",
-							modal_copytooltipcolor:				"Use the same Color for all servers in a Folder",
+							modal_copytooltipcolor:				"Use the same Color for all Servers in a Folder",
 							modal_customclosed:					"Closed icon",
 							modal_customopen:					"Open icon",
 							modal_custompreview:				"Icon preview",
