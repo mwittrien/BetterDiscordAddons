@@ -14,14 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomStatusPresets",
 			"author": "DevilBro",
-			"version": "1.0.4",
+			"version": "1.0.5",
 			"description": "Allows you to save custom statuses as quick select"
 		},
 		"changeLog": {
-			"fixed": {
-				"First Bugs": "All bugs in the first test phase should be fixed",
-				"Server Emotes": "Properly shows server emotes in the context menu now",
-				"Textless Statuses": "Now also works with textless statuses"
+			"improved": {
+				"Settings": "You can now reorder the presets in the plugin settings and 'disable' them which stops them from showing in the quick menu"
 			}
 		}
 	};
@@ -65,10 +63,166 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
+		var _this;
 		var presets = {};
+		
+		const CustomStatusInput = class CustomStatusInput extends BdApi.React.Component {
+			handleChange() {
+				this.props.onChange(this.props);
+			}
+			render() {
+				return BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN.emojiinputcontainer,
+					children: [
+						BDFDB.ReactUtils.createElement("div", {
+							key: "EMOJIINPUT",
+							className: BDFDB.disCN.emojiinputbuttoncontainer,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.EmojiPickerButton, {
+								emoji: this.props.emoji,
+								onSelect: this.handleChange.bind(this)
+							})
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+							key: "TEXTINPUT",
+							inputClassName: BDFDB.disCN.emojiinput,
+							maxLength: 128,
+							value: this.props.text,
+							placeholder: this.props.text,
+							onChange: this.handleChange.bind(this)
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+							size: BDFDB.LibraryComponents.Button.Sizes.NONE,
+							look: BDFDB.LibraryComponents.Button.Looks.BLANK,
+							className: BDFDB.disCN.emojiinputclearbutton,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.emojiinputclearicon,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE_CIRCLE
+							}),
+							onClick: (e, instance) => {
+								this.props.text = "";
+								delete this.props.text;
+								this.handleChange();
+								BDFDB.ReactUtils.forceUpdate(this);
+							}
+						})
+					]
+				});
+			}
+		};
+		
+		const SortableList = class SortableList extends BdApi.React.Component {
+			createDragPreview(div, event) {
+				if (!Node.prototype.isPrototypeOf(div)) return;
+				let dragPreview = div.cloneNode(true);
+				BDFDB.DOMUtils.addClass(dragPreview, BDFDB.disCN._customstatuspresetsdragpreview);
+				BDFDB.DOMUtils.hide(dragPreview);
+				dragPreview.style.setProperty("pointer-events", "none", "important");
+				dragPreview.style.setProperty("left", event.clientX - 25 + "px", "important");
+				dragPreview.style.setProperty("top", event.clientY - 25 + "px", "important");
+				document.querySelector(BDFDB.dotCN.appmount).appendChild(dragPreview);
+				this.props.dragPreview = dragPreview;
+			}
+			updateDragPreview(event) {
+				if (!Node.prototype.isPrototypeOf(this.props.dragPreview)) return;
+				BDFDB.DOMUtils.show(this.props.dragPreview);
+				this.props.dragPreview.style.setProperty("left", event.clientX - 25 + "px", "important");
+				this.props.dragPreview.style.setProperty("top", event.clientY - 25 + "px", "important");
+			}
+			render() {
+				return Object.keys(BDFDB.ObjectUtils.sort(this.props.entries, this.props.sortKey)).map(id => [
+					this.props.hovered == id && BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN._customstatuspresetssortdivider
+					}),
+					this.props.dragged != id && BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN._customstatuspresetssortablecard,
+						cardId: id,
+						onMouseDown: event => {
+							event = event.nativeEvent || event;
+							let target = BDFDB.DOMUtils.containsClass(event.target, BDFDB.disCN.hovercard) ? event.target.parentElement : event.target;
+							if (!BDFDB.DOMUtils.containsClass(target, BDFDB.disCN._customstatuspresetssortablecard)) return;
+							let mouseMove = event2 => {
+								if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
+									BDFDB.ListenerUtils.stopEvent(event);
+									this.createDragPreview(target, event2);
+									this.props.dragged = id;
+									BDFDB.ReactUtils.forceUpdate(this);
+									document.removeEventListener("mousemove", mouseMove);
+									document.removeEventListener("mouseup", mouseUp);
+									let dragging = event3 => {
+										this.updateDragPreview(event3);
+										let hoveredId = BDFDB.DOMUtils.getParent(BDFDB.dotCN._customstatuspresetssortablecard, event3.target)?.getAttribute("cardId");
+										let update = hoveredId != this.props.hovered;
+										this.props.hovered = hoveredId;
+										if (update) BDFDB.ReactUtils.forceUpdate(this);
+									};
+									let releasing = event3 => {
+										BDFDB.ListenerUtils.stopEvent(event3);
+										BDFDB.DOMUtils.remove(this.props.dragPreview);
+										if (this.props.hovered) {
+											presets[id][this.props.sortKey] = presets[this.props.hovered][this.props.sortKey] - 0.5;
+											let pos = 0, sortedPresets = BDFDB.ObjectUtils.sort(presets, this.props.sortKey);
+											for (let sortId in sortedPresets) presets[sortId][this.props.sortKey] = pos++;
+											this.props.entries = presets;
+											BDFDB.DataUtils.save(presets, _this, "presets");
+										}
+										delete this.props.dragged;
+										delete this.props.hovered;
+										BDFDB.ReactUtils.forceUpdate(this);
+										document.removeEventListener("mousemove", dragging);
+										document.removeEventListener("mouseup", releasing);
+									};
+									document.addEventListener("mousemove", dragging);
+									document.addEventListener("mouseup", releasing);
+								}
+							};
+							let mouseUp = _ => {
+								document.removeEventListener("mousemove", mouseMove);
+								document.removeEventListener("mouseup", mouseUp);
+							};
+							document.addEventListener("mousemove", mouseMove);
+							document.addEventListener("mouseup", mouseUp);
+						},
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
+							horizontal: true,
+							children: [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+									wrap: true,
+									children: BDFDB.ReactUtils.createElement(CustomStatusInput, {
+										text: presets[id].text,
+										emoji: presets[id].emojiInfo,
+										onChange: value => {
+											presets[id].text = value.text;
+											presets[id].emojiInfo = value.emoji;
+											BDFDB.DataUtils.save(presets, _this, "presets");
+										}
+									})
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
+										value: !presets[id].disabled,
+										onChange: value => {
+											presets[id].disabled = !value;
+											BDFDB.DataUtils.save(presets, _this, "presets");
+										}
+									})
+								})
+							],
+							onRemove: _ => {
+								delete presets[id];
+								BDFDB.DataUtils.save(presets, _this, "presets");
+								this.props.entries = presets;
+								BDFDB.ReactUtils.forceUpdate(this);
+							}
+						})
+					})
+				]).flat().filter(n => n);
+			}
+		};
 		
 		return class CustomStatusPresets extends Plugin {
 			onLoad () {
+				_this = this;
+				
 				this.patchedModules = {
 					before: {
 						Menu: "default"
@@ -123,6 +277,17 @@ module.exports = (_ => {
 						display: flex;
 						margin-right: 6px;
 					}
+					${BDFDB.dotCN._customstatuspresetssortdivider} {
+						background: ${BDFDB.DiscordConstants.Colors.STATUS_GREEN};
+						height: 2px;
+						margin: 0 26px 8px 0;
+					}
+					${BDFDB.dotCN._customstatuspresetsdragpreview} {
+						pointer-events: none !important;
+						position: absolute !important;
+						opacity: 0.5 !important;
+						z-index: 10000 !important;
+					}
 				`;
 			}
 			
@@ -133,6 +298,21 @@ module.exports = (_ => {
 			onStop () {
 				this.forceUpdateAll();
 			}
+
+			getSettingsPanel (collapseStates = {}) {
+				let settingsPanel, settingsItems = [];
+				
+				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+					title: "Custom Status Presets:",
+					dividerTop: true,
+					children: BDFDB.ReactUtils.createElement(SortableList, {
+						entries: presets,
+						sortKey: "pos"
+					})
+				}));
+				
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+			}
 			
 			forceUpdateAll () {
 				presets = BDFDB.DataUtils.load(this, "presets");
@@ -141,15 +321,16 @@ module.exports = (_ => {
 			}
 			
 			processMenu (e) {
-				if (e.instance.props.navId == "status-picker" && Object.keys(presets).length) {
+				let enabledPresets = BDFDB.ObjectUtils.filter(presets, id => !presets[id].disabled, true);
+				if (e.instance.props.navId == "status-picker" && Object.keys(enabledPresets).length) {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.instance, {id: "custom-status"});
 					if (index > -1 && children[index].props && !children[index].props.children) {
 						let render = children[index].props.render;
 						delete children[index].props.render;
 						children[index] = BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, Object.assign({}, children[index].props, {
 							label: render(),
-							children: Object.keys(BDFDB.ObjectUtils.sort(presets, "pos")).map(key => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-								id: BDFDB.ContextMenuUtils.createItemId(this.name, "custom-status-preset", key),
+							children: Object.keys(BDFDB.ObjectUtils.sort(enabledPresets, "pos")).map(id => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								id: BDFDB.ContextMenuUtils.createItemId(this.name, "custom-status-preset", id),
 								label: BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN._customstatuspresetscustomstatusitem,
 									children: [
@@ -161,9 +342,9 @@ module.exports = (_ => {
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 												className: BDFDB.disCN._customstatuspresetsdeletebutton,
 												onClick: _ => {
-													delete presets[key];
+													delete presets[id];
 													let pos = 0, sortedPresets = BDFDB.ObjectUtils.sort(presets, "pos");
-													for (let key in sortedPresets) presets[key].pos = pos++;
+													for (let id in sortedPresets) presets[id].pos = pos++;
 													BDFDB.DataUtils.save(presets, this, "presets");
 												},
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
@@ -174,24 +355,24 @@ module.exports = (_ => {
 												})
 											})
 										}),
-										presets[key].text
+										presets[id].text
 									]
 								}),
-								imageUrl: presets[key].emojiInfo && (presets[key].emojiInfo.id ? BDFDB.LibraryModules.IconUtils.getEmojiURL(presets[key].emojiInfo) : BDFDB.LibraryModules.EmojiStateUtils.getURL(presets[key].emojiInfo.name)),
-								hint: !presets[key].clearAfter ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : presets[key].clearAfter == BDFDB.LibraryModules.CustomStatusConstants.ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", presets[key].clearAfter/3600000),
+								imageUrl: presets[id].emojiInfo && (presets[id].emojiInfo.id ? BDFDB.LibraryModules.IconUtils.getEmojiURL(presets[id].emojiInfo) : BDFDB.LibraryModules.EmojiStateUtils.getURL(presets[id].emojiInfo.name)),
+								hint: !presets[id].clearAfter ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : presets[id].clearAfter == BDFDB.LibraryModules.CustomStatusConstants.ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", presets[id].clearAfter/3600000),
 								action: _ => {
-									if (!presets[key]) return;
-									let expiresAt = presets[key].clearAfter ? presets[key].clearAfter : null;
-									if (presets[key].clearAfter === BDFDB.LibraryModules.CustomStatusConstants.ClearAfterValues.TODAY) {
+									if (!presets[id]) return;
+									let expiresAt = presets[id].clearAfter ? presets[id].clearAfter : null;
+									if (presets[id].clearAfter === BDFDB.LibraryModules.CustomStatusConstants.ClearAfterValues.TODAY) {
 										let date = new Date;
 										expiresAt = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime() - date.getTime();
 									}
 									BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({
 										customStatus: {
-											text: presets[key].text && presets[key].text.length > 0 ? presets[key].text : null,
+											text: presets[id].text && presets[id].text.length > 0 ? presets[id].text : null,
 											expiresAt: expiresAt ? BDFDB.DiscordObjects.Timestamp().add(expiresAt, "ms").toISOString() : null,
-											emojiId: presets[key].emojiInfo ? presets[key].emojiInfo.id : null,
-											emojiName: presets[key].emojiInfo ? presets[key].emojiInfo.name : null
+											emojiId: presets[id].emojiInfo ? presets[id].emojiInfo.id : null,
+											emojiName: presets[id].emojiInfo ? presets[id].emojiInfo.name : null
 										}
 									});
 								}
