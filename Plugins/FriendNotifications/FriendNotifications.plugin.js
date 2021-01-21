@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.5.9",
+			"version": "1.6.0",
 			"description": "Get a notification when a Friend or a User, you choose to observe, changes their status"
 		},
 		"changeLog": {
@@ -693,7 +693,11 @@ module.exports = (_ => {
 					let activityName = isCustom ? "custom" : BDFDB.DiscordConstants.ActivityTypes[activity.type].toLowerCase();
 					if (statuses[activityName] && config[activityName]) {
 						Object.assign(status, {name: isCustom ? status.name : activityName, activity: Object.assign({}, activity), custom: isCustom});
-						if (activityName == "listening" || activityName == "streaming") delete status.activity.name;
+						if (activity.type == BDFDB.DiscordConstants.ActivityTypes.STREAMING || activity.type == BDFDB.DiscordConstants.ActivityTypes.LISTENING) delete status.activity.name;
+						else if (activity.type == BDFDB.DiscordConstants.ActivityTypes.PLAYING) {
+							delete status.activity.details;
+							delete status.activity.state;
+						}
 					}
 				}
 				return status;
