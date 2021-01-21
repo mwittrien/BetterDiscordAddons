@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.1.1",
+			"version": "4.1.2",
 			"description": "Allow you to change the icon, name, tag and color of users"
 		},
 		"changeLog": {
-			"improved": {
-				"Separate Servers and DMs": "You can now disable all changes in the chat window for servers or dms"
+			"fixed": {
+				"Message Color": "Fixed issue with BDs colored text option"
 			}
 		}
 	};
@@ -654,7 +654,10 @@ module.exports = (_ => {
 								gradient: BDFDB.ColorUtils.createGradient(messageColor),
 								children: e.returnvalue.props.children
 							});
-							else e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {color: BDFDB.ColorUtils.convert(messageColor, "RGBA")});
+							else e.returnvalue.props.children = BDFDB.ReactUtils.createElement("span", {
+								style: Object.assign({}, e.returnvalue.props.style, {color: BDFDB.ColorUtils.convert(messageColor, "RGBA")}),
+								children: e.returnvalue.props.children
+							});
 						}
 					}
 				}
