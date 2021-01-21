@@ -30,6 +30,7 @@ https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Th
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/TeamRem.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/Winter_Returns.theme.css
 https://raw.githubusercontent.com/DiscordStyles/Slate/master/Slate.theme.css
+https://raw.githubusercontent.com/ElijahPepe/BDThemes/main/Cyberpunk/CyberpunkImport.theme.css
 https://raw.githubusercontent.com/fluffingtons/revert-discord/master/revert.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/AdjustableServerWidth/AdjustableServerWidth.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/FrostedGlass/FrostedGlass.theme.css
