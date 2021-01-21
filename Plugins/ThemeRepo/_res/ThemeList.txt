@@ -13,6 +13,7 @@ https://raw.githubusercontent.com/codedotspectra/themes/master/nocturnal/nocturn
 https://raw.githubusercontent.com/codedotspectra/themes/master/themes-files/neutron.theme.css
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/Red.n.Black.theme.css
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/ReZero.theme.css
+https://raw.githubusercontent.com/DagCord/Wildberry/main/BetterDiscord/Wildberry.theme.css
 https://raw.githubusercontent.com/DarkKillerXL/Red-n-Black/master/Red_n_Black.theme.css
 https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/ClearDiscord.theme.css
 https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/JustBlack.theme.css
