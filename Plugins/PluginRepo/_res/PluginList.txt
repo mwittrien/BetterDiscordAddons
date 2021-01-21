@@ -23,6 +23,8 @@ https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/scr
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/Snowfall.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/toggleYourStuff.plugin.js
 https://raw.githubusercontent.com/JakeCover/BetterDiscordExtensions/main/release/CopyMoji.plugin.js
+https://raw.githubusercontent.com/jaimeadf/BetterDiscordPlugins/main/BiggerStreamPreview/BiggerStreamPreview.plugin.js
+https://raw.githubusercontent.com/jaimeadf/BetterDiscordPlugins/main/WhoReacted/WhoReacted.plugin.js
 https://raw.githubusercontent.com/l0c4lh057/BetterDiscordStuff/master/Plugins/ChannelTabs/ChannelTabs.plugin.js
 https://raw.githubusercontent.com/l0c4lh057/BetterDiscordStuff/master/Plugins/Minespoiler/Minespoiler.plugin.js
 https://raw.githubusercontent.com/l0c4lh057/BetterDiscordStuff/master/Plugins/TypingIndicator/TypingIndicator.plugin.js
