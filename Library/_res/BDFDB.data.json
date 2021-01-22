@@ -803,6 +803,14 @@
 			"unpinButton": "unpinButton-z3-UVO",
 			"unpinIcon": "unpinIcon-79ZnEr"
 		},
+		"PluginRepo": {
+			"loadingIcon": "loadingIcon-dB3qSe",
+			"loadingTooltip": "loadingTooltip-SzsTEU",
+			"failNotice": "failNotice-OtHUGb",
+			"newEntriesNotice": "newEntriesNotice-qvvpPx",
+			"outdatedNotice": "outdatedNotice-9Q9gJv",
+			"repoNotice": "repoNotice-P5ss6R"
+		},
 		"ReadAllNotificationsButton": {
 			"button": "button-Jt-tIg",
 			"frame": "frame-oXWS21",
@@ -854,6 +862,14 @@
 			"song": "song-tIdBpF",
 			"timeline": "timeline-UWmgAx",
 			"volumeSlider": "volumeSlider-sR5g00"
+		},
+		"ThemeRepo": {
+			"loadingIcon": "loadingIcon-h7OqHY",
+			"loadingTooltip": "loadingTooltip-YszEmb",
+			"failNotice": "failNotice-pZAzjZ",
+			"newEntriesNotice": "newEntriesNotice-abF6e1",
+			"outdatedNotice": "outdatedNotice-fw8ams",
+			"repoNotice": "repoNotice-TV3RFr"
 		},
 		"TimedLightDarkMode": {
 			"dateGrabber": "dateGrabber-QrRkIX",
@@ -1240,6 +1256,12 @@
 		"_pindmsrecentplaceholder": ["PinDMs", "recentPlaceholder"],
 		"_pindmsunpinbutton": ["PinDMs", "unpinButton"],
 		"_pindmsunpinicon": ["PinDMs", "unpinIcon"],
+		"_pluginrepoloadingicon": ["PluginRepo", "loadingIcon"],
+		"_pluginrepoloadingtooltip": ["PluginRepo", "loadingTooltip"],
+		"_pluginrepofailnotice": ["PluginRepo", "failNotice"],
+		"_pluginreponewentriesnotice": ["PluginRepo", "newEntriesNotice"],
+		"_pluginrepooutdatednotice": ["PluginRepo", "outdatedNotice"],
+		"_pluginreporeponotice": ["PluginRepo", "repoNotice"],
 		"_readallnotificationsbuttonbutton": ["ReadAllNotificationsButton", "button"],
 		"_readallnotificationsbuttonframe": ["ReadAllNotificationsButton", "frame"],
 		"_readallnotificationsbuttoninner": ["ReadAllNotificationsButton", "innerFrame"],
@@ -1278,6 +1300,12 @@
 		"_spotifycontrolssong": ["SpotifyControls", "song"],
 		"_spotifycontrolstimeline": ["SpotifyControls", "timeline"],
 		"_spotifycontrolsvolumeslider": ["SpotifyControls", "volumeSlider"],
+		"_themerepoloadingicon": ["ThemeRepo", "loadingIcon"],
+		"_themerepoloadingtooltip": ["ThemeRepo", "loadingTooltip"],
+		"_themerepofailnotice": ["ThemeRepo", "failNotice"],
+		"_themereponewentriesnotice": ["ThemeRepo", "newEntriesNotice"],
+		"_themerepooutdatednotice": ["ThemeRepo", "outdatedNotice"],
+		"_themereporeponotice": ["ThemeRepo", "repoNotice"],
 		"_timedlightdarkmodedategrabber": ["TimedLightDarkMode", "dateGrabber"],
 		"_timedlightdarkmodetimergrabber": ["TimedLightDarkMode", "timerGrabber"],
 		"_timedlightdarkmodetimersettings": ["TimedLightDarkMode", "timerSettings"],
