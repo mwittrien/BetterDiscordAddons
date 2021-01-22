@@ -79,19 +79,19 @@ module.exports = (_ => {
 				colorClass: "GREEN",
 				backgroundColor: "STATUS_GREEN",
 				icon: "CHECKMARK",
-				text: "Updated"
+				text: "updated"
 			},
 			OUTDATED: {
 				colorClass: "RED",
 				backgroundColor: "STATUS_RED",
 				icon: "CLOSE",
-				text: "Outdated"
+				text: "outdated"
 			},
 			DOWNLOADABLE: {
 				colorClass: "BRAND",
 				backgroundColor: "var(--bdfdb-blurple)",
 				icon: "DOWNLOAD",
-				text: "Download"
+				text: "download"
 			}
 		};
 		const favStates = {
@@ -259,7 +259,7 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 									className: BDFDB.disCN.margintop20,
 									style: {textAlign: "center"},
-									children: "Themes are still being fetched. Please wait a moment."
+									children: BDFDB.LanguageUtils.LibraryStringsFormat("loading", "Theme Repo")
 								})
 							]
 						}) : BDFDB.ReactUtils.forceStyle(BDFDB.ReactUtils.createElement("div", {
@@ -619,7 +619,7 @@ module.exports = (_ => {
 							})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: buttonConfig.text,
+							text: BDFDB.LanguageUtils.LibraryStrings[buttonConfig.text],
 							children: BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCNS._repobutton + BDFDB.disCN._repocontrolsbutton,
 								style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor] || buttonConfig.backgroundColor},
@@ -644,7 +644,7 @@ module.exports = (_ => {
 						this.props.theme.state != themeStates.DOWNLOADABLE && BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN._repocontrolsbutton,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								text: "Delete Themefile",
+								text: BDFDB.LanguageUtils.LanguageStrings.DELETE,
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 									name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_TRASH,
 									className: BDFDB.disCN._repoicon,
@@ -786,9 +786,9 @@ module.exports = (_ => {
 
 				this.defaults = {
 					settings: {
-						keepOnTop: 			{value: false,		description: "Keep the preview window always on top"},
-						notifyOutdated:		{value: true, 		description: "Get a notification when one of your Themes is outdated"},
-						notifyNewentries:	{value: true, 		description: "Get a notification when there are new entries in the Repo"}
+						keepOnTop: 			{value: false,		description: "Keep the Preview Window always on top"},
+						notifyOutdated:		{value: true, 		description: "Get a Notification when one of your Themes is outdated"},
+						notifyNewentries:	{value: true, 		description: "Get a Notification when there are new Entries in the Repo"}
 					},
 					modalSettings: {
 						updated: 			{value: true,	modify: true,	description: "Show updated Themes",},
@@ -822,7 +822,7 @@ module.exports = (_ => {
 
 				this.forceUpdateAll();
 
-				BDFDB.DOMUtils.remove(".bd-themerepobutton", ".themerepo-notice", ".themerepo-loadingicon");
+				BDFDB.DOMUtils.remove(BDFDB.dotCN._themereponotice, BDFDB.dotCN._themerepoloadingicon);
 			}
 
 			getSettingsPanel (collapseStates = {}) {
@@ -888,7 +888,7 @@ module.exports = (_ => {
 							color: BDFDB.LibraryComponents.Button.Colors.RED,
 							label: "Remove all custom added Themes",
 							onClick: _ => {
-								BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added Themes from your own list", _ => {
+								BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added Themes from your own List", _ => {
 									BDFDB.DataUtils.save([], this, "custom");
 									BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 								});
@@ -1015,7 +1015,7 @@ module.exports = (_ => {
 			}
 
 			loadThemes () {
-				BDFDB.DOMUtils.remove(".themerepo-loadingicon");
+				BDFDB.DOMUtils.remove(BDFDB.dotCN._themerepoloadingicon);
 				let getThemeInfo, outdated = 0, newEntries = 0, i = 0;
 				let tags = ["name", "description", "author", "version"];
 				let newEntriesData = BDFDB.DataUtils.load(this, "newentriesdata");
@@ -1038,11 +1038,11 @@ module.exports = (_ => {
 						}, 1200000), amount: loading.amount+1};
 					
 						let loadingIcon = BDFDB.DOMUtils.create(themeRepoIcon.replace(/COLOR_1/gi, "var(--bdfdb-blurple)").replace(/COLOR_2/gi, "#72767d"));
-						BDFDB.DOMUtils.addClass(loadingIcon, "themerepo-loadingicon");
+						BDFDB.DOMUtils.addClass(loadingIcon, BDFDB.disCN._themerepoloadingicon);
 						loadingIcon.addEventListener("mouseenter", _ => {
 							BDFDB.TooltipUtils.create(loadingIcon, this.getLoadingTooltipText(), {
 								type: "left",
-								className: "themerepo-loadingtooltip",
+								className: BDFDB.disCN._themerepoloadingtooltip,
 								delay: 500,
 								style: "max-width: unset;"
 							});
@@ -1055,18 +1055,18 @@ module.exports = (_ => {
 								return;
 							}
 							BDFDB.TimeUtils.clear(loading.timeout);
-							BDFDB.DOMUtils.remove(loadingIcon, ".themerepo-loadingicon");
+							BDFDB.DOMUtils.remove(loadingIcon, BDFDB.dotCN._themerepoloadingicon);
 							loading = {is: false, timeout: null, amount: loading.amount};
 							
 							BDFDB.LogUtils.log("Finished fetching Themes", this.name);
 							if (list) BDFDB.ReactUtils.forceUpdate(list);
 							
 							if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
-								let oldBarButton = document.querySelector(".themerepo-outdate-notice " + BDFDB.dotCN.noticedismiss);
+								let oldBarButton = document.querySelector(BDFDB.dotCNS._themerepooutdatednotice + BDFDB.dotCN.noticedismiss);
 								if (oldBarButton) oldBarButton.click();
 								let bar = BDFDB.NotificationUtils.notice(`${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check: `, {
 									type: "danger",
-									className: "themerepo-notice themerepo-outdate-notice",
+									className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themerepooutdatednotice,
 									btn: "ThemeRepo",
 									customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
 								});
@@ -1078,12 +1078,12 @@ module.exports = (_ => {
 							}
 							
 							if (settings.notifyNewEntries && newEntries > 0) {
-								let oldBarButton = document.querySelector(".themerepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
+								let oldBarButton = document.querySelector(BDFDB.dotCNS._themereponewentriesnotice + BDFDB.dotCN.noticedismiss);
 								if (oldBarButton) oldBarButton.click();
 								let single = newEntries == 1;
 								let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Theme${single ? "" : "s"} in the Repo. Check: `, {
 									type: "success",
-									className: "themerepo-notice themerepo-newentries-notice",
+									className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themereponewentriesnotice,
 									btn: "ThemeRepo",
 									customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
 								});
@@ -1096,12 +1096,14 @@ module.exports = (_ => {
 							}
 							
 							if (BDFDB.UserUtils.me.id == "278543574059057154") {
+								let oldBarButton = document.querySelector(BDFDB.dotCNS._themerepofailnotice + BDFDB.dotCN.noticedismiss);
+								if (oldBarButton) oldBarButton.click();
 								let wrongUrls = [];
 								for (let url of foundThemes) if (url && !loadedThemes[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
 								if (wrongUrls.length) {
 									let bar = BDFDB.NotificationUtils.notice(`ThemeRepo: ${wrongUrls.length} Theme${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {
 										type: "danger",
-										className: "themerepo-notice themerepo-fail-notice",
+										className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themerepofailnotice,
 										btn: "List",
 										customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
 									});
@@ -1181,7 +1183,7 @@ module.exports = (_ => {
 						}
 						i++;
 						
-						let loadingTooltip = document.querySelector(".themerepo-loadingtooltip");
+						let loadingTooltip = document.querySelector(BDFDB.dotCN._themerepoloadingtooltip);
 						if (loadingTooltip) loadingTooltip.update(this.getLoadingTooltipText());
 						
 						getThemeInfo(callback);
@@ -1190,7 +1192,7 @@ module.exports = (_ => {
 			}
 
 			getLoadingTooltipText () {
-				return `Loading ThemeRepo - [${Object.keys(loadedThemes).length}/${Object.keys(grabbedThemes).length}]`;
+				return BDFDB.LanguageUtils.LibraryStringsFormat("loading", `ThemeRepo - [${Object.keys(loadedThemes).length}/${Object.keys(grabbedThemes).length}]`);
 			}
 
 			checkForNewThemes () {
@@ -1204,15 +1206,15 @@ module.exports = (_ => {
 
 			downloadTheme (data) {
 				BDFDB.LibraryRequires.request(data.url, (error, response, body) => {
-					if (error) BDFDB.NotificationUtils.toast(`Unable to download Theme "${data.name}".`, {type: "danger"});
+					if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Theme "${data.name}"`), {type: "danger"});
 					else this.createThemeFile(data.url.split("/").pop(), body);
 				});
 			}
 
 			createThemeFile (filename, content) {
 				BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getThemesFolder(), filename), content, (error) => {
-					if (error) BDFDB.NotificationUtils.toast(`Unable to save Theme "${filename}".`, {type: "danger"});
-					else BDFDB.NotificationUtils.toast(`Successfully saved Theme "${filename}".`, {type: "success"});
+					if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_fail", `Theme "${filename}"`), {type: "danger"});
+					else BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_success", `Theme "${filename}"`), {type: "success"});
 				});
 			}
 
@@ -1221,15 +1223,15 @@ module.exports = (_ => {
 					let id = data.name.replace(/^[^a-z]+|[^\w-]+/gi, "-");
 					BDFDB.DOMUtils.remove(`style#${id}`);
 					BDFDB.BDUtils.enableTheme(data.name, false);
-					BDFDB.LogUtils.log(`Applied Theme ${data.name}.`, this.name);
+					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", data.name), this.name);
 				}
 			}
 
 			deleteThemeFile (data) {
 				let filename = data.url.split("/").pop();
 				BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getThemesFolder(), filename), (error) => {
-					if (error) BDFDB.NotificationUtils.toast(`Unable to delete Theme "${filename}".`, {type: "danger"});
-					else BDFDB.NotificationUtils.toast(`Successfully deleted Theme "${filename}".`);
+					if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_fail", `Theme "${filename}"`), {type: "danger"});
+					else BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_success", `Theme "${filename}"`));
 				});
 			}
 
@@ -1238,7 +1240,7 @@ module.exports = (_ => {
 					let id = data.name.replace(/^[^a-z]+|[^\w-]+/gi, "-");
 					BDFDB.DOMUtils.remove(`style#${id}`);
 					BDFDB.BDUtils.disableTheme(data.name, false);
-					BDFDB.LogUtils.log(`Removed Theme ${data.name}.`, this.name);
+					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", data.name), this.name);
 				}
 			}
 		};

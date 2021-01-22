@@ -79,19 +79,19 @@ module.exports = (_ => {
 				colorClass: "GREEN",
 				backgroundColor: "STATUS_GREEN",
 				icon: "CHECKMARK",
-				text: "Updated"
+				text: "updated"
 			},
 			OUTDATED: {
 				colorClass: "RED",
 				backgroundColor: "STATUS_RED",
 				icon: "CLOSE",
-				text: "Outdated"
+				text: "outdated"
 			},
 			DOWNLOADABLE: {
 				colorClass: "BRAND",
 				backgroundColor: "var(--bdfdb-blurple)",
 				icon: "DOWNLOAD",
-				text: "Download"
+				text: "download"
 			}
 		};
 		const favStates = {
@@ -187,7 +187,7 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 									className: BDFDB.disCN.margintop20,
 									style: {textAlign: "center"},
-									children: "Plugins are still being fetched. Please wait a moment."
+									children: BDFDB.LanguageUtils.LibraryStringsFormat("loading", "Plugin Repo")
 								})
 							]
 						}) : BDFDB.ReactUtils.forceStyle(BDFDB.ReactUtils.createElement("div", {
@@ -327,7 +327,7 @@ module.exports = (_ => {
 							})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: buttonConfig.text,
+							text: BDFDB.LanguageUtils.LibraryStrings[buttonConfig.text],
 							children: BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCNS._repobutton + BDFDB.disCN._repocontrolsbutton,
 								style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor] || buttonConfig.backgroundColor},
@@ -352,7 +352,7 @@ module.exports = (_ => {
 						this.props.plugin.state != pluginStates.DOWNLOADABLE && BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN._repocontrolsbutton,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								text: "Delete Pluginfile",
+								text: BDFDB.LanguageUtils.LanguageStrings.DELETE,
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 									name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_TRASH,
 									className: BDFDB.disCN._repoicon,
@@ -494,8 +494,8 @@ module.exports = (_ => {
 
 				this.defaults = {
 					settings: {
-						notifyOutdated:		{value: true, 	description: "Get a notification when one of your Plugins is outdated"},
-						notifyNewEntries:	{value: true, 	description: "Get a notification when there are new entries in the Repo"}
+						notifyOutdated:		{value: true, 	description: "Get a Notification when one of your Plugins is outdated"},
+						notifyNewEntries:	{value: true, 	description: "Get a Notification when there are new Entries in the Repo"}
 					},
 					modalSettings: {
 						updated: 			{value: true,	modify: true,	description: "Show updated Plugins",},
@@ -530,7 +530,7 @@ module.exports = (_ => {
 
 				this.forceUpdateAll();
 
-				BDFDB.DOMUtils.remove(".bd-pluginrepobutton", ".pluginrepo-notice", ".pluginrepo-loadingicon");
+				BDFDB.DOMUtils.remove(BDFDB.dotCN._pluginreponotice, BDFDB.dotCN._pluginrepoloadingicon);
 			}
 
 			getSettingsPanel (collapseStates = {}) {
@@ -697,7 +697,7 @@ module.exports = (_ => {
 			}
 
 			loadPlugins () {
-				BDFDB.DOMUtils.remove(".pluginrepo-loadingicon");
+				BDFDB.DOMUtils.remove(BDFDB.dotCN._pluginrepoloadingicon);
 				let settings = BDFDB.DataUtils.load(this, "settings");
 				let getPluginInfo, extractConfigInfo, createSandbox, runInSandbox;
 				let sandbox, sandboxRunning = false, sandboxQueue = [], outdated = 0, newEntries = 0, i = 0;
@@ -723,11 +723,11 @@ module.exports = (_ => {
 						}, 1200000), amount: loading.amount+1};
 						
 						let loadingIcon = BDFDB.DOMUtils.create(pluginRepoIcon.replace(/COLOR_1/gi, "var(--bdfdb-blurple)").replace(/COLOR_2/gi, "#72767d"));
-						BDFDB.DOMUtils.addClass(loadingIcon, "pluginrepo-loadingicon");
+						BDFDB.DOMUtils.addClass(loadingIcon, BDFDB.disCN._pluginrepoloadingicon);
 						loadingIcon.addEventListener("mouseenter", _ => {
 							BDFDB.TooltipUtils.create(loadingIcon, this.getLoadingTooltipText(), {
 								type: "left",
-								className: "pluginrepo-loadingtooltip",
+								className: BDFDB.disCN._pluginrepoloadingtooltip,
 								delay: 500,
 								style: "max-width: unset;"
 							});
@@ -746,18 +746,18 @@ module.exports = (_ => {
 										BDFDB.TimeUtils.clear(loading.timeout);
 										BDFDB.TimeUtils.clear(finishInterval);
 										BDFDB.WindowUtils.close(sandbox);
-										BDFDB.DOMUtils.remove(loadingIcon, ".pluginrepo-loadingicon");
+										BDFDB.DOMUtils.remove(loadingIcon, BDFDB.dotCN._pluginrepoloadingicon);
 										loading = {is: false, timeout: null, amount: loading.amount};
 										
 										BDFDB.LogUtils.log("Finished fetching Plugins.", this.name);
 										if (list) BDFDB.ReactUtils.forceUpdate(list);
 										
 										if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
-											let oldBarButton = document.querySelector(".pluginrepo-outdate-notice " + BDFDB.dotCN.noticedismiss);
+											let oldBarButton = document.querySelector(BDFDB.dotCNS._pluginrepooutdatednotice + BDFDB.dotCN.noticedismiss);
 											if (oldBarButton) oldBarButton.click();
 											let bar = BDFDB.NotificationUtils.notice(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check: `, {
 												type: "danger",
-												className: "pluginrepo-notice pluginrepo-outdate-notice",
+												className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepooutdatednotice,
 												btn: "PluginRepo",
 												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
 											});
@@ -769,12 +769,12 @@ module.exports = (_ => {
 										}
 										
 										if ((settings.notifyNewEntries || settings.notifyNewEntries == undefined) && newEntries > 0) {
-											let oldBarButton = document.querySelector(".pluginrepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
+											let oldBarButton = document.querySelector(BDFDB.dotCNS._pluginreponewentriesnotice + BDFDB.dotCN.noticedismiss);
 											if (oldBarButton) oldBarButton.click();
 											let single = newEntries == 1;
 											let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Plugin${single ? "" : "s"} in the Repo. Check: `, {
 												type: "success",
-												className: "pluginrepo-notice pluginrepo-newentries-notice",
+												className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginreponewentriesnotice,
 												btn: "PluginRepo",
 												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
 											});
@@ -787,12 +787,14 @@ module.exports = (_ => {
 										}
 										
 										if (BDFDB.UserUtils.me.id == "278543574059057154") {
+											let oldBarButton = document.querySelector(BDFDB.dotCNS._pluginrepofailnotice + BDFDB.dotCN.noticedismiss);
+											if (oldBarButton) oldBarButton.click();
 											let wrongUrls = [];
 											for (let url of foundPlugins) if (url && !loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
 											if (wrongUrls.length) {
 												let bar = BDFDB.NotificationUtils.notice(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {
 													type: "danger",
-													className: "pluginrepo-notice pluginrepo-fail-notice",
+													className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepofailnotice,
 													btn: "List",
 													customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
 												});
@@ -831,13 +833,14 @@ module.exports = (_ => {
 							let bodyWithoutSpecial = bodyCopy.replace(/\n|\r|\t/g, "").replace(/\n|\r|\t/g, "").replace(/\s{2,}/g, "");
 							let configReg = /(\.exports|config)\s*=\s*\{(.*?)\s*["'`]*info["'`]*\s*:\s*/i.exec(bodyWithoutSpecial);
 							if (configReg) {
+								bodyWithoutSpecial = bodyWithoutSpecial.substring(configReg.index)?.split(configReg[0])[1]?.split("};")[0]?.split("}},")[0]?.replace(/,([\]\}])/g, "$1");
 								try {
-									extractConfigInfo(plugin, JSON.parse('{"info":' + bodyWithoutSpecial.substring(configReg.index).split(configReg[0])[1].split("};")[0].split("}},")[0] + '}'));
+									extractConfigInfo(plugin, JSON.parse('{"info":' + bodyWithoutSpecial + '}'));
 								}
 								catch (err) {
 									let i = 0, j = 0, configString = "";
 									try {
-										for (let c of (bodyWithoutSpecial.substring(configReg.index).split(configReg[0])[1].split("};")[0].split("}},")[0]).replace(/:\s*([\[\{"]+)/g, '":$1').replace(/([\]\}"]+)\s*,/g, '$1,"').replace(/\s*([\[\{]+)/g, '$1"')) {
+										for (let c of bodyWithoutSpecial.replace(/:\s*([\[\{"]+)/g, '":$1').replace(/([\]\}"]+)\s*,([^"])/g, '$1,"$2').replace(/\s*\{([^"])/g, '{"$1')) {
 											configString += c;
 											if (c == "{") i++;
 											else if (c == "}") j++;
@@ -892,7 +895,7 @@ module.exports = (_ => {
 						}
 						i++;
 						
-						let loadingTooltip = document.querySelector(".pluginrepo-loadingtooltip");
+						let loadingTooltip = document.querySelector(BDFDB.dotCN._pluginrepoloadingtooltip);
 						if (loadingTooltip) loadingTooltip.update(this.getLoadingTooltipText());
 						
 						getPluginInfo(callback);
@@ -976,7 +979,7 @@ module.exports = (_ => {
 			}
 
 			getLoadingTooltipText () {
-				return `Loading PluginRepo - [${Object.keys(loadedPlugins).length}/${Object.keys(grabbedPlugins).length}]`;
+				return BDFDB.LanguageUtils.LibraryStringsFormat("loading", `PluginRepo - [${Object.keys(loadedPlugins).length}/${Object.keys(grabbedPlugins).length}]`);
 			}
 			
 			isPluginOutdated (plugin, url) {
@@ -1017,37 +1020,37 @@ module.exports = (_ => {
 
 			downloadPlugin (data) {
 				BDFDB.LibraryRequires.request(data.url, (error, response, body) => {
-					if (error) BDFDB.NotificationUtils.toast(`Unable to download Plugin "${plugin.getName}".`, {type: "danger"});
+					if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Plugin "${data.getName}"`), {type: "danger"});
 					else this.createPluginFile(data.url.split("/").pop(), body);
 				});
 			}
 
 			createPluginFile (filename, content) {
 				BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), filename), content, (error) => {
-					if (error) BDFDB.NotificationUtils.toast(`Unable to save Plugin "${filename}".`, {type: "danger"});
-					else BDFDB.NotificationUtils.toast(`Successfully saved Plugin "${filename}".`, {type: "success"});
+					if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_fail", `Plugin "${filename}"`), {type: "danger"});
+					else BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_success", `Plugin "${filename}"`), {type: "success"});
 				});
 			}
 
 			startPlugin (data) {
 				if (data.name && BDFDB.BDUtils.isPluginEnabled(data.name) == false) {
 					BDFDB.BDUtils.enablePlugin(data.name, false);
-					BDFDB.LogUtils.log(`Started Plugin ${data.name}.`, this.name);
+					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", data.name), this.name);
 				}
 			}
 
 			deletePluginFile (data) {
 				let filename = data.url.split("/").pop();
 				BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), filename), (error) => {
-					if (error) BDFDB.NotificationUtils.toast(`Unable to delete Plugin "${filename}".`, {type: "danger"});
-					else BDFDB.NotificationUtils.toast(`Successfully deleted Plugin "${filename}".`);
+					if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_fail", `Plugin "${filename}"`), {type: "danger"});
+					else BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_success", `Plugin "${filename}"`));
 				});
 			}
 
 			stopPlugin (data) {
 				if (data.name && BDFDB.BDUtils.isPluginEnabled(data.name) == true) {
 					BDFDB.BDUtils.disablePlugin(data.name, false);
-					BDFDB.LogUtils.log(`Stopped Plugin ${data.name}.`, this.name);
+					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", data.name), this.name);
 				}
 			}
 		};
