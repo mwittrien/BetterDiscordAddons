@@ -30,6 +30,7 @@ https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Th
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/TeamRam.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/TeamRem.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/Winter_Returns.theme.css
+https://raw.githubusercontent.com/DiscordStyles/discord-dyslexia/main/dyslexia.theme.css
 https://raw.githubusercontent.com/DiscordStyles/Slate/master/Slate.theme.css
 https://raw.githubusercontent.com/ElijahPepe/BDThemes/main/Cyberpunk/Cyberpunk.theme.css
 https://raw.githubusercontent.com/fluffingtons/revert-discord/master/revert.theme.css
@@ -94,8 +95,6 @@ https://raw.githubusercontent.com/orblazer/discord-nordic/master/nordic.theme.cs
 https://raw.githubusercontent.com/Pierce01/Opacity/master/OpacityMaxBun.theme.css
 https://raw.githubusercontent.com/puckzxz/NotAnotherAnimeTheme/master/NotAnotherAnimeThemeSCSL.theme.css
 https://raw.githubusercontent.com/Quietess/Casual-Dark/master/Casual_Dark.theme.css
-https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/CompactServerList.theme.css
-https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/Dyslexia.theme.css
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/TransientMaterial/TransientMaterial.theme.css
 https://raw.githubusercontent.com/rauenzi/Nox/master/release/Nox.theme.css
 https://raw.githubusercontent.com/redsauce117/SauceysDiscordThemes/master/DarkerDiscordTheme.theme.css
