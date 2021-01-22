@@ -3095,7 +3095,7 @@
 			"descending": "Absteigend",
 			"developer": "Entwickler",
 			"donate_message": "Unterstütze mich, um weitere Updates zu erhalten!",
-			"download": "Download",
+			"download": "Herunterladen",
 			"download_success": "{{var0}} erfolgreich heruntergeladen",
 			"download_fail": "{{var0}} kann nicht heruntergeladen werden",
 			"file_navigator_text": "Datei durchsuchen",
