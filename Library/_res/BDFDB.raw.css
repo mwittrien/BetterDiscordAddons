@@ -8,8 +8,11 @@ img:not([src]), img[src=""], img[src="null"] {
 	opacity: 0;
 }
 
+[REPLACE_CLASS_itemlayer] ~ [REPLACE_CLASS_itemlayer] [REPLACE_CLASS_menu] {
+	z-index: 1001;
+}
 [REPLACE_CLASS_menu] [REPLACE_CLASS_itemlayer] {
-	z-index: 1003;
+	z-index: 1002;
 }
 
 [REPLACE_CLASS_loadingiconwrapper] {
