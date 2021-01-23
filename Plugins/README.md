@@ -12,7 +12,7 @@
  - [Better Search Page](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterSearchPage) - Add some extra controls to the search results page
  - [Char Counter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CharCounter) - Add a character counter to the chat
  - [Chat Aliases](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatAliases) - Allow the user to configure their own chat-aliases which will automatically be replaced before the message is being sent
- - [Chat Filter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatFilter) - Allow the user to censor words or block complete messages based on words in the chatwindow
+ - [Chat Filter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatFilter) - Allows the user to censor Words or block complete Messages/Statuses
  - [Complete Timestamps](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CompleteTimestamps) - Replace all timestamps with complete timestamps
  - [Copy Raw Message](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CopyRawMessage) - Add a entry in the contextmenu when you right click a message that allows you to copy the raw contents of a message
  - [Creation Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CreationDate) - Display the Creation Date of an Account in the UserPopout and UserModal
