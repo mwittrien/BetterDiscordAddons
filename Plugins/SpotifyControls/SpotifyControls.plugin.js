@@ -619,13 +619,13 @@ module.exports = (_ => {
 				if (!BDFDB.LibraryModules.SpotifyTrackUtils.hasConnectedAccount()) BDFDB.ModalUtils.open(this, {
 					size: "SMALL",
 					header: this.name + ": Something is missing...",
-					subheader: "You need to connect a Spotify account",
+					subHeader: "You need to connect a Spotify account",
 					text: "You are missing a connected Spotify account, without a connected account you won't be able to use Spotify Controls. To connect a Spotify account with your discord account click the button below.",
 					buttons: [{
 						contents: BDFDB.LanguageUtils.LanguageStrings.CONNECT,
 						color: "BRAND",
 						close: true,
-						click: modal => {
+						onClick: modal => {
 							BDFDB.LibraryModules.UserSettingsUtils.open(BDFDB.DiscordConstants.UserSettingsSections.CONNECTIONS)
 						}
 					}]

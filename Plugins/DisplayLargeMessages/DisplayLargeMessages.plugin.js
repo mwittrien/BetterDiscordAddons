@@ -303,7 +303,7 @@ module.exports = (_ => {
 											BDFDB.ModalUtils.open(this, {
 												size: "LARGE",
 												header: BDFDB.LanguageUtils.LanguageStrings.MESSAGE_PREVIEW,
-												subheader: "",
+												subHeader: "",
 												children: BDFDB.ReactUtils.createElement("div", {
 													className: BDFDB.disCNS.messagepopout + BDFDB.disCN._displaylargemessagespreviewmessage,
 													children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessageGroup, {

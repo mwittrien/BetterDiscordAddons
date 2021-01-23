@@ -610,7 +610,7 @@ module.exports = (_ => {
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: this.labels.modal_header,
-					subheader: channel.name,
+					subHeader: channel.name,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_channelname,
@@ -700,7 +700,7 @@ module.exports = (_ => {
 						contents: BDFDB.LanguageUtils.LanguageStrings.SAVE,
 						color: "BRAND",
 						close: true,
-						click: modal => {
+						onClick: modal => {
 							let oldData = Object.assign({}, data);
 							
 							let channelNameInput = modal.querySelector(".input-channelname " + BDFDB.dotCN.input);

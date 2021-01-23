@@ -825,7 +825,7 @@ module.exports = (_ => {
 			BDFDB.TimeUtils.timeout(_ => {
 				BDFDB.ModalUtils.open(addon, {
 					header: `${addon.name} ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
-					subheader: "",
+					subHeader: "",
 					className: BDFDB.disCN._repomodal,
 					headerClassName: BDFDB.disCN._repomodalheader,
 					contentClassName: BDFDB.disCN._repomodalsettings,
@@ -3644,7 +3644,7 @@ module.exports = (_ => {
 															}),
 															BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
 																size: InternalComponents.LibraryComponents.TextElement.Sizes.SIZE_12,
-																children: typeof config.subheader == "string" || BDFDB.ReactUtils.isValidElement(config.subheader) ? config.subheader : (name || "")
+																children: typeof config.subHeader == "string" || BDFDB.ReactUtils.isValidElement(config.subHeader) ? config.subHeader : (name || "")
 															})
 														]
 													}),
@@ -3695,10 +3695,16 @@ module.exports = (_ => {
 				};
 				BDFDB.ModalUtils.confirm = function (plugin, text, callback) {
 					if (!BDFDB.ObjectUtils.is(plugin) || typeof text != "string") return;
-					BDFDB.ModalUtils.open(plugin, {text, header: BDFDB.LanguageUtils.LibraryStrings.confirm, className: BDFDB.disCN.modalconfirmmodal, scroller: false, buttons: [
-						{contents: BDFDB.LanguageUtils.LanguageStrings.OKAY, close: true, color: "RED", click: typeof callback == "function" ? callback : _ => {}},
-						{contents: BDFDB.LanguageUtils.LanguageStrings.CANCEL, close: true}
-					]});
+					BDFDB.ModalUtils.open(plugin, {
+						text: text,
+						header: BDFDB.LanguageUtils.LibraryStrings.confirm,
+						className: BDFDB.disCN.modalconfirmmodal,
+						scroller: false,
+						buttons: [
+							{contents: BDFDB.LanguageUtils.LanguageStrings.OKAY, close: true, color: "RED", onClick: callback},
+							{contents: BDFDB.LanguageUtils.LanguageStrings.CANCEL, close: true}
+						]
+					});
 				};
 			
 				const RealMenuItems = BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup");

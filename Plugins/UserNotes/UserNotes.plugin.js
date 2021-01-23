@@ -111,7 +111,7 @@ module.exports = (_ => {
 				BDFDB.ModalUtils.open(this, {
 					size: "LARGE",
 					header: BDFDB.LanguageUtils.LanguageStrings.USERS + " " + BDFDB.LanguageUtils.LanguageStrings.NOTE,
-					subheader: user.username,
+					subHeader: user.username,
 					scroller: false,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextArea, {
@@ -124,7 +124,7 @@ module.exports = (_ => {
 						contents: BDFDB.LanguageUtils.LanguageStrings.SAVE,
 						color: "BRAND",
 						close: true,
-						click: modal => {
+						onClick: modal => {
 							note = modal.querySelector("textarea").value;
 							if (note) BDFDB.DataUtils.save(note, this, "notes", user.id);
 							else BDFDB.DataUtils.remove(this, "notes", user.id);

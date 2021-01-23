@@ -806,7 +806,7 @@ module.exports = (_ => {
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: "LogIn/-Out Timelog",
-					subheader: "",
+					subHeader: "",
 					className: BDFDB.disCN._friendnotificationstimelogmodal,
 					titleChildren: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
 						autoFocus: true,

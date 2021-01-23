@@ -883,7 +883,7 @@ module.exports = (_ => {
 				if (BDFDB.ObjectUtils.is(data) && type) BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_SETTINGS,
-					subheader: data.name,
+					subHeader: data.name,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_NAME,
@@ -914,7 +914,7 @@ module.exports = (_ => {
 						contents: isNew ? BDFDB.LanguageUtils.LanguageStrings.CREATE : BDFDB.LanguageUtils.LanguageStrings.SAVE,
 						color: "BRAND",
 						close: true,
-						click: modal => {
+						onClick: modal => {
 							data.name = modal.querySelector(".input-categoryname " + BDFDB.dotCN.input).value.trim() || data.name;
 
 							data.color = BDFDB.ColorUtils.getSwatchColor(modal, 1);

@@ -1167,7 +1167,7 @@ module.exports = (_ => {
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: this.labels.modal_header,
-					subheader: member.nick || user.username,
+					subHeader: member.nick || user.username,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader1,
@@ -1399,7 +1399,7 @@ module.exports = (_ => {
 						contents: BDFDB.LanguageUtils.LanguageStrings.SAVE,
 						color: "BRAND",
 						close: true,
-						click: modal => {
+						onClick: modal => {
 							let oldData = Object.assign({}, data);
 							
 							let userNameInput = modal.querySelector(".input-username " + BDFDB.dotCN.input);

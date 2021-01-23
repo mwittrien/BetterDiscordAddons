@@ -425,7 +425,7 @@ module.exports = (_ => {
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: this.labels.modal_header,
-					subheader: guild.name,
+					subHeader: guild.name,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader1,
@@ -629,7 +629,7 @@ module.exports = (_ => {
 						contents: BDFDB.LanguageUtils.LanguageStrings.SAVE,
 						color: "BRAND",
 						close: true,
-						click: modal => {
+						onClick: modal => {
 							let oldData = Object.assign({}, data);
 							
 							let guildNameInput = modal.querySelector(".input-guildname " + BDFDB.dotCN.input);

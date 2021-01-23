@@ -99,14 +99,14 @@ module.exports = (_ => {
 						let open = _ => {
 							BDFDB.ModalUtils.open(this, {
 								header: `${addon.name} ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
-								subheader: "",
+								subHeader: "",
 								className: BDFDB.disCN._repomodal,
 								headerClassName: BDFDB.disCN._repomodalheader,
 								contentClassName: BDFDB.disCN._repomodalsettings,
 								footerClassName: BDFDB.disCN._repomodalfooter,
 								size: "MEDIUM",
 								children: this.createThemeInputs(addon, imports, vars),
-								buttons: [{contents: BDFDB.LanguageUtils.LanguageStrings.SAVE, color: "BRAND", click: modal => {this.updateTheme(modal, addon);}}]
+								buttons: [{contents: BDFDB.LanguageUtils.LanguageStrings.SAVE, color: "BRAND", onClick: modal => {this.updateTheme(modal, addon);}}]
 							});
 						};
 						if (isBeta) {

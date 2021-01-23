@@ -1034,7 +1034,7 @@ module.exports = (_ => {
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: this.labels.serversubmenu_createfolder,
-					subheader: "",
+					subHeader: "",
 					contentClassName: BDFDB.disCN.listscroller,
 					children: guilds.map((guild, i) => {
 						return [
@@ -1065,7 +1065,7 @@ module.exports = (_ => {
 						contents: BDFDB.LanguageUtils.LanguageStrings.DONE,
 						color: "BRAND",
 						close: true,
-						click: (modal, instance) => {
+						onClick: (modal, instance) => {
 							this.createFolder(BDFDB.ArrayUtils.removeCopies(targetedGuildIds));
 						}
 					}]

@@ -455,7 +455,7 @@ module.exports = (_ => {
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: BDFDB.LanguageUtils.LibraryStringsFormat("add_to", "ChatFilter"),
-					subheader: "",
+					subHeader: "",
 					children: [
 						this.createInputs(values),
 						BDFDB.ArrayUtils.remove(Object.keys(this.defaults.configs), "file").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -471,7 +471,7 @@ module.exports = (_ => {
 						contents: BDFDB.LanguageUtils.LanguageStrings.ADD,
 						color: "BRAND",
 						close: true,
-						click: modal => {
+						onClick: modal => {
 							let newConfigs = {};
 							for (let key in this.defaults.configs) {
 								let configInput = modal.querySelector(`.input-config${key} ${BDFDB.dotCN.switchinner}`);

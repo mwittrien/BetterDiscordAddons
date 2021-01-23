@@ -215,7 +215,7 @@ module.exports = (_ => {
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: this.labels.modal_header,
-					subheader: "",
+					subHeader: "",
 					contentClassName: BDFDB.disCN.listscroller,
 					children: guilds.map((guild, i) => {
 						let folder = folders.find(folder => folder.guildIds.includes(guild.id) && !foldersAdded.includes(folder.folderId));
@@ -286,7 +286,7 @@ module.exports = (_ => {
 						contents: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL,
 						color: "TRANSPARENT",
 						look: "LINK",
-						click: (modal, instance) => {
+						onClick: (modal, instance) => {
 							let enabled = hiddenGuildIds.includes(guilds[0].id);
 							hiddenGuildIds = [].concat(enabled ? [] : guilds.map(n => n.id));
 							BDFDB.DataUtils.save(hiddenGuildIds, this, "hidden", "servers");
