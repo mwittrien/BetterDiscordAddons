@@ -759,7 +759,7 @@ module.exports = (_ => {
 												className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepooutdatednotice,
 												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
 												buttons: [{
-													contents: "PluginRepo",
+													contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
 													close: true,
 													onClick: _ => {
 														showOnlyOutdated = true;
@@ -777,7 +777,7 @@ module.exports = (_ => {
 												className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginreponewentriesnotice,
 												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
 												buttons: [{
-													contents: "PluginRepo",
+													contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
 													close: true,
 													onClick: _ => {
 														forcedSort = "NEW";

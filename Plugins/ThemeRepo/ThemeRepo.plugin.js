@@ -1068,7 +1068,7 @@ module.exports = (_ => {
 									className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themerepooutdatednotice,
 									customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
 									buttons: [{
-										contents: "ThemeRepo",
+										contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
 										close: true,
 										onClick: _ => {
 											showOnlyOutdated = true;
@@ -1086,7 +1086,7 @@ module.exports = (_ => {
 									className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themereponewentriesnotice,
 									customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
 									buttons: [{
-										contents: "ThemeRepo",
+										contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
 										close: true,
 										onClick: _ => {
 											forcedSort = "NEW";
