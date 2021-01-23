@@ -14,12 +14,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "WriteUpperCase",
 			"author": "DevilBro",
-			"version": "1.2.7",
+			"version": "1.2.8",
 			"description": "Change first letter of each sentence in message input to uppercase"
 		},
 		"changeLog": {
 			"fixed": {
 				"Emojis": "No longer tries to capitalize letters when the message already contains an emoji since that makes the cursor jump to the start of the message"
+			},
+			"improved": {
+				"Ellipsis": "No longer capitalizes a word after ellipsis (...)"
 			}
 		}
 	};
@@ -88,7 +91,10 @@ module.exports = (_ => {
 					if (string.length && !/:[A-z0-9_-]+:|[\uD83C-\uDBFF\uDC00-\uDFFF]+/.test(string)) {
 						let newString = string, stop = false;
 						for (let space of spaces) for (let symbol of symbols) if (!stop) {
-							let sentences = newString.split(new RegExp(BDFDB.StringUtils.regEscape(symbol + space), "g"));
+							let reg;
+							try {reg = new RegExp((symbol == "." ? "(?<!\\.)" : "") + BDFDB.StringUtils.regEscape(symbol + space), "g");}
+							catch (err) {reg = new RegExp(BDFDB.StringUtils.regEscape(symbol + space), "g");}
+							let sentences = newString.split(reg);
 							for (let i in sentences) {
 								let sentence = sentences[i];
 								let first = sentence.charAt(0);
