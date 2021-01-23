@@ -259,7 +259,7 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 									className: BDFDB.disCN.margintop20,
 									style: {textAlign: "center"},
-									children: BDFDB.LanguageUtils.LibraryStringsFormat("loading", "Theme Repo")
+									children: `${BDFDB.LanguageUtils.LibraryStringsFormat("loading", "Theme Repo")} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`
 								})
 							]
 						}) : BDFDB.ReactUtils.forceStyle(BDFDB.ReactUtils.createElement("div", {
@@ -1061,9 +1061,9 @@ module.exports = (_ => {
 							BDFDB.LogUtils.log("Finished fetching Themes", this.name);
 							if (list) BDFDB.ReactUtils.forceUpdate(list);
 							
-							if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
+							if (settings.notifyOutdated && outdated > 0) {
 								document.querySelector(BDFDB.dotCN._themerepooutdatednotice)?.close();
-								BDFDB.NotificationUtils.notice(`${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check: `, {
+								BDFDB.NotificationUtils.notice(this.labels.notice_outdated_themes.replace("{{var0}}", outdated), {
 									type: "danger",
 									className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themerepooutdatednotice,
 									customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
@@ -1080,8 +1080,7 @@ module.exports = (_ => {
 							
 							if (settings.notifyNewEntries && newEntries > 0) {
 								document.querySelector(BDFDB.dotCN._themereponewentriesnotice)?.close();
-								let single = newEntries == 1;
-								BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Theme${single ? "" : "s"} in the Repo. Check: `, {
+								BDFDB.NotificationUtils.notice(this.labels.notice_new_themes.replace("{{var0}}", newEntries), {
 									type: "success",
 									className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themereponewentriesnotice,
 									customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
@@ -1102,12 +1101,12 @@ module.exports = (_ => {
 								let wrongUrls = [];
 								for (let url of foundThemes) if (url && !loadedThemes[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
 								if (wrongUrls.length) {
-									BDFDB.NotificationUtils.notice(`ThemeRepo: ${wrongUrls.length} Theme${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {
+									BDFDB.NotificationUtils.notice(this.labels.notice_failed_themes.replace("{{var0}}", wrongUrls.length), {
 										type: "danger",
 										className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themerepofailnotice,
 										customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
 										buttons: [{
-											contents: "List",
+											contents: this.labels.list,
 											onClick: _ => {
 												let toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"), {type: "error"});
 												toast.style.setProperty("overflow", "hidden");
@@ -1244,6 +1243,200 @@ module.exports = (_ => {
 					BDFDB.DOMUtils.remove(`style#${id}`);
 					BDFDB.BDUtils.disableTheme(data.name, false);
 					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", data.name), this.name);
+				}
+			}
+
+			setLabelsByLanguage () {
+				switch (BDFDB.LanguageUtils.getLanguage().id) {
+					case "bg":		// Bulgarian
+						return {
+							list:								"Списък",
+							notice_failed_themes:				"Някои Themes [{{var0}}] не можаха да бъдат заредени",
+							notice_new_themes:					"Новите Themes [{{var0}}] бяха добавени към ThemeRepo",
+							notice_outdated_themes:				"Някои Themes [{{var0}}] са остарели"
+						};
+					case "da":		// Danish
+						return {
+							list:								"Liste",
+							notice_failed_themes:				"Nogle Themes [{{var0}}] kunne ikke indlæses",
+							notice_new_themes:					"Nye Themes [{{var0}}] er blevet føjet til ThemeRepo",
+							notice_outdated_themes:				"Nogle Themes [{{var0}}] er forældede"
+						};
+					case "de":		// German
+						return {
+							list:								"Liste",
+							notice_failed_themes:				"Einige Themes [{{var0}}] konnten nicht geladen werden",
+							notice_new_themes:					"Neue Themes [{{var0}}] wurden zur ThemeRepo hinzugefügt",
+							notice_outdated_themes:				"Einige Themes [{{var0}}] sind veraltet"
+						};
+					case "el":		// Greek
+						return {
+							list:								"Λίστα",
+							notice_failed_themes:				"Δεν ήταν δυνατή η φόρτωση ορισμένων Themes [{{var0}}] ",
+							notice_new_themes:					"Προστέθηκαν νέα Themes [{{var0}}] στο ThemeRepo",
+							notice_outdated_themes:				"Ορισμένα Themes [{{var0}}] είναι παλιά"
+						};
+					case "es":		// Spanish
+						return {
+							list:								"Lista",
+							notice_failed_themes:				"Algunos Themes [{{var0}}] no se pudieron cargar",
+							notice_new_themes:					"Se han agregado nuevos Themes [{{var0}}] a ThemeRepo",
+							notice_outdated_themes:				"Algunas Themes [{{var0}}] están desactualizadas"
+						};
+					case "fi":		// Finnish
+						return {
+							list:								"Lista",
+							notice_failed_themes:				"Joitain kohdetta Themes [{{var0}}] ei voitu ladata",
+							notice_new_themes:					"Uusi Themes [{{var0}}] on lisätty ThemeRepo",
+							notice_outdated_themes:				"Jotkut Themes [{{var0}}] ovat vanhentuneita"
+						};
+					case "fr":		// French
+						return {
+							list:								"Liste",
+							notice_failed_themes:				"Certains Themes [{{var0}}] n'ont pas pu être chargés",
+							notice_new_themes:					"De nouveaux Themes [{{var0}}] ont été ajoutés à ThemeRepo",
+							notice_outdated_themes:				"Certains Themes [{{var0}}] sont obsolètes"
+						};
+					case "hr":		// Croatian
+						return {
+							list:								"Popis",
+							notice_failed_themes:				"Neke datoteke Themes [{{var0}}] nije moguće učitati",
+							notice_new_themes:					"Novi Themes [{{var0}}] dodani su u ThemeRepo",
+							notice_outdated_themes:				"Neki su Themes [{{var0}}] zastarjeli"
+						};
+					case "hu":		// Hungarian
+						return {
+							list:								"Lista",
+							notice_failed_themes:				"Néhány Themes [{{var0}}] nem sikerült betölteni",
+							notice_new_themes:					"Új Themes [{{var0}}] hozzáadva a következőhöz: ThemeRepo",
+							notice_outdated_themes:				"Néhány Themes [{{var0}}] elavult"
+						};
+					case "it":		// Italian
+						return {
+							list:								"Elenco",
+							notice_failed_themes:				"Impossibile caricare alcuni Themes [{{var0}}] ",
+							notice_new_themes:					"Il nuovo Themes [{{var0}}] è stato aggiunto a ThemeRepo",
+							notice_outdated_themes:				"Alcuni Themes [{{var0}}] non sono aggiornati"
+						};
+					case "ja":		// Japanese
+						return {
+							list:								"リスト",
+							notice_failed_themes:				"一部の Themes [{{var0}}] を読み込めませんでした",
+							notice_new_themes:					"新しい Themes [{{var0}}] が ThemeRepo に追加されました",
+							notice_outdated_themes:				"一部の Themes [{{var0}}] は古くなっています"
+						};
+					case "ko":		// Korean
+						return {
+							list:								"명부",
+							notice_failed_themes:				"일부 Themes [{{var0}}] 을 (를)로드 할 수 없습니다.",
+							notice_new_themes:					"새 Themes [{{var0}}] 이 ThemeRepo 에 추가되었습니다.",
+							notice_outdated_themes:				"일부 Themes [{{var0}}] 이 오래되었습니다."
+						};
+					case "lt":		// Lithuanian
+						return {
+							list:								"Sąrašas",
+							notice_failed_themes:				"Kai kurių Themes [{{var0}}] nepavyko įkelti",
+							notice_new_themes:					"Naujas Themes [{{var0}}] pridėtas prie ThemeRepo",
+							notice_outdated_themes:				"Kai kurie Themes [{{var0}}] yra pasenę"
+						};
+					case "nl":		// Dutch
+						return {
+							list:								"Lijst",
+							notice_failed_themes:				"Sommige Themes [{{var0}}] konden niet worden geladen",
+							notice_new_themes:					"Nieuwe Themes [{{var0}}] zijn toegevoegd aan de ThemeRepo",
+							notice_outdated_themes:				"Sommige Themes [{{var0}}] zijn verouderd"
+						};
+					case "no":		// Norwegian
+						return {
+							list:								"Liste",
+							notice_failed_themes:				"Noen Themes [{{var0}}] kunne ikke lastes inn",
+							notice_new_themes:					"Nye Themes [{{var0}}] er lagt til i ThemeRepo",
+							notice_outdated_themes:				"Noen Themes [{{var0}}] er utdaterte"
+						};
+					case "pl":		// Polish
+						return {
+							list:								"Lista",
+							notice_failed_themes:				"Nie można załadować niektórych Themes [{{var0}}] ",
+							notice_new_themes:					"Nowe Themes [{{var0}}] zostały dodane do ThemeRepo",
+							notice_outdated_themes:				"Niektóre Themes [{{var0}}] są nieaktualne"
+						};
+					case "pt-BR":	// Portuguese (Brazil)
+						return {
+							list:								"Lista",
+							notice_failed_themes:				"Algum Themes [{{var0}}] não pôde ser carregado",
+							notice_new_themes:					"Novo Themes [{{var0}}] foi adicionado ao ThemeRepo",
+							notice_outdated_themes:				"Alguns Themes [{{var0}}] estão desatualizados"
+						};
+					case "ro":		// Romanian
+						return {
+							list:								"Listă",
+							notice_failed_themes:				"Unele Themes [{{var0}}] nu au putut fi încărcate",
+							notice_new_themes:					"Themes [{{var0}}] nou au fost adăugate la ThemeRepo",
+							notice_outdated_themes:				"Unele Themes [{{var0}}] sunt învechite"
+						};
+					case "ru":		// Russian
+						return {
+							list:								"Список",
+							notice_failed_themes:				"Не удалось загрузить некоторые Themes [{{var0}}] ",
+							notice_new_themes:					"Новые Themes [{{var0}}] добавлены в ThemeRepo",
+							notice_outdated_themes:				"Некоторые Themes [{{var0}}] устарели"
+						};
+					case "sv":		// Swedish
+						return {
+							list:								"Lista",
+							notice_failed_themes:				"Vissa Themes [{{var0}}] kunde inte laddas",
+							notice_new_themes:					"Nya Themes [{{var0}}] har lagts till i ThemeRepo",
+							notice_outdated_themes:				"Vissa Themes [{{var0}}] är föråldrade"
+						};
+					case "th":		// Thai
+						return {
+							list:								"รายการ",
+							notice_failed_themes:				"ไม่สามารถโหลด Themes [{{var0}}] บางรายการได้",
+							notice_new_themes:					"เพิ่ม Themes [{{var0}}] ใหม่ใน ThemeRepo แล้ว",
+							notice_outdated_themes:				"Themes [{{var0}}] บางรายการล้าสมัย"
+						};
+					case "tr":		// Turkish
+						return {
+							list:								"Liste",
+							notice_failed_themes:				"Bazı Themes [{{var0}}] yüklenemedi",
+							notice_new_themes:					"Yeni Themes [{{var0}}], ThemeRepo 'ye eklendi",
+							notice_outdated_themes:				"Bazı Themes [{{var0}}] güncel değil"
+						};
+					case "uk":		// Ukrainian
+						return {
+							list:								"Список",
+							notice_failed_themes:				"Деякі Themes [{{var0}}] не вдалося завантажити",
+							notice_new_themes:					"Нові Themes [{{var0}}] були додані до ThemeRepo",
+							notice_outdated_themes:				"Деякі Themes [{{var0}}] застарілі"
+						};
+					case "vi":		// Vietnamese
+						return {
+							list:								"Danh sách",
+							notice_failed_themes:				"Không thể tải một số Themes [{{var0}}] ",
+							notice_new_themes:					"Themes [{{var0}}] mới đã được thêm vào ThemeRepo",
+							notice_outdated_themes:				"Một số Themes [{{var0}}] đã lỗi thời"
+						};
+					case "zh-CN":	// Chinese (China)
+						return {
+							list:								"清单",
+							notice_failed_themes:				"某些 Themes [{{var0}}] 无法加载",
+							notice_new_themes:					"新的 Themes [{{var0}}] 已添加到 ThemeRepo",
+							notice_outdated_themes:				"一些 Themes [{{var0}}] 已过时"
+						};
+					case "zh-TW":	// Chinese (Taiwan)
+						return {
+							list:								"清單",
+							notice_failed_themes:				"某些 Themes [{{var0}}] 無法加載",
+							notice_new_themes:					"新的 Themes [{{var0}}] 已添加到 ThemeRepo",
+							notice_outdated_themes:				"一些 Themes [{{var0}}] 已過時"
+						};
+					default:		// English
+						return {
+							list:								"List",
+							notice_failed_themes:				"Some Themes [{{var0}}] could not be loaded",
+							notice_new_themes:					"New Themes [{{var0}}] have been added to the ThemeRepo",
+							notice_outdated_themes:				"Some Themes [{{var0}}] are outdated"
+						};
 				}
 			}
 		};
