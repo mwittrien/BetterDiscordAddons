@@ -752,7 +752,7 @@ module.exports = (_ => {
 										BDFDB.LogUtils.log("Finished fetching Plugins", this.name);
 										if (list) BDFDB.ReactUtils.forceUpdate(list);
 										
-										if (settings.notifyOutdated && outdated == 0) {
+										if (settings.notifyOutdated && outdated > 0) {
 											document.querySelector(BDFDB.dotCN._pluginrepooutdatednotice)?.close();
 											BDFDB.NotificationUtils.notice(this.labels.notice_outdated_plugins.replace("{{var0}}", outdated), {
 												type: "danger",
@@ -769,7 +769,7 @@ module.exports = (_ => {
 											});
 										}
 										
-										if (settings.notifyNewEntries && newEntries == 0) {
+										if (settings.notifyNewEntries && newEntries > 0) {
 											document.querySelector(BDFDB.dotCN._pluginreponewentriesnotice)?.close();
 											BDFDB.NotificationUtils.notice(this.labels.notice_new_plugins.replace("{{var0}}", newEntries), {
 												type: "success",
@@ -791,7 +791,7 @@ module.exports = (_ => {
 											document.querySelector(BDFDB.dotCN._pluginrepofailnotice)?.close();
 											let wrongUrls = [];
 											for (let url of foundPlugins) if (url && !loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
-											if (!wrongUrls.length) {
+											if (wrongUrls.length) {
 												BDFDB.NotificationUtils.notice(this.labels.notice_failed_plugins.replace("{{var0}}", wrongUrls.length), {
 													type: "danger",
 													className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepofailnotice,
