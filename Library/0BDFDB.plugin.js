@@ -1198,7 +1198,7 @@ module.exports = (_ => {
 							let ele = BDFDB.DOMUtils.create(`<button class="${BDFDB.DOMUtils.formatClassName(BDFDB.disCN.noticebutton, button.className)}">${contents}</button>`);
 							ele.addEventListener("click", e => {
 								if (button.close) notice.close();
-								if (typeof button.onClick == "function") button.onClick(e, bar);
+								if (typeof button.onClick == "function") button.onClick(e, notice);
 							});
 							notice.appendChild(ele);
 						}
