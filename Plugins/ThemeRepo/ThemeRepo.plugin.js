@@ -1062,55 +1062,58 @@ module.exports = (_ => {
 							if (list) BDFDB.ReactUtils.forceUpdate(list);
 							
 							if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
-								let oldBarButton = document.querySelector(BDFDB.dotCNS._themerepooutdatednotice + BDFDB.dotCN.noticedismiss);
-								if (oldBarButton) oldBarButton.click();
-								let bar = BDFDB.NotificationUtils.notice(`${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check: `, {
+								document.querySelector(BDFDB.dotCN._themerepooutdatednotice)?.close();
+								BDFDB.NotificationUtils.notice(`${outdated} of your Themes ${outdated == 1 ? "is" : "are"} outdated. Check: `, {
 									type: "danger",
 									className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themerepooutdatednotice,
-									btn: "ThemeRepo",
-									customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
-								});
-								bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
-									showOnlyOutdated = true;
-									BDFDB.LibraryModules.UserSettingsUtils.open("themerepo");
-									bar.querySelector(BDFDB.dotCN.noticedismiss).click();
+									customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
+									buttons: [{
+										contents: "ThemeRepo",
+										close: true,
+										onClick: _ => {
+											showOnlyOutdated = true;
+											BDFDB.LibraryModules.UserSettingsUtils.open("themerepo");
+										}
+									}]
 								});
 							}
 							
 							if (settings.notifyNewEntries && newEntries > 0) {
-								let oldBarButton = document.querySelector(BDFDB.dotCNS._themereponewentriesnotice + BDFDB.dotCN.noticedismiss);
-								if (oldBarButton) oldBarButton.click();
+								document.querySelector(BDFDB.dotCN._themereponewentriesnotice)?.close();
 								let single = newEntries == 1;
-								let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Theme${single ? "" : "s"} in the Repo. Check: `, {
+								BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Theme${single ? "" : "s"} in the Repo. Check: `, {
 									type: "success",
 									className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themereponewentriesnotice,
-									btn: "ThemeRepo",
-									customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
-								});
-								bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
-									forcedSort = "NEW";
-									forcedOrder = "ASC";
-									BDFDB.LibraryModules.UserSettingsUtils.open("themerepo");
-									bar.querySelector(BDFDB.dotCN.noticedismiss).click();
+									customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
+									buttons: [{
+										contents: "ThemeRepo",
+										close: true,
+										onClick: _ => {
+											forcedSort = "NEW";
+											forcedOrder = "ASC";
+											BDFDB.LibraryModules.UserSettingsUtils.open("themerepo");
+										}
+									}]
 								});
 							}
 							
 							if (BDFDB.UserUtils.me.id == "278543574059057154") {
-								let oldBarButton = document.querySelector(BDFDB.dotCNS._themerepofailnotice + BDFDB.dotCN.noticedismiss);
-								if (oldBarButton) oldBarButton.click();
+								document.querySelector(BDFDB.dotCN._themerepofailnotice)?.close();
 								let wrongUrls = [];
 								for (let url of foundThemes) if (url && !loadedThemes[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
 								if (wrongUrls.length) {
-									let bar = BDFDB.NotificationUtils.notice(`ThemeRepo: ${wrongUrls.length} Theme${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {
+									BDFDB.NotificationUtils.notice(`ThemeRepo: ${wrongUrls.length} Theme${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {
 										type: "danger",
 										className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themerepofailnotice,
-										btn: "List",
-										customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
-									});
-									bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
-										let toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"), {type: "error"});
-										toast.style.setProperty("overflow", "hidden");
-										for (let url of wrongUrls) console.log(url);
+										customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
+										buttons: [{
+											contents: "List",
+											onClick: _ => {
+												let toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"), {type: "error"});
+												toast.style.setProperty("overflow", "hidden");
+												for (let url of wrongUrls) console.log(url);
+											}
+										}]
 									});
 								}
 							}

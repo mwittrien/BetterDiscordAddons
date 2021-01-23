@@ -749,59 +749,62 @@ module.exports = (_ => {
 										BDFDB.DOMUtils.remove(loadingIcon, BDFDB.dotCN._pluginrepoloadingicon);
 										loading = {is: false, timeout: null, amount: loading.amount};
 										
-										BDFDB.LogUtils.log("Finished fetching Plugins.", this.name);
+										BDFDB.LogUtils.log("Finished fetching Plugins", this.name);
 										if (list) BDFDB.ReactUtils.forceUpdate(list);
 										
 										if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
-											let oldBarButton = document.querySelector(BDFDB.dotCNS._pluginrepooutdatednotice + BDFDB.dotCN.noticedismiss);
-											if (oldBarButton) oldBarButton.click();
-											let bar = BDFDB.NotificationUtils.notice(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check: `, {
+											document.querySelector(BDFDB.dotCN._pluginrepooutdatednotice)?.close();
+											BDFDB.NotificationUtils.notice(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check: `, {
 												type: "danger",
 												className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepooutdatednotice,
-												btn: "PluginRepo",
-												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
-											});
-											bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
-												showOnlyOutdated = true;
-												BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo");
-												bar.querySelector(BDFDB.dotCN.noticedismiss).click();
+												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
+												buttons: [{
+													contents: "PluginRepo",
+													close: true,
+													onClick: _ => {
+														showOnlyOutdated = true;
+														BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo");
+													}
+												}]
 											});
 										}
 										
 										if ((settings.notifyNewEntries || settings.notifyNewEntries == undefined) && newEntries > 0) {
-											let oldBarButton = document.querySelector(BDFDB.dotCNS._pluginreponewentriesnotice + BDFDB.dotCN.noticedismiss);
-											if (oldBarButton) oldBarButton.click();
+											document.querySelector(BDFDB.dotCN._pluginreponewentriesnotice)?.close();
 											let single = newEntries == 1;
-											let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Plugin${single ? "" : "s"} in the Repo. Check: `, {
+											BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Plugin${single ? "" : "s"} in the Repo. Check: `, {
 												type: "success",
 												className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginreponewentriesnotice,
-												btn: "PluginRepo",
-												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
-											});
-											bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
-												forcedSort = "NEW";
-												forcedOrder = "ASC";
-												BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo");
-												bar.querySelector(BDFDB.dotCN.noticedismiss).click();
+												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
+												buttons: [{
+													contents: "PluginRepo",
+													close: true,
+													onClick: _ => {
+														forcedSort = "NEW";
+														forcedOrder = "ASC";
+														BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo");
+													}
+												}]
 											});
 										}
 										
 										if (BDFDB.UserUtils.me.id == "278543574059057154") {
-											let oldBarButton = document.querySelector(BDFDB.dotCNS._pluginrepofailnotice + BDFDB.dotCN.noticedismiss);
-											if (oldBarButton) oldBarButton.click();
+											document.querySelector(BDFDB.dotCN._pluginrepofailnotice)?.close();
 											let wrongUrls = [];
 											for (let url of foundPlugins) if (url && !loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
 											if (wrongUrls.length) {
-												let bar = BDFDB.NotificationUtils.notice(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {
+												BDFDB.NotificationUtils.notice(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {
 													type: "danger",
 													className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepofailnotice,
-													btn: "List",
-													customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
-												});
-												bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
-													let toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"), {type: "error"});
-													toast.style.setProperty("overflow", "hidden");
-													for (let url of wrongUrls) console.log(url);
+													customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
+													buttons: [{
+														contents: "List",
+														onClick: _ => {
+															let toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"), {type: "error"});
+															toast.style.setProperty("overflow", "hidden");
+															for (let url of wrongUrls) console.log(url);
+														}
+													}]
 												});
 											}
 										}
