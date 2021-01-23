@@ -1087,7 +1087,7 @@ module.exports = (_ => {
 			
 				var NotificationBars = [], DesktopNotificationQueue = {queue: [], running: false};
 				BDFDB.NotificationUtils = {};
-				BDFDB.NotificationUtils.toast = function (text, options = {}) {
+				BDFDB.NotificationUtils.toast = function (text, config = {}) {
 					let toasts = document.querySelector(BDFDB.dotCNC.toasts + ".bd-toasts");
 					if (!toasts) {
 						let channels = document.querySelector(BDFDB.dotCN.channels + " + div");
@@ -1100,7 +1100,7 @@ module.exports = (_ => {
 						toasts = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.toasts} bd-toasts" style="width: ${width}px; left: ${left}px; bottom: ${bottom}px;"></div>`);
 						(document.querySelector(BDFDB.dotCN.app) || document.body).appendChild(toasts);
 					}
-					const {type = "", icon = true, timeout = 3000, html = false, className = "", noPointer = false, color = ""} = options;
+					const {type = "", icon = true, timeout = 3000, html = false, className = "", noPointer = false, color = ""} = config;
 					let toast = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.toast} bd-toast">${html === true ? text : BDFDB.StringUtils.htmlEscape(text)}</div>`);
 					if (type) {
 						BDFDB.DOMUtils.addClass(toast, "toast-" + type);
@@ -1141,20 +1141,20 @@ module.exports = (_ => {
 							if (notification) notify(notification.parsedContent, notification.parsedOptions);
 						}
 					};
-					const notify = (content, options) => {
+					const notify = (content, config) => {
 						DesktopNotificationQueue.running = true;
-						let muted = options.silent;
-						options.silent = options.silent || options.sound ? true : false;
-						let notification = new Notification(content, options);
+						let muted = config.silent;
+						config.silent = config.silent || config.sound ? true : false;
+						let notification = new Notification(content, config);
 						let audio = new Audio();
-						let timeout = BDFDB.TimeUtils.timeout(_ => {close();}, options.timeout ? options.timeout : 3000);
-						if (typeof options.click == "function") notification.onclick = _ => {
+						let timeout = BDFDB.TimeUtils.timeout(_ => {close();}, config.timeout ? config.timeout : 3000);
+						if (typeof config.click == "function") notification.onclick = _ => {
 							BDFDB.TimeUtils.clear(timeout);
 							close();
-							options.click();
+							config.click();
 						};
-						if (!muted && options.sound) {
-							audio.src = options.sound;
+						if (!muted && config.sound) {
+							audio.src = config.sound;
 							audio.play();
 						}
 						const close = _ => {
@@ -1168,36 +1168,47 @@ module.exports = (_ => {
 					else if (Notification.permission === "granted") queue();
 					else if (Notification.permission !== "denied") Notification.requestPermission(function (response) {if (response === "granted") queue();});
 				};
-				BDFDB.NotificationUtils.notice = function (text, options = {}) {
+				BDFDB.NotificationUtils.notice = function (text, config = {}) {
 					if (!text) return;
 					let layers = document.querySelector(BDFDB.dotCN.layers) || document.querySelector(BDFDB.dotCN.appmount);
 					if (!layers) return;
 					let id = BDFDB.NumberUtils.generateId(NotificationBars);
-					let notice = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.notice + BDFDB.disCN.noticewrapper}" notice-id="${id}"><div class="${BDFDB.disCN.noticedismiss}"${options.forceStyle ? ` style="width: 36px !important; height: 36px !important; position: absolute !important; top: 0 !important; right: 0 !important; left: unset !important;"` : ""}></div><span class="${BDFDB.disCN.noticetext}"></span></div>`);
+					let notice = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.notice + BDFDB.disCN.noticewrapper}" notice-id="${id}"><div class="${BDFDB.disCN.noticedismiss}"${config.forceStyle ? ` style="width: 36px !important; height: 36px !important; position: absolute !important; top: 0 !important; right: 0 !important; left: unset !important;"` : ""}></div><span class="${BDFDB.disCN.noticetext}"></span></div>`);
 					layers.parentElement.insertBefore(notice, layers);
 					let noticeText = notice.querySelector(BDFDB.dotCN.noticetext);
-					if (options.platform) for (let platform of options.platform.split(" ")) if (DiscordClasses["noticeicon" + platform]) {
+					if (config.platform) for (let platform of config.platform.split(" ")) if (DiscordClasses["noticeicon" + platform]) {
 						let icon = BDFDB.DOMUtils.create(`<i class="${BDFDB.disCN["noticeicon" + platform]}"></i>`);
 						BDFDB.DOMUtils.addClass(icon, BDFDB.disCN.noticeplatformicon);
 						BDFDB.DOMUtils.removeClass(icon, BDFDB.disCN.noticeicon);
 						notice.insertBefore(icon, noticeText);
 					}
-					if (options.customIcon) {
-						let iconInner = BDFDB.DOMUtils.create(options.customIcon)
+					if (config.customIcon) {
+						let iconInner = BDFDB.DOMUtils.create(config.customIcon)
 						let icon = BDFDB.DOMUtils.create(`<i></i>`);
-						if (iconInner.tagName == "span" && !iconinner.firstElementChild) icon.style.setProperty("background", `url(${options.customIcon}) center/cover no-repeat`);
+						if (iconInner.tagName == "span" && !iconinner.firstElementChild) icon.style.setProperty("background", `url(${config.customIcon}) center/cover no-repeat`);
 						else icon.appendChild(iconInner);
 						BDFDB.DOMUtils.addClass(icon, BDFDB.disCN.noticeplatformicon);
 						BDFDB.DOMUtils.removeClass(icon, BDFDB.disCN.noticeicon);
 						notice.insertBefore(icon, noticeText);
 					}
-					if (options.btn || options.button) notice.appendChild(BDFDB.DOMUtils.create(`<button class="${BDFDB.disCN.noticebutton}">${options.btn || options.button}</button>`));
-					if (options.id) notice.id = options.id.split(" ").join("");
-					if (options.className) BDFDB.DOMUtils.addClass(notice, options.className);
-					if (options.textClassName) BDFDB.DOMUtils.addClass(noticeText, options.textClassName);
-					if (options.css) BDFDB.DOMUtils.appendLocalStyle("BDFDBcustomNotificationBar" + id, options.css);
-					if (options.style) notice.style = options.style;
-					if (options.html === true) noticeText.innerHTML = text;
+					if (config.btn || config.button) notice.appendChild(BDFDB.DOMUtils.create(`<button class="${BDFDB.disCN.noticebutton}">${config.btn || config.button}</button>`));
+					if (BDFDB.ArrayUtils.is(config.buttons)) for (let button of config.buttons) {
+						let contents = typeof button.contents == "string" && button.contents;
+						if (contents) {
+							let ele = BDFDB.DOMUtils.create(`<button class="${BDFDB.DOMUtils.formatClassName(BDFDB.disCN.noticebutton, button.className)}">${contents}</button>`);
+							ele.addEventListener("click", e => {
+								if (button.close) notice.close();
+								if (typeof button.onClick == "function") button.onClick(e, bar);
+							});
+							notice.appendChild(ele);
+						}
+					}
+					if (config.id) notice.id = config.id.split(" ").join("");
+					if (config.className) BDFDB.DOMUtils.addClass(notice, config.className);
+					if (config.textClassName) BDFDB.DOMUtils.addClass(noticeText, config.textClassName);
+					if (config.css) BDFDB.DOMUtils.appendLocalStyle("BDFDBcustomNotificationBar" + id, config.css);
+					if (config.style) notice.style = config.style;
+					if (config.html === true) noticeText.innerHTML = text;
 					else {
 						let link = document.createElement("a");
 						let newText = [];
@@ -1209,9 +1220,9 @@ module.exports = (_ => {
 						noticeText.innerHTML = newText.join(" ");
 					}
 					let type = null;
-					if (options.type && !document.querySelector(BDFDB.dotCNS.chatbase + BDFDB.dotCN.noticestreamer)) {
-						if (type = BDFDB.disCN["notice" + options.type]) BDFDB.DOMUtils.addClass(notice, type);
-						if (options.type == "premium") {
+					if (config.type && !document.querySelector(BDFDB.dotCNS.chatbase + BDFDB.dotCN.noticestreamer)) {
+						if (type = BDFDB.disCN["notice" + config.type]) BDFDB.DOMUtils.addClass(notice, type);
+						if (config.type == "premium") {
 							let noticeButton = notice.querySelector(BDFDB.dotCN.noticebutton);
 							if (noticeButton) BDFDB.DOMUtils.addClass(noticeButton, BDFDB.disCN.noticepremiumaction);
 							BDFDB.DOMUtils.addClass(noticeText, BDFDB.disCN.noticepremiumtext);
@@ -1219,7 +1230,7 @@ module.exports = (_ => {
 						}
 					}
 					if (!type) {
-						let comp = BDFDB.ColorUtils.convert(options.color, "RGBCOMP");
+						let comp = BDFDB.ColorUtils.convert(config.color, "RGBCOMP");
 						if (comp) {
 							let fontColor = comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "#000" : "#FFF";
 							let backgroundColor = BDFDB.ColorUtils.convert(comp, "HEX");
@@ -1229,7 +1240,7 @@ module.exports = (_ => {
 						}
 						else BDFDB.DOMUtils.addClass(notice, BDFDB.disCN.noticedefault);
 					}
-					if (options.forceStyle) {
+					if (config.forceStyle) {
 						notice.style.setProperty("display", "block", "important");
 						notice.style.setProperty("height", "36px", "important");
 						notice.style.setProperty("min-width", "70vw", "important");
@@ -1242,21 +1253,22 @@ module.exports = (_ => {
 						notice.style.setProperty("width", "unset", "important");
 						notice.style.setProperty("max-width", `calc(100vw - ${sideMargin*2}px)`, "important");
 					}
-					notice.querySelector(BDFDB.dotCN.noticedismiss).addEventListener("click", _ => {
+					notice.close = _ => {
 						BDFDB.DOMUtils.addClass(notice, BDFDB.disCN.noticeclosing);
-						if (options.forceStyle) {
+						if (config.forceStyle) {
 							notice.style.setProperty("overflow", "hidden", "important");
 							notice.style.setProperty("height", "0px", "important");
 						}
 						if (notice.tooltip && typeof notice.tooltip.removeTooltip == "function") notice.tooltip.removeTooltip();
 						BDFDB.TimeUtils.timeout(_ => {
-							if (typeof options.onClose == "function") options.onClose();
+							if (typeof config.onClose == "function") config.onClose();
 							BDFDB.ArrayUtils.remove(NotificationBars, id);
 							BDFDB.DOMUtils.removeLocalStyle("BDFDBcustomNotificationBar" + id);
 							BDFDB.DOMUtils.removeLocalStyle("BDFDBcustomNotificationBarColorCorrection" + id);
 							BDFDB.DOMUtils.remove(notice);
 						}, 500);
-					});
+					};
+					notice.querySelector(BDFDB.dotCN.noticedismiss).addEventListener("click", notice.close);
 					return notice;
 				};
 				BDFDB.NotificationUtils.alert = function (header, body) {
@@ -1265,17 +1277,17 @@ module.exports = (_ => {
 
 				var Tooltips = [];
 				BDFDB.TooltipUtils = {};
-				BDFDB.TooltipUtils.create = function (anker, text, options = {}) {
+				BDFDB.TooltipUtils.create = function (anker, text, config = {}) {
 					let itemLayerContainer = document.querySelector(BDFDB.dotCN.appmount +  " > " + BDFDB.dotCN.itemlayercontainer);
 					if (!itemLayerContainer || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
 					text = typeof text == "function" ? text() : text;
-					if (typeof text != "string" && !BDFDB.ReactUtils.isValidElement(text) && !BDFDB.ObjectUtils.is(options.guild)) return null;
+					if (typeof text != "string" && !BDFDB.ReactUtils.isValidElement(text) && !BDFDB.ObjectUtils.is(config.guild)) return null;
 					let id = BDFDB.NumberUtils.generateId(Tooltips);
-					let zIndexed = typeof options.zIndex == "number";
+					let zIndexed = typeof config.zIndex == "number";
 					let itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltippointer}"></div><div class="${BDFDB.disCN.tooltipcontent}"></div></div></div>`);
 					if (zIndexed) {
 						let itemLayerContainerClone = itemLayerContainer.cloneNode();
-						itemLayerContainerClone.style.setProperty("z-index", options.zIndex || 1002, "important");
+						itemLayerContainerClone.style.setProperty("z-index", config.zIndex || 1002, "important");
 						itemLayerContainer.parentElement.insertBefore(itemLayerContainerClone, itemLayerContainer.nextElementSibling);
 						itemLayerContainer = itemLayerContainerClone;
 					}
@@ -1285,49 +1297,49 @@ module.exports = (_ => {
 					let tooltipContent = itemLayer.querySelector(BDFDB.dotCN.tooltipcontent);
 					let tooltipPointer = itemLayer.querySelector(BDFDB.dotCN.tooltippointer);
 					
-					if (options.id) tooltip.id = options.id.split(" ").join("");
+					if (config.id) tooltip.id = config.id.split(" ").join("");
 					
-					if (typeof options.type != "string" || !BDFDB.disCN["tooltip" + options.type.toLowerCase()]) options.type = "top";
-					let type = options.type.toLowerCase();
-					BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + type], options.className);
+					if (typeof config.type != "string" || !BDFDB.disCN["tooltip" + config.type.toLowerCase()]) config.type = "top";
+					let type = config.type.toLowerCase();
+					BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + type], config.className);
 					
 					let fontColorIsGradient = false, customBackgroundColor = false, style = "";
-					if (options.style) style += options.style;
-					if (options.fontColor) {
-						fontColorIsGradient = BDFDB.ObjectUtils.is(options.fontColor);
-						if (!fontColorIsGradient) style = (style ? (style + " ") : "") + `color: ${BDFDB.ColorUtils.convert(options.fontColor, "RGBA")} !important;`
+					if (config.style) style += config.style;
+					if (config.fontColor) {
+						fontColorIsGradient = BDFDB.ObjectUtils.is(config.fontColor);
+						if (!fontColorIsGradient) style = (style ? (style + " ") : "") + `color: ${BDFDB.ColorUtils.convert(config.fontColor, "RGBA")} !important;`
 					}
-					if (options.backgroundColor) {
+					if (config.backgroundColor) {
 						customBackgroundColor = true;
-						let backgroundColorIsGradient = BDFDB.ObjectUtils.is(options.backgroundColor);
-						let backgroundColor = !backgroundColorIsGradient ? BDFDB.ColorUtils.convert(options.backgroundColor, "RGBA") : BDFDB.ColorUtils.createGradient(options.backgroundColor);
-						style = (style ? (style + " ") : "") + `background: ${backgroundColor} !important; border-color: ${backgroundColorIsGradient ? BDFDB.ColorUtils.convert(options.backgroundColor[type == "left" ? 100 : 0], "RGBA") : backgroundColor} !important;`;
+						let backgroundColorIsGradient = BDFDB.ObjectUtils.is(config.backgroundColor);
+						let backgroundColor = !backgroundColorIsGradient ? BDFDB.ColorUtils.convert(config.backgroundColor, "RGBA") : BDFDB.ColorUtils.createGradient(config.backgroundColor);
+						style = (style ? (style + " ") : "") + `background: ${backgroundColor} !important; border-color: ${backgroundColorIsGradient ? BDFDB.ColorUtils.convert(config.backgroundColor[type == "left" ? 100 : 0], "RGBA") : backgroundColor} !important;`;
 					}
 					if (style) tooltip.style = style;
 					if (zIndexed) {
-						itemLayer.style.setProperty("z-index", options.zIndex || 1002, "important");
-						tooltip.style.setProperty("z-index", options.zIndex || 1002, "important");
-						tooltipContent.style.setProperty("z-index", options.zIndex || 1002, "important");
+						itemLayer.style.setProperty("z-index", config.zIndex || 1002, "important");
+						tooltip.style.setProperty("z-index", config.zIndex || 1002, "important");
+						tooltipContent.style.setProperty("z-index", config.zIndex || 1002, "important");
 					}
-					if (typeof options.width == "number" && options.width > 196) {
-						tooltip.style.setProperty("width", `${options.width}px`, "important");
-						tooltip.style.setProperty("max-width", `${options.width}px`, "important");
+					if (typeof config.width == "number" && config.width > 196) {
+						tooltip.style.setProperty("width", `${config.width}px`, "important");
+						tooltip.style.setProperty("max-width", `${config.width}px`, "important");
 					}
-					if (typeof options.maxWidth == "number" && options.maxWidth > 196) {
-						tooltip.style.setProperty("max-width", `${options.maxWidth}px`, "important");
+					if (typeof config.maxWidth == "number" && config.maxWidth > 196) {
+						tooltip.style.setProperty("max-width", `${config.maxWidth}px`, "important");
 					}
 					if (customBackgroundColor) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipcustom);
-					else if (options.color && BDFDB.disCN["tooltip" + options.color.toLowerCase()]) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + options.color.toLowerCase()]);
+					else if (config.color && BDFDB.disCN["tooltip" + config.color.toLowerCase()]) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + config.color.toLowerCase()]);
 					else BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipprimary);
 					
-					if (options.list || BDFDB.ObjectUtils.is(options.guild)) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltiplistitem);
+					if (config.list || BDFDB.ObjectUtils.is(config.guild)) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltiplistitem);
 
 					let mouseMove = e => {
 						let parent = e.target.parentElement.querySelector(":hover");
 						if (parent && anker != parent && !anker.contains(parent)) itemLayer.removeTooltip();
 					};
 					let mouseLeave = e => {itemLayer.removeTooltip();};
-					if (!options.perssist) {
+					if (!config.perssist) {
 						document.addEventListener("mousemove", mouseMove);
 						document.addEventListener("mouseleave", mouseLeave);
 					}
@@ -1339,25 +1351,25 @@ module.exports = (_ => {
 					observer.observe(document.body, {subtree: true, childList: true});
 					
 					(tooltip.setText = itemLayer.setText = newText => {
-						if (BDFDB.ObjectUtils.is(options.guild)) {
-							let streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === options.guild.id).map(app => app.ownerId) || [];
+						if (BDFDB.ObjectUtils.is(config.guild)) {
+							let streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === config.guild.id).map(app => app.ownerId) || [];
 							let streamOwners = streamOwnerIds.map(ownerId => LibraryModules.UserStore.getUser(ownerId)).filter(n => n);
-							let connectedUsers = Object.keys(LibraryModules.VoiceUtils.getVoiceStates(options.guild.id)).map(userId => !streamOwnerIds.includes(userId) && BDFDB.LibraryModules.UserStore.getUser(userId)).filter(n => n);
-							let tooltipText = options.guild.toString();
-							if (fontColorIsGradient) tooltipText = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(options.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(tooltipText)}</span>`;
+							let connectedUsers = Object.keys(LibraryModules.VoiceUtils.getVoiceStates(config.guild.id)).map(userId => !streamOwnerIds.includes(userId) && BDFDB.LibraryModules.UserStore.getUser(userId)).filter(n => n);
+							let tooltipText = config.guild.toString();
+							if (fontColorIsGradient) tooltipText = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(config.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(tooltipText)}</span>`;
 							BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 								children: [
 									BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltiprow, BDFDB.disCN.tooltiprowguildname),
 										children: [
 											BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.Badge, {
-												guild: options.guild,
+												guild: config.guild,
 												size: LibraryModules.StringUtils.cssValueToNumber(DiscordClassModules.TooltipGuild.iconSize),
 												className: BDFDB.disCN.tooltiprowicon
 											}),
 											BDFDB.ReactUtils.createElement("span", {
 												className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext, (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipguildnametextlimitedsize),
-												children: fontColorIsGradient || options.html ? BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(tooltipText)) : tooltipText
+												children: fontColorIsGradient || config.html ? BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(tooltipText)) : tooltipText
 											}),
 										]
 									}),
@@ -1395,8 +1407,8 @@ module.exports = (_ => {
 							}), tooltipContent);
 						}
 						else {
-							if (fontColorIsGradient) tooltipContent.innerHTML = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(options.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(newText)}</span>`;
-							else if (options.html === true) tooltipContent.innerHTML = newText;
+							if (fontColorIsGradient) tooltipContent.innerHTML = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(config.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(newText)}</span>`;
+							else if (config.html === true) tooltipContent.innerHTML = newText;
 							else tooltipContent.innerText = newText;
 						}
 					})(text);
@@ -1407,7 +1419,7 @@ module.exports = (_ => {
 						BDFDB.ArrayUtils.remove(Tooltips, id);
 						observer.disconnect();
 						if (zIndexed) BDFDB.DOMUtils.remove(itemLayerContainer);
-						if (typeof options.onHide == "function") options.onHide(itemLayer, anker);
+						if (typeof config.onHide == "function") config.onHide(itemLayer, anker);
 					});
 					(tooltip.update = itemLayer.update = newText => {
 						if (newText) tooltip.setText(newText);
@@ -1416,7 +1428,7 @@ module.exports = (_ => {
 						const iRects = BDFDB.DOMUtils.getRects(itemLayer);
 						const aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						const positionOffsets = {height: 10, width: 10};
-						const offset = typeof options.offset == "number" ? options.offset : 0;
+						const offset = typeof config.offset == "number" ? config.offset : 0;
 						switch (type) {
 							case "top":
 								top = tRects.top - iRects.height - positionOffsets.height + 2 - offset;
@@ -1471,15 +1483,15 @@ module.exports = (_ => {
 						}
 					})();
 					
-					if (options.delay) {
+					if (config.delay) {
 						BDFDB.DOMUtils.toggle(itemLayer);
 						BDFDB.TimeUtils.timeout(_ => {
 							BDFDB.DOMUtils.toggle(itemLayer);
-							if (typeof options.onShow == "function") options.onShow(itemLayer, anker);
-						}, options.delay);
+							if (typeof config.onShow == "function") config.onShow(itemLayer, anker);
+						}, config.delay);
 					}
 					else {
-						if (typeof options.onShow == "function") options.onShow(itemLayer, anker);
+						if (typeof config.onShow == "function") config.onShow(itemLayer, anker);
 					}
 					return itemLayer;
 				};
@@ -3951,8 +3963,8 @@ module.exports = (_ => {
 				};
 
 				BDFDB.DiscordUtils = {};
-				BDFDB.DiscordUtils.openLink = function (url, options = {}) {
-					if (options.inBuilt || options.inBuilt === undefined && settings.useChromium) {
+				BDFDB.DiscordUtils.openLink = function (url, config = {}) {
+					if (config.inBuilt || config.inBuilt === undefined && settings.useChromium) {
 						let browserWindow = new LibraryRequires.electron.remote.BrowserWindow({
 							frame: true,
 							resizeable: true,
@@ -3965,7 +3977,7 @@ module.exports = (_ => {
 						});
 						browserWindow.setMenu(null);
 						browserWindow.loadURL(url);
-						if (options.minimized) browserWindow.minimize(null);
+						if (config.minimized) browserWindow.minimize(null);
 					}
 					else window.open(url, "_blank");
 				};
@@ -4028,17 +4040,17 @@ module.exports = (_ => {
 				};
 
 				BDFDB.WindowUtils = {};
-				BDFDB.WindowUtils.open = function (plugin, url, options = {}) {
+				BDFDB.WindowUtils.open = function (plugin, url, config = {}) {
 					plugin = plugin == BDFDB && InternalBDFDB || plugin;
 					if (!BDFDB.ObjectUtils.is(plugin) || !url) return;
 					if (!BDFDB.ArrayUtils.is(plugin.browserWindows)) plugin.browserWindows = [];
-					let config = Object.assign({
+					config = Object.assign({
 						show: false,
 						webPreferences: {
 							nodeIntegration: true,
 							nodeIntegrationInWorker: true
 						}
-					}, options);
+					}, config);
 					let browserWindow = new LibraryRequires.electron.remote.BrowserWindow(BDFDB.ObjectUtils.exclude(config, "showOnReady", "onLoad"));
 					
 					if (!config.show && config.showOnReady) browserWindow.once("ready-to-show", browserWindow.show);
