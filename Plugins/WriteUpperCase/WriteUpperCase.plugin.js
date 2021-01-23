@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "WriteUpperCase",
 			"author": "DevilBro",
-			"version": "1.2.6",
+			"version": "1.2.7",
 			"description": "Change first letter of each sentence in message input to uppercase"
 		},
 		"changeLog": {
-			"improved": {
-				"Sentences": "Now changes the first letter in every sentence and not just of the first word in a message"
+			"fixed": {
+				"Emojis": "No longer tries to capitalize letters when the message already contains an emoji since that makes the cursor jump to the start of the message"
 			}
 		}
 	};
@@ -85,16 +85,16 @@ module.exports = (_ => {
 			processChannelEditorContainer (e) {
 				if (e.instance.props.textValue && e.instance.state.focused) {
 					let string = e.instance.props.textValue;
-					if (string.length > 0) {
-						let newString = string, hasCodeBlock = false;
-						for (let space of spaces) for (let symbol of symbols) if (!hasCodeBlock) {
+					if (string.length && !/:[A-z0-9_-]+:|[\uD83C-\uDBFF\uDC00-\uDFFF]+/.test(string)) {
+						let newString = string, stop = false;
+						for (let space of spaces) for (let symbol of symbols) if (!stop) {
 							let sentences = newString.split(new RegExp(BDFDB.StringUtils.regEscape(symbol + space), "g"));
 							for (let i in sentences) {
 								let sentence = sentences[i];
 								let first = sentence.charAt(0);
 								if (first === first.toUpperCase() && (sentence.toLowerCase().indexOf("http") == 0 || sentence.toLowerCase().indexOf("s/") == 0)) sentences[i] = sentence.charAt(0).toLowerCase() + sentence.slice(1);
 								else if (first === first.toLowerCase() && first !== first.toUpperCase() && sentence.toLowerCase().indexOf("http") != 0 && sentence.toLowerCase().indexOf("s/") != 0) sentences[i] = sentence.charAt(0).toUpperCase() + sentence.slice(1);
-								if (sentence.indexOf("```") > -1) hasCodeBlock = true;
+								if (sentence.indexOf("```") > -1) stop = true;
 							}
 							newString = sentences.join(symbol + space);
 						}
