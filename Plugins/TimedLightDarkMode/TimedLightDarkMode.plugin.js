@@ -14,13 +14,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "TimedLightDarkMode",
 			"author": "DevilBro",
-			"version": "1.0.9",
+			"version": "1.1.0",
 			"description": "Allow you to automatically change light/dark mode depending on the time of day - Slider is added to the 'Appearance' settings"
-		},
-		"changeLog": {
-			"fixed": {
-				"Works again": "Yes"
-			}
 		}
 	};
 
@@ -85,9 +80,9 @@ module.exports = (_ => {
 				};
 			}
 			
-			onStart () {				
+			onStart () {	
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SettingsUtils, "updateLocalSettings", {after: e => {
-					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].theme) {
+					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].theme && settings.running) {
 						BDFDB.TimeUtils.clear(changeTimeout);
 						disableChanging = true;
 						changeTimeout = BDFDB.TimeUtils.timeout(_ => {
@@ -149,6 +144,7 @@ module.exports = (_ => {
 				BDFDB.TimeUtils.clear(checkInterval);
 				settings = BDFDB.DataUtils.get(this, "settings");
 				values = BDFDB.DataUtils.get(this, "values");
+				disableChanging = false;
 				if (settings.running) {
 					let inverted = values.timer1 > values.timer2;
 					let timer1LOW = this.getTime(values.timer1), timer2LOW = this.getTime(values.timer2);
