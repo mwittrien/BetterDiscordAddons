@@ -481,7 +481,7 @@ module.exports = (_ => {
 					if (BDFDB.ReactUtils.isValidElement(e.instance.props.subText)) {
 						let data = changedUsers[e.instance.props.user.id];
 						if (data && (data.removeStatus || data.status || data.statusEmoji)) {
-							e.instance.props.subText.props.activities = [].concat(e.instance.props.subText.props.activities).filter(n => n && n.type != 4);
+							e.instance.props.subText.props.activities = [].concat(e.instance.props.subText.props.activities).filter(n => n && n.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
 							let activity = this.createCustomStatus(data);
 							if (activity) e.instance.props.subText.props.activities.unshift(activity);
 						}
@@ -805,7 +805,7 @@ module.exports = (_ => {
 						if (data) {
 							if (data.name) e.instance.props.nick = data.name;
 							if (data.removeStatus || data.status || data.statusEmoji) {
-								e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != 4);
+								e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
 								let activity = this.createCustomStatus(data);
 								if (activity) e.instance.props.activities.unshift(activity);
 							}
@@ -920,7 +920,7 @@ module.exports = (_ => {
 					if (!e.returnvalue) {
 						let data = changedUsers[e.instance.props.user.id];
 						if (data && (data.removeStatus || data.status || data.statusEmoji)) {
-							e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != 4);
+							e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
 							let activity = this.createCustomStatus(data);
 							if (activity) e.instance.props.activities.unshift(activity);
 						}
@@ -1155,7 +1155,7 @@ module.exports = (_ => {
 					id: "custom",
 					name: "Custom Status",
 					state: data.status,
-					type: 4
+					type: BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS
 				}
 			}
 
@@ -1288,7 +1288,7 @@ module.exports = (_ => {
 													key: "USERSTATUS",
 													maxLength: 100000000000000000000,
 													value: data.status,
-													placeholder: activity && activity.type == 4 && activity.state || "",
+													placeholder: activity && activity.type == BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS && activity.state || "",
 													disabled: data.removeStatus
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
