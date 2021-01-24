@@ -1133,10 +1133,12 @@ img:not([src]), img[src=""], img[src="null"] {
 	border-radius: 50%;
 	width: 24px;
 	height: 24px;
+	margin-right: 6px;
 	overflow: hidden;
 }
-[REPLACE_CLASS_toasttext] {
-	min-height: 24px;
+[REPLACE_CLASS_toastinner] {
+	display: flex;
+	align-items: center;
 }
 [REPLACE_CLASS_toastdefault] {
 	background-color: var(--background-floating);
