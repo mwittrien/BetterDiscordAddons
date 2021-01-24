@@ -1870,6 +1870,12 @@
 .toast-brand {
 	background-color: rgb(var(--vaccentcolor));
 }
+.colorBrand-WfDfzD {
+	background-color: rgb(var(--vaccentcolor));
+}
+.colorCustom-WKsPgT[style*="background-color: rgb(114, 137, 218)"] {
+	background-color: rgb(var(--vaccentcolor)) !important;
+}
 
 
 /* ~~~~		13.		BDSUPPORT						~~~~ */
