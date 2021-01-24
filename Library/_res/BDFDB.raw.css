@@ -1120,6 +1120,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	transform: translateY(-10px);
 }
 [REPLACE_CLASS_toasticon] {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	flex: 0 0 auto;
 	width: 24px;
 	height: 24px;

@@ -1183,9 +1183,8 @@ module.exports = (_ => {
 						notice.insertBefore(icon, noticeText);
 					}
 					if (config.customIcon) {
-						let iconInner = BDFDB.DOMUtils.create(config.customIcon)
-						let icon = BDFDB.DOMUtils.create(`<i></i>`);
-						if (iconInner.tagName == "span" && !iconInner.firstElementChild) icon.style.setProperty("background", `url(${config.customIcon}) center/cover no-repeat`);
+						let icon = document.createElement("i"), iconInner = BDFDB.DOMUtils.create(config.customIcon);
+						if (iconInner.nodeType == Node.TEXT_NODE) icon.style.setProperty("background", `url(${config.customIcon}) center/cover no-repeat`);
 						else icon.appendChild(iconInner);
 						BDFDB.DOMUtils.addClass(icon, BDFDB.disCN.noticeplatformicon);
 						BDFDB.DOMUtils.removeClass(icon, BDFDB.disCN.noticeicon);
