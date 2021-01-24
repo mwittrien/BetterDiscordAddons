@@ -2516,7 +2516,6 @@
 		"searchpopoutsearchresultchanneliconbackground": ["SearchPopout", "searchResultChannelIconBackground"],
 		"searchpopoutselected": ["SearchPopout", "selected"],
 		"searchpopoutuser": ["SearchPopout", "user"],
-		"searchresultschannelname": ["SearchResultsElements", "channelName"],
 		"searchresultsmessage": ["SearchResultsMessage", "message"],
 		"searchresultspagination": ["NotFound", "searchResultsPagination"],
 		"searchresultsresult": ["SearchResultsMessage", "searchResult"],
