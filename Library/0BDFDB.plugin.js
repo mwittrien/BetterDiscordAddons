@@ -1108,9 +1108,9 @@ module.exports = (_ => {
 						let leftSideRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.channels + " + div"));
 						let rightSideRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCNC.memberswrap + BDFDB.dotCN.peoplesnowplayingcolumn));
 						let bottomRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.chatform));
-						let left = leftSideRects ? leftSideRects.left : 310;
-						let right = rightSideRects ? rightSideRects.width : 240;
-						let bottom = bottomRects ? (bottomRects.height + 10) : 85;
+						let left = leftSideRects && typeof leftSideRects.left == "number" && leftSideRects.left || 310;
+						let right = rightSideRects && typeof rightSideRects.width == "number" && rightSideRects.width || 240;
+						let bottom = bottomRects && typeof bottomRects.height == "number" && (bottomRects.height + 10) || 85;
 						toasts = BDFDB.DOMUtils.create(`<div class="${BDFDB.DOMUtils.formatClassName(BDFDB.disCN.toasts, orientation && BDFDB.disCN[orientation])}" style="left: ${left}px; right: ${right}px; bottom: ${bottom}px;"></div>`);
 						app.appendChild(toasts);
 					}
