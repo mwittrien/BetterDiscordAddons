@@ -1119,20 +1119,17 @@ img:not([src]), img[src=""], img[src="null"] {
 	opacity: 1;
 	transform: translateY(-10px);
 }
-[REPLACE_CLASS_toastavatar] {
-	margin-right: 6px;
+[REPLACE_CLASS_toasticon] {
+	flex: 0 0 auto;
 	width: 24px;
 	height: 24px;
-	flex: 0 0 auto;
-	background-size: cover;
-	background-position: center;
-	border-radius: 50%;
+	margin-right: 6px;
 }
-[REPLACE_CLASS_toasticon] {
-	padding-left: 30px;
-	background-position: 6px 50%;
-	background-size: 20px 20px;
-	background-repeat: no-repeat;
+[REPLACE_CLASS_toastavatar] {
+	background-position: center;
+	background-size: cover;
+	border-radius: 50%;
+	overflow: hidden;
 }
 [REPLACE_CLASS_toastdefault] {
 	background-color: var(--background-floating);
