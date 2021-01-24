@@ -942,17 +942,17 @@
 		},
 		"Toast": {
 			"avatar": "avatar-3xmbmC",
-			"brand": "brand-WfDfzD",
+			"brand": "colorBrand-WfDfzD",
 			"closing": "closing-K489s7",
-			"custom": "toast-WKsPgT",
-			"danger": "danger-O5wq9n",
-			"default": "default-XdNdIp",
+			"custom": "colorCustom-WKsPgT",
+			"danger": "colorDanger-O5wq9n",
+			"default": "colorDefault-XdNdIp",
 			"icon": "icon-OZgBPQ",
-			"info": "info-ujWH4-",
+			"info": "colorInfo-ujWH4-",
 			"text": "text-28VADE",
 			"toast": "toast-g4bfgI",
 			"toasts": "toasts-tApoHv",
-			"warning": "warning-qZNMsx"
+			"warning": "colorWarning-qZNMsx"
 		}
 	},
 	"DiscordClassModules": {
