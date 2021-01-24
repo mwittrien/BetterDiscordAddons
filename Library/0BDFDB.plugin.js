@@ -572,7 +572,7 @@ module.exports = (_ => {
 				if (!newVersion) return callback(null);
 				if (pluginName == newName && BDFDB.NumberUtils.getVersionDifference(newVersion[0], window.PluginUpdates.plugins[url].version) > 0.2) {
 					BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_force_updated", pluginName), {
-						type: "warn",
+						type: "warning",
 						noPointer: true
 					});
 					BDFDB.PluginUtils.downloadUpdate(pluginName, url);

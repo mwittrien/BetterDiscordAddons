@@ -606,7 +606,7 @@ module.exports = (_ => {
 											onClick: _ => {
 												let source = settingsPanel.props._node.querySelector(`.input-${key}src ` + BDFDB.dotCN.input).value.trim();
 												if (!source.length) {
-													BDFDB.NotificationUtils.toast(`Sound file was removed.`, {type: "warn"});
+													BDFDB.NotificationUtils.toast(`Sound file was removed.`, {type: "warning"});
 													successSavedAudio(key, source, source);
 												}
 												else if (source.indexOf("http") == 0) BDFDB.LibraryRequires.request(source, (error, response, result) => {
