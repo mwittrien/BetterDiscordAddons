@@ -1125,8 +1125,6 @@ img:not([src]), img[src=""], img[src="null"] {
 	justify-content: center;
 	align-items: center;
 	flex: 0 0 auto;
-	width: 18px;
-	height: 24px;
 	margin-right: 6px;
 }
 [REPLACE_CLASS_toastavatar] {
@@ -1134,6 +1132,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	background-size: cover;
 	border-radius: 50%;
 	width: 24px;
+	height: 24px;
 	overflow: hidden;
 }
 [REPLACE_CLASS_toasttext] {
