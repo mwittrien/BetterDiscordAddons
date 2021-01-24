@@ -340,7 +340,7 @@ module.exports = (_ => {
 					if (channel && (channel.type == 1 || channel.type == 3 || BDFDB.UserUtils.can("MANAGE_MESSAGES")) && message.type == 0) {
 						if (message.pinned) {
 							BDFDB.LibraryModules.MessagePinUtils.unpinMessage(channel, message.id);
-							if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been unpinned", {type: "error"});
+							if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been unpinned", {type: "danger"});
 						}
 						else {
 							BDFDB.LibraryModules.MessagePinUtils.pinMessage(channel, message.id);

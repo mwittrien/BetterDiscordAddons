@@ -357,6 +357,9 @@
 			},
 			"icon": "<svg name='Checkmark' width='%%width' height='%%height' viewBox='0 0 18 18'><g fill='none' fill-rule='evenodd'><polyline stroke='%%color' stroke-width='2' points='3.5 9.5 7 13 15 5'></polyline></g></svg>"
 		},
+		"CHECKMARK_CIRCLE": {
+			"icon": "<svg name='CheckmarkCircle' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/></svg>"
+		},
 		"CLOSE": {
 			"defaultProps": {
 				"width": 12,
@@ -403,6 +406,9 @@
 				"height": 36
 			},
 			"icon": "<svg name='Gradient' width='%%width' height='%%height' viewBox='0 0 36 36'><path fill='%%color' d='M 5,0 C 0,0 0,5 0,5 V 31 c 0,5 5,5 5,5 h 26 c 5,0 5,-5 5,-5 V 5 C 36,0 31,0 31,0 Z M 4,4 h 8 v 4 h 4 v -4 h 4 v 4 h 4 V 12 h -4 v 4 h 4 v 4 h -4 v 4 h 4 v 4 h -4 v 4 h -4 v -4 h -4 v 4 H 4 Z M 16,28 h 4 v -4 h -4 z m 0,-4 v -4 h -4 v 4 z m 0,-4 h 4 v -4 h -4 z m 0,-4 v -4 h -4 v 4 z m 0,-4 h 4 V 8 h -4 z'/></svg>"
+		},
+		"INFO": {
+			"icon": "<svg name='Info' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/></svg>"
 		},
 		"LEFT_CARET": {
 			"icon": "<svg name='LeftCaret' width='%%width' height='%%height' viewBox='0 0 24 24'><g fill='none' fill-rule='evenodd'><polygon fill='%%color' fill-rule='nonzero' points='18.35 4.35 16 2 6 12 16 22 18.35 19.65 10.717 12'></polygon><polygon points='0 0 24 0 24 24 0 24'></polygon></g></svg>"
@@ -482,6 +488,9 @@
 		},
 		"TRASH": {
 			"icon": "<svg name='Trash' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='none' d='M0 0h24v24H0V0z'/><path fill='%%color' d='M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z'/></svg>"
+		},
+		"WARNING": {
+			"icon": "<svg name='Warning' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z'/></svg>"
 		}
 	},
 	"CustomClassModules": {
@@ -932,13 +941,18 @@
 			"wrapper": "wrapper-2AQieU"
 		},
 		"Toast": {
-			"avatar": "toast-avatar",
-			"closing": "closing",
-			"custom": "toast-custom",
-			"icon": "icon",
-			"inner": "toast-inner",
-			"toast": "toast",
-			"toasts": "toasts"
+			"avatar": "avatar-3xmbmC",
+			"brand": "brand-WfDfzD",
+			"closing": "closing-K489s7",
+			"custom": "toast-WKsPgT",
+			"danger": "danger-O5wq9n",
+			"default": "default-XdNdIp",
+			"icon": "icon-OZgBPQ",
+			"info": "info-ujWH4-",
+			"text": "text-28VADE",
+			"toast": "toast-g4bfgI",
+			"toasts": "toasts-tApoHv",
+			"warning": "warning-qZNMsx"
 		}
 	},
 	"DiscordClassModules": {
@@ -2678,11 +2692,16 @@
 		"titlesize16": ["UserPopout", "size16"],
 		"toast": ["Toast", "toast"],
 		"toastavatar": ["Toast", "avatar"],
+		"toastbrand": ["Toast", "brand"],
 		"toastclosing": ["Toast", "closing"],
 		"toastcustom": ["Toast", "custom"],
+		"toastdanger": ["Toast", "danger"],
+		"toastdefault": ["Toast", "default"],
 		"toasticon": ["Toast", "icon"],
-		"toastinner": ["Toast", "inner"],
+		"toastinfo": ["Toast", "info"],
 		"toasts": ["Toast", "toasts"],
+		"toasttext": ["Toast", "text"],
+		"toastwarning": ["Toast", "warning"],
 		"tooltip": ["Tooltip", "tooltip"],
 		"tooltipactivityicon": ["TooltipGuild", "activityIcon"],
 		"tooltipblack": ["Tooltip", "tooltipBlack"],

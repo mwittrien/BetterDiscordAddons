@@ -1108,7 +1108,7 @@ module.exports = (_ => {
 										buttons: [{
 											contents: this.labels.list,
 											onClick: _ => {
-												let toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"), {type: "error"});
+												let toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"), {type: "danger"});
 												toast.style.setProperty("overflow", "hidden");
 												for (let url of wrongUrls) console.log(url);
 											}

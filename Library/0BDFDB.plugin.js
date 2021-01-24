@@ -701,7 +701,7 @@ module.exports = (_ => {
 				let updateNotice = document.querySelector("#pluginNotice");
 				if (updateNotice) BDFDB.PluginUtils.removeUpdateNotice(pluginName, updateNotice);
 				BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_update_failed", pluginName), {
-					type: "error",
+					type: "danger",
 					noPointer: true
 				});
 			}
@@ -1208,7 +1208,7 @@ module.exports = (_ => {
 					if (config.textClassName) BDFDB.DOMUtils.addClass(noticeText, config.textClassName);
 					if (config.css) BDFDB.DOMUtils.appendLocalStyle("BDFDBcustomNotificationBar" + id, config.css);
 					if (config.style) notice.style = config.style;
-					if (config.html === true) noticeText.innerHTML = text;
+					if (config.html) noticeText.innerHTML = text;
 					else {
 						let link = document.createElement("a");
 						let newText = [];
@@ -7316,7 +7316,7 @@ module.exports = (_ => {
 									BDFDB.PluginUtils.checkAllUpdates().then(outdated => {
 										toast.close();
 										if (outdated > 0) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("update_check_complete_outdated", outdated), {
-											type: "error"
+											type: "danger"
 										});
 										else BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStrings.update_check_complete, {
 											type: "success"
@@ -7821,14 +7821,14 @@ module.exports = (_ => {
 								else {
 									if (response.statusCode == 429) {
 										BDFDB.NotificationUtils.toast("Too many requests, switching to backup", {
-											type: "error"
+											type: "danger"
 										});
 										config.useBackup = true;
 										BDFDB.DevUtils.generateLanguageStrings(strings, config);
 									}
 									else {
 										BDFDB.NotificationUtils.toast("Failed to translate text", {
-											type: "error"
+											type: "danger"
 										});
 										callback("");
 									}

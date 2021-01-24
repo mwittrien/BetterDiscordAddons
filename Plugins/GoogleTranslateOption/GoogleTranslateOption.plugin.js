@@ -659,7 +659,7 @@ module.exports = (_ => {
 					toast.interval = BDFDB.TimeUtils.interval(_ => {
 						if (timer++ > 40) {
 							finishTranslation("");
-							BDFDB.NotificationUtils.toast("Failed to translate text. Try another Translate Engine.", {type: "error"});
+							BDFDB.NotificationUtils.toast("Failed to translate text. Try another Translate Engine.", {type: "danger"});
 						}
 						else toast.textContent = toast.textContent.indexOf(".....") > -1 ? "Translating. Please wait" : toast.textContent + ".";
 					}, 500);
@@ -727,8 +727,8 @@ module.exports = (_ => {
 						catch (err) {callback("");}
 					}
 					else {
-						if (response.statusCode == 429) BDFDB_Global.NotificationUtils.toast("Failed to translate text. Request Limit per Hour is reached. Choose another Translate Engine.", {type: "error"});
-						else BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server might be down. Try another Translate Engine.", {type: "error"});
+						if (response.statusCode == 429) BDFDB_Global.NotificationUtils.toast("Failed to translate text. Request Limit per Hour is reached. Choose another Translate Engine.", {type: "danger"});
+						else BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server might be down. Try another Translate Engine.", {type: "danger"});
 						callback("");
 					}
 				});
@@ -764,7 +764,7 @@ module.exports = (_ => {
 							catch (err) {callback("");}
 						}
 						else {
-							BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or API-key outdated. Try another Translate Engine.", {type: "error"});
+							BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or API-key outdated. Try another Translate Engine.", {type: "danger"});
 							callback("");
 						}
 					});
@@ -800,11 +800,11 @@ module.exports = (_ => {
 						else callback("");
 					}
 					if (result && result.indexOf('code="408"') > -1) {
-						BDFDB.NotificationUtils.toast("Failed to translate text. Monthly rate limit reached. Choose another Translate Engine", {type: "error"});
+						BDFDB.NotificationUtils.toast("Failed to translate text. Monthly rate limit reached. Choose another Translate Engine", {type: "danger"});
 						callback("");
 					}
 					else {
-						BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or API-key outdated. Try another Translate Engine.", {type: "error"});
+						BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or API-key outdated. Try another Translate Engine.", {type: "danger"});
 						callback("");
 					}
 				});
@@ -832,7 +832,7 @@ module.exports = (_ => {
 						catch (err) {callback("");}
 					}
 					else {
-						BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down, daily limited reached or API-key outdated. Try another Translate Engine.", {type: "error"});
+						BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down, daily limited reached or API-key outdated. Try another Translate Engine.", {type: "danger"});
 						callback("");
 					}
 				});
@@ -891,7 +891,7 @@ module.exports = (_ => {
 						}
 					}
 				}
-				else BDFDB.NotificationUtils.toast("Invalid binary format. Only use 0s and 1s.", {type: "error"});
+				else BDFDB.NotificationUtils.toast("Invalid binary format. Only use 0s and 1s.", {type: "danger"});
 				return string;
 			}
 

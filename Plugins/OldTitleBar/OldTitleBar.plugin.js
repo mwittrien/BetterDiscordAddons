@@ -171,15 +171,18 @@ module.exports = (_ => {
 						onChange: isNativeTitlebarSetting ? value => {
 							if (this.patchMainScreen(value)) {
 								patched = !patched;
-								let notifybar = document.querySelector("#OldTitleBarNotifyBar");
-								if (notifybar) notifybar.querySelector(BDFDB.dotCN.noticedismiss).click();
-								if (patched) {
-									notifybar = BDFDB.NotificationUtils.notice("Changed nativebar settings, relaunch to see changes:", {type: "danger",btn: "Relaunch",id: "OldTitleBarNotifyBar"});
-									notifybar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
-										BDFDB.LibraryRequires.electron.remote.app.relaunch();
-										BDFDB.LibraryRequires.electron.remote.app.quit();
-									});
-								}
+								document.querySelector("#OldTitleBarNotifyBar")?.close();
+								if (patched) BDFDB.NotificationUtils.notice("Changed nativebar settings, relaunch to see changes:", {
+									type: "danger",
+									id: "OldTitleBarNotifyBar",
+									buttons: [{
+										contents: "Relaunch",
+										onClick: _ => {
+											BDFDB.LibraryRequires.electron.remote.app.relaunch();
+											BDFDB.LibraryRequires.electron.remote.app.quit();
+										}
+									}]
+								});
 							}
 						} : null
 					}));

@@ -950,10 +950,10 @@ module.exports = (_ => {
 			downloadImage (url, path) {
 				url = url.startsWith("/assets") ? (window.location.origin + url) : url;
 				BDFDB.LibraryRequires.request(url, {encoding: null}, (error, response, body) => {
-					if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type: "error"});
+					if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type: "danger"});
 					else {
 						BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, url.split("/").pop().split(".").slice(0, -1).join("."), response.headers["content-type"].split("/").pop().split("+")[0], 0), body, error => {
-							if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type: "error"});
+							if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type: "danger"});
 							else BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_success.replace("{{path}}", path), {type: "success"});
 						});
 					}
@@ -974,7 +974,7 @@ module.exports = (_ => {
 			
 			copyImage (url) {
 				BDFDB.LibraryRequires.request(url, {encoding: null}, (error, response, buffer) => {
-					if (error) BDFDB.NotificationUtils.toast(this.labels.toast_copyimage_failed, {type: "error"});
+					if (error) BDFDB.NotificationUtils.toast(this.labels.toast_copyimage_failed, {type: "danger"});
 					else if (buffer) {
 						if (BDFDB.LibraryRequires.process.platform === "win32" || BDFDB.LibraryRequires.process.platform === "darwin") {
 							BDFDB.LibraryRequires.electron.clipboard.write({image: BDFDB.LibraryRequires.electron.nativeImage.createFromBuffer(buffer)});

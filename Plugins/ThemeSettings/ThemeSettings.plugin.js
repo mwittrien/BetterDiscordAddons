@@ -176,7 +176,7 @@ module.exports = (_ => {
 					}
 					else BDFDB.NotificationUtils.toast(`There are no changed variables to be updated in ${addon.filename}`, {type: "warning"});
 				}
-				else BDFDB.NotificationUtils.toast(`Could not find themefile: ${addon.filename}`, {type: "error"});
+				else BDFDB.NotificationUtils.toast(`Could not find themefile: ${addon.filename}`, {type: "danger"});
 			}
 
 			getThemeImports (css) {

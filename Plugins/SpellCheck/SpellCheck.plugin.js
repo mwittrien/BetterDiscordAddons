@@ -344,7 +344,7 @@ module.exports = (_ => {
 					let parse = (error, response, body, download) => {
 						this.killLanguageToast(key);
 						if (error || (response && body.toLowerCase().indexOf("<!doctype html>") > -1)) {
-							BDFDB.NotificationUtils.toast(this.labels.toast_dictionary_fail.replace("{{var0}}", this.getLanguageName(languages[lang])), {type: "error"});
+							BDFDB.NotificationUtils.toast(this.labels.toast_dictionary_fail.replace("{{var0}}", this.getLanguageName(languages[lang])), {type: "danger"});
 						}
 						else if (response && languageToasts[key].lang == lang) {
 							if (download) {

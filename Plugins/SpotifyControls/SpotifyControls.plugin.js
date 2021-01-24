@@ -193,7 +193,7 @@ module.exports = (_ => {
 														BDFDB.LibraryRequires.electron.clipboard.write({text: url});
 														BDFDB.NotificationUtils.toast(_this.labels.toast_copyurl_fail, {type: "success"});
 													}
-													else BDFDB.NotificationUtils.toast(_this.labels.toast_copyurl_success, {type: "error"});
+													else BDFDB.NotificationUtils.toast(_this.labels.toast_copyurl_success, {type: "danger"});
 												}
 											}),
 											BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
