@@ -775,22 +775,22 @@ module.exports = (_ => {
 								if (observedUsers[id][status.name] == notificationTypes.DESKTOP.value) {
 									let desktopString = string.replace(/\$user/g, `${name}${settings.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/\$status/g, statusName);
 									if (status.activity) desktopString = desktopString.replace(/\$song|\$game/g, status.activity.name || status.activity.details || "").replace(/\$artist|\$custom/g, [status.activity.emoji && status.activity.emoji.name, status.activity.state].filter(n => n).join(" ") || "");
-									let notificationsound = notificationSounds["desktop" + status.name] || {};
-									BDFDB.NotificationUtils.desktop(desktopString, {icon: avatar, timeout: desktopTime, click: openChannel, silent: notificationsound.mute, sound: notificationsound.song});
+									let notificationSound = notificationSounds["desktop" + status.name] || {};
+									BDFDB.NotificationUtils.desktop(desktopString, {icon: avatar, timeout: desktopTime, click: openChannel, silent: notificationSound.mute, sound: notificationSound.song});
 								}
 								else if (!document.querySelector(`.friendnotifications-${id}-toast`)) {
-									let toast = BDFDB.NotificationUtils.toast(`<div class="${BDFDB.disCN.toastinner}"><div class="${BDFDB.disCN.toastavatar}" style="background-image: url(${avatar});"></div><div>${toastString}</div></div>`, {
+									BDFDB.NotificationUtils.toast(toastString, {
 										className: `friendnotifications-${status.name}-toast friendnotifications-${id}-toast`,
 										html: true,
 										timeout: toastTime,
+										avatar: avatar,
 										color: BDFDB.UserUtils.getStatusColor(status.name),
-										icon: false
+										onClick: openChannel
 									});
-									toast.addEventListener("click", openChannel);
-									let notificationsound = notificationSounds["toast" + status.name] || {};
-									if (!notificationsound.mute && notificationsound.song) {
+									let notificationSound = notificationSounds["toast" + status.name] || {};
+									if (!notificationSound.mute && notificationSound.song) {
 										let audio = new Audio();
-										audio.src = notificationsound.song;
+										audio.src = notificationSound.song;
 										audio.play();
 									}
 								}
