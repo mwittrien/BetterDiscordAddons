@@ -1085,48 +1085,88 @@ module.exports = (_ => {
 					}
 				};
 			
-				var NotificationBars = [], DesktopNotificationQueue = {queue: [], running: false};
+				const ToastIcons = {
+					info: "INFO",
+					danger: "CLOSE_CIRCLE",
+					success: "CHECKMARK_CIRCLE",
+					warning: "WARNING"
+				};
+				const ToastOrientations = {
+					left: "toastsleft",
+					right: "toastsright"
+				};
+				var Toasts = [], NotificationBars = [], DesktopNotificationQueue = {queue: [], running: false};
 				BDFDB.NotificationUtils = {};
 				BDFDB.NotificationUtils.toast = function (text, config = {}) {
-					let toasts = document.querySelector(BDFDB.dotCNC.toasts + ".bd-toasts");
+					if (!text) return;
+					let app = document.querySelector(BDFDB.dotCN.app) || document.body;
+					if (!app) return;
+					let id = BDFDB.NumberUtils.generateId(Toasts);
+					let orientation = ToastOrientations[config.orientation] || ToastOrientations.left;
+					let toasts = document.querySelector(BDFDB.dotCN.toasts + BDFDB.dotCN[orientation]);
 					if (!toasts) {
-						let channels = document.querySelector(BDFDB.dotCN.channels + " + div");
-						let channelRects = channels ? BDFDB.DOMUtils.getRects(channels) : null;
-						let members = channels ? channels.querySelector(BDFDB.dotCN.memberswrap) : null;
-						let left = channelRects ? channelRects.left : 310;
-						let width = channelRects ? (members ? channelRects.width - BDFDB.DOMUtils.getRects(members).width : channelRects.width) : window.outerWidth - 0;
-						let form = channels ? channels.querySelector("form") : null;
-						let bottom = form ? BDFDB.DOMUtils.getRects(form).height : 80;
-						toasts = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.toasts} bd-toasts" style="width: ${width}px; left: ${left}px; bottom: ${bottom}px;"></div>`);
-						(document.querySelector(BDFDB.dotCN.app) || document.body).appendChild(toasts);
+						let leftSideRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.channels + " + div"));
+						let rightSideRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCNC.memberswrap + BDFDB.dotCN.peoplesnowplayingcolumn));
+						let bottomRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.chatform));
+						let left = leftSideRects ? leftSideRects.left : 310;
+						let right = rightSideRects ? rightSideRects.width : 240;
+						let bottom = bottomRects ? (bottomRects.height + 10) : 85;
+						toasts = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.toasts + BDFDB.disCN[orientation]}" style="left: ${left}px; right: ${right}px; bottom: ${bottom}px;"></div>`);
+						app.appendChild(toasts);
 					}
-					const {type = "", icon = true, timeout = 3000, html = false, className = "", noPointer = false, color = ""} = config;
-					let toast = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.toast} bd-toast">${html === true ? text : BDFDB.StringUtils.htmlEscape(text)}</div>`);
-					if (type) {
-						BDFDB.DOMUtils.addClass(toast, "toast-" + type);
-						if (icon) BDFDB.DOMUtils.addClass(toast, BDFDB.disCN.toasticon);
-					}
-					else if (color) {
-						let rgbColor = BDFDB.ColorUtils.convert(color, "RGB");
-						if (rgbColor) {
-							toast.style.setProperty("background-color", rgbColor);
+					let toast = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.toast}"><div class="${BDFDB.disCN.toasttext}"></div></div>`);
+					let toastText = toast.querySelector(BDFDB.dotCN.toasttext);
+					
+					if (config.id) toast.id = config.id.split(" ").join("");
+					if (config.className) BDFDB.DOMUtils.addClass(toast, config.className);
+					if (config.textClassName) BDFDB.DOMUtils.addClass(toastText, config.textClassName);
+					if (config.css) BDFDB.DOMUtils.appendLocalStyle("BDFDBcustomToast" + id, config.css);
+					if (config.style) toast.style = config.style;
+					if (config.html) toastText.innerHTML = text;
+					else toastText.innerHTML = BDFDB.StringUtils.htmlEscape(text);
+						
+					let type = null;
+					if (config.type && (type = BDFDB.disCN["toast" + config.type]) != null) BDFDB.DOMUtils.addClass(toast, type);
+					if (!type) {
+						let comp = BDFDB.ColorUtils.convert(config.color, "RGBCOMP");
+						if (comp) {
+							let backgroundColor = BDFDB.ColorUtils.convert(comp, "HEX");
+							let fontColor = comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "#000" : "#FFF";
+							toast.style.setProperty("background-color", backgroundColor);
+							toast.style.setProperty("color", fontColor);
 							BDFDB.DOMUtils.addClass(toast, BDFDB.disCN.toastcustom);
 						}
+						else BDFDB.DOMUtils.addClass(toast, BDFDB.disCN.toastdefault);
 					}
-					BDFDB.DOMUtils.addClass(toast, className);
+					let iconMarkup = config.avatar || config.icon || config.type && ToastIcons[config.type] && InternalComponents.LibraryComponents.SvgIcon.Names[ToastIcons[config.type]]?.icon.replace("%%width", 20).replace("%%height", 20).replace("%%color", "currentColor");
+					if (iconMarkup) {
+						let icon = document.createElement("div"), iconInner = BDFDB.DOMUtils.create(iconMarkup);
+						if (iconInner.nodeType == Node.TEXT_NODE) icon.style.setProperty("background", `url(${iconMarkup}) center/cover no-repeat`);
+						else icon.appendChild(iconInner);
+						BDFDB.DOMUtils.addClass(icon, BDFDB.disCN.toasticon, config.iconClassName, config.avatar && BDFDB.disCN.toastavatar);
+						toast.insertBefore(icon, toastText);
+					}
+						
 					toasts.appendChild(toast);
 					toast.close = _ => {
 						if (document.contains(toast)) {
 							BDFDB.DOMUtils.addClass(toast, BDFDB.disCN.toastclosing);
 							toast.style.setProperty("pointer-events", "none", "important");
 							BDFDB.TimeUtils.timeout(_ => {
+								if (typeof config.onClose == "function") config.onClose();
+								BDFDB.ArrayUtils.remove(Toasts, id);
+								BDFDB.DOMUtils.removeLocalStyle("BDFDBcustomToast" + id);
 								toast.remove();
-								if (!toasts.querySelectorAll(BDFDB.dotCNC.toast + ".bd-toast").length) toasts.remove();
+								if (!toasts.querySelectorAll(BDFDB.dotCN.toast).length) toasts.remove();
 							}, 3000);
 						}
 					};
-					if (noPointer) toast.style.setProperty("pointer-events", "none", "important");
-					else toast.addEventListener("click", toast.close);
+					if (config.noPointer && typeof config.onClick != "function") toast.style.setProperty("pointer-events", "none", "important");
+					else toast.addEventListener("click", _ => {
+						if (typeof config.onClick == "function") config.onClick();
+						toast.close();
+					});
+					let timeout = typeof config.timeout == "number" ? config.timeout : 3000;
 					BDFDB.TimeUtils.timeout(_ => {toast.close();}, timeout > 0 ? timeout : 600000);
 					return toast;
 				};
