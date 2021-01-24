@@ -110,7 +110,7 @@ module.exports = (_ => {
 					label: this.defaults.choices[key].description,
 					basis: "50%",
 					value: choices[key],
-					options: (this.defaults.choices[key].options || []).map(option => this.getValue(option, this.defaults.choices[key].type)),
+					options: (this.defaults.choices[key].options || []).map(option => this.getPopoutValue(option, this.defaults.choices[key].type)),
 					searchable: true
 				}));
 				
@@ -266,9 +266,9 @@ module.exports = (_ => {
 			}
 			
 			openNotesPopout (buttonInstance) {
-				buttonInstance.props.selectedFilter = buttonInstance.props.selectedFilter || this.getValue(choices.defaultFilter || filterKeys[0], "filter");
-				buttonInstance.props.selectedSort = buttonInstance.props.selectedSort || this.getValue(choices.defaultSort || sortKeys[0], "sort");
-				buttonInstance.props.selectedOrder = buttonInstance.props.selectedOrder || this.getValue(choices.defaultOrder || orderKeys[0], "order");
+				buttonInstance.props.selectedFilter = buttonInstance.props.selectedFilter || this.getPopoutValue(choices.defaultFilter || filterKeys[0], "filter");
+				buttonInstance.props.selectedSort = buttonInstance.props.selectedSort || this.getPopoutValue(choices.defaultSort || sortKeys[0], "sort");
+				buttonInstance.props.selectedOrder = buttonInstance.props.selectedOrder || this.getPopoutValue(choices.defaultOrder || orderKeys[0], "order");
 				buttonInstance.props.searchKey = buttonInstance.props.searchKey || "";
 				let searchTimeout;
 				return [
@@ -313,27 +313,27 @@ module.exports = (_ => {
 											itemSelectedClassName: BDFDB.disCN.messagespopouttabbartabactive,
 											type: BDFDB.LibraryComponents.TabBar.Types.TOP_PILL,
 											selectedItem: buttonInstance.props.selectedFilter.value,
-											items: filterKeys.map(option => this.getValue(option, "filter")),
+											items: filterKeys.map(option => this.getPopoutValue(option, "filter")),
 											onItemSelect: option => {
-												buttonInstance.props.selectedFilter = this.getValue(option, "filter");
+												buttonInstance.props.selectedFilter = this.getPopoutValue(option, "filter");
 												BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
 											}
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
 											label: BDFDB.LanguageUtils.LibraryStrings.sort_by + ":",
 											value: buttonInstance.props.selectedSort,
-											options: sortKeys.map(option => this.getValue(option, "sort")),
+											options: sortKeys.map(option => this.getPopoutValue(option, "sort")),
 											onChange: option => {
-												buttonInstance.props.selectedSort = this.getValue(option, "sort");
+												buttonInstance.props.selectedSort = this.getPopoutValue(option, "sort");
 												BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
 											}
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
 											label: BDFDB.LanguageUtils.LibraryStrings.order + ":",
 											value: buttonInstance.props.selectedOrder,
-											options: orderKeys.map(option => this.getValue(option, "order")),
+											options: orderKeys.map(option => this.getPopoutValue(option, "order")),
 											onChange: option => {
-												buttonInstance.props.selectedOrder = this.getValue(option, "order");
+												buttonInstance.props.selectedOrder = this.getPopoutValue(option, "order");
 												BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
 											}
 										})
@@ -349,7 +349,7 @@ module.exports = (_ => {
 				];
 			}
 			
-			getValue (key, type) {
+			getPopoutValue (key, type) {
 				return {
 					label: type == "order" ? BDFDB.LanguageUtils.LibraryStrings[key] : this.labels[`popout_${type}_${key}`],
 					value: key
@@ -587,7 +587,7 @@ module.exports = (_ => {
 						return {
 							context_pinoption:					"Запишете съобщението",
 							context_unpinoption:				"Премахване на бележката",
-							context_updateoption:				"Бележка за актуализация",
+							context_updateoption:				"Бележката за актуализация",
 							popout_filter_all:					"Всички сървъри",
 							popout_filter_channel:				"Канал",
 							popout_filter_server:				"Сървър",
@@ -603,7 +603,7 @@ module.exports = (_ => {
 						return {
 							context_pinoption:					"Skriv beskeden ned",
 							context_unpinoption:				"Fjern noten",
-							context_updateoption:				"Opdater note",
+							context_updateoption:				"Opdater noten",
 							popout_filter_all:					"Alle servere",
 							popout_filter_channel:				"Kanal",
 							popout_filter_server:				"Server",
@@ -635,7 +635,7 @@ module.exports = (_ => {
 						return {
 							context_pinoption:					"Γράψτε το μήνυμα",
 							context_unpinoption:				"Αφαιρέστε τη σημείωση",
-							context_updateoption:				"Ενημέρωση σημείωσης",
+							context_updateoption:				"Ενημέρωση τη σημείωση",
 							popout_filter_all:					"Όλοι οι διακομιστές",
 							popout_filter_channel:				"Κανάλι",
 							popout_filter_server:				"Υπηρέτης",
@@ -650,8 +650,8 @@ module.exports = (_ => {
 					case "es":		// Spanish
 						return {
 							context_pinoption:					"Escribe el mensaje",
-							context_unpinoption:				"Eliminar nota",
-							context_updateoption:				"Nota de actualización",
+							context_unpinoption:				"Eliminar la nota",
+							context_updateoption:				"Actualiza la nota",
 							popout_filter_all:					"Todos los servidores",
 							popout_filter_channel:				"Canal",
 							popout_filter_server:				"Servidor",
@@ -698,8 +698,8 @@ module.exports = (_ => {
 					case "hr":		// Croatian
 						return {
 							context_pinoption:					"Zapišite poruku",
-							context_unpinoption:				"Ukloni bilješku",
-							context_updateoption:				"Napomena o ažuriranju",
+							context_unpinoption:				"Izbriši bilješku",
+							context_updateoption:				"Ažurirajte bilješku",
 							popout_filter_all:					"Svi poslužitelji",
 							popout_filter_channel:				"Kanal",
 							popout_filter_server:				"Poslužitelju",
@@ -714,7 +714,7 @@ module.exports = (_ => {
 					case "hu":		// Hungarian
 						return {
 							context_pinoption:					"Írja le az üzenetet",
-							context_unpinoption:				"Megjegyzés eltávolítása",
+							context_unpinoption:				"Törölje a jegyzetet",
 							context_updateoption:				"Frissítse a jegyzetet",
 							popout_filter_all:					"Minden szerver",
 							popout_filter_channel:				"Csatorna",
@@ -730,8 +730,8 @@ module.exports = (_ => {
 					case "it":		// Italian
 						return {
 							context_pinoption:					"Annota il messaggio",
-							context_unpinoption:				"Rimuovi nota",
-							context_updateoption:				"Aggiorna nota",
+							context_unpinoption:				"Elimina la nota",
+							context_updateoption:				"Aggiorna la nota",
 							popout_filter_all:					"Tutti i server",
 							popout_filter_channel:				"Canale",
 							popout_filter_server:				"Server",
@@ -746,8 +746,8 @@ module.exports = (_ => {
 					case "ja":		// Japanese
 						return {
 							context_pinoption:					"メッセージを書き留めます",
-							context_unpinoption:				"メモを削除",
-							context_updateoption:				"更新メモ",
+							context_unpinoption:				"メモを削除します",
+							context_updateoption:				"メモを更新する",
 							popout_filter_all:					"すべてのサーバー",
 							popout_filter_channel:				"チャネル",
 							popout_filter_server:				"サーバ",
@@ -762,7 +762,7 @@ module.exports = (_ => {
 					case "ko":		// Korean
 						return {
 							context_pinoption:					"메시지를 적어",
-							context_unpinoption:				"메모 제거",
+							context_unpinoption:				"메모 삭제",
 							context_updateoption:				"메모 업데이트",
 							popout_filter_all:					"모든 서버",
 							popout_filter_channel:				"채널",
@@ -778,8 +778,8 @@ module.exports = (_ => {
 					case "lt":		// Lithuanian
 						return {
 							context_pinoption:					"Užrašykite žinutę",
-							context_unpinoption:				"Pašalinti užrašą",
-							context_updateoption:				"Atnaujinti pastabą",
+							context_unpinoption:				"Ištrinkite užrašą",
+							context_updateoption:				"Atnaujinkite užrašą",
 							popout_filter_all:					"Visi serveriai",
 							popout_filter_channel:				"Kanalą",
 							popout_filter_server:				"Serverio",
@@ -794,8 +794,8 @@ module.exports = (_ => {
 					case "nl":		// Dutch
 						return {
 							context_pinoption:					"Schrijf het bericht op",
-							context_unpinoption:				"Notitie verwijderen",
-							context_updateoption:				"Update notitie",
+							context_unpinoption:				"Verwijder de notitie",
+							context_updateoption:				"Werk de notitie bij",
 							popout_filter_all:					"Alle servers",
 							popout_filter_channel:				"Kanaal",
 							popout_filter_server:				"Server",
@@ -810,8 +810,8 @@ module.exports = (_ => {
 					case "no":		// Norwegian
 						return {
 							context_pinoption:					"Skriv ned meldingen",
-							context_unpinoption:				"Fjern notatet",
-							context_updateoption:				"Oppdateringsnotat",
+							context_unpinoption:				"Slett notatet",
+							context_updateoption:				"Oppdater notatet",
 							popout_filter_all:					"Alle servere",
 							popout_filter_channel:				"Kanal",
 							popout_filter_server:				"Server",
@@ -827,7 +827,7 @@ module.exports = (_ => {
 						return {
 							context_pinoption:					"Zapisz wiadomość",
 							context_unpinoption:				"Usuń notatkę",
-							context_updateoption:				"Uwaga dotycząca aktualizacji",
+							context_updateoption:				"Zaktualizuj notatkę",
 							popout_filter_all:					"Wszystkie serwery",
 							popout_filter_channel:				"Kanał",
 							popout_filter_server:				"Serwer",
@@ -842,8 +842,8 @@ module.exports = (_ => {
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
 							context_pinoption:					"Escreva a mensagem",
-							context_unpinoption:				"Remover nota",
-							context_updateoption:				"Atualizar nota",
+							context_unpinoption:				"Exclua a nota",
+							context_updateoption:				"Atualize a nota",
 							popout_filter_all:					"Todos os servidores",
 							popout_filter_channel:				"Canal",
 							popout_filter_server:				"Servidor",
@@ -858,8 +858,8 @@ module.exports = (_ => {
 					case "ro":		// Romanian
 						return {
 							context_pinoption:					"Notează mesajul",
-							context_unpinoption:				"Eliminați nota",
-							context_updateoption:				"Notă de actualizare",
+							context_unpinoption:				"Ștergeți nota",
+							context_updateoption:				"Actualizați nota",
 							popout_filter_all:					"Toate serverele",
 							popout_filter_channel:				"Canal",
 							popout_filter_server:				"Server",
@@ -875,11 +875,11 @@ module.exports = (_ => {
 						return {
 							context_pinoption:					"Запишите сообщение",
 							context_unpinoption:				"Удалить заметку",
-							context_updateoption:				"Обновить примечание",
+							context_updateoption:				"Обновить заметку",
 							popout_filter_all:					"Все серверы",
 							popout_filter_channel:				"Канал",
 							popout_filter_server:				"Сервер",
-							popout_note:						"Ноты",
+							popout_note:						"Замечания",
 							popout_pinoption:					"Запись",
 							popout_sort_messagetime:			"Дата сообщения",
 							popout_sort_notetime:				"Дата записи",
@@ -890,8 +890,8 @@ module.exports = (_ => {
 					case "sv":		// Swedish
 						return {
 							context_pinoption:					"Skriv ner meddelandet",
-							context_unpinoption:				"Ta bort anteckningen",
-							context_updateoption:				"Uppdatera anteckning",
+							context_unpinoption:				"Radera anteckningen",
+							context_updateoption:				"Uppdatera anteckningen",
 							popout_filter_all:					"Alla servrar",
 							popout_filter_channel:				"Kanal",
 							popout_filter_server:				"Server",
@@ -922,8 +922,8 @@ module.exports = (_ => {
 					case "tr":		// Turkish
 						return {
 							context_pinoption:					"Mesajı yazın",
-							context_unpinoption:				"Notu kaldır",
-							context_updateoption:				"Notu güncelle",
+							context_unpinoption:				"Notu silin",
+							context_updateoption:				"Notu güncelleyin",
 							popout_filter_all:					"Tüm sunucular",
 							popout_filter_channel:				"Kanal",
 							popout_filter_server:				"Sunucu",
@@ -938,8 +938,8 @@ module.exports = (_ => {
 					case "uk":		// Ukrainian
 						return {
 							context_pinoption:					"Запишіть повідомлення",
-							context_unpinoption:				"Вилучити примітку",
-							context_updateoption:				"Примітка до оновлення",
+							context_unpinoption:				"Видаліть нотатку",
+							context_updateoption:				"Оновіть нотатку",
 							popout_filter_all:					"Усі сервери",
 							popout_filter_channel:				"Каналу",
 							popout_filter_server:				"Сервер",
@@ -971,7 +971,7 @@ module.exports = (_ => {
 						return {
 							context_pinoption:					"写下消息",
 							context_unpinoption:				"删除笔记",
-							context_updateoption:				"更新说明",
+							context_updateoption:				"更新笔记",
 							popout_filter_all:					"所有服务器",
 							popout_filter_channel:				"渠道",
 							popout_filter_server:				"服务器",
@@ -987,7 +987,7 @@ module.exports = (_ => {
 						return {
 							context_pinoption:					"寫下消息",
 							context_unpinoption:				"刪除筆記",
-							context_updateoption:				"更新說明",
+							context_updateoption:				"更新筆記",
 							popout_filter_all:					"所有服務器",
 							popout_filter_channel:				"渠道",
 							popout_filter_server:				"服務器",
@@ -1013,7 +1013,7 @@ module.exports = (_ => {
 							popout_sort_notetime:				"Note Date",
 							toast_noteadd:						"Message added to Notebook",
 							toast_noteremove:					"Message removed from Notebook",
-							toast_noteupdate:					"Message updated in the Notebook"
+							toast_noteupdate:					"Updated the Message in the Notebook"
 						};
 				}
 			}
