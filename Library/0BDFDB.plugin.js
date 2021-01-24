@@ -1102,7 +1102,6 @@ module.exports = (_ => {
 					let app = document.querySelector(BDFDB.dotCN.app) || document.body;
 					if (!app) return;
 					let id = BDFDB.NumberUtils.generateId(Toasts);
-					let orientation = ToastOrientations[config.orientation] || ToastOrientations.left;
 					let orientation = ToastOrientations[config.orientation] || "";
 					let toasts = document.querySelector(BDFDB.dotCN.toasts + (orientation ? BDFDB.dotCN[orientation] : ""));
 					if (!toasts) {
