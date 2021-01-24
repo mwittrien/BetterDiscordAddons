@@ -784,7 +784,7 @@ module.exports = (_ => {
 										html: true,
 										timeout: toastTime,
 										avatar: avatar,
-										color: BDFDB.UserUtils.getStatusColor(status.name),
+										color: BDFDB.UserUtils.getStatusColor(status.name, true),
 										onClick: openChannel
 									});
 									let notificationSound = notificationSounds["toast" + status.name] || {};
