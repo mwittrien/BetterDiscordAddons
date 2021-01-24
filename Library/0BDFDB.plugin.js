@@ -1185,7 +1185,7 @@ module.exports = (_ => {
 					if (config.customIcon) {
 						let iconInner = BDFDB.DOMUtils.create(config.customIcon)
 						let icon = BDFDB.DOMUtils.create(`<i></i>`);
-						if (iconInner.tagName == "span" && !iconinner.firstElementChild) icon.style.setProperty("background", `url(${config.customIcon}) center/cover no-repeat`);
+						if (iconInner.tagName == "span" && !iconInner.firstElementChild) icon.style.setProperty("background", `url(${config.customIcon}) center/cover no-repeat`);
 						else icon.appendChild(iconInner);
 						BDFDB.DOMUtils.addClass(icon, BDFDB.disCN.noticeplatformicon);
 						BDFDB.DOMUtils.removeClass(icon, BDFDB.disCN.noticeicon);

@@ -1093,6 +1093,8 @@ img:not([src]), img[src=""], img[src="null"] {
 	}
 }
 [REPLACE_CLASS_toast] {
+	display: flex;
+	align-items: center;
 	border-radius: 5px;
 	box-shadow: var(--elevation-medium);
 	margin-top: 10px;
@@ -1116,10 +1118,6 @@ img:not([src]), img[src=""], img[src="null"] {
 	animation-fill-mode: forwards;
 	opacity: 1;
 	transform: translateY(-10px);
-}
-[REPLACE_CLASS_toasttext] {
-	display: flex;
-	align-items: center;
 }
 [REPLACE_CLASS_toastavatar] {
 	margin-right: 6px;
