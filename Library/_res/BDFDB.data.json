@@ -2700,6 +2700,7 @@
 		"toasticon": ["Toast", "icon"],
 		"toastinfo": ["Toast", "info"],
 		"toasts": ["Toast", "toasts"],
+		"toastsuccess": ["Toast", "success"],
 		"toasttext": ["Toast", "text"],
 		"toastwarning": ["Toast", "warning"],
 		"tooltip": ["Tooltip", "tooltip"],
