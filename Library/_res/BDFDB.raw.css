@@ -1098,11 +1098,12 @@ img:not([src]), img[src=""], img[src="null"] {
 	border-radius: 5px;
 	box-shadow: var(--elevation-medium);
 	margin-top: 10px;
-	padding: 10px;
-	opacity: 1;
+	padding: 6px 10px;
+	min-height: 24px;
 	font-size: 14px;
 	font-weight: 500;
 	user-select: text;
+	opacity: 1;
 	pointer-events: auto;
 	animation: toast-up 300ms ease;
 	transform: translateY(-10px);
@@ -1124,7 +1125,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	justify-content: center;
 	align-items: center;
 	flex: 0 0 auto;
-	width: 24px;
+	width: 18px;
 	height: 24px;
 	margin-right: 6px;
 }
@@ -1132,7 +1133,11 @@ img:not([src]), img[src=""], img[src="null"] {
 	background-position: center;
 	background-size: cover;
 	border-radius: 50%;
+	width: 24px;
 	overflow: hidden;
+}
+[REPLACE_CLASS_toasttext] {
+	min-height: 24px;
 }
 [REPLACE_CLASS_toastdefault] {
 	background-color: var(--background-floating);

@@ -1138,7 +1138,7 @@ module.exports = (_ => {
 						}
 						else BDFDB.DOMUtils.addClass(toast, BDFDB.disCN.toastdefault);
 					}
-					let iconMarkup = config.avatar || config.icon || config.type && ToastIcons[config.type] && InternalComponents.LibraryComponents.SvgIcon.Names[ToastIcons[config.type]]?.icon.replace("%%width", 20).replace("%%height", 20).replace("%%color", "currentColor");
+					let iconMarkup = config.avatar || config.icon || config.type && ToastIcons[config.type] && InternalComponents.LibraryComponents.SvgIcon.Names[ToastIcons[config.type]]?.icon.replace("%%width", 18).replace("%%height", 18).replace("%%color", "currentColor");
 					if (iconMarkup) {
 						let icon = document.createElement("div"), iconInner = BDFDB.DOMUtils.create(iconMarkup);
 						if (iconInner.nodeType == Node.TEXT_NODE) icon.style.setProperty("background", `url(${iconMarkup}) center/cover no-repeat`);
