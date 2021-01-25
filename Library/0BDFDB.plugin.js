@@ -1091,10 +1091,6 @@ module.exports = (_ => {
 					success: "CHECKMARK_CIRCLE",
 					warning: "WARNING"
 				};
-				const ToastOrientations = {
-					left: "toastsleft",
-					right: "toastsright"
-				};
 				var Toasts = [], NotificationBars = [], DesktopNotificationQueue = {queue: [], running: false};
 				BDFDB.NotificationUtils = {};
 				BDFDB.NotificationUtils.toast = function (text, config = {}) {
@@ -1161,7 +1157,7 @@ module.exports = (_ => {
 						toast.close();
 					}, timeout > 0 ? timeout : 600000);
 					toast.close = _ => {
-						clearTimeout(closeTimeout);
+						BDFDB.TimeUtils.clear(closeTimeout);
 						if (document.contains(toast)) {
 							BDFDB.DOMUtils.addClass(toast, BDFDB.disCN.toastclosing);
 							toast.style.setProperty("pointer-events", "none", "important");
@@ -1209,14 +1205,13 @@ module.exports = (_ => {
 						let closeTimeout = BDFDB.TimeUtils.timeout(_ => {
 							notification.close();
 						}, timeout > 0 ? timeout : 600000);
-						let close = notification.close;
-						notification.close = _ => {
-							clearTimeout(closeTimeout);
+						
+						notification.onclose = _ => {
+							BDFDB.TimeUtils.clear(closeTimeout);
 							audio.pause();
-							close();
 							DesktopNotificationQueue.running = false;
 							BDFDB.TimeUtils.timeout(_ => {runQueue();}, 1000);
-						};
+						}
 					};
 					if (!("Notification" in window)) {}
 					else if (Notification.permission === "granted") queue();
@@ -4649,7 +4644,7 @@ module.exports = (_ => {
 					componentWillAppear(e) {if (typeof e == "function") e();}
 					componentWillEnter(e) {if (typeof e == "function") e();}
 					componentWillLeave(e) {if (typeof e == "function") this.timeoutId = setTimeout(e, 300);}
-					componentWillUnmount() {clearTimeout(this.timeoutId)}
+					componentWillUnmount() {BDFDB.TimeUtils.clear(this.timeoutId)}
 					render() {
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Animations.animated.div, {
 							className: this.props.className,
