@@ -1098,8 +1098,7 @@ module.exports = (_ => {
 					let app = document.querySelector(BDFDB.dotCN.app) || document.body;
 					if (!app) return;
 					let id = BDFDB.NumberUtils.generateId(Toasts);
-					let orientation = ToastOrientations[config.orientation] || "";
-					let toasts = document.querySelector(BDFDB.dotCN.toasts + (orientation ? BDFDB.dotCN[orientation] : ""));
+					let toasts = document.querySelector(BDFDB.dotCN.toasts));
 					if (!toasts) {
 						let leftSideRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.channels + " + div"));
 						let rightSideRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCNC.memberswrap + BDFDB.dotCN.peoplesnowplayingcolumn));
@@ -1107,7 +1106,7 @@ module.exports = (_ => {
 						let left = leftSideRects && typeof leftSideRects.left == "number" && leftSideRects.left || 310;
 						let right = rightSideRects && typeof rightSideRects.width == "number" && rightSideRects.width || 240;
 						let bottom = bottomRects && typeof bottomRects.height == "number" && (bottomRects.height + 10) || 85;
-						toasts = BDFDB.DOMUtils.create(`<div class="${BDFDB.DOMUtils.formatClassName(BDFDB.disCN.toasts, orientation && BDFDB.disCN[orientation])}" style="left: ${left}px; right: ${right}px; bottom: ${bottom}px;"></div>`);
+						toasts = BDFDB.DOMUtils.create(`<div class="${BDFDB.DOMUtils.formatClassName(BDFDB.disCN.toasts)}" style="left: ${left}px; right: ${right}px; bottom: ${bottom}px;"></div>`);
 						app.appendChild(toasts);
 					}
 					let toast = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.toast}"><div class="${BDFDB.disCN.toasttext}"></div></div>`);
