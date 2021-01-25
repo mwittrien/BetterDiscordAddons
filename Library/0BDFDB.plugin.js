@@ -4086,7 +4086,7 @@ module.exports = (_ => {
 					return parseInt(document.firstElementChild.style.fontSize.replace("%", ""));
 				};
 				BDFDB.DiscordUtils.shake = function () {
-					BDFDB.ReactUtils.getInstance(document.querySelector(BDFDB.dotCN.appold)).return.stateNode.shake();
+					BDFDB.ReactUtils.getInstance(document.querySelector(BDFDB.dotCN.appinner)).return.stateNode.shake();
 				};
 
 				BDFDB.WindowUtils = {};
