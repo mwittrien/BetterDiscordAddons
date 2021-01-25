@@ -1110,6 +1110,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	font-weight: 500;
 	user-select: text;
 	opacity: 1;
+	cursor: pointer;
 	pointer-events: auto;
 	animation: toast-up 300ms ease;
 	transform: translateY(-10px);
