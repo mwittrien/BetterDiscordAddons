@@ -2697,6 +2697,7 @@
 		"toastavatar": ["Toast", "avatar"],
 		"toastbar": ["Toast", "bar"],
 		"toastbarinner": ["Toast", "barInner"],
+		"toastbrand": ["Toast", "brand"],
 		"toastclosing": ["Toast", "closing"],
 		"toastcustom": ["Toast", "custom"],
 		"toastdanger": ["Toast", "danger"],
