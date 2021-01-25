@@ -776,7 +776,13 @@ module.exports = (_ => {
 									let desktopString = string.replace(/\$user/g, `${name}${settings.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/\$status/g, statusName);
 									if (status.activity) desktopString = desktopString.replace(/\$song|\$game/g, status.activity.name || status.activity.details || "").replace(/\$artist|\$custom/g, [status.activity.emoji && status.activity.emoji.name, status.activity.state].filter(n => n).join(" ") || "");
 									let notificationSound = notificationSounds["desktop" + status.name] || {};
-									BDFDB.NotificationUtils.desktop(desktopString, {icon: avatar, timeout: desktopTime, click: openChannel, silent: notificationSound.mute, sound: notificationSound.song});
+									BDFDB.NotificationUtils.desktop(desktopString, {
+										icon: avatar,
+										timeout: desktopTime,
+										silent: notificationSound.mute,
+										sound: notificationSound.song,
+										onClick: openChannel
+									});
 								}
 								else if (!document.querySelector(`.friendnotifications-${id}-toast`)) {
 									BDFDB.NotificationUtils.toast(toastString, {

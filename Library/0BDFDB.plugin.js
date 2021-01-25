@@ -489,7 +489,7 @@ module.exports = (_ => {
 		let startMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		BDFDB.LogUtils.log(startMsg, plugin.name);
 		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${plugin.name} ${startMsg}`, {
-			noPointer: true
+			disableInteractions: true
 		});
 		
 		if (plugin.css) BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
@@ -505,7 +505,7 @@ module.exports = (_ => {
 		let stopMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", "v" + plugin.version);
 		BDFDB.LogUtils.log(stopMsg, plugin.name);
 		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${plugin.name} ${stopMsg}`, {
-			noPointer: true
+			disableInteractions: true
 		});
 
 		let url = plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
@@ -573,7 +573,7 @@ module.exports = (_ => {
 				if (pluginName == newName && BDFDB.NumberUtils.getVersionDifference(newVersion[0], window.PluginUpdates.plugins[url].version) > 0.2) {
 					BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_force_updated", pluginName), {
 						type: "warning",
-						noPointer: true
+						disableInteractions: true
 					});
 					BDFDB.PluginUtils.downloadUpdate(pluginName, url);
 					return callback(2);
@@ -702,7 +702,7 @@ module.exports = (_ => {
 				if (updateNotice) BDFDB.PluginUtils.removeUpdateNotice(pluginName, updateNotice);
 				BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_update_failed", pluginName), {
 					type: "danger",
-					noPointer: true
+					disableInteractions: true
 				});
 			}
 			else {
@@ -723,7 +723,7 @@ module.exports = (_ => {
 						BDFDB.TimeUtils.timeout(_ => {if (wasEnabled && !BDFDB.BDUtils.isPluginEnabled(newName)) BDFDB.BDUtils.enablePlugin(newName);}, 3000);
 					}
 					BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_updated", pluginName, "v" + oldVersion, newName, "v" + newVersion), {
-						noPointer: true
+						disableInteractions: true
 					});
 					let updateNotice = document.querySelector("#pluginNotice");
 					if (updateNotice) {
@@ -1161,7 +1161,7 @@ module.exports = (_ => {
 							}, 3000);
 						}
 					};
-					if (config.noPointer && typeof config.onClick != "function") toast.style.setProperty("pointer-events", "none", "important");
+					if (config.disableInteractions && typeof config.onClick != "function") toast.style.setProperty("pointer-events", "none", "important");
 					else toast.addEventListener("click", _ => {
 						if (typeof config.onClick == "function") config.onClick();
 						toast.close();
@@ -1173,9 +1173,9 @@ module.exports = (_ => {
 				BDFDB.NotificationUtils.desktop = function (parsedContent, parsedOptions = {}) {
 					const queue = _ => {
 						DesktopNotificationQueue.queue.push({parsedContent, parsedOptions});
-						runqueue();
+						runQueue();
 					};
-					const runqueue = _ => {
+					const runQueue = _ => {
 						if (!DesktopNotificationQueue.running) {
 							let notification = DesktopNotificationQueue.queue.shift();
 							if (notification) notify(notification.parsedContent, notification.parsedOptions);
@@ -1187,11 +1187,13 @@ module.exports = (_ => {
 						config.silent = config.silent || config.sound ? true : false;
 						let notification = new Notification(content, config);
 						let audio = new Audio();
-						let timeout = BDFDB.TimeUtils.timeout(_ => {close();}, config.timeout ? config.timeout : 3000);
-						if (typeof config.click == "function") notification.onclick = _ => {
-							BDFDB.TimeUtils.clear(timeout);
+						let closeTimeout = BDFDB.TimeUtils.timeout(_ => {
 							close();
-							config.click();
+						}, config.timeout ? config.timeout : 3000);
+						notification.onclick = _ => {
+							BDFDB.TimeUtils.clear(closeTimeout);
+							close();
+							if (typeof config.onClick == "function") config.onClick();
 						};
 						if (!muted && config.sound) {
 							audio.src = config.sound;
@@ -1201,7 +1203,7 @@ module.exports = (_ => {
 							audio.pause();
 							notification.close();
 							DesktopNotificationQueue.running = false;
-							BDFDB.TimeUtils.timeout(_ => {runqueue();}, 1000);
+							BDFDB.TimeUtils.timeout(_ => {runQueue();}, 1000);
 						};
 					};
 					if (!("Notification" in window)) {}

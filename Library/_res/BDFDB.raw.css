@@ -1092,6 +1092,12 @@ img:not([src]), img[src=""], img[src="null"] {
 		opacity: 0;
 	}
 }
+@keyframes toast-down {
+	to {
+		transform: translateY(0px);
+		opacity: 0;
+	}
+}
 [REPLACE_CLASS_toast] {
 	display: flex;
 	align-items: center;
@@ -1107,12 +1113,6 @@ img:not([src]), img[src=""], img[src="null"] {
 	pointer-events: auto;
 	animation: toast-up 300ms ease;
 	transform: translateY(-10px);
-}
-@keyframes toast-down {
-	to {
-		transform: translateY(0px);
-		opacity: 0;
-	}
 }
 [REPLACE_CLASS_toastclosing] {
 	animation: toast-down 200ms ease;
