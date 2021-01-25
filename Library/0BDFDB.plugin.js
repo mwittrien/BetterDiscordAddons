@@ -1118,8 +1118,11 @@ module.exports = (_ => {
 					if (config.textClassName) BDFDB.DOMUtils.addClass(toastText, config.textClassName);
 					if (config.css) BDFDB.DOMUtils.appendLocalStyle("BDFDBcustomToast" + id, config.css);
 					if (config.style) toast.style = config.style;
-					if (config.html) toastText.innerHTML = text;
-					else toastText.innerHTML = BDFDB.StringUtils.htmlEscape(text);
+					(toast.setText = newText => {
+						if (!newText) return;
+						if (config.html) toastText.innerHTML = text;
+						else toastText.innerHTML = BDFDB.StringUtils.htmlEscape(text);
+					})(text);
 						
 					let type = null;
 					if (config.type && (type = BDFDB.disCN["toast" + config.type]) != null) BDFDB.DOMUtils.addClass(toast, type);
@@ -1456,7 +1459,7 @@ module.exports = (_ => {
 						}
 						else {
 							if (fontColorIsGradient) tooltipContent.innerHTML = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(config.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(newText)}</span>`;
-							else if (config.html === true) tooltipContent.innerHTML = newText;
+							else if (config.html) tooltipContent.innerHTML = newText;
 							else tooltipContent.innerText = newText;
 						}
 					})(text);
