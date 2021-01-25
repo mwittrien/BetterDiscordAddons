@@ -1146,9 +1146,22 @@ module.exports = (_ => {
 						BDFDB.DOMUtils.addClass(icon, BDFDB.disCN.toasticon, config.iconClassName, config.avatar && BDFDB.disCN.toastavatar);
 						toast.insertBefore(icon, toastText);
 					}
-						
+				
 					toasts.appendChild(toast);
+					
+					let disableInteractions = config.disableInteractions && typeof config.onClick != "function";
+					if (disableInteractions) toast.style.setProperty("pointer-events", "none", "important");
+					else toast.addEventListener("click", _ => {
+						if (typeof config.onClick == "function") config.onClick();
+						toast.close();
+					});
+					
+					let timeout = typeof config.timeout == "number" && !disableInteractions ? config.timeout : 3000;
+					let closeTimeout = BDFDB.TimeUtils.timeout(_ => {
+						toast.close();
+					}, timeout > 0 ? timeout : 600000);
 					toast.close = _ => {
+						clearTimeout(closeTimeout);
 						if (document.contains(toast)) {
 							BDFDB.DOMUtils.addClass(toast, BDFDB.disCN.toastclosing);
 							toast.style.setProperty("pointer-events", "none", "important");
@@ -1161,13 +1174,6 @@ module.exports = (_ => {
 							}, 3000);
 						}
 					};
-					if (config.disableInteractions && typeof config.onClick != "function") toast.style.setProperty("pointer-events", "none", "important");
-					else toast.addEventListener("click", _ => {
-						if (typeof config.onClick == "function") config.onClick();
-						toast.close();
-					});
-					let timeout = typeof config.timeout == "number" ? config.timeout : 3000;
-					BDFDB.TimeUtils.timeout(_ => {toast.close();}, timeout > 0 ? timeout : 600000);
 					return toast;
 				};
 				BDFDB.NotificationUtils.desktop = function (parsedContent, parsedOptions = {}) {
@@ -1185,23 +1191,29 @@ module.exports = (_ => {
 						DesktopNotificationQueue.running = true;
 						let muted = config.silent;
 						config.silent = config.silent || config.sound ? true : false;
-						let notification = new Notification(content, config);
 						let audio = new Audio();
-						let closeTimeout = BDFDB.TimeUtils.timeout(_ => {
-							close();
-						}, config.timeout ? config.timeout : 3000);
-						notification.onclick = _ => {
-							BDFDB.TimeUtils.clear(closeTimeout);
-							close();
-							if (typeof config.onClick == "function") config.onClick();
-						};
 						if (!muted && config.sound) {
 							audio.src = config.sound;
 							audio.play();
 						}
-						const close = _ => {
-							audio.pause();
+						let notification = new Notification(content, config);
+						
+						let disableInteractions = config.disableInteractions && typeof config.onClick != "function";
+						if (disableInteractions) notification.onclick = _ => {};
+						else notification.onclick = _ => {
+							if (typeof config.onClick == "function") config.onClick();
 							notification.close();
+						};
+						
+						let timeout = typeof config.timeout == "number" && !disableInteractions ? config.timeout : 3000;
+						let closeTimeout = BDFDB.TimeUtils.timeout(_ => {
+							notification.close();
+						}, timeout > 0 ? timeout : 600000);
+						let close = notification.close;
+						notification.close = _ => {
+							clearTimeout(closeTimeout);
+							audio.pause();
+							close();
 							DesktopNotificationQueue.running = false;
 							BDFDB.TimeUtils.timeout(_ => {runQueue();}, 1000);
 						};
