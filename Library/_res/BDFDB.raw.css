@@ -1139,6 +1139,7 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_toastinner] {
 	display: flex;
 	align-items: center;
+	white-space: pre;
 }
 [REPLACE_CLASS_toastdefault] {
 	background-color: var(--background-floating);
