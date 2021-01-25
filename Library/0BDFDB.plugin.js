@@ -1098,7 +1098,7 @@ module.exports = (_ => {
 					let app = document.querySelector(BDFDB.dotCN.app) || document.body;
 					if (!app) return;
 					let id = BDFDB.NumberUtils.generateId(Toasts);
-					let toasts = document.querySelector(BDFDB.dotCN.toasts));
+					let toasts = document.querySelector(BDFDB.dotCN.toasts);
 					if (!toasts) {
 						let leftSideRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.channels + " + div"));
 						let rightSideRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCNC.memberswrap + BDFDB.dotCN.peoplesnowplayingcolumn));
