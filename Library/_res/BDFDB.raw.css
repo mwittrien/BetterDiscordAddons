@@ -1109,6 +1109,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	padding: 6px 10px;
 	overflow: hidden;
 	cursor: pointer;
+	pointer-events: auto;
 	min-height: 24px;
 	height: unset;
 	opacity: 1;
