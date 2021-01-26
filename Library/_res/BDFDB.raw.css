@@ -1108,13 +1108,16 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-top: 10px;
 	padding: 6px 10px;
 	overflow: hidden;
-	cursor: pointer;
 	pointer-events: auto;
 	min-height: 24px;
 	height: unset;
 	opacity: 1;
 	transform: scale(1);
 	transition: all 300ms ease;
+}
+[REPLACE_CLASS_toastcloseable] {
+	cursor: pointer;
+	pointer-events: auto;
 }
 [REPLACE_CLASS_toasts][REPLACE_CLASS_toastsleft] [REPLACE_CLASS_toast] {
 	border-radius: 0 5px 5px 0;
