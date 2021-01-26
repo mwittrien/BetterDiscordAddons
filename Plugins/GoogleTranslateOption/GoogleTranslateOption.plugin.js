@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.1.3",
+			"version": "2.1.4",
 			"description": "Add a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send"
+		},
+		"changeLog": {
+			"improved": {
+				"New Toast API": ""
+			}
 		}
 	};
 	
@@ -641,13 +646,10 @@ module.exports = (_ => {
 			}
 
 			translateText (text, type, callback) {
-				let toast = null, finishTranslation = translation => {
+				let toast = null, toastInterval, finishTranslation = translation => {
 					isTranslating = false;
 					if (translation) translation = this.addExceptions(translation, excepts);
-					if (toast) {
-						BDFDB.TimeUtils.clear(toast.interval);
-						toast.close();
-					}
+					if (toast) toast.close();
 					callback(translation == text ? "" : translation, input, output);
 				};
 				let [newText, excepts, translate] = this.removeExceptions(text.trim(), type);
@@ -655,13 +657,25 @@ module.exports = (_ => {
 				let output = Object.assign({}, languages[this.getLanguageChoice("output", type)]);
 				if (translate && input.id != output.id) {
 					let timer = 0;
-					toast = BDFDB.NotificationUtils.toast("Translating. Please wait", {timeout: 0});
-					toast.interval = BDFDB.TimeUtils.interval(_ => {
+					let loadingString = `${this.labels.toast_translating} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`;
+					let currentLoadingString = loadingString;
+					toast = BDFDB.NotificationUtils.toast(loadingString, {
+						timeout: 0,
+						orientation: "center"
+					});
+					toastInterval = BDFDB.TimeUtils.interval(_ => {
 						if (timer++ > 40) {
 							finishTranslation("");
-							BDFDB.NotificationUtils.toast("Failed to translate text. Try another Translate Engine.", {type: "danger"});
+							BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed} - ${this.labels.toast_translating_tryanother}`, {
+								type: "danger",
+								orientation: "center",
+								onClose: _ => {BDFDB.TimeUtils.clear(toastInterval);}
+							});
 						}
-						else toast.textContent = toast.textContent.indexOf(".....") > -1 ? "Translating. Please wait" : toast.textContent + ".";
+						else {
+							currentLoadingString = currentLoadingString.endsWith(".....") ? loadingString : currentLoadingString + ".";
+							toast.update(currentLoadingString);
+						}
 					}, 500);
 					let specialCase = this.checkForSpecialCase(newText, input);
 					if (specialCase) {
@@ -727,8 +741,14 @@ module.exports = (_ => {
 						catch (err) {callback("");}
 					}
 					else {
-						if (response.statusCode == 429) BDFDB_Global.NotificationUtils.toast("Failed to translate text. Request Limit per Hour is reached. Choose another Translate Engine.", {type: "danger"});
-						else BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server might be down. Try another Translate Engine.", {type: "danger"});
+						if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Request Limit per Hour is reached.`, {
+							type: "danger",
+							orientation: "center"
+						});
+						else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server might be down.`, {
+							type: "danger",
+							orientation: "center"
+						});
 						callback("");
 					}
 				});
@@ -764,7 +784,10 @@ module.exports = (_ => {
 							catch (err) {callback("");}
 						}
 						else {
-							BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or API-key outdated. Try another Translate Engine.", {type: "danger"});
+							BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server is down or API-key outdated.`, {
+								type: "danger",
+								orientation: "center"
+							});
 							callback("");
 						}
 					});
@@ -800,11 +823,17 @@ module.exports = (_ => {
 						else callback("");
 					}
 					if (result && result.indexOf('code="408"') > -1) {
-						BDFDB.NotificationUtils.toast("Failed to translate text. Monthly rate limit reached. Choose another Translate Engine", {type: "danger"});
+						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Monthly rate limit reached.`, {
+							type: "danger",
+							orientation: "center"
+						});
 						callback("");
 					}
 					else {
-						BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or API-key outdated. Try another Translate Engine.", {type: "danger"});
+						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server is down or API-key outdated.`, {
+							type: "danger",
+							orientation: "center"
+						});
 						callback("");
 					}
 				});
@@ -832,7 +861,10 @@ module.exports = (_ => {
 						catch (err) {callback("");}
 					}
 					else {
-						BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down, daily limited reached or API-key outdated. Try another Translate Engine.", {type: "danger"});
+						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server is down, daily limited reached or API-key outdated.`, {
+							type: "danger",
+							orientation: "center"
+						});
 						callback("");
 					}
 				});
@@ -891,7 +923,10 @@ module.exports = (_ => {
 						}
 					}
 				}
-				else BDFDB.NotificationUtils.toast("Invalid binary format. Only use 0s and 1s.", {type: "danger"});
+				else BDFDB.NotificationUtils.toast("Invalid binary format. Only use 0s and 1s.", {
+					type: "danger",
+					orientation: "center"
+				});
 				return string;
 			}
 
@@ -970,6 +1005,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Превод на съобщението",
 							popout_translateoption:				"Превод",
 							popout_untranslateoption:			"Непревод",
+							toast_translating:					"Превод",
+							toast_translating_failed:			"Преводът не бе успешен",
+							toast_translating_tryanother:		"Опитайте друг преводач",
 							translated_watermark:				"преведено"
 						};
 					case "da":		// Danish
@@ -979,6 +1017,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Ikke-oversat besked",
 							popout_translateoption:				"Oversætte",
 							popout_untranslateoption:			"Untranslate",
+							toast_translating:					"Oversætter",
+							toast_translating_failed:			"Kunne ikke oversætte",
+							toast_translating_tryanother:		"Prøv en anden oversætter",
 							translated_watermark:				"oversat"
 						};
 					case "de":		// German
@@ -988,6 +1029,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Nachricht unübersetzen",
 							popout_translateoption:				"Übersetzen",
 							popout_untranslateoption:			"Unübersetzen",
+							toast_translating:					"Übersetzen",
+							toast_translating_failed:			"Übersetzung fehlgeschlagen",
+							toast_translating_tryanother:		"Versuch einen anderen Übersetzer",
 							translated_watermark:				"übersetzt"
 						};
 					case "el":		// Greek
@@ -997,6 +1041,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Μη μετάφραση μηνύματος",
 							popout_translateoption:				"Μεταφράζω",
 							popout_untranslateoption:			"Μη μετάφραση",
+							toast_translating:					"Μετάφραση",
+							toast_translating_failed:			"Αποτυχία μετάφρασης",
+							toast_translating_tryanother:		"Δοκιμάστε έναν άλλο Μεταφραστή",
 							translated_watermark:				"μεταφρασμένο"
 						};
 					case "es":		// Spanish
@@ -1006,6 +1053,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Mensaje sin traducir",
 							popout_translateoption:				"Traducir",
 							popout_untranslateoption:			"No traducir",
+							toast_translating:					"Traductorio",
+							toast_translating_failed:			"No se pudo traducir",
+							toast_translating_tryanother:		"Prueba con otro traductor",
 							translated_watermark:				"traducido"
 						};
 					case "fi":		// Finnish
@@ -1015,6 +1065,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Käännä viesti",
 							popout_translateoption:				"Kääntää",
 							popout_untranslateoption:			"Käännä",
+							toast_translating:					"Kääntäminen",
+							toast_translating_failed:			"Käännös epäonnistui",
+							toast_translating_tryanother:		"Kokeile toista kääntäjää",
 							translated_watermark:				"käännetty"
 						};
 					case "fr":		// French
@@ -1024,6 +1077,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Message non traduit",
 							popout_translateoption:				"Traduire",
 							popout_untranslateoption:			"Non traduit",
+							toast_translating:					"Traduction en cours",
+							toast_translating_failed:			"Échec de la traduction",
+							toast_translating_tryanother:		"Essayez un autre traducteur",
 							translated_watermark:				"traduit"
 						};
 					case "hr":		// Croatian
@@ -1033,6 +1089,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Prevedi poruku",
 							popout_translateoption:				"Prevedi",
 							popout_untranslateoption:			"Neprevedi",
+							toast_translating:					"Prevođenje",
+							toast_translating_failed:			"Prijevod nije uspio",
+							toast_translating_tryanother:		"Pokušajte s drugim prevoditeljem",
 							translated_watermark:				"prevedeno"
 						};
 					case "hu":		// Hungarian
@@ -1042,6 +1101,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Az üzenet lefordítása",
 							popout_translateoption:				"fordít",
 							popout_untranslateoption:			"Fordítás le",
+							toast_translating:					"Fordítás",
+							toast_translating_failed:			"Nem sikerült lefordítani",
+							toast_translating_tryanother:		"Próbálkozzon másik fordítóval",
 							translated_watermark:				"lefordított"
 						};
 					case "it":		// Italian
@@ -1051,6 +1113,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Annulla traduzione messaggio",
 							popout_translateoption:				"Tradurre",
 							popout_untranslateoption:			"Non tradurre",
+							toast_translating:					"Tradurre",
+							toast_translating_failed:			"Impossibile tradurre",
+							toast_translating_tryanother:		"Prova un altro traduttore",
 							translated_watermark:				"tradotto"
 						};
 					case "ja":		// Japanese
@@ -1060,6 +1125,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"メッセージの翻訳解除",
 							popout_translateoption:				"翻訳する",
 							popout_untranslateoption:			"翻訳しない",
+							toast_translating:					"翻訳",
+							toast_translating_failed:			"翻訳に失敗しました",
+							toast_translating_tryanother:		"別の翻訳者を試す",
 							translated_watermark:				"翻訳済み"
 						};
 					case "ko":		// Korean
@@ -1069,6 +1137,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"메시지 번역 취소",
 							popout_translateoption:				"옮기다",
 							popout_untranslateoption:			"번역 취소",
+							toast_translating:					"번역 중",
+							toast_translating_failed:			"번역하지 못했습니다.",
+							toast_translating_tryanother:		"다른 번역기 시도",
 							translated_watermark:				"번역"
 						};
 					case "lt":		// Lithuanian
@@ -1078,6 +1149,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Išversti pranešimą",
 							popout_translateoption:				"Išversti",
 							popout_untranslateoption:			"Neišversti",
+							toast_translating:					"Vertimas",
+							toast_translating_failed:			"Nepavyko išversti",
+							toast_translating_tryanother:		"Išbandykite kitą vertėją",
 							translated_watermark:				"išverstas"
 						};
 					case "nl":		// Dutch
@@ -1087,6 +1161,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Bericht onvertalen",
 							popout_translateoption:				"Vertalen",
 							popout_untranslateoption:			"Onvertalen",
+							toast_translating:					"Vertalen",
+							toast_translating_failed:			"Kan niet vertalen",
+							toast_translating_tryanother:		"Probeer een andere vertaler",
 							translated_watermark:				"vertaald"
 						};
 					case "no":		// Norwegian
@@ -1096,6 +1173,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Ikke oversett melding",
 							popout_translateoption:				"Oversette",
 							popout_untranslateoption:			"Ikke oversett",
+							toast_translating:					"Oversetter",
+							toast_translating_failed:			"Kunne ikke oversette",
+							toast_translating_tryanother:		"Prøv en annen oversetter",
 							translated_watermark:				"oversatt"
 						};
 					case "pl":		// Polish
@@ -1105,6 +1185,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Nieprzetłumacz wiadomość",
 							popout_translateoption:				"Tłumaczyć",
 							popout_untranslateoption:			"Nie przetłumacz",
+							toast_translating:					"Tłumaczenie",
+							toast_translating_failed:			"Nie udało się przetłumaczyć",
+							toast_translating_tryanother:		"Wypróbuj innego tłumacza",
 							translated_watermark:				"przetłumaczony"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
@@ -1114,6 +1197,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Mensagem não traduzida",
 							popout_translateoption:				"Traduzir",
 							popout_untranslateoption:			"Não traduzido",
+							toast_translating:					"Traduzindo",
+							toast_translating_failed:			"Falha ao traduzir",
+							toast_translating_tryanother:		"Tente outro tradutor",
 							translated_watermark:				"traduzido"
 						};
 					case "ro":		// Romanian
@@ -1123,6 +1209,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Untraduceți mesajul",
 							popout_translateoption:				"Traduceți",
 							popout_untranslateoption:			"Netradus",
+							toast_translating:					"Traducere",
+							toast_translating_failed:			"Nu s-a putut traduce",
+							toast_translating_tryanother:		"Încercați un alt traducător",
 							translated_watermark:				"tradus"
 						};
 					case "ru":		// Russian
@@ -1132,6 +1221,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Непереведенное сообщение",
 							popout_translateoption:				"Переведите",
 							popout_untranslateoption:			"Неперевести",
+							toast_translating:					"Идет перевод",
+							toast_translating_failed:			"Не удалось перевести",
+							toast_translating_tryanother:		"Попробуйте другой переводчик",
 							translated_watermark:				"переведено"
 						};
 					case "sv":		// Swedish
@@ -1141,6 +1233,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Untranslate meddelande",
 							popout_translateoption:				"Översätt",
 							popout_untranslateoption:			"Untranslate",
+							toast_translating:					"Översätter",
+							toast_translating_failed:			"Det gick inte att översätta",
+							toast_translating_tryanother:		"Prova en annan översättare",
 							translated_watermark:				"översatt"
 						};
 					case "th":		// Thai
@@ -1150,6 +1245,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"ยกเลิกการแปลข้อความ",
 							popout_translateoption:				"แปลภาษา",
 							popout_untranslateoption:			"ไม่แปล",
+							toast_translating:					"กำลังแปล",
+							toast_translating_failed:			"แปลไม่สำเร็จ",
+							toast_translating_tryanother:		"ลองใช้นักแปลคนอื่น",
 							translated_watermark:				"แปล"
 						};
 					case "tr":		// Turkish
@@ -1159,6 +1257,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Çeviriyi Kaldır Mesajı",
 							popout_translateoption:				"Çevirmek",
 							popout_untranslateoption:			"Çevirmeyi kaldır",
+							toast_translating:					"Çeviri",
+							toast_translating_failed:			"Tercüme edilemedi",
+							toast_translating_tryanother:		"Başka bir Çevirmen deneyin",
 							translated_watermark:				"tercüme"
 						};
 					case "uk":		// Ukrainian
@@ -1168,6 +1269,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Неперекладене повідомлення",
 							popout_translateoption:				"Перекласти",
 							popout_untranslateoption:			"Неперекласти",
+							toast_translating:					"Переклад",
+							toast_translating_failed:			"Не вдалося перекласти",
+							toast_translating_tryanother:		"Спробуйте іншого перекладача",
 							translated_watermark:				"переклав"
 						};
 					case "vi":		// Vietnamese
@@ -1177,6 +1281,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"Thư chưa dịch",
 							popout_translateoption:				"Phiên dịch",
 							popout_untranslateoption:			"Chưa dịch",
+							toast_translating:					"Phiên dịch",
+							toast_translating_failed:			"Không dịch được",
+							toast_translating_tryanother:		"Thử một Trình dịch khác",
 							translated_watermark:				"đã dịch"
 						};
 					case "zh-CN":	// Chinese (China)
@@ -1186,6 +1293,9 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"取消翻译消息",
 							popout_translateoption:				"翻译",
 							popout_untranslateoption:			"取消翻译",
+							toast_translating:					"正在翻译",
+							toast_translating_failed:			"翻译失败",
+							toast_translating_tryanother:		"尝试其他翻译器",
 							translated_watermark:				"已翻译"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
@@ -1195,15 +1305,21 @@ module.exports = (_ => {
 							context_messageuntranslateoption:	"取消翻譯訊息",
 							popout_translateoption:				"翻譯",
 							popout_untranslateoption:			"取消翻譯",
+							toast_translating:					"正在翻譯",
+							toast_translating_failed:			"翻譯失敗",
+							toast_translating_tryanother:		"嘗試其他翻譯器",
 							translated_watermark:				"已翻譯"
 						};
 					default:		// English
 						return {
-							context_googletranslateoption:		"Search translation",
+							context_googletranslateoption:		"Search Translation",
 							context_messagetranslateoption:		"Translate Message",
 							context_messageuntranslateoption:	"Untranslate Message",
 							popout_translateoption:				"Translate",
 							popout_untranslateoption:			"Untranslate",
+							toast_translating:					"Translating",
+							toast_translating_failed:			"Failed to translate",
+							toast_translating_tryanother:		"Try another Translator",
 							translated_watermark:				"translated"
 						};
 				}

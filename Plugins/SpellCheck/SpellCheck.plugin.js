@@ -16,6 +16,11 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "1.5.4",
 			"description": "Add a Spellcheck to all Textareas. Select a Word and Right Click it to add it to your Dictionary"
+		},
+		"changeLog": {
+			"improved": {
+				"New Toast API": ""
+			}
 		}
 	};
 	
@@ -332,9 +337,14 @@ module.exports = (_ => {
 				if (languages[lang]) {
 					let ownDictionary = BDFDB.DataUtils.load(this, "owndics", lang) || [];
 					let loadingString = `${this.labels.toast_dictionary.replace("{{var0}}", this.getLanguageName(languages[lang]))} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`;
-					languageToasts[key] = BDFDB.NotificationUtils.toast(loadingString, {timeout: 0});
+					let currentLoadingString = loadingString;
+					languageToasts[key] = BDFDB.NotificationUtils.toast(loadingString, {
+						timeout: 0,
+						orientation: "center"
+					});
 					languageToasts[key].interval = BDFDB.TimeUtils.interval(_ => {
-						languageToasts[key].textContent = languageToasts[key].textContent.endsWith(".....") ? loadingString : languageToasts[key].textContent + ".";
+						currentLoadingString = currentLoadingString.endsWith(".....") ? loadingString : currentLoadingString + ".";
+						languageToasts[key].update(currentLoadingString);
 					}, 500);
 					languageToasts[key].lang = lang
 					
@@ -344,7 +354,10 @@ module.exports = (_ => {
 					let parse = (error, response, body, download) => {
 						this.killLanguageToast(key);
 						if (error || (response && body.toLowerCase().indexOf("<!doctype html>") > -1)) {
-							BDFDB.NotificationUtils.toast(this.labels.toast_dictionary_fail.replace("{{var0}}", this.getLanguageName(languages[lang])), {type: "danger"});
+							BDFDB.NotificationUtils.toast(this.labels.toast_dictionary_fail.replace("{{var0}}", this.getLanguageName(languages[lang])), {
+								type: "danger",
+								orientation: "center"
+							});
 						}
 						else if (response && languageToasts[key].lang == lang) {
 							if (download) {
@@ -353,7 +366,10 @@ module.exports = (_ => {
 							}
 							langDictionaries[key] = body.toLowerCase().replace(/\r/g, "").split("\n");
 							dictionaries[key] = this.formatDictionary(langDictionaries[key].concat(ownDictionary));
-							BDFDB.NotificationUtils.toast(this.labels.toast_dictionary_success.replace("{{var0}}", this.getLanguageName(languages[lang])), {type: "success"});
+							BDFDB.NotificationUtils.toast(this.labels.toast_dictionary_success.replace("{{var0}}", this.getLanguageName(languages[lang])), {
+								type: "success",
+								orientation: "center"
+							});
 						}
 					};
 					

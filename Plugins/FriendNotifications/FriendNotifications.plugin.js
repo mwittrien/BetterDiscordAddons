@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.6.0",
+			"version": "1.6.1",
 			"description": "Get a notification when a Friend or a User, you choose to observe, changes their status"
 		},
 		"changeLog": {
 			"improved": {
-				"Activities": "No longer shows status changes for users that still got the same activity"
+				"New Toast API": ""
 			}
 		}
 	};
@@ -785,20 +785,21 @@ module.exports = (_ => {
 									});
 								}
 								else if (!document.querySelector(`.friendnotifications-${id}-toast`)) {
-									BDFDB.NotificationUtils.toast(toastString, {
+									BDFDB.NotificationUtils.toast(BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(toastString)), {
 										className: `friendnotifications-${status.name}-toast friendnotifications-${id}-toast`,
-										html: true,
 										timeout: toastTime,
 										avatar: avatar,
 										color: BDFDB.UserUtils.getStatusColor(status.name, true),
-										onClick: openChannel
+										onClick: openChannel,
+										onShow: _ => {
+											let notificationSound = notificationSounds["toast" + status.name] || {};
+											if (!notificationSound.mute && notificationSound.song) {
+												let audio = new Audio();
+												audio.src = notificationSound.song;
+												audio.play();
+											}
+										}
 									});
-									let notificationSound = notificationSounds["toast" + status.name] || {};
-									if (!notificationSound.mute && notificationSound.song) {
-										let audio = new Audio();
-										audio.src = notificationSound.song;
-										audio.play();
-									}
 								}
 							}
 						}
