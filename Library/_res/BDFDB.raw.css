@@ -1089,6 +1089,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	justify-content: flex-end;
 	flex-direction: column;
 	pointer-events: none;
+	z-index: 4001;
 }
 [REPLACE_CLASS_toasts][REPLACE_CLASS_toastsleft] {
 	align-items: flex-start;
@@ -1128,10 +1129,12 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 [REPLACE_CLASS_toastopening],
 [REPLACE_CLASS_toastclosing] {
-	min-height: 0;
-	height: 0;
 	opacity: 0;
 	transform: scale(0);
+}
+[REPLACE_CLASS_toastclosing] {
+	min-height: 0;
+	height: 0;
 }
 [REPLACE_CLASS_toastinner] {
 	display: flex;
