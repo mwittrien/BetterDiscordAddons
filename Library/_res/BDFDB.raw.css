@@ -1106,7 +1106,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	align-items: center;
 	box-shadow: var(--elevation-medium);
 	margin-top: 10px;
-	padding: 6px 10px;
+	padding: 6px 10px 8px;
 	overflow: hidden;
 	pointer-events: auto;
 	min-height: 24px;
