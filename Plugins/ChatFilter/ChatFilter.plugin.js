@@ -77,8 +77,8 @@ module.exports = (_ => {
 						regex: 					{value: false,				noBlocked: false,		description: "Handle the Word Value as a RegExp String"}
 					},
 					replaces: {
-						blocked: 				{value: "~~BLOCKED~~",		description: "Default Replacement Word for blocked Messages: "},
-						censored:				{value: "$!%&%!&",			description: "Default Replacement Word for censored Messages: "}
+						blocked: 				{value: "~~BLOCKED~~",		description: "Default Replacement Value for blocked Messages: "},
+						censored:				{value: "$!%&%!&",			description: "Default Replacement Value for censored Messages: "}
 					},
 					settings: {
 						addContextMenu:			{value: true,				description: "Add a Context Menu Entry to faster add new blocked/censored Words"},
@@ -147,7 +147,7 @@ module.exports = (_ => {
 						placeholder: this.defaults.replaces[rType].value
 					})))
 				}));
-				let values = {wordvalue: "", replacevalue: "", choice: "blocked"};
+				let values = {wordValue: "", replaceValue: "", choice: "blocked"};
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 					title: `Add new blocked/censored word`,
 					collapseStates: collapseStates,
@@ -171,9 +171,9 @@ module.exports = (_ => {
 					collapseStates: collapseStates,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
 						settings: Object.keys(this.defaults.configs).filter(n => !this.defaults.configs[n]["no" + BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(rType)]),
-						data: Object.keys(words[rType]).map(wordvalue => Object.assign({}, words[rType][wordvalue], {
-							key: wordvalue,
-							label: wordvalue
+						data: Object.keys(words[rType]).map(wordValue => Object.assign({}, words[rType][wordValue], {
+							key: wordValue,
+							label: wordValue
 						})),
 						renderLabel: data => BDFDB.ReactUtils.createElement("div", {
 							style: {width: "100%"},
@@ -240,9 +240,9 @@ module.exports = (_ => {
 						"Not Exact: Will block/censor all Words containing the selected Word. apple => apple, applepie and pineapple",
 						"Segment: Will only replace the caught segment in the censored Word. apple with peach => applepie => peachpie",
 						"Not Segment: Will replae the whole censored Word. apple with peach => applepie => peach",
-						"Empty: Ignores the default/choosen Replacement Word and removes the Word/Message instead.",
+						"Empty: Ignores the default/choosen Replacement Value and removes the Word/Message instead.",
 						[
-							"Regex: Will treat the entered wordvalue as a regular expression. ",
+							"Regex: Will treat the entered Word Value as a Regular Expression. ",
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {href: "https://regexr.com/", children: BDFDB.LanguageUtils.LanguageStrings.HELP + "?"})
 						],
 					].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
@@ -506,8 +506,8 @@ module.exports = (_ => {
 				return new RegExp(BDFDB.StringUtils.htmlEscape(config.exact ? "^" + escapedWord + "$" : escapedWord), `${config.case ? "" : "i"}${config.exact ? "" : "g"}`);
 			}
 
-			openAddModal (wordvalue) {
-				let values = {wordvalue, replacevalue: "", choice: "blocked"};
+			openAddModal (wordValue) {
+				let values = {wordValue, replaceValue: "", choice: "blocked"};
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: BDFDB.LanguageUtils.LibraryStringsFormat("add_to", "ChatFilter"),
@@ -523,7 +523,7 @@ module.exports = (_ => {
 					].flat(10).filter(n => n),
 					buttons: [{
 						key: "ADDBUTTON",
-						disabled: !values.wordvalue,
+						disabled: !values.wordValue,
 						contents: BDFDB.LanguageUtils.LanguageStrings.ADD,
 						color: "BRAND",
 						close: true,
@@ -547,17 +547,17 @@ module.exports = (_ => {
 						className: BDFDB.disCN.marginbottom8,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 							key: "WORDVALUE",
-							value: values.wordvalue,
-							placeholder: values.wordvalue,
-							errorMessage: !values.wordvalue && "Choose a Word Value" || words[values.choice][values.wordvalue] && `Word Value already used, saving will overwrite old ${values.choice} Word`,
+							value: values.wordValue,
+							placeholder: values.wordValue,
+							errorMessage: !values.wordValue && "Choose a Word Value" || words[values.choice][values.wordValue] && `Word Value already used, saving will overwrite old ${values.choice} Word`,
 							onChange: (value, instance) => {
-								values.wordvalue = value.trim();
-								if (!values.wordvalue) instance.props.errorMessage = "Choose a Word Value";
-								else if (words[values.choice][values.wordvalue]) instance.props.errorMessage = `Word Value already used, saving will overwrite old ${values.choice} word`;
+								values.wordValue = value.trim();
+								if (!values.wordValue) instance.props.errorMessage = "Choose a Word Value";
+								else if (words[values.choice][values.wordValue]) instance.props.errorMessage = `Word Value already used, saving will overwrite old ${values.choice} word`;
 								else delete instance.props.errorMessage;
 								let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: ["BDFDB_Modal", "BDFDB_SettingsPanel"], up: true}), {key: "ADDBUTTON"});
 								if (addButtonIns) {
-									addButtonIns.props.disabled = !values.wordvalue;
+									addButtonIns.props.disabled = !values.wordValue;
 									BDFDB.ReactUtils.forceUpdate(addButtonIns);
 								}
 							}
@@ -567,11 +567,11 @@ module.exports = (_ => {
 						title: "With:",
 						className: BDFDB.disCN.marginbottom8,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-							value: values.replacevalue,
-							placeholder: values.replacevalue,
+							value: values.replaceValue,
+							placeholder: values.replaceValue,
 							autoFocus: true,
 							onChange: (value, instance) => {
-								values.replacevalue = value.trim();
+								values.replaceValue = value.trim();
 							}
 						})
 					}),
@@ -581,12 +581,12 @@ module.exports = (_ => {
 						options: [{value: "blocked", name: "Block"}, {value: "censored", name: "Censor"}],
 						onChange: (value, instance) => {
 							values.choice = value.value;
-							let wordvalueInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: ["BDFDB_Modal", "BDFDB_SettingsPanel"], up: true}), {key: "WORDVALUE"});
-							if (wordvalueInputIns) {
-								if (!values.wordvalue) wordvalueInputIns.props.errorMessage = "Choose a Word Value";
-								else if (words[values.choice][values.wordvalue]) wordvalueInputIns.props.errorMessage = `Word Value already used, saving will overwrite old ${values.choice} Word`;
-								else delete wordvalueInputIns.props.errorMessage;
-								BDFDB.ReactUtils.forceUpdate(wordvalueInputIns);
+							let wordValueInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: ["BDFDB_Modal", "BDFDB_SettingsPanel"], up: true}), {key: "WORDVALUE"});
+							if (wordValueInputIns) {
+								if (!values.wordValue) wordValueInputIns.props.errorMessage = "Choose a Word Value";
+								else if (words[values.choice][values.wordValue]) wordValueInputIns.props.errorMessage = `Word Value already used, saving will overwrite old ${values.choice} Word`;
+								else delete wordValueInputIns.props.errorMessage;
+								BDFDB.ReactUtils.forceUpdate(wordValueInputIns);
 							}
 						}
 					})
@@ -594,15 +594,15 @@ module.exports = (_ => {
 			}
 
 			saveWord (values, wordConfigs = configs) {
-				if (!values.wordvalue || !values.choice) return;
-				values.wordvalue = values.wordvalue.trim();
-				values.replacevalue = values.replacevalue.trim();
+				if (!values.wordValue || !values.choice) return;
+				values.wordValue = values.wordValue.trim();
+				values.replaceValue = values.replaceValue.trim();
 				if (!BDFDB.ObjectUtils.is(words[values.choice])) words[values.choice] = {};
-				words[values.choice][values.wordvalue] = {
-					replace: values.replacevalue,
+				words[values.choice][values.wordValue] = {
+					replace: values.replaceValue,
 					empty: wordConfigs.empty,
 					case: wordConfigs.case,
-					exact: values.wordvalue.indexOf(" ") > -1 ? false : wordConfigs.exact,
+					exact: values.wordValue.indexOf(" ") > -1 ? false : wordConfigs.exact,
 					regex: false
 				};
 				BDFDB.DataUtils.save(words, this, "words");

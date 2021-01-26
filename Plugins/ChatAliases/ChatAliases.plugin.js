@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.2.3",
+			"version": "2.2.4",
 			"description": "Allow the user to configure their own chat-aliases which will automatically be replaced before the message is being sent"
 		},
 		"changeLog": {
 			"fixed": {
-				"Command List": "Fixed issue where command list and autocomplete menu could be open at the same time on top of each other"
+				"New Aliases": "You can add new Aliases again"
 			}
 		}
 	};
@@ -69,22 +69,22 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					configs: {
-						case: 				{value: false,		description: "Handle the wordvalue case sensitive"},
-						exact: 				{value: true,		description: "Handle the wordvalue as an exact word and not as part of a word"},
-						autoc: 				{value: true,		description: "Add this alias in the autocomplete menu (not for RegExp)"},
-						regex: 				{value: false,		description: "Handle the wordvalue as a RegExp string"},
-						file: 				{value: false,		description: "Handle the replacevalue as a filepath"}
+						case: 				{value: false,		description: "Handle the Word Value case sensitive"},
+						exact: 				{value: true,		description: "Handle the Word Value as an exact Word and not as part of a Word"},
+						autoc: 				{value: true,		description: "Add this Alias in the Autocomplete Menu (not for RegExp)"},
+						regex: 				{value: false,		description: "Handle the Word Value as a RegExp String"},
+						file: 				{value: false,		description: "Handle the Replacement Value as a File Path"}
 					},
 					settings: {
-						replaceBeforeSend:	{value: true, 		inner: false,		description: "Replace words with your aliases before a message is sent"},
-						addContextMenu:		{value: true, 		inner: false,		description: "Add a contextmenu entry to faster add new aliases"},
-						addAutoComplete:	{value: true, 		inner: false,		description: "Add an autocomplete-menu for non-RegExp aliases"},
+						replaceBeforeSend:	{value: true, 		inner: false,		description: "Replace Words with your Aliases before a Message is sent"},
+						addContextMenu:		{value: true, 		inner: false,		description: "Add a Context Menu Entry to faster add new Aliases"},
+						addAutoComplete:	{value: true, 		inner: false,		description: "Add an Autocomplete Menu for non-RegExp Aliases"},
 						triggerNormal:		{value: true, 		inner: true,		description: "Normal Message Textarea"},
 						triggerEdit:		{value: true, 		inner: true,		description: "Edit Message Textarea"},
 						triggerUpload:		{value: true, 		inner: true,		description: "Upload Message Prompt"}
 					},
 					amounts: {
-						minAliasLength:		{value: 2, 			min: 1,				description: "Minimal Character Length to open Autocomplete-Menu: "}
+						minAliasLength:		{value: 2, 			min: 1,				description: "Minimal Character Length to open Autocomplete Menu: "}
 					}
 				};
 				
@@ -248,7 +248,7 @@ module.exports = (_ => {
 								max: this.defaults.amounts[key].max,
 								value: amounts[key]
 							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-								title: "Automatically replace aliases in:",
+								title: "Automatically replace Aliases in:",
 								children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 									type: "Switch",
 									plugin: this,
@@ -259,19 +259,19 @@ module.exports = (_ => {
 							}))
 						}));
 						
-						let values = {wordvalue: "", replacevalue: ""};
+						let values = {wordValue: "", replaceValue: ""};
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: "Add new alias",
+							title: "Add new Alias",
 							collapseStates: collapseStates,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Button",
-									label: "Pick a wordvalue and replacevalue:",
+									label: "Pick a Word Value and Replacement Value:",
 									key: "ADDBUTTON",
 									disabled: !Object.keys(values).every(valuename => values[valuename]),
 									children: BDFDB.LanguageUtils.LanguageStrings.ADD,
 									onClick: _ => {
-										this.saveWord(values.wordvalue, values.replacevalue, settingsPanel.props._node.querySelector(".input-replacevalue input[type='file']"));
+										this.saveWord(values.wordValue, values.replaceValue, settingsPanel.props._node.querySelector(".input-replacevalue input[type='file']"));
 										BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 									}
 								}),
@@ -280,13 +280,13 @@ module.exports = (_ => {
 						}));
 						
 						if (!BDFDB.ObjectUtils.isEmpty(aliases)) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: "Added aliases",
+							title: "Added Aliases",
 							collapseStates: collapseStates,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
 								settings: Object.keys(this.defaults.configs),
-								data: Object.keys(aliases).map((wordvalue, i) => Object.assign({}, aliases[wordvalue], {
-									key: wordvalue,
-									label: wordvalue
+								data: Object.keys(aliases).map((wordValue, i) => Object.assign({}, aliases[wordValue], {
+									key: wordValue,
+									label: wordValue
 								})),
 								renderLabel: data => BDFDB.ReactUtils.createElement("div", {
 									style: {width: "100%"},
@@ -333,9 +333,9 @@ module.exports = (_ => {
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 								type: "Button",
 								color: BDFDB.LibraryComponents.Button.Colors.RED,
-								label: "Remove all added aliases",
+								label: "Remove all added Aliases",
 								onClick: _ => {
-									BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added aliases?", _ => {
+									BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added Aliases?", _ => {
 										aliases = {};
 										commandAliases = {};
 										BDFDB.DataUtils.remove(this, "words");
@@ -350,16 +350,16 @@ module.exports = (_ => {
 							title: "Config Guide",
 							collapseStates: collapseStates,
 							children: [
-								"Case: Will replace words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe",
-								"Not Case: Will replace words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe",
-								"Exact: Will replace words that are exactly the replaceword. apple to pear => applepie stays applepie",
-								"Not Exact: Will replace words anywhere they appear. apple to pear => applepieapple to pearpiepear",
+								"Case: Will replace Words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe",
+								"Not Case: Will replace Words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe",
+								"Exact: Will replace Words that are exactly the Replacement Value. apple to pear => applepie stays applepie",
+								"Not Exact: Will replace Words anywhere they appear. apple to pear => applepieapple to pearpiepear",
 								"Autoc: Will appear in the Autocomplete Menu (if enabled)",
 								[
-									"Regex: Will treat the entered wordvalue as a regular expression - ",
+									"Regex: Will treat the entered Word Value as a Regular Expression - ",
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {href: "https://regexr.com/", children: BDFDB.LanguageUtils.LanguageStrings.HELP + "?"})
 								],
-								"File: If the replacevalue is a filepath it will try to upload the file located at the filepath"
+								"File: If the Replacement Value is a File Path it will try to upload the File located at the File Path"
 							].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
 								type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
 								children: string
@@ -501,10 +501,10 @@ module.exports = (_ => {
 				return string;
 			}
 
-			openAddModal (wordvalue) {
+			openAddModal (wordValue) {
 				let values = {
-					wordvalue,
-					replacevalue: ""
+					wordValue,
+					replaceValue: ""
 				};
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
@@ -531,7 +531,7 @@ module.exports = (_ => {
 								let configInput = modal.querySelector(`.input-config${key} ${BDFDB.dotCN.switchinner}`);
 								if (configInput) configs[key] = configInput.checked;
 							}
-							this.saveWord(values.wordvalue, values.replacevalue, modal.querySelector(".input-replacevalue input[type='file']"), configs);
+							this.saveWord(values.wordValue, values.replaceValue, modal.querySelector(".input-replacevalue input[type='file']"), configs);
 							this.forceUpdateAll();
 						}
 					}]
@@ -544,13 +544,13 @@ module.exports = (_ => {
 						title: "Replace:",
 						className: BDFDB.disCN.marginbottom8,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-							value: values.wordvalue,
-							placeholder: values.wordvalue,
-							errorMessage: !values.wordvalue && "Choose a wordvalue" || aliases[values.wordvalue] && "Wordvalue already used, saving will overwrite old alias",
+							value: values.wordValue,
+							placeholder: values.wordValue,
+							errorMessage: !values.wordValue && "Choose a Word Value" || aliases[values.wordValue] && "Word Value already used, saving will overwrite old Alias",
 							onChange: (value, instance) => {
-								values.wordvalue = value.trim();
-								if (!values.wordvalue) instance.props.errorMessage = "Choose a wordvalue";
-								else if (aliases[values.wordvalue]) instance.props.errorMessage = "Wordvalue already used, saving will overwrite old alias";
+								values.wordValue = value.trim();
+								if (!values.wordValue) instance.props.errorMessage = "Choose a Word Value";
+								else if (aliases[values.wordValue]) instance.props.errorMessage = "Word Value already used, saving will overwrite old Alias";
 								else delete instance.props.errorMessage;
 								let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: ["BDFDB_Modal", "BDFDB_SettingsPanel"], up: true}), {key: "ADDBUTTON"});
 								if (addButtonIns) {
@@ -564,15 +564,16 @@ module.exports = (_ => {
 						title: "With:",
 						className: BDFDB.disCN.marginbottom8,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+							className: "input-replacevalue",
 							type: "file",
 							useFilePath: true,
-							value: values.replacevalue,
-							placeholder: values.replacevalue,
+							value: values.replaceValue,
+							placeholder: values.replaceValue,
 							autoFocus: true,
-							errorMessage: !values.replacevalue && "Choose a replacevalue",
+							errorMessage: !values.replaceValue && "Choose a Replacement Value",
 							onChange: (value, instance) => {
-								values.replacevalue = value.trim();
-								if (!values.replacevalue) instance.props.errorMessage = "Choose a replacevalue";
+								values.replaceValue = value.trim();
+								if (!values.replaceValue) instance.props.errorMessage = "Choose a Replacement Value";
 								else delete instance.props.errorMessage;
 								let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: ["BDFDB_Modal", "BDFDB_SettingsPanel"], up: true}), {key: "ADDBUTTON"});
 								if (addButtonIns) {
@@ -585,21 +586,22 @@ module.exports = (_ => {
 				];
 			}
 
-			saveWord (wordvalue, replacevalue, fileselection, aliasConfigs = configs) {
-				if (!wordvalue || !replacevalue || !fileselection) return;
+			saveWord (wordValue, replaceValue, fileSelection, aliasConfigs = configs) {
+				console.log(wordValue, replaceValue, fileSelection);
+				if (!wordValue || !replaceValue || !fileSelection) return;
 				let filedata = null;
-				if (fileselection.files && fileselection.files[0] && BDFDB.LibraryRequires.fs.existsSync(replacevalue)) {
+				if (fileSelection.files && fileSelection.files[0] && BDFDB.LibraryRequires.fs.existsSync(replaceValue)) {
 					filedata = JSON.stringify({
-						data: BDFDB.LibraryRequires.fs.readFileSync(replacevalue).toString("base64"),
-						name: fileselection.files[0].name,
-						type: fileselection.files[0].type
+						data: BDFDB.LibraryRequires.fs.readFileSync(replaceValue).toString("base64"),
+						name: fileSelection.files[0].name,
+						type: fileSelection.files[0].type
 					});
 				}
-				aliases[wordvalue] = {
-					replace: replacevalue,
+				aliases[wordValue] = {
+					replace: replaceValue,
 					filedata: filedata,
 					case: aliasConfigs.case,
-					exact: wordvalue.indexOf(" ") > -1 ? false : aliasConfigs.exact,
+					exact: wordValue.indexOf(" ") > -1 ? false : aliasConfigs.exact,
 					autoc: aliasConfigs.regex ? false : aliasConfigs.autoc,
 					regex: aliasConfigs.regex,
 					file: filedata != null
