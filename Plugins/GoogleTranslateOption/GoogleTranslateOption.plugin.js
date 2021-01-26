@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.1.4",
+			"version": "2.1.5",
 			"description": "Add a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send"
 		},
 		"changeLog": {
@@ -661,15 +661,15 @@ module.exports = (_ => {
 					let currentLoadingString = loadingString;
 					toast = BDFDB.NotificationUtils.toast(loadingString, {
 						timeout: 0,
-						orientation: "center"
+						orientation: "center",
+						onClose: _ => {BDFDB.TimeUtils.clear(toastInterval);}
 					});
 					toastInterval = BDFDB.TimeUtils.interval(_ => {
 						if (timer++ > 40) {
 							finishTranslation("");
 							BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed} - ${this.labels.toast_translating_tryanother}`, {
 								type: "danger",
-								orientation: "center",
-								onClose: _ => {BDFDB.TimeUtils.clear(toastInterval);}
+								orientation: "center"
 							});
 						}
 						else {
