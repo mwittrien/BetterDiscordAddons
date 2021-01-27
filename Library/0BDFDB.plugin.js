@@ -16,13 +16,14 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.3.2",
+			"version": "1.3.3",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 		"changeLog": {
 			"improved": {
-				"New Toast API": "Changed Toast API to add new functionalities and styles"
+				"New Toast API": "Changed Toast API to add new functionalities and styles",
+				"Toast Positions": "You can now change the default Position of Toasts (left/right/center) in the BDFDB Settings"
 			}
 		}
 	};
@@ -34,7 +35,7 @@ module.exports = (_ => {
 	const Cache = {data: {}, modules: {}};
 	
 	var libraryInstance;
-	var settings = {}, changeLogs = {};
+	var settings = {}, choices = {}, changeLogs = {};
 	
 	if (window.BDFDB_Global && window.BDFDB_Global.PluginUtils && typeof window.BDFDB_Global.PluginUtils.cleanUp == "function") {
 		window.BDFDB_Global.PluginUtils.cleanUp(window.BDFDB_Global);
@@ -52,9 +53,26 @@ module.exports = (_ => {
 				showToasts:				{value: true,		disableIfNative: true,		noteIfNative: true},
 				showSupportBadges:		{value: true,		disableIfNative: false,		noteIfNative: true},
 				useChromium:			{value: false,		disableIfNative: false,		noteIfNative: true}
+			},
+			choices: {
+				toastPosition:			{value: "right",	items: "ToastPositions"}
 			}
 		},
 	});
+	
+	const LibraryConstants = {
+		ToastIcons: {
+			info: "INFO",
+			danger: "CLOSE_CIRCLE",
+			success: "CHECKMARK_CIRCLE",
+			warning: "WARNING"
+		},
+		ToastPositions: {
+			center: "toastscenter",
+			left: "toastsleft",
+			right: "toastsright"
+		}
+	}
 	
 	const PluginStores = {
 		loaded: {},
@@ -494,7 +512,8 @@ module.exports = (_ => {
 		let startMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		BDFDB.LogUtils.log(startMsg, plugin.name);
 		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${plugin.name} ${startMsg}`, {
-			disableInteractions: true
+			disableInteractions: true,
+			barColor: BDFDB.DiscordConstants.Colors.STATUS_GREEN
 		});
 		
 		if (plugin.css) BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
@@ -510,7 +529,8 @@ module.exports = (_ => {
 		let stopMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", "v" + plugin.version);
 		BDFDB.LogUtils.log(stopMsg, plugin.name);
 		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${plugin.name} ${stopMsg}`, {
-			disableInteractions: true
+			disableInteractions: true,
+			barColor: BDFDB.DiscordConstants.Colors.STATUS_RED
 		});
 
 		let url = plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
@@ -1092,35 +1112,24 @@ module.exports = (_ => {
 				
 				var Toasts = [], NotificationBars = [];
 				var ToastQueues = {}, DesktopNotificationQueue = {queue: [], running: false};
-				const ToastIcons = {
-					info: "INFO",
-					danger: "CLOSE_CIRCLE",
-					success: "CHECKMARK_CIRCLE",
-					warning: "WARNING"
-				};
-				const ToastOrientations = {
-					center: "toastscenter",
-					left: "toastsleft",
-					right: "toastsright"
-				};
-				for (let key in ToastOrientations) ToastQueues[ToastOrientations[key]] = {queue: [], full: false};
+				for (let key in LibraryConstants.ToastPositions) ToastQueues[LibraryConstants.ToastPositions[key]] = {queue: [], full: false};
 				
 				BDFDB.NotificationUtils = {};
 				BDFDB.NotificationUtils.toast = function (children, config = {}) {
 				if (!children) return;
 				let app = document.querySelector(BDFDB.dotCN.appmount) || document.body;
 				if (!app) return;
-				let orientation = config.orientation && ToastOrientations[config.orientation] || ToastOrientations.right;
+				let position = config.position && LibraryConstants.ToastPositions[config.position] || choices.toastPosition && LibraryConstants.ToastPositions[choices.toastPosition] || LibraryConstants.ToastPositions.right;
 				
 				const runQueue = _ => {
-					if (ToastQueues[orientation].full) return;
-					let data = ToastQueues[orientation].queue.shift();
+					if (ToastQueues[position].full) return;
+					let data = ToastQueues[position].queue.shift();
 					if (!data) return;
 					
 					let id = BDFDB.NumberUtils.generateId(Toasts);
-					let toasts = document.querySelector(BDFDB.dotCN.toasts + BDFDB.dotCN[orientation]);
+					let toasts = document.querySelector(BDFDB.dotCN.toasts + BDFDB.dotCN[position]);
 					if (!toasts) {
-						toasts = BDFDB.DOMUtils.create(`<div class="${BDFDB.DOMUtils.formatClassName(BDFDB.disCN.toasts, BDFDB.disCN[orientation])}"></div>`);
+						toasts = BDFDB.DOMUtils.create(`<div class="${BDFDB.DOMUtils.formatClassName(BDFDB.disCN.toasts, BDFDB.disCN[position])}"></div>`);
 						app.appendChild(toasts);
 					}
 					
@@ -1128,20 +1137,21 @@ module.exports = (_ => {
 					if (data.config.className) BDFDB.DOMUtils.addClass(data.toast, data.config.className);
 					if (data.config.css) BDFDB.DOMUtils.appendLocalStyle("BDFDBcustomToast" + id, data.config.css);
 					if (data.config.style) data.toast.style = Object.assign({}, data.toast.style, data.config.style);
-						
-					let type = null;
-					if (data.config.type && (type = BDFDB.disCN["toast" + data.config.type]) != null) BDFDB.DOMUtils.addClass(data.toast, type);
+					
+					let backgroundColor, fontColor, barColor;
+					
+					let type = data.config.type && BDFDB.disCN["toast" + data.config.type];
 					if (!type) {
+						barColor = BDFDB.ColorUtils.convert(data.config.barColor, "HEX");
 						let comp = BDFDB.ColorUtils.convert(data.config.color, "RGBCOMP");
 						if (comp) {
-							let backgroundColor = BDFDB.ColorUtils.convert(comp, "HEX");
-							let fontColor = comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "#000" : "#FFF";
-							data.toast.style.setProperty("background-color", backgroundColor);
-							data.toast.style.setProperty("color", fontColor);
+							backgroundColor = BDFDB.ColorUtils.convert(comp, "HEX");
+							fontColor = comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "#000" : "#FFF";
 							BDFDB.DOMUtils.addClass(data.toast, BDFDB.disCN.toastcustom);
 						}
 						else BDFDB.DOMUtils.addClass(data.toast, BDFDB.disCN.toastdefault);
 					}
+					else BDFDB.DOMUtils.addClass(data.toast, type);
 					
 					let disableInteractions = data.config.disableInteractions && typeof data.config.onClick != "function";
 					if (disableInteractions) data.toast.style.setProperty("pointer-events", "none", "important");
@@ -1174,16 +1184,15 @@ module.exports = (_ => {
 								if (!toasts.querySelectorAll(BDFDB.dotCN.toast).length) toasts.remove();
 							}, 300);
 						}
-						ToastQueues[orientation].full = false;
+						ToastQueues[position].full = false;
 						runQueue();
 					};
 					
-					let barColor = !type && BDFDB.ColorUtils.convert(data.config.barColor, "HEX");
 					let icon = data.config.avatar ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
 						src: data.config.avatar,
 						size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_24
-					}) : ((data.config.icon || data.config.type && ToastIcons[data.config.type]) ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-						name: data.config.type && ToastIcons[data.config.type] && BDFDB.LibraryComponents.SvgIcon.Names[ToastIcons[data.config.type]],
+					}) : ((data.config.icon || data.config.type && LibraryConstants.ToastIcons[data.config.type]) ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+						name: data.config.type && LibraryConstants.ToastIcons[data.config.type] && BDFDB.LibraryComponents.SvgIcon.Names[LibraryConstants.ToastIcons[data.config.type]],
 						iconSVG: data.config.icon,
 						width: 18,
 						height: 18,
@@ -1196,8 +1205,19 @@ module.exports = (_ => {
 								this.props.children = newChildren;
 								BDFDB.ReactUtils.forceUpdate(this);
 							};
+							let lastHeight;
 							this._start = performance.now();
-							this._progress = BDFDB.TimeUtils.interval(_ => {BDFDB.ReactUtils.forceUpdate(this);}, 10);
+							this._progress = BDFDB.TimeUtils.interval(_ => {
+								if (!this._rendered) {
+									let nextHeight = BDFDB.DOMUtils.getRects(data.toast).height;
+									if (nextHeight != 0 && nextHeight == lastHeight) {
+										this._rendered = true;
+										BDFDB.DOMUtils.addClass(data.toast, BDFDB.disCN.toastrendered);
+									}
+									lastHeight = nextHeight;
+								}
+								BDFDB.ReactUtils.forceUpdate(this);
+							}, 10);
 						}
 						componentWillUnmount() {
 							BDFDB.TimeUtils.clear(this._progress);
@@ -1206,7 +1226,12 @@ module.exports = (_ => {
 							return BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 								children: [
 									BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN.toastbg,
+										style: {backgroundColor: backgroundColor}
+									}),
+									BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN.toastinner,
+										style: {color: fontColor},
 										children: [
 											icon && BDFDB.ReactUtils.createElement("div", {
 												className: BDFDB.DOMUtils.formatClassName(data.config.avatar && BDFDB.disCN.toastavatar, BDFDB.disCN.toasticon, data.config.iconClassName),
@@ -1225,7 +1250,7 @@ module.exports = (_ => {
 										].filter(n => n)
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Animations.animated.div, {
-										className: BDFDB.disCN.toastbar,
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.toastbar, barColor && BDFDB.disCN.toastcustombar),
 										style: {
 											backgroundColor: barColor,
 											right: `${100 - (performance.now() - this._start) * 100 / timeout}%`
@@ -1236,17 +1261,17 @@ module.exports = (_ => {
 						}
 					}, {children: data.children}), data.toast);
 					
-					ToastQueues[orientation].full = (BDFDB.ArrayUtils.sum(Array.from(toasts.childNodes).map(c => {
+					ToastQueues[position].full = (BDFDB.ArrayUtils.sum(Array.from(toasts.childNodes).map(c => {
 						let height = BDFDB.DOMUtils.getRects(c).height;
-						return height > 46 ? height : 46;
-					})) - 92) > BDFDB.DOMUtils.getRects(app).height;
+						return height > 50 ? height : 50;
+					})) - 100) > BDFDB.DOMUtils.getRects(app).height;
 					
 					if (typeof data.config.onShow == "function") data.config.onShow();
 				};
 				
 				let toast = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.toast + BDFDB.disCN.toastopening}"></div>`);
 				toast.update = _ => {};
-				ToastQueues[orientation].queue.push({children, config, toast});
+				ToastQueues[position].queue.push({children, config, toast});
 				runQueue();
 				return toast;
 				};
@@ -7669,7 +7694,10 @@ module.exports = (_ => {
 				};
 				
 				InternalBDFDB.forceUpdateAll = function () {
-					if (LibraryRequires.path) settings = BDFDB.DataUtils.get(BDFDB, "settings");
+					if (LibraryRequires.path) {
+						settings = BDFDB.DataUtils.get(BDFDB, "settings");
+						choices = BDFDB.DataUtils.get(BDFDB, "choices");
+					}
 					
 					BDFDB.MessageUtils.rerenderAll();
 					BDFDB.PatchUtils.forceAllUpdates(BDFDB);
@@ -8054,14 +8082,25 @@ module.exports = (_ => {
 		
 		getSettingsPanel (collapseStates = {}) {
 			let settingsPanel;
-			let getString = (key, property) => {
-				return BDFDB.LanguageUtils.LibraryStringsCheck[`settings_${key}_${property}`] ? BDFDB.LanguageUtils.LibraryStringsFormat(`settings_${key}_${property}`, BDFDB.BDUtils.getSettingsProperty("name", BDFDB.BDUtils.settingsIds[key]) || BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(key.replace(/([A-Z])/g, " $1"))) : InternalBDFDB.defaults.settings[key][property];
+			let getString = (type, key, property) => {
+				return BDFDB.LanguageUtils.LibraryStringsCheck[`settings_${key}_${property}`] ? BDFDB.LanguageUtils.LibraryStringsFormat(`settings_${key}_${property}`, BDFDB.BDUtils.getSettingsProperty("name", BDFDB.BDUtils.settingsIds[key]) || BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(key.replace(/([A-Z])/g, " $1"))) : InternalBDFDB.defaults[type][key][property];
 			};
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, {
 				collapseStates: collapseStates,
 				children: _ => {
 					let settingsItems = [];
 					
+					for (let key in choices) settingsItems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
+						type: "Select",
+						plugin: InternalBDFDB,
+						keys: ["choices", key],
+						label: getString("choices", key, "description"),
+						note: getString("choices", key, "note"),
+						basis: "50%",
+						value: choices[key],
+						options: Object.keys(LibraryConstants[InternalBDFDB.defaults.choices[key].items] || {}).map(p => ({value: p, label: BDFDB.LanguageUtils.LibraryStrings[p] || p})),
+						searchable: true,
+					}));
 					for (let key in settings) {
 						let nativeSetting = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds[key]);
 						settingsItems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
@@ -8069,8 +8108,8 @@ module.exports = (_ => {
 							plugin: InternalBDFDB,
 							disabled: InternalBDFDB.defaults.settings[key].disableIfNative && nativeSetting,
 							keys: ["settings", key],
-							label: getString(key, "description"),
-							note: (InternalBDFDB.defaults.settings[key].noteAlways || InternalBDFDB.defaults.settings[key].noteIfNative && nativeSetting) && getString(key, "note"),
+							label: getString("settings", key, "description"),
+							note: (InternalBDFDB.defaults.settings[key].noteAlways || InternalBDFDB.defaults.settings[key].noteIfNative && nativeSetting) && getString("settings", key, "note"),
 							value: settings[key] || nativeSetting
 						}));
 					}

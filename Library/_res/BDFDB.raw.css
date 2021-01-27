@@ -1082,33 +1082,37 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_toasts] {
 	position: absolute;
 	top: 10px;
-	right: 0;
-	bottom: 80px;
-	left: 0;
+	right: 10px;
+	left: 10px;
 	display: flex;
-	justify-content: flex-end;
 	flex-direction: column;
 	pointer-events: none;
 	z-index: 4001;
 }
 [REPLACE_CLASS_toasts][REPLACE_CLASS_toastsleft] {
+	bottom: 10px;
+	justify-content: flex-start;
 	align-items: flex-start;
 }
 [REPLACE_CLASS_toasts][REPLACE_CLASS_toastscenter] {
+	bottom: 80px;
+	justify-content: flex-end;
 	align-items: center;
 }
 [REPLACE_CLASS_toasts][REPLACE_CLASS_toastsright] {
+	bottom: 10px;
+	justify-content: flex-start;
 	align-items: flex-end;
 }
 [REPLACE_CLASS_toast] {
 	position: relative;
 	display: flex;
 	align-items: center;
+	border-radius: 3px;
 	box-shadow: var(--elevation-medium);
 	margin-top: 10px;
-	padding: 6px 10px 8px;
+	padding: 10px 10px 12px 10px;
 	overflow: hidden;
-	pointer-events: auto;
 	min-height: 24px;
 	height: unset;
 	opacity: 1;
@@ -1120,16 +1124,16 @@ img:not([src]), img[src=""], img[src="null"] {
 	pointer-events: auto;
 }
 [REPLACE_CLASS_toasts][REPLACE_CLASS_toastsleft] [REPLACE_CLASS_toast] {
-	border-radius: 0 5px 5px 0;
-	transform-origin: left bottom;
+	min-width: 200px;
+	transform-origin: left top;
 }
 [REPLACE_CLASS_toasts][REPLACE_CLASS_toastscenter] [REPLACE_CLASS_toast] {
-	border-radius: 5px;
+	min-width: 100px;
 	transform-origin: center bottom;
 }
 [REPLACE_CLASS_toasts][REPLACE_CLASS_toastsright] [REPLACE_CLASS_toast] {
-	border-radius: 5px 0 0 5px;
-	transform-origin: right bottom;
+	min-width: 200px;
+	transform-origin: right top;
 }
 [REPLACE_CLASS_toastopening],
 [REPLACE_CLASS_toastclosing] {
@@ -1140,9 +1144,24 @@ img:not([src]), img[src=""], img[src="null"] {
 	min-height: 0;
 	height: 0;
 }
+[REPLACE_CLASS_toastbg] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	opacity: 0.9;
+	z-index: 1;
+}
+[REPLACE_CLASS_toastrendered] [REPLACE_CLASS_toastbg] {
+	backdrop-filter: blur(5px);
+}
 [REPLACE_CLASS_toastinner] {
+	position: relative;
 	display: flex;
 	align-items: center;
+	flex: 1 0 auto;
+	z-index: 2;
 }
 [REPLACE_CLASS_toasticon] {
 	display: flex;
@@ -1155,53 +1174,70 @@ img:not([src]), img[src=""], img[src="null"] {
 	width: 24px;
 	height: 24px;
 }
-[REPLACE_CLASS_toastbar] {
-	position: absolute;
-	background: black;
-	opacity: .3;
-	height: 3px;
-	right: 50%;
-	bottom: 0;
-	left: 0;
-	transition: all;
-}
-[REPLACE_CLASS_toastdefault] [REPLACE_CLASS_toastbar] {
-	background: var(--header-primary);
-	opacity: .2;
-}
 [REPLACE_CLASS_toasttext] {
+	flex: 1 0 auto;
 	font-size: 14px;
 	font-weight: 500;
 	white-space: pre;
 }
 [REPLACE_CLASS_toastcloseicon] {
-	margin-left: 6px;
 	display: none;
+	margin-left: 6px;
 }
 [REPLACE_CLASS_toast]:hover [REPLACE_CLASS_toastcloseicon] {
 	display: block;
 }
-[REPLACE_CLASS_toastdefault] {
+[REPLACE_CLASS_toastbar] {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	height: 4px;
+	background: black;
+	opacity: 0.2;
+	z-index: 3;
+	transition: all;
+}
+[REPLACE_CLASS_toastdefault] [REPLACE_CLASS_toastbar] {
+	background: var(--header-primary);
+	opacity: 0.3;
+}
+[REPLACE_CLASS_toastbar][REPLACE_CLASS_toastcustombar] {
+	opacity: 1;
+}
+[REPLACE_CLASS_toastdefault] [REPLACE_CLASS_toastbg] {
 	background-color: var(--background-floating);
+}
+[REPLACE_CLASS_toastdefault] [REPLACE_CLASS_toastinner] {
 	color: var(--header-primary);
 }
-[REPLACE_CLASS_toastbrand] {
+[REPLACE_CLASS_toastbrand] [REPLACE_CLASS_toastbg] {
 	background-color: var(--bdfdb-blurple);
+}
+[REPLACE_CLASS_toastbrand] [REPLACE_CLASS_toastinner] {
 	color: #FFF;
 }
-[REPLACE_CLASS_toastdanger] {
+[REPLACE_CLASS_toastdanger] [REPLACE_CLASS_toastbg] {
 	background-color: #F04747;
+}
+[REPLACE_CLASS_toastdanger] [REPLACE_CLASS_toastinner] {
 	color: #FFF;
 }
-[REPLACE_CLASS_toastinfo] {
+[REPLACE_CLASS_toastinfo] [REPLACE_CLASS_toastbg] {
 	background-color: #4A90E2;
+}
+[REPLACE_CLASS_toastinfo] [REPLACE_CLASS_toastinner] {
 	color: #FFF;
 }
-[REPLACE_CLASS_toastsuccess] {
+[REPLACE_CLASS_toastsuccess] [REPLACE_CLASS_toastbg] {
 	background-color: #43B581;
+}
+[REPLACE_CLASS_toastsuccess] [REPLACE_CLASS_toastinner] {
 	color: #FFF;
 }
-[REPLACE_CLASS_toastwarning] {
+[REPLACE_CLASS_toastwarning] [REPLACE_CLASS_toastbg] {
 	background-color: #FFA600;
+}
+[REPLACE_CLASS_toastwarning] [REPLACE_CLASS_toastinner] {
 	color: #FFF;
 }
