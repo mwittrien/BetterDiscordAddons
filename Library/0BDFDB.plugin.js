@@ -1178,6 +1178,7 @@ module.exports = (_ => {
 						runQueue();
 					};
 					
+					let barColor = !type && BDFDB.ColorUtils.convert(data.config.barColor, "HEX");
 					let icon = data.config.avatar ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
 						src: data.config.avatar,
 						size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_24
@@ -1225,7 +1226,10 @@ module.exports = (_ => {
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Animations.animated.div, {
 										className: BDFDB.disCN.toastbar,
-										style: {right: `${100 - (performance.now() - this._start) * 100 / timeout}%`}
+										style: {
+											backgroundColor: barColor,
+											right: `${100 - (performance.now() - this._start) * 100 / timeout}%`
+										}
 									})
 								]
 							});
