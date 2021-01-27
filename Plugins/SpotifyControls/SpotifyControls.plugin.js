@@ -214,7 +214,7 @@ module.exports = (_ => {
 												playerSize: playerSize,
 												disabled: socketDevice.device.is_restricted,
 												onClick: _ => {
-													if (previousIsClicked) {
+													if (previousIsClicked || !settings.doubleBack) {
 														previousIsClicked = false;
 														this.request(socketDevice.socket, socketDevice.device, "previous");
 													}
@@ -412,7 +412,8 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						addTimeline: 		{value: true,		description: "Show the song timeline in the controls"}
+						addTimeline: 		{value: true,		description: "Show the song timeline in the controls"},
+						doubleBack: 		{value: true,       description: "Force user to press back button twice to go to previous track"}
 					},
 					buttonConfigs: {
 						share: 				{value: {small: false, big: true},		icons: [""],						description: "Share"},
