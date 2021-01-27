@@ -1115,7 +1115,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	transform: scale(1);
 	transition: all 300ms ease;
 }
-[REPLACE_CLASS_toastcloseable] {
+[REPLACE_CLASS_toastclosable] {
 	cursor: pointer;
 	pointer-events: auto;
 }
