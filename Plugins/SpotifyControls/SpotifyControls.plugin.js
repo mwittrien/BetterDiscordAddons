@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.0.8",
+			"version": "1.0.9",
 			"description": "Add a control panel to discord when listening to spotify"
+		},
+		"changeLog": {
+			"improved": {
+				"Double Click Back": "Added option to allow ppl to go back to the previous song without having to double click the back button"
+			}
 		}
 	};
 
@@ -214,7 +219,7 @@ module.exports = (_ => {
 												playerSize: playerSize,
 												disabled: socketDevice.device.is_restricted,
 												onClick: _ => {
-													if (previousIsClicked) {
+													if (previousIsClicked || !settings.doubleBack) {
 														previousIsClicked = false;
 														this.request(socketDevice.socket, socketDevice.device, "previous");
 													}
@@ -412,7 +417,8 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						addTimeline: 		{value: true,		description: "Show the song timeline in the controls"}
+						addTimeline: 		{value: true,		description: "Show the Song Timeline in the Controls"},
+						doubleBack: 		{value: true,       description: "Requires the User to press the Back Button twice to go to previous Track"}
 					},
 					buttonConfigs: {
 						share: 				{value: {small: false, big: true},		icons: [""],						description: "Share"},
