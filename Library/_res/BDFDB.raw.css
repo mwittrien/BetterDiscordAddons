@@ -1114,6 +1114,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-top: 10px;
 	padding: 10px 10px 12px 10px;
 	overflow: hidden;
+	max-width: 50vw;
 	min-height: 24px;
 	height: unset;
 	opacity: 1;

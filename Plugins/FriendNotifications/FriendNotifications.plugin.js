@@ -789,7 +789,7 @@ module.exports = (_ => {
 										className: `friendnotifications-${status.name}-toast friendnotifications-${id}-toast`,
 										timeout: toastTime,
 										avatar: avatar,
-										color: BDFDB.UserUtils.getStatusColor(status.name, true),
+										barColor: BDFDB.UserUtils.getStatusColor(status.name, true),
 										onClick: openChannel,
 										onShow: _ => {
 											let notificationSound = notificationSounds["toast" + status.name] || {};
