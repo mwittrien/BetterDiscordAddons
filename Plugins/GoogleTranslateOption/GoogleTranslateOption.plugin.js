@@ -661,7 +661,7 @@ module.exports = (_ => {
 					let currentLoadingString = loadingString;
 					toast = BDFDB.NotificationUtils.toast(loadingString, {
 						timeout: 0,
-						orientation: "center",
+						position: "center",
 						onClose: _ => {BDFDB.TimeUtils.clear(toastInterval);}
 					});
 					toastInterval = BDFDB.TimeUtils.interval(_ => {
@@ -669,7 +669,7 @@ module.exports = (_ => {
 							finishTranslation("");
 							BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed} - ${this.labels.toast_translating_tryanother}`, {
 								type: "danger",
-								orientation: "center"
+								position: "center"
 							});
 						}
 						else {
@@ -743,11 +743,11 @@ module.exports = (_ => {
 					else {
 						if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Request Limit per Hour is reached.`, {
 							type: "danger",
-							orientation: "center"
+							position: "center"
 						});
 						else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server might be down.`, {
 							type: "danger",
-							orientation: "center"
+							position: "center"
 						});
 						callback("");
 					}
@@ -786,7 +786,7 @@ module.exports = (_ => {
 						else {
 							BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server is down or API-key outdated.`, {
 								type: "danger",
-								orientation: "center"
+								position: "center"
 							});
 							callback("");
 						}
@@ -825,14 +825,14 @@ module.exports = (_ => {
 					if (result && result.indexOf('code="408"') > -1) {
 						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Monthly rate limit reached.`, {
 							type: "danger",
-							orientation: "center"
+							position: "center"
 						});
 						callback("");
 					}
 					else {
 						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server is down or API-key outdated.`, {
 							type: "danger",
-							orientation: "center"
+							position: "center"
 						});
 						callback("");
 					}
@@ -863,7 +863,7 @@ module.exports = (_ => {
 					else {
 						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server is down, daily limited reached or API-key outdated.`, {
 							type: "danger",
-							orientation: "center"
+							position: "center"
 						});
 						callback("");
 					}
@@ -925,7 +925,7 @@ module.exports = (_ => {
 				}
 				else BDFDB.NotificationUtils.toast("Invalid binary format. Only use 0s and 1s.", {
 					type: "danger",
-					orientation: "center"
+					position: "center"
 				});
 				return string;
 			}

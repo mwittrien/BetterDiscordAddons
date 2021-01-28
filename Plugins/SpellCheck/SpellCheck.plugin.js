@@ -340,7 +340,7 @@ module.exports = (_ => {
 					let currentLoadingString = loadingString;
 					languageToasts[key] = BDFDB.NotificationUtils.toast(loadingString, {
 						timeout: 0,
-						orientation: "center"
+						position: "center"
 					});
 					languageToasts[key].interval = BDFDB.TimeUtils.interval(_ => {
 						currentLoadingString = currentLoadingString.endsWith(".....") ? loadingString : currentLoadingString + ".";
@@ -356,7 +356,7 @@ module.exports = (_ => {
 						if (error || (response && body.toLowerCase().indexOf("<!doctype html>") > -1)) {
 							BDFDB.NotificationUtils.toast(this.labels.toast_dictionary_fail.replace("{{var0}}", this.getLanguageName(languages[lang])), {
 								type: "danger",
-								orientation: "center"
+								position: "center"
 							});
 						}
 						else if (response && languageToasts[key].lang == lang) {
@@ -368,7 +368,7 @@ module.exports = (_ => {
 							dictionaries[key] = this.formatDictionary(langDictionaries[key].concat(ownDictionary));
 							BDFDB.NotificationUtils.toast(this.labels.toast_dictionary_success.replace("{{var0}}", this.getLanguageName(languages[lang])), {
 								type: "success",
-								orientation: "center"
+								position: "center"
 							});
 						}
 					};
