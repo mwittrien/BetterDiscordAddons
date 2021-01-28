@@ -1870,10 +1870,13 @@
 .toast-brand {
 	background-color: rgb(var(--vaccentcolor));
 }
-.colorBrand-WfDfzD {
+.colorBrand-WfDfzD .bg-8df5St {
 	background-color: rgb(var(--vaccentcolor));
 }
-.colorCustom-WKsPgT[style*="background-color: rgb(114, 137, 218)"] {
+.colorCustom-WKsPgT .bg-8df5St[style*="background-color: rgb(114, 137, 218)"] {
+	background-color: rgb(var(--vaccentcolor)) !important;
+}
+.bar-95Sdw1.customBar-3RsUzs[style*="background-color: rgb(114, 137, 218)"] {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 
