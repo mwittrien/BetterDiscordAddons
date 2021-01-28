@@ -933,6 +933,7 @@ module.exports = (_ => {
 								callback();
 							}
 						});
+						if (!sandbox) callback();
 					});
 				}
 
