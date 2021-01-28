@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.1.2",
+			"version": "4.1.3",
 			"description": "Allow you to change the icon, name, tag and color of users"
 		},
 		"changeLog": {
 			"fixed": {
-				"Message Color": "Fixed issue with BDs colored text option"
+				"Use Role Color for Tag": "Fixed option not being changable"
 			}
 		}
 	};
@@ -1373,10 +1373,10 @@ module.exports = (_ => {
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: data.ignoreTagColor,
 									onChange: (value, instance) => {
-										let colorpicker3ins = BDFDB.ReactUtils.findOwner(instance._reactInternals.return, {props: [["number",3]]});
-										let colorpicker4ins = BDFDB.ReactUtils.findOwner(instance._reactInternals.return, {props: [["number",4]]});
-										if (colorpicker3ins) colorpicker3ins.setState({disabled: value});
-										if (colorpicker4ins) colorpicker4ins.setState({disabled: value});
+										let colorPicker3Ins = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return`), {props: [["number",3]]});
+										let colorPicker4Ins = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return`), {props: [["number",4]]});
+										if (colorPicker3Ins) colorPicker3Ins.setState({disabled: value});
+										if (colorPicker4Ins) colorPicker4Ins.setState({disabled: value});
 									}
 								})
 							]
