@@ -132,6 +132,9 @@
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="pc-updater-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settings_icons_updatecheck.svg) center/contain no-repeat;
 }
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="bdCompat-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settings_icons_betterdiscord.svg) center/contain no-repeat;
+}
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Logout-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settings_icons_logout.svg) center/contain no-repeat;
 }
