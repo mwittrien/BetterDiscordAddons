@@ -1205,19 +1205,8 @@ module.exports = (_ => {
 								this.props.children = newChildren;
 								BDFDB.ReactUtils.forceUpdate(this);
 							};
-							let lastHeight;
 							this._start = performance.now();
-							this._progress = BDFDB.TimeUtils.interval(_ => {
-								if (!this._rendered) {
-									let nextHeight = BDFDB.DOMUtils.getRects(data.toast).height;
-									if (nextHeight != 0 && nextHeight == lastHeight) {
-										this._rendered = true;
-										BDFDB.DOMUtils.addClass(data.toast, BDFDB.disCN.toastrendered);
-									}
-									lastHeight = nextHeight;
-								}
-								BDFDB.ReactUtils.forceUpdate(this);
-							}, 10);
+							this._progress = BDFDB.TimeUtils.interval(_ => {BDFDB.ReactUtils.forceUpdate(this);}, 10);
 						}
 						componentWillUnmount() {
 							BDFDB.TimeUtils.clear(this._progress);

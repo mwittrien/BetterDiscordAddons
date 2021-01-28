@@ -1108,6 +1108,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	position: relative;
 	display: flex;
 	align-items: center;
+	backdrop-filter: blur(5px);
 	border-radius: 3px;
 	box-shadow: var(--elevation-medium);
 	margin-top: 10px;
@@ -1152,9 +1153,6 @@ img:not([src]), img[src=""], img[src="null"] {
 	left: 0;
 	opacity: 0.9;
 	z-index: 1;
-}
-[REPLACE_CLASS_toastrendered] [REPLACE_CLASS_toastbg] {
-	backdrop-filter: blur(5px);
 }
 [REPLACE_CLASS_toastinner] {
 	position: relative;
