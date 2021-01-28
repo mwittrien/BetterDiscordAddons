@@ -3837,7 +3837,7 @@ body::before {
 	opacity: 0.7;
 }
 
-#app-mount .modal-DRZfgq .checked-3_4uQ9 {					/* modal				ackcheckbox							*/
+#app-mount .modal-DRZfgq .checkbox-1ix_J3.checked-3_4uQ9 {	/* modal				ackcheckbox							*/
 	background-color: rgb(var(--vaccentcolor));
 }
 #app-mount .modal-DRZfgq .checkbox-1ix_J3 [stroke="#7289da"] {
@@ -3846,7 +3846,7 @@ body::before {
 #app-mount .ack-2yIUvY {									/* modal				acklabel							*/
 	color: rgb(var(--fontwhite2));
 }
-#app-mount .buttonContainer-3S_miP {						/* modal				footer							*/
+#app-mount .buttonContainer-3S_miP {						/* modal				footer								*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	box-shadow: none;
 }
@@ -6389,23 +6389,23 @@ body::before {
 #app-mount .checkbox-1ix_J3 {								/* checkbox				inner								*/
 	border-color: rgb(var(--fontwhite3));
 }
-#app-mount .checked-3_4uQ9 {								/* checkbox				checked								*/
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9 {				/* checkbox				checked								*/
 	background-color: rgb(var(--fontwhite1));
 	border-color: rgb(var(--fontwhite1));
 }
-#app-mount .checked-3_4uQ9.round-2jCFai,					/* checkbox				roundchecked						*/
-#app-mount .checked-3_4uQ9[style*="border-color: rgb(79, 84, 92)"] {
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9.round-2jCFai,	/* checkbox				roundchecked						*/
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="border-color: rgb(79, 84, 92)"] {
 	background-color: rgb(var(--vaccentcolor)) !important;
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
-#app-mount .checked-3_4uQ9.round-2jCFai svg,
-#app-mount .checked-3_4uQ9[style*="border-color: rgb(79, 84, 92)"] svg,
-#app-mount .checked-3_4uQ9[style*="background-color: rgb(114, 137, 218)"] svg {
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9.round-2jCFai svg,
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="border-color: rgb(79, 84, 92)"] svg,
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="background-color: rgb(114, 137, 218)"] svg {
 	filter: drop-shadow(1px 1px var(--vtextshadow));
 }
-#app-mount .checked-3_4uQ9 polyline[stroke="#43b581"],		/* checkbox				checkmark							*/
-#app-mount .checked-3_4uQ9 polyline[stroke="#4f545c"],
-#app-mount .checked-3_4uQ9 polyline[stroke="#ffffff"] {
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9 polyline[stroke="#43b581"],		/* checkbox				checkmark							*/
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9 polyline[stroke="#4f545c"],
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9 polyline[stroke="#ffffff"] {
 	stroke: rgb(var(--fontwhite1));
 }
 .checkboxMute-14hTGS::before {
