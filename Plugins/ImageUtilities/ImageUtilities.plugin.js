@@ -1241,7 +1241,7 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"Nem sikerült másolni a képet a vágólapra",
 							toast_copyimage_success:			"Kép másolása a vágólapra",
 							toast_copyimagelink_success:		"Képlink linkre másolva a vágólapra",
-							toast_saveimage_failed:				"Nem sikerült menteni a képet a (z) '{{path}}” mappába",
+							toast_saveimage_failed:				"Nem sikerült menteni a képet a '{{path}}” mappába",
 							toast_saveimage_success:			"Mentett kép itt: '{{path}}”"
 						};
 					case "it":		// Italian

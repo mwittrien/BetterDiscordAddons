@@ -817,7 +817,7 @@ module.exports = (_ => {
 						return {
 							noaccount_header:					"Valami hiányzik",
 							noaccount_subheader:				"Csatlakoztatnia kell egy Spotify-fiókot",
-							noaccount_text:						"Hiányzik egy csatlakoztatott Spotify-fiók, fiók nélkül nem fogja tudni használni a (z) Spotify Controls szolgáltatást. Ha Spotify-fiókot szeretne összekapcsolni Discord-fiókot, kattintson az alábbi gombra.",
+							noaccount_text:						"Hiányzik egy csatlakoztatott Spotify-fiók, fiók nélkül nem fogja tudni használni a Spotify Controls szolgáltatást. Ha Spotify-fiókot szeretne összekapcsolni Discord-fiókot, kattintson az alábbi gombra.",
 							restricted_device:					"Nem lehet irányítani a Spotify szolgáltatást, miközben zenét játszik le korlátozott eszközön",
 							toast_copyurl_fail:					"A dal URL-jét nem sikerült átmásolni a vágólapra",
 							toast_copyurl_success:				"A dal URL-jét a vágólapra másolta"
