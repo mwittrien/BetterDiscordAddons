@@ -545,7 +545,8 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_settingstablecardlabel] {
 	display: flex;
 	align-items: center;
-	flex: 1 0 auto;
+	flex: 0 1 auto;
+	overflow: hidden;
 	color: var(--header-primary);
 }
 [REPLACE_CLASS_settingstablecardconfigs] {
