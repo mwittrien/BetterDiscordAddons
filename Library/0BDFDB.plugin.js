@@ -2611,6 +2611,7 @@ module.exports = (_ => {
 				BDFDB.ReactUtils.forceUpdate = function (...instances) {
 					for (let ins of instances.flat(10).filter(n => n)) if (ins.updater && typeof ins.updater.isMounted == "function" && ins.updater.isMounted(ins)) ins.forceUpdate();
 				};
+				/* BROKEN ON CANARY */
 				BDFDB.ReactUtils.getInstance = function (node) {
 					if (!BDFDB.ObjectUtils.is(node)) return null;
 					return node[Object.keys(node).find(key => key.startsWith("__reactInternalInstance") || key.startsWith("__reactFiber"))];
