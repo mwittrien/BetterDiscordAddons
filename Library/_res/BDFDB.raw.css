@@ -246,6 +246,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	text-overflow: ellipsis;
 }
 
+[REPLACE_CLASS_userinfodate] {
+	user-select: text;
+}
 [REPLACE_CLASS_userpopout] [REPLACE_CLASS_userpopoutheadertext] + [REPLACE_CLASS_userinfodate],
 [REPLACE_CLASS_userprofile] [REPLACE_CLASS_userprofilenametag] + [REPLACE_CLASS_userinfodate] {
 	margin-top: 8px;
