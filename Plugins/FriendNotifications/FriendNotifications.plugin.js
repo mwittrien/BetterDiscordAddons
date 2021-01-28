@@ -769,7 +769,7 @@ module.exports = (_ => {
 										let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id)
 										if (DMid) BDFDB.LibraryModules.SelectChannelUtils.selectPrivateChannel(DMid);
 										else BDFDB.LibraryModules.DirectMessageUtils.openPrivateChannel(BDFDB.UserUtils.me.id, user.id);
-										BDFDB.LibraryRequires.electron.remote.getCurrentWindow().focus();
+										BDFDB.DiscordUtils.focus();
 									}
 								};
 								if (observedUsers[id][status.name] == notificationTypes.DESKTOP.value) {

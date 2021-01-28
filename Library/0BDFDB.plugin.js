@@ -663,7 +663,7 @@ module.exports = (_ => {
 			if (reloadButton) {
 				BDFDB.DOMUtils.toggle(reloadButton, true);
 				reloadButton.addEventListener("click", _ => {
-					LibraryRequires.electron.remote.getCurrentWindow().reload();
+					LibraryRequires.electron && LibraryRequires.electron.remote && LibraryRequires.electron.remote.getCurrentWindow().reload();
 				});
 				reloadButton.addEventListener("mouseenter", _ => {
 					if (window.PluginUpdates.downloaded) BDFDB.TooltipUtils.create(reloadButton, window.PluginUpdates.downloaded.join(", "), {
@@ -1188,11 +1188,11 @@ module.exports = (_ => {
 						runQueue();
 					};
 					
-					let icon = data.config.avatar ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
+					let icon = data.config.avatar ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.AvatarComponents.default, {
 						src: data.config.avatar,
-						size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_24
-					}) : ((data.config.icon || data.config.type && LibraryConstants.ToastIcons[data.config.type]) ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-						name: data.config.type && LibraryConstants.ToastIcons[data.config.type] && BDFDB.LibraryComponents.SvgIcon.Names[LibraryConstants.ToastIcons[data.config.type]],
+						size: InternalComponents.LibraryComponents.AvatarComponents.Sizes.SIZE_24
+					}) : ((data.config.icon || data.config.type && LibraryConstants.ToastIcons[data.config.type]) ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+						name: data.config.type && LibraryConstants.ToastIcons[data.config.type] && InternalComponents.LibraryComponents.SvgIcon.Names[LibraryConstants.ToastIcons[data.config.type]],
 						iconSVG: data.config.icon,
 						width: 18,
 						height: 18,
@@ -1230,15 +1230,15 @@ module.exports = (_ => {
 												className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.toasttext, data.config.textClassName),
 												children: this.props.children
 											}),
-											!disableInteractions && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+											!disableInteractions && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 												className: BDFDB.disCN.toastcloseicon,
-												name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE,
+												name: InternalComponents.LibraryComponents.SvgIcon.Names.CLOSE,
 												width: 16,
 												height: 16
 											})
 										].filter(n => n)
 									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Animations.animated.div, {
+									BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Animations.animated.div, {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.toastbar, barColor && BDFDB.disCN.toastcustombar),
 										style: {
 											backgroundColor: barColor,
@@ -4104,8 +4104,11 @@ module.exports = (_ => {
 				};
 
 				BDFDB.DiscordUtils = {};
+				BDFDB.DiscordUtils.focus = function () {
+					LibraryRequires.electron && LibraryRequires.electron.remote && LibraryRequires.electron.remote.getCurrentWindow().focus();
+				};
 				BDFDB.DiscordUtils.openLink = function (url, config = {}) {
-					if (config.inBuilt || config.inBuilt === undefined && settings.useChromium) {
+					if ((config.inBuilt || config.inBuilt === undefined && settings.useChromium) && LibraryRequires.electron && LibraryRequires.electron.remote) {
 						let browserWindow = new LibraryRequires.electron.remote.BrowserWindow({
 							frame: true,
 							resizeable: true,
@@ -4123,6 +4126,7 @@ module.exports = (_ => {
 					else window.open(url, "_blank");
 				};
 				BDFDB.DiscordUtils.getFolder = function () {
+					if (!LibraryRequires.electron || !LibraryRequires.electron.remote) return "";
 					let built = BDFDB.DiscordUtils.getBuilt();
 					built = "discord" + (built == "stable" ? "" : built);
 					return LibraryRequires.path.resolve(LibraryRequires.electron.remote.app.getPath("appData"), built, BDFDB.DiscordUtils.getVersion());
@@ -4138,7 +4142,7 @@ module.exports = (_ => {
 								let version = BDFDB.DiscordUtils.getVersion();
 								if (version) {
 									version = version.split(".");
-									if (version.length == 3 && !isNaN(version = parseInt(version[2]))) built = version > 300 ? "stable" : da > 200 ? "canary" : "ptb";
+									if (version.length == 3 && !isNaN(version = parseInt(version[2]))) built = version > 300 ? "stable" : version > 200 ? "canary" : "ptb";
 									else built = "stable";
 								}
 								else built = "stable";
@@ -4153,7 +4157,7 @@ module.exports = (_ => {
 					else {
 						let version = null;
 						try {version = LibraryRequires.electron.remote.app.getVersion();}
-						catch (err) {version = "";}
+						catch (err) {version = 400;}
 						BDFDB.DiscordUtils.getBuilt.version = version;
 						return version;
 					}
@@ -4183,7 +4187,7 @@ module.exports = (_ => {
 				BDFDB.WindowUtils = {};
 				BDFDB.WindowUtils.open = function (plugin, url, config = {}) {
 					plugin = plugin == BDFDB && InternalBDFDB || plugin;
-					if (!BDFDB.ObjectUtils.is(plugin) || !url) return;
+					if (!BDFDB.ObjectUtils.is(plugin) || !url || !LibraryRequires.electron || !LibraryRequires.electron.remote) return;
 					if (!BDFDB.ArrayUtils.is(plugin.browserWindows)) plugin.browserWindows = [];
 					config = Object.assign({
 						show: false,
@@ -7941,7 +7945,7 @@ module.exports = (_ => {
 											let translation = Array.from(document.querySelectorAll("[data-language-to-translate-into] span:not([class])")).map(n => n.innerText).join("");
 											if (translation || count > 50) {
 												clearInterval(interval);
-												require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "BDFDB-translation", [
+												require("electron").ipcRenderer.sendTo(${LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "BDFDB-translation", [
 													translation,
 													(document.querySelector("h2 ~ [lang]") || {}).lang
 												]);
