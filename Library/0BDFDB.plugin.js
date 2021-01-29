@@ -312,6 +312,12 @@ module.exports = (_ => {
 	BDFDB.ObjectUtils.isEmpty = function (obj) {
 		return !BDFDB.ObjectUtils.is(obj) || Object.getOwnPropertyNames(obj).length == 0;
 	};
+	BDFDB.ObjectUtils.mirror = function (obj) {
+		if (!BDFDB.ObjectUtils.is(obj)) return {};
+		let newObj = Object.assign({}, obj);
+		for (let key in newObj) newObj[newObj[key]] = key;
+		return newObj;
+	};
 
 	BDFDB.ArrayUtils = {};
 	BDFDB.ArrayUtils.is = function (array) {
