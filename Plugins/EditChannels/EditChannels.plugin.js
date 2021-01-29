@@ -14,16 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.2.3",
+			"version": "4.2.4",
 			"description": "Allow you to rename and recolor channelnames"
 		},
 		"changeLog": {
 			"improved": {
-				"Groups": "You can now change the name/color/icon of group channels"
-			},
-			"fixed": {
-				"Categories": "Gradient works for categories again",
-				"Icons": "Colors icons properly again"
+				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
 			}
 		}
 	};
@@ -606,6 +602,9 @@ module.exports = (_ => {
 
 			openChannelSettingsModal (channel) {
 				let data = changedChannels[channel.id] || {};
+				let newData = Object.assign({}, data);
+				
+				let iconInput;
 				
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
@@ -614,12 +613,13 @@ module.exports = (_ => {
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_channelname,
-							className: BDFDB.disCN.marginbottom20 + " input-channelname",
+							className: BDFDB.disCN.marginbottom20,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									value: data.name,
 									placeholder: channel.name,
-									autoFocus: true
+									autoFocus: true,
+									onChange: value => {newData.name = value}
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 									className: BDFDB.disCN.dividerdefault
@@ -632,18 +632,18 @@ module.exports = (_ => {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 									color: data.color,
-									number: 1
+									onColorChange: value => {newData.color = value}
 								})
 							]
 						}),
 						!channel.isGroupDM() && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Switch",
-							className: "input-inheritcolor",
 							margin: 20,
 							label: this.labels.modal_inheritcolor,
 							tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 							value: channel.isCategory() && data.inheritColor,
-							disabled: !channel.isCategory()
+							disabled: !channel.isCategory(),
+							onChange: value => {newData.inheritColor = value}
 						}),
 						channel.isGroupDM() && BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.marginbottom20,
@@ -662,7 +662,6 @@ module.exports = (_ => {
 											children: this.labels.modal_channelicon
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-											className: "input-removeicon",
 											type: "Switch",
 											margin: 0,
 											grow: 0,
@@ -670,27 +669,34 @@ module.exports = (_ => {
 											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 											value: data.removeIcon,
 											onChange: (value, instance) => {
-												let iconInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return`), {key: "CHANNELICON"});
-												if (iconInputIns) {
-													delete iconInputIns.props.success;
-													delete iconInputIns.props.errorMessage;
-													iconInputIns.props.disabled = value;
-													BDFDB.ReactUtils.forceUpdate(iconInputIns);
+												newData.removeIcon = value;
+												if (value) {
+													delete iconInput.props.success;
+													delete iconInput.props.errorMessage;
+													iconInput.props.disabled = true;
+													BDFDB.ReactUtils.forceUpdate(iconInput);
+												}
+												else {
+													iconInput.props.disabled = false;
+													this.checkUrl(iconInput.props.value, iconInput).then(returnValue => {
+														newData.url = returnValue;
+													});
 												}
 											}
 										})
 									]
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									className: "input-channelicon",
-									key: "CHANNELICON",
 									success: !data.removeIcon && data.url,
 									maxLength: 100000000000000000000,
 									value: data.url,
 									placeholder: BDFDB.DMUtils.getIcon(channel.id),
 									disabled: data.removeIcon,
+									ref: instance => {if (instance) iconInput = instance;},
 									onChange: (value, instance) => {
-										this.checkUrl(value, instance);
+										this.checkUrl(value, instance).then(returnValue => {
+											newData.url = returnValue;
+										});
 									}
 								})
 							]
@@ -700,29 +706,21 @@ module.exports = (_ => {
 						contents: BDFDB.LanguageUtils.LanguageStrings.SAVE,
 						color: "BRAND",
 						close: true,
-						onClick: modal => {
-							let oldData = Object.assign({}, data);
-							
-							let channelNameInput = modal.querySelector(".input-channelname " + BDFDB.dotCN.input);
-							let inheritColorInput = modal.querySelector(".input-inheritcolor " + BDFDB.dotCN.switchinner);
-							let channelIconInput = modal.querySelector(".input-channelicon " + BDFDB.dotCN.input);
-							let removeIconInput = modal.querySelector(".input-removeicon " + BDFDB.dotCN.switchinner);
-							
-							data.name = channelNameInput.value.trim() || null;
-
-							data.color = BDFDB.ColorUtils.getSwatchColor(modal, 1);
-							if (data.color != null && !BDFDB.ObjectUtils.is(data.color)) {
-								if (data.color[0] < 30 && data.color[1] < 30 && data.color[2] < 30) data.color = BDFDB.ColorUtils.change(data.color, 30);
-								else if (data.color[0] > 225 && data.color[1] > 225 && data.color[2] > 225) data.color = BDFDB.ColorUtils.change(data.color, -30);
+						onClick: _ => {
+							if (newData.color != null && !BDFDB.ObjectUtils.is(newData.color)) {
+								if (newData.color[0] < 30 && newData.color[1] < 30 && newData.color[2] < 30) newData.color = BDFDB.ColorUtils.change(newData.color, 30);
+								else if (newData.color[0] > 225 && newData.color[1] > 225 && newData.color[2] > 225) newData.color = BDFDB.ColorUtils.change(newData.color, -30);
 							}
-
-							data.inheritColor = inheritColorInput && inheritColorInput.checked;
-							data.removeIcon = removeIconInput && removeIconInput.checked;
-							data.url = channelIconInput && (!data.removeIcon && BDFDB.DOMUtils.containsClass(channelIconInput, BDFDB.disCN.inputsuccess) ? channelIconInput.value.trim() : null) || null;
+							
+							newData.url = !newData.removeIcon ? newData.url : "";
 							
 							let changed = false;
-							if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.DataUtils.remove(this, "channels", channel.id);
-							else if (!BDFDB.equals(oldData, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "channels", channel.id);
+							if (Object.keys(newData).every(key => newData[key] == null || newData[key] == false) && (changed = true)) {
+								BDFDB.DataUtils.remove(this, "channels", channel.id);
+							}
+							else if (!BDFDB.equals(newData, data) && (changed = true)) {
+								BDFDB.DataUtils.save(newData, this, "channels", channel.id);
+							}
 							if (changed) this.forceUpdateAll(true);
 						}
 					}]
@@ -730,26 +728,37 @@ module.exports = (_ => {
 			}
 			
 			checkUrl (url, instance) {
-				BDFDB.TimeUtils.clear(instance.checkTimeout);
-				if (url == null || !url.trim()) {
-					delete instance.props.success;
-					delete instance.props.errorMessage;
-					instance.forceUpdate();
-				}
-				else instance.checkTimeout = BDFDB.TimeUtils.timeout(_ => {
-					BDFDB.LibraryRequires.request(url.trim(), (error, response, result) => {
-						if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
-							instance.props.success = true;
-							delete instance.props.errorMessage;
-						}
-						else {
-							delete instance.props.success;
-							instance.props.errorMessage = this.labels.modal_invalidurl;
-						}
-						delete instance.checkTimeout;
-						instance.forceUpdate();
-					});
-				}, 1000);
+				return new Promise(callback => {
+					BDFDB.TimeUtils.clear(instance.checkTimeout);
+					url = url && url.trim();
+					if (!url || instance.props.disabled) {
+						delete instance.props.success;
+						delete instance.props.errorMessage;
+						callback("");
+						BDFDB.ReactUtils.forceUpdate(instance);
+					}
+					else instance.checkTimeout = BDFDB.TimeUtils.timeout(_ => {
+						BDFDB.LibraryRequires.request(url, (error, response, result) => {
+							delete instance.checkTimeout;
+							if (instance.props.disabled) {
+								delete instance.props.success;
+								delete instance.props.errorMessage;
+								callback("");
+							}
+							else if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
+								instance.props.success = true;
+								delete instance.props.errorMessage;
+								callback(url);
+							}
+							else {
+								delete instance.props.success;
+								instance.props.errorMessage = this.labels.modal_invalidurl;
+								callback("");
+							}
+							BDFDB.ReactUtils.forceUpdate(instance);
+						});
+					}, 1000);
+				});
 			}
 
 			setLabelsByLanguage () {
@@ -764,6 +773,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Локален цвят на канала",
 							modal_header:						"Настройки на местния канал",
 							modal_inheritcolor:					"Наследете цвета на подканали",
+							modal_invalidurl:					"Невалиден адрес",
 							submenu_channelsettings:			"Промяна на настройките",
 							submenu_resetsettings:				"Нулиране на канала"
 						};
@@ -777,6 +787,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Lokal kanalfarve",
 							modal_header:						"Lokale kanalindstillinger",
 							modal_inheritcolor:					"Arv farve til underkanaler",
+							modal_invalidurl:					"Ugyldig URL",
 							submenu_channelsettings:			"Ændre indstillinger",
 							submenu_resetsettings:				"Nulstil kanal"
 						};
@@ -790,6 +801,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Lokale Kanalfarbe",
 							modal_header:						"Lokale Kanaleinstellungen",
 							modal_inheritcolor:					"Vererbung der Farbe an Unterkanäle",
+							modal_invalidurl:					"Ungültige URL",
 							submenu_channelsettings:			"Einstellungen ändern",
 							submenu_resetsettings:				"Kanal zurücksetzen"
 						};
@@ -803,6 +815,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Τοπικό χρώμα καναλιού",
 							modal_header:						"Ρυθμίσεις τοπικού καναλιού",
 							modal_inheritcolor:					"Κληρονομήστε το χρώμα στα δευτερεύοντα κανάλια",
+							modal_invalidurl:					"Μη έγκυρη διεύθυνση URL",
 							submenu_channelsettings:			"Αλλαξε ρυθμίσεις",
 							submenu_resetsettings:				"Επαναφορά καναλιού"
 						};
@@ -816,6 +829,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Color del canal local",
 							modal_header:						"Configuración de canal local",
 							modal_inheritcolor:					"Heredar color a subcanales",
+							modal_invalidurl:					"URL invalida",
 							submenu_channelsettings:			"Cambiar ajustes",
 							submenu_resetsettings:				"Restablecer canal"
 						};
@@ -829,6 +843,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Paikallisen kanavan väri",
 							modal_header:						"Paikallisen kanavan asetukset",
 							modal_inheritcolor:					"Peri väri alikanaville",
+							modal_invalidurl:					"Virheellinen URL",
 							submenu_channelsettings:			"Vaihda asetuksia",
 							submenu_resetsettings:				"Nollaa kanava"
 						};
@@ -842,6 +857,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Couleur locale de la salon",
 							modal_header:						"Paramètres locaux de la salon",
 							modal_inheritcolor:					"Hériter de la couleur aux sous-canaux",
+							modal_invalidurl:					"URL invalide",
 							submenu_channelsettings:			"Modifier les paramètres",
 							submenu_resetsettings:				"Réinitialiser la salon"
 						};
@@ -855,6 +871,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Lokalna boja kanala",
 							modal_header:						"Postavke lokalnog kanala",
 							modal_inheritcolor:					"Naslijedi boju na podkanalima",
+							modal_invalidurl:					"Neispravna poveznica",
 							submenu_channelsettings:			"Promijeniti postavke",
 							submenu_resetsettings:				"Resetiraj kanal"
 						};
@@ -868,6 +885,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Helyi csatorna színe",
 							modal_header:						"Helyi csatorna beállításai",
 							modal_inheritcolor:					"Örökli a színt az alcsatornákra",
+							modal_invalidurl:					"Érvénytelen URL",
 							submenu_channelsettings:			"Beállítások megváltoztatása",
 							submenu_resetsettings:				"Csatorna visszaállítása"
 						};
@@ -881,6 +899,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Colore canale locale",
 							modal_header:						"Impostazioni del canale locale",
 							modal_inheritcolor:					"Eredita colore ai canali secondari",
+							modal_invalidurl:					"URL non valido",
 							submenu_channelsettings:			"Cambia impostazioni",
 							submenu_resetsettings:				"Reimposta canale"
 						};
@@ -894,6 +913,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"ローカルチャンネルの色",
 							modal_header:						"ローカルチャンネル設定",
 							modal_inheritcolor:					"サブチャネルに色を継承する",
+							modal_invalidurl:					"無効なURL",
 							submenu_channelsettings:			"設定を変更する",
 							submenu_resetsettings:				"チャネルをリセット"
 						};
@@ -907,6 +927,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"로컬 채널 색상",
 							modal_header:						"로컬 채널 설정",
 							modal_inheritcolor:					"하위 채널에 색상 상속",
+							modal_invalidurl:					"잘못된 URL",
 							submenu_channelsettings:			"설정 변경",
 							submenu_resetsettings:				"채널 재설정"
 						};
@@ -920,6 +941,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Vietinio kanalo spalva",
 							modal_header:						"Vietinio kanalo nustatymai",
 							modal_inheritcolor:					"Paveldėkite spalvas subkanalams",
+							modal_invalidurl:					"Neteisingas URL",
 							submenu_channelsettings:			"Pakeisti nustatymus",
 							submenu_resetsettings:				"Iš naujo nustatyti kanalą"
 						};
@@ -933,6 +955,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Lokale kanaalkleur",
 							modal_header:						"Lokale kanaalinstellingen",
 							modal_inheritcolor:					"Overerf kleur naar subkanalen",
+							modal_invalidurl:					"Ongeldige URL",
 							submenu_channelsettings:			"Instellingen veranderen",
 							submenu_resetsettings:				"Kanaal resetten"
 						};
@@ -946,6 +969,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Lokal kanalfarge",
 							modal_header:						"Lokale kanalinnstillinger",
 							modal_inheritcolor:					"Arv farge til underkanaler",
+							modal_invalidurl:					"Ugyldig URL",
 							submenu_channelsettings:			"Endre innstillinger",
 							submenu_resetsettings:				"Tilbakestill kanal"
 						};
@@ -959,6 +983,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Kolor kanału lokalnego",
 							modal_header:						"Ustawienia kanału lokalnego",
 							modal_inheritcolor:					"Dziedzicz kolor do kanałów podrzędnych",
+							modal_invalidurl:					"Nieprawidłowy URL",
 							submenu_channelsettings:			"Zmień ustawienia",
 							submenu_resetsettings:				"Resetuj kanał"
 						};
@@ -972,6 +997,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Cor do Canal Local",
 							modal_header:						"Configurações de canal local",
 							modal_inheritcolor:					"Herdar cor para subcanais",
+							modal_invalidurl:					"URL inválida",
 							submenu_channelsettings:			"Mudar configurações",
 							submenu_resetsettings:				"Reiniciar canal"
 						};
@@ -985,6 +1011,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Culoare canal local",
 							modal_header:						"Setări canale locale",
 							modal_inheritcolor:					"Moșteniți culoarea la sub-canale",
+							modal_invalidurl:					"URL invalid",
 							submenu_channelsettings:			"Schimbă setările",
 							submenu_resetsettings:				"Resetați canalul"
 						};
@@ -998,6 +1025,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Цвет локального канала",
 							modal_header:						"Настройки локального канала",
 							modal_inheritcolor:					"Наследовать цвет для субканалов",
+							modal_invalidurl:					"Неверная ссылка",
 							submenu_channelsettings:			"Изменить настройки",
 							submenu_resetsettings:				"Сбросить канал"
 						};
@@ -1011,6 +1039,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Lokal kanalfärg",
 							modal_header:						"Lokala kanalinställningar",
 							modal_inheritcolor:					"Ärva färg till underkanaler",
+							modal_invalidurl:					"Ogiltig URL",
 							submenu_channelsettings:			"Ändra inställningar",
 							submenu_resetsettings:				"Återställ kanal"
 						};
@@ -1024,6 +1053,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"ช่องท้องถิ่นสี",
 							modal_header:						"การตั้งค่าช่องท้องถิ่น",
 							modal_inheritcolor:					"สืบทอดสีไปยังช่องย่อย",
+							modal_invalidurl:					"URL ไม่ถูกต้อง",
 							submenu_channelsettings:			"เปลี่ยนการตั้งค่า",
 							submenu_resetsettings:				"รีเซ็ตช่อง"
 						};
@@ -1037,6 +1067,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Yerel Kanal Rengi",
 							modal_header:						"Yerel Kanal Ayarları",
 							modal_inheritcolor:					"Renkleri Alt Kanallara Devral",
+							modal_invalidurl:					"Geçersiz URL",
 							submenu_channelsettings:			"Ayarları değiştir",
 							submenu_resetsettings:				"Kanalı Sıfırla"
 						};
@@ -1050,6 +1081,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Колір локального каналу",
 							modal_header:						"Налаштування локального каналу",
 							modal_inheritcolor:					"Успадковувати колір для підканалів",
+							modal_invalidurl:					"Недійсна URL-адреса",
 							submenu_channelsettings:			"Змінити налаштування",
 							submenu_resetsettings:				"Скинути канал"
 						};
@@ -1063,6 +1095,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Màu kênh địa phương",
 							modal_header:						"Cài đặt kênh cục bộ",
 							modal_inheritcolor:					"Kế thừa màu cho các kênh phụ",
+							modal_invalidurl:					"URL không hợp lệ",
 							submenu_channelsettings:			"Thay đổi cài đặt",
 							submenu_resetsettings:				"Đặt lại kênh"
 						};
@@ -1076,6 +1109,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"本地频道颜色",
 							modal_header:						"本地频道设置",
 							modal_inheritcolor:					"继承颜色到子通道",
+							modal_invalidurl:					"无效的网址",
 							submenu_channelsettings:			"更改设置",
 							submenu_resetsettings:				"重置频道"
 						};
@@ -1089,6 +1123,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"本地頻道顏色",
 							modal_header:						"本地頻道設置",
 							modal_inheritcolor:					"繼承顏色到子通道",
+							modal_invalidurl:					"無效的網址",
 							submenu_channelsettings:			"更改設置",
 							submenu_resetsettings:				"重置頻道"
 						};
@@ -1102,6 +1137,7 @@ module.exports = (_ => {
 							modal_colorpicker1:					"Local Channel Color",
 							modal_header:						"Local Channel Settings",
 							modal_inheritcolor:					"Inherit Color to Sub-Channels",
+							modal_invalidurl:					"Invalid URL",
 							submenu_channelsettings:			"Change Settings",
 							submenu_resetsettings:				"Reset Channel"
 						};
