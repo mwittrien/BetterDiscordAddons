@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "PinDMs",
 			"author": "DevilBro",
-			"version": "1.7.8",
+			"version": "1.7.9",
 			"description": "Allow you to pin DMs, making them appear at the top of your DMs/Server-List"
 		},
 		"changeLog": {
-			"added": {
-				"Predefined Categories": "Added the option to enable predefined categories for the channel list in the settings that will automatically add the dms fitting the category topic"
+			"improved": {
+				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
 			}
 		}
 	};
@@ -880,7 +880,10 @@ module.exports = (_ => {
 			}
 			
 			openCategorySettingsModal (data, type, isNew) {
-				if (BDFDB.ObjectUtils.is(data) && type) BDFDB.ModalUtils.open(this, {
+				if (!BDFDB.ObjectUtils.is(data) || !type) return;
+				let newData = Object.assign({}, data);
+				
+				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_SETTINGS,
 					subHeader: data.name,
@@ -892,7 +895,8 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									value: data.name,
 									placeholder: data.name,
-									autoFocus: true
+									autoFocus: true,
+									onChange: value => {newData.name = value}
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 									className: BDFDB.disCN.dividerdefault
@@ -905,7 +909,7 @@ module.exports = (_ => {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 									color: data.color,
-									number: 1
+									onColorChange: value => {newData.color = value}
 								})
 							]
 						})
@@ -914,16 +918,13 @@ module.exports = (_ => {
 						contents: isNew ? BDFDB.LanguageUtils.LanguageStrings.CREATE : BDFDB.LanguageUtils.LanguageStrings.SAVE,
 						color: "BRAND",
 						close: true,
-						onClick: modal => {
-							data.name = modal.querySelector(".input-categoryname " + BDFDB.dotCN.input).value.trim() || data.name;
-
-							data.color = BDFDB.ColorUtils.getSwatchColor(modal, 1);
-							if (data.color != null && !BDFDB.ObjectUtils.is(data.color)) {
-								if (data.color[0] < 30 && data.color[1] < 30 && data.color[2] < 30) data.color = BDFDB.ColorUtils.change(data.color, 30);
-								else if (data.color[0] > 225 && data.color[1] > 225 && data.color[2] > 225) data.color = BDFDB.ColorUtils.change(data.color, -30);
+						onClick: _ => {
+							if (newData.color != null && !BDFDB.ObjectUtils.is(newData.color)) {
+								if (newData.color[0] < 30 && newData.color[1] < 30 && newData.color[2] < 30) newData.color = BDFDB.ColorUtils.change(newData.color, 30);
+								else if (newData.color[0] > 225 && newData.color[1] > 225 && newData.color[2] > 225) newData.color = BDFDB.ColorUtils.change(newData.color, -30);
 							}
 							
-							BDFDB.DataUtils.save(data, this, type, data.id);
+							BDFDB.DataUtils.save(newData, this, type, data.id);
 							
 							this.updateContainer(type);
 						}
@@ -931,11 +932,11 @@ module.exports = (_ => {
 				});
 			}
 
-			addPin (newid, type) {
-				if (!newid) return;
+			addPin (newId, type) {
+				if (!newId) return;
 				let pinnedDMs = BDFDB.DataUtils.load(this, type);
 				for (let id in pinnedDMs) pinnedDMs[id] = pinnedDMs[id] + 1;
-				pinnedDMs[newid] = 0;
+				pinnedDMs[newId] = 0;
 				BDFDB.DataUtils.save(pinnedDMs, this, type);
 				this.updateContainer(type);
 			}
