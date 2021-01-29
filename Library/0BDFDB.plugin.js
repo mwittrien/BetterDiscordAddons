@@ -1299,13 +1299,6 @@ module.exports = (_ => {
 							notification.close();
 						};
 						
-						if (!data.config.requireInteraction) {
-							let timeout = typeof data.config.timeout == "number" && !disableInteractions ? data.config.timeout : 5000;
-							let closeTimeout = BDFDB.TimeUtils.timeout(_ => {
-								notification.close();
-							}, timeout > 0 ? timeout : 600000);
-						}
-						
 						notification.onclose = _ => {
 							BDFDB.TimeUtils.clear(closeTimeout);
 							audio.pause();
