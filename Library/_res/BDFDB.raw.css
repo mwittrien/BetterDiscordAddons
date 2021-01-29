@@ -1197,13 +1197,12 @@ img:not([src]), img[src=""], img[src="null"] {
 	left: 0;
 	height: 4px;
 	background: black;
-	opacity: 0.2;
+	opacity: 0.3;
 	z-index: 3;
 	transition: all;
 }
 [REPLACE_CLASS_toastdefault] [REPLACE_CLASS_toastbar] {
 	background: var(--header-primary);
-	opacity: 0.3;
 }
 [REPLACE_CLASS_toastbar][REPLACE_CLASS_toastcustombar] {
 	opacity: 1;
