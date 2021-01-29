@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "6.8.6",
+			"version": "6.8.7",
 			"description": "Patch Discords native Folders in a way to open Servers within a Folder in a new bar to the right, also adds a bunch of new features to more easily organize, customize and manage your Folders"
 		},
 		"changeLog": {
-			"fixed": {
-				"Custom Icons": "You can now add custom icons again"
+			"improved": {
+				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
 			}
 		}
 	};
@@ -228,6 +228,7 @@ module.exports = (_ => {
 							},
 							onClick: _ => {
 								this.props.selectedIcon = id;
+								this.props.onSelect(this.props.selectedIcon);
 								BDFDB.ReactUtils.forceUpdate(this);
 							},
 							onRemove: _ => {
@@ -300,6 +301,7 @@ module.exports = (_ => {
 				}
 			}
 			render() {
+				let openInput, closeInput;
 				return [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 						title: _this.labels.modal_customopen,
@@ -308,6 +310,7 @@ module.exports = (_ => {
 							type: "file",
 							filter: "image",
 							value: this.props.open,
+							ref: instance => {if (instance) openInput = instance;},
 							onChange: value => {
 								this.props.open = value;
 								BDFDB.ReactUtils.forceUpdate(this);
@@ -321,6 +324,7 @@ module.exports = (_ => {
 							type: "file",
 							filter: "image",
 							value: this.props.closed,
+							ref: instance => {if (instance) closeInput = instance;},
 							onChange: value => {
 								this.props.closed = value;
 								BDFDB.ReactUtils.forceUpdate(this);
@@ -357,11 +361,10 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 									children: BDFDB.LanguageUtils.LanguageStrings.ADD,
-									onClick: (e, instance) => {
-										let inputIns = BDFDB.ReactUtils.findOwner(this, {name: "BDFDB_TextInput", all: true, unlimited: true});
-										if (inputIns.length == 2 && inputIns[0].props.value && inputIns[1].props.value) {
-											this.checkImage(inputIns[0].props.value, openIcon => {
-												this.checkImage(inputIns[1].props.value, closedIcon => {
+									onClick: _ => {
+										if (openInput.props.value && closeInput.props.value) {
+											this.checkImage(openInput.props.value, openIcon => {
+												this.checkImage(closeInput.props.value, closedIcon => {
 													customIcons[_this.generateId("customicon")] = {openicon: openIcon, closedicon: closedIcon};
 													BDFDB.DataUtils.save(customIcons, _this, "customicons");
 													this.props.open = null;
@@ -784,6 +787,10 @@ module.exports = (_ => {
 				if (e.returnvalue) {
 					let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(e.instance.props.folderId);
 					let data = this.getFolderConfig(e.instance.props.folderId);
+					let newData = Object.assign({}, data, {folderName: folder.folderName});
+					
+					let tabs = {};
+					
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["ModalHeader", "Header"]});
 					if (index > -1) {
 						children[index].props.className = BDFDB.DOMUtils.formatClassName(children[index].props.className, BDFDB.disCN.modalheaderhassibling),
@@ -803,12 +810,12 @@ module.exports = (_ => {
 										{value: this.labels.modal_tabheader4}
 									],
 									onItemSelect: (value, instance) => {
-										let tabContentInstances = BDFDB.ReactUtils.findOwner(e.instance, {name: "BDFDB_ModalTabContent", all: true, unlimited: true});
-										for (let ins of tabContentInstances) {
+										let tabsArray = BDFDB.ObjectUtils.toArray(tabs);
+										for (let ins of tabsArray) {
 											if (ins.props.tab == value) ins.props.open = true;
 											else delete ins.props.open;
 										}
-										BDFDB.ReactUtils.forceUpdate(tabContentInstances);
+										BDFDB.ReactUtils.forceUpdate(tabsArray);
 									}
 								})
 							})
@@ -819,36 +826,39 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader1,
 							open: true,
+							ref: instance => {if (instance) tabs[this.labels.modal_tabheader1] = instance;},
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 									title: BDFDB.LanguageUtils.LanguageStrings.GUILD_FOLDER_NAME,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-										inputClassName: "input-foldername",
 										value: folder.folderName,
 										placeholder: folder.folderName || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER,
-										autoFocus: true
+										autoFocus: true,
+										onChange: value => {newData.folderName = value}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 									title: this.labels.modal_iconpicker,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(folderIconPickerComponent, {
-										selectedIcon: data.iconID
+										selectedIcon: data.iconID,
+										onSelect: value => {newData.iconID = value}
 									}, true)
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
-									className: "input-usecloseicon",
 									margin: 20,
 									label: this.labels.modal_usecloseicon,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-									value: data.useCloseIcon
+									value: data.useCloseIcon,
+									onChange: value => {newData.useCloseIcon = value}
 								})
 							]
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader2,
+							ref: instance => {if (instance) tabs[this.labels.modal_tabheader2] = instance;},
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 									title: this.labels.modal_colorpicker1,
@@ -856,7 +866,7 @@ module.exports = (_ => {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color1,
 										defaultFallback: !data.color1 && !data.swapColors,
-										number: 1
+										onColorChange: value => {newData.color1 = value}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -865,28 +875,29 @@ module.exports = (_ => {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color2,
 										defaultFallback: !data.color2 && data.swapColors,
-										number: 2
+										onColorChange: value => {newData.color2 = value}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
-									className: "input-swapcolors",
 									margin: 20,
 									label: this.labels.modal_swapcolor,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-									value: data.swapColors
+									value: data.swapColors,
+									onChange: value => {newData.swapColors = value}
 								})
 							]
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader3,
+							ref: instance => {if (instance) tabs[this.labels.modal_tabheader3] = instance;},
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 									title: this.labels.modal_colorpicker3,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color3,
-										number: 3
+										onColorChange: value => {newData.color3 = value}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -894,21 +905,22 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color4,
-										number: 4
+										onColorChange: value => {newData.color4 = value}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
-									className: "input-copytooltipcolor",
 									margin: 20,
 									label: this.labels.modal_copytooltipcolor,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-									value: data.copyTooltipColor
+									value: data.copyTooltipColor,
+									onChange: value => {newData.copyTooltipColor = value}
 								})
 							]
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader4,
+							ref: instance => {if (instance) tabs[this.labels.modal_tabheader4] = instance;},
 							children: BDFDB.ReactUtils.createElement(folderIconCustomPreviewComponent, {}, true)
 						})
 					];
@@ -916,30 +928,15 @@ module.exports = (_ => {
 					if (index > -1) children[index].props.children = [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 							children: BDFDB.LanguageUtils.LanguageStrings.SAVE,
-							onClick: event => {
-								let oldData = Object.assign({}, data);
-								
-								let root = BDFDB.ReactUtils.findDOMNode(e.instance).parentElement.querySelector(BDFDB.dotCN.layermodal);
-								
-								data.iconID = root.querySelector(BDFDB.dotCN._serverfoldersiconswatch + BDFDB.dotCN._serverfoldersiconswatchselected).getAttribute("iconID");
-
-								data.useCloseIcon = root.querySelector(".input-usecloseicon " + BDFDB.dotCN.switchinner).checked;
-								data.swapColors = root.querySelector(".input-swapcolors " + BDFDB.dotCN.switchinner).checked;
-								data.copyTooltipColor = root.querySelector(".input-copytooltipcolor " + BDFDB.dotCN.switchinner).checked;
-								
-								data.color1 = BDFDB.ColorUtils.getSwatchColor(root, 1);
-								data.color2 = BDFDB.ColorUtils.getSwatchColor(root, 2);
-								data.color3 = BDFDB.ColorUtils.getSwatchColor(root, 3);
-								data.color4 = BDFDB.ColorUtils.getSwatchColor(root, 4);
-								
-								let nativeColor = data.swapColors ? "color2" : "color1";
+							onClick: _ => {								
+								let folderColor = newData[newData.swapColors ? "color2" : "color1"];
 								this.updateFolder({
 									folderId: e.instance.props.folderId,
-									folderName: root.querySelector(".input-foldername").value,
-									folderColor: data[nativeColor] ? BDFDB.ColorUtils.convert(data[nativeColor] && BDFDB.ObjectUtils.is(data[nativeColor]) ? data[nativeColor][Object.keys(data[nativeColor])[0]] : data[nativeColor], "INT") : null
+									folderName: newData.folderName,
+									folderColor: folderColor ? BDFDB.ColorUtils.convert(folderColor && BDFDB.ObjectUtils.is(folderColor) ? folderColor[Object.keys(folderColor)[0]] : folderColor, "INT") : null
 								});
-								if (!BDFDB.equals(oldData, data)) {
-									BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
+								if (!BDFDB.equals(newData, data)) {
+									BDFDB.DataUtils.save(newData, this, "folders", e.instance.props.folderId);
 									this.forceUpdateAll();
 								}
 								e.instance.close();
