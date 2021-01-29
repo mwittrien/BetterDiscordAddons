@@ -704,8 +704,6 @@ module.exports = (_ => {
 				
 				for (let id in observedUsers) userStatusStore[id] = this.getStatusWithMobileAndActivity(id, observedUsers[id]);
 				
-				let toastTime = (amounts.toastTime > amounts.checkInterval ? amounts.checkInterval : amounts.toastTime) * 1000;
-				
 				checkInterval = BDFDB.TimeUtils.interval(_ => {
 					let amount = BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount();
 					if (friendCounter && friendCounter.props.amount != amount) {
@@ -770,7 +768,7 @@ module.exports = (_ => {
 								else if (!document.querySelector(`.friendnotifications-${id}-toast`)) {
 									BDFDB.NotificationUtils.toast(BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(toastString)), {
 										className: `friendnotifications-${status.name}-toast friendnotifications-${id}-toast`,
-										timeout: toastTime,
+										timeout: amounts.toastTime * 1000,
 										avatar: avatar,
 										barColor: BDFDB.UserUtils.getStatusColor(status.name, true),
 										onClick: openChannel,
