@@ -896,7 +896,7 @@ module.exports = (_ => {
 									value: data.name,
 									placeholder: data.name,
 									autoFocus: true,
-									onChange: value => {newData.name = value}
+									onChange: value => {newData.name = value;}
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 									className: BDFDB.disCN.dividerdefault
@@ -909,7 +909,7 @@ module.exports = (_ => {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 									color: data.color,
-									onColorChange: value => {newData.color = value}
+									onColorChange: value => {newData.color = value;}
 								})
 							]
 						})

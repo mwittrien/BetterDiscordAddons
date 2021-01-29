@@ -589,7 +589,7 @@ module.exports = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 											color: data.color1,
-											onColorChange: value => {newData.color1 = value}
+											onColorChange: value => {newData.color1 = value;}
 										})
 									]
 								}),
@@ -599,7 +599,7 @@ module.exports = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 											color: data.color2,
-											onColorChange: value => {newData.color2 = value}
+											onColorChange: value => {newData.color2 = value;}
 										})
 									]
 								})
@@ -614,7 +614,7 @@ module.exports = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 											color: data.color3,
-											onColorChange: value => {newData.color3 = value}
+											onColorChange: value => {newData.color3 = value;}
 										})
 									]
 								}),
@@ -624,7 +624,7 @@ module.exports = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 											color: data.color4,
-											onColorChange: value => {newData.color4 = value}
+											onColorChange: value => {newData.color4 = value;}
 										})
 									]
 								})

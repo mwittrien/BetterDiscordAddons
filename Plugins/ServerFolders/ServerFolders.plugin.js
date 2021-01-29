@@ -835,7 +835,7 @@ module.exports = (_ => {
 										value: folder.folderName,
 										placeholder: folder.folderName || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER,
 										autoFocus: true,
-										onChange: value => {newData.folderName = value}
+										onChange: value => {newData.folderName = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -843,7 +843,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(folderIconPickerComponent, {
 										selectedIcon: data.iconID,
-										onSelect: value => {newData.iconID = value}
+										onSelect: value => {newData.iconID = value;}
 									}, true)
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -852,7 +852,7 @@ module.exports = (_ => {
 									label: this.labels.modal_usecloseicon,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: data.useCloseIcon,
-									onChange: value => {newData.useCloseIcon = value}
+									onChange: value => {newData.useCloseIcon = value;}
 								})
 							]
 						}),
@@ -866,7 +866,7 @@ module.exports = (_ => {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color1,
 										defaultFallback: !data.color1 && !data.swapColors,
-										onColorChange: value => {newData.color1 = value}
+										onColorChange: value => {newData.color1 = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -875,7 +875,7 @@ module.exports = (_ => {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color2,
 										defaultFallback: !data.color2 && data.swapColors,
-										onColorChange: value => {newData.color2 = value}
+										onColorChange: value => {newData.color2 = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -884,7 +884,7 @@ module.exports = (_ => {
 									label: this.labels.modal_swapcolor,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: data.swapColors,
-									onChange: value => {newData.swapColors = value}
+									onChange: value => {newData.swapColors = value;}
 								})
 							]
 						}),
@@ -897,7 +897,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color3,
-										onColorChange: value => {newData.color3 = value}
+										onColorChange: value => {newData.color3 = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -905,7 +905,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color4,
-										onColorChange: value => {newData.color4 = value}
+										onColorChange: value => {newData.color4 = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -914,7 +914,7 @@ module.exports = (_ => {
 									label: this.labels.modal_copytooltipcolor,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: data.copyTooltipColor,
-									onChange: value => {newData.copyTooltipColor = value}
+									onChange: value => {newData.copyTooltipColor = value;}
 								})
 							]
 						}),

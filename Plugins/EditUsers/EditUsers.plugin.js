@@ -1182,7 +1182,7 @@ module.exports = (_ => {
 										value: data.name,
 										placeholder: member.nick || user.username,
 										autoFocus: true,
-										onChange: value => {newData.name = value}
+										onChange: value => {newData.name = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -1190,7 +1190,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 										value: data.tag,
-										onChange: value => {newData.tag = value}
+										onChange: value => {newData.tag = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement("div", {
@@ -1283,7 +1283,7 @@ module.exports = (_ => {
 														emoji: data.statusEmoji,
 														allowManagedEmojis: true,
 														ref: instance => {if (instance) statusEmojiInput = instance;},
-														onSelect: value => {newData.statusEmoji = value}
+														onSelect: value => {newData.statusEmoji = value;}
 													})
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
@@ -1293,7 +1293,7 @@ module.exports = (_ => {
 													placeholder: activity && activity.type == BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS && activity.state || "",
 													disabled: data.removeStatus,
 													ref: instance => {if (instance) statusInput = instance;},
-													onChange: value => {newData.status = value}
+													onChange: value => {newData.status = value;}
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 													size: BDFDB.LibraryComponents.Button.Sizes.NONE,
@@ -1325,7 +1325,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color1,
-										onColorChange: value => {newData.color1 = value}
+										onColorChange: value => {newData.color1 = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -1333,7 +1333,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color2,
-										onColorChange: value => {newData.color2 = value}
+										onColorChange: value => {newData.color2 = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -1342,7 +1342,7 @@ module.exports = (_ => {
 									label: this.labels.modal_userolecolor,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: data.useRoleColor,
-									onChange: value => {newData.useRoleColor = value}
+									onChange: value => {newData.useRoleColor = value;}
 								})
 							]
 						}),
@@ -1356,7 +1356,7 @@ module.exports = (_ => {
 										color: data.color3,
 										disabled: data.ignoreTagColor,
 										ref: instance => {if (instance) colorPicker3 = instance;},
-										onColorChange: value => {newData.color3 = value}
+										onColorChange: value => {newData.color3 = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -1366,7 +1366,7 @@ module.exports = (_ => {
 										color: data.color4,
 										disabled: data.ignoreTagColor,
 										ref: instance => {if (instance) colorPicker4 = instance;},
-										onColorChange: value => {newData.color4 = value}
+										onColorChange: value => {newData.color4 = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -1392,7 +1392,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color5,
-										onColorChange: value => {newData.color5 = value}
+										onColorChange: value => {newData.color5 = value;}
 									})
 								})
 							]

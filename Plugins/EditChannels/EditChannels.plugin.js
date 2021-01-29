@@ -619,7 +619,7 @@ module.exports = (_ => {
 									value: data.name,
 									placeholder: channel.name,
 									autoFocus: true,
-									onChange: value => {newData.name = value}
+									onChange: value => {newData.name = value;}
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 									className: BDFDB.disCN.dividerdefault
@@ -632,7 +632,7 @@ module.exports = (_ => {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 									color: data.color,
-									onColorChange: value => {newData.color = value}
+									onColorChange: value => {newData.color = value;}
 								})
 							]
 						}),
@@ -643,7 +643,7 @@ module.exports = (_ => {
 							tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 							value: channel.isCategory() && data.inheritColor,
 							disabled: !channel.isCategory(),
-							onChange: value => {newData.inheritColor = value}
+							onChange: value => {newData.inheritColor = value;}
 						}),
 						channel.isGroupDM() && BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.marginbottom20,
