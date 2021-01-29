@@ -3699,21 +3699,27 @@ module.exports = (_ => {
 				BDFDB.ModalUtils = {};
 				BDFDB.ModalUtils.open = function (plugin, config) {
 					if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ObjectUtils.is(config)) return;
-					let modal, modalInstance, modalProps, cancels = [], closeModal = _ => {
+					let modalInstance, modalProps, cancels = [], closeModal = _ => {
 						if (BDFDB.ObjectUtils.is(modalProps) && typeof modalProps.onClose == "function") modalProps.onClose();
 					};
+					
 					let titleChildren = [], headerChildren = [], contentChildren = [], footerChildren = [];
-					if (typeof config.text == "string") {
-						contentChildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
-							children: config.text
-						}));
-					}
+					
+					if (typeof config.text == "string") contentChildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
+						children: config.text
+					}));
+					
 					if (config.children) {
-						let tabBarItems = [];
+						let tabBarItems = [], tabIns = {};
 						for (let child of [config.children].flat(10).filter(n => n)) if (LibraryModules.React.isValidElement(child)) {
 							if (child.type == InternalComponents.LibraryComponents.ModalComponents.ModalTabContent) {
 								if (!tabBarItems.length) child.props.open = true;
 								else delete child.props.open;
+								let ref = typeof child.ref == "function" ? child.ref : (_ => {});
+								child.ref = instance => {
+									ref(instance);
+									if (instance) tabIns[child.props.tab] = instance;
+								};
 								tabBarItems.push({value: child.props.tab});
 							}
 							contentChildren.push(child);
@@ -3727,19 +3733,19 @@ module.exports = (_ => {
 									itemClassName: BDFDB.disCN.tabbaritem,
 									type: InternalComponents.LibraryComponents.TabBar.Types.TOP,
 									items: tabBarItems,
-									onItemSelect: (value, instance) => {
-										let tabContentInstances = BDFDB.ReactUtils.findOwner(modal, {name: "BDFDB_ModalTabContent", all: true, unlimited: true});
-										for (let ins of tabContentInstances) {
-											if (ins.props.tab == value) ins.props.open = true;
-											else delete ins.props.open;
+									onItemSelect: value => {
+										for (let key in tabIns) {
+											if (key == value) tabIns[key].props.open = true;
+											else delete tabIns[key].props.open;
 										}
-										BDFDB.ReactUtils.forceUpdate(tabContentInstances);
+										BDFDB.ReactUtils.forceUpdate(BDFDB.ObjectUtils.toArray(tabIns));
 									}
 								}),
 								config.tabBarChildren
 							].flat(10).filter(n => n)
 						}));
 					}
+					
 					if (BDFDB.ArrayUtils.is(config.buttons)) for (let button of config.buttons) {
 						let contents = typeof button.contents == "string" && button.contents;
 						if (contents) {
@@ -3754,16 +3760,18 @@ module.exports = (_ => {
 								color: color || InternalComponents.LibraryComponents.Button.Colors.PRIMARY,
 								onClick: _ => {
 									if (button.close) closeModal();
-									if (!(button.close && button.cancel)) click(modal, modalInstance);
+									if (!(button.close && button.cancel)) click(modalInstance);
 								},
 								children: contents
 							}), "click", "close", "cancel", "contents")));
 						}
 					}
+					
 					contentChildren = contentChildren.concat(config.contentChildren).filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
 					titleChildren = titleChildren.concat(config.titleChildren).filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
 					headerChildren = headerChildren.concat(config.headerChildren).filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
 					footerChildren = footerChildren.concat(config.footerChildren).filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
+					
 					if (contentChildren.length) {
 						if (typeof config.onClose != "function") config.onClose = _ => {};
 						if (typeof config.onOpen != "function") config.onOpen = _ => {};
@@ -3824,15 +3832,13 @@ module.exports = (_ => {
 								}
 								componentDidMount() {
 									modalInstance = this;
-									modal = BDFDB.ReactUtils.findDOMNode(this);
-									modal = modal && modal.parentElement ? modal.parentElement.querySelector(BDFDB.dotCN.modalwrapper) : null;
-									if (modal && props.transitionState == 1 && props.transitionState > oldTransitionState) config.onOpen(modal, this);
+									if (props.transitionState == 1 && props.transitionState > oldTransitionState) config.onOpen(modalInstance);
 									oldTransitionState = props.transitionState;
 								}
 								componentWillUnmount() {
-									if (modal && props.transitionState == 3) {
-										for (let cancel of cancels) cancel(modal);
-										config.onClose(modal, this);
+									if (props.transitionState == 3) {
+										for (let cancel of cancels) cancel(modalInstance);
+										config.onClose(modalInstance);
 									}
 								}
 							}, props, true);
@@ -6090,16 +6096,13 @@ module.exports = (_ => {
 				
 				InternalComponents.LibraryComponents.ModalComponents.ModalTabContent = reactInitialized && class BDFDB_ModalTabContent extends LibraryModules.React.Component {
 					render() {
-						return BDFDB.ReactUtils.forceStyle(BDFDB.ReactUtils.createElement(this.props.scroller ? InternalComponents.LibraryComponents.Scrollers.Thin : "div", Object.assign(BDFDB.ObjectUtils.exclude(this.props, "scroller", "open", "render"), {
+						return !this.props.open ? null : BDFDB.ReactUtils.createElement(this.props.scroller ? InternalComponents.LibraryComponents.Scrollers.Thin : "div", Object.assign(BDFDB.ObjectUtils.exclude(this.props, "scroller", "open"), {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modaltabcontent, this.props.open && BDFDB.disCN.modaltabcontentopen, this.props.className),
-							style: Object.assign({}, this.props.style, {
-								display: this.props.open ? null : "none"
-							}),
-							children: !this.props.open && !this.props.render ? null : this.props.children
-						})), ["display"]);
+							children: this.props.children
+						}));
 					}
 				};
-				InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.ModalComponents.ModalTabContent, {tab: "unnamed", render: true});
+				InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.ModalComponents.ModalTabContent, {tab: "unnamed"});
 				
 				InternalComponents.LibraryComponents.ModalComponents.ModalFooter = reactInitialized && class BDFDB_ModalFooter extends LibraryModules.React.Component {
 					render() {
