@@ -259,12 +259,12 @@ module.exports = (_ => {
 						if (e.instance.props.category) e.instance.props.category = this.getChannelData(e.instance.props.category.id);
 					}
 					else {
-						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.marginleft4]]});
+						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.autocompleterowcontentprimary]]});
 						if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id);
 						let channelIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.autocompleteicon]]});
 						if (channelIcon) this.changeChannelIconColor(channelIcon, e.instance.props.channel.id, {alpha: 0.6});
 						if (e.instance.props.category) {
-							let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.autocompletedescription]]});
+							let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.autocompleterowcontentsecondary]]});
 							if (categoryName) this.changeChannelColor(categoryName, e.instance.props.category.id);
 						}
 					}

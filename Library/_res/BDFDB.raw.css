@@ -87,6 +87,13 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin: 1px;
 }
 
+[REPLACE_CLASS_marginleft4] {
+	margin-left: 4px;
+}
+[REPLACE_CLASS_marginleft8] {
+	margin-left: 8px;
+}
+
 [REPLACE_CLASS_collapsecontainer] {
 	margin-bottom: 20px;
 }
