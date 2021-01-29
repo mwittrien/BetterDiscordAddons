@@ -1299,10 +1299,12 @@ module.exports = (_ => {
 							notification.close();
 						};
 						
-						let timeout = typeof data.config.timeout == "number" && !disableInteractions ? data.config.timeout : 3000;
-						let closeTimeout = BDFDB.TimeUtils.timeout(_ => {
-							notification.close();
-						}, timeout > 0 ? timeout : 600000);
+						if (!data.config.requireInteraction) {
+							let timeout = typeof data.config.timeout == "number" && !disableInteractions ? data.config.timeout : 5000;
+							let closeTimeout = BDFDB.TimeUtils.timeout(_ => {
+								notification.close();
+							}, timeout > 0 ? timeout : 600000);
+						}
 						
 						notification.onclose = _ => {
 							BDFDB.TimeUtils.clear(closeTimeout);
