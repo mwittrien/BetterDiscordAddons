@@ -14,12 +14,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
-			"version": "1.8.3",
+			"version": "1.8.4",
 			"description": "Offer a number of useful message options. Remap the keybindings in the settings"
 		},
 		"changeLog": {
 			"improved": {
 				"Performance": ""
+			},
+			"fixed": {
+				"Selection and other weird Issues": "Fixed issues that occured when you patched the channel textarea, wtf discord"
 			}
 		}
 	};
@@ -99,8 +102,7 @@ module.exports = (_ => {
 					before: {
 						Menu: "default",
 						Message: "default",
-						ChannelTextAreaForm: "render",
-						ChannelTextAreaContainer: "render"
+						ChannelTextAreaForm: "render"
 					}
 				};
 				
@@ -111,7 +113,11 @@ module.exports = (_ => {
 				}
 			}
 			
-			onStart () {				
+			onStart () {
+				BDFDB.ListenerUtils.add(this, document, "keydown", event => {
+					if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareawrapchat, document.activeElement)) this.onKeyDown(event);
+				});
+				
 				this.forceUpdateAll();
 			}
 			
@@ -285,14 +291,6 @@ module.exports = (_ => {
 			processChannelTextAreaForm (e) {
 				ChannelTextAreaForm = e.instance;
 			}
-			
-			processChannelTextAreaContainer (e) {
-				let props = Object.assign({}, e.instance.props);
-				e.instance.props.onKeyDown = event => {
-					this.onKeyDown(event);
-					if (typeof props.onKeyDown == "function") props.onKeyDown(event);
-				};
-			}
 
 			onClick (event, message) {
 				let type = event.type;
@@ -306,7 +304,7 @@ module.exports = (_ => {
 						if (this.checkIfBindingIsValid(binding, clickType) && (!enabledBindings[priorityAction] || binding.click > priorityBinding.click || binding.keycombo.length > priorityBinding.keycombo.length)) priorityAction = action;
 					}
 					if (priorityAction) {
-						let messageDiv = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.message + BDFDB.dotCN.searchresultsmessage, event.currentTarget);
+						let messageDiv = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.message + BDFDB.dotCN.searchresultsmessage, event.target);
 						if (messageDiv) {
 							BDFDB.ListenerUtils.stopEvent(event);
 							BDFDB.TimeUtils.clear(clickTimeout);
@@ -425,7 +423,6 @@ module.exports = (_ => {
 			}
 
 			doNote ({messageDiv, message}, action) {
-				console.log(action);
 				if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Note_Message.plugin)) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 					if (channel) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Note_Message.plugin).addMessageToNotes(message, channel);
