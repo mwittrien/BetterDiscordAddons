@@ -5503,7 +5503,7 @@ module.exports = (_ => {
 									disabled: this.props.isDisabled,
 									onClick: _ => {
 										if (!this.props.isSelected) {
-											let color = this.props.isCustom && this.props.color == null ? "rgba(0, 0, 0, 1)" : this.props.color;
+											let color = this.props.isCustom && this.props.color == null ? (swatches.state.selectedColor || "rgba(0, 0, 0, 1)") : this.props.color;
 											if (typeof swatches.props.onColorChange == "function") swatches.props.onColorChange(BDFDB.ColorUtils.convert(color, "RGBA"));
 											swatches.setState({
 												selectedColor: color,
@@ -5545,10 +5545,12 @@ module.exports = (_ => {
 									position: InternalComponents.LibraryComponents.PopoutContainer.Positions.BOTTOM,
 									align: InternalComponents.LibraryComponents.PopoutContainer.Align.CENTER,
 									renderPopout: _ => {
-										return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ColorPicker, Object.assign({
-											color: this.props.color,
+										return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ColorPicker, Object.assign({}, props.pickerConfig, {
+											color: swatches.state.selectedColor,
 											onColorChange: color => {
-												if (typeof swatches.props.onColorChange == "function") swatches.props.onColorChange(BDFDB.ColorUtils.convert(color, "RGBA"))
+												let rgba = BDFDB.ColorUtils.convert(color, "RGBA");
+												if (typeof swatches.props.onColorChange == "function") swatches.props.onColorChange(rgba);
+												if (props.pickerConfig && typeof props.pickerConfig.onColorChange == "function") props.pickerConfig.onColorChange(rgba);
 												this.props.color = color;
 												swatches.setState({
 													selectedColor: color,
@@ -5556,7 +5558,7 @@ module.exports = (_ => {
 													customSelected: true
 												});
 											}
-										}, props.pickerConfig), true);
+										}), true);
 									}
 								});
 								return swatch;
@@ -7483,11 +7485,8 @@ module.exports = (_ => {
 					if (e.returnvalue && e.returnvalue.props && e.returnvalue.props.children && e.returnvalue.props.children.props) {
 						let message;
 						for (let key in e.instance.props) {
-							let data = BDFDB.ObjectUtils.get(e.instance.props[key], "props.message");
-							if (data) {
-								message = data;
-								break;
-							}
+							if (!message) message = BDFDB.ObjectUtils.get(e.instance.props[key], "props.message");
+							else break;
 						}
 						if (message) e.returnvalue.props.children.props["user_by_BDFDB"] = message.author.id;
 					}
