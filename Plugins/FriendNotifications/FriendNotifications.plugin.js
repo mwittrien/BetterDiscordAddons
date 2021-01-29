@@ -221,7 +221,6 @@ module.exports = (_ => {
 					notificationsounds: {},
 					amounts: {
 						toastTime:			{value: 5, 		min: 1,		description: "Amount of Seconds a Toast Notification stays on Screen: "},
-						desktopTime:		{value: 5, 		min: 1,		description: "Amount of Seconds a Desktop Notification stays on Screen: "},
 						checkInterval:		{value: 10, 	min: 5,		description: "Check Users every X Seconds: "}
 					}
 				};
@@ -720,7 +719,6 @@ module.exports = (_ => {
 				for (let id in observedUsers) userStatusStore[id] = this.getStatusWithMobileAndActivity(id, observedUsers[id]);
 				
 				let toastTime = (amounts.toastTime > amounts.checkInterval ? amounts.checkInterval : amounts.toastTime) * 1000;
-				let desktopTime = (amounts.desktopTime > amounts.checkInterval ? amounts.checkInterval : amounts.desktopTime) * 1000;
 				
 				checkInterval = BDFDB.TimeUtils.interval(_ => {
 					let amount = BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount();
@@ -778,7 +776,6 @@ module.exports = (_ => {
 									let notificationSound = notificationSounds["desktop" + status.name] || {};
 									BDFDB.NotificationUtils.desktop(desktopString, {
 										icon: avatar,
-										timeout: desktopTime,
 										silent: notificationSound.mute,
 										sound: notificationSound.song,
 										onClick: openChannel
