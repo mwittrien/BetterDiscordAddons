@@ -263,20 +263,6 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				// REMOVE 1.1.2021
-				let convert = type => {
-					let data = BDFDB.DataUtils.load(this, type);
-					if (Object.keys(data).length) {
-						for (let id in data) if (data[id].desktop != undefined) {
-							for (let key of Object.keys(statuses)) data[id][key] = notificationTypes[!data[id][key] ? "DISABLED" : (data[id].desktop ? "DESKTOP" : "TOAST")].value;
-							delete data[id].desktop;
-						}
-						BDFDB.DataUtils.save(data, this, type);
-					}
-				};
-				convert("friends");
-				convert("nonfriends");
-				
 				this.startInterval();
 
 				BDFDB.PatchUtils.forceAllUpdates(this);
