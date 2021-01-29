@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.0.9",
+			"version": "1.1.0",
 			"description": "Add a control panel to discord when listening to spotify"
 		},
 		"changeLog": {
@@ -196,9 +196,9 @@ module.exports = (_ => {
 													let url = BDFDB.ObjectUtils.get(playbackState, "item.external_urls.spotify") || BDFDB.ObjectUtils.get(playbackState, "context.external_urls.spotify");
 													if (url) {
 														BDFDB.LibraryRequires.electron.clipboard.write({text: url});
-														BDFDB.NotificationUtils.toast(_this.labels.toast_copyurl_fail, {type: "success"});
+														BDFDB.NotificationUtils.toast(_this.labels.toast_copyurl_success, {type: "success"});
 													}
-													else BDFDB.NotificationUtils.toast(_this.labels.toast_copyurl_success, {type: "danger"});
+													else BDFDB.NotificationUtils.toast(_this.labels.toast_copyurl_fail, {type: "danger"});
 												}
 											}),
 											BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
