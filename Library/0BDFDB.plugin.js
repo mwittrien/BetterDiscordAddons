@@ -315,7 +315,7 @@ module.exports = (_ => {
 	BDFDB.ObjectUtils.mirror = function (obj) {
 		if (!BDFDB.ObjectUtils.is(obj)) return {};
 		let newObj = Object.assign({}, obj);
-		for (let key in newObj) newObj[newObj[key]] = key;
+		for (let key in newObj) if (newObj[newObj[key]] == undefined && (typeof key == "number" || typeof key == "string")) newObj[newObj[key]] = key;
 		return newObj;
 	};
 
