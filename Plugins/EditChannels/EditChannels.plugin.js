@@ -668,7 +668,7 @@ module.exports = (_ => {
 											label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
 											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 											value: data.removeIcon,
-											onChange: (value, instance) => {
+											onChange: value => {
 												newData.removeIcon = value;
 												if (value) {
 													delete iconInput.props.success;

@@ -1300,7 +1300,6 @@ module.exports = (_ => {
 						};
 						
 						notification.onclose = _ => {
-							BDFDB.TimeUtils.clear(closeTimeout);
 							audio.pause();
 							DesktopNotificationQueue.running = false;
 							BDFDB.TimeUtils.timeout(runQueue, 1000);
@@ -3410,12 +3409,6 @@ module.exports = (_ => {
 						gradientString += color ? `, ${color} ${pos*100}%` : ''
 					}
 					return gradientString += ")";
-				};
-				BDFDB.ColorUtils.getSwatchColor = function (container, number) {
-					if (!Node.prototype.isPrototypeOf(container)) return;
-					let swatches = container.querySelector(`${BDFDB.dotCN.colorpickerswatches}[number="${number}"], ${BDFDB.dotCN.colorpickerswatch}[number="${number}"]`);
-					if (!swatches) return null;
-					return BDFDB.ColorUtils.convert(BDFDB.ReactUtils.findValue(BDFDB.ReactUtils.getInstance(swatches), "selectedColor", {up: true, blacklist: {"props":true}}));
 				};
 
 				BDFDB.DOMUtils = {};

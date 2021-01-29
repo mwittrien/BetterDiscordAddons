@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditServers",
 			"author": "DevilBro",
-			"version": "2.2.7",
+			"version": "2.2.8",
 			"description": "Allow you to change the icon, name and color of servers"
 		},
 		"changeLog": {
 			"improved": {
-				"Reset Confirmation": "Trying to reset a server will first ask for permission, holding Shift will skip this"
+				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
 			}
 		}
 	};
@@ -419,8 +419,9 @@ module.exports = (_ => {
 				let guild = BDFDB.LibraryModules.GuildStore.getGuild(guildId);
 				if (!guild) return;
 				let data = changedGuilds[guild.id] || {};
+				let newData = Object.assign({}, data);
 				
-				let currentIgnoreCustomNameState = data.ignoreCustomName;
+				let nameInput, acronymInput, iconInput, bannerInput;
 				
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
@@ -434,18 +435,15 @@ module.exports = (_ => {
 									title: this.labels.modal_guildname,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-										className: "input-guildname",
-										key: "GUILDNAME",
 										value: data.name,
 										placeholder: guild.name,
 										autoFocus: true,
-										onChange: (value, instance) => {
-											if (!currentIgnoreCustomNameState) {
-												let acronymInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return.return`), {key: "GUILDACRONYM"});
-												if (acronymInputIns) {
-													acronymInputIns.props.placeholder = value && BDFDB.LibraryModules.StringUtils.getAcronym(value) || guild.acronym;
-													BDFDB.ReactUtils.forceUpdate(acronymInputIns);
-												}
+										ref: instance => {if (instance) nameInput = instance;},
+										onChange: value => {
+											newData.name = value;
+											if (!newData.ignoreCustomName) {
+												acronymInput.props.placeholder = value && BDFDB.LibraryModules.StringUtils.getAcronym(value) || guild.acronym;
+												BDFDB.ReactUtils.forceUpdate(acronymInput);
 											}
 										}
 									})
@@ -455,26 +453,22 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom8,
 									children: 
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-										className: "input-guildacronym",
-										key: "GUILDACRONYM",
 										value: data.shortName,
-										placeholder: !data.ignoreCustomName && data.name && BDFDB.LibraryModules.StringUtils.getAcronym(data.name) || guild.acronym
+										ref: instance => {if (instance) acronymInput = instance;},
+										placeholder: !data.ignoreCustomName && data.name && BDFDB.LibraryModules.StringUtils.getAcronym(data.name) || guild.acronym,
+										onChange: value => {newData.shortName = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
-									className: BDFDB.disCN.marginbottom20 + " input-ignorecustomname",
+									className: BDFDB.disCN.marginbottom20,
 									label: this.labels.modal_ignorecustomname,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: data.ignoreCustomName,
-									onChange: (value, instance) => {
-										currentIgnoreCustomNameState = value;
-										let nameInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return`), {key: "GUILDNAME"});
-										let acronymInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return`), {key: "GUILDACRONYM"});
-										if (nameInputIns && acronymInputIns) {
-											acronymInputIns.props.placeholder = !value && nameInputIns.props.value && BDFDB.LibraryModules.StringUtils.getAcronym(nameInputIns.props.value) || guild.acronym;
-											BDFDB.ReactUtils.forceUpdate(acronymInputIns);
-										}
+									onChange: value => {
+										newData.ignoreCustomName = value;
+										acronymInput.props.placeholder = !value && newData.name && BDFDB.LibraryModules.StringUtils.getAcronym(newData.name) || guild.acronym;
+										BDFDB.ReactUtils.forceUpdate(acronymInput);
 									}
 								}),
 								BDFDB.ReactUtils.createElement("div", {
@@ -491,35 +485,41 @@ module.exports = (_ => {
 													children: this.labels.modal_guildicon
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-													className: "input-removeicon",
 													type: "Switch",
 													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
 													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 													value: data.removeIcon,
-													onChange: (value, instance) => {
-														let iconInputIins = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return`), {key: "GUILDICON"});
-														if (iconInputIins) {
-															delete iconInputIins.props.success;
-															delete iconInputIins.props.errorMessage;
-															iconInputIins.props.disabled = value;
-															BDFDB.ReactUtils.forceUpdate(iconInputIins);
+													onChange: value => {
+														newData.removeIcon = value;
+														if (value) {
+															delete iconInput.props.success;
+															delete iconInput.props.errorMessage;
+															iconInput.props.disabled = true;
+															BDFDB.ReactUtils.forceUpdate(iconInput);
+														}
+														else {
+															iconInput.props.disabled = false;
+															this.checkUrl(iconInput.props.value, iconInput).then(returnValue => {
+																newData.url = returnValue;
+															});
 														}
 													}
 												})
 											]
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-											className: "input-guildicon",
-											key: "GUILDICON",
 											success: !data.removeIcon && data.url,
 											maxLength: 100000000000000000000,
 											value: data.url,
 											placeholder: BDFDB.GuildUtils.getIcon(guild.id),
 											disabled: data.removeIcon,
+											ref: instance => {if (instance) iconInput = instance;},
 											onChange: (value, instance) => {
-												this.checkUrl(value, instance);
+												this.checkUrl(value, instance).then(returnValue => {
+													newData.url = returnValue;
+												});
 											}
 										})
 									]
@@ -538,7 +538,6 @@ module.exports = (_ => {
 													children: this.labels.modal_guildbanner
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-													className: "input-removebanner",
 													type: "Switch",
 													margin: 0,
 													grow: 0,
@@ -546,28 +545,35 @@ module.exports = (_ => {
 													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 													value: data.removeBanner && guild.id != "410787888507256842",
 													disabled: guild.id == "410787888507256842",
-													onChange: (value, instance) => {
-														let bannerInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return`), {key: "GUILDBANNER"});
-														if (bannerInputIns) {
-															delete bannerInputIns.props.success;
-															delete bannerInputIns.props.errorMessage;
-															bannerInputIns.props.disabled = value;
-															BDFDB.ReactUtils.forceUpdate(bannerInputIns);
+													onChange: value => {
+														newData.removeBanner = value;
+														if (value) {
+															delete bannerInput.props.success;
+															delete bannerInput.props.errorMessage;
+															bannerInput.props.disabled = true;
+															BDFDB.ReactUtils.forceUpdate(bannerInput);
+														}
+														else {
+															bannerInput.props.disabled = false;
+															this.checkUrl(bannerInput.props.value, bannerInput).then(returnValue => {
+																newData.url = returnValue;
+															});
 														}
 													}
 												})
 											]
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-											className: "input-guildbanner",
-											key: "GUILDBANNER",
 											success: !data.removeBanner && data.banner,
 											maxLength: 100000000000000000000,
 											value: data.banner,
 											placeholder: BDFDB.GuildUtils.getBanner(guild.id),
 											disabled: data.removeBanner || guild.id == "410787888507256842",
+											ref: instance => {if (instance) bannerInput = instance;},
 											onChange: (value, instance) => {
-												this.checkUrl(value, instance);
+												this.checkUrl(value, instance).then(returnValue => {
+													newData.banner = returnValue;
+												});
 											}
 										})
 									]
@@ -583,7 +589,7 @@ module.exports = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 											color: data.color1,
-											number: 1
+											onColorChange: value => {newData.color1 = value}
 										})
 									]
 								}),
@@ -593,7 +599,7 @@ module.exports = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 											color: data.color2,
-											number: 2
+											onColorChange: value => {newData.color2 = value}
 										})
 									]
 								})
@@ -608,7 +614,7 @@ module.exports = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 											color: data.color3,
-											number: 3
+											onColorChange: value => {newData.color3 = value}
 										})
 									]
 								}),
@@ -618,7 +624,7 @@ module.exports = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 											color: data.color4,
-											number: 4
+											onColorChange: value => {newData.color4 = value}
 										})
 									]
 								})
@@ -629,60 +635,56 @@ module.exports = (_ => {
 						contents: BDFDB.LanguageUtils.LanguageStrings.SAVE,
 						color: "BRAND",
 						close: true,
-						onClick: modal => {
-							let oldData = Object.assign({}, data);
-							
-							let guildNameInput = modal.querySelector(".input-guildname " + BDFDB.dotCN.input);
-							let guildAcronymInput = modal.querySelector(".input-guildacronym " + BDFDB.dotCN.input);
-							let ignoreCustomNameInput = modal.querySelector(".input-ignorecustomname " + BDFDB.dotCN.switchinner);
-							let guildIconInput = modal.querySelector(".input-guildicon " + BDFDB.dotCN.input);
-							let removeIconInput = modal.querySelector(".input-removeicon " + BDFDB.dotCN.switchinner);
-							let guildBannerInput = modal.querySelector(".input-guildbanner " + BDFDB.dotCN.input);
-							let removeBannerInput = modal.querySelector(".input-removebanner " + BDFDB.dotCN.switchinner);
-							
-							data.name = guildAcronymInput.value.trim() || null;
-							data.shortName = guildAcronymInput.value.trim() || null;
-							data.ignoreCustomName = ignoreCustomNameInput.checked;
-							data.removeIcon = removeIconInput.checked;
-							data.url = (!data.removeIcon && BDFDB.DOMUtils.containsClass(guildIconInput, BDFDB.disCN.inputsuccess) ? guildIconInput.value.trim() : null) || null;
-							data.removeBanner = removeBannerInput.checked && guild.id != "410787888507256842";
-							data.banner = (!data.removeBanner && BDFDB.DOMUtils.containsClass(guildBannerInput, BDFDB.disCN.inputsuccess) ? guildBannerInput.value.trim() : null) || null;
-
-							data.color1 = BDFDB.ColorUtils.getSwatchColor(modal, 1);
-							data.color2 = BDFDB.ColorUtils.getSwatchColor(modal, 2);
-							data.color3 = BDFDB.ColorUtils.getSwatchColor(modal, 3);
-							data.color4 = BDFDB.ColorUtils.getSwatchColor(modal, 4);
+						onClick: _ => {
+							newData.url = !newData.removeIcon ? newData.url : "";
+							newData.removeBanner = newData.removeBanner && guild.id != "410787888507256842";
+							newData.banner = !newData.removeBanner ? newData.banner : "";
 
 							let changed = false;
-							if (Object.keys(data).every(key => !data[key]) && (changed = true)) BDFDB.DataUtils.remove(this, "servers", guild.id);
-							else if (!BDFDB.equals(oldData, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "servers", guild.id);
-							if (changed) this.forceUpdateAll();;
+							if (Object.keys(newData).every(key => newData[key] == null || newData[key] == false) && (changed = true)) {
+								BDFDB.DataUtils.remove(this, "servers", guild.id);
+							}
+							else if (!BDFDB.equals(newData, data) && (changed = true)) {
+								BDFDB.DataUtils.save(newData, this, "servers", guild.id);
+							}
+							if (changed) this.forceUpdateAll();
 						}
 					}]
 				});
 			}
 			
 			checkUrl (url, instance) {
-				BDFDB.TimeUtils.clear(instance.checkTimeout);
-				if (url == null || !url.trim()) {
-					delete instance.props.success;
-					delete instance.props.errorMessage;
-					instance.forceUpdate();
-				}
-				else instance.checkTimeout = BDFDB.TimeUtils.timeout(_ => {
-					BDFDB.LibraryRequires.request(url.trim(), (error, response, result) => {
-						if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
-							instance.props.success = true;
-							delete instance.props.errorMessage;
-						}
-						else {
-							delete instance.props.success;
-							instance.props.errorMessage = this.labels.modal_invalidurl;
-						}
-						delete instance.checkTimeout;
-						instance.forceUpdate();
-					});
-				}, 1000);
+				return new Promise(callback => {
+					BDFDB.TimeUtils.clear(instance.checkTimeout);
+					url = url && url.trim();
+					if (!url || instance.props.disabled) {
+						delete instance.props.success;
+						delete instance.props.errorMessage;
+						callback("");
+						BDFDB.ReactUtils.forceUpdate(instance);
+					}
+					else instance.checkTimeout = BDFDB.TimeUtils.timeout(_ => {
+						BDFDB.LibraryRequires.request(url, (error, response, result) => {
+							delete instance.checkTimeout;
+							if (instance.props.disabled) {
+								delete instance.props.success;
+								delete instance.props.errorMessage;
+								callback("");
+							}
+							else if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
+								instance.props.success = true;
+								delete instance.props.errorMessage;
+								callback(url);
+							}
+							else {
+								delete instance.props.success;
+								instance.props.errorMessage = this.labels.modal_invalidurl;
+								callback("");
+							}
+							BDFDB.ReactUtils.forceUpdate(instance);
+						});
+					}, 1000);
+				});
 			}
 
 			setBanner (id, data) {
