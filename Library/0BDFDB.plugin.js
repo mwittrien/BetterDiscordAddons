@@ -7173,6 +7173,7 @@ module.exports = (_ => {
 									onColorChange: color => {
 										this.handleChange(!color ? "" : (this.props.mode == "comp" ? BDFDB.ColorUtils.convert(color, "RGBCOMP").slice(0, 3).join(",") : (this.props.noAlpha ? BDFDB.ColorUtils.convert(color, "RGB") : color)));
 									},
+									ref: this.props.controlsRef,
 									pickerConfig: {gradient: false, alpha: this.props.mode != "comp" && !this.props.noAlpha}
 								})
 							}) : null,
@@ -7180,7 +7181,8 @@ module.exports = (_ => {
 								filter: this.props.filter,
 								mode: this.props.mode,
 								useFilePath: this.props.useFilePath,
-								searchFolders: this.props.searchFolders
+								searchFolders: this.props.searchFolders,
+								ref: this.props.controlsRef
 							}) : null
 						].flat(10).filter(n => n);
 						
@@ -7216,7 +7218,10 @@ module.exports = (_ => {
 								}) : null,
 								inputChildren.length == 1 ? inputChildren[0] : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 									align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
-									children: inputChildren.map((child, i) => i != 0 ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {shrink: 0, children: child}) : child)
+									children: inputChildren.map((child, i) => i != 0 ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
+										shrink: 0,
+										children: child
+									}) : child)
 								}),
 								this.props.errorMessage ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
 									className: BDFDB.disCN.carderror,

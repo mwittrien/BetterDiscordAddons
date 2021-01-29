@@ -18,8 +18,8 @@ module.exports = (_ => {
 			"description": "Allow the user to configure their own chat-aliases which will automatically be replaced before the message is being sent"
 		},
 		"changeLog": {
-			"fixed": {
-				"New Aliases": "You can add new Aliases again"
+			"improved": {
+				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
 			}
 		}
 	};
@@ -267,11 +267,11 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Button",
 									label: "Pick a Word Value and Replacement Value:",
-									key: "ADDBUTTON",
-									disabled: !Object.keys(values).every(valuename => values[valuename]),
+									disabled: !Object.keys(values).every(valueName => values[valueName]),
 									children: BDFDB.LanguageUtils.LanguageStrings.ADD,
+									ref: instance => {if (instance) values.addButton = instance;},
 									onClick: _ => {
-										this.saveWord(values.wordValue, values.replaceValue, settingsPanel.props._node.querySelector(".input-replacevalue input[type='file']"));
+										this.saveWord(values);
 										BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 									}
 								}),
@@ -502,36 +502,30 @@ module.exports = (_ => {
 			}
 
 			openAddModal (wordValue) {
-				let values = {
-					wordValue,
-					replaceValue: ""
-				};
+				let values = {wordValue, replaceValue: ""};
+				let configs = BDFDB.ObjectUtils.map(BDFDB.ObjectUtils.filter(this.defaults.configs, key => key != "file", true), n => n.value);
+				
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: BDFDB.LanguageUtils.LibraryStringsFormat("add_to", "ChatAliases"),
 					subHeader: "",
 					children: [
 						this.createInputs(values),
-						BDFDB.ArrayUtils.remove(Object.keys(this.defaults.configs), "file").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+						Object.keys(configs).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Switch",
-							className: "input-config" + key,
 							label: this.defaults.configs[key].description,
-							value: this.defaults.configs[key].value
+							value: configs[key],
+							onChange: value => {configs[key] = value;}
 						}))
 					].flat(10).filter(n => n),
 					buttons: [{
-						key: "ADDBUTTON",
-						disabled: !Object.keys(values).every(valuename => values[valuename]),
+						disabled: !Object.keys(values).every(valueName => values[valueName]),
 						contents: BDFDB.LanguageUtils.LanguageStrings.ADD,
 						color: "BRAND",
 						close: true,
-						onClick: modal => {
-							let configs = {};
-							for (let key in this.defaults.configs) {
-								let configInput = modal.querySelector(`.input-config${key} ${BDFDB.dotCN.switchinner}`);
-								if (configInput) configs[key] = configInput.checked;
-							}
-							this.saveWord(values.wordValue, values.replaceValue, modal.querySelector(".input-replacevalue input[type='file']"), configs);
+						ref: instance => {if (instance) values.addButton = instance;},
+						onClick: _ => {
+							this.saveWord(values, configs);
 							this.forceUpdateAll();
 						}
 					}]
@@ -552,11 +546,8 @@ module.exports = (_ => {
 								if (!values.wordValue) instance.props.errorMessage = "Choose a Word Value";
 								else if (aliases[values.wordValue]) instance.props.errorMessage = "Word Value already used, saving will overwrite old Alias";
 								else delete instance.props.errorMessage;
-								let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: ["BDFDB_Modal", "BDFDB_SettingsPanel"], up: true}), {key: "ADDBUTTON"});
-								if (addButtonIns) {
-									addButtonIns.props.disabled = !Object.keys(values).every(valuename => values[valuename]);
-									BDFDB.ReactUtils.forceUpdate(addButtonIns);
-								}
+								values.addButton.props.disabled = !Object.keys(values).every(valueName => values[valueName]);
+								BDFDB.ReactUtils.forceUpdate(values.addButton);
 							}
 						})
 					}),
@@ -564,44 +555,40 @@ module.exports = (_ => {
 						title: "With:",
 						className: BDFDB.disCN.marginbottom8,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-							className: "input-replacevalue",
 							type: "file",
 							useFilePath: true,
 							value: values.replaceValue,
 							placeholder: values.replaceValue,
 							autoFocus: true,
 							errorMessage: !values.replaceValue && "Choose a Replacement Value",
+							controlsRef: instance => {if (instance) values.fileSelection = instance;},
 							onChange: (value, instance) => {
 								values.replaceValue = value.trim();
 								if (!values.replaceValue) instance.props.errorMessage = "Choose a Replacement Value";
 								else delete instance.props.errorMessage;
-								let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: ["BDFDB_Modal", "BDFDB_SettingsPanel"], up: true}), {key: "ADDBUTTON"});
-								if (addButtonIns) {
-									addButtonIns.props.disabled = !Object.keys(values).every(valuename => values[valuename]);
-									BDFDB.ReactUtils.forceUpdate(addButtonIns);
-								}
+								values.addButton.props.disabled = !Object.keys(values).every(valueName => values[valueName]);
+								BDFDB.ReactUtils.forceUpdate(values.addButton);
 							}
 						})
 					})
 				];
 			}
 
-			saveWord (wordValue, replaceValue, fileSelection, aliasConfigs = configs) {
-				console.log(wordValue, replaceValue, fileSelection);
-				if (!wordValue || !replaceValue || !fileSelection) return;
+			saveWord (values, aliasConfigs = configs) {
+				if (!values.wordValue || !values.replaceValue || !values.fileSelection) return;
 				let filedata = null;
-				if (fileSelection.files && fileSelection.files[0] && BDFDB.LibraryRequires.fs.existsSync(replaceValue)) {
+				if (values.fileSelection.files && values.fileSelection.files[0] && BDFDB.LibraryRequires.fs.existsSync(values.replaceValue)) {
 					filedata = JSON.stringify({
-						data: BDFDB.LibraryRequires.fs.readFileSync(replaceValue).toString("base64"),
-						name: fileSelection.files[0].name,
-						type: fileSelection.files[0].type
+						data: BDFDB.LibraryRequires.fs.readFileSync(values.replaceValue).toString("base64"),
+						name: values.fileSelection.files[0].name,
+						type: values.fileSelection.files[0].type
 					});
 				}
-				aliases[wordValue] = {
-					replace: replaceValue,
+				aliases[values.wordValue] = {
+					replace: values.replaceValue,
 					filedata: filedata,
 					case: aliasConfigs.case,
-					exact: wordValue.indexOf(" ") > -1 ? false : aliasConfigs.exact,
+					exact: values.wordValue.indexOf(" ") > -1 ? false : aliasConfigs.exact,
 					autoc: aliasConfigs.regex ? false : aliasConfigs.autoc,
 					regex: aliasConfigs.regex,
 					file: filedata != null

@@ -631,7 +631,7 @@ module.exports = (_ => {
 						contents: BDFDB.LanguageUtils.LanguageStrings.CONNECT,
 						color: "BRAND",
 						close: true,
-						onClick: modal => {
+						onClick: _ => {
 							BDFDB.LibraryModules.UserSettingsUtils.open(BDFDB.DiscordConstants.UserSettingsSections.CONNECTIONS)
 						}
 					}]

@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "UserNotes",
 			"author": "DevilBro",
-			"version": "1.0.5",
+			"version": "1.0.6",
 			"description": "Allow you to write your own user notes wihtout a character limit"
+		},
+		"changeLog": {
+			"improved": {
+				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
+			}
 		}
 	};
 
@@ -107,6 +112,7 @@ module.exports = (_ => {
 
 			openNotesModal (user) {
 				let note = BDFDB.DataUtils.load(this, "notes", user.id);
+				let textarea;
 				
 				BDFDB.ModalUtils.open(this, {
 					size: "LARGE",
@@ -117,15 +123,16 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextArea, {
 							value: note,
 							placeholder: note,
-							autoFocus: true
+							autoFocus: true,
+							ref: instance => {if (instance) textarea = instance;}
 						})
 					],
 					buttons: [{
 						contents: BDFDB.LanguageUtils.LanguageStrings.SAVE,
 						color: "BRAND",
 						close: true,
-						onClick: modal => {
-							note = modal.querySelector("textarea").value;
+						onClick: _ => {
+							note = textarea.props.value;
 							if (note) BDFDB.DataUtils.save(note, this, "notes", user.id);
 							else BDFDB.DataUtils.remove(this, "notes", user.id);
 						}
