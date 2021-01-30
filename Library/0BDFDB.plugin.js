@@ -8035,6 +8035,7 @@ module.exports = (_ => {
 					BDFDB.LibraryComponents[component] = "div";
 				}
 				
+				if (!document.querySelector("head #bd-stylesheet")) BDFDB.DOMUtils.appendWebStyle("bdStyleSheet", "https://rauenzi.github.io/BetterDiscordApp/src/styles/index.css");
 				if (css) BDFDB.DOMUtils.appendLocalStyle("BDFDB", css.replace(/[\n\t\r]/g, "").replace(/\[REPLACE_CLASS_([A-z0-9_]+?)\]/g, function(a, b) {return BDFDB.dotCN[b];}));
 			
 				BDFDB.LogUtils.log("Finished loading library.");
