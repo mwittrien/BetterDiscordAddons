@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.1.0",
+			"version": "1.1.1",
 			"description": "Add a control panel to discord when listening to spotify"
 		},
 		"changeLog": {
 			"improved": {
-				"Double Click Back": "Added option to allow ppl to go back to the previous song without having to double click the back button"
+				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
 			}
 		}
 	};
@@ -64,7 +64,6 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var _this;
-		var insertPatchCancel;
 		var controls, starting, lastSong, currentVolume, lastVolume, stopTime, previousIsClicked, previousDoubleTimeout, timelineTimeout, timelineDragging, updateInterval;
 		var playbackState = {};
 		var settings = {}, buttonConfigs = {};
@@ -432,8 +431,8 @@ module.exports = (_ => {
 				};
 				
 				this.patchedModules = {
-					before: {
-						AppView: "render"
+					after: {
+						AppView: "default"
 					}
 				};
 				
@@ -631,7 +630,7 @@ module.exports = (_ => {
 						contents: BDFDB.LanguageUtils.LanguageStrings.CONNECT,
 						color: "BRAND",
 						close: true,
-						onClick: _ => {
+						onClick: modal => {
 							BDFDB.LibraryModules.UserSettingsUtils.open(BDFDB.DiscordConstants.UserSettingsSections.CONNECTIONS)
 						}
 					}]
@@ -642,8 +641,6 @@ module.exports = (_ => {
 			
 			onStop () {
 				this.forceUpdateAll();
-				
-				if (typeof insertPatchCancel == "function") insertPatchCancel();
 			}
 
 			getSettingsPanel (collapseStates = {}) {
@@ -718,18 +715,16 @@ module.exports = (_ => {
 				buttonConfigs = BDFDB.DataUtils.get(this, "buttonConfigs");
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 
 			processAppView (e) {
-				if (typeof insertPatchCancel == "function") insertPatchCancel();
-				insertPatchCancel = BDFDB.PatchUtils.patch(this, e.instance, "renderChannelSidebar", {after: e2 => {
-					let [children, index] = BDFDB.ReactUtils.findParent(e2.returnValue, {props: [["section", BDFDB.DiscordConstants.AnalyticsSections.ACCOUNT_PANEL]]});
-					if (index > -1) children.splice(index - 1, 0, BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
-						song: BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false),
-						maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
-						timeline: settings.addTimeline
-					}, true));
-				}}, {force: true, noCache: true});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["section", BDFDB.DiscordConstants.AnalyticsSections.ACCOUNT_PANEL]]});
+				if (index > -1) children.splice(index - 1, 0, BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
+					song: BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false),
+					maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
+					timeline: settings.addTimeline
+				}, true));
 			}
 			
 			updatePlayer (song) {

@@ -661,7 +661,7 @@ module.exports = (_ => {
 							size: BDFDB.LibraryComponents.Button.Sizes.MIN,
 							color: BDFDB.LibraryComponents.Button.Colors[buttonConfig.colorClass],
 							style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor] || buttonConfig.backgroundColor},
-							children: buttonConfig.text,
+							children: BDFDB.LanguageUtils.LibraryStrings[buttonConfig.text],
 							onClick: (e, instance) => {
 								_this.downloadTheme(this.props.theme);
 								if (list && list.props.rnmStart) BDFDB.TimeUtils.timeout(_ => {
