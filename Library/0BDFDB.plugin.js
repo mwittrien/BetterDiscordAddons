@@ -598,7 +598,7 @@ module.exports = (_ => {
 			LibraryRequires.request(url, (error, response, body) => {
 				if (error || !window.PluginUpdates.plugins[url]) return callback(null);
 				let newName = (body.match(/"name"\s*:\s*"([^"]+)"/) || [])[1] || pluginName;
-				let newVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
+				let newVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i).toString().replace(/['"]/g, "");
 				if (!newVersion) return callback(null);
 				if (pluginName == newName && BDFDB.NumberUtils.getVersionDifference(newVersion[0], window.PluginUpdates.plugins[url].version) > 0.2) {
 					BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_force_updated", pluginName), {
@@ -743,6 +743,7 @@ module.exports = (_ => {
 				let fileName = pluginName == "BDFDB" ? "0BDFDB" : pluginName;
 				let newFileName = newName == "BDFDB" ? "0BDFDB" : newName;
 				LibraryRequires.fs.writeFile(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), newFileName + ".plugin.js"), body, _ => {
+					window.PluginUpdates.plugins[url].version = newVersion;
 					if (fileName != newFileName) {
 						url = url.replace(new RegExp(fileName, "g"), newFileName);
 						LibraryRequires.fs.unlink(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".plugin.js"), _ => {});
@@ -758,7 +759,6 @@ module.exports = (_ => {
 					let updateNotice = document.querySelector("#pluginNotice");
 					if (updateNotice) {
 						if (updateNotice.querySelector(BDFDB.dotCN.noticebutton)) {
-							window.PluginUpdates.plugins[url].version = newVersion;
 							if (!window.PluginUpdates.downloaded) window.PluginUpdates.downloaded = [];
 							if (!window.PluginUpdates.downloaded.includes(pluginName)) window.PluginUpdates.downloaded.push(pluginName);
 						}
