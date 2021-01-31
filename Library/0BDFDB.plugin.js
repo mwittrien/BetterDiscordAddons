@@ -598,7 +598,7 @@ module.exports = (_ => {
 			LibraryRequires.request(url, (error, response, body) => {
 				if (error || !window.PluginUpdates.plugins[url]) return callback(null);
 				let newName = (body.match(/"name"\s*:\s*"([^"]+)"/) || [])[1] || pluginName;
-				let newVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i).toString().replace(/['"]/g, "");
+				let newVersion = (body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i) || "").toString().replace(/['"]/g, "");
 				if (!newVersion) return callback(null);
 				if (pluginName == newName && BDFDB.NumberUtils.getVersionDifference(newVersion[0], window.PluginUpdates.plugins[url].version) > 0.2) {
 					BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_force_updated", pluginName), {
