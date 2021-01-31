@@ -16,7 +16,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.3.4",
+			"version": "1.3.5",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
@@ -4305,9 +4305,6 @@ module.exports = (_ => {
 						if (selector) {
 							className = className.split(" ").filter(n => n.indexOf("da-") != 0).join(selector ? "." : " ");
 							className = className || fallbackClassName;
-						}
-						else {
-							if (BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.normalizedClasses)) className = className.split(" ").filter(n => n.indexOf("da-") != 0).map(n => n.replace(/^([A-z0-9]+?)-([A-z0-9_-]{6})$/g, "$1-$2 da-$1")).join(" ");
 						}
 						return BDFDB.ArrayUtils.removeCopies(className.split(" ")).join(" ") || fallbackClassName;
 					}
