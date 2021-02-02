@@ -57,14 +57,12 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var patched, electronWindow;
+		var patched;
 		var settings = {};
 		
 		return class OldTitleBar extends Plugin {
 			onLoad () {
 				patched = false;
-
-				electronWindow = BDFDB.LibraryRequires.electron && BDFDB.LibraryRequires.electron.remote && BDFDB.LibraryRequires.electron.remote.getCurrentWindow();
 
 				this.defaults = {
 					settings: {
@@ -166,19 +164,20 @@ module.exports = (_ => {
 						label: this.defaults.settings[key].description,
 						value: isLinux && isNativeTitlebarSetting || settings[key],
 						disabled: isLinux && isNativeTitlebarSetting,
-						note: isLinux && isNativeTitlebarSetting && "This is disabled on Linux, because Discord/BD forces the titlebar on Linux systems!",
+						note: isLinux && isNativeTitlebarSetting && "This is disabled on Linux, because Discord/BD forces the Titlebar on Linux Systems!",
 						onChange: isNativeTitlebarSetting ? value => {
 							if (this.patchMainScreen(value)) {
 								patched = !patched;
 								let notifybar = document.querySelector("#OldTitleBarNotifyBar");
 								if (notifybar) notifybar.querySelector(BDFDB.dotCN.noticedismiss).click();
 								if (patched) {
-									notifybar = BDFDB.NotificationUtils.notice("Changed nativebar settings, relaunch to see changes:", {type: "danger",btn: "Relaunch",id: "OldTitleBarNotifyBar"});
-									notifybar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
-										if (BDFDB.LibraryRequires.electron && BDFDB.LibraryRequires.electron.remote) {
-											BDFDB.LibraryRequires.electron.remote.app.relaunch();
-											BDFDB.LibraryRequires.electron.remote.app.quit();
-										}
+									notifybar = BDFDB.NotificationUtils.notice("Changed native Titlebar Settings. Please relaunch now:", {
+										type: "danger",
+										id: "OldTitleBarNotifyBar",
+										buttons: [{
+											contents: "Relaunch",
+											onClick: BDFDB.LibraryModules.WindowUtils.relaunch
+										}]
 									});
 								}
 							}
@@ -258,7 +257,7 @@ module.exports = (_ => {
 						tooltipConfig: {type: "bottom"},
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 							className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
-							onClick: _ => {electronWindow && electronWindow.reload();},
+							onClick: location.reload,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 								className: BDFDB.disCN.channelheadericon,
 								iconSVG: `<svg><path fill="currentColor" stroke="none" transform="translate(3,4)" d="M 17.061, 7.467 V 0 l -2.507, 2.507 C 13.013, 0.96, 10.885, 0, 8.528, 0 C 3.813, 0, 0.005, 3.819, 0.005, 8.533 s 3.808, 8.533, 8.523, 8.533 c 3.973, 0, 7.301 -2.72, 8.245 -6.4 h -2.219 c -0.88, 2.485 -3.237, 4.267 -6.027, 4.267 c -3.536, 0 -6.4 -2.864 -6.4 -6.4 s 2.864 -6.4, 6.4 -6.4 c 1.765, 0, 3.349, 0.736, 4.507, 1.893 l -3.44, 3.44 H 17.061 z"/></svg>`
@@ -269,7 +268,7 @@ module.exports = (_ => {
 				};
 				children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 					className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
-					onClick: _ => {electronWindow && electronWindow.minimize();},
+					onClick: BDFDB.LibraryModules.WindowUtils.minimize,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						className: BDFDB.disCN.channelheadericon,
 						iconSVG: `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 18 l13 0"/></svg>`
@@ -277,24 +276,24 @@ module.exports = (_ => {
 				}));
 				children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 					className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
-					onClick: _ => {
-						if (!electronWindow) return;
-						else if (electronWindow.isMaximized()) electronWindow.unmaximize();
-						else electronWindow.maximize();
-					},
+					onClick: BDFDB.LibraryModules.WindowUtils.maximize,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						className: BDFDB.disCN.channelheadericon,
-						iconSVG: electronWindow.isMaximized() ? `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 9 l10 0 l0 10 l-10 0 l0 -10 m3 -3 l10 0 l0 10"/></svg>` : `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 6 l13 0 l0 13 l-13 0 l0 -13"/></svg>`
+						iconSVG: this.isMaximized() ? `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 9 l10 0 l0 10 l-10 0 l0 -10 m3 -3 l10 0 l0 10"/></svg>` : `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 6 l13 0 l0 13 l-13 0 l0 -13"/></svg>`
 					})
 				}));
 				children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 					className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
-					onClick: _ => {electronWindow && electronWindow.close();},
+					onClick: BDFDB.LibraryModules.WindowUtils.close,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						className: BDFDB.disCN.channelheadericon,
 						iconSVG: `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 6 l13 13 m0 -13 l-13 13"/></svg>`
 					})
 				}));
+			}
+			
+			isMaximized () {
+				return window.screenX == 0 && window.screenY == 0 && screen.availWidth - window.innerWidth == 0 && screen.availHeight - window.innerHeight == 0;
 			}
 
 			patchMainScreen (enable) {

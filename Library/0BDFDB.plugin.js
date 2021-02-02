@@ -4102,9 +4102,6 @@ module.exports = (_ => {
 				};
 
 				BDFDB.DiscordUtils = {};
-				BDFDB.DiscordUtils.focus = function () {
-					LibraryRequires.electron && LibraryRequires.electron.remote && LibraryRequires.electron.remote.getCurrentWindow().focus();
-				};
 				BDFDB.DiscordUtils.openLink = function (url, config = {}) {
 					if ((config.inBuilt || config.inBuilt === undefined && settings.useChromium) && LibraryRequires.electron && LibraryRequires.electron.remote) {
 						let browserWindow = new LibraryRequires.electron.remote.BrowserWindow({
