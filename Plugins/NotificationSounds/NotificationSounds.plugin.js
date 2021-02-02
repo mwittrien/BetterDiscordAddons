@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
-			"version": "3.5.7",
+			"version": "3.5.8",
 			"description": "Allow you to replace the native sounds of Discord with your own"
 		},
 		"changeLog": {
 			"fixed": {
-				"New Settings Menu": "Fixed for new settings menu"
+				"Incoming Call": "Works again, you'll most likely need to reload Discord (Ctrl + R) for it to be fixed"
 			}
 		}
 	};
@@ -32,7 +32,7 @@ module.exports = (_ => {
 		
 		downloadLibrary () {
 			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
+				if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
 				else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
 			});
 		}
@@ -645,23 +645,16 @@ module.exports = (_ => {
 				volumes = BDFDB.DataUtils.get(this, "volumes");
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
-		
+			
 			processShakeable (e) {
-				if (e.returnvalue && BDFDB.ArrayUtils.is(e.returnvalue.props.children)) {
-					let child = e.returnvalue.props.children.find(n => {
+				if (repatchIncoming && e.returnvalue && BDFDB.ArrayUtils.is(e.returnvalue.props.children)) {
+					let index = e.returnvalue.props.children.findIndex(n => {
 						let string = n && n.type && n.type.toString();
 						return string && string.indexOf("call_ringing_beat") > -1 && string.indexOf("call_ringing") > -1 && string.indexOf("hasIncomingCalls") > -1;
 					});
-					if (child) {
-						let index = e.returnvalue.props.children.indexOf(child);
-						if (repatchIncoming) {
-							e.returnvalue.props.children[index] = null;
-							BDFDB.TimeUtils.timeout(_ => {
-								repatchIncoming = false;
-								BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name: "App", up: true}))
-							});
-						}
-						else e.returnvalue.props.children[index] = BDFDB.ReactUtils.createElement(e.returnvalue.props.children[index].type, {});
+					if (index > -1) {
+						repatchIncoming = false;
+						e.returnvalue.props.children[index] = BDFDB.ReactUtils.createElement(e.returnvalue.props.children[index].type, e.returnvalue.props.children[index].props);
 					}
 				}
 			}
