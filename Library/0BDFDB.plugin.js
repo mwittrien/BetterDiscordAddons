@@ -4148,12 +4148,12 @@ module.exports = (_ => {
 					}
 				};
 				BDFDB.DiscordUtils.getVersion = function () {
-					if (BDFDB.DiscordUtils.getBuilt.version) return BDFDB.DiscordUtils.getBuilt.version;
+					if (BDFDB.DiscordUtils.getVersion.version) return BDFDB.DiscordUtils.getVersion.version;
 					else {
 						let version = null;
-						try {version = LibraryRequires.electron.remote.app.getVersion();}
-						catch (err) {version = 400;}
-						BDFDB.DiscordUtils.getBuilt.version = version;
+						try {version = LibraryModules.WindowUtils.version.join(".");}
+						catch (err) {version = "999.999.999";}
+						BDFDB.DiscordUtils.getVersion.version = version;
 						return version;
 					}
 				};
