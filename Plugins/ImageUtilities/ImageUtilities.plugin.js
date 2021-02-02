@@ -121,6 +121,7 @@ module.exports = (_ => {
 						showOnHover:			{value: false, 	inner: false,		description: "Show Image Details as Tooltip in the Chat"},
 						enableGallery: 			{value: true,	inner: false,		description: "Display previous/next Images in the same message in the Image Modal"},
 						enableZoom: 			{value: true,	inner: false,		description: "Create a Zoom Lens if you press down on an Image in the Image Modal"},
+						pixelZoom: 			{value: false,	inner: false,		description: "Pixelated Zoom Lens"},
 						enableCopyImg: 			{value: true,	inner: false,		description: "Add a copy Image option in the Image Modal"},
 						enableSaveImg: 			{value: true,	inner: false,		description: "Add a save Image as option in the Image Modal"},
 						addUserAvatarEntry: 	{value: true, 	inner: true,		description: "User Avatars"},
@@ -804,6 +805,9 @@ module.exports = (_ => {
 								lens.style.setProperty("height", zoomSettings.lensesize + "px", "important");
 								lens.style.setProperty("clip-path", `circle(${(zoomSettings.lensesize/2) + 2}px at center)`, "important");
 								lens.firstElementChild.style.setProperty("clip-path", `circle(${zoomSettings.lensesize/2}px at center)`, "important");
+								if (settings.pixelZoom) {
+									lens.style.setProperty("image-rendering", "pixelated");
+								}
 								pane.style.setProperty("left", imgRects.left + ((zoomSettings.zoomlevel - 1) * (imgRects.left - x - halfW)) + "px", "important");
 								pane.style.setProperty("top", imgRects.top + ((zoomSettings.zoomlevel - 1) * (imgRects.top - y - halfH)) + "px", "important");
 								pane.style.setProperty("width", imgRects.width * zoomSettings.zoomlevel + "px", "important");
