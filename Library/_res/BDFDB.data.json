@@ -119,6 +119,7 @@
 		"UserStore": {"props": ["getUser", "getUsers"]},
 		"Utilities": {"props": ["flatMap", "cloneDeep"]},
 		"VoiceUtils": {"props": ["getAllVoiceStates", "getVoiceStatesForChannel"]},
+		"WindowUtils": {"props": ["minimize", "maximize", "close"]},
 		"ZoomUtils": {"props": ["setZoom", "setFontSize"]}
 	},
 	"ModuleUtilsConfig": {
