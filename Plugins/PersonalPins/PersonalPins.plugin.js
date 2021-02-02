@@ -28,7 +28,14 @@ module.exports = (_ => {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
-		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it.\n\n${config.info.description}`;}
+		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it. \n\n${config.info.description}`;}
+		
+		downloadLibrary () {
+			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+				if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
+				else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
+			});
+		}
 		
 		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
@@ -40,10 +47,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-							else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-						});
+						this.downloadLibrary();
 					}
 				});
 			}
@@ -54,20 +58,15 @@ module.exports = (_ => {
 		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
-			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
-				require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-					if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-					else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-				});
-			});
+			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		const pinIconGeneral = `<svg name="Note" width="24" height="24" viewBox="-1 -1.5 23 23"><mask/><g mask="url(#pinIconMask)"><path fill="currentColor" d="M 4.618, 0 c -0.316, 0 -0.573, 0.256 -0.573, 0.573 v 1.145 c 0, 0.316, 0.256, 0.573, 0.573, 0.573 s 0.573 -0.256, 0.573 -0.573 V 0.573 C 5.191, 0.256, 4.935, 0, 4.618, 0 z"/><path fill="currentColor" d="M 8.053, 0 c -0.316, 0 -0.573, 0.256 -0.573, 0.573 v 1.145 c 0, 0.316, 0.256, 0.573, 0.573, 0.573 s 0.573 -0.256, 0.573 -0.573 V 0.573 C 8.626, 0.256, 8.37, 0, 8.053, 0 z"/><path fill="currentColor" d="M 11.489, 0 c -0.316, 0 -0.573, 0.256 -0.573, 0.573 v 1.145 c 0, 0.316, 0.256, 0.573, 0.573, 0.573 c 0.316, 0, 0.573 -0.256, 0.573 -0.573 V 0.573 C 12.061, 0.256, 11.805, 0, 11.489, 0 z "/><path fill="currentColor" d="M 14.924, 0 c -0.316, 0 -0.573, 0.256 -0.573, 0.573 v 1.145 c 0, 0.316, 0.256, 0.573, 0.573, 0.573 c 0.316, 0, 0.573 -0.256, 0.573 -0.573 V 0.573 C 15.496, 0.256, 15.24, 0, 14.924, 0 z"/><path fill="currentColor" d="M 16.641, 1.25 V 1.718 c 0, 0.947 -0.77, 1.718 -1.718, 1.718 c -0.947, 0 -1.718 -0.77 -1.718 -1.718 c 0, 0.947 -0.77, 1.718 -1.718, 1.718 c -0.947, 0 -1.718 -0.77 -1.718 -1.718 c 0, 0.947 -0.77, 1.718 -1.718, 1.718 c -0.947, 0 -1.718 -0.77 -1.718 -1.718 c 0, 0.947 -0.77, 1.718 -1.718, 1.718 c -0.947, 0 -1.718 -0.77 -1.718 -1.718 V 1.25 C 2.236, 1.488, 1.756, 2.117, 1.756, 2.863 v 14.962 c 0, 0.947, 0.77, 1.718, 1.718, 1.718 h 12.595 c 0.947, 0, 1.718 -0.77, 1.718 -1.718 V 2.863 C 17.786, 2.117, 17.306, 1.488, 16.641, 1.25 z M 14.924, 16.679 H 4.618 c -0.316, 0 -0.573 -0.256 -0.573 -0.573 c 0 -0.316, 0.256 -0.573, 0.573 -0.573 h 10.305 c 0.316, 0, 0.573, 0.256, 0.573, 0.573 C 15.496, 16.423, 15.24, 16.679, 14.924, 16.679 z M 14.924, 13.244 H 4.618 c -0.316, 0 -0.573 -0.256 -0.573 -0.573 c 0 -0.316, 0.256 -0.573, 0.573 -0.573 h 10.305 c 0.316, 0, 0.573, 0.256, 0.573, 0.573 C 15.496, 12.988, 15.24, 13.244, 14.924, 13.244 z M 14.924, 9.733 H 4.618 c -0.316, 0 -0.573 -0.256 -0.573 -0.573 s 0.256 -0.573, 0.573 -0.573 h 10.305 c 0.316, 0, 0.573, 0.256, 0.573, 0.573 S 15.24, 9.733, 14.924, 9.733 z M 14.924, 6.298 H 4.618 c -0.316, 0 -0.573 -0.256 -0.573 -0.573 s 0.256 -0.573, 0.573 -0.573 h 10.305 c 0.316, 0, 0.573, 0.256, 0.573, 0.573 S 15.24, 6.298, 14.924, 6.298 z"/></g><extra/></svg>`;
-		const pinIconMask = `<mask id="pinIconMask" fill="black"><path d="M 0 0 H 24 V 24 H 0 Z" fill="white"></path><path d="M24 12 H 12 V 24 H 24 Z" fill="black"></path></mask>`;
+		const pinIconGeneral = `<svg name="Note" width="24" height="24" viewBox="0 0 24 24"><mask/><path fill="currentColor" mask="url(#pinIconMask)" d="M 6.7285156 2 C 6.4051262 2 6.1425781 2.2615247 6.1425781 2.5859375 L 6.1425781 3.7578125 C 6.1425781 4.081202 6.4041028 4.34375 6.7285156 4.34375 C 7.0529284 4.34375 7.3144531 4.0822254 7.3144531 3.7578125 L 7.3144531 2.5859375 C 7.3144531 2.2615247 7.0529284 2 6.7285156 2 z M 10.244141 2 C 9.9207511 2 9.6582031 2.2615247 9.6582031 2.5859375 L 9.6582031 3.7578125 C 9.6582031 4.081202 9.9197277 4.34375 10.244141 4.34375 C 10.568554 4.34375 10.830078 4.0822254 10.830078 3.7578125 L 10.830078 2.5859375 C 10.830078 2.2615247 10.568554 2 10.244141 2 z M 13.759766 2 C 13.436377 2 13.173828 2.2615247 13.173828 2.5859375 L 13.173828 3.7578125 C 13.173828 4.081202 13.435354 4.34375 13.759766 4.34375 C 14.083156 4.34375 14.347656 4.0822254 14.347656 3.7578125 L 14.347656 2.5859375 C 14.346656 2.2615247 14.083156 2 13.759766 2 z M 17.275391 2 C 16.952002 2 16.689453 2.2615247 16.689453 2.5859375 L 16.689453 3.7578125 C 16.689453 4.081202 16.950979 4.34375 17.275391 4.34375 C 17.598781 4.34375 17.863281 4.0822254 17.863281 3.7578125 L 17.863281 2.5859375 C 17.862281 2.2615247 17.598781 2 17.275391 2 z M 4.9667969 3.2792969 C 4.2903399 3.5228623 3.8007813 4.1662428 3.8007812 4.9296875 L 3.8007812 20.242188 C 3.8007812 21.211333 4.5884253 22 5.5585938 22 L 18.447266 22 C 19.41641 22 20.205078 21.212356 20.205078 20.242188 L 20.205078 4.9296875 C 20.204054 4.1662428 19.713754 3.5228623 19.033203 3.2792969 L 19.033203 3.7578125 C 19.033203 4.7269575 18.245559 5.515625 17.275391 5.515625 C 16.306246 5.515625 15.517578 4.7279808 15.517578 3.7578125 C 15.517578 4.7269575 14.72798 5.515625 13.757812 5.515625 C 12.788668 5.515625 12 4.7279808 12 3.7578125 C 12 4.7269575 11.212357 5.515625 10.242188 5.515625 C 9.2730428 5.515625 8.484375 4.7279808 8.484375 3.7578125 C 8.484375 4.7269575 7.6967309 5.515625 6.7265625 5.515625 C 5.7574176 5.515625 4.9667969 4.7279808 4.9667969 3.7578125 L 4.9667969 3.2792969 z M 6.7285156 7.2734375 L 17.275391 7.2734375 C 17.598781 7.2734375 17.861328 7.5349622 17.861328 7.859375 C 17.861328 8.1837878 17.598781 8.4453125 17.275391 8.4453125 L 6.7285156 8.4453125 C 6.4051262 8.4453125 6.1425781 8.1837878 6.1425781 7.859375 C 6.1425781 7.5349622 6.4041028 7.2734375 6.7285156 7.2734375 z M 6.7285156 10.787109 L 17.275391 10.787109 C 17.598781 10.787109 17.861328 11.050587 17.861328 11.375 C 17.861328 11.699413 17.598781 11.960938 17.275391 11.960938 L 6.7285156 11.960938 C 6.4051262 11.960938 6.1425781 11.699413 6.1425781 11.375 C 6.1425781 11.050587 6.4041028 10.787109 6.7285156 10.787109 z M 6.7285156 14.380859 L 17.275391 14.380859 C 17.598781 14.380859 17.861328 14.642384 17.861328 14.966797 C 17.861328 15.29121 17.598781 15.552734 17.275391 15.552734 L 6.7285156 15.552734 C 6.4051262 15.552734 6.1425781 15.29121 6.1425781 14.966797 C 6.1425781 14.643408 6.4041028 14.380859 6.7285156 14.380859 z M 6.7285156 17.896484 L 17.275391 17.896484 C 17.598781 17.896484 17.861328 18.158009 17.861328 18.482422 C 17.861328 18.806835 17.598781 19.068359 17.275391 19.068359 L 6.7285156 19.068359 C 6.4051262 19.068359 6.1425781 18.806835 6.1425781 18.482422 C 6.1425781 18.159033 6.4041028 17.896484 6.7285156 17.896484 z"/><extra/></svg>`;
+		const pinIconMask = `<mask id="pinIconMask" fill="black"><path fill="white" d="M 0 0 H 24 V 24 H 0 Z"/><path fill="black" d="M24 12 H 12 V 24 H 24 Z"/></mask>`;
 		const pinIcon = pinIconGeneral.replace(`<extra/>`, ``).replace(`<mask/>`, ``).replace(` mask="url(#pinIconMask)"`, ``);
-		const pinIconDelete = pinIconGeneral.replace(`<extra/>`, `<path transform="translate(8, 8)" stroke="#f04747" stroke-width="2" fill="none" d="M 4 4 l 8.666 8.666 m 0 -8.667 l -8.667 8.666 Z"/>`).replace(`<mask/>`, pinIconMask);
-		const pinIconUpdate = pinIconGeneral.replace(`<extra/>`, `<path transform="translate(10, 10)" fill="#43b581" d="M 11.374, 4.978 V 0 l -1.672, 1.671 C 8.675, 0.64, 7.256, 0, 5.685, 0 C 2.542, 0, 0.003, 2.546, 0.003, 5.688 s 2.538, 5.688, 5.681, 5.688 c 2.648, 0, 4.867 -1.814, 5.496 -4.267 h -1.48 c -0.587, 1.656 -2.158, 2.844 -4.018, 2.844 c -2.358, 0 -4.267 -1.91 -4.267 -4.267 s 1.909 -4.267, 4.266 -4.267 c 1.176, 0, 2.232, 0.49, 3.004, 1.262 l -2.294, 2.293 H 11.374 z"/>`).replace(`<mask/>`, pinIconMask);
+		const pinIconDelete = pinIconGeneral.replace(`<extra/>`, `<path fill="none" stroke="#f04747" stroke-width="2" d="m 14.702359,14.702442 8.596228,8.596148 m 0,-8.597139 -8.59722,8.596147 z"/>`).replace(`<mask/>`, pinIconMask);
+		const pinIconUpdate = pinIconGeneral.replace(`<extra/>`, `<path fill="#43b581" d="M 24,18.375879 V 14 l -1.470407,1.468882 C 21.626418,14.562588 20.378506,14 18.996922,14 16.232873,14 14,16.238045 14,19 c 0,2.761955 2.231994,5 4.996043,5 2.32873,0 4.280186,-1.594585 4.833347,-3.750879 h -1.301556 c -0.516226,1.455696 -1.89781,2.5 -3.53355,2.5 -2.073696,0 -3.752528,-1.678973 -3.752528,-3.750879 0,-2.071906 1.678832,-3.750879 3.751649,-3.750879 1.034209,0 1.962887,0.430731 2.641808,1.109353 L 19.6178,18.372363 H 24 Z"/>`).replace(`<mask/>`, pinIconMask);
 		
 		const filterKeys = ["channel", "server", "all"];
 		const sortKeys = ["notetime", "messagetime"];
@@ -110,7 +109,7 @@ module.exports = (_ => {
 					label: this.defaults.choices[key].description,
 					basis: "50%",
 					value: choices[key],
-					options: (this.defaults.choices[key].options || []).map(option => this.getValue(option, this.defaults.choices[key].type)),
+					options: (this.defaults.choices[key].options || []).map(option => this.getPopoutValue(option, this.defaults.choices[key].type)),
 					searchable: true
 				}));
 				
@@ -266,9 +265,9 @@ module.exports = (_ => {
 			}
 			
 			openNotesPopout (buttonInstance) {
-				buttonInstance.props.selectedFilter = buttonInstance.props.selectedFilter || this.getValue(choices.defaultFilter || filterKeys[0], "filter");
-				buttonInstance.props.selectedSort = buttonInstance.props.selectedSort || this.getValue(choices.defaultSort || sortKeys[0], "sort");
-				buttonInstance.props.selectedOrder = buttonInstance.props.selectedOrder || this.getValue(choices.defaultOrder || orderKeys[0], "order");
+				buttonInstance.props.selectedFilter = buttonInstance.props.selectedFilter || this.getPopoutValue(choices.defaultFilter || filterKeys[0], "filter");
+				buttonInstance.props.selectedSort = buttonInstance.props.selectedSort || this.getPopoutValue(choices.defaultSort || sortKeys[0], "sort");
+				buttonInstance.props.selectedOrder = buttonInstance.props.selectedOrder || this.getPopoutValue(choices.defaultOrder || orderKeys[0], "order");
 				buttonInstance.props.searchKey = buttonInstance.props.searchKey || "";
 				let searchTimeout;
 				return [
@@ -313,27 +312,27 @@ module.exports = (_ => {
 											itemSelectedClassName: BDFDB.disCN.messagespopouttabbartabactive,
 											type: BDFDB.LibraryComponents.TabBar.Types.TOP_PILL,
 											selectedItem: buttonInstance.props.selectedFilter.value,
-											items: filterKeys.map(option => this.getValue(option, "filter")),
+											items: filterKeys.map(option => this.getPopoutValue(option, "filter")),
 											onItemSelect: option => {
-												buttonInstance.props.selectedFilter = this.getValue(option, "filter");
+												buttonInstance.props.selectedFilter = this.getPopoutValue(option, "filter");
 												BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
 											}
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
 											label: BDFDB.LanguageUtils.LibraryStrings.sort_by + ":",
 											value: buttonInstance.props.selectedSort,
-											options: sortKeys.map(option => this.getValue(option, "sort")),
+											options: sortKeys.map(option => this.getPopoutValue(option, "sort")),
 											onChange: option => {
-												buttonInstance.props.selectedSort = this.getValue(option, "sort");
+												buttonInstance.props.selectedSort = this.getPopoutValue(option, "sort");
 												BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
 											}
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
 											label: BDFDB.LanguageUtils.LibraryStrings.order + ":",
 											value: buttonInstance.props.selectedOrder,
-											options: orderKeys.map(option => this.getValue(option, "order")),
+											options: orderKeys.map(option => this.getPopoutValue(option, "order")),
 											onChange: option => {
-												buttonInstance.props.selectedOrder = this.getValue(option, "order");
+												buttonInstance.props.selectedOrder = this.getPopoutValue(option, "order");
 												BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
 											}
 										})
@@ -349,7 +348,7 @@ module.exports = (_ => {
 				];
 			}
 			
-			getValue (key, type) {
+			getPopoutValue (key, type) {
 				return {
 					label: type == "order" ? BDFDB.LanguageUtils.LibraryStrings[key] : this.labels[`popout_${type}_${key}`],
 					value: key
@@ -587,7 +586,7 @@ module.exports = (_ => {
 						return {
 							context_pinoption:					"Запишете съобщението",
 							context_unpinoption:				"Премахване на бележката",
-							context_updateoption:				"Бележка за актуализация",
+							context_updateoption:				"Бележката за актуализация",
 							popout_filter_all:					"Всички сървъри",
 							popout_filter_channel:				"Канал",
 							popout_filter_server:				"Сървър",
@@ -603,7 +602,7 @@ module.exports = (_ => {
 						return {
 							context_pinoption:					"Skriv beskeden ned",
 							context_unpinoption:				"Fjern noten",
-							context_updateoption:				"Opdater note",
+							context_updateoption:				"Opdater noten",
 							popout_filter_all:					"Alle servere",
 							popout_filter_channel:				"Kanal",
 							popout_filter_server:				"Server",
@@ -635,7 +634,7 @@ module.exports = (_ => {
 						return {
 							context_pinoption:					"Γράψτε το μήνυμα",
 							context_unpinoption:				"Αφαιρέστε τη σημείωση",
-							context_updateoption:				"Ενημέρωση σημείωσης",
+							context_updateoption:				"Ενημέρωση τη σημείωση",
 							popout_filter_all:					"Όλοι οι διακομιστές",
 							popout_filter_channel:				"Κανάλι",
 							popout_filter_server:				"Υπηρέτης",
@@ -650,8 +649,8 @@ module.exports = (_ => {
 					case "es":		// Spanish
 						return {
 							context_pinoption:					"Escribe el mensaje",
-							context_unpinoption:				"Eliminar nota",
-							context_updateoption:				"Nota de actualización",
+							context_unpinoption:				"Eliminar la nota",
+							context_updateoption:				"Actualiza la nota",
 							popout_filter_all:					"Todos los servidores",
 							popout_filter_channel:				"Canal",
 							popout_filter_server:				"Servidor",
@@ -698,8 +697,8 @@ module.exports = (_ => {
 					case "hr":		// Croatian
 						return {
 							context_pinoption:					"Zapišite poruku",
-							context_unpinoption:				"Ukloni bilješku",
-							context_updateoption:				"Napomena o ažuriranju",
+							context_unpinoption:				"Izbriši bilješku",
+							context_updateoption:				"Ažurirajte bilješku",
 							popout_filter_all:					"Svi poslužitelji",
 							popout_filter_channel:				"Kanal",
 							popout_filter_server:				"Poslužitelju",
@@ -714,7 +713,7 @@ module.exports = (_ => {
 					case "hu":		// Hungarian
 						return {
 							context_pinoption:					"Írja le az üzenetet",
-							context_unpinoption:				"Megjegyzés eltávolítása",
+							context_unpinoption:				"Törölje a jegyzetet",
 							context_updateoption:				"Frissítse a jegyzetet",
 							popout_filter_all:					"Minden szerver",
 							popout_filter_channel:				"Csatorna",
@@ -730,8 +729,8 @@ module.exports = (_ => {
 					case "it":		// Italian
 						return {
 							context_pinoption:					"Annota il messaggio",
-							context_unpinoption:				"Rimuovi nota",
-							context_updateoption:				"Aggiorna nota",
+							context_unpinoption:				"Elimina la nota",
+							context_updateoption:				"Aggiorna la nota",
 							popout_filter_all:					"Tutti i server",
 							popout_filter_channel:				"Canale",
 							popout_filter_server:				"Server",
@@ -746,8 +745,8 @@ module.exports = (_ => {
 					case "ja":		// Japanese
 						return {
 							context_pinoption:					"メッセージを書き留めます",
-							context_unpinoption:				"メモを削除",
-							context_updateoption:				"更新メモ",
+							context_unpinoption:				"メモを削除します",
+							context_updateoption:				"メモを更新する",
 							popout_filter_all:					"すべてのサーバー",
 							popout_filter_channel:				"チャネル",
 							popout_filter_server:				"サーバ",
@@ -762,7 +761,7 @@ module.exports = (_ => {
 					case "ko":		// Korean
 						return {
 							context_pinoption:					"메시지를 적어",
-							context_unpinoption:				"메모 제거",
+							context_unpinoption:				"메모 삭제",
 							context_updateoption:				"메모 업데이트",
 							popout_filter_all:					"모든 서버",
 							popout_filter_channel:				"채널",
@@ -778,8 +777,8 @@ module.exports = (_ => {
 					case "lt":		// Lithuanian
 						return {
 							context_pinoption:					"Užrašykite žinutę",
-							context_unpinoption:				"Pašalinti užrašą",
-							context_updateoption:				"Atnaujinti pastabą",
+							context_unpinoption:				"Ištrinkite užrašą",
+							context_updateoption:				"Atnaujinkite užrašą",
 							popout_filter_all:					"Visi serveriai",
 							popout_filter_channel:				"Kanalą",
 							popout_filter_server:				"Serverio",
@@ -794,8 +793,8 @@ module.exports = (_ => {
 					case "nl":		// Dutch
 						return {
 							context_pinoption:					"Schrijf het bericht op",
-							context_unpinoption:				"Notitie verwijderen",
-							context_updateoption:				"Update notitie",
+							context_unpinoption:				"Verwijder de notitie",
+							context_updateoption:				"Werk de notitie bij",
 							popout_filter_all:					"Alle servers",
 							popout_filter_channel:				"Kanaal",
 							popout_filter_server:				"Server",
@@ -810,8 +809,8 @@ module.exports = (_ => {
 					case "no":		// Norwegian
 						return {
 							context_pinoption:					"Skriv ned meldingen",
-							context_unpinoption:				"Fjern notatet",
-							context_updateoption:				"Oppdateringsnotat",
+							context_unpinoption:				"Slett notatet",
+							context_updateoption:				"Oppdater notatet",
 							popout_filter_all:					"Alle servere",
 							popout_filter_channel:				"Kanal",
 							popout_filter_server:				"Server",
@@ -827,7 +826,7 @@ module.exports = (_ => {
 						return {
 							context_pinoption:					"Zapisz wiadomość",
 							context_unpinoption:				"Usuń notatkę",
-							context_updateoption:				"Uwaga dotycząca aktualizacji",
+							context_updateoption:				"Zaktualizuj notatkę",
 							popout_filter_all:					"Wszystkie serwery",
 							popout_filter_channel:				"Kanał",
 							popout_filter_server:				"Serwer",
@@ -842,8 +841,8 @@ module.exports = (_ => {
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
 							context_pinoption:					"Escreva a mensagem",
-							context_unpinoption:				"Remover nota",
-							context_updateoption:				"Atualizar nota",
+							context_unpinoption:				"Exclua a nota",
+							context_updateoption:				"Atualize a nota",
 							popout_filter_all:					"Todos os servidores",
 							popout_filter_channel:				"Canal",
 							popout_filter_server:				"Servidor",
@@ -858,8 +857,8 @@ module.exports = (_ => {
 					case "ro":		// Romanian
 						return {
 							context_pinoption:					"Notează mesajul",
-							context_unpinoption:				"Eliminați nota",
-							context_updateoption:				"Notă de actualizare",
+							context_unpinoption:				"Ștergeți nota",
+							context_updateoption:				"Actualizați nota",
 							popout_filter_all:					"Toate serverele",
 							popout_filter_channel:				"Canal",
 							popout_filter_server:				"Server",
@@ -875,11 +874,11 @@ module.exports = (_ => {
 						return {
 							context_pinoption:					"Запишите сообщение",
 							context_unpinoption:				"Удалить заметку",
-							context_updateoption:				"Обновить примечание",
+							context_updateoption:				"Обновить заметку",
 							popout_filter_all:					"Все серверы",
 							popout_filter_channel:				"Канал",
 							popout_filter_server:				"Сервер",
-							popout_note:						"Ноты",
+							popout_note:						"Замечания",
 							popout_pinoption:					"Запись",
 							popout_sort_messagetime:			"Дата сообщения",
 							popout_sort_notetime:				"Дата записи",
@@ -890,8 +889,8 @@ module.exports = (_ => {
 					case "sv":		// Swedish
 						return {
 							context_pinoption:					"Skriv ner meddelandet",
-							context_unpinoption:				"Ta bort anteckningen",
-							context_updateoption:				"Uppdatera anteckning",
+							context_unpinoption:				"Radera anteckningen",
+							context_updateoption:				"Uppdatera anteckningen",
 							popout_filter_all:					"Alla servrar",
 							popout_filter_channel:				"Kanal",
 							popout_filter_server:				"Server",
@@ -922,8 +921,8 @@ module.exports = (_ => {
 					case "tr":		// Turkish
 						return {
 							context_pinoption:					"Mesajı yazın",
-							context_unpinoption:				"Notu kaldır",
-							context_updateoption:				"Notu güncelle",
+							context_unpinoption:				"Notu silin",
+							context_updateoption:				"Notu güncelleyin",
 							popout_filter_all:					"Tüm sunucular",
 							popout_filter_channel:				"Kanal",
 							popout_filter_server:				"Sunucu",
@@ -938,8 +937,8 @@ module.exports = (_ => {
 					case "uk":		// Ukrainian
 						return {
 							context_pinoption:					"Запишіть повідомлення",
-							context_unpinoption:				"Вилучити примітку",
-							context_updateoption:				"Примітка до оновлення",
+							context_unpinoption:				"Видаліть нотатку",
+							context_updateoption:				"Оновіть нотатку",
 							popout_filter_all:					"Усі сервери",
 							popout_filter_channel:				"Каналу",
 							popout_filter_server:				"Сервер",
@@ -971,7 +970,7 @@ module.exports = (_ => {
 						return {
 							context_pinoption:					"写下消息",
 							context_unpinoption:				"删除笔记",
-							context_updateoption:				"更新说明",
+							context_updateoption:				"更新笔记",
 							popout_filter_all:					"所有服务器",
 							popout_filter_channel:				"渠道",
 							popout_filter_server:				"服务器",
@@ -987,7 +986,7 @@ module.exports = (_ => {
 						return {
 							context_pinoption:					"寫下消息",
 							context_unpinoption:				"刪除筆記",
-							context_updateoption:				"更新說明",
+							context_updateoption:				"更新筆記",
 							popout_filter_all:					"所有服務器",
 							popout_filter_channel:				"渠道",
 							popout_filter_server:				"服務器",
@@ -1013,7 +1012,7 @@ module.exports = (_ => {
 							popout_sort_notetime:				"Note Date",
 							toast_noteadd:						"Message added to Notebook",
 							toast_noteremove:					"Message removed from Notebook",
-							toast_noteupdate:					"Message updated in the Notebook"
+							toast_noteupdate:					"Updated the Message in the Notebook"
 						};
 				}
 			}

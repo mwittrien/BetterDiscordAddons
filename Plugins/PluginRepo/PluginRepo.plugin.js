@@ -28,7 +28,14 @@ module.exports = (_ => {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
-		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it.\n\n${config.info.description}`;}
+		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it. \n\n${config.info.description}`;}
+		
+		downloadLibrary () {
+			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+				if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
+				else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
+			});
+		}
 		
 		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
@@ -40,10 +47,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-							else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-						});
+						this.downloadLibrary();
 					}
 				});
 			}
@@ -54,12 +58,7 @@ module.exports = (_ => {
 		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
-			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
-				require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-					if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-					else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-				});
-			});
+			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
@@ -79,19 +78,19 @@ module.exports = (_ => {
 				colorClass: "GREEN",
 				backgroundColor: "STATUS_GREEN",
 				icon: "CHECKMARK",
-				text: "Updated"
+				text: "updated"
 			},
 			OUTDATED: {
 				colorClass: "RED",
 				backgroundColor: "STATUS_RED",
 				icon: "CLOSE",
-				text: "Outdated"
+				text: "outdated"
 			},
 			DOWNLOADABLE: {
 				colorClass: "BRAND",
 				backgroundColor: "var(--bdfdb-blurple)",
 				icon: "DOWNLOAD",
-				text: "Download"
+				text: "download"
 			}
 		};
 		const favStates = {
@@ -116,7 +115,7 @@ module.exports = (_ => {
 			DESC:			"descending"
 		};
 		
-		const pluginRepoIcon = `<svg width="34" height="31" viewBox="0 0 400 382"><path d="M0.000 183.023 L 0.000 366.046 46.377 366.046 L 92.754 366.046 92.754 312.629 L 92.754 259.213 127.223 259.213 C 174.433 259.213,187.432 257.146,210.766 245.926 C 311.105 197.681,301.344 41.358,195.859 7.193 C 173.603 -0.015,173.838 0.000,80.846 0.000 L 0.000 0.000 0.000 183.023 M157.615 88.195 C 193.007 97.413,198.827 152.678,166.407 171.674 C 158.993 176.019,155.494 176.398,122.807 176.398 L 92.754 176.398 92.754 131.677 L 92.754 86.957 122.807 86.957 C 146.807 86.957,153.819 87.206,157.615 88.195" stroke="none" fill="COLOR_1" fill-rule="evenodd"></path><path d="M226.647 3.824 C 258.085 21.580,282.721 54.248,291.095 89.281 C 292.183 93.834,293.041 95.659,294.560 96.655 C 310.880 107.348,312.400 140.701,297.286 156.464 C 293.685 160.221,293.134 161.348,291.162 169.006 C 282.026 204.468,259.916 235.185,230.701 253.002 C 229.548 253.705,235.510 262.261,270.237 309.731 L 311.131 365.631 355.565 365.846 L 400.000 366.060 400.000 348.309 L 400.000 330.557 364.338 285.630 L 328.676 240.703 333.494 238.892 C 373.356 223.907,395.248 189.691,399.313 136.020 C 404.504 67.495,372.510 19.710,311.375 4.675 C 294.592 0.548,287.694 -0.000,252.482 0.000 L 219.876 0.000 226.647 3.824 M202.899 265.964 C 183.869 272.635,168.536 274.960,139.752 275.540 L 116.770 276.003 116.770 321.024 L 116.770 366.046 163.975 366.046 L 211.180 366.046 211.180 314.700 C 211.180 286.460,210.901 263.386,210.559 263.425 C 210.217 263.464,206.770 264.607,202.899 265.964" stroke="none" fill="COLOR_2" fill-rule="evenodd"></path></svg>`;
+		const pluginRepoIcon = `<svg width="35" height="32" viewBox="0 0 35 32"><path fill="COLOR_1" d="m 0,15.999383 v 15.999393 h 4.0579876 4.0579875 v -4.669578 -4.669486 h 3.0160369 c 4.130876,0 5.268288,-0.180687 7.310013,-1.16151 C 27.221688,17.280747 26.3676,3.6154073 17.137662,0.62878797 15.190263,-0.00131638 15.210826,2.2791846e-8 7.074025,2.2791846e-8 H 0 V 15.999383 M 13.791313,7.7097692 c 3.0968,0.8058133 3.60605,5.6369388 0.769299,7.2975188 -0.648724,0.379824 -0.954887,0.41296 -3.815,0.41296 H 8.1159751 V 11.510851 7.6015465 h 2.6296369 c 2.100001,0 2.71355,0.021803 3.045701,0.1082227 z"/><path fill="COLOR_2" d="m 19.831613,0.33428402 c 2.750824,1.55218268 4.906474,4.40793308 5.639199,7.47042048 0.0952,0.3980164 0.170276,0.5575479 0.303189,0.6446156 1.427999,0.934759 1.560999,3.8503849 0.238524,5.2283499 -0.315088,0.328422 -0.3633,0.426947 -0.53585,1.096389 -0.7994,3.099994 -2.734025,5.785188 -5.290337,7.342709 -0.100893,0.0615 0.420787,0.809392 3.4594,4.959094 l 3.578225,4.886631 3.887975,0.01882 L 35,32 V 30.448249 28.896416 L 31.879575,24.969021 28.75915,21.041616 29.180725,20.883309 C 32.66865,19.573354 34.5842,16.582282 34.939888,11.89051 35.3941,5.9002298 32.594625,1.7229963 27.245312,0.40867105 25.7768,0.04790474 25.173225,2.2791846e-8 22.092175,2.2791846e-8 H 19.23915 L 19.831613,0.33428402 M 17.753663,23.249872 C 16.088537,23.833028 14.7469,24.036278 12.2283,24.08698 l -2.010924,0.04052 v 3.935622 3.935705 h 4.130436 4.130438 v -4.488532 c 0,-2.468667 -0.02441,-4.485735 -0.05434,-4.482331 -0.02993,0.0031 -0.331537,0.103328 -0.67025,0.221958 z"/></svg>`;
 		
 		const RepoListComponent = class PluginList extends BdApi.React.Component {
 			componentDidMount() {
@@ -187,7 +186,7 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 									className: BDFDB.disCN.margintop20,
 									style: {textAlign: "center"},
-									children: "Plugins are still being fetched. Please wait a moment."
+									children: `${BDFDB.LanguageUtils.LibraryStringsFormat("loading", "Plugin Repo")} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`
 								})
 							]
 						}) : BDFDB.ReactUtils.forceStyle(BDFDB.ReactUtils.createElement("div", {
@@ -327,7 +326,7 @@ module.exports = (_ => {
 							})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: buttonConfig.text,
+							text: BDFDB.LanguageUtils.LibraryStrings[buttonConfig.text],
 							children: BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCNS._repobutton + BDFDB.disCN._repocontrolsbutton,
 								style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor] || buttonConfig.backgroundColor},
@@ -352,7 +351,7 @@ module.exports = (_ => {
 						this.props.plugin.state != pluginStates.DOWNLOADABLE && BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN._repocontrolsbutton,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								text: "Delete Pluginfile",
+								text: BDFDB.LanguageUtils.LanguageStrings.DELETE,
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 									name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_TRASH,
 									className: BDFDB.disCN._repoicon,
@@ -369,7 +368,7 @@ module.exports = (_ => {
 							size: BDFDB.LibraryComponents.Button.Sizes.MIN,
 							color: BDFDB.LibraryComponents.Button.Colors[buttonConfig.colorClass],
 							style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor] || buttonConfig.backgroundColor},
-							children: buttonConfig.text,
+							children: BDFDB.LanguageUtils.LibraryStrings[buttonConfig.text],
 							onClick: (e, instance) => {
 								_this.downloadPlugin(this.props.plugin);
 								if (list && list.props.rnmStart) BDFDB.TimeUtils.timeout(_ => {
@@ -494,8 +493,8 @@ module.exports = (_ => {
 
 				this.defaults = {
 					settings: {
-						notifyOutdated:		{value: true, 	description: "Get a notification when one of your Plugins is outdated"},
-						notifyNewEntries:	{value: true, 	description: "Get a notification when there are new entries in the Repo"}
+						notifyOutdated:		{value: true, 	description: "Get a Notification when one of your Plugins is outdated"},
+						notifyNewEntries:	{value: true, 	description: "Get a Notification when there are new Entries in the Repo"}
 					},
 					modalSettings: {
 						updated: 			{value: true,	modify: true,	description: "Show updated Plugins",},
@@ -530,7 +529,7 @@ module.exports = (_ => {
 
 				this.forceUpdateAll();
 
-				BDFDB.DOMUtils.remove(".bd-pluginrepobutton", ".pluginrepo-notice", ".pluginrepo-loadingicon");
+				BDFDB.DOMUtils.remove(BDFDB.dotCN._pluginreponotice, BDFDB.dotCN._pluginrepoloadingicon);
 			}
 
 			getSettingsPanel (collapseStates = {}) {
@@ -656,7 +655,7 @@ module.exports = (_ => {
 			processSettingsView (e) {
 				if (BDFDB.ArrayUtils.is(e.instance.props.sections) && e.instance.props.sections[0] && e.instance.props.sections[0].label == BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS) {
 					e.instance.props.sections = e.instance.props.sections.filter(n => n.section != "pluginrepo");
-					let index = e.instance.props.sections.indexOf(e.instance.props.sections.find(n => n.section == "themes") || e.instance.props.sections.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS));
+					let index = e.instance.props.sections.indexOf(e.instance.props.sections.find(n => n.section == "themes") || e.instance.props.sections.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS) || e.instance.props.sections.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.HYPESQUAD_ONLINE));
 					if (index > -1) {
 						e.instance.props.sections.splice(index + 1, 0, {
 							section: "pluginrepo",
@@ -697,7 +696,7 @@ module.exports = (_ => {
 			}
 
 			loadPlugins () {
-				BDFDB.DOMUtils.remove(".pluginrepo-loadingicon");
+				BDFDB.DOMUtils.remove(BDFDB.dotCN._pluginrepoloadingicon);
 				let settings = BDFDB.DataUtils.load(this, "settings");
 				let getPluginInfo, extractConfigInfo, createSandbox, runInSandbox;
 				let sandbox, sandboxRunning = false, sandboxQueue = [], outdated = 0, newEntries = 0, i = 0;
@@ -723,11 +722,11 @@ module.exports = (_ => {
 						}, 1200000), amount: loading.amount+1};
 						
 						let loadingIcon = BDFDB.DOMUtils.create(pluginRepoIcon.replace(/COLOR_1/gi, "var(--bdfdb-blurple)").replace(/COLOR_2/gi, "#72767d"));
-						BDFDB.DOMUtils.addClass(loadingIcon, "pluginrepo-loadingicon");
+						BDFDB.DOMUtils.addClass(loadingIcon, BDFDB.disCN._pluginrepoloadingicon);
 						loadingIcon.addEventListener("mouseenter", _ => {
 							BDFDB.TooltipUtils.create(loadingIcon, this.getLoadingTooltipText(), {
 								type: "left",
-								className: "pluginrepo-loadingtooltip",
+								className: BDFDB.disCN._pluginrepoloadingtooltip,
 								delay: 500,
 								style: "max-width: unset;"
 							});
@@ -746,60 +745,64 @@ module.exports = (_ => {
 										BDFDB.TimeUtils.clear(loading.timeout);
 										BDFDB.TimeUtils.clear(finishInterval);
 										BDFDB.WindowUtils.close(sandbox);
-										BDFDB.DOMUtils.remove(loadingIcon, ".pluginrepo-loadingicon");
+										BDFDB.DOMUtils.remove(loadingIcon, BDFDB.dotCN._pluginrepoloadingicon);
 										loading = {is: false, timeout: null, amount: loading.amount};
 										
-										BDFDB.LogUtils.log("Finished fetching Plugins.", this.name);
+										BDFDB.LogUtils.log("Finished fetching Plugins", this.name);
 										if (list) BDFDB.ReactUtils.forceUpdate(list);
 										
-										if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
-											let oldBarButton = document.querySelector(".pluginrepo-outdate-notice " + BDFDB.dotCN.noticedismiss);
-											if (oldBarButton) oldBarButton.click();
-											let bar = BDFDB.NotificationUtils.notice(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check: `, {
+										if (settings.notifyOutdated && outdated > 0) {
+											document.querySelector(BDFDB.dotCN._pluginrepooutdatednotice)?.close();
+											BDFDB.NotificationUtils.notice(this.labels.notice_outdated_plugins.replace("{{var0}}", outdated), {
 												type: "danger",
-												className: "pluginrepo-notice pluginrepo-outdate-notice",
-												btn: "PluginRepo",
-												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
-											});
-											bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
-												showOnlyOutdated = true;
-												BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo");
-												bar.querySelector(BDFDB.dotCN.noticedismiss).click();
+												className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepooutdatednotice,
+												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
+												buttons: [{
+													contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
+													close: true,
+													onClick: _ => {
+														showOnlyOutdated = true;
+														BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo");
+													}
+												}]
 											});
 										}
 										
-										if ((settings.notifyNewEntries || settings.notifyNewEntries == undefined) && newEntries > 0) {
-											let oldBarButton = document.querySelector(".pluginrepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
-											if (oldBarButton) oldBarButton.click();
-											let single = newEntries == 1;
-											let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Plugin${single ? "" : "s"} in the Repo. Check: `, {
+										if (settings.notifyNewEntries && newEntries > 0) {
+											document.querySelector(BDFDB.dotCN._pluginreponewentriesnotice)?.close();
+											BDFDB.NotificationUtils.notice(this.labels.notice_new_plugins.replace("{{var0}}", newEntries), {
 												type: "success",
-												className: "pluginrepo-notice pluginrepo-newentries-notice",
-												btn: "PluginRepo",
-												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
-											});
-											bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
-												forcedSort = "NEW";
-												forcedOrder = "ASC";
-												BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo");
-												bar.querySelector(BDFDB.dotCN.noticedismiss).click();
+												className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginreponewentriesnotice,
+												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
+												buttons: [{
+													contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
+													close: true,
+													onClick: _ => {
+														forcedSort = "NEW";
+														forcedOrder = "ASC";
+														BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo");
+													}
+												}]
 											});
 										}
 										
 										if (BDFDB.UserUtils.me.id == "278543574059057154") {
+											document.querySelector(BDFDB.dotCN._pluginrepofailnotice)?.close();
 											let wrongUrls = [];
 											for (let url of foundPlugins) if (url && !loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
 											if (wrongUrls.length) {
-												let bar = BDFDB.NotificationUtils.notice(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {
+												BDFDB.NotificationUtils.notice(this.labels.notice_failed_plugins.replace("{{var0}}", wrongUrls.length), {
 													type: "danger",
-													className: "pluginrepo-notice pluginrepo-fail-notice",
-													btn: "List",
-													customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe")
-												});
-												bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
-													let toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"), {type: "error"});
-													toast.style.setProperty("overflow", "hidden");
-													for (let url of wrongUrls) console.log(url);
+													className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepofailnotice,
+													customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
+													buttons: [{
+														contents: this.labels.list,
+														onClick: _ => {
+															let toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"), {type: "danger"});
+															toast.style.setProperty("overflow", "hidden");
+															for (let url of wrongUrls) console.log(url);
+														}
+													}]
 												});
 											}
 										}
@@ -831,13 +834,14 @@ module.exports = (_ => {
 							let bodyWithoutSpecial = bodyCopy.replace(/\n|\r|\t/g, "").replace(/\n|\r|\t/g, "").replace(/\s{2,}/g, "");
 							let configReg = /(\.exports|config)\s*=\s*\{(.*?)\s*["'`]*info["'`]*\s*:\s*/i.exec(bodyWithoutSpecial);
 							if (configReg) {
+								bodyWithoutSpecial = bodyWithoutSpecial.substring(configReg.index)?.split(configReg[0])[1]?.split("};")[0]?.split("}},")[0]?.replace(/,([\]\}])/g, "$1");
 								try {
-									extractConfigInfo(plugin, JSON.parse('{"info":' + bodyWithoutSpecial.substring(configReg.index).split(configReg[0])[1].split("};")[0].split("}},")[0] + '}'));
+									extractConfigInfo(plugin, JSON.parse('{"info":' + bodyWithoutSpecial + '}'));
 								}
 								catch (err) {
 									let i = 0, j = 0, configString = "";
 									try {
-										for (let c of (bodyWithoutSpecial.substring(configReg.index).split(configReg[0])[1].split("};")[0].split("}},")[0]).replace(/:\s*([\[\{"]+)/g, '":$1').replace(/([\]\}"]+)\s*,/g, '$1,"').replace(/\s*([\[\{]+)/g, '$1"')) {
+										for (let c of bodyWithoutSpecial.replace(/:\s*([\[\{"]+)/g, '":$1').replace(/([\]\}"]+)\s*,([^"])/g, '$1,"$2').replace(/\s*\{([^"])/g, '{"$1')) {
 											configString += c;
 											if (c == "{") i++;
 											else if (c == "}") j++;
@@ -892,7 +896,7 @@ module.exports = (_ => {
 						}
 						i++;
 						
-						let loadingTooltip = document.querySelector(".pluginrepo-loadingtooltip");
+						let loadingTooltip = document.querySelector(BDFDB.dotCN._pluginrepoloadingtooltip);
 						if (loadingTooltip) loadingTooltip.update(this.getLoadingTooltipText());
 						
 						getPluginInfo(callback);
@@ -928,6 +932,7 @@ module.exports = (_ => {
 								callback();
 							}
 						});
+						if (!sandbox) callback();
 					});
 				}
 
@@ -976,7 +981,7 @@ module.exports = (_ => {
 			}
 
 			getLoadingTooltipText () {
-				return `Loading PluginRepo - [${Object.keys(loadedPlugins).length}/${Object.keys(grabbedPlugins).length}]`;
+				return BDFDB.LanguageUtils.LibraryStringsFormat("loading", `PluginRepo - [${Object.keys(loadedPlugins).length}/${Object.keys(grabbedPlugins).length}]`);
 			}
 			
 			isPluginOutdated (plugin, url) {
@@ -1017,37 +1022,231 @@ module.exports = (_ => {
 
 			downloadPlugin (data) {
 				BDFDB.LibraryRequires.request(data.url, (error, response, body) => {
-					if (error) BDFDB.NotificationUtils.toast(`Unable to download Plugin "${plugin.getName}".`, {type: "danger"});
+					if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Plugin "${data.getName}"`), {type: "danger"});
 					else this.createPluginFile(data.url.split("/").pop(), body);
 				});
 			}
 
 			createPluginFile (filename, content) {
 				BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), filename), content, (error) => {
-					if (error) BDFDB.NotificationUtils.toast(`Unable to save Plugin "${filename}".`, {type: "danger"});
-					else BDFDB.NotificationUtils.toast(`Successfully saved Plugin "${filename}".`, {type: "success"});
+					if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_fail", `Plugin "${filename}"`), {type: "danger"});
+					else BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_success", `Plugin "${filename}"`), {type: "success"});
 				});
 			}
 
 			startPlugin (data) {
 				if (data.name && BDFDB.BDUtils.isPluginEnabled(data.name) == false) {
 					BDFDB.BDUtils.enablePlugin(data.name, false);
-					BDFDB.LogUtils.log(`Started Plugin ${data.name}.`, this.name);
+					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", data.name), this.name);
 				}
 			}
 
 			deletePluginFile (data) {
 				let filename = data.url.split("/").pop();
 				BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), filename), (error) => {
-					if (error) BDFDB.NotificationUtils.toast(`Unable to delete Plugin "${filename}".`, {type: "danger"});
-					else BDFDB.NotificationUtils.toast(`Successfully deleted Plugin "${filename}".`);
+					if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_fail", `Plugin "${filename}"`), {type: "danger"});
+					else BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_success", `Plugin "${filename}"`));
 				});
 			}
 
 			stopPlugin (data) {
 				if (data.name && BDFDB.BDUtils.isPluginEnabled(data.name) == true) {
 					BDFDB.BDUtils.disablePlugin(data.name, false);
-					BDFDB.LogUtils.log(`Stopped Plugin ${data.name}.`, this.name);
+					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", data.name), this.name);
+				}
+			}
+
+			setLabelsByLanguage () {
+				switch (BDFDB.LanguageUtils.getLanguage().id) {
+					case "bg":		// Bulgarian
+						return {
+							list:								"Списък",
+							notice_failed_plugins:				"Някои Plugins [{{var0}}] не можаха да бъдат заредени",
+							notice_new_plugins:					"Новите Plugins [{{var0}}] бяха добавени към PluginRepo",
+							notice_outdated_plugins:			"Някои Plugins [{{var0}}] са остарели"
+						};
+					case "da":		// Danish
+						return {
+							list:								"Liste",
+							notice_failed_plugins:				"Nogle Plugins [{{var0}}] kunne ikke indlæses",
+							notice_new_plugins:					"Nye Plugins [{{var0}}] er blevet føjet til PluginRepo",
+							notice_outdated_plugins:			"Nogle Plugins [{{var0}}] er forældede"
+						};
+					case "de":		// German
+						return {
+							list:								"Liste",
+							notice_failed_plugins:				"Einige Plugins [{{var0}}] konnten nicht geladen werden",
+							notice_new_plugins:					"Neue Plugins [{{var0}}] wurden zur PluginRepo hinzugefügt",
+							notice_outdated_plugins:			"Einige Plugins [{{var0}}] sind veraltet"
+						};
+					case "el":		// Greek
+						return {
+							list:								"Λίστα",
+							notice_failed_plugins:				"Δεν ήταν δυνατή η φόρτωση ορισμένων Plugins [{{var0}}] ",
+							notice_new_plugins:					"Προστέθηκαν νέα Plugins [{{var0}}] στο PluginRepo",
+							notice_outdated_plugins:			"Ορισμένα Plugins [{{var0}}] είναι παλιά"
+						};
+					case "es":		// Spanish
+						return {
+							list:								"Lista",
+							notice_failed_plugins:				"Algunos Plugins [{{var0}}] no se pudieron cargar",
+							notice_new_plugins:					"Se han agregado nuevos Plugins [{{var0}}] a PluginRepo",
+							notice_outdated_plugins:			"Algunas Plugins [{{var0}}] están desactualizadas"
+						};
+					case "fi":		// Finnish
+						return {
+							list:								"Lista",
+							notice_failed_plugins:				"Joitain kohdetta Plugins [{{var0}}] ei voitu ladata",
+							notice_new_plugins:					"Uusi Plugins [{{var0}}] on lisätty PluginRepo",
+							notice_outdated_plugins:			"Jotkut Plugins [{{var0}}] ovat vanhentuneita"
+						};
+					case "fr":		// French
+						return {
+							list:								"Liste",
+							notice_failed_plugins:				"Certains Plugins [{{var0}}] n'ont pas pu être chargés",
+							notice_new_plugins:					"De nouveaux Plugins [{{var0}}] ont été ajoutés à PluginRepo",
+							notice_outdated_plugins:			"Certains Plugins [{{var0}}] sont obsolètes"
+						};
+					case "hr":		// Croatian
+						return {
+							list:								"Popis",
+							notice_failed_plugins:				"Neke datoteke Plugins [{{var0}}] nije moguće učitati",
+							notice_new_plugins:					"Novi Plugins [{{var0}}] dodani su u PluginRepo",
+							notice_outdated_plugins:			"Neki su Plugins [{{var0}}] zastarjeli"
+						};
+					case "hu":		// Hungarian
+						return {
+							list:								"Lista",
+							notice_failed_plugins:				"Néhány Plugins [{{var0}}] nem sikerült betölteni",
+							notice_new_plugins:					"Új Plugins [{{var0}}] hozzáadva a következőhöz: PluginRepo",
+							notice_outdated_plugins:			"Néhány Plugins [{{var0}}] elavult"
+						};
+					case "it":		// Italian
+						return {
+							list:								"Elenco",
+							notice_failed_plugins:				"Impossibile caricare alcuni Plugins [{{var0}}] ",
+							notice_new_plugins:					"Il nuovo Plugins [{{var0}}] è stato aggiunto a PluginRepo",
+							notice_outdated_plugins:			"Alcuni Plugins [{{var0}}] non sono aggiornati"
+						};
+					case "ja":		// Japanese
+						return {
+							list:								"リスト",
+							notice_failed_plugins:				"一部の Plugins [{{var0}}] を読み込めませんでした",
+							notice_new_plugins:					"新しい Plugins [{{var0}}] が PluginRepo に追加されました",
+							notice_outdated_plugins:			"一部の Plugins [{{var0}}] は古くなっています"
+						};
+					case "ko":		// Korean
+						return {
+							list:								"명부",
+							notice_failed_plugins:				"일부 Plugins [{{var0}}] 을 (를)로드 할 수 없습니다.",
+							notice_new_plugins:					"새 Plugins [{{var0}}] 이 PluginRepo 에 추가되었습니다.",
+							notice_outdated_plugins:			"일부 Plugins [{{var0}}] 이 오래되었습니다."
+						};
+					case "lt":		// Lithuanian
+						return {
+							list:								"Sąrašas",
+							notice_failed_plugins:				"Kai kurių Plugins [{{var0}}] nepavyko įkelti",
+							notice_new_plugins:					"Naujas Plugins [{{var0}}] pridėtas prie PluginRepo",
+							notice_outdated_plugins:			"Kai kurie Plugins [{{var0}}] yra pasenę"
+						};
+					case "nl":		// Dutch
+						return {
+							list:								"Lijst",
+							notice_failed_plugins:				"Sommige Plugins [{{var0}}] konden niet worden geladen",
+							notice_new_plugins:					"Nieuwe Plugins [{{var0}}] zijn toegevoegd aan de PluginRepo",
+							notice_outdated_plugins:			"Sommige Plugins [{{var0}}] zijn verouderd"
+						};
+					case "no":		// Norwegian
+						return {
+							list:								"Liste",
+							notice_failed_plugins:				"Noen Plugins [{{var0}}] kunne ikke lastes inn",
+							notice_new_plugins:					"Nye Plugins [{{var0}}] er lagt til i PluginRepo",
+							notice_outdated_plugins:			"Noen Plugins [{{var0}}] er utdaterte"
+						};
+					case "pl":		// Polish
+						return {
+							list:								"Lista",
+							notice_failed_plugins:				"Nie można załadować niektórych Plugins [{{var0}}] ",
+							notice_new_plugins:					"Nowe Plugins [{{var0}}] zostały dodane do PluginRepo",
+							notice_outdated_plugins:			"Niektóre Plugins [{{var0}}] są nieaktualne"
+						};
+					case "pt-BR":	// Portuguese (Brazil)
+						return {
+							list:								"Lista",
+							notice_failed_plugins:				"Algum Plugins [{{var0}}] não pôde ser carregado",
+							notice_new_plugins:					"Novo Plugins [{{var0}}] foi adicionado ao PluginRepo",
+							notice_outdated_plugins:			"Alguns Plugins [{{var0}}] estão desatualizados"
+						};
+					case "ro":		// Romanian
+						return {
+							list:								"Listă",
+							notice_failed_plugins:				"Unele Plugins [{{var0}}] nu au putut fi încărcate",
+							notice_new_plugins:					"Plugins [{{var0}}] nou au fost adăugate la PluginRepo",
+							notice_outdated_plugins:			"Unele Plugins [{{var0}}] sunt învechite"
+						};
+					case "ru":		// Russian
+						return {
+							list:								"Список",
+							notice_failed_plugins:				"Не удалось загрузить некоторые Plugins [{{var0}}] ",
+							notice_new_plugins:					"Новые Plugins [{{var0}}] добавлены в PluginRepo",
+							notice_outdated_plugins:			"Некоторые Plugins [{{var0}}] устарели"
+						};
+					case "sv":		// Swedish
+						return {
+							list:								"Lista",
+							notice_failed_plugins:				"Vissa Plugins [{{var0}}] kunde inte laddas",
+							notice_new_plugins:					"Nya Plugins [{{var0}}] har lagts till i PluginRepo",
+							notice_outdated_plugins:			"Vissa Plugins [{{var0}}] är föråldrade"
+						};
+					case "th":		// Thai
+						return {
+							list:								"รายการ",
+							notice_failed_plugins:				"ไม่สามารถโหลด Plugins [{{var0}}] บางรายการได้",
+							notice_new_plugins:					"เพิ่ม Plugins [{{var0}}] ใหม่ใน PluginRepo แล้ว",
+							notice_outdated_plugins:			"Plugins [{{var0}}] บางรายการล้าสมัย"
+						};
+					case "tr":		// Turkish
+						return {
+							list:								"Liste",
+							notice_failed_plugins:				"Bazı Plugins [{{var0}}] yüklenemedi",
+							notice_new_plugins:					"Yeni Plugins [{{var0}}], PluginRepo 'ye eklendi",
+							notice_outdated_plugins:			"Bazı Plugins [{{var0}}] güncel değil"
+						};
+					case "uk":		// Ukrainian
+						return {
+							list:								"Список",
+							notice_failed_plugins:				"Деякі Plugins [{{var0}}] не вдалося завантажити",
+							notice_new_plugins:					"Нові Plugins [{{var0}}] були додані до PluginRepo",
+							notice_outdated_plugins:			"Деякі Plugins [{{var0}}] застарілі"
+						};
+					case "vi":		// Vietnamese
+						return {
+							list:								"Danh sách",
+							notice_failed_plugins:				"Không thể tải một số Plugins [{{var0}}] ",
+							notice_new_plugins:					"Plugins [{{var0}}] mới đã được thêm vào PluginRepo",
+							notice_outdated_plugins:			"Một số Plugins [{{var0}}] đã lỗi thời"
+						};
+					case "zh-CN":	// Chinese (China)
+						return {
+							list:								"清单",
+							notice_failed_plugins:				"某些 Plugins [{{var0}}] 无法加载",
+							notice_new_plugins:					"新的 Plugins [{{var0}}] 已添加到 PluginRepo",
+							notice_outdated_plugins:			"一些 Plugins [{{var0}}] 已过时"
+						};
+					case "zh-TW":	// Chinese (Taiwan)
+						return {
+							list:								"清單",
+							notice_failed_plugins:				"某些 Plugins [{{var0}}] 無法加載",
+							notice_new_plugins:					"新的 Plugins [{{var0}}] 已添加到 PluginRepo",
+							notice_outdated_plugins:			"一些 Plugins [{{var0}}] 已過時"
+						};
+					default:		// English
+						return {
+							list:								"List",
+							notice_failed_plugins:				"Some Plugins [{{var0}}] could not be loaded",
+							notice_new_plugins:					"New Plugins [{{var0}}] have been added to the PluginRepo",
+							notice_outdated_plugins:			"Some Plugins [{{var0}}] are outdated"
+						};
 				}
 			}
 		};

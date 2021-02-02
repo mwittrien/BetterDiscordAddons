@@ -14,17 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.2.4",
+			"version": "4.2.5",
 			"description": "Add a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode)"
 		},
 		"changeLog": {
-			"improved": {
-				"Download locations": "Merged 'save' and 'save as' entry, clicking it opens the save as modal, and hovering over it opens a submenu for preset paths, you can add your own download locations in the plugin settings",
-				"Toggle": "You can now toggle the download locations"
-			},
 			"fixed": {
-				"Slow modal transitions": "Fixed issue where the css of the plugin would cause render slow downds for modals",
-				"New download locations": "Fixed issue where you needed to restart plugin for new locations to be editable"
+				"Download": "Download via Image Modal would sometimes download a small version of the image"
 			}
 		}
 	};
@@ -33,7 +28,14 @@ module.exports = (_ => {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
-		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it.\n\n${config.info.description}`;}
+		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it. \n\n${config.info.description}`;}
+		
+		downloadLibrary () {
+			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+				if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
+				else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
+			});
+		}
 		
 		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
@@ -45,10 +47,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-							else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-						});
+						this.downloadLibrary();
 					}
 				});
 			}
@@ -59,18 +58,12 @@ module.exports = (_ => {
 		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
-			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
-				require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-					if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-					else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-				});
-			});
+			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
 		const imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
-		var firedEvents = [], clickedImage, loadedImages = [], searching = false;
-		
+		var firedEvents = [], clickedImage;
 		var settings = {}, amounts = {}, zoomSettings = {}, engines = {}, enabledEngines = {}, ownLocations = {}, downloadsFolder;
 		
 		const ImageDetails = class ImageDetails extends BdApi.React.Component {
@@ -636,37 +629,9 @@ module.exports = (_ => {
 
 			processImageModal (e) {
 				if (clickedImage) e.instance.props.cachedImage = clickedImage;
-				let url = e.instance.props.cachedImage && e.instance.props.cachedImage.src ? e.instance.props.cachedImage : e.instance.props.src;
-				url = url.src || url;
+				let url = this.getImageSrc(e.instance.props.cachedImage && e.instance.props.cachedImage.src ? e.instance.props.cachedImage : e.instance.props.src);
+				let messages = this.getMessageGroupOfImage(url);
 				if (e.returnvalue) {
-					let message = !searching && BDFDB.ReactUtils.findValue(e.instance.props.cachedImage, "message", {up: true});
-					if (message) {
-						searching = true;
-						BDFDB.LibraryModules.APIUtils.get({
-							url: BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(message.channel_id),
-							oldFormErrors: true,
-							query: this.createQuery(message, true)
-						}).then(result => {
-							BDFDB.LibraryModules.APIUtils.get({
-								url: BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(message.channel_id),
-								oldFormErrors: true,
-								query: this.createQuery(message, false)
-							}).then(result2 => {
-								searching = false;
-								let found = [], messages = BDFDB.ArrayUtils.keySort([
-									message,
-									[].concat(result.body.messages).reverse(),
-									[].concat(result2.body.messages)
-								].flat(10).filter(m => {
-									if (!found.includes(m.id) && m.attachments.length || m.embeds.filter(embed => embed.type == "image").length) {
-										found.push(m.id);
-										return m;
-									}
-								}), "id");
-								console.log(messages);
-							});
-						});
-					}
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.downloadlink]]});
 					if (index > -1) {
 						let openContext = event => {
@@ -708,7 +673,7 @@ module.exports = (_ => {
 										onContextMenu: event => {
 											let locations = Object.keys(ownLocations).filter(n => ownLocations[n].enabled);
 											if (locations.length) BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-												children: Object.keys(locations).map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+												children: locations.map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 													id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, i),
 													label: name,
 													action: _ => {
@@ -751,8 +716,8 @@ module.exports = (_ => {
 						});
 					}
 					let imageIndex = 0, amount = 1;
-					if (loadedImages.length) {
-						let data = this.getSiblingsAndPosition(url);
+					if (messages.length) {
+						let data = this.getSiblingsAndPosition(url, messages);
 						imageIndex = data.index;
 						amount = data.amount;
 						if (data.previous) {
@@ -785,9 +750,9 @@ module.exports = (_ => {
 				if (e.node) {
 					let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.modal + BDFDB.dotCN.layermodal, e.node);
 					if (modal) {
-						modal.className = BDFDB.DOMUtils.formatClassName(modal.className, loadedImages.length && BDFDB.disCN._imageutilitiesgallery, settings.addDetails && BDFDB.disCN._imageutilitiesdetailsadded);
+						modal.className = BDFDB.DOMUtils.formatClassName(modal.className, messages.length && BDFDB.disCN._imageutilitiesgallery, settings.addDetails && BDFDB.disCN._imageutilitiesdetailsadded);
 						this.cleanupListeners("Gallery");
-						if (loadedImages.length) {
+						if (messages.length) {
 							document.keydownImageUtilitiesGalleryListener = event => {
 								if (!document.contains(e.node)) this.cleanupListeners("Gallery");
 								else if (!firedEvents.includes("Gallery")) {
@@ -930,7 +895,7 @@ module.exports = (_ => {
 				}
 				else {
 					if (settings.resizeImage && e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.imagemodalimage) > -1 && BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), {name: "ImageModal", up: true})) {
-						let data = settings.enableGallery ? this.getSiblingsAndPosition(e.instance.props.src) : {};
+						let data = settings.enableGallery ? this.getSiblingsAndPosition(e.instance.props.src, this.getMessageGroupOfImage(e.instance.props.src)) : {};
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let ratio = Math.min((aRects.width * (data.previous || data.next ? 0.8 : 1) - 20) / e.instance.props.width, (aRects.height - (settings.addDetails ? 310 : 100)) / e.instance.props.height);
 						let width = Math.round(ratio * e.instance.props.width);
@@ -966,16 +931,6 @@ module.exports = (_ => {
 				return child;
 			}
 			
-			createQuery (message, before) {
-				return BDFDB.LibraryModules.APIEncodeUtils.stringify(BDFDB.ObjectUtils.filter({
-					has: ["image", "embed"],
-					include_nsfw: true,
-					min_id: !before && message.id,
-					max_id: before && message.id,
-					sort_order: before ? "desc" : "asc"
-				}, n => n));
-			}
-			
 			isValidImg (url) {
 				const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
 				return file && (url.startsWith("https://images-ext-2.discordapp.net/") || file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png") || file.endsWith(".gif") || file.endsWith(".apng") || file.endsWith(".webp") || file.endsWith(".svg"));
@@ -994,10 +949,10 @@ module.exports = (_ => {
 			downloadImage (url, path) {
 				url = url.startsWith("/assets") ? (window.location.origin + url) : url;
 				BDFDB.LibraryRequires.request(url, {encoding: null}, (error, response, body) => {
-					if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type: "error"});
+					if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type: "danger"});
 					else {
 						BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, url.split("/").pop().split(".").slice(0, -1).join("."), response.headers["content-type"].split("/").pop().split("+")[0], 0), body, error => {
-							if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type: "error"});
+							if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type: "danger"});
 							else BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_success.replace("{{path}}", path), {type: "success"});
 						});
 					}
@@ -1018,7 +973,7 @@ module.exports = (_ => {
 			
 			copyImage (url) {
 				BDFDB.LibraryRequires.request(url, {encoding: null}, (error, response, buffer) => {
-					if (error) BDFDB.NotificationUtils.toast(this.labels.toast_copyimage_failed, {type: "error"});
+					if (error) BDFDB.NotificationUtils.toast(this.labels.toast_copyimage_failed, {type: "danger"});
 					else if (buffer) {
 						if (BDFDB.LibraryRequires.process.platform === "win32" || BDFDB.LibraryRequires.process.platform === "darwin") {
 							BDFDB.LibraryRequires.electron.clipboard.write({image: BDFDB.LibraryRequires.electron.nativeImage.createFromBuffer(buffer)});
@@ -1048,9 +1003,6 @@ module.exports = (_ => {
 				else return wholePath;
 			}
 
-			getImages (src, instance) {
-			}
-
 			getMessageGroupOfImage (src) {
 				if (src && settings.enableGallery) for (let message of document.querySelectorAll(BDFDB.dotCN.message)) for (let img of message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")) if (this.isSameImage(src, img)) {
 					let previousSiblings = [], nextSiblings = [];
@@ -1072,8 +1024,8 @@ module.exports = (_ => {
 				return [];
 			}
 			
-			getSiblingsAndPosition (url) {
-				let images = loadedImages.map(n => Array.from(n.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"))).flat().filter(img => !BDFDB.DOMUtils.getParent(BDFDB.dotCN.spoilerhidden, img));
+			getSiblingsAndPosition (url, messages) {
+				let images = messages.map(n => Array.from(n.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"))).flat().filter(img => !BDFDB.DOMUtils.getParent(BDFDB.dotCN.spoilerhidden, img));
 				let next, previous, index = 0, amount = images.length;
 				for (let i = 0; i < amount; i++) if (this.isSameImage(url, images[i])) {
 					index = i;
@@ -1288,7 +1240,7 @@ module.exports = (_ => {
 							toast_copyimage_failed:				"Nem sikerült másolni a képet a vágólapra",
 							toast_copyimage_success:			"Kép másolása a vágólapra",
 							toast_copyimagelink_success:		"Képlink linkre másolva a vágólapra",
-							toast_saveimage_failed:				"Nem sikerült menteni a képet a (z) '{{path}}” mappába",
+							toast_saveimage_failed:				"Nem sikerült menteni a képet a '{{path}}” mappába",
 							toast_saveimage_success:			"Mentett kép itt: '{{path}}”"
 						};
 					case "it":		// Italian
@@ -1555,9 +1507,9 @@ module.exports = (_ => {
 							context_saveimageas:				"Save Image as ...",
 							context_viewimage:					"View Image",
 							submenu_disabled:					"All disabled",
-							toast_copyimage_failed:				"Failed to copy image to Clipboard",
-							toast_copyimage_success:			"Copied image to Clipboard",
-							toast_copyimagelink_success:		"Copied image link to Clipboard",
+							toast_copyimage_failed:				"Failed to copy Image to Clipboard",
+							toast_copyimage_success:			"Copied Image to Clipboard",
+							toast_copyimagelink_success:		"Copied Image link to Clipboard",
 							toast_saveimage_failed:				"Failed to save Image in '{{path}}'",
 							toast_saveimage_success:			"Saved Image in '{{path}}'"
 						};

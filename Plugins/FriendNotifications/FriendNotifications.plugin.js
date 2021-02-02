@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.5.9",
+			"version": "1.6.1",
 			"description": "Get a notification when a Friend or a User, you choose to observe, changes their status"
 		},
 		"changeLog": {
 			"improved": {
-				"Activities": "No longer shows status changes for users that still got the same activity"
+				"New Toast API": ""
 			}
 		}
 	};
@@ -28,7 +28,14 @@ module.exports = (_ => {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
-		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it.\n\n${config.info.description}`;}
+		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it. \n\n${config.info.description}`;}
+		
+		downloadLibrary () {
+			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+				if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
+				else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
+			});
+		}
 		
 		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
@@ -40,10 +47,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-							else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-						});
+						this.downloadLibrary();
 					}
 				});
 			}
@@ -54,12 +58,7 @@ module.exports = (_ => {
 		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
-			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
-				require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-					if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-					else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-				});
-			});
+			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
@@ -221,7 +220,6 @@ module.exports = (_ => {
 					notificationsounds: {},
 					amounts: {
 						toastTime:			{value: 5, 		min: 1,		description: "Amount of Seconds a Toast Notification stays on Screen: "},
-						desktopTime:		{value: 5, 		min: 1,		description: "Amount of Seconds a Desktop Notification stays on Screen: "},
 						checkInterval:		{value: 10, 	min: 5,		description: "Check Users every X Seconds: "}
 					}
 				};
@@ -264,20 +262,6 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				// REMOVE 1.1.2021
-				let convert = type => {
-					let data = BDFDB.DataUtils.load(this, type);
-					if (Object.keys(data).length) {
-						for (let id in data) if (data[id].desktop != undefined) {
-							for (let key of Object.keys(statuses)) data[id][key] = notificationTypes[!data[id][key] ? "DISABLED" : (data[id].desktop ? "DESKTOP" : "TOAST")].value;
-							delete data[id].desktop;
-						}
-						BDFDB.DataUtils.save(data, this, type);
-					}
-				};
-				convert("friends");
-				convert("nonfriends");
-				
 				this.startInterval();
 
 				BDFDB.PatchUtils.forceAllUpdates(this);
@@ -494,9 +478,9 @@ module.exports = (_ => {
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 										onClick: _ => {
 											let userId = settingsPanel.props._node.querySelector(`.input-newstranger ` + BDFDB.dotCN.input).value.trim();
-											if (userId == BDFDB.UserUtils.me.id) BDFDB.NotificationUtils.toast("Are you seriously trying to stalk yourself?", {type: "error"});
-											else if (friendIds.includes(userId)) BDFDB.NotificationUtils.toast("User is already a friend of yours, please use the 'Friend-List' area to configure them", {type: "error"});
-											else if (Object.keys(nonFriends).includes(userId)) BDFDB.NotificationUtils.toast("User is already being observed as a 'Stranger'", {type: "error"});
+											if (userId == BDFDB.UserUtils.me.id) BDFDB.NotificationUtils.toast("Are you seriously trying to stalk yourself?", {type: "danger"});
+											else if (friendIds.includes(userId)) BDFDB.NotificationUtils.toast("User is already a friend of yours, please use the 'Friend-List' area to configure them", {type: "danger"});
+											else if (Object.keys(nonFriends).includes(userId)) BDFDB.NotificationUtils.toast("User is already being observed as a 'Stranger'", {type: "danger"});
 											else {
 												let user = /.+#[0-9]{4}/.test(userId) ? BDFDB.LibraryModules.UserStore.findByTag(userId.split("#").slice(0, -1).join("#"), userId.split("#").pop()) : BDFDB.LibraryModules.UserStore.getUser(userId);
 												if (user) {
@@ -504,7 +488,7 @@ module.exports = (_ => {
 													BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 													this.SettingsUpdated = true;
 												}
-												else BDFDB.NotificationUtils.toast("Please enter a valid UserID of a user that has been loaded in your client", {type: "error"});
+												else BDFDB.NotificationUtils.toast("Please enter a valid UserID of a user that has been loaded in your client", {type: "danger"});
 											}
 										},
 										children: BDFDB.LanguageUtils.LanguageStrings.ADD
@@ -606,7 +590,7 @@ module.exports = (_ => {
 											onClick: _ => {
 												let source = settingsPanel.props._node.querySelector(`.input-${key}src ` + BDFDB.dotCN.input).value.trim();
 												if (!source.length) {
-													BDFDB.NotificationUtils.toast(`Sound file was removed.`, {type: "warn"});
+													BDFDB.NotificationUtils.toast(`Sound file was removed.`, {type: "warning"});
 													successSavedAudio(key, source, source);
 												}
 												else if (source.indexOf("http") == 0) BDFDB.LibraryRequires.request(source, (error, response, result) => {
@@ -693,7 +677,11 @@ module.exports = (_ => {
 					let activityName = isCustom ? "custom" : BDFDB.DiscordConstants.ActivityTypes[activity.type].toLowerCase();
 					if (statuses[activityName] && config[activityName]) {
 						Object.assign(status, {name: isCustom ? status.name : activityName, activity: Object.assign({}, activity), custom: isCustom});
-						if (activityName == "listening" || activityName == "streaming") delete status.activity.name;
+						if (activity.type == BDFDB.DiscordConstants.ActivityTypes.STREAMING || activity.type == BDFDB.DiscordConstants.ActivityTypes.LISTENING) delete status.activity.name;
+						else if (activity.type == BDFDB.DiscordConstants.ActivityTypes.PLAYING) {
+							delete status.activity.details;
+							delete status.activity.state;
+						}
 					}
 				}
 				return status;
@@ -714,9 +702,6 @@ module.exports = (_ => {
 				observedUsers = Object.assign({}, BDFDB.DataUtils.load(this, "nonfriends"), BDFDB.DataUtils.load(this, "friends"));
 				
 				for (let id in observedUsers) userStatusStore[id] = this.getStatusWithMobileAndActivity(id, observedUsers[id]);
-				
-				let toastTime = (amounts.toastTime > amounts.checkInterval ? amounts.checkInterval : amounts.toastTime) * 1000;
-				let desktopTime = (amounts.desktopTime > amounts.checkInterval ? amounts.checkInterval : amounts.desktopTime) * 1000;
 				
 				checkInterval = BDFDB.TimeUtils.interval(_ => {
 					let amount = BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount();
@@ -765,30 +750,36 @@ module.exports = (_ => {
 										let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id)
 										if (DMid) BDFDB.LibraryModules.SelectChannelUtils.selectPrivateChannel(DMid);
 										else BDFDB.LibraryModules.DirectMessageUtils.openPrivateChannel(BDFDB.UserUtils.me.id, user.id);
-										BDFDB.LibraryRequires.electron.remote.getCurrentWindow().focus();
+										BDFDB.DiscordUtils.focus();
 									}
 								};
 								if (observedUsers[id][status.name] == notificationTypes.DESKTOP.value) {
 									let desktopString = string.replace(/\$user/g, `${name}${settings.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/\$status/g, statusName);
 									if (status.activity) desktopString = desktopString.replace(/\$song|\$game/g, status.activity.name || status.activity.details || "").replace(/\$artist|\$custom/g, [status.activity.emoji && status.activity.emoji.name, status.activity.state].filter(n => n).join(" ") || "");
-									let notificationsound = notificationSounds["desktop" + status.name] || {};
-									BDFDB.NotificationUtils.desktop(desktopString, {icon: avatar, timeout: desktopTime, click: openChannel, silent: notificationsound.mute, sound: notificationsound.song});
+									let notificationSound = notificationSounds["desktop" + status.name] || {};
+									BDFDB.NotificationUtils.desktop(desktopString, {
+										icon: avatar,
+										silent: notificationSound.mute,
+										sound: notificationSound.song,
+										onClick: openChannel
+									});
 								}
 								else if (!document.querySelector(`.friendnotifications-${id}-toast`)) {
-									let toast = BDFDB.NotificationUtils.toast(`<div class="${BDFDB.disCN.toastinner}"><div class="${BDFDB.disCN.toastavatar}" style="background-image: url(${avatar});"></div><div>${toastString}</div></div>`, {
+									BDFDB.NotificationUtils.toast(BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(toastString)), {
 										className: `friendnotifications-${status.name}-toast friendnotifications-${id}-toast`,
-										html: true,
-										timeout: toastTime,
-										color: BDFDB.UserUtils.getStatusColor(status.name),
-										icon: false
+										timeout: amounts.toastTime * 1000,
+										avatar: avatar,
+										barColor: BDFDB.UserUtils.getStatusColor(status.name, true),
+										onClick: openChannel,
+										onShow: _ => {
+											let notificationSound = notificationSounds["toast" + status.name] || {};
+											if (!notificationSound.mute && notificationSound.song) {
+												let audio = new Audio();
+												audio.src = notificationSound.song;
+												audio.play();
+											}
+										}
 									});
-									toast.addEventListener("click", openChannel);
-									let notificationsound = notificationSounds["toast" + status.name] || {};
-									if (!notificationsound.mute && notificationsound.song) {
-										let audio = new Audio();
-										audio.src = notificationsound.song;
-										audio.play();
-									}
 								}
 							}
 						}
@@ -802,7 +793,7 @@ module.exports = (_ => {
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: "LogIn/-Out Timelog",
-					subheader: "",
+					subHeader: "",
 					className: BDFDB.disCN._friendnotificationstimelogmodal,
 					titleChildren: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
 						autoFocus: true,

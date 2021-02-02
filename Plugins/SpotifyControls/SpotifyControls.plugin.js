@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.0.8",
+			"version": "1.1.1",
 			"description": "Add a control panel to discord when listening to spotify"
+		},
+		"changeLog": {
+			"improved": {
+				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
+			}
 		}
 	};
 
@@ -23,7 +28,14 @@ module.exports = (_ => {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
-		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it.\n\n${config.info.description}`;}
+		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it. \n\n${config.info.description}`;}
+		
+		downloadLibrary () {
+			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+				if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
+				else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
+			});
+		}
 		
 		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
@@ -35,10 +47,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-							else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-						});
+						this.downloadLibrary();
 					}
 				});
 			}
@@ -49,17 +58,11 @@ module.exports = (_ => {
 		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
-			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
-				require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-					if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-					else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-				});
-			});
+			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
 		var _this;
-		var insertPatchCancel;
 		var controls, starting, lastSong, currentVolume, lastVolume, stopTime, previousIsClicked, previousDoubleTimeout, timelineTimeout, timelineDragging, updateInterval;
 		var playbackState = {};
 		var settings = {}, buttonConfigs = {};
@@ -178,7 +181,7 @@ module.exports = (_ => {
 									]
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-									text: socketDevice.device.is_restricted ? "Can not control Spotify while playing on restricted device" : null,
+									text: socketDevice.device.is_restricted ? _this.labels.restricted_device : null,
 									tooltipConfig: {color: "red"},
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 										grow: 0,
@@ -191,9 +194,9 @@ module.exports = (_ => {
 													let url = BDFDB.ObjectUtils.get(playbackState, "item.external_urls.spotify") || BDFDB.ObjectUtils.get(playbackState, "context.external_urls.spotify");
 													if (url) {
 														BDFDB.LibraryRequires.electron.clipboard.write({text: url});
-														BDFDB.NotificationUtils.toast("Song URL was copied to clipboard", {type: "success"});
+														BDFDB.NotificationUtils.toast(_this.labels.toast_copyurl_success, {type: "success"});
 													}
-													else BDFDB.NotificationUtils.toast("Could not copy song URL to clipboard", {type: "error"});
+													else BDFDB.NotificationUtils.toast(_this.labels.toast_copyurl_fail, {type: "danger"});
 												}
 											}),
 											BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
@@ -214,7 +217,7 @@ module.exports = (_ => {
 												playerSize: playerSize,
 												disabled: socketDevice.device.is_restricted,
 												onClick: _ => {
-													if (previousIsClicked) {
+													if (previousIsClicked || !settings.doubleBack) {
 														previousIsClicked = false;
 														this.request(socketDevice.socket, socketDevice.device, "previous");
 													}
@@ -412,7 +415,8 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						addTimeline: 		{value: true,		description: "Show the song timeline in the controls"}
+						addTimeline: 		{value: true,		description: "Show the Song Timeline in the Controls"},
+						doubleBack: 		{value: true,       description: "Requires the User to press the Back Button twice to go to previous Track"}
 					},
 					buttonConfigs: {
 						share: 				{value: {small: false, big: true},		icons: [""],						description: "Share"},
@@ -426,8 +430,8 @@ module.exports = (_ => {
 				};
 				
 				this.patchedModules = {
-					before: {
-						AppView: "render"
+					after: {
+						AppView: "default"
 					}
 				};
 				
@@ -618,14 +622,14 @@ module.exports = (_ => {
 				
 				if (!BDFDB.LibraryModules.SpotifyTrackUtils.hasConnectedAccount()) BDFDB.ModalUtils.open(this, {
 					size: "SMALL",
-					header: this.name + ": Something is missing...",
-					subheader: "You need to connect a Spotify account",
-					text: "You are missing a connected Spotify account, without a connected account you won't be able to use Spotify Controls. To connect a Spotify account with your discord account click the button below.",
+					header: `${this.name}: ${this.labels.noaccount_header}...`,
+					subHeader: this.labels.noaccount_subheader,
+					text: this.labels.noaccount_text,
 					buttons: [{
 						contents: BDFDB.LanguageUtils.LanguageStrings.CONNECT,
 						color: "BRAND",
 						close: true,
-						click: modal => {
+						onClick: modal => {
 							BDFDB.LibraryModules.UserSettingsUtils.open(BDFDB.DiscordConstants.UserSettingsSections.CONNECTIONS)
 						}
 					}]
@@ -636,8 +640,6 @@ module.exports = (_ => {
 			
 			onStop () {
 				this.forceUpdateAll();
-				
-				if (typeof insertPatchCancel == "function") insertPatchCancel();
 			}
 
 			getSettingsPanel (collapseStates = {}) {
@@ -712,24 +714,270 @@ module.exports = (_ => {
 				buttonConfigs = BDFDB.DataUtils.get(this, "buttonConfigs");
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 
 			processAppView (e) {
-				if (typeof insertPatchCancel == "function") insertPatchCancel();
-				insertPatchCancel = BDFDB.PatchUtils.patch(this, e.instance, "renderChannelSidebar", {after: e2 => {
-					let [children, index] = BDFDB.ReactUtils.findParent(e2.returnValue, {props: [["section", BDFDB.DiscordConstants.AnalyticsSections.ACCOUNT_PANEL]]});
-					if (index > -1) children.splice(index - 1, 0, BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
-						song: BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false),
-						maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
-						timeline: settings.addTimeline
-					}, true));
-				}}, {force: true, noCache: true});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["section", BDFDB.DiscordConstants.AnalyticsSections.ACCOUNT_PANEL]]});
+				if (index > -1) children.splice(index - 1, 0, BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
+					song: BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false),
+					maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
+					timeline: settings.addTimeline
+				}, true));
 			}
 			
 			updatePlayer (song) {
 				if (controls) {
 					controls.props.song = song;
 					BDFDB.ReactUtils.forceUpdate(controls);
+				}
+			}
+
+			setLabelsByLanguage () {
+				switch (BDFDB.LanguageUtils.getLanguage().id) {
+					case "bg":		// Bulgarian
+						return {
+							noaccount_header:					"Нещо липсва",
+							noaccount_subheader:				"Трябва да свържете акаунт в Spotify",
+							noaccount_text:						"Липсва ви свързан акаунт в Spotify, без акаунт няма да можете да използвате Spotify Controls. За да свържете акаунт в Spotify с вашия акаунт в Discord, кликнете върху бутона по-долу.",
+							restricted_device:					"Не може да контролира Spotify, докато възпроизвежда музика на ограничено устройство",
+							toast_copyurl_fail:					"URL адресът на песента не може да бъде копиран в клипборда",
+							toast_copyurl_success:				"URL адресът на песента беше копиран в клипборда"
+						};
+					case "da":		// Danish
+						return {
+							noaccount_header:					"Noget mangler",
+							noaccount_subheader:				"Du skal oprette forbindelse til en Spotify-konto",
+							noaccount_text:						"Du mangler en tilsluttet Spotify-konto, uden en konto kan du ikke bruge Spotify Controls. For at forbinde en Spotify-konto med din Discord-konto skal du klikke på knappen nedenfor.",
+							restricted_device:					"Kan ikke kontrollere Spotify, mens du spiller musik på en begrænset enhed",
+							toast_copyurl_fail:					"Sang-URL kunne ikke kopieres til udklipsholderen",
+							toast_copyurl_success:				"Sang-URL blev kopieret til udklipsholderen"
+						};
+					case "de":		// German
+						return {
+							noaccount_header:					"Etwas fehlt",
+							noaccount_subheader:				"Sie müssen ein Spotify-Konto verbinden",
+							noaccount_text:						"Ihnen fehlt ein verbundenes Spotify-Konto. Ohne ein Konto können Sie Spotify Controls nicht verwenden. Um ein Spotify-Konto mit Ihrem Discord-Konto zu verbinden, klicken Sie auf die Schaltfläche unten.",
+							restricted_device:					"Spotify  kann nicht gesteuert werden, während Musik auf einem eingeschränkten Gerät abgespielt wird",
+							toast_copyurl_fail:					"Die Song-URL konnte nicht in die Zwischenablage kopiert werden",
+							toast_copyurl_success:				"Die Song-URL wurde in die Zwischenablage kopiert"
+						};
+					case "el":		// Greek
+						return {
+							noaccount_header:					"Κάτι λείπει",
+							noaccount_subheader:				"Πρέπει να συνδέσετε έναν λογαριασμό Spotify",
+							noaccount_text:						"Λείπει ένας συνδεδεμένος λογαριασμός Spotify, χωρίς λογαριασμό δεν θα μπορείτε να χρησιμοποιήσετε το Spotify Controls. Για να συνδέσετε έναν λογαριασμό Spotify με τον λογαριασμό σας Discord κάντε κλικ στο παρακάτω κουμπί.",
+							restricted_device:					"Δεν είναι δυνατή ο έλεγχος του Spotify κατά την αναπαραγωγή μουσικής σε περιορισμένη συσκευή",
+							toast_copyurl_fail:					"Δεν ήταν δυνατή η αντιγραφή του URL τραγουδιού στο πρόχειρο",
+							toast_copyurl_success:				"Η διεύθυνση URL του τραγουδιού αντιγράφηκε στο πρόχειρο"
+						};
+					case "es":		// Spanish
+						return {
+							noaccount_header:					"Algo falta",
+							noaccount_subheader:				"Necesitas conectar una cuenta de Spotify",
+							noaccount_text:						"Falta una cuenta de Spotify conectada, sin una cuenta no podrá usar Spotify Controls. Para conectar una cuenta de Spotify con su cuenta de Discord, haga clic en el botón de abajo.",
+							restricted_device:					"No se puede controlar Spotify mientras se reproduce música en un dispositivo restringido",
+							toast_copyurl_fail:					"No se pudo copiar la URL de la canción al portapapeles",
+							toast_copyurl_success:				"La URL de la canción se copió al portapapeles"
+						};
+					case "fi":		// Finnish
+						return {
+							noaccount_header:					"Jotain puuttuu",
+							noaccount_subheader:				"Sinun on yhdistettävä Spotify-tili",
+							noaccount_text:						"Sinulta puuttuu yhdistetty Spotify-tili. Ilman tiliä et voi käyttää Spotify Controls. Yhdistä Spotify-tili Discord-tili napsauttamalla alla olevaa painiketta.",
+							restricted_device:					"Spotify ä ei voi hallita musiikkia toistettaessa rajoitetulla laitteella",
+							toast_copyurl_fail:					"Kappaleen URL-osoitetta ei voitu kopioida leikepöydälle",
+							toast_copyurl_success:				"Kappaleen URL-osoite kopioitiin leikepöydälle"
+						};
+					case "fr":		// French
+						return {
+							noaccount_header:					"Quelque chose manque",
+							noaccount_subheader:				"Vous devez connecter un compte Spotify",
+							noaccount_text:						"Il vous manque un compte Spotify connecté, sans compte, vous ne pourrez pas utiliser Spotify Controls. Pour connecter un compte Spotify à votre compte Discord, cliquez sur le bouton ci-dessous.",
+							restricted_device:					"Impossible de contrôler Spotify lors de la lecture de musique sur un appareil restreint",
+							toast_copyurl_fail:					"L'URL de la chanson n'a pas pu être copiée dans le presse-papiers",
+							toast_copyurl_success:				"L'URL de la chanson a été copiée dans le presse-papiers"
+						};
+					case "hr":		// Croatian
+						return {
+							noaccount_header:					"Nešto nedostaje",
+							noaccount_subheader:				"Morate povezati Spotify račun",
+							noaccount_text:						"Nedostaje vam povezani Spotify račun, bez računa nećete moći koristiti Spotify Controls. Da biste povezali Spotify račun sa svojim Discord računom, kliknite gumb u nastavku.",
+							restricted_device:					"Ne može kontrolirati Spotify tijekom reprodukcije glazbe na ograničenom uređaju",
+							toast_copyurl_fail:					"URL pjesme nije se mogao kopirati u međuspremnik",
+							toast_copyurl_success:				"URL pjesme kopiran je u međuspremnik"
+						};
+					case "hu":		// Hungarian
+						return {
+							noaccount_header:					"Valami hiányzik",
+							noaccount_subheader:				"Csatlakoztatnia kell egy Spotify-fiókot",
+							noaccount_text:						"Hiányzik egy csatlakoztatott Spotify-fiók, fiók nélkül nem fogja tudni használni a Spotify Controls szolgáltatást. Ha Spotify-fiókot szeretne összekapcsolni Discord-fiókot, kattintson az alábbi gombra.",
+							restricted_device:					"Nem lehet irányítani a Spotify szolgáltatást, miközben zenét játszik le korlátozott eszközön",
+							toast_copyurl_fail:					"A dal URL-jét nem sikerült átmásolni a vágólapra",
+							toast_copyurl_success:				"A dal URL-jét a vágólapra másolta"
+						};
+					case "it":		// Italian
+						return {
+							noaccount_header:					"Manca qualcosa",
+							noaccount_subheader:				"Devi collegare un account Spotify",
+							noaccount_text:						"Ti manca un account Spotify collegato, senza un account non sarai in grado di utilizzare Spotify Controls. Per collegare un account Spotify al tuo account Discord, fai clic sul pulsante in basso.",
+							restricted_device:					"Non è possibile controllare Spotify durante la riproduzione di musica su un dispositivo limitato",
+							toast_copyurl_fail:					"L'URL del brano non può essere copiato negli appunti",
+							toast_copyurl_success:				"L'URL del brano è stato copiato negli appunti"
+						};
+					case "ja":		// Japanese
+						return {
+							noaccount_header:					"何かが欠けています",
+							noaccount_subheader:				"Spotify アカウントを接続する必要があります",
+							noaccount_text:						"接続されている Spotify アカウントがありません。アカウントがないと、 Spotify Controls を使用できません。 Spotify アカウントを Discord アカウントに接続するには、下のボタンをクリックしてください。",
+							restricted_device:					"制限されたデバイスで音楽を再生している間は Spotify を制御できません",
+							toast_copyurl_fail:					"曲のURLをクリップボードにコピーできませんでした",
+							toast_copyurl_success:				"曲のURLがクリップボードにコピーされました"
+						};
+					case "ko":		// Korean
+						return {
+							noaccount_header:					"무언가가 빠졌어",
+							noaccount_subheader:				"Spotify  계정을 연결해야합니다",
+							noaccount_text:						"연결된 Spotify 계정이 없습니다. 계정이 없으면 Spotify Controls 을 사용할 수 없습니다. Spotify 계정을 Discord 계정과 연결하려면 아래 버튼을 클릭하세요.",
+							restricted_device:					"제한된 장치에서 음악을 재생하는 동안 Spotify 를 제어 할 수 없습니다.",
+							toast_copyurl_fail:					"노래 URL을 클립 보드에 복사 할 수 없습니다.",
+							toast_copyurl_success:				"노래 URL이 클립 보드에 복사되었습니다. "
+						};
+					case "lt":		// Lithuanian
+						return {
+							noaccount_header:					"Kažko trūksta",
+							noaccount_subheader:				"Turite prijungti „ Spotify “ paskyrą",
+							noaccount_text:						"Trūksta prijungtos „ Spotify “ paskyros, be paskyros negalėsite naudoti Spotify Controls. Norėdami susieti „ Spotify “ paskyrą su Discord paskyra, spustelėkite toliau pateiktą mygtuką.",
+							restricted_device:					"Nepavyksta valdyti „ Spotify “ grojant muziką ribotame įrenginyje",
+							toast_copyurl_fail:					"Dainos URL nepavyko nukopijuoti į iškarpinę",
+							toast_copyurl_success:				"Dainos URL buvo nukopijuotas į iškarpinę"
+						};
+					case "nl":		// Dutch
+						return {
+							noaccount_header:					"Er mist iets",
+							noaccount_subheader:				"U moet een Spotify-account verbinden",
+							noaccount_text:						"U mist een verbonden Spotify-account. Zonder account kunt u Spotify Controls niet gebruiken. Om een Spotify-account aan uw Discord-account te koppelen, klikt u op de onderstaande knop.",
+							restricted_device:					"Kan Spotify niet bedienen tijdens het afspelen van muziek op een beperkt apparaat",
+							toast_copyurl_fail:					"Nummer-URL kan niet naar klembord worden gekopieerd",
+							toast_copyurl_success:				"Nummer-URL is naar klembord gekopieerd"
+						};
+					case "no":		// Norwegian
+						return {
+							noaccount_header:					"Noe mangler",
+							noaccount_subheader:				"Du må koble til en Spotify-konto",
+							noaccount_text:						"Du mangler en tilkoblet Spotify-konto, uten en konto kan du ikke bruke Spotify Controls. For å koble en Spotify-konto til Discord-konto din, klikk på knappen nedenfor.",
+							restricted_device:					"Kan ikke kontrollere Spotify mens du spiller musikk på begrenset enhet",
+							toast_copyurl_fail:					"Sangens URL kunne ikke kopieres til utklippstavlen",
+							toast_copyurl_success:				"Sang-URL ble kopiert til utklippstavlen"
+						};
+					case "pl":		// Polish
+						return {
+							noaccount_header:					"Czegoś brakuje",
+							noaccount_subheader:				"Musisz połączyć konto Spotify",
+							noaccount_text:						"Brakuje połączonego konta Spotify, bez konta nie będziesz mógł korzystać z Spotify Controls. Aby połączyć konto Spotify z kontem Discord, kliknij przycisk poniżej.",
+							restricted_device:					"Nie można sterować Spotify podczas odtwarzania muzyki na urządzeniu z ograniczeniami",
+							toast_copyurl_fail:					"Nie udało się skopiować adresu URL utworu do schowka",
+							toast_copyurl_success:				"URL utworu został skopiowany do schowka"
+						};
+					case "pt-BR":	// Portuguese (Brazil)
+						return {
+							noaccount_header:					"Algo está faltando",
+							noaccount_subheader:				"Você precisa conectar uma conta Spotify",
+							noaccount_text:						"Está faltando uma conta Spotify conectada, sem uma conta você não poderá usar Spotify Controls. Para conectar uma conta Spotify à sua conta Discord, clique no botão abaixo.",
+							restricted_device:					"Não é possível controlar o Spotify enquanto reproduz música em dispositivo restrito",
+							toast_copyurl_fail:					"O URL da música não pôde ser copiado para a área de transferência",
+							toast_copyurl_success:				"O URL da música foi copiado para a área de transferência"
+						};
+					case "ro":		// Romanian
+						return {
+							noaccount_header:					"Ceva lipseste",
+							noaccount_subheader:				"Trebuie să vă conectați un cont Spotify",
+							noaccount_text:						"Vă lipsește un cont Spotify conectat, fără un cont pe care nu îl veți putea folosi Spotify Controls. Pentru a conecta un cont Spotify la contul dvs. Discord faceți clic pe butonul de mai jos.",
+							restricted_device:					"Nu pot controla Spotify în timp ce redați muzică pe dispozitiv restricționat",
+							toast_copyurl_fail:					"Adresa URL a melodiei nu a putut fi copiată în clipboard",
+							toast_copyurl_success:				"Adresa URL a melodiei a fost copiată în clipboard"
+						};
+					case "ru":		// Russian
+						return {
+							noaccount_header:					"Что-то пропало",
+							noaccount_subheader:				"Вам необходимо подключить учетную запись Spotify",
+							noaccount_text:						"У вас отсутствует подключенная учетная запись Spotify, без нее вы не сможете использовать Spotify Controls. Чтобы связать учетную запись Spotify со своей учетной записью Discord, нажмите кнопку ниже.",
+							restricted_device:					"Невозможно управлять Spotify во время воспроизведения музыки на ограниченном устройстве",
+							toast_copyurl_fail:					"URL-адрес песни не может быть скопирован в буфер обмена",
+							toast_copyurl_success:				"URL песни скопирован в буфер обмена"
+						};
+					case "sv":		// Swedish
+						return {
+							noaccount_header:					"Något saknas",
+							noaccount_subheader:				"Du måste ansluta ett Spotify-konto",
+							noaccount_text:						"Du saknar ett anslutet Spotify-konto utan ett konto kan du inte använda Spotify Controls. För att ansluta ett Spotify-konto till ditt Discord-konto, klicka på knappen nedan.",
+							restricted_device:					"Kan inte styra Spotify när du spelar musik på en begränsad enhet",
+							toast_copyurl_fail:					"Låtens URL kunde inte kopieras till Urklipp",
+							toast_copyurl_success:				"Låtens URL kopierades till Urklipp"
+						};
+					case "th":		// Thai
+						return {
+							noaccount_header:					"มีบางอย่างหายไป",
+							noaccount_subheader:				"คุณต้องเชื่อมต่อบัญชี Spotify",
+							noaccount_text:						"คุณไม่มีบัญชี Spotify ที่เชื่อมต่อหากไม่มีบัญชีคุณจะไม่สามารถใช้ Spotify Controls ได้หากต้องการเชื่อมต่อบัญชี Spotify กับบัญชี Discord ของคุณให้คลิกปุ่มด้านล่าง",
+							restricted_device:					"ไม่สามารถควบคุม Spotify ขณะเล่นเพลงบนอุปกรณ์ที่ จำกัด",
+							toast_copyurl_fail:					"ไม่สามารถคัดลอก URL ของเพลงไปยังคลิปบอร์ด",
+							toast_copyurl_success:				"คัดลอก URL ของเพลงไปยังคลิปบอร์ดแล้ว"
+						};
+					case "tr":		// Turkish
+						return {
+							noaccount_header:					"Bir şey eksik",
+							noaccount_subheader:				"Spotify  Hesabı bağlamanız gerekiyor",
+							noaccount_text:						"Bağlı bir Spotify Hesabınız yok, bir Hesap olmadan Spotify Controls kullanamazsınız. Bir Spotify Hesabını Discord Hesabınıza bağlamak için aşağıdaki düğmeyi tıklayın.",
+							restricted_device:					"Kısıtlı Cihazda Müzik çalarken Spotify 'ı kontrol edemez",
+							toast_copyurl_fail:					"Şarkı URL'si panoya kopyalanamadı",
+							toast_copyurl_success:				"Şarkı URL'si panoya kopyalandı"
+						};
+					case "uk":		// Ukrainian
+						return {
+							noaccount_header:					"Щось не вистачає",
+							noaccount_subheader:				"Вам потрібно підключити акаунт Spotify",
+							noaccount_text:						"У вас відсутній підключений обліковий запис Spotify, без якого ви не зможете використовувати Spotify Controls. Щоб підключити обліковий запис Spotify до свого облікового запису Discord, натисніть кнопку нижче.",
+							restricted_device:					"Не вдається керувати Spotify під час відтворення музики на обмеженому пристрої",
+							toast_copyurl_fail:					"URL-адресу пісні не вдалося скопіювати в буфер обміну",
+							toast_copyurl_success:				"URL-адресу пісні скопійовано в буфер обміну"
+						};
+					case "vi":		// Vietnamese
+						return {
+							noaccount_header:					"Thiêu một thư gi đo",
+							noaccount_subheader:				"Bạn cần kết nối Tài khoản Spotify",
+							noaccount_text:						"Bạn đang thiếu Tài khoản Spotify được kết nối, nếu không có Tài khoản, bạn sẽ không thể sử dụng Spotify Controls. Để kết nối Tài khoản Spotify với Tài khoản Discord của bạn, hãy nhấp vào nút bên dưới.",
+							restricted_device:					"Không thể điều khiển Spotify khi phát Nhạc trên Thiết bị bị hạn chế",
+							toast_copyurl_fail:					"Không thể sao chép URL bài hát vào khay nhớ tạm",
+							toast_copyurl_success:				"URL bài hát đã được sao chép vào khay nhớ tạm"
+						};
+					case "zh-CN":	// Chinese (China)
+						return {
+							noaccount_header:					"缺了点什么",
+							noaccount_subheader:				"您需要连接一个 Spotify 帐户",
+							noaccount_text:						"您缺少关联的 Spotify 帐户，如果没有帐户，将无法使用 Spotify Controls。要将 Spotify 帐户与您的 Discord 帐户关联，请单击下面的按钮。",
+							restricted_device:					"在受限设备上播放音乐时无法控制 Spotify",
+							toast_copyurl_fail:					"歌曲网址无法复制到剪贴板",
+							toast_copyurl_success:				"歌曲网址已复制到剪贴板"
+						};
+					case "zh-TW":	// Chinese (Taiwan)
+						return {
+							noaccount_header:					"缺了點什麼",
+							noaccount_subheader:				"您需要連接一個 Spotify 帳戶",
+							noaccount_text:						"您缺少關聯的 Spotify 帳戶，如果沒有帳戶，將無法使用 Spotify Controls。要將 Spotify 帳戶與您的 Discord 帳戶關聯，請單擊下面的按鈕。",
+							restricted_device:					"在受限設備上播放音樂時無法控制 Spotify",
+							toast_copyurl_fail:					"歌曲網址無法複製到剪貼板",
+							toast_copyurl_success:				"歌曲網址已復製到剪貼板"
+						};
+					default:		// English
+						return {
+							noaccount_header:					"Something is missing",
+							noaccount_subheader:				"You need to connect a Spotify Account",
+							noaccount_text:						"You are missing a connected Spotify Account, without an Account you won't be able to use Spotify Controls. To connect a Spotify Account with your Discord Account click the button below.",
+							restricted_device:					"Can not control Spotify while playing Music on restricted Device",
+							toast_copyurl_fail:					"Song URL could not be copied to clipboard",
+							toast_copyurl_success:				"Song URL was copied to clipboard"
+						};
 				}
 			}
 		};

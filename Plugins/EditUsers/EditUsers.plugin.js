@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.1.1",
+			"version": "4.1.4",
 			"description": "Allow you to change the icon, name, tag and color of users"
 		},
 		"changeLog": {
 			"improved": {
-				"Separate Servers and DMs": "You can now disable all changes in the chat window for servers or dms"
+				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
 			}
 		}
 	};
@@ -28,7 +28,14 @@ module.exports = (_ => {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
-		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it.\n\n${config.info.description}`;}
+		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it. \n\n${config.info.description}`;}
+		
+		downloadLibrary () {
+			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+				if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
+				else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
+			});
+		}
 		
 		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
@@ -40,10 +47,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-							else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-						});
+						this.downloadLibrary();
 					}
 				});
 			}
@@ -54,12 +58,7 @@ module.exports = (_ => {
 		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
-			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
-				require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-					if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-					else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-				});
-			});
+			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
@@ -361,7 +360,7 @@ module.exports = (_ => {
 						if (data && data.name) e.instance.props.nick = data.name;
 					}
 					else {
-						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.marginleft8]]});
+						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.autocompleterowcontentprimary]]});
 						if (userName) this.changeUserColor(userName, e.instance.props.user.id);
 					}
 				}
@@ -481,7 +480,7 @@ module.exports = (_ => {
 					if (BDFDB.ReactUtils.isValidElement(e.instance.props.subText)) {
 						let data = changedUsers[e.instance.props.user.id];
 						if (data && (data.removeStatus || data.status || data.statusEmoji)) {
-							e.instance.props.subText.props.activities = [].concat(e.instance.props.subText.props.activities).filter(n => n && n.type != 4);
+							e.instance.props.subText.props.activities = [].concat(e.instance.props.subText.props.activities).filter(n => n && n.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
 							let activity = this.createCustomStatus(data);
 							if (activity) e.instance.props.subText.props.activities.unshift(activity);
 						}
@@ -654,7 +653,10 @@ module.exports = (_ => {
 								gradient: BDFDB.ColorUtils.createGradient(messageColor),
 								children: e.returnvalue.props.children
 							});
-							else e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {color: BDFDB.ColorUtils.convert(messageColor, "RGBA")});
+							else e.returnvalue.props.children = BDFDB.ReactUtils.createElement("span", {
+								style: Object.assign({}, e.returnvalue.props.style, {color: BDFDB.ColorUtils.convert(messageColor, "RGBA")}),
+								children: e.returnvalue.props.children
+							});
 						}
 					}
 				}
@@ -802,7 +804,7 @@ module.exports = (_ => {
 						if (data) {
 							if (data.name) e.instance.props.nick = data.name;
 							if (data.removeStatus || data.status || data.statusEmoji) {
-								e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != 4);
+								e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
 								let activity = this.createCustomStatus(data);
 								if (activity) e.instance.props.activities.unshift(activity);
 							}
@@ -917,7 +919,7 @@ module.exports = (_ => {
 					if (!e.returnvalue) {
 						let data = changedUsers[e.instance.props.user.id];
 						if (data && (data.removeStatus || data.status || data.statusEmoji)) {
-							e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != 4);
+							e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
 							let activity = this.createCustomStatus(data);
 							if (activity) e.instance.props.activities.unshift(activity);
 						}
@@ -1152,37 +1154,42 @@ module.exports = (_ => {
 					id: "custom",
 					name: "Custom Status",
 					state: data.status,
-					type: 4
+					type: BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS
 				}
 			}
 
 			openUserSettingsModal (user) {
 				let data = changedUsers[user.id] || {};
+				let newData = Object.assign({}, data);
 				let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), user.id) || {};
 				let activity = BDFDB.LibraryModules.StatusMetaUtils.getApplicationActivity(user.id);
+				
+				let avatarInput, statusEmojiInput, statusInput, colorPicker3, colorPicker4;
 				
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: this.labels.modal_header,
-					subheader: member.nick || user.username,
+					subHeader: member.nick || user.username,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader1,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 									title: this.labels.modal_username,
-									className: BDFDB.disCN.marginbottom20 + " input-username",
+									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 										value: data.name,
 										placeholder: member.nick || user.username,
-										autoFocus: true
+										autoFocus: true,
+										onChange: value => {newData.name = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 									title: this.labels.modal_usertag,
-									className: BDFDB.disCN.marginbottom20 + " input-usertag",
+									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-										value: data.tag
+										value: data.tag,
+										onChange: value => {newData.tag = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement("div", {
@@ -1199,35 +1206,41 @@ module.exports = (_ => {
 													children: this.labels.modal_useravatar
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-													className: "input-removeicon",
 													type: "Switch",
 													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
 													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 													value: data.removeIcon,
-													onChange: (value, instance) => {
-														let avatarInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return`), {key: "USERAVATAR"});
-														if (avatarInputIns) {
-															delete avatarInputIns.props.success;
-															delete avatarInputIns.props.errorMessage;
-															avatarInputIns.props.disabled = value;
-															BDFDB.ReactUtils.forceUpdate(avatarInputIns);
+													onChange: value => {
+														newData.removeIcon = value;
+														if (value) {
+															delete avatarInput.props.success;
+															delete avatarInput.props.errorMessage;
+															avatarInput.props.disabled = true;
+															BDFDB.ReactUtils.forceUpdate(avatarInput);
+														}
+														else {
+															avatarInput.props.disabled = false;
+															this.checkUrl(avatarInput.props.value, avatarInput).then(returnValue => {
+																newData.url = returnValue;
+															});
 														}
 													}
 												})
 											]
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-											className: "input-useravatar",
-											key: "USERAVATAR",
 											success: !data.removeIcon && data.url,
 											maxLength: 100000000000000000000,
 											value: data.url,
 											placeholder: BDFDB.UserUtils.getAvatar(user.id),
 											disabled: data.removeIcon,
+											ref: instance => {if (instance) avatarInput = instance;},
 											onChange: (value, instance) => {
-												this.checkUrl(value, instance);
+												this.checkUrl(value, instance).then(returnValue => {
+													newData.url = returnValue;
+												});
 											}
 										})
 									]
@@ -1246,23 +1259,16 @@ module.exports = (_ => {
 													children: BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-													className: "input-removestatus",
 													type: "Switch",
 													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
 													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 													value: data.removeStatus,
-													onChange: (value, instance) => {
-														let statusInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return`), {key: "USERSTATUS"});
-														let statusEmojiInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return`), {key: "USERSTATUSEMOJI"});
-														if (statusInputIns && statusEmojiInputIns) {
-															delete statusInputIns.props.success;
-															delete statusInputIns.props.errorMessage;
-															statusInputIns.props.disabled = value;
-															delete statusEmojiInputIns.props.emoji;
-															BDFDB.ReactUtils.forceUpdate(statusInputIns, statusEmojiInputIns);
-														}
+													onChange: value => {
+														newData.removeStatus = value;
+														statusInput.props.disabled = value;
+														BDFDB.ReactUtils.forceUpdate(statusInput);
 													}
 												})
 											]
@@ -1273,20 +1279,20 @@ module.exports = (_ => {
 												BDFDB.ReactUtils.createElement("div", {
 													className: BDFDB.disCN.emojiinputbuttoncontainer,
 													children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.EmojiPickerButton, {
-														className: "input-useremojistatus",
-														key: "USERSTATUSEMOJI",
 														emoji: data.statusEmoji,
-														allowManagedEmojis: true
+														allowManagedEmojis: true,
+														ref: instance => {if (instance) statusEmojiInput = instance;},
+														onSelect: value => {newData.statusEmoji = value;}
 													})
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-													className: "input-userstatus",
 													inputClassName: BDFDB.disCN.emojiinput,
-													key: "USERSTATUS",
 													maxLength: 100000000000000000000,
 													value: data.status,
-													placeholder: activity && activity.type == 4 && activity.state || "",
-													disabled: data.removeStatus
+													placeholder: activity && activity.type == BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS && activity.state || "",
+													disabled: data.removeStatus,
+													ref: instance => {if (instance) statusInput = instance;},
+													onChange: value => {newData.status = value;}
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 													size: BDFDB.LibraryComponents.Button.Sizes.NONE,
@@ -1296,14 +1302,12 @@ module.exports = (_ => {
 														className: BDFDB.disCN.emojiinputclearicon,
 														name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE_CIRCLE
 													}),
-													onClick: (e, instance) => {
-														let statusInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return`), {key: "USERSTATUS"});
-														let statusEmojiInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return.return`), {key: "USERSTATUSEMOJI"});
-														if (statusInputIns && statusEmojiInputIns) {
-															statusInputIns.props.value = "";
-															delete statusEmojiInputIns.props.emoji;
-															BDFDB.ReactUtils.forceUpdate(statusInputIns, statusEmojiInputIns);
-														}
+													onClick: _ => {
+														newData.status = "";
+														newData.statusEmoji = null;
+														statusInput.props.value = "";
+														delete statusEmojiInput.props.emoji;
+														BDFDB.ReactUtils.forceUpdate(statusInput, statusEmojiInput);
 													}
 												})
 											]
@@ -1320,7 +1324,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color1,
-										number: 1
+										onColorChange: value => {newData.color1 = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -1328,16 +1332,16 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color2,
-										number: 2
+										onColorChange: value => {newData.color2 = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
-									className: "input-userolecolor",
 									margin: 20,
 									label: this.labels.modal_userolecolor,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-									value: data.useRoleColor
+									value: data.useRoleColor,
+									onChange: value => {newData.useRoleColor = value;}
 								})
 							]
 						}),
@@ -1349,8 +1353,9 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color3,
-										number: 3,
-										disabled: data.ignoreTagColor
+										disabled: data.ignoreTagColor,
+										ref: instance => {if (instance) colorPicker3 = instance;},
+										onColorChange: value => {newData.color3 = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -1358,22 +1363,22 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color4,
-										number: 4,
-										disabled: data.ignoreTagColor
+										disabled: data.ignoreTagColor,
+										ref: instance => {if (instance) colorPicker4 = instance;},
+										onColorChange: value => {newData.color4 = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
-									className: "input-ignoretagcolor",
 									margin: 20,
 									label: this.labels.modal_ignoretagcolor,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: data.ignoreTagColor,
-									onChange: (value, instance) => {
-										let colorpicker3ins = BDFDB.ReactUtils.findOwner(instance._reactInternals.return, {props: [["number",3]]});
-										let colorpicker4ins = BDFDB.ReactUtils.findOwner(instance._reactInternals.return, {props: [["number",4]]});
-										if (colorpicker3ins) colorpicker3ins.setState({disabled: value});
-										if (colorpicker4ins) colorpicker4ins.setState({disabled: value});
+									onChange: value => {
+										newData.ignoreTagColor = value;
+										colorPicker3.props.disabled = value;
+										colorPicker4.props.disabled = value;
+										BDFDB.ReactUtils.forceUpdate(colorPicker3, colorPicker4);
 									}
 								})
 							]
@@ -1386,7 +1391,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color5,
-										number: 5
+										onColorChange: value => {newData.color5 = value;}
 									})
 								})
 							]
@@ -1396,38 +1401,18 @@ module.exports = (_ => {
 						contents: BDFDB.LanguageUtils.LanguageStrings.SAVE,
 						color: "BRAND",
 						close: true,
-						click: modal => {
-							let oldData = Object.assign({}, data);
-							
-							let userNameInput = modal.querySelector(".input-username " + BDFDB.dotCN.input);
-							let userTagInput = modal.querySelector(".input-usertag " + BDFDB.dotCN.input);
-							let userAvatarInput = modal.querySelector(".input-useravatar " + BDFDB.dotCN.input);
-							let removeIconInput = modal.querySelector(".input-removeicon " + BDFDB.dotCN.switchinner);
-							let userStatusInput = modal.querySelector(".input-userstatus " + BDFDB.dotCN.input);
-							let userStatusEmojiPicker = modal.querySelector(".input-useremojistatus " + BDFDB.dotCN.emojiold);
-							let removeStatusInput = modal.querySelector(".input-removestatus " + BDFDB.dotCN.switchinner);
-							let useRoleColorInput = modal.querySelector(".input-userolecolor " + BDFDB.dotCN.switchinner);
-							let ignoreTagColorInput = modal.querySelector(".input-ignoretagcolor " + BDFDB.dotCN.switchinner);
-							
-							data.name = userNameInput.value.trim() || null;
-							data.tag = userTagInput.value.trim() || null;
-							data.removeIcon = removeIconInput.checked;
-							data.url = (!data.removeIcon && BDFDB.DOMUtils.containsClass(userAvatarInput, BDFDB.disCN.inputsuccess) ? userAvatarInput.value.trim() : null) || null;
-							data.removeStatus = removeStatusInput.checked;
-							data.status = !data.removeStatus && userStatusInput.value.trim() || null;
-							data.statusEmoji = !data.removeStatus && BDFDB.ReactUtils.findValue(userStatusEmojiPicker, "emoji", {up: true}) || null;
-							data.useRoleColor = useRoleColorInput.checked;
-							data.ignoreTagColor = ignoreTagColorInput.checked;
-
-							data.color1 = BDFDB.ColorUtils.getSwatchColor(modal, 1);
-							data.color2 = BDFDB.ColorUtils.getSwatchColor(modal, 2);
-							data.color3 = BDFDB.ColorUtils.getSwatchColor(modal, 3);
-							data.color4 = BDFDB.ColorUtils.getSwatchColor(modal, 4);
-							data.color5 = BDFDB.ColorUtils.getSwatchColor(modal, 5);
+						onClick: _ => {
+							newData.url = !newData.removeIcon ? newData.url : "";
+							newData.status = !newData.removeStatus ? newData.status : "";
+							newData.statusEmoji = !newData.removeStatus ? newData.statusEmoji : null;
 
 							let changed = false;
-							if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.DataUtils.remove(this, "users", user.id);
-							else if (!BDFDB.equals(oldData, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "users", user.id);
+							if (Object.keys(newData).every(key => newData[key] == null || newData[key] == false) && (changed = true)) {
+								BDFDB.DataUtils.remove(this, "users", user.id);
+							}
+							else if (!BDFDB.equals(newData, data) && (changed = true)) {
+								BDFDB.DataUtils.save(newData, this, "users", user.id);
+							}
 							if (changed) this.forceUpdateAll();
 						}
 					}]
@@ -1435,26 +1420,37 @@ module.exports = (_ => {
 			}
 			
 			checkUrl (url, instance) {
-				BDFDB.TimeUtils.clear(instance.checkTimeout);
-				if (url == null || !url.trim()) {
-					delete instance.props.success;
-					delete instance.props.errorMessage;
-					instance.forceUpdate();
-				}
-				else instance.checkTimeout = BDFDB.TimeUtils.timeout(_ => {
-					BDFDB.LibraryRequires.request(url.trim(), (error, response, result) => {
-						if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
-							instance.props.success = true;
-							delete instance.props.errorMessage;
-						}
-						else {
-							delete instance.props.success;
-							instance.props.errorMessage = this.labels.modal_invalidurl;
-						}
-						delete instance.checkTimeout;
-						instance.forceUpdate();
-					});
-				}, 1000);
+				return new Promise(callback => {
+					BDFDB.TimeUtils.clear(instance.checkTimeout);
+					url = url && url.trim();
+					if (!url || instance.props.disabled) {
+						delete instance.props.success;
+						delete instance.props.errorMessage;
+						callback("");
+						BDFDB.ReactUtils.forceUpdate(instance);
+					}
+					else instance.checkTimeout = BDFDB.TimeUtils.timeout(_ => {
+						BDFDB.LibraryRequires.request(url, (error, response, result) => {
+							delete instance.checkTimeout;
+							if (instance.props.disabled) {
+								delete instance.props.success;
+								delete instance.props.errorMessage;
+								callback("");
+							}
+							else if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
+								instance.props.success = true;
+								delete instance.props.errorMessage;
+								callback(url);
+							}
+							else {
+								delete instance.props.success;
+								instance.props.errorMessage = this.labels.modal_invalidurl;
+								callback("");
+							}
+							BDFDB.ReactUtils.forceUpdate(instance);
+						});
+					}, 1000);
+				});
 			}
 
 			setLabelsByLanguage () {

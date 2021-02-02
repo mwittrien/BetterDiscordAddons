@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.2.0",
+			"version": "1.2.1",
 			"description": "Completely removes blocked messages"
 		},
 		"changeLog": {
@@ -22,7 +22,7 @@ module.exports = (_ => {
 				"Remove Reactions": "Now decreases the count for reactions if one of them is by a blocked user and hides it if the reaction is 0"
 			},
 			"fixed": {
-				"Update Reactions": "Fixed issue where reaction sometimes wouldn't get updated"
+				"Update Reactions": "Fixed issue where reaction sometimes wouldn't show up at all"
 			}
 		}
 	};
@@ -31,7 +31,14 @@ module.exports = (_ => {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
-		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it.\n\n${config.info.description}`;}
+		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it. \n\n${config.info.description}`;}
+		
+		downloadLibrary () {
+			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+				if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
+				else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
+			});
+		}
 		
 		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
@@ -43,10 +50,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-							else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-						});
+						this.downloadLibrary();
 					}
 				});
 			}
@@ -57,12 +61,7 @@ module.exports = (_ => {
 		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
-			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
-				require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-					if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-					else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-				});
-			});
+			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
@@ -275,7 +274,7 @@ module.exports = (_ => {
 					for (let i in e.returnvalue.props.children[0]) {
 						let reaction = e.returnvalue.props.children[0][i];
 						let emojiId = reaction.props.emoji.name || reaction.props.emoji.id;
-						if (cachedReactions[reaction.props.message.id][emojiId] && cachedReactions[reaction.props.message.id][emojiId].relationshipCount == relationshipCount && cachedReactions[reaction.props.message.id][emojiId].oldTotalCount == BDFDB.ArrayUtils.sum(reaction.props.message.reactions.map(n => n.count))) {
+						if (cachedReactions[reaction.props.message.id][emojiId] && cachedReactions[reaction.props.message.id][emojiId].relationshipCount == relationshipCount && cachedReactions[reaction.props.message.id][emojiId].oldCount == reaction.props.message.reactions.find(n => n.emoji.name && n.emoji.name == emojiId || n.emoji.id == emojiId)?.count || 0) {
 							reaction.props.count = cachedReactions[reaction.props.message.id][emojiId].reactions.length;
 							if (reaction.props.count < 1) e.returnvalue.props.children[0][i] = null;
 						}
@@ -286,7 +285,7 @@ module.exports = (_ => {
 								reaction.props.count = reaction.props.reactions.length;
 								if (cachedReactions && cachedReactions[reaction.props.message.id]) cachedReactions[reaction.props.message.id][emojiId] = {
 									relationshipCount: relationshipCount,
-									oldTotalCount: BDFDB.ArrayUtils.sum(reaction.props.message.reactions.map(n => n.count)),
+									oldCount: reaction.props.message.reactions.find(n => n.emoji.name && n.emoji.name == emojiId || n.emoji.id == emojiId)?.count || 0,
 									reactions: reaction.props.reactions
 								};
 								BDFDB.TimeUtils.clear(updateTimeout);
@@ -298,33 +297,6 @@ module.exports = (_ => {
 					}
 					if (!e.returnvalue.props.children[0].filter(n => n).length) return null;
 				}
-			}
-			
-			processReactiona (e) {
-				if (!settings.removeReactions) return;
-				if (!e.returnvalue) {
-					let emojiId = e.instance.props.emoji.name || e.instance.props.emoji.id;
-					if (e.instance.props.reactions && e.instance.props.reactions.length) {
-						e.instance.props.reactions = e.instance.props.reactions.filter(n => !n || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.id));
-						e.instance.props.count = e.instance.props.reactions.length;
-						if (cachedReactions && cachedReactions[e.instance.props.message.id]) cachedReactions[e.instance.props.message.id][emojiId] = e.instance.props.count;
-					}
-					else if (!e.instance.props.reactions) {
-						if (cachedChannelId != e.instance.props.message.channel_id) {
-							cachedReactions = {};
-							cachedChannelId = e.instance.props.message.channel_id;
-						}
-						if (!cachedReactions[e.instance.props.message.id]) cachedReactions[e.instance.props.message.id] = {};
-						if (cachedReactions[e.instance.props.message.id][emojiId] !== undefined) e.instance.props.count = cachedReactions[e.instance.props.message.id][emojiId];
-						
-						e.instance.props.reactions = [];
-						BDFDB.LibraryModules.ReactionUtils.getReactions(e.instance.props.message.channel_id, e.instance.props.message.id, e.instance.props.emoji).then(reactions => {
-							e.instance.props.reactions = reactions;
-							BDFDB.ReactUtils.forceUpdate(e.instance);
-						});
-					}
-				}
-				else if (!e.instance.props.count) return null;
 			}
 		
 			processReactorsComponent (e) {

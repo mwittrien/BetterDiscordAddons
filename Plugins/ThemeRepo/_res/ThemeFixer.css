@@ -1,7 +1,7 @@
 body,
 #app-mount,
 #app-mount REPLACE_CLASS_app,
-#app-mount REPLACE_CLASS_appold,
+#app-mount REPLACE_CLASS_appinner,
 #app-mount REPLACE_CLASS_loadingscreen,
 #app-mount REPLACE_CLASS_errorscreen,
 #app-mount REPLACE_CLASS_layersbg,

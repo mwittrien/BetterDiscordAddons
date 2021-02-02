@@ -23,7 +23,14 @@ module.exports = (_ => {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
-		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it.\n\n${config.info.description}`;}
+		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it. \n\n${config.info.description}`;}
+		
+		downloadLibrary () {
+			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+				if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
+				else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
+			});
+		}
 		
 		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
@@ -35,10 +42,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-							else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-						});
+						this.downloadLibrary();
 					}
 				});
 			}
@@ -49,12 +53,7 @@ module.exports = (_ => {
 		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
-			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
-				require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-					if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-					else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-				});
-			});
+			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
@@ -65,7 +64,7 @@ module.exports = (_ => {
 			onLoad () {
 				patched = false;
 
-				electronWindow = BDFDB.LibraryRequires.electron.remote.getCurrentWindow();
+				electronWindow = BDFDB.LibraryRequires.electron && BDFDB.LibraryRequires.electron.remote && BDFDB.LibraryRequires.electron.remote.getCurrentWindow();
 
 				this.defaults = {
 					settings: {
@@ -176,8 +175,10 @@ module.exports = (_ => {
 								if (patched) {
 									notifybar = BDFDB.NotificationUtils.notice("Changed nativebar settings, relaunch to see changes:", {type: "danger",btn: "Relaunch",id: "OldTitleBarNotifyBar"});
 									notifybar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
-										BDFDB.LibraryRequires.electron.remote.app.relaunch();
-										BDFDB.LibraryRequires.electron.remote.app.quit();
+										if (BDFDB.LibraryRequires.electron && BDFDB.LibraryRequires.electron.remote) {
+											BDFDB.LibraryRequires.electron.remote.app.relaunch();
+											BDFDB.LibraryRequires.electron.remote.app.quit();
+										}
 									});
 								}
 							}
@@ -257,7 +258,7 @@ module.exports = (_ => {
 						tooltipConfig: {type: "bottom"},
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 							className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
-							onClick: _ => {electronWindow.reload();},
+							onClick: _ => {electronWindow && electronWindow.reload();},
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 								className: BDFDB.disCN.channelheadericon,
 								iconSVG: `<svg><path fill="currentColor" stroke="none" transform="translate(3,4)" d="M 17.061, 7.467 V 0 l -2.507, 2.507 C 13.013, 0.96, 10.885, 0, 8.528, 0 C 3.813, 0, 0.005, 3.819, 0.005, 8.533 s 3.808, 8.533, 8.523, 8.533 c 3.973, 0, 7.301 -2.72, 8.245 -6.4 h -2.219 c -0.88, 2.485 -3.237, 4.267 -6.027, 4.267 c -3.536, 0 -6.4 -2.864 -6.4 -6.4 s 2.864 -6.4, 6.4 -6.4 c 1.765, 0, 3.349, 0.736, 4.507, 1.893 l -3.44, 3.44 H 17.061 z"/></svg>`
@@ -268,7 +269,7 @@ module.exports = (_ => {
 				};
 				children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 					className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
-					onClick: _ => {electronWindow.minimize();},
+					onClick: _ => {electronWindow && electronWindow.minimize();},
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						className: BDFDB.disCN.channelheadericon,
 						iconSVG: `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 18 l13 0"/></svg>`
@@ -277,7 +278,8 @@ module.exports = (_ => {
 				children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 					className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
 					onClick: _ => {
-						if (electronWindow.isMaximized()) electronWindow.unmaximize();
+						if (!electronWindow) return;
+						else if (electronWindow.isMaximized()) electronWindow.unmaximize();
 						else electronWindow.maximize();
 					},
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
@@ -287,7 +289,7 @@ module.exports = (_ => {
 				}));
 				children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 					className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
-					onClick: _ => {electronWindow.close();},
+					onClick: _ => {electronWindow && electronWindow.close();},
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						className: BDFDB.disCN.channelheadericon,
 						iconSVG: `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 6 l13 13 m0 -13 l-13 13"/></svg>`

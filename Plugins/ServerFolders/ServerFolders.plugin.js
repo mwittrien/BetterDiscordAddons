@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "6.8.6",
+			"version": "6.8.8",
 			"description": "Patch Discords native Folders in a way to open Servers within a Folder in a new bar to the right, also adds a bunch of new features to more easily organize, customize and manage your Folders"
 		},
 		"changeLog": {
-			"fixed": {
-				"Custom Icons": "You can now add custom icons again"
+			"improved": {
+				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
 			}
 		}
 	};
@@ -28,7 +28,14 @@ module.exports = (_ => {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
-		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it.\n\n${config.info.description}`;}
+		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it. \n\n${config.info.description}`;}
+		
+		downloadLibrary () {
+			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+				if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
+				else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
+			});
+		}
 		
 		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
@@ -40,10 +47,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-							else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-						});
+						this.downloadLibrary();
 					}
 				});
 			}
@@ -54,12 +58,7 @@ module.exports = (_ => {
 		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
-			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
-				require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-					if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-					else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-				});
-			});
+			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
@@ -228,6 +227,7 @@ module.exports = (_ => {
 							},
 							onClick: _ => {
 								this.props.selectedIcon = id;
+								this.props.onSelect(this.props.selectedIcon);
 								BDFDB.ReactUtils.forceUpdate(this);
 							},
 							onRemove: _ => {
@@ -249,7 +249,7 @@ module.exports = (_ => {
 			}
 		};
 		
-		var redCross = `'data:image/svg+xml; base64, PHN2ZyB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48cGF0aCBkPSJNNDAuNDAwIDE3LjE3OCBDIDM5Ljg1MCAxNy4zNjYsMzguNzkzIDE3LjUzOCwzOC4wNTAgMTcuNTYwIEMgMzMuMzUxIDE3LjY5OSwyMy4zOTcgMjQuNzg4LDIxLjM4MSAyOS40MzIgQyAyMS4wODcgMzAuMTA5LDIwLjU2NiAzMC44OTYsMjAuMjIzIDMxLjE4MSBDIDE5Ljg4MCAzMS40NjUsMTkuNjAwIDMxLjg2NiwxOS42MDAgMzIuMDcxIEMgMTkuNjAwIDMyLjI3NiwxOS4yMzYgMzMuMjQyLDE4Ljc5MiAzNC4yMTggQyAxNi4zNDUgMzkuNTg5LDE2LjM0NSA0OS42MTEsMTguNzkyIDU0Ljk4MiBDIDE5LjIzNiA1NS45NTgsMTkuNjAwIDU2LjkxOCwxOS42MDAgNTcuMTE2IEMgMTkuNjAwIDU3LjMxNCwxOS45NjAgNTcuODAyLDIwLjQwMCA1OC4yMDAgQyAyMC44NDAgNTguNTk4LDIxLjIwMCA1OS4xMzEsMjEuMjAwIDU5LjM4NSBDIDIxLjIwMCA2MC4zOTEsMjUuNjgwIDY0Ljk0Miw5MS41MDUgMTMwLjgwMCBDIDEyOC45OTUgMTY4LjMxMCwxNTkuODQ5IDE5OS4zMjYsMTYwLjA2OCAxOTkuNzI0IEMgMTYwLjQwOSAyMDAuMzQ0LDE1MC45NTAgMjA5Ljk2NCw5My45ODkgMjY2LjkyNCBDIDE4Ljc5OCAzNDIuMTEzLDE5LjYwMCAzNDEuMjkyLDE5LjYwMCAzNDMuMTI2IEMgMTkuNjAwIDM0My4yODMsMTkuMjUwIDM0NC4wNjUsMTguODIyIDM0NC44NjQgQyAxNS40MjkgMzUxLjE5NSwxNS45NTggMzYyLjkxOCwxOS45MzIgMzY5LjQ0MCBDIDIyLjA5NCAzNzIuOTkwLDI3LjQ3NCAzNzguODAwLDI4LjU5OCAzNzguODAwIEMgMjguODYxIDM3OC44MDAsMjkuNDAyIDM3OS4xNjAsMjkuODAwIDM3OS42MDAgQyAzMC4xOTggMzgwLjA0MCwzMC43MDMgMzgwLjQwMCwzMC45MjIgMzgwLjQwMCBDIDMxLjE0MSAzODAuNDAwLDMyLjIzOCAzODAuODMxLDMzLjM2MCAzODEuMzU4IEMgMzQuNDgyIDM4MS44ODYsMzYuNDgwIDM4Mi41MzMsMzcuODAwIDM4Mi43OTcgQyA0My43ODYgMzgzLjk5NCw0NC4zMjMgMzg0LjAyNyw0Ny4yOTkgMzgzLjM4NiBDIDQ4Ljg5NSAzODMuMDQyLDUxLjAxMCAzODIuNjE5LDUyLjAwMCAzODIuNDQ2IEMgNTIuOTkwIDM4Mi4yNzQsNTQuNTE3IDM4MS43NDMsNTUuMzk0IDM4MS4yNjYgQyA1Ni4yNzEgMzgwLjc5MCw1Ny4xODggMzgwLjQwMCw1Ny40MzIgMzgwLjQwMCBDIDU3LjY3NiAzODAuNDAwLDU4LjIwMiAzODAuMDQwLDU4LjYwMCAzNzkuNjAwIEMgNTguOTk4IDM3OS4xNjAsNTkuNTk4IDM3OC44MDAsNTkuOTMyIDM3OC44MDAgQyA2MC4yNjcgMzc4LjgwMCw5MS43MjUgMzQ3LjYxNSwxMjkuODM5IDMwOS41MDAgQyAxNjkuMDU3IDI3MC4yODEsMTk5LjQ5NiAyNDAuMTQ1LDE5OS45NjQgMjQwLjA3MyBDIDIwMC42MDIgMjM5Ljk3NSwyMTYuMDAxIDI1NS4xOTMsMjY3LjQ5NSAzMDYuODE0IEMgMzI3LjA0NiAzNjYuNTExLDMzOS41MzEgMzc4LjgwMCwzNDAuNjI3IDM3OC44MDAgQyAzNDAuNzk4IDM3OC44MDAsMzQxLjI2NSAzNzkuMDk3LDM0MS42NjcgMzc5LjQ2MSBDIDM0NS43MjggMzgzLjEzNiwzNjEuMDEzIDM4NC40MDksMzY1LjY4NSAzODEuNDYxIEMgMzY2LjE4OCAzODEuMTQzLDM2Ny4wMjQgMzgwLjc1NywzNjcuNTQxIDM4MC42MDIgQyAzNzAuNTgzIDM3OS42OTEsMzc2LjYyMyAzNzQuMjAwLDM3OS4zODIgMzY5LjgzNiBDIDM4NS4xMDUgMzYwLjc4NSwzODQuMDM5IDM0Ni40MDksMzc3LjAzOSAzMzguMjI4IEMgMzc2LjA4NCAzMzcuMTEzLDM0NC44NDYgMzA1Ljc0MywzMDcuNjIxIDI2OC41MTcgQyAyNTUuMzI5IDIxNi4yMjQsMjM5Ljk2OSAyMDAuNjQ3LDI0MC4wNzAgMjAwLjAwOSBDIDI0MC4xNDMgMTk5LjU0NSwyNzAuMDYyIDE2OS4yODgsMzA4LjIxNiAxMzEuMDkxIEMgMzQ1LjYyNSA5My42NDEsMzc2LjcyMyA2Mi4zNzAsMzc3LjMyNCA2MS42MDAgQyAzODQuMjg2IDUyLjY3OCwzODUuMDM2IDQwLjYyMSwzNzkuMjc3IDMwLjE3MSBDIDM3Ni4xMzYgMjQuNDY5LDM2Ny45MDYgMTguNTM3LDM2MS42NjggMTcuNDc3IEMgMzU0LjY1NiAxNi4yODYsMzQ1LjA5NSAxNy42NjUsMzQxLjg4MyAyMC4zMzEgQyAzNDEuNTY3IDIwLjU5NCwzNDAuNTQ5IDIxLjMxOCwzMzkuNjIyIDIxLjk0MSBDIDMzOC42OTUgMjIuNTYzLDMwNy4wMzEgNTMuOTcyLDI2OS4yNTkgOTEuNzM3IEMgMjMxLjQ4NiAxMjkuNTAxLDIwMC4zMzAgMTYwLjQwMCwyMDAuMDIyIDE2MC40MDAgQyAxOTkuNzE0IDE2MC40MDAsMTY4LjkzOCAxMjkuODY5LDEzMS42MzEgOTIuNTU0IEMgNTYuMjI1IDE3LjEzMSw2MC4yODggMjEuMDQ3LDU1LjIwMCAxOC44ODcgQyA1MS41OTEgMTcuMzU0LDQyLjgzNiAxNi4zNDMsNDAuNDAwIDE3LjE3OHoiIGZpbGw9InJnYigyNDAsIDcxLCA3MSkiPjwvcGF0aD48L3N2Zz4='`;
+		const redCross = `'data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><g fill="none" stroke="rgb(240,71,71)" stroke-width="2.63295174" stroke-linecap="round"><pathd="M 2.3297741,2.3297744 17.669885,17.670227"/><path d="M 17.66721,2.3327927 2.3327902,17.667207"/></svg>'`;
 		
 		const folderIconCustomPreviewComponent = class FolderIconCustomPreview extends BdApi.React.Component {
 			componentDidMount() {
@@ -300,6 +300,7 @@ module.exports = (_ => {
 				}
 			}
 			render() {
+				let openInput, closeInput;
 				return [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 						title: _this.labels.modal_customopen,
@@ -308,6 +309,7 @@ module.exports = (_ => {
 							type: "file",
 							filter: "image",
 							value: this.props.open,
+							ref: instance => {if (instance) openInput = instance;},
 							onChange: value => {
 								this.props.open = value;
 								BDFDB.ReactUtils.forceUpdate(this);
@@ -321,6 +323,7 @@ module.exports = (_ => {
 							type: "file",
 							filter: "image",
 							value: this.props.closed,
+							ref: instance => {if (instance) closeInput = instance;},
 							onChange: value => {
 								this.props.closed = value;
 								BDFDB.ReactUtils.forceUpdate(this);
@@ -357,11 +360,10 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 									children: BDFDB.LanguageUtils.LanguageStrings.ADD,
-									onClick: (e, instance) => {
-										let inputIns = BDFDB.ReactUtils.findOwner(this, {name: "BDFDB_TextInput", all: true, unlimited: true});
-										if (inputIns.length == 2 && inputIns[0].props.value && inputIns[1].props.value) {
-											this.checkImage(inputIns[0].props.value, openIcon => {
-												this.checkImage(inputIns[1].props.value, closedIcon => {
+									onClick: _ => {
+										if (openInput.props.value && closeInput.props.value) {
+											this.checkImage(openInput.props.value, openIcon => {
+												this.checkImage(closeInput.props.value, closedIcon => {
 													customIcons[_this.generateId("customicon")] = {openicon: openIcon, closedicon: closedIcon};
 													BDFDB.DataUtils.save(customIcons, _this, "customicons");
 													this.props.open = null;
@@ -403,7 +405,7 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					after: {
-						AppView: "render",
+						AppView: "default",
 						GuildFolder: "type",
 						Guilds: "render",
 						Guild: ["componentDidMount", "render"],
@@ -552,7 +554,7 @@ module.exports = (_ => {
 				
 				BDFDB.ReactUtils.forceUpdate(folderGuildContent);
 				BDFDB.PatchUtils.forceAllUpdates(this);
-				BDFDB.GuildUtils.rerenderAll();
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 
 			onGuildContextMenu (e) {
@@ -651,7 +653,7 @@ module.exports = (_ => {
 
 			processAppView (e) {
 				if (settings.extraColumn) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["FluxContainer(Guilds)", "FluxContainer(NavigableGuilds)"]});
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.guilds]]});
 					if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(folderGuildContentComponent, {
 						themeOverride: children[index].props.themeOverride
 					}, true));
@@ -784,6 +786,10 @@ module.exports = (_ => {
 				if (e.returnvalue) {
 					let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(e.instance.props.folderId);
 					let data = this.getFolderConfig(e.instance.props.folderId);
+					let newData = Object.assign({}, data, {folderName: folder.folderName});
+					
+					let tabs = {};
+					
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["ModalHeader", "Header"]});
 					if (index > -1) {
 						children[index].props.className = BDFDB.DOMUtils.formatClassName(children[index].props.className, BDFDB.disCN.modalheaderhassibling),
@@ -803,12 +809,12 @@ module.exports = (_ => {
 										{value: this.labels.modal_tabheader4}
 									],
 									onItemSelect: (value, instance) => {
-										let tabContentInstances = BDFDB.ReactUtils.findOwner(e.instance, {name: "BDFDB_ModalTabContent", all: true, unlimited: true});
-										for (let ins of tabContentInstances) {
+										let tabsArray = BDFDB.ObjectUtils.toArray(tabs);
+										for (let ins of tabsArray) {
 											if (ins.props.tab == value) ins.props.open = true;
 											else delete ins.props.open;
 										}
-										BDFDB.ReactUtils.forceUpdate(tabContentInstances);
+										BDFDB.ReactUtils.forceUpdate(tabsArray);
 									}
 								})
 							})
@@ -819,36 +825,39 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader1,
 							open: true,
+							ref: instance => {if (instance) tabs[this.labels.modal_tabheader1] = instance;},
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 									title: BDFDB.LanguageUtils.LanguageStrings.GUILD_FOLDER_NAME,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-										inputClassName: "input-foldername",
 										value: folder.folderName,
 										placeholder: folder.folderName || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER,
-										autoFocus: true
+										autoFocus: true,
+										onChange: value => {newData.folderName = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 									title: this.labels.modal_iconpicker,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(folderIconPickerComponent, {
-										selectedIcon: data.iconID
+										selectedIcon: data.iconID,
+										onSelect: value => {newData.iconID = value;}
 									}, true)
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
-									className: "input-usecloseicon",
 									margin: 20,
 									label: this.labels.modal_usecloseicon,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-									value: data.useCloseIcon
+									value: data.useCloseIcon,
+									onChange: value => {newData.useCloseIcon = value;}
 								})
 							]
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader2,
+							ref: instance => {if (instance) tabs[this.labels.modal_tabheader2] = instance;},
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 									title: this.labels.modal_colorpicker1,
@@ -856,7 +865,7 @@ module.exports = (_ => {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color1,
 										defaultFallback: !data.color1 && !data.swapColors,
-										number: 1
+										onColorChange: value => {newData.color1 = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -865,28 +874,29 @@ module.exports = (_ => {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color2,
 										defaultFallback: !data.color2 && data.swapColors,
-										number: 2
+										onColorChange: value => {newData.color2 = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
-									className: "input-swapcolors",
 									margin: 20,
 									label: this.labels.modal_swapcolor,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-									value: data.swapColors
+									value: data.swapColors,
+									onChange: value => {newData.swapColors = value;}
 								})
 							]
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader3,
+							ref: instance => {if (instance) tabs[this.labels.modal_tabheader3] = instance;},
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 									title: this.labels.modal_colorpicker3,
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color3,
-										number: 3
+										onColorChange: value => {newData.color3 = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -894,21 +904,22 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color4,
-										number: 4
+										onColorChange: value => {newData.color4 = value;}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
-									className: "input-copytooltipcolor",
 									margin: 20,
 									label: this.labels.modal_copytooltipcolor,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-									value: data.copyTooltipColor
+									value: data.copyTooltipColor,
+									onChange: value => {newData.copyTooltipColor = value;}
 								})
 							]
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader4,
+							ref: instance => {if (instance) tabs[this.labels.modal_tabheader4] = instance;},
 							children: BDFDB.ReactUtils.createElement(folderIconCustomPreviewComponent, {}, true)
 						})
 					];
@@ -916,30 +927,15 @@ module.exports = (_ => {
 					if (index > -1) children[index].props.children = [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 							children: BDFDB.LanguageUtils.LanguageStrings.SAVE,
-							onClick: event => {
-								let oldData = Object.assign({}, data);
-								
-								let root = BDFDB.ReactUtils.findDOMNode(e.instance).parentElement.querySelector(BDFDB.dotCN.layermodal);
-								
-								data.iconID = root.querySelector(BDFDB.dotCN._serverfoldersiconswatch + BDFDB.dotCN._serverfoldersiconswatchselected).getAttribute("iconID");
-
-								data.useCloseIcon = root.querySelector(".input-usecloseicon " + BDFDB.dotCN.switchinner).checked;
-								data.swapColors = root.querySelector(".input-swapcolors " + BDFDB.dotCN.switchinner).checked;
-								data.copyTooltipColor = root.querySelector(".input-copytooltipcolor " + BDFDB.dotCN.switchinner).checked;
-								
-								data.color1 = BDFDB.ColorUtils.getSwatchColor(root, 1);
-								data.color2 = BDFDB.ColorUtils.getSwatchColor(root, 2);
-								data.color3 = BDFDB.ColorUtils.getSwatchColor(root, 3);
-								data.color4 = BDFDB.ColorUtils.getSwatchColor(root, 4);
-								
-								let nativeColor = data.swapColors ? "color2" : "color1";
+							onClick: _ => {								
+								let folderColor = newData[newData.swapColors ? "color2" : "color1"];
 								this.updateFolder({
 									folderId: e.instance.props.folderId,
-									folderName: root.querySelector(".input-foldername").value,
-									folderColor: data[nativeColor] ? BDFDB.ColorUtils.convert(data[nativeColor] && BDFDB.ObjectUtils.is(data[nativeColor]) ? data[nativeColor][Object.keys(data[nativeColor])[0]] : data[nativeColor], "INT") : null
+									folderName: newData.folderName,
+									folderColor: folderColor ? BDFDB.ColorUtils.convert(folderColor && BDFDB.ObjectUtils.is(folderColor) ? folderColor[Object.keys(folderColor)[0]] : folderColor, "INT") : null
 								});
-								if (!BDFDB.equals(oldData, data)) {
-									BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
+								if (!BDFDB.equals(newData, data)) {
+									BDFDB.DataUtils.save(newData, this, "folders", e.instance.props.folderId);
 									this.forceUpdateAll();
 								}
 								e.instance.close();
@@ -1034,7 +1030,7 @@ module.exports = (_ => {
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: this.labels.serversubmenu_createfolder,
-					subheader: "",
+					subHeader: "",
 					contentClassName: BDFDB.disCN.listscroller,
 					children: guilds.map((guild, i) => {
 						return [
@@ -1065,7 +1061,7 @@ module.exports = (_ => {
 						contents: BDFDB.LanguageUtils.LanguageStrings.DONE,
 						color: "BRAND",
 						close: true,
-						click: (modal, instance) => {
+						onClick: (modal, instance) => {
 							this.createFolder(BDFDB.ArrayUtils.removeCopies(targetedGuildIds));
 						}
 					}]

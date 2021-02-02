@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "PinDMs",
 			"author": "DevilBro",
-			"version": "1.7.8",
+			"version": "1.7.9",
 			"description": "Allow you to pin DMs, making them appear at the top of your DMs/Server-List"
 		},
 		"changeLog": {
-			"added": {
-				"Predefined Categories": "Added the option to enable predefined categories for the channel list in the settings that will automatically add the dms fitting the category topic"
+			"improved": {
+				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
 			}
 		}
 	};
@@ -28,7 +28,14 @@ module.exports = (_ => {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
-		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it.\n\n${config.info.description}`;}
+		getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it. \n\n${config.info.description}`;}
+		
+		downloadLibrary () {
+			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+				if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
+				else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
+			});
+		}
 		
 		load () {
 			if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
@@ -40,10 +47,7 @@ module.exports = (_ => {
 					onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
 					onConfirm: _ => {
 						delete window.BDFDB_Global.downloadModal;
-						require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-							if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-							else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-						});
+						this.downloadLibrary();
 					}
 				});
 			}
@@ -54,12 +58,7 @@ module.exports = (_ => {
 		getSettingsPanel () {
 			let template = document.createElement("template");
 			template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
-			template.content.firstElementChild.querySelector("a").addEventListener("click", _ => {
-				require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-					if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => {});
-					else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
-				});
-			});
+			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
@@ -880,10 +879,13 @@ module.exports = (_ => {
 			}
 			
 			openCategorySettingsModal (data, type, isNew) {
-				if (BDFDB.ObjectUtils.is(data) && type) BDFDB.ModalUtils.open(this, {
+				if (!BDFDB.ObjectUtils.is(data) || !type) return;
+				let newData = Object.assign({}, data);
+				
+				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_SETTINGS,
-					subheader: data.name,
+					subHeader: data.name,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_NAME,
@@ -892,7 +894,8 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									value: data.name,
 									placeholder: data.name,
-									autoFocus: true
+									autoFocus: true,
+									onChange: value => {newData.name = value;}
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 									className: BDFDB.disCN.dividerdefault
@@ -905,7 +908,7 @@ module.exports = (_ => {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 									color: data.color,
-									number: 1
+									onColorChange: value => {newData.color = value;}
 								})
 							]
 						})
@@ -914,16 +917,13 @@ module.exports = (_ => {
 						contents: isNew ? BDFDB.LanguageUtils.LanguageStrings.CREATE : BDFDB.LanguageUtils.LanguageStrings.SAVE,
 						color: "BRAND",
 						close: true,
-						click: modal => {
-							data.name = modal.querySelector(".input-categoryname " + BDFDB.dotCN.input).value.trim() || data.name;
-
-							data.color = BDFDB.ColorUtils.getSwatchColor(modal, 1);
-							if (data.color != null && !BDFDB.ObjectUtils.is(data.color)) {
-								if (data.color[0] < 30 && data.color[1] < 30 && data.color[2] < 30) data.color = BDFDB.ColorUtils.change(data.color, 30);
-								else if (data.color[0] > 225 && data.color[1] > 225 && data.color[2] > 225) data.color = BDFDB.ColorUtils.change(data.color, -30);
+						onClick: _ => {
+							if (newData.color != null && !BDFDB.ObjectUtils.is(newData.color)) {
+								if (newData.color[0] < 30 && newData.color[1] < 30 && newData.color[2] < 30) newData.color = BDFDB.ColorUtils.change(newData.color, 30);
+								else if (newData.color[0] > 225 && newData.color[1] > 225 && newData.color[2] > 225) newData.color = BDFDB.ColorUtils.change(newData.color, -30);
 							}
 							
-							BDFDB.DataUtils.save(data, this, type, data.id);
+							BDFDB.DataUtils.save(newData, this, type, data.id);
 							
 							this.updateContainer(type);
 						}
@@ -931,11 +931,11 @@ module.exports = (_ => {
 				});
 			}
 
-			addPin (newid, type) {
-				if (!newid) return;
+			addPin (newId, type) {
+				if (!newId) return;
 				let pinnedDMs = BDFDB.DataUtils.load(this, type);
 				for (let id in pinnedDMs) pinnedDMs[id] = pinnedDMs[id] + 1;
-				pinnedDMs[newid] = 0;
+				pinnedDMs[newId] = 0;
 				BDFDB.DataUtils.save(pinnedDMs, this, type);
 				this.updateContainer(type);
 			}
