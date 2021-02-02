@@ -4183,7 +4183,7 @@ module.exports = (_ => {
 				};
 				BDFDB.DiscordUtils.rerenderAll = function (instant) {
 					BDFDB.TimeUtils.clear(BDFDB.DiscordUtils.rerenderAll.timeout);
-					BDFDB.DiscordUtils.rerenderAll.timeou = BDFDB.TimeUtils.timeout(_ => {
+					BDFDB.DiscordUtils.rerenderAll.timeout = BDFDB.TimeUtils.timeout(_ => {
 						let ShakeableIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.appcontainer), {name: "Shakeable", unlimited: true, up: true});
 						let ShakeablePrototype = BDFDB.ObjectUtils.get(ShakeableIns, `${BDFDB.ReactUtils.instanceKey}.type.prototype`);
 						if (ShakeableIns && ShakeablePrototype) {

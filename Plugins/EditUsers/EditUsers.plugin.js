@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.1.4",
+			"version": "4.1.5",
 			"description": "Allow you to change the icon, name, tag and color of users"
 		},
 		"changeLog": {
-			"improved": {
-				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
+			"fixed": {
+				"Incoming Call Popup": ""
 			}
 		}
 	};
@@ -966,10 +966,10 @@ module.exports = (_ => {
 			}
 			
 			processIncomingCallModal (e) {
-				if (e.instance.props.channelId && settings.changeInDmCalls) {
-					let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channelId);
+				if (e.instance.props.channel && settings.changeInDmCalls) {
+					let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channel.id);
 					if (!user) {
-						let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
+						let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channel.id);
 						if (channel && channel.isDM()) user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
 					}
 					if (user) {
@@ -979,7 +979,7 @@ module.exports = (_ => {
 							if (data && data.name) userName.props.children = data.name;
 							this.changeUserColor(userName, user.id);
 						}
-						let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.callincomingicon]]});
+						let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "CallAvatar"});
 						if (avatar) avatar.props.src = this.getUserAvatar(user.id);
 					}
 				}
