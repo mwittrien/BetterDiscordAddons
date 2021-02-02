@@ -121,6 +121,7 @@ module.exports = (_ => {
 						showOnHover:			{value: false, 	inner: false,		description: "Show Image Details as Tooltip in the Chat"},
 						enableGallery: 			{value: true,	inner: false,		description: "Display previous/next Images in the same message in the Image Modal"},
 						enableZoom: 			{value: true,	inner: false,		description: "Create a Zoom Lens if you press down on an Image in the Image Modal"},
+						pixelZoom: 				{value: false,	inner: false,		description: "Zoom Lens will be pixelated instead of blurry"},
 						enableCopyImg: 			{value: true,	inner: false,		description: "Add a copy Image option in the Image Modal"},
 						enableSaveImg: 			{value: true,	inner: false,		description: "Add a save Image as option in the Image Modal"},
 						addUserAvatarEntry: 	{value: true, 	inner: true,		description: "User Avatars"},
@@ -782,7 +783,7 @@ module.exports = (_ => {
 
 							let imgRects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
 
-							let lens = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${zoomSettings.lensesize}px !important; height: ${zoomSettings.lensesize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * zoomSettings.zoomlevel}px; height: ${imgRects.height * zoomSettings.zoomlevel}px; position: fixed !important;"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
+							let lens = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${zoomSettings.lensesize}px !important; height: ${zoomSettings.lensesize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * zoomSettings.zoomlevel}px; height: ${imgRects.height * zoomSettings.zoomlevel}px; position: fixed !important;${settings.pixelZoom ? " image-rendering: pixelated !important;" : ""}"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
 							let pane = lens.firstElementChild.firstElementChild;
 							let backdrop = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslensebackdrop}" style="background: rgba(0, 0, 0, 0.3) !important; position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; pointer-events: none !important; z-index: 8000 !important;"></div>`);
 							let appMount = document.querySelector(BDFDB.dotCN.appmount);
