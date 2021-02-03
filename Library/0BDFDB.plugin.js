@@ -4120,41 +4120,45 @@ module.exports = (_ => {
 					}
 					else window.open(url, "_blank");
 				};
+				window.DiscordNative && window.DiscordNative.app && window.DiscordNative.app.getPath("appData").then(path => {BDFDB.DiscordUtils.getFolder.base = path;});
 				BDFDB.DiscordUtils.getFolder = function () {
-					if (!LibraryRequires.electron || !LibraryRequires.electron.remote) return "";
-					let built = BDFDB.DiscordUtils.getBuilt();
-					built = "discord" + (built == "stable" ? "" : built);
-					return LibraryRequires.path.resolve(LibraryRequires.electron.remote.app.getPath("appData"), built, BDFDB.DiscordUtils.getVersion());
+					if (!BDFDB.DiscordUtils.getFolder.base) return "";
+					else if (BDFDB.DiscordUtils.getFolder.folder) return BDFDB.DiscordUtils.getFolder.folder;
+					else {
+						let folder;
+						try {
+							let built = BDFDB.DiscordUtils.getBuilt();
+							built = "discord" + (built == "stable" ? "" : built);
+							folder = LibraryRequires.path.resolve(BDFDB.DiscordUtils.getFolder.base, built, BDFDB.DiscordUtils.getVersion());
+						} 
+						catch (err) {folder = BDFDB.DiscordUtils.getFolder.base;}
+						return BDFDB.DiscordUtils.getFolder.folder = folder;
+					}
 				};
 				BDFDB.DiscordUtils.getBuilt = function () {
 					if (BDFDB.DiscordUtils.getBuilt.built) return BDFDB.DiscordUtils.getBuilt.built;
 					else {
-						let built = null;
-						try {built = require(LibraryRequires.electron.remote.app.getAppPath() + "/build_info.json").releaseChannel.toLowerCase();} 
+						let built;
+						try {built = window.DiscordNative.app.getReleaseChannel();} 
 						catch (err) {
-							try {built = require(LibraryRequires.electron.remote.app.getAppPath().replace("\app.asar", "") + "/build_info.json").releaseChannel.toLowerCase();} 
-							catch (err) {
-								let version = BDFDB.DiscordUtils.getVersion();
-								if (version) {
-									version = version.split(".");
-									if (version.length == 3 && !isNaN(version = parseInt(version[2]))) built = version > 300 ? "stable" : version > 200 ? "canary" : "ptb";
-									else built = "stable";
-								}
+							let version = BDFDB.DiscordUtils.getVersion();
+							if (version) {
+								version = version.split(".");
+								if (version.length == 3 && !isNaN(version = parseInt(version[2]))) built = version > 300 ? "stable" : version > 200 ? "canary" : "ptb";
 								else built = "stable";
 							}
+							else built = "stable";
 						}
-						BDFDB.DiscordUtils.getBuilt.built = built;
-						return built;
+						return BDFDB.DiscordUtils.getBuilt.built = built;
 					}
 				};
 				BDFDB.DiscordUtils.getVersion = function () {
 					if (BDFDB.DiscordUtils.getVersion.version) return BDFDB.DiscordUtils.getVersion.version;
 					else {
-						let version = null;
-						try {version = LibraryModules.WindowUtils.version.join(".");}
-						catch (err) {version = "999.999.999";}
-						BDFDB.DiscordUtils.getVersion.version = version;
-						return version;
+						let version;
+						try {version = window.DiscordNative.app.getVersion();}
+						catch (err) {version = "999.999.9999";}
+						return BDFDB.DiscordUtils.getVersion.version = version;
 					}
 				};
 				BDFDB.DiscordUtils.isDevModeEnabled = function () {
