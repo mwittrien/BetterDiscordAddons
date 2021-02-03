@@ -1098,7 +1098,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	display: flex;
 	flex-direction: column;
 	pointer-events: none;
-	z-index: 4001;
+	z-index: 100001;
 }
 [REPLACE_CLASS_toasts][REPLACE_CLASS_toastsleft] {
 	bottom: 10px;
