@@ -57,7 +57,7 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var patched;
+		var patched, lastWindowRects;
 		var settings = {};
 		
 		return class OldTitleBar extends Plugin {
@@ -276,7 +276,7 @@ module.exports = (_ => {
 				}));
 				children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 					className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
-					onClick: _ => {BDFDB.LibraryModules.WindowUtils.maximize();},
+					onClick: _ => {this.maximize();},
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						className: BDFDB.disCN.channelheadericon,
 						iconSVG: this.isMaximized() ? `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 9 l10 0 l0 10 l-10 0 l0 -10 m3 -3 l10 0 l0 10"/></svg>` : `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 6 l13 0 l0 13 l-13 0 l0 -13"/></svg>`
@@ -293,7 +293,34 @@ module.exports = (_ => {
 			}
 			
 			isMaximized () {
-				return window.screenX == 0 && window.screenY == 0 && screen.availWidth - window.innerWidth == 0 && screen.availHeight - window.innerHeight == 0;
+				let rects = this.getWindowRects();
+				return rects.x == 0 && rects.y == 0 && this.isScreenSize(rects);
+			}
+			
+			isScreenSize (rects) {
+				return screen.availWidth - rects.width == 0 && screen.availHeight - rects.height == 0;
+			}
+			
+			maximize () {
+				if (!this.isMaximized()) {
+					lastWindowRects = this.getWindowRects();
+					BDFDB.LibraryModules.WindowUtils.maximize();
+				}
+				else {
+					if (!lastWindowRects || this.isScreenSize(lastWindowRects)) {
+						let rects = this.getWindowRects();
+						window.resizeTo(rects.width/2, rects.height/2);
+						window.moveTo(rects.width/4, rects.height/4);
+					}
+					else {
+						window.resizeTo(lastWindowRects.width, lastWindowRects.height);
+						window.moveTo(lastWindowRects.x, lastWindowRects.y);
+					}
+				}
+			}
+			
+			getWindowRects () {
+				return {x: window.screenX, y: window.screenY, width: window.outerWidth, height: window.outerHeight};
 			}
 
 			patchMainScreen (enable) {
