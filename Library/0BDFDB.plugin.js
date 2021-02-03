@@ -667,9 +667,7 @@ module.exports = (_ => {
 			let reloadButton = updateNotice.querySelector(BDFDB.dotCN.noticebutton);
 			if (reloadButton) {
 				BDFDB.DOMUtils.toggle(reloadButton, true);
-				reloadButton.addEventListener("click", _ => {
-					LibraryRequires.electron && LibraryRequires.electron.remote && LibraryRequires.electron.remote.getCurrentWindow().reload();
-				});
+				reloadButton.addEventListener("click", location.reload);
 				reloadButton.addEventListener("mouseenter", _ => {
 					if (window.PluginUpdates.downloaded) BDFDB.TooltipUtils.create(reloadButton, window.PluginUpdates.downloaded.join(", "), {
 						type: "bottom",
