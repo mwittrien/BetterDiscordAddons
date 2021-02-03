@@ -143,7 +143,8 @@
 		9.	TOOLTIPS
 		10.	TOASTS
 	16.	BDSUPPORT
-	17.	PLUGINSUPPORT
+	17.	POWERCORDSUPPORT
+	18.	PLUGINSUPPORT
 		1.	DATEVIEWER
 		2.	SERVERFOLDERS
 		3.	MEMBERCOUNT
@@ -155,8 +156,8 @@
 		9.	PLUGIN/THEMEREPO
 		10.	CHANNELHISTORY
 		11.	CHANNELTABS
-	18.	UPDATENOTICE
-	19.	WATERMARK
+	19.	UPDATENOTICE
+	20.	WATERMARK
 */
 
 
@@ -1018,7 +1019,7 @@ body::before {
 .mouse-mode .message-2qnXI6.cozy-3raOZG:hover .header-23xsNx::after,
 .mouse-mode.full-motion .message-2qnXI6.cozy-3raOZG:hover .header-23xsNx::after,
 .mouse-mode .wrapper-1F5TKx.cozy-12kSNU:hover .header-1oLBbW::after,
-.mouse-mode.full-motion .wrapper-1F5TKx.cozy-12kSNU:hover .header-1oLBbW::after
+.mouse-mode.full-motion .wrapper-1F5TKx.cozy-12kSNU:hover .header-1oLBbW::after,
 .selected-2P5D_Z.message-2qnXI6.cozy-3raOZG .iconContainer-3GkGRf::after,
 .mouse-mode .message-2qnXI6.cozy-3raOZG:hover .iconContainer-3GkGRf::after,
 .mouse-mode.full-motion .message-2qnXI6.cozy-3raOZG:hover .iconContainer-3GkGRf::after {
@@ -4952,7 +4953,7 @@ body::before {
 
 .messagesPopoutWrap-1MQ1bW,								/* popout				wrapper								*/
 .container-enaOkj {										/* popout				wrapper	(inbox)						*/
-	background-color: transparent
+	background-color: transparent;
 	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
 	overflow: hidden;
@@ -5317,7 +5318,7 @@ body::before {
 /* ----		14.6.	COLORPICKER						---- */
 
 #app-mount .colorPickerCustom-2CWBn2 {						/* popout				wrapper								*/
-	background-color: transparent
+	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
 	border-radius: 3px;
@@ -6986,20 +6987,18 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	background: rgba(var(--vtransparencycolor), 0.5);
 }
 
-/* ----		15.10.	TOASTS							---- */
 
-html .toast,
+/* ~~~~		16.		BDSUPPORT						~~~~ */
+
 html .bd-toast {
 	background-color: rgb(var(--vaccentcolor));
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
 	text-shadow: 1px 1px var(--vtextshadow);
 }
-html .toast.icon,
 html .bd-toast.icon {
 	background-image: none !important;
 }
-html .toast.icon::before,
 html .bd-toast.icon::before {
 	content: "";
 	position: absolute;
@@ -7010,61 +7009,20 @@ html .bd-toast.icon::before {
 	background: rgb(var(--fontwhite1)) !important;
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg"><path fill="black" d=""/></svg>') center/cover no-repeat;
 }
-html .toast.toast-brand.icon::after,
-html .bd-toast.toast-brand.icon::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	right: 0;
-	left: 0;
-	bottom: 0;
-	background: var(--vtextshadow);
-}
-html .toast.toast-brand.icon::before,
-html .bd-toast.toast-brand.icon::before,
-html .toast.toast-brand.icon::after,
-html .bd-toast.toast-brand.icon::after {
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="27 27 115 115"><path fill="black" d="M 111.3,124.1 c 0,0-3.4-4.1-6.3-7.7 c 12.6-3.5,17.4-11.3,17.4-11.3 c -4,2.6-7.7,4.4-11.1,5.6 c -4.8,2-9.5,3.3-14,4.1 c -9.2,1.7-17.6,1.3-24.9-0.1 c -5.5-1-10.2-2.5-14.1-4.1 c -2.2-0.8-4.6-1.9-7.1-3.3 c -0.3-0.2-0.6-0.3-0.9-0.5 c -0.1-0.1-0.3-0.2-0.4-0.2 c -1.7-1-2.6-1.6-2.6-1.6 s 4.6,7.6,16.8,11.2 c -2.9,3.6-6.4,7.9-6.4,7.9 c -21.2-0.6-29.3-14.5-29.3-14.5 c 0-30.6,13.8-55.4,13.8-55.4 c 13.8-10.3,26.9-10,26.9-10 l 1,1.1 C 52.8,50.3,45,57.9,45,57.9 s 2.1-1.2,5.7-2.7 c 10.3-4.5,18.4-5.7,21.8-6 c 0.5-0.1,1.1-0.2,1.6-0.2 c 5.9-0.7,12.5-0.9,19.4-0.2 c 9.1,1,18.9,3.7,28.9,9.1 c 0,0-7.5-7.2-23.9-12.1 l 1.3-1.5 c 0,0,13.1-0.3,26.9,10 c 0,0,13.8,24.8,13.8,55.4 C 140.6,109.6,132.5,123.5,111.3,124.1 z M 101.7,79.7 c -5.4,0-9.8,4.7-9.8,10.5 c 0,5.8,4.4,10.5,9.8,10.5 c 5.4,0,9.8-4.7,9.8-10.5 C 111.5,84.4,107.1,79.7,101.7,79.7 z M 66.7,79.7 c -5.4,0-9.8,4.7-9.8,10.5 c 0,5.8,4.4,10.5,9.8,10.5 c 5.4,0,9.8-4.7,9.8-10.5 C 76.5,84.4,72.1,79.7,66.7,79.7 z"/></svg>') 6px 50%/20px 20px no-repeat;
-}
-html .toast.toast-danger.icon::before,
-html .toast.toast-error.icon::before,
 html .bd-toast.toast-danger.icon::before,
 html .bd-toast.toast-error.icon::before {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="black" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>') 6px 50%/20px 20px no-repeat;
 }
-html .toast.toast-facebook.icon::before,
-html .bd-toast.toast-facebook.icon::before {
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="-5 -5 100 100"><path fill="black" d="M 90,15.001 C 90,7.119,82.884,0,75,0 H 15 C 7.116,0,0,7.119,0,15.001 v 59.998 C 0,82.881,7.116,90,15.001,90 H 45 V 56 H 34 V 41 h 11 v -5.844 C 45,25.077,52.568,16,61.875,16 H 74 v 15 H 61.875 C 60.548,31,59,32.611,59,35.024 V 41 h 15 v 15 H 59 v 34 h 16 c 7.884,0,15-7.119,15-15.001 V 15.001 z"/></svg>') 6px 50%/20px 20px no-repeat;
-}
-html .toast.toast-info.icon::before,
 html .bd-toast.toast-info.icon::before {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="black" d="M 12 2 C 6.48 2 2 6.48 2 12 s 4.48 10 10 10 10-4.48 10-10 S 17.52 2 12 2 z m 1 15 h -2 v -6 h 2 v 6 z m 0-8 h -2 V 7 h 2 v 2 z"/></svg>') 6px 50%/20px 20px no-repeat;
 }
-html .toast.toast-premium.icon::before,
-html .bd-toast.toast-premium.icon::before {
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="103" height="26"><path fill="black" fill-rule="evenodd" d="M 96.2826 8.60278824 l -1.2155 8.39035296 c -.2775 1.9826274-2.4655 2.9033333-4.479 2.9033333-1.875 0-3.7155-.9207059-3.4725-2.7259216 l 1.2155-8.56776466 c .2775-1.87658824 2.4655-2.8324706 4.479-2.8324706 2.014 0 3.75.95588236 3.4725 2.8324706 M 93.7721.0039255 l .0005-.00407844 h -13.084 c -.334 0-.618.25031372-.666.58729412 l -.6365 4.4322353 c -.0595.41447058.256.78611764.6665.78611764 h 2.3895 c .24 0 .4045.24980392.31.47564706-.298.71219607-.5155 1.48607843-.636 2.32164706 l -1.2155 8.56776466 c -.799 5.7352942 3.889 8.6024314 8.993 8.6024314 5.3475 0 10.5905-2.8671372 11.389-8.6024314 l 1.215-8.56776466 c .783-5.62211765-3.7395-8.4882353-8.7255-8.59886275 m -78.59525 11.728651 l .067 4.1589804 c .0015.0851372-.055.1605882-.136.1814902 h -.0005 l -1.3855-5.0164706 c -.002-.0076471-.005-.0147843-.008-.0224314 L 9.41435.77077253 c -.106-.25286275-.3495-.4165098-.6195-.4165098 h -4.8725 c -.336 0-.6205.25235294-.667.59137254 L .00685 24.6372431 c -.057.413451.2575.7820393.6665.7820393 h 4.854 c .3365 0 .6215-.2533726.6675-.592902 l 1.272-9.4125098 c .0015-.0091765.002-.018353.002-.0275294 l -.0695-4.8365098.1385-.0351765 1.4555 5.0164706 c .0025.0071372.005.0137647.0075.020902 l 4.0215 9.4538039 c .1065.2508235.3495.413451.6175.413451 h 5.2565 c .336 0 .6205-.252353.667-.5918824 l 3.2495-23.69160784 c .0565-.41294118-.258-.78152942-.667-.78152942 h -4.8205 c -.336 0-.6205.25184314-.667.59086275 l -1.48 10.758902 c -.001.0091764-.0015.0188627-.0015.028549 m 9.394 13.6866039 h 4.855 c .336 0 .6205-.2523529.667-.5913726 l 3.249-23.6921176 c .0565-.4129412-.258-.78152944-.667-.78152944 h -4.855 c -.336 0-.6205.25235294-.667.59137255 l -3.249 23.69211768 c -.0565.4129412.258.7815294.667.7815294 M 36.62115.9060745 l -.636 4.4322353 c -.0595.4144706.2555.78611765.666.78611765 h 5.0805 c .4085 0 .723.36756863.6675.7805098 l -2.3935 17.73403925 c -.0555.4124313.2585.78.667.78 h 4.9255 c .3365 0 .621-.2528628.667-.592902 l 2.444-18.1087451 c .046-.3395294.3305-.59290195.667-.59290195 h 5.4625 c .334 0 .618-.24980392.666-.58729412 l .637-4.4322353 c .0595-.41447058-.2555-.78611764-.6665-.78611764 h -18.1875 c -.3345 0-.618.2503137-.6665.5872941 M 71.0387 9.0983686 c -.174 1.45141177-1.2845 2.90282357-3.195 2.90282357 h -2.8695 c -.41 0-.7245-.3696079-.667-.7830589 l .6075-4.36188233 c .047-.3385098.3315-.59035294.667-.59035294 h 3.061 c 1.8405 0 2.5695 1.31019608 2.396 2.8324706 M 69.3372.35421176 h -9.2405 c -.336 0-.6205.25235294-.667.59137254 l -3.249 23.6921177 c -.0565.4129411.258.7815294.667.7815294 h 4.9235 c .3365 0 .6215-.2533726.6675-.592902 l .956-7.0765882 c .023-.1697647.165-.2961961.3335-.2961961 h .633 c .1145 0 .2215.0596471.2835.1580392 l 4.702 7.4910588 c .124.1972942.3375.3165883.5675.3165883 h 6.081 c .545 0 .8645-.6250196.552-1.0802745 l -4.9345-7.191804 c -.118-.1728235-.0575-.4124313.128-.5047058 3.1505-1.5696863 4.9795-3.1781177 5.583-7.6501177.6935-5.8770196-2.917-8.63811763-7.9865-8.63811763"/></svg>') 6px 50%/63px 16px no-repeat;
-}
-html .toast.toast-spotify.icon::before,
-html .bd-toast.toast-spotify.icon::before {
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 508.52 508.52"><path fill="black" d="M 254.26,0 C 113.845,0,0,113.845,0,254.26 s 113.845,254.26,254.26,254.26 s 254.26-113.845,254.26-254.26 S 394.675,0,254.26,0 z M 371.696,403.288 c -3.178,5.816-9.122,9.058-15.287,9.058 c -2.86,0-5.721-0.667-8.422-2.129 c -40.713-22.438-86.957-34.293-133.677-34.293 c -28,0-55.651,4.163-82.126,12.363 c -9.217,2.86-19.006-2.288-21.835-11.537 c -2.86-9.185,2.288-28.7,11.537-31.592 c 29.844-9.249,60.959-13.921,92.455-13.921 c 52.568,0,104.66,13.349,150.522,38.616 C 373.317,374.461,376.4,394.866,371.696,403.288 z M 404.019,307.527 c -3.623,7.024-10.742,18.338-18.084,18.338 c -3.21,0-6.388-0.699-9.376-2.32 c -50.471-26.189-105.041-39.474-162.218-39.474 c -31.496,0-62.77,4.132-92.964,12.459 c -10.901,2.956-22.089-3.401-25.045-14.302 c -2.924-10.901,3.464-29.431,14.334-32.386 c 33.689-9.185,68.587-13.857,103.674-13.857 c 62.898,0,125.445,15.256,180.938,44.114 C 405.29,285.248,409.199,297.516,404.019,307.527 z M 417.526,230.836 c -3.464,0-7.024-0.795-10.361-2.447 c -60.228-30.034-125.096-45.226-192.761-45.226 c -35.279,0-70.43,4.291-104.533,12.713 c -12.522,3.083-25.14-4.513-28.223-17.004 c -3.115-12.459,4.513-27.555,17.004-30.638 c 37.726-9.376,76.659-14.111,115.72-14.111 c 74.975,0,146.867,16.877,213.578,50.121 c 11.537,5.753,16.241,19.737,10.488,31.242 C 434.308,223.653,426.108,230.836,417.526,230.836 z"/></svg>') 6px 50%/20px 20px no-repeat;
-}
-html .toast.toast-streamermode.icon::before,
-html .bd-toast.toast-streamermode.icon::before {
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="-25 -25 542 542"><path fill="black" d="M 488.3,142.5 v 203.1 c 0,15.7-17,25.5-30.6,17.7 l -84.6-48.8 v 13.9 c 0,41.8-33.9,75.7-75.7,75.7 H 75.7 C 33.9,404.1,0,370.2,0,328.4 V 159.9 c 0-41.8,33.9-75.7,75.7-75.7 h 221.8 c 41.8,0,75.7,33.9,75.7,75.7 v 13.9 l 84.6-48.8 C 471.3,117,488.3,126.9,488.3,142.5 z"/></svg>') 6px 50%/20px 20px no-repeat;
-}
-html .toast.toast-success.icon::before,
 html .bd-toast.toast-success.icon::before {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="black" d="M 12 2 C 6.48 2 2 6.48 2 12 s 4.48 10 10 10 10-4.48 10-10 S 17.52 2 12 2 z m -2 15 l -5-5 1.41-1.41 L 10 14.17 l 7.59-7.59 L 19 8 l -9 9 z"/></svg>') 6px 50%/20px 20px no-repeat;
 }
-html .toast.toast-warning.icon::before,
-html .toast.toast-warn.icon::before,
 html .bd-toast.toast-warning.icon::before,
 html .bd-toast.toast-warn.icon::before {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="black" d="M 1 21 h 22 L 12 2 1 21 z m 12-3 h -2 v -2 h 2 v 2 z m 0-4 h -2 v -4 h 2 v 4 z"/></svg>') 6px 50%/20px 20px no-repeat;
 }
-
-
-/* ~~~~		16.		BDSUPPORT						~~~~ */
 
 #app-mount .fav {
 	background: var(--header-primary);
@@ -7409,10 +7367,58 @@ html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight 
 }
 
 
+/* ~~~~		17.		POWERCORDSUPPORT				~~~~ */
 
-/* ~~~~		17.		PLUGINSUPPORT					~~~~ */
+html .powercord-toast {
+	background-color: transparent;
+	border: none;
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
+	overflow: hidden;
+}
+html .powercord-toast::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
+	background-attachment: fixed;
+	filter: blur(var(--vpopoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+html .powercord-toast::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
+	width: unset;
+	height: unset;
+	border-radius: 5px;
+	pointer-events: none;
+	z-index: -1;
+}
+html .powercord-toast .header {
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 2px 3px 0 rgba(var(--vtransparencycolor), 0.2);
+	color: rgb(var(--fontwhite1));
+}
+html .powercord-toast .contents .inner {
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	border: none;
+	color: rgb(var(--fontwhite2));
+}
 
-/* ----		17.1.	DATEVIEWER						---- */
+
+/* ~~~~		18.		PLUGINSUPPORT					~~~~ */
+
+/* ----		18.1.	DATEVIEWER						---- */
 
 #app-mount #dv-mount {
 	background: transparent;
@@ -7426,13 +7432,13 @@ html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight 
 	opacity: 1;
 }
 
-/* ----		17.2.	SERVERFOLDERS					---- */
+/* ----		18.2.	SERVERFOLDERS					---- */
 
 .base-PmTxvP[style*="background-color: rgb(114, 137, 218)"] {
 	text-shadow: 1px 1px var(--vtextshadow);
 }
 
-/* ----		17.3.	MEMBERCOUNT						---- */
+/* ----		18.3.	MEMBERCOUNT						---- */
 
 #app-mount #MemberCount {
 	background-color: transparent;
@@ -7462,14 +7468,14 @@ html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight 
 	filter: blur(var(--vbackgroundblur));
 }
 
-/* ----		17.4.	CHARCOUNTER						---- */
+/* ----		18.4.	CHARCOUNTER						---- */
 
 #app-mount #charcounter {
 	color: rgb(var(--fontwhite3));
 	opacity: 1;
 }
 
-/* ----		17.5.	LINENUMBERS						---- */
+/* ----		18.5.	LINENUMBERS						---- */
 
 .hljs ol li {
 	border-left-color: rgba(var(--fontwhite1), 0.2);
@@ -7478,7 +7484,7 @@ html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight 
 	color: rgb(var(--fontwhite4));
 }
 
-/* ----		17.6.	PERMISSIONVIEWER				---- */
+/* ----		18.6.	PERMISSIONVIEWER				---- */
 
 #permissions-modal-wrapper #permissions-modal {				/* modal				container							*/
 	background-color: transparent;
@@ -7548,7 +7554,7 @@ html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight 
 	color: rgb(var(--fontwhite3));
 }
 
-/* ----		17.7.	DIRECTDOWNLOAD					---- */
+/* ----		18.7.	DIRECTDOWNLOAD					---- */
 
 #files_directDownload .file {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
@@ -7569,7 +7575,7 @@ html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight 
 	background-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		17.8.	BETTERFORMATINGREDUX			---- */
+/* ----		18.8.	BETTERFORMATINGREDUX			---- */
 
 .innerDisabled-2mc-iF ~ .bf-toolbar {
 	display: none;
@@ -7627,7 +7633,7 @@ html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight 
 	color: rgb(var(--fontwhite1));
 }
 
-/* ----		17.9	PLUGIN/THEMEREPO				---- */
+/* ----		18.9	PLUGIN/THEMEREPO				---- */
 
 #app-mount .pluginEntry svg[fill="currentColor"],
 #app-mount .pluginEntry .gifFavoriteButton-1gYkEU:not(.selected-2QpwIN),
@@ -7643,14 +7649,14 @@ html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight 
 	color: rgb(var(--fontwhite1)) !important;
 }
 
-/* ----		17.10	CHANNELHISTORY					---- */
+/* ----		18.10	CHANNELHISTORY					---- */
 
 .channelHistoryButtons {
 	top: 4px;
 	left: 310px;
 }
 
-/* ----		17.11	CHANNELTABS						---- */
+/* ----		18.11	CHANNELTABS						---- */
 
 html .channelTabs-tabContainer,
 html .channelTabs-favContainer {
@@ -7762,7 +7768,7 @@ html .channelTabs-newTab:hover {
 }
 
 
-/* ~~~~		18.		UPDATENOTICE					~~~~ */
+/* ~~~~		19.		UPDATENOTICE					~~~~ */
 
 html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.app-1q1i1E > div.app-2rEoOp::before {
 	content: "Your version of   BasicBackground   by DevilBro is outdated. Please download the newest version from:	https://github.com/mwittrien/BetterDiscordAddons/blob/master/Themes/BasicBackground" !important;
@@ -7798,7 +7804,7 @@ html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.app-1q1i1E >
 }
 
 
-/* ~~~~		19.		WATERMARK						~~~~ */
+/* ~~~~		20.		WATERMARK						~~~~ */
 
 html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.typeWindows-1za-n7.titleBar-AC4pGV.horizontalReverse-3tRjY7.flex-1O1GKY.directionRowReverse-m8IjIq.justifyStart-2NDFzi.alignStretch-DpGPf3 > div.wordmark-2iDDfm {
 	color: white !important;
