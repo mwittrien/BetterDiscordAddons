@@ -141,21 +141,21 @@
 		7.	SCROLLBARS
 		8.	NOTIFICATIONBAR
 		9.	TOOLTIPS
-		10.	TOASTS
 	16.	BDSUPPORT
 	17.	POWERCORDSUPPORT
 	18.	PLUGINSUPPORT
-		1.	DATEVIEWER
-		2.	SERVERFOLDERS
-		3.	MEMBERCOUNT
-		4.	CHARCOUNTER
-		5.	LINENUMBERS
-		6.	PERMISSIONVIEWER
-		7.	DIRECTDOWNLOAD
-		8.	BETTERFORMATINGREDUX
-		9.	PLUGIN/THEMEREPO
-		10.	CHANNELHISTORY
-		11.	CHANNELTABS
+		1.	BDFDB
+		2.	DATEVIEWER
+		3.	SERVERFOLDERS
+		4.	MEMBERCOUNT
+		5.	CHARCOUNTER
+		6.	LINENUMBERS
+		7.	PERMISSIONVIEWER
+		8.	DIRECTDOWNLOAD
+		9.	BETTERFORMATINGREDUX
+		10.	PLUGIN/THEMEREPO
+		11.	CHANNELHISTORY
+		12.	CHANNELTABS
 	19.	UPDATENOTICE
 	20.	WATERMARK
 */
@@ -7418,7 +7418,15 @@ html .powercord-toast .contents .inner {
 
 /* ~~~~		18.		PLUGINSUPPORT					~~~~ */
 
-/* ----		18.1.	DATEVIEWER						---- */
+/* ----		18.1.	BDFDB							---- */
+
+html .colorDefault-XdNdIp .bg-8df5St {
+	background: linear-gradient(rgba(var(--vtransparencycolor), 0.75), rgba(var(--vtransparencycolor), 0.75))  var(--vpopoutposition)/var(--vpopoutsize), var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
+	background-attachment: fixed;
+	filter: blur(var(--vpopoutblur));
+}
+
+/* ----		18.2.	DATEVIEWER						---- */
 
 #app-mount #dv-mount {
 	background: transparent;
@@ -7432,13 +7440,13 @@ html .powercord-toast .contents .inner {
 	opacity: 1;
 }
 
-/* ----		18.2.	SERVERFOLDERS					---- */
+/* ----		18.3.	SERVERFOLDERS					---- */
 
 .base-PmTxvP[style*="background-color: rgb(114, 137, 218)"] {
 	text-shadow: 1px 1px var(--vtextshadow);
 }
 
-/* ----		18.3.	MEMBERCOUNT						---- */
+/* ----		18.4.	MEMBERCOUNT						---- */
 
 #app-mount #MemberCount {
 	background-color: transparent;
@@ -7468,14 +7476,14 @@ html .powercord-toast .contents .inner {
 	filter: blur(var(--vbackgroundblur));
 }
 
-/* ----		18.4.	CHARCOUNTER						---- */
+/* ----		18.5.	CHARCOUNTER						---- */
 
 #app-mount #charcounter {
 	color: rgb(var(--fontwhite3));
 	opacity: 1;
 }
 
-/* ----		18.5.	LINENUMBERS						---- */
+/* ----		18.6.	LINENUMBERS						---- */
 
 .hljs ol li {
 	border-left-color: rgba(var(--fontwhite1), 0.2);
@@ -7484,7 +7492,7 @@ html .powercord-toast .contents .inner {
 	color: rgb(var(--fontwhite4));
 }
 
-/* ----		18.6.	PERMISSIONVIEWER				---- */
+/* ----		18.7.	PERMISSIONVIEWER				---- */
 
 #permissions-modal-wrapper #permissions-modal {				/* modal				container							*/
 	background-color: transparent;
@@ -7554,7 +7562,7 @@ html .powercord-toast .contents .inner {
 	color: rgb(var(--fontwhite3));
 }
 
-/* ----		18.7.	DIRECTDOWNLOAD					---- */
+/* ----		18.8.	DIRECTDOWNLOAD					---- */
 
 #files_directDownload .file {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
@@ -7575,7 +7583,7 @@ html .powercord-toast .contents .inner {
 	background-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		18.8.	BETTERFORMATINGREDUX			---- */
+/* ----		18.9.	BETTERFORMATINGREDUX			---- */
 
 .innerDisabled-2mc-iF ~ .bf-toolbar {
 	display: none;
@@ -7617,7 +7625,7 @@ html .powercord-toast .contents .inner {
 	z-index: 100;
 }
 .theme-brand .bf-toolbar::after {
-	background: rgb(var(--vaccentcolor)) linear-gradient(rgba(var(--vtransparencycolor), 0.2), rgba(var(--vtransparencycolor), 0.2))!important;
+	background: rgb(var(--vaccentcolor)) linear-gradient(rgba(var(--vtransparencycolor), 0.2), rgba(var(--vtransparencycolor), 0.2)) !important;
 }
 .theme-brand .bf-toolbar::before {
 	display: none;
@@ -7633,7 +7641,7 @@ html .powercord-toast .contents .inner {
 	color: rgb(var(--fontwhite1));
 }
 
-/* ----		18.9	PLUGIN/THEMEREPO				---- */
+/* ----		18.10	PLUGIN/THEMEREPO				---- */
 
 #app-mount .pluginEntry svg[fill="currentColor"],
 #app-mount .pluginEntry .gifFavoriteButton-1gYkEU:not(.selected-2QpwIN),
@@ -7649,14 +7657,14 @@ html .powercord-toast .contents .inner {
 	color: rgb(var(--fontwhite1)) !important;
 }
 
-/* ----		18.10	CHANNELHISTORY					---- */
+/* ----		18.11	CHANNELHISTORY					---- */
 
 .channelHistoryButtons {
 	top: 4px;
 	left: 310px;
 }
 
-/* ----		18.11	CHANNELTABS						---- */
+/* ----		18.12	CHANNELTABS						---- */
 
 html .channelTabs-tabContainer,
 html .channelTabs-favContainer {
