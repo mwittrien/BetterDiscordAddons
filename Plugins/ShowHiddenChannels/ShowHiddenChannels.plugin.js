@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "2.9.0",
+			"version": "2.9.1",
 			"description": "Display channels that are hidden from you by role restrictions"
 		},
 		"changeLog": {
-			"improved": {
-				"Admin/Owner": "Now shows admins and owners in the access modal"
+			"fixed": {
+				"Multiplication Spam": "Fixed issue that occured ifa hidden channel was deleted in a server (often occured with ticket system bots)"
 			}
 		}
 	};
@@ -463,21 +463,19 @@ module.exports = (_ => {
 			
 			getHiddenChannels (guild) {
 				if (!guild) return [{}, 0];
-				let roles = (BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id) || {roles: []}).roles.length;
-				if (hiddenChannelCache[guild.id] && hiddenChannelCache[guild.id].roles == roles) return [hiddenChannelCache[guild.id].hidden, hiddenChannelCache[guild.id].amount];
-				else {
-					let all = BDFDB.LibraryModules.ChannelStore.getGuildChannels(), hidden = {}, amount = 0;
-					for (let type in BDFDB.DiscordConstants.ChannelTypes) hidden[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
+				let hiddenChannels = {}, rolesAmount = (BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id) || {roles: []}).roles.length;
+				if (!hiddenChannelCache[guild.id] || hiddenChannelCache[guild.id].roles != rolesAmount) {
+					let all = BDFDB.LibraryModules.ChannelStore.getGuildChannels();
+					for (let type in BDFDB.DiscordConstants.ChannelTypes) hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
 					for (let channel_id in all) {
 						let channel = all[channel_id];
-						if (channel.guild_id == guild.id && channel.type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY && (settings[settingsMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]] || settings[settingsMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]] === undefined) && !BDFDB.DMUtils.isDMChannel(channel.id) && !BDFDB.UserUtils.can("VIEW_CHANNEL", BDFDB.UserUtils.me.id, channel.id)) {
-							amount++;
-							hidden[channel.type].push(channel);
-						}
+						if (channel.guild_id == guild.id && channel.type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY && (settings[settingsMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]] || settings[settingsMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]] === undefined) && !BDFDB.DMUtils.isDMChannel(channel.id) && !BDFDB.UserUtils.can("VIEW_CHANNEL", BDFDB.UserUtils.me.id, channel.id)) hiddenChannels[channel.type].push(channel);
 					}
-					hiddenChannelCache[guild.id] = {hidden, amount, roles};
-					return [hidden, amount];
 				}
+				else hiddenChannels = hiddenChannelCache[guild.id].hidden;
+				for (let type in hiddenChannels) hiddenChannels[type] = hiddenChannels[type].filter(c => BDFDB.LibraryModules.ChannelStore.getChannel(c.id));
+				hiddenChannelCache[guild.id] = {hidden: hiddenChannels, amount: BDFDB.ObjectUtils.toArray(hiddenChannels).flat().length, roles: rolesAmount};
+				return [hiddenChannelCache[guild.id].hidden, hiddenChannelCache[guild.id].amount];
 			}
 			
 			batchSetGuilds (settingsPanel, collapseStates, value) {
