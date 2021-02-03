@@ -14,15 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "WriteUpperCase",
 			"author": "DevilBro",
-			"version": "1.2.8",
+			"version": "1.2.9",
 			"description": "Change first letter of each sentence in message input to uppercase"
 		},
 		"changeLog": {
-			"fixed": {
-				"Emojis": "No longer tries to capitalize letters when the message already contains an emoji since that makes the cursor jump to the start of the message"
-			},
 			"improved": {
-				"Ellipsis": "No longer capitalizes a word after ellipsis (...)"
+				"Settings": "You can now disable/enaBle it form normal/edit/upload textareas"
 			}
 		}
 	};
@@ -66,9 +63,18 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		const symbols = [".", "!", "¡", "?", "¿"], spaces = ["\n", "\r", "\t", " "];
+		var settings = {};
 		
 		return class WriteUpperCase extends Plugin {
 			onLoad () {
+				this.defaults = {
+					settings: {
+						changeNormal:		{value: true, 			description: "Normal Message Textarea"},
+						changeEdit:			{value: true, 			description: "Edit Message Textarea"},
+						changeForm:			{value: true, 			description: "Upload Message Prompt"}
+					}
+				};
+				
 				this.patchedModules = {
 					before: {
 						ChannelEditorContainer: "render"
@@ -77,15 +83,52 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.PatchUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 			
 			onStop () {
+				this.forceUpdateAll();
+			}
+
+			getSettingsPanel (collapseStates = {}) {
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
+					collapseStates: collapseStates,
+					children: _ => {
+						let settingsItems = [];
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							title: "Automatically transform in:",
+							children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["settings", key],
+								label: this.defaults.settings[key].description,
+								value: settings[key]
+							}))
+						}));
+						
+						return settingsItems;
+					}
+				});
+			}
+
+			onSettingsClosed () {
+				if (this.SettingsUpdated) {
+					delete this.SettingsUpdated;
+					this.forceUpdateAll();
+				}
+			}
+		
+			forceUpdateAll () {
+				settings = BDFDB.DataUtils.get(this, "settings");
+				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 
 			processChannelEditorContainer (e) {
-				if (e.instance.props.textValue && e.instance.state.focused) {
+				let type = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(e.instance.props.type || "");
+				if (e.instance.props.textValue && e.instance.state.focused && (!type || settings["change" + type] || settings["change" + type] === undefined)) {
 					let string = e.instance.props.textValue;
 					if (string.length && !/:[A-z0-9_-]+:|[\uD83C-\uDBFF\uDC00-\uDFFF]+/.test(string)) {
 						let newString = string, stop = false;
