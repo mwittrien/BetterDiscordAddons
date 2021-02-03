@@ -19,8 +19,8 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Discord Built (stable, ptb or canary):**
-Which built o discord are you using.
+**Discord Build (stable, ptb or canary):**
+Which build of Discord are you using.
 
 **Additional context**
 Add any other context about the problem here.
