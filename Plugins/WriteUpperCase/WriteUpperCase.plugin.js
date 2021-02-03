@@ -19,7 +19,7 @@ module.exports = (_ => {
 		},
 		"changeLog": {
 			"improved": {
-				"Settings": "You can now disable/enaBle it form normal/edit/upload textareas"
+				"Settings": "You can now disable/enable it form normal/edit/upload textareas"
 			}
 		}
 	};
