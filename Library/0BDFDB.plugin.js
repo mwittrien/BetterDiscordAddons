@@ -669,7 +669,7 @@ module.exports = (_ => {
 			updateNotice.style.setProperty("opacity", "1", "important");
 			let reloadButton = updateNotice.querySelector(BDFDB.dotCN.noticebutton);
 			if (reloadButton) {
-				BDFDB.DOMUtils.toggle(reloadButton, true);
+				BDFDB.DOMUtils.hide(reloadButton);
 				reloadButton.addEventListener("mouseenter", _ => {
 					if (window.PluginUpdates.downloaded) BDFDB.TooltipUtils.create(reloadButton, window.PluginUpdates.downloaded.join(", "), {
 						type: "bottom",
@@ -719,7 +719,7 @@ module.exports = (_ => {
 				let reloadButton = updateNotice.querySelector(BDFDB.dotCN.noticebutton);
 				if (reloadButton) {
 					updateNotice.querySelector(BDFDB.dotCN.noticeupdatetext).innerText = BDFDB.LanguageUtils.LibraryStrings.update_notice_reload;
-					BDFDB.DOMUtils.toggle(reloadButton, false);
+					BDFDB.DOMUtils.show(reloadButton);
 				}
 				else updateNotice.querySelector(BDFDB.dotCN.noticedismiss).click();
 			}
@@ -3513,8 +3513,8 @@ module.exports = (_ => {
 					}
 					function toggle(node) {
 						if (!node || !Node.prototype.isPrototypeOf(node)) return;
-						let hidden = force === undefined ? !BDFDB.DOMUtils.isHidden(node) : !force;
-						if (hidden) {
+						let hide = force === undefined ? !BDFDB.DOMUtils.isHidden(node) : !force;
+						if (hide) {
 							let display = node.style.getPropertyValue("display");
 							if (display && display != "none") node.BDFDBhideDisplayState = {
 								display: display,
