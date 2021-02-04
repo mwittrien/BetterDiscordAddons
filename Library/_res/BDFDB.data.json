@@ -976,6 +976,7 @@
 		"AppMount": {"props": ["appMount"]},
 		"ApplicationStore": {"props": ["applicationStore", "navigation"]},
 		"AppOuter": {"props": ["app"], "length": 1},
+		"Attachment": {"props": ["wrapper", "video", "metadataDownload"]},
 		"AuditLog": {"props": ["auditLog"]},
 		"AuthBox": {"props": ["authBox"]},
 		"Autocomplete": {"props": ["autocomplete", "autocompleteRow"]},
