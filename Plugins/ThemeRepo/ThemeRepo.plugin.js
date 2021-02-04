@@ -126,13 +126,14 @@ module.exports = (_ => {
 					showOnlyOutdated = false;
 				}, 5000);
 			}
-			componentWillUnmount () {
+			componentWillUnmount() {
+				list = null;
 				if (preview) {
 					BDFDB.WindowUtils.close(preview);
 					preview = null;
 				}
 			}
-			filterThemes () {
+			filterThemes() {
 				let themes = Object.keys(loadedThemes).map(url => {
 					let theme = loadedThemes[url];
 					let instTheme = BDFDB.BDUtils.getTheme(theme.name);
@@ -164,7 +165,7 @@ module.exports = (_ => {
 				if (this.props.orderKey == "DESC") themes.reverse();
 				return themes;
 			}
-			openPreview () {
+			openPreview() {
 				preview = BDFDB.WindowUtils.open(this, "https://mwittrien.github.io/BetterDiscordAddons/Plugins/_res/DiscordPreview.html", {
 					alwaysOnTop: settings.keepOnTop,
 					showOnReady: true,

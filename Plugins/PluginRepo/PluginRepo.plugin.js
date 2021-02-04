@@ -126,7 +126,10 @@ module.exports = (_ => {
 					showOnlyOutdated = false;
 				}, 5000);
 			}
-			filterPlugins () {
+			componentWillUnmount() {
+				list = null;
+			}
+			filterPlugins() {
 				let plugins = Object.keys(loadedPlugins).map(url => {
 					let plugin = loadedPlugins[url];
 					let instPlugin = BDFDB.BDUtils.getPlugin(plugin.getName);
