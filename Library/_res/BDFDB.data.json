@@ -2365,7 +2365,7 @@
 		"namecontainersubtext": ["NameContainer", "subText"],
 		"nametag": ["NameTag", "nameTag"],
 		"nitrostore": ["NitroStore", "applicationStore"],
-		"nochannel": ["ChatWindow", "noChannel"],
+		"nochannel": ["ChatWindow", ["noChannel", "noChat"]],
 		"notice": ["Notice", "notice"],
 		"noticebrand": ["Notice", "colorBrand"],
 		"noticebutton": ["Notice", "button"],
