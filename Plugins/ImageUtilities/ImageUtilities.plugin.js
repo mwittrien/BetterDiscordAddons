@@ -734,7 +734,7 @@ module.exports = (_ => {
 						className: BDFDB.disCN._imageutilitiesdetailswrapper,
 						children: [
 							{label: "Source", text: e.instance.props.src},
-							{label: "Size", text: `${e.instance.props.width} x ${e.instance.props.height}px`},
+							{label: "Size", text: `${e.instance.props.width}x${e.instance.props.height}px`},
 							{label: "Image", text: `${imageIndex + 1} of ${amount}`}
 						].map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 							className: BDFDB.disCN._imageutilitiesdetails,
