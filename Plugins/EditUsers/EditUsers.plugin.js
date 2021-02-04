@@ -360,7 +360,7 @@ module.exports = (_ => {
 						if (data && data.name) e.instance.props.nick = data.name;
 					}
 					else {
-						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.autocompleterowcontentprimary]]});
+						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "AutocompleteRowHeading"});
 						if (userName) this.changeUserColor(userName, e.instance.props.user.id);
 					}
 				}
