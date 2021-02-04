@@ -107,27 +107,27 @@ module.exports = (_ => {
 										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 											label: _this.labels.context_unreadguilds,
 											id: BDFDB.ContextMenuUtils.createItemId(_this.name, "mark-unread-read"),
-											action: _ => {this.clearGuilds(this.getUnread());}
+											action: _ => this.clearGuilds(this.getUnread())
 										}),
 										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 											label: _this.labels.context_pingedguilds,
 											id: BDFDB.ContextMenuUtils.createItemId(_this.name, "mark-pinged-read"),
-											action: _ => {this.clearGuilds(this.getPinged());}
+											action: _ => this.clearGuilds(this.getPinged())
 										}),
 										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 											label: _this.labels.context_mutedguilds,
 											id: BDFDB.ContextMenuUtils.createItemId(_this.name, "mark-muted-read"),
-											action: _ => {this.clearGuilds(this.getMuted());}
+											action: _ => this.clearGuilds(this.getMuted())
 										}),
 										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 											label: _this.labels.context_guilds,
 											id: BDFDB.ContextMenuUtils.createItemId(_this.name, "mark-all-read"),
-											action: _ => {this.clearGuilds(this.getGuilds());}
+											action: _ => this.clearGuilds(this.getGuilds())
 										}),
 										BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 											label: _this.labels.context_dms,
 											id: BDFDB.ContextMenuUtils.createItemId(_this.name, "mark-dms-read"),
-											action: _ => {BDFDB.DMUtils.markAsRead(this.getPingedDMs());}
+											action: _ => BDFDB.DMUtils.markAsRead(this.getPingedDMs())
 										})
 									]
 								}));

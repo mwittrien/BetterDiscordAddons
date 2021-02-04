@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomQuoter",
 			"author": "DevilBro",
-			"version": "1.2.4",
+			"version": "1.2.5",
 			"description": "Customize the output of the native quote feature of Discord"
 		},
 		"changeLog": {
 			"improved": {
-				"Quick Quote": "Quote button now shows in message toolbar even without holding shift, can be disabled"
+				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
 			}
 		}
 	};
@@ -359,7 +359,7 @@ module.exports = (_ => {
 			quote (channel, message, shift) {
 				let text = this.parseQuote(message, channel);
 				if (text && text.length) {
-					if (shift && !settings.alwaysCopy || !shift && settings.alwaysCopy || !(BDFDB.DMUtils.isDMChannel(channel) || BDFDB.UserUtils.can("SEND_MESSAGES"))) {
+					if (shift && !settings.alwaysCopy || !shift && settings.alwaysCopy || !(BDFDB.DMUtils.isDMChannel(channel.id) || BDFDB.UserUtils.can("SEND_MESSAGES"))) {
 						BDFDB.LibraryRequires.electron.clipboard.write({text: text});
 						BDFDB.NotificationUtils.toast(this.labels.toast_quotecopied, {type: "success"});
 					}

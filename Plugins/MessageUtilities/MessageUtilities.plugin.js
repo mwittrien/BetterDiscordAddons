@@ -14,15 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
-			"version": "1.8.4",
+			"version": "1.8.5",
 			"description": "Offer a number of useful message options. Remap the keybindings in the settings"
 		},
 		"changeLog": {
 			"improved": {
-				"Performance": ""
-			},
-			"fixed": {
-				"Selection and other weird Issues": "Fixed issues that occured when you patched the channel textarea, wtf discord"
+				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
 			}
 		}
 	};
@@ -376,7 +373,7 @@ module.exports = (_ => {
 			doPinUnPin ({messageDiv, message}, action) {
 				if (message.state == BDFDB.DiscordConstants.MessageStates.SENT) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
-					if (channel && (BDFDB.DMUtils.isDMChannel(channel) || BDFDB.UserUtils.can("MANAGE_MESSAGES")) && message.type == BDFDB.DiscordConstants.MessageTypes.DEFAULT) {
+					if (channel && (BDFDB.DMUtils.isDMChannel(channel.id) || BDFDB.UserUtils.can("MANAGE_MESSAGES")) && message.type == BDFDB.DiscordConstants.MessageTypes.DEFAULT) {
 						if (message.pinned) {
 							BDFDB.LibraryModules.MessagePinUtils.unpinMessage(channel, message.id);
 							if (toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.MESSAGE_UNPINNED), {type: "danger"});
@@ -392,7 +389,7 @@ module.exports = (_ => {
 			doReply ({messageDiv, message}, action) {
 				if (message.state == BDFDB.DiscordConstants.MessageStates.SENT) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
-					if (channel && (BDFDB.DMUtils.isDMChannel(channel) || BDFDB.UserUtils.can("SEND_MESSAGES")) && message.type == BDFDB.DiscordConstants.MessageTypes.DEFAULT) {
+					if (channel && (BDFDB.DMUtils.isDMChannel(channel.id) || BDFDB.UserUtils.can("SEND_MESSAGES")) && message.type == BDFDB.DiscordConstants.MessageTypes.DEFAULT) {
 						BDFDB.LibraryModules.MessageManageUtils.replyToMessage(channel, message);
 						if (toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.NOTIFICATION_REPLY), {type: "success"});
 					}
