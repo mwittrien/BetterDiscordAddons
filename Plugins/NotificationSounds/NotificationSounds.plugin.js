@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
-			"version": "3.5.8",
+			"version": "3.5.9",
 			"description": "Allow you to replace the native sounds of Discord with your own"
 		},
 		"changeLog": {
@@ -196,12 +196,6 @@ module.exports = (_ => {
 				this.defaults = {
 					volumes: {
 						globalVolume:				{value: 100,				description: "Global Notification Sounds Volume"}
-					}
-				};
-				
-				this.patchedModules = {
-					after: {
-						Shakeable: "render"
 					}
 				};
 				
@@ -644,19 +638,7 @@ module.exports = (_ => {
 				createdAudios["call_calling"] = BDFDB.LibraryModules.SoundUtils.createSound("call_calling");
 				volumes = BDFDB.DataUtils.get(this, "volumes");
 				BDFDB.PatchUtils.forceAllUpdates(this);
-			}
-			
-			processShakeable (e) {
-				if (repatchIncoming && e.returnvalue && BDFDB.ArrayUtils.is(e.returnvalue.props.children)) {
-					let index = e.returnvalue.props.children.findIndex(n => {
-						let string = n && n.type && n.type.toString();
-						return string && string.indexOf("call_ringing_beat") > -1 && string.indexOf("call_ringing") > -1 && string.indexOf("hasIncomingCalls") > -1;
-					});
-					if (index > -1) {
-						repatchIncoming = false;
-						e.returnvalue.props.children[index] = BDFDB.ReactUtils.createElement(e.returnvalue.props.children[index].type, e.returnvalue.props.children[index].props);
-					}
-				}
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 			
 			loadAudios () {
