@@ -105,7 +105,6 @@ module.exports = (_ => {
 					before: {
 						HeaderBarContainer: "render",
 						ChannelEditorContainer: "render",
-						ChannelAutoComplete: "render",
 						AutocompleteUserResult: "render",
 						UserPopout: "render",
 						UserProfile: "render",
