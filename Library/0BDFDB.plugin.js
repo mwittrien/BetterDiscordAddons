@@ -16,7 +16,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.3.5",
+			"version": "1.3.6",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
@@ -1804,13 +1804,14 @@ module.exports = (_ => {
 							subRender: InternalData.ModuleUtilsConfig.SubRender.includes(unmappedType),
 							forceObserve: InternalData.ModuleUtilsConfig.ForceObserve.includes(unmappedType),
 							nonRender: BDFDB.ObjectUtils.toArray(pluginData.patchTypes).flat(10).filter(n => n && !InternalData.ModuleUtilsConfig.InstanceFunctions.includes(n)).length > 0,
+							exported: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].exported || false,
 							mapped: InternalData.ModuleUtilsConfig.PatchMap[type]
 						};
 						config.ignoreCheck = !!(config.codeFind || config.propertyFind || config.specialFilter || config.nonRender || config.memoComponent);
 						config.nonPrototype = InternalData.ModuleUtilsConfig.NonPrototype.includes(unmappedType) || !!(config.codeFind || config.propertyFind || config.nonRender);
 						
 						let component = InternalData.ModuleUtilsConfig.LoadedInComponents[type] && BDFDB.ObjectUtils.get(InternalComponents, InternalData.ModuleUtilsConfig.LoadedInComponents[type]);
-						if (component) InternalBDFDB.patchComponent(pluginData, config.nonRender ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type, config);
+						if (component) InternalBDFDB.patchComponent(pluginData, config.nonRender ? (BDFDB.ModuleUtils.find(m => m == component, config.exported) || {}).exports : component, type, config);
 						else {
 							let mappedType = config.mapped ? config.mapped + " _ _ " + type : type;
 							let name = mappedType.split(" _ _ ")[0];
@@ -1820,19 +1821,16 @@ module.exports = (_ => {
 									delete plugin.patchedModules[patchType][type];
 								}
 							}
+							
+							let patchSpecial = (func, argument) => {
+								let module = BDFDB.ModuleUtils[func](argument, config.exported);
+								let exports = module && !config.exported && module.exports || module;
+								exports && InternalBDFDB.patchComponent(pluginData, config.memoComponent ? exports.default : exports, mappedType, config);
+							};
 							if (config.classNames.length) InternalBDFDB.checkForInstance(pluginData, mappedType, config);
-							else if (config.stringFind) {
-								let exports = (BDFDB.ModuleUtils.findByString(config.stringFind, false) || {}).exports;
-								InternalBDFDB.patchComponent(pluginData, exports && config.memoComponent ? exports.default : exports, mappedType, config);
-							}
-							else if (config.propertyFind) {
-								let exports = (BDFDB.ModuleUtils.findByProperties(config.propertyFind, false) || {}).exports;
-								InternalBDFDB.patchComponent(pluginData, exports && config.memoComponent ? exports.default : exports, mappedType, config);
-							}
-							else if (config.nonRender) {
-								let exports = (BDFDB.ModuleUtils.findByName(name, false) || {}).exports;
-								InternalBDFDB.patchComponent(pluginData, exports && config.memoComponent ? exports.default : exports, mappedType, config);
-							}
+							else if (config.stringFind) patchSpecial("findByString", config.stringFind);
+							else if (config.propertyFind) patchSpecial("findByProperties", config.propertyFind);
+							else if (config.nonRender) patchSpecial("findByName", name);
 							else InternalBDFDB.patchComponent(pluginData, BDFDB.ModuleUtils.findByName(name), mappedType, config);
 						}
 					}
