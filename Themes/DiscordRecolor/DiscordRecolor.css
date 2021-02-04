@@ -1234,28 +1234,6 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .selected-1Tbx07 {
 	background-color: var(--background-primary);
 }
-#app-mount .divider-23swzi {
-	background-color: rgba(var(--vtextdarker),.6);
-}
-#app-mount .contentTitle-2tG_sM {
-	color: var(--text-muted);
-}
-#app-mount .contentTitle-2tG_sM strong {
-	color: var(--header-primary);
-}
-#app-mount .content-Qb0rXO {
-	color: var(--header-primary);
-}
-#app-mount .iconForeground-1w5n7R {
-	fill: var(--text-muted);
-}
-#app-mount .description-11DmNu,
-#app-mount .descriptionUsername-J_75O8 {
-	color: var(--text-muted);
-}
-#app-mount .descriptionDiscriminator-3vUOCc {
-	color: rgba(var(--vtextdarker),.6);
-}
 
 /* ----		3.5.	MEMBERLIST						---- */
 
