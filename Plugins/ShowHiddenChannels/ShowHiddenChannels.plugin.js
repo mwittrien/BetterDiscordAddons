@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "2.9.1",
+			"version": "2.9.2",
 			"description": "Display channels that are hidden from you by role restrictions"
 		},
 		"changeLog": {
 			"fixed": {
-				"Multiplication Spam": "Fixed issue that occured ifa hidden channel was deleted in a server (often occured with ticket system bots)"
+				"Canary": "Fixed for Channel Store changes on Canary"
 			}
 		}
 	};
@@ -231,7 +231,7 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.GuildChannelStore, "getTextChannelNameDisambiguations", {after: e => {
-					let all = BDFDB.LibraryModules.ChannelStore.getGuildChannels();
+					let all = this.getAllChannels();
 					for (let channel_id in all) if (all[channel_id].guild_id == e.methodArguments[0] && !e.returnValue[channel_id] && (all[channel_id].type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY && all[channel_id].type != BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE)) e.returnValue[channel_id] = {id: channel_id, name: all[channel_id].name};
 				}});
 
@@ -461,11 +461,15 @@ module.exports = (_ => {
 				return channel && hiddenChannelCache[channel.guild_id] && hiddenChannelCache[channel.guild_id].hidden[channel.type] && hiddenChannelCache[channel.guild_id].hidden[channel.type].find(c => c.id == channel.id);
 			}
 			
+			getAllChannels () {
+				return (BDFDB.LibraryModules.ChannelStore.getGuildChannels || BDFDB.LibraryModules.ChannelStore.getMutableGuildChannels || (_ => {return {};}))();
+			}
+			
 			getHiddenChannels (guild) {
 				if (!guild) return [{}, 0];
 				let hiddenChannels = {}, rolesAmount = (BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id) || {roles: []}).roles.length;
 				if (!hiddenChannelCache[guild.id] || hiddenChannelCache[guild.id].roles != rolesAmount) {
-					let all = BDFDB.LibraryModules.ChannelStore.getGuildChannels();
+					let all = this.getAllChannels();
 					for (let type in BDFDB.DiscordConstants.ChannelTypes) hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
 					for (let channel_id in all) {
 						let channel = all[channel_id];
