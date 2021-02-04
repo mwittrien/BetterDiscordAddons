@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.1.5",
+			"version": "2.1.6",
 			"description": "Add a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send"
 		},
 		"changeLog": {
-			"improved": {
-				"New Toast API": ""
+			"fixed": {
+				"Exceptions": "Fixed issues where spaces infront of exceptions would get removed sometimes"
 			}
 		}
 	};
@@ -948,9 +948,9 @@ module.exports = (_ => {
 			addExceptions (string, excepts) {
 				for (let count in excepts) {
 					let exception = BDFDB.ArrayUtils.is(exceptions.wordStart) && exceptions.wordStart.some(n => excepts[count].indexOf(n) == 0) ? excepts[count].slice(1) : excepts[count];
-					let newstring = string.replace(new RegExp(`\[/////[ ]*${count}\]`), exception);
-					if (newstring == string) string = newstring + " " + exception;
-					else string = newstring;
+					let newString = string.replace(new RegExp(BDFDB.StringUtils.regEscape(`{{${count}}}`)), exception);
+					if (newString == string) string = newString + " " + exception;
+					else string = newString;
 				}
 				return string;
 			}
@@ -966,7 +966,7 @@ module.exports = (_ => {
 					});
 					for (let j in text) {
 						if (text[j].indexOf("<") == 0) {
-							newString.push(`[/////${count}]`);
+							newString.push(`{{${count}}}`);
 							excepts[count] = text[j];
 							count++;
 						}
@@ -977,7 +977,7 @@ module.exports = (_ => {
 					let usedExceptions = BDFDB.ArrayUtils.is(exceptions.wordStart) ? exceptions.wordStart : [];
 					string.split(" ").forEach(word => {
 						if (word.indexOf("<@!") == 0 || word.indexOf("<#") == 0 || word.indexOf(":") == 0 || word.indexOf("<:") == 0 || word.indexOf("<a: ") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || usedExceptions.some(n => word.indexOf(n) == 0 && word.length > 1)) {
-							newString.push(`[/////${count}]`);
+							newString.push(`{{${count}}}`);
 							excepts[count] = word;
 							count++;
 						}
