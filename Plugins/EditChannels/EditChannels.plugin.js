@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.2.4",
+			"version": "4.2.5",
 			"description": "Allow you to rename and recolor channelnames"
 		},
 		"changeLog": {
@@ -78,7 +78,9 @@ module.exports = (_ => {
 						changeInAutoComplete:	{value: true, 	inner: true,		description: "Autocomplete Menu"},
 						changeInAuditLog:		{value: true, 	inner: true,		description: "Audit Log"},
 						changeInInviteLog:		{value: true, 	inner: true,		description: "Invite Log"},
-						changeInQuickSwitcher:	{value: true, 	inner: true,		description: "Quick Switcher"}
+						changeInQuickSwitcher:	{value: true, 	inner: true,		description: "Quick Switcher"},
+						changeInSearchResults:	{value: true, 	inner: true,		description: "Search Results"},
+						changeInSearchPopout:	{value: true, 	inner: true,		description: "Search Popout"}
 					}
 				};
 			
@@ -92,6 +94,7 @@ module.exports = (_ => {
 						ChannelCategoryItem: "type",
 						ChannelItem: "default",
 						QuickSwitchChannelResult: "render",
+						SearchPopoutComponent: "render",
 						MessageContent: "type"
 					},
 					after: {
@@ -103,6 +106,7 @@ module.exports = (_ => {
 						DirectMessage: "render",
 						PrivateChannel: "render",
 						QuickSwitchChannelResult: "render",
+						SearchResultsInner: "default",
 						RecentsChannelHeader: "default",
 						ChannelMention: "ChannelMention"
 					}
@@ -110,7 +114,8 @@ module.exports = (_ => {
 				
 				this.css = `
 					${BDFDB.dotCN.messagespopoutchannelname}:hover > span[style*="color"],
-					${BDFDB.dotCN.recentmentionschannelname}:hover > span[style*="color"] {
+					${BDFDB.dotCN.recentmentionschannelname}:hover > span[style*="color"],
+					${BDFDB.dotCN.searchresultschannelname}:hover > span[style*="color"] {
 						text-decoration: underline;
 					}
 				`;
@@ -317,15 +322,40 @@ module.exports = (_ => {
 			}
 
 			processFocusRing (e) {
-				if (e.returnvalue && e.returnvalue.props && e.returnvalue.props.className && e.returnvalue.props.className.indexOf(BDFDB.disCN.categoryiconvisibility) > -1 && settings.changeInChannelList) {
-					let dataListId = BDFDB.ObjectUtils.get(e.returnvalue, "props.children.0.props.data-list-item-id");
-					if (dataListId) {
-						let channelId = dataListId.split("_").pop();
-						let modify = {muted: BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(BDFDB.LibraryModules.LastGuildStore.getGuildId(), channelId)};
-						let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.categoryname]]});
-						if (categoryName) this.changeChannelColor(categoryName.props && categoryName.props.children || categoryName, channelId, modify);
-						let categoryIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.categoryicon]]});
-						if (categoryIcon) this.changeChannelIconColor(categoryIcon, channelId, Object.assign({alpha: 0.6}, modify));
+				if (e.returnvalue && e.returnvalue.props.className) {
+					let change, channelId, nameClass, categoyClass, iconClass, modify = {};
+					if (settings.changeInChannelList && e.returnvalue.props.className.indexOf(BDFDB.disCN.categoryiconvisibility) > -1) {
+						change = true;
+						channelId = BDFDB.ReactUtils.findValue(e.returnvalue, "data-list-item-id")?.split("_").pop();
+						nameClass = BDFDB.disCN.categoryname;
+						iconClass = BDFDB.disCN.categoryicon;
+						modify = {muted: BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(BDFDB.LibraryModules.LastGuildStore.getGuildId(), channelId)};
+					}
+					else if (settings.changeInSearchPopout && e.returnvalue.props.className.indexOf(BDFDB.disCN.searchpopoutoption) > -1) {
+						change = true;
+						channelId = BDFDB.ReactUtils.findValue(e.returnvalue._owner, "result", {up: true})?.channel.id;
+						nameClass = BDFDB.disCN.searchpopoutresultchannel;
+						categoyClass = BDFDB.disCN.searchpopoutsearchresultchannelcategory;
+						iconClass = BDFDB.disCN.searchpopoutsearchresultchannelicon;
+					}
+					if (change) {
+						if (changedChannels[channelId]) {
+							let name = nameClass && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", nameClass]]});
+							if (name) {
+								name = name.props && name.props.children || name;
+								this.changeChannelColor(BDFDB.ArrayUtils.is(name) ? name.find(c => c.type == "strong") || name[0] : name, channelId, modify);
+							}
+							let icon = iconClass && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", iconClass]]});
+							if (icon) this.changeChannelIconColor(icon, channelId, Object.assign({alpha: 0.6}, modify));
+						}
+						let categoryId = BDFDB.LibraryModules.ChannelStore.getChannel(channelId)?.parent_id;
+						if (categoryId && changedChannels[categoryId]) {
+							let categoryName = categoyClass && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", categoyClass]]});
+							if (categoryName) {
+								categoryName.props.children = this.getChannelData(categoryId).name;
+								this.changeChannelColor(categoryName, categoryId, modify);
+							}
+						}
 					}
 				}
 			}
@@ -401,6 +431,26 @@ module.exports = (_ => {
 						if (e.instance.props.category) {
 							let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.quickswitchresultnote]]});
 							if (categoryName) this.changeChannelColor(categoryName, e.instance.props.category.id);
+						}
+					}
+				}
+			}
+
+			processSearchPopoutComponent (e) {
+				if (BDFDB.ArrayUtils.is(BDFDB.ObjectUtils.get(e, "instance.props.resultsState.autocompletes")) && settings.changeInSearchPopout) {
+					for (let autocomplete of e.instance.props.resultsState.autocompletes) if (autocomplete && BDFDB.ArrayUtils.is(autocomplete.results)) for (let result of autocomplete.results) if (result.channel) result.channel = this.getChannelData(result.channel.id);
+				}
+			}
+			
+			processSearchResultsInner (e) {
+				if (settings.changeInSearchResults) {
+					let results = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["id", "search-results"]]});
+					if (results && BDFDB.ArrayUtils.is(results.props.children)) for (let group of results.props.children) {
+						let channelId = BDFDB.ObjectUtils.get(group, "props.children.key")?.split("-")[0];
+						let channelName = channelId && changedChannels[channelId] && BDFDB.ReactUtils.findChild(group, {props: [["className", BDFDB.disCN.searchresultschannelname]]});
+						if (channelName) {
+							if (changedChannels[channelId].name) channelName.props.children = "#" + changedChannels[channelId].name;
+							this.changeChannelColor(channelName, channelId);
 						}
 					}
 				}
