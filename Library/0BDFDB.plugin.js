@@ -49,12 +49,25 @@ module.exports = (_ => {
 		patchPriority: 0,
 		defaults: {
 			settings: {
-				showToasts:				{value: true,		disableIfNative: true,		noteIfNative: true},
-				showSupportBadges:		{value: true,		disableIfNative: false,		noteIfNative: true},
-				useChromium:			{value: false,		disableIfNative: false,		noteIfNative: true}
+				showToasts: {
+					value: true,
+					isDisabled: data => data.nativeValue,
+					hasNote: data => data.disabled && data.value
+				},
+				showSupportBadges: {
+					value: true
+				},
+				useChromium: {
+					value: false,
+					isDisabled: data => !LibraryRequires.electron || !LibraryRequires.electron.remote,
+					getValue: data => !data.disabled
+				}
 			},
 			choices: {
-				toastPosition:			{value: "right",	items: "ToastPositions"}
+				toastPosition: {
+					value: "right",
+					items: "ToastPositions"
+				}
 			}
 		},
 	});
@@ -1174,7 +1187,6 @@ module.exports = (_ => {
 						else {
 							BDFDB.DOMUtils.addClass(data.toast, BDFDB.disCN.toastclosable);
 							data.toast.addEventListener("click", event => {
-								console.log(event.target);
 								if (typeof data.config.onClick == "function" && !BDFDB.DOMUtils.getParent(BDFDB.dotCN.toastcloseicon, event.target)) data.config.onClick();
 								data.toast.close();
 							});
@@ -7921,19 +7933,34 @@ module.exports = (_ => {
 						note: getString("choices", key, "note"),
 						basis: "50%",
 						value: choices[key],
-						options: Object.keys(LibraryConstants[InternalBDFDB.defaults.choices[key].items] || {}).map(p => ({value: p, label: BDFDB.LanguageUtils.LibraryStrings[p] || p})),
+						options: Object.keys(LibraryConstants[InternalBDFDB.defaults.choices[key].items] || {}).map(p => ({
+							value: p,
+							label: BDFDB.LanguageUtils.LibraryStrings[p] || p
+						})),
 						searchable: true,
 					}));
 					for (let key in settings) {
 						let nativeSetting = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds[key]);
+						let disabled = typeof InternalBDFDB.defaults.settings[key].isDisabled == "function" && InternalBDFDB.defaults.settings[key].isDisabled({
+							value: settings[key],
+							nativeValue: nativeSetting
+						});
 						settingsItems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
 							type: "Switch",
 							plugin: InternalBDFDB,
-							disabled: InternalBDFDB.defaults.settings[key].disableIfNative && nativeSetting,
+							disabled: disabled,
 							keys: ["settings", key],
 							label: getString("settings", key, "description"),
-							note: (InternalBDFDB.defaults.settings[key].noteAlways || InternalBDFDB.defaults.settings[key].noteIfNative && nativeSetting) && getString("settings", key, "note"),
-							value: settings[key] || nativeSetting
+							note: (typeof InternalBDFDB.defaults.settings[key].hasNote == "function" ? InternalBDFDB.defaults.settings[key].hasNote({
+								value: settings[key],
+								nativeValue: nativeSetting,
+								disabled: disabled
+							}) : InternalBDFDB.defaults.settings[key].hasNote) && getString("settings", key, "note"),
+							value: (typeof InternalBDFDB.defaults.settings[key].getValue == "function" ? InternalBDFDB.defaults.settings[key].getValue({
+								value: settings[key],
+								nativeValue: nativeSetting,
+								disabled: disabled
+							}) : true) && (settings[key] || nativeSetting)
 						}));
 					}
 					
