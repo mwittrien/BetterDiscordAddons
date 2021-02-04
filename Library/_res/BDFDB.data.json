@@ -150,7 +150,6 @@
 			"GuildIcon"
 		],
 		"MemoComponent": [
-			"ChannelCategoryItem",
 			"EmojiPicker",
 			"ExpressionPicker",
 			"InviteGuildName",
@@ -174,7 +173,7 @@
 			"BannedCard": {"class": "guildsettingsbannedcard"},
 			"Category": {"class": "categorycontainerdefault"},
 			"ChannelCall": {"class": "callcurrentcontainer"},
-			"ChannelCategoryItem": {"strings": ["muted", "channel", "collapsed"]},
+			"ChannelCategoryItem": {"strings": ["muted", "channel", "collapsed"], "exported": true},
 			"ChannelMember": {"class": "member"},
 			"ChannelMembers": {"class": "members"},
 			"ChannelMention": {"props": ["ChannelMention"]},
