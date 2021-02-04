@@ -1405,6 +1405,8 @@
 		"appmount": ["AppMount", "appMount"],
 		"applayers": ["AppInner", "layers"],
 		"applicationstore": ["ApplicationStore", "applicationStore"],
+		"attachment": ["Attachment", "wrapper"],
+		"attachmentvideo": ["Attachment", "video"],
 		"auditlog": ["AuditLog", "auditLog"],
 		"auditlogoverflowellipsis": ["AuditLog", "overflowEllipsis"],
 		"auditloguserhook": ["AuditLog", "userHook"],
