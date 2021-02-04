@@ -149,8 +149,6 @@
 			"GuildIcon"
 		],
 		"MemoComponent": [
-			"ChannelAutoComplete",
-			"ChannelCategoryItem",
 			"EmojiPicker",
 			"ExpressionPicker",
 			"InviteGuildName",
@@ -163,7 +161,6 @@
 			"GuildFolder"
 		],
 		"NonPrototype": [
-			"ChannelAutoComplete",
 			"ChannelTextAreaContainer"
 		],
 		"Finder": {
@@ -174,7 +171,6 @@
 			"Avatar": {"props": ["AnimatedAvatar"]},
 			"BannedCard": {"class": "guildsettingsbannedcard"},
 			"Category": {"class": "categorycontainerdefault"},
-			"ChannelAutoComplete": {"strings": ["hidePersonalInformation", "canExecuteCommands"]},
 			"ChannelCall": {"class": "callcurrentcontainer"},
 			"ChannelCategoryItem": {"strings": ["muted", "channel", "collapsed"]},
 			"ChannelMember": {"class": "member"},

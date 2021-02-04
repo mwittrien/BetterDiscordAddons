@@ -85,7 +85,6 @@ module.exports = (_ => {
 				this.patchedModules = {
 					before: {
 						ChannelEditorContainer: "render",
-						ChannelAutoComplete: "render",
 						AutocompleteChannelResult: "render",
 						AuditLog: "render",
 						SettingsInvites: "render",
