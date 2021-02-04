@@ -1162,8 +1162,9 @@ module.exports = (_ => {
 						if (disableInteractions) data.toast.style.setProperty("pointer-events", "none", "important");
 						else {
 							BDFDB.DOMUtils.addClass(data.toast, BDFDB.disCN.toastclosable);
-							data.toast.addEventListener("click", _ => {
-								if (typeof data.config.onClick == "function") data.config.onClick();
+							data.toast.addEventListener("click", event => {
+								console.log(event.target);
+								if (typeof data.config.onClick == "function" && !BDFDB.DOMUtils.getParent(BDFDB.dotCN.toastcloseicon, event.target)) data.config.onClick();
 								data.toast.close();
 							});
 						}
