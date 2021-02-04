@@ -1,4 +1,5 @@
 {
+	"PluginNameMap": {},
 	"LibraryRequires": ["child_process", "electron", "fs", "path", "process", "request"],
 	"DiscordObjects": {
 		"Channel": {"props": ["getRecipientId", "isManaged", "getGuildId"]},

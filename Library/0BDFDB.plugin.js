@@ -71,7 +71,7 @@ module.exports = (_ => {
 			left: "toastsleft",
 			right: "toastsright"
 		}
-	}
+	};
 	
 	const PluginStores = {
 		loaded: {},
@@ -497,7 +497,7 @@ module.exports = (_ => {
 	BDFDB.PluginUtils.load = function (plugin) {
 		if (!PluginStores.updateTimeout.includes(plugin.name)) {
 			PluginStores.updateTimeout.push(plugin.name);
-			let url = plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
+			let url = InternalBDFDB.getPluginURL(plugin);
 
 			if (!BDFDB.ObjectUtils.is(window.PluginUpdates) || !BDFDB.ObjectUtils.is(window.PluginUpdates.plugins)) window.PluginUpdates = {plugins: {}};
 			window.PluginUpdates.plugins[url] = {name: plugin.name, raw: url, version: plugin.version};
@@ -745,7 +745,6 @@ module.exports = (_ => {
 				LibraryRequires.fs.writeFile(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), newFileName + ".plugin.js"), body, _ => {
 					window.PluginUpdates.plugins[url].version = newVersion;
 					if (fileName != newFileName) {
-						url = url.replace(new RegExp(fileName, "g"), newFileName);
 						LibraryRequires.fs.unlink(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".plugin.js"), _ => {});
 						let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".config.json");
 						LibraryRequires.fs.exists(configPath, exists => {
@@ -923,6 +922,18 @@ module.exports = (_ => {
 			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.data.json", BDFDB.TimeUtils.suppress((error2, response2, body2) => {
 				if ((error2 || !body2) && tryAgain) return BDFDB.TimeUtils.timeout(_ => {loadLibrary();}, 10000);
 				const InternalData = JSON.parse(body2);
+				
+				InternalBDFDB.getPluginURL = function (plugin) {
+					plugin = plugin == BDFDB && InternalBDFDB || plugin;
+					if (BDFDB.ObjectUtils.is(plugin)) {
+						if (plugin.rawUrl) return plugin.rawUrl;
+						else {
+							let name = InternalData && InternalData.PluginNameMap && InternalData.PluginNameMap[plugin.name] || plugin.name;
+							return `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${name}/${name}.plugin.js`;
+						}
+					}
+					else return "";
+				};
 			
 				BDFDB.ObserverUtils = {};
 				BDFDB.ObserverUtils.connect = function (plugin, eleOrSelec, observer, config = {childList: true}) {
@@ -2908,67 +2919,11 @@ module.exports = (_ => {
 					let channel = typeof channelOrId == "string" ? LibraryModules.ChannelStore.getChannel(channelOrId) : channelOrId;
 					return BDFDB.ObjectUtils.is(channel) && (channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_TEXT || channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_STORE || channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_ANNOUNCEMENT);
 				};
-				BDFDB.ChannelUtils.getId = function (div) {
-					if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
-					div = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.categorycontainerdefault + BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.dmchannel, div);
-					if (!div) return;
-					let info = BDFDB.ReactUtils.findValue(div, "channel");
-					return info ? info.id.toString() : null;
-				};
-				BDFDB.ChannelUtils.getDiv = function (eleOrInfoOrId) {
-					if (!eleOrInfoOrId) return null;
-					let info = BDFDB.ChannelUtils.getData(eleOrInfoOrId);
-					return info ? info.div : null;
-				};
-				BDFDB.ChannelUtils.getData = function (eleOrInfoOrId) {
-					if (!eleOrInfoOrId) return null;
-					let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.ChannelUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
-					id = typeof id == "number" ? id.toFixed() : id;
-					for (let info of BDFDB.ChannelUtils.getAll()) if (info && info.id == id) return info;
-					return null;
-				};
-				BDFDB.ChannelUtils.getName = function (id, addPrefix) {
-					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(id);
-					if (!channel) return "";
-					switch (channel.type) {
-						case BDFDB.DiscordConstants.ChannelTypes.DM:
-							let user = channel.recipients.map(BDFDB.LibraryModules.UserStore.getUser).filter(n => n)[0];
-							return (addPrefix && "@" || "") + (user && user.toString() || "");
-						case BDFDB.DiscordConstants.ChannelTypes.GROUP_DM:
-							if (channel.name) return channel.name;
-							let users = channel.recipients.map(BDFDB.LibraryModules.UserStore.getUser).filter(n => n);
-							return users.length > 0 ? users.map(user => user.toString).join(", ") : BDFDB.LanguageUtils.LanguageStrings.UNNAMED;
-						case BDFDB.DiscordConstants.ChannelTypes.GUILD_ANNOUNCEMENT:
-						case BDFDB.DiscordConstants.ChannelTypes.GUILD_TEXT:
-							return (addPrefix && "#" || "") + channel.name;
-						default:
-							return channel.name
-					}
-				};
-				BDFDB.ChannelUtils.getAll = function () {
-					let found = [];
-					for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.channels), {name: ["ChannelCategoryItem", "ChannelItem", "PrivateChannel"], all: true, unlimited: true})) if (ins.props && !ins.props.ispin && ins.props.channel && ins[BDFDB.ReactUtils.instanceKey] && ins[BDFDB.ReactUtils.instanceKey].return) {
-						let div = BDFDB.ReactUtils.findDOMNode(ins);
-						div = div && BDFDB.DOMUtils.containsClass(div.parentElement, BDFDB.disCN.categorycontainerdefault, BDFDB.disCN.channelcontainerdefault, false) ? div.parentElement : div;
-						found.push(Object.assign(new ins.props.channel.constructor(ins.props.channel), {div, instance: ins}));
-					}
-					return found;
-				};
-				BDFDB.ChannelUtils.getSelected = function () {
-					let info = LibraryModules.ChannelStore.getChannel(LibraryModules.LastChannelStore.getChannelId());
-					if (info) return BDFDB.ChannelUtils.getData(info.id) || Object.assign(new info.constructor(info), {div: null, instance: null});
-					else return null;
-				};
 				BDFDB.ChannelUtils.markAsRead = function (channels) {
-					if (!channels) return;
-					let unreadChannels = [];
-					for (let channel of [channels].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
-						let id = Node.prototype.isPrototypeOf(channel) ? BDFDB.ChannelUtils.getId(channel) : (channel && typeof channel == "object" ? channel.id : channel);
-						if (id && BDFDB.ChannelUtils.isTextChannel(id)) unreadChannels.push({
-							channelId: id,
-							messageId: LibraryModules.UnreadChannelUtils.lastMessageId(id)
-						});
-					}
+					let unreadChannels = [channels].flat(10).filter(n => n && typeof n == "string" && BDFDB.ChannelUtils.isTextChannel(id)).map(id => ({
+						channelId: id,
+						messageId: LibraryModules.UnreadChannelUtils.lastMessageId(id)
+					}));
 					if (unreadChannels.length) LibraryModules.AckUtils.bulkAck(unreadChannels);
 				};
 				BDFDB.ChannelUtils.rerenderAll = function (instant) {
@@ -7389,7 +7344,7 @@ module.exports = (_ => {
 					let plugin = props && props.addon && (props.addon.plugin || props.addon.instance);
 					if (plugin && !props.hasCustomControls && (plugin == libraryInstance || plugin.name && plugin.name && PluginStores.loaded[plugin.name] && PluginStores.loaded[plugin.name] == plugin)) {
 						props.hasCustomControls = true;
-						let url = plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
+						let url = InternalBDFDB.getPluginURL(plugin);
 						let controls = [];
 						let footerControls = card.querySelector("." + BDFDB.disCN._repofooter.split(" ")[0] + " " + BDFDB.dotCN._repocontrols);
 						if (plugin.changeLog) controls.push(InternalBDFDB.createCustomControl({
