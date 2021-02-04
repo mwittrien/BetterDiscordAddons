@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "EmojiStatistics",
 			"author": "DevilBro",
-			"version": "2.9.5",
+			"version": "2.9.6",
 			"description": "Add some helpful options to show you more information about emojis and emojiservers"
+		},
+		"changeLog": {
+			"improved": {
+				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
+			}
 		}
 	};
 
@@ -136,44 +141,48 @@ module.exports = (_ => {
 						className: `${this.name}-table`,
 						stickyHeader: true,
 						sortData: false,
-						columns: [{key: "icon", sortkey: "index", cell: "icon"}, {key: "name", cell: "name"}, {key: "total", cell: "amount", reverse: true}, {key: "global", cell: "amount", reverse: true}, {key: "local", cell: "amount", reverse: true}, {key: "copies", cell: "amount", reverse: true}].map(data => {return {
-							key: data.sortkey || data.key,
+						columns: [
+							{key: "icon", icon: "icon", sortKey: "index"},
+							{key: "name", cell: "name"},
+							{key: "total", cell: "amount", reverse: true},
+							{key: "global", cell: "amount", reverse: true},
+							{key: "local", cell: "amount", reverse: true},
+							{key: "copies", cell: "amount", reverse: true}
+						].map(data => ({
+							key: data.sortKey || data.key,
 							sort: true,
 							reverse: data.reverse,
 							cellClassName: BDFDB.disCN[`_emojistatistics${data.cell}cell`],
-							renderHeader: _ => {
-								return this.labels[`modal_titles${data.key}`]
-							},
-							render: guilddata => {
+							renderHeader: _ => this.labels[`modal_titles${data.key}`],
+							render: item => {
 								if (data.key == "icon") return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Guild, {
-									guild: guilddata[data.key],
+									guild: item.guild,
 									menu: false,
 									tooltip: false
 								});
 								else if (data.key == "name") return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-									children: guilddata[data.key]
+									children: item.guild.name
 								});
-								else return guilddata[data.key]
+								else return item[data.key];
 							}
-						}}),
-						data: BDFDB.GuildUtils.getAll().map((info, i) => {
-							let data = {
+						})),
+						data: BDFDB.LibraryModules.FolderStore.getFlattenedGuilds().map((guild, i) => {
+							let itemData = {
 								index: i,
-								icon: info,
-								name: info.name,
+								guild: guild,
 								global: 0,
 								local: 0,
 								copies: 0
 							}
 							for (let emoji of BDFDB.LibraryModules.GuildEmojiStore.getGuildEmoji(info.id)) {
 								if (emoji.managed) {
-									data.global++;
-									if (emojiReplicaList[emoji.name]) data.copies++;
+									itemData.global++;
+									if (emojiReplicaList[emoji.name]) itemData.copies++;
 								}
-								else data.local++;
+								else itemData.local++;
 							}
-							data.total = data.global + data.local;
-							return data;
+							itemData.total = itemData.global + itemData.local;
+							return itemData;
 						})
 					})
 				});
