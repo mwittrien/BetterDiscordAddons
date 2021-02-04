@@ -150,6 +150,7 @@
 			"GuildIcon"
 		],
 		"MemoComponent": [
+			"ChannelCategoryItem",
 			"EmojiPicker",
 			"ExpressionPicker",
 			"InviteGuildName",
