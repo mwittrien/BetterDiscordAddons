@@ -452,12 +452,12 @@ module.exports = (_ => {
 						};
 					default:		// English
 						return {
-							modal_header:						"Statistics of emojis",
+							modal_header:						"Emoji Statistics",
 							modal_titlescopies:					"Copies",
 							modal_titlesglobal:					"Global",
 							modal_titlesicon:					"Icon",
 							modal_titleslocal:					"Local",
-							modal_titlesname:					"Servername",
+							modal_titlesname:					"Server Name",
 							modal_titlestotal:					"Total"
 						};
 				}
