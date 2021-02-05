@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "2.9.2",
+			"version": "2.9.3",
 			"description": "Display channels that are hidden from you by role restrictions"
 		},
 		"changeLog": {
-			"fixed": {
-				"Canary": "Fixed for Channel Store changes on Canary"
+			"added": {
+				"Hide connected voice users": "You can now disable the option to show users who are in a hidden voice channel"
 			}
 		}
 	};
@@ -162,6 +162,7 @@ module.exports = (_ => {
 						showVoice:				{value: true, 	description: "Show hidden Voice Channels"},
 						showAnnouncement:		{value: true, 	description: "Show hidden Announcement Channels"},
 						showStore:				{value: true, 	description: "Show hidden Store Channels"},
+						showVoiceUsers:			{value: true, 	description: "Show connected Users in hidden Voice Channels"},
 						alwaysCollapse:			{value: false, 	description: "Always collapse 'Hidden' Category after switching Servers"},
 						showForNormal:			{value: true,	description: "Add Access-Overview ContextMenu Entry for non-hidden Channels"}
 					}
@@ -170,7 +171,8 @@ module.exports = (_ => {
 				this.patchedModules = {
 					before: {
 						Channels: "render",
-						ChannelCategoryItem: "type"
+						ChannelCategoryItem: "type",
+						VoiceUsers: "render"
 					},
 					after: {
 						ChannelItem: "default"
@@ -454,6 +456,10 @@ module.exports = (_ => {
 						}
 					}
 				}
+			}
+		
+			processVoiceUsers (e) {
+				if (!settings.showVoiceUsers && this.isChannelHidden(e.instance.props.channel.id)) e.instance.props.voiceStates = [];
 			}
 			
 			isChannelHidden (channelId) {
