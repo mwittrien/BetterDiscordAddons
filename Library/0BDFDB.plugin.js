@@ -16,13 +16,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.3.6",
+			"version": "1.3.7",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 		"changeLog": {
-			"improved": {
-				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
+			"fixed": {
+				"Server Mark as Read": "Fixed issue with BDFDB.GuildUtils.markAsRead not working"
 			}
 		}
 	};
@@ -2770,7 +2770,7 @@ module.exports = (_ => {
 					});
 				};
 				BDFDB.GuildUtils.markAsRead = function (guildIds) {
-					let channels = [guildIds].flat(10).filter(id => id && typeof id == "string" && LibraryModules.GuildStore.getGuild(id)).map(id => BDFDB.ObjectUtils.toArray(LibraryModules.GuildChannelStore.getChannels(id)).flat(10).filter(n => BDFDB.ObjectUtils.is(n)).map(n => n.channel)).flat().filter(n => n);
+					let channels = [guildIds].flat(10).filter(id => id && typeof id == "string" && LibraryModules.GuildStore.getGuild(id)).map(id => BDFDB.ObjectUtils.toArray(LibraryModules.GuildChannelStore.getChannels(id)).flat(10).filter(n => BDFDB.ObjectUtils.is(n)).map(n => n.channel && n.channel.id)).flat().filter(n => n);
 					if (channels.length) BDFDB.ChannelUtils.markAsRead(channels);
 				};
 				BDFDB.GuildUtils.rerenderAll = function (instant) {
