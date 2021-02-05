@@ -826,20 +826,6 @@ img:not([src]), img[src=""], img[src="null"] {
     padding: 0 16px 16px 16px;
 }
 
-#bd-settingspane-container .ui-form-title {
-	display: inline-block;
-}
-#bd-settingspane-container [REPLACE_CLASS__repofolderbutton] {
-	position: static;
-	margin-bottom: 0;
-	border-radius: 5px;
-	display: inline-block;
-	margin-left: 10px;
-}
-#bd-settingspane-container [REPLACE_CLASS__repoupdatebutton][style] {
-	display: none !important;
-}
-
 [REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS_settingswindowtoolscontainer] {
 	margin-top: -140px;
 }
