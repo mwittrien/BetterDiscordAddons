@@ -893,20 +893,6 @@ img:not([src]), img[src=""], img[src="null"] {
 	border-radius: 3px;
 }
 
-#pluginNotice [REPLACE_CLASS_noticeupdatetext] {
-	white-space: pre;
-}
-#pluginNotice [REPLACE_CLASS_noticeupdateseparator] {
-	pointer-events: none;
-}
-#pluginNotice #outdatedPlugins span {
-	-webkit-app-region: no-drag;
-	color: #FFF;
-	cursor: pointer;
-}
-#pluginNotice #outdatedPlugins span:hover {
-	text-decoration: underline;
-}
 [REPLACE_CLASS_noticewrapper] {
 	height: 36px !important;
 	border-radius: 0 !important;
@@ -916,11 +902,39 @@ img:not([src]), img[src=""], img[src="null"] {
 	height: 0 !important;
 	overflow: hidden !important;
 }
+[REPLACE_CLASS_noticetext] {
+    white-space: pre;
+}
 [REPLACE_CLASS_noticewrapper] [REPLACE_CLASS_noticeplatformicon] {
 	margin-top: -7px;
 }
 [REPLACE_CLASS_noticewrapper] [REPLACE_CLASS_noticeplatformicon] svg {
 	max-height: 28px;
+}
+
+#pluginNotice #outdatedPlugins {
+	font-weight: 700;
+}
+#pluginNotice #outdatedPlugins span {
+	-webkit-app-region: no-drag;
+	color: #FFF;
+	cursor: pointer;
+}
+#pluginNotice #outdatedPlugins span:hover {
+	text-decoration: underline;
+}
+[REPLACE_CLASS_noticeupdateentries] {
+	font-weight: 700;
+}
+[REPLACE_CLASS_noticeupdateentry] {
+	cursor: pointer;
+	-webkit-app-region: no-drag;
+}
+[REPLACE_CLASS_noticeupdateentry]:hover {
+	text-decoration: underline;
+}
+[REPLACE_CLASS_noticeupdateseparator] {
+	pointer-events: none;
 }
 
 .platform-osx [REPLACE_CLASS_noticewrapper] ~ * [REPLACE_CLASS_guildswrapper] {
