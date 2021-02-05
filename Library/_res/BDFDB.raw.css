@@ -896,6 +896,9 @@ img:not([src]), img[src=""], img[src="null"] {
 #pluginNotice [REPLACE_CLASS_noticeupdatetext] {
 	white-space: pre;
 }
+#pluginNotice [REPLACE_CLASS_noticeupdateseparator] {
+	pointer-events: none;
+}
 #pluginNotice #outdatedPlugins span {
 	-webkit-app-region: no-drag;
 	color: #FFF;
