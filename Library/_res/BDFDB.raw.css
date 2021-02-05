@@ -903,7 +903,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	overflow: hidden !important;
 }
 [REPLACE_CLASS_noticetext] {
-	display: flex;
+	display: inline-flex;
     white-space: pre;
 }
 [REPLACE_CLASS_noticewrapper] [REPLACE_CLASS_noticeplatformicon] {
