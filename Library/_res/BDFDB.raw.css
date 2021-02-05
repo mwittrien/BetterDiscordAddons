@@ -893,7 +893,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	border-radius: 3px;
 }
 
-#pluginNotice .notice-message {
+#pluginNotice [REPLACE_CLASS_noticeupdatetext] {
 	white-space: pre;
 }
 #pluginNotice #outdatedPlugins span {
@@ -1185,10 +1185,12 @@ img:not([src]), img[src=""], img[src="null"] {
 	height: 24px;
 }
 [REPLACE_CLASS_toasttext] {
+	max-width: calc(50vw - 50px);
 	flex: 1 0 auto;
 	font-size: 14px;
 	font-weight: 500;
-	white-space: pre;
+	white-space: pre-wrap;
+	word-wrap: break-word;
 }
 [REPLACE_CLASS_toastcloseicon] {
 	display: none;
