@@ -892,11 +892,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	display: inline-flex;
     white-space: pre;
 }
-[REPLACE_CLASS_noticewrapper] [REPLACE_CLASS_noticeplatformicon] {
-	margin-top: -7px;
-}
-[REPLACE_CLASS_noticewrapper] [REPLACE_CLASS_noticeplatformicon] svg {
+[REPLACE_CLASS_noticewrapper] svg[REPLACE_CLASS_noticeplatformicon] {
 	max-height: 28px;
+	width: unset;
 }
 
 #pluginNotice .notice-message {

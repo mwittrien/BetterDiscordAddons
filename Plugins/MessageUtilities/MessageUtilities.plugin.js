@@ -16,11 +16,6 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "1.8.5",
 			"description": "Offer a number of useful message options. Remap the keybindings in the settings"
-		},
-		"changeLog": {
-			"improved": {
-				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
-			}
 		}
 	};
 
@@ -165,7 +160,7 @@ module.exports = (_ => {
 								plugin: this,
 								keys: ["settings", action],
 								value: settings[action],
-								labelchildren: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+								labelChildren: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 									direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.KeybindRecorder, {

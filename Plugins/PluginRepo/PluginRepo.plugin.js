@@ -115,7 +115,7 @@ module.exports = (_ => {
 			DESC:			"descending"
 		};
 		
-		const pluginRepoIcon = `<svg width="35" height="32" viewBox="0 0 35 32"><path fill="COLOR_1" d="m 0,15.999383 v 15.999393 h 4.0579876 4.0579875 v -4.669578 -4.669486 h 3.0160369 c 4.130876,0 5.268288,-0.180687 7.310013,-1.16151 C 27.221688,17.280747 26.3676,3.6154073 17.137662,0.62878797 15.190263,-0.00131638 15.210826,2.2791846e-8 7.074025,2.2791846e-8 H 0 V 15.999383 M 13.791313,7.7097692 c 3.0968,0.8058133 3.60605,5.6369388 0.769299,7.2975188 -0.648724,0.379824 -0.954887,0.41296 -3.815,0.41296 H 8.1159751 V 11.510851 7.6015465 h 2.6296369 c 2.100001,0 2.71355,0.021803 3.045701,0.1082227 z"/><path fill="COLOR_2" d="m 19.831613,0.33428402 c 2.750824,1.55218268 4.906474,4.40793308 5.639199,7.47042048 0.0952,0.3980164 0.170276,0.5575479 0.303189,0.6446156 1.427999,0.934759 1.560999,3.8503849 0.238524,5.2283499 -0.315088,0.328422 -0.3633,0.426947 -0.53585,1.096389 -0.7994,3.099994 -2.734025,5.785188 -5.290337,7.342709 -0.100893,0.0615 0.420787,0.809392 3.4594,4.959094 l 3.578225,4.886631 3.887975,0.01882 L 35,32 V 30.448249 28.896416 L 31.879575,24.969021 28.75915,21.041616 29.180725,20.883309 C 32.66865,19.573354 34.5842,16.582282 34.939888,11.89051 35.3941,5.9002298 32.594625,1.7229963 27.245312,0.40867105 25.7768,0.04790474 25.173225,2.2791846e-8 22.092175,2.2791846e-8 H 19.23915 L 19.831613,0.33428402 M 17.753663,23.249872 C 16.088537,23.833028 14.7469,24.036278 12.2283,24.08698 l -2.010924,0.04052 v 3.935622 3.935705 h 4.130436 4.130438 v -4.488532 c 0,-2.468667 -0.02441,-4.485735 -0.05434,-4.482331 -0.02993,0.0031 -0.331537,0.103328 -0.67025,0.221958 z"/></svg>`;
+		const pluginRepoIcon = `<svg width="35" height="32" viewBox="0 0 35 32"><path fill="COLOR_1" d="M 0,15.999383 V 31.998776 H 3.7511774 7.5023548 V 27.329198 22.659712 H 10.29036 c 3.818555,0 4.869971,-0.180687 6.757328,-1.16151 C 25.163552,17.280747 24.374039,3.6154073 15.841944,0.62878797 14.041781,-0.00131638 14.060789,2.2791846e-8 6.5391829,2.2791846e-8 H 0 V 15.999383 M 12.7486,7.7097692 c 2.862662,0.8058133 3.33341,5.6369388 0.711135,7.2975188 -0.599676,0.379824 -0.882691,0.41296 -3.5265609,0.41296 H 7.5023548 V 11.510851 7.6015465 h 2.4308193 c 1.9412269,0 2.5083879,0.021803 2.8154259,0.1082227 z"/><path fill="COLOR_2" d="m 21.064702,0 c 1.967452,1.766478 3.332467,4.063209 4.090139,6.5585938 0.151187,0.4101248 0.282303,0.8253185 0.382275,1.2460937 0.09454,0.3980164 0.168822,0.5574636 0.300807,0.6445313 1.418028,0.9347589 1.551379,3.8505502 0.238139,5.2285152 -0.312888,0.328422 -0.361335,0.426261 -0.532679,1.095704 -0.12405,0.484431 -0.284496,0.954562 -0.461656,1.416015 -0.817671,2.517439 -2.289982,4.820475 -4.441079,6.572266 0.414023,0.623399 1.264807,1.81072 3.085359,4.314453 l 3.553282,4.886719 3.860356,0.01758 L 35,32 V 30.449219 28.896484 L 31.902107,24.96875 28.802124,21.041016 29.222,20.882812 c 3.46357,-1.309954 5.364216,-4.300415 5.71742,-8.992187 C 35.390461,5.9003448 32.612138,1.7225284 27.300178,0.40820312 25.841921,0.04743681 25.241818,0 22.182283,0 Z m -2.477479,24.140625 c -0.208425,0.11463 -0.413274,0.232173 -0.630859,0.337891 -2.267583,1.101803 -3.819887,1.414393 -7.56613,1.484375 v 2.099609 3.935547 h 4.102673 4.100582 v -4.488281 c 0,-1.919086 0.0021,-2.772654 -0.0063,-3.369141 z"/></svg>`;
 		
 		const RepoListComponent = class PluginList extends BdApi.React.Component {
 			componentDidMount() {
@@ -759,7 +759,7 @@ module.exports = (_ => {
 											BDFDB.NotificationUtils.notice(this.labels.notice_outdated_plugins.replace("{{var0}}", outdated), {
 												type: "danger",
 												className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepooutdatednotice,
-												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
+												customIcon: pluginRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
 												buttons: [{
 													contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
 													close: true,
@@ -776,7 +776,7 @@ module.exports = (_ => {
 											BDFDB.NotificationUtils.notice(this.labels.notice_new_plugins.replace("{{var0}}", newEntries), {
 												type: "success",
 												className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginreponewentriesnotice,
-												customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
+												customIcon: pluginRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
 												buttons: [{
 													contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
 													close: true,
@@ -797,7 +797,7 @@ module.exports = (_ => {
 												BDFDB.NotificationUtils.notice(this.labels.notice_failed_plugins.replace("{{var0}}", wrongUrls.length), {
 													type: "danger",
 													className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepofailnotice,
-													customIcon: pluginRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
+													customIcon: pluginRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
 													buttons: [{
 														contents: this.labels.list,
 														onClick: _ => {
@@ -989,19 +989,7 @@ module.exports = (_ => {
 			
 			isPluginOutdated (plugin, url) {
 				let instPlugin = BDFDB.BDUtils.getPlugin(plugin.getName);
-				return instPlugin && typeof instPlugin.getAuthor == "function" && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion && !this.pluginHasUpdateCheck(url);
-			}
-			
-			pluginHasUpdateCheck (url) {
-				if (!BDFDB.ObjectUtils.is(window.PluginUpdates) || !BDFDB.ObjectUtils.is(window.PluginUpdates.plugins)) return false;
-				if (window.PluginUpdates.plugins[url]) return true;
-				else {
-					let temp = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginRepo/PluginRepo.plugin.js".replace("//raw.githubusercontent.com", "//").split("/");
-					let gitname = temp.splice(3, 1);
-					temp.splice(4, 1);
-					temp.splice(2, 1, gitname + ".github.io");
-					return !!window.PluginUpdates.plugins[temp.join("/")];
-				}
+				return instPlugin && typeof instPlugin.getAuthor == "function" && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion && !BDFDB.PluginUtils.hasUpdateCheck(url);
 			}
 
 			getString (obj) {

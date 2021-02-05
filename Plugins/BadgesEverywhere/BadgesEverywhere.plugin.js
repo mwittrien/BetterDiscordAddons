@@ -16,13 +16,9 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "1.6.5",
 			"description": "Display Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout"
-		},
-		"changeLog": {
-			"fixed": {
-				"Styling Replies": "Fixed position and margins for badges in replied messages"
-			}
 		}
 	};
+	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
@@ -358,7 +354,7 @@ module.exports = (_ => {
 					keys: ["badges", flag],
 					label: this.defaults.badges[flag].name + (this.defaults.badges[flag].suffix ? ` ${this.defaults.badges[flag].suffix}` : ""),
 					value: badges[flag],
-					labelchildren: this.createSettingsBadges(flag)
+					labelChildren: this.createSettingsBadges(flag)
 				}));
 				for (let flag in indicators) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 					type: "Switch",
@@ -366,7 +362,7 @@ module.exports = (_ => {
 					keys: ["indicators", flag],
 					label: this.defaults.indicators[flag].name + (this.defaults.indicators[flag].suffix ? ` ${this.defaults.indicators[flag].suffix}` : ""),
 					value: indicators[flag],
-					labelchildren: this.createSettingsBadges(flag)
+					labelChildren: this.createSettingsBadges(flag)
 				}));
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 					title: "Display Badges:",

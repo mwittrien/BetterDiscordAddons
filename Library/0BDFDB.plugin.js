@@ -88,9 +88,16 @@ module.exports = (_ => {
 	
 	const PluginStores = {
 		loaded: {},
-		delayedLoad: [],
-		delayedStart: [],
-		updateTimeout: [],
+		delayed: {
+			loads: [],
+			starts: []
+		},
+		updateData: {
+			plugins: {},
+			timeouts: [],
+			downloaded: [],
+			interval: null
+		},
 		patchQueues: {}
 	};
 	const Plugin = function(config) {
@@ -102,7 +109,7 @@ module.exports = (_ => {
 			load () {
 				this.loaded = true;
 				if (window.BDFDB_Global.loading) {
-					if (!PluginStores.delayedLoad.includes(this)) PluginStores.delayedLoad.push(this);
+					if (!PluginStores.delayed.loads.includes(this)) PluginStores.delayed.loads.push(this);
 				}
 				else {
 					Object.assign(this, config.info, BDFDB.ObjectUtils.exclude(config, "info"));
@@ -116,7 +123,7 @@ module.exports = (_ => {
 			start () {
 				if (!this.loaded) this.load();
 				if (window.BDFDB_Global.loading) {
-					if (!PluginStores.delayedStart.includes(this)) PluginStores.delayedStart.push(this);
+					if (!PluginStores.delayed.starts.includes(this)) PluginStores.delayed.starts.push(this);
 				}
 				else {
 					if (this.started) return;
@@ -508,20 +515,19 @@ module.exports = (_ => {
 		return [Plugin(config), BDFDB];
 	};
 	BDFDB.PluginUtils.load = function (plugin) {
-		if (!PluginStores.updateTimeout.includes(plugin.name)) {
-			PluginStores.updateTimeout.push(plugin.name);
+		if (!PluginStores.updateData.timeouts.includes(plugin.name)) {
+			PluginStores.updateData.timeouts.push(plugin.name);
 			let url = InternalBDFDB.getPluginURL(plugin);
 
-			if (!BDFDB.ObjectUtils.is(window.PluginUpdates) || !BDFDB.ObjectUtils.is(window.PluginUpdates.plugins)) window.PluginUpdates = {plugins: {}};
-			window.PluginUpdates.plugins[url] = {name: plugin.name, raw: url, version: plugin.version};
+			PluginStores.updateData.plugins[url] = {name: plugin.name, raw: url, version: plugin.version};
 			
 			BDFDB.PluginUtils.checkUpdate(plugin.name, url);
 			
-			if (window.PluginUpdates.interval === undefined) window.PluginUpdates.interval = BDFDB.TimeUtils.interval(_ => {
+			if (!PluginStores.updateData.interval) PluginStores.updateData.interval = BDFDB.TimeUtils.interval(_ => {
 				BDFDB.PluginUtils.checkAllUpdates();
 			}, 1000*60*60*2);
 			
-			BDFDB.TimeUtils.timeout(_ => {BDFDB.ArrayUtils.remove(PluginStores.updateTimeout, plugin.name, true);}, 30000);
+			BDFDB.TimeUtils.timeout(_ => {BDFDB.ArrayUtils.remove(PluginStores.updateData.timeouts, plugin.name, true);}, 30000);
 		}
 	};
 	BDFDB.PluginUtils.init = function (plugin) {
@@ -563,7 +569,7 @@ module.exports = (_ => {
 		}
 		
 		delete Cache.data[plugin.name]
-		if (BDFDB.ObjectUtils.is(window.PluginUpdates) && BDFDB.ObjectUtils.is(window.PluginUpdates.plugins)) delete window.PluginUpdates.plugins[url];
+		delete PluginStores.updateData.plugins[url];
 	};
 	BDFDB.PluginUtils.translate = function (plugin) {
 		plugin.labels = {};
@@ -587,6 +593,8 @@ module.exports = (_ => {
 		BDFDB.TimeUtils.suppress(_ => {
 			if (!BDFDB.ObjectUtils.is(plugin)) return;
 			if (plugin == window.BDFDB_Global) {
+				document.querySelector(BDFDB.dotCN.noticeupdate)?.close();
+				BDFDB.TimeUtils.clear(PluginStores.updateData.interval);
 				delete window.BDFDB_Global.loaded;
 				BDFDB.TimeUtils.interval((interval, count) => {
 					if (count > 60 || window.BDFDB_Global.loaded) BDFDB.TimeUtils.clear(interval);
@@ -607,13 +615,14 @@ module.exports = (_ => {
 		}, "Failed to clean up plugin!", plugin.name)();
 	};
 	BDFDB.PluginUtils.checkUpdate = function (pluginName, url) {
-		if (pluginName && url && window.PluginUpdates.plugins[url]) return new Promise(callback => {
+		let updateStore = Object.assign({}, window.PluginUpdates && window.PluginUpdates.plugins, PluginStores.updateData.plugins);
+		if (pluginName && url && updateStore[url]) return new Promise(callback => {
 			LibraryRequires.request(url, (error, response, body) => {
-				if (error || !window.PluginUpdates.plugins[url]) return callback(null);
+				if (error || !updateStore[url]) return callback(null);
 				let newName = (body.match(/"name"\s*:\s*"([^"]+)"/) || [])[1] || pluginName;
 				let newVersion = (body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i) || "").toString().replace(/['"]/g, "");
 				if (!newVersion) return callback(null);
-				if (pluginName == newName && BDFDB.NumberUtils.getVersionDifference(newVersion, window.PluginUpdates.plugins[url].version) > 0.2) {
+				if (pluginName == newName && BDFDB.NumberUtils.getVersionDifference(newVersion, updateStore[url].version) > 0.2) {
 					BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_force_updated", pluginName), {
 						type: "warning",
 						disableInteractions: true
@@ -621,8 +630,8 @@ module.exports = (_ => {
 					BDFDB.PluginUtils.downloadUpdate(pluginName, url);
 					return callback(2);
 				}
-				else if (BDFDB.NumberUtils.compareVersions(newVersion, window.PluginUpdates.plugins[url].version)) {
-					window.PluginUpdates.plugins[url].outdated = true;
+				else if (BDFDB.NumberUtils.compareVersions(newVersion, updateStore[url].version)) {
+					if (PluginStores.updateData.plugins[url]) PluginStores.updateData.plugins[url].outdated = true;
 					BDFDB.PluginUtils.showUpdateNotice(pluginName, url);
 					return callback(1);
 				}
@@ -637,41 +646,65 @@ module.exports = (_ => {
 	BDFDB.PluginUtils.checkAllUpdates = function () {
 		return new Promise(callback => {
 			let finished = 0, amount = 0;
-			for (let url in window.PluginUpdates.plugins) {
-				let plugin = window.PluginUpdates.plugins[url];
+			let updateStore = Object.assign({}, window.PluginUpdates && window.PluginUpdates.plugins, PluginStores.updateData.plugins);
+			for (let url in updateStore) {
+				let plugin = updateStore[url];
 				if (plugin) BDFDB.PluginUtils.checkUpdate(plugin.name, plugin.raw).then(state => {
 					finished++;
 					if (state == 1) amount++;
-					if (finished >= Object.keys(window.PluginUpdates.plugins).length) callback(amount);
+					if (finished >= Object.keys(updateStore).length) callback(amount);
 				});
 			}
 		});
 	};
+	BDFDB.PluginUtils.hasUpdateCheck = function (url) {
+		let updateStore = Object.assign({}, window.PluginUpdates && window.PluginUpdates.plugins, PluginStores.updateData.plugins);
+		if (updateStore[url]) return true;
+		else {
+			let temp = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginRepo/PluginRepo.plugin.js".replace("//raw.githubusercontent.com", "//").split("/");
+			let gitName = temp.splice(3, 1);
+			temp.splice(4, 1);
+			temp.splice(2, 1, gitName + ".github.io");
+			let pagesUrl = temp.join("/");
+			return updateStore[pagesUrl];
+		}
+	};
 	BDFDB.PluginUtils.showUpdateNotice = function (pluginName, url) {
 		if (!pluginName || !url) return;
-		let updateNotice = document.querySelector("#pluginNotice");
+		let updateNotice = document.querySelector(BDFDB.dotCN.noticeupdate);
 		if (!updateNotice) {
 			let vanishObserver = new MutationObserver(changes => {
 				if (!document.contains(updateNotice)) {
-					if (updateNotice.querySelector("#outdatedPlugins span")) {
+					if (updateNotice.querySelector(BDFDB.dotCN.noticeupdateentry)) {
 						let layers = document.querySelector(BDFDB.dotCN.layers) || document.querySelector(BDFDB.dotCN.appmount);
 						if (layers) layers.parentElement.insertBefore(updateNotice, layers);
 					}
 					else vanishObserver.disconnect();
 				}
-				else if (document.contains(updateNotice) && !updateNotice.querySelector("#outdatedPlugins span," + BDFDB.dotCN.noticebutton)) vanishObserver.disconnect();
+				else if (document.contains(updateNotice) && !updateNotice.querySelector(BDFDB.dotCNC.noticeupdateentry + BDFDB.dotCN.noticebutton)) vanishObserver.disconnect();
 			});
 			vanishObserver.observe(document.body, {childList: true, subtree: true});
-			updateNotice = BDFDB.NotificationUtils.notice(`${BDFDB.LanguageUtils.LibraryStrings.update_notice_update}&nbsp;&nbsp;&nbsp;&nbsp;<strong id="outdatedPlugins"></strong>`, {
-				id: "pluginNotice",
+			updateNotice = BDFDB.NotificationUtils.notice(`${BDFDB.LanguageUtils.LibraryStrings.update_notice_update}&nbsp;&nbsp;&nbsp;&nbsp;<div class="${BDFDB.disCN.noticeupdateentries}"></div>`, {
 				type: "info",
-				textClassName: BDFDB.disCN.noticeupdatetext,
+				className: BDFDB.disCN.noticeupdate,
 				html: true,
 				forceStyle: true,
-				customIcon: `<svg height="100%" style="fill-rule: evenodd;clip-rule: evenodd;stroke-linecap: round;stroke-linejoin: round;" xmlns: xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xml: space="preserve" width="100%" version="1.1" viewBox="0 0 2000 2000"><metadata /><defs><filter id="shadow1"><feDropShadow dx="20" dy="0" stdDeviation="20" flood-color="rgba(0,0,0,0.35)"/></filter><filter id="shadow2"><feDropShadow dx="15" dy="0" stdDeviation="20" flood-color="rgba(255,255,255,0.15)"/></filter><filter id="shadow3"><feDropShadow dx="10" dy="0" stdDeviation="20" flood-color="rgba(0,0,0,0.35)"/></filter></defs><g><path fill="#171717" filter="url(#shadow3)" d="M 1195.44+135.442 L 1195.44+135.442 L 997.6+136.442 C 1024.2+149.742+1170.34+163.542+1193.64+179.742 C 1264.34+228.842+1319.74+291.242+1358.24+365.042 C 1398.14+441.642+1419.74+530.642+1422.54+629.642 L 1422.54+630.842 L 1422.54+632.042 C 1422.54+773.142+1422.54+1228.14+1422.54+1369.14 L 1422.54+1370.34 L 1422.54+1371.54 C 1419.84+1470.54+1398.24+1559.54+1358.24+1636.14 C 1319.74+1709.94+1264.44+1772.34+1193.64+1821.44 C 1171.04+1837.14+1025.7+1850.54+1000+1863.54 L 1193.54+1864.54 C 1539.74+1866.44+1864.54+1693.34+1864.54+1296.64 L 1864.54+716.942 C 1866.44+312.442+1541.64+135.442+1195.44+135.442 Z"/><path fill="#3E82E5" filter="url(#shadow2)" d="M 1695.54+631.442 C 1685.84+278.042+1409.34+135.442+1052.94+135.442 L 361.74+136.442 L 803.74+490.442 L 1060.74+490.442 C 1335.24+490.442+1335.24+835.342+1060.74+835.342 L 1060.74+1164.84 C 1150.22+1164.84+1210.53+1201.48+1241.68+1250.87 C 1306.07+1353+1245.76+1509.64+1060.74+1509.64 L 361.74+1863.54 L 1052.94+1864.54 C 1409.24+1864.54+1685.74+1721.94+1695.54+1368.54 C 1695.54+1205.94+1651.04+1084.44+1572.64+999.942 C 1651.04+915.542+1695.54+794.042+1695.54+631.442 Z"/><path fill="#FFFFFF" filter="url(#shadow1)" d="M 1469.25+631.442 C 1459.55+278.042+1183.05+135.442+826.65+135.442 L 135.45+135.442 L 135.45+1004 C 135.45+1004+135.427+1255.21+355.626+1255.21 C 575.825+1255.21+575.848+1004+575.848+1004 L 577.45+490.442 L 834.45+490.442 C 1108.95+490.442+1108.95+835.342+834.45+835.342 L 664.65+835.342 L 664.65+1164.84 L 834.45+1164.84 C 923.932+1164.84+984.244+1201.48+1015.39+1250.87 C 1079.78+1353+1019.47+1509.64+834.45+1509.64 L 135.45+1509.64 L 135.45+1864.54 L 826.65+1864.54 C 1182.95+1864.54+1459.45+1721.94+1469.25+1368.54 C 1469.25+1205.94+1424.75+1084.44+1346.35+999.942 C 1424.75+915.542+1469.25+794.042+1469.25+631.442 Z"/></g></svg>`,
+				customIcon: `<svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M 15.46875 0.859375 C 15.772992 1.030675 16.059675 1.2229406 16.326172 1.4316406 C 17.134815 2.0640406 17.768634 2.8677594 18.208984 3.8183594 C 18.665347 4.8050594 18.913286 5.9512625 18.945312 7.2265625 L 18.945312 7.2421875 L 18.945312 7.2597656 L 18.945312 16.753906 L 18.945312 16.769531 L 18.945312 16.785156 C 18.914433 18.060356 18.666491 19.206759 18.208984 20.193359 C 17.768634 21.144059 17.135961 21.947578 16.326172 22.580078 C 16.06768 22.782278 15.790044 22.967366 15.496094 23.134766 L 16.326172 23.134766 C 20.285895 23.158766 24 20.930212 24 15.820312 L 24 8.3535156 C 24.021728 3.1431156 20.305428 0.86132812 16.345703 0.86132812 L 15.46875 0.859375 z M 0 0.8671875 L 0 10.064453 L 4.4492188 15.191406 L 4.4492188 5.4394531 L 8.4394531 5.4394531 C 11.753741 5.4394531 11.753741 9.8828125 8.4394531 9.8828125 L 7.0234375 9.8828125 L 7.0234375 14.126953 L 8.4394531 14.126953 C 11.753741 14.126953 11.753741 18.568359 8.4394531 18.568359 L 0 18.568359 L 0 23.138672 L 8.3457031 23.138672 C 12.647637 23.138672 15.987145 21.3021 16.105469 16.75 C 16.105469 14.6555 15.567688 13.090453 14.621094 12.001953 C 15.567688 10.914853 16.105469 9.3502594 16.105469 7.2558594 C 15.988351 2.7036594 12.648845 0.8671875 8.3457031 0.8671875 L 0 0.8671875 z"/></svg>`,
 				buttons: !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.automaticLoading) && [{
+					className: BDFDB.disCN.noticeupdatebuttonreload,
 					contents: BDFDB.LanguageUtils.LanguageStrings.ERRORS_RELOAD,
-					onClick: _ => location.reload()
+					onClick: _ => location.reload(),
+					onMouseEnter: _ => {
+						if (PluginStores.updateData.downloaded) BDFDB.TooltipUtils.create(reloadButton, PluginStores.updateData.downloaded.join(", "), {
+							type: "bottom",
+							style: "max-width: 420px"
+						});
+					}
+				}],
+				buttons: [{
+					className: BDFDB.disCN.noticeupdatebuttonall,
+					contents: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL,
+					onClick: _ => {for (let notice of updateNotice.querySelectorAll(BDFDB.dotCN.noticeupdateentry)) notice.click();}
 				}],
 				onClose: _ => {vanishObserver.disconnect();}
 			});
@@ -680,23 +713,14 @@ module.exports = (_ => {
 			updateNotice.style.setProperty("position", "relative", "important");
 			updateNotice.style.setProperty("visibility", "visible", "important");
 			updateNotice.style.setProperty("opacity", "1", "important");
-			let reloadButton = updateNotice.querySelector(BDFDB.dotCN.noticebutton);
-			if (reloadButton) {
-				BDFDB.DOMUtils.hide(reloadButton);
-				reloadButton.addEventListener("mouseenter", _ => {
-					if (window.PluginUpdates.downloaded) BDFDB.TooltipUtils.create(reloadButton, window.PluginUpdates.downloaded.join(", "), {
-						type: "bottom",
-						className: "update-notice-tooltip",
-						style: "max-width: 420px"
-					});
-				});
-			}
+			let reloadButton = updateNotice.querySelector(BDFDB.dotCN.noticeupdatebuttonreload);
+			if (reloadButton) BDFDB.DOMUtils.hide(reloadButton);
 		}
 		if (updateNotice) {
-			let updateNoticeList = updateNotice.querySelector("#outdatedPlugins");
+			let updateNoticeList = updateNotice.querySelector(BDFDB.dotCN.noticeupdateentries);
 			if (updateNoticeList && !updateNoticeList.querySelector(`#${pluginName}-notice`)) {
-				if (updateNoticeList.querySelector("span")) updateNoticeList.appendChild(BDFDB.DOMUtils.create(`<span class="separator">, </span>`));
-				let updateEntry = BDFDB.DOMUtils.create(`<span id="${pluginName}-notice">${pluginName}</span>`);
+				if (updateNoticeList.childElementCount) updateNoticeList.appendChild(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.noticeupdateseparator}">, </div>`));
+				let updateEntry = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.noticeupdateentry}" id="${pluginName}-notice">${pluginName}</div>`);
 				updateEntry.addEventListener("click", _ => {
 					if (!updateEntry.wasClicked) {
 						updateEntry.wasClicked = true;
@@ -716,22 +740,22 @@ module.exports = (_ => {
 			}
 		}
 	};
-	BDFDB.PluginUtils.removeUpdateNotice = function (pluginName, updateNotice = document.querySelector("#pluginNotice")) {
+	BDFDB.PluginUtils.removeUpdateNotice = function (pluginName, updateNotice = document.querySelector(BDFDB.dotCN.noticeupdate)) {
 		if (!pluginName || !updateNotice) return;
-		let updateNoticeList = updateNotice.querySelector("#outdatedPlugins");
+		let updateNoticeList = updateNotice.querySelector(BDFDB.dotCN.noticeupdateentries);
 		if (updateNoticeList) {
 			let noticeEntry = updateNoticeList.querySelector(`#${pluginName}-notice`);
 			if (noticeEntry) {
 				let nextSibling = noticeEntry.nextSibling;
 				let prevSibling = noticeEntry.prevSibling;
-				if (nextSibling && BDFDB.DOMUtils.containsClass(nextSibling, "separator")) nextSibling.remove();
-				else if (prevSibling && BDFDB.DOMUtils.containsClass(prevSibling, "separator")) prevSibling.remove();
+				if (nextSibling && BDFDB.DOMUtils.containsClass(nextSibling, BDFDB.disCN.noticeupdateseparator)) nextSibling.remove();
+				else if (prevSibling && BDFDB.DOMUtils.containsClass(prevSibling, BDFDB.disCN.noticeupdateseparator)) prevSibling.remove();
 				noticeEntry.remove();
 			}
-			if (!updateNoticeList.querySelector("span")) {
-				let reloadButton = updateNotice.querySelector(BDFDB.dotCN.noticebutton);
+			if (!updateNoticeList.childElementCount) {
+				let reloadButton = updateNotice.querySelector(BDFDB.dotCN.noticeupdatebuttonreload);
 				if (reloadButton) {
-					updateNotice.querySelector(BDFDB.dotCN.noticeupdatetext).innerText = BDFDB.LanguageUtils.LibraryStrings.update_notice_reload;
+					updateNotice.querySelector(BDFDB.dotCN.noticetext).innerText = BDFDB.LanguageUtils.LibraryStrings.update_notice_reload;
 					BDFDB.DOMUtils.show(reloadButton);
 				}
 				else updateNotice.querySelector(BDFDB.dotCN.noticedismiss).click();
@@ -741,22 +765,22 @@ module.exports = (_ => {
 	BDFDB.PluginUtils.downloadUpdate = function (pluginName, url) {
 		if (pluginName && url) LibraryRequires.request(url, (error, response, body) => {
 			if (error) {
-				let updateNotice = document.querySelector("#pluginNotice");
-				if (updateNotice) BDFDB.PluginUtils.removeUpdateNotice(pluginName, updateNotice);
+				BDFDB.PluginUtils.removeUpdateNotice(pluginName);
 				BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_update_failed", pluginName), {
 					type: "danger",
 					disableInteractions: true
 				});
 			}
 			else {
+				let updateStore = Object.assign({}, window.PluginUpdates && window.PluginUpdates.plugins, PluginStores.updateData.plugins);
 				let wasEnabled = BDFDB.BDUtils.isPluginEnabled(pluginName);
 				let newName = (body.match(/"name"\s*:\s*"([^"]+)"/) || [])[1] || pluginName;
 				let newVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i).toString().replace(/['"]/g, "");
-				let oldVersion = window.PluginUpdates.plugins[url].version;
+				let oldVersion = updateStore[url].version;
 				let fileName = pluginName == "BDFDB" ? "0BDFDB" : pluginName;
 				let newFileName = newName == "BDFDB" ? "0BDFDB" : newName;
 				LibraryRequires.fs.writeFile(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), newFileName + ".plugin.js"), body, _ => {
-					window.PluginUpdates.plugins[url].version = newVersion;
+					if (PluginStores.updateData.plugins[url]) PluginStores.updateData.plugins[url].version = newVersion;
 					if (fileName != newFileName) {
 						LibraryRequires.fs.unlink(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".plugin.js"), _ => {});
 						let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".config.json");
@@ -768,11 +792,10 @@ module.exports = (_ => {
 					BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_updated", pluginName, "v" + oldVersion, newName, "v" + newVersion), {
 						disableInteractions: true
 					});
-					let updateNotice = document.querySelector("#pluginNotice");
+					let updateNotice = document.querySelector(BDFDB.dotCN.noticeupdate);
 					if (updateNotice) {
-						if (updateNotice.querySelector(BDFDB.dotCN.noticebutton)) {
-							if (!window.PluginUpdates.downloaded) window.PluginUpdates.downloaded = [];
-							if (!window.PluginUpdates.downloaded.includes(pluginName)) window.PluginUpdates.downloaded.push(pluginName);
+						if (updateNotice.querySelector(BDFDB.dotCN.noticebutton) && !PluginStores.updateData.downloaded.includes(pluginName)) {
+							PluginStores.updateData.downloaded.push(pluginName);
 						}
 						BDFDB.PluginUtils.removeUpdateNotice(pluginName, updateNotice);
 					}
@@ -1338,7 +1361,7 @@ module.exports = (_ => {
 					let layers = document.querySelector(BDFDB.dotCN.layers) || document.querySelector(BDFDB.dotCN.appmount);
 					if (!layers) return;
 					let id = BDFDB.NumberUtils.generateId(NotificationBars);
-					let notice = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.notice + BDFDB.disCN.noticewrapper}" notice-id="${id}"><div class="${BDFDB.disCN.noticedismiss}"${config.forceStyle ? ` style="width: 36px !important; height: 36px !important; position: absolute !important; top: 0 !important; right: 0 !important; left: unset !important;"` : ""}></div><span class="${BDFDB.disCN.noticetext}"></span></div>`);
+					let notice = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.notice + BDFDB.disCN.noticewrapper}" notice-id="${id}"><div class="${BDFDB.disCN.noticedismiss}"${config.forceStyle ? ` style="width: 36px !important; height: 36px !important; position: absolute !important; top: 0 !important; right: 0 !important; left: unset !important;"` : ""}></div><div class="${BDFDB.disCN.noticetext}"></div></div>`);
 					layers.parentElement.insertBefore(notice, layers);
 					let noticeText = notice.querySelector(BDFDB.dotCN.noticetext);
 					if (config.platform) for (let platform of config.platform.split(" ")) if (DiscordClasses["noticeicon" + platform]) {
@@ -1350,21 +1373,28 @@ module.exports = (_ => {
 					if (config.customIcon) {
 						let icon = document.createElement("i"), iconInner = BDFDB.DOMUtils.create(config.customIcon);
 						if (iconInner.nodeType == Node.TEXT_NODE) icon.style.setProperty("background", `url(${config.customIcon}) center/cover no-repeat`);
-						else icon.appendChild(iconInner);
+						else {
+							icon = iconInner;
+							if ((icon.tagName || "").toUpperCase() == "SVG") {
+								icon.removeAttribute("width");
+								icon.setAttribute("height", "100%");
+							}
+						}
 						BDFDB.DOMUtils.addClass(icon, BDFDB.disCN.noticeplatformicon);
 						BDFDB.DOMUtils.removeClass(icon, BDFDB.disCN.noticeicon);
 						notice.insertBefore(icon, noticeText);
 					}
-					if (config.btn || config.button) notice.appendChild(BDFDB.DOMUtils.create(`<button class="${BDFDB.disCN.noticebutton}">${config.btn || config.button}</button>`));
-					if (BDFDB.ArrayUtils.is(config.buttons)) for (let button of config.buttons) {
-						let contents = typeof button.contents == "string" && button.contents;
+					if (BDFDB.ArrayUtils.is(config.buttons)) for (let data of config.buttons) {
+						let contents = typeof data.contents == "string" && data.contents;
 						if (contents) {
-							let ele = BDFDB.DOMUtils.create(`<button class="${BDFDB.DOMUtils.formatClassName(BDFDB.disCN.noticebutton, button.className)}">${contents}</button>`);
-							ele.addEventListener("click", e => {
-								if (button.close) notice.close();
-								if (typeof button.onClick == "function") button.onClick(e, notice);
+							let button = BDFDB.DOMUtils.create(`<button class="${BDFDB.DOMUtils.formatClassName(BDFDB.disCN.noticebutton, data.className)}">${contents}</button>`);
+							button.addEventListener("click", event => {
+								if (data.close) notice.close();
+								if (typeof data.onClick == "function") data.onClick(event, notice);
 							});
-							notice.appendChild(ele);
+							if (typeof data.onMouseEnter == "function") button.addEventListener("mouseenter", event => data.onMouseEnter(event, notice));
+							if (typeof data.onMouseLeave == "function") button.addEventListener("mouseleave", event => data.onMouseLeave(event, notice));
+							notice.appendChild(button);
 						}
 					}
 					if (config.id) notice.id = config.id.split(" ").join("");
@@ -6400,7 +6430,7 @@ module.exports = (_ => {
 											wrap: true,
 											children: label
 										}) : label,
-										this.props.labelchildren,
+										this.props.labelChildren,
 										BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
 											className: BDFDB.disCNS.settingsrowcontrol + BDFDB.disCN.flexchild,
 											grow: 0,
@@ -6410,7 +6440,7 @@ module.exports = (_ => {
 											children: BDFDB.ReactUtils.createElement(childComponent, BDFDB.ObjectUtils.exclude(Object.assign(BDFDB.ObjectUtils.exclude(this.props, "className", "id", "type"), this.props.childProps, {
 												onChange: this.handleChange.bind(this),
 												onValueChange: this.handleChange.bind(this)
-											}), "basis", "margin", "dividerBottom", "dividerTop", "label", "labelClassName", "labelchildren", "tag", "mini", "note", "childProps"))
+											}), "basis", "margin", "dividerBottom", "dividerTop", "label", "labelClassName", "labelChildren", "tag", "mini", "note", "childProps"))
 										})
 									].flat(10).filter(n => n)
 								}),
@@ -7217,7 +7247,7 @@ module.exports = (_ => {
 							svgName: InternalComponents.LibraryComponents.SvgIcon.Names.CHANGELOG,
 							onClick: _ => {BDFDB.PluginUtils.openChangeLog(plugin);}
 						}));
-						if (window.PluginUpdates && window.PluginUpdates.plugins && window.PluginUpdates.plugins[url] && window.PluginUpdates.plugins[url].outdated) controls.push(InternalBDFDB.createCustomControl({
+						if (PluginStores.updateData.plugins[url]?.outdated) controls.push(InternalBDFDB.createCustomControl({
 							tooltipText: BDFDB.LanguageUtils.LanguageStrings.UPDATE_MANUALLY,
 							svgName: InternalComponents.LibraryComponents.SvgIcon.Names.DOWNLOAD,
 							onClick: _ => {BDFDB.PluginUtils.downloadUpdate(plugin.name, url);}
@@ -7270,43 +7300,7 @@ module.exports = (_ => {
 						PrivateChannel: ["componentDidMount", "componentDidUpdate"],
 						UserPopout: ["componentDidMount", "componentDidUpdate"],
 						UserProfile: ["componentDidMount", "componentDidUpdate"],
-						Shakeable: "render",
-						V2C_ContentColumn: "render"
-					}
-				};
-				
-				InternalBDFDB.processV2CContentColumn = function (e) {
-					if (window.PluginUpdates && window.PluginUpdates.plugins && typeof e.instance.props.title == "string" && e.instance.props.title.toUpperCase().indexOf("PLUGINS") == 0) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: "folder-button"});
-						if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-							text: BDFDB.LanguageUtils.LibraryStrings.update_check_info,
-							tooltipConfig: {
-								type: "bottom",
-								maxWidth: 420
-							},
-							onContextMenu: (event, instance) => {
-								instance.updateTooltip(BDFDB.ObjectUtils.toArray(window.PluginUpdates.plugins).map(p => p.name).filter(n => n).sort().join(", "));
-							},
-							children: BDFDB.ReactUtils.createElement("button", {
-								className: `${BDFDB.disCNS._repobutton + BDFDB.disCN._repofolderbutton} bd-updatebtn`,
-								onClick: _ => {
-									let toast = BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStrings.update_check_inprogress, {
-										type: "info",
-										timeout: 0
-									});
-									BDFDB.PluginUtils.checkAllUpdates().then(outdated => {
-										toast.close();
-										if (outdated > 0) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("update_check_complete_outdated", outdated), {
-											type: "danger"
-										});
-										else BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStrings.update_check_complete, {
-											type: "success"
-										});
-									});
-								},
-								children: BDFDB.LanguageUtils.LibraryStrings.update_check
-							})
-						}));
+						Shakeable: "render"
 					}
 				};
 				
@@ -7389,7 +7383,7 @@ module.exports = (_ => {
 								if (customBadge) avatar.setAttribute("custombadge_id", user.id);
 								let badge = document.createElement("div");
 								badge.className = BDFDB.disCN.bdfdbbadge;
-								badge.addEventListener("mouseenter", _ => {BDFDB.TooltipUtils.create(badge, role, {position: "top"});});
+								badge.addEventListener("mouseenter", _ => BDFDB.TooltipUtils.create(badge, role, {position: "top"}));
 								avatar.style.setProperty("position", "relative");
 								avatar.style.setProperty("overflow", "visible");
 								avatar.style.setProperty("border-radius", 0);
@@ -7886,8 +7880,8 @@ module.exports = (_ => {
 					}
 				}, config);
 				
-				while (PluginStores.delayedLoad.length) PluginStores.delayedLoad.shift().load();
-				while (PluginStores.delayedStart.length) PluginStores.delayedStart.shift().start();
+				while (PluginStores.delayed.loads.length) PluginStores.delayed.loads.shift().load();
+				while (PluginStores.delayed.starts.length) PluginStores.delayed.starts.shift().start();
 				while (pluginQueue.length) {
 					let pluginName = pluginQueue.shift();
 					if (pluginName) BDFDB.TimeUtils.timeout(_ => BDFDB.BDUtils.reloadPlugin(pluginName));
@@ -7935,7 +7929,7 @@ module.exports = (_ => {
 							value: p,
 							label: BDFDB.LanguageUtils.LibraryStrings[p] || p
 						})),
-						searchable: true,
+						searchable: true
 					}));
 					for (let key in settings) {
 						let nativeSetting = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds[key]);
@@ -7961,6 +7955,48 @@ module.exports = (_ => {
 							}) : true) && (settings[key] || nativeSetting)
 						}));
 					}
+					settingsItems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsItem, {
+						type: "Button",
+						label: BDFDB.LanguageUtils.LibraryStrings.update_check_info,
+						dividerTop: true,
+						basis: "20%",
+						children: BDFDB.LanguageUtils.LanguageStrings.CHECKING_FOR_UPDATES,
+						labelChildren: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
+							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+								name: InternalComponents.LibraryComponents.SvgIcon.Names.QUESTIONMARK,
+								width: 16,
+								height: 16,
+								onClick: _ => BDFDB.ModalUtils.open(BDFDB, {
+									header: "Plugins",
+									subHeader: "",
+									contentClassName: BDFDB.disCN.marginbottom20,
+									text: BDFDB.ObjectUtils.toArray(Object.assign({}, window.PluginUpdates && window.PluginUpdates.plugins, PluginStores.updateData.plugins)).map(p => p.name).filter(n => n).sort().join(", ")
+								})
+							})
+						}),
+						onClick: _ => {
+							let loadingString = `${BDFDB.LanguageUtils.LanguageStrings.CHECKING_FOR_UPDATES} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`;
+							let currentLoadingString = loadingString;
+							let toastInterval, toast = BDFDB.NotificationUtils.toast(loadingString, {
+								type: "info",
+								timeout: 0,
+								onClose: _ => {BDFDB.TimeUtils.clear(toastInterval);}
+							});
+							toastInterval = BDFDB.TimeUtils.interval(_ => {
+								currentLoadingString = currentLoadingString.endsWith(".....") ? loadingString : currentLoadingString + ".";
+								toast.update(currentLoadingString);
+							}, 500);
+							BDFDB.PluginUtils.checkAllUpdates().then(outdated => {
+								toast.close();
+								if (outdated > 0) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("update_check_complete_outdated", outdated), {
+									type: "danger"
+								});
+								else BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStrings.update_check_complete, {
+									type: "success"
+								});
+							});
+						}
+					}));
 					
 					return settingsItems;
 				}
