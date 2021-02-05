@@ -899,6 +899,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	max-height: 28px;
 }
 
+#pluginNotice .notice-message {
+	white-space: pre;
+}
 #pluginNotice #outdatedPlugins {
 	font-weight: 700;
 }
