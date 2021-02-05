@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
-			"version": "2.1.2",
+			"version": "2.1.3",
 			"description": "Allow you to preview all themes from the theme repo and download them on the fly"
 		},
 		"changeLog": {
@@ -115,7 +115,7 @@ module.exports = (_ => {
 			DESC:			"descending"
 		};
 		
-		const themeRepoIcon = `<svg width="39" height="32" viewBox="0 0 39 32"><path fill="COLOR_1" d="m 0,3.8369956 v 3.8369068 h 4.2485624 4.24866 V 19.836368 31.998734 h 4.1396556 4.139655 V 19.836368 7.6739024 h 4.248562 4.248659 V 3.8369956 0 H 12.636878 0 v 3.8369956 z"/><path fill="COLOR_2" d="m 26.726212,3.7539002 v 3.7539002 l 0.599235,0.047207 c 2.895848,0.2282931 4.458187,2.8030736 3.228908,5.3213946 -0.789652,1.617734 -1.78074,1.964611 -5.613855,1.964611 H 22.441379 V 11.981369 9.1218131 H 20.335184 18.229088 V 20.560312 31.9987 h 2.106096 2.106195 v -5.070253 -5.070353 l 0.692251,0.02077 0.69225,0.02066 3.690081,5.031466 3.690084,5.031477 3.896976,0.01877 L 39,32 v -1.551755 -1.551744 l -3.127411,-3.927389 -3.127409,-3.927388 0.422565,-0.158416 c 3.495667,-1.309944 5.41554,-4.30099 5.772,-8.992777 C 39.488279,4.6720596 35.120865,0 27.824452,0 h -1.09824 v 3.7539002 z"/></svg>`;
+		const themeRepoIcon = `<svg width="42" height="32" viewBox="0 0 42 32"><path fill="COLOR_1" d="M 0,0 V 7.671875 H 8.6211458 V 32 H 16.922769 V 7.672 l 8.621146,-1.25e-4 V 0 Z"/><path fill="COLOR_2" d="M 29.542969 0 L 29.542969 7.5488281 L 30.056641 7.5488281 C 35.246318 7.5488281 35.246318 14.869141 30.056641 14.869141 L 25.234375 14.869141 L 25.234375 11.671875 L 20.921875 11.671875 L 20.921875 32 L 25.234375 32 L 25.234375 21.830078 L 26.705078 21.830078 L 34.236328 32 L 42 32 L 42 28.931641 L 35.613281 21.017578 C 39.562947 19.797239 41.998047 16.452154 41.998047 10.53125 C 41.814341 3.0284252 36.625168 0 29.919922 0 L 29.542969 0 z"/></svg>`;
 		
 		const RepoListComponent = class ThemeList extends BdApi.React.Component {
 			componentDidMount() {
@@ -1066,7 +1066,7 @@ module.exports = (_ => {
 								BDFDB.NotificationUtils.notice(this.labels.notice_outdated_themes.replace("{{var0}}", outdated), {
 									type: "danger",
 									className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themerepooutdatednotice,
-									customIcon: themeRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
+									customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
 									buttons: [{
 										contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
 										close: true,
@@ -1083,7 +1083,7 @@ module.exports = (_ => {
 								BDFDB.NotificationUtils.notice(this.labels.notice_new_themes.replace("{{var0}}", newEntries), {
 									type: "success",
 									className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themereponewentriesnotice,
-									customIcon: themeRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
+									customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
 									buttons: [{
 										contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
 										close: true,
@@ -1104,7 +1104,7 @@ module.exports = (_ => {
 									BDFDB.NotificationUtils.notice(this.labels.notice_failed_themes.replace("{{var0}}", wrongUrls.length), {
 										type: "danger",
 										className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themerepofailnotice,
-										customIcon: themeRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
+										customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
 										buttons: [{
 											contents: this.labels.list,
 											onClick: _ => {
