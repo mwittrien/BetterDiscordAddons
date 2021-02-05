@@ -903,6 +903,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	overflow: hidden !important;
 }
 [REPLACE_CLASS_noticetext] {
+	display: flex;
     white-space: pre;
 }
 [REPLACE_CLASS_noticewrapper] [REPLACE_CLASS_noticeplatformicon] {
@@ -924,6 +925,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	text-decoration: underline;
 }
 [REPLACE_CLASS_noticeupdateentries] {
+	display: flex;
 	font-weight: 700;
 }
 [REPLACE_CLASS_noticeupdateentry] {
