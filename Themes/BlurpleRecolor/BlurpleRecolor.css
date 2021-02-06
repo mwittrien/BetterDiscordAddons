@@ -1,10 +1,10 @@
 ﻿@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
 
 :root {
-	--daccentcolor: 114,137,218;	/* #7289da */
+	--daccentcolor: 114,137,218;
 	--vaccentcolor: var(--accentcolor, var(--daccentcolor));
-	--daccentcolor2: 255,115,250;	/* #ff73fa */
-	--vaccentcolor2: var(--accentcolor2, var(--daccentcolor));
+	--daccentcolor2: 255,115,250;
+	--vaccentcolor2: var(--accentcolor2, var(--daccentcolor2));
 	--dlinkcolor: 0,176,244;
 	--vlinkcolor: var(--linkcolor, var(--dlinkcolor));
 	
