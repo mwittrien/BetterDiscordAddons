@@ -525,7 +525,7 @@ module.exports = (_ => {
 			
 			if (!PluginStores.updateData.interval) PluginStores.updateData.interval = BDFDB.TimeUtils.interval(_ => {
 				BDFDB.PluginUtils.checkAllUpdates();
-			}, 1000*60*60*2);
+			}, 1000*60*60*4);
 			
 			BDFDB.TimeUtils.timeout(_ => {BDFDB.ArrayUtils.remove(PluginStores.updateData.timeouts, plugin.name, true);}, 30000);
 		}
@@ -643,10 +643,10 @@ module.exports = (_ => {
 		});
 		return new Promise(callback => {callback(null);});
 	};
-	BDFDB.PluginUtils.checkAllUpdates = function () {
+	BDFDB.PluginUtils.checkAllUpdates = function (all) {
 		return new Promise(callback => {
 			let finished = 0, amount = 0;
-			let updateStore = Object.assign({}, window.PluginUpdates && window.PluginUpdates.plugins, PluginStores.updateData.plugins);
+			let updateStore = Object.assign({}, all && window.PluginUpdates && window.PluginUpdates.plugins, PluginStores.updateData.plugins);
 			for (let url in updateStore) {
 				let plugin = updateStore[url];
 				if (plugin) BDFDB.PluginUtils.checkUpdate(plugin.name, plugin.raw).then(state => {
@@ -7986,7 +7986,7 @@ module.exports = (_ => {
 								currentLoadingString = currentLoadingString.endsWith(".....") ? loadingString : currentLoadingString + ".";
 								toast.update(currentLoadingString);
 							}, 500);
-							BDFDB.PluginUtils.checkAllUpdates().then(outdated => {
+							BDFDB.PluginUtils.checkAllUpdates(true).then(outdated => {
 								toast.close();
 								if (outdated > 0) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("update_check_complete_outdated", outdated), {
 									type: "danger"
