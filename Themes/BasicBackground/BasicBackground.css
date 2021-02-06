@@ -958,15 +958,21 @@ body::before {
 	bottom: 0;
 	left: calc(-1*var(--avatar-size) - (6px*var(--vusechatbubbles)));
 	width: calc(var(--avatar-size) - 4px);
-	margin-right: var(--reply-spacing);
-	margin-top: calc(-1*var(--spine-width)/2);
-	margin-left: calc(-1*var(--spine-width)/2);
-	margin-bottom: calc(.125rem - 4px);
-	border-left: var(--spine-width) solid var(--background-accent);
-	border-bottom: 0 solid var(--background-accent);
+	margin: calc(-1*var(--spine-width)/2) var(--reply-spacing) calc(.125rem - 4px) calc(-1*var(--spine-width)/2);
 	border-right: 0 solid var(--background-accent);
+	border-left: var(--spine-width) solid var(--background-accent);
+}
+#app-mount .repliedMessage-VokQwo::before,
+#app-mount .repliedMessage-VokQwo::after {
 	border-top: var(--spine-width) solid var(--background-accent);
+	border-bottom: 0 solid var(--background-accent);
 	border-top-left-radius: 6px;
+}
+#app-mount .spine-1UneWn::before,
+#app-mount .spine-1UneWn::after {
+	border-top: 0 solid var(--background-accent);
+	border-bottom: var(--spine-width) solid var(--background-accent);
+	border-bottom-left-radius: 6px;
 }
 #app-mount .compact-T3H92H .repliedMessage-VokQwo::before,
 #app-mount .compact-T3H92H .repliedMessage-VokQwo::after,
