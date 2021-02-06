@@ -114,7 +114,7 @@
 	color: rgb(var(--vaccentcolor));
 }
 .iconTierThree-3EAOB7 {										/* guild header			icontier3							*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--vaccentcolor2));
 }
 .subscribeTooltipWrapper-32-Ce8 {							/* guild header			subscribetooltip					*/
 	background-color: rgb(var(--vaccentcolor));
@@ -240,7 +240,7 @@
 }
 
 .icon-360yEu {												/* systemmessage		guild sub easter egg icon			*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--vaccentcolor2));
 }
 
 .message-15tBk4 strong,										/* mention				in header							*/
@@ -350,11 +350,22 @@
 .introductionAction-M1r6AX {								/* gifpicker			introductionaction tooltip			*/
 	color: rgb(var(--vaccentcolor));
 }
+.iconColorLightBlue-zbxJUe {								/* stickerpicker		icon lightblue						*/
+	color: rgb(var(--vaccentcolor));
+	filter: brightness(150%);
+}
+.iconColorDarkBlue-6qQpJf {									/* stickerpicker		icon darkblue						*/
+	color: rgb(var(--vaccentcolor));
+	filter: brightness(75%);
+}
+.iconColorPink-1dhBIv {										/* stickerpicker		icon pink							*/
+	color: rgb(var(--vaccentcolor2));
+}
 
 /* ----		3.4.	MEMBERLIST						---- */
 
 .premiumIcon-1rDbWQ {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--vaccentcolor2));
 }
 
 /* ----		3.5.	SEARCHPAGE						---- */
@@ -409,7 +420,7 @@
 	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(162, 48, 194), rgba(162, 48, 194, 0.5));
 }
 .gridItemBadge-1Se-Pu::before {
-	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--vaccentcolor2)), rgba(var(--vaccentcolor2), 0.5));
 }
 
 .activeTransferGuildCardBorder-2jUQ7t{
@@ -417,7 +428,7 @@
 }
 
 .premiumGuildSubscriptionRowActive-1WxLXI{
-	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--vaccentcolor2)), rgba(var(--vaccentcolor2), 0.5));
 }
 
 .theme-light .animationContainer-cNePAf {
@@ -625,7 +636,7 @@
 #app-mount .tierAccomplished-2eXPdI,
 #app-mount .tierCurrent-Lw7-4E,
 #app-mount .tierDefault-2qaRkD {
-	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor2)), rgba(var(--vaccentcolor2), 0.5));
 }
 #app-mount .tierCloseHint-380zIA {							/* boostsettings		tierclosehint						*/
 	background-color: rgb(var(--vaccentcolor));
@@ -635,6 +646,9 @@
 }
 #app-mount .tierHeaderUnlockedBackground-MW5XJU {			/* boostsettings		tierheaderunlockedbg				*/
 	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+}
+#app-mount .foreground-2EIns2 {								/* boostsettings		icon foreground						*/
+	color: rgb(var(--vaccentcolor2));
 }
 .emojiIcon-2xOPMD {											/* boostsettings		perkicon emoji						*/
 	color: rgb(var(--vaccentcolor));
@@ -647,35 +661,20 @@
 	color: rgb(var(--vaccentcolor));
 	filter: brightness(150%);
 }
-.profileBadgeIcon-_ctnKj {
-	position: relative;
-	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_boostbadge_bg.svg) center/contain no-repeat;
-}
-.profileBadgeIcon-_ctnKj::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_boostbadge_accent.svg) center/contain no-repeat;
-}
-.premiumGuildIcon-13KUPa {									/* boostsettings		sub count icon						*/
-	color: rgb(var(--vaccentcolor));
+.premiumGuildIcon-13KUPa {									/* boostsettings		perkicon premium					*/
+	color: rgb(var(--vaccentcolor2));
 }
 .gemWithLabel-2aecE_ {										/* boostsettings		progress label						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--vaccentcolor2));
 }
 .gemIndicatorProgressCircle-3wDFa1 {						/* boostsettings		progress circle						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--vaccentcolor2));
 }
 .guildSubscriberCountIcon-6Fo5EK {							/* boostsettings		sub count							*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--vaccentcolor2));
 }
 .guildSubscriptionSlotIcon-EVE04u {							/* boostsettings		slot icon							*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--vaccentcolor2));
 }
 
 .icon-3j1dJB {												/* hypesettings			perk icon							*/
@@ -858,6 +857,10 @@
 
 .featureIcon-3p1TC_ [fill="#7289da" i] {					/* communitysettings	intro		featureicon				*/
 	fill: rgb(var(--vaccentcolor));
+}
+
+.info-1LuGpo {												/* communitysettings	partnership							*/
+	color: rgb(var(--vaccentcolor));
 }
 
 .fakeButton-kGEmb3 {										/* communitysettings	rules		example fake			*/
@@ -1297,23 +1300,23 @@
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_boostheader_accent.svg) center/cover no-repeat;
 }
 .badgeIconWithSubscribers-3PlMu9 {							/* modal				sub badge icon						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--vaccentcolor2));
 }
 #app-mount .icon-QVoPRH {									/* modal				perkicon general					*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--vaccentcolor2));
 }
 															/* modal				tiermarker in progress tier3		*/
 #app-mount .tierMarkerInProgress-24LMzJ .currentTierIcon-2gcTCn.tier3Icon-Ku4Ahe {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--vaccentcolor2));
 }
 .tierMarkerAccomplished-2MiXeg {							/* modal				tiermarker accomplished				*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.7)) !important;
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor2)), rgba(var(--vaccentcolor2), 0.7)) !important;
 }
 #app-mount .barForeground-3KglC8 {							/* modal				tierbarfill							*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--vaccentcolor2));
 }
 #app-mount .barSecondary-3B1aP2 {							/* modal				previewbarfill						*/
-	background: var(--interactive-hover) linear-gradient(90deg, rgba(var(--vaccentcolor), 0.3), rgba(var(--vaccentcolor), 0.3));
+	background: var(--interactive-hover) linear-gradient(90deg, rgba(var(--vaccentcolor2), 0.3), rgba(var(--vaccentcolor2), 0.3));
 }
 #app-mount .iconIncluded-24npcq {							/* modal				included perkicon					*/
 	color: rgb(var(--vaccentcolor));
@@ -1356,7 +1359,7 @@
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_boostangel_accent.svg) center/cover no-repeat;
 }
 .tierMarkerLabelPlusIcon-1OS7E9 {							/* modal				prebuy icon							*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--vaccentcolor2));
 }
 .upsellFooterIcon-2105bD path {								/* prebuy popout		footer icon							*/
 	fill: rgb(var(--vaccentcolor));
@@ -1490,9 +1493,11 @@
 
 /* ----		11.1.	CONTEXTMENU						---- */
 
-.colorBrand-ROmMP1,											/* contextmenu			brand								*/
-.colorPremium-p4p7qO {										/* contextmenu			premium								*/
+.colorBrand-ROmMP {											/* contextmenu			brand								*/
 	color: rgb(var(--vaccentcolor));
+}
+.colorPremium-p4p7qO {										/* contextmenu			premium								*/
+	color: rgb(var(--vaccentcolor2));
 }
 .colorDefault-2K3EoJ.focused-3afm-j,
 .colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O),
@@ -1527,7 +1532,7 @@
 	color: #F04747;
 }
 .colorPremium-p4p7qO .icon-LYJorE {							/* contextmenu			premiumicon							*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--vaccentcolor2));
 }
 
 /* ----		11.2.	USERPOPOUT						---- */
