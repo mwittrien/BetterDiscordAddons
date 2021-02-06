@@ -7965,8 +7965,8 @@ module.exports = (_ => {
 						labelChildren: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
 							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 								name: InternalComponents.LibraryComponents.SvgIcon.Names.QUESTIONMARK,
-								width: 16,
-								height: 16,
+								width: 20,
+								height: 20,
 								onClick: _ => BDFDB.ModalUtils.open(BDFDB, {
 									header: "Plugins",
 									subHeader: "",
