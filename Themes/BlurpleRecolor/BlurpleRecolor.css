@@ -579,16 +579,24 @@
 /* ~~~~		8.		USERSETTINGS					~~~~ */
 
 .item-PXvHYJ[style^="color: rgb(114, 137, 218)"],
-.item-PXvHYJ[style*=" color: rgb(114, 137, 218)"] {			/* settingsitems		list item							*/
+.item-PXvHYJ[style*=" color: rgb(114, 137, 218)"] {			/* settingsitems		item								*/
 	color: rgb(var(--vaccentcolor)) !important;
-}
-.item-PXvHYJ[style*="background-color: rgb(114, 137, 218)"] {
-	background-color: rgb(var(--vaccentcolor)) !important;
 }
 .item-PXvHYJ[style*="background-color: rgba(114, 137, 218, 0.1)"] {
 	background-color: rgb(var(--vaccentcolor), 0.1) !important;
 }
-
+.item-PXvHYJ[style*="background-color: rgb(114, 137, 218)"] {
+	background-color: rgb(var(--vaccentcolor)) !important;
+}
+.item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Nitro Server Boost-tab"] {
+	color: rgb(var(--vaccentcolor2)) !important;
+}
+.item-PXvHYJ:hover[aria-controls="Nitro Server Boost-tab"] {
+	background-color: rgb(var(--vaccentcolor2), 0.1) !important;
+}
+.item-PXvHYJ.selected-3s45Ha[aria-controls="Nitro Server Boost-tab"] {
+	background-color: rgb(var(--vaccentcolor2)) !important;
+}
 
 .dot-2s_oHI {												/* settingsitems		dot									*/
 	background-color: rgb(var(--vaccentcolor));
@@ -655,11 +663,27 @@
 	filter: brightness(75%);
 }
 .uploadSizeIcon-2HNa5p {									/* boostsettings		perkicon upload						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--vaccentcolor2));
+	filter: brightness(75%);
 }
 .memberBadgeIcon-1hpSQc {									/* boostsettings		perkicon guild						*/
 	color: rgb(var(--vaccentcolor));
 	filter: brightness(150%);
+}
+.profileBadgeIcon-_ctnKj {									/* boostsettings		perkicon badge						*/
+	position: relative;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_boostbadge_bg.svg) center/contain no-repeat;
+}
+.profileBadgeIcon-_ctnKj::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	pointer-events: none;
+	background: rgb(var(--vaccentcolor2));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/usersettings_boostbadge_accent.svg) center/contain no-repeat;
 }
 .premiumGuildIcon-13KUPa {									/* boostsettings		perkicon premium					*/
 	color: rgb(var(--vaccentcolor2));
@@ -1296,7 +1320,7 @@
 	width: 96px;
 	height: 60px;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--vaccentcolor2));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_boostheader_accent.svg) center/cover no-repeat;
 }
 .badgeIconWithSubscribers-3PlMu9 {							/* modal				sub badge icon						*/
@@ -1322,7 +1346,7 @@
 	color: rgb(var(--vaccentcolor));
 }
 #app-mount .upload-2-2ZMI {									/* modal				perkicon upload						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--vaccentcolor2));
 }
 #app-mount .animated-XlVkOl {								/* modal				perkicon animated					*/
 	color: rgb(var(--vaccentcolor));
@@ -1336,10 +1360,10 @@
 	color: rgb(var(--vaccentcolor));
 }
 #app-mount .tierHeaderUnlocked-1n-OTI {						/* modal				tierheaderunlockedbg				*/
-	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor2)), rgba(var(--vaccentcolor2), 0.5));
 }
 .wrapper-3nSjSv {											/* modal				boostaddwrapper						*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor2)), rgba(var(--vaccentcolor2), 0.5));
 }
 .wrapper-3nSjSv::before,									/* modal				boostangel							*/
 .wrapper-3nSjSv::after {
@@ -1355,7 +1379,7 @@
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_boostangel_bg.svg) center/cover no-repeat;
 }
 .wrapper-3nSjSv::after {
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--vaccentcolor2));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_boostangel_accent.svg) center/cover no-repeat;
 }
 .tierMarkerLabelPlusIcon-1OS7E9 {							/* modal				prebuy icon							*/
@@ -1365,7 +1389,7 @@
 	fill: rgb(var(--vaccentcolor));
 }
 .perkIconGuild-KLNhuR {										/* prebuy popout		perkicon guild						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--vaccentcolor2));
 }
 .perkIconChatPerks-BnKNFh {									/* prebuy popout		perkicon chat						*/
 	color: rgb(var(--vaccentcolor));
