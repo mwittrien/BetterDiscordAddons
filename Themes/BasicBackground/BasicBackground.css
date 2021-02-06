@@ -1086,6 +1086,10 @@ body::before {
 	margin-bottom: .5625rem;
 }
 
+.cozy-3I4Ja9.content-2Kddbs {								/* message				command content						*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+
 .edited-DL9ECl {											/* message				editedtag							*/
 	color: rgb(var(--fontwhite3));
 }
