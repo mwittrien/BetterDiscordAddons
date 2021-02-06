@@ -1,6 +1,6 @@
 /**
  * @name BlurpleRecolor
- * @description Replace discords native blurple with your own color, change color in themefile
+ * @description Replace discords native blurple and boostpink with your own color, change color in themefile
  * @author DevilBro
  * @version 1.0.0
  * @authorId 278543574059057154
@@ -19,6 +19,7 @@
 /* All colors are in RGB format (red, green, blue) use: https://www.google.com/search?q=colorpicker	*/
 
 :root {
-	--accentcolor:			163,47,194;		/*	blurple	-	default:	114,137,218		*/
-	--linkcolor:			190,60,220;		/*	link	-	default:	0,176,244		*/
+	--accentcolor:			163,47,194;		/*	blurple		-	default:	114,137,218		*/
+	--accentcolor2:			225,115,180;	/*	boostpink	-	default:	255,115,250		*/
+	--linkcolor:			190,60,220;		/*	link		-	default:	0,176,244		*/
 }
