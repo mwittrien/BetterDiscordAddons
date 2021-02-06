@@ -999,6 +999,8 @@ body::before {
 	left: calc(1px * (-58 * var(--vusechatbubbles) + -48 * (1 - var(--vusechatbubbles))));
 	height: 25px;
 	width: 25px;
+	margin: unset;
+	margin-right: 1rem;
 	padding: 0;
 }
 .cozy-3raOZG .blockedSystemMessage-2Rk1ek .iconContainer-3GkGRf {
