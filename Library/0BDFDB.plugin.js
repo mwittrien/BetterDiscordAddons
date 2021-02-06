@@ -1546,9 +1546,10 @@ module.exports = (_ => {
 					
 					(tooltip.setText = itemLayer.setText = newText => {
 						if (BDFDB.ObjectUtils.is(config.guild)) {
+							let voiceChannels = LibraryModules.GuildChannelStore.getChannels(config.guild.id)[BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE].map(c => c.channel.id);
 							let streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === config.guild.id).map(app => app.ownerId) || [];
 							let streamOwners = streamOwnerIds.map(ownerId => LibraryModules.UserStore.getUser(ownerId)).filter(n => n);
-							let connectedUsers = Object.keys(LibraryModules.VoiceUtils.getVoiceStates(config.guild.id)).map(userId => !streamOwnerIds.includes(userId) && LibraryModules.UserStore.getUser(userId)).filter(n => n);
+							let connectedUsers = BDFDB.ObjectUtils.toArray(LibraryModules.VoiceUtils.getVoiceStates(config.guild.id)).map(state => voiceChannels.includes(state.channelId) && state.channelId != config.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && LibraryModules.UserStore.getUser(state.userId)).filter(n => n);
 							let tooltipText = config.guild.toString();
 							if (fontColorIsGradient) tooltipText = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(config.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(tooltipText)}</span>`;
 							BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
