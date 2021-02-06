@@ -26,7 +26,7 @@
 	--vusechatbubbles: 				calc(var(--vmessagetransparency) / (var(--vmessagetransparency) + 0.00000000000000000000001));
 	--vguildchanneltransparency:	var(--guildchanneltransparency,		var(--dguildchanneltransparency));
 	--vmemberlisttransparency:		var(--memberlisttransparency,		var(--dmemberlisttransparency));
-	--vaccentcolor:					var(--accentcolor,					var(--daccentcolor));
+	--vaccentcolor2:				var(--vaccentcolor);
 	--vlinkcolor:					var(--vaccentcolor);
 	
 	--vfont:						var(--font,							var(--dfont));
