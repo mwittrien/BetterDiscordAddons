@@ -2075,6 +2075,19 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	fill: var(--header-primary);
 }
 
+.bd-social-logo {
+	opacity: 1;
+	background: var(--text-muted);
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settings_icons_betterdiscord.svg) center/contain no-repeat;
+	transition: background .15s ease;
+}
+.bd-social-link:hover .bd-social-logo {
+	background: var(--header-primary);
+}
+.bd-social-logo > * {
+	display: none;
+}
+
 
 /* ~~~~		9.		GUILDSETTINGS					~~~~ */
 
