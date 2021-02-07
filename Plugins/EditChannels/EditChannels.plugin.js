@@ -326,14 +326,14 @@ module.exports = (_ => {
 					let change, channelId, nameClass, categoyClass, iconClass, modify = {};
 					if (settings.changeInChannelList && e.returnvalue.props.className.indexOf(BDFDB.disCN.categoryiconvisibility) > -1) {
 						change = true;
-						channelId = BDFDB.ReactUtils.findValue(e.returnvalue, "data-list-item-id")?.split("_").pop();
+						channelId = (BDFDB.ReactUtils.findValue(e.returnvalue, "data-list-item-id") || "").split("_").pop();
 						nameClass = BDFDB.disCN.categoryname;
 						iconClass = BDFDB.disCN.categoryicon;
 						modify = {muted: BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(BDFDB.LibraryModules.LastGuildStore.getGuildId(), channelId)};
 					}
 					else if (settings.changeInSearchPopout && e.returnvalue.props.className.indexOf(BDFDB.disCN.searchpopoutoption) > -1) {
 						change = true;
-						channelId = BDFDB.ReactUtils.findValue(e.returnvalue._owner, "result", {up: true})?.channel.id;
+						channelId = (BDFDB.ReactUtils.findValue(e.returnvalue._owner, "result", {up: true}) || {}).channel.id;
 						nameClass = BDFDB.disCN.searchpopoutresultchannel;
 						categoyClass = BDFDB.disCN.searchpopoutsearchresultchannelcategory;
 						iconClass = BDFDB.disCN.searchpopoutsearchresultchannelicon;
@@ -348,7 +348,7 @@ module.exports = (_ => {
 							let icon = iconClass && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", iconClass]]});
 							if (icon) this.changeChannelIconColor(icon, channelId, Object.assign({alpha: 0.6}, modify));
 						}
-						let categoryId = BDFDB.LibraryModules.ChannelStore.getChannel(channelId)?.parent_id;
+						let categoryId = (BDFDB.LibraryModules.ChannelStore.getChannel(channelId) || {}).parent_id;
 						if (categoryId && changedChannels[categoryId]) {
 							let categoryName = categoyClass && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", categoyClass]]});
 							if (categoryName) {
@@ -446,7 +446,7 @@ module.exports = (_ => {
 				if (settings.changeInSearchResults) {
 					let results = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["id", "search-results"]]});
 					if (results && BDFDB.ArrayUtils.is(results.props.children)) for (let group of results.props.children) {
-						let channelId = BDFDB.ObjectUtils.get(group, "props.children.key")?.split("-")[0];
+						let channelId = (BDFDB.ObjectUtils.get(group, "props.children.key") || "").split("-")[0];
 						let channelName = channelId && changedChannels[channelId] && BDFDB.ReactUtils.findChild(group, {props: [["className", BDFDB.disCN.searchresultschannelname]]});
 						if (channelName) {
 							if (changedChannels[channelId].name) channelName.props.children = "#" + changedChannels[channelId].name;
