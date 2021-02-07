@@ -149,7 +149,8 @@ module.exports = (_ => {
 									document.removeEventListener("mouseup", mouseUp);
 									let dragging = event3 => {
 										this.updateDragPreview(event3);
-										let hoveredId = BDFDB.DOMUtils.getParent(BDFDB.dotCN._customstatuspresetssortablecard, event3.target)?.getAttribute("cardId");
+										let hoveredId = BDFDB.DOMUtils.getParent(BDFDB.dotCN._customstatuspresetssortablecard, event3.target);
+										hoveredId = hoveredId && hoveredId.getAttribute("cardId");
 										let update = hoveredId != this.props.hovered;
 										this.props.hovered = hoveredId;
 										if (update) BDFDB.ReactUtils.forceUpdate(this);
