@@ -274,7 +274,7 @@ module.exports = (_ => {
 					for (let i in e.returnvalue.props.children[0]) {
 						let reaction = e.returnvalue.props.children[0][i];
 						let emojiId = reaction.props.emoji.name || reaction.props.emoji.id;
-						if (cachedReactions[reaction.props.message.id][emojiId] && cachedReactions[reaction.props.message.id][emojiId].relationshipCount == relationshipCount && cachedReactions[reaction.props.message.id][emojiId].oldCount == reaction.props.message.reactions.find(n => n.emoji.name && n.emoji.name == emojiId || n.emoji.id == emojiId)?.count || 0) {
+						if (cachedReactions[reaction.props.message.id][emojiId] && cachedReactions[reaction.props.message.id][emojiId].relationshipCount == relationshipCount && cachedReactions[reaction.props.message.id][emojiId].oldCount == (reaction.props.message.reactions.find(n => n.emoji.name && n.emoji.name == emojiId || n.emoji.id == emojiId) || {}).count) {
 							reaction.props.count = cachedReactions[reaction.props.message.id][emojiId].reactions.length;
 							if (reaction.props.count < 1) e.returnvalue.props.children[0][i] = null;
 						}
@@ -285,7 +285,7 @@ module.exports = (_ => {
 								reaction.props.count = reaction.props.reactions.length;
 								if (cachedReactions && cachedReactions[reaction.props.message.id]) cachedReactions[reaction.props.message.id][emojiId] = {
 									relationshipCount: relationshipCount,
-									oldCount: reaction.props.message.reactions.find(n => n.emoji.name && n.emoji.name == emojiId || n.emoji.id == emojiId)?.count || 0,
+									oldCount: (reaction.props.message.reactions.find(n => n.emoji.name && n.emoji.name == emojiId || n.emoji.id == emojiId) || {}).count || 0,
 									reactions: reaction.props.reactions
 								};
 								BDFDB.TimeUtils.clear(updateTimeout);
