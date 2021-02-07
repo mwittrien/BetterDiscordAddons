@@ -593,7 +593,8 @@ module.exports = (_ => {
 		BDFDB.TimeUtils.suppress(_ => {
 			if (!BDFDB.ObjectUtils.is(plugin)) return;
 			if (plugin == window.BDFDB_Global) {
-				document.querySelector(BDFDB.dotCN.noticeupdate)?.close();
+				let updateNotice = document.querySelector(BDFDB.dotCN.noticeupdate);
+				if (updateNotice) updateNotice.close();
 				BDFDB.TimeUtils.clear(PluginStores.updateData.interval);
 				delete window.BDFDB_Global.loaded;
 				BDFDB.TimeUtils.interval((interval, count) => {
@@ -7245,7 +7246,7 @@ module.exports = (_ => {
 							svgName: InternalComponents.LibraryComponents.SvgIcon.Names.CHANGELOG,
 							onClick: _ => {BDFDB.PluginUtils.openChangeLog(plugin);}
 						}));
-						if (PluginStores.updateData.plugins[url]?.outdated) controls.push(InternalBDFDB.createCustomControl({
+						if (PluginStores.updateData.plugins[url] && PluginStores.updateData.plugins[url].outdated) controls.push(InternalBDFDB.createCustomControl({
 							tooltipText: BDFDB.LanguageUtils.LanguageStrings.UPDATE_MANUALLY,
 							svgName: InternalComponents.LibraryComponents.SvgIcon.Names.DOWNLOAD,
 							onClick: _ => {BDFDB.PluginUtils.downloadUpdate(plugin.name, url);}
