@@ -588,13 +588,17 @@
 .item-PXvHYJ[style*="background-color: rgb(114, 137, 218)"] {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
-.item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Nitro Server Boost-tab"] {
+.item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Nitro Server Boost-tab"],
+.item-PXvHYJ[style^="color: rgb(114, 137, 218)"][aria-controls="GUILD_PREMIUM-tab"],
+.item-PXvHYJ[style*=" color: rgb(114, 137, 218)"][aria-controls="GUILD_PREMIUM-tab"] {
 	color: rgb(var(--vaccentcolor2)) !important;
 }
-.item-PXvHYJ:hover[aria-controls="Nitro Server Boost-tab"] {
+.item-PXvHYJ:hover[aria-controls="Nitro Server Boost-tab"],
+.item-PXvHYJ[style*="background-color: rgba(114, 137, 218, 0.1)"][aria-controls="GUILD_PREMIUM-tab"] {
 	background-color: rgb(var(--vaccentcolor2), 0.1) !important;
 }
-.item-PXvHYJ.selected-3s45Ha[aria-controls="Nitro Server Boost-tab"] {
+.item-PXvHYJ.selected-3s45Ha[aria-controls="Nitro Server Boost-tab"],
+.item-PXvHYJ[style*="background-color: rgb(114, 137, 218)"][aria-controls="GUILD_PREMIUM-tab"] {
 	background-color: rgb(var(--vaccentcolor2)) !important;
 }
 
@@ -1381,6 +1385,9 @@
 .wrapper-3nSjSv::after {
 	background: rgb(var(--vaccentcolor2));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/guildsettings_boostangel_accent.svg) center/cover no-repeat;
+}
+#app-mount .wrapper-3nSjSv .lookInverted-2D7oAl.colorBrand-3pXr91 {
+	color: rgb(var(--vaccentcolor2)) !important;
 }
 .tierMarkerLabelPlusIcon-1OS7E9 {							/* modal				prebuy icon							*/
 	color: rgb(var(--vaccentcolor2));
