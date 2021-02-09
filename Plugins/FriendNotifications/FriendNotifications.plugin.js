@@ -518,19 +518,21 @@ module.exports = (_ => {
 								children: BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
 									children: [
-										"Allows you to configure your own message strings for the different statuses. ",
+										"Allows you to configure your own Message Strings for the different Statuses. ",
 										BDFDB.ReactUtils.createElement("strong", {children: "$user"}),
-										" is the placeholder for the username, ",
+										" is the Placeholder for the User Name, ",
 										BDFDB.ReactUtils.createElement("strong", {children: "$status"}),
-										" for the status name, ",
+										" for the Status Name, ",
+										BDFDB.ReactUtils.createElement("strong", {children: "$statusOld"}),
+										" for the previous Status Name, ",
 										BDFDB.ReactUtils.createElement("strong", {children: "$custom"}),
-										" for the custom status, ",
+										" for the Custom Status, ",
 										BDFDB.ReactUtils.createElement("strong", {children: "$game"}),
-										" for the game name, ",
+										" for the Game Name, ",
 										BDFDB.ReactUtils.createElement("strong", {children: "$song"}),
-										" for the song name and ",
+										" for the Song Name and ",
 										BDFDB.ReactUtils.createElement("strong", {children: "$artist"}),
-										" for the song artist."
+										" for the Song Artist."
 									]
 								})
 							})].concat(Object.keys(notificationStrings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
@@ -687,6 +689,12 @@ module.exports = (_ => {
 				return status;
 			}
 			
+			getStatusName (id, status) {
+				if (!status) return "";
+				let statusName = (BDFDB.LanguageUtils.LanguageStringsCheck[statuses[status.name].name] && BDFDB.LanguageUtils.LanguageStrings[statuses[status.name].name] || this.labels["status_" + status.name] || statuses[status.name].name || "").toLowerCase();
+				if (status.mobile && observedUsers[id].mobile) statusName += ` (${BDFDB.LanguageUtils.LanguageStrings.ACTIVE_ON_MOBILE})`;
+			}
+			
 			compareActivity (id, status) {
 				return BDFDB.equals(BDFDB.ObjectUtils.extract(userStatusStore[id].activity, "name", "details", "state", "emoji"), status && BDFDB.ObjectUtils.extract(status.activity, "name", "details", "state", "emoji"));
 			}
@@ -727,11 +735,11 @@ module.exports = (_ => {
 							let avatar = EUdata.removeIcon ? "" : (EUdata.url || BDFDB.UserUtils.getAvatar(user.id));
 							let timeString = (new Date()).toLocaleString();
 							
-							let statusName = (BDFDB.LanguageUtils.LanguageStringsCheck[statuses[status.name].name] && BDFDB.LanguageUtils.LanguageStrings[statuses[status.name].name] || this.labels["status_" + status.name] || statuses[status.name].name || "").toLowerCase();
-							if (status.mobile && observedUsers[id].mobile) statusName += ` (${BDFDB.LanguageUtils.LanguageStrings.ACTIVE_ON_MOBILE})`;
+							let statusName = this.getStatusName(id, status);
+							let oldStatusName = this.getStatusName(id, userStatusStore[id]);
 							
 							let string = notificationStrings[customChanged ? "custom" : status.name] || "'$user' changed status to '$status'";
-							let toastString = BDFDB.StringUtils.htmlEscape(string).replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.StringUtils.htmlEscape(name)}</strong>${settings.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/'{0,1}\$status'{0,1}/g, `<strong>${statusName}</strong>`);
+							let toastString = BDFDB.StringUtils.htmlEscape(string).replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.StringUtils.htmlEscape(name)}</strong>${settings.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/'{0,1}\$statusOld'{0,1}/g, `<strong>${oldStatusName}</strong>`).replace(/'{0,1}\$status'{0,1}/g, `<strong>${statusName}</strong>`);
 							if (status.activity) toastString = toastString.replace(/'{0,1}\$song'{0,1}|'{0,1}\$game'{0,1}/g, `<strong>${status.activity.name || status.activity.details || ""}</strong>`).replace(/'{0,1}\$artist'{0,1}|'{0,1}\$custom'{0,1}/g, `<strong>${[status.activity.emoji && status.activity.emoji.name, status.activity.state].filter(n => n).join(" ") || ""}</strong>`);
 							
 							timeLog.unshift({
@@ -754,7 +762,7 @@ module.exports = (_ => {
 									}
 								};
 								if (observedUsers[id][status.name] == notificationTypes.DESKTOP.value) {
-									let desktopString = string.replace(/\$user/g, `${name}${settings.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/\$status/g, statusName);
+									let desktopString = string.replace(/\$user/g, `${name}${settings.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/\$status/g, statusName).replace(/\$statusOld/g, oldStatusName);
 									if (status.activity) desktopString = desktopString.replace(/\$song|\$game/g, status.activity.name || status.activity.details || "").replace(/\$artist|\$custom/g, [status.activity.emoji && status.activity.emoji.name, status.activity.state].filter(n => n).join(" ") || "");
 									let notificationSound = notificationSounds["desktop" + status.name] || {};
 									BDFDB.NotificationUtils.desktop(desktopString, {
