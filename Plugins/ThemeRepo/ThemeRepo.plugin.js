@@ -553,7 +553,7 @@ module.exports = (_ => {
 								})
 							})
 						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
+						BDFDB.LibraryRequires.electron && BDFDB.LibraryRequires.electron.remote && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
 							value: list && list.props.currentTheme && list.props.currentTheme.url == this.props.theme.url,
 							onChange: (value, instance) => {
 								if (!list) return;
@@ -1067,7 +1067,7 @@ module.exports = (_ => {
 								BDFDB.NotificationUtils.notice(this.labels.notice_outdated_themes.replace("{{var0}}", outdated), {
 									type: "danger",
 									className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themerepooutdatednotice,
-									customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
+									customIcon: themeRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
 									buttons: [{
 										contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
 										close: true,
@@ -1085,7 +1085,7 @@ module.exports = (_ => {
 								BDFDB.NotificationUtils.notice(this.labels.notice_new_themes.replace("{{var0}}", newEntries), {
 									type: "success",
 									className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themereponewentriesnotice,
-									customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
+									customIcon: themeRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
 									buttons: [{
 										contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
 										close: true,
@@ -1107,7 +1107,7 @@ module.exports = (_ => {
 									BDFDB.NotificationUtils.notice(this.labels.notice_failed_themes.replace("{{var0}}", wrongUrls.length), {
 										type: "danger",
 										className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themerepofailnotice,
-										customIcon: themeRepoIcon.replace(/COLOR_1/gi, "#fff").replace(/COLOR_2/gi, "#b9bbbe"),
+										customIcon: themeRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
 										buttons: [{
 											contents: this.labels.list,
 											onClick: _ => {
