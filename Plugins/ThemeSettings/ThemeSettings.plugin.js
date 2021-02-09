@@ -14,13 +14,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeSettings",
 			"author": "DevilBro",
-			"version": "1.3.1",
+			"version": "1.3.2",
 			"description": "Allow you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page"
-		},
-		"changeLog": {
-			"improved": {
-				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
-			}
 		}
 	};
 
@@ -69,22 +64,35 @@ module.exports = (_ => {
 		return class ThemeSettings extends Plugin {
 			onLoad () {
 				dir = BDFDB.BDUtils.getThemesFolder();
+			
+				this.patchedModules = {
+					after: {
+						SettingsView: "componentDidMount"
+					}
+				};
 			}
 			
 			onStart () {
-				let cardObserver = (new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
-					if (BDFDB.DOMUtils.containsClass(node, BDFDB.disCN._repocard)) this.appendSettingsButton(node);
-					if (node.nodeType != Node.TEXT_NODE) for (let child of node.querySelectorAll(BDFDB.dotCN._repocard)) this.appendSettingsButton(child);
-				});}});}));
-				BDFDB.ObserverUtils.connect(this, document.querySelector(`${BDFDB.dotCN.layer}[aria-label="${BDFDB.DiscordConstants.Layers.USER_SETTINGS}"]`), {name: "cardObserver", instance: cardObserver}, {childList: true, subtree: true});
-				BDFDB.ObserverUtils.connect(this, BDFDB.dotCN.applayers, {name: "appLayerObserver", instance: (new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
-					if (node.nodeType != Node.TEXT_NODE && node.getAttribute("aria-label") == BDFDB.DiscordConstants.Layers.USER_SETTINGS) BDFDB.ObserverUtils.connect(this, node, {name: "cardObserver", instance: cardObserver}, {childList: true, subtree: true});
-				});}});}))}, {childList: true});
-				for (let child of document.querySelectorAll(BDFDB.dotCN._repocard)) this.appendSettingsButton(child);
+				this.addListObserver(document.querySelector(`${BDFDB.dotCN.layer}[aria-label="${BDFDB.DiscordConstants.Layers.USER_SETTINGS}"]`));
+				BDFDB.ReactUtils.forceUpdate(this);
 			}
 			
 			onStop () {
 				BDFDB.DOMUtils.remove(".theme-settings-button");
+			}
+			
+			processSettingsView (e) {
+				if (e.node && e.node.parentElement && e.node.parentElement.getAttribute("aria-label") == BDFDB.DiscordConstants.Layers.USER_SETTINGS) this.addListObserver(e.node.parentElement);
+			}
+			
+			addListObserver (layer) {
+				if (!layer) return;
+				BDFDB.ObserverUtils.connect(this, layer, {name: "cardObserver", instance: new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
+					if (BDFDB.DOMUtils.containsClass(node, BDFDB.disCN._repocard)) this.appendSettingsButton(node);
+					if (node.nodeType != Node.TEXT_NODE) for (let child of node.querySelectorAll(BDFDB.dotCN._repocard)) this.appendSettingsButton(child);
+				});}});})}, {childList: true, subtree: true});
+				for (let child of layer.querySelectorAll(BDFDB.dotCN._repocard)) this.appendSettingsButton(child);
+				
 			}
 		
 			appendSettingsButton (card) {
