@@ -4501,15 +4501,8 @@ body::before {
 .container-1S6Mlq {											/* contextmenu			searchbar							*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
-.item-1tOPte.colorDefault-2K3EoJ {							/* contextmenu			item								*/
+.colorDefault-2K3EoJ {										/* contextmenu			item								*/
 	color: rgb(var(--fontwhite2));
-}
-.item-1tOPte.colorBrand-ROmMP1,
-.item-1tOPte.colorPremium-p4p7qO {
-	color: rgb(var(--vaccentcolor));
-}
-.item-1tOPte.colorDanger-2qLCe1 {
-	color: #F04747;
 }
 .item-1tOPte.colorDefault-2K3EoJ.focused-3afm-j,
 .item-1tOPte.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O) {
@@ -4524,7 +4517,13 @@ body::before {
 .item-1tOPte.colorBrand-ROmMP1.focused-3afm-j,
 .item-1tOPte.colorBrand-ROmMP1:hover:not(.hideInteraction-1iHO1O),
 .item-1tOPte.colorPremium-p4p7qO.focused-3afm-j,
-.item-1tOPte.colorPremium-p4p7qO:hover:not(.hideInteraction-1iHO1O) {
+.item-1tOPte.colorPremium-p4p7qO:hover:not(.hideInteraction-1iHO1O),
+.item-1tOPte.colorDefault-2K3EoJ.focused-3afm-j[id="user-settings-cog-Discord_Nitro"],
+.item-1tOPte.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O)[id="user-settings-cog-Discord_Nitro"],
+.item-1tOPte.colorDefault-2K3EoJ.focused-3afm-j[id="user-settings-cog-Nitro_Server_Boost"],
+.item-1tOPte.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O)[id="user-settings-cog-Nitro_Server_Boost"],
+.item-1tOPte.colorDefault-2K3EoJ.focused-3afm-j[id="guild-context-guild-settings--GUILD_PREMIUM"],
+.item-1tOPte.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O)[id="guild-context-guild-settings--GUILD_PREMIUM"] {
 	background-color: rgba(var(--vaccentcolor), 0.2);
 	color: rgb(var(--fontwhite1)) !important;
 }
@@ -6981,11 +6980,13 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 #app-mount .tooltip-3oByQd,
 #app-mount .tooltip-1_vJJI,
 #app-mount .tooltipPrimary-1d1ph4,
+#app-mount .tooltipGrey-1hnvTt,
 #app-mount .tooltipBlack-PPG47z {
 	background-color: rgb(var(--vaccentcolor));
 	text-shadow: 1px 1px var(--vtextshadow);
 }
 #app-mount .tooltipPrimary-1d1ph4 .tooltipPointer-3ZfirK,
+#app-mount .tooltipGrey-1hnvTt .tooltipPointer-3ZfirK,
 #app-mount .tooltipBlack-PPG47z .tooltipPointer-3ZfirK {
 	border-top-color: rgb(var(--vaccentcolor));
 }

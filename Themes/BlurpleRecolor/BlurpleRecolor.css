@@ -1524,10 +1524,13 @@
 
 /* ----		11.1.	CONTEXTMENU						---- */
 
-.colorBrand-ROmMP1 {										/* contextmenu			brand								*/
+.colorBrand-ROmMP1,											/* contextmenu			brand								*/
+.colorDefault-2K3EoJ:not(.focused-3afm-j)[id="user-settings-cog-Discord_Nitro"] {
 	color: rgb(var(--vaccentcolor));
 }
-.colorPremium-p4p7qO {										/* contextmenu			premium								*/
+.colorPremium-p4p7qO,										/* contextmenu			premium								*/
+.colorDefault-2K3EoJ:not(.focused-3afm-j)[id="user-settings-cog-Nitro_Server_Boost"],
+.colorDefault-2K3EoJ:not(.focused-3afm-j)[id="guild-context-guild-settings--GUILD_PREMIUM"] {
 	color: rgb(var(--vaccentcolor2));
 }
 .colorDefault-2K3EoJ.focused-3afm-j,
@@ -1537,7 +1540,13 @@
 }
 .colorPremium-p4p7qO.focused-3afm-j,
 .colorPremium-p4p7qO:hover:not(.hideInteraction-1iHO1O),
-.colorPremium-p4p7qO:active:not(.hideInteraction-1iHO1O) {
+.colorPremium-p4p7qO:active:not(.hideInteraction-1iHO1O),
+.colorDefault-2K3EoJ.focused-3afm-j[id="user-settings-cog-Nitro_Server_Boost"],
+.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O)[id="user-settings-cog-Nitro_Server_Boost"],
+.colorDefault-2K3EoJ:active:not(.hideInteraction-1iHO1O)[id="user-settings-cog-Nitro_Server_Boost"],
+.colorDefault-2K3EoJ.focused-3afm-j[id="guild-context-guild-settings--GUILD_PREMIUM"],
+.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O)[id="guild-context-guild-settings--GUILD_PREMIUM"],
+.colorDefault-2K3EoJ:active:not(.hideInteraction-1iHO1O)[id="guild-context-guild-settings--GUILD_PREMIUM"] {
 	background-color: rgb(var(--vaccentcolor2));
 }
 .colorDanger-2qLCe1.focused-3afm-j,
