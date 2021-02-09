@@ -317,7 +317,7 @@
 /* ----		3.3.	AUTOCOMPLETEMENU				---- */
 
 #app-mount .active-2awTSY {									/* autocomplete			option active						*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--vaccentcolor)) !important;
 }
 
 #app-mount .searchSuggestion-2K8OBX:hover {					/* gifpicker			suggestions							*/
