@@ -1062,7 +1062,8 @@ module.exports = (_ => {
 							if (list) BDFDB.ReactUtils.forceUpdate(list);
 							
 							if (settings.notifyOutdated && outdated > 0) {
-								document.querySelector(BDFDB.dotCN._themerepooutdatednotice)?.close();
+								let notice = document.querySelector(BDFDB.dotCN._themerepooutdatednotice);
+								if (notice) notice.close();
 								BDFDB.NotificationUtils.notice(this.labels.notice_outdated_themes.replace("{{var0}}", outdated), {
 									type: "danger",
 									className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themerepooutdatednotice,
@@ -1079,7 +1080,8 @@ module.exports = (_ => {
 							}
 							
 							if (settings.notifyNewEntries && newEntries > 0) {
-								document.querySelector(BDFDB.dotCN._themereponewentriesnotice)?.close();
+								let notice = document.querySelector(BDFDB.dotCN._themereponewentriesnotice);
+								if (notice) notice.close();
 								BDFDB.NotificationUtils.notice(this.labels.notice_new_themes.replace("{{var0}}", newEntries), {
 									type: "success",
 									className: BDFDB.disCNS._themereponotice + BDFDB.disCN._themereponewentriesnotice,
@@ -1097,7 +1099,8 @@ module.exports = (_ => {
 							}
 							
 							if (BDFDB.UserUtils.me.id == "278543574059057154") {
-								document.querySelector(BDFDB.dotCN._themerepofailnotice)?.close();
+								let notice = document.querySelector(BDFDB.dotCN._themerepofailnotice);
+								if (notice) notice.close();
 								let wrongUrls = [];
 								for (let url of foundThemes) if (url && !loadedThemes[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
 								if (wrongUrls.length) {

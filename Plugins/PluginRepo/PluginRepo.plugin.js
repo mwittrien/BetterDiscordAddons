@@ -750,7 +750,8 @@ module.exports = (_ => {
 										if (list) BDFDB.ReactUtils.forceUpdate(list);
 										
 										if (settings.notifyOutdated && outdated > 0) {
-											document.querySelector(BDFDB.dotCN._pluginrepooutdatednotice)?.close();
+											let notice = document.querySelector(BDFDB.dotCN._pluginrepooutdatednotice);
+											if (notice) notice.close();
 											BDFDB.NotificationUtils.notice(this.labels.notice_outdated_plugins.replace("{{var0}}", outdated), {
 												type: "danger",
 												className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepooutdatednotice,
@@ -767,7 +768,8 @@ module.exports = (_ => {
 										}
 										
 										if (settings.notifyNewEntries && newEntries > 0) {
-											document.querySelector(BDFDB.dotCN._pluginreponewentriesnotice)?.close();
+											let notice = document.querySelector(BDFDB.dotCN._pluginreponewentriesnotice);
+											if (notice) notice.close();
 											BDFDB.NotificationUtils.notice(this.labels.notice_new_plugins.replace("{{var0}}", newEntries), {
 												type: "success",
 												className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginreponewentriesnotice,
@@ -785,7 +787,8 @@ module.exports = (_ => {
 										}
 										
 										if (BDFDB.UserUtils.me.id == "278543574059057154") {
-											document.querySelector(BDFDB.dotCN._pluginrepofailnotice)?.close();
+											let notice = document.querySelector(BDFDB.dotCN._pluginrepofailnotice);
+											if (notice) notice.close();
 											let wrongUrls = [];
 											for (let url of foundPlugins) if (url && !loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
 											if (wrongUrls.length) {
@@ -832,26 +835,27 @@ module.exports = (_ => {
 							let bodyWithoutSpecial = bodyCopy.replace(/\n|\r|\t/g, "").replace(/\n|\r|\t/g, "").replace(/\s{2,}/g, "");
 							let configReg = /(\.exports|config)\s*=\s*\{(.*?)\s*["'`]*info["'`]*\s*:\s*/i.exec(bodyWithoutSpecial);
 							if (configReg) {
-								bodyWithoutSpecial = bodyWithoutSpecial.substring(configReg.index)?.split(configReg[0])[1]?.split("};")[0]?.split("}},")[0]?.replace(/,([\]\}])/g, "$1");
 								try {
-									extractConfigInfo(plugin, JSON.parse('{"info":' + bodyWithoutSpecial + '}'));
-								}
-								catch (err) {
-									let i = 0, j = 0, configString = "";
-									try {
-										for (let c of bodyWithoutSpecial.replace(/:\s*([\[\{"]+)/g, '":$1').replace(/([\]\}"]+)\s*,([^"])/g, '$1,"$2').replace(/\s*\{([^"])/g, '{"$1')) {
-											configString += c;
-											if (c == "{") i++;
-											else if (c == "}") j++;
-											if (i > 0 && i == j) break;
+									bodyWithoutSpecial = bodyWithoutSpecial.substring(configReg.index).split(configReg[0])[1].split("};")[0].split("}},")[0].replace(/,([\]\}])/g, "$1");
+									try {extractConfigInfo(plugin, JSON.parse('{"info":' + bodyWithoutSpecial + '}'));}
+									catch (err) {
+										let i = 0, j = 0, configString = "";
+										try {
+											for (let c of bodyWithoutSpecial.replace(/:\s*([\[\{"]+)/g, '":$1').replace(/([\]\}"]+)\s*,([^"])/g, '$1,"$2').replace(/\s*\{([^"])/g, '{"$1')) {
+												configString += c;
+												if (c == "{") i++;
+												else if (c == "}") j++;
+												if (i > 0 && i == j) break;
+											}
+											extractConfigInfo(plugin, JSON.parse('{"info":' + configString + '}'));
 										}
-										extractConfigInfo(plugin, JSON.parse('{"info":' + configString + '}'));
-									}
-									catch (err2) {
-										try {extractConfigInfo(plugin, JSON.parse(('{"info":' + configString + '}').replace(/'/g, "\"")));}
-										catch (err3) {}
+										catch (err) {
+											try {extractConfigInfo(plugin, JSON.parse(('{"info":' + configString + '}').replace(/'/g, "\"")));}
+											catch (err) {}
+										}
 									}
 								}
+								catch (err) {}
 							}
 							else {
 								let hasMETAline = bodyCopy.replace(/\s/g, "").indexOf("//META{");
