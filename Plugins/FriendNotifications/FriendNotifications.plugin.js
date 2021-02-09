@@ -693,6 +693,7 @@ module.exports = (_ => {
 				if (!status) return "";
 				let statusName = (BDFDB.LanguageUtils.LanguageStringsCheck[statuses[status.name].name] && BDFDB.LanguageUtils.LanguageStrings[statuses[status.name].name] || this.labels["status_" + status.name] || statuses[status.name].name || "").toLowerCase();
 				if (status.mobile && observedUsers[id].mobile) statusName += ` (${BDFDB.LanguageUtils.LanguageStrings.ACTIVE_ON_MOBILE})`;
+				return statusName;
 			}
 			
 			compareActivity (id, status) {
