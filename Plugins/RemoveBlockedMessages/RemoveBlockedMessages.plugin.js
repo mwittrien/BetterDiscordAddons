@@ -14,13 +14,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.2.1",
+			"version": "1.2.2",
 			"description": "Completely removes blocked messages"
 		},
 		"changeLog": {
-			"improved": {
-				"Remove Reactions": "Now decreases the count for reactions if one of them is by a blocked user and hides it if the reaction is 0"
-			},
 			"fixed": {
 				"Update Reactions": "Fixed issue where reaction sometimes wouldn't show up at all"
 			}
@@ -279,19 +276,27 @@ module.exports = (_ => {
 							if (reaction.props.count < 1) e.returnvalue.props.children[0][i] = null;
 						}
 						else {
-							reaction.props.reactions = [];
+							let someBlocked = false;
 							BDFDB.LibraryModules.ReactionUtils.getReactions(reaction.props.message.channel_id, reaction.props.message.id, reaction.props.emoji).then(reactions => {
-								reaction.props.reactions = reactions.filter(n => !n || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.id));
-								reaction.props.count = reaction.props.reactions.length;
+								let filteredReactions = reactions.filter(n => {
+									let isBlocked = n && BDFDB.LibraryModules.FriendUtils.isBlocked(n.id);
+									someBlocked = someBlocked || isBlocked;
+									return !isBlocked;
+								});
+								if (someBlocked) {
+									reaction.props.reactions = filteredReactions;
+									reaction.props.count = reaction.props.reactions.length;
+									BDFDB.TimeUtils.clear(updateTimeout);
+									updateTimeout = BDFDB.TimeUtils.timeout(_ => {
+										BDFDB.ReactUtils.forceUpdate(e.instance);
+									}, 1000);
+								}
 								if (cachedReactions && cachedReactions[reaction.props.message.id]) cachedReactions[reaction.props.message.id][emojiId] = {
+									blocked: someBlocked,
 									relationshipCount: relationshipCount,
 									oldCount: (reaction.props.message.reactions.find(n => n.emoji.name && n.emoji.name == emojiId || n.emoji.id == emojiId) || {}).count || 0,
-									reactions: reaction.props.reactions
+									reactions: reaction.props.reactions || reactions
 								};
-								BDFDB.TimeUtils.clear(updateTimeout);
-								updateTimeout = BDFDB.TimeUtils.timeout(_ => {
-									BDFDB.ReactUtils.forceUpdate(e.instance);
-								}, 1000);
 							});
 						}
 					}
