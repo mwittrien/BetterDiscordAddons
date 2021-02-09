@@ -333,12 +333,13 @@ module.exports = (_ => {
 					}
 					else if (settings.changeInSearchPopout && e.returnvalue.props.className.indexOf(BDFDB.disCN.searchpopoutoption) > -1) {
 						change = true;
-						channelId = (BDFDB.ReactUtils.findValue(e.returnvalue._owner, "result", {up: true}) || {channel: {}}).channel.id;
+						let channel = (BDFDB.ReactUtils.findValue(e.returnvalue._owner, "result", {up: true}) || {}).channel;
+						channelId = channel && channel.id;
 						nameClass = BDFDB.disCN.searchpopoutresultchannel;
 						categoyClass = BDFDB.disCN.searchpopoutsearchresultchannelcategory;
 						iconClass = BDFDB.disCN.searchpopoutsearchresultchannelicon;
 					}
-					if (change) {
+					if (change && channelId) {
 						if (changedChannels[channelId]) {
 							let name = nameClass && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", nameClass]]});
 							if (name) {
