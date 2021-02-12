@@ -656,15 +656,16 @@ module.exports = (_ => {
 		});
 	};
 	BDFDB.PluginUtils.hasUpdateCheck = function (url) {
+		if (!url || typeof url != "string") return false;
 		let updateStore = Object.assign({}, window.PluginUpdates && window.PluginUpdates.plugins, PluginStores.updateData.plugins);
 		if (updateStore[url]) return true;
 		else {
-			let temp = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginRepo/PluginRepo.plugin.js".replace("//raw.githubusercontent.com", "//").split("/");
+			let temp = url.replace("//raw.githubusercontent.com", "//").split("/");
 			let gitName = temp.splice(3, 1);
 			temp.splice(4, 1);
 			temp.splice(2, 1, gitName + ".github.io");
 			let pagesUrl = temp.join("/");
-			return updateStore[pagesUrl];
+			return !!updateStore[pagesUrl];
 		}
 	};
 	BDFDB.PluginUtils.showUpdateNotice = function (pluginName, url) {
