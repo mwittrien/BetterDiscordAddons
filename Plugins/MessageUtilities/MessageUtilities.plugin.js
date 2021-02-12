@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
 			"version": "1.8.6",
-			"description": "Offer a number of useful message options (quick actions)"
+			"description": "Offers you a number of useful message options (quick actions)"
 		}
 	};
 

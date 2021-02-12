@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "SendLargeMessages",
 			"author": "DevilBro",
 			"version": "1.6.5",
-			"description": "Split messages into several smaller messages when your message exceeds the limit"
+			"description": "Allows you to enter larger messages in the chattextarea, which allows you to automatically send the message in several smaller messages"
 		}
 	};
 

@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "WriteUpperCase",
 			"author": "DevilBro",
 			"version": "1.2.9",
-			"description": "Change first letter of each sentence in message input to uppercase"
+			"description": "Changes the first letter of each sentence in message input to uppercase"
 		},
 		"changeLog": {
 			"improved": {

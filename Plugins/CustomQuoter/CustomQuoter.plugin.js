@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "CustomQuoter",
 			"author": "DevilBro",
 			"version": "1.2.5",
-			"description": "Customize the output of the native quote feature of Discord"
+			"description": "Brings back the Quote Feature and allows you to set your own Quote Formats"
 		},
 		"changeLog": {
 			"improved": {

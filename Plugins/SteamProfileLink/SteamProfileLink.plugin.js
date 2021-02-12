@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "SteamProfileLink",
 			"author": "DevilBro",
 			"version": "1.0.9",
-			"description": "Open any Steam links in Steam instead of your internet browser"
+			"description": "Opens Steam Links in Steam instead of your Browser"
 		}
 	};
 
