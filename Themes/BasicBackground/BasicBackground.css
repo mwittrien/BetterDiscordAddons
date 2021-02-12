@@ -2359,7 +2359,7 @@ body::before {
 .bd-social-logo {
 	opacity: 1;
 	background: rgb(var(--fontwhite3));
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settings_icons_betterdiscord.svg) center/contain no-repeat;
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settings_icons/betterdiscord.svg) center/contain no-repeat;
 	transition: background .15s ease;
 }
 .bd-social-link:hover .bd-social-logo {
