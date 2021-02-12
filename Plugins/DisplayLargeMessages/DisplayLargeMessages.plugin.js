@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "DisplayLargeMessages",
 			"author": "DevilBro",
-			"version": "1.0.7",
+			"version": "1.0.8",
 			"description": "Inject the contents of large messages that were sent by discord via 'message.txt'"
 		},
 		"changelog": {
-			"added": {
-				"Open in popout": "Added an option to add a button that allows you to preview the contents of a 'message.txt' in a popup"
+			"improved": {
+				"Open in Popout": "The open button now gets added to any .txt file not only 'message.txt'"
 			}
 		}
 	};
@@ -247,9 +247,9 @@ module.exports = (_ => {
 			}
 			
 			processAttachment (e) {
-				if (e.instance.props.filename == "message.txt" && (settings.onDemand || amounts.maxFileSize && (amounts.maxFileSize < e.instance.props.size/1024))) {
+				if (typeof e.instance.props.filename == "string") {
 					e.returnvalue.props.children.splice(2, 0, [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						e.instance.props.filename == "message.txt" && (settings.onDemand || amounts.maxFileSize && (amounts.maxFileSize < e.instance.props.size/1024)) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							text: this.labels.button_injectattachment,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
 								className: BDFDB.disCN._displaylargemessagesinjectbuttonwrapper,
@@ -280,7 +280,7 @@ module.exports = (_ => {
 								}
 							})
 						}),
-						settings.addOpenButton && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						e.instance.props.filename.endsWith(".txt") && settings.addOpenButton && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							text: BDFDB.LanguageUtils.LanguageStrings.OPEN,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
 								className: BDFDB.disCN._displaylargemessagespopoutbuttonwrapper,
