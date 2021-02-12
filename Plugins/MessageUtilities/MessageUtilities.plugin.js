@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
 			"version": "1.8.6",
-			"description": "Offer a number of useful message options. Remap the keybindings in the settings"
+			"description": "Offer a number of useful message options (quick actions)"
 		}
 	};
 
@@ -70,8 +70,8 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					settings: {
-						"addHints":					{value: true, 	description: "Add keycombo hints to contextmenus: "},
-						"clearOnEscape":			{value: true, 	description: "Clear chat input when Escape is pressed: "}
+						"addHints":					{value: true, 	description: "Add Key Combo hints to Context Menus"},
+						"clearOnEscape":			{value: true, 	description: "Clear Chat Input when Escape is pressed"}
 					},
 					toasts: {},
 					bindings: {
@@ -123,81 +123,98 @@ module.exports = (_ => {
 					children: _ => {
 						let settingsItems = [];
 						
-						for (let key in settings) if (this.defaults.settings[key].description) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-							type: "Switch",
-							plugin: this,
-							keys: ["settings", key],
-							label: this.defaults.settings[key].description,
-							value: settings[key]
-						}));
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-							className: BDFDB.disCN.marginbottom8
-						}));
-						for (let action in bindings) if (!this.defaults.bindings[action].plugin || BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings[action].plugin)) {
-							settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-								className: BDFDB.disCN.marginbottom8,
-								align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-								direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
-								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
-										label: this.defaults.bindings[action].name + (this.defaults.bindings[action].plugin ? ` (${this.defaults.bindings[action].plugin})` : "")
-									}),
-									toasts[action] != undefined ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-										type: "Switch",
-										mini: true,
-										plugin: this,
-										keys: ["toasts", action],
-										grow: 0,
-										label: "Toast:",
-										value: toasts[action]
-									}) : null
-								].filter(n => n)
-							}));
-							settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Settings",
+							collapseStates: collapseStates,
+							children: Object.keys(settings).map(key => this.defaults.settings[key].description && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "Switch",
-								dividerBottom: true,
-								mini: true,
 								plugin: this,
-								keys: ["settings", action],
-								value: settings[action],
-								labelChildren: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-									direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
+								keys: ["settings", key],
+								label: this.defaults.settings[key].description,
+								value: settings[key]
+							}))
+						}));
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Actions",
+							collapseStates: collapseStates,
+							children: Object.keys(bindings).map(action => {
+								if (this.defaults.bindings[action].plugin && !BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings[action].plugin)) return null;
+								let keyRecorderIns, clickSelectorIns;
+								return BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.marginbottom20,
 									children: [
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.KeybindRecorder, {
-											defaultValue: bindings[action].keycombo.filter(n => n),
-											reset: true,
-											onChange: keycombo => {
-												bindings[action].keycombo = keycombo;
-												BDFDB.DataUtils.save(bindings, this, "bindings");
-												this.SettingsUpdated = true;
-											}
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+											className: BDFDB.disCN.marginbottom8,
+											align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+											direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
+											children: [
+												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
+													label: this.defaults.bindings[action].name + (this.defaults.bindings[action].plugin ? ` (${this.defaults.bindings[action].plugin})` : "")
+												}),
+												toasts[action] != undefined ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+													type: "Switch",
+													mini: true,
+													plugin: this,
+													keys: ["toasts", action],
+													grow: 0,
+													label: "Show Confirmation Toast:",
+													value: toasts[action]
+												}) : null
+											].filter(n => n)
 										}),
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
-											value: bindings[action].click,
-											options: Object.keys(clickMap).map((label, i) => {return {value: i, label: label}}),
-											onChange: choice => {
-												bindings[action].click = choice.value;
-												BDFDB.DataUtils.save(bindings, this, "bindings");
-												this.SettingsUpdated = true;
-											}
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+											type: "Switch",
+											plugin: this,
+											keys: ["settings", action],
+											value: settings[action],
+											onChange: value => {
+												keyRecorderIns.props.disabled = !value;
+												clickSelectorIns.props.disabled = !value;
+												BDFDB.ReactUtils.forceUpdate(keyRecorderIns, clickSelectorIns);
+											},
+											labelChildren: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+												direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
+												children: [
+													BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.KeybindRecorder, {
+														defaultValue: bindings[action].keycombo.filter(n => n),
+														reset: true,
+														disabled: !settings[action],
+														ref: instance => {if (instance) keyRecorderIns = instance;},
+														onChange: keyCombo => {
+															bindings[action].keycombo = keyCombo;
+															BDFDB.DataUtils.save(bindings, this, "bindings");
+															this.SettingsUpdated = true;
+														}
+													}),
+													BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
+														value: bindings[action].click,
+														options: Object.keys(clickMap).map((label, i) => ({value: i, label: label})),
+														disabled: !settings[action],
+														ref: instance => {if (instance) clickSelectorIns = instance;},
+														onChange: choice => {
+															bindings[action].click = choice.value;
+															BDFDB.DataUtils.save(bindings, this, "bindings");
+															this.SettingsUpdated = true;
+														}
+													})
+												]
+											})
 										})
 									]
-								})
-							}));
-						}
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-							type: "Button",
-							color: BDFDB.LibraryComponents.Button.Colors.RED,
-							label: "Reset all Key Bindings",
-							onClick: (e, instance) => {
-								BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all Key Bindings?", _ => {
-									BDFDB.DataUtils.remove(this, "bindings");
-									settingsPanel.parentElement.appendChild(this.getSettingsPanel());
-									settingsPanel.remove();
-									this.SettingsUpdated = true;
 								});
-							},
-							children: BDFDB.LanguageUtils.LanguageStrings.RESET
+							}).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+								type: "Button",
+								color: BDFDB.LibraryComponents.Button.Colors.RED,
+								label: "Reset all Key Bindings",
+								onClick: _ => {
+									BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all Key Bindings?", _ => {
+										BDFDB.DataUtils.remove(this, "bindings");
+										BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+										this.SettingsUpdated = true;
+									});
+								},
+								children: BDFDB.LanguageUtils.LanguageStrings.RESET
+							}))
 						}));
 						
 						return settingsItems;

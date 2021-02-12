@@ -689,10 +689,14 @@ module.exports = (_ => {
 							className: BDFDB.disCN.marginbottom4,
 							align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
-									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H2,
-									className: BDFDB.disCN.marginreset,
-									children: `Theme Repo — ${loading.is ? 0 : this.props.amount || 0}/${loading.is ? 0 : Object.keys(loadedThemes).length}`
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+									grow: 1,
+									shrink: 0,
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+										tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H2,
+										className: BDFDB.disCN.marginreset,
+										children: `Theme Repo — ${loading.is ? 0 : this.props.amount || 0}/${loading.is ? 0 : Object.keys(loadedThemes).length}`
+									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
@@ -712,6 +716,15 @@ module.exports = (_ => {
 											BDFDB.ReactUtils.forceUpdate(this, list);
 										}
 									})
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+									size: BDFDB.LibraryComponents.Button.Sizes.TINY,
+									children: BDFDB.LanguageUtils.LibraryStrings.check_for_updates,
+									onClick: _ => {
+										if (loading.is) return;
+										loading = {is: false, timeout: null, amount: 0};
+										_this.loadThemes();
+									}
 								})
 							]
 						}),
@@ -897,20 +910,6 @@ module.exports = (_ => {
 						})
 					].flat(10).filter(n => n)
 				}));
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Refetch All",
-					collapseStates: collapseStates,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-						type: "Button",
-						margin: 0,
-						label: "Force all Themes to be fetched again",
-						onClick: _ => {
-							loading = {is: false, timeout: null, amount: 0};
-							this.loadThemes();
-						},
-						children: BDFDB.LanguageUtils.LanguageStrings.ERRORS_RELOAD
-					})
-				}));
 				
 				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 			}
@@ -1048,6 +1047,8 @@ module.exports = (_ => {
 							});
 						});
 						BDFDB.PluginUtils.addLoadingIcon(loadingIcon);
+						
+						BDFDB.ReactUtils.forceUpdate(list, header);
 
 						getThemeInfo(_ => {
 							if (!this.started) {
