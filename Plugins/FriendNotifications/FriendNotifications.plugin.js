@@ -773,23 +773,20 @@ module.exports = (_ => {
 										onClick: openChannel
 									});
 								}
-								else if (!document.querySelector(`.friendnotifications-${id}-toast`)) {
-									BDFDB.NotificationUtils.toast(BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(toastString)), {
-										className: `friendnotifications-${status.name}-toast friendnotifications-${id}-toast`,
-										timeout: amounts.toastTime * 1000,
-										avatar: avatar,
-										barColor: BDFDB.UserUtils.getStatusColor(status.name, true),
-										onClick: openChannel,
-										onShow: _ => {
-											let notificationSound = notificationSounds["toast" + status.name] || {};
-											if (!notificationSound.mute && notificationSound.song) {
-												let audio = new Audio();
-												audio.src = notificationSound.song;
-												audio.play();
-											}
+								else BDFDB.NotificationUtils.toast(BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(toastString)), {
+									timeout: amounts.toastTime * 1000,
+									avatar: avatar,
+									barColor: BDFDB.UserUtils.getStatusColor(status.name, true),
+									onClick: openChannel,
+									onShow: _ => {
+										let notificationSound = notificationSounds["toast" + status.name] || {};
+										if (!notificationSound.mute && notificationSound.song) {
+											let audio = new Audio();
+											audio.src = notificationSound.song;
+											audio.play();
 										}
-									});
-								}
+									}
+								});
 							}
 						}
 						userStatusStore[id] = status;
