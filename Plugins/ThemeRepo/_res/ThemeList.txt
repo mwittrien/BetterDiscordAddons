@@ -85,7 +85,6 @@ https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/Ba
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/BlurpleRecolor/BlurpleRecolor.theme.css
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/DiscordRecolor/DiscordRecolor.theme.css
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/EmojiReplace/EmojiReplace.theme.css
-https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/FullThemeDark/FullThemeDark.theme.css
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/ServerColumns/ServerColumns.theme.css
 https://raw.githubusercontent.com/Mylan719/Discord-light-theme/master/Discord Light-Blue.theme.css
 https://raw.githubusercontent.com/nirewen/Discordify/master/Discordify.theme.css
