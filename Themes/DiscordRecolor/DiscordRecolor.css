@@ -1966,7 +1966,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 
 .container-3PXSwK {
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/voice_level_bar.svg);
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/common/voice_level_bar.svg);
 }
 .notches-1sAcEM {
 	background: transparent !important;
@@ -2074,7 +2074,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 .bd-social-logo {
 	opacity: 1;
 	background: var(--text-muted);
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settings_icons/betterdiscord.svg) center/contain no-repeat;
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/betterdiscord.svg) center/contain no-repeat;
 	transition: background .15s ease;
 }
 .bd-social-link:hover .bd-social-logo {
@@ -2345,7 +2345,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	bottom: 0;
 	left: 0;
 	background: var(--background-tertiary);
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/discord_window_placeholder.svg) 0 0/cover no-repeat;
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/common/discord_window_placeholder.svg) 0 0/cover no-repeat;
 }
 
 #app-mount .member-1q7VfX {
@@ -3863,14 +3863,14 @@ html .bd-settings-group.collapsible .bd-settings-title::after {
 	width: 16px;
 	height: 16px;
 	padding: 0;
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/fav_star_empty.svg) center/contain no-repeat;
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/common/fav_star_empty.svg) center/contain no-repeat;
 }
 #app-mount .fav:hover,
 #app-mount .fav.active {
 	background: #faa61a;
 }
 #app-mount .fav.active {
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/fav_star.svg) center/contain no-repeat;
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/common/fav_star.svg) center/contain no-repeat;
 }
 
 #app-mount .bd-modal-wrapper .bd-modal-inner {
