@@ -7964,7 +7964,7 @@ module.exports = (_ => {
 						label: BDFDB.LanguageUtils.LibraryStrings.update_check_info,
 						dividerTop: true,
 						basis: "20%",
-						children: BDFDB.LanguageUtils.LanguageStrings.CHECKING_FOR_UPDATES,
+						children: BDFDB.LanguageUtils.LibraryStrings.check_for_updates,
 						labelChildren: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
 							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 								name: InternalComponents.LibraryComponents.SvgIcon.Names.QUESTIONMARK,
