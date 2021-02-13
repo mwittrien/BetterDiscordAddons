@@ -1602,12 +1602,12 @@ module.exports = (_ => {
 										]
 									}),
 									isMuted && muteConfig && (muteConfig.end_time == null ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext && (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipmutetextwithactivity),
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext, (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipmutetextwithactivity),
 										size: InternalComponents.LibraryComponents.TextElement.Sizes.SIZE_12,
 										color: InternalComponents.LibraryComponents.TextElement.Colors.MUTED,
 										children: BDFDB.LanguageUtils.LanguageStrings.VOICE_CHANNEL_MUTED
 									}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.MutedText, {
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext && (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipmutetextwithactivity),
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext, (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipmutetextwithactivity),
 										muteConfig: muteConfig
 									}))
 								].filter(n => n)
