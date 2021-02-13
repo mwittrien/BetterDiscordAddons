@@ -1601,7 +1601,7 @@ module.exports = (_ => {
 											})
 										]
 									}),
-									isMuted && muteConfig && (muteConfig.end_time == 0 ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
+									isMuted && muteConfig && (muteConfig.end_time == null ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext && (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipmutetextwithactivity),
 										size: InternalComponents.LibraryComponents.TextElement.Sizes.SIZE_12,
 										color: InternalComponents.LibraryComponents.TextElement.Colors.MUTED,
