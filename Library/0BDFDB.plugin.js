@@ -1548,8 +1548,13 @@ module.exports = (_ => {
 							let streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === config.guild.id).map(app => app.ownerId) || [];
 							let streamOwners = streamOwnerIds.map(ownerId => LibraryModules.UserStore.getUser(ownerId)).filter(n => n);
 							let connectedUsers = BDFDB.ObjectUtils.toArray(LibraryModules.VoiceUtils.getVoiceStates(config.guild.id)).map(state => voiceChannels.includes(state.channelId) && state.channelId != config.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && LibraryModules.UserStore.getUser(state.userId)).filter(n => n);
+							
 							let tooltipText = config.guild.toString();
 							if (fontColorIsGradient) tooltipText = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(config.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(tooltipText)}</span>`;
+							
+							let isMuted = LibraryModules.MutedUtils.isMuted(config.guild.id);
+							let muteConfig = LibraryModules.MutedUtils.getMuteConfig(config.guild.id);
+							
 							BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 								children: [
 									BDFDB.ReactUtils.createElement("div", {
@@ -1595,7 +1600,16 @@ module.exports = (_ => {
 												max: 6
 											})
 										]
-									})
+									}),
+									isMuted && muteConfig && (muteConfig.end_time == 0 ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext && (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipmutetextwithactivity),
+										size: InternalComponents.LibraryComponents.TextElement.Sizes.SIZE_12,
+										color: InternalComponents.LibraryComponents.TextElement.Colors.MUTED,
+										children: BDFDB.LanguageUtils.LanguageStrings.VOICE_CHANNEL_MUTED
+									}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.MutedText, {
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext && (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipmutetextwithactivity),
+										muteConfig: muteConfig
+									}))
 								].filter(n => n)
 							}), tooltipContent);
 						}
