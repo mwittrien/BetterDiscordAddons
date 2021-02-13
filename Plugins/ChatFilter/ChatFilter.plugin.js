@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatFilter",
 			"author": "DevilBro",
-			"version": "3.4.9",
+			"version": "3.5.0",
 			"description": "Allows the user to censor Words or block complete Messages/Statuses"
 		},
 		"changeLog": {
-			"improved": {
-				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
+			"added": {
+				"Ignore own Messages/Status": "Added option to ignore your own Messages/Status"
 			}
 		}
 	};
@@ -82,7 +82,8 @@ module.exports = (_ => {
 					settings: {
 						addContextMenu:			{value: true,				description: "Add a Context Menu Entry to faster add new blocked/censored Words"},
 						targetMessages:			{value: true,				description: "Check Messages for blocked/censored Words"},
-						targetStatuses:			{value: true,				description: "Check Custom Statuses for blocked/censored Words"}
+						targetStatuses:			{value: true,				description: "Check Custom Statuses for blocked/censored Words"},
+						targetOwn:				{value: true, 				description: "Filter/Block your own Messages/Custom Status"}
 					}
 				};
 			
@@ -389,18 +390,18 @@ module.exports = (_ => {
 			}
 			
 			checkStatus (e) {
-				if (settings.targetStatuses && e.instance.props.customStatusActivity) {
-					let {content} = this.parseMessage({content: e.instance.props.customStatusActivity.state, embeds: [], id: "status"});
+				if (settings.targetStatuses && e.instance.props.customStatusActivity && e.instance.props.user) {
+					let {content} = this.parseMessage({content: e.instance.props.customStatusActivity.state, embeds: [], id: "status", author: e.instance.props.user});
 					if (content) e.instance.props.customStatusActivity = Object.assign({}, e.instance.props.customStatusActivity, {state: content});
 					else if (!e.instance.props.customStatusActivity.emoji) delete e.instance.props.customStatusActivity;
 				}
 			}
 			
 			checkActivities (e) {
-				if (settings.targetStatuses && e.instance.props.activities && e.instance.props.activities.length) {
+				if (settings.targetStatuses && e.instance.props.activities && e.instance.props.activities.length && e.instance.props.user) {
 					let index = e.instance.props.activities.findIndex(n => n && n.type == BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
 					if (index > -1 && e.instance.props.activities[index].state) {
-						let {content} = this.parseMessage({content: e.instance.props.activities[index].state, embeds: [], id: "status"});
+						let {content} = this.parseMessage({content: e.instance.props.activities[index].state, embeds: [], id: "status", author: e.instance.props.user});
 						if (content) e.instance.props.activities[index] = Object.assign({}, e.instance.props.activities[index], {state: content});
 						else if (!e.instance.props.activities[index].emoji) {
 							e.instance.props.activities = [].concat(e.instance.props.activities);
@@ -426,7 +427,7 @@ module.exports = (_ => {
 				let content = (oldBlockedMessages[message.id] || oldCensoredMessages[message.id] || {}).content || message.content;
 				let embeds = [].concat((oldBlockedMessages[message.id] || oldCensoredMessages[message.id] || {}).embeds || message.embeds);
 				let isContent = content && typeof content == "string";
-				if (isContent || embeds.length) {
+				if ((isContent || embeds.length) && (message.author.id != BDFDB.UserUtils.me.id || settings.targetOwn)) {
 					let blockedReplace;
 					for (let bWord in words.blocked) {
 						let compareContent = [isContent && content, embeds.map(e => e.rawDescription)].flat(10).filter(n => n).join(" ");
