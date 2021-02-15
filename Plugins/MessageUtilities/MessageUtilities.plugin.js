@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
-			"version": "1.8.6",
+			"version": "1.8.7",
 			"description": "Offers you a number of useful message options (quick actions)"
+		},
+		"changeLog": {
+			"fixed": {
+				"Edit": "Trying to edit a message that is alsready being edited no longer resets the edit"
+			}
 		}
 	};
 
@@ -368,7 +373,7 @@ module.exports = (_ => {
 			}
 
 			doEdit ({messageDiv, message}, action) {
-				if (message.author.id == BDFDB.UserUtils.me.id) {
+				if (message.author.id == BDFDB.UserUtils.me.id && !messageDiv.querySelector(BDFDB.dotCN.messagechanneltextarea)) {
 					BDFDB.LibraryModules.MessageUtils.startEditMessage(message.channel_id, message.id, message.content);
 					if (toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.EDITING_MESSAGE), {type: "success"});
 				}
