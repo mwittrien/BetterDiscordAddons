@@ -47,8 +47,8 @@
  - [Send Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SendLargeMessages) - Allows you to enter larger messages in the chattextarea, which allows you to automatically send the message in several smaller messages
  - [Server Counter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerCounter) - Adds a server counter to the server list
  - [Server Details](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerDetails) - Shows details of a server when you hover over the icon in the server list
- - [Server Hider](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerHider) - Adds options on your server context menu to hide servers in your server list
  - [Server Folders](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerFolders) - Changes Discords native Folders in a way to open Servers within a Folder in a new bar to the right - Also adds a bunch of new features to more easily organize, customize and manage your Folders
+ - [Server Hider](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerHider) - Allows you to hide certain Servers in your Server List
  - [Show Hidden Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowHiddenChannels) - Displays all hidden channels that can't be accessed due to role restrictions in a new category
  - [Spell Check](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpellCheck) - Adds a spellcheck to all textareas
  - [Spotify Controls](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpotifyControls) - Adds a control panel to discord when listening to spotify

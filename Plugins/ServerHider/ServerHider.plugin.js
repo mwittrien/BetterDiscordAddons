@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "ServerHider",
 			"author": "DevilBro",
 			"version": "6.1.9",
-			"description": "Hide Servers in your Serverlist"
+			"description": "Allows you to hide certain Servers in your Server List"
 		},
 		"changeLog": {
 			"fixed": {
