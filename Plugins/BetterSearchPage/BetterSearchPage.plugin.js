@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterSearchPage",
 			"author": "DevilBro",
-			"version": "1.1.9",
+			"version": "1.2.0",
 			"description": "Add some extra controls to the search results page"
 		},
 		"changeLog": {
 			"fixed": {
-				"New Pagination": "Fixed for the new pagination style, 'First/Last' was removed because the native pagination now allows to jump to those pages"
+				"Jump Input": "No longer adds jump input if there is only one page of search results"
 			}
 		}
 	};
@@ -68,8 +68,8 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					settings: {
-						addJumpTo:		{value: true, 	description: "Add a jump to input field (press enter to jump)"},
-						cloneToTheTop:	{value: true, 	description: "Clone the controls to the top of the results page"}
+						addJumpTo:		{value: true, 	description: "Add a Jump to Input Field (press enter to Jump)"},
+						cloneToTheTop:	{value: true, 	description: "Clone the controls to the top of the Results Page"}
 					}
 				};
 				
@@ -125,7 +125,7 @@ module.exports = (_ => {
 						children[index].props.totalResults = children[index].props.totalResults > 5000 ? 5000 : children[index].props.totalResults;
 						
 						let pagination = children[index].type(children[index].props);
-						if (!pagination) return;
+						if (!pagination || !pagination.props.children) return;
 						pagination.props.className = BDFDB.DOMUtils.formatClassName(pagination.props.className, BDFDB.disCN.pagination, BDFDB.disCN._bettersearchpagepagination, settings.addJumpTo && BDFDB.disCN.paginationmini);
 						
 						if (settings.addJumpTo) {
@@ -149,8 +149,9 @@ module.exports = (_ => {
 						}
 						children[index] = pagination;
 						if (settings.cloneToTheTop) {
-							children.unshift(pagination);
-							children[children.length-1].props.className = BDFDB.DOMUtils.formatClassName(children[children.length-1].props.className, BDFDB.disCN.paginationtop);
+							let topPagination = BDFDB.ReactUtils.cloneElement(pagination);
+							topPagination.props.className = BDFDB.DOMUtils.formatClassName(topPagination.props.className, BDFDB.disCN.paginationtop);
+							children.unshift(topPagination);
 						}
 						pagination.props.className = BDFDB.DOMUtils.formatClassName(pagination.props.className, BDFDB.disCN.paginationbottom);
 					}
