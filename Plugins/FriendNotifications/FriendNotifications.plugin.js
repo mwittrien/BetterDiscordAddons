@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.6.1",
+			"version": "1.6.2",
 			"description": "Get a notification when a Friend or a User, you choose to observe, changes their status"
 		},
 		"changeLog": {
-			"improved": {
-				"New Toast API": ""
+			"fixed": {
+				"Add stranger by name#discrim": "Works again"
 			}
 		}
 	};
@@ -461,6 +461,7 @@ module.exports = (_ => {
 						
 						if (friends.length) settingsItems.push(createUserList(friends, "friends", "Friend-List"));
 						
+						let strangerId = "";
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Add new Stranger",
 							collapseStates: collapseStates,
@@ -472,19 +473,20 @@ module.exports = (_ => {
 										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 											className: `input-newstranger`,
 											placeholder: "user (id or name#discriminator)",
-											value: ""
+											value: "",
+											onChange: value => strangerId = value
 										})
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 										onClick: _ => {
-											let userId = settingsPanel.props._node.querySelector(`.input-newstranger ` + BDFDB.dotCN.input).value.trim();
+											let userId = strangerId.trim();
 											if (userId == BDFDB.UserUtils.me.id) BDFDB.NotificationUtils.toast("Are you seriously trying to stalk yourself?", {type: "danger"});
 											else if (friendIds.includes(userId)) BDFDB.NotificationUtils.toast("User is already a friend of yours, please use the 'Friend-List' area to configure them", {type: "danger"});
 											else if (Object.keys(nonFriends).includes(userId)) BDFDB.NotificationUtils.toast("User is already being observed as a 'Stranger'", {type: "danger"});
 											else {
 												let user = /.+#[0-9]{4}/.test(userId) ? BDFDB.LibraryModules.UserStore.findByTag(userId.split("#").slice(0, -1).join("#"), userId.split("#").pop()) : BDFDB.LibraryModules.UserStore.getUser(userId);
 												if (user) {
-													BDFDB.DataUtils.save(this.createDefaultConfig(), this, "nonfriends", userId);
+													BDFDB.DataUtils.save(this.createDefaultConfig(), this, "nonfriends", user.id || userId);
 													BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 													this.SettingsUpdated = true;
 												}
