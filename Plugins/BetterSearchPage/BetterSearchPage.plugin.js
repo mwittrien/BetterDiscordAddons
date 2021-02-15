@@ -125,7 +125,7 @@ module.exports = (_ => {
 						children[index].props.totalResults = children[index].props.totalResults > 5000 ? 5000 : children[index].props.totalResults;
 						
 						let pagination = children[index].type(children[index].props);
-						if (!pagination || !pagination.props.children) return;
+						if (!pagination || maxPage < 2) return;
 						pagination.props.className = BDFDB.DOMUtils.formatClassName(pagination.props.className, BDFDB.disCN.pagination, BDFDB.disCN._bettersearchpagepagination, settings.addJumpTo && BDFDB.disCN.paginationmini);
 						
 						if (settings.addJumpTo) {
