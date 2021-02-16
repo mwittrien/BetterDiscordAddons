@@ -14,13 +14,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "EmojiStatistics",
 			"author": "DevilBro",
-			"version": "2.9.6",
+			"version": "2.9.7",
 			"description": "Add some helpful options to show you more information about emojis and emojiservers"
-		},
-		"changeLog": {
-			"improved": {
-				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
-			}
 		}
 	};
 
@@ -108,14 +103,12 @@ module.exports = (_ => {
 				this.loadEmojiList();
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "DiversitySelector"});
 				if (index > -1) children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					text: "Emoji Statistics",
+					text: this.labels.modal_header,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 						className: BDFDB.disCN._emojistatisticsstatisticsbutton,
 						children: BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.emojipickerdiversityemojiitemimage,
-							style: {
-								backgroundImage: "url(/assets/0477c6a43026315dd623bc6367e18acb.svg)"
-							}
+							style: {backgroundImage: `url(${BDFDB.LibraryModules.EmojiStateUtils.getURL(BDFDB.LibraryModules.EmojiUtils.convertNameToSurrogate("mag_right"))})`}
 						})
 					}),
 					onClick: _ => {
@@ -142,7 +135,7 @@ module.exports = (_ => {
 						stickyHeader: true,
 						sortData: false,
 						columns: [
-							{key: "icon", icon: "icon", sortKey: "index"},
+							{key: "icon", cell: "icon", sortKey: "index"},
 							{key: "name", cell: "name"},
 							{key: "total", cell: "amount", reverse: true},
 							{key: "global", cell: "amount", reverse: true},
@@ -174,7 +167,7 @@ module.exports = (_ => {
 								local: 0,
 								copies: 0
 							}
-							for (let emoji of BDFDB.LibraryModules.GuildEmojiStore.getGuildEmoji(info.id)) {
+							for (let emoji of BDFDB.LibraryModules.GuildEmojiStore.getGuildEmoji(guild.id)) {
 								if (emoji.managed) {
 									itemData.global++;
 									if (emojiReplicaList[emoji.name]) itemData.copies++;
@@ -212,7 +205,7 @@ module.exports = (_ => {
 						};
 					case "de":		// German
 						return {
-							modal_header:						"Statistiken von Emojis",
+							modal_header:						"Emoji Statistiken",
 							modal_titlescopies:					"Kopien",
 							modal_titlesglobal:					"Global",
 							modal_titlesicon:					"Symbol",
