@@ -3534,7 +3534,7 @@ module.exports = (_ => {
 					container = container || document.head.querySelector("bd-head bd-styles") || document.head;
 					container = Node.prototype.isPrototypeOf(container) ? container : document.head;
 					BDFDB.DOMUtils.removeWebStyle(url, container);
-					container.appendChild(BDFDB.DOMUtils.create(`<link type="text/css" rel="Stylesheet" href="${url}"></link>`));
+					container.appendChild(BDFDB.DOMUtils.create(`<link type="text/css" rel="stylesheet" href="${url}"></link>`));
 				};
 				BDFDB.DOMUtils.removeWebStyle = function (url, container) {
 					if (typeof url != "string") return;

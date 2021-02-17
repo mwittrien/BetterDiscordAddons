@@ -4,6 +4,7 @@
 	window.global = window;
 	
 	let nativeRequire = window.require || (_ => {});
+	let nativeWebpackJsonp = window.webpackJsonp;
 	
 	window.respondToParent = function (data = {}) {
 		if (window.parent && typeof window.parent.postMessage == "function") window.parent.postMessage(data, "*");
@@ -227,13 +228,11 @@
 		return string;
 	};
 
-	window.webpackJsonp = function () {
-		return {
-			default: {
-				m: {},
-				c: {}
-			}
-		};
+	window.webpackJsonp = {
+		push: _ => ({
+			m: {},
+			c: {}
+		})
 	};
 	
 	window.fetch = function () {
@@ -248,7 +247,7 @@
 	
 	let WebModulesFind = function (filter) {
 		const id = "PluginRepo-WebModules";
-		const req = typeof(window.webpackJsonp) == "function" ? window.webpackJsonp([], {[id]: (module, exports, req) => exports.default = req}, [id]).default : window.webpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
+		const req = nativeWebpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
 		delete req.m[id];
 		delete req.c[id];
 		for (let m in req.c) {
