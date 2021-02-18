@@ -99,8 +99,35 @@
 	background-color: rgb(var(--vaccentcolor));
 }
 
-.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.4)"] {
+.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 1"] {
+	background-color: rgba(var(--vaccentcolor), 1) !important;
+}
+.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.9"] {
+	background-color: rgba(var(--vaccentcolor), 0.9) !important;
+}
+.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.8"] {
+	background-color: rgba(var(--vaccentcolor), 0.8) !important;
+}
+.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.7"] {
+	background-color: rgba(var(--vaccentcolor), 0.7) !important;
+}
+.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.6"] {
+	background-color: rgba(var(--vaccentcolor), 0.6) !important;
+}
+.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.5"] {
+	background-color: rgba(var(--vaccentcolor), 0.5) !important;
+}
+.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.4"] {
 	background-color: rgba(var(--vaccentcolor), 0.4) !important;
+}
+.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.3"] {
+	background-color: rgba(var(--vaccentcolor), 0.3) !important;
+}
+.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.2"] {
+	background-color: rgba(var(--vaccentcolor), 0.2) !important;
+}
+.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.1"] {
+	background-color: rgba(var(--vaccentcolor), 0.1) !important;
 }
 .folderIconWrapper-226oVY svg[style^="color: rgb(114, 137, 218)"],
 .folderIconWrapper-226oVY svg[style*=" color: rgb(114, 137, 218)"] {
