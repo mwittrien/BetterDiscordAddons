@@ -4565,7 +4565,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
-		"811756093730586635": {"active": true,		"t3": true,	"custom": false,	"id": "Namii (RiDeLo)"},
+		"811756093730586635": {"active": false,		"t3": true,		"custom": false,	"id": "Namii (RiDeLo)"},
 		"121188168002174976": {"active": true,		"t3": false,	"custom": false,	"id": "Aven (Syn)"},
 		"630634411259330570": {"active": true,		"t3": false,	"custom": false,	"id": "Zardex (KhaPo)"},
 		"159762323907543040": {"active": true,		"t3": false,	"custom": false,	"id": "STRIX (A1C)"},
