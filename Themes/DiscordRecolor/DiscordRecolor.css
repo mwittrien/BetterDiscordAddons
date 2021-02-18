@@ -591,13 +591,13 @@ html .iconBadge-2wi9r4 {
 #app-mount .checkbox-1ix_J3 {
 	border-color: var(--text-muted);
 }
-#app-mount .checked-3_4uQ9[style*="border-color: rgb(79, 84, 92)"],
-#app-mount .checked-3_4uQ9:not([style*="border-color:"]):not([style*="background-color:"]) {
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="border-color: rgb(79, 84, 92)"],
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9:not([style*="border-color:"]):not([style*="background-color:"]) {
 	background-color: rgb(var(--vaccentcolor)) !important;
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
-#app-mount .checked-3_4uQ9[style*="border-color: rgb(79, 84, 92)"] path,
-#app-mount .checked-3_4uQ9:not([style*="border-color:"]):not([style*="background-color:"]) path {
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="border-color: rgb(79, 84, 92)"] path,
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9:not([style*="border-color:"]):not([style*="background-color:"]) path {
 	fill: #fff;
 }
 
