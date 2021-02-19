@@ -2331,7 +2331,7 @@ body::before {
 .themed-OHr7kt.item-PXvHYJ:hover {
 	color: rgb(var(--fontwhite2));
 }
-side-8zPYf6 .themed-OHr7kt.item-PXvHYJ:hover:not(.disabled-1Hwwfb),			/*		sideitems							*/
+.side-8zPYf6 .themed-OHr7kt.item-PXvHYJ:hover:not(.disabled-1Hwwfb),		/*		sideitems							*/
 .topPill-30KHOu .themed-OHr7kt.item-PXvHYJ:hover:not(.disabled-1Hwwfb) {	/*		tabitems							*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
