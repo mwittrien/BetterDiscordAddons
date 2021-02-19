@@ -4462,7 +4462,7 @@ side-8zPYf6 .themed-OHr7kt.item-PXvHYJ:hover:not(.disabled-1Hwwfb),			/*		sideit
 .container-1S6Mlq {											/* contextmenu			searchbar							*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
-.colorDefault-2K3EoJ {										/* contextmenu			item								*/
+.colorDefault-2K3EoJ:not(.colorDanger-2qLCe1):not(.colorBrand-ROmMP1) {			/*	item								*/
 	color: rgb(var(--fontwhite2));
 }
 .item-1tOPte.colorDefault-2K3EoJ.focused-3afm-j,
