@@ -1031,11 +1031,16 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	box-shadow: 0 0 0 1px rgba(var(--vbackgroundtertiary),.6),0 2px 10px 0 rgba(0,0,0,.2);
 }
 
-.mentioned-xhSam7 {											/* replying				container							*/
-	background-color: rgba(var(--vamentioncolor), 0.05);
+.mentioned-xhSam7 {											/* mentioned			container							*/
+	background-color: rgba(var(--vmentioncolor), 0.05);
 }
-.mentioned-xhSam7::before {									/* replying				before								*/
+.mentioned-xhSam7::before {									/* mentioned			before								*/
 	background-color: rgb(var(--vmentioncolor));
+}
+.message-2qnXI6.mentioned-xhSam7.selected-2P5D_Z,
+.mouse-mode.full-motion .mentioned-xhSam7:hover,
+.mouse-mode .mentioned-xhSam7:hover {
+	background-color: rgba(var(--vmentioncolor), 0.1);
 }
 
 #app-mount .ephemeralMessage-1fEWtQ,
