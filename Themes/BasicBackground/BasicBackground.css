@@ -885,18 +885,18 @@ body::before {
 .message-2qRu38 .wrapper-2a6GCs,							/* message				settings preview					*/
 .messageGroupCozy-2iY6cT,									/* message				pin popout							*/
 .message-1Ng5AR .wrapper-2a6GCs {							/* message				searchpage							*/
-	background-color: rgba(var(--vtransparencycolor), var(--vmessagetransparency));
+	background-color: rgba(var(--vtransparencycolor), var(--vmessagetransparency)) !important;
 	contain: unset;
 }
 .message-1Ng5AR .wrapper-2a6GCs {							/* message				searchpage							*/
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vmessagetransparency) * 0.8));
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vmessagetransparency) * 0.8)) !important;
 }
 .message-2qnXI6.selected-2P5D_Z,
 .mouse-mode .message-2qnXI6:hover,
 .mouse-mode.full-motion .message-2qnXI6:hover,
 .mouse-mode .wrapper-1F5TKx:hover,
 .mouse-mode.full-motion .wrapper-1F5TKx:hover {
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vmessagetransparency) * 1.2 * var(--vusechatbubbles) + 0.3 * (1 - var(--vusechatbubbles))));
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vmessagetransparency) * 1.2 * var(--vusechatbubbles) + 0.3 * (1 - var(--vusechatbubbles)))) !important;
 }
 .message-2qnXI6.ephemeral-1PsL1r,							/* message				localbot							*/
 .message-2qnXI6.replying-1x3H0T {							/* message				replying							*/
@@ -910,7 +910,7 @@ body::before {
 .message-2qnXI6.mentioned-xhSam7::before {
 	background-color: rgb(var(--vaccentcolor));
 }
-.message-2qnXI6.mentioned-xhSam7 .markup-2BOw-j {
+.message-2qnXI6.mentioned-xhSam7 .markup-2BOw-j:not(.slateTextArea-1Mkdgw) {
 	border-radius: 3px;
 	background-color: rgba(var(--vaccentcolor), calc(0.3 * var(--vusechatbubbles)));
 }
