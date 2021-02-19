@@ -14,15 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatFilter",
 			"author": "DevilBro",
-			"version": "3.5.1",
+			"version": "3.5.0",
 			"description": "Allows the user to censor Words or block complete Messages/Statuses"
 		},
 		"changeLog": {
 			"added": {
 				"Ignore own Messages/Status": "Added option to ignore your own Messages/Status"
-			},
-			"fixed": {
-				"Settings Update": "Fixed issue where the settings panel wouldn't show new words without having to close it first"
 			}
 		}
 	};
@@ -130,137 +127,131 @@ module.exports = (_ => {
 			}
 
 			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel;
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
-					collapseStates: collapseStates,
-					children: _ => {
-						let settingsItems = [];
+				let settingsPanel, settingsItems = [];
 				
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: "Settings",
-							collapseStates: collapseStates,
-							children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-								type: "Switch",
-								plugin: this,
-								keys: ["settings", key],
-								label: this.defaults.settings[key].description,
-								value: settings[key]
-							})).concat(Object.keys(replaces).map(rType => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-								type: "TextInput",
-								plugin: this,
-								keys: ["replaces", rType],
-								label: this.defaults.replaces[rType].description,
-								value: replaces[rType],
-								placeholder: this.defaults.replaces[rType].value
-							})))
-						}));
-						let values = {wordValue: "", replaceValue: "", choice: "blocked"};
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: `Add new blocked/censored word`,
-							collapseStates: collapseStates,
+				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+					title: "Settings",
+					collapseStates: collapseStates,
+					children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+						type: "Switch",
+						plugin: this,
+						keys: ["settings", key],
+						label: this.defaults.settings[key].description,
+						value: settings[key]
+					})).concat(Object.keys(replaces).map(rType => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+						type: "TextInput",
+						plugin: this,
+						keys: ["replaces", rType],
+						label: this.defaults.replaces[rType].description,
+						value: replaces[rType],
+						placeholder: this.defaults.replaces[rType].value
+					})))
+				}));
+				let values = {wordValue: "", replaceValue: "", choice: "blocked"};
+				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+					title: `Add new blocked/censored word`,
+					collapseStates: collapseStates,
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							type: "Button",
+							label: "Pick a Word Value and Replacement Value:",
+							disabled: !Object.keys(values).every(valuename => values[valuename]),
+							children: BDFDB.LanguageUtils.LanguageStrings.ADD,
+							ref: instance => {if (instance) values.addButton = instance;},
+							onClick: _ => {
+								this.saveWord(values);
+								BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+							}
+						}),
+						this.createInputs(values)
+					].flat(10).filter(n => n)
+				}));
+				for (let rType in replaces) if (!BDFDB.ObjectUtils.isEmpty(words[rType])) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+					title: `Added ${rType} Words`,
+					collapseStates: collapseStates,
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
+						settings: Object.keys(this.defaults.configs).filter(n => !this.defaults.configs[n]["no" + BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(rType)]),
+						data: Object.keys(words[rType]).map(wordValue => Object.assign({}, words[rType][wordValue], {
+							key: wordValue,
+							label: wordValue
+						})),
+						renderLabel: data => BDFDB.ReactUtils.createElement("div", {
+							style: {width: "100%"},
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-									type: "Button",
-									label: "Pick a Word Value and Replacement Value",
-									disabled: !Object.keys(values).every(valuename => values[valuename]),
-									children: BDFDB.LanguageUtils.LanguageStrings.ADD,
-									ref: instance => {if (instance) values.addButton = instance;},
-									onClick: _ => {
-										this.saveWord(values);
-										BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+									value: data.label,
+									placeholder: data.label,
+									size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
+									maxLength: 100000000000000000000,
+									onChange: value => {
+										words[rType][value] = words[rType][data.label];
+										delete words[rType][data.label];
+										data.label = value;
+										BDFDB.DataUtils.save(words, this, "words");
 									}
 								}),
-								this.createInputs(values)
-							].flat(10).filter(n => n)
-						}));
-						for (let rType in replaces) if (!BDFDB.ObjectUtils.isEmpty(words[rType])) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: `Added ${rType} Words`,
-							collapseStates: collapseStates,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
-								settings: Object.keys(this.defaults.configs).filter(n => !this.defaults.configs[n]["no" + BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(rType)]),
-								data: Object.keys(words[rType]).map(wordValue => Object.assign({}, words[rType][wordValue], {
-									key: wordValue,
-									label: wordValue
-								})),
-								renderLabel: data => BDFDB.ReactUtils.createElement("div", {
-									style: {width: "100%"},
-									children: [
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-											value: data.label,
-											placeholder: data.label,
-											size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
-											maxLength: 100000000000000000000,
-											onChange: value => {
-												words[rType][value] = words[rType][data.label];
-												delete words[rType][data.label];
-												data.label = value;
-												BDFDB.DataUtils.save(words, this, "words");
-											}
-										}),
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-											value: data.replace,
-											placeholder: data.replace,
-											size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
-											maxLength: 100000000000000000000,
-											onChange: value => {
-												words[rType][data.label].replace = value;
-												BDFDB.DataUtils.save(words, this, "words");
-											}
-										})
-									]
-								}),
-								onCheckboxChange: (value, instance) => {
-									words[rType][instance.props.cardId][instance.props.settingId] = value;
-									BDFDB.DataUtils.save(words, this, "words");
-								},
-								onRemove: (e, instance) => {
-									delete words[rType][instance.props.cardId];
-									BDFDB.DataUtils.save(words, this, "words");
-									BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
-								}
-							})
-						}));
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: "Remove All",
-							collapseStates: collapseStates,
-							children: Object.keys(replaces).map(rType => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-								type: "Button",
-								color: BDFDB.LibraryComponents.Button.Colors.RED,
-								label: `Remove all ${rType} Words`,
-								onClick: _ => {
-									BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove all ${rType} Words?`, _ => {
-										words[rType] = {};
-										BDFDB.DataUtils.remove(this, "words", rType);
-										BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
-									});
-								},
-								children: BDFDB.LanguageUtils.LanguageStrings.REMOVE
-							}))
-						}));
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: "Config Guide",
-							collapseStates: collapseStates,
-							children: [
-								"Case: Will block/censor Words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe",
-								"Not Case: Will block/censor Words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe",
-								"Exact: Will block/censor Words that are exactly the selected Word. apple => apple, not applepie or pineapple",
-								"Not Exact: Will block/censor all Words containing the selected Word. apple => apple, applepie and pineapple",
-								"Segment: Will only replace the caught segment in the censored Word. apple with peach => applepie => peachpie",
-								"Not Segment: Will replae the whole censored Word. apple with peach => applepie => peach",
-								"Empty: Ignores the default/choosen Replacement Value and removes the Word/Message instead.",
-								[
-									"Regex: Will treat the entered Word Value as a Regular Expression. ",
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {href: "https://regexr.com/", children: BDFDB.LanguageUtils.LanguageStrings.HELP + "?"})
-								],
-							].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
-								type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
-								children: string
-							}))
-						}));
-						
-						return settingsItems;
-					}
-				});
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+									value: data.replace,
+									placeholder: data.replace,
+									size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
+									maxLength: 100000000000000000000,
+									onChange: value => {
+										words[rType][data.label].replace = value;
+										BDFDB.DataUtils.save(words, this, "words");
+									}
+								})
+							]
+						}),
+						onCheckboxChange: (value, instance) => {
+							words[rType][instance.props.cardId][instance.props.settingId] = value;
+							BDFDB.DataUtils.save(words, this, "words");
+						},
+						onRemove: (e, instance) => {
+							delete words[rType][instance.props.cardId];
+							BDFDB.DataUtils.save(words, this, "words");
+							BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+						}
+					})
+				}));
+				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+					title: "Remove All",
+					collapseStates: collapseStates,
+					children: Object.keys(replaces).map(rType => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+						type: "Button",
+						color: BDFDB.LibraryComponents.Button.Colors.RED,
+						label: `Remove all ${rType} Words`,
+						onClick: _ => {
+							BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove all ${rType} Words?`, _ => {
+								words[rType] = {};
+								BDFDB.DataUtils.remove(this, "words", rType);
+								BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+							});
+						},
+						children: BDFDB.LanguageUtils.LanguageStrings.REMOVE
+					}))
+				}));
+				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+					title: "Config Guide",
+					collapseStates: collapseStates,
+					children: [
+						"Case: Will block/censor Words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe",
+						"Not Case: Will block/censor Words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe",
+						"Exact: Will block/censor Words that are exactly the selected Word. apple => apple, not applepie or pineapple",
+						"Not Exact: Will block/censor all Words containing the selected Word. apple => apple, applepie and pineapple",
+						"Segment: Will only replace the caught segment in the censored Word. apple with peach => applepie => peachpie",
+						"Not Segment: Will replae the whole censored Word. apple with peach => applepie => peach",
+						"Empty: Ignores the default/choosen Replacement Value and removes the Word/Message instead.",
+						[
+							"Regex: Will treat the entered Word Value as a Regular Expression. ",
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {href: "https://regexr.com/", children: BDFDB.LanguageUtils.LanguageStrings.HELP + "?"})
+						],
+					].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
+						type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
+						children: string
+					}))
+				}));
+				
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 			}
 
 			onSettingsClosed () {
