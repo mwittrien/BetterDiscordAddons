@@ -6869,6 +6869,9 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 
 /* ----		15.8.	NOTIFICATIONBAR					---- */
 
+.base-3dtUhz .notice-3bPHh- {
+	border-radius: 0;
+}
 #app-mount .notice-2FJMB4 {
 	box-shadow: 0 1px 5px 0 rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
