@@ -16,13 +16,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.3.8",
+			"version": "1.3.9",
 			"description": "Give other plugins utility functions"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 		"changeLog": {
 			"fixed": {
-				"Server Component": "Fixed Issue with Server Component"
+				"Color Picker": "Fixed Issue with Color Swatches Component"
 			}
 		}
 	};
@@ -5434,6 +5434,10 @@ module.exports = (_ => {
 										}), true);
 									}
 								});
+								if (this.props.isCustom) swatch = BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.colorpickerswatchcustomcontainer,
+									children: swatch
+								});
 								return swatch;
 							}
 						}
@@ -5466,7 +5470,7 @@ module.exports = (_ => {
 							className: BDFDB.disCN.colorpickerswatchsinglewrapper,
 							children: customSwatch
 						}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickerswatches, this.state.disabled && BDFDB.disCN.colorpickerswatchesdisabled),
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickerswatches, BDFDB.disCN.colorpickerswatchescontainer, this.state.disabled && BDFDB.disCN.colorpickerswatchesdisabled),
 							number: this.props.number != null ? this.props.number : 0,
 							children: [
 								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
