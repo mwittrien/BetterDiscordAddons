@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CompleteTimestamps",
 			"author": "DevilBro",
-			"version": "1.5.1",
+			"version": "1.5.2",
 			"description": "Replace all timestamps with complete timestamps"
 		},
 		"changeLog": {
-			"added": {
-				"Format for Tooltips": "Added an option to set up and select a custom format for timestamps inside tooltips"
+			"fixed": {
+				"Mini Stamp Tooltip": "Fixes the issue where tooltips for mini time stamps wouldn't show, smh this is discord's own fault for their shitty css"
 			}
 		}
 	};
@@ -101,24 +101,21 @@ module.exports = (_ => {
 						SystemMessage: "default"
 					}
 				};
+				
+				this.css = `
+					${BDFDB.dotCN.messagetimestamp} {
+						z-index: 1;
+					}
+				`;
 			}
 			
 			onStart () {
 				languages = BDFDB.ObjectUtils.deepAssign({
 					own: {
-							"name": "Own",
+						name: "Own",
 						id: "own"
 					}
 				}, BDFDB.LanguageUtils.languages);
-				
-				// REMOVE 21.12.2020
-				let oC = BDFDB.DataUtils.load(this, "choices"), oF = BDFDB.DataUtils.load(this, "formats");
-				if (!oC.timestampToolLang || !oF.ownFormatTool) {
-					oC.timestampToolLang = oC.timestampLang;
-					oF.ownFormatTool = oF.ownFormat;
-					BDFDB.DataUtils.save(oC, this, "choices");
-					BDFDB.DataUtils.save(oF, this, "formats");
-				}
 				
 				this.forceUpdateAll();
 			}
@@ -158,7 +155,7 @@ module.exports = (_ => {
 						label: this.defaults.choices[key].description,
 						basis: "65%",
 						value: choices[key],
-						options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value: id, label: lang.name}})),
+						options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => ({value: id, label: lang.name}))),
 						searchable: true,
 						optionRenderer: lang => {
 							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
