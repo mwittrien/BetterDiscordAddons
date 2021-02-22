@@ -1397,16 +1397,16 @@ module.exports = (_ => {
 						};
 					case "th":		// Thai
 						return {
-							context_copy:						"คัดลอก {{var0}}",
+							context_copy:						"คัดลอก{{var0}}",
 							context_lenssize:					"ขนาดเลนส์",
-							context_saveas:						"บันทึก {{var0}} เป็น ...",
-							context_searchwith:					"ค้นหา {{var0}} ด้วย ...",
-							context_view:						"ดู {{var0}}",
+							context_saveas:						"บันทึก{{var0}}เป็น ...",
+							context_searchwith:					"ค้นหา{{var0}} ้วย ...",
+							context_view:						"ดู{{var0}}",
 							submenu_disabled:					"ปิดใช้งานทั้งหมด",
-							toast_copy_failed:					"ไม่สามารถคัดลอก {{var0}} ไปยังคลิปบอร์ดได้",
-							toast_copy_success:					"คัดลอก {{var0}} ไปยังคลิปบอร์ดแล้ว",
-							toast_save_failed:					"ไม่สามารถบันทึก {{var0}} ใน '{{var1}}'",
-							toast_save_success:					"{{var0}} ถูกบันทึกใน '{{var1}}'"
+							toast_copy_failed:					"ไม่สามารถคัดลอก{{var0}}ไปยังคลิปบอร์ดได้",
+							toast_copy_success:					"คัดลอก{{var0}}ไปยังคลิปบอร์ดแล้ว",
+							toast_save_failed:					"ไม่สามารถบันทึก{{var0}}ใน '{{var1}}'",
+							toast_save_success:					"{{var0}} ูกบันทึกใน '{{var1}}'"
 						};
 					case "tr":		// Turkish
 						return {
