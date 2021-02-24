@@ -5170,7 +5170,7 @@ module.exports = (_ => {
 														onClick: event => {
 															let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickeralphahorizontal, event.target));
 															let newA = BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 1], event.clientX);
-															this.handleColorChange(BDFDB.ColorUtils.setAlpha(selectedColor, newA, hslFormat));
+															this.handleColorChange(BDFDB.ColorUtils.setAlpha([h, s, l], newA, hslFormat));
 														},
 														onMouseDown: event => {
 															let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickeralphahorizontal, event.target));
@@ -5184,7 +5184,7 @@ module.exports = (_ => {
 															let mouseMove = event2 => {
 																this.state.draggingAlphaCursor = true;
 																let newA = BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 1], event2.clientX);
-																this.handleColorChange(BDFDB.ColorUtils.setAlpha(selectedColor, newA, hslFormat));
+																this.handleColorChange(BDFDB.ColorUtils.setAlpha([h, s, l], newA, hslFormat));
 															};
 															document.addEventListener("mouseup", mouseUp);
 															document.addEventListener("mousemove", mouseMove);
@@ -7305,12 +7305,8 @@ module.exports = (_ => {
 				});
 				
 				InternalBDFDB.patchedModules = {
-					before: {
-						MessageContent: "type"
-					},
 					after: {
 						DiscordTag: "default",
-						Mention: "default",
 						Message: "default",
 						MessageHeader: "default",
 						MemberListItem: ["componentDidMount", "componentDidUpdate"],
@@ -7442,24 +7438,6 @@ module.exports = (_ => {
 				};
 				InternalBDFDB.processDiscordTag = function (e) {
 					if (e.instance && e.instance.props && e.returnvalue && e.instance.props.user) e.returnvalue.props.user = e.instance.props.user;
-				};
-				InternalBDFDB.processMessageContent = function (e) {
-					if (BDFDB.ArrayUtils.is(e.instance.props.content)) for (let ele of e.instance.props.content) InternalBDFDB._processMessageContentEle(ele, e.instance.props.message);
-				};
-				InternalBDFDB._processMessageContentEle = function (ele, message) {
-					if (BDFDB.ReactUtils.isValidElement(ele)) {
-						if (typeof ele.props.render == "function" && BDFDB.ObjectUtils.get(ele, "props.children.type.displayName") == "Mention") {
-							let userId = BDFDB.ObjectUtils.get(ele.props.render(), "props.userId");
-							if (userId && !ele.props.children.props.userId) ele.props.children.props.userId = userId;
-							if (message && message.mentioned) ele.props.children.props.mentioned = true;
-						}
-						else if (BDFDB.ReactUtils.isValidElement(ele.props.children)) InternalBDFDB._processMessageContentEle(ele.props.children, message);
-						else if (BDFDB.ArrayUtils.is(ele.props.children)) for (let child of ele.props.children) InternalBDFDB._processMessageContentEle(child, message);
-					}
-					else if (BDFDB.ArrayUtils.is(ele)) for (let child of ele) InternalBDFDB._processMessageContentEle(child, message);
-				};
-				InternalBDFDB.processMention = function (e) {
-					delete e.returnvalue.props.userId;
 				};
 				
 				const ContextMenuTypes = ["UserSettingsCog", "UserProfileActions", "User", "Developer", "Slate", "GuildFolder", "GroupDM", "SystemMessage", "Message", "Native", "Role", "Guild", "Channel"];
