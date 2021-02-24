@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.2.5",
-			"description": "Allow you to rename and recolor channelnames"
+			"version": "4.2.6",
+			"description": "Allow you to rename and recolor Channel Names"
 		},
 		"changeLog": {
-			"improved": {
-				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
+			"fixed": {
+				"Mentions": ""
 			}
 		}
 	};
@@ -108,7 +108,7 @@ module.exports = (_ => {
 						QuickSwitchChannelResult: "render",
 						SearchResultsInner: "default",
 						RecentsChannelHeader: "default",
-						ChannelMention: "ChannelMention"
+						RichChannelMention: "ChannelMention"
 					}
 				};
 				
@@ -508,7 +508,7 @@ module.exports = (_ => {
 				}
 			}
 			
-			processChannelMention (e) {
+			processRichChannelMention (e) {
 				if (e.instance.props.id && settings.changeInMentions) {
 					let name = (changedChannels[e.instance.props.id] || {}).name;
 					let color = this.getChannelDataColor(e.instance.props.id);

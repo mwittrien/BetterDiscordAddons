@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.1.5",
+			"version": "4.1.6",
 			"description": "Allow you to change the icon, name, tag and color of users"
 		},
 		"changeLog": {
 			"fixed": {
-				"Incoming Call Popup": ""
+				"Mentions": ""
 			}
 		}
 	};
@@ -148,8 +148,8 @@ module.exports = (_ => {
 						MessageContent: "type",
 						Reaction: "render",
 						ReactorsComponent: "render",
-						Mention: "default",
-						UserMention: "UserMention",
+						UserMention: "default",
+						RichUserMention: "UserMention",
 						ChannelReply: "default",
 						MemberListItem: "render",
 						UserHook: "render",
@@ -393,7 +393,7 @@ module.exports = (_ => {
 			}
 			
 			processNameTag (e) {
-				if (e.instance.props.user && (e.instance.props.className || e.instance.props.usernameClass)) {
+				if (e.returnvalue && e.instance.props.user && (e.instance.props.className || e.instance.props.usernameClass)) {
 					let change = false, guildId = null;
 					let changeBackground = false;
 					let tagClass = "";
@@ -717,13 +717,14 @@ module.exports = (_ => {
 				}
 			}
 			
-			processMention (e) {
+			processUserMention (e) {
 				if (e.instance.props.userId && settings.changeInMentions && changedUsers[e.instance.props.userId] && this.shouldChangeInChat()) {
-					this.changeMention(e.returnvalue, changedUsers[e.instance.props.userId]);
+					let mention = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Mention"});
+					if (mention) this.changeMention(mention, changedUsers[e.instance.props.userId]);
 				}
 			}
 			
-			processUserMention (e) {
+			processRichUserMention (e) {
 				if (e.instance.props.id && settings.changeInMentions && changedUsers[e.instance.props.id] && this.shouldChangeInChat()) {
 					let data = changedUsers[e.instance.props.id];
 					let tooltipChildren = BDFDB.ObjectUtils.get(e, "returnvalue.props.text.props.children");

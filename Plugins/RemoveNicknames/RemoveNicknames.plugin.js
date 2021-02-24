@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveNicknames",
 			"author": "DevilBro",
-			"version": "1.3.6",
+			"version": "1.3.7",
 			"description": "Replace all nicknames with the actual accountnames"
 		},
 		"changeLog": {
 			"fixed": {
-				"Messages": "Works in messages again"
+				"Mentions": ""
 			}
 		}
 	};
@@ -68,10 +68,10 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					settings: {
-						replaceOwn:				{value: false, 	inner: false,		description: "Replace your own name: "},
-						replaceBots:			{value: true, 	inner: false,		description: "Replace the nickname of bots: "},
-						addNickname:			{value: false, 	inner: false,		description: "Add nickname as parentheses: "},
-						swapPositions:			{value: false, 	inner: false,		description: "Swap the position of username and nickname: "},
+						replaceOwn:				{value: false, 	inner: false,		description: "Replace your own Name"},
+						replaceBots:			{value: true, 	inner: false,		description: "Replace the Nickname of Bots"},
+						addNickname:			{value: false, 	inner: false,		description: "Add Nickname as Parentheses"},
+						swapPositions:			{value: false, 	inner: false,		description: "Swap the Position of Username and Nickname"},
 						changeInChatWindow:		{value: true, 	inner: true,		description: "Messages"},
 						changeInReactions:		{value: true, 	inner: true,		description: "Reactions"},
 						changeInMentions:		{value: true, 	inner: true,		description: "Mentions"},
@@ -92,8 +92,8 @@ module.exports = (_ => {
 					after: {
 						TypingUsers: "render",
 						Reaction: "render",
-						Mention: "default",
-						UserMention: "UserMention"
+						UserMention: "default",
+						RichUserMention: "UserMention"
 					}
 				};
 			}
@@ -197,14 +197,15 @@ module.exports = (_ => {
 				});
 			}
 			
-			processMention (e) {
+			processUserMention (e) {
 				if (e.instance.props.userId && settings.changeInMentions) {
-					let newName = this.getNewName(BDFDB.LibraryModules.UserStore.getUser(e.instance.props.userId));
-					if (newName) e.returnvalue.props.children[0] = "@" + newName;
+					let mention = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Mention"});
+					let newName = mention && this.getNewName(BDFDB.LibraryModules.UserStore.getUser(e.instance.props.userId));
+					if (newName) mention.props.children[0] = "@" + newName;
 				}
 			}
 			
-			processUserMention (e) {
+			processRichUserMention (e) {
 				if (e.instance.props.id && settings.changeInMentions && typeof e.returnvalue.props.children == "function") {
 					let newName = this.getNewName(BDFDB.LibraryModules.UserStore.getUser(e.instance.props.id));
 					if (newName) {

@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.2.3",
+			"version": "1.2.4",
 			"description": "Removes blocked messages/users completely"
 		},
 		"changeLog": {
 			"fixed": {
-				"Update Reactions": "Fixed issue where reaction sometimes wouldn't show up at all, really now"
+				"Mentions": ""
 			}
 		}
 	};
@@ -103,7 +103,8 @@ module.exports = (_ => {
 						Reactions: "render",
 						MemberListItem: "render",
 						VoiceUser: "render",
-						Mention: "default"
+						UserMention: "default",
+						RichUserMention: "UserMention"
 					}
 				};
 				
@@ -373,9 +374,16 @@ module.exports = (_ => {
 				if (settings.removeUsers && BDFDB.ArrayUtils.is(e.instance.props.users)) e.instance.props.users = [].concat(e.instance.props.users).filter(n => !n || !BDFDB.LibraryModules.FriendUtils.isBlocked(n.id));
 			}
 			
-			processMention (e) {
-				if (settings.removeMentions && e.instance.props.userId && BDFDB.LibraryModules.FriendUtils.isBlocked(e.instance.props.userId)) return BDFDB.ReactUtils.createElement("span", {
-					className: BDFDB.disCNS.mention + BDFDB.disCN.mentionwrapper,
+			processUserMention (e) {
+				if (e.instance.props.userId && settings.removeMentions && BDFDB.LibraryModules.FriendUtils.isBlocked(e.instance.props.userId)) return BDFDB.ReactUtils.createElement("span", {
+					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.mention, BDFDB.disCN.mentionwrapper, e.instance.props.className),
+					children: ["@" + BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER]
+				});
+			}
+			
+			processRichUserMention (e) {
+				if (e.instance.props.id && settings.removeMentions && BDFDB.LibraryModules.FriendUtils.isBlocked(e.instance.props.id)) return BDFDB.ReactUtils.createElement("span", {
+					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.mention, BDFDB.disCN.mentionwrapper, e.instance.props.className),
 					children: ["@" + BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER]
 				});
 			}
