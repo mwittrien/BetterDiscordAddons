@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveNicknames",
 			"author": "DevilBro",
-			"version": "1.3.7",
+			"version": "1.3.8",
 			"description": "Replace all nicknames with the actual accountnames"
 		},
 		"changeLog": {
@@ -201,7 +201,7 @@ module.exports = (_ => {
 				if (e.instance.props.userId && settings.changeInMentions) {
 					let mention = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Mention"});
 					let newName = mention && this.getNewName(BDFDB.LibraryModules.UserStore.getUser(e.instance.props.userId));
-					if (newName) mention.props.children[0] = "@" + newName;
+					if (newName) mention.props.children = "@" + newName;
 				}
 			}
 			
