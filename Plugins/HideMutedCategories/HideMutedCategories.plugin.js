@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "HideMutedCategories",
 			"author": "DevilBro",
-			"version": "1.0.5",
+			"version": "1.0.6",
 			"description": "Hide muted categories the same way muted channels are hidden, when the server is set to hide muted channels"
 		},
 		"changeLog": {
@@ -98,7 +98,7 @@ module.exports = (_ => {
 						let topIsVisible = topBar.props.isVisible;
 						topBar.props.isVisible = (...args) => {
 							args[2] = args[2].filter(id => !this.isCategoryMuted(e.instance.props.guildId, id));
-							return args[2].some(id => BDFDB.LibraryModules.UnreadChannelUtils.hasUnread(id) || BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id)) ? bottomIsVisible(...args) : true;
+							return args[2].some(id => BDFDB.LibraryModules.UnreadChannelUtils.hasUnread(id) || BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id)) ? topIsVisible(...args) : true;
 						};
 					}
 					let bottomBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelsunreadbarbottom]]});
