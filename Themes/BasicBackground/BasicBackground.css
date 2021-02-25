@@ -817,6 +817,42 @@ body::before {
 	background-color: rgba(var(--vtransparencycolor), 0.5);
 }
 
+.button-18p_f6:hover {										/* welcomemessage		edit channel						*/
+	background-color: rgb(var(--vaccentcolor));
+	color: rgb(var(--fontwhite1));
+}
+
+#app-mount .role-1P70N6 {									/* welcomemessage		role								*/
+	background: transparent;
+	border-color: rgba(var(--fontwhite3), 0.6);
+	border-radius: 5px;
+	olor: rgb(var(--fontwhite1));
+	height: 22px;
+	padding: 0 5px;
+	position: relative;
+}
+#app-mount .role-1P70N6[style*="border-color: rgba(185, 187, 190, 0.6)"] {
+	border-color: rgba(var(--fontwhite3), 0.6) !important;
+}
+#app-mount .role-1P70N6 .roleColor-fHISxl {					/* welcomemessage		rolecircle							*/
+	position: absolute;
+	background-color: rgb(var(--fontwhite3));
+	border-radius: 3px;
+	opacity: 0.5;
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	left: 0;
+	top: 0;
+	z-index: -1;
+}
+#app-mount .role-1P70N6:hover .roleColor-fHISxl {
+	opacity: 0.8;
+}
+#app-mount .role-1P70N6 .roleColor-fHISxl[style*="background-color: rgb(185, 187, 190)"] {
+	background-color: rgb(var(--fontwhite3)) !important;
+}
+
 .divider-JfaTT5:not(.isUnread-3Ef-o9) {						/* divider				time								*/
 	border-color: rgba(var(--fontwhite1), 0.2);
 }
