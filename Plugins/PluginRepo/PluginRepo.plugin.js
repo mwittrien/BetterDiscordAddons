@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.1.3",
+			"version": "2.1.4",
 			"description": "Allow you to look at all plugins from the plugin repo and download them on the fly"
+		},
+		"changeLog": {
+			"progress": {
+				"New Meta Headers": "Adjusted Update Check for new Plugin Meta Headers"
+			}
 		}
 	};
 
@@ -834,9 +839,11 @@ module.exports = (_ => {
 								/* code is minified -> add newlines */
 								bodyCopy = body.replace(/}/g, "}\n");
 							}
+							
 							let bodyWithoutSpecial = bodyCopy.replace(/\n|\r|\t/g, "").replace(/\n|\r|\t/g, "").replace(/\s{2,}/g, "");
-							let configReg = /(\.exports|config)\s*=\s*\{(.*?)\s*["'`]*info["'`]*\s*:\s*/i.exec(bodyWithoutSpecial);
+							let configFound = false, configReg = /(\.exports|config)\s*=\s*\{(.*?)\s*["'`]*info["'`]*\s*:\s*/i.exec(bodyWithoutSpecial);
 							if (configReg) {
+								configFound = true;
 								try {
 									bodyWithoutSpecial = bodyWithoutSpecial.substring(configReg.index).split(configReg[0])[1].split("};")[0].split("}},")[0].replace(/,([\]\}])/g, "$1");
 									try {extractConfigInfo(plugin, JSON.parse('{"info":' + bodyWithoutSpecial + '}'));}
@@ -853,13 +860,14 @@ module.exports = (_ => {
 										}
 										catch (err) {
 											try {extractConfigInfo(plugin, JSON.parse(('{"info":' + configString + '}').replace(/'/g, "\"")));}
-											catch (err) {}
+											catch (err) {configFound = false;}
 										}
 									}
 								}
-								catch (err) {}
+								catch (err) {configFound = false;}
 							}
-							else {
+							
+							if (!configFound) {
 								let hasMETAline = bodyCopy.replace(/\s/g, "").indexOf("//META{");
 								if (!(hasMETAline < 20 && hasMETAline > -1)) {
 									let searchText = bodyCopy.replace(/[\r\t| ]*\*\s*/g, "*");
