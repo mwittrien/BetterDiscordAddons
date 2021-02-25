@@ -14,13 +14,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.3.0",
+			"version": "4.3.1",
 			"description": "Add a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode)"
 		},
 		"changeLog": {
+			"added": {
+				"Group Icons": "Added option"
+			},
 			"fixed": {
 				"Zoom Lens Stuck": "Using the middle mosue button sometimes managed to make the zoom lens get stuck",
-				"Embed Images": "Menu Items are now properly added for all emded images (some like twitter imgs didn't work)"
+				"Embed Images": "Menu Items are now properly added for all emded images (also copy and search)"
 			}
 		}
 	};
@@ -140,6 +143,7 @@ module.exports = (_ => {
 						enableCopyImg: 			{value: true,	inner: false,		description: "Add a copy Image option in the Image Modal"},
 						enableSaveImg: 			{value: true,	inner: false,		description: "Add a save Image as option in the Image Modal"},
 						addUserAvatarEntry: 	{value: true, 	inner: true,		description: "User Avatars"},
+						addGroupIconEntry: 		{value: true, 	inner: true,		description: "Group Icons"},
 						addGuildIconEntry: 		{value: true, 	inner: true,		description: "Server Icons"},
 						addEmojiEntry: 			{value: true, 	inner: true,		description: "Custom Emojis/Emotes"}
 					},
@@ -485,6 +489,10 @@ module.exports = (_ => {
 				if (e.instance.props.user && settings.addUserAvatarEntry) this.injectItem(e, e.instance.props.user.getAvatarURL("png"), BDFDB.LibraryModules.IconUtils.hasAnimatedAvatar(e.instance.props.user) && e.instance.props.user.getAvatarURL("gif"))
 			}
 
+			onGroupDMContextMenu (e) {
+				if (e.instance.props.channel && e.instance.props.channel.isGroupDM() && settings.addGroupIconEntry) this.injectItem(e, BDFDB.DMUtils.getIcon(e.instance.props.channel.id));
+			}
+
 			onNativeContextMenu (e) {
 				if (e.type == "NativeImageContextMenu" && (e.instance.props.href || e.instance.props.src)) {
 					this.injectItem(e, e.instance.props.href || e.instance.props.src);
@@ -511,7 +519,7 @@ module.exports = (_ => {
 			}
 
 			injectItem (e, ...urls) {
-				let types = [];
+				let fileTypes = [];
 				let validUrls = urls.filter(n => this.isValid(n)).map(n => {
 					let originalUrl = n;
 					let url = originalUrl.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "").replace(/%3A/g, ":");
@@ -520,8 +528,8 @@ module.exports = (_ => {
 						else if (url.split("/http/").length > 1) url = "http://" + url.split("/http/").pop();
 					}
 					const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
-					const type = file && file.split(".").pop();
-					return url && type && !types.includes(type) && types.push(type) && {url, originalUrl, type};
+					const fileType = file && (file.split(".").pop() || "").split(":")[0];
+					return url && fileType && !fileTypes.includes(fileType) && fileTypes.push(fileType) && {url, originalUrl, fileType};
 				}).filter(n => n);
 				if (!validUrls.length) return;
 				
@@ -536,7 +544,7 @@ module.exports = (_ => {
 				let type = this.isValid(validUrls[0].url, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
 				let isNative = validUrls.length == 1 && removeIndex > -1;
 				let subMenu = validUrls.length == 1 ? this.createUrlMenu(e, validUrls[0].url, validUrls[0].originalUrl) : validUrls.map((urlData, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-					label: urlData.type.toUpperCase(),
+					label: urlData.fileType.toUpperCase(),
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "subitem", i),
 					children: this.createUrlMenu(e, urlData.url, urlData.originalUrl)
 				}));
@@ -960,7 +968,7 @@ module.exports = (_ => {
 			
 			isValid (url, type) {
 				if (!url) return false;
-				const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
+				const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").split(":")[0].toLowerCase();
 				return file && (!type && (url.startsWith("https://images-ext-1.discordapp.net/") || url.startsWith("https://images-ext-2.discordapp.net/") || Object.keys(fileTypes).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`))) || type && Object.keys(fileTypes).filter(t => fileTypes[t][type]).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`)));
 			}
 			
