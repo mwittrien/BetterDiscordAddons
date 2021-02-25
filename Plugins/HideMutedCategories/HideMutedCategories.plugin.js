@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "HideMutedCategories",
 			"author": "DevilBro",
-			"version": "1.0.4",
+			"version": "1.0.5",
 			"description": "Hide muted categories the same way muted channels are hidden, when the server is set to hide muted channels"
+		},
+		"changeLog": {
+			"fixed": {
+				"Unread Bar": "Unread Badge no longer shows in the channel list when an unmuted channel inside a hidden muted category has unread messages"
+			}
 		}
 	};
 
@@ -88,6 +93,22 @@ module.exports = (_ => {
 					for (let catId in e.instance.props.categories) if (BDFDB.LibraryModules.MutedUtils.isChannelMuted(e.instance.props.guild.id, catId)) e.instance.props.categories[catId] = [];
 				}
 				else {
+					let topBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelsunreadbartop]]});
+					if (topBar) {
+						let topIsVisible = topBar.props.isVisible;
+						topBar.props.isVisible = (...args) => {
+							args[2] = args[2].filter(id => !this.isCategoryMuted(e.instance.props.guildId, id));
+							return args[2].some(id => BDFDB.LibraryModules.UnreadChannelUtils.hasUnread(id) || BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id)) ? bottomIsVisible(...args) : true;
+						};
+					}
+					let bottomBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelsunreadbarbottom]]});
+					if (bottomBar) {
+						let bottomIsVisible = bottomBar.props.isVisible;
+						bottomBar.props.isVisible = (...args) => {
+							args[2] = args[2].filter(id => !this.isCategoryMuted(e.instance.props.guildId, id));
+							return args[2].some(id => BDFDB.LibraryModules.UnreadChannelUtils.hasUnread(id) || BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id)) ? bottomIsVisible(...args) : true;
+						};
+					}
 					let tree = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
 					if (tree) {
 						let childrenRender = tree.props.children;
@@ -99,6 +120,12 @@ module.exports = (_ => {
 					}
 					else this.patchList(e.instance.props.guild.id, e.returnvalue);
 				}
+			}
+			
+			isCategoryMuted (guildId, channelId) {
+				if (!guildId || !channelId) return false;
+				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
+				return channel && channel.parent_id && BDFDB.LibraryModules.MutedUtils.isChannelMuted(guildId, channel.parent_id);
 			}
 		
 			patchList (guildId, returnvalue) {
