@@ -14,15 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.2.9",
+			"version": "4.3.0",
 			"description": "Add a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode)"
 		},
 		"changeLog": {
 			"fixed": {
-				"Image as Video": "Fixed issue where images would sometimes be seen as videos"
-			},
-			"improved": {
-				"Discords Native Options": "Instead of just hiding the native image options, the plugin now injects the new options into the native groups"
+				"Zoom Lens Stuck": "Using the middle mosue button sometimes managed to make the zoom lens get stuck",
+				"Embed Images": "Menu Items are now properly added for all emded images (some like twitter imgs didn't work)"
 			}
 		}
 	};
@@ -515,14 +513,15 @@ module.exports = (_ => {
 			injectItem (e, ...urls) {
 				let types = [];
 				let validUrls = urls.filter(n => this.isValid(n)).map(n => {
-					let url = n.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "");
-					if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
+					let originalUrl = n;
+					let url = originalUrl.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "").replace(/%3A/g, ":");
+					if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1 || url.indexOf("https://images-ext-2.discordapp.net/external/") > -1) {
 						if (url.split("/https/").length > 1) url = "https://" + url.split("/https/").pop();
 						else if (url.split("/http/").length > 1) url = "http://" + url.split("/http/").pop();
 					}
 					const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
 					const type = file && file.split(".").pop();
-					return url && type && !types.includes(type) && types.push(type) && {url, type};
+					return url && type && !types.includes(type) && types.push(type) && {url, originalUrl, type};
 				}).filter(n => n);
 				if (!validUrls.length) return;
 				
@@ -536,10 +535,10 @@ module.exports = (_ => {
 				
 				let type = this.isValid(validUrls[0].url, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
 				let isNative = validUrls.length == 1 && removeIndex > -1;
-				let subMenu = validUrls.length == 1 ? this.createUrlMenu(e, validUrls[0].url) : validUrls.map((urlData, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				let subMenu = validUrls.length == 1 ? this.createUrlMenu(e, validUrls[0].url, validUrls[0].originalUrl) : validUrls.map((urlData, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: urlData.type.toUpperCase(),
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "subitem", i),
-					children: this.createUrlMenu(e, urlData.url)
+					children: this.createUrlMenu(e, urlData.url, urlData.originalUrl)
 				}));
 				
 				let [children, index] = isNative ? [removeParent, removeIndex] : BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
@@ -552,7 +551,7 @@ module.exports = (_ => {
 				}));
 			}
 			
-			createUrlMenu (e, url) {
+			createUrlMenu (e, url, originalUrl) {
 				let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
 				let engineKeys = Object.keys(enginesWithoutAll);
 				let locations = Object.keys(ownLocations).filter(n => ownLocations[n].enabled);
@@ -586,8 +585,8 @@ module.exports = (_ => {
 											size: BDFDB.LibraryComponents.ModalComponents.ModalSize.DYNAMIC,
 											"aria-label": BDFDB.LanguageUtils.LanguageStrings.IMAGE,
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
-												src: url,
-												original: url,
+												src: originalUrl || url,
+												original: originalUrl || url,
 												width: this.width,
 												height: this.height,
 												className: BDFDB.disCN.imagemodalimage,
@@ -814,6 +813,8 @@ module.exports = (_ => {
 							if (event.which != 1) return;
 							BDFDB.ListenerUtils.stopEvent(event);
 
+							let vanishObserver;
+							
 							let imgRects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
 
 							let lens = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${zoomSettings.lensesize}px !important; height: ${zoomSettings.lensesize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * zoomSettings.zoomlevel}px; height: ${imgRects.height * zoomSettings.zoomlevel}px; position: fixed !important;${settings.pixelZoom ? " image-rendering: pixelated !important;" : ""}"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
@@ -853,10 +854,7 @@ module.exports = (_ => {
 								this.cleanupListeners("Zoom");
 								document.removeEventListener("mousemove", dragging);
 								document.removeEventListener("mouseup", releasing);
-								if (document.removeImageUtilitiesZoomObserver) {
-									document.removeImageUtilitiesZoomObserver.disconnect();
-									delete document.removeImageUtilitiesZoomObserver;
-								}
+								if (vanishObserver) vanishObserver.disconnect();
 								BDFDB.DOMUtils.remove(lens, backdrop);
 								BDFDB.DataUtils.save(zoomSettings, this, "zoomSettings");
 							};
@@ -899,13 +897,8 @@ module.exports = (_ => {
 							document.addEventListener("keydown", document.keydownImageUtilitiesZoomListener);
 							document.addEventListener("keyup", document.keyupImageUtilitiesZoomListener);
 							
-							document.removeImageUtilitiesZoomObserver = new MutationObserver(changes => changes.forEach(change => {
-								let nodes = Array.from(change.removedNodes);
-								if (nodes.indexOf(appMount) > -1 || nodes.some(n => n.contains(appMount)) || nodes.indexOf(e.node) > -1 || nodes.some(n => n.contains(e.node))) {
-									releasing();
-								}
-							}));
-							document.removeImageUtilitiesZoomObserver.observe(document.body, {subtree: true, childList: true});
+							vanishObserver = new MutationObserver(changes => {if (!document.contains(e.node)) releasing();});
+							vanishObserver.observe(appMount, {childList: true, subtree: true});
 						});
 					}
 				}
@@ -968,7 +961,7 @@ module.exports = (_ => {
 			isValid (url, type) {
 				if (!url) return false;
 				const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
-				return file && (!type && (url.startsWith("https://images-ext-2.discordapp.net/") || Object.keys(fileTypes).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`))) || type && Object.keys(fileTypes).filter(t => fileTypes[t][type]).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`)));
+				return file && (!type && (url.startsWith("https://images-ext-1.discordapp.net/") || url.startsWith("https://images-ext-2.discordapp.net/") || Object.keys(fileTypes).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`))) || type && Object.keys(fileTypes).filter(t => fileTypes[t][type]).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`)));
 			}
 			
 			downloadFile (url, path) {
@@ -1069,7 +1062,7 @@ module.exports = (_ => {
 
 			getImageSrc (img) {
 				if (!img) return null;
-				return (typeof img == "string" ? img : (img.src || (img.querySelector("canvas") ? img.querySelector("canvas").src : ""))).split("?width=")[0];
+				return (typeof img == "string" ? img : (img.src || (img.querySelector("canvas") ? img.querySelector("canvas").src : ""))).replace(/%3A/g, ":").split("?width=")[0];
 			}
 			
 			createImageWrapper (instance, imgRef, type, svgIcon) {

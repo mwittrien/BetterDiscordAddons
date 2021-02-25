@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Change the Server List to a gridlike container to allow servers to be displayed in columns - Amount of columns can be set in the .theme.css file
+Changes the Server List to a grid-like structure that allows any amount of columns

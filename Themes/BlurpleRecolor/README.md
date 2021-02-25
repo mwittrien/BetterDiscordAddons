@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Replace discords native blurple with your own color, change color in themefile
+Replaces Discords native Blurple and Boost-Pink with your own color
