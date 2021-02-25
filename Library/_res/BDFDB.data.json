@@ -380,9 +380,10 @@
 		},
 		"DOWNLOAD": {
 			"defaultProps": {
-				"foreground": ""
+				"width": 16,
+				"height": 16
 			},
-			"icon": "<svg name='Download' width='%%width' height='%%height' viewBox='0 0 24 24'><path class='%%foreground' fill='%%color' d='M 16.293,9.2929995 17.707,10.707 12,16.414 6.29297,10.707 7.70697,9.2929995 11,12.586 V 1.9999995 h 2 V 12.586 Z M 18,20 v -2 h 2 v 2 c 0,1.102 -0.896,2 -2,2 H 6 C 4.896,22 4,21.102 4,20 v -2 h 2 v 2 z'/></svg>"
+			"icon": "<svg name='Download' width='%%width' height='%%height' viewBox='0 0 16 16'><path fill='%%color' fill-rule='evenodd' d='M7.47 10.78a.75.75 0 001.06 0l3.75-3.75a.75.75 0 00-1.06-1.06L8.75 8.44V1.75a.75.75 0 00-1.5 0v6.69L4.78 5.97a.75.75 0 00-1.06 1.06l3.75 3.75zM3.75 13a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5z'/></svg>"
 		},
 		"DROPPER": {
 			"defaultProps": {
