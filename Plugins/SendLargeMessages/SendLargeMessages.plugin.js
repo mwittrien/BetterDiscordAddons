@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "SendLargeMessages",
 			"author": "DevilBro",
-			"version": "1.6.5",
+			"version": "1.6.6",
 			"description": "Allows you to enter larger messages in the chattextarea, which allows you to automatically send the message in several smaller messages"
+		},
+		"changeLog": {
+			"improved": {
+				"New Line instead of Spaces": "Added an option to check for newlines instead of spaces to split messages"
+			}
 		}
 	};
 
@@ -58,9 +63,17 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		const messageDelay = 1000; //changing at own risk, might result in bans or mutes
+		
+		let settings = {};
 	
 		return class SendLargeMessages extends Plugin {
 			onLoad () {
+				this.defaults = {
+					settings: {
+						byNewlines:		{value: false, 	description: "Try to split messages on newlines instead of spaces",		note: "This will stop sentences from being cut, but might result in more messages being sent"},
+					}
+				};
+				
 				this.patchedModules = {
 					before: {
 						ChannelTextAreaForm: "render",
@@ -73,10 +86,38 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.PatchUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 			
 			onStop () {
+				this.forceUpdateAll();
+			}
+
+			getSettingsPanel (collapseStates = {}) {
+				let settingsPanel, settingsItems = [];
+				
+				for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+					type: "Switch",
+					plugin: this,
+					keys: ["settings", key],
+					label: this.defaults.settings[key].description,
+					note: this.defaults.settings[key].note,
+					value: settings[key]
+				}));
+				
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+			}
+
+			onSettingsClosed (e) {
+				if (this.SettingsUpdated) {
+					delete this.SettingsUpdated;
+					this.forceUpdateAll();
+				}
+			}
+		
+			forceUpdateAll () {
+				settings = BDFDB.DataUtils.get(this, "settings");
+				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 
@@ -123,8 +164,10 @@ module.exports = (_ => {
 			}
 
 			formatText (text) {
+				const separator = settings.byNewlines ? "\n" : " ";
+				
 				text = text.replace(/\t/g, "	");
-				let longWords = text.match(new RegExp(`[^ ]{${BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH * (19/20)},}`, "gm"));
+				let longWords = text.match(new RegExp(`[^${separator.replace("\n", "\\n")}]{${BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH * (19/20)},}`, "gm"));
 				if (longWords) for (let longWord of longWords) {
 					let count1 = 0;
 					let shortWords = [];
@@ -132,13 +175,13 @@ module.exports = (_ => {
 						if (shortWords[count1] && (shortWords[count1].length >= BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH * (19/20) || (c == "\n" && shortWords[count1].length >= BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH * (19/20) - 100))) count1++;
 						shortWords[count1] = shortWords[count1] ? shortWords[count1] + c : c;
 					});
-					text = text.replace(longWord, shortWords.join(" "));
+					text = text.replace(longWord, shortWords.join(separator));
 				}
 				let messages = [];
 				let count2 = 0;
-				text.split(" ").forEach((word) => {
+				text.split(separator).forEach((word) => {
 					if (messages[count2] && (messages[count2] + "" + word).length > BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH * (39/40)) count2++;
-					messages[count2] = messages[count2] ? messages[count2] + " " + word : word;
+					messages[count2] = messages[count2] ? messages[count2] + separator + word : word;
 				});
 
 				let insertCodeBlock = null, insertCodeLine = null;
