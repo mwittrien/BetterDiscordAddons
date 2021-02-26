@@ -23,7 +23,7 @@ module.exports = (_ => {
 			},
 			"fixed": {
 				"Zoom Lens Stuck": "Using the middle mosue button sometimes managed to make the zoom lens get stuck",
-				"Embed Images": "Menu Items are now properly added for all emded images (also copy and search)"
+				"Embed Images": "Menu Items are now properly added for all embed images (also copy and search)"
 			}
 		}
 	};
