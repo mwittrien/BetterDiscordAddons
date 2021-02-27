@@ -1430,6 +1430,7 @@
 		"autocomplete": ["Autocomplete", "autocomplete"],
 		"autocompletecontenttitle": ["Autocomplete", "contentTitle"],
 		"autocompletedescriptiondiscriminator": ["Autocomplete", "descriptionDiscriminator"],
+		"autocompleteemoji": ["Autocomplete", "emojiImage"],
 		"autocompleteicon": ["Autocomplete", "icon"],
 		"autocompleteiconforeground": ["Autocomplete", "iconForeground"],
 		"autocompleteinner": ["Autocomplete", "autocompleteInner"],
