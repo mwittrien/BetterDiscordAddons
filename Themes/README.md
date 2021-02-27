@@ -6,7 +6,7 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
- - [Basic Background](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/BasicBackground) - Allows you to use a background image in Discord without greatly altering the basic look of Discord
+ - [Basic Background](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/BasicBackground) - Allows you to use a background image in Discord without greatly altering the basic layout of Discord
  - [Blurple Recolor](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/BlurpleRecolor) - Replaces Discords native Blurple and Boost-Pink with your own color
  - [Discord Recolor](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/DiscordRecolor) - Allows you to customize Discords native color scheme
  - [Emoji Replace](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace) - Replaces Discords Emojis with Emojis of a different provider (Apple, Facebook...)
