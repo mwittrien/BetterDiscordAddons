@@ -583,6 +583,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	min-height: 56px;
 }
 [REPLACE_CLASS_popoutwrapper] [REPLACE_CLASS_messagespopouttabbarheader] [REPLACE_CLASS_messagespopouttabbar] {
+	flex: 1 1 auto;
 	min-height: 32px;
 }
 
