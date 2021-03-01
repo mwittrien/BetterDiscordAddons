@@ -14,13 +14,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpellCheck",
 			"author": "DevilBro",
-			"version": "1.5.4",
+			"version": "1.5.5",
 			"description": "Add a Spellcheck to all Textareas. Select a Word and Right Click it to add it to your Dictionary"
-		},
-		"changeLog": {
-			"improved": {
-				"New Toast API": ""
-			}
 		}
 	};
 	
@@ -201,8 +196,8 @@ module.exports = (_ => {
 			}
 
 			onSlateContextMenu (e) {
-				let [SCparent, SCindex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "spellcheck", group: true});
-				if (SCindex > -1) SCparent.splice(SCindex, 1);
+				let [removeParent, removeIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "spellcheck", group: true});
+				if (removeIndex > -1) removeParent.splice(removeIndex, 1);
 				let textarea = BDFDB.DOMUtils.getParent(BDFDB.dotCN.textarea, e.instance.props.target), word = null;
 				if (textarea) for (let error of textarea.parentElement.querySelectorAll(BDFDB.dotCN._spellcheckerror)) {
 					let rects = BDFDB.DOMUtils.getRects(error);
@@ -347,10 +342,10 @@ module.exports = (_ => {
 					}, 500);
 					languageToasts[key].lang = lang
 					
-					let folder = BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), "dictionaries");
-					let filePath = BDFDB.LibraryRequires.path.join(folder, lang + ".dic");
+					const folder = BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), "dictionaries");
+					const filePath = BDFDB.LibraryRequires.path.join(folder, lang + ".dic");
 					
-					let parse = (error, response, body, download) => {
+					const parse = (error, response, body, download) => {
 						this.killLanguageToast(key);
 						if (error || (response && body.toLowerCase().indexOf("<!doctype html>") > -1)) {
 							BDFDB.NotificationUtils.toast(this.labels.toast_dictionary_fail.replace("{{var0}}", this.getLanguageName(languages[lang])), {
@@ -399,7 +394,7 @@ module.exports = (_ => {
 			killLanguageToast (key) {
 				if (languageToasts[key]) {
 					BDFDB.TimeUtils.clear(languageToasts[key].interval);
-					languageToasts[key].close == "function" && languageToasts[key].close();
+					languageToasts[key].close();
 				}
 			}
 

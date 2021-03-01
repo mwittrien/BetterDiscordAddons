@@ -1222,7 +1222,7 @@ module.exports = (_ => {
 						}, timeout);
 						BDFDB.TimeUtils.timeout(_ => {BDFDB.DOMUtils.removeClass(data.toast, BDFDB.disCN.toastopening);});
 						data.toast.close = _ => {
-							clearTimeout(closeTimeout);
+							BDFDB.TimeUtils.clear(closeTimeout);
 							if (document.contains(data.toast)) {
 								BDFDB.DOMUtils.addClass(data.toast, BDFDB.disCN.toastclosing);
 								data.toast.style.setProperty("pointer-events", "none", "important");
