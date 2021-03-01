@@ -198,6 +198,8 @@ module.exports = (_ => {
 			onSlateContextMenu (e) {
 				let [removeParent, removeIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "spellcheck", group: true});
 				if (removeIndex > -1) removeParent.splice(removeIndex, 1);
+				[removeParent, removeIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "correction-0", group: true});
+				if (removeIndex > -1) removeParent.splice(removeIndex, 1);
 				let textarea = BDFDB.DOMUtils.getParent(BDFDB.dotCN.textarea, e.instance.props.target), word = null;
 				if (textarea) for (let error of textarea.parentElement.querySelectorAll(BDFDB.dotCN._spellcheckerror)) {
 					let rects = BDFDB.DOMUtils.getRects(error);
