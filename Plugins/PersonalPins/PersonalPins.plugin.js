@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "PersonalPins",
 			"author": "DevilBro",
-			"version": "1.9.9",
+			"version": "2.0.0",
 			"description": "Allows you to save locally pin Messages similar to normal Pins"
 		},
 		"changeLog": {
-			"improved": {
-				"Quick Action": "Added Icon to quick action bar. Holding shift while hovering a message shows the quick action bar"
+			"fixed": {
+				"Jump To": "Fixed Server not updating when jumping to a pinned Message"
 			}
 		}
 	};
