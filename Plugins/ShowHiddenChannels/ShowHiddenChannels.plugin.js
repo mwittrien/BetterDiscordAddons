@@ -64,6 +64,7 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		var blackList = [], collapseList = [], hiddenCategory, lastGuildId, overrideTypes = [];
 		var hiddenChannelCache = {};
+		var accessModal;
 		var settings = {};
 		
 		const settingsMap = {
@@ -106,7 +107,11 @@ module.exports = (_ => {
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
 							src: BDFDB.UserUtils.getAvatar(this.props.user.id),
 							status: BDFDB.UserUtils.getStatus(this.props.user.id),
-							size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
+							size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40,
+							onClick: _ => {
+								if (accessModal) accessModal.props.onClose();
+								BDFDB.LibraryModules.UserProfileUtils.open(this.props.user.id);
+							}
 						})
 					}),
 					label: [
@@ -555,6 +560,7 @@ module.exports = (_ => {
 					subHeader: "#" + channel.name,
 					className: BDFDB.disCN._showhiddenchannelsaccessmodal,
 					contentClassName: BDFDB.disCN.listscroller,
+					onOpen: modalInstance => {if (modalInstance) accessModal = modalInstance;},
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							className: BDFDB.disCN.modalsubinner,
