@@ -142,7 +142,7 @@ module.exports = (_ => {
 			}
 			
 			processChannelTextAreaContainer (e) {
-				if (e.returnvalue.ref && e.returnvalue.ref.current && BDFDB.DOMUtils.getParent(BDFDB.dotCN.chatform, e.returnvalue.ref.current)) {
+				if (e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SlateCharacterCount"});
 					if (index > -1) {
 						let text = BDFDB.LibraryModules.SlateSelectionUtils.serialize(children[index].props.document, "raw");
