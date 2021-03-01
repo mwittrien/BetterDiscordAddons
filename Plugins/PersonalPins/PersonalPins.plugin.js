@@ -440,7 +440,8 @@ module.exports = (_ => {
 							tag: "span",
 							className: BDFDB.disCN.messagespopoutchannelname,
 							onClick: _ => {
-								BDFDB.LibraryModules.SelectChannelUtils.selectChannel(channel.guild_id, channel.id);
+								BDFDB.LibraryModules.GuildUtils.selectGuild(channel.guild_id);
+								BDFDB.LibraryModules.ChannelUtils.selectChannel(channel.guild_id, channel.id);
 							},
 							children: channelName ? ((channel.guild_id ? "#" : "@") + channelName) : "???"
 						}),
@@ -467,7 +468,8 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 									className: BDFDB.disCN.messagespopoutjumpbutton,
 									onClick: _ => {
-										BDFDB.LibraryModules.SelectChannelUtils.selectChannel(channel.guild_id, channel.id, message.id);
+										BDFDB.LibraryModules.GuildUtils.selectGuild(channel.guild_id);
+										BDFDB.LibraryModules.ChannelUtils.selectChannel(channel.guild_id, channel.id, message.id);
 									},
 									children: BDFDB.ReactUtils.createElement("div", {
 										children: BDFDB.LanguageUtils.LanguageStrings.JUMP
