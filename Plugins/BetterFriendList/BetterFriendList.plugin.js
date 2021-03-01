@@ -179,8 +179,8 @@ module.exports = (_ => {
 								newChildren.push(this.createBadge(BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount()));
 								break;
 							case "PENDING":
-								newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING]));
-								newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_OUTGOING]));
+								newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING], this.labels.incoming));
+								newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_OUTGOING], this.labels.outgoing));
 								break;
 							case "BLOCKED":
 								newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.BLOCKED]));
@@ -334,17 +334,164 @@ module.exports = (_ => {
 				}, true));
 			}
 			
-			createBadge (amount) {
-				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
+			createBadge (amount, text) {
+				let badge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
 					className: BDFDB.disCN.peoplesbadge,
 					count: amount,
 					style: {marginLeft: 6}
 				});
+				return text ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					text: text,
+					tooltipConfig: {
+						type: "bottom"
+					},
+					children: badge
+				}) : badge;
 			}
 			
 			rerenderList () {
 				let selectedButton = document.querySelector(BDFDB.dotCNS.peoplestabbar + BDFDB.dotCN.settingsitemselected);
 				if (selectedButton) selectedButton.click();
+			}
+
+			setLabelsByLanguage () {
+				switch (BDFDB.LanguageUtils.getLanguage().id) {
+					case "bg":		// Bulgarian
+						return {
+							incoming:							"Входящи",
+							outgoing:							"Изходящи"
+						};
+					case "da":		// Danish
+						return {
+							incoming:							"Indgående",
+							outgoing:							"Udgående"
+						};
+					case "de":		// German
+						return {
+							incoming:							"Eingehend",
+							outgoing:							"Ausgehend"
+						};
+					case "el":		// Greek
+						return {
+							incoming:							"Εισερχόμενος",
+							outgoing:							"Εξερχόμενος"
+						};
+					case "es":		// Spanish
+						return {
+							incoming:							"Entrante",
+							outgoing:							"Saliente"
+						};
+					case "fi":		// Finnish
+						return {
+							incoming:							"Saapuva",
+							outgoing:							"Lähtevä"
+						};
+					case "fr":		// French
+						return {
+							incoming:							"Entrant",
+							outgoing:							"Sortant"
+						};
+					case "hr":		// Croatian
+						return {
+							incoming:							"Dolazni",
+							outgoing:							"Odlazni"
+						};
+					case "hu":		// Hungarian
+						return {
+							incoming:							"Beérkező",
+							outgoing:							"Kimenő"
+						};
+					case "it":		// Italian
+						return {
+							incoming:							"In arrivo",
+							outgoing:							"Estroverso"
+						};
+					case "ja":		// Japanese
+						return {
+							incoming:							"着信",
+							outgoing:							"発信"
+						};
+					case "ko":		// Korean
+						return {
+							incoming:							"들어오는",
+							outgoing:							"나가는"
+						};
+					case "lt":		// Lithuanian
+						return {
+							incoming:							"Gaunamasis",
+							outgoing:							"Išeinantis"
+						};
+					case "nl":		// Dutch
+						return {
+							incoming:							"Inkomend",
+							outgoing:							"Uitgaand"
+						};
+					case "no":		// Norwegian
+						return {
+							incoming:							"Innkommende",
+							outgoing:							"Utgående"
+						};
+					case "pl":		// Polish
+						return {
+							incoming:							"Przychodzący",
+							outgoing:							"Towarzyski"
+						};
+					case "pt-BR":	// Portuguese (Brazil)
+						return {
+							incoming:							"Entrada",
+							outgoing:							"Extrovertido"
+						};
+					case "ro":		// Romanian
+						return {
+							incoming:							"Primite",
+							outgoing:							"De ieșire"
+						};
+					case "ru":		// Russian
+						return {
+							incoming:							"Входящий",
+							outgoing:							"Исходящий"
+						};
+					case "sv":		// Swedish
+						return {
+							incoming:							"Inkommande",
+							outgoing:							"Utgående"
+						};
+					case "th":		// Thai
+						return {
+							incoming:							"ขาเข้า",
+							outgoing:							"ขาออก"
+						};
+					case "tr":		// Turkish
+						return {
+							incoming:							"Gelen",
+							outgoing:							"Dışa dönük"
+						};
+					case "uk":		// Ukrainian
+						return {
+							incoming:							"Вхідні",
+							outgoing:							"Вихідний"
+						};
+					case "vi":		// Vietnamese
+						return {
+							incoming:							"Mới đến",
+							outgoing:							"Hướng ngoaị"
+						};
+					case "zh-CN":	// Chinese (China)
+						return {
+							incoming:							"进来的",
+							outgoing:							"外向"
+						};
+					case "zh-TW":	// Chinese (Taiwan)
+						return {
+							incoming:							"傳入",
+							outgoing:							"外向"
+						};
+					default:		// English
+						return {
+							incoming:							"Incoming",
+							outgoing:							"Outgoing"
+						};
+				}
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));

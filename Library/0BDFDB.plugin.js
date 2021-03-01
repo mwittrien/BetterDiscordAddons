@@ -4626,6 +4626,16 @@ module.exports = (_ => {
 				};
 				
 				InternalComponents.LibraryComponents.Badges = Object.assign({}, BDFDB.ModuleUtils.findByProperties("IconBadge", "NumberBadge"));
+				InternalComponents.LibraryComponents.Badges.getBadgePaddingForValue = function (count) {
+					switch (count) {
+						case 1:
+						case 4:
+						case 6:
+							return 1;
+						default:
+							return 0;
+					}
+				};
 				InternalComponents.LibraryComponents.Badges.IconBadge = reactInitialized && class BDFDB_IconBadge extends LibraryModules.React.Component {
 					render() {
 						return BDFDB.ReactUtils.createElement("div", {
@@ -4637,6 +4647,27 @@ module.exports = (_ => {
 								className: BDFDB.disCN.badgeicon,
 								name: this.props.icon
 							})
+						});
+					}
+				};
+				InternalComponents.LibraryComponents.Badges.NumberBadge = reactInitialized && class BDFDB_IconBadge extends LibraryModules.React.Component {
+					handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
+					handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
+					handleMouseEnter(e) {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);}
+					handleMouseLeave(e) {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);}
+					render() {
+						return BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.badgenumberbadge),
+							style: Object.assign({
+								backgroundColor: !this.props.disableColor && (this.props.color || BDFDB.DiscordConstants.Colors.STATUS_RED),
+								width: InternalComponents.LibraryComponents.Badges.getBadgeWidthForValue(this.props.count),
+								paddingRight: InternalComponents.LibraryComponents.Badges.getBadgePaddingForValue(this.props.count)
+							}, this.props.style),
+							onClick: this.handleClick.bind(this),
+							onContextMenu: this.handleContextMenu.bind(this),
+							onMouseEnter: this.handleMouseEnter.bind(this),
+							onMouseLeave: this.handleMouseLeave.bind(this),
+							children: InternalComponents.LibraryComponents.Badges.getBadgeCountString(this.props.count)
 						});
 					}
 				};
@@ -7190,7 +7221,7 @@ module.exports = (_ => {
 									onHide: (tooltip, anker) => {
 										delete anker.BDFDBtooltipShown;
 										shown = false;
-										if (this.props.tooltipConfig && typeof this.props.tooltipConfig.onHide == "function") this.props.onHide(tooltip, anker);
+										if (this.props.tooltipConfig && typeof this.props.tooltipConfig.onHide == "function") this.props.tooltipConfig.onHide(tooltip, anker);
 									}
 								}));
 								if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);
