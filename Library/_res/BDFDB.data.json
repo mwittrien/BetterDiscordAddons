@@ -853,6 +853,7 @@
 			"iconSwatch": "iconSwatch-_78Ghj",
 			"iconSwatchInner": "iconInner-aOY-qk",
 			"iconSwatchPreview": "preview-Bbg_24",
+			"iconSwatchNoPreview": "noPreview-G8SS4t",
 			"iconSwatchSelected": "selected-P5oePO"
 		},
 		"SpellCheck": {
@@ -1319,6 +1320,7 @@
 		"_serverfoldersiconswatch": ["ServerFolders", "iconSwatch"],
 		"_serverfoldersiconswatchinner": ["ServerFolders", "iconSwatchInner"],
 		"_serverfoldersiconswatchpreview": ["ServerFolders", "iconSwatchPreview"],
+		"_serverfoldersiconswatchnopreview": ["ServerFolders", "iconSwatchNoPreview"],
 		"_serverfoldersiconswatchselected": ["ServerFolders", "iconSwatchSelected"],
 		"_showhiddenchannelsaccessmodal": ["ShowHiddenChannels", "accessModal"],
 		"_spellcheckerror": ["SpellCheck", "error"],
