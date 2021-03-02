@@ -529,8 +529,8 @@ module.exports = (_ => {
 			injectItem (e, ...urls) {
 				let fileTypes = [];
 				let validUrls = urls.filter(n => this.isValid(n)).map(n => {
-					let originalUrl = n;
-					let url = originalUrl.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "").replace(/%3A/g, ":");
+					let originalUrl = n.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096");
+					let url = originalUrl.replace(/[\?\&](height|width)=\d+/g, "").replace(/%3A/g, ":");
 					if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1 || url.indexOf("https://images-ext-2.discordapp.net/external/") > -1) {
 						if (url.split("/https/").length > 1) url = "https://" + url.split("/https/").pop();
 						else if (url.split("/http/").length > 1) url = "http://" + url.split("/http/").pop();
