@@ -14,16 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.3.1",
+			"version": "4.3.2",
 			"description": "Add a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode)"
 		},
 		"changeLog": {
-			"added": {
-				"Group Icons": "Added option"
-			},
-			"fixed": {
-				"Zoom Lens Stuck": "Using the middle mosue button sometimes managed to make the zoom lens get stuck",
-				"Embed Images": "Menu Items are now properly added for all embed images (also copy and search)"
+			"improved": {
+				"Video File Types": "Added 10 additional video file types"
 			}
 		}
 	};
@@ -72,16 +68,28 @@ module.exports = (_ => {
 		const imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
 			
 		const fileTypes = {
-			apng:	{copyable: false,	searchable: true,	video: false},
-			avi:	{copyable: false,	searchable: false,	video: true},
-			jpeg:	{copyable: true,	searchable: true,	video: false},
-			jpg:	{copyable: true,	searchable: true,	video: false},
-			gif:	{copyable: false,	searchable: true,	video: false},
-			mov:	{copyable: false,	searchable: false,	video: true},
-			mp4:	{copyable: false,	searchable: false,	video: true},
-			png:	{copyable: true,	searchable: true,	video: false},
-			svg:	{copyable: false,	searchable: false,	video: false},
-			webp:	{copyable: true,	searchable: true,	video: false}
+			"3gp":		{copyable: false,	searchable: false,	video: true},
+			"3g2":		{copyable: false,	searchable: false,	video: true},
+			"amv":		{copyable: false,	searchable: false,	video: true},
+			"apng":		{copyable: false,	searchable: true,	video: false},
+			"avi":		{copyable: false,	searchable: false,	video: true},
+			"flv":		{copyable: false,	searchable: false,	video: true},
+			"jpeg":		{copyable: true,	searchable: true,	video: false},
+			"jpg":		{copyable: true,	searchable: true,	video: false},
+			"gif":		{copyable: false,	searchable: true,	video: false},
+			"m4v":		{copyable: false,	searchable: false,	video: true},
+			"mkv":		{copyable: false,	searchable: false,	video: true},
+			"mov":		{copyable: false,	searchable: false,	video: true},
+			"mp4":		{copyable: false,	searchable: false,	video: true},
+			"mpeg-1":	{copyable: false,	searchable: false,	video: true},
+			"mpeg-2":	{copyable: false,	searchable: false,	video: true},
+			"ogg":		{copyable: false,	searchable: false,	video: true},
+			"ogv":		{copyable: false,	searchable: false,	video: true},
+			"png":		{copyable: true,	searchable: true,	video: false},
+			"svg":		{copyable: false,	searchable: false,	video: false},
+			"webm":		{copyable: false,	searchable: false,	video: true},
+			"webp":		{copyable: true,	searchable: true,	video: false},
+			"wmv":		{copyable: false,	searchable: false,	video: true}
 		};
 		
 		const ImageDetails = class ImageDetails extends BdApi.React.Component {
@@ -521,8 +529,8 @@ module.exports = (_ => {
 			injectItem (e, ...urls) {
 				let fileTypes = [];
 				let validUrls = urls.filter(n => this.isValid(n)).map(n => {
-					let originalUrl = n.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096");
-					let url = originalUrl.replace(/[\?\&](height|width)=\d+/g, "").replace(/%3A/g, ":");
+					let originalUrl = n;
+					let url = originalUrl.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "").replace(/%3A/g, ":");
 					if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1 || url.indexOf("https://images-ext-2.discordapp.net/external/") > -1) {
 						if (url.split("/https/").length > 1) url = "https://" + url.split("/https/").pop();
 						else if (url.split("/http/").length > 1) url = "http://" + url.split("/http/").pop();
