@@ -72,7 +72,7 @@ module.exports = (_ => {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 					children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: "Reveal all Spoilers",
+							label: this.labels.reveal_all,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "reveal-all"),
 							hint: hint && (_ => {
 								return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
@@ -91,6 +91,119 @@ module.exports = (_ => {
 				let messageDiv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.message, target);
 				if (!messageDiv) return;
 				for (let spoiler of messageDiv.querySelectorAll(BDFDB.dotCN.spoilerhidden)) spoiler.click();
+			}
+
+			setLabelsByLanguage () {
+				switch (BDFDB.LanguageUtils.getLanguage().id) {
+					case "bg":		// Bulgarian
+						return {
+							reveal_all:							"Разкрийте всички спойлери"
+						};
+					case "da":		// Danish
+						return {
+							reveal_all:							"Afslør alle spoilere"
+						};
+					case "de":		// German
+						return {
+							reveal_all:							"Zeige alle Spoiler"
+						};
+					case "el":		// Greek
+						return {
+							reveal_all:							"Αποκαλύψτε όλα τα Spoilers"
+						};
+					case "es":		// Spanish
+						return {
+							reveal_all:							"Revelar todos los spoilers"
+						};
+					case "fi":		// Finnish
+						return {
+							reveal_all:							"Paljasta kaikki spoilerit"
+						};
+					case "fr":		// French
+						return {
+							reveal_all:							"Révéler tous les spoilers"
+						};
+					case "hr":		// Croatian
+						return {
+							reveal_all:							"Otkrijte sve spojlere"
+						};
+					case "hu":		// Hungarian
+						return {
+							reveal_all:							"Feltárja az összes spoilert"
+						};
+					case "it":		// Italian
+						return {
+							reveal_all:							"Rivela tutti gli spoiler"
+						};
+					case "ja":		// Japanese
+						return {
+							reveal_all:							"すべてのネタバレを明らかにする"
+						};
+					case "ko":		// Korean
+						return {
+							reveal_all:							"모든 스포일러 공개"
+						};
+					case "lt":		// Lithuanian
+						return {
+							reveal_all:							"Atskleiskite visus spoilerius"
+						};
+					case "nl":		// Dutch
+						return {
+							reveal_all:							"Onthul alle spoilers"
+						};
+					case "no":		// Norwegian
+						return {
+							reveal_all:							"Avslør alle spoilere"
+						};
+					case "pl":		// Polish
+						return {
+							reveal_all:							"Odkryj wszystkie spoilery"
+						};
+					case "pt-BR":	// Portuguese (Brazil)
+						return {
+							reveal_all:							"Revelar todos os spoilers"
+						};
+					case "ro":		// Romanian
+						return {
+							reveal_all:							"Dezvăluie toate spoilerele"
+						};
+					case "ru":		// Russian
+						return {
+							reveal_all:							"Показать все спойлеры"
+						};
+					case "sv":		// Swedish
+						return {
+							reveal_all:							"Avslöja alla spoilers"
+						};
+					case "th":		// Thai
+						return {
+							reveal_all:							"เปิดเผยสปอยเลอร์ทั้งหมด"
+						};
+					case "tr":		// Turkish
+						return {
+							reveal_all:							"Tüm Spoilerleri Göster"
+						};
+					case "uk":		// Ukrainian
+						return {
+							reveal_all:							"Розкрийте всі спойлери"
+						};
+					case "vi":		// Vietnamese
+						return {
+							reveal_all:							"Tiết lộ tất cả Spoilers"
+						};
+					case "zh-CN":	// Chinese (China)
+						return {
+							reveal_all:							"显示所有剧透"
+						};
+					case "zh-TW":	// Chinese (Taiwan)
+						return {
+							reveal_all:							"顯示所有劇透"
+						};
+					default:		// English
+						return {
+							reveal_all:							"Reveal all Spoilers"
+						};
+				}
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
