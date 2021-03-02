@@ -195,16 +195,15 @@ module.exports = (_ => {
 				let guild = BDFDB.LibraryModules.GuildStore.getGuild(BDFDB.LibraryModules.LastGuildStore.getGuildId());
 				if (!guild || user.bot && settings.disableForBots) return;
 				let role = BDFDB.LibraryModules.PermissionRoleUtils.getHighestRole(guild, user.id);
-				if (role && !role.colorString && !settings.includeColorless) {
+				if (settings.showOwnerRole && user.id == guild.ownerId) role = Object.assign({}, role, {name: BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER, ownerRole: true});
+				if (role && !role.colorString && !settings.includeColorless && !role.ownerRole) {
 					let member = BDFDB.LibraryModules.MemberStore.getMember(guild.id, user.id);
 					if (member) for (let sortedRole of BDFDB.ArrayUtils.keySort(member.roles.map(roleId => guild.getRole(roleId)), "position").reverse()) if (sortedRole.colorString) {
 						role = sortedRole;
 						break;
 					}
 				}
-				if (role && (role.colorString || settings.includeColorless)) children.splice(insertIndex, 0, this.createTag(Object.assign({}, role, {
-					name: settings.showOwnerRole && user.id == guild.ownerId ? BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER : role.name
-				}), type, config));
+				if (role && (role.colorString || role.ownerRole || settings.includeColorless)) children.splice(insertIndex, 0, this.createTag(role, type, config));
 			}
 
 			injectIdTag (children, user, type, insertIndex, config = {}) {
