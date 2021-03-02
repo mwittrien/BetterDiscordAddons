@@ -14,12 +14,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.3.2",
+			"version": "4.3.3",
 			"description": "Add a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode)"
 		},
 		"changeLog": {
 			"improved": {
 				"Video File Types": "Added 10 additional video file types"
+			},
+			"fixed": {
+				"Twitter Gallery": "Fixed an issue where gallery mode wouldn't work with some twitter embedded images"
 			}
 		}
 	};
@@ -530,13 +533,13 @@ module.exports = (_ => {
 				let fileTypes = [];
 				let validUrls = urls.filter(n => this.isValid(n)).map(n => {
 					let originalUrl = n.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096");
-					let url = originalUrl.replace(/[\?\&](height|width)=\d+/g, "").replace(/%3A/g, ":");
+					let url = originalUrl.replace(/[\?\&](height|width)=\d+/g, "").split("%3A")[0];
 					if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1 || url.indexOf("https://images-ext-2.discordapp.net/external/") > -1) {
 						if (url.split("/https/").length > 1) url = "https://" + url.split("/https/").pop();
 						else if (url.split("/http/").length > 1) url = "http://" + url.split("/http/").pop();
 					}
 					const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
-					const fileType = file && (file.split(".").pop() || "").split(":")[0];
+					const fileType = file && (file.split(".").pop() || "");
 					return url && fileType && !fileTypes.includes(fileType) && fileTypes.push(fileType) && {url, originalUrl, fileType};
 				}).filter(n => n);
 				if (!validUrls.length) return;
@@ -976,7 +979,7 @@ module.exports = (_ => {
 			
 			isValid (url, type) {
 				if (!url) return false;
-				const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").split(":")[0].toLowerCase();
+				const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").split("%3A")[0].toLowerCase();
 				return file && (!type && (url.startsWith("https://images-ext-1.discordapp.net/") || url.startsWith("https://images-ext-2.discordapp.net/") || Object.keys(fileTypes).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`))) || type && Object.keys(fileTypes).filter(t => fileTypes[t][type]).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`)));
 			}
 			
@@ -1078,7 +1081,7 @@ module.exports = (_ => {
 
 			getImageSrc (img) {
 				if (!img) return null;
-				return (typeof img == "string" ? img : (img.src || (img.querySelector("canvas") ? img.querySelector("canvas").src : ""))).replace(/%3A/g, ":").split("?width=")[0];
+				return (typeof img == "string" ? img : (img.src || (img.querySelector("canvas") ? img.querySelector("canvas").src : ""))).split("?width=")[0];
 			}
 			
 			createImageWrapper (instance, imgRef, type, svgIcon) {
