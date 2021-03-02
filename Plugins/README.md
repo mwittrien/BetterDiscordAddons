@@ -38,7 +38,6 @@
  - [Owner Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OwnerTag) - Adds a tag or crown to the server owner (or admins/management)
  - [Personal Pins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PersonalPins) - Allows you to save locally pin Messages similar to normal Pins
  - [Pin DMs](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PinDMs) - Allows you to pin DMs, making them appear at the top of your DMs/Guild-list
- - [Plugin Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PluginRepo) - Allows you to look at all plugins from the plugin repo and download them on the fly
  - [Quick Mention](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/QuickMention) - Adds a mention entry to the message option toolbar
  - [Read All Notifications Button](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReadAllNotificationsButton) - Adds a little button at the top of your serverlist that enables you to clear all mentions and messagesnotifications at once
  - [Remove Blocked Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveBlockedMessages) - Removes blocked messages/users completely
@@ -53,7 +52,6 @@
  - [Spell Check](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpellCheck) - Adds a spellcheck to all textareas
  - [Spotify Controls](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpotifyControls) - Adds a control panel to discord when listening to spotify
  - [Steam Profile Link](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SteamProfileLink) - Opens Steam Links in Steam instead of your Browser
- - [Theme Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeRepo) - Allows you to preview all themes from the theme repo and download them on the fly
  - [Theme Settings](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeSettings) - Allows you to change Theme Variables within BetterDiscord
  - [Timed Light Dark Mode](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TimedLightDarkMode) - Allows you to automatically change light/dark mode depending on the time of date - Slider is added to the 'Appearance' settings
  - [Top Role Everywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TopRoleEverywhere) - Adds the highest role of a user as a tag
