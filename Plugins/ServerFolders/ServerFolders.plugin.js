@@ -249,13 +249,11 @@ module.exports = (_ => {
 			}
 		};
 		
-		const redCross = `'data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><g fill="none" stroke="rgb(240,71,71)" stroke-width="2.63295174" stroke-linecap="round"><pathd="M 2.3297741,2.3297744 17.669885,17.670227"/><path d="M 17.66721,2.3327927 2.3327902,17.667207"/></svg>'`;
-		
 		const folderIconCustomPreviewComponent = class FolderIconCustomPreview extends BdApi.React.Component {
 			componentDidMount() {
 				this._previewInterval = BDFDB.TimeUtils.interval(_ => {
 					this.props.tick = !this.props.tick;
-					BDFDB.ReactUtils.forceUpdate(this);
+					if (this.props.open || this.props.closed) BDFDB.ReactUtils.forceUpdate(this);
 				}, 2000);
 			}
 			componentWillUnmount () {
@@ -338,24 +336,24 @@ module.exports = (_ => {
 							align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 							children: [
 								BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCNS._serverfoldersiconswatch + BDFDB.disCN._serverfoldersiconswatchpreview,
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._serverfoldersiconswatch, BDFDB.disCN._serverfoldersiconswatchpreview, !this.props.open && BDFDB.disCN._serverfoldersiconswatchnopreview),
 									children: BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN._serverfoldersiconswatchinner,
-										style: {background: `url(${this.props.open || redCross}) center/cover no-repeat`}
+										style: this.props.open && {background: `url(${this.props.open}) center/cover no-repeat`}
 									})
 								}),
 								BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCNS._serverfoldersiconswatch + BDFDB.disCN._serverfoldersiconswatchpreview,
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._serverfoldersiconswatch, BDFDB.disCN._serverfoldersiconswatchpreview, !this.props.closed && BDFDB.disCN._serverfoldersiconswatchnopreview),
 									children: BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN._serverfoldersiconswatchinner,
-										style: {background: `url(${this.props.closed || redCross}) center/cover no-repeat`}
+										style: this.props.closed && {background: `url(${this.props.closed}) center/cover no-repeat`}
 									})
 								}),
 								BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCNS._serverfoldersiconswatch + BDFDB.disCN._serverfoldersiconswatchpreview,
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._serverfoldersiconswatch, BDFDB.disCN._serverfoldersiconswatchpreview, !(this.props.tick ? this.props.open : this.props.closed) && BDFDB.disCN._serverfoldersiconswatchnopreview),
 									children: BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN._serverfoldersiconswatchinner,
-										style: {background: `url(${(this.props.tick ? this.props.open : this.props.closed) || redCross}) center/cover no-repeat`}
+										style: (this.props.tick ? this.props.open : this.props.closed) && {background: `url(${(this.props.tick ? this.props.open : this.props.closed)}) center/cover no-repeat`}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
@@ -414,7 +412,7 @@ module.exports = (_ => {
 				};
 				
 				this.css = `
-					.${this.name}-modal ${BDFDB.dotCN._serverfoldersiconswatch} {
+					${BDFDB.dotCN._serverfoldersiconswatch} {
 						position: relative;
 						margin: 3px 3px;
 						padding: 3px 3px;
@@ -423,18 +421,18 @@ module.exports = (_ => {
 						border-radius: 12px;
 						cursor: pointer;
 					}
-					.${this.name}-modal ${BDFDB.dotCN._serverfoldersiconswatch + BDFDB.dotCN._serverfoldersiconswatchpreview} {
+					${BDFDB.dotCN._serverfoldersiconswatch + BDFDB.dotCN._serverfoldersiconswatchpreview} {
 						width: 95px;
 						height: 95px;
 						cursor: default;
 					}
-					.${this.name}-modal ${BDFDB.dotCN._serverfoldersiconswatch}:hover {
+					${BDFDB.dotCN._serverfoldersiconswatch}:hover {
 						background-color: var(--background-modifier-hover);
 					}
-					.${this.name}-modal ${BDFDB.dotCN._serverfoldersiconswatch + BDFDB.dotCN._serverfoldersiconswatchselected} {
+					${BDFDB.dotCN._serverfoldersiconswatch + BDFDB.dotCN._serverfoldersiconswatchselected} {
 						background-color: var(--background-modifier-selected);
 					}
-					.${this.name}-modal ${BDFDB.dotCNS._serverfoldersiconswatch + BDFDB.dotCN._serverfoldersiconswatchinner} {
+					${BDFDB.dotCNS._serverfoldersiconswatch + BDFDB.dotCN._serverfoldersiconswatchinner} {
 						width: 100%;
 						height: 100%;
 						border-radius: 12px;
@@ -442,10 +440,17 @@ module.exports = (_ => {
 						background-size: cover;
 						background-repeat: no-repeat;
 					}
-					.${this.name}-modal ${BDFDB.dotCN._serverfoldersiconswatch} svg${BDFDB.dotCN._serverfoldersiconswatchinner} {
+					${BDFDB.dotCN._serverfoldersiconswatchnopreview},
+					${BDFDB.dotCN._serverfoldersiconswatchnopreview}:hover {
+						background-color: transparent;
+					}
+					${BDFDB.dotCNS._serverfoldersiconswatchnopreview + BDFDB.dotCN._serverfoldersiconswatchinner} {
+						background-image: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><g fill="none" stroke="rgb(240,71,71)" stroke-width="2.63295174" stroke-linecap="round"><path d="M 2.3297741,2.3297744 17.669885,17.670227"/><path d="M 17.66721,2.3327927 2.3327902,17.667207"/></g></svg>');
+					}
+					${BDFDB.dotCN._serverfoldersiconswatch} svg${BDFDB.dotCN._serverfoldersiconswatchinner} {
 						transform: translateY(-2px) scale(0.8);
 					}
-					.${this.name}-modal ${BDFDB.dotCNS._serverfoldersiconswatch + BDFDB.dotCN.hovercardbutton} {
+					${BDFDB.dotCNS._serverfoldersiconswatch + BDFDB.dotCN.hovercardbutton} {
 						position: absolute;
 						top: -10px;
 						right: -10px;
@@ -667,7 +672,7 @@ module.exports = (_ => {
 						let topIsVisible = topBar.props.isVisible;
 						topBar.props.isVisible = (...args) => {
 							let ids = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
-							args[2] = args[2].filter(n => !ids.includes(n));
+							args[2] = args[2].filter(id => !ids.includes(id));
 							return topIsVisible(...args);
 						};
 					}
@@ -676,7 +681,7 @@ module.exports = (_ => {
 						let bottomIsVisible = bottomBar.props.isVisible;
 						bottomBar.props.isVisible = (...args) => {
 							let ids = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
-							args[2] = args[2].filter(n => !ids.includes(n));
+							args[2] = args[2].filter(id => !ids.includes(id));
 							return bottomIsVisible(...args);
 						};
 					}
@@ -1823,15 +1828,15 @@ module.exports = (_ => {
 							modal_colorpicker3:					"Tooltip Color",
 							modal_colorpicker4:					"Font Color",
 							modal_copytooltipcolor:				"Use the same Color for all Servers in a Folder",
-							modal_customclosed:					"Closed icon",
-							modal_customopen:					"Open icon",
-							modal_custompreview:				"Icon preview",
-							modal_iconpicker:					"Folder selection",
+							modal_customclosed:					"Closed Icon",
+							modal_customopen:					"Open Icon",
+							modal_custompreview:				"Icon Preview",
+							modal_iconpicker:					"Folder Selection",
 							modal_swapcolor:					"Use the second Color for the original Folder",
 							modal_tabheader1:					"Folder",
 							modal_tabheader2:					"Folder Color",
 							modal_tabheader3:					"Tooltip Color",
-							modal_tabheader4:					"Own symbols",
+							modal_tabheader4:					"Custom Icons",
 							modal_usecloseicon:					"Use a closed Icon instead of the Mini-Servers",
 							servercontext_serverfolders:		"Server Folder",
 							serversubmenu_addtofolder:			"Add the Server to the Folder",
