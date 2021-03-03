@@ -202,10 +202,7 @@
 			"InviteGuildName": {"props": ["GuildName", "GuildTemplateName"]},
 			"InviteCard": {"class": "guildsettingsinvitecard"},
 			"MemberCard": {"class": "guildsettingsmembercard"},
-<<<<<<< HEAD
-=======
 			"Message": {"strings": ["childrenMessageContent", "childrenRepliedMessage", "zalgo"]},
->>>>>>> development
 			"MessageHeader": {"props": ["MessageTimestamp"]},
 			"Messages": {"strings": ["group-spacing-", "canManageMessages"]},
 			"MessageUsername": {"strings": ["default.username", "colorString", "compact"]},
