@@ -688,7 +688,7 @@ body::before {
 	border: none;
 }
 .panels-j1Uci_ > * + * {
-	border-top: 1px solid rgba(var(--fontwhite4), 0.2);
+	border-top: 1px solid rgba(var(--vtransparencycolor), 0.2);
 }
 
 .title-eS5yk3 {												/* account/voice		title								*/
@@ -3257,6 +3257,7 @@ body::before {
 #app-mount .footer-2gL1pp {									/* modal				footer							*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	box-shadow: none;
+	z-index: 0;
 }
 #app-mount .footer-1lnhms {									/* modal				footer info						*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
