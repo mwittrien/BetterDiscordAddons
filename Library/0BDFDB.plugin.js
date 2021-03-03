@@ -945,12 +945,13 @@ module.exports = (_ => {
 
 	
 	const loadLibrary = tryAgain => {
-		require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.raw.css", (error, response, body) => {
-			if ((error || !body) && tryAgain) return BDFDB.TimeUtils.timeout(_ => {loadLibrary();}, 10000);
-			const css = body;
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.data.json", BDFDB.TimeUtils.suppress((error2, response2, body2) => {
-				if ((error2 || !body2) && tryAgain) return BDFDB.TimeUtils.timeout(_ => {loadLibrary();}, 10000);
-				const InternalData = JSON.parse(body2);
+		const branch = ((BdApi.findModuleByProps("getCurrentUser") || {getCurrentUser: _ => {}}).getCurrentUser() || {}).id == "278543574059057154" ? "developement" : "master";
+		require("request").get(`https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/${branch}/Library/BDFDB.raw.css`, (e, r, b) => {
+			if ((e || !b) && tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
+			const css = b;
+			require("request").get(`https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/${branch}/Library/BDFDB.data.json`, BDFDB.TimeUtils.suppress((e2, res2, b2) => {
+				if ((e2 || !b2) && tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
+				const InternalData = JSON.parse(b2);
 				
 				InternalBDFDB.getPluginURL = function (plugin) {
 					plugin = plugin == BDFDB && InternalBDFDB || plugin;
