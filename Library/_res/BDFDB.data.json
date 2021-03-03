@@ -892,7 +892,8 @@
 			"chatTag": "chatTag-Y-5TDc",
 			"memberTag": "memberTag-QVWzGc",
 			"roleStyle": "roleStyle-jQ7KI2",
-			"tag": "tag-wWVHyf"
+			"tag": "tag-wWVHyf",
+			"voiceTag": "voiceTag-0F4Ss0"
 		},
 		"NotFound": {
 			"_": "",
@@ -1348,6 +1349,7 @@
 		"_toproleseverywheremembertag": ["TopRolesEverywhere", "memberTag"],
 		"_toproleseverywhererolestyle": ["TopRolesEverywhere", "roleStyle"],
 		"_toproleseverywheretag": ["TopRolesEverywhere", "tag"],
+		"_toproleseverywherevoicetag": ["TopRolesEverywhere", "voiceTag"],
 		"_repoauthor": ["BDrepo", "bdaAuthor"],
 		"_repobutton": ["BDrepo", "bdButton"],
 		"_repobuttondanger": ["BDrepo", "bdButtonDanger"],
