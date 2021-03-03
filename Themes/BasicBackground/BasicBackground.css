@@ -7450,9 +7450,29 @@ html .colorDefault-XdNdIp .bg-8df5St {
 
 #app-mount #dv-mount {
 	background: transparent;
+	z-index: 1;
+}
+#app-mount #dv-mount::after,
+#app-mount #dv-mount::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	pointer-events: none;
+	z-index: -1;
+}
+#app-mount #dv-mount::after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + var(--vmemberlisttransparency) * 0.85));
+}
+#app-mount #dv-mount::before {
+	background: var(--vbackground) var(--vbackgroundposition)/var(--vbackgroundsize);
+	background-attachment: fixed;
+	filter: blur(var(--vbackgroundblur));
 }
 #app-mount #dv-main {
-	border-top-color: rgba(var(--fontwhite1), 0.1);
+	border-top-color: rgba(var(--vtransparencycolor), 0.2);
 	color: rgb(var(--fontwhite1));
 }
 #app-mount #dv-main .dv-date {
