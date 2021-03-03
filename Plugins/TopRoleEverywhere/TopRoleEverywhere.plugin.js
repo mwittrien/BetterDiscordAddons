@@ -18,8 +18,8 @@ module.exports = (_ => {
 			"description": "Add the highest role of a user as a tag"
 		},
 		"changeLog": {
-			"fixed": {
-				"Compact": "Fixed some issues with compact mode"
+			"added": {
+				"Voice Channel List": "Added Option to add Role Tag in the Voice Channel List for Users"
 			}
 		}
 	};
@@ -70,6 +70,7 @@ module.exports = (_ => {
 					settings: {
 						showInChat:			{value: true, 	inner: true, 	description: "Chat Window"},
 						showInMemberList:	{value: true, 	inner: true, 	description: "Member List"},
+						showInVoiceList:	{value: true, 	inner: true, 	description: "Voice User List"},
 						useOtherStyle:		{value: false, 	inner: false, 	description: "Use BotTag Style instead of the Role Style"},
 						useBlackFont:		{value: false, 	inner: false,	description: "Instead of darkening the Color for BotTag Style on bright Colors use black Font"},
 						includeColorless:	{value: false, 	inner: false, 	description: "Include colorless Roles"},
@@ -82,7 +83,8 @@ module.exports = (_ => {
 				this.patchedModules = {
 					after: {
 						MemberListItem: "render",
-						MessageUsername: "default"
+						MessageUsername: "default",
+						VoiceUser: "render"
 					}
 				};
 				
@@ -93,6 +95,8 @@ module.exports = (_ => {
 						overflow: visible;
 					}
 					${BDFDB.dotCN._toproleseverywheretag} {
+						display: inline-flex;
+						flex: 0 1 auto;
 						cursor: pointer;
 						overflow: hidden;
 						text-overflow: ellipsis;
@@ -187,6 +191,13 @@ module.exports = (_ => {
 						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 						useRem: true
 					});
+				}
+			}
+
+			processVoiceUser (e) {
+				if (e.instance.props.user && settings.showInVoiceList) {
+					let content = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.voicecontent]]});
+					if (content) this.injectRoleTag(content.props.children, e.instance.props.user, "voice", 3);
 				}
 			}
 

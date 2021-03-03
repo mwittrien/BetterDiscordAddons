@@ -14,12 +14,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "OwnerTag",
 			"author": "DevilBro",
-			"version": "1.3.6",
+			"version": "1.3.7",
 			"description": "Add a tag or crown to the server owner (or admins/management)"
 		},
 		"changeLog": {
-			"fixed": {
-				"Compact": "Fixed some issues with compact mode"
+			"added": {
+				"Voice Channel List": "Added Option to add Role Tag in the Voice Channel List for Users"
 			}
 		}
 	};
@@ -77,6 +77,7 @@ module.exports = (_ => {
 					after: {
 						MemberListItem: "render",
 						MessageUsername: "default",
+						VoiceUser: "render",
 						NameTag: "default",
 						UserPopout: "render"
 					}
@@ -86,15 +87,16 @@ module.exports = (_ => {
 					settings: {
 						addInChatWindow:		{value: true, 	inner: true,		description: "Messages"},
 						addInMemberList:		{value: true, 	inner: true,		description: "Member List"},
+						addInVoiceList:			{value: true, 	inner: true,		description: "Voice User List"},
 						addInUserPopout:		{value: true, 	inner: true,		description: "User Popouts"},
 						addInUserProfile:		{value: true, 	inner: true,		description: "User Profile Modal"},
-						useRoleColor:			{value: true, 	inner: false,	description: "Use the Rolecolor instead of the default blue"},
-						useBlackFont:			{value: false, 	inner: false,	description: "Instead of darkening the Rolecolor on bright colors use black font"},
-						useCrown:				{value: false, 	inner: false,	description: "Use the Crown Icon instead of the Bot Tag Style"},
-						hideNativeCrown:		{value: true, 	inner: false,	description: "Hide the native Crown Icon (not the Plugin one)"},
-						addForAdmins:			{value: false, 	inner: false,	description: "Add an Admin Tag for users with admin permissions"},
-						addForManagement:		{value: false, 	inner: false,	description: "Add a Management Tag for users with management permissions"},
-						ignoreBotAdmins:		{value: false, 	inner: false,	description: "Do not add the Admin/Management tag for bots"}
+						useRoleColor:			{value: true, 	inner: false,		description: "Use the Rolecolor instead of the default blue"},
+						useBlackFont:			{value: false, 	inner: false,		description: "Instead of darkening the Rolecolor on bright colors use black font"},
+						useCrown:				{value: false, 	inner: false,		description: "Use the Crown Icon instead of the Bot Tag Style"},
+						hideNativeCrown:		{value: true, 	inner: false,		description: "Hide the native Crown Icon (not the Plugin one)"},
+						addForAdmins:			{value: false, 	inner: false,		description: "Add an Admin Tag for users with admin permissions"},
+						addForManagement:		{value: false, 	inner: false,		description: "Add a Management Tag for users with management permissions"},
+						ignoreBotAdmins:		{value: false, 	inner: false,		description: "Do not add the Admin/Management tag for bots"}
 					},
 					inputs: {
 						ownTagName:				{value: "Owner", 		description: "Tag Text for Owners"},
@@ -113,13 +115,16 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.message + BDFDB.dotCN.memberownericon} {
 						top: 2px;
 					}
+					${BDFDB.dotCNS.voicecontent + BDFDB.dotCN.memberownericon} {
+						top: 0px;
+					}
+					${BDFDB.dotCNS.userprofile + BDFDB.dotCN.memberownericon} {
+						top: 0px;
+					}
 					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN.memberownericon},
 					${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.memberownericon} {
 						margin-left: 0;
 						margin-right: 4px;
-					}
-					${BDFDB.dotCNS.userprofile + BDFDB.dotCN.memberownericon} {
-						top: 0px;
 					}
 				`;
 			}
@@ -205,6 +210,7 @@ module.exports = (_ => {
 				let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
 				if (userType && settings.addInMemberList) {
 					this.injectOwnerTag(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, userType, 1, {
+						channelId: e.instance.props.channel && e.instance.props.channel.id,
 						tagClass: BDFDB.disCN.bottagmember
 					});
 				}
@@ -218,6 +224,18 @@ module.exports = (_ => {
 						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 						useRem: true
 					});
+				}
+			}
+
+			processVoiceUser (e) {
+				if (e.instance.props.user && settings.addInVoiceList) {
+					let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
+					if (userType) {
+						let content = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.voicecontent]]});
+						if (content) this.injectOwnerTag(content.props.children, e.instance.props.user, userType, 3, {
+							channelId: e.instance.props.channel && e.instance.props.channel.id,
+						});
+					}
 				}
 			}
 
