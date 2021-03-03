@@ -14,13 +14,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "CompleteTimestamps",
 			"author": "DevilBro",
-			"version": "1.5.2",
+			"version": "1.5.3",
 			"description": "Replace all timestamps with complete timestamps"
-		},
-		"changeLog": {
-			"fixed": {
-				"Mini Stamp Tooltip": "Fixes the issue where tooltips for mini time stamps wouldn't show, smh this is discord's own fault for their shitty css"
-			}
 		}
 	};
 
@@ -94,7 +89,7 @@ module.exports = (_ => {
 				
 				this.patchedModules = {
 					after: {
-						Message: "default",
+						Message: "type",
 						MessageHeader: "default",
 						MessageContent: "type",
 						Embed: "render",

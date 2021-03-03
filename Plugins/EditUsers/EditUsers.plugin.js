@@ -14,13 +14,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.1.6",
+			"version": "4.1.7",
 			"description": "Allow you to change the icon, name, tag and color of users"
-		},
-		"changeLog": {
-			"fixed": {
-				"Mentions": ""
-			}
 		}
 	};
 
@@ -112,7 +107,7 @@ module.exports = (_ => {
 						NowPlayingHeader: "Header",
 						VoiceUser: "render",
 						Account: "render",
-						Message: "default",
+						Message: "type",
 						MessageUsername: "default",
 						MessageContent: "type",
 						ReactorsComponent: "render",
