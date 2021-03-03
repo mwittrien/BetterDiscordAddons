@@ -945,7 +945,7 @@ module.exports = (_ => {
 
 	
 	const loadLibrary = tryAgain => {
-		const branch = ((BdApi.findModuleByProps("getCurrentUser") || {getCurrentUser: _ => {}}).getCurrentUser() || {}).id == "278543574059057154" ? "developement" : "master";
+		const branch = ((BdApi.findModuleByProps("getCurrentUser") || {getCurrentUser: _ => {}}).getCurrentUser() || {}).id == "278543574059057154" ? "development" : "master";
 		require("request").get(`https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/${branch}/Library/BDFDB.raw.css`, (e, r, b) => {
 			if ((e || !b) && tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
 			const css = b;
