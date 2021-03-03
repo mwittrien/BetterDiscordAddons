@@ -154,6 +154,7 @@
 			"ExpressionPicker",
 			"InviteGuildName",
 			"GuildFolder",
+			"Message",
 			"Messages",
 			"MessageContent",
 			"NowPlayingHeader"
