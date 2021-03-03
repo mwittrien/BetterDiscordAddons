@@ -180,6 +180,7 @@
 			"Channels": {"class": "guildchannels"},
 			"ChannelTextAreaForm": {"class": "chatform"},
 			"ChannelWindow": {"class": "chatcontent"},
+			"ChatMessage": {"strings": ["childrenMessageContent", "childrenRepliedMessage", "message.id"]},
 			"CustomStatusModal": {"class": "customstatusmodal"},
 			"DirectMessage": {"class": "guildouter"},
 			"EmojiPicker": {"strings": ["allowManagedEmojis", "EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"]},
@@ -201,6 +202,10 @@
 			"InviteGuildName": {"props": ["GuildName", "GuildTemplateName"]},
 			"InviteCard": {"class": "guildsettingsinvitecard"},
 			"MemberCard": {"class": "guildsettingsmembercard"},
+<<<<<<< HEAD
+=======
+			"Message": {"strings": ["childrenMessageContent", "childrenRepliedMessage", "zalgo"]},
+>>>>>>> development
 			"MessageHeader": {"props": ["MessageTimestamp"]},
 			"Messages": {"strings": ["group-spacing-", "canManageMessages"]},
 			"MessageUsername": {"strings": ["default.username", "colorString", "compact"]},

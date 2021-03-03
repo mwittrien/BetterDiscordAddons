@@ -592,11 +592,11 @@ module.exports = (_ => {
 		BDFDB.TimeUtils.suppress(_ => {
 			if (!BDFDB.ObjectUtils.is(plugin)) return;
 			if (plugin == window.BDFDB_Global) {
-				let updateNotice = document.querySelector(BDFDB.dotCN.noticeupdate);
+				let updateNotice = BDFDB.dotCN && document.querySelector(BDFDB.dotCN.noticeupdate);
 				if (updateNotice) updateNotice.close();
-				BDFDB.TimeUtils.clear(PluginStores.updateData.interval);
+				BDFDB.TimeUtils.clear(PluginStores && PluginStores.updateData && PluginStores.updateData.interval);
 				delete window.BDFDB_Global.loaded;
-				BDFDB.TimeUtils.interval((interval, count) => {
+				if (PluginStores) BDFDB.TimeUtils.interval((interval, count) => {
 					if (count > 60 || window.BDFDB_Global.loaded) BDFDB.TimeUtils.clear(interval);
 					if (window.BDFDB_Global.loaded) for (let pluginName in BDFDB.ObjectUtils.sort(PluginStores.loaded)) BDFDB.TimeUtils.timeout(_ => {
 						if (PluginStores.loaded[pluginName].started) BDFDB.BDUtils.reloadPlugin(pluginName);
@@ -951,11 +951,12 @@ module.exports = (_ => {
 	
 	const loadLibrary = tryAgain => {
 		const branch = ((BdApi.findModuleByProps("getCurrentUser") || {getCurrentUser: _ => {}}).getCurrentUser() || {}).id == "278543574059057154" ? "development" : "master";
-		require("request").get(`https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/${branch}/Library/BDFDB.raw.css`, (e, r, b) => {
-			if ((e || !b) && tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
+		const request = require("request");
+		request.get(`https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/${branch}/Library/_res/BDFDB.raw.css`, (e, r, b) => {
+			if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
 			const css = b;
-			require("request").get(`https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/${branch}/Library/BDFDB.data.json`, BDFDB.TimeUtils.suppress((e2, res2, b2) => {
-				if ((e2 || !b2) && tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
+			request.get(`https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/${branch}/Library/_res/BDFDB.data.json`, BDFDB.TimeUtils.suppress((e2, r2, b2) => {
+				if ((e2 || !b2 || r2.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
 				const InternalData = JSON.parse(b2);
 				
 				InternalBDFDB.getPluginURL = function (plugin) {
@@ -7363,9 +7364,13 @@ module.exports = (_ => {
 				
 				let MessageHeaderExport = BDFDB.ModuleUtils.findByProperties("MessageTimestamp", false);
 				InternalBDFDB.processMessage = function (e) {
+<<<<<<< HEAD
 					if (MessageHeaderExport && BDFDB.ObjectUtils.get(e, "instance.props.childrenHeader.type.type.name") && BDFDB.ObjectUtils.get(e, "instance.props.childrenHeader.props.message")) {
 						e.instance.props.childrenHeader.type = MessageHeaderExport.exports.default;
 					}
+=======
+					if (MessageHeaderExport && BDFDB.ObjectUtils.get(e, "instance.props.childrenHeader.type.type.name") && BDFDB.ObjectUtils.get(e, "instance.props.childrenHeader.props.message")) e.instance.props.childrenHeader.type = MessageHeaderExport.exports.default;
+>>>>>>> development
 					if (e.returnvalue && e.returnvalue.props && e.returnvalue.props.children && e.returnvalue.props.children.props) {
 						let message;
 						for (let key in e.instance.props) {
