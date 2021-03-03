@@ -149,22 +149,9 @@
 			"DirectMessage",
 			"GuildIcon"
 		],
-		"MemoComponent": [
-			"EmojiPicker",
-			"ExpressionPicker",
-			"InviteGuildName",
-			"GuildFolder",
-			"Message",
-			"Messages",
-			"MessageContent",
-			"NowPlayingHeader"
-		],
-		"SubRender": [
-			"GuildFolder"
-		],
-		"NonPrototype": [
-			"ChannelTextAreaContainer"
-		],
+		"MemoComponent": [],
+		"SubRender": [],
+		"NonPrototype": [],
 		"Finder": {
 			"Account": {"class": "accountinfo"},
 			"App": {"class": "app"},
@@ -201,6 +188,7 @@
 			"InviteGuildName": {"props": ["GuildName", "GuildTemplateName"]},
 			"InviteCard": {"class": "guildsettingsinvitecard"},
 			"MemberCard": {"class": "guildsettingsmembercard"},
+			"Message": {"strings": ["childrenMessageContent", "childrenRepliedMessage", "message.id"]},
 			"MessageHeader": {"props": ["MessageTimestamp"]},
 			"Messages": {"strings": ["group-spacing-", "canManageMessages"]},
 			"MessageUsername": {"strings": ["default.username", "colorString", "compact"]},
@@ -232,8 +220,7 @@
 			"UserHook": {"class": "auditloguserhook"},
 			"UserPopout": {"class": "userpopout"},
 			"UserProfile": {"class": "userprofile"},
-			"UserSettingsAppearance": {"class": "usersettingsappearancepreview"},
-			"V2C_ContentColumn": {"class": "settingswindowcontentcolumn", "special": [{"path": "return.stateNode.props.title", "value": ["PLUGINS", "THEMES"]}]}
+			"UserSettingsAppearance": {"class": "usersettingsappearancepreview"}
 		},
 		"LoadedInComponents": {
 			"AutocompleteChannelResult": "LibraryComponents.AutocompleteItems.Channel",
