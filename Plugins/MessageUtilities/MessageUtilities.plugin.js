@@ -14,13 +14,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
-			"version": "1.8.7",
+			"version": "1.8.8",
 			"description": "Offers you a number of useful message options (quick actions)"
-		},
-		"changeLog": {
-			"fixed": {
-				"Edit": "Trying to edit a message that is alsready being edited no longer resets the edit"
-			}
 		}
 	};
 
@@ -97,8 +92,10 @@ module.exports = (_ => {
 				this.patchedModules = {
 					before: {
 						Menu: "default",
-						Message: "default",
 						ChannelTextAreaForm: "render"
+					},
+					after: {
+						Message: "type"
 					}
 				};
 				
@@ -283,19 +280,14 @@ module.exports = (_ => {
 			}
 		
 			processMessage (e) {
-				let message;
-				for (let key in e.instance.props) {
-					if (!message) message = BDFDB.ObjectUtils.get(e.instance.props[key], "props.message");
-					else break;
-				}
-				if (message) {
-					let props = Object.assign({}, e.instance.props);
-					e.instance.props.onClick = event => {
-						this.onClick(event, message);
+				if (e.instance.props.message) {
+					let props = Object.assign({}, e.returnvalue.props);
+					e.returnvalue.props.onClick = event => {
+						this.onClick(event, e.instance.props.message);
 						if (typeof props.onClick == "function") props.onClick(event);
 					};
-					e.instance.props.onDoubleClick = event => {
-						this.onClick(event, message);
+					e.returnvalue.props.onDoubleClick = event => {
+						this.onClick(event, e.instance.props.message);
 						if (typeof props.onDoubleClick == "function") props.onDoubleClick(event);
 					};
 				}
