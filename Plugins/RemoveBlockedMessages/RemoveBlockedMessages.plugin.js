@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.2.5",
+			"version": "1.2.4",
 			"description": "Removes blocked messages/users completely"
+		},
+		"changeLog": {
+			"fixed": {
+				"Mentions": ""
+			}
 		}
 	};
 
@@ -81,7 +86,7 @@ module.exports = (_ => {
 				
 				this.patchedModules = {
 					before: {
-						Message: "type",
+						Message: "default",
 						ReactorsComponent: "render",
 						ChannelMembers: "render",
 						PrivateChannelRecipients: "default",

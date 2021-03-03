@@ -14,8 +14,19 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatFilter",
 			"author": "DevilBro",
-			"version": "3.5.2",
+			"version": "3.5.1",
 			"description": "Allows the user to censor Words or block complete Messages/Statuses"
+		},
+		"changeLog": {
+			"added": {
+				"Ignore own Messages/Status": "Added option to ignore your own Messages/Status"
+			},
+			"improved": {
+				"Zero Width Spaces": "Ignores any zero width space, since some ppl like to troll with it"
+			},
+			"fixed": {
+				"Settings Update": "Fixed issue where the settings panel wouldn't show new words without having to close it first"
+			}
 		}
 	};
 
@@ -84,7 +95,7 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					before: {
-						Message: "type",
+						Message: "default",
 						MessageContent: "type",
 						UserPopout: "render",
 						UserProfile: "render",

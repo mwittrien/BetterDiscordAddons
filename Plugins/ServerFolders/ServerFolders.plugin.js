@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "6.8.9",
+			"version": "6.8.8",
 			"description": "Patch Discords native Folders in a way to open Servers within a Folder in a new bar to the right, also adds a bunch of new features to more easily organize, customize and manage your Folders"
+		},
+		"changeLog": {
+			"improved": {
+				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
+			}
 		}
 	};
 
@@ -399,7 +404,7 @@ module.exports = (_ => {
 				this.patchedModules = {
 					after: {
 						AppView: "default",
-						GuildFolder: "render",
+						GuildFolder: "type",
 						Guilds: "render",
 						Guild: ["componentDidMount", "render"],
 						GuildFolderSettingsModal: ["componentDidMount", "render"]
