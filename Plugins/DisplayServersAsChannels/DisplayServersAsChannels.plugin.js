@@ -14,13 +14,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "DisplayServersAsChannels",
 			"author": "DevilBro",
-			"version": "1.4.6",
+			"version": "1.4.7",
 			"description": "Display servers in a similar way as channels"
-		},
-		"changeLog": {
-			"fixed": {
-				"Works again": "Can discord stop messing with the server list, jeez"
-			}
 		}
 	};
 
@@ -84,7 +79,7 @@ module.exports = (_ => {
 						DefaultHomeButton: "render",
 						DirectMessage: "render",
 						Guild: "render",
-						GuildFolder: "type",
+						GuildFolder: "render",
 						CircleIconButton: "render",
 						UnavailableGuildsButton: "UnavailableGuildsButton"
 					}
