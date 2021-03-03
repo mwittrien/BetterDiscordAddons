@@ -149,22 +149,9 @@
 			"DirectMessage",
 			"GuildIcon"
 		],
-		"MemoComponent": [
-			"EmojiPicker",
-			"ExpressionPicker",
-			"InviteGuildName",
-			"GuildFolder",
-			"Message",
-			"Messages",
-			"MessageContent",
-			"NowPlayingHeader"
-		],
-		"SubRender": [
-			"GuildFolder"
-		],
-		"NonPrototype": [
-			"ChannelTextAreaContainer"
-		],
+		"MemoComponent": [],
+		"SubRender": [],
+		"NonPrototype": [],
 		"Finder": {
 			"Account": {"class": "accountinfo"},
 			"App": {"class": "app"},
