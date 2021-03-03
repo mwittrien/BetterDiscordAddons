@@ -3335,7 +3335,7 @@ body::before {
 	left: 0;
 	background: var(--user-background, var(--vpopout)) var(--vpopoutposition)/var(--vpopoutsize);
 	filter: blur(var(--vpopoutblur));
-	background-attachment: fixed;
+	background-attachment: var(--user-background, fixed);
 	width: unset;
 	height: unset;
 	pointer-events: none;
@@ -4561,7 +4561,7 @@ body::before {
 	left: 0;
 	background: var(--user-background, var(--vpopout)) var(--vpopoutposition)/var(--vpopoutsize);
 	filter: blur(var(--vpopoutblur));
-	background-attachment: fixed;
+	background-attachment: var(--user-background, fixed);
 	width: unset;
 	height: unset;
 	pointer-events: none;
