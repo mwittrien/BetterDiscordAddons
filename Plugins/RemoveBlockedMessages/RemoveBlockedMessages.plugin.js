@@ -14,8 +14,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.2.5",
+			"version": "1.2.4",
 			"description": "Removes blocked messages/users completely"
+		},
+		"changeLog": {
+			"fixed": {
+				"Mentions": ""
+			}
 		}
 	};
 
@@ -81,6 +86,7 @@ module.exports = (_ => {
 				
 				this.patchedModules = {
 					before: {
+						Message: "default",
 						ReactorsComponent: "render",
 						ChannelMembers: "render",
 						PrivateChannelRecipients: "default",
@@ -94,7 +100,6 @@ module.exports = (_ => {
 						ChannelPins: "default",
 						RecentMentions: "default",
 						Messages: "type",
-						Message: "type",
 						Reactions: "render",
 						MemberListItem: "render",
 						VoiceUser: "render",
@@ -234,9 +239,9 @@ module.exports = (_ => {
 		
 			processMessage (e) {
 				if (settings.removeReplies) {
-					let repliedMessage = e.returnvalue.props.childrenRepliedMessage;
+					let repliedMessage = e.instance.props.childrenRepliedMessage;
 					if (repliedMessage && repliedMessage.props && repliedMessage.props.children && repliedMessage.props.children.props && repliedMessage.props.children.props.referencedMessage && repliedMessage.props.children.props.referencedMessage.message && repliedMessage.props.children.props.referencedMessage.message.author && BDFDB.LibraryModules.FriendUtils.isBlocked(repliedMessage.props.children.props.referencedMessage.message.author.id)) {
-						delete e.returnvalue.props.childrenRepliedMessage;
+						delete e.instance.props.childrenRepliedMessage;
 						let header = e.instance.props.childrenHeader;
 						if (header && header.props) {
 							delete header.props.referencedMessage;
