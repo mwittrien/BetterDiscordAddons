@@ -81,7 +81,6 @@ module.exports = (_ => {
 				
 				this.patchedModules = {
 					before: {
-						Message: "type",
 						ReactorsComponent: "render",
 						ChannelMembers: "render",
 						PrivateChannelRecipients: "default",
@@ -95,6 +94,7 @@ module.exports = (_ => {
 						ChannelPins: "default",
 						RecentMentions: "default",
 						Messages: "type",
+						Message: "type",
 						Reactions: "render",
 						MemberListItem: "render",
 						VoiceUser: "render",
@@ -234,9 +234,9 @@ module.exports = (_ => {
 		
 			processMessage (e) {
 				if (settings.removeReplies) {
-					let repliedMessage = e.instance.props.childrenRepliedMessage;
+					let repliedMessage = e.returnvalue.props.childrenRepliedMessage;
 					if (repliedMessage && repliedMessage.props && repliedMessage.props.children && repliedMessage.props.children.props && repliedMessage.props.children.props.referencedMessage && repliedMessage.props.children.props.referencedMessage.message && repliedMessage.props.children.props.referencedMessage.message.author && BDFDB.LibraryModules.FriendUtils.isBlocked(repliedMessage.props.children.props.referencedMessage.message.author.id)) {
-						delete e.instance.props.childrenRepliedMessage;
+						delete e.returnvalue.props.childrenRepliedMessage;
 						let header = e.instance.props.childrenHeader;
 						if (header && header.props) {
 							delete header.props.referencedMessage;
