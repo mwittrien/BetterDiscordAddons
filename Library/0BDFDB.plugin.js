@@ -950,7 +950,7 @@ module.exports = (_ => {
 		request.get(`https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/${branch}/Library/_res/BDFDB.raw.css`, (e, r, b) => {
 			if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
 			const css = b;
-			request.get(`https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/${branch}/Library/_res/BDFDB.data.json`, BDFDB.TimeUtils.suppress((e2, res2, b2) => {
+			request.get(`https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/${branch}/Library/_res/BDFDB.data.json`, BDFDB.TimeUtils.suppress((e2, r2, b2) => {
 				if ((e2 || !b2 || r2.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
 				const InternalData = JSON.parse(b2);
 				
@@ -7359,17 +7359,7 @@ module.exports = (_ => {
 				
 				let MessageHeaderExport = BDFDB.ModuleUtils.findByProperties("MessageTimestamp", false);
 				InternalBDFDB.processMessage = function (e) {
-					if (MessageHeaderExport && BDFDB.ObjectUtils.get(e, "instance.props.childrenHeader.type.type.name") && BDFDB.ObjectUtils.get(e, "instance.props.childrenHeader.props.message")) {
-						e.instance.props.childrenHeader.type = MessageHeaderExport.exports.default;
-					}
-					if (BDFDB.ObjectUtils.get(e, "returnvalue.props.children.props")) {
-						let message;
-						for (let key in e.instance.props) {
-							if (!message) message = BDFDB.ObjectUtils.get(e.instance.props[key], "props.message");
-							else break;
-						}
-						if (message) e.returnvalue.props.children.props["user_by_BDFDB"] = message.author.id;
-					}
+					if (e.instance.props.message) e.returnvalue.props["user_by_BDFDB"] = e.instance.props.message.author.id;
 				};
 
 				const BDFDB_Patrons = Object.assign({}, InternalData.BDFDB_Patrons);
