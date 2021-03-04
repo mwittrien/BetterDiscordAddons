@@ -12,7 +12,7 @@
  - [Better Search Page](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterSearchPage) - Adds some extra Controls to the Search Results Page
  - [Char Counter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CharCounter) - Adds a Character Counter to most Chat Inputs
  - [Chat Aliases](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatAliases) - Allows you to configure your own Aliases/Commands
- - [Chat Filter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatFilter) - Allows the user to censor Words or block complete Messages/Statuses
+ - [Chat Filter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatFilter) - Allows you to censor Words or block complete Messages/Statuses
  - [Complete Timestamps](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CompleteTimestamps) - Replaces Timestamps with your own custom Timestamps
  - [Copy Raw Message](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CopyRawMessage) - Allows you to copy the raw Contents of a Message
  - [Creation Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CreationDate) - Displays the Creation Date of an Account in the UserPopout and UserModal
@@ -20,8 +20,8 @@
  - [Custom Status Presets](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CustomStatusPresets) - Allows you to save Custom Statuses as Quick Select
  - [Display Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayLargeMessages) - Injects 'message.txt' into Discord or open any '.txt' File in a Window
  - [Display Servers As Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayServersAsChannels) - Displays servers in a similar way as channels
- - [Edit Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditChannels) - Allows the user to locally change the name and color of channels
- - [Edit Servers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditServers) - Allows the user to locally change the name, initials, icon and color of servers
+ - [Edit Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditChannels) - Allows you to locally change the name and color of channels
+ - [Edit Servers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditServers) - Allows you to locally change the name, initials, icon and color of servers
  - [Edit Users](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers) - Allows you to change the icon, name, tag and color of users
  - [Emoji Statistics](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EmojiStatistics) - Adds some helpful options to show you more information about emojis and emojiservers
  - [Force Image Previews](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ForceImagePreviews) - Forces embedded Image Previews, if Discord doesn't do it itself

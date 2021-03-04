@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "ChatFilter",
 			"author": "DevilBro",
 			"version": "3.5.1",
-			"description": "Allows the user to censor Words or block complete Messages/Statuses"
+			"description": "Allows you to censor Words or block complete Messages/Statuses"
 		},
 		"changeLog": {
 			"added": {
