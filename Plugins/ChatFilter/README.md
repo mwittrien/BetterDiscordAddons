@@ -9,5 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Allows the user to censor Words or block complete Messages/Statuses.  Blocked in this case means, that a message that contains one of the words will be completely blocked in your chat window. Censored means you will still be able to read the message but the censored words will be unreadable. You can also completely hide blocked messages and enable the option to see the original message while hovering over a censored/blocked message
-Support Regular Expressions
+Allows the user to censor Words or block complete Messages/Statuses

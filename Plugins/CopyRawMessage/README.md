@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Add a entry in the contextmenu when you right click a message that allows you to copy the raw contents of a message
+Allows you to copy the raw Contents of a Message

@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "DisplayLargeMessages",
 			"author": "DevilBro",
 			"version": "1.0.8",
-			"description": "Inject the contents of large messages that were sent by discord via 'message.txt'"
+			"description": "Injects 'message.txt' into Discord or open any '.txt' File in a Window"
 		},
 		"changelog": {
 			"improved": {

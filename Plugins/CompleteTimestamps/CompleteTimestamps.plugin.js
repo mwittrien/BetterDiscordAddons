@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "CompleteTimestamps",
 			"author": "DevilBro",
 			"version": "1.5.2",
-			"description": "Replace all timestamps with complete timestamps"
+			"description": "Replaces Timestamps with your own custom Timestamps"
 		},
 		"changeLog": {
 			"fixed": {

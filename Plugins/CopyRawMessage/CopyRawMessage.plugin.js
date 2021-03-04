@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "CopyRawMessage",
 			"author": "DevilBro",
 			"version": "1.1.2",
-			"description": "Add a entry in the contextmenu when you right click a message that allows you to copy the raw contents of a message"
+			"description": "Allows you to copy the raw Contents of a Message"
 		},
 		"changeLog": {
 			"improved": {

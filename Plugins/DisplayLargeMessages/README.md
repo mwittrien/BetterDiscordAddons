@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Inject the contents of large messages that were sent by discord via 'message.txt'
+Injects 'message.txt' into Discord or open any '.txt' File in a Window
