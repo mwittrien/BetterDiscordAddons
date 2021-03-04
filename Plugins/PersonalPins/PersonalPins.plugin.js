@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "PersonalPins",
 			"author": "DevilBro",
 			"version": "2.0.0",
-			"description": "Allows you to save locally pin Messages similar to normal Pins"
+			"description": "Allows you to locally pin Messages"
 		},
 		"changeLog": {
 			"fixed": {

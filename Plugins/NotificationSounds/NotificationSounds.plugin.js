@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
 			"version": "3.5.9",
-			"description": "Allow you to replace the native sounds of Discord with your own"
+			"description": "Allows you to replace the native Sounds with custom Sounds"
 		},
 		"changeLog": {
 			"fixed": {

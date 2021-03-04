@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "PinDMs",
 			"author": "DevilBro",
 			"version": "1.7.9",
-			"description": "Allow you to pin DMs, making them appear at the top of your DMs/Server-List"
+			"description": "Allows you to pin DMs, making them appear at the top of your DMs/ServerList"
 		},
 		"changeLog": {
 			"improved": {

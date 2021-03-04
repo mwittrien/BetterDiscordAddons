@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Revert the title bar back to its former self
+Allows you to switch to Discord's old Titlebar or add the native OS Titlebar

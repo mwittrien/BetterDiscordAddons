@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "QuickMention",
 			"author": "DevilBro",
 			"version": "1.0.2",
-			"description": "Add a mention entry to the message option toolbar"
+			"description": "Adds a Mention Button to the Message Options Bar"
 		}
 	};
 

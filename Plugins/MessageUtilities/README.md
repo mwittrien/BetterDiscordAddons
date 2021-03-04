@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Offers you a number of useful message options (quick actions)
+Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)

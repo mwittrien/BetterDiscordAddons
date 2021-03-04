@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Add a tag or crown to the server owner (or admins/management)
+Adds a Tag/Crown to Server Owners (or Admins/Management)

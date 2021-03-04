@@ -32,13 +32,13 @@
  - [Image Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageUtilities) - Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  - [Joined At Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/JoinedAtDate) - Displays the Joined At Date of a Member in the UserPopout and UserModal
  - [Last Message Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/LastMessageDate) - Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
- - [Message Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MessageUtilities) - Offers a number of useful message options (quick actions)
- - [Notification Sounds](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/NotificationSounds) - Allows you to replace the native sounds of Discord with your own
- - [Old Title Bar](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OldTitleBar) - Reverts the title bar back to its former self
- - [Owner Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OwnerTag) - Adds a tag or crown to the server owner (or admins/management)
- - [Personal Pins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PersonalPins) - Allows you to save locally pin Messages similar to normal Pins
- - [Pin DMs](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PinDMs) - Allows you to pin DMs, making them appear at the top of your DMs/Guild-list
- - [Quick Mention](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/QuickMention) - Adds a mention entry to the message option toolbar
+ - [Message Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MessageUtilities) - Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)
+ - [Notification Sounds](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/NotificationSounds) - Allows you to replace the native Sounds with custom Sounds
+ - [Old Title Bar](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OldTitleBar) - Allows you to switch to Discord's old Titlebar or add the native OS Titlebar
+ - [Owner Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OwnerTag) - Adds a Tag/Crown to Server Owners (or Admins/Management)
+ - [Personal Pins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PersonalPins) - Allows you to locally pin Messages
+ - [Pin DMs](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PinDMs) - Allows you to pin DMs, making them appear at the top of your DMs/ServerList
+ - [Quick Mention](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/QuickMention) - Adds a Mention Button to the Message Options Bar
  - [Read All Notifications Button](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReadAllNotificationsButton) - Adds a little button at the top of your serverlist that enables you to clear all mentions and messagesnotifications at once
  - [Remove Blocked Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveBlockedMessages) - Removes blocked messages/users completely
  - [Remove Nicknames](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveNicknames) - Replaces all nicknames with the actual accountnames

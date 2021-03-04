@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
 			"version": "1.8.7",
-			"description": "Offers you a number of useful message options (quick actions)"
+			"description": "Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)"
 		},
 		"changeLog": {
 			"fixed": {

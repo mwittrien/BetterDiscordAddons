@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "OldTitleBar",
 			"author": "DevilBro",
 			"version": "1.6.7",
-			"description": "Revert the title bar back to its former self"
+			"description": "Allows you to switch to Discord's old Titlebar or add the native OS Titlebar"
 		}
 	};
 
