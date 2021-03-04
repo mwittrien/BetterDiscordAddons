@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
 			"version": "1.6.2",
-			"description": "Get a notification when a Friend or a User, you choose to observe, changes their status"
+			"description": "Shows a Notification when a Friend or a User, you choose to observe, changes their Status"
 		},
 		"changeLog": {
 			"fixed": {

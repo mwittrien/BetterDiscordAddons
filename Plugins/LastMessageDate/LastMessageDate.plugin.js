@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "LastMessageDate",
 			"author": "DevilBro",
 			"version": "1.2.0",
-			"description": "Display the Date of the last sent Message of a Member for the current Server/DM in the UserPopout and UserModal"
+			"description": "Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal"
 		},
 		"changeLog": {
 			"fixed": {

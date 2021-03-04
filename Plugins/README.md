@@ -19,19 +19,19 @@
  - [Custom Quoter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CustomQuoter) - Brings back the Quote Feature and allows you to set your own Quote Formats
  - [Custom Status Presets](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CustomStatusPresets) - Allows you to save Custom Statuses as Quick Select
  - [Display Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayLargeMessages) - Injects 'message.txt' into Discord or open any '.txt' File in a Window
- - [Display Servers As Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayServersAsChannels) - Displays servers in a similar way as channels
- - [Edit Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditChannels) - Allows you to locally change the name and color of channels
- - [Edit Servers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditServers) - Allows you to locally change the name, initials, icon and color of servers
- - [Edit Users](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers) - Allows you to change the icon, name, tag and color of users
- - [Emoji Statistics](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EmojiStatistics) - Adds some helpful options to show you more information about emojis and emojiservers
- - [Force Image Previews](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ForceImagePreviews) - Forces embedded Image Previews, if Discord doesn't do it itself
- - [Friend Notifications](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FriendNotifications) - Shows a notification when a Friend or a User, you choose to observe, changes their status
- - [Google Search Replace](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleSearchReplace) - Replaces the default Google Text Search with a selection menu of several search engines
- - [Google Translate Option](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleTranslateOption) - Adds a Google Translate option to your context menu, which will open the selected text in Google Translate
- - [Hide Muted Categories](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/HideMutedCategories) - Hides muted categories the same way muted channels are hidden, when the server is set to hide muted channels
- - [Image Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageUtilities) - Adds a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode)
+ - [Display Servers As Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayServersAsChannels) - Displays Servers in a similar way as Channels
+ - [Edit Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditChannels) - Allows you to locally edit Channels
+ - [Edit Servers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditServers) - Allows you to locally edit Servers
+ - [Edit Users](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers) - Allows you to locally edit Users
+ - [Emoji Statistics](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EmojiStatistics) - Shows you an Overview of Emojis and Emoji Servers
+ - [Force Image Previews](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ForceImagePreviews) - Forces unrendered embedded Image Previews to render
+ - [Friend Notifications](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FriendNotifications) - Shows a Notification when a Friend or a User, you choose to observe, changes their Status
+ - [Google Search Replace](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleSearchReplace) - Replaces the default Google Text Search with a custom Search Engine
+ - [Google Translate Option](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleTranslateOption) - Allows you to translate Messages and your outgoing Message within Discord
+ - [Hide Muted Categories](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/HideMutedCategories) - Hides muted Categories, if muted Channels are hidden
+ - [Image Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageUtilities) - Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  - [Joined At Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/JoinedAtDate) - Displays the Joined At Date of a Member in the UserPopout and UserModal
- - [Last Message Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/LastMessageDate) - Displays the Date of the last sent Message of a Member for the current Server/DM in the UserPopout and UserModal
+ - [Last Message Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/LastMessageDate) - Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  - [Message Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MessageUtilities) - Offers a number of useful message options (quick actions)
  - [Notification Sounds](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/NotificationSounds) - Allows you to replace the native sounds of Discord with your own
  - [Old Title Bar](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OldTitleBar) - Reverts the title bar back to its former self

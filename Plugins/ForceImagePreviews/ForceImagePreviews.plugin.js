@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "ForceImagePreviews",
 			"author": "DevilBro",
 			"version": "1.2.0",
-			"description": "Force embedded Image Previews, if Discord doesn't do it itself. Caution: Externals Images can contain malicious code and reveal your IP!"
+			"description": "Forces unrendered embedded Image Previews to render. Caution: Externals Images can contain malicious code and reveal your IP!"
 		}
 	};
 

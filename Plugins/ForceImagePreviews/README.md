@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Force embedded Image Previews, if Discord doesn't do it itself
+Forces unrendered embedded Image Previews to render

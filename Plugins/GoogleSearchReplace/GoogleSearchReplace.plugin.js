@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "GoogleSearchReplace",
 			"author": "DevilBro",
 			"version": "1.2.9",
-			"description": "Replace the default Google Text Search with a selection menu of several search engines"
+			"description": "Replaces the default Google Text Search with a custom Search Engine"
 		},
 		"changeLog": {
 			"added": {

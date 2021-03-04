@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Hide muted categories the same way muted channels are hidden, when the server is set to hide muted channels
+Hides muted Categories, if muted Channels are hidden

@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Display the Joined At Date of a Member in the UserPopout and UserModal
+Displays the Joined At Date of a Member in the UserPopout and UserModal

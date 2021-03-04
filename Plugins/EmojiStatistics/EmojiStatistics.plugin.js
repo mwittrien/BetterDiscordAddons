@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "EmojiStatistics",
 			"author": "DevilBro",
 			"version": "2.9.7",
-			"description": "Add some helpful options to show you more information about emojis and emojiservers"
+			"description": "Shows you an Overview of Emojis and Emoji Servers"
 		}
 	};
 

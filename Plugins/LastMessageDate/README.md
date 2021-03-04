@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Display the Date of the last sent Message of a Member for the current Server/DM in the UserPopout and UserModal
+Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal

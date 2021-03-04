@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
 			"version": "2.1.6",
-			"description": "Add a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send"
+			"description": "Allows you to translate Messages and your outgoing Message within Discord"
 		},
 		"changeLog": {
 			"fixed": {

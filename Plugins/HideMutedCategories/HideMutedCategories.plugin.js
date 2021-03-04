@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "HideMutedCategories",
 			"author": "DevilBro",
 			"version": "1.0.6",
-			"description": "Hide muted categories the same way muted channels are hidden, when the server is set to hide muted channels"
+			"description": "Hides muted Categories, if muted Channels are hidden"
 		},
 		"changeLog": {
 			"fixed": {

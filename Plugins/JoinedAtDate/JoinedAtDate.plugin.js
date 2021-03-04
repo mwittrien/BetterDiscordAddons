@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "JoinedAtDate",
 			"author": "DevilBro",
 			"version": "1.2.5",
-			"description": "Display the Joined At Date of the current Server for a Member in the UserPopout and UserModal"
+			"description": "Displays the Joined At Date of a Member in the UserPopout and UserModal"
 		},
 		"changeLog": {
 			"fixed": {

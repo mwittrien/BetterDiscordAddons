@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Add some helpful options to show you more information about emojis and emojiservers
+Shows you an Overview of Emojis and Emoji Servers
