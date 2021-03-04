@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "BetterFriendList",
 			"author": "DevilBro",
 			"version": "1.3.2",
-			"description": "Add extra controls to the friends page, like sort by name/status, search and all/request/blocked amount"
+			"description": "Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount"
 		},
 		"changeLog": {
 			"fixed": {

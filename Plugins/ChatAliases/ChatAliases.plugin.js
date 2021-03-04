@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "ChatAliases",
 			"author": "DevilBro",
 			"version": "2.2.4",
-			"description": "Allow the user to configure their own chat-aliases which will automatically be replaced before the message is being sent"
+			"description": "Allows you to configure your own Aliases/Commands"
 		},
 		"changeLog": {
 			"improved": {

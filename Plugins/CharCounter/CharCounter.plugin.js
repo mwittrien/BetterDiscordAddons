@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "CharCounter",
 			"author": "DevilBro",
 			"version": "1.5.0",
-			"description": "Add a charcounter in the chat"
+			"description": "Adds a Character Counter to most Chat Inputs"
 		},
 		"changeLog": {
 			"fixed": {

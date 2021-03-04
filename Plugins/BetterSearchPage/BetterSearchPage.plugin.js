@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "BetterSearchPage",
 			"author": "DevilBro",
 			"version": "1.2.0",
-			"description": "Add some extra controls to the search results page"
+			"description": "Adds some extra Controls to the Search Results Page"
 		},
 		"changeLog": {
 			"fixed": {

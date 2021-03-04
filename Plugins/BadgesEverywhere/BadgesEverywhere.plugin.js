@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "BadgesEverywhere",
 			"author": "DevilBro",
 			"version": "1.6.6",
-			"description": "Display Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout"
+			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/UserPopout"
 		}
 	};
 	

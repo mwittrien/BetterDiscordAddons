@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Allow the user to configure their own chat-aliases which will automatically be replaced before the message is being sent
+Allows you to configure your own Aliases/Commands

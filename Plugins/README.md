@@ -6,12 +6,12 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
- - [Badges Everywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BadgesEverywhere) - Displays Badges (Nitro, Hypesquad, etc...) in the chat/memberlist/userpopout
- - [Better Friend List](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterFriendList) - Adds extra controls to the friends page, like sort by name/status, search and all/request/blocked amount
- - [Better NSFW Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterNsfwTag) - Adds a more noticeable tag to NSFW channels
- - [Better Search Page](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterSearchPage) - Adds some extra controls to the search results page
- - [Char Counter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CharCounter) - Adds a character counter to the chat
- - [Chat Aliases](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatAliases) - Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent
+ - [Badges Everywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BadgesEverywhere) - Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/UserPopout
+ - [Better Friend List](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterFriendList) - Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
+ - [Better NSFW Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterNsfwTag) - Adds a more noticeable Tag to NSFW Channels
+ - [Better Search Page](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterSearchPage) - Adds some extra Controls to the Search Results Page
+ - [Char Counter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CharCounter) - Adds a Character Counter to most Chat Inputs
+ - [Chat Aliases](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatAliases) - Allows you to configure your own Aliases/Commands
  - [Chat Filter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatFilter) - Allows the user to censor Words or block complete Messages/Statuses
  - [Complete Timestamps](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CompleteTimestamps) - Replaces all timestamps with complete timestamps
  - [Copy Raw Message](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CopyRawMessage) - Adds a entry in the contextmenu when you right click a message that allows you to copy the raw contents of a message

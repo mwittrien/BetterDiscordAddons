@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "BetterNsfwTag",
 			"author": "DevilBro",
 			"version": "1.2.7",
-			"description": "Add a more noticeable tag to NSFW channels"
+			"description": "Adds a more noticeable Tag to NSFW Channels"
 		},
 		"changeLog": {
 			"fixed": {
