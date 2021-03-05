@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "ServerFolders",
 			"author": "DevilBro",
 			"version": "6.8.9",
-			"description": "Patch Discords native Folders in a way to open Servers within a Folder in a new bar to the right, also adds a bunch of new features to more easily organize, customize and manage your Folders"
+			"description": "Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders"
 		}
 	};
 

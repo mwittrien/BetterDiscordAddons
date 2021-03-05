@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Changes the Server List to a grid-like structure that allows any amount of columns
+Changes the Server List to a grid-like Structure that allows any Amount of Columns

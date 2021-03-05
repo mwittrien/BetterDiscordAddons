@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "ServerCounter",
 			"author": "DevilBro",
 			"version": "1.0.3",
-			"description": "Add a server counter to the server list"
+			"description": "Adds a Server Counter to the Server List"
 		},
 		"changeLog": {
 			"fixed": {

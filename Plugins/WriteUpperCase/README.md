@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Changes the first letter of each sentence in message input to uppercase
+Changes the first Letter of each Sentence in Message Inputs to Uppercase

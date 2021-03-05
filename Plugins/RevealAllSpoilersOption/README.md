@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Add an entry to the message contextmenu to reveal all spoilers within a messageblock
+Allows you to reveal all Spoilers within a Message

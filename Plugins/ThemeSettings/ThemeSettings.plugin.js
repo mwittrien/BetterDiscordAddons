@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "ThemeSettings",
 			"author": "DevilBro",
 			"version": "1.3.2",
-			"description": "Allow you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page"
+			"description": "Allows you to change Theme Variables within Discord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page"
 		}
 	};
 

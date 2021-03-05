@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Display all hidden channels that can't be accessed due to role restrictions in a new category
+Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)

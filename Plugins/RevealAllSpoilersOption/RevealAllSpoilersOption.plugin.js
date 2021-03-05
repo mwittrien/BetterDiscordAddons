@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "RevealAllSpoilersOption",
 			"author": "DevilBro",
 			"version": "1.0.5",
-			"description": "Add an entry to the message contextmenu to reveal all spoilers within a messageblock"
+			"description": "Allows you to reveal all Spoilers within a Message"
 		}
 	};
 

@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Add a little button at the top of your serverlist that enables you to clear all mentions and messagesnotifications at once
+Adds a Clear Button to the Server List and the Mentions Popout

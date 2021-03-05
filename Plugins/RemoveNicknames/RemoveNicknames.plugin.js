@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "RemoveNicknames",
 			"author": "DevilBro",
 			"version": "1.3.8",
-			"description": "Replace all nicknames with the actual accountnames"
+			"description": "Replaces Nicknames with Accountnames"
 		},
 		"changeLog": {
 			"fixed": {

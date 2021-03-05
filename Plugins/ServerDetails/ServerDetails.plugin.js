@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "ServerDetails",
 			"author": "DevilBro",
 			"version": "1.0.4",
-			"description": "Show details of a server when you hover over the icon in the server list"
+			"description": "Shows Server Details in the Server List Tooltip"
 		},
 		"changeLog": {
 			"fixed": {

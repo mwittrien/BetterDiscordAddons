@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "UserNotes",
 			"author": "DevilBro",
 			"version": "1.0.6",
-			"description": "Allow you to write your own user notes wihtout a character limit"
+			"description": "Allows you to write User Notes locally"
 		},
 		"changeLog": {
 			"improved": {

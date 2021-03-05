@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "SendLargeMessages",
 			"author": "DevilBro",
 			"version": "1.6.6",
-			"description": "Allows you to enter larger messages in the chattextarea, which allows you to automatically send the message in several smaller messages"
+			"description": "Allows you to enter larger Messages, which will automatically split into several smaller Messages"
 		},
 		"changeLog": {
 			"improved": {

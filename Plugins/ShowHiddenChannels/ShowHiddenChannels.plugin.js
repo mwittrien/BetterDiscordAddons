@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
 			"version": "2.9.3",
-			"description": "Display channels that are hidden from you by role restrictions"
+			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
 		},
 		"changeLog": {
 			"added": {

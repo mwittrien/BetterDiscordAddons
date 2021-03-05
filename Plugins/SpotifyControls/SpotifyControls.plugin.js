@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
 			"version": "1.1.1",
-			"description": "Add a control panel to discord when listening to spotify"
+			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
 		},
 		"changeLog": {
 			"improved": {

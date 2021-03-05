@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Allow you to automatically change light/dark mode depending on the time of date. Slider is added to the 'Appearance' settings
+Adds a Time Slider to the Appearance Settings

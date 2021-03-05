@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "SpellCheck",
 			"author": "DevilBro",
 			"version": "1.5.5",
-			"description": "Add a Spellcheck to all Textareas. Select a Word and Right Click it to add it to your Dictionary"
+			"description": "Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary"
 		}
 	};
 	

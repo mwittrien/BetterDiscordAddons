@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "ReadAllNotificationsButton",
 			"author": "DevilBro",
 			"version": "1.6.6",
-			"description": "Add a button to clear all notifications"
+			"description": "Adds a Clear Button to the Server List and the Mentions Popout"
 		},
 		"changeLog": {
 			"improved": {

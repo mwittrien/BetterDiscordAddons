@@ -15,7 +15,7 @@ module.exports = (_ => {
 			"name": "TimedLightDarkMode",
 			"author": "DevilBro",
 			"version": "1.1.0",
-			"description": "Allow you to automatically change light/dark mode depending on the time of day - Slider is added to the 'Appearance' settings"
+			"description": "Adds a Time Slider to the Appearance Settings"
 		}
 	};
 
