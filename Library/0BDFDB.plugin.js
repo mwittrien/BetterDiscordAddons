@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.2
+ * @version 1.4.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.4.2",
+			"version": "1.4.3",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
@@ -705,11 +705,10 @@ module.exports = (_ => {
 				}],
 				onClose: _ => {vanishObserver.disconnect();}
 			});
-			updateNotice.style.setProperty("z-index", "100000", "important");
-			updateNotice.style.setProperty("display", "block", "important");
 			updateNotice.style.setProperty("position", "relative", "important");
 			updateNotice.style.setProperty("visibility", "visible", "important");
 			updateNotice.style.setProperty("opacity", "1", "important");
+			updateNotice.style.setProperty("z-index", "100000", "important");
 			let reloadButton = updateNotice.querySelector(BDFDB.dotCN.noticeupdatebuttonreload);
 			if (reloadButton) BDFDB.DOMUtils.hide(reloadButton);
 		}
@@ -1433,7 +1432,7 @@ module.exports = (_ => {
 						else BDFDB.DOMUtils.addClass(notice, BDFDB.disCN.noticedefault);
 					}
 					if (config.forceStyle) {
-						notice.style.setProperty("display", "block", "important");
+						notice.style.setProperty("display", "flex", "important");
 						notice.style.setProperty("height", "36px", "important");
 						notice.style.setProperty("min-width", "70vw", "important");
 						notice.style.setProperty("left", "unset", "important");

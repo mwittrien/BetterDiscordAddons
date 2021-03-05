@@ -885,6 +885,9 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 
 [REPLACE_CLASS_noticewrapper] {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	height: 36px !important;
 	border-radius: 0 !important;
 	transition: height 10s ease !important;
@@ -894,12 +897,25 @@ img:not([src]), img[src=""], img[src="null"] {
 	overflow: hidden !important;
 }
 [REPLACE_CLASS_noticetext] {
-	display: inline-flex;
+	display: flex;
+	flex: 0 1 auto;
     white-space: pre;
+	overflow: hidden;
+}
+[REPLACE_CLASS_noticewrapper] [REPLACE_CLASS_noticeplatformicon] {
+	display: flex;
+	flex: 0 0 auto;
+	position: static;
+	margin: 0 10px 0 0;
 }
 [REPLACE_CLASS_noticewrapper] svg[REPLACE_CLASS_noticeplatformicon] {
 	max-height: 28px;
 	width: unset;
+}
+[REPLACE_CLASS_noticewrapper] [REPLACE_CLASS_noticebutton] {
+	display: flex;
+	flex: 0 0 auto;
+	position: static;
 }
 
 #pluginNotice .notice-message {
