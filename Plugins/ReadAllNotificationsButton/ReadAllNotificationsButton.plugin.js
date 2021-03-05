@@ -14,7 +14,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ReadAllNotificationsButton",
 			"author": "DevilBro",
-			"version": "1.6.6",
+			"version": "1.6.7",
 			"description": "Adds a Clear Button to the Server List and the Mentions Popout"
 		},
 		"changeLog": {
@@ -32,7 +32,7 @@ module.exports = (_ => {
 		
 		downloadLibrary () {
 			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
+				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
 				else BdApi.alert("Error", "Could not download BDFDB Library Plugin, try again later or download it manually from GitHub: https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/");
 			});
 		}
@@ -99,7 +99,7 @@ module.exports = (_ => {
 							children: "read all",
 							onClick: _ => {
 								if (!settings.confirmClear) this.clearClick();
-								else BDFDB.ModalUtils.confirm(_this, _this.labels.modal_confirmnotifications, this.clearClick);
+								else BDFDB.ModalUtils.confirm(_this, _this.labels.modal_confirmnotifications, _ => this.clearClick());
 							},
 							onContextMenu: event => {
 								BDFDB.ContextMenuUtils.open(_this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
