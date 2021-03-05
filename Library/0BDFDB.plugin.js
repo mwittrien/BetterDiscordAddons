@@ -5770,7 +5770,10 @@ module.exports = (_ => {
 						});
 						return this.props.switchOnClick ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
 							className: BDFDB.disCN.guildsummaryclickableicon,
-							onClick: _ => {LibraryModules.SelectChannelUtils.selectChannel(guild.id, LibraryModules.LastChannelStore.getChannelId(guild.id));},
+							onClick: _ => {
+								LibraryModules.GuildUtils.selectGuild(guild.id);
+								LibraryModules.ChannelUtils.selectChannel(guild.id, LibraryModules.LastChannelStore.getChannelId(guild.id));
+							},
 							key: guild.id,
 							tabIndex: -1,
 							children: icon

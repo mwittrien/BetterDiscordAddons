@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.6.2",
+			"version": "1.6.3",
 			"description": "Shows a Notification when a Friend or a User, you choose to observe, changes their Status"
 		},
 		"changeLog": {
 			"fixed": {
-				"Add stranger by name#discrim": "Works again"
+				"Switch to DM": "CLicking a notification switches the channel again"
 			}
 		}
 	};
@@ -763,7 +763,7 @@ module.exports = (_ => {
 								let openChannel = _ => {
 									if (settings.openOnClick) {
 										let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id)
-										if (DMid) BDFDB.LibraryModules.SelectChannelUtils.selectPrivateChannel(DMid);
+										if (DMid) BDFDB.LibraryModules.ChannelUtils.selectPrivateChannel(DMid);
 										else BDFDB.LibraryModules.DirectMessageUtils.openPrivateChannel(BDFDB.UserUtils.me.id, user.id);
 										BDFDB.LibraryModules.WindowUtils.focus();
 									}
