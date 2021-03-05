@@ -1,6 +1,9 @@
 /**
  * @name FriendNotifications
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 1.6.2
+ * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

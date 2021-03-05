@@ -1,6 +1,9 @@
 /**
  * @name ChatAliases
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 2.2.4
+ * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

@@ -1,6 +1,9 @@
 /**
  * @name DisplayLargeMessages
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 1.0.8
+ * @description Injects 'message.txt' into Discord or open any '.txt' File in a Window
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
@@ -17,7 +20,7 @@ module.exports = (_ => {
 			"version": "1.0.8",
 			"description": "Injects 'message.txt' into Discord or open any '.txt' File in a Window"
 		},
-		"changelog": {
+		"changeLog": {
 			"improved": {
 				"Open in Popout": "The open button now gets added to any .txt file not only 'message.txt'"
 			}

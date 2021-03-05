@@ -1,6 +1,9 @@
 /**
  * @name EmojiStatistics
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 2.9.7
+ * @description Shows you an Overview of Emojis and Emoji Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

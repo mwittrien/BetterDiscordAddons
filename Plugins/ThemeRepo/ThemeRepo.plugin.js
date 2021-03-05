@@ -1,6 +1,9 @@
 /**
  * @name ThemeRepo
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 2.1.3
+ * @description Allow you to preview all themes from the theme repo and download them on the fly
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

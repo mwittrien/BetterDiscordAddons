@@ -1,6 +1,9 @@
 /**
  * @name TimedLightDarkMode
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 1.1.0
+ * @description Adds a Time Slider to the Appearance Settings
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

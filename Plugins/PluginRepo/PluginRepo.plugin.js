@@ -1,6 +1,9 @@
 /**
  * @name PluginRepo
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 2.1.4
+ * @description Allow you to look at all plugins from the plugin repo and download them on the fly
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

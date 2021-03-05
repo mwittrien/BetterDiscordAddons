@@ -1,6 +1,9 @@
 /**
  * @name ChatFilter
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 3.5.1
+ * @description Allows you to censor Words or block complete Messages/Statuses
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

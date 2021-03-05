@@ -1,6 +1,9 @@
 /**
  * @name CopyRawMessage
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 1.1.2
+ * @description Allows you to copy the raw Contents of a Message
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

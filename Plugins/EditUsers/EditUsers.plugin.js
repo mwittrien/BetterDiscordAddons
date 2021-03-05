@@ -1,6 +1,9 @@
 /**
  * @name EditUsers
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 4.1.6
+ * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

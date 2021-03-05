@@ -1,6 +1,9 @@
 /**
  * @name OldTitleBar
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 1.6.7
+ * @description Allows you to switch to Discord's old Titlebar or add the native OS Titlebar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

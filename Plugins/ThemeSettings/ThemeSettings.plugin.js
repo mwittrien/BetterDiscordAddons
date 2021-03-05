@@ -1,6 +1,9 @@
 /**
  * @name ThemeSettings
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 1.3.2
+ * @description Allows you to change Theme Variables within Discord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

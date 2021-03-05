@@ -1,6 +1,9 @@
 /**
  * @name RemoveNicknames
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 1.3.8
+ * @description Replaces Nicknames with Accountnames
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

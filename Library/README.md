@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Gives other plugins utility functions
+Required Library for DevilBro's Plugins

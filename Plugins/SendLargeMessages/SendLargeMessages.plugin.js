@@ -1,6 +1,9 @@
 /**
  * @name SendLargeMessages
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 1.6.6
+ * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

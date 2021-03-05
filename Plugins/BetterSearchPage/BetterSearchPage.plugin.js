@@ -1,6 +1,9 @@
 /**
  * @name BetterSearchPage
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 1.2.0
+ * @description Adds some extra Controls to the Search Results Page
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

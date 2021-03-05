@@ -1,6 +1,9 @@
 /**
  * @name BetterFriendList
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 1.3.2
+ * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

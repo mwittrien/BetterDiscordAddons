@@ -1,6 +1,9 @@
 /**
  * @name SpellCheck
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 1.5.5
+ * @description Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

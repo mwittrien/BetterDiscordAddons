@@ -1,6 +1,9 @@
 /**
  * @name RevealAllSpoilersOption
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 1.0.5
+ * @description Allows you to reveal all Spoilers within a Message
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

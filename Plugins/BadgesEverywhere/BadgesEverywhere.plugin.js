@@ -1,6 +1,9 @@
 /**
  * @name BadgesEverywhere
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 1.6.6
+ * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

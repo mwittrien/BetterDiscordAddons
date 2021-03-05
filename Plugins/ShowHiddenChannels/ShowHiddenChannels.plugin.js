@@ -1,6 +1,9 @@
 /**
  * @name ShowHiddenChannels
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 2.9.3
+ * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien

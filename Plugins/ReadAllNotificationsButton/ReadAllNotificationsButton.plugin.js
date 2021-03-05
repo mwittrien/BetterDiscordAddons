@@ -1,6 +1,9 @@
 /**
  * @name ReadAllNotificationsButton
+ * @author DevilBro
  * @authorId 278543574059057154
+ * @version 1.6.7
+ * @description Adds a Clear Button to the Server List and the Mentions Popout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
