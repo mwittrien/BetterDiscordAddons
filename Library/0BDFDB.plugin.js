@@ -7919,7 +7919,7 @@ module.exports = (_ => {
 					let pluginName = pluginQueue.shift();
 					if (pluginName) BDFDB.TimeUtils.timeout(_ => BDFDB.BDUtils.reloadPlugin(pluginName));
 				}
-			}, "Could not initiate library!", config.name));
+			}, "Could not initiate library!"));
 		});
 	};
 	loadLibrary(true);
@@ -7931,11 +7931,14 @@ module.exports = (_ => {
 		getDescription () {return config.info.description;}
 		
 		load () {
+			this.loaded = true;
 			libraryInstance = this;
 			Object.assign(this, config.info, BDFDB.ObjectUtils.exclude(config, "info"));
 			if (!BDFDB.BDUtils.isPluginEnabled(config.info.name)) BDFDB.BDUtils.enablePlugin(config.info.name);
 		}
-		start () {}
+		start () {
+			if (!this.loaded) this.load();
+		}
 		stop () {
 			if (!BDFDB.BDUtils.isPluginEnabled(config.info.name)) BDFDB.BDUtils.enablePlugin(config.info.name);
 		}
