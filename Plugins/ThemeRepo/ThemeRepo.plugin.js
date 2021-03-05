@@ -495,7 +495,7 @@ module.exports = (_ => {
 								disabled: key == "rnmStart" && !automaticLoading,
 								value: this.props[key],
 								onChange: (value, instance) => {
-									this.props[key] = value;
+									this.props[key] = modalSettings[key] = value;
 									BDFDB.ReactUtils.forceUpdate(this);
 								}
 							}))
