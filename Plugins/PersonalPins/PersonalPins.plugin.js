@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "PersonalPins",
 			"author": "DevilBro",
-			"version": "2.0.0",
+			"version": "2.0.1",
 			"description": "Allows you to locally pin Messages"
 		},
 		"changeLog": {
@@ -442,10 +442,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 							tag: "span",
 							className: BDFDB.disCN.messagespopoutchannelname,
-							onClick: _ => {
-								BDFDB.LibraryModules.GuildUtils.selectGuild(channel.guild_id);
-								BDFDB.LibraryModules.ChannelUtils.selectChannel(channel.guild_id, channel.id);
-							},
+							onClick: _ => BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id)),
 							children: channelName ? ((channel.guild_id ? "#" : "@") + channelName) : "???"
 						}),
 						filter == "all" ? BDFDB.ReactUtils.createElement("span", {
@@ -470,10 +467,7 @@ module.exports = (_ => {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 									className: BDFDB.disCN.messagespopoutjumpbutton,
-									onClick: _ => {
-										BDFDB.LibraryModules.GuildUtils.selectGuild(channel.guild_id);
-										BDFDB.LibraryModules.ChannelUtils.selectChannel(channel.guild_id, channel.id, message.id);
-									},
+									onClick: _ => BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id, message.id)),
 									children: BDFDB.ReactUtils.createElement("div", {
 										children: BDFDB.LanguageUtils.LanguageStrings.JUMP
 									})

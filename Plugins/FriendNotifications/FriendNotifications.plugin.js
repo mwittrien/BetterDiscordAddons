@@ -22,7 +22,7 @@ module.exports = (_ => {
 		},
 		"changeLog": {
 			"fixed": {
-				"Switch to DM": "CLicking a notification switches the channel again"
+				"Switch to DM": "Clicking a notification switches the channel again"
 			}
 		}
 	};
