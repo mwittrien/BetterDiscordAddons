@@ -283,6 +283,15 @@ module.exports = (_ => {
 		}
 		return newObj;
 	};
+	BDFDB.ObjectUtils.group = function (obj, key) {
+		if (!BDFDB.ObjectUtils.is(obj)) return {};
+		if (typeof key != "string") return obj;
+		return Object.entries(obj).reduce((newObj, objPair) => {
+			if (!newObj[objPair[1][key]]) newObj[objPair[1][key]] = {};
+			newObj[objPair[1][key]][objPair[0]] = objPair[1];
+			return newObj;
+		}, {});
+	};
 	BDFDB.ObjectUtils.reverse = function (obj, sort) {
 		if (!BDFDB.ObjectUtils.is(obj)) return {};
 		let newObj = {};
