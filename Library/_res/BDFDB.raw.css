@@ -897,13 +897,13 @@ img:not([src]), img[src=""], img[src="null"] {
 	overflow: hidden !important;
 }
 [REPLACE_CLASS_noticetext] {
-	display: flex;
+	display: inline-flex;
 	flex: 0 1 auto;
-    white-space: pre;
+	white-space: pre;
 	overflow: hidden;
 }
 [REPLACE_CLASS_noticewrapper] [REPLACE_CLASS_noticeplatformicon] {
-	display: flex;
+	display: inline-flex;
 	flex: 0 0 auto;
 	position: static;
 	margin: 0 10px 0 0;
@@ -913,7 +913,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	width: unset;
 }
 [REPLACE_CLASS_noticewrapper] [REPLACE_CLASS_noticebutton] {
-	display: flex;
+	display: inline-flex;
 	flex: 0 0 auto;
 	position: static;
 }
