@@ -1420,6 +1420,7 @@
 		"attachmentvideo": ["Attachment", "video"],
 		"auditlog": ["AuditLog", "auditLog"],
 		"auditlogoverflowellipsis": ["AuditLog", "overflowEllipsis"],
+		"auditlogtimestamp": ["AuditLog", "timestamp"],
 		"auditloguserhook": ["AuditLog", "userHook"],
 		"authbox": ["AuthBox", "authBox"],
 		"autocomplete": ["Autocomplete", "autocomplete"],
