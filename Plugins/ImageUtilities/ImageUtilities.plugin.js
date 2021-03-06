@@ -693,7 +693,7 @@ module.exports = (_ => {
 			processImageModal (e) {
 				if (clickedImage) e.instance.props.cachedImage = clickedImage;
 				let url = this.getImageSrc(e.instance.props.cachedImage && e.instance.props.cachedImage.src ? e.instance.props.cachedImage : e.instance.props.src);
-				url = this.getImageSrc((typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})) || {type: {}}).props.src) || url;
+				url = this.getImageSrc(typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})).props.src) || url;
 				let isVideo = this.isValid(url, "video");
 				let messages = this.getMessageGroupOfImage(url);
 				if (e.returnvalue) {
