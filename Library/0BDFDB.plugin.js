@@ -109,6 +109,8 @@ module.exports = (_ => {
 			getDescription () {return config.info.description;}
 			load () {
 				this.loaded = true;
+				this.defaults = {};
+				this.labels = {};
 				if (window.BDFDB_Global.loading) {
 					if (!PluginStores.delayed.loads.includes(this)) PluginStores.delayed.loads.push(this);
 				}
@@ -871,6 +873,7 @@ module.exports = (_ => {
 		loadingIconWrapper.appendChild(icon);
 	};
 	BDFDB.PluginUtils.createSettingsPanel = function (addon, props) {
+		if (!window.BDFDB_Global.loaded) return "Could not initiate BDFDB Library Plugin! Can not create Settings Panel!";
 		addon = addon == BDFDB && InternalBDFDB || addon;
 		if (!BDFDB.ObjectUtils.is(addon)) return;
 		let settingsProps = props;
@@ -7923,7 +7926,7 @@ module.exports = (_ => {
 					let pluginName = pluginQueue.shift();
 					if (pluginName) BDFDB.TimeUtils.timeout(_ => BDFDB.BDUtils.reloadPlugin(pluginName));
 				}
-			}, "Could not initiate library!"));
+			}, "Could not initiate Library!"));
 		});
 	};
 	loadLibrary(true);
