@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.2
+ * @version 1.5.3
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "CompleteTimestamps",
 			"author": "DevilBro",
-			"version": "1.5.2",
+			"version": "1.5.3",
 			"description": "Replaces Timestamps with your own custom Timestamps"
 		},
 		"changeLog": {
+			"added": {
+				"Audit Logs": "Logs are now also affected by the plugin"
+			},
 			"fixed": {
-				"Mini Stamp Tooltip": "Fixes the issue where tooltips for mini time stamps wouldn't show, smh this is discord's own fault for their shitty css"
+				"Embeds": "Fixed Issue where timestamps of some embeds weren't affected"
 			}
 		}
 	};
@@ -72,15 +75,16 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					settings: {
-						showInChat:				{value: true, 			description: "Replace chat timestamp with complete timestamp"},
-						showInEmbed:			{value: true, 			description: "Replace embed timestamp with complete timestamp"},
-						changeForChat:			{value: true, 			description: "Change the time for the chat time tooltips"},
-						changeForEdit:			{value: true, 			description: "Change the time for the edited time tooltips"},
-						displayTime:			{value: true, 			description: "Display the time in the timestamp"},
-						displayDate:			{value: true, 			description: "Display the date in the timestamp"},
-						cutSeconds:				{value: false, 			description: "Cut off seconds of the time"},
-						forceZeros:				{value: false, 			description: "Force leading zeros"},
-						otherOrder:				{value: false, 			description: "Show the time before the date"}
+						showInChat:				{value: true, 			description: "Replace Chat Timestamps with complete Timestamps"},
+						showInEmbed:			{value: true, 			description: "Replace Embed Timestamps with complete Timestamps"},
+						showInAuditLogs:		{value: true, 			description: "Replace Audit Log Timestamps with complete Timestamps"},
+						changeForChat:			{value: true, 			description: "Change the Time for Chat Time Tooltips"},
+						changeForEdit:			{value: true, 			description: "Change the Time for Edited Time Tooltips"},
+						displayTime:			{value: true, 			description: "Display the Time in Timestamps"},
+						displayDate:			{value: true, 			description: "Display the Date in Timestamps"},
+						cutSeconds:				{value: false, 			description: "Cut off Seconds of the Time"},
+						forceZeros:				{value: false, 			description: "Force leading Zeros"},
+						otherOrder:				{value: false, 			description: "Show the Time before the Date"}
 					},
 					choices: {
 						timestampLang:			{value: "$discord", 		description: "Chat Timestamp Format"},
@@ -101,7 +105,8 @@ module.exports = (_ => {
 						MessageHeader: "default",
 						MessageContent: "type",
 						Embed: "render",
-						SystemMessage: "default"
+						SystemMessage: "default",
+						AuditLog: "render"
 					}
 				};
 				
@@ -297,10 +302,13 @@ module.exports = (_ => {
 			}
 
 			processEmbed (e) {
-				if (e.instance.props.embed.timestamp && settings.showInEmbed) {
+				if (e.instance.props.embed && e.instance.props.embed.timestamp && settings.showInEmbed) {
 					let process = returnvalue => {
 						let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props: [["className", BDFDB.disCN.embedfootertext]]});
-						if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children.splice(children[index].props.children.length - 1, 1, this.getTimestamp(languages[choices.timestampLang].id, e.instance.props.embed.timestamp._i));
+						if (index > -1) {
+							if (BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children[children[index].props.children.length - 1] = this.getTimestamp(languages[choices.timestampLang].id, e.instance.props.embed.timestamp._i);
+							else children[index].props.children = this.getTimestamp(languages[choices.timestampLang].id, e.instance.props.embed.timestamp._i);
+						}
 					};
 					if (typeof e.returnvalue.props.children == "function") {
 						let childrenRender = e.returnvalue.props.children;
@@ -315,10 +323,30 @@ module.exports = (_ => {
 			}
 
 			processSystemMessage (e) {
-				if (settings.showInChat) {
+				if (e.instance.props.timestamp && settings.showInChat) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "time"});
 					if (index > -1) children[index].props.children = this.getTimestamp(languages[choices.timestampLang].id, e.instance.props.timestamp._i);
 				}
+			}
+
+			processAuditLog (e) {
+				if (e.instance.props.log && settings.showInAuditLogs) {
+					if (typeof e.returnvalue.props.children == "function") {
+						let childrenRender = e.returnvalue.props.children;
+						e.returnvalue.props.children = (...args) => {
+							let children = childrenRender(...args);
+							this.editLog(e.instance.props.log, children);
+							return children;
+						};
+					}
+					else this.editLog(e.instance.props.log, e.returnvalue);
+				}
+			}
+			
+			editLog (log, returnvalue) {
+				if (!log || !returnvalue) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props: [["className", "timestamp-1mruiI"]]});
+				if (index > -1) children[index].props.children = this.getTimestamp(languages[choices.timestampLang].id, log.timestampStart._i);
 			}
 			
 			changeTimestamp (parent, index, change = {}) {
@@ -354,7 +382,7 @@ module.exports = (_ => {
 				let timeObj = time || new Date();
 				if (typeof time == "string" || typeof time == "number") timeObj = new Date(time);
 				if (timeObj.toString() == "Invalid Date") timeObj = new Date(parseInt(time));
-				if (timeObj.toString() == "Invalid Date") return;
+				if (timeObj.toString() == "Invalid Date" || timeObj.constructor != Date) return;
 				let timeString = "";
 				if (languageId != "own") {
 					let timestamp = [];
