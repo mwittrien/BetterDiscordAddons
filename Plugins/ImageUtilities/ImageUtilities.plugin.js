@@ -523,7 +523,7 @@ module.exports = (_ => {
 						else if (BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.emojiold, "emote", false) && settings.addEmojiEntry) this.injectItem(e, e.instance.props.target.src);
 					}
 					else if (e.instance.props.target.tagName == "VIDEO") {
-						if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.attachmentvideo, e.instance.props.target)) this.injectItem(e, e.instance.props.target.src);
+						if (BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.embedvideo) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.attachmentvideo, e.instance.props.target)) this.injectItem(e, e.instance.props.target.src);
 					}
 					else {
 						let reaction = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagereaction, e.instance.props.target);
@@ -535,15 +535,15 @@ module.exports = (_ => {
 			injectItem (e, ...urls) {
 				let fileTypes = [];
 				let validUrls = urls.filter(n => this.isValid(n)).map(n => {
-					let originalUrl = n.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096");
-					let url = originalUrl.replace(/[\?\&](height|width)=\d+/g, "").split("%3A")[0];
+					let srcUrl = n.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096");
+					let url = srcUrl.replace(/[\?\&](height|width)=\d+/g, "").split("%3A")[0];
 					if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1 || url.indexOf("https://images-ext-2.discordapp.net/external/") > -1) {
 						if (url.split("/https/").length > 1) url = "https://" + url.split("/https/").pop();
 						else if (url.split("/http/").length > 1) url = "http://" + url.split("/http/").pop();
 					}
 					const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
 					const fileType = file && (file.split(".").pop() || "");
-					return url && fileType && !fileTypes.includes(fileType) && fileTypes.push(fileType) && {url, originalUrl, fileType};
+					return url && fileType && !fileTypes.includes(fileType) && fileTypes.push(fileType) && {url, srcUrl, fileType};
 				}).filter(n => n);
 				if (!validUrls.length) return;
 				
@@ -557,10 +557,10 @@ module.exports = (_ => {
 				
 				let type = this.isValid(validUrls[0].url, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
 				let isNative = validUrls.length == 1 && removeIndex > -1;
-				let subMenu = validUrls.length == 1 ? this.createUrlMenu(e, validUrls[0].url, validUrls[0].originalUrl) : validUrls.map((urlData, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				let subMenu = validUrls.length == 1 ? this.createUrlMenu(e, validUrls[0].url, validUrls[0].srcUrl) : validUrls.map((urlData, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: urlData.fileType.toUpperCase(),
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "subitem", i),
-					children: this.createUrlMenu(e, urlData.url, urlData.originalUrl)
+					children: this.createUrlMenu(e, urlData.url, urlData.srcUrl)
 				}));
 				
 				let [children, index] = isNative ? [removeParent, removeIndex] : BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
@@ -573,7 +573,7 @@ module.exports = (_ => {
 				}));
 			}
 			
-			createUrlMenu (e, url, originalUrl) {
+			createUrlMenu (e, url, srcUrl) {
 				let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
 				let engineKeys = Object.keys(enginesWithoutAll);
 				let locations = Object.keys(ownLocations).filter(n => ownLocations[n].enabled);
@@ -594,12 +594,12 @@ module.exports = (_ => {
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED, {type: "success"});
 							}
 						}),
-						!isVideo && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_view.replace("{{var0}}", type),
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "view-file"),
 							action: _ => {
-								let img = new Image();
-								img.onload = function() {
+								let img = document.createElement(isVideo ? "video" : "img");
+								img.addEventListener(isVideo ? "loadedmetadata" : "load", function() {
 									BDFDB.LibraryModules.ModalUtils.openModal(modalData => {
 										return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalRoot, Object.assign({
 											className: BDFDB.disCN.imagemodal
@@ -607,17 +607,26 @@ module.exports = (_ => {
 											size: BDFDB.LibraryComponents.ModalComponents.ModalSize.DYNAMIC,
 											"aria-label": BDFDB.LanguageUtils.LanguageStrings.IMAGE,
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
-												src: originalUrl || url,
-												original: originalUrl || url,
-												width: this.width,
-												height: this.height,
+												animated: !!isVideo,
+												src: srcUrl || url,
+												original: url,
+												width: isVideo ? this.videoWidth : this.width,
+												height: isVideo ? this.videoHeight : this.height,
 												className: BDFDB.disCN.imagemodalimage,
 												shouldAnimate: true,
-												renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
+												renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props),
+												children: isVideo && (videoData => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Video, {
+													src: srcUrl || url,
+													width: videoData.size.width,
+													height: videoData.size.height,
+													naturalWidth: this.videoWidth,
+													naturalHeight: this.videoHeight,
+													play: true
+												}))
 											})
 										}), true);
 									});
-								};
+								});
 								img.src = url;
 							}
 						}),
@@ -684,8 +693,8 @@ module.exports = (_ => {
 			processImageModal (e) {
 				if (clickedImage) e.instance.props.cachedImage = clickedImage;
 				let url = this.getImageSrc(e.instance.props.cachedImage && e.instance.props.cachedImage.src ? e.instance.props.cachedImage : e.instance.props.src);
-				let isVideo = (typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})) || {type: {}}).type.displayName == "Video";
-				url = isVideo ? (typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})) || {type: {}}).props.src : url;
+				url = this.getImageSrc((typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})) || {type: {}}).props.src) || url;
+				let isVideo = this.isValid(url, "video");
 				let messages = this.getMessageGroupOfImage(url);
 				if (e.returnvalue) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.downloadlink]]});

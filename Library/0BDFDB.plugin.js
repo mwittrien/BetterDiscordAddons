@@ -1751,9 +1751,10 @@ module.exports = (_ => {
 						if (m && typeof m == "function" && filter(m)) {
 							if (req.c[i]) return getExport ? req.c[i].exports : req.c[i];
 							else {
-								let resolved = {};
-								req.m[i](resolved, null, req);
-								return getExport ? resolved.exports : resolved;
+								let resolved = {}, resolved2 = {};
+								m(resolved, resolved2, req);
+								let trueResolved = resolved2 && BDFDB.ObjectUtils.isEmpty(resolved2) ? resolved : resolved2;
+								return getExport ? trueResolved.exports : trueResolved;
 							}
 						}
 					}
@@ -6817,7 +6818,7 @@ module.exports = (_ => {
 						BOTTOM: "M4.08643 11.0903L5.67742 9.49929L9.4485 13.2704L7.85751 14.8614L4.08643 11.0903Z"
 					}
 				};
-				const SwitchInner = function(props) {
+				const SwitchInner = function (props) {
 					let reducedMotion = BDFDB.ReactUtils.useContext(LibraryModules.PreferencesContext.AccessibilityPreferencesContext).reducedMotion;
 					let ref = BDFDB.ReactUtils.useRef(null);
 					let state = BDFDB.ReactUtils.useState(false);
@@ -7268,6 +7269,35 @@ module.exports = (_ => {
 								});
 							}
 						}), "userId", "guildId", "channelId"));
+					}
+				};
+				
+				const VideoInner = function (props) {
+						let ref = BDFDB.ReactUtils.useRef(null);
+						BDFDB.ReactUtils.useEffect(_ => {
+							if (ref.current) props.play ? ref.current.play() : ref.current.pause();
+						}, [props.play]);
+						return props.naturalWidth <= BDFDB.DiscordConstants.MAX_VIDEO_WIDTH && props.naturalHeight <= BDFDB.DiscordConstants.MAX_VIDEO_HEIGHT || props.naturalWidth <= BDFDB.DiscordConstants.MAX_VIDEO_HEIGHT && props.naturalHeight <= BDFDB.DiscordConstants.MAX_VIDEO_WIDTH ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.VideoForwardRef, {
+							ref: ref,
+							className: props.className,
+							poster: props.poster,
+							src: props.src,
+							width: props.width,
+							height: props.height,
+							muted: true,
+							loop: true,
+							autoPlay: props.play,
+							preload: "none"
+						}) : BDFDB.ReactUtils.createElement("img", {
+							alt: "",
+							src: props.poster,
+							width: props.width,
+							height: props.height
+						});
+				};
+				InternalComponents.LibraryComponents.Video = reactInitialized && class BDFDB_Video extends LibraryModules.React.Component {
+					render() {
+						return BDFDB.ReactUtils.createElement(VideoInner, this.props);
 					}
 				};
 				
