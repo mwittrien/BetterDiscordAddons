@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.4
+ * @version 1.4.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -22,15 +22,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.4.4",
+			"version": "1.4.3",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `${myGithub}/Library/0BDFDB.plugin.js`,
-		"changeLog": {
-			"progress": {
-				"Crash Issue": "If you encounter a crash while using the chat textarea to write a message, then you'll need to reinstall BD, this has nothing to do with any plugins"
-			}
-		}
+		"rawUrl": `${myGithub}/Library/0BDFDB.plugin.js`
 	};
 	
 	const DiscordObjects = {};
