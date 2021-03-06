@@ -1,9 +1,6 @@
 ﻿/**
  * @name UserNotes
- * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.6
- * @description Allows you to write User Notes locally
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
@@ -35,7 +32,7 @@ module.exports = (_ => {
 		
 		downloadLibrary () {
 			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
+				if (!e && b && b.indexOf(`* @name BDFDB`) > -1) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
 				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
@@ -102,11 +99,9 @@ module.exports = (_ => {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 					children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: BDFDB.LanguageUtils.LanguageStrings.USERS + " " + BDFDB.LanguageUtils.LanguageStrings.NOTE,
+							label: this.labels.user_note,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "user-note"),
-							action: _ => {
-								this.openNotesModal(e.instance.props.user);
-							}
+							action: _ => this.openNotesModal(e.instance.props.user)
 						})
 					}));
 				}
@@ -140,6 +135,119 @@ module.exports = (_ => {
 						}
 					}]
 				});
+			}
+
+			setLabelsByLanguage () {
+				switch (BDFDB.LanguageUtils.getLanguage().id) {
+					case "bg":		// Bulgarian
+						return {
+							user_note:							"Потребителска бележка"
+						};
+					case "da":		// Danish
+						return {
+							user_note:							"Brugernote"
+						};
+					case "de":		// German
+						return {
+							user_note:							"Benutzer Notiz"
+						};
+					case "el":		// Greek
+						return {
+							user_note:							"Σημείωση χρήστη"
+						};
+					case "es":		// Spanish
+						return {
+							user_note:							"Nota de usuario"
+						};
+					case "fi":		// Finnish
+						return {
+							user_note:							"Käyttäjän huomautus"
+						};
+					case "fr":		// French
+						return {
+							user_note:							"Note de l'utilisateur"
+						};
+					case "hr":		// Croatian
+						return {
+							user_note:							"Napomena korisnika"
+						};
+					case "hu":		// Hungarian
+						return {
+							user_note:							"Felhasználói megjegyzés"
+						};
+					case "it":		// Italian
+						return {
+							user_note:							"Nota dell'utente"
+						};
+					case "ja":		// Japanese
+						return {
+							user_note:							"ユーザーノート"
+						};
+					case "ko":		// Korean
+						return {
+							user_note:							"사용자 참고"
+						};
+					case "lt":		// Lithuanian
+						return {
+							user_note:							"Vartotojo pastaba"
+						};
+					case "nl":		// Dutch
+						return {
+							user_note:							"Opmerking van de gebruiker"
+						};
+					case "no":		// Norwegian
+						return {
+							user_note:							"Brukermerknad"
+						};
+					case "pl":		// Polish
+						return {
+							user_note:							"Uwaga użytkownika"
+						};
+					case "pt-BR":	// Portuguese (Brazil)
+						return {
+							user_note:							"Nota do usuário"
+						};
+					case "ro":		// Romanian
+						return {
+							user_note:							"Notă utilizator"
+						};
+					case "ru":		// Russian
+						return {
+							user_note:							"Примечание пользователя"
+						};
+					case "sv":		// Swedish
+						return {
+							user_note:							"Användaranteckning"
+						};
+					case "th":		// Thai
+						return {
+							user_note:							"หมายเหตุผู้ใช้"
+						};
+					case "tr":		// Turkish
+						return {
+							user_note:							"Kullanıcı notu"
+						};
+					case "uk":		// Ukrainian
+						return {
+							user_note:							"Примітка користувача"
+						};
+					case "vi":		// Vietnamese
+						return {
+							user_note:							"Ghi chú của người dùng"
+						};
+					case "zh-CN":	// Chinese (China)
+						return {
+							user_note:							"用户须知"
+						};
+					case "zh-TW":	// Chinese (Taiwan)
+						return {
+							user_note:							"用戶須知"
+						};
+					default:		// English
+						return {
+							user_note:							"User Note"
+						};
+				}
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
