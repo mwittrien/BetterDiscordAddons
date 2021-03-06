@@ -13,7 +13,10 @@
  */
 
 module.exports = (_ => {
-	const isBeta = !(window.BdApi && !Array.isArray(BdApi.settings));
+	const BdApi = window.BdApi;
+	const isBeta = !(BdApi && !Array.isArray(BdApi.settings));
+	
+	const myGithub = ((BdApi && typeof BdApi.findModuleByProps == "function" && BdApi.findModuleByProps("getCurrentUser") || {getCurrentUser: _ => {}}).getCurrentUser() || {}).id == "278543574059057154" ? "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/development" : "https://mwittrien.github.io/BetterDiscordAddons";
 	
 	const config = {
 		"info": {
@@ -22,7 +25,7 @@ module.exports = (_ => {
 			"version": "1.4.3",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
+		"rawUrl": `${myGithub}/Library/0BDFDB.plugin.js`
 	};
 	
 	const DiscordObjects = {};
@@ -392,7 +395,7 @@ module.exports = (_ => {
 
 	BDFDB.BDUtils = {};
 	BDFDB.BDUtils.getPluginsFolder = function () {
-		if (window.BdApi && BdApi.Plugins.folder && typeof BdApi.Plugins.folder == "string") return BdApi.Plugins.folder;
+		if (BdApi && BdApi.Plugins && BdApi.Plugins.folder && typeof BdApi.Plugins.folder == "string") return BdApi.Plugins.folder;
 		else if (LibraryRequires.process.env.injDir) return LibraryRequires.path.resolve(LibraryRequires.process.env.injDir, "plugins/");
 		else switch (LibraryRequires.process.platform) {
 			case "win32":
@@ -405,7 +408,7 @@ module.exports = (_ => {
 			}
 	};
 	BDFDB.BDUtils.getThemesFolder = function () {
-		if (window.BdApi && BdApi.Themes.folder && typeof BdApi.Themes.folder == "string") return BdApi.Themes.folder;
+		if (BdApi && BdApi.Themes && BdApi.Themes.folder && typeof BdApi.Themes.folder == "string") return BdApi.Themes.folder;
 		else if (LibraryRequires.process.env.injDir) return LibraryRequires.path.resolve(LibraryRequires.process.env.injDir, "plugins/");
 		else switch (LibraryRequires.process.platform) {
 			case "win32": 
@@ -418,28 +421,28 @@ module.exports = (_ => {
 			}
 	};
 	BDFDB.BDUtils.isPluginEnabled = function (pluginName) {
-		if (!window.BdApi) return null;
+		if (!BdApi) return null;
 		else if (BdApi.Plugins && typeof BdApi.Plugins.isEnabled == "function") return BdApi.Plugins.isEnabled(pluginName);
 		else if (typeof BdApi.isPluginEnabled == "function") return BdApi.isPluginEnabled(pluginName);
 	};
 	BDFDB.BDUtils.reloadPlugin = function (pluginName) {
-		if (!window.BdApi) return;
+		if (!BdApi) return;
 		else if (BdApi.Plugins && typeof BdApi.Plugins.reload == "function") BdApi.Plugins.reload(pluginName);
 		else if (window.pluginModule) window.pluginModule.reloadPlugin(pluginName);
 	};
 	BDFDB.BDUtils.enablePlugin = function (pluginName) {
-		if (!window.BdApi) return;
+		if (!BdApi) return;
 		else if (BdApi.Plugins && typeof BdApi.Plugins.enable == "function") BdApi.Plugins.enable(pluginName);
 		else if (window.pluginModule) window.pluginModule.startPlugin(pluginName);
 	};
 	BDFDB.BDUtils.disablePlugin = function (pluginName) {
-		if (!window.BdApi) return;
+		if (!BdApi) return;
 		else if (BdApi.Plugins && typeof BdApi.Plugins.disable == "function") BdApi.Plugins.disable(pluginName);
 		else if (window.pluginModule) window.pluginModule.stopPlugin(pluginName);
 	};
 	BDFDB.BDUtils.getPlugin = function (pluginName, hasToBeEnabled = false, overHead = false) {
-		if (window.BdApi && !hasToBeEnabled || BDFDB.BDUtils.isPluginEnabled(pluginName)) {	
-			if (BdApi.Plugins.get && typeof BdApi.Plugins.get == "function") {
+		if (BdApi && !hasToBeEnabled || BDFDB.BDUtils.isPluginEnabled(pluginName)) {	
+			if (BdApi.Plugins && typeof BdApi.Plugins.get == "function") {
 				let plugin = BdApi.Plugins.get(pluginName);
 				if (overHead) return plugin ? {filename: LibraryRequires.fs.existsSync(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), `${pluginName}.plugin.js`)) ? `${pluginName}.plugin.js` : null, id: pluginName, name: pluginName, plugin: plugin} : null;
 				else return plugin;
@@ -449,22 +452,22 @@ module.exports = (_ => {
 		return null;
 	};
 	BDFDB.BDUtils.isThemeEnabled = function (themeName) {
-		if (!window.BdApi) return null;
+		if (!BdApi) return null;
 		else if (BdApi.Themes && typeof BdApi.Themes.isEnabled == "function") return BdApi.Themes.isEnabled(themeName);
 		else if (typeof BdApi.isThemeEnabled == "function") return BdApi.isThemeEnabled(themeName);
 	};
 	BDFDB.BDUtils.enableTheme = function (themeName) {
-		if (!window.BdApi) return;
+		if (!BdApi) return;
 		else if (BdApi.Themes && typeof BdApi.Themes.enable == "function") BdApi.Themes.enable(themeName);
 		else if (window.themeModule) window.themeModule.enableTheme(themeName);
 	};
 	BDFDB.BDUtils.disableTheme = function (themeName) {
-		if (!window.BdApi) return;
+		if (!BdApi) return;
 		else if (BdApi.Themes && typeof BdApi.Themes.disable == "function") BdApi.Themes.disable(themeName);
 		else if (window.themeModule) window.themeModule.disableTheme(themeName);
 	};
 	BDFDB.BDUtils.getTheme = function (themeName, hasToBeEnabled = false) {
-		if (window.BdApi && !hasToBeEnabled || BDFDB.BDUtils.isThemeEnabled(themeName)) {
+		if (BdApi && !hasToBeEnabled || BDFDB.BDUtils.isThemeEnabled(themeName)) {
 			if (BdApi.Themes && typeof BdApi.Themes.get == "function") return BdApi.Themes.get(themeName);
 			else if (window.bdthemes) window.bdthemes[themeName];
 		}
@@ -482,25 +485,25 @@ module.exports = (_ => {
 		showToasts: "settings.general.showToasts"
 	};
 	BDFDB.BDUtils.toggleSettings = function (key, state) {
-		if (window.BdApi && typeof key == "string") {
+		if (BdApi && typeof key == "string") {
 			let path = key.split(".");
 			let currentState = BDFDB.BDUtils.getSettings(key);
 			if (state === true) {
-				if (currentState === false) BdApi.enableSetting(...path);
+				if (currentState === false && typeof BdApi.enableSetting == "function") BdApi.enableSetting(...path);
 			}
 			else if (state === false) {
-				if (currentState === true) BdApi.disableSetting(...path);
+				if (currentState === true && typeof BdApi.disableSetting == "function") BdApi.disableSetting(...path);
 			}
 			else if (currentState === true || currentState === false) BDFDB.BDUtils.toggleSettings(key, !currentState);
 		}
 	};
 	BDFDB.BDUtils.getSettings = function (key) {
-		if (!window.BdApi) return {};
-		if (typeof key == "string") return BdApi.isSettingEnabled(...key.split("."));
+		if (!BdApi) return {};
+		if (typeof key == "string") return typeof BdApi.isSettingEnabled == "function" && BdApi.isSettingEnabled(...key.split("."));
 		else return !isBeta && typeof BdApi.getBDData == "function" ? BDFDB.ObjectUtils.get(BdApi.getBDData("settings"), `${BDFDB.DiscordUtils.getBuild()}.settings`) : (BDFDB.ArrayUtils.is(BdApi.settings) ? BdApi.settings.map(n => n.settings.map(m => m.settings.map(l => ({id: [n.id, m.id, l.id].join("."), value: l.value})))).flat(10).reduce((newObj, setting) => (newObj[setting.id] = setting.value, newObj), {}) : {});
 	};
 	BDFDB.BDUtils.getSettingsProperty = function (property, key) {
-		if (!window.BdApi || !isBeta) return key ? "" : {};
+		if (!BdApi || !isBeta) return key ? "" : {};
 		else {
 			let settingsMap = BdApi.settings.map(n => n.settings.map(m => m.settings.map(l => ({id: [n.id, m.id, l.id].join("."), value: l[property]})))).flat(10).reduce((newObj, setting) => (newObj[setting.id] = setting.value, newObj), {});
 			return key ? (settingsMap[key] != null ? settingsMap[key] : "") : "";
@@ -554,8 +557,8 @@ module.exports = (_ => {
 			disableInteractions: true,
 			barColor: BDFDB.DiscordConstants.Colors.STATUS_RED
 		});
-
-		let url = plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
+		
+		let url = InternalBDFDB.getPluginURL(plugin);
 
 		BDFDB.PluginUtils.cleanUp(plugin);
 		
@@ -947,13 +950,15 @@ module.exports = (_ => {
 
 	
 	const loadLibrary = tryAgain => {
-		const branch = ((BdApi.findModuleByProps("getCurrentUser") || {getCurrentUser: _ => {}}).getCurrentUser() || {}).id == "278543574059057154" ? "development" : "master";
 		const request = require("request");
-		request.get(`https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/${branch}/Library/_res/BDFDB.raw.css`, (e, r, b) => {
+		request.get(`${myGithub}/Library/_res/BDFDB.raw.css`, (e, r, b) => {
 			if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
 			const css = b;
-			request.get(`https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/${branch}/Library/_res/BDFDB.data.json`, BDFDB.TimeUtils.suppress((e2, r2, b2) => {
-				if ((e2 || !b2 || r2.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
+			request.get(`${myGithub}/Library/_res/BDFDB.data.json`, BDFDB.TimeUtils.suppress((e2, r2, b2) => {
+				if (e2 || !b2 || r2.statusCode != 200) {
+					if (tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
+					else BdApi.alert("Error", "Could not initiate BDFDB Library Plugin. Check your Internet Connection and make sure GitHub isn't blocked in your Network.");
+				}
 				const InternalData = JSON.parse(b2);
 				
 				InternalBDFDB.getPluginURL = function (plugin) {
@@ -962,7 +967,7 @@ module.exports = (_ => {
 						if (plugin.rawUrl) return plugin.rawUrl;
 						else {
 							let name = InternalData && InternalData.PluginNameMap && InternalData.PluginNameMap[plugin.name] || plugin.name;
-							return `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${name}/${name}.plugin.js`;
+							return `${myGithub}/Plugins/${name}/${name}.plugin.js`;
 						}
 					}
 					else return "";
@@ -1463,7 +1468,7 @@ module.exports = (_ => {
 					return notice;
 				};
 				BDFDB.NotificationUtils.alert = function (header, body) {
-					if (typeof header == "string" && typeof header == "string" && window.BdApi && typeof BdApi.alert == "function") BdApi.alert(header, body);
+					if (typeof header == "string" && typeof header == "string" && BdApi && typeof BdApi.alert == "function") BdApi.alert(header, body);
 				};
 
 				var Tooltips = [];
@@ -7671,7 +7676,7 @@ module.exports = (_ => {
 				}
 				
 				BDFDB.PatchUtils.patch(BDFDB, LibraryModules.GuildStore, "getGuild", {after: e => {
-					if (e.returnValue && e.methodArguments[0] == InternalData.myGuildId) e.returnValue.banner = "https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.banner.png";
+					if (e.returnValue && e.methodArguments[0] == InternalData.myGuildId) e.returnValue.banner = `${myGithub}/Library/_res/BDFDB.banner.png`;
 				}});
 
 				BDFDB.PatchUtils.patch(BDFDB, LibraryModules.IconUtils, "getGuildBannerURL", {instead: e => {
