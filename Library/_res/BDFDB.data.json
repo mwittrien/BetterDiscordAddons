@@ -306,7 +306,7 @@
 		"TextElement": {"name": "Text"},
 		"UserPopout": {"name": "ConnectedUserPopout"},
 		"UserSummaryItem": {"name": "UserSummaryItem"},
-		"VideoForwardsRef": {"strings": ["displayName\=\"Video\"", "\"video\"", "HTMLImageElement"], "value": "default"}
+		"VideoForwardRef": {"strings": ["displayName\=\"Video\"", "\"video\"", "HTMLImageElement"], "value": "default"}
 	},
 	"SvgIcons": {
 		"ARROW_DOWN": {
