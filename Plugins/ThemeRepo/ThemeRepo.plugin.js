@@ -1062,7 +1062,7 @@ module.exports = (_ => {
 							BDFDB.DOMUtils.remove(loadingIcon, BDFDB.dotCN._themerepoloadingicon);
 							loading = {is: false, timeout: null, amount: loading.amount};
 							
-							BDFDB.LogUtils.log("Finished fetching Themes", this.name);
+							BDFDB.LogUtils.log("Finished fetching Themes", this);
 							if (list) BDFDB.ReactUtils.forceUpdate(list);
 							
 							if (settings.notifyOutdated && outdated > 0) {
@@ -1232,7 +1232,7 @@ module.exports = (_ => {
 					let id = data.name.replace(/^[^a-z]+|[^\w-]+/gi, "-");
 					BDFDB.DOMUtils.remove(`style#${id}`);
 					BDFDB.BDUtils.enableTheme(data.name, false);
-					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", data.name), this.name);
+					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", data.name), this);
 				}
 			}
 
@@ -1249,7 +1249,7 @@ module.exports = (_ => {
 					let id = data.name.replace(/^[^a-z]+|[^\w-]+/gi, "-");
 					BDFDB.DOMUtils.remove(`style#${id}`);
 					BDFDB.BDUtils.disableTheme(data.name, false);
-					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", data.name), this.name);
+					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", data.name), this);
 				}
 			}
 

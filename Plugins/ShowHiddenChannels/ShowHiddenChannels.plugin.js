@@ -165,7 +165,7 @@ module.exports = (_ => {
 				 
 				this.defaults = {
 					settings: {
-						sortNative:				{value: false, 	description: "Sort hidden Channels in the native Order"},
+						sortNative:				{value: true, 	description: "Sort hidden Channels in the native Order instead of an extra Category"},
 						showText:				{value: true, 	description: "Show hidden Text Channels"},
 						showVoice:				{value: true, 	description: "Show hidden Voice Channels"},
 						showAnnouncement:		{value: true, 	description: "Show hidden Announcement Channels"},

@@ -77,21 +77,21 @@ module.exports = (_ => {
 					settings: {
 						addInUserPopout:		{value: true, 			description: "Add in User Popouts"},
 						addInUserProfil:		{value: true, 			description: "Add in User Profile Modal"},
-						displayText:			{value: true, 			description: "Display 'Joined on' text in the timestamp"},
-						displayTime:			{value: true, 			description: "Display the time in the timestamp"},
-						displayDate:			{value: true, 			description: "Display the date in the timestamp"},
-						cutSeconds:				{value: false, 			description: "Cut off seconds of the time"},
-						forceZeros:				{value: false, 			description: "Force leading zeros"},
-						otherOrder:				{value: false, 			description: "Show the time before the date"}
+						displayText:			{value: true, 			description: "Display 'Joined on' text in the Timestamp"},
+						displayTime:			{value: true, 			description: "Display the Time in the Timestamp"},
+						displayDate:			{value: true, 			description: "Display the Date in the Timestamp"},
+						cutSeconds:				{value: false, 			description: "Cut off Seconds of the Time"},
+						forceZeros:				{value: false, 			description: "Force leading Zeros"},
+						otherOrder:				{value: false, 			description: "Show the Time before the Date"}
 					},
 					choices: {
-						joinedAtDateLang:		{value: "$discord", 		description: "Joined At Date Format"}
+						joinedAtDateLang:		{value: "$discord", 	description: "Joined At Date Format"}
 					},
 					formats: {
-						ownFormat:				{value: "$hour: $minute: $second, $day.$month.$year", 	description: "Own Format"}
+						ownFormat:				{value: "$hour:$minute:$second, $day.$month.$year", 	description: "Own Format"}
 					},
 					amounts: {
-						maxDaysAgo:				{value: 0, 	min: 0,		description: "Maximum count of days displayed in the $daysago placeholder",	note: "0 equals no limit"}
+						maxDaysAgo:				{value: 0, 	min: 0,		description: "Maximum Count of Days displayed in the $daysago Placeholder",	note: "0 equals no Limit"}
 					}
 				};
 				

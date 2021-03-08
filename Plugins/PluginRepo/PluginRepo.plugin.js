@@ -756,7 +756,7 @@ module.exports = (_ => {
 										BDFDB.DOMUtils.remove(loadingIcon, BDFDB.dotCN._pluginrepoloadingicon);
 										loading = {is: false, timeout: null, amount: loading.amount};
 										
-										BDFDB.LogUtils.log("Finished fetching Plugins", this.name);
+										BDFDB.LogUtils.log("Finished fetching Plugins", this);
 										if (list) BDFDB.ReactUtils.forceUpdate(list);
 										
 										if (settings.notifyOutdated && outdated > 0) {
@@ -1040,7 +1040,7 @@ module.exports = (_ => {
 			startPlugin (data) {
 				if (data.name && BDFDB.BDUtils.isPluginEnabled(data.name) == false) {
 					BDFDB.BDUtils.enablePlugin(data.name, false);
-					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", data.name), this.name);
+					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", data.name), this);
 				}
 			}
 
@@ -1055,7 +1055,7 @@ module.exports = (_ => {
 			stopPlugin (data) {
 				if (data.name && BDFDB.BDUtils.isPluginEnabled(data.name) == true) {
 					BDFDB.BDUtils.disablePlugin(data.name, false);
-					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", data.name), this.name);
+					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", data.name), this);
 				}
 			}
 
