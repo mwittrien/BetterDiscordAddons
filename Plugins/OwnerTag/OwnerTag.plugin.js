@@ -2,7 +2,7 @@
  * @name OwnerTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.8
+ * @version 1.3.9
  * @description Adds a Tag/Crown to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "OwnerTag",
 			"author": "DevilBro",
-			"version": "1.3.8",
+			"version": "1.3.9",
 			"description": "Adds a Tag/Crown to Server Owners (or Admins/Management)"
 		},
 		"changeLog": {
@@ -195,13 +195,13 @@ module.exports = (_ => {
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Tag Text Settings",
 							collapseStates: collapseStates,
-							children: Object.keys(this.defaults.inputs).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							children: Object.keys(this.settings.inputs).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "TextInput",
 								plugin: this,
 								keys: ["inputs", key],
 								label: this.defaults.inputs[key].description,
 								basis: "50%",
-								value: this.defaults.inputs[key]
+								value: this.settings.inputs[key]
 							}))
 						}));
 						
