@@ -88,7 +88,7 @@ https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/Em
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Themes/ServerColumns/ServerColumns.theme.css
 https://raw.githubusercontent.com/Mylan719/Discord-light-theme/master/Discord Light-Blue.theme.css
 https://raw.githubusercontent.com/nirewen/Discordify/master/Discordify.theme.css
-https://raw.githubusercontent.com/NYRI4/Comfy/master/support/comfy.theme.css
+https://raw.githubusercontent.com/NYRI4/Comfy/master/betterdiscord/comfy.theme.css
 https://raw.githubusercontent.com/NYRI4/Discolored/master/support/discolored.theme.css
 https://raw.githubusercontent.com/ObserverOfTime/DiscordThemes/master/NewNihilism/dist/NewNihilism.theme.css
 https://raw.githubusercontent.com/orblazer/discord-nordic/master/nordic.theme.css

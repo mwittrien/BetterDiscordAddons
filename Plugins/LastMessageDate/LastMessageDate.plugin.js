@@ -85,10 +85,10 @@ module.exports = (_ => {
 						otherOrder:				{value: false, 			description: "Show the time before the date"}
 					},
 					choices: {
-						lastMessageDateLang:	{value: "$discord", 		description: "Last Message Date Format"}
+						lastMessageDateLang:	{value: "$discord", 	description: "Last Message Date Format"}
 					},
 					formats: {
-						ownFormat:				{value: "$hour: $minute: $second, $day.$month.$year", 	description: "Own Format"}
+						ownFormat:				{value: "$hour:$minute:$second, $day.$month.$year", 	description: "Own Format"}
 					},
 					amounts: {
 						maxDaysAgo:				{value: 0, 	min: 0,		description: "Maximum count of days displayed in the $daysago placeholder",	note: "0 equals no limit"}

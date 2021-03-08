@@ -293,7 +293,7 @@ module.exports = (_ => {
 						createdAudios[e.methodArguments[0]] = audio;
 						return audio;
 					}
-					else BDFDB.LogUtils.warn(`Could not create sound for "${e.methodArguments[0]}".`, this.name);
+					else BDFDB.LogUtils.warn(`Could not create Sound for "${e.methodArguments[0]}".`, this);
 				}});
 				
 				
