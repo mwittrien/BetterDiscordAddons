@@ -2,7 +2,7 @@
  * @name CustomQuoter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.5
+ * @version 1.2.6
  * @description Brings back the Quote Feature and allows you to set your own Quote Formats
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomQuoter",
 			"author": "DevilBro",
-			"version": "1.2.5",
+			"version": "1.2.6",
 			"description": "Brings back the Quote Feature and allows you to set your own Quote Formats"
 		},
 		"changeLog": {
 			"improved": {
-				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
+				"Auto New Line": "If there is already some text in your Message Input, then the plugin adds a newline before the quote"
 			}
 		}
 	};
@@ -65,8 +65,8 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var _this;
-		var settings = {}, formats = {}, format = null;
+		var _this, ChannelTextAreaForm;
+		var formats = {}, format = null;
 		
 		const PreviewMessageComponent = class PreviewMessage extends BdApi.React.Component {
 			render() {
@@ -107,8 +107,14 @@ module.exports = (_ => {
 			onLoad () {
 				_this = this;
 				
+				this.patchedModules = {
+					before: {
+						ChannelTextAreaForm: "render"
+					}
+				};
+				
 				this.defaults = {
-					settings: {
+					general: {
 						quoteOnlySelected:		{value: true, 				description: "Only insert selected Text in a Quoted Message"},
 						holdShiftToolbar:		{value: false, 				description: "Need to hold Shift on a Message to show Quick Quote"},
 						alwaysCopy:				{value: false, 				description: "Always copy Quote to Clipboard without holding Shift"},
@@ -270,8 +276,9 @@ module.exports = (_ => {
 			}
 			
 			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
 				formats = Object.assign({"Standard": "$quote $mention"}, BDFDB.DataUtils.load(this, "formats"));
+				
+				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 
 			onMessageContextMenu (e) {
@@ -337,7 +344,7 @@ module.exports = (_ => {
 			}
 		
 			onMessageOptionToolbar (e) {
-				if ((e.instance.props.expanded || !settings.holdShiftToolbar) && e.instance.props.message && e.instance.props.channel) {
+				if ((e.instance.props.expanded || !this.settings.general.holdShiftToolbar) && e.instance.props.message && e.instance.props.channel) {
 					let quoteButton = BDFDB.ReactUtils.findChild(e.returnvalue, {key: "quote"});
 					if (!quoteButton) {
 						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: ["reply", "mark-unread"]});
@@ -358,16 +365,24 @@ module.exports = (_ => {
 					}
 				}
 			}
+		
+			processChannelTextAreaForm (e) {
+				ChannelTextAreaForm = e.instance;
+			}
 			
 			quote (channel, message, shift) {
 				let text = this.parseQuote(message, channel);
 				if (text && text.length) {
-					if (shift && !settings.alwaysCopy || !shift && settings.alwaysCopy || !(BDFDB.DMUtils.isDMChannel(channel.id) || BDFDB.UserUtils.can("SEND_MESSAGES"))) {
+					if (shift && !this.settings.general.alwaysCopy || !shift && this.settings.general.alwaysCopy || !(BDFDB.DMUtils.isDMChannel(channel.id) || BDFDB.UserUtils.can("SEND_MESSAGES"))) {
 						BDFDB.LibraryRequires.electron.clipboard.write({text: text});
 						BDFDB.NotificationUtils.toast(this.labels.toast_quotecopied, {type: "success"});
 					}
 					else {
-						BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {content: text});
+						if (ChannelTextAreaForm) {
+							let textValue = [ChannelTextAreaForm.state.textValue, text].filter(n => n).join("\n");
+							ChannelTextAreaForm.setState({textValue: textValue, richValue: BDFDB.LibraryModules.SlateUtils.deserialize(textValue)});
+						}
+						else BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {content: text});
 					}
 				}
 			}
@@ -389,7 +404,7 @@ module.exports = (_ => {
 				}
 				
 				let content = message.content;
-				let selectedText = settings.quoteOnlySelected && document.getSelection().toString().trim();
+				let selectedText = this.settings.general.quoteOnlySelected && document.getSelection().toString().trim();
 				if (selectedText) content = BDFDB.StringUtils.extractSelection(content, selectedText);
 				if (content) {
 					content = content.replace(/(@everyone|@here)/g, "`$1`").replace(/``(@everyone|@here)``/g, "`$1`");
@@ -407,7 +422,7 @@ module.exports = (_ => {
 				let quotedLines = unquotedLines.slice(unquotedLines.findIndex(line => line.trim().length > 0)).map(line => "> " + line + "\n").join("");
 				
 				return BDFDB.StringUtils.insertNRST(quoteFormat)
-					.replace("$mention", settings.ignoreMentionInDM && channel.isDM() ? "" : `<@!${message.author.id}>`)
+					.replace("$mention", this.settings.general.ignoreMentionInDM && channel.isDM() ? "" : `<@!${message.author.id}>`)
 					.replace("$link", `<https://discordapp.com/channels/${guild.id}/${channel.id}/${message.id}>`)
 					.replace("$authorName", member && member.nick || message.author.username || "")
 					.replace("$authorAccount", `${message.author.username}#${message.author.discriminator}`)
@@ -417,17 +432,17 @@ module.exports = (_ => {
 					.replace("$channel", channel.isDM() && channel.rawRecipients[0] ? `@ ${channel.rawRecipients[0].username}` : `<#${channel.id}>`)
 					.replace("$serverId", guild.id || "")
 					.replace("$serverName", guild.name || "")
-					.replace("$hour", settings.forceZeros && hour < 10 ? "0" + hour : hour)
+					.replace("$hour", this.settings.general.forceZeros && hour < 10 ? "0" + hour : hour)
 					.replace("$minute", minute < 10 ? "0" + minute : minute)
 					.replace("$second", second < 10 ? "0" + second : second)
-					.replace("$msecond", settings.forceZeros ? (msecond < 10 ? "00" + msecond : (msecond < 100 ? "0" + msecond : msecond)) : msecond)
+					.replace("$msecond", this.settings.general.forceZeros ? (msecond < 10 ? "00" + msecond : (msecond < 100 ? "0" + msecond : msecond)) : msecond)
 					.replace("$timemode", timemode)
 					.replace("$weekdayL", timestamp.toLocaleDateString(languageId, {weekday: "long"}))
 					.replace("$weekdayS", timestamp.toLocaleDateString(languageId, {weekday: "short"}))
 					.replace("$monthnameL", timestamp.toLocaleDateString(languageId, {month: "long"}))
 					.replace("$monthnameS", timestamp.toLocaleDateString(languageId, {month: "short"}))
-					.replace("$day", settings.forceZeros && day < 10 ? "0" + day : day)
-					.replace("$month", settings.forceZeros && month < 10 ? "0" + month : month)
+					.replace("$day", this.settings.general.forceZeros && day < 10 ? "0" + day : day)
+					.replace("$month", this.settings.general.forceZeros && month < 10 ? "0" + month : month)
 					.replace("$year", timestamp.getFullYear())
 					.replace("$quote", quotedLines || "")
 					.replace("$rawQuote", unquotedLines.join("\n") || "");
