@@ -172,7 +172,7 @@ module.exports = (_ => {
 			name = BDFDB.name;
 			version = BDFDB.version;
 		}
-		console[type](...[[name && `%c[${name}]`, version && `%c(v${version})`].filter(n => n).join(" "), name && "color: #3a71c1; font-weight: 700;", version && "color: #666; font-weight: 600; font-size: 11px;", [config.strings].flat(10).filter(n => typeof n == "string").join(" ").trim()].filter(n => n));
+		console[type](...[[name && `%c[${name}]`, version && `%c(v${version})`].filter(n => n).join(" "), name && "color: #3a71c1; font-weight: 700;", version && "color: #666; font-weight: 600; font-size: 11px;", [config.strings].flat(10).filter(n => n).join(" ").trim()].filter(n => n));
 	};
 	BDFDB.LogUtils.log = function (strings, config = {}) {
 		InternalBDFDB.console("log", Object.assign({}, config, {name: typeof config == "string" ? config : config.name, strings}));
@@ -213,9 +213,9 @@ module.exports = (_ => {
 			else if (typeof t == "object") clearImmediate(t);
 		}
 	};
-	BDFDB.TimeUtils.suppress = function (callback, string, config) {return function (...args) {
+	BDFDB.TimeUtils.suppress = function (callback, strings, config) {return function (...args) {
 		try {return callback(...args);}
-		catch (err) {BDFDB.LogUtils.error([string, err], config);}
+		catch (err) {BDFDB.LogUtils.error([strings, err], config);}
 	}};
 
 	BDFDB.LogUtils.log("Loading library");
