@@ -87,15 +87,15 @@ module.exports = (_ => {
 						otherOrder:				{value: false, 			description: "Show the Time before the Date"}
 					},
 					choices: {
-						timestampLang:			{value: "$discord", 		description: "Chat Timestamp Format"},
-						timestampToolLang:		{value: "$discord", 		description: "Tooltip Timestamp Format"}
+						timestampLang:			{value: "$discord", 	description: "Chat Timestamp Format"},
+						timestampToolLang:		{value: "$discord", 	description: "Tooltip Timestamp Format"}
 					},
 					formats: {
 						ownFormat:				{value: "$hour:$minute:$second, $day.$month.$year", 	description: "Own Chat Format"},
 						ownFormatTool:			{value: "$hour:$minute:$second, $day.$month.$year", 	description: "Own Tooltip Format"}
 					},
 					amounts: {
-						maxDaysAgo:				{value: 0, 	min: 0,		description: "Maximum count of days displayed in the $daysago placeholder",	note: "0 equals no limit"}
+						maxDaysAgo:				{value: 0, 	min: 0,		description: "Maximum Count of Days displayed in the $daysago Placeholder",	note: "0 equals no Limit"}
 					}
 				};
 				
