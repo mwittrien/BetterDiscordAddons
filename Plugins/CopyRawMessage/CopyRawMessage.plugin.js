@@ -65,55 +65,18 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var settings = {};
-	
 		return class CopyRawMessage extends Plugin {
-			onLoad () {
-				this.defaults = {
-					settings: {
-						copyOnlySelected:		{value: true, 				description: "Only copy selected text of a message"}
-					}
-				};
-			}
+			onLoad () {}
 			
-			onStart () {
-				this.forceUpdateAll();
-			}
+			onStart () {}
 			
-			onStop () {
-				this.forceUpdateAll();
-			}
-
-			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [];
-				
-				for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					type: "Switch",
-					plugin: this,
-					keys: ["settings", key],
-					label: this.defaults.settings[key].description,
-					value: settings[key]
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
-			}
-
-			onSettingsClosed () {
-				if (this.SettingsUpdated) {
-					delete this.SettingsUpdated;
-					this.forceUpdateAll();
-				}
-			}
-		
-			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
-			}
+			onStop () {}
 
 			onMessageContextMenu (e) {
 				if (e.instance.props.message) {
 					let content = e.instance.props.message.content;
 					let messageString = [e.instance.props.message.content, BDFDB.ArrayUtils.is(e.instance.props.message.attachments) && e.instance.props.message.attachments.map(n => n.url)].flat(10).filter(n => n).join("\n");
-					let selectedText = settings.copyOnlySelected && document.getSelection().toString().trim();
+					let selectedText = document.getSelection().toString().trim();
 					if (selectedText) messageString = BDFDB.StringUtils.extractSelection(messageString, selectedText);
 					let embed = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedwrapper, e.instance.props.target);
 					let embedData = e.instance.props.message.embeds[embed ? Array.from(embed.parentElement.querySelectorAll(BDFDB.dotCN.embedwrapper)).indexOf(embed) : -1];

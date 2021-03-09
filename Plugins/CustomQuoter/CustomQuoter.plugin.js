@@ -115,10 +115,8 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						quoteOnlySelected:		{value: true, 				description: "Only insert selected Text in a Quoted Message"},
 						holdShiftToolbar:		{value: false, 				description: "Need to hold Shift on a Message to show Quick Quote"},
 						alwaysCopy:				{value: false, 				description: "Always copy Quote to Clipboard without holding Shift"},
-						ignoreMentionInDM:		{value: true, 				description: "Do not add a mention in Direct Messages"},
 						forceZeros:				{value: false, 				description: "Force leading Zeros"}
 					}
 				};
@@ -401,7 +399,7 @@ module.exports = (_ => {
 				}
 				
 				let content = message.content;
-				let selectedText = this.settings.general.quoteOnlySelected && document.getSelection().toString().trim();
+				let selectedText = document.getSelection().toString().trim();
 				if (selectedText) content = BDFDB.StringUtils.extractSelection(content, selectedText);
 				if (content) {
 					content = content.replace(/(@everyone|@here)/g, "`$1`").replace(/``(@everyone|@here)``/g, "`$1`");
@@ -419,7 +417,7 @@ module.exports = (_ => {
 				let quotedLines = unquotedLines.slice(unquotedLines.findIndex(line => line.trim().length > 0)).map(line => "> " + line + "\n").join("");
 				
 				return BDFDB.StringUtils.insertNRST(quoteFormat)
-					.replace("$mention", this.settings.general.ignoreMentionInDM && channel.isDM() ? "" : `<@!${message.author.id}>`)
+					.replace("$mention", channel.isDM() ? "" : `<@!${message.author.id}>`)
 					.replace("$link", `<https://discordapp.com/channels/${guild.id}/${channel.id}/${message.id}>`)
 					.replace("$authorName", member && member.nick || message.author.username || "")
 					.replace("$authorAccount", `${message.author.username}#${message.author.discriminator}`)
