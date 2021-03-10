@@ -386,47 +386,37 @@ module.exports = (_ => {
 				let timeString = "";
 				if (languageId != "own") {
 					let timestamp = [];
-					if (settings.displayDate) timestamp.push(timeObj.toLocaleDateString(languageId));
-					if (settings.displayTime) timestamp.push(settings.cutSeconds ? this.cutOffSeconds(timeObj.toLocaleTimeString(languageId)) : timeObj.toLocaleTimeString(languageId));
-					if (settings.otherOrder) timestamp.reverse();
+					if (settings.displayDate) 	timestamp.push(timeObj.toLocaleDateString(languageId));
+					if (settings.displayTime) 	timestamp.push(settings.cutSeconds ? this.cutOffSeconds(timeObj.toLocaleTimeString(languageId)) : timeObj.toLocaleTimeString(languageId));
+					if (settings.otherOrder)	timestamp.reverse();
 					timeString = timestamp.length > 1 ? timestamp.join(", ") : (timestamp.length > 0 ? timestamp[0] : "");
 					if (timeString && settings.forceZeros) timeString = this.addLeadingZeros(timeString);
 				}
 				else {
 					languageId = BDFDB.LanguageUtils.getLanguage().id;
-					let hours = timeObj.getHours();
-					let minutes = timeObj.getMinutes();
-					let seconds = timeObj.getSeconds();
-					let milliSeconds = timeObj.getMilliseconds();
-					
-					let day = timeObj.getDate();
-					let month = timeObj.getMonth()+1;
-					
-					let timeMode = "";
 					let now = new Date();
-					let daysAgo = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(timeObj.getFullYear(), timeObj.getMonth(), timeObj.getDate()))/(1000*60*60*24));
-					
+					let hour = timeObj.getHours(), minute = timeObj.getMinutes(), second = timeObj.getSeconds(), msecond = timeObj.getMilliseconds(), day = timeObj.getDate(), month = timeObj.getMonth()+1, timemode = "", daysago = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(timeObj.getFullYear(), timeObj.getMonth(), timeObj.getDate()))/(1000*60*60*24));
 					if (formats[isTooltip ? "ownFormatTool" : "ownFormat"].indexOf("$timemode") > -1) {
-						timeMode = hours >= 12 ? "PM" : "AM";
-						hours = hours % 12;
-						hours = hours ? hours : 12;
+						timemode = hour >= 12 ? "PM" : "AM";
+						hour = hour % 12;
+						hour = hour ? hour : 12;
 					}
-					timeString = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(formats[isTooltip ? "ownFormatTool" : "ownFormat"]
-						.replace(/\$hour/g, settings.forceZeros && hours < 10 ? "0" + hours : hours)
-						.replace(/\$minute/g, minutes < 10 ? "0" + minutes : minutes)
-						.replace(/\$second/g, seconds < 10 ? "0" + seconds : seconds)
-						.replace(/\$msecond/g, settings.forceZeros ? (milliSeconds < 10 ? "00" + milliSeconds : (milliSeconds < 100 ? "0" + milliSeconds : milliSeconds)) : milliSeconds)
-						.replace(/\$timemode/g, timeMode)
+					timeString = formats[isTooltip ? "ownFormatTool" : "ownFormat"]
+						.replace(/\$hour/g, settings.forceZeros && hour < 10 ? "0" + hour : hour)
+						.replace(/\$minute/g, minute < 10 ? "0" + minute : minute)
+						.replace(/\$second/g, second < 10 ? "0" + second : second)
+						.replace(/\$msecond/g, settings.forceZeros ? (msecond < 10 ? "00" + msecond : (msecond < 100 ? "0" + msecond : msecond)) : msecond)
+						.replace(/\$timemode/g, timemode)
 						.replace(/\$weekdayL/g, timeObj.toLocaleDateString(languageId, {weekday: "long"}))
 						.replace(/\$weekdayS/g, timeObj.toLocaleDateString(languageId, {weekday: "short"}))
 						.replace(/\$monthnameL/g, timeObj.toLocaleDateString(languageId, {month: "long"}))
 						.replace(/\$monthnameS/g, timeObj.toLocaleDateString(languageId, {month: "short"}))
-						.replace(/\$daysago/g, amounts.maxDaysAgo == 0 || amounts.maxDaysAgo >= daysAgo ? (daysAgo > 1 ? BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", daysAgo) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`]) : "")
+						.replace(/\$daysago/g, amounts.maxDaysAgo == 0 || amounts.maxDaysAgo >= daysago ? (daysago > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", daysago) : BDFDB.LanguageUtils.LanguageStrings.SEARCH_SHORTCUT_TODAY) : "")
 						.replace(/\$day/g, settings.forceZeros && day < 10 ? "0" + day : day)
 						.replace(/\$month/g, settings.forceZeros && month < 10 ? "0" + month : month)
 						.replace(/\$yearS/g, parseInt(timeObj.getFullYear().toString().slice(-2)))
 						.replace(/\$year/g, timeObj.getFullYear())
-						.trim().split(" ").filter(n => n).join(" "));
+						.trim().split(" ").filter(n => n).join(" ");
 				}
 				return timeString;
 			}
