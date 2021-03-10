@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.4
+ * @version 1.4.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -22,15 +22,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.4.4",
+			"version": "1.4.5",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
-		"changeLog": {
-			"progress": {
-				"Crash Issue": "If you encounter a crash while using the chat textarea to write a message, then you'll need to reinstall BD, this has nothing to do with any plugins"
-			}
-		}
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
 	};
 	
 	const DiscordObjects = {};
@@ -5438,9 +5433,9 @@ module.exports = (_ => {
 							disabled: props.isDisabled,
 							onClick: _ => {
 								if (!props.isSelected) {
-									let color = props.isCustom && props.color == null ? (props.swatches.props.selectedColor || "rgba(0, 0, 0, 1)") : props.color;
+									let color = props.isCustom && props.color == null ? (props.swatches.props.color || "rgba(0, 0, 0, 1)") : props.color;
 									if (typeof props.swatches.props.onColorChange == "function") props.swatches.props.onColorChange(BDFDB.ColorUtils.convert(color, "RGBCOMP"));
-									props.swatches.props.selectedColor = color;
+									props.swatches.props.color = color;
 									props.swatches.props.customColor = props.isCustom ? color : props.swatches.props.customColor;
 									props.swatches.props.customSelected = props.isCustom;
 									BDFDB.ReactUtils.forceUpdate(props.swatches);
@@ -5480,13 +5475,13 @@ module.exports = (_ => {
 							align: InternalComponents.LibraryComponents.PopoutContainer.Align.CENTER,
 							renderPopout: _ => {
 								return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ColorPicker, Object.assign({}, props.pickerConfig, {
-									color: props.swatches.props.selectedColor,
+									color: props.swatches.props.color,
 									onColorChange: color => {
 										let comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
 										if (typeof props.swatches.props.onColorChange == "function") props.swatches.props.onColorChange(comp);
 										if (props.pickerConfig && typeof props.pickerConfig.onColorChange == "function") props.pickerConfig.onColorChange(comp);
 										props.color = color;
-										props.swatches.props.selectedColor = color;
+										props.swatches.props.color = color;
 										props.swatches.props.customColor = color;
 										props.swatches.props.customSelected = true;
 										BDFDB.ReactUtils.forceUpdate(props.swatches);
@@ -5509,17 +5504,17 @@ module.exports = (_ => {
 									swatches: this,
 									color: color,
 									isCustom: false,
-									isSelected: !this.props.customSelected && color === this.props.selectedColor,
+									isSelected: !this.props.customSelected && color == this.props.color,
 									isDisabled: this.props.disabled
 								})
 							})
 						});
 					}
 					render() {
-						this.props.selectedColor = this.props.selectedColor || (BDFDB.ObjectUtils.is(this.props.color) ? this.props.color : BDFDB.ColorUtils.convert(this.props.color, "RGBA"));
+						this.props.color = BDFDB.ObjectUtils.is(this.props.color) ? this.props.color : BDFDB.ColorUtils.convert(this.props.color, "RGBA");
 						this.props.colors = (BDFDB.ArrayUtils.is(this.props.colors) ? this.props.colors : [null, 5433630, 3066993, 1752220, 3447003, 3429595, 8789737, 10181046, 15277667, 15286558, 15158332, 15105570, 15844367, 13094093, 7372936, 6513507, 16777215, 3910932, 2067276, 1146986, 2123412, 2111892, 7148717, 7419530, 11342935, 11345940, 10038562, 11027200, 12745742, 9936031, 6121581, 2894892]).map(c => BDFDB.ColorUtils.convert(c, "RGBA"));
 						this.props.colorRows = this.props.colors.length ? [this.props.colors.slice(0, parseInt(this.props.colors.length/2)), this.props.colors.slice(parseInt(this.props.colors.length/2))] : [];
-						this.props.customColor = !this.props.selectedColor || !this.props.customSelected && this.props.colors.indexOf(this.props.selectedColor) > -1 ? null : this.props.selectedColor;
+						this.props.customColor = !this.props.color || !this.props.customSelected && this.props.colors.indexOf(this.props.color) > -1 ? null : this.props.color;
 						this.props.customSelected = !!this.props.customColor;
 						this.props.pickerConfig = BDFDB.ObjectUtils.is(this.props.pickerConfig) ? this.props.pickerConfig : {gradient: true, alpha: true};
 						
