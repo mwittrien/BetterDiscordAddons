@@ -332,7 +332,7 @@ module.exports = (_ => {
 			getTimestamp (languageId, time) {
 				return BDFDB.StringUtils.formatTime(time, Object.assign({
 					language: languageId,
-					formatString: languageId != "own" && formats.ownFormat
+					formatString: languageId == "own" && formats.ownFormat
 				}, settings, amounts));
 			}
 

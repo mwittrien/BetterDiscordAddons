@@ -383,7 +383,7 @@ module.exports = (_ => {
 				return BDFDB.TimeUtils.suppress(_ => {
 					return BDFDB.StringUtils.formatTime(time, Object.assign({
 						language: languageId,
-						formatString: languageId != "own" && (formats[isTooltip ? "ownFormatTool" : "ownFormat"])
+						formatString: languageId == "own" && (formats[isTooltip ? "ownFormatTool" : "ownFormat"])
 					}, settings, amounts));
 				}, "Failed to create Timestamp!", config.info)() || "Failed Timestamp";
 			}
