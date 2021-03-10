@@ -3918,16 +3918,14 @@ module.exports = (_ => {
 					}
 					else return original;
 				};
-				BDFDB.StringUtils.formatTime = function (formatString, time, config = {}) {
-					if (!formatString || typeof formatString != "string") return "";
+				BDFDB.StringUtils.formatTime = function (time, config = {}) {
 					let timeObj = time || new Date();
 					if (typeof time == "string" || typeof time == "number") timeObj = new Date(time);
 					if (timeObj.toString() == "Invalid Date") timeObj = new Date(parseInt(time));
 					if (timeObj.toString() == "Invalid Date" || typeof timeObj.toLocaleDateString != "function") return "";
 					
-					let languageId = config.language || BDFDB.LanguageUtils.getLanguage().id;
-					let timeString = "";
-					if (languageId != "own") {
+					let languageId = config.language && BDFDB.LanguageUtils.languages[config.language] ? config.language : BDFDB.LanguageUtils.getLanguage().id, timeString = "";
+					if (typeof config.formatString != "string") {
 						const cutOffSeconds = string => {
 							return string.replace(/(.{1,2}:.{1,2}):.{1,2}(.*)/, "$1$2").replace(/(.{1,2}\..{1,2})\..{1,2}(.*)/, "$1$2").replace(/(.{1,2} h .{1,2} min) .{1,2} s(.*)/, "$1$2");
 						};
@@ -3945,7 +3943,6 @@ module.exports = (_ => {
 						if (timeString && config.forceZeros) timeString = addLeadingZeros(timeString);
 					}
 					else {
-						languageId = BDFDB.LanguageUtils.getLanguage().id;
 						let hours = timeObj.getHours();
 						let minutes = timeObj.getMinutes();
 						let seconds = timeObj.getSeconds();
@@ -3958,12 +3955,12 @@ module.exports = (_ => {
 						let now = new Date();
 						let daysAgo = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(timeObj.getFullYear(), timeObj.getMonth(), timeObj.getDate()))/(1000*60*60*24));
 						
-						if (formatString.indexOf("$timemode") > -1) {
+						if (config.formatString.indexOf("$timemode") > -1) {
 							timeMode = hours >= 12 ? "PM" : "AM";
 							hours = hours % 12;
 							hours = hours ? hours : 12;
 						}
-						timeString = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(formatString
+						timeString = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(config.formatString
 							.replace(/\$hour/g, config.forceZeros && hours < 10 ? "0" + hours : hours)
 							.replace(/\$minute/g, minutes < 10 ? "0" + minutes : minutes)
 							.replace(/\$second/g, seconds < 10 ? "0" + seconds : seconds)

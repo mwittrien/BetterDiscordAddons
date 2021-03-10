@@ -379,60 +379,12 @@ module.exports = (_ => {
 			}
 
 			getTimestamp (languageId, time, isTooltip) {
-				let timeObj = time || new Date();
-				if (typeof time == "string" || typeof time == "number") timeObj = new Date(time);
-				if (timeObj.toString() == "Invalid Date") timeObj = new Date(parseInt(time));
-				if (timeObj.toString() == "Invalid Date" || typeof timeObj.toLocaleDateString != "function") return;
-				let timeString = "";
-				if (languageId != "own") {
-					let timestamp = [];
-					if (settings.displayDate) 	timestamp.push(timeObj.toLocaleDateString(languageId));
-					if (settings.displayTime) 	timestamp.push(settings.cutSeconds ? this.cutOffSeconds(timeObj.toLocaleTimeString(languageId)) : timeObj.toLocaleTimeString(languageId));
-					if (settings.otherOrder)	timestamp.reverse();
-					timeString = timestamp.length > 1 ? timestamp.join(", ") : (timestamp.length > 0 ? timestamp[0] : "");
-					if (timeString && settings.forceZeros) timeString = this.addLeadingZeros(timeString);
-				}
-				else {
-					languageId = BDFDB.LanguageUtils.getLanguage().id;
-					let now = new Date();
-					let hour = timeObj.getHours(), minute = timeObj.getMinutes(), second = timeObj.getSeconds(), msecond = timeObj.getMilliseconds(), day = timeObj.getDate(), month = timeObj.getMonth()+1, timemode = "", daysago = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(timeObj.getFullYear(), timeObj.getMonth(), timeObj.getDate()))/(1000*60*60*24));
-					if (formats[isTooltip ? "ownFormatTool" : "ownFormat"].indexOf("$timemode") > -1) {
-						timemode = hour >= 12 ? "PM" : "AM";
-						hour = hour % 12;
-						hour = hour ? hour : 12;
-					}
-					timeString = formats[isTooltip ? "ownFormatTool" : "ownFormat"]
-						.replace(/\$hour/g, settings.forceZeros && hour < 10 ? "0" + hour : hour)
-						.replace(/\$minute/g, minute < 10 ? "0" + minute : minute)
-						.replace(/\$second/g, second < 10 ? "0" + second : second)
-						.replace(/\$msecond/g, settings.forceZeros ? (msecond < 10 ? "00" + msecond : (msecond < 100 ? "0" + msecond : msecond)) : msecond)
-						.replace(/\$timemode/g, timemode)
-						.replace(/\$weekdayL/g, timeObj.toLocaleDateString(languageId, {weekday: "long"}))
-						.replace(/\$weekdayS/g, timeObj.toLocaleDateString(languageId, {weekday: "short"}))
-						.replace(/\$monthnameL/g, timeObj.toLocaleDateString(languageId, {month: "long"}))
-						.replace(/\$monthnameS/g, timeObj.toLocaleDateString(languageId, {month: "short"}))
-						.replace(/\$daysago/g, amounts.maxDaysAgo == 0 || amounts.maxDaysAgo >= daysago ? (daysago > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", daysago) : BDFDB.LanguageUtils.LanguageStrings.SEARCH_SHORTCUT_TODAY) : "")
-						.replace(/\$day/g, settings.forceZeros && day < 10 ? "0" + day : day)
-						.replace(/\$month/g, settings.forceZeros && month < 10 ? "0" + month : month)
-						.replace(/\$yearS/g, parseInt(timeObj.getFullYear().toString().slice(-2)))
-						.replace(/\$year/g, timeObj.getFullYear())
-						.trim().split(" ").filter(n => n).join(" ");
-				}
-				return timeString;
-			}
-
-			cutOffSeconds (timeString) {
-				return timeString.replace(/(.{1,2}:.{1,2}):.{1,2}(.*)/, "$1$2").replace(/(.{1,2}\..{1,2})\..{1,2}(.*)/, "$1$2").replace(/(.{1,2} h .{1,2} min) .{1,2} s(.*)/, "$1$2");
-			}
-
-			addLeadingZeros (timeString) {
-				let charArray = timeString.split("");
-				let numreg = /[0-9]/;
-				for (let i = 0; i < charArray.length; i++) {
-					if (!numreg.test(charArray[i-1]) && numreg.test(charArray[i]) && !numreg.test(charArray[i+1])) charArray[i] = "0" + charArray[i];
-				}
-
-				return charArray.join("");
+				return BDFDB.TimeUtils.suppress(_ => {
+					return BDFDB.StringUtils.formatTime(time, Object.assign({
+						language: languageId,
+						formatString: formats[isTooltip ? "ownFormatTool" : "ownFormat"]
+					}, settings, amounts));
+				}, "Failed to create Timestamp!", config.info)() || "Failed Timestamp";
 			}
 			
 			setMaxWidth (timestamp, compact) {
