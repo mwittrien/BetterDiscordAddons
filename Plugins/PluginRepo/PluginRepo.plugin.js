@@ -9,7 +9,7 @@
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://mwittrien.github.io/
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PluginRepo/
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginRepo/PluginRepo.plugin.js
+ * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/PluginRepo.plugin.js
  */
 
 module.exports = (_ => {

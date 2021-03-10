@@ -9,7 +9,7 @@
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://mwittrien.github.io/
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RevealAllSpoilersOption/
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/RevealAllSpoilersOption/RevealAllSpoilersOption.plugin.js
+ * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/RevealAllSpoilersOption/RevealAllSpoilersOption.plugin.js
  */
 
 module.exports = (_ => {

@@ -9,7 +9,7 @@
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://mwittrien.github.io/
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleTranslateOption/
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/GoogleTranslateOption/GoogleTranslateOption.plugin.js
+ * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/GoogleTranslateOption/GoogleTranslateOption.plugin.js
  */
 
 module.exports = (_ => {

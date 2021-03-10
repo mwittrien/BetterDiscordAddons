@@ -9,7 +9,7 @@
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://mwittrien.github.io/
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveBlockedMessages/
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/RemoveBlockedMessages/RemoveBlockedMessages.plugin.js
+ * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/RemoveBlockedMessages/RemoveBlockedMessages.plugin.js
  */
 
 module.exports = (_ => {

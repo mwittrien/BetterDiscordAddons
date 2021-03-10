@@ -9,7 +9,7 @@
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://mwittrien.github.io/
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SteamProfileLink/
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/SteamProfileLink/SteamProfileLink.plugin.js
+ * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/SteamProfileLink/SteamProfileLink.plugin.js
  */
 
 module.exports = (_ => {

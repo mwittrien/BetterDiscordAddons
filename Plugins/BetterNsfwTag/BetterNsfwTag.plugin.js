@@ -9,7 +9,7 @@
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://mwittrien.github.io/
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterNsfwTag/
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterNsfwTag/BetterNsfwTag.plugin.js
+ * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/BetterNsfwTag/BetterNsfwTag.plugin.js
  */
 
 module.exports = (_ => {

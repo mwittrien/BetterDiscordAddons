@@ -9,7 +9,7 @@
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://mwittrien.github.io/
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CompleteTimestamps/
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CompleteTimestamps/CompleteTimestamps.plugin.js
+ * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/CompleteTimestamps/CompleteTimestamps.plugin.js
  */
 
 module.exports = (_ => {

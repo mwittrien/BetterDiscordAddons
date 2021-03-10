@@ -9,7 +9,7 @@
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://mwittrien.github.io/
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayServersAsChannels/
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/DisplayServersAsChannels/DisplayServersAsChannels.plugin.js
+ * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/DisplayServersAsChannels/DisplayServersAsChannels.plugin.js
  */
 
 module.exports = (_ => {

@@ -9,7 +9,7 @@
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://mwittrien.github.io/
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Library/
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Library/0BDFDB.plugin.js
+ * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js
  */
 
 module.exports = (_ => {
@@ -25,7 +25,7 @@ module.exports = (_ => {
 			"version": "1.4.4",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `${myGithub}/Library/0BDFDB.plugin.js`,
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
 		"changeLog": {
 			"progress": {
 				"Crash Issue": "If you encounter a crash while using the chat textarea to write a message, then you'll need to reinstall BD, this has nothing to do with any plugins"
@@ -998,7 +998,7 @@ module.exports = (_ => {
 						if (plugin.rawUrl) return plugin.rawUrl;
 						else {
 							let name = InternalData && InternalData.PluginNameMap && InternalData.PluginNameMap[plugin.name] || plugin.name;
-							return `${myGithub}/Plugins/${name}/${name}.plugin.js`;
+							return `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${name}/${name}.plugin.js`;
 						}
 					}
 					else return "";
@@ -7729,7 +7729,7 @@ module.exports = (_ => {
 				}
 				
 				BDFDB.PatchUtils.patch(BDFDB, LibraryModules.GuildStore, "getGuild", {after: e => {
-					if (e.returnValue && e.methodArguments[0] == InternalData.myGuildId) e.returnValue.banner = `${myGithub}/Library/_res/BDFDB.banner.png`;
+					if (e.returnValue && e.methodArguments[0] == InternalData.myGuildId) e.returnValue.banner = `https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.banner.png`;
 				}});
 
 				BDFDB.PatchUtils.patch(BDFDB, LibraryModules.IconUtils, "getGuildBannerURL", {instead: e => {

@@ -9,7 +9,7 @@
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://mwittrien.github.io/
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/JoinedAtDate/
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/JoinedAtDate/JoinedAtDate.plugin.js
+ * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/JoinedAtDate/JoinedAtDate.plugin.js
  */
 
 module.exports = (_ => {

@@ -9,7 +9,7 @@
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://mwittrien.github.io/
  * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/UserNotes/
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/UserNotes/UserNotes.plugin.js
+ * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/UserNotes/UserNotes.plugin.js
  */
 
 module.exports = (_ => {
