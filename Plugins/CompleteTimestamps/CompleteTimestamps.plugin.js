@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.3
+ * @version 1.5.4
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "CompleteTimestamps",
 			"author": "DevilBro",
-			"version": "1.5.3",
+			"version": "1.5.4",
 			"description": "Replaces Timestamps with your own custom Timestamps"
 		},
 		"changeLog": {
@@ -382,7 +382,7 @@ module.exports = (_ => {
 				let timeObj = time || new Date();
 				if (typeof time == "string" || typeof time == "number") timeObj = new Date(time);
 				if (timeObj.toString() == "Invalid Date") timeObj = new Date(parseInt(time));
-				if (timeObj.toString() == "Invalid Date" || timeObj.constructor != Date) return;
+				if (timeObj.toString() == "Invalid Date" || typeof timeObj.toLocaleDateString != "function") return;
 				let timeString = "";
 				if (languageId != "own") {
 					let timestamp = [];
