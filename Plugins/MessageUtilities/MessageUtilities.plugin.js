@@ -409,7 +409,6 @@ module.exports = (_ => {
 			doReply ({messageDiv, message}, action) {
 				if (message.state == BDFDB.DiscordConstants.MessageStates.SENT) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
-						console.log(message);
 					if (channel && (BDFDB.DMUtils.isDMChannel(channel.id) || BDFDB.UserUtils.can("SEND_MESSAGES")) && (message.type == BDFDB.DiscordConstants.MessageTypes.DEFAULT || message.type == BDFDB.DiscordConstants.MessageTypes.REPLY)) {
 						BDFDB.LibraryModules.MessageManageUtils.replyToMessage(channel, message);
 						if (toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.NOTIFICATION_REPLY), {type: "success"});
