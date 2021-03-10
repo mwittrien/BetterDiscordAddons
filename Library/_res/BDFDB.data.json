@@ -110,6 +110,7 @@
 		"StreamUtils": {"props": ["getActiveStreamForUser", "getAllApplicationStreams"]},
 		"StringUtils": {"props": ["cssValueToNumber", "upperCaseFirstChar"]},
 		"TimestampUtils": {"props": ["fromTimestamp", "extractTimestamp"]},
+		"TimeUtils": {"props": ["calendarFormat", "dateFormat"]},
 		"UnreadGuildUtils": {"props": ["hasUnread", "getUnreadGuilds"]},
 		"UnreadChannelUtils": {"props": ["getUnreadCount", "getOldestUnreadMessageId"]},
 		"UploadUtils": {"props": ["upload", "instantBatchUpload"]},
