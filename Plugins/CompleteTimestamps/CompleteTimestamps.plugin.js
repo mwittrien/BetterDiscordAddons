@@ -84,7 +84,8 @@ module.exports = (_ => {
 						displayDate:			{value: true, 			description: "Display the Date in Timestamps"},
 						cutSeconds:				{value: false, 			description: "Cut off Seconds of the Time"},
 						forceZeros:				{value: false, 			description: "Force leading Zeros"},
-						otherOrder:				{value: false, 			description: "Show the Time before the Date"}
+						otherOrder:				{value: false, 			description: "Show the Time before the Date"},
+						useDateInDaysAgo:		{value: false, 			description: "Use the Date instead of 'x days ago' in $daysago Placeholder"}
 					},
 					choices: {
 						timestampLang:			{value: "$discord", 	description: "Chat Timestamp Format"},

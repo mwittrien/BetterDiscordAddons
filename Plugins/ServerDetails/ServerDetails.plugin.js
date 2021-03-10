@@ -166,18 +166,21 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					settings: {
-						cutSeconds:			{value: false, 		cat: "settings",	description: "Cut off seconds of the time"},
-						forceZeros:			{value: false, 		cat: "settings",	description: "Force leading zeros"},
-						otherOrder:			{value: false, 		cat: "settings",	description: "Show the time before the date"},
-						addIcon:			{value: true, 		cat: "tooltip",	description: "GUILD_CREATE_UPLOAD_ICON_LABEL"},
-						addOwner:			{value: true, 		cat: "tooltip",	description: "GUILD_OWNER"},
-						addCreation:		{value: true, 		cat: "tooltip",	description: "creation_date"},
-						addJoin:			{value: true, 		cat: "tooltip",	description: "join_date"},
-						addMembers:			{value: true, 		cat: "tooltip",	description: "MEMBERS"},
-						addChannels:		{value: true, 		cat: "tooltip",	description: "CHANNELS"},
-						addRoles:			{value: true, 		cat: "tooltip",	description: "ROLES"},
-						addBoosters:		{value: true, 		cat: "tooltip",	description: "SUBSCRIPTIONS_TITLE"},
-						addRegion:			{value: true, 		cat: "tooltip",	description: "REGION"}
+						displayTime:		{value: false, 		cat: "settings",	description: "Display the Time in the Timestamp"},
+						displayDate:		{value: true, 		cat: "settings",	description: "Display the Date in the Timestamp"},
+						cutSeconds:			{value: false, 		cat: "settings",	description: "Cut off Seconds of the Time"},
+						forceZeros:			{value: false, 		cat: "settings",	description: "Force leading Zeros"},
+						otherOrder:			{value: false, 		cat: "settings",	description: "Show the Time before the Date"},
+						useDateInDaysAgo:	{value: false, 		cat: "settings",	description: "Use the Date instead of 'x days ago' in $daysago Placeholder"},
+						addIcon:			{value: true, 		cat: "tooltip",		description: "GUILD_CREATE_UPLOAD_ICON_LABEL"},
+						addOwner:			{value: true, 		cat: "tooltip",		description: "GUILD_OWNER"},
+						addCreation:		{value: true, 		cat: "tooltip",		description: "creation_date"},
+						addJoin:			{value: true, 		cat: "tooltip",		description: "join_date"},
+						addMembers:			{value: true, 		cat: "tooltip",		description: "MEMBERS"},
+						addChannels:		{value: true, 		cat: "tooltip",		description: "CHANNELS"},
+						addRoles:			{value: true, 		cat: "tooltip",		description: "ROLES"},
+						addBoosters:		{value: true, 		cat: "tooltip",		description: "SUBSCRIPTIONS_TITLE"},
+						addRegion:			{value: true, 		cat: "tooltip",		description: "REGION"}
 					},
 					colors: {
 						tooltipColor:		{value: "", 					description: "Tooltip Color"}
@@ -189,9 +192,9 @@ module.exports = (_ => {
 						ownFormat:			{value: "$hour: $minute: $second, $day.$month.$year", 	description: "Own Format"}
 					},
 					amounts: {
-						tooltipDelay:		{value: 0,	cat: "tooltip",	 min: 0,		max: 10,		digits: 1,	unit: "s",	description: "Details Tooltip Delay"},
+						tooltipDelay:		{value: 0,		cat: "tooltip",	 min: 0,	max: 10,	digits: 1,	unit: "s",	description: "Details Tooltip Delay"},
 						tooltipWidth:		{value: 300,	cat: "tooltip",	 min: 200,	max: 600,	digits: 0,	unit: "px",	description: "Details Tooltip Width"},
-						maxDaysAgo:			{value: 0,	cat: "format",	 min: 0,		description: "Maximum count of days displayed in the $daysago placeholder",	note: "0 equals no limit"}
+						maxDaysAgo:			{value: 0,		cat: "format",	 min: 0,	description: "Maximum Count of Days displayed in the $daysago Placeholder",	note: "0 equals no Limit"}
 					}
 				};
 			
@@ -472,46 +475,10 @@ module.exports = (_ => {
 			}
 
 			getTimestamp (languageId, time) {
-				let timeObj = time || new Date();
-				if (typeof time == "string" || typeof time == "number") timeObj = new Date(time);
-				if (timeObj.toString() == "Invalid Date") timeObj = new Date(parseInt(time));
-				if (timeObj.toString() == "Invalid Date") return;
-				let timeString = "";
-				if (languageId != "own") {
-					let timestamp = [];
-					timestamp.push(timeObj.toLocaleDateString(languageId));
-					timestamp.push(settings.cutSeconds ? this.cutOffSeconds(timeObj.toLocaleTimeString(languageId)) : timeObj.toLocaleTimeString(languageId));
-					if (settings.otherOrder) timestamp.reverse();
-					timeString = timestamp.length > 1 ? timestamp.join(", ") : (timestamp.length > 0 ? timestamp[0] : "");
-					if (timeString && settings.forceZeros) timeString = this.addLeadingZeros(timeString);
-				}
-				else {
-					languageId = BDFDB.LanguageUtils.getLanguage().id;
-					let now = new Date();
-					let hour = timeObj.getHours(), minute = timeObj.getMinutes(), second = timeObj.getSeconds(), msecond = timeObj.getMilliseconds(), day = timeObj.getDate(), month = timeObj.getMonth()+1, timemode = "", daysago = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(timeObj.getFullYear(), timeObj.getMonth(), timeObj.getDate()))/(1000*60*60*24));
-					if (formats.ownFormat.indexOf("$timemode") > -1) {
-						timemode = hour >= 12 ? "PM" : "AM";
-						hour = hour % 12;
-						hour = hour ? hour : 12;
-					}
-					timeString = formats.ownFormat
-						.replace(/\$hour/g, settings.forceZeros && hour < 10 ? "0" + hour : hour)
-						.replace(/\$minute/g, minute < 10 ? "0" + minute : minute)
-						.replace(/\$second/g, second < 10 ? "0" + second : second)
-						.replace(/\$msecond/g, settings.forceZeros ? (msecond < 10 ? "00" + msecond : (msecond < 100 ? "0" + msecond : msecond)) : msecond)
-						.replace(/\$timemode/g, timemode)
-						.replace(/\$weekdayL/g, timeObj.toLocaleDateString(languageId, {weekday: "long"}))
-						.replace(/\$weekdayS/g, timeObj.toLocaleDateString(languageId, {weekday: "short"}))
-						.replace(/\$monthnameL/g, timeObj.toLocaleDateString(languageId, {month: "long"}))
-						.replace(/\$monthnameS/g, timeObj.toLocaleDateString(languageId, {month: "short"}))
-						.replace(/\$daysago/g, amounts.maxDaysAgo == 0 || amounts.maxDaysAgo >= daysago ? (daysago > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", daysago) : BDFDB.LanguageUtils.LanguageStrings.SEARCH_SHORTCUT_TODAY) : "")
-						.replace(/\$day/g, settings.forceZeros && day < 10 ? "0" + day : day)
-						.replace(/\$month/g, settings.forceZeros && month < 10 ? "0" + month : month)
-						.replace(/\$yearS/g, parseInt(timeObj.getFullYear().toString().slice(-2)))
-						.replace(/\$year/g, timeObj.getFullYear())
-						.trim().split(" ").filter(n => n).join(" ");
-				}
-				return timeString;
+				return BDFDB.StringUtils.formatTime(time, Object.assign({
+					language: languageId,
+					formatString: formats.ownFormat
+				}, settings, amounts));
 			}
 
 			cutOffSeconds (timeString) {

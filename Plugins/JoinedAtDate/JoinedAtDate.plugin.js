@@ -82,7 +82,8 @@ module.exports = (_ => {
 						displayDate:			{value: true, 			description: "Display the Date in the Timestamp"},
 						cutSeconds:				{value: false, 			description: "Cut off Seconds of the Time"},
 						forceZeros:				{value: false, 			description: "Force leading Zeros"},
-						otherOrder:				{value: false, 			description: "Show the Time before the Date"}
+						otherOrder:				{value: false, 			description: "Show the Time before the Date"},
+						useDateInDaysAgo:		{value: false, 			description: "Use the Date instead of 'x days ago' in $daysago Placeholder"}
 					},
 					choices: {
 						joinedAtDateLang:		{value: "$discord", 	description: "Joined At Date Format"}
@@ -302,46 +303,10 @@ module.exports = (_ => {
 			}
 
 			getTimestamp (languageId, time) {
-				let timeObj = time || new Date();
-				if (typeof time == "string" || typeof time == "number") timeObj = new Date(time);
-				if (timeObj.toString() == "Invalid Date") timeObj = new Date(parseInt(time));
-				if (timeObj.toString() == "Invalid Date") return;
-				let timeString = "";
-				if (languageId != "own") {
-					let timestamp = [];
-					if (settings.displayDate) 	timestamp.push(timeObj.toLocaleDateString(languageId));
-					if (settings.displayTime) 	timestamp.push(settings.cutSeconds ? this.cutOffSeconds(timeObj.toLocaleTimeString(languageId)) : timeObj.toLocaleTimeString(languageId));
-					if (settings.otherOrder)	timestamp.reverse();
-					timeString = timestamp.length > 1 ? timestamp.join(", ") : (timestamp.length > 0 ? timestamp[0] : "");
-					if (timeString && settings.forceZeros) timeString = this.addLeadingZeros(timeString);
-				}
-				else {
-					languageId = BDFDB.LanguageUtils.getLanguage().id;
-					let now = new Date();
-					let hour = timeObj.getHours(), minute = timeObj.getMinutes(), second = timeObj.getSeconds(), msecond = timeObj.getMilliseconds(), day = timeObj.getDate(), month = timeObj.getMonth()+1, timemode = "", daysago = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(timeObj.getFullYear(), timeObj.getMonth(), timeObj.getDate()))/(1000*60*60*24));
-					if (formats.ownFormat.indexOf("$timemode") > -1) {
-						timemode = hour >= 12 ? "PM" : "AM";
-						hour = hour % 12;
-						hour = hour ? hour : 12;
-					}
-					timeString = formats.ownFormat
-						.replace(/\$hour/g, settings.forceZeros && hour < 10 ? "0" + hour : hour)
-						.replace(/\$minute/g, minute < 10 ? "0" + minute : minute)
-						.replace(/\$second/g, second < 10 ? "0" + second : second)
-						.replace(/\$msecond/g, settings.forceZeros ? (msecond < 10 ? "00" + msecond : (msecond < 100 ? "0" + msecond : msecond)) : msecond)
-						.replace(/\$timemode/g, timemode)
-						.replace(/\$weekdayL/g, timeObj.toLocaleDateString(languageId, {weekday: "long"}))
-						.replace(/\$weekdayS/g, timeObj.toLocaleDateString(languageId, {weekday: "short"}))
-						.replace(/\$monthnameL/g, timeObj.toLocaleDateString(languageId, {month: "long"}))
-						.replace(/\$monthnameS/g, timeObj.toLocaleDateString(languageId, {month: "short"}))
-						.replace(/\$daysago/g, amounts.maxDaysAgo == 0 || amounts.maxDaysAgo >= daysago ? (daysago > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", daysago) : BDFDB.LanguageUtils.LanguageStrings.SEARCH_SHORTCUT_TODAY) : "")
-						.replace(/\$day/g, settings.forceZeros && day < 10 ? "0" + day : day)
-						.replace(/\$month/g, settings.forceZeros && month < 10 ? "0" + month : month)
-						.replace(/\$yearS/g, parseInt(timeObj.getFullYear().toString().slice(-2)))
-						.replace(/\$year/g, timeObj.getFullYear())
-						.trim().split(" ").filter(n => n).join(" ");
-				}
-				return timeString;
+				return BDFDB.StringUtils.formatTime(time, Object.assign({
+					language: languageId,
+					formatString: formats.ownFormat
+				}, settings, amounts));
 			}
 
 			cutOffSeconds (timeString) {
