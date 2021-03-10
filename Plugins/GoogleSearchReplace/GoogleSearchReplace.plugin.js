@@ -82,6 +82,7 @@ module.exports = (_ => {
 						GoogleScholar: 		{value: true, 	name: "Google Scholar", 		url: "https://scholar.google.com/scholar?q=" + textUrlReplaceString},
 						Quora: 				{value: true, 	name: "Quora", 					url: "https://www.quora.com/search?q=" + textUrlReplaceString},
 						Qwant: 				{value: true, 	name: "Qwant", 					url: "https://www.qwant.com/?t=all&q=" + textUrlReplaceString},
+						Startpage: 			{value: true, 	name: "Startpage", 				url: "https://www.startpage.com/sp/search?q=" + textUrlReplaceString},
 						UrbanDictionary: 	{value: true, 	name: "Urban Dictionary", 		url: "https://www.urbandictionary.com/define.php?term=" + textUrlReplaceString},
 						Searx: 				{value: true, 	name: "Searx", 					url: "https://searx.info/?q=" + textUrlReplaceString},
 						WolframAlpha:		{value: true, 	name: "Wolfram Alpha", 			url: "https://www.wolframalpha.com/input/?i=" + textUrlReplaceString},
