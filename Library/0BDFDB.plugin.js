@@ -3925,7 +3925,7 @@ module.exports = (_ => {
 					if (timeObj.toString() == "Invalid Date" || typeof timeObj.toLocaleDateString != "function") return "";
 					
 					let languageId = config.language && BDFDB.LanguageUtils.languages[config.language] ? config.language : BDFDB.LanguageUtils.getLanguage().id, timeString = "";
-					if (typeof config.formatString != "string") {
+					if (!config.formatString || typeof config.formatString != "string") {
 						const cutOffSeconds = string => {
 							return string.replace(/(.{1,2}:.{1,2}):.{1,2}(.*)/, "$1$2").replace(/(.{1,2}\..{1,2})\..{1,2}(.*)/, "$1$2").replace(/(.{1,2} h .{1,2} min) .{1,2} s(.*)/, "$1$2");
 						};
