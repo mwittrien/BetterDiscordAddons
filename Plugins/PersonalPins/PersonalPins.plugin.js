@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.0
+ * @version 2.0.2
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "PersonalPins",
 			"author": "DevilBro",
-			"version": "2.0.1",
+			"version": "2.0.2",
 			"description": "Allows you to locally pin Messages"
-		},
-		"changeLog": {
-			"fixed": {
-				"Jump To": "Fixed Server not updating when jumping to a pinned Message"
-			}
 		}
 	};
 
@@ -65,6 +60,8 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
+		let _this;
+		
 		const pinIconGeneral = `<svg name="Note" width="24" height="24" viewBox="0 0 24 24"><mask/><path fill="currentColor" mask="url(#pinIconMask)" d="M 6.7285156 2 C 6.4051262 2 6.1425781 2.2615247 6.1425781 2.5859375 L 6.1425781 3.7578125 C 6.1425781 4.081202 6.4041028 4.34375 6.7285156 4.34375 C 7.0529284 4.34375 7.3144531 4.0822254 7.3144531 3.7578125 L 7.3144531 2.5859375 C 7.3144531 2.2615247 7.0529284 2 6.7285156 2 z M 10.244141 2 C 9.9207511 2 9.6582031 2.2615247 9.6582031 2.5859375 L 9.6582031 3.7578125 C 9.6582031 4.081202 9.9197277 4.34375 10.244141 4.34375 C 10.568554 4.34375 10.830078 4.0822254 10.830078 3.7578125 L 10.830078 2.5859375 C 10.830078 2.2615247 10.568554 2 10.244141 2 z M 13.759766 2 C 13.436377 2 13.173828 2.2615247 13.173828 2.5859375 L 13.173828 3.7578125 C 13.173828 4.081202 13.435354 4.34375 13.759766 4.34375 C 14.083156 4.34375 14.347656 4.0822254 14.347656 3.7578125 L 14.347656 2.5859375 C 14.346656 2.2615247 14.083156 2 13.759766 2 z M 17.275391 2 C 16.952002 2 16.689453 2.2615247 16.689453 2.5859375 L 16.689453 3.7578125 C 16.689453 4.081202 16.950979 4.34375 17.275391 4.34375 C 17.598781 4.34375 17.863281 4.0822254 17.863281 3.7578125 L 17.863281 2.5859375 C 17.862281 2.2615247 17.598781 2 17.275391 2 z M 4.9667969 3.2792969 C 4.2903399 3.5228623 3.8007813 4.1662428 3.8007812 4.9296875 L 3.8007812 20.242188 C 3.8007812 21.211333 4.5884253 22 5.5585938 22 L 18.447266 22 C 19.41641 22 20.205078 21.212356 20.205078 20.242188 L 20.205078 4.9296875 C 20.204054 4.1662428 19.713754 3.5228623 19.033203 3.2792969 L 19.033203 3.7578125 C 19.033203 4.7269575 18.245559 5.515625 17.275391 5.515625 C 16.306246 5.515625 15.517578 4.7279808 15.517578 3.7578125 C 15.517578 4.7269575 14.72798 5.515625 13.757812 5.515625 C 12.788668 5.515625 12 4.7279808 12 3.7578125 C 12 4.7269575 11.212357 5.515625 10.242188 5.515625 C 9.2730428 5.515625 8.484375 4.7279808 8.484375 3.7578125 C 8.484375 4.7269575 7.6967309 5.515625 6.7265625 5.515625 C 5.7574176 5.515625 4.9667969 4.7279808 4.9667969 3.7578125 L 4.9667969 3.2792969 z M 6.7285156 7.2734375 L 17.275391 7.2734375 C 17.598781 7.2734375 17.861328 7.5349622 17.861328 7.859375 C 17.861328 8.1837878 17.598781 8.4453125 17.275391 8.4453125 L 6.7285156 8.4453125 C 6.4051262 8.4453125 6.1425781 8.1837878 6.1425781 7.859375 C 6.1425781 7.5349622 6.4041028 7.2734375 6.7285156 7.2734375 z M 6.7285156 10.787109 L 17.275391 10.787109 C 17.598781 10.787109 17.861328 11.050587 17.861328 11.375 C 17.861328 11.699413 17.598781 11.960938 17.275391 11.960938 L 6.7285156 11.960938 C 6.4051262 11.960938 6.1425781 11.699413 6.1425781 11.375 C 6.1425781 11.050587 6.4041028 10.787109 6.7285156 10.787109 z M 6.7285156 14.380859 L 17.275391 14.380859 C 17.598781 14.380859 17.861328 14.642384 17.861328 14.966797 C 17.861328 15.29121 17.598781 15.552734 17.275391 15.552734 L 6.7285156 15.552734 C 6.4051262 15.552734 6.1425781 15.29121 6.1425781 14.966797 C 6.1425781 14.643408 6.4041028 14.380859 6.7285156 14.380859 z M 6.7285156 17.896484 L 17.275391 17.896484 C 17.598781 17.896484 17.861328 18.158009 17.861328 18.482422 C 17.861328 18.806835 17.598781 19.068359 17.275391 19.068359 L 6.7285156 19.068359 C 6.4051262 19.068359 6.1425781 18.806835 6.1425781 18.482422 C 6.1425781 18.159033 6.4041028 17.896484 6.7285156 17.896484 z"/><extra/></svg>`;
 		const pinIconMask = `<mask id="pinIconMask" fill="black"><path fill="white" d="M 0 0 H 24 V 24 H 0 Z"/><path fill="black" d="M24 12 H 12 V 24 H 24 Z"/></mask>`;
 		const pinIcon = pinIconGeneral.replace(`<extra/>`, ``).replace(`<mask/>`, ``).replace(` mask="url(#pinIconMask)"`, ``);
@@ -74,293 +71,16 @@ module.exports = (_ => {
 		const filterKeys = ["channel", "server", "all"];
 		const sortKeys = ["notetime", "messagetime"];
 		const orderKeys = ["ascending", "descending"];
-	
-		var choices = {};
-	
-		return class PersonalPins extends Plugin {
-			onLoad () {
-				this.defaults = {
-					choices: {
-						defaultFilter:		{value: filterKeys[0], 		options: filterKeys,		type: "filter",		description: "Default choice tab"},
-						defaultSort:		{value: sortKeys[0], 		options: sortKeys,		type: "sort",		description: "Default sort choice"},
-						defaultOrder:		{value: orderKeys[0], 		options: orderKeys,		type: "order",		description: "Default order choice"},
-					}
-				};
-			
-				this.patchedModules = {
-					after: {
-						HeaderBarContainer: "render"
-					}
-				};
-			}
-			
-			onStart () {
-				this.forceUpdateAll();
-			}
-			
-			onStop () {
-				this.forceUpdateAll();
-			}
-
-			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [];
-				
-				for (let key in choices) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					type: "Select",
-					plugin: this,
-					keys: ["choices", key],
-					label: this.defaults.choices[key].description,
-					basis: "50%",
-					value: choices[key],
-					options: (this.defaults.choices[key].options || []).map(option => this.getPopoutValue(option, this.defaults.choices[key].type)),
-					searchable: true
-				}));
-				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-					type: "Button",
-					color: BDFDB.LibraryComponents.Button.Colors.RED,
-					label: "Delete all notes",
-					onClick: _ => {
-						BDFDB.ModalUtils.confirm(this, "Are you sure you want to delete all pinned notes?", _ => {
-							BDFDB.DataUtils.remove(this, "notes");
-						});
-					},
-					children: BDFDB.LanguageUtils.LanguageStrings.DELETE
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
-			}
-
-			onSettingsClosed () {
-				if (this.SettingsUpdated) {
-					delete this.SettingsUpdated;
-					this.forceUpdateAll();
-				}
-			}
 		
-			forceUpdateAll () {
-				choices = BDFDB.DataUtils.get(this, "choices");
-				
-				BDFDB.PatchUtils.forceAllUpdates(this);
+		const popoutProps = {};
+	
+		const NotesPopoutComponent = class NotesPopout extends BdApi.React.Component {
+			containsSearchkey(data, key, searchKey) {
+				let value = BDFDB.ObjectUtils.get(data, key);
+				return value && value.toUpperCase().indexOf(searchKey) > -1;
 			}
-
-			onMessageContextMenu (e) {
-				if (e.instance.props.message && e.instance.props.channel) {
-					let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
-					let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Note_Message") : null;
-					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
-					if (index == -1) [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["edit", "add-reaction", "quote"]});
-					children.splice(index > -1 ? index + 1: 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: note ? this.labels.context_unpinoption : this.labels.context_pinoption,
-						id: BDFDB.ContextMenuUtils.createItemId(this.name, note ? "unpin-note" : "pin-note"),
-						hint: hint && (_ => {
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
-								hint: hint
-							});
-						}),
-						action: _ => {
-							this.addMessageToNotes(e.instance.props.message, e.instance.props.channel);
-						}
-					}));
-					if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index > -1 ? index + 1: 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.labels.context_updateoption,
-						id: BDFDB.ContextMenuUtils.createItemId(this.name, "update-note"),
-						action: _ => {
-							this.updateNoteData(note, e.instance.props.message);
-						}
-					}));
-				}
-			}
-			
-			onMessageOptionContextMenu (e) {
-				if (e.instance.props.message && e.instance.props.channel) {
-					let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
-					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
-					children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: note ? this.labels.context_unpinoption : this.labels.context_pinoption,
-						id: BDFDB.ContextMenuUtils.createItemId(this.name, note ? "unpin-note" : "pin-note"),
-						icon: _ => {
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
-								icon: note ? pinIconDelete : pinIcon
-							});
-						},
-						action: _ => {
-							this.addMessageToNotes(e.instance.props.message, e.instance.props.channel);
-						}
-					}));
-					if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.labels.context_updateoption,
-						id: "update-note",
-						icon: _ => {
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
-								icon: pinIconUpdate
-							});
-						},
-						action: _ => {
-							this.updateNoteData(note, e.instance.props.message);
-						}
-					}));
-				}
-			}
-		
-			onMessageOptionToolbar (e) {
-				if (e.instance.props.expanded && e.instance.props.message && e.instance.props.channel) {
-					let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
-					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						key: note ? "unpin-note" : "pin-note",
-						text: note ? this.labels.context_unpinoption : this.labels.context_pinoption,
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-							className: BDFDB.disCN.messagetoolbarbutton,
-							onClick: _ => {
-								this.addMessageToNotes(e.instance.props.message, e.instance.props.channel);
-							},
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCN.messagetoolbaricon,
-								iconSVG: note ? pinIconDelete : pinIcon
-							})
-						})
-					}));
-					if (this.isNoteOutdated(note, e.instance.props.message)) e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						key: "update-note",
-						text: this.labels.context_updateoption,
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-							className: BDFDB.disCN.messagetoolbarbutton,
-							onClick: _ => {
-								this.updateNoteData(note, e.instance.props.message);
-							},
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCN.messagetoolbaricon,
-								iconSVG: pinIconUpdate
-							})
-						})
-					}));
-				}
-			}
-
-			processHeaderBarContainer (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(BDFDB.ObjectUtils.get(e.returnvalue, "props.toolbar"), {name: "FluxContainer(Search)"});
-				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						text: this.labels.popout_note,
-						tooltipConfig: {type: "bottom"},
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-							className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCNS.channelheadericon,
-								iconSVG: pinIcon
-							})
-						})
-					}),
-					popoutClassName: BDFDB.disCN.messagespopoutwrap,
-					animation: BDFDB.LibraryComponents.PopoutContainer.Animation.SCALE,
-					position: BDFDB.LibraryComponents.PopoutContainer.Positions.BOTTOM,
-					align: BDFDB.LibraryComponents.PopoutContainer.Align.RIGHT,
-					width: 650,
-					maxHeight: "calc(100vh - 100px)",
-					onClose: instance => {
-						BDFDB.DOMUtils.removeClass(instance.domElementRef.current, BDFDB.disCN.channelheadericonselected);
-					},
-					renderPopout: instance => {
-						BDFDB.DOMUtils.addClass(instance.domElementRef.current, BDFDB.disCN.channelheadericonselected);
-						return this.openNotesPopout(instance);
-					}
-				}));
-			}
-			
-			openNotesPopout (buttonInstance) {
-				buttonInstance.props.selectedFilter = buttonInstance.props.selectedFilter || this.getPopoutValue(choices.defaultFilter || filterKeys[0], "filter");
-				buttonInstance.props.selectedSort = buttonInstance.props.selectedSort || this.getPopoutValue(choices.defaultSort || sortKeys[0], "sort");
-				buttonInstance.props.selectedOrder = buttonInstance.props.selectedOrder || this.getPopoutValue(choices.defaultOrder || orderKeys[0], "order");
-				buttonInstance.props.searchKey = buttonInstance.props.searchKey || "";
-				let searchTimeout;
-				return [
-					BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCNS.messagespopouttabbarheader + BDFDB.disCN.messagespopoutheader,
-						style: {
-							paddingBottom: 4
-						},
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-							direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-									className: BDFDB.disCN.marginbottom4,
-									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-									children: [
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-											className: BDFDB.disCN.messagespopouttitle,
-											children: this.labels.popout_note
-										}),
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
-											query: buttonInstance.props.searchKey,
-											onChange: value => {
-												BDFDB.TimeUtils.clear(searchTimeout);
-												searchTimeout = BDFDB.TimeUtils.timeout(_ => {
-													buttonInstance.props.searchKey = value;
-													BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
-												}, 1000);
-											},
-											onClear: _ => {
-												buttonInstance.props.searchKey = "";
-												BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
-											}
-										})
-									]
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-									children: [
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar, {
-											className: BDFDB.disCN.messagespopouttabbar,
-											itemClassName: BDFDB.disCN.messagespopouttabbartab,
-											itemSelectedClassName: BDFDB.disCN.messagespopouttabbartabactive,
-											type: BDFDB.LibraryComponents.TabBar.Types.TOP_PILL,
-											selectedItem: buttonInstance.props.selectedFilter.value,
-											items: filterKeys.map(option => this.getPopoutValue(option, "filter")),
-											onItemSelect: option => {
-												buttonInstance.props.selectedFilter = this.getPopoutValue(option, "filter");
-												BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
-											}
-										}),
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
-											label: BDFDB.LanguageUtils.LibraryStrings.sort_by + ":",
-											value: buttonInstance.props.selectedSort,
-											options: sortKeys.map(option => this.getPopoutValue(option, "sort")),
-											onChange: option => {
-												buttonInstance.props.selectedSort = this.getPopoutValue(option, "sort");
-												BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
-											}
-										}),
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
-											label: BDFDB.LanguageUtils.LibraryStrings.order + ":",
-											value: buttonInstance.props.selectedOrder,
-											options: orderKeys.map(option => this.getPopoutValue(option, "order")),
-											onChange: option => {
-												buttonInstance.props.selectedOrder = this.getPopoutValue(option, "order");
-												BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
-											}
-										})
-									]
-								})
-							]
-						})
-					}),
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Scrollers.Thin, {
-						className: BDFDB.disCN.messagespopout,
-						children: this.filterMessages(buttonInstance, buttonInstance.props.selectedFilter.value, buttonInstance.props.selectedSort.value, buttonInstance.props.selectedOrder.value == "descending", buttonInstance.props.searchKey.toUpperCase())
-					})
-				];
-			}
-			
-			getPopoutValue (key, type) {
-				return {
-					label: type == "order" ? BDFDB.LanguageUtils.LibraryStrings[key] : this.labels[`popout_${type}_${key}`],
-					value: key
-				};
-			}
-			
-			filterMessages (buttonInstance, filter, sort, reverse, searchkey) {
-				let lightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
-				let messages = [], notes = BDFDB.DataUtils.load(this, "notes"), updateData = false;
+			filterMessages() {
+				let messages = [], notes = BDFDB.DataUtils.load(_this, "notes"), updateData = false;
 				for (let guild_id in notes) for (let channel_id in notes[guild_id]) for (let message_idPOS in notes[guild_id][channel_id]) {
 					let message = JSON.parse(notes[guild_id][channel_id][message_idPOS].message);
 					message.author = new BDFDB.DiscordObjects.User(message.author);
@@ -392,9 +112,9 @@ module.exports = (_ => {
 						notetime: notes[guild_id][channel_id][message_idPOS].addedat
 					});
 				}
-				if (updateData) BDFDB.DataUtils.save(notes, this, "notes");
+				if (updateData) BDFDB.DataUtils.save(notes, _this, "notes");
 				let currentChannel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId()) || {};
-				switch (filter) {
+				switch (popoutProps.selectedFilter.value) {
 					case "channel":
 						messages = messages.filter(messageData => messageData.channel_id == currentChannel.id);
 						break;
@@ -405,38 +125,33 @@ module.exports = (_ => {
 						messages = messages;
 						break;
 				}
-				if (searchkey) {
+				let searchKey = popoutProps.searchKey.toUpperCase();
+				if (searchKey) {
 					let searchValues = ["content", "author.username", "rawDescription", "author.name"];
-					messages = messages.filter(messageData => searchValues.some(key => this.containsSearchkey(messageData.message, key, searchkey) || messageData.message.embeds.some(embed => this.containsSearchkey(embed, key, searchkey))));
+					messages = messages.filter(messageData => searchValues.some(key => this.containsSearchkey(messageData.message, key, searchKey) || messageData.message.embeds.some(embed => this.containsSearchkey(embed, key, searchKey))));
 				}
-				BDFDB.ArrayUtils.keySort(messages, sort);
-				if (!reverse) messages.reverse();
+				BDFDB.ArrayUtils.keySort(messages, popoutProps.selectedSort.value);
+				if (popoutProps.selectedOrder.value != "descending") messages.reverse();
 				return Object.keys(messages).length ? 
-					messages.map(messageData => this.renderMessage(buttonInstance, messageData.note, messageData.message, messageData.channel, filter)).flat(10).filter(n => n) :
+					messages.map(messageData => this.renderMessage(messageData.note, messageData.message, messageData.channel)).flat(10).filter(n => n) :
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateCenter, {
 						msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
-						image: lightTheme ? "/assets/03c7541028afafafd1a9f6a81cb7f149.svg" : "/assets/6793e022dc1b065b21f12d6df02f91bd.svg"
+						image: BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight ? "/assets/03c7541028afafafd1a9f6a81cb7f149.svg" : "/assets/6793e022dc1b065b21f12d6df02f91bd.svg"
 					});
 			}
-			
-			containsSearchkey (data, key, searchkey) {
-				let value = BDFDB.ObjectUtils.get(data, key);
-				return value && value.toUpperCase().indexOf(searchkey) > -1
-			}
-			
-			renderMessage (buttonInstance, note, message, channel, filter) {
+			renderMessage(note, message, channel) {
 				if (!message || !channel) return null;
 				let channelName = channel.name;
 				let guild = channel.guild_id && BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
 				let role = guild && BDFDB.LibraryModules.PermissionRoleUtils.getHighestRole(guild, message.author.id);
 				if (role) message.colorString = role.colorString;
-				if (filter != "channel" && !channelName && channel.recipients.length > 0) {
+				if (popoutProps.selectedFilter.value != "channel" && !channelName && channel.recipients.length > 0) {
 					for (let dmuser_id of channel.recipients) {
 						channelName = channelName ? channelName + ", @" : channelName;
 						channelName = channelName + ((BDFDB.LibraryModules.UserStore.getUser(dmuser_id) || {}).username || BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER);
 					}
 				}
-				return [filter == "channel" ? null : BDFDB.ReactUtils.createElement("div", {
+				return [popoutProps.selectedFilter.value == "channel" ? null : BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN.messagespopoutchannelseparator,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
@@ -445,7 +160,7 @@ module.exports = (_ => {
 							onClick: _ => BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id)),
 							children: channelName ? ((channel.guild_id ? "#" : "@") + channelName) : "???"
 						}),
-						filter == "all" ? BDFDB.ReactUtils.createElement("span", {
+						popoutProps.selectedFilter.value == "all" ? BDFDB.ReactUtils.createElement("span", {
 							className: BDFDB.disCN.messagespopoutguildname,
 							children: channel.guild_id ? (BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {}).name || BDFDB.LanguageUtils.LanguageStrings.GUILD_UNAVAILABLE_HEADER : BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES
 						}) : null
@@ -458,9 +173,7 @@ module.exports = (_ => {
 							className: BDFDB.disCN.messagespopoutgroupcozy,
 							message: message,
 							channel: channel,
-							onContextMenu: e => {
-								BDFDB.MessageUtils.openMenu(message, e, true);
-							}
+							onContextMenu: e => BDFDB.MessageUtils.openMenu(message, e, true)
 						}),
 						BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.messagespopoutactionbuttons,
@@ -503,9 +216,9 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 									look: BDFDB.LibraryComponents.Button.Looks.BLANK,
 									size: BDFDB.LibraryComponents.Button.Sizes.NONE,
-									onClick: (e, instance) => {
-										this.removeNoteData(note);
-										BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
+									onClick: _ => {
+										_this.removeNoteData(note);
+										BDFDB.ReactUtils.forceUpdate(this);
 									},
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 										className: BDFDB.disCN.messagespopoutclosebutton,
@@ -516,6 +229,267 @@ module.exports = (_ => {
 						})
 					]
 				})];
+			}
+			render() {
+				let searchTimeout;
+				return BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
+					children: [
+						BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCNS.messagespopouttabbarheader + BDFDB.disCN.messagespopoutheader,
+							style: {paddingBottom: 4},
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+								direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+										className: BDFDB.disCN.marginbottom4,
+										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+										children: [
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+												className: BDFDB.disCN.messagespopouttitle,
+												children: _this.labels.popout_note
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
+												query: popoutProps.searchKey,
+												onChange: value => {
+													BDFDB.TimeUtils.clear(searchTimeout);
+													searchTimeout = BDFDB.TimeUtils.timeout(_ => {
+														popoutProps.searchKey = value;
+														BDFDB.ReactUtils.forceUpdate(this);
+													}, 1000);
+												},
+												onClear: _ => {
+													popoutProps.searchKey = "";
+													BDFDB.ReactUtils.forceUpdate(this);
+												}
+											})
+										]
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+										children: [
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar, {
+												className: BDFDB.disCN.messagespopouttabbar,
+												itemClassName: BDFDB.disCN.messagespopouttabbartab,
+												itemSelectedClassName: BDFDB.disCN.messagespopouttabbartabactive,
+												type: BDFDB.LibraryComponents.TabBar.Types.TOP_PILL,
+												selectedItem: popoutProps.selectedFilter.value,
+												items: filterKeys.map(option => _this.getPopoutValue(option, "filter")),
+												onItemSelect: option => {
+													popoutProps.selectedFilter = _this.getPopoutValue(option, "filter");
+													BDFDB.ReactUtils.forceUpdate(this);
+												}
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
+												label: BDFDB.LanguageUtils.LibraryStrings.sort_by + ":",
+												value: popoutProps.selectedSort,
+												options: sortKeys.map(option => _this.getPopoutValue(option, "sort")),
+												onChange: option => {
+													popoutProps.selectedSort = _this.getPopoutValue(option, "sort");
+													BDFDB.ReactUtils.forceUpdate(this);
+												}
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
+												label: BDFDB.LanguageUtils.LibraryStrings.order + ":",
+												value: popoutProps.selectedOrder,
+												options: orderKeys.map(option => _this.getPopoutValue(option, "order")),
+												onChange: option => {
+													popoutProps.selectedOrder = _this.getPopoutValue(option, "order");
+													BDFDB.ReactUtils.forceUpdate(this);
+												}
+											})
+										]
+									})
+								]
+							})
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Scrollers.Thin, {
+							className: BDFDB.disCN.messagespopout,
+							children: this.filterMessages()
+						})
+					]
+				});
+			}
+		};
+	
+		return class PersonalPins extends Plugin {
+			onLoad () {
+				_this = this;
+				
+				this.defaults = {
+					choices: {
+						defaultFilter:		{value: filterKeys[0], 		options: filterKeys,	type: "filter",		description: "Default choice tab"},
+						defaultSort:		{value: sortKeys[0], 		options: sortKeys,		type: "sort",		description: "Default sort choice"},
+						defaultOrder:		{value: orderKeys[0], 		options: orderKeys,		type: "order",		description: "Default order choice"},
+					}
+				};
+			
+				this.patchedModules = {
+					after: {
+						HeaderBarContainer: "render"
+					}
+				};
+			}
+			
+			onStart () {
+				BDFDB.PatchUtils.forceAllUpdates(this);
+			}
+			
+			onStop () {
+				BDFDB.PatchUtils.forceAllUpdates(this);
+			}
+
+			getSettingsPanel (collapseStates = {}) {
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
+					collapseStates: collapseStates,
+					children: _ => {
+						let settingsItems = [];
+						
+						for (let key in this.settings.choices) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							type: "Select",
+							plugin: this,
+							keys: ["choices", key],
+							label: this.defaults.choices[key].description,
+							basis: "50%",
+							value: this.settings.choices[key],
+							options: (this.defaults.choices[key].options || []).map(option => this.getPopoutValue(option, this.defaults.choices[key].type)),
+							searchable: true
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							type: "Button",
+							color: BDFDB.LibraryComponents.Button.Colors.RED,
+							label: "Delete all notes",
+							onClick: _ => {
+								BDFDB.ModalUtils.confirm(this, "Are you sure you want to delete all pinned Notes?", _ => BDFDB.DataUtils.remove(this, "notes"));
+							},
+							children: BDFDB.LanguageUtils.LanguageStrings.DELETE
+						}));
+						
+						return settingsItems;
+					}
+				});
+			}
+
+			onSettingsClosed () {
+				if (this.SettingsUpdated) {
+					delete this.SettingsUpdated;
+					BDFDB.PatchUtils.forceAllUpdates(this);
+				}
+			}
+
+			onMessageContextMenu (e) {
+				if (e.instance.props.message && e.instance.props.channel) {
+					let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
+					let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Note_Message") : null;
+					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
+					if (index == -1) [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["edit", "add-reaction", "quote"]});
+					children.splice(index > -1 ? index + 1: 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: note ? this.labels.context_unpinoption : this.labels.context_pinoption,
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, note ? "unpin-note" : "pin-note"),
+						hint: hint && (_ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+							hint: hint
+						})),
+						action: _ => this.addMessageToNotes(e.instance.props.message, e.instance.props.channel)
+					}));
+					if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index > -1 ? index + 1: 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: this.labels.context_updateoption,
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "update-note"),
+						action: _ => this.updateNoteData(note, e.instance.props.message)
+					}));
+				}
+			}
+			
+			onMessageOptionContextMenu (e) {
+				if (e.instance.props.message && e.instance.props.channel) {
+					let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
+					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
+					children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: note ? this.labels.context_unpinoption : this.labels.context_pinoption,
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, note ? "unpin-note" : "pin-note"),
+						icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+							icon: note ? pinIconDelete : pinIcon
+						}),
+						action: _ => this.addMessageToNotes(e.instance.props.message, e.instance.props.channel)
+					}));
+					if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: this.labels.context_updateoption,
+						id: "update-note",
+						icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+							icon: pinIconUpdate
+						}),
+						action: _ => this.updateNoteData(note, e.instance.props.message)
+					}));
+				}
+			}
+		
+			onMessageOptionToolbar (e) {
+				if (e.instance.props.expanded && e.instance.props.message && e.instance.props.channel) {
+					let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
+					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						key: note ? "unpin-note" : "pin-note",
+						text: note ? this.labels.context_unpinoption : this.labels.context_pinoption,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.disCN.messagetoolbarbutton,
+							onClick: _ => this.addMessageToNotes(e.instance.props.message, e.instance.props.channel),
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.messagetoolbaricon,
+								iconSVG: note ? pinIconDelete : pinIcon
+							})
+						})
+					}));
+					if (this.isNoteOutdated(note, e.instance.props.message)) e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						key: "update-note",
+						text: this.labels.context_updateoption,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.disCN.messagetoolbarbutton,
+							onClick: _ => this.updateNoteData(note, e.instance.props.message),
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.messagetoolbaricon,
+								iconSVG: pinIconUpdate
+							})
+						})
+					}));
+				}
+			}
+
+			processHeaderBarContainer (e) {
+				let [children, index] = BDFDB.ReactUtils.findParent(BDFDB.ObjectUtils.get(e.returnvalue, "props.toolbar"), {name: "FluxContainer(Search)"});
+				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: this.labels.popout_note,
+						tooltipConfig: {type: "bottom"},
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCNS.channelheadericon,
+								iconSVG: pinIcon
+							})
+						})
+					}),
+					popoutClassName: BDFDB.disCN.messagespopoutwrap,
+					animation: BDFDB.LibraryComponents.PopoutContainer.Animation.SCALE,
+					position: BDFDB.LibraryComponents.PopoutContainer.Positions.BOTTOM,
+					align: BDFDB.LibraryComponents.PopoutContainer.Align.RIGHT,
+					width: 650,
+					maxHeight: "calc(100vh - 100px)",
+					onClose: instance => BDFDB.DOMUtils.removeClass(instance.domElementRef.current, BDFDB.disCN.channelheadericonselected),
+					renderPopout: instance => {
+						BDFDB.DOMUtils.addClass(instance.domElementRef.current, BDFDB.disCN.channelheadericonselected);
+						popoutProps.selectedFilter = popoutProps.selectedFilter || this.getPopoutValue(this.settings.choices.defaultFilter || filterKeys[0], "filter");
+						popoutProps.selectedSort = popoutProps.selectedSort || this.getPopoutValue(this.settings.choices.defaultSort || sortKeys[0], "sort");
+						popoutProps.selectedOrder = popoutProps.selectedOrder || this.getPopoutValue(this.settings.choices.defaultOrder || orderKeys[0], "order");
+						popoutProps.searchKey = popoutProps.searchKey || "";
+						return BDFDB.ReactUtils.createElement(NotesPopoutComponent, {});
+					}
+				}));
+			}
+			
+			getPopoutValue (key, type) {
+				return {
+					label: type == "order" ? BDFDB.LanguageUtils.LibraryStrings[key] : this.labels[`popout_${type}_${key}`],
+					value: key
+				};
 			}
 
 			addMessageToNotes (message, channel) {
