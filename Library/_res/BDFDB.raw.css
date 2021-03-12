@@ -647,6 +647,27 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-left: 6px;
 }
 
+[REPLACE_CLASS_dateinputwrapper] {
+	display: flex;
+	align-items: center;
+	margin-bottom: 8px;
+}
+[REPLACE_CLASS_dateinputinner] {
+	flex: 1 1 auto;
+	max-width: calc(100% - 150px);
+}
+[REPLACE_CLASS_dateinputcontrols] {
+	display: flex;
+	align-items: center;
+	margin-bottom: 8px;
+}
+[REPLACE_CLASS_dateinputfield] {
+	flex: 1 1 auto;
+}
+[REPLACE_CLASS_dateinputbutton] {
+	margin-left: 8px;
+}
+
 [REPLACE_CLASS_inputnumberwrapper] {
 	position: relative;
 }
