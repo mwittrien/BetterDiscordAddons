@@ -8,6 +8,7 @@ https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/LineNum
 https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/MemberCount/MemberCount.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/MessageTimestampsRedux/MessageTimestampsRedux.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/TitleForTitlebar/TitleForTitlebar.plugin.js
+https://raw.githubusercontent.com/bepvte/bd-addons/main/plugins/gifsaver.plugin.js
 https://raw.githubusercontent.com/Curtis-D/ChannelPopouts/master/ChannelPopouts.plugin.js
 https://raw.githubusercontent.com/Egrodo/DiscordPlugins/master/GameActivityToggle.plugin.js
 https://raw.githubusercontent.com/hammy1/BDStuff/master/Plugins/dateViewer/dateViewer.plugin.js
@@ -47,6 +48,7 @@ https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/ShareB
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/TransitioningBackgrounds.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/UserBirthdays.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/VoiceChatNotifications.plugin.js
+https://raw.githubusercontent.com/mihabozic123/BDplugins/master/streamerModeOnGoLive/streamerModeOnGoLive.plugin.js
 https://raw.githubusercontent.com/MKSx/Send-Audio-Plugin-BetterDiscord/master/SendAudio.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Library/0BDFDB.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BadgesEverywhere/BadgesEverywhere.plugin.js
@@ -106,6 +108,7 @@ https://raw.githubusercontent.com/noodlebox/betterdiscord-plugins/master/StaticA
 https://raw.githubusercontent.com/Orrielel/BetterDiscordAddons/master/Plugins/BetterImagePopups/BetterImagePopups.plugin.js
 https://raw.githubusercontent.com/planetarian/BetterDiscordPlugins/master/DefaultChannels.plugin.js
 https://raw.githubusercontent.com/planetarian/BetterDiscordPlugins/master/Zalgo.plugin.js
+https://raw.githubusercontent.com/QWERTxD/BetterDiscordPlugins/main/QuickMessages/QuickMessages.plugin.js
 https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/AccountDetailsPlus/AccountDetailsPlus.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/AutoPlayGifs/AutoPlayGifs.plugin.js
