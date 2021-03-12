@@ -1505,14 +1505,8 @@ module.exports = (_ => {
 					text = typeof text == "function" ? text() : text;
 					if (typeof text != "string" && !BDFDB.ReactUtils.isValidElement(text) && !BDFDB.ObjectUtils.is(config.guild)) return null;
 					let id = BDFDB.NumberUtils.generateId(Tooltips);
-					let zIndexed = typeof config.zIndex == "number";
+					let zIndexed = config.zIndex && typeof config.zIndex == "number";
 					let itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltippointer}"></div><div class="${BDFDB.disCN.tooltipcontent}"></div></div></div>`);
-					if (zIndexed) {
-						let itemLayerContainerClone = itemLayerContainer.cloneNode();
-						itemLayerContainerClone.style.setProperty("z-index", config.zIndex || 1002, "important");
-						itemLayerContainer.parentElement.insertBefore(itemLayerContainerClone, itemLayerContainer.nextElementSibling);
-						itemLayerContainer = itemLayerContainerClone;
-					}
 					itemLayerContainer.appendChild(itemLayer);
 					
 					let tooltip = itemLayer.firstElementChild;
@@ -1538,10 +1532,12 @@ module.exports = (_ => {
 						style = (style ? (style + " ") : "") + `background: ${backgroundColor} !important; border-color: ${backgroundColorIsGradient ? BDFDB.ColorUtils.convert(config.backgroundColor[type == "left" ? 100 : 0], "RGBA") : backgroundColor} !important;`;
 					}
 					if (style) tooltip.style = style;
+					const zIndexed = config.zIndex && typeof config.zIndex == "number";
 					if (zIndexed) {
-						itemLayer.style.setProperty("z-index", config.zIndex || 1002, "important");
-						tooltip.style.setProperty("z-index", config.zIndex || 1002, "important");
-						tooltipContent.style.setProperty("z-index", config.zIndex || 1002, "important");
+						itemLayer.style.setProperty("z-index", config.zIndex, "important");
+						tooltip.style.setProperty("z-index", config.zIndex, "important");
+						tooltipContent.style.setProperty("z-index", config.zIndex, "important");
+						BDFDB.DOMUtils.addClass(itemLayerContainer, BDFDB.disCN.itemlayercontainerzindexdisabled);
 					}
 					if (typeof config.width == "number" && config.width > 196) {
 						tooltip.style.setProperty("width", `${config.width}px`, "important");
@@ -1560,7 +1556,7 @@ module.exports = (_ => {
 						let parent = e.target.parentElement.querySelector(":hover");
 						if (parent && anker != parent && !anker.contains(parent)) itemLayer.removeTooltip();
 					};
-					let mouseLeave = e => {itemLayer.removeTooltip();};
+					let mouseLeave = e => itemLayer.removeTooltip();
 					if (!config.perssist) {
 						document.addEventListener("mousemove", mouseMove);
 						document.addEventListener("mouseleave", mouseLeave);
@@ -1655,7 +1651,7 @@ module.exports = (_ => {
 						BDFDB.DOMUtils.remove(itemLayer);
 						BDFDB.ArrayUtils.remove(Tooltips, id);
 						observer.disconnect();
-						if (zIndexed) BDFDB.DOMUtils.remove(itemLayerContainer);
+						if (zIndexed) BDFDB.DOMUtils.removeClass(itemLayerContainer, BDFDB.disCN.itemlayercontainerzindexdisabled);
 						if (typeof config.onHide == "function") config.onHide(itemLayer, anker);
 					});
 					(tooltip.update = itemLayer.update = newText => {
