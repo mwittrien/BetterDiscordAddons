@@ -159,16 +159,15 @@ html {
 		1.	USERPOPOUT
 		2.	EMOJIPICKER
 		3.	SEARCHPOPOUT
-		4.	ADDROLE
-		5.	EVERYONEMENTION
-		6.	CHANNELFOLLOW
-		7.	CHANNELFOLLOWINFO
-		8.	STREAMPREVIEW
-		9.	ROLEOVERFLOW
-		10.	PUBLICGUILDANNOUNCEMENT
-		11.	QUICKSELECTPOPOUT
-		12.	RTCSTATUSPOPOUT
-		13.	PHONE-/EMAILVALIDATION
+		4.	EVERYONEMENTION
+		5.	CHANNELFOLLOW
+		6.	CHANNELFOLLOWINFO
+		7.	STREAMPREVIEW
+		8.	ROLEOVERFLOW
+		9.	PUBLICGUILDANNOUNCEMENT
+		10.	QUICKSELECTPOPOUT
+		11.	RTCSTATUSPOPOUT
+		12.	PHONE-/EMAILVALIDATION
 	12.	BDSUPPORT
 	13.	POWERCORDSUPPORT
 	14.	PLUGINSUPPORT
@@ -3592,37 +3591,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	color: rgba(var(--vtextbrightest),.3);
 }
 
-/* ----		11.4.	ADDROLE							---- */
-
-#app-mount .container-VSDcQc .input-1ppKdn {
-	color: var(--header-primary);
-}
-#app-mount .container-VSDcQc .input-1ppKdn::-webkit-input-placeholder,
-#app-mount .container-VSDcQc .input-1ppKdn::-moz-placeholder,
-#app-mount .container-VSDcQc .input-1ppKdn:-ms-input-placeholder,
-#app-mount .container-VSDcQc .input-1ppKdn::placeholder {
-	color: var(--text-muted);
-}
-#app-mount .container-VSDcQc .sectionTag-pXyto9 {
-	background-color: var(--background-secondary);
-	color: var(--text-muted);
-}
-#app-mount .autocompleteArrow-Zxoy9H,
-#app-mount .autocompleteShadow-iiGWFU {
-	box-shadow: 0 2px 10px 0 rgba(0,0,0,.2),0 0 0 1px rgba(var(--vbackgroundtertiary),.6);
-}
-#app-mount .autocompleteArrow-Zxoy9H,
-#app-mount .header-2bNvm4 {
-	background-color: var(--background-tertiary);
-}
-#app-mount .empty-3hoe1g .noResultsHeader-pqW4H- {
-	color: var(--header-secondary);
-}
-#app-mount .empty-3hoe1g p {
-	color: var(--text-muted);
-}
-
-/* ----		11.5.	EVERYONEMENTION					---- */
+/* ----		11.4.	EVERYONEMENTION					---- */
 
 #app-mount .everyonePopout-nEbJY3 {
 	background-color: var(--background-primary);
@@ -3651,7 +3620,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	color: var(--header-secondary);
 }
 
-/* ----		11.6.	CHANNELFOLLOW					---- */
+/* ----		11.5.	CHANNELFOLLOW					---- */
 
 #app-mount .header-1pGpFt {
 	background: var(--background-tertiary);
@@ -3667,7 +3636,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	-webkit-mask: url(https://discordapp.com/assets/cb89c31c79a62ae99ec12351c1efb277.svg) center/cover no-repeat;
 }
 
-/* ----		11.7.	CHANNELFOLLOWINFO				---- */
+/* ----		11.6.	CHANNELFOLLOWINFO				---- */
 
 #app-mount .guildPopout-3CgKqR {
 	background-color: var(--background-tertiary);
@@ -3683,7 +3652,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background: var(--text-muted);
 }
 
-/* ----		11.8.	STREAMPREVIEW					---- */
+/* ----		11.7.	STREAMPREVIEW					---- */
 
 #app-mount .streamPreview-2-WUWT {
 	background-color: var(--background-tertiary);
@@ -3705,7 +3674,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background: rgba(0,0,0,.6);
 }
 
-/* ----		11.9.	ROLEOVERFLOW					---- */
+/* ----		11.8.	ROLEOVERFLOW					---- */
 
 #app-mount .overflowRolesPopoutHeaderText-1SW-y3 {
 	color: var(--text-muted);
@@ -3723,7 +3692,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	box-shadow: 0 2px 10px 0 rgba(0,0,0,.2),0 0 0 1px rgba(var(--vbackgroundtertiary),.6);
 }
 
-/* ----		11.10.	PUBLICGUILDANNOUNCEMENT			---- */
+/* ----		11.9.	PUBLICGUILDANNOUNCEMENT			---- */
 
 #app-mount .popout-6p6fkZ {
 	background-color: var(--background-tertiary);
@@ -3733,7 +3702,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	color: var(--header-primary);
 }
 
-/* ----		11.11.	QUICKSELECTPOPOUT				---- */
+/* ----		11.10.	QUICKSELECTPOPOUT				---- */
 
 #app-mount .selectableItem-1MP3MQ {
 	color: var(--header-primary);
@@ -3759,7 +3728,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background-color: var(--background-accent);
 }
 
-/* ----		11.12.	RTCSTATUSPOPOUT					---- */
+/* ----		11.11.	RTCSTATUSPOPOUT					---- */
 
 #app-mount .container-2x5lvQ{
 	width: 260px;
@@ -3790,7 +3759,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background-color: var(--header-primary);
 }
 
-/* ----		11.13.	PHONE-/EMAILVALIDATION			---- */
+/* ----		11.12.	PHONE-/EMAILVALIDATION			---- */
 
 #app-mount  .input-3yHnCz {
 	background-color: var(--background-accent);

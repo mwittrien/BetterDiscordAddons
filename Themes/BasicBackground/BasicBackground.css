@@ -5380,7 +5380,7 @@ body::before {
 #app-mount .BDFDB-colorpicker .gradient-bar .gradient-cursor > div {			/* popout				gradientcursor						*/
 	border-color: rgb(var(--fontwhite4));
 }
-#app-mount .BDFDB-colorpicker .gradient-bar .gradient-cursor > div::before {		/* popout				gradientcursorpointer				*/
+#app-mount .BDFDB-colorpicker .gradient-bar .gradient-cursor > div::before {	/* popout				gradientcursorpointer				*/
 	border-top-color: rgb(var(--fontwhite4));
 }
 #app-mount .BDFDB-colorpicker .gradient-bar .gradient-cursor.selected > div {
@@ -5392,14 +5392,14 @@ body::before {
 
 /* ----		14.7.	ADDROLE							---- */
 
-#app-mount .container-VSDcQc {								/* popout				wrapper								*/
+#app-mount .container-3XJ8ns {								/* popout				wrapper								*/
 	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
 	border-radius: 3px;
 	overflow: hidden;
 }
-.container-VSDcQc::before {
+.container-3XJ8ns::before {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -5414,7 +5414,7 @@ body::before {
 	pointer-events: none;
 	z-index: -1;
 }
-.container-VSDcQc::after {
+.container-3XJ8ns::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -5427,36 +5427,8 @@ body::before {
 	pointer-events: none;
 	z-index: -1;
 }
-#app-mount .header-2bNvm4,
-#app-mount .autocompleteHeaderBackground-30T70q {			/* popout				header								*/
-	background: rgba(var(--vtransparencycolor), 0.3);
-	border-radius: 5px 5px 0 0;
-}
-#app-mount .container-VSDcQc .headerText-3i6A8K {			/* popout				headertext							*/
-	color: rgb(var(--fontwhite2));
-}
-#app-mount .container-VSDcQc .input-1ppKdn {				/* popout				headerinput							*/
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .container-VSDcQc .input-1ppKdn::placeholder {
-	color: rgb(var(--fontwhite4));
-}
-#app-mount .autocompleteArrow-Zxoy9H {						/* popout				arrow								*/
-	display: none;
-}
-#app-mount .autocompleteShadow-iiGWFU {						/* popout				shadow								*/
-	box-shadow: 0 1px 5px 0 rgba(var(--vtransparencycolor), 0.3);
-}
-#app-mount .container-VSDcQc .sectionTag-pXyto9 {			/* popout				body								*/
-	background: transparent;
-	border-radius: 0 0 5px 5px;
-	color: rgb(var(--fontwhite3));
-}
-.row-rrHHJU:focus .rowInner-1vvRiF,
-.row-rrHHJU:hover .rowInner-1vvRiF {
-	background: rgba(var(--vtransparencycolor), 0.2);
-}
-.row-rrHHJU.selected-1pIgLL .rowInner-1vvRiF {
+.focused-dKLoQt,
+.item-2J2GlB:hover {
 	background: rgba(var(--vtransparencycolor), 0.4);
 }
 
