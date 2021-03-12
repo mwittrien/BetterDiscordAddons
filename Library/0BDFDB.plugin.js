@@ -6264,11 +6264,15 @@ module.exports = (_ => {
 				InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.PaginatedList, {amount: 50, offset: 0, mini: true, jump: true, maxVisiblePages: 7, copyToBottom: false, fade: true});
 				
 				InternalComponents.LibraryComponents.Popout = reactInitialized && class BDFDB_Popout extends LibraryModules.React.Component {
+					componentDidMount() {
+						this.props.containerInstance.popout = this;
+					}
 					componentWillUnmount() {
 						delete this.props.containerInstance.popout;
 						if (typeof this.props.onClose == "function") this.props.onClose(this.props.containerInstance, this);
 					}
 					render() {
+						if (!this.props.wrap) return this.props.children;
 						let pos = typeof this.props.position == "string" ? this.props.position.toLowerCase() : null;
 						let positionClass = pos && DiscordClasses["popout" + pos] ? BDFDB.disCN["popout" + pos] : BDFDB.disCN.popouttop;
 						let arrowClass = !this.props.arrow ? BDFDB.disCN.popoutnoarrow : (pos && pos.indexOf("top") > -1 && pos != "top" ? BDFDB.disCN.popoutarrowalignmenttop : BDFDB.disCN.popoutarrowalignmentmiddle);
@@ -6287,26 +6291,13 @@ module.exports = (_ => {
 						});
 					}
 				};
-				InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.Popout, {themed: true});
+				InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.Popout, {themed: true, wrap: true});
 				
 				InternalComponents.LibraryComponents.PopoutContainer = reactInitialized && class BDFDB_PopoutContainer extends LibraryModules.React.Component {
-					handleRender(e) {
-						let children = typeof this.props.renderPopout == "function" ? this.props.renderPopout(this) : null;
-						return this.context.popout = !children ? null : (!this.props.wrap ? children : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Popout, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-							className: this.props.popoutClassName,
-							containerInstance: this,
-							isChild: true,
-							position: e.position,
-							style: this.props.popoutStyle,
-							onClose: typeof this.props.onClose == "function" ? this.props.onClose.bind(this) : _ => {},
-							children: children
-						}), "popoutStyle", "popoutClassName")));
-					}
 					componentDidMount() {
 						let basePopout = BDFDB.ReactUtils.findOwner(this, {name: "BasePopout"});
 						if (!basePopout || !basePopout.handleClick) return;
-						basePopout.isBDFDBpopout = true;
-						this.handleClick = e => {return basePopout.handleClick(BDFDB.ObjectUtils.is(e) ? e : (new MouseEvent({})));};
+						this.handleClick = e => basePopout.handleClick(BDFDB.ObjectUtils.is(e) ? e : (new MouseEvent({})));
 						this.close = basePopout.close;
 						this.domElementRef = basePopout.domElementRef;
 					}
@@ -6332,8 +6323,26 @@ module.exports = (_ => {
 						};
 						return BDFDB.ReactUtils.createElement(LibraryModules.React.Fragment, {
 							children: BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.PopoutContainer, Object.assign({}, this.props, {
-								children: _ => {return child;},
-								renderPopout: this.handleRender.bind(this)
+								children: _ => child,
+								renderPopout: e => {
+									const documentClick = event => {
+										let node = BDFDB.ReactUtils.findDOMNode(this.popout);
+										if (!node || !document.contains(node) || node != event.target && document.contains(event.target) && !node.contains(event.target)) {
+											document.removeEventListener("click", documentClick);
+											if (node && typeof this.close == "function") this.close();
+										}
+									};
+									document.addEventListener("click", documentClick);
+									return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Popout, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+										className: this.props.popoutClassName,
+										containerInstance: this,
+										isChild: true,
+										position: e.position,
+										style: this.props.popoutStyle,
+										onClose: typeof this.props.onClose == "function" ? this.props.onClose.bind(this) : _ => {},
+										children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(this) : null
+									}), "popoutStyle", "popoutClassName"));
+								}
 							}))
 						});
 					}
