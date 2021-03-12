@@ -5148,16 +5148,16 @@ module.exports = (_ => {
 						this.domElementRef = {current: BDFDB.DOMUtils.getParent(BDFDB.dotCN.itemlayer, BDFDB.ReactUtils.findDOMNode(this))};
 						let popoutContainerInstance = BDFDB.ReactUtils.findOwner(this.domElementRef.current, {name: "BDFDB_PopoutContainer", unlimited: true, up: true});
 						if (popoutContainerInstance) {
-							let mousedown = event => {
-								if (!this.domElementRef.current || !document.contains(this.domElementRef.current)) document.removeEventListener("mousedown", mousedown);
+							let mouseDown = event => {
+								if (!this.domElementRef.current || !document.contains(this.domElementRef.current)) document.removeEventListener("mousedown", mouseDown);
 								else if (!this.domElementRef.current.contains(event.target)) {
 									let mouseUp = event => {
 										if (!this.domElementRef.current || !document.contains(this.domElementRef.current)) {
-											document.removeEventListener("mousedown", mousedown);
+											document.removeEventListener("mousedown", mouseDown);
 											document.removeEventListener("mouseup", mouseUp);
 										}
 										else if (!this.domElementRef.current.contains(event.target)) {
-											document.removeEventListener("mousedown", mousedown);
+											document.removeEventListener("mousedown", mouseDown);
 											document.removeEventListener("mouseup", mouseUp);
 											popoutContainerInstance.handleClick(event);
 										}
@@ -5165,7 +5165,7 @@ module.exports = (_ => {
 									document.addEventListener("mouseup", mouseUp);
 								}
 							};
-							document.addEventListener("mousedown", mousedown);
+							document.addEventListener("mousedown", mouseDown);
 						}
 					}
 					render() {
@@ -5481,6 +5481,7 @@ module.exports = (_ => {
 				
 				InternalComponents.LibraryComponents.ColorSwatches = reactInitialized && class BDFDB_ColorSwatches extends LibraryModules.React.Component {
 					ColorSwatch(props) {
+						const swatches = props.swatches;
 						let useWhite = !BDFDB.ColorUtils.isBright(props.color);
 						let swatch = BDFDB.ReactUtils.createElement("button", {
 							type: "button",
@@ -5489,12 +5490,12 @@ module.exports = (_ => {
 							disabled: props.isDisabled,
 							onClick: _ => {
 								if (!props.isSelected) {
-									let color = props.isCustom && props.color == null ? (props.swatches.props.color || "rgba(0, 0, 0, 1)") : props.color;
-									if (typeof props.swatches.props.onColorChange == "function") props.swatches.props.onColorChange(BDFDB.ColorUtils.convert(color, "RGBCOMP"));
-									props.swatches.props.color = color;
-									props.swatches.props.customColor = props.isCustom ? color : props.swatches.props.customColor;
-									props.swatches.props.customSelected = props.isCustom;
-									BDFDB.ReactUtils.forceUpdate(props.swatches);
+									let color = props.isCustom && props.color == null ? (swatches.props.color || "rgba(0, 0, 0, 1)") : props.color;
+									if (typeof swatches.props.onColorChange == "function") swatches.props.onColorChange(BDFDB.ColorUtils.convert(color, "RGBCOMP"));
+									swatches.props.color = color;
+									swatches.props.customColor = props.isCustom ? color : swatches.props.customColor;
+									swatches.props.customSelected = props.isCustom;
+									BDFDB.ReactUtils.forceUpdate(swatches);
 								}
 							},
 							style: Object.assign({}, props.style, {
@@ -5529,21 +5530,19 @@ module.exports = (_ => {
 							animation: InternalComponents.LibraryComponents.PopoutContainer.Animation.TRANSLATE,
 							position: InternalComponents.LibraryComponents.PopoutContainer.Positions.BOTTOM,
 							align: InternalComponents.LibraryComponents.PopoutContainer.Align.CENTER,
-							renderPopout: _ => {
-								return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ColorPicker, Object.assign({}, props.pickerConfig, {
-									color: props.swatches.props.color,
-									onColorChange: color => {
-										let comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
-										if (typeof props.swatches.props.onColorChange == "function") props.swatches.props.onColorChange(comp);
-										if (props.pickerConfig && typeof props.pickerConfig.onColorChange == "function") props.pickerConfig.onColorChange(comp);
-										props.color = color;
-										props.swatches.props.color = color;
-										props.swatches.props.customColor = color;
-										props.swatches.props.customSelected = true;
-										BDFDB.ReactUtils.forceUpdate(props.swatches);
-									}
-								}), true);
-							}
+							renderPopout: _ => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ColorPicker, Object.assign({}, swatches.props.pickerConfig, {
+								color: swatches.props.color,
+								onColorChange: color => {
+									let comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
+									if (typeof swatches.props.onColorChange == "function") swatches.props.onColorChange(comp);
+									if (swatches.props.pickerConfig && typeof swatches.props.pickerConfig.onColorChange == "function") swatches.props.pickerConfig.onColorChange(comp);
+									props.color = color;
+									swatches.props.color = color;
+									swatches.props.customColor = color;
+									swatches.props.customSelected = true;
+									BDFDB.ReactUtils.forceUpdate(swatches);
+								}
+							}), true)
 						});
 						if (props.isCustom) swatch = BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.colorpickerswatchcustomcontainer,
