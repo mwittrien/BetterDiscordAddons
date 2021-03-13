@@ -172,7 +172,7 @@
 			"ChatMessage": {"strings": ["childrenMessageContent", "childrenRepliedMessage", "message.id"]},
 			"CustomStatusModal": {"class": "customstatusmodal"},
 			"DirectMessage": {"class": "guildouter"},
-			"EmojiPicker": {"strings": ["allowManagedEmojis", "EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"]},
+			"EmojiPicker": {"strings": ["EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"]},
 			"FocusRing": {"props": ["FocusRingScope"]},
 			"GuestHomeButton": {"props": ["GuestHomeButton"]},
 			"Guild": {"class": "guildouter"},
