@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.5
+ * @version 1.4.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -22,10 +22,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.4.5",
+			"version": "1.4.6",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
+		"changeLog": {
+			"added": {
+				"Date Input Component": "Added new Internal Component for Plugins like CreationDate, CompleteTimestamps etc."
+			}
+		}
 	};
 	
 	const DiscordObjects = {};
@@ -1915,13 +1920,13 @@ module.exports = (_ => {
 								let patchMethods = {};
 								patchMethods[patchType] = e => {
 									return InternalBDFDB.initiateProcess(pluginData.plugin, type, {
-										instance: e.thisObject && window != e.thisObject ? e.thisObject : {props: e.methodArguments[0]},
+										instance: e.thisObject,
 										returnvalue: e.returnValue,
 										methodname: e.originalMethodName,
 										patchtypes: [patchType]
 									});
 								};
-								BDFDB.PatchUtils.patch(pluginData.plugin, toBePatched, pluginData.patchTypes[patchType], patchMethods);
+								BDFDB.PatchUtils.patch(pluginData.plugin, toBePatched, pluginData.patchTypes[patchType], patchMethods, {name});
 							}
 						}
 					}
@@ -2039,12 +2044,13 @@ module.exports = (_ => {
 								for (let type of InternalData.ModuleUtilsConfig.PatchTypes) module.BDFDB_patches[methodName][type] = {};
 							}
 							if (!module[methodName]) module[methodName] = (_ => {});
+							const name = config.name || (module.constructor ? (module.constructor.displayName || module.constructor.name) : "module");
 							const originalMethod = module[methodName];
 							module.BDFDB_patches[methodName].originalMethod = originalMethod;
 							module[methodName] = function () {
 								let callInstead = false, stopCall = false;
 								const data = {
-									thisObject: this,
+									thisObject: this && this !== window ? this : {props: arguments[0]},
 									methodArguments: arguments,
 									originalMethod: originalMethod,
 									originalMethodName: methodName,
@@ -2054,24 +2060,24 @@ module.exports = (_ => {
 								};
 								if (module.BDFDB_patches && module.BDFDB_patches[methodName]) {
 									for (let priority in module.BDFDB_patches[methodName].before) for (let id in BDFDB.ObjectUtils.sort(module.BDFDB_patches[methodName].before[priority])) {
-										BDFDB.TimeUtils.suppress(module.BDFDB_patches[methodName].before[priority][id], `"before" callback of ${methodName} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`, {name: module.BDFDB_patches[methodName].before[priority][id].pluginName, version: module.BDFDB_patches[methodName].before[priority][id].pluginVersion})(data);
+										BDFDB.TimeUtils.suppress(module.BDFDB_patches[methodName].before[priority][id], `"before" callback of ${methodName} in ${name}`, {name: module.BDFDB_patches[methodName].before[priority][id].pluginName, version: module.BDFDB_patches[methodName].before[priority][id].pluginVersion})(data);
 									}
 									
-									if (!module.BDFDB_patches || !module.BDFDB_patches[methodName]) return methodName == "render" && data.returnValue === undefined ? null : data.returnValue;
+									if (!module.BDFDB_patches || !module.BDFDB_patches[methodName]) return (methodName == "render" || methodName == "default") && data.returnValue === undefined ? null : data.returnValue;
 									let hasInsteadPatches = BDFDB.ObjectUtils.toArray(module.BDFDB_patches[methodName].instead).some(priorityObj => !BDFDB.ObjectUtils.isEmpty(priorityObj));
 									if (hasInsteadPatches) for (let priority in module.BDFDB_patches[methodName].instead) for (let id in BDFDB.ObjectUtils.sort(module.BDFDB_patches[methodName].instead[priority])) {
-										let tempReturn = BDFDB.TimeUtils.suppress(module.BDFDB_patches[methodName].instead[priority][id], `"instead" callback of ${methodName} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`, {name: module.BDFDB_patches[methodName].instead[priority][id].pluginName, version: module.BDFDB_patches[methodName].instead[priority][id].pluginVersion})(data);
+										let tempReturn = BDFDB.TimeUtils.suppress(module.BDFDB_patches[methodName].instead[priority][id], `"instead" callback of ${methodName} in ${name}`, {name: module.BDFDB_patches[methodName].instead[priority][id].pluginName, version: module.BDFDB_patches[methodName].instead[priority][id].pluginVersion})(data);
 										if (tempReturn !== undefined) data.returnValue = tempReturn;
 									}
-									if ((!hasInsteadPatches || callInstead) && !stopCall) BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${methodName} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`)();
+									if ((!hasInsteadPatches || callInstead) && !stopCall) BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${methodName} in ${name}`)();
 									
 									if (!module.BDFDB_patches || !module.BDFDB_patches[methodName]) return methodName == "render" && data.returnValue === undefined ? null : data.returnValue;
 									for (let priority in module.BDFDB_patches[methodName].after) for (let id in BDFDB.ObjectUtils.sort(module.BDFDB_patches[methodName].after[priority])) {
-										let tempReturn = BDFDB.TimeUtils.suppress(module.BDFDB_patches[methodName].after[priority][id], `"after" callback of ${methodName} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`, {name: module.BDFDB_patches[methodName].after[priority][id].pluginName, version: module.BDFDB_patches[methodName].after[priority][id].pluginVersion})(data);
+										let tempReturn = BDFDB.TimeUtils.suppress(module.BDFDB_patches[methodName].after[priority][id], `"after" callback of ${methodName} in ${name}`, {name: module.BDFDB_patches[methodName].after[priority][id].pluginName, version: module.BDFDB_patches[methodName].after[priority][id].pluginVersion})(data);
 										if (tempReturn !== undefined) data.returnValue = tempReturn;
 									}
 								}
-								else BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${methodName} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`)();
+								else BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${methodName} in ${name}`)();
 								callInstead = false, stopCall = false;
 								return (methodName == "render" || methodName == "default") && data.returnValue === undefined ? null : data.returnValue;
 							};
@@ -5604,6 +5610,222 @@ module.exports = (_ => {
 							]
 						});
 					}
+				};
+		
+				InternalComponents.LibraryComponents.DateInput = class BDFDB_DateInput extends LibraryModules.React.Component {
+					renderFormatButton(props) {
+						const button = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
+							className: BDFDB.disCN.dateinputbutton,
+							onClick: typeof props.onClick == "function" ? props.onClick : null,
+							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+								name: props.svgName,
+								width: 20,
+								height: 20
+							})
+						});
+						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PopoutContainer, {
+							width: 350,
+							padding: 10,
+							animation: InternalComponents.LibraryComponents.PopoutContainer.Animation.SCALE,
+							position: InternalComponents.LibraryComponents.PopoutContainer.Positions.TOP,
+							align: InternalComponents.LibraryComponents.PopoutContainer.Align.RIGHT,
+							renderPopout: _ => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+								align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
+								children: [
+									props.name && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsLabel, {
+										label: props.name
+									}),
+									BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextInput, {
+										className: BDFDB.disCN.dateinputfield,
+										placeholder: props.string,
+										value: props.string,
+										onChange: typeof props.onChange == "function" ? props.onChange : null
+									}),
+									this.renderInfoButton(props.tooltipText)
+								].filter(n => n)
+							}),
+							children: props.name ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+								text: props.name,
+								children: button
+							}) : button
+						});
+					}
+					renderInfoButton(text) {
+						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+							text: text,
+							tooltipConfig: {
+								type: "bottom",
+								zIndex: 1009,
+								maxWidth: 560
+							},
+							children: BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.dateinputbutton,
+								children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+									name: InternalComponents.LibraryComponents.SvgIcon.Names.QUESTIONMARK,
+									width: 24,
+									height: 24
+								})
+							})
+						});
+					}
+					handleChange() {
+						if (typeof this.props.onChange == "function") this.props.onChange(BDFDB.ObjectUtils.extract(this.props, "customString", "dateString", "timeString"));
+					}
+					render() {
+						let input = this, preview;
+						return BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.dateinputwrapper, this.props.className),
+							children: [
+								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsLabel, {
+									label: this.props.label
+								}),
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.dateinputinner,
+									children: [
+										BDFDB.ReactUtils.createElement("div", {
+											className: BDFDB.disCN.dateinputcontrols,
+											children: [
+												BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextInput, {
+													className: BDFDB.disCN.dateinputfield,
+													placeholder: InternalComponents.LibraryComponents.DateInput.getDefaultString(),
+													value: this.props.customString,
+													onChange: value => {
+														this.props.customString = value;
+														this.handleChange.apply(this, []);
+														BDFDB.ReactUtils.forceUpdate(preview);
+													}
+												}),
+												this.renderFormatButton({
+													name: BDFDB.LanguageUtils.LanguageStrings.DATE,
+													svgName: InternalComponents.LibraryComponents.SvgIcon.Names.CALENDAR,
+													string: this.props.dateString,
+													tooltipText: [
+														"$d will be replaced with the Day",
+														"$dd will be replaced with the Day (Forced Zeros)",
+														"$m will be replaced with the Month",
+														"$mm will be replaced with the Month (Forced Zeros)",
+														"$yy will be replaced with the Year (2-Digit)",
+														"$yyyy will be replaced with the Year (4-Digit)"
+													].join("\n"),
+													onChange: value => {
+														this.props.dateString = value;
+														this.handleChange.apply(this, []);
+														BDFDB.ReactUtils.forceUpdate(preview);
+													}
+												}),
+												this.renderFormatButton({
+													name: BDFDB.LanguageUtils.LibraryStrings.time,
+													svgName: InternalComponents.LibraryComponents.SvgIcon.Names.CLOCK,
+													string: this.props.timeString,
+													tooltipText: [
+														"$h will be replaced with the Hours",
+														"$hh will be replaced with the Hours (Forced Zeros)",
+														"$m will be replaced with the Minutes",
+														"$mm will be replaced with the Minutes (Forced Zeros)",
+														"$s will be replaced with the Seconds",
+														"$ss will be replaced with the Seconds (Forced Zeros)",
+														"$u will be replaced with the Milliseconds",
+														"$uu will be replaced with the Milliseconds (Forced Zeros)"
+													].join("\n"),
+													onChange: value => {
+														this.props.timeString = value;
+														this.handleChange.apply(this, []);
+														BDFDB.ReactUtils.forceUpdate(preview);
+													}
+												}),
+												this.renderInfoButton([
+													"$date will be replaced with the Date",
+													"$time will be replaced with the Time",
+													"$time12 will be replaced with the Time (12h Form)",
+													"$month will be replaced with the Month Name",
+													"$monthS will be replaced with the Month Name (Short Form)",
+													"$day will be replaced with the Weekday Name",
+													"$dayS will be replaced with the Weekday Name (Short Form)",
+													"$agoAmount will be replaced with ('Today', 'Yesterday', '2 days ago')",
+													"$agoDate will be replaced with ('Today', 'Yesterday', $date)"
+												].join("\n"))
+											]
+										}),
+										BDFDB.ReactUtils.createElement(class DateInputPreview extends LibraryModules.React.Component {
+											componentDidMount() {preview = this;}
+											render() {
+												return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextScroller, {
+													children: InternalComponents.LibraryComponents.DateInput.format({
+														formatString: input.props.customString,
+														dateString: input.props.dateString,
+														timeString: input.props.timeString
+													}, new Date((new Date()) - (1000*60*60*24*2)))
+												});
+											}
+										})
+									]
+								})
+							]
+						});
+					}
+				};
+				InternalComponents.LibraryComponents.DateInput.getDefaultString = function () {
+					const language = BDFDB.LanguageUtils.getLanguage().id;
+					const date = new Date();
+					return date.toLocaleString(language).replace(date.toLocaleDateString(language), "$date").replace(date.toLocaleTimeString(language), "$time");
+				};
+				InternalComponents.LibraryComponents.DateInput.parseDate = function (date) {
+					let timeObj = typeof date == "string" || typeof date == "number" ? new Date(date) : date;
+					if (timeObj.toString() == "Invalid Date") timeObj = new Date(parseInt(date));
+					if (timeObj.toString() == "Invalid Date" || typeof timeObj.toLocaleDateString != "function") timeObj = new Date();
+					return timeObj;
+				};
+				InternalComponents.LibraryComponents.DateInput.format = function (strings, time) {
+					if (typeof strings == "string") strings = {formatString: strings};
+					if (!strings || typeof strings.formatString != "string" || !time) return "";
+					const timeObj = InternalComponents.LibraryComponents.DateInput.parseDate(time);
+					const language = BDFDB.LanguageUtils.getLanguage().id;
+					const now = new Date();
+					const daysAgo = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(timeObj.getFullYear(), timeObj.getMonth(), timeObj.getDate()))/(1000*60*60*24));
+					const date = strings.dateString && typeof strings.dateString == "string" ? InternalComponents.LibraryComponents.DateInput.formatDate(strings.dateString, timeObj) : timeObj.toLocaleDateString(language);
+					return (strings.formatString || InternalComponents.LibraryComponents.DateInput.getDefaultString())
+						.replace(/\$date/g, date)
+						.replace(/\$time12/g, strings.timeString && typeof strings.timeString == "string" ? InternalComponents.LibraryComponents.DateInput.formatTime(strings.timeString, timeObj, true) : timeObj.toLocaleTimeString(language, {hour12: true}))
+						.replace(/\$time/g, strings.timeString && typeof strings.timeString == "string" ? InternalComponents.LibraryComponents.DateInput.formatTime(strings.timeString, timeObj) : timeObj.toLocaleTimeString(language))
+						.replace(/\$monthS/g, timeObj.toLocaleDateString(language, {month: "short"}))
+						.replace(/\$month/g, timeObj.toLocaleDateString(language, {month: "long"}))
+						.replace(/\$dayS/g, timeObj.toLocaleDateString(language, {weekday: "short"}))
+						.replace(/\$day/g, timeObj.toLocaleDateString(language, {weekday: "long"}))
+						.replace(/\$agoAmount/g, daysAgo > 1 ? BDFDB.LanguageUtils.LanguageStringsFormat(`GAME_LIBRARY_LAST_PLAYED_${daysAgo > 80 ? "MONTHS" : daysAgo > 30 ? "WEEKS" : "DAYS"}`, daysAgo > 80 ? Math.round(daysAgo/30) : daysAgo > 30 ? Math.round(daysAgo/7) : daysAgo) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
+						.replace(/\$agoDate/g, daysAgo > 1 ? date : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`]);
+				};
+				InternalComponents.LibraryComponents.DateInput.formatDate = function (string, time) {
+					if (!string || typeof string != "string" || !time) return "";
+					const timeObj = InternalComponents.LibraryComponents.DateInput.parseDate(time);
+					const day = timeObj.getDate();
+					const month = timeObj.getMonth()+1;
+					const year = timeObj.getFullYear();
+					return string
+						.replace(/\$dd/g, day < 10 ? `0${day}` : day)
+						.replace(/\$d/g, day)
+						.replace(/\$mm/g, month < 10 ? `0${month}` : month)
+						.replace(/\$m/g, month)
+						.replace(/\$yyyy/g, year)
+						.replace(/\$yy/g, parseInt(year.toString().slice(-2)));
+				};
+				InternalComponents.LibraryComponents.DateInput.formatTime = function (string, time, hour12) {
+					if (!string || typeof string != "string" || !time) return "";
+					const timeObj = InternalComponents.LibraryComponents.DateInput.parseDate(time);
+					let hours = timeObj.getHours();
+					if (hour12 && hours > 12) hours -= 12;
+					const minutes = timeObj.getMinutes();
+					const seconds = timeObj.getSeconds();
+					const milli = timeObj.getMilliseconds();
+					string = string
+						.replace(/\$hh/g, hours < 10 ? `0${hours}` : hours)
+						.replace(/\$h/g, hours)
+						.replace(/\$mm/g, minutes < 10 ? `0${minutes}` : minutes)
+						.replace(/\$m/g, minutes)
+						.replace(/\$ss/g, seconds < 10 ? `0${seconds}` : seconds)
+						.replace(/\$s/g, seconds)
+						.replace(/\$uu/g, milli < 10 ? `00${seconds}` : milli < 100 ? `0${milli}` : milli)
+						.replace(/\$u/g, milli);
+					return hour12 ? timeObj.toLocaleTimeString(BDFDB.LanguageUtils.getLanguage().id, {hour12: true}).replace(/\d{1,2}[^\d]\d{1,2}[^\d]\d{1,2}/g, string) : string;
 				};
 				
 				InternalComponents.LibraryComponents.EmojiPickerButton = reactInitialized && class BDFDB_EmojiPickerButton extends LibraryModules.React.Component {
