@@ -5554,15 +5554,13 @@ module.exports = (_ => {
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 							className: BDFDB.disCN.colorpickerrow,
 							wrap: InternalComponents.LibraryComponents.Flex.Wrap.WRAP,
-							children: colors.map(color => {
-								return BDFDB.ReactUtils.createElement(this.ColorSwatch, {
-									swatches: this,
-									color: color,
-									isCustom: false,
-									isSelected: !this.props.customSelected && color == this.props.color,
-									isDisabled: this.props.disabled
-								})
-							})
+							children: colors.map(color => BDFDB.ReactUtils.createElement(this.ColorSwatch, {
+								swatches: this,
+								color: color,
+								isCustom: false,
+								isSelected: !this.props.customSelected && color == this.props.color,
+								isDisabled: this.props.disabled
+							}))
 						});
 					}
 					render() {
