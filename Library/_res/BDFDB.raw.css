@@ -668,9 +668,15 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-top: 8px;
 	font-weight: normal;
 }
+[REPLACE_CLASS_dateinputpreviewprefix],
+[REPLACE_CLASS_dateinputpreviewsuffix] {
+	font-weight: 600;
+}
 [REPLACE_CLASS_dateinputpreviewprefix] {
 	margin-right: 6px;
-	font-weight: 600;
+}
+[REPLACE_CLASS_dateinputpreviewsuffix] {
+	margin-left: 6px;
 }
 [REPLACE_CLASS_dateinputfield] {
 	flex: 1 1 auto;

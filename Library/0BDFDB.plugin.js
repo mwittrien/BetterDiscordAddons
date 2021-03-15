@@ -5701,6 +5701,10 @@ module.exports = (_ => {
 																dateString: input.props.dateString,
 																timeString: input.props.timeString
 															}, new Date((new Date()) - (1000*60*60*24*2)))
+														}),
+														input.props.suffix && BDFDB.ReactUtils.createElement("div", {
+															className: BDFDB.disCN.dateinputpreviewsuffix,
+															children: typeof input.props.suffix == "function" ? input.props.suffix(input) : input.props.suffix,
 														})
 													].filter(n => n)
 												});
@@ -5709,7 +5713,7 @@ module.exports = (_ => {
 									]
 								})
 							]
-						}), "onChange", "label", "formatString", "dateString", "timeString", "noPreview", "prefix"));
+						}), "onChange", "label", "formatString", "dateString", "timeString", "noPreview", "prefix", "suffix"));
 					}
 				};
 				InternalComponents.LibraryComponents.DateInput.getDefaultString = function () {
