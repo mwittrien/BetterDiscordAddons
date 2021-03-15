@@ -832,8 +832,8 @@ module.exports = (_ => {
 				if (!id) return "";
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(id);
 				if (!channel) return "";
-				else if (preCategories.friends && channel.isDM() && BDFDB.LibraryModules.FriendUtils.isFriend(channel.recipients[0])) return "friends";
-				else if (preCategories.blocked && channel.isDM() && BDFDB.LibraryModules.FriendUtils.isBlocked(channel.recipients[0])) return "blocked";
+				else if (preCategories.friends && channel.isDM() && BDFDB.LibraryModules.RelationshipStore.isFriend(channel.recipients[0])) return "friends";
+				else if (preCategories.blocked && channel.isDM() && BDFDB.LibraryModules.RelationshipStore.isBlocked(channel.recipients[0])) return "blocked";
 				else if (preCategories.groups && channel.isGroupDM()) return "groups";
 				return "";
 			}

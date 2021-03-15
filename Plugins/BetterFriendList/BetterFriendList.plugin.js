@@ -169,7 +169,7 @@ module.exports = (_ => {
 
 			processTabBar (e) {
 				if (settings.addTotalAmount && e.returnvalue.props.children) for (let checkChild of e.returnvalue.props.children) if (checkChild && checkChild.props.id == "ADD_FRIEND") {
-					let relationships = BDFDB.LibraryModules.FriendUtils.getRelationships(), relationshipCount = {};
+					let relationships = BDFDB.LibraryModules.RelationshipStore.getRelationships(), relationshipCount = {};
 					for (let type in BDFDB.DiscordConstants.RelationshipTypes) relationshipCount[type] = 0;
 					for (let id in relationships) relationshipCount[relationships[id]]++;
 					for (let child of e.returnvalue.props.children) if (child && child.props.id != "ADD_FRIEND") {

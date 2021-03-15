@@ -399,7 +399,7 @@ module.exports = (_ => {
 						let notificationStrings = BDFDB.DataUtils.get(this, "notificationstrings");
 						let notificationSounds = BDFDB.DataUtils.get(this, "notificationsounds");
 
-						let friendIds = BDFDB.LibraryModules.FriendUtils.getFriendIDs();
+						let friendIds = BDFDB.LibraryModules.RelationshipStore.getFriendIDs();
 						let friendsData = BDFDB.DataUtils.load(this, "friends"), nonFriendsData = BDFDB.DataUtils.load(this, "nonfriends");
 						let friends = [], nonFriends = [];
 						
