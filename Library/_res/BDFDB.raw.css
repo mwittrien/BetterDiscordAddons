@@ -672,10 +672,10 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_dateinputpreviewsuffix] {
 	font-weight: 600;
 }
-[REPLACE_CLASS_dateinputpreviewprefix] {
+[REPLACE_CLASS_dateinputpreviewprefix]:not(:empty) {
 	margin-right: 6px;
 }
-[REPLACE_CLASS_dateinputpreviewsuffix] {
+[REPLACE_CLASS_dateinputpreviewsuffix]:not(:empty) {
 	margin-left: 6px;
 }
 [REPLACE_CLASS_dateinputfield] {
