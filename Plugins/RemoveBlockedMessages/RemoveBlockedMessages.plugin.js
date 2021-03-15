@@ -72,18 +72,18 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					settings: {
-						disableNotifications:		{value: true, 	inner: true,		description: "Messages Notifications"},
-						disableVoiceNotifications:	{value: true, 	inner: true,		description: "Voice Chat Notifications"},
-						removeMessages:				{value: true, 	inner: true,		description: "Messages"},
-						removePinnedMessages:		{value: true, 	inner: true,		description: "Pinned Messages"},
-						removeInbox:				{value: true, 	inner: true,		description: "Inbox Messages"},
-						removeReplies:				{value: true, 	inner: true,		description: "Replies"},
-						removeMentions:				{value: true, 	inner: true,		description: "Mentions"},
-						removeReactions:			{value: true, 	inner: true,		description: "Reactions"},
-						removeAutocomplete:			{value: true, 	inner: true,		description: "Autocomplete Entries"},
-						removeUsers:				{value: true, 	inner: true,		description: "Members in List"},
-						removeVoiceUser:			{value: true, 	inner: true,		description: "Members in Voice List"},
-						removeVoiceChats:			{value: true, 	inner: true,		description: "Members in Voice Chat"}
+						disableNotifications:		{value: true, 	description: "Messages Notifications"},
+						disableVoiceNotifications:	{value: true, 	description: "Voice Chat Notifications"},
+						removeMessages:				{value: true, 	description: "Messages"},
+						removePinnedMessages:		{value: true, 	description: "Pinned Messages"},
+						removeInbox:				{value: true, 	description: "Inbox Messages"},
+						removeReplies:				{value: true, 	description: "Replies"},
+						removeMentions:				{value: true, 	description: "Mentions"},
+						removeReactions:			{value: true, 	description: "Reactions"},
+						removeAutocomplete:			{value: true, 	description: "Autocomplete Entries"},
+						removeUsers:				{value: true, 	description: "Members in List"},
+						removeVoiceUser:			{value: true, 	description: "Members in Voice List"},
+						removeVoiceChats:			{value: true, 	description: "Members in Voice Chat"}
 					}
 				};
 				
@@ -115,6 +115,11 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RelationshipUtils, "addRelationship", {after: e => {
+					if (e.methodArguments[2] == BDFDB.DiscordConstants.RelationshipTypes.BLOCKED) this.forceUpdateAll();
+				}});
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RelationshipUtils, "removeRelationship", {after: e => this.forceUpdateAll()});
+				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
 					if (e.returnValue && settings.disableNotifications) {
 						let count = BDFDB.LibraryModules.UnreadChannelUtils.getUnreadCount(e.methodArguments[0]);
@@ -184,7 +189,7 @@ module.exports = (_ => {
 				
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 					title: "Remove Elements:",
-					children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+					children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 						type: "Switch",
 						plugin: this,
 						keys: ["settings", key],
