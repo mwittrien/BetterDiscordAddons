@@ -654,7 +654,7 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 [REPLACE_CLASS_dateinputinner] {
 	flex: 1 1 auto;
-	color: rgb(--header-primary);
+	color: var(--header-primary);
 	max-width: calc(100% - 150px);
 }
 [REPLACE_CLASS_dateinputcontrols] {
@@ -663,8 +663,10 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-bottom: 8px;
 }
 [REPLACE_CLASS_dateinputpreview] {
-	color: rgb(--header-primary);
-	font-weight: 500;
+	display: flex;
+	align-items: center;
+	color: var(--header-primary);
+	font-weight: normal;
 }
 [REPLACE_CLASS_dateinputpreviewprefix] {
 	margin-right: 6px;

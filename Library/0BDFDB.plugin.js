@@ -5673,7 +5673,7 @@ module.exports = (_ => {
 					}
 					render() {
 						let input = this, preview;
-						return BDFDB.ReactUtils.createElement("div", {
+						return BDFDB.ReactUtils.createElement("div", BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.dateinputwrapper, this.props.className),
 							children: [
 								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsLabel, {
@@ -5754,7 +5754,7 @@ module.exports = (_ => {
 													children: [
 														input.props.prefix && BDFDB.ReactUtils.createElement("div", {
 															className: BDFDB.disCN.dateinputpreviewprefix,
-															children: input.props.prefix
+															children: typeof input.props.prefix == "function" ? input.props.prefix(input) : input.props.prefix,
 														}),
 														BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextScroller, {
 															children: InternalComponents.LibraryComponents.DateInput.format({
@@ -5770,7 +5770,7 @@ module.exports = (_ => {
 									]
 								})
 							]
-						});
+						}), "onChange", "label", "customString", "dateString", "timeString", "prefix"));
 					}
 				};
 				InternalComponents.LibraryComponents.DateInput.getDefaultString = function () {
