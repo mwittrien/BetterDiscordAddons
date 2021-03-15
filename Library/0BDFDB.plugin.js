@@ -5749,12 +5749,21 @@ module.exports = (_ => {
 										BDFDB.ReactUtils.createElement(class DateInputPreview extends LibraryModules.React.Component {
 											componentDidMount() {preview = this;}
 											render() {
-												return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextScroller, {
-													children: InternalComponents.LibraryComponents.DateInput.format({
-														formatString: input.props.customString,
-														dateString: input.props.dateString,
-														timeString: input.props.timeString
-													}, new Date((new Date()) - (1000*60*60*24*2)))
+												return BDFDB.ReactUtils.createElement("div", {
+													className: BDFDB.disCN.dateinputpreview,
+													children: [
+														input.props.prefix && BDFDB.ReactUtils.createElement("div", {
+															className: BDFDB.disCN.dateinputpreviewprefix,
+															children: input.props.prefix
+														}),
+														BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextScroller, {
+															children: InternalComponents.LibraryComponents.DateInput.format({
+																formatString: input.props.customString,
+																dateString: input.props.dateString,
+																timeString: input.props.timeString
+															}, new Date((new Date()) - (1000*60*60*24*2)))
+														})
+													].filter(n => n)
 												});
 											}
 										})
