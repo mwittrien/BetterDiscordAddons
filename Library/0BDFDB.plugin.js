@@ -5741,7 +5741,7 @@ module.exports = (_ => {
 					return (strings.formatString || InternalComponents.LibraryComponents.DateInput.getDefaultString())
 						.replace(/\$date/g, date)
 						.replace(/\$time12/g, strings.timeString && typeof strings.timeString == "string" ? InternalComponents.LibraryComponents.DateInput.formatTime(strings.timeString, timeObj, true) : timeObj.toLocaleTimeString(language, {hourCycle: "h12"}))
-						.replace(/\$time/g, strings.timeString && typeof strings.timeString == "string" ? InternalComponents.LibraryComponents.DateInput.formatTime(strings.timeString, timeObj) : timeObj.toLocaleTimeString(language))
+						.replace(/\$time/g, strings.timeString && typeof strings.timeString == "string" ? InternalComponents.LibraryComponents.DateInput.formatTime(strings.timeString, timeObj) : timeObj.toLocaleTimeString(language, {hourCycle: "h24"}))
 						.replace(/\$monthS/g, timeObj.toLocaleDateString(language, {month: "short"}))
 						.replace(/\$month/g, timeObj.toLocaleDateString(language, {month: "long"}))
 						.replace(/\$dayS/g, timeObj.toLocaleDateString(language, {weekday: "short"}))
