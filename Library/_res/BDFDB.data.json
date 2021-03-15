@@ -42,7 +42,7 @@
 		"DirectMessageUtils": {"props": ["addRecipient", "openPrivateChannel"]},
 		"EmojiUtils": {"props": ["translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji"]},
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},
-		"RelationshipStore": {"props": ["getFriendIDs", "getRelationships"]},
+		"FriendUtils": {"props": ["getFriendIDs", "getRelationships"]},
 		"FolderStore": {"props": ["getGuildFolderById", "getFlattenedGuilds"]},
 		"FolderUtils": {"props": ["isFolderExpanded", "getExpandedFolders"]},
 		"GuildBoostUtils": {"props": ["getTierName", "getUserLevel"]},
