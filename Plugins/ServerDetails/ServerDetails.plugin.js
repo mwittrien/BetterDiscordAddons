@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.4
+ * @version 1.0.5
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerDetails",
 			"author": "DevilBro",
-			"version": "1.0.4",
+			"version": "1.0.5",
 			"description": "Shows Server Details in the Server List Tooltip"
 		},
 		"changeLog": {
-			"fixed": {
-				"New React Structure": "Fixed for new internal react structure"
+			"improved": {
+				"New Settings": "Changed the Settings Panel for the Plugin, some Settings got reset sowwy ~w~"
 			}
 		}
 	};
@@ -65,8 +65,7 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var _this, languages;
-		var settings = {}, colors = {}, choices = {}, formats = {}, amounts = {};
+		var _this;
 	
 		const GuildDetailsComponent = class GuildDetails extends BdApi.React.Component {
 			constructor(props) {
@@ -74,20 +73,18 @@ module.exports = (_ => {
 				this.state = {fetchedOwner: false, delayed: false, repositioned: false};
 			}
 			componentDidUpdate() {
-				if (amounts.tooltipDelay && this.state.delayed && !this.state.repositioned) {
+				if (_this.settings.amounts.tooltipDelay && this.state.delayed && !this.state.repositioned) {
 					this.state.repositioned = true;
-					let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return.return.stateNode.containerInfo`));
-					if (tooltip) tooltip.update();
+					if (this.props.tooltipContainer && this.props.tooltipContainer.tooltip) this.props.tooltipContainer.tooltip.update();
 				}
 			}
 			render() {
-				if (amounts.tooltipDelay && !this.state.delayed) {
+				if (_this.settings.amounts.tooltipDelay && !this.state.delayed) {
 					BDFDB.TimeUtils.timeout(_ => {
 						this.state.delayed = true;
-						let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return.return.stateNode.containerInfo`));
-						if (tooltip) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN._serverdetailstooltip);
+						if (this.props.tooltipContainer && this.props.tooltipContainer.tooltip) BDFDB.DOMUtils.addClass(this.props.tooltipContainer.tooltip.firstElementChild, BDFDB.disCN._serverdetailstooltip);
 						BDFDB.ReactUtils.forceUpdate(this);
-					}, amounts.tooltipDelay * 1000);
+					}, _this.settings.amounts.tooltipDelay * 1000);
 					return null;
 				}
 				let owner = BDFDB.LibraryModules.UserStore.getUser(this.props.guild.ownerId);
@@ -96,47 +93,46 @@ module.exports = (_ => {
 					BDFDB.LibraryModules.UserFetchUtils.getUser(this.props.guild.ownerId).then(_ => BDFDB.ReactUtils.forceUpdate(this));
 				}
 				let src = this.props.guild.getIconURL(BDFDB.LibraryModules.IconUtils.hasAnimatedGuildIcon(this.props.guild) ? "gif" : "png");
-				let ownerString = `${owner ? owner.username : "Unknown"}#${owner ? owner.discriminator : "0000"}`;
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 					direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
 					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 					children: [
-						settings.addIcon && (src ? BDFDB.ReactUtils.createElement("img", {
+						_this.settings.items.icon && (src ? BDFDB.ReactUtils.createElement("img", {
 							className: BDFDB.disCN._serverdetailsicon,
 							src: src.replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "")
 						}) : BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN._serverdetailsicon,
 							children: this.props.guild.acronym
 						})),
-						settings.addOwner && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+						_this.settings.items.owner && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 							prefix: BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER,
 							string: `${owner ? owner.username : "Unknown"}#${owner ? owner.discriminator : "0000"}`
 						}),
-						settings.addCreation && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+						_this.settings.items.creationDate && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 							prefix: _this.labels.creation_date,
-							string: _this.getTimestamp(languages[choices.timeLang].id, BDFDB.LibraryModules.TimestampUtils.extractTimestamp(this.props.guild.id))
+							string: BDFDB.LibraryComponents.DateInput.format(_this.settings.dates.tooltipDates, BDFDB.LibraryModules.TimestampUtils.extractTimestamp(this.props.guild.id))
 						}),
-						settings.addJoin && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+						_this.settings.items.joinDate && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 							prefix: _this.labels.join_date,
-							string: _this.getTimestamp(languages[choices.timeLang].id, this.props.guild.joinedAt)
+							string: BDFDB.LibraryComponents.DateInput.format(_this.settings.dates.tooltipDates, this.props.guild.joinedAt)
 						}),
-						settings.addMembers && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+						_this.settings.items.members && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 							prefix: BDFDB.LanguageUtils.LanguageStrings.MEMBERS,
 							string: BDFDB.LibraryModules.MemberCountUtils.getMemberCount(this.props.guild.id)
 						}),
-						settings.addBoosters && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+						_this.settings.items.boosters && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 							prefix: _this.labels.boosters,
 							string: this.props.guild.premiumSubscriberCount
 						}),
-						settings.addChannels && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+						_this.settings.items.channels && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 							prefix: BDFDB.LanguageUtils.LanguageStrings.CHANNELS,
 							string: BDFDB.LibraryModules.GuildChannelStore.getChannels(this.props.guild.id).count
 						}),
-						settings.addRoles && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+						_this.settings.items.roles && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 							prefix: BDFDB.LanguageUtils.LanguageStrings.ROLES,
 							string: Object.keys(this.props.guild.roles).length
 						}),
-						settings.addRegion && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+						_this.settings.items.region && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 							prefix: BDFDB.LanguageUtils.LanguageStrings.REGION,
 							string: this.props.guild.region
 						})
@@ -147,7 +143,7 @@ module.exports = (_ => {
 		
 		const GuildDetailsRowComponent = class GuildDetailsRow extends BdApi.React.Component {
 			render() {
-				return (this.props.prefix.length + this.props.string.length) > Math.round(34 * (amounts.tooltipWidth/300)) ? [
+				return (this.props.prefix.length + this.props.string.length) > Math.round(34 * (_this.settings.amounts.tooltipWidth/300)) ? [
 					BDFDB.ReactUtils.createElement("div", {
 						children: `${this.props.prefix}:`
 					}),
@@ -165,36 +161,26 @@ module.exports = (_ => {
 				_this = this;
 				
 				this.defaults = {
-					settings: {
-						displayTime:		{value: false, 		cat: "settings",	description: "Display the Time in the Timestamp"},
-						displayDate:		{value: true, 		cat: "settings",	description: "Display the Date in the Timestamp"},
-						cutSeconds:			{value: false, 		cat: "settings",	description: "Cut off Seconds of the Time"},
-						forceZeros:			{value: false, 		cat: "settings",	description: "Force leading Zeros"},
-						otherOrder:			{value: false, 		cat: "settings",	description: "Show the Time before the Date"},
-						useDateInDaysAgo:	{value: false, 		cat: "settings",	description: "Use the Date instead of 'x days ago' in $daysago Placeholder"},
-						addIcon:			{value: true, 		cat: "tooltip",		description: "GUILD_CREATE_UPLOAD_ICON_LABEL"},
-						addOwner:			{value: true, 		cat: "tooltip",		description: "GUILD_OWNER"},
-						addCreation:		{value: true, 		cat: "tooltip",		description: "creation_date"},
-						addJoin:			{value: true, 		cat: "tooltip",		description: "join_date"},
-						addMembers:			{value: true, 		cat: "tooltip",		description: "MEMBERS"},
-						addChannels:		{value: true, 		cat: "tooltip",		description: "CHANNELS"},
-						addRoles:			{value: true, 		cat: "tooltip",		description: "ROLES"},
-						addBoosters:		{value: true, 		cat: "tooltip",		description: "SUBSCRIPTIONS_TITLE"},
-						addRegion:			{value: true, 		cat: "tooltip",		description: "REGION"}
+					items: {
+						icon:				{value: true, 	description: "GUILD_CREATE_UPLOAD_ICON_LABEL"},
+						owner:				{value: true, 	description: "GUILD_OWNER"},
+						creationDate:		{value: true, 	description: "creation_date"},
+						joinDate:			{value: true, 	description: "join_date"},
+						members:			{value: true, 	description: "MEMBERS"},
+						channels:			{value: true, 	description: "CHANNELS"},
+						roles:				{value: true, 	description: "ROLES"},
+						boosters:			{value: true, 	description: "boosters"},
+						region:				{value: true, 	description: "REGION"}
+					},
+					dates: {
+						tooltipDates:		{value: {}, 	description: "Tooltip Dates"}
 					},
 					colors: {
-						tooltipColor:		{value: "", 					description: "Tooltip Color"}
-					},
-					choices: {
-						timeLang:			{value: "$discord", 			description: "Date Format"}
-					},
-					formats: {
-						ownFormat:			{value: "$hour: $minute: $second, $day.$month.$year", 	description: "Own Format"}
+						tooltipColor:		{value: "", 	description: "Tooltip Color"}
 					},
 					amounts: {
-						tooltipDelay:		{value: 0,		cat: "tooltip",	 min: 0,	max: 10,	digits: 1,	unit: "s",	description: "Details Tooltip Delay"},
-						tooltipWidth:		{value: 300,	cat: "tooltip",	 min: 200,	max: 600,	digits: 0,	unit: "px",	description: "Details Tooltip Width"},
-						maxDaysAgo:			{value: 0,		cat: "format",	 min: 0,	description: "Maximum Count of Days displayed in the $daysago Placeholder",	note: "0 equals no Limit"}
+						tooltipDelay:		{value: 0,		min: 0,		max: 10,	digits: 1,	unit: "s",	description: "Tooltip Delay"},
+						tooltipWidth:		{value: 300,	min: 200,	max: 600,	digits: 0,	unit: "px",	description: "Tooltip Width"}
 					}
 				};
 			
@@ -234,13 +220,6 @@ module.exports = (_ => {
 					this.processGuild({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"});
 				}});
 
-				languages = BDFDB.ObjectUtils.deepAssign({
-					own: {
-						name: "Own",
-						id: "own"
-					}
-				}, BDFDB.LanguageUtils.languages);
-
 				this.forceUpdateAll();
 			}
 			
@@ -258,37 +237,30 @@ module.exports = (_ => {
 						let settingsItems = [];
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: "Settings",
+							title: "Tooltip Items",
 							collapseStates: collapseStates,
-							children: Object.keys(settings).map(key => this.defaults.settings[key].cat == "settings" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							children: Object.keys(this.defaults.items).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "Switch",
 								plugin: this,
-								keys: ["settings", key],
-								label: this.defaults.settings[key].description,
-								value: settings[key],
-								onChange: (value, instance) => {
-									settings[key] = value;
-									BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_SettingsPanel", up: true}), {name: "BDFDB_Select", all: true, noCopies: true}));
-								}
+								keys: ["items", key],
+								label: this.labels[this.defaults.items[key].description] || BDFDB.LanguageUtils.LanguageStrings[this.defaults.items[key].description],
+								value: this.settings.items[key]
 							}))
 						}));
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: "Tooltip Settings",
+							title: "Tooltip Format",
 							collapseStates: collapseStates,
-							children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
-								className: BDFDB.disCN.marginbottom4,
-								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
-								children: "Add additional details in the server tooltip for: "
-							})].concat(Object.keys(settings).map(key => this.defaults.settings[key].cat == "tooltip" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-								type: "Switch",
-								plugin: this,
-								keys: ["settings", key],
-								label: this.labels[this.defaults.settings[key].description] || BDFDB.LanguageUtils.LanguageStrings[this.defaults.settings[key].description],
-								value: settings[key]
+							children: Object.keys(this.defaults.dates).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.DateInput, Object.assign({}, this.settings.dates[key], {
+								label: this.defaults.dates[key].description,
+								onChange: valueObj => {
+									this.SettingsUpdated = true;
+									this.settings.dates[key] = valueObj;
+									BDFDB.DataUtils.save(this.settings.dates, this, "dates");
+								}
 							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 								className: BDFDB.disCN.marginbottom8
-							})).concat(Object.keys(amounts).map(key => this.defaults.amounts[key].cat == "tooltip" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							})).concat(Object.keys(this.defaults.amounts).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "Slider",
 								plugin: this,
 								keys: ["amounts", key],
@@ -300,124 +272,19 @@ module.exports = (_ => {
 								markerAmount: 11,
 								onValueRender: value => value + this.defaults.amounts[key].unit,
 								childProps: {type: "number"},
-								value: amounts[key]
+								value: this.settings.amounts[key]
 							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 								className: BDFDB.disCN.marginbottom8
-							})).concat(Object.keys(colors).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							})).concat(Object.keys(this.defaults.colors).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "TextInput",
 								plugin: this,
 								keys: ["colors", key],
 								basis: "70%",
 								label: this.defaults.colors[key].description,
-								value: colors[key],
+								value: this.settings.colors[key],
 								childProps: {type: "color"},
-								placeholder: colors[key]
+								placeholder: this.settings.colors[key]
 							})))
-						}));
-						
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: "Time Format",
-							collapseStates: collapseStates,
-							children: Object.keys(choices).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-								type: "Select",
-								plugin: this,
-								keys: ["choices", key],
-								label: this.defaults.choices[key].description,
-								basis: "70%",
-								value: choices[key],
-								options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value: id, label: lang.name}})),
-								searchable: true,
-								optionRenderer: lang => {
-									return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-										children: [
-											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-												grow: 0,
-												shrink: 0,
-												basis: "40%",
-												children: lang.label
-											}),
-											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-												grow: 0,
-												shrink: 0,
-												basis: "60%",
-												children: this.getTimestamp(languages[lang.value].id)
-											})
-										]
-									});
-								},
-								valueRenderer: lang => {
-									return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-										children: [
-											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-												grow: 0,
-												shrink: 0,
-												children: lang.label
-											}),
-											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-												grow: 1,
-												shrink: 0,
-												basis: "70%",
-												children: this.getTimestamp(languages[lang.value].id)
-											})
-										]
-									});
-								}
-							})).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-								className: BDFDB.disCN.marginbottom8
-							})).concat(Object.keys(formats).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-								type: "TextInput",
-								plugin: this,
-								keys: ["formats", key],
-								label: this.defaults.formats[key].description,
-								basis: "70%",
-								value: formats[key],
-								onChange: (value, instance) => {
-									formats[key] = value;
-									BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_SettingsPanel", up: true}), {name: "BDFDB_Select", all: true, noCopies: true}));
-								}
-							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-								className: BDFDB.disCN.marginbottom8
-							})).concat(Object.keys(amounts).map(key => this.defaults.amounts[key].cat == "format" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-								type: "TextInput",
-								plugin: this,
-								keys: ["amounts", key],
-								label: this.defaults.amounts[key].description,
-								note: this.defaults.amounts[key].note,
-								basis: "20%",
-								min: this.defaults.amounts[key].min,
-								max: this.defaults.amounts[key].max,
-								childProps: {type: "number"},
-								value: amounts[key]
-							}))).filter(n => n)
-						}));
-						
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: "Placeholder Guide",
-							dividerTop: true,
-							collapseStates: collapseStates,
-							children: [
-								"$hour will be replaced with the hour of the date",
-								"$minute will be replaced with the minutes of the date",
-								"$second will be replaced with the seconds of the date",
-								"$msecond will be replaced with the milliseconds of the date",
-								"$timemode will change $hour to a 12h format and will be replaced with AM/PM",
-								"$year will be replaced with the year of the date",
-								"$yearS will be replaced with the year in short form",
-								"$month will be replaced with the month of the date",
-								"$day will be replaced with the day of the date",
-								"$monthnameL will be replaced with the monthname in long format based on the Discord Language",
-								"$monthnameS will be replaced with the monthname in short format based on the Discord Language",
-								"$weekdayL will be replaced with the weekday in long format based on the Discord Language",
-								"$weekdayS will be replaced with the weekday in short format based on the Discord Language",
-								"$daysago will be replaced with a string to tell you how many days ago the event occured. For Example: " + BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", 3)
-							].map(string => {
-								return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
-									type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
-									children: string
-								});
-							})
 						}));
 						
 						return settingsItems;
@@ -432,17 +299,12 @@ module.exports = (_ => {
 				}
 			}
 		
-			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
-				colors = BDFDB.DataUtils.get(this, "colors");
-				choices = BDFDB.DataUtils.get(this, "choices");
-				formats = BDFDB.DataUtils.get(this, "formats");
-				amounts = BDFDB.DataUtils.get(this, "amounts");
-				
-				let iconSize = amounts.tooltipWidth - 80;
+			forceUpdateAll () {				
+				let iconSize = this.settings.amounts.tooltipWidth - 80;
 				BDFDB.DOMUtils.appendLocalStyle(this.name + "TooltipWidth", `
 					${BDFDB.dotCN._serverdetailstooltip} {
-						width: ${amounts.tooltipWidth}px !important;
+						min-width: ${this.settings.amounts.tooltipWidth}px !important;
+						width: unset !important;
 						max-width: unset !important;
 					}
 					${BDFDB.dotCNS._serverdetailstooltip + BDFDB.dotCN._serverdetailsicon} {
@@ -456,43 +318,25 @@ module.exports = (_ => {
 
 			processGuild (e) {
 				if (BDFDB.GuildUtils.is(e.instance.props.guild)) {
+					let tooltipContainer;
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
 					if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, Object.assign({}, children[index].props, {
+						ref: instance => {if (instance) tooltipContainer = instance;},
 						tooltipConfig:  Object.assign({
-							backgroundColor: colors.tooltipColor
+							backgroundColor: this.settings.colors.tooltipColor
 						}, children[index].props.tooltipConfig, {
-							className: !amounts.tooltipDelay && BDFDB.disCN._serverdetailstooltip,
+							className: !this.settings.amounts.tooltipDelay && BDFDB.disCN._serverdetailstooltip,
 							type: "right",
 							guild: e.instance.props.guild,
 							list: true,
 							offset: 12
 						}),
 						text: _ => BDFDB.ReactUtils.createElement(GuildDetailsComponent, {
+							tooltipContainer: tooltipContainer,
 							guild: e.instance.props.guild
 						})
 					}));
 				}
-			}
-
-			getTimestamp (languageId, time) {
-				return BDFDB.StringUtils.formatTime(time, Object.assign({
-					language: languageId,
-					formatString: languageId == "own" && formats.ownFormat
-				}, settings, amounts));
-			}
-
-			cutOffSeconds (timeString) {
-				return timeString.replace(/(.{1,2}:.{1,2}):.{1,2}(.*)/, "$1$2").replace(/(.{1,2}\..{1,2})\..{1,2}(.*)/, "$1$2").replace(/(.{1,2} h .{1,2} min) .{1,2} s(.*)/, "$1$2");
-			}
-
-			addLeadingZeros (timeString) {
-				let charArray = timeString.split("");
-				let numreg = /[0-9]/;
-				for (let i = 0; i < charArray.length; i++) {
-					if (!numreg.test(charArray[i-1]) && numreg.test(charArray[i]) && !numreg.test(charArray[i+1])) charArray[i] = "0" + charArray[i];
-				}
-
-				return charArray.join("");
 			}
 
 			setLabelsByLanguage () {
