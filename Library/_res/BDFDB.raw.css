@@ -660,12 +660,12 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_dateinputcontrols] {
 	display: flex;
 	align-items: center;
-	margin-bottom: 8px;
 }
 [REPLACE_CLASS_dateinputpreview] {
 	display: flex;
 	align-items: center;
 	color: var(--header-primary);
+	margin-top: 8px;
 	font-weight: normal;
 }
 [REPLACE_CLASS_dateinputpreviewprefix] {
