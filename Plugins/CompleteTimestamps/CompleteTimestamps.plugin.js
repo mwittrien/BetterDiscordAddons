@@ -186,8 +186,8 @@ module.exports = (_ => {
 					let process = returnvalue => {
 						let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props: [["className", BDFDB.disCN.embedfootertext]]});
 						if (index > -1) {
-							if (BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children[children[index].props.children.length - 1] = BDFDB.LibraryComponents.DateInput.format(this.settings.dates.timestampDate, e.instance.props.embed.timestamp._i);
-							else children[index].props.children = BDFDB.LibraryComponents.DateInput.format(this.settings.dates.timestampDate, e.instance.props.embed.timestamp._i);
+							if (BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children[children[index].props.children.length - 1] = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.embed.timestamp._i);
+							else children[index].props.children = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.embed.timestamp._i);
 						}
 					};
 					if (typeof e.returnvalue.props.children == "function") {
@@ -205,7 +205,7 @@ module.exports = (_ => {
 			processSystemMessage (e) {
 				if (e.instance.props.timestamp && this.settings.general.showInChat) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "time"});
-					if (index > -1) children[index].props.children = BDFDB.LibraryComponents.DateInput.format(this.settings.dates.timestampDate, e.instance.props.timestamp._i);
+					if (index > -1) children[index].props.children = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.timestamp._i);
 				}
 			}
 
@@ -226,7 +226,7 @@ module.exports = (_ => {
 			editLog (log, returnvalue) {
 				if (!log || !returnvalue) return;
 				let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props: [["className", "timestamp-1mruiI"]]});
-				if (index > -1) children[index].props.children = BDFDB.LibraryComponents.DateInput.format(this.settings.dates.timestampDate, log.timestampStart._i);
+				if (index > -1) children[index].props.children = this.formatTimestamp(this.settings.dates.timestampDate, log.timestampStart._i);
 			}
 			
 			changeTimestamp (parent, index, change = {}) {
@@ -240,12 +240,12 @@ module.exports = (_ => {
 				}
 				if (tooltipWrapper) {
 					if (change.tooltip) {
-						tooltipWrapper.props.text = BDFDB.LibraryComponents.DateInput.format(this.settings.dates.tooltipDate, parent[index].props.timestamp._i, true);
+						tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, parent[index].props.timestamp._i, true);
 						tooltipWrapper.props.delay = 0;
 					}
 					if (change.child && typeof tooltipWrapper.props.children == "function") {
 						if (tooltipIsSame) tooltipWrapper.props.delay = 99999999999999999999;
-						let timestamp = BDFDB.LibraryComponents.DateInput.format(this.settings.dates.timestampDate, parent[index].props.timestamp._i);
+						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, parent[index].props.timestamp._i);
 						let renderChildren = tooltipWrapper.props.children;
 						tooltipWrapper.props.children = (...args) => {
 							let renderedChildren = renderChildren(...args);
@@ -258,11 +258,15 @@ module.exports = (_ => {
 				parent[index] = stamp;
 			}
 			
+			formatTimestamp (format, date) {
+				return BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(BDFDB.LibraryComponents.DateInput.format(format, date));
+			}
+			
 			setMaxWidth (timestamp, compact) {
 				if (currentMode != compact) {
 					currentMode = compact;
 					if (timestamp.props.className && typeof timestamp.type == "string") {
-						let tempTimestamp = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.messagecompact}"><${timestamp.type} class="${timestamp.props.className}" style="width: auto !important;">${BDFDB.LibraryComponents.DateInput.format(this.settings.dates.timestampDate, new Date(253402124399995))}</${timestamp.type}></div>`);
+						let tempTimestamp = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.messagecompact}"><${timestamp.type} class="${timestamp.props.className}" style="width: auto !important;">${this.formatTimestamp(this.settings.dates.timestampDate, new Date(253402124399995))}</${timestamp.type}></div>`);
 						document.body.appendChild(tempTimestamp);
 						let width = BDFDB.DOMUtils.getRects(tempTimestamp.firstElementChild).width + 10;
 						tempTimestamp.remove();
