@@ -5740,7 +5740,7 @@ module.exports = (_ => {
 					const date = strings.dateString && typeof strings.dateString == "string" ? InternalComponents.LibraryComponents.DateInput.formatDate(strings.dateString, timeObj) : timeObj.toLocaleDateString(language);
 					return (strings.formatString || InternalComponents.LibraryComponents.DateInput.getDefaultString())
 						.replace(/\$date/g, date)
-						.replace(/\$time12/g, strings.timeString && typeof strings.timeString == "string" ? InternalComponents.LibraryComponents.DateInput.formatTime(strings.timeString, timeObj, true) : timeObj.toLocaleTimeString(language, {hour12: true}))
+						.replace(/\$time12/g, strings.timeString && typeof strings.timeString == "string" ? InternalComponents.LibraryComponents.DateInput.formatTime(strings.timeString, timeObj, true) : timeObj.toLocaleTimeString(language, {hourCycle: "h12"}))
 						.replace(/\$time/g, strings.timeString && typeof strings.timeString == "string" ? InternalComponents.LibraryComponents.DateInput.formatTime(strings.timeString, timeObj) : timeObj.toLocaleTimeString(language))
 						.replace(/\$monthS/g, timeObj.toLocaleDateString(language, {month: "short"}))
 						.replace(/\$month/g, timeObj.toLocaleDateString(language, {month: "long"}))
@@ -5784,7 +5784,7 @@ module.exports = (_ => {
 						.replace(/\$s/g, seconds)
 						.replace(/\$uu/g, milli < 10 ? `00${seconds}` : milli < 100 ? `0${milli}` : milli)
 						.replace(/\$u/g, milli);
-					return hour12 ? timeObj.toLocaleTimeString(language, {hour12: true}).replace(/\d{1,2}[^\d]\d{1,2}[^\d]\d{1,2}/g, string) : string;
+					return hour12 ? timeObj.toLocaleTimeString(language, {hourCycle: "h12"}).replace(/\d{1,2}[^\d]\d{1,2}[^\d]\d{1,2}/g, string) : string;
 				};
 				
 				InternalComponents.LibraryComponents.EmojiPickerButton = reactInitialized && class BDFDB_EmojiPickerButton extends LibraryModules.React.Component {
