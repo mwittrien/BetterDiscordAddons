@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.3
+ * @version 2.1.5
  * @description Allow you to preview all themes from the theme repo and download them on the fly
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
-			"version": "2.1.3",
+			"version": "2.1.5",
 			"description": "Allow you to preview all themes from the theme repo and download them on the fly"
 		},
 		"changeLog": {
 			"fixed": {
-				"New Settings Order": "Fixed for new settings order"
+				"Repo Header": "Repo Header gets added properly again"
 			}
 		}
 	};
@@ -978,7 +978,7 @@ module.exports = (_ => {
 			}
 			
 			processStandardSidebarView (e) {
-				if (BDFDB.ObjectUtils.get(e, "instance.props.content.props.section") == "themerepo") {
+				if (e.instance.props.section == "themerepo") {
 					let content = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.settingswindowcontentregion]]});
 					if (content) content.props.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repolistwrapper, content.props.className);
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.settingswindowcontentregionscroller]]});

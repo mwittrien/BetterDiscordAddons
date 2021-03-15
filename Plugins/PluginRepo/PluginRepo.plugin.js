@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.4
+ * @version 2.1.5
  * @description Allow you to look at all plugins from the plugin repo and download them on the fly
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.1.4",
+			"version": "2.1.5",
 			"description": "Allow you to look at all plugins from the plugin repo and download them on the fly"
 		},
 		"changeLog": {
-			"progress": {
-				"New Meta Headers": "Adjusted Update Check for new Plugin Meta Headers"
+			"fixed": {
+				"Repo Header": "Repo Header gets added properly again"
 			}
 		}
 	};
@@ -684,7 +684,7 @@ module.exports = (_ => {
 			}
 			
 			processStandardSidebarView (e) {
-				if (BDFDB.ObjectUtils.get(e, "instance.props.content.props.section") == "pluginrepo") {
+				if (e.instance.props.section == "pluginrepo") {
 					let content = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.settingswindowcontentregion]]});
 					if (content) content.props.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repolistwrapper, content.props.className);
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.settingswindowcontentregionscroller]]});
