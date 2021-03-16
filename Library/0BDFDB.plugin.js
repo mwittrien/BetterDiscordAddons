@@ -5685,7 +5685,8 @@ module.exports = (_ => {
 													"$monthS will be replaced with the Month Name (Short Form)",
 													"$day will be replaced with the Weekday Name",
 													"$dayS will be replaced with the Weekday Name (Short Form)",
-													"$agoAmount will be replaced with ('Today', 'Yesterday', '2 days ago')",
+													"$agoAmount will be replaced with ('Today', 'Yesterday', 'x days/weeks/months ago')",
+													"$agoDays will be replaced with ('Today', 'Yesterday', 'x days ago')",
 													"$agoDate will be replaced with ('Today', 'Yesterday', $date)"
 												].join("\n"))
 											]
@@ -5750,6 +5751,7 @@ module.exports = (_ => {
 						.replace(/\$dayS/g, timeObj.toLocaleDateString(language, {weekday: "short"}))
 						.replace(/\$day/g, timeObj.toLocaleDateString(language, {weekday: "long"}))
 						.replace(/\$agoAmount/g, daysAgo > 1 ? BDFDB.LanguageUtils.LanguageStringsFormat(`GAME_LIBRARY_LAST_PLAYED_${daysAgo > 80 ? "MONTHS" : daysAgo > 30 ? "WEEKS" : "DAYS"}`, daysAgo > 80 ? Math.round(daysAgo/30) : daysAgo > 30 ? Math.round(daysAgo/7) : daysAgo) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
+						.replace(/\$agoDays/g, daysAgo > 1 ? BDFDB.LanguageUtils.LanguageStringsFormat(`GAME_LIBRARY_LAST_PLAYED_DAYS`, daysAgo) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
 						.replace(/\$agoDate/g, daysAgo > 1 ? date : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`]);
 				};
 				InternalComponents.LibraryComponents.DateInput.formatDate = function (string, time) {
