@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.2
+ * @version 1.6.4
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.6.3",
+			"version": "1.6.4",
 			"description": "Shows a Notification when a Friend or a User, you choose to observe, changes their Status"
 		},
 		"changeLog": {
-			"fixed": {
-				"Switch to DM": "Clicking a notification switches the channel again"
+			"improved": {
+				"Time Log Timestamp Format": "Added Option to allow Users to customize the Timestamp Format in the Time Log"
 			}
 		}
 	};
@@ -68,7 +68,7 @@ module.exports = (_ => {
 		var _this;
 		var userStatusStore, timeLog, lastTimes, checkInterval, paginationOffset = {};
 		var friendCounter, timeLogList;
-		var settings = {}, amounts = {}, notificationStrings = {}, notificationSounds = {}, observedUsers = {};
+		var settings = {}, dates = {}, amounts = {}, notificationStrings = {}, notificationSounds = {}, observedUsers = {};
 		
 		const statuses = {
 			online: {
@@ -142,9 +142,7 @@ module.exports = (_ => {
 					children: BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS.guildslabel + BDFDB.disCN._friendnotificationsfriendsonline,
 						children: BDFDB.LanguageUtils.LanguageStringsFormat("FRIENDS_ONLINE_HEADER", this.props.amount),
-						onClick: _ => {
-							_this.showTimeLog();
-						}
+						onClick: _ => _this.showTimeLog()
 					})
 				});
 			}
@@ -168,7 +166,7 @@ module.exports = (_ => {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 									className: BDFDB.disCN._friendnotificationslogtime,
-									children: `[${log.timeString}]`
+									children: BDFDB.LibraryComponents.DateInput.format(dates.logDate, log.timestamp)
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
 									className: BDFDB.disCN._friendnotificationslogavatar,
@@ -221,6 +219,9 @@ module.exports = (_ => {
 						custom: 			{value: "$user changed status to '$custom'"}
 					},
 					notificationsounds: {},
+					dates: {
+						logDate:			{value: {}, 				description: "Log Timestamp"},
+					},
 					amounts: {
 						toastTime:			{value: 5, 		min: 1,		description: "Amount of Seconds a Toast Notification stays on Screen: "},
 						checkInterval:		{value: 10, 	min: 5,		description: "Check Users every X Seconds: "}
@@ -235,7 +236,8 @@ module.exports = (_ => {
 		
 				this.css = `
 					${BDFDB.dotCN._friendnotificationslogtime} {
-						width: 160px;
+						flex: 0 1 auto;
+						min-width: 160px;
 					}	
 					${BDFDB.dotCN._friendnotificationslogavatar} {
 						margin: 0 10px;
@@ -396,43 +398,11 @@ module.exports = (_ => {
 						
 						let settings = BDFDB.DataUtils.get(this, "settings");
 						let amounts = BDFDB.DataUtils.get(this, "amounts");
+						let dates = BDFDB.DataUtils.get(this, "dates");
 						let notificationStrings = BDFDB.DataUtils.get(this, "notificationstrings");
 						let notificationSounds = BDFDB.DataUtils.get(this, "notificationsounds");
-
-						let friendIds = BDFDB.LibraryModules.RelationshipStore.getFriendIDs();
-						let friendsData = BDFDB.DataUtils.load(this, "friends"), nonFriendsData = BDFDB.DataUtils.load(this, "nonfriends");
-						let friends = [], nonFriends = [];
 						
-						for (let id of friendIds) {
-							let user = BDFDB.LibraryModules.UserStore.getUser(id);
-							if (user) {
-								friendsData[id] = Object.assign({}, friendsData[id] || nonFriendsData[id] || this.createDefaultConfig());
-								delete nonFriendsData[id];
-							}
-						}
-						for (let id in friendsData) {
-							let user = BDFDB.LibraryModules.UserStore.getUser(id);
-							if (user) {
-								if (!friendIds.includes(id)) {
-									nonFriendsData[id] = Object.assign({}, friendsData[id]);
-									delete friendsData[id];
-								}
-								else if (id != BDFDB.UserUtils.me.id) friends.push(Object.assign({}, user, friendsData[id], {
-									key: id,
-									className: friendsData[id].disabled ? BDFDB.disCN.hovercarddisabled : ""
-								}));
-							}
-						}
-						for (let id in nonFriendsData) {
-							let user = BDFDB.LibraryModules.UserStore.getUser(id);
-							if (user && id != BDFDB.UserUtils.me.id) nonFriends.push(Object.assign({}, user, nonFriendsData[id], {
-								key: id,
-								className: nonFriendsData[id].disabled ? BDFDB.disCN.hovercarddisabled : ""
-							}));
-						}
-
-						BDFDB.DataUtils.save(friendsData, this, "friends");
-						BDFDB.DataUtils.save(nonFriendsData, this, "nonfriends");
+						let {cards} = this.getObserverData();
 						
 						for (let key in settings) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 							type: "Switch",
@@ -441,6 +411,15 @@ module.exports = (_ => {
 							label: this.defaults.settings[key].description,
 							value: settings[key]
 						}));
+						
+						for (let key in dates) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.DateInput, Object.assign({}, dates[key], {
+							label: this.defaults.dates[key].description,
+							onChange: valueObj => {
+								this.SettingsUpdated = true;
+								dates[key] = valueObj;
+								BDFDB.DataUtils.save(dates, this, "dates");
+							}
+						})));
 						
 						for (let key in amounts) if (key.indexOf("desktop") == -1 || "Notification" in window) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 							type: "TextInput",
@@ -462,7 +441,7 @@ module.exports = (_ => {
 							children: innerItems
 						}));
 						
-						if (friends.length) settingsItems.push(createUserList(friends, "friends", "Friend-List"));
+						if (cards.friends.length) settingsItems.push(createUserList(cards.friends, "friends", "Friend-List"));
 						
 						let strangerId = "";
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
@@ -485,7 +464,7 @@ module.exports = (_ => {
 											let userId = strangerId.trim();
 											if (userId == BDFDB.UserUtils.me.id) BDFDB.NotificationUtils.toast("Are you seriously trying to stalk yourself?", {type: "danger"});
 											else if (friendIds.includes(userId)) BDFDB.NotificationUtils.toast("User is already a friend of yours, please use the 'Friend-List' area to configure them", {type: "danger"});
-											else if (Object.keys(nonFriends).includes(userId)) BDFDB.NotificationUtils.toast("User is already being observed as a 'Stranger'", {type: "danger"});
+											else if (Object.keys(cards.nonFriends).includes(userId)) BDFDB.NotificationUtils.toast("User is already being observed as a 'Stranger'", {type: "danger"});
 											else {
 												let user = /.+#[0-9]{4}/.test(userId) ? BDFDB.LibraryModules.UserStore.findByTag(userId.split("#").slice(0, -1).join("#"), userId.split("#").pop()) : BDFDB.LibraryModules.UserStore.getUser(userId);
 												if (user) {
@@ -502,7 +481,7 @@ module.exports = (_ => {
 							})
 						}));
 						
-						if (nonFriends.length) settingsItems.push(createUserList(nonFriends, "nonfriends", "Stranger-List"));
+						if (cards.nonFriends.length) settingsItems.push(createUserList(cards.nonFriends, "nonfriends", "Stranger-List"));
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "LogIn/-Out Timelog",
@@ -669,6 +648,45 @@ module.exports = (_ => {
 					amount: BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount()
 				}));
 			}
+			
+			getObserverData () {
+				let friendIds = BDFDB.LibraryModules.RelationshipStore.getFriendIDs();
+				let friendDatas = BDFDB.DataUtils.load(this, "friends"), nonFriendDatas = BDFDB.DataUtils.load(this, "nonfriends");
+				let friendCards = [], nonFriendCards = [];
+				
+				for (let id of friendIds) {
+					let user = BDFDB.LibraryModules.UserStore.getUser(id);
+					if (user) {
+						friendDatas[id] = Object.assign({}, friendDatas[id] || nonFriendDatas[id] || this.createDefaultConfig());
+						delete nonFriendDatas[id];
+					}
+				}
+				for (let id in friendDatas) {
+					let user = BDFDB.LibraryModules.UserStore.getUser(id);
+					if (user) {
+						if (!friendIds.includes(id)) {
+							nonFriendDatas[id] = Object.assign({}, friendDatas[id]);
+							delete friendDatas[id];
+						}
+						else if (id != BDFDB.UserUtils.me.id) friendCards.push(Object.assign({}, user, friendDatas[id], {
+							key: id,
+							className: friendDatas[id].disabled ? BDFDB.disCN.hovercarddisabled : ""
+						}));
+					}
+				}
+				for (let id in nonFriendDatas) {
+					let user = BDFDB.LibraryModules.UserStore.getUser(id);
+					if (user && id != BDFDB.UserUtils.me.id) nonFriendCards.push(Object.assign({}, user, nonFriendDatas[id], {
+						key: id,
+						className: nonFriendDatas[id].disabled ? BDFDB.disCN.hovercarddisabled : ""
+					}));
+				}
+
+				BDFDB.DataUtils.save(friendDatas, this, "friends");
+				BDFDB.DataUtils.save(nonFriendDatas, this, "nonfriends");
+				
+				return {data: {friends: friendDatas, nonFriends: nonFriendDatas}, cards: {friends: friendCards, nonFriends: nonFriendCards}};
+			}
 
 			createDefaultConfig () {
 				return Object.assign({
@@ -710,10 +728,12 @@ module.exports = (_ => {
 				
 				settings = BDFDB.DataUtils.get(this, "settings");
 				amounts = BDFDB.DataUtils.get(this, "amounts");
+				dates = BDFDB.DataUtils.get(this, "dates");
 				notificationStrings = BDFDB.DataUtils.get(this, "notificationstrings");
 				notificationSounds = BDFDB.DataUtils.get(this, "notificationsounds");
 				
-				observedUsers = Object.assign({}, BDFDB.DataUtils.load(this, "nonfriends"), BDFDB.DataUtils.load(this, "friends"));
+				let {data} = this.getObserverData();
+				observedUsers = Object.assign({}, data.nonFriends, data.friends);
 				delete observedUsers[BDFDB.UserUtils.me.id];
 				
 				for (let id in observedUsers) userStatusStore[id] = this.getStatusWithMobileAndActivity(id, observedUsers[id]);
@@ -740,7 +760,7 @@ module.exports = (_ => {
 							let EUdata = BDFDB.BDUtils.isPluginEnabled("EditUsers") && BDFDB.DataUtils.load("EditUsers", "users", user.id) || {};
 							let name = EUdata.name || user.username;
 							let avatar = EUdata.removeIcon ? "" : (EUdata.url || BDFDB.UserUtils.getAvatar(user.id));
-							let timeString = (new Date()).toLocaleString();
+							let timestamp = new Date().getTime();
 							
 							let statusName = this.getStatusName(id, status);
 							let oldStatusName = this.getStatusName(id, userStatusStore[id]);
@@ -754,11 +774,11 @@ module.exports = (_ => {
 								avatar: avatar,
 								name: name,
 								status: BDFDB.UserUtils.getStatus(user.id),
-								timeString: timeString
+								timestamp: timestamp
 							});
 							
-							if (!(settings.muteOnDND && BDFDB.UserUtils.getStatus() == BDFDB.DiscordConstants.StatusTypes.DND) && (!lastTimes[user.id] || lastTimes[user.id] != timeString)) {
-								lastTimes[user.id] = timeString;
+							if (!(settings.muteOnDND && BDFDB.UserUtils.getStatus() == BDFDB.DiscordConstants.StatusTypes.DND) && (!lastTimes[user.id] || lastTimes[user.id] != timestamp)) {
+								lastTimes[user.id] = timestamp;
 								
 								let openChannel = _ => {
 									if (settings.openOnClick) {
