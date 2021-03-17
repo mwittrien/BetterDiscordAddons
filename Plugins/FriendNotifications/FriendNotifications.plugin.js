@@ -155,7 +155,7 @@ module.exports = (_ => {
 			render() {
 				return this.props.entries.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PaginatedList, {
 					items: this.props.entries,
-					amount: 100,
+					amount: 50,
 					copyToBottom: true,
 					renderItem: (log, i) => [
 						i > 0 ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
