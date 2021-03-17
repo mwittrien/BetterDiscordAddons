@@ -95,6 +95,7 @@
 		"RelationshipStore": {"props": ["getFriendIDs", "getRelationships"]},
 		"RelationshipUtils": {"props": ["addRelationship", "removeRelationship"]},
 		"SearchPageUtils": {"props": ["searchNextPage", "searchPreviousPage"]},
+		"SettingsStore": {"props": ["guildPositions", "theme"]},
 		"SettingsUtils": {"props": ["updateRemoteSettings", "updateLocalSettings"]},
 		"SimpleMarkdownParser": {"props": ["parseBlock", "parseInline", "defaultOutput"]},
 		"SlateUtils": {"props": ["serialize", "deserialize"], "notProps": ["getFlag"]},

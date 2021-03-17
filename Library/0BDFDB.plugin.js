@@ -4066,13 +4066,13 @@ module.exports = (_ => {
 					}
 				};
 				BDFDB.DiscordUtils.isDevModeEnabled = function () {
-					return (LibraryModules.StoreChangeUtils.get("UserSettingsStore") || {}).developerMode;
+					return LibraryModules.SettingsStore.developerMode;
 				};
 				BDFDB.DiscordUtils.getTheme = function () {
-					return (LibraryModules.StoreChangeUtils.get("UserSettingsStore") || {}).theme != "dark" ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
+					return LibraryModules.SettingsStore.theme != "dark" ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
 				};
 				BDFDB.DiscordUtils.getMode = function () {
-					return (LibraryModules.StoreChangeUtils.get("UserSettingsStore") || {}).message_display_compact ? "compact" : "cozy";
+					return LibraryModules.SettingsStore.messageDisplayCompact ? "compact" : "cozy";
 				};
 				BDFDB.DiscordUtils.getZoomFactor = function () {
 					let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
@@ -4274,13 +4274,13 @@ module.exports = (_ => {
 				BDFDB.LanguageUtils = {};
 				BDFDB.LanguageUtils.languages = Object.assign({}, InternalData.Languages);
 				BDFDB.LanguageUtils.getLanguage = function () {
-					let lang = LibraryModules.LanguageStore.chosenLocale || "en";
+					let lang = LibraryModules.LanguageStore.chosenLocale || LibraryModules.SettingsStore.locale || "en";
 					if (lang == "en-GB" || lang == "en-US") lang = "en";
 					let langIds = lang.split("-");
 					let langId = langIds[0];
 					let langId2 = langIds[1] || "";
 					lang = langId2 && langId.toUpperCase() !== langId2.toUpperCase() ? langId + "-" + langId2 : langId;
-					return BDFDB.LanguageUtils.languages[lang] || BDFDB.LanguageUtils.languages[langId] || BDFDB.LanguageUtils.languages["en"];
+					return BDFDB.LanguageUtils.languages[lang] || BDFDB.LanguageUtils.languages[langId] || BDFDB.LanguageUtils.languages.en;
 				};
 				BDFDB.LanguageUtils.LanguageStrings = new Proxy(LanguageStrings, {
 					get: function (list, item) {
