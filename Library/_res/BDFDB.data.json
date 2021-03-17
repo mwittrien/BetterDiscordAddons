@@ -298,6 +298,7 @@
 		"ModalComponents": {"props": ["ModalContent", "ModalFooter"], "assign": true},
 		"NavItem": {"name": "NavItem"},
 		"Paginator": {"name": "Paginator"},
+		"PanelButton": {"name": "PanelButton"},
 		"PopoutCSSAnimator": {"name": "PopoutCSSAnimator"},
 		"PopoutFocusLock": {"strings": ["useFocusLock", "useImperativeHandle"]},
 		"PrivateChannelItems": {"props": ["DirectMessage", "GroupDM"]},
@@ -371,7 +372,7 @@
 			"icon": "<svg name='CloseCircle' width='%%width' height='%%height' viewBox='0 0 14 14'><path fill='%%color' d='M7.02799 0.333252C3.346 0.333252 0.361328 3.31792 0.361328 6.99992C0.361328 10.6819 3.346 13.6666 7.02799 13.6666C10.71 13.6666 13.6947 10.6819 13.6947 6.99992C13.6947 3.31792 10.7093 0.333252 7.02799 0.333252ZM10.166 9.19525L9.22333 10.1379L7.02799 7.94325L4.83266 10.1379L3.89 9.19525L6.08466 6.99992L3.88933 4.80459L4.832 3.86259L7.02733 6.05792L9.22266 3.86259L10.1653 4.80459L7.97066 6.99992L10.166 9.19525Z'/></svg>"
 		},
 		"COG": {
-			"icon": "<svg name='Cog' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='M 21.2856,9.6 H 24 v 4.8 H 21.2868 C 20.9976,15.5172 20.52,16.5576 19.878,17.4768 L 21.6,19.2 19.2,21.6 17.478,19.8768 c -0.9216,0.642 -1.9596,1.1208 -3.078,1.4088 V 24 H 9.6 V 21.2856 C 8.4828,20.9976 7.4436,20.5188 6.5232,19.8768 L 4.8,21.6 2.4,19.2 4.1232,17.4768 C 3.4812,16.5588 3.0024,15.5184 2.7144,14.4 H 0 V 9.6 H 2.7144 C 3.0024,8.4816 3.48,7.4424 4.1232,6.5232 L 2.4,4.8 4.8,2.4 6.5232,4.1232 C 7.4424,3.48 8.4816,3.0024 9.6,2.7144 V 0 h 4.8 v 2.7132 c 1.1184,0.2892 2.1564,0.7668 3.078,1.4088 l 1.722,-1.7232 2.4,2.4 -1.7232,1.7244 c 0.642,0.9192 1.1208,1.9596 1.4088,3.0768 z M 12,16.8 c 2.65092,0 4.8,-2.14908 4.8,-4.8 0,-2.650968 -2.14908,-4.8 -4.8,-4.8 -2.650968,0 -4.8,2.149032 -4.8,4.8 0,2.65092 2.149032,4.8 4.8,4.8 z'/></svg>"
+			"icon": "<svg name='Cog' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='M 19.738,10 H 22 v 4 h -2.261 c -0.241,0.931 -0.639,1.798 -1.174,2.564 L 20,18 18,20 16.565,18.564 C 15.797,19.099 14.932,19.498 14,19.738 V 22 H 10 V 19.738 C 9.069,19.498 8.203,19.099 7.436,18.564 L 6,20 4,18 5.436,16.564 C 4.901,15.799 4.502,14.932 4.262,14 H 2 V 10 H 4.262 C 4.502,9.068 4.9,8.202 5.436,7.436 L 4,6 6,4 7.436,5.436 C 8.202,4.9 9.068,4.502 10,4.262 V 2 h 4 v 2.261 c 0.932,0.241 1.797,0.639 2.565,1.174 L 18,3.999 l 2,2 -1.436,1.437 C 19.099,8.202 19.498,9.069 19.738,10 Z M 12,16 c 2.2091,0 4,-1.7909 4,-4 0,-2.20914 -1.7909,-4 -4,-4 -2.20914,0 -4,1.79086 -4,4 0,2.2091 1.79086,4 4,4 z'/></svg>"
 		},
 		"CROWN": {
 			"icon": "<svg name='Crown' width='%%width' height='%%height' viewBox='0 0 16 16'><path fill='%%color' fill-rule='evenodd' clip-rule='evenodd' d='M13.6572 5.42868C13.8879 5.29002 14.1806 5.30402 14.3973 5.46468C14.6133 5.62602 14.7119 5.90068 14.6473 6.16202L13.3139 11.4954C13.2393 11.7927 12.9726 12.0007 12.6666 12.0007H3.33325C3.02725 12.0007 2.76058 11.792 2.68592 11.4954L1.35258 6.16202C1.28792 5.90068 1.38658 5.62602 1.60258 5.46468C1.81992 5.30468 2.11192 5.29068 2.34325 5.42868L5.13192 7.10202L7.44592 3.63068C7.46173 3.60697 7.48377 3.5913 7.50588 3.57559C7.5192 3.56612 7.53255 3.55663 7.54458 3.54535L6.90258 2.90268C6.77325 2.77335 6.77325 2.56068 6.90258 2.43135L7.76458 1.56935C7.89392 1.44002 8.10658 1.44002 8.23592 1.56935L9.09792 2.43135C9.22725 2.56068 9.22725 2.77335 9.09792 2.90268L8.45592 3.54535C8.46794 3.55686 8.48154 3.56651 8.49516 3.57618C8.51703 3.5917 8.53897 3.60727 8.55458 3.63068L10.8686 7.10202L13.6572 5.42868ZM2.66667 12.6673H13.3333V14.0007H2.66667V12.6673Z'/></svg>"
@@ -1415,6 +1416,7 @@
 		"accountinfobutton": ["AccountDetailsButtons", "button"],
 		"accountinfobuttondisabled": ["AccountDetailsButtons", "disabled"],
 		"accountinfobuttonenabled": ["AccountDetailsButtons", "enabled"],
+		"accountinfobuttonstrikethrough: ["AccountDetails", "strikethrough"],
 		"accountinfodetails": ["AccountDetails", "usernameContainer"],
 		"accountinfonametag": ["AccountDetails", "nameTag"],
 		"anchor": ["Anchor", "anchor"],
@@ -1483,8 +1485,8 @@
 		"badgeicon": ["Badge", "icon"],
 		"badgeiconbadge": ["Badge", "iconBadge"],
 		"badgenumberbadge": ["Badge", "numberBadge"],
-		"badgeshaperound": ["Badge", "baseShapeRound"],
-		"badgeshaperoundleft": ["Badge", "baseShapeRoundLeft"],
+		"badgeshaperound": ["Badge", ["baseShapeRound", "base"]],
+		"badgeshaperoundleft": ["Badge", ["baseShapeRoundLeft", "base"]],
 		"badgetextbadge": ["Badge", "textBadge"],
 		"badgewrapper": ["NotFound", "badgeWrapper"],
 		"bdfdbbadge": ["BDFDB", "badge"],
