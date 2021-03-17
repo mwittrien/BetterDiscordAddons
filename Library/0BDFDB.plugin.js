@@ -4697,7 +4697,7 @@ module.exports = (_ => {
 					handleMouseLeave(e) {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);}
 					render() {
 						return BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.badgenumberbadge),
+							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.badgenumberbadge, this.props.left ? BDFDB.disCN.badgeshaperoundleft : BDFDB.disCN.badgeshaperound),
 							style: Object.assign({
 								backgroundColor: !this.props.disableColor && (this.props.color || BDFDB.DiscordConstants.Colors.STATUS_RED),
 								width: InternalComponents.LibraryComponents.Badges.getBadgeWidthForValue(this.props.count),

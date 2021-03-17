@@ -1483,6 +1483,8 @@
 		"badgeicon": ["Badge", "icon"],
 		"badgeiconbadge": ["Badge", "iconBadge"],
 		"badgenumberbadge": ["Badge", "numberBadge"],
+		"badgeshaperound": ["Badge", "baseShapeRound"],
+		"badgeshaperoundleft": ["Badge", "baseShapeRoundLeft"],
 		"badgetextbadge": ["Badge", "textBadge"],
 		"badgewrapper": ["NotFound", "badgeWrapper"],
 		"bdfdbbadge": ["BDFDB", "badge"],
