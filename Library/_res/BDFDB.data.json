@@ -1417,7 +1417,7 @@
 		"accountinfobutton": ["AccountDetailsButtons", "button"],
 		"accountinfobuttondisabled": ["AccountDetailsButtons", "disabled"],
 		"accountinfobuttonenabled": ["AccountDetailsButtons", "enabled"],
-		"accountinfobuttonstrikethrough: ["AccountDetails", "strikethrough"],
+		"accountinfobuttonstrikethrough": ["AccountDetails", "strikethrough"],
 		"accountinfodetails": ["AccountDetails", "usernameContainer"],
 		"accountinfonametag": ["AccountDetails", "nameTag"],
 		"anchor": ["Anchor", "anchor"],
