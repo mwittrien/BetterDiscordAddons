@@ -2,7 +2,7 @@
  * @name CustomQuoter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.6
+ * @version 1.2.7
  * @description Brings back the Quote Feature and allows you to set your own Quote Formats
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomQuoter",
 			"author": "DevilBro",
-			"version": "1.2.6",
+			"version": "1.2.7",
 			"description": "Brings back the Quote Feature and allows you to set your own Quote Formats"
-		},
-		"changeLog": {
-			"improved": {
-				"Auto New Line": "If there is already some text in your Message Input, then the plugin adds a newline before the quote"
-			}
 		}
 	};
 
@@ -372,13 +367,7 @@ module.exports = (_ => {
 						BDFDB.LibraryRequires.electron.clipboard.write({text: text});
 						BDFDB.NotificationUtils.toast(this.labels.toast_quotecopied, {type: "success"});
 					}
-					else {
-						if (ChannelTextAreaForm) {
-							let textValue = [ChannelTextAreaForm.state.textValue, text].filter(n => n).join("\n");
-							ChannelTextAreaForm.setState({textValue: textValue, richValue: BDFDB.LibraryModules.SlateUtils.deserialize(textValue)});
-						}
-						else BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {content: text});
-					}
+					else BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {content: [ChannelTextAreaForm && ChannelTextAreaForm.state.textValue && "\n", text].filter(n => n).join("")});
 				}
 			}
 
