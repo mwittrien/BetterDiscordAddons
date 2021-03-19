@@ -5768,7 +5768,10 @@ module.exports = (_ => {
 					const timeObj = InternalComponents.LibraryComponents.DateInput.parseDate(time);
 					const language = BDFDB.LanguageUtils.getLanguage().id;
 					let hours = timeObj.getHours();
-					if (hour12 && hours > 12) hours -= 12;
+					if (hour12) {
+						hours = hours == 0 ? 12 : hours;
+						if (hours > 12) hours -= 12;
+					}
 					const minutes = timeObj.getMinutes();
 					const seconds = timeObj.getSeconds();
 					const milli = timeObj.getMilliseconds();
