@@ -117,6 +117,7 @@
 		15.	GUILDRULESMODAL
 		16.	GUILDFEEDBACKMODAL
 		17.	SCREENSHAREMODAL
+		18.	PHONEVERIFICATIONMODAL
 	14.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -130,6 +131,8 @@
 		10.	CHANNELFOLLOWINFO
 		11.	EMOJIINFO
 		12.	STREAMPREVIEW
+		13.	STREAMINFO
+		14.	PUBLICGUILDANNOUNCEMENT
 	15.	GENERAL
 		1.	TEXT
 		2.	BUTTONS
@@ -2350,6 +2353,9 @@ body::before {
 .emptyContainer-1_gwCl {									/* search				no results							*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
+.placeholder-2erB-x {										/* search				placeholder							*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
 
 
 /* ~~~~		11.		USERSETTINGS					~~~~ */
@@ -2587,6 +2593,9 @@ body::before {
 }
 .membershipDialogHouse3-15OBIQ {
 	background-color: rgba(69, 221, 192, 0.8);
+}
+.videoWrapper-3YdgHH {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
 
 .container-3PXSwK {											/* voicesettings		voicebarcontainer					*/
@@ -2894,6 +2903,9 @@ body::before {
 .analyticsCard-qckucw {										/* communitysettings	analytics	card					*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
+.backgroundAccent-349kuI {									/* communitysettings	analytics	error					*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
 
 #app-mount .card-3_CqkU {									/* communitysettings	discovery	card					*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
@@ -2994,6 +3006,21 @@ body::before {
 }
 .settingsFormItem-103g1I {									/* communitysettings	rules		form					*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.getStartedWrapper-2AGgRZ {									/* communitysettings	rules		getstarted				*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.exampleRule-32tIs5 {										/* communitysettings	rules		example rule			*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+.rulesTextAreaInput-2aGfKB {								/* communitysettings	rules		edit rule				*/
+	border-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.rulesTextAreaInput-2aGfKB:hover:not(:focus) {
+	border-color: rgb(var(--vtransparencycolor));
+}
+.editCircle-y9c7xP {										/* communitysettings	rules		editcirle				*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
 .editButton-1MavoF {										/* communitysettings	rules		editbutton				*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
@@ -4286,9 +4313,20 @@ body::before {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 
+/* ----		13.18.	PHONEVERIFICATIONMODAL			---- */
+
+.phoneField-38N1bJ {
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.phoneField-38N1bJ .inputField-aNPXsv {
+	background-color: transparent;
+}
+.phoneFieldPopout-7PzjOO {
+	position: absolute !important;
+}
+
 
 /* ~~~~		14.		POPOUTS							~~~~ */
-
 
 .layer-v9HyYc:nth-child(1) {
 	z-index: 1002;
@@ -5645,8 +5683,81 @@ body::before {
 #app-mount .previewContainer-12UlHl	{						/* popout				preview								*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
+/* ----		14.13.	STREAMINFO						---- */
 
-/* ----		14.13.	PUBLICGUILDANNOUNCEMENT			---- */
+#app-mount .container-2dqNWc {								/* modal				container							*/
+	background-color: transparent;
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
+	position: relative;
+	overflow: visible !important;
+}
+.container-2dqNWc::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.container-2dqNWc::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+
+/* ----		14.13.	STREAMINFO						---- */
+
+#app-mount .container-2dqNWc {								/* modal				container							*/
+	background-color: transparent;
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
+	position: relative;
+	overflow: visible !important;
+}
+.container-2dqNWc::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.container-2dqNWc::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+
+/* ----		14.14.	PUBLICGUILDANNOUNCEMENT			---- */
 
 #app-mount .popout-6p6fkZ {									/* popout				wrapper								*/
 	background-color: transparent;

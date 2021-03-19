@@ -143,10 +143,10 @@
 .iconTierThree-3EAOB7 {										/* guild header			icontier3							*/
 	color: rgb(var(--vaccentcolor2));
 }
-.subscribeTooltipWrapper-32-Ce8 {							/* guild header			subscribetooltip					*/
+.subscribeTooltipWrapper-1JoUuw {							/* guild header			subscribetooltip					*/
 	background-color: rgb(var(--vaccentcolor));
 }
-.subscribeTooltipWrapper-32-Ce8::after {
+.subscribeTooltipWrapper-1JoUuw::after {
 	border-bottom-color: rgb(var(--vaccentcolor));
 }
 
@@ -801,8 +801,17 @@
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_streamermode_details.svg) center/contain no-repeat;
 }
 
+#app-mount .premiumIcon-3GPLjg {							/* games				premium icon						*/
+	background-color: rgb(var(--vaccentcolor));
+}
+
 
 /* ~~~~		9.		GUILDSETTINGS					~~~~ */
+
+.selectedBrand-1UKrSX {										/* auditlogs			filter popout selected 				*/
+	background-color: rgb(var(--vaccentcolor));
+
+}
 															/* widgetsettings		widget placeholder image 			*/
 .layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type {
 	position: relative !important;
