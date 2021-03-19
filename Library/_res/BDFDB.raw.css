@@ -656,6 +656,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	flex: 1 1 auto;
 	color: var(--header-primary);
 	max-width: calc(100% - 150px);
+	margin-left: 8px;
 }
 [REPLACE_CLASS_dateinputcontrols] {
 	display: flex;

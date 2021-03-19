@@ -2,7 +2,7 @@
  * @name CustomQuoter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.7
+ * @version 1.2.8
  * @description Brings back the Quote Feature and allows you to set your own Quote Formats
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomQuoter",
 			"author": "DevilBro",
-			"version": "1.2.7",
+			"version": "1.2.8",
 			"description": "Brings back the Quote Feature and allows you to set your own Quote Formats"
+		},
+		"changeLog": {
+			"improved": {
+				"Date Insert": "Changed the manual Timestamp Placeholders to the new Date Component"
+			},
+			"added": {
+				"Auto new Lines": "Added Option to auto insert new line feeds for Quotes"
+			}
 		}
 	};
 
@@ -110,9 +118,12 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						holdShiftToolbar:		{value: false, 				description: "Need to hold Shift on a Message to show Quick Quote"},
-						alwaysCopy:				{value: false, 				description: "Always copy Quote to Clipboard without holding Shift"},
-						forceZeros:				{value: false, 				description: "Force leading Zeros"}
+						autoAddNewLine:			{value: true, 			description: "Try to add New Lines before/after Quotes"},
+						holdShiftToolbar:		{value: false, 			description: "Need to hold Shift on a Message to show Quick Quote"},
+						alwaysCopy:				{value: false, 			description: "Always copy Quote to Clipboard without holding Shift"}
+					},
+					dates: {
+						quoteDate:				{value: {}, 			description: "Message Timestamp"},
 					}
 				};
 			}
@@ -139,7 +150,14 @@ module.exports = (_ => {
 								keys: ["general", key],
 								label: this.defaults.general[key].description,
 								value: this.settings.general[key]
-							}))
+							})).concat(Object.keys(this.defaults.dates).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.DateInput, Object.assign({}, this.settings.dates[key], {
+								label: this.defaults.dates[key].description,
+								onChange: valueObj => {
+									this.SettingsUpdated = true;
+									this.settings.dates[key] = valueObj;
+									BDFDB.DataUtils.save(this.settings.dates, this, "dates");
+								}
+							}))))
 						}));
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
@@ -198,24 +216,28 @@ module.exports = (_ => {
 									BDFDB.DataUtils.save(formats, this, "formats");
 									BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 								},
-								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-										type: "TextInput",
-										plugin: this,
-										keys: ["formats", key],
-										label: key + ":",
-										basis: "70%",
-										value: formats[key],
-										onChange: (value, instance) => {
-											formats[key] = value;
-											BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return`), {key: "PREVIEW_MESSAGE_" + key.replace(/\s/g, "_")}));
-										}
-									}),
-									BDFDB.ReactUtils.createElement(PreviewMessageComponent, {
-										key: "PREVIEW_MESSAGE_" + key.replace(/\s/g, "_"),
-										format: key
-									})
-								]
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+									direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+									style: {width: "100%"},
+									children: [
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+											type: "TextInput",
+											plugin: this,
+											keys: ["formats", key],
+											label: key + ":",
+											basis: "70%",
+											value: formats[key],
+											onChange: (value, instance) => {
+												formats[key] = value;
+												BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(instance, `${BDFDB.ReactUtils.instanceKey}.return`), {key: "PREVIEW_MESSAGE_" + key.replace(/\s/g, "_")}));
+											}
+										}),
+										BDFDB.ReactUtils.createElement(PreviewMessageComponent, {
+											key: "PREVIEW_MESSAGE_" + key.replace(/\s/g, "_"),
+											format: key
+										})
+									]
+								})
 							})))
 						}));
 						
@@ -223,30 +245,19 @@ module.exports = (_ => {
 							title: "Placeholder Guide",
 							collapseStates: collapseStates,
 							children: [
-								"$quote will be replaced with the quoted message content",
-								"$rawQuote will be replaced with the raw quoted message content",
-								"$mention will be replaced with a mention of the message author",
-								"$link will be replaced with a discord direct link pointing to the message",
-								"$authorId will be replaced with the ID of the message author",
-								"$authorName will be replaced with the nickname or username of the message author",
-								"$authorAccount will be replaced with the accountname of the message author (username#discriminator)",
-								"$channel will be replaced with a mention of the channel (ignored for DMs)",
-								"$channelId will be replaced with the ID of the channel",
-								"$channelName will be replaced with the Name of the channel",
-								"$serverId will be replaced with the ID of the server",
-								"$serverName will be replaced with the name of the server",
-								"$hour will be replaced with the quote hour",
-								"$minute will be replaced with the quote minutes",
-								"$second will be replaced with the quote seconds",
-								"$msecond will be replaced with the quote milliseconds",
-								"$timemode will change $hour to a 12h format and will be replaced with AM/PM",
-								"$year will be replaced with the quote year",
-								"$month will be replaced with the quote month",
-								"$day will be replaced with the quote day",
-								"$monthnameL will be replaced with the monthname in long format based on the Discord Language",
-								"$monthnameS will be replaced with the monthname in short format based on the Discord Language",
-								"$weekdayL will be replaced with the weekday in long format based on the Discord Language",
-								"$weekdayS will be replaced with the weekday in short format based on the Discord Language"
+								"$quote will be replaced with the quoted Message Content",
+								"$rawQuote will be replaced with the raw quoted Message Content",
+								"$mention will be replaced with a Mention of the Message Author",
+								"$link will be replaced with a Discord Direct Link pointing to the Message",
+								"$authorId will be replaced with the ID of the Message Author",
+								"$authorName will be replaced with the Nickname or Username of the Message Author",
+								"$authorAccount will be replaced with the Accountname of the Message Author (username#discriminator)",
+								"$channel will be replaced with a Mention of the Channel",
+								"$channelId will be replaced with the ID of the Channel",
+								"$channelName will be replaced with the Name of the Channel",
+								"$serverId will be replaced with the ID of the Server",
+								"$serverName will be replaced with the Name of the Server",
+								"$timestamp will be replaced with the Timestamp of the quoted Message"
 							].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
 								type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
 								children: string
@@ -367,8 +378,14 @@ module.exports = (_ => {
 						BDFDB.LibraryRequires.electron.clipboard.write({text: text});
 						BDFDB.NotificationUtils.toast(this.labels.toast_quotecopied, {type: "success"});
 					}
-					else BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {content: [ChannelTextAreaForm && ChannelTextAreaForm.state.textValue && !ChannelTextAreaForm.state.textValue.endsWith("\n") && "\n", text].filter(n => n).join("")});
+					else {
+						BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {content: [this.settings.general.autoAddNewLine && ChannelTextAreaForm && ChannelTextAreaForm.state.textValue && !this.isNewLine(ChannelTextAreaForm.state.textValue, true) && !this.isNewLine(text, false) && "\n", text, this.settings.general.autoAddNewLine && !this.isNewLine(text, true) && "\n"].filter(n => n).join("")});
+					}
 				}
+			}
+			
+			isNewLine (string, end) {
+				return string && typeof string == "string" && string.replace(/[*~_ ]/g, "")[end ? "endsWith" : "startsWith"]("\n");
 			}
 
 			parseQuote (message, channel, choice = format) {
@@ -378,14 +395,6 @@ module.exports = (_ => {
 				
 				let guild = channel.guild_id ? (BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {id: channel.guild_id, name: "Test Server"}) : {id: BDFDB.DiscordConstants.ME, name: BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES};
 				let member = guild && BDFDB.LibraryModules.MemberStore.getMember(guild.id, message.author.id);
-				
-				let timestamp = new Date(message.editedTimestamp || message.timestamp);
-				let hour = timestamp.getHours(), minute = timestamp.getMinutes(), second = timestamp.getSeconds(), msecond = timestamp.getMilliseconds(), day = timestamp.getDate(), month = timestamp.getMonth()+1, timemode = "";
-				if (quoteFormat.indexOf("$timemode") > -1) {
-					timemode = hour >= 12 ? "PM" : "AM";
-					hour = hour % 12;
-					hour = hour ? hour : 12;
-				}
 				
 				let content = message.content;
 				let selectedText = document.getSelection().toString().trim();
@@ -416,28 +425,9 @@ module.exports = (_ => {
 					.replace("$channel", channel.isDM() && channel.rawRecipients[0] ? `@ ${channel.rawRecipients[0].username}` : `<#${channel.id}>`)
 					.replace("$serverId", guild.id || "")
 					.replace("$serverName", guild.name || "")
-					.replace("$hour", this.settings.general.forceZeros && hour < 10 ? "0" + hour : hour)
-					.replace("$minute", minute < 10 ? "0" + minute : minute)
-					.replace("$second", second < 10 ? "0" + second : second)
-					.replace("$msecond", this.settings.general.forceZeros ? (msecond < 10 ? "00" + msecond : (msecond < 100 ? "0" + msecond : msecond)) : msecond)
-					.replace("$timemode", timemode)
-					.replace("$weekdayL", timestamp.toLocaleDateString(languageId, {weekday: "long"}))
-					.replace("$weekdayS", timestamp.toLocaleDateString(languageId, {weekday: "short"}))
-					.replace("$monthnameL", timestamp.toLocaleDateString(languageId, {month: "long"}))
-					.replace("$monthnameS", timestamp.toLocaleDateString(languageId, {month: "short"}))
-					.replace("$day", this.settings.general.forceZeros && day < 10 ? "0" + day : day)
-					.replace("$month", this.settings.general.forceZeros && month < 10 ? "0" + month : month)
-					.replace("$year", timestamp.getFullYear())
+					.replace("$timestamp", BDFDB.LibraryComponents.DateInput.format(this.settings.dates.quoteDate, new Date(message.editedTimestamp || message.timestamp)))
 					.replace("$quote", quotedLines || "")
 					.replace("$rawQuote", unquotedLines.join("\n") || "");
-			}
-
-			addLeadingZeros (timestring) {
-				let charArray = timestring.split("");
-				let numreg = /[0-9]/;
-				for (let i = 0; i < charArray.length; i++) if (!numreg.test(charArray[i-1]) && numreg.test(charArray[i]) && !numreg.test(charArray[i+1])) charArray[i] = "0" + charArray[i];
-
-				return charArray.join("");
 			}
 
 			setLabelsByLanguage () {
