@@ -121,6 +121,7 @@ module.exports = (_ => {
 						ReactorsComponent: "render",
 						ChannelReply: "default",
 						MemberListItem: "render",
+						AuditLogs: "render",
 						AuditLog: "render",
 						GuildSettingsEmoji: "render",
 						MemberCard: "render",
@@ -819,6 +820,20 @@ module.exports = (_ => {
 							tagClass: BDFDB.disCN.bottagmember
 						});
 					}
+				}
+			}
+
+			processAuditLogs (e) {
+				if (e.instance.props.logs && settings.changeInGuildSettings) { 
+					if (!BDFDB.PatchUtils.isPatched(this, e.instance, "renderUserQuickSelectItem")) BDFDB.PatchUtils.patch(this, e.instance, "renderUserQuickSelectItem", {after: e2 => {if (e2.methodArguments[0] && e2.methodArguments[0].user && changedUsers[e2.methodArguments[0].user.id]) {
+						let userName = BDFDB.ReactUtils.findChild(e2.returnValue, {props: [["children", e2.methodArguments[0].label]]});
+						if (userName) {
+							if (changedUsers[e2.methodArguments[0].user.id].name) userName.props.children = changedUsers[e2.methodArguments[0].user.id].name;
+							this.changeUserColor(userName, e2.methodArguments[0].user.id);
+						}
+						let avatar = BDFDB.ReactUtils.findChild(e2.returnValue, {props: [["className", BDFDB.disCN.auditlogpopoutavatar]]});
+						if (avatar) avatar.props.src = this.getUserAvatar(e2.methodArguments[0].user.id);
+					}}}, {force: true, noCache: true});
 				}
 			}
 
