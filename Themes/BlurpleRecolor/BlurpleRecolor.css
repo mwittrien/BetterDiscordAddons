@@ -812,6 +812,10 @@
 	background-color: rgb(var(--vaccentcolor));
 
 }
+.selectedBrand-1UKrSX.focused-dKLoQt,
+.selectedBrand-1UKrSX:hover {
+	background: var(--vaccentcolor-hover);
+}
 															/* widgetsettings		widget placeholder image 			*/
 .layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type {
 	position: relative !important;

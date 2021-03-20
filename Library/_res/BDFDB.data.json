@@ -141,6 +141,7 @@
 			"componentWillUnmount"
 		],
 		"PatchMap": {
+			"AuditLogs": "GuildSettingsAuditLog",
 			"BannedCard": "BannedUser",
 			"ChannelWindow": "Channel",
 			"InvitationCard": "InviteRow",
@@ -161,6 +162,7 @@
 			"Account": {"class": "accountinfo"},
 			"App": {"class": "app"},
 			"AppSkeleton": {"class": "app"},
+			"AuditLogs": {"class": "auditlog"},
 			"AuthWrapper": {"class": "loginscreen"},
 			"Avatar": {"props": ["AnimatedAvatar"]},
 			"BannedCard": {"class": "guildsettingsbannedcard"},
