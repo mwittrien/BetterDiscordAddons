@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.9
+ * @version 1.5.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -22,10 +22,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.4.9",
+			"version": "1.5.0",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
+		"changeLog": {
+			"improved": {
+				"Select Component": "Switched the old Dropdown Select Component with Discord's New Version"
+			}
+		}
 	};
 	
 	const DiscordObjects = {};
@@ -5897,7 +5902,7 @@ module.exports = (_ => {
 												children: this.props.title
 											})
 										}) : null
-									].concat([this.props.titlechildren].flat(10)).filter(n => n)
+									].concat([this.props.titleChildren].flat(10)).filter(n => n)
 								}),
 							].concat(this.props.children)
 						});

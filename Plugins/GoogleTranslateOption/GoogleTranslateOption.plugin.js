@@ -2,7 +2,7 @@
  * @name GoogleTranslateOption
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.6
+ * @version 2.1.7
  * @description Allows you to translate Messages and your outgoing Message within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.1.6",
+			"version": "2.1.7",
 			"description": "Allows you to translate Messages and your outgoing Message within Discord"
 		},
 		"changeLog": {
 			"fixed": {
-				"Exceptions": "Fixed issues where spaces infront of exceptions would get removed sometimes"
+				"Select Component": "Changed Stuff to improve behaviour with the new Select Component"
 			}
 		}
 	};
@@ -65,10 +65,143 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
+		var _this;
+		
 		const translateIconGeneral = `<svg name="Translate" width="24" height="24" viewBox="0 0 24 24"><mask/><path fill="currentColor" mask="url(#translateIconMask)" d="M 4 2 C 2.9005593 2 2 2.9005593 2 4 L 2 17 C 2 18.10035 2.9005593 19 4 19 L 11 19 L 12 22 L 20 22 C 21.10035 22 22 21.099441 22 20 L 22 7 C 22 5.9005592 21.099441 5 20 5 L 10.880859 5 L 10 2 L 4 2 z M 11.173828 6 L 20 6 C 20.550175 6 21 6.4498249 21 7 L 21 20 C 21 20.550175 20.550176 21 20 21 L 13 21 L 15 19 L 14.185547 16.236328 L 15.105469 15.314453 L 17.791016 18 L 18.521484 17.269531 L 15.814453 14.583984 C 16.714739 13.54911 17.414914 12.335023 17.730469 11.080078 L 19 11.080078 L 19 10.039062 L 15.365234 10.039062 L 15.365234 9 L 14.324219 9 L 14.324219 10.039062 L 12.365234 10.039062 L 11.173828 6 z M 7.1660156 6.4160156 C 8.2063466 6.4160156 9.1501519 6.7857022 9.9003906 7.4804688 L 9.9648438 7.5449219 L 8.7441406 8.7246094 L 8.6855469 8.6699219 C 8.4009108 8.3998362 7.9053417 8.0859375 7.1660156 8.0859375 C 5.8555986 8.0859375 4.7890625 9.1708897 4.7890625 10.505859 C 4.7890625 11.84083 5.8555986 12.925781 7.1660156 12.925781 C 8.5364516 12.925781 9.1309647 12.050485 9.2910156 11.464844 L 7.0800781 11.464844 L 7.0800781 9.9160156 L 11.03125 9.9160156 L 11.044922 9.984375 C 11.084932 10.194442 11.099609 10.379777 11.099609 10.589844 C 11.094109 12.945139 9.4803883 14.583984 7.1660156 14.583984 C 4.9107525 14.583984 3.0800781 12.749807 3.0800781 10.5 C 3.0800781 8.2501934 4.9162088 6.4160156 7.1660156 6.4160156 z M 12.675781 11.074219 L 16.669922 11.074219 C 16.669922 11.074219 16.330807 12.390095 15.111328 13.810547 C 14.576613 13.195806 14.206233 12.595386 13.970703 12.115234 L 12.980469 12.115234 L 12.675781 11.074219 z M 13.201172 12.884766 C 13.535824 13.484957 13.940482 14.059272 14.390625 14.583984 L 13.855469 15.115234 L 13.201172 12.884766 z"/><extra/></svg>`;
 		const translateIconMask = `<mask id="translateIconMask" fill="black"><path fill="white" d="M 0 0 H 24 V 24 H 0 Z"/><path fill="black" d="M24 12 H 12 V 24 H 24 Z"/></mask>`;
 		const translateIcon = translateIconGeneral.replace(`<extra/>`, ``).replace(`<mask/>`, ``).replace(` mask="url(#translateIconMask)"`, ``);
 		const translateIconUntranslate = translateIconGeneral.replace(`<extra/>`, `<path fill="none" stroke="#f04747" stroke-width="2" d="m 14.702359,14.702442 8.596228,8.596148 m 0,-8.597139 -8.59722,8.596147 z"/>`).replace(`<mask/>`, translateIconMask);
+		
+		var settingsModal;
+		
+		const TranslateButtonComponent = class TranslateButton extends BdApi.React.Component {
+			render() {
+				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ChannelTextAreaButton, {
+					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._googletranslateoptiontranslatebutton, translationEnabled && BDFDB.disCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton),
+					isActive: this.props.isActive,
+					iconSVG: translateIcon,
+					nativeClass: true,
+					onClick: _ => {
+						this.props.isActive = true;
+						BDFDB.ReactUtils.forceUpdate(this);
+						
+						BDFDB.ModalUtils.open(_this, {
+							size: "MEDIUM",
+							header: BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
+							subHeader: "",
+							onOpen: instance => {
+								settingsModal = instance;
+							},
+							onClose: _ => {
+								settingsModal = null;
+								this.props.isActive = false;
+								BDFDB.ReactUtils.forceUpdate(this);
+							},
+							children: [
+								BDFDB.ArrayUtils.is(_this.settings.exceptions.wordStart) && _this.settings.exceptions.wordStart.length && [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+										className: BDFDB.disCN.marginbottom8,
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
+											label: `Words starting with ${_this.settings.exceptions.wordStart.map(n => '"' + n + '"').join(", ")} will be ignored`
+										})
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+										className: BDFDB.disCN.marginbottom8
+									})
+								],
+								_this.createSelects(true),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+									type: "Switch",
+									plugin: _this,
+									keys: ["general", "sendOriginalMessage"],
+									label: _this.defaults.general.sendOriginalMessage.description,
+									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+									value: _this.settings.general.sendOriginalMessage
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+									type: "Switch",
+									label: "Translate your Messages before sending",
+									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+									value: translationEnabled,
+									onChange: value => {
+										translationEnabled = value;
+										BDFDB.ReactUtils.forceUpdate(this);
+									}
+								})
+							].flat(10).filter(n => n)
+						});
+					},
+					onContextMenu: _ => {
+						translationEnabled = !translationEnabled;
+						BDFDB.ReactUtils.forceUpdate(this);
+					}
+				});
+			}
+		};
+		
+		const selectInstances = {};
+		const TranslationSelectionComponent = class TranslationSelection extends BdApi.React.Component {
+			render() {
+				const direction = _this.defaults.choices[this.props.id].direction;
+				const place = _this.defaults.choices[this.props.id].place;
+				const isOutput = direction == "output"
+				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+					title: _this.defaults.choices[this.props.id].description,
+					titleChildren: isOutput ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+						look: BDFDB.LibraryComponents.Button.Looks.BLANK,
+						size: BDFDB.LibraryComponents.Button.Sizes.NONE,
+						onClick: _ => {
+							let input = _this.getLanguageChoice("input", place);
+							let output = _this.getLanguageChoice("output", place);
+							input = input == "auto" ? "en" : input;
+							
+							_this.settings.choices["input" + place] = output;
+							_this.settings.choices["output" + place] = input;
+							BDFDB.DataUtils.save(_this.settings.choices, _this, "choices");
+							
+							for (let key in selectInstances) if (selectInstances[key] && selectInstances[key].place == place) {
+								selectInstances[key].instance.props.value = selectInstances[key].direction == "input" ? output : input;
+								BDFDB.ReactUtils.forceUpdate(selectInstances[key].instance);
+							}
+							
+							_this.setLanguages();
+						},
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+							className: BDFDB.disCN._googletranslateoptionreversebutton,
+							iconSVG: `<svg width="21" height="21" fill="currentColor"><path d="M 0, 10.515 c 0, 2.892, 1.183, 5.521, 3.155, 7.361 L 0, 21.031 h 7.887 V 13.144 l -2.892, 2.892 C 3.549, 14.722, 2.629, 12.75, 2.629, 10.515 c 0 -3.418, 2.235 -6.309, 5.258 -7.492 v -2.629 C 3.418, 1.577, 0, 5.652, 0, 10.515 z M 21.031, 0 H 13.144 v 7.887 l 2.892 -2.892 C 17.482, 6.309, 18.402, 8.281, 18.402, 10.515 c 0, 3.418 -2.235, 6.309 -5.258, 7.492 V 20.768 c 4.469 -1.183, 7.887 -5.258, 7.887 -10.121 c 0 -2.892 -1.183 -5.521 -3.155 -7.361 L 21.031, 0 z"/></svg>`
+						})
+					}) : null,
+					className: BDFDB.disCN.marginbottom8,
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
+						ref: instance => {if (instance) selectInstances[this.props.id] = {instance, direction, place};},
+						value: _this.getLanguageChoice(this.props.id),
+						options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(isOutput ? BDFDB.ObjectUtils.filter(languages, lang => lang.id != "auto") : languages, (lang, id) => ({value: id, label: _this.getLanguageName(lang)}))),
+						optionRenderer: lang => languages[lang.value] ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+							align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+							children: [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+									grow: 1,
+									children: lang.label
+								}),
+								this.props.addFavButton ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
+									isFavorite: languages[lang.value].fav == 0,
+									onClick: value => {
+										if (value) favorites[lang.value] = true;
+										else delete favorites[lang.value];
+										BDFDB.DataUtils.save(favorites, _this, "favorites");
+										_this.setLanguages();
+									}
+								}) : null
+							]
+						}) : null,
+						onChange: value => {
+							_this.settings.choices[this.props.id] = value;
+							BDFDB.DataUtils.save(_this.settings.choices, _this, "choices");
+						}
+					})
+				});
+			}
+		};
 
 		const brailleConverter = {
 			"0":"⠴", "1":"⠂", "2":"⠆", "3":"⠒", "4":"⠲", "5":"⠢", "6":"⠖", "7":"⠶", "8":"⠦", "9":"⠔", "!":"⠮", "\"":"⠐", "#":"⠼", "$":"⠫", "%":"⠩", "&":"⠯", "'":"⠄", "(":"⠷", ")":"⠾", "*":"⠡", "+":"⠬", ",":"⠠", "-":"⠤", ".":"⠨", "/":"⠌", ":":"⠱", ";":"⠰", "<":"⠣", "=":"⠿", ">":"⠜", "?":"⠹", "@":"⠈", "a":"⠁", "b":"⠃", "c":"⠉", "d":"⠙", "e":"⠑", "f":"⠋", "g":"⠛", "h":"⠓", "i":"⠊", "j":"⠚", "k":"⠅", "l":"⠇", "m":"⠍", "n":"⠝", "o":"⠕", "p":"⠏", "q":"⠟", "r":"⠗", "s":"⠎", "t":"⠞", "u":"⠥", "v":"⠧", "w":"⠺", "x":"⠭", "y":"⠽", "z":"⠵", "[":"⠪", "\\":"⠳", "]":"⠻", "^":"⠘", "⠁":"a", "⠂":"1", "⠃":"b", "⠄":"'", "⠅":"k", "⠆":"2", "⠇":"l", "⠈":"@", "⠉":"c", "⠊":"i", "⠋":"f", "⠌":"/", "⠍":"m", "⠎":"s", "⠏":"p", "⠐":"\"", "⠑":"e", "⠒":"3", "⠓":"h", "⠔":"9", "⠕":"o", "⠖":"6", "⠗":"r", "⠘":"^", "⠙":"d", "⠚":"j", "⠛":"g", "⠜":">", "⠝":"n", "⠞":"t", "⠟":"q", "⠠":", ", "⠡":"*", "⠢":"5", "⠣":"<", "⠤":"-", "⠥":"u", "⠦":"8", "⠧":"v", "⠨":".", "⠩":"%", "⠪":"[", "⠫":"$", "⠬":"+", "⠭":"x", "⠮":"!", "⠯":"&", "⠰":";", "⠱":":", "⠲":"4", "⠳":"\\", "⠴":"0", "⠵":"z", "⠶":"7", "⠷":"(", "⠸":"_", "⠹":"?", "⠺":"w", "⠻":"]", "⠼":"#", "⠽":"y", "⠾":")", "⠿":"=", "_":"⠸"
@@ -87,33 +220,35 @@ module.exports = (_ => {
 			papago: 					{name: "Papago",			auto: false,	funcName: "papagoTranslate",			languages: ["en","es","fr","id","ja","ko","th","vi","zh-CN","zh-TW"]}
 		};
 		
-		var languages, translating, isTranslating, translatedMessages, oldMessages;
-		var settings = {}, choices = {}, exceptions = {}, engines = {}, favorites = {};
+		var favorites, languages, translationEnabled, isTranslating, translatedMessages, oldMessages;
 	
 		return class GoogleTranslateOption extends Plugin {
 			onLoad () {
+				_this = this;
+				
+				favorites = {};
 				languages = {};
-				translating = false;
+				translationEnabled = false;
 				isTranslating = false;	
 				translatedMessages = {};
 				oldMessages = {};
 				
 				this.defaults = {
-					settings: {
-						addTranslateButton:		{value: true, 			description: "Add an translate button to the chatbar"},
-						sendOriginalMessage:	{value: false, 			description: "Send the original message together with the translation"}
+					general: {
+						addTranslateButton:		{value: true, 			description: "Add a Translate Button to the Channel Textarea"},
+						sendOriginalMessage:	{value: false, 			description: "Send the Original Message together with the Translation"}
 					},
 					choices: {
-						inputContext:			{value: "auto", 			direction: "input",		place: "Context", 		description: "Input Language in received Messages: "},
-						outputContext:			{value: "$discord", 		direction: "output",		place: "Context", 		description: "Output Language in received Messages: "},
-						inputMessage:			{value: "auto", 			direction: "input",		place: "Message", 		description: "Input Language in sent Messages: "},
-						outputMessage:			{value: "$discord", 		direction: "output",		place: "Message", 		description: "Output Language in sent Messages: "}
+						inputContext:			{value: "auto", 		direction: "input",		place: "Context", 		description: "Input Language in received Messages: "},
+						outputContext:			{value: "$discord", 	direction: "output",	place: "Context", 		description: "Output Language in received Messages: "},
+						inputMessage:			{value: "auto", 		direction: "input",		place: "Message", 		description: "Input Language in sent Messages: "},
+						outputMessage:			{value: "$discord", 	direction: "output",	place: "Message", 		description: "Output Language in sent Messages: "}
 					},
 					exceptions: {
 						wordStart:				{value: ["!"],			max: 1,		description: "Words starting with any of these will be ignored"}
 					},
 					engines: {
-						translator:				{value: "googleapi", 	description: "Translation Engine: "}
+						translator:				{value: "googleapi", 	description: "Translation Engine"}
 					}
 				};
 			
@@ -152,7 +287,7 @@ module.exports = (_ => {
 			}
 			
 			onStop () {
-				translating = false;
+				translationEnabled = false;
 				
 				this.forceUpdateAll();
 			}
@@ -162,28 +297,28 @@ module.exports = (_ => {
 				
 				settingsItems = settingsItems.concat(this.createSelects(false));
 				
-				for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 					type: "Switch",
 					plugin: this,
-					keys: ["settings", key],
-					label: this.defaults.settings[key].description,
-					value: settings[key]
+					keys: ["general", key],
+					label: this.defaults.general[key].description,
+					value: this.settings.general[key]
 				}));
 				
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 					className: BDFDB.disCNS.dividerdefault + BDFDB.disCN.marginbottom8
 				}));
 				
-				for (let key in exceptions) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+				for (let key in this.defaults.exceptions) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 					title: this.defaults.exceptions[key].description,
 					className: BDFDB.disCN.marginbottom8,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListInput, {
 						placeholder: "New Exception",
 						maxLength: this.defaults.exceptions[key].max,
-						items: exceptions[key],
-						onChange: newExceptions => {
+						items: this.settings.exceptions[key],
+						onChange: value => {
 							this.SettingsUpdated = true;
-							BDFDB.DataUtils.save(newExceptions, this, "exceptions", key);
+							BDFDB.DataUtils.save(value, this, "exceptions", key);
 						}
 					})
 				}));
@@ -199,10 +334,6 @@ module.exports = (_ => {
 			}
 		
 			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
-				choices = BDFDB.DataUtils.get(this, "choices");
-				exceptions = BDFDB.DataUtils.get(this, "exceptions");
-				engines = BDFDB.DataUtils.get(this, "engines");
 				favorites = BDFDB.DataUtils.load(this, "favorites");
 				
 				this.setLanguages();
@@ -327,10 +458,10 @@ module.exports = (_ => {
 			
 			processChannelTextAreaForm (e) {
 				BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
-					if (translating) {
+					if (translationEnabled) {
 						e2.stopOriginalMethodCall();
 						this.translateText(e2.methodArguments[0], "message", (translation, input, output) => {
-							translation = !translation ? e2.methodArguments[0] : (settings.sendOriginalMessage ? (e2.methodArguments[0] + "\n\n" + translation) : translation);
+							translation = !translation ? e2.methodArguments[0] : (this.settings.general.sendOriginalMessage ? (e2.methodArguments[0] + "\n\n" + translation) : translation);
 							e2.originalMethod(translation);
 						});
 						return Promise.resolve({
@@ -343,88 +474,15 @@ module.exports = (_ => {
 			}
 
 			processChannelEditorContainer (e) {
-				if (translating && isTranslating) e.instance.props.disabled = true;
+				if (translationEnabled && isTranslating) e.instance.props.disabled = true;
 			}
 			
 			processChannelTextAreaContainer (e) {
-				if (settings.addTranslateButton) {
+				if (this.settings.general.addTranslateButton) {
 					let editor = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelEditorContainer"});
 					if (editor && editor.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && !editor.props.disabled) {
 						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.textareapickerbuttons]]});
-						if (index > -1 && children[index].props && children[index].props.children) children[index].props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ChannelTextAreaButton, {
-								key: "translate-button",
-								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._googletranslateoptiontranslatebutton, translating && BDFDB.disCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton),
-								nativeClass: true,
-								iconSVG: translateIcon
-							}),
-							width: 450,
-							padding: 10,
-							animation: BDFDB.LibraryComponents.PopoutContainer.Animation.SCALE,
-							position: BDFDB.LibraryComponents.PopoutContainer.Positions.TOP,
-							align: BDFDB.LibraryComponents.PopoutContainer.Align.RIGHT,
-							onClose: instance => {
-								let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {key: "translate-button"});
-								if (channelTextareaButtonIns) {
-									channelTextareaButtonIns.props.isActive = false;
-									BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
-								}
-							},
-							onContextMenu: (e, instance) => {
-								translating = !translating;
-								let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {key: "translate-button"});
-								if (channelTextareaButtonIns) {
-									channelTextareaButtonIns.props.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._googletranslateoptiontranslatebutton, translating && BDFDB.disCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton);
-									BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
-									instance.close();
-								}
-							},
-							renderPopout: instance => {
-								let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {key: "translate-button"});
-								if (channelTextareaButtonIns) {
-									channelTextareaButtonIns.props.isActive = true;
-									BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
-								}
-								let popoutelements = [];
-								if (BDFDB.ArrayUtils.is(exceptions.wordStart) && exceptions.wordStart.length) {
-									popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-										className: BDFDB.disCN.marginbottom8,
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
-											label: `Words starting with ${exceptions.wordStart.map(n => '"' + n + '"').join(", ")} will be ignored`
-										})
-									}));
-									popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-										className: BDFDB.disCN.marginbottom8
-									}));
-								}
-								popoutelements = popoutelements.concat(this.createSelects(true));
-								popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-									type: "Switch",
-									plugin: this,
-									keys: ["settings", "sendOriginalMessage"],
-									label: this.defaults.settings.sendOriginalMessage.description,
-									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-									value: settings.sendOriginalMessage,
-									onChange: value => {
-										settings.sendOriginalMessage = value;
-									}
-								}));
-								popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-									type: "Switch",
-									label: "Translate your Messages before sending",
-									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-									value: translating,
-									onChange: value => {
-										translating = value;
-										if (channelTextareaButtonIns) {
-											channelTextareaButtonIns.props.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._googletranslateoptiontranslatebutton, translating && BDFDB.disCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton);
-											BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
-										}
-									}
-								}));
-								return popoutelements;
-							}
-						}));
+						if (index > -1 && children[index].props && children[index].props.children) children[index].props.children.unshift(BDFDB.ReactUtils.createElement(TranslateButtonComponent, {}));
 					}
 				}
 			}
@@ -496,88 +554,26 @@ module.exports = (_ => {
 			createSelects (inPopout) {
 				let selects = [];
 				for (let key in this.defaults.choices) {
-					let isOutput = this.defaults.choices[key].direction == "output";
-					selects.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-						title: this.defaults.choices[key].description,
-						titlechildren: isOutput ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-							look: BDFDB.LibraryComponents.Button.Looks.BLANK,
-							size: BDFDB.LibraryComponents.Button.Sizes.NONE,
-							onClick: e => {
-								let place = this.defaults.choices[key].place;
-								let input = this.getLanguageChoice("input", place);
-								let output = this.getLanguageChoice("output", place);
-								input = input == "auto" ? "en" : input;
-								
-								choices["input" + place] = output;
-								choices["output" + place] = input;
-								BDFDB.DataUtils.save(choices, this, "choices");
-								
-								for (let selectIns of BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(e._targetInst, {name: ["BDFDB_Popout", "BDFDB_SettingsPanel"], up: true}), {name: "BDFDB_Select", all: true, noCopies: true})) if (selectIns && selectIns.props && selectIns.props.id && this.defaults.choices[selectIns.props.id] && this.defaults.choices[selectIns.props.id].place == place) {
-									selectIns.props.value = this.defaults.choices[selectIns.props.id].direction == "input" ? output : input;
-									BDFDB.ReactUtils.forceUpdate(selectIns);
-								}
-								this.setLanguages();
-							},
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCN._googletranslateoptionreversebutton,
-								iconSVG: `<svg width="21" height="21" fill="currentColor"><path d="M 0, 10.515 c 0, 2.892, 1.183, 5.521, 3.155, 7.361 L 0, 21.031 h 7.887 V 13.144 l -2.892, 2.892 C 3.549, 14.722, 2.629, 12.75, 2.629, 10.515 c 0 -3.418, 2.235 -6.309, 5.258 -7.492 v -2.629 C 3.418, 1.577, 0, 5.652, 0, 10.515 z M 21.031, 0 H 13.144 v 7.887 l 2.892 -2.892 C 17.482, 6.309, 18.402, 8.281, 18.402, 10.515 c 0, 3.418 -2.235, 6.309 -5.258, 7.492 V 20.768 c 4.469 -1.183, 7.887 -5.258, 7.887 -10.121 c 0 -2.892 -1.183 -5.521 -3.155 -7.361 L 21.031, 0 z"/></svg>`
-							})
-						}) : null,
-						className: BDFDB.disCN.marginbottom8,
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
-							menuPlacement: inPopout ? BDFDB.LibraryComponents.Select.MenuPlacements.TOP : BDFDB.LibraryComponents.Select.MenuPlacements.BOTTOM,
-							value: this.getLanguageChoice(key),
-							id: key,
-							options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(isOutput ? BDFDB.ObjectUtils.filter(languages, lang => lang.id != "auto") : languages, (lang, id) => {return {value: id, label: this.getLanguageName(lang)}})),
-							searchable: true,
-							optionRenderer: lang => {
-								return languages[lang.value] ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-									children: [
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-											grow: 1,
-											children: lang.label
-										}),
-										inPopout ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
-											isFavorite: languages[lang.value].fav == 0,
-											onClick: value => {
-												if (value) favorites[lang.value] = true;
-												else delete favorites[lang.value];
-												BDFDB.DataUtils.save(favorites, this, "favorites");
-												this.setLanguages();
-											}
-										}) : null
-									]
-								}) : null;
-							},
-							onChange: lang => {
-								choices[key] = lang.value;
-								BDFDB.DataUtils.save(choices, this, "choices");
-							}
-						})
+					selects.push(BDFDB.ReactUtils.createElement(TranslationSelectionComponent, {
+						id: key,
+						addFavButton: inPopout
 					}));
-					if (isOutput) selects.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+					if (this.defaults.choices[key].direction == "output") selects.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 						className: BDFDB.disCN.marginbottom8
 					}));
 				}
-				for (let key in engines) selects.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+				for (let key in this.defaults.engines) selects.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 					title: this.defaults.engines[key].description,
 					className: BDFDB.disCN.marginbottom8,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
-						menuPlacement: inPopout ? BDFDB.LibraryComponents.Select.MenuPlacements.TOP : BDFDB.LibraryComponents.Select.MenuPlacements.BOTTOM,
-						value: engines[key],
-						id: key,
-						options: Object.keys(translationEngines).map(engineKey => {return {value: engineKey, label: translationEngines[engineKey].name}}),
-						searchable: true,
-						onChange: (engine, instance) => {
-							engines[key] = engine.value;
-							BDFDB.DataUtils.save(engines, this, "engines");
+						value: this.settings.engines[key],
+						options: Object.keys(translationEngines).map(engineKey => ({value: engineKey, label: translationEngines[engineKey].name})),
+						maxVisibleItems: 4,
+						onChange: value => {
+							this.settings.engines[key] = value;
+							BDFDB.DataUtils.save(this.settings.engines, this, "engines");
 							this.setLanguages();
-							let popoutInstance = BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_PopoutContainer", up: true});
-							if (popoutInstance) {
-								popoutInstance.close();
-								popoutInstance.handleClick();
-							}
+							if (settingsModal) settingsModal.props.onClose();
 						}
 					})
 				}));
@@ -585,7 +581,7 @@ module.exports = (_ => {
 			}
 
 			setLanguages () {
-				let engine = translationEngines[engines.translator] || {};
+				let engine = translationEngines[this.settings.engines.translator] || {};
 				let languageIds = engine.languages || [];
 				languages = BDFDB.ObjectUtils.deepAssign(
 					!engine.auto ? {} : {
@@ -617,7 +613,7 @@ module.exports = (_ => {
 			getLanguageChoice (direction, place) {
 				this.setLanguages();
 				let type = place === undefined ? direction : direction.toLowerCase() + place.charAt(0).toUpperCase() + place.slice(1).toLowerCase();
-				let choice = choices[type];
+				let choice = this.settings.choices[type];
 				choice = languages[choice] ? choice : Object.keys(languages)[0];
 				choice = type.indexOf("output") > -1 && choice == "auto" ? "en" : choice;
 				return choice;
@@ -698,9 +694,9 @@ module.exports = (_ => {
 						finishTranslation(newText);
 					}
 					else {
-						if (translationEngines[engines.translator] && typeof this[translationEngines[engines.translator].funcName] == "function") {
+						if (translationEngines[this.settings.engines.translator] && typeof this[translationEngines[this.settings.engines.translator].funcName] == "function") {
 							isTranslating = true;
-							this[translationEngines[engines.translator].funcName].apply(this, [{input, output, text: newText, specialCase, engine: translationEngines[engines.translator]}, finishTranslation]);
+							this[translationEngines[this.settings.engines.translator].funcName].apply(this, [{input, output, text: newText, specialCase, engine: translationEngines[this.settings.engines.translator]}, finishTranslation]);
 						}
 						else finishTranslation();
 					}
@@ -950,7 +946,7 @@ module.exports = (_ => {
 
 			addExceptions (string, excepts) {
 				for (let count in excepts) {
-					let exception = BDFDB.ArrayUtils.is(exceptions.wordStart) && exceptions.wordStart.some(n => excepts[count].indexOf(n) == 0) ? excepts[count].slice(1) : excepts[count];
+					let exception = BDFDB.ArrayUtils.is(this.settings.exceptions.wordStart) && this.settings.exceptions.wordStart.some(n => excepts[count].indexOf(n) == 0) ? excepts[count].slice(1) : excepts[count];
 					let newString = string.replace(new RegExp(BDFDB.StringUtils.regEscape(`{{${count}}}`)), exception);
 					if (newString == string) string = newString + " " + exception;
 					else string = newString;
@@ -977,7 +973,7 @@ module.exports = (_ => {
 					}
 				}
 				else {
-					let usedExceptions = BDFDB.ArrayUtils.is(exceptions.wordStart) ? exceptions.wordStart : [];
+					let usedExceptions = BDFDB.ArrayUtils.is(this.settings.exceptions.wordStart) ? this.settings.exceptions.wordStart : [];
 					string.split(" ").forEach(word => {
 						if (word.indexOf("<@!") == 0 || word.indexOf("<#") == 0 || word.indexOf(":") == 0 || word.indexOf("<:") == 0 || word.indexOf("<a: ") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || usedExceptions.some(n => word.indexOf(n) == 0 && word.length > 1)) {
 							newString.push(`{{${count}}}`);
