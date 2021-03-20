@@ -359,10 +359,6 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-left: 12px;
 }
 
-[REPLACE_CLASS_selectoption] [REPLACE_CLASS_giffavoritesize] {
-	width: 20px;
-	height: 20px;
-}
 [REPLACE_CLASS_selectwrapper] {
 	display: flex;
 	align-items: center;
@@ -370,8 +366,15 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_selectwrapper] [REPLACE_CLASS_select] {
 	flex: 1 1 auto;
 }
+[REPLACE_CLASS_selectwrapper] [REPLACE_CLASS_selectsearchinput] {
+	width: 100%;
+}
 [REPLACE_CLASS_selectwrapper] [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"] {
 	z-index: 3;
+}
+[REPLACE_CLASS_selectoption] [REPLACE_CLASS_giffavoritesize] {
+	width: 20px;
+	height: 20px;
 }
 
 [REPLACE_CLASS_hotkeywrapper] [REPLACE_CLASS_hotkeycontainer] {

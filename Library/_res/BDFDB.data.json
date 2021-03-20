@@ -2606,6 +2606,7 @@
 		"searchresultswrap": ["SearchResults", "searchResultsWrap"],
 		"select": ["Select", "select"],
 		"selectoption": ["SelectSearchable", "option"],
+		"selectsearchinput": ["SelectSearchable", "searchInput"],
 		"selectselectedicon": ["SelectSearchable", "selectedIcon"],
 		"selectwrapper": ["BDFDB", "selectWrapper"],
 		"settingsclosebutton": ["SettingsCloseButton", "closeButton"],
