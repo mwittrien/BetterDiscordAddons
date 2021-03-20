@@ -23,6 +23,7 @@
 }
 .theme-dark, .theme-light {
 	--text-link: rgb(var(--vlinkcolor));
+	--background-help-info: rgba(var(--vlinkcolor), 0.1);
 	--focus-primary: rgb(var(--vlinkcolor));
 	--radio-group-dot-foreground: rgb(var(--vaccentcolor));
 }

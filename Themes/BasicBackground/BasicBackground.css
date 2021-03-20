@@ -2797,6 +2797,88 @@ body::before {
 	z-index: -1;
 }
 
+.addRoleIcon-3YjErH {										/* rolesettings			addrolebutton						*/
+	-webkit-mask: url(https://discordapp.com/assets/cef02719c12d8aaf38894c16dca7fbe6.svg);
+	background: rgb(var(--fontwhite3));
+	object-position: -999999px -999999px;
+}
+.group-1WdBVp {												/* rolesettings			permissions group					*/
+	border-color: rgb(var(--vtransparencycolor), 0.4);
+}
+.item-1yAxl1 {												/* rolesettings			permissions item					*/
+	background: rgb(var(--vtransparencycolor), 0.2);
+}
+.passthrough-1c2ewQ.selected-2YhbGh {						/* rolesettings			permissions passthrough selected	*/
+	background: rgb(var(--vtransparencycolor), 0.4);
+	color: rgb(var(--fontwhite1));
+}
+
+.container-_phMUq {											/* rolesettings			everyone role						*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.container-_phMUq:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+.icon-3_8HGa {												/* rolesettings			everyone role icon					*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+.titleContainer-2CXtJo,										/* rolesettings			role list header					*/
+.header-2mZ9Ov {											/* rolesettings			perms list header					*/
+	background-color: transparent;
+}
+.titleElevated-c_kdi7,
+.stickyHeaderElevated-I6QUOA {
+	box-shadow: none;
+}
+.titleContainer-2CXtJo::after,
+.titleContainer-2CXtJo::before,
+.stickyHeader-hH_ZLl::after,
+.stickyHeader-hH_ZLl::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	pointer-events: none;
+	z-index: -1;
+}
+.titleContainer-2CXtJo::after,
+.stickyHeader-hH_ZLl::after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha)));
+}
+.titleContainer-2CXtJo::before,
+.stickyHeader-hH_ZLl::before {
+	background: var(--vbackground) var(--vbackgroundposition)/var(--vbackgroundsize);
+	background-attachment: fixed;
+	filter: blur(var(--vbackgroundblur));
+}
+.roleDot-ZwSovK {											/* rolesettings			role dot							*/
+	border: none;
+}
+.roleRow-30TwGe:hover:not(.roleRowDisableHover-1HiqqT) {	/* rolesettings			role row							*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.roleRow-30TwGe:hover:not(.roleRowDisableHover-1HiqqT) .circleButton-3RB01i {
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.roleRow-30TwGe:hover:not(.roleRowDisableHover-1HiqqT) .circleButton-3RB01i:hover {
+	background-color: rgb(var(--vaccentcolor));
+}
+.roleRow-30TwGe:before,
+.roleRow-30TwGe:last-child:after {
+	background-color: rgba(var(--fontwhite4), 0.3);
+}
+#app-mount .colorPickerSwatch-5GX3Ve.noColor-1pdBDm {		/* rolesettings			colorswatch nocolor					*/
+	border-color: rgba(var(--fontwhite1), 0.3);
+}
+#app-mount .colorPickerSwatch-5GX3Ve.noColor-1pdBDm .colorPickerDropperFg-3jYKWI {
+	fill: rgb(var(--fontwhite1));
+}
+#app-mount .colorPickerSwatch-5GX3Ve.noColor-1pdBDm polyline {
+	stroke: rgb(var(--fontwhite1));
+}
+
 #app-mount .emojiAliasInput-1y-NBz .emojiInput-1aLNse {		/* emojisettings		nameinput							*/
 	background-color: rgba(var(--vtransparencycolor), 0.1);
 }
@@ -3102,31 +3184,6 @@ body::before {
 }
 .channelIcon-1eKmlw {										/* communitysettings	welcome		channelicon			s	*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
-}
-
-.addRoleIcon-3YjErH {										/* rolesettings			addrolebutton						*/
-	-webkit-mask: url(https://discordapp.com/assets/cef02719c12d8aaf38894c16dca7fbe6.svg);
-	background: rgb(var(--fontwhite3));
-	object-position: -999999px -999999px;
-}
-.group-1WdBVp {												/* rolesettings			permissions group					*/
-	border-color: rgb(var(--vtransparencycolor), 0.4);
-}
-.item-1yAxl1 {												/* rolesettings			permissions item					*/
-	background: rgb(var(--vtransparencycolor), 0.2);
-}
-.passthrough-1c2ewQ.selected-2YhbGh {						/* rolesettings			permissions passthrough selected	*/
-	background: rgb(var(--vtransparencycolor), 0.4);
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .colorPickerSwatch-5GX3Ve.noColor-1pdBDm {		/* rolesettings			colorswatchnocolor					*/
-	border-color: rgba(var(--fontwhite1), 0.3);
-}
-#app-mount .colorPickerSwatch-5GX3Ve.noColor-1pdBDm .colorPickerDropperFg-3jYKWI {
-	fill: rgb(var(--fontwhite1));
-}
-#app-mount .colorPickerSwatch-5GX3Ve.noColor-1pdBDm polyline {
-	stroke: rgb(var(--fontwhite1));
 }
 
 .descriptionBox-1EKQKL {									/* templatesettings		descriptionbox						*/
