@@ -1238,6 +1238,53 @@ body::before {
 	background-color: rgb(var(--fontwhite4));
 }
 
+.textContainer-C0szpm {										/* messageelement 		plain file text						*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+	border-color: rgba(var(--vtransparencycolor), 0.1);
+}
+.footer-2yA7Ep {											/* messageelement 		plain file footer					*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+	border-color: rgba(var(--vtransparencycolor), 0.1);
+}
+.languageSelector-2LVJrh {									/* messageelement 		plain file popout					*/
+	background-color: transparent;
+	border: 1px solid rgba(var(--vtransparencycolor), 0.3);
+	border-radius: 5px;
+	box-shadow: 0px 1px 5px 0px rgba(var(--vtransparencycolor), 0.3);
+	overflow: hidden;
+}
+.languageSelector-2LVJrh::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
+	background-attachment: fixed;
+	filter: blur(var(--vpopoutblur));
+	border-radius: 5px;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.languageSelector-2LVJrh::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
+	border-radius: 5px;
+	width: unset;
+	height: unset;
+	border-radius: 5px;
+	pointer-events: none;
+	z-index: -1;
+}
+
 #app-mount .spoilerText-3p6IlD {							/* messageelement		spoiler								*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
@@ -6683,7 +6730,7 @@ body::before {
 	box-shadow: 0px 1px 5px 0px rgba(var(--vtransparencycolor), 0.3);
 	overflow: hidden;
 }
-.content-3YMskv::before,
+.popout-VcNcHB .content-3YMskv::before,
 .container-3LUQwT::before,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::before {
 	content: "";
@@ -6700,7 +6747,7 @@ body::before {
 	pointer-events: none;
 	z-index: -1;
 }
-.content-3YMskv::after,
+.popout-VcNcHB .content-3YMskv::after,
 .container-3LUQwT::after,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::after {
 	content: "";
