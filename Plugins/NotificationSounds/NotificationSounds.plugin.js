@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.5.9
+ * @version 3.6.0
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
-			"version": "3.5.9",
+			"version": "3.6.0",
 			"description": "Allows you to replace the native Sounds with custom Sounds"
-		},
-		"changeLog": {
-			"fixed": {
-				"Incoming Call": "Works again, you'll most likely need to reload Discord (Ctrl + R) for it to be fixed"
-			}
 		}
 	};
 
@@ -369,9 +364,9 @@ module.exports = (_ => {
 											value: choices[type].category,
 											options: Object.keys(audios).map(name => ({value: name, label: name})),
 											searchable: true,
-											onChange: category => {
-												choices[type].category = category.value;
-												choices[type].sound = Object.keys(audios[category.value] || {})[0];
+											onChange: value => {
+												choices[type].category = value;
+												choices[type].sound = Object.keys(audios[value] || {})[0];
 												this.saveChoice(type, true);
 												BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 											}
@@ -388,8 +383,8 @@ module.exports = (_ => {
 											value: choices[type].sound,
 											options: Object.keys(audios[choices[type].category] || {}).map(name => ({value: name, label: name})),
 											searchable: true,
-											onChange: sound => {
-												choices[type].sound = sound.value;
+											onChange: value => {
+												choices[type].sound = value;
 												this.saveChoice(type, true);
 												BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 											}

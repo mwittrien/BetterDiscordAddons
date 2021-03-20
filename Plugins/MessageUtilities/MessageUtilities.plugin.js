@@ -2,7 +2,7 @@
  * @name MessageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.8
+ * @version 1.8.9
  * @description Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
-			"version": "1.8.8",
+			"version": "1.8.9",
 			"description": "Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)"
-		},
-		"changeLog": {
-			"fixed": {
-				"Replies": "Reply To/Pin now also works on Messages that contain a reply"
-			}
 		}
 	};
 
@@ -188,8 +183,8 @@ module.exports = (_ => {
 														reset: true,
 														disabled: !settings[action],
 														ref: instance => {if (instance) keyRecorderIns = instance;},
-														onChange: keyCombo => {
-															bindings[action].keycombo = keyCombo;
+														onChange: value => {
+															bindings[action].keycombo = value;
 															BDFDB.DataUtils.save(bindings, this, "bindings");
 															this.SettingsUpdated = true;
 														}
@@ -199,8 +194,8 @@ module.exports = (_ => {
 														options: Object.keys(clickMap).map((label, i) => ({value: i, label: label})),
 														disabled: !settings[action],
 														ref: instance => {if (instance) clickSelectorIns = instance;},
-														onChange: choice => {
-															bindings[action].click = choice.value;
+														onChange: value => {
+															bindings[action].click = value;
 															BDFDB.DataUtils.save(bindings, this, "bindings");
 															this.SettingsUpdated = true;
 														}
