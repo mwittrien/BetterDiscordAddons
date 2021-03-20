@@ -4460,7 +4460,11 @@ body::before {
 #app-mount .activeBreadcrumb-p6aw-F {
 	color: rgb(var(--fontwhite1));
 }
-
+.selected-2114Fj,											/* popout				combobox selected					*/
+.selected-2114Fj:hover {
+	background-color: rgb(var(--vaccentcolor));
+	color: rgb(var(--fontwhite1));
+}
 #app-mount .divider-1que2t {								/* popout				divider								*/
 	border-color: rgba(var(--fontwhite4), 0.3);
 }
