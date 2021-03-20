@@ -140,7 +140,8 @@ module.exports = (_ => {
 							label: this.defaults.selections[key].description,
 							basis: "50%",
 							options: sounds.map(o => ({value: o, label: o.split(/[-_]/g).map(BDFDB.LibraryModules.StringUtils.upperCaseFirstChar).join(" ")})),
-							value: this.settings.selections[key]
+							value: this.settings.selections[key],
+							onChange: BDFDB.LibraryModules.SoundUtils.playSound
 						}));
 						
 						return settingsItems;
