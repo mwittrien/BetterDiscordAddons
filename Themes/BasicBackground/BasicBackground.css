@@ -169,6 +169,7 @@ body,														/* body														*/
 #app-mount .app-1q1i1E,										/* app					container							*/
 #app-mount .app-2rEoOp,										/* app					inner								*/
 #app-mount .container-16j22k,								/* app					loadingscreen						*/
+#app-mount .loading-Ags1CY,									/* app					i18n loading						*/
 #app-mount .wrapper-1prNyd,									/* app					errorscreen							*/
 #app-mount .bg-h5JY_x,										/* app					background							*/
 #app-mount .layer-3QrUeG,									/* layer				container							*/
@@ -3037,6 +3038,9 @@ body::before {
 	border-color: rgba(var(--fontwhite3), 0.2);
 }
 
+.editCircle-ityklj {										/* communitysettings	welcome		editcirle				*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
 .optionContainer-1FtykV {									/* communitysettings	welcome		exampleoption			*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
@@ -3047,6 +3051,9 @@ body::before {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 .welcomeChannel-1rFrIO {									/* communitysettings	welcome		welcomechannel			*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+.channelIcon-1eKmlw {										/* communitysettings	welcome		channelicon			s	*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
 
@@ -3299,6 +3306,9 @@ body::before {
 #app-mount .override-2YgiXd,
 #app-mount .overrideHighlight-YPcBxt {
 	color: rgb(var(--fontwhite3));
+}
+#app-mount .override-2YgiXd:hover {
+	background-color: rgb(var(--vtransparencycolor), 0.2);
 }
 #app-mount .channelName-28iMRJ {							/* modal				channelname						*/
 	color: rgb(var(--fontwhite1));
@@ -3618,9 +3628,17 @@ body::before {
 }
 .uploadModal-2ifh8j .footer-3mqk7D {						/* modal				footer								*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: none;
 }
 .uploadModal-2ifh8j .checkbox-1ix_J3 {						/* modal				checkbox							*/
 	border-color: rgb(var(--fontwhite1)) !important;
+}
+.uploadModal-2ifh8j .checkbox-1ix_J3.checked-3_4uQ9 {
+	background-color: rgb(var(--vaccentcolor)) !important;
+	border-color: rgb(var(--vaccentcolor)) !important;
+}
+.uploadModal-2ifh8j .checkbox-1ix_J3.checked-3_4uQ9 path[fill="#7289da"] {
+	fill: rgb(var(--fontwhite1)) !important;
 }
 .uploadModal-2ifh8j .inner-3nWsbo .file-34mY5K .icon-kyxXVr.image-2yrs5j {
 	box-shadow: 0 2px 8px rgba(var(--vtransparencycolor), 0.4);
@@ -4311,6 +4329,9 @@ body::before {
 }
 .selectorButton-EEUWed:not(.selectorButtonSelected-t5V9On) {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+#app-mount .userListOverflow-cTtEue {
+	background: rgba(var(--vtransparencycolor), 0.5);
 }
 
 /* ----		13.18.	PHONEVERIFICATIONMODAL			---- */
@@ -6507,6 +6528,19 @@ body::before {
 .checkboxMute-14hTGS::before {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="background-color: rgba(67, 181, 129, 0.15)"],
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="border-color: rgba(67, 181, 129, 0.15)"] {
+	background-color: rgba(var(--vaccentcolor), 0.15) !important;
+	border-color: rgba(var(--vaccentcolor), 0.15) !important;
+}
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="background-color: rgba(67, 181, 129, 0.15)"] svg,
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="border-color: rgba(67, 181, 129, 0.15)"] svg {
+	filter: unset;
+}
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="background-color: rgba(67, 181, 129, 0.15)"] path[fill="#43b581"],
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="border-color: rgba(67, 181, 129, 0.15)"] path[fill="#43b581"] {
+	fill: rgb(var(--vaccentcolor)) !important;
+}
 
 #app-mount .bar-2Qqk5Z {									/* slider				backgroundbar						*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
@@ -6588,23 +6622,25 @@ body::before {
 .select-2TCrqx [class*="css-"][class*="-container"] {		/* select				container							*/
 	background-color: transparent;
 }
-#app-mount .lookFilled-1h1y05.select-1Pkeg4,
+.lookFilled-22uAsw.select-2fjwPw,
 .select-2TCrqx [class*="css-"][class*="-control"] {
 	background-color: rgba(var(--vtransparencycolor), 0.1);
 	border-color: rgba(var(--vtransparencycolor), 0.3);
 }
-#app-mount .lookFilled-1h1y05.select-1Pkeg4:hover.selectOpen-hQuR6b,
-#app-mount .lookFilled-1h1y05.selectOpen-hQuR6b {
+.lookFilled-22uAsw.select-2fjwPw:hover.open-kZ53_U,
+.lookFilled-22uAsw.open-kZ53_U {
 	border-color: rgb(var(--vtransparencycolor)) rgb(var(--vtransparencycolor)) rgba(var(--vtransparencycolor), 0.3);
 }
-#app-mount .select-1Pkeg4,
-#app-mount .lookFilled-1h1y05 .arrow-2KJjTM,
+.lookFilled-22uAsw.select-2fjwPw .searchInput-5YMkDH {
+	background: transparent;
+}
+.select-2fjwPw,
 .select-2TCrqx [class*="css-"][class*="-singleValue"],
 .select-2TCrqx [class*="css-"][class*="-placeholder"],
 .select-2TCrqx [class*="css-"][class*="-indicatorContainer"] {
 	color: rgb(var(--fontwhite1));
 }
-#app-mount .optionNormal-12VR9V,
+.option-3KoAJB,
 .css-1gfjib6-option,
 .css-1yz4bi9-option,
 .css-ru8b0x-option,
@@ -6612,7 +6648,9 @@ body::before {
 	background-color: rgba(var(--vtransparencycolor), 0.1);
 	color: rgb(var(--fontwhite2));
 }
-#app-mount .optionNormal-12VR9V:hover,
+.option-3KoAJB.focused-1T6PE5,
+.option-3KoAJB:focus,
+.option-3KoAJB:hover,
 .css-pkcurw-option,
 .css-rzbxvl-option,
 .css-1qxn4c5-option,
@@ -6620,7 +6658,6 @@ body::before {
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite2));
 }
-#app-mount .optionActive-KkAdqq,
 .css-1gxgi19-option,
 .css-1ba14n5-option,
 .css-6qzljd-option,
@@ -6631,7 +6668,10 @@ body::before {
 .role-3ulsK-:hover {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
-#app-mount .popout-2sKjHu,
+.popout-VcNcHB::-webkit-scrollbar {
+	display: none;
+}
+.popout-VcNcHB,
 .container-3LUQwT,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"] {
 	background-color: transparent;
@@ -6639,7 +6679,7 @@ body::before {
 	box-shadow: 0px 1px 5px 0px rgba(var(--vtransparencycolor), 0.3);
 	overflow: hidden;
 }
-#app-mount .popout-2sKjHu::before,
+.content-3YMskv::before,
 .container-3LUQwT::before,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::before {
 	content: "";
@@ -6656,7 +6696,7 @@ body::before {
 	pointer-events: none;
 	z-index: -1;
 }
-#app-mount .popout-2sKjHu::after,
+.content-3YMskv::after,
 .container-3LUQwT::after,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::after {
 	content: "";
