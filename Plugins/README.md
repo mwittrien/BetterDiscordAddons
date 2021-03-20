@@ -26,6 +26,7 @@
  - [Emoji Statistics](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EmojiStatistics) - Shows you an Overview of Emojis and Emoji Servers
  - [Force Image Previews](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ForceImagePreviews) - Forces unrendered embedded Image Previews to render
  - [Friend Notifications](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FriendNotifications) - Shows a Notification when a Friend or a User, you choose to observe, changes their Status
+ - [Game Activity Toggle](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GameActivityToggle) - Adds a Quick-Toggle Game Activity Button
  - [Google Search Replace](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleSearchReplace) - Replaces the default Google Text Search with a custom Search Engine
  - [Google Translate Option](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleTranslateOption) - Allows you to translate Messages and your outgoing Message within Discord
  - [Hide Muted Categories](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/HideMutedCategories) - Hides muted Categories, if muted Channels are hidden
