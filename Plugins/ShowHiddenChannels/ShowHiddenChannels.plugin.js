@@ -657,7 +657,7 @@ module.exports = (_ => {
 						};
 					case "fr":		// French
 						return {
-							context_hidehidden:					"Masquer les chaînes verrouillées",
+							context_hidehidden:					"Masquer les salons verrouillées",
 							modal_allowed:						"Permis",
 							modal_denied:						"Refusé"
 						};
