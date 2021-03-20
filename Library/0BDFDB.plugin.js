@@ -6626,6 +6626,7 @@ module.exports = (_ => {
 						return BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.selectwrapper,
 							children: BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.SearchableSelect, Object.assign({}, this.props, {
+								autoFocus: this.props.autoFocus ? this.props.autoFocus : false,
 								maxVisibleItems: this.props.maxVisibleItems || 7,
 								renderOptionLabel: this.props.optionRenderer,
 								onChange: this.handleChange.bind(this)
