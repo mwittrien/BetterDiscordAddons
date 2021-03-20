@@ -293,37 +293,43 @@ module.exports = (_ => {
 			}
 
 			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [];
-				
-				settingsItems = settingsItems.concat(this.createSelects(false));
-				
-				for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					type: "Switch",
-					plugin: this,
-					keys: ["general", key],
-					label: this.defaults.general[key].description,
-					value: this.settings.general[key]
-				}));
-				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-					className: BDFDB.disCNS.dividerdefault + BDFDB.disCN.marginbottom8
-				}));
-				
-				for (let key in this.defaults.exceptions) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-					title: this.defaults.exceptions[key].description,
-					className: BDFDB.disCN.marginbottom8,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListInput, {
-						placeholder: "New Exception",
-						maxLength: this.defaults.exceptions[key].max,
-						items: this.settings.exceptions[key],
-						onChange: value => {
-							this.SettingsUpdated = true;
-							BDFDB.DataUtils.save(value, this, "exceptions", key);
-						}
-					})
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
+					collapseStates: collapseStates,
+					children: _ => {
+						let settingsItems = [];
+						
+						settingsItems = settingsItems.concat(this.createSelects(false));
+						
+						for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							type: "Switch",
+							plugin: this,
+							keys: ["general", key],
+							label: this.defaults.general[key].description,
+							value: this.settings.general[key]
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+							className: BDFDB.disCNS.dividerdefault + BDFDB.disCN.marginbottom8
+						}));
+						
+						for (let key in this.defaults.exceptions) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							title: this.defaults.exceptions[key].description,
+							className: BDFDB.disCN.marginbottom8,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListInput, {
+								placeholder: "New Exception",
+								maxLength: this.defaults.exceptions[key].max,
+								items: this.settings.exceptions[key],
+								onChange: value => {
+									this.SettingsUpdated = true;
+									BDFDB.DataUtils.save(value, this, "exceptions", key);
+								}
+							})
+						}));
+						
+						return settingsItems.flat(10);
+					}
+				});
 			}
 		
 			onSettingsClosed () {
