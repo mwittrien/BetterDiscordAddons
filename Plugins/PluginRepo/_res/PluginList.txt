@@ -133,6 +133,7 @@ https://raw.githubusercontent.com/SMC242/CodingDND/master/dist/CodingDND.plugin.
 https://raw.githubusercontent.com/somebody1234/userscripts/master/NRM.plugin.js
 https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/LinkChannels/LinkChannels.plugin.js
 https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/OpenSpotifylinksInSpotify/OpenSpotifylinksInSpotify.plugin.js
+https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/PlatformIndicators/PlatformIndicators.plugin.js
 https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/QuickMuteChannels/QuickMuteChannels.plugin.js
 https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/ShowAllActivities/ShowAllActivities.plugin.js
 https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/SuppressReplyMentions/SuppressReplyMentions.plugin.js
