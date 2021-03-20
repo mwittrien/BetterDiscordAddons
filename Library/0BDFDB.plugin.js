@@ -6616,7 +6616,6 @@ module.exports = (_ => {
 					}
 				};
 				
-				let NativeSubSelectExport = (BDFDB.ModuleUtils.find(m => m == InternalComponents.NativeSubComponents.Select, false) || {exports: {}}).exports;
 				InternalComponents.LibraryComponents.Select = reactInitialized && class BDFDB_Select extends LibraryModules.React.Component {
 					handleChange(value) {
 						this.props.value = value.value || value;
@@ -6624,14 +6623,11 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.forceUpdate(this);
 					}
 					render() {
-						let lightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
-						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+						return BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.selectwrapper,
-							direction: InternalComponents.LibraryComponents.Flex.Direction.HORIZONTAL,
-							align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
-							children: BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.Select, Object.assign({}, this.props, {
-								lightThemeColorOverrides: NativeSubSelectExport[lightTheme ? "LIGHT_THEME_COLORS" : "DARK_THEME_COLORS"],
-								darkThemeColorOverrides: NativeSubSelectExport[lightTheme ? "LIGHT_THEME_COLORS" : "DARK_THEME_COLORS"],
+							children: BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.SearchableSelect, Object.assign({}, this.props, {
+								maxVisibleItems: this.props.maxVisibleItems || 7,
+								renderOptionLabel: this.props.optionRenderer,
 								onChange: this.handleChange.bind(this)
 							}))
 						});

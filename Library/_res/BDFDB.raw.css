@@ -359,6 +359,10 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-left: 12px;
 }
 
+[REPLACE_CLASS_selectwrapper] {
+	display: flex;
+	align-items: center;
+}
 [REPLACE_CLASS_selectwrapper] [REPLACE_CLASS_select] {
 	flex: 1 1 auto;
 }
