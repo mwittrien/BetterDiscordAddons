@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.4
+ * @version 1.6.5
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,10 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.6.4",
+			"version": "1.6.5",
 			"description": "Shows a Notification when a Friend or a User, you choose to observe, changes their Status"
 		},
 		"changeLog": {
+			"fixed": {
+				"Add Stranger": "Works again"
+			},
 			"improved": {
 				"Time Log Timestamp Format": "Added Option to allow Users to customize the Timestamp Format in the Time Log"
 			}
@@ -402,7 +405,7 @@ module.exports = (_ => {
 						let notificationStrings = BDFDB.DataUtils.get(this, "notificationstrings");
 						let notificationSounds = BDFDB.DataUtils.get(this, "notificationsounds");
 						
-						let {cards} = this.getObserverData();
+						let {friendIds, cards} = this.getObserverData();
 						
 						for (let key in settings) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 							type: "Switch",
@@ -685,7 +688,7 @@ module.exports = (_ => {
 				BDFDB.DataUtils.save(friendDatas, this, "friends");
 				BDFDB.DataUtils.save(nonFriendDatas, this, "nonfriends");
 				
-				return {data: {friends: friendDatas, nonFriends: nonFriendDatas}, cards: {friends: friendCards, nonFriends: nonFriendCards}};
+				return {friendIds, data: {friends: friendDatas, nonFriends: nonFriendDatas}, cards: {friends: friendCards, nonFriends: nonFriendCards}};
 			}
 
 			createDefaultConfig () {
