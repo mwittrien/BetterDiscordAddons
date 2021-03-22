@@ -2,7 +2,7 @@
  * @name GoogleTranslateOption
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.7
+ * @version 2.1.8
  * @description Allows you to translate Messages and your outgoing Message within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.1.7",
+			"version": "2.1.8",
 			"description": "Allows you to translate Messages and your outgoing Message within Discord"
 		},
 		"changeLog": {
 			"fixed": {
-				"Select Component": "Changed Stuff to improve behaviour with the new Select Component"
+				"Animated Emojis": "Fixed Translation Issue",
+				"Select Component": "Changed Stuff to improve Behaviour with the new Select Component"
 			}
 		}
 	};
@@ -981,7 +982,7 @@ module.exports = (_ => {
 				else {
 					let usedExceptions = BDFDB.ArrayUtils.is(this.settings.exceptions.wordStart) ? this.settings.exceptions.wordStart : [];
 					string.split(" ").forEach(word => {
-						if (word.indexOf("<@!") == 0 || word.indexOf("<#") == 0 || word.indexOf(":") == 0 || word.indexOf("<:") == 0 || word.indexOf("<a: ") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || usedExceptions.some(n => word.indexOf(n) == 0 && word.length > 1)) {
+						if (word.indexOf("<@!") == 0 || word.indexOf("<#") == 0 || word.indexOf(":") == 0 || word.indexOf("<:") == 0 || word.indexOf("<a:") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || usedExceptions.some(n => word.indexOf(n) == 0 && word.length > 1)) {
 							newString.push(`{{${count}}}`);
 							excepts[count] = word;
 							count++;
