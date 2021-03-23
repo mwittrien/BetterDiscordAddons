@@ -802,7 +802,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	padding-right: 8px;
 }
 [REPLACE_CLASS_modaltextcontent] {
-	padding-bottom: 10px;
+	margin-bottom: 10px;
 }
 [REPLACE_CLASS_modalnoscroller] {
 	overflow: hidden;
