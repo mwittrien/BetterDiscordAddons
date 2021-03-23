@@ -92,6 +92,7 @@ https://raw.githubusercontent.com/NYRI4/Comfy/master/betterdiscord/comfy.theme.c
 https://raw.githubusercontent.com/NYRI4/Discolored/master/support/discolored.theme.css
 https://raw.githubusercontent.com/ObserverOfTime/DiscordThemes/master/NewNihilism/dist/NewNihilism.theme.css
 https://raw.githubusercontent.com/orblazer/discord-nordic/master/nordic.theme.css
+https://raw.githubusercontent.com/Pavui/Nebula/main/nebula.theme.css
 https://raw.githubusercontent.com/Pierce01/Opacity/master/OpacityMaxBun.theme.css
 https://raw.githubusercontent.com/puckzxz/NotAnotherAnimeTheme/master/NotAnotherAnimeThemeSCSL.theme.css
 https://raw.githubusercontent.com/Quietess/Casual-Dark/master/Casual_Dark.theme.css
