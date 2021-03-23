@@ -97,6 +97,8 @@
 #bd-settings-sidebar .ui-tab-bar-item:nth-child(3)::before,
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ.bd-settings-tab::before,
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="pc-general-tab" i]::before,
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="lightcord-tab" i]::before,
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="core-tab" i]::before,
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Settings-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/settings.svg) center/contain no-repeat;
 }
@@ -138,7 +140,8 @@
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Logout-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/logout.svg) center/contain no-repeat;
 }
-.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="OVERVIEW-tab" i]::before {
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="OVERVIEW-tab" i]::before,
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="accountinfo-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/overview.svg) center/contain no-repeat;
 }
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="ROLES-tab" i]::before,
@@ -148,7 +151,8 @@
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="AUDIT_LOG-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/audit.svg) center/contain no-repeat;
 }
-.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="INTEGRATIONS-tab" i]::before {
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="INTEGRATIONS-tab" i]::before,
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="status-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/integrations.svg) center/contain no-repeat;
 }
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="WIDGET-tab" i]::before {

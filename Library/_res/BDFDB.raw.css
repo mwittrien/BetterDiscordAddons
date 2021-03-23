@@ -801,6 +801,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	padding-left: 16px;
 	padding-right: 8px;
 }
+[REPLACE_CLASS_modaltextcontent] {
+	padding-bottom: 10px;
+}
 [REPLACE_CLASS_modalnoscroller] {
 	overflow: hidden;
 }

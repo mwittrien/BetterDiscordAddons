@@ -2081,16 +2081,25 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	fill: var(--header-primary);
 }
 
-.bd-social-logo {
-	opacity: 1;
+.bd-social-link[title="BD" i] .bd-social-logo,
+.bd-social-link[title="BetterDiscord" i] .bd-social-logo,
+.bd-social-link[title="BBD" i] .bd-social-logo,
+.bd-social-link[title="BandagedBD" i] .bd-social-logo {
 	background: var(--text-muted);
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/betterdiscord.svg) center/contain no-repeat;
+	opacity: 1;
 	transition: background .15s ease;
 }
-.bd-social-link:hover .bd-social-logo {
+.bd-social-link[title="BD" i]:hover .bd-social-logo,
+.bd-social-link[title="BetterDiscord" i]:hover .bd-social-logo,
+.bd-social-link[title="BBD" i]:hover .bd-social-logo,
+.bd-social-link[title="BandagedBD" i]:hover .bd-social-logo {
 	background: var(--header-primary);
 }
-.bd-social-logo > * {
+.bd-social-link[title="BD" i] .bd-social-logo > *,
+.bd-social-link[title="BetterDiscord" i] .bd-social-logo > *,
+.bd-social-link[title="BBD" i] .bd-social-logo > *,
+.bd-social-link[title="BandagedBD" i] .bd-social-logo > * {
 	display: none;
 }
 

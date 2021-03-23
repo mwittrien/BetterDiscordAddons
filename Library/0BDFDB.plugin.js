@@ -2069,7 +2069,7 @@ module.exports = (_ => {
 										let tempReturn = BDFDB.TimeUtils.suppress(module.BDFDB_patches[methodName].instead[priority][id], `"instead" callback of ${methodName} in ${name}`, {name: module.BDFDB_patches[methodName].instead[priority][id].pluginName, version: module.BDFDB_patches[methodName].instead[priority][id].pluginVersion})(data);
 										if (tempReturn !== undefined) data.returnValue = tempReturn;
 									}
-									if ((!hasInsteadPatches || callInstead) && !stopCall) BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${methodName} in ${name}`)();
+									if ((!hasInsteadPatches || callInstead) && !stopCall) BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${methodName} in ${name}`, {name: "Discord"})();
 									
 									if (!module.BDFDB_patches || !module.BDFDB_patches[methodName]) return methodName == "render" && data.returnValue === undefined ? null : data.returnValue;
 									for (let priority in module.BDFDB_patches[methodName].after) for (let id in BDFDB.ObjectUtils.sort(module.BDFDB_patches[methodName].after[priority])) {
@@ -3603,9 +3603,12 @@ module.exports = (_ => {
 					
 					let titleChildren = [], headerChildren = [], contentChildren = [], footerChildren = [];
 					
-					if (typeof config.text == "string") contentChildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
-						children: config.text
-					}));
+					if (typeof config.text == "string") {
+						config.contentClassName = BDFDB.DOMUtils.formatClassName(config.contentClassName, BDFDB.disCN.modaltextcontent);
+						contentChildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
+							children: config.text
+						}));
+					}
 					
 					if (config.children) {
 						let tabBarItems = [], tabIns = {};
@@ -7802,6 +7805,13 @@ module.exports = (_ => {
 				InternalBDFDB.settings = BDFDB.DataUtils.get(BDFDB);
 				changeLogs = BDFDB.DataUtils.load(BDFDB, "changeLogs");
 				BDFDB.PluginUtils.checkChangeLog(BDFDB);
+				
+				if (window.Lightcord || window.LightCord) BDFDB.ModalUtils.open(BDFDB, {
+					header: "Attention!",
+					subHeader: "Modified Client detected",
+					text: "We detected that you are using LightCord. Unlike other Client Modificaton (BD, PowerCord), LightCord is a completely modified Client, which is no longer maintained by Discord but instead by a 3rd Party. This will put your Account to risk, not only because the 3rd Party might due with your Account Credentials as they like, you are also breaking a higher Instance of Discord's ToS by using a 3rd Party Client instead of using a simple Client Mod. Many Plugins won't flawlessly run on LightCord. We do not support LightCord and as such, we do not provide Help or Support. You should switch to another Modification.",
+					buttons: [{color: "RED", contents: BDFDB.LanguageUtils.LanguageStrings.OKAY}]
+				});
 				
 				InternalBDFDB.patchPlugin(BDFDB);
 				
