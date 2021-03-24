@@ -813,9 +813,9 @@ module.exports = (_ => {
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							context_pinoption:					"Escreva a mensagem",
-							context_unpinoption:				"Exclua a nota",
-							context_updateoption:				"Atualize a nota",
+							context_pinoption:					"Anotar mensagem",
+							context_unpinoption:				"Desanotar mensagem",
+							context_updateoption:				"Atualizar nota",
 							popout_filter_all:					"Todos os servidores",
 							popout_filter_channel:				"Canal",
 							popout_filter_server:				"Servidor",
@@ -825,7 +825,7 @@ module.exports = (_ => {
 							popout_sort_notetime:				"Data da nota",
 							toast_noteadd:						"Mensagem adicionada ao caderno",
 							toast_noteremove:					"Mensagem removida do bloco de notas",
-							toast_noteupdate:					"Atualizou a mensagem no notebook"
+							toast_noteupdate:					"Atualizou a mensagem no caderno"
 						};
 					case "ro":		// Romanian
 						return {
