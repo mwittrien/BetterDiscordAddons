@@ -824,7 +824,7 @@ module.exports = (_ => {
 							popout_sort_messagetime:			"Data da mensagem",
 							popout_sort_notetime:				"Data da nota",
 							toast_noteadd:						"Mensagem adicionada ao caderno",
-							toast_noteremove:					"Mensagem removida do bloco de notas",
+							toast_noteremove:					"Mensagem removida do caderno",
 							toast_noteupdate:					"Atualizou a mensagem no caderno"
 						};
 					case "ro":		// Romanian
