@@ -202,7 +202,8 @@ body,														/* body														*/
 #app-mount {												/* app-mount												*/
 	background-color: rgba(var(--vtransparencycolor), var(--vtransparencyalpha));
 }
-#app-mount .wrapper-1Rf91z {								/* guilds				container							*/
+#app-mount .wrapper-1Rf91z,									/* guilds				container							*/
+#app-mount .wrapper-3NnKdC {								/* guilds				container							*/
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vguildchanneltransparency) * 2));
 }
 #app-mount .sidebar-2K8pFh {								/* channels				container							*/
@@ -288,7 +289,8 @@ body::before {
 	margin-top: 0;
 	margin-right: 0;
 }
-.platform-osx .wrapper-1Rf91z {
+.platform-osx .wrapper-1Rf91z,
+.platform-osx .wrapper-3NnKdC {
 	margin-top: 0;
 	padding-top: 32px;
 }
@@ -326,23 +328,28 @@ body::before {
 	color: rgb(var(--fontwhite2));
 }
 
-.circleIconButton-jET_ig {									/* guildadd/discovery	innerwrap							*/
+.circleIconButton-jET_ig,									/* guildadd/discovery	innerwrap							*/
+.circleIconButton-1QV--U {									/* guildadd/discovery	innerwrap							*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
-.circleIconButton-jET_ig.selected-ugP_am {
+.circleIconButton-jET_ig.selected-ugP_am,
+.circleIconButton-1QV--U.selected-1JjBPm {
 	color: rgb(var(--fontwhite1));
 }
 
+.guildsError-b7zR5H,										/* guilderror			innerwrap							*/
 .guildIconUnavailable-5PMHDN,								/* guilderror			miniicon							*/
-.guildsError-b7zR5H {										/* guilderror			innerwrap							*/
+.guildsError-g6NwOI {										/* guilderror			innerwrap							*/
 	background-color: rgba(240, 71, 71, 0.3);
 }
 
-.dragInner-_SHftW {											/* dragplaceholder											*/
+.dragInner-_SHftW,											/* dragplaceholder											*/
+.dragInner-Oq_toX {											/* dragplaceholder											*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 
-.guildSeparator-3s64Iy {									/* guildseparator											*/
+.guildSeparator-3s64Iy,										/* guildseparator											*/
+.guildSeparator-33mFX6 {									/* guildseparator											*/
 	background-color: rgba(var(--fontwhite1), 0.2);
 }
 
@@ -350,16 +357,20 @@ body::before {
 	background-color: rgb(var(--fontwhite1));
 }
 
-.wrapper-21YSNc {											/* folder				outerwrap							*/
+.wrapper-21YSNc,											/* folder				outerwrap							*/
+.wrapper-3Njo_c {											/* folder				outerwrap							*/
 	margin-bottom: 8px;
 }
-.folder-21wGz3 {											/* folder				iconwrap							*/
+.folder-21wGz3,												/* folder				iconwrap							*/
+.folder-1hbNCn {											/* folder				iconwrap							*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
-.folder-21wGz3.hover-2ji_A7 {
+.folder-21wGz3.hover-2ji_A7,
+.folder-1hbNCn.hover-qTxTR_ {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
-.expandedFolderBackground-2sPsd- {							/* folder				background							*/
+.expandedFolderBackground-2sPsd-,							/* folder				background							*/
+.expandedFolderBackground-1cujaW {							/* folder				background							*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	border-radius: 15px 15px 24px 24px;
 	top: 0;
@@ -367,14 +378,17 @@ body::before {
 	margin-bottom: 8px;
 	transition: border-radius 3s ease, background-color 1s ease;
 }
-.expandedFolderBackground-2sPsd-.hover-2ji_A7 {
+.expandedFolderBackground-2sPsd-.hover-2ji_A7,
+.expandedFolderBackground-1cujaW.hover-qTxTR_ {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
 
-.wrapper-1Rf91z .wrapper-21YSNc [role="group"] {			/* folder				guildwrap							*/
+.wrapper-1Rf91z .wrapper-21YSNc [role="group"],				/* folder				guildwrap							*/
+.wrapper-3NnKdC .wrapper-3Njo_c [role="group"] {			/* folder				guildwrap							*/
 	margin-bottom: -8px;
 }
-.wrapper-1Rf91z .wrapper-21YSNc [role="group"] .listItem-2P_4kh:last-child {
+.wrapper-1Rf91z .wrapper-21YSNc [role="group"] .listItem-2P_4kh:last-child,
+.wrapper-3NnKdC .wrapper-3Njo_c [role="group"] .listItem-GuPuDH:last-child {
 	margin-bottom: 0;
 }
 
@@ -413,7 +427,8 @@ body::before {
 .sidebar-2K8pFh .bar-30k2ka:not(.mention-1f5kbO)::after {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + var(--vguildchanneltransparency) * 0.85 + 0.1));
 }
-.wrapper-1Rf91z .bar-30k2ka:not(.mention-1f5kbO)::after {
+.wrapper-1Rf91z .bar-30k2ka:not(.mention-1f5kbO)::after,
+.wrapper-3NnKdC .bar-30k2ka:not(.mention-1f5kbO)::after {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + var(--vguildchanneltransparency) * 1.9 + 0.1));
 }
 
