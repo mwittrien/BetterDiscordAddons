@@ -653,19 +653,19 @@ module.exports = (_ => {
 						};
 					case "fr":		// French
 						return {
-							context_pinoption:					"Écrivez le message",
+							context_pinoption:					"Noter le message",
 							context_unpinoption:				"Supprimer la note",
 							context_updateoption:				"Mettre à jour la note",
 							popout_filter_all:					"Tous les serveurs",
 							popout_filter_channel:				"Salon",
 							popout_filter_server:				"Serveur",
-							popout_note:						"Remarques",
-							popout_pinoption:					"Remarque",
+							popout_note:						"Notes",
+							popout_pinoption:					"Note",
 							popout_sort_messagetime:			"Date du message",
 							popout_sort_notetime:				"Date de la note",
-							toast_noteadd:						"Message ajouté au notebook",
-							toast_noteremove:					"Message supprimé du notebook",
-							toast_noteupdate:					"Mise à jour du message dans le cahier"
+							toast_noteadd:						"Message ajouté au carnet",
+							toast_noteremove:					"Message supprimé du carnet",
+							toast_noteupdate:					"Mise à jour du message dans le carnet"
 						};
 					case "hr":		// Croatian
 						return {
