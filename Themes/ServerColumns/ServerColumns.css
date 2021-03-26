@@ -108,11 +108,6 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	height: calc(1px * var(--vguildsize)) !important;
 	width: calc(1px * var(--vguildsize)) !important;
 }
-.wrapper-1Rf91z .homeIcon-tEMBK1,
-.wrapper-3NnKdC .homeIcon-FuNwkv {
-	height: calc(1px * (var(--vguildsize) * (8/50) + 12)) !important;
-	width: calc(1px * (var(--vguildsize) * (16/50) + 12)) !important;
-}
 .wrapper-1Rf91z .scroller-2TZvBN > div[style*="height"]:not([class]),
 .wrapper-3NnKdC .scroller-1Bvpku > div[style*="height"]:not([class]) {
 	height: calc(1px * var(--vguildsize) * (58/50)) !important;
@@ -251,7 +246,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	width: calc(1px * var(--vguildsize)) !important;
 }
 .wrapper-1Rf91z .wrapper-21YSNc > .listItem-2P_4kh,
-.wrapper-3NnKdC .wrapper-3Njo_c > .listItem-2P_4kh {
+.wrapper-3NnKdC .wrapper-3Njo_c > .listItem-GuPuDH {
 	margin: 0 !important;
 }
 .wrapper-1Rf91z .wrapper-21YSNc [role="group"],
