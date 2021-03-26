@@ -337,8 +337,9 @@ body::before {
 	color: rgb(var(--fontwhite1));
 }
 
-.guildsError-b7zR5H,										/* guilderror			innerwrap							*/
 .guildIconUnavailable-5PMHDN,								/* guilderror			miniicon							*/
+.guildsError-b7zR5H,										/* guilderror			innerwrap							*/
+.guildIconUnavailable-3IYARS,								/* guilderror			miniicon							*/
 .guildsError-g6NwOI {										/* guilderror			innerwrap							*/
 	background-color: rgba(240, 71, 71, 0.3);
 }
