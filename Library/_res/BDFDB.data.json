@@ -2606,7 +2606,7 @@
 		"searchresultspagination": ["NotFound", "searchResultsPagination"],
 		"searchresultsresult": ["SearchResultsMessage", "searchResult"],
 		"searchresultswrap": ["SearchResults", "searchResultsWrap"],
-		"select": ["Select", "select"],
+		"select": ["SelectSearchable", "select"],
 		"selectoption": ["SelectSearchable", "option"],
 		"selectsearchinput": ["SelectSearchable", "searchInput"],
 		"selectselectedicon": ["SelectSearchable", "selectedIcon"],
