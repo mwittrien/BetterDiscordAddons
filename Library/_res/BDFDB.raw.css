@@ -949,7 +949,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	align-items: center;
 	height: 36px !important;
 	border-radius: 0 !important;
-	transition: height 10s ease !important;
+	transition: height 0.5s ease !important;
 }
 [REPLACE_CLASS_noticeclosing] {
 	height: 0 !important;
