@@ -66,7 +66,7 @@ module.exports = (_ => {
 				},
 				useChromium: {
 					value: false,
-					isDisabled: data => !LibraryRequires.electron || !LibraryRequires.electron.remote,
+					isHidden: data => !LibraryRequires.electron || !LibraryRequires.electron.remote,
 					getValue: data => !data.disabled
 				}
 			},
@@ -8280,7 +8280,11 @@ module.exports = (_ => {
 							value: InternalBDFDB.settings.general[key],
 							nativeValue: nativeSetting
 						});
-						settingsItems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
+						let hidden = typeof InternalBDFDB.defaults.general[key].isHidden == "function" && InternalBDFDB.defaults.general[key].isHidden({
+							value: InternalBDFDB.settings.general[key],
+							nativeValue: nativeSetting
+						});
+						if (!hidden) settingsItems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
 							type: "Switch",
 							plugin: InternalBDFDB,
 							disabled: disabled,
