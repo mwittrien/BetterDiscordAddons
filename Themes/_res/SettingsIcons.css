@@ -51,14 +51,17 @@
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Billing-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/billing.svg) center/contain no-repeat;
 }
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Appearance-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/appearance.svg) center/contain no-repeat;
+}
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Accessibility-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/accessibility.svg) center/contain no-repeat;
+}
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Voice & Video-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/voice.svg) center/contain no-repeat;
 }
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Text & Images-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/text.svg) center/contain no-repeat;
-}
-.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Appearance-tab" i]::before {
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/appearance.svg) center/contain no-repeat;
 }
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Notifications-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/notifications.svg) center/contain no-repeat;
@@ -74,6 +77,9 @@
 }
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Streamer Mode-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/streamermode.svg) center/contain no-repeat;
+}
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Advanced-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/advanced.svg) center/contain no-repeat;
 }
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Game Activity-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/games.svg) center/contain no-repeat;
