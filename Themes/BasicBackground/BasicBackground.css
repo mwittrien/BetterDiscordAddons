@@ -2838,6 +2838,10 @@ body::before {
 	color: rgb(var(--fontwhite1));
 }
 
+.sidebar-dLM-kh {											/* rolesettings			sidebar								*/
+	background-color: rgba(var(--vtransparencycolor), 0.1);
+	border: none;
+}
 .container-_phMUq {											/* rolesettings			everyone role						*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
@@ -2857,8 +2861,8 @@ body::before {
 }
 .titleContainer-2CXtJo::after,
 .titleContainer-2CXtJo::before,
-.stickyHeader-hH_ZLl::after,
-.stickyHeader-hH_ZLl::before {
+.header-2mZ9Ov::after,
+.header-2mZ9Ov::before {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -2869,11 +2873,15 @@ body::before {
 	z-index: -1;
 }
 .titleContainer-2CXtJo::after,
-.stickyHeader-hH_ZLl::after {
+.header-2mZ9Ov::after {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha)));
 }
+.sidebar-dLM-kh .titleContainer-2CXtJo::after,
+.sidebar-dLM-kh .header-2mZ9Ov::after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.1))
+}
 .titleContainer-2CXtJo::before,
-.stickyHeader-hH_ZLl::before {
+.header-2mZ9Ov::before {
 	background: var(--vbackground) var(--vbackgroundposition)/var(--vbackgroundsize);
 	background-attachment: fixed;
 	filter: blur(var(--vbackgroundblur));
@@ -2894,6 +2902,9 @@ body::before {
 .roleRow-30TwGe:last-child:after {
 	background-color: rgba(var(--fontwhite4), 0.3);
 }
+.memberRow-1wwtfV:hover {									/* rolesettings			member row							*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
 #app-mount .colorPickerSwatch-5GX3Ve.noColor-1pdBDm {		/* rolesettings			colorswatch nocolor					*/
 	border-color: rgba(var(--fontwhite1), 0.3);
 }
@@ -2902,6 +2913,18 @@ body::before {
 }
 #app-mount .colorPickerSwatch-5GX3Ve.noColor-1pdBDm polyline {
 	stroke: rgb(var(--fontwhite1));
+}
+.previewContainer-1KQDJS {									/* rolesettings			preview								*/
+	border: none;
+}
+.messageContainer-1DiFnQ {									/* rolesettings			preview message						*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.theme-light .messageContainer-1DiFnQ {
+	display: none;
+}
+.addMemberRow-3-w-9X.selectedRow-1QP7qb {					/* rolesettings			add member row						*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 
 #app-mount .emojiAliasInput-1y-NBz .emojiInput-1aLNse {		/* emojisettings		nameinput							*/

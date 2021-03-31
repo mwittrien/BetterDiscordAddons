@@ -2132,6 +2132,9 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	-webkit-mask: url(https://discordapp.com/assets/a8564dac0d728add0025be388f5ad7a2.svg) center/contain no-repeat;
 	background: var(--background-tertiary);
 }
+.theme-light .messageContainer-1DiFnQ {
+	display: none;
+}
 
 #app-mount .emojiAliasInput-1y-NBz .emojiInput-1aLNse {
 	background-color: var(--deprecated-text-input-bg);
