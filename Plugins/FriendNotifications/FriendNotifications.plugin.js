@@ -141,7 +141,7 @@ module.exports = (_ => {
 			}
 			render() {
 				return BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCN.guildouter,
+					className: BDFDB.disCNS.guildouter + BDFDB.disCN._friendnotificationsfriendsonlinewrap,
 					children: BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS.guildslabel + BDFDB.disCN._friendnotificationsfriendsonline,
 						children: BDFDB.LanguageUtils.LanguageStringsFormat("FRIENDS_ONLINE_HEADER", this.props.amount),

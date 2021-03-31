@@ -779,6 +779,7 @@
 		},
 		"FriendNotifications": {
 			"friendsOnline": "friendsOnline-2JkivW",
+			"friendsOnlineWrap": "friendsOnlineWrap-0gZ63m",
 			"logAvatar": "avatar-GgGssS",
 			"logContent": "content-_3_FFs",
 			"logTime": "time-00Fs44",
@@ -850,7 +851,8 @@
 			"innerFrame": "innerFrame-8Hg64E"
 		},
 		"ServerCounter": {
-			"serverCount": "serverCount-FsTTs1"
+			"serverCount": "serverCount-FsTTs1",
+			"serverCountWrap": "serverCountWrap-k8F5De"
 		},
 		"ServerDetails": {
 			"details": "details-08FrsT",
@@ -1276,6 +1278,7 @@
 		"_friendnotificationslogcontent": ["FriendNotifications", "logContent"],
 		"_friendnotificationslogtime": ["FriendNotifications", "logTime"],
 		"_friendnotificationsfriendsonline": ["FriendNotifications", "friendsOnline"],
+		"_friendnotificationsfriendsonlinewrap": ["FriendNotifications", "friendsOnlineWrap"],
 		"_friendnotificationstimelogmodal": ["FriendNotifications", "timeLogModal"],
 		"_friendnotificationstypelabel": ["FriendNotifications", "typeLabel"],
 		"_imageutilitiesdetails": ["ImageUtilities", "details"],
@@ -1325,6 +1328,7 @@
 		"_readallnotificationsbuttonframe": ["ReadAllNotificationsButton", "frame"],
 		"_readallnotificationsbuttoninner": ["ReadAllNotificationsButton", "innerFrame"],
 		"_servercounterservercount": ["ServerCounter", "serverCount"],
+		"_servercounterservercountwrap": ["ServerCounter", "serverCountWrap"],
 		"_serverdetailsdetails": ["ServerDetails", "details"],
 		"_serverdetailsicon": ["ServerDetails", "icon"],
 		"_serverdetailstooltip": ["ServerDetails", "tooltip"],
