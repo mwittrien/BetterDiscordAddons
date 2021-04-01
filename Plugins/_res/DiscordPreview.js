@@ -71,6 +71,7 @@
 					}
 					
 					if (data.html || data.htmlClassName) document.documentElement.className = data.html || data.htmlClassName;
+					if (window.parent && typeof window.parent.postMessage == "function") document.documentElement.classList.add("iframe-mode");
 					document.documentElement.classList.add("mouse-mode");
 					document.documentElement.classList.add("full-motion");
 					
