@@ -9,7 +9,7 @@
 		let electron = nativeRequire("electron");
 		if (electron && electron.remote) {
 			let browserWindow = electron.remote.getCurrentWindow();
-			if (browserWindow) 
+			if (browserWindow) return browserWindow;
 		}
 	};
 	const = respondToParent = (data = {}) => {
