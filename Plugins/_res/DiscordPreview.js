@@ -83,20 +83,27 @@
 							let browserWindow = getWindow();
 							if (button.className.indexOf(disCN.titlebarmacbuttonclose) > -1 || button.className.indexOf(disCN.titlebarwinbuttonclose) > -1) {
 								if (browserWindow) browserWindow.close();
-								else while (document.childElementCount) document.firstElementChild.remove();
+								respondToParent({
+									origin: "DiscordPreview",
+									reason: "close"
+								});
 							}
 							else if (button.className.indexOf(disCN.titlebarmacbuttonmax) > -1 || (button.className.indexOf(disCN.titlebarwinbuttonminmax) > -1 && button.parentElement.lastElementChild != button)) {
 								if (browserWindow) {
 									if (browserWindow.isMaximized()) browserWindow.unmaximize();
 									else browserWindow.maximize();
 								}
-								else {
-								}
+								respondToParent({
+									origin: "DiscordPreview",
+									reason: "maximize"
+								});
 							}
 							else if (button.className.indexOf(disCN.titlebarmacbuttonmin) > -1 || (button.className.indexOf(disCN.titlebarwinbuttonminmax) > -1 && button.parentElement.lastElementChild == button)) {
 								if (browserWindow) browserWindow.minimize();
-								else {
-								}
+								respondToParent({
+									origin: "DiscordPreview",
+									reason: "minimize"
+								});
 							}
 						}
 					});
