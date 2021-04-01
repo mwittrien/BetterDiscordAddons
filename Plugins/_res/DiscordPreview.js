@@ -12,7 +12,7 @@
 			if (browserWindow) return browserWindow;
 		}
 	};
-	const = respondToParent = (data = {}) => {
+	const respondToParent = (data = {}) => {
 		if (window.parent && typeof window.parent.postMessage == "function") window.parent.postMessage(data, "*");
 		if (data.hostId != null && data.hostName != null) {
 			let ipcRenderer = (nativeRequire("electron") || {}).ipcRenderer;
