@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "WriteUpperCase",
 			"author": "DevilBro",
-			"version": "1.2.9",
+			"version": "1.3.0",
 			"description": "Changes the first Letter of each Sentence in Message Inputs to Uppercase"
 		},
 		"changeLog": {
-			"improved": {
-				"Settings": "You can now disable/enable it form normal/edit/upload textareas"
+			"fixed": {
+				"Mentions": "No longer acts weird with mentions"
 			}
 		}
 	};
@@ -133,7 +133,7 @@ module.exports = (_ => {
 				let type = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(e.instance.props.type || "");
 				if (e.instance.props.textValue && e.instance.state.focused && (!type || settings["change" + type] || settings["change" + type] === undefined)) {
 					let string = e.instance.props.textValue;
-					if (string.length && !/:[A-z0-9_-]+:|[\uD83C-\uDBFF\uDC00-\uDFFF]+/.test(string)) {
+					if (string.length && !/<[#@]\d+>|:[A-z0-9_-]+:|[\uD83C-\uDBFF\uDC00-\uDFFF]+/.test(string)) {
 						let newString = string, stop = false;
 						for (let space of spaces) for (let symbol of symbols) if (!stop) {
 							let reg;

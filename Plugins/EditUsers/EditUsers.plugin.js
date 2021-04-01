@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.1.6",
+			"version": "4.1.7",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"Mentions": ""
+				"Tags in DMs List": "Fixed overflowing tags in dms turning invisible"
 			}
 		}
 	};
@@ -180,6 +180,7 @@ module.exports = (_ => {
 						bottom: 1px;
 					}
 					${BDFDB.dotCNS.dmchannel + BDFDB.dotCN.bottag} {
+						display: inline;
 						margin-left: 4px;
 					}
 					${BDFDB.dotCNS.userinfo + BDFDB.dotCN.userinfodiscriminator} {
@@ -933,12 +934,12 @@ module.exports = (_ => {
 			}
 
 			processPrivateChannel (e) {
-				if (e.instance.props.user && settings.changeInDmsList) {
+				if (e.instance.props.user && settings.changeInDmsList && changedUsers[e.instance.props.user.id]) {
 					if (!e.returnvalue) {
 						let data = changedUsers[e.instance.props.user.id];
-						if (data && (data.removeStatus || data.status || data.statusEmoji)) {
+						if (data.removeStatus || data.status || data.statusEmoji) {
 							e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
-							let activity = this.createCustomStatus(data);
+							let activity = this.createCustomStatus(changedUsers[e.instance.props.user.id]);
 							if (activity) e.instance.props.activities.unshift(activity);
 						}
 					}
