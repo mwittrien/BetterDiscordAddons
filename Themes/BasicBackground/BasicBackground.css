@@ -3044,6 +3044,9 @@ body::before {
 #app-mount .card-1o0mns {									/* integrationsettings	apps card							*/
 	border-color: rgba(var(--vtransparencycolor), 0.1)
 }
+#app-mount .card-11DMwv {									/* integrationsettings	follows card						*/
+	border-color: rgba(var(--vtransparencycolor), 0.1)
+}
 .iconWrapper-lS1uig {										/* integrationsettings	icon								*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
