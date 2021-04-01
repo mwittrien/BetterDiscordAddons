@@ -3865,6 +3865,9 @@ html .bd-settings-group.collapsible .bd-settings-title::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/common/fav_star.svg) center/contain no-repeat;
 }
 
+#app-mount .bd-modal-wrapper {
+	z-index: 1002;
+}
 #app-mount .bd-modal-wrapper .bd-modal-inner {
 	background-color: var(--background-primary);
 	border: none;

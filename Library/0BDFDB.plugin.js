@@ -7810,7 +7810,7 @@ module.exports = (_ => {
 					header: "Attention!",
 					subHeader: "Modified Client detected",
 					text: "We detected that you are using LightCord. Unlike other Client Modificaton (BetterDiscord, PowerCord), LightCord is a completely modified Client, which is no longer maintained by Discord but instead by a 3rd Party. This will put your Account to risk, not only because the 3rd Party might do with your Account Credentials what they want, you are also breaking a higher Instance of Discord's ToS by using a 3rd Party Client instead of using a simple Client Mod. Many Plugins won't flawlessly run on LightCord. We do not support LightCord and as such, we do not provide Help or Support. You should switch to another Modification.",
-					buttons: [{color: "RED", contents: BDFDB.LanguageUtils.LanguageStrings.OKAY}]
+					buttons: [{color: "RED", contents: BDFDB.LanguageUtils.LanguageStrings.OKAY, close: true}]
 				});
 				
 				InternalBDFDB.patchPlugin(BDFDB);

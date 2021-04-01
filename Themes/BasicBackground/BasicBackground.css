@@ -7377,6 +7377,9 @@ html .bd-toast.toast-warn.icon::before {
 	pointer-events: none;
 	z-index: -1;
 }
+.bd-modal-wrapper {
+	z-index: 1002;
+}
 .bd-modal-wrapper .header {									/* modal				header								*/
 	background-color: transparent;
 	box-shadow: none;
