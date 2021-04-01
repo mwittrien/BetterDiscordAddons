@@ -3,10 +3,16 @@
 	
 	window.global = window;
 	
-	let nativeRequire = window.require || (_ => {});
-	let nativeWebpackJsonp = window.webpackJsonp;
-	
-	window.respondToParent = function (data = {}) {
+	const nativeRequire = window.require || (_ => {});
+	const nativeWebpackJsonp = window.webpackJsonp;
+	const getWindow = _ => {
+		let electron = nativeRequire("electron");
+		if (electron && electron.remote) {
+			let browserWindow = electron.remote.getCurrentWindow();
+			if (browserWindow) 
+		}
+	};
+	const = respondToParent = (data = {}) => {
 		if (window.parent && typeof window.parent.postMessage == "function") window.parent.postMessage(data, "*");
 		if (data.hostId != null && data.hostName != null) {
 			let ipcRenderer = (nativeRequire("electron") || {}).ipcRenderer;
@@ -15,13 +21,13 @@
 	};
 
 	window.onload = function () {
-		window.respondToParent({
+		respondToParent({
 			origin: "DiscordPreview",
 			reason: "OnLoad"
 		});
 	};
 	window.onkeyup = function (e) {
-		window.respondToParent({
+		respondToParent({
 			origin: "DiscordPreview",
 			reason: "KeyUp",
 			which: e.which
@@ -68,25 +74,32 @@
 					document.documentElement.classList.add("mouse-mode");
 					document.documentElement.classList.add("full-motion");
 					
-					if (data.titlebar || data.titleBar) document.querySelector(".preview-titlebar").outerHTML = data.titlebar || data.titleBar;
+					if (data.titleBar) document.querySelector(".preview-titlebar").outerHTML = data.titleBar;
 					
 					document.body.firstElementChild.style.removeProperty("display");
-	
-					let electron = nativeRequire("electron");
-					if (electron && electron.remote) {
-						let browserWindow = electron.remote.getCurrentWindow();
-						if (browserWindow) document.addEventListener("click", event => {
-							let button = getParent(dotCNC.titlebarmacbutton + dotCN.titlebarwinbutton, event.target);
-							if (button) {
-								if (button.className.indexOf(disCN.titlebarmacbuttonclose) > -1 || button.className.indexOf(disCN.titlebarwinbuttonclose) > -1) browserWindow.close();
-								else if (button.className.indexOf(disCN.titlebarmacbuttonmax) > -1 || (button.className.indexOf(disCN.titlebarwinbuttonminmax) > -1 && button.parentElement.lastElementChild != button)) {
+					document.addEventListener("click", event => {
+						let button = getParent(dotCNC.titlebarmacbutton + dotCN.titlebarwinbutton, event.target);
+						if (button) {
+							let browserWindow = getWindow();
+							if (button.className.indexOf(disCN.titlebarmacbuttonclose) > -1 || button.className.indexOf(disCN.titlebarwinbuttonclose) > -1) {
+								if (browserWindow) browserWindow.close();
+								else while (document.childElementCount) document.firstElementChild.remove();
+							}
+							else if (button.className.indexOf(disCN.titlebarmacbuttonmax) > -1 || (button.className.indexOf(disCN.titlebarwinbuttonminmax) > -1 && button.parentElement.lastElementChild != button)) {
+								if (browserWindow) {
 									if (browserWindow.isMaximized()) browserWindow.unmaximize();
 									else browserWindow.maximize();
 								}
-								else if (button.className.indexOf(disCN.titlebarmacbuttonmin) > -1 || (button.className.indexOf(disCN.titlebarwinbuttonminmax) > -1 && button.parentElement.lastElementChild == button)) browserWindow.minimize();
+								else {
+								}
 							}
-						});
-					}
+							else if (button.className.indexOf(disCN.titlebarmacbuttonmin) > -1 || (button.className.indexOf(disCN.titlebarwinbuttonminmax) > -1 && button.parentElement.lastElementChild == button)) {
+								if (browserWindow) browserWindow.minimize();
+								else {
+								}
+							}
+						}
+					});
 					break;
 				case "NewTheme":
 				case "CustomCSS":
