@@ -45,7 +45,7 @@
 					if (data.avatar) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_AVATAR/gi, data.avatar.split('"').join('') + "?size=");
 					if (data.discriminator) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_DISCRIMINATOR/gi, data.discriminator);
 					if (data.classes) DiscordClasses = JSON.parse(data.classes);
-					if (data.classmodules || data.classModules) DiscordClassModules = JSON.parse(data.classmodules || data.classModules);
+					if (data.classModules) DiscordClassModules = JSON.parse(data.classModules);
 					
 					if (disCN != undefined && DiscordClasses != undefined && DiscordClassModules != undefined) {
 						let oldHTML = document.body.innerHTML.split("REPLACE_CLASS_");
