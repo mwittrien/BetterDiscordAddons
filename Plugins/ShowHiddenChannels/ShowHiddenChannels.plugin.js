@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.3
+ * @version 2.9.4
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "2.9.3",
+			"version": "2.9.4",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
-		},
-		"changeLog": {
-			"added": {
-				"Hide connected voice users": "You can now disable the option to show users who are in a hidden voice channel"
-			}
 		}
 	};
 
@@ -75,6 +70,11 @@ module.exports = (_ => {
 			GUILD_VOICE: "showVoice",
 			GUILD_ANNOUNCEMENT: "showAnnouncement",
 			GUILD_STORE: "showStore"
+		};
+		
+		const channelsAliases = {
+			GUILD_TEXT: "SELECTABLE",
+			GUILD_VOICE: "VOCAL"
 		};
 
 		const typeNameMap = {
@@ -387,7 +387,7 @@ module.exports = (_ => {
 						hiddenCategory = new BDFDB.DiscordObjects.Channel({
 							guild_id: e.instance.props.guild.id,
 							id: hiddenId,
-								"name": "hidden",
+							name: "hidden",
 							type: BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY
 						});
 						e.instance.props.categories[hiddenId] = [];
@@ -403,7 +403,7 @@ module.exports = (_ => {
 					else hiddenCategory = null;
 						
 					for (let type in hiddenChannels) {
-						let channelType = type == BDFDB.DiscordConstants.ChannelTypes.GUILD && e.instance.props.channels.SELECTABLE ? "SELECTABLE" : type;
+						let channelType = channelsAliases[BDFDB.DiscordConstants.ChannelTypes[type]] || type;
 						if (!BDFDB.ArrayUtils.is(e.instance.props.channels[channelType])) e.instance.props.channels[channelType] = [];
 						for (let channel of hiddenChannels[type]) {
 							let hiddenChannel = new BDFDB.DiscordObjects.Channel(Object.assign({}, channel, {

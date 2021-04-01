@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.0
+ * @version 1.5.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -22,15 +22,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.5.0",
+			"version": "1.5.1",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
-		"changeLog": {
-			"improved": {
-				"Select Component": "Switched the old Dropdown Select Component with Discord's New Version"
-			}
-		}
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
 	};
 	
 	const DiscordObjects = {};
@@ -1555,26 +1550,20 @@ module.exports = (_ => {
 					else BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipprimary);
 					
 					if (config.list || BDFDB.ObjectUtils.is(config.guild)) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltiplistitem);
-
-					let mouseMove = e => {
-						let parent = e.target.parentElement.querySelector(":hover");
-						if (parent && anker != parent && !anker.contains(parent)) itemLayer.removeTooltip();
+					
+					const removeTooltip = _ => {
+						document.removeEventListener("mousemove", mouseMove);
+						document.removeEventListener("mouseleave", mouseLeave);
+						BDFDB.DOMUtils.remove(itemLayer);
+						BDFDB.ArrayUtils.remove(Tooltips, id);
+						observer.disconnect();
+						if (zIndexed) BDFDB.DOMUtils.removeClass(itemLayerContainer, BDFDB.disCN.itemlayercontainerzindexdisabled);
+						if (typeof config.onHide == "function") config.onHide(itemLayer, anker);
 					};
-					let mouseLeave = e => itemLayer.removeTooltip();
-					if (!config.perssist) {
-						document.addEventListener("mousemove", mouseMove);
-						document.addEventListener("mouseleave", mouseLeave);
-					}
-					
-					let observer = new MutationObserver(changes => changes.forEach(change => {
-						let nodes = Array.from(change.removedNodes);
-						if (nodes.indexOf(itemLayer) > -1 || nodes.indexOf(anker) > -1 || nodes.some(n => n.contains(anker))) itemLayer.removeTooltip();
-					}));
-					observer.observe(document.body, {subtree: true, childList: true});
-					
-					(tooltip.setText = itemLayer.setText = newText => {
+					const setText = newText => {
 						if (BDFDB.ObjectUtils.is(config.guild)) {
-							let voiceChannels = LibraryModules.GuildChannelStore.getChannels(config.guild.id)[BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE].map(c => c.channel.id);
+							let channels = LibraryModules.GuildChannelStore.getChannels(config.guild.id);
+							let voiceChannels = (channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE] || channels.VOCAL || []).map(c => c.channel.id);
 							let streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === config.guild.id).map(app => app.ownerId) || [];
 							let streamOwners = streamOwnerIds.map(ownerId => LibraryModules.UserStore.getUser(ownerId)).filter(n => n);
 							let connectedUsers = BDFDB.ObjectUtils.toArray(LibraryModules.VoiceUtils.getVoiceStates(config.guild.id)).map(state => voiceChannels.includes(state.channelId) && state.channelId != config.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && LibraryModules.UserStore.getUser(state.userId)).filter(n => n);
@@ -1648,18 +1637,9 @@ module.exports = (_ => {
 							else if (config.html) tooltipContent.innerHTML = newText;
 							else tooltipContent.innerText = newText;
 						}
-					})(text);
-					(tooltip.removeTooltip = itemLayer.removeTooltip = _ => {
-						document.removeEventListener("mousemove", mouseMove);
-						document.removeEventListener("mouseleave", mouseLeave);
-						BDFDB.DOMUtils.remove(itemLayer);
-						BDFDB.ArrayUtils.remove(Tooltips, id);
-						observer.disconnect();
-						if (zIndexed) BDFDB.DOMUtils.removeClass(itemLayerContainer, BDFDB.disCN.itemlayercontainerzindexdisabled);
-						if (typeof config.onHide == "function") config.onHide(itemLayer, anker);
-					});
-					(tooltip.update = itemLayer.update = newText => {
-						if (newText) tooltip.setText(newText);
+					};
+					const update = newText => {
+						if (newText) setText(newText);
 						let left, top;
 						const tRects = BDFDB.DOMUtils.getRects(anker);
 						const iRects = BDFDB.DOMUtils.getRects(itemLayer);
@@ -1718,7 +1698,29 @@ module.exports = (_ => {
 								}
 							}
 						}
-					})();
+					};
+
+					const mouseMove = e => {
+						let parent = e.target.parentElement.querySelector(":hover");
+						if (parent && anker != parent && !anker.contains(parent)) removeTooltip();
+					};
+					const mouseLeave = e => removeTooltip();
+					if (!config.perssist) {
+						document.addEventListener("mousemove", mouseMove);
+						document.addEventListener("mouseleave", mouseLeave);
+					}
+					
+					const observer = new MutationObserver(changes => changes.forEach(change => {
+						let nodes = Array.from(change.removedNodes);
+						if (nodes.indexOf(itemLayer) > -1 || nodes.indexOf(anker) > -1 || nodes.some(n => n.contains(anker))) removeTooltip();
+					}));
+					observer.observe(document.body, {subtree: true, childList: true});
+					
+					tooltip.removeTooltip = itemLayer.removeTooltip = removeTooltip;
+					tooltip.setText = itemLayer.setText = setText;
+					tooltip.update = itemLayer.update = update;
+					setText(text);
+					update();
 					
 					if (config.delay) {
 						BDFDB.DOMUtils.toggle(itemLayer);
