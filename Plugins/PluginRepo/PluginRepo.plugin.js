@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.1.5",
+			"version": "2.1.6",
 			"description": "Allow you to look at all plugins from the plugin repo and download them on the fly"
 		},
 		"changeLog": {
 			"fixed": {
-				"Repo Header": "Repo Header gets added properly again"
+				"New BD Beta": "Works 100% with the new BD Version"
 			}
 		}
 	};
@@ -704,8 +704,8 @@ module.exports = (_ => {
 			loadPlugins () {
 				BDFDB.DOMUtils.remove(BDFDB.dotCN._pluginrepoloadingicon);
 				let settings = BDFDB.DataUtils.load(this, "settings");
-				let getPluginInfo, extractConfigInfo, createSandbox, runInSandbox;
-				let sandbox, sandboxRunning = false, sandboxQueue = [], outdated = 0, newEntries = 0, i = 0;
+				let getPluginInfo, setPluginParameter;
+				let outdated = 0, newEntries = 0, i = 0;
 				let tags = ["getName", "getVersion", "getAuthor", "getDescription"];
 				let seps = ["\"", "\'", "\`"];
 				let newEntriesData = BDFDB.DataUtils.load(this, "newentriesdata");
@@ -741,89 +741,85 @@ module.exports = (_ => {
 						
 						BDFDB.ReactUtils.forceUpdate(list, header);
 
-						createSandbox().then(_ => {
-							getPluginInfo(_ => {
-								if (!this.started) {
-									BDFDB.TimeUtils.clear(loading.timeout);
-									BDFDB.WindowUtils.close(sandbox);
-									return;
-								}
-								let finishCounter = 0, finishInterval = BDFDB.TimeUtils.interval(_ => { 
-									if ((sandboxQueue.length == 0 && !sandboxRunning) || finishCounter > 300 || !loading.is) {
-										BDFDB.TimeUtils.clear(loading.timeout);
-										BDFDB.TimeUtils.clear(finishInterval);
-										BDFDB.WindowUtils.close(sandbox);
-										BDFDB.DOMUtils.remove(loadingIcon, BDFDB.dotCN._pluginrepoloadingicon);
-										loading = {is: false, timeout: null, amount: loading.amount};
-										
-										BDFDB.LogUtils.log("Finished fetching Plugins", this);
-										if (list) BDFDB.ReactUtils.forceUpdate(list);
-										
-										if (settings.notifyOutdated && outdated > 0) {
-											let notice = document.querySelector(BDFDB.dotCN._pluginrepooutdatednotice);
-											if (notice) notice.close();
-											BDFDB.NotificationUtils.notice(this.labels.notice_outdated_plugins.replace("{{var0}}", outdated), {
-												type: "danger",
-												className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepooutdatednotice,
-												customIcon: pluginRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
-												buttons: [{
-													contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
-													close: true,
-													onClick: _ => {
-														showOnlyOutdated = true;
-														BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo");
-													}
-												}]
-											});
+						getPluginInfo(_ => {
+							if (!this.started) {
+								BDFDB.TimeUtils.clear(loading.timeout);
+								return;
+							}
+							BDFDB.TimeUtils.clear(loading.timeout);
+							BDFDB.DOMUtils.remove(loadingIcon, BDFDB.dotCN._pluginrepoloadingicon);
+							loading = {is: false, timeout: null, amount: loading.amount};
+							
+							BDFDB.LogUtils.log("Finished fetching Plugins", this);
+							if (list) BDFDB.ReactUtils.forceUpdate(list);
+							
+							if (settings.notifyOutdated && outdated > 0) {
+								let notice = document.querySelector(BDFDB.dotCN._pluginrepooutdatednotice);
+								if (notice) notice.close();
+								BDFDB.NotificationUtils.notice(this.labels.notice_outdated_plugins.replace("{{var0}}", outdated), {
+									type: "danger",
+									className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepooutdatednotice,
+									customIcon: pluginRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
+									buttons: [{
+										contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
+										close: true,
+										onClick: _ => {
+											showOnlyOutdated = true;
+											BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo");
 										}
-										
-										if (settings.notifyNewEntries && newEntries > 0) {
-											let notice = document.querySelector(BDFDB.dotCN._pluginreponewentriesnotice);
-											if (notice) notice.close();
-											BDFDB.NotificationUtils.notice(this.labels.notice_new_plugins.replace("{{var0}}", newEntries), {
-												type: "success",
-												className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginreponewentriesnotice,
-												customIcon: pluginRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
-												buttons: [{
-													contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
-													close: true,
-													onClick: _ => {
-														forcedSort = "NEW";
-														forcedOrder = "ASC";
-														BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo");
-													}
-												}]
-											});
+									}]
+								});
+							}
+							
+							if (settings.notifyNewEntries && newEntries > 0) {
+								let notice = document.querySelector(BDFDB.dotCN._pluginreponewentriesnotice);
+								if (notice) notice.close();
+								BDFDB.NotificationUtils.notice(this.labels.notice_new_plugins.replace("{{var0}}", newEntries), {
+									type: "success",
+									className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginreponewentriesnotice,
+									customIcon: pluginRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
+									buttons: [{
+										contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
+										close: true,
+										onClick: _ => {
+											forcedSort = "NEW";
+											forcedOrder = "ASC";
+											BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo");
 										}
-										
-										if (BDFDB.UserUtils.me.id == "278543574059057154") {
-											let notice = document.querySelector(BDFDB.dotCN._pluginrepofailnotice);
-											if (notice) notice.close();
-											let wrongUrls = [];
-											for (let url of foundPlugins) if (url && !loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
-											if (wrongUrls.length) {
-												BDFDB.NotificationUtils.notice(this.labels.notice_failed_plugins.replace("{{var0}}", wrongUrls.length), {
-													type: "danger",
-													className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepofailnotice,
-													customIcon: pluginRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
-													buttons: [{
-														contents: this.labels.list,
-														onClick: _ => {
-															let toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"), {type: "danger"});
-															toast.style.setProperty("overflow", "hidden");
-															for (let url of wrongUrls) console.log(url);
-														}
-													}]
-												});
+									}]
+								});
+							}
+							
+							if (BDFDB.UserUtils.me.id == "278543574059057154") {
+								let notice = document.querySelector(BDFDB.dotCN._pluginrepofailnotice);
+								if (notice) notice.close();
+								let wrongUrls = [];
+								for (let url of foundPlugins) if (url && !loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
+								if (wrongUrls.length) {
+									BDFDB.NotificationUtils.notice(this.labels.notice_failed_plugins.replace("{{var0}}", wrongUrls.length), {
+										type: "danger",
+										className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepofailnotice,
+										customIcon: pluginRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
+										buttons: [{
+											contents: this.labels.list,
+											onClick: _ => {
+												let toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"), {type: "danger"});
+												toast.style.setProperty("overflow", "hidden");
+												for (let url of wrongUrls) console.log(url);
 											}
-										}
-									}
-									else finishCounter++;
-								},1000);
-							});
+										}]
+									});
+								}
+							}
 						});
 					}
 				});
+				
+				setPluginParameter = (plugin, tag, value) => {
+					value = value ? value.split("\n")[0] : null;
+					value = value && tag != "getVersion" ? value.charAt(0).toUpperCase() + value.slice(1) : value;
+					plugin[tag] = value ? value.trim() : value;
+				};
 
 				getPluginInfo = callback => {
 					if (i >= foundPlugins.length || !this.started || !loading.is) {
@@ -843,29 +839,27 @@ module.exports = (_ => {
 								bodyCopy = body.replace(/}/g, "}\n");
 							}
 							
-							let bodyWithoutSpecial = bodyCopy.replace(/\n|\r|\t/g, "").replace(/\n|\r|\t/g, "").replace(/\s{2,}/g, "");
-							let configFound = false, configReg = /(\.exports|config)\s*=\s*\{(.*?)\s*["'`]*info["'`]*\s*:\s*/i.exec(bodyWithoutSpecial);
-							if (configReg) {
+							let configFound = false, configWrapper = bodyCopy.replace(/[\n\r\t"'`]/g, "").split(/(\s+config|\s+script|\.exports)\s*=\s*\{/g)[2];
+							if (configWrapper) {
 								configFound = true;
+								let i = 0, j = 0, configString = "";
 								try {
-									bodyWithoutSpecial = bodyWithoutSpecial.substring(configReg.index).split(configReg[0])[1].split("};")[0].split("}},")[0].replace(/,([\]\}])/g, "$1");
-									try {extractConfigInfo(plugin, JSON.parse('{"info":' + bodyWithoutSpecial + '}'));}
-									catch (err) {
-										let i = 0, j = 0, configString = "";
-										try {
-											for (let c of bodyWithoutSpecial.replace(/:\s*([\[\{"]+)/g, '":$1').replace(/([\]\}"]+)\s*,([^"])/g, '$1,"$2').replace(/\s*\{([^"])/g, '{"$1')) {
-												configString += c;
-												if (c == "{") i++;
-												else if (c == "}") j++;
-												if (i > 0 && i == j) break;
-											}
-											extractConfigInfo(plugin, JSON.parse('{"info":' + configString + '}'));
-										}
-										catch (err) {
-											try {extractConfigInfo(plugin, JSON.parse(('{"info":' + configString + '}').replace(/'/g, "\"")));}
-											catch (err) {configFound = false;}
-										}
+									for (let c of `{${configWrapper}`) {
+										configString += c;
+										if (c == "{") i++;
+										else if (c == "}") j++;
+										if (i > 0 && i == j) break;
 									}
+									for (let tag of tags) {
+										let result = new RegExp(`[\\s\{\\}\[\\:,]${tag.replace("get", "").toLowerCase()}\\s*:\\s*([^\\{^\\}^\\[^\\]^:^,]+)`, "gi").exec(configString);
+										if (result) setPluginParameter(plugin, tag, result[1]);
+									}
+									if (!plugin.getAuthor) plugin.getAuthor = ((new RegExp(`[\\s\{\\}\[\\:,]authors\\s*:\\s*\\[\\s*(.+)\\s*\\]`, "gi").exec(configString) || [])[1] || "").split(/[\{\}\[\]:,]+\s*name\s*:/gi).slice(1).map(n => n.split(",")[0]).join(", ");
+									if (!plugin.getDescription) {
+										let result = new RegExp(`[\\s\{\\}\[\\:,]desc\\s*:\\s*([^\\{^\\}^\\[^\\]^:^,]+)`, "gi").exec(configString);
+										if (result) setPluginParameter(plugin, "getDescription", result[1]);
+									}
+									if (tags.some(tag => !plugin[tag])) configFound = false;
 								}
 								catch (err) {configFound = false;}
 							}
@@ -874,25 +868,16 @@ module.exports = (_ => {
 								let hasMETAline = bodyCopy.replace(/\s/g, "").indexOf("//META{");
 								if (!(hasMETAline < 20 && hasMETAline > -1)) {
 									let searchText = bodyCopy.replace(/[\r\t| ]*\*\s*/g, "*");
-									for (let tag of tags) {
-										let result = searchText.split('@' + tag.toLowerCase().slice(3) + ' ');
-										result = result.length > 1 ? result[1].split('\n')[0] : null;
-										result = result && tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
-										plugin[tag] = result ? result.trim() : result;
-									}
+									for (let tag of tags) setPluginParameter(plugin, tag, searchText.split(`@${tag.toLowerCase().slice(3)} `)[1]);
 								}
 								if (tags.some(tag => !plugin[tag])) {
 									for (let tag of tags) {
-										let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(bodyCopy);
+										let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1", "gi").exec(bodyCopy);
 										if (!result) result = new RegExp("get " + tag.replace("get", "").toLowerCase() + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(bodyCopy);
 										if (result) {
 											let separator = result[1];
 											result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
-											if (result.length > 2) {
-												result = result.slice(1, -1).join(separator).replace(/\\n/g, "\n").replace(/\\/g, "");
-												result = tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
-												plugin[tag] = result ? result.trim() : result;
-											}
+											if (result.length > 2) setPluginParameter(plugin, tag, result.slice(1, -1).join(separator).replace(/\\n/g, "\n").replace(/\\/g, ""));
 										}
 									}
 								}
@@ -904,10 +889,6 @@ module.exports = (_ => {
 								if (this.isPluginOutdated(plugin, url)) outdated++;
 								if (!cachedPlugins.includes(url)) newEntries++;
 							}
-							else if (sandbox) {
-								sandboxQueue.push({body, url});
-								runInSandbox();
-							}
 						}
 						i++;
 						
@@ -917,82 +898,6 @@ module.exports = (_ => {
 						getPluginInfo(callback);
 					});
 				};
-				
-				extractConfigInfo = (plugin, config) => {
-					plugin.getName = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(config.info.name);
-					plugin.getDescription = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(config.info.description);
-					plugin.getVersion = config.info.version;
-					plugin.getAuthor = "";
-					if (typeof config.info.author == "string") plugin.getAuthor = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(config.info.author);
-					else if (typeof config.info.authors == "string") plugin.getAuthor = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(config.info.authors);
-					else if (Array.isArray(config.info.authors)) for (let author of config.info.authors) {
-						plugin.getAuthor += (plugin.getAuthor + (plugin.getAuthor ? ", " : "") + BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(typeof author == "string" ? author : author.name || ""));
-					}
-				};
-
-				createSandbox = _ => {
-					return new Promise(callback => {
-						let loadTimeout = BDFDB.TimeUtils.timeout(_ => {
-							callback();
-						}, 600000);
-						sandbox = BDFDB.WindowUtils.open(this, "https://mwittrien.github.io/BetterDiscordAddons/Plugins/_res/DiscordPreview.html", {
-							onLoad: _ => {
-								BDFDB.TimeUtils.clear(loadTimeout);
-								sandbox.executeJavaScriptSafe(`window.onmessage({
-									origin: "PluginRepo",
-									reason: "OnLoad",
-									classes: ${JSON.stringify(JSON.stringify(BDFDB.DiscordClasses))},
-									classModules: ${JSON.stringify(JSON.stringify(BDFDB.DiscordClassModules))}
-								})`);
-								callback();
-							}
-						});
-						if (!sandbox) callback();
-					});
-				}
-
-				runInSandbox = _ => {
-					if (sandboxRunning) return;
-					let sandboxData = sandboxQueue.shift();
-					if (!sandboxData) return;
-					let {body, url} = sandboxData;
-					let name = (body.replace(/\s*:\s*/g, ":").split('"name":"')[1] || "").split('"')[0];
-					name = name ? name : (body.replace(/ {2,}/g, " ").replace(/\r/g, "").split("@name ")[1] || "").split("\n")[0];
-					if (name) {
-						let messageId = (this.name + name + BDFDB.NumberUtils.generateId()).replace(/\s/g, "").trim();
-						sandboxRunning = true;
-						BDFDB.WindowUtils.addListener(this, messageId, (event, messageData) => {
-							BDFDB.WindowUtils.removeListener(this, messageId);
-							if (BDFDB.ObjectUtils.is(messageData.plugin)) {
-								messageData.plugin.url = url;
-								loadedPlugins[url] = messageData.plugin;
-								if (this.isPluginOutdated(messageData.plugin, url)) outdated++;
-								if (!cachedPlugins.includes(url)) newEntries++;
-							}
-							sandboxRunning = false;
-							runInSandbox();
-						});
-						sandbox.executeJavaScriptSafe(`
-							let result = null;
-							try {
-								${body};
-								let p = new ${name}();
-								result = {
-									"getName": getString(p.getName()),
-									"getAuthor": getString(p.getAuthor()),
-									"getVersion": getString(p.getVersion()),
-									"getDescription": getString(p.getDescription())
-								};
-							}
-							catch (err) {}
-							window.respondToParent({
-								hostId: ${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id},
-								hostName: "${messageId}",
-								plugin: result
-							});
-						`);
-					}
-				}
 			}
 
 			getLoadingTooltipText () {
