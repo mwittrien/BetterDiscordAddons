@@ -196,6 +196,7 @@
 			"InviteGuildName": {"props": ["GuildName", "GuildTemplateName"]},
 			"InviteCard": {"class": "guildsettingsinvitecard"},
 			"MemberCard": {"class": "guildsettingsmembercard"},
+			"MemberRole": {"props": ["MemberRole"]},
 			"Message": {"strings": ["childrenMessageContent", "childrenRepliedMessage", "zalgo"]},
 			"MessageHeader": {"props": ["MessageTimestamp"]},
 			"Messages": {"strings": ["group-spacing-", "canManageMessages"]},
