@@ -66,6 +66,7 @@ module.exports = (_ => {
 			onLoad () {
 				this.patchedModules = {
 					before: {
+						DeveloperContextMenu: "default",
 						MemberListItem: "render",
 						UserPopout: "render"
 					}
@@ -174,6 +175,10 @@ module.exports = (_ => {
 					}),
 					e.returnvalue.props.children
 				].flat(10).filter(n => n);
+			}
+			
+			processDeveloperContextMenu (e) {
+				BDFDB.LibraryModules.SettingsUtils.updateLocalSettings({"developerMode": true});
 			}
 			
 			processMemberListItem (e) {
