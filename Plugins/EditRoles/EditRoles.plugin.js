@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.0
+ * @version 1.0.1
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditRoles",
 			"author": "DevilBro",
-			"version": "1.0.0",
+			"version": "1.0.1",
 			"description": "Allows you to locally edit Roles"
 		}
 	};
@@ -60,7 +60,7 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var changedRoles = {};
+		var changedRoles = {}, cachedDevMode;
 		
 		return class EditRoles extends Plugin {
 			onLoad () {
@@ -68,7 +68,8 @@ module.exports = (_ => {
 					before: {
 						DeveloperContextMenu: "default",
 						MemberListItem: "render",
-						UserPopout: "render"
+						UserPopout: "render",
+						ChannelMembers: "render"
 					}
 				};
 			}
@@ -152,6 +153,8 @@ module.exports = (_ => {
 										label: this.labels.submenu_rolesettings,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
 										action: _ => {
+											BDFDB.LibraryModules.SettingsUtils.updateLocalSettings({"developerMode": cachedDevMode})
+											cachedDevMode = null;
 											this.openRoleSettingsModal(guild.roles[e.instance.props.id]);
 										}
 									}),
@@ -161,6 +164,8 @@ module.exports = (_ => {
 										color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
 										disabled: !changedRoles[e.instance.props.id],
 										action: event => {
+											BDFDB.LibraryModules.SettingsUtils.updateLocalSettings({"developerMode": cachedDevMode})
+											cachedDevMode = null;
 											let remove = _ => {
 												BDFDB.DataUtils.remove(this, "roles", e.instance.props.id);
 												this.forceUpdateAll(true);
@@ -178,7 +183,8 @@ module.exports = (_ => {
 			}
 			
 			processDeveloperContextMenu (e) {
-				BDFDB.LibraryModules.SettingsUtils.updateLocalSettings({"developerMode": true});
+				cachedDevMode = BDFDB.LibraryModules.SettingsStore.developerMode;
+				BDFDB.LibraryModules.SettingsUtils.updateLocalSettings({"developerMode": true})
 			}
 			
 			processMemberListItem (e) {
@@ -191,16 +197,30 @@ module.exports = (_ => {
 			processUserPopout (e) {
 				if (e.instance.props.user && e.instance.props.guild && e.instance.props.guildMember) e.instance.props.guild = this.changeRolesInGuild(e.instance.props.guild);
 			}
+		
+			processChannelMembers (e) {
+				e.instance.props.groups = [].concat(e.instance.props.groups);
+				for (let i in e.instance.props.groups) if (e.instance.props.groups[i].type == "GROUP") {
+					let data = changedRoles[e.instance.props.groups[i].id];
+					if (data && data.name) e.instance.props.groups[i] = Object.assign({}, e.instance.props.groups[i], {title: data.name});
+				}
+				e.instance.props.rows = [].concat(e.instance.props.rows);
+				for (let i in e.instance.props.rows) if (e.instance.props.rows[i].type == "GROUP") {
+					let data = changedRoles[e.instance.props.rows[i].id];
+					if (data && data.name) e.instance.props.rows[i] = Object.assign({}, e.instance.props.rows[i], {title: data.name});
+				}
+			}
 			
 			changeRolesInGuild (guild) {
 				let changed = false, roles = Object.assign({}, guild.roles);
 				for (let id in guild.roles) {
 					let data = changedRoles[id];
-					if (data && data.color) {
+					if (data) {
 						changed = true;
 						roles[id] = Object.assign({}, roles[id], {
-							color: BDFDB.ColorUtils.convert(data.color, "INT"),
-							colorString: BDFDB.ColorUtils.convert(data.color, "HEX")
+							name: data.name || roles[id].color,
+							color: data.color ? BDFDB.ColorUtils.convert(data.color, "INT") : roles[id].color,
+							colorString: data.color ? BDFDB.ColorUtils.convert(data.color, "HEX") : roles[id].colorString
 						});
 					}
 				}
@@ -217,7 +237,22 @@ module.exports = (_ => {
 					subHeader: role.name,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-							title: this.labels.modal_colorpicker1,
+							title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ROLE_NAME,
+							className: BDFDB.disCN.marginbottom20,
+							children: [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+									value: data.name,
+									placeholder: role.name,
+									autoFocus: true,
+									onChange: value => {newData.name = value;}
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+									className: BDFDB.disCN.dividerdefault
+								})
+							]
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ROLE_COLOR,
 							className: BDFDB.disCN.marginbottom20,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
@@ -256,7 +291,6 @@ module.exports = (_ => {
 							confirm_reset:						"Наистина ли искате да нулирате тази роля?",
 							confirm_resetall:					"Наистина ли искате да нулирате всички роли?",
 							context_localrolesettings:			"Настройки на местната роля",
-							modal_colorpicker1:					"Цвят на ролята",
 							modal_header:						"Настройки на местната роля",
 							submenu_resetsettings:				"Нулиране на ролята",
 							submenu_rolesettings:				"Промяна на настройките"
@@ -266,7 +300,6 @@ module.exports = (_ => {
 							confirm_reset:						"Er du sikker på, at du vil nulstille denne rolle?",
 							confirm_resetall:					"Er du sikker på, at du vil nulstille alle roller?",
 							context_localrolesettings:			"Lokale rolleindstillinger",
-							modal_colorpicker1:					"Rollefarve",
 							modal_header:						"Lokale rolleindstillinger",
 							submenu_resetsettings:				"Nulstil rolle",
 							submenu_rolesettings:				"Ændre indstillinger"
@@ -276,7 +309,6 @@ module.exports = (_ => {
 							confirm_reset:						"Möchtest du diese Rolle wirklich zurücksetzen?",
 							confirm_resetall:					"Möchtest du wirklich alle Rollen zurücksetzen?",
 							context_localrolesettings:			"Lokale Rolleneinstellungen",
-							modal_colorpicker1:					"Rollenfarbe",
 							modal_header:						"Lokale Rolleneinstellungen",
 							submenu_resetsettings:				"Rolle zurücksetzen",
 							submenu_rolesettings:				"Einstellungen ändern"
@@ -286,7 +318,6 @@ module.exports = (_ => {
 							confirm_reset:						"Είστε βέβαιοι ότι θέλετε να επαναφέρετε αυτόν τον ρόλο;",
 							confirm_resetall:					"Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλους τους ρόλους;",
 							context_localrolesettings:			"Ρυθμίσεις τοπικού ρόλου",
-							modal_colorpicker1:					"Χρώμα ρόλου",
 							modal_header:						"Ρυθμίσεις τοπικού ρόλου",
 							submenu_resetsettings:				"Επαναφορά ρόλου",
 							submenu_rolesettings:				"Αλλαξε ρυθμίσεις"
@@ -296,7 +327,6 @@ module.exports = (_ => {
 							confirm_reset:						"¿Está seguro de que desea restablecer este rol?",
 							confirm_resetall:					"¿Está seguro de que desea restablecer todos los roles?",
 							context_localrolesettings:			"Configuración de roles locales",
-							modal_colorpicker1:					"Color de la función",
 							modal_header:						"Configuración de roles locales",
 							submenu_resetsettings:				"Restablecer rol",
 							submenu_rolesettings:				"Cambiar ajustes"
@@ -306,7 +336,6 @@ module.exports = (_ => {
 							confirm_reset:						"Haluatko varmasti nollata tämän roolin?",
 							confirm_resetall:					"Haluatko varmasti nollata kaikki roolit?",
 							context_localrolesettings:			"Paikalliset rooliasetukset",
-							modal_colorpicker1:					"Roolin väri",
 							modal_header:						"Paikalliset rooliasetukset",
 							submenu_resetsettings:				"Nollaa rooli",
 							submenu_rolesettings:				"Vaihda asetuksia"
@@ -316,7 +345,6 @@ module.exports = (_ => {
 							confirm_reset:						"Voulez-vous vraiment réinitialiser ce rôle?",
 							confirm_resetall:					"Voulez-vous vraiment réinitialiser tous les rôles?",
 							context_localrolesettings:			"Paramètres de rôle locaux",
-							modal_colorpicker1:					"Couleur du rôle",
 							modal_header:						"Paramètres de rôle locaux",
 							submenu_resetsettings:				"Réinitialiser le rôle",
 							submenu_rolesettings:				"Modifier les paramètres"
@@ -326,7 +354,6 @@ module.exports = (_ => {
 							confirm_reset:						"Jeste li sigurni da želite resetirati ovu ulogu?",
 							confirm_resetall:					"Jeste li sigurni da želite resetirati sve uloge?",
 							context_localrolesettings:			"Postavke lokalne uloge",
-							modal_colorpicker1:					"Boja uloge",
 							modal_header:						"Postavke lokalne uloge",
 							submenu_resetsettings:				"Resetiraj ulogu",
 							submenu_rolesettings:				"Promijeniti postavke"
@@ -336,7 +363,6 @@ module.exports = (_ => {
 							confirm_reset:						"Biztosan vissza akarja állítani ezt a szerepet?",
 							confirm_resetall:					"Biztosan vissza akarja állítani az összes szerepet?",
 							context_localrolesettings:			"Helyi szerepbeállítások",
-							modal_colorpicker1:					"Szerepszín",
 							modal_header:						"Helyi szerepbeállítások",
 							submenu_resetsettings:				"A szerepkör visszaállítása",
 							submenu_rolesettings:				"Beállítások megváltoztatása"
@@ -346,7 +372,6 @@ module.exports = (_ => {
 							confirm_reset:						"Sei sicuro di voler reimpostare questo ruolo?",
 							confirm_resetall:					"Sei sicuro di voler reimpostare tutti i ruoli?",
 							context_localrolesettings:			"Impostazioni ruolo locale",
-							modal_colorpicker1:					"Colore ruolo",
 							modal_header:						"Impostazioni ruolo locale",
 							submenu_resetsettings:				"Reimposta ruolo",
 							submenu_rolesettings:				"Cambia impostazioni"
@@ -356,7 +381,6 @@ module.exports = (_ => {
 							confirm_reset:						"この役割をリセットしてもよろしいですか？",
 							confirm_resetall:					"すべての役割をリセットしてもよろしいですか？",
 							context_localrolesettings:			"ローカルロール設定",
-							modal_colorpicker1:					"役割の色",
 							modal_header:						"ローカルロール設定",
 							submenu_resetsettings:				"役割をリセット",
 							submenu_rolesettings:				"設定を変更する"
@@ -366,7 +390,6 @@ module.exports = (_ => {
 							confirm_reset:						"이 역할을 재설정 하시겠습니까?",
 							confirm_resetall:					"모든 역할을 재설정 하시겠습니까?",
 							context_localrolesettings:			"로컬 역할 설정",
-							modal_colorpicker1:					"역할 색상",
 							modal_header:						"로컬 역할 설정",
 							submenu_resetsettings:				"역할 재설정",
 							submenu_rolesettings:				"설정 변경"
@@ -376,7 +399,6 @@ module.exports = (_ => {
 							confirm_reset:						"Ar tikrai norite iš naujo nustatyti šį vaidmenį?",
 							confirm_resetall:					"Ar tikrai norite iš naujo nustatyti visus vaidmenis?",
 							context_localrolesettings:			"Vietos vaidmens nustatymai",
-							modal_colorpicker1:					"Vaidmens spalva",
 							modal_header:						"Vietos vaidmens nustatymai",
 							submenu_resetsettings:				"Iš naujo nustatyti vaidmenį",
 							submenu_rolesettings:				"Pakeisti nustatymus"
@@ -386,7 +408,6 @@ module.exports = (_ => {
 							confirm_reset:						"Weet u zeker dat u deze rol wilt resetten?",
 							confirm_resetall:					"Weet u zeker dat u alle rollen opnieuw wilt instellen?",
 							context_localrolesettings:			"Lokale rolinstellingen",
-							modal_colorpicker1:					"Rol kleur",
 							modal_header:						"Lokale rolinstellingen",
 							submenu_resetsettings:				"Rol opnieuw instellen",
 							submenu_rolesettings:				"Instellingen veranderen"
@@ -396,7 +417,6 @@ module.exports = (_ => {
 							confirm_reset:						"Er du sikker på at du vil tilbakestille denne rollen?",
 							confirm_resetall:					"Er du sikker på at du vil tilbakestille alle rollene?",
 							context_localrolesettings:			"Lokale rolleinnstillinger",
-							modal_colorpicker1:					"Rollefarge",
 							modal_header:						"Lokale rolleinnstillinger",
 							submenu_resetsettings:				"Tilbakestill rolle",
 							submenu_rolesettings:				"Endre innstillinger"
@@ -406,7 +426,6 @@ module.exports = (_ => {
 							confirm_reset:						"Czy na pewno chcesz zresetować tę rolę?",
 							confirm_resetall:					"Czy na pewno chcesz zresetować wszystkie role?",
 							context_localrolesettings:			"Ustawienia roli lokalnej",
-							modal_colorpicker1:					"Kolor roli",
 							modal_header:						"Ustawienia roli lokalnej",
 							submenu_resetsettings:				"Zresetuj rolę",
 							submenu_rolesettings:				"Zmień ustawienia"
@@ -416,7 +435,6 @@ module.exports = (_ => {
 							confirm_reset:						"Tem certeza de que deseja redefinir esta função?",
 							confirm_resetall:					"Tem certeza de que deseja redefinir todas as funções?",
 							context_localrolesettings:			"Configurações de função local",
-							modal_colorpicker1:					"Cor da Função",
 							modal_header:						"Configurações de função local",
 							submenu_resetsettings:				"Redefinir função",
 							submenu_rolesettings:				"Mudar configurações"
@@ -426,7 +444,6 @@ module.exports = (_ => {
 							confirm_reset:						"Sigur doriți să resetați acest rol?",
 							confirm_resetall:					"Sigur doriți să resetați toate rolurile?",
 							context_localrolesettings:			"Setări rol local",
-							modal_colorpicker1:					"Culoarea rolului",
 							modal_header:						"Setări rol local",
 							submenu_resetsettings:				"Resetați rolul",
 							submenu_rolesettings:				"Schimbă setările"
@@ -436,7 +453,6 @@ module.exports = (_ => {
 							confirm_reset:						"Вы уверены, что хотите сбросить эту роль?",
 							confirm_resetall:					"Вы уверены, что хотите сбросить все роли?",
 							context_localrolesettings:			"Настройки локальной роли",
-							modal_colorpicker1:					"Цвет роли",
 							modal_header:						"Настройки локальной роли",
 							submenu_resetsettings:				"Сбросить роль",
 							submenu_rolesettings:				"Изменить настройки"
@@ -446,7 +462,6 @@ module.exports = (_ => {
 							confirm_reset:						"Är du säker på att du vill återställa denna roll?",
 							confirm_resetall:					"Är du säker på att du vill återställa alla roller?",
 							context_localrolesettings:			"Lokala rollinställningar",
-							modal_colorpicker1:					"Rollfärg",
 							modal_header:						"Lokala rollinställningar",
 							submenu_resetsettings:				"Återställ roll",
 							submenu_rolesettings:				"Ändra inställningar"
@@ -456,7 +471,6 @@ module.exports = (_ => {
 							confirm_reset:						"แน่ใจไหมว่าต้องการรีเซ็ตบทบาทนี้",
 							confirm_resetall:					"แน่ใจไหมว่าต้องการรีเซ็ตบทบาททั้งหมด",
 							context_localrolesettings:			"การตั้งค่าบทบาทท้องถิ่น",
-							modal_colorpicker1:					"สีของบทบาท",
 							modal_header:						"การตั้งค่าบทบาทท้องถิ่น",
 							submenu_resetsettings:				"รีเซ็ตบทบาท",
 							submenu_rolesettings:				"เปลี่ยนการตั้งค่า"
@@ -466,7 +480,6 @@ module.exports = (_ => {
 							confirm_reset:						"Bu Rolü sıfırlamak istediğinizden emin misiniz?",
 							confirm_resetall:					"Tüm Rolleri sıfırlamak istediğinizden emin misiniz?",
 							context_localrolesettings:			"Yerel Rol Ayarları",
-							modal_colorpicker1:					"Rol Rengi",
 							modal_header:						"Yerel Rol Ayarları",
 							submenu_resetsettings:				"Rolü Sıfırla",
 							submenu_rolesettings:				"Ayarları değiştir"
@@ -476,7 +489,6 @@ module.exports = (_ => {
 							confirm_reset:						"Ви впевнені, що хочете скинути цю роль?",
 							confirm_resetall:					"Ви впевнені, що хочете скинути всі ролі?",
 							context_localrolesettings:			"Налаштування локальної ролі",
-							modal_colorpicker1:					"Колір ролі",
 							modal_header:						"Налаштування локальної ролі",
 							submenu_resetsettings:				"Скинути роль",
 							submenu_rolesettings:				"Змінити налаштування"
@@ -486,7 +498,6 @@ module.exports = (_ => {
 							confirm_reset:						"Bạn có chắc chắn muốn đặt lại Vai trò này không?",
 							confirm_resetall:					"Bạn có chắc chắn muốn đặt lại tất cả các Vai trò không?",
 							context_localrolesettings:			"Cài đặt vai trò cục bộ",
-							modal_colorpicker1:					"Màu vai trò",
 							modal_header:						"Cài đặt vai trò cục bộ",
 							submenu_resetsettings:				"Đặt lại vai trò",
 							submenu_rolesettings:				"Thay đổi cài đặt"
@@ -496,7 +507,6 @@ module.exports = (_ => {
 							confirm_reset:						"您确定要重置此角色吗？",
 							confirm_resetall:					"您确定要重置所有角色吗？",
 							context_localrolesettings:			"本地角色设置",
-							modal_colorpicker1:					"角色颜色",
 							modal_header:						"本地角色设置",
 							submenu_resetsettings:				"重置角色",
 							submenu_rolesettings:				"更改设置"
@@ -506,7 +516,6 @@ module.exports = (_ => {
 							confirm_reset:						"您確定要重置此角色嗎？",
 							confirm_resetall:					"您確定要重置所有角色嗎？",
 							context_localrolesettings:			"本地角色設置",
-							modal_colorpicker1:					"角色顏色",
 							modal_header:						"本地角色設置",
 							submenu_resetsettings:				"重置角色",
 							submenu_rolesettings:				"更改設置"
@@ -516,7 +525,6 @@ module.exports = (_ => {
 							confirm_reset:						"Are you sure you want to reset this Role?",
 							confirm_resetall:					"Are you sure you want to reset all Roles?",
 							context_localrolesettings:			"Local Role Settings",
-							modal_colorpicker1:					"Role Color",
 							modal_header:						"Local Role Settings",
 							submenu_resetsettings:				"Reset Role",
 							submenu_rolesettings:				"Change Settings"
