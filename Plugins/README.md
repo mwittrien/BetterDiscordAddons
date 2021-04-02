@@ -21,6 +21,7 @@
  - [Display Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayLargeMessages) - Injects 'message.txt' into Discord or open any '.txt' File in a Window
  - [Display Servers As Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayServersAsChannels) - Displays Servers in a similar way as Channels
  - [Edit Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditChannels) - Allows you to locally edit Channels
+ - [Edit Roles](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditRoles) - Allows you to locally edit Roles
  - [Edit Servers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditServers) - Allows you to locally edit Servers
  - [Edit Users](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers) - Allows you to locally edit Users
  - [Emoji Statistics](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EmojiStatistics) - Shows you an Overview of Emojis and Emoji Servers
