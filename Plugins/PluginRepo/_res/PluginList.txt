@@ -9,6 +9,8 @@ https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/MemberC
 https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/MessageTimestampsRedux/MessageTimestampsRedux.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/TitleForTitlebar/TitleForTitlebar.plugin.js
 https://raw.githubusercontent.com/bepvte/bd-addons/main/plugins/gifsaver.plugin.js
+https://raw.githubusercontent.com/bepvte/bd-addons/main/plugins/NoSpotifyPause.plugin.js
+https://raw.githubusercontent.com/bepvte/bd-addons/main/plugins/StereoSound.plugin.js
 https://raw.githubusercontent.com/Curtis-D/ChannelPopouts/master/ChannelPopouts.plugin.js
 https://raw.githubusercontent.com/hammy1/BDStuff/master/Plugins/dateViewer/dateViewer.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/AvatarHover.plugin.js
