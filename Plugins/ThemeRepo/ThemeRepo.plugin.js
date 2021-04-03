@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.6
+ * @version 2.1.7
  * @description Allows you to preview all Themes from the Theme Repo and download them on the fly
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
-			"version": "2.1.6",
+			"version": "2.1.7",
 			"description": "Allows you to preview all Themes from the Theme Repo and download them on the fly"
 		},
 		"changeLog": {
 			"fixed": {
-				"Preview and Generator": "Both work again"
+				"Old META": "Downloading a Theme that still uses the old META Format will now automatically transform it into the new META Format"
 			}
 		}
 	};
@@ -1389,8 +1389,25 @@ module.exports = (_ => {
 									else valid = false;
 								}
 								if (valid) {
-									theme.fullCSS = text;
-									theme.css = hasMETAline < 20 && hasMETAline > -1 ? text.split("\n").slice(1).join("\n").replace(/[\r|\n|\t]/g, "") : text.replace(/[\r|\n|\t]/g, "");
+									let newMeta = "";
+									if (hasMETAline < 20 && hasMETAline > -1) {
+										let i = 0, j = 0, metaString = "";
+										try {
+											for (let c of `{${text.split("{").slice(1).join("{")}`) {
+												metaString += c;
+												if (c == "{") i++;
+												else if (c == "}") j++;
+												if (i > 0 && i == j) break;
+											}
+											let metaObj = JSON.parse(metaString);
+											newMeta = "/**\n";
+											for (let key in metaObj) newMeta += ` * @${key} ${metaObj[key]}\n`;
+											newMeta += "*/";
+										}
+										catch (err) {newMeta = "";}
+									}
+									theme.fullCSS = [newMeta, newMeta ? text.split("\n").slice(1).join("\n") : text].filter(n => n).join("\n");
+									theme.css = (hasMETAline < 20 && hasMETAline > -1 ? text.split("\n").slice(1).join("\n") : text).replace(/[\r|\n|\t]/g, "");
 									theme.url = url;
 									loadedThemes[url] = theme;
 									let instTheme = BDFDB.BDUtils.getTheme(theme.name);
