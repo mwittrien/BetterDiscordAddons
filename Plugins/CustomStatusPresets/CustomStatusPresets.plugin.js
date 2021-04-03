@@ -131,7 +131,7 @@ module.exports = (_ => {
 				this.props.dragPreview.style.setProperty("top", event.clientY - 25 + "px", "important");
 			}
 			render() {
-				return !this.props.entries.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+				return !Object.keys(this.props.entries).length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 					children: "You haven't added any Custom Status Presets. You can add some via the Custom Status Modal, where you usually configure your Custom Status."
 				}) : Object.keys(BDFDB.ObjectUtils.sort(this.props.entries, this.props.sortKey)).map(id => [
 					this.props.hovered == id && BDFDB.ReactUtils.createElement("div", {
