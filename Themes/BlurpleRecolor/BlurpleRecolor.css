@@ -1483,7 +1483,7 @@
 
 /* ----		10.12.	SCREENSHAREMODAL				---- */
 
-.art-1qgogX {
+#app-mount .art-1qgogX {
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/screenshare_header_bg.svg) center/contain no-repeat;
 }
 .art-1qgogX::after {
