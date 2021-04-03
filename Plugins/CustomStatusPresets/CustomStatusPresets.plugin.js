@@ -68,7 +68,7 @@ module.exports = (_ => {
 		var _this;
 		var presets = {};
 		
-		const CustomStatusInput = class CustomStatusInput extends BdApi.React.Component {
+		const CustomStatusInputComponent = class CustomStatusInput extends BdApi.React.Component {
 			handleChange() {
 				this.props.onChange(this.props);
 			}
@@ -112,7 +112,7 @@ module.exports = (_ => {
 			}
 		};
 		
-		const SortableList = class SortableList extends BdApi.React.Component {
+		const SortableListComponent = class SortableList extends BdApi.React.Component {
 			createDragPreview(div, event) {
 				if (!Node.prototype.isPrototypeOf(div)) return;
 				let dragPreview = div.cloneNode(true);
@@ -131,7 +131,9 @@ module.exports = (_ => {
 				this.props.dragPreview.style.setProperty("top", event.clientY - 25 + "px", "important");
 			}
 			render() {
-				return Object.keys(BDFDB.ObjectUtils.sort(this.props.entries, this.props.sortKey)).map(id => [
+				return !this.props.entries.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+					children: "You haven't added any Custom Status Presets. You can add some via the Custom Status Modal, where you usually configure your Custom Status."
+				}) : Object.keys(BDFDB.ObjectUtils.sort(this.props.entries, this.props.sortKey)).map(id => [
 					this.props.hovered == id && BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN._customstatuspresetssortdivider
 					}),
@@ -190,7 +192,7 @@ module.exports = (_ => {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 									wrap: true,
-									children: BDFDB.ReactUtils.createElement(CustomStatusInput, {
+									children: BDFDB.ReactUtils.createElement(CustomStatusInputComponent, {
 										text: presets[id].text,
 										emoji: presets[id].emojiInfo,
 										onChange: value => {
@@ -308,7 +310,7 @@ module.exports = (_ => {
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 					title: "Custom Status Presets:",
 					dividerTop: true,
-					children: BDFDB.ReactUtils.createElement(SortableList, {
+					children: BDFDB.ReactUtils.createElement(SortableListComponent, {
 						entries: presets,
 						sortKey: "pos"
 					})
