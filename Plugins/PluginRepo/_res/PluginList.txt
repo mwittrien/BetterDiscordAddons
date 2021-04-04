@@ -36,13 +36,10 @@ https://raw.githubusercontent.com/Mega-Mewthree/BetterDiscordPlugins/master/Plug
 https://raw.githubusercontent.com/Mega-Mewthree/BetterDiscordPlugins/master/Plugins/ColorSighted/ColorSighted.plugin.js
 https://raw.githubusercontent.com/Mega-Mewthree/BetterDiscordPlugins/master/Plugins/DiscordCakeDay/DiscordCakeDay.plugin.js
 https://raw.githubusercontent.com/Mega-Mewthree/BetterDiscordPlugins/master/Plugins/MobileForAll/MobileForAll.plugin.js
-https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/AvatarIconViewer.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/BetterEmoteSizes.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/CustomizableAvatarDPI.plugin.js
-https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/DetailedServerTooltips.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/DoubleClickVoiceChannels.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/GuildAndFriendRemovalAlerts.plugin.js
-https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/GuildCounter.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/OpenLinksInDiscord.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/PinCollapsedChannels.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/ReactionImages.plugin.js
