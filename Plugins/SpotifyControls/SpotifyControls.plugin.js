@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.1
+ * @version 1.1.2
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.1.1",
+			"version": "1.1.2",
 			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
 		},
 		"changeLog": {
-			"improved": {
-				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
+			"fixed": {
+				"Works again": ""
 			}
 		}
 	};
@@ -721,12 +721,28 @@ module.exports = (_ => {
 			}
 
 			processAppView (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["section", BDFDB.DiscordConstants.AnalyticsSections.ACCOUNT_PANEL]]});
+				let injected = this.injectPlayer(e.returnvalue);
+				if (!injected) {
+					let channels = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelSidebar"});
+					if (channels) {
+						let type = channels.type;
+						channels.type = (...args) => {
+							let appliedType = type(...args);
+							this.injectPlayer(appliedType);
+							return appliedType;
+						};
+					}
+				}
+			}
+			
+			injectPlayer (parent) {
+				let [children, index] = BDFDB.ReactUtils.findParent(parent, {props: [["section", BDFDB.DiscordConstants.AnalyticsSections.ACCOUNT_PANEL]]});
 				if (index > -1) children.splice(index - 1, 0, BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
 					song: BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false),
 					maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
 					timeline: settings.addTimeline
 				}, true));
+				return index > -1;
 			}
 			
 			updatePlayer (song) {
