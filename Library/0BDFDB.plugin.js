@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.2
+ * @version 1.5.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -22,7 +22,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.5.2",
+			"version": "1.5.3",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -213,7 +213,7 @@ module.exports = (_ => {
 		catch (err) {BDFDB.LogUtils.error([strings, err], config);}
 	}};
 
-	BDFDB.LogUtils.log("Loading library");
+	BDFDB.LogUtils.log("Loading Library");
 
 	BDFDB.sameProto = function (a, b) {
 		if (a != null && typeof a == "object") return a.constructor && a.constructor.prototype && typeof a.constructor.prototype.isPrototypeOf == "function" && a.constructor.prototype.isPrototypeOf(b);
@@ -2225,7 +2225,7 @@ module.exports = (_ => {
 					}
 				}
 				if (LibraryModules.KeyCodeUtils) LibraryModules.KeyCodeUtils.getString = function (keyArray) {
-					return LibraryModules.KeyCodeUtils.toString([keyArray].flat(10).filter(n => n).map(keycode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keycode, BDFDB.DiscordConstants.KeyboardEnvs.BROWSER]), true);
+					return LibraryModules.KeyCodeUtils.toString([keyArray].flat(10).filter(n => n).map(keyCode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keyCode, BDFDB.DiscordConstants.KeyboardEnvs[LibraryModules.KeyCodeUtils.getEnv()]]), true);
 				};
 				BDFDB.LibraryModules = Object.assign({}, LibraryModules);
 				
@@ -6097,14 +6097,18 @@ module.exports = (_ => {
 				
 				InternalComponents.LibraryComponents.KeybindRecorder = reactInitialized && class BDFDB_KeybindRecorder extends LibraryModules.React.Component {
 					handleChange(arrays) {
-						if (typeof this.props.onChange == "function") this.props.onChange(arrays.map(platformkey => LibraryModules.KeyEvents.codes[LibraryModules.KeyCodeUtils.codeToKey(platformkey)] || platformkey[1]), this);
+						this.props.defaultValue = arrays.map(platformKey => LibraryModules.KeyEvents.codes[LibraryModules.KeyCodeUtils.codeToKey(platformKey)] || platformKey[1]);
+						if (this.recorder) this.recorder.setState({codes: this.props.defaultValue});
+						if (typeof this.props.onChange == "function") this.props.onChange(this.props.defaultValue, this);
 					}
 					handleReset() {
 						this.props.defaultValue = [];
-						let recorder = BDFDB.ReactUtils.findOwner(this, {name: "KeybindRecorder"});
-						if (recorder) recorder.setState({codes: []});
-						if (typeof this.props.onChange == "function") this.props.onChange([], this);
+						if (this.recorder) this.recorder.setState({codes: this.props.defaultValue});
+						if (typeof this.props.onChange == "function") this.props.onChange(this.props.defaultValue, this);
 						if (typeof this.props.onReset == "function") this.props.onReset(this);
+					}
+					componentDidMount() {
+						if (!this.recorder) this.recorder = BDFDB.ReactUtils.findOwner(this, {name: "KeybindRecorder"});
 					}
 					render() {
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
@@ -6113,7 +6117,7 @@ module.exports = (_ => {
 							align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
 							children: [
 								BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.KeybindRecorder, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-									defaultValue: [this.props.defaultValue].flat(10).filter(n => n).map(keycode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keycode, BDFDB.DiscordConstants.KeyboardEnvs.BROWSER]),
+									defaultValue: [this.props.defaultValue].flat(10).filter(n => n).map(keyCode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keyCode, BDFDB.DiscordConstants.KeyboardEnvs[LibraryModules.KeyCodeUtils.getEnv()]]),
 									onChange: this.handleChange.bind(this)
 								}), "reset", "onReset")),
 								this.props.reset || this.props.onReset ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
@@ -8212,7 +8216,7 @@ module.exports = (_ => {
 				if (!document.querySelector("head #bd-stylesheet")) BDFDB.DOMUtils.appendWebStyle("https://rauenzi.github.io/BetterDiscordApp/src/styles/index.css");
 				if (css) BDFDB.DOMUtils.appendLocalStyle("BDFDB", css.replace(/[\n\t\r]/g, "").replace(/\[REPLACE_CLASS_([A-z0-9_]+?)\]/g, function(a, b) {return BDFDB.dotCN[b];}));
 			
-				BDFDB.LogUtils.log("Finished loading library");
+				BDFDB.LogUtils.log("Finished loading Library");
 				
 				window.BDFDB_Global = Object.assign({
 					started: true,
