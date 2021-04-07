@@ -2,7 +2,7 @@
  * @name GoogleTranslateOption
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.8
+ * @version 2.1.9
  * @description Allows you to translate Messages and your outgoing Message within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,14 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.1.8",
+			"version": "2.1.9",
 			"description": "Allows you to translate Messages and your outgoing Message within Discord"
-		},
-		"changeLog": {
-			"fixed": {
-				"Animated Emojis": "Fixed Translation Issue",
-				"Select Component": "Changed Stuff to improve Behaviour with the new Select Component"
-			}
 		}
 	};
 	
@@ -722,7 +716,7 @@ module.exports = (_ => {
 						`);
 					}
 				});
-				BDFDB.WindowUtils.addListener(this, "GTO-translation", (event, messageData) => {
+				if (googleTranslateWindow) BDFDB.WindowUtils.addListener(this, "GTO-translation", (event, messageData) => {
 					BDFDB.WindowUtils.close(googleTranslateWindow);
 					BDFDB.WindowUtils.removeListener(this, "GTO-translation");
 					if (!data.specialCase && messageData[1] && languages[messageData[1]]) {
@@ -731,6 +725,7 @@ module.exports = (_ => {
 					}
 					callback(messageData[0]);
 				});
+				else this.googleApiTranslate(data, callback);
 			}
 			
 			googleApiTranslate (data, callback) {
@@ -867,7 +862,11 @@ module.exports = (_ => {
 						catch (err) {callback("");}
 					}
 					else {
-						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server is down, daily limited reached or API-key outdated.`, {
+						if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Request Limit per Hour is reached.`, {
+							type: "danger",
+							position: "center"
+						});
+						else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server is down or API-key outdated.`, {
 							type: "danger",
 							position: "center"
 						});
