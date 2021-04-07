@@ -977,16 +977,23 @@ module.exports = (_ => {
 
 	
 	const loadLibrary = tryAgain => {
-		const request = require("request");
-		request.get(`${myGithub}/Library/_res/BDFDB.raw.css`, (e, r, b) => {
+		const request = require("request"), fs = require("fs"), path = require("path");
+		request.get(`${myGithub}/Library/_res/BDFDB.raw.css2`, (e, r, b) => {
 			if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
-			const css = b;
-			request.get(`${myGithub}/Library/_res/BDFDB.data.json`, BDFDB.TimeUtils.suppress((e2, r2, b2) => {
+			const cssPath = path.join(BDFDB.BDUtils.getPluginsFolder(), "0BDFDB.raw.css");
+			const css = !e && b && r.statusCode == 200 ? b : fs.existsSync(cssPath) && fs.readFileSync(cssPath);
+			request.get(`${myGithub}/Library/_res/BDFDB.data.json2`, BDFDB.TimeUtils.suppress((e2, r2, b2) => {
+				const dataPath = path.join(BDFDB.BDUtils.getPluginsFolder(), "0BDFDB.data.json");
 				if (e2 || !b2 || r2.statusCode != 200) {
 					if (tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
-					else BdApi.alert("Error", "Could not initiate BDFDB Library Plugin. Check your Internet Connection and make sure GitHub isn't blocked by your Network or try disabling your VPN.");
+					else {
+						b2 = fs.existsSync(dataPath) && fs.readFileSync(dataPath) || null;
+						if (!b2) BdApi.alert("Error", "Could not initiate BDFDB Library Plugin. Check your Internet Connection and make sure GitHub isn't blocked by your Network or try disabling your VPN/Proxy.");
+					}
 				}
 				const InternalData = JSON.parse(b2);
+				if (!e && b && r.statusCode == 200) fs.writeFile(cssPath, b, _ => {});
+				if (!e2 && b2 && r2.statusCode == 200) fs.writeFile(dataPath, b2, _ => {});
 				
 				InternalBDFDB.getPluginURL = function (plugin) {
 					plugin = plugin == BDFDB && InternalBDFDB || plugin;
