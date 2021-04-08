@@ -108,10 +108,6 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				
-				BDFDB.PatchUtils.patch(this, BDFDB.DevUtils.findByIndex(262).exports.default, "setMode", {after: e => {
-					console.log(e);
-				}});
 				BDFDB.ListenerUtils.add(this, document, "keydown", event => {
 					if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareawrapchat, document.activeElement)) this.onKeyDown(event);
 				});
