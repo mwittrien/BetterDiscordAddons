@@ -18,7 +18,6 @@
  - [Creation Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CreationDate) - Displays the Creation Date of an Account in the UserPopout and UserModal
  - [Custom Quoter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CustomQuoter) - Brings back the Quote Feature and allows you to set your own Quote Formats
  - [Custom Status Presets](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CustomStatusPresets) - Allows you to save Custom Statuses as Quick Select
- - [Display Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayLargeMessages) - Injects 'message.txt' into Discord or open any '.txt' File in a Window
  - [Display Servers As Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayServersAsChannels) - Displays Servers in a similar way as Channels
  - [Edit Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditChannels) - Allows you to locally edit Channels
  - [Edit Roles](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditRoles) - Allows you to locally edit Roles
