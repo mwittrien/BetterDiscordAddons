@@ -1652,6 +1652,7 @@
 		"channelmodeselected": ["Channel", "modeSelected"],
 		"channelmodeunread": ["Channel", "modeUnread"],
 		"channelname": ["Channel", "name"],
+		"channelnameinner": ["Channel", "channelName"],
 		"channelpanel": ["AppBase", "activityPanel"],
 		"channelpaneltitle": ["NotFound", "channelPanelTitle"],
 		"channelpanels": ["AppBase", "panels"],

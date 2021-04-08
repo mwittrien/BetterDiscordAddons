@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.6
+ * @version 4.2.7
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.2.6",
+			"version": "4.2.7",
 			"description": "Allows you to locally edit Channels"
 		},
 		"changeLog": {
 			"fixed": {
-				"Mentions": ""
+				"Gradient": "Works for Channels again"
 			}
 		}
 	};
@@ -373,7 +373,7 @@ module.exports = (_ => {
 					if (!e.returnvalue) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
 					else {
 						let modify = BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "muted", "locked", "selected", "unread", "connected", "hovered");
-						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelname]]});
+						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelnameinner]]});
 						if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id, modify);
 						let channelIcon = settings.changeChannelIcon && BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelItemIcon"});
 						if (channelIcon && typeof channelIcon.type == "function") {
