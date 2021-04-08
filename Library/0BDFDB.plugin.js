@@ -7681,9 +7681,7 @@ module.exports = (_ => {
 					if (index > -1) children[index] = BDFDB.ReactUtils.createElement(AppViewExport.exports.default, children[index].props);
 				};
 				
-				let MessageHeaderExport = BDFDB.ModuleUtils.findByProperties("MessageTimestamp", false);
 				InternalBDFDB.processMessage = function (e) {
-					if (MessageHeaderExport && BDFDB.ObjectUtils.get(e, "instance.props.childrenHeader.type.type.name") && BDFDB.ObjectUtils.get(e, "instance.props.childrenHeader.props.message")) e.instance.props.childrenHeader.type = MessageHeaderExport.exports.default;
 					if (e.returnvalue && e.returnvalue.props && e.returnvalue.props.children && e.returnvalue.props.children.props) {
 						let message;
 						for (let key in e.instance.props) {

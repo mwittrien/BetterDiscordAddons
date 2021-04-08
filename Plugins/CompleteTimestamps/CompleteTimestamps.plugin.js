@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.5
+ * @version 1.5.6
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CompleteTimestamps",
 			"author": "DevilBro",
-			"version": "1.5.5",
+			"version": "1.5.6",
 			"description": "Replaces Timestamps with your own custom Timestamps"
 		},
 		"changeLog": {
-			"improved": {
-				"New Settings": "Changed the Settings Panel for the Plugin, Settings got reset sowwy ~w~"
+			"fixed": {
+				"Works again": ""
 			}
 		}
 	};
@@ -66,9 +66,12 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var currentMode, tooltipIsSame;
+		var MessageTimestampComponent;
 	
 		return class CompleteTimestamps extends Plugin {
 			onLoad () {
+				MessageTimestampComponent = (BDFDB.ModuleUtils.findByName("MessageTimestamp", false) || {exports: null}).exports;
+				
 				this.defaults = {
 					general: {
 						showInChat:				{value: true, 			description: "Replace Chat Timestamps with complete Timestamps"},
@@ -86,8 +89,7 @@ module.exports = (_ => {
 				this.patchedModules = {
 					after: {
 						Message: "default",
-						MessageHeader: "default",
-						MessageContent: "type",
+						MessageTimestamp: "default",
 						Embed: "render",
 						SystemMessage: "default",
 						AuditLog: "render"
@@ -160,24 +162,40 @@ module.exports = (_ => {
 			}
 
 			processMessage (e) {
-				if (this.settings.general.changeForChat && BDFDB.ObjectUtils.get(e, "instance.props.childrenHeader.type.type.displayName") == "MessageTimestamp") {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: e.instance.props.childrenHeader.type});
-					if (index > -1) this.changeTimestamp(children, index, {child: false, tooltip: true});
+				if (MessageTimestampComponent) {
+					let timestamp = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: c => c && c.type && c.type.type && c.type.type.displayName == "MessageTimestamp"});
+					if (timestamp) timestamp.type.type = MessageTimestampComponent.default;
 				}
 			}
 			
-			processMessageHeader (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "MessageTimestamp"});
-				if (index > -1) {
-					this.changeTimestamp(children, index, {child: this.settings.general.showInChat, tooltip: this.settings.general.changeForChat});
-					this.setMaxWidth(children[index], e.instance.props.compact);
+			processMessageTimestamp (e) {
+				let tooltipWrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Tooltip"});
+				if (!tooltipWrapper) return;
+				let childClassName = BDFDB.ObjectUtils.get(e, "instance.props.children.props.className");
+				if (childClassName && childClassName.indexOf(BDFDB.disCN.messageedited) > -1) {
+					if (this.settings.general.changeForEdit) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
+				}
+				else {
+					if (this.settings.general.changeForChat) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
+					if (this.settings.general.showInChat && !e.instance.props.cozyAlt) {
+						if (tooltipIsSame) tooltipWrapper.props.delay = 99999999999999999999;
+						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.timestamp._i);
+						let renderChildren = tooltipWrapper.props.children;
+						tooltipWrapper.props.children = (...args) => {
+							let renderedChildren = renderChildren(...args);
+							if (BDFDB.ArrayUtils.is(renderedChildren.props.children)) renderedChildren.props.children[1] = timestamp;
+							else renderedChildren.props.children = timestamp;
+							return renderedChildren;
+						};
+						this.setMaxWidth(e.returnvalue, e.instance.props.compact);
+					}
 				}
 			}
 			
 			processMessageContent (e) {
 				if (e.instance.props.message.editedTimestamp && this.settings.general.changeForEdit) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SuffixEdited"});
-					if (index > -1) this.changeTimestamp(children, index, {child: false, tooltip: true});
+					let editStamp = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "SuffixEdited"});
+					if (editStamp) console.log(editStamp);
 				}
 			}
 
@@ -225,37 +243,8 @@ module.exports = (_ => {
 			
 			editLog (log, returnvalue) {
 				if (!log || !returnvalue) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props: [["className", "timestamp-1mruiI"]]});
+				let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props: [["className", BDFDB.disCN.auditlogtimestamp]]});
 				if (index > -1) children[index].props.children = this.formatTimestamp(this.settings.dates.timestampDate, log.timestampStart._i);
-			}
-			
-			changeTimestamp (parent, index, change = {}) {
-				let type = parent[index].type && parent[index].type.type || parent[index].type;
-				if (typeof type != "function") return;
-				let stamp = type(parent[index].props), tooltipWrapper;
-				if (stamp.type.displayName == "Tooltip") tooltipWrapper = stamp;
-				else {
-					let [children, tooltipIndex] = BDFDB.ReactUtils.findParent(stamp, {name: "Tooltip"});
-					if (tooltipIndex > -1) tooltipWrapper = children[tooltipIndex];
-				}
-				if (tooltipWrapper) {
-					if (change.tooltip) {
-						tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, parent[index].props.timestamp._i, true);
-						tooltipWrapper.props.delay = 0;
-					}
-					if (change.child && typeof tooltipWrapper.props.children == "function") {
-						if (tooltipIsSame) tooltipWrapper.props.delay = 99999999999999999999;
-						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, parent[index].props.timestamp._i);
-						let renderChildren = tooltipWrapper.props.children;
-						tooltipWrapper.props.children = (...args) => {
-							let renderedChildren = renderChildren(...args);
-							if (BDFDB.ArrayUtils.is(renderedChildren.props.children)) renderedChildren.props.children[1] = timestamp;
-							else renderChildren.props.children = timestamp;
-							return renderedChildren;
-						};
-					}
-				}
-				parent[index] = stamp;
 			}
 			
 			formatTimestamp (format, date) {
