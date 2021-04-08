@@ -77,7 +77,6 @@ https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/rele
 https://raw.githubusercontent.com/motoenduroboy/BetterDiscord-Themes/master/release/master/yourabloodyweeb.theme.css
 https://raw.githubusercontent.com/mrmaple240/betterdiscord-mini-themes/master/Mutual_Servers_Server_Count.theme.css
 https://raw.githubusercontent.com/mrmaple240/betterdiscord-mini-themes/master/SeperateTextareaButtons.theme.css
-https://raw.githubusercontent.com/mrmaple240/betterdiscord-mini-themes/master/TempBDSettingsPublicServersFix.theme.css
 https://raw.githubusercontent.com/mrmaple240/ChatTextBubbles/master/ChatTextBubbles.theme.css
 https://raw.githubusercontent.com/mrmaple240/ChatTextBubbles/master/ChatTextBubblesMinified.theme.css
 https://raw.githubusercontent.com/mrmaple240/Full-Light-Theme/master/FullLightTheme.theme.css
