@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.6
+ * @version 1.5.7
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "CompleteTimestamps",
 			"author": "DevilBro",
-			"version": "1.5.6",
+			"version": "1.5.7",
 			"description": "Replaces Timestamps with your own custom Timestamps"
 		},
 		"changeLog": {
 			"fixed": {
-				"Works again": ""
+				"Works again": "",
+				"Edit Stamp Compact Mode": "Fixed Issue where the (edited) stamp would grow in size in compact mode"
 			}
 		}
 	};
@@ -268,7 +269,7 @@ module.exports = (_ => {
 								padding-left: ${44 + width}px;
 								text-indent: calc(-${44 + width}px - -1rem);
 							}
-							${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.messagetimestamp} {
+							${BDFDB.dotCNS.messagecompact + BDFDB.dotCNS.messageheader + BDFDB.dotCN.messagetimestamp} {
 								width: ${width}px;
 							}
 						`);
