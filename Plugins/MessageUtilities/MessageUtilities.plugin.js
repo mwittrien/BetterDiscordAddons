@@ -108,6 +108,10 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				
+				BDFDB.PatchUtils.patch(this, BDFDB.DevUtils.findByIndex(262).exports.default, "setMode", {after: e => {
+					console.log(e);
+				}});
 				BDFDB.ListenerUtils.add(this, document, "keydown", event => {
 					if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareawrapchat, document.activeElement)) this.onKeyDown(event);
 				});
@@ -179,7 +183,7 @@ module.exports = (_ => {
 												direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
 												children: [
 													BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.KeybindRecorder, {
-														defaultValue: bindings[action].keycombo.filter(n => n),
+														value: bindings[action].keycombo.filter(n => n),
 														reset: true,
 														disabled: !settings[action],
 														ref: instance => {if (instance) keyRecorderIns = instance;},
