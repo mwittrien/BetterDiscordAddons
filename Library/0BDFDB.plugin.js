@@ -2232,7 +2232,7 @@ module.exports = (_ => {
 					}
 				}
 				if (LibraryModules.KeyCodeUtils) LibraryModules.KeyCodeUtils.getString = function (keyArray) {
-					return LibraryModules.KeyCodeUtils.toString([keyArray].flat(10).filter(n => n).map(keyCode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, LibraryModules.KeyCodeUtils.keyToCode((Object.entries(LibraryModules.KeyEvents.codes).find(n => n[1] == keyCode && LibraryModules.KeyCodeUtils.keyToCode(n[0])) || [])[0]) || keyCode]), true);
+					return LibraryModules.KeyCodeUtils.toString([keyArray].flat(10).filter(n => n).map(keyCode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, LibraryModules.KeyCodeUtils.keyToCode((Object.entries(LibraryModules.KeyEvents.codes).find(n => n[1] == keyCode && LibraryModules.KeyCodeUtils.keyToCode(n[0], null)) || [])[0], null) || keyCode]), true);
 				};
 				BDFDB.LibraryModules = Object.assign({}, LibraryModules);
 				
@@ -6123,7 +6123,7 @@ module.exports = (_ => {
 							align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
 							children: [
 								BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.KeybindRecorder, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-									defaultValue: [this.props.defaultValue || this.props.value].flat(10).filter(n => n).map(keyCode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, LibraryModules.KeyCodeUtils.keyToCode((Object.entries(LibraryModules.KeyEvents.codes).find(n => n[1] == keyCode && LibraryModules.KeyCodeUtils.keyToCode(n[0])) || [])[0]) || keyCode]),
+									defaultValue: [this.props.defaultValue || this.props.value].flat(10).filter(n => n).map(keyCode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, LibraryModules.KeyCodeUtils.keyToCode((Object.entries(LibraryModules.KeyEvents.codes).find(n => n[1] == keyCode && LibraryModules.KeyCodeUtils.keyToCode(n[0], null)) || [])[0], null) || keyCode]),
 									onChange: this.handleChange.bind(this)
 								}), "reset", "onReset")),
 								this.props.reset || this.props.onReset ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
