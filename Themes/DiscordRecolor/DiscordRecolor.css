@@ -173,6 +173,7 @@ html {
 	14.	PLUGINSUPPORT
 		1.	MEMBERCOUNT
 		2.	CHANNELTABS
+		3.	TYPINGINDICATOR
 */
 
 
@@ -4639,6 +4640,25 @@ html .channelTabs-newTab {
 html .channelTabs-newTab:hover {
 	background-color: var(--background-primary);
 	color: var(--interactive-active);
+}
+
+/* ----		14.3.	TYPINGINDICATOR					---- */
+
+html .typingindicator-guild,
+html .typingindicator-dms,
+html .typingindicator-folder {
+	background: var(--background-tertiary);
+	border: 4px solid var(--background-tertiary);
+	border-right: unset;
+	box-shadow: unset;
+	right: 12px;
+	bottom: -5px;
+	padding: 2px 0;
+}
+html .wrapper-3Njo_c .typingindicator-guild,
+html .typingindicator-folder {
+	background: var(--background-secondary);
+	border-color: var(--background-secondary);
 }
 
 

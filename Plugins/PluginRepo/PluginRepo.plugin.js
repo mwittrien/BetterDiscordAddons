@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.6
+ * @version 2.1.7
  * @description Allows you to look at all Plugins from the Plugin Repo and download them on the fly
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.1.6",
+			"version": "2.1.7",
 			"description": "Allows you to look at all Plugins from the Plugin Repo and download them on the fly"
-		},
-		"changeLog": {
-			"fixed": {
-				"New BD Beta": "Works 100% with the new BD Version"
-			}
 		}
 	};
 
@@ -854,7 +849,7 @@ module.exports = (_ => {
 										let result = new RegExp(`[\\s\{\\}\[\\:,]${tag.replace("get", "").toLowerCase()}\\s*:\\s*([^\\{^\\}^\\[^\\]^:^,]+)`, "gi").exec(configString);
 										if (result) setPluginParameter(plugin, tag, result[1]);
 									}
-									if (!plugin.getAuthor) plugin.getAuthor = ((new RegExp(`[\\s\{\\}\[\\:,]authors\\s*:\\s*\\[\\s*(.+)\\s*\\]`, "gi").exec(configString) || [])[1] || "").split(/[\{\}\[\]:,]+\s*name\s*:/gi).slice(1).map(n => n.split(",")[0]).join(", ");
+									if (!plugin.getAuthor) plugin.getAuthor = ((new RegExp(`[\\s\{\\}\[\\:,]authors\\s*:\\s*\\[\\s*(.+?)\\s*\\]`, "gi").exec(configString) || [])[1] || "").split(/[\{\}\[\]:,]+\s*name\s*:/gi).slice(1).map(n => n.split(",")[0]).join(", ").trim();
 									if (!plugin.getDescription) {
 										let result = new RegExp(`[\\s\{\\}\[\\:,]desc\\s*:\\s*([^\\{^\\}^\\[^\\]^:^,]+)`, "gi").exec(configString);
 										if (result) setPluginParameter(plugin, "getDescription", result[1]);

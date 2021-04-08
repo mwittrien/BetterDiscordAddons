@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.7
+ * @version 1.4.8
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "DisplayServersAsChannels",
 			"author": "DevilBro",
-			"version": "1.4.7",
+			"version": "1.4.8",
 			"description": "Displays Servers in a similar way as Channels"
 		}
 	};
@@ -306,6 +306,7 @@ module.exports = (_ => {
 				});
 				if (index > -1) {
 					let insertElements = returnvalue => {
+						if (BDFDB.ReactUtils.findChild(parent, {props: [["className", BDFDB.disCN._displayserversaschannelsname]]})) return;
 						let childEles = [
 							[
 								options.isDm && returnvalue.props.icon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
@@ -525,6 +526,17 @@ module.exports = (_ => {
 						position: static !important;
 						contain: unset !important;
 						width: 100% !important;
+					}
+					
+					${BDFDB.dotCN._displayserversaschannelsstyled} .typingindicator-guild,
+					${BDFDB.dotCN._displayserversaschannelsstyled} .typingindicator-dms,
+					${BDFDB.dotCN._displayserversaschannelsstyled} .typingindicator-folder {
+						position: static !important;
+						margin-left: -34px !important;
+						padding-left: 6px !important;
+						box-shadow: unset !important;
+						background: var(--background-primary) !important;
+						z-index: 1 !important;
 					}
 					
 					#server-search ${BDFDB.dotCN.guildinner} {

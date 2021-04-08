@@ -158,6 +158,7 @@
 		10.	PLUGIN/THEMEREPO
 		11.	CHANNELHISTORY
 		12.	CHANNELTABS
+		13.	TYPINGINDICATOR
 	19.	UPDATENOTICE
 	20.	WATERMARK
 */
@@ -8082,6 +8083,19 @@ html .channelTabs-newTab {
 html .channelTabs-newTab:hover {
 	background: rgb(var(--vaccentcolor));
 	color: var(--interactive-active);
+}
+
+/* ----		18.13	CHANNELTABS						---- */
+
+html .typingindicator-guild,
+html .typingindicator-dms,
+html .typingindicator-folder {
+	background: rgb(var(--vtransparencycolor), 0.2);
+	border: 4px solid rgb(var(--vtransparencycolor), 0.2);
+	box-shadow: unset;
+	right: 8px;
+	bottom: -5px;
+	padding: 2px 0;
 }
 
 
