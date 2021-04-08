@@ -198,7 +198,7 @@
 			"MemberCard": {"class": "guildsettingsmembercard"},
 			"MemberRoles": {"props": ["MemberRole"]},
 			"Message": {"strings": ["childrenMessageContent", "childrenRepliedMessage", "zalgo"]},
-			"MessageHeader": {"props": ["MessageTimestamp"]},
+			"MessageHeader": {"strings": ["ANIMATE_CHAT_AVATAR", "showUsernamePopout"]},
 			"Messages": {"strings": ["group-spacing-", "canManageMessages"]},
 			"MessageUsername": {"strings": ["default.username", "colorString", "compact"]},
 			"ModalLayer": {"class": "layermodal"},
