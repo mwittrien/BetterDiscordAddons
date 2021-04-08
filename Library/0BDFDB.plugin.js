@@ -2232,7 +2232,7 @@ module.exports = (_ => {
 					}
 				}
 				if (LibraryModules.KeyCodeUtils) LibraryModules.KeyCodeUtils.getString = function (keyArray) {
-					return LibraryModules.KeyCodeUtils.toString([keyArray].flat(10).filter(n => n).map(keyCode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keyCode, BDFDB.DiscordConstants.KeyboardEnvs[LibraryModules.KeyCodeUtils.getEnv()]]), true);
+					return LibraryModules.KeyCodeUtils.toString([keyArray].flat(10).filter(n => n).map(keyCode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, LibraryModules.KeyCodeUtils.keyToCode((Object.entries(LibraryModules.KeyEvents.codes).find(n => n[1] == keyCode && LibraryModules.KeyCodeUtils.keyToCode(n[0])) || [])[0]) || keyCode]), true);
 				};
 				BDFDB.LibraryModules = Object.assign({}, LibraryModules);
 				
@@ -6104,14 +6104,13 @@ module.exports = (_ => {
 				
 				InternalComponents.LibraryComponents.KeybindRecorder = reactInitialized && class BDFDB_KeybindRecorder extends LibraryModules.React.Component {
 					handleChange(arrays) {
-						this.props.defaultValue = arrays.map(platformKey => LibraryModules.KeyEvents.codes[LibraryModules.KeyCodeUtils.codeToKey(platformKey)] || platformKey[1]);
-						if (this.recorder) this.recorder.setState({codes: this.props.defaultValue});
-						if (typeof this.props.onChange == "function") this.props.onChange(this.props.defaultValue, this);
+						this.props.value = arrays.map(platformKey => LibraryModules.KeyEvents.codes[LibraryModules.KeyCodeUtils.codeToKey(platformKey)] || platformKey[1]);
+						if (typeof this.props.onChange == "function") this.props.onChange(this.props.value, this);
 					}
 					handleReset() {
-						this.props.defaultValue = [];
-						if (this.recorder) this.recorder.setState({codes: this.props.defaultValue});
-						if (typeof this.props.onChange == "function") this.props.onChange(this.props.defaultValue, this);
+						this.props.value = [];
+						if (this.recorder) this.recorder.setState({codes: []});
+						if (typeof this.props.onChange == "function") this.props.onChange([], this);
 						if (typeof this.props.onReset == "function") this.props.onReset(this);
 					}
 					componentDidMount() {
@@ -6124,7 +6123,7 @@ module.exports = (_ => {
 							align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
 							children: [
 								BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.KeybindRecorder, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-									defaultValue: [this.props.defaultValue].flat(10).filter(n => n).map(keyCode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keyCode, BDFDB.DiscordConstants.KeyboardEnvs[LibraryModules.KeyCodeUtils.getEnv()]]),
+									defaultValue: [this.props.defaultValue || this.props.value].flat(10).filter(n => n).map(keyCode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, LibraryModules.KeyCodeUtils.keyToCode((Object.entries(LibraryModules.KeyEvents.codes).find(n => n[1] == keyCode && LibraryModules.KeyCodeUtils.keyToCode(n[0])) || [])[0]) || keyCode]),
 									onChange: this.handleChange.bind(this)
 								}), "reset", "onReset")),
 								this.props.reset || this.props.onReset ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
