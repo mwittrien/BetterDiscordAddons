@@ -760,13 +760,6 @@
 			"sortableCard": "sortableCard-oF6sTT",
 			"sortDivider": "sortDivider-d8SzzU"
 		},
-		"DisplayLargeMessages": {
-			"injectButton": "injectButton-8eKqGu",
-			"injectButtonWrapper": "injectButtonWrapper-U462Rh",
-			"popoutButton": "popoutButton-a26sRh",
-			"popoutButtonWrapper": "popoutButtonWrapper-p90FFs",
-			"previewMessage": "previewMessage-lM55Sw"
-		},
 		"DisplayServersAsChannels": {
 			"badge": "badge-fxFrUP",
 			"name": "name-z5133D",
@@ -1270,11 +1263,6 @@
 		"_customstatuspresetsdragpreview": ["CustomStatusPresets", "dragPreview"],
 		"_customstatuspresetssortablecard": ["CustomStatusPresets", "sortableCard"],
 		"_customstatuspresetssortdivider": ["CustomStatusPresets", "sortDivider"],
-		"_displaylargemessagesinjectbutton": ["DisplayLargeMessages", "injectButton"],
-		"_displaylargemessagesinjectbuttonwrapper": ["DisplayLargeMessages", "injectButtonWrapper"],
-		"_displaylargemessagespopoutbutton": ["DisplayLargeMessages", "popoutButton"],
-		"_displaylargemessagespopoutbuttonwrapper": ["DisplayLargeMessages", "popoutButtonWrapper"],
-		"_displaylargemessagespreviewmessage": ["DisplayLargeMessages", "previewMessage"],
 		"_displayserversaschannelsbadge": ["DisplayServersAsChannels", "badge"],
 		"_displayserversaschannelsname": ["DisplayServersAsChannels", "name"],
 		"_displayserversaschannelsstyled": ["DisplayServersAsChannels", "styled"],
