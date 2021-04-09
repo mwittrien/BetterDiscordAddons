@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.2
+ * @version 1.1.3
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.1.2",
+			"version": "1.1.3",
 			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
 		},
 		"changeLog": {
-			"fixed": {
-				"Works again": ""
+			"improved": {
+				"No Cover": "Added a placeholder for song without a cover image"
 			}
 		}
 	};
@@ -136,6 +136,7 @@ module.exports = (_ => {
 				if (!lastSong) return null;
 				currentVolume = socketDevice.device.volume_percent;
 				let playerSize = this.props.maximized ? "big" : "small";
+				let coverSrc = BDFDB.LibraryModules.AssetUtils.getAssetImage(lastSong.application_id, lastSong.assets.large_image);
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._spotifycontrolscontainer, this.props.maximized && BDFDB.disCN._spotifycontrolscontainermaximized, this.props.timeline && BDFDB.disCN._spotifycontrolscontainerwithtimeline),
 					children: [
@@ -154,9 +155,14 @@ module.exports = (_ => {
 										else BDFDB.ReactUtils.forceUpdate(this);
 									},
 									children: [
-										BDFDB.ReactUtils.createElement("img", {
+										coverSrc ? BDFDB.ReactUtils.createElement("img", {
 											className: BDFDB.disCN._spotifycontrolscover,
-											src: BDFDB.LibraryModules.AssetUtils.getAssetImage(lastSong.application_id, lastSong.assets.large_image)
+											src: coverSrc
+										}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+											className: BDFDB.disCN._spotifycontrolscover,
+											width: "100%",
+											height: "100%",
+											name: BDFDB.LibraryComponents.SvgIcon.Names.QUESTIONMARK_ACTIVITY
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 											className: BDFDB.disCN._spotifycontrolscovermaximizer,
