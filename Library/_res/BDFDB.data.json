@@ -103,6 +103,7 @@
 		"SlowmodeUtils": {"props": ["getSlowmodeCooldownGuess"]},
 		"SoundStateUtils": {"props": ["isSoundDisabled", "getDisabledSounds"]},
 		"SoundUtils": {"props": ["playSound", "createSound"]},
+		"SpellCheckStore": {"strings": ["SPELLCHECK_LEARN_WORD", "isEnabled"], "value": "default"},
 		"SpellCheckUtils": {"props": ["learnWord", "toggleSpellcheck"]},
 		"SpotifyTrackUtils": {"props": ["hasConnectedAccount", "getLastPlayedTrackId"]},
 		"SpotifyUtils": {"props": ["setActiveDevice", "pause"]},

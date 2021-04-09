@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.4
+ * @version 1.5.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -22,7 +22,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.5.4",
+			"version": "1.5.5",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -2231,6 +2231,8 @@ module.exports = (_ => {
 						if (InternalData.LibraryModules[name].nonProps) LibraryModules[name] = BDFDB.ModuleUtils.find(m => InternalData.LibraryModules[name].props.every(prop => typeof m[prop] == "function") && InternalData.LibraryModules[name].nonProps.every(prop => typeof m[prop] != "function"));
 						else LibraryModules[name] = BDFDB.ModuleUtils.findByProperties(InternalData.LibraryModules[name].props);
 					}
+					else if (InternalData.LibraryModules[name].strings) LibraryModules[name] = BDFDB.ModuleUtils.findByString(InternalData.LibraryModules[name].strings);
+					if (InternalData.LibraryModules[name].value) LibraryModules[name] = (LibraryModules[name] || {})[InternalData.LibraryModules[name].value];
 				}
 				if (LibraryModules.KeyCodeUtils) LibraryModules.KeyCodeUtils.getString = function (keyArray) {
 					return LibraryModules.KeyCodeUtils.toString([keyArray].flat(10).filter(n => n).map(keyCode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, LibraryModules.KeyCodeUtils.keyToCode((Object.entries(LibraryModules.KeyEvents.codes).find(n => n[1] == keyCode && LibraryModules.KeyCodeUtils.keyToCode(n[0], null)) || [])[0], null) || keyCode]), true);
