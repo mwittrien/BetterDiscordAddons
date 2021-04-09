@@ -1446,7 +1446,7 @@
 .selectorButtonSelected-1j4DmC {
 	background-color: rgb(var(--vaccentcolor));
 }
-.badgeUpgrade-1DzdNZ {										/* modal				badgeupgrade						*/
+.badgeUpgrade-3_4a3F {										/* modal				badgeupgrade						*/
 	color: rgb(var(--vaccentcolor));
 }
 .imageSelected-4Kl81J {										/* modal				imageselected						*/
@@ -1483,7 +1483,8 @@
 
 /* ----		10.12.	SCREENSHAREMODAL				---- */
 
-#app-mount .art-1qgogX {
+#app-mount .art-1qgogX {															/* settings modal */
+	position: relative;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/screenshare_header_bg.svg) center/contain no-repeat;
 }
 .art-1qgogX::after {
@@ -1496,6 +1497,22 @@
 	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/screenshare_header_accent.svg) center/contain no-repeat;
+}
+
+#app-mount .art-11ppxi[src="/assets/3f8ff16e485080df4e54267370420785.png"] + * {	/* unlock modal */
+	position: static;
+}
+#app-mount .art-11ppxi[src="/assets/3f8ff16e485080df4e54267370420785.png"] + *::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	border: 0px solid rgb(var(--vaccentcolor));
+	border-width: 29px 26px;
+	border-radius: 7px;
+	width: 225px;
+	height: 149px;
+	margin: -24px -112.5px 8px;
+	box-sizing: border-box;
 }
 
 .tile-2w4k5N:hover .sourceThumbnail-27dolk {
