@@ -22,6 +22,7 @@ module.exports = (_ => {
 		},
 		"changeLog": {
 			"improved": {
+				"Minimal Mode": "Added a bit of support for BDs minimal mode",
 				"No Cover": "Added a placeholder for song without a cover image"
 			}
 		}
@@ -609,6 +610,21 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN._spotifycontrolssettingslabel} {
 						margin-left: 10px;
+					}
+					${BDFDB.dotCNS._bdminimalmode + BDFDB.dotCN._spotifycontrolsbar} {
+						height: 3px;
+					}
+					${BDFDB.dotCNS._bdminimalmode + BDFDB.dotCNS._spotifycontrolscontainer + BDFDB.dotCN.accountinfobutton} {
+						width: 26px;
+						height: 26px;
+					}
+					${BDFDB.dotCNS._bdminimalmode + BDFDB.dotCNS._spotifycontrolscontainer + BDFDB.dotCN.size14} {
+						font-size: 13px;
+						line-height: 13px;
+					}
+					${BDFDB.dotCNS._bdminimalmode + BDFDB.dotCNS._spotifycontrolscontainer + BDFDB.dotCN.size12} {
+						font-size: 11px;
+						line-height: 11px;
 					}
 				`;
 			}
