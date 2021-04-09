@@ -2,7 +2,7 @@
  * @name SpellCheck
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.5
+ * @version 1.5.6
  * @description Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpellCheck",
 			"author": "DevilBro",
-			"version": "1.5.5",
+			"version": "1.5.6",
 			"description": "Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary"
 		}
 	};
@@ -101,7 +101,7 @@ module.exports = (_ => {
 					let dictionaryLanguageIds = Array.from(BDFDB.DOMUtils.create(body).querySelectorAll(`[href*="/mwittrien/BetterDiscordAddons/blob/master/Plugins/SpellCheck/dic/"]`)).map(n => n.innerText.split(".")[0]).filter(n => n);
 					languages = BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, langId => dictionaryLanguageIds.includes(langId), true);
 					
-					if ((BDFDB.LibraryModules.StoreChangeUtils && BDFDB.LibraryModules.StoreChangeUtils.get("SpellcheckStore") || {}).enabled) BDFDB.LibraryModules.SpellCheckUtils.toggleSpellcheck();
+					if (BDFDB.LibraryModules.SpellCheckStore && BDFDB.LibraryModules.SpellCheckStore.isEnabled()) BDFDB.LibraryModules.SpellCheckUtils.toggleSpellcheck();
 
 					this.forceUpdateAll();
 					
@@ -274,6 +274,7 @@ module.exports = (_ => {
 							child.style.setProperty("background-color", "transparent", "important");
 							child.style.setProperty("border-color", "transparent", "important");
 							child.style.setProperty("text-shadow", "none", "important");
+							child.style.setProperty("object-position", "-999999px -999999px", "important");
 							child.style.setProperty("pointer-events", "none", "important");
 							if (child.getAttribute("data-slate-string") && child.parentElement.getAttribute("data-slate-leaf")) {
 								let newline = child.querySelector("br");
@@ -290,11 +291,14 @@ module.exports = (_ => {
 			spellCheckText (string) {
 				let htmlString = [];
 				string.replace(/\n/g, "\n ").split(" ").forEach(word => {
-					let hasNewline = word.endsWith("\n");
-					word = word.replace(/\n/g, "");
-					htmlString.push(`<label class="${this.isWordNotInDictionary(word) ? BDFDB.disCN._spellcheckerror : ""}" style="color: transparent !important; text-shadow: none !important;">${BDFDB.StringUtils.htmlEscape(word)}</label>${hasNewline ? "\n" : ""}`);
+					if (!word) htmlString.push("");
+					else {
+						let hasNewline = word.endsWith("\n");
+						word = word.replace(/\n/g, "");
+						htmlString.push(`<span class="${this.isWordNotInDictionary(word) ? BDFDB.disCN._spellcheckerror : ""}" style="color: transparent !important; text-shadow: none !important;">${BDFDB.StringUtils.htmlEscape(word)}</span>${hasNewline ? "\n" : ""}`);
+					}
 				});
-				return htmlString.join(" ").replace(/\n /g, "\n");
+				return htmlString.join("<span> </span>").replace(/\n /g, "\n");
 			}
 
 			replaceWord (editor, toBeReplaced, replacement) {
