@@ -190,7 +190,7 @@ module.exports = (_ => {
 					}
 				};
 				
-				this.patchPriority = 10;
+				this.patchPriority = 9;
 				
 				this.css = `
 					${BDFDB.dotCNS._serverdetailstooltip + BDFDB.dotCN.tooltipcontent} {

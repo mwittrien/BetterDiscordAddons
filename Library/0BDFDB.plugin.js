@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.3
+ * @version 1.5.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -22,7 +22,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.5.3",
+			"version": "1.5.4",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -2043,7 +2043,8 @@ module.exports = (_ => {
 					const pluginName = typeof plugin === "string" ? plugin : plugin.name;
 					const pluginVersion = typeof plugin === "string" ? "" : plugin.version;
 					const pluginId = pluginName.toLowerCase();
-					const patchPriority = BDFDB.ObjectUtils.is(plugin) && !isNaN(plugin.patchPriority) ? (plugin.patchPriority < 0 ? 0 : (plugin.patchPriority > 10 ? 10 : Math.round(plugin.patchPriority))) : 5;
+					let patchPriority = !isNaN(config.priority) ? config.priority : (BDFDB.ObjectUtils.is(plugin) && !isNaN(plugin.patchPriority) ? plugin.patchPriority : 5);
+					patchPriority = patchPriority < 1 ? (plugin == InternalBDFDB ? 0 : 1) : (patchPriority > 9 ? (plugin == InternalBDFDB ? 10 : 9) : Math.round(patchPriority));
 					if (!BDFDB.ObjectUtils.is(module.BDFDB_patches)) module.BDFDB_patches = {};
 					methodNames = [methodNames].flat(10).filter(n => n);
 					let cancel = _ => {BDFDB.PatchUtils.unpatch(plugin, module, methodNames);};
@@ -7867,6 +7868,13 @@ module.exports = (_ => {
 						InternalBDFDB.executeExtraPatchedPatches("GuildHeaderContextMenu", {instance: {props: e2.methodArguments[0]}, returnvalue: e2.returnValue, methodname: "type"});
 					}}, {noCache: true});
 				}});
+				
+				BDFDB.PatchUtils.patch(BDFDB, (BDFDB.ModuleUtils.findByName("useCopyIdItem", false) || {}).exports, "default", {after: e => {
+					if (!e.returnValue) e.returnValue = false;
+				}}, {priority: 10});
+				BDFDB.PatchUtils.patch(BDFDB, (BDFDB.ModuleUtils.findByName("DeveloperContextMenu", false) || {}).exports, "default", {after: e => {
+					if (!e.returnValue.props.children) LibraryModules.ContextMenuUtils.closeContextMenu();
+				}}, {priority: 10});
 				
 				InternalBDFDB.onSettingsClosed = function () {
 					if (InternalBDFDB.SettingsUpdated) {

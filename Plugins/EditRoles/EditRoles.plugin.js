@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.1
+ * @version 1.0.2
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditRoles",
 			"author": "DevilBro",
-			"version": "1.0.1",
+			"version": "1.0.2",
 			"description": "Allows you to locally edit Roles"
 		}
 	};
@@ -60,13 +60,12 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var changedRoles = {}, cachedDevMode;
+		var changedRoles = {};
 		
 		return class EditRoles extends Plugin {
 			onLoad () {
 				this.patchedModules = {
 					before: {
-						DeveloperContextMenu: "default",
 						MemberListItem: "render",
 						UserPopout: "render",
 						ChannelMembers: "render"
@@ -141,7 +140,7 @@ module.exports = (_ => {
 			}
 
 			onDeveloperContextMenu (e) {
-				let guild = BDFDB.LibraryModules.FolderStore.getFlattenedGuilds().find(g => g.roles[e.instance.props.id]);
+				let guild = this.getGuildFromRoleId(e.instance.props.id);
 				if (guild) e.returnvalue.props.children = [
 					BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -153,8 +152,6 @@ module.exports = (_ => {
 										label: this.labels.submenu_rolesettings,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
 										action: _ => {
-											BDFDB.LibraryModules.SettingsUtils.updateLocalSettings({"developerMode": cachedDevMode})
-											cachedDevMode = null;
 											this.openRoleSettingsModal(guild.roles[e.instance.props.id]);
 										}
 									}),
@@ -164,8 +161,6 @@ module.exports = (_ => {
 										color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
 										disabled: !changedRoles[e.instance.props.id],
 										action: event => {
-											BDFDB.LibraryModules.SettingsUtils.updateLocalSettings({"developerMode": cachedDevMode})
-											cachedDevMode = null;
 											let remove = _ => {
 												BDFDB.DataUtils.remove(this, "roles", e.instance.props.id);
 												this.forceUpdateAll(true);
@@ -180,11 +175,6 @@ module.exports = (_ => {
 					}),
 					e.returnvalue.props.children
 				].flat(10).filter(n => n);
-			}
-			
-			processDeveloperContextMenu (e) {
-				cachedDevMode = BDFDB.LibraryModules.SettingsStore.developerMode;
-				BDFDB.LibraryModules.SettingsUtils.updateLocalSettings({"developerMode": true})
 			}
 			
 			processMemberListItem (e) {
@@ -209,6 +199,10 @@ module.exports = (_ => {
 					let data = changedRoles[e.instance.props.rows[i].id];
 					if (data && data.name) e.instance.props.rows[i] = Object.assign({}, e.instance.props.rows[i], {title: data.name});
 				}
+			}
+			
+			getGuildFromRoleId (roleId) {
+				return BDFDB.LibraryModules.FolderStore.getFlattenedGuilds().find(g => g.roles[roleId]);
 			}
 			
 			changeRolesInGuild (guild) {

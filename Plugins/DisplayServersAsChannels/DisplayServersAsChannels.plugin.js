@@ -74,7 +74,7 @@ module.exports = (_ => {
 					}
 				};
 				
-				this.patchPriority = 10;
+				this.patchPriority = 9;
 
 				this.patchedModules = {
 					after: {
