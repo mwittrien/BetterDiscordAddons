@@ -2028,6 +2028,7 @@
 		"guildsummarysvgicon": ["BDFDB", "guildSummarySvgIcon"],
 		"guildsvg": ["Guild", "svg"],
 		"guildswrapper": ["GuildsWrapper", "wrapper"],
+		"guildswrapperhidden": ["GuildsWrapper", "hidden"],
 		"guildswrapperunreadmentionsbar": ["GuildsWrapper", "unreadMentionsBar"],
 		"guildswrapperunreadmentionsbarbottom": ["GuildsWrapper", "unreadMentionsIndicatorBottom"],
 		"guildswrapperunreadmentionsbartop": ["GuildsWrapper", "unreadMentionsIndicatorTop"],
