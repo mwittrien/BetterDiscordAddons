@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.1.2",
+			"version": "1.1.3",
 			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
 		},
 		"changeLog": {
 			"fixed": {
-				"Works again": ""
+				"Local songs covers now displays a *missing album cover picture* instead of nothing": ""
 			}
 		}
 	};
@@ -156,7 +156,7 @@ module.exports = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement("img", {
 											className: BDFDB.disCN._spotifycontrolscover,
-											src: BDFDB.LibraryModules.AssetUtils.getAssetImage(lastSong.application_id, lastSong.assets.large_image)
+											src: BDFDB.LibraryModules.AssetUtils.getAssetImage(lastSong.application_id, lastSong.assets.large_image) || 'https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpotifyControls/_res/missingAlbumCover.png'
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 											className: BDFDB.disCN._spotifycontrolscovermaximizer,
