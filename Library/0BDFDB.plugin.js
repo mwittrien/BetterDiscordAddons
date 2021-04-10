@@ -7821,12 +7821,20 @@ module.exports = (_ => {
 				changeLogs = BDFDB.DataUtils.load(BDFDB, "changeLogs");
 				BDFDB.PluginUtils.checkChangeLog(BDFDB);
 				
-				if (window.Lightcord || window.LightCord) BDFDB.ModalUtils.open(BDFDB, {
-					header: "Attention!",
-					subHeader: "Modified Client detected",
-					text: "We detected that you are using LightCord. Unlike other Client Modificaton (BetterDiscord, PowerCord), LightCord is a completely modified Client, which is no longer maintained by Discord but instead by a 3rd Party. This will put your Account to risk, not only because the 3rd Party might do with your Account Credentials what they want, you are also breaking a higher Instance of Discord's ToS by using a 3rd Party Client instead of using a simple Client Mod. Many Plugins won't flawlessly run on LightCord. We do not support LightCord and as such, we do not provide Help or Support. You should switch to another Modification.",
-					buttons: [{color: "RED", contents: BDFDB.LanguageUtils.LanguageStrings.OKAY, close: true}]
-				});
+				if ((window.Lightcord || window.LightCord) && !(InternalBDFDB.readConfig(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), "0BDFDB.config.json"))["choices"]["acknowledgeLightcord"])){  // check if Lightcord is installed and if acknowledgeLightcord in its config file is not set to "true"
+					BDFDB.ModalUtils.open(BDFDB, {
+						header: "BDFDB",
+						subHeader: "Lightcord detected",
+						text: "We detected that you are using Lightcord. Unlike other client modifications (BetterDiscord, Powercord), Lightcord is a completely modified client, which is not maintained by Discord, but instead by a 3rd-party. This can put your account to risk, not only because the 3rd-party might do whatever they want with your account credentials, but you are also breaking a higher instance of Discord's ToS by using a 3rd-party client instead of using a simple client mod. And as such, many Plugins won't flawlessly run on Lightcord. We do not support Lightcord, and therefore we do not provide help or support. You should switch to another modification. By clicking \"I acknowledge\", you agree that you are on your own.",
+						buttons: [{color: "RED", contents: "I acknowledge", close: true}]
+					});  // do the whole popup dialog
+
+					// we already showed the popup AND the user *should* be aware that they're now on their own, we don't need to annoy them any more
+					let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), "0BDFDB.config.json");
+					let config = InternalBDFDB.readConfig(configPath);  // get config
+					config["choices"]["acknowledgeLightcord"] = true;  // set acknowledgeLightcord to "true"
+					InternalBDFDB.writeConfig(configPath, config);     // write the new config file
+				}
 				
 				InternalBDFDB.patchPlugin(BDFDB);
 				
