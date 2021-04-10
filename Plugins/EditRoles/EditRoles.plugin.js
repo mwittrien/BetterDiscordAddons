@@ -270,6 +270,7 @@ module.exports = (_ => {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 									color: data.color,
+									defaultCustomColor: role.colorString,
 									pickerConfig: {
 										alpha: false,
 										gradient: false

@@ -5451,7 +5451,7 @@ module.exports = (_ => {
 							disabled: props.isDisabled,
 							onClick: _ => {
 								if (!props.isSelected) {
-									let color = props.isCustom && props.color == null ? (swatches.props.color || "rgba(0, 0, 0, 1)") : props.color;
+									let color = props.isCustom && props.color == null ? (swatches.props.color || swatches.props.defaultCustomColor || "rgba(0, 0, 0, 1)") : props.color;
 									if (typeof swatches.props.onColorChange == "function") swatches.props.onColorChange(BDFDB.ColorUtils.convert(color, "RGBCOMP"));
 									swatches.props.color = color;
 									swatches.props.customColor = props.isCustom ? color : swatches.props.customColor;
@@ -5529,6 +5529,7 @@ module.exports = (_ => {
 						this.props.colors = (BDFDB.ArrayUtils.is(this.props.colors) ? this.props.colors : [null, 5433630, 3066993, 1752220, 3447003, 3429595, 8789737, 10181046, 15277667, 15286558, 15158332, 15105570, 15844367, 13094093, 7372936, 6513507, 16777215, 3910932, 2067276, 1146986, 2123412, 2111892, 7148717, 7419530, 11342935, 11345940, 10038562, 11027200, 12745742, 9936031, 6121581, 2894892]).map(c => BDFDB.ColorUtils.convert(c, "RGBA"));
 						this.props.colorRows = this.props.colors.length ? [this.props.colors.slice(0, parseInt(this.props.colors.length/2)), this.props.colors.slice(parseInt(this.props.colors.length/2))] : [];
 						this.props.customColor = !this.props.color || !this.props.customSelected && this.props.colors.indexOf(this.props.color) > -1 ? null : this.props.color;
+						this.props.defaultCustomColor = BDFDB.ObjectUtils.is(this.props.defaultCustomColor) ? this.props.defaultCustomColor : BDFDB.ColorUtils.convert(this.props.defaultCustomColor, "RGBA");
 						this.props.customSelected = !!this.props.customColor;
 						this.props.pickerConfig = BDFDB.ObjectUtils.is(this.props.pickerConfig) ? this.props.pickerConfig : {gradient: true, alpha: true};
 						
