@@ -86,7 +86,8 @@ module.exports = (_ => {
 						triggerUpload:		{value: true, 		inner: true,		description: "Upload Message Prompt"}
 					},
 					amounts: {
-						minAliasLength:		{value: 2, 			min: 1,				description: "Minimal Character Length to open Autocomplete Menu: "}
+						minAliasLength:		{value: 2, 			min: 1,				description: "Minimal Character Length to open Autocomplete Menu: "},
+						maxAutocComplete: 	{value: 10,			min: 1	,			description: "The amount of results the Autocmplete Menu will show: "}
 					}
 				};
 				
@@ -146,7 +147,7 @@ module.exports = (_ => {
 							let currentLastWord = BDFDB.StringUtils.findMatchCaseless(wordLowercase, rawValue, true);
 							let matches = [];
 							for (let word in aliases) {
-								if (matches.length >= BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS) break;
+								if (matches.length >= amounts.maxAutocComplete) break;
 								let aliasData = Object.assign({word}, aliases[word]);
 								if (!aliasData.regex && aliasData.autoc) {
 									if (aliasData.exact) {
@@ -188,7 +189,7 @@ module.exports = (_ => {
 						if (m) {
 							let currentLastWord = commandSentinel + e.methodArguments[1];
 							if (currentLastWord.length >= amounts.minAliasLength) for (let word in commandAliases) {
-								if (m.commands.length >= BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS) break;
+								if (m.commands.length >= amounts.maxAutocComplete) break;
 								let aliasData = commandAliases[word];
 								let name = word.slice(1);
 								let command = {
