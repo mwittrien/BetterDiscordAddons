@@ -1864,7 +1864,7 @@
 		"emojipickerdiversityemojiitem": ["EmojiPickerDiversitySelector", "diversityEmojiItem"],
 		"emojipickerdiversityemojiitemimage": ["EmojiPickerDiversitySelector", "diversityEmojiItemImage"],
 		"emojipickerdiversityselector": ["EmojiPickerDiversitySelector", "diversitySelector"],
-		"emojipickerdiversityselectorpopout": ["EmojiPickerDiversitySelector", "diversitySelectorPopout"],
+		"emojipickerdiversityselectoroptions": ["EmojiPickerDiversitySelector", "diversitySelectorOptions"],
 		"emojipickerdiversityselectorwrapper": ["EmojiPicker", "diversitySelector"],
 		"emojipickeremojispriteimage": ["EmojiPickerItem", "emojiSpriteImage"],
 		"emojipickerheader": ["EmojiPicker", "header"],
