@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.4
+ * @version 2.2.5
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.2.4",
+			"version": "2.2.5",
 			"description": "Allows you to configure your own Aliases/Commands"
 		},
 		"changeLog": {
 			"improved": {
-				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
+				"Max Cap": "Removed Max Alias Cap and turned autocomplete into a scrollable element"
 			}
 		}
 	};
@@ -95,10 +95,16 @@ module.exports = (_ => {
 						ChannelTextAreaForm: "render",
 						MessageEditor: "render",
 						Upload: "render"
+					},
+					after: {
+						Autocomplete: "render"
 					}
 				};
 				
 				this.css = `
+					${BDFDB.dotCNS.aliasautocomplete + BDFDB.dotCN.autocompleteinner} {
+						max-height: 50vh;
+					}
 					${BDFDB.dotCN.autocompleteicon} {
 						flex: 0 0 auto;
 					}
@@ -107,6 +113,17 @@ module.exports = (_ => {
 			
 			onStart () {
 				aliases = BDFDB.DataUtils.load(this, "words");
+				for (let i = 0; i < 100; i++) aliases["word" + i] = {
+					"word": "aaaa",
+					"replace": "¯\\_(ツ)_/¯",
+					"filedata": null,
+					"case": false,
+					"exact": true,
+					"autoc": true,
+					"regex": false,
+					"file": false
+				};
+				console.log(aliases),
 				commandSentinel = BDFDB.LibraryModules.AutocompleteSentinels && BDFDB.LibraryModules.AutocompleteSentinels.COMMAND_SENTINEL || "/";
 				commandAliases = BDFDB.ObjectUtils.filter(aliases, key => key.startsWith(commandSentinel), true);
 				
@@ -146,7 +163,6 @@ module.exports = (_ => {
 							let currentLastWord = BDFDB.StringUtils.findMatchCaseless(wordLowercase, rawValue, true);
 							let matches = [];
 							for (let word in aliases) {
-								if (matches.length >= BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS) break;
 								let aliasData = Object.assign({word}, aliases[word]);
 								if (!aliasData.regex && aliasData.autoc) {
 									if (aliasData.exact) {
@@ -188,7 +204,6 @@ module.exports = (_ => {
 						if (m) {
 							let currentLastWord = commandSentinel + e.methodArguments[1];
 							if (currentLastWord.length >= amounts.minAliasLength) for (let word in commandAliases) {
-								if (m.commands.length >= BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS) break;
 								let aliasData = commandAliases[word];
 								let name = word.slice(1);
 								let command = {
@@ -433,6 +448,13 @@ module.exports = (_ => {
 				if (!BDFDB.PatchUtils.isPatched(this, e.instance, "submitUpload")) BDFDB.PatchUtils.patch(this, e.instance, "submitUpload", {before: e2 => {
 					if (settings.triggerUpload) this.handleSubmit(e, e2, 1);
 				}}, {force: true, noCache: true});
+			}
+			
+			processAutocomplete (e) {
+				if (e.returnvalue.props.children && e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.aliasautocomplete) > -1) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.autocompleteinner]]});
+					if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Scrollers.Thin, children[index].props);
+				}
 			}
 			
 			handleSubmit (e, e2, textIndex) {
