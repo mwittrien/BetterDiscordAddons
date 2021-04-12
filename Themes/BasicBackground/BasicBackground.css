@@ -4926,7 +4926,7 @@ body::before {
 
 .contentWrapper-SvZHNd,										/* picker				expression wrapper					*/
 .emojiPicker-3PwZFl,										/* picker				inner								*/
-.diversitySelectorPopout-3FiGaM {							/* picker				diversityselector					*/
+.diversitySelectorOptions-4YM-vX {							/* picker				diversityselector					*/
 	background: transparent;
 	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
@@ -4934,7 +4934,7 @@ body::before {
 }
 .contentWrapper-SvZHNd::before,
 .emojiPicker-3PwZFl::before,
-.diversitySelectorPopout-3FiGaM::before {
+.diversitySelectorOptions-4YM-vX::before {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -4951,7 +4951,7 @@ body::before {
 }
 .contentWrapper-SvZHNd::after,
 .emojiPicker-3PwZFl::after,
-.diversitySelectorPopout-3FiGaM::after {
+.diversitySelectorOptions-4YM-vX::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -4964,8 +4964,8 @@ body::before {
 	pointer-events: none;
 	z-index: -1;
 }
-.diversitySelectorPopout-3FiGaM::after,
-.diversitySelectorPopout-3FiGaM::before {
+.diversitySelectorOptions-4YM-vX::after,
+.diversitySelectorOptions-4YM-vX::before {
 	border-radius: 5px;
 }
 .emojiPickerInExpressionPicker-3IzIcv .emojiPicker-3PwZFl {

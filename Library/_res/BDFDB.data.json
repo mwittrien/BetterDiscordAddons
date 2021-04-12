@@ -1061,7 +1061,7 @@
 		"Emoji": {"props": ["emoji"], "length": 1},
 		"EmojiButton": {"props": ["emojiButton", "sprite"]},
 		"EmojiPicker": {"props": ["emojiPicker", "inspector"]},
-		"EmojiPickerDiversitySelector": {"props": ["diversityEmojiItemImage", "diversitySelectorPopout"]},
+		"EmojiPickerDiversitySelector": {"props": ["diversityEmojiItemImage", "diversitySelectorOptions"]},
 		"EmojiPickerItem": {"props": ["emojiSpriteImage"]},
 		"EmojiPickerInspector": {"props": ["inspector", "graphicPrimary"]},
 		"EmojiPickerInspectorEmoji": {"props": ["emoji", "glyphEmoji"]},
