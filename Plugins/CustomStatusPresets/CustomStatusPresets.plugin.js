@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.5
+ * @version 1.0.6
  * @description Allows you to save Custom Statuses as Quick Select
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomStatusPresets",
 			"author": "DevilBro",
-			"version": "1.0.5",
+			"version": "1.0.6",
 			"description": "Allows you to save Custom Statuses as Quick Select"
 		},
 		"changeLog": {
-			"improved": {
-				"Settings": "You can now reorder the presets in the plugin settings and 'disable' them which stops them from showing in the quick menu"
+			"added": {
+				"Online Status": "The online status now also gets saved in the preset"
 			}
 		}
 	};
@@ -282,6 +282,9 @@ module.exports = (_ => {
 						display: flex;
 						margin-right: 6px;
 					}
+					${BDFDB.dotCN._customstatuspresetsstatus} {
+						margin-right: 6px;
+					}
 					${BDFDB.dotCN._customstatuspresetssortdivider} {
 						background: ${BDFDB.DiscordConstants.Colors.STATUS_GREEN};
 						height: 2px;
@@ -360,6 +363,10 @@ module.exports = (_ => {
 												})
 											})
 										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Status, {
+											className: BDFDB.disCN._customstatuspresetsstatus,
+											status: presets[id].status || BDFDB.DiscordConstants.StatusTypes.ONLINE
+										}),
 										presets[id].text
 									]
 								}),
@@ -373,6 +380,7 @@ module.exports = (_ => {
 										expiresAt = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime() - date.getTime();
 									}
 									BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({
+										status: presets[id].status,
 										customStatus: {
 											text: presets[id].text && presets[id].text.length > 0 ? presets[id].text : null,
 											expiresAt: expiresAt ? BDFDB.DiscordObjects.Timestamp().add(expiresAt, "ms").toISOString() : null,
@@ -394,7 +402,7 @@ module.exports = (_ => {
 					color: BDFDB.disCN.modalcancelbutton,
 					look: BDFDB.LibraryComponents.Button.Looks.LINK,
 					onClick: event => {
-						presets[id] = Object.assign({pos: Object.keys(presets).length}, BDFDB.ObjectUtils.extract(e.instance.state, "clearAfter", "emojiInfo", "text"));
+						presets[id] = Object.assign({pos: Object.keys(presets).length}, BDFDB.ObjectUtils.extract(e.instance.state, "clearAfter", "emojiInfo", "status", "text"));
 						BDFDB.DataUtils.save(presets, this, "presets");
 						if (!event.shiftKey) e.instance.props.onClose();
 						else id = BDFDB.NumberUtils.generateId(Object.keys(presets));

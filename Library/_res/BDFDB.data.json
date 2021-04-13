@@ -314,6 +314,7 @@
 		"Scrollers None": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerNone"},
 		"Scrollers Thin": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerThin"},
 		"Spinner": {"name": "Spinner"},
+		"Status": {"name": "Status"},
 		"StatusPickerPopout": {"strings": ["\"StatusPickerPopout\""], "value": "default"},
 		"TextElement": {"name": "Text"},
 		"UserPopout": {"name": "ConnectedUserPopout"},
@@ -767,7 +768,8 @@
 			"deleteIcon": "deleteIcon-22SgHa",
 			"dragPreview": "dragPreview-3F0ssT",
 			"sortableCard": "sortableCard-oF6sTT",
-			"sortDivider": "sortDivider-d8SzzU"
+			"sortDivider": "sortDivider-d8SzzU",
+			"status": "status-0f5Sr2"
 		},
 		"DisplayServersAsChannels": {
 			"badge": "badge-fxFrUP",
@@ -1274,6 +1276,7 @@
 		"_customstatuspresetsdragpreview": ["CustomStatusPresets", "dragPreview"],
 		"_customstatuspresetssortablecard": ["CustomStatusPresets", "sortableCard"],
 		"_customstatuspresetssortdivider": ["CustomStatusPresets", "sortDivider"],
+		"_customstatuspresetsstatus": ["CustomStatusPresets", "status"],
 		"_displayserversaschannelsbadge": ["DisplayServersAsChannels", "badge"],
 		"_displayserversaschannelsname": ["DisplayServersAsChannels", "name"],
 		"_displayserversaschannelsstyled": ["DisplayServersAsChannels", "styled"],
