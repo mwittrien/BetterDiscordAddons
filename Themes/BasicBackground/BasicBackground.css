@@ -951,7 +951,7 @@ body::before {
 .message-2qnXI6.mentioned-xhSam7::before {
 	background-color: rgb(var(--vaccentcolor));
 }
-.message-2qnXI6.mentioned-xhSam7 .markup-2BOw-j:not(.slateTextArea-1Mkdgw) {
+.message-2qnXI6.mentioned-xhSam7 .contents-2mQqc9 .messageContent-2qWWxC {
 	border-radius: 3px;
 	background-color: rgba(var(--vaccentcolor), calc(0.3 * var(--vusechatbubbles)));
 }
@@ -2807,22 +2807,6 @@ body::before {
 	z-index: -1;
 }
 
-.addRoleIcon-3YjErH {										/* rolesettings			addrolebutton						*/
-	-webkit-mask: url(https://discord.com/assets/cef02719c12d8aaf38894c16dca7fbe6.svg);
-	background: rgb(var(--fontwhite3));
-	object-position: -999999px -999999px;
-}
-.group-1WdBVp {												/* rolesettings			permissions group					*/
-	border-color: rgb(var(--vtransparencycolor), 0.4);
-}
-.item-1yAxl1 {												/* rolesettings			permissions item					*/
-	background: rgb(var(--vtransparencycolor), 0.2);
-}
-.passthrough-1c2ewQ.selected-2YhbGh {						/* rolesettings			permissions passthrough selected	*/
-	background: rgb(var(--vtransparencycolor), 0.4);
-	color: rgb(var(--fontwhite1));
-}
-
 .sidebar-dLM-kh {											/* rolesettings			sidebar								*/
 	background-color: rgba(var(--vtransparencycolor), 0.1);
 	border: none;
@@ -2832,6 +2816,36 @@ body::before {
 }
 .container-_phMUq:hover {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addrolebutton						*/
+	-webkit-mask: url(https://discord.com/assets/cef02719c12d8aaf38894c16dca7fbe6.svg);
+	background: rgb(var(--fontwhite3));
+	object-position: -999999px -999999px;
+}
+.settingCard-3w2mVL {										/* rolesettings			setting card						*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.settingCard-3w2mVL.active-1ytUzX {							/* rolesettings			setting card active					*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.cardContent-qqqwo8 {										/* rolesettings			setting card header					*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.cardFolder-28dwxo {										/* rolesettings			setting card body					*/
+	background-color: transparent;
+}
+.group-1WdBVp {												/* rolesettings			permissions group					*/
+	border-color: rgb(var(--vtransparencycolor), 0.4);
+}
+.item-1yAxl1 {												/* rolesettings			permissions item					*/
+	background: rgb(var(--vtransparencycolor), 0.2);
+}
+.item-1yAxl1:hover {
+	background: rgb(var(--vtransparencycolor), 0.4);
+}
+.passthrough-1c2ewQ.selected-2YhbGh {						/* rolesettings			permissions passthrough selected	*/
+	background: rgb(var(--vaccentcolor));
+	color: rgb(var(--fontwhite1));
 }
 .icon-3_8HGa {												/* rolesettings			everyone role icon					*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
