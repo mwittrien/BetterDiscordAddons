@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.4
+ * @version 2.9.5
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "2.9.4",
+			"version": "2.9.5",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
+		},
+		"changeLog": {
+			"fixed": {
+				"Changed Permissions": "No longer requires a restart if permissions got changed"
+			}
 		}
 	};
 
@@ -476,13 +481,13 @@ module.exports = (_ => {
 			}
 			
 			getAllChannels () {
-				return (BDFDB.LibraryModules.ChannelStore.getGuildChannels || BDFDB.LibraryModules.ChannelStore.getMutableGuildChannels || (_ => {return {};}))();
+				return (BDFDB.LibraryModules.ChannelStore.getGuildChannels || BDFDB.LibraryModules.ChannelStore.getMutableGuildChannels || (_ => ({})))();
 			}
 			
 			getHiddenChannels (guild) {
 				if (!guild) return [{}, 0];
-				let hiddenChannels = {}, rolesAmount = (BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id) || {roles: []}).roles.length;
-				if (!hiddenChannelCache[guild.id] || hiddenChannelCache[guild.id].roles != rolesAmount) {
+				let hiddenChannels = {}, visibleAmount = (BDFDB.LibraryModules.GuildChannelStore.getChannels(guild.id) || {count: 0}),count, rolesAmount = (BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id) || {roles: []}).roles.length;
+				if (!hiddenChannelCache[guild.id] || hiddenChannelCache[guild.id].visible != visibleAmount || hiddenChannelCache[guild.id].roles != rolesAmount) {
 					let all = this.getAllChannels();
 					for (let type in BDFDB.DiscordConstants.ChannelTypes) hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
 					for (let channel_id in all) {
@@ -492,7 +497,7 @@ module.exports = (_ => {
 				}
 				else hiddenChannels = hiddenChannelCache[guild.id].hidden;
 				for (let type in hiddenChannels) hiddenChannels[type] = hiddenChannels[type].filter(c => BDFDB.LibraryModules.ChannelStore.getChannel(c.id));
-				hiddenChannelCache[guild.id] = {hidden: hiddenChannels, amount: BDFDB.ObjectUtils.toArray(hiddenChannels).flat().length, roles: rolesAmount};
+				hiddenChannelCache[guild.id] = {hidden: hiddenChannels, amount: BDFDB.ObjectUtils.toArray(hiddenChannels).flat().length, visible: visibleAmount, roles: rolesAmount};
 				return [hiddenChannelCache[guild.id].hidden, hiddenChannelCache[guild.id].amount];
 			}
 			
