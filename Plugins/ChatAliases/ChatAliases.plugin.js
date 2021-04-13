@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.5
+ * @version 2.2.6
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.2.5",
+			"version": "2.2.6",
 			"description": "Allows you to configure your own Aliases/Commands"
 		},
 		"changeLog": {
@@ -113,17 +113,6 @@ module.exports = (_ => {
 			
 			onStart () {
 				aliases = BDFDB.DataUtils.load(this, "words");
-				for (let i = 0; i < 100; i++) aliases["word" + i] = {
-					"word": "aaaa",
-					"replace": "¯\\_(ツ)_/¯",
-					"filedata": null,
-					"case": false,
-					"exact": true,
-					"autoc": true,
-					"regex": false,
-					"file": false
-				};
-				console.log(aliases),
 				commandSentinel = BDFDB.LibraryModules.AutocompleteSentinels && BDFDB.LibraryModules.AutocompleteSentinels.COMMAND_SENTINEL || "/";
 				commandAliases = BDFDB.ObjectUtils.filter(aliases, key => key.startsWith(commandSentinel), true);
 				
