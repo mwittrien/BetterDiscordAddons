@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.6
+ * @version 1.6.7
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,10 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.6.6",
+			"version": "1.6.7",
 			"description": "Shows a Notification when a Friend or a User, you choose to observe, changes their Status"
 		},
 		"changeLog": {
+			"fixed": {
+				"Custom Status": "Fixed Issue where the notification wouldn't show that a user changed their custom status, if they previously had not custom status set. This could lead to what looked like double entries in the login/out timelog, since custom statuses appeared like normal status changes"
+			},
 			"added": {
 				"Status Indicator": "Added the Status Indicator to the Notifications"
 			},
@@ -724,7 +727,7 @@ module.exports = (_ => {
 				return statusName;
 			}
 			
-			compareActivity (id, status) {
+			activityIsSame (id, status) {
 				return BDFDB.equals(BDFDB.ObjectUtils.extract(userStatusStore[id].activity, "name", "details", "state", "emoji"), status && BDFDB.ObjectUtils.extract(status.activity, "name", "details", "state", "emoji"));
 			}
 
@@ -756,13 +759,13 @@ module.exports = (_ => {
 						let status = this.getStatusWithMobileAndActivity(id, observedUsers[id], clientStatuses);
 						let customChanged = false;
 						if (user && observedUsers[id][status.name] && (
-							userStatusStore[id].name != status.name ||
-							observedUsers[id].mobile && userStatusStore[id].mobile != status.mobile ||
 							observedUsers[id].custom && (
-								userStatusStore[id].custom != status.custom ||
-								(customChanged = status.custom && !this.compareActivity(id, status))
+								userStatusStore[id].custom != status.custom && ((customChanged = status.custom) || true) ||
+								(customChanged = status.custom && !this.activityIsSame(id, status))
 							) ||
-							statuses[status.name].checkActivity && !this.compareActivity(id, status)
+							observedUsers[id].mobile && userStatusStore[id].mobile != status.mobile ||
+							statuses[status.name].checkActivity && !this.activityIsSame(id, status) ||
+							userStatusStore[id].name != status.name
 						)) {
 							let EUdata = BDFDB.BDUtils.isPluginEnabled("EditUsers") && BDFDB.DataUtils.load("EditUsers", "users", user.id) || {};
 							let name = EUdata.name || user.username;
