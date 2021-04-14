@@ -100,38 +100,38 @@
 	background-color: rgb(var(--vaccentcolor));
 }
 
-.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 1"] {
+.folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 1"] {
 	background-color: rgba(var(--vaccentcolor), 1) !important;
 }
-.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.9"] {
+.folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.9"] {
 	background-color: rgba(var(--vaccentcolor), 0.9) !important;
 }
-.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.8"] {
+.folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.8"] {
 	background-color: rgba(var(--vaccentcolor), 0.8) !important;
 }
-.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.7"] {
+.folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.7"] {
 	background-color: rgba(var(--vaccentcolor), 0.7) !important;
 }
-.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.6"] {
+.folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.6"] {
 	background-color: rgba(var(--vaccentcolor), 0.6) !important;
 }
-.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.5"] {
+.folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.5"] {
 	background-color: rgba(var(--vaccentcolor), 0.5) !important;
 }
-.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.4"] {
+.folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.4"] {
 	background-color: rgba(var(--vaccentcolor), 0.4) !important;
 }
-.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.3"] {
+.folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.3"] {
 	background-color: rgba(var(--vaccentcolor), 0.3) !important;
 }
-.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.2"] {
+.folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.2"] {
 	background-color: rgba(var(--vaccentcolor), 0.2) !important;
 }
-.folderIconWrapper-226oVY[style*="background-color: rgba(114, 137, 218, 0.1"] {
+.folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.1"] {
 	background-color: rgba(var(--vaccentcolor), 0.1) !important;
 }
-.folderIconWrapper-226oVY svg[style^="color: rgb(114, 137, 218)"],
-.folderIconWrapper-226oVY svg[style*=" color: rgb(114, 137, 218)"] {
+.folderIconWrapper-1_bOZe svg[style^="color: rgb(114, 137, 218)"],
+.folderIconWrapper-1_bOZe svg[style*=" color: rgb(114, 137, 218)"] {
 	color: rgb(var(--vaccentcolor)) !important;
 }
 
@@ -340,6 +340,12 @@
 	pointer-events: none;
 	background: rgb(var(--vaccentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_verifyemail_accent.svg) center/contain no-repeat;
+}
+
+															/* textarea				wave hand icon						*/
+.animation-10aT2_ path[stroke="rgb(123,162,255)"],
+.animation-10aT2_ path[stroke="rgb(123, 162, 255)"] {
+	stroke: rgb(var(--vaccentcolor)) !important;
 }
 
 /* ----		3.3.	AUTOCOMPLETEMENU				---- */

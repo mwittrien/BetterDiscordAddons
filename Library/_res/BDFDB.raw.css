@@ -369,9 +369,6 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_selectwrapper] [REPLACE_CLASS_selectsearchinput] {
 	width: 100%;
 }
-[REPLACE_CLASS_selectwrapper] [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"] {
-	z-index: 3;
-}
 [REPLACE_CLASS_selectoption] [REPLACE_CLASS_giffavoritesize] {
 	width: 20px;
 	height: 20px;
