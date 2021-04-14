@@ -602,8 +602,7 @@ module.exports = (_ => {
 	BDFDB.PluginUtils.translate = function (plugin) {
 		if (typeof plugin.setLabelsByLanguage == "function" || typeof plugin.changeLanguageStrings == "function") {
 			const translate = _ => {
-				const language = BDFDB.LanguageUtils.getLanguage();
-				if (typeof plugin.setLabelsByLanguage == "function") plugin.labels = plugin.setLabelsByLanguage(language.id);
+				if (typeof plugin.setLabelsByLanguage == "function") plugin.labels = plugin.setLabelsByLanguage();
 				if (typeof plugin.changeLanguageStrings == "function") plugin.changeLanguageStrings();
 			};
 			if (LibraryModules.LanguageStore.chosenLocale) translate();
@@ -7897,6 +7896,17 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(BDFDB, (BDFDB.ModuleUtils.findByName("DeveloperContextMenu", false) || {}).exports, "default", {after: e => {
 					if (!e.returnValue.props.children) LibraryModules.ContextMenuUtils.closeContextMenu();
 				}}, {priority: 10});
+				
+				let languageChangeTimeout, translateAllNew = e => {
+					if (e.methodArguments[0] && e.methodArguments[0].locale) {
+						BDFDB.TimeUtils.clear(languageChangeTimeout);
+						languageChangeTimeout = BDFDB.TimeUtils.timeout(_ => {
+							for (let pluginName in PluginStores.loaded) if (PluginStores.loaded[pluginName].started) BDFDB.PluginUtils.translate(PluginStores.loaded[pluginName]);
+							BDFDB.PatchUtils.patch(this, LibraryModules.SettingsUtils, "updateLocalSettings", {after: translateAllNew});
+						}, 10000);
+					}
+				};
+				if (LibraryModules.SettingsUtils) BDFDB.PatchUtils.patch(this, LibraryModules.SettingsUtils, "updateLocalSettings", {after: translateAllNew});
 				
 				InternalBDFDB.onSettingsClosed = function () {
 					if (InternalBDFDB.SettingsUpdated) {

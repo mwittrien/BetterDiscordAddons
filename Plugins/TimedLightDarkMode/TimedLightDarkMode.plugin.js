@@ -82,7 +82,7 @@ module.exports = (_ => {
 				};
 			}
 			
-			onStart () {	
+			onStart () {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SettingsUtils, "updateLocalSettings", {after: e => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].theme && settings.running) {
 						BDFDB.TimeUtils.clear(changeTimeout);
