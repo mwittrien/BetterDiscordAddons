@@ -179,6 +179,7 @@ module.exports = (_ => {
 									src: log.avatar,
 									size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
 								}),
+								_this.createStatusDot(log.status, log.mobile),
 								BDFDB.ReactUtils.createElement("di", {
 									className: BDFDB.disCN._friendnotificationslogcontent,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
@@ -187,8 +188,7 @@ module.exports = (_ => {
 											children: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(log.string))
 										})
 									})
-								}),
-								_this.createStatusDot(log.status, log.mobile)
+								})
 							]
 						})
 					]
