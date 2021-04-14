@@ -995,12 +995,28 @@ module.exports = (_ => {
 				if (!e && b && r.statusCode == 200) fs.writeFile(cssPath, b, _ => {});
 				if (!e2 && b2 && r2.statusCode == 200) fs.writeFile(dataPath, b2, _ => {});
 				
+				InternalData.UserBackgrounds = {};
+				if (InternalData.userBackgroundsUrl) request(InternalData.userBackgroundsUrl, (e3, r3, b3) => {
+					if (!e3 && b3 && r3.statusCode == 200) b3.replace(/\n|\r|\t/g, "").split(`*/[${InternalData.userIdAttribute}="`).forEach(s => {
+						let idReg = /(\d{16,})/gi, urlReg = /url\(['"]*(https*:\/\/.*?)['"]*\);/gi;
+						let ids = [], id;
+						do {
+							id = idReg.exec(s);
+							if (id && ids.indexOf(id[1]) == -1) ids.push(id[1]);
+						} while (id);
+						if (ids.length) {
+							let url = (urlReg.exec(s) || [])[1];
+							if (url) for (let i of ids) InternalData.UserBackgrounds[i] = url;
+						}
+					});
+				});
+				
 				InternalBDFDB.getPluginURL = function (plugin) {
 					plugin = plugin == BDFDB && InternalBDFDB || plugin;
 					if (BDFDB.ObjectUtils.is(plugin)) {
 						if (plugin.rawUrl) return plugin.rawUrl;
 						else {
-							let name = InternalData && InternalData.PluginNameMap && InternalData.PluginNameMap[plugin.name] || plugin.name;
+							let name = InternalData.PluginNameMap && InternalData.PluginNameMap[plugin.name] || plugin.name;
 							return `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${name}/${name}.plugin.js`;
 						}
 					}
@@ -7691,14 +7707,14 @@ module.exports = (_ => {
 							if (!message) message = BDFDB.ObjectUtils.get(e.instance.props[key], "props.message");
 							else break;
 						}
-						if (message) e.returnvalue.props.children.props["user_by_BDFDB"] = message.author.id;
+						if (message) e.returnvalue.props.children.props[InternalData.userIdAttribute] = message.author.id;
 					}
 				};
 
 				const BDFDB_Patrons = Object.assign({}, InternalData.BDFDB_Patrons);
 				InternalBDFDB._processAvatarRender = function (user, avatar) {
 					if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user) && (avatar.props.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) == -1) {
-						avatar.props["user_by_BDFDB"] = user.id;
+						avatar.props[InternalData.userIdAttribute] = user.id;
 						let role = "", className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")), addBadge = InternalBDFDB.settings.general.showSupportBadges, customBadge = false;
 						if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
 							role = BDFDB_Patrons[user.id].t3 ? "BDFDB Patron Level 2" : "BDFDB Patron";
@@ -7711,18 +7727,19 @@ module.exports = (_ => {
 							className = BDFDB.DOMUtils.formatClassName(className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbdev);
 						}
 						if (role) {
-							delete avatar.props["user_by_BDFDB"];
+							delete avatar.props[InternalData.userIdAttribute];
 							if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.AvatarComponents.default, Object.assign({}, avatar.props, {
 								size: InternalComponents.LibraryComponents.AvatarComponents.Sizes.SIZE_40
 							}));
 							delete avatar.props.className;
-							avatar = BDFDB.ReactUtils.createElement("div", {
+							let newProps = {
 								className: className,
 								style: {borderRadius: 0, overflow: "visible"},
-								"custombadge_id": customBadge ? user.id : null,
-								"user_by_BDFDB": user.id,
+								custombadge_id: customBadge ? user.id : null,
 								children: [avatar]
-							});
+							};
+							newProps[InternalData.userIdAttribute] = user.id;
+							avatar = BDFDB.ReactUtils.createElement("div", newProps);
 							if (addBadge) avatar.props.children.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 								text: role,
 								children: BDFDB.ReactUtils.createElement("div", {
@@ -7735,8 +7752,8 @@ module.exports = (_ => {
 				};
 				InternalBDFDB._processAvatarMount = function (user, avatar, wrapper) {
 					if (Node.prototype.isPrototypeOf(avatar) && BDFDB.ObjectUtils.is(user) && (avatar.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) == -1) {
-						if (wrapper) wrapper.setAttribute("user_by_BDFDB", user.id);
-						avatar.setAttribute("user_by_BDFDB", user.id);
+						if (wrapper) wrapper.setAttribute(InternalData.userIdAttribute, user.id);
+						avatar.setAttribute(InternalData.userIdAttribute, user.id);
 						let role = "", addBadge = InternalBDFDB.settings.general.showSupportBadges, customBadge = false;
 						if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
 							role = BDFDB_Patrons[user.id].t3 ? "BDFDB Patron Level 2" : "BDFDB Patron";
@@ -7783,9 +7800,11 @@ module.exports = (_ => {
 				};
 				InternalBDFDB.processUserPopout = function (e) {
 					InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.userpopoutavatarwrapper), e.node);
+					if (e.node && e.instance.props.user && InternalData.UserBackgrounds[e.instance.props.user.id]) e.node.style.setProperty(InternalData.userBackgroundProperty, `url('${InternalData.UserBackgrounds[e.instance.props.user.id]}')`);
 				};
 				InternalBDFDB.processUserProfile = function (e) {
 					InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
+					if (e.node && e.instance.props.user && InternalData.UserBackgrounds[e.instance.props.user.id]) e.node.style.setProperty(InternalData.userBackgroundProperty, `url('${InternalData.UserBackgrounds[e.instance.props.user.id]}')`);
 				};
 				InternalBDFDB.processDiscordTag = function (e) {
 					if (e.instance && e.instance.props && e.returnvalue && e.instance.props.user) e.returnvalue.props.user = e.instance.props.user;
