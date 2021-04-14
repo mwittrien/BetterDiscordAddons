@@ -3441,7 +3441,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addr
 .modal-qgFCbT::after {
 	display: none;
 }
-#app-mount .modalTextContainer-ITvzbi {
+#app-mount .modalTextContainer-ITvzbi {						/* modal				text file						*/
 	background-color: rgba(var(--vtransparencycolor), 0.5);
 	border: none;
 }
