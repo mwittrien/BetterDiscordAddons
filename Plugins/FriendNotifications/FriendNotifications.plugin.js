@@ -179,7 +179,7 @@ module.exports = (_ => {
 									src: log.avatar,
 									size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
 								}),
-								_this.createStatusDot(log.status, log.mobile),
+								_this.createStatusDot(log.status, log.mobile, {marginRight: 6}),
 								BDFDB.ReactUtils.createElement("di", {
 									className: BDFDB.disCN._friendnotificationslogcontent,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
@@ -816,7 +816,7 @@ module.exports = (_ => {
 									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 									children: [
 										BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(toastString)),
-										this.createStatusDot(statusType, status.mobile)
+										this.createStatusDot(statusType, status.mobile, {marginLeft: 6})
 									]
 								}), {
 									timeout: amounts.toastTime * 1000,
@@ -839,9 +839,9 @@ module.exports = (_ => {
 				}, amounts.checkInterval * 1000);
 			}
 			
-			createStatusDot (status, isMobile) {
+			createStatusDot (status, isMobile, style = {}) {
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Status, {
-					style: {marginLeft: 6},
+					style: Object.assign({}, style),
 					size: 12,
 					color: isMobile ? BDFDB.UserUtils.getStatusColor(status, true) : null,
 					isMobile: isMobile,
