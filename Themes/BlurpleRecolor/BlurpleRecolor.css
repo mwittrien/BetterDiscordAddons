@@ -344,7 +344,9 @@
 
 															/* textarea				wave hand icon						*/
 .animation-10aT2_ path[stroke="rgb(123,162,255)"],
-.animation-10aT2_ path[stroke="rgb(123, 162, 255)"] {
+.animation-10aT2_ path[stroke="rgb(123, 162, 255)"],
+.animation-vamXOL path[stroke="rgb(123,162,255)"],
+.animation-vamXOL path[stroke="rgb(123, 162, 255)"] {
 	stroke: rgb(var(--vaccentcolor)) !important;
 }
 
