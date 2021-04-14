@@ -1,47 +1,57 @@
 /**
- * @name BasicBackground
- * @description Allows you to use a Background Image without greatly altering the basic Layout of Discord
- * @author DevilBro
- * @version 1.0.5
- * @authorId 278543574059057154
- * @invite Jx3TjNS
- * @donate https://www.paypal.me/MircoWittrien
- * @patreon https://www.patreon.com/MircoWittrien
- * @website https://mwittrien.github.io/
- * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/BasicBackground/
- * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/BasicBackground.theme.css
+ * @name         Boreal
+ * @description  Enjoy Discord over a calm peaceful lake under the northern lights.
+ * @donate       https://bit.ly/3fnzq1Z
+ * @source       https://github.com/rmkx/rmkx.github.io/blob/main/Boreal/src/boreal.css
+ * @author       rmkx
+ * @invite       HnGWVQbQBv
+ * @version      1.0 
  */
 
-/* To change stuff like the colors, transparency and background image, change the variables inside the root {}, do NOT change the @import url() */
+@import url('https://rmkx.github.io/src/hideGuilds.css'); /*Comment line if you don't want servers list to hide | This moves it to the default position (you need to set its bg to transparent*/
+@import url('https://rmkx.github.io/src/hideMembers.css'); /*Comment line if you don't want servers' members to hide*/
+@import url('https://rmkx.github.io/src/hideChannels.css'); /*Comment line if you don't want servers' channels to hide*/
 
-@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/BasicBackground.css);
+@import url('https://rmkx.github.io/Boreal/src/boreal.css'); /*Main CSS sheet*/
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap'); /*Put your font url here*/
+
+::-webkit-input-placeholder, body, button, input, select, textarea {
+    font-family: "Lato"; /*Change the font name you imported here*/
+}
 
 :root {
-	--transparencycolor:			0,0,0;						/* default:	0,0,0																								*/
-	--transparencyalpha:			0.15;						/* default: 0.15				(general darkness of the app)													*/
-	--messagetransparency:			0.5;						/* default: 0.5					(additional shadows behind messages, set to 0 to remove boxes)					*/
-	--guildchanneltransparency:		0.15;						/* default: 0.15				(additional darkness for guild/channel list)									*/
-	--memberlisttransparency:		0.0;						/* default: 0.0					(additional darkness for member list)											*/
-	--accentcolor:					190,78,180;					/* default: 190,78,180			(RGB-format - blurple: 114,137,218 bd-blue: 58,113,193)							*/
-	
-	--font:							Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;		/* font used in most places														*/
-	--textshadow:					transparent;				/* default: transparent			(textshadow for text ontop of accentcolor nodes, ONLY accepts a color, no px)	*/
-	--settingsicons:				1;							/* Use Settings Icons in User/Server/Channel Settings: 1 = yes, 0 = no											*/
-	
-	--background:					url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/_res/background.jpg);	/* general background image				*/
-	--backgroundposition:			center;						/* default: center				(position of background - values: [center/top/right/bottom/left])				*/
-	--backgroundsize:				cover;						/* default: cover				(sizefit of background - values: [cover/contain/auto])							*/
-	--backgroundblur:				unset;						/* default: unset				(blur in px, only works when --background is set to an image)					*/
-	
-	--popout:						var(--background);			/* default: var(--background)	(change to use another background/color for modals/popouts)						*/
-	--popoutposition:				var(--backgroundposition);	/* default: center				(position of popout - values: [center/top/right/bottom/left])					*/
-	--popoutsize:					var(--backgroundsize);		/* default: cover				(sizefit of popout - values: [cover/contain/auto])								*/
-	--popoutblur:					var(--backgroundblur);		/* default: unset				(blur in px, only works when --popout is set to an image)						*/
-	
-	--backdrop:						rgba(0,0,0,0.85);			/* default: rgba(0,0,0,0.85)	(change to use another background/color for backdrops)							*/
-	--backdropposition:				var(--backgroundposition);	/* default: center				(position of backdrop - values: [center/top/right/bottom/left])					*/
-	--backdropsize:					var(--backgroundsize);		/* default: cover				(sizefit of backdrop - values: [cover/contain/auto])							*/
-	--backdropblur:					var(--backgroundblur);		/* default: unset				(blur in px, only works when --backdrop is set to an image)						*/
-	
-	--version1_0_5:					none;						/* DO NOT CHANGE THIS VARIABLE , USED TO HIDE UPDATE NOTICE														*/
+    --server-hiding-width: 50px; /*Amount that will be shown when the channels panel hides | Default 50px*/
+    --members-hiding-width: 53px; /*Amount that will be shown when the server's members panel hides | Default 53px*/
+    --showing-width: 252px; /*Amount that will be shown when the panels show | Default 252px*/
+    --hidden-background: transparent; /*Background of the elements when hidden*/
+    /*Background of the elements when showing*/
+    --showing-background: linear-gradient(195deg, rgba(0,182,122,0.39537821964723385) 14%, rgba(0,241,255,0.3785714969581583) 35%, rgba(23,114,246,0.22170875186011907) 59%, rgba(15,8,74,0.2049020291710434) 87%, rgba(6,1,42,0.0536415249693627) 96%);
+    
+    --background-image: url(https://cdn.discordapp.com/attachments/787720834185560114/831808292107321354/438b665dc986cc128b30cb13b0d34d51.png); /*Changes the background image*/
+    --bg-blur: 0px; /*changes the blur of the background image*/
+    --main-accent: rgb(35, 77, 117); /*Main accent of the theme for little elements*/
+    --main-accent-rgb: 35, 77, 117; /*RGB code of main accent for some elements, change this if you change main accent*/
+    --popout-blur: 2px; /*Changes the blur of elements that appear on screen*/
+    --bg-opacity: 1; /*Changes the opacity of the background*/
+    --links: rgb(97, 195, 224); /*Color for links*/
+
+    --panel-boxes: rgba(0, 0, 0, 0.55); /*Changes the background of the surrounded panels*/
+    --second-panel-bg: rgba(0, 0, 0, 0.8); /*changes the bg of panels that come out, like right clicking on a user*/
+    --panel-border: 0px solid rgb(70, 69, 69); /*Changes the borders of the surrounded panels*/
+    --panel-border-radius: 8px; /*Changes the radius of the surrounded panels*/
+
+    --chat-hover: rgb(0, 0, 0, 0.2); /*Message background when hovering*/
+
+    --buttons-background: rgba(0, 0, 0, 0.3); /*Changes the color of the buttons*/
+    --buttons-border: 0px solid rgb(70, 69, 69); /*Changes the color of the buttons*/
+    --buttons-radius: 8px; /*Changes the radius of the buttons*/
+    --buttons-color: white; /*Changes the color of the button text*/
+
+    /*Changes the color of the background when hovering*/
+    --element-hovered: linear-gradient(195deg, rgba(0,182,122,0.39537821964723385) 14%, rgba(0,241,255,0.3785714969581583) 35%, rgba(23,114,246,0.22170875186011907) 59%, rgba(15,8,74,0.2049020291710434) 87%, rgba(6,1,42,0.0536415249693627) 96%); 
+    /*Code for the gradient*/
+    --underline-gradient: linear-gradient(195deg, rgba(0,182,122,0.39537821964723385) 14%, rgba(0,241,255,0.3785714969581583) 35%, rgba(23,114,246,0.22170875186011907) 59%, rgba(15, 8, 74, 0.473) 87%);
+
+    --settings-width: 60%; /*Width for the settings window*/
+    --settings-heigth: 85%; /*Width for the settings window*/
 }
