@@ -1772,12 +1772,10 @@
 	color: rgb(var(--vaccentcolor));
 }
 
-#app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91:hover,
 #app-mount .lookOutlined-3sRXeN.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover {
 	border-color: rgba(var(--vaccentcolor), 0.6);
 }
-#app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91:active,
-#app-mount .lookOutlined-3sRXeN.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover {
+#app-mount .lookOutlined-3sRXeN.hoverBrand-1_Fxlk.hasHover-3X1-zV:active {
 	background-color: rgba(var(--vaccentcolor), 0.1);
 	border-color: rgb(var(--vaccentcolor));
 }
@@ -1787,11 +1785,9 @@
 	color: rgb(var(--vaccentcolor));
 }
 
-#app-mount .lookGhost-2Fn_0-.colorBrand-3pXr91:hover,
 #app-mount .lookGhost-2Fn_0-.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover {
 	background-color: rgba(var(--vaccentcolor), 0.15);
 }
-#app-mount .lookGhost-2Fn_0-.colorBrand-3pXr91:active,
 #app-mount .lookGhost-2Fn_0-.hoverBrand-1_Fxlk.hasHover-3X1-zV:active {
 	background-color: rgba(var(--vaccentcolor), 0.2);
 }
@@ -1804,7 +1800,6 @@
 #app-mount .lookLink-9FtZy-.colorBrand-3pXr91 {
 	color: rgb(var(--vaccentcolor));
 }
-#app-mount .lookLink-9FtZy-.colorBrand-3pXr91:hover .contents-18-Yxp,
 #app-mount .lookLink-9FtZy-.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover .contents-18-Yxp {
 	background-image: linear-gradient(0deg, transparent, transparent 1px, rgb(var(--vaccentcolor)) 0, rgb(var(--vaccentcolor)) 2px, transparent 0);
 	color: rgb(var(--vaccentcolor));

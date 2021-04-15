@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.7
+ * @version 1.6.8
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,14 +17,19 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.6.7",
+			"version": "1.6.8",
 			"description": "Shows a Notification when a Friend or a User, you choose to observe, changes their Status"
 		},
 		"changeLog": {
+			"progress": {
+				"Last Update": "for now, sorry for the little bit of update spam :)"
+			},
 			"fixed": {
+				"Mobile": "Fixed Issue where ppl appeared as mobile even if they weren't",
 				"Custom Status": "Fixed Issue where the notification wouldn't show that a user changed their custom status, if they previously had not custom status set. This could lead to what looked like double entries in the login/out timelog, since custom statuses appeared like normal status changes"
 			},
 			"added": {
+				"Clear Button": "Added a button to clear the Timelog",
 				"Status Indicator": "Added the Status Indicator to the Notifications"
 			},
 			"improved": {
@@ -704,7 +709,12 @@ module.exports = (_ => {
 			}
 
 			getStatusWithMobileAndActivity (id, config, clientStatuses) {
-				let status = {name: BDFDB.UserUtils.getStatus(id), activity: null, custom: false, mobile: clientStatuses && clientStatuses[id] && !!clientStatuses[id].mobile};
+				let status = {
+					name: BDFDB.UserUtils.getStatus(id),
+					activity: null,
+					custom: false,
+					mobile: clientStatuses && clientStatuses[id] && Object.keys(clientStatuses[id]).length == 1 && !!clientStatuses[id].mobile
+				};
 				let activity = BDFDB.UserUtils.getActivity(id) || BDFDB.UserUtils.getCustomStatus(id);
 				if (activity && BDFDB.DiscordConstants.ActivityTypes[activity.type]) {
 					let isCustom = activity.type == BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS;
@@ -856,22 +866,36 @@ module.exports = (_ => {
 					header: "LogIn/-Out Timelog",
 					subHeader: "",
 					className: BDFDB.disCN._friendnotificationstimelogmodal,
-					titleChildren: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
-						autoFocus: true,
-						query: "",
-						onChange: (value, instance) => {
-							BDFDB.TimeUtils.clear(searchTimeout);
-							searchTimeout = BDFDB.TimeUtils.timeout(_ => {
-								let searchString = value.toUpperCase();
-								timeLogList.props.entries = timeLog.filter(n => n && n.name && n.name.toUpperCase().indexOf(searchString) > -1);
+					titleChildren: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+							color: BDFDB.LibraryComponents.Button.Colors.RED,
+							size: BDFDB.LibraryComponents.Button.Sizes.TINY,
+							look: BDFDB.LibraryComponents.Button.Looks.GHOST,
+							style: {marginLeft: 6, marginRight: 12},
+							children: BDFDB.LanguageUtils.LanguageStrings.BUILD_OVERRIDE_CLEAR,
+							onClick: _ => BDFDB.ModalUtils.confirm(this, this.labels.clear_log, _ => {
+								timeLog = [];
+								timeLogList.props.entries = timeLog;
 								BDFDB.ReactUtils.forceUpdate(timeLogList);
-							}, 1000);
-						},
-						onClear: instance => {
-							timeLogList.props.entries = timeLog;
-							BDFDB.ReactUtils.forceUpdate(timeLogList);
-						}
-					}),
+							})
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
+							autoFocus: true,
+							query: "",
+							onChange: (value, instance) => {
+								BDFDB.TimeUtils.clear(searchTimeout);
+								searchTimeout = BDFDB.TimeUtils.timeout(_ => {
+									let searchString = value.toUpperCase();
+									timeLogList.props.entries = timeLog.filter(n => n && n.name && n.name.toUpperCase().indexOf(searchString) > -1);
+									BDFDB.ReactUtils.forceUpdate(timeLogList);
+								}, 1000);
+							},
+							onClear: instance => {
+								timeLogList.props.entries = timeLog;
+								BDFDB.ReactUtils.forceUpdate(timeLogList);
+							}
+						})
+					],
 					children: BDFDB.ReactUtils.createElement(TimeLogComponent, {
 						entries: timeLog
 					})
@@ -882,136 +906,163 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
+							clear_log:							"Наистина ли искате да изчистите дневника на времето?",
 							status_listening:					"Слушане",
 							status_playing:						"Играе"
 						};
 					case "da":		// Danish
 						return {
+							clear_log:							"Er du sikker på, at du vil rydde tidsloggen?",
 							status_listening:					"Hører efter",
 							status_playing:						"Spiller"
 						};
 					case "de":		// German
 						return {
+							clear_log:							"Möchtest du das Zeitprotokoll wirklich löschen?",
 							status_listening:					"Hören",
 							status_playing:						"Spielen"
 						};
 					case "el":		// Greek
 						return {
+							clear_log:							"Είστε βέβαιοι ότι θέλετε να διαγράψετε το ημερολόγιο ώρας;",
 							status_listening:					"Ακούγοντας",
 							status_playing:						"Παιχνίδι"
 						};
 					case "es":		// Spanish
 						return {
+							clear_log:							"¿Está seguro de que desea borrar el registro de tiempo?",
 							status_listening:					"Escuchando",
 							status_playing:						"Jugando"
 						};
 					case "fi":		// Finnish
 						return {
+							clear_log:							"Haluatko varmasti tyhjentää aikalokin?",
 							status_listening:					"Kuunteleminen",
 							status_playing:						"Pelataan"
 						};
 					case "fr":		// French
 						return {
+							clear_log:							"Voulez-vous vraiment effacer le journal de temps?",
 							status_listening:					"Écoute",
 							status_playing:						"En jouant"
 						};
 					case "hr":		// Croatian
 						return {
+							clear_log:							"Jeste li sigurni da želite očistiti vremenski zapisnik?",
 							status_listening:					"Slušanje",
 							status_playing:						"Sviranje"
 						};
 					case "hu":		// Hungarian
 						return {
+							clear_log:							"Biztosan törli az időnaplót?",
 							status_listening:					"Hallgatás",
 							status_playing:						"Játék"
 						};
 					case "it":		// Italian
 						return {
+							clear_log:							"Sei sicuro di voler cancellare il registro del tempo?",
 							status_listening:					"Ascoltando",
 							status_playing:						"Giocando"
 						};
 					case "ja":		// Japanese
 						return {
+							clear_log:							"タイムログをクリアしてもよろしいですか？",
 							status_listening:					"聞いている",
 							status_playing:						"遊ぶ"
 						};
 					case "ko":		// Korean
 						return {
+							clear_log:							"시간 로그를 지우시겠습니까?",
 							status_listening:					"청취",
 							status_playing:						"놀이"
 						};
 					case "lt":		// Lithuanian
 						return {
+							clear_log:							"Ar tikrai norite išvalyti laiko žurnalą?",
 							status_listening:					"Klausymas",
 							status_playing:						"Žaidžia"
 						};
 					case "nl":		// Dutch
 						return {
+							clear_log:							"Weet u zeker dat u het tijdlogboek wilt wissen?",
 							status_listening:					"Luisteren",
 							status_playing:						"Spelen"
 						};
 					case "no":		// Norwegian
 						return {
+							clear_log:							"Er du sikker på at du vil slette tidsloggen?",
 							status_listening:					"Lytte",
 							status_playing:						"Spiller"
 						};
 					case "pl":		// Polish
 						return {
+							clear_log:							"Czy na pewno chcesz wyczyścić dziennik czasu?",
 							status_listening:					"Słuchający",
 							status_playing:						"Gra"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
+							clear_log:							"Tem certeza de que deseja limpar o registro de horas?",
 							status_listening:					"Ouvindo",
 							status_playing:						"Jogando"
 						};
 					case "ro":		// Romanian
 						return {
+							clear_log:							"Sigur doriți să ștergeți jurnalul de timp?",
 							status_listening:					"Ascultare",
 							status_playing:						"Joc"
 						};
 					case "ru":		// Russian
 						return {
+							clear_log:							"Вы уверены, что хотите очистить журнал времени?",
 							status_listening:					"Прослушивание",
 							status_playing:						"Играет"
 						};
 					case "sv":		// Swedish
 						return {
+							clear_log:							"Är du säker på att du vill rensa tidsloggen?",
 							status_listening:					"Lyssnande",
 							status_playing:						"Spelar"
 						};
 					case "th":		// Thai
 						return {
+							clear_log:							"แน่ใจไหมว่าต้องการล้างบันทึกเวลา",
 							status_listening:					"การฟัง",
 							status_playing:						"กำลังเล่น"
 						};
 					case "tr":		// Turkish
 						return {
+							clear_log:							"Zaman kaydını temizlemek istediğinizden emin misiniz?",
 							status_listening:					"Dinleme",
 							status_playing:						"Çalma"
 						};
 					case "uk":		// Ukrainian
 						return {
+							clear_log:							"Ви впевнені, що хочете очистити журнал часу?",
 							status_listening:					"Слухання",
 							status_playing:						"Гра"
 						};
 					case "vi":		// Vietnamese
 						return {
+							clear_log:							"Bạn có chắc chắn muốn xóa nhật ký thời gian không?",
 							status_listening:					"Lắng nghe",
 							status_playing:						"Đang chơi"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
+							clear_log:							"您确定要清除时间记录吗？",
 							status_listening:					"倾听",
 							status_playing:						"玩"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
+							clear_log:							"您確定要清除時間記錄嗎？",
 							status_listening:					"傾聽",
 							status_playing:						"玩"
 						};
 					default:		// English
 						return {
+							clear_log:							"Are you sure you want to clear the timelog?",
 							status_listening:					"Listening",
 							status_playing:						"Playing"
 						};

@@ -416,11 +416,9 @@ html .iconBadge-2wi9r4 {
 	color: var(--background-accent);
 }
 
-#app-mount .lookOutlined-3sRXeN.colorPrimary-3b3xI6:hover,
 #app-mount .lookOutlined-3sRXeN.hoverPrimary-2D1j2r.hasHover-3X1-zV:hover {
 	border-color: rgba(var(--vtextbrightest), 0.6);
 }
-#app-mount .lookOutlined-3sRXeN.colorPrimary-3b3xI6:active,
 #app-mount .lookOutlined-3sRXeN.hoverPrimary-2D1j2r.hasHover-3X1-zV:hover {
 	background-color: rgba(var(--vtextbrightest), 0.1);
 	border-color: var(--header-primary);
@@ -431,11 +429,9 @@ html .iconBadge-2wi9r4 {
 	color: var(--header-primary);
 }
 
-#app-mount .lookGhost-2Fn_0-.colorPrimary-3b3xI6:hover,
 #app-mount .lookGhost-2Fn_0-.hoverPrimary-2D1j2r.hasHover-3X1-zV:hover {
 	background-color: rgba(var(--vtextbrightest), 0.15);
 }
-#app-mount .lookGhost-2Fn_0-.colorPrimary-3b3xI6:active,
 #app-mount .lookGhost-2Fn_0-.hoverPrimary-2D1j2r.hasHover-3X1-zV:active {
 	background-color: rgba(var(--vtextbrightest), 0.2);
 }
@@ -492,12 +488,10 @@ html .iconBadge-2wi9r4 {
 	color: rgba(var(--vtextbrightest),.1);
 }
 
-#app-mount .lookOutlined-3sRXeN.colorTransparent-1ewNp9:hover,
 #app-mount .lookOutlined-3sRXeN.hoverTransparent-2Lz5CN.hasHover-3X1-zV:hover {
 	background-color: rgba(var(--vtextbrighter),.1);
 	border-color: var(--interactive-hover);
 }
-#app-mount .lookOutlined-3sRXeN.colorTransparent-1ewNp9:active,
 #app-mount .lookOutlined-3sRXeN.hoverTransparent-2Lz5CN.hasHover-3X1-zV:active {
 	background-color: rgba(var(--vtextbrightest),.1);
 	border-color: var(--header-primary);
@@ -508,8 +502,6 @@ html .iconBadge-2wi9r4 {
 	color: var(--text-normal);
 }
 
-
-#app-mount .lookGhost-2Fn_0-.colorTransparent-1ewNp9:active,
 #app-mount .lookGhost-2Fn_0-.hoverTransparent-2Lz5CN.hasHover-3X1-zV:active {
 	background-color: rgba(var(--vtextbrighter),.2);
 	color: var(--text-normal);
