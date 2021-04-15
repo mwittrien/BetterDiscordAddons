@@ -98,6 +98,8 @@ https://raw.githubusercontent.com/Quietess/Casual-Dark/master/Casual_Dark.theme.
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Themes/TransientMaterial/TransientMaterial.theme.css
 https://raw.githubusercontent.com/rauenzi/Nox/master/release/Nox.theme.css
 https://raw.githubusercontent.com/redsauce117/SauceysDiscordThemes/master/DarkerDiscordTheme.theme.css
+https://raw.githubusercontent.com/rmkx/rmkx.github.io/main/Boreal/Boreal.theme.css
+https://raw.githubusercontent.com/rmkx/rmkx.github.io/main/LlunaPlena/LlunaPlena.theme.css
 https://raw.githubusercontent.com/Ruben7173/Ruben7173.github.io/master/BetterDiscord-Themes/BlackPanther-Theme/blackpanther.theme.css
 https://raw.githubusercontent.com/Ruben7173/Ruben7173.github.io/master/BetterDiscord-Themes/Darling-in-The-Franxx/02-theme.theme.css
 https://raw.githubusercontent.com/Ruben7173/Ruben7173.github.io/master/BetterDiscord-Themes/Fixed-Themes-Misc/Dark-Matter-Remastered/dark-matter.theme.css
