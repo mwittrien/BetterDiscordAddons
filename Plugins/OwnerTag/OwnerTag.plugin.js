@@ -116,10 +116,10 @@ module.exports = (_ => {
 			
 				this.css = `
 					${BDFDB.dotCN.memberownericon + BDFDB.dotCN._ownertagadminicon} {
-						color: #c0c0c0;
+						color: #aaa9ad;
 					}
 					${BDFDB.dotCN.memberownericon + BDFDB.dotCN._ownertagmanagementicon} {
-						color: #ef7f32;
+						color: #88540b;
 					}
 					${BDFDB.dotCNS.message + BDFDB.dotCN.memberownericon} {
 						top: 2px;
