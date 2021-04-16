@@ -4218,8 +4218,19 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addr
 }
 
 #app-mount .ctaBar-2UsjF2 {									/* current boost stats	container							*/
+	position: relative;
 	background-color: rgba(var(--vtransparencycolor), 0.4);
-	background-image: url(https://discord.com/assets/94ff6fdc535b6ecb7b1bc54f2dd56a10.svg);
+	background-image: none;
+}
+#app-mount .ctaBar-2UsjF2::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgb(var(--vaccentcolor));
+	-webkit-mask: url(https://discord.com/assets/94ff6fdc535b6ecb7b1bc54f2dd56a10.svg);
 }
 .guildIcon-3raYf3 {											/* current boost stats	guild icon							*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
@@ -4278,6 +4289,9 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addr
 }
 #app-mount .selectedTier-1JkO7i .tierMarkerLabel-2PluTw {
 	color: rgb(var(--fontwhite1));
+}
+#app-mount .tierMarkerLabelText-F_zS1F:not(.isAccomplished-2EpZfL):hover {
+	background: rgba(var(--vtransparencycolor), 0.3);
 }
 #app-mount .barBackground-2EEiLw {							/* modal				tierbar 								*/
 	background: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 3%, rgba(var(--vtransparencycolor), 0.3) 3%, rgba(var(--vtransparencycolor), 0.3) 30.2%, rgba(0,0,0,0) 30.2%, rgba(0,0,0,0) 36.2%, rgba(var(--vtransparencycolor), 0.3) 36.2%, rgba(var(--vtransparencycolor), 0.3) 63.5%, rgba(0,0,0,0) 63.5%, rgba(0,0,0,0) 69.5%, rgba(var(--vtransparencycolor), 0.3) 69.5%, rgba(var(--vtransparencycolor), 0.3) 96.7%, rgba(0,0,0,0) 96.7%, rgba(0,0,0,0) 100%);
@@ -6050,6 +6064,10 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addr
 }
 
 /* ----		15.2.	BUTTONS							---- */
+
+.contents-18-Yxp svg {
+	color: currentColor !important;
+}
 
 .searchSuggestion-2K8OBX:hover,
 .form-236Xmo .btnPrimary-346kfV,
