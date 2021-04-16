@@ -687,6 +687,11 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_dateinputpreviewsuffix]:not(:empty) {
 	margin-left: 6px;
 }
+[REPLACE_CLASS_dateinputoffset] {
+	flex: 0 1 auto;
+	max-width: 110px;
+	margin-left: 6px;
+}
 [REPLACE_CLASS_dateinputfield] {
 	flex: 1 1 auto;
 }
