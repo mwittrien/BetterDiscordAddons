@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.6
+ * @version 2.2.7
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.2.6",
+			"version": "2.2.7",
 			"description": "Allows you to configure your own Aliases/Commands"
 		},
 		"changeLog": {
-			"improved": {
-				"Max Cap": "Removed Max Alias Cap and turned autocomplete into a scrollable element"
+			"fixed": {
+				"Files": "Aliases for Files work again"
 			}
 		}
 	};
@@ -574,7 +574,7 @@ module.exports = (_ => {
 							placeholder: values.replaceValue,
 							autoFocus: true,
 							errorMessage: !values.replaceValue && "Choose a Replacement Value",
-							controlsRef: instance => {if (instance) values.fileSelection = instance;},
+							controlsRef: instance => {if (instance) values.fileSelection = BDFDB.ReactUtils.findDOMNode(instance).querySelector("input");},
 							onChange: (value, instance) => {
 								values.replaceValue = value.trim();
 								if (!values.replaceValue) instance.props.errorMessage = "Choose a Replacement Value";
@@ -589,9 +589,9 @@ module.exports = (_ => {
 
 			saveWord (values, aliasConfigs = configs) {
 				if (!values.wordValue || !values.replaceValue || !values.fileSelection) return;
-				let filedata = null;
+				let fileData = null;
 				if (values.fileSelection.files && values.fileSelection.files[0] && BDFDB.LibraryRequires.fs.existsSync(values.replaceValue)) {
-					filedata = JSON.stringify({
+					fileData = JSON.stringify({
 						data: BDFDB.LibraryRequires.fs.readFileSync(values.replaceValue).toString("base64"),
 						name: values.fileSelection.files[0].name,
 						type: values.fileSelection.files[0].type
@@ -599,12 +599,12 @@ module.exports = (_ => {
 				}
 				aliases[values.wordValue] = {
 					replace: values.replaceValue,
-					filedata: filedata,
+					filedata: fileData,
 					case: aliasConfigs.case,
 					exact: values.wordValue.indexOf(" ") > -1 ? false : aliasConfigs.exact,
 					autoc: aliasConfigs.regex ? false : aliasConfigs.autoc,
 					regex: aliasConfigs.regex,
-					file: filedata != null
+					file: fileData != null
 				};
 				BDFDB.DataUtils.save(aliases, this, "words");
 			}
