@@ -562,6 +562,17 @@ html .iconBadge-2wi9r4 {
 	background: var(--radio-bar-accent-color) linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
 }
 
+.lookFilled-22uAsw.select-2fjwPw {
+	background-color: var(--deprecated-text-input-bg);
+	border-color: var(--deprecated-text-input-border);
+}
+.searchInput-5YMkDH {
+	background-color: transparent;
+}
+.lookFilled-22uAsw.select-2fjwPw:hover {
+	border-color: var(--deprecated-text-input-border-hover);
+}
+
 #app-mount .container-1nZlH6 {
 	background-color: var(--deprecated-text-input-bg);
 	border-color: var(--deprecated-text-input-border);
