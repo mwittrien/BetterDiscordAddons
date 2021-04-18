@@ -379,10 +379,6 @@ html .iconBadge-2wi9r4 {
 
 /* ----		1.2.	BUTTONS							---- */
 
-.contents-18-Yxp svg {
-	color: currentColor !important;
-}
-
 #app-mount .lookInverted-2D7oAl.colorPrimary-3b3xI6 .spinnerItem-3GlVyU {
 	background-color: var(--background-accent);
 }
