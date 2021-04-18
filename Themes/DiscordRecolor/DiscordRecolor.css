@@ -2562,9 +2562,9 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	color: var(--text-color);
 }
 #app-mount .topSectionNormal-2-vo2m .tabBarContainer-1s1u-z {
+	position: relative;
 	border-color: transparent;
 	padding-left: 0;
-	position: relative;
 }
 #app-mount .topSectionNormal-2-vo2m .tabBarContainer-1s1u-z .tabBar-2MuP6- {
 	padding-left: 20px;
@@ -2617,7 +2617,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 #app-mount .topSectionNormal-2-vo2m .headerInfo-30uryT::after {
 	top: -5px;
-	right: 10px;
+	right: 8px;
 	bottom: -5px;
 	left: -5px;
 }
@@ -2629,16 +2629,16 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	border-radius: 50%;
 }
 #app-mount .topSectionNormal-2-vo2m .activity-1ythUs::after {
-	top: 10px;
-	right: 10px;
-	bottom: 10px;
-	left: 10px;
+	top: 8px;
+	right: 8px;
+	bottom: 8px;
+	left: 8px;
 }
 #app-mount .topSectionNormal-2-vo2m .tabBarContainer-1s1u-z::after {
 	top: 0;
-	right: 10px;
+	right: 8px;
 	bottom: 0;
-	left: 10px;
+	left: 8px;
 	border-radius: 5px 5px 0 0;
 }
 #app-mount .topSectionNormal-2-vo2m .tabBarContainer-1s1u-z::before {
