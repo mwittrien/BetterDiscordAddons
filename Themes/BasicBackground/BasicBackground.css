@@ -3703,7 +3703,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addr
 .topSectionNormal-2-vo2m .tabBarContainer-1s1u-z::before {
 	content: "";
 	position: absolute;
-	background: currentColor;
+	background: rgba(var(--vtransparencycolor), 0.3);
 	width: 100%;
 	height: var(--user-background, 1px);
 	top: -1px;
