@@ -11,6 +11,7 @@ https://raw.githubusercontent.com/Chloesviel/Discord-Stuff/master/minifiedMember
 https://raw.githubusercontent.com/ClearVision/ClearVision-v6/master/ClearVision_v6.theme.css
 https://raw.githubusercontent.com/codedotspectra/themes/master/nocturnal/nocturnal.theme.css
 https://raw.githubusercontent.com/codedotspectra/themes/master/themes-files/neutron.theme.css
+https://raw.githubusercontent.com/CommandCrafterHD/DiscordDarkNeon/master/css/DarkNeon.theme.css
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/Red.n.Black.theme.css
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/ReZero.theme.css
 https://raw.githubusercontent.com/DagCord/Wildberry/main/BetterDiscord/Wildberry.theme.css
@@ -63,6 +64,8 @@ https://raw.githubusercontent.com/KaminariKillua/Themes/master/InfernalPrison/In
 https://raw.githubusercontent.com/KaminariKillua/Themes/master/SakuraPrison/SakuraPrison.theme.css
 https://raw.githubusercontent.com/llcoll/Discord-Themes/master/Themes/Akame/Akame.theme.css
 https://raw.githubusercontent.com/llcoll/Discord-Themes/master/Themes/Esdeath/Esdeath.theme.css
+https://raw.githubusercontent.com/LuckFire/amoled-cord/main/src/support/betterdiscord/AMOLED-Cord.theme.css
+https://raw.githubusercontent.com/LuckFire/midnight-mars/main/src/support/MidnightMars.theme.css
 https://raw.githubusercontent.com/Mixter213/Discord/master/Theme/Cyan.theme.css
 https://raw.githubusercontent.com/Modder4869/LazyStuff/master/LazyMadeThemes/null.theme.css
 https://raw.githubusercontent.com/monstrousdev/themes/master/theme-files/Black-Hole.theme.css
