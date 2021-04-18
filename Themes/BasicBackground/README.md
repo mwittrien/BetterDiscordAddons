@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Allows you to use a Background Image without greatly altering the basic Layout of Discord TEST
+Allows you to use a Background Image without greatly altering the basic Layout of Discord
