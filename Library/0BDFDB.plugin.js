@@ -1004,7 +1004,7 @@ module.exports = (_ => {
 				
 				InternalData.UserBackgrounds = {};
 				if (InternalData.userBackgroundsUrl) request(InternalData.userBackgroundsUrl, (e3, r3, b3) => {
-					if (!e3 && b3 && r3.statusCode == 200) b3.replace(/\n|\r|\t/g, "").split(`*/[${InternalData.userIdAttribute}="`).forEach(s => {
+					if (!e3 && b3 && r3.statusCode == 200) b3.replace(/\n|\r|\t/g, "").split(new RegExp(`\\*\\/\\[(?:${BDFDB.ArrayUtils.removeCopies(["user_by_bdfdb", "data-user-id", InternalData.userIdAttribute]).map(BDFDB.StringUtils.regEscape).join("|")})="`)).forEach(s => {
 						let idReg = /(\d{16,})/gi, urlReg = /url\(['"]*(https*:\/\/.*?)['"]*\);/gi;
 						let ids = [], id;
 						do {
