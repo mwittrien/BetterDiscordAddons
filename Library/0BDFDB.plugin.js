@@ -1019,6 +1019,7 @@ module.exports = (_ => {
 								}
 							}
 						});
+						else if (BDFDB.UserUtils.me.id == InternalData.myId || BDFDB.UserUtils.me.id == "350635509275557888") BDFDB.LogUtils.warn("Could not load usrbgs!");
 					}
 				});
 				
