@@ -29,6 +29,7 @@ https://raw.githubusercontent.com/jaimeadf/BetterDiscordPlugins/release/dist/Big
 https://raw.githubusercontent.com/jaimeadf/BetterDiscordPlugins/release/dist/SecretRingTone/SecretRingTone.plugin.js
 https://raw.githubusercontent.com/jaimeadf/BetterDiscordPlugins/release/dist/WhoReacted/WhoReacted.plugin.js
 https://raw.githubusercontent.com/j-f1/discord-plugins/main/AutoDarkMode.plugin.js
+https://raw.githubusercontent.com/kyza-betterdiscord/ShowAllMessageButtons/master/build/ShowAllMessageButtons.plugin.js
 https://raw.githubusercontent.com/l0c4lh057/BetterDiscordStuff/master/Plugins/ChannelTabs/ChannelTabs.plugin.js
 https://raw.githubusercontent.com/l0c4lh057/BetterDiscordStuff/master/Plugins/TypingIndicator/TypingIndicator.plugin.js
 https://raw.githubusercontent.com/Mega-Mewthree/BetterDiscordPlugins/master/Plugins/AlwaysMentionEveryone/AlwaysMentionEveryone.plugin.js

@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.8
+ * @version 1.5.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -22,7 +22,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.5.8",
+			"version": "1.5.9",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -996,18 +996,30 @@ module.exports = (_ => {
 				
 				InternalData.UserBackgrounds = {};
 				if (InternalData.userBackgroundsUrl) request(InternalData.userBackgroundsUrl, (e3, r3, b3) => {
-					if (!e3 && b3 && r3.statusCode == 200) b3.replace(/\n|\r|\t/g, "").split(new RegExp(`\\*\\/\\[(?:${BDFDB.ArrayUtils.removeCopies(["user_by_bdfdb", "data-user-id", InternalData.userIdAttribute]).map(BDFDB.StringUtils.regEscape).join("|")})="`)).forEach(s => {
-						let idReg = /(\d{16,})/gi, urlReg = /url\(['"]*(https*:\/\/.*?)['"]*\);/gi;
-						let ids = [], id;
-						do {
-							id = idReg.exec(s);
-							if (id && ids.indexOf(id[1]) == -1) ids.push(id[1]);
-						} while (id);
-						if (ids.length) {
-							let url = (urlReg.exec(s) || [])[1];
-							if (url) for (let i of ids) InternalData.UserBackgrounds[i] = url;
-						}
-					});
+					if (!e3 && b3 && r3.statusCode == 200) {
+						const array = b3.replace(/\n|\r|\t/g, "").split(new RegExp(`\\*\\/[^\\[]+\\[${BDFDB.StringUtils.regEscape(InternalData.userIdAttribute)}="|\\*\\/\s*\\[${BDFDB.StringUtils.regEscape(InternalData.userIdAttribute)}="`));
+						if (array.length > 100) array.forEach((s, i) => {
+							let idReg = /(\d{16,})/gi;
+							let ids = [], id;
+							do {
+								id = idReg.exec(s);
+								if (id && ids.indexOf(id[1]) == -1) ids.push(id[1]);
+							} while (id);
+							if (ids.length) {
+								let properties = ((s.split("{").slice(1).join("{") || "").split("}").slice(0, -1).join("}") || "").split(";").map(s => s.trim()).filter(n => n);
+								if (properties && properties.length) {
+									let values = {}, found = false;
+									for (let propertyString of properties) {
+										let pair = propertyString.split(": ");
+										let property = (pair[0] || "").trim();
+										let value = (pair.slice(1).join(": ") || "").replace(/\s*!important\s*$/i, "").trim();
+										if (property && value && (found = true)) values[property] = value;
+									}
+									if (found) for (let i of ids) InternalData.UserBackgrounds[i] = values;
+								}
+							}
+						});
+					}
 				});
 				
 				InternalBDFDB.getPluginURL = function (plugin) {
@@ -7789,6 +7801,9 @@ module.exports = (_ => {
 						}
 					}
 				};
+				InternalBDFDB._processUserInfoNode = function (user, wrapper) {
+					if (wrapper && user && InternalData.UserBackgrounds[user.id]) for (let property in InternalData.UserBackgrounds[user.id]) wrapper.style.setProperty(property, InternalData.UserBackgrounds[user.id][property], "important");
+				};
 				InternalBDFDB.processMessageHeader = function (e) {
 					if (e.instance.props.message && e.instance.props.message.author) {
 						let avatarWrapper = BDFDB.ObjectUtils.get(e, "returnvalue.props.children.0");
@@ -7810,11 +7825,11 @@ module.exports = (_ => {
 				};
 				InternalBDFDB.processUserPopout = function (e) {
 					InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.userpopoutavatarwrapper), e.node);
-					if (e.node && e.instance.props.user && InternalData.UserBackgrounds[e.instance.props.user.id]) e.node.style.setProperty(InternalData.userBackgroundProperty, `url('${InternalData.UserBackgrounds[e.instance.props.user.id]}')`);
+					InternalBDFDB._processUserInfoNode(e.instance.props.user, e.node);
 				};
 				InternalBDFDB.processUserProfile = function (e) {
 					InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
-					if (e.node && e.instance.props.user && InternalData.UserBackgrounds[e.instance.props.user.id]) e.node.style.setProperty(InternalData.userBackgroundProperty, `url('${InternalData.UserBackgrounds[e.instance.props.user.id]}')`);
+					InternalBDFDB._processUserInfoNode(e.instance.props.user, e.node);
 				};
 				InternalBDFDB.processDiscordTag = function (e) {
 					if (e.instance && e.instance.props && e.returnvalue && e.instance.props.user) e.returnvalue.props.user = e.instance.props.user;
