@@ -11,7 +11,7 @@
 }
 #app-mount .stop-animations * {
 	transition-property: inherit !important;
-    animation: inherit !important;
+	animation: inherit !important;
 }
 #app-mount .layer-3QrUeG.stop-animations:first-child::after {
 	content: "" !important;
