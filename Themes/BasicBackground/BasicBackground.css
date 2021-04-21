@@ -6731,43 +6731,15 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addr
 .maxLength-39QFBo {
 	color: rgb(var(--fontwhite3));
 }
-#app-mount .inputNumberWrapper .numberinput-button-up {
-	border-bottom-color: rgb(var(--fontwhite3));
-}
-#app-mount .inputNumberWrapper .numberinput-button-up:hover {
-	border-bottom-color: rgb(var(--fontwhite1));
-}
-#app-mount .inputNumberWrapper .numberinput-button-down {
-	border-top-color: rgb(var(--fontwhite3));
-}
-#app-mount .inputNumberWrapper .numberinput-button-down:hover {
-	border-top-color: rgb(var(--fontwhite1));
-}
 
-#app-mount .container-3auIfb {								/* checkboxswitch											*/
+.container-3auIfb {											/* checkboxswitch											*/
 	background-color: rgba(var(--vtransparencycolor), 0.3) !important;
 }
-#app-mount .container-3auIfb[style*="background-color: rgb(67, 181, 129)"],
-#app-mount .container-3auIfb[style*="background-color: rgb(114, 137, 218)"] {
-	background-color: rgba(var(--vaccentcolor), 0.8) !important;
-}
-#app-mount .container-3auIfb[style*="background-color: rgb(67, 181, 129)"]:hover,
-#app-mount .container-3auIfb[style*="background-color: rgb(114, 137, 218)"]:hover {
-	background: var(--vaccentcolor-hover);
-}
-#app-mount .container-3auIfb[style*="background-color: rgb(67, 181, 129)"]:active,
-#app-mount .container-3auIfb[style*="background-color: rgb(114, 137, 218)"]:active {
-	background: var(--vaccentcolor-active);
-}
-#app-mount .container-3auIfb rect[fill] {
+.container-3auIfb rect[fill] {
 	fill: rgb(var(--fontwhite1)) !important;
 }
-#app-mount .container-3auIfb path[fill] {
+.container-3auIfb path[fill] {
 	fill: rgb(var(--vtransparencycolor)) !important;
-}
-#app-mount .container-3auIfb[style*="background-color: rgb(67, 181, 129)"] path[fill],
-#app-mount .container-3auIfb[style*="background-color: rgb(114, 137, 218)"] path[fill] {
-	fill: rgb(var(--vaccentcolor)) !important;
 }
 
 #app-mount .item-26Dhrx {									/* radiogroup			container							*/
@@ -7591,45 +7563,9 @@ html .bd-toast.toast-warn.icon::before {
 .bd-server-card .bd-server-tags {							/* pubslayer			guildtags							*/
 	color: rgb(var(--fontwhite3));
 }
-#pubslayer h2.ui-form-title {								/* pubslayer			header								*/
-	color: rgb(var(--fontwhite1));
-}
-#pubslayer button {											/* pubslayer			button								*/
-	color: rgb(var(--fontwhite1));
-}
-#pubslayer input {											/* pubslayer			input								*/
-	background-color: rgba(var(--vtransparencycolor), 0.1);
-	border-color: rgba(var(--vtransparencycolor), 0.3);
-	color: rgb(var(--fontwhite1));
-}
-#pubslayer input:hover {
-	border-color: rgb(var(--vtransparencycolor));
-}
-#pubslayer input::placeholder {
-	color: rgb(var(--fontwhite3));
-}
 
-#app-mount #bd-settingspane-container h2.ui-form-title {	/* settingsitems		header								*/
-	color: rgb(var(--fontwhite1));
-	min-width: 100px;
-}
-#app-mount #bd-settingspane-container .ui-switch-item h3 {
-	color: rgb(var(--fontwhite1));
-}
-#app-mount #bd-settingspane-container .ui-switch-item .style-description {
-	border-bottom-color: rgba(var(--fontwhite4), 0.3);
-	color: rgb(var(--fontwhite3));
-}
-
-.bd-switch: {												/* bd switch												*/
-	box-shadow: inset 0 1px 1px rgba(var(--vtransparencycolor), 0.15);
-}
-.bd-switch:not(.bd-switch-checked) {
-	background-color: rgba(var(--vtransparencycolor), 0.3);
-}
-.bd-switch::before {
-	background-color: rgb(var(--fontwhite1));
-	box-shadow: 0 2px 4px rgba(var(--vtransparencycolor), 0.6);
+.bd-switch-body {											/* bd switch												*/
+	--switch-color: rgba(var(--vtransparencycolor), 0.3);
 }
 
 .bd-select-wrapper {										/* bd select			wrapper								*/
