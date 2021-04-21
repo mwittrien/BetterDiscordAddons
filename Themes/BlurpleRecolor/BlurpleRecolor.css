@@ -2098,20 +2098,14 @@
 	background: var(--bd-blue);
 }
 
-#bd-settingspane-container .ui-switch-item .ui-switch-wrapper .ui-switch.checked,
-.bd-switch-checked {
+.bd-switch input:checked + .bd-switch-body {
 	background-color: rgba(var(--vaccentcolor), 0.8);
 }
-#bd-settingspane-container .ui-switch-item .ui-switch-wrapper .ui-switch.checked:hover,
-.bd-switch-checked:hover {
+.bd-switch input:checked:hover + .bd-switch-body {
 	background: var(--vaccentcolor-hover);
 }
-#bd-settingspane-container .ui-switch-item .ui-switch-wrapper .ui-switch.checked:active,
-.bd-switch-checked:active {
+.bd-switch input:checked:active + .bd-switch-body {
 	background: var(--vaccentcolor-active);
-}
-.bd-switch::before {
-	box-shadow: none;
 }
 
 html .monaco-editor .find-widget .monaco-inputbox.synthetic-focus {
