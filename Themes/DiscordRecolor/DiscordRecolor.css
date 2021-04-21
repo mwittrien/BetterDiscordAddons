@@ -2931,6 +2931,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	left: 0;
 	background-color: var(--header-primary);
 	-webkit-mask: url(https://discord.com/assets/c486dc65ce2877eeb18e4c39bb49507a.svg) bottom/100% no-repeat;
+	pointer-events: none;
 }
 #app-mount .headerLogo--hLLAk {
 	color: var(--header-primary);

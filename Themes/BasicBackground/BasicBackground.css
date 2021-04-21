@@ -234,13 +234,26 @@ body,														/* body														*/
 
 body::before {
 	content: "";
+	position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
-	position: fixed;
 	background: var(--vbackground) var(--vbackgroundposition)/var(--vbackgroundsize);
 	filter: blur(var(--vbackgroundblur));
+}
+.layer-3QrUeG ~ .layer-3QrUeG::before,
+.root-3R2ngo::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
+	background-attachment: fixed;
+	filter: blur(var(--vpopoutblur));
+	pointer-events: none;
 }
 #ace_settingsmenu_container,
 .uploadArea-3QgLtW,

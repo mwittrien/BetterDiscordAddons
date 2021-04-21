@@ -11,3 +11,4 @@
  - [Discord Recolor](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/DiscordRecolor) - Allows you to customize Discord's native Color Scheme
  - [Emoji Replace](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace) - Replaces Discord's Emojis with Emojis of a different Provider (Apple, Facebook...)
  - [Server Columns](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/ServerColumns) - Changes the Server List to a grid-like Structure that allows any Amount of Columns
+ - [Server Columns](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/SettingsModal) - Turns Settings Windows like User-/Channel-/Serversettings and Boost Overview into Modals
