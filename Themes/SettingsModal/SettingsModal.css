@@ -59,6 +59,9 @@
 	padding-top: 20px !important;
 	padding-bottom: 20px !important;
 }
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG .standardSidebarView-3F1I7i .editor {
+	height: calc(var(--vsettingsmodalheight) - 120px);
+}
 #app-mount .layer-3QrUeG ~ .layer-3QrUeG .toolsContainer-1edPuj,
 #app-mount .layer-3QrUeG ~ .layer-3QrUeG .toolsContainer-1edPuj .tools-3-3s-N,
 #app-mount .layer-3QrUeG ~ .layer-3QrUeG .toolsContainer-1edPuj .container-1sFeqf,
