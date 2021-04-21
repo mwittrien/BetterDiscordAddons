@@ -62,6 +62,7 @@ https://raw.githubusercontent.com/Juicysteak117/MinimalImprovement/master/Minima
 https://raw.githubusercontent.com/KaminariKillua/Themes/master/GlacialPrison/GlacialPrison.theme.css
 https://raw.githubusercontent.com/KaminariKillua/Themes/master/InfernalPrison/InfernalPrison.theme.css
 https://raw.githubusercontent.com/KaminariKillua/Themes/master/SakuraPrison/SakuraPrison.theme.css
+https://raw.githubusercontent.com/KillYoy/DiscordNight/master/DiscordNight.theme.css
 https://raw.githubusercontent.com/llcoll/Discord-Themes/master/Themes/Akame/Akame.theme.css
 https://raw.githubusercontent.com/llcoll/Discord-Themes/master/Themes/Esdeath/Esdeath.theme.css
 https://raw.githubusercontent.com/LuckFire/amoled-cord/main/src/support/betterdiscord/AMOLED-Cord.theme.css
