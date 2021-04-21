@@ -45,6 +45,7 @@
 	contain: unset !important;
 	z-index: 1002 !important;
 }
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG > div,
 #app-mount .layer-3QrUeG ~ .layer-3QrUeG .standardSidebarView-3F1I7i {
 	position: relative !important;
 	top: 0 !important;
