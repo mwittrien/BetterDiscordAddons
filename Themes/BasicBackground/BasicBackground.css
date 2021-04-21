@@ -7545,33 +7545,6 @@ html .bd-toast.toast-warn.icon::before {
 	border-color: rgba(var(--fontwhite4), 0.3);
 	color: rgb(var(--fontwhite1));
 }
-	
-#pubslayer .ui-tab-bar-item,
-#app-mount #bd-settings-sidebar .ui-tab-bar-item {			/* sidebar				item								*/
-	color: rgb(var(--fontwhite3));
-}
-#pubslayer .ui-tab-bar-item:hover,
-#app-mount #bd-settings-sidebar .ui-tab-bar-item:hover {
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-	color: rgb(var(--fontwhite2));
-}
-#pubslayer .ui-tab-bar-item.selected,
-#app-mount #bd-settings-sidebar .ui-tab-bar-item.selected {
-	background-color: rgb(var(--vaccentcolor));
-	color: rgb(var(--fontwhite1));
-	text-shadow: 1px 1px var(--vtextshadow);
-}
-#pubslayer .ui-tab-bar-header,
-#app-mount #bd-settings-sidebar .ui-tab-bar-header {		/* sidebar				sideitemheader						*/
-	color: rgb(var(--fontwhite3));
-}
-#pubslayer .ui-tab-bar-separator,
-#app-mount #bd-settings-sidebar .ui-tab-bar-separator {		/* sidebar				sideitemseparator					*/
-	background-color: rgba(var(--fontwhite4), 0.3);
-}
-#bd-settings-sidebar [style*=" color: rgb(114, 118, 125)"] {/* sidebar				credits								*/
-	color: rgb(var(--fontwhite4)) !important;
-}
 
 #app-mount .bd-server-card {								/* pubslayer			guildcard							*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
