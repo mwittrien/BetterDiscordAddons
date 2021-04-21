@@ -2,7 +2,7 @@
  * @name ServerHider
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.1.9
+ * @version 6.2.0
  * @description Allows you to hide certain Servers in your Server List
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerHider",
 			"author": "DevilBro",
-			"version": "6.1.9",
+			"version": "6.2.0",
 			"description": "Allows you to hide certain Servers in your Server List"
 		},
 		"changeLog": {
-			"fixed": {
-				"Works again": "Can discord stop messing with the server list, jeez"
+			"added": {
+				"Streamer Mode": "Added Option to only hide Servers while in Streamer Mode"
 			}
 		}
 	};
@@ -67,6 +67,12 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		return class ServerHider extends Plugin {
 			onLoad () {
+				this.defaults = {
+					general: {
+						onlyHideInStream:	{value: false, 	description: "Only hide selected Servers while in Streamer Mode"}
+					}
+				};
+				
 				this.patchedModules = {
 					after: {
 						Guilds: "render"
@@ -75,6 +81,10 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
+					if (e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.STREAMER_MODE_UPDATE) BDFDB.PatchUtils.forceAllUpdates(this);
+				}});
+				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.FolderStore, "getGuildFolderById", {after: e => {
 					let hiddenGuildIds = BDFDB.DataUtils.load(this, "hidden", "servers") || [];
 					if (e.returnValue && hiddenGuildIds.length) {
@@ -93,22 +103,36 @@ module.exports = (_ => {
 			}
 
 			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [];
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
+					collapseStates: collapseStates,
+					children: _ => {
+						let settingsItems = [];
+						
+						for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							type: "Switch",
+							plugin: this,
+							keys: ["general", key],
+							label: this.defaults.general[key].description,
+							value: this.settings.general[key],
+						}));
 				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-					type: "Button",
-					color: BDFDB.LibraryComponents.Button.Colors.RED,
-					label: "Unhide all Servers/Folders",
-					onClick: _ => {
-						BDFDB.ModalUtils.confirm(this, "Are you sure you want to unhide all servers and folders?", _ => {
-							BDFDB.DataUtils.save([], this, "hidden");
-							BDFDB.PatchUtils.forceAllUpdates(this);
-						});
-					},
-					children: BDFDB.LanguageUtils.LanguageStrings.RESET
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							type: "Button",
+							color: BDFDB.LibraryComponents.Button.Colors.RED,
+							label: "Unhide all Servers/Folders",
+							onClick: _ => {
+								BDFDB.ModalUtils.confirm(this, "Are you sure you want to unhide all Servers and Folders?", _ => {
+									BDFDB.DataUtils.save([], this, "hidden");
+									BDFDB.PatchUtils.forceAllUpdates(this);
+								});
+							},
+							children: BDFDB.LanguageUtils.LanguageStrings.RESET
+						}));
+						
+						return settingsItems;
+					}
+				});
 			}
 			
 			onGuildContextMenu (e) {
@@ -185,6 +209,7 @@ module.exports = (_ => {
 			}
 
 			handleGuilds (returnvalue) {
+				if (this.settings.general.onlyHideInStream && !BDFDB.LibraryModules.StreamerModeStore.enabled) return;
 				let hiddenEles = BDFDB.DataUtils.load(this, "hidden");
 				let hiddenGuildIds = hiddenEles.servers || [];
 				let hiddenFolderIds = hiddenEles.folders || [];

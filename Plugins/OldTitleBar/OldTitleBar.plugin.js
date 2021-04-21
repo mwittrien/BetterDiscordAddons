@@ -2,7 +2,7 @@
  * @name OldTitleBar
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.8
+ * @version 1.6.9
  * @description Allows you to switch to Discord's old Titlebar or add the native OS Titlebar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "OldTitleBar",
 			"author": "DevilBro",
-			"version": "1.6.8",
+			"version": "1.6.9",
 			"description": "Allows you to switch to Discord's old Titlebar or add the native OS Titlebar"
 		}
 	};
@@ -61,18 +61,15 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var patched, lastWindowRects;
-		var settings = {};
 		
 		return class OldTitleBar extends Plugin {
 			onLoad () {
 				patched = false;
 
 				this.defaults = {
-					settings: {
-						displayNative:		{value: !!document.querySelector(".platform-linux"), 	description: "Display the native Titlebar"},
-						addOldBar:			{value: true, 											description: "Display the Titlebar in the old Fashion"},
-						addToSettings:		{value: true, 											description: "Add a Titlebar to Settings Windows"},
-						reloadButton:		{value: false, 											description: "Add a Reload Button to the Titlebar"}
+					general: {
+						addToSettings:		{value: true, 												description: "Adds a Titlebar to Settings Windows"},
+						reloadButton:		{value: false, 												description: "Adds a Reload Button to the Titlebar"}
 					}
 				};
 			
@@ -142,71 +139,45 @@ module.exports = (_ => {
 
 				BDFDB.DOMUtils.addClass(document.body, BDFDB.disCN._oldtitlebarenabled);
 
-				this.forceUpdateAll();
-
-				this.patchMainScreen(settings.displayNative);
+				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			
 			onStop () {
-				this.forceUpdateAll();
+				BDFDB.PatchUtils.forceAllUpdates(this);
 
 				BDFDB.DOMUtils.removeClassFromDOM(BDFDB.disCN._oldtitlebarenabled);
 			}
 
 			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [];
-				
-				let isLinux = !!document.querySelector(".platform-linux");
-				
-				for (let key in settings) {
-					let isNativeTitlebarSetting = key == "displayNative";
-					settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "Switch",
-						plugin: this,
-						keys: ["settings", key],
-						label: this.defaults.settings[key].description,
-						value: isLinux && isNativeTitlebarSetting || settings[key],
-						disabled: isLinux && isNativeTitlebarSetting,
-						note: isLinux && isNativeTitlebarSetting && "This is disabled on Linux, because Discord/BD forces the Titlebar on Linux Systems!",
-						onChange: isNativeTitlebarSetting ? value => {
-							if (this.patchMainScreen(value)) {
-								patched = !patched;
-								let notifybar = document.querySelector("#OldTitleBarNotifyBar");
-								if (notifybar) notifybar.querySelector(BDFDB.dotCN.noticedismiss).click();
-								if (patched) {
-									notifybar = BDFDB.NotificationUtils.notice("Changed native Titlebar Settings. Please relaunch now:", {
-										type: "danger",
-										id: "OldTitleBarNotifyBar",
-										buttons: [{
-											contents: "Relaunch",
-											onClick: _ => {BDFDB.LibraryModules.WindowUtils.relaunch();}
-										}]
-									});
-								}
-							}
-						} : null
-					}));
-				}
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
+					collapseStates: collapseStates,
+					children: _ => {
+						let settingsItems = [];
+						
+						for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							type: "Switch",
+							plugin: this,
+							keys: ["general", key],
+							label: this.defaults.general[key].description,
+							value: this.settings.general[key],
+						}));
+						
+						return settingsItems;
+					}
+				});
 			}
 
 			onSettingsClosed () {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
 
-					this.forceUpdateAll();
+					BDFDB.PatchUtils.forceAllUpdates(this);
 				}
-			}
-		
-			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
-				
-				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 
 			processApp (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {props: [["type",["WINDOWS", "MACOS"]]]});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {props: [["type", ["WINDOWS", "MACOS"]]]});
 				if (index > -1) children[index] = null;
 			}
 
@@ -215,7 +186,6 @@ module.exports = (_ => {
 			}
 
 			processHeaderBarContainer (e) {
-				if (!settings.addOldBar) return;
 				let children = BDFDB.ObjectUtils.get(e.returnvalue, "props.toolbar.props.children");
 				if (!children) {
 					let [oldToolbarParent, oldToolbarIndex] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: "OldTitleBar-toolbar"});
@@ -242,7 +212,7 @@ module.exports = (_ => {
 			}
 			
 			injectSettingsToolbar (children, fixed) {
-				if (!settings.addToSettings) return;
+				if (!this.settings.general.addToSettings) return;
 				let toolbar = BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCNS.channelheadertoolbar + BDFDB.disCN._oldtitlebarsettingstoolbar,
 					children: [],
@@ -254,7 +224,7 @@ module.exports = (_ => {
 			
 			injectButtons (children, addFirstDivider) {
 				if (addFirstDivider) children.push(BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN.channelheaderdivider}))
-				if (settings.reloadButton) {
+				if (this.settings.general.reloadButton) {
 					children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						text: BDFDB.LanguageUtils.LanguageStrings.ERRORS_RELOAD,
 						tooltipConfig: {type: "bottom"},
@@ -324,19 +294,6 @@ module.exports = (_ => {
 			
 			getWindowRects () {
 				return {x: window.screenX, y: window.screenY, width: window.outerWidth, height: window.outerHeight};
-			}
-
-			patchMainScreen (enable) {
-				try {
-					if (BdApi.getWindowPreference("frame") != enable) {
-						BdApi.setWindowPreference("frame", enable);
-						return true;
-					}
-					return false;
-				}
-				catch (err) {
-					return false;
-				}
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
