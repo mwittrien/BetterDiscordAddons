@@ -3958,6 +3958,10 @@ html .bd-settings-group.collapsible .bd-settings-title::after {
 	background-color: currentColor;
 }
 
+.bd-tab-item.selected:hover {
+	background-color: var(--background-modifier-selected);
+}
+
 #app-mount .fav {
 	background: var(--header-primary);
 	width: 16px;

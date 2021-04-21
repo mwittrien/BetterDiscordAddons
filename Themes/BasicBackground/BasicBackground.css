@@ -3454,6 +3454,9 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addr
 .modal-qgFCbT::after {
 	display: none;
 }
+#app-mount .separator-2-RRj_ {
+	box-shadow: 0 1px 0 0 rgba(var(--vtransparencycolor),.3),0 1px 2px 0 rgba(var(--vtransparencycolor),.3);
+}
 #app-mount .modalTextContainer-ITvzbi {						/* modal				text file						*/
 	background-color: rgba(var(--vtransparencycolor), 0.5);
 	border: none;
@@ -7544,6 +7547,30 @@ html .bd-toast.toast-warn.icon::before {
 .bd-modal-wrapper .error {									/* modal				tablerow							*/
 	border-color: rgba(var(--fontwhite4), 0.3);
 	color: rgb(var(--fontwhite1));
+}
+
+#app-mount .bd-tab-item:hover,
+#app-mount .bd-tab-item.selected {
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .bd-tab-item:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+#app-mount .bd-tab-item.selected {
+	background-color: rgb(var(--vaccentcolor));
+}
+
+#app-mount .bd-addon-error {
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+	border-color: transparent;
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .bd-addon-error-icon {
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+#app-mount .bd-addon-error-stack code {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+	border-color: rgba(var(--vtransparencycolor), 0.1);
 }
 
 #app-mount .bd-server-card {								/* pubslayer			guildcard							*/
