@@ -2099,12 +2099,12 @@
 }
 
 .bd-switch input:checked + .bd-switch-body {
-	background-color: rgba(var(--vaccentcolor), 0.8);
+	--switch-color: rgba(var(--vaccentcolor), 0.8);
 }
-.bd-switch input:checked:hover + .bd-switch-body {
+.bd-switch:hover input:checked + .bd-switch-body {
 	background: var(--vaccentcolor-hover);
 }
-.bd-switch input:checked:active + .bd-switch-body {
+.bd-switch:active input:checked + .bd-switch-body {
 	background: var(--vaccentcolor-active);
 }
 
