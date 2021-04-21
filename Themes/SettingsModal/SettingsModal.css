@@ -106,6 +106,9 @@
 	contain: unset !important;
 	z-index: 1002 !important;
 }
+#app-mount .root-3R2ngo ~ * {
+	z-index: 1003 !important;
+}
 #app-mount .root-3R2ngo.enterDone-2zvtsK {
 	transform: unset !important;
 }
