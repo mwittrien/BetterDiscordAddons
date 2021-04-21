@@ -1853,17 +1853,17 @@
 }
 .container-3auIfb[style*="background-color: rgb(67, 181, 129)"]:hover,
 .container-3auIfb[style*="background-color: rgb(114, 137, 218)"]:hover {
-	background: var(--vaccentcolor-hover);
+	background: var(--vaccentcolor-hover) !important;
 }
-.container-3auIfb[style*="background-color: rgb(67, 181, 129)"]:active,
-.container-3auIfb[style*="background-color: rgb(114, 137, 218)"]:active {
-	background: var(--vaccentcolor-active);
+#app-mount .container-3auIfb:active {
+	background: var(--vaccentcolor-active) !important;
 }
 .container-3auIfb path[fill] {
 	fill: rgb(114, 118, 125) !important;
 }
 .container-3auIfb[style*="background-color: rgb(67, 181, 129)"] path[fill],
-.container-3auIfb[style*="background-color: rgb(114, 137, 218)"] path[fill] {
+.container-3auIfb[style*="background-color: rgb(114, 137, 218)"] path[fill],
+.container-3auIfb:active path[fill] {
 	fill: rgb(var(--vaccentcolor)) !important;
 }
 
@@ -2100,6 +2100,7 @@
 
 .bd-switch input:checked + .bd-switch-body {
 	--switch-color: rgba(var(--vaccentcolor), 0.8);
+	background-color: rgba(var(--vaccentcolor), 0.8);
 }
 .bd-switch input:active + .bd-switch-body {
 	--switch-color: rgba(var(--vaccentcolor));

@@ -7565,7 +7565,8 @@ html .bd-toast.toast-warn.icon::before {
 }
 
 .bd-switch-body {											/* bd switch												*/
-	--switch-color: rgba(var(--vtransparencycolor), 0.3);
+	--switch-color: rgb(var(--vtransparencycolor));
+	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 
 .bd-select-wrapper {										/* bd select			wrapper								*/
