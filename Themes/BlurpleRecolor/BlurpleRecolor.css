@@ -2101,10 +2101,14 @@
 .bd-switch input:checked + .bd-switch-body {
 	--switch-color: rgba(var(--vaccentcolor), 0.8);
 }
-.bd-switch:hover input:checked + .bd-switch-body {
+.bd-switch input:active + .bd-switch-body {
+	--switch-color: rgba(var(--vaccentcolor));
+}
+.bd-switch input:checked:hover + .bd-switch-body {
 	background: var(--vaccentcolor-hover);
 }
-.bd-switch:active input:checked + .bd-switch-body {
+.bd-switch input:checked:active + .bd-switch-body {
+	--switch-color: rgb(var(--vaccentcolor));
 	background: var(--vaccentcolor-active);
 }
 
