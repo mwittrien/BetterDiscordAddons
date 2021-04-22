@@ -986,7 +986,7 @@ module.exports = (_ => {
 			removePin (id, type) {
 				if (!id) return;
 				let newData = this.getPinnedChannels(type);
-				delete newData[category.id];
+				delete newData[id];
 				this.savePinnedChannels(newData, type);
 				this.updateContainer(type);
 			}
