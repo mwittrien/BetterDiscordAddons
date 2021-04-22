@@ -250,10 +250,23 @@ body::before {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: var(--vpopout) var(--vpopoutposition)/var(--vpopoutsize);
+	background: var(--vbackground) var(--vbackgroundposition)/var(--vbackgroundsize);
 	background-attachment: fixed;
-	filter: blur(var(--vpopoutblur));
+	filter: blur(var(--vbackgroundblur));
 	pointer-events: none;
+	z-index: -1;
+}
+.layer-3QrUeG ~ .layer-3QrUeG::after,
+.root-3R2ngo::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(var(--vtransparencycolor), var(--vtransparencyalpha));
+	pointer-events: none;
+	z-index: -1;
 }
 #ace_settingsmenu_container,
 .uploadArea-3QgLtW,
