@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.9
+ * @version 1.8.0
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "PinDMs",
 			"author": "DevilBro",
-			"version": "1.7.9",
+			"version": "1.8.0",
 			"description": "Allows you to pin DMs, making them appear at the top of your DMs/ServerList"
 		},
 		"changeLog": {
 			"improved": {
-				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
+				"Settings": "Restructured Settings",
+				"User Specific": "Pinned DMs are now User-Specific, meaning the Plugin will not try to load the same pinned DMs for your second account"
+			},
+			"fixed": {
+				"Empty List": "Deleting the last Category caused the DM list to only render with the DMs of the deleted Category"
 			}
 		}
 	};
@@ -68,22 +72,22 @@ module.exports = (_ => {
 		var hoveredCategory, draggedCategory, releasedCategory;
 		var hoveredChannel, draggedChannel, releasedChannel;
 		
-		var settings = {}, preCategories = {}, preCollapseStates = {};
-		
 		return class PinDMs extends Plugin {
 			onLoad () {
 				this.defaults = {
-					settings: {
-						sortInRecentOrder:		{value: false, 	inner: true,		description: "Channel List"},
-						sortInRecentOrderGuild:	{value: false, 	inner: true,		description: "Guild List"},
-						showPinIcon:			{value: true, 	inner: false,		description: "Show a little 'Pin' icon for pinned DMs in the server list: "},
-						showCategoryUnread:		{value: true, 	inner: false,		description: "Show the amount of unread Messages in a category in the channel list: "},
-						showCategoryAmount:		{value: true, 	inner: false,		description: "Show the amount of pinned DMs in a category in the channel list: "}
+					general: {
+						pinIcon:			{value: true, 									description: "Show a little 'Pin' Icon for pinned DMs in the Server List"},
+						unreadAmount:		{value: true, 									description: "Shows the Amount of unread Messages in a Category in the Channel List"},
+						channelAmount:		{value: true, 									description: "Shows the Amount of pinned DMs in a Category in the Channel List"}
+					},
+					recentOrder: {
+						channelList:		{value: false, 									description: "Channel List"},
+						guildList:			{value: false, 									description: "Server List"},
 					},
 					preCategories: {
-						friends:				{value: false,						description: "FRIENDS"},
-						blocked:				{value: false,						description: "BLOCKED"},
-						groups:					{value: false,						description: "GROUPS"}
+						friends:			{value: {enabled: false, collapsed: false},		description: "FRIENDS"},
+						blocked:			{value: {enabled: false, collapsed: false},		description: "BLOCKED"},
+						groups:				{value: {enabled: false, collapsed: false},		description: "GROUPS"}
 					}
 				};
 				
@@ -167,6 +171,14 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				if (!BDFDB.DataUtils.load(this, "pinned", BDFDB.UserUtils.me.id)) {
+					let pinned = {};
+					let channelListPinned = BDFDB.DataUtils.load(this, "dmCategories");
+					let guildListPinned = BDFDB.DataUtils.load(this, "pinnedRecents");
+					if (!BDFDB.ObjectUtils.isEmpty(channelListPinned)) pinned.channelList = channelListPinned;
+					if (!BDFDB.ObjectUtils.isEmpty(guildListPinned)) pinned.guildList = guildListPinned;
+					if (pinned.channelList || pinned.guildList) BDFDB.DataUtils.save(pinned, this, "pinned", BDFDB.UserUtils.me.id);
+				}
 				this.forceUpdateAll();
 			}
 			
@@ -182,52 +194,69 @@ module.exports = (_ => {
 			}
 
 			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [];
-				
-				for (let key in settings) if (!this.defaults.settings[key].inner) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					type: "Switch",
-					plugin: this,
-					keys: ["settings", key],
-					label: this.defaults.settings[key].description,
-					value: settings[key]
-				}));
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-					title: "Sort pinned DMs in the 'recent message' order instead of the 'pinned at' order in:",
-					dividerTop: true,
-					dividerBottom: true,
-					children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "Switch",
-						plugin: this,
-						keys: ["settings", key],
-						label: this.defaults.settings[key].description,
-						value: settings[key]
-					}))
-				}));
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-					title: "Add predefined category for:",
-					dividerBottom: true,
-					children: Object.keys(preCategories).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "Switch",
-						plugin: this,
-						keys: ["preCategories", key],
-						label: BDFDB.LanguageUtils.LanguageStrings[this.defaults.preCategories[key].description],
-						value: preCategories[key]
-					}))
-				}));
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-					type: "Button",
-					color: BDFDB.LibraryComponents.Button.Colors.RED,
-					label: "Unpin all pinned DMs",
-					onClick: _ => {
-						BDFDB.ModalUtils.confirm(this, "Are you sure you want to unpin all pinned DMs?", _ => {
-							BDFDB.DataUtils.remove(this, "dmCategories");
-							BDFDB.DataUtils.remove(this, "pinnedRecents");
-						});
-					},
-					children: BDFDB.LanguageUtils.LanguageStrings.UNPIN
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
+					collapseStates: collapseStates,
+					children: _ => {
+						let settingsItems = [];
+						
+						settingsItems.push(Object.keys(this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							type: "Switch",
+							plugin: this,
+							keys: ["general", key],
+							label: this.defaults.general[key].description,
+							value: this.settings.general[key]
+						})));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+							className: BDFDB.disCN.marginbottom8
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							title: "Sort pinned DMs in the 'Recent Message' instead of the 'Pinned at' Order in:",
+							children: Object.keys(this.defaults.recentOrder).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["recentOrder", key],
+								label: this.defaults.recentOrder[key].description,
+								value: this.settings.recentOrder[key]
+							}))
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+							className: BDFDB.disCN.marginbottom8
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							title: "Add predefined Category for:",
+							children: Object.keys(this.defaults.preCategories).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+								type: "Switch",
+								label: BDFDB.LanguageUtils.LanguageStrings[this.defaults.preCategories[key].description],
+								value: this.settings.preCategories[key].enabled,
+								onChange: value => {
+									this.settings.preCategories[key].enabled = value;
+									BDFDB.DataUtils.save(this.settings.preCategories, this, "preCategories");
+								}
+							}))
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+							className: BDFDB.disCN.marginbottom8
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							type: "Button",
+							color: BDFDB.LibraryComponents.Button.Colors.RED,
+							label: "Unpin all pinned DMs",
+							onClick: _ => {
+								BDFDB.ModalUtils.confirm(this, "Are you sure you want to unpin all pinned DMs?", _ => BDFDB.DataUtils.remove(this, "pinned", BDFDB.UserUtils.me.id));
+							},
+							children: BDFDB.LanguageUtils.LanguageStrings.UNPIN
+						}));
+						
+						return settingsItems.flat(10);
+					}
+				});
 			}
 
 			onSettingsClosed () {
@@ -238,12 +267,8 @@ module.exports = (_ => {
 			}
 
 			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
-				preCategories = BDFDB.DataUtils.get(this, "preCategories");
-				preCollapseStates = BDFDB.DataUtils.load(this, "preCollapseStates");
-				
-				BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name: "FluxContainer(PrivateChannels)", all: true, unlimited: true}));
 				BDFDB.PatchUtils.forceAllUpdates(this);
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 
 			onUserContextMenu (e) {
@@ -265,10 +290,10 @@ module.exports = (_ => {
 
 			injectItem (instance, id, children, index) {
 				if (!id) return;
-				let pinnedInGuild = this.isPinned(id, "pinnedRecents");
+				let pinnedInGuild = this.isPinned(id, "guildList");
 				
-				let categories = this.sortAndUpdateCategories("dmCategories", true);
-				let currentCategory = this.getCategory(id, "dmCategories");
+				let categories = this.sortAndUpdateCategories("channelList", true);
+				let currentCategory = this.getCategory(id, "channelList");
 				
 				children.splice(index, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: this.labels.context_pindm,
@@ -288,7 +313,7 @@ module.exports = (_ => {
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "unpin-channellist"),
 										color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
 										action: _ => {
-											this.removeFromCategory(id, currentCategory, "dmCategories");
+											this.removeFromCategory(id, currentCategory, "channelList");
 										}
 									}) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.context_addtonewcategory,
@@ -296,13 +321,13 @@ module.exports = (_ => {
 										color: BDFDB.LibraryComponents.MenuItems.Colors.BRAND,
 										action: _ => {
 											this.openCategorySettingsModal({
-												id: this.generateID("dmCategories").toString(),
+												id: this.generateID("channelList").toString(),
 												name: `${this.labels.header_pinneddms} #${categories.length + 1}`,
 												dms: [id],
 												pos: categories.length,
 												collapsed: false,
 												color: null
-											}, "dmCategories", true);
+											}, "channelList", true);
 										}
 									})
 								}),
@@ -311,8 +336,8 @@ module.exports = (_ => {
 										label: category.name || this.labels.header_pinneddms,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "pin-channellist", category.id),
 										action: _ => {
-											if (currentCategory) this.removeFromCategory(id, currentCategory, "dmCategories");
-											this.addToCategory(id, category, "dmCategories");
+											if (currentCategory) this.removeFromCategory(id, currentCategory, "channelList");
+											this.addToCategory(id, category, "channelList");
 										}
 									})).filter(n => n)
 								}) : null
@@ -323,8 +348,8 @@ module.exports = (_ => {
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, pinnedInGuild ? "unpin-serverlist" : "pin-serverlist"),
 							danger: pinnedInGuild,
 							action: _ => {
-								if (!pinnedInGuild) this.addPin(id, "pinnedRecents");
-								else this.removePin(id, "pinnedRecents");
+								if (!pinnedInGuild) this.addPin(id, "guildList");
+								else this.removePin(id, "guildList");
 							}
 						})
 					].filter(n => n)
@@ -332,7 +357,7 @@ module.exports = (_ => {
 			}
 			
 			processPrivateChannelsList (e) {
-				let categories = this.sortAndUpdateCategories("dmCategories", true);
+				let categories = this.sortAndUpdateCategories("channelList", true);
 				if (categories.length) {
 					e.instance.props.channels = Object.assign({}, e.instance.props.channels);
 					e.instance.props.privateChannelIds = [].concat(e.instance.props.privateChannelIds || []);
@@ -344,7 +369,7 @@ module.exports = (_ => {
 							if (category) {
 								BDFDB.ArrayUtils.remove(category.dms, draggedChannel, true);
 								category.dms.splice(categoryId != undefined ? 0 : category.dms.indexOf(releasedChannel) + 1, 0, draggedChannel);
-								BDFDB.DataUtils.save(category, this, "dmCategories", category.id);
+								this.savePinnedChannels(Object.assign({}, this.getPinnedChannels("channelList"), {[category.id]: category}), "channelList");
 							}
 							draggedChannel = null;
 							releasedChannel = null;
@@ -357,7 +382,7 @@ module.exports = (_ => {
 								categories.splice(categories.indexOf(maybedReleasedCategory) + 1, 0, maybedDraggedCategory);
 								let newCategories = {}, newPos = 0;
 								for (let category of [].concat(categories).reverse()) if (!category.predefined) newCategories[category.id] = Object.assign(category, {pos: newPos++});
-								BDFDB.DataUtils.save(newCategories, this, "dmCategories");
+								this.savePinnedChannels(newCategories, "channelList");
 							}
 							draggedCategory = null;
 							releasedCategory = null;
@@ -365,7 +390,7 @@ module.exports = (_ => {
 						e.instance.props.pinnedChannelIds = {};
 						for (let category of [].concat(categories).reverse()) {
 							e.instance.props.pinnedChannelIds[category.id] = [];
-							for (let id of this.sortDMsByTime(this.filterDMs(category.dms, !category.predefined), "dmCategories").reverse()) {
+							for (let id of this.sortDMsByTime(this.filterDMs(category.dms, !category.predefined), "channelList").reverse()) {
 								BDFDB.ArrayUtils.remove(e.instance.props.privateChannelIds, id, true);
 								if (!category.collapsed || e.instance.props.selectedChannelId == id) {
 									e.instance.props.privateChannelIds.unshift(id);
@@ -465,7 +490,7 @@ module.exports = (_ => {
 						if (category && draggedCategory != category.id) {
 							let color = BDFDB.ColorUtils.convert(category.color, "RGBA");
 							let foundDMs = this.filterDMs(category.dms, !category.predefined);
-							let unreadAmount = settings.showCategoryUnread && BDFDB.ArrayUtils.sum(foundDMs.map(id => BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id)));
+							let unreadAmount = this.settings.general.unreadAmount && BDFDB.ArrayUtils.sum(foundDMs.map(id => BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id)));
 							return category.predefined && foundDMs.length < 1 ? null : [
 								BDFDB.ReactUtils.createElement("h2", {
 									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.dmchannelheadercontainer, BDFDB.disCN._pindmspinnedchannelsheadercontainer, category.collapsed && BDFDB.disCN._pindmspinnedchannelsheadercollapsed, color && BDFDB.disCN._pindmspinnedchannelsheadercolored, BDFDB.disCN.namecontainernamecontainer),
@@ -477,7 +502,7 @@ module.exports = (_ => {
 											if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 												BDFDB.ListenerUtils.stopEvent(event);
 												draggedCategory = category.id;
-												this.updateContainer("dmCategories");
+												this.updateContainer("channelList");
 												let dragPreview = this.createDragPreview(node, event2);
 												document.removeEventListener("mousemove", mouseMove);
 												document.removeEventListener("mouseup", mouseUp);
@@ -487,16 +512,16 @@ module.exports = (_ => {
 													let categoryNode = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmspinnedchannelsheadercontainer, placeholder ? placeholder.previousSibling : event3.target);
 													let maybeHoveredCategory = categoryNode && categoryNode.getAttribute("categoryId");
 													let update = maybeHoveredCategory != hoveredCategory;
-													if (maybeHoveredCategory && !preCategories[maybeHoveredCategory]) hoveredCategory = maybeHoveredCategory;
+													if (maybeHoveredCategory && !this.defaults.preCategories[maybeHoveredCategory]) hoveredCategory = maybeHoveredCategory;
 													else hoveredCategory = null;
-													if (update) this.updateContainer("dmCategories");
+													if (update) this.updateContainer("channelList");
 												};
 												let releasing = event3 => {
 													BDFDB.DOMUtils.remove(dragPreview);
 													if (hoveredCategory) releasedCategory = hoveredCategory;
 													else draggedCategory = null;
 													hoveredCategory = null;
-													this.updateContainer("dmCategories");
+													this.updateContainer("channelList");
 													document.removeEventListener("mousemove", dragging);
 													document.removeEventListener("mouseup", releasing);
 												};
@@ -515,11 +540,11 @@ module.exports = (_ => {
 										if (foundDMs.length || !category.collapsed) {
 											category.collapsed = !category.collapsed;
 											if (category.predefined) {
-												preCollapseStates[category.id] = category.collapsed;
-												BDFDB.DataUtils.save(category.collapsed, this, "preCollapseStates", category.id);
+												this.settings.preCategories[category.id].collapsed = category.collapsed;
+												BDFDB.DataUtils.save(this.settings.preCategories, this, "preCategories");
 											}
-											else BDFDB.DataUtils.save(category, this, "dmCategories", category.id);
-											this.updateContainer("dmCategories");
+											else this.savePinnedChannels(Object.assign({}, this.getPinnedChannels("channelList"), {[category.id]: category}), "channelList");
+											this.updateContainer("channelList");
 										}
 									},
 									onContextMenu: event => {
@@ -528,16 +553,17 @@ module.exports = (_ => {
 												label: this.labels.context_disablepredefined,
 												id: BDFDB.ContextMenuUtils.createItemId(this.name, "disable-predefined"),
 												action: _ => {
-													preCategories[category.id] = false;
-													BDFDB.DataUtils.save(preCategories, this, "preCategories");
-													this.updateContainer("dmCategories");
+													if (!this.settings.preCategories[category.id]) return;
+													this.settings.preCategories[category.id].enabled = false;
+													BDFDB.DataUtils.save(this.settings.preCategories, this, "preCategories");
+													this.updateContainer("channelList");
 												}
 											}) : [
 												BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 													label: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_SETTINGS,
 													id: BDFDB.ContextMenuUtils.createItemId(this.name, "category-settings"),
 													action: _ => {
-														this.openCategorySettingsModal(category, "dmCategories");
+														this.openCategorySettingsModal(category, "channelList");
 													}
 												}),
 												BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -545,8 +571,10 @@ module.exports = (_ => {
 													id: BDFDB.ContextMenuUtils.createItemId(this.name, "remove-category"),
 													color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
 													action: _ => {
-														BDFDB.DataUtils.remove(this, "dmCategories", category.id);
-														this.updateContainer("dmCategories");
+														let newData = this.getPinnedChannels("channelList");
+														delete newData[category.id];
+														this.savePinnedChannels(newData, "channelList");
+														this.updateContainer("channelList");
 													}
 												})
 											]
@@ -569,7 +597,7 @@ module.exports = (_ => {
 											count: unreadAmount,
 											style: {backgroundColor: BDFDB.DiscordConstants.Colors.STATUS_RED}
 										}) : null,
-										settings.showCategoryAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
+										this.settings.general.channelAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
 											className: BDFDB.disCN._pindmspinnedchannelsheaderamount,
 											count: foundDMs.length,
 											style: {backgroundColor: "var(--bdfdb-blurple)"}
@@ -600,7 +628,7 @@ module.exports = (_ => {
 
 			processUnreadDMs (e) {
 				e.instance.props.pinnedPrivateChannelIds = [];
-				let sortedRecents = this.sortAndUpdate("pinnedRecents");
+				let sortedRecents = this.sortAndUpdate("guildList");
 				if (sortedRecents.length) {
 					e.instance.props.unreadPrivateChannelIds = [];
 					for (let pos in sortedRecents) {
@@ -617,7 +645,7 @@ module.exports = (_ => {
 							BDFDB.ArrayUtils.remove(pinnedPrivateChannelIds, draggedChannel, true);
 							pinnedPrivateChannelIds.splice(pinnedPrivateChannelIds.indexOf(releasedChannel) + 1, 0, draggedChannel);
 							for (let pos in pinnedPrivateChannelIds) newData[pinnedPrivateChannelIds[pos]] = parseInt(pos);
-							BDFDB.DataUtils.save(newData, this, "pinnedRecents");
+							this.savePinnedChannels(newData, "guildList");
 							draggedChannel = null;
 							releasedChannel = null;
 							BDFDB.ReactUtils.forceUpdate(e.instance);
@@ -642,12 +670,12 @@ module.exports = (_ => {
 
 			processPrivateChannel (e) {
 				if (e.instance.props.channel && !this.getPredefinedCategory(e.instance.props.channel.id)) {
-					let category = this.getCategory(e.instance.props.channel.id, "dmCategories");
+					let category = this.getCategory(e.instance.props.channel.id, "channelList");
 					if (category) {
 						if (e.node) {
 							BDFDB.DOMUtils.addClass(e.node, BDFDB.disCN._pindmsdmchannelpinned);
 							e.node.removeEventListener("mousedown", e.node.PinDMsMouseDownListener);
-							if (!settings.sortInRecentOrder) {
+							if (!this.settings.recentOrder.channelList) {
 								e.node.setAttribute("draggable", false);
 								e.node.PinDMsMouseDownListener = event => {
 									if (!this.started) e.node.removeEventListener("mousedown", e.node.PinDMsMouseDownListener);
@@ -657,7 +685,7 @@ module.exports = (_ => {
 											if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 												BDFDB.ListenerUtils.stopEvent(event);
 												draggedChannel = e.instance.props.channel.id;
-												this.updateContainer("dmCategories");
+												this.updateContainer("channelList");
 												let dragPreview = this.createDragPreview(e.node, event2);
 												document.removeEventListener("mousemove", mouseMove);
 												document.removeEventListener("mouseup", mouseUp);
@@ -672,20 +700,20 @@ module.exports = (_ => {
 													else {
 														let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsdmchannelplaceholder, event3.target);
 														maybeHoveredChannel = (BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsdmchannelpinned, placeholder ? placeholder.previousSibling : event3.target), "channel", {up: true}) || {}).id;
-														let maybeHoveredCategory = maybeHoveredChannel && this.getCategory(maybeHoveredChannel, "dmCategories");
+														let maybeHoveredCategory = maybeHoveredChannel && this.getCategory(maybeHoveredChannel, "channelList");
 														if (!maybeHoveredCategory || maybeHoveredCategory.id != category.id) maybeHoveredChannel = null;
 													};
 													let update = maybeHoveredChannel != hoveredChannel;
 													if (maybeHoveredChannel) hoveredChannel = maybeHoveredChannel;
 													else hoveredChannel = null; 
-													if (update) this.updateContainer("dmCategories");
+													if (update) this.updateContainer("channelList");
 												};
 												let releasing = event3 => {
 													BDFDB.DOMUtils.remove(dragPreview);
 													if (hoveredChannel) releasedChannel = hoveredChannel;
 													else draggedChannel = null;
 													hoveredChannel = null;
-													this.updateContainer("dmCategories");
+													this.updateContainer("channelList");
 													document.removeEventListener("mousemove", dragging);
 													document.removeEventListener("mouseup", releasing);
 												};
@@ -711,7 +739,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN._pindmsunpinbutton,
 									onClick: event => {
 										BDFDB.ListenerUtils.stopEvent(event);
-										this.removeFromCategory(e.instance.props.channel.id, category, "dmCategories");
+										this.removeFromCategory(e.instance.props.channel.id, category, "channelList");
 									},
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 										className: BDFDB.disCN._pindmsunpinicon,
@@ -731,10 +759,10 @@ module.exports = (_ => {
 						BDFDB.DOMUtils.removeClass(e.node, BDFDB.disCN._pindmsrecentpinned);
 						e.node.removeEventListener("contextmenu", e.node.PinDMsContextMenuListener);
 						e.node.addEventListener("contextmenu", e.node.PinDMsContextMenuListener);
-						if (this.isPinned(e.instance.props.channel.id, "pinnedRecents")) {
+						if (this.isPinned(e.instance.props.channel.id, "guildList")) {
 							BDFDB.DOMUtils.addClass(e.node, BDFDB.disCN._pindmsrecentpinned);
 							e.node.removeEventListener("mousedown", e.node.PinDMsMouseDownListener);
-							if (!settings.sortInRecentOrderGuild) {
+							if (!this.settings.recentOrder.guildList) {
 								for (let child of e.node.querySelectorAll("a")) child.setAttribute("draggable", false);
 								e.node.PinDMsMouseDownListener = event => {
 									let mousemove = event2 => {
@@ -781,7 +809,7 @@ module.exports = (_ => {
 					if (e.node && e.methodname == "componentWillUnmount") {
 						BDFDB.PatchUtils.forceAllUpdates(this, "PrivateChannelsList");
 					}
-					if (e.returnvalue && this.isPinned(e.instance.props.channel.id, "pinnedRecents") && settings.showPinIcon) {
+					if (e.returnvalue && this.settings.general.pinIcon && this.isPinned(e.instance.props.channel.id, "guildList")) {
 						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "BlobMask"});
 						if (index > -1) children[index].props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.IconBadge, {
 							className: BDFDB.disCN.guildiconbadge,
@@ -792,10 +820,22 @@ module.exports = (_ => {
 					}
 				}
 			}
+			
+			getPinnedChannels (type) {
+				return ((BDFDB.DataUtils.load(this, "pinned", BDFDB.UserUtils.me.id) || {})[type] || {});
+			}
+			
+			savePinnedChannels (channels, type) {
+				let pinned = BDFDB.DataUtils.load(this, "pinned", BDFDB.UserUtils.me.id) || {};
+				if (BDFDB.ObjectUtils.is(channels) && !BDFDB.ObjectUtils.isEmpty(channels)) pinned[type] = channels;
+				else delete pinned[type];
+				if (!BDFDB.ObjectUtils.isEmpty(pinned)) BDFDB.DataUtils.save(pinned, this, "pinned", BDFDB.UserUtils.me.id);
+				else BDFDB.DataUtils.remove(this, "pinned", BDFDB.UserUtils.me.id);
+			}
 
 			generateID (type) {
 				if (!type) return null;
-				let categories = BDFDB.DataUtils.load(this, type);
+				let categories = this.getPinnedChannels(type);
 				let id = Math.round(Math.random() * 10000000000000000);
 				return categories[id] ? this.generateID() : id;
 			}
@@ -808,8 +848,8 @@ module.exports = (_ => {
 				if (!id || !category || !type) return;
 				let wasEmpty = !this.filterDMs(category.dms).length;
 				if (!category.dms.includes(id)) category.dms.unshift(id);
+				this.savePinnedChannels(Object.assign({}, this.getPinnedChannels(type), {[category.id]: category}), type);
 				if (wasEmpty && category.dms.length) category.collapsed = false;
-				BDFDB.DataUtils.save(category, this, type, category.id);
 				this.updateContainer(type);
 			}
 
@@ -817,13 +857,13 @@ module.exports = (_ => {
 				if (!id || !category || !type) return;
 				BDFDB.ArrayUtils.remove(category.dms, id, true);
 				if (!this.filterDMs(category.dms).length) category.collapsed = true;
-				BDFDB.DataUtils.save(category, this, type, category.id);
+				this.savePinnedChannels(Object.assign({}, this.getPinnedChannels(type), {[category.id]: category}), type);
 				this.updateContainer(type);
 			}
 
 			getCategory (id, type) {
 				if (!id || !type) return null;
-				let categories = BDFDB.DataUtils.load(this, type);
+				let categories = this.getPinnedChannels(type);
 				for (let catId in categories) if (categories[catId].dms.includes(id)) return categories[catId];
 				return null;
 			}
@@ -832,14 +872,14 @@ module.exports = (_ => {
 				if (!id) return "";
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(id);
 				if (!channel) return "";
-				else if (preCategories.friends && channel.isDM() && BDFDB.LibraryModules.RelationshipStore.isFriend(channel.recipients[0])) return "friends";
-				else if (preCategories.blocked && channel.isDM() && BDFDB.LibraryModules.RelationshipStore.isBlocked(channel.recipients[0])) return "blocked";
-				else if (preCategories.groups && channel.isGroupDM()) return "groups";
+				else if (this.settings.preCategories.friends.enabled && channel.isDM() && BDFDB.LibraryModules.RelationshipStore.isFriend(channel.recipients[0])) return "friends";
+				else if (this.settings.preCategories.blocked.enabled && channel.isDM() && BDFDB.LibraryModules.RelationshipStore.isBlocked(channel.recipients[0])) return "blocked";
+				else if (this.settings.preCategories.groups.enabled && channel.isGroupDM()) return "groups";
 				return "";
 			}
 
 			sortAndUpdateCategories (type, reverse) {
-				let data = BDFDB.ObjectUtils.sort(BDFDB.DataUtils.load(this, type), "pos"), newData = {};
+				let data = BDFDB.ObjectUtils.sort(this.getPinnedChannels(type), "pos"), newData = {};
 				let sorted = [], pos = 0, sort = id => {
 					if (sorted[pos] === undefined) {
 						newData[id] = Object.assign({}, data[id], {pos});
@@ -851,8 +891,8 @@ module.exports = (_ => {
 					}
 				};
 				for (let id in data) sort(id);
-				if (!BDFDB.equals(data, newData)) BDFDB.DataUtils.save(newData, this, type);
-				if (type == "dmCategories" && Object.keys(preCategories).some(type => preCategories[type])) {
+				if (!BDFDB.equals(data, newData)) this.savePinnedChannels(newData, type);
+				if (type == "channelList" && Object.keys(this.settings.preCategories).some(type => this.settings.preCategories[type].enabled)) {
 					let predefinedDMs = {};
 					for (let channelId of BDFDB.LibraryModules.DirectMessageStore.getPrivateChannelIds()) {
 						let category = this.getPredefinedCategory(channelId);
@@ -863,7 +903,7 @@ module.exports = (_ => {
 					}
 					for (let type in predefinedDMs) if (predefinedDMs[type].length) sorted.unshift({
 						predefined: true,
-						collapsed: preCollapseStates[type],
+						collapsed: this.settings.preCategories[type].collapsed,
 						color: null,
 						dms: predefinedDMs[type],
 						id: type,
@@ -874,7 +914,7 @@ module.exports = (_ => {
 			}
 			
 			sortDMsByTime (dms, type) {
-				if (dms.length > 1 && settings[type == "dmCategories" ? "sortInRecentOrder" : "sortInRecentOrderGuild"]) {
+				if (dms.length > 1 && this.settings.recentOrder[type]) {
 					let timestamps = BDFDB.LibraryModules.DirectMessageStore.getPrivateChannelIds().reduce((newObj, channelId) => (newObj[channelId] = BDFDB.LibraryModules.UnreadChannelUtils.lastMessageId(channelId), newObj), {});
 					return [].concat(dms).sort(function (x, y) {return timestamps[x] > timestamps[y] ? -1 : timestamps[x] < timestamps[y] ? 1 : 0;});
 				}
@@ -926,7 +966,7 @@ module.exports = (_ => {
 								else if (newData.color[0] > 225 && newData.color[1] > 225 && newData.color[2] > 225) newData.color = BDFDB.ColorUtils.change(newData.color, -30);
 							}
 							
-							BDFDB.DataUtils.save(newData, this, type, data.id);
+							this.savePinnedChannels(Object.assign({}, this.getPinnedChannels(type), {[data.id]: newData}), type);
 							
 							this.updateContainer(type);
 						}
@@ -936,36 +976,39 @@ module.exports = (_ => {
 
 			addPin (newId, type) {
 				if (!newId) return;
-				let pinnedDMs = BDFDB.DataUtils.load(this, type);
-				for (let id in pinnedDMs) pinnedDMs[id] = pinnedDMs[id] + 1;
-				pinnedDMs[newId] = 0;
-				BDFDB.DataUtils.save(pinnedDMs, this, type);
+				let channels = this.getPinnedChannels(type);
+				for (let id in channels) channels[id] = channels[id] + 1;
+				channels[newId] = 0;
+				this.savePinnedChannels(channels, type);
 				this.updateContainer(type);
 			}
 
 			removePin (id, type) {
 				if (!id) return;
-				BDFDB.DataUtils.remove(this, type, id);
+				let newData = this.getPinnedChannels(type);
+				delete newData[category.id];
+				this.savePinnedChannels(newData, type);
 				this.updateContainer(type);
 			}
 			
 			isPinned (id, type) {
-				return BDFDB.DataUtils.load(this, type, id) != undefined;
+				return this.getPinnedChannels(type)[id] != undefined;
 			}
 			
 			updateContainer (type) {
 				switch (type) {
-					case "dmCategories": 
+					case "channelList": 
 						BDFDB.PatchUtils.forceAllUpdates(this, "PrivateChannelsList");
+						if (!Object.keys(this.settings.preCategories).every(type => this.settings.preCategories[type].enabled) && BDFDB.ObjectUtils.isEmpty(this.getPinnedChannels(type))) this.forceUpdateAll();
 						break;
-					case "pinnedRecents": 
+					case "guildList": 
 						BDFDB.PatchUtils.forceAllUpdates(this, "UnreadDMs");
 						break;
 				}
 			}
 
 			sortAndUpdate (type) {
-				let data = BDFDB.DataUtils.load(this, type), newData = {};
+				let data = this.getPinnedChannels(type), newData = {};
 				delete data[""];
 				delete data["null"];
 				let sortedDMs = [], existingDMs = [], sortDM = (id, pos) => {
@@ -978,7 +1021,7 @@ module.exports = (_ => {
 					newData[sortedDMs[pos]] = parseInt(pos);
 					if (BDFDB.LibraryModules.ChannelStore.getChannel(sortedDMs[pos])) existingDMs.push(sortedDMs[pos]);
 				}
-				if (!BDFDB.equals(data, newData)) BDFDB.DataUtils.save(newData, this, type);
+				if (!BDFDB.equals(data, newData)) this.savePinnedChannels(newData, this);
 				return this.sortDMsByTime(existingDMs, type);
 			}
 
