@@ -2,7 +2,7 @@
  * @name BadgesEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.7
+ * @version 1.6.8
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "BadgesEverywhere",
 			"author": "DevilBro",
-			"version": "1.6.7",
+			"version": "1.6.8",
 			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/UserPopout"
 		},
 		"changeLog": {
 			"fixed": {
-				"Margin": "Removed Margin which Discord added by itself"
+				"Margin & Overlapping": "Fixed Margin and Overlapping Issue, thanks Discord"
 			}
 		}
 	};
@@ -238,7 +238,6 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN._badgeseverywherebadge} {
 						height: 17px !important;
-						margin: 0 !important;
 					}
 					${BDFDB.dotCN._badgeseverywheresize17} {
 						width: 17px !important; min-width: 17px !important;
@@ -446,7 +445,7 @@ module.exports = (_ => {
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._badgeseverywherebadges, BDFDB.disCN[`_badgeseverywherebadges${type}`], miniTypes.includes(type) && BDFDB.disCN._badgeseverywheremini), 
 					children: BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._badgeseverywherebadgesinner, BDFDB.disCN.userbadges, !uncolored && BDFDB.disCN.userbadgescolored),
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._badgeseverywherebadgesinner, !uncolored && BDFDB.disCN.userbadgescolored),
 						children: renderedBadges
 					})
 				});
