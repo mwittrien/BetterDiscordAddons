@@ -346,7 +346,7 @@ module.exports = (_ => {
 						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels[pinnedInGuild ? "context_unpinguild" : "context_pinguild"],
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, pinnedInGuild ? "unpin-serverlist" : "pin-serverlist"),
-							danger: pinnedInGuild,
+							color: pinnedInGuild ? BDFDB.LibraryComponents.MenuItems.Colors.DANGER : BDFDB.LibraryComponents.MenuItems.Colors.DEFAULT,
 							action: _ => {
 								if (!pinnedInGuild) this.addPin(id, "guildList");
 								else this.removePin(id, "guildList");
@@ -974,20 +974,20 @@ module.exports = (_ => {
 				});
 			}
 
-			addPin (newId, type) {
-				if (!newId) return;
+			addPin (id, type) {
+				if (!id) return;
 				let channels = this.getPinnedChannels(type);
-				for (let id in channels) channels[id] = channels[id] + 1;
-				channels[newId] = 0;
+				for (let i in channels) channels[i] = channels[i] + 1;
+				channels[id] = 0;
 				this.savePinnedChannels(channels, type);
 				this.updateContainer(type);
 			}
 
 			removePin (id, type) {
 				if (!id) return;
-				let newData = this.getPinnedChannels(type);
-				delete newData[id];
-				this.savePinnedChannels(newData, type);
+				let channels = this.getPinnedChannels(type);
+				delete channels[id];
+				this.savePinnedChannels(channels, type);
 				this.updateContainer(type);
 			}
 			
