@@ -1,5 +1,7 @@
 {
-	"PluginNameMap": {},
+	"PluginNameMap": {
+		"OwnerTag": "StaffTag"
+	},
 	"LibraryRequires": ["child_process", "electron", "fs", "path", "process", "request"],
 	"DiscordObjects": {
 		"Channel": {"props": ["getRecipientId", "isManaged", "getGuildId"]},
@@ -824,11 +826,6 @@
 			"settingsToolbar": "settingsToolbar-wu4yfQ",
 			"toolbar": "toolbar-hRzFw-"
 		},
-		"OwnerTag": {
-			"adminIcon": "admin-Kv1Hp_",
-			"managementIcon": "management-3fF_o8",
-			"ownerIcon": "owner-FfFh3B-"
-		},
 		"PinDMs": {
 			"dragPreview": "dragPreview-nXiByA",
 			"dmChannelPinned": "pinned-0lM4wD",
@@ -904,6 +901,11 @@
 			"song": "song-tIdBpF",
 			"timeline": "timeline-UWmgAx",
 			"volumeSlider": "volumeSlider-sR5g00"
+		},
+		"StaffTag": {
+			"adminIcon": "admin-Kv1Hp_",
+			"managementIcon": "management-3fF_o8",
+			"ownerIcon": "owner-FfFh3B-"
 		},
 		"ThemeRepo": {
 			"dragBar": "dragBar-4FsRaa",
@@ -1314,9 +1316,6 @@
 		"_oldtitlebarenabled": ["OldTitleBar", "oldTitleBarEnabled"],
 		"_oldtitlebarsettingstoolbar": ["OldTitleBar", "settingsToolbar"],
 		"_oldtitlebartoolbar": ["OldTitleBar", "toolbar"],
-		"_ownertagadminicon": ["OwnerTag", "adminIcon"],
-		"_ownertagmanagementicon": ["OwnerTag", "managementIcon"],
-		"_ownertagownericon": ["OwnerTag", "ownerIcon"],
 		"_pindmsdragpreview": ["PinDMs", "dragPreview"],
 		"_pindmsdmchannelpinned": ["PinDMs", "dmChannelPinned"],
 		"_pindmsdmchannelplaceholder": ["PinDMs", "dmChannelPlaceholder"],
@@ -1375,6 +1374,9 @@
 		"_spotifycontrolssong": ["SpotifyControls", "song"],
 		"_spotifycontrolstimeline": ["SpotifyControls", "timeline"],
 		"_spotifycontrolsvolumeslider": ["SpotifyControls", "volumeSlider"],
+		"_stafftagadminicon": ["StaffTag", "adminIcon"],
+		"_stafftagmanagementicon": ["StaffTag", "managementIcon"],
+		"_stafftagownericon": ["StaffTag", "ownerIcon"],
 		"_themerepodragbar": ["ThemeRepo", "dragBar"],
 		"_themerepodragcorner": ["ThemeRepo", "dragCorner"],
 		"_themerepodraginterface": ["ThemeRepo", "dragInterface"],

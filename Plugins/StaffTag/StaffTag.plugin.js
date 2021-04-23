@@ -1,28 +1,28 @@
 /**
- * @name OwnerTag
+ * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.9
+ * @version 1.4.0
  * @description Adds a Tag/Crown to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://mwittrien.github.io/
- * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OwnerTag/
- * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/OwnerTag/OwnerTag.plugin.js
+ * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/StaffTag/
+ * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/StaffTag/StaffTag.plugin.js
  */
 
 module.exports = (_ => {
 	const config = {
 		"info": {
-			"name": "OwnerTag",
+			"name": "StaffTag",
 			"author": "DevilBro",
-			"version": "1.3.9",
+			"version": "1.4.0",
 			"description": "Adds a Tag/Crown to Server Owners (or Admins/Management)"
 		},
 		"changeLog": {
-			"added": {
-				"New Settings": "Added new tag options for Management (Users/Messages) and restructured the Settings so you might need to reconfigure some stuff"
+			"progress": {
+				"New Plugin Name": "Changed Plugin Name for more clarity"
 			}
 		}
 	};
@@ -72,7 +72,7 @@ module.exports = (_ => {
 			OWNER: 3
 		};
 		
-		return class OwnerTag extends Plugin {
+		return class StaffTag extends Plugin {
 			onLoad () {
 				this.patchedModules = {
 					after: {
@@ -115,10 +115,10 @@ module.exports = (_ => {
 				};
 			
 				this.css = `
-					${BDFDB.dotCN.memberownericon + BDFDB.dotCN._ownertagadminicon} {
+					${BDFDB.dotCN.memberownericon + BDFDB.dotCN._stafftagadminicon} {
 						color: #aaa9ad;
 					}
-					${BDFDB.dotCN.memberownericon + BDFDB.dotCN._ownertagmanagementicon} {
+					${BDFDB.dotCN.memberownericon + BDFDB.dotCN._stafftagmanagementicon} {
 						color: #88540b;
 					}
 					${BDFDB.dotCNS.message + BDFDB.dotCN.memberownericon} {
@@ -225,7 +225,7 @@ module.exports = (_ => {
 			processMemberListItem (e) {
 				let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
 				if (userType && this.settings.tagPlaces.memberList) {
-					this.injectOwnerTag(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, userType, 1, {
+					this.injectStaffTag(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, userType, 1, {
 						channelId: e.instance.props.channel && e.instance.props.channel.id,
 						tagClass: BDFDB.disCN.bottagmember
 					});
@@ -235,7 +235,7 @@ module.exports = (_ => {
 			processMessageUsername (e) {
 				if (e.instance.props.message && this.settings.tagPlaces.chat) {
 					let userType = this.getUserType(e.instance.props.message.author, e.instance.props.message.channel_id);
-					if (userType) this.injectOwnerTag(e.returnvalue.props.children, e.instance.props.message.author, userType, e.instance.props.compact ? 0 : 2, {
+					if (userType) this.injectStaffTag(e.returnvalue.props.children, e.instance.props.message.author, userType, e.instance.props.compact ? 0 : 2, {
 						channelId: e.instance.props.message.channel_id,
 						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 						useRem: true
@@ -248,7 +248,7 @@ module.exports = (_ => {
 					let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
 					if (userType) {
 						let content = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.voicecontent]]});
-						if (content) this.injectOwnerTag(content.props.children, e.instance.props.user, userType, 3, {
+						if (content) this.injectStaffTag(content.props.children, e.instance.props.user, userType, 3, {
 							channelId: e.instance.props.channel && e.instance.props.channel.id,
 						});
 					}
@@ -270,7 +270,7 @@ module.exports = (_ => {
 								tagClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
 								break;
 						}
-						if (inject) this.injectOwnerTag(e.returnvalue.props.children, e.instance.props.user, userType, 2, {
+						if (inject) this.injectStaffTag(e.returnvalue.props.children, e.instance.props.user, userType, 2, {
 							tagClass: tagClass,
 							useRem: e.instance.props.useRemSizes,
 							inverted: e.instance.props.invertBotTagColor
@@ -284,7 +284,7 @@ module.exports = (_ => {
 					let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
 					if (userType) {
 						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadertagwithnickname]]});
-						if (index > -1) this.injectOwnerTag(children, e.instance.props.user, userType, 2, {
+						if (index > -1) this.injectStaffTag(children, e.instance.props.user, userType, 2, {
 							tagClass: BDFDB.disCNS.userpopoutheaderbottagwithnickname + BDFDB.disCN.bottagnametag,
 							inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
 						});
@@ -292,7 +292,7 @@ module.exports = (_ => {
 				}
 			}
 
-			injectOwnerTag (children, user, userType, insertIndex, config = {}) {
+			injectStaffTag (children, user, userType, insertIndex, config = {}) {
 				if (!BDFDB.ArrayUtils.is(children) || !user) return;
 				let [_, index] = BDFDB.ReactUtils.findParent(children, {props: [["text", [BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER, BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER]]]});
 				if (index > -1) children[index] = null;
@@ -304,15 +304,15 @@ module.exports = (_ => {
 					switch (userType) {
 						case userTypes.OWNER:
 							label = channel && channel.isGroupDM() ? BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER : BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER;
-							className = BDFDB.disCN._ownertagownericon;
+							className = BDFDB.disCN._stafftagownericon;
 							break;
 						case userTypes.ADMIN:
 							label = BDFDB.LanguageUtils.LanguageStrings.ADMINISTRATOR;
-							className = BDFDB.disCN._ownertagadminicon;
+							className = BDFDB.disCN._stafftagadminicon;
 							break;
 						case userTypes.MANAGEMENT:
 							label = `${this.labels.management} (${this.getManagementLabel(user)})`;
-							className = BDFDB.disCN._ownertagmanagementicon;
+							className = BDFDB.disCN._stafftagmanagementicon;
 							break;
 					}
 					tag = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {

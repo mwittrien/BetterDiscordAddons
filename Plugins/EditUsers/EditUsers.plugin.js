@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.1.7
+ * @version 4.1.8
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.1.7",
+			"version": "4.1.8",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
-			"fixed": {
-				"Tags in DMs List": "Fixed overflowing tags in dms turning invisible"
+			"added": {
+				"Do not overwrite Server Nicks": "Added options so local usernames never overwrite the server nicknames of users"
 			}
 		}
 	};
@@ -205,8 +205,9 @@ module.exports = (_ => {
 					if (settings.changeInChatWindow && e.methodArguments[0] && e.methodArguments[0].author && changedUsers[e.methodArguments[0].author.id] && this.shouldChangeInChat(e.methodArguments[0].channel_id)) {
 						let data = changedUsers[e.methodArguments[0].author.id];
 						if (data.name || data.color1) {
-							let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.methodArguments[0].channel_id) || {}).guild_id, e.methodArguments[0].author.id) || {}).colorString || data.color1;
-							if (data.name) e.returnValue.nick = data.name;
+							let member = BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.methodArguments[0].channel_id) || {}).guild_id, e.methodArguments[0].author.id);
+							let color1 = data.color1 && data.useRoleColor && member && member.colorString || data.color1;
+							if (data.name) e.returnValue.nick = data.useServerNick && member && member.nick || data.name;
 							if (color1) e.returnValue.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
 						}
 					}
@@ -256,33 +257,39 @@ module.exports = (_ => {
 			}
 
 			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [];
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
+					collapseStates: collapseStates,
+					children: _ => {
+						let settingsItems = [];
 				
-				for (let cat in settingsHeaders) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-					title: settingsHeaders[cat],
-					dividerBottom: true,
-					children: Object.keys(settings).filter(key => this.defaults.settings[key].category == cat).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "Switch",
-						plugin: this,
-						keys: ["settings", key],
-						label: this.defaults.settings[key].description,
-						value: settings[key]
-					}))
-				}));
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-					type: "Button",
-					color: BDFDB.LibraryComponents.Button.Colors.RED,
-					label: "Reset all Users",
-					onClick: _ => {
-						BDFDB.ModalUtils.confirm(this, this.labels.confirm_resetall, _ => {
-							BDFDB.DataUtils.remove(this, "users");
-							this.forceUpdateAll();
-						});
-					},
-					children: BDFDB.LanguageUtils.LanguageStrings.RESET
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+						for (let cat in settingsHeaders) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							title: settingsHeaders[cat],
+							dividerBottom: true,
+							children: Object.keys(settings).filter(key => this.defaults.settings[key].category == cat).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["settings", key],
+								label: this.defaults.settings[key].description,
+								value: settings[key]
+							}))
+						}));
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							type: "Button",
+							color: BDFDB.LibraryComponents.Button.Colors.RED,
+							label: "Reset all Users",
+							onClick: _ => {
+								BDFDB.ModalUtils.confirm(this, this.labels.confirm_resetall, _ => {
+									BDFDB.DataUtils.remove(this, "users");
+									this.forceUpdateAll();
+								});
+							},
+							children: BDFDB.LanguageUtils.LanguageStrings.RESET
+						}));
+						
+						return settingsItems;
+					}
+				});
 			}
 
 			onSettingsClosed () {
@@ -448,7 +455,7 @@ module.exports = (_ => {
 					if (!e.returnvalue) {
 						e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
 						if (data) {
-							if (data.name) {
+							if (data.name && !(data.useServerNick && e.instance.props.nickname)) {
 								e.instance.props.nickname = data.name;
 								if (e.instance.props.guildMember) e.instance.props.guildMember = Object.assign({}, e.instance.props.guildMember, {nick: data.name});
 							}
@@ -511,7 +518,10 @@ module.exports = (_ => {
 					if (!e.returnvalue) {
 						e.instance.props.user = this.getUserData(e.instance.props.user.id);
 						let data = changedUsers[e.instance.props.user.id];
-						if (data && data.name) e.instance.props.nick = data.name;
+						if (data && data.name) {
+							let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), e.instance.props.user.id);
+							if (!member || !member.nick || !data.useServerNick) e.instance.props.nick = data.name;
+						}
 					}
 					else {
 						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.voicename]]});
@@ -807,7 +817,10 @@ module.exports = (_ => {
 						e.instance.props.user = this.getUserData(e.instance.props.user.id);
 						let data = changedUsers[e.instance.props.user.id];
 						if (data) {
-							if (data.name) e.instance.props.nick = data.name;
+							if (data.name) {
+								let member = BDFDB.LibraryModules.MemberStore.getMember(e.instance.props.channel.guild_id, e.instance.props.user.id);
+								if (!member || !member.nick || !data.useServerNick) e.instance.props.nick = data.name;
+							}
 							if (data.removeStatus || data.status || data.statusEmoji) {
 								e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
 								let activity = this.createCustomStatus(data);
@@ -1193,15 +1206,37 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader1,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: this.labels.modal_username,
+								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.marginbottom20,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-										value: data.name,
-										placeholder: member.nick || user.username,
-										autoFocus: true,
-										onChange: value => {newData.name = value;}
-									})
+									children: [
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+											className: BDFDB.disCN.marginbottom8,
+											align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+											direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
+											children: [
+												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+													className: BDFDB.disCN.marginreset,
+													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+													children: this.labels.modal_username
+												}),
+												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+													type: "Switch",
+													margin: 0,
+													grow: 0,
+													label: this.labels.modal_useservernick,
+													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+													value: data.useServerNick,
+													onChange: value => {newData.useServerNick = value}
+												})
+											]
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+											value: data.name,
+											placeholder: member.nick || user.username,
+											autoFocus: true,
+											onChange: value => {newData.name = value;}
+										})
+									]
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 									title: this.labels.modal_usertag,
@@ -1495,6 +1530,7 @@ module.exports = (_ => {
 							modal_username:						"Локално потребителско име",
 							modal_userolecolor:					"Не презаписвайте цвета на ролята",
 							modal_usertag:						"Етикет",
+							modal_useservernick:				"Не презаписвайте псевдонимите",
 							submenu_resetsettings:				"Нулиране на потребителя",
 							submenu_usersettings:				"Промяна на настройките"
 						};
@@ -1519,6 +1555,7 @@ module.exports = (_ => {
 							modal_username:						"Lokalt brugernavn",
 							modal_userolecolor:					"Overskriv ikke rollefarven",
 							modal_usertag:						"Tag",
+							modal_useservernick:				"Overskriv ikke kælenavne",
 							submenu_resetsettings:				"Nulstil bruger",
 							submenu_usersettings:				"Ændre indstillinger"
 						};
@@ -1543,6 +1580,7 @@ module.exports = (_ => {
 							modal_username:						"Lokaler Benutzername",
 							modal_userolecolor:					"Rollenfarbe nicht überschreiben",
 							modal_usertag:						"Etikett",
+							modal_useservernick:				"Nicknamen nicht überschreiben",
 							submenu_resetsettings:				"Benutzer zurücksetzen",
 							submenu_usersettings:				"Einstellungen ändern"
 						};
@@ -1567,6 +1605,7 @@ module.exports = (_ => {
 							modal_username:						"Τοπικό όνομα χρήστη",
 							modal_userolecolor:					"Μην αντικαθιστάτε το χρώμα του ρόλου",
 							modal_usertag:						"Ετικέτα",
+							modal_useservernick:				"Μην αντικαθιστάτε ψευδώνυμα",
 							submenu_resetsettings:				"Επαναφορά χρήστη",
 							submenu_usersettings:				"Αλλαξε ρυθμίσεις"
 						};
@@ -1591,6 +1630,7 @@ module.exports = (_ => {
 							modal_username:						"Nombre de usuario local",
 							modal_userolecolor:					"No sobrescriba el color de la función",
 							modal_usertag:						"Etiqueta",
+							modal_useservernick:				"No sobrescriba los apodos",
 							submenu_resetsettings:				"Restablecer usuario",
 							submenu_usersettings:				"Cambiar ajustes"
 						};
@@ -1615,6 +1655,7 @@ module.exports = (_ => {
 							modal_username:						"Paikallinen käyttäjätunnus",
 							modal_userolecolor:					"Älä korvaa roolin väriä",
 							modal_usertag:						"Tag",
+							modal_useservernick:				"Älä korvaa lempinimiä",
 							submenu_resetsettings:				"Nollaa käyttäjä",
 							submenu_usersettings:				"Vaihda asetuksia"
 						};
@@ -1639,6 +1680,7 @@ module.exports = (_ => {
 							modal_username:						"Nom local d'utilisateur",
 							modal_userolecolor:					"Ne pas écraser la couleur du rôle",
 							modal_usertag:						"Marque",
+							modal_useservernick:				"Ne pas écraser les surnoms",
 							submenu_resetsettings:				"Réinitialiser l'utilisateur",
 							submenu_usersettings:				"Modifier les paramètres"
 						};
@@ -1663,6 +1705,7 @@ module.exports = (_ => {
 							modal_username:						"Lokalno korisničko ime",
 							modal_userolecolor:					"Nemojte prebrisati boju uloge",
 							modal_usertag:						"Označiti",
+							modal_useservernick:				"Ne prepisujte nadimke",
 							submenu_resetsettings:				"Resetiraj korisnika",
 							submenu_usersettings:				"Promijeniti postavke"
 						};
@@ -1687,6 +1730,7 @@ module.exports = (_ => {
 							modal_username:						"Helyi felhasználónév",
 							modal_userolecolor:					"Ne írja felül a Szerepszínt",
 							modal_usertag:						"Címke",
+							modal_useservernick:				"Ne írja felül a beceneveket",
 							submenu_resetsettings:				"Felhasználó visszaállítása",
 							submenu_usersettings:				"Beállítások megváltoztatása"
 						};
@@ -1711,6 +1755,7 @@ module.exports = (_ => {
 							modal_username:						"Nome utente locale",
 							modal_userolecolor:					"Non sovrascrivere il colore del ruolo",
 							modal_usertag:						"Etichetta",
+							modal_useservernick:				"Non sovrascrivere i soprannomi",
 							submenu_resetsettings:				"Reimposta utente",
 							submenu_usersettings:				"Cambia impostazioni"
 						};
@@ -1735,6 +1780,7 @@ module.exports = (_ => {
 							modal_username:						"ローカルユーザー名",
 							modal_userolecolor:					"役割の色を上書きしないでください",
 							modal_usertag:						"鬼ごっこ",
+							modal_useservernick:				"ニックネームを上書きしないでください",
 							submenu_resetsettings:				"ユーザーのリセット",
 							submenu_usersettings:				"設定を変更する"
 						};
@@ -1759,6 +1805,7 @@ module.exports = (_ => {
 							modal_username:						"로컬 사용자 이름",
 							modal_userolecolor:					"역할 색상을 덮어 쓰지 마십시오.",
 							modal_usertag:						"꼬리표",
+							modal_useservernick:				"별명을 덮어 쓰지 마십시오",
 							submenu_resetsettings:				"사용자 재설정",
 							submenu_usersettings:				"설정 변경"
 						};
@@ -1783,6 +1830,7 @@ module.exports = (_ => {
 							modal_username:						"Vietinis vartotojo vardas",
 							modal_userolecolor:					"Neperrašykite vaidmens spalvos",
 							modal_usertag:						"Žyma",
+							modal_useservernick:				"Neperrašykite slapyvardžių",
 							submenu_resetsettings:				"Iš naujo nustatyti vartotoją",
 							submenu_usersettings:				"Pakeisti nustatymus"
 						};
@@ -1807,6 +1855,7 @@ module.exports = (_ => {
 							modal_username:						"Lokale gebruikersnaam",
 							modal_userolecolor:					"Overschrijf de rolkleur niet",
 							modal_usertag:						"Label",
+							modal_useservernick:				"Overschrijf geen bijnamen",
 							submenu_resetsettings:				"Gebruiker resetten",
 							submenu_usersettings:				"Instellingen veranderen"
 						};
@@ -1831,6 +1880,7 @@ module.exports = (_ => {
 							modal_username:						"Lokalt brukernavn",
 							modal_userolecolor:					"Ikke skriv rollefargen",
 							modal_usertag:						"Stikkord",
+							modal_useservernick:				"Ikke overskriv kallenavn",
 							submenu_resetsettings:				"Tilbakestill bruker",
 							submenu_usersettings:				"Endre innstillinger"
 						};
@@ -1855,6 +1905,7 @@ module.exports = (_ => {
 							modal_username:						"Lokalna nazwa użytkownika",
 							modal_userolecolor:					"Nie zastępuj koloru roli",
 							modal_usertag:						"Etykietka",
+							modal_useservernick:				"Nie nadpisuj pseudonimów",
 							submenu_resetsettings:				"Resetuj użytkownika",
 							submenu_usersettings:				"Zmień ustawienia"
 						};
@@ -1879,6 +1930,7 @@ module.exports = (_ => {
 							modal_username:						"Nome de usuário local",
 							modal_userolecolor:					"Não sobrescreva a Cor da Função",
 							modal_usertag:						"Tag",
+							modal_useservernick:				"Não sobrescrever apelidos",
 							submenu_resetsettings:				"Reiniciar usuário",
 							submenu_usersettings:				"Mudar configurações"
 						};
@@ -1903,6 +1955,7 @@ module.exports = (_ => {
 							modal_username:						"Nume utilizator local",
 							modal_userolecolor:					"Nu suprascrieți culoarea rolului",
 							modal_usertag:						"Etichetă",
+							modal_useservernick:				"Nu suprascrieți porecle",
 							submenu_resetsettings:				"Resetați utilizatorul",
 							submenu_usersettings:				"Schimbă setările"
 						};
@@ -1927,6 +1980,7 @@ module.exports = (_ => {
 							modal_username:						"Локальное имя пользователя",
 							modal_userolecolor:					"Не перезаписывайте цвет роли",
 							modal_usertag:						"Тег",
+							modal_useservernick:				"Не перезаписывать никнеймы",
 							submenu_resetsettings:				"Сбросить пользователя",
 							submenu_usersettings:				"Изменить настройки"
 						};
@@ -1951,6 +2005,7 @@ module.exports = (_ => {
 							modal_username:						"Lokalt användarnamn",
 							modal_userolecolor:					"Skriv inte över rollfärgen",
 							modal_usertag:						"Märka",
+							modal_useservernick:				"Skriv inte över smeknamn",
 							submenu_resetsettings:				"Återställ användare",
 							submenu_usersettings:				"Ändra inställningar"
 						};
@@ -1975,6 +2030,7 @@ module.exports = (_ => {
 							modal_username:						"ชื่อผู้ใช้ท้องถิ่น",
 							modal_userolecolor:					"อย่าเขียนทับสีของบทบาท",
 							modal_usertag:						"แท็ก",
+							modal_useservernick:				"อย่าเขียนทับชื่อเล่น",
 							submenu_resetsettings:				"รีเซ็ตผู้ใช้",
 							submenu_usersettings:				"เปลี่ยนการตั้งค่า"
 						};
@@ -1999,6 +2055,7 @@ module.exports = (_ => {
 							modal_username:						"Yerel Kullanıcı Adı",
 							modal_userolecolor:					"Rol Renginin üzerine yazmayın",
 							modal_usertag:						"Etiket",
+							modal_useservernick:				"Takma adların üzerine yazmayın",
 							submenu_resetsettings:				"Kullanıcıyı Sıfırla",
 							submenu_usersettings:				"Ayarları değiştir"
 						};
@@ -2023,6 +2080,7 @@ module.exports = (_ => {
 							modal_username:						"Локальне ім’я користувача",
 							modal_userolecolor:					"Не перезаписуйте колір ролі",
 							modal_usertag:						"Позначка",
+							modal_useservernick:				"Не перезаписуйте псевдоніми",
 							submenu_resetsettings:				"Скинути налаштування користувача",
 							submenu_usersettings:				"Змінити налаштування"
 						};
@@ -2047,6 +2105,7 @@ module.exports = (_ => {
 							modal_username:						"Tên người dùng cục bộ",
 							modal_userolecolor:					"Không ghi đè Màu vai trò",
 							modal_usertag:						"Nhãn",
+							modal_useservernick:				"Không ghi đè biệt hiệu",
 							submenu_resetsettings:				"Đặt lại người dùng",
 							submenu_usersettings:				"Thay đổi cài đặt"
 						};
@@ -2071,6 +2130,7 @@ module.exports = (_ => {
 							modal_username:						"本地用户名",
 							modal_userolecolor:					"不要覆盖角色颜色",
 							modal_usertag:						"标签",
+							modal_useservernick:				"不要覆盖昵称",
 							submenu_resetsettings:				"重置用户",
 							submenu_usersettings:				"更改设置"
 						};
@@ -2095,6 +2155,7 @@ module.exports = (_ => {
 							modal_username:						"本地用戶名",
 							modal_userolecolor:					"不要覆蓋角色顏色",
 							modal_usertag:						"標籤",
+							modal_useservernick:				"不要覆蓋暱稱",
 							submenu_resetsettings:				"重置用戶",
 							submenu_usersettings:				"更改設置"
 						};
@@ -2119,6 +2180,7 @@ module.exports = (_ => {
 							modal_username:						"Local Username",
 							modal_userolecolor:					"Do not overwrite the Role Color",
 							modal_usertag:						"Tag",
+							modal_useservernick:				"Do not overwrite Nicknames",
 							submenu_resetsettings:				"Reset User",
 							submenu_usersettings:				"Change Settings"
 						};

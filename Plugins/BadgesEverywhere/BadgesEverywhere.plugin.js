@@ -2,7 +2,7 @@
  * @name BadgesEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.6
+ * @version 1.6.7
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BadgesEverywhere",
 			"author": "DevilBro",
-			"version": "1.6.6",
+			"version": "1.6.7",
 			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/UserPopout"
+		},
+		"changeLog": {
+			"fixed": {
+				"Margin": "Removed Margin which Discord added by itself"
+			}
 		}
 	};
 	
@@ -233,6 +238,7 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN._badgeseverywherebadge} {
 						height: 17px !important;
+						margin: 0 !important;
 					}
 					${BDFDB.dotCN._badgeseverywheresize17} {
 						width: 17px !important; min-width: 17px !important;

@@ -35,8 +35,7 @@
  - [Last Message Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/LastMessageDate) - Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  - [Message Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MessageUtilities) - Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)
  - [Notification Sounds](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/NotificationSounds) - Allows you to replace the native Sounds with custom Sounds
- - [Old Title Bar](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OldTitleBar) - Allows you to switch to Discord's old Titlebar or add the native OS Titlebar
- - [Owner Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OwnerTag) - Adds a Tag/Crown to Server Owners (or Admins/Management)
+ - [Old Title Bar](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OldTitleBar) - Allows you to switch to Discord's old Titlebar
  - [Personal Pins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PersonalPins) - Allows you to locally pin Messages
  - [Pin DMs](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PinDMs) - Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  - [Quick Mention](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/QuickMention) - Adds a Mention Button to the Message Options Bar
@@ -52,6 +51,7 @@
  - [Show Hidden Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowHiddenChannels) - Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  - [Spell Check](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpellCheck) - Adds a Spell Check to all Message Inputs
  - [Spotify Controls](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpotifyControls) - Adds a Control Panel while listening to Spotify on a connected Account
+ - [Staff Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/StaffTag) - Adds a Tag/Crown to Server Owners (or Admins/Management)
  - [Steam Profile Link](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SteamProfileLink) - Opens Steam Links in Steam instead of your Browser
  - [Theme Settings](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeSettings) - Allows you to change Theme Variables within Discord
  - [Timed Light Dark Mode](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TimedLightDarkMode) - Adds a Time Slider to the Appearance Settings
