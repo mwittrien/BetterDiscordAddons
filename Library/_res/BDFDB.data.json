@@ -128,6 +128,7 @@
 		"UserSettingsUtils": {"props": ["open", "updateAccount"]},
 		"UserStore": {"props": ["getUser", "getUsers"]},
 		"Utilities": {"props": ["flatMap", "cloneDeep"]},
+		"VoiceChannelUtils": {"props": ["isFullscreenInContext", "getParticipants"]},
 		"VoiceUtils": {"props": ["getAllVoiceStates", "getVoiceStatesForChannel"]},
 		"WindowUtils": {"props": ["minimize", "maximize", "close"]},
 		"ZoomUtils": {"props": ["setZoom", "setFontSize"]}
