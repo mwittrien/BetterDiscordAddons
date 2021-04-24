@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.4
+ * @version 4.3.6
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.3.4",
+			"version": "4.3.6",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		},
 		"changeLog": {
@@ -172,7 +172,7 @@ module.exports = (_ => {
 						Baidu: 		{value: true, 	name: "Baidu", 		url: "http://image.baidu.com/pcdutu?queryImageUrl=" + imgUrlReplaceString},
 						Bing: 		{value: true, 	name: "Bing", 		url: "https://www.bing.com/images/search?q=imgurl: " + imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
 						Google:		{value: true, 	name: "Google", 	url: "https://images.google.com/searchbyimage?image_url=" + imgUrlReplaceString},
-						ImgOps:		{value: true, 	name: "ImgOps", 	url: "https://imgops.com/specialized+reverse/" + imgUrlReplaceString},
+						ImgOps:		{value: true, 	name: "ImgOps", 	raw: true, 	url: "https://imgops.com/specialized+reverse/" + imgUrlReplaceString},
 						IQDB:		{value: true, 	name: "IQDB", 		url: "https://iqdb.org/?url=" + imgUrlReplaceString},
 						Reddit: 	{value: true, 	name: "Reddit", 	url: "http://karmadecay.com/search?q=" + imgUrlReplaceString},
 						SauceNAO: 	{value: true, 	name: "SauceNAO", 	url: "https://saucenao.com/search.php?db=999&url=" + imgUrlReplaceString},
@@ -527,7 +527,7 @@ module.exports = (_ => {
 						if (BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.embedvideo) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.attachmentvideo, e.instance.props.target)) {
 							let src = "", href = "", ele = e.instance.props.target;
 							while (ele instanceof Node) ele instanceof HTMLImageElement && null != ele.src && (src = ele.src), ele instanceof HTMLAnchorElement && null != ele.href && (href = ele.href), ele = ele.parentNode;
-							this.injectItem(e, {file: e.instance.props.target.src, link: href || src});
+							this.injectItem(e, {file: e.instance.props.target.src, original: href || src});
 						}
 					}
 					else {
@@ -542,13 +542,14 @@ module.exports = (_ => {
 				let validUrls = urls.filter(n => this.isValid(n.file || n)).map(n => {
 					let srcUrl = (n.file || n).replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096");
 					let url = srcUrl.replace(/[\?\&](height|width)=\d+/g, "").split("%3A")[0];
+					let original = (n.original || n).replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "").split("%3A")[0];
 					if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1 || url.indexOf("https://images-ext-2.discordapp.net/external/") > -1) {
 						if (url.split("/https/").length > 1) url = "https://" + url.split("/https/").pop();
 						else if (url.split("/http/").length > 1) url = "http://" + url.split("/http/").pop();
 					}
 					const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
 					const fileType = file && (file.split(".").pop() || "");
-					return url && fileType && !fileTypes.includes(fileType) && fileTypes.push(fileType) && {file: url, src: srcUrl, link: n.link || n, fileType};
+					return url && fileType && !fileTypes.includes(fileType) && fileTypes.push(fileType) && {file: url, src: srcUrl, original: original, fileType};
 				}).filter(n => n);
 				if (!validUrls.length) return;
 				
@@ -590,17 +591,17 @@ module.exports = (_ => {
 						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.OPEN_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "open-link"),
-							action: _ => {BDFDB.DiscordUtils.openLink(urls.link);}
+							action: _ => {BDFDB.DiscordUtils.openLink(urls.original);}
 						}),
 						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-link"),
 							action: _ => {
-								BDFDB.LibraryRequires.electron.clipboard.write({text: urls.link});
+								BDFDB.LibraryRequires.electron.clipboard.write({text: urls.original});
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED, {type: "success"});
 							}
 						}),
-						urls.file != urls.link && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						urls.file != urls.original && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_MEDIA_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-media-link"),
 							action: _ => {
@@ -688,15 +689,12 @@ module.exports = (_ => {
 								color: key == "_all" ? BDFDB.LibraryComponents.MenuItems.Colors.DANGER : BDFDB.LibraryComponents.MenuItems.Colors.DEFAULT,
 								persisting: true,
 								action: event => {
+									const open = (url, k) => BDFDB.DiscordUtils.openLink(this.defaults.engines[k].url.replace(imgUrlReplaceString, this.defaults.engines[k].raw ? url : encodeURIComponent(url)), {minimized: event.shiftKey});
 									if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
 									if (key == "_all") {
-										for (let key2 in enginesWithoutAll) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(imgUrlReplaceString, encodeURIComponent(urls.file)), {
-											minimized: event.shiftKey
-										});
+										for (let key2 in enginesWithoutAll) open(urls.file, key2);
 									}
-									else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(imgUrlReplaceString, encodeURIComponent(urls.file)), {
-										minimized: event.shiftKey
-									});
+									else open(urls.file, key);
 								}
 							}))
 						})
