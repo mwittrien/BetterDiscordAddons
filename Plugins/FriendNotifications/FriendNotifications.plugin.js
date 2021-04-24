@@ -271,6 +271,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				// REMOVE 24.04.2021
 				let oldData = BDFDB.DataUtils.load(this);
 				if (oldData.settings) {
 					this.settings.general = oldData.settings;

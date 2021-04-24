@@ -171,6 +171,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				// REMOVE 24.04.2021
 				if (!BDFDB.DataUtils.load(this, "pinned", BDFDB.UserUtils.me.id)) {
 					let pinned = {};
 					let channelListPinned = BDFDB.DataUtils.load(this, "dmCategories");
