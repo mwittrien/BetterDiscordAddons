@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.9
+ * @version 1.6.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -22,7 +22,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.5.9",
+			"version": "1.6.0",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -7740,7 +7740,7 @@ module.exports = (_ => {
 						avatar.props[InternalData.userIdAttribute] = user.id;
 						let role = "", className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")), addBadge = InternalBDFDB.settings.general.showSupportBadges, customBadge = false;
 						if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
-							role = BDFDB_Patrons[user.id].t3 ? "BDFDB Patron Level 2" : "BDFDB Patron";
+							role = BDFDB_Patrons[user.id].text || (BDFDB_Patrons[user.id].t3 ? "BDFDB Patron Level 2" : "BDFDB Patron");
 							customBadge = addBadge && BDFDB_Patrons[user.id].t3 && BDFDB_Patrons[user.id].custom;
 							className = BDFDB.DOMUtils.formatClassName(className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, customBadge && BDFDB.disCN.bdfdbsupportercustom);
 						}
@@ -7758,7 +7758,7 @@ module.exports = (_ => {
 							let newProps = {
 								className: className,
 								style: {borderRadius: 0, overflow: "visible"},
-								custombadge_id: customBadge ? user.id : null,
+								"custom-badge-id": customBadge ? user.id : null,
 								children: [avatar]
 							};
 							newProps[InternalData.userIdAttribute] = user.id;
@@ -7779,7 +7779,7 @@ module.exports = (_ => {
 						avatar.setAttribute(InternalData.userIdAttribute, user.id);
 						let role = "", addBadge = InternalBDFDB.settings.general.showSupportBadges, customBadge = false;
 						if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
-							role = BDFDB_Patrons[user.id].t3 ? "BDFDB Patron Level 2" : "BDFDB Patron";
+							role = BDFDB_Patrons[user.id].text || (BDFDB_Patrons[user.id].t3 ? "BDFDB Patron Level 2" : "BDFDB Patron");
 							customBadge = addBadge && BDFDB_Patrons[user.id].t3 && BDFDB_Patrons[user.id].custom;
 							avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, customBadge && BDFDB.disCN.bdfdbsupportercustom);
 						}
@@ -7790,7 +7790,7 @@ module.exports = (_ => {
 						}
 						if (role && !avatar.querySelector(BDFDB.dotCN.bdfdbbadge)) {
 							if (addBadge) {
-								if (customBadge) avatar.setAttribute("custombadge_id", user.id);
+								if (customBadge) avatar.setAttribute("custom-badge-id", user.id);
 								let badge = document.createElement("div");
 								badge.className = BDFDB.disCN.bdfdbbadge;
 								badge.addEventListener("mouseenter", _ => BDFDB.TooltipUtils.create(badge, role, {position: "top"}));
