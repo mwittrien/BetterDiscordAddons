@@ -465,18 +465,6 @@ module.exports = (_ => {
 					${BDFDB.dotCN.guildswrapper + BDFDB.dotCN._serverfoldersfoldercontent + BDFDB.dotCN._serverfoldersfoldercontentclosed} {
 						width: 0px !important;
 					}
-					${BDFDB.dotCN.appcontainer} {
-						display: flex !important;
-					}
-					${BDFDB.dotCN.guildswrapper} {
-						position: static !important;
-						contain: unset !important;
-					}
-					${BDFDB.dotCN.chatbase} {
-						position: static !important;
-						contain: unset !important;
-						width: 100% !important;
-					}
 				`;
 			}
 			

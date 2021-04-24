@@ -1008,9 +1008,6 @@ img:not([src]), img[src=""], img[src="null"] {
 	pointer-events: none;
 }
 
-[REPLACE_CLASS_guildswrapper][REPLACE_CLASS_guildswrapperhidden] {
-	display: none;
-}
 .platform-osx [REPLACE_CLASS_noticewrapper] ~ * [REPLACE_CLASS_guildswrapper] {
 	margin-top: 0;
 }

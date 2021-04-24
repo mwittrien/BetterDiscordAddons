@@ -67,6 +67,7 @@
 		"LastChannelStore": {"props": ["getLastSelectedChannelId"]},
 		"LastGuildStore": {"props": ["getLastSelectedGuildId"]},
 		"LinkUtils": {"props": ["handleClick", "isLinkTrusted"]},
+		"LocalSettingsStore": {"props": ["darkSidebar", "keyboardModeEnabled"]},
 		"LoginUtils": {"props": ["login", "logout"]},
 		"MediaDeviceUtils": {"props": ["getOutputDevices", "getInputDevices"]},
 		"MediaDeviceSetUtils": {"props": ["setOutputDevice", "setInputDevice"]},
