@@ -710,8 +710,8 @@ module.exports = (_ => {
 				}
 				folderStates[e.instance.props.folderId] = state;
 				
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ListItemTooltip"});
-				if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+				let [tooltipParent, tooltipIndex] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["ListItemTooltip", "BDFDB_TooltipContainer"]});
+				if (tooltipIndex > -1) tooltipParent[tooltipIndex] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: e.instance.props.folderName || BDFDB.FolderUtils.getDefaultName(e.instance.props.folderId),
 					tooltipConfig: {
 						type: "right",
@@ -720,24 +720,24 @@ module.exports = (_ => {
 						backgroundColor: data.color3,
 						fontColor: data.color4
 					},
-					children: children[index].props.children
+					children: tooltipParent[tooltipIndex].props.children
 				});
 				if (e.instance.props.expanded || data.useCloseIcon) {
 					let folderIcons = this.loadAllIcons(), icontype = e.instance.props.expanded ? "openicon" : "closedicon";
 					let icon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? this.createBase64SVG(folderIcons[data.iconID][icontype], data.color1, data.color2) : folderIcons[data.iconID][icontype]) : null;
 					if (icon) {
-						[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
-						if (index > -1) children[index] = BDFDB.ReactUtils.createElement("div", {
+						let [folderIconParent, folderIconIndex] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
+						if (folderIconIndex > -1) folderIconParent[folderIconIndex] = BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.guildfoldericonwrapper,
 							style: {background: `url(${icon}) center/cover no-repeat`}
 						});
 					}
 				}
 				if (this.settings.general.showCountBadge) {
-					[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "BlobMask"});
-					if (index > -1) {
-						children[index].props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.getBadgeWidthForValue(e.instance.props.guildIds.length);
-						children[index].props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
+					let mask = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "BlobMask"});
+					if (mask) {
+						mask.props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.getBadgeWidthForValue(e.instance.props.guildIds.length);
+						mask.props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
 							count: e.instance.props.guildIds.length,
 							style: {backgroundColor: "var(--bdfdb-blurple)"}
 						});
