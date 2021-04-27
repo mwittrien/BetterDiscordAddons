@@ -58,12 +58,13 @@
 		6.	LOGINSCREEN
 		7.	DOWNLOADAPPMODAL
 		8.	GUILDBOOSTMODAL
-		9.	STREAMSETTINGSMODAL
-		10.	DISPATCHERRORMODAL
-		11.	CHANGELOGMODAL
-		12.	SCREENSHAREMODAL
-		13.	PHONEVERIFICATIONMODAL
-		14.	CUSTOMSTATUSMODAL
+		9.	ADDGUILDBOOSTMODAL
+		10.	STREAMSETTINGSMODAL
+		11.	DISPATCHERRORMODAL
+		12.	CHANGELOGMODAL
+		13.	SCREENSHAREMODAL
+		14.	PHONEVERIFICATIONMODAL
+		15.	CUSTOMSTATUSMODAL
 	11.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -1448,7 +1449,40 @@
 	filter: brightness(150%);
 }
 
-/* ----		10.9.	STREAMSETTINGSMODAL				---- */
+/* ----		10.9.	ADDGUILDBOOSTMODAL				---- */
+
+#app-mount .confirmImage-2pGr87 {							/* add boost modal		add confirm							*/
+	position: relative;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/addboost_header_bg.svg) center/contain no-repeat;
+}
+.confirmImage-2pGr87::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	pointer-events: none;
+	background: rgb(var(--vaccentcolor));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/addboost_header_accent.svg) center/contain no-repeat;
+}
+#app-mount .transferConfirmImage-1SYwXp {					/* add boost modal		transfer confirm					*/
+	position: relative;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/transferboost_header_bg.svg) center/contain no-repeat;
+}
+.transferConfirmImage-1SYwXp::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	pointer-events: none;
+	background: rgb(var(--vaccentcolor2));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/transferboost_header_accent.svg) center/contain no-repeat;
+}
+
+/* ----		10.10.	STREAMSETTINGSMODAL				---- */
 
 .selectorButtonSelected-336oUc,								/* modal				selectorselectedbutton				*/
 .selectorButtonSelected-1j4DmC {
@@ -1467,13 +1501,13 @@
 	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor));
 }
 
-/* ----		10.10.	DISPATCHERRORMODAL				---- */
+/* ----		10.11.	DISPATCHERRORMODAL				---- */
 
 .theme-light .closeLink-2MRAUp {							/* modal				closelink							*/
 	color: rgb(var(--vaccentcolor));
 }
 
-/* ----		10.11.	CHANGELOGMODAL					---- */
+/* ----		10.12.	CHANGELOGMODAL					---- */
 
 .content-s2SEQO a {											/* modal				link								*/
 	color: var(--text-link);
@@ -1489,7 +1523,7 @@
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
 }
 
-/* ----		10.12.	SCREENSHAREMODAL				---- */
+/* ----		10.13.	SCREENSHAREMODAL				---- */
 
 #app-mount .art-1qgogX {															/* settings modal */
 	position: relative;
@@ -1536,13 +1570,13 @@
 	background-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		10.13.	PHONEVERIFICATIONMODAL			---- */
+/* ----		10.14.	PHONEVERIFICATIONMODAL			---- */
 
 .phoneVerificationModal-OzcDc3 path[fill="rgb(118,134,177)"] {
 	fill: rgb(var(--vaccentcolor));
 }
 
-/* ----		10.14.	CUSTOMSTATUSMODAL				---- */
+/* ----		10.15.	CUSTOMSTATUSMODAL				---- */
 
 .art-347BZj {
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/customstatus_header_bg.svg) center/contain no-repeat;
