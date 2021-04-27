@@ -645,21 +645,6 @@ module.exports = (_ => {
 					return false;
 				}});
 				
-				if (!BDFDB.LibraryModules.SpotifyTrackUtils.hasConnectedAccount()) BDFDB.ModalUtils.open(this, {
-					size: "SMALL",
-					header: `${this.name}: ${this.labels.noaccount_header}...`,
-					subHeader: this.labels.noaccount_subheader,
-					text: this.labels.noaccount_text,
-					buttons: [{
-						contents: BDFDB.LanguageUtils.LanguageStrings.CONNECT,
-						color: "BRAND",
-						close: true,
-						onClick: modal => {
-							BDFDB.LibraryModules.UserSettingsUtils.open(BDFDB.DiscordConstants.UserSettingsSections.CONNECTIONS)
-						}
-					}]
-				});
-				
 				this.forceUpdateAll();
 			}
 			
@@ -667,64 +652,83 @@ module.exports = (_ => {
 				this.forceUpdateAll();
 			}
 
-			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [];
-				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Settings",
+			getSettingsPanel (collapseStates = {}) {				
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
 					collapseStates: collapseStates,
-					children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "Switch",
-						plugin: this,
-						keys: ["settings", key],
-						label: this.defaults.settings[key].description,
-						value: settings[key]
-					}))
-				}));
-				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Button Settings",
-					collapseStates: collapseStates,
-					children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
-						className: BDFDB.disCN.marginbottom4,
-						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
-						children: "Add control buttons in small and/or big player version: "
-					})].concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
-						settings: Object.keys(this.defaults.buttonConfigs[Object.keys(this.defaults.buttonConfigs)[0]].value),
-						data: Object.keys(buttonConfigs).map(key => Object.assign({}, buttonConfigs[key], {
-							key: key,
-							label: this.defaults.buttonConfigs[key].description,
-							icons: this.defaults.buttonConfigs[key].icons
-						})),
-						noRemove: true,
-						renderLabel: data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-							align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-									justify: BDFDB.LibraryComponents.Flex.Justify.CENTER,
-									wrap: BDFDB.LibraryComponents.Flex.Wrap.WRAP,
-									basis: 50,
-									grow: 0,
-									children: data.icons.map(icon => BDFDB.ReactUtils.createElement("div", {
-										className: BDFDB.disCN._spotifycontrolssettingsicon,
-										children: icon
-									}))
+					children: _ => {
+						let settingsItems = [];
+						
+						if (!BDFDB.LibraryModules.SpotifyTrackUtils.hasConnectedAccount()) BDFDB.ModalUtils.open(this, {
+							size: "SMALL",
+							header: `${this.name}: ${this.labels.noaccount_header}...`,
+							subHeader: this.labels.noaccount_subheader,
+							text: this.labels.noaccount_text,
+							buttons: [{
+								contents: BDFDB.LanguageUtils.LanguageStrings.CONNECT,
+								color: "BRAND",
+								close: true,
+								onClick: _ => BDFDB.LibraryModules.UserSettingsUtils.open(BDFDB.DiscordConstants.UserSettingsSections.CONNECTIONS)
+							}]
+						});
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Settings",
+							collapseStates: collapseStates,
+							children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["settings", key],
+								label: this.defaults.settings[key].description,
+								value: settings[key]
+							}))
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Button Settings",
+							collapseStates: collapseStates,
+							children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+								className: BDFDB.disCN.marginbottom4,
+								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
+								children: "Add control buttons in small and/or big player version: "
+							})].concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
+								settings: Object.keys(this.defaults.buttonConfigs[Object.keys(this.defaults.buttonConfigs)[0]].value),
+								data: Object.keys(buttonConfigs).map(key => Object.assign({}, buttonConfigs[key], {
+									key: key,
+									label: this.defaults.buttonConfigs[key].description,
+									icons: this.defaults.buttonConfigs[key].icons
+								})),
+								noRemove: true,
+								renderLabel: data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+									children: [
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+											justify: BDFDB.LibraryComponents.Flex.Justify.CENTER,
+											wrap: BDFDB.LibraryComponents.Flex.Wrap.WRAP,
+											basis: 50,
+											grow: 0,
+											children: data.icons.map(icon => BDFDB.ReactUtils.createElement("div", {
+												className: BDFDB.disCN._spotifycontrolssettingsicon,
+												children: icon
+											}))
+										}),
+										BDFDB.ReactUtils.createElement("div", {
+											className: BDFDB.disCN._spotifycontrolssettingslabel,
+											children: data.label
+										})
+									]
 								}),
-								BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN._spotifycontrolssettingslabel,
-									children: data.label
-								})
-							]
-						}),
-						onCheckboxChange: (value, instance) => {
-							buttonConfigs[instance.props.cardId][instance.props.settingId] = value;
-							BDFDB.DataUtils.save(buttonConfigs, this, "buttonConfigs");
-							this.SettingsUpdated = true;
-						}
-					}))
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+								onCheckboxChange: (value, instance) => {
+									buttonConfigs[instance.props.cardId][instance.props.settingId] = value;
+									BDFDB.DataUtils.save(buttonConfigs, this, "buttonConfigs");
+									this.SettingsUpdated = true;
+								}
+							}))
+						}));
+						
+						return settingsItems;
+					}
+				});
 			}
 
 			onSettingsClosed () {
