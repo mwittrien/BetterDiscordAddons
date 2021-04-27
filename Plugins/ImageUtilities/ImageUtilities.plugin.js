@@ -519,22 +519,25 @@ module.exports = (_ => {
 					if (e.instance.props.attachment) this.injectItem(e, e.instance.props.attachment.url);
 					else if (e.instance.props.target.tagName == "A" && e.instance.props.message.embeds && e.instance.props.message.embeds[0] && (e.instance.props.message.embeds[0].type == "image" || e.instance.props.message.embeds[0].type == "video")) this.injectItem(e, e.instance.props.target.href);
 					else if (e.instance.props.target.tagName == "IMG") {
-						if (BDFDB.DOMUtils.containsClass(e.instance.props.target.parentElement, BDFDB.disCN.imagewrapper)) this.injectItem(e, e.instance.props.target.src);
+						if (BDFDB.DOMUtils.containsClass(e.instance.props.target.parentElement, BDFDB.disCN.imagewrapper)) this.injectItem(e, {file: e.instance.props.target.src, original: this.getTargetLink(e.instance.props.target)});
 						else if (BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.embedauthoricon) && this.settings.places.userAvatars) this.injectItem(e, e.instance.props.target.src);
 						else if (BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.emojiold, "emote", false) && this.settings.places.emojis) this.injectItem(e, e.instance.props.target.src);
 					}
 					else if (e.instance.props.target.tagName == "VIDEO") {
-						if (BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.embedvideo) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.attachmentvideo, e.instance.props.target)) {
-							let src = "", href = "", ele = e.instance.props.target;
-							while (ele instanceof Node) ele instanceof HTMLImageElement && null != ele.src && (src = ele.src), ele instanceof HTMLAnchorElement && null != ele.href && (href = ele.href), ele = ele.parentNode;
-							this.injectItem(e, {file: e.instance.props.target.src, original: href || src});
-						}
+						if (BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.embedvideo) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.attachmentvideo, e.instance.props.target)) this.injectItem(e, {file: e.instance.props.target.src, original: this.getTargetLink(e.instance.props.target)});
 					}
 					else {
 						let reaction = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagereaction, e.instance.props.target);
 						if (reaction && this.settings.places.emojis) this.injectItem(e, reaction.querySelector(BDFDB.dotCN.emojiold).src);
 					}
 				}
+			}
+			
+			getTargetLink (target) {
+				let ele = target;
+				let src = "", href = "";
+				while (ele instanceof Node) ele instanceof HTMLImageElement && null != ele.src && (src = ele.src), ele instanceof HTMLAnchorElement && null != ele.href && (href = ele.href), ele = ele.parentNode;
+				return href || src;
 			}
 
 			injectItem (e, ...urls) {
