@@ -6,6 +6,7 @@ https://raw.githubusercontent.com/archnemeziz/Discord/master/ElegantBlue.theme.c
 https://raw.githubusercontent.com/Asteria5675/BetterDiscordThemes/master/null/null.theme.css
 https://raw.githubusercontent.com/A-User-s-Discord-Themes/Bash/master/bash.theme.css
 https://raw.githubusercontent.com/BeardDesign1/Ios-switches/themes/IOS_Switches.theme.css
+https://raw.githubusercontent.com/booglesmcgee/booglesmcgee.github.io/main/Materialistic-Discord/Materialistic.theme.css
 https://raw.githubusercontent.com/CapnKitten/Material-Discord/master/Material-Discord.theme.css
 https://raw.githubusercontent.com/Chloesviel/Discord-Stuff/master/minifiedMemberlist/minifiedMemberlist.theme.css
 https://raw.githubusercontent.com/ClearVision/ClearVision-v6/master/ClearVision_v6.theme.css
@@ -32,6 +33,7 @@ https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Th
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/TeamRam.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/TeamRem.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/Winter_Returns.theme.css
+https://raw.githubusercontent.com/DiscordStyles/DarkMatter/main/DarkMatter.theme.css
 https://raw.githubusercontent.com/DiscordStyles/discord-dyslexia/main/dyslexia.theme.css
 https://raw.githubusercontent.com/DiscordStyles/Slate/master/Slate.theme.css
 https://raw.githubusercontent.com/Discord-Theme-Addons/compact-userarea/main/src/support/CompactUserarea.theme.css
@@ -97,6 +99,7 @@ https://raw.githubusercontent.com/Mylan719/Discord-light-theme/master/Discord Li
 https://raw.githubusercontent.com/nirewen/Discordify/master/Discordify.theme.css
 https://raw.githubusercontent.com/NYRI4/Comfy/master/betterdiscord/comfy.theme.css
 https://raw.githubusercontent.com/NYRI4/Discolored/master/support/discolored.theme.css
+https://raw.githubusercontent.com/NYRI4/LilyPichu/main/lilypichu.theme.css
 https://raw.githubusercontent.com/ObserverOfTime/DiscordThemes/master/NewNihilism/dist/NewNihilism.theme.css
 https://raw.githubusercontent.com/orblazer/discord-nordic/master/nordic.theme.css
 https://raw.githubusercontent.com/Pavui/Nebula/main/nebula.theme.css

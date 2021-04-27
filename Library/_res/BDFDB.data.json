@@ -4679,17 +4679,18 @@
 		}
 	},
 	"BDFDB_Patrons": {
-		"89482511343702016": {"active": true,		"t3": false,	"custom": false,	"id": "AzukiPuddles"},
-		"341383936984875020": {"active": true,		"t3": true,		"custom": false,	"id": "dannycoch (DaCo)"},
-		"811756093730586635": {"active": false,		"t3": true,		"custom": false,	"id": "Namii (RiDeLo)"},
-		"121188168002174976": {"active": true,		"t3": false,	"custom": false,	"id": "Aven (Syn)"},
-		"630634411259330570": {"active": true,		"t3": false,	"custom": false,	"id": "Zardex (KhaPo)"},
-		"159762323907543040": {"active": true,		"t3": false,	"custom": false,	"id": "STRIX (A1C)"},
-		"363785301195358221": {"active": true,		"t3": false,	"custom": false,	"id": "TRENT (KABEL)"},
-		"106938698938978304": {"active": false,		"t3": false,	"custom": false,	"id": "GABRIEL"},
-		"174868361040232448": {"active": true,		"t3": false,	"custom": false,	"id": "GIBBU (Ian)"},
-		"443943393660239872": {"active": true,		"t3": true,		"custom": false,	"id": "SARGE (PaSh)"},
-		"620397524494057513": {"active": true,		"t3": true,		"custom": false,	"id": "FUSL"},
-		"562008872467038230": {"active": false,		"t3": true,		"custom": true,		"id": "BEAUDEN"}
+		"455384923034091541": {"active": true,		"t3": false,	"custom": true,		"text": "Allmächtig",		"id": "EXITIUM"},
+		"89482511343702016": {"active": true,		"t3": false,	"custom": false,	"text": "",					"id": "AzukiPuddles"},
+		"341383936984875020": {"active": true,		"t3": true,		"custom": false,	"text": "",					"id": "dannycoch (DaCo)"},
+		"811756093730586635": {"active": false,		"t3": true,		"custom": false,	"text": "",					"id": "Namii (RiDeLo)"},
+		"121188168002174976": {"active": true,		"t3": false,	"custom": false,	"text": "",					"id": "Aven (Syn)"},
+		"630634411259330570": {"active": true,		"t3": false,	"custom": false,	"text": "",					"id": "Zardex (KhaPo)"},
+		"159762323907543040": {"active": true,		"t3": false,	"custom": false,	"text": "",					"id": "STRIX (A1C)"},
+		"363785301195358221": {"active": true,		"t3": false,	"custom": false,	"text": "",					"id": "TRENT (KABEL)"},
+		"106938698938978304": {"active": false,		"t3": false,	"custom": false,	"text": "",					"id": "GABRIEL"},
+		"174868361040232448": {"active": true,		"t3": false,	"custom": false,	"text": "",					"id": "GIBBU (Ian)"},
+		"443943393660239872": {"active": true,		"t3": true,		"custom": false,	"text": "",					"id": "SARGE (PaSh)"},
+		"620397524494057513": {"active": true,		"t3": true,		"custom": false,	"text": "",					"id": "FUSL"},
+		"562008872467038230": {"active": false,		"t3": true,		"custom": true,		"text": "",					"id": "BEAUDEN"}
 	}
 }
