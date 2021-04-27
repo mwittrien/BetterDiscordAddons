@@ -7758,7 +7758,6 @@ module.exports = (_ => {
 							let newProps = {
 								className: className,
 								style: {borderRadius: 0, overflow: "visible"},
-								"custom-badge-id": customBadge ? user.id : null,
 								children: [avatar]
 							};
 							newProps[InternalData.userIdAttribute] = user.id;
@@ -7790,7 +7789,6 @@ module.exports = (_ => {
 						}
 						if (role && !avatar.querySelector(BDFDB.dotCN.bdfdbbadge)) {
 							if (addBadge) {
-								if (customBadge) avatar.setAttribute("custom-badge-id", user.id);
 								let badge = document.createElement("div");
 								badge.className = BDFDB.disCN.bdfdbbadge;
 								badge.addEventListener("mouseenter", _ => BDFDB.TooltipUtils.create(badge, role, {position: "top"}));
