@@ -67,7 +67,8 @@ https://raw.githubusercontent.com/KaminariKillua/Themes/master/GlacialPrison/Gla
 https://raw.githubusercontent.com/KaminariKillua/Themes/master/InfernalPrison/InfernalPrison.theme.css
 https://raw.githubusercontent.com/KaminariKillua/Themes/master/SakuraPrison/SakuraPrison.theme.css
 https://raw.githubusercontent.com/KillYoy/DiscordNight/master/DiscordNight.theme.css
-https://raw.githubusercontent.com/LeafyLuigi/discord-themes/master/pyrite/pyrite.theme.css
+https://raw.githubusercontent.com/LeafyLuigi/discord-themes/master/pyrite/pyrite.theme.css#
+https://raw.githubusercontent.com/leeprky/Lode/main/default/support/betterdiscord/LodeBD.theme.css
 https://raw.githubusercontent.com/llcoll/Discord-Themes/master/Themes/Akame/Akame.theme.css
 https://raw.githubusercontent.com/llcoll/Discord-Themes/master/Themes/Esdeath/Esdeath.theme.css
 https://raw.githubusercontent.com/LuckFire/amoled-cord/main/src/support/betterdiscord/AMOLED-Cord.theme.css
