@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.9.0
+ * @version 6.9.1
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "6.9.0",
+			"version": "6.9.1",
 			"description": "Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders"
 		},
 		"changeLog": {
 			"fixed": {
-				"Full Screen": "Extra Column is no longer visible in Full Screen Voice Mode"
+				"Full Screen": "Extra Column is no longer visible in Full Screen Voice Mode",
+				"Settings": "Fixed Settings resetting after reloading"
 			},
 		}
 	};
@@ -517,7 +518,7 @@ module.exports = (_ => {
 						for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 							type: "Switch",
 							plugin: this,
-							keys: ["settings", key],
+							keys: ["general", key],
 							label: this.defaults.general[key].description,
 							value: this.settings.general[key]
 						}));
