@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.1.8
+ * @version 4.1.9
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.1.8",
+			"version": "4.1.9",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
 			"added": {
-				"Do not overwrite Server Nicks": "Added options so local usernames never overwrite the server nicknames of users"
+				"Do not overwrite Server Nicks": "Added options so local usernames never overwrite the server nicknames of users",
+				"Edited Users List": "Reset all option now shows the list of all edited users, click them to quick edit them"
 			}
 		}
 	};
@@ -274,13 +275,27 @@ module.exports = (_ => {
 								value: settings[key]
 							}))
 						}));
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
+							label: "Changed Users:"
+						}));
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Button",
 							color: BDFDB.LibraryComponents.Button.Colors.RED,
-							label: "Reset all Users",
+							label: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+								children: !Object.keys(changedUsers).length ? BDFDB.LanguageUtils.LanguageStrings.NONE : Object.keys(changedUsers).filter(BDFDB.LibraryModules.UserStore.getUser).map(id => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+									text: this.getUserData(id).username,
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
+										className: BDFDB.disCN.listavatar,
+										src: this.getUserAvatar(id),
+										size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_32,
+										onClick: _ => this.openUserSettingsModal(BDFDB.LibraryModules.UserStore.getUser(id))
+									})
+								}))
+							}),
 							onClick: _ => {
 								BDFDB.ModalUtils.confirm(this, this.labels.confirm_resetall, _ => {
 									BDFDB.DataUtils.remove(this, "users");
+									BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 									this.forceUpdateAll();
 								});
 							},
