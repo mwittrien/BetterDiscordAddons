@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.1
+ * @version 1.8.2
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,16 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "PinDMs",
 			"author": "DevilBro",
-			"version": "1.8.1",
+			"version": "1.8.2",
 			"description": "Allows you to pin DMs, making them appear at the top of your DMs/ServerList"
 		},
 		"changeLog": {
-			"improved": {
-				"Settings": "Restructured Settings",
-				"User Specific": "Pinned DMs are now User-Specific, meaning the Plugin will not try to load the same pinned DMs for your second account"
-			},
 			"fixed": {
-				"Empty List": "Deleting the last Category caused the DM list to only render with the DMs of the deleted Category"
+				"Rare Duplication Bug": "Fixed and Issue where a selected DM in a predefined Category could get multi duplicated if it was pinned in another Category before"
 			}
 		}
 	};
@@ -429,7 +425,7 @@ module.exports = (_ => {
 							
 							let category = categories[e2.methodArguments[0] - 1];
 							if (category) {
-								if (!id || (category.collapsed && e.instance.props.selectedChannelId != id) || !category.dms.includes(id) || draggedCategory == category.id  || draggedChannel == id) e2.returnValue = null;
+								if (!id || (category.collapsed && e.instance.props.selectedChannelId != id) || !this.filterDMs(category.dms, !category.predefined).includes(id) || draggedCategory == category.id  || draggedChannel == id) e2.returnValue = null;
 								else if (hoveredCategory == category.id && [].concat(category.dms).reverse()[0] == id) e2.returnValue = [
 									e2.returnValue,
 									BDFDB.ReactUtils.createElement("h2", {
