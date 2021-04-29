@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.3
+ * @version 1.0.4
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditRoles",
 			"author": "DevilBro",
-			"version": "1.0.3",
+			"version": "1.0.4",
 			"description": "Allows you to locally edit Roles"
+		},
+		"changeLog": {
+			"fixed": {
+				"Role Names": "Fixed issue where the role name was changed to the role color string and not the name"
+			}
 		}
 	};
 
@@ -231,7 +236,7 @@ module.exports = (_ => {
 					if (data) {
 						changed = true;
 						roles[id] = Object.assign({}, roles[id], {
-							name: data.name || roles[id].color,
+							name: data.name || roles[id].name,
 							color: data.color ? BDFDB.ColorUtils.convert(data.color, "INT") : roles[id].color,
 							colorString: data.color ? BDFDB.ColorUtils.convert(data.color, "HEX") : roles[id].colorString
 						});
