@@ -52,6 +52,11 @@
 }
 
 .theme-light, .theme-dark {
+	--background-primary: rgba(var(--vtransparencycolor), 0.1);
+	--background-secondary: rgba(var(--vtransparencycolor), 0.2);
+	--background-secondary-alt: rgba(var(--vtransparencycolor), 0.3);
+	--background-tertiary: rgba(var(--vtransparencycolor), 0.4);
+	--background-floating: rgba(var(--vtransparencycolor), 0.5);
 	--header-primary: rgb(var(--fontwhite1));
 	--header-secondary: rgb(var(--fontwhite2));
 	--text-normal: rgb(var(--fontwhite2));
