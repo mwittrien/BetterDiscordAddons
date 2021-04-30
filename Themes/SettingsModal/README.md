@@ -6,7 +6,7 @@
 [paypal-badge]: https://img.shields.io/badge/Paypal-Donate!-%23003087.svg?logo=paypal&style=flat
 [paypal-link]: https://paypal.me/MircoWittrien
 
-[patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
+[patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat 
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Turns Settings Windows like User-/Channel-/Serversettings and Boost Overview into Modals
