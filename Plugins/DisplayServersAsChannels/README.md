@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Displays Servers in a similar way as Channels
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/DisplayServersAsChannels/_res/cover.png)
