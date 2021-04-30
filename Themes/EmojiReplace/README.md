@@ -16,6 +16,7 @@ Replaces Discord's Emojis with Emojis of a different Provider (Apple, Facebook..
 
 
 Apple:
+
 ![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/_res/screenshot1.png)
 
 Facebook:
