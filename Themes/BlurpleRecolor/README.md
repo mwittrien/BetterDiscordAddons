@@ -16,16 +16,21 @@ Replaces Discord's native Blurple and Boost-Pink with your own Color
 
 
 Main Page:
+
 ![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/_res/screenshot1.png)
 
 Settings:
+
 ![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/_res/screenshot2.png)
 
 Friends Page:
+
 ![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/_res/screenshot3.png)
 
 Modal Example:
+
 ![screenshot4](https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/_res/screenshot4.png)
 
 Discovery Page:
+
 ![screenshot5](https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/_res/screenshot5.png)
