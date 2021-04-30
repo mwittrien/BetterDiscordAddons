@@ -227,7 +227,7 @@ module.exports = (_ => {
 						};
 					case "fr":		// French
 						return {
-							joined_at:							"Inscription le {{time}}"
+							joined_at:							"Rejoint le {{time}}"
 						};
 					case "hr":		// Croatian
 						return {
