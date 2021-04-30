@@ -13,3 +13,7 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to copy the raw Contents of a Message
+
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/CopyRawMessage/_res/screenshot1.png)
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/CopyRawMessage/_res/screenshot2.png)

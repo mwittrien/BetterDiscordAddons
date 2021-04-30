@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Replaces Timestamps with your own custom Timestamps
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/CompleteTimestamps/_res/cover.png)
