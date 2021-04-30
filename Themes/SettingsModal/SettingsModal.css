@@ -90,7 +90,7 @@
 	z-index: -1 !important;
 }
 #app-mount .layer-3QrUeG ~ .layer-3QrUeG .settingsToolbar-wu4yfQ {
-	position: fixed;
+	display: none !important;
 }
 
 #app-mount .root-3R2ngo {
