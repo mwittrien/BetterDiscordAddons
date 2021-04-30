@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to censor Words or block complete Messages/Statuses
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ChatFilter/_res/cover.png)

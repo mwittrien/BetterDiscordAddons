@@ -13,3 +13,24 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Adds a Character Counter to most Inputs
+
+
+Message Input:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/CharCounter/_res/screenshot1.png)
+
+Edit Input:
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/CharCounter/_res/screenshot2.png)
+
+File Upload:
+
+![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Plugins/CharCounter/_res/screenshot3.png)
+
+User Notes:
+
+![screenshot4](https://mwittrien.github.io/BetterDiscordAddons/Plugins/CharCounter/_res/screenshot4.png)
+
+Nickname Editor:
+
+![screenshot5](https://mwittrien.github.io/BetterDiscordAddons/Plugins/CharCounter/_res/screenshot5.png)

@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/BetterFriendList/_res/cover.png)

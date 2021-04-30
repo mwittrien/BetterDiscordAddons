@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Adds a more noticeable Tag to NSFW Channels
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/BetterNsfwTag/_res/cover.png)

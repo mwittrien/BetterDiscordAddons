@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Adds some extra Controls to the Search Results Page
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/BetterSearchPage/_res/cover.png)
