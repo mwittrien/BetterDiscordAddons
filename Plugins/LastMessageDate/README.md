@@ -13,3 +13,12 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
+
+
+User Popout:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/LastMessageDate/_res/screenshot1.png)
+
+User Profile:
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/LastMessageDate/_res/screenshot2.png)

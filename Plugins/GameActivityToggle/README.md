@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Adds a Quick-Toggle Game Activity Button
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/GameActivityToggle/_res/cover.png)

@@ -13,3 +13,19 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to locally edit Users
+
+
+
+Menu:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditUsers/_res/screenshot1.png)
+
+Local Settings:
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditUsers/_res/screenshot2.png)
+
+![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditUsers/_res/screenshot3.png)
+
+![screenshot4](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditUsers/_res/screenshot4.png)
+
+![screenshot5](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditUsers/_res/screenshot5.png)

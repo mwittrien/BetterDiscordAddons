@@ -13,3 +13,12 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Shows you an Overview of Emojis and Emoji Servers
+
+
+Button:
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EmojiStatistics/_res/cover.png)
+
+Menu:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EmojiStatistics/_res/screenshot1.png)

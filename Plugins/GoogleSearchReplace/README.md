@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Replaces the default Google Text Search with a custom Search Engine
+
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/GoogleSearchReplace/_res/screenshot1.png)

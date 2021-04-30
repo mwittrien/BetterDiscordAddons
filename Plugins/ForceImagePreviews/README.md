@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Forces unrendered embedded Image Previews to render
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ForceImagePreviews/_res/cover.png)

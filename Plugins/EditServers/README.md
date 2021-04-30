@@ -13,3 +13,16 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to locally edit Servers
+
+
+Menu:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditServers/_res/screenshot1.png)
+
+Local Settings:
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditServers/_res/screenshot2.png)
+
+![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditServers/_res/screenshot3.png)
+
+![screenshot4](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditServers/_res/screenshot4.png)

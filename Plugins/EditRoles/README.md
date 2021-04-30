@@ -13,3 +13,12 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to locally edit Roles
+
+
+Menu:
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditRoles/_res/cover.png)
+
+Local Settings:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditRoles/_res/screenshot1.png)

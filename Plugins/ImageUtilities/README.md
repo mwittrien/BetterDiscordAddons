@@ -13,3 +13,21 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
+
+
+Image/Video Utilities:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/_res/screenshot1.png)
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/_res/screenshot2.png)
+
+Image Details Chat:
+
+![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/_res/screenshot3.png)
+
+Image Details/Gallery Viewer:
+
+![screenshot4](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/_res/screenshot4.png)
+
+Image Zoom Lens:
+
+![screenshot5](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/_res/screenshot5.png)

@@ -13,3 +13,21 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to translate Messages and your outgoing Message within Discord
+
+
+Translate Message Option:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/GoogleTranslateOption/_res/screenshot1.png)
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/GoogleTranslateOption/_res/screenshot2.png)
+
+Search Translation Option:
+
+![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Plugins/GoogleTranslateOption/_res/screenshot3.png)
+
+Translation Options Button:
+
+![screenshot4](https://mwittrien.github.io/BetterDiscordAddons/Plugins/GoogleTranslateOption/_res/screenshot4.png)
+
+Translation Options:
+
+![screenshot5](https://mwittrien.github.io/BetterDiscordAddons/Plugins/GoogleTranslateOption/_res/screenshot5.png)

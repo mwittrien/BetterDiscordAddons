@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Hides muted Categories, if muted Channels are hidden
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/HideMutedCategories/_res/cover.png)

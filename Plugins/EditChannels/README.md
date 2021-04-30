@@ -13,3 +13,12 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to locally edit Channels
+
+
+Menu:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditChannels/_res/screenshot1.png)
+
+Local Settings:
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditChannels/_res/screenshot2.png)
