@@ -13,3 +13,7 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Changes the Server List to a grid-like Structure that allows any Amount of Columns
+
+Variable Configs:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Themes/ServerColumns/_res/cover.png)
