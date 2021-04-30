@@ -16,8 +16,6 @@ module.exports = (_ => {
 	const BdApi = window.BdApi;
 	const isBeta = !(BdApi && !Array.isArray(BdApi.settings));
 	
-	const myGithub = ((BdApi && typeof BdApi.findModuleByProps == "function" && BdApi.findModuleByProps("getCurrentUser") || {getCurrentUser: _ => {}}).getCurrentUser() || {}).id == "278543574059057154" ? "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/development" : "https://mwittrien.github.io/BetterDiscordAddons";
-	
 	const config = {
 		"info": {
 			"name": "BDFDB",
@@ -977,11 +975,11 @@ module.exports = (_ => {
 	
 	const loadLibrary = tryAgain => {
 		const request = require("request"), fs = require("fs"), path = require("path");
-		request.get(`${myGithub}/Library/_res/BDFDB.raw.css`, (e, r, b) => {
+		request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.raw.css`, (e, r, b) => {
 			if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
 			const cssPath = path.join(BDFDB.BDUtils.getPluginsFolder(), "0BDFDB.raw.css");
 			const css = !e && b && r.statusCode == 200 ? b : fs.existsSync(cssPath) && (fs.readFileSync(cssPath) || "").toString();
-			request.get(`${myGithub}/Library/_res/BDFDB.data.json`, BDFDB.TimeUtils.suppress((e2, r2, b2) => {
+			request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.data.json`, BDFDB.TimeUtils.suppress((e2, r2, b2) => {
 				const dataPath = path.join(BDFDB.BDUtils.getPluginsFolder(), "0BDFDB.data.json");
 				if (e2 || !b2 || r2.statusCode != 200) {
 					if (tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
