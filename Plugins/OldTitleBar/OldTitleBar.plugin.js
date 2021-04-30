@@ -108,6 +108,7 @@ module.exports = (_ => {
 					}
 
 					${BDFDB.dotCN._oldtitlebarsettingstoolbar} {
+						display: flex;
 						position: absolute;
 						top: 0;
 						right: 0;
@@ -214,7 +215,7 @@ module.exports = (_ => {
 			injectSettingsToolbar (children, fixed) {
 				if (!this.settings.general.addToSettings) return;
 				let toolbar = BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCNS.channelheadertoolbar + BDFDB.disCN._oldtitlebarsettingstoolbar,
+					className: BDFDB.disCN._oldtitlebarsettingstoolbar,
 					children: [],
 					style: fixed ? {position: "fixed"} : null
 				});

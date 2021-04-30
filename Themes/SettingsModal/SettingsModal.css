@@ -89,8 +89,8 @@
 	top: 22px !important;
 	z-index: -1 !important;
 }
-#app-mount .layer-3QrUeG ~ .layer-3QrUeG .toolbar-1t6TWx {
-	display: none !important;
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG .settingsToolbar-wu4yfQ {
+	position: fixed;
 }
 
 #app-mount .root-3R2ngo {
