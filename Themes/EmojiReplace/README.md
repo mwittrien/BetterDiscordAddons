@@ -20,19 +20,25 @@ Apple:
 ![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/_res/screenshot1.png)
 
 Facebook:
+
 ![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/_res/screenshot2.png)
 
 Google:
+
 ![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/_res/screenshot3.png)
 
 JoyPixels:
+
 ![screenshot4](https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/_res/screenshot4.png)
 
 Microsoft:
+
 ![screenshot5](https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/_res/screenshot5.png)
 
 Samsung:
+
 ![screenshot6](https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/_res/screenshot6.png)
 
 WhatsApp:
+
 ![screenshot7](https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/_res/screenshot7.png)
