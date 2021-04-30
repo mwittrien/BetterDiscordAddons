@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Adds a Time Slider to the Appearance Settings
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/TimedLightDarkMode/_res/cover.png)

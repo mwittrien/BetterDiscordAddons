@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to change Theme Variables within Discord
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeSettings/_res/cover.png)

@@ -13,3 +13,12 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to write User Notes locally
+
+
+Menu:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/UserNotes/_res/screenshot1.png)
+
+Local Note:
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/UserNotes/_res/screenshot2.png)

@@ -13,3 +13,13 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to locally pin Messages
+
+
+Menu:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/PersonalPins/_res/screenshot1.png)
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/PersonalPins/_res/screenshot2.png)
+
+Personal Pins:
+
+![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Plugins/PersonalPins/_res/screenshot3.png)

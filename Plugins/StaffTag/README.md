@@ -12,4 +12,21 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-%23F96854.svg?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAdhwAAHYcBj+XxZQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAGBSURBVFiF7Za9ThtBFEbPBUpERWMwCorfJjY4aVLxBFHCKyCl4hWQUqVMBULmbfiRCNACqSJsDsXakjHGO8Y7ovFXrmbmO3NnZ74bqrzUeUR8HPP9mdQ60AZawCZQBwK4BC6ADnAUEZeTFhmnsxLjdfVAfXhl/rB66h/1QyUAalu9TzAe1Z26NROAutvf0VvVU7+/CUD9PKP5MMT2VADqhvqvAvOB7tQ1gIXXznpEP4HlxLEpWgH2AEInX0OLv/cUWKwQAKALbKZU4EsGc4AloJ0C8CmD+UDNFIBGRoBGCkAtI8B66i3IpccUgJuMANcpAKcZAc5SAE4yAnRSAA6BXgbzLnBUChARF8DvDAC/IuIqNYzqFYfRrVqDxDCKiL/AV6o5ikdgJyJuBrsrrcBQJX44W0/QVb+NLpoM0B/f6pdwWt2qL3NlWoD+nFV1X/2fYPxg0cCOfdJL+4ESkBqwDTQpQmuNoi2/onjAOsBxRFxPWmTqClSp9w6jOcAcYA7AE1OMk5ulhBZCAAAAAElFTkSuQmCC
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Adds a Tag/Crown to Server Owners (or Admins/Management)
+Adds a Crown/Tag to Server Owners (or Admins/Management)
+
+
+Crown Style:
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/StaffTag/_res/cover.png)
+
+Tag Style:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/StaffTag/_res/screenshot1.png)
+
+Different Types:
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/StaffTag/_res/screenshot2.png)
+
+![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Plugins/StaffTag/_res/screenshot3.png)
+
+![screenshot4](https://mwittrien.github.io/BetterDiscordAddons/Plugins/StaffTag/_res/screenshot4.png)

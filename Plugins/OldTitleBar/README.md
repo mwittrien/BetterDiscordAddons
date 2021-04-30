@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to switch to Discord's old Titlebar
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/NotificationSounds/_res/cover.png)

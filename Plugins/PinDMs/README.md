@@ -13,3 +13,20 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to pin DMs, making them appear at the top of your DMs/ServerList
+
+
+Menu:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/PinDMs/_res/screenshot1.png)
+
+Channel List:
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/PinDMs/_res/screenshot2.png)
+
+Server List:
+
+![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Plugins/PinDMs/_res/screenshot3.png)
+
+Pinned DMs Category Settings:
+
+![screenshot4](https://mwittrien.github.io/BetterDiscordAddons/Plugins/PinDMs/_res/screenshot4.png)

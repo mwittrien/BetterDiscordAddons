@@ -13,3 +13,25 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
+
+
+
+Extra Column:
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ServerFolders/_res/cover.png)
+
+New Menu Features:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ServerFolders/_res/screenshot1.png)
+
+Folder Settings:
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ServerFolders/_res/screenshot2.png)
+
+![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ServerFolders/_res/screenshot3.png)
+
+![screenshot4](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ServerFolders/_res/screenshot4.png)
+
+Custom Icons:
+
+![screenshot5](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ServerFolders/_res/screenshot5.png)

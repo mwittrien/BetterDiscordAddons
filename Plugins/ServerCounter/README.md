@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Adds a Server Counter to the Server List
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ServerCounter/_res/cover.png)

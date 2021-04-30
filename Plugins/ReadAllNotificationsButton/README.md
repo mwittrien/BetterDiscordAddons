@@ -13,3 +13,16 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Adds a Clear Button to the Server List and the Mentions Popout
+
+
+Server List Button:
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ReadAllNotificationsButton/_res/cover.png)
+
+Right Click Menu:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ReadAllNotificationsButton/_res/screenshot1.png)
+
+Mentions Popup Button:
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ReadAllNotificationsButton/_res/screenshot2.png)

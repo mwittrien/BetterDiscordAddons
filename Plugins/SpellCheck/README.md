@@ -13,3 +13,12 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Adds a Spell Check to all Message Inputs
+
+
+Typo:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/_res/screenshot1.png)
+
+Menu:
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/_res/screenshot2.png)

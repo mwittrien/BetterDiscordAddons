@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Opens Steam Links in Steam instead of your Browser
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/SteamProfileLink/_res/cover.png)

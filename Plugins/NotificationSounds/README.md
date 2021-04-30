@@ -13,3 +13,12 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to replace the native Sounds with custom Sounds
+
+
+Add Sound:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/NotificationSounds/_res/screenshot1.png)
+
+Set Sound:
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/NotificationSounds/_res/screenshot2.png)

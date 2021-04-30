@@ -13,3 +13,16 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
+
+
+Hidden Channels:
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ShowHiddenChannels/_res/cover.png)
+
+Channels Details Overview:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ShowHiddenChannels/_res/screenshot1.png)
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ShowHiddenChannels/_res/screenshot2.png)
+
+![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ShowHiddenChannels/_res/screenshot3.png)

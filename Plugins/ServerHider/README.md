@@ -13,3 +13,12 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to hide certain Servers in your Server List
+
+
+Menu:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ServerHider/_res/screenshot1.png)
+
+Server Management:
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ServerHider/_res/screenshot2.png)

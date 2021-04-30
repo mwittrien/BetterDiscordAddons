@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Adds a Mention Button to the Message Options Bar
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/QuickMention/_res/cover.png)

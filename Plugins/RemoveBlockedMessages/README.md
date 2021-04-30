@@ -13,3 +13,20 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Removes blocked Messages/Users
+
+
+Remove Messages:
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/RemoveBlockedMessages/_res/cover.png)
+
+Remove Users:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/RemoveBlockedMessages/_res/screenshot1.png)
+
+Remove Name in Mentions:
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/RemoveBlockedMessages/_res/screenshot2.png)
+
+Remove Voice Users:
+
+![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Plugins/RemoveBlockedMessages/_res/screenshot3.png)

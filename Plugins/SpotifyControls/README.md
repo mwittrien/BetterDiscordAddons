@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Adds a Control Panel while listening to Spotify on a connected Account
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpotifyControls/_res/cover.png)

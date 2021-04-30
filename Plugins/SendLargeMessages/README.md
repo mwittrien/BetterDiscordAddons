@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to enter larger Messages, which will automatically split into several smaller Messages
+
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/SendLargeMessages/_res/screenshot1.png)

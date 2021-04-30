@@ -3,7 +3,7 @@
  * @author DevilBro
  * @authorId 278543574059057154
  * @version 1.4.0
- * @description Adds a Tag/Crown to Server Owners (or Admins/Management)
+ * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
@@ -18,7 +18,7 @@ module.exports = (_ => {
 			"name": "StaffTag",
 			"author": "DevilBro",
 			"version": "1.4.0",
-			"description": "Adds a Tag/Crown to Server Owners (or Admins/Management)"
+			"description": "Adds a Crown/Tag to Server Owners (or Admins/Management)"
 		},
 		"changeLog": {
 			"progress": {

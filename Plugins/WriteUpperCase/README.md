@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Changes the first Letter of each Sentence in Message Inputs to Uppercase
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/WriteUpperCase/_res/cover.gif)

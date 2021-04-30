@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Shows Server Details in the Server List Tooltip
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ServerDetails/_res/cover.png)

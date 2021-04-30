@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Replaces Nicknames with Accountnames
+
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/RemoveNicknames/_res/cover.png)

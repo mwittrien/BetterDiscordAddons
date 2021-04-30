@@ -13,3 +13,12 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Adds the highest Role of a User as a Tag
+
+
+Bot Tag Style:
+
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/TopRoleEverywhere/_res/cover.png)
+
+Role Tag Style:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/TopRoleEverywhere/_res/screenshot1.png)

@@ -13,3 +13,6 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to reveal all Spoilers within a Message
+
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/RevealAllSpoilersOption/_res/screenshot1.png)
