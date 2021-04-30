@@ -1,9 +1,9 @@
-## Themes [![Paypal][paypal-badge]][paypal-link] [![Patreon][patreon-badge]][patreon-link]
+## Themes [![PayPal][paypal-badge]][paypal-link] [![Patreon][patreon-badge]][patreon-link]
 
-[paypal-badge]: https://img.shields.io/badge/Paypal-Donate!-%23003087.svg?logo=paypal&style=flat
+[paypal-badge]: https://img.shields.io/badge/PayPal-%23003087.svg?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAgCAYAAAABtRhCAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAdhwAAHYcBj+XxZQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAIZSURBVEiJvZa7a1RREIe/CRsIqBBQJEEUO5+YRgSx0JTBwkKwsBMU/4HY2dmKFmm1tRBREEGFYGMhvgolPlBsRBuJj5iIiRvzWWxuOF7v3r2Ld/ODhXNmhvnOzHnshZzU82rTamqqn9XX6jV1XB3K52wrtaHOV4S104J6Ue2vAtz2n7BUt9S+PCNv2FG5HZ11GDi1mkCA052AO2sG7s63tdcV9gON1BDZQA1gFlhTI3AmIgZTQ1rhlpphAFN5Qwqse/8A7uYNaX/r3j+Am9lAHQbmegmcjIhnyfwosLFXwEXgbM52BBhemdl6hOvSeEpSR9QldTYzDNUE+q2eyZer3lj2rwBHa4A9UA8UwE4kMS+yPexm/xZpPRDTwBvgCXA9Ip4XwEaBicT0MHNMlKz8ijrQxYKynMfVn7lcxzLnZAnwYJegEfV2QZ6P6kDW0rJX5lUHwAZgD7CP1l3b2yb0XETMow6WVDedS35Bfbf8+2LrqFfRVVt/DqDuLwm8nwM+qghIdcnk+6aP8hO60s7lFW4va2+iReAOcCgiTkZEM3M0OgBfJuNNwLqCmHvAY+AbMAO8BZ5GxNeihA2qH5iiuO/AWET8Ksnxl/o6ANMKizox1Q0sA65t45sDPiTzov0rvTJFagC7gM0FvoWIMJkXVdg1sLLUTwVHfqxXsPVt7tjWbnP98+3fRkXt/AG8Xy3gEnA5Ipa6Bf4BbzmPtw84RMAAAAAASUVORK5CYII=
 [paypal-link]: https://paypal.me/MircoWittrien
 
-[patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
+[patreon-badge]: https://img.shields.io/badge/Patreon-%23F96854.svg?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAdhwAAHYcBj+XxZQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAGBSURBVFiF7Za9ThtBFEbPBUpERWMwCorfJjY4aVLxBFHCKyCl4hWQUqVMBULmbfiRCNACqSJsDsXakjHGO8Y7ovFXrmbmO3NnZ74bqrzUeUR8HPP9mdQ60AZawCZQBwK4BC6ADnAUEZeTFhmnsxLjdfVAfXhl/rB66h/1QyUAalu9TzAe1Z26NROAutvf0VvVU7+/CUD9PKP5MMT2VADqhvqvAvOB7tQ1gIXXznpEP4HlxLEpWgH2AEInX0OLv/cUWKwQAKALbKZU4EsGc4AloJ0C8CmD+UDNFIBGRoBGCkAtI8B66i3IpccUgJuMANcpAKcZAc5SAE4yAnRSAA6BXgbzLnBUChARF8DvDAC/IuIqNYzqFYfRrVqDxDCKiL/AV6o5ikdgJyJuBrsrrcBQJX44W0/QVb+NLpoM0B/f6pdwWt2qL3NlWoD+nFV1X/2fYPxg0cCOfdJL+4ESkBqwDTQpQmuNoi2/onjAOsBxRFxPWmTqClSp9w6jOcAcYA7AE1OMk5ulhBZCAAAAAElFTkSuQmCC
 [patreon-link]: https://patreon.com/MircoWittrien
 
  - [Basic Background](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/BasicBackground) - Allows you to use a Background Image without greatly altering the basic Layout of Discord
