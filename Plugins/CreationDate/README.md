@@ -13,3 +13,12 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Displays the Creation Date of an Account in the UserPopout and UserModal
+
+
+User Popout:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/CreationDate/_res/screenshot1.png)
+
+User Profile:
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/CreationDate/_res/screenshot2.png)

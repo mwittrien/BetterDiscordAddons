@@ -13,3 +13,12 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Allows you to save Custom Statuses as Quick Select
+
+
+Status Modal:
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/CustomStatusPresets/_res/screenshot1.png)
+
+Status Picker:
+
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/CustomStatusPresets/_res/screenshot2.png)

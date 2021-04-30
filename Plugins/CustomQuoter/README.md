@@ -13,3 +13,7 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
 Brings back the Quote Feature and allows you to set your own Quote Formats
+
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/CustomQuoter/_res/screenshot1.png)
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/CustomQuoter/_res/screenshot2.png)
