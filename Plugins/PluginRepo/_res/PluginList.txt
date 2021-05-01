@@ -143,7 +143,7 @@ https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/ShowAllAct
 https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/SuppressReplyMentions/SuppressReplyMentions.plugin.js
 https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/VoiceUsersCounter/VoiceUsersCounter.plugin.js
 https://raw.githubusercontent.com/Yentis/betterdiscord-emotereplacer/master/EmoteReplacer.plugin.js
-https://raw.githubusercontent.com/vBread/BetterCodeblocks/master/BetterCodeblocks.plugin.js
+https://raw.githubusercontent.com/vBread/bd-contributions/master/BetterCodeblocks/BetterCodeblocks.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/BetterFolders.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/BetterReplyer.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/Emulator.plugin.js
