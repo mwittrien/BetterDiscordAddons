@@ -17,8 +17,8 @@ Allows you to locally edit Roles
 
 Menu:
 
-![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditRoles/_res/cover.png)
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditRoles/_res/screenshot1.png)
 
 Local Settings:
 
-![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditRoles/_res/screenshot1.png)
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/EditRoles/_res/screenshot2.png)
