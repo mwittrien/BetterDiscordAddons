@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.8
+ * @version 2.1.9
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.1.8",
+			"version": "2.1.9",
 			"description": "Allows you to download all Plugins from BD's Website within Discord"
 		},
 		"changeLog": {
@@ -164,7 +164,7 @@ module.exports = (_ => {
 				if (!this.props.tab) this.props.tab = "Plugins";
 				
 				this.props.entries = (!loading.is && grabbedPlugins.length ? this.filterPlugins() : []).map(plugin => BDFDB.ReactUtils.createElement(RepoCardComponent, {
-					...plugin
+					data: plugin
 				})).filter(n => n);
 				
 				BDFDB.TimeUtils.timeout(_ => {
@@ -245,8 +245,8 @@ module.exports = (_ => {
 		
 		const RepoCardComponent = class PluginCard extends BdApi.React.Component {
 			render() {
-				const buttonConfig = buttonData[(Object.entries(pluginStates).find(n => n[1] == this.props.state) || [])[0]];
-				const thumbnailUrl = this.props.thumbnailUrl && `https://betterdiscord.app${this.props.thumbnailUrl}`;
+				const thumbnailUrl = this.props.data.thumbnailUrl && `https://betterdiscord.app${this.props.data.thumbnailUrl}`;
+				let downloadButton;
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN.discoverycard,
 					children: [
@@ -284,7 +284,7 @@ module.exports = (_ => {
 												img.src = thumbnailUrl;
 											}
 										}),
-										this.props.new && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
+										this.props.data.new && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
 											className: BDFDB.disCN.discoverycardcoverbadge,
 											style: {
 												borderRadius: 3,
@@ -301,7 +301,7 @@ module.exports = (_ => {
 										className: BDFDB.disCN.discoverycardicon,
 										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 											nativeClass: true,
-											iconSVG: `<svg width="100%" height="100%" viewBox="0 0 24 24"><path fill="currentColor" d="${this.props.name == "BDFDB" || this.props.name == "ZeresPluginLibrary" ? "m 7.3125,2.625 c -0.3238672,0 -0.5859375,0.2620703 -0.5859375,0.5859375 V 14.929687 c 0,0.323868 0.2620703,0.585938 0.5859375,0.585938 2.710313,0 3.840547,1.498711 4.101563,1.914062 V 3.9905599 C 10.603047,3.3127865 9.3007813,2.625 7.3125,2.625 Z M 4.96875,3.796875 c -0.3238672,0 -0.5859375,0.2620703 -0.5859375,0.5859375 V 17.273437 c 0,0.323868 0.2620703,0.585938 0.5859375,0.585938 h 5.30599 C 9.9465755,17.461602 9.0865625,16.6875 7.3125,16.6875 c -0.9692969,0 -1.7578125,-0.788516 -1.7578125,-1.757813 V 3.796875 Z m 9.375,0 c -0.662031,0 -1.266641,0.2287891 -1.757812,0.6005859 V 18.445312 c 0,-0.323281 0.262656,-0.585937 0.585937,-0.585937 h 5.859375 c 0.323868,0 0.585937,-0.26207 0.585937,-0.585938 V 4.3828125 c 0,-0.3238672 -0.262069,-0.5859375 -0.585937,-0.5859375 z M 2.5859375,4.96875 C 2.2620703,4.96875 2,5.2308203 2,5.5546875 V 19.617187 c 0,0.323868 0.2620703,0.585938 0.5859375,0.585938 H 9.171224 c 0.2420313,0.68207 0.892995,1.171875 1.656901,1.171875 h 2.34375 c 0.763906,0 1.414831,-0.489805 1.656901,-1.171875 h 6.585286 C 21.73793,20.203125 22,19.941055 22,19.617187 V 5.5546875 C 22,5.2308203 21.73793,4.96875 21.414062,4.96875 h -0.585937 v 12.304687 c 0,0.969297 -0.827578,1.757813 -1.796875,1.757813 H 13.656901 C 13.41487,19.71332 12.763907,20.203125 12,20.203125 c -0.763906,0 -1.414831,-0.489805 -1.656901,-1.171875 H 4.96875 c -0.9692968,0 -1.796875,-0.788516 -1.796875,-1.757813 V 4.96875 Z" : "m 11.470703,0.625 c -1.314284,0 -2.3808593,1.0666594 -2.3808592,2.3808594 V 4.4335938 H 5.2792969 c -1.0476168,0 -1.8945313,0.85855 -1.8945313,1.90625 v 3.6191406 h 1.4179688 c 1.41905,0 2.5722656,1.1512126 2.5722656,2.5703126 0,1.4191 -1.1532156,2.572266 -2.5722656,2.572265 H 3.375 v 3.619141 c 0,1.0477 0.8566801,1.904297 1.9042969,1.904297 h 3.6191406 v -1.427734 c 0,-1.4189 1.1532235,-2.572266 2.5722655,-2.572266 1.41905,0 2.570313,1.153366 2.570313,2.572266 V 20.625 h 3.61914 c 1.047626,0 1.90625,-0.856597 1.90625,-1.904297 v -3.810547 h 1.427735 c 1.314292,0 2.380859,-1.066559 2.380859,-2.380859 0,-1.3143 -1.066567,-2.38086 -2.380859,-2.380859 H 19.566406 V 6.3398438 c 0,-1.0477002 -0.858624,-1.90625 -1.90625,-1.90625 H 13.851562 V 3.0058594 c 0,-1.3142 -1.066568,-2.3808594 -2.380859,-2.3808594 z"}"/></svg>`
+											iconSVG: `<svg width="100%" height="100%" viewBox="0 0 24 24"><path fill="currentColor" d="${this.props.data.name == "BDFDB" || this.props.data.name == "ZeresPluginLibrary" ? "m 7.3125,2.625 c -0.3238672,0 -0.5859375,0.2620703 -0.5859375,0.5859375 V 14.929687 c 0,0.323868 0.2620703,0.585938 0.5859375,0.585938 2.710313,0 3.840547,1.498711 4.101563,1.914062 V 3.9905599 C 10.603047,3.3127865 9.3007813,2.625 7.3125,2.625 Z M 4.96875,3.796875 c -0.3238672,0 -0.5859375,0.2620703 -0.5859375,0.5859375 V 17.273437 c 0,0.323868 0.2620703,0.585938 0.5859375,0.585938 h 5.30599 C 9.9465755,17.461602 9.0865625,16.6875 7.3125,16.6875 c -0.9692969,0 -1.7578125,-0.788516 -1.7578125,-1.757813 V 3.796875 Z m 9.375,0 c -0.662031,0 -1.266641,0.2287891 -1.757812,0.6005859 V 18.445312 c 0,-0.323281 0.262656,-0.585937 0.585937,-0.585937 h 5.859375 c 0.323868,0 0.585937,-0.26207 0.585937,-0.585938 V 4.3828125 c 0,-0.3238672 -0.262069,-0.5859375 -0.585937,-0.5859375 z M 2.5859375,4.96875 C 2.2620703,4.96875 2,5.2308203 2,5.5546875 V 19.617187 c 0,0.323868 0.2620703,0.585938 0.5859375,0.585938 H 9.171224 c 0.2420313,0.68207 0.892995,1.171875 1.656901,1.171875 h 2.34375 c 0.763906,0 1.414831,-0.489805 1.656901,-1.171875 h 6.585286 C 21.73793,20.203125 22,19.941055 22,19.617187 V 5.5546875 C 22,5.2308203 21.73793,4.96875 21.414062,4.96875 h -0.585937 v 12.304687 c 0,0.969297 -0.827578,1.757813 -1.796875,1.757813 H 13.656901 C 13.41487,19.71332 12.763907,20.203125 12,20.203125 c -0.763906,0 -1.414831,-0.489805 -1.656901,-1.171875 H 4.96875 c -0.9692968,0 -1.796875,-0.788516 -1.796875,-1.757813 V 4.96875 Z" : "m 11.470703,0.625 c -1.314284,0 -2.3808593,1.0666594 -2.3808592,2.3808594 V 4.4335938 H 5.2792969 c -1.0476168,0 -1.8945313,0.85855 -1.8945313,1.90625 v 3.6191406 h 1.4179688 c 1.41905,0 2.5722656,1.1512126 2.5722656,2.5703126 0,1.4191 -1.1532156,2.572266 -2.5722656,2.572265 H 3.375 v 3.619141 c 0,1.0477 0.8566801,1.904297 1.9042969,1.904297 h 3.6191406 v -1.427734 c 0,-1.4189 1.1532235,-2.572266 2.5722655,-2.572266 1.41905,0 2.570313,1.153366 2.570313,2.572266 V 20.625 h 3.61914 c 1.047626,0 1.90625,-0.856597 1.90625,-1.904297 v -3.810547 h 1.427735 c 1.314292,0 2.380859,-1.066559 2.380859,-2.380859 0,-1.3143 -1.066567,-2.38086 -2.380859,-2.380859 H 19.566406 V 6.3398438 c 0,-1.0477002 -0.858624,-1.90625 -1.90625,-1.90625 H 13.851562 V 3.0058594 c 0,-1.3142 -1.066568,-2.3808594 -2.380859,-2.3808594 z"}"/></svg>`
 										})
 									})
 								})
@@ -315,14 +315,14 @@ module.exports = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement("div", {
 											className: BDFDB.disCN.discoverycardname,
-											children: this.props.name
+											children: this.props.data.name
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
-											isFavorite: this.props.fav,
+											isFavorite: this.props.data.fav,
 											onClick: value => {
-												this.props.fav = value && 1;
-												if (value) favorites.push(this.props.id);
-												else BDFDB.ArrayUtils.remove(favorites, this.props.id, true);
+												this.props.data.fav = value && 1;
+												if (value) favorites.push(this.props.data.id);
+												else BDFDB.ArrayUtils.remove(favorites, this.props.data.id, true);
 												BDFDB.DataUtils.save(BDFDB.ArrayUtils.numSort(favorites).join(" "), _this, "favorites");
 											}
 										})
@@ -330,18 +330,18 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.discoverycardauthor,
-									children: `by ${this.props.author}`
+									children: `by ${this.props.data.author}`
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Scrollers.Thin, {
 									className: BDFDB.disCN.discoverycarddescription,
-									children: this.props.description
+									children: this.props.data.description
 								}),
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.discoverycardfooter,
 									children: [
-										this.props.tags && this.props.tags.length && BDFDB.ReactUtils.createElement("div", {
+										this.props.data.tags && this.props.data.tags.length && BDFDB.ReactUtils.createElement("div", {
 											className: BDFDB.disCN.discoverycardtags,
-											children: this.props.tags.map(tag => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
+											children: this.props.data.tags.map(tag => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
 												className: BDFDB.disCN.discoverycardtag,
 												style: {background: "var(--background-accent)"},
 												text: tag
@@ -358,9 +358,11 @@ module.exports = (_ => {
 															children: [
 																BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 																	className: BDFDB.disCN.discoverycardstaticon,
+																	width: 16,
+																	height: 16,
 																	name: BDFDB.LibraryComponents.SvgIcon.Names.DOWNLOAD
 																}),
-																this.props.downloads
+																this.props.data.downloads
 															]
 														}),
 														BDFDB.ReactUtils.createElement("div", {
@@ -368,40 +370,47 @@ module.exports = (_ => {
 															children: [
 																BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 																	className: BDFDB.disCN.discoverycardstaticon,
+																	width: 16,
+																	height: 16,
 																	name: BDFDB.LibraryComponents.SvgIcon.Names.HEART
 																}),
-																this.props.likes
+																this.props.data.likes
 															]
 														})
 													]
 												}),
-												BDFDB.ReactUtils.createElement("div", {
-													className: BDFDB.disCN.discoverycardbutton,
-													style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor] || buttonConfig.backgroundColor},
-													children: [
-														BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-															className: BDFDB.disCN.discoverycardstaticon,
-															name: BDFDB.LibraryComponents.SvgIcon.Names[buttonConfig.icon]
-														}),
-														BDFDB.LanguageUtils.LibraryStringsCheck[buttonConfig.text] ? BDFDB.LanguageUtils.LibraryStrings[buttonConfig.text] : BDFDB.LanguageUtils.LanguageStrings[buttonConfig.text]
-													],
-													onClick: _ => BDFDB.LibraryRequires.request(this.props.rawSourceUrl, (error, response, body) => {
-														if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Plugin "${this.props.name}"`), {type: "danger"});
-														else BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.rawSourceUrl.split("/").pop()), body, error2 => {
-															if (error2) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_fail", `Plugin "${this.props.name}"`), {type: "danger"});
+												BDFDB.ReactUtils.createElement(RepoCardDownloadButtonComponent, {
+													...buttonData[(Object.entries(pluginStates).find(n => n[1] == this.props.data.state) || [])[0]],
+													installed: this.props.data.state == pluginStates.INSTALLED,
+													onDownload: _ => {
+														BDFDB.LibraryRequires.request(this.props.data.rawSourceUrl, (error, response, body) => {
+															if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
+															else BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.data.rawSourceUrl.split("/").pop()), body, error2 => {
+																if (error2) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
+																else {
+																	BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_success", `Plugin "${this.props.data.name}"`), {type: "success"});
+																	if (_this.settings.general.rnmStart) BDFDB.TimeUtils.timeout(_ => {
+																		if (this.props.data.state == pluginStates.INSTALLED && BDFDB.BDUtils.isPluginEnabled(this.props.data.name) == false) {
+																			BDFDB.BDUtils.enablePlugin(this.props.data.name, false);
+																			BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", this.props.data.name), _this);
+																		}
+																	}, 3000);
+																	this.props.data.state = pluginStates.INSTALLED;
+																	BDFDB.ReactUtils.forceUpdate(this);
+																}
+															})
+														})
+													},
+													onDelete: _ => {
+														BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.data.rawSourceUrl.split("/").pop()), error => {
+															if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
 															else {
-																BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_success", `Plugin "${this.props.name}"`), {type: "success"});
-																this.props.state = pluginStates.INSTALLED;
+																BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_success", `Plugin "${this.props.data.name}"`));
+																this.props.data.state = pluginStates.DOWNLOADABLE;
 																BDFDB.ReactUtils.forceUpdate(this);
-																if (_this.settings.general.rnmStart) BDFDB.TimeUtils.timeout(_ => {
-																	if (this.props.state == pluginStates.INSTALLED && this.props.name && BDFDB.BDUtils.isPluginEnabled(this.props.name) == false) {
-																		BDFDB.BDUtils.enablePlugin(this.props.name, false);
-																		BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", this.props.name), _this);
-																	}
-																}, 3000);
 															}
 														});
-													})
+													}
 												})
 											]
 										})
@@ -410,6 +419,36 @@ module.exports = (_ => {
 							]
 						})
 					]
+				});
+			}
+		};
+		
+		const RepoCardDownloadButtonComponent = class PluginCardDownloadButton extends BdApi.React.Component {
+			render() {
+				return BDFDB.ReactUtils.createElement("button", {
+					className: BDFDB.disCN.discoverycardbutton,
+					style: {backgroundColor: this.props.delete ? BDFDB.DiscordConstants.Colors.STATUS_RED : (BDFDB.DiscordConstants.Colors[this.props.backgroundColor] || this.props.backgroundColor)},
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+							className: BDFDB.disCN.discoverycardstaticon,
+							width: 16,
+							height: 16,
+							name: this.props.delete ? BDFDB.LibraryComponents.SvgIcon.Names.TRASH : BDFDB.LibraryComponents.SvgIcon.Names[this.props.icon]
+						}),
+						this.props.delete ? BDFDB.LanguageUtils.LanguageStrings.APPLICATION_CONTEXT_MENU_UNINSTALL : (BDFDB.LanguageUtils.LibraryStringsCheck[this.props.text] ? BDFDB.LanguageUtils.LibraryStrings[this.props.text] : BDFDB.LanguageUtils.LanguageStrings[this.props.text])
+					],
+					onClick: _ => {
+						if (this.props.delete) typeof this.props.onDelete == "function" && this.props.onDelete();
+						else typeof this.props.onDelete == "function" && this.props.onDownload();
+					},
+					onMouseEnter: this.props.installed && (_ => {
+						this.props.delete = true;
+						BDFDB.ReactUtils.forceUpdate(this);
+					}),
+					onMouseLeave: this.props.installed && (_ => {
+						this.props.delete = false;
+						BDFDB.ReactUtils.forceUpdate(this);
+					})
 				});
 			}
 		};

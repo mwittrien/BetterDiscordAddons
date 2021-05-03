@@ -371,7 +371,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	height: 20px;
 	flex: 0 0 auto;
 }
-[REPLACE_CLASS_discoverycard] [REPLACE_CLASS_favbuttoncontainer][REPLACE_CLASS_giffavoritesize] {
+[REPLACE_CLASS_discoverycard] [REPLACE_CLASS_favbuttoncontainer] [REPLACE_CLASS_giffavoritesize] {
 	width: 20px;
 	height: 20px;
 }
@@ -413,10 +413,11 @@ img:not([src]), img[src=""], img[src="null"] {
 	justify-content: center;
 	align-items: center;
 	border-radius: 3px;
+	color: var(--header-primary);
 	font-size: 14px;
 	font-weight: 500;
 	padding: 6px 8px;
-	cursor: pointer;
+	transition: background-color 0.3s ease;
 }
 [REPLACE_CLASS_discoverycardstats] {
 	display: flex;
