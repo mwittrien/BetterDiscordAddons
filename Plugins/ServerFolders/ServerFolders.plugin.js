@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.9.1
+ * @version 6.9.2
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "6.9.1",
+			"version": "6.9.2",
 			"description": "Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders"
 		},
 		"changeLog": {
 			"fixed": {
-				"Full Screen": "Extra Column is no longer visible in Full Screen Voice Mode",
-				"Settings": "Fixed Settings resetting after reloading"
+				"Custom Icon Picker": "Fixed some Issues with the Custom Icon Picker"
 			},
 		}
 	};
@@ -264,7 +263,10 @@ module.exports = (_ => {
 				BDFDB.TimeUtils.clear(this._previewInterval);
 			}
 			checkImage(base64OrUrl, callback) {
-				if (base64OrUrl.indexOf("https://") == 0 || base64OrUrl.indexOf("http://") == 0) BDFDB.LibraryRequires.request(base64OrUrl.trim(), (error, response, body) => {
+				if (base64OrUrl.indexOf("https://") == 0 || base64OrUrl.indexOf("http://") == 0) BDFDB.LibraryRequires.request({
+					url: base64OrUrl.trim(),
+					encoding: null
+				}, (error, response, body) => {
 					if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1 && response.headers["content-type"] != "image/gif") {
 						this.resizeImage("data:" + response.headers["content-type"] + ";base64," + (new Buffer(body).toString("base64")), callback);
 					}
@@ -291,13 +293,14 @@ module.exports = (_ => {
 						let ctx = canvas.getContext("2d");
 						ctx.canvas.width = width;
 						ctx.canvas.height = height;
-						document.body.appendChild(canvas);
 						ctx.drawImage(img, 0, 0, width, height);
 						callback(canvas.toDataURL(type));
 					};
 					img.onerror = function() {
+						console.log("b");
 						callback(base64);
 					};
+					console.log(base64);
 					img.src = base64;
 				}
 			}
@@ -343,21 +346,21 @@ module.exports = (_ => {
 									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._serverfoldersiconswatch, BDFDB.disCN._serverfoldersiconswatchpreview, !this.props.open && BDFDB.disCN._serverfoldersiconswatchnopreview),
 									children: BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN._serverfoldersiconswatchinner,
-										style: this.props.open && {background: `url(${this.props.open}) center/cover no-repeat`}
+										style: this.props.open && {background: `url(${this.props.open}) center/cover no-repeat`} || {}
 									})
 								}),
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._serverfoldersiconswatch, BDFDB.disCN._serverfoldersiconswatchpreview, !this.props.closed && BDFDB.disCN._serverfoldersiconswatchnopreview),
 									children: BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN._serverfoldersiconswatchinner,
-										style: this.props.closed && {background: `url(${this.props.closed}) center/cover no-repeat`}
+										style: this.props.closed && {background: `url(${this.props.closed}) center/cover no-repeat`} || {}
 									})
 								}),
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._serverfoldersiconswatch, BDFDB.disCN._serverfoldersiconswatchpreview, !(this.props.tick ? this.props.open : this.props.closed) && BDFDB.disCN._serverfoldersiconswatchnopreview),
 									children: BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN._serverfoldersiconswatchinner,
-										style: (this.props.tick ? this.props.open : this.props.closed) && {background: `url(${(this.props.tick ? this.props.open : this.props.closed)}) center/cover no-repeat`}
+										style: (this.props.tick ? this.props.open : this.props.closed) && {background: `url(${(this.props.tick ? this.props.open : this.props.closed)}) center/cover no-repeat`} || {}
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {

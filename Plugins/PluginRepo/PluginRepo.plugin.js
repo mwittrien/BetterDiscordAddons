@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.9
+ * @version 2.2.0
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.1.9",
+			"version": "2.2.0",
 			"description": "Allows you to download all Plugins from BD's Website within Discord"
 		},
 		"changeLog": {
 			"progress": {
 				"New Style and Website Store": "The Repo now directly reflects the Plugins hosted on <a>https://betterdiscord.app/</a> and uses a new Card Style"
+			},
+			"improved": {
+				"Search String Cache": "Saves the Search Query for the Plugins Repo until the Settings Window was closed",
+				"Thumbnails": "Converted Thumbnail Gifs to PNGs to reduce the stress, GIFs play when you hover over the Thumbnail"
 			}
 		}
 	};
@@ -70,7 +74,7 @@ module.exports = (_ => {
 		var list, header;
 		
 		var loading, cachedPlugins, grabbedPlugins, updateInterval;
-		var searchTimeout, forcedSort, forcedOrder, showOnlyOutdated;
+		var searchString, searchTimeout, forcedSort, forcedOrder, showOnlyOutdated;
 		
 		var favorites = [];
 		
@@ -148,9 +152,9 @@ module.exports = (_ => {
 				if (!this.props.updated)		plugins = plugins.filter(plugin => plugin.state != pluginStates.INSTALLED);
 				if (!this.props.outdated)		plugins = plugins.filter(plugin => plugin.state != pluginStates.OUTDATED);
 				if (!this.props.downloadable)	plugins = plugins.filter(plugin => plugin.state != pluginStates.DOWNLOADABLE);
-				if (this.props.searchString) 	{
-					let searchString = this.props.searchString.toUpperCase();
-					plugins = plugins.filter(plugin => plugin.search.indexOf(searchString) > -1);
+				if (searchString) 	{
+					let usedSearchString = searchString.toUpperCase();
+					plugins = plugins.filter(plugin => plugin.search.indexOf(usedSearchString) > -1);
 				}
 				
 				const sortKey = !this.props.sortKey || this.props.sortKey == "NEW" && !plugins.some(plugin => plugin.new) ? Object.keys(sortKeys)[0] : this.props.sortKey;
@@ -245,8 +249,6 @@ module.exports = (_ => {
 		
 		const RepoCardComponent = class PluginCard extends BdApi.React.Component {
 			render() {
-				const thumbnailUrl = this.props.data.thumbnailUrl && `https://betterdiscord.app${this.props.data.thumbnailUrl}`;
-				let downloadButton;
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN.discoverycard,
 					children: [
@@ -256,11 +258,14 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.discoverycardcoverwrapper,
 									children: [
-										thumbnailUrl && BDFDB.ReactUtils.createElement("img", {
+										this.props.data.thumbnailUrl && BDFDB.ReactUtils.createElement("img", {
 											className: BDFDB.disCN.discoverycardcover,
-											src: thumbnailUrl,
+											src: this.props.data.thumbnailUrl,
+											onMouseEnter: this.props.data.thumbnailGifUrl && (e => e.target.src = this.props.data.thumbnailGifUrl),
+											onMouseLeave: this.props.data.thumbnailGifUrl && (e => e.target.src = this.props.data.thumbnailUrl),
 											onClick: _ => {
-												let img = document.createElement("img");
+												const url = this.props.data.thumbnailGifUrl || this.props.data.thumbnailUrl;
+												const img = document.createElement("img");
 												img.addEventListener("load", function() {
 													BDFDB.LibraryModules.ModalUtils.openModal(modalData => {
 														return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalRoot, Object.assign({
@@ -270,8 +275,8 @@ module.exports = (_ => {
 															"aria-label": BDFDB.LanguageUtils.LanguageStrings.IMAGE,
 															children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
 																animated: false,
-																src: thumbnailUrl,
-																original: thumbnailUrl,
+																src: url,
+																original: url,
 																width: this.width,
 																height: this.height,
 																className: BDFDB.disCN.imagemodalimage,
@@ -281,7 +286,7 @@ module.exports = (_ => {
 														}), true);
 													});
 												});
-												img.src = thumbnailUrl;
+												img.src = url;
 											}
 										}),
 										this.props.data.new && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
@@ -479,18 +484,18 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
 										autoFocus: true,
-										query: this.props.searchString,
+										query: searchString,
 										onChange: (value, instance) => {
 											if (loading.is) return;
 											BDFDB.TimeUtils.clear(searchTimeout);
 											searchTimeout = BDFDB.TimeUtils.timeout(_ => {
-												this.props.searchString = list.props.searchString = value.replace(/[<|>]/g, "");
+												searchString = value.replace(/[<|>]/g, "");
 												BDFDB.ReactUtils.forceUpdate(this, list);
 											}, 1000);
 										},
 										onClear: instance => {
 											if (loading.is) return;
-											this.props.searchString = list.props.searchString = "";
+											searchString = "";
 											BDFDB.ReactUtils.forceUpdate(this, list);
 										}
 									})
@@ -572,6 +577,7 @@ module.exports = (_ => {
 
 				cachedPlugins = [];
 				grabbedPlugins = [];
+				searchString = "";
 
 				this.defaults = {
 					general: {
@@ -588,7 +594,7 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					before: {
-						SettingsView: "render"
+						SettingsView: ["render", "componentWillUnmount"]
 					},
 					after: {
 						StandardSidebarView: "render"
@@ -645,7 +651,8 @@ module.exports = (_ => {
 			}
 			
 			processSettingsView (e) {
-				if (BDFDB.ArrayUtils.is(e.instance.props.sections) && e.instance.props.sections[0] && e.instance.props.sections[0].label == BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS) {
+				if (e.node) searchString = "";
+				else if (BDFDB.ArrayUtils.is(e.instance.props.sections) && e.instance.props.sections[0] && e.instance.props.sections[0].label == BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS) {
 					e.instance.props.sections = e.instance.props.sections.filter(n => n.section != "pluginrepo");
 					let index = e.instance.props.sections.indexOf(e.instance.props.sections.find(n => n.section == "themes") || e.instance.props.sections.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS) || e.instance.props.sections.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.HYPESQUAD_ONLINE));
 					if (index > -1) {
@@ -657,7 +664,6 @@ module.exports = (_ => {
 								options.updated = options.updated && !showOnlyOutdated;
 								options.outdated = options.outdated || showOnlyOutdated;
 								options.downloadable = options.downloadable && !showOnlyOutdated;
-								options.searchString = "";
 								options.sortKey = forcedSort || Object.keys(sortKeys)[0];
 								options.orderKey = forcedOrder || Object.keys(orderKeys)[0];
 								
@@ -676,7 +682,6 @@ module.exports = (_ => {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.settingswindowcontentregionscroller]]});
 					if (index > -1) {
 						let options = {};
-						options.searchString = "";
 						options.sortKey = forcedSort || Object.keys(sortKeys)[0];
 						options.orderKey = forcedOrder || Object.keys(orderKeys)[0];
 						children[index] = [
@@ -695,7 +700,7 @@ module.exports = (_ => {
 				let loadingIcon;
 				let newEntries = 0, outdatedEntries = 0, checkIndex = 0, checksRunning = 0, callbackCalled = false;
 				
-				const checkPluginVersion = _ => {
+				const checkPlugin = _ => {
 					if (checksRunning > 20) return;
 					else if (grabbedPlugins.every(p => p.loaded || !p.latestSourceUrl) || !this.started || !loading.is) {
 						if (!callbackCalled) {
@@ -750,10 +755,26 @@ module.exports = (_ => {
 					else if (checkIndex > grabbedPlugins.length) return;
 					
 					const plugin = grabbedPlugins[checkIndex++];
-					if (!plugin || !plugin.latestSourceUrl) checkPluginVersion();
+					if (!plugin || !plugin.latestSourceUrl) checkPlugin();
 					else {
 						checksRunning++;
-						plugin.rawSourceUrl = plugin.latestSourceUrl.replace("https://github.com/", "https://raw.githubusercontent.com/").replace(/\/blob\/(.{32,})/i, "/$1")
+						plugin.rawSourceUrl = plugin.latestSourceUrl.replace("https://github.com/", "https://raw.githubusercontent.com/").replace(/\/blob\/(.{32,})/i, "/$1");
+						plugin.thumbnailUrl = plugin.thumbnailUrl ? (plugin.thumbnailUrl.startsWith("https://") ? plugin.thumbnailUrl : `https://betterdiscord.app${plugin.thumbnailUrl}`) : "";
+						if (plugin.thumbnailUrl) BDFDB.LibraryRequires.request({url: plugin.thumbnailUrl, encoding: null}, (error, response, body) => {
+							if (response && response.headers["content-type"] && response.headers["content-type"] == "image/gif") {
+								let throwAwayImg = new Image();
+								throwAwayImg.onload = function() {
+									const canvas = document.createElement("canvas");
+									canvas.getContext("2d").drawImage(throwAwayImg, 0, 0, canvas.width = this.width, canvas.height = this.height);
+									try {
+										const oldUrl = plugin.thumbnailUrl;
+										plugin.thumbnailUrl = canvas.toDataURL("image/png");
+										plugin.thumbnailGifUrl = oldUrl;
+									} catch(err) {}
+								};
+								throwAwayImg.src = "data:" + response.headers["content-type"] + ";base64," + (new Buffer(body).toString("base64"));
+							}
+						});
 						BDFDB.LibraryRequires.request(plugin.rawSourceUrl, (error, response, body) => {
 							if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
 								plugin.name = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar((/@name\s+([^\s^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || plugin.name || "");
@@ -773,7 +794,7 @@ module.exports = (_ => {
 							if (loadingTooltip) loadingTooltip.update(this.getLoadingTooltipText());
 							
 							checksRunning--;
-							checkPluginVersion();
+							checkPlugin();
 						});
 					}
 				};
@@ -805,7 +826,7 @@ module.exports = (_ => {
 						
 						BDFDB.ReactUtils.forceUpdate(list, header);
 						
-						for (let i = 0; i <= 20; i++) checkPluginVersion();
+						for (let i = 0; i <= 20; i++) checkPlugin();
 					}
 					catch (err) {BDFDB.NotificationUtils.toast("Failed to load Plugin Store", {type: "danger"});}
 				});

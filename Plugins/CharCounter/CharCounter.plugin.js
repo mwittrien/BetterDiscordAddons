@@ -97,9 +97,9 @@ module.exports = (_ => {
 					${BDFDB.dotCN._charcountercounter} {
 						display: block;
 						position: absolute;
-						z-index: 1000;
-						pointer-events: none;
 						font-size: 15px;
+						z-index: 10;
+						pointer-events: none;
 					}
 					${BDFDB.dotCN._charcounterchatcounter} {
 						right: 0;

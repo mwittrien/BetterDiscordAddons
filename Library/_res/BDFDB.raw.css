@@ -421,7 +421,6 @@ img:not([src]), img[src=""], img[src="null"] {
 	font-size: 14px;
 	font-weight: 500;
 	padding: 6px 8px;
-	transition: background-color 0.3s ease;
 }
 [REPLACE_CLASS_discoverycardstats] {
 	display: flex;
