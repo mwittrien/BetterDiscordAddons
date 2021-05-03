@@ -134,8 +134,8 @@ module.exports = (_ => {
 			}
 			filterPlugins() {
 				let plugins = grabbedPlugins.map(plugin => {
-					const installedPlugin = plugin.version && _this.getInstalledPlugin(plugin);
-					const state = installedPlugin ? (BDFDB.NumberUtils.compareVersions(plugin.version, _this.getString(installedPlugin.version)) ? pluginStates.OUTDATED : pluginStates.INSTALLED) : pluginStates.DOWNLOADABLE;
+					const installedPlugin = _this.getInstalledPlugin(plugin);
+					const state = installedPlugin ? (plugin.version && BDFDB.NumberUtils.compareVersions(plugin.version, _this.getString(installedPlugin.version)) ? pluginStates.OUTDATED : pluginStates.INSTALLED) : pluginStates.DOWNLOADABLE;
 					return {
 						...plugin,
 						search: [plugin.name, plugin.version, plugin.author, plugin.description, plugin.tags].flat(10).filter(n => typeof n == "string").join(" ").toUpperCase(),

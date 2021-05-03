@@ -136,8 +136,8 @@ module.exports = (_ => {
 			}
 			filterThemes() {
 				let themes = grabbedThemes.map(theme => {
-					const installedTheme = theme.version && _this.getInstalledTheme(theme);
-					const state = installedTheme ? (BDFDB.NumberUtils.compareVersions(theme.version, _this.getString(installedTheme.version)) ? themeStates.OUTDATED : themeStates.INSTALLED) : themeStates.DOWNLOADABLE;
+					const installedTheme = _this.getInstalledTheme(theme);
+					const state = installedTheme ? (theme.version && BDFDB.NumberUtils.compareVersions(theme.version, _this.getString(installedTheme.version)) ? themeStates.OUTDATED : themeStates.INSTALLED) : themeStates.DOWNLOADABLE;
 					return {
 						...theme,
 						search: [theme.name, theme.version, theme.author, theme.description, theme.tags].flat(10).filter(n => typeof n == "string").join(" ").toUpperCase(),
