@@ -2,7 +2,7 @@
  * @name ChatFilter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.5.1
+ * @version 3.5.2
  * @description Allows you to censor Words or block complete Messages/Statuses
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,18 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatFilter",
 			"author": "DevilBro",
-			"version": "3.5.1",
+			"version": "3.5.2",
 			"description": "Allows you to censor Words or block complete Messages/Statuses"
 		},
 		"changeLog": {
-			"added": {
-				"Ignore own Messages/Status": "Added option to ignore your own Messages/Status"
-			},
-			"improved": {
-				"Zero Width Spaces": "Ignores any zero width space, since some ppl like to troll with it"
-			},
 			"fixed": {
-				"Settings Update": "Fixed issue where the settings panel wouldn't show new words without having to close it first"
+				"Tag": "Fixed censored/blocked tag for new structure"
 			}
 		}
 	};
@@ -430,9 +424,12 @@ module.exports = (_ => {
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: tooltipText,
 					tooltipConfig: {style: "max-width: 400px"},
-					children: BDFDB.ReactUtils.createElement("time", {
-						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.messageedited, BDFDB.disCN[`_chatfilter${label}stamp`]),
-						children: `(${label})`
+					children: BDFDB.ReactUtils.createElement("span", {
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.messagetimestamp, BDFDB.disCN.messagetimestampinline, BDFDB.disCN[`_chatfilter${label}stamp`]),
+						children: BDFDB.ReactUtils.createElement("span", {
+							className: BDFDB.disCN.messageedited,
+							children: `(${label})`
+						})
 					})
 				});
 			}

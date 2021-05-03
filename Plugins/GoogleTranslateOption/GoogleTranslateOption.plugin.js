@@ -2,7 +2,7 @@
  * @name GoogleTranslateOption
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.9
+ * @version 2.2.0
  * @description Allows you to translate Messages and your outgoing Message within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,14 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.1.9",
+			"version": "2.2.0",
 			"description": "Allows you to translate Messages and your outgoing Message within Discord"
+		},
+		"changeLog": {
+			"fixed": {
+				"Embeds": "Fixed an Issue where translated embeds would be inject as text and not as an embed",
+				"Tag": "Fixed censored/blocked tag for new structure"
+			}
 		}
 	};
 	
@@ -514,12 +520,15 @@ module.exports = (_ => {
 			processMessageContent (e) {
 				if (e.instance.props.message) {
 					let translation = translatedMessages[e.instance.props.message.id];
-					if (translation) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					if (translation && translation.content) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						text: `${BDFDB.LanguageUtils.LibraryStrings.from}: ${this.getLanguageName(translation.input)}\n${BDFDB.LanguageUtils.LibraryStrings.to}: ${this.getLanguageName(translation.output)}`,
 						tooltipConfig: {style: "max-width: 400px"},
-						children: BDFDB.ReactUtils.createElement("time", {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.messageedited, BDFDB.disCN._googletranslateoptiontranslated),
-							children: `(${this.labels.translated_watermark})`
+						children: BDFDB.ReactUtils.createElement("span", {
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.messagetimestamp, BDFDB.disCN.messagetimestampinline, BDFDB.disCN._googletranslateoptiontranslated),
+							children: BDFDB.ReactUtils.createElement("span", {
+								className: BDFDB.disCN.messageedited,
+								children: `(${this.labels.translated_watermark})`
+							})
 						})
 					}));
 				}
@@ -528,7 +537,7 @@ module.exports = (_ => {
 			processEmbed (e) {
 				if (e.instance.props.embed && e.instance.props.embed.message_id) {
 					let translation = translatedMessages[e.instance.props.embed.message_id];
-					if (translation) {
+					if (translation && Object.keys(translation.embeds).length) {
 						if (!e.returnvalue) e.instance.props.embed = Object.assign({}, e.instance.props.embed, {
 							rawDescription: translation.embeds[e.instance.props.embed.id],
 							originalDescription: e.instance.props.embed.originalDescription || e.instance.props.embed.rawDescription
@@ -538,9 +547,12 @@ module.exports = (_ => {
 							if (index > -1) children[index].props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 								text: `${BDFDB.LanguageUtils.LibraryStrings.from}: ${this.getLanguageName(translation.input)}\n${BDFDB.LanguageUtils.LibraryStrings.to}: ${this.getLanguageName(translation.output)}`,
 								tooltipConfig: {style: "max-width: 400px"},
-								children: BDFDB.ReactUtils.createElement("time", {
-									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.messageedited, BDFDB.disCN._googletranslateoptiontranslated),
-									children: `(${this.labels.translated_watermark})`
+								children: BDFDB.ReactUtils.createElement("span", {
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.messagetimestamp, BDFDB.disCN.messagetimestampinline, BDFDB.disCN._googletranslateoptiontranslated),
+									children: BDFDB.ReactUtils.createElement("span", {
+										className: BDFDB.disCN.messageedited,
+										children: `(${this.labels.translated_watermark})`
+									})
 								})
 							}));
 						}
@@ -632,7 +644,7 @@ module.exports = (_ => {
 					this.translateText(content, "context", (translation, input, output) => {
 						if (translation) {
 							oldMessages[message.id] = new BDFDB.DiscordObjects.Message(message);
-							let strings = translation.split("\n__________________ __________________ __________________\n");
+							let strings = translation.split(/\n{0,1}__________________ __________________ __________________\n{0,1}/);
 							let content = strings.shift().trim(), embeds = {};
 							for (let i in message.embeds) {
 								message.embeds[i].message_id = message.id;
