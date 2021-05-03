@@ -1,10 +1,10 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
 
 :root {
-	--vcolumns: var(--columns, 3);
-	--vguildsize: var(--guildsize, 50);
-	--vguildgap: var(--guildgap, 3);
-	--valigndms: var(--aligndms, 1);
+	--columns: 3;
+	--guildsize: 50;
+	--guildgap: 3;
+	--aligndms: 1;
 }
 
 .titleBar-AC4pGV.typeMacOS-3EmCyP,
@@ -12,17 +12,17 @@
 .wrapper-3NnKdC,
 .wrapper-3NnKdC .unreadMentionsIndicatorTop-2-tcdU,
 .wrapper-3NnKdC .unreadMentionsIndicatorBottom-2mDYbI {
-	width: calc(1px * (var(--vguildsize) * var(--vcolumns) + 20 * (var(--vguildsize)/50) + 14 * (var(--vguildsize)/50) * (var(--vcolumns) - 1))) !important;
+	width: calc(1px * (var(--guildsize) * var(--columns) + 20 * (var(--guildsize)/50) + 14 * (var(--guildsize)/50) * (var(--columns) - 1))) !important;
 }
 .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
-	padding-right: calc(1px * ((var(--vguildsize) + 12 * var(--vguildsize)/50) * var(--vcolumns) - 50)) !important;
+	padding-right: calc(1px * ((var(--guildsize) + 12 * var(--guildsize)/50) * var(--columns) - 50)) !important;
 }
 body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP,
 body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
-	width: calc(2px * ((var(--vguildsize) + 12 * var(--vguildsize)/50) * var(--vcolumns) + 35 - 25)) !important;
+	width: calc(2px * ((var(--guildsize) + 12 * var(--guildsize)/50) * var(--columns) + 35 - 25)) !important;
 }
 body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
-	padding-right: calc(1px * ((var(--vguildsize) + 12 * var(--vguildsize)/50) * var(--vcolumns) * 2 - 40)) !important;
+	padding-right: calc(1px * ((var(--guildsize) + 12 * var(--guildsize)/50) * var(--columns) * 2 - 40)) !important;
 }
 .titleBar-AC4pGV.typeMacOS-3EmCyP.typeMacOSWithFrame-3R_i5S .macButtons-2MuSAC {
 	margin-top: 0 !important;
@@ -32,7 +32,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	padding: 0 !important;
 }
 .wrapper-3NnKdC .scroller-1Bvpku {
-	padding: 0 0 calc(10px * var(--vguildsize)/50) calc(10px * var(--vguildsize)/50) !important;
+	padding: 0 0 calc(10px * var(--guildsize)/50) calc(10px * var(--guildsize)/50) !important;
 }
 .wrapper-3NnKdC .scroller-1Bvpku.none-2Eo-qx::-webkit-scrollbar {
 	width: 0 !important;
@@ -46,19 +46,19 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	align-content: flex-start !important;
 }
 .wrapper-3NnKdC .listItem-GuPuDH {
-	margin: calc(1px * var(--vguildgap)) calc(1px * (12 * var(--vguildsize)/50)) calc(1px * var(--vguildgap)) 0 !important;
+	margin: calc(1px * var(--guildgap)) calc(1px * (12 * var(--guildsize)/50)) calc(1px * var(--guildgap)) 0 !important;
 }
 .wrapper-3NnKdC #server-search {
-	margin: calc(1px * var(--vguildgap)) calc(1px * (((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2)) !important;
+	margin: calc(1px * var(--guildgap)) calc(1px * (((var(--guildsize) + 12 * var(--guildsize)/50) * (var(--columns) - 1))/2)) !important;
 }
 .wrapper-3NnKdC #server-search .pill-3YxEhL {
 	display: none;
 }
 .wrapper-3NnKdC .listItem-GuPuDH:first-child .listItemWrapper-KhRmzM {
-	margin: 0 calc(1px * (((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2)) calc(1px * var(--vguildgap)) calc(1px * ((((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2))) !important;
+	margin: 0 calc(1px * (((var(--guildsize) + 12 * var(--guildsize)/50) * (var(--columns) - 1))/2)) calc(1px * var(--guildgap)) calc(1px * ((((var(--guildsize) + 12 * var(--guildsize)/50) * (var(--columns) - 1))/2))) !important;
 }
 .wrapper-3NnKdC .listItem-GuPuDH:first-child .pill-1Z5PKm ~ .listItemWrapper-KhRmzM {
-	margin: 0 calc(1px * ((((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) 0 calc(1px * (((0 * var(--valigndms)) + ((((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))))) !important;
+	margin: 0 calc(1px * ((((var(--guildsize) + 12 * var(--guildsize)/50) * (var(--columns) - 1))/2) * (1 - var(--aligndms)))) 0 calc(1px * (((0 * var(--aligndms)) + ((((var(--guildsize) + 12 * var(--guildsize)/50) * (var(--columns) - 1))/2) * (1 - var(--aligndms)))))) !important;
 }
 .wrapper-3NnKdC .blobContainer-pmnxKB,
 .wrapper-3NnKdC .circleButtonMask-1_597P,
@@ -71,43 +71,43 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 .wrapper-3NnKdC .placeholderMask-3v3K7P,
 .wrapper-3NnKdC .svg-1X37T1,
 .wrapper-3NnKdC .wrapper-25eVIn {
-	height: calc(1px * var(--vguildsize)) !important;
-	width: calc(1px * var(--vguildsize)) !important;
+	height: calc(1px * var(--guildsize)) !important;
+	width: calc(1px * var(--guildsize)) !important;
 }
 .wrapper-3NnKdC .scroller-1Bvpku > div[style*="height"]:not([class]) {
-	height: calc(1px * var(--vguildsize) * (58/50)) !important;
+	height: calc(1px * var(--guildsize) * (58/50)) !important;
 }
 .wrapper-3NnKdC .upperBadge-2XnnGB .base-PmTxvP {
-	transform: translate(calc(1.5px * ((50 - var(--vguildsize))/10)), calc(-1.5px * ((50 - var(--vguildsize))/10))) scale(calc(var(--vguildsize)/50)) !important;
+	transform: translate(calc(1.5px * ((50 - var(--guildsize))/10)), calc(-1.5px * ((50 - var(--guildsize))/10))) scale(calc(var(--guildsize)/50)) !important;
 }
 .wrapper-3NnKdC .upperLeftBadge-e35IpL .base-PmTxvP {
-	transform: translate(calc(-1.5px * ((50 - var(--vguildsize))/10)), calc(-1.5px * ((50 - var(--vguildsize))/10))) scale(calc(var(--vguildsize)/50)) !important;
+	transform: translate(calc(-1.5px * ((50 - var(--guildsize))/10)), calc(-1.5px * ((50 - var(--guildsize))/10))) scale(calc(var(--guildsize)/50)) !important;
 }
 .wrapper-3NnKdC .lowerBadge-29hYVK .base-PmTxvP {
-	transform: translate(calc(1.5px * ((50 - var(--vguildsize))/10)), calc(1.5px * ((50 - var(--vguildsize))/10))) scale(calc(var(--vguildsize)/50)) !important;
+	transform: translate(calc(1.5px * ((50 - var(--guildsize))/10)), calc(1.5px * ((50 - var(--guildsize))/10))) scale(calc(var(--guildsize)/50)) !important;
 }
 .wrapper-3NnKdC .lowerLeftBadge-zr4T_9 .base-PmTxvP {
-	transform: translate(calc(-1.5px * ((50 - var(--vguildsize))/10)), calc(1.5px * ((50 - var(--vguildsize))/10))) scale(calc(var(--vguildsize)/50)) !important;
+	transform: translate(calc(-1.5px * ((50 - var(--guildsize))/10)), calc(1.5px * ((50 - var(--guildsize))/10))) scale(calc(var(--guildsize)/50)) !important;
 }
 .wrapper-3NnKdC .wrapper-sa6paO {
-	top: calc(-5px * var(--vguildsize)/50) !important;
-	height: calc(1px * (var(--vguildsize) + 10 * var(--vguildsize)/50)) !important;
-	transform: scale(calc(var(--vguildsize)/50)) !important;
+	top: calc(-5px * var(--guildsize)/50) !important;
+	height: calc(1px * (var(--guildsize) + 10 * var(--guildsize)/50)) !important;
+	transform: scale(calc(var(--guildsize)/50)) !important;
 	transform-origin: 0 50% !important;
 }
 .wrapper-3NnKdC .pill-3N7f9r {	/*	home	*/ 
-	left: calc(1px * ((((var(--vguildsize) + 10 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2) - 9)) !important;
+	left: calc(1px * ((((var(--guildsize) + 10 * var(--guildsize)/50) * (var(--columns) - 1))/2) - 9)) !important;
 }
 .wrapper-3NnKdC .pill-1Z5PKm {	/*	dm		*/ 
-	left: calc(1px * ((var(--valigndms) + ((((var(--vguildsize) + 10 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) - 8)) !important;
+	left: calc(1px * ((var(--aligndms) + ((((var(--guildsize) + 10 * var(--guildsize)/50) * (var(--columns) - 1))/2) * (1 - var(--aligndms)))) - 8)) !important;
 }
 .wrapper-3NnKdC .pill-1z4sAY,	/*	guild	*/ 
 .wrapper-3NnKdC .pill-1aYSec {	/* 	button	*/
-	left: calc(-10px * var(--vguildsize)/50) !important;
+	left: calc(-10px * var(--guildsize)/50) !important;
 }
 .wrapper-3NnKdC .guildSeparator-33mFX6 {
-	width: calc(1px * ((var(--vguildsize) + 12 * var(--vguildsize)/50) * var(--vcolumns) - (12 * var(--vguildsize)/50))) !important;
-	margin: calc(1px * (var(--vguildsize)/10)) 0 !important;
+	width: calc(1px * ((var(--guildsize) + 12 * var(--guildsize)/50) * var(--columns) - (12 * var(--guildsize)/50))) !important;
+	margin: calc(1px * (var(--guildsize)/10)) 0 !important;
 	display: block !important;
 }
 .wrapper-3NnKdC [role=tree] ~ .listItem-GuPuDH .listItemWrapper-KhRmzM,
@@ -117,10 +117,10 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	margin: 0 !important;
 }
 .wrapper-3NnKdC .guildsError-g6NwOI {
-	height: calc(1px * var(--vguildsize)) !important;
-	width: calc(1px * var(--vguildsize)) !important;
-	font-size: calc(1px * (var(--vguildsize)/4 + 7.5)) !important;
-	line-height: calc(1px * (var(--vguildsize)/4 + 6.5)) !important;
+	height: calc(1px * var(--guildsize)) !important;
+	width: calc(1px * var(--guildsize)) !important;
+	font-size: calc(1px * (var(--guildsize)/4 + 7.5)) !important;
+	line-height: calc(1px * (var(--guildsize)/4 + 6.5)) !important;
 }
 .wrapper-3NnKdC #bd-pub-li,
 .wrapper-3NnKdC #bd-pub-li #bd-pub-button,
@@ -128,34 +128,34 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 .wrapper-3NnKdC #sort-button > div,
 .wrapper-3NnKdC .frame-oXWS21,
 .wrapper-3NnKdC .frame-oXWS21 .button-Jt-tIg {
-	height: calc(1px * ((var(--vguildsize)/5) + 10)) !important;
+	height: calc(1px * ((var(--guildsize)/5) + 10)) !important;
 }
 .wrapper-3NnKdC .friendsOnline-2JkivW,
 .wrapper-3NnKdC .label-2wRs_g {
 	display: flex !important;
 	justify-content: center !important;
-	width: calc(1px * (var(--vguildsize) * var(--vcolumns) + 20 * (var(--vguildsize)/50) + 14 * (var(--vguildsize)/50) * (var(--vcolumns) - 1) - (20 * var(--vguildsize)/50) calc(10px * var(--vguildsize)/50))) !important;
-	margin: calc(1px * var(--vguildgap)) 0 calc(1px * var(--vguildgap)) 0 !important;
-	font-size: calc(1px * ((var(--vguildsize)/8) + 3)) !important;
+	width: calc(1px * (var(--guildsize) * var(--columns) + 20 * (var(--guildsize)/50) + 14 * (var(--guildsize)/50) * (var(--columns) - 1) - (20 * var(--guildsize)/50) calc(10px * var(--guildsize)/50))) !important;
+	margin: calc(1px * var(--guildgap)) 0 calc(1px * var(--guildgap)) 0 !important;
+	font-size: calc(1px * ((var(--guildsize)/8) + 3)) !important;
 }
 .wrapper-3NnKdC #bd-pub-li,
 .wrapper-3NnKdC #sort-button,
 .wrapper-3NnKdC .frame-oXWS21 {
-	width: calc(1px * ((var(--vguildsize)*4/5) + 12 * var(--vguildsize)/50)) !important;
+	width: calc(1px * ((var(--guildsize)*4/5) + 12 * var(--guildsize)/50)) !important;
 }
 .wrapper-3NnKdC #bd-pub-li,
 .wrapper-3NnKdC #sort-button,
 .wrapper-3NnKdC .frame-oXWS21 {
 	text-align: center !important;
-	margin: calc(1px * var(--vguildgap)) calc(1px * (((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1) - ((var(--vguildsize)*4/5) + 12 * var(--vguildsize)/50) + var(--vguildsize))/2)) calc(1px * var(--vguildgap)) calc(1px * (((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1) - ((var(--vguildsize)*4/5) + 12 * var(--vguildsize)/50) + var(--vguildsize))/2)) !important;
+	margin: calc(1px * var(--guildgap)) calc(1px * (((var(--guildsize) + 12 * var(--guildsize)/50) * (var(--columns) - 1) - ((var(--guildsize)*4/5) + 12 * var(--guildsize)/50) + var(--guildsize))/2)) calc(1px * var(--guildgap)) calc(1px * (((var(--guildsize) + 12 * var(--guildsize)/50) * (var(--columns) - 1) - ((var(--guildsize)*4/5) + 12 * var(--guildsize)/50) + var(--guildsize))/2)) !important;
 }
 .wrapper-3NnKdC #sort-button > div,
 .wrapper-3NnKdC #bd-pub-li #bd-pub-button,
 .wrapper-3NnKdC .frame-oXWS21 .innerFrame-8Hg64E,
 .wrapper-3NnKdC .frame-oXWS21 .button-Jt-tIg {
 	white-space: pre !important;
-	font-size: calc(1px * ((var(--vguildsize)/8) + 5)) !important;
-	line-height: calc(1px * ((var(--vguildsize)/5) + 10)) !important;
+	font-size: calc(1px * ((var(--guildsize)/8) + 5)) !important;
+	line-height: calc(1px * ((var(--guildsize)/5) + 10)) !important;
 }
 .wrapper-3NnKdC #sort-button > div,
 .wrapper-3NnKdC #bd-pub-li #bd-pub-button,
@@ -165,8 +165,8 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 }
 
 .wrapper-3NnKdC .wrapper-3Njo_c {
-	margin: calc(1px * var(--vguildgap)) calc(1px * (12 * var(--vguildsize)/50)) calc(1px * var(--vguildgap)) 0 !important;
-	width: calc(1px * var(--vguildsize)) !important;
+	margin: calc(1px * var(--guildgap)) calc(1px * (12 * var(--guildsize)/50)) calc(1px * var(--guildgap)) 0 !important;
+	width: calc(1px * var(--guildsize)) !important;
 }
 .wrapper-3NnKdC .wrapper-3Njo_c > .listItem-GuPuDH {
 	margin: 0 !important;
@@ -184,7 +184,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	margin-bottom: 0 !important;
 }
 .wrapper-3NnKdC .expandedFolderBackground-1cujaW {
-	width: calc(1px * var(--vguildsize)) !important;
+	width: calc(1px * var(--guildsize)) !important;
 	top: 0 !important;
 	bottom: 0 !important;
 	left: 0 !important;
@@ -195,7 +195,7 @@ html .typingindicator-guild,
 html .typingindicator-dms,
 html .typingindicator-folder {
 	right: 3px !important;
-	top: calc(var(--vguildsize) * 1px - 5px) !important;
+	top: calc(var(--guildsize) * 1px - 5px) !important;
 	bottom: unset !important;
 }
 

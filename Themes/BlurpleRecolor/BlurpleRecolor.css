@@ -1,34 +1,31 @@
 ﻿@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
 
 :root {
-	--daccentcolor: 114,137,218;
-	--vaccentcolor: var(--accentcolor, var(--daccentcolor));
-	--daccentcolor2: 255,115,250;
-	--vaccentcolor2: var(--accentcolor2, var(--daccentcolor2));
-	--dlinkcolor: 0,176,244;
-	--vlinkcolor: var(--linkcolor, var(--dlinkcolor));
+	--accentcolor: 114,137,218;
+	--accentcolor2: 255,115,250;
+	--linkcolor: 0,176,244;
 	
-	--dfontwhite1: 255,255,255;
+	--fontwhite1: 255,255,255;
 	
-	--vaccentcolor-hover: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15));
-	--vaccentcolor-active: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
-	--vaccentcolor2-hover: rgb(var(--vaccentcolor2)) linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15));
-	--vaccentcolor2-active: rgb(var(--vaccentcolor2)) linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
+	--accentcolor-hover: rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15));
+	--accentcolor-active: rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
+	--accentcolor2-hover: rgb(var(--accentcolor2)) linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15));
+	--accentcolor2-active: rgb(var(--accentcolor2)) linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
 	
-	--bdfdb-blurple: rgb(var(--vaccentcolor)) !important;
-	--bd-blue: rgb(var(--vaccentcolor)) !important;
-	--bd-blue-hover: var(--vaccentcolor-hover) !important;
-	--bd-blue-active: var(--vaccentcolor-active) !important;
-	--blurple: rgb(var(--vaccentcolor)) !important;
+	--bdfdb-blurple: rgb(var(--accentcolor)) !important;
+	--bd-blue: rgb(var(--accentcolor)) !important;
+	--bd-blue-hover: var(--accentcolor-hover) !important;
+	--bd-blue-active: var(--accentcolor-active) !important;
+	--blurple: rgb(var(--accentcolor)) !important;
 }
 .theme-dark, .theme-light {
-	--text-link: rgb(var(--vlinkcolor));
-	--background-help-info: rgba(var(--vlinkcolor), 0.1);
-	--focus-primary: rgb(var(--vlinkcolor));
-	--radio-group-dot-foreground: rgb(var(--vaccentcolor));
+	--text-link: rgb(var(--linkcolor));
+	--background-help-info: rgba(var(--linkcolor), 0.1);
+	--focus-primary: rgb(var(--linkcolor));
+	--radio-group-dot-foreground: rgb(var(--accentcolor));
 }
 .theme-light {
-	--logo-primary: rgb(var(--vaccentcolor));
+	--logo-primary: rgb(var(--accentcolor));
 }
 
 
@@ -98,58 +95,58 @@
 
 .wrapper-1BJsBx.selected-bZ3Lue .childWrapper-anI2G9,		/* home/acronym												*/
 .wrapper-1BJsBx:hover .childWrapper-anI2G9 {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 .folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 1"] {
-	background-color: rgba(var(--vaccentcolor), 1) !important;
+	background-color: rgba(var(--accentcolor), 1) !important;
 }
 .folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.9"] {
-	background-color: rgba(var(--vaccentcolor), 0.9) !important;
+	background-color: rgba(var(--accentcolor), 0.9) !important;
 }
 .folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.8"] {
-	background-color: rgba(var(--vaccentcolor), 0.8) !important;
+	background-color: rgba(var(--accentcolor), 0.8) !important;
 }
 .folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.7"] {
-	background-color: rgba(var(--vaccentcolor), 0.7) !important;
+	background-color: rgba(var(--accentcolor), 0.7) !important;
 }
 .folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.6"] {
-	background-color: rgba(var(--vaccentcolor), 0.6) !important;
+	background-color: rgba(var(--accentcolor), 0.6) !important;
 }
 .folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.5"] {
-	background-color: rgba(var(--vaccentcolor), 0.5) !important;
+	background-color: rgba(var(--accentcolor), 0.5) !important;
 }
 .folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.4"] {
-	background-color: rgba(var(--vaccentcolor), 0.4) !important;
+	background-color: rgba(var(--accentcolor), 0.4) !important;
 }
 .folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.3"] {
-	background-color: rgba(var(--vaccentcolor), 0.3) !important;
+	background-color: rgba(var(--accentcolor), 0.3) !important;
 }
 .folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.2"] {
-	background-color: rgba(var(--vaccentcolor), 0.2) !important;
+	background-color: rgba(var(--accentcolor), 0.2) !important;
 }
 .folderIconWrapper-1_bOZe[style*="background-color: rgba(114, 137, 218, 0.1"] {
-	background-color: rgba(var(--vaccentcolor), 0.1) !important;
+	background-color: rgba(var(--accentcolor), 0.1) !important;
 }
 .folderIconWrapper-1_bOZe svg[style^="color: rgb(114, 137, 218)"],
 .folderIconWrapper-1_bOZe svg[style*=" color: rgb(114, 137, 218)"] {
-	color: rgb(var(--vaccentcolor)) !important;
+	color: rgb(var(--accentcolor)) !important;
 }
 
 
 /* ~~~~		2.		CHANNELLIST						~~~~ */
 
 .background-2uufRq {										/* guild header			partnerbadge						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .iconTierThree-3EAOB7 {										/* guild header			icontier3							*/
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 .subscribeTooltipWrapper-1JoUuw {							/* guild header			subscribetooltip					*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .subscribeTooltipWrapper-1JoUuw::after {
-	border-bottom-color: rgb(var(--vaccentcolor));
+	border-bottom-color: rgb(var(--accentcolor));
 }
 
 .channelNotice-1-XFjC::before,								/* channel notice											*/
@@ -177,14 +174,14 @@
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/channelnotice_premium_bg.svg) center 23px no-repeat;
 }
 .channelNotice-1-XFjC.premiumGuildSubscription-3oKecP::after {
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/channelnotice_premium_accent.svg) center 23px no-repeat;
 }
 .channelNotice-1-XFjC.publicUpsell-31ZSJ8::before {
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/channelnotice_upsell_bg.svg) center 12px no-repeat;
 }
 .channelNotice-1-XFjC.publicUpsell-31ZSJ8::after {
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/channelnotice_upsell_accent.svg) center 12px no-repeat;
 }
 
@@ -194,59 +191,59 @@
 /* ----		3.1.	MESSAGES						---- */
 
 .newMessagesBar-265mhP {									/* new messagesbar											*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 .hasMore-3POVhk {											/* hasmore messagesbar										*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 
 .backgroundFlash-24qWLN[style*="background-color: rgb(114, 137, 218)"],
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 1"] {
-	background-color: rgba(var(--vaccentcolor), 1) !important;
+	background-color: rgba(var(--accentcolor), 1) !important;
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.9"] {
-	background-color: rgba(var(--vaccentcolor), 0.9) !important;
+	background-color: rgba(var(--accentcolor), 0.9) !important;
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.8"] {
-	background-color: rgba(var(--vaccentcolor), 0.8) !important;
+	background-color: rgba(var(--accentcolor), 0.8) !important;
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.7"] {
-	background-color: rgba(var(--vaccentcolor), 0.7) !important;
+	background-color: rgba(var(--accentcolor), 0.7) !important;
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.6"] {
-	background-color: rgba(var(--vaccentcolor), 0.6) !important;
+	background-color: rgba(var(--accentcolor), 0.6) !important;
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.5"] {
-	background-color: rgba(var(--vaccentcolor), 0.5) !important;
+	background-color: rgba(var(--accentcolor), 0.5) !important;
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.4"] {
-	background-color: rgba(var(--vaccentcolor), 0.4) !important;
+	background-color: rgba(var(--accentcolor), 0.4) !important;
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.3"] {
-	background-color: rgba(var(--vaccentcolor), 0.3) !important;
+	background-color: rgba(var(--accentcolor), 0.3) !important;
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.2"] {
-	background-color: rgba(var(--vaccentcolor), 0.2) !important;
+	background-color: rgba(var(--accentcolor), 0.2) !important;
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.1"] {
-	background-color: rgba(var(--vaccentcolor), 0.1) !important;
+	background-color: rgba(var(--accentcolor), 0.1) !important;
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.0"] {
-	background-color: rgba(var(--vaccentcolor), 0.0) !important;
+	background-color: rgba(var(--accentcolor), 0.0) !important;
 }
 
 .embedFull-2tM8--[style*="border-color: rgb(114, 137, 218)"] {
-	border-color: rgb(var(--vaccentcolor)) !important;
+	border-color: rgb(var(--accentcolor)) !important;
 }
 
 .ephemeral-1PsL1r,											/* localbot				container							*/
 .replying-1x3H0T {											/* replying				container							*/
-	background-color: rgba(var(--vaccentcolor), 0.05);
+	background-color: rgba(var(--accentcolor), 0.05);
 }
 .ephemeral-1PsL1r::before,									/* localbot				before								*/
 .replying-1x3H0T::before {									/* replying				before								*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .message-2qnXI6.ephemeral-1PsL1r.selected-2P5D_Z,
 .mouse-mode.full-motion .ephemeral-1PsL1r:hover,
@@ -254,47 +251,47 @@
 .message-2qnXI6.replying-1x3H0T.selected-2P5D_Z,
 .mouse-mode.full-motion .replying-1x3H0T:hover,
 .mouse-mode .replying-1x3H0T:hover {
-	background-color: rgba(var(--vaccentcolor), 0.1);
+	background-color: rgba(var(--accentcolor), 0.1);
 }
 .ephemeralMessage-1fEWtQ a {								/* localbot				operations							*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 
 .operations-36ENbA > a {									/* message				operations							*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 
 .command-2EsN1V {											/* command				used command						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 
 .icon-360yEu {												/* systemmessage		guild sub easter egg icon			*/
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 
 .message-15tBk4 strong,										/* mention				in header							*/
 .wrapper-3WhCwL {											/* mention													*/
-	background-color: rgba(var(--vaccentcolor), 0.1);
-	color: rgb(var(--vaccentcolor));
+	background-color: rgba(var(--accentcolor), 0.1);
+	color: rgb(var(--accentcolor));
 }
 .message-15tBk4 strong:hover,
 .interactive:hover {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 #app-mount .mentioned-xhSam7 .mention.interactive:hover {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 
 .reactionMe-wv5HKu .reactionCount-2mvXRV,					/* reaction				count me							*/
 .reactionMe-wv5HKu:hover .reactionCount-2mvXRV {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .reaction-1hd86g.reactionMe-wv5HKu {						/* reaction				wrapper me							*/
-	background-color: rgba(var(--vaccentcolor), 0.3);
+	background-color: rgba(var(--accentcolor), 0.3);
 }
 															/* attachment			upload bar							*/
 .progressBar-3u8FBM[style*="background-color: rgb(114, 137, 218)"] {
-	background-color: rgb(var(--vaccentcolor)) !important;
+	background-color: rgb(var(--accentcolor)) !important;
 }
 
 /* ----		3.2.	TEXTAREA						---- */
@@ -317,7 +314,7 @@
 	width: 47px;
 	height: 60px;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_followchannel_accent.svg) center/contain no-repeat;
 }
 															/* textarea				verify email icon					*/
@@ -339,7 +336,7 @@
 	width: 65px;
 	height: 60px;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_verifyemail_accent.svg) center/contain no-repeat;
 }
 
@@ -348,68 +345,68 @@
 .animation-10aT2_ path[stroke="rgb(123, 162, 255)"],
 .animation-vamXOL path[stroke="rgb(123,162,255)"],
 .animation-vamXOL path[stroke="rgb(123, 162, 255)"] {
-	stroke: rgb(var(--vaccentcolor)) !important;
+	stroke: rgb(var(--accentcolor)) !important;
 }
 
 /* ----		3.3.	AUTOCOMPLETEMENU				---- */
 
 #app-mount .active-2awTSY {									/* autocomplete			option active						*/
-	background-color: rgb(var(--vaccentcolor)) !important;
+	background-color: rgb(var(--accentcolor)) !important;
 }
 
 #app-mount .searchSuggestion-2K8OBX:hover {					/* gifpicker			suggestions							*/
-	border-color: rgb(var(--vaccentcolor));
-	background-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--accentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .result-3w1ZcL[style*="background-color"] {					/* gifpicker			result loading						*/
-	background-color: rgb(var(--vaccentcolor)) !important;
+	background-color: rgb(var(--accentcolor)) !important;
 }
 .result-3w1ZcL[style*="background-color: rgb(146, 154, 250)"] {
-	background: var(--vaccentcolor-hover) !important;
+	background: var(--accentcolor-hover) !important;
 }
 .result-3w1ZcL[style*="background-color: rgb(179, 174, 255)"] {
-	background: var(--vaccentcolor-active) !important;
+	background: var(--accentcolor-active) !important;
 }
 .theme-light .focused-1En8bG::after,						/* gifpicker			result hover						*/
 .theme-light .result-3w1ZcL:hover::after {
-	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor)), inset 0 0 0 3px #dcddde;
+	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor)), inset 0 0 0 3px #dcddde;
 }
 .theme-dark .focused-1En8bG::after,							/* gifpicker			result hover						*/
 .theme-dark .result-3w1ZcL:hover::after {
-	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor)), inset 0 0 0 3px #2f3136;
+	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor)), inset 0 0 0 3px #2f3136;
 }
 #app-mount .categoryFadeBlurple-1j72_A {					/* gifpicker			categoryfade						*/
-	background-color: rgba(var(--vaccentcolor), 0.8);
+	background-color: rgba(var(--accentcolor), 0.8);
 }
 #app-mount .categoryFadeBlurple-1j72_A:hover {
-	background-color: rgba(var(--vaccentcolor), 0.95);
+	background-color: rgba(var(--accentcolor), 0.95);
 }
 .introductionAction-M1r6AX {								/* gifpicker			introductionaction tooltip			*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .iconColorLightBlue-zbxJUe {								/* stickerpicker		icon lightblue						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 	filter: brightness(150%);
 }
 .iconColorDarkBlue-6qQpJf {									/* stickerpicker		icon darkblue						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 	filter: brightness(75%);
 }
 .iconColorPink-1dhBIv {										/* stickerpicker		icon pink							*/
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 
 /* ----		3.4.	MEMBERLIST						---- */
 
 .premiumIcon-1rDbWQ {
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 
 /* ----		3.5.	SEARCHPAGE						---- */
 
 #app-mount .activeButton-rvKcqq,
 #app-mount .activeButton-rvKcqq:hover {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .noResultsImage-3Y0eCI.alt-3EpRdH {
 	display: flex;
@@ -420,7 +417,7 @@
 	width: 160px;
 	height: 160px;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/searchpage_noresults_accent.svg) center/cover no-repeat;
 }
 
@@ -439,152 +436,152 @@
 	background-image: url(https://discord.com/assets/c13a0b03a798023c27155fad5f0c7a61.png);
 }
 .background-ujHpbY[style*="background-color: rgb(116, 140, 220)"] {
-	background-color: rgb(var(--vaccentcolor)) !important;
+	background-color: rgb(var(--accentcolor)) !important;
 }
 
 
 /* ~~~~		4.		PEOPLES							~~~~ */
 
 .wrapper-1cBijl .btn:disabled {								/* addfriendpage		button								*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 
 /* ~~~~		5.		STORE/NITRO						~~~~ */
 
 #app-mount .premiumIndicator-1XvbfM {						/* premium				where?								*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 .gridItemGuildSubscription-1sZ0fD::before {
 	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(162, 48, 194), rgba(162, 48, 194, 0.5));
 }
 .gridItemBadge-1Se-Pu::before {
-	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--vaccentcolor2)), rgba(var(--vaccentcolor2), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.5));
 }
 
 .activeTransferGuildCardBorder-2jUQ7t{
-	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 
 .premiumGuildSubscriptionRowActive-1WxLXI{
-	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--vaccentcolor2)), rgba(var(--vaccentcolor2), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.5));
 }
 
 .theme-light .animationContainer-cNePAf {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .theme-light .shine-KMI5j7 {
-	color: rgba(var(--vaccentcolor), 0.2);
+	color: rgba(var(--accentcolor), 0.2);
 }
 
 .grandfatheredMessage-1BnHtv {
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 .tierGrandfathered-R6zrrD.banner-3Kac2g {
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5) 75.25%);
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5) 75.25%);
 }
 
 .tier1-UUxEBG,
 .headerTier1-2Ckjmd,										/* submodal				tier1 header						*/
 .tier1HeaderBackground-3LjWgU {								/* submodal				tier1 bg							*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .headerTier1-2Ckjmd .wrapper-1P_m9K image:not([width="170px"]),
 .tier1HeaderBackground-3LjWgU .wrapper-1P_m9K image:not([width="170px"]) {
 	display: none !important;
 }
 .tier1-1ttHRY.banner-3Kac2g {
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5) 75.25%);
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5) 75.25%);
 }
 
 .tier2-3pW_6T,
 .headerTier2-3FKMxd,										/* submodal				tier2 header						*/
 .tier2HeaderBackground-2BUqcl {								/* submodal				tier2 bg							*/
-	background: #ffcd4b linear-gradient(45deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: #ffcd4b linear-gradient(45deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 .tier2-3hSil0.banner-3Kac2g {
-	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5) 75.25%);
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5) 75.25%);
 }
 
 .price-1rEl-z {												/* submodal				price								*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 
 .iconBackgroundTier1-2GOcU8 {								/* tierlist				tier1 bg							*/
-	background: rgb(255, 255, 255) linear-gradient(45deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(45deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 .iconBackgroundTier2-2TeI3a {								/* tierlist				tier2 bg							*/
-	background: #ffcd4b linear-gradient(45deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: #ffcd4b linear-gradient(45deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 
 .xboxPromotion-1k0m0c {										/* bannerpromo			xboxpromo							*/
-	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 .bannerPromotionLogoPremium-2cB301 {						/* bannerpromo			logo								*/
-	background: #ffcd4b linear-gradient(rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: #ffcd4b linear-gradient(rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 .premiumLogo-1D3iJc {										/* bannerpromo			nitro logo							*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 
 #app-mount .tag-HanR-9 {									/* tag														*/
-	background: rgb(255, 255, 255) linear-gradient(45deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(45deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 #app-mount .tag-HanR-9::before {
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://discord.com/assets/04a2e1509ad72be575b1529b51ea3977.svg) top/cover no-repeat;
 }
 
 .skuButtonTier1-2XTq5D,
 .skuButtonTier1-3-EFd9 {
-	background: rgb(255, 255, 255) linear-gradient(32.3deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5) 75.25%);
+	background: rgb(255, 255, 255) linear-gradient(32.3deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5) 75.25%);
 }
 .skuButtonTier2-2asv3-,
 .skuButtonTier2-i01WfL {
-	background: #ffcd4b linear-gradient(32.3deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: #ffcd4b linear-gradient(32.3deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 
 #app-mount .alternativeSkuSelected-3Qhw9n {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 .overlappingBorder-1-XPGl {									/* store				preview image						*/
-	border-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 
 #app-mount .headerFancy-1AcCLF {							/* store				header fancy						*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 #app-mount .premiumHeaderPrice-1F1CMD {						/* store				price								*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .premiumCircle-3jgziV {										/* store				premiumcircle						*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 #app-mount .staffIcon-2MB1se {								/* store				stafficon							*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 #app-mount .nitroIcon-2uS3VJ {								/* store				nitroicon							*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 .perkTag-2O4dx4 {											/* store				perktag								*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 .confirmPremiumIcon-26GX5Y,									/* store				confirmpremiumicon					*/
 .gameIcon-gg34Dz[style*="/assets/f6cbcdc9366fb8d31e03bdc6c9c50246.svg"] {
 	background-color: rgb(255, 255, 255) !important;
-	background-image: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/nitrobadge_details.svg), linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5)) !important;
+	background-image: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/nitrobadge_details.svg), linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5)) !important;
 }
 .pageWrapper-3F6owx {										/* store				pagewrapper							*/
-	background: white linear-gradient(114deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.6));
+	background: white linear-gradient(114deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.6));
 }
 
 
 /* ~~~~		6.		LIBRARY							~~~~ */
 
 .foreground-2aE44H {										/* installationpath		fill								*/
-	stroke: rgb(var(--vaccentcolor));
+	stroke: rgb(var(--accentcolor));
 }
 
 
@@ -594,25 +591,25 @@
 .searchBox-3Y2Vi7:focus-within,
 .searchPage-3GKAdT .search-1iTphC .searchBox-2_mAlO:focus,
 .searchPage-3GKAdT .search-1iTphC .searchBox-2_mAlO:focus-within {
-	border-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 .search-1iTphC .searchBox-2_mAlO:focus,
 .search-1iTphC .searchBox-2_mAlO:focus-within {
-	box-shadow: 0 0 0 1px rgb(var(--vaccentcolor)), 0 0 0 2px rgba(var(--vaccentcolor), 0.6), 0 0 0 3px rgba(var(--vaccentcolor), 0.3);
+	box-shadow: 0 0 0 1px rgb(var(--accentcolor)), 0 0 0 2px rgba(var(--accentcolor), 0.6), 0 0 0 3px rgba(var(--accentcolor), 0.3);
 }
 
 #app-mount .activeButton-1BJAiN,							/* pagination			button								*/
 #app-mount .activeButton-1BJAiN:hover {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 															/* categorylist			selected item						*/
 .categoryItem-3zFJns.selectedCategoryItem-3X8ujp .itemInner-3gVXMG {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 .categoryPill-34fszg.selected-1dONk0 {						/* categorylist			search categorypill					*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 
@@ -620,51 +617,51 @@
 
 .item-PXvHYJ[style^="color: rgb(114, 137, 218)"],
 .item-PXvHYJ[style*=" color: rgb(114, 137, 218)"] {			/* settingsitems		item								*/
-	color: rgb(var(--vaccentcolor)) !important;
+	color: rgb(var(--accentcolor)) !important;
 }
 .item-PXvHYJ[style*="background-color: rgba(114, 137, 218, 0.1)"] {
-	background-color: rgb(var(--vaccentcolor), 0.1) !important;
+	background-color: rgb(var(--accentcolor), 0.1) !important;
 }
 .item-PXvHYJ[style*="background-color: rgb(114, 137, 218)"] {
-	background-color: rgb(var(--vaccentcolor)) !important;
+	background-color: rgb(var(--accentcolor)) !important;
 }
 .item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Nitro Server Boost-tab"],
 .item-PXvHYJ[style^="color: rgb(114, 137, 218)"][aria-controls="GUILD_PREMIUM-tab"],
 .item-PXvHYJ[style*=" color: rgb(114, 137, 218)"][aria-controls="GUILD_PREMIUM-tab"] {
-	color: rgb(var(--vaccentcolor2)) !important;
+	color: rgb(var(--accentcolor2)) !important;
 }
 .item-PXvHYJ:hover[aria-controls="Nitro Server Boost-tab"],
 .item-PXvHYJ[style*="background-color: rgba(114, 137, 218, 0.1)"][aria-controls="GUILD_PREMIUM-tab"] {
-	background-color: rgb(var(--vaccentcolor2), 0.1) !important;
+	background-color: rgb(var(--accentcolor2), 0.1) !important;
 }
 .item-PXvHYJ.selected-3s45Ha[aria-controls="Nitro Server Boost-tab"],
 .item-PXvHYJ[style*="background-color: rgb(114, 137, 218)"][aria-controls="GUILD_PREMIUM-tab"] {
-	background-color: rgb(var(--vaccentcolor2)) !important;
+	background-color: rgb(var(--accentcolor2)) !important;
 }
 
 .dot-2s_oHI {												/* settingsitems		dot									*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 .cardBrand-39zmMQ {											/* settingsitems		card								*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .cardBrand-39zmMQ,
 .cardBrandOutline-3jvFfo {
-	border-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 
 .avatarUploaderInner-3UNxY3 {								/* accountsettings		avatar upload						*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 #app-mount .questionMark-CWEQZn,							/* accountsettings		questionmark						*/
 #app-mount .questionMark-3qBhGj {							/* accountsettings		questionmark new					*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 #app-mount .questionMark-CWEQZn:hover,
 #app-mount .questionMark-3qBhGj:hover {
-	background: var(--vaccentcolor-hover);
+	background: var(--accentcolor-hover);
 }
 
 .marketingLogoImage-2SzXIR {								/* boostsettings		boost header						*/
@@ -679,39 +676,39 @@
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_accent.svg) center/cover no-repeat;
 }
 #app-mount .tierUnlocked-27DwHo {							/* boostsettings		tierunlocked						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 #app-mount .tierAccomplished-2eXPdI,
 #app-mount .tierCurrent-Lw7-4E,
 #app-mount .tierDefault-2qaRkD {
-	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor2)), rgba(var(--vaccentcolor2), 0.5));
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.5));
 }
 #app-mount .tierCloseHint-380zIA {							/* boostsettings		tierclosehint						*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 #app-mount .tierCloseHint-380zIA::before {
-	border-right-color: rgb(var(--vaccentcolor));
+	border-right-color: rgb(var(--accentcolor));
 }
 #app-mount .tierHeaderUnlockedBackground-MW5XJU {			/* boostsettings		tierheaderunlockedbg				*/
-	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 #app-mount .foreground-2EIns2 {								/* boostsettings		icon foreground						*/
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 .emojiIcon-2xOPMD {											/* boostsettings		perkicon emoji						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 	filter: brightness(75%);
 }
 .uploadSizeIcon-2HNa5p {									/* boostsettings		perkicon upload						*/
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 	filter: brightness(75%);
 }
 .memberBadgeIcon-1hpSQc {									/* boostsettings		perkicon guild						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 	filter: brightness(150%);
 }
 .profileBadgeIcon-_ctnKj {									/* boostsettings		perkicon badge						*/
@@ -726,23 +723,23 @@
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor2));
+	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/usersettings_boostbadge_accent.svg) center/contain no-repeat;
 }
 .premiumGuildIcon-13KUPa {									/* boostsettings		perkicon premium					*/
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 .gemWithLabel-2aecE_ {										/* boostsettings		progress label						*/
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 .gemIndicatorProgressCircle-3wDFa1 {						/* boostsettings		progress circle						*/
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 .guildSubscriberCountIcon-6Fo5EK {							/* boostsettings		sub count							*/
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 .guildSubscriptionSlotIcon-EVE04u {							/* boostsettings		slot icon							*/
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 
 .icon-3j1dJB {												/* hypesettings			perk icon							*/
@@ -756,7 +753,7 @@
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/common/empty.svg) center/cover no-repeat;
 }
 .perkNewsletter-2lxlA1 {
@@ -779,14 +776,14 @@
 }
 
 .wrapper-3jrx9n {											/* overlaysettings		positionsettings wrapper			*/
-	border-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 .option-n0icdO:hover {										/* overlaysettings		positionoption						*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .selected-mKYnfr.option-n0icdO {
-	background-color: rgb(var(--vaccentcolor));
-	border-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 															/* streamermodesettings	headerimage							*/
 .noticeIcon-1phvR2[src="/assets/616e078b351d0df460971441949c53a3.svg"] {
@@ -807,7 +804,7 @@
 	pointer-events: none;
 }
 .noticeIcon-1phvR2[src="/assets/616e078b351d0df460971441949c53a3.svg"] + *::before {
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_streamermode_accent.svg) center/contain no-repeat;
 }
 .noticeIcon-1phvR2[src="/assets/616e078b351d0df460971441949c53a3.svg"] + *::after {
@@ -815,7 +812,7 @@
 }
 
 #app-mount .premiumIcon-3GPLjg {							/* games				premium icon						*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 
@@ -844,7 +841,7 @@
 	pointer-events: none;
 }
 .layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type::before {
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_accent.svg) center/contain no-repeat;
 }
 .layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type::after {
@@ -854,12 +851,12 @@
 
 @-webkit-keyframes pulseBorder-1LZYy9 { 					/* intergrationsettings	new webhook							*/
 	0% {border-color: transparent;}
-	50% {border-color: rgb(var(--vaccentcolor));}
+	50% {border-color: rgb(var(--accentcolor));}
 	to {border-color: transparent;}
 }
 @keyframes pulseBorder-1LZYy9 { 
 	0% {border-color: transparent;}
-	50% {border-color: rgb(var(--vaccentcolor));}
+	50% {border-color: rgb(var(--accentcolor));}
 	to {border-color: transparent;}
 }
 
@@ -875,7 +872,7 @@
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_insight_accent.svg) center/cover no-repeat;
 }
 															/* discoverysettings	partner program						*/
@@ -896,12 +893,12 @@
     width: 428px;
     height: 241px;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_partnerprogram_accent.svg) center/cover no-repeat;
 }
 
 .defaultIcon-2NMkWn {										/* discoverysettings	default guildicon					*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 															/* discoverysettings	requirements icon					*/
@@ -924,20 +921,20 @@
 	width: 40px;
 	height: 40px;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_requirements_accent.svg) center/cover no-repeat;
 }
 
 .featureIcon-3p1TC_ [fill="#7289da" i] {					/* communitysettings	intro		featureicon				*/
-	fill: rgb(var(--vaccentcolor));
+	fill: rgb(var(--accentcolor));
 }
 
 .info-1LuGpo {												/* communitysettings	partnership							*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 
 .fakeButton-kGEmb3 {										/* communitysettings	rules		example fake			*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 .exampleWumpus-3QIhvG .wumpus-3Q6pSF,						/* communitysettings	rules		wumpus					*/
@@ -952,7 +949,7 @@
 	width: 82px;
 	height: 72px;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_wumpus_accent.svg) center/cover no-repeat;
 }
 .exampleModal-2oh58d .guildInfo-3Co_-d,						/* communitysettings	rules		wumpus icon				*/
@@ -986,7 +983,7 @@
 	position: absolute;
 	border-radius: 10px;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_wumpusicon_accent.svg) center/cover no-repeat;
 }
 
@@ -996,63 +993,63 @@
 /* ----		10.1.	USERMODAL						---- */
 
 .topSectionPlaying-1J5E4n {									/* modal				topsection playing					*/
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 }
 
 .container-q03LZO.colored-1armap .profileBadgeStaff-3BXdTO {
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://discord.com/assets/4358ad1fb423b346324516453750f569.svg) center/contain no-repeat;
 }
 .container-q03LZO.colored-1armap .profileBadgePartner-j6Lwhr {
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://discord.com/assets/6203964d9d25c394a573fd4f6be36d97.svg) center/contain no-repeat;
 }
 .container-q03LZO.colored-1armap .profileGuildSubscriberlvl1-3oI9tx {
-	background: rgb(var(--vaccentcolor2));
+	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://discord.com/assets/24e49184598820f274e62293349a2e43.svg) center/contain no-repeat;
 }
 .container-q03LZO.colored-1armap .profileGuildSubscriberlvl2-r6nJHT {
-	background: rgb(var(--vaccentcolor2));
+	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://discord.com/assets/cc73fba5c2e9b70752bbd1db35a1b9c3.svg) center/contain no-repeat;
 }
 .container-q03LZO.colored-1armap .profileGuildSubscriberlvl3-38s3Dj {
-	background: rgb(var(--vaccentcolor2));
+	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://discord.com/assets/a4c3939a9b03274246df9b144fcd86cf.svg) center/contain no-repeat;
 }
 .container-q03LZO.colored-1armap .profileGuildSubscriberlvl4-2NXrsI {
-	background: rgb(var(--vaccentcolor2));
+	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://discord.com/assets/d01bee8a9b41bd9dda26a43221b2e7e8.svg) center/contain no-repeat;
 }
 .container-q03LZO.colored-1armap .profileGuildSubscriberlvl5-3XIa2K {
-	background: rgb(var(--vaccentcolor2));
+	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://discord.com/assets/a99def5f819c077e5e5061cab741b7e6.svg) center/contain no-repeat;
 }
 .container-q03LZO.colored-1armap .profileGuildSubscriberlvl6-3e3sxW {
-	background: rgb(var(--vaccentcolor2));
+	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://discord.com/assets/2cfb317f3db3963d8ded9a97ee967bac.svg) center/contain no-repeat;
 }
 .container-q03LZO.colored-1armap .profileGuildSubscriberlvl7-1dVhQT {
-	background: rgb(var(--vaccentcolor2));
+	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://discord.com/assets/278736f579d810b11ddf308cb598b19e.svg) center/contain no-repeat;
 }
 .container-q03LZO.colored-1armap .profileGuildSubscriberlvl8-1kXdFr {
-	background: rgb(var(--vaccentcolor2));
+	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://discord.com/assets/38e40f25802a0fdf480d9b855a37a2f3.svg) center/contain no-repeat;
 }
 .container-q03LZO.colored-1armap .profileGuildSubscriberlvl9-1d6zav {
-	background: rgb(var(--vaccentcolor2));
+	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://discord.com/assets/cfbc2d8ceacfacf07850f986c8165195.svg) center/contain no-repeat;
 }
 
 .guildAvatarWithoutIcon-1sTmE_ {							/* modal				shared servers no icon				*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 /* ----		10.2.	GUILDADD/CREATION				---- */
 															/* create guild			create own icon						*/
 .icon-QM5383[src="/assets/79516499036b21acd5f56ccba0635c38.svg"] {
 	object-position: -999999px -999999px;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildcreate_createown_accent.svg) center/contain no-repeat;
 }
 .icon-QM5383[src="/assets/79516499036b21acd5f56ccba0635c38.svg"] + * {
@@ -1072,45 +1069,45 @@
 }
 
 .uploadIcon-2IFzZU [fill="#7289da" i] {						/* create guild			upload icon							*/
-	fill: rgb(var(--vaccentcolor));
+	fill: rgb(var(--accentcolor));
 }
 
 /* ----		10.3.	REGIONSELECTMODAL				---- */
 
 .regionSelectFlag-3uwFtG,									/* modal				regionselect flag					*/
 .regionSelectFlag-1htPow {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .vip-3pFIN8::after,											/* modal				regionselect vip					*/
 .vip-1SuRbe::after {
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 }
 .regionSelect-3lf4eE button {								/* modal				regionselect button					*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 #app-mount .regionSelect-3lf4eE:hover .regionSelectInner-24f4Ce,
 #app-mount .regionSelect-3lf4eE:hover button {
-	border-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 #app-mount .regionSelect-3lf4eE:hover button {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .regionSelectModal-12e-57 .regionSelectModalHeader-21khC1 {	/* modal				regionselect header					*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 															/* modal				regionselect option					*/
 .regionSelectModal-12e-57 .regionSelectModalOption-2DSIZ3:hover {
-	border-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 .check-2by_h9 {
 	-webkit-mask: url(https://discord.com/assets/6acb20d5e709b34b6a7f36ec13648666.svg);
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 }
 
 /* ----		10.4.	UPLOADMODAL						---- */
 															/* modal				background							*/
 .uploadModalIn-1z07Bv .uploadDropModal-2kTwbc .bgScale-1otPtc {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 .attachment-33OFj0 .icon-1kp3fr,
@@ -1131,7 +1128,7 @@
 	content: "";
 	position: absolute;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 }
 .markup-2BOw-j > .attachment-33OFj0 {
     position: relative;
@@ -1261,7 +1258,7 @@
 	top: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/keybinds_arrows_accent.svg) center/contain no-repeat;
 }
 .ddrArrows-lSnH7P .arrow-2enltQ.down-2Ju7Q_ {
@@ -1278,7 +1275,7 @@
 /* ----		10.6.	LOGINSCREEN						---- */
 
 .authBox-hW6HRx a {											/* authobox				links								*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 
 .authBox-hW6HRx img[src="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] {
@@ -1297,30 +1294,30 @@
 	width: 124px;
 	height: 84px;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/login_authbox_mask.svg) center/cover no-repeat;
 }
 
 .startOverButton-3q0wUV {									/* authobox				startover								*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 
 /* ----		10.7.	DOWNLOADAPPMODAL				---- */
 
 .downloadApps-wbBFdZ .footer-1nkeBm a {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .downloadApps-wbBFdZ .platforms-28Rb-3 .platform-iik236.active-iLSdWQ {
-	border-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 .downloadApps-wbBFdZ .platforms-28Rb-3 .platform-iik236.active-iLSdWQ p {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .downloadApps-wbBFdZ .platforms-28Rb-3 .platform-iik236.active-iLSdWQ .downloadButton-1bWXpg {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 #app-mount .downloadApps-wbBFdZ .platforms-28Rb-3 .icon-2Pk7pb.active-iLSdWQ {
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask-size: cover;
 }
 .downloadApps-wbBFdZ .platforms-28Rb-3 .icon-2Pk7pb.active-iLSdWQ.apple-1fKN59 {
@@ -1340,11 +1337,11 @@
 }
 
 .browserItem-1mKMYK:hover {
-	border-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 .browserItem-1mKMYK:hover .btn-3wPLTq {
-	background-color: rgb(var(--vaccentcolor));
-	border-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 
 /* ----		10.8.	GUILDBOOSTMODAL					---- */
@@ -1369,50 +1366,50 @@
 	width: 96px;
 	height: 60px;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor2));
+	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_accent.svg) center/cover no-repeat;
 }
 .badgeIconWithSubscribers-3PlMu9 {							/* modal				sub badge icon						*/
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 #app-mount .icon-QVoPRH {									/* modal				perkicon general					*/
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 															/* modal				tiermarker in progress tier3		*/
 #app-mount .tierMarkerInProgress-24LMzJ .currentTierIcon-2gcTCn.tier3Icon-Ku4Ahe {
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 .tierMarkerAccomplished-2MiXeg {							/* modal				tiermarker accomplished				*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor2)), rgba(var(--vaccentcolor2), 0.7)) !important;
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.7)) !important;
 }
 #app-mount .barForeground-3KglC8 {							/* modal				tierbarfill							*/
-	background-color: rgb(var(--vaccentcolor2));
+	background-color: rgb(var(--accentcolor2));
 }
 #app-mount .barSecondary-3B1aP2 {							/* modal				previewbarfill						*/
-	background: var(--interactive-hover) linear-gradient(90deg, rgba(var(--vaccentcolor2), 0.3), rgba(var(--vaccentcolor2), 0.3));
+	background: var(--interactive-hover) linear-gradient(90deg, rgba(var(--accentcolor2), 0.3), rgba(var(--accentcolor2), 0.3));
 }
 #app-mount .iconIncluded-24npcq {							/* modal				included perkicon					*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 #app-mount .upload-2-2ZMI {									/* modal				perkicon upload						*/
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 #app-mount .animated-XlVkOl {								/* modal				perkicon animated					*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 	filter: brightness(75%);
 }
 #app-mount .stream-3mNTxK {									/* modal				perkicon stream						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 	filter: brightness(150%);
 }
 #app-mount .tierUnlocked-25K6Kv {							/* modal				tierunlocked						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 #app-mount .tierHeaderUnlocked-1n-OTI {						/* modal				tierheaderunlockedbg				*/
-	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor2)), rgba(var(--vaccentcolor2), 0.5));
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.5));
 }
 .wrapper-3nSjSv {											/* modal				boostaddwrapper						*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor2)), rgba(var(--vaccentcolor2), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.5));
 }
 .wrapper-3nSjSv::before,									/* modal				boostangel							*/
 .wrapper-3nSjSv::after {
@@ -1428,27 +1425,27 @@
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostangel_bg.svg) center/cover no-repeat;
 }
 .wrapper-3nSjSv::after {
-	background: rgb(var(--vaccentcolor2));
+	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostangel_accent.svg) center/cover no-repeat;
 }
 #app-mount .wrapper-3nSjSv .lookInverted-2D7oAl.colorBrand-3pXr91 {
-	color: rgb(var(--vaccentcolor2)) !important;
+	color: rgb(var(--accentcolor2)) !important;
 }
 .tierMarkerLabelPlusIcon-1OS7E9 {							/* modal				prebuy icon							*/
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 .upsellFooterIcon-2105bD path {								/* prebuy popout		footer icon							*/
-	fill: rgb(var(--vaccentcolor));
+	fill: rgb(var(--accentcolor));
 }
 .perkIconGuild-KLNhuR {										/* prebuy popout		perkicon guild						*/
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 .perkIconChatPerks-BnKNFh {									/* prebuy popout		perkicon chat						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 	filter: brightness(120%);
 }
 .perkIconStream-7wqAvn {									/* prebuy popout		perkicon stream						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 	filter: brightness(150%);
 }
 
@@ -1466,7 +1463,7 @@
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/addboost_header_accent.svg) center/contain no-repeat;
 }
 #app-mount .transferConfirmImage-1SYwXp {					/* add boost modal		transfer confirm					*/
@@ -1481,7 +1478,7 @@
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor2));
+	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/transferboost_header_accent.svg) center/contain no-repeat;
 }
 
@@ -1489,25 +1486,25 @@
 
 .selectorButtonSelected-336oUc,								/* modal				selectorselectedbutton				*/
 .selectorButtonSelected-1j4DmC {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .badgeUpgrade-3_4a3F {										/* modal				badgeupgrade						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .imageSelected-4Kl81J {										/* modal				imageselected						*/
-	border-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 .tile-2silOL:hover .sourceThumbnail-14Iubx {				/* modal				sourcethumbnail						*/
-	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor));
+	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor));
 }
 .sourceThumbnail-14Iubx.selected-3Qtv-u {
-	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor));
+	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor));
 }
 
 /* ----		10.11.	DISPATCHERRORMODAL				---- */
 
 .theme-light .closeLink-2MRAUp {							/* modal				closelink							*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 
 /* ----		10.12.	CHANGELOGMODAL					---- */
@@ -1516,14 +1513,14 @@
 	color: var(--text-link);
 }
 .improved-1NJK-y {											/* modal				improved category					*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .improved-1NJK-y::after {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 .premiumBanner-rP6H1S {
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 
 /* ----		10.13.	SCREENSHAREMODAL				---- */
@@ -1540,7 +1537,7 @@
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/screenshare_header_accent.svg) center/contain no-repeat;
 }
 
@@ -1551,7 +1548,7 @@
 	content: "";
 	position: absolute;
 	top: 0;
-	border: 0px solid rgb(var(--vaccentcolor));
+	border: 0px solid rgb(var(--accentcolor));
 	border-width: 29px 26px;
 	border-radius: 7px;
 	width: 225px;
@@ -1561,22 +1558,22 @@
 }
 
 .tile-2w4k5N:hover .sourceThumbnail-27dolk {
-	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor));
+	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor));
 }
 .sourceThumbnail-27dolk.selected-1nOkyc {
-	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor));
+	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor));
 }
 .selectorButton-EEUWed:not(.selectorButtonPremiumRequired-mKMbIu):hover {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .selectorButtonSelected-t5V9On {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 /* ----		10.14.	PHONEVERIFICATIONMODAL			---- */
 
 .phoneVerificationModal-OzcDc3 path[fill="rgb(118,134,177)"] {
-	fill: rgb(var(--vaccentcolor));
+	fill: rgb(var(--accentcolor));
 }
 
 /* ----		10.15.	CUSTOMSTATUSMODAL				---- */
@@ -1592,7 +1589,7 @@
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/customstatus_header_accent.svg) center/contain no-repeat;
 }
 
@@ -1600,10 +1597,10 @@
 /* ~~~~		11.		POPOUTS							~~~~ */
 
 .popoutLeft-3aViER.arrowAlignmentTop-1yftWI::before {
-	border-left-color: #rgb(var(--vaccentcolor));
+	border-left-color: #rgb(var(--accentcolor));
 }
 .popoutRight-1veHKi.arrowAlignmentTop-1yftWI::before {
-	border-right-color: #rgb(var(--vaccentcolor));
+	border-right-color: #rgb(var(--accentcolor));
 }
 .popoutBottom-2GAFPg.arrowAlignmentMiddle-NBGtsX::before,
 .popoutBottom-2GAFPg.arrowAlignmentTop-1yftWI::before,
@@ -1617,44 +1614,44 @@
 .theme-light.popoutBottomLeft-1pG8B4.arrowAlignmentTop-1yftWI::before,
 .theme-light.popoutBottomRight-2Rno5S.arrowAlignmentMiddle-NBGtsX::before,
 .theme-light.popoutBottomRight-2Rno5S.arrowAlignmentTop-1yftWI::before {
-	border-bottom-color: #rgb(var(--vaccentcolor));
+	border-bottom-color: #rgb(var(--accentcolor));
 }
 .popoutInvert-3TZnzz:not(.popoutBottom-2GAFPg).popoutTop-3WSJtH.arrowAlignmentMiddle-NBGtsX::before,
 .popoutInvert-3TZnzz:not(.popoutBottom-2GAFPg).popoutTop-3WSJtH.arrowAlignmentTop-1yftWI::before,
 .popoutInvert-3TZnzz:not(.popoutBottom-2GAFPg).popoutTopRight-1lc8Mq.arrowAlignmentMiddle-NBGtsX::before,
 .popoutInvert-3TZnzz:not(.popoutBottom-2GAFPg).popoutTopRight-1lc8Mq.arrowAlignmentTop-1yftWI::before {
-	border-top-color: #rgb(var(--vaccentcolor));
+	border-top-color: #rgb(var(--accentcolor));
 }
 .theme-light.contentNarrowMedia-W7SHxH.topArrow-1B63md::before,
 .theme-light .contentNarrowNoMedia-Il01H1.topArrow-1B63md::before,
 .theme-light.contentWideNoMedia-22TIu6.topArrow-1B63md::before,
 .theme-light .contentWideNoMedia-22TIu6.topArrow-1B63md::before {
-	border-bottom-color: #rgb(var(--vaccentcolor));
+	border-bottom-color: #rgb(var(--accentcolor));
 }
 
 .selectedBrand-1UKrSX {										/* popout				combobox selected brand				*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .selectedBrand-1UKrSX.focused-dKLoQt,
 .selectedBrand-1UKrSX:hover {
-	background: var(--vaccentcolor-hover);
+	background: var(--accentcolor-hover);
 }
 
 /* ----		11.1.	CONTEXTMENU						---- */
 
 .colorBrand-ROmMP1,											/* contextmenu			brand								*/
 .colorDefault-2K3EoJ:not(.focused-3afm-j)[id="user-settings-cog-Discord_Nitro"] {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .colorPremium-p4p7qO,										/* contextmenu			premium								*/
 .colorDefault-2K3EoJ:not(.focused-3afm-j)[id="user-settings-cog-Nitro_Server_Boost"],
 .colorDefault-2K3EoJ:not(.focused-3afm-j)[id="guild-context-guild-settings--GUILD_PREMIUM"] {
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 .colorDefault-2K3EoJ.focused-3afm-j,
 .colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O),
 .colorDefault-2K3EoJ:active:not(.hideInteraction-1iHO1O) {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .colorPremium-p4p7qO.focused-3afm-j,
 .colorPremium-p4p7qO:hover:not(.hideInteraction-1iHO1O),
@@ -1665,7 +1662,7 @@
 .colorDefault-2K3EoJ.focused-3afm-j[id="guild-context-guild-settings--GUILD_PREMIUM"],
 .colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O)[id="guild-context-guild-settings--GUILD_PREMIUM"],
 .colorDefault-2K3EoJ:active:not(.hideInteraction-1iHO1O)[id="guild-context-guild-settings--GUILD_PREMIUM"] {
-	background-color: rgb(var(--vaccentcolor2));
+	background-color: rgb(var(--accentcolor2));
 }
 .colorDanger-2qLCe1.focused-3afm-j,
 .colorDanger-2qLCe1:hover:not(.hideInteraction-1iHO1O),
@@ -1673,19 +1670,19 @@
 	background-color: #F04747;
 }
 .colorDefault-2K3EoJ .radioSelection-1HmrQS {				/* contextmenu			radioselection						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .colorPremium-p4p7qO .radioSelection-1HmrQS {
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 .colorDanger-2qLCe1 .radioSelection-1HmrQS {
 	color: #F04747;
 }
 .colorDefault-2K3EoJ .checkbox-3s5GYZ {						/* contextmenu			checkbox							*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .colorPremium-p4p7qO .checkbox-3s5GYZ {
-	color: rgb(var(--vaccentcolor2));
+	color: rgb(var(--accentcolor2));
 }
 .colorDanger-2qLCe1 .checkbox-3s5GYZ {
 	color: #F04747;
@@ -1693,12 +1690,12 @@
 .colorDefault-2K3EoJ.focused-3afm-j .check-1JyqgN,			/* contextmenu			checkmark							*/
 .colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O) .check-1JyqgN,
 .colorDefault-2K3EoJ:active:not(.hideInteraction-1iHO1O) .check-1JyqgN {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .colorPremium-p4p7qO.focused-3afm-j .check-1JyqgN,
 .colorPremium-p4p7qO:hover:not(.hideInteraction-1iHO1O) .check-1JyqgN,
 .colorPremium-p4p7qO:active:not(.hideInteraction-1iHO1O) .check-1JyqgN {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .colorDanger-2qLCe1.focused-3afm-j .check-1JyqgN,
 .colorDanger-2qLCe1:hover:not(.hideInteraction-1iHO1O) .check-1JyqgN,
@@ -1712,7 +1709,7 @@
 /* ----		11.2.	USERPOPOUT						---- */
 
 .headerPlaying-j0WQBV {
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 }
 .headerStreaming-2FjmGz {
 	background: #593695;
@@ -1721,55 +1718,55 @@
 /* ----		11.3.	EMOJIPICKER						---- */
 
 .emojiPicker-3m1S-j .categories-1feg4n .selected-39BZ4S {	/* emojipicker			selected category					*/
-	border-bottom-color: rgb(var(--vaccentcolor));
+	border-bottom-color: rgb(var(--accentcolor));
 }
 
 /* ----		11.4.	PINS/MENTIONS					---- */
 
 .hasMoreButton-1MELpI {										/* popout				hasmore button						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 
 /* ----		11.5.	SEARCHPOPOUT					---- */
 															/* datepicker			day hover							*/
 #app-mount .calendarPicker-2yf6Ci .react-datepicker__day.react-datepicker__day--selected:hover,
 #app-mount .calendarPicker-2yf6Ci .react-datepicker__day:not(.react-datepicker__day--disabled):hover {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 															/* datepicker			day selectd							*/
 #app-mount .calendarPicker-2yf6Ci .react-datepicker__day.react-datepicker__day--selected::after {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 															/* datepicker			hintvalue							*/
 #app-mount .datePicker--XZbmJ .datePickerHint-3Q1Udw .hintValue-29ny8Z {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 
 /* ~~~~		12.		GENERAL							~~~~ */
 
 .wanderingCubesItem-WPXqao {								/* loading				cubes								*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .chasingDotsItem-2DVNUn {									/* loading				dots								*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .theme-light .path-92Hmty,									/* loading				circle								*/
 .theme-dark .path-92Hmty,
 .theme-dark .path2-1q7bG_ {
-	stroke: rgb(var(--vaccentcolor));
+	stroke: rgb(var(--accentcolor));
 }
 
 /* ----		12.1.	TEXT							---- */
 
 .brand-2-tkdo {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .colorBrand-2tjs5J {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .tipTitle-GL9qAt {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 
 /* ----		12.2.	BUTTONS							---- */
@@ -1778,22 +1775,22 @@
 #app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91 .spinnerItem-3GlVyU,
 #app-mount .lookGhost-2Fn_0-.colorBrand-3pXr91 .spinnerItem-3GlVyU,
 #app-mount .lookLink-9FtZy-.colorBrand-3pXr91 .spinnerItem-3GlVyU {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 #app-mount .btn-1PnLxm.btnPrimary-1jluZW:hover:not(:disabled),
 #app-mount .lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-7qQbGO):hover,
 #app-mount .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover {
-	background: var(--vaccentcolor-hover);
+	background: var(--accentcolor-hover);
 }
 #app-mount .lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-7qQbGO):active,
 #app-mount .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:active {
-	background: var(--vaccentcolor-active);
+	background: var(--accentcolor-active);
 }
 #app-mount .btn-1PnLxm.btnPrimary-1jluZW,
 #app-mount .lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-7qQbGO),
 #app-mount .lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-7qQbGO):disabled {
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 }
 
 #app-mount .lookInverted-2D7oAl.colorBrand-3pXr91:hover,
@@ -1806,47 +1803,47 @@
 }
 #app-mount .lookInverted-2D7oAl.colorBrand-3pXr91,
 #app-mount .lookInverted-2D7oAl.colorBrand-3pXr91:disabled {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 
 #app-mount .lookOutlined-3sRXeN.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover {
-	border-color: rgba(var(--vaccentcolor), 0.6);
+	border-color: rgba(var(--accentcolor), 0.6);
 }
 #app-mount .lookOutlined-3sRXeN.hoverBrand-1_Fxlk.hasHover-3X1-zV:active {
-	background-color: rgba(var(--vaccentcolor), 0.1);
-	border-color: rgb(var(--vaccentcolor));
+	background-color: rgba(var(--accentcolor), 0.1);
+	border-color: rgb(var(--accentcolor));
 }
 #app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91,
 #app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91:disabled {
-	border-color: rgba(var(--vaccentcolor), 0.1);
-	color: rgb(var(--vaccentcolor));
+	border-color: rgba(var(--accentcolor), 0.1);
+	color: rgb(var(--accentcolor));
 }
 
 #app-mount .lookGhost-2Fn_0-.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover {
-	background-color: rgba(var(--vaccentcolor), 0.15);
+	background-color: rgba(var(--accentcolor), 0.15);
 }
 #app-mount .lookGhost-2Fn_0-.hoverBrand-1_Fxlk.hasHover-3X1-zV:active {
-	background-color: rgba(var(--vaccentcolor), 0.2);
+	background-color: rgba(var(--accentcolor), 0.2);
 }
 #app-mount .lookGhost-2Fn_0-.colorBrand-3pXr91,
 #app-mount .lookGhost-2Fn_0-.colorBrand-3pXr91:disabled {
-	background-color: rgba(var(--vaccentcolor), 0.1);
-	color: rgb(var(--vaccentcolor));
+	background-color: rgba(var(--accentcolor), 0.1);
+	color: rgb(var(--accentcolor));
 }
 
 #app-mount .lookLink-9FtZy-.colorBrand-3pXr91 {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 #app-mount .lookLink-9FtZy-.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover .contents-18-Yxp {
-	background-image: linear-gradient(0deg, transparent, transparent 1px, rgb(var(--vaccentcolor)) 0, rgb(var(--vaccentcolor)) 2px, transparent 0);
-	color: rgb(var(--vaccentcolor));
+	background-image: linear-gradient(0deg, transparent, transparent 1px, rgb(var(--accentcolor)) 0, rgb(var(--accentcolor)) 2px, transparent 0);
+	color: rgb(var(--accentcolor));
 }
 
 /* ----		12.3.	INPUTS							---- */
 
 .input-cIJ7To.focused-1mmYsC,								/* textinput			focused								*/
 .input-cIJ7To:focus {
-	border-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 .input-cIJ7To.error-2O5WFJ {
 	border-color: #f04747;
@@ -1855,29 +1852,29 @@
 	border-color: #43b581;
 }
 .focused-1mmYsC {
-	border-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 #app-mount .prefixInput-14nUik.focused-2QzoMt {
-	border-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 															/* checkbox				checked 							*/
 .checkbox-3kaeSU .checkboxInner-3yjcPe .checkboxElement-1qV33p:checked + span {
-	background-color: rgb(var(--vaccentcolor));
-	border-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 															/* checkbox				checked alt							*/
 .checkbox-3kaeSU .checkboxInner-3yjcPe.alt-6FvZrq .checkboxElement-1qV33p:checked + span::after {
-	border-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 
 .checkbox-1ix_J3.checked-3_4uQ9[style*="background-color: rgb(114, 137, 218)"] {
-	background-color: rgb(var(--vaccentcolor)) !important;
+	background-color: rgb(var(--accentcolor)) !important;
 }
 .checkbox-1ix_J3.checked-3_4uQ9[style*="border-color: rgb(114, 137, 218)"] {
-	border-color: rgb(var(--vaccentcolor)) !important;
+	border-color: rgb(var(--accentcolor)) !important;
 }
 .checkbox-1ix_J3.checked-3_4uQ9 path[fill="#7289da"] {
-	border-color: rgb(var(--vaccentcolor)) !important;
+	border-color: rgb(var(--accentcolor)) !important;
 }
 
 .container-3auIfb {											/* switch				unchecked							*/
@@ -1886,14 +1883,14 @@
 }															/* switch				checked								*/
 .container-3auIfb[style*="background-color: rgb(67, 181, 129)"],
 .container-3auIfb[style*="background-color: rgb(114, 137, 218)"] {
-	background-color: rgba(var(--vaccentcolor), 0.8) !important;
+	background-color: rgba(var(--accentcolor), 0.8) !important;
 }
 .container-3auIfb[style*="background-color: rgb(67, 181, 129)"]:hover,
 .container-3auIfb[style*="background-color: rgb(114, 137, 218)"]:hover {
-	background: var(--vaccentcolor-hover) !important;
+	background: var(--accentcolor-hover) !important;
 }
 #app-mount .container-3auIfb:active {
-	background: var(--vaccentcolor-active) !important;
+	background: var(--accentcolor-active) !important;
 }
 .container-3auIfb path[fill] {
 	fill: rgb(114, 118, 125) !important;
@@ -1901,58 +1898,58 @@
 .container-3auIfb[style*="background-color: rgb(67, 181, 129)"] path[fill],
 .container-3auIfb[style*="background-color: rgb(114, 137, 218)"] path[fill],
 .container-3auIfb:active path[fill] {
-	fill: rgb(var(--vaccentcolor)) !important;
+	fill: rgb(var(--accentcolor)) !important;
 }
 
 .barFill-23-gu- {											/* slider				barfill								*/
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--accentcolor));
 }
 .mediaBarGrabber-1FqnbN,									/* progessbar			grabber								*/
 .mediaBarProgress-1xaPtl,									/* progessbar			barfill								*/
 .mediaBarProgress-1xaPtl::after,
 .mediaBarProgress-1xaPtl::before {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .mediaBarInteraction-37i2O4:hover .mediaBarGrabber-1FqnbN,
 .mediaBarInteractionDragging-2QurIZ .mediaBarGrabber-1FqnbN {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 	filter: brightness(120%);
 }
 
 .theme-light .select-2fjwPw:focus,							/* dropdown select		nitro subscription					*/
 .theme-light .lookFilled-22uAsw.select-2fjwPw:focus {
-	border-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 .theme-light .lookFilled-22uAsw.select-2fjwPw:hover.open-kZ53_U,
 .theme-light .lookFilled-22uAsw.open-kZ53_U {
-	border-color: rgb(var(--vaccentcolor)) rgb(var(--vaccentcolor)) #b9bbbe;
+	border-color: rgb(var(--accentcolor)) rgb(var(--accentcolor)) #b9bbbe;
 }
 .theme-dark .select-2fjwPw:focus,
 .theme-dark .lookFilled-22uAsw.select-2fjwPw:focus {
-	border-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--accentcolor));
 }
 .theme-dark .lookFilled-22uAsw.select-2fjwPw:hover.open-kZ53_U,
 .theme-dark .lookFilled-22uAsw.open-kZ53_U {
-	border-color: rgb(var(--vaccentcolor)) rgb(var(--vaccentcolor)) rgba(0, 0, 0, 0.3);
+	border-color: rgb(var(--accentcolor)) rgb(var(--accentcolor)) rgba(0, 0, 0, 0.3);
 }
 .selectedIcon-3uS11H {										/* dropdown select		selected icon						*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 
 /* ----		12.4.	TAGS							---- */
 
 .botTagRegular-2HEhHi {										/* bottag				regular								*/
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .botTagInvert-18-95s {										/* bottag				inverted							*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 
 .verified-1eC5dy {											/* verifiedbadge											*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .partnered-3nJayh {											/* partneredbadge											*/
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .partnered-3nJayh .flowerStar-1GeTsn {
 	filter: brightness(75%);
@@ -1963,12 +1960,12 @@
 [style*="/assets/f78426a064bc9dd24847519259bc42af.png"],
 [src*="/assets/f78426a064bc9dd24847519259bc42af.png"] {		/* avatars				clyde								*/
 	object-position: -999999px -999999px;
-	background: rgb(var(--vaccentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/clydeicon_details.svg) center/contain no-repeat !important;
+	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/clydeicon_details.svg) center/contain no-repeat !important;
 }
 [style*="/assets/6debd47ed13483642cf09e832ed0bc1b.png"],
 [src*="/assets/6debd47ed13483642cf09e832ed0bc1b.png"] {		/* avatars				blue discord						*/
 	object-position: -999999px -999999px;
-	background: rgb(var(--vaccentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/blurplediscordicon_details.svg) center/contain no-repeat !important;
+	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/blurplediscordicon_details.svg) center/contain no-repeat !important;
 }
 
 /* ----		12.6.	SCROLLBARS						---- */
@@ -1978,7 +1975,7 @@
 .theme-light .scrollerWrap-2lJEkd .scrollbar-2rkZSL .thumb-2JwNFC,
 .theme-light .scrollerThemed-2oenus.themedWithTrack-q8E3vB .scrollbar-2rkZSL .thumb-2JwNFC,
 .theme-light .scrollbarDefault-3COgCQ::-webkit-scrollbar-thumb {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 ::-webkit-scrollbar-corner,
@@ -1989,80 +1986,80 @@
 /* ----		12.7.	NOTIFICATIONBAR					---- */
 
 .colorPremiumTier1-3D7SPt {
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.7));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.7));
 }
 .colorPremiumTier1-3D7SPt .button-2DhvE9:hover {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .colorPremiumTier2-dCdap5 {
-	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 .colorPremiumTier2-dCdap5 .button-2DhvE9:hover {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .colorBrand-2zeG8h {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .colorBrand-2zeG8h .button-2DhvE9:hover {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .notice-3bPHh-[style*="background-color: rgb(114, 137, 218)"] {
-	background-color: rgb(var(--vaccentcolor)) !important;
+	background-color: rgb(var(--accentcolor)) !important;
 }
 .notice-3bPHh-[style*="background-color: rgb(114, 137, 218)"] .button-2DhvE9:hover {
-	color: rgb(var(--vaccentcolor)) !important;
+	color: rgb(var(--accentcolor)) !important;
 }
 .notice-2X5hT5 {											/* preview notice											*/
-	background: #000000 linear-gradient(90deg, rgba(var(--vaccentcolor), 0.5), rgba(var(--vaccentcolor), 0.5));
+	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor), 0.5), rgba(var(--accentcolor), 0.5));
 }
 .button-2PWmas:hover {										/* preview notice		button								*/
-	background: #000000 linear-gradient(90deg, rgba(var(--vaccentcolor), 0.7), rgba(var(--vaccentcolor), 0.7));
+	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor), 0.7), rgba(var(--accentcolor), 0.7));
 }
 .notice-1tZwqv {											/* role notice												*/
-	background: #000000 linear-gradient(90deg, rgba(var(--vaccentcolor), 0.5), rgba(var(--vaccentcolor), 0.5));
+	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor), 0.5), rgba(var(--accentcolor), 0.5));
 }
 .button-3Ijpww:hover {										/* role notice			button								*/
-	background: #000000 linear-gradient(90deg, rgba(var(--vaccentcolor), 0.7), rgba(var(--vaccentcolor), 0.7));
+	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor), 0.7), rgba(var(--accentcolor), 0.7));
 }
 .notice-3uyY6c {											/* rules notice												*/
-	background: #000000 linear-gradient(90deg, rgba(var(--vaccentcolor), 0.5), rgba(var(--vaccentcolor), 0.5));
+	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor), 0.5), rgba(var(--accentcolor), 0.5));
 }
 .button-gP4R86:hover {										/* rules notice			button								*/
-	background: #000000 linear-gradient(90deg, rgba(var(--vaccentcolor), 0.7), rgba(var(--vaccentcolor), 0.7));
+	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor), 0.7), rgba(var(--accentcolor), 0.7));
 }
 
 /* ----		12.8.	TOOLTIPS						---- */
 
 #app-mount .tooltipBrand-g03Nz8 {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 #app-mount .tooltipBrand-g03Nz8 .tooltipPointer-3ZfirK {
-	border-top-color: rgb(var(--vaccentcolor));
+	border-top-color: rgb(var(--accentcolor));
 }
 
 .content-3O0wBS {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .content-3O0wBS	.button-3zdF3z {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 .pointer-3ClhC2 {
-	border-top-color: rgb(var(--vaccentcolor));
+	border-top-color: rgb(var(--accentcolor));
 }
 
 /* ----		12.9.	TOASTS							---- */
 
 .toast-brand {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .colorBrand-WfDfzD .bg-8df5St {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 .colorCustom-WKsPgT .bg-8df5St[style*="background-color: rgb(114, 137, 218)"] {
-	background-color: rgb(var(--vaccentcolor)) !important;
+	background-color: rgb(var(--accentcolor)) !important;
 }
 .bar-95Sdw1.customBar-3RsUzs[style*="background-color: rgb(114, 137, 218)"] {
-	background-color: rgb(var(--vaccentcolor)) !important;
+	background-color: rgb(var(--accentcolor)) !important;
 }
 
 
@@ -2074,17 +2071,17 @@
 }
 #bd-pub-button:hover {
 	color: rgb(var(--fontwhite1, var(--dfontwhite1)));
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 #bd-pub-button:active {
 	color: rgb(var(--fontwhite1, var(--dfontwhite1)));
-	background: var(--vaccentcolor-hover);
+	background: var(--accentcolor-hover);
 }
 #pubslayer button:hover {
-	background: var(--vaccentcolor-hover);
+	background: var(--accentcolor-hover);
 }
 #pubslayer button:active {
-	background: var(--vaccentcolor-active);
+	background: var(--accentcolor-active);
 }
 .bd-server-card.bd-server-card-pinned::after {
 	background: var(--bd-blue);
@@ -2094,10 +2091,10 @@
 	background: var(--bd-blue);
 }
 .bd-modal-wrapper .footer button:hover {
-	background: var(--vaccentcolor-hover);
+	background: var(--accentcolor-hover);
 }
 .bd-modal-wrapper .footer button:active {
-	background: var(--vaccentcolor-active);
+	background: var(--accentcolor-active);
 }
 .bd-modal-wrapper .error-link {
 	color: var(--bd-blue);
@@ -2107,20 +2104,20 @@
 	background: var(--bd-blue);
 }
 .bd-pfbtn:hover {
-	background: var(--vaccentcolor-hover);
+	background: var(--accentcolor-hover);
 }
 .bd-pfbtn:active {
-	background: var(--vaccentcolor-active);
+	background: var(--accentcolor-active);
 }
 
 .bd-button {
 	background: var(--bd-blue);
 }
 .bd-button:hover {
-	background: var(--vaccentcolor-hover);
+	background: var(--accentcolor-hover);
 }
 .bd-button:active {
-	background: var(--vaccentcolor-active);
+	background: var(--accentcolor-active);
 }
 
 .bd-addon-views .bd-view-button.selected {
@@ -2136,35 +2133,35 @@
 }
 
 .bd-switch input:checked + .bd-switch-body {
-	--switch-color: rgba(var(--vaccentcolor), 0.8);
-	background-color: rgba(var(--vaccentcolor), 0.8);
+	--switch-color: rgba(var(--accentcolor), 0.8);
+	background-color: rgba(var(--accentcolor), 0.8);
 }
 .bd-switch input:active + .bd-switch-body {
-	--switch-color: rgba(var(--vaccentcolor));
+	--switch-color: rgba(var(--accentcolor));
 }
 .bd-switch input:checked:hover + .bd-switch-body {
-	background: var(--vaccentcolor-hover);
+	background: var(--accentcolor-hover);
 }
 .bd-switch input:checked:active + .bd-switch-body {
-	--switch-color: rgb(var(--vaccentcolor));
-	background: var(--vaccentcolor-active);
+	--switch-color: rgb(var(--accentcolor));
+	background: var(--accentcolor-active);
 }
 
 html .monaco-editor .find-widget .monaco-inputbox.synthetic-focus {
-	outline-color: rgb(var(--vaccentcolor));
+	outline-color: rgb(var(--accentcolor));
 }
 html .monaco-editor .monaco-editor-hover a {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 html .monaco-editor [class*="arrow-decoration"] {
-	border-bottom-color: rgb(var(--vaccentcolor));
+	border-bottom-color: rgb(var(--accentcolor));
 }
 html .monaco-editor .focused .selected-text {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 html .monaco-tree[class*="monaco-tree-instance"].focused .monaco-tree-rows > .monaco-tree-row.focused:not(.highlighted) {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 	color: #ffffff;
 }
 html .monaco-tree[class*="monaco-tree-instance"].focused .monaco-tree-rows > .monaco-tree-row.focused:not(.highlighted) .results-group {
@@ -2179,7 +2176,7 @@ html .monaco-editor [style*="background-color: rgb(14, 99, 156)"],
 html .monaco-editor [style*="background: rgb(14, 99, 156)"],
 html .monaco-editor [style*="background-color: rgb(9, 71, 113)"],
 html .monaco-editor [style*="background: rgb(9, 71, 113)"] {
-	background: rgb(var(--vaccentcolor)) !important;
+	background: rgb(var(--accentcolor)) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.9)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.9)"],
@@ -2189,7 +2186,7 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.9)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.9)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.9)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.9)"] {
-	background: rgba(var(--vaccentcolor), 0.9) !important;
+	background: rgba(var(--accentcolor), 0.9) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.8)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.8)"],
@@ -2199,7 +2196,7 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.8)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.8)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.8)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.8)"] {
-	background: rgba(var(--vaccentcolor), 0.8) !important;
+	background: rgba(var(--accentcolor), 0.8) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.7)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.7)"],
@@ -2209,7 +2206,7 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.7)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.7)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.7)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.7)"] {
-	background: rgba(var(--vaccentcolor), 0.7) !important;
+	background: rgba(var(--accentcolor), 0.7) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.6)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.6)"],
@@ -2219,7 +2216,7 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.6)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.6)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.6)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.6)"] {
-	background: rgba(var(--vaccentcolor), 0.6) !important;
+	background: rgba(var(--accentcolor), 0.6) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.5)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.5)"],
@@ -2229,7 +2226,7 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.5)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.5)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.5)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.5)"] {
-	background: rgba(var(--vaccentcolor), 0.5) !important;
+	background: rgba(var(--accentcolor), 0.5) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.4)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.4)"],
@@ -2239,7 +2236,7 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.4)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.4)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.4)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.4)"] {
-	background: rgba(var(--vaccentcolor), 0.4) !important;
+	background: rgba(var(--accentcolor), 0.4) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.3)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.3)"],
@@ -2249,7 +2246,7 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.3)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.3)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.3)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.3)"] {
-	background: rgba(var(--vaccentcolor), 0.3) !important;
+	background: rgba(var(--accentcolor), 0.3) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.2)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.2)"],
@@ -2259,7 +2256,7 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.2)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.2)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.2)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.2)"] {
-	background: rgba(var(--vaccentcolor), 0.2) !important;
+	background: rgba(var(--accentcolor), 0.2) !important;
 }
 html .monaco-editor [style*="background-color: rgba(0, 122, 204, 0.1)"],
 html .monaco-editor [style*="background: rgba(0, 122, 204, 0.1)"],
@@ -2269,56 +2266,56 @@ html .monaco-editor [style*="background-color: rgba(14, 99, 156, 0.1)"],
 html .monaco-editor [style*="background: rgba(14, 99, 156, 0.1)"],
 html .monaco-editor [style*="background-color: rgba(9, 71, 113, 0.1)"],
 html .monaco-editor [style*="background: rgba(9, 71, 113, 0.1)"] {
-	background: rgba(var(--vaccentcolor), 0.1) !important;
+	background: rgba(var(--accentcolor), 0.1) !important;
 }
 html .monaco-editor [style*="border-color: rgb(0, 122, 204)"],
 html .monaco-editor [style*="border-color: rgb(14, 122, 192)"],
 html .monaco-editor [style*="border-color: rgb(14, 99, 156)"],
 html .monaco-editor [style*="border-color: rgb(9, 71, 113)"] {
-	border-color: rgb(var(--vaccentcolor)) !important;
+	border-color: rgb(var(--accentcolor)) !important;
 }
 html .monaco-editor [style*="border-top-color: rgb(0, 122, 204)"],
 html .monaco-editor [style*="border-top-color: rgb(14, 122, 192)"],
 html .monaco-editor [style*="border-top-color: rgb(14, 99, 156)"],
 html .monaco-editor [style*="border-top-color: rgb(9, 71, 113)"] {
-	border-top-color: rgb(var(--vaccentcolor)) !important;
+	border-top-color: rgb(var(--accentcolor)) !important;
 }
 html .monaco-editor [style*="border-right-color: rgb(0, 122, 204)"],
 html .monaco-editor [style*="border-right-color: rgb(14, 122, 192)"],
 html .monaco-editor [style*="border-right-color: rgb(14, 99, 156)"],
 html .monaco-editor [style*="border-right-color: rgb(9, 71, 113)"] {
-	border-right-color: rgb(var(--vaccentcolor)) !important;
+	border-right-color: rgb(var(--accentcolor)) !important;
 }
 html .monaco-editor [style*="border-bottom-color: rgb(0, 122, 204)"],
 html .monaco-editor [style*="border-bottom-color: rgb(14, 122, 192)"],
 html .monaco-editor [style*="border-bottom-color: rgb(14, 99, 156)"],
 html .monaco-editor [style*="border-bottom-color: rgb(9, 71, 113)"] {
-	border-bottom-color: rgb(var(--vaccentcolor)) !important;
+	border-bottom-color: rgb(var(--accentcolor)) !important;
 }
 html .monaco-editor [style*="border-left-color: rgb(0, 122, 204)"],
 html .monaco-editor [style*="border-left-color: rgb(14, 122, 192)"],
 html .monaco-editor [style*="border-left-color: rgb(14, 99, 156)"],
 html .monaco-editor [style*="border-left-color: rgb(9, 71, 113)"] {
-	border-left-color: rgb(var(--vaccentcolor)) !important;
+	border-left-color: rgb(var(--accentcolor)) !important;
 }
 
 .embedFull-2tM8--[style*="border-color: rgb(62, 130, 229)"],
 .embedFull-2tM8--[style*="border-color: rgb(62, 130, 226)"] {
-	border-color: rgb(var(--vaccentcolor)) !important;
+	border-color: rgb(var(--accentcolor)) !important;
 }
 
 
 /* ~~~~		14.		POWERCORDSUPPORT				~~~~ */
 
 html .powercord-toast[data-toast-type=info] .icon {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 html .powercord-toast .progressBar-3u8FBM {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgb(var(--accentcolor));
 }
 
 html .powercord-updater .debug-info b {
-	color: rgb(var(--vaccentcolor));
+	color: rgb(var(--accentcolor));
 }
 
 
@@ -2327,19 +2324,19 @@ html .powercord-updater .debug-info b {
 /* ----		15.1.	IMAGEZOOM						---- */
 
 .zoomLens-uOK8xV {
-	border-color: rgb(var(--vaccentcolor)) !important;
+	border-color: rgb(var(--accentcolor)) !important;
 }
 
 /* ----		15.2.	HIDEUTILS						---- */
 
 #HideUtils-Settings button {
-	background-color: rgb(var(--vaccentcolor)) !important;
+	background-color: rgb(var(--accentcolor)) !important;
 }
 
 /* ----		15.3.	READALLNOTIFICATIONSBUTTON		---- */
 
 .wrapper-1BJsBx:active .childWrapper-anI2G9.button-Jt-tIg{
-	background: var(--vaccentcolor-hover);
+	background: var(--accentcolor-hover);
 	color: rgb(var(--fontwhite1, var(--dfontwhite1)));
 }
 
@@ -2350,13 +2347,13 @@ html .powercord-updater .debug-info b {
 	transition: background-color .16s ease-out;
 }
 #server-search .wrapper-25eVIn:hover {
-	background-color: rgb(var(--vaccentcolor)) !important;
+	background-color: rgb(var(--accentcolor)) !important;
 }
 
 /* ----		15.5.	CHANNELTABS						---- */
 
 .channelTabs-unreadBadge:not(.channelTabs-noUnread) {
-	background-color: rgb(var(--vaccentcolor)) !important;
+	background-color: rgb(var(--accentcolor)) !important;
 }
 
 
@@ -2365,9 +2362,9 @@ html .powercord-updater .debug-info b {
 /* ----		16.1.	THEMEDEVBADGE					---- */
 
 #app-mount .dev-A7f2Rx.hasBadge-4rT8_u .badge-7R_W3s {
-	background: rgb(var(--vaccentcolor)) !important;
+	background: rgb(var(--accentcolor)) !important;
 }
 #app-mount .topSectionPlaying-1J5E4n .dev-A7f2Rx.hasBadge-4rT8_u .badge-7R_W3s,
 #app-mount .headerPlaying-j0WQBV .dev-A7f2Rx.hasBadge-4rT8_u .badge-7R_W3s {
-	background: rgb(var(--vaccentcolor)) !important;
+	background: rgb(var(--accentcolor)) !important;
 }
