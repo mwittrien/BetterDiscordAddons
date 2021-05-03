@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.5
+ * @version 2.9.6
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "2.9.5",
+			"version": "2.9.6",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
 		},
 		"changeLog": {
-			"fixed": {
-				"Changed Permissions": "No longer requires a restart if permissions got changed"
+			"improved": {
+				"Channel Topic": "Formatting Channel Topic in Access Modal (makes Links clickable, etc)"
 			}
 		}
 	};
@@ -336,9 +336,7 @@ module.exports = (_ => {
 							children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 								label: BDFDB.LanguageUtils.LanguageStrings.CHANNEL + " " + BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY,
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "permissions"),
-								action: _ => {
-									this.openAccessModal(e.instance.props.channel, !isHidden);
-								}
+								action: _ => this.openAccessModal(e.instance.props.channel, !isHidden)
 							})
 						}));
 					}
@@ -581,7 +579,7 @@ module.exports = (_ => {
 									text: channel.bitrate || "---"
 								} : {
 									title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_TOPIC,
-									text: channel.topic || "---"
+									text: BDFDB.ReactUtils.markdownParse(channel.topic || "---")
 								}, {
 									title: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_TYPE,
 									text: BDFDB.LanguageUtils.LanguageStrings[typeNameMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]]
