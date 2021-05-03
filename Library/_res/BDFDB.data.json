@@ -2455,6 +2455,7 @@
 		"messagetimestampasiancompact": ["MessageBody", "asianCompactTimeStamp"],
 		"messagetimestamp": ["MessageBody", "timestamp"],
 		"messagetimestampalt": ["MessageBody", "alt"],
+		"messagetimestampinline": ["MessageBody", "timestampInline"],
 		"messagetimestamplatin12compact": ["MessageBody", "latin12CompactTimeStamp"],
 		"messagetimestamplatin24compact": ["MessageBody", "latin24CompactTimeStamp"],
 		"messagetimestampseparator": ["MessageBody", "separator"],
