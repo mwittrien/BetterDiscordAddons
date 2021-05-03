@@ -318,6 +318,7 @@ module.exports = (_ => {
 											children: this.props.data.name
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
+											className: BDFDB.disCN.discoverycardtitlebutton,
 											isFavorite: this.props.data.fav,
 											onClick: value => {
 												this.props.data.fav = value && 1;
@@ -516,7 +517,7 @@ module.exports = (_ => {
 										type: BDFDB.LibraryComponents.TabBar.Types.TOP,
 										selectedItem: this.props.tab,
 										items: [{value: "Plugins"}, {value: BDFDB.LanguageUtils.LanguageStrings.SETTINGS}],
-										onItemSelect: (value, instance) => {
+										onItemSelect: value => {
 											this.props.tab = list.props.tab = value;
 											BDFDB.ReactUtils.forceUpdate(list);
 										}
@@ -533,7 +534,7 @@ module.exports = (_ => {
 											label: sortKeys[key],
 											value: key
 										})),
-										onChange: (key, instance) => {
+										onChange: key => {
 											this.props.sortKey = list.props.sortKey = key;
 											BDFDB.ReactUtils.forceUpdate(this, list);
 										}
@@ -550,7 +551,7 @@ module.exports = (_ => {
 											label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[key]],
 											value: key
 										})),
-										onChange: (key, instance) => {
+										onChange: key => {
 											this.props.orderKey = list.props.orderKey = key;
 											BDFDB.ReactUtils.forceUpdate(this, list);
 										}

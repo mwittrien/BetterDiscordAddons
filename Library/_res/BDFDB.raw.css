@@ -366,6 +366,11 @@ img:not([src]), img[src=""], img[src="null"] {
 	text-overflow: ellipsis;
 	flex: 1 1 auto;
 }
+[REPLACE_CLASS_discoverycardtitlebutton] {
+	width: 20px;
+	height: 20px;
+	margin-left: 4px;
+}
 [REPLACE_CLASS_discoverycard] [REPLACE_CLASS_favbuttoncontainer] {
 	width: 20px;
 	height: 20px;
