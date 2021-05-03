@@ -1262,7 +1262,7 @@ module.exports = (_ => {
 							}
 							
 							BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/_res/GeneratorList.txt", (error, response, body) => {
-								if (!error && body) for (let id of "23 40 45 47".replace(/[\r\t]/g, "").split(" ").map(n => parseInt(n)).filter(n => n != null)) {
+								if (!error && body) for (let id of body.replace(/[\r\t]/g, "").split(" ").map(n => parseInt(n)).filter(n => n != null)) {
 									let theme = grabbedThemes.find(t => t.id == id);
 									if (theme) generatorThemes.push(theme);
 								}
