@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.7
+ * @version 2.1.8
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.1.7",
+			"version": "2.1.8",
 			"description": "Allows you to download all Plugins from BD's Website within Discord"
+		},
+		"changeLog": {
+			"progress": {
+				"New Style and Website Store": "The Repo now directly reflects the Plugins hosted on <a>https://betterdiscord.app/</a> and uses a new Card Style"
+			}
 		}
 	};
 
@@ -60,23 +65,26 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		const isBeta = !(window.BdApi && !Array.isArray(BdApi.settings));
 		var _this;
-		var loading, cachedPlugins, grabbedPlugins, foundPlugins, loadedPlugins, updateInterval;
-		var list, header, searchTimeout, forcedSort, forcedOrder, showOnlyOutdated;
-		var settings = {}, modalSettings = {}, favorites = [], customList = [];
+		
+		var list, header;
+		
+		var loading, cachedPlugins, grabbedPlugins, updateInterval;
+		var searchTimeout, forcedSort, forcedOrder, showOnlyOutdated;
+		
+		var favorites = [];
 		
 		const pluginStates = {
-			UPDATED: 0,
+			INSTALLED: 0,
 			OUTDATED: 1,
 			DOWNLOADABLE: 2
 		};
 		const buttonData = {
-			UPDATED: {
+			INSTALLED: {
 				colorClass: "GREEN",
 				backgroundColor: "STATUS_GREEN",
 				icon: "CHECKMARK",
-				text: "updated"
+				text: "USER_SETTINGS_VOICE_INSTALLED_LABEL"
 			},
 			OUTDATED: {
 				colorClass: "RED",
@@ -91,20 +99,17 @@ module.exports = (_ => {
 				text: "download"
 			}
 		};
-		const favStates = {
-			FAVORIZED: 0,
-			NOT_FAVORIZED: 1
-		};
-		const newStates = {
-			NEW: 0,
-			NOT_NEW: 1
-		};
+		const reverseSorts = [
+			"DOWNLOADS", "LIKES", "FAV"
+		];
 		const sortKeys = {
 			NAME:			"Name",
 			AUTHOR:			"Author",
 			VERSION:		"Version",
 			DESCRIPTION:	"Description",
 			STATE:			"Update State",
+			DOWNLOADS:		"Downloads",
+			LIKES:			"Likes",
 			FAV:			"Favorites",
 			NEW:			"New Plugins"
 		};
@@ -128,40 +133,38 @@ module.exports = (_ => {
 				list = null;
 			}
 			filterPlugins() {
-				let plugins = Object.keys(loadedPlugins).map(url => {
-					let plugin = loadedPlugins[url];
-					let instPlugin = BDFDB.BDUtils.getPlugin(plugin.getName);
-					if (instPlugin && typeof instPlugin.getAuthor == "function" && _this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase()) plugin.getState = _this.getString(instPlugin.getVersion()) != plugin.getVersion ? pluginStates.OUTDATED : pluginStates.UPDATED;
-					else plugin.getState = pluginStates.DOWNLOADABLE;
+				let plugins = grabbedPlugins.map(plugin => {
+					const installedPlugin = plugin.version && _this.getInstalledPlugin(plugin);
+					const state = installedPlugin ? (BDFDB.NumberUtils.compareVersions(plugin.version, _this.getString(installedPlugin.version)) ? pluginStates.OUTDATED : pluginStates.INSTALLED) : pluginStates.DOWNLOADABLE;
 					return {
-						url: plugin.url,
-						search: (plugin.getName + " " + plugin.getVersion + " " + plugin.getAuthor + " " + plugin.getDescription).toUpperCase(),
-						name: plugin.getName,
-						version: plugin.getVersion,
-						author: plugin.getAuthor,
-						description: plugin.getDescription || "No Description found",
-						fav: favorites.includes(url) ? favStates.FAVORIZED : favStates.NOT_FAVORIZED,
-						new: plugin.getState == pluginStates.DOWNLOADABLE && !cachedPlugins.includes(url) ? newStates.NEW : newStates.NOT_NEW,
-						state: plugin.getState
+						...plugin,
+						search: [plugin.name, plugin.version, plugin.author, plugin.description, plugin.tags].flat(10).filter(n => typeof n == "string").join(" ").toUpperCase(),
+						description: plugin.description || "No Description found",
+						fav: favorites.includes(plugin.id) && 1,
+						new: state == pluginStates.DOWNLOADABLE && !cachedPlugins.includes(plugin.id) && 1,
+						state: state
 					};
 				});
-				if (!this.props.updated)		plugins = plugins.filter(plugin => plugin.state != pluginStates.UPDATED);
+				if (!this.props.updated)		plugins = plugins.filter(plugin => plugin.state != pluginStates.INSTALLED);
 				if (!this.props.outdated)		plugins = plugins.filter(plugin => plugin.state != pluginStates.OUTDATED);
 				if (!this.props.downloadable)	plugins = plugins.filter(plugin => plugin.state != pluginStates.DOWNLOADABLE);
 				if (this.props.searchString) 	{
 					let searchString = this.props.searchString.toUpperCase();
 					plugins = plugins.filter(plugin => plugin.search.indexOf(searchString) > -1);
 				}
-
-				BDFDB.ArrayUtils.keySort(plugins, (!this.props.sortKey || this.props.sortKey == "NEW" && !plugins.some(plugin => plugin.new == newStates.NEW) ? Object.keys(sortKeys)[0] : this.props.sortKey).toLowerCase());
+				
+				const sortKey = !this.props.sortKey || this.props.sortKey == "NEW" && !plugins.some(plugin => plugin.new) ? Object.keys(sortKeys)[0] : this.props.sortKey;
+				BDFDB.ArrayUtils.keySort(plugins, sortKey.toLowerCase());
 				if (this.props.orderKey == "DESC") plugins.reverse();
+				if (reverseSorts.includes(sortKey)) plugins.reverse();
 				return plugins;
 			}
 			render() {
 				let automaticLoading = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.automaticLoading);
 				if (!this.props.tab) this.props.tab = "Plugins";
-				this.props.entries = (!loading.is && !BDFDB.ObjectUtils.isEmpty(loadedPlugins) ? this.filterPlugins() : []).map(plugin => BDFDB.ReactUtils.createElement(RepoCardComponent, {
-					plugin: plugin
+				
+				this.props.entries = (!loading.is && grabbedPlugins.length ? this.filterPlugins() : []).map(plugin => BDFDB.ReactUtils.createElement(RepoCardComponent, {
+					...plugin
 				})).filter(n => n);
 				
 				BDFDB.TimeUtils.timeout(_ => {
@@ -190,43 +193,50 @@ module.exports = (_ => {
 									children: `${BDFDB.LanguageUtils.LibraryStringsFormat("loading", "Plugin Repo")} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`
 								})
 							]
-						}) : BDFDB.ReactUtils.forceStyle(BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN._repolist,
-							style: {
-								display: "flex",
-								flexDirection: "column",
-								margin: "unset",
-								width: "unset"
-							},
+						}) : BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.discoverycards,
 							children: this.props.entries
-						}), ["display", "flex-direction", "margin", "width"])
+						})
 					}),
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 						tab: BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
 						open: this.props.tab == BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
 						render: false,
 						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+								title: "Show following Plugins",
+								children: Object.keys(_this.defaults.filters).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+									type: "Switch",
+									plugin: this,
+									keys: ["filters", key],
+									label: _this.defaults.filters[key].description,
+									value: _this.settings.filters[key],
+									onChange: value => {
+										this.props[key] = _this.settings.filters[key] = value;
+										BDFDB.ReactUtils.forceUpdate(this);
+									}
+								}))
+							}),
+							Object.keys(_this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["general", key],
+								label: _this.defaults.general[key].description,
+								note: key == "rnmStart" && !automaticLoading && "Automatic Loading has to be enabled",
+								disabled: key == "rnmStart" && !automaticLoading,
+								value: _this.settings.general[key],
+								onChange: value => {
+									_this.settings.general[key] = value;
+									BDFDB.ReactUtils.forceUpdate(this);
+								}
+							})),
 							!automaticLoading && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 								className: BDFDB.disCN.marginbottom20,
 								children: BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
-									children: "To experience Plugin Repo in the best way. I would recommend you to enable BD intern reload function, that way all downloaded files are loaded into Discord without the need to reload."
+									children: "To experience Plugin Repo in the best way. I would recommend you to enable BD's intern Automatic-Loading Feature, that way all downloaded Files are loaded into Discord without the need to reload."
 								})
-							}),
-							Object.keys(modalSettings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-								className: BDFDB.disCN.marginbottom20,
-								type: "Switch",
-								plugin: _this,
-								keys: ["modalSettings", key],
-								label: _this.defaults.modalSettings[key].description,
-								note: key == "rnmStart" && !automaticLoading && "Automatic Loading has to be enabled",
-								disabled: key == "rnmStart" && !automaticLoading,
-								value: this.props[key],
-								onChange: (value, instance) => {
-									this.props[key] = modalSettings[key] = value;
-									BDFDB.ReactUtils.forceUpdate(this);
-								}
-							}))
+							})
 						].flat(10).filter(n => n)
 					})
 				];
@@ -235,149 +245,169 @@ module.exports = (_ => {
 		
 		const RepoCardComponent = class PluginCard extends BdApi.React.Component {
 			render() {
-				let buttonConfig = buttonData[(Object.entries(pluginStates).find(n => n[1] == this.props.plugin.state) || [])[0]];
-				return buttonConfig && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AddonCard, {
-					icon: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-						className: BDFDB.disCN._repoicon,
-						nativeClass: true,
-						iconSVG: `<svg viewBox="0 0 24 24" fill="#FFFFFF" style="width: 18px; height: 18px;"><path d="M0 0h24v24H0z" fill="none"></path><path d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5C13 2.12 11.88 1 10.5 1S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7 1.49 0 2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"></path></svg>`
-					}),
-					data: this.props.plugin,
-					controls: [
-						this.props.plugin.new == newStates.NEW && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
-							style: {
-								borderRadius: 3,
-								textTransform: "uppercase",
-								background: BDFDB.DiscordConstants.Colors.STATUS_YELLOW
-							},
-							text: BDFDB.LanguageUtils.LanguageStrings.NEW
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
-							className: BDFDB.disCN._repocontrolsbutton,
-							isFavorite: this.props.plugin.fav == favStates.FAVORIZED,
-							onClick: value => {
-								this.props.plugin.fav = value ? favStates.FAVORIZED : favStates.NOT_FAVORIZED;
-								if (value) favorites.push(this.props.plugin.url);
-								else BDFDB.ArrayUtils.remove(favorites, this.props.plugin.url, true);
-								BDFDB.DataUtils.save(favorites, _this, "favorites");
-							}
-						}),
-						!isBeta && BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN._repocontrolsbutton,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								text: "Go to Source",
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									name: BDFDB.LibraryComponents.SvgIcon.Names.GITHUB,
-									className: BDFDB.disCN._repoicon,
-									onClick: _ => {
-										let gitUrl = null;
-										if (this.props.plugin.url.indexOf("https://raw.githubusercontent.com") == 0) {
-											let temp = this.props.plugin.url.replace("//raw.githubusercontent", "//github").split("/");
-											temp.splice(5, 0, "blob");
-											gitUrl = temp.join("/");
-										}
-										else if (this.props.plugin.url.indexOf("https://gist.githubusercontent.com/") == 0) {
-											gitUrl = this.props.plugin.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
-										}
-										if (gitUrl) BDFDB.DiscordUtils.openLink(gitUrl);
-									}
+				const buttonConfig = buttonData[(Object.entries(pluginStates).find(n => n[1] == this.props.state) || [])[0]];
+				const thumbnailUrl = this.props.thumbnailUrl && `https://betterdiscord.app${this.props.thumbnailUrl}`;
+				return BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN.discoverycard,
+					children: [
+						BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.discoverycardheader,
+							children: [
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.discoverycardcoverwrapper,
+									children: [
+										thumbnailUrl && BDFDB.ReactUtils.createElement("img", {
+											className: BDFDB.disCN.discoverycardcover,
+											src: thumbnailUrl,
+											onClick: _ => {
+												let img = document.createElement("img");
+												img.addEventListener("load", function() {
+													BDFDB.LibraryModules.ModalUtils.openModal(modalData => {
+														return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalRoot, Object.assign({
+															className: BDFDB.disCN.imagemodal
+														}, modalData, {
+															size: BDFDB.LibraryComponents.ModalComponents.ModalSize.DYNAMIC,
+															"aria-label": BDFDB.LanguageUtils.LanguageStrings.IMAGE,
+															children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
+																animated: false,
+																src: thumbnailUrl,
+																original: thumbnailUrl,
+																width: this.width,
+																height: this.height,
+																className: BDFDB.disCN.imagemodalimage,
+																shouldAnimate: true,
+																renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
+															})
+														}), true);
+													});
+												});
+												img.src = thumbnailUrl;
+											}
+										}),
+										this.props.new && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
+											className: BDFDB.disCN.discoverycardcoverbadge,
+											style: {
+												borderRadius: 3,
+												textTransform: "uppercase",
+												background: BDFDB.DiscordConstants.Colors.STATUS_YELLOW
+											},
+											text: BDFDB.LanguageUtils.LanguageStrings.NEW
+										})
+									]
+								}),
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.discoverycardiconwrapper,
+									children: BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN.discoverycardicon,
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+											nativeClass: true,
+											iconSVG: `<svg width="100%" height="100%" viewBox="0 0 24 24"><path fill="currentColor" d="${this.props.name == "BDFDB" || this.props.name == "ZeresPluginLibrary" ? "m 7.3125,2.625 c -0.3238672,0 -0.5859375,0.2620703 -0.5859375,0.5859375 V 14.929687 c 0,0.323868 0.2620703,0.585938 0.5859375,0.585938 2.710313,0 3.840547,1.498711 4.101563,1.914062 V 3.9905599 C 10.603047,3.3127865 9.3007813,2.625 7.3125,2.625 Z M 4.96875,3.796875 c -0.3238672,0 -0.5859375,0.2620703 -0.5859375,0.5859375 V 17.273437 c 0,0.323868 0.2620703,0.585938 0.5859375,0.585938 h 5.30599 C 9.9465755,17.461602 9.0865625,16.6875 7.3125,16.6875 c -0.9692969,0 -1.7578125,-0.788516 -1.7578125,-1.757813 V 3.796875 Z m 9.375,0 c -0.662031,0 -1.266641,0.2287891 -1.757812,0.6005859 V 18.445312 c 0,-0.323281 0.262656,-0.585937 0.585937,-0.585937 h 5.859375 c 0.323868,0 0.585937,-0.26207 0.585937,-0.585938 V 4.3828125 c 0,-0.3238672 -0.262069,-0.5859375 -0.585937,-0.5859375 z M 2.5859375,4.96875 C 2.2620703,4.96875 2,5.2308203 2,5.5546875 V 19.617187 c 0,0.323868 0.2620703,0.585938 0.5859375,0.585938 H 9.171224 c 0.2420313,0.68207 0.892995,1.171875 1.656901,1.171875 h 2.34375 c 0.763906,0 1.414831,-0.489805 1.656901,-1.171875 h 6.585286 C 21.73793,20.203125 22,19.941055 22,19.617187 V 5.5546875 C 22,5.2308203 21.73793,4.96875 21.414062,4.96875 h -0.585937 v 12.304687 c 0,0.969297 -0.827578,1.757813 -1.796875,1.757813 H 13.656901 C 13.41487,19.71332 12.763907,20.203125 12,20.203125 c -0.763906,0 -1.414831,-0.489805 -1.656901,-1.171875 H 4.96875 c -0.9692968,0 -1.796875,-0.788516 -1.796875,-1.757813 V 4.96875 Z" : "m 11.470703,0.625 c -1.314284,0 -2.3808593,1.0666594 -2.3808592,2.3808594 V 4.4335938 H 5.2792969 c -1.0476168,0 -1.8945313,0.85855 -1.8945313,1.90625 v 3.6191406 h 1.4179688 c 1.41905,0 2.5722656,1.1512126 2.5722656,2.5703126 0,1.4191 -1.1532156,2.572266 -2.5722656,2.572265 H 3.375 v 3.619141 c 0,1.0477 0.8566801,1.904297 1.9042969,1.904297 h 3.6191406 v -1.427734 c 0,-1.4189 1.1532235,-2.572266 2.5722655,-2.572266 1.41905,0 2.570313,1.153366 2.570313,2.572266 V 20.625 h 3.61914 c 1.047626,0 1.90625,-0.856597 1.90625,-1.904297 v -3.810547 h 1.427735 c 1.314292,0 2.380859,-1.066559 2.380859,-2.380859 0,-1.3143 -1.066567,-2.38086 -2.380859,-2.380859 H 19.566406 V 6.3398438 c 0,-1.0477002 -0.858624,-1.90625 -1.90625,-1.90625 H 13.851562 V 3.0058594 c 0,-1.3142 -1.066568,-2.3808594 -2.380859,-2.3808594 z"}"/></svg>`
+										})
+									})
 								})
-							})
-						})
-					],
-					links: isBeta && [{
-						label: "Source",
-						icon: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-							name: BDFDB.LibraryComponents.SvgIcon.Names.GITHUB,
-							nativeClass: true,
-							width: 18,
-							height: 18
+							]							
 						}),
-						onClick: _ => {
-							let gitUrl = null;
-							if (this.props.plugin.url.indexOf("https://raw.githubusercontent.com") == 0) {
-								let temp = this.props.plugin.url.replace("//raw.githubusercontent", "//github").split("/");
-								temp.splice(5, 0, "blob");
-								gitUrl = temp.join("/");
-							}
-							else if (this.props.plugin.url.indexOf("https://gist.githubusercontent.com/") == 0) {
-								gitUrl = this.props.plugin.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
-							}
-							if (gitUrl) BDFDB.DiscordUtils.openLink(gitUrl);
-						}
-					}],
-					buttons: isBeta ? [
-						this.props.plugin.state != pluginStates.DOWNLOADABLE && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: BDFDB.LanguageUtils.LanguageStrings.DELETE,
-							children: BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCNS._repobutton + BDFDB.disCNS._repocontrolsbutton + BDFDB.disCN._repobuttondanger,
-								onClick: _ => {
-									_this.stopPlugin(this.props.plugin);
-									_this.deletePluginFile(this.props.plugin);
-									this.props.plugin.state = pluginStates.DOWNLOADABLE;
-									BDFDB.ReactUtils.forceUpdate(this);
-								},
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									name: BDFDB.LibraryComponents.SvgIcon.Names.TRASH,
-									nativeClass: true,
-									color: "#FFFFFF",
-									width: 20,
-									height: 20
+						BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.discoverycardinfo,
+							children: [
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.discoverycardtitle,
+									children: [
+										BDFDB.ReactUtils.createElement("div", {
+											className: BDFDB.disCN.discoverycardname,
+											children: this.props.name
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
+											isFavorite: this.props.fav,
+											onClick: value => {
+												this.props.fav = value && 1;
+												if (value) favorites.push(this.props.id);
+												else BDFDB.ArrayUtils.remove(favorites, this.props.id, true);
+												BDFDB.DataUtils.save(BDFDB.ArrayUtils.numSort(favorites).join(" "), _this, "favorites");
+											}
+										})
+									]
+								}),
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.discoverycardauthor,
+									children: `by ${this.props.author}`
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Scrollers.Thin, {
+									className: BDFDB.disCN.discoverycarddescription,
+									children: this.props.description
+								}),
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.discoverycardfooter,
+									children: [
+										this.props.tags && this.props.tags.length && BDFDB.ReactUtils.createElement("div", {
+											className: BDFDB.disCN.discoverycardtags,
+											children: this.props.tags.map(tag => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
+												className: BDFDB.disCN.discoverycardtag,
+												style: {background: "var(--background-accent)"},
+												text: tag
+											}))
+										}),
+										BDFDB.ReactUtils.createElement("div", {
+											className: BDFDB.disCN.discoverycardcontrols,
+											children: [
+												BDFDB.ReactUtils.createElement("div", {
+													className: BDFDB.disCN.discoverycardstats,
+													children: [
+														BDFDB.ReactUtils.createElement("div", {
+															className: BDFDB.disCN.discoverycardstat,
+															children: [
+																BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+																	className: BDFDB.disCN.discoverycardstaticon,
+																	name: BDFDB.LibraryComponents.SvgIcon.Names.DOWNLOAD
+																}),
+																this.props.downloads
+															]
+														}),
+														BDFDB.ReactUtils.createElement("div", {
+															className: BDFDB.disCN.discoverycardstat,
+															children: [
+																BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+																	className: BDFDB.disCN.discoverycardstaticon,
+																	name: BDFDB.LibraryComponents.SvgIcon.Names.HEART
+																}),
+																this.props.likes
+															]
+														})
+													]
+												}),
+												BDFDB.ReactUtils.createElement("div", {
+													className: BDFDB.disCN.discoverycardbutton,
+													style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor] || buttonConfig.backgroundColor},
+													children: [
+														BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+															className: BDFDB.disCN.discoverycardstaticon,
+															name: BDFDB.LibraryComponents.SvgIcon.Names[buttonConfig.icon]
+														}),
+														BDFDB.LanguageUtils.LibraryStringsCheck[buttonConfig.text] ? BDFDB.LanguageUtils.LibraryStrings[buttonConfig.text] : BDFDB.LanguageUtils.LanguageStrings[buttonConfig.text]
+													],
+													onClick: _ => BDFDB.LibraryRequires.request(this.props.rawSourceUrl, (error, response, body) => {
+														if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Plugin "${this.props.name}"`), {type: "danger"});
+														else BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.rawSourceUrl.split("/").pop()), body, error2 => {
+															if (error2) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_fail", `Plugin "${this.props.name}"`), {type: "danger"});
+															else {
+																BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_success", `Plugin "${this.props.name}"`), {type: "success"});
+																this.props.state = pluginStates.INSTALLED;
+																BDFDB.ReactUtils.forceUpdate(this);
+																if (_this.settings.general.rnmStart) BDFDB.TimeUtils.timeout(_ => {
+																	if (this.props.state == pluginStates.INSTALLED && this.props.name && BDFDB.BDUtils.isPluginEnabled(this.props.name) == false) {
+																		BDFDB.BDUtils.enablePlugin(this.props.name, false);
+																		BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", this.props.name), _this);
+																	}
+																}, 3000);
+															}
+														});
+													})
+												})
+											]
+										})
+									]
 								})
-							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: BDFDB.LanguageUtils.LibraryStrings[buttonConfig.text],
-							children: BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCNS._repobutton + BDFDB.disCN._repocontrolsbutton,
-								style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor] || buttonConfig.backgroundColor},
-								onClick: _ => {
-									_this.downloadPlugin(this.props.plugin);
-									if (list && list.props.rnmStart) BDFDB.TimeUtils.timeout(_ => {
-										if (this.props.plugin.state == pluginStates.UPDATED) _this.startPlugin(this.props.plugin);
-									}, 3000);
-									this.props.plugin.state = pluginStates.UPDATED;
-									BDFDB.ReactUtils.forceUpdate(this);
-								},
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									name: BDFDB.LibraryComponents.SvgIcon.Names[buttonConfig.icon],
-									nativeClass: true,
-									color: "#FFFFFF",
-									width: 20,
-									height: 20
-								})
-							})
-						})
-					] : [
-						this.props.plugin.state != pluginStates.DOWNLOADABLE && BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN._repocontrolsbutton,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								text: BDFDB.LanguageUtils.LanguageStrings.DELETE,
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_TRASH,
-									className: BDFDB.disCN._repoicon,
-									onClick: (e, instance) => {
-										_this.stopPlugin(this.props.plugin);
-										_this.deletePluginFile(this.props.plugin);
-										this.props.plugin.state = pluginStates.DOWNLOADABLE;
-										BDFDB.ReactUtils.forceUpdate(this);
-									}
-								})
-							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-							size: BDFDB.LibraryComponents.Button.Sizes.MIN,
-							color: BDFDB.LibraryComponents.Button.Colors[buttonConfig.colorClass],
-							style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor] || buttonConfig.backgroundColor},
-							children: BDFDB.LanguageUtils.LibraryStrings[buttonConfig.text],
-							onClick: (e, instance) => {
-								_this.downloadPlugin(this.props.plugin);
-								if (list && list.props.rnmStart) BDFDB.TimeUtils.timeout(_ => {
-									if (this.props.plugin.state == pluginStates.UPDATED) _this.startPlugin(this.props.plugin);
-								}, 3000);
-								this.props.plugin.state = pluginStates.UPDATED;
-								BDFDB.ReactUtils.forceUpdate(this);
-							}
+							]
 						})
 					]
 				});
@@ -403,7 +433,7 @@ module.exports = (_ => {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 										tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H2,
 										className: BDFDB.disCN.marginreset,
-										children: `Plugin Repo — ${loading.is ? 0 : this.props.amount || 0}/${loading.is ? 0 : Object.keys(loadedPlugins).length}`
+										children: `Plugin Repo — ${loading.is ? 0 : this.props.amount || 0}/${loading.is ? 0 : grabbedPlugins.length}`
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
@@ -460,7 +490,7 @@ module.exports = (_ => {
 											label: sortKeys[this.props.sortKey],
 											value: this.props.sortKey
 										},
-										options: Object.keys(sortKeys).filter(n => n != "NEW" || Object.keys(loadedPlugins).some(p => !cachedPlugins.includes(p))).map(key => ({
+										options: Object.keys(sortKeys).filter(n => n != "NEW" || grabbedPlugins.some(p => !cachedPlugins.includes(p.id))).map(key => ({
 											label: sortKeys[key],
 											value: key
 										})),
@@ -502,19 +532,17 @@ module.exports = (_ => {
 
 				cachedPlugins = [];
 				grabbedPlugins = [];
-				foundPlugins = [];
-				loadedPlugins = {};
 
 				this.defaults = {
-					settings: {
+					general: {
 						notifyOutdated:		{value: true, 	description: "Get a Notification when one of your Plugins is outdated"},
-						notifyNewEntries:	{value: true, 	description: "Get a Notification when there are new Entries in the Repo"}
+						notifyNewEntries:	{value: true, 	description: "Get a Notification when there are new Entries in the Repo"},
+						rnmStart:			{value: true, 	description: "Start Plugin after Download"}
 					},
-					modalSettings: {
-						updated: 			{value: true,	modify: true,	description: "Show updated Plugins",},
-						outdated:			{value: true, 	modify: true,	description: "Show outdated Plugins"},
-						downloadable:		{value: true, 	modify: true,	description: "Show downloadable Plugins"},
-						rnmStart:			{value: true, 	modify: false,	description: "Start Plugin after Download"}
+					filters: {
+						updated: 			{value: true,	description: "Updated"},
+						outdated:			{value: true, 	description: "Outdated"},
+						downloadable:		{value: true, 	description: "Downloadable"},
 					}
 				};
 			
@@ -530,6 +558,9 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				// REMOVE 01.05.2021
+				BDFDB.DataUtils.remove(this, "newentriesdata");
+				
 				this.forceUpdateAll();
 
 				this.loadPlugins();
@@ -545,82 +576,6 @@ module.exports = (_ => {
 
 				BDFDB.DOMUtils.remove(BDFDB.dotCN._pluginreponotice, BDFDB.dotCN._pluginrepoloadingicon);
 			}
-
-			getSettingsPanel (collapseStates = {}) {
-				let customUrl = "";
-				let settingsPanel, settingsItems = [];
-				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Settings",
-					collapseStates: collapseStates,
-					children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "Switch",
-						plugin: this,
-						keys: ["settings", key],
-						label: this.defaults.settings[key].description,
-						value: settings[key]
-					}))
-				}));
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Custom Plugins",
-					collapseStates: collapseStates,
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-							title: "Add Plugin:",
-							tag: BDFDB.LibraryComponents.FormComponents.FormTitleTags.H3,
-							className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom8,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-								align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-											placeholder: customUrl,
-											placeholder: "Insert Raw Github Link of Plugin (https://raw.githubusercontent.com/...)",
-											onChange: value => {customUrl = value.trim();}
-										})
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-										onClick: _ => {
-											if (customUrl) {
-												customList.push(customUrl);
-												BDFDB.DataUtils.save(BDFDB.ArrayUtils.removeCopies(customList), this, "custom");
-												BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
-											}
-										},
-										children: BDFDB.LanguageUtils.LanguageStrings.ADD
-									})
-								]
-							})
-						}),
-						customList.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-							title: "Custom Plugin List:",
-							className: BDFDB.disCNS.margintop8 + BDFDB.disCN.marginbottom20,
-							children: customList.map(url => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
-								children: url,
-								onRemove: _ => {
-									BDFDB.ArrayUtils.remove(customList, url, true);
-									BDFDB.DataUtils.save(customList, this, "custom");
-									BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
-								}
-							}))
-						}) : null,
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-							type: "Button",
-							color: BDFDB.LibraryComponents.Button.Colors.RED,
-							label: "Remove all custom added Plugins",
-							onClick: _ => {
-								BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added Plugins from your own list", _ => {
-									BDFDB.DataUtils.save([], this, "custom");
-									BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
-								});
-							},
-							children: BDFDB.LanguageUtils.LanguageStrings.REMOVE
-						})
-					].flat(10).filter(n => n)
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
-			}
 			
 			onSettingsClosed () {
 				if (this.SettingsUpdated) {
@@ -630,12 +585,8 @@ module.exports = (_ => {
 			}
 			
 			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
-				modalSettings = BDFDB.DataUtils.get(this, "modalSettings");
 				favorites = BDFDB.DataUtils.load(this, "favorites");
-				favorites = BDFDB.ArrayUtils.is(favorites) ? favorites : [];
-				customList = BDFDB.DataUtils.load(this, "custom");
-				customList = BDFDB.ArrayUtils.is(customList) ? customList : [];
+				favorites = (typeof favorites == "string" ? favorites.split(" ") : []).map(n => parseInt(n)).filter(n => !isNaN(n));
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
@@ -662,7 +613,7 @@ module.exports = (_ => {
 							section: "pluginrepo",
 							label: "Plugin Repo",
 							element: _ => {
-								let options = Object.assign({}, modalSettings);
+								let options = Object.assign({}, this.settings.filters);
 								options.updated = options.updated && !showOnlyOutdated;
 								options.outdated = options.outdated || showOnlyOutdated;
 								options.downloadable = options.downloadable && !showOnlyOutdated;
@@ -698,60 +649,29 @@ module.exports = (_ => {
 
 			loadPlugins () {
 				BDFDB.DOMUtils.remove(BDFDB.dotCN._pluginrepoloadingicon);
-				let settings = BDFDB.DataUtils.load(this, "settings");
-				let getPluginInfo, setPluginParameter;
-				let outdated = 0, newEntries = 0, i = 0;
-				let tags = ["getName", "getVersion", "getAuthor", "getDescription"];
-				let seps = ["\"", "\'", "\`"];
-				let newEntriesData = BDFDB.DataUtils.load(this, "newentriesdata");
-				cachedPlugins = (newEntriesData.urlbase64 ? atob(newEntriesData.urlbase64).split("\n") : []).concat(customList);
-				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/_res/PluginList.txt", (error, response, result) => {
-					if (!error && result) {
-						result = result.replace(/[\r\t]/g, "");
-						BDFDB.DataUtils.save(btoa(result), this, "newentriesdata", "urlbase64");
-						
-						loadedPlugins = {};
-						grabbedPlugins = result.split("\n").filter(n => n);
-						foundPlugins = grabbedPlugins.concat(customList);
-						
-						loading = {is: true, timeout: BDFDB.TimeUtils.timeout(_ => {
-							BDFDB.TimeUtils.clear(loading.timeout);
-							if (this.started) {
-								if (loading.is && loading.amount < 4) BDFDB.TimeUtils.timeout(_ => {this.loadPlugins();},10000);
-								loading = {is: false, timeout: null, amount: loading.amount};
-							}
-						}, 1200000), amount: loading.amount+1};
-						
-						let loadingIcon = BDFDB.DOMUtils.create(pluginRepoIcon.replace(/COLOR_1/gi, "var(--bdfdb-blurple)").replace(/COLOR_2/gi, "#72767d"));
-						BDFDB.DOMUtils.addClass(loadingIcon, BDFDB.disCN._pluginrepoloadingicon);
-						loadingIcon.addEventListener("mouseenter", _ => {
-							BDFDB.TooltipUtils.create(loadingIcon, this.getLoadingTooltipText(), {
-								type: "left",
-								className: BDFDB.disCN._pluginrepoloadingtooltip,
-								delay: 500,
-								style: "max-width: unset;"
-							});
-						});
-						BDFDB.PluginUtils.addLoadingIcon(loadingIcon);
-						
-						BDFDB.ReactUtils.forceUpdate(list, header);
-
-						getPluginInfo(_ => {
-							if (!this.started) {
-								BDFDB.TimeUtils.clear(loading.timeout);
-								return;
-							}
+				cachedPlugins = BDFDB.DataUtils.load(this, "cached");
+				cachedPlugins = (typeof cachedPlugins == "string" ? cachedPlugins.split(" ") : []).map(n => parseInt(n)).filter(n => !isNaN(n));
+				
+				let loadingIcon;
+				let newEntries = 0, outdatedEntries = 0, checkIndex = 0, checksRunning = 0, callbackCalled = false;
+				
+				const checkPluginVersion = _ => {
+					if (checksRunning > 20) return;
+					else if (grabbedPlugins.every(p => p.loaded || !p.latestSourceUrl) || !this.started || !loading.is) {
+						if (!callbackCalled) {
+							callbackCalled = true;
+							if (!this.started) return BDFDB.TimeUtils.clear(loading.timeout);
 							BDFDB.TimeUtils.clear(loading.timeout);
 							BDFDB.DOMUtils.remove(loadingIcon, BDFDB.dotCN._pluginrepoloadingicon);
 							loading = {is: false, timeout: null, amount: loading.amount};
 							
 							BDFDB.LogUtils.log("Finished fetching Plugins", this);
-							if (list) BDFDB.ReactUtils.forceUpdate(list);
+							BDFDB.ReactUtils.forceUpdate(list);
 							
-							if (settings.notifyOutdated && outdated > 0) {
+							if (this.settings.general.notifyOutdated && outdatedEntries > 0) {
 								let notice = document.querySelector(BDFDB.dotCN._pluginrepooutdatednotice);
 								if (notice) notice.close();
-								BDFDB.NotificationUtils.notice(this.labels.notice_outdated_plugins.replace("{{var0}}", outdated), {
+								BDFDB.NotificationUtils.notice(this.labels.notice_outdated_plugins.replace("{{var0}}", outdatedEntries), {
 									type: "danger",
 									className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepooutdatednotice,
 									customIcon: pluginRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
@@ -766,7 +686,7 @@ module.exports = (_ => {
 								});
 							}
 							
-							if (settings.notifyNewEntries && newEntries > 0) {
+							if (this.settings.general.notifyNewEntries && newEntries > 0) {
 								let notice = document.querySelector(BDFDB.dotCN._pluginreponewentriesnotice);
 								if (notice) notice.close();
 								BDFDB.NotificationUtils.notice(this.labels.notice_new_plugins.replace("{{var0}}", newEntries), {
@@ -784,124 +704,75 @@ module.exports = (_ => {
 									}]
 								});
 							}
-							
-							if (BDFDB.UserUtils.me.id == "278543574059057154") {
-								let notice = document.querySelector(BDFDB.dotCN._pluginrepofailnotice);
-								if (notice) notice.close();
-								let wrongUrls = [];
-								for (let url of foundPlugins) if (url && !loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
-								if (wrongUrls.length) {
-									BDFDB.NotificationUtils.notice(this.labels.notice_failed_plugins.replace("{{var0}}", wrongUrls.length), {
-										type: "danger",
-										className: BDFDB.disCNS._pluginreponotice + BDFDB.disCN._pluginrepofailnotice,
-										customIcon: pluginRepoIcon.replace(/COLOR_[0-9]+/gi, "currentColor"),
-										buttons: [{
-											contents: this.labels.list,
-											onClick: _ => {
-												let toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"), {type: "danger"});
-												toast.style.setProperty("overflow", "hidden");
-												for (let url of wrongUrls) console.log(url);
-											}
-										}]
-									});
-								}
-							}
-						});
-					}
-				});
-				
-				setPluginParameter = (plugin, tag, value) => {
-					value = value ? value.split("\n")[0] : null;
-					value = value && tag != "getVersion" ? value.charAt(0).toUpperCase() + value.slice(1) : value;
-					plugin[tag] = value ? value.trim() : value;
-				};
-
-				getPluginInfo = callback => {
-					if (i >= foundPlugins.length || !this.started || !loading.is) {
-						callback();
+						}
 						return;
 					}
-					let url = foundPlugins[i];
-					BDFDB.LibraryRequires.request(url, (error, response, body) => {
-						if (!response) {
-							if (url && BDFDB.ArrayUtils.getAllIndexes(foundPlugins, url).length < 2) foundPlugins.push(url);
-						}
-						else if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
-							let plugin = {};
-							let bodyCopy = body;
-							if (body.length / body.split("\n").length > 1000) {
-								/* code is minified -> add newlines */
-								bodyCopy = body.replace(/}/g, "}\n");
-							}
-							
-							let configFound = false, configWrapper = bodyCopy.replace(/[\n\r\t"'`]/g, "").split(/(\s+config|\s+script|\.exports)\s*=\s*\{/g)[2];
-							if (configWrapper) {
-								configFound = true;
-								let i = 0, j = 0, configString = "";
-								try {
-									for (let c of `{${configWrapper}`) {
-										configString += c;
-										if (c == "{") i++;
-										else if (c == "}") j++;
-										if (i > 0 && i == j) break;
-									}
-									for (let tag of tags) {
-										let result = new RegExp(`[\\s\{\\}\[\\:,]${tag.replace("get", "").toLowerCase()}\\s*:\\s*([^\\{^\\}^\\[^\\]^:^,]+)`, "gi").exec(configString);
-										if (result) setPluginParameter(plugin, tag, result[1]);
-									}
-									if (!plugin.getAuthor) plugin.getAuthor = ((new RegExp(`[\\s\{\\}\[\\:,]authors\\s*:\\s*\\[\\s*(.+?)\\s*\\]`, "gi").exec(configString) || [])[1] || "").split(/[\{\}\[\]:,]+\s*name\s*:/gi).slice(1).map(n => n.split(",")[0]).join(", ").trim();
-									if (!plugin.getDescription) {
-										let result = new RegExp(`[\\s\{\\}\[\\:,]desc\\s*:\\s*([^\\{^\\}^\\[^\\]^:^,]+)`, "gi").exec(configString);
-										if (result) setPluginParameter(plugin, "getDescription", result[1]);
-									}
-									if (tags.some(tag => !plugin[tag])) configFound = false;
-								}
-								catch (err) {configFound = false;}
-							}
-							
-							if (!configFound) {
-								let hasMETAline = bodyCopy.replace(/\s/g, "").indexOf("//META{");
-								if (!(hasMETAline < 20 && hasMETAline > -1)) {
-									let searchText = bodyCopy.replace(/[\r\t| ]*\*\s*/g, "*");
-									for (let tag of tags) setPluginParameter(plugin, tag, searchText.split(`@${tag.toLowerCase().slice(3)} `)[1]);
-								}
-								if (tags.some(tag => !plugin[tag])) {
-									for (let tag of tags) {
-										let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1", "gi").exec(bodyCopy);
-										if (!result) result = new RegExp("get " + tag.replace("get", "").toLowerCase() + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(bodyCopy);
-										if (result) {
-											let separator = result[1];
-											result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
-											if (result.length > 2) setPluginParameter(plugin, tag, result.slice(1, -1).join(separator).replace(/\\n/g, "\n").replace(/\\/g, ""));
-										}
-									}
+					else if (checkIndex > grabbedPlugins.length) return;
+					
+					const plugin = grabbedPlugins[checkIndex++];
+					if (!plugin || !plugin.latestSourceUrl) checkPluginVersion();
+					else {
+						checksRunning++;
+						plugin.rawSourceUrl = plugin.latestSourceUrl.replace("https://github.com/", "https://raw.githubusercontent.com/").replace(/\/blob\/(.{32,})/i, "/$1")
+						BDFDB.LibraryRequires.request(plugin.rawSourceUrl, (error, response, body) => {
+							if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
+								plugin.name = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar((/@name\s+([^\s^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || plugin.name || "");
+								plugin.author = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || plugin.author;
+								const version = (/@version\s+(.+)|\/\/\**META.*["']version["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1];
+								if (version) {
+									plugin.version = version;
+									const installedPlugin = this.getInstalledPlugin(plugin);
+									if (installedPlugin && BDFDB.NumberUtils.compareVersions(version, this.getString(installedPlugin.version))) outdatedEntries++;
 								}
 							}
+							if (!cachedPlugins.includes(plugin.id)) newEntries++;
 							
-							if (!tags.some(tag => !plugin[tag] || plugin[tag].length > 10000)) {
-								plugin.url = url;
-								loadedPlugins[url] = plugin;
-								if (this.isPluginOutdated(plugin, url)) outdated++;
-								if (!cachedPlugins.includes(url)) newEntries++;
-							}
-						}
-						i++;
-						
-						let loadingTooltip = document.querySelector(BDFDB.dotCN._pluginrepoloadingtooltip);
-						if (loadingTooltip) loadingTooltip.update(this.getLoadingTooltipText());
-						
-						getPluginInfo(callback);
-					});
+							plugin.loaded = true;
+							
+							let loadingTooltip = document.querySelector(BDFDB.dotCN._pluginrepoloadingtooltip);
+							if (loadingTooltip) loadingTooltip.update(this.getLoadingTooltipText());
+							
+							checksRunning--;
+							checkPluginVersion();
+						});
+					}
 				};
+				
+				BDFDB.LibraryRequires.request("https://api.betterdiscord.app/v1/store/plugins", (error, response, body) => {
+					if (!error && body) try {
+						grabbedPlugins = BDFDB.ArrayUtils.keySort(JSON.parse(body).filter(n => n), "name");
+						BDFDB.DataUtils.save(BDFDB.ArrayUtils.numSort(grabbedPlugins.map(n => n.id)).join(" "), this, "cached");
+						
+						loading = {is: true, timeout: BDFDB.TimeUtils.timeout(_ => {
+							BDFDB.TimeUtils.clear(loading.timeout);
+							if (this.started) {
+								if (loading.is && loading.amount < 4) BDFDB.TimeUtils.timeout(_ => this.loadPlugins(), 10000);
+								loading = {is: false, timeout: null, amount: loading.amount};
+							}
+						}, 1200000), amount: loading.amount + 1};
+						
+						loadingIcon = BDFDB.DOMUtils.create(pluginRepoIcon.replace(/COLOR_1/gi, "var(--bdfdb-blurple)").replace(/COLOR_2/gi, "#72767d"));
+						BDFDB.DOMUtils.addClass(loadingIcon, BDFDB.disCN._pluginrepoloadingicon);
+						loadingIcon.addEventListener("mouseenter", _ => {
+							BDFDB.TooltipUtils.create(loadingIcon, this.getLoadingTooltipText(), {
+								type: "left",
+								className: BDFDB.disCN._pluginrepoloadingtooltip,
+								delay: 500,
+								style: "max-width: unset;"
+							});
+						});
+						BDFDB.PluginUtils.addLoadingIcon(loadingIcon);
+						
+						BDFDB.ReactUtils.forceUpdate(list, header);
+						
+						for (let i = 0; i <= 20; i++) checkPluginVersion();
+					}
+					catch (err) {BDFDB.NotificationUtils.toast("Failed to load Plugin Store", {type: "danger"});}
+				});
 			}
 
 			getLoadingTooltipText () {
-				return BDFDB.LanguageUtils.LibraryStringsFormat("loading", `Plugin Repo - [${Object.keys(loadedPlugins).length}/${Object.keys(grabbedPlugins).length}]`);
-			}
-			
-			isPluginOutdated (plugin, url) {
-				let instPlugin = BDFDB.BDUtils.getPlugin(plugin.getName);
-				return instPlugin && typeof instPlugin.getAuthor == "function" && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion && !BDFDB.PluginUtils.hasUpdateCheck(url);
+				return BDFDB.LanguageUtils.LibraryStringsFormat("loading", `Plugin Repo - [${grabbedPlugins.filter(n => n.loaded).length}/${grabbedPlugins.length}]`);
 			}
 
 			getString (obj) {
@@ -913,50 +784,27 @@ module.exports = (_ => {
 				}
 				return string;
 			}
+			
+			getInstalledPlugin (plugin) {
+				if (!plugin || typeof plugin.author != "string") return;
+				const iPlugin = BDFDB.BDUtils.getPlugin(plugin.name, false, true);
+				if (iPlugin && plugin.author.toUpperCase() == this.getString(iPlugin.author).toUpperCase()) return iPlugin;
+				else if (plugin.rawSourceUrl && window.BdApi && BdApi.Plugins && typeof BdApi.Plugins.getAll == "function") {
+					const filename = plugin.rawSourceUrl.split("/").pop();
+					for (let p of BdApi.Plugins.getAll()) if (p.filename == filename && plugin.author.toUpperCase() == this.getString(p.author).toUpperCase()) return p;
+				}
+			}
 
 			checkForNewPlugins () {
-				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/_res/PluginList.txt", (error, response, result) => {
-					if (response && !BDFDB.equals(result.replace(/\t|\r/g, "").split("\n").filter(n => n), grabbedPlugins)) {
-						loading = {is: false, timeout: null, amount: 0};
-						this.loadPlugins();
+				BDFDB.LibraryRequires.request("https://api.betterdiscord.app/v1/store/plugins", (error, response, body) => {
+					if (!error && body) try {
+						if (JSON.parse(body).filter(n => n).length != grabbedPlugins.length) {
+							loading = {is: false, timeout: null, amount: 0};
+							this.loadPlugins();
+						}
 					}
+					catch (err) {BDFDB.NotificationUtils.toast("Failed to load Plugin Store", {type: "danger"});}
 				});
-			}
-
-			downloadPlugin (data) {
-				BDFDB.LibraryRequires.request(data.url, (error, response, body) => {
-					if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Plugin "${data.getName}"`), {type: "danger"});
-					else this.createPluginFile(data.url.split("/").pop(), body);
-				});
-			}
-
-			createPluginFile (filename, content) {
-				BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), filename), content, (error) => {
-					if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_fail", `Plugin "${filename}"`), {type: "danger"});
-					else BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_success", `Plugin "${filename}"`), {type: "success"});
-				});
-			}
-
-			startPlugin (data) {
-				if (data.name && BDFDB.BDUtils.isPluginEnabled(data.name) == false) {
-					BDFDB.BDUtils.enablePlugin(data.name, false);
-					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", data.name), this);
-				}
-			}
-
-			deletePluginFile (data) {
-				let filename = data.url.split("/").pop();
-				BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), filename), (error) => {
-					if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_fail", `Plugin "${filename}"`), {type: "danger"});
-					else BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_success", `Plugin "${filename}"`));
-				});
-			}
-
-			stopPlugin (data) {
-				if (data.name && BDFDB.BDUtils.isPluginEnabled(data.name) == true) {
-					BDFDB.BDUtils.disablePlugin(data.name, false);
-					BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", data.name), this);
-				}
 			}
 
 			setLabelsByLanguage () {
