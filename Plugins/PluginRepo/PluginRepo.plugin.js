@@ -3,7 +3,7 @@
  * @author DevilBro
  * @authorId 278543574059057154
  * @version 2.1.7
- * @description Allows you to look at all Plugins from the Plugin Repo and download them on the fly
+ * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
@@ -18,7 +18,7 @@ module.exports = (_ => {
 			"name": "PluginRepo",
 			"author": "DevilBro",
 			"version": "2.1.7",
-			"description": "Allows you to look at all Plugins from the Plugin Repo and download them on the fly"
+			"description": "Allows you to download all Plugins from BD's Website within Discord"
 		}
 	};
 

@@ -41,6 +41,7 @@
  - [Old Title Bar](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OldTitleBar) - Allows you to switch to Discord's old Titlebar
  - [Personal Pins](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PersonalPins) - Allows you to locally pin Messages
  - [Pin DMs](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PinDMs) - Allows you to pin DMs, making them appear at the top of your DMs/ServerList
+ - [Plugin Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PluginRepo) - Allows you to download all Plugins from BD's Website within Discord
  - [Quick Mention](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/QuickMention) - Adds a Mention Button to the Message Options Bar
  - [Read All Notifications Button](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReadAllNotificationsButton) - Adds a Clear Button to the Server List and the Mentions Popout
  - [Remove Blocked Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveBlockedMessages) - Removes blocked Messages/Users
@@ -56,6 +57,7 @@
  - [Spotify Controls](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpotifyControls) - Adds a Control Panel while listening to Spotify on a connected Account
  - [Staff Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/StaffTag) - Adds a Crown/Tag to Server Owners (or Admins/Management)
  - [Steam Profile Link](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SteamProfileLink) - Opens Steam Links in Steam instead of your Browser
+ - [Theme Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeRepo) - Allows you to download all Themes from BD's Website within Discord
  - [Theme Settings](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeSettings) - Allows you to change Theme Variables within Discord
  - [Timed Light Dark Mode](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TimedLightDarkMode) - Adds a Time Slider to the Appearance Settings
  - [Top Role Everywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TopRoleEverywhere) - Adds the highest Role of a User as a Tag
