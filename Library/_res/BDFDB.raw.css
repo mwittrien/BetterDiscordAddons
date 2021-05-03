@@ -367,8 +367,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	flex: 1 1 auto;
 }
 [REPLACE_CLASS_discoverycardtitlebutton] {
-	width: 20px;
-	height: 20px;
+	display: flex;
 	margin-left: 4px;
 }
 [REPLACE_CLASS_discoverycard] [REPLACE_CLASS_favbuttoncontainer] {
