@@ -100,7 +100,7 @@ module.exports = (_ => {
 			}
 		};
 		const reverseSorts = [
-			"DOWNLOADS", "LIKES", "FAV"
+			"DOWNLOADS", "LIKES", "FAV", "NEW"
 		];
 		const sortKeys = {
 			NAME:			"Name",
