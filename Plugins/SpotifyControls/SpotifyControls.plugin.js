@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.3
+ * @version 1.1.4
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.1.3",
+			"version": "1.1.4",
 			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
 		},
 		"changeLog": {
-			"improved": {
-				"Minimal Mode": "Added a bit of support for BDs minimal mode",
-				"No Cover": "Added a placeholder for song without a cover image"
+			"fixed": {
+				"No Cover": "No Cover is no longer black on dark theme"
 			}
 		}
 	};
@@ -67,9 +66,10 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var _this;
-		var controls, starting, lastSong, currentVolume, lastVolume, stopTime, previousIsClicked, previousDoubleTimeout, timelineTimeout, timelineDragging, updateInterval;
+		var controls;
+		var starting, lastSong, currentVolume, lastVolume, stopTime, previousIsClicked, previousDoubleTimeout;
+		var timelineTimeout, timelineDragging, updateInterval;
 		var playbackState = {};
-		var settings = {}, buttonConfigs = {};
 		
 		const repeatStates = [
 			"off",
@@ -227,7 +227,7 @@ module.exports = (_ => {
 												playerSize: playerSize,
 												disabled: socketDevice.device.is_restricted,
 												onClick: _ => {
-													if (previousIsClicked || !settings.doubleBack) {
+													if (previousIsClicked || !_this.settings.general.doubleBack) {
 														previousIsClicked = false;
 														this.request(socketDevice.socket, socketDevice.device, "previous");
 													}
@@ -335,12 +335,12 @@ module.exports = (_ => {
 		};
 		const SpotifyControlsButtonComponent = class SpotifyControlsButton extends BdApi.React.Component {
 			render() {
-				if (!this.props.playerSize || !buttonConfigs[this.props.type] || !buttonConfigs[this.props.type][this.props.playerSize]) return null;
+				if (!this.props.playerSize || !_this.settings.buttons[this.props.type] || !_this.settings.buttons[this.props.type][this.props.playerSize]) return null;
 				let button = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.accountinfobutton, this.props.disabled ? BDFDB.disCN.accountinfobuttondisabled : BDFDB.disCN.accountinfobuttonenabled, this.props.active && BDFDB.disCN._spotifycontrolsbuttonactive),
 					look: BDFDB.LibraryComponents.Button.Looks.BLANK,
 					size: BDFDB.LibraryComponents.Button.Sizes.NONE,
-					children: _this.defaults.buttonConfigs[this.props.type] && _this.defaults.buttonConfigs[this.props.type].icons ? (_this.defaults.buttonConfigs[this.props.type].icons[this.props.icon] || _this.defaults.buttonConfigs[this.props.type].icons[0]) : "?",
+					children: _this.defaults.buttons[this.props.type] && _this.defaults.buttons[this.props.type].icons ? (_this.defaults.buttons[this.props.type].icons[this.props.icon] || _this.defaults.buttons[this.props.type].icons[0]) : "?",
 					onClick: this.props.disabled ? _ => {} : this.props.onClick,
 					onContextMenu: this.props.disabled ? _ => {} : this.props.onContextMenu,
 				}), "active", "disabled", "renderPopout", "icon", "type", "playerSize"));
@@ -424,11 +424,11 @@ module.exports = (_ => {
 				_this = this;
 				
 				this.defaults = {
-					settings: {
+					general: {
 						addTimeline: 		{value: true,		description: "Show the Song Timeline in the Controls"},
 						doubleBack: 		{value: true,       description: "Requires the User to press the Back Button twice to go to previous Track"}
 					},
-					buttonConfigs: {
+					buttons: {
 						share: 				{value: {small: false, big: true},		icons: [""],						description: "Share"},
 						shuffle: 			{value: {small: false, big: true},		icons: [""],						description: "Shuffle"},
 						previous: 			{value: {small: true, big: true},		icons: [""],						description: "Previous"},
@@ -527,6 +527,7 @@ module.exports = (_ => {
 						display: block;
 						width: 100%;
 						height: 100%;
+						color: var(--header-primary);
 						object-fit: cover;
 					}
 					${BDFDB.dotCN._spotifycontrolscovermaximizer} {
@@ -630,6 +631,19 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				// REMOVE 24.04.2021
+				let oldData = BDFDB.DataUtils.load(this);
+				if (oldData.settings) {
+					this.settings.general = oldData.settings;
+					BDFDB.DataUtils.save(this.settings.general, this, "general");
+					BDFDB.DataUtils.remove(this, "settings");
+				}
+				if (oldData.buttonConfigs) {
+					this.settings.buttons = oldData.buttonConfigs;
+					BDFDB.DataUtils.save(this.settings.buttons, this, "buttons");
+					BDFDB.DataUtils.remove(this, "buttonConfigs");
+				}
+				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SpotifyTrackUtils, "getActivity", {after: e => {
 					if (e.methodArguments[0] !== false) {
 						if (e.returnValue && e.returnValue.name == "Spotify") this.updatePlayer(e.returnValue);
@@ -675,12 +689,12 @@ module.exports = (_ => {
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Settings",
 							collapseStates: collapseStates,
-							children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							children: Object.keys(this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "Switch",
 								plugin: this,
-								keys: ["settings", key],
-								label: this.defaults.settings[key].description,
-								value: settings[key]
+								keys: ["general", key],
+								label: this.defaults.general[key].description,
+								value: this.settings.general[key]
 							}))
 						}));
 						
@@ -690,13 +704,13 @@ module.exports = (_ => {
 							children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 								className: BDFDB.disCN.marginbottom4,
 								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
-								children: "Add control buttons in small and/or big player version: "
+								children: "Add control Buttons in small and/or big Player Version: "
 							})].concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
-								settings: Object.keys(this.defaults.buttonConfigs[Object.keys(this.defaults.buttonConfigs)[0]].value),
-								data: Object.keys(buttonConfigs).map(key => Object.assign({}, buttonConfigs[key], {
+								settings: Object.keys(this.defaults.buttons[Object.keys(this.defaults.buttons)[0]].value),
+								data: Object.keys(this.defaults.buttons).map(key => Object.assign({}, this.settings.buttons[key], {
 									key: key,
-									label: this.defaults.buttonConfigs[key].description,
-									icons: this.defaults.buttonConfigs[key].icons
+									label: this.defaults.buttons[key].description,
+									icons: this.defaults.buttons[key].icons
 								})),
 								noRemove: true,
 								renderLabel: data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -719,8 +733,8 @@ module.exports = (_ => {
 									]
 								}),
 								onCheckboxChange: (value, instance) => {
-									buttonConfigs[instance.props.cardId][instance.props.settingId] = value;
-									BDFDB.DataUtils.save(buttonConfigs, this, "buttonConfigs");
+									this.settings.buttons[instance.props.cardId][instance.props.settingId] = value;
+									BDFDB.DataUtils.save(this.settings.buttons, this, "buttons");
 									this.SettingsUpdated = true;
 								}
 							}))
@@ -738,10 +752,7 @@ module.exports = (_ => {
 				}
 			}
 		
-			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
-				buttonConfigs = BDFDB.DataUtils.get(this, "buttonConfigs");
-				
+			forceUpdateAll () {				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.DiscordUtils.rerenderAll();
 			}
@@ -766,7 +777,7 @@ module.exports = (_ => {
 				if (index > -1) children.splice(index - 1, 0, BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
 					song: BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false),
 					maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
-					timeline: settings.addTimeline
+					timeline: this.settings.general.addTimeline
 				}, true));
 				return index > -1;
 			}
