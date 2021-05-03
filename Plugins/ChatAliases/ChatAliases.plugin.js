@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.7
+ * @version 2.2.8
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.2.7",
+			"version": "2.2.8",
 			"description": "Allows you to configure your own Aliases/Commands"
 		},
 		"changeLog": {
 			"fixed": {
-				"Files": "Aliases for Files work again"
+				"Crash Tenor/Giphy": "Fixed an Issue that caused Discord to crash when clciking a gif with /tenor or /giphy"
 			}
 		}
 	};
@@ -65,7 +65,7 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var settings = {}, amounts = {}, configs = {}, aliases = {}, commandAliases = {}, commandSentinel;
+		var aliases = {}, commandAliases = {}, commandSentinel;
 	
 		return class ChatAliases extends Plugin {
 			onLoad () {
@@ -77,13 +77,15 @@ module.exports = (_ => {
 						regex: 				{value: false,		description: "Handle the Word Value as a RegExp String"},
 						file: 				{value: false,		description: "Handle the Replacement Value as a File Path"}
 					},
-					settings: {
+					general: {
 						replaceBeforeSend:	{value: true, 		inner: false,		description: "Replace Words with your Aliases before a Message is sent"},
 						addContextMenu:		{value: true, 		inner: false,		description: "Add a Context Menu Entry to faster add new Aliases"},
-						addAutoComplete:	{value: true, 		inner: false,		description: "Add an Autocomplete Menu for non-RegExp Aliases"},
-						triggerNormal:		{value: true, 		inner: true,		description: "Normal Message Textarea"},
-						triggerEdit:		{value: true, 		inner: true,		description: "Edit Message Textarea"},
-						triggerUpload:		{value: true, 		inner: true,		description: "Upload Message Prompt"}
+						addAutoComplete:	{value: true, 		inner: false,		description: "Add an Autocomplete Menu for non-RegExp Aliases"}
+					},
+					places: {
+						normal:				{value: true, 		inner: true,		description: "Normal Message Textarea"},
+						edit:				{value: true, 		inner: true,		description: "Edit Message Textarea"},
+						upload:				{value: true, 		inner: true,		description: "Upload Message Prompt"}
 					},
 					amounts: {
 						minAliasLength:		{value: 2, 			min: 1,				description: "Minimal Character Length to open Autocomplete Menu: "}
@@ -132,7 +134,7 @@ module.exports = (_ => {
 						},
 						matches: (channel, what, wordLowercase, what2, config, rawValue) => {
 							let currentLastWord = BDFDB.StringUtils.findMatchCaseless(wordLowercase, rawValue, true);
-							if (currentLastWord.length >= amounts.minAliasLength) for (let word in aliases) {
+							if (currentLastWord.length >= this.settings.amounts.minAliasLength) for (let word in aliases) {
 								let aliasData = aliases[word];
 								if (!aliasData.regex && aliasData.autoc) {
 									if (aliasData.exact) {
@@ -192,7 +194,7 @@ module.exports = (_ => {
 						let m = Array.from(e.methodArguments).find(n => n && n.commands);
 						if (m) {
 							let currentLastWord = commandSentinel + e.methodArguments[1];
-							if (currentLastWord.length >= amounts.minAliasLength) for (let word in commandAliases) {
+							if (currentLastWord.length >= this.settings.amounts.minAliasLength) for (let word in commandAliases) {
 								let aliasData = commandAliases[word];
 								let name = word.slice(1);
 								let command = {
@@ -215,14 +217,14 @@ module.exports = (_ => {
 					}});
 				}
 
-				this.forceUpdateAll();
+				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			
 			onStop () {
 				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) {
 					delete BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.ALIASES;
 				}
-				this.forceUpdateAll();
+				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 
 			getSettingsPanel (collapseStates = {}) {
@@ -235,13 +237,13 @@ module.exports = (_ => {
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Settings",
 							collapseStates: collapseStates,
-							children: Object.keys(settings).map(key => !this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							children: Object.keys(this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "Switch",
 								plugin: this,
-								keys: ["settings", key],
-								label: this.defaults.settings[key].description,
-								value: settings[key]
-							})).concat(Object.keys(amounts).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								keys: ["general", key],
+								label: this.defaults.general[key].description,
+								value: this.settings.general[key]
+							})).concat(Object.keys(this.defaults.amounts).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "TextInput",
 								childProps: {
 									type: "number"
@@ -252,15 +254,15 @@ module.exports = (_ => {
 								basis: "20%",
 								min: this.defaults.amounts[key].min,
 								max: this.defaults.amounts[key].max,
-								value: amounts[key]
+								value: this.settings.amounts[key]
 							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 								title: "Automatically replace Aliases in:",
-								children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								children: Object.keys(this.settings.places).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 									type: "Switch",
 									plugin: this,
-									keys: ["settings", key],
-									label: this.defaults.settings[key].description,
-									value: settings[key]
+									keys: ["places", key],
+									label: this.defaults.places[key].description,
+									value: this.settings.places[key]
 								}))
 							}))
 						}));
@@ -380,32 +382,24 @@ module.exports = (_ => {
 			onSettingsClosed () {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
-					this.forceUpdateAll();
+					BDFDB.PatchUtils.forceAllUpdates(this);
 				}
-			}
-		
-			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
-				amounts = BDFDB.DataUtils.get(this, "amounts");
-				configs = BDFDB.DataUtils.get(this, "configs");
-				
-				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 
 			onNativeContextMenu (e) {
 				if (e.instance.props.value && e.instance.props.value.trim()) {
-					if ((e.instance.props.type == "NATIVE_TEXT" || e.instance.props.type == "CHANNEL_TEXT_AREA") && settings.addContextMenu) this.injectItem(e, e.instance.props.value.trim());
+					if ((e.instance.props.type == "NATIVE_TEXT" || e.instance.props.type == "CHANNEL_TEXT_AREA") && this.settings.general.addContextMenu) this.injectItem(e, e.instance.props.value.trim());
 				}
 			}
 
 			onSlateContextMenu (e) {
 				let text = document.getSelection().toString().trim();
-				if (text && settings.addContextMenu) this.injectItem(e, text);
+				if (text && this.settings.general.addContextMenu) this.injectItem(e, text);
 			}
 
 			onMessageContextMenu (e) {
 				let text = document.getSelection().toString().trim();
-				if (text && settings.addContextMenu) this.injectItem(e, text);
+				if (text && this.settings.general.addContextMenu) this.injectItem(e, text);
 			}
 		 
 			injectItem (e, text) {
@@ -423,19 +417,19 @@ module.exports = (_ => {
 			
 			processChannelTextAreaForm (e) {
 				if (!BDFDB.PatchUtils.isPatched(this, e.instance, "handleSendMessage")) BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {before: e2 => {
-					if (settings.triggerNormal) this.handleSubmit(e, e2, 0);
+					if (this.settings.places.normal) this.handleSubmit(e, e2, 0);
 				}}, {force: true, noCache: true});
 			}
 			
 			processMessageEditor (e) {
 				if (!BDFDB.PatchUtils.isPatched(this, e.instance, "onSubmit")) BDFDB.PatchUtils.patch(this, e.instance, "onSubmit", {before: e2 => {
-					if (settings.triggerEdit) this.handleSubmit(e, e2, 0);
+					if (this.settings.places.edit) this.handleSubmit(e, e2, 0);
 				}}, {force: true, noCache: true});
 			}
 			
 			processUpload (e) {
 				if (!BDFDB.PatchUtils.isPatched(this, e.instance, "submitUpload")) BDFDB.PatchUtils.patch(this, e.instance, "submitUpload", {before: e2 => {
-					if (settings.triggerUpload) this.handleSubmit(e, e2, 1);
+					if (this.settings.places.upload) this.handleSubmit(e, e2, 1);
 				}}, {force: true, noCache: true});
 			}
 			
@@ -447,10 +441,10 @@ module.exports = (_ => {
 			}
 			
 			handleSubmit (e, e2, textIndex) {
-				if (!settings.replaceBeforeSend || BDFDB.LibraryModules.SlowmodeUtils.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
+				if (!this.settings.general.replaceBeforeSend || BDFDB.LibraryModules.SlowmodeUtils.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
 				let messageData = this.formatText(e2.methodArguments[textIndex]);
 				if (messageData) {
-					if (messageData.text != null) {
+					if (messageData.text != null && e2.methodArguments[textIndex] != messageData.text) {
 						e2.methodArguments[textIndex] = messageData.text;
 						e.instance.props.textValue = "";
 						if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.copyRichValue("", e.instance.props.richValue);
@@ -539,7 +533,7 @@ module.exports = (_ => {
 						ref: instance => {if (instance) values.addButton = instance;},
 						onClick: _ => {
 							this.saveWord(values, configs);
-							this.forceUpdateAll();
+							BDFDB.PatchUtils.forceAllUpdates(this);
 						}
 					}]
 				});
@@ -587,7 +581,7 @@ module.exports = (_ => {
 				];
 			}
 
-			saveWord (values, aliasConfigs = configs) {
+			saveWord (values, aliasConfigs = this.settings.configs) {
 				if (!values.wordValue || !values.replaceValue || !values.fileSelection) return;
 				let fileData = null;
 				if (values.fileSelection.files && values.fileSelection.files[0] && BDFDB.LibraryRequires.fs.existsSync(values.replaceValue)) {
