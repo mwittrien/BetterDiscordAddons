@@ -123,7 +123,6 @@ module.exports = (_ => {
 									onClick: _ => {this.updateTheme(refs, addon);}
 								}]
 							});
-							console.log(refs);
 						};
 						if (isBeta) {
 							let controls = card.querySelector("." + BDFDB.disCN._repofooter.split(" ")[0] + " " + BDFDB.dotCN._repocontrols);
@@ -209,82 +208,86 @@ module.exports = (_ => {
 					vars.shift();
 					vars = vars.join("{").replace(/\s*(:|;|--|\*)\s*/g, "$1");
 					vars = vars.split("}")[0];
-					return vars.slice(2).split(/;--|\*\/--/);
+					return (vars.endsWith(";") ? vars.slice(0, -1) : vars).slice(2).split(/;--|\*\/--/);
 				}
 				return [];
 			}
 
 			createThemeInputs (refs, theme, imports, vars) {
-				let settingsItems = [];
-				if (imports.length) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-					title: "Imports:",
-					dividerBottom: vars.length,
-					children: imports.map((impo, i) => {
-						let name = impo[0].split("/").pop().replace(/"/g, "");
-						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-							type: "Switch",
-							margin: 8,
-							childProps: {
-								ref: instance => {if (instance) refs.imports[i] = instance;}
-							},
-							label: name[0].toUpperCase() + name.slice(1),
-							note: impo[0].replace(/"/g, ""),
-							name: impo[0],
-							value: impo[1],
-							oldValue: impo[1].toString()
-						});
-					})
-				}));
-				let varInputs = [];
-				for (let i in vars) {
-					let varStr = vars[i].split(":");
-					let varName = varStr.shift().trim();
-					varStr = varStr.join(":").split(/;[^A-z0-9]|\/\*/);
-					let varValue = varStr.shift().trim();
-					if (varValue) {
-						let childType = "text", childMode = "";
-						let isColor = BDFDB.ColorUtils.getType(varValue);
-						let isComp = !isColor && /^[0-9 ]+,[0-9 ]+,[0-9 ]+$/g.test(varValue);
-						if (isColor || isComp) {
-							childType = "color";
-							childMode = isComp && "comp";
-						}
-						else {
-							let isUrlFile = /url\(.+\)/gi.test(varValue);
-							let isFile = !isUrlFile && /(http(s)?):\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(varValue);
-							if (isFile || isUrlFile) {
-								childType = "file";
-								childMode = isUrlFile && "url";
-							}
-						}
-						let varDescription = varStr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
-						varInputs.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-							type: "TextInput",
-							margin: 8,
-							childProps: {
-								type: childType,
-								mode: childMode,
-								filter: childType == "file" && "image",
-								ref: instance => {if (instance) refs.inputs[i] = instance;}
-							},
-							label: varName[0].toUpperCase() + varName.slice(1),
-							note: varDescription && varDescription.indexOf("*") == 0 ? varDescription.slice(1) : varDescription,
-							basis: "70%",
-							name: varName,
-							value: varValue,
-							oldValue: varValue,
-							placeholder: varValue
-						}));
-					}
-				};
-				if (varInputs.length) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-					title: "Variables:",
-					children: varInputs
-				}));
-				
-				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanel, {
+				let settingsPanel;
+				return settingsPanel = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanel, {
 					addon: theme,
-					children: settingsItems
+					children: _ => {
+					let settingsItems = [];
+						
+						if (imports.length) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							title: "Imports:",
+							dividerBottom: vars.length,
+							children: imports.map((impo, i) => {
+								let name = impo[0].split("/").pop().replace(/"/g, "");
+								return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+									type: "Switch",
+									margin: 8,
+									childProps: {
+										ref: instance => {if (instance) refs.imports[i] = instance;}
+									},
+									label: name[0].toUpperCase() + name.slice(1),
+									note: impo[0].replace(/"/g, ""),
+									name: impo[0],
+									value: impo[1],
+									oldValue: impo[1].toString()
+								});
+							})
+						}));
+						let varInputs = [];
+						for (let i in vars) {
+							let varStr = vars[i].split(":");
+							let varName = varStr.shift().trim();
+							varStr = varStr.join(":").split(/;[^A-z0-9]|\/\*/);
+							let varValue = varStr.shift().trim();
+							if (varValue) {
+								let childType = "text", childMode = "";
+								let isColor = BDFDB.ColorUtils.getType(varValue);
+								let isComp = !isColor && /^[0-9 ]+,[0-9 ]+,[0-9 ]+$/g.test(varValue);
+								if (isColor || isComp) {
+									childType = "color";
+									childMode = isComp && "comp";
+								}
+								else {
+									let isUrlFile = /url\(.+\)/gi.test(varValue);
+									let isFile = !isUrlFile && /(http(s)?):\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(varValue);
+									if (isFile || isUrlFile) {
+										childType = "file";
+										childMode = isUrlFile && "url";
+									}
+								}
+								let varDescription = varStr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
+								varInputs.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+									type: "TextInput",
+									margin: 8,
+									childProps: {
+										type: childType,
+										mode: childMode,
+										filter: childType == "file" && "image",
+										ref: instance => {if (instance) refs.inputs[i] = instance;}
+									},
+									label: varName[0].toUpperCase() + varName.slice(1),
+									note: varDescription && varDescription.indexOf("*") == 0 ? varDescription.slice(1) : varDescription,
+									basis: "70%",
+									name: varName,
+									value: varValue,
+									oldValue: varValue,
+									placeholder: varValue
+								}));
+							}
+						};
+						if (varInputs.length) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							title: "Variables:",
+							children: varInputs
+						}));
+						
+						return settingsItems;
+					}
 				});
 			}
 		};

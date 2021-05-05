@@ -492,7 +492,7 @@ module.exports = (_ => {
 									vars.shift();
 									vars = vars.join("{").replace(/\s*(:|;|--|\*)\s*/g, "$1");
 									vars = vars.split("}")[0];
-									vars = vars.slice(2).split(/;--|\*\/--/);
+									vars = (vars.endsWith(";") ? vars.slice(0, -1) : vars).slice(2).split(/;--|\*\/--/);
 									let inputRefs = [];
 									for (let varStr of vars) {
 										varStr = varStr.split(":");
