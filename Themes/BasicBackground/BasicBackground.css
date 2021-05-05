@@ -6033,42 +6033,6 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addr
 #app-mount .previewContainer-12UlHl	{						/* popout				preview								*/
 	background-color: rgba(var(--transparencycolor), 0.2);
 }
-/* ----		14.13.	STREAMINFO						---- */
-
-#app-mount .container-2dqNWc {								/* modal				container							*/
-	background-color: transparent;
-	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), 0.3), 0 2px 10px 0 rgba(var(--transparencycolor), 0.3);
-	position: relative;
-	overflow: visible !important;
-}
-.container-2dqNWc::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	filter: blur(var(--popoutblur));
-	background-attachment: fixed;
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
-.container-2dqNWc::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
 
 /* ----		14.13.	STREAMINFO						---- */
 

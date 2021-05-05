@@ -2,7 +2,7 @@
  * @name RemoveBlockedMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.5
+ * @version 1.2.6
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.2.5",
+			"version": "1.2.6",
 			"description": "Removes blocked Messages/Users"
 		},
 		"changeLog": {
@@ -341,7 +341,7 @@ module.exports = (_ => {
 			}
 		
 			processChannelMembers (e) {
-				if (this.settings.places.members) {
+				if (this.settings.places.memberList) {
 					e.instance.props.groups = [].concat(e.instance.props.groups);
 					e.instance.props.rows = [].concat(e.instance.props.rows);
 					let newRows = [], newGroups = [];
@@ -379,7 +379,7 @@ module.exports = (_ => {
 			}
 			
 			processMemberListItem (e) {
-				if (this.settings.places.members && e.instance.props.user && BDFDB.LibraryModules.RelationshipStore.isBlocked(e.instance.props.user.id)) return null;
+				if (this.settings.places.memberList && e.instance.props.user && BDFDB.LibraryModules.RelationshipStore.isBlocked(e.instance.props.user.id)) return null;
 			}
 		
 			processVoiceUsers (e) {
@@ -391,7 +391,7 @@ module.exports = (_ => {
 			}
 
 			processPrivateChannel (e) {
-				if (this.settings.places.members && e.instance.props.channel && e.instance.props.channel.isGroupDM()) e.instance.props.channel = new BDFDB.DiscordObjects.Channel(Object.assign({}, e.instance.props.channel, {rawRecipients: e.instance.props.channel.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id)), recipients: e.instance.props.channel.recipients.filter(id => !id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(id))}));
+				if (this.settings.places.memberList && e.instance.props.channel && e.instance.props.channel.isGroupDM()) e.instance.props.channel = new BDFDB.DiscordObjects.Channel(Object.assign({}, e.instance.props.channel, {rawRecipients: e.instance.props.channel.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id)), recipients: e.instance.props.channel.recipients.filter(id => !id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(id))}));
 			}
 
 			processPrivateChannelCallParticipants (e) {
@@ -403,7 +403,7 @@ module.exports = (_ => {
 			}
 
 			processUserSummaryItem (e) {
-				if (this.settings.places.members && BDFDB.ArrayUtils.is(e.instance.props.users)) e.instance.props.users = [].concat(e.instance.props.users).filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id));
+				if (this.settings.places.memberList && BDFDB.ArrayUtils.is(e.instance.props.users)) e.instance.props.users = [].concat(e.instance.props.users).filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id));
 			}
 			
 			processUserMention (e) {
