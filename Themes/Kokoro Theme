@@ -1,0 +1,80 @@
+/**
+ * @name Pyrite
+ * @author ChimuGamer
+ * @version 0.1.3
+ * @description Pyrite for BetterDiscord/BandagedBD
+ * @source https://discord.gg/Yp8Mm5bx
+ * @website https://discord.gg/Yp8Mm5bx
+ * @invite W976FZS
+ */
+
+/* Import Base */
+@import url(https://discord.gg/Yp8Mm5bx);
+
+/* Import BD Only Features */
+@import url(https://discord.gg/Yp8Mm5bx);
+
+/* Import for optional things: */
+/* HorizontalServerList. Includes the base for the minitheme. */
+/* @import url(hhttps://discord.gg/Yp8Mm5bx); */
+
+/* Theme Base */
+:root {
+  --background-image: url(https://i.imgur.com/pKIJOmi.jpg);
+  --user-modal-image: var(--background-image);
+  --user-popout-image: var(--background-image);
+  --background-attachment: fixed;
+  --user-modal-attachment: var(--background-attachment);
+  --user-popout-attachment: var(--background-attachment);
+  --primary-color: rgba(1, 7, 1, 0.938);
+  --secondary-color: rgb(0, 0, 0);
+  --hover-color: rgb(7, 6, 4);
+  --tooltip-color: rgb(0, 0, 0);
+  --mention-background: var(--primary-color);
+  --mention-opacity: 0.3;
+  --home-icon: url(https://i.imgur.com/pKIJOmi.jpg);
+
+  /* For Advanced Users */
+  --code-font: Monaco, Consolas, Courier, monospace;
+  --body-font: Whitney, Helvetica Neue, Helvetica, sans-serif;
+  /* Below are currently unused but will be used in future. */
+  --background-filters: none;
+  --user-modal-filters: blur(3px);
+  --user-popout-filters: blur(3px);
+  --gradient-colors: var(--primary-color);
+  --gradient-direction: to bottom right;
+  --body-filters: none;
+
+  /* Toggles. From 0 (disable) to 1 (enable). Anything outside of those values have NOT been tested and likely aren't supported. */
+  --hide-member-list: 1;
+  --hide-active-now: 1;
+
+  /* Windows Only - How many *pixels* wide the min/max/close buttons should be. */
+  --win-min-max-close-button-width: 28px; /* default: 28px, square: 48px */
+
+
+  /* Using HSL? Uncomment this chunk below. */
+
+  /*--server-size: var(--HSL-server-icon-size, var(--HSL-size, 35px));
+  --server-spacing: var(--HSL-server-spacing, var(--HSL-spacing, 10px));
+  --server-container: calc(var(--server-size) + 20px); */
+
+  /* Using any of the below plugins? Change the 0 to a 1 */
+  --channel-tabs-enabled: 0;
+}
+
+
+/* Feel free to edit these ones for Dark Mode */
+.theme-dark, .theme-dark .theme-light {
+  --card-background: rgba(11, 12, 12, 0.5);
+  --side-shading: rgba(3, 3, 3, 0.5);
+  --middle-shading: rgba(0, 0, 0, 0.39);
+  --header-shading: rgb(9, 10, 7);
+}
+
+/* Feel free to edit these ones for Light Mode */
+.theme-light {
+  --card-background: rgba(11,12,12,0.5);
+  --side-shading: rgba(0, 0, 0, 0.5);
+  --middle-shading: rgba(0, 0, 0, 0.3);
+  --header-shading: rgb(12, 4, 4);
