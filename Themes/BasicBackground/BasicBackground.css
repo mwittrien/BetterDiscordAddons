@@ -2029,47 +2029,46 @@ body::before {
 #app-mount .gemIndicatorContainer-2jdECl {					/* boostsettings		suggestioncard circle				*/
 	background-color: transparent;
 }
-#app-mount .paymentPane-3bwJ6A {							/* boostsettings		past transations					*/
-	background-color: rgba(var(--transparencycolor), .3);
-	color: rgb(var(--fontwhite1));
+#app-mount .summaryInfo-2QFKUg {							/* boostsettings		past transactions summary			*/
+	color: var(--header-primary);
 }
-#app-mount .summaryInfo-2QFKUg {							/* boostsettings		past transations summary			*/
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .paymentHeader-3QlZQi {							/* boostsettings		past transations header				*/
-	border-color: rgba(var(--fontwhite3), .5);
-	color: rgb(var(--fontwhite3));
-}
-#app-mount .payment-xT17Mq {								/* boostsettings		past transations payment			*/
+#app-mount .payment-xT17Mq {								/* boostsettings		past transactions payment			*/
 	background-color: transparent;
-	color: rgb(var(--fontwhite2));
+	color: var(--header-secondary);
 }
 #app-mount .hoverablePayment-Yc6mK7:hover {
 	background-color: rgba(var(--transparencycolor), .2);
 }
-#app-mount .paymentText-2vaF7U {							/* boostsettings		past transations paymenttext		*/
-	color: rgb(var(--fontwhite3));
+#app-mount .paymentHeader-3QlZQi {							/* boostsettings		past transactions header			*/
+	color: var(--header-primary);
+	border-color: var(--background-modifier-accent);
 }
-#app-mount .expandedInfo-3kfShd {							/* boostsettings		past transations expandedinfo		*/
+#app-mount .expandedInfo-3kfShd {							/* boostsettings		past transactions expandedinfo		*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
-#app-mount .giftIcon-3DRGI6 {								/* boostsettings		past transations gifticon			*/
-	color: rgb(var(--fontwhite1));
+#app-mount .paymentText-2vaF7U {							/* boostsettings		past transactions paymenttext		*/
+	color: var(--header-secondary);
 }
-#app-mount .paginator-166-09 {								/* boostsettings		past transations paginator			*/
+#app-mount .giftIcon-3DRGI6 {								/* boostsettings		past transactions gifticon			*/
+	color: var(--header-primary);
+}
+
+#app-mount .paymentPane-3bwJ6A {							/* boostsettings		past transactions					*/
+	background-color: rgba(var(--transparencycolor), .3);
+	color: var(--header-primary);
+}
+#app-mount .paginator-166-09 {								/* boostsettings		past transactions paginator			*/
 	background: rgba(var(--transparencycolor), .3);
+	color: var(--text-muted);
 }
-#app-mount .bottomDivider-1K9Gao {							/* boostsettings		past transations divider			*/
-	border-bottom-color: rgba(var(--fontwhite3), .5);
+#app-mount .bottomDivider-1K9Gao {							/* boostsettings		past transactions divider			*/
+	border-bottom-color: rgba(var(--transparencycolor), .3);
 }
-#app-mount .tab-1kx2RU {									/* boostsettings		past transations tab				*/
-	color: rgb(var(--fontwhite3));
+#app-mount .tab-1kx2RU {									/* boostsettings		past transactions tab				*/
+	color: var(--text-muted);
 }
-#app-mount .appleRowHeader-241O5v {							/* boostsettings		past transations applerowheader		*/
-	color: rgb(var(--fontwhite2));
-}
-#app-mount .appleRowBody-2B5tp2 {							/* boostsettings		past transations applerowbody		*/
-	color: rgb(var(--fontwhite3));
+#app-mount .externalRowHeader-2-8cG6 {						/* boostsettings		past transactions extenal row		*/
+	color: var(--header-secondary);
 }
 
 .emptyStateImage-2MrSNs {									/* giftinventory		no gifts							*/
@@ -2079,24 +2078,9 @@ body::before {
 #app-mount .codeRedemptionRedirect-1wVR4b {					/* payment				coderedem							*/
 	background-color: rgba(var(--transparencycolor), .2);
 	border-color: rgba(var(--transparencycolor), .1);
-	color: rgb(var(--fontwhite1));
+	color: var(--header-primary);
 }
 
-.introHeader-4MPach {										/* hypesquad			header								*/
-	color: rgb(var(--fontwhite1));
-}
-.introBlurb-3gFgTQ {										/* hypesquad			description							*/
-	color: rgb(var(--fontwhite2));
-}
-.title-PMZpEi {												/* hypesquad			perktitle							*/
-	color: rgb(var(--fontwhite1));
-}
-.description-1W0DiL {										/* hypesquad			description							*/
-	color: rgb(var(--fontwhite2));
-}
-.attendeeCTA-3ZZQWt {										/* hypesquad			attendeeCTA							*/
-	color: rgb(var(--fontwhite2));
-}
 .membershipDialogHouse1-3KhKE- {							/* hypesquad			membershipdialogs					*/
 	background-color: rgba(156, 132, 239, .8);
 }
@@ -2150,13 +2134,7 @@ body::before {
 	color: rgba(var(--transparencycolor), .4);
 }
 
-.notificationsSound-27jFSh {								/* notifications		row									*/
-	color: rgb(var(--fontwhite2));
-	box-shadow: inset 0 -1px 0 0 rgba(var(--fontwhite4), .2);
-}
-
 #app-mount .row-2okwlC {									/* hotkeys				row									*/
-	color: rgb(var(--fontwhite2));
 	box-shadow: inset 0 -1px 0 var(--background-modifier-accent);
 }
 
@@ -2175,38 +2153,59 @@ body::before {
 #app-mount .game-1ipmAa {									/* games				card								*/
 	box-shadow: 0 1px 0 0 var(--background-modifier-accent);
 }
-#app-mount .notDetected-33MY4s {							/* games				nogame								*/
-	background-color: rgba(var(--transparencycolor), .3);
-}
-#app-mount .nowPlayingAdd-1Kdmh_ {							/* games				descriptionhint						*/
-	color: rgb(var(--fontwhite3));
-}
-#app-mount .gameName-1RiWHm {								/* games				gamename							*/
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .lastPlayed-3bQ7Bo,								/* games				lastplayed							*/
-#app-mount .overlayStatusText-L2IACa {						/* games				overlaystatustext					*/
-	color: rgb(var(--fontwhite3));
-}
-#app-mount .overlayToggleIconOn-3UNmty .fill-1ugeBG {		/* games				overlaystatusicon					*/
-	fill: rgb(var(--fontwhite3));
-}
-#app-mount .nowPlaying-284llR .lastPlayed-3bQ7Bo,
-#app-mount .nowPlaying-284llR .overlayStatusText-L2IACa {
-	color: rgb(var(--fontwhite2));
-}
-#app-mount .nowPlaying-284llR .overlayToggleIconOff-1kT42w .fill-1ugeBG,
-#app-mount .nowPlaying-284llR .overlayToggleIconOn-3UNmty .fill-1ugeBG {
-	fill: rgb(var(--fontwhite2));
-}
 #app-mount .gameNameInput-385LoS:focus,
 #app-mount .gameNameInput-385LoS:hover {
 	background-color: rgba(var(--transparencycolor), .3);
 	border-color: rgba(var(--transparencycolor), .1);
 }
-#app-mount .text-GwUZgS,
-#app-mount .title-2BxgL2 {
-	color: rgb(var(--fontwhite4));
+#app-mount .gameName-1RiWHm {								/* games				gamename							*/
+	color: var(--header-primary);
+}
+#app-mount .lastPlayed-3bQ7Bo,								/* games				lastplayed							*/
+#app-mount .overlayStatusText-L2IACa {						/* games				overlaystatustext					*/
+	color: var(--text-muted);
+}
+#app-mount .overlayToggleIconOn-3UNmty .fill-1ugeBG {		/* games				overlaystatusicon					*/
+	fill: var(--text-muted);
+}
+#app-mount .addGamePopout-2RY8Ju {
+	background-color: var(--background-primary);
+}
+#app-mount .addGamePopout-2RY8Ju .cancelButton-10XRsm {
+	color: var(--header-primary);
+}
+#app-mount .nowPlayingAdd-1Kdmh_ {							/* games				descriptionhint						*/
+	color: var(--header-secondary);
+}
+#app-mount .nowPlaying-284llR .gameName-1RiWHm {
+	color: #fff;
+}
+#app-mount .nowPlaying-284llR .lastPlayed-3bQ7Bo,
+#app-mount .nowPlaying-284llR .overlayStatusText-L2IACa {
+	color: #b4e1cd;
+}
+#app-mount .nowPlaying-284llR .overlayToggleIconOff-1kT42w .fill-1ugeBG,
+#app-mount .nowPlaying-284llR .overlayToggleIconOn-3UNmty .fill-1ugeBG {
+	fill: #b4e1cd;
+}
+#app-mount .notDetected-33MY4s {							/* games				nogame								*/
+	background-color: rgba(var(--transparencycolor), .3);
+}
+#app-mount .notDetected-33MY4s .lastPlayed-3bQ7Bo {
+	color: var(--header-secondary);
+}
+#app-mount .activeGame-14JI7o .removeGame-2JFGPn {
+	background-image: none;
+}
+#app-mount .activeGame-14JI7o .removeGame-2JFGPn::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: var(--header-primary);
+	-webkit-mask: url(https://discord.com/assets/eb69ec9fdd30653a3ade1ab501a7cd3d.svg) center no-repeat;
 }
 
 .preview-2nSL_2 {											/* appearance			preview								*/
@@ -2223,10 +2222,6 @@ body::before {
 }
 .item-3eFBNF.selected-2DeaDa {
 	background-color: rgba(var(--transparencycolor), .4);
-}
-
-#app-mount .experimentDate-2ymg99 {							/* experiments			date								*/
-	color: rgb(var(--fontwhite3));
 }
 
 
@@ -2263,9 +2258,9 @@ body::before {
 .container-_phMUq:hover {
 	background-color: rgba(var(--transparencycolor), .4);
 }
-img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addrolebutton						*/
+img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addrolebutton						*/
 	-webkit-mask: url(https://discord.com/assets/cef02719c12d8aaf38894c16dca7fbe6.svg);
-	background: rgb(var(--fontwhite3));
+	background: currentColor;
 	object-position: -999999px -999999px;
 }
 .settingCard-3w2mVL {										/* rolesettings			setting card						*/
@@ -2291,7 +2286,6 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addr
 }
 .passthrough-1c2ewQ.selected-2YhbGh {						/* rolesettings			permissions passthrough selected	*/
 	background: rgb(var(--accentcolor));
-	color: rgb(var(--fontwhite1));
 }
 .icon-3_8HGa {												/* rolesettings			everyone role icon					*/
 	background-color: rgba(var(--transparencycolor), .4);
@@ -2351,13 +2345,13 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addr
 	background-color: rgba(var(--transparencycolor), .2);
 }
 #app-mount .colorPickerSwatch-5GX3Ve.noColor-1pdBDm {		/* rolesettings			colorswatch nocolor					*/
-	border-color: rgba(var(--fontwhite1), .3);
+	border-color: rgba(var(--textbrightest), .3);
 }
 #app-mount .colorPickerSwatch-5GX3Ve.noColor-1pdBDm .colorPickerDropperFg-3jYKWI {
-	fill: rgb(var(--fontwhite1));
+	fill: var(--header-primary);
 }
 #app-mount .colorPickerSwatch-5GX3Ve.noColor-1pdBDm polyline {
-	stroke: rgb(var(--fontwhite1));
+	stroke: var(--header-primary);
 }
 .previewContainer-1KQDJS {									/* rolesettings			preview								*/
 	border: none;
@@ -2377,30 +2371,24 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addr
 }
 
 #app-mount .selectableItem-1MP3MQ {							/* auditlogs			popoutitem							*/
-	color: rgb(var(--fontwhite2));
+	color: var(--header-primary);
 }
 #app-mount .selectableItem-1MP3MQ:hover {
 	background-color: rgba(var(--transparencycolor), .2);
 }
-#app-mount .selectableItem-1MP3MQ[style*=" color: rgb(255, 255, 255)"] {
-	color: rgb(var(--fontwhite1)) !important;
-}
-#app-mount .selectableItem-1MP3MQ polyline[stroke="#ffffff"] {
-	stroke: rgb(var(--fontwhite1));
-}
 
 #app-mount .auditLog-3jNbM6 {								/* auditlogs			logitem								*/
 	border-color: rgba(var(--transparencycolor), .1);
-	color: rgb(var(--fontwhite4));
+	color: var(--text-muted);
 }
 #app-mount .headerClickable-2IVFo9,							/* auditlogs			loginner							*/
 #app-mount .headerDefault-1wrJcN {
 	background-color: rgba(var(--transparencycolor), .2);
-	color: rgb(var(--fontwhite3));
+	color: var(--header-secondary);
 }
 #app-mount .headerExpanded-CUEwZ5 {
 	background-color: rgba(var(--transparencycolor), .3);
-	color: rgb(var(--fontwhite2));
+	color: var(--header-secondary);
 }
 #app-mount .divider-1pnAR2 {								/* auditlogs			loginnerdivider						*/
 	background-color: var(--background-modifier-accent);
@@ -2409,16 +2397,16 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addr
 	background-color: rgba(var(--transparencycolor), .2);
 }
 #app-mount .userHook-3AdCBF {								/* auditlogs			userhook							*/
-	color: rgb(var(--fontwhite1));
+	color: var(--header-primary);
 }
 #app-mount .auditLog-3jNbM6 strong {						/* auditlogs			targets								*/
-	color: rgb(var(--fontwhite1));
+	color: var(--header-primary);
 }
 #app-mount .timestamp-1mruiI {								/* auditlogs			timestamp							*/
-	color: rgb(var(--fontwhite4));
+	color: var(--text-muted);
 }
 #app-mount .expandForeground-1nZ4VR {						/* auditlogs			expandarrow							*/
-	stroke: rgb(var(--fontwhite2));
+	stroke: var(--header-secondary);
 }
 .themeOverrideLight-3bx_5B.icon-RTGJu3,						/* auditlogs			logicon								*/
 .themeOverrideDark-1u5Vo0.icon-RTGJu3,
@@ -2432,7 +2420,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addr
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: rgb(var(--fontwhite1));
+	background: var(--header-primary);
 }
 .icon-RTGJu3.targetAll-13V3n6::before {
 	-webkit-mask: url(https://discord.com/assets/fc3f5f9be1a4db14b02336b7cb02e6ce.svg);
@@ -5578,6 +5566,10 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addr
 
 /* ----		15.1.	TEXT							---- */
 
+#app-mount .text-GwUZgS,
+#app-mount .title-2BxgL2 {
+	color: rgb(var(--fontwhite4));
+}
 .username-3gJmXY {
 	color: rgb(var(--fontwhite1));
 }
