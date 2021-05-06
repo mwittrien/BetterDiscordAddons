@@ -5,8 +5,6 @@
 	--accentcolor2: 255,115,250;
 	--linkcolor: 0,176,244;
 	
-	--fontwhite1: 255,255,255;
-	
 	--accentcolor-hover: rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15));
 	--accentcolor-active: rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
 	--accentcolor2-hover: rgb(var(--accentcolor2)) linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15));
@@ -233,7 +231,8 @@
 	background-color: rgba(var(--accentcolor), 0.0) !important;
 }
 
-.embedFull-2tM8--[style*="border-color: rgb(114, 137, 218)"] {
+.embedFull-2tM8--[style*="border-color: rgb(114, 137, 218)"],
+.embedFull-2tM8--[style*="border-color: rgb(58, 113, 193)"] {
 	border-color: rgb(var(--accentcolor)) !important;
 }
 
@@ -2070,11 +2069,9 @@
 	transition: background-color .15s ease-out, color .15s ease-out;
 }
 #bd-pub-button:hover {
-	color: rgb(var(--fontwhite1, var(--dfontwhite1)));
 	background-color: rgb(var(--accentcolor));
 }
 #bd-pub-button:active {
-	color: rgb(var(--fontwhite1, var(--dfontwhite1)));
 	background: var(--accentcolor-hover);
 }
 #pubslayer button:hover {
@@ -2335,9 +2332,8 @@ html .powercord-updater .debug-info b {
 
 /* ----		15.3.	READALLNOTIFICATIONSBUTTON		---- */
 
-.wrapper-1BJsBx:active .childWrapper-anI2G9.button-Jt-tIg{
+.wrapper-1BJsBx:active .childWrapper-anI2G9.button-Jt-tIg {
 	background: var(--accentcolor-hover);
-	color: rgb(var(--fontwhite1, var(--dfontwhite1)));
 }
 
 /* ----		15.4.	SERVERSEARCH					---- */
