@@ -17,12 +17,12 @@ Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/UserPopout
 
 Chat:
 
-![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/BadgesEverywhere/_res/screenshot1.png)
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/BadgesEverywhere/_res/cover.png)
 
 Member List:
 
-![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/BadgesEverywhere/_res/screenshot2.png)
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/BadgesEverywhere/_res/screenshot1.png)
 
 User Popout:
 
-![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Plugins/BadgesEverywhere/_res/screenshot3.png)
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Plugins/BadgesEverywhere/_res/screenshot2.png)
