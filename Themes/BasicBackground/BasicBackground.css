@@ -506,6 +506,27 @@ body::before {
 	filter: drop-shadow(1px 1px var(--textshadow));
 }
 
+.icon-1DeIlz {												/* channel				icon								*/
+	color: var(--channels-default);
+}
+.modeMuted-onO3r- .icon-1DeIlz {
+	color: var(--interactive-muted);
+}
+.modeMuted-onO3r-:hover .icon-1DeIlz,
+.wrapper-2jXpOf:hover .icon-1DeIlz {
+	color: var(--interactive-hover);
+}
+.modeConnected-3IsKId .icon-1DeIlz,
+.modeConnected-3IsKId:hover .icon-1DeIlz,
+.modeSelected-346R90 .icon-1DeIlz,
+.modeSelected-346R90:hover .icon-1DeIlz,
+.modeUnread-1qO3K1 .icon-1DeIlz,
+.modeUnread-1qO3K1:hover .icon-1DeIlz,
+.notInteractive-1X92pj.modeConnected-3IsKId .icon-1DeIlz,
+.notInteractive-1X92pj.modeSelected-346R90 .icon-1DeIlz {
+	color: var(--interactive-active);
+}
+
 .wrapper-2tAnRe {											/* voicechat			limit								*/
 	background-color: rgba(var(--transparencycolor), .15);
 }
