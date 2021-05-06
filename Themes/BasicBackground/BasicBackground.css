@@ -496,6 +496,15 @@ body::before {
 .wrapper-2jXpOf:hover .content-1x5b-n {						/* channel				content								*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
+.modeSelected-346R90 .content-1x5b-n,
+.modeSelected-346R90:hover .content-1x5b-n {
+	background-color: rgb(var(--accentcolor));
+	text-shadow: 1px 1px var(--textshadow);
+}
+.modeSelected-346R90 .content-1x5b-n svg,
+.modeSelected-346R90:hover .content-1x5b-n svg {
+	filter: drop-shadow(1px 1px var(--textshadow));
+}
 
 .wrapper-2tAnRe {											/* voicechat			limit								*/
 	background-color: rgba(var(--transparencycolor), .15);
