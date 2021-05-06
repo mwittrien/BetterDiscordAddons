@@ -2314,21 +2314,6 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .tierCurrent-Lw7-4E {
 	box-shadow: 0 4px 8px rgba(0,0,0,.24);
 }
-#app-mount .currentTierIcon-EGY5eG {
-	color: #fff;
-}
-#app-mount .tooltipMuted-26IcoY {
-	color: #72767d;
-}
-#app-mount .tierUnlocked-27DwHo {
-	background-color: #fff;
-}
-#app-mount .tierCloseHint-380zIA {
-	color: #fff;
-}
-#app-mount .tierHeaderUnlocked-2RhWqn {
-	color: #fff;
-}
 
 .exampleContainer-3ekFIr,
 .exampleContainer-25sB-A {
@@ -2693,8 +2678,8 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	color: var(--text-muted);
 }
 #app-mount .regionSelectModal-12e-57 .regionSelectModalOption-2DSIZ3 {
-	border: 2px solid var(--background-secondary);
 	background-color: var(--background-secondary);
+	border: 2px solid var(--background-secondary);
 }
 #app-mount .regionSelectModal-12e-57 .regionSelectModalOption-2DSIZ3:hover {
 	border-color: var(--background-tertiary);
@@ -2848,8 +2833,8 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 .theme-dark.authBox-hW6HRx,
 .theme-light.authBox-hW6HRx {
-	color: var(--text-muted);
 	background: var(--background-mobile-primary);
+	color: var(--text-muted);
 }
 .theme-dark.authBox-hW6HRx::before,
 .theme-light.authBox-hW6HRx::before {
@@ -2904,6 +2889,18 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 .downloadApps-wbBFdZ .footer-1nkeBm {
 	color: var(--text-muted);
 }
+.downloadApps-wbBFdZ .header-nJMe-Q {
+	color: var(--text-normal);
+}
+.downloadApps-wbBFdZ .platforms-28Rb-3 .platform-iik236 {
+	border-color: var(--header-secondary);
+}
+.downloadApps-wbBFdZ .platforms-28Rb-3 .platform-iik236 p {
+	color: var(--header-secondary);
+}
+.downloadApps-wbBFdZ .platforms-28Rb-3 .platform-iik236 .downloadButton-1bWXpg {
+	background-color: var(--header-secondary);
+}
 
 /* ----		10.11.	GUILDBOOSTMODAL						---- */
 
@@ -2934,13 +2931,6 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .tierBody-16Chc9 {
 	background-color: var(--background-tertiary);
 	border-color: var(--background-secondary);
-}
-
-#app-mount .tierHeaderUnlocked-1n-OTI {
-	color: #fff;
-}
-#app-mount .tierUnlocked-25K6Kv {
-	background-color: #fff;
 }
 
 #app-mount .barBackground-2EEiLw {
@@ -2974,6 +2964,9 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 #app-mount .giftIcon-ZxlWk5 {
 	color: var(--header-secondary);
+}
+#app-mount .button-38aScr .giftIcon-ZxlWk5 {
+	color: currentColor;
 }
 #app-mount .badgeIconWithoutSubscribers-3A9Xol {
 	color: var(--text-muted);
