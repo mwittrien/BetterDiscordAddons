@@ -6617,6 +6617,7 @@ img[src="/assets/4c59c8e37dda86294d3cf237b2695dde.png"] {
 #app-mount .tooltipGrey-1hnvTt,
 #app-mount .tooltipBlack-PPG47z {
 	background-color: rgb(var(--accentcolor));
+	color: #fff;
 	text-shadow: 1px 1px var(--textshadow);
 }
 #app-mount .tooltipPrimary-1d1ph4 .tooltipPointer-3ZfirK,

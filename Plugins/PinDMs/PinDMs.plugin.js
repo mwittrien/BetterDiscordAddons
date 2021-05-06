@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.2
+ * @version 1.8.3
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "PinDMs",
 			"author": "DevilBro",
-			"version": "1.8.2",
+			"version": "1.8.3",
 			"description": "Allows you to pin DMs, making them appear at the top of your DMs/ServerList"
 		},
 		"changeLog": {
 			"fixed": {
-				"Rare Duplication Bug": "Fixed and Issue where a selected DM in a predefined Category could get multi duplicated if it was pinned in another Category before"
+				"Unread Badge": "Fixed Issue where the unread badge for pinned categories would not get updated after the first new message"
 			}
 		}
 	};
@@ -287,10 +287,10 @@ module.exports = (_ => {
 
 			injectItem (instance, id, children, index) {
 				if (!id) return;
-				let pinnedInGuild = this.isPinned(id, "guildList");
+				let pinnedInGuild = this.isPinnedInGuilds(id);
 				
 				let categories = this.sortAndUpdateCategories("channelList", true);
-				let currentCategory = this.getCategory(id, "channelList");
+				let currentCategory = this.getChannelListCategory(id);
 				
 				children.splice(index, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: this.labels.context_pindm,
@@ -667,7 +667,7 @@ module.exports = (_ => {
 
 			processPrivateChannel (e) {
 				if (e.instance.props.channel && !this.getPredefinedCategory(e.instance.props.channel.id)) {
-					let category = this.getCategory(e.instance.props.channel.id, "channelList");
+					let category = this.getChannelListCategory(e.instance.props.channel.id);
 					if (category) {
 						if (e.node) {
 							BDFDB.DOMUtils.addClass(e.node, BDFDB.disCN._pindmsdmchannelpinned);
@@ -697,7 +697,7 @@ module.exports = (_ => {
 													else {
 														let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsdmchannelplaceholder, event3.target);
 														maybeHoveredChannel = (BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsdmchannelpinned, placeholder ? placeholder.previousSibling : event3.target), "channel", {up: true}) || {}).id;
-														let maybeHoveredCategory = maybeHoveredChannel && this.getCategory(maybeHoveredChannel, "channelList");
+														let maybeHoveredCategory = maybeHoveredChannel && this.getChannelListCategory(maybeHoveredChannel);
 														if (!maybeHoveredCategory || maybeHoveredCategory.id != category.id) maybeHoveredChannel = null;
 													};
 													let update = maybeHoveredChannel != hoveredChannel;
@@ -752,68 +752,73 @@ module.exports = (_ => {
 
 			processDirectMessage (e) {
 				if (e.instance.props.channel) {
-					if (e.node && e.methodname == "componentDidMount") {
-						BDFDB.DOMUtils.removeClass(e.node, BDFDB.disCN._pindmsrecentpinned);
-						e.node.removeEventListener("contextmenu", e.node.PinDMsContextMenuListener);
-						e.node.addEventListener("contextmenu", e.node.PinDMsContextMenuListener);
-						if (this.isPinned(e.instance.props.channel.id, "guildList")) {
-							BDFDB.DOMUtils.addClass(e.node, BDFDB.disCN._pindmsrecentpinned);
-							e.node.removeEventListener("mousedown", e.node.PinDMsMouseDownListener);
-							if (!this.settings.recentOrder.guildList) {
-								for (let child of e.node.querySelectorAll("a")) child.setAttribute("draggable", false);
-								e.node.PinDMsMouseDownListener = event => {
-									let mousemove = event2 => {
-										if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
-											BDFDB.ListenerUtils.stopEvent(event);
-											draggedChannel = e.instance.props.channel.id;
-											BDFDB.PatchUtils.forceAllUpdates(this, "UnreadDMs");
-											let dragPreview = this.createDragPreview(e.node, event2);
+					if (e.node) {
+						if (e.methodname == "componentDidMount") {
+							BDFDB.DOMUtils.removeClass(e.node, BDFDB.disCN._pindmsrecentpinned);
+							e.node.removeEventListener("contextmenu", e.node.PinDMsContextMenuListener);
+							e.node.addEventListener("contextmenu", e.node.PinDMsContextMenuListener);
+							if (this.isPinnedInGuilds(e.instance.props.channel.id)) {
+								BDFDB.DOMUtils.addClass(e.node, BDFDB.disCN._pindmsrecentpinned);
+								e.node.removeEventListener("mousedown", e.node.PinDMsMouseDownListener);
+								if (!this.settings.recentOrder.guildList) {
+									for (let child of e.node.querySelectorAll("a")) child.setAttribute("draggable", false);
+									e.node.PinDMsMouseDownListener = event => {
+										let mousemove = event2 => {
+											if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
+												BDFDB.ListenerUtils.stopEvent(event);
+												draggedChannel = e.instance.props.channel.id;
+												BDFDB.PatchUtils.forceAllUpdates(this, "UnreadDMs");
+												let dragPreview = this.createDragPreview(e.node, event2);
+												document.removeEventListener("mousemove", mousemove);
+												document.removeEventListener("mouseup", mouseup);
+												let dragging = event3 => {
+													this.updateDragPreview(dragPreview, event3);
+													let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsrecentplaceholder, event3.target);
+													let maybeHoveredChannel = (BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsrecentpinned, placeholder ? placeholder.previousSibling : event3.target), "channel", {up: true}) || {}).id;
+													let update = maybeHoveredChannel != hoveredChannel;
+													if (maybeHoveredChannel) hoveredChannel = maybeHoveredChannel;
+													else hoveredChannel = null; 
+													if (update) BDFDB.PatchUtils.forceAllUpdates(this, "UnreadDMs");
+												};
+												let releasing = event3 => {
+													BDFDB.DOMUtils.remove(dragPreview);
+													if (hoveredChannel) releasedChannel = hoveredChannel;
+													else draggedChannel = null;
+													hoveredChannel = null;
+													BDFDB.PatchUtils.forceAllUpdates(this, "UnreadDMs");
+													document.removeEventListener("mousemove", dragging);
+													document.removeEventListener("mouseup", releasing);
+												};
+												document.addEventListener("mousemove", dragging);
+												document.addEventListener("mouseup", releasing);
+											}
+										};
+										let mouseup = _ => {
 											document.removeEventListener("mousemove", mousemove);
 											document.removeEventListener("mouseup", mouseup);
-											let dragging = event3 => {
-												this.updateDragPreview(dragPreview, event3);
-												let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsrecentplaceholder, event3.target);
-												let maybeHoveredChannel = (BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsrecentpinned, placeholder ? placeholder.previousSibling : event3.target), "channel", {up: true}) || {}).id;
-												let update = maybeHoveredChannel != hoveredChannel;
-												if (maybeHoveredChannel) hoveredChannel = maybeHoveredChannel;
-												else hoveredChannel = null; 
-												if (update) BDFDB.PatchUtils.forceAllUpdates(this, "UnreadDMs");
-											};
-											let releasing = event3 => {
-												BDFDB.DOMUtils.remove(dragPreview);
-												if (hoveredChannel) releasedChannel = hoveredChannel;
-												else draggedChannel = null;
-												hoveredChannel = null;
-												BDFDB.PatchUtils.forceAllUpdates(this, "UnreadDMs");
-												document.removeEventListener("mousemove", dragging);
-												document.removeEventListener("mouseup", releasing);
-											};
-											document.addEventListener("mousemove", dragging);
-											document.addEventListener("mouseup", releasing);
-										}
+										};
+										document.addEventListener("mousemove", mousemove);
+										document.addEventListener("mouseup", mouseup);
 									};
-									let mouseup = _ => {
-										document.removeEventListener("mousemove", mousemove);
-										document.removeEventListener("mouseup", mouseup);
-									};
-									document.addEventListener("mousemove", mousemove);
-									document.addEventListener("mouseup", mouseup);
-								};
-								e.node.addEventListener("mousedown", e.node.PinDMsMouseDownListener);
+									e.node.addEventListener("mousedown", e.node.PinDMsMouseDownListener);
+								}
 							}
 						}
+						if (e.methodname == "componentWillUnmount") {
+							if (this.getChannelListCategory(e.instance.props.channel.id)) BDFDB.PatchUtils.forceAllUpdates(this, "PrivateChannelsList");
+						}
 					}
-					if (e.node && e.methodname == "componentWillUnmount") {
-						BDFDB.PatchUtils.forceAllUpdates(this, "PrivateChannelsList");
-					}
-					if (e.returnvalue && this.settings.general.pinIcon && this.isPinned(e.instance.props.channel.id, "guildList")) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "BlobMask"});
-						if (index > -1) children[index].props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.IconBadge, {
-							className: BDFDB.disCN.guildiconbadge,
-							disableColor: true,
-							style: {transform: "scale(-1, 1)"},
-							icon: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_PIN
-						});
+					if (e.returnvalue) {
+						if (this.settings.general.pinIcon && this.isPinnedInGuilds(e.instance.props.channel.id)) {
+							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "BlobMask"});
+							if (index > -1) children[index].props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.IconBadge, {
+								className: BDFDB.disCN.guildiconbadge,
+								disableColor: true,
+								style: {transform: "scale(-1, 1)"},
+								icon: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_PIN
+							});
+						}
+						if (this.getChannelListCategory(e.instance.props.channel.id)) BDFDB.PatchUtils.forceAllUpdates(this, "PrivateChannelsList");
 					}
 				}
 			}
@@ -858,9 +863,9 @@ module.exports = (_ => {
 				this.updateContainer(type);
 			}
 
-			getCategory (id, type) {
-				if (!id || !type) return null;
-				let categories = this.getPinnedChannels(type);
+			getChannelListCategory (id) {
+				if (!id) return null;
+				let categories = this.getPinnedChannels("channelList");
 				for (let catId in categories) if (categories[catId].dms.includes(id)) return categories[catId];
 				return null;
 			}
@@ -988,8 +993,8 @@ module.exports = (_ => {
 				this.updateContainer(type);
 			}
 			
-			isPinned (id, type) {
-				return this.getPinnedChannels(type)[id] != undefined;
+			isPinnedInGuilds (id) {
+				return this.getPinnedChannels("guildList")[id] != undefined;
 			}
 			
 			updateContainer (type) {
