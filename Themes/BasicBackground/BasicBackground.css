@@ -116,6 +116,7 @@
 		16.	GUILDFEEDBACKMODAL
 		17.	SCREENSHAREMODAL
 		18.	PHONEVERIFICATIONMODAL
+		19.	NOTIFICATIONSMODAL
 	14.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -2609,7 +2610,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background: transparent;
 }
 .exampleTextSingleLine-1kvErc {								/* communitysettings	rules		example line			*/
-	background-color: rgba(var(--fontwhite1), .2);
+	background-color: rgba(var(--textbrightest), .3);
 }
 
 .enableContainer-2DIT9Q {									/* communitysettings	rules		enablecontainer			*/
@@ -2647,9 +2648,6 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .2);
 	border-color: rgba(var(--transparencycolor), .2);
 }
-.termsRow-2dS5nm {											/* communitysettings	rules		termsrow				*/
-	border-color: rgba(var(--fontwhite3), .2);
-}
 
 .editCircle-ityklj {										/* communitysettings	welcome		editcirle				*/
 	background-color: rgba(var(--transparencycolor), .4);
@@ -2676,21 +2674,14 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 
 #app-mount .tierHeaderLocked-1a2opw {						/* boostsettings		tierheaderlocked					*/
 	background-color: rgba(var(--transparencycolor), .4);
-	color: rgb(var(--fontwhite3));
-}
-#app-mount .tierLock-1oFMOZ {								/* boostsettings		tierlock							*/
-	color: rgb(var(--fontwhite4));
+	color: var(--header-secondary);
 }
 #app-mount .tierHeaderUnlocked-2RhWqn {						/* boostsettings		tierheaderunlocked					*/
 	background-color: rgba(var(--transparencycolor), .5);
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .tierUnlocked-27DwHo {							/* boostsettings		tierunlocked						*/
-	background-color: rgb(var(--fontwhite1));
 }
 #app-mount .tierBody-x9kBBp {								/* boostsettings		tierbody							*/
 	background-color: rgba(var(--transparencycolor), .3);
-	color: rgb(var(--fontwhite3));
+	color: var(--header-secondary);
 }
 #app-mount .tierInProgress-3mBoXq {							/* boostsettings		tiermilestone						*/
 	background-color: rgba(var(--transparencycolor), .3);
@@ -2703,17 +2694,23 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	box-shadow: 0 1px 0 0 var(--background-modifier-accent);
 }
 #app-mount .member-1q7VfX .name-8yzEIY {					/* membersettings		membercardname						*/
-	color: rgb(var(--fontwhite1));
+	color: var(--header-primary);
 }
 #app-mount .member-1q7VfX .tag-1YGWN9 {						/* membersettings		membercardtag						*/
-	color: rgb(var(--fontwhite4));
+	color: var(--text-muted);
+}
+#app-mount .member-1q7VfX .roleWrapper-1Hde_V {				/* membersettings		rolewrapper							*/
+	color: rgba(var(--textbrightest),.8);
 }
 #app-mount .actionButton-VzECiy {							/* membersettings		addrolebutton						*/
-	border-color: rgb(var(--fontwhite4));
-	color: rgb(var(--fontwhite3));
+	border-color: var(--header-secondary);
+	color: var(--header-secondary);
 }
-#app-mount .member-1q7VfX .overflowIconFg-QMRRFI {			/* membersettings		3-doticon							*/
-	fill: rgb(var(--fontwhite1));
+#app-mount .member-1q7VfX .overflowIconFg-QMRRFI {			/* membersettings		3-dot icon							*/
+	fill: var(--header-primary);
+}
+#app-mount .member-1q7VfX .ownerHelpIcon-3ItaBx {			/* membersettings		help icon							*/
+	color: var(--header-primary);
 }
 
 #app-mount .overflowRolesPopout-140n9i,						/* membersettings		roleoverflow popout					*/
@@ -2755,36 +2752,29 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	z-index: -1;
 }
 .overflowRolesPopoutHeaderIcon-6PNEZA path {
-	fill: rgb(var(--fontwhite2));
+	fill: var(--header-secondary);
 }
 .overflowRolesPopoutHeaderText-1SW-y3 {
-	color: rgb(var(--fontwhite2));
+	color: var(--header-secondary);
 }
 
 #app-mount .inviteSettingsInviteRow-3p2O-N {				/* invitesettings		invitecard							*/
 	box-shadow: 0 1px 0 0 var(--background-modifier-accent);
-	color: rgb(var(--fontwhite2));
-}
-.user-3x-NP9 {												/* invitesettings		user								*/
-	color: rgb(var(--fontwhite1));
-}
-.channelName-13-Sm9 {										/* invitesettings		channelname							*/
-	color: rgb(var(--fontwhite3));
 }
 
 #app-mount .bannedUser-1IalTM {								/* bansettings			bancard								*/
 	box-shadow: 0 1px 0 0 var(--background-modifier-accent);
 }
 #app-mount .bannedUser-1IalTM .username-1b3MVI {			/* invitesettings		username							*/
-	color: rgb(var(--fontwhite1));
+	color: var(--header-primary);
 }
 #app-mount .bannedUserModal-3RJCOV .reasonHeader-2etdjy {	/* invitesettings		banmodalreasonheader				*/
-	color: rgb(var(--fontwhite2));
+	color: var(--text-normal);
 }
 #app-mount .bannedUser-1IalTM .username-1b3MVI .discrim-oGb-FO,
 #app-mount .bannedUserModal-3RJCOV .reason-YbfGC6,			/* invitesettings		banmodalreason						*/
 #app-mount .bannedUserModal-3RJCOV .userDiscrim-1D2NlF {	/* invitesettings		discriminator						*/
-	color: rgb(var(--fontwhite3));
+	color: var(--text-muted);
 }
 
 
@@ -2891,23 +2881,8 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .footer-1lnhms {									/* modal				footer info						*/
 	background-color: rgba(var(--transparencycolor), .3);
 }
-#app-mount .closeButton-1tv5uR,								/* modal				closebutton						*/
-#app-mount .close-hZ94c6 {
-	color: rgb(var(--fontwhite1));
+#app-mount .close-hZ94c6 {									/* modal				closebutton						*/
 	z-index: 2;
-}
-
-#app-mount .guildName-3WI6ml,								/* modal				guildname						*/
-#app-mount .date-2WJGyu,
-#app-mount .override-2YgiXd,
-#app-mount .overrideHighlight-YPcBxt {
-	color: rgb(var(--fontwhite3));
-}
-#app-mount .override-2YgiXd:hover {
-	background-color: rgb(var(--transparencycolor), .2);
-}
-#app-mount .channelName-28iMRJ {							/* modal				channelname						*/
-	color: rgb(var(--fontwhite1));
 }
 
 .tabBarContainer-1s1u-z {									/* modal				tabbarcontainer					*/
@@ -2916,39 +2891,6 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .modal-6GHvdM .tabBarContainer-1s1u-z {
 	background: rgba(var(--transparencycolor), .2);
 	box-shadow: 0 2px 3px 0 rgba(var(--transparencycolor), .1);
-}
-.top-28JiJ- .themed-OHr7kt.item-PXvHYJ,						/* modal				tabbaritem						*/
-.top-28JiJ- .item-PXvHYJ[style*="rgba(79, 84, 92, .4)"],
-.top-28JiJ- .item-PXvHYJ[style*="rgba(255, 255, 255, .4)"],
-.themed-OHr7kt.tabBarItem-1b8RUP,
-.tabBarItem-1b8RUP[style*="rgba(79, 84, 92, .4)"],
-.tabBarItem-1b8RUP[style*="rgba(255, 255, 255, .4)"] {
-	color: rgba(var(--fontwhite1), .4) !important;
-}
-.top-28JiJ- .themed-OHr7kt.item-PXvHYJ:hover,				/* modal				tabbaritem hover				*/
-.top-28JiJ- .item-PXvHYJ[style*="rgba(79, 84, 92, .6)"],
-.top-28JiJ- .item-PXvHYJ[style*="rgba(255, 255, 255, .6)"],
-.themed-OHr7kt.tabBarItem-1b8RUP:hover,
-.tabBarItem-1b8RUP[style*="rgba(79, 84, 92, .6)"],
-.tabBarItem-1b8RUP[style*="rgba(255, 255, 255, .6)"] {
-	border-color: rgba(var(--fontwhite1), .6) !important;
-	color: rgba(var(--fontwhite1), .6) !important;
-}
-.top-28JiJ- .themed-OHr7kt.item-PXvHYJ.selected-3s45Ha,		/* modal				tabbaritem selected				*/
-.top-28JiJ- .item-PXvHYJ[style*="rgb(79, 84, 92)"],
-.top-28JiJ- .item-PXvHYJ[style*="rgb(255, 255, 255)"],
-.themed-OHr7kt.tabBarItem-1b8RUP.selected-3s45Ha,
-.tabBarItem-1b8RUP[style*="rgb(79, 84, 92)"],
-.tabBarItem-1b8RUP[style*="rgb(255, 255, 255)"] {
-	border-color: rgb(var(--fontwhite1)) !important;
-	color: rgb(var(--fontwhite1)) !important;
-}
-#app-mount .content-8biNdB p,								/* modal				listentry						*/
-#app-mount .content-8biNdB ul li {
-	color: rgb(var(--fontwhite2));
-}
-#app-mount .content-8biNdB ul li::before {					/* modal				listentrydot					*/
-	background-color: rgb(var(--fontwhite2));
 }
 
 /* ----		13.1.	USERMODAL						----- */
@@ -4035,6 +3977,30 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 .phoneFieldPopout-7PzjOO {
 	position: absolute !important;
+}
+
+/* ----		13.19.	NOTIFICATIONSMODAL				---- */
+
+#app-mount .channelName-28iMRJ {
+	color: var(--header-primary);
+}
+#app-mount .guildName-3WI6ml,
+#app-mount .override-2YgiXd,
+#app-mount .overrideHighlight-YPcBxt {
+	color: var(--header-secondary);
+}
+#app-mount .override-2YgiXd:hover {
+	background-color: rgba(var(--backgroundtertiary),.1);
+}
+#app-mount .overrideHighlight-YPcBxt,
+#app-mount .overrideHighlight-YPcBxt:hover {
+	background-color: rgba(var(--backgroundtertiary),.3);
+}
+#app-mount .checkboxContainer-2vV9zd::before {
+	background-color: rgba(var(--backgroundtertiary),.6);
+}
+#app-mount .overridePlaceholder-14_rPI {
+	border: 1px dashed var(--background-floating);
 }
 
 

@@ -131,6 +131,9 @@ module.exports = (_ => {
 						!this.props.user.discriminator ? null : BDFDB.ReactUtils.createElement("span", {
 							className: BDFDB.disCN.listdiscriminator,
 							children: `#${this.props.user.discriminator}`
+						}),
+						this.props.user.bot && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BotTag, {
+							style: {marginLeft: 6}
 						})
 					]
 				});
