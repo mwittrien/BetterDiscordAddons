@@ -2941,77 +2941,16 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .body-3ND3kc {												/* modal				body								*/
 	background-color: transparent;
 }
-.discriminator-xUhQkU {										/* header				discriminator						*/
-	color: rgb(var(--fontwhite1));
-}
-.topSectionNormal-2-vo2m .discriminator-xUhQkU {
-	color: rgb(var(--fontwhite2));
-}
-.additionalActionsIcon-1FoUlE,								/* header				additionalactionsicon				*/
-.topSectionNormal-2-vo2m .additionalActionsIcon-1FoUlE,
-.topSectionNormal-2-vo2m .additionalActionsIcon-1FoUlE:hover {
-	color: rgb(var(--fontwhite1));
-}
 .topSectionNormal-2-vo2m .tabBarContainer-1s1u-z {			/* header				tabbarcontainer						*/
 	position: relative;
 	border-color: transparent;
 	padding-left: 0;
 }
-#app-mount .header-QKLPzZ .textRow-19NEd_ {
-	color: rgb(var(--fontwhite2));
-}
-#app-mount .topSectionNormal-2-vo2m .header-QKLPzZ .textRow-19NEd_ {
-	color: rgb(var(--fontwhite3));
-}
-#app-mount .activityProfile-2bJRaP .headerText-1HLrL7 {		/* header				activitytext						*/
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .activityProfile-2bJRaP .content-3JfFJh,			/* header				activitycontent						*/
-#app-mount .activityProfile-2bJRaP .details-38sfDr,			/* header				activitydetails						*/
-#app-mount .activityProfile-2bJRaP .name-29ETJS {			/* header				activityname						*/
-	color: rgb(var(--fontwhite2));
-}
-.activityName-1IaRLn,
-.nameNormal-2lqVQK,
-.nameWrap-3Z4G_9 {
-	color: rgb(var(--fontwhite1));
-}
-.userInfoSectionHeader-CBvMDh {								/* body					sectionheader						*/
-	color: rgb(var(--fontwhite3));
-}
-.userInfoSection-2acyCx + .userInfoSection-2acyCx {
-	border-top-color: var(--background-modifier-accent);
-}
-.connectedAccount-36nQx7 {									/* body					connectedaccount					*/
-	border-color: var(--background-modifier-accent);
-}
-.connectedAccountName-f8AEe2 {								/* body					connectedaccountname				*/
-	color: rgb(var(--fontwhite2));
-}
-.connectedAccountOpenIcon-2cNbq5 {
-	color: rgb(var(--fontwhite2));
-}
-.connectedAccountOpenIcon-2cNbq5:hover {
-	color: rgb(var(--fontwhite1));
-}
-.listRow-hutiT_ {											/* body					listrow								*/
-	color: rgb(var(--fontwhite2));
-}
-.guildNick-3uAm3i {											/* body					guildnick							*/
-	color: rgb(var(--fontwhite3));
-}
 .listRow-hutiT_:hover {
 	background-color: rgba(var(--transparencycolor), .2);
-	color: rgb(var(--fontwhite1));
-}
-.listRow-hutiT_:hover .guildNick-3uAm3i {
-	color: rgb(var(--fontwhite2));
 }
 .emptyIcon-pGTAhd {											/* body					emptypic							*/
 	opacity: 0.6;
-}
-.emptyText-6tYmO5 {											/* body					emptytext							*/
-	color: rgb(var(--fontwhite2));
 }
 
 .topSectionNormal-2-vo2m .avatarStack-2Dr8S9::after {
