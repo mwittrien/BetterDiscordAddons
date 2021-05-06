@@ -600,7 +600,7 @@
 }
 
 															/* categorylist			selected item						*/
-.categoryItem-3zFJns.selectedCategoryItem-3X8ujp .itemInner-3gVXMG {
+.categoryItem-1QIroW.selectedCategoryItem-FHKU_o .itemInner-gPkiWb {
 	background-color: rgb(var(--accentcolor));
 }
 
@@ -2116,10 +2116,6 @@
 
 .bd-addon-views .bd-view-button.selected {
 	background: var(--bd-blue);
-}
-
-.bd-addon-list .bd-footer a {
-	color: var(--bd-blue);
 }
 
 .bd-server-tag {

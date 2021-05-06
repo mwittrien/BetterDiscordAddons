@@ -189,6 +189,14 @@ module.exports = (_ => {
 				};
 				
 				this.css = `
+					${BDFDB.dotCN._badgeseverywherebadges} {
+						display: flex;
+						justify-content: center;
+						align-items: center;
+					}
+					${BDFDB.dotCN._badgeseverywherebadgespopout} {
+						margin-top: 6px;
+					}
 					${BDFDB.dotCN._badgeseverywherebadgeschat} {
 						display: inline-flex;
 						position: relative;
@@ -197,9 +205,6 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN._badgeseverywherebadgeschat} {
 						top: 0;
 					}
-					${BDFDB.dotCN._badgeseverywheremini} {
-						margin-left: 5px;
-					}
 					${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.messageusername} ~ ${BDFDB.dotCN._badgeseverywherebadges},
 					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN.messageusername} ~ ${BDFDB.dotCN._badgeseverywherebadges} {
 						margin-right: .25rem;
@@ -207,6 +212,9 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN.messageusername} ~ ${BDFDB.dotCN._badgeseverywherebadges} {
 						margin-left: 0;
+					}
+					${BDFDB.dotCN._badgeseverywheremini} {
+						margin-left: 5px;
 					}
 					
 					${BDFDB.dotCN._badgeseverywherebadgesinner} {
