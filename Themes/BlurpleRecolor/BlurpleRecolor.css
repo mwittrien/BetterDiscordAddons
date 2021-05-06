@@ -564,9 +564,6 @@
 #app-mount .nitroIcon-2uS3VJ {								/* store				nitroicon							*/
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
-.perkTag-2O4dx4 {											/* store				perktag								*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
-}
 .confirmPremiumIcon-26GX5Y,									/* store				confirmpremiumicon					*/
 .gameIcon-gg34Dz[style*="/assets/f6cbcdc9366fb8d31e03bdc6c9c50246.svg"] {
 	background-color: rgb(255, 255, 255) !important;

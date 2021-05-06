@@ -1295,9 +1295,6 @@ body::before {
 #app-mount .header-1TOWci {									/* autocomplete			header								*/
 	box-shadow: 0 1px 0 0 rgba(var(--transparencycolor), .2), 0 1px 2px 0 rgba(var(--transparencycolor), .2);
 }
-#app-mount .divider-23swzi::after {							/* autocomplete			divider								*/
-	background-color: rgba(var(--fontwhite4), .3);
-}
 #app-mount .selected-1Tbx07 {								/* autocomplete			rowselected							*/
 	background-color: rgba(var(--transparencycolor), .3);
 }
@@ -1312,28 +1309,20 @@ body::before {
 #app-mount .selected-3xBBKs:hover {
 	background-color: rgb(var(--accentcolor));
 }
+#app-mount .selected-3xBBKs svg {
+	filter: drop-shadow(1px 1px var(--textshadow));
+}
 
 #app-mount .searchSuggestion-2K8OBX:hover {					/* gifpicker			suggestions							*/
-	color: rgb(var(--fontwhite1));
+	text-shadow: 1px 1px var(--textshadow);
 }
 
 #app-mount .placeholder-1kJjXI {							/* gifpicker			result placeholder					*/
 	background-color: rgba(var(--transparencycolor), .3);
 }
 
-
 /* ----		6.5.	MEMBERLIST						---- */
 
-.member-3-YXUe {											/* member				container							*/
-	color: rgb(var(--fontwhite3));
-}
-.clickable-1JJAn8.member-3-YXUe:hover {
-	color: rgb(var(--fontwhite2));
-}
-.clickable-1JJAn8.member-3-YXUe:active,
-.selected-aXhQR6.member-3-YXUe {
-	color: rgb(var(--fontwhite1));
-}
 .member-3-YXUe:hover .layout-2DM8Md {						/* member				inner								*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
@@ -1344,30 +1333,8 @@ body::before {
 .selected-aXhQR6.member-3-YXUe .layout-2DM8Md svg:not(.svg-2V3M55) {
 	filter: drop-shadow(1px 1px var(--textshadow));
 }
-.member-3-YXUe .name-uJV0GL {
-	color: rgb(var(--fontwhite2));
-}
-.member-3-YXUe .activity-2Gy-9S {
-	color: rgb(var(--fontwhite3));
-}
-.member-3-YXUe:hover .linkButtonIcon-Mlm5d6,
-.member-3-YXUe.selected-aXhQR6 .linkButtonIcon-Mlm5d6 {
-	color: rgb(var(--fontwhite1));
-}
-.member-3-YXUe:hover .name-uJV0GL,
-.member-3-YXUe.selected-aXhQR6 .name-uJV0GL {
-	color: rgb(var(--fontwhite1));
-}
-.member-3-YXUe:hover .activity-2Gy-9S,
-.member-3-YXUe.selected-aXhQR6 .activity-2Gy-9S {
-	color: rgb(var(--fontwhite2));
-}
 .member-3-YXUe.selected-aXhQR6 .premiumIcon-2IFPOX {
 	color: rgb(var(--fontwhite1)) !important;
-}
-
-.membersGroup-v9BXpm {										/* roleheader												*/
-	color: rgb(var(--fontwhite2));
 }
 
 .avatar-VxgULZ::before {									/* emptyavatar												*/
@@ -1409,20 +1376,16 @@ body::before {
 .pageButton-2ruNwd:hover {
 	background-color: rgba(var(--transparencycolor), .4);
 }
-#app-mount .activeButton-rvKcqq,
-#app-mount .activeButton-rvKcqq:hover {
-	color: rgb(var(--fontwhite1));
+.activeButton-rvKcqq {
 	text-shadow: 1px 1px var(--textshadow);
 }
 
 /* ----		6.7.	CALL							---- */
 
-#app-mount .incomingCallInner-2VmFiR,
 #app-mount .root-3JVdIJ {									/* popout				inner								*/
 	background-color: transparent;
 	border: none;
 }
-.incomingCallInner-2VmFiR::before,
 .root-3JVdIJ::before {
 	content: "";
 	position: absolute;
@@ -1438,7 +1401,6 @@ body::before {
 	pointer-events: none;
 	z-index: -1;
 }
-.incomingCallInner-2VmFiR::after,
 .root-3JVdIJ::after {
 	content: "";
 	position: absolute;
@@ -1452,18 +1414,12 @@ body::before {
 	pointer-events: none;
 	z-index: -1;
 }
-#app-mount .members-2BNiuX {								/* popout				members							*/
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .subtitle-1H8FPn {								/* popout				subtitle						*/
-	color: rgb(var(--fontwhite3));
-}
 
 #app-mount .wrapper-2qzCYF {								/* call					wrapper							*/
 	background-color: rgba(var(--transparencycolor), calc(var(--guildchanneltransparency) * 0.8));
 }
 #app-mount .root-217Brm {									/* call					root							*/
-	color: rgb(var(--fontwhite1));
+	color: rgb(var(--textbrightest));
 }
 .videoWrapper-2v09vt {										/* call					video wrapper					*/
 	background-color: rgba(var(--transparencycolor), .3);
@@ -1494,7 +1450,6 @@ body::before {
 }
 .button-3HqqDX {
 	background-color: rgba(var(--transparencycolor), .4);
-	color: rgb(var(--fontwhite1));
 }
 .button-3HqqDX:hover {
 	background-color: rgba(var(--transparencycolor), .6);
@@ -1519,9 +1474,6 @@ body::before {
 .splashImage-13vBzp {										/* screen				image								*/
 	opacity: 0.7;
 }
-.splashHeader-ehL7gZ {										/* screen				headertext							*/
-	color: rgb(var(--fontwhite1));
-}
 
 
 /* ~~~~		7.		PEOPLES							~~~~ */
@@ -1533,60 +1485,21 @@ body::before {
 .wrapper-1cBijl:hover {
 	border-color: rgb(var(--transparencycolor));
 }
-.wrapper-1cBijl .addFriendInput-4bcerK {
-	color: rgb(var(--fontwhite1));
-}
-.wrapper-1cBijl .addFriendInput-4bcerK::placeholder,
-.addFriendHint-3Y70FX {
-	color: rgb(var(--fontwhite4));
-}
 
-.tableHeaderText-2io-_N,									/* tableheader			text								*/
-.onlineStatusGroupTitle-6ObdV6 {							/* groupheader												*/
-	color: rgb(var(--fontwhite2));
-}
-
-.tableHeader-2Ctu7Y {										/* tablerheader			border								*/
-	border-top-color: rgba(var(--fontwhite4), .5);
-}
-.peopleListItem-2nzedh {									/* peoples				row									*/
-	border-top-color: rgba(var(--fontwhite1), .1);
-}
-.peopleListItem-2nzedh .username-31C1TQ {					/* peoples				username							*/
-	color: rgb(var(--fontwhite2));
-}
-.peopleListItem-2nzedh .discriminator-22Okc1 {				/* peoples				discriminator						*/
-	color: rgb(var(--fontwhite4));
-}
-.peopleListItem-2nzedh .subtext-24R4-w {					/* peoples				subtext								*/
-	color: rgb(var(--fontwhite3));
-}
 .peopleListItem-2nzedh .actionButton-uPB8Fs {				/* peoples				actionbutton						*/
 	background-color: rgba(var(--transparencycolor), .1);
-	color: rgb(var(--fontwhite3));
+}
+.peopleListItem-2nzedh .actionButton-uPB8Fs:hover {
+	background-color: rgb(var(--accentcolor));
+}
+.peopleListItem-2nzedh .actionButton-uPB8Fs:hover svg {
+	filter: drop-shadow(1px 1px var(--textshadow));
 }
 .peopleListItem-2nzedh:hover {
 	background-color: rgba(var(--transparencycolor), .3);
 }
-.peopleListItem-2nzedh:hover .username-31C1TQ {
-	color: rgb(var(--fontwhite1));
-}
-.peopleListItem-2nzedh:hover .discriminator-22Okc1 {
-	color: rgb(var(--fontwhite3));
-}
-.peopleListItem-2nzedh:hover .subtext-24R4-w {
-	color: rgb(var(--fontwhite2));
-}
 .peopleListItem-2nzedh:hover .actionButton-uPB8Fs {
 	background-color: rgba(var(--transparencycolor), .3);
-	color: rgb(var(--fontwhite2));
-}
-.peopleListItem-2nzedh .actionButton-uPB8Fs:hover {
-	background-color: rgb(var(--accentcolor));
-	color: rgb(var(--fontwhite1));
-}
-.header-13Cw0- {											/* playing				header								*/
-	color: rgb(var(--fontwhite2));
 }
 #app-mount .outer-1AjyKL {									/* playing				card								*/
 	background-color: rgba(var(--transparencycolor), .2);
@@ -1609,7 +1522,7 @@ body::before {
 	background-color: rgba(var(--transparencycolor), .5);
 }
 #app-mount .partyMemberUnknownIcon-1eDbV6 {
-	color: color: rgb(var(--fontwhite4));
+	color: rgb(var(--textdark));
 }
 #app-mount .popout-38lTFE {									/* playing				popout								*/
 	background-color: transparent;
@@ -1655,12 +1568,6 @@ body::before {
 .gridItemBadge-1Se-Pu {
 	text-shadow: 1px 1px var(--textshadow);
 }
-.gridItemHeading-3D4Rb2 {
-	color: rgb(var(--fontwhite1));
-}
-.gridItemSubheading-FIneEP {
-	color: rgb(var(--fontwhite1));
-}
 
 .marketingHeader-2Iq7qk {									/* marketingheader											*/
 	background-color: rgba(var(--transparencycolor), .3);
@@ -1670,80 +1577,20 @@ body::before {
 	background-color: rgba(var(--transparencycolor), .3);
 }
 
-.sectionHeader-127c3L {										/* header													*/
-	color: rgb(var(--fontwhite1));
-}
-.tier2PlanName-2TttcQ {										/* header				svgtitle							*/
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .title-2a5mvx {									/* header				title								*/
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .subtitle-UfhpvR,								/* header				subtitle							*/
-#app-mount .subtitleRepositioned-11uB9- {
-	color: rgb(var(--fontwhite2));
-}
-.yearlyButtonDiscount-2K7GZZ {
-	border-color: rgba(var(--fontwhite1), .3);
-}
-
-.subsectionHeader-1SVMaW {									/* subsection			header								*/
-	color: rgb(var(--fontwhite1));
-}
-.blurb-1H7VPv {												/* subsection			description							*/
-	color: rgb(var(--fontwhite2));
-}
-.title-3IUNJ6 {												/* subsection			featuretitle						*/
-	color: rgb(var(--fontwhite1));
-}
-.description-yMw5z0 {										/* subsection			featuredescription					*/
-	color: rgb(var(--fontwhite2));
-}
-.guildMoreFeatures-svfRvH {									/* subsection			footer								*/
-	color: rgb(var(--fontwhite1));
-}
-
 #app-mount .categoryHeader-1D7Tqy,							/* categoryheader											*/
 #app-mount .premiumApplicationsHeader-Zmkm5e {
-	color: rgb(var(--fontwhite1));
-	border-color: rgba(var(--fontwhite4), .3);
-}
-
-.gradientOverlay-298TBM {									/* cardscroller			gradient							*/
-	display: none;
-}
-.scrollerButton-1Vm5_P {									/* cardscroller			button								*/
-	background-color: rgba(var(--transparencycolor), .3);
-	color: rgb(var(--fontwhite1));
-}
-
-#app-mount .tile-QA_yMc {									/* gamecard				container							*/
-	background-color: rgba(var(--transparencycolor), .3);
-	box-shadow: 0 0 0 rgba(var(--transparencycolor), .15);
-}
-#app-mount .description-2oYgWO {							/* gamecard				description							*/
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .tagline-EIH5-W,									/* gamecard				tagline								*/
-#app-mount .title-2XwaXv {									/* gamecard				title								*/
-	color: rgb(var(--fontwhite2));
-}
-#app-mount .perkTag-2O4dx4 {								/* gamecard				perktag								*/
-	border-radius: 4px;
-	color: rgb(var(--fontwhite1));
+	border-color: var(--background-modifier-accent);
+	color: rgb(var(--textbrightest));
 }
 
 #app-mount .tier1Banner-1BTgv0 {							/* tier1banner			container							*/
 	background-color: rgba(var(--transparencycolor), .3);
-	color: rgb(var(--fontwhite1));
+	color: #fff;
 }
 .headerIcon-3bqya6 {										/* tier1banner			svgtitle							*/
-	color: rgb(var(--fontwhite1));
+	color: #fff;
 }
 
-.carouselButtonsContainer-Rba2-D {							/* gamepreview			container							*/
-	color: rgb(var(--fontwhite1));
-}
 .smallCarousel-2e0IQc {
 	background-color: rgba(var(--transparencycolor), .3);
 	border-radius: 5px;
@@ -1754,170 +1601,115 @@ body::before {
 .arrow-3jRqK8 {												/* gamepreview			prev/nextarrow (big)				*/
 	background-color: rgba(var(--transparencycolor), .3);
 }
-.arrow-vOpU7R {												/* gamepreview			prev/nextarrow (small)				*/
-	color: rgb(var(--fontwhite1));
+#app-mount .themedPagination-3v0Dnu .arrow-vOpU7R {			/* gamepreview			prev/nextarrow (small)				*/
+	color: rgb(var(--textbrightest));
 }
-.dot-2Q_mMZ {												/* gamepreview			itemdot (small)						*/
-	background-color: rgb(var(--fontwhite1));
+#app-mount .themedPagination-3v0Dnu .dot-2Q_mMZ {			/* gamepreview			itemdot (small)						*/
+	background-color: rgb(var(--textbrightest));
 }
 
 #app-mount .root-1bFE0x {									/* gameinfo				sectioncontainer					*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
 #app-mount .header-3HFF3R {									/* gameinfo				sectionheader						*/
-	color: rgb(var(--fontwhite1));
+	color: rgb(var(--textbrightest));
 }
 #app-mount .section-7tu4tu {								/* gameinfo				subsection							*/
-	border-bottom-color: rgba(var(--fontwhite4), .3);
+	border-bottom-color: var(--background-modifier-accent);
 }
 #app-mount .playerOverflow-2Hf77M {
 	background-color: rgba(var(--transparencycolor), .3);
-	color: rgb(var(--fontwhite2));
+	color: rgb(var(--textbright));
 }
 #app-mount .description-2Ifi6N {							/* gameinfo				subsectiondescription				*/
-	color: rgb(var(--fontwhite3));
+	color: rgb(var(--textbright));
 }
 #app-mount .description-2Ifi6N strong,
 #app-mount .username-2gp_Xw {								/* gameinfo				subsectionusername					*/
-	color: rgb(var(--fontwhite1));
+	color: rgb(var(--textbrightest));
 }
 #app-mount .smallHeader-2h-9-U {							/* gameinfo				subsectionheader					*/
-	color: rgb(var(--fontwhite3));
+	color: rgb(var(--textbright));
 }
 #app-mount .text-1Z3P6i {									/* gameinfo				subsectiontext						*/
-	color: rgb(var(--fontwhite1));
+	color: rgb(var(--textbrightest));
 }
 #app-mount .iconCircle-1dlYo0 {
 	background-color: rgba(var(--transparencycolor), .3);
 }
 #app-mount .circle-1nK_79 {
-	color: rgb(var(--fontwhite1));
+	color: rgb(var(--textbrightest));
 }
 
 #app-mount .divider-21LyPb {								/* section				divider								*/
-	border-color: rgba(var(--fontwhite4), .3);
+	border-color: var(--background-modifier-accent);
 }
 #app-mount .blurb-1iBKJy {									/* section				description							*/
-	color: rgb(var(--fontwhite1));
+	color: rgb(var(--textbrighter));
 }
 #app-mount .description-1AwRKJ,								/* section				subdescription						*/
 #app-mount .markdown-11q6EU {
-	color: rgb(var(--fontwhite3));
-}
-
-#app-mount .tile-PuWjfs {									/* perkcard				container							*/
-	background-color: rgba(var(--transparencycolor), .3);
-	box-shadow: 0 0 0 rgba(var(--transparencycolor), .15);
-}
-.tile-PuWjfs div.splashPlaceholder-1ev-9c {					/* perkcard				imagecontainer						*/
-	background-color: transparent;
-	position: relative;
-	z-index: 5;
-}
-.tile-PuWjfs div.splashPlaceholder-1ev-9c::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--background) var(--backgroundposition)/var(--backgroundsize);
-	background-attachment: fixed;
-	filter: blur(var(--backgroundblur));
-	pointer-events: none;
-	z-index: -1;
-}
-.tile-PuWjfs div.splashPlaceholder-1ev-9c::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
-	pointer-events: none;
-	z-index: -1;
-}
-.tile-PuWjfs img.splashPlaceholder-1ev-9c {					/* perkcard				image								*/
-	-webkit-mask: linear-gradient(rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
-}
-.tile-PuWjfs .description-2h6giI {							/* perkcard				imagecontainer						*/
-	color: rgb(var(--fontwhite1));
-	z-index: 6;
-}
-#app-mount .mediaFade-2NVPtV {								/* perkcard				fade								*/
-	background: transparent;
-}
-#app-mount .item-2yFVoY {									/* newscard				container							*/
-	background-color: rgba(var(--transparencycolor), .3);
-	box-shadow: 0 0 0 rgba(var(--transparencycolor), .15);
-}
-#app-mount .collapsedTimestamp-2gjDIM,						/* newscard				timestamp							*/
-#app-mount .openTimestamp-sTgPmn {
-	color: rgb(var(--fontwhite3));
-}
-#app-mount .title-i-qCkH {									/* newscard				title								*/
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .openDescription-2XUOH3 {						/* newscard				description							*/
-	color: rgb(var(--fontwhite3));
+	color: rgb(var(--textbright));
 }
 
 #app-mount .requirements-dEriwm {							/* requirements												*/
-	color: rgb(var(--fontwhite2));
+	color: rgb(var(--textbrighter));
 }
 #app-mount .requirementKey-14DT2D {							/* requirements			key									*/
-	color: rgb(var(--fontwhite4));
+	color: rgb(var(--textdarker));
 }
 #app-mount .content-1zhNsr {								/* requirements			rating								*/
-	color: rgb(var(--fontwhite4));
+	color: rgb(var(--textdarker));
 }
 #app-mount .content-3FEARf {								/* requirements			copyright							*/
-	color: rgb(var(--fontwhite4));
+	color: rgb(var(--textdarker));
 }
 
 #app-mount .bodySection-jqkkIP {							/* sidebar				section								*/
 	background-color: rgba(var(--transparencycolor), .2);
-	border-top-color: rgba(var(--fontwhite4), .3);
+	border-top-color: var(--background-modifier-accent);
 }
 #app-mount .actionText-3EKWER {								/* sidebar				header								*/
-	color: rgb(var(--fontwhite2));
+	color: rgb(var(--textbrighter));
 }
 #app-mount .purchaseUnitOperatingSystem-cnbJPz {			/* sidebar				OSicon								*/
-	color: rgb(var(--fontwhite2));
+	color: rgb(var(--textdarkest));
 }
 #app-mount .price-4PDWNj,									/* sidebar				price								*/
 #app-mount .listingPrice-2GiDSc {
-	color: rgb(var(--fontwhite1));
+	color: rgb(var(--textbrightest));
 }
 #app-mount .title-2xCQKy {									/* sidebar				subtitle							*/
-	color: rgb(var(--fontwhite1));
+	color: rgb(var(--textbrightest));
 }
 #app-mount .skuNormal-3h1es- {								/* sidebar				pricerow							*/
-	border-bottom-color: rgba(var(--fontwhite4), .4);
+	border-bottom-color: var(--background-modifier-accent);
 }
 #app-mount .name-u2zgy7 {									/* sidebar				pricename							*/
-	color: rgb(var(--fontwhite3));
+	color: rgb(var(--textbright));
+}
+#app-mount .sku-epQEb_:hover .name-u2zgy7 {
+	color: rgb(var(--textbrightest));
 }
 #app-mount .price-NUANu6 {									/* sidebar				priceamount							*/
 	background-color: rgba(var(--transparencycolor), .3);
-	color: rgb(var(--fontwhite1));
+	color: rgb(var(--textbrightest));
 }
 #app-mount .label-13UUcd {									/* sidebar				label								*/
-	color: rgb(var(--fontwhite4));
+	color: rgb(var(--textdarker));
 }
 #app-mount .info-1Emy1X {									/* sidebar				labelinfo							*/
-	color: rgb(var(--fontwhite1));
+	color: rgb(var(--textbrightest));
 }
 
 #app-mount .content-35aVm0 {								/* invitecard			container							*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
 #app-mount .name-3TBxUq {									/* invitecard			guildname							*/
-	color: rgb(var(--fontwhite3));
+	color: rgb(var(--textbright));
 }
 #app-mount .memberInfo-1TAaKC {								/* invitecard			memberinfo							*/
-	color: rgb(var(--fontwhite4));
+	color: rgb(var(--textdarker));
 }
 
 .premiumSubscriptionAccountCredit-25i0tQ {					/* abonnements			abocard								*/
@@ -1926,10 +1718,10 @@ body::before {
 
 #app-mount .row-1bU71H {									/* features				row									*/
 	background-color: rgba(var(--transparencycolor), .2);
-	color: rgb(var(--fontwhite3));
+	color: rgb(var(--textbright));
 }
 #app-mount .featureIcon-1f78KU {							/* features				featureicon							*/
-	color: rgb(var(--fontwhite3));
+	color: rgb(var(--textbright));
 }
 #app-mount .feature-2w65J5 {								/* features				feature								*/
 	background-color: rgba(var(--transparencycolor), .4);
@@ -5878,7 +5670,6 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* 	rolesettings		addr
 
 /* ----		15.2.	BUTTONS							---- */
 
-.searchSuggestion-2K8OBX:hover,
 .form-236Xmo .btnPrimary-346kfV,
 .button-22FETM,
 .questionMark-CWEQZn,
