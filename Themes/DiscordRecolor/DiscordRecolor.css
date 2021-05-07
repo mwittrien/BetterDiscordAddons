@@ -252,8 +252,8 @@ svg [fill="#4F545C"] {
 	color: var(--header-primary);
 }
 #app-mount .editIcon-13gaox {
-	background: var(--header-primary);
 	-webkit-mask: url(https://discord.com/assets/860396b3ff3fa1c4ae355bebfabadecb.svg);
+	background: var(--header-primary);
 }
 
 #app-mount .path2-1q7bG_ {									/* loading icons		spinning circles					*/
@@ -625,12 +625,6 @@ html .iconBadge-2wi9r4 {
 #app-mount .inputDefault-A2ud2y {
 	color: var(--header-primary);
 }
-#app-mount .hiddenMessage-1iiFV5::-webkit-input-placeholder,
-#app-mount .inputDefault-A2ud2y::-webkit-input-placeholder,
-#app-mount .hiddenMessage-1iiFV5::-moz-placeholder,
-#app-mount .inputDefault-A2ud2y::-moz-placeholder,
-#app-mount .hiddenMessage-1iiFV5:-ms-input-placeholder,
-#app-mount .inputDefault-A2ud2y:-ms-input-placeholder,
 #app-mount .hiddenMessage-1iiFV5::placeholder,
 #app-mount .inputDefault-A2ud2y::placeholder {
 	color: rgba(var(--textbrightest),.3);
@@ -699,13 +693,6 @@ html .iconBadge-2wi9r4 {
 	overflow: hidden;
 }
 
-
-#app-mount .colorPickerSwatch-5GX3Ve.noColor-1pdBDm {
-	border-color: rgba(var(--textbrightest),.1);
-}
-#app-mount .colorPickerSwatch-5GX3Ve.noColor-1pdBDm .colorPickerDropperFg-3jYKWI {
-	fill: var(--header-primary);
-}
 #app-mount .colorPickerCustom-2CWBn2 {
 	background: var(--background-primary);
 	border-color: var(--background-tertiary);
@@ -717,9 +704,6 @@ html .iconBadge-2wi9r4 {
 	background-color: var(--background-accent);
 	box-shadow: 0 2px 5px 0 rgba(0,0,0,.2);
 }
-#app-mount .searchBox-3Y2Vi7 .searchBoxInput-uJtBcv::-webkit-input-placeholder,
-#app-mount .searchBox-3Y2Vi7 .searchBoxInput-uJtBcv::-moz-placeholder,
-#app-mount .searchBox-3Y2Vi7 .searchBoxInput-uJtBcv:-ms-input-placeholder,
 #app-mount .searchBox-3Y2Vi7 .searchBoxInput-uJtBcv::placeholder {
 	color: var(--text-muted);
 }
@@ -2463,27 +2447,6 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	opacity: .5;
 }
 
-#app-mount .paginator-2CA79G {
-	color: var(--text-muted);
-}
-#app-mount .pageIndicator-1gAbyA {
-	border-color: var(--interactive-muted);
-	color: var(--interactive-hover);
-}
-#app-mount .pageButtonNext-V2kUq0,
-#app-mount .pageButtonPrev-1Y-47D {
-	border-color: var(--interactive-muted);
-}
-#app-mount .pageButtonNext-V2kUq0:hover,
-#app-mount .pageButtonPrev-1Y-47D:hover {
-	border-color: var(--interactive-hover);
-	color: var(--interactive-hover);
-}
-#app-mount .disabled-BrLY9Y:hover {
-	border-color: var(--interactive-muted);
-	color: var(--text-muted);
-}
-
 #app-mount .divider-1que2t {
 	border-color: var(--background-secondary);
 }
@@ -3844,7 +3807,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 /* ----		11.11.	RTCSTATUSPOPOUT					---- */
 
-#app-mount .container-2x5lvQ{
+#app-mount .container-2x5lvQ {
 	width: 260px;
 }
 #app-mount .container-2x5lvQ .header-2C89wJ {
