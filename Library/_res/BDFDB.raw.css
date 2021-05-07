@@ -521,7 +521,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	text-align: center;
 	font-weight: 600;
 	font-size: 12px;
-	color: #f6f6f7;
+	color: var(--header-primary);
 	visibility: hidden;
 }
 [REPLACE_CLASS_sliderbubble],
