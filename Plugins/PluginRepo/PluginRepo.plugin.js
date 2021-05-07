@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.0
+ * @version 2.2.1
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,16 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.2.0",
+			"version": "2.2.1",
 			"description": "Allows you to download all Plugins from BD's Website within Discord"
 		},
 		"changeLog": {
-			"progress": {
-				"New Style and Website Store": "The Repo now directly reflects the Plugins hosted on <a>https://betterdiscord.app/</a> and uses a new Card Style"
-			},
 			"improved": {
-				"Search String Cache": "Saves the Search Query for the Plugins Repo until the Settings Window was closed",
-				"Thumbnails": "Converted Thumbnail Gifs to PNGs to reduce the stress, GIFs play when you hover over the Thumbnail"
+				"Thumbnail Conversion": "Moved Thumbnail Conversion to Card Component to reduce stress on BD Website"
 			}
 		}
 	};
@@ -140,14 +136,13 @@ module.exports = (_ => {
 				let plugins = grabbedPlugins.map(plugin => {
 					const installedPlugin = _this.getInstalledPlugin(plugin);
 					const state = installedPlugin ? (plugin.version && BDFDB.NumberUtils.compareVersions(plugin.version, _this.getString(installedPlugin.version)) ? pluginStates.OUTDATED : pluginStates.INSTALLED) : pluginStates.DOWNLOADABLE;
-					return {
-						...plugin,
+					return Object.assign(plugin, {
 						search: [plugin.name, plugin.version, plugin.author, plugin.description, plugin.tags].flat(10).filter(n => typeof n == "string").join(" ").toUpperCase(),
 						description: plugin.description || "No Description found",
 						fav: favorites.includes(plugin.id) && 1,
 						new: state == pluginStates.DOWNLOADABLE && !cachedPlugins.includes(plugin.id) && 1,
 						state: state
-					};
+					});
 				});
 				if (!this.props.updated)		plugins = plugins.filter(plugin => plugin.state != pluginStates.INSTALLED);
 				if (!this.props.outdated)		plugins = plugins.filter(plugin => plugin.state != pluginStates.OUTDATED);
@@ -249,6 +244,32 @@ module.exports = (_ => {
 		
 		const RepoCardComponent = class PluginCard extends BdApi.React.Component {
 			render() {
+				if (this.props.data.thumbnailUrl && !this.props.data.thumbnailChecked) {
+					if (!window.Buffer) this.props.data.thumbnailChecked = true;
+					else BDFDB.LibraryRequires.request(this.props.data.thumbnailUrl, {encoding: null}, (error, response, body) => {
+						this.props.data.thumbnailChecked = true;
+						if (response && response.headers["content-type"] && response.headers["content-type"] == "image/gif") {
+							const throwAwayImg = new Image(), instance = this;
+							throwAwayImg.onload = function() {
+								const canvas = document.createElement("canvas");
+								canvas.getContext("2d").drawImage(throwAwayImg, 0, 0, canvas.width = this.width, canvas.height = this.height);
+								try {
+									const oldUrl = instance.props.data.thumbnailUrl;
+									instance.props.data.thumbnailUrl = canvas.toDataURL("image/png");
+									instance.props.data.thumbnailGifUrl = oldUrl;
+									BDFDB.ReactUtils.forceUpdate(instance);
+								} catch(err) {
+									BDFDB.ReactUtils.forceUpdate(instance);
+								}
+							};
+							throwAwayImg.onerror = function() {
+								BDFDB.ReactUtils.forceUpdate(instance);
+							};
+							throwAwayImg.src = "data:" + response.headers["content-type"] + ";base64," + (new Buffer(body).toString("base64"));
+						}
+						else BDFDB.ReactUtils.forceUpdate(this);
+					});
+				}
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN.discoverycard,
 					children: [
@@ -258,7 +279,7 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.discoverycardcoverwrapper,
 									children: [
-										this.props.data.thumbnailUrl && BDFDB.ReactUtils.createElement("img", {
+										this.props.data.thumbnailUrl && this.props.data.thumbnailChecked && BDFDB.ReactUtils.createElement("img", {
 											className: BDFDB.disCN.discoverycardcover,
 											src: this.props.data.thumbnailUrl,
 											onMouseEnter: this.props.data.thumbnailGifUrl && (e => e.target.src = this.props.data.thumbnailGifUrl),
@@ -760,21 +781,6 @@ module.exports = (_ => {
 						checksRunning++;
 						plugin.rawSourceUrl = plugin.latestSourceUrl.replace("https://github.com/", "https://raw.githubusercontent.com/").replace(/\/blob\/(.{32,})/i, "/$1");
 						plugin.thumbnailUrl = plugin.thumbnailUrl ? (plugin.thumbnailUrl.startsWith("https://") ? plugin.thumbnailUrl : `https://betterdiscord.app${plugin.thumbnailUrl}`) : "";
-						if (plugin.thumbnailUrl) BDFDB.LibraryRequires.request({url: plugin.thumbnailUrl, encoding: null}, (error, response, body) => {
-							if (response && response.headers["content-type"] && response.headers["content-type"] == "image/gif") {
-								let throwAwayImg = new Image();
-								throwAwayImg.onload = function() {
-									const canvas = document.createElement("canvas");
-									canvas.getContext("2d").drawImage(throwAwayImg, 0, 0, canvas.width = this.width, canvas.height = this.height);
-									try {
-										const oldUrl = plugin.thumbnailUrl;
-										plugin.thumbnailUrl = canvas.toDataURL("image/png");
-										plugin.thumbnailGifUrl = oldUrl;
-									} catch(err) {}
-								};
-								throwAwayImg.src = "data:" + response.headers["content-type"] + ";base64," + (new Buffer(body).toString("base64"));
-							}
-						});
 						BDFDB.LibraryRequires.request(plugin.rawSourceUrl, (error, response, body) => {
 							if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
 								plugin.name = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar((/@name\s+([^\s^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || plugin.name || "");

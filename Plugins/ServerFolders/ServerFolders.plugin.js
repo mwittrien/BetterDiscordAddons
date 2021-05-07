@@ -263,10 +263,7 @@ module.exports = (_ => {
 				BDFDB.TimeUtils.clear(this._previewInterval);
 			}
 			checkImage(base64OrUrl, callback) {
-				if (base64OrUrl.indexOf("https://") == 0 || base64OrUrl.indexOf("http://") == 0) BDFDB.LibraryRequires.request({
-					url: base64OrUrl.trim(),
-					encoding: null
-				}, (error, response, body) => {
+				if (base64OrUrl.indexOf("https://") == 0 || base64OrUrl.indexOf("http://") == 0) BDFDB.LibraryRequires.request(base64OrUrl.trim(), {encoding: null}, (error, response, body) => {
 					if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1 && response.headers["content-type"] != "image/gif") {
 						this.resizeImage("data:" + response.headers["content-type"] + ";base64," + (new Buffer(body).toString("base64")), callback);
 					}
