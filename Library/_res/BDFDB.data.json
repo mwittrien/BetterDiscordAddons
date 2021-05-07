@@ -111,6 +111,7 @@
 		"SpellCheckUtils": {"props": ["learnWord", "toggleSpellcheck"]},
 		"SpotifyTrackUtils": {"props": ["hasConnectedAccount", "getLastPlayedTrackId"]},
 		"SpotifyUtils": {"props": ["setActiveDevice", "pause"]},
+		"StageChannelLiveStore": {"props": ["getAllLiveStageChannels", "useAllLiveStageChannels"]},
 		"StageChannelStore": {"props": ["getStageInstanceByChannel", "getAllStageInstances"]},
 		"StateStoreUtils": {"props": ["useStateFromStores", "useStateFromStoresArray"]},
 		"StatusMetaUtils": {"props": ["getApplicationActivity", "getStatus"]},
@@ -481,6 +482,9 @@
 				"height": 16
 			},
 			"icon": "<svg name='Pin' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='M19 3H5V5H7V12H5V14H11V22H13V14H19V12H17V5H19V3Z'/></svg>"
+		},
+		"PODIUM": {
+			"icon": "<svg name='Podium' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' fill-rule='evenodd' clip-rule='evenodd' d='M14 13C14 14.1 13.1 15 12 15C10.9 15 10 14.1 10 13C10 11.9 10.9 11 12 11C13.1 11 14 11.9 14 13ZM8.5 20V19.5C8.5 17.8 9.94 16.5 12 16.5C14.06 16.5 15.5 17.8 15.5 19.5V20H8.5ZM7 13C7 10.24 9.24 8 12 8C14.76 8 17 10.24 17 13C17 13.91 16.74 14.75 16.31 15.49L17.62 16.25C18.17 15.29 18.5 14.19 18.5 13C18.5 9.42 15.58 6.5 12 6.5C8.42 6.5 5.5 9.42 5.5 13C5.5 14.18 5.82 15.29 6.38 16.25L7.69 15.49C7.26 14.75 7 13.91 7 13ZM2.5 13C2.5 7.75 6.75 3.5 12 3.5C17.25 3.5 21.5 7.75 21.5 13C21.5 14.73 21.03 16.35 20.22 17.75L21.51 18.5C22.45 16.88 23 15 23 13C23 6.93 18.07 2 12 2C5.93 2 1 6.93 1 13C1 15 1.55 16.88 2.48 18.49L3.77 17.74C2.97 16.35 2.5 14.73 2.5 13Z'/></svg>"
 		},
 		"QUESTIONMARK": {
 			"icon": "<svg name='QuestionMark' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='M12 2C6.486 2 2 6.487 2 12C2 17.515 6.486 22 12 22C17.514 22 22 17.515 22 12C22 6.487 17.514 2 12 2ZM12 18.25C11.31 18.25 10.75 17.691 10.75 17C10.75 16.31 11.31 15.75 12 15.75C12.69 15.75 13.25 16.31 13.25 17C13.25 17.691 12.69 18.25 12 18.25ZM13 13.875V15H11V12H12C13.104 12 14 11.103 14 10C14 8.896 13.104 8 12 8C10.896 8 10 8.896 10 10H8C8 7.795 9.795 6 12 6C14.205 6 16 7.795 16 10C16 11.861 14.723 13.429 13 13.875Z'/></svg>"
