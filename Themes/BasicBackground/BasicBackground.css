@@ -528,6 +528,16 @@ body::before {
 .notInteractive-1X92pj.modeSelected-346R90 .icon-1DeIlz {
 	color: var(--interactive-active);
 }
+.modeConnected-3IsKId .subtitle-3V1p2E,						/* channel				subtitle							*/
+.modeConnected-3IsKId:hover .subtitle-3V1p2E,
+.modeSelected-346R90 .subtitle-3V1p2E,
+.modeSelected-346R90:hover .subtitle-3V1p2E,
+.modeUnread-1qO3K1 .subtitle-3V1p2E,
+.modeUnread-1qO3K1:hover .subtitle-3V1p2E,
+.notInteractive-1X92pj.modeConnected-3IsKId .subtitle-3V1p2E,
+.notInteractive-1X92pj.modeSelected-346R90 .subtitle-3V1p2E {
+	color: var(--interactive-normal);
+}
 
 .wrapper-2tAnRe {											/* voicechat			limit								*/
 	background-color: rgba(var(--transparencycolor), .15);
