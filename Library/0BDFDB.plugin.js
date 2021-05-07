@@ -5299,8 +5299,7 @@ module.exports = (_ => {
 														style: {padding: "0px 2px", position: "relative", height: "100%", background: `linear-gradient(to right, ${BDFDB.ColorUtils.setAlpha([h, s, l], 0, "RGBA")}, ${BDFDB.ColorUtils.setAlpha([h, s, l], 1, "RGBA")}`},
 														onClick: event => {
 															let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickeralphahorizontal, event.target));
-															let newA = BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 1], event.clientX);
-															this.handleColorChange(BDFDB.ColorUtils.setAlpha([h, s, l], newA, hslFormat));
+															this.handleColorChange(BDFDB.ColorUtils.setAlpha([h, s, l], BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 1], event.clientX), hslFormat));
 														},
 														onMouseDown: event => {
 															let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickeralphahorizontal, event.target));
@@ -5313,8 +5312,7 @@ module.exports = (_ => {
 															};
 															let mouseMove = event2 => {
 																this.state.draggingAlphaCursor = true;
-																let newA = BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 1], event2.clientX);
-																this.handleColorChange(BDFDB.ColorUtils.setAlpha([h, s, l], newA, hslFormat));
+																this.handleColorChange(BDFDB.ColorUtils.setAlpha([h, s, l], BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 1], event2.clientX), hslFormat));
 															};
 															document.addEventListener("mouseup", mouseUp);
 															document.addEventListener("mousemove", mouseMove);
@@ -5537,9 +5535,7 @@ module.exports = (_ => {
 							renderPopout: _ => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ColorPicker, Object.assign({}, swatches.props.pickerConfig, {
 								color: swatches.props.color,
 								onColorChange: color => {
-									let comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
-									if (typeof swatches.props.onColorChange == "function") swatches.props.onColorChange(comp);
-									if (swatches.props.pickerConfig && typeof swatches.props.pickerConfig.onColorChange == "function") swatches.props.pickerConfig.onColorChange(comp);
+									if (typeof swatches.props.onColorChange == "function") swatches.props.onColorChange(color);
 									props.color = color;
 									swatches.props.color = color;
 									swatches.props.customColor = color;
