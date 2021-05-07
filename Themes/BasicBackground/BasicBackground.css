@@ -1418,7 +1418,7 @@ body::before {
 	z-index: -1;
 }
 
-#app-mount .wrapper-2qzCYF {								/* call					wrapper							*/
+#app-mount .wrapper-2qzCYF {								/* call					voice wrapper					*/
 	background-color: rgba(var(--transparencycolor), calc(var(--guildchanneltransparency) * 0.8));
 }
 #app-mount .root-217Brm {									/* call					root							*/
@@ -1465,6 +1465,34 @@ body::before {
 }
 .regionSelectPopout-p9-0_W {
 	width: 170px;
+}
+
+.container-pTf0Ly {											/* call					podium wrapper					*/
+	background-color: rgba(var(--transparencycolor), calc(var(--guildchanneltransparency) * 0.8));
+}
+.callContainer-3UuV6S {										/* call					podium inner					*/
+	background-color: transparent;
+}
+.scroller-1SuHJo {											/* call					podium scroller					*/
+	background-color: transparent;
+}
+.container-2t1JyW {											/* call					podium info						*/
+	background-color: transparent;
+}
+.rowContainer-2tYerQ {										/* call					podium row						*/
+	background-color: transparent;
+}
+.participants-soO0aD {										/* call					podium participants				*/
+	background-color: transparent;
+}
+.tileContainer-BaRAZF:hover {								/* call					podium participant				*/
+	background-color: rgb(var(--accentcolor));
+}
+.container-1EOCj2 {											/* call					podium requests					*/
+	background-color: rgba(var(--transparencycolor), calc(var(--guildchanneltransparency) * 0.3));
+}
+.headerContainer-3Dbfbk {									/* call					podium requests header			*/
+	box-shadow: 0 1px 0 rgba(var(--transparencycolor), .2), 0 1.5px 0 rgba(var(--transparencycolor), .05), 0 2px 0 rgba(var(--transparencycolor), .05);
 }
 
 /* ----		6.8.	UNAVAILABLESCREEN				---- */
@@ -6400,7 +6428,7 @@ img[src="/assets/4c59c8e37dda86294d3cf237b2695dde.png"] {
 	color: #fff;
 }
 #app-mount .muteText-1DPH3L {
-	color: #8e9297;
+	color: #bbb;
 }
 #app-mount .tooltip-3oByQd,
 #app-mount .tooltip-1_vJJI,

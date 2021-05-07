@@ -1597,16 +1597,20 @@ module.exports = (_ => {
 					const setText = newText => {
 						if (BDFDB.ObjectUtils.is(config.guild)) {
 							let channels = LibraryModules.GuildChannelStore.getChannels(config.guild.id);
-							let voiceChannels = (channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE] || channels.VOCAL || []).map(c => c.channel.id);
+							let voiceChannels = (channels[LibraryModules.GuildChannelKeys.GUILD_VOCAL_CHANNELS_KEY] || []).filter(c => c.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE).map(c => c.channel.id);
+							let stageChannels = (channels[LibraryModules.GuildChannelKeys.GUILD_VOCAL_CHANNELS_KEY] || []).filter(c => c.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_STAGE_VOICE && LibraryModules.StageChannelStore.getStageInstanceByChannel(c.channel.id)).map(c => c.channel.id);
 							let streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === config.guild.id).map(app => app.ownerId) || [];
 							let streamOwners = streamOwnerIds.map(ownerId => LibraryModules.UserStore.getUser(ownerId)).filter(n => n);
-							let connectedUsers = BDFDB.ObjectUtils.toArray(LibraryModules.VoiceUtils.getVoiceStates(config.guild.id)).map(state => voiceChannels.includes(state.channelId) && state.channelId != config.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && LibraryModules.UserStore.getUser(state.userId)).filter(n => n);
+							let connectedVoiceUsers = BDFDB.ObjectUtils.toArray(LibraryModules.VoiceUtils.getVoiceStates(config.guild.id)).map(state => voiceChannels.includes(state.channelId) && state.channelId != config.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && LibraryModules.UserStore.getUser(state.userId)).filter(n => n);
+							let connectedStageUsers = BDFDB.ObjectUtils.toArray(LibraryModules.VoiceUtils.getVoiceStates(config.guild.id)).map(state => stageChannels.includes(state.channelId) && state.channelId != config.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && LibraryModules.UserStore.getUser(state.userId)).filter(n => n);
 							
 							let tooltipText = config.guild.toString();
 							if (fontColorIsGradient) tooltipText = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(config.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(tooltipText)}</span>`;
 							
 							let isMuted = LibraryModules.MutedUtils.isMuted(config.guild.id);
 							let muteConfig = LibraryModules.MutedUtils.getMuteConfig(config.guild.id);
+							
+							let hasExtraRow = connectedStageUsers.length || connectedVoiceUsers.length || streamOwners.length;
 							
 							BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 								children: [
@@ -1619,7 +1623,7 @@ module.exports = (_ => {
 												className: BDFDB.disCN.tooltiprowicon
 											}),
 											BDFDB.ReactUtils.createElement("span", {
-												className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext, (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipguildnametextlimitedsize),
+												className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext, hasExtraRow && BDFDB.disCN.tooltipguildnametextlimitedsize),
 												children: fontColorIsGradient || config.html ? BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(tooltipText)) : tooltipText
 											}),
 										]
@@ -1628,7 +1632,20 @@ module.exports = (_ => {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltiprow, BDFDB.disCN.tooltiprowextra),
 										children: newText
 									}),
-									connectedUsers.length && BDFDB.ReactUtils.createElement("div", {
+									connectedStageUsers.length && BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN.tooltiprow,
+										children: [
+											BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+												name: InternalComponents.LibraryComponents.SvgIcon.Names.PODIUM,
+												className: BDFDB.disCN.tooltipactivityicon
+											}),
+											BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.UserSummaryItem, {
+												users: connectedStageUsers,
+												max: 6
+											})
+										]
+									}),
+									connectedVoiceUsers.length && BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN.tooltiprow,
 										children: [
 											BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
@@ -1636,7 +1653,7 @@ module.exports = (_ => {
 												className: BDFDB.disCN.tooltipactivityicon
 											}),
 											BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.UserSummaryItem, {
-												users: connectedUsers,
+												users: connectedVoiceUsers,
 												max: 6
 											})
 										]
@@ -1655,12 +1672,12 @@ module.exports = (_ => {
 										]
 									}),
 									isMuted && muteConfig && (muteConfig.end_time == null ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext, (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipmutetextwithactivity),
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext, hasExtraRow && BDFDB.disCN.tooltipmutetextwithactivity),
 										size: InternalComponents.LibraryComponents.TextElement.Sizes.SIZE_12,
 										color: InternalComponents.LibraryComponents.TextElement.Colors.MUTED,
 										children: BDFDB.LanguageUtils.LanguageStrings.VOICE_CHANNEL_MUTED
 									}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.MutedText, {
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext, (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipmutetextwithactivity),
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext, hasExtraRow && BDFDB.disCN.tooltipmutetextwithactivity),
 										muteConfig: muteConfig
 									}))
 								].filter(n => n)
@@ -5964,6 +5981,64 @@ module.exports = (_ => {
 				
 				InternalComponents.LibraryComponents.GuildComponents = Object.assign({}, InternalComponents.LibraryComponents.GuildComponents);
 				
+				const GuildInner = function (props) {
+					let currentVoiceChannel = LibraryModules.ChannelStore.getChannel(LibraryModules.CurrentVoiceUtils.getChannelId());
+					let hasVideo = currentVoiceChannel && LibraryModules.VoiceUtils.hasVideo(currentVoiceChannel);
+					
+					props.selected = props.useState ? LibraryModules.LastGuildStore.getGuildId() == props.guild.id : false;
+					props.unread = props.useState ? LibraryModules.UnreadGuildUtils.hasUnread(props.guild.id) : false;
+					props.badge = props.useState ? LibraryModules.UnreadGuildUtils.getMentionCount(props.guild.id) : 0;
+					
+					props.audio = props.useState ? currentVoiceChannel && currentVoiceChannel.guild_id == props.guild.id && !hasVideo : false;
+					props.video = props.useState ? currentVoiceChannel && currentVoiceChannel.guild_id == props.guild.id && hasVideo : false;
+					props.screenshare = props.useState ? !!LibraryModules.StreamUtils.getAllApplicationStreams().filter(stream => stream.guildId == props.guild.id)[0] : false;
+					props.liveStage = props.useState ? (LibraryModules.StageChannelLiveStore.default(props.guild.id) || []).length > 0 : false;
+					props.hasLiveVoiceChannel = props.useState && false ? !LibraryModules.MutedUtils.isMuted(props.guild.id) && BDFDB.ObjectUtils.toArray(LibraryModules.VoiceUtils.getVoiceStates(props.guild.id)).length > 0 : false;
+					props.participating = props.useState ? LibraryModules.CurrentVoiceUtils.getGuildId() == props.guild.id : false;
+					props.participatingInStage = props.useState ? currentVoiceChannel && currentVoiceChannel.guild_id == props.guild.id && currentVoiceChannel.isGuildStageVoice() : false;
+					
+					props.animatable = props.useState ? LibraryModules.IconUtils.hasAnimatedGuildIcon(props.guild) : false;
+					props.unavailable = props.useState ? LibraryModules.GuildUnavailableStore.unavailableGuilds.includes(props.guild.id) : false;
+					
+					let isDraggedGuild = props.draggingGuildId === props.guild.id;
+					let guild = isDraggedGuild ? BDFDB.ReactUtils.createElement("div", {
+						children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.Items.DragPlaceholder, {})
+					}) : BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.guildcontainer,
+						children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.BlobMask, {
+							selected: props.selected || props.state.hovered,
+							upperBadge: props.unavailable ? InternalComponents.LibraryComponents.GuildComponents.Items.renderUnavailableBadge() : InternalComponents.LibraryComponents.GuildComponents.Items.renderIconBadge(BDFDB.ObjectUtils.extract(props, "audio", "video", "screenshare", "liveStage", "hasLiveVoiceChannel", "participating", "participatingInStage")),
+							lowerBadge: props.badge > 0 ? InternalComponents.LibraryComponents.GuildComponents.Items.renderMentionBadge(props.badge) : null,
+							lowerBadgeWidth: InternalComponents.LibraryComponents.Badges.getBadgeWidthForValue(props.badge),
+							children: props.navItem || null
+						})
+					});
+						
+					if (props.draggable && typeof props.connectDragSource == "function") guild = props.connectDragSource(guild);
+					
+					let children = [
+						props.list || props.pill ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.Pill, {
+							hovered: !isDraggedGuild && props.state.hovered,
+							selected: !isDraggedGuild && props.selected,
+							unread: !isDraggedGuild && props.unread,
+							className: BDFDB.disCN.guildpill
+						}) : null,
+						!props.tooltip ? guild : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+							tooltipConfig: Object.assign({type: "right"}, props.tooltipConfig, {guild: props.list && props.guild}),
+							children: guild
+						})
+					].filter(n => n);
+					return props.list ? BDFDB.ReactUtils.createElement("div", {
+						ref: null != props.setRef ? props.setRef : null,
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guildouter, BDFDB.disCN._bdguild, props.unread && BDFDB.disCN._bdguildunread, props.selected && BDFDB.disCN._bdguildselected, props.unread && BDFDB.disCN._bdguildunread, props.audio && BDFDB.disCN._bdguildaudio, props.video && BDFDB.disCN._bdguildvideo),
+						children: BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
+							children: children
+						})
+					}) : BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guild, props.className),
+						children: children
+					});
+				};
 				InternalComponents.LibraryComponents.GuildComponents.Guild = reactInitialized && class BDFDB_Guild extends LibraryModules.React.Component {
 					constructor(props) {
 						super(props);
@@ -6000,77 +6075,33 @@ module.exports = (_ => {
 					}
 					render() {
 						if (!this.props.guild) return null;
-						let currentVoiceChannel = LibraryModules.ChannelStore.getChannel(LibraryModules.CurrentVoiceUtils.getChannelId());
-						let hasVideo = currentVoiceChannel && LibraryModules.VoiceUtils.hasVideo(currentVoiceChannel);
 						this.props.guildId = this.props.guild.id;
 						this.props.selectedChannelId = LibraryModules.LastChannelStore.getChannelId(this.props.guild.id);
-						this.props.selected = this.props.state ? LibraryModules.LastGuildStore.getGuildId() == this.props.guild.id : false;
-						this.props.unread = this.props.state ? LibraryModules.UnreadGuildUtils.hasUnread(this.props.guild.id) : false;
-						this.props.badge = this.props.state ? LibraryModules.UnreadGuildUtils.getMentionCount(this.props.guild.id) : 0;
-						this.props.audio = this.props.state ? currentVoiceChannel && currentVoiceChannel.guild_id == this.props.guild.id && !hasVideo : false;
-						this.props.video = this.props.state ? currentVoiceChannel && currentVoiceChannel.guild_id == this.props.guild.id && hasVideo : false;
-						this.props.screenshare = this.props.state ? !!LibraryModules.StreamUtils.getAllApplicationStreams().filter(stream => stream.guildId == this.props.guild.id)[0] : false;
-						this.props.participating = this.props.state ? LibraryModules.CurrentVoiceUtils.getGuildId() == this.props.guild.id : false;
-						this.props.animatable = this.props.state ? LibraryModules.IconUtils.hasAnimatedGuildIcon(this.props.guild) : false;
-						this.props.unavailable = this.props.state ? LibraryModules.GuildUnavailableStore.unavailableGuilds.includes(this.props.guild.id) : false;
-						let isDraggedGuild = this.props.draggingGuildId === this.props.guild.id;
-						let guild = isDraggedGuild ? BDFDB.ReactUtils.createElement("div", {
-							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.Items.DragPlaceholder, {})
-						}) : BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN.guildcontainer,
-							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.BlobMask, {
-								selected: this.state.isDropHovering || this.props.selected || this.state.hovered,
-								upperBadge: this.props.unavailable ? InternalComponents.LibraryComponents.GuildComponents.Items.renderUnavailableBadge() : InternalComponents.LibraryComponents.GuildComponents.Items.renderIconBadge(BDFDB.ObjectUtils.extract(this.props, "audio", "video", "screenshare", "participating")),
-								lowerBadge: this.props.badge > 0 ? InternalComponents.LibraryComponents.GuildComponents.Items.renderMentionBadge(this.props.badge) : null,
-								lowerBadgeWidth: InternalComponents.LibraryComponents.Badges.getBadgeWidthForValue(this.props.badge),
-								children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.NavItem, {
-									to: {
-										pathname: BDFDB.DiscordConstants.Routes.CHANNEL(this.props.guild.id, this.props.selectedChannelId),
-										state: {
-											analyticsSource: {
-												page: BDFDB.DiscordConstants.AnalyticsPages.GUILD_CHANNEL,
-												section: BDFDB.DiscordConstants.AnalyticsSections.CHANNEL_LIST,
-												object: BDFDB.DiscordConstants.AnalyticsObjects.CHANNEL
-											}
+						return BDFDB.ReactUtils.createElement(GuildInner, Object.assign({}, this.props, {
+							useState: this.props.state,
+							state: this.state,
+							navItem: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.NavItem, {
+								to: {
+									pathname: BDFDB.DiscordConstants.Routes.CHANNEL(this.props.guild.id, this.props.selectedChannelId),
+									state: {
+										analyticsSource: {
+											page: BDFDB.DiscordConstants.AnalyticsPages.GUILD_CHANNEL,
+											section: BDFDB.DiscordConstants.AnalyticsSections.CHANNEL_LIST,
+											object: BDFDB.DiscordConstants.AnalyticsObjects.CHANNEL
 										}
-									},
-									name: this.props.guild.name,
-									onMouseEnter: this.handleMouseEnter.bind(this),
-									onMouseLeave: this.handleMouseLeave.bind(this),
-									onMouseDown: this.handleMouseDown.bind(this),
-									onMouseUp: this.handleMouseUp.bind(this),
-									onClick: this.handleClick.bind(this),
-									onContextMenu: this.handleContextMenu.bind(this),
-									icon: this.props.guild.getIconURL(this.state.hovered && this.props.animatable ? "gif" : "png"),
-									selected: this.props.selected || this.state.hovered
-								})
+									}
+								},
+								name: this.props.guild.name,
+								onMouseEnter: this.handleMouseEnter.bind(this),
+								onMouseLeave: this.handleMouseLeave.bind(this),
+								onMouseDown: this.handleMouseDown.bind(this),
+								onMouseUp: this.handleMouseUp.bind(this),
+								onClick: this.handleClick.bind(this),
+								onContextMenu: this.handleContextMenu.bind(this),
+								icon: this.props.guild.getIconURL(this.state.hovered && this.props.animatable ? "gif" : "png"),
+								selected: this.props.selected || this.state.hovered
 							})
-						});
-							
-						if (this.props.draggable && typeof this.props.connectDragSource == "function") guild = this.props.connectDragSource(guild);
-						
-						let children = [
-							this.props.list || this.props.pill ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.Pill, {
-								hovered: !isDraggedGuild && this.state.hovered,
-								selected: !isDraggedGuild && this.props.selected,
-								unread: !isDraggedGuild && this.props.unread,
-								className: BDFDB.disCN.guildpill
-							}) : null,
-							!this.props.tooltip ? guild : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-								tooltipConfig: Object.assign({type: "right"}, this.props.tooltipConfig, {guild: this.props.list && this.props.guild}),
-								children: guild
-							})
-						].filter(n => n);
-						return this.props.list ? BDFDB.ReactUtils.createElement("div", {
-							ref: null != this.props.setRef ? this.props.setRef : null,
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guildouter, BDFDB.disCN._bdguild, this.props.unread && BDFDB.disCN._bdguildunread, this.props.selected && BDFDB.disCN._bdguildselected, this.props.unread && BDFDB.disCN._bdguildunread, this.props.audio && BDFDB.disCN._bdguildaudio, this.props.video && BDFDB.disCN._bdguildvideo),
-							children: BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
-								children: children
-							})
-						}) : BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guild, this.props.className),
-							children: children
-						});
+						}));
 					}
 				};
 				InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.GuildComponents.Guild, {menu: true, tooltip: true, list: false, state: false, draggable: false, sorting: false});
@@ -7594,27 +7625,27 @@ module.exports = (_ => {
 				};
 				
 				const VideoInner = function (props) {
-						let ref = BDFDB.ReactUtils.useRef(null);
-						BDFDB.ReactUtils.useEffect(_ => {
-							if (ref.current) props.play ? ref.current.play() : ref.current.pause();
-						}, [props.play]);
-						return props.naturalWidth <= BDFDB.DiscordConstants.MAX_VIDEO_WIDTH && props.naturalHeight <= BDFDB.DiscordConstants.MAX_VIDEO_HEIGHT || props.naturalWidth <= BDFDB.DiscordConstants.MAX_VIDEO_HEIGHT && props.naturalHeight <= BDFDB.DiscordConstants.MAX_VIDEO_WIDTH ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.VideoForwardRef, {
-							ref: ref,
-							className: props.className,
-							poster: props.poster,
-							src: props.src,
-							width: props.width,
-							height: props.height,
-							muted: true,
-							loop: true,
-							autoPlay: props.play,
-							preload: "none"
-						}) : BDFDB.ReactUtils.createElement("img", {
-							alt: "",
-							src: props.poster,
-							width: props.width,
-							height: props.height
-						});
+					let ref = BDFDB.ReactUtils.useRef(null);
+					BDFDB.ReactUtils.useEffect(_ => {
+						if (ref.current) props.play ? ref.current.play() : ref.current.pause();
+					}, [props.play]);
+					return props.naturalWidth <= BDFDB.DiscordConstants.MAX_VIDEO_WIDTH && props.naturalHeight <= BDFDB.DiscordConstants.MAX_VIDEO_HEIGHT || props.naturalWidth <= BDFDB.DiscordConstants.MAX_VIDEO_HEIGHT && props.naturalHeight <= BDFDB.DiscordConstants.MAX_VIDEO_WIDTH ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.VideoForwardRef, {
+						ref: ref,
+						className: props.className,
+						poster: props.poster,
+						src: props.src,
+						width: props.width,
+						height: props.height,
+						muted: true,
+						loop: true,
+						autoPlay: props.play,
+						preload: "none"
+					}) : BDFDB.ReactUtils.createElement("img", {
+						alt: "",
+						src: props.poster,
+						width: props.width,
+						height: props.height
+					});
 				};
 				InternalComponents.LibraryComponents.Video = reactInitialized && class BDFDB_Video extends LibraryModules.React.Component {
 					render() {
