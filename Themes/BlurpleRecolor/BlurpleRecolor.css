@@ -1737,6 +1737,9 @@
 #app-mount .datePicker--XZbmJ .datePickerHint-3Q1Udw .hintValue-29ny8Z {
 	background-color: rgb(var(--accentcolor));
 }
+#app-mount .datePicker--XZbmJ .datePickerHint-3Q1Udw .hintValue-29ny8Z:hover {
+	background: var(--accentcolor-hover);
+}
 
 
 /* ~~~~		12.		GENERAL							~~~~ */

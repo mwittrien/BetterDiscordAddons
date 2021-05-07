@@ -3637,6 +3637,27 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background-color: var(--background-primary);
 	border-color: rgba(var(--backgroundfloating),.2);
 }
+#app-mount .datePicker--XZbmJ .react-datepicker__navigation {
+	background: transparent;
+	border-color: rgba(var(--textbrightest), .5);
+	top: 30px;
+}
+#app-mount .datePicker--XZbmJ .react-datepicker__navigation::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	-webkit-mask: url(https://discord.com/assets/7619529e87dad31fd2ae83d9b9583e49.svg) center/6px 12px no-repeat;
+	background-color: rgb(var(--textbrightest));
+}
+#app-mount .datePicker--XZbmJ .react-datepicker__navigation--previous {
+	left: 30px;
+}
+#app-mount .datePicker--XZbmJ .react-datepicker__navigation--next {
+	right: 30px;
+}
 #app-mount .calendarPicker-2yf6Ci .react-datepicker__current-month {
 	border-bottom-color: rgba(var(--backgroundfloating),.3);
 	color: var(--header-primary);

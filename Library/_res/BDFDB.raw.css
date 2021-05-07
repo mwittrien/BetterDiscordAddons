@@ -525,12 +525,12 @@ img:not([src]), img[src=""], img[src="null"] {
 	visibility: hidden;
 }
 [REPLACE_CLASS_sliderbubble],
-[REPLACE_CLASS_sliderbubble]:before {
+[REPLACE_CLASS_sliderbubble]::before {
 	position: absolute;
 	left: 50%;
 	pointer-events: none;
 }
-[REPLACE_CLASS_sliderbubble]:before {
+[REPLACE_CLASS_sliderbubble]::before {
 	border: 5px solid transparent;
 	border-top-color: var(--background-floating);
 	content: " ";
@@ -775,7 +775,7 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_settingstablecard] [REPLACE_CLASS_settingstablecardconfigs] {
 	margin: 0;
 }
-[REPLACE_CLASS_settingstablelist] [REPLACE_CLASS_checkboxcontainer]:before {
+[REPLACE_CLASS_settingstablelist] [REPLACE_CLASS_checkboxcontainer]::before {
 	display: none;
 }
 
@@ -1032,23 +1032,23 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-right: 12px;
 }
 
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutright][REPLACE_CLASS_popoutarrowalignmentmiddle]:before {
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutright][REPLACE_CLASS_popoutarrowalignmentmiddle]::before {
 	border-right-color: #2f3136;
 }
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutleft][REPLACE_CLASS_popoutarrowalignmentmiddle]:before {
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutleft][REPLACE_CLASS_popoutarrowalignmentmiddle]::before {
 	border-left-color: #2f3136;
 }
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutbottom][REPLACE_CLASS_popoutarrowalignmentmiddle]:before,
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutbottom][REPLACE_CLASS_popoutarrowalignmenttop]:before,
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutbottomleft][REPLACE_CLASS_popoutarrowalignmentmiddle]:before,
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutbottomleft][REPLACE_CLASS_popoutarrowalignmenttop]:before,
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutbottomright][REPLACE_CLASS_popoutarrowalignmentmiddle]:before,
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutbottomright][REPLACE_CLASS_popoutarrowalignmenttop]:before {
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutbottom][REPLACE_CLASS_popoutarrowalignmentmiddle]::before,
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutbottom][REPLACE_CLASS_popoutarrowalignmenttop]::before,
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutbottomleft][REPLACE_CLASS_popoutarrowalignmentmiddle]::before,
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutbottomleft][REPLACE_CLASS_popoutarrowalignmenttop]::before,
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutbottomright][REPLACE_CLASS_popoutarrowalignmentmiddle]::before,
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popoutbottomright][REPLACE_CLASS_popoutarrowalignmenttop]::before {
 	border-bottom-color: #2f3136;
 }
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popouttop]:after,
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popouttopleft]:after,
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popouttopright]:after {
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popouttop]::after,
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popouttopleft]::after,
+[REPLACE_CLASS_themedark] [REPLACE_CLASS_popoutwrapper][REPLACE_CLASS_popouttopright]::after {
 	border-top-color: #2f3136;
 }
 [REPLACE_CLASS_popoutthemedpopout] {
@@ -1239,13 +1239,13 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_colorpickerswatch][REPLACE_CLASS_colorpickerswatchcustom][style*="background"] {
 	border: none;
 }
-[REPLACE_CLASS_colorpickerswatch]:not([REPLACE_CLASS_colorpickerswatchdefault]):after {
+[REPLACE_CLASS_colorpickerswatch]:not([REPLACE_CLASS_colorpickerswatchdefault])::after {
 	border-radius: 3px;
 }
-[REPLACE_CLASS_colorpickerswatch][REPLACE_CLASS_colorpickerswatchcustom]:not([REPLACE_CLASS_colorpickerswatchdefault]):after {
+[REPLACE_CLASS_colorpickerswatch][REPLACE_CLASS_colorpickerswatchcustom]:not([REPLACE_CLASS_colorpickerswatchdefault])::after {
 	border-radius: 5px;
 }
-[REPLACE_CLASS_colorpickerswatch]:not([REPLACE_CLASS_colorpickerswatchnocolor]):not([REPLACE_CLASS_colorpickerswatchdefault]):not([REPLACE_CLASS_colorpickerswatchdisabled]):after {
+[REPLACE_CLASS_colorpickerswatch]:not([REPLACE_CLASS_colorpickerswatchnocolor]):not([REPLACE_CLASS_colorpickerswatchdefault]):not([REPLACE_CLASS_colorpickerswatchdisabled])::after {
 	content: "";
 	background: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect x="0" y="0" width="4" height="4" fill="black"></rect><rect x="0" y="4" width="4" height="4" fill="white"></rect><rect x="4" y="0" width="4" height="4" fill="white"></rect><rect x="4" y="4" width="4" height="4" fill="black"></rect></svg>') center repeat;
 	position: absolute;
@@ -1272,13 +1272,13 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-top: -3px !important;
 	border-radius: 3px !important;
 }
-[REPLACE_CLASS_themelight] [REPLACE_CLASS_colorpickersaturation] > div > div > div > div {
-	box-shadow: rgb(200, 200, 200) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.6) 0px 0px 1px 1px inset, rgba(0, 0, 0, 0.6) 0px 0px 1px 2px !important;
+[REPLACE_CLASS_colorpickersaturation] > div > div > div > div {
+	box-shadow: var(--header-primary) 0px 0px 0px 1.5px, var(--background-floating) 0px 0px 1px 1px inset, var(--background-floating) 0px 0px 1px 2px !important;
 }
-[REPLACE_CLASS_themelight] [REPLACE_CLASS_colorpickerhue] > div > div > div > div,
-[REPLACE_CLASS_themelight] [REPLACE_CLASS_colorpickeralpha] > div > div > div > div {
-	background: rgb(200, 200, 200) !important;
-	box-shadow: rgba(0, 0, 0, 1) 0px 0px 2px !important;
+[REPLACE_CLASS_colorpickerhue] > div > div > div > div,
+[REPLACE_CLASS_colorpickeralpha] > div > div > div > div {
+	background: var(--header-primary) !important;
+	box-shadow: var(--background-floating) 0px 0px 2px !important;
 }
 [REPLACE_CLASS_colorpickeralpha] > div > div,
 [REPLACE_CLASS_colorpickergradient] > div > div {
@@ -1286,7 +1286,7 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 [REPLACE_CLASS_colorpickeralpha] [REPLACE_CLASS_colorpickeralphacheckered],
 [REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcheckered],
-[REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor] > div:after {
+[REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor] > div::after {
 	background: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect x="0" y="0" width="4" height="4" fill="black"></rect><rect x="0" y="4" width="4" height="4" fill="white"></rect><rect x="4" y="0" width="4" height="4" fill="white"></rect><rect x="4" y="4" width="4" height="4" fill="black"></rect></svg>') center repeat;
 }
 [REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor] > div {
@@ -1298,7 +1298,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	transform: translateX(-5px);
 	transform-style: preserve-3d;
 }
-[REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor] > div:after {
+[REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor] > div::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -1309,7 +1309,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	border-radius: 3px;
 	transform: translateZ(-1px);
 }
-[REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor] > div:before {
+[REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor] > div::before {
 	content: "";
 	position: absolute;
 	border: 3px solid transparent;
@@ -1321,25 +1321,19 @@ img:not([src]), img[src=""], img[src="null"] {
 	left: -50%;
 	transform: translateX(5px);
 }
-[REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor][REPLACE_CLASS_colorpickergradientcursoredge] > div:before {
+[REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor][REPLACE_CLASS_colorpickergradientcursoredge] > div::before {
 	border-right-width: 0;
 	border-left-width: 5px;
 }
-[REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor][REPLACE_CLASS_colorpickergradientcursoredge] ~ [REPLACE_CLASS_colorpickergradientcursor][REPLACE_CLASS_colorpickergradientcursoredge] > div:before {
+[REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor][REPLACE_CLASS_colorpickergradientcursoredge] ~ [REPLACE_CLASS_colorpickergradientcursor][REPLACE_CLASS_colorpickergradientcursoredge] > div::before {
 	border-right-width: 5px;
 	border-left-width: 0;
 }
-[REPLACE_CLASS_themelight] [REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor][REPLACE_CLASS_colorpickergradientcursorselected] > div {
-	border-color: rgb(55, 55, 55);
+[REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor][REPLACE_CLASS_colorpickergradientcursorselected] > div {
+	border-color: var(--header-secondary);
 }
-[REPLACE_CLASS_themelight] [REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor][REPLACE_CLASS_colorpickergradientcursorselected] > div:before {
-	border-top-color: rgb(55, 55, 55);
-}
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor][REPLACE_CLASS_colorpickergradientcursorselected] > div {
-	border-color: rgb(200, 200, 200);
-}
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor][REPLACE_CLASS_colorpickergradientcursorselected] > div:before {
-	border-top-color: rgb(200, 200, 200);
+[REPLACE_CLASS_colorpickergradient] [REPLACE_CLASS_colorpickergradientcursor][REPLACE_CLASS_colorpickergradientcursorselected] > div::before {
+	border-top-color: var(--header-secondary);
 }
 [REPLACE_CLASS_colorpickergradientbutton] {
 	color: var(--interactive-normal);
