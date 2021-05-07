@@ -68,18 +68,12 @@ module.exports = (_ => {
 		var blackList = [], collapseList = [], hiddenCategory, lastGuildId, overrideTypes = [];
 		var hiddenChannelCache = {};
 		var accessModal;
-		var settings = {};
 		
-		const settingsMap = {
-			GUILD_TEXT: "showText",
-			GUILD_VOICE: "showVoice",
-			GUILD_ANNOUNCEMENT: "showAnnouncement",
-			GUILD_STORE: "showStore"
-		};
-		
-		const channelsAliases = {
+		const channelGroupMap = {
 			GUILD_TEXT: "SELECTABLE",
-			GUILD_VOICE: "VOCAL"
+			GUILD_VOICE: "VOCAL",
+			GUILD_ANNOUNCEMENT: "SELECTABLE",
+			GUILD_STORE: "SELECTABLE",
 		};
 
 		const typeNameMap = {
@@ -87,7 +81,8 @@ module.exports = (_ => {
 			GUILD_VOICE: "VOICE_CHANNEL",
 			GUILD_ANNOUNCEMENT: "NEWS_CHANNEL",
 			GUILD_STORE: "STORE_CHANNEL",
-			GUILD_CATEGORY: "CATEGORY"
+			GUILD_CATEGORY: "CATEGORY",
+			GUILD_STAGE_VOICE: "STAGE_CHANNEL"
 		};
 
 		const channelIcons = {
@@ -172,15 +167,18 @@ module.exports = (_ => {
 				overrideTypes = Object.keys(BDFDB.DiscordConstants.PermissionOverrideType);
 				 
 				this.defaults = {
-					settings: {
+					general: {
 						sortNative:				{value: true, 	description: "Sort hidden Channels in the native Order instead of an extra Category"},
-						showText:				{value: true, 	description: "Show hidden Text Channels"},
-						showVoice:				{value: true, 	description: "Show hidden Voice Channels"},
-						showAnnouncement:		{value: true, 	description: "Show hidden Announcement Channels"},
-						showStore:				{value: true, 	description: "Show hidden Store Channels"},
 						showVoiceUsers:			{value: true, 	description: "Show connected Users in hidden Voice Channels"},
 						alwaysCollapse:			{value: false, 	description: "Always collapse 'Hidden' Category after switching Servers"},
 						showForNormal:			{value: true,	description: "Add Access-Overview ContextMenu Entry for non-hidden Channels"}
+					},
+					channels: {
+						GUILD_TEXT:				{value: true},
+						GUILD_VOICE:			{value: true},
+						GUILD_ANNOUNCEMENT:		{value: true},
+						GUILD_STORE:			{value: true},
+						GUILD_STAGE_VOICE:		{value: true}
 					}
 				};
 			
@@ -221,7 +219,7 @@ module.exports = (_ => {
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseStore, "isCollapsed", {after: e => {
 					if (e.methodArguments[0] && e.methodArguments[0].endsWith("hidden")) {
-						if (settings.alwaysCollapse && e.methodArguments[0] != lastGuildId && !collapseList.includes(e.methodArguments[0])) {
+						if (this.settings.general.alwaysCollapse && e.methodArguments[0] != lastGuildId && !collapseList.includes(e.methodArguments[0])) {
 							collapseList.push(e.methodArguments[0]);
 							this.saveCollapseList(BDFDB.ArrayUtils.removeCopies(collapseList));
 						}
@@ -261,51 +259,65 @@ module.exports = (_ => {
 			}
 
 			getSettingsPanel (collapseStates = {}) {
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
+					collapseStates: collapseStates,
+					children: _ => {
+						let settingsItems = [];
+				
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Settings",
+							collapseStates: collapseStates,
+							children: Object.keys(this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["general", key],
+								label: this.defaults.general[key].description,
+								value: this.settings.general[key]
+							})).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+								title: "Show Channels:",
+								children: Object.keys(this.defaults.channels).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+									type: "Switch",
+									plugin: this,
+									keys: ["channels", key],
+									label: BDFDB.LanguageUtils.LanguageStrings[typeNameMap[key]],
+									value: this.settings.channels[key]
+								}))
+							}))
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Server Black List",
+							collapseStates: collapseStates,
+							children: [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsGuildList, {
+									className: BDFDB.disCN.marginbottom20,
+									disabled: blackList,
+									onClick: disabledGuilds => this.saveBlackList(disabledGuilds)
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+									type: "Button",
+									color: BDFDB.LibraryComponents.Button.Colors.GREEN,
+									label: "Enable for all Servers",
+									onClick: _ => this.batchSetGuilds(settingsPanel, collapseStates, true),
+									children: BDFDB.LanguageUtils.LanguageStrings.ENABLE
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+									type: "Button",
+									color: BDFDB.LibraryComponents.Button.Colors.PRIMARY,
+									label: "Disable for all Servers",
+									onClick: _ => this.batchSetGuilds(settingsPanel, collapseStates, false),
+									children: BDFDB.LanguageUtils.LanguageStrings.DISABLE
+								})
+							]
+						}));
+						
+						return settingsItems;
+					}
+				});
+			}
+			getSettingsPanel (collapseStates = {}) {
 				let settingsPanel, settingsItems = [];
-				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Settings",
-					collapseStates: collapseStates,
-					children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-						type: "Switch",
-						plugin: this,
-						keys: ["settings", key],
-						label: this.defaults.settings[key].description,
-						value: settings[key]
-					}))
-				}));
-				
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-					title: "Server Black List",
-					collapseStates: collapseStates,
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsGuildList, {
-							className: BDFDB.disCN.marginbottom20,
-							disabled: blackList,
-							onClick: disabledGuilds => {
-								this.saveBlackList(disabledGuilds);
-							}
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-							type: "Button",
-							color: BDFDB.LibraryComponents.Button.Colors.GREEN,
-							label: "Enable for all Servers",
-							onClick: _ => {
-								this.batchSetGuilds(settingsPanel, collapseStates, true);
-							},
-							children: BDFDB.LanguageUtils.LanguageStrings.ENABLE
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-							type: "Button",
-							color: BDFDB.LibraryComponents.Button.Colors.PRIMARY,
-							label: "Disable for all Servers",
-							onClick: _ => {
-								this.batchSetGuilds(settingsPanel, collapseStates, false);
-							},
-							children: BDFDB.LanguageUtils.LanguageStrings.DISABLE
-						})
-					]
-				}));
 				
 				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 			}
@@ -317,9 +329,7 @@ module.exports = (_ => {
 				}
 			}
 		
-			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
-				
+			forceUpdateAll () {				
 				hiddenChannelCache = {};
 
 				BDFDB.PatchUtils.forceAllUpdates(this);
@@ -333,7 +343,7 @@ module.exports = (_ => {
 						if (index > -1) children.splice(index, 1);
 					}
 					let isHidden = this.isChannelHidden(e.instance.props.channel.id);
-					if (isHidden || BDFDB.DataUtils.get(this, "settings", "showForNormal")) {
+					if (isHidden || this.settings.general.showForNormal) {
 						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mark-channel-read", group: true});
 						children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 							children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -389,7 +399,7 @@ module.exports = (_ => {
 						if (catId != "_categories") e.instance.props.categories[catId] = e.instance.props.categories[catId].filter(n => !this.isChannelHidden(n.channel.id));
 						for (let channelObj of e.instance.props.categories[catId]) if (channelObj.index > index) index = parseInt(channelObj.index);
 					}
-					if (!settings.sortNative) {
+					if (!this.settings.general.sortNative) {
 						hiddenCategory = new BDFDB.DiscordObjects.Channel({
 							guild_id: e.instance.props.guild.id,
 							id: hiddenId,
@@ -407,9 +417,9 @@ module.exports = (_ => {
 						});
 					}
 					else hiddenCategory = null;
-						
+					
 					for (let type in hiddenChannels) {
-						let channelType = channelsAliases[BDFDB.DiscordConstants.ChannelTypes[type]] || type;
+						let channelType = channelGroupMap[BDFDB.DiscordConstants.ChannelTypes[type]] || type;
 						if (!BDFDB.ArrayUtils.is(e.instance.props.channels[channelType])) e.instance.props.channels[channelType] = [];
 						for (let channel of hiddenChannels[type]) {
 							let hiddenChannel = new BDFDB.DiscordObjects.Channel(Object.assign({}, channel, {
@@ -473,7 +483,7 @@ module.exports = (_ => {
 			}
 		
 			processVoiceUsers (e) {
-				if (!settings.showVoiceUsers && this.isChannelHidden(e.instance.props.channel.id)) e.instance.props.voiceStates = [];
+				if (!this.settings.general.showVoiceUsers && this.isChannelHidden(e.instance.props.channel.id)) e.instance.props.voiceStates = [];
 			}
 			
 			isChannelHidden (channelId) {
@@ -493,7 +503,7 @@ module.exports = (_ => {
 					for (let type in BDFDB.DiscordConstants.ChannelTypes) hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
 					for (let channel_id in all) {
 						let channel = all[channel_id];
-						if (channel.guild_id == guild.id && channel.type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY && (settings[settingsMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]] || settings[settingsMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]] === undefined) && !BDFDB.DMUtils.isDMChannel(channel.id) && !BDFDB.UserUtils.can("VIEW_CHANNEL", BDFDB.UserUtils.me.id, channel.id)) hiddenChannels[channel.type].push(channel);
+						if (channel.guild_id == guild.id && channel.type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY && (this.settings.channels[BDFDB.DiscordConstants.ChannelTypes[channel.type]] || this.settings.channels[BDFDB.DiscordConstants.ChannelTypes[channel.type]] === undefined) && !BDFDB.DMUtils.isDMChannel(channel.id) && !BDFDB.UserUtils.can("VIEW_CHANNEL", BDFDB.UserUtils.me.id, channel.id)) hiddenChannels[channel.type].push(channel);
 					}
 				}
 				else hiddenChannels = hiddenChannelCache[guild.id].hidden;
