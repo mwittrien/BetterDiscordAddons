@@ -1229,9 +1229,18 @@ img:not([src]), img[src=""], img[src="null"] {
 	height: 30px;
 	width: 30px;
 }
-[REPLACE_CLASS_colorpickerswatches][REPLACE_CLASS_colorpickerswatchesdisabled] {
+[REPLACE_CLASS_colorpickerswatchesdisabled] {
 	cursor: no-drop;
 	filter: grayscale(70%) brightness(50%);
+}
+[REPLACE_CLASS_colorpickerswatch][REPLACE_CLASS_colorpickerswatchnocolor] {
+	border-color: var(--text-muted);
+}
+[REPLACE_CLASS_colorpickerswatch][style*="background: rgb(255, 255, 255)"] {
+	border-color: var(--header-primary) !important;
+}
+[REPLACE_CLASS_colorpickerswatch][REPLACE_CLASS_colorpickerswatchnocolor] [REPLACE_CLASS_colorpickerswatchdropperfg] {
+	border-color: var(--text-muted);
 }
 [REPLACE_CLASS_colorpickerswatch]:not([REPLACE_CLASS_colorpickerswatchnocolor]):not([REPLACE_CLASS_colorpickerswatchdefault]):not([REPLACE_CLASS_colorpickerswatchdisabled]) {
 	overflow: hidden;
