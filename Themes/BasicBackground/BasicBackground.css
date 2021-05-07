@@ -353,10 +353,6 @@ body::before {
 	background-color: rgba(var(--transparencycolor), .3);
 }
 
-.guildSeparator-33mFX6 {									/* guildseparator											*/
-	background-color: rgba(var(--textbrightest), .2);
-}
-
 .wrapper-3Njo_c {											/* folder				outerwrap							*/
 	margin-bottom: 8px;
 }
