@@ -2127,17 +2127,17 @@
 
 .bd-switch input:checked + .bd-switch-body {
 	--switch-color: rgba(var(--accentcolor), 0.8);
-	background-color: rgba(var(--accentcolor), 0.8);
+	background-color: rgba(var(--accentcolor), 0.8) !important;
 }
 .bd-switch input:active + .bd-switch-body {
 	--switch-color: rgba(var(--accentcolor));
 }
 .bd-switch input:checked:hover + .bd-switch-body {
-	background: var(--accentcolor-hover);
+	background: var(--accentcolor-hover) !important;
 }
 .bd-switch input:checked:active + .bd-switch-body {
 	--switch-color: rgb(var(--accentcolor));
-	background: var(--accentcolor-active);
+	background: var(--accentcolor-active) !important;
 }
 
 html .monaco-editor .find-widget .monaco-inputbox.synthetic-focus {
