@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.1
+ * @version 2.2.2
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.2.1",
+			"version": "2.2.2",
 			"description": "Allows you to download all Plugins from BD's Website within Discord"
 		},
 		"changeLog": {
 			"improved": {
 				"Thumbnail Conversion": "Moved Thumbnail Conversion to Card Component to reduce stress on BD Website"
+			},
+			"fixed": {
+				"Settings": "No longer get reset"
 			}
 		}
 	};
@@ -206,7 +209,7 @@ module.exports = (_ => {
 								title: "Show following Plugins",
 								children: Object.keys(_this.defaults.filters).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 									type: "Switch",
-									plugin: this,
+									plugin: _this,
 									keys: ["filters", key],
 									label: _this.defaults.filters[key].description,
 									value: _this.settings.filters[key],
@@ -218,7 +221,7 @@ module.exports = (_ => {
 							}),
 							Object.keys(_this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "Switch",
-								plugin: this,
+								plugin: _this,
 								keys: ["general", key],
 								label: _this.defaults.general[key].description,
 								note: key == "rnmStart" && !automaticLoading && "Automatic Loading has to be enabled",
