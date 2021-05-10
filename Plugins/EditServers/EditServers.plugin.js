@@ -2,7 +2,7 @@
  * @name EditServers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.0
+ * @version 2.3.1
  * @description Allows you to locally edit Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditServers",
 			"author": "DevilBro",
-			"version": "2.3.0",
+			"version": "2.3.1",
 			"description": "Allows you to locally edit Servers"
 		},
 		"changeLog": {
@@ -182,7 +182,7 @@ module.exports = (_ => {
 								this.forceUpdateAll();;
 							}),
 							children: BDFDB.LanguageUtils.LanguageStrings.RESET
-						}));.LanguageUtils.LanguageStrings.RESET
+						}));
 						
 						return settingsItems;
 					}
