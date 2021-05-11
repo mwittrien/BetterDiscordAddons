@@ -5,10 +5,10 @@
 	--accentcolor2: 255,115,250;
 	--linkcolor: 0,176,244;
 	
-	--accentcolor-hover: rgb(var(--accentcolor)) linear-gradient(0deg,rgba(255,255,255,.15),rgba(255,255,255,.15));
-	--accentcolor-active: rgb(var(--accentcolor)) linear-gradient(0deg,rgba(255,255,255,.3),rgba(255,255,255,.3));
-	--accentcolor2-hover: rgb(var(--accentcolor2)) linear-gradient(0deg,rgba(255,255,255,.15),rgba(255,255,255,.15));
-	--accentcolor2-active: rgb(var(--accentcolor2)) linear-gradient(0deg,rgba(255,255,255,.3),rgba(255,255,255,.3));
+	--accentcolor-hover: rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255,255,255,.15), rgba(255,255,255,.15));
+	--accentcolor-active: rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255,255,255,.3), rgba(255,255,255,.3));
+	--accentcolor2-hover: rgb(var(--accentcolor2)) linear-gradient(0deg, rgba(255,255,255,.15), rgba(255,255,255,.15));
+	--accentcolor2-active: rgb(var(--accentcolor2)) linear-gradient(0deg, rgba(255,255,255,.3), rgba(255,255,255,.3));
 	
 	--bdfdb-blurple: rgb(var(--accentcolor)) !important;
 	--bd-blue: rgb(var(--accentcolor)) !important;
@@ -20,9 +20,9 @@
 	--text-link: rgb(var(--linkcolor));
 	--info-help-background: rgba(var(--linkcolor),.1);
 	--info-help-foreground: rgb(var(--linkcolor));
+	--info-help-text: #fff;
 	--focus-primary: rgb(var(--linkcolor));
 	--control-brand-foreground: rgb(var(--accentcolor));
-	--radio-group-dot-foreground: rgb(var(--accentcolor)); /* REMOVE AFTER REBRAND */
 }
 .theme-light {
 	--logo-primary: rgb(var(--accentcolor));
@@ -1232,7 +1232,7 @@ html.oldBrand, html.newBrand {
 }
 .uploadModalIn-1z07Bv .error-kKl9o2 .icon-kyxXVr:not(.image-2yrs5j)::before,
 .uploadModalIn-1z07Bv .error-kKl9o2 .icon-kyxXVr:not(.image-2yrs5j)::after {
-	background: rgb(240, 71, 71);
+	background: #d83c3f;
 }
 .attachment-33OFj0 .icon-1kp3fr + *::before,
 .audioMetadata-3zOuGv > *:first-child::before,

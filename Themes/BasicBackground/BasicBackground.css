@@ -9,12 +9,16 @@
 	--guildchanneltransparency:		0.15;
 	--memberlisttransparency:		0.0;
 	
+	--font:							Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
+	--textshadow:					transparent;
+	
 	--accentcolor:					190,78,180;
 	--accentcolor2:					var(--accentcolor);
 	--linkcolor:					var(--accentcolor);
 	
-	--font:							Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
-	--textshadow:					transparent;
+	--successcolor: 				59,165,92;
+	--warningcolor: 				250,166,26;
+	--dangercolor: 					240,71,71;
 	
 	--textbrightest: 				255,255,255;
 	--textbrighter: 				222,222,222;
@@ -40,25 +44,42 @@
 }
 
 .theme-light, .theme-dark {
+	--text-positive: rgb(var(--successcolor));
+	--text-warning: rgb(var(--warningcolor));
+	--text-danger: rgb(var(--dangercolor));
+	--info-positive-background: rgba(var(--successcolor),.1);
+	--info-positive-foreground: rgb(var(--successcolor));
+	--info-positive-text: #fff;
+	--info-warning-background: rgba(var(--warningcolor),.1);
+	--info-warning-foreground: rgb(var(--warningcolor));
+	--info-warning-text: #fff;
+	--info-danger-background: rgba(var(--dangercolor),.1);
+	--info-danger-foreground: rgb(var(--dangercolor));
+	--info-danger-text: #fff;
+	--status-positive-background: rgb(var(--successcolor));
+	--status-positive-text: #fff;
+	--status-warning-background: rgb(var(--warningcolor));
+	--status-warning-text: #fff;
+	--status-danger-background: rgb(var(--dangercolor));
+	--status-danger-text: #fff;
+	--header-primary: rgb(var(--textbrightest));
+	--header-secondary: rgb(var(--textbright));
+	--text-normal: rgb(var(--textbrighter));
+	--text-muted: rgb(var(--textdarker));
+	--channels-default: rgb(var(--textdark));
+	--interactive-normal: rgb(var(--textbright));
+	--interactive-hover: rgb(var(--textbrighter));
+	--interactive-active: rgb(var(--textbrightest));
+	--interactive-muted: rgb(var(--textdarkest));
+	--logo-primary: rgb(var(--textbrightest));
 	--background-primary: rgba(var(--transparencycolor), .1);
 	--background-secondary: rgba(var(--transparencycolor), .2);
 	--background-secondary-alt: rgba(var(--transparencycolor), .3);
 	--background-tertiary: rgba(var(--transparencycolor), .4);
 	--background-floating: rgba(var(--transparencycolor), .5);
 	--background-modifier-accent: rgba(var(--textbrightest),.1);
-	--header-primary: rgb(var(--textbrightest));
-	--header-secondary: rgb(var(--textbright));
-	--text-normal: rgb(var(--textbrighter));
-	--text-muted: rgb(var(--textdarker));
-	--text-link: rgb(var(--linkcolor));
-	--channels-default: rgb(var(--textdark));
-	--interactive-normal: rgb(var(--textbright));
-	--interactive-hover: rgb(var(--textbrighter));
-	--interactive-active: rgb(var(--textbrightest));
-	--interactive-muted: rgb(var(--textdarkest));
 	--elevation-low: 0 1px 5px 0 rgba(var(--transparencycolor), .3);
 	--elevation-high: 0 2px 10px 0 rgba(var(--transparencycolor), .3);
-	--logo-primary: rgb(var(--textbrightest));
 }
 
 
@@ -346,7 +367,7 @@ body::before {
 
 .guildIconUnavailable-3IYARS,								/* guilderror			miniicon							*/
 .guildsError-g6NwOI {										/* guilderror			innerwrap							*/
-	background-color: rgba(240, 71, 71, .3);
+	background-color: rgba(var(--dangercolor)),.3);
 }
 
 .dragInner-Oq_toX {											/* dragplaceholder											*/
@@ -1460,10 +1481,10 @@ body::before {
 	background-color: rgba(var(--transparencycolor), .6);
 }
 .controlButton-2MhVEL.leaveButton-2YnTyt {
-	background-color: rgba(240, 71, 71, .5);
+	background-color: rgba(var(--dangercolor)),.5);
 }
 .controlButton-2MhVEL.leaveButton-2YnTyt:hover {
-	background-color: rgb(240, 71, 71);
+	background-color: rgb(var(--dangercolor));
 }
 .regionSelectPopout-p9-0_W {
 	width: 170px;
@@ -4103,7 +4124,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 .item-1tOPte.colorDanger-2qLCe1.focused-3afm-j,
 .item-1tOPte.colorDanger-2qLCe1:hover:not(.hideInteraction-1iHO1O) {
-	background-color: rgba(240, 71, 71, .2);
+	background-color: rgba(var(--dangercolor)),.2);
 }
 .item-1tOPte.colorBrand-ROmMP1.focused-3afm-j,
 .item-1tOPte.colorBrand-ROmMP1:hover:not(.hideInteraction-1iHO1O),
@@ -4121,7 +4142,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	color: rgb(var(--accentcolor));
 }
 #app-mount .item-1tOPte.colorDanger-2qLCe1 .checkbox-3s5GYZ {
-	color: #F04747;
+	color: rgb(var(--dangercolor));
 }
 #app-mount .item-1tOPte .check-1JyqgN {						/* contextmenu			checkmark 							*/
 	color: #fff;
@@ -5857,8 +5878,8 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background: var(--header-primary);
 }
 #app-mount .container-CpszHS.recording-1H2dS7 .button-34kXw5 {
-	color: #f04747;
-	background-color: rgba(240,71,71,.1);
+	color: rgb(var(--dangercolor));
+	background-color: rgba(var(--dangercolor)),.1);
 }
 
 .select-2TCrqx [class*="css-"][class*="-container"] {		/* select				container							*/
