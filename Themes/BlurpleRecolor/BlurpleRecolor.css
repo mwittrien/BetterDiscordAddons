@@ -2035,7 +2035,12 @@ html.oldBrand, html.newBrand {
 [style*="/assets/6debd47ed13483642cf09e832ed0bc1b.png"],
 [src*="/assets/6debd47ed13483642cf09e832ed0bc1b.png"] {		/* avatars				blue discord						*/
 	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/blurplediscordicon_details.svg) center/contain no-repeat !important;
+	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/discordavatar_old_details.svg) center/contain no-repeat !important;
+}
+[style*="/assets/1f0bfc0865d324c2587920a7d80c609b.png"],
+[src*="/assets/1f0bfc0865d324c2587920a7d80c609b.png"] {		/* avatars				blue discord						*/
+	object-position: -999999px -999999px;
+	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/discordavatar_details.svg) center/contain no-repeat !important;
 }
 
 /* ----		12.6.	SCROLLBARS						---- */
