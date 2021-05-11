@@ -1,7 +1,7 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/SupporterBadge.css);
 
 :root {
-	--bdfdb-blurple: var(--blurple, rgb(114, 137, 218));
+	--bdfdb-blurple: var(--brand-experiment, var(--blurple, rgb(114, 137, 218)));
 }
 
 img:not([src]), img[src=""], img[src="null"] {

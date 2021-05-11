@@ -5,10 +5,10 @@
 	--accentcolor2: 255,115,250;
 	--linkcolor: 0,176,244;
 	
-	--accentcolor-hover: rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15));
-	--accentcolor-active: rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
-	--accentcolor2-hover: rgb(var(--accentcolor2)) linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15));
-	--accentcolor2-active: rgb(var(--accentcolor2)) linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
+	--accentcolor-hover: rgb(var(--accentcolor)) linear-gradient(0deg,rgba(255,255,255,.15),rgba(255,255,255,.15));
+	--accentcolor-active: rgb(var(--accentcolor)) linear-gradient(0deg,rgba(255,255,255,.3),rgba(255,255,255,.3));
+	--accentcolor2-hover: rgb(var(--accentcolor2)) linear-gradient(0deg,rgba(255,255,255,.15),rgba(255,255,255,.15));
+	--accentcolor2-active: rgb(var(--accentcolor2)) linear-gradient(0deg,rgba(255,255,255,.3),rgba(255,255,255,.3));
 	
 	--bdfdb-blurple: rgb(var(--accentcolor)) !important;
 	--bd-blue: rgb(var(--accentcolor)) !important;
@@ -18,12 +18,61 @@
 }
 .theme-dark, .theme-light {
 	--text-link: rgb(var(--linkcolor));
-	--background-help-info: rgba(var(--linkcolor), 0.1);
+	--info-help-background: rgba(var(--linkcolor),.1);
+	--info-help-foreground: rgb(var(--linkcolor));
 	--focus-primary: rgb(var(--linkcolor));
-	--radio-group-dot-foreground: rgb(var(--accentcolor));
+	--control-brand-foreground: rgb(var(--accentcolor));
+	--radio-group-dot-foreground: rgb(var(--accentcolor)); /* REMOVE AFTER REBRAND */
 }
 .theme-light {
 	--logo-primary: rgb(var(--accentcolor));
+}
+html.oldBrand, html.newBrand {
+	--brand-experiment-100: rgb(var(--accentcolor));
+	--brand-experiment-130: rgb(var(--accentcolor));
+	--brand-experiment-160: rgb(var(--accentcolor));
+	--brand-experiment-200: rgb(var(--accentcolor));
+	--brand-experiment-230: rgb(var(--accentcolor));
+	--brand-experiment-260: rgb(var(--accentcolor));
+	--brand-experiment-300: rgb(var(--accentcolor));
+	--brand-experiment-330: rgb(var(--accentcolor));
+	--brand-experiment-360: rgb(var(--accentcolor));
+	--brand-experiment-400: rgb(var(--accentcolor));
+	--brand-experiment-430: rgb(var(--accentcolor));
+	--brand-experiment-460: rgb(var(--accentcolor));
+	--brand-experiment: rgb(var(--accentcolor));
+	--brand-experiment-500: rgb(var(--accentcolor));
+	--brand-experiment-530: rgb(var(--accentcolor));
+	--brand-experiment-560: rgb(var(--accentcolor));
+	--brand-experiment-600: rgb(var(--accentcolor));
+	--brand-experiment-630: rgb(var(--accentcolor));
+	--brand-experiment-660: rgb(var(--accentcolor));
+	--brand-experiment-700: rgb(var(--accentcolor));
+	--brand-experiment-730: rgb(var(--accentcolor));
+	--brand-experiment-760: rgb(var(--accentcolor));
+	--brand-experiment-800: rgb(var(--accentcolor));
+	--brand-experiment-830: rgb(var(--accentcolor));
+	--brand-experiment-860: rgb(var(--accentcolor));
+	--brand-experiment-900: rgb(var(--accentcolor));
+	--brand-experiment-05a: rgba(var(--accentcolor),.05);
+	--brand-experiment-10a: rgba(var(--accentcolor),.1);
+	--brand-experiment-15a: rgba(var(--accentcolor),.15);
+	--brand-experiment-20a: rgba(var(--accentcolor),.2);
+	--brand-experiment-25a: rgba(var(--accentcolor),.25);
+	--brand-experiment-30a: rgba(var(--accentcolor),.3);
+	--brand-experiment-35a: rgba(var(--accentcolor),.35);
+	--brand-experiment-40a: rgba(var(--accentcolor),.4);
+	--brand-experiment-45a: rgba(var(--accentcolor),.45);
+	--brand-experiment-50a: rgba(var(--accentcolor),.5);
+	--brand-experiment-55a: rgba(var(--accentcolor),.55);
+	--brand-experiment-60a: rgba(var(--accentcolor),.6);
+	--brand-experiment-65a: rgba(var(--accentcolor),.65);
+	--brand-experiment-70a: rgba(var(--accentcolor),.7);
+	--brand-experiment-75a: rgba(var(--accentcolor),.75);
+	--brand-experiment-80a: rgba(var(--accentcolor),.8);
+	--brand-experiment-85a: rgba(var(--accentcolor),.85);
+	--brand-experiment-90a: rgba(var(--accentcolor),.9);
+	--brand-experiment-95a: rgba(var(--accentcolor),.95)}
 }
 
 
@@ -625,15 +674,18 @@
 	background-color: rgb(var(--accentcolor)) !important;
 }
 .item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Nitro Server Boost-tab"],
+.serverBoostTabItem-2hFTIN[aria-selected=false],
 .item-PXvHYJ[style^="color: rgb(114, 137, 218)"][aria-controls="GUILD_PREMIUM-tab"],
 .item-PXvHYJ[style*=" color: rgb(114, 137, 218)"][aria-controls="GUILD_PREMIUM-tab"] {
 	color: rgb(var(--accentcolor2)) !important;
 }
 .item-PXvHYJ:hover[aria-controls="Nitro Server Boost-tab"],
+.serverBoostTabItem-2hFTIN[aria-selected=false]:hover,,
 .item-PXvHYJ[style*="background-color: rgba(114, 137, 218, 0.1)"][aria-controls="GUILD_PREMIUM-tab"] {
 	background-color: rgb(var(--accentcolor2), 0.1) !important;
 }
 .item-PXvHYJ.selected-3s45Ha[aria-controls="Nitro Server Boost-tab"],
+.serverBoostTabItem-2hFTIN[aria-selected=true],
 .item-PXvHYJ[style*="background-color: rgb(114, 137, 218)"][aria-controls="GUILD_PREMIUM-tab"] {
 	background-color: rgb(var(--accentcolor2)) !important;
 }
@@ -878,17 +930,20 @@
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_insight_accent.svg) center/cover no-repeat;
 }
 															/* discoverysettings	partner program						*/
-.banner-2AwsUs[src="/assets/b3d9ebeb2259945abe78c49206f5b62d.svg"] {
+.banner-2AwsUs[src="/assets/b3d9ebeb2259945abe78c49206f5b62d.svg"],
+.banner-2AwsUs[src="/assets/fd7c94580512371af3a5bb3bf25299e9.svg"] {
 	object-position: -999999px -999999px;
 	filter: grayscale(0.5);
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_partnerprogram_bg.svg) center/cover no-repeat;
 }
-.banner-2AwsUs[src="/assets/b3d9ebeb2259945abe78c49206f5b62d.svg"] + * {
+.banner-2AwsUs[src="/assets/b3d9ebeb2259945abe78c49206f5b62d.svg"] + *,
+.banner-2AwsUs[src="/assets/fd7c94580512371af3a5bb3bf25299e9.svg"] + * {
 	position: relative;
 	display: flex;
 	justify-content: center;
 }
-.banner-2AwsUs[src="/assets/b3d9ebeb2259945abe78c49206f5b62d.svg"] + *::after {
+.banner-2AwsUs[src="/assets/b3d9ebeb2259945abe78c49206f5b62d.svg"] + *::after,
+.banner-2AwsUs[src="/assets/fd7c94580512371af3a5bb3bf25299e9.svg"] + *::after {
 	content: "";
 	position: absolute;
 	top: -281px;
@@ -905,17 +960,23 @@
 
 															/* discoverysettings	requirements icon					*/
 .requirementsImage-tqIP2X[src="/assets/ec3ea47d6b85de83ab2c298ddecf7df2.svg"],
-.headerIcon-2S6VR5[src="/assets/8bfa6300dd6ce22829ffa093fb87da9f.svg"] {
+.requirementsImage-tqIP2X[src="/assets/bc7f9210390707aa76067bf85b8137e6.svg"],
+.headerIcon-2S6VR5[src="/assets/8bfa6300dd6ce22829ffa093fb87da9f.svg"],
+.headerIcon-2S6VR5[src="/assets/84c2ac411161e2270327766e6c44a4fe.svg"] {
 	object-position: -999999999px -999999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_requirements_bg.svg) center/cover no-repeat;
 }
 .requirementsImage-tqIP2X[src="/assets/ec3ea47d6b85de83ab2c298ddecf7df2.svg"] + *,
-.headerIcon-2S6VR5[src="/assets/8bfa6300dd6ce22829ffa093fb87da9f.svg"] + * {
+.requirementsImage-tqIP2X[src="/assets/bc7f9210390707aa76067bf85b8137e6.svg"] + *,
+.headerIcon-2S6VR5[src="/assets/8bfa6300dd6ce22829ffa093fb87da9f.svg"] + *,
+.headerIcon-2S6VR5[src="/assets/84c2ac411161e2270327766e6c44a4fe.svg"] + * {
 	position: relative;
 	height: 60px;
 }
 .requirementsImage-tqIP2X[src="/assets/ec3ea47d6b85de83ab2c298ddecf7df2.svg"] + *::after,
-.headerIcon-2S6VR5[src="/assets/8bfa6300dd6ce22829ffa093fb87da9f.svg"] + *::after {
+.requirementsImage-tqIP2X[src="/assets/bc7f9210390707aa76067bf85b8137e6.svg"] + *::after,
+.headerIcon-2S6VR5[src="/assets/8bfa6300dd6ce22829ffa093fb87da9f.svg"] + *::after,
+.headerIcon-2S6VR5[src="/assets/84c2ac411161e2270327766e6c44a4fe.svg"] + *::after {
 	content: "";
 	position: absolute;
 	left: -56px;
