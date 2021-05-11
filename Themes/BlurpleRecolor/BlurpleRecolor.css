@@ -28,13 +28,13 @@
 	--logo-primary: rgb(var(--accentcolor));
 }
 html.oldBrand, html.newBrand {
-	--brand-experiment-100: rgb(var(--accentcolor));
-	--brand-experiment-130: rgb(var(--accentcolor));
-	--brand-experiment-160: rgb(var(--accentcolor));
-	--brand-experiment-200: rgb(var(--accentcolor));
-	--brand-experiment-230: rgb(var(--accentcolor));
-	--brand-experiment-260: rgb(var(--accentcolor));
-	--brand-experiment-300: rgb(var(--accentcolor));
+	--brand-experiment-100: #fdfdfd;
+	--brand-experiment-130: #f2f2f2;
+	--brand-experiment-160: #ebebeb;
+	--brand-experiment-200: #e3e3e3;
+	--brand-experiment-230: #dadada;
+	--brand-experiment-260: #d1d1d1;
+	--brand-experiment-300: #c7c7c7;
 	--brand-experiment-330: rgb(var(--accentcolor));
 	--brand-experiment-360: rgb(var(--accentcolor));
 	--brand-experiment-400: rgb(var(--accentcolor));
@@ -47,13 +47,13 @@ html.oldBrand, html.newBrand {
 	--brand-experiment-600: rgb(var(--accentcolor));
 	--brand-experiment-630: rgb(var(--accentcolor));
 	--brand-experiment-660: rgb(var(--accentcolor));
-	--brand-experiment-700: rgb(var(--accentcolor));
-	--brand-experiment-730: rgb(var(--accentcolor));
-	--brand-experiment-760: rgb(var(--accentcolor));
-	--brand-experiment-800: rgb(var(--accentcolor));
-	--brand-experiment-830: rgb(var(--accentcolor));
-	--brand-experiment-860: rgb(var(--accentcolor));
-	--brand-experiment-900: rgb(var(--accentcolor));
+	--brand-experiment-700: #323232;
+	--brand-experiment-730: #2b2b2b;
+	--brand-experiment-760: #272727;
+	--brand-experiment-800: #222222;
+	--brand-experiment-830: #1a1a1a;
+	--brand-experiment-860: #111111;
+	--brand-experiment-900: #0b0b0b;
 	--brand-experiment-05a: rgba(var(--accentcolor),.05);
 	--brand-experiment-10a: rgba(var(--accentcolor),.1);
 	--brand-experiment-15a: rgba(var(--accentcolor),.15);
