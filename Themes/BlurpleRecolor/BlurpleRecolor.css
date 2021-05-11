@@ -1881,10 +1881,12 @@
 	transition: background-color .1s ease-out;
 }															/* switch				checked								*/
 .container-3auIfb[style*="background-color: rgb(67, 181, 129)"],
+.container-3auIfb[style*="background-color: rgb(59, 165, 92)"],
 .container-3auIfb[style*="background-color: rgb(114, 137, 218)"] {
 	background-color: rgba(var(--accentcolor), 0.8) !important;
 }
 .container-3auIfb[style*="background-color: rgb(67, 181, 129)"]:hover,
+.container-3auIfb[style*="background-color: rgb(59, 165, 92)"]:hover,
 .container-3auIfb[style*="background-color: rgb(114, 137, 218)"]:hover {
 	background: var(--accentcolor-hover) !important;
 }
@@ -1895,6 +1897,7 @@
 	fill: rgb(114, 118, 125) !important;
 }
 .container-3auIfb[style*="background-color: rgb(67, 181, 129)"] path[fill],
+.container-3auIfb[style*="background-color: rgb(59, 165, 92)"] path[fill],
 .container-3auIfb[style*="background-color: rgb(114, 137, 218)"] path[fill],
 .container-3auIfb:active path[fill] {
 	fill: rgb(var(--accentcolor)) !important;
