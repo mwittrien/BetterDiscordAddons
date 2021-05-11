@@ -611,13 +611,16 @@
 
 /* ~~~~		8.		USERSETTINGS					~~~~ */
 
+.premiumTabItem-1QTfBr[aria-selected=false],
 .item-PXvHYJ[style^="color: rgb(114, 137, 218)"],
 .item-PXvHYJ[style*=" color: rgb(114, 137, 218)"] {			/* settingsitems		item								*/
 	color: rgb(var(--accentcolor)) !important;
 }
+.premiumTabItem-1QTfBr[aria-selected=false]:hover,
 .item-PXvHYJ[style*="background-color: rgba(114, 137, 218, 0.1)"] {
 	background-color: rgb(var(--accentcolor), 0.1) !important;
 }
+.premiumTabItem-1QTfBr[aria-selected=true],
 .item-PXvHYJ[style*="background-color: rgb(114, 137, 218)"] {
 	background-color: rgb(var(--accentcolor)) !important;
 }
@@ -633,6 +636,9 @@
 .item-PXvHYJ.selected-3s45Ha[aria-controls="Nitro Server Boost-tab"],
 .item-PXvHYJ[style*="background-color: rgb(114, 137, 218)"][aria-controls="GUILD_PREMIUM-tab"] {
 	background-color: rgb(var(--accentcolor2)) !important;
+}
+.item-PXvHYJ .icon-Zc-uZZ {
+	fill: currentColor;
 }
 
 .dot-2s_oHI {												/* settingsitems		dot									*/
