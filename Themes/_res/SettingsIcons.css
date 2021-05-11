@@ -198,7 +198,8 @@
 .bd-server-search ~ .item-PXvHYJ::before {
 	display: none;
 }
-.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ .icon-Zc-uZZ {
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ .icon-Zc-uZZ,
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ .icon-3Povsy {
 	transform: scaleX(calc(1 - var(--usesettingsicons)));
 }
 

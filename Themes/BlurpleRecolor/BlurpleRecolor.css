@@ -689,7 +689,8 @@ html.oldBrand, html.newBrand {
 .item-PXvHYJ[style*="background-color: rgb(114, 137, 218)"][aria-controls="GUILD_PREMIUM-tab"] {
 	background-color: rgb(var(--accentcolor2)) !important;
 }
-.item-PXvHYJ .icon-Zc-uZZ {
+.item-PXvHYJ .icon-Zc-uZZ,
+.item-PXvHYJ .icon-3Povsy {
 	fill: currentColor;
 }
 
