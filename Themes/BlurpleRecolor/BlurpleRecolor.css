@@ -1707,65 +1707,59 @@ html.oldBrand, html.newBrand {
 .colorDefault-2K3EoJ:not(.focused-3afm-j)[id="user-settings-cog-Discord_Nitro"] {
 	color: rgb(var(--accentcolor));
 }
+.colorBrand-ROmMP1.focused-3afm-j,
+.colorDefault-2K3EoJ:not(.colorDanger-2qLCe1):not(.colorPremium-p4p7qO).focused-3afm-j {
+	background-color: rgb(var(--accentcolor));
+}
+.colorBrand-ROmMP1:not(.focused-3afm-j) .radioSelection-1HmrQS,
+.colorDefault-2K3EoJ:not(.colorDanger-2qLCe1):not(.colorPremium-p4p7qO):not(.focused-3afm-j) .radioSelection-1HmrQS {
+	color: rgb(var(--accentcolor));
+}
+.colorBrand-ROmMP1:not(.focused-3afm-j) .checkbox-3s5GYZ,
+.colorDefault-2K3EoJ:not(.colorDanger-2qLCe1):not(.colorPremium-p4p7qO):not(.focused-3afm-j) .checkbox-3s5GYZ {
+	color: rgb(var(--accentcolor));
+}
+.colorBrand-ROmMP1.focused-3afm-j .check-1JyqgN,
+.colorDefault-2K3EoJ.focused-3afm-j .check-1JyqgN {
+	color: rgb(var(--accentcolor));
+}
+
 .colorPremium-p4p7qO,										/* contextmenu			premium								*/
 .colorDefault-2K3EoJ:not(.focused-3afm-j)[id="user-settings-cog-Nitro_Server_Boost"],
 .colorDefault-2K3EoJ:not(.focused-3afm-j)[id="guild-context-guild-settings--GUILD_PREMIUM"] {
 	color: rgb(var(--accentcolor2));
 }
-.colorDefault-2K3EoJ.focused-3afm-j,
-.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O),
-.colorDefault-2K3EoJ:active:not(.hideInteraction-1iHO1O) {
-	background-color: rgb(var(--accentcolor));
-}
 .colorPremium-p4p7qO.focused-3afm-j,
-.colorPremium-p4p7qO:hover:not(.hideInteraction-1iHO1O),
-.colorPremium-p4p7qO:active:not(.hideInteraction-1iHO1O),
 .colorDefault-2K3EoJ.focused-3afm-j[id="user-settings-cog-Nitro_Server_Boost"],
-.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O)[id="user-settings-cog-Nitro_Server_Boost"],
-.colorDefault-2K3EoJ:active:not(.hideInteraction-1iHO1O)[id="user-settings-cog-Nitro_Server_Boost"],
-.colorDefault-2K3EoJ.focused-3afm-j[id="guild-context-guild-settings--GUILD_PREMIUM"],
-.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O)[id="guild-context-guild-settings--GUILD_PREMIUM"],
-.colorDefault-2K3EoJ:active:not(.hideInteraction-1iHO1O)[id="guild-context-guild-settings--GUILD_PREMIUM"] {
+.colorDefault-2K3EoJ.focused-3afm-j[id="guild-context-guild-settings--GUILD_PREMIUM"] {
 	background-color: rgb(var(--accentcolor2));
 }
-.colorDanger-2qLCe1.focused-3afm-j,
-.colorDanger-2qLCe1:hover:not(.hideInteraction-1iHO1O),
-.colorDanger-2qLCe1:active:not(.hideInteraction-1iHO1O) {
-	background-color: #F04747;
+.colorPremium-p4p7qO.focused-3afm-j {
+	background-color: rgb(var(--accentcolor2));
 }
-.colorDefault-2K3EoJ .radioSelection-1HmrQS {				/* contextmenu			radioselection						*/
-	color: rgb(var(--accentcolor));
-}
-.colorPremium-p4p7qO .radioSelection-1HmrQS {
+.colorPremium-p4p7qO:not(.focused-3afm-j) .radioSelection-1HmrQS {
 	color: rgb(var(--accentcolor2));
 }
-.colorDanger-2qLCe1 .radioSelection-1HmrQS {
-	color: #F04747;
-}
-.colorDefault-2K3EoJ .checkbox-3s5GYZ {						/* contextmenu			checkbox							*/
-	color: rgb(var(--accentcolor));
-}
-.colorPremium-p4p7qO .checkbox-3s5GYZ {
+.colorPremium-p4p7qO:not(.focused-3afm-j) .checkbox-3s5GYZ {
 	color: rgb(var(--accentcolor2));
 }
-.colorDanger-2qLCe1 .checkbox-3s5GYZ {
-	color: #F04747;
+.colorPremium-p4p7qO.focused-3afm-j .check-1JyqgN {
+	color: rgb(var(--accentcolor2));
 }
-.colorDefault-2K3EoJ.focused-3afm-j .check-1JyqgN,			/* contextmenu			checkmark							*/
-.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O) .check-1JyqgN,
-.colorDefault-2K3EoJ:active:not(.hideInteraction-1iHO1O) .check-1JyqgN {
-	color: rgb(var(--accentcolor));
+
+.colorDefault-2K3EoJ[id="status-picker-online"].focused-3afm-j {
+	background-color: rgb(59,165,92);
 }
-.colorPremium-p4p7qO.focused-3afm-j .check-1JyqgN,
-.colorPremium-p4p7qO:hover:not(.hideInteraction-1iHO1O) .check-1JyqgN,
-.colorPremium-p4p7qO:active:not(.hideInteraction-1iHO1O) .check-1JyqgN {
-	color: rgb(var(--accentcolor));
+.colorDefault-2K3EoJ[id="status-picker-idle"].focused-3afm-j {
+	background-color: rgb(250,166,26);
 }
-.colorDanger-2qLCe1.focused-3afm-j .check-1JyqgN,
-.colorDanger-2qLCe1:hover:not(.hideInteraction-1iHO1O) .check-1JyqgN,
-.colorDanger-2qLCe1:active:not(.hideInteraction-1iHO1O) .check-1JyqgN {
-	color: #F04747;
+.colorDefault-2K3EoJ[id="status-picker-dnd"].focused-3afm-j {
+	background-color: rgb(240,71,71);
 }
+.colorDefault-2K3EoJ[id="status-picker-invisible"].focused-3afm-j {
+	background-color: rgb(116,127,141);
+}
+
 .icon-LYJorE {												/* contextmenu			icon								*/
 	color: currentColor !important;
 }
@@ -1908,20 +1902,15 @@ html.oldBrand, html.newBrand {
 
 /* ----		12.3.	INPUTS							---- */
 
-.input-cIJ7To.focused-1mmYsC,								/* textinput			focused								*/
-.input-cIJ7To:focus {
-	border-color: rgb(var(--accentcolor));
-}
-.input-cIJ7To.error-2O5WFJ {
-	border-color: #f04747;
-}
-.input-cIJ7To.success-2-F980 {
-	border-color: #43b581;
+															/* textinput			focused								*/
+.input-cIJ7To:not(.error-2O5WFJ):not(.success-2-F980).focused-1mmYsC,
+.input-cIJ7To:not(.error-2O5WFJ):not(.success-2-F980):focus {
+	border-color: rgb(var(--linkcolor));
 }
 .focused-1mmYsC {
 	border-color: rgb(var(--accentcolor));
 }
-#app-mount .prefixInput-14nUik.focused-2QzoMt {
+#app-mount .prefixInput-14nUik:not(.error-6_-E9g).focused-2QzoMt {
 	border-color: rgb(var(--accentcolor));
 }
 															/* checkbox				checked 							*/
