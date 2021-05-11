@@ -1917,10 +1917,10 @@ body::before {
 }
 
 #app-mount .foreground-26ym5y {								/* sidebar				sideitemlink						*/
-	fill: var(--header-secondary);
+	background: var(--interactive-normal);
 }
 #app-mount .link-1IoFq-:hover .foreground-26ym5y {
-	fill: var(--header-primary);
+	background: var(--interactive-active);
 }
 
 .bd-social-link[title="BD" i] .bd-social-logo,

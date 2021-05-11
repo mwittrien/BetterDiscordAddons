@@ -2045,10 +2045,10 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 
 #app-mount .foreground-26ym5y {
-	fill: var(--text-muted);
+	background: var(--interactive-normal);
 }
 #app-mount .link-1IoFq-:hover .foreground-26ym5y {
-	fill: var(--header-primary);
+	background: var(--interactive-active);
 }
 
 .bd-social-link[title="BD" i] .bd-social-logo,
