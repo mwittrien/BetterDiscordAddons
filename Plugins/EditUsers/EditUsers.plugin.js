@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.1.9
+ * @version 4.2.0
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.1.9",
+			"version": "4.2.0",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
-			"added": {
-				"Do not overwrite Server Nicks": "Added options so local usernames never overwrite the server nicknames of users",
-				"Edited Users List": "Reset all option now shows the list of all edited users, click them to quick edit them"
+			"fixed": {
+				"New Mention Style": ""
 			}
 		}
 	};
@@ -785,25 +784,27 @@ module.exports = (_ => {
 					}
 				}
 				if (data.color1) {
-					let color1_0 = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "RGBA");
-					let color0_1 = mention.props.mentioned ? "transparent" : BDFDB.ColorUtils.setAlpha(color1_0, 0.1, "RGBA");
-					let color0_7 = mention.props.mentioned ? "transparent" : BDFDB.ColorUtils.setAlpha(color1_0, 0.7, "RGBA");
-					let white = mention.props.mentioned ? color1_0 : "#FFFFFF";
+					let mentioned = mention.props.mentioned;
+					let color = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "RGBA");
+					let color_200 = BDFDB.ColorUtils.change(color, 200);
+					let color_a30 = BDFDB.ColorUtils.setAlpha(color, 0.3, "RGBA");
 					mention.props.style = Object.assign({}, mention.props.style, {
-						background: color0_1,
-						color: color1_0
+						background: mentioned ? "transparent" : color_a30,
+						color: color_200
 					});
 					let onMouseEnter = mention.props.onMouseEnter || ( _ => {});
 					mention.props.onMouseEnter = event => {
 						onMouseEnter(event);
-						event.target.style.setProperty("background", color0_7, "important");
-						event.target.style.setProperty("color", white, "important");
+						mentioned = !!BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagementioned, event.target);
+						event.target.style.setProperty("background", mentioned ? "transparent" : color, "important");
+						event.target.style.setProperty("color", mentioned ? color_200 : "#fff", "important");
 					};
 					let onMouseLeave = mention.props.onMouseLeave || ( _ => {});
 					mention.props.onMouseLeave = event => {
 						onMouseLeave(event);
-						event.target.style.setProperty("background", color0_1, "important");
-						event.target.style.setProperty("color", color1_0, "important");
+						mentioned = !!BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagementioned, event.target);
+						event.target.style.setProperty("background", mentioned ? "transparent" : color_a30, "important");
+						event.target.style.setProperty("color", color_200, "important");
 					};
 				}
 			}
