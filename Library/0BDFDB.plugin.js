@@ -6013,6 +6013,9 @@ module.exports = (_ => {
 					render() {
 						if (!this.props.guild) return null;
 						
+						this.props.guildId = this.props.guild.id;
+						this.props.selectedChannelId = LibraryModules.LastChannelStore.getChannelId(this.props.guild.id);
+						
 						let currentVoiceChannel = LibraryModules.ChannelStore.getChannel(LibraryModules.CurrentVoiceUtils.getChannelId());
 						let hasVideo = currentVoiceChannel && LibraryModules.VoiceUtils.hasVideo(currentVoiceChannel);
 						
