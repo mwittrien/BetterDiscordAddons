@@ -28,6 +28,7 @@
 		"CallUtils": {"props": ["getCalls", "isCallActive"]},
 		"CategoryCollapseStore": {"props": ["getCollapsedCategories", "isCollapsed"]},
 		"CategoryCollapseUtils": {"props": ["categoryCollapse", "categoryCollapseAll"]},
+		"ChannelIconUtils": {"props": ["getChannelIconComponent", "getChannelIconTooltipText"]},
 		"ChannelUtils": {"props": ["selectChannel", "selectPrivateChannel"]},
 		"ChannelStore": {"props": ["getChannel", "getDMFromUserId"]},
 		"ColorUtils": {"props": ["hex2int", "hex2rgb"]},
