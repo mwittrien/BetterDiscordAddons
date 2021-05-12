@@ -7675,7 +7675,7 @@ module.exports = (_ => {
 					if (plugin && (plugin == libraryInstance || plugin.name && plugin.name && PluginStores.loaded[plugin.name] && PluginStores.loaded[plugin.name] == plugin)) {
 						let url = InternalBDFDB.getPluginURL(plugin);
 						let controls = [];
-						let footerControls = card.querySelector("." + BDFDB.disCN._repofooter.split(" ")[0] + " " + BDFDB.dotCN._repocontrols);
+						let footerControls = card.querySelector(BDFDB.dotCNS._repofooter + BDFDB.dotCN._repocontrols);
 						if (plugin.changeLog) controls.push(InternalBDFDB.createCustomControl({
 							tooltipText: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
 							svgName: InternalComponents.LibraryComponents.SvgIcon.Names.CHANGELOG,
