@@ -2,7 +2,7 @@
  * @name GoogleTranslateOption
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.0
+ * @version 2.2.1
  * @description Allows you to translate Messages and your outgoing Message within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.2.0",
+			"version": "2.2.1",
 			"description": "Allows you to translate Messages and your outgoing Message within Discord"
 		},
 		"changeLog": {
-			"fixed": {
-				"Embeds": "Fixed an Issue where translated embeds would be inject as text and not as an embed",
-				"Tag": "Fixed censored/blocked tag for new structure"
+			"added": {
+				"DeepL": "was added"
 			}
 		}
 	};
@@ -214,10 +213,10 @@ module.exports = (_ => {
 		
 		const googleLanguages = ["af","am","ar","az","be","bg","bn","bs","ca","ceb","co","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fr","fy","ga","gd","gl","gu","ha","haw","hi","hmn","hr","ht","hu","hy","id","ig","is","it","iw","ja","jw","ka","kk","km","kn","ko","ku","ky","la","lb","lo","lt","lv","mg","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","ny","or","pa","pl","ps","pt","ro","ru","rw","sd","si","sk","sl","sm","sn","so","sq","sr","st","su","sv","sw","ta","te","tg","th","tk","tl","tr","tt","ug","uk","ur","uz","vi","xh","yi","yo","zh-CN","zu"];
 		const translationEngines = {
-			googleapi: 					{name: "GoogleApi",			auto: true,	funcName: "googleApiTranslate",			languages: googleLanguages},
-			google: 					{name: "Google",			auto: true,	funcName: "googleTranslate",			languages: googleLanguages},
-			itranslate: 				{name: "iTranslate",		auto: true,	funcName: "iTranslateTranslate",		languages: [...new Set(["af","ar","az","be","bg","bn","bs","ca","ceb","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fil","fr","ga","gl","gu","ha","he","hi","hmn","hr","ht","hu","hy","id","ig","is","it","ja","jw","ka","kk","km","kn","ko","la","lo","lt","lv","mg","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","ny","pa","pl","pt-BR","pt-PT","ro","ru","si","sk","sl","so","sq","sr","st","su","sv","sw","ta","te","tg","th","tr","uk","ur","uz","vi","we","yi","yo","zh-CN","zh-TW","zu"].concat(googleLanguages))].sort()},
-			yandex: 					{name: "Yandex",			auto: true,	funcName: "yandexTranslate",			languages: ["af","am","ar","az","ba","be","bg","bn","bs","ca","ceb","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fr","ga","gd","gl","gu","he","hi","hr","ht","hu","hy","id","is","it","ja","jv","ka","kk","km","kn","ko","ky","la","lb","lo","lt","lv","mg","mhr","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","pa","pap","pl","pt","ro","ru","si","sk","sl","sq","sr","su","sv","sw","ta","te","tg","th","tl","tr","tt","udm","uk","ur","uz","vi","xh","yi","zh"]},
+			googleapi: 					{name: "Google",			auto: true,		funcName: "googleApiTranslate",			languages: googleLanguages},
+			deepl: 						{name: "DeepL",				auto: true,		funcName: "deepLTranslate",				languages: ["bg","cs","da","de","en","el","es","et","fi","fr","hu","it","ja","lt","lv","nl","pl","pt","ro","ru","sk","sl","sv","zh"]},
+			itranslate: 				{name: "iTranslate",		auto: true,		funcName: "iTranslateTranslate",		languages: [...new Set(["af","ar","az","be","bg","bn","bs","ca","ceb","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fil","fr","ga","gl","gu","ha","he","hi","hmn","hr","ht","hu","hy","id","ig","is","it","ja","jw","ka","kk","km","kn","ko","la","lo","lt","lv","mg","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","ny","pa","pl","pt-BR","pt-PT","ro","ru","si","sk","sl","so","sq","sr","st","su","sv","sw","ta","te","tg","th","tr","uk","ur","uz","vi","we","yi","yo","zh-CN","zh-TW","zu"].concat(googleLanguages))].sort()},
+			yandex: 					{name: "Yandex",			auto: true,		funcName: "yandexTranslate",			languages: ["af","am","ar","az","ba","be","bg","bn","bs","ca","ceb","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fr","ga","gd","gl","gu","he","hi","hr","ht","hu","hy","id","is","it","ja","jv","ka","kk","km","kn","ko","ky","la","lb","lo","lt","lv","mg","mhr","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","pa","pap","pl","pt","ro","ru","si","sk","sl","sq","sr","su","sv","sw","ta","te","tg","th","tl","tr","tt","udm","uk","ur","uz","vi","xh","yi","zh"]},
 			papago: 					{name: "Papago",			auto: false,	funcName: "papagoTranslate",			languages: ["en","es","fr","id","ja","ko","th","vi","zh-CN","zh-TW"]}
 		};
 		
@@ -717,44 +716,52 @@ module.exports = (_ => {
 				else finishTranslation();
 			}
 			
-			googleTranslate (data, callback) {
-				let googleTranslateWindow = BDFDB.WindowUtils.open(this, this.getGoogleTranslatePageURL(data.input.id, data.output.id, data.text), {
-					onLoad: _ => {
-						googleTranslateWindow.executeJavaScriptSafe(`
-							require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "GTO-translation", [
-								Array.from(document.querySelectorAll("[data-language-to-translate-into] span:not([class])")).map(n => n.innerText).join(""),
-								(document.querySelector("h2 ~ [lang]") || {}).lang
-							]);
-						`);
-					}
-				});
-				if (googleTranslateWindow) BDFDB.WindowUtils.addListener(this, "GTO-translation", (event, messageData) => {
-					BDFDB.WindowUtils.close(googleTranslateWindow);
-					BDFDB.WindowUtils.removeListener(this, "GTO-translation");
-					if (!data.specialCase && messageData[1] && languages[messageData[1]]) {
-						data.input.name = languages[messageData[1]].name;
-						data.input.ownlang = languages[messageData[1]].ownlang;
-					}
-					callback(messageData[0]);
-				});
-				else this.googleApiTranslate(data, callback);
-			}
-			
 			googleApiTranslate (data, callback) {
-				BDFDB.LibraryRequires.request(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${data.input.id}&tl=${data.output.id}&dt=t&dj=1&source=input&q=${encodeURIComponent(data.text)}`, (error, response, result) => {
-					if (!error && result && response.statusCode == 200) {
+				BDFDB.LibraryRequires.request(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${data.input.id}&tl=${data.output.id}&dt=t&dj=1&source=input&q=${encodeURIComponent(data.text)}`, (error, response, body) => {
+					if (!error && body && response.statusCode == 200) {
 						try {
-							result = JSON.parse(result);
-							if (!data.specialCase && result.src && result.src && languages[result.src]) {
-								data.input.name = languages[result.src].name;
-								data.input.ownlang = languages[result.src].ownlang;
+							body = JSON.parse(body);
+							if (!data.specialCase && body.src && body.src && languages[body.src]) {
+								data.input.name = languages[body.src].name;
+								data.input.ownlang = languages[body.src].ownlang;
 							}
-							callback(result.sentences.map(n => n && n.trans).filter(n => n).join(""));
+							callback(body.sentences.map(n => n && n.trans).filter(n => n).join(""));
 						}
 						catch (err) {callback("");}
 					}
 					else {
-						if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Request Limit per Hour is reached.`, {
+						if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Request Limit per Hour reached.`, {
+							type: "danger",
+							position: "center"
+						});
+						else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server might be down.`, {
+							type: "danger",
+							position: "center"
+						});
+						callback("");
+					}
+				});
+			}
+			
+			deepLTranslate (data, callback) {
+				BDFDB.LibraryRequires.request(`https://api-free.deepl.com/v2/translate?auth_key=75cc2f40-fdae-14cd-7242-6a384e2abb9c:fx&text=${encodeURIComponent(data.text)}${data.input.id == "auto" ? "" : `&source_lang=${data.input.id}`}&target_lang=${data.output.id}`, (error, response, body) => {
+					if (!error && body && response.statusCode == 200) {
+						try {
+							body = JSON.parse(body);
+							if (!data.specialCase && body.translations[0] && body.translations[0].detected_source_language && languages[body.translations[0].detected_source_language.toLowerCase()]) {
+								data.input.name = languages[body.translations[0].detected_source_language.toLowerCase()].name;
+								data.input.ownlang = languages[body.translations[0].detected_source_language.toLowerCase()].ownlang;
+							}
+							callback(body.translations.map(n => n && n.text).filter(n => n).join(""));
+						}
+						catch (err) {callback("");}
+					}
+					else {
+						if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Request Limit reached.`, {
+							type: "danger",
+							position: "center"
+						});
+						else if (response.statusCode == 403) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. API-Key outdated.`, {
 							type: "danger",
 							position: "center"
 						});
@@ -769,8 +776,7 @@ module.exports = (_ => {
 			
 			iTranslateTranslate (data, callback) {
 				let translate = _ => {
-					BDFDB.LibraryRequires.request({
-						method: "POST",
+					BDFDB.LibraryRequires.request.post({
 						url: "https://web-api.itranslateapp.com/v3/texts/translate",
 						headers: {
 							"API-KEY": data.engine.APIkey
@@ -784,20 +790,28 @@ module.exports = (_ => {
 								dialect: data.output.id
 							}
 						})
-					}, (error, response, result) => {
+					}, (error, response, body) => {
 						if (!error && response && response.statusCode == 200) {
 							try {
-								result = JSON.parse(result);
-								if (!data.specialCase && result.source && result.source.dialect && languages[result.source.dialect]) {
-									data.input.name = languages[result.source.dialect].name;
-									data.input.ownlang = languages[result.source.dialect].ownlang;
+								body = JSON.parse(body);
+								if (!data.specialCase && body.source && body.source.dialect && languages[body.source.dialect]) {
+									data.input.name = languages[body.source.dialect].name;
+									data.input.ownlang = languages[body.source.dialect].ownlang;
 								}
-								callback(result.target.text);
+								callback(body.target.text);
 							}
 							catch (err) {callback("");}
 						}
 						else {
-							BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server is down or API-key outdated.`, {
+							if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Request Limit reached.`, {
+								type: "danger",
+								position: "center"
+							});
+							else if (response.statusCode == 403) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. API-Key outdated.`, {
+								type: "danger",
+								position: "center"
+							});
+							else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server might be down.`, {
 								type: "danger",
 								position: "center"
 							});
@@ -806,9 +820,9 @@ module.exports = (_ => {
 					});
 				};
 				if (data.engine.APIkey) translate();
-				else BDFDB.LibraryRequires.request("https://www.itranslate.com/js/webapp/main.js", {gzip: true}, (error, response, result) => {
-					if (!error && result) {
-						let APIkey = /var API_KEY = "(.+)"/.exec(result);
+				else BDFDB.LibraryRequires.request("https://www.itranslate.com/js/webapp/main.js", {gzip: true}, (error, response, body) => {
+					if (!error && body) {
+						let APIkey = /var API_KEY = "(.+)"/.exec(body);
 						if (APIkey) {
 							data.engine.APIkey = APIkey[1];
 							translate();
@@ -820,11 +834,11 @@ module.exports = (_ => {
 			}
 			
 			yandexTranslate (data, callback) {
-				BDFDB.LibraryRequires.request(`https://translate.yandex.net/api/v1.5/tr/translate?key=trnsl.1.1.20191206T223907Z.52bd512eca953a5b.1ec123ce4dcab3ae859f312d27cdc8609ab280de&text=${encodeURIComponent(data.text)}&lang=${data.specialCase || data.input.id == "auto" ? data.output.id : (data.input.id + "-" + data.output.id)}&options=1`, (error, response, result) => {
-					if (!error && result && response.statusCode == 200) {
-						result = BDFDB.DOMUtils.create(result);
-						let translation = result.querySelector("text");
-						let detected = result.querySelector("detected");
+				BDFDB.LibraryRequires.request(`https://translate.yandex.net/api/v1.5/tr/translate?key=trnsl.1.1.20191206T223907Z.52bd512eca953a5b.1ec123ce4dcab3ae859f312d27cdc8609ab280de&text=${encodeURIComponent(data.text)}&lang=${data.specialCase || data.input.id == "auto" ? data.output.id : (data.input.id + "-" + data.output.id)}&options=1`, (error, response, body) => {
+					if (!error && body && response.statusCode == 200) {
+						body = BDFDB.DOMUtils.create(body);
+						let translation = body.querySelector("text");
+						let detected = body.querySelector("detected");
 						if (translation && detected) {
 							let detectedLang = detected.getAttribute("lang");
 							if (!data.specialCase && detectedLang && languages[detectedLang]) {
@@ -835,15 +849,15 @@ module.exports = (_ => {
 						}
 						else callback("");
 					}
-					if (result && result.indexOf('code="408"') > -1) {
-						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Monthly rate limit reached.`, {
+					if (body && body.indexOf('code="408"') > -1) {
+						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Monthly Request Limit reached.`, {
 							type: "danger",
 							position: "center"
 						});
 						callback("");
 					}
 					else {
-						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server is down or API-key outdated.`, {
+						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server down or API-Key outdated.`, {
 							type: "danger",
 							position: "center"
 						});
@@ -864,11 +878,11 @@ module.exports = (_ => {
 						"X-Naver-Client-Id": "kUNGxtAmTJQFbaFehdjk",
 						"X-Naver-Client-Secret": "zC70k3VhpM"
 					}
-				}, (error, response, result) => {
-					if (!error && result && response.statusCode == 200) {
+				}, (error, response, body) => {
+					if (!error && body && response.statusCode == 200) {
 						try {
-							let message = (JSON.parse(result) || {}).message;
-							if (message && message.result && message.result.translatedText) callback(message.result.translatedText);
+							let message = (JSON.parse(body) || {}).message;
+							if (message && message.body && message.body.translatedText) callback(message.body.translatedText);
 							else callback("");
 						}
 						catch (err) {callback("");}
