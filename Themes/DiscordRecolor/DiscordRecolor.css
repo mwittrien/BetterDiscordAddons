@@ -63,8 +63,9 @@
 	--background-modifier-active: rgba(var(--backgroundaccent),.4);
 	--background-modifier-selected: rgba(var(--backgroundaccent),.6);
 	--background-modifier-accent: rgba(var(--textdark),.1);
-	--background-mentioned: rgba(var(--warningcolor),.05);
-	--background-mentioned-hover: rgba(var(--warningcolor),.08);
+	--background-mentioned: rgba(var(--mentioncolor, --warningcolor),.05);
+	--background-mentioned-hover: rgba(var(--mentioncolor, --warningcolor),.08);
+	--background-mentioned-accent: rgb(var(--mentioncolor, --warningcolor));
 	--background-message-hover: rgba(var(--backgroundfloating),.15);
 	--scrollbar-thin-thumb: rgb(var(--backgroundtertiary));
 	--scrollbar-thin-track: transparent;
@@ -214,10 +215,10 @@ svg [fill="#4F545C"] {
 }
 
 ::selection {
-	background: rgb(var(--warningcolor));
+	background: rgb(var(--mentioncolor, --warningcolor));
 }
 .highlight {
-	background: rgba(var(--warningcolor),.3);
+	background: rgba(var(--mentioncolor, --warningcolor),.3);
 }
 
 #app-mount .elevationLow-2lY09M, #app-mount .elevationLow-126AxN, .lightElevationLow-3_Ybxi, .darkElevationLow-DABD7i {
@@ -1014,6 +1015,10 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .message-2qRu38 {
 	background-color: var(--background-primary);
 	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary),.6),0 2px 10px 0 rgba(0,0,0,.2);
+}
+
+#app-mount .mentioned-xhSam7::before {
+	background-color: rgb(var(--mentioncolor, --warningcolor));
 }
 
 #app-mount .ephemeralMessage-1fEWtQ,
@@ -4064,7 +4069,7 @@ html .monaco-editor .selected-text {
 	background-color: var(--background-tertiary);
 }
 html .monaco-editor .focused .selected-text {
-	background-color: rgb(var(--warningcolor));
+	background-color: rgb(var(--mentioncolor, --warningcolor));
 }
 
 html .monaco-editor.rename-box {
@@ -4184,7 +4189,7 @@ html .monaco-editor .reference-zone-widget .ref-tree .monaco-list:focus .monaco-
     color: var(--header-primary) !important;
 }
 html .monaco-editor .reference-zone-widget .ref-tree .referenceMatch .highlight {
-	background: rgb(var(--warningcolor));
+	background: rgb(var(--mentioncolor, --warningcolor));
 }
 html .codicon-close,
 html .codicon-remove-close,
