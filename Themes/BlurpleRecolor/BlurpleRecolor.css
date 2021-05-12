@@ -326,7 +326,7 @@ html.oldBrand, html.newBrand {
 .interactive:hover {
 	background-color: rgb(var(--accentcolor));
 }
-#app-mount .mentioned-xhSam7 .mention.interactive:hover {
+.mentioned-xhSam7 .mention.interactive:hover {
 	color: rgb(var(--accentcolor));
 }
 
