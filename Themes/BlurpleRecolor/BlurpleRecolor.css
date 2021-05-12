@@ -1576,10 +1576,10 @@ html.oldBrand, html.newBrand {
 .content-s2SEQO a {											/* modal				link								*/
 	color: var(--text-link);
 }
-.improved-1NJK-y {											/* modal				improved category					*/
+#app-mount .improved-1NJK-y {											/* modal				improved category					*/
 	color: rgb(var(--accentcolor));
 }
-.improved-1NJK-y::after {
+#app-mount .improved-1NJK-y::after {
 	background-color: rgb(var(--accentcolor));
 }
 
