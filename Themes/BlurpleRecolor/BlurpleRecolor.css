@@ -109,6 +109,7 @@ html.oldBrand, html.newBrand {
 		13.	SCREENSHAREMODAL
 		14.	PHONEVERIFICATIONMODAL
 		15.	CUSTOMSTATUSMODAL
+		16.	DISCOVERYENTRYMODAL
 	11.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -1656,6 +1657,16 @@ html.oldBrand, html.newBrand {
 	pointer-events: none;
 	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/customstatus_header_accent.svg) center/contain no-repeat;
+}
+
+/* ----		10.16.	DISCOVERYENTRYMODAL				---- */
+
+.overviewSidebar-auQZeh {
+	background: rgb(255, 255, 255) linear-gradient(rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.66));
+	text-shadow: 1px 1px var(--textshadow);
+}
+.selected-3AsYnC .stepIndex-3rtpcw {
+	color: rgb(var(--accentcolor));
 }
 
 

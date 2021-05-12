@@ -133,6 +133,7 @@
 		17.	SCREENSHAREMODAL
 		18.	PHONEVERIFICATIONMODAL
 		19.	NOTIFICATIONSMODAL
+		20.	DISCOVERYENTRYMODAL
 	14.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -999,6 +1000,23 @@ body::before {
 
 .reaction-1hd86g {											/* message				reaction							*/
 	background-color: rgba(var(--transparencycolor), .3);
+	border: none;
+}
+.reaction-1hd86g:hover {
+	background-color: rgba(var(--transparencycolor), .4);
+}
+.reaction-1hd86g.reactionMe-wv5HKu {
+	background-color: rgba(var(--accentcolor), .8);
+}
+.reaction-1hd86g.reactionMe-wv5HKu:hover {
+	background-color: rgb(var(--accentcolor));
+}
+.reaction-1hd86g.reactionMe-wv5HKu .reactionCount-2mvXRV {
+	color: #FFF;
+	text-shadow: 1px 1px var(--textshadow);
+}
+.reaction-1hd86g:hover {
+	background-color: rgba(var(--transparencycolor), .4);
 }
 
 .wrapper-2aW0bm {											/* message				buttons								*/
@@ -3984,6 +4002,21 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 #app-mount .overridePlaceholder-14_rPI {
 	border: 1px dashed var(--background-floating);
+}
+
+/* ----		13.20.	DISCOVERYENTRYMODAL				---- */
+
+.checkboxWrapper-SkhIWG.row-3QHy4I {
+	background-color: rgba(var(--transparencycolor),.2);
+}
+.checkboxWrapper-SkhIWG.row-3QHy4I:hover:not(.checked-3_4uQ9) {
+	background-color: rgba(var(--transparencycolor),.4);
+}
+.checkboxWrapper-SkhIWG.row-3QHy4I.checked-3_4uQ9 {
+	background-color: rgb(var(--accentcolor));
+}
+.checkboxWrapper-SkhIWG.row-3QHy4I.checked-3_4uQ9 .colorStandard-2KCXvj {
+	color: var(--header-primary);
 }
 
 
