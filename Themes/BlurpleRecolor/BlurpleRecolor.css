@@ -134,8 +134,6 @@ html.oldBrand, html.newBrand {
 		3.	READALLNOTIFICATIONSBUTTON
 		4.	SERVERSEARCH
 		5.	CHANNELTABS
-	16.	THEMESUPPORT
-		1.	THEMEDEVBADGE
 */
 
 
@@ -2427,17 +2425,4 @@ html .powercord-updater .debug-info b {
 
 .channelTabs-unreadBadge:not(.channelTabs-noUnread) {
 	background-color: rgb(var(--accentcolor)) !important;
-}
-
-
-/* ~~~~		16.		THEMESUPPORT					~~~~ */
-
-/* ----		16.1.	THEMEDEVBADGE					---- */
-
-#app-mount .dev-A7f2Rx.hasBadge-4rT8_u .badge-7R_W3s {
-	background: rgb(var(--accentcolor)) !important;
-}
-#app-mount .topSectionPlaying-1J5E4n .dev-A7f2Rx.hasBadge-4rT8_u .badge-7R_W3s,
-#app-mount .headerPlaying-j0WQBV .dev-A7f2Rx.hasBadge-4rT8_u .badge-7R_W3s {
-	background: rgb(var(--accentcolor)) !important;
 }
