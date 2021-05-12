@@ -1132,7 +1132,8 @@ html.oldBrand, html.newBrand {
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildcreate_createown_bg.svg) center/contain no-repeat;
 }
 
-.uploadIcon-2IFzZU [fill="#7289da" i] {						/* create guild			upload icon							*/
+.uploadIcon-2IFzZU [fill="#7289da" i],
+.uploadIcon-2IFzZU [fill="#5865f2" i] {						/* create guild			upload icon							*/
 	fill: rgb(var(--accentcolor));
 }
 
