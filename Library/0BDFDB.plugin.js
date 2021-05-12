@@ -5623,21 +5623,25 @@ module.exports = (_ => {
 							animation: InternalComponents.LibraryComponents.PopoutContainer.Animation.SCALE,
 							position: InternalComponents.LibraryComponents.PopoutContainer.Positions.TOP,
 							align: InternalComponents.LibraryComponents.PopoutContainer.Align.RIGHT,
-							renderPopout: _ => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-								align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
-								children: [
-									props.name && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsLabel, {
-										label: props.name
-									}),
-									BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextInput, {
-										className: BDFDB.disCN.dateinputfield,
-										placeholder: props.string,
-										value: props.string,
-										onChange: typeof props.onChange == "function" ? props.onChange : null
-									}),
-									this.renderInfoButton(props.tooltipText)
-								].filter(n => n)
-							}),
+							onClose: instance => BDFDB.DOMUtils.removeClass(instance.domElementRef.current, BDFDB.disCN.dateinputbuttonselected),
+							renderPopout: _ => {
+								BDFDB.DOMUtils.addClass(instance.domElementRef.current, BDFDB.disCN.dateinputbuttonselected);
+								return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+									align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
+									children: [
+										props.name && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsLabel, {
+											label: props.name
+										}),
+										BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextInput, {
+											className: BDFDB.disCN.dateinputfield,
+											placeholder: props.string,
+											value: props.string,
+											onChange: typeof props.onChange == "function" ? props.onChange : null
+										}),
+										this.renderInfoButton(props.tooltipText)
+									].filter(n => n)
+								})
+							},
 							children: props.name ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 								text: props.name,
 								children: button

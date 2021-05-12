@@ -883,6 +883,10 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_dateinputbutton] {
 	margin-left: 8px;
 }
+[REPLACE_CLASS_dateinputbuttonselected] [REPLACE_CLASS_svgicon],
+[REPLACE_CLASS_dateinputbuttonselected] [REPLACE_CLASS_svgicon]:hover {
+	color: var(--interactive-active);
+}
 
 [REPLACE_CLASS_inputnumberwrapper] {
 	position: relative;
