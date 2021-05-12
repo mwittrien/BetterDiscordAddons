@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.8
+ * @version 2.3.0
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.2.8",
+			"version": "2.3.0",
 			"description": "Allows you to configure your own Aliases/Commands"
 		},
 		"changeLog": {
-			"fixed": {
-				"Crash Tenor/Giphy": "Fixed an Issue that caused Discord to crash when clciking a gif with /tenor or /giphy"
+			"improved": {
+				"Case Equalization": "Equalizes the case for case insensitive non-regex Aliases (Thats becomes That's not that's)"
 			}
 		}
 	};
@@ -488,13 +488,13 @@ module.exports = (_ => {
 						result = new RegExp(regString, `${config.case ? "" : "i"}${config.exact ? "" : "g"}`).exec(tempString1);
 						if (result) {
 							replaced = true;
-							let replace = config.file ? "" : BDFDB.StringUtils.insertNRST(config.replace);
-							if (result.length > 1) for (let i = 1; i < result.length; i++) replace = replace.replace(new RegExp("\\\\" + i + "|\\$" + i, "g"), result[i]);
-							tempString2 += tempString1.slice(0, result.index + result[0].length).replace(result[0], replace);
+							let replacement = config.file ? "" : BDFDB.StringUtils.insertNRST(config.replace);
+							if (result.length > 1) for (let i = 1; i < result.length; i++) replacement = replacement.replace(new RegExp("\\\\" + i + "|\\$" + i, "g"), result[i]);
+							tempString2 += tempString1.slice(0, result.index + result[0].length).replace(result[0], !config.regex && !config.case ? BDFDB.StringUtils.equalCase(result[0], replacement) : replacement);
 							tempString1 = tempString1.slice(result.index + result[0].length);
 							if (config.file && typeof config.filedata == "string") {
-								let filedata = JSON.parse(config.filedata);
-								files.push(new File([Uint8Array.from(atob(filedata.data), c => c.charCodeAt(0))], filedata.name, {type: filedata.type}));
+								let fileData = JSON.parse(config.filedata);
+								files.push(new File([Uint8Array.from(atob(fileData.data), c => c.charCodeAt(0))], fileData.name, {type: fileData.type}));
 							}
 							if (config.regex && regString.indexOf("^") == 0) result = null;
 						}
