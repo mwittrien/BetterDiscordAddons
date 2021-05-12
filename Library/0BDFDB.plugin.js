@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.0
+ * @version 1.6.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -20,7 +20,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.6.0",
+			"version": "1.6.1",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -3941,6 +3941,11 @@ module.exports = (_ => {
 					match = BDFDB.StringUtils.regEscape(match);
 					let exec = (new RegExp(any ? `([\\n\\r\\s]+${match})|(^${match})` : `([\\n\\r\\s]+${match}[\\n\\r\\s]+)|([\\n\\r\\s]+${match}$)|(^${match}[\\n\\r\\s]+)|(^${match}$)`, "i")).exec(string);
 					return exec && typeof exec[0] == "string" && exec[0].replace(/[\n\r\s]/g, "") || "";
+				};
+				BDFDB.StringUtils.equalCase = function (match, string) {
+					if (typeof match != "string" || typeof string != "string") return "";
+					let first = match.charAt(0);
+					return first != first.toUpperCase() ? (string.charAt(0).toUpperCase() + string.slice(1)) : first != first.toLowerCase() ? (string.charAt(0).toLowerCase() + string.slice(1)) : string;
 				};
 				BDFDB.StringUtils.extractSelection = function (original, selection) {
 					if (typeof original != "string") return "";
