@@ -3945,7 +3945,7 @@ module.exports = (_ => {
 				BDFDB.StringUtils.equalCase = function (match, string) {
 					if (typeof match != "string" || typeof string != "string") return "";
 					let first = match.charAt(0);
-					return first != first.toUpperCase() ? (string.charAt(0).toUpperCase() + string.slice(1)) : first != first.toLowerCase() ? (string.charAt(0).toLowerCase() + string.slice(1)) : string;
+					return first != first.toUpperCase() ? (string.charAt(0).toLowerCase() + string.slice(1)) : first != first.toLowerCase() ? (string.charAt(0).toUpperCase() + string.slice(1)) : string;
 				};
 				BDFDB.StringUtils.extractSelection = function (original, selection) {
 					if (typeof original != "string") return "";
