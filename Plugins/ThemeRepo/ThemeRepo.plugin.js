@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.2
+ * @version 2.2.3
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,15 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
-			"version": "2.2.2",
+			"version": "2.2.3",
 			"description": "Allows you to download all Themes from BD's Website within Discord"
 		},
 		"changeLog": {
-			"improved": {
-				"Thumbnail Conversion": "Moved Thumbnail Conversion to Card Component to reduce stress on BD Website"
-			},
-			"fixed": {
-				"Settings": "No longer get reset"
+			"progress": {
+				"Changed Api": "Preparing Plugin for API Changes"
 			}
 		}
 	};
@@ -104,18 +101,18 @@ module.exports = (_ => {
 			}
 		};
 		const reverseSorts = [
-			"DOWNLOADS", "LIKES", "FAV", "NEW"
+			"RELEASEDATE", "DOWNLOADS", "LIKES", "FAV"
 		];
 		const sortKeys = {
 			NAME:			"Name",
-			AUTHOR:			"Author",
+			AUTHORNAME:		"Author",
 			VERSION:		"Version",
 			DESCRIPTION:	"Description",
+			RELEASEDATE:	"Release Date",
 			STATE:			"Update State",
 			DOWNLOADS:		"Downloads",
 			LIKES:			"Likes",
-			FAV:			"Favorites",
-			NEW:			"New Themes"
+			FAV:			"Favorites"
 		};
 		const orderKeys = {
 			ASC:			"ascending",
@@ -142,7 +139,7 @@ module.exports = (_ => {
 					const installedTheme = _this.getInstalledTheme(theme);
 					const state = installedTheme ? (theme.version && BDFDB.NumberUtils.compareVersions(theme.version, _this.getString(installedTheme.version)) ? themeStates.OUTDATED : themeStates.INSTALLED) : themeStates.DOWNLOADABLE;
 					return Object.assign(theme, {
-						search: [theme.name, theme.version, theme.author, theme.description, theme.tags].flat(10).filter(n => typeof n == "string").join(" ").toUpperCase(),
+						search: [theme.name, theme.version, theme.authorname, theme.description, theme.tags].flat(10).filter(n => typeof n == "string").join(" ").toUpperCase(),
 						description: theme.description || "No Description found",
 						fav: favorites.includes(theme.id) && 1,
 						new: state == themeStates.DOWNLOADABLE && !cachedThemes.includes(theme.id) && 1,
@@ -157,10 +154,9 @@ module.exports = (_ => {
 					themes = themes.filter(theme => theme.search.indexOf(usedSearchString) > -1);
 				}
 				
-				const sortKey = !this.props.sortKey || this.props.sortKey == "NEW" && !themes.some(theme => theme.new) ? Object.keys(sortKeys)[0] : this.props.sortKey;
-				BDFDB.ArrayUtils.keySort(themes, sortKey.toLowerCase());
+				BDFDB.ArrayUtils.keySort(themes, this.props.sortKey.toLowerCase());
 				if (this.props.orderKey == "DESC") themes.reverse();
-				if (reverseSorts.includes(sortKey)) themes.reverse();
+				if (reverseSorts.includes(this.props.sortKey)) themes.reverse();
 				return themes;
 			}
 			openPreview() {
@@ -523,7 +519,7 @@ module.exports = (_ => {
 													mode: childMode,
 													filter: childType == "file" && "image"
 												},
-												label: varName[0].toUpperCase() + varName.slice(1),
+												label: varName.split("-").map(BDFDB.LibraryModules.StringUtils.upperCaseFirstChar).join(" "),
 												note: varDescription && varDescription.indexOf("*") == 0 ? varDescription.slice(1) : varDescription,
 												basis: "70%",
 												value: oldValue,
@@ -731,7 +727,10 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.discoverycardiconwrapper,
-									children: BDFDB.ReactUtils.createElement("div", {
+									children: this.props.data.author && this.props.data.author.discord_avatar_hash && this.props.data.author.discord_snowflake ? BDFDB.ReactUtils.createElement("img", {
+										className: BDFDB.disCN.discoverycardicon,
+										src: `https://cdn.discordapp.com/avatars/${this.props.data.author.discord_snowflake}/${this.props.data.author.discord_avatar_hash}.webp?size=128`
+									}) : BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN.discoverycardicon,
 										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 											nativeClass: true,
@@ -793,7 +792,7 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.discoverycardauthor,
-									children: `by ${this.props.data.author}`
+									children: `by ${this.props.data.authorname}`
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Scrollers.Thin, {
 									className: BDFDB.disCN.discoverycarddescription,
@@ -978,7 +977,7 @@ module.exports = (_ => {
 											label: sortKeys[this.props.sortKey],
 											value: this.props.sortKey
 										},
-										options: Object.keys(sortKeys).filter(n => n != "NEW" || grabbedThemes.some(t => !cachedThemes.includes(t.id))).map(key => ({
+										options: Object.keys(sortKeys).map(key => ({
 											label: sortKeys[key],
 											value: key
 										})),
@@ -1243,7 +1242,7 @@ module.exports = (_ => {
 				
 				const checkTheme = _ => {
 					if (checksRunning > 20) return;
-					else if (grabbedThemes.every(t => t.loaded || !t.latestSourceUrl) || !this.started || !loading.is) {
+					else if (grabbedThemes.every(t => t.loaded || (!t.latestSourceUrl && !t.latest_source_url)) || !this.started || !loading.is) {
 						if (!callbackCalled) {
 							callbackCalled = true;
 							if (!this.started) return BDFDB.TimeUtils.clear(loading.timeout);
@@ -1283,7 +1282,7 @@ module.exports = (_ => {
 										contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
 										close: true,
 										onClick: _ => {
-											forcedSort = "NEW";
+											forcedSort = "RELEASEDATE";
 											forcedOrder = "ASC";
 											BDFDB.LibraryModules.UserSettingsUtils.open("themerepo");
 										}
@@ -1313,15 +1312,21 @@ module.exports = (_ => {
 					else if (checkIndex > grabbedThemes.length) return;
 					
 					const theme = grabbedThemes[checkIndex++];
-					if (!theme || !theme.latestSourceUrl) checkTheme();
+					if (!theme || (!theme.latestSourceUrl && !theme.latest_source_url)) checkTheme();
 					else {
 						checksRunning++;
+						theme.releasedate = new Date(theme.releaseDate || theme.release_date || 0).getTime();
+						theme.latestSourceUrl = theme.latestSourceUrl || theme.latest_source_url;
 						theme.rawSourceUrl = theme.latestSourceUrl.replace("https://github.com/", "https://raw.githubusercontent.com/").replace(/\/blob\/(.{32,})/i, "/$1");
+						theme.thumbnailUrl = theme.thumbnailUrl || theme.thumbnail_url;
 						theme.thumbnailUrl = theme.thumbnailUrl ? (theme.thumbnailUrl.startsWith("https://") ? theme.thumbnailUrl : `https://betterdiscord.app${theme.thumbnailUrl}`) : "";
+						delete theme.release_date;
+						delete theme.latest_source_url;
+						delete theme.thumbnail_url;
 						BDFDB.LibraryRequires.request(theme.rawSourceUrl, (error, response, body) => {
 							if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
 								theme.name = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar((/@name\s+([^\s^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || theme.name || "");
-								theme.author = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || theme.author;
+								theme.authorname = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || theme.author.display_name || theme.author;
 								const version = (/@version\s+(.+)|\/\/\**META.*["']version["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1];
 								if (version) {
 									theme.version = version;
@@ -1410,12 +1415,12 @@ module.exports = (_ => {
 			}
 			
 			getInstalledTheme (theme) {
-				if (!theme || typeof theme.author != "string") return;
+				if (!theme || typeof theme.authoName != "string") return;
 				const iTheme = BDFDB.BDUtils.getTheme(theme.name, false, true);
-				if (iTheme && theme.author.toUpperCase() == this.getString(iTheme.author).toUpperCase()) return iTheme;
+				if (iTheme && theme.authorname.toUpperCase() == this.getString(iTheme.author).toUpperCase()) return iTheme;
 				else if (theme.rawSourceUrl && window.BdApi && BdApi.Themes && typeof BdApi.Themes.getAll == "function") {
 					const filename = theme.rawSourceUrl.split("/").pop();
-					for (let t of BdApi.Themes.getAll()) if (t.filename == filename && theme.author.toUpperCase() == this.getString(t.author).toUpperCase()) return t;
+					for (let t of BdApi.Themes.getAll()) if (t.filename == filename && theme.authorname.toUpperCase() == this.getString(t.author).toUpperCase()) return t;
 				}
 			}
 
