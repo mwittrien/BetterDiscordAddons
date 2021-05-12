@@ -2,7 +2,7 @@
  * @name GoogleTranslateOption
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.1
+ * @version 2.2.2
  * @description Allows you to translate Messages and your outgoing Message within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.2.1",
+			"version": "2.2.2",
 			"description": "Allows you to translate Messages and your outgoing Message within Discord"
 		},
 		"changeLog": {
 			"added": {
-				"DeepL": "was added"
+				"DeepL": "was added",
+				"Backup": "You can now add a backup translator, it will be used if the select language is not supported by the main translator or if the main translator errors out (rate limit, server down)"
 			}
 		}
 	};
@@ -72,8 +73,6 @@ module.exports = (_ => {
 		const translateIcon = translateIconGeneral.replace(`<extra/>`, ``).replace(`<mask/>`, ``).replace(` mask="url(#translateIconMask)"`, ``);
 		const translateIconUntranslate = translateIconGeneral.replace(`<extra/>`, `<path fill="none" stroke="#f04747" stroke-width="2" d="m 14.702359,14.702442 8.596228,8.596148 m 0,-8.597139 -8.59722,8.596147 z"/>`).replace(`<mask/>`, translateIconMask);
 		
-		var settingsModal;
-		
 		const TranslateButtonComponent = class TranslateButton extends BdApi.React.Component {
 			render() {
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ChannelTextAreaButton, {
@@ -86,49 +85,14 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.forceUpdate(this);
 						
 						BDFDB.ModalUtils.open(_this, {
-							size: "MEDIUM",
+							size: "LARGE",
 							header: BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
 							subHeader: "",
-							onOpen: instance => {
-								settingsModal = instance;
-							},
 							onClose: _ => {
-								settingsModal = null;
 								this.props.isActive = false;
 								BDFDB.ReactUtils.forceUpdate(this);
 							},
-							children: [
-								BDFDB.ArrayUtils.is(_this.settings.exceptions.wordStart) && _this.settings.exceptions.wordStart.length && [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-										className: BDFDB.disCN.marginbottom8,
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
-											label: `Words starting with ${_this.settings.exceptions.wordStart.map(n => '"' + n + '"').join(", ")} will be ignored`
-										})
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-										className: BDFDB.disCN.marginbottom8
-									})
-								],
-								_this.createSelects(true),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-									type: "Switch",
-									plugin: _this,
-									keys: ["general", "sendOriginalMessage"],
-									label: _this.defaults.general.sendOriginalMessage.description,
-									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-									value: _this.settings.general.sendOriginalMessage
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-									type: "Switch",
-									label: "Translate your Messages before sending",
-									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-									value: translationEnabled,
-									onChange: value => {
-										translationEnabled = value;
-										BDFDB.ReactUtils.forceUpdate(this);
-									}
-								})
-							].flat(10).filter(n => n)
+							children: BDFDB.ReactUtils.createElement(TranslateSettingsComponent, {})
 						});
 					},
 					onContextMenu: _ => {
@@ -139,67 +103,138 @@ module.exports = (_ => {
 			}
 		};
 		
-		const selectInstances = {};
-		const TranslationSelectionComponent = class TranslationSelection extends BdApi.React.Component {
+		const TranslateSettingsComponent = class TranslateSettings extends BdApi.React.Component {
+			filterLanguages(isOutput, place) {
+				return BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(isOutput ? BDFDB.ObjectUtils.filter(languages, lang => !lang.auto) : languages, (lang, id) => ({
+					value: id,
+					label: _this.getLanguageName(lang),
+					backup: this.isOnlyBackup(lang)
+				}))).filter(isOutput && this.isOnlyBackup(languages[_this.getLanguageChoice("input", place)]) ? (n => n.backup) : (n => n));
+			}
+			isOnlyBackup(lang) {
+				return lang.auto && !translationEngines[_this.settings.engines.translator].auto || !lang.auto && !lang.special && !translationEngines[_this.settings.engines.translator].languages.includes(lang.id);
+			}
 			render() {
-				const direction = _this.defaults.choices[this.props.id].direction;
-				const place = _this.defaults.choices[this.props.id].place;
-				const isOutput = direction == "output"
-				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-					title: _this.defaults.choices[this.props.id].description,
-					titleChildren: isOutput ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-						look: BDFDB.LibraryComponents.Button.Looks.BLANK,
-						size: BDFDB.LibraryComponents.Button.Sizes.NONE,
-						onClick: _ => {
-							let input = _this.getLanguageChoice("input", place);
-							let output = _this.getLanguageChoice("output", place);
-							input = input == "auto" ? "en" : input;
-							
-							_this.settings.choices["input" + place] = output;
-							_this.settings.choices["output" + place] = input;
-							BDFDB.DataUtils.save(_this.settings.choices, _this, "choices");
-							
-							for (let key in selectInstances) if (selectInstances[key] && selectInstances[key].place == place) {
-								selectInstances[key].instance.props.value = selectInstances[key].direction == "input" ? output : input;
-								BDFDB.ReactUtils.forceUpdate(selectInstances[key].instance);
-							}
-							
-							_this.setLanguages();
-						},
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-							className: BDFDB.disCN._googletranslateoptionreversebutton,
-							iconSVG: `<svg width="21" height="21" fill="currentColor"><path d="M 0, 10.515 c 0, 2.892, 1.183, 5.521, 3.155, 7.361 L 0, 21.031 h 7.887 V 13.144 l -2.892, 2.892 C 3.549, 14.722, 2.629, 12.75, 2.629, 10.515 c 0 -3.418, 2.235 -6.309, 5.258 -7.492 v -2.629 C 3.418, 1.577, 0, 5.652, 0, 10.515 z M 21.031, 0 H 13.144 v 7.887 l 2.892 -2.892 C 17.482, 6.309, 18.402, 8.281, 18.402, 10.515 c 0, 3.418 -2.235, 6.309 -5.258, 7.492 V 20.768 c 4.469 -1.183, 7.887 -5.258, 7.887 -10.121 c 0 -2.892 -1.183 -5.521 -3.155 -7.361 L 21.031, 0 z"/></svg>`
+				return [
+					BDFDB.ArrayUtils.is(_this.settings.exceptions.wordStart) && _this.settings.exceptions.wordStart.length && [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+							className: BDFDB.disCN.marginbottom8,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
+								label: `Words starting with ${_this.settings.exceptions.wordStart.map(n => '"' + n + '"').join(", ")} will be ignored`
+							})
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+							className: BDFDB.disCN.marginbottom8
 						})
-					}) : null,
-					className: BDFDB.disCN.marginbottom8,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
-						ref: instance => {if (instance) selectInstances[this.props.id] = {instance, direction, place};},
-						value: _this.getLanguageChoice(this.props.id),
-						options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(isOutput ? BDFDB.ObjectUtils.filter(languages, lang => lang.id != "auto") : languages, (lang, id) => ({value: id, label: _this.getLanguageName(lang)}))),
-						optionRenderer: lang => languages[lang.value] ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-							align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-									grow: 1,
-									children: lang.label
-								}),
-								this.props.addFavButton ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
-									isFavorite: languages[lang.value].fav == 0,
-									onClick: value => {
-										if (value) favorites[lang.value] = true;
-										else delete favorites[lang.value];
-										BDFDB.DataUtils.save(favorites, _this, "favorites");
+					],
+					Object.keys(_this.defaults.choices).map(key => {
+						const isOutput = _this.defaults.choices[key].direction == "output";
+						const place = _this.defaults.choices[key].place;
+						
+						return [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: _this.defaults.choices[key].description,
+								titleChildren: isOutput ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+									look: BDFDB.LibraryComponents.Button.Looks.BLANK,
+									size: BDFDB.LibraryComponents.Button.Sizes.NONE,
+									onClick: _ => {
+										let input = _this.getLanguageChoice("input", place);
+										let output = _this.getLanguageChoice("output", place);
+										input = input == "auto" ? "en" : input;
+										
+										_this.settings.choices["input" + place] = output;
+										_this.settings.choices["output" + place] = input;
+										BDFDB.DataUtils.save(_this.settings.choices, _this, "choices");
+										
 										_this.setLanguages();
+										
+										BDFDB.ReactUtils.forceUpdate(this);
+									},
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										className: BDFDB.disCN._googletranslateoptionreversebutton,
+										iconSVG: `<svg width="21" height="21" fill="currentColor"><path d="M 0, 10.515 c 0, 2.892, 1.183, 5.521, 3.155, 7.361 L 0, 21.031 h 7.887 V 13.144 l -2.892, 2.892 C 3.549, 14.722, 2.629, 12.75, 2.629, 10.515 c 0 -3.418, 2.235 -6.309, 5.258 -7.492 v -2.629 C 3.418, 1.577, 0, 5.652, 0, 10.515 z M 21.031, 0 H 13.144 v 7.887 l 2.892 -2.892 C 17.482, 6.309, 18.402, 8.281, 18.402, 10.515 c 0, 3.418 -2.235, 6.309 -5.258, 7.492 V 20.768 c 4.469 -1.183, 7.887 -5.258, 7.887 -10.121 c 0 -2.892 -1.183 -5.521 -3.155 -7.361 L 21.031, 0 z"/></svg>`
+									})
+								}) : null,
+								className: BDFDB.disCN.marginbottom8,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
+									value: _this.getLanguageChoice(key),
+									options: this.filterLanguages(isOutput, place),
+									optionRenderer: lang => languages[lang.value] ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+										children: [
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+												grow: 1,
+												children: lang.label
+											}),
+											lang.backup && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+												text: "Will use Backup Translator",
+												tooltipConfig: {
+													color: "red"
+												},
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+													nativeClass: true,
+													width: 20,
+													height: 20,
+													color: BDFDB.DiscordConstants.Colors.STATUS_RED,
+													name: BDFDB.LibraryComponents.SvgIcon.Names.WARNING
+												})
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
+												isFavorite: languages[lang.value].fav == 0,
+												onClick: value => {
+													if (value) favorites[lang.value] = true;
+													else delete favorites[lang.value];
+													BDFDB.DataUtils.save(favorites, _this, "favorites");
+													_this.setLanguages();
+												}
+											})
+										]
+									}) : null,
+									onChange: value => {
+										_this.settings.choices[key] = value;
+										BDFDB.DataUtils.save(_this.settings.choices, _this, "choices");
 									}
-								}) : null
-							]
-						}) : null,
+								})
+							}),
+							isOutput && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								className: BDFDB.disCN.marginbottom8
+							})
+						];
+					}),
+					Object.keys(_this.defaults.engines).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						title: _this.defaults.engines[key].description,
+						className: BDFDB.disCN.marginbottom8,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
+							value: _this.settings.engines[key],
+							options: (key == "backup" ? ["----"] : []).concat(Object.keys(translationEngines)).filter(key == "backup" ? (n => n != _this.settings.engines.translator) : (n => n)).map(engineKey => ({value: engineKey, label: translationEngines[engineKey] ? translationEngines[engineKey].name : "----"})),
+							maxVisibleItems: 3,
+							onChange: value => {
+								_this.settings.engines[key] = value;
+								BDFDB.DataUtils.save(_this.settings.engines, _this, "engines");
+								_this.setLanguages();
+								BDFDB.ReactUtils.forceUpdate(this);
+							}
+						})
+					})),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+						type: "Switch",
+						plugin: _this,
+						keys: ["general", "sendOriginalMessage"],
+						label: _this.defaults.general.sendOriginalMessage.description,
+						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+						value: _this.settings.general.sendOriginalMessage
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+						type: "Switch",
+						label: "Translate your Messages before sending",
+						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+						value: translationEnabled,
 						onChange: value => {
-							_this.settings.choices[this.props.id] = value;
-							BDFDB.DataUtils.save(_this.settings.choices, _this, "choices");
+							translationEnabled = value;
+							BDFDB.ReactUtils.forceUpdate(this);
 						}
 					})
-				});
+				].flat(10).filter(n => n);
 			}
 		};
 
@@ -241,14 +276,15 @@ module.exports = (_ => {
 					choices: {
 						inputContext:			{value: "auto", 		direction: "input",		place: "Context", 		description: "Input Language in received Messages: "},
 						outputContext:			{value: "$discord", 	direction: "output",	place: "Context", 		description: "Output Language in received Messages: "},
-						inputMessage:			{value: "auto", 		direction: "input",		place: "Message", 		description: "Input Language in sent Messages: "},
-						outputMessage:			{value: "$discord", 	direction: "output",	place: "Message", 		description: "Output Language in sent Messages: "}
+						inputMessage:			{value: "auto", 		direction: "input",		place: "Message", 		description: "Input Language in your sent Messages: "},
+						outputMessage:			{value: "$discord", 	direction: "output",	place: "Message", 		description: "Output Language in your sent Messages: "}
 					},
 					exceptions: {
 						wordStart:				{value: ["!"],			max: 1,		description: "Words starting with any of these will be ignored"}
 					},
 					engines: {
-						translator:				{value: "googleapi", 	description: "Translation Engine"}
+						translator:				{value: "googleapi", 	description: "Translation Engine"},
+						backup:					{value: "----", 		description: "Backup Engine"}
 					}
 				};
 			
@@ -298,8 +334,6 @@ module.exports = (_ => {
 					collapseStates: collapseStates,
 					children: _ => {
 						let settingsItems = [];
-						
-						settingsItems = settingsItems.concat(this.createSelects(false));
 						
 						for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 							type: "Switch",
@@ -562,42 +596,19 @@ module.exports = (_ => {
 					}
 				}
 			}
-			
-			createSelects (inPopout) {
-				let selects = [];
-				for (let key in this.defaults.choices) {
-					selects.push(BDFDB.ReactUtils.createElement(TranslationSelectionComponent, {
-						id: key,
-						addFavButton: inPopout
-					}));
-					if (this.defaults.choices[key].direction == "output") selects.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-						className: BDFDB.disCN.marginbottom8
-					}));
-				}
-				for (let key in this.defaults.engines) selects.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-					title: this.defaults.engines[key].description,
-					className: BDFDB.disCN.marginbottom8,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
-						value: this.settings.engines[key],
-						options: Object.keys(translationEngines).map(engineKey => ({value: engineKey, label: translationEngines[engineKey].name})),
-						maxVisibleItems: 4,
-						onChange: value => {
-							this.settings.engines[key] = value;
-							BDFDB.DataUtils.save(this.settings.engines, this, "engines");
-							this.setLanguages();
-							if (settingsModal) settingsModal.props.onClose();
-						}
-					})
-				}));
-				return selects;
-			}
 
 			setLanguages () {
-				let engine = translationEngines[this.settings.engines.translator] || {};
-				let languageIds = engine.languages || [];
+				if (this.settings.engines.translator == this.settings.engines.backup) {
+					this.settings.engines.backup = Object.keys(translationEngines).filter(n => n != this.settings.engines.translator)[0];
+					BDFDB.DataUtils.save(this.settings.engines, this, "engines");
+				}
+				let engine = translationEngines[this.settings.engines.translator];
+				let backup = translationEngines[this.settings.engines.backup];
+				let languageIds = [].concat(engine.languages, backup && backup.languages).flat(10).filter(n => n);
 				languages = BDFDB.ObjectUtils.deepAssign(
-					!engine.auto ? {} : {
+					!engine.auto && (!backup || !backup.auto) ? {} : {
 						auto: {
+							auto: true,
 							name: "Auto",
 							id: "auto"
 						}
@@ -605,14 +616,17 @@ module.exports = (_ => {
 					BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, lang => languageIds.includes(lang.id)),
 					{
 						binary:	{
+							special: true,
 							name: "Binary",
 							id: "binary"
 						},
 						braille: {
+							special: true,
 							name: "Braille 6-dot",
 							id: "braille"
 						},
 						morse: {
+							special: true,
 							name: "Morse",
 							id: "morse"
 						}
@@ -657,37 +671,20 @@ module.exports = (_ => {
 			}
 
 			translateText (text, type, callback) {
-				let toast = null, toastInterval, finishTranslation = translation => {
+				let toast = null, toastInterval, finished = false, finishTranslation = translation => {
 					isTranslating = false;
-					if (translation) translation = this.addExceptions(translation, excepts);
 					if (toast) toast.close();
+					BDFDB.TimeUtils.clear(toastInterval);
+					
+					if (finished) return;
+					finished = true;
+					if (translation) translation = this.addExceptions(translation, excepts);
 					callback(translation == text ? "" : translation, input, output);
 				};
 				let [newText, excepts, translate] = this.removeExceptions(text.trim(), type);
 				let input = Object.assign({}, languages[this.getLanguageChoice("input", type)]);
 				let output = Object.assign({}, languages[this.getLanguageChoice("output", type)]);
 				if (translate && input.id != output.id) {
-					let timer = 0;
-					let loadingString = `${this.labels.toast_translating} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`;
-					let currentLoadingString = loadingString;
-					toast = BDFDB.NotificationUtils.toast(loadingString, {
-						timeout: 0,
-						position: "center",
-						onClose: _ => {BDFDB.TimeUtils.clear(toastInterval);}
-					});
-					toastInterval = BDFDB.TimeUtils.interval(_ => {
-						if (timer++ > 40) {
-							finishTranslation("");
-							BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed} - ${this.labels.toast_translating_tryanother}`, {
-								type: "danger",
-								position: "center"
-							});
-						}
-						else {
-							currentLoadingString = currentLoadingString.endsWith(".....") ? loadingString : currentLoadingString + ".";
-							toast.update(currentLoadingString);
-						}
-					}, 500);
 					let specialCase = this.checkForSpecialCase(newText, input);
 					if (specialCase) {
 						input.name = specialCase.name;
@@ -697,7 +694,7 @@ module.exports = (_ => {
 							case "morse": newText = this.morse2string(newText); break;
 						}
 					}
-					if (output.id == "binary" || output.id == "braille" || output.id == "morse") {
+					if (output.special) {
 						switch (output.id) {
 							case "binary": newText = this.string2binary(newText); break;
 							case "braille": newText = this.string2braille(newText); break;
@@ -706,14 +703,57 @@ module.exports = (_ => {
 						finishTranslation(newText);
 					}
 					else {
-						if (translationEngines[this.settings.engines.translator] && typeof this[translationEngines[this.settings.engines.translator].funcName] == "function") {
+						const startTranslating = engine => {
 							isTranslating = true;
-							this[translationEngines[this.settings.engines.translator].funcName].apply(this, [{input, output, text: newText, specialCase, engine: translationEngines[this.settings.engines.translator]}, finishTranslation]);
+							if (toast) toast.close();
+							BDFDB.TimeUtils.clear(toastInterval);
+							
+							let loadingString = `${this.labels.toast_translating} (${translationEngines[engine].name}) - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`;
+							let currentLoadingString = loadingString;
+							toast = BDFDB.NotificationUtils.toast(loadingString, {
+								timeout: 0,
+								position: "center",
+								onClose: _ => BDFDB.TimeUtils.clear(toastInterval)
+							});
+							toastInterval = BDFDB.TimeUtils.interval((_, count) => {
+								if (count > 40) {
+									finishTranslation("");
+									BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed} (${translationEngines[engine].name}) - ${this.labels.toast_translating_tryanother}`, {
+										type: "danger",
+										position: "center"
+									});
+								}
+								else {
+									currentLoadingString = currentLoadingString.endsWith(".....") ? loadingString : currentLoadingString + ".";
+									toast.update(currentLoadingString);
+								}
+							}, 500);
+						};
+						if (this.validTranslator(this.settings.engines.translator, input, output, specialCase)) {
+							startTranslating(this.settings.engines.translator);
+							this[translationEngines[this.settings.engines.translator].funcName].apply(this, [{input, output, text: newText, specialCase, engine: translationEngines[this.settings.engines.translator]}, translation => {
+								if (!translation && this.validTranslator(this.settings.engines.backup, input, output, specialCase)) {
+									startTranslating(this.settings.engines.backup);
+									this[translationEngines[this.settings.engines.backup].funcName].apply(this, [{input, output, text: newText, specialCase, engine: translationEngines[this.settings.engines.backup]}, finishTranslation]);
+								}
+								else finishTranslation(translation);
+							}]);
 						}
-						else finishTranslation();
+						else if (this.validTranslator(this.settings.engines.backup, input, output, specialCase)) {
+							startTranslating(this.settings.engines.backup);
+							this[translationEngines[this.settings.engines.backup].funcName].apply(this, [{input, output, text: newText, specialCase, engine: translationEngines[this.settings.engines.backup]}, finishTranslation]);
+						}
+						else {
+							console.log("no");
+							finishTranslation();
+						}
 					}
 				}
 				else finishTranslation();
+			}
+			
+			validTranslator (key, input, output, specialCase) {
+				return translationEngines[key] && typeof this[translationEngines[key].funcName] == "function" && (specialCase || input.auto && translationEngines[key].auto || translationEngines[key].languages.includes(input.id) && translationEngines[key].languages.includes(output.id));
 			}
 			
 			googleApiTranslate (data, callback) {
@@ -744,7 +784,7 @@ module.exports = (_ => {
 			}
 			
 			deepLTranslate (data, callback) {
-				BDFDB.LibraryRequires.request(`https://api-free.deepl.com/v2/translate?auth_key=75cc2f40-fdae-14cd-7242-6a384e2abb9c:fx&text=${encodeURIComponent(data.text)}${data.input.id == "auto" ? "" : `&source_lang=${data.input.id}`}&target_lang=${data.output.id}`, (error, response, body) => {
+				BDFDB.LibraryRequires.request(`https://api-free.deepl.com/v2/translate?auth_key=75cc2f40-fdae-14cd-7242-6a384e2abb9c:fx&text=${encodeURIComponent(data.text)}${data.input.auto ? "" : `&source_lang=${data.input.id}`}&target_lang=${data.output.id}`, (error, response, body) => {
 					if (!error && body && response.statusCode == 200) {
 						try {
 							body = JSON.parse(body);
@@ -834,7 +874,7 @@ module.exports = (_ => {
 			}
 			
 			yandexTranslate (data, callback) {
-				BDFDB.LibraryRequires.request(`https://translate.yandex.net/api/v1.5/tr/translate?key=trnsl.1.1.20191206T223907Z.52bd512eca953a5b.1ec123ce4dcab3ae859f312d27cdc8609ab280de&text=${encodeURIComponent(data.text)}&lang=${data.specialCase || data.input.id == "auto" ? data.output.id : (data.input.id + "-" + data.output.id)}&options=1`, (error, response, body) => {
+				BDFDB.LibraryRequires.request(`https://translate.yandex.net/api/v1.5/tr/translate?key=trnsl.1.1.20191206T223907Z.52bd512eca953a5b.1ec123ce4dcab3ae859f312d27cdc8609ab280de&text=${encodeURIComponent(data.text)}&lang=${data.specialCase || data.input.auto ? data.output.id : (data.input.id + "-" + data.output.id)}&options=1`, (error, response, body) => {
 					if (!error && body && response.statusCode == 200) {
 						body = BDFDB.DOMUtils.create(body);
 						let translation = body.querySelector("text");
@@ -902,8 +942,8 @@ module.exports = (_ => {
 			}
 
 			checkForSpecialCase (text, input) {
-				if (input.id == "binary" || input.id == "braille" || input.id == "morse") return input;
-				else if (input.id == "auto") {
+				if (input.special) return input;
+				else if (input.auto) {
 					if (/^[0-1]*$/.test(text.replace(/\s/g, ""))) {
 						return {id: "binary", name: "Binary"};
 					}
