@@ -397,6 +397,10 @@ html.oldBrand, html.newBrand {
 	stroke: rgb(var(--accentcolor)) !important;
 }
 
+.colorLink-2vG20E.mentionButton-3710-W {					/* textarea				reply mention						*/
+	color: rgb(var(--accentcolor));
+}
+
 /* ----		3.3.	AUTOCOMPLETEMENU				---- */
 
 #app-mount .active-2awTSY {									/* autocomplete			option active						*/
