@@ -1905,7 +1905,7 @@ html.oldBrand, html.newBrand {
 															/* textinput			focused								*/
 .input-cIJ7To:not(.error-2O5WFJ):not(.success-2-F980).focused-1mmYsC,
 .input-cIJ7To:not(.error-2O5WFJ):not(.success-2-F980):focus {
-	border-color: rgb(var(--linkcolor));
+	border-color: rgb(var(--accentcolor));
 }
 .focused-1mmYsC {
 	border-color: rgb(var(--accentcolor));
