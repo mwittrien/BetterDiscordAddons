@@ -560,7 +560,7 @@ module.exports = (_ => {
 
 			injectItem (e, ...urls) {
 				let fileTypes = [];
-				let validUrls = urls.filter(n => this.isValid(n.file || n)).map(n => {
+				let validUrls = urls.filter(n => this.isValid(n && n.file || n)).map(n => {
 					let srcUrl = (n.file || n).replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096");
 					let url = srcUrl.replace(/[\?\&](height|width)=\d+/g, "").split("%3A")[0];
 					let original = (n.original || n).replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "").split("%3A")[0];
