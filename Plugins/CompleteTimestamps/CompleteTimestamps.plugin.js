@@ -192,13 +192,6 @@ module.exports = (_ => {
 					}
 				}
 			}
-			
-			processMessageContent (e) {
-				if (e.instance.props.message.editedTimestamp && this.settings.general.changeForEdit) {
-					let editStamp = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "SuffixEdited"});
-					if (editStamp) console.log(editStamp);
-				}
-			}
 
 			processEmbed (e) {
 				if (e.instance.props.embed && e.instance.props.embed.timestamp && this.settings.general.showInEmbed) {

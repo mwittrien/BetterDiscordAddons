@@ -294,10 +294,8 @@ module.exports = (_ => {
 						callback(canvas.toDataURL(type));
 					};
 					img.onerror = function() {
-						console.log("b");
 						callback(base64);
 					};
-					console.log(base64);
 					img.src = base64;
 				}
 			}

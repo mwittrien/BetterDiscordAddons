@@ -164,7 +164,6 @@ module.exports = (_ => {
 						let input = refs.imports[i];
 						let oldValue = input.props.oldValue;
 						let newValue = input.props.value;
-						console.log(oldValue, newValue);
 						if (newValue.toString() != oldValue.toString()) {
 							let importUrl = input.props.name;
 							if (newValue) css = css.replace(new RegExp(`\\n${BDFDB.StringUtils.regEscape("/* @import url(" + importUrl + "); */")}`, "g"), `\n@import url(${importUrl});`);
@@ -177,7 +176,6 @@ module.exports = (_ => {
 						let input = refs.inputs[i];
 						let oldValue = input.props.oldValue;
 						let newValue = input.props.value;
-						console.log(oldValue, newValue);
 						if (newValue && newValue.trim() && newValue != oldValue) {
 							let varName = input.props.name;
 							css = css.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(varName)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(oldValue)}`,"g"), `--${varName}$1: $2${newValue}`);
