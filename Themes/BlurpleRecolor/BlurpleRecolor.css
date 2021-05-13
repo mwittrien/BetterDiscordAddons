@@ -129,11 +129,10 @@ html.oldBrand, html.newBrand {
 	13.	BDSUPPORT
 	14.	POWERCORDSUPPORT
 	15.	PLUGINSUPPORT
-		1.	IMAGEZOOM
-		2.	HIDEUTILS
-		3.	READALLNOTIFICATIONSBUTTON
-		4.	SERVERSEARCH
-		5.	CHANNELTABS
+		1.	HIDEUTILS
+		2.	READALLNOTIFICATIONSBUTTON
+		3.	SERVERSEARCH
+		4.	CHANNELTABS
 */
 
 
@@ -2053,6 +2052,11 @@ html.oldBrand, html.newBrand {
 	filter: brightness(75%);
 }
 
+.base-PmTxvP[style*="background-color: rgb(88, 101, 242)"],
+.base-PmTxvP[style*="background-color: rgb(114, 137, 218)"] {
+	background-color: rgb(var(--accentcolor)) !important;
+}
+
 /* ----		12.5.	ICONS							---- */
 
 [style*="/assets/f78426a064bc9dd24847519259bc42af.png"],
@@ -2422,25 +2426,20 @@ html .powercord-updater .debug-info b {
 
 /* ~~~~		15.		PLUGINSUPPORT					~~~~ */
 
-/* ----		15.1.	IMAGEZOOM						---- */
 
-.zoomLens-uOK8xV {
-	border-color: rgb(var(--accentcolor)) !important;
-}
-
-/* ----		15.2.	HIDEUTILS						---- */
+/* ----		15.1.	HIDEUTILS						---- */
 
 #HideUtils-Settings button {
 	background-color: rgb(var(--accentcolor)) !important;
 }
 
-/* ----		15.3.	READALLNOTIFICATIONSBUTTON		---- */
+/* ----		15.2.	READALLNOTIFICATIONSBUTTON		---- */
 
 .wrapper-1BJsBx:active .childWrapper-anI2G9.button-Jt-tIg {
 	background: var(--accentcolor-hover);
 }
 
-/* ----		15.4.	SERVERSEARCH					---- */
+/* ----		15.3.	SERVERSEARCH					---- */
 
 #server-search .wrapper-25eVIn {
 	background-color: rgb(47, 49, 54) !important;
@@ -2450,7 +2449,7 @@ html .powercord-updater .debug-info b {
 	background-color: rgb(var(--accentcolor)) !important;
 }
 
-/* ----		15.5.	CHANNELTABS						---- */
+/* ----		15.4.	CHANNELTABS						---- */
 
 .channelTabs-unreadBadge:not(.channelTabs-noUnread) {
 	background-color: rgb(var(--accentcolor)) !important;

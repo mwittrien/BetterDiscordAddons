@@ -167,16 +167,15 @@
 	18.	PLUGINSUPPORT
 		1.	BDFDB
 		2.	DATEVIEWER
-		3.	SERVERFOLDERS
-		4.	MEMBERCOUNT
-		5.	LINENUMBERS
-		6.	PERMISSIONVIEWER
-		7.	DIRECTDOWNLOAD
-		8.	BETTERFORMATINGREDUX
-		9.	CHANNELHISTORY
-		10.	CHANNELTABS
-		11.	TYPINGINDICATOR
-		12.	BADGESEVERYWHERE
+		3.	MEMBERCOUNT
+		4.	LINENUMBERS
+		5.	PERMISSIONVIEWER
+		6.	DIRECTDOWNLOAD
+		7.	BETTERFORMATINGREDUX
+		8.	CHANNELHISTORY
+		9.	CHANNELTABS
+		10.	TYPINGINDICATOR
+		11.	BADGESEVERYWHERE
 	19.	UPDATENOTICE
 	20.	WATERMARK
 */
@@ -6035,7 +6034,6 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	z-index: -1;
 }
 
-
 /* ----		15.4.	SEARCHBARS						---- */
 
 .container-2XeR5Z,											/* searchbar			inner								*/
@@ -6064,6 +6062,12 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 .botTagRegular-2HEhHi:not([style]) svg {
 	filter: drop-shadow(1px 1px var(--textshadow));
+}
+
+.base-PmTxvP[style*="var(--bdfdb-blurple)"],				/* numberbadge												*/
+.base-PmTxvP[style*="background-color: rgb(88, 101, 242)"],
+.base-PmTxvP[style*="background-color: rgb(114, 137, 218)"] {
+	text-shadow: 1px 1px var(--textshadow);
 }
 
 .iconBadge-2wi9r4 {											/* iconbadge												*/
@@ -6447,13 +6451,7 @@ html .colorDefault-XdNdIp .bg-8df5St {
 	opacity: 1;
 }
 
-/* ----		18.3.	SERVERFOLDERS					---- */
-
-.base-PmTxvP[style*="var(--bdfdb-blurple)"] {
-	text-shadow: 1px 1px var(--textshadow);
-}
-
-/* ----		18.4.	MEMBERCOUNT						---- */
+/* ----		18.3.	MEMBERCOUNT						---- */
 
 #app-mount #MemberCount {
 	background-color: transparent;
@@ -6482,7 +6480,7 @@ html .colorDefault-XdNdIp .bg-8df5St {
 	filter: blur(var(--backgroundblur));
 }
 
-/* ----		18.5.	LINENUMBERS						---- */
+/* ----		18.4.	LINENUMBERS						---- */
 
 .hljs ol li {
 	border-left-color: var(--background-modifier-accent);
@@ -6491,7 +6489,7 @@ html .colorDefault-XdNdIp .bg-8df5St {
 	color: rgb(var(--textdarker));
 }
 
-/* ----		18.6.	PERMISSIONVIEWER				---- */
+/* ----		18.5.	PERMISSIONVIEWER				---- */
 
 #permissions-modal-wrapper #permissions-modal {				/* modal				container							*/
 	background-color: transparent;
@@ -6561,7 +6559,7 @@ html .colorDefault-XdNdIp .bg-8df5St {
 	color: var(--header-secondary);
 }
 
-/* ----		18.7.	DIRECTDOWNLOAD					---- */
+/* ----		18.6.	DIRECTDOWNLOAD					---- */
 
 #files_directDownload .file {
 	background-color: rgba(var(--transparencycolor), .4);
@@ -6582,7 +6580,7 @@ html .colorDefault-XdNdIp .bg-8df5St {
 	background-color: rgb(var(--accentcolor));
 }
 
-/* ----		18.8.	BETTERFORMATINGREDUX			---- */
+/* ----		18.7.	BETTERFORMATINGREDUX			---- */
 
 .innerDisabled-2mc-iF ~ .bf-toolbar {
 	display: none;
@@ -6640,14 +6638,14 @@ html .colorDefault-XdNdIp .bg-8df5St {
 	color: #fff;
 }
 
-/* ----		18.9	CHANNELHISTORY					---- */
+/* ----		18.8	CHANNELHISTORY					---- */
 
 .channelHistoryButtons {
 	top: 4px;
 	left: 310px;
 }
 
-/* ----		18.10	CHANNELTABS						---- */
+/* ----		18.9	CHANNELTABS						---- */
 
 html .channelTabs-tabContainer,
 html .channelTabs-favContainer {
@@ -6758,7 +6756,7 @@ html .channelTabs-newTab:hover {
 	color: var(--interactive-active);
 }
 
-/* ----		18.11	TYPINGINDICATOR					---- */
+/* ----		18.10	TYPINGINDICATOR					---- */
 
 html .typingindicator-guild,
 html .typingindicator-dms,
@@ -6771,7 +6769,7 @@ html .typingindicator-folder {
 	padding: 2px 0;
 }
 
-/* ----		18.12	BADGESEVERYWHERE				---- */
+/* ----		18.11	BADGESEVERYWHERE				---- */
 
 .inner-dA0J42:not(.colored-1armap) .badge-7CsdQq:not(.indicator-cY1-b4) {
 	background: #fff;

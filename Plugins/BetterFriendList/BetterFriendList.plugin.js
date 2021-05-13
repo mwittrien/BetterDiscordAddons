@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.2
+ * @version 1.3.3
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterFriendList",
 			"author": "DevilBro",
-			"version": "1.3.2",
+			"version": "1.3.3",
 			"description": "Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount"
 		},
 		"changeLog": {
 			"fixed": {
-				"Mutual Guilds": "Visible again"
+				"Changed Style": ""
 			}
 		}
 	};
@@ -66,7 +66,6 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var rerenderTimeout, sortKey, sortReversed, searchQuery, searchTimeout;
-		var settings = {};
 		
 		const placeHolderId = "PLACEHOLDER_BETTERFRIENDLIST";
 		
@@ -83,11 +82,11 @@ module.exports = (_ => {
 		return class BetterFriendList extends Plugin {
 			onLoad () {
 				this.defaults = {
-					settings: {
-						addTotalAmount:		{value: true, 	description: "Add total amount for all/requested/blocked"},
-						addSortOptions:		{value: true, 	description: "Add sort options"},
-						addSearchbar:		{value: true, 	description: "Add searchbar"},
-						addMutualGuild:		{value: true, 	description: "Add mutual servers in friend list"}
+					general: {
+						addTotalAmount:		{value: true, 	description: "Add total Amount for All/Requested/Blocked"},
+						addSortOptions:		{value: true, 	description: "Add Sort Options"},
+						addSearchbar:		{value: true, 	description: "Add a Searchbar"},
+						addMutualGuild:		{value: true, 	description: "Add mutual Servers in Friend List"}
 					}
 				};
 
@@ -140,17 +139,23 @@ module.exports = (_ => {
 			}
 
 			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [];
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
+					collapseStates: collapseStates,
+					children: _ => {
+						let settingsItems = [];
 				
-				for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					type: "Switch",
-					plugin: this,
-					keys: ["settings", key],
-					label: this.defaults.settings[key].description,
-					value: settings[key]
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+						for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							type: "Switch",
+							plugin: this,
+							keys: ["general", key],
+							label: this.defaults.general[key].description,
+							value: this.settings.general[key]
+						}));
+						
+						return settingsItems;
+					}
+				});
 			}
 
 			onSettingsClosed () {
@@ -161,14 +166,12 @@ module.exports = (_ => {
 			}
 		
 			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
-
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				this.rerenderList();
 			}
 
 			processTabBar (e) {
-				if (settings.addTotalAmount && e.returnvalue.props.children) for (let checkChild of e.returnvalue.props.children) if (checkChild && checkChild.props.id == "ADD_FRIEND") {
+				if (this.settings.general.addTotalAmount && e.returnvalue.props.children) for (let checkChild of e.returnvalue.props.children) if (checkChild && checkChild.props.id == "ADD_FRIEND") {
 					let relationships = BDFDB.LibraryModules.RelationshipStore.getRelationships(), relationshipCount = {};
 					for (let type in BDFDB.DiscordConstants.RelationshipTypes) relationshipCount[type] = 0;
 					for (let id in relationships) relationshipCount[relationships[id]]++;
@@ -182,7 +185,7 @@ module.exports = (_ => {
 								newChildren.push(this.createBadge(BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount()));
 								break;
 							case "PENDING":
-								newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING], this.labels.incoming));
+								newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING], this.labels.incoming, relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING] > 0 && BDFDB.DiscordConstants.Colors.STATUS_RED));
 								newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_OUTGOING], this.labels.outgoing));
 								break;
 							case "BLOCKED":
@@ -238,7 +241,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN._betterfriendlisttitle,
 									children: e2.returnValue.replace(users.length, users.filter(u => u && u.key != placeHolderId).length)
 								}),
-								settings.addSortOptions && [
+								this.settings.general.addSortOptions && [
 									{key: "usernameLower", label: BDFDB.LanguageUtils.LanguageStrings.FRIENDS_COLUMN_NAME},
 									{key: "statusIndex", label: BDFDB.LanguageUtils.LanguageStrings.FRIENDS_COLUMN_STATUS}
 								].filter(n => n).map(data => BDFDB.ReactUtils.createElement("div", {
@@ -268,7 +271,7 @@ module.exports = (_ => {
 										this.rerenderList();
 									}
 								})),
-								settings.addSearchbar && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+								this.settings.general.addSearchbar && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
 										query: searchQuery,
 										onChange: value => {
@@ -313,7 +316,7 @@ module.exports = (_ => {
 				}
 				else {
 					if (e.instance.props.user.id == placeHolderId) return null;
-					else if (settings.addMutualGuild && e.instance.props.mutualGuilds && e.instance.props.mutualGuilds.length) {
+					else if (this.settings.general.addMutualGuild && e.instance.props.mutualGuilds && e.instance.props.mutualGuilds.length) {
 						if (typeof e.returnvalue.props.children == "function") {
 							let childrenRender = e.returnvalue.props.children;
 							e.returnvalue.props.children = (...args) => {
@@ -337,10 +340,11 @@ module.exports = (_ => {
 				}, true));
 			}
 			
-			createBadge (amount, text) {
+			createBadge (amount, text, color) {
 				let badge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
 					className: BDFDB.disCN.peoplesbadge,
 					count: amount,
+					color: color || BDFDB.DiscordConstants.Colors.PRIMARY_DARK,
 					style: {marginLeft: 6}
 				});
 				return text ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
