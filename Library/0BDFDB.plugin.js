@@ -973,22 +973,34 @@ module.exports = (_ => {
 	}, config, window.BDFDB_Global);
 
 	
+	const request = require("request"), fs = require("fs"), path = require("path");
+	const cssPath = path.join(BDFDB.BDUtils.getPluginsFolder(), "0BDFDB.raw.css");
+	const dataPath = path.join(BDFDB.BDUtils.getPluginsFolder(), "0BDFDB.data.json");
+	
+	const loadBackup = _ => {
+		const backup = fs.existsSync(dataPath) && (fs.readFileSync(dataPath) || "").toString() || null;
+		if (!backup) BdApi.alert("Error", "Could not initiate BDFDB Library Plugin. Check your Internet Connection and make sure GitHub isn't blocked by your Network or try disabling your VPN/Proxy.");
+		return backup;
+	};
 	const loadLibrary = tryAgain => {
-		const request = require("request"), fs = require("fs"), path = require("path");
 		request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.raw.css`, (e, r, b) => {
 			if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
-			const cssPath = path.join(BDFDB.BDUtils.getPluginsFolder(), "0BDFDB.raw.css");
 			const css = !e && b && r.statusCode == 200 ? b : fs.existsSync(cssPath) && (fs.readFileSync(cssPath) || "").toString();
 			request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.data.json`, BDFDB.TimeUtils.suppress((e2, r2, b2) => {
-				const dataPath = path.join(BDFDB.BDUtils.getPluginsFolder(), "0BDFDB.data.json");
 				if (e2 || !b2 || r2.statusCode != 200) {
 					if (tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
 					else {
-						b2 = fs.existsSync(dataPath) && (fs.readFileSync(dataPath) || "").toString() || null;
-						if (!b2) BdApi.alert("Error", "Could not initiate BDFDB Library Plugin. Check your Internet Connection and make sure GitHub isn't blocked by your Network or try disabling your VPN/Proxy.");
+						BDFDB.LogUtils.error(["Failed to fetch JSON from GitHub. Could not load data.json!", e2 || ""]);
+						b2 = loadBackup(dataPath);
 					}
 				}
-				const InternalData = JSON.parse(b2);
+				let InternalData;
+				try {InternalData = JSON.parse(b2);}
+				catch (err) {
+					BDFDB.LogUtils.error(["Failed to parse fetched JSON. Could not load data.json!", err]);
+					b2 = null;
+					InternalData = JSON.parse(loadBackup(dataPath));
+				}
 				if (!e && b && r.statusCode == 200) fs.writeFile(cssPath, b, _ => {});
 				if (!e2 && b2 && r2.statusCode == 200) fs.writeFile(dataPath, b2, _ => {});
 				
