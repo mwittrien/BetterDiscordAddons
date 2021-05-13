@@ -4,6 +4,7 @@
 :root {
 	--font:							Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
 	
+	--mentioncolor: 				250,166,26;
 	--successcolor: 				59,165,92;
 	--warningcolor: 				250,166,26;
 	--dangercolor: 					240,71,71;
