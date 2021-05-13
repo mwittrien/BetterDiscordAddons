@@ -4754,5 +4754,6 @@
 		"174868361040232448": 	{"active": true,		"t3": false,	"custom": false,	"text": "",					"id": "GIBBU (Ian)"},
 		"443943393660239872": 	{"active": true,		"t3": true,		"custom": false,	"text": "",					"id": "SARGE (PaSh)"},
 		"620397524494057513": 	{"active": true,		"t3": true,		"custom": false,	"text": "",					"id": "FUSL"}
-	}
+	},
+	"BDFDB_Patron_Tiers": {}
 }
