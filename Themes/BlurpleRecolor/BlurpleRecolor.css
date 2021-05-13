@@ -16,6 +16,9 @@
 	--bd-blue-active: var(--accentcolor-active) !important;
 	--blurple: rgb(var(--accentcolor)) !important;
 }
+.theme-light {
+	--logo-primary: rgb(var(--accentcolor));
+}
 .theme-dark, .theme-light {
 	--text-link: rgb(var(--linkcolor));
 	--info-help-background: rgba(var(--linkcolor),.1);
@@ -23,56 +26,51 @@
 	--info-help-text: #fff;
 	--focus-primary: rgb(var(--linkcolor));
 	--control-brand-foreground: rgb(var(--accentcolor));
-}
-.theme-light {
-	--logo-primary: rgb(var(--accentcolor));
-}
-html.oldBrand, html.newBrand {
-	--brand-experiment-100: #fdfdfd;
-	--brand-experiment-130: #f2f2f2;
-	--brand-experiment-160: #ebebeb;
-	--brand-experiment-200: #e3e3e3;
-	--brand-experiment-230: #dadada;
-	--brand-experiment-260: #d1d1d1;
-	--brand-experiment-300: #c7c7c7;
-	--brand-experiment-330: rgb(var(--accentcolor));
-	--brand-experiment-360: rgb(var(--accentcolor));
-	--brand-experiment-400: rgb(var(--accentcolor));
-	--brand-experiment-430: rgb(var(--accentcolor));
-	--brand-experiment-460: rgb(var(--accentcolor));
-	--brand-experiment: rgb(var(--accentcolor));
-	--brand-experiment-500: rgb(var(--accentcolor));
-	--brand-experiment-530: rgb(var(--accentcolor));
-	--brand-experiment-560: rgb(var(--accentcolor));
-	--brand-experiment-600: rgb(var(--accentcolor));
-	--brand-experiment-630: rgb(var(--accentcolor));
-	--brand-experiment-660: rgb(var(--accentcolor));
-	--brand-experiment-700: #323232;
-	--brand-experiment-730: #2b2b2b;
-	--brand-experiment-760: #272727;
-	--brand-experiment-800: #222222;
-	--brand-experiment-830: #1a1a1a;
-	--brand-experiment-860: #111111;
-	--brand-experiment-900: #0b0b0b;
-	--brand-experiment-05a: rgba(var(--accentcolor),.05);
-	--brand-experiment-10a: rgba(var(--accentcolor),.1);
-	--brand-experiment-15a: rgba(var(--accentcolor),.15);
-	--brand-experiment-20a: rgba(var(--accentcolor),.2);
-	--brand-experiment-25a: rgba(var(--accentcolor),.25);
-	--brand-experiment-30a: rgba(var(--accentcolor),.3);
-	--brand-experiment-35a: rgba(var(--accentcolor),.35);
-	--brand-experiment-40a: rgba(var(--accentcolor),.4);
-	--brand-experiment-45a: rgba(var(--accentcolor),.45);
-	--brand-experiment-50a: rgba(var(--accentcolor),.5);
-	--brand-experiment-55a: rgba(var(--accentcolor),.55);
-	--brand-experiment-60a: rgba(var(--accentcolor),.6);
-	--brand-experiment-65a: rgba(var(--accentcolor),.65);
-	--brand-experiment-70a: rgba(var(--accentcolor),.7);
-	--brand-experiment-75a: rgba(var(--accentcolor),.75);
-	--brand-experiment-80a: rgba(var(--accentcolor),.8);
-	--brand-experiment-85a: rgba(var(--accentcolor),.85);
-	--brand-experiment-90a: rgba(var(--accentcolor),.9);
-	--brand-experiment-95a: rgba(var(--accentcolor),.95)}
+	--brand-experiment-100: #fdfdfd !important;
+	--brand-experiment-130: #f2f2f2 !important;
+	--brand-experiment-160: #ebebeb !important;
+	--brand-experiment-200: #e3e3e3 !important;
+	--brand-experiment-230: #dadada !important;
+	--brand-experiment-260: #d1d1d1 !important;
+	--brand-experiment-300: #c7c7c7 !important;
+	--brand-experiment-330: rgb(var(--accentcolor)) !important;
+	--brand-experiment-360: rgb(var(--accentcolor)) !important;
+	--brand-experiment-400: rgb(var(--accentcolor)) !important;
+	--brand-experiment-430: rgb(var(--accentcolor)) !important;
+	--brand-experiment-460: rgb(var(--accentcolor)) !important;
+	--brand-experiment: rgb(var(--accentcolor)) !important;
+	--brand-experiment-500: rgb(var(--accentcolor)) !important;
+	--brand-experiment-530: rgb(var(--accentcolor)) !important;
+	--brand-experiment-560: rgb(var(--accentcolor)) !important;
+	--brand-experiment-600: rgb(var(--accentcolor)) !important;
+	--brand-experiment-630: rgb(var(--accentcolor)) !important;
+	--brand-experiment-660: rgb(var(--accentcolor)) !important;
+	--brand-experiment-700: #323232 !important;
+	--brand-experiment-730: #2b2b2b !important;
+	--brand-experiment-760: #272727 !important;
+	--brand-experiment-800: #222222 !important;
+	--brand-experiment-830: #1a1a1a !important;
+	--brand-experiment-860: #111111 !important;
+	--brand-experiment-900: #0b0b0b !important;
+	--brand-experiment-05a: rgba(var(--accentcolor),.05) !important;
+	--brand-experiment-10a: rgba(var(--accentcolor),.1) !important;
+	--brand-experiment-15a: rgba(var(--accentcolor),.15) !important;
+	--brand-experiment-20a: rgba(var(--accentcolor),.2) !important;
+	--brand-experiment-25a: rgba(var(--accentcolor),.25) !important;
+	--brand-experiment-30a: rgba(var(--accentcolor),.3) !important;
+	--brand-experiment-35a: rgba(var(--accentcolor),.35) !important;
+	--brand-experiment-40a: rgba(var(--accentcolor),.4) !important;
+	--brand-experiment-45a: rgba(var(--accentcolor),.45) !important;
+	--brand-experiment-50a: rgba(var(--accentcolor),.5) !important;
+	--brand-experiment-55a: rgba(var(--accentcolor),.55) !important;
+	--brand-experiment-60a: rgba(var(--accentcolor),.6) !important;
+	--brand-experiment-65a: rgba(var(--accentcolor),.65) !important;
+	--brand-experiment-70a: rgba(var(--accentcolor),.7) !important;
+	--brand-experiment-75a: rgba(var(--accentcolor),.75) !important;
+	--brand-experiment-80a: rgba(var(--accentcolor),.8) !important;
+	--brand-experiment-85a: rgba(var(--accentcolor),.85) !important;
+	--brand-experiment-90a: rgba(var(--accentcolor),.9) !important;
+	--brand-experiment-95a: rgba(var(--accentcolor),.95) !important;
 }
 
 

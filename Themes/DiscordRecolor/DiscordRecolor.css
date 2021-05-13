@@ -93,6 +93,8 @@
 	--deprecated-text-input-border-hover: #040405;
 	--deprecated-text-input-border-disabled: #202225;
 	--deprecated-text-input-prefix: rgb(var(--textbrighter));
+	--font-primary: var(--font) !important;
+	--font-display: var(--font) !important;
 }
 
 html {
@@ -176,10 +178,6 @@ html {
 
 
 /* ~~~~		1.		GENERAL							~~~~ */
-
-::-webkit-input-placeholder, body, button, input, select, textarea {
-	font-family: var(--font);
-}
 
 svg [style*="stroke: rgb(114, 118, 125)"],
 svg [style*="stroke: #72767d"],

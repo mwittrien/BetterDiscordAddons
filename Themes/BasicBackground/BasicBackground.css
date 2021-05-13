@@ -80,6 +80,8 @@
 	--background-modifier-accent: rgba(var(--textbrightest),.1);
 	--elevation-low: 0 1px 5px 0 rgba(var(--transparencycolor), .3);
 	--elevation-high: 0 2px 10px 0 rgba(var(--transparencycolor), .3);
+	--font-primary: var(--font) !important;
+	--font-display: var(--font) !important;
 }
 
 
@@ -5508,10 +5510,6 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 
 
 /* ~~~~		15.		GENERAL							~~~~ */
-
-::-webkit-input-placeholder, body, button, input, select, textarea {
-	font-family: var(--font);
-}
 
 ::selection {												/* selection												*/
 	background: rgb(var(--accentcolor));
