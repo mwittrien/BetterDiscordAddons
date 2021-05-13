@@ -260,7 +260,7 @@ module.exports = (_ => {
 						font-weight: 600;
 					}
 					${BDFDB.dotCN._imageutilitieslense} {
-						border: 2px solid rgb(114, 137, 218);
+						border: 2px solid var(--bdfdb-blurple);
 					}
 					${BDFDB.dotCN._imageutilitiesoperations} {
 						position: absolute;

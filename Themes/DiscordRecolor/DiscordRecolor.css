@@ -184,7 +184,7 @@ html {
 svg [style*="stroke: rgb(114, 118, 125)"],
 svg [style*="stroke: #72767d"],
 svg [style*="stroke: #72767D"],
-svg [stroke="rgb(114, 137, 218)"],
+svg [stroke="rgb(114, 118, 125)"],
 svg [stroke="#72767d"],
 svg [stroke="#72767D"] {
 	stroke: var(--text-muted) !important;
@@ -192,7 +192,7 @@ svg [stroke="#72767D"] {
 svg [style*="fill: rgb(114, 118, 125)"],
 svg [style*="fill: #72767d"],
 svg [style*="fill: #72767D"],
-svg [fill="rgb(114, 137, 218)"],
+svg [fill="rgb(114, 118, 125)"],
 svg [fill="#72767d"],
 svg [fill="#72767D"] {
 	fill: var(--text-muted) !important;
@@ -1325,6 +1325,10 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 #app-mount .container-1D34oG {
 	background-color: var(--background-primary);
+}
+
+#app-mount .scroller-2ZPeAD {
+	border: none;
 }
 
 #app-mount .sectionHeader-20RGqu {
@@ -2835,7 +2839,8 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .modal-DRZfgq .checked-3_4uQ9 {
 	background-color: rgb(var(--accentcolor));
 }
-#app-mount .modal-DRZfgq .checkbox-1ix_J3 [stroke="#7289da"] {
+#app-mount .modal-DRZfgq .checkbox-1ix_J3 [stroke="#5865f2" i],
+#app-mount .modal-DRZfgq .checkbox-1ix_J3 [stroke="#7289da" i] {
 	stroke: #fff !important;
 }
 #app-mount .ack-2yIUvY {
