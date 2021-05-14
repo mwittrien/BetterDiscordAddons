@@ -779,8 +779,6 @@
 			"size24": "size24-NlR6be"
 		},
 		"BetterFriendList": {
-			"badge": "badge-8F4Saa",
-			"badgeRed": "red-5F22aW",
 			"mutualGuilds": "mutualGuilds-s7F2aa",
 			"nameCell": "nameCell-7F4sRs",
 			"title": "title-3aDrFs"
@@ -1301,8 +1299,6 @@
 		"_badgeseverywheresize21": ["BadgesEverywhere", "size21"],
 		"_badgeseverywheresize22": ["BadgesEverywhere", "size22"],
 		"_badgeseverywheresize24": ["BadgesEverywhere", "size24"],
-		"_betterfriendlistbadge": ["BetterFriendList", "badge"],
-		"_betterfriendlistbadgered": ["BetterFriendList", "badgeRed"],
 		"_betterfriendlistmutualguilds": ["BetterFriendList", "mutualGuilds"],
 		"_betterfriendlistnamecell": ["BetterFriendList", "nameCell"],
 		"_betterfriendlisttitle": ["BetterFriendList", "title"],

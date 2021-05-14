@@ -117,6 +117,10 @@ module.exports = (_ => {
 						margin-left: 13px;
 						width: 200px;
 					}
+					${BDFDB.dotCNS.peoplestabbar + BDFDB.dotCN.peoplesbadge} {
+						background-color: var(--background-accent);
+						margin-left: 6px;
+					}
 					${BDFDB.dotCN._betterfriendlisttitle} {
 						width: 200px;
 					}
@@ -185,7 +189,7 @@ module.exports = (_ => {
 								newChildren.push(this.createBadge(BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount()));
 								break;
 							case "PENDING":
-								newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING], this.labels.incoming, relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING] > 0 && BDFDB.DiscordConstants.Colors.STATUS_RED));
+								newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING], this.labels.incoming, relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING] > 0));
 								newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_OUTGOING], this.labels.outgoing));
 								break;
 							case "BLOCKED":
@@ -340,12 +344,11 @@ module.exports = (_ => {
 				}, true));
 			}
 			
-			createBadge (amount, text, color) {
+			createBadge (amount, text, red) {
 				let badge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
-					className: BDFDB.disCN.peoplesbadge,
+					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.peoplesbadge),
 					count: amount,
-					color: color || BDFDB.DiscordConstants.Colors.PRIMARY_DARK,
-					style: {marginLeft: 6}
+					disableColor: !red
 				});
 				return text ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: text,
