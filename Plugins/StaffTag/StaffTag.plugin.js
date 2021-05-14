@@ -130,8 +130,13 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.userprofile + BDFDB.dotCN.memberownericon} {
 						top: 0px;
 					}
-					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN.memberownericon},
+					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN.memberownericon} {
+						top: 0px;
+						margin-left: 0;
+						margin-right: 4px;
+					}
 					${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.memberownericon} {
+						top: 1px;
 						margin-left: 0;
 						margin-right: 4px;
 					}

@@ -13,6 +13,10 @@ img:not([src]), img[src=""], img[src="null"] {
 	position: fixed;
 }
 
+[REPLACE_CLASS_titlebarmac] {
+	z-index: 1000001;
+}
+
 [REPLACE_CLASS_itemlayercontainerzindexdisabled] {
 	z-index: unset;
 }
