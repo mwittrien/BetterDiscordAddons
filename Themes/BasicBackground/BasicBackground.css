@@ -72,9 +72,10 @@
 	--interactive-active: rgb(var(--textbrightest));
 	--interactive-muted: rgb(var(--textdarkest));
 	--logo-primary: rgb(var(--textbrightest));
-	--background-primary: rgba(var(--transparencycolor), .1);
-	--background-secondary: rgba(var(--transparencycolor), .2);
-	--background-secondary-alt: rgba(var(--transparencycolor), .3);
+	--background-accent: rgba(var(--transparencycolor), .1);
+	--background-primary: rgba(var(--transparencycolor), .2);
+	--background-secondary: rgba(var(--transparencycolor), .3);
+	--background-secondary-alt: rgba(var(--transparencycolor), .35);
 	--background-tertiary: rgba(var(--transparencycolor), .4);
 	--background-floating: rgba(var(--transparencycolor), .5);
 	--background-modifier-accent: rgba(var(--textbrightest),.1);
@@ -4168,11 +4169,11 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 .item-1tOPte.colorDefault-2K3EoJ.focused-3afm-j,
 .item-1tOPte.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O) {
-	background-color: rgba(var(--transparencycolor), .2);
+	background-color: rgba(var(--transparencycolor), .2) !important;
 }
 .item-1tOPte.colorDanger-2qLCe1.focused-3afm-j,
 .item-1tOPte.colorDanger-2qLCe1:hover:not(.hideInteraction-1iHO1O) {
-	background-color: rgba(var(--dangercolor)),.2);
+	background-color: rgba(var(--dangercolor)), .2) !important;
 }
 .item-1tOPte.colorBrand-ROmMP1.focused-3afm-j,
 .item-1tOPte.colorBrand-ROmMP1:hover:not(.hideInteraction-1iHO1O),
@@ -4184,7 +4185,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .item-1tOPte.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O)[id="user-settings-cog-Nitro_Server_Boost"],
 .item-1tOPte.colorDefault-2K3EoJ.focused-3afm-j[id="guild-context-guild-settings--GUILD_PREMIUM"],
 .item-1tOPte.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O)[id="guild-context-guild-settings--GUILD_PREMIUM"] {
-	background-color: rgba(var(--accentcolor), .2);
+	background-color: rgba(var(--accentcolor), .2) !important;
 }
 #app-mount .item-1tOPte .checkbox-3s5GYZ {					/* contextmenu			checkbox 							*/
 	color: rgb(var(--accentcolor));
