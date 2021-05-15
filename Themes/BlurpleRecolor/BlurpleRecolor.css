@@ -4,6 +4,7 @@
 	--accentcolor: 114,137,218;
 	--accentcolor2: 255,115,250;
 	--linkcolor: 0,176,244;
+	--dangercolor: 237,66,69;
 	
 	--accentcolor-hover: rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255,255,255,.15), rgba(255,255,255,.15));
 	--accentcolor-active: rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255,255,255,.3), rgba(255,255,255,.3));
@@ -1740,15 +1741,17 @@ a.metadataName-14STf- {
 	color: rgb(var(--accentcolor));
 }
 .colorBrand-ROmMP1.focused-3afm-j,
-.colorDefault-2K3EoJ:not(.colorDanger-2qLCe1):not(.colorPremium-p4p7qO).focused-3afm-j {
+.colorBrand-ROmMP1:active:not(.hideInteraction-1iHO1O),
+.colorDefault-2K3EoJ.focused-3afm-j,
+.colorDefault-2K3EoJ:active:not(.hideInteraction-1iHO1O) {
 	background-color: rgb(var(--accentcolor));
 }
 .colorBrand-ROmMP1:not(.focused-3afm-j) .radioSelection-1HmrQS,
-.colorDefault-2K3EoJ:not(.colorDanger-2qLCe1):not(.colorPremium-p4p7qO):not(.focused-3afm-j) .radioSelection-1HmrQS {
+.colorDefault-2K3EoJ:not(.focused-3afm-j) .radioSelection-1HmrQS {
 	color: rgb(var(--accentcolor));
 }
 .colorBrand-ROmMP1:not(.focused-3afm-j) .checkbox-3s5GYZ,
-.colorDefault-2K3EoJ:not(.colorDanger-2qLCe1):not(.colorPremium-p4p7qO):not(.focused-3afm-j) .checkbox-3s5GYZ {
+.colorDefault-2K3EoJ:not(.focused-3afm-j) .checkbox-3s5GYZ {
 	color: rgb(var(--accentcolor));
 }
 .colorBrand-ROmMP1.focused-3afm-j .check-1JyqgN,
@@ -1762,11 +1765,11 @@ a.metadataName-14STf- {
 	color: rgb(var(--accentcolor2));
 }
 .colorPremium-p4p7qO.focused-3afm-j,
+.colorPremium-p4p7qO:active:not(.hideInteraction-1iHO1O),
 .colorDefault-2K3EoJ.focused-3afm-j[id="user-settings-cog-Nitro_Server_Boost"],
-.colorDefault-2K3EoJ.focused-3afm-j[id="guild-context-guild-settings--GUILD_PREMIUM"] {
-	background-color: rgb(var(--accentcolor2));
-}
-.colorPremium-p4p7qO.focused-3afm-j {
+.colorDefault-2K3EoJ[id="user-settings-cog-Nitro_Server_Boost"]:active:not(.hideInteraction-1iHO1O),
+.colorDefault-2K3EoJ.focused-3afm-j[id="guild-context-guild-settings--GUILD_PREMIUM"],
+.colorDefault-2K3EoJ[id="guild-context-guild-settings--GUILD_PREMIUM"]:active:not(.hideInteraction-1iHO1O) {
 	background-color: rgb(var(--accentcolor2));
 }
 .colorPremium-p4p7qO:not(.focused-3afm-j) .radioSelection-1HmrQS {
@@ -1779,14 +1782,31 @@ a.metadataName-14STf- {
 	color: rgb(var(--accentcolor2));
 }
 
+.colorDanger-2qLCe1 {
+	color: rgb(var(--dangercolor));
+}
+.colorDanger-2qLCe1.focused-3afm-j,
+.colorDanger-2qLCe1:active:not(.hideInteraction-1iHO1O) {
+	background-color: rgb(var(--dangercolor));
+}
+.colorDanger-2qLCe1:not(.focused-3afm-j) .radioSelection-1HmrQS {
+	color: rgb(var(--dangercolor));
+}
+.colorDanger-2qLCe1:not(.focused-3afm-j) .checkbox-3s5GYZ {
+	color: rgb(var(--dangercolor));
+}
+.colorDanger-2qLCe1.focused-3afm-j .check-1JyqgN {
+	color: rgb(var(--dangercolor));
+}
+
 .colorDefault-2K3EoJ[id="status-picker-online"].focused-3afm-j {
-	background-color: rgb(59,165,92);
+	background-color: rgb(87,242,135);
 }
 .colorDefault-2K3EoJ[id="status-picker-idle"].focused-3afm-j {
 	background-color: rgb(250,166,26);
 }
 .colorDefault-2K3EoJ[id="status-picker-dnd"].focused-3afm-j {
-	background-color: rgb(240,71,71);
+	background-color: rgb(237,66,69);
 }
 .colorDefault-2K3EoJ[id="status-picker-invisible"].focused-3afm-j {
 	background-color: rgb(116,127,141);
