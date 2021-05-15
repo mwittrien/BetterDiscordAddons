@@ -1194,6 +1194,10 @@
 	background-color: rgb(var(--accentcolor));
 }
 
+.uploadModalIn-1z07Bv .uploadDropModal-2kTwbc .inner-3nWsbo .icon-kyxXVr.two-3BBQI9 {
+	filter: drop-shadow(0 0 48px rgba(var(--accentcolor),.5));
+}
+
 .attachment-33OFj0 .icon-1kp3fr,
 .audioMetadata-3zOuGv::before,
 .uploadModal-2ifh8j .icon-kyxXVr:not(.image-2yrs5j),
