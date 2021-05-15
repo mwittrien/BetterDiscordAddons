@@ -1736,8 +1736,8 @@ a.metadataName-14STf- {
 
 /* ----		11.1.	CONTEXTMENU						---- */
 
-.colorBrand-ROmMP1,											/* contextmenu			brand								*/
-.colorDefault-2K3EoJ:not(.focused-3afm-j)[id="user-settings-cog-Discord_Nitro"] {
+.colorBrand-ROmMP1:not(.focused-3afm-j):not(:active),		/* contextmenu			brand								*/
+.colorDefault-2K3EoJ:not(.focused-3afm-j):not(:active)[id="user-settings-cog-Discord_Nitro"] {
 	color: rgb(var(--accentcolor));
 }
 .colorBrand-ROmMP1.focused-3afm-j,
@@ -1746,12 +1746,12 @@ a.metadataName-14STf- {
 .colorDefault-2K3EoJ:active:not(.hideInteraction-1iHO1O) {
 	background-color: rgb(var(--accentcolor));
 }
-.colorBrand-ROmMP1:not(.focused-3afm-j) .radioSelection-1HmrQS,
-.colorDefault-2K3EoJ:not(.focused-3afm-j) .radioSelection-1HmrQS {
+.colorBrand-ROmMP1:not(.focused-3afm-j):not(:active) .radioSelection-1HmrQS,
+.colorDefault-2K3EoJ:not(.focused-3afm-j):not(:active) .radioSelection-1HmrQS {
 	color: rgb(var(--accentcolor));
 }
-.colorBrand-ROmMP1:not(.focused-3afm-j) .checkbox-3s5GYZ,
-.colorDefault-2K3EoJ:not(.focused-3afm-j) .checkbox-3s5GYZ {
+.colorBrand-ROmMP1:not(.focused-3afm-j):not(:active) .checkbox-3s5GYZ,
+.colorDefault-2K3EoJ:not(.focused-3afm-j):not(:active) .checkbox-3s5GYZ {
 	color: rgb(var(--accentcolor));
 }
 .colorBrand-ROmMP1.focused-3afm-j .check-1JyqgN,
@@ -1759,9 +1759,9 @@ a.metadataName-14STf- {
 	color: rgb(var(--accentcolor));
 }
 
-.colorPremium-p4p7qO,										/* contextmenu			premium								*/
-.colorDefault-2K3EoJ:not(.focused-3afm-j)[id="user-settings-cog-Nitro_Server_Boost"],
-.colorDefault-2K3EoJ:not(.focused-3afm-j)[id="guild-context-guild-settings--GUILD_PREMIUM"] {
+.colorPremium-p4p7qO:not(.focused-3afm-j):not(:active),		/* contextmenu			premium								*/
+.colorDefault-2K3EoJ:not(.focused-3afm-j):not(:active)[id="user-settings-cog-Nitro_Server_Boost"],
+.colorDefault-2K3EoJ:not(.focused-3afm-j):not(:active)[id="guild-context-guild-settings--GUILD_PREMIUM"] {
 	color: rgb(var(--accentcolor2));
 }
 .colorPremium-p4p7qO.focused-3afm-j,
@@ -1772,43 +1772,47 @@ a.metadataName-14STf- {
 .colorDefault-2K3EoJ[id="guild-context-guild-settings--GUILD_PREMIUM"]:active:not(.hideInteraction-1iHO1O) {
 	background-color: rgb(var(--accentcolor2));
 }
-.colorPremium-p4p7qO:not(.focused-3afm-j) .radioSelection-1HmrQS {
+.colorPremium-p4p7qO:not(.focused-3afm-j):not(:active) .radioSelection-1HmrQS {
 	color: rgb(var(--accentcolor2));
 }
-.colorPremium-p4p7qO:not(.focused-3afm-j) .checkbox-3s5GYZ {
+.colorPremium-p4p7qO:not(.focused-3afm-j):not(:active) .checkbox-3s5GYZ {
 	color: rgb(var(--accentcolor2));
 }
 .colorPremium-p4p7qO.focused-3afm-j .check-1JyqgN {
 	color: rgb(var(--accentcolor2));
 }
 
-.colorDanger-2qLCe1 {
+.colorDanger-2qLCe1:not(.focused-3afm-j):not(:active) {		/* contextmenu			danger								*/
 	color: rgb(var(--dangercolor));
 }
 .colorDanger-2qLCe1.focused-3afm-j,
 .colorDanger-2qLCe1:active:not(.hideInteraction-1iHO1O) {
 	background-color: rgb(var(--dangercolor));
 }
-.colorDanger-2qLCe1:not(.focused-3afm-j) .radioSelection-1HmrQS {
+.colorDanger-2qLCe1:not(.focused-3afm-j):not(:active) .radioSelection-1HmrQS {
 	color: rgb(var(--dangercolor));
 }
-.colorDanger-2qLCe1:not(.focused-3afm-j) .checkbox-3s5GYZ {
+.colorDanger-2qLCe1:not(.focused-3afm-j):not(:active) .checkbox-3s5GYZ {
 	color: rgb(var(--dangercolor));
 }
 .colorDanger-2qLCe1.focused-3afm-j .check-1JyqgN {
 	color: rgb(var(--dangercolor));
 }
 
-.colorDefault-2K3EoJ[id="status-picker-online"].focused-3afm-j {
+.colorDefault-2K3EoJ[id="status-picker-online"].focused-3afm-j,
+.colorDefault-2K3EoJ[id="status-picker-online"]:active:not(.hideInteraction-1iHO1O) {
 	background-color: rgb(87,242,135);
 }
-.colorDefault-2K3EoJ[id="status-picker-idle"].focused-3afm-j {
+.colorDefault-2K3EoJ[id="status-picker-idle"].focused-3afm-j,
+.colorDefault-2K3EoJ[id="status-picker-idle"]:active:not(.hideInteraction-1iHO1O) {
 	background-color: rgb(250,166,26);
 }
-.colorDefault-2K3EoJ[id="status-picker-dnd"].focused-3afm-j {
+.colorDefault-2K3EoJ[id="status-picker-dnd"].focused-3afm-j,
+.colorDefault-2K3EoJ[id="status-picker-dnd"]:active:not(.hideInteraction-1iHO1O) {
 	background-color: rgb(237,66,69);
 }
-.colorDefault-2K3EoJ[id="status-picker-invisible"].focused-3afm-j {
+.colorDefault-2K3EoJ[id="status-picker-invisible"].focused-3afm-j,
+.colorDefault-2K3EoJ[id="status-picker-invisible"]:active:not(.hideInteraction-1iHO1O) {
 	background-color: rgb(116,127,141);
 }
 
