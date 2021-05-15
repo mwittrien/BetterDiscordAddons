@@ -155,6 +155,7 @@
 		15.	RTCSTATUSPOPOUT
 		16.	PHONE-/EMAILVALIDATION
 		17.	QUICKSELECTPOPOUT
+		18.	WARNINGPOPOUT
 	15.	GENERAL
 		1.	TEXT
 		2.	BUTTONS
@@ -635,7 +636,7 @@ body::before {
 /* ----		6.1.	CHANNELHEADER					---- */
 
 .container-1r6BKw.themed-ANHk51 {							/* header				themedcontainer						*/
-	box-shadow: 0 1px 0 rgba(var(--transparencycolor), .2),0 1.5px 0 rgba(var(--transparencycolor), .05),0 2px 0 rgba(var(--transparencycolor), .05);
+	box-shadow: 0 1px 0 rgba(var(--transparencycolor), .2), 0 1.5px 0 rgba(var(--transparencycolor), .05), 0 2px 0 rgba(var(--transparencycolor), .05);
 }
 
 .input-2A_zIr:focus {										/* header				dmchannelinput						*/
@@ -2981,7 +2982,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	flex: 1 0 auto;
 }
 #app-mount .separator-2-RRj_ {
-	box-shadow: 0 1px 0 0 rgba(var(--transparencycolor),.3),0 1px 2px 0 rgba(var(--transparencycolor),.3);
+	box-shadow: 0 1px 0 0 rgba(var(--transparencycolor),.3), 0 1px 2px 0 rgba(var(--transparencycolor),.3);
 }
 #app-mount .modalTextContainer-ITvzbi {						/* modal				text file						*/
 	background-color: rgba(var(--transparencycolor), .5);
@@ -3008,7 +3009,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 
 #app-mount .separator-19P9q2 {
-	box-shadow: 0 1px 0 0 rgba(var(--transparencycolor),.3),0 1px 2px 0 rgba(var(--transparencycolor),.3);
+	box-shadow: 0 1px 0 0 rgba(var(--transparencycolor),.3), 0 1px 2px 0 rgba(var(--transparencycolor),.3);
 }
 #app-mount .divider-3WKGWk {
 	border-color: var(--background-modifier-accent);
@@ -5525,6 +5526,52 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background: var(--interactive-normal);
 }
 
+/* ----		14.18.	WARNINGPOPOUT					---- */
+
+#app-mount .contentWarningPopout-n5JsIs {					/* popout													*/
+	background-color: transparent;
+	border: none;
+	border-radius: 5px;
+	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
+	position: relative;
+}
+.contentWarningPopout-n5JsIs::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+	filter: blur(var(--popoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	border-radius: 5px;
+	z-index: -1;
+}
+.contentWarningPopout-n5JsIs::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	border-radius: 5px;
+	z-index: -1;
+}
+#app-mount .body-3PNusm {
+	color: var(--header-secondary);
+}
+#app-mount .header-2NYWtG {
+	color: var(--header-primary);
+}
+
 
 /* ~~~~		15.		GENERAL							~~~~ */
 
@@ -5760,7 +5807,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 #app-mount .lookLink-9FtZy-.colorTransparent-1ewNp9:hover .contents-18-Yxp,
 #app-mount .lookLink-9FtZy-.hoverTransparent-2Lz5CN.hasHover-3X1-zV:hover .contents-18-Yxp {
-	background-image: linear-gradient(0deg,transparent,transparent 1px,rgb(var(--textbrighter)) 0,rgb(var(--textbrighter)) 2px,transparent 0);
+	background-image: linear-gradient(0deg, transparent,transparent 1px,rgb(var(--textbrighter)) 0,rgb(var(--textbrighter)) 2px,transparent 0);
 	color: var(--text-normal);
 }
 
@@ -6676,7 +6723,7 @@ html .channelTabs-favContainer {
 }
 html .channelTabs-tabContainer {
 	background: rgba(var(--transparencycolor), calc(0.05 + var(--guildchanneltransparency) * 2));
-	box-shadow: 0 1px 0 rgba(var(--transparencycolor), .2),0 1.5px 0 rgba(var(--transparencycolor), .05),0 2px 0 rgba(var(--transparencycolor), .05);
+	box-shadow: 0 1px 0 rgba(var(--transparencycolor), .2), 0 1.5px 0 rgba(var(--transparencycolor), .05), 0 2px 0 rgba(var(--transparencycolor), .05);
 	padding-top: 6px;
 }
 html .channelTabs-favContainer {
