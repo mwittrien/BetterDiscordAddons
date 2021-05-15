@@ -2,7 +2,7 @@
  * @name GoogleTranslateOption
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.2
+ * @version 2.2.3
  * @description Allows you to translate Messages and your outgoing Message within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.2.2",
+			"version": "2.2.3",
 			"description": "Allows you to translate Messages and your outgoing Message within Discord"
 		},
 		"changeLog": {
@@ -602,11 +602,11 @@ module.exports = (_ => {
 					this.settings.engines.backup = Object.keys(translationEngines).filter(n => n != this.settings.engines.translator)[0];
 					BDFDB.DataUtils.save(this.settings.engines, this, "engines");
 				}
-				let engine = translationEngines[this.settings.engines.translator];
-				let backup = translationEngines[this.settings.engines.backup];
-				let languageIds = [].concat(engine.languages, backup && backup.languages).flat(10).filter(n => n);
+				let engine = translationEngines[this.settings.engines.translator] || {};
+				let backup = translationEngines[this.settings.engines.backup] || {};
+				let languageIds = [].concat(engine.languages, backup.languages).flat(10).filter(n => n);
 				languages = BDFDB.ObjectUtils.deepAssign(
-					!engine.auto && (!backup || !backup.auto) ? {} : {
+					!engine.auto && !backup.auto ? {} : {
 						auto: {
 							auto: true,
 							name: "Auto",
