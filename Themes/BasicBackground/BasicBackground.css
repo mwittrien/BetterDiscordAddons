@@ -3348,15 +3348,12 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .2);
 	box-shadow: none;
 }
-.uploadModal-2ifh8j .checkbox-1ix_J3 {						/* modal				checkbox							*/
-	border-color: #fff !important;
-}
 .uploadModal-2ifh8j .checkbox-1ix_J3.checked-3_4uQ9 {
 	background-color: rgb(var(--accentcolor)) !important;
 	border-color: rgb(var(--accentcolor)) !important;
 }
-.uploadModal-2ifh8j .checkbox-1ix_J3.checked-3_4uQ9 path[fill="#5865f2", i],
-.uploadModal-2ifh8j .checkbox-1ix_J3.checked-3_4uQ9 path[fill="#7289da", i] {
+.uploadModal-2ifh8j .checkbox-1ix_J3.checked-3_4uQ9 path[fill="#5865f2" i],
+.uploadModal-2ifh8j .checkbox-1ix_J3.checked-3_4uQ9 path[fill="#7289da" i] {
 	fill: #fff !important;
 }
 .uploadModal-2ifh8j .inner-3nWsbo .file-34mY5K .icon-kyxXVr.image-2yrs5j {

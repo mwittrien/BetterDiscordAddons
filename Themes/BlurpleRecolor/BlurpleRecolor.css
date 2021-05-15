@@ -1205,6 +1205,10 @@
 	object-position: -999999px -999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_bg.svg) center/contain no-repeat !important;
 }
+.uploadModal-2ifh8j .icon-kyxXVr:not(.image-2yrs5j),
+.uploadModalIn-1z07Bv .icon-kyxXVr:not(.image-2yrs5j) {
+	background-size: 72px 96px !important;
+}
 .attachment-33OFj0 .icon-1kp3fr + *::before,
 .attachment-33OFj0 .icon-1kp3fr + *::after,
 .audioMetadata-3zOuGv > *:first-child::before,
@@ -1218,34 +1222,22 @@
 	pointer-events: none;
 	background: rgb(var(--accentcolor));
 }
-.markup-2BOw-j > .attachment-33OFj0 {
-    position: relative;
-}
-.attachment-33OFj0 .icon-1kp3fr {
-	background-size: 120% !important;
-}
 .audioMetadata-3zOuGv::before {
-	background-position: center -4px !important;
-	background-size: 140% !important;
+	background-position: top center !important;
 }
 .attachment-33OFj0 .icon-1kp3fr + *::before,
 .attachment-33OFj0 .icon-1kp3fr + *::after {
-	top: 9px;
-	left: 8px;
-	width: 36px;
-	height: 48px;
-}
-.markup-2BOw-j > .attachment-33OFj0 .icon-1kp3fr + *::before,
-.markup-2BOw-j > .attachment-33OFj0 .icon-1kp3fr + *::after {
-	top: 6px;
-	left: 7px;
+    top: 11px;
+    left: 11px;
+    width: 30px;
+    height: 40px;
 }
 .audioMetadata-3zOuGv > *:first-child::before,
 .audioMetadata-3zOuGv > *:first-child::after {
-	top: 0;
-	left: 5px;
-	width: 34px;
-	height: 56px;
+    top: 10px;
+    left: 10px;
+    width: 24px;
+    height: 32px;
 }
 .uploadModal-2ifh8j .icon-kyxXVr:not(.image-2yrs5j)::before,
 .uploadModal-2ifh8j .icon-kyxXVr:not(.image-2yrs5j)::after,
@@ -1253,6 +1245,7 @@
 .uploadModalIn-1z07Bv .icon-kyxXVr:not(.image-2yrs5j)::after {
 	width: 100px;
 	height: 130px;
+	-webkit-mask-size: 72px 96px !important;
 }
 .uploadModalIn-1z07Bv .error-kKl9o2 .icon-kyxXVr:not(.image-2yrs5j)::before,
 .uploadModalIn-1z07Bv .error-kKl9o2 .icon-kyxXVr:not(.image-2yrs5j)::after {

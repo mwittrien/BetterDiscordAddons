@@ -2695,6 +2695,14 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background-color: var(--background-secondary);
 	box-shadow: inset 0 1px 0 rgba(var(--backgroundsecondary),.6);
 }
+.uploadModal-2ifh8j .checkbox-1ix_J3.checked-3_4uQ9 {
+	background-color: rgb(var(--accentcolor)) !important;
+	border-color: rgb(var(--accentcolor)) !important;
+}
+.uploadModal-2ifh8j .checkbox-1ix_J3.checked-3_4uQ9 path[fill="#5865f2" i],
+.uploadModal-2ifh8j .checkbox-1ix_J3.checked-3_4uQ9 path[fill="#7289da" i] {
+	fill: #fff !important;
+}
 
 /* ----		10.5.	KEYBOARDSHORTCUTSMODAL			---- */
 
