@@ -26,7 +26,7 @@ module.exports = (_ => {
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
 		"changeLog": {
 			"improved": {
-				"Date Input Changer": "Added a Language Option, which allows you to change the Language used for the Date Formatter outside of Discords Native Languages, this allows People to use to use the Persian Calendar again for Example"
+				"Date Input Changer": "Added a Language Option, which allows you to change the Language used for the Date Formatter outside of Discords Native Languages, this allows People to use the Persian Calendar again for Example"
 			}
 		}
 	};
