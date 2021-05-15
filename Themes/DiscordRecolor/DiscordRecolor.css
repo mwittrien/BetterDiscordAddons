@@ -680,6 +680,9 @@ html .iconBadge-2wi9r4 {
 .select-2TCrqx [class*="css-"][class*="-indicatorContainer"] {
 	color: var(--text-normal);
 }
+.selectedIcon-3uS11H {
+	color: var(--interactive-active);
+}
 #app-mount .optionNormal-12VR9V,
 .css-1gfjib6-option,
 .css-1yz4bi9-option,

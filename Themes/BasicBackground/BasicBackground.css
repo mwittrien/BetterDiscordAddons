@@ -5977,7 +5977,10 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .select-2TCrqx [class*="css-"][class*="-indicatorContainer"] {
 	color: var(--text-normal);
 }
-.option-3KoAJB,
+.selectedIcon-3uS11H {
+	color: var(--interactive-active);
+}
+#app-mount .optionNormal-12VR9V,
 .css-1gfjib6-option,
 .css-1yz4bi9-option,
 .css-ru8b0x-option,
@@ -5985,9 +5988,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .1);
 	color: var(--interactive-normal);
 }
-.option-3KoAJB.focused-1T6PE5,
-.option-3KoAJB:focus,
-.option-3KoAJB:hover,
+#app-mount .optionNormal-12VR9V:hover,
 .css-pkcurw-option,
 .css-rzbxvl-option,
 .css-1qxn4c5-option,
@@ -5995,6 +5996,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .3);
 	color: var(--interactive-hover);
 }
+#app-mount .optionActive-KkAdqq,
 .css-1gxgi19-option,
 .css-1ba14n5-option,
 .css-6qzljd-option,
