@@ -1815,6 +1815,10 @@ a.metadataName-14STf- {
 .colorDefault-2K3EoJ[id="status-picker-invisible"]:active:not(.hideInteraction-1iHO1O) {
 	background-color: rgb(116,127,141);
 }
+.colorDefault-2K3EoJ.focused-3afm-j .status-1AY8sU,
+.colorDefault-2K3EoJ:active .status-1AY8sU {
+	background-color: #fff !important;
+}
 
 .icon-LYJorE {												/* contextmenu			icon								*/
 	color: currentColor !important;
