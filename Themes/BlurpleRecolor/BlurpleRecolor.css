@@ -1324,6 +1324,11 @@
 .uploadModal-2ifh8j .icon-kyxXVr.webcode-22GGLX::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_webcode_accent.svg) center/contain no-repeat;
 }
+.filenameLinkWrapper-1-14c5,
+a.fileNameLink-9GuxCo,
+a.metadataName-14STf- {
+	color: rgb(var(--accentcolor));
+}
 
 /* ----		10.5.	KEYBOARDSHORTCUTSMODAL			---- */
 
