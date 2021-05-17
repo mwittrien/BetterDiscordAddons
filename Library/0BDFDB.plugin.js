@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.3
+ * @version 1.6.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,19 +14,21 @@
 
 module.exports = (_ => {
 	const BdApi = window.BdApi;
-	const isBeta = !(BdApi && !Array.isArray(BdApi.settings));
 	
 	const config = {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.6.3",
+			"version": "1.6.4",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
 		"changeLog": {
+			"fixed": {
+				"Text Scroller Component": "Fixed some scrolling Issue, which made the Scrollers act weird (especially noticeable for SpotifyControls)"
+			},
 			"improved": {
-				"Date Input Changer": "Added a Language Option, which allows you to change the Language used for the Date Formatter outside of Discords Native Languages, this allows People to use the Persian Calendar again for Example"
+				"Date Input Component": "Added a Language Option, which allows you to change the Language used for the Date Formatter outside of Discords Native Languages, this allows People to use the Persian Calendar again for Example"
 			}
 		}
 	};
@@ -503,12 +505,7 @@ module.exports = (_ => {
 		}
 		return null;
 	};
-	BDFDB.BDUtils.settingsIds = !isBeta ? {
-		automaticLoading: "fork-ps-5",
-		coloredText: "bda-gs-7",
-		normalizedClasses: "fork-ps-4",
-		showToasts: "fork-ps-2"
-	} : {
+	BDFDB.BDUtils.settingsIds = {
 		automaticLoading: "settings.addons.autoReload",
 		coloredText: "settings.appearance.coloredText",
 		normalizedClasses: "settings.general.classNormalizer",
@@ -530,10 +527,10 @@ module.exports = (_ => {
 	BDFDB.BDUtils.getSettings = function (key) {
 		if (!BdApi) return {};
 		if (typeof key == "string") return typeof BdApi.isSettingEnabled == "function" && BdApi.isSettingEnabled(...key.split("."));
-		else return !isBeta && typeof BdApi.getBDData == "function" ? BDFDB.ObjectUtils.get(BdApi.getBDData("settings"), `${BDFDB.DiscordUtils.getBuild()}.settings`) : (BDFDB.ArrayUtils.is(BdApi.settings) ? BdApi.settings.map(n => n.settings.map(m => m.settings.map(l => ({id: [n.id, m.id, l.id].join("."), value: l.value})))).flat(10).reduce((newObj, setting) => (newObj[setting.id] = setting.value, newObj), {}) : {});
+		else return BDFDB.ArrayUtils.is(BdApi.settings) ? BdApi.settings.map(n => n.settings.map(m => m.settings.map(l => ({id: [n.id, m.id, l.id].join("."), value: l.value})))).flat(10).reduce((newObj, setting) => (newObj[setting.id] = setting.value, newObj), {}) : {};
 	};
 	BDFDB.BDUtils.getSettingsProperty = function (property, key) {
-		if (!BdApi || !isBeta) return key ? "" : {};
+		if (!BdApi || !BDFDB.ArrayUtils.is(BdApi.settings)) return key ? "" : {};
 		else {
 			let settingsMap = BdApi.settings.map(n => n.settings.map(m => m.settings.map(l => ({id: [n.id, m.id, l.id].join("."), value: l[property]})))).flat(10).reduce((newObj, setting) => (newObj[setting.id] = setting.value, newObj), {});
 			return key ? (settingsMap[key] != null ? settingsMap[key] : "") : "";
@@ -906,33 +903,10 @@ module.exports = (_ => {
 		if (settingsProps && !BDFDB.ObjectUtils.is(settingsProps) && (BDFDB.ReactUtils.isValidElement(settingsProps) || BDFDB.ArrayUtils.is(settingsProps))) settingsProps = {
 			children: settingsProps
 		};
-		let settingsPanel = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, Object.assign({
+		return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, Object.assign({
 			addon: addon,
 			collapseStates: settingsProps && settingsProps.collapseStates
 		}, settingsProps));
-		if (isBeta || !document.querySelector("#bd-settingspane-container")) return settingsPanel;
-		else {
-			let div = document.createElement("div");
-			div.props = settingsPanel.props;
-			BDFDB.TimeUtils.timeout(_ => {
-				BDFDB.ModalUtils.open(addon, {
-					header: `${addon.name} ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
-					subHeader: "",
-					className: BDFDB.disCN._repomodal,
-					headerClassName: BDFDB.disCN._repomodalheader,
-					contentClassName: BDFDB.disCN._repomodalsettings,
-					footerClassName: BDFDB.disCN._repomodalfooter,
-					size: "MEDIUM",
-					children: settingsPanel,
-					buttons: [{contents: BDFDB.LanguageUtils.LanguageStrings.DONE, color: "BRAND", close: true}]
-				});
-			});
-			BDFDB.TimeUtils.timeout(_ => {
-				let settings = document.querySelector(`${BDFDB.dotCN._reposettingsopen} #plugin-settings-${addon.name}`);
-				if (settings && settings.previousElementSibling && !settings.previousElementSibling.className) settings.previousElementSibling.click();
-			}, 1000);
-			return div;
-		}
 	};
 	BDFDB.PluginUtils.refreshSettingsPanel = function (plugin, settingsPanel, ...args) {
 		if (BDFDB.ObjectUtils.is(plugin)) {
@@ -4650,103 +4624,6 @@ module.exports = (_ => {
 					else components[child] = module;
 				}
 				
-				InternalComponents.LibraryComponents.AddonCard = reactInitialized && class BDFDB_AddonCard extends LibraryModules.React.Component {
-					render() {
-						if (!BDFDB.ObjectUtils.is(this.props.data)) return null;
-						let controls = [].concat(this.props.controls).flat(10).filter(n => n);
-						let links = [].concat(this.props.links).flat(10).filter(n => n);
-						let buttons = [].concat(this.props.buttons).flat(10).filter(n => n);
-						let meta = [
-							!isBeta && " v",
-							BDFDB.ReactUtils.createElement("span", {
-								className: BDFDB.disCN._repoversion,
-								children: isBeta ? `v${this.props.data.version}` : this.props.data.version
-							}),
-							" by ",
-							BDFDB.ReactUtils.createElement("span", {
-								className: BDFDB.disCN._repoauthor,
-								children: this.props.data.author
-							})
-						].filter(n => n);
-						return BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repoentry, this.props.className, BDFDB.disCN._repocard, BDFDB.disCN._reposettingsclosed, BDFDB.disCN._repocheckboxitem),
-							children: [
-								BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN._repoheader,
-									style: {overflow: "visible"},
-									children: [
-										isBeta && this.props.icon,
-										BDFDB.ReactUtils.createElement("span", {
-											className: BDFDB.disCN._repoheadertitle,
-											children: [
-												BDFDB.ReactUtils.createElement("span", {
-													className: BDFDB.disCN._reponame,
-													children: this.props.data.name
-												}),
-												isBeta ? BDFDB.ReactUtils.createElement("div", {
-													className: BDFDB.disCN._repometa,
-													children: meta
-												}) : meta
-											]
-										}),
-										controls.length && BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN._repoheadercontrols,
-											children: controls
-										})
-									]
-								}),
-								BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN._repodescriptionwrap,
-									children: BDFDB.ReactUtils.createElement("div", {
-										className: BDFDB.disCN._repodescription,
-										children: this.props.data.description && BDFDB.ReactUtils.markdownParse(this.props.data.description)
-									})
-								}),
-								(links.length || buttons.length) && BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN._repofooter,
-									children: [
-										links.length && BDFDB.ReactUtils.createElement("span", {
-											className: BDFDB.disCN._repolinks,
-											children: links.map((data, i) => {
-												if (!BDFDB.ObjectUtils.is(data)) return;
-												let link = BDFDB.ReactUtils.createElement("a", {
-													className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repolink, typeof data.label == "string" && BDFDB.disCN._repolink + "-" + data.label.toLowerCase().replace(/\s/g, "")),
-													href: data.href,
-													children: data.icon || data.label
-												});
-												if (!isBeta) return [
-													i > 0 && " | ",
-													link
-												];
-												else {
-													let button = BDFDB.ReactUtils.createElement("div", {
-														className: BDFDB.disCN._repocontrolsbutton,
-														children: link,
-														onClick: e => {
-															if (typeof data.onClick == "function") {
-																BDFDB.ListenerUtils.stopEvent(e);
-																data.onClick();
-															}
-														}
-													});
-													return typeof data.label == "string" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-														text: data.label,
-														children: button
-													}) : button;
-												}
-											}).flat(10).filter(n => n)
-										}),
-										buttons.length && BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repofootercontrols, isBeta && BDFDB.disCN._repocontrols),
-											children: buttons
-										})
-									].flat(10).filter(n => n)
-								})
-							].filter(n => n)
-						});
-					}
-				};
-				
 				InternalComponents.LibraryComponents.AutoFocusCatcher = reactInitialized && class BDFDB_AutoFocusCatcher extends LibraryModules.React.Component {
 					render() {
 						const style = {padding: 0, margin: 0, border: "none", width: 0, maxWidth: 0, height: 0, maxHeight: 0, visibility: "hidden"};
@@ -6856,6 +6733,7 @@ module.exports = (_ => {
 					}
 					render() {						
 						let panelItems = [
+							BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.AutoFocusCatcher, {}),
 							typeof this.props.children == "function" ? (_ => {
 								return this.props.children(this.props.collapseStates);
 							})() : this.props.children
@@ -7600,6 +7478,7 @@ module.exports = (_ => {
 				
 				InternalComponents.LibraryComponents.TextScroller = reactInitialized && class BDFDB_TextScroller extends LibraryModules.React.Component {
 					render() {
+						let scrolling, scroll = _ => {};
 						return BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.textscroller, this.props.className),
 							style: Object.assign({}, this.props.style, {
@@ -7608,21 +7487,29 @@ module.exports = (_ => {
 								overflow: "hidden"
 							}),
 							ref: instance => {
-								let ele = BDFDB.ReactUtils.findDOMNode(instance);
+								const ele = BDFDB.ReactUtils.findDOMNode(instance);
 								if (ele && ele.parentElement) {
-									let maxWidth = BDFDB.DOMUtils.getInnerWidth(ele.parentElement);
+									const maxWidth = BDFDB.DOMUtils.getInnerWidth(ele.parentElement);
 									if (maxWidth > 50) ele.style.setProperty("max-width", `${maxWidth}px`);
-									BDFDB.TimeUtils.timeout(_ => {
+									if (!this.props.initiated) BDFDB.TimeUtils.timeout(_ => {
+										this.props.initiated = true;
 										if (document.contains(ele.parentElement)) BDFDB.ReactUtils.forceUpdate(this);
 									}, 3000);
-									let Animation = new LibraryModules.AnimationUtils.Value(0);
-									Animation
-										.interpolate({inputRange: [0, 1], outputRange: [0, (BDFDB.DOMUtils.getRects(ele.firstElementChild).width - BDFDB.DOMUtils.getRects(ele).width) * -1]})
-										.addListener(v => {ele.firstElementChild.style.setProperty("left", `${v.value}px`, "important");});
-									this.scroll = p => {
-										let w = p + parseFloat(ele.firstElementChild.style.getPropertyValue("left")) / (BDFDB.DOMUtils.getRects(ele.firstElementChild).width - BDFDB.DOMUtils.getRects(ele).width);
+									const Animation = new LibraryModules.AnimationUtils.Value(0);
+									Animation.interpolate({inputRange: [0, 1], outputRange: [0, (BDFDB.DOMUtils.getRects(ele.firstElementChild).width - BDFDB.DOMUtils.getRects(ele).width) * -1]}).addListener(v => {
+										ele.firstElementChild.style.setProperty("display", v.value == 0 ? "inline" : "block", "important");
+										ele.firstElementChild.style.setProperty("left", `${v.value}px`, "important");
+									});
+									scroll = p => {
+										const display = ele.firstElementChild.style.getPropertyValue("display", "inline");
+										ele.firstElementChild.style.setProperty("display", "inline", "important");
+										const innerWidth = BDFDB.DOMUtils.getRects(ele.firstElementChild).width;
+										const outerWidth = BDFDB.DOMUtils.getRects(ele).width;
+										ele.firstElementChild.style.setProperty("display", display, "important");
+										
+										let w = p + parseFloat(ele.firstElementChild.style.getPropertyValue("left")) / (innerWidth - outerWidth);
 										w = isNaN(w) || !isFinite(w) ? p : w;
-										w *= BDFDB.DOMUtils.getRects(ele.firstElementChild).width / (BDFDB.DOMUtils.getRects(ele).width * 2);
+										w *= innerWidth / (outerWidth * 2);
 										LibraryModules.AnimationUtils.parallel([LibraryModules.AnimationUtils.timing(Animation, {toValue: p, duration: Math.sqrt(w**2) * 4000 / (parseInt(this.props.speed) || 1)})]).start();
 									};
 								}
@@ -7632,16 +7519,14 @@ module.exports = (_ => {
 							},
 							onMouseEnter: e => {
 								if (BDFDB.DOMUtils.getRects(e.currentTarget).width < BDFDB.DOMUtils.getRects(e.currentTarget.firstElementChild).width) {
-									this.scrolling = true;
-									e.currentTarget.firstElementChild.style.setProperty("display", "block", "important");
-									this.scroll(1);
+									scrolling = true;
+									scroll(1);
 								}
 							},
 							onMouseLeave: e => {
-								if (this.scrolling) {
-									delete this.scrolling;
-									e.currentTarget.firstElementChild.style.setProperty("display", "inline", "important");
-									this.scroll(0);
+								if (scrolling) {
+									scrolling = false;
+									scroll(0);
 								}
 							},
 							children: BDFDB.ReactUtils.createElement("div", {
@@ -7750,13 +7635,12 @@ module.exports = (_ => {
 				BDFDB.LibraryComponents = Object.assign({}, InternalComponents.LibraryComponents);
 				
 				InternalBDFDB.createCustomControl = function (data) {
-					let controlButton = BDFDB.DOMUtils.create(`<${isBeta ? "button" : "div"} class="${BDFDB.DOMUtils.formatClassName(isBeta && BDFDB.disCN._repobutton, BDFDB.disCN._repocontrolsbutton, BDFDB.disCN._repocontrolscustom)}"></${isBeta ? "button" : "div"}>`);
+					let controlButton = BDFDB.DOMUtils.create(`<button class="${BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repobutton, BDFDB.disCN._repocontrolsbutton, BDFDB.disCN._repocontrolscustom)}"></button>`);
 					BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-						className: !isBeta && BDFDB.disCN._repoicon,
 						nativeClass: true,
 						name: data.svgName,
-						width: isBeta ? "20" : "24",
-						height: isBeta ? "20" : "24"
+						width: 20,
+						height: 20
 					}), controlButton);
 					controlButton.addEventListener("click", _ => {if (typeof data.onClick == "function") data.onClick();});
 					if (data.tooltipText) controlButton.addEventListener("mouseenter", _ => {BDFDB.TooltipUtils.create(controlButton, data.tooltipText);});
