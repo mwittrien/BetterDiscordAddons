@@ -129,7 +129,7 @@ module.exports = (_ => {
 			DESKTOP: {
 				button: 2,
 				value: 2,
-				color: "STATUS_GREEN"
+				color: "var(--bdfdb-green)"
 			}
 		};
 		

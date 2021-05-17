@@ -83,13 +83,13 @@ module.exports = (_ => {
 		const buttonData = {
 			INSTALLED: {
 				colorClass: "GREEN",
-				backgroundColor: "STATUS_GREEN",
+				backgroundColor: "var(--bdfdb-green)",
 				icon: "CHECKMARK",
 				text: "USER_SETTINGS_VOICE_INSTALLED_LABEL"
 			},
 			OUTDATED: {
 				colorClass: "RED",
-				backgroundColor: "STATUS_RED",
+				backgroundColor: "var(--bdfdb-red)",
 				icon: "CLOSE",
 				text: "outdated"
 			},

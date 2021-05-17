@@ -2853,9 +2853,9 @@ module.exports = (_ => {
 				BDFDB.UserUtils.getStatusColor = function (status, useColor) {
 					status = typeof status == "string" ? status.toLowerCase() : null;
 					switch (status) {
-						case "online": return BDFDB.DiscordConstants.Colors.STATUS_GREEN;
-						case "idle": return BDFDB.DiscordConstants.Colors.STATUS_YELLOW;
-						case "dnd": return BDFDB.DiscordConstants.Colors.STATUS_RED;
+						case "online": return useColor ? BDFDB.DiscordConstants.Colors.STATUS_GREEN_600 : "var(--bdfdb-green)";
+						case "idle": return useColor ? BDFDB.DiscordConstants.Colors.STATUS_YELLOW : "var(--bdfdb-yellow)";
+						case "dnd": return useColor ? BDFDB.DiscordConstants.Colors.STATUS_RED : "var(--bdfdb-red)";
 						case "playing": return useColor ? BDFDB.DiscordConstants.Colors.BRAND : "var(--bdfdb-blurple)";
 						case "listening": return BDFDB.DiscordConstants.Colors.SPOTIFY;
 						case "streaming": return BDFDB.DiscordConstants.Colors.TWITCH;
