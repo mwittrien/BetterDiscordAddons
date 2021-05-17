@@ -529,7 +529,7 @@ module.exports = (_ => {
 						margin-right: 8px;
 						border-radius: 4px;
 						overflow: hidden;
-						transition: width .3s ease, height .3s ease;
+						transition: border-radius .3s ease, margin .3s ease, width .3s ease, height .3s ease;
 					}
 					${BDFDB.dotCN._spotifycontrolscover} {
 						display: block;
