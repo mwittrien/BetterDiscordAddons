@@ -1199,6 +1199,9 @@
 	filter: drop-shadow(0 0 48px rgba(var(--accentcolor),.5));
 }
 
+.attachment-33OFj0 {
+	position: relative;
+}
 .attachment-33OFj0 .icon-1kp3fr,
 .audioMetadata-3zOuGv::before,
 .uploadModal-2ifh8j .icon-kyxXVr:not(.image-2yrs5j),
@@ -1228,8 +1231,8 @@
 }
 .attachment-33OFj0 .icon-1kp3fr + *::before,
 .attachment-33OFj0 .icon-1kp3fr + *::after {
-    top: 11px;
-    left: 11px;
+    top: 10px;
+    left: 10px;
     width: 30px;
     height: 40px;
 }

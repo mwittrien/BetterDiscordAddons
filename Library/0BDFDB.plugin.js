@@ -2872,7 +2872,7 @@ module.exports = (_ => {
 				};
 				BDFDB.UserUtils.getAvatar = function (id = BDFDB.UserUtils.me.id) {
 					let user = LibraryModules.UserStore.getUser(id);
-					if (!user) return window.location.origin + "/assets/322c936a8c8be1b803cd94861bdfa868.png";
+					if (!user) return window.location.origin + "/assets/1f0bfc0865d324c2587920a7d80c609b.png";
 					else return ((user.avatar ? "" : window.location.origin) + LibraryModules.IconUtils.getUserAvatarURL(user)).split("?")[0];
 				};
 				BDFDB.UserUtils.can = function (permission, id = BDFDB.UserUtils.me.id, channelId = LibraryModules.LastChannelStore.getChannelId()) {
