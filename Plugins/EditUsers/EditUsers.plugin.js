@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.0
+ * @version 4.2.1
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.2.0",
+			"version": "4.2.1",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"New Mention Style": ""
+				"Failed Messages": "No longer overwrites the red color indicating a message that failed to send"
 			}
 		}
 	};
@@ -673,7 +673,7 @@ module.exports = (_ => {
 							if (e.instance.props.children) e.instance.props.children.props.message = e.instance.props.message;
 						}
 					}
-					else {
+					else if (e.instance.props.message.state != BDFDB.DiscordConstants.MessageStates.SEND_FAILED) {
 						let data = changedUsers[e.instance.props.message.author.id];
 						let messageColor = data && (data.color5 || (BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.coloredText) && (data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.message.author.id) || {}).colorString || data.color1)));
 						if (messageColor) {
