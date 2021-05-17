@@ -805,6 +805,7 @@ body::before {
 	bottom: 0;
 	left: 0;
 	z-index: 1;
+	pointer-events: none;
 }
 .message-2qnXI6.ephemeral-1PsL1r,							/* message				localbot							*/
 .message-2qnXI6.replying-1x3H0T {							/* message				replying							*/
