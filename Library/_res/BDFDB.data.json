@@ -964,6 +964,7 @@
 			"accessModal": "accessModal-w5HjsV"
 		},
 		"SpotifyControls": {
+			activityButton: "activityButton-5Fs4Aa",
 			"bar": "bar-g2ZMIm",
 			"barGabber": "grabber-7sd5f5",
 			"barFill": "barFill-Dhkah7",
@@ -981,7 +982,6 @@
 			"settingsIcon": "icon-F4SSra",
 			"settingsLabel": "label-3f00Sr",
 			"song": "song-tIdBpF",
-			"songDetails": "songDetails-g9D3sa",
 			"timeline": "timeline-UWmgAx",
 			"volumeSlider": "volumeSlider-sR5g00"
 		},
@@ -1181,7 +1181,6 @@
 		"GuildSettingsEmoji": {"props": ["emojiRow", "emojiAliasPlaceholder"]},
 		"GuildSettingsInvite": {"props": ["countdownColumn", "inviteSettingsInviteRow"]},
 		"GuildSettingsMember": {"props": ["member", "membersFilterPopout"]},
-		"GuildSettingsRoles": {"props": ["buttonWrapper", "addRoleIcon"]},
 		"GuildServer": {"props": ["blobContainer", "pill"]},
 		"GuildsItems": {"props": ["guildSeparator", "guildsError"]},
 		"GuildsWrapper": {"props": ["scroller", "unreadMentionsBar", "wrapper"]},
@@ -1439,6 +1438,7 @@
 		"_showhiddenchannelsaccessmodal": ["ShowHiddenChannels", "accessModal"],
 		"_spellcheckerror": ["SpellCheck", "error"],
 		"_spellcheckoverlay": ["SpellCheck", "overlay"],
+		"_spotifycontrolsactivitybutton": ["SpotifyControls", "activityButton"],
 		"_spotifycontrolsbar": ["SpotifyControls", "bar"],
 		"_spotifycontrolsbarfill": ["SpotifyControls", "barFill"],
 		"_spotifycontrolsbargrabber": ["SpotifyControls", "barGabber"],
@@ -1456,7 +1456,6 @@
 		"_spotifycontrolssettingsicon": ["SpotifyControls", "settingsIcon"],
 		"_spotifycontrolssettingslabel": ["SpotifyControls", "settingsLabel"],
 		"_spotifycontrolssong": ["SpotifyControls", "song"],
-		"_spotifycontrolssongdetails": ["SpotifyControls", "songDetails"],
 		"_spotifycontrolstimeline": ["SpotifyControls", "timeline"],
 		"_spotifycontrolsvolumeslider": ["SpotifyControls", "volumeSlider"],
 		"_stafftagadminicon": ["StaffTag", "adminIcon"],
@@ -2132,7 +2131,6 @@
 		"guildsettingsmembercard": ["GuildSettingsMember", "member"],
 		"guildsettingsmembername": ["GuildSettingsMember", "name"],
 		"guildsettingsmembernametag": ["GuildSettingsMember", "nameTag"],
-		"guildsettingsrolesbuttonwrapper": ["GuildSettingsRoles", "buttonWrapper"],
 		"guildslabel": ["BDFDB", "guildsLabel"],
 		"guildsscroller": ["GuildsWrapper", "scroller"],
 		"guildstree": ["GuildsWrapper", "tree"],
