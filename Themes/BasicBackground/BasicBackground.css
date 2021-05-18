@@ -1937,7 +1937,9 @@ body::before {
 #app-mount .pageWrapper-1PgVDX {							/* guilddiscovery		container							*/
 	color: var(--header-primary);
 }
-
+#app-mount .search-1iTphC .searchBox-2_mAlO {				/* guilddiscovery		searchbox							*/
+	background: #fff;
+}
 #app-mount .card-3DjzTQ {									/* guildcard			container							*/
 	background-color: rgba(var(--transparencycolor), .3);
 }

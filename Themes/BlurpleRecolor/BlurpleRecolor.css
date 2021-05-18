@@ -649,7 +649,7 @@
 	background-image: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/nitrobadge_details.svg), linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5)) !important;
 }
 .pageWrapper-3F6owx {										/* store				pagewrapper							*/
-	background: white linear-gradient(114deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.6));
+	background: #fff linear-gradient(114deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.6));
 }
 
 
@@ -911,7 +911,7 @@
 	z-index: -1;
 }
 .banner-aJsFyZ::before {
-	background: white;
+	background: #fff;
 }
 .bannerClubs-3Xj268 {
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_clubs_details.svg) center/cover no-repeat;
