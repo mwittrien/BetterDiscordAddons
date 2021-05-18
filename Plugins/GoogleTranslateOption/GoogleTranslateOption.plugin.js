@@ -395,9 +395,7 @@ module.exports = (_ => {
 							});
 						}),
 						disabled: !translated && isTranslating,
-						action: _ => {
-							this.translateMessage(e.instance.props.message, e.instance.props.channel);
-						}
+						action: _ => this.translateMessage(e.instance.props.message, e.instance.props.channel)
 					}));
 					this.injectSearchItem(e);
 				}
@@ -468,9 +466,7 @@ module.exports = (_ => {
 								icon: translated ? translateIconUntranslate : translateIcon
 							});
 						},
-						action: _ => {
-							this.translateMessage(e.instance.props.message, e.instance.props.channel);
-						}
+						action: _ => this.translateMessage(e.instance.props.message, e.instance.props.channel)
 					}));
 				}
 			}
@@ -478,19 +474,27 @@ module.exports = (_ => {
 			onMessageOptionToolbar (e) {
 				if (e.instance.props.expanded && e.instance.props.message && e.instance.props.channel) {
 					let translated = !!translatedMessages[e.instance.props.message.id];
-					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						key: translated ? "untranslate-message" : "translate-message",
-						text: translated ? this.labels.context_messageuntranslateoption : this.labels.context_messagetranslateoption,
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-							className: BDFDB.disCN.messagetoolbarbutton,
-							onClick: _ => {
-								if (!isTranslating) this.translateMessage(e.instance.props.message, e.instance.props.channel);
-							},
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCN.messagetoolbaricon,
-								iconSVG: translated ? translateIconUntranslate : translateIcon
-							})
-						})
+					e.returnvalue.props.children.unshift();
+					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(class extends BdApi.React.Component {
+						render() {
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								key: translated ? "untranslate-message" : "translate-message",
+								text: _ => translated ? _this.labels.context_messageuntranslateoption : _this.labels.context_messagetranslateoption,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									className: BDFDB.disCN.messagetoolbarbutton,
+									onClick: _ => {
+										if (!isTranslating) _this.translateMessage(e.instance.props.message, e.instance.props.channel).then(_ => {
+											translated = !!translatedMessages[e.instance.props.message.id];
+											BDFDB.ReactUtils.forceUpdate(this);
+										});
+									},
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										className: BDFDB.disCN.messagetoolbaricon,
+										iconSVG: translated ? translateIconUntranslate : translateIcon
+									})
+								})
+							});
+						}
 					}));
 				}
 			}
@@ -645,28 +649,32 @@ module.exports = (_ => {
 			}
 
 			translateMessage (message, channel) {
-				if (!message) return;
-				if (translatedMessages[message.id]) {
-					delete translatedMessages[message.id];
-					BDFDB.MessageUtils.rerenderAll(true);
-				}
-				else {
-					let content = message.content || "";
-					for (let embed of message.embeds) content += ("\n__________________ __________________ __________________\n" + embed.rawDescription);
-					this.translateText(content, "context", (translation, input, output) => {
-						if (translation) {
-							oldMessages[message.id] = new BDFDB.DiscordObjects.Message(message);
-							let strings = translation.split(/\n{0,1}__________________ __________________ __________________\n{0,1}/);
-							let content = strings.shift().trim(), embeds = {};
-							for (let i in message.embeds) {
-								message.embeds[i].message_id = message.id;
-								embeds[message.embeds[i].id] = (strings.shift() || message.embeds[i].rawDescription).trim();
+				return new Promise(callback => {
+					if (!message) return callback(null);
+					if (translatedMessages[message.id]) {
+						delete translatedMessages[message.id];
+						BDFDB.MessageUtils.rerenderAll(true);
+						callback(false);
+					}
+					else {
+						let content = message.content || "";
+						for (let embed of message.embeds) content += ("\n__________________ __________________ __________________\n" + embed.rawDescription);
+						this.translateText(content, "context", (translation, input, output) => {
+							if (translation) {
+								oldMessages[message.id] = new BDFDB.DiscordObjects.Message(message);
+								let strings = translation.split(/\n{0,1}__________________ __________________ __________________\n{0,1}/);
+								let content = strings.shift().trim(), embeds = {};
+								for (let i in message.embeds) {
+									message.embeds[i].message_id = message.id;
+									embeds[message.embeds[i].id] = (strings.shift() || message.embeds[i].rawDescription).trim();
+								}
+								translatedMessages[message.id] = {content, embeds, input, output};
+								BDFDB.MessageUtils.rerenderAll(true);
 							}
-							translatedMessages[message.id] = {content, embeds, input, output};
-							BDFDB.MessageUtils.rerenderAll(true);
-						}
-					});
-				}
+							callback(true);
+						});
+					}
+				});
 			}
 
 			translateText (text, type, callback) {
@@ -742,10 +750,7 @@ module.exports = (_ => {
 							startTranslating(this.settings.engines.backup);
 							this[translationEngines[this.settings.engines.backup].funcName].apply(this, [{input, output, text: newText, specialCase, engine: translationEngines[this.settings.engines.backup]}, finishTranslation]);
 						}
-						else {
-							console.log("no");
-							finishTranslation();
-						}
+						else finishTranslation();
 					}
 				}
 				else finishTranslation();
@@ -784,7 +789,6 @@ module.exports = (_ => {
 			
 			deepLTranslate (data, callback) {
 				BDFDB.LibraryRequires.request(`https://api-free.deepl.com/v2/translate?auth_key=75cc2f40-fdae-14cd-7242-6a384e2abb9c:fx&text=${encodeURIComponent(data.text)}${data.input.auto ? "" : `&source_lang=${data.input.id}`}&target_lang=${data.output.id}`, (error, response, body) => {
-					console.log(error, response, body);
 					if (!error && body && response.statusCode == 200) {
 						try {
 							body = JSON.parse(body);
