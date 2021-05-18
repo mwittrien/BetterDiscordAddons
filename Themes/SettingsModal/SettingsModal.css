@@ -60,6 +60,9 @@
 	padding-top: 20px !important;
 	padding-bottom: 20px !important;
 }
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG .sidebar-dLM-kh {
+	height: var(--settingsmodalheight) !important;
+}
 #app-mount .layer-3QrUeG ~ .layer-3QrUeG .repoHeader-2KfNvH {
 	max-width: calc(var(--settingsmodalwidth) - 256px) !important;;
 }
