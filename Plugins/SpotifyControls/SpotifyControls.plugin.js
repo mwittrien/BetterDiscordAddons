@@ -138,8 +138,7 @@ module.exports = (_ => {
 				
 				let playerSize = this.props.maximized ? "big" : "small";
 				let coverSrc = BDFDB.LibraryModules.AssetUtils.getAssetImage(lastSong.application_id, lastSong.assets.large_image);
-				let account = BDFDB.LibraryModules.ConnectionStore.getAccounts().find(n => n.type == "spotify");
-				showActivity = showActivity != undefined ? showActivity : account.show_activity;
+				showActivity = showActivity != undefined ? showActivity : (BDFDB.LibraryModules.ConnectionStore.getAccounts().find(n => n.type == "spotify") || {}).show_activity;
 				currentVolume = this.props.draggingVolume ? currentVolume : socketDevice.device.volume_percent;
 				
 				return BDFDB.ReactUtils.createElement("div", {
@@ -184,7 +183,8 @@ module.exports = (_ => {
 												onClick: event => {
 													BDFDB.ListenerUtils.stopEvent(event);
 													showActivity = !showActivity;
-													BDFDB.LibraryModules.ConnectionUtils.setShowActivity("spotify", account.id, showActivity);
+													let account = BDFDB.LibraryModules.ConnectionStore.getAccounts().find(n => n.type == "spotify");
+													account && BDFDB.LibraryModules.ConnectionUtils.setShowActivity("spotify", account.id, showActivity);
 												}
 											})
 										})
