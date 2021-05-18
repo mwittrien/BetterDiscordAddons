@@ -2485,11 +2485,24 @@ html .powercord-updater .debug-info b {
 /* ----		15.3.	SERVERSEARCH					---- */
 
 #server-search .wrapper-25eVIn {
-	background-color: rgb(47, 49, 54) !important;
-	transition: background-color .16s ease-out;
+    background-color: var(--background-primary) !important;
+    transition: background-color .16s ease-out;
 }
 #server-search .wrapper-25eVIn:hover {
 	background-color: rgb(var(--accentcolor)) !important;
+}
+#server-search .wrapper-25eVIn [fill="white"] {
+    fill: var(--header-primary);
+}
+#server-search .wrapper-25eVIn:hover [fill="white"] {
+    fill: #fff;
+}
+#server-search .circleIconButton-1QV--U {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+    width: 48px;
+    height: 48px;
 }
 
 /* ----		15.4.	CHANNELTABS						---- */
