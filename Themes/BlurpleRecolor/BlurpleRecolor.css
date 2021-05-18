@@ -896,43 +896,16 @@
 /* ~~~~		9.		GUILDSETTINGS					~~~~ */
 
 .banner-aJsFyZ {											/* rolesettings			intro banner 						*/
-	position: absolute;
 	border-radius: 5px;
 }
-.banner-aJsFyZ::before,
-.banner-aJsFyZ::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	pointer-events: none;
-	z-index: -1;
-}
-.banner-aJsFyZ::before {
-	background: #fff;
-}
 .bannerClubs-3Xj268 {
-	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_clubs_details.svg) center/cover no-repeat;
-}
-.bannerClubs-3Xj268::after {
-	background: rgb(var(--accentcolor));
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_clubs_accent.svg) center/cover no-repeat;
+	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_clubs_details.svg) center/cover no-repeat;
 }
 .bannerGaming-2JPrc4 {
-	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_gaming_details.svg) center/cover no-repeat;
-}
-.bannerGaming-2JPrc4::after {
-	background: rgb(var(--accentcolor));
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_gaming_accent.svg) center/cover no-repeat;
+	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_gaming_details.svg) center/cover no-repeat;
 }
 .bannerHobbies-1oItTY {
-	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_hobbies_details.svg) center/cover no-repeat;
-}
-.bannerHobbies-1oItTY::after {
-	background: rgb(var(--accentcolor));
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_hobbies_accent.svg) center/cover no-repeat;
+	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_hobbies_details.svg) center/cover no-repeat;
 }
 
 															/* widgetsettings		widget placeholder image 			*/
