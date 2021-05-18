@@ -1708,6 +1708,11 @@ a.metadataName-14STf- {
 .selected-3AsYnC .stepIndex-3rtpcw {
 	color: rgb(var(--accentcolor));
 }
+.image-2Qw4tp[src="/assets/7f62c4c1f689de046a6ad83020c897ad.svg"],
+.footerImage-2KxOYG[src="/assets/7f62c4c1f689de046a6ad83020c897ad.svg"] {
+	object-position: -999999px -999999px;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/discovery_house.svg) center/contain no-repeat !important;
+}
 
 
 /* ~~~~		11.		POPOUTS							~~~~ */
