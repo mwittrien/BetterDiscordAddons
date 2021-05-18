@@ -2140,6 +2140,21 @@ a.metadataName-14STf- {
 	object-position: -999999px -999999px;
 	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/discordavatar_details.svg) center/contain no-repeat !important;
 }
+[style*="/assets/3a55d3972a7d68bcb306af32ab1b226a.svg"],
+[src*="/assets/3a55d3972a7d68bcb306af32ab1b226a.svg"] {		/* avatars				rolesettings intro avatar			*/
+	object-position: -999999px -999999px;
+	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_clubs_avatar.svg) center/contain no-repeat !important;
+}
+[style*="/assets/f17da3efc8cf47226d362fee2f5f7197.svg"],
+[src*="/assets/f17da3efc8cf47226d362fee2f5f7197.svg"] {		/* avatars				rolesettings intro avatar			*/
+	object-position: -999999px -999999px;
+	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_gaming_avatar.svg) center/contain no-repeat !important;
+}
+[style*="/assets/642982d3d82323a8fb69860f116ebca7.svg"],
+[src*="/assets/642982d3d82323a8fb69860f116ebca7.svg"] {		/* avatars				rolesettings intro avatar			*/
+	object-position: -999999px -999999px;
+	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_hobbies_avatar.svg) center/contain no-repeat !important;
+}
 
 /* ----		12.6.	SCROLLBARS						---- */
 
