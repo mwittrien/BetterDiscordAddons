@@ -7573,10 +7573,12 @@ module.exports = (_ => {
 						child.props.onClick = (e, childThis) => {
 							if (typeof this.props.onClick == "function") this.props.onClick(e, this);
 							if (typeof childProps.onClick == "function") childProps.onClick(e, childThis);
+							if (typeof this.props.text == "function") this.updateTooltip(this.props.text(this));
 						};
 						child.props.onContextMenu = (e, childThis) => {
 							if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
 							if (typeof childProps.onContextMenu == "function") childProps.onContextMenu(e, childThis);
+							if (typeof this.props.text == "function") this.updateTooltip(this.props.text(this));
 						};
 						return BDFDB.ReactUtils.createElement(LibraryModules.React.Fragment, {
 							children: child
