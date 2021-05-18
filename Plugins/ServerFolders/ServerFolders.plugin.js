@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.9.2
+ * @version 6.9.3
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "6.9.2",
+			"version": "6.9.3",
 			"description": "Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders"
 		},
 		"changeLog": {
 			"fixed": {
-				"Custom Icon Picker": "Fixed some Issues with the Custom Icon Picker"
+				"Mentioned Bar": "No longer shows for Foldered Servers in extra Column"
 			},
 		}
 	};
@@ -294,10 +294,8 @@ module.exports = (_ => {
 						callback(canvas.toDataURL(type));
 					};
 					img.onerror = function() {
-						console.log("b");
 						callback(base64);
 					};
-					console.log(base64);
 					img.src = base64;
 				}
 			}
@@ -670,24 +668,49 @@ module.exports = (_ => {
 						folderGuildContent.props.themeOverride = e.instance.props.themeOverride;
 						BDFDB.ReactUtils.forceUpdate(folderGuildContent);
 					}
-					let topBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbartop]]});
-					if (topBar) {
-						let topIsVisible = topBar.props.isVisible;
-						topBar.props.isVisible = (...args) => {
-							let ids = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
-							args[2] = args[2].filter(id => !ids.includes(id));
-							return topIsVisible(...args);
+					if (typeof e.returnvalue.props.children == "function") {
+						let childrenRender = e.returnvalue.props.children;
+						e.returnvalue.props.children = (...args) => {
+							let children = childrenRender(...args);
+							this.checkTree(children);
+							return children;
 						};
 					}
-					let bottomBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbarbottom]]});
-					if (bottomBar) {
-						let bottomIsVisible = bottomBar.props.isVisible;
-						bottomBar.props.isVisible = (...args) => {
-							let ids = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
-							args[2] = args[2].filter(id => !ids.includes(id));
-							return bottomIsVisible(...args);
-						};
-					}
+					else this.checkTree(e.returnvalue);
+				}
+			}
+			
+			checkTree (returnvalue) {
+				let tree = BDFDB.ReactUtils.findChild(returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
+				if (tree) {
+					let childrenRender = tree.props.children;
+					tree.props.children = (...args) => {
+						let children = childrenRender(...args);
+						this.handleGuilds(children);
+						return children;
+					};
+				}
+				else this.handleGuilds(returnvalue);
+			}
+			
+			handleGuilds (returnvalue) {
+				let topBar = BDFDB.ReactUtils.findChild(returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbartop]]});
+				if (topBar) {
+					let topIsVisible = topBar.props.isVisible;
+					topBar.props.isVisible = (...args) => {
+						let ids = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
+						args[2] = args[2].filter(id => !ids.includes(id));
+						return topIsVisible(...args);
+					};
+				}
+				let bottomBar = BDFDB.ReactUtils.findChild(returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbarbottom]]});
+				if (bottomBar) {
+					let bottomIsVisible = bottomBar.props.isVisible;
+					bottomBar.props.isVisible = (...args) => {
+						let ids = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
+						args[2] = args[2].filter(id => !ids.includes(id));
+						return bottomIsVisible(...args);
+					};
 				}
 			}
 			

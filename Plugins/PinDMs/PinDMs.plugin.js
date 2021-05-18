@@ -121,6 +121,7 @@ module.exports = (_ => {
 						position: relative;
 						top: -1px;
 						margin-right: 6px;
+						background-color: var(--background-accent);
 					}
 					${BDFDB.dotCN._pindmspinnedchannelsheaderarrow} {
 						flex: 0;
@@ -591,13 +592,12 @@ module.exports = (_ => {
 										}),
 										unreadAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
 											className: BDFDB.disCN._pindmspinnedchannelsheaderamount,
-											count: unreadAmount,
-											style: {backgroundColor: BDFDB.DiscordConstants.Colors.STATUS_RED}
+											count: unreadAmount
 										}) : null,
 										this.settings.general.channelAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
 											className: BDFDB.disCN._pindmspinnedchannelsheaderamount,
 											count: foundDMs.length,
-											style: {backgroundColor: "var(--bdfdb-blurple)"}
+											disableColor: true
 										}) : null,
 										BDFDB.ReactUtils.createElement("div", {
 											className: BDFDB.disCNS._pindmspinnedchannelsheaderarrow + BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,

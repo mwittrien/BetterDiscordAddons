@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.2
+ * @version 2.2.3
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,15 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.2.2",
+			"version": "2.2.3",
 			"description": "Allows you to download all Plugins from BD's Website within Discord"
 		},
 		"changeLog": {
-			"improved": {
-				"Thumbnail Conversion": "Moved Thumbnail Conversion to Card Component to reduce stress on BD Website"
-			},
-			"fixed": {
-				"Settings": "No longer get reset"
+			"progress": {
+				"Changed Api": "Preparing Plugin for API Changes"
 			}
 		}
 	};
@@ -85,13 +82,13 @@ module.exports = (_ => {
 		const buttonData = {
 			INSTALLED: {
 				colorClass: "GREEN",
-				backgroundColor: "STATUS_GREEN",
+				backgroundColor: "var(--bdfdb-green)",
 				icon: "CHECKMARK",
 				text: "USER_SETTINGS_VOICE_INSTALLED_LABEL"
 			},
 			OUTDATED: {
 				colorClass: "RED",
-				backgroundColor: "STATUS_RED",
+				backgroundColor: "var(--bdfdb-red)",
 				icon: "CLOSE",
 				text: "outdated"
 			},
@@ -103,18 +100,18 @@ module.exports = (_ => {
 			}
 		};
 		const reverseSorts = [
-			"DOWNLOADS", "LIKES", "FAV", "NEW"
+			"RELEASEDATE", "DOWNLOADS", "LIKES", "FAV"
 		];
 		const sortKeys = {
 			NAME:			"Name",
-			AUTHOR:			"Author",
+			AUTHORNAME:		"Author",
 			VERSION:		"Version",
 			DESCRIPTION:	"Description",
+			RELEASEDATE:	"Release Date",
 			STATE:			"Update State",
 			DOWNLOADS:		"Downloads",
 			LIKES:			"Likes",
-			FAV:			"Favorites",
-			NEW:			"New Plugins"
+			FAV:			"Favorites"
 		};
 		const orderKeys = {
 			ASC:			"ascending",
@@ -140,7 +137,7 @@ module.exports = (_ => {
 					const installedPlugin = _this.getInstalledPlugin(plugin);
 					const state = installedPlugin ? (plugin.version && BDFDB.NumberUtils.compareVersions(plugin.version, _this.getString(installedPlugin.version)) ? pluginStates.OUTDATED : pluginStates.INSTALLED) : pluginStates.DOWNLOADABLE;
 					return Object.assign(plugin, {
-						search: [plugin.name, plugin.version, plugin.author, plugin.description, plugin.tags].flat(10).filter(n => typeof n == "string").join(" ").toUpperCase(),
+						search: [plugin.name, plugin.version, plugin.authorname, plugin.description, plugin.tags].flat(10).filter(n => typeof n == "string").join(" ").toUpperCase(),
 						description: plugin.description || "No Description found",
 						fav: favorites.includes(plugin.id) && 1,
 						new: state == pluginStates.DOWNLOADABLE && !cachedPlugins.includes(plugin.id) && 1,
@@ -155,10 +152,9 @@ module.exports = (_ => {
 					plugins = plugins.filter(plugin => plugin.search.indexOf(usedSearchString) > -1);
 				}
 				
-				const sortKey = !this.props.sortKey || this.props.sortKey == "NEW" && !plugins.some(plugin => plugin.new) ? Object.keys(sortKeys)[0] : this.props.sortKey;
-				BDFDB.ArrayUtils.keySort(plugins, sortKey.toLowerCase());
+				BDFDB.ArrayUtils.keySort(plugins, this.props.sortKey.toLowerCase());
 				if (this.props.orderKey == "DESC") plugins.reverse();
-				if (reverseSorts.includes(sortKey)) plugins.reverse();
+				if (reverseSorts.includes(this.props.sortKey)) plugins.reverse();
 				return plugins;
 			}
 			render() {
@@ -326,7 +322,10 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.discoverycardiconwrapper,
-									children: BDFDB.ReactUtils.createElement("div", {
+									children: this.props.data.author && this.props.data.author.discord_avatar_hash && this.props.data.author.discord_snowflake ? BDFDB.ReactUtils.createElement("img", {
+										className: BDFDB.disCN.discoverycardicon,
+										src: `https://cdn.discordapp.com/avatars/${this.props.data.author.discord_snowflake}/${this.props.data.author.discord_avatar_hash}.webp?size=128`
+									}) : BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN.discoverycardicon,
 										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 											nativeClass: true,
@@ -360,7 +359,7 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.discoverycardauthor,
-									children: `by ${this.props.data.author}`
+									children: `by ${this.props.data.authorname}`
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Scrollers.Thin, {
 									className: BDFDB.disCN.discoverycarddescription,
@@ -559,7 +558,7 @@ module.exports = (_ => {
 											label: sortKeys[this.props.sortKey],
 											value: this.props.sortKey
 										},
-										options: Object.keys(sortKeys).filter(n => n != "NEW" || grabbedPlugins.some(p => !cachedPlugins.includes(p.id))).map(key => ({
+										options: Object.keys(sortKeys).map(key => ({
 											label: sortKeys[key],
 											value: key
 										})),
@@ -726,7 +725,7 @@ module.exports = (_ => {
 				
 				const checkPlugin = _ => {
 					if (checksRunning > 20) return;
-					else if (grabbedPlugins.every(p => p.loaded || !p.latestSourceUrl) || !this.started || !loading.is) {
+					else if (grabbedPlugins.every(p => p.loaded || (!p.latestSourceUrl && !p.latest_source_url)) || !this.started || !loading.is) {
 						if (!callbackCalled) {
 							callbackCalled = true;
 							if (!this.started) return BDFDB.TimeUtils.clear(loading.timeout);
@@ -766,7 +765,7 @@ module.exports = (_ => {
 										contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
 										close: true,
 										onClick: _ => {
-											forcedSort = "NEW";
+											forcedSort = "RELEASEDATE";
 											forcedOrder = "ASC";
 											BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo");
 										}
@@ -779,15 +778,21 @@ module.exports = (_ => {
 					else if (checkIndex > grabbedPlugins.length) return;
 					
 					const plugin = grabbedPlugins[checkIndex++];
-					if (!plugin || !plugin.latestSourceUrl) checkPlugin();
+					if (!plugin || (!plugin.latestSourceUrl && !plugin.latest_source_url)) checkPlugin();
 					else {
 						checksRunning++;
+						plugin.releasedate = new Date(plugin.releaseDate || plugin.release_date || 0).getTime();
+						plugin.latestSourceUrl = plugin.latestSourceUrl || plugin.latest_source_url;
 						plugin.rawSourceUrl = plugin.latestSourceUrl.replace("https://github.com/", "https://raw.githubusercontent.com/").replace(/\/blob\/(.{32,})/i, "/$1");
+						plugin.thumbnailUrl = plugin.thumbnailUrl || plugin.thumbnail_url;
 						plugin.thumbnailUrl = plugin.thumbnailUrl ? (plugin.thumbnailUrl.startsWith("https://") ? plugin.thumbnailUrl : `https://betterdiscord.app${plugin.thumbnailUrl}`) : "";
+						delete plugin.release_date;
+						delete plugin.latest_source_url;
+						delete plugin.thumbnail_url;
 						BDFDB.LibraryRequires.request(plugin.rawSourceUrl, (error, response, body) => {
 							if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
 								plugin.name = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar((/@name\s+([^\s^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || plugin.name || "");
-								plugin.author = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || plugin.author;
+								plugin.authorname = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || plugin.author.display_name || plugin.author;
 								const version = (/@version\s+(.+)|\/\/\**META.*["']version["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1];
 								if (version) {
 									plugin.version = version;
@@ -856,12 +861,12 @@ module.exports = (_ => {
 			}
 			
 			getInstalledPlugin (plugin) {
-				if (!plugin || typeof plugin.author != "string") return;
+				if (!plugin || typeof plugin.authorname != "string") return;
 				const iPlugin = BDFDB.BDUtils.getPlugin(plugin.name, false, true);
-				if (iPlugin && plugin.author.toUpperCase() == this.getString(iPlugin.author).toUpperCase()) return iPlugin;
+				if (iPlugin && plugin.authorname.toUpperCase() == this.getString(iPlugin.author).toUpperCase()) return iPlugin;
 				else if (plugin.rawSourceUrl && window.BdApi && BdApi.Plugins && typeof BdApi.Plugins.getAll == "function") {
 					const filename = plugin.rawSourceUrl.split("/").pop();
-					for (let p of BdApi.Plugins.getAll()) if (p.filename == filename && plugin.author.toUpperCase() == this.getString(p.author).toUpperCase()) return p;
+					for (let p of BdApi.Plugins.getAll()) if (p.filename == filename && plugin.authorname.toUpperCase() == this.getString(p.author).toUpperCase()) return p;
 				}
 			}
 

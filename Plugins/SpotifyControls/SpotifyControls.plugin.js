@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.4
+ * @version 1.1.5
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.1.4",
+			"version": "1.1.5",
 			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
 		},
 		"changeLog": {
-			"fixed": {
-				"No Cover": "No Cover is no longer black on dark theme"
+			"improved": {
+				"Volume Slider": "Now updates live without having to release the Slider"
 			}
 		}
 	};
@@ -135,7 +135,7 @@ module.exports = (_ => {
 					stopTime = new Date();
 				}
 				if (!lastSong) return null;
-				currentVolume = socketDevice.device.volume_percent;
+				currentVolume = this.props.draggingVolume ? currentVolume : socketDevice.device.volume_percent;
 				let playerSize = this.props.maximized ? "big" : "small";
 				let coverSrc = BDFDB.LibraryModules.AssetUtils.getAssetImage(lastSong.application_id, lastSong.assets.large_image);
 				return BDFDB.ReactUtils.createElement("div", {
@@ -300,6 +300,7 @@ module.exports = (_ => {
 													}
 												},
 												renderPopout: instance => {
+													let changeTimeout;
 													return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Slider, {
 														className: BDFDB.disCN._spotifycontrolsvolumeslider,
 														defaultValue: currentVolume,
@@ -307,9 +308,16 @@ module.exports = (_ => {
 														barStyles: {height: 6, top: 3},
 														fillStyles: {backgroundColor: BDFDB.DiscordConstants.Colors.SPOTIFY},
 														onValueRender: value => {
+															this.props.draggingVolume = true;
+															currentVolume = value;
+															BDFDB.TimeUtils.clear(changeTimeout);
+															changeTimeout = BDFDB.TimeUtils.timeout(_ => this.props.draggingVolume && this.request(socketDevice.socket, socketDevice.device, "volume", {
+																volume_percent: currentVolume
+															}), 500);
 															return value + "%";
 														},
 														onValueChange: value => {
+															this.props.draggingVolume = false;
 															currentVolume = value;
 															this.request(socketDevice.socket, socketDevice.device, "volume", {
 																volume_percent: currentVolume
@@ -521,7 +529,7 @@ module.exports = (_ => {
 						margin-right: 8px;
 						border-radius: 4px;
 						overflow: hidden;
-						transition: width .3s ease, height .3s ease;
+						transition: border-radius .3s ease, margin .3s ease, width .3s ease, height .3s ease;
 					}
 					${BDFDB.dotCN._spotifycontrolscover} {
 						display: block;

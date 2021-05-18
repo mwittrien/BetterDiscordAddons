@@ -70,7 +70,7 @@ module.exports = (_ => {
 		
 		/* NEVER CHANGE THE SRC LINKS IN THE PLUGIN FILE, TO ADD NEW SOUNDS ADD THEM IN THE SETTINGS GUI IN THE PLUGINS PAGE */
 		const types = {
-			"message1":					{implemented: true,		name: "New Chatmessage",			src: "/assets/dd920c06a01e5bb8b09678581e29d56f.mp3",	mute: true,		focus: null,	include: true},
+			"message1":					{implemented: true,		name: "New Chat Message",			src: "/assets/dd920c06a01e5bb8b09678581e29d56f.mp3",	mute: true,		focus: null,	include: true},
 			"dm":						{implemented: true,		name: "Direct Message",				src: "/assets/84c9fa3d07da865278bd77c97d952db4.mp3",	mute: true,		focus: true,	include: false},
 			"mentioned":				{implemented: true,		name: "Mentioned",					src: "/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute: true,		focus: true,	include: false},
 			"role":						{implemented: true,		name: "Mentioned (role)",			src: "/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute: true,		focus: true,	include: false},
@@ -87,10 +87,10 @@ module.exports = (_ => {
 			"reconnect":				{implemented: false,	name: "Voicechat Reconnect",		src: "/assets/471cfd0005b112ff857705e894bf41a6.mp3",	mute: true,		focus: null,	include: true},
 			"ptt_start":				{implemented: true,		name: "Push2Talk Start",			src: "/assets/8b63833c8d252fedba6b9c4f2517c705.mp3",	mute: false,	focus: null,	include: true},
 			"ptt_stop":					{implemented: true,		name: "Push2Talk Stop",				src: "/assets/74ab980d6890a0fa6aa0336182f9f620.mp3",	mute: false,	focus: null,	include: true},
-			"call_calling":				{implemented: true,		name: "Outgoing Call",				src: "/assets/c6e92752668dde4eee5923d70441579f.mp3",	mute: false,	focus: null,	include: true},
-			"call_ringing":				{implemented: true,		name: "Incoming Call",				src: "/assets/84a1b4e11d634dbfa1e5dd97a96de3ad.mp3",	mute: true,		focus: null,	include: true},
-			"call_ringing_beat":		{implemented: false,	name: "Incoming Call Beat",			src: "/assets/b9411af07f154a6fef543e7e442e4da9.mp3",	mute: true,		focus: null,	include: true},
-			"call_ringing_halloween":	{implemented: false,	name: "Incoming Call Halloween",	src: "/assets/bceeb2ba92c01584dcaafc957f769bae.mp3",	mute: true,		focus: null,	include: true},
+			"call_calling":				{implemented: true,		name: "Outgoing Call",				src: "/assets/c6e92752668dde4eee5923d70441579f.mp3",	mute: null,		focus: null,	include: true},
+			"call_ringing":				{implemented: true,		name: "Incoming Call",				src: "/assets/84a1b4e11d634dbfa1e5dd97a96de3ad.mp3",	mute: null,		focus: null,	include: true},
+			"call_ringing_beat":		{implemented: false,	name: "Incoming Call Beat",			src: "/assets/b9411af07f154a6fef543e7e442e4da9.mp3",	mute: null,		focus: null,	include: true},
+			"call_ringing_halloween":	{implemented: false,	name: "Incoming Call Halloween",	src: "/assets/bceeb2ba92c01584dcaafc957f769bae.mp3",	mute: null,		focus: null,	include: true},
 			"stream_started":			{implemented: true,		name: "Stream Started",				src: "/assets/9ca817f41727edc1b2f1bc4f1911107c.mp3",	mute: false,	focus: null,	include: true},
 			"stream_ended":				{implemented: true,		name: "Stream Ended",				src: "/assets/4e30f98aa537854f79f49a76af822bbc.mp3",	mute: false,	focus: null,	include: true},
 			"stream_user_joined":		{implemented: true,		name: "Stream User Joined",			src: "/assets/5827bbf9a67c61cbb0e02ffbf434b654.mp3",	mute: false,	focus: null,	include: true},
@@ -338,7 +338,7 @@ module.exports = (_ => {
 										this.saveChoice(type, false);
 									}
 								}) : null,
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+								types[type].mute !== null && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
 									mini: true,
 									grow: 0,
@@ -519,15 +519,9 @@ module.exports = (_ => {
 						}));
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: "Implemented Sounds",
+							title: "Sound Configuration",
 							collapseStates: collapseStates,
-							children: Object.keys(BDFDB.ObjectUtils.filter(types, typedata => typedata.implemented)).map(type => createSoundCard(type)).flat(10).filter(n => n)
-						}));
-						
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: "Unimplemented Sounds",
-							collapseStates: collapseStates,
-							children: Object.keys(BDFDB.ObjectUtils.filter(types, typedata => !typedata.implemented)).map(type => createSoundCard(type)).flat(10).filter(n => n)
+							children: Object.keys(BDFDB.ObjectUtils.filter(types, typeData => typeData.implemented)).map(type => createSoundCard(type)).flat(10).filter(n => n)
 						}));
 						
 						let removeableCategories = [{value: removeAllKey, label: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL}].concat(Object.keys(audios).filter(category => !(defaultAudios[category] && !Object.keys(audios[category] || {}).filter(sound => defaultAudios[category][sound] === undefined).length)).map(name => ({value: name, label: name})));
@@ -595,7 +589,7 @@ module.exports = (_ => {
 													else if (soundAll) soundAmount = Object.keys(audios[categorySelectIns.props.value] || {}).filter(sound => !(defaultAudios[categorySelectIns.props.value] && defaultAudios[categorySelectIns.props.value][sound] !== undefined)).length;
 													else if (audios[categorySelectIns.props.value][soundSelectIns.props.value]) soundAmount = 1;
 													
-													if (soundAmount) BDFDB.ModalUtils.confirm(this, `Are you sure you want to delete ${soundAmount} added sound${soundAmount == 1 ? "" : "s"}?`, _ => {
+													if (soundAmount) BDFDB.ModalUtils.confirm(this, `Are you sure you want to delete ${soundAmount} added Sound${soundAmount == 1 ? "" : "s"}?`, _ => {
 														if (catAll) BDFDB.DataUtils.remove(this, "audios");
 														else if (soundAll) BDFDB.DataUtils.remove(this, "audios", categorySelectIns.props.value);
 														else {
@@ -607,7 +601,7 @@ module.exports = (_ => {
 														this.loadChoices();
 														BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 													});
-													else BDFDB.NotificationUtils.toast("No sounds to delete", {type: "danger"});
+													else BDFDB.NotificationUtils.toast("No Sounds to delete", {type: "danger"});
 												}
 											},
 											children: BDFDB.LanguageUtils.LanguageStrings.DELETE
