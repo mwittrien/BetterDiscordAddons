@@ -1937,9 +1937,6 @@ body::before {
 #app-mount .pageWrapper-1PgVDX {							/* guilddiscovery		container							*/
 	color: var(--header-primary);
 }
-#app-mount .search-1iTphC .searchBox-2_mAlO {				/* guilddiscovery		searchbox							*/
-	background: #fff;
-}
 #app-mount .card-3DjzTQ {									/* guildcard			container							*/
 	background-color: rgba(var(--transparencycolor), .3);
 }
@@ -6142,8 +6139,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .filterLabel-2yQNPl {
 	color: var(--header-secondary);
 }
-
-#app-mount .searchBox-3Y2Vi7 {
+#app-mount .searchBox-3Y2Vi7:not(.searchBox-2_mAlO) {
 	background-color: rgba(var(--transparencycolor), .3);
 	box-shadow: 0 2px 5px 0 rgba(var(--transparencycolor), .2);
 }
