@@ -916,35 +916,11 @@
 	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_hobbies_details.svg) center/cover no-repeat;
 }
 
-															/* widgetsettings		widget placeholder image 			*/
-.layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type {
-	position: relative !important;
-}
-.layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type img[src="/assets/5fb477ca84edd15d9a2888ac28365acd.svg"] {
+img[src="/assets/4697ec960e57790ad4f6251af4c246b4.svg"] {	/* widgetsettings		widget placeholder image 			*/
 	object-position: -999999px -999999px;
+	border-radius: 5px;
+	background: linear-gradient(rgb(var(--accentcolor)) 20%, rgba(0,0,0,.3) 20%, rgba(0,0,0,.3)), url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_details.svg) center/contain no-repeat;
 	flex: unset !important;
-	height: 310px !important;
-	min-width: 320px !important;
-	background: var(--background-tertiary);
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_bg.svg) center/contain no-repeat;
-}
-.layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type::before,
-.layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type::after {
-	content: "";
-	position: absolute;
-	right: 0;
-	bottom: 0;
-	width: 320px;
-	height: 310px;
-	pointer-events: none;
-}
-.layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type::before {
-	background: rgb(var(--accentcolor));
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_accent.svg) center/contain no-repeat;
-}
-.layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type::after {
-	background: var(--header-primary);
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_details.svg) center/contain no-repeat;
 }
 
 @-webkit-keyframes pulseBorder-1LZYy9 { 					/* intergrationsettings	new webhook							*/
