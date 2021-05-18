@@ -901,6 +901,14 @@
 .bannerClubs-3Xj268 {
 	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_clubs_details.svg) center/cover no-repeat;
 }
+.bannerClubs-3Xj268 .avatarName-3m2hgE {
+	display: flex;
+	font-size: 0;
+}
+.bannerClubs-3Xj268 .avatarName-3m2hgE::before {
+	content: "Susie#0000";
+	font-size: 16px;
+}
 .bannerGaming-2JPrc4 {
 	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_gaming_details.svg) center/cover no-repeat;
 }
