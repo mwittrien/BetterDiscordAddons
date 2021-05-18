@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.5
+ * @version 1.1.6
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.1.5",
+			"version": "1.1.6",
 			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
 		},
 		"changeLog": {
 			"improved": {
-				"Volume Slider": "Now updates live without having to release the Slider"
+				"Activity Toggle": "Added Activity Status Toggle Button"
 			}
 		}
 	};
@@ -67,7 +67,7 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		var _this;
 		var controls;
-		var starting, lastSong, currentVolume, lastVolume, stopTime, previousIsClicked, previousDoubleTimeout;
+		var starting, lastSong, showActivity, currentVolume, lastVolume, stopTime, previousIsClicked, previousDoubleTimeout;
 		var timelineTimeout, timelineDragging, updateInterval;
 		var playbackState = {};
 		
@@ -135,9 +135,13 @@ module.exports = (_ => {
 					stopTime = new Date();
 				}
 				if (!lastSong) return null;
-				currentVolume = this.props.draggingVolume ? currentVolume : socketDevice.device.volume_percent;
+				
 				let playerSize = this.props.maximized ? "big" : "small";
 				let coverSrc = BDFDB.LibraryModules.AssetUtils.getAssetImage(lastSong.application_id, lastSong.assets.large_image);
+				let account = BDFDB.LibraryModules.ConnectionStore.getAccounts().find(n => n.type == "spotify");
+				showActivity = showActivity != undefined ? showActivity : account.show_activity;
+				currentVolume = this.props.draggingVolume ? currentVolume : socketDevice.device.volume_percent;
+				
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._spotifycontrolscontainer, this.props.maximized && BDFDB.disCN._spotifycontrolscontainermaximized, this.props.timeline && BDFDB.disCN._spotifycontrolscontainerwithtimeline),
 					children: [
@@ -168,6 +172,21 @@ module.exports = (_ => {
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 											className: BDFDB.disCN._spotifycontrolscovermaximizer,
 											name: BDFDB.LibraryComponents.SvgIcon.Names.LEFT_CARET
+										}),
+										this.props.maximized && this.props.activityToggle && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+											text: _ => `${BDFDB.LanguageUtils.LanguageStringsFormat("DISPLAY_ACTIVITY", "Spotify")} (${showActivity ? BDFDB.LanguageUtils.LanguageStrings.REPLY_MENTION_ON : BDFDB.LanguageUtils.LanguageStrings.REPLY_MENTION_OFF})`,
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+												className: BDFDB.disCN._spotifycontrolsactivitybutton,
+												width: 20,
+												height: 20,
+												foreground: BDFDB.disCN.accountinfobuttonstrikethrough,
+												name: showActivity ? BDFDB.LibraryComponents.SvgIcon.Names.ACTIVITY : BDFDB.LibraryComponents.SvgIcon.Names.ACTIVITY_DISABLED,
+												onClick: event => {
+													BDFDB.ListenerUtils.stopEvent(event);
+													showActivity = !showActivity;
+													BDFDB.LibraryModules.ConnectionUtils.setShowActivity("spotify", account.id, showActivity);
+												}
+											})
 										})
 									]
 								}),
@@ -433,7 +452,8 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						addTimeline: 		{value: true,		description: "Show the Song Timeline in the Controls"},
+						addTimeline: 		{value: true,		description: "Shows the Song Timeline in the Controls"},
+						addActivityButton: 	{value: true,		description: "Shows the Activity Status Toggle Button in the Controls"},
 						doubleBack: 		{value: true,       description: "Requires the User to press the Back Button twice to go to previous Track"}
 					},
 					buttons: {
@@ -556,11 +576,29 @@ module.exports = (_ => {
 					${BDFDB.dotCN._spotifycontrolscoverwrapper}:hover ${BDFDB.dotCN._spotifycontrolscovermaximizer} {
 						visibility: visible;
 					}
+					${BDFDB.dotCN._spotifycontrolsactivitybutton} {
+						visibility: hidden;
+						position: absolute;
+						background-color: rgba(0, 0, 0, 0.5);
+						color: rgba(255, 255, 255, 0.5);
+						border-radius: 50%;
+						bottom: 4px;
+						right: 4px;
+						width: 22px;
+						height: 22px;
+						padding: 5px;
+					}
+					${BDFDB.dotCN._spotifycontrolsactivitybutton}:hover {
+						color: rgb(255, 255, 255);
+					}
+					${BDFDB.dotCN._spotifycontrolscoverwrapper}:hover ${BDFDB.dotCN._spotifycontrolsactivitybutton} {
+						visibility: visible;
+					}
 					${BDFDB.dotCN._spotifycontrolsdetails} {
-						user-select: text;
 						flex-grow: 1;
 						margin-right: 4px;
 						min-width: 0;
+						user-select: text;
 					}
 					${BDFDB.dotCN._spotifycontrolssong} {
 						font-weight: 500;
@@ -712,7 +750,7 @@ module.exports = (_ => {
 							children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 								className: BDFDB.disCN.marginbottom4,
 								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
-								children: "Add control Buttons in small and/or big Player Version: "
+								children: "Add Control Buttons in small and/or big Player Version: "
 							})].concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
 								settings: Object.keys(this.defaults.buttons[Object.keys(this.defaults.buttons)[0]].value),
 								data: Object.keys(this.defaults.buttons).map(key => Object.assign({}, this.settings.buttons[key], {
@@ -785,7 +823,8 @@ module.exports = (_ => {
 				if (index > -1) children.splice(index - 1, 0, BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
 					song: BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false),
 					maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
-					timeline: this.settings.general.addTimeline
+					timeline: this.settings.general.addTimeline,
+					activityToggle: this.settings.general.addActivityButton
 				}, true));
 				return index > -1;
 			}
