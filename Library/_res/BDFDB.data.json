@@ -981,6 +981,7 @@
 			"settingsIcon": "icon-F4SSra",
 			"settingsLabel": "label-3f00Sr",
 			"song": "song-tIdBpF",
+			"songDetails": "songDetails-g9D3sa",
 			"timeline": "timeline-UWmgAx",
 			"volumeSlider": "volumeSlider-sR5g00"
 		},
@@ -1455,6 +1456,7 @@
 		"_spotifycontrolssettingsicon": ["SpotifyControls", "settingsIcon"],
 		"_spotifycontrolssettingslabel": ["SpotifyControls", "settingsLabel"],
 		"_spotifycontrolssong": ["SpotifyControls", "song"],
+		"_spotifycontrolssongdetails": ["SpotifyControls", "songDetails"],
 		"_spotifycontrolstimeline": ["SpotifyControls", "timeline"],
 		"_spotifycontrolsvolumeslider": ["SpotifyControls", "volumeSlider"],
 		"_stafftagadminicon": ["StaffTag", "adminIcon"],
