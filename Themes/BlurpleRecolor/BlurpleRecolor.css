@@ -919,7 +919,7 @@
 img[src="/assets/4697ec960e57790ad4f6251af4c246b4.svg"] {	/* widgetsettings		widget placeholder image 			*/
 	object-position: -999999px -999999px;
 	border-radius: 5px;
-	background: linear-gradient(rgb(var(--accentcolor)) 20%, rgba(0,0,0,.3) 20%, rgba(0,0,0,.3)), url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_details.svg) center/contain no-repeat;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_details.svg) center/contain no-repeat, linear-gradient(rgb(var(--accentcolor)) 20%, rgba(0,0,0,.3) 20%, rgba(0,0,0,.3));
 	flex: unset !important;
 }
 
