@@ -32,6 +32,7 @@
 		"ChannelUtils": {"props": ["selectChannel", "selectPrivateChannel"]},
 		"ChannelStore": {"props": ["getChannel", "getDMFromUserId"]},
 		"ColorUtils": {"props": ["hex2int", "hex2rgb"]},
+		"ConnectionStore": {"props": ["getAccounts", "getLocalAccounts"]},
 		"ConnectionUtils": {"props": ["setShowActivity", "setVisibility"]},
 		"ContextMenuUtils": {"props": ["closeContextMenu", "openContextMenu"]},
 		"CopyLinkUtils": {"props": ["SUPPORTS_COPY", "copy"]},
