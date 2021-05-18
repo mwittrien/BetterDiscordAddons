@@ -793,17 +793,18 @@ body::before {
 .mouse-mode.full-motion .wrapper-1F5TKx:hover {
 	background-color: rgba(var(--transparencycolor), calc(var(--messagetransparency) * 1.2 * var(--usechatbubbles) + 0.3 * (1 - var(--usechatbubbles)))) !important;
 }
-.backgroundFlash-24qWLN {									/* message				jump flash							*/
+.backgroundFlash-24qWLN .message-2qnXI6 {					/* message				jump flash							*/
 	position: relative;
 }
-.backgroundFlash-24qWLN::before {
+.backgroundFlash-24qWLN .message-2qnXI6::before {
 	content: "";
 	position: absolute;
-	background: inherit;
+	background: var(--message-background-flash, transparent);
+	opacity: 0.2;
 	top: 0;
 	right: 0;
 	bottom: 0;
-	left: 0;
+	left: calc(-80px * var(--usechatbubbles));
 	z-index: 1;
 	pointer-events: none;
 }
