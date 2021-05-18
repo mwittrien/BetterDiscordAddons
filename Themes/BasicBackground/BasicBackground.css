@@ -2376,6 +2376,28 @@ body::before {
 	z-index: -1;
 }
 
+.roles-1ti6KV {												/* rolesettings			intro roles							*/
+	z-index: 2;
+}
+.profileCard-2RGvbu {										/* rolesettings			intro profile						*/
+	position: relative;
+	z-index: 1;
+}
+.profileCard-2RGvbu::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+	filter: blur(var(--popoutblur));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
 .sidebar-dLM-kh {											/* rolesettings			sidebar								*/
 	background-color: rgba(var(--transparencycolor), .1);
 	border: none;
