@@ -2,7 +2,7 @@
  * @name GoogleTranslateOption
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.3
+ * @version 2.2.4
  * @description Allows you to translate Messages and your outgoing Message within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.2.3",
+			"version": "2.2.4",
 			"description": "Allows you to translate Messages and your outgoing Message within Discord"
 		},
 		"changeLog": {
-			"added": {
-				"DeepL": "was added",
-				"Backup": "You can now add a backup translator, it will be used if the select language is not supported by the main translator or if the main translator errors out (rate limit, server down)"
+			"improved": {
+				"DeepL": "Request Limit Warning"
 			}
 		}
 	};
@@ -785,6 +784,7 @@ module.exports = (_ => {
 			
 			deepLTranslate (data, callback) {
 				BDFDB.LibraryRequires.request(`https://api-free.deepl.com/v2/translate?auth_key=75cc2f40-fdae-14cd-7242-6a384e2abb9c:fx&text=${encodeURIComponent(data.text)}${data.input.auto ? "" : `&source_lang=${data.input.id}`}&target_lang=${data.output.id}`, (error, response, body) => {
+					console.log(error, response, body);
 					if (!error && body && response.statusCode == 200) {
 						try {
 							body = JSON.parse(body);
@@ -797,7 +797,7 @@ module.exports = (_ => {
 						catch (err) {callback("");}
 					}
 					else {
-						if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Request Limit reached.`, {
+						if (response.statusCode == 429 || response.statusCode == 456) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Request Limit reached.`, {
 							type: "danger",
 							position: "center"
 						});
