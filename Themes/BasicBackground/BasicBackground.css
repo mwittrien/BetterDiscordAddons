@@ -800,13 +800,15 @@ body::before {
 	content: "";
 	position: absolute;
 	background: var(--message-background-flash, transparent);
-	opacity: 0.2;
 	top: 0;
 	right: 0;
 	bottom: 0;
-	left: calc(-80px * var(--usechatbubbles));
+	left: 0;
 	z-index: 1;
 	pointer-events: none;
+}
+.backgroundFlash-24qWLN .cozyMessage-3V1Y8y::before {
+	left: calc(-80px * var(--usechatbubbles));
 }
 .message-2qnXI6.ephemeral-1PsL1r,							/* message				localbot							*/
 .message-2qnXI6.replying-1x3H0T {							/* message				replying							*/
