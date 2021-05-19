@@ -245,7 +245,7 @@ module.exports = (_ => {
 						margin: 0 !important;
 					}
 					${BDFDB.dotCN._badgeseverywherebadge} {
-						height: 17px !important;
+						height: 17px !important; min-height: 17px !important;
 					}
 					${BDFDB.dotCN._badgeseverywheresize17} {
 						width: 17px !important; min-width: 17px !important;
@@ -260,13 +260,13 @@ module.exports = (_ => {
 						width: 24px !important; min-width: 24px !important;
 					}
 					${BDFDB.dotCN._badgeseverywhereindicator} {
-						height: 14px !important; min-height: 14px !important; width: 14px !important; min-width: 14px !important;
+						width: 14px !important; min-width: 14px !important;
 					}
 					${BDFDB.dotCN._badgeseverywhereindicatorinner} {
-						height: inherit !important; min-height: inherit !important; width: inherit !important; min-width: inherit !important;
+						height: 85% !important; min-height: 85% !important; width: inherit !important; min-width: inherit !important;
 					}
 					${BDFDB.dotCNS._badgeseverywheremini + BDFDB.dotCN._badgeseverywherebadge} {
-						height: 14px !important;
+						height: 14px !important; min-height: 14px !important;
 					}
 					${BDFDB.dotCNS._badgeseverywheremini + BDFDB.dotCN._badgeseverywheresize17} {
 						width: 14px !important; min-width: 14px !important;
@@ -281,7 +281,7 @@ module.exports = (_ => {
 						width: 19px !important; min-width: 19px !important;
 					}
 					${BDFDB.dotCNS._badgeseverywheremini + BDFDB.dotCN._badgeseverywhereindicator} {
-						height: 12px !important; min-height: 12px !important; width: 12px !important; min-width: 12px !important;
+						width: 12px !important; min-width: 12px !important;
 					}
 					#app-mount ${BDFDB.dotCNS._badgeseverywherebadgessettings + BDFDB.dotCN._badgeseverywherebadge} {
 						width: 30px !important; min-width: 30px !important;
