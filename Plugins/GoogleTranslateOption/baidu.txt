@@ -201,9 +201,7 @@
 
 
 ,
-			baidu: {
-				name: "Baidu", auto: true, funcName: "baiduTranslate", languages: ["en", "es", "fr", "id", "ja", "ko", "th", "vi", "zh-CN", "zh-TW"]
-			}
+			baidu: { name: "Baidu", auto: true, funcName: "baiduTranslate", languages: ["en", "es", "fr", "id", "ja", "ko", "th", "vi", "zh-CN", "zh-TW"] }
 
 
 

@@ -254,51 +254,54 @@
 	color: rgb(var(--accentcolor));
 }
 
+.backgroundFlash-24qWLN {
+	background-color: var(--message-background-flash) !important;
+}
 .backgroundFlash-24qWLN[style*="background-color: rgb(88, 101, 242)"],
 .backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 1"],
 .backgroundFlash-24qWLN[style*="background-color: rgb(114, 137, 218)"],
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 1"] {
-	background-color: rgba(var(--accentcolor), 1) !important;
+	--message-background-flash: rgba(var(--accentcolor), 1);
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.9"],
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.9"] {
-	background-color: rgba(var(--accentcolor), 0.9) !important;
+	--message-background-flash: rgba(var(--accentcolor), 0.9);
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.8"],
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.8"] {
-	background-color: rgba(var(--accentcolor), 0.8) !important;
+	--message-background-flash: rgba(var(--accentcolor), 0.8);
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.7"],
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.7"] {
-	background-color: rgba(var(--accentcolor), 0.7) !important;
+	--message-background-flash: rgba(var(--accentcolor), 0.7);
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.6"],
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.6"] {
-	background-color: rgba(var(--accentcolor), 0.6) !important;
+	--message-background-flash: rgba(var(--accentcolor), 0.6);
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.5"],
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.5"] {
-	background-color: rgba(var(--accentcolor), 0.5) !important;
+	--message-background-flash: rgba(var(--accentcolor), 0.5);
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.4"],
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.4"] {
-	background-color: rgba(var(--accentcolor), 0.4) !important;
+	--message-background-flash: rgba(var(--accentcolor), 0.4);
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.3"],
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.3"] {
-	background-color: rgba(var(--accentcolor), 0.3) !important;
+	--message-background-flash: rgba(var(--accentcolor), 0.3);
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.2"],
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.2"] {
-	background-color: rgba(var(--accentcolor), 0.2) !important;
+	--message-background-flash: rgba(var(--accentcolor), 0.2);
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.1"],
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.1"] {
-	background-color: rgba(var(--accentcolor), 0.1) !important;
+	--message-background-flash: rgba(var(--accentcolor), 0.1);
 }
 .backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.0"],
 .backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.0"] {
-	background-color: rgba(var(--accentcolor), 0) !important;
+	--message-background-flash: rgba(var(--accentcolor), 0);
 }
 
 .embedFull-2tM8--[style*="border-color: rgb(88, 101, 242)"],
@@ -646,7 +649,7 @@
 	background-image: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/nitrobadge_details.svg), linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5)) !important;
 }
 .pageWrapper-3F6owx {										/* store				pagewrapper							*/
-	background: white linear-gradient(114deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.6));
+	background: #fff linear-gradient(114deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.6));
 }
 
 
@@ -892,35 +895,32 @@
 
 /* ~~~~		9.		GUILDSETTINGS					~~~~ */
 
-															/* widgetsettings		widget placeholder image 			*/
-.layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type {
-	position: relative !important;
+.banner-aJsFyZ {											/* rolesettings			intro banner 						*/
+	border-radius: 5px;
 }
-.layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type img[src="/assets/5fb477ca84edd15d9a2888ac28365acd.svg"] {
+.bannerClubs-3Xj268 {
+	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_clubs_details.svg) center/cover no-repeat;
+}
+.bannerClubs-3Xj268 .avatarName-3m2hgE {
+	display: flex;
+	font-size: 0;
+}
+.bannerClubs-3Xj268 .avatarName-3m2hgE::before {
+	content: "Susie#0000";
+	font-size: 16px;
+}
+.bannerGaming-2JPrc4 {
+	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_gaming_details.svg) center/cover no-repeat;
+}
+.bannerHobbies-1oItTY {
+	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_hobbies_details.svg) center/cover no-repeat;
+}
+
+img[src="/assets/4697ec960e57790ad4f6251af4c246b4.svg"] {	/* widgetsettings		widget placeholder image 			*/
 	object-position: -999999px -999999px;
+	border-radius: 5px;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_details.svg) center/contain no-repeat, linear-gradient(rgb(var(--accentcolor)) 20%, rgba(0,0,0,.3) 20%, rgba(0,0,0,.3));
 	flex: unset !important;
-	height: 310px !important;
-	min-width: 320px !important;
-	background: var(--background-tertiary);
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_bg.svg) center/contain no-repeat;
-}
-.layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type::before,
-.layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type::after {
-	content: "";
-	position: absolute;
-	right: 0;
-	bottom: 0;
-	width: 320px;
-	height: 310px;
-	pointer-events: none;
-}
-.layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type::before {
-	background: rgb(var(--accentcolor));
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_accent.svg) center/contain no-repeat;
-}
-.layer-3QrUeG[aria-label="GUILD_SETTINGS"] .contentRegion-3nDuYy .contentColumn-2hrIYH > div > div > .divider-3573oO + .flex-1xMQg5 + .divider-3573oO + .flex-1xMQg5:last-of-type::after {
-	background: var(--header-primary);
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_details.svg) center/contain no-repeat;
 }
 
 @-webkit-keyframes pulseBorder-1LZYy9 { 					/* intergrationsettings	new webhook							*/
@@ -1692,6 +1692,11 @@ a.metadataName-14STf- {
 .selected-3AsYnC .stepIndex-3rtpcw {
 	color: rgb(var(--accentcolor));
 }
+.image-2Qw4tp[src="/assets/7f62c4c1f689de046a6ad83020c897ad.svg"],
+.footerImage-2KxOYG[src="/assets/7f62c4c1f689de046a6ad83020c897ad.svg"] {
+	object-position: -999999px -999999px;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/discovery_house.svg) center/contain no-repeat !important;
+}
 
 
 /* ~~~~		11.		POPOUTS							~~~~ */
@@ -2092,15 +2097,25 @@ a.metadataName-14STf- {
 	object-position: -999999px -999999px;
 	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/clydeicon_details.svg) center/contain no-repeat !important;
 }
-[style*="/assets/6debd47ed13483642cf09e832ed0bc1b.png"],
-[src*="/assets/6debd47ed13483642cf09e832ed0bc1b.png"] {		/* avatars				blue discord						*/
-	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/discordavatar_old_details.svg) center/contain no-repeat !important;
-}
 [style*="/assets/1f0bfc0865d324c2587920a7d80c609b.png"],
 [src*="/assets/1f0bfc0865d324c2587920a7d80c609b.png"] {		/* avatars				blue discord						*/
 	object-position: -999999px -999999px;
 	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/discordavatar_details.svg) center/contain no-repeat !important;
+}
+[style*="/assets/3a55d3972a7d68bcb306af32ab1b226a.svg"],
+[src*="/assets/3a55d3972a7d68bcb306af32ab1b226a.svg"] {		/* avatars				rolesettings intro avatar			*/
+	object-position: -999999px -999999px;
+	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_clubs_avatar.svg) center/contain no-repeat !important;
+}
+[style*="/assets/f17da3efc8cf47226d362fee2f5f7197.svg"],
+[src*="/assets/f17da3efc8cf47226d362fee2f5f7197.svg"] {		/* avatars				rolesettings intro avatar			*/
+	object-position: -999999px -999999px;
+	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_gaming_avatar.svg) center/contain no-repeat !important;
+}
+[style*="/assets/642982d3d82323a8fb69860f116ebca7.svg"],
+[src*="/assets/642982d3d82323a8fb69860f116ebca7.svg"] {		/* avatars				rolesettings intro avatar			*/
+	object-position: -999999px -999999px;
+	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_hobbies_avatar.svg) center/contain no-repeat !important;
 }
 
 /* ----		12.6.	SCROLLBARS						---- */
@@ -2470,11 +2485,24 @@ html .powercord-updater .debug-info b {
 /* ----		15.3.	SERVERSEARCH					---- */
 
 #server-search .wrapper-25eVIn {
-	background-color: rgb(47, 49, 54) !important;
-	transition: background-color .16s ease-out;
+    background-color: var(--background-primary) !important;
+    transition: background-color .16s ease-out;
 }
 #server-search .wrapper-25eVIn:hover {
 	background-color: rgb(var(--accentcolor)) !important;
+}
+#server-search .wrapper-25eVIn [fill="white"] {
+    fill: var(--header-primary);
+}
+#server-search .wrapper-25eVIn:hover [fill="white"] {
+    fill: #fff;
+}
+#server-search .circleIconButton-1QV--U {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+    width: 48px;
+    height: 48px;
 }
 
 /* ----		15.4.	CHANNELTABS						---- */

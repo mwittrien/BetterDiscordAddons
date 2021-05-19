@@ -32,6 +32,8 @@
 		"ChannelUtils": {"props": ["selectChannel", "selectPrivateChannel"]},
 		"ChannelStore": {"props": ["getChannel", "getDMFromUserId"]},
 		"ColorUtils": {"props": ["hex2int", "hex2rgb"]},
+		"ConnectionStore": {"props": ["getAccounts", "getLocalAccounts"]},
+		"ConnectionUtils": {"props": ["setShowActivity", "setVisibility"]},
 		"ContextMenuUtils": {"props": ["closeContextMenu", "openContextMenu"]},
 		"CopyLinkUtils": {"props": ["SUPPORTS_COPY", "copy"]},
 		"CurrentUserStore": {"props": ["getCurrentUser"]},
@@ -330,6 +332,21 @@
 		"VideoForwardRef": {"strings": ["displayName=\"Video\"", "\"video\"", "HTMLImageElement"], "value": "default"}
 	},
 	"SvgIcons": {
+		"ACTIVITY": {
+			"defaultProps": {
+				"width": 16,
+				"height": 16
+			},
+			"icon": "<svg name='Activity' width='%%width' height='%%height' viewBox='0 0 16 16'><path fill='%%color' d='M6,7 L2,7 L2,6 L6,6 L6,7 Z M8,5 L2,5 L2,4 L8,4 L8,5 Z M8,3 L2,3 L2,2 L8,2 L8,3 Z M8.88888889,0 L1.11111111,0 C0.494444444,0 0,0.494444444 0,1.11111111 L0,8.88888889 C0,9.50253861 0.497461389,10 1.11111111,10 L8.88888889,10 C9.50253861,10 10,9.50253861 10,8.88888889 L10,1.11111111 C10,0.494444444 9.5,0 8.88888889,0 Z' transform='translate(3 3)'/></svg>"
+		},
+		"ACTIVITY_DISABLED": {
+			"defaultProps": {
+				"width": 16,
+				"height": 16,
+				"foreground": 16
+			},
+			"icon": "<svg name='ActivityDisabled' aria-hidden='false' width='%%width' height='%%height' viewBox='0 0 16 16'><path fill='%%color' d='M 4.1113281 3 C 3.4946615 3 3 3.4946615 3 4.1113281 L 3 10.46875 L 5.484375 8 L 5 8 L 5 7 L 6.4902344 7 L 7.4980469 6 L 5 6 L 5 5 L 8.5039062 5 L 10.517578 3 L 4.1113281 3 z M 13 5.5390625 L 11 7.5390625 L 11 8 L 10.539062 8 L 9 9.5390625 L 9 10 L 8.5390625 10 L 8.5117188 10.027344 L 5.5195312 13 L 11.888672 13 C 12.502322 13 13 12.502322 13 11.888672 L 13 5.5390625 z'/><path d='M 14,2.8466665 13.153333,1.9999998 2,13.153333 2.846666,14 5.64,11.213333 6.46,10.386667 7.566666,9.2799998 9.993333,6.8533328 Z' class='%%foreground' fill='currentColor'/></svg>"
+		},
 		"ARROW_DOWN": {
 			"defaultProps": {
 				"width": 18,
@@ -413,6 +430,15 @@
 		"FOLDER": {
 			"icon": "<svg name='Folder' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='M20 7H12L10.553 5.106C10.214 4.428 9.521 4 8.764 4H3C2.447 4 2 4.447 2 5V19C2 20.104 2.895 21 4 21H20C21.104 21 22 20.104 22 19V9C22 7.896 21.104 7 20 7Z'/></svg>"
 		},
+		"GAMEPAD": {
+			"icon": "<svg name='Gamepad' aria-hidden='false' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='M 5.7066445,4.9022473 H 18.293275 c 1.595895,0 2.92046,1.2333283 3.034163,2.8251676 l 0.667683,9.3475611 c 0.0743,1.040197 -0.708715,1.943677 -1.748914,2.017977 -0.04477,0.0032 -0.08964,0.0048 -0.134531,0.0048 -1.191828,0 -2.230714,-0.811138 -2.519775,-1.96738 l -0.522119,-2.08848 H 6.930137 l -0.5221194,2.088478 c -0.2890608,1.156242 -1.3279463,1.96738 -2.5197742,1.96738 -1.0428481,0 -1.8882436,-0.845396 -1.8882436,-1.888243 0,-0.04488 0.0016,-0.08976 0.0048,-0.134532 L 2.6724812,7.7274149 C 2.7861841,6.1355756 4.1107494,4.9022473 5.7066445,4.9022473 Z m 8.8282265,5.0698223 c 0.839995,0 1.520947,-0.680951 1.520947,-1.5209465 0,-0.8399957 -0.680952,-1.5209468 -1.520947,-1.5209468 -0.839996,0 -1.520947,0.6809511 -1.520947,1.5209468 0,0.8399955 0.680951,1.5209465 1.520947,1.5209465 z m 4.055858,3.0418944 c 0.839996,0 1.520947,-0.680952 1.520947,-1.520947 0,-0.839995 -0.680951,-1.5209474 -1.520947,-1.5209474 -0.839996,0 -1.520947,0.6809524 -1.520947,1.5209474 0,0.839995 0.680951,1.520947 1.520947,1.520947 z M 5.9161725,8.9581056 H 3.8882434 v 2.0279294 h 2.0279291 v 2.027929 H 7.9441016 V 10.986035 H 9.9720304 V 8.9581056 H 7.9441016 V 6.9301763 H 5.9161725 Z'/></svg>"
+		},
+		"GAMEPAD_DISABLED": {
+			"defaultProps": {
+				"foreground": ""
+			},
+			"icon": "<svg name='GamepadDisabled' aria-hidden='false' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='m 5.707493,4.903746 c -1.5957556,0 -2.921198,1.232272 -3.0348909,2.823972 l -0.6679103,9.346058 c -0.0032,0.04477 -0.00469,0.09105 -0.00469,0.135925 0,0.286145 0.068875,0.553783 0.1827966,0.796805 L 7.1745522,13.014755 H 5.9160685 v -2.02951 H 3.8889021 V 8.958078 H 5.9160685 V 6.930913 H 7.943235 v 2.027165 h 2.0295102 v 1.258484 L 15.285561,4.903746 Z m 15.366625,1.832652 -4.813642,4.813642 -3.491882,3.491882 h 4.300405 l 0.522611,2.088099 c 0.289036,1.156141 1.327587,1.966233 2.519311,1.966233 0.04489,0 0.08882,-0.0014 0.133582,-0.0047 1.040108,-0.0743 1.824922,-0.977685 1.750628,-2.01779 l -0.66791,-9.346079 c -0.02519,-0.352659 -0.11926,-0.683371 -0.253103,-0.99132 z m -2.484157,3.236436 c 0.839921,0 1.52096,0.681039 1.52096,1.52096 0,0.839923 -0.681039,1.520961 -1.52096,1.520961 -0.839923,0 -1.520962,-0.681038 -1.520962,-1.520961 0,-0.839921 0.681039,-1.52096 1.520962,-1.52096 z M 7.943235,10.985245 v 1.260827 l 1.2608277,-1.260827 z'/><path d='M21 4.27L19.73 3L3 19.73L4.27 21L8.46 16.82L9.69 15.58L11.35 13.92L14.99 10.28L21 4.27Z' class='%%foreground' fill='currentColor'/></svg>"
+		},
 		"GITHUB": {
 			"icon": "<svg name='Github' width='%%width' height='%%height' viewBox='0 0 24 24'><g fill='%%color'><path d='m12 .5c-6.63 0-12 5.28-12 11.792 0 5.211 3.438 9.63 8.205 11.188.6.111.82-.254.82-.567 0-.28-.01-1.022-.015-2.005-3.338.711-4.042-1.582-4.042-1.582-.546-1.361-1.335-1.725-1.335-1.725-1.087-.731.084-.716.084-.716 1.205.082 1.838 1.215 1.838 1.215 1.07 1.803 2.809 1.282 3.495.981.108-.763.417-1.282.76-1.577-2.665-.295-5.466-1.309-5.466-5.827 0-1.287.465-2.339 1.235-3.164-.135-.298-.54-1.497.105-3.121 0 0 1.005-.316 3.3 1.209.96-.262 1.98-.392 3-.398 1.02.006 2.04.136 3 .398 2.28-1.525 3.285-1.209 3.285-1.209.645 1.624.24 2.823.12 3.121.765.825 1.23 1.877 1.23 3.164 0 4.53-2.805 5.527-5.475 5.817.42.354.81 1.077.81 2.182 0 1.578-.015 2.846-.015 3.229 0 .309.21.678.825.56 4.801-1.548 8.236-5.97 8.236-11.173 0-6.512-5.373-11.792-12-11.792z'/></g></svg>"
 		},
@@ -470,6 +496,12 @@
 		},
 		"OPEN_EXTERNAL": {
 			"icon": "<svg name='OpenExternal' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z'/></svg>"
+		},
+		"OVERLAY": {
+			"icon": "<svg name='Overlay' aria-hidden='false' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' fill-rule='evenodd' clip-rule='evenodd' d='M4 2.5C2.897 2.5 2 3.397 2 4.5V15.5C2 16.604 2.897 17.5 4 17.5H11V19.5H7V21.5H17V19.5H13V17.5H20C21.103 17.5 22 16.604 22 15.5V4.5C22 3.397 21.103 2.5 20 2.5H4ZM20 4.5V13.5H4V4.5H20Z'/></svg>"
+		},
+		"OVERLAY_DISABLED": {
+			"icon": "<svg name='OverlayDisabled' aria-hidden='false' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='M8.67872 19H11V21H7V23H17V21H13V19H20C21.103 19 22 18.104 22 17V6C22 5.89841 21.9924 5.79857 21.9777 5.70101L20 7.67872V15H12.6787L8.67872 19ZM13.1496 6H4V15H4.14961L2.00515 17.1445C2.00174 17.0967 2 17.0486 2 17V6C2 4.897 2.897 4 4 4H15.1496L13.1496 6Z'/><path d='M21 4.27L19.73 3L3 19.73L4.27 21L8.46 16.82L9.69 15.58L11.35 13.92L14.99 10.28L21 4.27Z' class='%%foreground' fill='currentColor'/></svg>"
 		},
 		"PATREON": {
 			"icon": "<svg name='Patreon' width='%%width' height='%%height' viewBox='0 0 24 24'><path fill='%%color' d='M 0,-1.2209e-4 V 24 H 4.4021963 V -1.2209e-4 Z m 15.010145,0 c -4.974287,0 -9.020427,4.04121619 -9.020427,9.00819799 0,4.9565461 4.04614,8.9837411 9.020427,8.9837421 C 19.970866,17.991818 24,13.959406 24,9.0080759 24,4.0421376 19.969822,-1.2209e-4 15.010145,-1.2209e-4 Z'/></svg>"
@@ -932,6 +964,7 @@
 			"accessModal": "accessModal-w5HjsV"
 		},
 		"SpotifyControls": {
+			"activityButton": "activityButton-5Fs4Aa",
 			"bar": "bar-g2ZMIm",
 			"barGabber": "grabber-7sd5f5",
 			"barFill": "barFill-Dhkah7",
@@ -1148,7 +1181,6 @@
 		"GuildSettingsEmoji": {"props": ["emojiRow", "emojiAliasPlaceholder"]},
 		"GuildSettingsInvite": {"props": ["countdownColumn", "inviteSettingsInviteRow"]},
 		"GuildSettingsMember": {"props": ["member", "membersFilterPopout"]},
-		"GuildSettingsRoles": {"props": ["buttonWrapper", "addRoleIcon"]},
 		"GuildServer": {"props": ["blobContainer", "pill"]},
 		"GuildsItems": {"props": ["guildSeparator", "guildsError"]},
 		"GuildsWrapper": {"props": ["scroller", "unreadMentionsBar", "wrapper"]},
@@ -1406,6 +1438,7 @@
 		"_showhiddenchannelsaccessmodal": ["ShowHiddenChannels", "accessModal"],
 		"_spellcheckerror": ["SpellCheck", "error"],
 		"_spellcheckoverlay": ["SpellCheck", "overlay"],
+		"_spotifycontrolsactivitybutton": ["SpotifyControls", "activityButton"],
 		"_spotifycontrolsbar": ["SpotifyControls", "bar"],
 		"_spotifycontrolsbarfill": ["SpotifyControls", "barFill"],
 		"_spotifycontrolsbargrabber": ["SpotifyControls", "barGabber"],
@@ -2098,7 +2131,6 @@
 		"guildsettingsmembercard": ["GuildSettingsMember", "member"],
 		"guildsettingsmembername": ["GuildSettingsMember", "name"],
 		"guildsettingsmembernametag": ["GuildSettingsMember", "nameTag"],
-		"guildsettingsrolesbuttonwrapper": ["GuildSettingsRoles", "buttonWrapper"],
 		"guildslabel": ["BDFDB", "guildsLabel"],
 		"guildsscroller": ["GuildsWrapper", "scroller"],
 		"guildstree": ["GuildsWrapper", "tree"],
