@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.0
+ * @version 1.7.1
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.7.0",
+			"version": "1.7.1",
 			"description": "Shows a Notification when a Friend or a User, you choose to observe, changes their Status"
 		},
 		"changeLog": {
-			"improved": {
-				"User Specific": "Configs are now User-Specific, meaning the Plugin will not try to load Friends/Strangers of your second Account"
+			"fixed": {
+				"Time Log": "Fixed Text Scrolling for huge scrolling entries"
 			},
 		}
 	};
@@ -175,11 +175,11 @@ module.exports = (_ => {
 									size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
 								}),
 								_this.createStatusDot(log.status, log.mobile, {marginRight: 6}),
-								BDFDB.ReactUtils.createElement("di", {
+								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN._friendnotificationslogcontent,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-										speed: 1,
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+											speed: 1,
 											children: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(log.string))
 										})
 									})
@@ -190,7 +190,7 @@ module.exports = (_ => {
 				}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateBottom, {
 					msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
 					image: BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight ? "/assets/9b0d90147f7fab54f00dd193fe7f85cd.svg" : "/assets/308e587f3a68412f137f7317206e92c2.svg"
-				})
+				});
 			}
 		};
 	
