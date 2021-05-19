@@ -3112,8 +3112,11 @@
 	"myId": "278543574059057154",
 	"myGuildId": "410787888507256842",
 	"userIdAttribute": "data-user-id",
-	"userBackgroundProperty": "--user-background",
-	"userBackgroundsUrl": "https://discord-custom-covers.github.io/usrbg/dist/usrbg.css",
+	"userBackgroundsProperties": {
+		"background": "--user-background",
+		"orientation": "--user-popout-position"
+	},
+	"userBackgroundsUrl": "https://discord-custom-covers.github.io/usrbg/dist/usrbg.json",
 	"Languages": {
 		"$discord": 	{"name":"Discord (English))",			"id":"en",		"ownlang":"English"},
 		"af":			{"name":"Afrikaans",					"id":"af",		"ownlang":"Afrikaans"},

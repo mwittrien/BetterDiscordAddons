@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.4
+ * @version 1.6.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,18 +19,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.6.4",
+			"version": "1.6.5",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
-		"changeLog": {
-			"fixed": {
-				"Text Scroller Component": "Fixed some scrolling Issue, which made the Scrollers act weird (especially noticeable for SpotifyControls)"
-			},
-			"improved": {
-				"Date Input Component": "Added a Language Option, which allows you to change the Language used for the Date Formatter outside of Discords Native Languages, this allows People to use the Persian Calendar again for Example"
-			}
-		}
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
 	};
 	
 	const DiscordObjects = {};
@@ -984,31 +976,25 @@ module.exports = (_ => {
 				if (!e2 && b2 && r2.statusCode == 200) fs.writeFile(dataPath, b2, _ => {});
 				
 				InternalData.UserBackgrounds = {};
-				if (InternalData.userBackgroundsUrl) request(InternalData.userBackgroundsUrl, (e3, r3, b3) => {
+				if (InternalData.userBackgroundsUrl && InternalData.userBackgroundsProperties) request(InternalData.userBackgroundsUrl, (e3, r3, b3) => {
 					if (!e3 && b3 && r3.statusCode == 200) {
-						const array = b3.replace(/\n|\r|\t/g, "").split(new RegExp(`\\*\\/[^\\[]+\\[${BDFDB.StringUtils.regEscape(InternalData.userIdAttribute)}="|\\*\\/\s*\\[${BDFDB.StringUtils.regEscape(InternalData.userIdAttribute)}="`));
-						if (array.length > 100) array.forEach((s, i) => {
-							let idReg = /(\d{16,})/gi;
-							let ids = [], id;
-							do {
-								id = idReg.exec(s);
-								if (id && ids.indexOf(id[1]) == -1) ids.push(id[1]);
-							} while (id);
-							if (ids.length) {
-								let properties = ((s.split("{").slice(1).join("{") || "").split("}").slice(0, -1).join("}") || "").split(";").map(s => s.trim()).filter(n => n);
-								if (properties && properties.length) {
-									let values = {}, found = false;
-									for (let propertyString of properties) {
-										let pair = propertyString.split(": ");
-										let property = (pair[0] || "").trim();
-										let value = (pair.slice(1).join(": ") || "").replace(/\s*!important\s*$/i, "").trim();
-										if (property && value && (found = true)) values[property] = value;
-									}
-									if (found) for (let i of ids) InternalData.UserBackgrounds[i] = values;
+						const log = BDFDB.UserUtils.me.id == InternalData.myId || BDFDB.UserUtils.me.id == "350635509275557888", notUsedValues = [];
+						try {
+							InternalData.UserBackgrounds = JSON.parse(b3);
+							for (let id in InternalData.UserBackgrounds) {
+								let user = {};
+								for (let key in InternalData.UserBackgrounds[id]) {
+									if (InternalData.userBackgroundsProperties[key]) user[InternalData.userBackgroundsProperties[key]] = key == "background" ? `url(${InternalData.UserBackgrounds[id][key]})` : InternalData.UserBackgrounds[id][key];
+									else if (log && !notUsedValues.includes(key)) notUsedValues.push(key);
 								}
+								InternalData.UserBackgrounds[id] = user;
 							}
-						});
-						else if (BDFDB.UserUtils.me.id == InternalData.myId || BDFDB.UserUtils.me.id == "350635509275557888") BDFDB.LogUtils.warn("Could not load usrbgs!");
+							if (notUsedValues.length) BDFDB.LogUtils.warn(["Found unused variables in usrbgs!", notUsedValues]);
+						}
+						catch (err) {
+							InternalData.UserBackgrounds = {};
+							if (log) BDFDB.LogUtils.error(["Could not load usrbgs!", err]);
+						}
 					}
 				});
 				
