@@ -2014,6 +2014,12 @@ body::before {
 	display: none;
 }
 
+.contentRegion-3nDuYy div[role="tabpanel"] {				/* tabpanel													*/
+	width: 100%;
+}
+.toolsContainer-1edPuj {									/* closebutton			wrapper								*/
+	margin-right: 37px;
+}
 #app-mount .closeButton-1tv5uR {							/* closebutton			button								*/
 	border-color: var(--channels-default);
 }

@@ -1810,6 +1810,12 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	opacity: .5;
 }
 
+.contentRegion-3nDuYy div[role="tabpanel"] {
+	width: 100%;
+}
+.toolsContainer-1edPuj {
+	margin-right: 37px;
+}
 #app-mount .closeButton-1tv5uR {
 	border-color: var(--channels-default);
 }
