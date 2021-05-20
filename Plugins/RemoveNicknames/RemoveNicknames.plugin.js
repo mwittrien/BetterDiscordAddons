@@ -2,7 +2,7 @@
  * @name RemoveNicknames
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.9
+ * @version 1.4.0
  * @description Replaces Nicknames with Accountnames
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveNicknames",
 			"author": "DevilBro",
-			"version": "1.3.9",
+			"version": "1.4.0",
 			"description": "Replaces Nicknames with Accountnames"
 		},
 		"changeLog": {
@@ -103,7 +103,7 @@ module.exports = (_ => {
 			
 			onStart () {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageAuthorUtils, ["default", "getMessageAuthor"], {after: e => {
-					if (settings.changeInChatWindow && e.methodArguments[0] && e.methodArguments[0].author) {
+					if (this.settings.places.chat && e.methodArguments[0] && e.methodArguments[0].author) {
 						let newName = this.getNewName(e.methodArguments[0].author);
 						if (newName) e.returnValue.nick = newName;
 					}
