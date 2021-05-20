@@ -2,7 +2,7 @@
  * @name BadgesEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.8
+ * @version 1.6.9
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "BadgesEverywhere",
 			"author": "DevilBro",
-			"version": "1.6.8",
+			"version": "1.6.9",
 			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/UserPopout"
 		},
 		"changeLog": {
 			"fixed": {
-				"Margin & Overlapping": "Fixed Margin and Overlapping Issue, thanks Discord"
+				"Works again": ""
 			}
 		}
 	};
@@ -326,7 +326,7 @@ module.exports = (_ => {
 				}
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
-					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.USER_PROFILE_MODAL_FETCH_SUCCESS && e.methodArguments[0].user) {
+					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.USER_PROFILE_FETCH_SUCCESS && e.methodArguments[0].user) {
 						let userCopy = Object.assign({}, e.methodArguments[0].user);
 						if (e.methodArguments[0].premium_since) userCopy.flags += nitroFlag;
 						userCopy.premium_since = e.methodArguments[0].premium_since;
