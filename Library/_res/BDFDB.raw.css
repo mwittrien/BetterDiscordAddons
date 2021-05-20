@@ -633,6 +633,12 @@ img:not([src]), img[src=""], img[src="null"] {
 	opacity: 1;
 }
 
+[REPLACE_CLASS_textareabuttonwrapper] {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 [REPLACE_CLASS_guildsummarycontainer] {
 	display: -webkit-box;
 	display: -ms-flexbox;

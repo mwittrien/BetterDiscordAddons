@@ -194,7 +194,6 @@
 body,														/* body														*/
 #app-mount .app-1q1i1E,										/* app					container							*/
 #app-mount .app-2rEoOp,										/* app					inner								*/
-#app-mount .container-16j22k,								/* app					loadingscreen						*/
 #app-mount .loading-Ags1CY,									/* app					i18n loading						*/
 #app-mount .wrapper-1prNyd,									/* app					errorscreen							*/
 #app-mount .bg-h5JY_x,										/* app					background							*/
@@ -273,6 +272,7 @@ body::before {
 	background: var(--background) var(--backgroundposition)/var(--backgroundsize);
 	filter: blur(var(--backgroundblur));
 }
+.container-16j22k::before,
 .layer-3QrUeG ~ .layer-3QrUeG::before,
 .root-3R2ngo::before {
 	content: "";
@@ -287,6 +287,7 @@ body::before {
 	pointer-events: none;
 	z-index: -1;
 }
+.container-16j22k::after,
 .layer-3QrUeG ~ .layer-3QrUeG::after,
 .root-3R2ngo::after {
 	content: "";
@@ -4276,6 +4277,47 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	right: 0;
 	left: 0;
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.headerNormal-1l1Znk {										/* popout new			headernormal						*/
+	background-color: rgba(var(--transparencycolor), .2);
+}
+.headerTop-2y3V6H,											/* popout new			header inner						*/
+.activity-fViXj7 {											/* popout new			activity							*/
+	background: transparent;
+}
+.userPopout-3XzG_A .avatar-22FtUu {							/* popout new			avatar								*/
+	background: transparent;
+	border-color: transparent;
+}
+.userPopout-3XzG_A .avatar-22FtUu::before {
+	content: "";
+	position: absolute;
+	top: -6px;
+	bottom: -6px;
+	right: -6px;
+	left: -6px;
+	background: var(--user-background, var(--popout)) var(--popoutposition)/var(--popoutsize);
+	filter: blur(var(--popoutblur));
+	background-attachment: var(--user-background, fixed);
+	border-radius: 50%;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.userPopout-3XzG_A .avatar-22FtUu::after {
+	content: "";
+	position: absolute;
+	top: -6px;
+	bottom: -6px;
+	right: -6px;
+	left: -6px;
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + .375));
+	border-radius: 50%;
 	width: unset;
 	height: unset;
 	pointer-events: none;
