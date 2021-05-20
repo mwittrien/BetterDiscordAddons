@@ -7787,7 +7787,7 @@ module.exports = (_ => {
 				InternalBDFDB._processUserInfoNode = function (user, wrapper) {
 					if (!user || !wrapper) return;
 					if (InternalData.UserBackgrounds[user.id]) {
-						avatar.setAttribute(InternalData.userBannerAttribute, true);
+						wrapper.setAttribute(InternalData.userBannerAttribute, true);
 						for (let property in InternalData.UserBackgrounds[user.id]) wrapper.style.setProperty(property, InternalData.UserBackgrounds[user.id][property], "important");
 					}
 				};
