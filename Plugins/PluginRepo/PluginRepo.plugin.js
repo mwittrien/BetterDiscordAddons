@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.3
+ * @version 2.2.4
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.2.3",
+			"version": "2.2.4",
 			"description": "Allows you to download all Plugins from BD's Website within Discord"
-		},
-		"changeLog": {
-			"progress": {
-				"Changed Api": "Preparing Plugin for API Changes"
-			}
 		}
 	};
 
@@ -803,7 +798,7 @@ module.exports = (_ => {
 						delete plugin.thumbnail_url;
 						BDFDB.LibraryRequires.request(plugin.rawSourceUrl, (error, response, body) => {
 							if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
-								plugin.name = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar((/@name\s+([^\s^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || plugin.name || "");
+								plugin.name = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar((/@name\s+([^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || plugin.name || "");
 								plugin.authorname = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || plugin.author.display_name || plugin.author;
 								const version = (/@version\s+(.+)|\/\/\**META.*["']version["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1];
 								if (version) {

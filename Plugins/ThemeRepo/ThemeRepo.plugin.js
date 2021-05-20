@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.3
+ * @version 2.2.4
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
-			"version": "2.2.3",
+			"version": "2.2.4",
 			"description": "Allows you to download all Themes from BD's Website within Discord"
-		},
-		"changeLog": {
-			"progress": {
-				"Changed Api": "Preparing Plugin for API Changes"
-			}
 		}
 	};
 
@@ -1337,11 +1332,11 @@ module.exports = (_ => {
 						delete theme.thumbnail_url;
 						BDFDB.LibraryRequires.request(theme.rawSourceUrl, (error, response, body) => {
 							if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
-								theme.name = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar((/@name\s+([^\s^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || theme.name || "");
+								theme.name = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar((/@name\s+([^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || theme.name || "");
 								theme.authorname = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || theme.author.display_name || theme.author;
 								const version = (/@version\s+(.+)|\/\/\**META.*["']version["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1];
-								if (version) {
-									theme.version = version;
+								if (version) theme.version = version;
+								if (theme.version) {
 									const installedTheme = this.getInstalledTheme(theme);
 									if (installedTheme && BDFDB.NumberUtils.compareVersions(version, this.getString(installedTheme.version))) outdatedEntries++;
 								}
@@ -1382,7 +1377,7 @@ module.exports = (_ => {
 				BDFDB.LibraryRequires.request("https://api.betterdiscord.app/v1/store/themes", (error, response, body) => {
 					if (!error && body) try {
 						grabbedThemes = BDFDB.ArrayUtils.keySort(JSON.parse(body).filter(n => n), "name");
-						console.log(grabbedThemes);
+						
 						BDFDB.DataUtils.save(BDFDB.ArrayUtils.numSort(grabbedThemes.map(n => n.id)).join(" "), this, "cached");
 						
 						loading = {is: true, timeout: BDFDB.TimeUtils.timeout(_ => {
@@ -1428,7 +1423,7 @@ module.exports = (_ => {
 			}
 			
 			getInstalledTheme (theme) {
-				if (!theme || typeof theme.authoName != "string") return;
+				if (!theme || typeof theme.authorname != "string") return;
 				const iTheme = BDFDB.BDUtils.getTheme(theme.name, false, true);
 				if (iTheme && theme.authorname.toUpperCase() == this.getString(iTheme.author).toUpperCase()) return iTheme;
 				else if (theme.rawSourceUrl && window.BdApi && BdApi.Themes && typeof BdApi.Themes.getAll == "function") {
