@@ -353,6 +353,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	width: 32px;
 	height: 32px;
 }
+[REPLACE_CLASS_discoverycardiconloading] {
+	visibility: hidden;
+}
 [REPLACE_CLASS_discoverycardinfo] {
 	display: flex;
 	flex: 1 1 auto;
