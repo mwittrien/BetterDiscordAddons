@@ -253,6 +253,9 @@ module.exports = (_ => {
 						overflow: visible;
 						white-space: unset;
 					}
+					#status-picker${BDFDB.dotCN.menu} #status-picker-custom-status ${BDFDB.dotCN.customstatusitem} {
+						grid-template-rows: minmax(24px, auto) 1fr;
+					}
 					#status-picker${BDFDB.dotCN.menu} #status-picker-custom-status ${BDFDB.dotCN.customstatusitemcustom},
 					#status-picker${BDFDB.dotCN.menu} #status-picker-custom-status ${BDFDB.dotCN.customstatusitemcustomwithemoji} {
 						display: flex;
@@ -278,6 +281,9 @@ module.exports = (_ => {
 						display: flex;
 						align-items: center;
 					}
+.statusItem-33LqPf {
+	grid-template-rows: minmax(24px, auto) 1fr;
+}
 					${BDFDB.dotCN._customstatuspresetsdeletebutton} {
 						display: flex;
 						margin-right: 6px;

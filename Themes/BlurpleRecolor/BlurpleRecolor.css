@@ -1830,6 +1830,9 @@ a.metadataName-14STf- {
 .colorDefault-2K3EoJ:active .status-1AY8sU {
 	background-color: #fff !important;
 }
+#status-picker-custom-status .statusItem-33LqPf {
+	grid-template-rows: minmax(24px, auto) 1fr;
+}
 
 .icon-LYJorE {												/* contextmenu			icon								*/
 	color: currentColor !important;
