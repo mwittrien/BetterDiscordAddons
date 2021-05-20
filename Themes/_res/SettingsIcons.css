@@ -100,6 +100,7 @@
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Change-Log-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/changelog.svg) center/contain no-repeat;
 }
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Hypesquad Online-tab" i]::before,
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Hypesquad-Online-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/hypesquad.svg) center/contain no-repeat;
 }
