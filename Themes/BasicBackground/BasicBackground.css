@@ -3105,7 +3105,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--user-background, var(--popout)) var(--popoutposition)/var(--popoutsize);
+	background: var(--user-background, var(--popout)) var(--user-popout-position, var(--popoutposition))/var(--popoutsize);
 	filter: blur(var(--popoutblur));
 	background-attachment: var(--user-background, fixed);
 	width: unset;
@@ -4261,7 +4261,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background: var(--user-background, var(--popout)) var(--popoutposition)/var(--popoutsize);
+	background: var(--user-background, var(--popout)) var(--user-popout-position, var(--popoutposition))/var(--popoutsize);
 	filter: blur(var(--popoutblur));
 	background-attachment: var(--user-background, fixed);
 	width: unset;
@@ -4300,7 +4300,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	bottom: -6px;
 	right: -6px;
 	left: -6px;
-	background: var(--user-background, var(--popout)) var(--popoutposition)/var(--popoutsize);
+	background: var(--user-background, var(--popout)) var(--user-popout-position, var(--popoutposition))/var(--popoutsize);
 	filter: blur(var(--popoutblur));
 	background-attachment: var(--user-background, fixed);
 	border-radius: 50%;
