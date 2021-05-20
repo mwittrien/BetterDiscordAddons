@@ -699,14 +699,17 @@
 .premiumTabItem-1QTfBr[aria-selected=true] {
 	background-color: rgb(var(--accentcolor)) !important;
 }
+.item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Nitro Server Boost-tab"],
 .item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Nitro-Server-Boost-tab"],
 .serverBoostTabItem-2hFTIN[aria-selected=false] {
 	color: rgb(var(--accentcolor2)) !important;
 }
+.item-PXvHYJ:hover[aria-controls="Nitro Server Boost-tab"],
 .item-PXvHYJ:hover[aria-controls="Nitro-Server-Boost-tab"],
 .serverBoostTabItem-2hFTIN[aria-selected=false]:hover {
 	background-color: rgb(var(--accentcolor2), 0.1) !important;
 }
+.item-PXvHYJ.selected-3s45Ha[aria-controls="Nitro Server Boost-tab"],
 .item-PXvHYJ.selected-3s45Ha[aria-controls="Nitro-Server-Boost-tab"],
 .serverBoostTabItem-2hFTIN[aria-selected=true] {
 	background-color: rgb(var(--accentcolor2)) !important;
