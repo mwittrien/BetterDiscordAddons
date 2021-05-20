@@ -7747,7 +7747,6 @@ module.exports = (_ => {
 							delete avatar.props.className;
 							let newProps = {
 								className: className,
-								style: {borderRadius: 0, overflow: "visible"},
 								children: [avatar]
 							};
 							newProps[InternalData.userIdAttribute] = user.id;
@@ -7763,8 +7762,9 @@ module.exports = (_ => {
 					}
 				};
 				InternalBDFDB._processAvatarMount = function (user, avatar, wrapper) {
-					if (Node.prototype.isPrototypeOf(avatar) && BDFDB.ObjectUtils.is(user) && (avatar.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) == -1) {
-						if (wrapper) wrapper.setAttribute(InternalData.userIdAttribute, user.id);
+					if (!user) return;
+					if (wrapper) wrapper.setAttribute(InternalData.userIdAttribute, user.id);
+					if (Node.prototype.isPrototypeOf(avatar) && (avatar.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) == -1) {
 						avatar.setAttribute(InternalData.userIdAttribute, user.id);
 						let role = "", addBadge = InternalBDFDB.settings.general.showSupportBadges;
 						if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
@@ -7780,15 +7780,16 @@ module.exports = (_ => {
 							let badge = document.createElement("div");
 							badge.className = BDFDB.disCN.bdfdbbadge;
 							badge.addEventListener("mouseenter", _ => BDFDB.TooltipUtils.create(badge, role, {position: "top"}));
-							avatar.style.setProperty("position", "relative");
-							avatar.style.setProperty("overflow", "visible");
-							avatar.style.setProperty("border-radius", 0);
 							avatar.appendChild(badge);
 						}
 					}
 				};
 				InternalBDFDB._processUserInfoNode = function (user, wrapper) {
-					if (wrapper && user && InternalData.UserBackgrounds[user.id]) for (let property in InternalData.UserBackgrounds[user.id]) wrapper.style.setProperty(property, InternalData.UserBackgrounds[user.id][property], "important");
+					if (!user || !wrapper) return;
+					if (InternalData.UserBackgrounds[user.id]) {
+						avatar.setAttribute(InternalData.userBannerAttribute, true);
+						for (let property in InternalData.UserBackgrounds[user.id]) wrapper.style.setProperty(property, InternalData.UserBackgrounds[user.id][property], "important");
+					}
 				};
 				InternalBDFDB.processMessageHeader = function (e) {
 					if (e.instance.props.message && e.instance.props.message.author) {
@@ -7810,7 +7811,7 @@ module.exports = (_ => {
 					InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
 				};
 				InternalBDFDB.processUserPopout = function (e) {
-					InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.userpopoutavatarwrapper), e.node);
+					InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
 					InternalBDFDB._processUserInfoNode(e.instance.props.user, e.node);
 				};
 				InternalBDFDB.processUserProfile = function (e) {
