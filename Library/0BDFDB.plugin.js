@@ -7847,7 +7847,7 @@ module.exports = (_ => {
 				BDFDB.ReactUtils.instanceKey = Object.keys(document.querySelector(BDFDB.dotCN.app) || {}).some(n => n.startsWith("__reactInternalInstance")) ? "_reactInternalFiber" : "_reactInternals";
 
 				BDFDB.PluginUtils.load(BDFDB);
-				InternalBDFDB.settings = BDFDB.DataUtils.get(BDFDB);
+				InternalBDFDB.settings = BDFDB.DataUtils.get(InternalBDFDB);
 				changeLogs = BDFDB.DataUtils.load(BDFDB, "changeLogs");
 				BDFDB.PluginUtils.checkChangeLog(BDFDB);
 				
@@ -8337,7 +8337,7 @@ module.exports = (_ => {
 						searchable: true
 					}));
 					for (let key in InternalBDFDB.settings.general) {
-						let nativeSetting = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds[key]);
+						let nativeSetting = BDFDB.BDUtils.settingsIds[key] && BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds[key]);
 						let disabled = typeof InternalBDFDB.defaults.general[key].isDisabled == "function" && InternalBDFDB.defaults.general[key].isDisabled({
 							value: InternalBDFDB.settings.general[key],
 							nativeValue: nativeSetting
@@ -8375,7 +8375,7 @@ module.exports = (_ => {
 								name: InternalComponents.LibraryComponents.SvgIcon.Names.QUESTIONMARK,
 								width: 20,
 								height: 20,
-								onClick: _ => BDFDB.ModalUtils.open(BDFDB, {
+								onClick: _ => BDFDB.ModalUtils.open(InternalBDFDB, {
 									header: "Plugins",
 									subHeader: "",
 									contentClassName: BDFDB.disCN.marginbottom20,
