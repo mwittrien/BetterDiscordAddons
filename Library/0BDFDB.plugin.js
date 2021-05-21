@@ -7786,10 +7786,7 @@ module.exports = (_ => {
 				};
 				InternalBDFDB._processUserInfoNode = function (user, wrapper) {
 					if (!user || !wrapper) return;
-					if (InternalData.UserBackgrounds[user.id]) {
-						wrapper.setAttribute(InternalData.userBannerAttribute, true);
-						for (let property in InternalData.UserBackgrounds[user.id]) wrapper.style.setProperty(property, InternalData.UserBackgrounds[user.id][property], "important");
-					}
+					if (InternalData.UserBackgrounds[user.id]) for (let property in InternalData.UserBackgrounds[user.id]) wrapper.style.setProperty(property, InternalData.UserBackgrounds[user.id][property], "important");
 				};
 				InternalBDFDB.processMessageHeader = function (e) {
 					if (e.instance.props.message && e.instance.props.message.author) {

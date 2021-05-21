@@ -8,6 +8,9 @@
 	top: 76px !important;
 	margin-top: var(--user-background, -60px) !important;
 }
+#app-mount .activity-fViXj7 {
+	border-color: transparent !important;
+}
 
 .userPopout-3XzG_A {
 	width: 300px !important;
@@ -29,13 +32,13 @@
 	max-height: var(--user-background, 60px);
 }
 .userPopout-3XzG_A .headerStreaming-2FjmGz::before {
-	background: #593695;
+	background: var(--user-background, #593695) var(--user-popout-position, center)/cover no-repeat;
 }
 .userPopout-3XzG_A .headerSpotify-zpWxgT::before {
-	background: #1db954;
+	background: var(--user-background, #1db954) var(--user-popout-position, center)/cover no-repeat;
 }
 .userPopout-3XzG_A .headerXbox-3G-4PF::before {
-	background: #107c10;
+	background: var(--user-background, #107c10) var(--user-popout-position, center)/cover no-repeat;
 }
 .userPopout-3XzG_A .headerTop-3C2Zn0 {
 	position: relative;
@@ -45,9 +48,10 @@
 	padding: 64px 16px 16px;
 }
 .userPopout-3XzG_A .activity-11LB_k {
+	background: transparent;
+	border-color: transparent;
 	padding: 16px 0;
 	margin: 0 16px;
-	border-bottom: 1px solid var(--background-accent);
 }
 .userPopout-3XzG_A .avatarWrapper-3H_478 {
 	border-radius: 50%;
@@ -135,6 +139,9 @@
 .userPopout-3XzG_A .botTagInvert-18-95s {
 	background: var(--brand-experiment, #5865f2);
 	color: #fff;
+}
+#app-mount .userPopout-3XzG_A .date-YN6TCS {
+	color: var(--header-secondary);
 }
 .userPopout-3XzG_A .customStatus-1bh2V9 {
 	color: var(--header-secondary);
