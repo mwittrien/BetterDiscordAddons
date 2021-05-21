@@ -3134,12 +3134,12 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .activity-1ythUs {								/* modal				activity							*/
 	background-color: transparent;
 }
-.root-SR8cQa .wrapper-3t9DeA {								/* modal				avatar								*/
+.root-SR8cQa .header-QKLPzZ .wrapper-3t9DeA {				/* modal				avatar								*/
 	background: transparent;
 	border-color: transparent;
 }
-.root-SR8cQa .wrapper-3t9DeA::before,
-.root-SR8cQa .wrapper-3t9DeA::after {
+.root-SR8cQa .header-QKLPzZ .wrapper-3t9DeA::before,
+.root-SR8cQa .header-QKLPzZ .wrapper-3t9DeA::after {
 	content: "";
 	position: absolute;
 	top: -6px;
@@ -3150,12 +3150,12 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	pointer-events: none;
 	z-index: -1;
 }
-.root-SR8cQa .wrapper-3t9DeA::before {
+.root-SR8cQa .header-QKLPzZ .wrapper-3t9DeA::before {
 	background: var(--popout) var(--popoutposition)/var(--popoutsize);
 	filter: blur(var(--popoutblur));
 	background-attachment: fixed;
 }
-.root-SR8cQa .wrapper-3t9DeA::after {
+.root-SR8cQa .header-QKLPzZ .wrapper-3t9DeA::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + .375));
 }
 #app-mount .body-3ND3kc {									/* modal				body								*/
