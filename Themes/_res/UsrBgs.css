@@ -8,6 +8,12 @@
 	top: 76px !important;
 	margin-top: var(--user-background, -60px) !important;
 }
+#app-mount .headerTop-2y3V6H {
+	padding: 58px 16px 16px;
+}
+#app-mount .headerName-3W-qH- {
+    margin-top: 0;
+}
 #app-mount .activity-fViXj7 {
 	border-color: transparent !important;
 }
@@ -45,7 +51,7 @@
 	justify-content: center;
 	align-items: flex-start;
 	background-color: var(--background-tertiary);
-	padding: 64px 16px 16px;
+	padding: 58px 16px 16px;
 }
 .userPopout-3XzG_A .activity-11LB_k {
 	background: transparent;
@@ -113,7 +119,7 @@
 	text-align: left;
 }
 .userPopout-3XzG_A .headerName-fajvi9 {
-    margin-top: 4px;
+    margin-top: 0;
     margin-bottom: 2px;
     word-break: break-word;
 }
@@ -204,7 +210,7 @@
 	justify-content: center;
 	align-items: flex-start;
 	background-color: var(--background-tertiary);
-	padding: 60px 16px 16px;
+	padding: 58px 16px 16px;
 }
 .root-SR8cQa .headerFill-adLl4x {
 	background-color: transparent;
@@ -330,15 +336,17 @@
 .root-SR8cQa .profileGuildSubscriberlvl9-1d6zav {
 	background-image: url(https://discord.com/assets/9ba64f1fa91ccde0eba506c1c33f3d1a.svg);
 }
-#app-mount .root-SR8cQa .actionButton-3W1xZa {
+#app-mount .root-SR8cQa .headerInfo-30uryT ~ .button-38aScr {
 	position: absolute;
 	top: -105px;
 	right: 56px;
 	background: rgba(0,0,0,.2) !important;
 	color: #ccc !important;
+	min-height: 32px;
+	height: 32px;
 	margin-top: var(--user-background, 60px);
 }
-#app-mount .root-SR8cQa .actionButton-3W1xZa:hover {
+#app-mount .root-SR8cQa .headerInfo-30uryT ~ .button-38aScr:hover {
 	background: rgba(0,0,0,.4) !important;
 	color: #fff !important;
 }
@@ -359,7 +367,7 @@
 	background: rgba(0,0,0,.4) !important;
 	color: #fff !important;
 }
-#app-mount .root-SR8cQa .actionButton-3W1xZa:active {
+#app-mount .root-SR8cQa .headerInfo-30uryT ~ .button-38aScr:active {
 	background: rgba(0,0,0,.4) !important;
 	color: #fff !important;
 }
