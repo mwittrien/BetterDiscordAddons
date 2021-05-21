@@ -4143,7 +4143,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 .item-1tOPte.colorDanger-2qLCe1.focused-3afm-j,
 .item-1tOPte.colorDanger-2qLCe1:hover:not(.hideInteraction-1iHO1O) {
-	background-color: rgba(var(--dangercolor)), .2) !important;
+	background-color: rgba(var(--dangercolor), .2) !important;
 }
 .item-1tOPte.colorBrand-ROmMP1.focused-3afm-j,
 .item-1tOPte.colorBrand-ROmMP1:hover:not(.hideInteraction-1iHO1O),
