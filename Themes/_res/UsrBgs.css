@@ -1,0 +1,10 @@
+#app-mount .profileBanner-j34RzR {
+	background: var(--user-background, rgb(var(--accentcolor))) var(--user-popout-position, center)/cover no-repeat !important;
+	background-attachment: var(--user-background, fixed) !important;
+	height: 120px !important;
+	max-height: var(--user-background, 60px) !important;
+}
+#app-mount .avatarPositionNormal-1CZUPk {
+	top: 76px !important;
+	margin-top: var(--user-background, -60px) !important;
+}

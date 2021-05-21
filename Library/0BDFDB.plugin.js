@@ -8044,9 +8044,17 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(BDFDB, LibraryModules.GuildStore, "getGuild", {after: e => {
 					if (e.returnValue && e.methodArguments[0] == InternalData.myGuildId) e.returnValue.banner = `https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.banner.png`;
 				}});
+				
+				BDFDB.PatchUtils.patch(BDFDB, LibraryModules.UserStore, "getUser", {after: e => {
+					if (e.returnValue && e.methodArguments[0] == InternalData.myId) e.returnValue.banner = `https://mwittrien.github.io/BetterDiscordAddons/Library/_res/DevilBro.banner.png`;
+				}});
 
 				BDFDB.PatchUtils.patch(BDFDB, LibraryModules.IconUtils, "getGuildBannerURL", {instead: e => {
 					return e.methodArguments[0].id == InternalData.myGuildId ? e.methodArguments[0].banner : e.callOriginalMethod();
+				}});
+
+				BDFDB.PatchUtils.patch(BDFDB, LibraryModules.IconUtils, "getUserBannerURL", {instead: e => {
+					return e.methodArguments[0].id == InternalData.myId ? e.methodArguments[0].banner : e.callOriginalMethod();
 				}});
 				
 				InternalBDFDB.forceUpdateAll();
