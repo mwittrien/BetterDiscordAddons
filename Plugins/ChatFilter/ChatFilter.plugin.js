@@ -2,7 +2,7 @@
  * @name ChatFilter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.5.2
+ * @version 3.5.3
  * @description Allows you to censor Words or block complete Messages/Statuses
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatFilter",
 			"author": "DevilBro",
-			"version": "3.5.2",
+			"version": "3.5.3",
 			"description": "Allows you to censor Words or block complete Messages/Statuses"
 		},
 		"changeLog": {
 			"fixed": {
-				"Tag": "Fixed censored/blocked tag for new structure"
+				"Some Special Characters": "Fixed Issue with some Special Characters like '>' when using RegEx"
 			}
 		}
 	};
@@ -458,7 +458,8 @@ module.exports = (_ => {
 					}
 					if (blocked) return {blocked, censored, content: blockedReplace, embeds: []};
 					else {
-						let checkCensor = string => {
+						const checkCensor = string => {
+							console.log(string);
 							let singleCensored = false;
 							string = string.replace(/([\n\t\r])/g, " $1 ");
 							for (let cWord in words.censored) {
@@ -467,6 +468,7 @@ module.exports = (_ => {
 								let newString = [];
 								if (words.censored[cWord].segment || words.censored[cWord].regex || cWord.indexOf(" ") > -1) {
 									if (this.testWord(string, reg)) {
+										console.log(reg);
 										singleCensored = true;
 										censored = true;
 										newString = [string.replace(reg, censoredReplace)];
@@ -483,6 +485,8 @@ module.exports = (_ => {
 								}
 								string = newString.join(" ");
 							}
+							console.log(string);
+							console.log("____");
 							return {parsedContent: string.replace(/ ([\n\t\r]) /g, "$1"), singleCensored: singleCensored};
 						};
 						if (isContent) {
@@ -499,6 +503,7 @@ module.exports = (_ => {
 			}
 			
 			testWord (word, reg) {
+				console.log(word, reg);
 				let nativeEmoji = BDFDB.LibraryModules.EmojiUtils.translateSurrogatesToInlineEmoji(word);
 				if (nativeEmoji != word) return this.regTest(nativeEmoji, reg);
 				else {
@@ -514,8 +519,8 @@ module.exports = (_ => {
 			}
 
 			createReg (word, config) {
-				let escapedWord = config.regex ? word : BDFDB.StringUtils.regEscape(word);
-				return new RegExp(BDFDB.StringUtils.htmlEscape(config.exact ? "^" + escapedWord + "$" : escapedWord), `${config.case ? "" : "i"}${config.exact ? "" : "g"}`);
+				let escapedWord = config.regex ? word : BDFDB.StringUtils.htmlEscape(BDFDB.StringUtils.regEscape(word));
+				return new RegExp(config.exact ? "^" + escapedWord + "$" : escapedWord, `${config.case ? "" : "i"}${config.exact ? "" : "g"}`);
 			}
 
 			openAddModal (wordValue) {
