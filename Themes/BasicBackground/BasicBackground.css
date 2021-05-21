@@ -4250,6 +4250,14 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .activity-11LB_k {											/* popout				activity							*/
 	background-color: rgba(var(--transparencycolor), .1);
 }
+#app-mount .headerNormal-T_seeN .headerTag-2pZJzA {
+	color: var(--header-secondary);
+}
+#app-mount .headerNormal-T_seeN .headerName-fajvi9,
+#app-mount .headerNormal-T_seeN .headerTagUsernameNoNickname-2_H881 {
+	color: var(--header-primary);
+}
+
 #app-mount .body-3iLsc4,									/* popout				body								*/
 #app-mount .footer-1fjuF6 {									/* popout				footer								*/
 	background-color: transparent;
@@ -4311,6 +4319,14 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 
 .wumpusWrapper-yrvoR3 {										/* footer				wumpus new user 					*/
 	margin-top: 27px;
+}
+#app-mount .wumpusTooltip-65YlMT {
+	background-color: rgb(var(--accentcolor));
+	color: #fff;
+	text-shadow: 1px 1px var(--textshadow);
+}
+#app-mount .wumpusTooltip-65YlMT::after {
+	border-color: transparent rgb(var(--accentcolor)) transparent transparent;
 }
 
 /* ----		14.3.	EMOJIPICKER						---- */

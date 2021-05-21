@@ -937,7 +937,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 #app-mount .userList-1kLH8B::before {
 	background-color: var(--background-secondary);
-	border-color: transparent #202225 #202225 transparent;
+	border-color: transparent var(--background-tertiary) var(--background-tertiary) transparent;
 }
 #app-mount .header-2B7Ri8 {
 	background-color: var(--background-tertiary);
@@ -3224,6 +3224,21 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 /* ----		11.1.	USERPOPOUT						---- */
 
+#app-mount .userPopout-3XzG_A {
+	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary),.6), 0 2px 10px 0 rgba(0,0,0,.2);
+}
+
+#app-mount .headerNormal-T_seeN {
+	background-color: var(--background-tertiary);
+}
+#app-mount .headerNormal-T_seeN .headerTag-2pZJzA {
+	color: var(--header-secondary);
+}
+#app-mount .headerNormal-T_seeN .headerName-fajvi9,
+#app-mount .headerNormal-T_seeN .headerTagUsernameNoNickname-2_H881 {
+	color: var(--header-primary);
+}
+
 #app-mount .body-3iLsc4,
 #app-mount .footer-1fjuF6 {
 	background-color: var(--background-secondary-alt);
@@ -3231,57 +3246,6 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 #app-mount .footer-1fjuF6 {
 	border-color: rgba(var(--backgroundtertiary),.3);
-}
-#app-mount .headerNormal-T_seeN .avatarStack-2Dr8S9::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background: rgba(0, 0, 0, .5);
-	opacity: var(--user-background, 0);
-	border-radius: 50%;
-	z-index: -1;
-}
-#app-mount .headerNormal-T_seeN .headerNameWrapper-3res2c,
-#app-mount .headerNormal-T_seeN .headerTag-2pZJzA,
-#app-mount .headerNormal-T_seeN .textRow-19NEd_,
-#app-mount .headerNormal-T_seeN .customStatus-1bh2V9,
-#app-mount .headerNormal-T_seeN .badges-XRnWAp {
-	position: relative;
-	z-index: 1;
-	padding: 1px 2px;
-	margin-bottom: -2px;
-}
-#app-mount .headerNormal-T_seeN .date-YN6TCS + .date-YN6TCS {
-	margin-top: 2px;
-}
-#app-mount .headerNormal-T_seeN .customStatus-1bh2V9 {
-	width: unset;
-}
-#app-mount .headerNormal-T_seeN .badges-XRnWAp {
-	margin-top: 4px;
-	padding: 5px 5px 2px 5px;
-}
-#app-mount .headerNormal-T_seeN .headerNameWrapper-3res2c::after,
-#app-mount .headerNormal-T_seeN .headerTag-2pZJzA::after,
-#app-mount .headerNormal-T_seeN .textRow-19NEd_::after,
-#app-mount .headerNormal-T_seeN .customStatus-1bh2V9::after,
-#app-mount .headerNormal-T_seeN .badges-XRnWAp::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background: rgba(0, 0, 0, .5);
-	opacity: var(--user-background, 0);
-	border-radius: 5px;
-	z-index: -1;
-}
-#app-mount .headerNormal-T_seeN .date-YN6TCS::after {
-	background: rgba(0, 0, 0, .7);
 }
 
 #app-mount .wumpusTooltip-65YlMT {
