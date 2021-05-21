@@ -514,7 +514,7 @@ module.exports = (_ => {
 			}
 
 			createReg (word, config) {
-				let escapedWord = config.regex ? word : BDFDB.StringUtils.htmlEscape(BDFDB.StringUtils.regEscape(word));
+				let escapedWord = config.regex ? word : BDFDB.StringUtils.regEscape(word);
 				return new RegExp(config.exact ? "^" + escapedWord + "$" : escapedWord, `${config.case ? "" : "i"}${config.exact ? "" : "g"}`);
 			}
 
