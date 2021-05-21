@@ -2498,7 +2498,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 #app-mount .topSectionNormal-2-vo2m {
 	--text-color: var(--user-background, var(--header-primary));
-	background: var(--user-background, var(--background-tertiary)) var(--user-popout-position, var(--popoutposition))/cover no-repeat;
+	background: var(--user-background, var(--background-tertiary)) var(--user-popout-position, center)/cover no-repeat;
 	border-color: #fff;
 	color: #fff;
 	text-shadow: 1px 1px var(--background-tertiary);
@@ -3353,7 +3353,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	color: #fff;
 }
 #app-mount .profileBanner-j34RzR {
-	background: var(--user-background, rgb(var(--accentcolor))) var(--user-popout-position, var(--popoutposition))/cover no-repeat !important;
+	background: var(--user-background, rgb(var(--accentcolor))) var(--user-popout-position, center)/cover no-repeat !important;
 	background-attachment: var(--user-background, fixed);
 	height: 120px !important;
 	max-height: var(--user-background, 60px) !important;
@@ -3363,7 +3363,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	margin-top: var(--user-background, -60px) !important;
 }
 #app-mount .headerNormal-T_seeN {
-	background: var(--user-background, var(--background-tertiary)) var(--user-popout-position, var(--popoutposition))/cover no-repeat;
+	background: var(--user-background, var(--background-tertiary)) var(--user-popout-position, center)/cover no-repeat;
 	background-attachment: var(--user-background, fixed);
 	color: var(--text-color);
 	text-shadow: 1px 1px var(--background-tertiary);

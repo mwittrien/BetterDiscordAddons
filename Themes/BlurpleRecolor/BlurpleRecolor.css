@@ -734,7 +734,13 @@
 .avatarUploaderInner-3UNxY3 {								/* accountsettings		avatar upload						*/
 	background-color: rgb(var(--accentcolor));
 }
-
+.profileBackgroundPreview-3BVL0Q {							/* accountsettings		banner upload						*/
+	height: calc(100% - 120px);
+}
+.bannerDisabledOverlay-2Z-HAU {
+	border-radius: 8px;
+	cursor: no-drop;
+}
 #app-mount .questionMark-CWEQZn,							/* accountsettings		questionmark						*/
 #app-mount .questionMark-3qBhGj {							/* accountsettings		questionmark new					*/
 	background-color: rgb(var(--accentcolor));
