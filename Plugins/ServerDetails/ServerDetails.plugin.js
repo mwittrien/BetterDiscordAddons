@@ -433,7 +433,7 @@ module.exports = (_ => {
 						};
 					case "pl":		// Polish
 						return {
-							boosters:							"Dopalacze",
+							boosters:							"Boosty",
 							creation_date:						"Data utworzenia",
 							join_date:							"Data dołączenia"
 						};
