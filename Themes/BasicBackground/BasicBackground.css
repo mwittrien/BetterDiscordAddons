@@ -4217,8 +4217,8 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .headerStreaming-2FjmGz {									/* popout				headerstreaming						*/
 	background: #593695;
 }
-.headerTop-3C2Zn0,											/* popout old			header inner						*/
-.activity-11LB_k,											/* popout old			activity							*/
+#app-mount .headerTop-3C2Zn0,								/* popout old			header inner						*/
+#app-mount .activity-11LB_k,								/* popout old			activity							*/
 .headerTop-2y3V6H,											/* popout new			header inner						*/
 .activity-fViXj7 {											/* popout new			activity							*/
 	background: transparent;

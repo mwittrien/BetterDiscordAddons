@@ -2,7 +2,7 @@
  * @name CreationDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.1
+ * @version 1.4.2
  * @description Displays the Creation Date of an Account in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CreationDate",
 			"author": "DevilBro",
-			"version": "1.4.1",
+			"version": "1.4.2",
 			"description": "Displays the Creation Date of an Account in the UserPopout and UserModal"
 		},
 		"changeLog": {
 			"improved": {
-				"New Settings": "Changed the Settings Panel for the Plugin, Settings got reset sowwy ~w~"
+				"New User Popout": "Fixed for the new User Popout, which will be released soon-ish"
 			}
 		}
 	};
@@ -83,6 +83,7 @@ module.exports = (_ => {
 				this.patchedModules = {
 					after: {
 						UserPopout: "render",
+						UserPopoutHeader: "default",
 						AnalyticsContext: "render"
 					}
 				};
@@ -153,8 +154,15 @@ module.exports = (_ => {
 					BDFDB.PatchUtils.forceAllUpdates(this);
 				}
 			}
-
+			
 			processUserPopout (e) {
+				if (e.instance.props.user && this.settings.places.userPopout) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
+					if (index > -1) this.injectDate(children, 2, e.instance.props.user);
+				}
+			}
+
+			processUserPopoutHeader (e) {
 				if (e.instance.props.user && this.settings.places.userPopout) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
 					if (index > -1) this.injectDate(children, 2, e.instance.props.user);
