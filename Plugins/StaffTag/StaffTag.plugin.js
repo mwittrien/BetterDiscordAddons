@@ -80,7 +80,8 @@ module.exports = (_ => {
 						MessageUsername: "default",
 						VoiceUser: "render",
 						NameTag: "default",
-						UserPopout: "render"
+						UserPopout: "render",
+						UserPopoutHeader: "default"
 					}
 				};
 				
@@ -266,6 +267,7 @@ module.exports = (_ => {
 					if (userType) {
 						let inject = false, tagClass = "";
 						switch (e.instance.props.className) {
+							case BDFDB.disCN.userpopoutheadertagnonickname_old:
 							case BDFDB.disCN.userpopoutheadertagnonickname:
 								inject = this.settings.tagPlaces.userPopout;
 								tagClass = BDFDB.disCN.bottagnametag;
@@ -285,12 +287,20 @@ module.exports = (_ => {
 			}
 
 			processUserPopout (e) {
+				this.handleUserPopout(e);
+			}
+
+			processUserPopoutHeader (e) {
+				this.handleUserPopout(e);
+			}
+			
+			handleUserPopout (e) {
 				if (e.instance.props.user && this.settings.tagPlaces.userPopout) {
 					let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
 					if (userType) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadertagwithnickname]]});
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", [BDFDB.disCN.userpopoutheadername_old, BDFDB.disCN.userpopoutheadername]]]});
 						if (index > -1) this.injectStaffTag(children, e.instance.props.user, userType, 2, {
-							tagClass: BDFDB.disCNS.userpopoutheaderbottagwithnickname + BDFDB.disCN.bottagnametag,
+							tagClass: BDFDB.disCNS.userpopoutheaderbottagwithnickname_old + BDFDB.disCNS.userpopoutheaderbottagwithnickname + BDFDB.disCN.bottagnametag,
 							inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
 						});
 					}

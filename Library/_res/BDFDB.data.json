@@ -3020,6 +3020,7 @@
 		"userpopoutheadertext_old": ["UserPopoutWrapper", "headerText"],
 		"userpopoutheadertop_old": ["UserPopoutWrapper", "headerTop"],
 		"userpopoutheaderbottagwithnickname": ["UserPopout", "headerBotTagWithNickname"],
+		"userpopoutheadertagdiscriminatornonickname": ["UserPopout", "headerTagDiscriminatorNoNickname"],
 		"userpopoutheadername": ["UserPopout", "headerName"],
 		"userpopoutheadernamewrapper": ["UserPopout", "headerNameWrapper"],
 		"userpopoutheadernormal": ["UserPopout", "headerNormal"],

@@ -459,6 +459,17 @@ img:not([src]), img[src=""], img[src="null"] {
 	text-overflow: ellipsis;
 }
 
+[REPLACE_CLASS_userpopoutheadernamewrapper_old],
+[REPLACE_CLASS_userpopoutheadernamewrapper],
+[REPLACE_CLASS_userpopoutheadertagnonickname] {
+	display: flex;
+	align-items: center;
+	line-height: unset;
+}
+[REPLACE_CLASS_userpopoutheadertagdiscriminatornonickname] {
+	position: relative;
+	top: 1px;
+}
 [REPLACE_CLASS_userinfodate] {
 	user-select: text;
 	margin-top: 8px;

@@ -123,6 +123,15 @@
 	font-weight: 500;
 	line-height: 18px;
 }
+.userPopout-3XzG_A .headerTagNoNickname-ENx6no {
+	align-items: center;
+	line-height: unset;
+}
+.userPopout-3XzG_A .headerTagNoNickname-ENx6no > span:not([class]) {
+	position: relative;
+	top: 1px;
+    font-size: 14px;
+}
 .userPopout-3XzG_A .botTagInvert-18-95s {
 	background: var(--brand-experiment, #5865f2);
 	color: #fff;

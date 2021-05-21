@@ -107,6 +107,7 @@ module.exports = (_ => {
 						ChannelEditorContainer: "render",
 						AutocompleteUserResult: "render",
 						UserPopout: "render",
+						UserPopoutHeader: "default",
 						UserProfile: "render",
 						UserInfo: "default",
 						NowPlayingHeader: "Header",
@@ -140,6 +141,7 @@ module.exports = (_ => {
 						DiscordTag: "default",
 						NameTag: "default",
 						UserPopout: "render",
+						UserPopoutHeader: "default",
 						NowPlayingHeader: "Header",
 						VoiceUser: "render",
 						Account: "render",
@@ -171,10 +173,6 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.chat + BDFDB.dotCN.messageusername}:hover > span[style*="color"],
 					${BDFDB.dotCN.voicedetailschannel}:hover > span[style*="color"] {
 						text-decoration: underline;
-					}
-					${BDFDB.dotCNS.userpopoutheadernamewrapper + BDFDB.dotCN.bottag} {
-						position: relative;
-						bottom: 1px;
 					}
 					${BDFDB.dotCNS.dmchannel + BDFDB.dotCN.bottag} {
 						display: inline;
@@ -445,6 +443,7 @@ module.exports = (_ => {
 					let changeBackground = false;
 					let tagClass = "";
 					switch (e.instance.props.className) {
+						case BDFDB.disCN.userpopoutheadertagnonickname_old:
 						case BDFDB.disCN.userpopoutheadertagnonickname:
 							change = this.settings.places.userPopout;
 							guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
@@ -485,6 +484,14 @@ module.exports = (_ => {
 			}
 
 			processUserPopout (e) {
+				this.handleUserPopout(e);
+			}
+
+			processUserPopoutHeader (e) {
+				this.handleUserPopout(e);
+			}
+			
+			handleUserPopout (e) {
 				if (e.instance.props.user && this.settings.places.userPopout) {
 					let data = changedUsers[e.instance.props.user.id];
 					if (!e.returnvalue) {
@@ -499,7 +506,7 @@ module.exports = (_ => {
 					}
 					else {
 						if (data && (data.color1 || data.color2 || data.tag)) {
-							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
+							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", [BDFDB.disCN.userpopoutheadername_old, BDFDB.disCN.userpopoutheadername]]]});
 							if (index > -1) {
 								this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground: true});
 								this.injectBadge(children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
