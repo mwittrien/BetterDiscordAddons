@@ -472,13 +472,13 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_userpopout] [REPLACE_CLASS_userpopoutheadernormal] [REPLACE_CLASS_userinfodate] {
 	color: var(--header-secondary);
 }
-[REPLACE_CLASS_userpopout] [REPLACE_CLASS_userpopoutheader]:not([REPLACE_CLASS_userpopoutheadernormal]) [REPLACE_CLASS_userinfodate] {
+[REPLACE_CLASS_userpopout] [REPLACE_CLASS_userpopoutheader]:not([class*='headerNormal']) [REPLACE_CLASS_userinfodate] {
 	color: hsla(0,0%,100%,.6);
 }
 [REPLACE_CLASS_userprofile] [REPLACE_CLASS_userprofiletopsectionnormal] [REPLACE_CLASS_userinfodate] {
 	color: var(--header-secondary);
 }
-[REPLACE_CLASS_userprofile] [class*='topSection']:not([REPLACE_CLASS_userprofiletopsectionnormal]) [REPLACE_CLASS_userinfodate] {
+[REPLACE_CLASS_userprofile] [class*='topSection']:not([class*='topSectionNormal']) [REPLACE_CLASS_userinfodate] {
 	color: hsla(0,0%,100%,.6);
 }
 
