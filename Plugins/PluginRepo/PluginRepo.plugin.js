@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.4
+ * @version 2.2.5
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.2.4",
+			"version": "2.2.5",
 			"description": "Allows you to download all Plugins from BD's Website within Discord"
 		}
 	};
@@ -634,8 +634,29 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				// REMOVE 01.05.2021
-				BDFDB.DataUtils.remove(this, "newentriesdata");
+				BDFDB.PatchUtils.patch(this, (BDFDB.ModuleUtils.findByName("SettingsView") || {}).prototype, "getPredicateSections", {after: e => {
+					if (BDFDB.ArrayUtils.is(e.returnValue) && e.returnValue.findIndex(n => n.section && (n.section.toLowerCase() == "changelog" || n.section == BDFDB.DiscordConstants.UserSettingsSections.CHANGE_LOG || n.section.toLowerCase() == "logout" || n.section == BDFDB.DiscordConstants.UserSettingsSections.LOGOUT))) {
+						e.returnValue = e.returnValue.filter(n => n.section != "pluginrepo");
+						let index = e.returnValue.indexOf(e.returnValue.find(n => n.section == "themes") || e.returnValue.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS) || e.returnValue.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.HYPESQUAD_ONLINE));
+						if (index > -1) {
+							e.returnValue.splice(index + 1, 0, {
+								section: "pluginrepo",
+								label: "Plugin Repo",
+								element: _ => {
+									let options = Object.assign({}, this.settings.filters);
+									options.updated = options.updated && !showOnlyOutdated;
+									options.outdated = options.outdated || showOnlyOutdated;
+									options.downloadable = options.downloadable && !showOnlyOutdated;
+									options.sortKey = forcedSort || Object.keys(sortKeys)[0];
+									options.orderKey = forcedOrder || Object.keys(orderKeys)[0];
+									
+									return BDFDB.ReactUtils.createElement(RepoListComponent, options, true);
+								}
+							});
+							if (!e.returnValue.find(n => n.section == "plugins")) e.returnValue.splice(index + 1, 0, {section: "DIVIDER"});
+						}
+					}
+				}});
 				
 				this.forceUpdateAll();
 
@@ -682,27 +703,6 @@ module.exports = (_ => {
 			
 			processSettingsView (e) {
 				if (e.node) searchString = "";
-				else if (BDFDB.ArrayUtils.is(e.instance.props.sections) && e.instance.props.sections[0] && e.instance.props.sections[0].label == BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS) {
-					e.instance.props.sections = e.instance.props.sections.filter(n => n.section != "pluginrepo");
-					let index = e.instance.props.sections.indexOf(e.instance.props.sections.find(n => n.section == "themes") || e.instance.props.sections.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS) || e.instance.props.sections.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.HYPESQUAD_ONLINE));
-					if (index > -1) {
-						e.instance.props.sections.splice(index + 1, 0, {
-							section: "pluginrepo",
-							label: "Plugin Repo",
-							element: _ => {
-								let options = Object.assign({}, this.settings.filters);
-								options.updated = options.updated && !showOnlyOutdated;
-								options.outdated = options.outdated || showOnlyOutdated;
-								options.downloadable = options.downloadable && !showOnlyOutdated;
-								options.sortKey = forcedSort || Object.keys(sortKeys)[0];
-								options.orderKey = forcedOrder || Object.keys(orderKeys)[0];
-								
-								return BDFDB.ReactUtils.createElement(RepoListComponent, options, true);
-							}
-						});
-						if (!e.instance.props.sections.find(n => n.section == "plugins")) e.instance.props.sections.splice(index + 1, 0, {section: "DIVIDER"});
-					}
-				}
 			}
 			
 			processStandardSidebarView (e) {
