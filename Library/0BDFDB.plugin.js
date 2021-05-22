@@ -1553,8 +1553,6 @@ module.exports = (_ => {
 				BDFDB.TooltipUtils.create = function (anker, text, config = {}) {
 					let itemLayerContainer = document.querySelector(BDFDB.dotCN.appmount +  " > " + BDFDB.dotCN.itemlayercontainer);
 					if (!itemLayerContainer || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
-					text = typeof text == "function" ? text() : text;
-					if (typeof text != "string" && !BDFDB.ReactUtils.isValidElement(text) && !BDFDB.ObjectUtils.is(config.guild)) return null;
 					let id = BDFDB.NumberUtils.generateId(Tooltips);
 					let itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltippointer}"></div><div class="${BDFDB.disCN.tooltipcontent}"></div></div></div>`);
 					itemLayerContainer.appendChild(itemLayer);
@@ -1621,13 +1619,11 @@ module.exports = (_ => {
 							let connectedVoiceUsers = BDFDB.ObjectUtils.toArray(LibraryModules.VoiceUtils.getVoiceStates(config.guild.id)).map(state => voiceChannels.includes(state.channelId) && state.channelId != config.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && LibraryModules.UserStore.getUser(state.userId)).filter(n => n);
 							let connectedStageUsers = BDFDB.ObjectUtils.toArray(LibraryModules.VoiceUtils.getVoiceStates(config.guild.id)).map(state => stageChannels.includes(state.channelId) && state.channelId != config.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && LibraryModules.UserStore.getUser(state.userId)).filter(n => n);
 							
-							let tooltipText = config.guild.toString();
-							if (fontColorIsGradient) tooltipText = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(config.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(tooltipText)}</span>`;
-							
 							let isMuted = LibraryModules.MutedUtils.isMuted(config.guild.id);
 							let muteConfig = LibraryModules.MutedUtils.getMuteConfig(config.guild.id);
 							
 							let hasExtraRow = connectedStageUsers.length || connectedVoiceUsers.length || streamOwners.length;
+							let children = [typeof newText == "function" ? newText() : newText].flat(10).filter(n => typeof n == "string" || BDFDB.ReactUtils.isValidElement(n));
 							
 							BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 								children: [
@@ -1641,13 +1637,20 @@ module.exports = (_ => {
 											}),
 											BDFDB.ReactUtils.createElement("span", {
 												className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext, hasExtraRow && BDFDB.disCN.tooltipguildnametextlimitedsize),
-												children: fontColorIsGradient || config.html ? BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(tooltipText)) : tooltipText
+												children: fontColorIsGradient ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextGradientElement, {
+													gradient: BDFDB.ColorUtils.createGradient(config.fontColor),
+													children: config.guild.toString()
+												}) : config.guild.toString()
 											}),
 										]
 									}),
-									newText && BDFDB.ReactUtils.createElement("div", {
+									children.length && BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltiprow, BDFDB.disCN.tooltiprowextra),
-										children: newText
+										children: children
+									}),
+									config.note && BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltiprow, BDFDB.disCN.tooltiprowextra, BDFDB.disCN.tooltipnote),
+										children: config.note
 									}),
 									connectedStageUsers.length && BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN.tooltiprow,
@@ -1701,9 +1704,19 @@ module.exports = (_ => {
 							}), tooltipContent);
 						}
 						else {
-							if (fontColorIsGradient) tooltipContent.innerHTML = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(config.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(newText)}</span>`;
-							else if (config.html) tooltipContent.innerHTML = newText;
-							else tooltipContent.innerText = newText;
+							let children = [typeof newText == "function" ? newText() : newText].flat(10).filter(n => typeof n == "string" || BDFDB.ReactUtils.isValidElement(n));
+							children.length && BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
+								children: [
+									fontColorIsGradient ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextGradientElement, {
+										gradient: BDFDB.ColorUtils.createGradient(config.fontColor),
+										children: children
+									}) : children,
+									config.note && BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltiprow, BDFDB.disCN.tooltiprowextra, BDFDB.disCN.tooltipnote),
+										children: config.note
+									})
+								]
+							}), tooltipContent);
 						}
 					};
 					const update = newText => {
@@ -7580,6 +7593,7 @@ module.exports = (_ => {
 							if (!shown && !e.currentTarget.BDFDBtooltipShown) {
 								e.currentTarget.BDFDBtooltipShown = shown = true;
 								this.tooltip = BDFDB.TooltipUtils.create(e.currentTarget, typeof this.props.text == "function" ? this.props.text(this) : this.props.text, Object.assign({
+									note: this.props.note,
 									delay: this.props.delay
 								}, this.props.tooltipConfig, {
 									onHide: (tooltip, anker) => {
@@ -7793,8 +7807,8 @@ module.exports = (_ => {
 							newProps[InternalData.userIdAttribute] = user.id;
 							avatar = BDFDB.ReactUtils.createElement("div", newProps);
 							if (addBadge) avatar.props.children.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-								text: [role, note && BDFDB.ReactUtils.createElement("span", {children: note})],
-								tooltipConfig: {className: BDFDB.disCN.bdfdbbadgetooltip},
+								text: role,
+								note: note,
 								children: BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.bdfdbbadge
 								})
@@ -7822,7 +7836,7 @@ module.exports = (_ => {
 						if (addBadge && role && !avatar.querySelector(BDFDB.dotCN.bdfdbbadge)) {
 							let badge = document.createElement("div");
 							badge.className = BDFDB.disCN.bdfdbbadge;
-							badge.addEventListener("mouseenter", _ => BDFDB.TooltipUtils.create(badge, [role, note && BDFDB.ReactUtils.createElement("span", {children: note})], {position: "top", className: BDFDB.disCN.bdfdbbadgetooltip}));
+							badge.addEventListener("mouseenter", _ => BDFDB.TooltipUtils.create(badge, role, {position: "top", note: note}));
 							avatar.appendChild(badge);
 						}
 					}
