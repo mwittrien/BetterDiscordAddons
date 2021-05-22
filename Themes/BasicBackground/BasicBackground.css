@@ -6206,6 +6206,11 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	color: #fff;
 	text-shadow: 1px 1px var(--textshadow);
 }
+#app-mount .tooltipPrimary-1d1ph4 .note-e4Jh6_,
+#app-mount .tooltipGrey-1hnvTt .note-e4Jh6_,
+#app-mount .tooltipBlack-PPG47z .note-e4Jh6_ {
+	color: #bbb;
+}
 #app-mount .tooltipPrimary-1d1ph4 .tooltipPointer-3ZfirK,
 #app-mount .tooltipGrey-1hnvTt .tooltipPointer-3ZfirK,
 #app-mount .tooltipBlack-PPG47z .tooltipPointer-3ZfirK {
