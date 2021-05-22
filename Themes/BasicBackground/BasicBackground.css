@@ -1283,7 +1283,17 @@ body::before {
 }
 
 .base-gE7OpD {												/* textarea				typingusers							*/
-	color: var(--text-normal);
+	background-color: rgba(var(--transparencycolor), .3);
+	border-radius: 5px;
+	bottom: 0;
+	height: 22px;
+	line-height: 32px;
+}
+.chatCounter-XOMPsh {										/* textarea				char counter						*/
+	background-color: rgba(var(--transparencycolor), .3);
+	border-radius: 5px;
+	padding: 4px;
+	bottom: calc(-1.3em - 4px);
 }
 
 .wrapper-39oAo3 {											/* textarea				placeholder							*/
