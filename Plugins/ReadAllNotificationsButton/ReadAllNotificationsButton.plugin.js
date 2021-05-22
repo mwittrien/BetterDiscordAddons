@@ -2,7 +2,7 @@
  * @name ReadAllNotificationsButton
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.7
+ * @version 1.6.8
  * @description Adds a Clear Button to the Server List and the Mentions Popout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ReadAllNotificationsButton",
 			"author": "DevilBro",
-			"version": "1.6.7",
+			"version": "1.6.8",
 			"description": "Adds a Clear Button to the Server List and the Mentions Popout"
-		},
-		"changeLog": {
-			"improved": {
-				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
-			}
 		}
 	};
 
@@ -294,14 +289,14 @@ module.exports = (_ => {
 					let childrenRender = tree.props.children;
 					tree.props.children = (...args) => {
 						let children = childrenRender(...args);
-						this.injectButton(children);
+						this.handleGuilds(children);
 						return children;
 					};
 				}
-				else this.injectButton(returnvalue);
+				else this.handleGuilds(returnvalue);
 			}
 			
-			injectButton (returnvalue) {
+			handleGuilds (returnvalue) {
 				let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {name: "ConnectedUnreadDMs"});
 				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(ReadAllButtonComponent, {}));
 			}
@@ -315,7 +310,7 @@ module.exports = (_ => {
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						text: `${BDFDB.LanguageUtils.LanguageStrings.CLOSE} (${BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL})`,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-							className: BDFDB.disCNS.messagespopoutbutton + BDFDB.disCN.messagespopoutbuttonsecondary,
+							className: BDFDB.disCNS.messagespopoutbutton + BDFDB.disCNS.messagespopoutbuttonsecondary + BDFDB.disCN.messagespopoutbuttonsize32,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 								nativeClass: true,
 								name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE,
