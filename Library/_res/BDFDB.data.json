@@ -574,6 +574,7 @@
 			"avatarDisabled": "disabled-6G33EE",
 			"badge": "badge-7R_W3s",
 			"badgeAvatar": "avatar-hF52Er",
+			"badgeTooltip": "badgeTooltip-e4Jh6_",
 			"bdControlsCustom": "custom-L9FFs5",
 			"bdRepoEntry": "entry-9JnAPs",
 			"bdRepoFooterControls": "controls-p0SrvV",
@@ -1613,6 +1614,7 @@
 		"badgewrapper": ["NotFound", "badgeWrapper"],
 		"bdfdbbadge": ["BDFDB", "badge"],
 		"bdfdbbadgeavatar": ["BDFDB", "badgeAvatar"],
+		"bdfdbbadgetooltip": ["BDFDB", "badgeTooltip"],
 		"bdfdbdev": ["BDFDB", "dev"],
 		"bdfdbhasbadge": ["BDFDB", "hasBadge"],
 		"bdfdbsupporter": ["BDFDB", "supporter"],
@@ -4857,6 +4859,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"266072167349747712": 	{"active": true,		"tier": "t3",		"text": "King",				"id": "Duckx (dogu)"},
 		"646354877336911884": 	{"active": true,		"tier": "t3",		"text": "",					"id": "case (kharri)"},
 		"431078101997584395": 	{"active": true,		"tier": "t2",		"text": "",					"id": "LEMI (f4g8)"},
 		"268824390337036298": 	{"active": true,		"tier": "t2",		"text": "",					"id": "lonelyw0lf (GriWa)"},
