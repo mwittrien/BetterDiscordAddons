@@ -187,17 +187,32 @@ module.exports = (_ => {
 	BDFDB.TimeUtils.timeout = function (callback, delay, ...args) {
 		delay = parseFloat(delay);
 		if (typeof callback != "function") return;
-		else if (isNaN(delay) || typeof delay != "number" || delay < 1) {
+		if (isNaN(delay) || typeof delay != "number" || delay < 1) {
 			let immediate = setImmediate(_ => BDFDB.TimeUtils.suppress(callback, "Immediate")(...[immediate, args].flat()));
 			return immediate;
 		}
 		else {
-			let timeout = setTimeout(_ => BDFDB.TimeUtils.suppress(callback, "Timeout")(...[timeout, args].flat()), delay);
+			let start, paused = true, timeout = {
+				pause: _ => {
+					if (paused) return;
+					paused = true;
+					BDFDB.TimeUtils.clear(timeout.timer);
+					delay -= performance.now() - start;
+				},
+				resume: _ => {
+					if (!paused) return;
+					paused = false;
+					start = performance.now();
+					timeout.timer = setTimeout(_ => BDFDB.TimeUtils.suppress(callback, "Timeout")(...[timeout, args].flat()), delay)
+				}
+			};
+			timeout.resume();
 			return timeout;
 		}
 	};
 	BDFDB.TimeUtils.clear = function (...timeObjects) {
 		for (let t of timeObjects.flat(10).filter(n => n)) {
+			t = t.timer != undefined ? t.timer : t;
 			if (typeof t == "number") {
 				clearInterval(t);
 				clearTimeout(t);
@@ -419,6 +434,7 @@ module.exports = (_ => {
 	BDFDB.BDUtils = {};
 	BDFDB.BDUtils.getPluginsFolder = function () {
 		if (BdApi && BdApi.Plugins && BdApi.Plugins.folder && typeof BdApi.Plugins.folder == "string") return BdApi.Plugins.folder;
+		else if (LibraryRequires.process.env.BETTERDISCORD_DATA_PATH) return LibraryRequires.path.resolve(LibraryRequires.process.env.BETTERDISCORD_DATA_PATH, "plugins/");
 		else if (LibraryRequires.process.env.injDir) return LibraryRequires.path.resolve(LibraryRequires.process.env.injDir, "plugins/");
 		else switch (LibraryRequires.process.platform) {
 			case "win32":
@@ -432,6 +448,7 @@ module.exports = (_ => {
 	};
 	BDFDB.BDUtils.getThemesFolder = function () {
 		if (BdApi && BdApi.Themes && BdApi.Themes.folder && typeof BdApi.Themes.folder == "string") return BdApi.Themes.folder;
+		else if (LibraryRequires.process.env.BETTERDISCORD_DATA_PATH) return LibraryRequires.path.resolve(LibraryRequires.process.env.BETTERDISCORD_DATA_PATH, "themes/");
 		else if (LibraryRequires.process.env.injDir) return LibraryRequires.path.resolve(LibraryRequires.process.env.injDir, "plugins/");
 		else switch (LibraryRequires.process.platform) {
 			case "win32": 
@@ -1245,23 +1262,11 @@ module.exports = (_ => {
 						else BDFDB.DOMUtils.addClass(data.toast, type);
 						
 						let disableInteractions = data.config.disableInteractions && typeof data.config.onClick != "function";
-						if (disableInteractions) data.toast.style.setProperty("pointer-events", "none", "important");
-						else {
-							BDFDB.DOMUtils.addClass(data.toast, BDFDB.disCN.toastclosable);
-							data.toast.addEventListener("click", event => {
-								if (typeof data.config.onClick == "function" && !BDFDB.DOMUtils.getParent(BDFDB.dotCN.toastcloseicon, event.target)) data.config.onClick();
-								data.toast.close();
-							});
-						}
-						
-						toasts.appendChild(data.toast);
-						
+						let start, progress = 0, paused = false
 						let timeout = typeof data.config.timeout == "number" && !disableInteractions ? data.config.timeout : 3000;
 						timeout = (timeout > 0 ? timeout : 600000) + 300;
-						let closeTimeout = BDFDB.TimeUtils.timeout(_ => {
-							data.toast.close();
-						}, timeout);
-						BDFDB.TimeUtils.timeout(_ => {BDFDB.DOMUtils.removeClass(data.toast, BDFDB.disCN.toastopening);});
+						
+						let progressInterval, closeTimeout = BDFDB.TimeUtils.timeout(_ => data.toast.close(), timeout);
 						data.toast.close = _ => {
 							BDFDB.TimeUtils.clear(closeTimeout);
 							if (document.contains(data.toast)) {
@@ -1279,6 +1284,31 @@ module.exports = (_ => {
 							runQueue();
 						};
 						
+						if (disableInteractions) data.toast.style.setProperty("pointer-events", "none", "important");
+						else {
+							BDFDB.DOMUtils.addClass(data.toast, BDFDB.disCN.toastclosable);
+							data.toast.addEventListener("click", event => {
+								if (typeof data.config.onClick == "function" && !BDFDB.DOMUtils.getParent(BDFDB.dotCN.toastcloseicon, event.target)) data.config.onClick();
+								data.toast.close();
+							});
+							if (typeof closeTimeout.pause == "function") {
+								data.toast.addEventListener("mouseenter", _ => {
+									if (paused) return;
+									paused = true;
+									closeTimeout.pause();
+								});
+								data.toast.addEventListener("mouseleave", _ => {
+									if (!paused) return;
+									paused = false;
+									start = performance.now() - progress;
+									closeTimeout.resume();
+								});
+							}
+						}
+						
+						toasts.appendChild(data.toast);
+						BDFDB.TimeUtils.timeout(_ => BDFDB.DOMUtils.removeClass(data.toast, BDFDB.disCN.toastopening));
+						
 						let icon = data.config.avatar ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.AvatarComponents.default, {
 							src: data.config.avatar,
 							size: InternalComponents.LibraryComponents.AvatarComponents.Sizes.SIZE_24
@@ -1289,18 +1319,14 @@ module.exports = (_ => {
 							height: 18,
 							nativeClass: true
 						}) : null);
-						BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(class BDFDB_Toast extends BDFDB.ReactUtils.Component {
+						
+						BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(class BDFDB_Toast extends LibraryModules.React.Component {
 							componentDidMount() {
 								data.toast.update = newChildren => {
 									if (!newChildren) return;
 									this.props.children = newChildren;
 									BDFDB.ReactUtils.forceUpdate(this);
 								};
-								this._start = performance.now();
-								this._progress = BDFDB.TimeUtils.interval(_ => {BDFDB.ReactUtils.forceUpdate(this);}, 10);
-							}
-							componentWillUnmount() {
-								BDFDB.TimeUtils.clear(this._progress);
 							}
 							render() {
 								return BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
@@ -1329,11 +1355,25 @@ module.exports = (_ => {
 												})
 											].filter(n => n)
 										}),
-										BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Animations.animated.div, {
-											className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.toastbar, barColor && BDFDB.disCN.toastcustombar),
-											style: {
-												backgroundColor: barColor,
-												right: `${100 - (performance.now() - this._start) * 100 / timeout}%`
+										BDFDB.ReactUtils.createElement(class extends LibraryModules.React.Component {
+											componentDidMount() {
+												start = performance.now();
+												progressInterval = BDFDB.TimeUtils.interval(_ => {
+													if (!paused) BDFDB.ReactUtils.forceUpdate(this);
+												}, 10);
+											}
+											componentWillUnmount() {
+												BDFDB.TimeUtils.clear(progressInterval);
+											}
+											render() {
+												progress = performance.now() - start;
+												return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Animations.animated.div, {
+													className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.toastbar, barColor && BDFDB.disCN.toastcustombar),
+													style: {
+														backgroundColor: barColor,
+														right: `${100 - progress * 100 / timeout}%`
+													}
+												})
 											}
 										})
 									]
