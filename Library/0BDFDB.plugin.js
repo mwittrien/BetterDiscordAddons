@@ -1551,6 +1551,7 @@ module.exports = (_ => {
 				var Tooltips = [];
 				BDFDB.TooltipUtils = {};
 				BDFDB.TooltipUtils.create = function (anker, text, config = {}) {
+					if (!text && !config.guild) return null;
 					let itemLayerContainer = document.querySelector(BDFDB.dotCN.appmount +  " > " + BDFDB.dotCN.itemlayercontainer);
 					if (!itemLayerContainer || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
 					let id = BDFDB.NumberUtils.generateId(Tooltips);
