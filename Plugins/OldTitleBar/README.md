@@ -15,4 +15,4 @@
 Allows you to switch to Discord's old Titlebar
 
 
-![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/NotificationSounds/_res/cover.png)
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/OldTitleBar/_res/cover.png)
