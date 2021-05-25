@@ -2133,6 +2133,27 @@ a.metadataName-14STf- {
 	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_hobbies_avatar.svg) center/contain no-repeat !important;
 }
 
+															/* warnings				locked channel message jump			*/
+.image-2568Gg[src="/assets/755d4654e19c105c3cd108610b78d01c.svg"] {
+	object-position: -999999px -999999px;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/warning_lockedchannellink_bg.svg) center/cover no-repeat;
+}
+.image-2568Gg[src="/assets/755d4654e19c105c3cd108610b78d01c.svg"] + * {
+	position: relative;
+	display: flex;
+	justify-content: center;
+}
+.image-2568Gg[src="/assets/755d4654e19c105c3cd108610b78d01c.svg"] + *::before {
+	content: "";
+	position: absolute;
+	top: -110px;
+	width: 120px;
+	height: 90px;
+	pointer-events: none;
+	background: rgb(var(--accentcolor));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/warning_lockedchannellink_mask.svg) center/cover no-repeat;
+}
+
 /* ----		12.6.	SCROLLBARS						---- */
 
 .scrollerThemed-2oenus.themeLight-1_DWyY .scrollbar-2rkZSL .thumb-2JwNFC,
