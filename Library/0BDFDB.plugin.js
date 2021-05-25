@@ -1552,15 +1552,15 @@ module.exports = (_ => {
 				BDFDB.TooltipUtils = {};
 				BDFDB.TooltipUtils.create = function (anker, text, config = {}) {
 					if (!text && !config.guild) return null;
-					let itemLayerContainer = document.querySelector(BDFDB.dotCN.appmount +  " > " + BDFDB.dotCN.itemlayercontainer);
+					const itemLayerContainer = document.querySelector(BDFDB.dotCN.appmount +  " > " + BDFDB.dotCN.itemlayercontainer);
 					if (!itemLayerContainer || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
-					let id = BDFDB.NumberUtils.generateId(Tooltips);
-					let itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltippointer}"></div><div class="${BDFDB.disCN.tooltipcontent}"></div></div></div>`);
+					const id = BDFDB.NumberUtils.generateId(Tooltips);
+					const itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltippointer}"></div><div class="${BDFDB.disCN.tooltipcontent}"></div></div></div>`);
 					itemLayerContainer.appendChild(itemLayer);
 					
-					let tooltip = itemLayer.firstElementChild;
-					let tooltipContent = itemLayer.querySelector(BDFDB.dotCN.tooltipcontent);
-					let tooltipPointer = itemLayer.querySelector(BDFDB.dotCN.tooltippointer);
+					const tooltip = itemLayer.firstElementChild;
+					const tooltipContent = itemLayer.querySelector(BDFDB.dotCN.tooltipcontent);
+					const tooltipPointer = itemLayer.querySelector(BDFDB.dotCN.tooltippointer);
 					
 					if (config.id) tooltip.id = config.id.split(" ").join("");
 					
@@ -1602,7 +1602,7 @@ module.exports = (_ => {
 					if (config.list || BDFDB.ObjectUtils.is(config.guild)) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltiplistitem);
 					
 					const removeTooltip = _ => {
-						document.removeEventListener("wheel", mouseMove);
+						document.removeEventListener("wheel", wheel);
 						document.removeEventListener("mousemove", mouseMove);
 						document.removeEventListener("mouseleave", mouseLeave);
 						BDFDB.DOMUtils.remove(itemLayer);
@@ -1783,19 +1783,27 @@ module.exports = (_ => {
 						}
 					};
 
+					const wheel = e => {
+						const tRects1 = BDFDB.DOMUtils.getRects(anker);
+						BDFDB.TimeUtils.clear(wheel.timeout);
+						wheel.timeout = BDFDB.TimeUtils.timeout(_ => {
+							const tRects2 = BDFDB.DOMUtils.getRects(anker);
+							if (tRects1.x != tRects2.x || tRects1.y != tRects2.y) removeTooltip();
+						}, 500);
+					};
 					const mouseMove = e => {
-						let parent = e.target.parentElement.querySelector(":hover");
+						const parent = e.target.parentElement.querySelector(":hover");
 						if (parent && anker != parent && !anker.contains(parent)) removeTooltip();
 					};
 					const mouseLeave = e => removeTooltip();
 					if (!config.perssist) {
-						document.addEventListener("wheel", mouseMove);
+						document.addEventListener("wheel", wheel);
 						document.addEventListener("mousemove", mouseMove);
 						document.addEventListener("mouseleave", mouseLeave);
 					}
 					
 					const observer = new MutationObserver(changes => changes.forEach(change => {
-						let nodes = Array.from(change.removedNodes);
+						const nodes = Array.from(change.removedNodes);
 						if (nodes.indexOf(itemLayer) > -1 || nodes.indexOf(anker) > -1 || nodes.some(n => n.contains(anker))) removeTooltip();
 					}));
 					observer.observe(document.body, {subtree: true, childList: true});
