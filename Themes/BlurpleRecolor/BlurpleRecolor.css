@@ -1461,8 +1461,8 @@ a.metadataName-14STf- {
 	position: relative;
 }
 .headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] + *:not(svg)::before,
-.headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] + svg + *::after,
-.headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] + *:not(svg)::before,
+.headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] + svg + *::before,
+.headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] + *:not(svg)::after,
 .headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] + svg + *::after {
 	content: "";
 	position: absolute;
