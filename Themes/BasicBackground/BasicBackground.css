@@ -4203,21 +4203,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .userPopout-3XzG_A {										/* popout				container							*/
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 }
-.userPopout-3XzG_A::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	filter: blur(var(--popoutblur));
-	background-attachment: fixed;
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
+.userPopout-3XzG_A::before,
 .userPopout-3XzG_A::after {
 	content: "";
 	position: absolute;
@@ -4225,11 +4211,19 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
+	border-radius: 5px;
 	width: unset;
 	height: unset;
 	pointer-events: none;
 	z-index: -1;
+}
+.userPopout-3XzG_A::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	filter: blur(var(--popoutblur));
+	background-attachment: fixed;
+}
+.userPopout-3XzG_A::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 }
 #app-mount .header-2BwW8b,									/* popout old			headernormal						*/
 .headerNormal-1l1Znk {										/* popout new			headernormal						*/

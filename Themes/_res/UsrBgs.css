@@ -8,6 +8,9 @@
 	top: 76px !important;
 	margin-top: var(--user-background, -60px) !important;
 }
+#app-mount .headerNormal-1l1Znk {
+	border-radius: 5px 5px 0 0;
+}
 #app-mount .headerTop-2y3V6H {
 	padding: 58px 16px 16px;
 }
@@ -23,6 +26,7 @@
 }
 .userPopout-3XzG_A .header-2BwW8b {
 	background-color: var(--background-secondary);
+	border-radius: 5px 5px 0 0;
 	color: var(--header-secondary);
 	line-height: 20px;
 	flex: 0 0 auto;
