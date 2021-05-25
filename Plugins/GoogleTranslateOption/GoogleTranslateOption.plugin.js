@@ -2,7 +2,7 @@
  * @name GoogleTranslateOption
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.4
+ * @version 2.2.5
  * @description Allows you to translate Messages and your outgoing Message within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.2.4",
+			"version": "2.2.5",
 			"description": "Allows you to translate Messages and your outgoing Message within Discord"
 		},
 		"changeLog": {
 			"improved": {
-				"DeepL": "Request Limit Warning"
+				"Per Channel Outgoing Translation State": "Instead of toggling the outgoing translation for every chat it now remembers the state for each channel, can be disabled to the way it worked before in the plugin settings"
 			}
 		}
 	};
@@ -75,7 +75,7 @@ module.exports = (_ => {
 		const TranslateButtonComponent = class TranslateButton extends BdApi.React.Component {
 			render() {
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ChannelTextAreaButton, {
-					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._googletranslateoptiontranslatebutton, translationEnabled && BDFDB.disCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton),
+					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._googletranslateoptiontranslatebutton, _this.isTranslationEnabled(this.props.channelId) && BDFDB.disCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton),
 					isActive: this.props.isActive,
 					iconSVG: translateIcon,
 					nativeClass: true,
@@ -91,11 +91,13 @@ module.exports = (_ => {
 								this.props.isActive = false;
 								BDFDB.ReactUtils.forceUpdate(this);
 							},
-							children: BDFDB.ReactUtils.createElement(TranslateSettingsComponent, {})
+							children: BDFDB.ReactUtils.createElement(TranslateSettingsComponent, {
+								channelId: this.props.channelId
+							})
 						});
 					},
 					onContextMenu: _ => {
-						translationEnabled = !translationEnabled;
+						_this.toggleTranslation(this.props.channelId);
 						BDFDB.ReactUtils.forceUpdate(this);
 					}
 				});
@@ -181,9 +183,9 @@ module.exports = (_ => {
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
 												isFavorite: languages[lang.value].fav == 0,
 												onClick: value => {
-													if (value) favorites[lang.value] = true;
-													else delete favorites[lang.value];
-													BDFDB.DataUtils.save(favorites, _this, "favorites");
+													if (value) favorites.push(lang.value);
+													else BDFDB.ArrayUtils.remove(favorites, lang.value, true);
+													BDFDB.DataUtils.save(favorites.sort(), _this, "favorites");
 													_this.setLanguages();
 												}
 											})
@@ -227,9 +229,9 @@ module.exports = (_ => {
 						type: "Switch",
 						label: "Translate your Messages before sending",
 						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-						value: translationEnabled,
+						value: _this.isTranslationEnabled(this.props.channelId),
 						onChange: value => {
-							translationEnabled = value;
+							_this.toggleTranslation(this.props.channelId);
 							BDFDB.ReactUtils.forceUpdate(this);
 						}
 					})
@@ -254,23 +256,20 @@ module.exports = (_ => {
 			papago: 					{name: "Papago",			auto: false,	funcName: "papagoTranslate",			languages: ["en","es","fr","id","ja","ko","th","vi","zh-CN","zh-TW"]}
 		};
 		
-		var favorites, languages, translationEnabled, isTranslating, translatedMessages, oldMessages;
+		var languages = {};
+		var favorites = [];
+		var translationEnabledStates = [], isTranslating;
+		var translatedMessages = {}, oldMessages = {};
 	
 		return class GoogleTranslateOption extends Plugin {
 			onLoad () {
 				_this = this;
 				
-				favorites = {};
-				languages = {};
-				translationEnabled = false;
-				isTranslating = false;	
-				translatedMessages = {};
-				oldMessages = {};
-				
 				this.defaults = {
 					general: {
-						addTranslateButton:		{value: true, 			description: "Add a Translate Button to the Channel Textarea"},
-						sendOriginalMessage:	{value: false, 			description: "Send the Original Message together with the Translation"}
+						addTranslateButton:		{value: true, 			description: "Adds a Translate Button to the Channel Textarea"},
+						usePerChatTranslation:	{value: true, 			description: "Enables/Disables the Translator Button State per Channel and not globally"},
+						sendOriginalMessage:	{value: false, 			description: "Sends the original Message together with the Translation"}
 					},
 					choices: {
 						inputContext:			{value: "auto", 		direction: "input",		place: "Context", 		description: "Input Language in received Messages: "},
@@ -318,12 +317,15 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				// REMOVE 25.05.2021
+				let loadedFavorites = BDFDB.DataUtils.load(this, "favorites");
+				if (BDFDB.ObjectUtils.is(loadedFavorites) && Object.keys(loadedFavorites).length) BDFDB.DataUtils.save(Object.keys(loadedFavorites), this, "favorites")
+				
+				
 				this.forceUpdateAll();
 			}
 			
 			onStop () {
-				translationEnabled = false;
-				
 				this.forceUpdateAll();
 			}
 
@@ -374,6 +376,7 @@ module.exports = (_ => {
 		
 			forceUpdateAll () {
 				favorites = BDFDB.DataUtils.load(this, "favorites");
+				favorites = !BDFDB.ArrayUtils.is(favorites) ? [] : favorites;
 				
 				this.setLanguages();
 				BDFDB.PatchUtils.forceAllUpdates(this);
@@ -501,7 +504,7 @@ module.exports = (_ => {
 			
 			processChannelTextAreaForm (e) {
 				BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
-					if (translationEnabled) {
+					if (this.isTranslationEnabled(e.instance.props.channel.id)) {
 						e2.stopOriginalMethodCall();
 						this.translateText(e2.methodArguments[0], "message", (translation, input, output) => {
 							translation = !translation ? e2.methodArguments[0] : (this.settings.general.sendOriginalMessage ? (e2.methodArguments[0] + "\n\n" + translation) : translation);
@@ -517,7 +520,7 @@ module.exports = (_ => {
 			}
 
 			processChannelEditorContainer (e) {
-				if (translationEnabled && isTranslating) e.instance.props.disabled = true;
+				if (this.isTranslationEnabled(e.instance.props.channel.id) && isTranslating) e.instance.props.disabled = true;
 			}
 			
 			processChannelTextAreaContainer (e) {
@@ -525,7 +528,9 @@ module.exports = (_ => {
 					let editor = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelEditorContainer"});
 					if (editor && editor.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && !editor.props.disabled) {
 						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.textareapickerbuttons]]});
-						if (index > -1 && children[index].props && children[index].props.children) children[index].props.children.unshift(BDFDB.ReactUtils.createElement(TranslateButtonComponent, {}));
+						if (index > -1 && children[index].props && children[index].props.children) children[index].props.children.unshift(BDFDB.ReactUtils.createElement(TranslateButtonComponent, {
+							channelId: e.instance.props.channel.id
+						}));
 					}
 				}
 			}
@@ -599,6 +604,15 @@ module.exports = (_ => {
 					}
 				}
 			}
+			
+			toggleTranslation (channelId) {
+				if (!this.isTranslationEnabled(channelId)) translationEnabledStates.push(this.settings.general.usePerChatTranslation ? channelId : "global");
+				else BDFDB.ArrayUtils.remove(translationEnabledStates, this.settings.general.usePerChatTranslation ? channelId : "global", true);
+			}
+			
+			isTranslationEnabled (channelId) {
+				return translationEnabledStates.includes(this.settings.general.usePerChatTranslation ? channelId : "global");
+			}
 
 			setLanguages () {
 				if (this.settings.engines.translator == this.settings.engines.backup) {
@@ -635,7 +649,7 @@ module.exports = (_ => {
 						}
 					}
 				);
-				for (let id in languages) languages[id].fav = favorites[id] != undefined ? 0 : 1;
+				for (let id in languages) languages[id].fav = favorites.includes(id) ? 0 : 1;
 				languages = BDFDB.ObjectUtils.sort(languages, "fav");
 			}
 
