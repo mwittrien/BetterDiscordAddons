@@ -1398,7 +1398,7 @@ a.metadataName-14STf- {
 	height: 84px;
 	pointer-events: none;
 	background: rgb(var(--accentcolor));
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/login_authbox_mask.svg) center/cover no-repeat;
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/login_authbox_accent.svg) center/cover no-repeat;
 }
 
 .startOverButton-3q0wUV {									/* authobox				startover								*/
@@ -2160,12 +2160,12 @@ a.metadataName-14STf- {
 .image-2568Gg[src="/assets/755d4654e19c105c3cd108610b78d01c.svg"] + *::before {
 	content: "";
 	position: absolute;
-	top: -110px;
+	top: -109px;
 	width: 120px;
 	height: 90px;
 	pointer-events: none;
 	background: rgb(var(--accentcolor));
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/warning_lockedchannellink_mask.svg) center/cover no-repeat;
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/warning_lockedchannellink_accent.svg) center/cover no-repeat;
 }
 
 /* ----		12.6.	SCROLLBARS						---- */
