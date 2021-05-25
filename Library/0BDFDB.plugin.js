@@ -1602,6 +1602,7 @@ module.exports = (_ => {
 					if (config.list || BDFDB.ObjectUtils.is(config.guild)) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltiplistitem);
 					
 					const removeTooltip = _ => {
+						document.removeEventListener("wheel", mouseMove);
 						document.removeEventListener("mousemove", mouseMove);
 						document.removeEventListener("mouseleave", mouseLeave);
 						BDFDB.DOMUtils.remove(itemLayer);
@@ -1788,6 +1789,7 @@ module.exports = (_ => {
 					};
 					const mouseLeave = e => removeTooltip();
 					if (!config.perssist) {
+						document.addEventListener("wheel", mouseMove);
 						document.addEventListener("mousemove", mouseMove);
 						document.addEventListener("mouseleave", mouseLeave);
 					}
