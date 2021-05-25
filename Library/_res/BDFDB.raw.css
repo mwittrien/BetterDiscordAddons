@@ -11,8 +11,8 @@ img:not([src]), img[src=""], img[src="null"] {
 	opacity: 0;
 }
 
-[REPLACE_CLASS_app] > [REPLACE_CLASS_itemlayercontainer],
-[REPLACE_CLASS_app] > [REPLACE_CLASS_popouts] {
+[REPLACE_CLASS_appmount] > [REPLACE_CLASS_itemlayercontainer],
+[REPLACE_CLASS_appmount] > [REPLACE_CLASS_popouts] {
 	position: fixed;
 }
 
