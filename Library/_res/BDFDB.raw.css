@@ -467,6 +467,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	display: flex;
 	align-items: center;
 	line-height: unset;
+	overflow: hidden;
 }
 [REPLACE_CLASS_userpopoutheadertagdiscriminatornonickname] {
 	position: relative;
