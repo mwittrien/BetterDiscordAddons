@@ -1,8 +1,16 @@
 #app-mount .profileBanner-33-uE1 {
-	background: var(--user-background, rgb(var(--accentcolor))) var(--user-popout-position, center)/cover no-repeat !important;
-	background-attachment: var(--user-background, fixed) !important;
 	height: 120px !important;
 	max-height: var(--user-background, 60px) !important;
+}
+#app-mount .profileBanner-33-uE1::before {
+	content: "";
+	position: absolute;
+	background: #000 var(--user-background) var(--user-popout-position, center)/cover no-repeat;
+	background-attachment: var(--user-background, fixed);
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
 }
 #app-mount .avatarPositionNormal-1CZUPk {
 	top: 76px !important;
@@ -16,9 +24,6 @@
 }
 #app-mount .headerName-3W-qH- {
     margin-top: 0;
-}
-#app-mount .activity-fViXj7 {
-	border-color: transparent !important;
 }
 
 .userPopout-3XzG_A {
@@ -196,7 +201,7 @@
 }
 
 .root-SR8cQa [class*="topSection"] {
-	background-color: var(--background-floating);
+	background-color: var(--background-tertiary);
 	color: var(--header-secondary);
 	line-height: 20px;
 	flex: 0 0 auto;
@@ -205,7 +210,7 @@
 	content: "";
 	position: relative;
 	display: block;
-	background: var(--user-background, var(--background-tertiary)) var(--user-popout-position, center)/cover no-repeat;
+	background: var(--user-background, var(--background-secondary)) var(--user-popout-position, center)/cover no-repeat;
 	top: 0;
 	width: 100%;
 	height: 120px;
@@ -227,31 +232,31 @@
 	position: relative;
 	justify-content: center;
 	align-items: flex-start;
-	background-color: var(--background-floating);
+	background-color: var(--background-tertiary);
 	padding: 58px 16px 16px;
 }
 .root-SR8cQa .headerFill-adLl4x {
 	background-color: transparent;
 }
 .root-SR8cQa .activity-1ythUs {
-	background-color: var(--background-floating);
+	background-color: var(--background-tertiary);
 	padding: 0 16px 10px 16px;
 }
 .root-SR8cQa .activityProfile-2bJRaP {
-	background-color: var(--background-floating);
+	background-color: var(--background-tertiary);
 	border-top: 1px solid var(--background-modifier-accent);
 	padding: 10px 16px 10px 16px;
 }
 .root-SR8cQa .body-3ND3kc {
-	background-color: var(--background-floating);
+	background-color: var(--background-tertiary);
 	overflow: hidden;
 }
 .root-SR8cQa .header-QKLPzZ .wrapper-3t9DeA {
 	position: absolute;
 	top: -44px;
 	left: 16px;
-	background-color: var(--background-floating);
-	border: 6px solid var(--background-floating);
+	background-color: var(--background-tertiary);
+	border: 6px solid var(--background-tertiary);
 	border-radius: 50%;
 	margin: 0;
 	z-index: 1;
