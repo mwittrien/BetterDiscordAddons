@@ -1,4 +1,4 @@
-#app-mount .profileBanner-j34RzR {
+#app-mount .profileBanner-33-uE1 {
 	background: var(--user-background, rgb(var(--accentcolor))) var(--user-popout-position, center)/cover no-repeat !important;
 	background-attachment: var(--user-background, fixed) !important;
 	height: 120px !important;
@@ -25,7 +25,7 @@
 	width: 300px !important;
 }
 .userPopout-3XzG_A .header-2BwW8b {
-	background-color: var(--background-secondary);
+	background-color: var(--background-floating);
 	border-radius: 5px 5px 0 0;
 	color: var(--header-secondary);
 	line-height: 20px;
@@ -35,7 +35,7 @@
 	content: "";
 	position: relative;
 	display: block;
-	background: var(--user-background, var(--background-secondary)) var(--user-popout-position, center)/cover no-repeat;
+	background: var(--user-background, var(--background-tertiary)) var(--user-popout-position, center)/cover no-repeat;
 	top: 0;
 	width: 100%;
 	height: 120px;
@@ -57,14 +57,21 @@
 	position: relative;
 	justify-content: center;
 	align-items: flex-start;
-	background-color: var(--background-tertiary);
+	background-color: var(--background-floating);
+	border-bottom: 1px solid var(--background-modifier-accent);
 	padding: 58px 16px 16px;
 }
 .userPopout-3XzG_A .activity-11LB_k {
-	background: transparent;
+	background-color: var(--background-floating);
 	border-color: transparent;
 	padding: 16px 0;
 	margin: 0 16px;
+}
+.userPopout-3XzG_A .body-3iLsc4 {
+	background-color: var(--background-floating);
+}
+.userPopout-3XzG_A .footer-1fjuF6 {
+	background-color: var(--background-floating);
 }
 .userPopout-3XzG_A .avatarWrapper-3H_478 {
 	border-radius: 50%;
@@ -74,8 +81,8 @@
 	z-index: 1;
 }
 .userPopout-3XzG_A .wrapper-3t9DeA {
-	background-color: var(--background-tertiary);
-	border: 6px solid var(--background-tertiary);
+	background-color: var(--background-floating);
+	border: 6px solid var(--background-floating);
 }
 .userPopout-3XzG_A .avatarHint-1qgaV3 {
 	border: 6px solid transparent;
@@ -148,7 +155,8 @@
 .userPopout-3XzG_A .headerTagNoNickname-ENx6no > span:not([class]) {
 	position: relative;
 	top: 1px;
-    font-size: 14px;
+    font-size: 20px;
+	font-weight: 600;
 }
 .userPopout-3XzG_A .botTagInvert-18-95s {
 	background: var(--brand-experiment, #5865f2);
@@ -188,7 +196,7 @@
 }
 
 .root-SR8cQa [class*="topSection"] {
-	background-color: var(--background-secondary);
+	background-color: var(--background-floating);
 	color: var(--header-secondary);
 	line-height: 20px;
 	flex: 0 0 auto;
@@ -197,7 +205,7 @@
 	content: "";
 	position: relative;
 	display: block;
-	background: var(--user-background, var(--background-secondary)) var(--user-popout-position, center)/cover no-repeat;
+	background: var(--user-background, var(--background-tertiary)) var(--user-popout-position, center)/cover no-repeat;
 	top: 0;
 	width: 100%;
 	height: 120px;
@@ -219,33 +227,31 @@
 	position: relative;
 	justify-content: center;
 	align-items: flex-start;
-	background-color: var(--background-tertiary);
+	background-color: var(--background-floating);
 	padding: 58px 16px 16px;
 }
 .root-SR8cQa .headerFill-adLl4x {
 	background-color: transparent;
 }
 .root-SR8cQa .activity-1ythUs {
-	background-color: var(--background-tertiary);
+	background-color: var(--background-floating);
 	padding: 0 16px 10px 16px;
 }
 .root-SR8cQa .activityProfile-2bJRaP {
-	background-color: var(--background-secondary);
+	background-color: var(--background-floating);
+	border-top: 1px solid var(--background-modifier-accent);
 	padding: 10px 16px 10px 16px;
 }
-.root-SR8cQa .tabBarContainer-1s1u-z {
-	border-color: transparent;
-}
 .root-SR8cQa .body-3ND3kc {
-	background-color: var(--background-secondary-alt);
+	background-color: var(--background-floating);
 	overflow: hidden;
 }
 .root-SR8cQa .header-QKLPzZ .wrapper-3t9DeA {
 	position: absolute;
 	top: -44px;
 	left: 16px;
-	background-color: var(--background-tertiary);
-	border: 6px solid var(--background-tertiary);
+	background-color: var(--background-floating);
+	border: 6px solid var(--background-floating);
 	border-radius: 50%;
 	margin: 0;
 	z-index: 1;
@@ -392,8 +398,9 @@
 .root-SR8cQa .discriminator-xUhQkU {
 	position: relative;
 	top: 1px;
-    font-size: 14px;
 	color: var(--header-secondary);
+    font-size: 20px;
+	font-weight: 600;
 }
 .root-SR8cQa .botTagInvert-18-95s {
 	background: var(--brand-experiment, #5865f2);
@@ -433,12 +440,16 @@
 	color: var(--interactive-hover) !important;
 	border-bottom-color: var(--interactive-hover) !important;
 }
+.root-SR8cQa .tabBarContainer-1s1u-z {
+	border: unset !important;
+	border-bottom: 1px solid var(--background-modifier-accent) !important;
+}
 .root-SR8cQa .item-PXvHYJ[style*="color: rgb(255, 255, 255)"],
 .root-SR8cQa .item-PXvHYJ[style*="color: rgb(255, 255, 255)"]:hover,
 .root-SR8cQa .selected-3s45Ha.themed-OHr7kt.item-PXvHYJ,
 .root-SR8cQa .themed-OHr7kt.item-PXvHYJ:active {
-	color: var(--interactive-active) !important;
 	border-bottom-color: var(--interactive-active) !important;
+	color: var(--interactive-active) !important;
 }
 .root-SR8cQa .disabled-1Hwwfb.themed-OHr7kt.item-PXvHYJ:hover {
 	border-bottom-color: transparent !important;
