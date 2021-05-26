@@ -3027,6 +3027,7 @@
 		"userpopoutheaderbottagwithnickname": ["UserPopout", "headerBotTagWithNickname"],
 		"userpopoutheadertagdiscriminatornonickname": ["UserPopout", "headerTagDiscriminatorNoNickname"],
 		"userpopoutheadername": ["UserPopout", "nickname"],
+		"userpopoutheadernamebase": ["UserPopout", "headerTagUsernameNoNickname"],
 		"userpopoutheadernormal": ["UserPopout", "headerNormal"],
 		"userpopoutheadertag": ["UserPopout", "headerTag"],
 		"userpopoutheadertagnonickname": ["UserPopout", "headerTagNoNickname"],

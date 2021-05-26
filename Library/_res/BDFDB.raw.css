@@ -469,6 +469,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	line-height: unset;
 	overflow: hidden;
 }
+[REPLACE_CLASS_userpopoutheadernamebase] {
+	overflow: hidden;
+}
 [REPLACE_CLASS_userpopoutheadertagdiscriminatornonickname] {
 	position: relative;
 	top: 1px;
