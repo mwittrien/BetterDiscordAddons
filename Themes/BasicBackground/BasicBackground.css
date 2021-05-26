@@ -3140,9 +3140,14 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .root-SR8cQa [class*="topSection"] {				/* modal				topsection							*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
-#app-mount .header-QKLPzZ,									/* modal				header								*/
+#app-mount .header-QKLPzZ {									/* modal				header								*/
+	background-color: transparent;
+	border: transparent;
+}
 #app-mount .activity-1ythUs {								/* modal				activity							*/
 	background-color: transparent;
+	border: transparent;
+	padding-top: 0;
 }
 .root-SR8cQa .header-QKLPzZ .wrapper-3t9DeA {				/* modal				avatar								*/
 	background: transparent;
@@ -4231,9 +4236,10 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 #app-mount .headerTop-3C2Zn0,								/* popout old			header inner						*/
 #app-mount .activity-11LB_k,								/* popout old			activity							*/
-.headerTop-2y3V6H,											/* popout new			header inner						*/
-.activity-fViXj7 {											/* popout new			activity							*/
+#app-mount .headerTop-2y3V6H,								/* popout new			header inner						*/
+#app-mount .activity-fViXj7 {								/* popout new			activity							*/
 	background: transparent;
+	border: transparent;
 }
 .userPopout-3XzG_A .wrapper-3t9DeA,							/* popout old			avatar								*/
 .userPopout-3XzG_A .avatar-22FtUu {							/* popout new			avatar								*/
