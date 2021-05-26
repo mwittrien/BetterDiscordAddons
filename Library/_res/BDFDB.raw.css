@@ -14,6 +14,7 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_appmount] > [REPLACE_CLASS_itemlayercontainer],
 [REPLACE_CLASS_appmount] > [REPLACE_CLASS_popouts] {
 	position: fixed;
+	z-index: 1001;
 }
 
 [REPLACE_CLASS_titlebarmac] {
@@ -460,7 +461,7 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 
 [REPLACE_CLASS_userpopoutheadernamewrapper_old],
-[REPLACE_CLASS_userpopoutheadernamewrapper],
+[REPLACE_CLASS_userpopoutheadername],
 [REPLACE_CLASS_userpopoutheadertagnonickname] {
 	display: flex;
 	align-items: center;
