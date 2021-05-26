@@ -22,7 +22,8 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 
 [REPLACE_CLASS_itemlayercontainerzindexdisabled] {
-	z-index: unset;
+	position: absolute !important;
+	z-index: unset !important;
 }
 [REPLACE_CLASS_itemlayercontainerzindexdisabled] > * {
 	z-index: 1002;
