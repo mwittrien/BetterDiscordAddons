@@ -109,6 +109,7 @@
 		14.	PHONEVERIFICATIONMODAL
 		15.	CUSTOMSTATUSMODAL
 		16.	DISCOVERYENTRYMODAL
+		17.	NICKNAMEMODAL
 	11.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -1719,6 +1720,12 @@ a.metadataName-14STf- {
 .footerImage-2KxOYG[src="/assets/7f62c4c1f689de046a6ad83020c897ad.svg"] {
 	object-position: -999999px -999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/discovery_house.svg) center/contain no-repeat !important;
+}
+
+/* ----		10.17.	NICKNAMEMODAL				---- */
+
+.reset-2ikQ30.lookLink-9FtZy-.colorLink-35jkBc {
+	color: rgb(var(--accentcolor));
 }
 
 
