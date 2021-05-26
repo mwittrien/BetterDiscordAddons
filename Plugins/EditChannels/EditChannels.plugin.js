@@ -290,7 +290,7 @@ module.exports = (_ => {
 						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "AutocompleteRowHeading"});
 						if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id);
 						let channelIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.autocompleteicon]]});
-						if (channelIcon) this.changeChannelIconColor(channelIcon, e.instance.props.channel.id, {alpha: 0.6});
+						if (channelIcon) this.changeChannelIconColor(channelIcon, e.instance.props.channel.id);
 						if (e.instance.props.category) {
 							let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "AutocompleteRowContentSecondary"});
 							if (categoryName) this.changeChannelColor(categoryName, e.instance.props.category.id);
@@ -336,7 +336,7 @@ module.exports = (_ => {
 							let icon = BDFDB.ReactUtils.createElement(children[index].props.icon, {
 								className: BDFDB.disCN.channelheadericon
 							});
-							this.changeChannelIconColor(icon, channel.id, {alpha: 0.6});
+							this.changeChannelIconColor(icon, channel.id);
 							children[index] = BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.channelheadericonwrapper,
 								children: icon
@@ -372,7 +372,7 @@ module.exports = (_ => {
 								this.changeChannelColor(BDFDB.ArrayUtils.is(name) ? name.find(c => c.type == "strong") || name[0] : name, channelId, modify);
 							}
 							let icon = iconClass && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", iconClass]]});
-							if (icon) this.changeChannelIconColor(icon, channelId, Object.assign({alpha: 0.6}, modify));
+							if (icon) this.changeChannelIconColor(icon, channelId, modify);
 						}
 						let categoryId = (BDFDB.LibraryModules.ChannelStore.getChannel(channelId) || {}).parent_id;
 						if (categoryId && changedChannels[categoryId]) {
@@ -406,7 +406,7 @@ module.exports = (_ => {
 									let childrenRender = returnValue.props.children;
 									returnValue.props.children = (...args2) => {
 										let renderedChildren = childrenRender(...args2);
-										this.changeChannelIconColor(renderedChildren.props.children, e.instance.props.channel.id, Object.assign({alpha: 0.6}, modify));
+										this.changeChannelIconColor(renderedChildren.props.children, e.instance.props.channel.id, modify);
 										return renderedChildren;
 									};
 								}
@@ -453,7 +453,7 @@ module.exports = (_ => {
 						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.quickswitchresultmatch]]});
 						if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id, modify);
 						let channelIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.quickswitchresulticon]]});
-						if (channelIcon) this.changeChannelIconColor(channelIcon, e.instance.props.channel.id, Object.assign({alpha: 0.6}, modify));
+						if (channelIcon) this.changeChannelIconColor(channelIcon, e.instance.props.channel.id, modify);
 						if (e.instance.props.category) {
 							let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.quickswitchresultnote]]});
 							if (categoryName) this.changeChannelColor(categoryName, e.instance.props.category.id);
@@ -561,7 +561,7 @@ module.exports = (_ => {
 				}
 				if (data.color) {
 					let mentioned = mention.props.mentioned;
-					let color = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color) ? data.color1[0] : data.color1, "RGBA");
+					let color = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color) ? data.color[0] : data.color, "RGBA");
 					let color_200 = BDFDB.ColorUtils.change(color, 200);
 					let color_a30 = BDFDB.ColorUtils.setAlpha(color, 0.3, "RGBA");
 					mention.props.style = Object.assign({}, mention.props.style, {

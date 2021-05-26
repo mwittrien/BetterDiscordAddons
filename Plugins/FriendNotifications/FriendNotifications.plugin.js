@@ -23,7 +23,7 @@ module.exports = (_ => {
 		"changeLog": {
 			"improved": {
 				"Added some extra Info": "New Info on how to control the Observer List better"
-			},
+			}
 		}
 	};
 

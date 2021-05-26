@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.5
+ * @version 1.6.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,10 +19,20 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.6.5",
+			"version": "1.6.6",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
+		"changeLog": {
+			"improved": {
+				"Patron Badges": "All Badges will now say that they are from by BDFDB Patreon, even the T3 Custom Badges",
+				"Toasts": "You can now hover Toasts to stop them from disappearing"
+			},
+			"fixed": {
+				"Color Picker": "Copy Pasting a 6-digit HEX Color, when the alpha channel is enabled will autocomplete it to a 8-digit HEXA Color",
+				"Tooltips": "Fixed some rendering Issues with Tooltips"
+			}
+		}
 	};
 	
 	const DiscordObjects = {};
@@ -3177,29 +3187,31 @@ module.exports = (_ => {
 						if (conv == "RGBCOMP") {
 							switch (type) {
 								case "RGBCOMP":
-									if (color.length == 3) return processRGB(color);
-									else if (color.length == 4) {
-										let a = processA(color.pop());
-										return processRGB(color).concat(a);
+									var rgbComp = [].concat(color);
+									if (rgbComp.length == 3) return processRGB(rgbComp);
+									else if (rgbComp.length == 4) {
+										let a = processA(rgbComp.pop());
+										return processRGB(rgbComp).concat(a);
 									}
 									break;
 								case "RGB":
 									return processRGB(color.replace(/\s/g, "").slice(4, -1).split(","));
 								case "RGBA":
-									let comp = color.replace(/\s/g, "").slice(5, -1).split(",");
-									let a = processA(comp.pop());
-									return processRGB(comp).concat(a);
+									var rgbComp = color.replace(/\s/g, "").slice(5, -1).split(",");
+									var a = processA(rgbComp.pop());
+									return processRGB(rgbComp).concat(a);
 								case "HSLCOMP":
-									if (color.length == 3) return BDFDB.ColorUtils.convert(`hsl(${processHSL(color).join(",")})`, "RGBCOMP");
-									else if (color.length == 4) {
-										let a = processA(color.pop());
-										return BDFDB.ColorUtils.convert(`hsl(${processHSL(color).join(",")})`, "RGBCOMP").concat(a);
+									var hslComp = [].concat(color);
+									if (hslComp.length == 3) return BDFDB.ColorUtils.convert(`hsl(${processHSL(hslComp).join(",")})`, "RGBCOMP");
+									else if (hslComp.length == 4) {
+										let a = processA(hslComp.pop());
+										return BDFDB.ColorUtils.convert(`hsl(${processHSL(hslComp).join(",")})`, "RGBCOMP").concat(a);
 									}
 									break;
 								case "HSL":
-									var hslcomp = processHSL(color.replace(/\s/g, "").slice(4, -1).split(","));
+									var hslComp = processHSL(color.replace(/\s/g, "").slice(4, -1).split(","));
 									var r, g, b, m, c, x, p, q;
-									var h = hslcomp[0] / 360, l = parseInt(hslcomp[1]) / 100, s = parseInt(hslcomp[2]) / 100; m = Math.floor(h * 6); c = h * 6 - m; x = s * (1 - l); p = s * (1 - c * l); q = s * (1 - (1 - c) * l);
+									var h = hslComp[0] / 360, l = parseInt(hslComp[1]) / 100, s = parseInt(hslComp[2]) / 100; m = Math.floor(h * 6); c = h * 6 - m; x = s * (1 - l); p = s * (1 - c * l); q = s * (1 - (1 - c) * l);
 									switch (m % 6) {
 										case 0: r = s, g = q, b = x; break;
 										case 1: r = p, g = s, b = x; break;
@@ -3210,8 +3222,8 @@ module.exports = (_ => {
 									}
 									return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 								case "HSLA":
-									var hslcomp = color.replace(/\s/g, "").slice(5, -1).split(",");
-									return BDFDB.ColorUtils.convert(`hsl(${hslcomp.slice(0, 3).join(",")})`, "RGBCOMP").concat(processA(hslcomp.pop()));
+									var hslComp = color.replace(/\s/g, "").slice(5, -1).split(",");
+									return BDFDB.ColorUtils.convert(`hsl(${hslComp.slice(0, 3).join(",")})`, "RGBCOMP").concat(processA(hslComp.pop()));
 								case "HEX":
 									var hex = /^#([a-f\d]{1})([a-f\d]{1})([a-f\d]{1})$|^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
 									return [parseInt(hex[1] + hex[1] || hex[4], 16), parseInt(hex[2] + hex[2] || hex[5], 16), parseInt(hex[3] + hex[3] || hex[6], 16)];
@@ -3300,25 +3312,25 @@ module.exports = (_ => {
 						return newcolor;
 					}
 					else {
-						let comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
-						if (comp) {
+						let rgbComp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
+						if (rgbComp) {
 							a = a.toString();
 							a = (a.indexOf("%") > -1 ? 0.01 : 1) * parseFloat(a.replace(/[^0-9\.\-]/g, ""));
 							a = isNaN(a) || a > 1 ? 1 : a < 0 ? 0 : a;
-							comp[3] = a;
+							rgbComp[3] = a;
 							conv = (conv || BDFDB.ColorUtils.getType(color)).toUpperCase();
 							conv = conv == "RGB" || conv == "HSL" || conv == "HEX" ? conv + "A" : conv;
-							return BDFDB.ColorUtils.convert(comp, conv);
+							return BDFDB.ColorUtils.convert(rgbComp, conv);
 						}
 					}
 					return null;
 				};
 				BDFDB.ColorUtils.getAlpha = function (color) {
-					let comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
-					if (comp) {
-						if (comp.length == 3) return 1;
-						else if (comp.length == 4) {
-							let a = comp[3].toString();
+					let rgbComp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
+					if (rgbComp) {
+						if (rgbComp.length == 3) return 1;
+						else if (rgbComp.length == 4) {
+							let a = rgbComp[3].toString();
 							a = (a.indexOf("%") > -1 ? 0.01 : 1) * parseFloat(a.replace(/[^0-9\.\-]/g, ""));
 							return isNaN(a) || a > 1 ? 1 : a < 0 ? 0 : a;
 						}
@@ -3334,21 +3346,22 @@ module.exports = (_ => {
 							return newColor;
 						}
 						else {
-							let comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
-							if (comp) {
+							let rgbComp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
+							if (rgbComp) {
+								let a = BDFDB.ColorUtils.getAlpha(rgbComp);
 								if (parseInt(value) !== value) {
 									value = value.toString();
 									value = (value.indexOf("%") > -1 ? 0.01 : 1) * parseFloat(value.replace(/[^0-9\.\-]/g, ""));
 									value = isNaN(value) ? 0 : value;
-									return BDFDB.ColorUtils.convert([].concat(comp).map(c => {
+									return BDFDB.ColorUtils.convert([].concat(rgbComp).slice(0, 3).map(c => {
 										c = Math.round(c * (1 + value));
 										return c > 255 ? 255 : c < 0 ? 0 : c;
-									}), conv || BDFDB.ColorUtils.getType(color));
+									}).concat(a), conv || BDFDB.ColorUtils.getType(color));
 								}
-								else return BDFDB.ColorUtils.convert([].concat(comp).map(c => {
+								else return BDFDB.ColorUtils.convert([].concat(rgbComp).slice(0, 3).map(c => {
 									c = Math.round(c + value);
 									return c > 255 ? 255 : c < 0 ? 0 : c;
-								}), conv || BDFDB.ColorUtils.getType(color));
+								}).concat(a), conv || BDFDB.ColorUtils.getType(color));
 							}
 						}
 					}
@@ -5160,6 +5173,9 @@ module.exports = (_ => {
 						let a = BDFDB.ColorUtils.getAlpha(selectedColor);
 						a = a == null ? 1 : a;
 						
+						let hexColor = BDFDB.ColorUtils.convert(selectedColor, this.props.alpha ? "HEXA" : "HEX");
+						let hexLength = hexColor.length;
+						
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PopoutFocusLock, {
 							className: BDFDB.disCNS.colorpickerwrapper + BDFDB.disCN.colorpicker,
 							children: [
@@ -5392,9 +5408,12 @@ module.exports = (_ => {
 									className: BDFDB.disCNS.colorpickerhexinput + BDFDB.disCN.margintop8,
 									maxLength: this.props.alpha ? 9 : 7,
 									valuePrefix: "#",
-									value: BDFDB.ColorUtils.convert(selectedColor, this.props.alpha ? "HEXA" : "HEX"),
+									value: hexColor,
 									autoFocus: true,
 									onChange: value => {
+										const oldLength = hexLength;
+										hexLength = (value || "").length;
+										if (this.props.alpha && (oldLength > 8 || oldLength < 6) && hexLength == 7) value += "FF";
 										if (hexRegex.test(value)) this.handleColorChange(value);
 									},
 									inputChildren: this.props.gradient && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
@@ -5611,7 +5630,7 @@ module.exports = (_ => {
 					}
 					renderInfoButton(text, style) {
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-							text: text,
+							text: [text].flat(10).filter(n => n).map(n => BDFDB.ReactUtils.createElement("div", {children: n})),
 							tooltipConfig: {
 								type: "bottom",
 								zIndex: 1009,
@@ -5672,7 +5691,7 @@ module.exports = (_ => {
 													"$agoAmount will be replaced with ('Today', 'Yesterday', 'x days/weeks/months ago')",
 													"$agoDays will be replaced with ('Today', 'Yesterday', 'x days ago')",
 													"$agoDate will be replaced with ('Today', 'Yesterday', $date)"
-												].join("\n"), {marginRight: 6}),
+												], {marginRight: 6}),
 												this.renderFormatButton({
 													name: BDFDB.LanguageUtils.LanguageStrings.DATE,
 													svgName: InternalComponents.LibraryComponents.SvgIcon.Names.CALENDAR,
@@ -5687,7 +5706,7 @@ module.exports = (_ => {
 														"$yyyy will be replaced with the Year (4-Digit)",
 														"$month will be replaced with the Month Name",
 														"$monthS will be replaced with the Month Name (Short Form)",
-													].join("\n"),
+													],
 													onChange: value => {
 														this.props.dateString = value;
 														this.handleChange.apply(this, []);
@@ -5708,7 +5727,7 @@ module.exports = (_ => {
 														"$ss will be replaced with the Seconds (Forced Zeros)",
 														"$u will be replaced with the Milliseconds",
 														"$uu will be replaced with the Milliseconds (Forced Zeros)"
-													].join("\n"),
+													],
 													onChange: value => {
 														this.props.timeString = value;
 														this.handleChange.apply(this, []);

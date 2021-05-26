@@ -1303,7 +1303,7 @@
 		"UserBadges": {"props": ["profileBadgeStaff", "profileBadgePremium"]},
 		"UserInfo": {"props": ["userInfo", "discordTag"]},
 		"UserPopout": {"props": ["headerNormal", "profileBadges"]},
-		"UserPopoutWrapper": {"props": ["userPopout", "headerPlaying"]},
+		"UserPopoutWrapper": {"props": ["userPopout", "rolesList"]},
 		"UserProfile": {"props": ["topSectionNormal", "tabBarContainer"]},
 		"UserSettingsAppearancePreview": {"props": ["preview", "firstMessage"]},
 		"UserSummaryItem": {"props": ["avatarContainerMasked", "container"]},
