@@ -525,8 +525,12 @@
 
 /* ~~~~		4.		PEOPLES							~~~~ */
 
-.wrapper-1cBijl .btn:disabled {								/* addfriendpage		button								*/
-	background-color: rgb(var(--accentcolor));
+.container-2rNpDV {											/* stagelive			cover								*/
+	background: #fff linear-gradient(rgba(var(--accentcolor),.8) 75%, rgb(var(--accentcolor)) 75%, rgb(var(--accentcolor)));
+}
+.container-2rNpDV .illustration-h6_gtD {
+	opacity: .8;
+	filter: grayscale(100%);
 }
 
 
