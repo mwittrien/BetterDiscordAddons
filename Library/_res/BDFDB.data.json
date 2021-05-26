@@ -4862,6 +4862,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"760784464560914452": 	{"active": true,		"tier": "t3",		"text": "",				"id": "Keyra (PaCu)"},
 		"266072167349747712": 	{"active": true,		"tier": "t3",		"text": "King",				"id": "Duckx (dogu)"},
 		"646354877336911884": 	{"active": true,		"tier": "t3",		"text": "",					"id": "case (kharri)"},
 		"431078101997584395": 	{"active": true,		"tier": "t2",		"text": "",					"id": "LEMI (f4g8)"},
