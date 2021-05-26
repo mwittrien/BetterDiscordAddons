@@ -3238,19 +3238,15 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 #app-mount .body-3iLsc4,
 #app-mount .footer-1fjuF6 {
-	background-color: var(--background-secondary-alt);
 	color: var(--header-secondary);
-}
-#app-mount .footer-1fjuF6 {
-	border-color: rgba(var(--backgroundtertiary),.3);
 }
 
 #app-mount .wumpusTooltip-65YlMT {
-	background-color: var(--background-floating);
+	background-color: var(--background-tertiary);
 	color: var(--header-primary);
 }
 #app-mount .wumpusTooltip-65YlMT::after {
-	border-color: transparent var(--background-floating) transparent transparent;
+	border-color: transparent var(--background-tertiary) transparent transparent;
 }
 
 .role-2irmRk[style*="border-color: rgba(185, 187, 190, .6)"],
