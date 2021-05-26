@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.1
+ * @version 1.7.2
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.7.1",
+			"version": "1.7.2",
 			"description": "Shows a Notification when a Friend or a User, you choose to observe, changes their Status"
 		},
 		"changeLog": {
-			"fixed": {
-				"Time Log": "Fixed Text Scrolling for huge scrolling entries"
+			"improved": {
+				"Added some extra Info": "New Info on how to control the Observer List better"
 			},
 		}
 	};
@@ -343,7 +343,7 @@ module.exports = (_ => {
 								style: {backgroundColor: "var(--bdfdb-blurple)"},
 								children: "Toast"
 							}),
-							"Notifications for that User: "
+							"Notifications for that User"
 						]
 					}));
 					if ("Notification" in window) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -352,10 +352,57 @@ module.exports = (_ => {
 							"Right-Click on an Option to toggle",
 							BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.disCN._friendnotificationstypelabel,
-								style: {backgroundColor: BDFDB.DiscordConstants.Colors.STATUS_GREEN},
+								style: {backgroundColor: "var(--bdfdb-green)"},
 								children: "Desktop"
 							}),
-							"Notifications for that User: "
+							"Notifications for that User"
+						]
+					}));
+					items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
+						style: {marginTop: 6},
+						children: [
+							"Click on an Option Header to toggle",
+							BDFDB.ReactUtils.createElement("span", {
+								className: BDFDB.disCN._friendnotificationstypelabel,
+								style: {backgroundColor: "var(--bdfdb-blurple)"},
+								children: "Toast"
+							}),
+							"Notifications for all Users"
+						]
+					}));
+					if ("Notification" in window) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
+						children: [
+							"Right-Click on an Option Header to toggle",
+							BDFDB.ReactUtils.createElement("span", {
+								className: BDFDB.disCN._friendnotificationstypelabel,
+								style: {backgroundColor: "var(--bdfdb-green)"},
+								children: "Desktop"
+							}),
+							"Notifications for all Users"
+						]
+					}));
+					items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
+						style: {marginTop: 6},
+						children: "Click on an Avatar to toggle between enabled/disabled"
+					}));
+					if ("Notification" in window) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
+						children: [
+							"Right-Click on an Avatar to toggle all Options between",
+							BDFDB.ReactUtils.createElement("span", {
+								className: BDFDB.disCN._friendnotificationstypelabel,
+								style: {backgroundColor: "var(--bdfdb-blurple)"},
+								children: "Toast"
+							}),
+							"/",
+							BDFDB.ReactUtils.createElement("span", {
+								className: BDFDB.disCN._friendnotificationstypelabel,
+								style: {backgroundColor: "var(--bdfdb-green)"},
+								children: "Desktop"
+							})
 						]
 					}));
 					items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
@@ -387,6 +434,21 @@ module.exports = (_ => {
 									let observed = this.getObservedData();
 									let data = observed[type][cardData.id] || this.createDefaultConfig();
 									data.disabled = !data.disabled;
+									observed[type][data.id] = data;
+									BDFDB.DataUtils.save(observed, this, "observed", BDFDB.UserUtils.me.id);
+									this.SettingsUpdated = true;
+									BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+								},
+								onContextMenu: _ => {
+									let observed = this.getObservedData();
+									let data = observed[type][cardData.id] || this.createDefaultConfig();
+									let batchType;
+									for (let config in statuses) {
+										if (data[config] == notificationTypes.TOAST.value) batchType = notificationTypes.DESKTOP.value;
+										else if (data[config] == notificationTypes.DESKTOP.value) batchType = notificationTypes.TOAST.value;
+										if (batchType != undefined) break;
+									}
+									for (let config in statuses) if (data[config] != notificationTypes.DISABLED.value) data[config] = batchType;
 									observed[type][data.id] = data;
 									BDFDB.DataUtils.save(observed, this, "observed", BDFDB.UserUtils.me.id);
 									this.SettingsUpdated = true;
