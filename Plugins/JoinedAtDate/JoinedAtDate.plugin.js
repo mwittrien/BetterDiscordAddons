@@ -2,7 +2,7 @@
  * @name JoinedAtDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.7
+ * @version 1.2.8
  * @description Displays the Joined At Date of a Member in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "JoinedAtDate",
 			"author": "DevilBro",
-			"version": "1.2.7",
+			"version": "1.2.8",
 			"description": "Displays the Joined At Date of a Member in the UserPopout and UserModal"
 		},
 		"changeLog": {
@@ -66,6 +66,7 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var loadedUsers, requestedUsers;
+		var currentPopout;
 		
 		return class JoinedAtDate extends Plugin {
 			onLoad () {
@@ -160,16 +161,13 @@ module.exports = (_ => {
 			}
 
 			processUserPopout (e) {
-				if (e.instance.props.user && this.settings.places.userPopout) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
-					if (index > -1) this.injectDate(e.instance, children, 2, e.instance.props.user, e.instance.props.guildId);
-				}
+				currentPopout = e.instance;
 			}
 
 			processUserPopoutHeader (e) {
 				if (e.instance.props.user && this.settings.places.userPopout) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
-					if (index > -1) this.injectDate(e.instance, children, 2, e.instance.props.user, e.instance.props.guildId);
+					if (index > -1) this.injectDate(currentPopout, children, 2, e.instance.props.user, e.instance.props.guildId);
 				}
 			}
 

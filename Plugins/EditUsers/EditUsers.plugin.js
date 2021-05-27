@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.2
+ * @version 4.2.3
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.2.2",
+			"version": "4.2.3",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
-			"fixed": {
-				"Mentions": ""
+			"improved": {
+				"New User Popout": "Fixed for the new User Popout, which will be released soon-ish"
 			}
 		}
 	};
@@ -106,7 +106,6 @@ module.exports = (_ => {
 						HeaderBarContainer: "render",
 						ChannelEditorContainer: "render",
 						AutocompleteUserResult: "render",
-						UserPopout: "render",
 						UserPopoutHeader: "default",
 						UserProfile: "render",
 						UserInfo: "default",
@@ -140,7 +139,6 @@ module.exports = (_ => {
 						AutocompleteUserResult: "render",
 						DiscordTag: "default",
 						NameTag: "default",
-						UserPopout: "render",
 						UserPopoutHeader: "default",
 						NowPlayingHeader: "Header",
 						VoiceUser: "render",
@@ -443,7 +441,6 @@ module.exports = (_ => {
 					let changeBackground = false;
 					let tagClass = "";
 					switch (e.instance.props.className) {
-						case BDFDB.disCN.userpopoutheadertagnonickname_old:
 						case BDFDB.disCN.userpopoutheadertagnonickname:
 							change = this.settings.places.userPopout;
 							guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
@@ -483,15 +480,7 @@ module.exports = (_ => {
 				}
 			}
 
-			processUserPopout (e) {
-				this.handleUserPopout(e);
-			}
-
 			processUserPopoutHeader (e) {
-				this.handleUserPopout(e);
-			}
-			
-			handleUserPopout (e) {
 				if (e.instance.props.user && this.settings.places.userPopout) {
 					let data = changedUsers[e.instance.props.user.id];
 					if (!e.returnvalue) {
@@ -506,10 +495,11 @@ module.exports = (_ => {
 					}
 					else {
 						if (data && (data.color1 || data.color2 || data.tag)) {
-							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", [BDFDB.disCN.userpopoutheadername_old, BDFDB.disCN.userpopoutheadername]]]});
+							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
 							if (index > -1) {
 								this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground: true});
-								this.injectBadge(children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
+								if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
+								this.injectBadge(children[index].props.children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
 									tagClass: BDFDB.disCN.bottagnametag,
 									inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
 								});

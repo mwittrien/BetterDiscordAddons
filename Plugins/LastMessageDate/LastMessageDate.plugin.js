@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.2
+ * @version 1.2.3
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "LastMessageDate",
 			"author": "DevilBro",
-			"version": "1.2.2",
+			"version": "1.2.3",
 			"description": "Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal"
 		},
 		"changeLog": {
@@ -66,7 +66,7 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var loadedUsers, requestedUsers, languages;
-		var settings = {}, choices = {}, formats = {}, amounts = {};
+		var currentPopout;
 		
 		return class LastMessageDate extends Plugin {
 			onLoad () {
@@ -171,16 +171,13 @@ module.exports = (_ => {
 			}
 
 			processUserPopout (e) {
-				if (e.instance.props.user && this.settings.places.userPopout) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
-					if (index > -1) this.injectDate(e.instance, children, 2, e.instance.props.user, e.instance.props.guildId);
-				}
+				currentPopout = e.instance;
 			}
 
 			processUserPopoutHeader (e) {
 				if (e.instance.props.user && this.settings.places.userPopout) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
-					if (index > -1) this.injectDate(e.instance, children, 2, e.instance.props.user, e.instance.props.guildId);
+					if (index > -1) this.injectDate(currentPopout, children, 2, e.instance.props.user, e.instance.props.guildId);
 				}
 			}
 
