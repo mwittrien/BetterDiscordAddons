@@ -388,7 +388,6 @@ html .iconBadge-2wi9r4 {
 	background-color: var(--background-accent);
 }
 #app-mount .lookOutlined-3sRXeN.colorPrimary-3b3xI6 .spinnerItem-3GlVyU,
-#app-mount .lookGhost-2Fn_0-.colorPrimary-3b3xI6 .spinnerItem-3GlVyU,
 #app-mount .lookLink-9FtZy-.colorPrimary-3b3xI6 .spinnerItem-3GlVyU {
 	background-color: var(--header-primary);
 }
@@ -434,18 +433,6 @@ html .iconBadge-2wi9r4 {
 	color: var(--header-primary);
 }
 
-#app-mount .lookGhost-2Fn_0-.hoverPrimary-2D1j2r.hasHover-3X1-zV:hover {
-	background-color: rgba(var(--textbrightest), .15);
-}
-#app-mount .lookGhost-2Fn_0-.hoverPrimary-2D1j2r.hasHover-3X1-zV:active {
-	background-color: rgba(var(--textbrightest), .2);
-}
-#app-mount .lookGhost-2Fn_0-.colorPrimary-3b3xI6,
-#app-mount .lookGhost-2Fn_0-.colorPrimary-3b3xI6:disabled {
-	background-color: rgba(var(--textbrightest), .1);
-	color: var(--header-primary);
-}
-
 #app-mount .lookLink-9FtZy-.colorPrimary-3b3xI6 {
 	color: var(--header-primary);
 }
@@ -460,7 +447,6 @@ html .iconBadge-2wi9r4 {
 }
 #app-mount .lookFilled-1Gx00P.colorTransparent-1ewNp9 .spinnerItem-3GlVyU,
 #app-mount .lookOutlined-3sRXeN.colorTransparent-1ewNp9 .spinnerItem-3GlVyU,
-#app-mount .lookGhost-2Fn_0-.colorTransparent-1ewNp9 .spinnerItem-3GlVyU,
 #app-mount .lookLink-9FtZy-.colorTransparent-1ewNp9 .spinnerItem-3GlVyU {
 	background-color: var(--header-primary);
 }
@@ -505,15 +491,6 @@ html .iconBadge-2wi9r4 {
 #app-mount .lookOutlined-3sRXeN.colorTransparent-1ewNp9:disabled {
 	background-color: transparent;
 	color: var(--text-normal);
-}
-
-#app-mount .lookGhost-2Fn_0-.hoverTransparent-2Lz5CN.hasHover-3X1-zV:active {
-	background-color: rgba(var(--textbrighter),.2);
-	color: var(--text-normal);
-}
-#app-mount .lookGhost-2Fn_0-.colorTransparent-1ewNp9,
-#app-mount .lookGhost-2Fn_0-.colorTransparent-1ewNp9:disabled {
-	background-color: rgba(var(--textbrighter),.1);
 }
 
 #app-mount .lookLink-9FtZy-.colorTransparent-1ewNp9 {
@@ -587,10 +564,6 @@ html .iconBadge-2wi9r4 {
 }
 #app-mount .container-1nZlH6:hover {
 	border-color: var(--deprecated-text-input-border-hover);
-}
-#app-mount .container-1nZlH6 .lookGhost-2Fn_0-.colorGrey-2DXtkV {
-	background-color: var(--background-modifier-hover);
-	color: var(--header-secondary);
 }
 
 #app-mount .container-OI6I9q {

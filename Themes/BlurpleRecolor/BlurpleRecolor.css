@@ -761,6 +761,7 @@
 	position: relative;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_bg.svg) center/cover no-repeat;
 }
+.marketingLogoImage-2SzXIR::before,
 .marketingLogoImage-2SzXIR::after {
 	content: "";
 	position: absolute;
@@ -769,8 +770,14 @@
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
+}
+.marketingLogoImage-2SzXIR::before {
 	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_accent.svg) center/cover no-repeat;
+}
+.marketingLogoImage-2SzXIR::after {
+	background: rgb(var(--accentcolor2));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_accent2.svg) center/cover no-repeat;
 }
 #app-mount .tierUnlocked-27DwHo {							/* boostsettings		tierunlocked						*/
 	color: rgb(var(--accentcolor));
@@ -1940,7 +1947,6 @@ a.metadataName-14STf- {
 
 #app-mount .lookInverted-2D7oAl.colorBrand-3pXr91 .spinnerItem-3GlVyU,
 #app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91 .spinnerItem-3GlVyU,
-#app-mount .lookGhost-2Fn_0-.colorBrand-3pXr91 .spinnerItem-3GlVyU,
 #app-mount .lookLink-9FtZy-.colorBrand-3pXr91 .spinnerItem-3GlVyU {
 	background-color: rgb(var(--accentcolor));
 }
@@ -1983,18 +1989,6 @@ a.metadataName-14STf- {
 #app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91,
 #app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91:disabled {
 	border-color: rgba(var(--accentcolor), 0.1);
-	color: rgb(var(--accentcolor));
-}
-
-#app-mount .lookGhost-2Fn_0-.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover {
-	background-color: rgba(var(--accentcolor), 0.15);
-}
-#app-mount .lookGhost-2Fn_0-.hoverBrand-1_Fxlk.hasHover-3X1-zV:active {
-	background-color: rgba(var(--accentcolor), 0.2);
-}
-#app-mount .lookGhost-2Fn_0-.colorBrand-3pXr91,
-#app-mount .lookGhost-2Fn_0-.colorBrand-3pXr91:disabled {
-	background-color: rgba(var(--accentcolor), 0.1);
 	color: rgb(var(--accentcolor));
 }
 
