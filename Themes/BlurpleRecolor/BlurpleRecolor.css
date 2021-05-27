@@ -349,12 +349,12 @@
 
 .message-15tBk4 strong,										/* mention				in header							*/
 #app-mount .wrapper-3WhCwL {								/* mention													*/
-	background-color: rgba(var(--accentcolor), 0.1);
-	color: rgb(var(--accentcolor));
+	background-color: var(--brand-experiment-30a);
+	color: var(--brand-experiment-200);
 }
 .message-15tBk4 strong:hover,
 #app-mount .interactive:hover {
-	background-color: rgb(var(--accentcolor));
+	background-color: var(--brand-experiment);
 	color: #fff;
 }
 
