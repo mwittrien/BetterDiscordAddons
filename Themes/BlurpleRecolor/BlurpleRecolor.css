@@ -357,7 +357,9 @@
 	background-color: rgb(var(--accentcolor));
 }
 .mentioned-xhSam7 .mention.interactive:hover {
+	background-color: transparent;
 	color: rgb(var(--accentcolor));
+	text-decoration: underline;
 }
 
 .reactionMe-wv5HKu .reactionCount-2mvXRV,					/* reaction				count me							*/
