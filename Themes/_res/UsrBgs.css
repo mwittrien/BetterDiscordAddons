@@ -26,6 +26,55 @@
     margin-top: 0;
 }
 
+#app-mount .avatarWrapper-1-5NA0 {
+	z-index: 3 !important;
+}
+#app-mount .activity-fViXj7 {
+	position: static !important;
+}
+
+#app-mount .profileBanner-33-uE1 ~ .activityUserPopout-2yItg2::before {
+	background: var(--brand-experiment, #5865f2) !important;
+}
+
+#app-mount .profileBanner-33-uE1 ~ * .twitchImageContainer-hVw_dv {
+	position: static !important;
+}
+#app-mount .profileBanner-33-uE1 ~ * .twitchImageContainer-hVw_dv::before {
+	background: #593695 !important;
+}
+
+#app-mount .profileBanner-33-uE1 ~ * .spotifyIcon-2J9kSv > * {
+	display: none !important;
+}
+#app-mount .profileBanner-33-uE1 ~ * .spotifyIcon-2J9kSv {
+	background: #1db954 !important;
+}
+
+#app-mount .profileBanner-33-uE1 ~ * .xboxAssets-aGhVw8 {
+	position: static !important;
+}
+#app-mount .profileBanner-33-uE1 ~ * .xboxAssets-aGhVw8::before {
+	background: #107c10 !important;
+}
+
+.profileBanner-33-uE1 ~ .activityUserPopout-2yItg2::before,
+.profileBanner-33-uE1 ~ * .twitchImageContainer-hVw_dv::before,
+.profileBanner-33-uE1 ~ * .spotifyIcon-2J9kSv,
+.profileBanner-33-uE1 ~ * .xboxAssets-aGhVw8::before {
+	content: "" !important;
+	position: absolute !important;
+	border-radius: 5px 5px 0 0 !important;
+	top: 0 !important;
+	left: 0 !important;
+	right: 0 !important;
+	width: 100% !important;
+	height: 0px !important;
+	min-height: var(--user-background, 60px) !important;
+	z-index: 2 !important;
+	pointer-events: none !important;
+}
+
 .root-SR8cQa [class*="topSection"] {
 	background-color: var(--background-tertiary);
 	color: var(--header-secondary);
