@@ -938,7 +938,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 							color: BDFDB.LibraryComponents.Button.Colors.RED,
 							size: BDFDB.LibraryComponents.Button.Sizes.TINY,
-							look: BDFDB.LibraryComponents.Button.Looks.GHOST,
+							look: BDFDB.LibraryComponents.Button.Looks.OUTLINE,
 							style: {marginLeft: 6, marginRight: 12},
 							children: BDFDB.LanguageUtils.LanguageStrings.BUILD_OVERRIDE_CLEAR,
 							onClick: _ => BDFDB.ModalUtils.confirm(this, this.labels.clear_log, _ => {
