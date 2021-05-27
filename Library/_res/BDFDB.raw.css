@@ -11,9 +11,10 @@ img:not([src]), img[src=""], img[src="null"] {
 	opacity: 0;
 }
 
-[REPLACE_CLASS_app] > [REPLACE_CLASS_itemlayercontainer],
-[REPLACE_CLASS_app] > [REPLACE_CLASS_popouts] {
+[REPLACE_CLASS_appmount] > [REPLACE_CLASS_itemlayercontainer],
+[REPLACE_CLASS_appmount] > [REPLACE_CLASS_popouts] {
 	position: fixed;
+	z-index: 1001;
 }
 
 [REPLACE_CLASS_titlebarmac] {
@@ -21,7 +22,8 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 
 [REPLACE_CLASS_itemlayercontainerzindexdisabled] {
-	z-index: unset;
+	position: absolute !important;
+	z-index: unset !important;
 }
 [REPLACE_CLASS_itemlayercontainerzindexdisabled] > * {
 	z-index: 1002;
@@ -353,6 +355,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	width: 32px;
 	height: 32px;
 }
+[REPLACE_CLASS_discoverycardiconloading] {
+	visibility: hidden;
+}
 [REPLACE_CLASS_discoverycardinfo] {
 	display: flex;
 	flex: 1 1 auto;
@@ -456,26 +461,41 @@ img:not([src]), img[src=""], img[src="null"] {
 	text-overflow: ellipsis;
 }
 
+[REPLACE_CLASS_userpopoutheadernamewrapper_old],
+[REPLACE_CLASS_userpopoutheadername],
+[REPLACE_CLASS_userpopoutheadertagnonickname] {
+	display: flex;
+	align-items: center;
+	line-height: unset;
+	overflow: hidden;
+}
+[REPLACE_CLASS_userpopoutheadernamebase] {
+	overflow: hidden;
+}
+[REPLACE_CLASS_userpopoutheadertagdiscriminatornonickname] {
+	position: relative;
+	top: 1px;
+}
 [REPLACE_CLASS_userinfodate] {
 	user-select: text;
-}
-[REPLACE_CLASS_userpopout] [REPLACE_CLASS_userpopoutheadertext] + [REPLACE_CLASS_userinfodate],
-[REPLACE_CLASS_userprofile] [REPLACE_CLASS_userprofilenametag] + [REPLACE_CLASS_userinfodate] {
 	margin-top: 8px;
 }
-[REPLACE_CLASS_userinfodate] + [REPLACE_CLASS_userpopoutcustomstatus] {
+[REPLACE_CLASS_userinfodate] + [REPLACE_CLASS_userinfodate] {
+	margin-top: 0;
+}
+[REPLACE_CLASS_userinfodate] + *:not([REPLACE_CLASS_userinfodate]) {
 	margin-top: 4px;
 }
-[REPLACE_CLASS_userpopout] [REPLACE_CLASS_userpopoutheadernormal] [REPLACE_CLASS_userinfodate] {
+[REPLACE_CLASS_userpopout] [REPLACE_CLASS_userinfodate] {
 	color: var(--header-secondary);
 }
-[REPLACE_CLASS_userpopout] [REPLACE_CLASS_userpopoutheader]:not([REPLACE_CLASS_userpopoutheadernormal]) [REPLACE_CLASS_userinfodate] {
+[REPLACE_CLASS_userprofile] [REPLACE_CLASS_userinfodate] {
+	color: var(--header-secondary);
+}
+[REPLACE_CLASS_userpopout] [REPLACE_CLASS_userpopoutheader]:not([class*='headerNormal']) [REPLACE_CLASS_userinfodate] {
 	color: hsla(0,0%,100%,.6);
 }
-[REPLACE_CLASS_userprofile] [REPLACE_CLASS_userprofiletopsectionnormal] [REPLACE_CLASS_userinfodate] {
-	color: var(--header-secondary);
-}
-[REPLACE_CLASS_userprofile] [class*='topSection']:not([REPLACE_CLASS_userprofiletopsectionnormal]) [REPLACE_CLASS_userinfodate] {
+[REPLACE_CLASS_userprofile] [class*='topSection']:not([class*='topSectionNormal']) [REPLACE_CLASS_userinfodate] {
 	color: hsla(0,0%,100%,.6);
 }
 
@@ -628,6 +648,12 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 [REPLACE_CLASS_hovercardwrapper]:hover [REPLACE_CLASS_hovercardbutton] {
 	opacity: 1;
+}
+
+[REPLACE_CLASS_textareabuttonwrapper] {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 [REPLACE_CLASS_guildsummarycontainer] {
@@ -1188,7 +1214,7 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 #pluginNotice #outdatedPlugins span {
 	-webkit-app-region: no-drag;
-	color: #FFF;
+	color: #fff;
 	cursor: pointer;
 }
 #pluginNotice #outdatedPlugins span:hover {
@@ -1216,9 +1242,18 @@ img:not([src]), img[src=""], img[src="null"] {
 	padding-top: 4px;
 }
 
+[REPLACE_CLASS_tooltipnote] {
+	color: var(--text-muted);
+	font-size: 11px;
+	margin-top: 2px;
+}
 [REPLACE_CLASS_tooltip][REPLACE_CLASS_tooltipcustom],
 [REPLACE_CLASS_tooltiplistitem][REPLACE_CLASS_tooltipcustom] {
-	color: #FFF;
+	color: #fff;
+}
+[REPLACE_CLASS_tooltip][REPLACE_CLASS_tooltipcustom] [REPLACE_CLASS_tooltipnote],
+[REPLACE_CLASS_tooltiplistitem][REPLACE_CLASS_tooltipcustom] [REPLACE_CLASS_tooltipnote] {
+	color: #bbb;
 }
 [REPLACE_CLASS_tooltipcustom] [REPLACE_CLASS_tooltippointer] {
 	border-top-color: inherit !important;
@@ -1529,29 +1564,29 @@ img:not([src]), img[src=""], img[src="null"] {
 	background-color: var(--bdfdb-blurple);
 }
 [REPLACE_CLASS_toastbrand] [REPLACE_CLASS_toastinner] {
-	color: #FFF;
+	color: #fff;
 }
 [REPLACE_CLASS_toastdanger] [REPLACE_CLASS_toastbg] {
 	background-color: var(--bdfdb-red);
 }
 [REPLACE_CLASS_toastdanger] [REPLACE_CLASS_toastinner] {
-	color: #FFF;
+	color: #fff;
 }
 [REPLACE_CLASS_toastinfo] [REPLACE_CLASS_toastbg] {
 	background-color: #4A90E2;
 }
 [REPLACE_CLASS_toastinfo] [REPLACE_CLASS_toastinner] {
-	color: #FFF;
+	color: #fff;
 }
 [REPLACE_CLASS_toastsuccess] [REPLACE_CLASS_toastbg] {
 	background-color: var(--bdfdb-green);
 }
 [REPLACE_CLASS_toastsuccess] [REPLACE_CLASS_toastinner] {
-	color: #FFF;
+	color: #fff;
 }
 [REPLACE_CLASS_toastwarning] [REPLACE_CLASS_toastbg] {
 	background-color: var(--bdfdb-yellow);
 }
 [REPLACE_CLASS_toastwarning] [REPLACE_CLASS_toastinner] {
-	color: #FFF;
+	color: #fff;
 }

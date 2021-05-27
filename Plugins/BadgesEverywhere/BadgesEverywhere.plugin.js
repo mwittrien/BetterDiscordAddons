@@ -2,7 +2,7 @@
  * @name BadgesEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.8
+ * @version 1.6.9
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "BadgesEverywhere",
 			"author": "DevilBro",
-			"version": "1.6.8",
+			"version": "1.6.9",
 			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/UserPopout"
 		},
 		"changeLog": {
 			"fixed": {
-				"Margin & Overlapping": "Fixed Margin and Overlapping Issue, thanks Discord"
+				"Works again": ""
 			}
 		}
 	};
@@ -67,7 +67,6 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		var badgeClasses, requestedUsers = {}, loadedUsers = {}, requestQueue = {queue: [], timeout: null, id: null}, cacheTimeout;
 		var nitroFlag, boostFlag;
-		var settings = {}, badges = {}, indicators = {};
 		
 		const miniTypes = ["list", "chat"];
 		
@@ -82,12 +81,14 @@ module.exports = (_ => {
 				};
 				
 				this.defaults = {
-					settings: {
-						showInPopout:		{value: true, 	description: "Show Badge in User Popout"},
-						showInChat:			{value: true, 	description: "Show Badge in Chat Window"},
-						showInMemberList:	{value: true, 	description: "Show Badge in Member List"},
-						useColoredVersion:	{value: true, 	description: "Use colored version of the Badges for Chat and Members"},
-						showNitroDate:		{value: true, 	description: "Show the subscription date for Nitro/Boost Badges"}
+					general: {
+						useColoredVersion:	{value: true, 	description: "Use colored Version of the Badges for Chat and Members"},
+						showNitroDate:		{value: true, 	description: "Show the Subscription Date for Nitro/Boost Badges"}
+					},
+					places: {
+						popout:				{value: true, 	description: "User Popout"},
+						chat:				{value: true, 	description: "Chat"},
+						memberList:			{value: true, 	description: "Member List"}
 					},
 					badges: {
 						"STAFF": {
@@ -245,7 +246,7 @@ module.exports = (_ => {
 						margin: 0 !important;
 					}
 					${BDFDB.dotCN._badgeseverywherebadge} {
-						height: 17px !important;
+						height: 17px !important; min-height: 17px !important;
 					}
 					${BDFDB.dotCN._badgeseverywheresize17} {
 						width: 17px !important; min-width: 17px !important;
@@ -260,13 +261,13 @@ module.exports = (_ => {
 						width: 24px !important; min-width: 24px !important;
 					}
 					${BDFDB.dotCN._badgeseverywhereindicator} {
-						height: 14px !important; min-height: 14px !important; width: 14px !important; min-width: 14px !important;
+						width: 14px !important; min-width: 14px !important;
 					}
 					${BDFDB.dotCN._badgeseverywhereindicatorinner} {
-						height: inherit !important; min-height: inherit !important; width: inherit !important; min-width: inherit !important;
+						height: 85% !important; min-height: 85% !important; width: inherit !important; min-width: inherit !important;
 					}
 					${BDFDB.dotCNS._badgeseverywheremini + BDFDB.dotCN._badgeseverywherebadge} {
-						height: 14px !important;
+						height: 14px !important; min-height: 14px !important;
 					}
 					${BDFDB.dotCNS._badgeseverywheremini + BDFDB.dotCN._badgeseverywheresize17} {
 						width: 14px !important; min-width: 14px !important;
@@ -281,7 +282,7 @@ module.exports = (_ => {
 						width: 19px !important; min-width: 19px !important;
 					}
 					${BDFDB.dotCNS._badgeseverywheremini + BDFDB.dotCN._badgeseverywhereindicator} {
-						height: 12px !important; min-height: 12px !important; width: 12px !important; min-width: 12px !important;
+						width: 12px !important; min-width: 12px !important;
 					}
 					#app-mount ${BDFDB.dotCNS._badgeseverywherebadgessettings + BDFDB.dotCN._badgeseverywherebadge} {
 						width: 30px !important; min-width: 30px !important;
@@ -325,7 +326,7 @@ module.exports = (_ => {
 				}
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
-					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.USER_PROFILE_MODAL_FETCH_SUCCESS && e.methodArguments[0].user) {
+					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.USER_PROFILE_FETCH_SUCCESS && e.methodArguments[0].user) {
 						let userCopy = Object.assign({}, e.methodArguments[0].user);
 						if (e.methodArguments[0].premium_since) userCopy.flags += nitroFlag;
 						userCopy.premium_since = e.methodArguments[0].premium_since;
@@ -355,37 +356,64 @@ module.exports = (_ => {
 			}
 
 			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [], innerItems = [];
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
+					collapseStates: collapseStates,
+					children: _ => {
+						let settingsItems = [];
 				
-				for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					type: "Switch",
-					plugin: this,
-					keys: ["settings", key],
-					label: this.defaults.settings[key].description,
-					value: settings[key]
-				}));
-				for (let flag in badges) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					type: "Switch",
-					plugin: this,
-					keys: ["badges", flag],
-					label: this.defaults.badges[flag].name + (this.defaults.badges[flag].suffix ? ` ${this.defaults.badges[flag].suffix}` : ""),
-					value: badges[flag],
-					labelChildren: this.createSettingsBadges(flag)
-				}));
-				for (let flag in indicators) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					type: "Switch",
-					plugin: this,
-					keys: ["indicators", flag],
-					label: this.defaults.indicators[flag].name + (this.defaults.indicators[flag].suffix ? ` ${this.defaults.indicators[flag].suffix}` : ""),
-					value: indicators[flag],
-					labelChildren: this.createSettingsBadges(flag)
-				}));
-				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-					title: "Display Badges:",
-					children: innerItems
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+						for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							type: "Switch",
+							plugin: this,
+							keys: ["general", key],
+							label: this.defaults.general[key].description,
+							value: this.settings.general[key]
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							title: "Show Badges in:",
+							children: Object.keys(this.defaults.places).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["places", key],
+								label: this.defaults.places[key].description,
+								value: this.settings.places[key]
+							}))
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							title: "Display Badges:",
+							children: Object.keys(this.defaults.badges).map(flag => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["badges", flag],
+								label: this.defaults.badges[flag].name + (this.defaults.badges[flag].suffix ? ` ${this.defaults.badges[flag].suffix}` : ""),
+								value: this.settings.badges[flag],
+								labelChildren: this.createSettingsBadges(flag)
+							})).concat(Object.keys(this.defaults.indicators).map(flag => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["indicators", flag],
+								label: this.defaults.indicators[flag].name + (this.defaults.indicators[flag].suffix ? ` ${this.defaults.indicators[flag].suffix}` : ""),
+								value: this.settings.indicators[flag],
+								labelChildren: this.createSettingsBadges(flag)
+							})))
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							type: "Button",
+							color: BDFDB.LibraryComponents.Button.Colors.RED,
+							label: "Reset cached Badge Data",
+							onClick: _ => BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset the Badge Cache? This will force all Badges to rerender.", _ => {
+								BDFDB.DataUtils.remove(this, "badgeCache");
+								this.forceUpdateAll();;
+							}),
+							children: BDFDB.LanguageUtils.LanguageStrings.RESET
+						}));
+						
+						return settingsItems;
+					}
+				});
 			}
 
 			onSettingsClosed () {
@@ -395,29 +423,25 @@ module.exports = (_ => {
 				}
 			}
 			
-			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
-				badges = BDFDB.DataUtils.get(this, "badges");
-				indicators = BDFDB.DataUtils.get(this, "indicators");
-				
+			forceUpdateAll () {				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.MessageUtils.rerenderAll();
 			}
 
 			processMemberListItem (e) {
-				if (e.instance.props.user && settings.showInMemberList) {
+				if (e.instance.props.user && this.settings.places.memberList) {
 					this.injectBadges(e.instance, BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, "list");
 				}
 			}
 
 			processMessageUsername (e) {
-				if (e.instance.props.message && settings.showInChat) {
+				if (e.instance.props.message && this.settings.places.chat) {
 					this.injectBadges(e.instance, e.returnvalue.props.children, e.instance.props.message.author, "chat");
 				}
 			}
 
 			processUserPopout (e) {
-				if (e.instance.props.user && settings.showInPopout) {
+				if (e.instance.props.user && this.settings.places.popout) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
 					if (index > -1) this.injectBadges(e.instance, children, e.instance.props.user, "popout", e.instance.props.activity && e.instance.props.activity.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
 				}
@@ -461,15 +485,15 @@ module.exports = (_ => {
 
 			createBadges (user, type, uncolored) {
 				let renderedBadges = [];
-				for (let flag in badges) if ((loadedUsers[user.id].flags | flag) == loadedUsers[user.id].flags && badges[flag]) {
-					renderedBadges.push(this.createBadge(settings.showNitroDate ? this.getTimeString(user.id, flag) : null, type, flag, flag == boostFlag ? BDFDB.LibraryModules.GuildBoostUtils.getUserLevel(loadedUsers[user.id].premium_guild_since) : null));
+				for (let flag in this.settings.badges) if ((loadedUsers[user.id].flags | flag) == loadedUsers[user.id].flags && this.settings.badges[flag]) {
+					renderedBadges.push(this.createBadge(this.settings.general.showNitroDate ? this.getTimeString(user.id, flag) : null, type, flag, flag == boostFlag ? BDFDB.LibraryModules.GuildBoostUtils.getUserLevel(loadedUsers[user.id].premium_guild_since) : null));
 				}
 				let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), user.id);
-				if (indicators.CURRENT_GUILD_BOOST && member && member.premiumSince) {
-					renderedBadges.push(this.createBadge(settings.showNitroDate ? this.getTimeString(user.id, "CURRENT_GUILD_BOOST") : null, type, "CURRENT_GUILD_BOOST"));
+				if (this.settings.indicators.CURRENT_GUILD_BOOST && member && member.premiumSince) {
+					renderedBadges.push(this.createBadge(this.settings.general.showNitroDate ? this.getTimeString(user.id, "CURRENT_GUILD_BOOST") : null, type, "CURRENT_GUILD_BOOST"));
 				}
 				if (!renderedBadges.length) return null;
-				else return this.createWrapper(renderedBadges, type, uncolored == undefined ? !settings.useColoredVersion : uncolored);
+				else return this.createWrapper(renderedBadges, type, uncolored == undefined ? !this.settings.general.useColoredVersion : uncolored);
 			}
 			
 			createBadge (timestring, type, flag, rank) {

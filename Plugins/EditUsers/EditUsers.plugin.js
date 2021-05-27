@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.1
+ * @version 4.2.2
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.2.1",
+			"version": "4.2.2",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"Failed Messages": "No longer overwrites the red color indicating a message that failed to send"
+				"Mentions": ""
 			}
 		}
 	};
@@ -65,42 +65,39 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var changedUsers = {}, settings = {};
-		
-		const settingsHeaders = {
-			sub: "Change Users in:",
-			main: "Change Users in the Chat Window (Messages, Reactions, Mentions, etc.) in:"
-		};
+		var changedUsers = {};
 	
 		return class EditUsers extends Plugin {
 			onLoad () {
 				this.defaults = {
-					settings: {
-						changeInServers:		{value: true, 	category: "main",	description: "Servers"},
-						changeInDms:			{value: true, 	category: "main",	description: "Direct Messages"},
-						changeInContextMenu:	{value: true, 	category: "sub",	description: "User ContextMenu"},
-						changeInChatTextarea:	{value: true, 	category: "sub",	description: "Chat Textarea"},
-						changeInChatWindow:		{value: true, 	category: "sub",	description: "Messages"},
-						changeInReactions:		{value: true, 	category: "sub",	description: "Reactions"},
-						changeInMentions:		{value: true, 	category: "sub",	description: "Mentions"},
-						changeInMemberList:		{value: true, 	category: "sub",	description: "Member List"},
-						changeInVoiceChat:		{value: true, 	category: "sub",	description: "Voice Channels"},
-						changeInRecentDms:		{value: true, 	category: "sub",	description: "Direct Message Notifications"},
-						changeInDmsList:		{value: true, 	category: "sub",	description: "Direct Message List"},
-						changeInDmHeader:		{value: true, 	category: "sub",	description: "Direct Message Header"},
-						changeInDmCalls:		{value: true, 	category: "sub",	description: "Calls/ScreenShares"},
-						changeInTyping:			{value: true, 	category: "sub",	description: "Typing List"},
-						changeInFriendList:		{value: true, 	category: "sub",	description: "Friend List"},
-						changeInInviteList:		{value: true, 	category: "sub",	description: "Invite List"},
-						changeInActivity:		{value: true, 	category: "sub",	description: "Activity Page"},
-						changeInUserPopout:		{value: true, 	category: "sub",	description: "User Popouts"},
-						changeInUserProfile:	{value: true, 	category: "sub",	description: "User Profile Modal"},
-						changeInAutoComplete:	{value: true, 	category: "sub",	description: "Autocomplete Menu"},
-						changeInGuildSettings:	{value: true, 	category: "sub",	description: "Server Settings"},
-						changeInQuickSwitcher:	{value: true, 	category: "sub",	description: "Quick Switcher"},
-						changeInSearchPopout:	{value: true, 	category: "sub",	description: "Search Popout"},
-						changeInUserAccount:	{value: true, 	category: "sub",	description: "Your Account Information"},
-						changeInAppTitle:		{value: true, 	category: "sub",	description: "Discord App Title (DMs)"}
+					types: {
+						servers:			{value: true, 		description: "Servers"},
+						dms:				{value: true, 		description: "Direct Messages"},
+					},
+					places: {
+						contextMenu:		{value: true, 		description: "User ContextMenu"},
+						chatTextarea:		{value: true, 		description: "Chat Textarea"},
+						chatWindow:			{value: true, 		description: "Messages"},
+						reactions:			{value: true, 		description: "Reactions"},
+						mentions:			{value: true, 		description: "Mentions"},
+						memberList:			{value: true, 		description: "Member List"},
+						voiceChat:			{value: true, 		description: "Voice Channels"},
+						recentDms:			{value: true, 		description: "Direct Message Notifications"},
+						dmsList:			{value: true, 		description: "Direct Message List"},
+						dmHeader:			{value: true, 		description: "Direct Message Header"},
+						dmCalls:			{value: true, 		description: "Calls/ScreenShares"},
+						typing:				{value: true, 		description: "Typing List"},
+						friendList:			{value: true, 		description: "Friend List"},
+						inviteList:			{value: true, 		description: "Invite List"},
+						activity:			{value: true, 		description: "Activity Page"},
+						userPopout:			{value: true, 		description: "User Popouts"},
+						userProfile:		{value: true, 		description: "User Profile Modal"},
+						autcocompletes:		{value: true, 		description: "Autocomplete Menu"},
+						guildSettings:		{value: true, 		description: "Server Settings"},
+						quickSwitcher:		{value: true, 		description: "Quick Switcher"},
+						searchPopout:		{value: true, 		description: "Search Popout"},
+						userAccount:		{value: true, 		description: "Your Account Information"},
+						appTitle:			{value: true, 		description: "Discord App Title (DMs)"}
 					}
 				};
 			
@@ -110,6 +107,7 @@ module.exports = (_ => {
 						ChannelEditorContainer: "render",
 						AutocompleteUserResult: "render",
 						UserPopout: "render",
+						UserPopoutHeader: "default",
 						UserProfile: "render",
 						UserInfo: "default",
 						NowPlayingHeader: "Header",
@@ -143,6 +141,7 @@ module.exports = (_ => {
 						DiscordTag: "default",
 						NameTag: "default",
 						UserPopout: "render",
+						UserPopoutHeader: "default",
 						NowPlayingHeader: "Header",
 						VoiceUser: "render",
 						Account: "render",
@@ -175,10 +174,6 @@ module.exports = (_ => {
 					${BDFDB.dotCN.voicedetailschannel}:hover > span[style*="color"] {
 						text-decoration: underline;
 					}
-					${BDFDB.dotCNS.userpopoutheadernamewrapper + BDFDB.dotCN.bottag} {
-						position: relative;
-						bottom: 1px;
-					}
 					${BDFDB.dotCNS.dmchannel + BDFDB.dotCN.bottag} {
 						display: inline;
 						margin-left: 4px;
@@ -198,11 +193,25 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				// REMOVE 16.05.2021
+				let oldData = BDFDB.DataUtils.load(this);
+				if (oldData.settings) {
+					this.settings.general = BDFDB.ObjectUtils.filter(oldData.settings, k => k.indexOf("changeIn") == -1, true);
+					this.settings.places = Object.entries(BDFDB.ObjectUtils.filter(oldData.settings, k => k.indexOf("changeIn") == 0, true)).reduce((n, p) => {
+						let k = p[0].replace("changeIn", "");
+						n[k[0].toLowerCase() + k.slice(1)] = p[1];
+						return n;
+					}, {});
+					BDFDB.DataUtils.save(this.settings.general, this, "general");
+					BDFDB.DataUtils.save(this.settings.places, this, "places");
+					BDFDB.DataUtils.remove(this, "settings");
+				}
+				
 				let observer = new MutationObserver(_ => {this.changeAppTitle();});
 				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name: "appTitleObserver", instance: observer}, {childList: true});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageAuthorUtils, ["default", "getMessageAuthor"], {after: e => {
-					if (settings.changeInChatWindow && e.methodArguments[0] && e.methodArguments[0].author && changedUsers[e.methodArguments[0].author.id] && this.shouldChangeInChat(e.methodArguments[0].channel_id)) {
+					if (this.settings.places.chatWindow && e.methodArguments[0] && e.methodArguments[0].author && changedUsers[e.methodArguments[0].author.id] && this.shouldchat(e.methodArguments[0].channel_id)) {
 						let data = changedUsers[e.methodArguments[0].author.id];
 						if (data.name || data.color1) {
 							let member = BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.methodArguments[0].channel_id) || {}).guild_id, e.methodArguments[0].author.id);
@@ -262,18 +271,29 @@ module.exports = (_ => {
 					collapseStates: collapseStates,
 					children: _ => {
 						let settingsItems = [];
-				
-						for (let cat in settingsHeaders) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-							title: settingsHeaders[cat],
-							dividerBottom: true,
-							children: Object.keys(settings).filter(key => this.defaults.settings[key].category == cat).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							title: "Change Users in:",
+							children: Object.keys(this.defaults.places).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "Switch",
 								plugin: this,
-								keys: ["settings", key],
-								label: this.defaults.settings[key].description,
-								value: settings[key]
+								keys: ["places", key],
+								label: this.defaults.places[key].description,
+								value: this.settings.places[key]
 							}))
 						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							title: "Change Users in the Chat Window (Messages, Reactions, Mentions, etc.) in:",
+							children: Object.keys(this.defaults.types).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["types", key],
+								label: this.defaults.types[key].description,
+								value: this.settings.types[key]
+							}))
+						}));
+						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
 							label: "Changed Users:"
 						}));
@@ -315,7 +335,6 @@ module.exports = (_ => {
 		
 			forceUpdateAll () {
 				changedUsers = BDFDB.DataUtils.load(this, "users");
-				settings = BDFDB.DataUtils.get(this, "settings");
 					
 				this.changeAppTitle();
 				BDFDB.PatchUtils.forceAllUpdates(this);
@@ -325,7 +344,7 @@ module.exports = (_ => {
 			onUserContextMenu (e) {
 				if (e.instance.props.user) {
 					let userName = this.getUserData(e.instance.props.user.id).username;
-					if (userName != e.instance.props.user.username && settings.changeInContextMenu) {
+					if (userName != e.instance.props.user.username && this.settings.places.contextMenu) {
 						let [kickChilden, kickIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "kick"});
 						if (kickIndex > -1) kickChilden[kickIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("KICK_USER", userName);
 						let [banChilden, banIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "ban"});
@@ -371,14 +390,14 @@ module.exports = (_ => {
 			}
 			
 			processChannelEditorContainer (e) {
-				if (!e.instance.props.disabled && e.instance.props.channel && e.instance.props.channel.isDM() && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && settings.changeInChatTextarea) {
+				if (!e.instance.props.disabled && e.instance.props.channel && e.instance.props.channel.isDM() && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && this.settings.places.chatTextarea) {
 					let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channel.recipients[0]);
 					if (user) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `@${changedUsers[user.id] && changedUsers[user.id].name || user.username}`);
 				}
 			}
 
 			processAutocompleteUserResult (e) {
-				if (e.instance.props.user && settings.changeInAutoComplete) {
+				if (e.instance.props.user && this.settings.places.autocompletes) {
 					if (!e.returnvalue) {
 						e.instance.props.user = this.getUserData(e.instance.props.user.id);
 						let data = changedUsers[e.instance.props.user.id];
@@ -393,7 +412,7 @@ module.exports = (_ => {
 
 			processHeaderBarContainer (e) {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
-				if (channel && channel.isDM() && settings.changeInDmHeader) {
+				if (channel && channel.isDM() && this.settings.places.dmHeader) {
 					let userName = BDFDB.ReactUtils.findChild(e.instance, {name: "Title"});
 					if (userName) {
 						let recipientId = channel.getRecipientId();
@@ -404,7 +423,7 @@ module.exports = (_ => {
 			}
 
 			processChannelCallHeader (e) {
-				if (e.instance.props.channel && e.instance.props.channel.isDM() && settings.changeInDmHeader) {
+				if (e.instance.props.channel && e.instance.props.channel.isDM() && this.settings.places.dmHeader) {
 					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Title"});
 					if (userName) {
 						let recipientId = e.instance.props.channel.getRecipientId();
@@ -424,29 +443,30 @@ module.exports = (_ => {
 					let changeBackground = false;
 					let tagClass = "";
 					switch (e.instance.props.className) {
+						case BDFDB.disCN.userpopoutheadertagnonickname_old:
 						case BDFDB.disCN.userpopoutheadertagnonickname:
-							change = settings.changeInUserPopout;
+							change = this.settings.places.userPopout;
 							guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 							changeBackground = true;
 							tagClass = BDFDB.disCN.bottagnametag;
 							break;
 						case BDFDB.disCN.userprofilenametag:
-							change = settings.changeInUserProfile;
+							change = this.settings.places.userProfile;
 							guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 							changeBackground = true;
 							tagClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
 							break;
 						case BDFDB.disCN.guildsettingsinviteusername:
-							change = settings.changeInGuildSettings;
+							change = this.settings.places.guildSettings;
 							break;
 						case BDFDB.disCN.userinfodiscordtag:
-							change = settings.changeInFriendList;
+							change = this.settings.places.friendList;
 							tagClass = BDFDB.disCN.bottagnametag;
 							break;
 					}
 					switch (e.instance.props.usernameClass) {
 						case BDFDB.disCN.messagereactionsmodalusername:
-							change = settings.changeInReactions && !BDFDB.LibraryModules.MemberStore.getNick(BDFDB.LibraryModules.LastGuildStore.getGuildId(), e.instance.props.user.id);
+							change = this.settings.places.reactions && !BDFDB.LibraryModules.MemberStore.getNick(BDFDB.LibraryModules.LastGuildStore.getGuildId(), e.instance.props.user.id);
 							break;
 					}
 					if (change) {
@@ -464,7 +484,15 @@ module.exports = (_ => {
 			}
 
 			processUserPopout (e) {
-				if (e.instance.props.user && settings.changeInUserPopout) {
+				this.handleUserPopout(e);
+			}
+
+			processUserPopoutHeader (e) {
+				this.handleUserPopout(e);
+			}
+			
+			handleUserPopout (e) {
+				if (e.instance.props.user && this.settings.places.userPopout) {
 					let data = changedUsers[e.instance.props.user.id];
 					if (!e.returnvalue) {
 						e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
@@ -478,7 +506,7 @@ module.exports = (_ => {
 					}
 					else {
 						if (data && (data.color1 || data.color2 || data.tag)) {
-							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
+							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", [BDFDB.disCN.userpopoutheadername_old, BDFDB.disCN.userpopoutheadername]]]});
 							if (index > -1) {
 								this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground: true});
 								this.injectBadge(children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
@@ -492,7 +520,7 @@ module.exports = (_ => {
 			}
 
 			processUserProfile (e) {
-				if (e.instance.props.user && settings.changeInUserProfile) {
+				if (e.instance.props.user && this.settings.places.userProfile) {
 					e.instance.props.user = this.getUserData(e.instance.props.user.id);
 					let data = changedUsers[e.instance.props.user.id];
 					if (data && (data.removeStatus || data.status || data.statusEmoji)) e.instance.props.customStatusActivity = this.createCustomStatus(data);
@@ -500,7 +528,7 @@ module.exports = (_ => {
 			}
 
 			processUserInfo (e) {
-				if (e.instance.props.user && settings.changeInFriendList) {
+				if (e.instance.props.user && this.settings.places.friendList) {
 					e.instance.props.user = this.getUserData(e.instance.props.user.id);
 					if (BDFDB.ReactUtils.isValidElement(e.instance.props.subText)) {
 						let data = changedUsers[e.instance.props.user.id];
@@ -514,7 +542,7 @@ module.exports = (_ => {
 			}
 
 			processNowPlayingHeader (e) {
-				if (BDFDB.ObjectUtils.is(e.instance.props.priorityUser) && e.instance.props.priorityUser.user && settings.changeInFriendList) {
+				if (BDFDB.ObjectUtils.is(e.instance.props.priorityUser) && e.instance.props.priorityUser.user && this.settings.places.friendList) {
 					if (!e.returnvalue) {
 						let titleIsName = e.instance.props.priorityUser.user.username == e.instance.props.title;
 						e.instance.props.priorityUser.user = this.getUserData(e.instance.props.priorityUser.user.id);
@@ -528,7 +556,7 @@ module.exports = (_ => {
 			}
 
 			processVoiceUser (e) {
-				if (e.instance.props.user && settings.changeInVoiceChat) {
+				if (e.instance.props.user && this.settings.places.voiceChat) {
 					if (!e.returnvalue) {
 						e.instance.props.user = this.getUserData(e.instance.props.user.id);
 						let data = changedUsers[e.instance.props.user.id];
@@ -545,7 +573,7 @@ module.exports = (_ => {
 			}
 
 			processAccount (e) {
-				if (e.instance.props.currentUser && settings.changeInUserAccount) {
+				if (e.instance.props.currentUser && this.settings.places.userAccount) {
 					let data = changedUsers[e.instance.props.currentUser.id];
 					if (!e.returnvalue) {
 						e.instance.props.currentUser = this.getUserData(e.instance.props.currentUser.id);
@@ -569,7 +597,7 @@ module.exports = (_ => {
 			}
 
 			processPrivateChannelEmptyMessage (e) {
-				if (e.instance.props.channel && e.instance.props.channel.isDM() && settings.changeInChatWindow) {
+				if (e.instance.props.channel && e.instance.props.channel.isDM() && this.settings.places.chatWindow) {
 					let recipientId = e.instance.props.channel.getRecipientId();
 					let name = this.getUserData(recipientId).username;
 					let avatar = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {props: "src"});
@@ -588,9 +616,9 @@ module.exports = (_ => {
 			}
 			
 			processMessage (e) {
-				if (settings.changeInChatWindow) {
+				if (this.settings.places.chatWindow) {
 					let header = e.instance.props.childrenHeader;
-					if (header && header.props && header.props.message && this.shouldChangeInChat(header.props.message.channel_id)) {
+					if (header && header.props && header.props.message && this.shouldchat(header.props.message.channel_id)) {
 						let data = changedUsers[header.props.message.author.id];
 						if (data) {
 							let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(header.props.message.channel_id) || {}).guild_id, header.props.message.author.id) || {}).colorString || data.color1;
@@ -600,7 +628,7 @@ module.exports = (_ => {
 						}
 					}
 					let content = e.instance.props.childrenMessageContent;
-					if (content && content.type && content.type.type && content.props.message && this.shouldChangeInChat(content.props.message.channel_id)) {
+					if (content && content.type && content.type.type && content.props.message && this.shouldchat(content.props.message.channel_id)) {
 						let data = changedUsers[content.props.message.author.id];
 						if (data) {
 							let messageColor = data.color5 || (BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.coloredText) && (data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(content.props.message.channel_id) || {}).guild_id, content.props.message.author.id) || {}).colorString || data.color1));
@@ -612,7 +640,7 @@ module.exports = (_ => {
 						}
 					}
 					let repliedMessage = e.instance.props.childrenRepliedMessage;
-					if (repliedMessage && repliedMessage.props && repliedMessage.props.children && repliedMessage.props.children.props && repliedMessage.props.children.props.referencedMessage && repliedMessage.props.children.props.referencedMessage.message && this.shouldChangeInChat(repliedMessage.props.children.props.referencedMessage.message.channel_id)) {
+					if (repliedMessage && repliedMessage.props && repliedMessage.props.children && repliedMessage.props.children.props && repliedMessage.props.children.props.referencedMessage && repliedMessage.props.children.props.referencedMessage.message && this.shouldchat(repliedMessage.props.children.props.referencedMessage.message.channel_id)) {
 						let referenceMessage = repliedMessage.props.children.props.referencedMessage.message;
 						let data = changedUsers[referenceMessage.author.id];
 						if (data) {
@@ -626,7 +654,7 @@ module.exports = (_ => {
 			}
 			
 			processMessageUsername (e) {
-				if (e.instance.props.message && settings.changeInChatWindow && this.shouldChangeInChat(e.instance.props.message.channel_id)) {
+				if (e.instance.props.message && this.settings.places.chatWindow && this.shouldchat(e.instance.props.message.channel_id)) {
 					let data = changedUsers[e.instance.props.message.author.id];
 					if (!e.returnvalue) {
 						let message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {author: this.getUserData(e.instance.props.message.author.id, true, false, e.instance.props.message.author)}));
@@ -660,7 +688,7 @@ module.exports = (_ => {
 			}
 			
 			processMessageContent (e) {
-				if (e.instance.props.message && settings.changeInChatWindow && this.shouldChangeInChat(e.instance.props.message.channel_id)) {
+				if (e.instance.props.message && this.settings.places.chatWindow && this.shouldchat(e.instance.props.message.channel_id)) {
 					if (!e.returnvalue) {
 						if (e.instance.props.message.type != BDFDB.DiscordConstants.MessageTypes.DEFAULT && e.instance.props.message.type != BDFDB.DiscordConstants.MessageTypes.REPLY) {
 							let message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {author: this.getUserData(e.instance.props.message.author.id, true, false, e.instance.props.message.author)}));
@@ -691,7 +719,7 @@ module.exports = (_ => {
 			}
 			
 			processReaction (e) {
-				if (!settings.changeInReactions || !e.returnvalue || !this.shouldChangeInChat(e.instance.props.message.channel_id)) return;
+				if (!this.settings.places.reactions || !e.returnvalue || !this.shouldchat(e.instance.props.message.channel_id)) return;
 				if (e.instance.props.reactions && e.instance.props.reactions.length) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id);
 					let guildId = null == channel || channel.isPrivate() ? null : channel.getGuildId();
@@ -720,7 +748,7 @@ module.exports = (_ => {
 			}
 			
 			processReactorsComponent (e) {
-				if (settings.changeInReactions && BDFDB.ArrayUtils.is(e.instance.props.reactors) && this.shouldChangeInChat(e.instance.props.channel.id)) {
+				if (this.settings.places.reactions && BDFDB.ArrayUtils.is(e.instance.props.reactors) && this.shouldchat(e.instance.props.channel.id)) {
 					if (!e.returnvalue) {
 						for (let i in e.instance.props.reactors) if (!BDFDB.LibraryModules.MemberStore.getNick(e.instance.props.guildId, e.instance.props.reactors[i].id)) e.instance.props.reactors[i] = this.getUserData(e.instance.props.reactors[i].id, true, false, e.instance.props.reactors[i]);
 					}
@@ -747,14 +775,21 @@ module.exports = (_ => {
 			}
 			
 			processUserMention (e) {
-				if (e.instance.props.userId && settings.changeInMentions && changedUsers[e.instance.props.userId] && this.shouldChangeInChat()) {
-					let mention = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Mention"});
-					if (mention) this.changeMention(mention, changedUsers[e.instance.props.userId]);
+				if (e.instance.props.userId && this.settings.places.mentions && changedUsers[e.instance.props.userId] && this.shouldchat()) {
+					if (typeof e.returnvalue.props.children == "function") {
+						let renderChildren = e.returnvalue.props.children;
+						e.returnvalue.props.children = (...args) => {
+							let children = renderChildren(...args);
+							this.changeMention(BDFDB.ReactUtils.findChild(children, {name: "Mention"}), changedUsers[e.instance.props.userId]);
+							return children;
+						};
+					}
+					else this.changeMention(BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Mention"}), changedUsers[e.instance.props.userId]);
 				}
 			}
 			
 			processRichUserMention (e) {
-				if (e.instance.props.id && settings.changeInMentions && changedUsers[e.instance.props.id] && this.shouldChangeInChat()) {
+				if (e.instance.props.id && this.settings.places.mentions && changedUsers[e.instance.props.id] && this.shouldchat()) {
 					let data = changedUsers[e.instance.props.id];
 					let tooltipChildren = BDFDB.ObjectUtils.get(e, "returnvalue.props.text.props.children");
 					if (tooltipChildren) {
@@ -776,6 +811,7 @@ module.exports = (_ => {
 			}
 			
 			changeMention (mention, data) {
+				if (!mention) return;
 				if (data.name) {
 					if (typeof mention.props.children == "string") mention.props.children = "@" + data.name;
 					else if (BDFDB.ArrayUtils.is(mention.props.children)) {
@@ -810,7 +846,7 @@ module.exports = (_ => {
 			}
 
 			processChannelReply (e) {
-				if (e.instance.props.reply && e.instance.props.reply.message && settings.changeInChatWindow && this.shouldChangeInChat(e.instance.props.reply.message.channel_id)) {
+				if (e.instance.props.reply && e.instance.props.reply.message && this.settings.places.chatWindow && this.shouldchat(e.instance.props.reply.message.channel_id)) {
 					if (!e.returnvalue) {
 						let message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.reply.message, {author: this.getUserData(e.instance.props.reply.message.author.id)}));
 						let data = changedUsers[e.instance.props.reply.message.author.id];
@@ -828,7 +864,7 @@ module.exports = (_ => {
 			}
 			
 			processMemberListItem (e) {
-				if (e.instance.props.user && settings.changeInMemberList && this.shouldChangeInChat()) {
+				if (e.instance.props.user && this.settings.places.memberList && this.shouldchat()) {
 					if (!e.returnvalue) {
 						e.instance.props.user = this.getUserData(e.instance.props.user.id);
 						let data = changedUsers[e.instance.props.user.id];
@@ -854,7 +890,7 @@ module.exports = (_ => {
 			}
 
 			processAuditLogs (e) {
-				if (e.instance.props.logs && settings.changeInGuildSettings) { 
+				if (e.instance.props.logs && this.settings.places.guildSettings) { 
 					if (!BDFDB.PatchUtils.isPatched(this, e.instance, "renderUserQuickSelectItem")) BDFDB.PatchUtils.patch(this, e.instance, "renderUserQuickSelectItem", {after: e2 => {if (e2.methodArguments[0] && e2.methodArguments[0].user && changedUsers[e2.methodArguments[0].user.id]) {
 						let userName = BDFDB.ReactUtils.findChild(e2.returnValue, {props: [["children", e2.methodArguments[0].label]]});
 						if (userName) {
@@ -868,45 +904,45 @@ module.exports = (_ => {
 			}
 
 			processAuditLog (e) {
-				if (e.instance.props.log && settings.changeInGuildSettings) {
+				if (e.instance.props.log && this.settings.places.guildSettings) {
 					if (e.instance.props.log.user) e.instance.props.log.user = this.getUserData(e.instance.props.log.user.id);
 					if (e.instance.props.log.target && e.instance.props.log.targetType == "USER") e.instance.props.log.target = this.getUserData(e.instance.props.log.target.id);
 				}
 			}
 
 			processUserHook (e) {
-				if (e.instance.props.user && settings.changeInGuildSettings) {
+				if (e.instance.props.user && this.settings.places.guildSettings) {
 					this.changeUserColor(e.returnvalue.props.children[0], e.instance.props.user.id);
 				}
 			}
 
 			processGuildSettingsEmoji (e) {
-				if (BDFDB.ArrayUtils.is(e.instance.props.emojis) && settings.changeInGuildSettings) {
+				if (BDFDB.ArrayUtils.is(e.instance.props.emojis) && this.settings.places.guildSettings) {
 					e.instance.props.emojis = [].concat(e.instance.props.emojis);
 					for (let i in e.instance.props.emojis) e.instance.props.emojis[i] = Object.assign({}, e.instance.props.emojis[i], {user: this.getUserData(e.instance.props.emojis[i].user.id)});
 				}
 			}
 
 			processMemberCard (e) {
-				if (e.instance.props.user && settings.changeInGuildSettings) e.instance.props.user = this.getUserData(e.instance.props.user.id);
+				if (e.instance.props.user && this.settings.places.guildSettings) e.instance.props.user = this.getUserData(e.instance.props.user.id);
 			}
 
 			processSettingsInvites (e) {
-				if (BDFDB.ObjectUtils.is(e.instance.props.invites) && settings.changeInGuildSettings) {
+				if (BDFDB.ObjectUtils.is(e.instance.props.invites) && this.settings.places.guildSettings) {
 					e.instance.props.invites = Object.assign({}, e.instance.props.invites);
 					for (let id in e.instance.props.invites) e.instance.props.invites[id] = new BDFDB.DiscordObjects.Invite(Object.assign({}, e.instance.props.invites[id], {inviter: this.getUserData(e.instance.props.invites[id].inviter.id)}));
 				}
 			}
 
 			processGuildSettingsBans (e) {
-				if (BDFDB.ObjectUtils.is(e.instance.props.bans) && settings.changeInGuildSettings) {
+				if (BDFDB.ObjectUtils.is(e.instance.props.bans) && this.settings.places.guildSettings) {
 					e.instance.props.bans = Object.assign({}, e.instance.props.bans);
 					for (let id in e.instance.props.bans) e.instance.props.bans[id] = Object.assign({}, e.instance.props.bans[id], {user: this.getUserData(e.instance.props.bans[id].user.id)});
 				}
 			}
 
 			processInvitationCard (e) {
-				if (e.instance.props.user && settings.changeInInviteList) {
+				if (e.instance.props.user && this.settings.places.inviteList) {
 					if (!e.returnvalue) e.instance.props.user = this.getUserData(e.instance.props.user.id);
 					else {
 						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.invitemodalinviterowname]]});
@@ -916,20 +952,20 @@ module.exports = (_ => {
 			}
 
 			processPrivateChannelRecipientsInvitePopout (e) {
-				if (BDFDB.ArrayUtils.is(e.instance.props.results) && settings.changeInInviteList) {
+				if (BDFDB.ArrayUtils.is(e.instance.props.results) && this.settings.places.inviteList) {
 					for (let result of e.instance.props.results) result.user = this.getUserData(result.user.id);
 				}
 			}
 
 			processInviteModalUserRow (e) {
-				if (e.instance.props.user && settings.changeInInviteList) {
+				if (e.instance.props.user && this.settings.places.inviteList) {
 					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.searchpopoutddmaddnickname]]});
 					if (userName) this.changeUserColor(userName, e.instance.props.user.id);
 				}
 			}
 
 			processTypingUsers (e) {
-				if (BDFDB.ObjectUtils.is(e.instance.props.typingUsers) && Object.keys(e.instance.props.typingUsers).length && settings.changeInTyping) {
+				if (BDFDB.ObjectUtils.is(e.instance.props.typingUsers) && Object.keys(e.instance.props.typingUsers).length && this.settings.places.typing) {
 					let users = Object.keys(e.instance.props.typingUsers).filter(id => id != BDFDB.UserUtils.me.id).filter(id => !BDFDB.LibraryModules.RelationshipStore.isBlocked(id)).map(id => BDFDB.LibraryModules.UserStore.getUser(id)).filter(user => user);
 					if (users.length) {
 						let typingText = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.typingtext]]});
@@ -946,7 +982,7 @@ module.exports = (_ => {
 			}
 
 			processDirectMessage (e) {
-				if (e.instance.props.channel && e.instance.props.channel.isDM() && settings.changeInRecentDms) {
+				if (e.instance.props.channel && e.instance.props.channel.isDM() && this.settings.places.recentDms) {
 					let recipientId = e.instance.props.channel.getRecipientId();
 					let tooltip = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ListItemTooltip"});
 					if (tooltip) tooltip.props.text = this.getUserData(recipientId).username;
@@ -963,7 +999,7 @@ module.exports = (_ => {
 			}
 
 			processPrivateChannel (e) {
-				if (e.instance.props.user && settings.changeInDmsList && changedUsers[e.instance.props.user.id]) {
+				if (e.instance.props.user && this.settings.places.dmsList && changedUsers[e.instance.props.user.id]) {
 					if (!e.returnvalue) {
 						let data = changedUsers[e.instance.props.user.id];
 						if (data.removeStatus || data.status || data.statusEmoji) {
@@ -983,7 +1019,7 @@ module.exports = (_ => {
 			}
 
 			processQuickSwitchUserResult (e) {
-				if (e.instance.props.user && settings.changeInQuickSwitcher) {
+				if (e.instance.props.user && this.settings.places.quickSwitcher) {
 					if (!e.returnvalue) e.instance.props.user = this.getUserData(e.instance.props.user.id);
 					else {
 						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.quickswitchresultmatch]]});
@@ -997,13 +1033,13 @@ module.exports = (_ => {
 			}
 
 			processSearchPopoutComponent (e) {
-				if (BDFDB.ArrayUtils.is(BDFDB.ObjectUtils.get(e, "instance.props.resultsState.autocompletes")) && settings.changeInSearchPopout) {
+				if (BDFDB.ArrayUtils.is(BDFDB.ObjectUtils.get(e, "instance.props.resultsState.autocompletes")) && this.settings.places.searchPopout) {
 					for (let autocomplete of e.instance.props.resultsState.autocompletes) if (autocomplete && BDFDB.ArrayUtils.is(autocomplete.results)) for (let result of autocomplete.results) if (result.user) result.user = this.getUserData(result.user.id);
 				}
 			}
 
 			processSearchPopoutUserResult (e) {
-				if (e.instance.props.result && e.instance.props.result.user && settings.changeInSearchPopout) {
+				if (e.instance.props.result && e.instance.props.result.user && this.settings.places.searchPopout) {
 					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.searchpopoutdisplayednick]]});
 					if (userName) {
 						let data = changedUsers[e.instance.props.result.user.id];
@@ -1014,7 +1050,7 @@ module.exports = (_ => {
 			}
 			
 			processIncomingCallModal (e) {
-				if (e.instance.props.channel && settings.changeInDmCalls) {
+				if (e.instance.props.channel && this.settings.places.dmCalls) {
 					let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channel.id);
 					if (!user) {
 						let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channel.id);
@@ -1034,7 +1070,7 @@ module.exports = (_ => {
 			}
 			
 			processRTCConnection (e) {
-				if (e.instance.props.channel && e.instance.props.channel.isDM() && settings.changeInRecentDms && typeof e.returnvalue.props.children == "function") {
+				if (e.instance.props.channel && e.instance.props.channel.isDM() && this.settings.places.recentDms && typeof e.returnvalue.props.children == "function") {
 					let recipientId = e.instance.props.channel.getRecipientId();
 					let renderChildren = e.returnvalue.props.children;
 					e.returnvalue.props.children = (...args) => {
@@ -1050,13 +1086,13 @@ module.exports = (_ => {
 			}
 
 			processPrivateChannelCallParticipants (e) {
-				if (BDFDB.ArrayUtils.is(e.instance.props.participants) && settings.changeInDmCalls) {
+				if (BDFDB.ArrayUtils.is(e.instance.props.participants) && this.settings.places.dmCalls) {
 					for (let participant of e.instance.props.participants) if (participant && participant.user) participant.user = this.getUserData(participant.user.id, true, true);
 				}
 			}
 			
 			processChannelCall (e) {
-				if (BDFDB.ArrayUtils.is(e.instance.props.participants) && settings.changeInDmCalls) {
+				if (BDFDB.ArrayUtils.is(e.instance.props.participants) && this.settings.places.dmCalls) {
 					for (let participant of e.instance.props.participants) if (participant && participant.user) participant.user = this.getUserData(participant.user.id);
 				}
 			}
@@ -1083,15 +1119,15 @@ module.exports = (_ => {
 				let title = document.head.querySelector("title");
 				if (title && channel && channel.isDM()) {
 					let user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
-					if (user) BDFDB.DOMUtils.setText(title, "@" + this.getUserData(user.id, settings.changeInAppTitle).username);
+					if (user) BDFDB.DOMUtils.setText(title, "@" + this.getUserData(user.id, this.settings.places.appTitle).username);
 				}
 			}
 			
-			shouldChangeInChat (channelId) {
-				if (settings.changeInServers && settings.changeInDms) return true;
+			shouldchat (channelId) {
+				if (this.settings.types.servers && this.settings.types.dms) return true;
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId || BDFDB.LibraryModules.LastChannelStore.getChannelId());
 				let isDm = channel && (channel.isDM() || channel.isGroupDM());
-				if (channel && (settings.changeInServers && !isDm || settings.changeInDms && isDm)) return true;
+				if (channel && (this.settings.types.servers && !isDm || this.settings.types.dms && isDm)) return true;
 				return false;
 			}
 			

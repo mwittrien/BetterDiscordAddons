@@ -2,7 +2,7 @@
  * @name ChatFilter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.5.2
+ * @version 3.5.3
  * @description Allows you to censor Words or block complete Messages/Statuses
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatFilter",
 			"author": "DevilBro",
-			"version": "3.5.2",
+			"version": "3.5.3",
 			"description": "Allows you to censor Words or block complete Messages/Statuses"
 		},
 		"changeLog": {
 			"fixed": {
-				"Tag": "Fixed censored/blocked tag for new structure"
+				"Some Special Characters": "Fixed Issue with some Special Characters like '>' when using RegEx"
 			}
 		}
 	};
@@ -458,7 +458,7 @@ module.exports = (_ => {
 					}
 					if (blocked) return {blocked, censored, content: blockedReplace, embeds: []};
 					else {
-						let checkCensor = string => {
+						const checkCensor = string => {
 							let singleCensored = false;
 							string = string.replace(/([\n\t\r])/g, " $1 ");
 							for (let cWord in words.censored) {
@@ -515,7 +515,7 @@ module.exports = (_ => {
 
 			createReg (word, config) {
 				let escapedWord = config.regex ? word : BDFDB.StringUtils.regEscape(word);
-				return new RegExp(BDFDB.StringUtils.htmlEscape(config.exact ? "^" + escapedWord + "$" : escapedWord), `${config.case ? "" : "i"}${config.exact ? "" : "g"}`);
+				return new RegExp(config.exact ? "^" + escapedWord + "$" : escapedWord, `${config.case ? "" : "i"}${config.exact ? "" : "g"}`);
 			}
 
 			openAddModal (wordValue) {

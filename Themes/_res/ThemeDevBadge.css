@@ -1,8 +1,14 @@
-﻿.dev-A7f2Rx.hasBadge-4rT8_u .mask-1l8v16 {
+﻿.dev-A7f2Rx.hasBadge-4rT8_u {
+	overflow: visible;
+}
+.dev-A7f2Rx.hasBadge-4rT8_u .mask-1l8v16 {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path fill="white" d="M 0,0 H 1 V 1 H 0.29565217 V 0.8 c 0,-0.1 -0.0347826,-0.14 -0.12173913,-0.14 H 0 Z"/></svg>') center/cover no-repeat;
 }
-.dev-A7f2Rx.hasBadge-4rT8_u .avatarHint-1qgaV3 {
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path fill="white" d="M 0,0 H 1 V 1 H 0.34 V 0.8 C 0.34,0.7 0.3,0.66 0.2,0.66 H 0 Z"/></svg>');
+.dev-A7f2Rx.hasBadge-4rT8_u ~ .avatarHint-1qgaV3 {
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path fill="white" d="M 0,0 H 1 V 1 H 0.34 V 0.8 C 0.34,0.7 0.3,0.66 0.2,0.66 H 0 Z"/></svg>') center/cover no-repeat;
+}
+.dev-A7f2Rx.hasBadge-4rT8_u ~ .avatarHint-1E3LMl {
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path fill="white" d="M 0,0 H 1 V 1 H 0.34 V 0.8 C 0.34,0.72 0.3,0.7 0.2,0.7 H 0 Z"/></svg>') center/cover no-repeat;
 }
 .dev-A7f2Rx.hasBadge-4rT8_u .badge-7R_W3s {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 508.52 508.52"><path fill="black" d="M63.565, 476.737c0, 12.84, 7.755, 24.473, 19.61, 29.367c3.941, 1.621, 8.073, 2.415, 12.173, 2.415c8.263, 0, 16.4-3.242, 22.47-9.312L254.26, 362.765l136.442, 136.442c6.07, 6.07, 14.207, 9.312, 22.47, 9.312c4.1, 0, 8.232-0.795, 12.141-2.415c11.887-4.894, 19.642-16.527, 19.642-29.367V165.347H63.565V476.737z"/><path fill="black" d="M413.172, 0H95.347C77.804, 0, 63.565, 14.239, 63.565, 31.782v61.782h381.39V31.782C444.955, 14.239, 430.716, 0, 413.172, 0z"/></svg>') center/cover no-repeat !important;
@@ -13,6 +19,7 @@
 	top: 74% !important;
 	left: 1.5% !important;
 }
+.selected-aXhQR6 .dev-A7f2Rx.hasBadge-4rT8_u .badge-7R_W3s,
 .root-SR8cQa .topSectionPlaying-1J5E4n .dev-A7f2Rx.hasBadge-4rT8_u .badge-7R_W3s,
 .userPopout-3XzG_A .headerPlaying-j0WQBV .dev-A7f2Rx.hasBadge-4rT8_u .badge-7R_W3s {
 	filter: brightness(80%) !important;

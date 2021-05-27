@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.9
+ * @version 1.5.0
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "DisplayServersAsChannels",
 			"author": "DevilBro",
-			"version": "1.4.9",
+			"version": "1.5.0",
 			"description": "Displays Servers in a similar way as Channels"
 		},
 		"changeLog": {
 			"fixed": {
-				"Full Screen": "Server List is no longer visible in Full Screen Voice Mode and doesn't cause lag spikes after closing Full Screen"
+				"Home Button": "Gets changed again"
 			},
 		}
 	};
@@ -82,7 +82,7 @@ module.exports = (_ => {
 				this.patchedModules = {
 					after: {
 						Guilds: "render",
-						DefaultHomeButton: "render",
+						DefaultHomeButton: "DefaultHomeButton",
 						DirectMessage: "render",
 						Guild: "render",
 						GuildFolder: "render",
@@ -92,15 +92,7 @@ module.exports = (_ => {
 				};
 			}
 			
-			onStart () {
-				// REMOVE 24.04.2021
-				let oldData = BDFDB.DataUtils.load(this);
-				if (oldData.settings) {
-					this.settings.general = oldData.settings;
-					BDFDB.DataUtils.save(this.settings.general, this, "general");
-					BDFDB.DataUtils.remove(this, "settings");
-				}
-				
+			onStart () {				
 				BDFDB.DOMUtils.addClass(document.body, BDFDB.disCN._displayserversaschannelsstyled);
 
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryComponents.GuildComponents.Guild.prototype, "render", {after: e => {
