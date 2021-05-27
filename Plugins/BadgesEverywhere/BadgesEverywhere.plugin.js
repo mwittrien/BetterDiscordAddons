@@ -2,8 +2,8 @@
  * @name BadgesEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.9
- * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/UserPopout
+ * @version 1.7.0
+ * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "BadgesEverywhere",
 			"author": "DevilBro",
-			"version": "1.6.9",
-			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/UserPopout"
+			"version": "1.7.0",
+			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList"
 		},
 		"changeLog": {
-			"fixed": {
-				"Works again": ""
+			"improved": {
+				"User Popout": "Removed all options for the User Popout since Discord added it themselves"
 			}
 		}
 	};
@@ -75,18 +75,16 @@ module.exports = (_ => {
 				this.patchedModules = {
 					after: {
 						MemberListItem: "render",
-						MessageUsername: "default",
-						UserPopout: "render"
+						MessageUsername: "default"
 					}
 				};
 				
 				this.defaults = {
 					general: {
-						useColoredVersion:	{value: true, 	description: "Use colored Version of the Badges for Chat and Members"},
+						useColoredVersion:	{value: true, 	description: "Use colored Version of the Badges"},
 						showNitroDate:		{value: true, 	description: "Show the Subscription Date for Nitro/Boost Badges"}
 					},
 					places: {
-						popout:				{value: true, 	description: "User Popout"},
 						chat:				{value: true, 	description: "Chat"},
 						memberList:			{value: true, 	description: "Member List"}
 					},
@@ -194,9 +192,6 @@ module.exports = (_ => {
 						display: flex;
 						justify-content: center;
 						align-items: center;
-					}
-					${BDFDB.dotCN._badgeseverywherebadgespopout} {
-						margin-top: 6px;
 					}
 					${BDFDB.dotCN._badgeseverywherebadgeschat} {
 						display: inline-flex;
@@ -437,13 +432,6 @@ module.exports = (_ => {
 			processMessageUsername (e) {
 				if (e.instance.props.message && this.settings.places.chat) {
 					this.injectBadges(e.instance, e.returnvalue.props.children, e.instance.props.message.author, "chat");
-				}
-			}
-
-			processUserPopout (e) {
-				if (e.instance.props.user && this.settings.places.popout) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
-					if (index > -1) this.injectBadges(e.instance, children, e.instance.props.user, "popout", e.instance.props.activity && e.instance.props.activity.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
 				}
 			}
 
