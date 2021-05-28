@@ -3013,6 +3013,7 @@
 		"userpopoutcustomstatustext": ["UserPopout", "customStatusText"],
 		"userpopoutendbodysection": ["UserPopoutWrapper", "endBodySection"],
 		"userpopoutfooter": ["UserPopoutWrapper", "footer"],
+		"userpopoutheaderbottag": ["UserPopout", "headerBotTag"],
 		"userpopoutheaderbottagwithnickname": ["UserPopout", "headerBotTagWithNickname"],
 		"userpopoutheadertagdiscriminatornonickname": ["UserPopout", "headerTagDiscriminatorNoNickname"],
 		"userpopoutheadernickname": ["UserPopout", "nickname"],

@@ -462,10 +462,8 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 
 
-[REPLACE_CLASS_userpopoutheadernickname] [REPLACE_CLASS_bottag],
-[REPLACE_CLASS_userpopoutheadertagnonickname] [REPLACE_CLASS_bottag] {
-    position: relative;
-	top: 4px;
+[REPLACE_CLASS_userpopoutheaderbottag] {
+	margin-top: 4px !important;
 }
 [REPLACE_CLASS_userinfodate] {
 	user-select: text;
