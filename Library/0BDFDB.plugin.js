@@ -7535,7 +7535,7 @@ module.exports = (_ => {
 									}) : child)
 								}),
 								this.props.errorMessage ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
-									className: BDFDB.disCN.carderror,
+									className: BDFDB.disCN.margintop8,
 									size: InternalComponents.LibraryComponents.TextElement.Sizes.SIZE_12,
 									color: InternalComponents.LibraryComponents.TextElement.Colors.STATUS_RED,
 									children: this.props.errorMessage
