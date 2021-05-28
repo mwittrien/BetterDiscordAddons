@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.7
+ * @version 4.3.8
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,15 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.3.7",
+			"version": "4.3.8",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		},
 		"changeLog": {
 			"fixed": {
-				"Embed Thumbnails": "Fixed issue that caused Embed Thumbnails to go out of bounds of embeds"
-			},
-			"improved": {
-				"Tenor and other GIFs": "Fixed issue where link for some GIFs copied by 'Copy Link' wasn't the same as Discord's Original"
+				"Animated Avatars": ""
 			}
 		}
 	};
@@ -514,12 +511,12 @@ module.exports = (_ => {
 					if (banner) {
 						if (e.instance.props.guild.banner) this.injectItem(e, BDFDB.LibraryModules.IconUtils.getGuildBannerURL(e.instance.props.guild));
 					}
-					else if (e.type != "GuildChannelListContextMenu") this.injectItem(e, e.instance.props.guild.getIconURL("png"), BDFDB.LibraryModules.IconUtils.hasAnimatedGuildIcon(e.instance.props.guild) && e.instance.props.guild.getIconURL("gif"));
+					else if (e.type != "GuildChannelListContextMenu") this.injectItem(e, e.instance.props.guild.getIconURL("png", "png"), BDFDB.LibraryModules.IconUtils.hasAnimatedGuildIcon(e.instance.props.guild) && e.instance.props.guild.getIconURL("gif", "gif"));
 				}
 			}
 
 			onUserContextMenu (e) {
-				if (e.instance.props.user && this.settings.places.userAvatars) this.injectItem(e, e.instance.props.user.getAvatarURL("png"), BDFDB.LibraryModules.IconUtils.hasAnimatedAvatar(e.instance.props.user) && e.instance.props.user.getAvatarURL("gif"))
+				if (e.instance.props.user && this.settings.places.userAvatars) this.injectItem(e, e.instance.props.user.getAvatarURL("png", "png"), BDFDB.LibraryModules.IconUtils.hasAnimatedAvatar(e.instance.props.user) && e.instance.props.user.getAvatarURL("gif", "gif"))
 			}
 
 			onGroupDMContextMenu (e) {
@@ -598,6 +595,12 @@ module.exports = (_ => {
 						children: subMenu
 					})
 				}));
+			}
+			
+			isValid (url, type) {
+				if (!url) return false;
+				const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").split("%3A")[0].toLowerCase();
+				return file && (!type && (url.startsWith("https://images-ext-1.discordapp.net/") || url.startsWith("https://images-ext-2.discordapp.net/") || Object.keys(fileTypes).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`))) || type && Object.keys(fileTypes).filter(t => fileTypes[t][type]).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`)));
 			}
 			
 			createUrlMenu (e, urls) {
@@ -999,12 +1002,6 @@ module.exports = (_ => {
 						e.instance.props.resized = true;
 					}
 				}
-			}
-			
-			isValid (url, type) {
-				if (!url) return false;
-				const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").split("%3A")[0].toLowerCase();
-				return file && (!type && (url.startsWith("https://images-ext-1.discordapp.net/") || url.startsWith("https://images-ext-2.discordapp.net/") || Object.keys(fileTypes).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`))) || type && Object.keys(fileTypes).filter(t => fileTypes[t][type]).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`)));
 			}
 			
 			downloadFile (url, path) {
