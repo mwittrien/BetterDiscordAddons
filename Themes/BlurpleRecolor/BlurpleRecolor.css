@@ -1876,14 +1876,11 @@ a.metadataName-14STf- {
 
 /* ----		11.2.	USERPOPOUT						---- */
 
-.headerPlaying-j0WQBV {
-	background: rgb(var(--accentcolor));
-}
-.headerStreaming-2FjmGz {
-	background: #593695;
-}
 .profileBanner-j34RzR[style*="background-color: rgb(114, 137, 218)"] {
 	background-color: rgb(var(--accentcolor)) !important;
+}
+.setIdentityLink-OpBDR6 {
+	color: rgb(var(--accentcolor));
 }
 
 /* ----		11.3.	EMOJIPICKER						---- */
