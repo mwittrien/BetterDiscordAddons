@@ -26,7 +26,7 @@
 	--info-help-foreground: rgb(var(--linkcolor));
 	--info-help-text: #fff;
 	--focus-primary: rgb(var(--linkcolor));
-	--control-brand-foreground: rgb(var(--accentcolor));
+	--control-brand-foreground: rgb(var(--accentcolor)) !important;
 	--brand-experiment-100: #fdfdfd !important;
 	--brand-experiment-130: #f2f2f2 !important;
 	--brand-experiment-160: #ebebeb !important;
