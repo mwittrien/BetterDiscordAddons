@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.2
+ * @version 1.4.3
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "StaffTag",
 			"author": "DevilBro",
-			"version": "1.4.2",
+			"version": "1.4.3",
 			"description": "Adds a Crown/Tag to Server Owners (or Admins/Management)"
 		},
 		"changeLog": {
 			"improved": {
-				"New User Popout": "Fixed for the new User Popout, which will be released soon-ish"
+				"New User Popout": "Fixed for the new User Popout, which will be released soon-ish, again and again and again, stop changing Stuff Discord"
 			}
 		}
 	};
@@ -268,7 +268,7 @@ module.exports = (_ => {
 						switch (e.instance.props.className) {
 							case BDFDB.disCN.userpopoutheadertagnonickname:
 								inject = this.settings.tagPlaces.userPopout;
-								tagClass = BDFDB.disCN.bottagnametag;
+								tagClass = BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag;
 								break;
 							case BDFDB.disCN.userprofilenametag:
 								inject = this.settings.tagPlaces.userProfile;
@@ -292,7 +292,7 @@ module.exports = (_ => {
 						if (index > -1) {
 							if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
 							this.injectStaffTag(children[index].props.children, e.instance.props.user, userType, 2, {
-								tagClass: BDFDB.disCN.bottagnametag,
+								tagClass: BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag,
 								inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
 							});
 						}

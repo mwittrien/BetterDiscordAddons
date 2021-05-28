@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.3
+ * @version 4.2.4
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.2.3",
+			"version": "4.2.4",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
 			"improved": {
-				"New User Popout": "Fixed for the new User Popout, which will be released soon-ish"
+				"New User Popout": "Fixed for the new User Popout, which will be released soon-ish, again and again and again, stop changing Stuff Discord"
 			}
 		}
 	};
@@ -445,7 +445,7 @@ module.exports = (_ => {
 							change = this.settings.places.userPopout;
 							guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 							changeBackground = true;
-							tagClass = BDFDB.disCN.bottagnametag;
+							tagClass = BDFDB.disCN.userpopoutheaderbottag + BDFDB.disCN.bottagnametag;
 							break;
 						case BDFDB.disCN.userprofilenametag:
 							change = this.settings.places.userProfile;
@@ -500,7 +500,7 @@ module.exports = (_ => {
 								this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground: true});
 								if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
 								this.injectBadge(children[index].props.children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
-									tagClass: BDFDB.disCN.bottagnametag,
+									tagClass: BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag,
 									inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
 								});
 							}
