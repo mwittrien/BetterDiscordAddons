@@ -329,7 +329,7 @@
 		"StatusPickerPopout": {"strings": ["\"StatusPickerPopout\""], "value": "default"},
 		"TextElement": {"name": "Text"},
 		"UserBadges": {"name": "UserProfileBadgeList"},
-		"UserBadgeSizes": {"props": ["BadgeSizes"]},
+		"UserBadgeSizes": {"props": ["BadgeSizes"], "value": "BadgeSizes"},
 		"UserPopout": {"name": "ConnectedUserPopout"},
 		"UserSummaryItem": {"name": "UserSummaryItem"},
 		"VideoForwardRef": {"strings": ["displayName=\"Video\"", "\"video\"", "HTMLImageElement"], "value": "default"}
@@ -2985,6 +2985,7 @@
 		"unreadbartext": ["UnreadBar", "text"],
 		"unreadbarunread": ["UnreadBar", "unread"],
 		"uploadmodal": ["UploadModal", "uploadModal"],
+		"userbadge": ["UserBadges", "profileBadge"],
 		"userbadges": ["UserBadges", "container"],
 		"userbadgescolored": ["UserBadges", "colored"],
 		"userbadgespopout": ["UserPopout", "profileBadges"],
