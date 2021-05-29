@@ -85,7 +85,7 @@
 	content: "";
 	position: relative;
 	display: block;
-	background: var(--user-background, var(--background-secondary)) var(--user-popout-position, center)/cover no-repeat;
+	background: var(--user-background, var(--user-banner-color, var(--background-secondary))) var(--user-popout-position, center)/cover no-repeat;
 	top: 0;
 	width: 100%;
 	height: 120px;

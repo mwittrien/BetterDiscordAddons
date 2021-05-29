@@ -2,7 +2,7 @@
  * @name CharCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.0
+ * @version 1.5.1
  * @description Adds a Character Counter to most Inputs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CharCounter",
 			"author": "DevilBro",
-			"version": "1.5.0",
+			"version": "1.5.1",
 			"description": "Adds a Character Counter to most Inputs"
 		},
 		"changeLog": {
 			"fixed": {
-				"Message Input": "Works again for the message textarea"
+				"Change Nick": "Counter gets added again"
 			}
 		}
 	};
@@ -85,7 +85,7 @@ module.exports = (_ => {
 					after: {
 						ChannelTextAreaContainer: "render",
 						Note: "render",
-						ChangeNickname: "default",
+						ChangeIdentity: "default",
 						CustomStatusModal: "render"
 					}
 				};
@@ -114,7 +114,7 @@ module.exports = (_ => {
 						bottom: -1.0em;
 					}
 					${BDFDB.dotCN._charcounternickcounter} {
-						right: 0 !important;
+						right: 8px !important;
 						top: 0 !important;
 					}
 					${BDFDB.dotCN._charcountercustomstatuscounter} {
@@ -158,12 +158,12 @@ module.exports = (_ => {
 				if (index > -1) this.injectCounter(e.returnvalue, children, e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.usernotepopout) > -1 ? "popoutnote" : "profilenote", "textarea");
 			}
 
-			processChangeNickname (e) {
-				let formItem = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "FormItem"});
-				if (formItem) {
-					let [children, index] = BDFDB.ReactUtils.findParent(formItem, {name: "TextInput"});
-					if (index > -1) this.injectCounter(formItem, children, "nick", BDFDB.dotCN.input);
-				}
+			processChangeIdentity (e) {
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: c => c && c.props && c.props.setNickname});
+				if (index > -1) children.unshift(BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.charcounter, BDFDB.disCN._charcountercounter, BDFDB.disCN._charcounternickcounter),
+					children: `${(children[index].props.nickname || "").length}/${maxLenghts.nick}`
+				}));
 			}
 
 			processCustomStatusModal (e) {
