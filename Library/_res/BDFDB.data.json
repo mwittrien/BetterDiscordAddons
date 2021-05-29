@@ -129,7 +129,6 @@
 		"UnreadChannelUtils": {"props": ["getUnreadCount", "getOldestUnreadMessageId"]},
 		"UploadUtils": {"props": ["upload", "instantBatchUpload"]},
 		"URLParser": {"props": ["parse", "resolveObject"]},
-		"UserBadgeParser": {"props": ["hypeSquadHouseWinner", "hasFlag"]},
 		"UserFetchUtils": {"props": ["fetchCurrentUser", "getUser"]},
 		"UserNameUtils": {"props": ["getName", "getNickname"]},
 		"UserProfileUtils": {"props": ["open", "fetchProfile"]},
