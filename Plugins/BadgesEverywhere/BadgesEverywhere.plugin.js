@@ -2,7 +2,7 @@
  * @name BadgesEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.3
+ * @version 1.7.4
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BadgesEverywhere",
 			"author": "DevilBro",
-			"version": "1.7.3",
+			"version": "1.7.4",
 			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList"
 		},
 		"changeLog": {
@@ -293,7 +293,7 @@ module.exports = (_ => {
 
 			processMessageUsername (e) {
 				if (e.instance.props.message && this.settings.places.chat) {
-					this.injectBadges(e.instance, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.returnvalue.props.children, e.instance.props.message.author, "chat");
+					this.injectBadges(e.instance, e.returnvalue.props.children, e.instance.props.message.author, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
 				}
 			}
 			
