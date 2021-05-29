@@ -1114,6 +1114,14 @@ img[src="/assets/4697ec960e57790ad4f6251af4c246b4.svg"] {	/* widgetsettings		wid
 	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://discord.com/assets/6203964d9d25c394a573fd4f6be36d97.svg) center/contain no-repeat;
 }
+.colored-1armap .profileBadgeVerifiedDeveloper-195KfD {
+	background: rgb(var(--accentcolor));
+	-webkit-mask: url(https://discord.com/assets/45cd06af582dcd3c6b79370b4e3630de.svg) center/contain no-repeat;
+}
+.colored-1armap .profileBadgeCertifiedModerator-1TQtjV {
+	background: rgb(var(--accentcolor));
+	-webkit-mask: url(https://discord.com/assets/955e3c9783043c7080ac202565810fc3.svg) center/contain no-repeat;
+}
 .colored-1armap .profileGuildSubscriberlvl1-3oI9tx {
 	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://discord.com/assets/24e49184598820f274e62293349a2e43.svg) center/contain no-repeat;
