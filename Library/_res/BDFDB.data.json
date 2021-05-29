@@ -64,6 +64,7 @@
 		"GuildWelcomeUtils": {"props": ["welcomeScreenViewed", "resetWelcomeScreen"]},
 		"HistoryUtils": {"props": ["transitionTo", "replaceWith", "getHistory"]},
 		"IconUtils": {"props": ["getGuildIconURL", "getGuildBannerURL"]},
+		"ImageEditUtils": {"props": ["getPrimaryColorForAvatar", "getRatio"]},
 		"InviteUtils": {"props": ["acceptInvite", "createInvite"]},
 		"KeyCodeUtils": {"props": ["toCombo", "keyToCode"], "assign": true},
 		"KeyEvents": {"props": ["aliases", "code", "codes"]},
