@@ -8,6 +8,7 @@
 	--messagetransparency:			0.5;
 	--usechatbubbles: 				calc(var(--messagetransparency) / (var(--messagetransparency) + 0.00000000000000000000001));
 	--guildchanneltransparency:		0.15;
+	--chatinputtransparency:		0.0;
 	--memberlisttransparency:		0.0;
 	
 	--font:							Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
@@ -1255,9 +1256,16 @@ body::before {
 
 /* ----		6.3.	TEXTAREA						---- */
 
-.form-2fGMdU {												/* textarea				form								*/
+.form-2fGMdU {
 	padding-top: 0;
 	margin-top: 0;
+}
+.form-2fGMdU {												/* textarea				form								*/
+	background: rgba(var(--transparencycolor), var(--chatinputtransparency));
+	margin-top: 0;
+	padding-top: 8px;
+	border-top-right-radius: calc(8px * (1 - (var(--memberlisttransparency) / (var(--memberlisttransparency) + 0.00000000000000000000001))));
+	border-top-left-radius: calc(8px * (1 - (var(--guildchanneltransparency) / (var(--guildchanneltransparency) + 0.00000000000000000000001))));
 }
 .form-2fGMdU::before {
 	display: none;
@@ -1280,20 +1288,6 @@ body::before {
 
 .sprite-2iCowe {											/* textarea				emojibutton							*/
 	transform: none !important;
-}
-
-.base-gE7OpD {												/* textarea				typingusers							*/
-	background-color: rgba(var(--transparencycolor), .3);
-	border-radius: 5px;
-	bottom: 0;
-	height: 22px;
-	line-height: 32px;
-}
-.chatCounter-XOMPsh {										/* textarea				char counter						*/
-	background-color: rgba(var(--transparencycolor), .3);
-	border-radius: 5px;
-	padding: 4px;
-	bottom: calc(-1.3em - 4px);
 }
 
 .wrapper-39oAo3 {											/* textarea				placeholder							*/
