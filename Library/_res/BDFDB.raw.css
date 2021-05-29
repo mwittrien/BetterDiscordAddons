@@ -560,6 +560,7 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_selectwrapper] {
 	display: flex;
 	align-items: center;
+	flex: 1 1 auto;
 }
 [REPLACE_CLASS_selectwrapper] [REPLACE_CLASS_select] {
 	flex: 1 1 auto;
