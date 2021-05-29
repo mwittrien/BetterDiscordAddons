@@ -2985,6 +2985,7 @@
 		"unreadbarunread": ["UnreadBar", "unread"],
 		"uploadmodal": ["UploadModal", "uploadModal"],
 		"userbadge": ["UserBadges", "profileBadge"],
+		"userbadgenitro": ["UserBadges", "profileBadgePremium"],
 		"userbadges": ["UserBadges", "container"],
 		"userbadgescolored": ["UserBadges", "colored"],
 		"userbadgespopout": ["UserPopout", "profileBadges"],

@@ -487,7 +487,6 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_messagebottag] {
 	top: .15rem;
 }
-
 [REPLACE_CLASS_messageusername] ~ [REPLACE_CLASS_messagebottagcompact] {
 	margin-right: 0;
 	margin-left: .25rem;
