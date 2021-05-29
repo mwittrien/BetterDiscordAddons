@@ -129,6 +129,7 @@
 		"UnreadChannelUtils": {"props": ["getUnreadCount", "getOldestUnreadMessageId"]},
 		"UploadUtils": {"props": ["upload", "instantBatchUpload"]},
 		"URLParser": {"props": ["parse", "resolveObject"]},
+		"UserBadgeParser": {"props": ["hypeSquadHouseWinner", "hasFlag"]},
 		"UserFetchUtils": {"props": ["fetchCurrentUser", "getUser"]},
 		"UserNameUtils": {"props": ["getName", "getNickname"]},
 		"UserProfileUtils": {"props": ["open", "fetchProfile"]},
@@ -814,19 +815,10 @@
 			"switchWrapper": "ui-switch-wrapper"
 		},
 		"BadgesEverywhere": {
-			"badge": "badge-7CsdQq",
 			"badges": "badges-XRnWAp",
 			"badgesChat": "badgesChat-f_cbR8",
-			"badgesInner": "inner-dA0J42",
 			"badgesList": "badgesList-Aw_p52",
-			"badgesSettings": "badgesSettings-ychoGn",
-			"indicator": "indicator-cY1-b4",
-			"indicatorInner": "indicatorInner-08W8Jl",
-			"mini": "mini-g-JPgX",
-			"size17": "size17-2GsONg",
-			"size21": "size21-Y634b3",
-			"size22": "size22-AJj9xV",
-			"size24": "size24-NlR6be"
+			"badgesSettings": "badgesSettings-ychoGn"
 		},
 		"BetterFriendList": {
 			"mutualGuilds": "mutualGuilds-s7F2aa",
