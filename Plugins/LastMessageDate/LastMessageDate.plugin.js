@@ -340,7 +340,7 @@ module.exports = (_ => {
 						};
 					default:		// English
 						return {
-							last_message:						"Last message on {{time}}"
+							last_message:						"Last Message on {{time}}"
 						};
 				}
 			}
