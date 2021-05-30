@@ -588,6 +588,22 @@ module.exports = (_ => {
 							toast_noteremove:					"Съобщението е премахнато от бележника",
 							toast_noteupdate:					"Актуализира съобщението в бележника"
 						};
+					case "cs":		// Czech
+						return {
+							context_pinoption:					"Poznamenat zprávu",
+							context_unpinoption:				"Odebrat poznámku",
+							context_updateoption:				"Aktualizovat poznámku",
+							popout_filter_all:					"Všechny servery",
+							popout_filter_channel:				"Kanál",
+							popout_filter_server:				"Server",
+							popout_note:						"Poznámky",
+							popout_pinoption:					"Poznámka",
+							popout_sort_messagetime:			"Datum zprávy",
+							popout_sort_notetime:				"Datum poznámky",
+							toast_noteadd:						"Zpráva přidána do poznámek",
+							toast_noteremove:					"Zpráva odebrána z poznámek",
+							toast_noteupdate:					"Zpráva v poznámkách aktualizována"
+						};
 					case "da":		// Danish
 						return {
 							context_pinoption:					"Skriv beskeden ned",
