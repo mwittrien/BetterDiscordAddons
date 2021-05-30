@@ -8265,60 +8265,19 @@ module.exports = (_ => {
 					};
 					BDFDB.DevUtils.generateLanguageStrings = function (strings, config = {}) {
 						const language = config.language || "en";
-						const languages = BDFDB.ArrayUtils.removeCopies(BDFDB.ArrayUtils.is(config.languages) ? config.languages : ["en"].concat(Object.keys(BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, n => n.discord))).filter(n => !n.startsWith("en-") && !n.startsWith("$") && n != language)).sort();
+						const languages = BDFDB.ArrayUtils.removeCopies(BDFDB.ArrayUtils.is(config.languages) ? config.languages : ["en"].concat(BDFDB.LibraryModules.LanguageStore.languages.filter(n => n.enabled).map(n => {
+							if (BDFDB.LanguageUtils.languages[n.code]) return n.code;
+							else {
+								const code = n.code.split("-")[0];
+								if (BDFDB.LanguageUtils.languages[code]) return code;
+							}
+						})).filter(n => n && !n.startsWith("en-") && !n.startsWith("$") && n != language)).sort();
 						let translations = {};
 						strings = BDFDB.ObjectUtils.sort(strings);
 						const stringKeys = Object.keys(strings);
 						translations[language] = BDFDB.ObjectUtils.toArray(strings);
 						let text = Object.keys(translations[language]).map(k => translations[language][k]).join("\n\n");
 						
-						let gt = (lang, callback) => {
-							let googleTranslateWindow = BDFDB.WindowUtils.open(BDFDB, `https://translate.google.com/#${language}/${{"zh": "zh-CN", "pt-BR": "pt"}[lang] || lang}/${encodeURIComponent(text)}`, {
-								onLoad: _ => {
-									googleTranslateWindow.executeJavaScriptSafe(`
-										let count = 0, interval = setInterval(_ => {
-											count++;
-											let translation = Array.from(document.querySelectorAll("[data-language-to-translate-into] span:not([class])")).map(n => n.innerText).join("");
-											if (translation || count > 50) {
-												clearInterval(interval);
-												require("electron").ipcRenderer.sendTo(${LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "BDFDB-translation", [
-													translation,
-													(document.querySelector("h2 ~ [lang]") || {}).lang
-												]);
-											}
-										}, 100);
-									`);
-								}
-							});
-							BDFDB.WindowUtils.addListener(BDFDB, "BDFDB-translation", (event, messageData) => {
-								BDFDB.WindowUtils.close(googleTranslateWindow);
-								BDFDB.WindowUtils.removeListener(BDFDB, "BDFDB-translation");
-								callback(messageData[0]);
-							});
-						};
-						let gt2 = (lang, callback) => {
-							BDFDB.LibraryRequires.request(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${language}&tl=${lang}&dt=t&dj=1&source=input&q=${encodeURIComponent(text)}`, (error, response, result) => {
-								if (!error && result && response.statusCode == 200) {
-									try {callback(JSON.parse(result).sentences.map(n => n && n.trans).filter(n => n).join(""));}
-									catch (err) {callback("");}
-								}
-								else {
-									if (response.statusCode == 429) {
-										BDFDB.NotificationUtils.toast("Too many requests, switching to backup", {
-											type: "danger"
-										});
-										config.useBackup = true;
-										BDFDB.DevUtils.generateLanguageStrings(strings, config);
-									}
-									else {
-										BDFDB.NotificationUtils.toast("Failed to translate text", {
-											type: "danger"
-										});
-										callback("");
-									}
-								}
-							});
-						};
 						let fails = 0, next = lang => {
 							if (!lang) {
 								let formatTranslation = (l, s, i) => {
@@ -8337,20 +8296,41 @@ module.exports = (_ => {
 								});
 								BDFDB.LibraryRequires.electron.clipboard.write({text: result});
 							}
-							else (config.useBackup ? gt : gt2)(lang, translation => {
-								BDFDB.LogUtils.log(lang);
-								if (!translation) {
-									console.warn("no translation");
-									fails++;
-									if (fails > 10) console.error("skipped language");
-									else languages.unshift(lang);
-								}
-								else {
-									fails = 0;
-									translations[lang] = translation.split("\n\n");
-								}
-								next(languages.shift());
-							});
+							else {
+								const callback = translation => {
+									BDFDB.LogUtils.log(lang);
+									if (!translation) {
+										console.warn("No Translation");
+										fails++;
+										if (fails > 10) console.error("Skipped Language");
+										else languages.unshift(lang);
+									}
+									else {
+										fails = 0;
+										translations[lang] = translation.split("\n\n");
+									}
+									next(languages.shift());
+								};
+								BDFDB.LibraryRequires.request(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${language}&tl=${lang}&dt=t&dj=1&source=input&q=${encodeURIComponent(text)}`, (error, response, result) => {
+									if (!error && result && response.statusCode == 200) {
+										try {callback(JSON.parse(result).sentences.map(n => n && n.trans).filter(n => n).join(""));}
+										catch (err) {callback("");}
+									}
+									else {
+										if (response.statusCode == 429) {
+											BDFDB.NotificationUtils.toast("Too many Requests", {
+												type: "danger"
+											});
+										}
+										else {
+											BDFDB.NotificationUtils.toast("Failed to translate Text", {
+												type: "danger"
+											});
+											callback("");
+										}
+									}
+								});
+							}
 						};
 						next(languages.shift());
 					};
