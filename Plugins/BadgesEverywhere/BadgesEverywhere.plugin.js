@@ -303,7 +303,10 @@ module.exports = (_ => {
 						let key = parseInt(e.returnvalue.props.children[i].key);
 						let keyName = e.instance.props.filter && Object.keys(this.defaults.badges).find(n => this.defaults.badges[n].keys.includes(key));
 						if (keyName && !this.settings.badges[keyName]) e.returnvalue.props.children[i] = null;
-						else if (e.returnvalue.props.children[i].type.displayName == "TooltipContainer") e.returnvalue.props.children[i] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, e.returnvalue.props.children[i].props);
+						else if (e.returnvalue.props.children[i].type.displayName == "TooltipContainer") {
+							if (BDFDB.ObjectUtils.get(e, `returnvalue.props.children.${i}.props.children.props.onClick`)) delete e.returnvalue.props.children[i].props.children.props.onClick;
+							e.returnvalue.props.children[i] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, e.returnvalue.props.children[i].props);
+						}
 					}
 					if ((this.settings.indicators.CURRENT_GUILD_BOOST || !e.instance.props.filter) && e.instance.props.premiumCurrentGuildSince) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						text: BDFDB.LanguageUtils.LanguageStringsFormat("PREMIUM_GUILD_SUBSCRIPTION_TOOLTIP", e.instance.props.premiumCurrentGuildSince),

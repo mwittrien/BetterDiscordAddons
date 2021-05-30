@@ -445,7 +445,7 @@ module.exports = (_ => {
 							change = this.settings.places.userPopout;
 							guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 							changeBackground = true;
-							tagClass = BDFDB.disCN.userpopoutheaderbottag + BDFDB.disCN.bottagnametag;
+							tagClass = BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag;
 							break;
 						case BDFDB.disCN.userprofilenametag:
 							change = this.settings.places.userProfile;
