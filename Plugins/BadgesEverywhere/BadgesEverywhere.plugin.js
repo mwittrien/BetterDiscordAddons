@@ -22,7 +22,7 @@ module.exports = (_ => {
 		},
 		"changeLog": {
 			"improved": {
-				"Switch to the native Badge List": "Instead of creationg the Badge List by myself, the plugin now uses the native Badge List Component, meaning anytime Discord adds a new type of Badge, the plugin will automatically include it without requiring an update"
+				"Switch to the native Badge List": "Instead of creating the Badge List by myself, the plugin now uses the native Badge List Component, meaning anytime Discord adds a new type of Badge, the plugin will automatically include it without requiring an update"
 			},
 			"fixed": {
 				"Current Guild Boost": "Fixed the indicator showing in every server"
@@ -125,13 +125,13 @@ module.exports = (_ => {
 						width: 14px;
 						height: 14px;
 					}
-					${BDFDB.dotCNS._badgeseverywherebadges + BDFDB.dotCN.userbadge + BDFDB.dotCN.userbadgenitro} {
-						width: 16px;
+					${BDFDB.dotCNS._badgeseverywherebadges + BDFDB.dotCN.userbadge + BDFDB.dotCN.userbadgenitro},
+					${BDFDB.dotCNS._badgeseverywherebadges + BDFDB.dotCN.userbadge + BDFDB.dotCN.userbadgeearlynitro} {
+						width: 17px;
 					}
-					${BDFDB.dotCNS._badgeseverywherebadgessettings + BDFDB.dotCN.userbadge},
-					${BDFDB.dotCNS._badgeseverywherebadgessettings + BDFDB.dotCN.userbadge + BDFDB.dotCN.userbadgenitro} {
-						width: 24px;
-						height: 20px;
+					${BDFDB.dotCNS._badgeseverywherebadgessettings + BDFDB.dotCN.userbadge} {
+						width: 24px !important;
+						height: 20px !important;
 					}
 					${BDFDB.dotCN.memberpremiumicon} {
 						display: none;
