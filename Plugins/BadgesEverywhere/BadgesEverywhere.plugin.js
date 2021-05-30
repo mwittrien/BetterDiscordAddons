@@ -363,7 +363,7 @@ module.exports = (_ => {
 					filter: type != "settings",
 					premiumSince: loadedUsers[user.id] && loadedUsers[user.id].premium_since ? new Date(loadedUsers[user.id].premium_since) : (user.id == (specialFlag + "NITRO") ? new Date() : null),
 					premiumGuildSince: fakeGuildBoostDate || (loadedUsers[user.id] && loadedUsers[user.id].premium_guild_since ? new Date(loadedUsers[user.id].premium_guild_since) : null),
-					premiumCurrentGuildSince: member && member.premiumSince || user.id == (specialFlag + "CGB") && new Date()
+					premiumCurrentGuildSince: member && member.premiumSince && new Date(member.premiumSince) || user.id == (specialFlag + "CGB") && new Date()
 				});
 			}
 			
