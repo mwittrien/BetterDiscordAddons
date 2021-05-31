@@ -121,7 +121,7 @@ module.exports = (_ => {
 							if (loadedUsers[e.instance.props.user.id].length) {
 								let isLightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
 								let bodyInner = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutbodyinnerwrapper]]});
-								if (bodyInner) bodyInner.props.children.splice(1, 0, [
+								if (bodyInner) bodyInner.props.children.splice(bodyInner.props.children.length - 1, 0, [
 									BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN.userpopoutbodytitle,
 										children: BDFDB.LanguageUtils.LanguageStrings.CONNECTIONS
