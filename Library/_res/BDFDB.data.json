@@ -964,6 +964,12 @@
 			"error": "error-k9z2IV",
 			"overlay": "spellCheckOverlay-cNSap5"
 		},
+		"ShowConnections": {
+			"connection": "connection-9Gh4sa",
+			"connectionIcon": "connectionIcon-888F4s",
+			"connections": "connections-pPr4as",
+			"verifiedBadge": "verifiedBadge-mH2YpO"
+		},
 		"ShowHiddenChannels": {
 			"accessModal": "accessModal-w5HjsV"
 		},
@@ -1440,6 +1446,11 @@
 		"_serverfoldersiconswatchnopreview": ["ServerFolders", "iconSwatchNoPreview"],
 		"_serverfoldersiconswatchselected": ["ServerFolders", "iconSwatchSelected"],
 		"_showhiddenchannelsaccessmodal": ["ShowHiddenChannels", "accessModal"],
+		"_showconnectionsconnection": ["ShowConnections", "connection"],
+		"_showconnectionsconnections": ["ShowConnections", "connections"],
+		"_showconnectionsicon": ["ShowConnections", "connectionIcon"],
+		"_showconnectionsverifiedbadge": ["ShowConnections", "verifiedBadge"],
+		"_showhiddenchannelsaccessmodal": ["ShowConnections", "connection"],
 		"_spellcheckerror": ["SpellCheck", "error"],
 		"_spellcheckoverlay": ["SpellCheck", "overlay"],
 		"_spotifycontrolsactivitybutton": ["SpotifyControls", "activityButton"],
