@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.0
+ * @version 1.0.1
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,17 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowConnections",
 			"author": "DevilBro",
-			"version": "1.0.0",
+			"version": "1.0.1",
 			"description": "Shows the connected Accounts of a User in the UserPopout"
+		},
+		"changeLog": {
+			"improved": {
+				"Tooltip Color": "Slighty darkened the Tooltip Color to increase Readability"
+			},
+			"added": {
+				"Filter": "You can now enable/disable certain Connections so they don't show",
+				"Customization": "You can now disable the Tooltip Color, change the Icons to a white Version, disable the Verified Badge",
+			}
 		}
 	};
 
@@ -70,6 +79,18 @@ module.exports = (_ => {
 					}
 				};
 				
+				this.defaults = {
+					general: {
+						useColoredIcons:	{value: true, 	description: "Use colored Version of the Icons"},
+						useColoredTooltips:	{value: true, 	description: "Use colored Version of the Tooltips"},
+						showVerifiedBadge:	{value: true, 	description: "Show the Badge for verified Connections"},
+						openWebpage:		{value: true, 	description: "Open the Connection Page when clicking the Icon"}
+					},
+					connections: {}
+				};
+				
+				for (let connection of BDFDB.LibraryModules.ConnectionProviderUtils.filter(e => e.enabled)) this.defaults.connections[connection.type] = Object.assign({}, connection, {value: true});
+				
 				this.css = `
 					${BDFDB.dotCN._showconnectionsconnections} {
 						display: flex;
@@ -89,8 +110,8 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN._showconnectionsverifiedbadge} {
 						position: absolute;
-						bottom: -3px;
-						right: -3px;
+						bottom: -10%;
+						right: -10%;
 					}
 				`;
 			}
@@ -113,12 +134,48 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 
+			getSettingsPanel (collapseStates = {}) {
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
+					collapseStates: collapseStates,
+					children: _ => {
+						let settingsItems = [];
+				
+						for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							type: "Switch",
+							plugin: this,
+							keys: ["general", key],
+							label: this.defaults.general[key].description,
+							value: this.settings.general[key]
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							title: "Display Connections:",
+							children: Object.keys(this.defaults.connections).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["connections", key],
+								label: this.defaults.connections[key].name,
+								value: this.settings.connections[key],
+								labelChildren: [
+									BDFDB.ReactUtils.createElement("img", {style: {width: 28, height: 28}, src: this.defaults.connections[key].icon.color}),
+									BDFDB.ReactUtils.createElement("img", {style: {width: 28, height: 28}, src: this.defaults.connections[key].icon.white})
+								]
+							}))
+						}));
+						
+						return settingsItems;
+					}
+				});
+			}
+
 			processUserPopout (e) {
 				if (e.instance.props.user && !e.instance.props.user.bot && e.instance.props.user.discriminator != "0000") {
 					if (e.node) currentPopup = {id: e.instance.props.user.id, instance: e.instance};
 					else {
 						if (loadedUsers[e.instance.props.user.id]) {
-							if (loadedUsers[e.instance.props.user.id].length) {
+							let connections = loadedUsers[e.instance.props.user.id].filter(c => BDFDB.LibraryModules.ConnectionProviderUtils.isSupported(c.type));
+							if (connections.length) {
 								let isLightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
 								let bodyInner = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutbodyinnerwrapper]]});
 								if (bodyInner) bodyInner.props.children.splice(bodyInner.props.children.length - 1, 0, [
@@ -128,37 +185,39 @@ module.exports = (_ => {
 									}),
 									BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN._showconnectionsconnections,
-										children: loadedUsers[e.instance.props.user.id].filter(c => BDFDB.LibraryModules.ConnectionProviderUtils.isSupported(c.type)).map(c => {
+										children: connections.map(c => {
 											let provider = BDFDB.LibraryModules.ConnectionProviderUtils.get(c.type);
-											let url = provider.getPlatformUserUrl && provider.getPlatformUserUrl(c);
+											let url = this.settings.general.openWebpage && provider.getPlatformUserUrl && provider.getPlatformUserUrl(c);
 											return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 												text: `${provider.name}: ${c.name}`,
-												tooltipConfig: {backgroundColor: provider.color, color: !provider.color && "grey"},
-												children: BDFDB.ReactUtils.createElement(!url ? "div" : BDFDB.LibraryComponents.Anchor, {
+												tooltipConfig: {backgroundColor: this.settings.general.useColoredTooltips && BDFDB.ColorUtils.change(provider.color, -0.3), color: !this.settings.general.useColoredTooltips || !provider.color ? "grey" : null},
+												children: BDFDB.ReactUtils.createElement(!url ? "div" : BDFDB.LibraryComponents.Anchor, Object.assign(!url ? {} : {
+													href: url
+												}, {
 													className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._showconnectionsconnection, url && BDFDB.disCN.cursorpointer),
-													href: url,
 													children: [
 														BDFDB.ReactUtils.createElement("img", {
 															className: BDFDB.disCN._showconnectionsicon,
 															alt: BDFDB.LanguageUtils.LanguageStringsFormat("IMG_ALT_LOGO", provider.name),
-															src: provider.icon.color
+															src: provider.icon[this.settings.general.useColoredIcons ? "color" : "white"]
 														}),
-														c.verified && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+														this.settings.general.showVerifiedBadge && c.verified && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 															text: BDFDB.LanguageUtils.LanguageStrings.CONNECTION_VERIFIED,
-															tooltipConfig: {color: "brand"},
+															tooltipConfig: {color: "brand", type: "bottom"},
 															children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FlowerStar, {
 																className: BDFDB.disCN._showconnectionsverifiedbadge,
+																size: "50%",
 																color: isLightTheme ? BDFDB.DiscordConstants.Colors.STATUS_GREY_200 : BDFDB.DiscordConstants.Colors.PRIMARY_DARK,
 																children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 																	name: BDFDB.LibraryComponents.SvgIcon.Names.CHECKMARK,
-																	width: 12,
-																	height: 12,
+																	width: "70%",
+																	height: "70%",
 																	color: isLightTheme ? BDFDB.DiscordConstants.Colors.STATUS_GREY_500 : BDFDB.DiscordConstants.Colors.WHITE
 																})
 															})
 														})
 													]
-												})
+												}))
 											});
 										})
 									})

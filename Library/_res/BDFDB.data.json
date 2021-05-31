@@ -1450,7 +1450,6 @@
 		"_showconnectionsconnections": ["ShowConnections", "connections"],
 		"_showconnectionsicon": ["ShowConnections", "connectionIcon"],
 		"_showconnectionsverifiedbadge": ["ShowConnections", "verifiedBadge"],
-		"_showhiddenchannelsaccessmodal": ["ShowConnections", "connection"],
 		"_spellcheckerror": ["SpellCheck", "error"],
 		"_spellcheckoverlay": ["SpellCheck", "overlay"],
 		"_spotifycontrolsactivitybutton": ["SpotifyControls", "activityButton"],
@@ -4992,7 +4991,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
-		"467514600934604801": 	{"active": true,		"tier": "t2",		"text": "",		"id": "star (adria)"},
+		"467514600934604801": 	{"active": true,		"tier": "t3",		"text": "",					"id": "star (adria)"},
 		"446396928092274720": 	{"active": true,		"tier": "t3",		"text": "Existing...",		"id": "Sayori (SaySa)"},
 		"760784464560914452": 	{"active": true,		"tier": "t3",		"text": "Keyra",			"id": "Keyra (PaCu)"},
 		"266072167349747712": 	{"active": true,		"tier": "t3",		"text": "King",				"id": "Duckx (dogu)"},
