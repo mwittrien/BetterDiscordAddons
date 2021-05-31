@@ -32,6 +32,7 @@
 		"ChannelUtils": {"props": ["selectChannel", "selectPrivateChannel"]},
 		"ChannelStore": {"props": ["getChannel", "getDMFromUserId"]},
 		"ColorUtils": {"props": ["hex2int", "hex2rgb"]},
+		"ConnectionProviderUtils": {"props": ["get", "isSupported", "filter"]},
 		"ConnectionStore": {"props": ["getAccounts", "getLocalAccounts"]},
 		"ConnectionUtils": {"props": ["setShowActivity", "setVisibility"]},
 		"ContextMenuUtils": {"props": ["closeContextMenu", "openContextMenu"]},
