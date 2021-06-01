@@ -82,11 +82,11 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						useColoredIcons:	{value: true, 	description: "Use colored Version of the Icons"},
-						useColoredTooltips:	{value: true, 	description: "Use colored Version of the Tooltips"},
+						useColoredIcons:	{value: true, 	description: "Uses colored Version of the Icons"},
+						useColoredTooltips:	{value: true, 	description: "Uses colored Version of the Tooltips"},
 						placeAtTop:			{value: false, 	description: "Places the Connections at the Top of the UserPopout Body"},
-						showVerifiedBadge:	{value: true, 	description: "Show the Badge for verified Connections"},
-						openWebpage:		{value: true, 	description: "Open the Connection Page when clicking the Icon"}
+						showVerifiedBadge:	{value: true, 	description: "Shows the Badge for verified Connections"},
+						openWebpage:		{value: true, 	description: "Opens the Connection Page when clicking the Icon"}
 					},
 					connections: {}
 				};
@@ -192,7 +192,7 @@ module.exports = (_ => {
 											let url = this.settings.general.openWebpage && provider.getPlatformUserUrl && provider.getPlatformUserUrl(c);
 											return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 												text: `${provider.name}: ${c.name}`,
-												tooltipConfig: {backgroundColor: this.settings.general.useColoredTooltips && BDFDB.ColorUtils.change(provider.color, -0.3), color: !this.settings.general.useColoredTooltips || !provider.color ? "grey" : null},
+												tooltipConfig: {backgroundColor: this.settings.general.useColoredTooltips && BDFDB.ColorUtils.change(provider.color, -0.3), color: !this.settings.general.useColoredTooltips || !provider.color ? "black" : null},
 												children: BDFDB.ReactUtils.createElement(!url ? "div" : BDFDB.LibraryComponents.Anchor, Object.assign(!url ? {} : {
 													href: url
 												}, {
