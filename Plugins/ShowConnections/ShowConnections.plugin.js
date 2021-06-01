@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.2
+ * @version 1.0.3
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowConnections",
 			"author": "DevilBro",
-			"version": "1.0.2",
+			"version": "1.0.3",
 			"description": "Shows the connected Accounts of a User in the UserPopout"
 		},
 		"changeLog": {
@@ -26,6 +26,7 @@ module.exports = (_ => {
 			},
 			"added": {
 				"Filter": "You can now enable/disable certain Connections so they don't show",
+				"Position": "You can now change the order and place them at the top of the UserPopout",
 				"Customization": "You can now disable the Tooltip Color, change the Icons to a white Version, disable the Verified Badge",
 			}
 		}
@@ -83,7 +84,8 @@ module.exports = (_ => {
 					general: {
 						useColoredIcons:	{value: true, 	description: "Use colored Version of the Icons"},
 						useColoredTooltips:	{value: true, 	description: "Use colored Version of the Tooltips"},
-						showVerifiedBadge:	{value: true, 	description: "Show the Badge for verified Connections"},
+						placeAtTop:		{value: false, 	description: "Places the Connections at the Top of the UserPopout Body"},
+						ShowVerifiedBadge:	{value: true, 	description: "Show the Badge for verified Connections"},
 						openWebpage:		{value: true, 	description: "Open the Connection Page when clicking the Icon"}
 					},
 					connections: {}
@@ -178,7 +180,7 @@ module.exports = (_ => {
 							if (connections.length) {
 								let isLightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
 								let bodyInner = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutbodyinnerwrapper]]});
-								if (bodyInner) bodyInner.props.children.splice(bodyInner.props.children.length - 1, 0, [
+								if (bodyInner) bodyInner.props.children.splice(this.settings.general.placeAtTop ? 0 : bodyInner.props.children.length - 1, 0, [
 									BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN.userpopoutbodytitle,
 										children: BDFDB.LanguageUtils.LanguageStrings.CONNECTIONS
