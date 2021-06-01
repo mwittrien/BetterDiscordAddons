@@ -1253,6 +1253,10 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-top: 8px;
 }
 
+[REPLACE_CLASS_colorpickerswatches] > div:not([class]),
+[REPLACE_CLASS_colorpickerswatches] [REPLACE_CLASS_colorpickerswatch] {
+	flex: 1 1 auto;
+}
 [REPLACE_CLASS_colorpickerswatchsinglewrapper] {
 	position: relative;
 	z-index: 1;

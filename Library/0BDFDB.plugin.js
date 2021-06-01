@@ -5558,22 +5558,13 @@ module.exports = (_ => {
 						return !this.props.colors.length ? BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.colorpickerswatchsinglewrapper,
 							children: customSwatch
-						}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+						}) : BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickerswatches, BDFDB.disCN.colorpickerswatchescontainer, this.props.disabled && BDFDB.disCN.colorpickerswatchesdisabled),
 							children: [
-								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
-									className: BDFDB.disCN.marginreset,
-									shrink: 0,
-									grow: 0,
-									children: customSwatch
-								}),
-								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-									direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
-									className: BDFDB.disCN.flexmarginreset,
-									grow: 1,
-									children: this.props.colorRows.map(row => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+								customSwatch,
+								BDFDB.ReactUtils.createElement("div", {
+									children: this.props.colorRows.map(row => BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN.colorpickerrow,
-										wrap: InternalComponents.LibraryComponents.Flex.Wrap.WRAP,
 										children: row.map(color => BDFDB.ReactUtils.createElement(this.ColorSwatch, {
 											swatches: this,
 											color: color,
