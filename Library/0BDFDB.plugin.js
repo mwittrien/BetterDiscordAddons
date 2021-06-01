@@ -8319,7 +8319,7 @@ module.exports = (_ => {
 								});
 							}
 						};
-						next(languages.shift());
+						if (stringKeys.length) next(languages.shift());
 					};
 					BDFDB.DevUtils.req = InternalBDFDB.getWebModuleReq();
 					
