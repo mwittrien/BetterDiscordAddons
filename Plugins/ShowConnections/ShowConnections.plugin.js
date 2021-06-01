@@ -89,7 +89,7 @@ module.exports = (_ => {
 					connections: {}
 				};
 				
-				for (let connection of BDFDB.LibraryModules.ConnectionProviderUtils) this.defaults.connections[connection.type] = Object.assign({}, connection, {value: true});
+				for (let connection of BDFDB.LibraryModules.ConnectionProviderUtils.filter(n => n)) this.defaults.connections[connection.type] = Object.assign({}, connection, {value: true});
 				
 				this.css = `
 					${BDFDB.dotCN._showconnectionsconnections} {
