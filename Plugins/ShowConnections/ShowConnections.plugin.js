@@ -89,7 +89,7 @@ module.exports = (_ => {
 					connections: {}
 				};
 				
-				for (let connection of BDFDB.LibraryModules.ConnectionProviderUtils.filter(e => e.enabled)) this.defaults.connections[connection.type] = Object.assign({}, connection, {value: true});
+				for (let connection of BDFDB.LibraryModules.ConnectionProviderUtils) this.defaults.connections[connection.type] = Object.assign({}, connection, {value: true});
 				
 				this.css = `
 					${BDFDB.dotCN._showconnectionsconnections} {
@@ -174,7 +174,7 @@ module.exports = (_ => {
 					if (e.node) currentPopup = {id: e.instance.props.user.id, instance: e.instance};
 					else {
 						if (loadedUsers[e.instance.props.user.id]) {
-							let connections = loadedUsers[e.instance.props.user.id].filter(c => BDFDB.LibraryModules.ConnectionProviderUtils.isSupported(c.type) && this.settings.connections[c.type]);
+							let connections = loadedUsers[e.instance.props.user.id].filter(c => this.settings.connections[c.type]);
 							if (connections.length) {
 								let isLightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
 								let bodyInner = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutbodyinnerwrapper]]});
