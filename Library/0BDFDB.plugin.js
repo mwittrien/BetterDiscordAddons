@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.6
+ * @version 1.6.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,20 +19,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.6.6",
+			"version": "1.6.7",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
-		"changeLog": {
-			"improved": {
-				"Patron Badges": "All Badges will now say that they are from by BDFDB Patreon, even the T3 Custom Badges",
-				"Toasts": "You can now hover Toasts to stop them from disappearing"
-			},
-			"fixed": {
-				"Color Picker": "Copy Pasting a 6-digit HEX Color, when the alpha channel is enabled will autocomplete it to a 8-digit HEXA Color",
-				"Tooltips": "Fixed some rendering Issues with Tooltips"
-			}
-		}
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
 	};
 	
 	const DiscordObjects = {};
@@ -2908,6 +2898,11 @@ module.exports = (_ => {
 					let user = LibraryModules.UserStore.getUser(id);
 					if (!user) return window.location.origin + "/assets/1f0bfc0865d324c2587920a7d80c609b.png";
 					else return ((user.avatar ? "" : window.location.origin) + LibraryModules.IconUtils.getUserAvatarURL(user)).split("?")[0];
+				};
+				BDFDB.UserUtils.getBanner = function (id = BDFDB.UserUtils.me.id) {
+					let user = LibraryModules.UserStore.getUser(id);
+					if (!user || !user.banner) return "";
+					return LibraryModules.IconUtils.getUserBannerURL(user).split("?")[0];
 				};
 				BDFDB.UserUtils.can = function (permission, id = BDFDB.UserUtils.me.id, channelId = LibraryModules.LastChannelStore.getChannelId()) {
 					if (!BDFDB.DiscordConstants.Permissions[permission]) BDFDB.LogUtils.warn([permission, "not found in Permissions"]);
