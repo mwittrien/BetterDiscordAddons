@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.3
+ * @version 1.0.4
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowConnections",
 			"author": "DevilBro",
-			"version": "1.0.3",
+			"version": "1.0.4",
 			"description": "Shows the connected Accounts of a User in the UserPopout"
 		},
 		"changeLog": {
@@ -84,8 +84,8 @@ module.exports = (_ => {
 					general: {
 						useColoredIcons:	{value: true, 	description: "Use colored Version of the Icons"},
 						useColoredTooltips:	{value: true, 	description: "Use colored Version of the Tooltips"},
-						placeAtTop:		{value: false, 	description: "Places the Connections at the Top of the UserPopout Body"},
-						ShowVerifiedBadge:	{value: true, 	description: "Show the Badge for verified Connections"},
+						placeAtTop:			{value: false, 	description: "Places the Connections at the Top of the UserPopout Body"},
+						showVerifiedBadge:	{value: true, 	description: "Show the Badge for verified Connections"},
 						openWebpage:		{value: true, 	description: "Open the Connection Page when clicking the Icon"}
 					},
 					connections: {}
