@@ -4852,6 +4852,15 @@ module.exports = (_ => {
 				
 				InternalComponents.LibraryComponents.ChannelTextAreaButton = reactInitialized && class BDFDB_ChannelTextAreaButton extends LibraryModules.React.Component {
 					render() {
+						const inner = BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.textareabuttonwrapper,
+							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+								name: this.props.iconName,
+								iconSVG: this.props.iconSVG,
+								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.textareaicon, this.props.iconClassName, this.props.pulse && BDFDB.disCN.textareaiconpulse),
+								nativeClass: this.props.nativeClass
+							})
+						});
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Button, {
 							look: InternalComponents.LibraryComponents.Button.Looks.BLANK,
 							size: InternalComponents.LibraryComponents.Button.Sizes.NONE,
@@ -4863,15 +4872,7 @@ module.exports = (_ => {
 							onContextMenu: this.props.onContextMenu,
 							onMouseEnter: this.props.onMouseEnter,
 							onMouseLeave: this.props.onMouseLeave,
-							children: BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.textareabuttonwrapper,
-								children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-									name: this.props.iconName,
-									iconSVG: this.props.iconSVG,
-									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.textareaicon, this.props.iconClassName, this.props.pulse && BDFDB.disCN.textareaiconpulse),
-									nativeClass: this.props.nativeClass
-								})
-							})
+							children: this.props.tooltip && this.props.tooltip.text ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, Object.assign({}, this.props.tooltip, {children: inner})) : inner
 						});
 					}
 				};
