@@ -174,7 +174,7 @@ module.exports = (_ => {
 									}
 								}].map(data => {
 									const icon = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-										className: "aaa",
+										className: BDFDB.disCN._googletranslateoptionconfigbutton,
 										onClick: data.onClick,
 										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 											width: 24,
@@ -337,11 +337,13 @@ module.exports = (_ => {
 						Embed: "render"
 					}
 				};
-				
 
 				this.css = `
 					${BDFDB.dotCN._googletranslateoptiontranslatebutton + BDFDB.dotCNS._googletranslateoptiontranslating + BDFDB.dotCN.textareaicon} {
 						color: var(--bdfdb-red) !important;
+					}
+					${BDFDB.dotCN._googletranslateoptionconfigbutton} {
+						margin: 2px 3px 0 6px;
 					}
 				`;
 			}
