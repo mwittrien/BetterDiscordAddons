@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.5
+ * @version 4.2.6
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.2.5",
+			"version": "4.2.6",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
 			"added": {
 				"Show Server Nickname": "Added an Option to Show the Server Nickname behind the local Nickname",
 				"Banners": "Added Support for banners"
+			},
+			"fixed": {
+				"Voice User List": "Fixed Voice User List not being changed in some places"
 			}
 		}
 	};
@@ -112,6 +115,7 @@ module.exports = (_ => {
 						UserInfo: "default",
 						NowPlayingHeader: "Header",
 						VoiceUser: "render",
+						RTCConnectionVoiceUsers: "default",
 						Account: "render",
 						Message: "default",
 						MessageUsername: "default",
@@ -556,7 +560,7 @@ module.exports = (_ => {
 					}
 				}
 			}
-
+			
 			processVoiceUser (e) {
 				if (e.instance.props.user && this.settings.places.voiceChat) {
 					if (!e.returnvalue) {
@@ -570,6 +574,17 @@ module.exports = (_ => {
 					else {
 						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.voicename]]});
 						if (userName) this.changeUserColor(userName, e.instance.props.user.id, {modify: e.instance.props});
+					}
+				}
+			}
+
+			processRTCConnectionVoiceUsers (e) {
+				if (e.instance.props.voiceStates && this.settings.places.voiceChat) for (let i in e.instance.props.voiceStates) {
+					let data = changedUsers[e.instance.props.voiceStates[i].user.id];
+					if (data) {
+						e.instance.props.voiceStates[i] = Object.assign({}, e.instance.props.voiceStates[i]);
+						e.instance.props.voiceStates[i].user = this.getUserData(e.instance.props.voiceStates[i].user.id);
+						if (data.name && (!e.instance.props.voiceStates[i].member.nick || !data.useServerNick)) e.instance.props.voiceStates[i].nick = [data.name, data.showServerNick && e.instance.props.voiceStates[i].member.nick && `(${e.instance.props.voiceStates[i].member.nick})`].filter(n => n).join(" ");
 					}
 				}
 			}
