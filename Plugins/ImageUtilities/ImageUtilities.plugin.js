@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.8
+ * @version 4.3.9
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.3.8",
+			"version": "4.3.9",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
-		},
-		"changeLog": {
-			"fixed": {
-				"Animated Avatars": ""
-			}
 		}
 	};
 	
@@ -170,7 +165,7 @@ module.exports = (_ => {
 					engines: {
 						_all: 		{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url: null},
 						Baidu: 		{value: true, 	name: "Baidu", 		url: "http://image.baidu.com/pcdutu?queryImageUrl=" + imgUrlReplaceString},
-						Bing: 		{value: true, 	name: "Bing", 		url: "https://www.bing.com/images/search?q=imgurl:" + imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
+						Bing: 		{value: true, 	name: "Bing", 		url: "https://www.bing.com/images/search?q=imgurl: " + imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
 						Google:		{value: true, 	name: "Google", 	url: "https://images.google.com/searchbyimage?image_url=" + imgUrlReplaceString},
 						ImgOps:		{value: true, 	name: "ImgOps", 	raw: true, 	url: "https://imgops.com/specialized+reverse/" + imgUrlReplaceString},
 						IQDB:		{value: true, 	name: "IQDB", 		url: "https://iqdb.org/?url=" + imgUrlReplaceString},
@@ -511,12 +506,12 @@ module.exports = (_ => {
 					if (banner) {
 						if (e.instance.props.guild.banner) this.injectItem(e, BDFDB.LibraryModules.IconUtils.getGuildBannerURL(e.instance.props.guild));
 					}
-					else if (e.type != "GuildChannelListContextMenu") this.injectItem(e, e.instance.props.guild.getIconURL("png", "png"), BDFDB.LibraryModules.IconUtils.hasAnimatedGuildIcon(e.instance.props.guild) && e.instance.props.guild.getIconURL("gif", "gif"));
+					else if (e.type != "GuildChannelListContextMenu") this.injectItem(e, e.instance.props.guild.getIconURL(), e.instance.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.icon) && e.instance.props.guild.getIconURL(true));
 				}
 			}
 
 			onUserContextMenu (e) {
-				if (e.instance.props.user && this.settings.places.userAvatars) this.injectItem(e, e.instance.props.user.getAvatarURL("png", "png"), BDFDB.LibraryModules.IconUtils.hasAnimatedAvatar(e.instance.props.user) && e.instance.props.user.getAvatarURL("gif", "gif"))
+				if (e.instance.props.user && this.settings.places.userAvatars) this.injectItem(e, e.instance.props.user.getAvatarURL(), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.avatar) && e.instance.props.user.getAvatarURL(null, true))
 			}
 
 			onGroupDMContextMenu (e) {

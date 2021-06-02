@@ -6064,7 +6064,7 @@ module.exports = (_ => {
 						this.props.participating = this.props.state ? LibraryModules.CurrentVoiceUtils.getGuildId() == this.props.guild.id : false;
 						this.props.participatingInStage = this.props.state ? currentVoiceChannel && currentVoiceChannel.guild_id == this.props.guild.id && currentVoiceChannel.isGuildStageVoice() : false;
 						
-						this.props.animatable = this.props.state ? LibraryModules.IconUtils.hasAnimatedGuildIcon(this.props.guild) : false;
+						this.props.animatable = this.props.state ? this.props.guild.icon && LibraryModules.IconUtils.isAnimatedIconHash(this.props.guild.icon) : false;
 						this.props.unavailable = this.props.state ? LibraryModules.GuildUnavailableStore.unavailableGuilds.includes(this.props.guild.id) : false;
 					
 						let isDraggedGuild = this.props.draggingGuildId === this.props.guild.id;
@@ -6095,7 +6095,7 @@ module.exports = (_ => {
 									onMouseUp: this.handleMouseUp.bind(this),
 									onClick: this.handleClick.bind(this),
 									onContextMenu: this.handleContextMenu.bind(this),
-									icon: this.props.guild.getIconURL(this.state.hovered && this.props.animatable ? "gif" : "png"),
+									icon: this.props.guild.getIconURL(this.state.hovered && this.props.animatable),
 									selected: this.props.selected || this.state.hovered
 								})
 							})

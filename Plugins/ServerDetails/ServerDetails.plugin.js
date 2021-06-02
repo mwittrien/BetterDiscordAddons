@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.5
+ * @version 1.0.6
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerDetails",
 			"author": "DevilBro",
-			"version": "1.0.5",
+			"version": "1.0.6",
 			"description": "Shows Server Details in the Server List Tooltip"
-		},
-		"changeLog": {
-			"improved": {
-				"New Settings": "Changed the Settings Panel for the Plugin, some Settings got reset sowwy ~w~"
-			}
 		}
 	};
 
@@ -92,7 +87,7 @@ module.exports = (_ => {
 					this.state.fetchedOwner = true;
 					BDFDB.LibraryModules.UserFetchUtils.getUser(this.props.guild.ownerId).then(_ => BDFDB.ReactUtils.forceUpdate(this));
 				}
-				let src = this.props.guild.getIconURL(BDFDB.LibraryModules.IconUtils.hasAnimatedGuildIcon(this.props.guild) ? "gif" : "png");
+				let src = this.props.guild.getIconURL(this.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(this.props.guild.icon));
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 					direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
 					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
