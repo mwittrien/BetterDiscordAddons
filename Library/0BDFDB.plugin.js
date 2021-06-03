@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.7
+ * @version 1.6.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.6.7",
+			"version": "1.6.8",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -4184,6 +4184,11 @@ module.exports = (_ => {
 				};
 				BDFDB.DiscordUtils.isDevModeEnabled = function () {
 					return LibraryModules.SettingsStore.developerMode;
+				};
+				BDFDB.DiscordUtils.getExperiment = function (id) {
+					if (!id) return null;
+					const module = BDFDB.ModuleUtils.find(m => m.definition && m.definition.defaultConfig && m.definition.defaultConfig[id] != null && typeof m.getCurrentConfig == "function");
+					return module && (module.getCurrentConfig({}) || {})[id];
 				};
 				BDFDB.DiscordUtils.getTheme = function () {
 					return LibraryModules.SettingsStore.theme != "dark" ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
