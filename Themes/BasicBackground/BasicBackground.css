@@ -4224,22 +4224,18 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .userPopout-3XzG_A::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 }
-#app-mount .header-2BwW8b,									/* popout old			headernormal						*/
-.headerNormal-1l1Znk {										/* popout new			headernormal						*/
+.headerNormal-1l1Znk {										/* popout				headernormal						*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
-#app-mount .headerTop-2cWpdB,								/* popout new			header inner						*/
-#app-mount .activity-fViXj7 {								/* popout new			activity							*/
+#app-mount .headerTop-2cWpdB,								/* popout				header inner						*/
+#app-mount .activity-fViXj7 {								/* popout				activity							*/
 	background: transparent;
 	border: transparent;
 }
-.userPopout-3XzG_A .wrapper-3t9DeA,							/* popout old			avatar								*/
-.userPopout-3XzG_A .avatar-22FtUu {							/* popout new			avatar								*/
+.userPopout-3XzG_A .avatar-22FtUu {							/* popout				avatar								*/
 	background: transparent;
 	border-color: transparent;
 }
-.userPopout-3XzG_A .wrapper-3t9DeA::before,
-.userPopout-3XzG_A .wrapper-3t9DeA::after,
 .userPopout-3XzG_A .avatar-22FtUu::before,
 .userPopout-3XzG_A .avatar-22FtUu::after {
 	content: "";
@@ -4252,13 +4248,11 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	pointer-events: none;
 	z-index: -1;
 }
-.userPopout-3XzG_A .wrapper-3t9DeA::before,
 .userPopout-3XzG_A .avatar-22FtUu::before {
 	background: var(--popout) var(--popoutposition)/var(--popoutsize);
 	filter: blur(var(--popoutblur));
 	background-attachment: fixed;
 }
-.userPopout-3XzG_A .wrapper-3t9DeA::after,
 .userPopout-3XzG_A .avatar-22FtUu::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + .375));
 }
