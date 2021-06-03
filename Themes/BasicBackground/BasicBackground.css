@@ -4228,9 +4228,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .headerNormal-1l1Znk {										/* popout new			headernormal						*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
-#app-mount .headerTop-3C2Zn0,								/* popout old			header inner						*/
-#app-mount .activity-11LB_k,								/* popout old			activity							*/
-#app-mount .headerTop-2y3V6H,								/* popout new			header inner						*/
+#app-mount .headerTop-2cWpdB,								/* popout new			header inner						*/
 #app-mount .activity-fViXj7 {								/* popout new			activity							*/
 	background: transparent;
 	border: transparent;
