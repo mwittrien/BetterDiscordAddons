@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.7
+ * @version 4.2.8
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.2.7",
+			"version": "4.2.8",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
@@ -106,7 +106,7 @@ module.exports = (_ => {
 						HeaderBarContainer: "render",
 						ChannelEditorContainer: "render",
 						AutocompleteUserResult: "render",
-						UserPopoutInfo: "default",
+						UserPopout: "render",
 						UserProfile: "render",
 						UserInfo: "default",
 						NowPlayingHeader: "Header",
@@ -491,31 +491,33 @@ module.exports = (_ => {
 				}
 			}
 
+			processUserPopout (e) {
+				if (e.instance.props.user && this.settings.places.userPopout) {
+					let data = changedUsers[e.instance.props.user.id];
+					if (data) {
+						e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
+						if (data.name && !(data.useServerNick && e.instance.props.nickname)) {
+							let name = [data.name, data.showServerNick && e.instance.props.nickname && `(${e.instance.props.nickname})`].filter(n => n).join(" ");
+							e.instance.props.nickname = name;
+							if (e.instance.props.guildMember) e.instance.props.guildMember = Object.assign({}, e.instance.props.guildMember, {nick: name});
+						}
+						if (data.removeStatus || data.status || data.statusEmoji) e.instance.props.customStatusActivity = this.createCustomStatus(data);
+					}
+				}
+			}
+
 			processUserPopoutInfo (e) {
 				if (e.instance.props.user && this.settings.places.userPopout) {
 					let data = changedUsers[e.instance.props.user.id];
-					if (!e.returnvalue) {
-						e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
-						if (data) {
-							if (data.name && !(data.useServerNick && e.instance.props.nickname)) {
-								let name = [data.name, data.showServerNick && e.instance.props.nickname && `(${e.instance.props.nickname})`].filter(n => n).join(" ");
-								e.instance.props.nickname = name;
-								if (e.instance.props.guildMember) e.instance.props.guildMember = Object.assign({}, e.instance.props.guildMember, {nick: name});
-							}
-							if (data.removeStatus || data.status || data.statusEmoji) e.instance.props.customStatusActivity = this.createCustomStatus(data);
-						}
-					}
-					else {
-						if (data && (data.color1 || data.color2 || data.tag)) {
-							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
-							if (index > -1) {
-								this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground: true});
-								if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
-								this.injectBadge(children[index].props.children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
-									tagClass: BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag,
-									inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
-								});
-							}
+					if (data && (data.color1 || data.color2 || data.tag)) {
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
+						if (index > -1) {
+							this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground: true});
+							if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
+							this.injectBadge(children[index].props.children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
+								tagClass: BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag,
+								inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
+							});
 						}
 					}
 				}
