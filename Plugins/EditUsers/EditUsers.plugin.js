@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.6
+ * @version 4.2.7
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,16 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.2.6",
+			"version": "4.2.7",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
-			"added": {
-				"Show Server Nickname": "Added an Option to Show the Server Nickname behind the local Nickname",
-				"Banners": "Added Support for banners"
-			},
-			"fixed": {
-				"Voice User List": "Fixed Voice User List not being changed in some places"
+			"improved": {
+				"New User Popout": "Fixed for the new User Popout, which will be released soon-ish, again and again and again, stop changing Stuff Discord, STOOOOOOOOOOOOOOOOOOOOP JESUS"
 			}
 		}
 	};
@@ -110,7 +106,7 @@ module.exports = (_ => {
 						HeaderBarContainer: "render",
 						ChannelEditorContainer: "render",
 						AutocompleteUserResult: "render",
-						UserPopoutHeader: "default",
+						UserPopoutInfo: "default",
 						UserProfile: "render",
 						UserInfo: "default",
 						NowPlayingHeader: "Header",
@@ -144,7 +140,7 @@ module.exports = (_ => {
 						AutocompleteUserResult: "render",
 						DiscordTag: "default",
 						NameTag: "default",
-						UserPopoutHeader: "default",
+						UserPopoutInfo: "default",
 						NowPlayingHeader: "Header",
 						VoiceUser: "render",
 						Account: "render",
@@ -495,7 +491,7 @@ module.exports = (_ => {
 				}
 			}
 
-			processUserPopoutHeader (e) {
+			processUserPopoutInfo (e) {
 				if (e.instance.props.user && this.settings.places.userPopout) {
 					let data = changedUsers[e.instance.props.user.id];
 					if (!e.returnvalue) {

@@ -2,7 +2,7 @@
  * @name JoinedAtDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.8
+ * @version 1.2.9
  * @description Displays the Joined At Date of a Member in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "JoinedAtDate",
 			"author": "DevilBro",
-			"version": "1.2.8",
+			"version": "1.2.9",
 			"description": "Displays the Joined At Date of a Member in the UserPopout and UserModal"
 		},
 		"changeLog": {
 			"improved": {
-				"New User Popout": "Fixed for the new User Popout, which will be released soon-ish"
+				"New User Popout": "Fixed for the new User Popout, which will be released soon-ish, again and again and again, stop changing Stuff Discord, STOOOOOOOOOOOOOOOOOOOOP JESUS"
 			}
 		}
 	};
@@ -89,7 +89,7 @@ module.exports = (_ => {
 				this.patchedModules = {
 					after: {
 						UserPopout: "render",
-						UserPopoutHeader: "default",
+						UserPopoutInfo: "default",
 						AnalyticsContext: "render"
 					}
 				};
@@ -164,7 +164,7 @@ module.exports = (_ => {
 				currentPopout = e.instance;
 			}
 
-			processUserPopoutHeader (e) {
+			processUserPopoutInfo (e) {
 				if (e.instance.props.user && this.settings.places.userPopout) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
 					if (index > -1) this.injectDate(currentPopout, children, 2, e.instance.props.user, e.instance.props.guildId);
