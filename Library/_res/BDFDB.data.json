@@ -1312,7 +1312,7 @@
 		"UploadModal": {"props": ["uploadModal", "bgScale"]},
 		"UserBadges": {"props": ["profileBadgeStaff", "profileBadgePremium"]},
 		"UserInfo": {"props": ["userInfo", "discordTag"]},
-		"UserPopout": {"props": ["headerNormal", "profileBadges"]},
+		"UserPopout": {"props": ["headerTop", "avatarPositionNormal"]},
 		"UserPopoutBanner": {"props": ["profileBanner", "profileBannerPremium"]},
 		"UserPopoutWrapper": {"props": ["userPopout", "rolesList"]},
 		"UserProfile": {"props": ["topSectionNormal", "tabBarContainer"]},
