@@ -2,7 +2,7 @@
  * @name CharCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.1
+ * @version 1.5.2
  * @description Adds a Character Counter to most Inputs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "CharCounter",
 			"author": "DevilBro",
-			"version": "1.5.1",
+			"version": "1.5.2",
 			"description": "Adds a Character Counter to most Inputs"
 		},
 		"changeLog": {
@@ -114,8 +114,9 @@ module.exports = (_ => {
 						bottom: -1.0em;
 					}
 					${BDFDB.dotCN._charcounternickcounter} {
-						right: 8px !important;
-						top: 0 !important;
+						position: static !important;
+						text-align: right !important;
+						margin-bottom: -16px !important;
 					}
 					${BDFDB.dotCN._charcountercustomstatuscounter} {
 						right: 0 !important;
@@ -160,7 +161,7 @@ module.exports = (_ => {
 
 			processChangeIdentity (e) {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: c => c && c.props && c.props.setNickname});
-				if (index > -1) children.unshift(BDFDB.ReactUtils.createElement("div", {
+				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.charcounter, BDFDB.disCN._charcountercounter, BDFDB.disCN._charcounternickcounter),
 					children: `${(children[index].props.nickname || "").length}/${maxLenghts.nick}`
 				}));
