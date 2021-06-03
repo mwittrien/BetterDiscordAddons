@@ -2,7 +2,7 @@
  * @name CharCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.2
+ * @version 1.5.3
  * @description Adds a Character Counter to most Inputs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CharCounter",
 			"author": "DevilBro",
-			"version": "1.5.2",
+			"version": "1.5.3",
 			"description": "Adds a Character Counter to most Inputs"
 		},
 		"changeLog": {
 			"fixed": {
-				"Change Nick": "Counter gets added again"
+				"Nitro Max Message Length": "Now uses 4000 as Max Limit when the user has the permissions to"
 			}
 		}
 	};
@@ -65,10 +65,7 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		const maxLenghts = {
-			normal: 2000,
-			edit: 2000,
-			form: 2000,
+		const maxLengths = {
 			nick: 32,
 			customstatus: 128,
 			popoutnote: 256,
@@ -148,7 +145,7 @@ module.exports = (_ => {
 
 			processChannelTextAreaContainer (e) {
 				let editorContainer = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelEditorContainer"});
-				if (editorContainer && editorContainer.props.type && maxLenghts[editorContainer.props.type] && !editorContainer.props.disabled) {
+				if (editorContainer && editorContainer.props.type && !editorContainer.props.disabled) {
 					if (!BDFDB.ArrayUtils.is(e.returnvalue.props.children)) e.returnvalue.props.children = [e.returnvalue.props.children];
 					this.injectCounter(e.returnvalue, e.returnvalue.props.children, editorContainer.props.type, BDFDB.dotCN.textarea, true);
 				}
@@ -163,7 +160,7 @@ module.exports = (_ => {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: c => c && c.props && c.props.setNickname});
 				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.charcounter, BDFDB.disCN._charcountercounter, BDFDB.disCN._charcounternickcounter),
-					children: `${(children[index].props.nickname || "").length}/${maxLenghts.nick}`
+					children: `${(children[index].props.nickname || "").length}/${maxLengths.nick}`
 				}));
 			}
 
@@ -172,7 +169,7 @@ module.exports = (_ => {
 				if (formItem) this.injectCounter(formItem, formItem.props.children, "customstatus", BDFDB.dotCN.input);
 			}
 			
-			injectCounter (parent, children, type, refClass, parsing) {
+			injectCounter (parent, children, type, refClass, parsing, premium) {
 				if (!children) return;
 				if (parent.props.className) parent.props.className = BDFDB.DOMUtils.formatClassName(parent.props.className, BDFDB.disCN._charcountercounteradded);
 				else parent.props.children = BDFDB.ReactUtils.createElement("div", {
@@ -183,7 +180,7 @@ module.exports = (_ => {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._charcountercounter, type && BDFDB.disCN[`_charcounter${typeMap[type] || type}counter`]),
 					refClass: refClass,
 					parsing: parsing,
-					max: maxLenghts[type],
+					max: maxLengths[type] || (BDFDB.LibraryModules.NitroUtils.canUseIncreasedMessageLength() && BDFDB.DiscordUtils.getExperiment("premiumContentLengthAvailable") ? BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH_PREMIUM : BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH),
 					onChange: instance => {
 						let node = BDFDB.ReactUtils.findDOMNode(instance);
 						let form = node && BDFDB.DOMUtils.getParent(BDFDB.dotCN.chatform, node);
