@@ -588,6 +588,22 @@ module.exports = (_ => {
 							toast_noteremove:					"Съобщението е премахнато от бележника",
 							toast_noteupdate:					"Актуализира съобщението в бележника"
 						};
+					case "cs":		// Czech
+						return {
+							context_pinoption:					"Poznamenat zprávu",
+							context_unpinoption:				"Odebrat poznámku",
+							context_updateoption:				"Aktualizovat poznámku",
+							popout_filter_all:					"Všechny servery",
+							popout_filter_channel:				"Kanál",
+							popout_filter_server:				"Server",
+							popout_note:						"Poznámky",
+							popout_pinoption:					"Poznámka",
+							popout_sort_messagetime:			"Datum zprávy",
+							popout_sort_notetime:				"Datum poznámky",
+							toast_noteadd:						"Zpráva přidána do poznámek",
+							toast_noteremove:					"Zpráva odebrána z poznámek",
+							toast_noteupdate:					"Zpráva v poznámkách aktualizována"
+						};
 					case "da":		// Danish
 						return {
 							context_pinoption:					"Skriv beskeden ned",
@@ -683,6 +699,22 @@ module.exports = (_ => {
 							toast_noteadd:						"Message ajouté au carnet",
 							toast_noteremove:					"Message supprimé du carnet",
 							toast_noteupdate:					"Mise à jour du message dans le carnet"
+						};
+					case "hi":		// Hindi
+						return {
+							context_pinoption:					"नोट संदेश",
+							context_unpinoption:				"नोट हटाएं",
+							context_updateoption:				"अद्यतन नोट",
+							popout_filter_all:					"सभी सर्वर",
+							popout_filter_channel:				"चैनल",
+							popout_filter_server:				"सर्वर",
+							popout_note:						"टिप्पणियाँ",
+							popout_pinoption:					"ध्यान दें",
+							popout_sort_messagetime:			"संदेश दिनांक",
+							popout_sort_notetime:				"नोट दिनांक",
+							toast_noteadd:						"संदेश नोटबुक में जोड़ा गया",
+							toast_noteremove:					"नोटबुक से संदेश हटाया गया",
+							toast_noteupdate:					"नोटबुक में संदेश अपडेट किया गया"
 						};
 					case "hr":		// Croatian
 						return {

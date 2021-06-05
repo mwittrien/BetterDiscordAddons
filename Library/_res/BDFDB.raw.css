@@ -461,39 +461,20 @@ img:not([src]), img[src=""], img[src="null"] {
 	text-overflow: ellipsis;
 }
 
-[REPLACE_CLASS_userpopoutheadernamewrapper_old],
-[REPLACE_CLASS_userpopoutheadername],
-[REPLACE_CLASS_userpopoutheadertagnonickname] {
-	display: flex;
-	align-items: center;
-	line-height: unset;
-	overflow: hidden;
-}
-[REPLACE_CLASS_userpopoutheadernamebase] {
-	overflow: hidden;
-}
-[REPLACE_CLASS_userpopoutheadertagdiscriminatornonickname] {
-	position: relative;
-	top: 1px;
+
+[REPLACE_CLASS_userpopoutheaderbottag] {
+	margin-top: 4px !important;
 }
 [REPLACE_CLASS_userinfodate] {
-	user-select: text;
+	color: var(--header-secondary);
 	margin-top: 8px;
+	user-select: text;
 }
 [REPLACE_CLASS_userinfodate] + [REPLACE_CLASS_userinfodate] {
 	margin-top: 0;
 }
 [REPLACE_CLASS_userinfodate] + *:not([REPLACE_CLASS_userinfodate]) {
-	margin-top: 4px;
-}
-[REPLACE_CLASS_userpopout] [REPLACE_CLASS_userinfodate] {
-	color: var(--header-secondary);
-}
-[REPLACE_CLASS_userprofile] [REPLACE_CLASS_userinfodate] {
-	color: var(--header-secondary);
-}
-[REPLACE_CLASS_userpopout] [REPLACE_CLASS_userpopoutheader]:not([class*='headerNormal']) [REPLACE_CLASS_userinfodate] {
-	color: hsla(0,0%,100%,.6);
+	margin-top: 6px;
 }
 [REPLACE_CLASS_userprofile] [class*='topSection']:not([class*='topSectionNormal']) [REPLACE_CLASS_userinfodate] {
 	color: hsla(0,0%,100%,.6);
@@ -506,7 +487,6 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_messagebottag] {
 	top: .15rem;
 }
-
 [REPLACE_CLASS_messageusername] ~ [REPLACE_CLASS_messagebottagcompact] {
 	margin-right: 0;
 	margin-left: .25rem;
@@ -579,6 +559,7 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_selectwrapper] {
 	display: flex;
 	align-items: center;
+	flex: 1 1 auto;
 }
 [REPLACE_CLASS_selectwrapper] [REPLACE_CLASS_select] {
 	flex: 1 1 auto;
@@ -1272,6 +1253,10 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-top: 8px;
 }
 
+[REPLACE_CLASS_colorpickerswatches] > div:not([class]),
+[REPLACE_CLASS_colorpickerswatches] [REPLACE_CLASS_colorpickerswatch] {
+	flex: 1 1 auto;
+}
 [REPLACE_CLASS_colorpickerswatchsinglewrapper] {
 	position: relative;
 	z-index: 1;

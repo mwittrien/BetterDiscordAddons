@@ -26,7 +26,7 @@
 	--info-help-foreground: rgb(var(--linkcolor));
 	--info-help-text: #fff;
 	--focus-primary: rgb(var(--linkcolor));
-	--control-brand-foreground: rgb(var(--accentcolor));
+	--control-brand-foreground: rgb(var(--accentcolor)) !important;
 	--brand-experiment-100: #fdfdfd !important;
 	--brand-experiment-130: #f2f2f2 !important;
 	--brand-experiment-160: #ebebeb !important;
@@ -348,16 +348,14 @@
 }
 
 .message-15tBk4 strong,										/* mention				in header							*/
-.wrapper-3WhCwL {											/* mention													*/
-	background-color: rgba(var(--accentcolor), 0.1);
-	color: rgb(var(--accentcolor));
+#app-mount .wrapper-3WhCwL {								/* mention													*/
+	background-color: var(--brand-experiment-30a);
+	color: var(--brand-experiment-200);
 }
 .message-15tBk4 strong:hover,
-.interactive:hover {
-	background-color: rgb(var(--accentcolor));
-}
-.mentioned-xhSam7 .mention.interactive:hover {
-	color: rgb(var(--accentcolor));
+#app-mount .interactive:hover {
+	background-color: var(--brand-experiment);
+	color: #fff;
 }
 
 .reactionMe-wv5HKu .reactionCount-2mvXRV,					/* reaction				count me							*/
@@ -740,6 +738,9 @@
 	border-color: rgb(var(--accentcolor));
 }
 
+.background-1QDuV2 .lookLink-9FtZy-.colorLink-35jkBc {
+	color: rgb(var(--accentcolor));
+}
 .avatarUploaderInner-3UNxY3 {								/* accountsettings		avatar upload						*/
 	background-color: rgb(var(--accentcolor));
 }
@@ -763,6 +764,7 @@
 	position: relative;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_bg.svg) center/cover no-repeat;
 }
+.marketingLogoImage-2SzXIR::before,
 .marketingLogoImage-2SzXIR::after {
 	content: "";
 	position: absolute;
@@ -771,11 +773,17 @@
 	bottom: 0;
 	left: 0;
 	pointer-events: none;
+}
+.marketingLogoImage-2SzXIR::before {
 	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_accent.svg) center/cover no-repeat;
 }
+.marketingLogoImage-2SzXIR::after {
+	background: rgb(var(--accentcolor2));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_accent2.svg) center/cover no-repeat;
+}
 #app-mount .tierUnlocked-27DwHo {							/* boostsettings		tierunlocked						*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor2));
 }
 #app-mount .tierAccomplished-2eXPdI,
 #app-mount .tierCurrent-Lw7-4E,
@@ -1105,6 +1113,14 @@ img[src="/assets/4697ec960e57790ad4f6251af4c246b4.svg"] {	/* widgetsettings		wid
 .colored-1armap .profileBadgePartner-j6Lwhr {
 	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://discord.com/assets/6203964d9d25c394a573fd4f6be36d97.svg) center/contain no-repeat;
+}
+.colored-1armap .profileBadgeVerifiedDeveloper-195KfD {
+	background: rgb(var(--accentcolor));
+	-webkit-mask: url(https://discord.com/assets/45cd06af582dcd3c6b79370b4e3630de.svg) center/contain no-repeat;
+}
+.colored-1armap .profileBadgeCertifiedModerator-1TQtjV {
+	background: rgb(var(--accentcolor));
+	-webkit-mask: url(https://discord.com/assets/955e3c9783043c7080ac202565810fc3.svg) center/contain no-repeat;
 }
 .colored-1armap .profileGuildSubscriberlvl1-3oI9tx {
 	background: rgb(var(--accentcolor2));
@@ -1521,7 +1537,7 @@ a.metadataName-14STf- {
 	filter: brightness(150%);
 }
 #app-mount .tierUnlocked-25K6Kv {							/* modal				tierunlocked						*/
-	color: rgb(var(--accentcolor));
+	color: rgb(var(--accentcolor2));
 }
 #app-mount .tierHeaderUnlocked-1n-OTI {						/* modal				tierheaderunlockedbg				*/
 	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.5));
@@ -1728,7 +1744,7 @@ a.metadataName-14STf- {
 
 /* ----		10.17.	NICKNAMEMODAL				---- */
 
-.reset-2ikQ30.lookLink-9FtZy-.colorLink-35jkBc {
+.reset-2Ufv5M.lookLink-9FtZy-.colorLink-35jkBc {
 	color: rgb(var(--accentcolor));
 }
 
@@ -1871,14 +1887,11 @@ a.metadataName-14STf- {
 
 /* ----		11.2.	USERPOPOUT						---- */
 
-.headerPlaying-j0WQBV {
-	background: rgb(var(--accentcolor));
-}
-.headerStreaming-2FjmGz {
-	background: #593695;
-}
 .profileBanner-j34RzR[style*="background-color: rgb(114, 137, 218)"] {
 	background-color: rgb(var(--accentcolor)) !important;
+}
+.setIdentityLink-OpBDR6 {
+	color: rgb(var(--accentcolor));
 }
 
 /* ----		11.3.	EMOJIPICKER						---- */
@@ -1942,7 +1955,6 @@ a.metadataName-14STf- {
 
 #app-mount .lookInverted-2D7oAl.colorBrand-3pXr91 .spinnerItem-3GlVyU,
 #app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91 .spinnerItem-3GlVyU,
-#app-mount .lookGhost-2Fn_0-.colorBrand-3pXr91 .spinnerItem-3GlVyU,
 #app-mount .lookLink-9FtZy-.colorBrand-3pXr91 .spinnerItem-3GlVyU {
 	background-color: rgb(var(--accentcolor));
 }
@@ -1985,18 +1997,6 @@ a.metadataName-14STf- {
 #app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91,
 #app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91:disabled {
 	border-color: rgba(var(--accentcolor), 0.1);
-	color: rgb(var(--accentcolor));
-}
-
-#app-mount .lookGhost-2Fn_0-.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover {
-	background-color: rgba(var(--accentcolor), 0.15);
-}
-#app-mount .lookGhost-2Fn_0-.hoverBrand-1_Fxlk.hasHover-3X1-zV:active {
-	background-color: rgba(var(--accentcolor), 0.2);
-}
-#app-mount .lookGhost-2Fn_0-.colorBrand-3pXr91,
-#app-mount .lookGhost-2Fn_0-.colorBrand-3pXr91:disabled {
-	background-color: rgba(var(--accentcolor), 0.1);
 	color: rgb(var(--accentcolor));
 }
 

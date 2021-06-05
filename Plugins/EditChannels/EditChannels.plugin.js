@@ -560,26 +560,23 @@ module.exports = (_ => {
 					}
 				}
 				if (data.color) {
-					let mentioned = mention.props.mentioned;
 					let color = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color) ? data.color[0] : data.color, "RGBA");
 					let color_200 = BDFDB.ColorUtils.change(color, 200);
 					let color_a30 = BDFDB.ColorUtils.setAlpha(color, 0.3, "RGBA");
 					mention.props.style = Object.assign({}, mention.props.style, {
-						background: mentioned ? "transparent" : color_a30,
+						background: color_a30,
 						color: color_200
 					});
 					let onMouseEnter = mention.props.onMouseEnter || ( _ => {});
 					mention.props.onMouseEnter = event => {
 						onMouseEnter(event);
-						mentioned = !!BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagementioned, event.target);
-						event.target.style.setProperty("background", mentioned ? "transparent" : color, "important");
-						event.target.style.setProperty("color", mentioned ? color_200 : "#fff", "important");
+						event.target.style.setProperty("background", color, "important");
+						event.target.style.setProperty("color", "#fff", "important");
 					};
 					let onMouseLeave = mention.props.onMouseLeave || ( _ => {});
 					mention.props.onMouseLeave = event => {
 						onMouseLeave(event);
-						mentioned = !!BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagementioned, event.target);
-						event.target.style.setProperty("background", mentioned ? "transparent" : color_a30, "important");
+						event.target.style.setProperty("background", color_a30, "important");
 						event.target.style.setProperty("color", color_200, "important");
 					};
 				}

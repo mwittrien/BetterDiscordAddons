@@ -11,7 +11,7 @@
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path fill="white" d="M 0,0 H 1 V 1 H 0.34 V 0.8 C 0.34,0.72 0.3,0.7 0.2,0.7 H 0 Z"/></svg>') center/cover no-repeat;
 }
 .dev-A7f2Rx.hasBadge-4rT8_u .badge-7R_W3s {
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 508.52 508.52"><path fill="black" d="M63.565, 476.737c0, 12.84, 7.755, 24.473, 19.61, 29.367c3.941, 1.621, 8.073, 2.415, 12.173, 2.415c8.263, 0, 16.4-3.242, 22.47-9.312L254.26, 362.765l136.442, 136.442c6.07, 6.07, 14.207, 9.312, 22.47, 9.312c4.1, 0, 8.232-0.795, 12.141-2.415c11.887-4.894, 19.642-16.527, 19.642-29.367V165.347H63.565V476.737z"/><path fill="black" d="M413.172, 0H95.347C77.804, 0, 63.565, 14.239, 63.565, 31.782v61.782h381.39V31.782C444.955, 14.239, 430.716, 0, 413.172, 0z"/></svg>') center/cover no-repeat !important;
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M 4.5 0 C 3.672043 0 3 0.67204269 3 1.5 L 3 4.4160156 L 21 4.4160156 L 21 1.5 C 21 0.67204269 20.328003 0 19.5 0 L 4.5 0 z M 3 7.8027344 L 3 22.5 C 3 23.105995 3.3662743 23.655743 3.9257812 23.886719 C 4.1117802 23.963224 4.306496 24 4.5 24 C 4.889979 24 5.2740679 23.847026 5.5605469 23.560547 L 12 17.121094 L 18.439453 23.560547 C 18.725933 23.847026 19.11002 24 19.5 24 C 19.693503 24 19.887777 23.963177 20.072266 23.886719 C 20.633283 23.655743 21 23.105995 21 22.5 L 21 7.8027344 L 3 7.8027344 z"/></svg>') center/cover no-repeat !important;
 	background: var(--bdfdb-blurple, #5865f2) !important;
 	position: absolute !important;
 	width: 30% !important;

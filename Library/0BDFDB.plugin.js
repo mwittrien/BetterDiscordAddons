@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.6
+ * @version 1.6.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,20 +19,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.6.6",
+			"version": "1.6.8",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
-		"changeLog": {
-			"improved": {
-				"Patron Badges": "All Badges will now say that they are from by BDFDB Patreon, even the T3 Custom Badges",
-				"Toasts": "You can now hover Toasts to stop them from disappearing"
-			},
-			"fixed": {
-				"Color Picker": "Copy Pasting a 6-digit HEX Color, when the alpha channel is enabled will autocomplete it to a 8-digit HEXA Color",
-				"Tooltips": "Fixed some rendering Issues with Tooltips"
-			}
-		}
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
 	};
 	
 	const DiscordObjects = {};
@@ -2909,6 +2899,11 @@ module.exports = (_ => {
 					if (!user) return window.location.origin + "/assets/1f0bfc0865d324c2587920a7d80c609b.png";
 					else return ((user.avatar ? "" : window.location.origin) + LibraryModules.IconUtils.getUserAvatarURL(user)).split("?")[0];
 				};
+				BDFDB.UserUtils.getBanner = function (id = BDFDB.UserUtils.me.id) {
+					let user = LibraryModules.UserStore.getUser(id);
+					if (!user || !user.banner) return "";
+					return LibraryModules.IconUtils.getUserBannerURL(user).split("?")[0];
+				};
 				BDFDB.UserUtils.can = function (permission, id = BDFDB.UserUtils.me.id, channelId = LibraryModules.LastChannelStore.getChannelId()) {
 					if (!BDFDB.DiscordConstants.Permissions[permission]) BDFDB.LogUtils.warn([permission, "not found in Permissions"]);
 					else {
@@ -4190,6 +4185,11 @@ module.exports = (_ => {
 				BDFDB.DiscordUtils.isDevModeEnabled = function () {
 					return LibraryModules.SettingsStore.developerMode;
 				};
+				BDFDB.DiscordUtils.getExperiment = function (id) {
+					if (!id) return null;
+					const module = BDFDB.ModuleUtils.find(m => m.definition && m.definition.defaultConfig && m.definition.defaultConfig[id] != null && typeof m.getCurrentConfig == "function");
+					return module && (module.getCurrentConfig({}) || {})[id];
+				};
 				BDFDB.DiscordUtils.getTheme = function () {
 					return LibraryModules.SettingsStore.theme != "dark" ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
 				};
@@ -4852,6 +4852,15 @@ module.exports = (_ => {
 				
 				InternalComponents.LibraryComponents.ChannelTextAreaButton = reactInitialized && class BDFDB_ChannelTextAreaButton extends LibraryModules.React.Component {
 					render() {
+						const inner = BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.textareabuttonwrapper,
+							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+								name: this.props.iconName,
+								iconSVG: this.props.iconSVG,
+								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.textareaicon, this.props.iconClassName, this.props.pulse && BDFDB.disCN.textareaiconpulse),
+								nativeClass: this.props.nativeClass
+							})
+						});
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Button, {
 							look: InternalComponents.LibraryComponents.Button.Looks.BLANK,
 							size: InternalComponents.LibraryComponents.Button.Sizes.NONE,
@@ -4863,15 +4872,7 @@ module.exports = (_ => {
 							onContextMenu: this.props.onContextMenu,
 							onMouseEnter: this.props.onMouseEnter,
 							onMouseLeave: this.props.onMouseLeave,
-							children: BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.textareabuttonwrapper,
-								children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-									name: this.props.iconName,
-									iconSVG: this.props.iconSVG,
-									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.textareaicon, this.props.iconClassName, this.props.pulse && BDFDB.disCN.textareaiconpulse),
-									nativeClass: this.props.nativeClass
-								})
-							})
+							children: this.props.tooltip && this.props.tooltip.text ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, Object.assign({}, this.props.tooltip, {children: inner})) : inner
 						});
 					}
 				};
@@ -5557,22 +5558,13 @@ module.exports = (_ => {
 						return !this.props.colors.length ? BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.colorpickerswatchsinglewrapper,
 							children: customSwatch
-						}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+						}) : BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickerswatches, BDFDB.disCN.colorpickerswatchescontainer, this.props.disabled && BDFDB.disCN.colorpickerswatchesdisabled),
 							children: [
-								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
-									className: BDFDB.disCN.marginreset,
-									shrink: 0,
-									grow: 0,
-									children: customSwatch
-								}),
-								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-									direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
-									className: BDFDB.disCN.flexmarginreset,
-									grow: 1,
-									children: this.props.colorRows.map(row => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+								customSwatch,
+								BDFDB.ReactUtils.createElement("div", {
+									children: this.props.colorRows.map(row => BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN.colorpickerrow,
-										wrap: InternalComponents.LibraryComponents.Flex.Wrap.WRAP,
 										children: row.map(color => BDFDB.ReactUtils.createElement(this.ColorSwatch, {
 											swatches: this,
 											color: color,
@@ -6077,7 +6069,7 @@ module.exports = (_ => {
 						this.props.participating = this.props.state ? LibraryModules.CurrentVoiceUtils.getGuildId() == this.props.guild.id : false;
 						this.props.participatingInStage = this.props.state ? currentVoiceChannel && currentVoiceChannel.guild_id == this.props.guild.id && currentVoiceChannel.isGuildStageVoice() : false;
 						
-						this.props.animatable = this.props.state ? LibraryModules.IconUtils.hasAnimatedGuildIcon(this.props.guild) : false;
+						this.props.animatable = this.props.state ? this.props.guild.icon && LibraryModules.IconUtils.isAnimatedIconHash(this.props.guild.icon) : false;
 						this.props.unavailable = this.props.state ? LibraryModules.GuildUnavailableStore.unavailableGuilds.includes(this.props.guild.id) : false;
 					
 						let isDraggedGuild = this.props.draggingGuildId === this.props.guild.id;
@@ -6108,7 +6100,7 @@ module.exports = (_ => {
 									onMouseUp: this.handleMouseUp.bind(this),
 									onClick: this.handleClick.bind(this),
 									onContextMenu: this.handleContextMenu.bind(this),
-									icon: this.props.guild.getIconURL(this.state.hovered && this.props.animatable ? "gif" : "png"),
+									icon: this.props.guild.getIconURL(this.state.hovered && this.props.animatable),
 									selected: this.props.selected || this.state.hovered
 								})
 							})
@@ -7535,7 +7527,7 @@ module.exports = (_ => {
 									}) : child)
 								}),
 								this.props.errorMessage ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
-									className: BDFDB.disCN.carderror,
+									className: BDFDB.disCN.margintop8,
 									size: InternalComponents.LibraryComponents.TextElement.Sizes.SIZE_12,
 									color: InternalComponents.LibraryComponents.TextElement.Colors.STATUS_RED,
 									children: this.props.errorMessage
@@ -7813,8 +7805,9 @@ module.exports = (_ => {
 				InternalBDFDB._processAvatarRender = function (user, avatar) {
 					if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user) && (avatar.props.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) == -1) {
 						avatar.props[InternalData.userIdAttribute] = user.id;
-						let role = "", note = "", className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")), addBadge = InternalBDFDB.settings.general.showSupportBadges;
+						let role = "", note = "", link, className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")), addBadge = InternalBDFDB.settings.general.showSupportBadges;
 						if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
+							link = "https://www.patreon.com/MircoWittrien";
 							role = BDFDB_Patrons[user.id].text || (BDFDB_Patron_Tiers[BDFDB_Patrons[user.id].tier] || {}).text;
 							note = BDFDB_Patrons[user.id].text && (BDFDB_Patron_Tiers[BDFDB_Patrons[user.id].tier] || {}).text;
 							className = BDFDB.DOMUtils.formatClassName(className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN[`bdfdbsupporter${BDFDB_Patrons[user.id].tier}`]);
@@ -7839,6 +7832,7 @@ module.exports = (_ => {
 							if (addBadge) avatar.props.children.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 								text: role,
 								note: note,
+								onClick: link ? (_ => BDFDB.DiscordUtils.openLink(link)) : (_ => {}),
 								children: BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.bdfdbbadge
 								})
@@ -7852,8 +7846,9 @@ module.exports = (_ => {
 					if (wrapper) wrapper.setAttribute(InternalData.userIdAttribute, user.id);
 					if (Node.prototype.isPrototypeOf(avatar) && (avatar.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) == -1) {
 						avatar.setAttribute(InternalData.userIdAttribute, user.id);
-						let role = "", note = "", addBadge = InternalBDFDB.settings.general.showSupportBadges;
+						let role = "", note = "", link, addBadge = InternalBDFDB.settings.general.showSupportBadges;
 						if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
+							link = "https://www.patreon.com/MircoWittrien";
 							role = BDFDB_Patrons[user.id].text || (BDFDB_Patron_Tiers[BDFDB_Patrons[user.id].tier] || {}).text;
 							note = BDFDB_Patrons[user.id].text && (BDFDB_Patron_Tiers[BDFDB_Patrons[user.id].tier] || {}).text;
 							avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN[`bdfdbsupporter${BDFDB_Patrons[user.id].tier}`]);
@@ -7866,6 +7861,7 @@ module.exports = (_ => {
 						if (addBadge && role && !avatar.querySelector(BDFDB.dotCN.bdfdbbadge)) {
 							let badge = document.createElement("div");
 							badge.className = BDFDB.disCN.bdfdbbadge;
+							if (link) badge.addEventListener("click", _ => BDFDB.DiscordUtils.openLink(link));
 							badge.addEventListener("mouseenter", _ => BDFDB.TooltipUtils.create(badge, role, {position: "top", note: note}));
 							avatar.appendChild(badge);
 						}
@@ -7873,6 +7869,10 @@ module.exports = (_ => {
 				};
 				InternalBDFDB._processUserInfoNode = function (user, wrapper) {
 					if (!user || !wrapper) return;
+					LibraryModules.ImageEditUtils.getPrimaryColorForAvatar(BDFDB.UserUtils.getAvatar(user.id)).then(color => {
+						const rgb = BDFDB.ColorUtils.convert(color, "RGB");
+						if (rgb) wrapper.style.setProperty("--user-banner-color", rgb, "important");
+					});
 					if (InternalData.UserBackgrounds[user.id]) for (let property in InternalData.UserBackgrounds[user.id]) wrapper.style.setProperty(property, InternalData.UserBackgrounds[user.id][property], "important");
 				};
 				InternalBDFDB.processMessageHeader = function (e) {
@@ -8257,60 +8257,19 @@ module.exports = (_ => {
 					};
 					BDFDB.DevUtils.generateLanguageStrings = function (strings, config = {}) {
 						const language = config.language || "en";
-						const languages = BDFDB.ArrayUtils.removeCopies(BDFDB.ArrayUtils.is(config.languages) ? config.languages : ["en"].concat(Object.keys(BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, n => n.discord))).filter(n => !n.startsWith("en-") && !n.startsWith("$") && n != language)).sort();
+						const languages = BDFDB.ArrayUtils.removeCopies(BDFDB.ArrayUtils.is(config.languages) ? config.languages : ["en"].concat(BDFDB.LibraryModules.LanguageStore.languages.filter(n => n.enabled).map(n => {
+							if (BDFDB.LanguageUtils.languages[n.code]) return n.code;
+							else {
+								const code = n.code.split("-")[0];
+								if (BDFDB.LanguageUtils.languages[code]) return code;
+							}
+						})).filter(n => n && !n.startsWith("en-") && !n.startsWith("$") && n != language)).sort();
 						let translations = {};
 						strings = BDFDB.ObjectUtils.sort(strings);
 						const stringKeys = Object.keys(strings);
 						translations[language] = BDFDB.ObjectUtils.toArray(strings);
 						let text = Object.keys(translations[language]).map(k => translations[language][k]).join("\n\n");
 						
-						let gt = (lang, callback) => {
-							let googleTranslateWindow = BDFDB.WindowUtils.open(BDFDB, `https://translate.google.com/#${language}/${{"zh": "zh-CN", "pt-BR": "pt"}[lang] || lang}/${encodeURIComponent(text)}`, {
-								onLoad: _ => {
-									googleTranslateWindow.executeJavaScriptSafe(`
-										let count = 0, interval = setInterval(_ => {
-											count++;
-											let translation = Array.from(document.querySelectorAll("[data-language-to-translate-into] span:not([class])")).map(n => n.innerText).join("");
-											if (translation || count > 50) {
-												clearInterval(interval);
-												require("electron").ipcRenderer.sendTo(${LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "BDFDB-translation", [
-													translation,
-													(document.querySelector("h2 ~ [lang]") || {}).lang
-												]);
-											}
-										}, 100);
-									`);
-								}
-							});
-							BDFDB.WindowUtils.addListener(BDFDB, "BDFDB-translation", (event, messageData) => {
-								BDFDB.WindowUtils.close(googleTranslateWindow);
-								BDFDB.WindowUtils.removeListener(BDFDB, "BDFDB-translation");
-								callback(messageData[0]);
-							});
-						};
-						let gt2 = (lang, callback) => {
-							BDFDB.LibraryRequires.request(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${language}&tl=${lang}&dt=t&dj=1&source=input&q=${encodeURIComponent(text)}`, (error, response, result) => {
-								if (!error && result && response.statusCode == 200) {
-									try {callback(JSON.parse(result).sentences.map(n => n && n.trans).filter(n => n).join(""));}
-									catch (err) {callback("");}
-								}
-								else {
-									if (response.statusCode == 429) {
-										BDFDB.NotificationUtils.toast("Too many requests, switching to backup", {
-											type: "danger"
-										});
-										config.useBackup = true;
-										BDFDB.DevUtils.generateLanguageStrings(strings, config);
-									}
-									else {
-										BDFDB.NotificationUtils.toast("Failed to translate text", {
-											type: "danger"
-										});
-										callback("");
-									}
-								}
-							});
-						};
 						let fails = 0, next = lang => {
 							if (!lang) {
 								let formatTranslation = (l, s, i) => {
@@ -8329,22 +8288,43 @@ module.exports = (_ => {
 								});
 								BDFDB.LibraryRequires.electron.clipboard.write({text: result});
 							}
-							else (config.useBackup ? gt : gt2)(lang, translation => {
-								BDFDB.LogUtils.log(lang);
-								if (!translation) {
-									console.warn("no translation");
-									fails++;
-									if (fails > 10) console.error("skipped language");
-									else languages.unshift(lang);
-								}
-								else {
-									fails = 0;
-									translations[lang] = translation.split("\n\n");
-								}
-								next(languages.shift());
-							});
+							else {
+								const callback = translation => {
+									BDFDB.LogUtils.log(lang);
+									if (!translation) {
+										console.warn("No Translation");
+										fails++;
+										if (fails > 10) console.error("Skipped Language");
+										else languages.unshift(lang);
+									}
+									else {
+										fails = 0;
+										translations[lang] = translation.split("\n\n");
+									}
+									next(languages.shift());
+								};
+								BDFDB.LibraryRequires.request(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${language}&tl=${lang}&dt=t&dj=1&source=input&q=${encodeURIComponent(text)}`, (error, response, result) => {
+									if (!error && result && response.statusCode == 200) {
+										try {callback(JSON.parse(result).sentences.map(n => n && n.trans).filter(n => n).join(""));}
+										catch (err) {callback("");}
+									}
+									else {
+										if (response.statusCode == 429) {
+											BDFDB.NotificationUtils.toast("Too many Requests", {
+												type: "danger"
+											});
+										}
+										else {
+											BDFDB.NotificationUtils.toast("Failed to translate Text", {
+												type: "danger"
+											});
+											callback("");
+										}
+									}
+								});
+							}
 						};
-						next(languages.shift());
+						if (stringKeys.length) next(languages.shift());
 					};
 					BDFDB.DevUtils.req = InternalBDFDB.getWebModuleReq();
 					
