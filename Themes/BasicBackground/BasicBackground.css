@@ -4263,6 +4263,12 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .headerNormal-T_seeN .headerTagUsernameNoNickname-2_H881 {
 	color: var(--header-primary);
 }
+.aboutMeSection---MkQa {									/* popout				about me section					*/
+	background-color: transparent;
+}
+.activity-fViXj7 {											/* popout				activity							*/
+	padding: 0 16px 16px;
+}
 
 #app-mount .body-3iLsc4,									/* popout				body								*/
 #app-mount .footer-1fjuF6 {									/* popout				footer								*/
