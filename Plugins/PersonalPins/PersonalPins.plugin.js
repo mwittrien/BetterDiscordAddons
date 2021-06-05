@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.3
+ * @version 2.0.4
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,14 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "PersonalPins",
 			"author": "DevilBro",
-			"version": "2.0.3",
+			"version": "2.0.4",
 			"description": "Allows you to locally pin Messages"
 		},
 		"changeLog": {
-			"improved": {
-				"Performance": "Added Pagination to the Notes Popout to reduce the Stress for People who saved a lot of Notes",
-				"Pagination": "Fixed some Performance Issues"
-			},
+			"added": {
+				"Amount": "Added the shown and total amount of pinned messages"
+			}
 		}
 	};
 
@@ -120,6 +119,7 @@ module.exports = (_ => {
 					});
 				}
 				if (updateData) BDFDB.DataUtils.save(notes, _this, "notes");
+				let allCount = messages.length;
 				let currentChannel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId()) || {};
 				switch (popoutProps.selectedFilter.value) {
 					case "channel":
@@ -139,7 +139,7 @@ module.exports = (_ => {
 				}
 				BDFDB.ArrayUtils.keySort(messages, popoutProps.selectedSort.value);
 				if (popoutProps.selectedOrder.value != "descending") messages.reverse();
-				return messages;
+				return [messages, allCount];
 			}
 			renderMessage(note, message, channel) {
 				if (!message || !channel) return null;
@@ -236,7 +236,7 @@ module.exports = (_ => {
 			}
 			render() {
 				let searchTimeout;
-				const messages = this.filterMessages();
+				const [messages, allCount] = this.filterMessages();
 				return BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 					children: [
 						BDFDB.ReactUtils.createElement("div", {
@@ -251,7 +251,7 @@ module.exports = (_ => {
 										children: [
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 												className: BDFDB.disCN.messagespopouttitle,
-												children: _this.labels.popout_note
+												children: `${_this.labels.popout_note} - ${messages.length}/${allCount}`
 											}),
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
 												query: popoutProps.searchKey,
