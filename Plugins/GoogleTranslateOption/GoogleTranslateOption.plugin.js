@@ -2,7 +2,7 @@
  * @name GoogleTranslateOption
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.6
+ * @version 2.2.7
  * @description Allows you to translate Messages and your outgoing Message within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.2.6",
+			"version": "2.2.7",
 			"description": "Allows you to translate Messages and your outgoing Message within Discord"
 		},
 		"changeLog": {
 			"added": {
-				"Show Original Message": "Added an option that, similar to send original message, allows you to translate someone elses message and have the plugin display the translation and the original message",
-				"Per Channel Languages": "You can now press the lock icon in the language settings, this will save any further changes for the languages in a separate save, allowing you to set up a separate language config for each channel"
+				"Auth Keys": "You can now set your own auth keys in the plugin settings, make sure they are formatted in the same way as the placeholder"
+			},
+			"fixed": {
+				"Papago": "Works again"
 			}
 		}
 	};
@@ -221,7 +223,10 @@ module.exports = (_ => {
 											})
 										]
 									}) : null,
-									onChange: value => _this.saveLanguageChoice(value, direction, place, this.props.channelId) 
+									onChange: value => {
+										_this.saveLanguageChoice(value, direction, place, this.props.channelId);
+										BDFDB.ReactUtils.forceUpdate(this);
+									}
 								})
 							}),
 							direction == languageTypes.OUTPUT && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
@@ -276,15 +281,45 @@ module.exports = (_ => {
 		
 		const googleLanguages = ["af","am","ar","az","be","bg","bn","bs","ca","ceb","co","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fr","fy","ga","gd","gl","gu","ha","haw","hi","hmn","hr","ht","hu","hy","id","ig","is","it","iw","ja","jw","ka","kk","km","kn","ko","ku","ky","la","lb","lo","lt","lv","mg","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","ny","or","pa","pl","ps","pt","ro","ru","rw","sd","si","sk","sl","sm","sn","so","sq","sr","st","su","sv","sw","ta","te","tg","th","tk","tl","tr","tt","ug","uk","ur","uz","vi","xh","yi","yo","zh-CN","zu"];
 		const translationEngines = {
-			googleapi: 					{name: "Google",			auto: true,		funcName: "googleApiTranslate",			languages: googleLanguages},
-			deepl: 						{name: "DeepL",				auto: true,		funcName: "deepLTranslate",				languages: ["bg","cs","da","de","en","el","es","et","fi","fr","hu","it","ja","lt","lv","nl","pl","pt","ro","ru","sk","sl","sv","zh"]},
-			itranslate: 				{name: "iTranslate",		auto: true,		funcName: "iTranslateTranslate",		languages: [...new Set(["af","ar","az","be","bg","bn","bs","ca","ceb","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fil","fr","ga","gl","gu","ha","he","hi","hmn","hr","ht","hu","hy","id","ig","is","it","ja","jw","ka","kk","km","kn","ko","la","lo","lt","lv","mg","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","ny","pa","pl","pt-BR","pt-PT","ro","ru","si","sk","sl","so","sq","sr","st","su","sv","sw","ta","te","tg","th","tr","uk","ur","uz","vi","we","yi","yo","zh-CN","zh-TW","zu"].concat(googleLanguages))].sort()},
-			yandex: 					{name: "Yandex",			auto: true,		funcName: "yandexTranslate",			languages: ["af","am","ar","az","ba","be","bg","bn","bs","ca","ceb","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fr","ga","gd","gl","gu","he","hi","hr","ht","hu","hy","id","is","it","ja","jv","ka","kk","km","kn","ko","ky","la","lb","lo","lt","lv","mg","mhr","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","pa","pap","pl","pt","ro","ru","si","sk","sl","sq","sr","su","sv","sw","ta","te","tg","th","tl","tr","tt","udm","uk","ur","uz","vi","xh","yi","zh"]},
-			papago: 					{name: "Papago",			auto: false,	funcName: "papagoTranslate",			languages: ["en","es","fr","id","ja","ko","th","vi","zh-CN","zh-TW"]}
+			googleapi: {
+				name: "Google",
+				auto: true,
+				funcName: "googleApiTranslate",
+				languages: googleLanguages
+			},
+			deepl: {
+				name: "DeepL",
+				auto: true,
+				funcName: "deepLTranslate",
+				languages: ["bg","cs","da","de","en","el","es","et","fi","fr","hu","it","ja","lt","lv","nl","pl","pt","ro","ru","sk","sl","sv","zh"],
+				key: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx:fx"
+			},
+			itranslate: {
+				name: "iTranslate",
+				auto: true,
+				funcName: "iTranslateTranslate",
+				languages: [...new Set(["af","ar","az","be","bg","bn","bs","ca","ceb","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fil","fr","ga","gl","gu","ha","he","hi","hmn","hr","ht","hu","hy","id","ig","is","it","ja","jw","ka","kk","km","kn","ko","la","lo","lt","lv","mg","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","ny","pa","pl","pt-BR","pt-PT","ro","ru","si","sk","sl","so","sq","sr","st","su","sv","sw","ta","te","tg","th","tr","uk","ur","uz","vi","we","yi","yo","zh-CN","zh-TW","zu"].concat(googleLanguages))].sort(),
+				key: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+			},
+			yandex: {
+				name: "Yandex",
+				auto: true,
+				funcName: "yandexTranslate",
+				languages: ["af","am","ar","az","ba","be","bg","bn","bs","ca","ceb","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fr","ga","gd","gl","gu","he","hi","hr","ht","hu","hy","id","is","it","ja","jv","ka","kk","km","kn","ko","ky","la","lb","lo","lt","lv","mg","mhr","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","pa","pap","pl","pt","ro","ru","si","sk","sl","sq","sr","su","sv","sw","ta","te","tg","th","tl","tr","tt","udm","uk","ur","uz","vi","xh","yi","zh"],
+				key: "trnsl.x.x.xxxxxxxxxxxxxxxx.xxxxxxxxxxxxxxxx.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+			},
+			papago: {
+				name: "Papago",
+				auto: false,
+				funcName: "papagoTranslate",
+				languages: ["en","es","fr","id","ja","ko","th","vi","zh-CN","zh-TW"],
+				key: "xxxxxxxxxxxxxxxxxxxx xxxxxxxxxx"
+			}
 		};
 		
 		var languages = {};
 		var favorites = [];
+		var authKeys = {};
 		var channelLanguages = {};
 		var translationEnabledStates = [], isTranslating;
 		var translatedMessages = {}, oldMessages = {};
@@ -380,6 +415,22 @@ module.exports = (_ => {
 							className: BDFDB.disCNS.dividerdefault + BDFDB.disCN.marginbottom8
 						}));
 						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							title: "Own Auth Keys:",
+							children: Object.keys(translationEngines).filter(key => translationEngines[key].key).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+								type: "TextInput",
+								basis: "75%",
+								label: translationEngines[key].name,
+								placeholder: translationEngines[key].key,
+								value: authKeys[key],
+								onChange: value => BDFDB.DataUtils.save((value || "").trim(), this, "authKeys", key)
+							}))
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+							className: BDFDB.disCNS.dividerdefault + BDFDB.disCN.marginbottom8
+						}));
+						
 						for (let key in this.defaults.exceptions) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.defaults.exceptions[key].description,
 							className: BDFDB.disCN.marginbottom8,
@@ -410,6 +461,7 @@ module.exports = (_ => {
 				favorites = BDFDB.DataUtils.load(this, "favorites");
 				favorites = !BDFDB.ArrayUtils.is(favorites) ? [] : favorites;
 				
+				authKeys = BDFDB.DataUtils.load(this, "authKeys");
 				channelLanguages = BDFDB.DataUtils.load(this, "channelLanguages");
 				
 				this.setLanguages();
@@ -858,7 +910,7 @@ module.exports = (_ => {
 			}
 			
 			deepLTranslate (data, callback) {
-				BDFDB.LibraryRequires.request(`https://api-free.deepl.com/v2/translate?auth_key=75cc2f40-fdae-14cd-7242-6a384e2abb9c:fx&text=${encodeURIComponent(data.text)}${data.input.auto ? "" : `&source_lang=${data.input.id}`}&target_lang=${data.output.id}`, (error, response, body) => {
+				BDFDB.LibraryRequires.request(`https://api-free.deepl.com/v2/translate?auth_key=${authKeys.deepl || "75cc2f40-fdae-14cd-7242-6a384e2abb9c:fx"}&text=${encodeURIComponent(data.text)}${data.input.auto ? "" : `&source_lang=${data.input.id}`}&target_lang=${data.output.id}`, (error, response, body) => {
 					if (!error && body && response.statusCode == 200) {
 						try {
 							body = JSON.parse(body);
@@ -871,7 +923,6 @@ module.exports = (_ => {
 						catch (err) {callback("");}
 					}
 					else {
-						console.log(response);
 						if (response.statusCode == 429 || response.statusCode == 456) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Request Limit reached.`, {
 							type: "danger",
 							position: "center"
@@ -894,7 +945,7 @@ module.exports = (_ => {
 					BDFDB.LibraryRequires.request.post({
 						url: "https://web-api.itranslateapp.com/v3/texts/translate",
 						headers: {
-							"API-KEY": data.engine.APIkey
+							"API-KEY": authKeys.itranslate || data.engine.APIkey
 						},
 						body: JSON.stringify({
 							source: {
@@ -934,7 +985,7 @@ module.exports = (_ => {
 						}
 					});
 				};
-				if (data.engine.APIkey) translate();
+				if (authKeys.itranslate || data.engine.APIkey) translate();
 				else BDFDB.LibraryRequires.request("https://www.itranslate.com/js/webapp/main.js", {gzip: true}, (error, response, body) => {
 					if (!error && body) {
 						let APIkey = /var API_KEY = "(.+)"/.exec(body);
@@ -949,7 +1000,7 @@ module.exports = (_ => {
 			}
 			
 			yandexTranslate (data, callback) {
-				BDFDB.LibraryRequires.request(`https://translate.yandex.net/api/v1.5/tr/translate?key=trnsl.1.1.20191206T223907Z.52bd512eca953a5b.1ec123ce4dcab3ae859f312d27cdc8609ab280de&text=${encodeURIComponent(data.text)}&lang=${data.specialCase || data.input.auto ? data.output.id : (data.input.id + "-" + data.output.id)}&options=1`, (error, response, body) => {
+				BDFDB.LibraryRequires.request(`https://translate.yandex.net/api/v1.5/tr/translate?key=${authKeys.yandex || "trnsl.1.1.20191206T223907Z.52bd512eca953a5b.1ec123ce4dcab3ae859f312d27cdc8609ab280de"}&text=${encodeURIComponent(data.text)}&lang=${data.specialCase || data.input.auto ? data.output.id : (data.input.id + "-" + data.output.id)}&options=1`, (error, response, body) => {
 					if (!error && body && response.statusCode == 200) {
 						body = BDFDB.DOMUtils.create(body);
 						let translation = body.querySelector("text");
@@ -982,6 +1033,7 @@ module.exports = (_ => {
 			}
 			
 			papagoTranslate (data, callback) {
+				const credentials = (authKeys.papago || "kUNGxtAmTJQFbaFehdjk zC70k3VhpM").split(" ");
 				BDFDB.LibraryRequires.request.post({
 					url: "https://openapi.naver.com/v1/papago/n2mt",
 					form: {
@@ -990,14 +1042,15 @@ module.exports = (_ => {
 						text: data.text
 					},
 					headers: {
-						"X-Naver-Client-Id": "kUNGxtAmTJQFbaFehdjk",
-						"X-Naver-Client-Secret": "zC70k3VhpM"
+						"X-Naver-Client-Id": credentials[0],
+						"X-Naver-Client-Secret": credentials[1]
 					}
 				}, (error, response, body) => {
 					if (!error && body && response.statusCode == 200) {
 						try {
 							let message = (JSON.parse(body) || {}).message;
-							if (message && message.body && message.body.translatedText) callback(message.body.translatedText);
+							let result = message && (message.body || message.result);
+							if (result && result.translatedText) callback(result.translatedText);
 							else callback("");
 						}
 						catch (err) {callback("");}
