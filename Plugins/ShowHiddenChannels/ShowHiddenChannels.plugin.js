@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.7
+ * @version 2.9.8
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,15 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "2.9.7",
+			"version": "2.9.8",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
 		},
 		"changeLog": {
-			"improved": {
-				"Channel Topic": "Formatting Channel Topic in Access Modal (makes Links clickable, etc)"
-			},
 			"fixed": {
-				"Settings": "Show again"
+				"User Profile Modal": "Opens again if you click a User in the Access Modal"
 			}
 		}
 	};
@@ -108,7 +105,10 @@ module.exports = (_ => {
 							size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40,
 							onClick: _ => {
 								if (accessModal) accessModal.props.onClose();
-								BDFDB.LibraryModules.UserProfileUtils.open(this.props.user.id);
+								BDFDB.LibraryModules.UserProfileModalUtils.openUserProfileModal({
+									userId: this.props.user.id,
+									guildId: this.props.guildId
+								});
 							}
 						})
 					}),

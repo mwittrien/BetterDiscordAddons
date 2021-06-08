@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.4
+ * @version 1.2.5
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "LastMessageDate",
 			"author": "DevilBro",
-			"version": "1.2.4",
+			"version": "1.2.5",
 			"description": "Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal"
 		},
 		"changeLog": {
-			"improved": {
-				"New User Popout": "Fixed for the new User Popout, which will be released soon-ish, again and again and again, stop changing Stuff Discord, STOOOOOOOOOOOOOOOOOOOOP JESUS"
+			"fixed": {
+				"User Profile Modal": ""
 			}
 		}
 	};
@@ -66,7 +66,7 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var loadedUsers, requestedUsers, languages;
-		var currentPopout;
+		var currentPopout, currentProfile;
 		
 		return class LastMessageDate extends Plugin {
 			onLoad () {
@@ -90,7 +90,8 @@ module.exports = (_ => {
 					after: {
 						UserPopout: "render",
 						UserPopoutInfo: "default",
-						AnalyticsContext: "render"
+						UserProfileModal: "default",
+						UserProfileModalHeader: "default"
 					}
 				};
 			}
@@ -175,21 +176,20 @@ module.exports = (_ => {
 			}
 
 			processUserPopoutInfo (e) {
-				if (e.instance.props.user && this.settings.places.userPopout) {
+				if (currentPopout && e.instance.props.user && this.settings.places.userPopout) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
 					if (index > -1) this.injectDate(currentPopout, children, 2, e.instance.props.user, e.instance.props.guildId);
 				}
 			}
 
-			processAnalyticsContext (e) {
-				if (typeof e.returnvalue.props.children == "function" && e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.PROFILE_MODAL && this.settings.places.userProfile) {
-					let renderChildren = e.returnvalue.props.children;
-					e.returnvalue.props.children = (...args) => {
-						let renderedChildren = renderChildren(...args);
-						let [children, index] = BDFDB.ReactUtils.findParent(renderedChildren, {name: ["DiscordTag", "ColoredFluxTag"]});
-						if (index > -1) this.injectDate(e.instance, children, 1, children[index].props.user, BDFDB.ReactUtils.findValue(e.instance, "guildId", {up: true}));
-						return renderedChildren;
-					};
+			processUserProfileModal (e) {
+				currentProfile = e.instance;
+			}
+
+			processUserProfileModalHeader (e) {
+				if (currentProfile && e.instance.props.user && this.settings.places.userProfile) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["DiscordTag", "ColoredFluxTag"]});
+					if (index > -1) this.injectDate(currentProfile, children, 1, e.instance.props.user, currentProfile.props.guildId);
 				}
 			}
 
