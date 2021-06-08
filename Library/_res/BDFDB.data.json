@@ -1317,7 +1317,7 @@
 		"UserPopoutBanner": {"props": ["profileBanner", "profileBannerPremium"]},
 		"UserPopoutHeader": {"props": ["headerNormal", "avatarPositionNormal"]},
 		"UserPopoutInfo": {"props": ["headerTop", "profileBadges"]},
-		"UserProfile": {"props": ["topSectionNormal", "tabBarContainer"]},
+		"UserProfile": {"props": ["root", "tabBarContainer"]},
 		"UserSettingsAppearancePreview": {"props": ["preview", "firstMessage"]},
 		"UserSummaryItem": {"props": ["avatarContainerMasked", "container"]},
 		"Video": {"props": ["video", "fullScreen"]},

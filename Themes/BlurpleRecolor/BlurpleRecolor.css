@@ -1102,10 +1102,6 @@ img[src="/assets/4697ec960e57790ad4f6251af4c246b4.svg"] {	/* widgetsettings		wid
 
 /* ----		10.1.	USERMODAL						---- */
 
-.topSectionPlaying-1J5E4n {									/* modal				topsection playing					*/
-	background: rgb(var(--accentcolor));
-}
-
 .colored-1armap .profileBadgeStaff-3BXdTO {
 	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://discord.com/assets/4358ad1fb423b346324516453750f569.svg) center/contain no-repeat;

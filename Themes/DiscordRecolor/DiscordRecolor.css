@@ -2409,7 +2409,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	flex: 1 0 auto;
 }
 
-#app-mount .modal-6GHvdM .tabBarContainer-1s1u-z {
+#app-mount .modal-6GHvdM .tabBarContainer-37hZsr {
 	background: rgba(0,0,0,.2);
 	box-shadow: 0 2px 3px 0 rgba(0,0,0,.1);
 }
@@ -3194,7 +3194,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 /* ----		11.1.	USERPOPOUT						---- */
 
-#app-mount .userPopout-3XzG_A {
+#app-mount .userPopout-xaxa6l {
 	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary),.6), 0 2px 10px 0 rgba(0,0,0,.2);
 }
 
@@ -3209,16 +3209,16 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	color: var(--header-primary);
 }
 
-#app-mount .body-3iLsc4,
-#app-mount .footer-1fjuF6 {
+#app-mount .body-3HBlXn,
+#app-mount .footer-1N3bR3 {
 	color: var(--header-secondary);
 }
 
-#app-mount .wumpusTooltip-65YlMT {
+#app-mount .wumpusTooltip-mj7eo0 {
 	background-color: var(--background-tertiary);
 	color: var(--header-primary);
 }
-#app-mount .wumpusTooltip-65YlMT::after {
+#app-mount .wumpusTooltip-mj7eo0::after {
 	border-color: transparent var(--background-tertiary) transparent transparent;
 }
 
