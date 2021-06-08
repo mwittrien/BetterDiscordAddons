@@ -2467,16 +2467,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 /* ----		10.1.	USERMODAL						---- */
 
-#app-mount .emptyIconStreamerMode-3RfWOW {
-	background-image: url(https://discord.com/assets/e18336bc1141d8a5e88379e41e91cacb.svg);
-	opacity: .5;
-}
-#app-mount .emptyIconGuilds-3OViNh {
-	background-image: url(https://discord.com/assets/87ad02315e38924402c7fb5017cf11ab.svg);
-	opacity: .5;
-}
-#app-mount .emptyIconFriends-BrjhY9 {
-	background-image: url(https://discord.com/assets/ca3f5ec71bb86c6aeb015bb0d54a10fa.svg);
+.emptyIcon-1yiM-z {
 	opacity: .5;
 }
 
