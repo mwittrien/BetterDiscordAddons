@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.6
+ * @version 1.1.7
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.1.6",
+			"version": "1.1.7",
 			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
-		},
-		"changeLog": {
-			"improved": {
-				"Activity Toggle": "Added Activity Status Toggle Button"
-			}
 		}
 	};
 
@@ -430,12 +425,10 @@ module.exports = (_ => {
 							className: BDFDB.disCN._spotifycontrolsbartext,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-									className: BDFDB.disCN.height12,
 									size: BDFDB.LibraryComponents.TextElement.Sizes.SIZE_12,
 									children: this.formatTime(currentTime)
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-									className: BDFDB.disCN.height12,
 									size: BDFDB.LibraryComponents.TextElement.Sizes.SIZE_12,
 									children: this.formatTime(maxTime)
 								})

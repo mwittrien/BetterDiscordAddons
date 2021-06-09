@@ -2173,7 +2173,6 @@
 		"h5defaultmargin": ["Text", "defaultMarginh5"],
 		"headertitle": ["Text", "title"],
 		"headerwrapper": ["TextColor2", "wrapper"],
-		"height12": ["UserPopoutHeader", "height12"],
 		"highlight": ["NotFound", "highlight"],
 		"homebuttonicon": ["HomeIcon", "homeIcon"],
 		"homebuttonpill": ["HomeIcon", "pill"],
