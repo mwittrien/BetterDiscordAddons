@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.6.0
+ * @version 3.6.1
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
-			"version": "3.6.0",
+			"version": "3.6.1",
 			"description": "Allows you to replace the native Sounds with custom Sounds"
+		},
+		"changeLog": {
+			"added": {
+				"Replies": "Same as @here/@everyone/role mentions a new sub type for replies was added, this allows you to set a custom sound for only replies or mute reply pings"
+			}
 		}
 	};
 
@@ -68,11 +73,14 @@ module.exports = (_ => {
 		
 		var currentDevice = defaultDevice, createdAudios = {}, repatchIncoming;
 		
+		const message1Types = ["dm", "mentioned", "reply", "role", "everyone", "here"];
+		
 		/* NEVER CHANGE THE SRC LINKS IN THE PLUGIN FILE, TO ADD NEW SOUNDS ADD THEM IN THE SETTINGS GUI IN THE PLUGINS PAGE */
 		const types = {
 			"message1":					{implemented: true,		name: "New Chat Message",			src: "/assets/dd920c06a01e5bb8b09678581e29d56f.mp3",	mute: true,		focus: null,	include: true},
 			"dm":						{implemented: true,		name: "Direct Message",				src: "/assets/84c9fa3d07da865278bd77c97d952db4.mp3",	mute: true,		focus: true,	include: false},
 			"mentioned":				{implemented: true,		name: "Mentioned",					src: "/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute: true,		focus: true,	include: false},
+			"reply":					{implemented: true,		name: "Mentioned (reply)",			src: "/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute: true,		focus: true,	include: false},
 			"role":						{implemented: true,		name: "Mentioned (role)",			src: "/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute: true,		focus: true,	include: false},
 			"everyone":					{implemented: true,		name: "Mentioned (@everyone)",		src: "/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute: true,		focus: true,	include: false},
 			"here":						{implemented: true,		name: "Mentioned (@here)",			src: "/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute: true,		focus: true,	include: false},
@@ -234,8 +242,8 @@ module.exports = (_ => {
 							}
 							else if (BDFDB.LibraryModules.MentionUtils.isRawMessageMentioned(message, BDFDB.UserUtils.me.id)) {
 								if (message.mentions.length && !this.isSuppressMentionEnabled(guildId, message.channel_id) && !(choices.mentioned.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) for (let mention of message.mentions) if (mention.id == BDFDB.UserUtils.me.id) {
-									this.fireEvent("mentioned");
-									this.playAudio("mentioned");
+									this.fireEvent(message.message_reference ? "reply" : "mentioned");
+									this.playAudio(message.message_reference ? "reply" : "mentioned");
 									return;
 								}
 								if (guildId && message.mention_roles.length && !BDFDB.LibraryModules.MutedUtils.isSuppressRolesEnabled(guildId, message.channel_id) && !(choices.role.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
@@ -270,12 +278,13 @@ module.exports = (_ => {
 						e.stopOriginalMethodCall();
 						BDFDB.TimeUtils.timeout(_ => {
 							if (type == "message1") {
-								if (firedEvents["dm"]) firedEvents["dm"] = false;
-								else if (firedEvents["mentioned"]) firedEvents["mentioned"] = false;
-								else if (firedEvents["role"]) firedEvents["role"] = false;
-								else if (firedEvents["everyone"]) firedEvents["everyone"] = false;
-								else if (firedEvents["here"]) firedEvents["here"] = false;
-								else this.playAudio(type);
+								let called = false;
+								for (let subType of message1Types) if (firedEvents[subType]) {
+									delete firedEvents[subType];
+									called = true;
+									break;
+								}
+								if (!called) this.playAudio(type);
 							}
 							else this.playAudio(type);
 						});
@@ -686,7 +695,7 @@ module.exports = (_ => {
 
 			fireEvent (type) {
 				firedEvents[type] = true;
-				BDFDB.TimeUtils.timeout(_ => {firedEvents[type] = false;},3000);
+				BDFDB.TimeUtils.timeout(_ => delete firedEvents[type], 3000);
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));

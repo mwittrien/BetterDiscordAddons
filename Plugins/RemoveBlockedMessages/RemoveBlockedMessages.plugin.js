@@ -2,7 +2,7 @@
  * @name RemoveBlockedMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.6
+ * @version 1.2.7
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.2.6",
+			"version": "1.2.7",
 			"description": "Removes blocked Messages/Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"New Messages Bar": "No longer shows on newly added blocked Messages"
+				"Group DMs": "Fixed some stuff in Group DMs"
 			}
 		}
 	};
@@ -84,7 +84,9 @@ module.exports = (_ => {
 						autocompletes:		{value: true, 	description: "Autocomplete Entries"},
 						memberList:			{value: true, 	description: "Members in List"},
 						voiceList:			{value: true, 	description: "Members in Voice List"},
-						voiceChat:			{value: true, 	description: "Members in Voice Chat"}
+						voiceChat:			{value: true, 	description: "Members in Voice Chat"},
+						channelList:		{value: true, 	description: "Channel/Group List"},
+						recentDms:			{value: true, 	description: "Group Notifications"}
 					}
 				};
 				
@@ -107,6 +109,8 @@ module.exports = (_ => {
 						Reactions: "render",
 						MemberListItem: "render",
 						VoiceUser: "render",
+						DirectMessage: "render",
+						PrivateChannel: "render",
 						UserMention: "default",
 						RichUserMention: "UserMention"
 					}
@@ -116,6 +120,10 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.ChannelStore, "getChannel", {after: e => {
+					if (e.returnValue && e.returnValue.isGroupDM()) return new BDFDB.DiscordObjects.Channel(Object.assign({}, e.returnValue, {rawRecipients: e.returnValue.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id)), recipients: e.returnValue.recipients.filter(id => !id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(id))}))
+				}});
+				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RelationshipUtils, "addRelationship", {after: e => {
 					if (e.methodArguments[2] == BDFDB.DiscordConstants.RelationshipTypes.BLOCKED) this.forceUpdateAll();
 				}});
@@ -390,8 +398,22 @@ module.exports = (_ => {
 				if (this.settings.places.voiceList && e.instance.props.user && BDFDB.LibraryModules.RelationshipStore.isBlocked(e.instance.props.user.id)) return null;
 			}
 
+			processDirectMessage (e) {
+				if (e.instance.props.channel && !e.instance.props.channel.name && e.instance.props.channel.isGroupDM() && this.settings.places.recentDms) {
+					let tooltip = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ListItemTooltip"});
+					if (tooltip) tooltip.props.text = this.getGroupName(e.instance.props.channel.id);
+				}
+			}
+
 			processPrivateChannel (e) {
-				if (this.settings.places.memberList && e.instance.props.channel && e.instance.props.channel.isGroupDM()) e.instance.props.channel = new BDFDB.DiscordObjects.Channel(Object.assign({}, e.instance.props.channel, {rawRecipients: e.instance.props.channel.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id)), recipients: e.instance.props.channel.recipients.filter(id => !id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(id))}));
+				if (this.settings.places.channelList && e.instance.props.channel && e.instance.props.channel.isGroupDM()) {
+					if (!e.returnvalue) {
+						e.instance.props.channel = new BDFDB.DiscordObjects.Channel(Object.assign({}, e.instance.props.channel, {rawRecipients: e.instance.props.channel.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id)), recipients: e.instance.props.channel.recipients.filter(id => !id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(id))}));
+					}
+					else {
+						if (!e.instance.props.channel.name) e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
+					}
+				}
 			}
 
 			processPrivateChannelCallParticipants (e) {
@@ -418,6 +440,13 @@ module.exports = (_ => {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.mention, BDFDB.disCN.mentionwrapper, e.instance.props.className),
 					children: ["@" + BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER]
 				});
+			}
+			
+			getGroupName (channelId) {
+				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
+				if (channel.name) return channel.name;
+				let recipients = channel.recipients.map(BDFDB.LibraryModules.UserStore.getUser).filter(n => n && !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id));
+				return recipients.length > 0 ? recipients.map(u => u.toString()).join(", ") : BDFDB.LanguageUtils.LanguageStrings.UNNAMED;
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));

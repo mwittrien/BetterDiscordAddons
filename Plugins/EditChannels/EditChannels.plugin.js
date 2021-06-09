@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.8
+ * @version 4.2.9
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.2.8",
+			"version": "4.2.9",
 			"description": "Allows you to locally edit Channels"
 		},
 		"changeLog": {
 			"fixed": {
-				"New Mention Style": ""
+				"Group DMs": "Fixed some stuff in Group DMs"
 			}
 		}
 	};
@@ -118,6 +118,8 @@ module.exports = (_ => {
 					}
 				};
 				
+				this.patchPriority = 9;
+				
 				this.css = `
 					${BDFDB.dotCN.messagespopoutchannelname}:hover > span[style*="color"],
 					${BDFDB.dotCN.recentmentionschannelname}:hover > span[style*="color"],
@@ -127,21 +129,7 @@ module.exports = (_ => {
 				`;
 			}
 			
-			onStart () {
-				// REMOVE 16.05.2021
-				let oldData = BDFDB.DataUtils.load(this);
-				if (oldData.settings) {
-					this.settings.general = BDFDB.ObjectUtils.filter(oldData.settings, k => k.indexOf("changeIn") == -1, true);
-					this.settings.places = Object.entries(BDFDB.ObjectUtils.filter(oldData.settings, k => k.indexOf("changeIn") == 0, true)).reduce((n, p) => {
-						let k = p[0].replace("changeIn", "");
-						n[k[0].toLowerCase() + k.slice(1)] = p[1];
-						return n;
-					}, {});
-					BDFDB.DataUtils.save(this.settings.general, this, "general");
-					BDFDB.DataUtils.save(this.settings.places, this, "places");
-					BDFDB.DataUtils.remove(this, "settings");
-				}
-				
+			onStart () {				
 				let observer = new MutationObserver(_ => {this.changeAppTitle();});
 				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name: "appTitleObserver", instance: observer}, {childList: true});
 				
@@ -274,9 +262,8 @@ module.exports = (_ => {
 			}
 			
 			processChannelEditorContainer (e) {
-				if (!e.instance.props.disabled && e.instance.props.channel && BDFDB.ChannelUtils.isTextChannel(e.instance.props.channel) && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && this.settings.places.chatTextarea) {
-					let data = changedChannels[e.instance.props.channel.id];
-					e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `#${data && data.name || e.instance.props.channel.name}`);
+				if (!e.instance.props.disabled && e.instance.props.channel && (BDFDB.ChannelUtils.isTextChannel(e.instance.props.channel) || e.instance.props.channel.isGroupDM()) && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && this.settings.places.chatTextarea) {
+					if (changedChannels[e.instance.props.channel.id] && changedChannels[e.instance.props.channel.id].name) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `#${changedChannels[e.instance.props.channel.id].name}`);
 				}
 			}
 
@@ -324,7 +311,7 @@ module.exports = (_ => {
 						let channelName = BDFDB.ReactUtils.findChild(e.instance, {name: ["Title", "ChannelName"]});
 						if (channelName) {
 							if (channelName.props.children) {
-								channelName.props.children = channel.isGroupDM() ? this.getGroupName(channel.id) : this.getChannelData(channel.id).name;
+								if (changedChannels[channel.id] && changedChannels[channel.id].name) channelName.props.children = channel.isGroupDM() ? this.getGroupName(channel.id) : this.getChannelData(channel.id).name;
 								this.changeChannelColor(channelName, channel.id);
 							}
 							if (channelName.props.channel) channelName.props.channel = this.getChannelData(channel.id);
@@ -419,8 +406,10 @@ module.exports = (_ => {
 
 			processDirectMessage (e) {
 				if (e.instance.props.channel && e.instance.props.channel.isGroupDM() && this.settings.places.recentDms) {
-					let tooltip = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ListItemTooltip"});
-					if (tooltip) tooltip.props.text = this.getGroupName(e.instance.props.channel.id);
+					if (changedChannels[e.instance.props.channel.id] && changedChannels[e.instance.props.channel.id].name) {
+						let tooltip = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ListItemTooltip"});
+						if (tooltip) tooltip.props.text = this.getGroupName(e.instance.props.channel.id);
+					}
 					let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: c => c && c.props && !isNaN(parseInt(c.props.id))});
 					if (avatar && typeof avatar.props.children == "function") {
 						let childrenRender = avatar.props.children;
@@ -435,7 +424,9 @@ module.exports = (_ => {
 
 			processPrivateChannel (e) {
 				if (e.instance.props.channel && e.instance.props.channel.isGroupDM() && this.settings.places.channelList) {
-					e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
+					if (changedChannels[e.instance.props.channel.id] && changedChannels[e.instance.props.channel.id].name) {
+						e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
+					}
 					this.changeChannelColor(e.returnvalue.props.name, e.instance.props.channel.id, {modify: BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "hovered", "selected", "hasUnreadMessages", "muted")});
 					e.returnvalue.props.name = [e.returnvalue.props.name];
 					e.returnvalue.props.avatar.props.src = this.getGroupIcon(e.instance.props.channel.id);
@@ -583,11 +574,13 @@ module.exports = (_ => {
 			}
 
 			changeAppTitle () {
-				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
-				let title = document.head.querySelector("title");
-				if (title) {
-					if (BDFDB.ChannelUtils.isTextChannel(channel)) BDFDB.DOMUtils.setText(title, "#" + this.getChannelData(channel.id, this.settings.places.appTitle).name);
-					else if (channel && channel.isGroupDM()) BDFDB.DOMUtils.setText(title, this.getGroupName(channel.id, this.settings.places.appTitle));
+				if (this.settings.places.appTitle) {
+					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
+					let title = document.head.querySelector("title");
+					if (title && changedChannels[channel.id] && changedChannels[channel.id].name) {
+						if (BDFDB.ChannelUtils.isTextChannel(channel)) BDFDB.DOMUtils.setText(title, "#" + this.getChannelData(channel.id).name);
+						else if (channel && channel.isGroupDM()) BDFDB.DOMUtils.setText(title, this.getGroupName(channel.id));
+					}
 				}
 			}
 			
@@ -655,8 +648,8 @@ module.exports = (_ => {
 				return new BDFDB.DiscordObjects.Channel(channel);
 			}
 			
-			getGroupName (channelId, change = true) {
-				let channel = this.getChannelData(channelId, change);
+			getGroupName (channelId) {
+				let channel = this.getChannelData(channelId);
 				if (channel.name) return channel.name;
 				let recipients = channel.recipients.map(BDFDB.LibraryModules.UserStore.getUser).filter(n => n);
 				return recipients.length > 0 ? recipients.map(u => u.toString()).join(", ") : BDFDB.LanguageUtils.LanguageStrings.UNNAMED;
