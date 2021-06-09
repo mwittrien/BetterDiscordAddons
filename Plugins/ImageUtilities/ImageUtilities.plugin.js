@@ -1006,7 +1006,6 @@ module.exports = (_ => {
 			}
 			
 			processUserBanner (e) {
-				if (e.instance.props.user && this.settings.places.userAvatars && BDFDB.UserUtils.getBanner(e.instance.props.user.id)) console.log(e, );
 				if (e.instance.props.user && this.settings.places.userAvatars && BDFDB.UserUtils.getBanner(e.instance.props.user.id)) e.returnvalue.props.onContextMenu = event => {
 					let validUrls = this.filterUrls((e.instance.props.user.getBannerURL() || "").replace(/\.webp|\.gif/, ".png"), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.banner) && e.instance.props.user.getBannerURL(true));
 					if (validUrls.length) BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {

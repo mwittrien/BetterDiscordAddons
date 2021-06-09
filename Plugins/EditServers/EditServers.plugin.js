@@ -2,7 +2,7 @@
  * @name EditServers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.1
+ * @version 2.3.2
  * @description Allows you to locally edit Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditServers",
 			"author": "DevilBro",
-			"version": "2.3.1",
+			"version": "2.3.2",
 			"description": "Allows you to locally edit Servers"
-		},
-		"changeLog": {
-			"fixed": {
-				"Settings": "Shown again"
-			}
 		}
 	};
 	
@@ -88,7 +83,7 @@ module.exports = (_ => {
 					before: {
 						Guild: "render",
 						GuildIconWrapper: "render",
-						MutualGuilds: "render",
+						MutualGuilds: "default",
 						QuickSwitcher: "render",
 						QuickSwitchChannelResult: "render",
 						GuildSidebar: "render",
@@ -317,7 +312,10 @@ module.exports = (_ => {
 			}
 
 			processMutualGuilds (e) {
-				if (this.settings.places.mutualGuilds) for (let i in e.instance.props.mutualGuilds) e.instance.props.mutualGuilds[i].guild = this.getGuildData(e.instance.props.mutualGuilds[i].guild.id);
+				if (this.settings.places.mutualGuilds) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "GuildRow"});
+					if (index > -1) for (let row of children) if (row && row.props && row.props.guild) row.props.guild = this.getGuildData(row.props.guild.id);
+				}
 			}
 
 			processQuickSwitcher (e) {

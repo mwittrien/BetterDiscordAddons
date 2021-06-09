@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.8
+ * @version 4.2.9
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.2.8",
+			"version": "4.2.9",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
@@ -92,6 +92,7 @@ module.exports = (_ => {
 						activity:			{value: true, 		description: "Activity Page"},
 						userPopout:			{value: true, 		description: "User Popouts"},
 						userProfile:		{value: true, 		description: "User Profile Modal"},
+						mutualFriends:		{value: true, 		description: "Mutual Friends"},
 						autcocompletes:		{value: true, 		description: "Autocomplete Menu"},
 						guildSettings:		{value: true, 		description: "Server Settings"},
 						quickSwitcher:		{value: true, 		description: "Quick Switcher"},
@@ -141,6 +142,7 @@ module.exports = (_ => {
 						DiscordTag: "default",
 						NameTag: "default",
 						UserPopoutInfo: "default",
+						MutualFriends: "default",
 						NowPlayingHeader: "Header",
 						VoiceUser: "render",
 						Account: "render",
@@ -528,6 +530,13 @@ module.exports = (_ => {
 					e.instance.props.user = this.getUserData(e.instance.props.user.id);
 					let data = changedUsers[e.instance.props.user.id];
 					if (data && (data.removeStatus || data.status || data.statusEmoji)) e.instance.props.customStatusActivity = this.createCustomStatus(data);
+				}
+			}
+
+			processMutualFriends (e) {
+				if (this.settings.places.mutualFriends) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FriendRow"});
+					if (index > -1) for (let row of children) if (row && row.props && row.props.user) row.props.user = this.getUserData(row.props.user.id);
 				}
 			}
 

@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.8
+ * @version 1.6.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.6.8",
+			"version": "1.6.9",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -7773,7 +7773,7 @@ module.exports = (_ => {
 						MemberListItem: ["componentDidMount", "componentDidUpdate"],
 						PrivateChannel: ["componentDidMount", "componentDidUpdate"],
 						UserPopout: ["componentDidMount", "componentDidUpdate"],
-						UserProfile: ["componentDidMount", "componentDidUpdate"],
+						AnalyticsContext: ["componentDidMount", "componentDidUpdate"],
 						SettingsView: "componentDidMount",
 						Shakeable: "render"
 					}
@@ -7898,9 +7898,12 @@ module.exports = (_ => {
 					InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
 					InternalBDFDB._processUserInfoNode(e.instance.props.user, e.node);
 				};
-				InternalBDFDB.processUserProfile = function (e) {
-					InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
-					InternalBDFDB._processUserInfoNode(e.instance.props.user, e.node);
+				InternalBDFDB.processAnalyticsContext = function (e) {
+					if (e.instance.props.section != BDFDB.DiscordConstants.AnalyticsSections.PROFILE_MODAL) return;
+					const user = BDFDB.ReactUtils.findValue(e.instance, "user");
+					const wrapper = e.node.querySelector(BDFDB.dotCN.userprofile) || e.node;
+					InternalBDFDB._processAvatarMount(user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), wrapper);
+					InternalBDFDB._processUserInfoNode(user, wrapper);
 				};
 				InternalBDFDB.processDiscordTag = function (e) {
 					if (e.instance && e.instance.props && e.returnvalue && e.instance.props.user) e.returnvalue.props.user = e.instance.props.user;
