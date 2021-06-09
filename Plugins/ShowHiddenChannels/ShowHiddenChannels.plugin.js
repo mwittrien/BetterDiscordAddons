@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.8
+ * @version 2.9.9
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "2.9.8",
+			"version": "2.9.9",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
-		},
-		"changeLog": {
-			"fixed": {
-				"User Profile Modal": "Opens again if you click a User in the Access Modal"
-			}
 		}
 	};
 
@@ -112,6 +107,7 @@ module.exports = (_ => {
 							}
 						})
 					}),
+					labelClassName: BDFDB.disCN.nametag,
 					label: [
 						BDFDB.ReactUtils.createElement("span", {
 							className: BDFDB.disCN.username,

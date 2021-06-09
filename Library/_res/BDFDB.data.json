@@ -216,8 +216,6 @@
 			"Messages": {"strings": ["group-spacing-", "canManageMessages"]},
 			"MessageUsername": {"strings": ["default.username", "colorString", "compact"]},
 			"ModalLayer": {"class": "layermodal"},
-			"MutualGuilds": {"class": "userprofilebody"},
-			"MutualFriends": {"class": "userprofilebody"},
 			"Note": {"class": "usernotetextarea"},
 			"PopoutContainer": {"class": "popout"},
 			"Popouts": {"class": "popouts"},
