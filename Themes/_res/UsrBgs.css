@@ -211,17 +211,17 @@
 	background: rgba(0,0,0,.4) !important;
 	color: #fff !important;
 }
-.root-3QyAh1 .nameTag-ECvD8P {
+.root-3QyAh1 .header-4zuFdR .nameTag-ECvD8P {
 	display: flex;
 	align-items: center;
 	marign-right: 0;
 }
-.root-3QyAh1 .username-2b1r56 {
+.root-3QyAh1 .header-4zuFdR .username-2b1r56 {
 	color: var(--header-primary);
     font-size: 20px;
     font-weight: 600;
 }
-.root-3QyAh1 .discriminator-1swucG {
+.root-3QyAh1 .header-4zuFdR .discriminator-1swucG {
 	position: relative;
 	top: 1px;
 	color: var(--header-secondary);
