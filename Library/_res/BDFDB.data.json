@@ -163,8 +163,7 @@
 			"InviteCard": "InviteRow",
 			"MemberCard": "Member",
 			"PopoutContainer": "Popout",
-			"QuickSwitchResult": "Result",
-			"UserProfile": "UserProfileBody"
+			"QuickSwitchResult": "Result"
 		},
 		"ForceObserve": [
 			"DirectMessage",
@@ -244,7 +243,6 @@
 			"Upload": {"class": "uploadmodal"},
 			"UserHook": {"class": "auditloguserhook"},
 			"UserPopout": {"class": "userpopout"},
-			"UserProfile": {"class": "userprofile"},
 			"UserSettingsAppearance": {"class": "usersettingsappearancepreview"},
 			"V2C_ContentColumn": {"class": "settingswindowcontentcolumn", "special": [{"path": "return.stateNode.props.title", "value": ["PLUGINS", "THEMES"]}]}
 		},

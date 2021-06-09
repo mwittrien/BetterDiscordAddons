@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.8
+ * @version 4.2.9
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.2.8",
+			"version": "4.2.9",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
 			"improved": {
-				"New User Popout": "Fixed for the new User Popout, which will be released soon-ish, again and again and again, stop changing Stuff Discord, STOOOOOOOOOOOOOOOOOOOOP JESUS"
+				"New User Profile Modal": "Fixed for the new User Profile"
 			}
 		}
 	};
@@ -107,7 +107,7 @@ module.exports = (_ => {
 						ChannelEditorContainer: "render",
 						AutocompleteUserResult: "render",
 						UserPopout: "render",
-						UserProfile: "render",
+						UserProfileModal: "default",
 						UserInfo: "default",
 						NowPlayingHeader: "Header",
 						VoiceUser: "render",
@@ -523,7 +523,7 @@ module.exports = (_ => {
 				}
 			}
 
-			processUserProfile (e) {
+			processUserProfileModal (e) {
 				if (e.instance.props.user && this.settings.places.userProfile) {
 					e.instance.props.user = this.getUserData(e.instance.props.user.id);
 					let data = changedUsers[e.instance.props.user.id];
