@@ -7869,10 +7869,6 @@ module.exports = (_ => {
 				};
 				InternalBDFDB._processUserInfoNode = function (user, wrapper) {
 					if (!user || !wrapper) return;
-					LibraryModules.ImageEditUtils.getPrimaryColorForAvatar(BDFDB.UserUtils.getAvatar(user.id)).then(color => {
-						const rgb = BDFDB.ColorUtils.convert(color, "RGB");
-						if (rgb) wrapper.style.setProperty("--user-banner-color", rgb, "important");
-					});
 					if (InternalData.UserBackgrounds[user.id]) for (let property in InternalData.UserBackgrounds[user.id]) wrapper.style.setProperty(property, InternalData.UserBackgrounds[user.id][property], "important");
 				};
 				InternalBDFDB.processMessageHeader = function (e) {

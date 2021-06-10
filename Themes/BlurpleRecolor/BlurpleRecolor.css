@@ -22,11 +22,13 @@
 }
 .theme-dark, .theme-light {
 	--text-link: rgb(var(--linkcolor));
+	--text-link-low-saturation: rgb(var(--linkcolor));
 	--info-help-background: rgba(var(--linkcolor),.1);
 	--info-help-foreground: rgb(var(--linkcolor));
 	--info-help-text: #fff;
 	--focus-primary: rgb(var(--linkcolor));
 	--control-brand-foreground: rgb(var(--accentcolor)) !important;
+	--control-brand-foreground-new: rgb(var(--accentcolor)) !important;
 	--brand-experiment-100: #fdfdfd !important;
 	--brand-experiment-130: #f2f2f2 !important;
 	--brand-experiment-160: #ebebeb !important;
@@ -2044,16 +2046,12 @@ a.metadataName-14STf- {
 	background-color: rgb(114, 118, 125) !important;
 	transition: background-color .1s ease-out;
 }															/* switch				checked								*/
-.container-3auIfb[style*="background-color: rgb(67, 181, 129)"],
-.container-3auIfb[style*="background-color: rgb(59, 165, 92)"],
-.container-3auIfb[style*="background-color: rgb(88, 101, 242)"],
-.container-3auIfb[style*="background-color: rgb(114, 137, 218)"] {
+.container-3auIfb[style*="background-color: hsl(139, "],
+.container-3auIfb[style*="background-color: hsl(227, "] {
 	background-color: rgba(var(--accentcolor), 0.8) !important;
 }
-.container-3auIfb[style*="background-color: rgb(67, 181, 129)"]:hover,
-.container-3auIfb[style*="background-color: rgb(59, 165, 92)"]:hover,
-.container-3auIfb[style*="background-color: rgb(88, 101, 242)"]:hover,
-.container-3auIfb[style*="background-color: rgb(114, 137, 218)"]:hover {
+.container-3auIfb[style*="background-color: hsl(139, "]:hover,
+.container-3auIfb[style*="background-color: hsl(227, "]:hover {
 	background: var(--accentcolor-hover) !important;
 }
 #app-mount .container-3auIfb:active {
@@ -2062,10 +2060,8 @@ a.metadataName-14STf- {
 .container-3auIfb path[fill] {
 	fill: rgb(114, 118, 125) !important;
 }
-.container-3auIfb[style*="background-color: rgb(67, 181, 129)"] path[fill],
-.container-3auIfb[style*="background-color: rgb(59, 165, 92)"] path[fill],
-.container-3auIfb[style*="background-color: rgb(88, 101, 242)"] path[fill],
-.container-3auIfb[style*="background-color: rgb(114, 137, 218)"] path[fill],
+.container-3auIfb[style*="background-color: hsl(139, "] path[fill],
+.container-3auIfb[style*="background-color: hsl(227, "] path[fill],
 .container-3auIfb:active path[fill] {
 	fill: rgb(var(--accentcolor)) !important;
 }
