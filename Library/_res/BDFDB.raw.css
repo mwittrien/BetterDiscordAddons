@@ -1,7 +1,7 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/SupporterBadge.css);
 
 :root {
-	--bdfdb-blurple: var(--brand-experiment, #5865f2);
+	--bdfdb-blurple: var(--brand-experiment, hsl(235, calc(var(--saturation-factor, 1)*85.6%), 64.7%));
 	--bdfdb-green: var(--status-positive-background, #3ba55c);
 	--bdfdb-yellow: var(--status-warning-background, #faa61a);
 	--bdfdb-red: var(--status-danger-background, #ed4245);

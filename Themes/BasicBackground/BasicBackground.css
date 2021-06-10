@@ -1602,9 +1602,11 @@ body::before {
 .peopleListItem-2nzedh .actionButton-uPB8Fs:hover svg {
 	filter: drop-shadow(1px 1px var(--textshadow));
 }
+.peopleListItem-2nzedh.active-rhSpJJ,
 .peopleListItem-2nzedh:hover {
 	background-color: rgba(var(--transparencycolor), .3);
 }
+.peopleListItem-2nzedh.active-rhSpJJ .actionButton-uPB8Fs,
 .peopleListItem-2nzedh:hover .actionButton-uPB8Fs {
 	background-color: rgba(var(--transparencycolor), .3);
 }
@@ -5838,37 +5840,18 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgb(var(--textbrightest));
 	border-color: rgb(var(--textbrightest));
 }
-#app-mount .checkbox-1ix_J3.checked-3_4uQ9.round-2jCFai,	/* checkbox				roundchecked						*/
-#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="border-color: rgb(79, 84, 92)"] {
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9.round-2jCFai {	/* checkbox				roundchecked						*/
 	background-color: rgb(var(--accentcolor)) !important;
 	border-color: rgb(var(--accentcolor)) !important;
 }
-#app-mount .checkbox-1ix_J3.checked-3_4uQ9.round-2jCFai svg,
-#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="border-color: rgb(79, 84, 92)"] svg,
-#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="background-color: rgb(88, 101, 242)"] svg,
-#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="background-color: rgb(114, 137, 218)"] svg {
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9.round-2jCFai svg {
 	filter: drop-shadow(1px 1px var(--textshadow));
 }
-#app-mount .checkbox-1ix_J3.checked-3_4uQ9 polyline[stroke="#43b581"],		/* checkbox				checkmark							*/
-#app-mount .checkbox-1ix_J3.checked-3_4uQ9 polyline[stroke="#4f545c"],
-#app-mount .checkbox-1ix_J3.checked-3_4uQ9 polyline[stroke="#ffffff"] {
-	stroke: rgb(var(--textbrightest));
+#app-mount .checkbox-1ix_J3.checked-3_4uQ9.round-2jCFai path[fill] {
+	fill: #fff;
 }
 .checkboxMute-14hTGS::before {
 	background-color: rgba(var(--transparencycolor), .2);
-}
-#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="background-color: rgba(67, 181, 129, .15)"],
-#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="border-color: rgba(67, 181, 129, .15)"] {
-	background-color: rgba(var(--accentcolor), .15) !important;
-	border-color: rgba(var(--accentcolor), .15) !important;
-}
-#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="background-color: rgba(67, 181, 129, .15)"] svg,
-#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="border-color: rgba(67, 181, 129, .15)"] svg {
-	filter: unset;
-}
-#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="background-color: rgba(67, 181, 129, .15)"] path[fill="#43b581"],
-#app-mount .checkbox-1ix_J3.checked-3_4uQ9[style*="border-color: rgba(67, 181, 129, .15)"] path[fill="#43b581"] {
-	fill: rgb(var(--accentcolor)) !important;
 }
 
 #app-mount .bar-2Qqk5Z {									/* slider				backgroundbar						*/
@@ -5880,7 +5863,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	box-shadow: 0 3px 1px 0 rgba(var(--transparencycolor), .05), 0 2px 2px 0 rgba(var(--transparencycolor), .1), 0 3px 3px 0 rgba(var(--transparencycolor), .05);
 }
 #app-mount .markValue-2DwdXI {								/* slider				markvalue							*/
-	color: var(--text-value);
+	color: var(--text-muted);
 }
 #app-mount .defaultValue-3gC7yw .markValue-2DwdXI {
 	color: #43b581;

@@ -9,7 +9,7 @@
 }
 .dev-A7f2Rx.hasBadge-4rT8_u .badge-7R_W3s {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M 4.5 0 C 3.672043 0 3 0.67204269 3 1.5 L 3 4.4160156 L 21 4.4160156 L 21 1.5 C 21 0.67204269 20.328003 0 19.5 0 L 4.5 0 z M 3 7.8027344 L 3 22.5 C 3 23.105995 3.3662743 23.655743 3.9257812 23.886719 C 4.1117802 23.963224 4.306496 24 4.5 24 C 4.889979 24 5.2740679 23.847026 5.5605469 23.560547 L 12 17.121094 L 18.439453 23.560547 C 18.725933 23.847026 19.11002 24 19.5 24 C 19.693503 24 19.887777 23.963177 20.072266 23.886719 C 20.633283 23.655743 21 23.105995 21 22.5 L 21 7.8027344 L 3 7.8027344 z"/></svg>') center/cover no-repeat !important;
-	background: var(--bdfdb-blurple, #5865f2) !important;
+	background: var(--bdfdb-blurple, hsl(235, calc(var(--saturation-factor, 1)*85.6%), 64.7%)) !important;
 	position: absolute !important;
 	width: 30% !important;
 	height: 30% !important;
