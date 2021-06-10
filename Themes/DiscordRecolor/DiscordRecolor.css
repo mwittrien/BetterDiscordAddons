@@ -2544,14 +2544,6 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background-color: var(--background-secondary);
 	box-shadow: inset 0 1px 0 rgba(var(--backgroundsecondary),.6);
 }
-.uploadModal-2ifh8j .checkbox-1ix_J3.checked-3_4uQ9 {
-	background-color: rgb(var(--accentcolor)) !important;
-	border-color: rgb(var(--accentcolor)) !important;
-}
-.uploadModal-2ifh8j .checkbox-1ix_J3.checked-3_4uQ9 path[fill="#5865f2" i],
-.uploadModal-2ifh8j .checkbox-1ix_J3.checked-3_4uQ9 path[fill="#7289da" i] {
-	fill: #fff !important;
-}
 
 /* ----		10.5.	KEYBOARDSHORTCUTSMODAL			---- */
 
@@ -2700,13 +2692,6 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .modal-DRZfgq [src*="/assets/a13cfdd7220132fff399a76c3ed64519.svg"] {
 	filter: brightness(85%) invert(100%);
 	opacity: .7;
-}
-#app-mount .modal-DRZfgq .checked-3_4uQ9 {
-	background-color: rgb(var(--accentcolor));
-}
-#app-mount .modal-DRZfgq .checkbox-1ix_J3 [stroke="#5865f2" i],
-#app-mount .modal-DRZfgq .checkbox-1ix_J3 [stroke="#7289da" i] {
-	stroke: #fff !important;
 }
 #app-mount .ack-2yIUvY {
 	color: var(--header-secondary);
