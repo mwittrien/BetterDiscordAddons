@@ -2,7 +2,7 @@
  * @name CreationDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.4
+ * @version 1.4.5
  * @description Displays the Creation Date of an Account in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "CreationDate",
 			"author": "DevilBro",
-			"version": "1.4.4",
+			"version": "1.4.5",
 			"description": "Displays the Creation Date of an Account in the UserPopout and UserModal"
 		},
 		"changeLog": {
@@ -164,7 +164,7 @@ module.exports = (_ => {
 			processUserProfileModalHeader (e) {
 				if (e.instance.props.user && this.settings.places.userProfile) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["DiscordTag", "ColoredFluxTag"]});
-					if (index > -1) this.injectDate(children, 1, e.instance.props.user);
+					if (index > -1) this.injectDate(children, index + 1, e.instance.props.user);
 				}
 			}
 			

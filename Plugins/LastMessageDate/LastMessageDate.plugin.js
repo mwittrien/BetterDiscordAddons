@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.5
+ * @version 1.2.6
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "LastMessageDate",
 			"author": "DevilBro",
-			"version": "1.2.5",
+			"version": "1.2.6",
 			"description": "Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal"
 		},
 		"changeLog": {
@@ -189,7 +189,7 @@ module.exports = (_ => {
 			processUserProfileModalHeader (e) {
 				if (currentProfile && e.instance.props.user && this.settings.places.userProfile) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["DiscordTag", "ColoredFluxTag"]});
-					if (index > -1) this.injectDate(currentProfile, children, 1, e.instance.props.user, currentProfile.props.guildId);
+					if (index > -1) this.injectDate(currentProfile, children, index + 1, e.instance.props.user, currentProfile.props.guildId);
 				}
 			}
 

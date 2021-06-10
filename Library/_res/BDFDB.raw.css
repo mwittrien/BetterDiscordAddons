@@ -470,11 +470,15 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-top: 8px;
 	user-select: text;
 }
+[REPLACE_CLASS_userprofilenametag] + [REPLACE_CLASS_userinfodate],
 [REPLACE_CLASS_userinfodate] + [REPLACE_CLASS_userinfodate] {
 	margin-top: 0;
 }
 [REPLACE_CLASS_userinfodate] + *:not([REPLACE_CLASS_userinfodate]) {
 	margin-top: 6px;
+}
+[REPLACE_CLASS_userprofile] [REPLACE_CLASS_userinfodate] {
+	margin-left: 16px;
 }
 
 [REPLACE_CLASS_avatardisabled] {
