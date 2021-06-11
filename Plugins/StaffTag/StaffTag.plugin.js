@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.4
+ * @version 1.4.5
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "StaffTag",
 			"author": "DevilBro",
-			"version": "1.4.4",
+			"version": "1.4.5",
 			"description": "Adds a Crown/Tag to Server Owners (or Admins/Management)"
 		},
 		"changeLog": {
-			"improved": {
-				"New User Popout": "Fixed for the new User Popout, which will be released soon-ish, again and again and again, stop changing Stuff Discord, STOOOOOOOOOOOOOOOOOOOOP JESUS"
+			"fixed": {
+				"Commands": "No longer use the crown of the bot instead of the user"
 			}
 		}
 	};
@@ -238,14 +238,14 @@ module.exports = (_ => {
 			}
 
 			processMessageUsername (e) {
-				if (e.instance.props.message && this.settings.tagPlaces.chat) {
-					let userType = this.getUserType(e.instance.props.message.author, e.instance.props.message.channel_id);
-					if (userType) this.injectStaffTag(e.returnvalue.props.children, e.instance.props.message.author, userType, e.instance.props.compact ? 0 : 2, {
-						channelId: e.instance.props.message.channel_id,
-						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
-						useRem: true
-					});
-				}
+				if (!e.instance.props.message || !this.settings.tagPlaces.chat) return;
+				const author = e.instance.props.userOverride || e.instance.props.message.author;
+				let userType = this.getUserType(author, e.instance.props.message.channel_id);
+				if (userType) this.injectStaffTag(e.returnvalue.props.children, author, userType, e.instance.props.compact ? 0 : 2, {
+					channelId: e.instance.props.message.channel_id,
+					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
+					useRem: true
+				});
 			}
 
 			processVoiceUser (e) {
