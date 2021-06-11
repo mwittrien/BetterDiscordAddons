@@ -2458,7 +2458,6 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .icon-3_8HGa {												/* rolesettings			everyone role icon					*/
 	background-color: rgba(var(--transparencycolor), .4);
 }
-.titleContainer-2CXtJo,										/* rolesettings			role list header					*/
 .header-2mZ9Ov {											/* rolesettings			perms list header					*/
 	background-color: transparent;
 }
@@ -2466,8 +2465,6 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .stickyHeaderElevated-I6QUOA {
 	box-shadow: none;
 }
-.titleContainer-2CXtJo::after,
-.titleContainer-2CXtJo::before,
 .header-2mZ9Ov::after,
 .header-2mZ9Ov::before {
 	content: "";
@@ -2479,15 +2476,9 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	pointer-events: none;
 	z-index: -1;
 }
-.titleContainer-2CXtJo::after,
 .header-2mZ9Ov::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha)));
 }
-.sidebar-dLM-kh .titleContainer-2CXtJo::after,
-.sidebar-dLM-kh .header-2mZ9Ov::after {
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.1))
-}
-.titleContainer-2CXtJo::before,
 .header-2mZ9Ov::before {
 	background: var(--background) var(--backgroundposition)/var(--backgroundsize);
 	background-attachment: fixed;
