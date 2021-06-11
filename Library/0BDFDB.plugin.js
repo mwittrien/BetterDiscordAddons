@@ -24,7 +24,7 @@ module.exports = (_ => {
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
 		"changeLog": {
-			"fixed:" {
+			"fixed": {
 				"Toasts": "Fixed progress bar color being always gray"
 			}
 		}
