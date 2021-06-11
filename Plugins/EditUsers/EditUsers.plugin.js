@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.9
+ * @version 4.3.0
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.2.9",
+			"version": "4.3.0",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
-			"improved": {
-				"New User Profile Modal": "Fixed for the new User Profile"
+			"fixed": {
+				"Commands": "No longer use the data of the bot instead of the user",
+				"Now Playing": "Gets changed again"
 			}
 		}
 	};
@@ -110,7 +111,7 @@ module.exports = (_ => {
 						UserPopout: "render",
 						UserProfileModal: "default",
 						UserInfo: "default",
-						NowPlayingHeader: "Header",
+						NowPlayingItem: "default",
 						VoiceUser: "render",
 						RTCConnectionVoiceUsers: "default",
 						Account: "render",
@@ -143,7 +144,6 @@ module.exports = (_ => {
 						NameTag: "default",
 						UserPopoutInfo: "default",
 						MutualFriends: "default",
-						NowPlayingHeader: "Header",
 						VoiceUser: "render",
 						Account: "render",
 						PrivateChannelEmptyMessage: "default",
@@ -460,12 +460,6 @@ module.exports = (_ => {
 							changeBackground = true;
 							tagClass = BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag;
 							break;
-						case BDFDB.disCN.userprofilenametag:
-							change = this.settings.places.userProfile;
-							guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-							changeBackground = true;
-							tagClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
-							break;
 						case BDFDB.disCN.guildsettingsinviteusername:
 							change = this.settings.places.guildSettings;
 							break;
@@ -477,6 +471,12 @@ module.exports = (_ => {
 					switch (e.instance.props.usernameClass) {
 						case BDFDB.disCN.messagereactionsmodalusername:
 							change = this.settings.places.reactions && !BDFDB.LibraryModules.MemberStore.getNick(BDFDB.LibraryModules.LastGuildStore.getGuildId(), e.instance.props.user.id);
+							break;
+						case BDFDB.disCN.userprofileusername:
+							change = this.settings.places.userProfile;
+							guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
+							changeBackground = true;
+							tagClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
 							break;
 					}
 					if (change) {
@@ -554,17 +554,24 @@ module.exports = (_ => {
 				}
 			}
 
-			processNowPlayingHeader (e) {
-				if (BDFDB.ObjectUtils.is(e.instance.props.priorityUser) && e.instance.props.priorityUser.user && this.settings.places.friendList) {
-					if (!e.returnvalue) {
-						let titleIsName = e.instance.props.priorityUser.user.username == e.instance.props.title;
-						e.instance.props.priorityUser.user = this.getUserData(e.instance.props.priorityUser.user.id);
-						if (titleIsName) e.instance.props.title = e.instance.props.priorityUser.user.username;
+			processNowPlayingItem (e) {
+				let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {name: "NowPlayingHeader"});
+				if (index > -1) for (let child of children) if (child && child.props && child.props.party) {
+					if (child.type && child.type.displayName == "NowPlayingHeader") {
+						const type = child.type;
+						child.type = (...args) => {
+							const returnValue = type(...args);
+							if (BDFDB.ObjectUtils.get(returnValue, "props.priorityUser.user.username") == returnValue.props.title) {
+								returnValue.props.title = BDFDB.ReactUtils.createElement("span", {children: returnValue.props.title});
+								this.changeUserColor(returnValue.props.title, returnValue.props.priorityUser.user.id);
+							}
+							return returnValue;
+						};
 					}
-					else {
-						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Header"});
-						if (userName) this.changeUserColor(userName, e.instance.props.priorityUser.user.id);
-					}
+					child.props.party = Object.assign({}, child.props.party);
+					if (child.props.party.partiedMembers) for (let i in child.props.party.partiedMembers) if (child.props.party.partiedMembers[i]) child.props.party.partiedMembers[i] = this.getUserData(child.props.party.partiedMembers[i].id);
+					if (child.props.party.priorityMembers) for (let i in child.props.party.priorityMembers) if (child.props.party.priorityMembers[i]) child.props.party.priorityMembers[i] = Object.assign({}, child.props.party.priorityMembers[i], {user: this.getUserData(child.props.party.priorityMembers[i].user.id)});
+					if (child.props.party.voiceChannels) for (let i in child.props.party.voiceChannels) if (child.props.party.voiceChannels[i]) child.props.party.voiceChannels[i] = Object.assign({}, child.props.party.voiceChannels[i], {members: [].concat(child.props.party.voiceChannels[i].members).map(user => this.getUserData(user.id))});
 				}
 			}
 			
@@ -678,36 +685,44 @@ module.exports = (_ => {
 			}
 			
 			processMessageUsername (e) {
-				if (e.instance.props.message && this.settings.places.chatWindow && this.shouldchat(e.instance.props.message.channel_id)) {
-					let data = changedUsers[e.instance.props.message.author.id];
-					if (!e.returnvalue) {
-						let message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {author: this.getUserData(e.instance.props.message.author.id, true, false, e.instance.props.message.author)}));
-						if (data) {
-							let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.message.author.id) || {}).colorString || data.color1;
-							if (color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
-						}
+				if (!e.instance.props.message || !this.settings.places.chatWindow || !this.shouldchat(e.instance.props.message.channel_id)) return;
+				const author = e.instance.props.userOverride || e.instance.props.message.author;
+				let data = changedUsers[author.id];
+				if (!data) return;
+				if (!e.returnvalue) {
+					let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, author.id) || {}).colorString || data.color1;
+					color1 = color1 && BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
+					if (e.instance.props.userOverride) e.instance.props.userOverride = this.getUserData(author.id)
+					else {
+						let message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {author: this.getUserData(author.id, true, false, author)}));
+						if (color1) message.colorString = color1;
 						e.instance.props.message = message;
 					}
-					else if (e.returnvalue.props.children) {
-						if (data && (data.color1 || data.color2)) {
-							let messageUsername = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
-							if (messageUsername) {
-								if (messageUsername.props && typeof messageUsername.props.children == "function") {
-									let renderChildren = messageUsername.props.children;
-									messageUsername.props.children = (...args) => {
-										let renderedChildren = renderChildren(...args);
-										this.changeUserColor(renderedChildren, e.instance.props.message.author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
-										return renderedChildren;
-									}
+					e.instance.props.author = Object.assign({}, e.instance.props.author, {
+						nick: data.name || e.instance.props.author.nick,
+						guildMemberAvatar: (data.removeIcon ? null : data.url) || e.instance.props.author.guildMemberAvatar,
+						colorString: color1 || e.instance.props.author.colorString
+					});
+				}
+				else if (e.returnvalue.props.children) {
+					if (data.color1 || data.color2) {
+						let messageUsername = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
+						if (messageUsername) {
+							if (messageUsername.props && typeof messageUsername.props.children == "function") {
+								let renderChildren = messageUsername.props.children;
+								messageUsername.props.children = (...args) => {
+									let renderedChildren = renderChildren(...args);
+									this.changeUserColor(renderedChildren, author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
+									return renderedChildren;
 								}
-								else this.changeUserColor(messageUsername, e.instance.props.message.author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
 							}
+							else this.changeUserColor(messageUsername, author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
 						}
-						this.injectBadge(e.returnvalue.props.children, e.instance.props.message.author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.compact ? 0 : 2, {
-							tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
-							useRem: true
-						});
 					}
+					this.injectBadge(e.returnvalue.props.children, author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.compact ? 0 : 2, {
+						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
+						useRem: true
+					});
 				}
 			}
 			
