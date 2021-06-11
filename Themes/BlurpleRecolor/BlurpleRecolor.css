@@ -344,9 +344,8 @@
 	background-color: rgba(var(--accentcolor), 0.3);
 }
 															/* attachment			upload bar							*/
-.progressBar-3u8FBM[style*="background-color: hsl(235, "],
-.progressBar-3u8FBM[style*="background-color: rgb(88, 101, 242)"],
-.progressBar-3u8FBM[style*="background-color: rgb(114, 137, 218)"] {
+.progressBar-3u8FBM[style*="background-color: hsl(227, "],
+.progressBar-3u8FBM[style*="background-color: hsl(235, "] {
 	background-color: rgb(var(--accentcolor)) !important;
 }
 
@@ -496,7 +495,7 @@
 	background-image: url(https://discord.com/assets/c13a0b03a798023c27155fad5f0c7a61.png);
 }
 .background-ujHpbY[style*="background-color: hsl(235, "],
-.background-ujHpbY[style*="background-color: rgb(116, 140, 220)"] {
+.background-ujHpbY[style*="background-color: hsl(227, "] {
 	background-color: rgb(var(--accentcolor)) !important;
 }
 
@@ -1863,9 +1862,9 @@ a.metadataName-14STf- {
 
 /* ----		11.2.	USERPOPOUT						---- */
 
+.banner-2QYc2d[style*="background-color: hsl(227, "],
 .banner-2QYc2d[style*="background-color: hsl(235, "],
-.banner-2QYc2d[style*="background-color: hsl(237, "],
-.banner-2QYc2d[style*="background-color: rgb(114, 137, 218)"] {
+.banner-2QYc2d[style*="background-color: hsl(237, "] {
 	background-color: rgb(var(--accentcolor)) !important;
 }
 .setIdentityLink-3lcnXW {
@@ -2009,9 +2008,11 @@ a.metadataName-14STf- {
 	border-color: rgb(var(--accentcolor));
 }
 
+.checkbox-1ix_J3.checked-3_4uQ9[style*="background-color: hsl(227, "],
 .checkbox-1ix_J3.checked-3_4uQ9[style*="background-color: hsl(235, "] {
 	background-color: rgb(var(--accentcolor)) !important;
 }
+.checkbox-1ix_J3.checked-3_4uQ9[style*="border-color: hsl(227, "],
 .checkbox-1ix_J3.checked-3_4uQ9[style*="border-color: hsl(235, "] {
 	border-color: rgb(var(--accentcolor)) !important;
 }
@@ -2021,11 +2022,13 @@ a.metadataName-14STf- {
 	transition: background-color .1s ease-out;
 }															/* switch				checked								*/
 .container-3auIfb[style*="background-color: hsl(139, "],
-.container-3auIfb[style*="background-color: hsl(227, "] {
+.container-3auIfb[style*="background-color: hsl(227, "],
+.container-3auIfb[style*="background-color: hsl(235, "] {
 	background-color: rgba(var(--accentcolor), 0.8) !important;
 }
 .container-3auIfb[style*="background-color: hsl(139, "]:hover,
-.container-3auIfb[style*="background-color: hsl(227, "]:hover {
+.container-3auIfb[style*="background-color: hsl(227, "]:hover,
+.container-3auIfb[style*="background-color: hsl(235, "]:hover {
 	background: var(--accentcolor-hover) !important;
 }
 #app-mount .container-3auIfb:active {
@@ -2091,6 +2094,7 @@ a.metadataName-14STf- {
 	filter: brightness(75%);
 }
 
+.base-PmTxvP[style*="background-color: hsl(227, "],
 .base-PmTxvP[style*="background-color: hsl(235, "] {
 	background-color: rgb(var(--accentcolor)) !important;
 }

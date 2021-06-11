@@ -777,6 +777,7 @@ body::before {
 	box-shadow: none;
 }
 .message-2qnXI6,											/* message				container							*/
+.messagesWrapper-1sRNjr .wrapper-2a6GCs,					/* message				upload placeholder					*/
 .wrapper-1F5TKx,											/* message				loading 							*/
 .message-2DieIs,											/* message				mention popout						*/
 .message-2g38UB,											/* message				inbox popout						*/
@@ -989,9 +990,13 @@ body::before {
 	overflow: visible;
 }
 #app-mount .cozyMessage-3V1Y8y,								/* message				container cozy						*/
+#app-mount .messagesWrapper-1sRNjr .cozy-3raOZG,			/* message				upload placeholder cozy				*/
 #app-mount .cozy-12kSNU {									/* message				loading cozy						*/
 	margin-left: calc(80px * var(--usechatbubbles));
 	padding-left: calc(1px * (10 * var(--usechatbubbles) + 72 * (1 - var(--usechatbubbles))));
+}
+#app-mount .wrapper-2a6GCs[data-list-item-id*="Uploader"] {
+	margin-top: 1rem;
 }
 #app-mount .compact-3Dy1Ya {								/* message				loading compact						*/
 	margin-top: .0625rem;
