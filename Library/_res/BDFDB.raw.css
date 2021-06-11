@@ -2,9 +2,9 @@
 
 :root {
 	--bdfdb-blurple: var(--brand-experiment, hsl(235, calc(var(--saturation-factor, 1)*85.6%), 64.7%));
-	--bdfdb-green: var(--status-positive-background, #3ba55c);
-	--bdfdb-yellow: var(--status-warning-background, #faa61a);
-	--bdfdb-red: var(--status-danger-background, #ed4245);
+	--bdfdb-green: hsl(139, calc(var(--saturation-factor, 1) * 47.3%), 43.9%);
+	--bdfdb-yellow: hsl(38, calc(var(--saturation-factor, 1) * 95.7%), 54.1%);
+	--bdfdb-red: hsl(359, calc(var(--saturation-factor, 1) * 82.6%), 59.4%);
 }
 
 img:not([src]), img[src=""], img[src="null"] {

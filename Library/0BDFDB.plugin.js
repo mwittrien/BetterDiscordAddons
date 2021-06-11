@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.9
+ * @version 1.7.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,10 +19,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.6.9",
+			"version": "1.7.0",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
+		"changeLog": {
+			"fixed:" {
+				"Toasts": "Fixed progress bar color being always gray"
+			}
+		}
 	};
 	
 	const DiscordObjects = {};
@@ -1250,7 +1255,7 @@ module.exports = (_ => {
 						
 						let type = data.config.type && BDFDB.disCN["toast" + data.config.type];
 						if (!type) {
-							barColor = BDFDB.ColorUtils.convert(data.config.barColor, "HEX");
+							barColor = BDFDB.ColorUtils.getType(data.config.barColor) ? BDFDB.ColorUtils.convert(data.config.barColor, "HEX") : data.config.barColor;
 							let comp = BDFDB.ColorUtils.convert(data.config.color, "RGBCOMP");
 							if (comp) {
 								backgroundColor = BDFDB.ColorUtils.convert(comp, "HEX");
