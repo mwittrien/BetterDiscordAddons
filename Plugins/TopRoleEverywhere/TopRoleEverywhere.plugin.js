@@ -2,7 +2,7 @@
  * @name TopRoleEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.5
+ * @version 3.0.6
  * @description Adds the highest Role of a User as a Tag
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "TopRoleEverywhere",
 			"author": "DevilBro",
-			"version": "3.0.5",
+			"version": "3.0.6",
 			"description": "Adds the highest Role of a User as a Tag"
 		},
 		"changeLog": {
-			"added": {
-				"Voice Channel List": "Added Option to add Role Tag in the Voice Channel List for Users"
+			"fixed": {
+				"Commands": "No longer use the roles of the bot instead of the user"
 			}
 		}
 	};
@@ -65,21 +65,21 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var settings = {};
-	
 		return class TopRoleEverywhere extends Plugin {
 			onLoad () {
 				this.defaults = {
-					settings: {
-						showInChat:			{value: true, 	inner: true, 	description: "Chat Window"},
-						showInMemberList:	{value: true, 	inner: true, 	description: "Member List"},
-						showInVoiceList:	{value: true, 	inner: true, 	description: "Voice User List"},
-						useOtherStyle:		{value: false, 	inner: false, 	description: "Use BotTag Style instead of the Role Style"},
-						useBlackFont:		{value: false, 	inner: false,	description: "Instead of darkening the Color for BotTag Style on bright Colors use black Font"},
-						includeColorless:	{value: false, 	inner: false, 	description: "Include colorless Roles"},
-						showOwnerRole:		{value: false, 	inner: false, 	description: `Display Role Tag of Server Owner as "${BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER}".`},
-						disableForBots:		{value: false, 	inner: false, 	description: "Disable Role Tag for Bots"},
-						addUserID:			{value: false, 	inner: false, 	description: "Add the UserID as a Tag to the Chat Window"}
+					general: {
+						useOtherStyle:		{value: false, 	description: "Use BotTag Style instead of the Role Style"},
+						useBlackFont:		{value: false, 	description: "Instead of darkening the Color for BotTag Style on bright Colors use black Font"},
+						includeColorless:	{value: false, 	description: "Include colorless Roles"},
+						showOwnerRole:		{value: false, 	description: `Display Role Tag of Server Owner as "${BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER}".`},
+						disableForBots:		{value: false, 	description: "Disable Role Tag for Bots"},
+						addUserID:			{value: false, 	description: "Add the UserID as a Tag to the Chat Window"}
+					},
+					places: {
+						chat:			{value: true, 	description: "Chat Window"},
+						memberList:		{value: true, 	description: "Member List"},
+						voiceList:		{value: true, 	description: "Voice User List"},
 					}
 				};
 				
@@ -117,6 +117,7 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN._toproleseverywhererolestyle},
 					${BDFDB.dotCNS.messagecompact + BDFDB.dotCN._toproleseverywhererolestyle} {
 						margin-right: 0.3rem;
+						margin-left: 0;
 						text-indent: 0;
 					}
 					${BDFDB.dotCN._toproleseverywhererolestyle} {
@@ -140,22 +141,22 @@ module.exports = (_ => {
 			getSettingsPanel (collapseStates = {}) {
 				let settingsPanel, settingsItems = [];
 				
-				for (let key in settings) if (!this.defaults.settings[key].inner) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 					type: "Switch",
 					plugin: this,
-					keys: ["settings", key],
-					label: this.defaults.settings[key].description,
-					value: settings[key]
+					keys: ["general", key],
+					label: this.defaults.general[key].description,
+					value: this.settings.general[key]
 				}));
 				
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 					title: "Add Role Tags in:",
-					children: Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+					children: Object.keys(this.defaults.places).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 						type: "Switch",
 						plugin: this,
-						keys: ["settings", key],
-						label: this.defaults.settings[key].description,
-						value: settings[key]
+						keys: ["places", key],
+						label: this.defaults.places[key].description,
+						value: this.settings.places[key]
 					}))
 				}));
 				
@@ -170,35 +171,31 @@ module.exports = (_ => {
 			}
 	
 			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
-				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.MessageUtils.rerenderAll();
 			}
 
 			processMemberListItem (e) {
-				if (e.instance.props.user && settings.showInMemberList) {
-					this.injectRoleTag(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, "member", 2, {
-						tagClass: BDFDB.disCN.bottagmember
-					});
-				}
+				if (e.instance.props.user && this.settings.places.memberList) this.injectRoleTag(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, "member", 2, {
+					tagClass: BDFDB.disCN.bottagmember
+				});
 			}
 
 			processMessageUsername (e) {
-				if (e.instance.props.message) {
-					if (settings.showInChat) this.injectRoleTag(e.returnvalue.props.children, e.instance.props.message.author, "chat", e.instance.props.compact ? 0 : 2, {
-						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
-						useRem: true
-					});
-					if (settings.addUserID) this.injectIdTag(e.returnvalue.props.children, e.instance.props.message.author, "chat", e.instance.props.compact ? 0 : 2, {
-						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
-						useRem: true
-					});
-				}
+				if (!e.instance.props.message) return;
+				const author = e.instance.props.userOverride || e.instance.props.message.author;
+				if (this.settings.places.chat) this.injectRoleTag(e.returnvalue.props.children, author, "chat", e.instance.props.compact ? 0 : 2, {
+					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
+					useRem: true
+				});
+				if (this.settings.general.addUserID) this.injectIdTag(e.returnvalue.props.children, author, "chat", e.instance.props.compact ? 0 : 2, {
+					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
+					useRem: true
+				});
 			}
 
 			processVoiceUser (e) {
-				if (e.instance.props.user && settings.showInVoiceList) {
+				if (e.instance.props.user && this.settings.places.voiceList) {
 					let content = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.voicecontent]]});
 					if (content) this.injectRoleTag(content.props.children, e.instance.props.user, "voice", 3);
 				}
@@ -207,17 +204,17 @@ module.exports = (_ => {
 			injectRoleTag (children, user, type, insertIndex, config = {}) {
 				if (!BDFDB.ArrayUtils.is(children) || !user) return;
 				let guild = BDFDB.LibraryModules.GuildStore.getGuild(BDFDB.LibraryModules.LastGuildStore.getGuildId());
-				if (!guild || user.bot && settings.disableForBots) return;
+				if (!guild || user.bot && this.settings.general.disableForBots) return;
 				let role = BDFDB.LibraryModules.PermissionRoleUtils.getHighestRole(guild, user.id);
-				if (settings.showOwnerRole && user.id == guild.ownerId) role = Object.assign({}, role, {name: BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER, ownerRole: true});
-				if (role && !role.colorString && !settings.includeColorless && !role.ownerRole) {
+				if (this.settings.general.showOwnerRole && user.id == guild.ownerId) role = Object.assign({}, role, {name: BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER, ownerRole: true});
+				if (role && !role.colorString && !this.settings.general.includeColorless && !role.ownerRole) {
 					let member = BDFDB.LibraryModules.MemberStore.getMember(guild.id, user.id);
 					if (member) for (let sortedRole of BDFDB.ArrayUtils.keySort(member.roles.map(roleId => guild.getRole(roleId)), "position").reverse()) if (sortedRole.colorString) {
 						role = sortedRole;
 						break;
 					}
 				}
-				if (role && (role.colorString || role.ownerRole || settings.includeColorless)) children.splice(insertIndex, 0, this.createTag(role, type, config));
+				if (role && (role.colorString || role.ownerRole || this.settings.general.includeColorless)) children.splice(insertIndex, 0, this.createTag(role, type, config));
 			}
 
 			injectIdTag (children, user, type, insertIndex, config = {}) {
@@ -228,17 +225,17 @@ module.exports = (_ => {
 			}
 			
 			createTag (role, type, config = {}) {
-				if (settings.useOtherStyle) {
+				if (this.settings.general.useOtherStyle) {
 					let tagColor = BDFDB.ColorUtils.convert(role.colorString || BDFDB.DiscordConstants.Colors.PRIMARY_DARK_500, "RGB")
 					let isBright = role.colorString && BDFDB.ColorUtils.isBright(tagColor);
-					tagColor = isBright ? (settings.useBlackFont ? tagColor : BDFDB.ColorUtils.change(tagColor, -0.3)) : tagColor;
+					tagColor = isBright ? (this.settings.general.useBlackFont ? tagColor : BDFDB.ColorUtils.change(tagColor, -0.3)) : tagColor;
 					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BotTag, {
 						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._toproleseverywheretag, BDFDB.disCN[`_toproleseverywhere${type}tag`], BDFDB.disCN._toproleseverywherebadgestyle, config.tagClass),
 						useRemSizes: config.useRem,
 						invertColor: config.inverted,
 						style: {
 							backgroundColor: tagColor,
-							color: isBright && settings.useBlackFont ? "black" : null
+							color: isBright && this.settings.general.useBlackFont ? "black" : null
 						},
 						tag: role.name,
 						onContextMenu: role.id ? e => {this.openRoleContextMenu(e, role);} : null

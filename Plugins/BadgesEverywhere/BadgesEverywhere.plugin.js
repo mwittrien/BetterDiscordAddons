@@ -292,9 +292,9 @@ module.exports = (_ => {
 			}
 
 			processMessageUsername (e) {
-				if (e.instance.props.message && this.settings.places.chat) {
-					this.injectBadges(e.instance, e.returnvalue.props.children, e.instance.props.message.author, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
-				}
+				if (!e.instance.props.message || !this.settings.places.chat) return;
+				const author = e.instance.props.userOverride || e.instance.props.message.author;
+				this.injectBadges(e.instance, e.returnvalue.props.children, author, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
 			}
 			
 			processUserProfileBadgeList (e) {
