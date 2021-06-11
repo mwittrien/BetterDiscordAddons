@@ -160,7 +160,9 @@ module.exports = (_ => {
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 								tag: "span",
 								className: BDFDB.disCN.messagespopoutchannelname,
-								onClick: _ => BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id)),
+								onClick: _ => {
+									if (!channel.guild_id || BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id)) BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id));
+								},
 								children: channelName ? ((channel.guild_id ? "#" : "@") + channelName) : "???"
 							}),
 							popoutProps.selectedFilter.value == "all" ? BDFDB.ReactUtils.createElement("span", {
@@ -181,7 +183,7 @@ module.exports = (_ => {
 							BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.messagespopoutactionbuttons,
 								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									(!channel.guild_id || BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id)) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 										className: BDFDB.disCN.messagespopoutjumpbutton,
 										onClick: _ => BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id, message.id)),
 										children: BDFDB.ReactUtils.createElement("div", {
