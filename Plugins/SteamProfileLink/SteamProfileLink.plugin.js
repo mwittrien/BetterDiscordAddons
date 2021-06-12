@@ -2,7 +2,7 @@
  * @name SteamProfileLink
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.9
+ * @version 1.1.0
  * @description Opens Steam Links in Steam instead of your Browser
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "SteamProfileLink",
 			"author": "DevilBro",
-			"version": "1.0.9",
+			"version": "1.1.0",
 			"description": "Opens Steam Links in Steam instead of your Browser"
+		},
+		"changeLog": {
+			"fixed": {
+				"Images": "Should no longer try to open Images in Steam"
+			}
 		}
 	};
 
@@ -77,7 +82,7 @@ module.exports = (_ => {
 		
 			openIn (e, key, url) {
 				let platform = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(key);
-				if (typeof this[`openIn${platform}`] == "function") {
+				if (url && !url.startsWith("https://images-ext-1.discord") && !url.startsWith("https://images-ext-2.discord") && typeof this[`openIn${platform}`] == "function") {
 					BDFDB.ListenerUtils.stopEvent(e);
 					this[`openIn${platform}`](url);
 					return true;
