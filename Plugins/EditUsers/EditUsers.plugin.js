@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.0
+ * @version 4.3.1
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.3.0",
+			"version": "4.3.1",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
 			"fixed": {
 				"Commands": "No longer use the data of the bot instead of the user",
-				"Now Playing": "Gets changed again"
+				"Now Playing": "Gets changed again",
+				"Custom Status": "Works in User Profile now",
+				"Show/Keep Server Nicknames": "Works in Messages again"
 			}
 		}
 	};
@@ -193,21 +195,7 @@ module.exports = (_ => {
 				`;
 			}
 			
-			onStart () {
-				// REMOVE 16.05.2021
-				let oldData = BDFDB.DataUtils.load(this);
-				if (oldData.settings) {
-					this.settings.general = BDFDB.ObjectUtils.filter(oldData.settings, k => k.indexOf("changeIn") == -1, true);
-					this.settings.places = Object.entries(BDFDB.ObjectUtils.filter(oldData.settings, k => k.indexOf("changeIn") == 0, true)).reduce((n, p) => {
-						let k = p[0].replace("changeIn", "");
-						n[k[0].toLowerCase() + k.slice(1)] = p[1];
-						return n;
-					}, {});
-					BDFDB.DataUtils.save(this.settings.general, this, "general");
-					BDFDB.DataUtils.save(this.settings.places, this, "places");
-					BDFDB.DataUtils.remove(this, "settings");
-				}
-				
+			onStart () {				
 				let observer = new MutationObserver(_ => {this.changeAppTitle();});
 				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name: "appTitleObserver", instance: observer}, {childList: true});
 				
@@ -262,11 +250,15 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.IconUtils, "getUserBannerURL", {instead: e => {
 					let user = BDFDB.LibraryModules.UserStore.getUser(e.methodArguments[0].id);
 					if (user) {
-						if (e.methodArguments[0].id == "278543574059057154") return user.banner;
+						if (user.id == "278543574059057154") return user.banner;
 						let data = changedUsers[user.id];
 						if (data && data.banner && !data.removeBanner) return data.banner;
 					}
 					return e.callOriginalMethod();
+				}});
+				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.StatusMetaUtils, "findActivity", {after: e => {
+					if (e.returnValue && changedUsers[e.methodArguments[0]] && e.returnValue.type === BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS) return this.createCustomStatus(changedUsers[e.methodArguments[0]]);
 				}});
 				
 				this.forceUpdateAll();
@@ -503,7 +495,6 @@ module.exports = (_ => {
 							e.instance.props.nickname = name;
 							if (e.instance.props.guildMember) e.instance.props.guildMember = Object.assign({}, e.instance.props.guildMember, {nick: name});
 						}
-						if (data.removeStatus || data.status || data.statusEmoji) e.instance.props.customStatusActivity = this.createCustomStatus(data);
 					}
 				}
 			}
@@ -526,11 +517,11 @@ module.exports = (_ => {
 			}
 
 			processUserProfileModal (e) {
-				if (e.instance.props.user && this.settings.places.userProfile) {
-					e.instance.props.user = this.getUserData(e.instance.props.user.id);
-					let data = changedUsers[e.instance.props.user.id];
-					if (data && (data.removeStatus || data.status || data.statusEmoji)) e.instance.props.customStatusActivity = this.createCustomStatus(data);
-				}
+				if (e.instance.props.user && this.settings.places.userProfile) e.instance.props.user = this.getUserData(e.instance.props.user.id);
+			}
+
+			processCustomStatusActivity (e) {
+				console.log(e);
 			}
 
 			processMutualFriends (e) {
@@ -698,8 +689,9 @@ module.exports = (_ => {
 						if (color1) message.colorString = color1;
 						e.instance.props.message = message;
 					}
+					let member = BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, author.id);
 					e.instance.props.author = Object.assign({}, e.instance.props.author, {
-						nick: data.name || e.instance.props.author.nick,
+						nick: (data.useServerNick && member && member.nick || [data.name, data.showServerNick && member && member.nick && `(${member.nick})`].filter(n => n).join(" ")) || e.instance.props.author.nick,
 						guildMemberAvatar: (data.removeIcon ? null : data.url) || e.instance.props.author.guildMemberAvatar,
 						colorString: color1 || e.instance.props.author.colorString
 					});
