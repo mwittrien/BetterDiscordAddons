@@ -2,7 +2,7 @@
  * @name EditServers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.2
+ * @version 2.3.3
  * @description Allows you to locally edit Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditServers",
 			"author": "DevilBro",
-			"version": "2.3.2",
+			"version": "2.3.3",
 			"description": "Allows you to locally edit Servers"
+		},
+		"changeLog": {
+			"fixed": {
+				"Invite Icon": "Fixed Icon being squashed for non squarish icons"
+			}
 		}
 	};
 	
@@ -103,23 +108,15 @@ module.exports = (_ => {
 				};
 				
 				this.patchPriority = 7;
+				
+				this.css = `
+					${BDFDB.dotCN.inviteguildicon} {
+						background-size: cover;
+					}
+				`;
 			}
 			
-			onStart () {
-				// REMOVE 07.05.2021
-				let oldData = BDFDB.DataUtils.load(this);
-				if (oldData.settings) {
-					this.settings.general = BDFDB.ObjectUtils.filter(oldData.settings, k => k.indexOf("changeIn") == -1, true);
-					this.settings.places = Object.entries(BDFDB.ObjectUtils.filter(oldData.settings, k => k.indexOf("changeIn") == 0, true)).reduce((n, p) => {
-						let k = p[0].replace("changeIn", "");
-						n[k[0].toLowerCase() + k.slice(1)] = p[1];
-						return n;
-					}, {});
-					BDFDB.DataUtils.save(this.settings.general, this, "general");
-					BDFDB.DataUtils.save(this.settings.places, this, "places");
-					BDFDB.DataUtils.remove(this, "settings");
-				}
-				
+			onStart () {				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.IconUtils, "getGuildBannerURL", {instead: e => {
 					let guild = BDFDB.LibraryModules.GuildStore.getGuild(e.methodArguments[0].id);
 					if (guild) {
