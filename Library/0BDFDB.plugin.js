@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.0
+ * @version 1.7.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,13 +19,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.7.0",
+			"version": "1.7.1",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
 		"changeLog": {
 			"fixed": {
-				"Toasts": "Fixed progress bar color being always gray"
+				"Message Rerendering": "Fixed Message Rerendering causing weird Message Jumps"
 			}
 		}
 	};
@@ -2837,10 +2837,10 @@ module.exports = (_ => {
 				BDFDB.MessageUtils.rerenderAll = function (instant) {
 					BDFDB.TimeUtils.clear(BDFDB.MessageUtils.rerenderAll.timeout);
 					BDFDB.MessageUtils.rerenderAll.timeout = BDFDB.TimeUtils.timeout(_ => {
-						let channel = LibraryModules.ChannelStore.getChannel(LibraryModules.LastChannelStore.getChannelId());
-						if (channel) {
-							if (BDFDB.DMUtils.isDMChannel(channel)) BDFDB.DMUtils.markAsRead(channel);
-							else BDFDB.ChannelUtils.markAsRead(channel);
+						let channelId = LibraryModules.LastChannelStore.getChannelId();
+						if (channelId) {
+							if (BDFDB.DMUtils.isDMChannel(channelId)) BDFDB.DMUtils.markAsRead(channelId);
+							else BDFDB.ChannelUtils.markAsRead(channelId);
 						}
 						let LayerProviderIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.messageswrapper), {name: "LayerProvider", unlimited: true, up: true});
 						let LayerProviderPrototype = BDFDB.ObjectUtils.get(LayerProviderIns, `${BDFDB.ReactUtils.instanceKey}.type.prototype`);
