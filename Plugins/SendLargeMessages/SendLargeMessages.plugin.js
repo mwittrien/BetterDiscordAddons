@@ -2,7 +2,7 @@
  * @name SendLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.7
+ * @version 1.6.8
  * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "SendLargeMessages",
 			"author": "DevilBro",
-			"version": "1.6.7",
+			"version": "1.6.8",
 			"description": "Allows you to enter larger Messages, which will automatically split into several smaller Messages"
 		},
 		"changeLog": {
@@ -88,7 +88,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				maxMessageLength = BDFDB.LibraryModules.NitroUtils.canUseIncreasedMessageLength() && BDFDB.DiscordUtils.getExperiment("premiumContentLengthAvailable") ? BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH_PREMIUM : BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH;
+				maxMessageLength = BDFDB.LibraryModules.NitroUtils.canUseIncreasedMessageLength(BDFDB.UserUtils.me) ? BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH_PREMIUM : BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH;
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
@@ -322,7 +322,7 @@ module.exports = (_ => {
 						};
 					default:		// English
 						return {
-							toast_allsent:						"All messages sent"
+							toast_allsent:						"All Messages sent"
 						};
 				}
 			}

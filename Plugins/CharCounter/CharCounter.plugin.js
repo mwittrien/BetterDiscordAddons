@@ -2,7 +2,7 @@
  * @name CharCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.3
+ * @version 1.5.4
  * @description Adds a Character Counter to most Inputs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,11 +17,11 @@ module.exports = (_ => {
 		"info": {
 			"name": "CharCounter",
 			"author": "DevilBro",
-			"version": "1.5.3",
+			"version": "1.5.4",
 			"description": "Adds a Character Counter to most Inputs"
 		},
 		"changeLog": {
-			"fixed": {
+			"improved": {
 				"Nitro Max Message Length": "Now uses 4000 as Max Limit when the user has the permissions to"
 			}
 		}
@@ -180,7 +180,7 @@ module.exports = (_ => {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._charcountercounter, type && BDFDB.disCN[`_charcounter${typeMap[type] || type}counter`]),
 					refClass: refClass,
 					parsing: parsing,
-					max: maxLengths[type] || (BDFDB.LibraryModules.NitroUtils.canUseIncreasedMessageLength() && BDFDB.DiscordUtils.getExperiment("premiumContentLengthAvailable") ? BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH_PREMIUM : BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH),
+					max: maxLengths[type] || (BDFDB.LibraryModules.NitroUtils.canUseIncreasedMessageLength(BDFDB.UserUtils.me) ? BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH_PREMIUM : BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH),
 					onChange: instance => {
 						let node = BDFDB.ReactUtils.findDOMNode(instance);
 						let form = node && BDFDB.DOMUtils.getParent(BDFDB.dotCN.chatform, node);
