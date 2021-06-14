@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.1
+ * @version 4.3.2
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.3.1",
+			"version": "4.3.2",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
@@ -258,7 +258,8 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.StatusMetaUtils, "findActivity", {after: e => {
-					if (e.returnValue && changedUsers[e.methodArguments[0]] && e.returnValue.type === BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS) return this.createCustomStatus(changedUsers[e.methodArguments[0]]);
+					let data = e.returnValue && changedUsers[e.methodArguments[0]];
+					if (data && (data.removeStatus || data.status || data.statusEmoji) && e.returnValue.type === BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS) return this.createCustomStatus(changedUsers[e.methodArguments[0]]);
 				}});
 				
 				this.forceUpdateAll();

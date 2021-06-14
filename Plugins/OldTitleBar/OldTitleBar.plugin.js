@@ -2,7 +2,7 @@
  * @name OldTitleBar
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.9
+ * @version 1.7.0
  * @description Allows you to switch to Discord's old Titlebar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "OldTitleBar",
 			"author": "DevilBro",
-			"version": "1.6.9",
+			"version": "1.7.0",
 			"description": "Allows you to switch to Discord's old Titlebar"
 		}
 	};
@@ -89,16 +89,16 @@ module.exports = (_ => {
 						display: none !important;
 					}
 					
-					.platform-osx ${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.guildswrapper} {
+					${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.guildswrapper} {
 						margin-top: 0;
 						padding-top: 0;
 					}
 
-					.platform-osx ${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.guildsscroller} {
+					${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.guildsscroller} {
 						padding-top: 4px;
 					}
 					
-					.platform-osx ${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.settingswindowstandardsidebarview}:before {
+					${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.settingswindowstandardsidebarview}:before {
 						display: none;
 					}
 					
@@ -122,7 +122,9 @@ module.exports = (_ => {
 						border-radius: 0 0 0 5px;
 					}
 
-					${BDFDB.dotCN.channelheaderheaderbar} {
+					${BDFDB.dotCN.channelheaderheaderbar},
+					${BDFDB.dotCNS.channelheaderheaderbar + BDFDB.dotCN.channelheaderchildren},
+					${BDFDB.dotCNS.channelheaderheaderbar + BDFDB.dotCN.channelheadertoolbar} {
 						-webkit-app-region: drag !important;
 					}
 
