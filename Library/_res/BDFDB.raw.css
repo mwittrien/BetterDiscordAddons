@@ -385,12 +385,15 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 [REPLACE_CLASS_discoverycardtitlebutton] {
 	display: flex;
-	margin-left: 4px;
+	justify-content: center;
+	align-items: center;
+	margin-left: 6px;
 }
 [REPLACE_CLASS_discoverycard] [REPLACE_CLASS_favbuttoncontainer] {
 	width: 20px;
 	height: 20px;
 	flex: 0 0 auto;
+	margin-left: 3px;
 }
 [REPLACE_CLASS_discoverycard] [REPLACE_CLASS_favbuttoncontainer] [REPLACE_CLASS_giffavoritesize] {
 	width: 20px;

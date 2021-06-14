@@ -352,6 +352,20 @@ module.exports = (_ => {
 											className: BDFDB.disCN.discoverycardname,
 											children: this.props.data.name
 										}),
+										this.props.data.latestSourceUrl && 
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+											text: BDFDB.LanguageUtils.LanguageStrings.SCREENSHARE_SOURCE,
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+												className: BDFDB.disCN.discoverycardtitlebutton,
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+													nativeClass: true,
+													width: 16,
+													height: 16,
+													name: BDFDB.LibraryComponents.SvgIcon.Names.GITHUB
+												})
+											}),
+											onClick: _ => BDFDB.DiscordUtils.openLink(this.props.data.latestSourceUrl)
+										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
 											className: BDFDB.disCN.discoverycardtitlebutton,
 											isFavorite: this.props.data.fav,
