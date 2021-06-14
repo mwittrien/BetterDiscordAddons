@@ -1101,41 +1101,42 @@ img[src="/assets/4697ec960e57790ad4f6251af4c246b4.svg"] {	/* widgetsettings		wid
 	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://discord.com/assets/955e3c9783043c7080ac202565810fc3.svg) center/contain no-repeat;
 }
+
 .colored-1armap .profileGuildSubscriberlvl1-3oI9tx {
-	background: rgb(var(--accentcolor2));
-	-webkit-mask: url(https://discord.com/assets/24e49184598820f274e62293349a2e43.svg) center/contain no-repeat;
+	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl1_details.svg) center/contain no-repeat;
+	-webkit-mask: url(https://discord.com/assets/fbb6f1e160280f0e9aeb5d7c452eefe1.svg) center/contain no-repeat;
 }
 .colored-1armap .profileGuildSubscriberlvl2-r6nJHT {
-	background: rgb(var(--accentcolor2));
-	-webkit-mask: url(https://discord.com/assets/cc73fba5c2e9b70752bbd1db35a1b9c3.svg) center/contain no-repeat;
+	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl2_details.svg) center/contain no-repeat;
+	-webkit-mask: url(https://discord.com/assets/b4b741bef6c3de9b29e2e0653e294620.svg) center/contain no-repeat;
 }
 .colored-1armap .profileGuildSubscriberlvl3-38s3Dj {
-	background: rgb(var(--accentcolor2));
-	-webkit-mask: url(https://discord.com/assets/a4c3939a9b03274246df9b144fcd86cf.svg) center/contain no-repeat;
+	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl3_details.svg) center/contain no-repeat;
+	-webkit-mask: url(https://discord.com/assets/93f5a393e22796a850931483166d7cb9.svg) center/contain no-repeat;
 }
 .colored-1armap .profileGuildSubscriberlvl4-2NXrsI {
-	background: rgb(var(--accentcolor2));
-	-webkit-mask: url(https://discord.com/assets/d01bee8a9b41bd9dda26a43221b2e7e8.svg) center/contain no-repeat;
+	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl4_details.svg) center/contain no-repeat;
+	-webkit-mask: url(https://discord.com/assets/4c380650960c2b1e1584115d5e9ad63b.svg) center/contain no-repeat;
 }
 .colored-1armap .profileGuildSubscriberlvl5-3XIa2K {
-	background: rgb(var(--accentcolor2));
-	-webkit-mask: url(https://discord.com/assets/a99def5f819c077e5e5061cab741b7e6.svg) center/contain no-repeat;
+	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl5_details.svg) center/contain no-repeat;
+	-webkit-mask: url(https://discord.com/assets/438dd7ecbffcf21b6cbf2773ade51a04.svg) center/contain no-repeat;
 }
 .colored-1armap .profileGuildSubscriberlvl6-3e3sxW {
-	background: rgb(var(--accentcolor2));
-	-webkit-mask: url(https://discord.com/assets/2cfb317f3db3963d8ded9a97ee967bac.svg) center/contain no-repeat;
+	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl6_details.svg) center/contain no-repeat;
+	-webkit-mask: url(https://discord.com/assets/7a5f78de816fcecbbd1d5d6e635cc7dd.svg) center/contain no-repeat;
 }
 .colored-1armap .profileGuildSubscriberlvl7-1dVhQT {
-	background: rgb(var(--accentcolor2));
-	-webkit-mask: url(https://discord.com/assets/278736f579d810b11ddf308cb598b19e.svg) center/contain no-repeat;
+	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl7_details.svg) center/contain no-repeat;
+	-webkit-mask: url(https://discord.com/assets/5a24b20b84fb3eafc138916729386e76.svg) center/contain no-repeat;
 }
 .colored-1armap .profileGuildSubscriberlvl8-1kXdFr {
-	background: rgb(var(--accentcolor2));
-	-webkit-mask: url(https://discord.com/assets/38e40f25802a0fdf480d9b855a37a2f3.svg) center/contain no-repeat;
+	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl8_details.svg) center/contain no-repeat;
+	-webkit-mask: url(https://discord.com/assets/f31d590e1f3629cd0b614330f4a8ee2a.svg) center/contain no-repeat;
 }
 .colored-1armap .profileGuildSubscriberlvl9-1d6zav {
-	background: rgb(var(--accentcolor2));
-	-webkit-mask: url(https://discord.com/assets/cfbc2d8ceacfacf07850f986c8165195.svg) center/contain no-repeat;
+	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl9_details.svg) center/contain no-repeat;
+	-webkit-mask: url(https://discord.com/assets/9ba64f1fa91ccde0eba506c1c33f3d1a.svg) center/contain no-repeat;
 }
 
 .guildAvatarWithoutIcon-1s9Pcy {							/* modal				shared servers no icon				*/
