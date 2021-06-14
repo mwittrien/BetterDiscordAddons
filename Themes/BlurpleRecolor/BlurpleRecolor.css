@@ -407,6 +407,10 @@
 	color: rgb(var(--accentcolor));
 }
 
+.premium-1XICKa path[fill] {
+	fill: var(--text-normal);
+}
+
 /* ----		3.3.	AUTOCOMPLETEMENU				---- */
 
 #app-mount .active-2awTSY {									/* autocomplete			option active						*/
