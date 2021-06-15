@@ -1414,6 +1414,16 @@ img:not([src]), img[src=""], img[src="null"] {
 	}
 }
 
+[REPLACE_CLASS_usersettingssociallink][href*="/Lightcord/" i]::before {
+	content: "";
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: red;
+}
+
 .platform-win [REPLACE_CLASS_toasts] {
 	padding-top: 22px;
 }
