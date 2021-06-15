@@ -7943,7 +7943,7 @@ module.exports = (_ => {
 				if (window.Lightcord || window.LightCord) BDFDB.ModalUtils.open(BDFDB, {
 					header: "Attention!",
 					subHeader: "Modified Client detected",
-					text: "We detected that you are using LightCord. Unlike other client modificaton (BetterDiscord, PowerCord), LightCord is a completely modified client, which is no longer maintained by Discord but instead by a 3rd party. This will put your account at risk, not only because the 3rd party might use your account credentials as they like, you are also breaking a higher instance of Discord's ToS by using a 3rd party client instead of using a simple client mod which ininjects itself into the original client app. Many Plugins won't flawlessly run on LightCord. We do not support LightCord and as such, we do not provide help or support. You should switch to another modification as soon as possible.",
+					text: "We detected that you are using LightCord. Unlike other client modificaton (BetterDiscord, PowerCord), LightCord is a completely modified client, which is no longer maintained by Discord but instead by a 3rd party. This will put your account at risk, not only because the 3rd party might use your account credentials as they like, you are also breaking a higher instance of Discord's ToS by using a 3rd party client instead of using a simple client mod which injects itself into the original client app. Many Plugins won't flawlessly run on LightCord. We do not support LightCord and as such, we do not provide help or support. You should switch to another modification as soon as possible.",
 					buttons: [{color: "RED", contents: BDFDB.LanguageUtils.LanguageStrings.OKAY, close: true}]
 				});
 				
