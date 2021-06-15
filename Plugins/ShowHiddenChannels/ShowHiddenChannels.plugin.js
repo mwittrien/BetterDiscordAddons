@@ -87,7 +87,7 @@ module.exports = (_ => {
 		
 		const sortOrders = {
 			EXTRA: {value: "extra", label: "Extra Category 'Hidden'"},
-			NATIVE: {value: "native", label: "Native Category in native Order"},
+			NATIVE: {value: "native", label: "Native Category in correct Order"},
 			BOTTOM: {value: "bottom", label: "Native Category at the bottom"}
 		};
 		
@@ -358,6 +358,24 @@ module.exports = (_ => {
 					if (e.instance.props.channel.id.endsWith("hidden") && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY) {
 						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ChannelMuteItem"});
 						if (index > -1) children.splice(index, 1);
+						[children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mark-channel-read", group: true});
+						children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+							children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								label: this.labels.context_changeorder,
+								id: BDFDB.ContextMenuUtils.createItemId(this.name, "change_order"),
+								children: Object.keys(sortOrders).filter(n => sortOrders[n].value != sortOrders.EXTRA.value).map(n => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+									children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+										label: this.labels["context_changeorder_" + sortOrders[n].value],
+										id: BDFDB.ContextMenuUtils.createItemId(this.name, "change_order", sortOrders[n].value),
+										action: _ => {
+											this.settings.sortOrder.hidden = sortOrders[n].value;
+											BDFDB.DataUtils.save(this.settings.sortOrder, this, "sortOrder");
+											this.forceUpdateAll();
+										}
+									})
+								}))
+							})
+						}));
 					}
 					let isHidden = this.isChannelHidden(e.instance.props.channel.id);
 					if (isHidden || this.settings.general.showForNormal) {
@@ -651,6 +669,9 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
+							context_changeorder:				"Промяна на реда на скритите канали",
+							context_changeorder_bottom:			"Родна категория в долната част",
+							context_changeorder_native:			"Родна категория в правилен ред",
 							context_channelaccess:				"Достъп до канал",
 							context_hidehidden:					"Скриване на заключените канали",
 							modal_allowed:						"Разрешено",
@@ -658,6 +679,9 @@ module.exports = (_ => {
 						};
 					case "cs":		// Czech
 						return {
+							context_changeorder:				"Změnit pořadí skrytých kanálů",
+							context_changeorder_bottom:			"Nativní kategorie dole",
+							context_changeorder_native:			"Nativní kategorie ve správném pořadí",
 							context_channelaccess:				"Přístup ke kanálu",
 							context_hidehidden:					"Skrýt zamčené kanály",
 							modal_allowed:						"Povoleno",
@@ -665,6 +689,9 @@ module.exports = (_ => {
 						};
 					case "da":		// Danish
 						return {
+							context_changeorder:				"Skift rækkefølge for skjulte kanaler",
+							context_changeorder_bottom:			"Indfødt kategori i bunden",
+							context_changeorder_native:			"Native Kategori i korrekt rækkefølge",
 							context_channelaccess:				"Kanaltilgang",
 							context_hidehidden:					"Skjul låste kanaler",
 							modal_allowed:						"Tilladt",
@@ -672,6 +699,9 @@ module.exports = (_ => {
 						};
 					case "de":		// German
 						return {
+							context_changeorder:				"Reihenfolge der versteckten Kanäle ändern",
+							context_changeorder_bottom:			"Native Kategorie ganz unten",
+							context_changeorder_native:			"Native Kategorie in der richtigen Reihenfolge",
 							context_channelaccess:				"Kanalzugriff",
 							context_hidehidden:					"Versteckte Kanäle ausblenden",
 							modal_allowed:						"Erlaubt",
@@ -679,6 +709,9 @@ module.exports = (_ => {
 						};
 					case "el":		// Greek
 						return {
+							context_changeorder:				"Αλλαγή σειράς κρυφών καναλιών",
+							context_changeorder_bottom:			"Εγγενής κατηγορία στο κάτω μέρος",
+							context_changeorder_native:			"Εγγενής κατηγορία σε σωστή σειρά",
 							context_channelaccess:				"Πρόσβαση καναλιού",
 							context_hidehidden:					"Απόκρυψη κλειδωμένων καναλιών",
 							modal_allowed:						"Επιτρεπόμενο",
@@ -686,6 +719,9 @@ module.exports = (_ => {
 						};
 					case "es":		// Spanish
 						return {
+							context_changeorder:				"Cambiar el orden de los canales ocultos",
+							context_changeorder_bottom:			"Categoría nativa en la parte inferior",
+							context_changeorder_native:			"Categoría nativa en el orden correcto",
 							context_channelaccess:				"Acceso al canal",
 							context_hidehidden:					"Ocultar canales bloqueados",
 							modal_allowed:						"Permitido",
@@ -693,6 +729,9 @@ module.exports = (_ => {
 						};
 					case "fi":		// Finnish
 						return {
+							context_changeorder:				"Muuta piilotettujen kanavien järjestystä",
+							context_changeorder_bottom:			"Alkuperäinen luokka alareunassa",
+							context_changeorder_native:			"Alkuperäinen luokka oikeassa järjestyksessä",
 							context_channelaccess:				"Kanavan käyttöoikeus",
 							context_hidehidden:					"Piilota lukitut kanavat",
 							modal_allowed:						"Sallittu",
@@ -700,6 +739,9 @@ module.exports = (_ => {
 						};
 					case "fr":		// French
 						return {
+							context_changeorder:				"Modifier l'ordre des canaux cachés",
+							context_changeorder_bottom:			"Catégorie native en bas",
+							context_changeorder_native:			"Catégorie native dans le bon ordre",
 							context_channelaccess:				"Accès à la chaîne",
 							context_hidehidden:					"Masquer les salons verrouillées",
 							modal_allowed:						"Permis",
@@ -707,6 +749,9 @@ module.exports = (_ => {
 						};
 					case "hi":		// Hindi
 						return {
+							context_changeorder:				"हिडन चैनल ऑर्डर बदलें",
+							context_changeorder_bottom:			"नीचे की ओर मूल श्रेणी",
+							context_changeorder_native:			"मूल श्रेणी सही क्रम में",
 							context_channelaccess:				"चैनल एक्सेस",
 							context_hidehidden:					"बंद चैनल छुपाएं Hide",
 							modal_allowed:						"अनुमति है",
@@ -714,6 +759,9 @@ module.exports = (_ => {
 						};
 					case "hr":		// Croatian
 						return {
+							context_changeorder:				"Promijenite redoslijed skrivenih kanala",
+							context_changeorder_bottom:			"Izvorna kategorija na dnu",
+							context_changeorder_native:			"Izvorna kategorija u ispravnom redoslijedu",
 							context_channelaccess:				"Pristup kanalu",
 							context_hidehidden:					"Sakrij zaključane kanale",
 							modal_allowed:						"Dopuštena",
@@ -721,6 +769,9 @@ module.exports = (_ => {
 						};
 					case "hu":		// Hungarian
 						return {
+							context_changeorder:				"Rejtett csatornák sorrendjének módosítása",
+							context_changeorder_bottom:			"Natív kategória az alján",
+							context_changeorder_native:			"Natív kategória helyes sorrendben",
 							context_channelaccess:				"Csatornához való hozzáférés",
 							context_hidehidden:					"Zárt csatornák elrejtése",
 							modal_allowed:						"Megengedett",
@@ -728,6 +779,9 @@ module.exports = (_ => {
 						};
 					case "it":		// Italian
 						return {
+							context_changeorder:				"Modifica l'ordine dei canali nascosti",
+							context_changeorder_bottom:			"Categoria nativa in basso",
+							context_changeorder_native:			"Categoria nativa nell'ordine corretto",
 							context_channelaccess:				"Accesso al canale",
 							context_hidehidden:					"Nascondi canali bloccati",
 							modal_allowed:						"Consentito",
@@ -735,6 +789,9 @@ module.exports = (_ => {
 						};
 					case "ja":		// Japanese
 						return {
+							context_changeorder:				"非表示チャネルの順序を変更する",
+							context_changeorder_bottom:			"下部のネイティブカテゴリ",
+							context_changeorder_native:			"正しい順序のネイティブカテゴリ",
 							context_channelaccess:				"チャネルアクセス",
 							context_hidehidden:					"ロックされたチャンネルを非表示にする",
 							modal_allowed:						"許可",
@@ -742,6 +799,9 @@ module.exports = (_ => {
 						};
 					case "ko":		// Korean
 						return {
+							context_changeorder:				"숨겨진 채널 순서 변경",
+							context_changeorder_bottom:			"하단의 기본 카테고리",
+							context_changeorder_native:			"올바른 순서의 네이티브 카테고리",
 							context_channelaccess:				"채널 액세스",
 							context_hidehidden:					"잠긴 채널 숨기기",
 							modal_allowed:						"허용됨",
@@ -749,6 +809,9 @@ module.exports = (_ => {
 						};
 					case "lt":		// Lithuanian
 						return {
+							context_changeorder:				"Keisti paslėptų kanalų tvarką",
+							context_changeorder_bottom:			"Gimtoji kategorija apačioje",
+							context_changeorder_native:			"Gimtoji kategorija teisinga tvarka",
 							context_channelaccess:				"Prieiga prie kanalo",
 							context_hidehidden:					"Slėpti užrakintus kanalus",
 							modal_allowed:						"Leidžiama",
@@ -756,6 +819,9 @@ module.exports = (_ => {
 						};
 					case "nl":		// Dutch
 						return {
+							context_changeorder:				"Wijzig de volgorde van verborgen kanalen",
+							context_changeorder_bottom:			"Native categorie onderaan",
+							context_changeorder_native:			"Native categorie in de juiste volgorde",
 							context_channelaccess:				"Kanaaltoegang",
 							context_hidehidden:					"Verberg vergrendelde kanalen",
 							modal_allowed:						"Toegestaan",
@@ -763,6 +829,9 @@ module.exports = (_ => {
 						};
 					case "no":		// Norwegian
 						return {
+							context_changeorder:				"Endre rekkefølgen på skjulte kanaler",
+							context_changeorder_bottom:			"Innfødt kategori nederst",
+							context_changeorder_native:			"Innfødt kategori i riktig rekkefølge",
 							context_channelaccess:				"Kanaltilgang",
 							context_hidehidden:					"Skjul låste kanaler",
 							modal_allowed:						"Tillatt",
@@ -770,6 +839,9 @@ module.exports = (_ => {
 						};
 					case "pl":		// Polish
 						return {
+							context_changeorder:				"Zmień kolejność ukrytych kanałów",
+							context_changeorder_bottom:			"Kategoria natywna na dole",
+							context_changeorder_native:			"Kategoria natywna we właściwej kolejności",
 							context_channelaccess:				"Dostęp do kanałów",
 							context_hidehidden:					"Ukryj zablokowane kanały",
 							modal_allowed:						"Dozwolony",
@@ -777,6 +849,9 @@ module.exports = (_ => {
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
+							context_changeorder:				"Alterar a ordem dos canais ocultos",
+							context_changeorder_bottom:			"Categoria nativa na parte inferior",
+							context_changeorder_native:			"Categoria nativa na ordem correta",
 							context_channelaccess:				"Acesso ao canal",
 							context_hidehidden:					"Ocultar canais bloqueados",
 							modal_allowed:						"Permitido",
@@ -784,6 +859,9 @@ module.exports = (_ => {
 						};
 					case "ro":		// Romanian
 						return {
+							context_changeorder:				"Schimbați comanda canalelor ascunse",
+							context_changeorder_bottom:			"Categorie nativă în partea de jos",
+							context_changeorder_native:			"Categorie nativă în ordine corectă",
 							context_channelaccess:				"Acces la canal",
 							context_hidehidden:					"Ascundeți canalele blocate",
 							modal_allowed:						"Permis",
@@ -791,6 +869,9 @@ module.exports = (_ => {
 						};
 					case "ru":		// Russian
 						return {
+							context_changeorder:				"Изменить порядок скрытых каналов",
+							context_changeorder_bottom:			"Родная категория внизу",
+							context_changeorder_native:			"Собственная категория в правильном порядке",
 							context_channelaccess:				"Доступ к каналу",
 							context_hidehidden:					"Скрыть заблокированные каналы",
 							modal_allowed:						"Разрешенный",
@@ -798,6 +879,9 @@ module.exports = (_ => {
 						};
 					case "sv":		// Swedish
 						return {
+							context_changeorder:				"Ändra ordning för dolda kanaler",
+							context_changeorder_bottom:			"Naturlig kategori längst ner",
+							context_changeorder_native:			"Naturlig kategori i rätt ordning",
 							context_channelaccess:				"Kanaltillgång",
 							context_hidehidden:					"Dölj låsta kanaler",
 							modal_allowed:						"Tillåtet",
@@ -805,6 +889,9 @@ module.exports = (_ => {
 						};
 					case "th":		// Thai
 						return {
+							context_changeorder:				"เปลี่ยนลำดับช่องที่ซ่อนอยู่",
+							context_changeorder_bottom:			"หมวดหมู่ดั้งเดิมที่ด้านล่าง",
+							context_changeorder_native:			"หมวดหมู่ดั้งเดิมในลำดับที่ถูกต้อง",
 							context_channelaccess:				"การเข้าถึงช่อง",
 							context_hidehidden:					"ซ่อนช่องที่ถูกล็อก",
 							modal_allowed:						"ได้รับอนุญาต",
@@ -812,6 +899,9 @@ module.exports = (_ => {
 						};
 					case "tr":		// Turkish
 						return {
+							context_changeorder:				"Gizli Kanal Sırasını Değiştir",
+							context_changeorder_bottom:			"Altta Yerel Kategori",
+							context_changeorder_native:			"Yerel Kategori doğru sırada",
 							context_channelaccess:				"Kanal Erişimi",
 							context_hidehidden:					"Kilitli Kanalları Gizle",
 							modal_allowed:						"İzin veriliyor",
@@ -819,6 +909,9 @@ module.exports = (_ => {
 						};
 					case "uk":		// Ukrainian
 						return {
+							context_changeorder:				"Змінити порядок прихованих каналів",
+							context_changeorder_bottom:			"Рідна категорія внизу",
+							context_changeorder_native:			"Рідна категорія в правильному порядку",
 							context_channelaccess:				"Доступ до каналу",
 							context_hidehidden:					"Сховати заблоковані канали",
 							modal_allowed:						"Дозволено",
@@ -826,6 +919,9 @@ module.exports = (_ => {
 						};
 					case "vi":		// Vietnamese
 						return {
+							context_changeorder:				"Thay đổi thứ tự các kênh bị ẩn",
+							context_changeorder_bottom:			"Danh mục Gốc ở dưới cùng",
+							context_changeorder_native:			"Danh mục gốc theo đúng thứ tự",
 							context_channelaccess:				"Quyền truy cập kênh",
 							context_hidehidden:					"Ẩn các kênh đã khóa",
 							modal_allowed:						"Được phép",
@@ -833,6 +929,9 @@ module.exports = (_ => {
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
+							context_changeorder:				"更改隐藏频道顺序",
+							context_changeorder_bottom:			"底部的原生类别",
+							context_changeorder_native:			"正确顺序的本地类别",
 							context_channelaccess:				"频道访问",
 							context_hidehidden:					"隐藏锁定的频道",
 							modal_allowed:						"允许的",
@@ -840,6 +939,9 @@ module.exports = (_ => {
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
+							context_changeorder:				"更改隱藏頻道順序",
+							context_changeorder_bottom:			"底部的原生類別",
+							context_changeorder_native:			"正確順序的本地類別",
 							context_channelaccess:				"頻道訪問",
 							context_hidehidden:					"隱藏鎖定的頻道",
 							modal_allowed:						"允許的",
@@ -847,6 +949,9 @@ module.exports = (_ => {
 						};
 					default:		// English
 						return {
+							context_changeorder:				"Change Hidden Channels Order",
+							context_changeorder_bottom:			"Native Category at the bottom",
+							context_changeorder_native:			"Native Category in correct Order",
 							context_channelaccess:				"Channel Access",
 							context_hidehidden:					"Hide Locked Channels",
 							modal_allowed:						"Permitted",
