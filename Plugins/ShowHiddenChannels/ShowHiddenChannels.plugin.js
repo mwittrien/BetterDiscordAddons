@@ -94,9 +94,9 @@ module.exports = (_ => {
 		};
 		
 		const sortOrders = {
-			EXTRA: {value: "extra", label: "Extra Category 'Hidden'"},
 			NATIVE: {value: "native", label: "Native Category in correct Order"},
-			BOTTOM: {value: "bottom", label: "Native Category at the bottom"}
+			BOTTOM: {value: "bottom", label: "Native Category at the bottom"},
+			EXTRA: {value: "extra", label: "Extra Category 'Hidden'"}
 		};
 		
 		const UserRowComponent = class UserRow extends BdApi.React.Component {
