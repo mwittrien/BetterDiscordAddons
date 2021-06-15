@@ -765,7 +765,7 @@
 	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_accent2.svg) center/cover no-repeat;
 }
-#app-mount .tierUnlocked-27DwHo {							/* boostsettings		tierunlocked						*/
+#app-mount .tierUnlocked-2H6ULo {							/* boostsettings		tierunlocked						*/
 	color: rgb(var(--accentcolor2));
 }
 #app-mount .tierAccomplished-2eXPdI,
@@ -773,13 +773,13 @@
 #app-mount .tierDefault-2qaRkD {
 	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.5));
 }
-#app-mount .tierCloseHint-380zIA {							/* boostsettings		tierclosehint						*/
+#app-mount .tierCloseHint-w4yino {							/* boostsettings		tierclosehint						*/
 	background-color: rgb(var(--accentcolor));
 }
-#app-mount .tierCloseHint-380zIA::before {
+#app-mount .tierCloseHint-w4yino::before {
 	border-right-color: rgb(var(--accentcolor));
 }
-#app-mount .tierHeaderUnlockedBackground-MW5XJU {			/* boostsettings		tierheaderunlockedbg				*/
+#app-mount .tierHeaderUnlockedBackground-dZ6zLI {			/* boostsettings		tierheaderunlockedbg				*/
 	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
 }
 #app-mount .foreground-2EIns2 {								/* boostsettings		icon foreground						*/
