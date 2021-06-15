@@ -287,9 +287,10 @@
 	--message-background-flash: rgba(var(--accentcolor), 0);
 }
 
-.embedFull-2tM8--[style*="border-color: rgb(88, 101, 242)"],
-.embedFull-2tM8--[style*="border-color: rgb(114, 137, 218)"],
-.embedFull-2tM8--[style*="border-color: rgb(58, 113, 193)"] {
+.embedFull-2tM8--[style*="border-color: hsl(216, "],
+.embedFull-2tM8--[style*="border-color: hsl(227, "],
+.embedFull-2tM8--[style*="border-color: hsl(235, "],
+.embedFull-2tM8--[style*="border-color: hsl(237, "] {
 	border-color: rgb(var(--accentcolor)) !important;
 }
 
