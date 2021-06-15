@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.9
+ * @version 4.3.0
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.2.9",
+			"version": "4.3.0",
 			"description": "Allows you to locally edit Channels"
 		},
 		"changeLog": {
 			"fixed": {
-				"Group DMs": "Fixed some stuff in Group DMs"
+				"Group DMs": "Fixed some stuff in Group DMs",
+				"Show Hidden Channels": "Fixed some Issues with the fake category created by ShowHiddenChannels"
 			}
 		}
 	};
@@ -338,7 +339,7 @@ module.exports = (_ => {
 					let change, channelId, nameClass, categoyClass, iconClass, modify = {};
 					if (this.settings.places.channelList && e.returnvalue.props.className.indexOf(BDFDB.disCN.categoryiconvisibility) > -1) {
 						change = true;
-						channelId = (BDFDB.ReactUtils.findValue(e.returnvalue, "data-list-item-id") || "").split("_").pop();
+						channelId = (BDFDB.ReactUtils.findValue(e.returnvalue, "data-list-item-id") || "").split("___").pop();
 						nameClass = BDFDB.disCN.categoryname;
 						iconClass = BDFDB.disCN.categoryicon;
 						modify = {muted: BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(BDFDB.LibraryModules.LastGuildStore.getGuildId(), channelId)};
@@ -374,12 +375,12 @@ module.exports = (_ => {
 			}
 			
 			processChannelCategoryItem (e) {
-				if (e.instance.props.channel && this.settings.places.channelList) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
+				if (e.instance.props.channel && this.settings.places.channelList) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id, true, e.instance.props.channel);
 			}
 
 			processChannelItem (e) {
 				if (e.instance.props.channel && this.settings.places.channelList) {
-					if (!e.returnvalue) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
+					if (!e.returnvalue) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id, true, e.instance.props.channel);
 					else {
 						let modify = BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "muted", "locked", "selected", "unread", "connected", "hovered");
 						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelnameinner]]});
@@ -624,20 +625,17 @@ module.exports = (_ => {
 			}
 			
 			getChannelDataColor (channelId) {
+				if (!changedChannels[channelId]) return null;
+				if (changedChannels[channelId].color) return changedChannels[channelId].color;
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
-				if (!channel) return null;
-				let channelData = changedChannels[channel.id];
-				if (channelData && channelData.color) return channelData.color;
-				let category = channel.parent_id && BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id);
-				if (category) {
-					let categoryData = changedChannels[category.id];
-					if (categoryData && categoryData.inheritColor && categoryData.color) return categoryData.color;
-				}
+				let category = channel && channel.parent_id && BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id);
+				if (category && changedChannels[category.id] && changedChannels[category.id].inheritColor && changedChannels[category.id].color) return changedChannels[category.id].color;
 				return null;
 			}
 			
-			getChannelData (channelId, change = true) {
+			getChannelData (channelId, change = true, fallbackData) {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
+				if (!channel && BDFDB.ObjectUtils.is(fallbackData) || channel && BDFDB.ObjectUtils.is(fallbackData) && channel.name != fallbackData.name) channel = fallbackData;
 				if (!channel) return new BDFDB.DiscordObjects.Channel({});
 				let data = change && changedChannels[channel.id];
 				if (data) {
