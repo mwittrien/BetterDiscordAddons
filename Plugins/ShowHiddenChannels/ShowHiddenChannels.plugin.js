@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.9
+ * @version 3.0.0
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "2.9.9",
+			"version": "3.0.0",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
+		},
+		"changeLog": {
+			"improved": {
+				"Sort Order": "Added a third option, which allows you to sort hidden channels in their native category BUT at the bottom of the category's own list"
+			}
 		}
 	};
 
@@ -78,6 +83,12 @@ module.exports = (_ => {
 			GUILD_STORE: "STORE_CHANNEL",
 			GUILD_CATEGORY: "CATEGORY",
 			GUILD_STAGE_VOICE: "STAGE_CHANNEL"
+		};
+		
+		const sortOrders = {
+			EXTRA: {value: "extra", label: "Extra Category 'Hidden'"},
+			NATIVE: {value: "native", label: "Native Category in native Order"},
+			BOTTOM: {value: "bottom", label: "Native Category at the bottom"}
 		};
 		
 		const UserRowComponent = class UserRow extends BdApi.React.Component {
@@ -158,11 +169,17 @@ module.exports = (_ => {
 				overrideTypes = Object.keys(BDFDB.DiscordConstants.PermissionOverrideType);
 				 
 				this.defaults = {
+					sortOrder: {
+						hidden: {
+							value: sortOrders[Object.keys(sortOrders)[0]].value,
+							description: "Sorts hidden Channels in",
+							options: Object.keys(sortOrders).map(n => sortOrders[n])
+						}
+					},
 					general: {
-						sortNative:				{value: true, 	description: "Sort hidden Channels in the native Order instead of an extra Category"},
-						showVoiceUsers:			{value: true, 	description: "Show connected Users in hidden Voice Channels"},
-						alwaysCollapse:			{value: false, 	description: "Always collapse 'Hidden' Category after switching Servers"},
-						showForNormal:			{value: true,	description: "Add Access-Overview ContextMenu Entry for non-hidden Channels"}
+						alwaysCollapse:			{value: false, 		description: "Always collapse 'Hidden' Category after switching Servers"},
+						showVoiceUsers:			{value: true, 		description: "Show connected Users in hidden Voice Channels"},
+						showForNormal:			{value: true,		description: "Add Access-Overview ContextMenu Entry for non-hidden Channels"}
 					},
 					channels: {
 						GUILD_TEXT:				{value: true},
@@ -260,16 +277,26 @@ module.exports = (_ => {
 					children: _ => {
 						let settingsItems = [];
 				
+						for (let key in this.defaults.selections) settingsItems.push();
+						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Settings",
 							collapseStates: collapseStates,
-							children: Object.keys(this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							children: Object.keys(this.defaults.sortOrder).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Select",
+								plugin: this,
+								keys: ["sortOrder", key],
+								label: this.defaults.sortOrder[key].description,
+								basis: "50%",
+								options: this.defaults.sortOrder[key].options,
+								value: this.settings.sortOrder[key]
+							})).concat(Object.keys(this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "Switch",
 								plugin: this,
 								keys: ["general", key],
 								label: this.defaults.general[key].description,
 								value: this.settings.general[key]
-							})).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 								title: "Show Channels:",
 								children: Object.keys(this.defaults.channels).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 									type: "Switch",
@@ -389,7 +416,7 @@ module.exports = (_ => {
 						if (catId != "_categories") e.instance.props.categories[catId] = e.instance.props.categories[catId].filter(n => !this.isChannelHidden(n.channel.id));
 						for (let channelObj of e.instance.props.categories[catId]) if (channelObj.index > index) index = parseInt(channelObj.index);
 					}
-					if (!this.settings.general.sortNative) {
+					if (this.settings.sortOrder.hidden == sortOrders.EXTRA.value) {
 						hiddenCategory = new BDFDB.DiscordObjects.Channel({
 							guild_id: e.instance.props.guild.id,
 							id: hiddenId,
@@ -413,7 +440,8 @@ module.exports = (_ => {
 						if (!BDFDB.ArrayUtils.is(e.instance.props.channels[channelType])) e.instance.props.channels[channelType] = [];
 						for (let channel of hiddenChannels[type]) {
 							let hiddenChannel = new BDFDB.DiscordObjects.Channel(Object.assign({}, channel, {
-								parent_id: hiddenCategory ? hiddenId : channel.parent_id
+								parent_id: hiddenCategory ? hiddenId : channel.parent_id,
+								position: this.settings.sortOrder.hidden == sortOrders.BOTTOM.value ? 999999999 : channel.position
 							}));
 							let parent_id = hiddenChannel.parent_id || "null";
 							e.instance.props.categories[parent_id].push({
