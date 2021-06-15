@@ -364,7 +364,7 @@ module.exports = (_ => {
 						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mark-channel-read", group: true});
 						children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 							children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-								label: BDFDB.LanguageUtils.LanguageStrings.CHANNEL + " " + BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY,
+								label: this.labels.context_channelaccess,
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "permissions"),
 								action: _ => this.openAccessModal(e.instance.props.channel, !isHidden)
 							})
@@ -651,162 +651,203 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
+							context_channelaccess:				"Достъп до канал",
 							context_hidehidden:					"Скриване на заключените канали",
 							modal_allowed:						"Разрешено",
 							modal_denied:						"Отрича се"
 						};
+					case "cs":		// Czech
+						return {
+							context_channelaccess:				"Přístup ke kanálu",
+							context_hidehidden:					"Skrýt zamčené kanály",
+							modal_allowed:						"Povoleno",
+							modal_denied:						"Odepřeno"
+						};
 					case "da":		// Danish
 						return {
+							context_channelaccess:				"Kanaltilgang",
 							context_hidehidden:					"Skjul låste kanaler",
 							modal_allowed:						"Tilladt",
 							modal_denied:						"Nægtet"
 						};
 					case "de":		// German
 						return {
+							context_channelaccess:				"Kanalzugriff",
 							context_hidehidden:					"Versteckte Kanäle ausblenden",
 							modal_allowed:						"Erlaubt",
 							modal_denied:						"Verweigert"
 						};
 					case "el":		// Greek
 						return {
+							context_channelaccess:				"Πρόσβαση καναλιού",
 							context_hidehidden:					"Απόκρυψη κλειδωμένων καναλιών",
 							modal_allowed:						"Επιτρεπόμενο",
 							modal_denied:						"Απορρίφθηκε"
 						};
 					case "es":		// Spanish
 						return {
+							context_channelaccess:				"Acceso al canal",
 							context_hidehidden:					"Ocultar canales bloqueados",
 							modal_allowed:						"Permitido",
 							modal_denied:						"Negado"
 						};
 					case "fi":		// Finnish
 						return {
+							context_channelaccess:				"Kanavan käyttöoikeus",
 							context_hidehidden:					"Piilota lukitut kanavat",
 							modal_allowed:						"Sallittu",
 							modal_denied:						"Kielletty"
 						};
 					case "fr":		// French
 						return {
+							context_channelaccess:				"Accès à la chaîne",
 							context_hidehidden:					"Masquer les salons verrouillées",
 							modal_allowed:						"Permis",
 							modal_denied:						"Refusé"
 						};
+					case "hi":		// Hindi
+						return {
+							context_channelaccess:				"चैनल एक्सेस",
+							context_hidehidden:					"बंद चैनल छुपाएं Hide",
+							modal_allowed:						"अनुमति है",
+							modal_denied:						"निषेध"
+						};
 					case "hr":		// Croatian
 						return {
+							context_channelaccess:				"Pristup kanalu",
 							context_hidehidden:					"Sakrij zaključane kanale",
 							modal_allowed:						"Dopuštena",
 							modal_denied:						"Odbijen"
 						};
 					case "hu":		// Hungarian
 						return {
+							context_channelaccess:				"Csatornához való hozzáférés",
 							context_hidehidden:					"Zárt csatornák elrejtése",
 							modal_allowed:						"Megengedett",
 							modal_denied:						"Megtagadva"
 						};
 					case "it":		// Italian
 						return {
+							context_channelaccess:				"Accesso al canale",
 							context_hidehidden:					"Nascondi canali bloccati",
 							modal_allowed:						"Consentito",
 							modal_denied:						"Negato"
 						};
 					case "ja":		// Japanese
 						return {
+							context_channelaccess:				"チャネルアクセス",
 							context_hidehidden:					"ロックされたチャンネルを非表示にする",
 							modal_allowed:						"許可",
 							modal_denied:						"拒否されました"
 						};
 					case "ko":		// Korean
 						return {
+							context_channelaccess:				"채널 액세스",
 							context_hidehidden:					"잠긴 채널 숨기기",
 							modal_allowed:						"허용됨",
 							modal_denied:						"거부 됨"
 						};
 					case "lt":		// Lithuanian
 						return {
+							context_channelaccess:				"Prieiga prie kanalo",
 							context_hidehidden:					"Slėpti užrakintus kanalus",
 							modal_allowed:						"Leidžiama",
 							modal_denied:						"Paneigta"
 						};
 					case "nl":		// Dutch
 						return {
+							context_channelaccess:				"Kanaaltoegang",
 							context_hidehidden:					"Verberg vergrendelde kanalen",
 							modal_allowed:						"Toegestaan",
 							modal_denied:						"Geweigerd"
 						};
 					case "no":		// Norwegian
 						return {
+							context_channelaccess:				"Kanaltilgang",
 							context_hidehidden:					"Skjul låste kanaler",
 							modal_allowed:						"Tillatt",
 							modal_denied:						"Nektet"
 						};
 					case "pl":		// Polish
 						return {
+							context_channelaccess:				"Dostęp do kanałów",
 							context_hidehidden:					"Ukryj zablokowane kanały",
 							modal_allowed:						"Dozwolony",
 							modal_denied:						"Odmówiono"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
+							context_channelaccess:				"Acesso ao canal",
 							context_hidehidden:					"Ocultar canais bloqueados",
 							modal_allowed:						"Permitido",
 							modal_denied:						"Negado"
 						};
 					case "ro":		// Romanian
 						return {
+							context_channelaccess:				"Acces la canal",
 							context_hidehidden:					"Ascundeți canalele blocate",
 							modal_allowed:						"Permis",
 							modal_denied:						"Negat"
 						};
 					case "ru":		// Russian
 						return {
+							context_channelaccess:				"Доступ к каналу",
 							context_hidehidden:					"Скрыть заблокированные каналы",
 							modal_allowed:						"Разрешенный",
 							modal_denied:						"Отказано"
 						};
 					case "sv":		// Swedish
 						return {
+							context_channelaccess:				"Kanaltillgång",
 							context_hidehidden:					"Dölj låsta kanaler",
 							modal_allowed:						"Tillåtet",
 							modal_denied:						"Förnekad"
 						};
 					case "th":		// Thai
 						return {
+							context_channelaccess:				"การเข้าถึงช่อง",
 							context_hidehidden:					"ซ่อนช่องที่ถูกล็อก",
 							modal_allowed:						"ได้รับอนุญาต",
 							modal_denied:						"ถูกปฏิเสธ"
 						};
 					case "tr":		// Turkish
 						return {
+							context_channelaccess:				"Kanal Erişimi",
 							context_hidehidden:					"Kilitli Kanalları Gizle",
 							modal_allowed:						"İzin veriliyor",
 							modal_denied:						"Reddedildi"
 						};
 					case "uk":		// Ukrainian
 						return {
+							context_channelaccess:				"Доступ до каналу",
 							context_hidehidden:					"Сховати заблоковані канали",
 							modal_allowed:						"Дозволено",
 							modal_denied:						"Заперечується"
 						};
 					case "vi":		// Vietnamese
 						return {
+							context_channelaccess:				"Quyền truy cập kênh",
 							context_hidehidden:					"Ẩn các kênh đã khóa",
 							modal_allowed:						"Được phép",
 							modal_denied:						"Phủ định"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
+							context_channelaccess:				"频道访问",
 							context_hidehidden:					"隐藏锁定的频道",
 							modal_allowed:						"允许的",
 							modal_denied:						"被拒绝"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
+							context_channelaccess:				"頻道訪問",
 							context_hidehidden:					"隱藏鎖定的頻道",
 							modal_allowed:						"允許的",
 							modal_denied:						"被拒絕"
 						};
 					default:		// English
 						return {
+							context_channelaccess:				"Channel Access",
 							context_hidehidden:					"Hide Locked Channels",
 							modal_allowed:						"Permitted",
 							modal_denied:						"Denied"
