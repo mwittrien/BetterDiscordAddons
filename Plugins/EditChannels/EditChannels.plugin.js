@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.0
+ * @version 4.3.1
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,14 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.3.0",
+			"version": "4.3.1",
 			"description": "Allows you to locally edit Channels"
 		},
 		"changeLog": {
 			"fixed": {
 				"Group DMs": "Fixed some stuff in Group DMs",
-				"Show Hidden Channels": "Fixed some Issues with the fake category created by ShowHiddenChannels"
+				"Show Hidden Channels": "Fixed some Issues with the fake category created by ShowHiddenChannels",
+				"Color Inherit": "Works again"
 			}
 		}
 	};
@@ -633,8 +634,7 @@ module.exports = (_ => {
 			}
 			
 			getChannelDataColor (channelId) {
-				if (!changedChannels[channelId]) return null;
-				if (changedChannels[channelId].color) return changedChannels[channelId].color;
+				if (changedChannels[channelId] && changedChannels[channelId].color) return changedChannels[channelId].color;
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
 				let category = channel && channel.parent_id && BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id);
 				if (category && changedChannels[category.id] && changedChannels[category.id].inheritColor && changedChannels[category.id].color) return changedChannels[category.id].color;
