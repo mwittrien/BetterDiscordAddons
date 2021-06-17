@@ -1421,7 +1421,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	right: 0;
 	bottom: 0;
 	left: 0;
-	background: red;
+	background: #18191c;
+	pointer-events: none;
+	z-index: 1000000;
 }
 
 .platform-win [REPLACE_CLASS_toasts] {
