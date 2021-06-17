@@ -21,13 +21,16 @@
 }
 
 .link-1IoFq-[href*="/Lightcord/" i]::before {
-	content: "";
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background: #18191c;
-	pointer-events: none;
-	z-index: 1000000;
+	content: "" !important;
+	display: block !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	position: fixed !important;
+	top: 0 !important;
+	right: 0 !important;
+	bottom: 0 !important;
+	left: 0 !important;
+	background: #18191c !important;
+	-webkit-app-region: drag !important;
+	z-index: 1000000 !important;
 }
