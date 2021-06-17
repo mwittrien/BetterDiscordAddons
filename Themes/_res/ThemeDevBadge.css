@@ -30,7 +30,7 @@
 	right: 0 !important;
 	bottom: 0 !important;
 	left: 0 !important;
-	background: #18191c !important;
+	background: #18191c linear-gradient(var(--background-floating), var(--background-floating)) !important;
 	-webkit-app-region: drag !important;
 	z-index: 1000000 !important;
 }
