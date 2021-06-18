@@ -881,6 +881,9 @@
 			"timeLogModal": "timeLogModal-9s4Rts",
 			"typeLabel": "label-9FgsSa"
 		},
+		"GameActivityToggle": {
+			"added": "gameActivityToggleAdded-Yd-YxC"
+		},
 		"GoogleTranslateOption": {
 			"configButton": "configButton-lLgMs2",
 			"translateButton": "translateButton-DhP9x8",
@@ -1384,6 +1387,11 @@
 		"_friendnotificationsfriendsonlinewrap": ["FriendNotifications", "friendsOnlineWrap"],
 		"_friendnotificationstimelogmodal": ["FriendNotifications", "timeLogModal"],
 		"_friendnotificationstypelabel": ["FriendNotifications", "typeLabel"],
+		"_gameactivitytoggleadded": ["GameActivityToggle", "added"],
+		"_googletranslateoptionconfigbutton": ["GoogleTranslateOption", "configButton"],
+		"_googletranslateoptiontranslatebutton": ["GoogleTranslateOption", "translateButton"],
+		"_googletranslateoptiontranslated": ["GoogleTranslateOption", "translated"],
+		"_googletranslateoptiontranslating": ["GoogleTranslateOption", "translating"],
 		"_imageutilitiesdetails": ["ImageUtilities", "details"],
 		"_imageutilitiesdetailsadded": ["ImageUtilities", "detailsAdded"],
 		"_imageutilitiesdetailslabel": ["ImageUtilities", "detailsLabel"],
@@ -1399,10 +1407,6 @@
 		"_imageutilitiesswitchicon": ["ImageUtilities", "switchIcon"],
 		"_joinedatdatedate": ["JoinedAtDate", "date"],
 		"_lastmessagedatedate": ["LastMessageDate", "date"],
-		"_googletranslateoptionconfigbutton": ["GoogleTranslateOption", "configButton"],
-		"_googletranslateoptiontranslatebutton": ["GoogleTranslateOption", "translateButton"],
-		"_googletranslateoptiontranslated": ["GoogleTranslateOption", "translated"],
-		"_googletranslateoptiontranslating": ["GoogleTranslateOption", "translating"],
 		"_oldtitlebarenabled": ["OldTitleBar", "oldTitleBarEnabled"],
 		"_oldtitlebarsettingstoolbar": ["OldTitleBar", "settingsToolbar"],
 		"_oldtitlebartoolbar": ["OldTitleBar", "toolbar"],
