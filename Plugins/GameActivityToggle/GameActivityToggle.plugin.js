@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.0
+ * @version 1.0.1
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "GameActivityToggle",
 			"author": "DevilBro",
-			"version": "1.0.0",
+			"version": "1.0.1",
 			"description": "Adds a Quick-Toggle Game Activity Button"
 		}
 	};
@@ -162,7 +162,10 @@ module.exports = (_ => {
 			
 			processAccount (e) {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "PanelButton"});
-				if (index > -1) children.unshift(BDFDB.ReactUtils.createElement(ActivityToggleComponent, {}));
+				if (index > -1) {
+					e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._gameactivitytoggleadded);
+					children.unshift(BDFDB.ReactUtils.createElement(ActivityToggleComponent, {}));
+				}
 			}
 
 			setLabelsByLanguage () {
