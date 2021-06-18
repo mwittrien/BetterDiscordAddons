@@ -483,6 +483,9 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_userprofile] [REPLACE_CLASS_userinfodate] {
 	margin-left: 16px;
 }
+[REPLACE_CLASS_userprofile] [REPLACE_CLASS_userinfodate]:last-child {
+	margin-bottom: 16px;
+}
 
 [REPLACE_CLASS_avatardisabled] {
 	filter: grayscale(100%) brightness(50%);
