@@ -22,7 +22,7 @@ module.exports = (_ => {
 		},
 		"changeLog": {
 			"improved": {
-				"Volume": "Now uses same Volumne as Mute/Deafen Button"
+				"Volume": "Now uses same Volume as Mute/Deafen Button"
 			}
 		}
 	};
