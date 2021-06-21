@@ -141,7 +141,7 @@ module.exports = (_ => {
 				let type = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(e.instance.props.type || "");
 				if (e.instance.props.textValue && e.instance.state.focused && (!type || settings["change" + type] || settings["change" + type] === undefined)) {
 					let string = e.instance.props.textValue;
-					if (string.length && !/<[#@]\d+>|:[A-z0-9_-]+:|[\uD83C-\uDBFF\uDC00-\uDFFF]+/.test(string)) {
+					if (string.length && !/<[#@][!&]{0,1}\d+>|@here|@everyone|:[A-z0-9_-]+:|[\uD83C-\uDBFF\uDC00-\uDFFF]+/.test(string)) {
 						let newString = string, stop = false;
 						for (let space of spaces) for (let symbol of symbols) if (!stop) {
 							let reg;
