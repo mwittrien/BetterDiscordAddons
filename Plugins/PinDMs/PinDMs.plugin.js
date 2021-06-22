@@ -1072,6 +1072,19 @@ module.exports = (_ => {
 							header_pinneddms:					"Закачени директни съобщения",
 							modal_colorpicker1:					"Категория цвят"
 						};
+					case "cs":		// Czech
+						return {
+							context_addtonewcategory:			"Přidat do nové kategorie",
+							context_disablepredefined:			"Deaktivovat předdefinovanou kategorii",
+							context_inpredefined:				"Připnuté v předdefinované katrgorii",
+							context_pinchannel:					"Připnout do seznamu kanálů",
+							context_pindm:						"Připnout do PZ",
+							context_pinguild:					"Připnout do seznamu serverů",
+							context_unpinchannel:				"Odepnout ze seznamu kanálů",
+							context_unpinguild:					"Odepnout ze seznamu serverů",
+							header_pinneddms:					"Připnuté přímé zprávy",
+							modal_colorpicker1:					"Barva kategorie"
+						};
 					case "da":		// Danish
 						return {
 							context_addtonewcategory:			"Føj til ny kategori",
