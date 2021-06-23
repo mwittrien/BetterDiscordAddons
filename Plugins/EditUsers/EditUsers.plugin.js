@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.2
+ * @version 4.3.3
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,15 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.3.2",
+			"version": "4.3.3",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
-			"fixed": {
-				"Commands": "No longer use the data of the bot instead of the user",
-				"Now Playing": "Gets changed again",
-				"Custom Status": "Works in User Profile now",
-				"Show/Keep Server Nicknames": "Works in Messages again"
+			"improved": {
+				"Custom Status": "You can now use nitro walled emojis in the local custom status changer"
 			}
 		}
 	};
@@ -1497,6 +1494,7 @@ module.exports = (_ => {
 													children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.EmojiPickerButton, {
 														emoji: data.statusEmoji,
 														allowManagedEmojis: true,
+														allowManagedEmojisUsage: true,
 														ref: instance => {if (instance) statusEmojiInput = instance;},
 														onSelect: value => {newData.statusEmoji = value;}
 													})

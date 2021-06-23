@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.1
+ * @version 1.7.2
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,15 +19,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.7.1",
+			"version": "1.7.2",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
-		"changeLog": {
-			"fixed": {
-				"Message Rerendering": "Fixed Message Rerendering causing weird Message Jumps"
-			}
-		}
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
 	};
 	
 	const DiscordObjects = {};
@@ -5913,10 +5908,12 @@ module.exports = (_ => {
 								animated: false
 							};
 							if (typeof this.props.onSelect == "function") this.props.onSelect(this.props.emoji, this);
+							if (typeof this.close == "function" && !BDFDB.ListenerUtils.isPressed(16)) this.close();
 							BDFDB.ReactUtils.forceUpdate(this);
 						}
 					}
 					render() {
+						let button = this;
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PopoutContainer, {
 							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.EmojiButton, {
 								className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.emojiinputbutton),
@@ -5931,16 +5928,25 @@ module.exports = (_ => {
 							position: InternalComponents.LibraryComponents.PopoutContainer.Positions.TOP,
 							align: InternalComponents.LibraryComponents.PopoutContainer.Align.LEFT,
 							renderPopout: instance => {
-								return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.EmojiPicker, {
-									closePopout: instance.close,
-									onSelectEmoji: this.handleEmojiChange.bind(this),
-									allowManagedEmojis: this.props.allowManagedEmojis
-								});
+								this.close = instance.close;
+								return [
+									BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.EmojiPicker, {
+										closePopout: this.close,
+										onSelectEmoji: this.handleEmojiChange.bind(this),
+										allowManagedEmojis: this.props.allowManagedEmojis,
+										allowManagedEmojisUsage: this.props.allowManagedEmojisUsage
+									}),
+									BDFDB.ReactUtils.createElement(class extends LibraryModules.React.Component {
+										componentDidMount() {InternalComponents.LibraryComponents.EmojiPickerButton.current = button;}
+										componentWillUnmount() {delete InternalComponents.LibraryComponents.EmojiPickerButton.current;}
+										render() {return null;}
+									})
+								];
 							}
 						});
 					}
 				};
-				InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.EmojiPickerButton, {allowManagedEmojis: false});
+				InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.EmojiPickerButton, {allowManagedEmojis: false, allowManagedEmojisUsage: false});
 				
 				InternalComponents.LibraryComponents.FavButton = reactInitialized && class BDFDB_FavButton extends LibraryModules.React.Component {
 					handleClick() {
@@ -7771,16 +7777,19 @@ module.exports = (_ => {
 				});
 				
 				InternalBDFDB.patchedModules = {
+					before: {
+						EmojiPickerListRow: "default"
+					},
 					after: {
-						DiscordTag: "default",
+						SettingsView: "componentDidMount",
+						Shakeable: "render",
 						Message: "default",
 						MessageHeader: "default",
 						MemberListItem: ["componentDidMount", "componentDidUpdate"],
 						PrivateChannel: ["componentDidMount", "componentDidUpdate"],
 						UserPopout: ["componentDidMount", "componentDidUpdate"],
 						AnalyticsContext: ["componentDidMount", "componentDidUpdate"],
-						SettingsView: "componentDidMount",
-						Shakeable: "render"
+						DiscordTag: "default"
 					}
 				};
 				
@@ -7908,6 +7917,9 @@ module.exports = (_ => {
 				};
 				InternalBDFDB.processDiscordTag = function (e) {
 					if (e.instance && e.instance.props && e.returnvalue && e.instance.props.user) e.returnvalue.props.user = e.instance.props.user;
+				};
+				InternalBDFDB.processEmojiPickerListRow = function (e) {
+					if (e.instance.props.emojiDescriptors && InternalComponents.LibraryComponents.EmojiPickerButton.current && InternalComponents.LibraryComponents.EmojiPickerButton.current.props && InternalComponents.LibraryComponents.EmojiPickerButton.current.props.allowManagedEmojisUsage) for (let i in e.instance.props.emojiDescriptors) e.instance.props.emojiDescriptors[i] = Object.assign({}, e.instance.props.emojiDescriptors[i], {isDisabled: false});
 				};
 				
 				const ContextMenuTypes = ["UserSettingsCog", "UserProfileActions", "User", "Developer", "Slate", "GuildFolder", "GroupDM", "SystemMessage", "Message", "Native", "Role", "Guild", "Channel"];
@@ -8143,6 +8155,10 @@ module.exports = (_ => {
 
 				BDFDB.PatchUtils.patch(BDFDB, LibraryModules.IconUtils, "getUserBannerURL", {instead: e => {
 					return e.methodArguments[0].id == InternalData.myId ? e.methodArguments[0].banner : e.callOriginalMethod();
+				}});
+				
+				BDFDB.PatchUtils.patch(BDFDB, LibraryModules.EmojiStateUtils, "getEmojiUnavailableReason", {instead: e => {
+					if (InternalComponents.LibraryComponents.EmojiPickerButton.current && InternalComponents.LibraryComponents.EmojiPickerButton.current.props && InternalComponents.LibraryComponents.EmojiPickerButton.current.props.allowManagedEmojisUsage) return null;
 				}});
 				
 				InternalBDFDB.forceUpdateAll();
