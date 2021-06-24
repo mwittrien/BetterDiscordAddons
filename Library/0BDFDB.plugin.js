@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.2
+ * @version 1.7.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.7.2",
+			"version": "1.7.3",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -8157,7 +8157,7 @@ module.exports = (_ => {
 					return e.methodArguments[0].id == InternalData.myId ? e.methodArguments[0].banner : e.callOriginalMethod();
 				}});
 				
-				BDFDB.PatchUtils.patch(BDFDB, LibraryModules.EmojiStateUtils, "getEmojiUnavailableReason", {instead: e => {
+				BDFDB.PatchUtils.patch(BDFDB, LibraryModules.EmojiStateUtils, "getEmojiUnavailableReason", {after: e => {
 					if (InternalComponents.LibraryComponents.EmojiPickerButton.current && InternalComponents.LibraryComponents.EmojiPickerButton.current.props && InternalComponents.LibraryComponents.EmojiPickerButton.current.props.allowManagedEmojisUsage) return null;
 				}});
 				
