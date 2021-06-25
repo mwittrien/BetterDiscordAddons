@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.6
+ * @version 1.2.7
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "LastMessageDate",
 			"author": "DevilBro",
-			"version": "1.2.6",
+			"version": "1.2.7",
 			"description": "Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal"
 		},
 		"changeLog": {
 			"fixed": {
-				"User Profile Modal": ""
+				"User Popout": "Fixing Stuff for the User Popout Update, thanks Discord"
 			}
 		}
 	};
@@ -96,9 +96,8 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					after: {
-						UserPopout: "render",
-						UserPopoutInfo: "default",
-						UserProfileModal: "default",
+						AnalyticsContext: "render",
+						UserPopoutInfo: "UserPopoutInfo",
 						UserProfileModalHeader: "default"
 					}
 				};
@@ -179,19 +178,16 @@ module.exports = (_ => {
 				}
 			}
 
-			processUserPopout (e) {
-				currentPopout = e.instance;
+			processAnalyticsContext (e) {
+				if (e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.PROFILE_MODAL) currentProfile = e.instance;
+				if (e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.PROFILE_POPOUT) currentPopout = e.instance;
 			}
 
 			processUserPopoutInfo (e) {
 				if (currentPopout && e.instance.props.user && this.settings.places.userPopout) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
-					if (index > -1) this.injectDate(currentPopout, children, 2, e.instance.props.user, e.instance.props.guildId);
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["DiscordTag", "ColoredFluxTag"]});
+					if (index > -1) this.injectDate(currentPopout, children, index + 1, e.instance.props.user, e.instance.props.guildId);
 				}
-			}
-
-			processUserProfileModal (e) {
-				currentProfile = e.instance;
 			}
 
 			processUserProfileModalHeader (e) {

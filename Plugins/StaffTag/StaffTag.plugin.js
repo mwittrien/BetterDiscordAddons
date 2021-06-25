@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.5
+ * @version 1.4.6
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "StaffTag",
 			"author": "DevilBro",
-			"version": "1.4.5",
+			"version": "1.4.6",
 			"description": "Adds a Crown/Tag to Server Owners (or Admins/Management)"
 		},
 		"changeLog": {
 			"fixed": {
-				"Commands": "No longer use the crown of the bot instead of the user"
+				"User Popout": "Fixing Stuff for the User Popout Update, thanks Discord"
 			}
 		}
 	};
@@ -88,7 +88,7 @@ module.exports = (_ => {
 						MessageUsername: "default",
 						VoiceUser: "render",
 						NameTag: "default",
-						UserPopoutInfo: "default"
+						UserPopoutInfo: "UserPopoutInfo"
 					}
 				};
 				
