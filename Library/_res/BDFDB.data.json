@@ -300,6 +300,7 @@
 		"GuildComponents Items": {"props": ["Separator", "DragPlaceholder"]},
 		"GuildComponents MutedText": {"props": ["useMutedUntilText"], "value": "default"},
 		"GuildComponents Pill": {"strings": ["opacity:1,height:", "20:8", "default.item"]},
+		"Header": {"name": "Header"},
 		"HeaderBarComponents": {"name": "HeaderBarContainer"},
 		"Image": {"props": ["ImageReadyStates"]},
 		"ImageModal": {"name": "ImageModal"},
