@@ -7668,14 +7668,10 @@ module.exports = (_ => {
 					render() {
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PopoutContainer, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 							wrap: false,
-							renderPopout: instance => {
-								return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.UserPopout, {
-									userId: this.props.userId,
-									guildId: this.props.guildId,
-									channelId: this.props.channelId
-								});
-							}
-						}), "userId", "guildId", "channelId"));
+							renderPopout: instance => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.UserPopout, {
+								user: LibraryModules.UserStore.getUser(this.props.userId)
+							}),
+						}), "userId"));
 					}
 				};
 				
