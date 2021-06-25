@@ -100,6 +100,9 @@
 #app-mount .layer-3QrUeG ~ .layer-3QrUeG .settingsToolbar-wu4yfQ {
 	display: none !important;
 }
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG .header-2RyJ0Y {
+	max-width: calc(var(--settingsmodalwidth) - 730px) !important;
+}
 
 #app-mount .root-3R2ngo {
 	position: fixed !important;

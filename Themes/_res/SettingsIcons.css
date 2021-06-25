@@ -4,6 +4,9 @@
 	--settingsiconsgap: 14px;
 }
 
+.sidebarRegion-VFTUkN {
+	flex-basis: calc(218px + (var(--usesettingsicons)*(var(--settingsiconssize)+var(--settingsiconsgap))));
+}
 .sidebar-CFHs9e {
 	width: calc(218px + (var(--usesettingsicons)*(var(--settingsiconssize)+var(--settingsiconsgap))));
 }
