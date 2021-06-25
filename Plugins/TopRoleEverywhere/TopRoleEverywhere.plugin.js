@@ -2,7 +2,7 @@
  * @name TopRoleEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.6
+ * @version 3.0.7
  * @description Adds the highest Role of a User as a Tag
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "TopRoleEverywhere",
 			"author": "DevilBro",
-			"version": "3.0.6",
+			"version": "3.0.7",
 			"description": "Adds the highest Role of a User as a Tag"
 		},
 		"changeLog": {
 			"fixed": {
-				"Commands": "No longer use the roles of the bot instead of the user"
+				"Role/ID Swap": "Added Option to swap userId/role"
 			}
 		}
 	};
@@ -77,17 +77,18 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					general: {
-						useOtherStyle:		{value: false, 	description: "Use BotTag Style instead of the Role Style"},
-						useBlackFont:		{value: false, 	description: "Instead of darkening the Color for BotTag Style on bright Colors use black Font"},
-						includeColorless:	{value: false, 	description: "Include colorless Roles"},
-						showOwnerRole:		{value: false, 	description: `Display Role Tag of Server Owner as "${BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER}".`},
-						disableForBots:		{value: false, 	description: "Disable Role Tag for Bots"},
-						addUserID:			{value: false, 	description: "Add the UserID as a Tag to the Chat Window"}
+						useOtherStyle:		{value: false, 	description: "Uses BotTag Style instead of the Role Style"},
+						useBlackFont:		{value: false, 	description: "Uses black Font instead of darkening the Color for BotTag Style on bright Colors"},
+						includeColorless:	{value: false, 	description: "Includes colorless Roles"},
+						showOwnerRole:		{value: false, 	description: `Displays Role Tag of Server Owner as "${BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER}".`},
+						disableForBots:		{value: false, 	description: "Disables Role Tag for Bots"},
+						addUserId:			{value: false, 	description: "Adds the User Id as a Tag to the Chat Window"},
+						userIdFirst:		{value: false, 	description: "Places the User Id before the Role Tag"}
 					},
 					places: {
-						chat:			{value: true, 	description: "Chat Window"},
-						memberList:		{value: true, 	description: "Member List"},
-						voiceList:		{value: true, 	description: "Voice User List"},
+						chat:				{value: true, 	description: "Chat Window"},
+						memberList:			{value: true, 	description: "Member List"},
+						voiceList:			{value: true, 	description: "Voice User List"},
 					}
 				};
 				
@@ -196,7 +197,7 @@ module.exports = (_ => {
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true
 				});
-				if (this.settings.general.addUserID) this.injectIdTag(e.returnvalue.props.children, author, "chat", e.instance.props.compact ? 0 : 2, {
+				if (this.settings.general.addUserId) this.injectIdTag(e.returnvalue.props.children, author, "chat", (e.instance.props.compact ? 0 : 2) + (this.settings.general.userIdFirst ? 0 : 1), {
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true
 				});
