@@ -19,7 +19,6 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "1.0.5",
 			"description": "Shows the connected Accounts of a User in the UserPopout"
-		},"description": "Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal"
 		},
 		"changeLog": {
 			"fixed": {
@@ -190,7 +189,6 @@ module.exports = (_ => {
 					if (!connections.length) return;
 					let isLightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
 					let bodyInner = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutbodyinnerwrapper]]});
-					console.log(bodyInner.props.children);
 					if (bodyInner) bodyInner.props.children.splice(this.settings.general.placeAtTop ? 1 : bodyInner.props.children.length - 2, 0, BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 						children: [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Header, {
