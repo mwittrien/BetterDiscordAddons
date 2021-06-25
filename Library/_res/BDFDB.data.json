@@ -2997,6 +2997,7 @@
 		"unreadbarunread": ["UnreadBar", "unread"],
 		"uploadmodal": ["UploadModal", "uploadModal"],
 		"userbadge": ["UserBadges", "profileBadge"],
+		"userbadgeouter": ["UserBadges", "clickable"],
 		"userbadges": ["UserBadges", "container"],
 		"userbadgespopout": ["UserPopoutInfo", "profileBadges"],
 		"userbadgesprofile": ["UserProfileHeader", "badgeList"],
