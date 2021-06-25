@@ -5,10 +5,10 @@
 }
 
 .sidebarRegion-VFTUkN {
-	flex-basis: calc(218px + (var(--usesettingsicons)*(var(--settingsiconssize)+var(--settingsiconsgap))));
+	flex-basis: calc(218px + (var(--usesettingsicons) * (var(--settingsiconssize) + var(--settingsiconsgap))));
 }
 .sidebar-CFHs9e {
-	width: calc(218px + (var(--usesettingsicons)*(var(--settingsiconssize)+var(--settingsiconsgap))));
+	width: calc(218px + (var(--usesettingsicons) * (var(--settingsiconssize) + var(--settingsiconsgap))));
 }
 #bd-settings-sidebar .ui-tab-bar-item,
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ {
@@ -20,9 +20,9 @@
 	content: "";
 	position: relative;
 	flex: 0 0 auto;
-	width: calc(var(--usesettingsicons)*var(--settingsiconssize));
-	height: calc(var(--usesettingsicons)*var(--settingsiconssize));
-	margin-right: calc(var(--usesettingsicons)*var(--settingsiconsgap));
+	width: calc(var(--usesettingsicons) * var(--settingsiconssize));
+	height: calc(var(--usesettingsicons) * var(--settingsiconssize));
+	margin-right: calc(var(--usesettingsicons) * var(--settingsiconsgap));
 	background: currentColor;
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/questionmark.svg) center/contain no-repeat;
 }
