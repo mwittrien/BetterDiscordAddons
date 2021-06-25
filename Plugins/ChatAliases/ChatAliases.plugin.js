@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.1
+ * @version 2.3.2
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.3.1",
+			"version": "2.3.2",
 			"description": "Allows you to configure your own Aliases/Commands"
 		},
 		"changeLog": {
@@ -131,15 +131,6 @@ module.exports = (_ => {
 				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) {
 					BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS[AUTOCOMPLETE_ALIAS_OPTION] = {
 						autoSelect: true,
-						getPlainText: (eventOrIndex, config, autocompletes) => {
-							let aliasData = eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.alias : typeof eventOrIndex == "number" && autocompletes.aliases[eventOrIndex];
-							return aliasData.word;
-						},
-						getRawText: (eventOrIndex, config, autocompletes) => {
-							let aliasData = eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.alias : typeof eventOrIndex == "number" && autocompletes.aliases[eventOrIndex];
-							return aliasData.file ? aliasData.word : BDFDB.StringUtils.insertNRST(aliasData.replace);
-						},
-						getSentinel: _ => "",
 						matches: (channel, guild, currentWord, _, config) => {
 							if (currentWord.length >= this.settings.amounts.minAliasLength) for (let word in aliases) {
 								let aliasData = aliases[word];
@@ -194,6 +185,10 @@ module.exports = (_ => {
 									description: BDFDB.StringUtils.insertNRST(aliasData.replace)
 								}))
 							].flat(10).filter(n => n);
+						},
+						onSelect: (results, index, _, config) => {
+							config.insertText(results.aliases[index].file ? results.aliases[index].word : BDFDB.StringUtils.insertNRST(results.aliases[index].replace));
+							return {};
 						}
 					};
 				}
