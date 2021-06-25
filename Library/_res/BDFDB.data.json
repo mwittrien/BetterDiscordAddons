@@ -3052,6 +3052,7 @@
 		"userpopoutrolelist": ["UserPopoutBody", "rolesList"],
 		"userpopoutrolename": ["Role", "roleName"],
 		"userpopoutroles": ["Role", "root"],
+		"userpopoutsetidentitylink": ["UserPopout", "setIdentityLink"],
 		"userprofile": ["UserProfile", "root"],
 		"userprofilebody": ["UserProfile", "body"],
 		"userprofilebottag": ["UserProfileHeader", "botTag"],
