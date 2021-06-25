@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.1
+ * @version 4.3.2
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,14 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.3.1",
+			"version": "4.3.2",
 			"description": "Allows you to locally edit Channels"
 		},
 		"changeLog": {
 			"fixed": {
-				"Group DMs": "Fixed some stuff in Group DMs",
-				"Show Hidden Channels": "Fixed some Issues with the fake category created by ShowHiddenChannels",
-				"Color Inherit": "Works again"
+				"Autocomplete Menu": ""
 			}
 		}
 	};
@@ -157,8 +155,8 @@ module.exports = (_ => {
 							catData
 						}, changedChannels[id]));
 					}
-					channelArray = BDFDB.ArrayUtils.keySort(channelArray.filter(n => e.returnValue.channels.every(channel => channel.id != n.channel.id) && (n.lowerCaseName.indexOf(e.methodArguments[1]) != -1 || (n.lowerCaseCatName && n.lowerCaseCatName.indexOf(e.methodArguments[1]) != -1))), "lowerCaseName");
-					e.returnValue.channels = [].concat(e.returnValue.channels, channelArray.map(n => n.channel)).slice(0, BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS);
+					channelArray = BDFDB.ArrayUtils.keySort(channelArray.filter(n => e.returnValue.results.channels.every(channel => channel.id != n.channel.id) && (n.lowerCaseName.indexOf(e.methodArguments[2].toLowerCase()) != -1 || (n.lowerCaseCatName && n.lowerCaseCatName.indexOf(e.methodArguments[2].toLowerCase()) != -1))), "lowerCaseName");
+					e.returnValue.results.channels = [].concat(e.returnValue.results.channels, channelArray.map(n => n.channel)).slice(0, BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS);
 				}});
 				
 				this.forceUpdateAll();
@@ -284,13 +282,20 @@ module.exports = (_ => {
 						if (e.instance.props.category) e.instance.props.category = this.getChannelData(e.instance.props.category.id);
 					}
 					else {
-						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "AutocompleteRowHeading"});
-						if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id);
-						let channelIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.autocompleteicon]]});
-						if (channelIcon) this.changeChannelIconColor(channelIcon, e.instance.props.channel.id);
-						if (e.instance.props.category) {
-							let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "AutocompleteRowContentSecondary"});
-							if (categoryName) this.changeChannelColor(categoryName, e.instance.props.category.id);
+						if (typeof e.returnvalue.props.children == "function") {
+							let childrenRender = e.returnvalue.props.children;
+							e.returnvalue.props.children = (...args) => {
+								let children = childrenRender(...args);
+								let channelName = BDFDB.ReactUtils.findChild(children, {name: "AutocompleteRowHeading"});
+								if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id);
+								let channelIcon = BDFDB.ReactUtils.findChild(children, {props: [["className", BDFDB.disCN.autocompleteicon]]});
+								if (channelIcon) this.changeChannelIconColor(channelIcon, e.instance.props.channel.id);
+								if (e.instance.props.category) {
+									let categoryName = BDFDB.ReactUtils.findChild(children, {name: "AutocompleteRowContentSecondary"});
+									if (categoryName) this.changeChannelColor(categoryName, e.instance.props.category.id);
+								}
+								return children;
+							};
 						}
 					}
 				}
@@ -587,7 +592,7 @@ module.exports = (_ => {
 				if (this.settings.places.appTitle) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
 					let title = document.head.querySelector("title");
-					if (title && changedChannels[channel.id] && changedChannels[channel.id].name) {
+					if (title && channel && changedChannels[channel.id] && changedChannels[channel.id].name) {
 						if (BDFDB.ChannelUtils.isTextChannel(channel)) BDFDB.DOMUtils.setText(title, "#" + this.getChannelData(channel.id).name);
 						else if (channel && channel.isGroupDM()) BDFDB.DOMUtils.setText(title, this.getGroupName(channel.id));
 					}
