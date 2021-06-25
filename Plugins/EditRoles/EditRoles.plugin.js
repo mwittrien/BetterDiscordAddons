@@ -80,7 +80,6 @@ module.exports = (_ => {
 				this.patchedModules = {
 					before: {
 						MemberListItem: "render",
-						UserPopout: "render",
 						ChannelMembers: "render"
 					}
 				};
@@ -214,10 +213,6 @@ module.exports = (_ => {
 					let member = BDFDB.LibraryModules.MemberStore.getMember(e.instance.props.guildId, e.instance.props.user.id);
 					if (member) e.instance.props.colorString = member.colorString;
 				}
-			}
-			
-			processUserPopout (e) {
-				if (e.instance.props.user && e.instance.props.guild && e.instance.props.guildMember) e.instance.props.guild = this.changeRolesInGuild(e.instance.props.guild);
 			}
 		
 			processChannelMembers (e) {

@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.3
+ * @version 4.3.4
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.3.3",
+			"version": "4.3.4",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
-			"improved": {
-				"Custom Status": "You can now use nitro walled emojis in the local custom status changer"
+			"fixed": {
+				"User Popout": "Fixing Stuff for the User Popout Update, thanks Discord"
 			}
 		}
 	};
@@ -115,7 +115,7 @@ module.exports = (_ => {
 						HeaderBarContainer: "render",
 						ChannelEditorContainer: "render",
 						AutocompleteUserResult: "render",
-						UserPopout: "render",
+						UserPopoutInfo: "UserPopoutInfo",
 						UserProfileModal: "default",
 						UserInfo: "default",
 						NowPlayingItem: "default",
@@ -149,7 +149,8 @@ module.exports = (_ => {
 						AutocompleteUserResult: "render",
 						DiscordTag: "default",
 						NameTag: "default",
-						UserPopoutInfo: "default",
+						UserPopoutContainer: "type",
+						UserPopoutInfo: "UserPopoutInfo",
 						MutualFriends: "default",
 						VoiceUser: "render",
 						Account: "render",
@@ -263,8 +264,8 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.StatusMetaUtils, "findActivity", {after: e => {
-					let data = e.returnValue && changedUsers[e.methodArguments[0]];
-					if (data && (data.removeStatus || data.status || data.statusEmoji) && e.returnValue.type === BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS) return this.createCustomStatus(changedUsers[e.methodArguments[0]]);
+					let data = changedUsers[e.methodArguments[0]];
+					if (data && (data.removeStatus || data.status || data.statusEmoji) && (e.returnValue && e.returnValue.type === BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS || !e.returnValue && e.methodArguments[1] && e.methodArguments[1].toString().indexOf("type===") > -1 && e.methodArguments[1].toString().indexOf("CUSTOM_STATUS") > -1)) return this.createCustomStatus(changedUsers[e.methodArguments[0]]);
 				}});
 				
 				this.forceUpdateAll();
@@ -491,32 +492,28 @@ module.exports = (_ => {
 				}
 			}
 
-			processUserPopout (e) {
-				if (e.instance.props.user && this.settings.places.userPopout) {
-					let data = changedUsers[e.instance.props.user.id];
-					if (data) {
-						e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
-						if (data.name && !(data.useServerNick && e.instance.props.nickname)) {
-							let name = [data.name, data.showServerNick && e.instance.props.nickname && `(${e.instance.props.nickname})`].filter(n => n).join(" ");
-							e.instance.props.nickname = name;
-							if (e.instance.props.guildMember) e.instance.props.guildMember = Object.assign({}, e.instance.props.guildMember, {nick: name});
-						}
-					}
-				}
+			processUserPopoutContainer (e) {
+				if (e.returnvalue.props.user && this.settings.places.userPopout && changedUsers[e.returnvalue.props.user.id]) e.returnvalue.props.user = this.getUserData(e.returnvalue.props.user.id, true, true);
 			}
 
 			processUserPopoutInfo (e) {
 				if (e.instance.props.user && this.settings.places.userPopout) {
 					let data = changedUsers[e.instance.props.user.id];
-					if (data && (data.color1 || data.color2 || data.tag)) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
-						if (index > -1) {
-							this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground: true});
-							if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
-							this.injectBadge(children[index].props.children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
-								tagClass: BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag,
-								inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
-							});
+					if (!data) return;
+					if (!e.returnvalue) {
+						if (data.name && !(data.useServerNick && e.instance.props.nickname)) e.instance.props.nickname = [data.name, data.showServerNick && e.instance.props.nickname && `(${e.instance.props.nickname})`].filter(n => n).join(" ");
+					}
+					else {
+						if (data.color1 || data.color2 || data.tag) {
+							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
+							if (index > -1) {
+								this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground: true});
+								if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
+								this.injectBadge(children[index].props.children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
+									tagClass: BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag,
+									inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
+								});
+							}
 						}
 					}
 				}
@@ -524,10 +521,6 @@ module.exports = (_ => {
 
 			processUserProfileModal (e) {
 				if (e.instance.props.user && this.settings.places.userProfile) e.instance.props.user = this.getUserData(e.instance.props.user.id);
-			}
-
-			processCustomStatusActivity (e) {
-				console.log(e);
 			}
 
 			processMutualFriends (e) {

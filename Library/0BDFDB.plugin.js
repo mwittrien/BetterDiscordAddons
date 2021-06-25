@@ -7670,9 +7670,10 @@ module.exports = (_ => {
 							wrap: false,
 							renderPopout: instance => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.UserPopout, {
 								userId: this.props.userId,
-								user: LibraryModules.UserStore.getUser(this.props.userId)
+								channelId: this.props.channelId,
+								guildId: this.props.guildId
 							}),
-						}), "userId"));
+						}), "userId", "channelId", "guildId"));
 					}
 				};
 				

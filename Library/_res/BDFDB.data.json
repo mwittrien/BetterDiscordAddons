@@ -240,7 +240,6 @@
 			"UnreadDMs": {"class": "guildsscroller"},
 			"Upload": {"class": "uploadmodal"},
 			"UserHook": {"class": "auditloguserhook"},
-			"UserPopout": {"class": "userpopout"},
 			"UserSettingsAppearance": {"class": "usersettingsappearancepreview"},
 			"V2C_ContentColumn": {"class": "settingswindowcontentcolumn", "special": [{"path": "return.stateNode.props.title", "value": ["PLUGINS", "THEMES"]}]}
 		},

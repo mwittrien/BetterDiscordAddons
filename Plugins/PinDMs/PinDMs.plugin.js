@@ -1072,6 +1072,19 @@ module.exports = (_ => {
 							header_pinneddms:					"Закачени директни съобщения",
 							modal_colorpicker1:					"Категория цвят"
 						};
+					case "cs":		// Czech
+						return {
+							context_addtonewcategory:			"Přidat do nové kategorie",
+							context_disablepredefined:			"Deaktivovat předdefinovanou kategorii",
+							context_inpredefined:				"Připnuté v předdefinované katrgorii",
+							context_pinchannel:					"Připnout do seznamu kanálů",
+							context_pindm:						"Připnout do PZ",
+							context_pinguild:					"Připnout do seznamu serverů",
+							context_unpinchannel:				"Odepnout ze seznamu kanálů",
+							context_unpinguild:					"Odepnout ze seznamu serverů",
+							header_pinneddms:					"Připnuté přímé zprávy",
+							modal_colorpicker1:					"Barva kategorie"
+						};
 					case "da":		// Danish
 						return {
 							context_addtonewcategory:			"Føj til ny kategori",
@@ -1149,6 +1162,19 @@ module.exports = (_ => {
 							context_unpinguild:					"Détacher de la liste des serveurs",
 							header_pinneddms:					"Messages privés épinglés",
 							modal_colorpicker1:					"Couleur de la catégorie"
+						};
+					case "hi":		// Hindi
+						return {
+							context_addtonewcategory:			"नई श्रेणी में जोड़ें",
+							context_disablepredefined:			"पूर्वनिर्धारित श्रेणी को निष्क्रिय करें",
+							context_inpredefined:				"एक पूर्वनिर्धारित श्रेणी में पिन किया गया",
+							context_pinchannel:					"चैनल सूची में पिन करें",
+							context_pindm:						"पिन डीएम",
+							context_pinguild:					"सर्वर सूची में पिन करें",
+							context_unpinchannel:				"चैनल सूची से अलग करें",
+							context_unpinguild:					"सर्वर सूची से अलग करें",
+							header_pinneddms:					"पिन किए गए सीधे संदेश",
+							modal_colorpicker1:					"श्रेणी रंग"
 						};
 					case "hr":		// Croatian
 						return {
