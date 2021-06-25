@@ -329,7 +329,7 @@
 		"TextElement": {"name": "Text"},
 		"UserBadges": {"props": ["BadgeSizes"]},
 		"UserBadgesKeys": {"props": ["BadgeKeys"], "value": "BadgeKeys"},
-		"UserPopout": {"name": "ConnectedUserPopout"},
+		"UserPopout": {"name": "UserPopoutContainer"},
 		"UserSummaryItem": {"name": "UserSummaryItem"},
 		"VideoForwardRef": {"strings": ["displayName=\"Video\"", "\"video\"", "HTMLImageElement"], "value": "default"}
 	},
