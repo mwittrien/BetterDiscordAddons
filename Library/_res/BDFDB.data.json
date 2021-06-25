@@ -3015,7 +3015,7 @@
 		"userpopout": ["UserPopout", "userPopout"],
 		"userpopoutactivity": ["UserPopoutBody", "activity"],
 		"userpopoutavatar": ["UserPopoutHeader", "avatar"],
-		"userpopoutavatarbase": ["UserPopoutHeader", "baseAvatar"],
+		"userpopoutavatarbase": ["UserPopout", "baseAvatar"],
 		"userpopoutavatarhint": ["UserPopoutHeader", "avatarHint"],
 		"userpopoutavatarhintinner": ["UserPopoutHeader", "avatarHintInner"],
 		"userpopoutavatarlarge": ["UserPopout", "largeAvatar"],
