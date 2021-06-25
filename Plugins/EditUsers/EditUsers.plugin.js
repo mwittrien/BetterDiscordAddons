@@ -102,7 +102,7 @@ module.exports = (_ => {
 						userPopout:			{value: true, 		description: "User Popouts"},
 						userProfile:		{value: true, 		description: "User Profile Modal"},
 						mutualFriends:		{value: true, 		description: "Mutual Friends"},
-						autcocompletes:		{value: true, 		description: "Autocomplete Menu"},
+						autocompletes:		{value: true, 		description: "Autocomplete Menu"},
 						guildSettings:		{value: true, 		description: "Server Settings"},
 						quickSwitcher:		{value: true, 		description: "Quick Switcher"},
 						searchPopout:		{value: true, 		description: "Search Popout"},
@@ -246,13 +246,16 @@ module.exports = (_ => {
 					let userArray = [];
 					for (let id in changedUsers) if (changedUsers[id] && changedUsers[id].name) {
 						let user = BDFDB.LibraryModules.UserStore.getUser(id);
-						if (user && (e.methodArguments[0].recipients.includes(id) || (e.methodArguments[0].guild_id && BDFDB.LibraryModules.MemberStore.getMember(e.methodArguments[0].guild_id, id)))) userArray.push(Object.assign({
-							lowerCaseName: changedUsers[id].name.toLowerCase(),
-							user
+						let member = user && e.methodArguments[0].guild_id && BDFDB.LibraryModules.MemberStore.getMember(e.methodArguments[0].guild_id, id);
+						if (user && (e.methodArguments[0].recipients.includes(id) || member)) userArray.push(Object.assign({
+							comparator: changedUsers[id].name,
+							nick: member && member.nick || null,
+							score: 0,
+							user: user
 						}, changedUsers[id]));
 					}
-					userArray = BDFDB.ArrayUtils.keySort(userArray.filter(n => e.returnValue.users.every(comp => comp.user.id != n.user.id) && n.lowerCaseName.indexOf(e.methodArguments[1]) != -1), "lowerCaseName");
-					e.returnValue.users = [].concat(e.returnValue.users, userArray.map(n => {return {user: n.user};})).slice(0, BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS);
+					userArray = BDFDB.ArrayUtils.keySort(userArray.filter(n => e.returnValue.results.users.every(comp => comp.user.id != n.user.id) && n.comparator.toLowerCase().indexOf(e.methodArguments[2].toLowerCase()) != -1), "lowerCaseName");
+					e.returnValue.results.users = [].concat(e.returnValue.results.users, userArray.map(n => ({user: n.user}))).slice(0, BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS);
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.IconUtils, "getUserBannerURL", {instead: e => {
@@ -416,8 +419,15 @@ module.exports = (_ => {
 						if (data && data.name) e.instance.props.nick = data.name;
 					}
 					else {
-						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "AutocompleteRowHeading"});
-						if (userName) this.changeUserColor(userName, e.instance.props.user.id);
+						if (typeof e.returnvalue.props.children == "function") {
+							let childrenRender = e.returnvalue.props.children;
+							e.returnvalue.props.children = (...args) => {
+								let children = childrenRender(...args);
+								let userName = BDFDB.ReactUtils.findChild(children, {name: "AutocompleteRowHeading"});
+								if (userName) this.changeUserColor(userName, e.instance.props.user.id);
+								return children;
+							};
+						}
 					}
 				}
 			}
