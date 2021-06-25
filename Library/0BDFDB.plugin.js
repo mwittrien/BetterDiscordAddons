@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.3
+ * @version 1.7.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,10 +19,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.7.3",
+			"version": "1.7.4",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
+		"changeLog": {
+			"fixed": {
+				"User Popout": "Fixing Stuff for the User Popout Update, thanks Discord"
+			}
+		}
 	};
 	
 	const DiscordObjects = {};
@@ -7787,7 +7792,6 @@ module.exports = (_ => {
 						MessageHeader: "default",
 						MemberListItem: ["componentDidMount", "componentDidUpdate"],
 						PrivateChannel: ["componentDidMount", "componentDidUpdate"],
-						UserPopout: ["componentDidMount", "componentDidUpdate"],
 						AnalyticsContext: ["componentDidMount", "componentDidUpdate"],
 						DiscordTag: "default"
 					}
@@ -7904,14 +7908,11 @@ module.exports = (_ => {
 				InternalBDFDB.processPrivateChannel = function (e) {
 					InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
 				};
-				InternalBDFDB.processUserPopout = function (e) {
-					InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
-					InternalBDFDB._processUserInfoNode(e.instance.props.user, e.node);
-				};
 				InternalBDFDB.processAnalyticsContext = function (e) {
-					if (e.instance.props.section != BDFDB.DiscordConstants.AnalyticsSections.PROFILE_MODAL) return;
+					if (e.instance.props.section != BDFDB.DiscordConstants.AnalyticsSections.PROFILE_MODAL && e.instance.props.section != BDFDB.DiscordConstants.AnalyticsSections.PROFILE_POPOUT) return;
 					const user = BDFDB.ReactUtils.findValue(e.instance, "user");
-					const wrapper = e.node.querySelector(BDFDB.dotCN.userprofile) || e.node;
+					if (!user) return;
+					const wrapper = e.node.querySelector(BDFDB.dotCNC.userpopout + BDFDB.dotCN.userprofile) || e.node;
 					InternalBDFDB._processAvatarMount(user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), wrapper);
 					InternalBDFDB._processUserInfoNode(user, wrapper);
 				};
