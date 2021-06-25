@@ -4178,6 +4178,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 /* ----		14.2.	USERPOPOUT						---- */
 
 .userPopout-xaxa6l {										/* popout				container							*/
+	background: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 }
 .userPopout-xaxa6l::before,
@@ -4202,13 +4203,17 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .userPopout-xaxa6l::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 }
-.headerNormal-1mX3KY {										/* popout				headernormal						*/
-	background-color: rgba(var(--transparencycolor), .2);
-}
-#app-mount .headerTop-2cWpdB,								/* popout				header inner						*/
-#app-mount .activity-fViXj7 {								/* popout				activity							*/
+#app-mount .headerTop-3vNv-a,								/* popout				header inner						*/
+#app-mount .activity-2INFPu,								/* popout				activity							*/
+#app-mount .aboutMeSection-1Fw5Ia {							/* popout				about me section					*/
 	background: transparent;
 	border: transparent;
+}
+#app-mount .activity-2INFPu {
+	padding: 0 16px 16px;
+}
+.userPopout-xaxa6l .avatarWrapper-3r9PdD {					/* popout				avatar wrapper						*/
+	z-index: 1;
 }
 .userPopout-xaxa6l .avatar-37jOim {							/* popout				avatar								*/
 	background: transparent;
@@ -4232,22 +4237,14 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-attachment: fixed;
 }
 .userPopout-xaxa6l .avatar-37jOim::after {
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + .375));
-}
-.aboutMeSection---MkQa {									/* popout				about me section					*/
-	background-color: transparent;
-}
-.activity-3v9l4T {											/* popout				activity							*/
-	padding: 0 16px 16px;
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 }
 
 #app-mount .body-3HBlXn,									/* popout				body								*/
-#app-mount .footer-1N3bR3 {									/* popout				footer								*/
+#app-mount .bodyInnerWrapper-26fQXj,						/* popout				body inner							*/
+#app-mount .footer-3UKYOU {									/* popout				footer								*/
 	background-color: transparent;
 	color: var(--header-secondary);
-}
-#app-mount .footer-1N3bR3 {
-	border-color: var(--background-modifier-accent);
 }
 
 .root-3-B5F3 {												/* body					roles								*/
