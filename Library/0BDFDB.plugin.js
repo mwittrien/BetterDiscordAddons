@@ -7669,6 +7669,7 @@ module.exports = (_ => {
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PopoutContainer, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 							wrap: false,
 							renderPopout: instance => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.UserPopout, {
+								userId: this.props.userId,
 								user: LibraryModules.UserStore.getUser(this.props.userId)
 							}),
 						}), "userId"));
