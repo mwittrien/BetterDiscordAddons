@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.4
+ * @version 4.3.5
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.3.4",
+			"version": "4.3.5",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"User Popout": "Fixing Stuff for the User Popout Update, thanks Discord"
+				"User Popout": "Fixing Stuff for the User Popout Update, thanks Discord",
+				"User Profile": "Avatar and Banner fixed"
 			}
 		}
 	};
@@ -117,6 +118,7 @@ module.exports = (_ => {
 						AutocompleteUserResult: "render",
 						UserPopoutInfo: "UserPopoutInfo",
 						UserProfileModal: "default",
+						UserProfileModalHeader: "default",
 						UserInfo: "default",
 						NowPlayingItem: "default",
 						VoiceUser: "render",
@@ -520,6 +522,10 @@ module.exports = (_ => {
 			}
 
 			processUserProfileModal (e) {
+				if (e.instance.props.user && this.settings.places.userProfile) e.instance.props.user = this.getUserData(e.instance.props.user.id);
+			}
+
+			processUserProfileModalHeader (e) {
 				if (e.instance.props.user && this.settings.places.userProfile) e.instance.props.user = this.getUserData(e.instance.props.user.id);
 			}
 
