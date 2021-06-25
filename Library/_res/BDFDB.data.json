@@ -820,6 +820,7 @@
 			"badgesChat": "badgesChat-f_cbR8",
 			"badgesList": "badgesList-Aw_p52",
 			"badgesSettings": "badgesSettings-ychoGn"
+			"indicator": "indicator-8F4GGw"
 		},
 		"BetterFriendList": {
 			"mutualGuilds": "mutualGuilds-s7F2aa",
@@ -1350,6 +1351,7 @@
 		"_badgeseverywherebadgeschat": ["BadgesEverywhere", "badgesChat"],
 		"_badgeseverywherebadgeslist": ["BadgesEverywhere", "badgesList"],
 		"_badgeseverywherebadgessettings": ["BadgesEverywhere", "badgesSettings"],
+		"_badgeseverywhereindicator": ["BadgesEverywhere", "indicator"],
 		"_betterfriendlistmutualguilds": ["BetterFriendList", "mutualGuilds"],
 		"_betterfriendlistnamecell": ["BetterFriendList", "nameCell"],
 		"_betterfriendlisttitle": ["BetterFriendList", "title"],
