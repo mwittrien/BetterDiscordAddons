@@ -2,7 +2,7 @@
  * @name SteamProfileLink
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.0
+ * @version 1.1.1
  * @description Opens Steam Links in Steam instead of your Browser
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "SteamProfileLink",
 			"author": "DevilBro",
-			"version": "1.1.0",
+			"version": "1.1.1",
 			"description": "Opens Steam Links in Steam instead of your Browser"
 		},
 		"changeLog": {
-			"fixed": {
-				"Images": "Should no longer try to open Images in Steam"
+			"added": {
+				"Short Invites": "Added support for https://s.team/ links"
 			}
 		}
 	};
@@ -74,7 +74,7 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		const urls = {
-			steam: ["https://steamcommunity.", "https://help.steampowered.", "https://store.steampowered.", "a.akamaihd.net/"]
+			steam: ["https://steamcommunity.", "https://help.steampowered.", "https://store.steampowered.", "https://s.team/", "a.akamaihd.net/"]
 		};
 		
 		return class SteamProfileLink extends Plugin {
