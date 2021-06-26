@@ -74,7 +74,7 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		const urls = {
-			steam: ["https://steamcommunity.", "https://help.steampowered.", "https://store.steampowered.", "a.akamaihd.net/"]
+			steam: ["https://steamcommunity.", "https://help.steampowered.", "https://store.steampowered.", "https://s.team/, "a.akamaihd.net/"]
 		};
 		
 		return class SteamProfileLink extends Plugin {
