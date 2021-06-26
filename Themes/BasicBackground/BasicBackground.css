@@ -3329,21 +3329,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	position: relative;
 	overflow: hidden;
 }
-.keyboardShortcutsModal-3piNz7::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-	filter: blur(var(--popoutblur));
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
+.keyboardShortcutsModal-3piNz7::before,
 .keyboardShortcutsModal-3piNz7::after {
 	content: "";
 	position: absolute;
@@ -3351,11 +3337,18 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
 	z-index: -1;
+}
+.keyboardShortcutsModal-3piNz7::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+}
+.keyboardShortcutsModal-3piNz7::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
+	backdrop-filter: blur(var(--popoutblur));
 }
 #app-mount .modalTitle-37O4n6 {								/* modal				title								*/
 	color: var(--header-primary);
@@ -3410,21 +3403,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	position: relative;
 	overflow: hidden;
 }
-.quickswitcher-3JagVE::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-	filter: blur(var(--popoutblur));
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
+.quickswitcher-3JagVE::before,
 .quickswitcher-3JagVE::after {
 	content: "";
 	position: absolute;
@@ -3432,11 +3411,18 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
 	z-index: -1;
+}
+.quickswitcher-3JagVE::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+}
+.quickswitcher-3JagVE::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
+	backdrop-filter: blur(var(--popoutblur));
 }
 .scroller-zPkAnE {
 	background-color: transparent;
@@ -3457,21 +3443,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	position: relative;
 	overflow: hidden;
 }
-.contentWrapper-3WC1ID::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-	filter: blur(var(--popoutblur));
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
+.contentWrapper-3WC1ID::before,
 .contentWrapper-3WC1ID::after {
 	content: "";
 	position: absolute;
@@ -3479,11 +3451,18 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
 	z-index: -1;
+}
+.contentWrapper-3WC1ID::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+}
+.contentWrapper-3WC1ID::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
+	backdrop-filter: blur(var(--popoutblur));
 }
 
 #app-mount .friendSelected-1sa4bG,								/* modal				groupdmrow						*/
