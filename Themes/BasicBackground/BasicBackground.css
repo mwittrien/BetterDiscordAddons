@@ -5844,9 +5844,13 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	-webkit-mask: url(https://discord.com/assets/860396b3ff3fa1c4ae355bebfabadecb.svg) center/cover no-repeat;
 	background: var(--header-primary);
 }
+#app-mount .container-CpszHS .button-34kXw5 {
+	background-color: rgba(var(--transparencycolor),.3) !important;
+	color: var(--header-primary) !important;
+}
 #app-mount .container-CpszHS.recording-1H2dS7 .button-34kXw5 {
-	background-color: rgba(var(--dangercolor)),.1);
-	color: rgb(var(--dangercolor));
+	background-color: rgba(var(--dangercolor),.1) !important;
+	color: rgb(var(--dangercolor)) !important;
 }
 
 .select-2TCrqx [class*="css-"][class*="-container"] {		/* select				container							*/
