@@ -2,7 +2,7 @@
  * @name BadgesEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.5
+ * @version 1.7.6
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BadgesEverywhere",
 			"author": "DevilBro",
-			"version": "1.7.5",
+			"version": "1.7.6",
 			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList"
 		},
 		"changeLog": {
@@ -90,9 +90,6 @@ module.exports = (_ => {
 				};
 				
 				this.defaults = {
-					general: {
-						useColoredVersion:	{value: true, 	description: "Use colored Version of the Badges"}
-					},
 					places: {
 						chat:				{value: true, 	description: "Chat"},
 						memberList:			{value: true, 	description: "Member List"}
@@ -214,14 +211,6 @@ module.exports = (_ => {
 					collapseStates: collapseStates,
 					children: _ => {
 						let settingsItems = [];
-				
-						for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-							type: "Switch",
-							plugin: this,
-							keys: ["general", key],
-							label: this.defaults.general[key].description,
-							value: this.settings.general[key]
-						}));
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 							title: "Show Badges in:",
@@ -323,7 +312,7 @@ module.exports = (_ => {
 
 			injectBadges (instance, children, user, guildId, type) {
 				if (!BDFDB.ArrayUtils.is(children) || !user || user.bot) return;
-				if (loadedUsers[user.id] && ((new Date()).getTime() - loadedUsers[user.id].date < 1000*60*60*24*7)) children.push(this.createBadges(user, guildId, type, this.settings.general.useColoredVersion));
+				if (loadedUsers[user.id] && ((new Date()).getTime() - loadedUsers[user.id].date < 1000*60*60*24*7)) children.push(this.createBadges(user, guildId, type));
 				else if (!BDFDB.ArrayUtils.is(requestedUsers[user.id])) {
 					requestedUsers[user.id] = [instance];
 					requestQueue.queue.push(user.id);
