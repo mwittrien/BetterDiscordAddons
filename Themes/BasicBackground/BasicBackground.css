@@ -264,15 +264,21 @@ body,														/* body														*/
 
 /* ~~~~		2.		BACKGROUND						~~~~ */
 
-body::before {
+body::before,
+body::after {
 	content: "";
 	position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
+	z-index: -1;
+}
+body::before {
 	background: var(--background) var(--backgroundposition)/var(--backgroundsize);
-	filter: blur(var(--backgroundblur));
+}
+body::after {
+	backdrop-filter: blur(var(--backgroundblur));
 }
 .container-16j22k::before,
 .layer-3QrUeG ~ .layer-3QrUeG::before,
