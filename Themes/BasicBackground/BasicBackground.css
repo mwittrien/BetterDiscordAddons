@@ -40,9 +40,9 @@
 	--popoutblur:					var(--backgroundblur);
 	
 	--backdrop:						rgba(0,0,0,0.85);
-	--backdropposition:				var(--backgroundposition);
-	--backdropsize:					var(--backgroundsize);
-	--backdropblur:					var(--backgroundblur);
+	--backdropposition:				center;
+	--backdropsize:					cover;
+	--backdropblur:					unset;
 	
 	--bdfdb-green:					rgb(var(--successcolor));
 	--bdfdb-yellow:					rgb(var(--warningcolor));
@@ -281,12 +281,19 @@ body::before {
 body::after {
 	backdrop-filter: blur(var(--backgroundblur));
 }
-.container-16j22k::before,
-.layer-3QrUeG ~ .layer-3QrUeG::before,
-.root-3R2ngo::before,
-.container-16j22k::after,
-.layer-3QrUeG ~ .layer-3QrUeG::after,
-.root-3R2ngo::after {
+.uploadArea-3QgLtW,
+.backdrop-29yll0,
+.backdrop-1wrmKB {
+	background: transparent !important;
+	opacity: 1 !important;
+	animation: none !important;
+}
+.uploadArea-3QgLtW::before,
+.backdrop-29yll0::before,
+.backdrop-1wrmKB::before,
+.uploadArea-3QgLtW::after,
+.backdrop-29yll0::after,
+.backdrop-1wrmKB::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -294,28 +301,18 @@ body::after {
 	right: 0;
 	bottom: 0;
 	pointer-events: none;
-	z-index: -1;
+	z-index: -2;
 }
-.container-16j22k::before,
-.layer-3QrUeG ~ .layer-3QrUeG::before,
-.root-3R2ngo::before {
-	background: var(--background) var(--backgroundposition)/var(--backgroundsize);
+.uploadArea-3QgLtW::before,
+.backdrop-29yll0::before,
+.backdrop-1wrmKB::before {
+	background: var(--backdrop) var(--backdropposition)/var(--backdropsize);
 	background-attachment: fixed;
 }
-.container-16j22k::after,
-.layer-3QrUeG ~ .layer-3QrUeG::after,
-.root-3R2ngo::after {
-	background-color: rgba(var(--transparencycolor), var(--transparencyalpha));
-	backdrop-filter: blur(var(--backgroundblur));
-}
-#ace_settingsmenu_container,
-.uploadArea-3QgLtW,
-.backdrop-29yll0,
-.backdrop-1wrmKB {
-	background: var(--backdrop) var(--backdropposition)/var(--backdropsize) !important;
-	filter: blur(var(--backdropblur));
-	opacity: 1;
-	animation: none;
+.uploadArea-3QgLtW::after,
+.backdrop-29yll0::after,
+.backdrop-1wrmKB::after {
+	backdrop-filter: blur(var(--backdropblur));
 }
 .withLayer-RoELSG {
 	z-index: -1;

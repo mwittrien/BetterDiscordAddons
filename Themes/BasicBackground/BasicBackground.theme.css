@@ -40,9 +40,9 @@
 	--popoutblur:					var(--backgroundblur);		/* default: unset				(blur in px, only works when --popout is set to an image)						*/
 	
 	--backdrop:						rgba(0,0,0,0.85);			/* default: rgba(0,0,0,0.85)	(change to use another background/color for backdrops)							*/
-	--backdropposition:				var(--backgroundposition);	/* default: center				(position of backdrop - values: [center/top/right/bottom/left])					*/
-	--backdropsize:					var(--backgroundsize);		/* default: cover				(sizefit of backdrop - values: [cover/contain/auto])							*/
-	--backdropblur:					var(--backgroundblur);		/* default: unset				(blur in px, only works when --backdrop is set to an image)						*/
+	--backdropposition:				center;						/* default: center				(position of backdrop - values: [center/top/right/bottom/left])					*/
+	--backdropsize:					cover;						/* default: cover				(sizefit of backdrop - values: [cover/contain/auto])							*/
+	--backdropblur:					unset;						/* default: unset				(blur in px, only works when --backdrop is set to an image)						*/
 	
 	--textbrightest: 				255,255,255;				/* default: 255,255,255			(text color for the brightest texts)											*/
 	--textbrighter: 				222,222,222;				/* default: 222,222,222			(text color for brighter texts)													*/
