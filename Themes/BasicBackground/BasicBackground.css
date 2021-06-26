@@ -2092,6 +2092,71 @@ body::before {
 	border-color: rgba(var(--transparencycolor), .2);
 }
 
+.accountProfileCard-1XCH88,									/* accountsettings		container							*/
+.profileBannerPreview-3_l0Wd {								/* accountsettings		preview								*/
+	background: transparent;
+	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
+}
+.accountProfileCard-1XCH88::before,
+.profileBannerPreview-3_l0Wd::before,
+.accountProfileCard-1XCH88::after,
+.profileBannerPreview-3_l0Wd::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	border-radius: 5px;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.accountProfileCard-1XCH88::before,
+.profileBannerPreview-3_l0Wd::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	filter: blur(var(--popoutblur));
+	background-attachment: fixed;
+}
+.accountProfileCard-1XCH88::after,
+.profileBannerPreview-3_l0Wd::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
+}
+.accountProfileCard-1XCH88 .avatar-1uQSZT,					/* accountsettings		container avatar					*/
+.profileBannerPreview-3_l0Wd .avatarUploader-2UF9NL {		/* accountsettings		preview avatar wrapper				*/
+	z-index: 1;
+}
+.accountProfileCard-1XCH88 .avatar-1uQSZT,					/* accountsettings		container avatar					*/
+.profileBannerPreview-3_l0Wd .avatarUploaderInner-Oiob_P {	/* accountsettings		preview avatar						*/
+	background-color: transparent;
+	border: none;
+	margin: 6px;
+}
+.accountProfileCard-1XCH88 .avatar-1uQSZT::before,
+.profileBannerPreview-3_l0Wd .avatarUploaderInner-Oiob_P::before,
+.accountProfileCard-1XCH88 .avatar-1uQSZT::after,
+.profileBannerPreview-3_l0Wd .avatarUploaderInner-Oiob_P::after {
+	content: "";
+	position: absolute;
+	top: -6px;
+	right: -6px;
+	bottom: -6px;
+	left: -6px;
+	border-radius: 50%;
+	pointer-events: none;
+	z-index: -1;
+}
+.accountProfileCard-1XCH88 .avatar-1uQSZT::before,
+.profileBannerPreview-3_l0Wd .avatarUploaderInner-Oiob_P::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	filter: blur(var(--popoutblur));
+	background-attachment: fixed;
+}
+.accountProfileCard-1XCH88 .avatar-1uQSZT::after,
+.profileBannerPreview-3_l0Wd .avatarUploaderInner-Oiob_P::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
+}
 .questionMark-3qBhGj svg {									/* accountsettings		questionmark new					*/
 	filter: drop-shadow(1px 1px var(--textshadow));
 }
@@ -2108,7 +2173,7 @@ body::before {
 	background-color: rgba(var(--transparencycolor), .2);
 }
 #app-mount .fieldList-21DyL8 {								/* accountsettings		settings							*/
-	background-color: rgba(var(--transparencycolor), .4);
+	background-color: transparent;
 }
 
 .accountList-33MS45 {										/* connections			container							*/
@@ -3136,8 +3201,9 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .2);
 }
 .root-3QyAh1 .avatar-AvHqJA {								/* modal				avatar								*/
-	background: transparent;
-	border-color: transparent;
+	background-color: transparent;
+	border: none;
+	margin: 8px;
 	z-index: 1;
 }
 .root-3QyAh1 .avatar-AvHqJA::before,
@@ -4216,8 +4282,9 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	z-index: 1;
 }
 .userPopout-xaxa6l .avatar-37jOim {							/* popout				avatar								*/
-	background: transparent;
-	border-color: transparent;
+	background-color: transparent;
+	border: none;
+	margin: 6px;
 }
 .userPopout-xaxa6l .avatar-37jOim::before,
 .userPopout-xaxa6l .avatar-37jOim::after {
