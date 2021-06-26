@@ -5033,21 +5033,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	overflow: hidden;
 	position: relative;
 }
-.streamPreview-2-WUWT::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-	filter: blur(var(--popoutblur));
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
+.streamPreview-2-WUWT::before,
 .streamPreview-2-WUWT::after {
 	content: "";
 	position: absolute;
@@ -5055,11 +5041,18 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
 	z-index: -1;
+}
+.streamPreview-2-WUWT::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+}
+.streamPreview-2-WUWT::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
+	backdrop-filter: blur(var(--popoutblur));
 }
 
 #app-mount .previewContainer-12UlHl	{						/* popout				preview								*/
@@ -5074,21 +5067,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	position: relative;
 	overflow: visible !important;
 }
-.container-2dqNWc::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	filter: blur(var(--popoutblur));
-	background-attachment: fixed;
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
+.container-2dqNWc::before,
 .container-2dqNWc::after {
 	content: "";
 	position: absolute;
@@ -5096,11 +5075,18 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
 	z-index: -1;
+}
+.container-2dqNWc::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+}
+.container-2dqNWc::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
+	backdrop-filter: blur(var(--popoutblur));
 }
 
 /* ----		14.14.	PUBLICGUILDANNOUNCEMENT			---- */
@@ -5113,21 +5099,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	overflow: hidden;
 	position: relative;
 }
-.popout-6p6fkZ::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-	filter: blur(var(--popoutblur));
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
+.popout-6p6fkZ::before,
 .popout-6p6fkZ::after {
 	content: "";
 	position: absolute;
@@ -5135,11 +5107,18 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
 	z-index: -1;
+}
+.popout-6p6fkZ::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+}
+.popout-6p6fkZ::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
+	backdrop-filter: blur(var(--popoutblur));
 }
 
 /* ----		14.15.	RTCSTATUSPOPOUT					---- */
@@ -5153,22 +5132,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	position: relative;
 	width: 260px;
 }
-.container-2x5lvQ::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-	filter: blur(var(--popoutblur));
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	border-radius: 5px;
-	z-index: -1;
-}
+.container-2x5lvQ::before,
 .container-2x5lvQ::after {
 	content: "";
 	position: absolute;
@@ -5176,12 +5140,19 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 	width: unset;
 	height: unset;
-	pointer-events: none;
 	border-radius: 5px;
+	pointer-events: none;
 	z-index: -1;
+}
+.container-2x5lvQ::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+}
+.container-2x5lvQ::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
+	backdrop-filter: blur(var(--popoutblur));
 }
 #app-mount .container-2x5lvQ .header-2C89wJ {
 	background-color: rgba(var(--transparencycolor), .2);
@@ -5276,22 +5247,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	position: relative;
 }
 .quickSelectPopout-X1hvgV::before,
-.popoutList-T9CKZQ::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-	filter: blur(var(--popoutblur));
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	border-radius: 5px;
-	z-index: -1;
-}
+.popoutList-T9CKZQ::before,
 .quickSelectPopout-X1hvgV::after,
 .popoutList-T9CKZQ::after {
 	content: "";
@@ -5300,12 +5256,21 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 	width: unset;
 	height: unset;
-	pointer-events: none;
 	border-radius: 5px;
+	pointer-events: none;
 	z-index: -1;
+}
+.quickSelectPopout-X1hvgV::before,
+.popoutList-T9CKZQ::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+}
+.quickSelectPopout-X1hvgV::after,
+.popoutList-T9CKZQ::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
+	backdrop-filter: blur(var(--popoutblur));
 }
 #app-mount .selectableItem-1MP3MQ {
 	color: var(--header-primary);
@@ -5336,22 +5301,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 	position: relative;
 }
-.contentWarningPopout-n5JsIs::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-	filter: blur(var(--popoutblur));
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	border-radius: 5px;
-	z-index: -1;
-}
+.contentWarningPopout-n5JsIs::before,
 .contentWarningPopout-n5JsIs::after {
 	content: "";
 	position: absolute;
@@ -5359,12 +5309,19 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 	width: unset;
 	height: unset;
-	pointer-events: none;
 	border-radius: 5px;
+	pointer-events: none;
 	z-index: -1;
+}
+.contentWarningPopout-n5JsIs::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+}
+.contentWarningPopout-n5JsIs::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
+	backdrop-filter: blur(var(--popoutblur));
 }
 #app-mount .body-3PNusm {
 	color: var(--header-secondary);
@@ -5830,21 +5787,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 .popout-VcNcHB .content-3YMskv::before,
 .container-3LUQwT::before,
-.select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-	filter: blur(var(--popoutblur));
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
+.select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::before,
 .popout-VcNcHB .content-3YMskv::after,
 .container-3LUQwT::after,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::after {
@@ -5854,11 +5797,22 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
 	z-index: -1;
+}
+.popout-VcNcHB .content-3YMskv::before,
+.container-3LUQwT::before,
+.select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+}
+.popout-VcNcHB .content-3YMskv::after,
+.container-3LUQwT::after,
+.select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
+	backdrop-filter: blur(var(--popoutblur));
 }
 
 /* ----		15.4.	SEARCHBARS						---- */
@@ -6109,22 +6063,7 @@ html .bd-toast.toast-warn.icon::before {
 	padding: 6px 8px;
 	margin-left: -9px;
 }
-.bd-select .bd-select-options::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-	filter: blur(var(--popoutblur));
-	width: unset;
-	height: unset;
-	border-radius: 4px;
-	pointer-events: none;
-	z-index: -1;
-}
+.bd-select .bd-select-options::before,
 .bd-select .bd-select-options::after {
 	content: "";
 	position: absolute;
@@ -6132,12 +6071,19 @@ html .bd-toast.toast-warn.icon::before {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.3));
 	width: unset;
 	height: unset;
 	border-radius: 4px;
 	pointer-events: none;
 	z-index: -1;
+}
+.bd-select .bd-select-options::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+}
+.bd-select .bd-select-options::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.3));
+	backdrop-filter: blur(var(--popoutblur));
 }
 .bd-select .bd-select-option {								/* bd select			popout option						*/
 	display: flex;
@@ -6197,21 +6143,7 @@ html .powercord-toast {
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 	overflow: hidden;
 }
-html .powercord-toast::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-	filter: blur(var(--popoutblur));
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
+html .powercord-toast::before,
 html .powercord-toast::after {
 	content: "";
 	position: absolute;
@@ -6219,12 +6151,19 @@ html .powercord-toast::after {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 	width: unset;
 	height: unset;
 	border-radius: 5px;
 	pointer-events: none;
 	z-index: -1;
+}
+html .powercord-toast::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+}
+html .powercord-toast::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
+	backdrop-filter: blur(var(--popoutblur));
 }
 html .powercord-toast .header {
 	background-color: rgba(var(--transparencycolor), .2);
@@ -6243,9 +6182,27 @@ html .powercord-toast .contents .inner {
 /* ----		18.1.	BDFDB							---- */
 
 html .colorDefault-XdNdIp .bg-8df5St {
-	background: linear-gradient(rgba(var(--transparencycolor), .75), rgba(var(--transparencycolor), .75))  var(--popoutposition)/var(--popoutsize), var(--popout) var(--popoutposition)/var(--popoutsize);
+	background: transparent;
+	opacity: 1;
+}
+html .colorDefault-XdNdIp .bg-8df5St::before,
+html .colorDefault-XdNdIp .bg-8df5St::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	pointer-events: none;
+	z-index: -1;
+}
+html .colorDefault-XdNdIp .bg-8df5St::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
 	background-attachment: fixed;
-	filter: blur(var(--popoutblur));
+}
+html .colorDefault-XdNdIp .bg-8df5St::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
+	backdrop-filter: blur(var(--popoutblur));
 }
 
 /* ----		18.2.	DATEVIEWER						---- */
@@ -6329,21 +6286,7 @@ html .colorDefault-XdNdIp .bg-8df5St {
 	position: relative;
 	overflow: hidden;
 }
-#permissions-modal-wrapper #permissions-modal::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-	filter: blur(var(--popoutblur));
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
+#permissions-modal-wrapper #permissions-modal::before,
 #permissions-modal-wrapper #permissions-modal::after {
 	content: "";
 	position: absolute;
@@ -6351,11 +6294,18 @@ html .colorDefault-XdNdIp .bg-8df5St {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
 	width: unset;
 	height: unset;
 	pointer-events: none;
 	z-index: -1;
+}
+#permissions-modal-wrapper #permissions-modal::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+}
+#permissions-modal-wrapper #permissions-modal::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
+	backdrop-filter: blur(var(--popoutblur));
 }
 #permissions-modal-wrapper .header {
 	background-color: rgba(var(--transparencycolor), .2);
