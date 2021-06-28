@@ -96,7 +96,8 @@ module.exports = (_ => {
 						WolframAlpha:		{value: true, 	name: "Wolfram Alpha", 			url: "https://www.wolframalpha.com/input/?i=" + textUrlReplaceString},
 						Yandex: 			{value: true, 	name: "Yandex", 				url: "https://yandex.com/search/?text=" + textUrlReplaceString},
 						Yahoo: 				{value: true, 	name: "Yahoo", 					url: "https://search.yahoo.com/search?p=" + textUrlReplaceString},
-						YouTube: 			{value: true, 	name: "YouTube", 				url: "https://www.youtube.com/results?q=" + textUrlReplaceString}
+						YouTube: 			{value: true, 	name: "YouTube", 				url: "https://www.youtube.com/results?q=" + textUrlReplaceString},
+						StackOverflow: 			{value: true, 	name: "Stack Overflow", 			url: "https://stackoverflow.com/search?q=" + textUrlReplaceString}
 					}
 				};
 			}
