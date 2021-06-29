@@ -22,7 +22,7 @@ module.exports = (_ => {
 		},
 		"changeLog": {
 			"added": {
-				"Startpage": "Added Startpage as search engine"
+				"StackOverflow": "Added StackOverflow as search engine"
 			}
 		}
 	};
