@@ -2,7 +2,7 @@
  * @name GoogleSearchReplace
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.0
+ * @version 1.3.1
  * @description Replaces the default Google Text Search with a custom Search Engine
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleSearchReplace",
 			"author": "DevilBro",
-			"version": "1.3.0",
+			"version": "1.3.1",
 			"description": "Replaces the default Google Text Search with a custom Search Engine"
 		},
 		"changeLog": {
@@ -92,6 +92,7 @@ module.exports = (_ => {
 						Qwant: 				{value: true, 	name: "Qwant", 					url: "https://www.qwant.com/?t=all&q=" + textUrlReplaceString},
 						UrbanDictionary: 	{value: true, 	name: "Urban Dictionary", 		url: "https://www.urbandictionary.com/define.php?term=" + textUrlReplaceString},
 						Searx: 				{value: true, 	name: "Searx", 					url: "https://searx.info/?q=" + textUrlReplaceString},
+						StackOverflow: 		{value: true, 	name: "Stack Overflow", 		url: "https://stackoverflow.com/search?q=" + textUrlReplaceString},
 						Startpage: 			{value: true, 	name: "Startpage", 				url: "https://www.startpage.com/sp/search?q=" + textUrlReplaceString},
 						WolframAlpha:		{value: true, 	name: "Wolfram Alpha", 			url: "https://www.wolframalpha.com/input/?i=" + textUrlReplaceString},
 						Yandex: 			{value: true, 	name: "Yandex", 				url: "https://yandex.com/search/?text=" + textUrlReplaceString},
