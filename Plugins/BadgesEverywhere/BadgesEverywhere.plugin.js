@@ -2,7 +2,7 @@
  * @name BadgesEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.6
+ * @version 1.7.7
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,14 @@ module.exports = (_ => {
 		"info": {
 			"name": "BadgesEverywhere",
 			"author": "DevilBro",
-			"version": "1.7.6",
+			"version": "1.7.7",
 			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList"
 		},
 		"changeLog": {
 			"fixed": {
 				"Removed Uncolored": "Discord no longer has the white version of the Badges",
-				"Size": "Badges arent giant or tiny anymore"
+				"Size": "Badges arent giant or tiny anymore",
+				"Click": "Disabled Click Pages again"
 			}
 		}
 	};
@@ -289,7 +290,12 @@ module.exports = (_ => {
 						let keyName = e.instance.props.filter && Object.keys(this.defaults.badges).find(n => this.defaults.badges[n].keys.includes(key));
 						if (keyName && !this.settings.badges[keyName]) e.returnvalue.props.children[i] = null;
 						else if (e.returnvalue.props.children[i].type.displayName == "TooltipContainer" || e.returnvalue.props.children[i].type.displayName == "Tooltip") {
-							if (BDFDB.ObjectUtils.get(e, `returnvalue.props.children.${i}.props.children.props.onClick`)) delete e.returnvalue.props.children[i].props.children.props.onClick;
+							const childrenRender = e.returnvalue.props.children[i].props.children;
+							e.returnvalue.props.children[i].props.children = (...args) => {
+								const children = childrenRender(...args);
+								delete children.props.onClick;
+								return children;
+							};
 							e.returnvalue.props.children[i] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, e.returnvalue.props.children[i].props);
 						}
 					}
