@@ -3962,7 +3962,7 @@
 			"settings_showSupportBadges_description": "Mostra piccoli badge per gli utenti che supportano il mio Patreon",
 			"settings_showToasts_description": "Mostra l'avvio e l'arresto del plugin",
 			"settings_showToasts_note": "Disabilita l'impostazione generale '{{var0}}' dei BD prima di disabilitarli",
-			"settings_toastPosition_description": "Posizione predefinita del pane tostato",
+			"settings_toastPosition_description": "Posizione predefinita del toast",
 			"settings_toastPosition_note": "Cambia solo la posizione dei toast creati dai miei plugins",
 			"settings_useChromium_description": "Apri link in Discord invece che nel tuo browser",
 			"sort_by": "Ordina per",
