@@ -1318,7 +1318,7 @@
 		"UserBanner": {"props": ["popoutBanner", "popoutBannerPremium"]},
 		"UserPopout": {"props": ["userPopout", "body"]},
 		"UserPopoutBody": {"props": ["rolesList", "note"]},
-		"UserPopoutFooter": {"props": ["quickMessage", "footer"]},
+		"UserPopoutFooter": {"props": ["wumpusTooltip", "footer"]},
 		"UserPopoutHeader": {"props": ["aboutMeSection", "avatarPositionNormal"]},
 		"UserPopoutInfo": {"props": ["headerTop", "profileBadges"]},
 		"UserProfile": {"props": ["root", "tabBarContainer"]},
