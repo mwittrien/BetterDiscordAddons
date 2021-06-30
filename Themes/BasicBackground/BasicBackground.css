@@ -16,6 +16,7 @@
 	
 	--accentcolor:					190,78,180;
 	--accentcolor2:					var(--accentcolor);
+	--mentioncolor:					var(--accentcolor);
 	--linkcolor:					var(--accentcolor);
 	
 	--successcolor: 				59,165,92;
@@ -812,16 +813,18 @@ body::after {
 	background-image: linear-gradient(rgba(var(--accentcolor), calc(0.2 * (1 - var(--usechatbubbles)))), rgba(var(--accentcolor), calc(0.2 * (1 - var(--usechatbubbles)))));
 }
 .message-2qnXI6.mentioned-xhSam7 {							/* message				mentioned							*/
-	background-image: linear-gradient(rgba(var(--accentcolor), calc(0.2 * (1 - var(--usechatbubbles)))), rgba(var(--accentcolor), calc(0.2 * (1 - var(--usechatbubbles)))));
+	background-image: linear-gradient(rgba(var(--mentioncolor), calc(0.2 * (1 - var(--usechatbubbles)))), rgba(var(--accentcolor), calc(0.2 * (1 - var(--usechatbubbles)))));
 }
 .message-2qnXI6.ephemeral-1PsL1r::before,
-.message-2qnXI6.replying-1x3H0T::before,
-.message-2qnXI6.mentioned-xhSam7::before {
+.message-2qnXI6.replying-1x3H0T::before {
 	background-color: rgb(var(--accentcolor));
+}
+.message-2qnXI6.mentioned-xhSam7::before {
+	background-color: rgb(var(--mentioncolor));
 }
 .message-2qnXI6.mentioned-xhSam7 .contents-2mQqc9 .messageContent-2qWWxC {
 	border-radius: 3px;
-	background-color: rgba(var(--accentcolor), calc(0.3 * var(--usechatbubbles)));
+	background-color: rgba(var(--mentioncolor), calc(0.3 * var(--usechatbubbles)));
 }
 #app-mount .avatar-1BDn8e,									/* message				container avatar					*/
 #app-mount .avatar-2daVqv {									/* message				loading avatar						*/
