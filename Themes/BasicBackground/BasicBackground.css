@@ -3991,7 +3991,8 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	box-shadow: 0 0 1px rgba(var(--transparencycolor), .2), 0 1px 4px rgba(var(--transparencycolor), .1);
 }
 
-#app-mount .themedPopout-1TrfdI {							/* themed popout		(for example mentionpopout)			*/
+#app-mount .loadingPopout-qYljDW,							/* loading popout											*/
+#app-mount .themedPopout-1TrfdI {							/* themed popout											*/
 	background-color: transparent;
 	border: none;
 	border-radius: 5px;
@@ -3999,7 +4000,9 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	color: var(--header-primary);
 	position: relative;
 }
+.loadingPopout-qYljDW::before,
 .themedPopout-1TrfdI::before,
+.loadingPopout-qYljDW::after,
 .themedPopout-1TrfdI::after {
 	content: "";
 	position: absolute;
@@ -4013,10 +4016,12 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	pointer-events: none;
 	z-index: -1;
 }
+.loadingPopout-qYljDW::before,
 .themedPopout-1TrfdI::before {
 	background: var(--popout) var(--popoutposition)/var(--popoutsize);
 	background-attachment: fixed;
 }
+.loadingPopout-qYljDW::after,
 .themedPopout-1TrfdI::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 	backdrop-filter: blur(var(--popoutblur));

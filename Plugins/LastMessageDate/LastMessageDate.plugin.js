@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.7
+ * @version 1.2.8
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "LastMessageDate",
 			"author": "DevilBro",
-			"version": "1.2.7",
+			"version": "1.2.8",
 			"description": "Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal"
 		},
 		"changeLog": {
 			"fixed": {
-				"User Popout": "Fixing Stuff for the User Popout Update, thanks Discord"
+				"User Popout": "No Longer requires you to open the Popout twice"
 			}
 		}
 	};
@@ -73,11 +73,13 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
+		var _this;
 		var loadedUsers, requestedUsers, languages;
 		var currentPopout, currentProfile;
 		
 		return class LastMessageDate extends Plugin {
 			onLoad () {
+				_this = this;
 				loadedUsers = {};
 				requestedUsers = {};
 
@@ -96,8 +98,9 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					after: {
-						AnalyticsContext: "render",
+						UserPopoutContainer: "type",
 						UserPopoutInfo: "UserPopoutInfo",
+						UserProfileModal: "default",
 						UserProfileModalHeader: "default"
 					}
 				};
@@ -178,62 +181,72 @@ module.exports = (_ => {
 				}
 			}
 
-			processAnalyticsContext (e) {
-				if (e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.PROFILE_MODAL) currentProfile = e.instance;
-				if (e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.PROFILE_POPOUT) currentPopout = e.instance;
+			processUserPopoutContainer (e) {
+				currentPopout = e.instance;
 			}
-
+			
 			processUserPopoutInfo (e) {
 				if (currentPopout && e.instance.props.user && this.settings.places.userPopout) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["DiscordTag", "ColoredFluxTag"]});
-					if (index > -1) this.injectDate(currentPopout, children, index + 1, e.instance.props.user, e.instance.props.guildId);
+					if (index > -1) this.injectDate(children, index + 1, e.instance.props.user, currentPopout.props.guildId);
 				}
 			}
 
+			processUserProfileModal (e) {
+				currentProfile = e.instance;
+			}
+			
 			processUserProfileModalHeader (e) {
 				if (currentProfile && e.instance.props.user && this.settings.places.userProfile) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["DiscordTag", "ColoredFluxTag"]});
-					if (index > -1) this.injectDate(currentProfile, children, index + 1, e.instance.props.user, currentProfile.props.guildId);
+					if (index > -1) this.injectDate(children, index + 1, e.instance.props.user, currentProfile.props.guildId);
 				}
 			}
 
-			injectDate (instance, children, index, user, guildId) {
+			injectDate ( children, index, user, guildId) {
 				if (!guildId) guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 				if (!BDFDB.ArrayUtils.is(children) || !user || user.discriminator == "0000") return;
 				let isGuild = guildId && guildId != BDFDB.DiscordConstants.ME;
 				guildId = isGuild ? guildId : BDFDB.LibraryModules.LastChannelStore.getChannelId();
 				if (!guildId) return;
+				
 				if (!loadedUsers[guildId]) loadedUsers[guildId] = {};
 				if (!requestedUsers[guildId]) requestedUsers[guildId] = {};
+				
 				if (!BDFDB.ArrayUtils.is(requestedUsers[guildId][user.id])) {
-					requestedUsers[guildId][user.id] = [instance];
+					requestedUsers[guildId][user.id] = [];
 					BDFDB.LibraryModules.APIUtils.get({
 						url: isGuild ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(guildId) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(guildId),
 						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({author_id: user.id})
 					}).then(result => {
 						if (typeof result.body.retry_after != "number") {
 							if (result.body.messages && Array.isArray(result.body.messages[0])) {
-								for (let message of result.body.messages[0]) if (message.hit && message.author.id == user.id) {
-									loadedUsers[guildId][user.id] = new Date(message.timestamp);
-								}
+								for (let message of result.body.messages[0]) if (message.hit && message.author.id == user.id) loadedUsers[guildId][user.id] = new Date(message.timestamp);
 							}
 							else loadedUsers[guildId][user.id] = null;
 							for (let queuedInstance of requestedUsers[guildId][user.id]) BDFDB.ReactUtils.forceUpdate(queuedInstance);
 						}
 						else {
 							delete requestedUsers[guildId][user.id];
-							BDFDB.TimeUtils.timeout(_ => this.injectDate(instance, children, index, user), result.body.retry_after + 500);
+							BDFDB.TimeUtils.timeout(_ => this.injectDate(children, index, user), result.body.retry_after + 500);
 						}
 					});
 				}
-				else if (loadedUsers[guildId][user.id] === undefined) requestedUsers[guildId][user.id].push(instance);
-				else {
-					let timestamp = loadedUsers[guildId][user.id] ? BDFDB.LibraryComponents.DateInput.format(this.settings.dates.lastMessageDate, loadedUsers[guildId][user.id]) : "---";
-					children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-						className: BDFDB.disCNS._lastmessagedatedate + BDFDB.disCNS.userinfodate + BDFDB.disCN.textrow,
-						children: this.settings.general.displayText ? this.labels.last_message.replace("{{time}}", timestamp) : timestamp
-					}));
-				}
+				children.splice(index, 0, BDFDB.ReactUtils.createElement(class extends BDFDB.ReactUtils.Component {
+					render() {
+						if (loadedUsers[guildId][user.id] === undefined) {
+							if (requestedUsers[guildId][user.id].indexOf(this) == -1) requestedUsers[guildId][user.id].push(this);
+							return null;
+						}
+						else {
+							let timestamp = loadedUsers[guildId][user.id] ? BDFDB.LibraryComponents.DateInput.format(_this.settings.dates.lastMessageDate, loadedUsers[guildId][user.id]) : "---";
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+								className: BDFDB.disCNS._lastmessagedatedate + BDFDB.disCNS.userinfodate + BDFDB.disCN.textrow,
+								children: _this.settings.general.displayText ? _this.labels.last_message.replace("{{time}}", timestamp) : timestamp
+							});
+						}
+					}
+				}));
 			}
 
 			setLabelsByLanguage () {

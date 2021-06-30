@@ -7821,11 +7821,12 @@ module.exports = (_ => {
 				InternalBDFDB._processAvatarRender = function (user, avatar) {
 					if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user) && (avatar.props.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) == -1) {
 						avatar.props[InternalData.userIdAttribute] = user.id;
-						let role = "", note = "", link, className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")), addBadge = InternalBDFDB.settings.general.showSupportBadges;
+						let role = "", note = "", color, link, className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")), addBadge = InternalBDFDB.settings.general.showSupportBadges;
 						if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
 							link = "https://www.patreon.com/MircoWittrien";
 							role = BDFDB_Patrons[user.id].text || (BDFDB_Patron_Tiers[BDFDB_Patrons[user.id].tier] || {}).text;
 							note = BDFDB_Patrons[user.id].text && (BDFDB_Patron_Tiers[BDFDB_Patrons[user.id].tier] || {}).text;
+							color = BDFDB_Patrons[user.id].color;
 							className = BDFDB.DOMUtils.formatClassName(className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN[`bdfdbsupporter${BDFDB_Patrons[user.id].tier}`]);
 						}
 						if (user.id == InternalData.myId) {
@@ -7848,6 +7849,7 @@ module.exports = (_ => {
 							if (addBadge) avatar.props.children.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 								text: role,
 								note: note,
+								tooltipConfig: {backgroundColor: color || ""},
 								onClick: link ? (_ => BDFDB.DiscordUtils.openLink(link)) : (_ => {}),
 								children: BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.bdfdbbadge
@@ -7862,11 +7864,12 @@ module.exports = (_ => {
 					if (wrapper) wrapper.setAttribute(InternalData.userIdAttribute, user.id);
 					if (Node.prototype.isPrototypeOf(avatar) && (avatar.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) == -1) {
 						avatar.setAttribute(InternalData.userIdAttribute, user.id);
-						let role = "", note = "", link, addBadge = InternalBDFDB.settings.general.showSupportBadges;
+						let role = "", note = "", color, link, addBadge = InternalBDFDB.settings.general.showSupportBadges;
 						if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
 							link = "https://www.patreon.com/MircoWittrien";
 							role = BDFDB_Patrons[user.id].text || (BDFDB_Patron_Tiers[BDFDB_Patrons[user.id].tier] || {}).text;
 							note = BDFDB_Patrons[user.id].text && (BDFDB_Patron_Tiers[BDFDB_Patrons[user.id].tier] || {}).text;
+							color = BDFDB_Patrons[user.id].color;
 							avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN[`bdfdbsupporter${BDFDB_Patrons[user.id].tier}`]);
 						}
 						else if (user.id == InternalData.myId) {
@@ -7878,7 +7881,7 @@ module.exports = (_ => {
 							let badge = document.createElement("div");
 							badge.className = BDFDB.disCN.bdfdbbadge;
 							if (link) badge.addEventListener("click", _ => BDFDB.DiscordUtils.openLink(link));
-							badge.addEventListener("mouseenter", _ => BDFDB.TooltipUtils.create(badge, role, {position: "top", note: note}));
+							badge.addEventListener("mouseenter", _ => BDFDB.TooltipUtils.create(badge, role, {position: "top", note: note, backgroundColor: color || ""}));
 							avatar.appendChild(badge);
 						}
 					}

@@ -2,7 +2,7 @@
  * @name JoinedAtDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.2
+ * @version 1.3.3
  * @description Displays the Joined At Date of a Member in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "JoinedAtDate",
 			"author": "DevilBro",
-			"version": "1.3.2",
+			"version": "1.3.3",
 			"description": "Displays the Joined At Date of a Member in the UserPopout and UserModal"
 		},
 		"changeLog": {
 			"fixed": {
-				"User Popout": "Fixing Stuff for the User Popout Update, thanks Discord"
+				"User Popout": "No Longer requires you to open the Popout twice"
 			}
 		}
 	};
@@ -73,11 +73,13 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
+		var _this;
 		var loadedUsers, requestedUsers;
 		var currentPopout, currentProfile;
 		
 		return class JoinedAtDate extends Plugin {
 			onLoad () {
+				_this = this;
 				loadedUsers = {};
 				requestedUsers = {};
 
@@ -96,8 +98,9 @@ module.exports = (_ => {
 				
 				this.patchedModules = {
 					after: {
-						AnalyticsContext: "render",
+						UserPopoutContainer: "type",
 						UserPopoutInfo: "UserPopoutInfo",
+						UserProfileModal: "default",
 						UserProfileModalHeader: "default"
 					}
 				};
@@ -168,45 +171,57 @@ module.exports = (_ => {
 				}
 			}
 
-			processAnalyticsContext (e) {
-				if (e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.PROFILE_MODAL) currentProfile = e.instance;
-				if (e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.PROFILE_POPOUT) currentPopout = e.instance;
+			processUserPopoutContainer (e) {
+				currentPopout = e.instance;
 			}
-
+			
 			processUserPopoutInfo (e) {
 				if (currentPopout && e.instance.props.user && this.settings.places.userPopout) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["DiscordTag", "ColoredFluxTag"]});
-					if (index > -1) this.injectDate(currentPopout, children, index + 1, e.instance.props.user, e.instance.props.guildId);
+					if (index > -1) this.injectDate(children, index + 1, e.instance.props.user, currentPopout.props.guildId);
 				}
+			}
+
+			processUserProfileModal (e) {
+				currentProfile = e.instance;
 			}
 			
 			processUserProfileModalHeader (e) {
 				if (currentProfile && e.instance.props.user && this.settings.places.userProfile) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["DiscordTag", "ColoredFluxTag"]});
-					if (index > -1) this.injectDate(currentProfile, children, index + 1, e.instance.props.user, currentProfile.props.guildId);
+					if (index > -1) this.injectDate(children, index + 1, e.instance.props.user, currentProfile.props.guildId);
 				}
 			}
 
-			injectDate (instance, children, index, user, guildId) {
+			injectDate (children, index, user, guildId) {
 				if (!guildId) guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 				if (!BDFDB.ArrayUtils.is(children) || !user || !guildId || user.discriminator == "0000" || !BDFDB.LibraryModules.MemberStore.getMember(guildId, user.id)) return;
+				
 				if (!loadedUsers[guildId]) loadedUsers[guildId] = {};
 				if (!requestedUsers[guildId]) requestedUsers[guildId] = {};
+				
 				if (!BDFDB.ArrayUtils.is(requestedUsers[guildId][user.id])) {
-					requestedUsers[guildId][user.id] = [instance];
+					requestedUsers[guildId][user.id] = [];
 					BDFDB.LibraryModules.APIUtils.get(BDFDB.DiscordConstants.Endpoints.GUILD_MEMBER(guildId, user.id)).then(result => {
 						loadedUsers[guildId][user.id] = new Date(result.body.joined_at);
 						for (let queuedInstance of requestedUsers[guildId][user.id]) BDFDB.ReactUtils.forceUpdate(queuedInstance);
 					});
 				}
-				else if (!loadedUsers[guildId][user.id]) requestedUsers[guildId][user.id].push(instance);
-				else {
-					let timestamp = BDFDB.LibraryComponents.DateInput.format(this.settings.dates.joinedAtDate, loadedUsers[guildId][user.id]);
-					children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-						className: BDFDB.disCNS._joinedatdatedate + BDFDB.disCNS.userinfodate + BDFDB.disCN.textrow,
-						children: this.settings.general.displayText ? this.labels.joined_at.replace("{{time}}", timestamp) : timestamp
-					}));
-				}
+				children.splice(index, 0, BDFDB.ReactUtils.createElement(class extends BDFDB.ReactUtils.Component {
+					render() {
+						if (!loadedUsers[guildId][user.id]) {
+							if (requestedUsers[guildId][user.id].indexOf(this) == -1) requestedUsers[guildId][user.id].push(this);
+							return null;
+						}
+						else {
+							let timestamp = BDFDB.LibraryComponents.DateInput.format(_this.settings.dates.joinedAtDate, loadedUsers[guildId][user.id]);
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+								className: BDFDB.disCNS._joinedatdatedate + BDFDB.disCNS.userinfodate + BDFDB.disCN.textrow,
+								children: _this.settings.general.displayText ? _this.labels.joined_at.replace("{{time}}", timestamp) : timestamp
+							});
+						}
+					}
+				}));
 			}
 
 			setLabelsByLanguage () {
