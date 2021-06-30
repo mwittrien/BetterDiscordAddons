@@ -21,7 +21,7 @@ module.exports = (_ => {
 			"description": "Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount"
 		},
 		"changeLog": {
-			"fixed": {
+			"added": {
 				"Hidden": "You can now hide Friends from your Friend List and put them into an extra category, allowing you to clean up your list without hurting someones feelings"
 			}
 		}
