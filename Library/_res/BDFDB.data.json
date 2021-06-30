@@ -2656,6 +2656,7 @@
 		"peoplesnowplayingcolumn": ["Peoples", "nowPlayingColumn"],
 		"peoplespeoplecolumn": ["Peoples", "peopleColumn"],
 		"peoplestabbar": ["Peoples", "tabBar"],
+		"peoplestabbaritem": ["Peoples", "item"],
 		"peoplewrapper": ["PeopleItem", "peopleListItem"],
 		"pictureinpicture": ["PictureInPicture", "pictureInPicture"],
 		"pictureinpicturewindow": ["PictureInPicture", "pictureInPictureWindow"],
