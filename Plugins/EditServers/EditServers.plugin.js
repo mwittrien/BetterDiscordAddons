@@ -120,6 +120,7 @@ module.exports = (_ => {
 				this.css = `
 					${BDFDB.dotCN.inviteguildicon} {
 						background-size: cover;
+						object-fit: cover;
 					}
 				`;
 			}

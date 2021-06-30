@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.5
+ * @version 4.3.6
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.3.5",
+			"version": "4.3.6",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"User Popout": "Fixing Stuff for the User Popout Update, thanks Discord",
-				"User Profile": "Avatar and Banner fixed"
+				"Message Avatar": "Fixed Avatar being squashed for non squarish icons"
 			}
 		}
 	};
@@ -181,6 +180,10 @@ module.exports = (_ => {
 				this.patchPriority = 3;
 				
 				this.css = `
+					${BDFDB.dotCN.messageavatar} {
+						background-size: cover;
+						object-fit: cover;
+					}
 					${BDFDB.dotCNS.chat + BDFDB.dotCN.messageusername}:hover > span[style*="color"],
 					${BDFDB.dotCN.voicedetailschannel}:hover > span[style*="color"] {
 						text-decoration: underline;
