@@ -294,7 +294,7 @@
 		"FlowerStar": {"name": "FlowerStar"},
 		"FocusRingScope": {"props": ["FocusRingScope"], "value": "default"},
 		"FormComponents": {"props": ["FormSection", "FormText"], "assign": true},
-		"FriendsEmptyState": {"strings": ["FriendsEmptyState", "FriendsSections"]},
+		"FriendsEmptyState": {"strings": ["FriendsEmptyState", "FriendsSections"], "value": "default"},
 		"GuildComponents Badge": {"name": "GuildBadge"},
 		"GuildComponents BlobMask": {"name": "BlobMask"},
 		"GuildComponents Icon": {"name": "GuildIconWrapper"},
