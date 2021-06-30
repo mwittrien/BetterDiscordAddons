@@ -217,7 +217,7 @@
 			"MessageUsername": {"strings": ["default.username", "colorString", "compact"]},
 			"ModalLayer": {"class": "layermodal"},
 			"Note": {"class": "usernotetextarea"},
-			"PeoplesPageList": {"strings": ["FriendsSections", "emptyStateContainer"]},
+			"PeoplePageList": {"strings": ["FriendsSections", "emptyStateContainer"]},
 			"PopoutContainer": {"class": "popout"},
 			"Popouts": {"class": "popouts"},
 			"PrivateChannelCall": {"class": "callcurrentcontainer"},
