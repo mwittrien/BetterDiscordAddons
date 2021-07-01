@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.4
+ * @version 1.3.5
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterFriendList",
 			"author": "DevilBro",
-			"version": "1.3.4",
+			"version": "1.3.5",
 			"description": "Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount"
 		},
 		"changeLog": {
 			"added": {
 				"Hidden": "You can now hide Friends from your Friend List and put them into an extra category, allowing you to clean up your list without hurting someones feelings"
+			},
+			"fixed": {
+				"Online Count": "No longer includes hidden Friends"
 			}
 		}
 	};
@@ -149,6 +152,13 @@ module.exports = (_ => {
 				sortReversed = false;
 				searchQuery = "";
 				isHiddenSelected = false;
+				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.StatusMetaUtils, "getOnlineFriendCount", {after: e => {
+					if (this.settings.general.addHiddenCategory) for (let id of hiddenFriends) {
+						const status = BDFDB.UserUtils.getStatus(id);
+						if (status && status != BDFDB.DiscordConstants.StatusTypes.OFFLINE && e.returnValue > 0) e.returnValue--;
+					}
+				}});
 
 				this.forceUpdateAll();
 			}
