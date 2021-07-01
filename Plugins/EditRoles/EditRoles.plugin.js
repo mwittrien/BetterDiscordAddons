@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.4
+ * @version 1.0.5
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditRoles",
 			"author": "DevilBro",
-			"version": "1.0.4",
+			"version": "1.0.5",
 			"description": "Allows you to locally edit Roles"
 		},
 		"changeLog": {
 			"fixed": {
-				"Role Names": "Fixed issue where the role name was changed to the role color string and not the name"
+				"Colorless Names": "Fixed issue where changing the name of a role without changing the color, would result in usernames to become colorless"
 			}
 		}
 	};
@@ -96,7 +96,7 @@ module.exports = (_ => {
 							let role;
 							for (let id of e.returnValue.roles) if (guild.roles[id] && guild.roles[id].colorString && (!role || role.position < guild.roles[id].position)) role = guild.roles[id];
 							let data = role && changedRoles[role.id];
-							if (data) e.returnValue = Object.assign({}, e.returnValue, {colorString: data.color ? BDFDB.ColorUtils.convert(data.color, "HEX") : null});
+							if (data) e.returnValue = Object.assign({}, e.returnValue, {colorString: data.color ? BDFDB.ColorUtils.convert(data.color, "HEX") : e.returnValue.colorString});
 						}
 					}
 				}});
