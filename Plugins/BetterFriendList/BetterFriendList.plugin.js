@@ -154,7 +154,7 @@ module.exports = (_ => {
 				isHiddenSelected = false;
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.StatusMetaUtils, "getOnlineFriendCount", {after: e => {
-					if (this.settings.general.addHiddenCategory) for (let id of hiddenFriends) {
+					if (this.settings.general.addHiddenCategory) for (let id of hiddenFriends) if (BDFDB.LibraryModules.RelationshipStore.isFriend(id)) {
 						const status = BDFDB.UserUtils.getStatus(id);
 						if (status && status != BDFDB.DiscordConstants.StatusTypes.OFFLINE && e.returnValue > 0) e.returnValue--;
 					}
