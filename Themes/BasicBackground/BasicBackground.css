@@ -2115,10 +2115,14 @@ body::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 	backdrop-filter: blur(var(--popoutblur));
 }
-.accountProfileCard-1XCH88 .avatar-1uQSZT,					/* accountsettings		container avatar					*/
-.profileBannerPreview-3_l0Wd .avatarUploaderInner-Oiob_P {	/* accountsettings		preview avatar						*/
+.accountProfileCard-1XCH88 .avatar-1uQSZT {					/* accountsettings		container avatar					*/
 	background-color: transparent;
 	border-color: transparent;
+}
+.profileBannerPreview-3_l0Wd .avatarUploaderInner-Oiob_P {	/* accountsettings		preview avatar						*/
+	background-color: transparent;
+	border: unset;
+	margin: 6px;
 }
 .accountProfileCard-1XCH88 .banner-2QYc2d {					/* accountsettings		container banner					*/
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 20.576172 120 A 46 46 0 0 1 62 94 A 46 46 0 0 1 103.41992 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
