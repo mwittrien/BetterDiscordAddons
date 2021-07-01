@@ -282,6 +282,33 @@ body::before {
 body::after {
 	backdrop-filter: blur(var(--backgroundblur));
 }
+.container-16j22k::before,
+.layer-3QrUeG ~ .layer-3QrUeG::before,
+.root-3R2ngo::before,
+.container-16j22k::after,
+.layer-3QrUeG ~ .layer-3QrUeG::after,
+.root-3R2ngo::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	pointer-events: none;
+	z-index: -1;
+}
+.container-16j22k::before,
+.layer-3QrUeG ~ .layer-3QrUeG::before,
+.root-3R2ngo::before {
+	background: var(--background) var(--backgroundposition)/var(--backgroundsize);
+	background-attachment: fixed;
+}
+.container-16j22k::after,
+.layer-3QrUeG ~ .layer-3QrUeG::after,
+.root-3R2ngo::after {
+	background-color: rgba(var(--transparencycolor), var(--transparencyalpha));
+	backdrop-filter: blur(var(--backgroundblur));
+}
 .uploadArea-3QgLtW,
 .backdrop-29yll0,
 .backdrop-1wrmKB {
@@ -2089,38 +2116,15 @@ body::after {
 	backdrop-filter: blur(var(--popoutblur));
 }
 .accountProfileCard-1XCH88 .avatar-1uQSZT,					/* accountsettings		container avatar					*/
-.profileBannerPreview-3_l0Wd .avatarUploader-2UF9NL {		/* accountsettings		preview avatar wrapper				*/
-	z-index: 1;
-}
-.accountProfileCard-1XCH88 .avatar-1uQSZT,					/* accountsettings		container avatar					*/
 .profileBannerPreview-3_l0Wd .avatarUploaderInner-Oiob_P {	/* accountsettings		preview avatar						*/
 	background-color: transparent;
-	border: none;
-	margin: 6px;
+	border-color: transparent;
 }
-.accountProfileCard-1XCH88 .avatar-1uQSZT::before,
-.profileBannerPreview-3_l0Wd .avatarUploaderInner-Oiob_P::before,
-.accountProfileCard-1XCH88 .avatar-1uQSZT::after,
-.profileBannerPreview-3_l0Wd .avatarUploaderInner-Oiob_P::after {
-	content: "";
-	position: absolute;
-	top: -6px;
-	right: -6px;
-	bottom: -6px;
-	left: -6px;
-	border-radius: 50%;
-	pointer-events: none;
-	z-index: -1;
+.accountProfileCard-1XCH88 .banner-2QYc2d {					/* accountsettings		container banner					*/
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 20.576172 120 A 46 46 0 0 1 62 94 A 46 46 0 0 1 103.41992 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
 }
-.accountProfileCard-1XCH88 .avatar-1uQSZT::before,
-.profileBannerPreview-3_l0Wd .avatarUploaderInner-Oiob_P::before {
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-}
-.accountProfileCard-1XCH88 .avatar-1uQSZT::after,
-.profileBannerPreview-3_l0Wd .avatarUploaderInner-Oiob_P::after {
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
-	backdrop-filter: blur(var(--popoutblur));
+.profileBannerPreview-3_l0Wd .banner-hcPdsd {				/* accountsettings		preview banner						*/
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 16 120 A 46 46 0 0 1 62 76 A 46 46 0 0 1 108 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
 }
 .questionMark-3qBhGj svg {									/* accountsettings		questionmark new					*/
 	filter: drop-shadow(1px 1px var(--textshadow));
@@ -3141,31 +3145,12 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .root-3QyAh1 .topSection-y3p-_D {				/* modal				topsection							*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
+.root-3QyAh1 .banner-2QYc2d {								/* modal				banner								*/
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="240" viewBox="0 0 2400 240" fill="none"><path fill="black" d="M 0 0 L 0 240 L 16 240 A 69 69 0 0 1 85 172 A 69 69 0 0 1 152 240 L 2400 240 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
+}
 .root-3QyAh1 .avatar-AvHqJA {								/* modal				avatar								*/
 	background-color: transparent;
-	border: none;
-	margin: 8px;
-	z-index: 1;
-}
-.root-3QyAh1 .avatar-AvHqJA::before,
-.root-3QyAh1 .avatar-AvHqJA::after {
-	content: "";
-	position: absolute;
-	top: -8px;
-	right: -8px;
-	bottom: -8px;
-	left: -8px;
-	border-radius: 50%;
-	pointer-events: none;
-	z-index: -1;
-}
-.root-3QyAh1 .avatar-AvHqJA::before {
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-}
-.root-3QyAh1 .avatar-AvHqJA::after {
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + .375));
-	backdrop-filter: blur(var(--popoutblur));
+	border-color: transparent;
 }
 #app-mount .body-r6_QPy {									/* modal				body								*/
 	background-color: transparent;
@@ -4155,33 +4140,12 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .activity-2INFPu {
 	padding: 0 16px 16px;
 }
-.userPopout-xaxa6l .avatarWrapper-3r9PdD {					/* popout				avatar wrapper						*/
-	z-index: 1;
+.userPopout-xaxa6l .banner-2QYc2d {							/* popout				banner								*/
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 16 120 A 46 46 0 0 1 62 76 A 46 46 0 0 1 108 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
 }
 .userPopout-xaxa6l .avatar-37jOim {							/* popout				avatar								*/
 	background-color: transparent;
-	border: none;
-	margin: 6px;
-}
-.userPopout-xaxa6l .avatar-37jOim::before,
-.userPopout-xaxa6l .avatar-37jOim::after {
-	content: "";
-	position: absolute;
-	top: -6px;
-	right: -6px;
-	bottom: -6px;
-	left: -6px;
-	border-radius: 50%;
-	pointer-events: none;
-	z-index: -1;
-}
-.userPopout-xaxa6l .avatar-37jOim::before {
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
-	background-attachment: fixed;
-}
-.userPopout-xaxa6l .avatar-37jOim::after {
-	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
-	backdrop-filter: blur(var(--popoutblur));
+	border-color: transparent;
 }
 
 #app-mount .body-3HBlXn,									/* popout				body								*/
