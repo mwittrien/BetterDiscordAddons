@@ -111,6 +111,7 @@
 		"SlateUtils": {"props": ["serialize", "deserialize"], "notProps": ["getFlag"]},
 		"SlateSelectionUtils": {"props": ["serialize", "serializeSelection"]},
 		"SlowmodeUtils": {"props": ["getSlowmodeCooldownGuess"]},
+		"SoundParser": {"strings": ["discodo", "ddr-down", "mute"]},
 		"SoundStateUtils": {"props": ["isSoundDisabled", "getDisabledSounds"]},
 		"SoundUtils": {"props": ["playSound", "createSound"]},
 		"SpellCheckStore": {"strings": ["SPELLCHECK_LEARN_WORD", "isEnabled"], "value": "default"},
