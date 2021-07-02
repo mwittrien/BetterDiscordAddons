@@ -1136,7 +1136,7 @@
 		"Backdrop": {"props": ["backdrop", "withLayer"]},
 		"Badge": {"props": ["numberBadge", "textBadge", "iconBadge"]},
 		"BotTag": {"props": ["botTag", "botTagInvert"]},
-		"Button": {"props": ["colorBlack", "button"]},
+		"Button": {"props": ["colorBrand", "lookBlank"]},
 		"CallCurrent": {"props": ["wrapper", "fullScreen"]},
 		"CallDetails": {"props": ["container", "hotspot"]},
 		"CallIncoming": {"props": ["wrapper", "mainChannelInfo"]},
