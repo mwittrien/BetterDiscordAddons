@@ -46,6 +46,9 @@
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Connections-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/connections.svg) center/contain no-repeat;
 }
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Subscriptions-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/subscriptions.svg) center/contain no-repeat;
+}
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Discord Nitro-tab" i]::before,
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Discord-Nitro-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/nitro.svg) center/contain no-repeat;

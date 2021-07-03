@@ -115,6 +115,7 @@ module.exports = (_ => {
 						flex-wrap: nowrap;
 						position: relative;
 						margin: 0 0 0 4px;
+						user-select: none;
 					}
 					${BDFDB.dotCN._badgeseverywherebadges} > * {
 						margin: 0;
