@@ -172,6 +172,9 @@
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="PERMISSIONS-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/roles.svg) center/contain no-repeat;
 }
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="STICKERS-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/stickers.svg) center/contain no-repeat;
+}
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="AUDIT_LOG-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/audit.svg) center/contain no-repeat;
 }
