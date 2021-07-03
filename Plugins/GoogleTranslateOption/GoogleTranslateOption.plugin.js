@@ -130,7 +130,7 @@ module.exports = (_ => {
 				}))).filter(isOutput && this.isOnlyBackup(languages[_this.getLanguageChoice(languageTypes.INPUT, place, this.props.channelId)]) ? (n => n.backup) : (n => n));
 			}
 			isOnlyBackup(lang) {
-				return lang.auto && !translationEngines[_this.settings.engines.translator].auto || !lang.auto && !lang.special && !translationEngines[_this.settings.engines.translator].languages.includes(lang.id);
+				return lang && (lang.auto && !translationEngines[_this.settings.engines.translator].auto || !lang.auto && !lang.special && !translationEngines[_this.settings.engines.translator].languages.includes(lang.id));
 			}
 			render() {
 				return [
