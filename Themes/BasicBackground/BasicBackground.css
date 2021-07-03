@@ -4080,15 +4080,19 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 .item-1tOPte.colorBrand-ROmMP1.focused-3afm-j,
 .item-1tOPte.colorBrand-ROmMP1:hover:not(.hideInteraction-1iHO1O),
+.item-1tOPte.colorDefault-2K3EoJ.focused-3afm-j[id="user-settings-cog-Subscriptions"],
+.item-1tOPte.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O)[id="user-settings-cog-Subscriptions"],
+.item-1tOPte.colorDefault-2K3EoJ.focused-3afm-j[id="user-settings-cog-Discord_Nitro"],
+.item-1tOPte.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O)[id="user-settings-cog-Discord_Nitro"] {
+	background-color: rgba(var(--accentcolor), .2) !important;
+}
 .item-1tOPte.colorPremium-p4p7qO.focused-3afm-j,
 .item-1tOPte.colorPremium-p4p7qO:hover:not(.hideInteraction-1iHO1O),
-.item-1tOPte.colorDefault-2K3EoJ.focused-3afm-j[id="user-settings-cog-Discord_Nitro"],
-.item-1tOPte.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O)[id="user-settings-cog-Discord_Nitro"],
 .item-1tOPte.colorDefault-2K3EoJ.focused-3afm-j[id="user-settings-cog-Nitro_Server_Boost"],
 .item-1tOPte.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O)[id="user-settings-cog-Nitro_Server_Boost"],
 .item-1tOPte.colorDefault-2K3EoJ.focused-3afm-j[id="guild-context-guild-settings--GUILD_PREMIUM"],
 .item-1tOPte.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O)[id="guild-context-guild-settings--GUILD_PREMIUM"] {
-	background-color: rgba(var(--accentcolor), .2) !important;
+	background-color: rgba(var(--accentcolor2), .2) !important;
 }
 #app-mount .item-1tOPte .checkbox-3s5GYZ {					/* contextmenu			checkbox 							*/
 	color: rgb(var(--accentcolor));

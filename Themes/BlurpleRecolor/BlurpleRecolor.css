@@ -1788,6 +1788,7 @@ a.metadataName-14STf- {
 /* ----		11.1.	CONTEXTMENU						---- */
 
 .colorBrand-ROmMP1:not(.focused-3afm-j):not(:active),		/* contextmenu			brand								*/
+.colorDefault-2K3EoJ:not(.focused-3afm-j):not(:active)[id="user-settings-cog-Subscriptions"],
 .colorDefault-2K3EoJ:not(.focused-3afm-j):not(:active)[id="user-settings-cog-Discord_Nitro"] {
 	color: rgb(var(--accentcolor));
 }
