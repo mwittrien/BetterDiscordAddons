@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.6
+ * @version 4.3.7
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.3.6",
+			"version": "4.3.7",
 			"description": "Allows you to locally edit Users"
-		},
-		"changeLog": {
-			"fixed": {
-				"Message Avatar": "Fixed Avatar being squashed for non squarish icons"
-			}
 		}
 	};
 
@@ -192,10 +187,10 @@ module.exports = (_ => {
 						display: inline;
 						margin-left: 4px;
 					}
-					${BDFDB.dotCNS.userinfo + BDFDB.dotCN.userinfodiscriminator} {
+					${BDFDB.dotCNS.peoplesuser + BDFDB.dotCN.peoplesdiscriminator} {
 						display: none;
 					}
-					${BDFDB.dotCNS.userinfohovered + BDFDB.dotCN.userinfodiscriminator} {
+					${BDFDB.dotCNS.peoplesuserhovered + BDFDB.dotCN.peoplesdiscriminator} {
 						display: block;
 					}
 					${BDFDB.dotCN.messagemarkup} span[style*="linear-gradient"] code.inline,
@@ -477,7 +472,7 @@ module.exports = (_ => {
 						case BDFDB.disCN.guildsettingsinviteusername:
 							change = this.settings.places.guildSettings;
 							break;
-						case BDFDB.disCN.userinfodiscordtag:
+						case BDFDB.disCN.peoplesdiscordtag:
 							change = this.settings.places.friendList;
 							tagClass = BDFDB.disCN.bottagnametag;
 							break;
