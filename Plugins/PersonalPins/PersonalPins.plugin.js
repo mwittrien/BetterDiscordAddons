@@ -904,19 +904,19 @@ module.exports = (_ => {
 						};
 					case "ru":		// Russian
 						return {
-							context_pinoption:					"Запишите сообщение",
-							context_unpinoption:				"Удалить заметку",
-							context_updateoption:				"Обновить заметку",
-							popout_filter_all:					"Все серверы",
+							context_pinoption:					"Сохранить сообщение",
+							context_unpinoption:				"Удалить из сохранённых",
+							context_updateoption:				"Обновить в сохранённых",
+							popout_filter_all:					"Все сервера",
 							popout_filter_channel:				"Канал",
 							popout_filter_server:				"Сервер",
-							popout_note:						"Замечания",
+							popout_note:						"Сохранённые сообщения",
 							popout_pinoption:					"Запись",
-							popout_sort_messagetime:			"Дата сообщения",
-							popout_sort_notetime:				"Дата записи",
-							toast_noteadd:						"Сообщение добавлено в блокнот",
-							toast_noteremove:					"Сообщение удалено из записной книжки",
-							toast_noteupdate:					"Обновил сообщение в блокноте"
+							popout_sort_messagetime:			"Дата отправки",
+							popout_sort_notetime:				"Дата сохранения",
+							toast_noteadd:						"Сообщение сохранено",
+							toast_noteremove:					"Сообщение удалено из сохранённых",
+							toast_noteupdate:					"Сообщение обновлено в сохранённых"
 						};
 					case "sv":		// Swedish
 						return {
