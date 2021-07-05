@@ -2,7 +2,7 @@
  * @name RemoveBlockedMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.8
+ * @version 1.2.9
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedMessages",
 			"author": "DevilBro",
-			"version": "1.2.8",
+			"version": "1.2.9",
 			"description": "Removes blocked Messages/Users"
-		},
-		"changeLog": {
-			"fixed": {
-				"Reactions": "Fixed some Issues with Reactions"
-			}
 		}
 	};
 
@@ -170,7 +165,7 @@ module.exports = (_ => {
 				}});
 				
 				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.MENTIONS, "queryResults", {after: e => {
-					if (this.settings.places.autocompletes) e.returnValue.users = e.returnValue.users.filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+					if (this.settings.places.autocompletes && e.returnValue.results && e.returnValue.results.users) e.returnValue.results.users = e.returnValue.results.users.filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
 				}});
 				
 				let muteTimeout;
