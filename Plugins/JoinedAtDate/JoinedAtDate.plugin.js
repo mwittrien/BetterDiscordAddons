@@ -74,7 +74,7 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var _this;
-		var loadedUsers, requestedUsers;
+		var loadedUsers, requestedUsers, queuedInstances;
 		var currentPopout, currentProfile;
 		
 		return class JoinedAtDate extends Plugin {
@@ -82,6 +82,7 @@ module.exports = (_ => {
 				_this = this;
 				loadedUsers = {};
 				requestedUsers = {};
+				queuedInstances = {};
 
 				this.defaults = {
 					general: {
@@ -199,14 +200,17 @@ module.exports = (_ => {
 				
 				if (!loadedUsers[guildId]) loadedUsers[guildId] = {};
 				if (!requestedUsers[guildId]) requestedUsers[guildId] = {};
+				if (!queuedInstances[guildId]) queuedInstances[guildId] = {};
 				
-				if (!loadedUsers[guildId][user.id]) {
-					requestedUsers[guildId][user.id] = [].concat(requestedUsers[guildId][user.id]).filter(n => n);
+				if (!loadedUsers[guildId][user.id] && !requestedUsers[guildId][user.id]) {
+					requestedUsers[guildId][user.id] = true;
+					queuedInstances[guildId][user.id] = [].concat(queuedInstances[guildId][user.id]).filter(n => n);
 					BDFDB.LibraryModules.APIUtils.get(BDFDB.DiscordConstants.Endpoints.GUILD_MEMBER(guildId, user.id)).then(result => {
+						delete requestedUsers[guildId][user.id];
 						if (typeof result.body.retry_after != "number") {
 							loadedUsers[guildId][user.id] = new Date(result.body.joined_at);
-							BDFDB.ReactUtils.forceUpdate(requestedUsers[guildId][user.id]);
-							delete requestedUsers[guildId][user.id];
+							BDFDB.ReactUtils.forceUpdate(queuedInstances[guildId][user.id]);
+							delete queuedInstances[guildId][user.id];
 						}
 						else BDFDB.TimeUtils.timeout(_ => this.injectDate(children, index, user, guildId), result.body.retry_after + 500);
 					});
@@ -214,7 +218,7 @@ module.exports = (_ => {
 				children.splice(index, 0, BDFDB.ReactUtils.createElement(class extends BDFDB.ReactUtils.Component {
 					render() {
 						if (!loadedUsers[guildId][user.id]) {
-							if (requestedUsers[guildId][user.id].indexOf(this) == -1) requestedUsers[guildId][user.id].push(this);
+							if (queuedInstances[guildId][user.id].indexOf(this) == -1) queuedInstances[guildId][user.id].push(this);
 							return null;
 						}
 						else {
