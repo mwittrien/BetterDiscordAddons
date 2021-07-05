@@ -230,6 +230,10 @@ module.exports = (_ => {
 						return {
 							joined_at:							"Присъединил се на {{time}}"
 						};
+					case "cs":		// Czech
+						return {
+							joined_at:							"Připojeno {{time}}"
+						};
 					case "da":		// Danish
 						return {
 							joined_at:							"Deltog den {{time}}"
@@ -253,6 +257,10 @@ module.exports = (_ => {
 					case "fr":		// French
 						return {
 							joined_at:							"Rejoint le {{time}}"
+						};
+					case "hi":		// Hindi
+						return {
+							joined_at:							"{{time}} को शामिल हुए"
 						};
 					case "hr":		// Croatian
 						return {

@@ -255,6 +255,10 @@ module.exports = (_ => {
 						return {
 							last_message:						"Последно съобщение на {{time}}"
 						};
+					case "cs":		// Czech
+						return {
+							last_message:						"Poslední zpráva v {{time}}"
+						};
 					case "da":		// Danish
 						return {
 							last_message:						"Sidste besked den {{time}}"
@@ -278,6 +282,10 @@ module.exports = (_ => {
 					case "fr":		// French
 						return {
 							last_message:						"Dernier message le {{time}}"
+						};
+					case "hi":		// Hindi
+						return {
+							last_message:						"अंतिम संदेश {{time}} को"
 						};
 					case "hr":		// Croatian
 						return {
