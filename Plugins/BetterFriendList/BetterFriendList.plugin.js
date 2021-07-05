@@ -393,11 +393,11 @@ module.exports = (_ => {
 					else if (this.settings.general.addMutualGuild && e.instance.props.mutualGuilds && e.instance.props.mutualGuilds.length) {
 						if (typeof e.returnvalue.props.children == "function") {
 							let childrenRender = e.returnvalue.props.children;
-							e.returnvalue.props.children = (...args) => {
+							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 								let children = childrenRender(...args);
 								this.injectMutualGuilds(children, e.instance.props.mutualGuilds);
 								return children;
-							};
+							}, "", this);
 						}
 						else this.injectMutualGuilds(e.returnvalue, e.instance.props.mutualGuilds);
 					}

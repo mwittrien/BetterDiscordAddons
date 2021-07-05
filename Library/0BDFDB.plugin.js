@@ -2970,11 +2970,11 @@ module.exports = (_ => {
 							BDFDB.PatchUtils.patch({name: "BDFDB GuildUtils"}, GuildsPrototype, "render", {after: e => {
 								if (typeof e.returnValue.props.children == "function") {
 									let childrenRender = e.returnValue.props.children;
-									e.returnValue.props.children = (...args) => {
+									e.returnValue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 										let children = childrenRender(...args);
 										injectPlaceholder(children);
 										return children;
-									};
+									});
 								}
 								else injectPlaceholder(e.returnValue);
 							}}, {once: true});
@@ -7895,10 +7895,10 @@ module.exports = (_ => {
 						let avatarWrapper = BDFDB.ObjectUtils.get(e, "returnvalue.props.children.0");
 						if (avatarWrapper && avatarWrapper.props && typeof avatarWrapper.props.children == "function") {
 							let renderChildren = avatarWrapper.props.children;
-							avatarWrapper.props.children = (...args) => {
+							avatarWrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
 								let renderedChildren = renderChildren(...args);
 								return InternalBDFDB._processAvatarRender(e.instance.props.message.author, renderedChildren) || renderedChildren;
-							};
+							});
 						}
 						else if (avatarWrapper && avatarWrapper.type == "img") e.returnvalue.props.children[0] = InternalBDFDB._processAvatarRender(e.instance.props.message.author, avatarWrapper) || avatarWrapper;
 					}
@@ -7988,13 +7988,13 @@ module.exports = (_ => {
 						InternalBDFDB.executeExtraPatchedPatches("MessageOptionToolbar", {instance: {props: e2.methodArguments[0]}, returnvalue: e2.returnValue, methodname: "default"});
 						if (menu && typeof menu.props.renderPopout == "function") {
 							let renderPopout = menu.props.renderPopout;
-							menu.props.renderPopout = (...args) => {
+							menu.props.renderPopout = BDFDB.TimeUtils.suppress((...args) => {
 								let renderedPopout = renderPopout(...args);
 								BDFDB.PatchUtils.patch(BDFDB, renderedPopout, "type", {after: e3 => {
 									InternalBDFDB.executeExtraPatchedPatches("MessageOptionContextMenu", {instance: {props: e3.methodArguments[0]}, returnvalue: e3.returnValue, methodname: "default"});
 								}}, {noCache: true});
 								return renderedPopout;
-							}
+							});
 						}
 					}}, {once: true});
 				}});

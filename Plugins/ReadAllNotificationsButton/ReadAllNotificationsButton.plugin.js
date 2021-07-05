@@ -295,11 +295,11 @@ module.exports = (_ => {
 				let tree = BDFDB.ReactUtils.findChild(returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
 				if (tree) {
 					let childrenRender = tree.props.children;
-					tree.props.children = (...args) => {
+					tree.props.children = BDFDB.TimeUtils.suppress((...args) => {
 						let children = childrenRender(...args);
 						this.handleGuilds(children);
 						return children;
-					};
+					}, "", this);
 				}
 				else this.handleGuilds(returnvalue);
 			}

@@ -419,12 +419,12 @@ module.exports = (_ => {
 					else {
 						if (typeof e.returnvalue.props.children == "function") {
 							let childrenRender = e.returnvalue.props.children;
-							e.returnvalue.props.children = (...args) => {
+							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 								let children = childrenRender(...args);
 								let userName = BDFDB.ReactUtils.findChild(children, {name: "AutocompleteRowHeading"});
 								if (userName) this.changeUserColor(userName, e.instance.props.user.id);
 								return children;
-							};
+							}, "", this);
 						}
 					}
 				}
@@ -619,12 +619,12 @@ module.exports = (_ => {
 							let tooltip = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Tooltip"});
 							if (tooltip && typeof tooltip.props.children == "function") {
 								let renderChildren = tooltip.props.children;
-								tooltip.props.children = (...args) => {
+								tooltip.props.children = BDFDB.TimeUtils.suppress((...args) => {
 									let renderedChildren = renderChildren(...args);
 									let userName = BDFDB.ReactUtils.findChild(renderedChildren, {name: "PanelTitle"});
 									if (userName) this.changeUserColor(userName, e.instance.props.currentUser.id);
 									return renderedChildren;
-								}
+								}, "", this);
 							}
 						}
 					}
@@ -715,11 +715,11 @@ module.exports = (_ => {
 						if (messageUsername) {
 							if (messageUsername.props && typeof messageUsername.props.children == "function") {
 								let renderChildren = messageUsername.props.children;
-								messageUsername.props.children = (...args) => {
+								messageUsername.props.children = BDFDB.TimeUtils.suppress((...args) => {
 									let renderedChildren = renderChildren(...args);
 									this.changeUserColor(renderedChildren, author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
 									return renderedChildren;
-								}
+								}, "", this);
 							}
 							else this.changeUserColor(messageUsername, author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
 						}
@@ -822,11 +822,11 @@ module.exports = (_ => {
 				if (e.instance.props.userId && this.settings.places.mentions && changedUsers[e.instance.props.userId] && this.shouldchat()) {
 					if (typeof e.returnvalue.props.children == "function") {
 						let renderChildren = e.returnvalue.props.children;
-						e.returnvalue.props.children = (...args) => {
+						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 							let children = renderChildren(...args);
 							this.changeMention(BDFDB.ReactUtils.findChild(children, {name: "Mention"}), changedUsers[e.instance.props.userId]);
 							return children;
-						};
+						}, "", this);
 					}
 					else this.changeMention(BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Mention"}), changedUsers[e.instance.props.userId]);
 				}
@@ -843,11 +843,11 @@ module.exports = (_ => {
 					if (data.name || data.color1) {
 						if (typeof e.returnvalue.props.children == "function") {
 							let renderChildren = e.returnvalue.props.children;
-							e.returnvalue.props.children = (...args) => {
+							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 								let children = renderChildren(...args);
 								this.changeMention(children, data);
 								return children;
-							};
+							}, "", this);
 						}
 						else this.changeMention(e.returnvalue, data);
 					}
@@ -1030,11 +1030,11 @@ module.exports = (_ => {
 					let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: c => c && c.props && !isNaN(parseInt(c.props.id))});
 					if (avatar && typeof avatar.props.children == "function") {
 						let childrenRender = avatar.props.children;
-						avatar.props.children = (...args) => {
+						avatar.props.children = BDFDB.TimeUtils.suppress((...args) => {
 							let renderedChildren = childrenRender(...args);
 							if (renderedChildren && renderedChildren.props) renderedChildren.props.icon = this.getUserAvatar(recipientId);
 							return renderedChildren;
-						};
+						}, "", this);
 					}
 				}
 			}
@@ -1114,7 +1114,7 @@ module.exports = (_ => {
 				if (e.instance.props.channel && e.instance.props.channel.isDM() && this.settings.places.recentDms && typeof e.returnvalue.props.children == "function") {
 					let recipientId = e.instance.props.channel.getRecipientId();
 					let renderChildren = e.returnvalue.props.children;
-					e.returnvalue.props.children = (...args) => {
+					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 						let renderedChildren = renderChildren(...args);
 						let userName = BDFDB.ReactUtils.findChild(renderedChildren, {name: "PanelSubtext"});
 						if (userName) {
@@ -1122,7 +1122,7 @@ module.exports = (_ => {
 							this.changeUserColor(userName, recipientId);
 						}
 						return renderedChildren;
-					};
+					}, "", this);
 				}
 			}
 

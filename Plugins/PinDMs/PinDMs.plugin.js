@@ -408,11 +408,11 @@ module.exports = (_ => {
 					else {
 						if (typeof e.returnvalue.props.children == "function") {
 							let childrenRender = e.returnvalue.props.children;
-							e.returnvalue.props.children = (...args) => {
+							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 								let children = childrenRender(...args);
 								this.injectCategories(e.instance, children, categories);
 								return children;
-							};
+							}, "", this);
 						}
 						else this.injectCategories(e.instance, e.returnvalue, categories);
 					}

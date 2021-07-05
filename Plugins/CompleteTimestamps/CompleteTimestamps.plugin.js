@@ -212,11 +212,11 @@ module.exports = (_ => {
 					};
 					if (typeof e.returnvalue.props.children == "function") {
 						let childrenRender = e.returnvalue.props.children;
-						e.returnvalue.props.children = (...args) => {
+						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 							let children = childrenRender(...args);
 							process(children);
 							return children;
-						};
+						}, "", this);
 					}
 					else process(e.returnvalue);
 				}
@@ -233,11 +233,11 @@ module.exports = (_ => {
 				if (e.instance.props.log && this.settings.general.showInAuditLogs) {
 					if (typeof e.returnvalue.props.children == "function") {
 						let childrenRender = e.returnvalue.props.children;
-						e.returnvalue.props.children = (...args) => {
+						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 							let children = childrenRender(...args);
 							this.editLog(e.instance.props.log, children);
 							return children;
-						};
+						}, "", this);
 					}
 					else this.editLog(e.instance.props.log, e.returnvalue);
 				}

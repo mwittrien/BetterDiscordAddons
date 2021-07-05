@@ -93,11 +93,11 @@ module.exports = (_ => {
 			processGuilds (e) {
 				if (typeof e.returnvalue.props.children == "function") {
 					let childrenRender = e.returnvalue.props.children;
-					e.returnvalue.props.children = (...args) => {
+					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 						let children = childrenRender(...args);
 						this.checkTree(children);
 						return children;
-					};
+					}, "", this);
 				}
 				else this.checkTree(e.returnvalue);
 			}
@@ -106,11 +106,11 @@ module.exports = (_ => {
 				let tree = BDFDB.ReactUtils.findChild(returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
 				if (tree) {
 					let childrenRender = tree.props.children;
-					tree.props.children = (...args) => {
+					tree.props.children = BDFDB.TimeUtils.suppress((...args) => {
 						let children = childrenRender(...args);
 						this.injectCounter(children);
 						return children;
-					};
+					}, "", this);
 				}
 				else this.injectCounter(returnvalue);
 			}

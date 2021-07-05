@@ -284,7 +284,7 @@ module.exports = (_ => {
 					else {
 						if (typeof e.returnvalue.props.children == "function") {
 							let childrenRender = e.returnvalue.props.children;
-							e.returnvalue.props.children = (...args) => {
+							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 								let children = childrenRender(...args);
 								let channelName = BDFDB.ReactUtils.findChild(children, {name: "AutocompleteRowHeading"});
 								if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id);
@@ -295,7 +295,7 @@ module.exports = (_ => {
 									if (categoryName) this.changeChannelColor(categoryName, e.instance.props.category.id);
 								}
 								return children;
-							};
+							}, "", this);
 						}
 					}
 				}
@@ -402,18 +402,18 @@ module.exports = (_ => {
 						let channelIcon = this.settings.general.changeChannelIcon && BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelItemIcon"});
 						if (channelIcon && typeof channelIcon.type == "function") {
 							let type = channelIcon.type;
-							channelIcon.type = (...args) => {
+							channelIcon.type = BDFDB.TimeUtils.suppress((...args) => {
 								let returnValue = type(...args);
 								if (returnValue && typeof returnValue.props.children == "function") {
 									let childrenRender = returnValue.props.children;
-									returnValue.props.children = (...args2) => {
+									returnValue.props.children = BDFDB.TimeUtils.suppress((...args2) => {
 										let renderedChildren = childrenRender(...args2);
 										this.changeChannelIconColor(renderedChildren.props.children, e.instance.props.channel.id, modify);
 										return renderedChildren;
-									};
+									}, "", this);
 								}
 								return returnValue;
-							};
+							}, "", this);
 						}
 					}
 				}
@@ -428,11 +428,11 @@ module.exports = (_ => {
 					let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: c => c && c.props && !isNaN(parseInt(c.props.id))});
 					if (avatar && typeof avatar.props.children == "function") {
 						let childrenRender = avatar.props.children;
-						avatar.props.children = (...args) => {
+						avatar.props.children = BDFDB.TimeUtils.suppress((...args) => {
 							let renderedChildren = childrenRender(...args);
 							if (renderedChildren && renderedChildren.props) renderedChildren.props.icon = this.getGroupIcon(e.instance.props.channel.id);
 							return renderedChildren;
-						};
+						}, "", this);
 					}
 				}
 			}
@@ -546,11 +546,11 @@ module.exports = (_ => {
 					if (name || color) {
 						if (typeof e.returnvalue.props.children == "function") {
 							let renderChildren = e.returnvalue.props.children;
-							e.returnvalue.props.children = (...args) => {
+							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 								let children = renderChildren(...args);
 								this.changeMention(children, {name, color});
 								return children;
-							};
+							}, "", this);
 						}
 						else this.changeMention(e.returnvalue, {name, color});
 					}

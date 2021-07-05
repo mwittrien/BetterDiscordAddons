@@ -983,7 +983,7 @@ module.exports = (_ => {
 						let attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up: true});
 						if (attachment) {
 							let renderChildren = e.returnvalue.props.children;
-							e.returnvalue.props.children = (...args) => {
+							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 								return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 									text: `${attachment.filename}\n${BDFDB.NumberUtils.formatBytes(attachment.size)}\n${attachment.width}x${attachment.height}px`,
 									tooltipConfig: {
@@ -992,7 +992,7 @@ module.exports = (_ => {
 									},
 									children: renderChildren(...args)
 								});
-							};
+							}, "", this);
 						}
 					}
 				}

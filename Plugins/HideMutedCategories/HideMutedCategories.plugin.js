@@ -123,11 +123,11 @@ module.exports = (_ => {
 					let tree = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
 					if (tree) {
 						let childrenRender = tree.props.children;
-						tree.props.children = (...args) => {
+						tree.props.children = BDFDB.TimeUtils.suppress((...args) => {
 							let children = childrenRender(...args);
 							this.patchList(e.instance.props.guild.id, children);
 							return children;
-						};
+						}, "", this);
 					}
 					else this.patchList(e.instance.props.guild.id, e.returnvalue);
 				}
