@@ -200,11 +200,15 @@ module.exports = (_ => {
 				if (!loadedUsers[guildId]) loadedUsers[guildId] = {};
 				if (!requestedUsers[guildId]) requestedUsers[guildId] = {};
 				
-				if (!BDFDB.ArrayUtils.is(requestedUsers[guildId][user.id])) {
-					requestedUsers[guildId][user.id] = [];
+				if (!loadedUsers[guildId][user.id]) {
+					requestedUsers[guildId][user.id] = [].concat(requestedUsers[guildId][user.id]).filter(n => n);
 					BDFDB.LibraryModules.APIUtils.get(BDFDB.DiscordConstants.Endpoints.GUILD_MEMBER(guildId, user.id)).then(result => {
-						loadedUsers[guildId][user.id] = new Date(result.body.joined_at);
-						for (let queuedInstance of requestedUsers[guildId][user.id]) BDFDB.ReactUtils.forceUpdate(queuedInstance);
+						if (typeof result.body.retry_after != "number") {
+							loadedUsers[guildId][user.id] = new Date(result.body.joined_at);
+							BDFDB.ReactUtils.forceUpdate(requestedUsers[guildId][user.id]);
+							delete requestedUsers[guildId][user.id];
+						}
+						else BDFDB.TimeUtils.timeout(_ => this.injectDate(children, index, user, guildId), result.body.retry_after + 500);
 					});
 				}
 				children.splice(index, 0, BDFDB.ReactUtils.createElement(class extends BDFDB.ReactUtils.Component {

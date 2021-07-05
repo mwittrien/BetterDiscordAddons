@@ -203,7 +203,7 @@ module.exports = (_ => {
 				}
 			}
 
-			injectDate ( children, index, user, guildId) {
+			injectDate (children, index, user, guildId) {
 				if (!guildId) guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 				if (!BDFDB.ArrayUtils.is(children) || !user || user.isNonUserBot()) return;
 				let isGuild = guildId && guildId != BDFDB.DiscordConstants.ME;
@@ -213,8 +213,8 @@ module.exports = (_ => {
 				if (!loadedUsers[guildId]) loadedUsers[guildId] = {};
 				if (!requestedUsers[guildId]) requestedUsers[guildId] = {};
 				
-				if (!BDFDB.ArrayUtils.is(requestedUsers[guildId][user.id])) {
-					requestedUsers[guildId][user.id] = [];
+				if (loadedUsers[guildId][user.id] === undefined) {
+					requestedUsers[guildId][user.id] = [].concat(requestedUsers[guildId][user.id]).filter(n => n);
 					BDFDB.LibraryModules.APIUtils.get({
 						url: isGuild ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(guildId) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(guildId),
 						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({author_id: user.id})
@@ -224,12 +224,10 @@ module.exports = (_ => {
 								for (let message of result.body.messages[0]) if (message.hit && message.author.id == user.id) loadedUsers[guildId][user.id] = new Date(message.timestamp);
 							}
 							else loadedUsers[guildId][user.id] = null;
-							for (let queuedInstance of requestedUsers[guildId][user.id]) BDFDB.ReactUtils.forceUpdate(queuedInstance);
-						}
-						else {
+							BDFDB.ReactUtils.forceUpdate(requestedUsers[guildId][user.id]);
 							delete requestedUsers[guildId][user.id];
-							BDFDB.TimeUtils.timeout(_ => this.injectDate(children, index, user), result.body.retry_after + 500);
 						}
+						else BDFDB.TimeUtils.timeout(_ => this.injectDate(children, index, user, guildId), result.body.retry_after + 500);
 					});
 				}
 				children.splice(index, 0, BDFDB.ReactUtils.createElement(class extends BDFDB.ReactUtils.Component {
