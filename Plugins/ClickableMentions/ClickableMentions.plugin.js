@@ -2,7 +2,7 @@
  * @name ClickableMentions
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.0
+ * @version 1.0.1
  * @description Allows you to open a User Popout by clicking a Mention in your Message Input
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ClickableMentions",
 			"author": "DevilBro",
-			"version": "1.0.0",
+			"version": "1.0.1",
 			"description": "Allows you to open a User Popout by clicking a Mention in your Message Input"
 		}
 	};
@@ -75,6 +75,8 @@ module.exports = (_ => {
 						RichUserMention: "UserMention"
 					}
 				};
+				
+				this.patchPriority = 9;
 			}
 			
 			onStart () {
@@ -89,7 +91,9 @@ module.exports = (_ => {
 				if (e.instance.props.id) {
 					if (typeof e.returnvalue.props.children == "function") {
 						let childrenRender = e.returnvalue.props.children;
-						e.returnvalue.props.children = (...args) => this.injectUserPopoutContainer(e.instance.props, childrenRender(...args));
+						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
+							return this.injectUserPopoutContainer(e.instance.props, childrenRender(...args))
+						}, "", this);
 					}
 					else e.returnvalue = this.injectUserPopoutContainer(e.instance.props, e.returnvalue.props.children);
 				}
