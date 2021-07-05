@@ -74,7 +74,7 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var _this;
-		var requestedUsers = {}, loadedUsers = {}, requestQueue = {queue: [], timeout: null, id: null}, cacheTimeout;
+		var loadedUsers = {}, queuedInstances = {}, requestQueue = {queue: [], timeout: null, id: null}, cacheTimeout;
 		var specialFlag;
 		
 		return class BadgesEverywhere extends Plugin {
@@ -167,7 +167,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				requestedUsers = {}, loadedUsers = {};
+				queuedInstances = {}, loadedUsers = {};
 				requestQueue = {queue: [], timeout: null, id: null};
 				
 				let badgeCache = BDFDB.DataUtils.load(this, "badgeCache");
@@ -192,8 +192,8 @@ module.exports = (_ => {
 						cacheTimeout = BDFDB.TimeUtils.timeout(_ => BDFDB.DataUtils.save(loadedUsers, this, "badgeCache"), 5000);
 						
 						if (requestQueue.id && requestQueue.id == e.methodArguments[0].user.id) {
-							BDFDB.ReactUtils.forceUpdate(requestedUsers[requestQueue.id]);
-							delete requestedUsers[requestQueue.id];
+							BDFDB.ReactUtils.forceUpdate(queuedInstances[requestQueue.id]);
+							delete queuedInstances[requestQueue.id];
 							requestQueue.id = null;
 							BDFDB.TimeUtils.timeout(_ => this.runQueue(), 1000);
 						}
@@ -321,14 +321,14 @@ module.exports = (_ => {
 			injectBadges (children, user, guildId, type) {
 				if (!BDFDB.ArrayUtils.is(children) || !user || user.isNonUserBot()) return;
 				if (!loadedUsers[user.id] || ((new Date()).getTime() - loadedUsers[user.id].date >= 1000*60*60*24*7)) {
-					requestedUsers[user.id] = [].concat(requestedUsers[user.id]).filter(n => n);
-					requestQueue.queue.push(user.id);
+					queuedInstances[user.id] = [].concat(queuedInstances[user.id]).filter(n => n);
+					if (requestQueue.queue.indexOf(user.id) > -1) requestQueue.queue.push(user.id);
 					this.runQueue();
 				}
 				children.push(BDFDB.ReactUtils.createElement(class extends BDFDB.ReactUtils.Component {
 					render() {
 						if (!loadedUsers[user.id] || ((new Date()).getTime() - loadedUsers[user.id].date >= 1000*60*60*24*7)) {
-							if (requestedUsers[user.id].indexOf(this) == -1) requestedUsers[user.id].push(this);
+							if (queuedInstances[user.id].indexOf(this) == -1) queuedInstances[user.id].push(this);
 							return null;
 						}
 						else return _this.createBadges(user, guildId, type);
