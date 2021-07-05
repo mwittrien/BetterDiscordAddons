@@ -192,7 +192,8 @@ module.exports = (_ => {
 						cacheTimeout = BDFDB.TimeUtils.timeout(_ => BDFDB.DataUtils.save(loadedUsers, this, "badgeCache"), 5000);
 						
 						if (requestQueue.id && requestQueue.id == e.methodArguments[0].user.id) {
-							while (requestedUsers[requestQueue.id].length) BDFDB.ReactUtils.forceUpdate(requestedUsers[requestQueue.id].pop());
+							BDFDB.ReactUtils.forceUpdate(requestedUsers[requestQueue.id]);
+							delete requestedUsers[requestQueue.id];
 							requestQueue.id = null;
 							BDFDB.TimeUtils.timeout(_ => this.runQueue(), 1000);
 						}
