@@ -2273,12 +2273,12 @@ a.metadataName-14STf- {
 .colorBrand-WfDfzD .bg-8df5St {
 	background-color: rgb(var(--accentcolor));
 }
-.colorCustom-WKsPgT .bg-8df5St[style*="background-color: rgb(88, 101, 242)"],
-.colorCustom-WKsPgT .bg-8df5St[style*="background-color: rgb(114, 137, 218)"] {
+.colorCustom-WKsPgT .bg-8df5St[style*="background-color: hsl(235, "],
+.colorCustom-WKsPgT .bg-8df5St[style*="background-color: hsl(227, "] {
 	background-color: rgb(var(--accentcolor)) !important;
 }
-.bar-95Sdw1.customBar-3RsUzs[style*="background-color: rgb(88, 101, 242)"],
-.bar-95Sdw1.customBar-3RsUzs[style*="background-color: rgb(114, 137, 218)"] {
+.bar-95Sdw1.customBar-3RsUzs[style*="background-color: hsl(235, "],
+.bar-95Sdw1.customBar-3RsUzs[style*="background-color: hsl(227, "] {
 	background-color: rgb(var(--accentcolor)) !important;
 }
 
