@@ -190,6 +190,10 @@ module.exports = (_ => {
 						return {
 							created_at:							"Създадено на {{time}}"
 						};
+					case "cs":		// Czech
+						return {
+							created_at:							"Vytvořeno {{time}}"
+						};
 					case "da":		// Danish
 						return {
 							created_at:							"Oprettet den {{time}}"
@@ -213,6 +217,10 @@ module.exports = (_ => {
 					case "fr":		// French
 						return {
 							created_at:							"Créé le {{time}}"
+						};
+					case "hi":		// Hindi
+						return {
+							created_at:							"{{time}} को बनाया गया"
 						};
 					case "hr":		// Croatian
 						return {
