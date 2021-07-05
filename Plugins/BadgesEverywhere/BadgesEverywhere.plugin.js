@@ -2,7 +2,7 @@
  * @name BadgesEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.7
+ * @version 1.7.8
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,14 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "BadgesEverywhere",
 			"author": "DevilBro",
-			"version": "1.7.7",
+			"version": "1.7.8",
 			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList"
 		},
 		"changeLog": {
 			"fixed": {
-				"Removed Uncolored": "Discord no longer has the white version of the Badges",
-				"Size": "Badges arent giant or tiny anymore",
-				"Click": "Disabled Click Pages again"
+				"AssignBadges Compatibility": "Fixed Badges no longer showing if you enabled verified bot tag for a user, dumb"
 			}
 		}
 	};
@@ -75,11 +73,14 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
+		var _this;
 		var requestedUsers = {}, loadedUsers = {}, requestQueue = {queue: [], timeout: null, id: null}, cacheTimeout;
 		var specialFlag;
 		
 		return class BadgesEverywhere extends Plugin {
 			onLoad () {
+				_this = this;
+				
 				specialFlag = BDFDB.NumberUtils.generateId() + "SPECIALFLAG";
 		
 				this.patchedModules = {
@@ -188,7 +189,7 @@ module.exports = (_ => {
 						loadedUsers[e.methodArguments[0].user.id].date = (new Date()).getTime();
 						
 						BDFDB.TimeUtils.clear(cacheTimeout);
-						cacheTimeout = BDFDB.TimeUtils.timeout(_ => {BDFDB.DataUtils.save(loadedUsers, this, "badgeCache");}, 5000);
+						cacheTimeout = BDFDB.TimeUtils.timeout(_ => BDFDB.DataUtils.save(loadedUsers, this, "badgeCache"), 5000);
 						
 						if (requestQueue.id && requestQueue.id == e.methodArguments[0].user.id) {
 							while (requestedUsers[requestQueue.id].length) BDFDB.ReactUtils.forceUpdate(requestedUsers[requestQueue.id].pop());
@@ -273,15 +274,14 @@ module.exports = (_ => {
 			}
 
 			processMemberListItem (e) {
-				if (e.instance.props.user && this.settings.places.memberList) {
-					this.injectBadges(e.instance, BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, e.instance.props.channel.guild_id, "list");
-				}
+				if (!e.instance.props.user || !this.settings.places.memberList) return;
+				this.injectBadges(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, e.instance.props.channel.guild_id, "list");
 			}
 
 			processMessageUsername (e) {
 				if (!e.instance.props.message || !this.settings.places.chat) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
-				this.injectBadges(e.instance, e.returnvalue.props.children, author, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
+				this.injectBadges(e.returnvalue.props.children, author, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
 			}
 			
 			processUserProfileBadgeList (e) {
@@ -317,15 +317,22 @@ module.exports = (_ => {
 				}
 			}
 
-			injectBadges (instance, children, user, guildId, type) {
-				if (!BDFDB.ArrayUtils.is(children) || !user || user.bot) return;
-				if (loadedUsers[user.id] && ((new Date()).getTime() - loadedUsers[user.id].date < 1000*60*60*24*7)) children.push(this.createBadges(user, guildId, type));
-				else if (!BDFDB.ArrayUtils.is(requestedUsers[user.id])) {
-					requestedUsers[user.id] = [instance];
+			injectBadges (children, user, guildId, type) {
+				if (!BDFDB.ArrayUtils.is(children) || !user || user.isNonUserBot()) return;
+				if (!loadedUsers[user.id] || ((new Date()).getTime() - loadedUsers[user.id].date >= 1000*60*60*24*7)) {
+					requestedUsers[user.id] = [].concat(requestedUsers[user.id]).filter(n => n);
 					requestQueue.queue.push(user.id);
 					this.runQueue();
 				}
-				else requestedUsers[user.id].push(instance);
+				children.push(BDFDB.ReactUtils.createElement(class extends BDFDB.ReactUtils.Component {
+					render() {
+						if (!loadedUsers[user.id] || ((new Date()).getTime() - loadedUsers[user.id].date >= 1000*60*60*24*7)) {
+							if (requestedUsers[user.id].indexOf(this) == -1) requestedUsers[user.id].push(this);
+							return null;
+						}
+						else return _this.createBadges(user, guildId, type);
+					}
+				}, {}, true));
 			}
 			
 			runQueue () {

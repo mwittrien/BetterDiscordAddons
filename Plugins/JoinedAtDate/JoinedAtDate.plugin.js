@@ -195,7 +195,7 @@ module.exports = (_ => {
 
 			injectDate (children, index, user, guildId) {
 				if (!guildId) guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-				if (!BDFDB.ArrayUtils.is(children) || !user || !guildId || user.discriminator == "0000" || !BDFDB.LibraryModules.MemberStore.getMember(guildId, user.id)) return;
+				if (!BDFDB.ArrayUtils.is(children) || !user || !guildId || user.isNonUserBot() || !BDFDB.LibraryModules.MemberStore.getMember(guildId, user.id)) return;
 				
 				if (!loadedUsers[guildId]) loadedUsers[guildId] = {};
 				if (!requestedUsers[guildId]) requestedUsers[guildId] = {};
