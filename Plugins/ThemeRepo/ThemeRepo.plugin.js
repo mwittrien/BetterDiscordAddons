@@ -258,6 +258,7 @@ module.exports = (_ => {
 						classes: JSON.stringify(BDFDB.DiscordClasses),
 						classModules: JSON.stringify(BDFDB.DiscordClassModules),
 						nativeCSS: (nativeCSS || "").replace(/\/assets\//g, document.location.origin + "/assets/").replace(/[\t\r\n]/g, ""),
+						bdCSS: (document.querySelector("#bd-stylesheet") || {}).innerText || "",
 						htmlClassName: document.documentElement.className,
 						titleBar: titleBar && titleBar.outerHTML || ""
 					});
