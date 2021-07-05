@@ -637,7 +637,7 @@ module.exports = (_ => {
 					let name = this.getUserData(recipientId).username;
 					let avatar = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {props: "src"});
 					if (avatar) avatar.props.src = this.getUserAvatar(recipientId);
-					let userName = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {name: "h1"});
+					let userName = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {name: "EmptyMessageHeader"});
 					if (userName) {
 						userName.props.children = BDFDB.ReactUtils.createElement("span", {children: name});
 						this.changeUserColor(userName.props.children, recipientId);
