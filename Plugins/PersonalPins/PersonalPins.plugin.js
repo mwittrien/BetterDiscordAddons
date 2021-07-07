@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.4
+ * @version 2.0.5
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "PersonalPins",
 			"author": "DevilBro",
-			"version": "2.0.4",
+			"version": "2.0.5",
 			"description": "Allows you to locally pin Messages"
 		},
 		"changeLog": {
-			"added": {
-				"Amount": "Added the shown and total amount of pinned messages"
+			"fixed": {
+				"Canary Crash": ""
 			}
 		}
 	};
@@ -213,7 +213,7 @@ module.exports = (_ => {
 															BDFDB.LibraryRequires.electron.clipboard.write({image: BDFDB.LibraryRequires.electron.nativeImage.createFromBuffer(body)});
 														}
 														else {
-															let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env["HOME"], "personalpinstemp.png");
+															let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.resourcesPath, "personalpinstemp.png");
 															BDFDB.LibraryRequires.fs.writeFileSync(file, body, {encoding: null});
 															BDFDB.LibraryRequires.electron.clipboard.write({image: file});
 															BDFDB.LibraryRequires.fs.unlinkSync(file);

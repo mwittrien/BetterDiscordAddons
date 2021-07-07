@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.1
+ * @version 4.4.2
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.4.1",
+			"version": "4.4.2",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		},
 		"changeLog": {
-			"added": {
-				"User Banners": "Right Click Banner to get Options"
+			"fixed": {
+				"Canary Crash": ""
 			}
 		}
 	};
@@ -77,7 +77,7 @@ module.exports = (_ => {
 		var ownLocations = {}, downloadsFolder;
 		
 		const imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
-			
+		
 		const fileTypes = {
 			"3gp":		{copyable: false,	searchable: false,	video: true},
 			"3g2":		{copyable: false,	searchable: false,	video: true},
@@ -149,7 +149,7 @@ module.exports = (_ => {
 			onLoad () {
 				firedEvents = [];
 				clickedImage = null;
-					
+				
 				this.defaults = {
 					general: {
 						resizeImage: 			{value: true,		description: "Always resize Image to fit the whole Image Modal"},
@@ -500,7 +500,8 @@ module.exports = (_ => {
 			}
 		
 			forceUpdateAll () {
-				ownLocations = Object.assign({"Downloads": {enabled:true, location: this.getDownloadLocation()}}, BDFDB.DataUtils.load(this, "ownLocations"));
+				const loadedLocations = BDFDB.DataUtils.load(this, "ownLocations");
+				ownLocations = Object.assign(!loadedLocations || !loadedLocations.Downloads ? {"Downloads": {enabled:true, location: this.getDownloadLocation()}} : {}, loadedLocations);
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.MessageUtils.rerenderAll();
@@ -1061,7 +1062,7 @@ module.exports = (_ => {
 							BDFDB.LibraryRequires.electron.clipboard.write({image: BDFDB.LibraryRequires.electron.nativeImage.createFromBuffer(body)});
 						}
 						else {
-							let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env.HOME, "imageutilstempimg.png");
+							let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.resourcesPath, "imageutilstempimg.png");
 							BDFDB.LibraryRequires.fs.writeFileSync(file, body, {encoding: null});
 							BDFDB.LibraryRequires.electron.clipboard.write({image: file});
 							BDFDB.LibraryRequires.fs.unlinkSync(file);
@@ -1073,10 +1074,17 @@ module.exports = (_ => {
 			
 			getDownloadLocation () {
 				if (downloadsFolder && BDFDB.LibraryRequires.fs.existsSync(downloadsFolder)) return downloadsFolder;
-				let homePath = BDFDB.LibraryRequires.process.env.USERPROFILE || BDFDB.LibraryRequires.process.env.HOMEPATH || BDFDB.LibraryRequires.process.env.HOME;
-				let downloadPath = homePath && BDFDB.LibraryRequires.path.join(homePath, "Downloads");
-				if (downloadPath && BDFDB.LibraryRequires.fs.existsSync(downloadPath)) return downloadsFolder = downloadPath;
-				return downloadsFolder = BDFDB.BDUtils.getPluginsFolder();
+				else if (false) {
+					let homePath = BDFDB.LibraryRequires.process.env.USERPROFILE || BDFDB.LibraryRequires.process.env.HOMEPATH || BDFDB.LibraryRequires.process.env.HOME;
+					let downloadPath = homePath && BDFDB.LibraryRequires.path.join(homePath, "Downloads");
+					if (downloadPath && BDFDB.LibraryRequires.fs.existsSync(downloadPath)) return downloadsFolder = downloadPath;
+					else if (downloadPath && BDFDB.LibraryRequires.fs.existsSync(downloadPath)) return downloadsFolder = downloadPath;
+				}
+				else {
+					downloadsFolder = BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), "downloads");
+					if (!BDFDB.LibraryRequires.fs.existsSync(downloadsFolder)) BDFDB.LibraryRequires.fs.mkdirSync(downloadsFolder);
+					return downloadsFolder;
+				}
 			}
 			
 			getFileName (path, fileName, extension, i) {
