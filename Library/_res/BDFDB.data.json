@@ -48,6 +48,7 @@
 		"DirectMessageUtils": {"props": ["addRecipient", "openPrivateChannel"]},
 		"EmojiUtils": {"props": ["translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji"]},
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},
+		"Env": {"props": ["env"]},
 		"FriendUtils": {"props": ["getFriendIDs", "getRelationships"]},
 		"FolderStore": {"props": ["getGuildFolderById", "getFlattenedGuilds"]},
 		"FolderUtils": {"props": ["isFolderExpanded", "getExpandedFolders"]},
