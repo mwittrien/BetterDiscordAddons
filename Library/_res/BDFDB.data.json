@@ -75,6 +75,7 @@
 		"LinkUtils": {"props": ["handleClick", "isLinkTrusted"]},
 		"LocalSettingsStore": {"props": ["darkSidebar", "keyboardModeEnabled"]},
 		"LoginUtils": {"props": ["login", "logout"]},
+		"MediaComponentUtils": {"props": ["renderImageComponent", "renderAudioComponent"]},
 		"MediaDeviceUtils": {"props": ["getOutputDevices", "getInputDevices"]},
 		"MediaDeviceSetUtils": {"props": ["setOutputDevice", "setInputDevice"]},
 		"MemberCountUtils": {"props": ["getMemberCount", "getMemberCounts"]},
