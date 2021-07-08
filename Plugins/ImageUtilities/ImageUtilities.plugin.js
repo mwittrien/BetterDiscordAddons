@@ -1211,6 +1211,19 @@ module.exports = (_ => {
 							toast_save_failed:					"{{var0}} не можа да бъде запазен в '{{var1}}'",
 							toast_save_success:					"{{var0}} бе запазено в '{{var1}}'"
 						};
+					case "cs":		// Czech
+						return {
+							context_copy:						"Zkopírovat {{var0}}",
+							context_lenssize:					"Velikost lupy",
+							context_saveas:						"Uložit {{var0}} jako...",
+							context_searchwith:					"Hledat {{var0}} pomocí...",
+							context_view:						"Zobrazit {{var0}}",
+							submenu_disabled:					"Vše zakázáno",
+							toast_copy_failed:					"{{var0}} nemohl být zkopírován do schránky",
+							toast_copy_success:					"{{var0}} byl zkopírován do schránky",
+							toast_save_failed:					"{{var0}} nemohl být uložen do '{{var1}}'",
+							toast_save_success:					"{{var0}} bylo uložen do '{{var1}}'"
+						};
 					case "da":		// Danish
 						return {
 							context_copy:						"Kopiér {{var0}}",
