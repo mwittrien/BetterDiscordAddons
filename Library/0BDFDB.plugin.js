@@ -984,7 +984,7 @@ module.exports = (_ => {
 					if (tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
 					else {
 						BDFDB.LogUtils.error(["Failed to fetch JSON from GitHub. Could not load data.json!", e2 || ""]);
-						b2 = loadBackup(dataPath);
+						b2 = loadBackup();
 					}
 				}
 				let InternalData;
@@ -992,7 +992,7 @@ module.exports = (_ => {
 				catch (err) {
 					BDFDB.LogUtils.error(["Failed to parse fetched JSON. Could not load data.json!", err]);
 					b2 = null;
-					InternalData = JSON.parse(loadBackup(dataPath));
+					InternalData = JSON.parse(loadBackup());
 				}
 				if (!e && b && r.statusCode == 200) fs.writeFile(cssPath, b, _ => {});
 				if (!e2 && b2 && r2.statusCode == 200) fs.writeFile(dataPath, b2, _ => {});

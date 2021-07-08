@@ -288,7 +288,7 @@ module.exports = (_ => {
 					BDFDB.TimeUtils.timeout(_ => {clickedImage = null;});
 				});
 				
-				BDFDB.PatchUtils.patch(this, (BDFDB.ModuleUtils.findByName("renderImageComponent", false).exports || {}), "renderImageComponent", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryComponents.MediaComponentUtils, "renderImageComponent", {after: e => {
 					if (this.settings.general.showAsHeader && e.returnValue && e.returnValue.type && (e.returnValue.type.displayName == "LazyImageZoomable" || e.returnValue.type.displayName == "LazyImage") && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedmedia) == -1 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedthumbnail) == -1) {
 						return BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.embedwrapper,
@@ -1211,6 +1211,19 @@ module.exports = (_ => {
 							toast_save_failed:					"{{var0}} не можа да бъде запазен в '{{var1}}'",
 							toast_save_success:					"{{var0}} бе запазено в '{{var1}}'"
 						};
+					case "cs":		// Czech
+						return {
+							context_copy:						"Zkopírovat {{var0}}",
+							context_lenssize:					"Velikost lupy",
+							context_saveas:						"Uložit {{var0}} jako...",
+							context_searchwith:					"Hledat {{var0}} pomocí...",
+							context_view:						"Zobrazit {{var0}}",
+							submenu_disabled:					"Vše zakázáno",
+							toast_copy_failed:					"{{var0}} nemohl být zkopírován do schránky",
+							toast_copy_success:					"{{var0}} byl zkopírován do schránky",
+							toast_save_failed:					"{{var0}} nemohl být uložen do '{{var1}}'",
+							toast_save_success:					"{{var0}} bylo uložen do '{{var1}}'"
+						};
 					case "da":		// Danish
 						return {
 							context_copy:						"Kopiér {{var0}}",
@@ -1288,6 +1301,19 @@ module.exports = (_ => {
 							toast_copy_success:					"{{var0}} a été copié dans le presse-papiers",
 							toast_save_failed:					"{{var0}} n'a pas pu être enregistré dans '{{var1}}'",
 							toast_save_success:					"{{var0}} a été enregistré dans '{{var1}}'"
+						};
+					case "hi":		// Hindi
+						return {
+							context_copy:						"कॉपी {{var0}}",
+							context_lenssize:					"लेंस का आकार",
+							context_saveas:						"{{var0}} को इस रूप में सेव करें...",
+							context_searchwith:					"इसके साथ {{var0}} खोजें ...",
+							context_view:						"देखें {{var0}}",
+							submenu_disabled:					"सभी अक्षम",
+							toast_copy_failed:					"{{var0}} को क्लिपबोर्ड पर कॉपी नहीं किया जा सका",
+							toast_copy_success:					"{{var0}} को क्लिपबोर्ड पर कॉपी किया गया था",
+							toast_save_failed:					"{{var0}} '{{var1}}' में सहेजा नहीं जा सका",
+							toast_save_success:					"{{var0}} '{{var1}}' में सहेजा गया था"
 						};
 					case "hr":		// Croatian
 						return {

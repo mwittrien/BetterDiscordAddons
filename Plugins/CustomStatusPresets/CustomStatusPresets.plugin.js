@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.6
+ * @version 1.0.7
  * @description Allows you to save Custom Statuses as Quick Select
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomStatusPresets",
 			"author": "DevilBro",
-			"version": "1.0.6",
+			"version": "1.0.7",
 			"description": "Allows you to save Custom Statuses as Quick Select"
 		},
 		"changeLog": {
-			"added": {
-				"Online Status": "The online status now also gets saved in the preset"
+			"fixed": {
+				"Status/Overflow": "Fixed some Issues with very long Status causing overflow issues"
 			}
 		}
 	};
@@ -289,15 +289,13 @@ module.exports = (_ => {
 						display: flex;
 						align-items: center;
 					}
-.statusItem-33LqPf {
-	grid-template-rows: minmax(24px, auto) 1fr;
-}
 					${BDFDB.dotCN._customstatuspresetsdeletebutton} {
 						display: flex;
 						margin-right: 6px;
 					}
 					${BDFDB.dotCN._customstatuspresetsstatus} {
 						margin-right: 6px;
+						flex: 0 0 auto;
 					}
 					${BDFDB.dotCN._customstatuspresetssortdivider} {
 						background: ${BDFDB.DiscordConstants.Colors.STATUS_GREEN};
@@ -381,7 +379,9 @@ module.exports = (_ => {
 											className: BDFDB.disCN._customstatuspresetsstatus,
 											status: presets[id].status || BDFDB.DiscordConstants.StatusTypes.ONLINE
 										}),
-										presets[id].text
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+											children: presets[id].text
+										})
 									]
 								}),
 								imageUrl: presets[id].emojiInfo && (presets[id].emojiInfo.id ? BDFDB.LibraryModules.IconUtils.getEmojiURL(presets[id].emojiInfo) : BDFDB.LibraryModules.EmojiStateUtils.getURL(presets[id].emojiInfo.name)),
