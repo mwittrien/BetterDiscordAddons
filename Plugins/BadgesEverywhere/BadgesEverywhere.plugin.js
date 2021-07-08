@@ -2,7 +2,7 @@
  * @name BadgesEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.8
+ * @version 1.7.9
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "BadgesEverywhere",
 			"author": "DevilBro",
-			"version": "1.7.8",
+			"version": "1.7.9",
 			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList"
 		},
 		"changeLog": {
 			"fixed": {
-				"AssignBadges Compatibility": "Fixed Badges no longer showing if you enabled verified bot tag for a user, dumb"
+				"Click": "Badges no longer only appear after you opened a USer Popup"
 			}
 		}
 	};
@@ -180,24 +180,29 @@ module.exports = (_ => {
 					BDFDB.DataUtils.save(badgeCache, this, "badgeCache");
 				}
 				
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
-					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.USER_PROFILE_FETCH_SUCCESS && e.methodArguments[0].user) {
-						let userCopy = Object.assign({}, e.methodArguments[0].user);
-						userCopy.premium_since = e.methodArguments[0].premium_since;
-						userCopy.premium_guild_since = e.methodArguments[0].premium_guild_since;
-						loadedUsers[e.methodArguments[0].user.id] = BDFDB.ObjectUtils.extract(userCopy, "flags", "premium_since", "premium_guild_since");
-						loadedUsers[e.methodArguments[0].user.id].date = (new Date()).getTime();
-						
-						BDFDB.TimeUtils.clear(cacheTimeout);
-						cacheTimeout = BDFDB.TimeUtils.timeout(_ => BDFDB.DataUtils.save(loadedUsers, this, "badgeCache"), 5000);
-						
-						if (requestQueue.id && requestQueue.id == e.methodArguments[0].user.id) {
-							BDFDB.ReactUtils.forceUpdate(queuedInstances[requestQueue.id]);
-							delete queuedInstances[requestQueue.id];
-							requestQueue.id = null;
-							BDFDB.TimeUtils.timeout(_ => this.runQueue(), 1000);
-						}
+				const processUser = (id, data) => {
+					let userCopy = Object.assign({}, data.user);
+					userCopy.premium_since = data.premium_since;
+					userCopy.premium_guild_since = data.premium_guild_since;
+					loadedUsers[id] = BDFDB.ObjectUtils.extract(userCopy, "flags", "premium_since", "premium_guild_since");
+					loadedUsers[id].date = (new Date()).getTime();
+					
+					BDFDB.TimeUtils.clear(cacheTimeout);
+					cacheTimeout = BDFDB.TimeUtils.timeout(_ => BDFDB.DataUtils.save(loadedUsers, this, "badgeCache"), 5000);
+					
+					if (requestQueue.id && requestQueue.id == id) {
+						BDFDB.ReactUtils.forceUpdate(queuedInstances[requestQueue.id]);
+						delete queuedInstances[requestQueue.id];
+						requestQueue.id = null;
+						BDFDB.TimeUtils.timeout(_ => this.runQueue(), 1000);
 					}
+				};
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
+					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.USER_PROFILE_FETCH_FAILURE && e.methodArguments[0].userId) {
+						const user = BDFDB.LibraryModules.UserStore.getUser(e.methodArguments[0].userId);
+						processUser(e.methodArguments[0].userId, {user: user || {}, flags: user ? user.publicFlags : 0});
+					}
+					else if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.USER_PROFILE_FETCH_SUCCESS && e.methodArguments[0].user) processUser(e.methodArguments[0].user.id, e.methodArguments[0])
 				}});
 
 				this.forceUpdateAll();
@@ -322,7 +327,7 @@ module.exports = (_ => {
 				if (!BDFDB.ArrayUtils.is(children) || !user || user.isNonUserBot()) return;
 				if (!loadedUsers[user.id] || ((new Date()).getTime() - loadedUsers[user.id].date >= 1000*60*60*24*7)) {
 					queuedInstances[user.id] = [].concat(queuedInstances[user.id]).filter(n => n);
-					if (requestQueue.queue.indexOf(user.id) > -1) requestQueue.queue.push(user.id);
+					if (requestQueue.queue.indexOf(user.id) == -1) requestQueue.queue.push(user.id);
 					this.runQueue();
 				}
 				children.push(BDFDB.ReactUtils.createElement(class extends BDFDB.ReactUtils.Component {
