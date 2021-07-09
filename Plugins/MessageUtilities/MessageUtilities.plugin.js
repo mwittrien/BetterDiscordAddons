@@ -2,7 +2,7 @@
  * @name MessageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.0
+ * @version 1.9.1
  * @description Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
-			"version": "1.9.0",
+			"version": "1.9.1",
 			"description": "Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)"
-		},
-		"changeLog": {
-			"fixed": {
-				"Reply": "Works again"
-			}
 		}
 	};
 
@@ -100,8 +95,7 @@ module.exports = (_ => {
 						"Copy_Link":				{name: "Copy Message Link",		func: this.doCopyLink,	value: {click: 0, 	keycombo: [17,81]}	},
 						"__Quote_Message":			{name: "Quote Message",			func: this.doQuote,		value: {click: 0, 	keycombo: [17,87]}, plugin: "CustomQuoter"},
 						"__Note_Message":			{name: "Note Message",			func: this.doNote,		value: {click: 0, 	keycombo: [16]}, 	plugin: "PersonalPins"},
-						"__Translate_Message":		{name: "Translate Message",		func: this.doTranslate,	value: {click: 0, 	keycombo: [20]}, 	plugin: "GoogleTranslateOption"},
-						"__Reveal_Spoilers":		{name: "Reveal All Spoilers",	func: this.doReveal,	value: {click: 0, 	keycombo: [17,74]}, plugin: "RevealAllSpoilersOption"}
+						"__Translate_Message":		{name: "Translate Message",		func: this.doTranslate,	value: {click: 0, 	keycombo: [20]}, 	plugin: "GoogleTranslateOption"}
 					}
 				};
 				
@@ -317,6 +311,7 @@ module.exports = (_ => {
 			}
 
 			onClick (event, message) {
+				if (BDFDB.DOMUtils.getParent(BDFDB.dotCNC.messagebuttons + BDFDB.dotCN.spoilerhidden, event.target)) return;
 				let type = event.type;
 				if (!firedEvents.includes(type)) {
 					firedEvents.push(type);
@@ -457,12 +452,6 @@ module.exports = (_ => {
 				if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Translate_Message.plugin)) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 					if (channel) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Translate_Message.plugin).translateMessage(message, channel);
-				}
-			}
-
-			doReveal ({messageDiv, message}, action, event) {
-				if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Reveal_Spoilers.plugin)) {
-					BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Reveal_Spoilers.plugin).revealAllSpoilers(messageDiv);
 				}
 			}
 			

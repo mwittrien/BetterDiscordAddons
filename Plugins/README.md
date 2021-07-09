@@ -46,7 +46,7 @@
  - [Read All Notifications Button](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReadAllNotificationsButton) - Adds a Clear Button to the Server List and the Mentions Popout
  - [Remove Blocked Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveBlockedMessages) - Removes blocked Messages/Users
  - [Remove Nicknames](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveNicknames) - Replaces Nicknames with Accountnames
- - [Reveal All Spoilers Option](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RevealAllSpoilersOption) - Allows you to reveal all Spoilers within a Message
+ - [Reveal All Spoilers Option](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RevealAllSpoilersOption) - Allows you to reveal all Spoilers within a Message/Status by holding the Ctrl Key and clicking a Spoiler
  - [Send Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SendLargeMessages) - Allows you to enter larger Messages, which will automatically split into several smaller Messages
  - [Server Counter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerCounter) - Adds a Server Counter to the Server List
  - [Server Details](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerDetails) - Shows Server Details in the Server List Tooltip
