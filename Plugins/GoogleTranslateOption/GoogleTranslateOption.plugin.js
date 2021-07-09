@@ -2,7 +2,7 @@
  * @name GoogleTranslateOption
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.7
+ * @version 2.2.8
  * @description Allows you to translate Messages and your outgoing Message within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,16 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleTranslateOption",
 			"author": "DevilBro",
-			"version": "2.2.7",
+			"version": "2.2.8",
 			"description": "Allows you to translate Messages and your outgoing Message within Discord"
-		},
-		"changeLog": {
-			"added": {
-				"Auth Keys": "You can now set your own auth keys in the plugin settings, make sure they are formatted in the same way as the placeholder"
-			},
-			"fixed": {
-				"Papago": "Works again"
-			}
 		}
 	};
 	
@@ -725,7 +717,7 @@ module.exports = (_ => {
 					!engine.auto && !backup.auto ? {} : {
 						auto: {
 							auto: true,
-							name: "Auto",
+							name: "Detect Language",
 							id: "auto"
 						}
 					},
