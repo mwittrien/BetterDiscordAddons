@@ -15,4 +15,4 @@
 Allows you to reveal all Spoilers within a Message/Status by holding the Ctrl Key and clicking a Spoiler
 
 
-![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/RevealAllSpoilersOption/_res/cover.png)
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/RevealAllSpoilersOption/_res/cover.gif)
