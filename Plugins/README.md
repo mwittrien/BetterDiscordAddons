@@ -31,7 +31,7 @@
  - [Friend Notifications](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FriendNotifications) - Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  - [Game Activity Toggle](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GameActivityToggle) - Adds a Quick-Toggle Game Activity Button
  - [Google Search Replace](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleSearchReplace) - Replaces the default Google Text Search with a custom Search Engine
- - [Google Translate Option](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleTranslateOption) - Allows you to translate Messages and your outgoing Message within Discord
+ - [Translator](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/Translator) - Allows you to translate Messages and your outgoing Messages within Discord
  - [Hide Muted Categories](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/HideMutedCategories) - Hides muted Categories, if muted Channels are hidden
  - [Image Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageUtilities) - Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  - [Joined At Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/JoinedAtDate) - Displays the Joined At Date of a Member in the UserPopout and UserModal

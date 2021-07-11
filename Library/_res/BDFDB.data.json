@@ -1,6 +1,7 @@
 {
 	"PluginNameMap": {
 		"BadgesEverywhere": "ShowBadgesInChat",
+		"GoogleTranslateOption": "Translator",
 		"OwnerTag": "StaffTag",
 		"RemoveBlockedMessages": "RemoveBlockedUsers",
 		"RevealAllSpoilersOption": "RevealAllSpoilers"
@@ -886,12 +887,6 @@
 		"GameActivityToggle": {
 			"added": "gameActivityToggleAdded-Yd-YxC"
 		},
-		"GoogleTranslateOption": {
-			"configButton": "configButton-lLgMs2",
-			"translateButton": "translateButton-DhP9x8",
-			"translated": "translated-5YO8i3",
-			"translating": "translating-Yi-YxC"
-		},
 		"ImageUtilities": {
 			"details": "details-9dkFPc",
 			"detailsAdded": "detailsAdded-fHiJlm",
@@ -1041,6 +1036,12 @@
 			"roleStyle": "roleStyle-jQ7KI2",
 			"tag": "tag-wWVHyf",
 			"voiceTag": "voiceTag-0F4Ss0"
+		},
+		"Translator": {
+			"configButton": "configButton-lLgMs2",
+			"translateButton": "translateButton-DhP9x8",
+			"translated": "translated-5YO8i3",
+			"translating": "translating-Yi-YxC"
 		},
 		"NotFound": {
 			"_": "",
@@ -1398,10 +1399,6 @@
 		"_friendnotificationstimelogmodal": ["FriendNotifications", "timeLogModal"],
 		"_friendnotificationstypelabel": ["FriendNotifications", "typeLabel"],
 		"_gameactivitytoggleadded": ["GameActivityToggle", "added"],
-		"_googletranslateoptionconfigbutton": ["GoogleTranslateOption", "configButton"],
-		"_googletranslateoptiontranslatebutton": ["GoogleTranslateOption", "translateButton"],
-		"_googletranslateoptiontranslated": ["GoogleTranslateOption", "translated"],
-		"_googletranslateoptiontranslating": ["GoogleTranslateOption", "translating"],
 		"_imageutilitiesdetails": ["ImageUtilities", "details"],
 		"_imageutilitiesdetailsadded": ["ImageUtilities", "detailsAdded"],
 		"_imageutilitiesdetailslabel": ["ImageUtilities", "detailsLabel"],
@@ -1513,6 +1510,10 @@
 		"_toproleseverywhererolestyle": ["TopRolesEverywhere", "roleStyle"],
 		"_toproleseverywheretag": ["TopRolesEverywhere", "tag"],
 		"_toproleseverywherevoicetag": ["TopRolesEverywhere", "voiceTag"],
+		"_translatorconfigbutton": ["Translator", "configButton"],
+		"_translatortranslatebutton": ["Translator", "translateButton"],
+		"_translatortranslated": ["Translator", "translated"],
+		"_translatortranslating": ["Translator", "translating"],
 		"_repoauthor": ["BD", "bdAuthor"],
 		"_repobutton": ["BD", "bdButton"],
 		"_repobuttondanger": ["BD", "bdButtonDanger"],
