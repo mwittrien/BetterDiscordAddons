@@ -184,7 +184,6 @@ module.exports = (_ => {
 						text-decoration: underline;
 					}
 					${BDFDB.dotCNS.dmchannel + BDFDB.dotCN.bottag} {
-						display: inline;
 						margin-left: 4px;
 					}
 					${BDFDB.dotCNS.peoplesuser + BDFDB.dotCN.peoplesdiscriminator} {
@@ -1052,9 +1051,9 @@ module.exports = (_ => {
 					else {
 						e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getUserData(e.instance.props.user.id).username});
 						this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {modify: BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "hovered", "selected", "hasUnreadMessages", "muted")});
-						e.returnvalue.props.name = [e.returnvalue.props.name];
 						e.returnvalue.props.avatar.props.src = this.getUserAvatar(e.instance.props.user.id);
-						this.injectBadge(e.returnvalue.props.name, e.instance.props.user.id, null, 1);
+						e.returnvalue.props.decorators = [e.returnvalue.props.decorators].flat(10);
+						this.injectBadge(e.returnvalue.props.decorators, e.instance.props.user.id, null, 1);
 					}
 				}
 			}

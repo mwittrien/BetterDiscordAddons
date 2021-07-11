@@ -9,7 +9,7 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-%23F96854.svg?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAdhwAAHYcBj+XxZQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAGBSURBVFiF7Za9ThtBFEbPBUpERWMwCorfJjY4aVLxBFHCKyCl4hWQUqVMBULmbfiRCNACqSJsDsXakjHGO8Y7ovFXrmbmO3NnZ74bqrzUeUR8HPP9mdQ60AZawCZQBwK4BC6ADnAUEZeTFhmnsxLjdfVAfXhl/rB66h/1QyUAalu9TzAe1Z26NROAutvf0VvVU7+/CUD9PKP5MMT2VADqhvqvAvOB7tQ1gIXXznpEP4HlxLEpWgH2AEInX0OLv/cUWKwQAKALbKZU4EsGc4AloJ0C8CmD+UDNFIBGRoBGCkAtI8B66i3IpccUgJuMANcpAKcZAc5SAE4yAnRSAA6BXgbzLnBUChARF8DvDAC/IuIqNYzqFYfRrVqDxDCKiL/AV6o5ikdgJyJuBrsrrcBQJX44W0/QVb+NLpoM0B/f6pdwWt2qL3NlWoD+nFV1X/2fYPxg0cCOfdJL+4ESkBqwDTQpQmuNoi2/onjAOsBxRFxPWmTqClSp9w6jOcAcYA7AE1OMk5ulhBZCAAAAAElFTkSuQmCC
 [patreon-link]: https://patreon.com/MircoWittrien
 
- - [Badges Everywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BadgesEverywhere) - Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList
+ - [Show Badges In Chat](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowBadgesInChat) - Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  - [Better Friend List](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterFriendList) - Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  - [Better NSFW Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterNsfwTag) - Adds a more noticeable Tag to NSFW Channels
  - [Better Search Page](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterSearchPage) - Adds some extra Controls to the Search Results Page
@@ -44,9 +44,9 @@
  - [Plugin Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PluginRepo) - Allows you to download all Plugins from BD's Website within Discord
  - [Quick Mention](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/QuickMention) - Adds a Mention Button to the Message Options Bar
  - [Read All Notifications Button](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReadAllNotificationsButton) - Adds a Clear Button to the Server List and the Mentions Popout
- - [Remove Blocked Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveBlockedMessages) - Removes blocked Messages/Users
+ - [Remove Blocked Users](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveBlockedUsers) - Removes blocked Messages/Users
  - [Remove Nicknames](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveNicknames) - Replaces Nicknames with Accountnames
- - [Reveal All Spoilers Option](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RevealAllSpoilersOption) - Allows you to reveal all Spoilers within a Message/Status by holding the Ctrl Key and clicking a Spoiler
+ - [Reveal All Spoilers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RevealAllSpoilers) - Allows you to reveal all Spoilers within a Message/Status by holding the Ctrl Key and clicking a Spoiler
  - [Send Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SendLargeMessages) - Allows you to enter larger Messages, which will automatically split into several smaller Messages
  - [Server Counter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerCounter) - Adds a Server Counter to the Server List
  - [Server Details](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerDetails) - Shows Server Details in the Server List Tooltip

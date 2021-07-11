@@ -1,27 +1,28 @@
 /**
- * @name RevealAllSpoilersOption
+ * @name RevealAllSpoilers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.6
+ * @version 1.0.7
  * @description Allows you to reveal all Spoilers within a Message/Status by holding the Ctrl Key and clicking a Spoiler
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://mwittrien.github.io/
- * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RevealAllSpoilersOption/
- * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/RevealAllSpoilersOption/RevealAllSpoilersOption.plugin.js
+ * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RevealAllSpoilers/
+ * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/RevealAllSpoilers/RevealAllSpoilers.plugin.js
  */
 
 module.exports = (_ => {
 	const config = {
 		"info": {
-			"name": "RevealAllSpoilersOption",
+			"name": "RevealAllSpoilers",
 			"author": "DevilBro",
-			"version": "1.0.6",
+			"version": "1.0.7",
 			"description": "Allows you to reveal all Spoilers within a Message/Status by holding the Ctrl Key and clicking a Spoiler"
 		},
 		"changeLog": {
 			"improved": {
+				"Plugin Name": "Changed to clarify the Usage",
 				"Behaviour": "You no longer need to right click a message and press reveal all, simply hold Ctrl and click a Spoiler",
 				"About Me": "Also works on About Mes"
 			}
@@ -74,7 +75,7 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		return class RevealAllSpoilersOption extends Plugin {
+		return class RevealAllSpoilers extends Plugin {
 			onLoad () {
 				this.patchedModules = {
 					after: {
@@ -95,7 +96,7 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(this, e.instance, "revealSpoiler", {after: e2 => {
 					if (e2.methodArguments[0].ctrlKey) {
 						BDFDB.ListenerUtils.stopEvent(e2.methodArguments[0]);
-						let parent = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.message + BDFDB.dotCN.userpopoutaboutmebody, e2.methodArguments[0].target);
+						let parent = BDFDB.DOMUtils.getParent(BDFDB.dotCN.message, e2.methodArguments[0].target) || e2.methodArguments[0].target.parentElement;
 						if (parent) for (let spoiler of parent.querySelectorAll(BDFDB.dotCN.spoilerhidden)) spoiler.click();
 					}
 				}}, {force: true, noCache: true});

@@ -1,6 +1,9 @@
 {
 	"PluginNameMap": {
-		"OwnerTag": "StaffTag"
+		"BadgesEverywhere": "ShowBadgesInChat",
+		"OwnerTag": "StaffTag",
+		"RemoveBlockedMessages": "RemoveBlockedUsers",
+		"RevealAllSpoilersOption": "RevealAllSpoilers"
 	},
 	"LibraryRequires": ["child_process", "electron", "fs", "path", "process", "request"],
 	"DiscordObjects": {
@@ -820,13 +823,6 @@
 			"switchItem": "ui-switch-item",
 			"switchWrapper": "ui-switch-wrapper"
 		},
-		"BadgesEverywhere": {
-			"badges": "badges-XRnWAp",
-			"badgesChat": "badgesChat-f_cbR8",
-			"badgesList": "badgesList-Aw_p52",
-			"badgesSettings": "badgesSettings-ychoGn",
-			"indicator": "indicator-8F4GGw"
-		},
 		"BetterFriendList": {
 			"mutualGuilds": "mutualGuilds-s7F2aa",
 			"nameCell": "nameCell-7F4sRs",
@@ -973,6 +969,14 @@
 		"SpellCheck": {
 			"error": "error-k9z2IV",
 			"overlay": "spellCheckOverlay-cNSap5"
+		},
+		"ShowBadgesInChat": {
+			"badges": "badges-XRnWAp",
+			"badgesChat": "badgesChat-f_cbR8",
+			"badgesDMs": "badgesDMs-Aw_p52",
+			"badgesMembers": "badgesMembers-8Kf3S1",
+			"badgesSettings": "badgesSettings-ychoGn",
+			"indicator": "indicator-8F4GGw"
 		},
 		"ShowConnections": {
 			"connection": "connection-9Gh4sa",
@@ -1353,11 +1357,6 @@
 		"_bdminimalmode": ["BD", "bdMinimalMode"],
 		"_bdpillselected": ["BD", "bdPillSelected"],
 		"_bdpillunread": ["BD", "bdPillUnread"],
-		"_badgeseverywherebadges": ["BadgesEverywhere", "badges"],
-		"_badgeseverywherebadgeschat": ["BadgesEverywhere", "badgesChat"],
-		"_badgeseverywherebadgeslist": ["BadgesEverywhere", "badgesList"],
-		"_badgeseverywherebadgessettings": ["BadgesEverywhere", "badgesSettings"],
-		"_badgeseverywhereindicator": ["BadgesEverywhere", "indicator"],
 		"_betterfriendlistmutualguilds": ["BetterFriendList", "mutualGuilds"],
 		"_betterfriendlistnamecell": ["BetterFriendList", "nameCell"],
 		"_betterfriendlisttitle": ["BetterFriendList", "title"],
@@ -1457,11 +1456,16 @@
 		"_serverfoldersiconswatchpreview": ["ServerFolders", "iconSwatchPreview"],
 		"_serverfoldersiconswatchnopreview": ["ServerFolders", "iconSwatchNoPreview"],
 		"_serverfoldersiconswatchselected": ["ServerFolders", "iconSwatchSelected"],
-		"_showhiddenchannelsaccessmodal": ["ShowHiddenChannels", "accessModal"],
+		"_showbadgesinchatbadges": ["ShowBadgesInChat", "badges"],
+		"_showbadgesinchatbadgeschat": ["ShowBadgesInChat", "badgesChat"],
+		"_showbadgesinchatbadgeslist": ["ShowBadgesInChat", "badgesList"],
+		"_showbadgesinchatbadgessettings": ["ShowBadgesInChat", "badgesSettings"],
+		"_showbadgesinchatindicator": ["ShowBadgesInChat", "indicator"],
 		"_showconnectionsconnection": ["ShowConnections", "connection"],
 		"_showconnectionsconnections": ["ShowConnections", "connections"],
 		"_showconnectionsicon": ["ShowConnections", "connectionIcon"],
 		"_showconnectionsverifiedbadge": ["ShowConnections", "verifiedBadge"],
+		"_showhiddenchannelsaccessmodal": ["ShowHiddenChannels", "accessModal"],
 		"_spellcheckerror": ["SpellCheck", "error"],
 		"_spellcheckoverlay": ["SpellCheck", "overlay"],
 		"_spotifycontrolsactivitybutton": ["SpotifyControls", "activityButton"],

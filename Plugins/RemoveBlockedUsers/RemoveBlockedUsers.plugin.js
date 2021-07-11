@@ -1,24 +1,29 @@
 /**
- * @name RemoveBlockedMessages
+ * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.9
+ * @version 1.3.0
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://mwittrien.github.io/
- * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveBlockedMessages/
- * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/RemoveBlockedMessages/RemoveBlockedMessages.plugin.js
+ * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveBlockedUsers/
+ * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/RemoveBlockedUsers/RemoveBlockedUsers.plugin.js
  */
 
 module.exports = (_ => {
 	const config = {
 		"info": {
-			"name": "RemoveBlockedMessages",
+			"name": "RemoveBlockedUsers",
 			"author": "DevilBro",
-			"version": "1.2.9",
+			"version": "1.3.0",
 			"description": "Removes blocked Messages/Users"
+		},
+		"changeLog": {
+			"improved": {
+				"Plugin Name": "Changed to clarify the Usage"
+			}
 		}
 	};
 
@@ -70,7 +75,7 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		var cachedChannelId, cachedReactions;
 		
-		return class RemoveBlockedMessages extends Plugin {
+		return class RemoveBlockedUsers extends Plugin {
 			onLoad () {
 				this.defaults = {
 					notifcations: {
