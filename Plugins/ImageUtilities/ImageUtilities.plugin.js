@@ -386,8 +386,7 @@ module.exports = (_ => {
 												for (let input of settingsPanel.props._node.querySelectorAll(".input-newlocation " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new Location.", {type: "danger"});
 												let name = settingsPanel.props._node.querySelector(".input-name " + BDFDB.dotCN.input).value.trim();
 												let location = settingsPanel.props._node.querySelector(".input-location " + BDFDB.dotCN.input).value.trim();
-												if (ownLocations[name] || name == "Downloads") return BDFDB.NotificationUtils.toast("A Location with the choosen Name already exists, please choose another Name", {type: "danger"});
-												else if (!BDFDB.LibraryRequires.fs.existsSync(location)) return BDFDB.NotificationUtils.toast("The choosen download Location is not a valid Path to a Folder", {type: "danger"});
+												if (!BDFDB.LibraryRequires.fs.existsSync(location)) return BDFDB.NotificationUtils.toast("The choosen download Location is not a valid Path to a Folder", {type: "danger"});
 												else {
 													ownLocations[name] = {enabled: true, location: location};
 													BDFDB.DataUtils.save(ownLocations, this, "ownLocations");
