@@ -1044,6 +1044,7 @@
 			"translating": "translating-Yi-YxC"
 		},
 		"WriteUpperCase": {
+			"enabled": "enabled-7KI3Q2",
 			"quickToggleButton": "quickToggleButton-P2xDh8"
 		},
 		"NotFound": {
@@ -1518,6 +1519,7 @@
 		"_translatortranslated": ["Translator", "translated"],
 		"_translatortranslating": ["Translator", "translating"],
 		"_writeuppercasequicktogglebutton": ["WriteUpperCase", "quickToggleButton"],
+		"_writeuppercasequicktogglebuttonenabled": ["WriteUpperCase", "enabled"],
 		"_repoauthor": ["BD", "bdAuthor"],
 		"_repobutton": ["BD", "bdButton"],
 		"_repobuttondanger": ["BD", "bdButtonDanger"],
