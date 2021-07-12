@@ -2866,7 +2866,7 @@ module.exports = (_ => {
 				var myDataUser = LibraryModules.UserStore && LibraryModules.UserStore.getCurrentUser && LibraryModules.UserStore.getCurrentUser();
 				BDFDB.UserUtils.me = new Proxy(myDataUser || {}, {
 					get: function (list, item) {
-						return (myDataUser = LibraryModules.UserStore.getCurrentUser()) && myDataUser[item];
+						return (myDataUser = (LibraryModules.UserStore && LibraryModules.UserStore.getCurrentUser && LibraryModules.UserStore.getCurrentUser() || {})) && myDataUser[item];
 					}
 				});
 				BDFDB.UserUtils.getStatus = function (id = BDFDB.UserUtils.me.id) {
