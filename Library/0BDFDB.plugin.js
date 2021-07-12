@@ -271,6 +271,15 @@ module.exports = (_ => {
 	BDFDB.ObjectUtils.is = function (obj) {
 		return obj && !Array.isArray(obj) && !Set.prototype.isPrototypeOf(obj) && (typeof obj == "function" || typeof obj == "object");
 	};
+	BDFDB.ObjectUtils.isProxy = function (obj) {
+		if (!obj && typeof obj !== "object") return false;
+		try {
+			window.postMessage({"_____BDFDB______": obj}, "*");
+		} catch (error) {
+			if (error && error.code === 25 && error.toString().indexOf("': #<Object>") > -1) return true; // DATA_CLONE_ERR
+		}
+		return false;
+	};
 	BDFDB.ObjectUtils.get = function (nodeOrObj, valuePath) {
 		if (!nodeOrObj || !valuePath) return null;
 		let obj = Node.prototype.isPrototypeOf(nodeOrObj) ? BDFDB.ReactUtils.getInstance(nodeOrObj) : nodeOrObj;
@@ -970,6 +979,7 @@ module.exports = (_ => {
 		if (!backup) BdApi.alert("Error", "Could not initiate BDFDB Library Plugin. Check your Internet Connection and make sure GitHub isn't blocked by your Network or try disabling your VPN/Proxy.");
 		return backup;
 	};
+	
 	const loadLibrary = tryAgain => {
 		request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.raw.css`, (e, r, b) => {
 			if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => loadLibrary(), 10000);
@@ -1851,6 +1861,19 @@ module.exports = (_ => {
 					}
 					return InternalBDFDB.getWebModuleReq.req;
 				};
+				const proxyStates = {};
+				InternalBDFDB.isSearchableModule = function (m, path) {
+					if (m && (typeof m == "object" || typeof m == "function")) {
+						path = [path].flat(10).join(" ");
+						if (proxyStates[path] !== undefined) return !proxyStates[path];
+						else {
+							proxyStates[path] = BDFDB.ObjectUtils.isProxy(m);
+							return !proxyStates[path];
+						}
+					}
+					return false;
+				};
+				
 				BDFDB.ModuleUtils = {};
 				BDFDB.ModuleUtils.find = function (filter, getExport) {
 					getExport = typeof getExport != "boolean" ? true : getExport;
@@ -1859,8 +1882,10 @@ module.exports = (_ => {
 						let m = req.c[i].exports;
 						if (m && (typeof m == "object" || typeof m == "function") && filter(m)) return getExport ? m : req.c[i];
 						if (m && m.__esModule) {
-							for (let j in m) if (m[j] && (typeof m[j] == "object" || typeof m[j] == "function") && filter(m[j])) return getExport ? m[j] : req.c[i];
-							if (m.default && (typeof m.default == "object" || typeof m.default == "function")) for (let j in m.default) if (m.default[j] && (typeof m.default[j] == "object" || typeof m.default[j] == "function") && filter(m.default[j])) return getExport ? m.default[j] : req.c[i];
+							for (let j in m) if (InternalBDFDB.isSearchableModule(m[j], [i, j]) && filter(m[j])) return getExport ? m[j] : req.c[i];
+							if (m.default && (typeof m.default == "object" || typeof m.default == "function")) {
+								for (let j in m.default) if (InternalBDFDB.isSearchableModule(m.default[j], [i, "default", j]) && filter(m.default[j])) return getExport ? m.default[j] : req.c[i];
+							}
 						}
 					}
 					for (let i in req.m) if (req.m.hasOwnProperty(i)) {
@@ -8347,6 +8372,8 @@ module.exports = (_ => {
 					
 					window.BDFDB = BDFDB;
 				}
+				
+				window.BDFDB = BDFDB;
 				
 				for (let obj in DiscordObjects) if (!DiscordObjects[obj]) {
 					DiscordObjects[obj] = function () {};
