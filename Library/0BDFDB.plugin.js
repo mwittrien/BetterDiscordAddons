@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.4
+ * @version 1.7.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,15 +19,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.7.4",
+			"version": "1.7.5",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
-		"changeLog": {
-			"fixed": {
-				"User Popout": "Fixing Stuff for the User Popout Update, thanks Discord"
-			}
-		}
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
 	};
 	
 	const DiscordObjects = {};
@@ -2868,7 +2863,7 @@ module.exports = (_ => {
 				BDFDB.UserUtils.is = function (user) {
 					return user && user instanceof BDFDB.DiscordObjects.User;
 				};
-				var myDataUser = LibraryModules.UserStore && LibraryModules.UserStore.getCurrentUser();
+				var myDataUser = LibraryModules.UserStore && LibraryModules.UserStore.getCurrentUser && LibraryModules.UserStore.getCurrentUser();
 				BDFDB.UserUtils.me = new Proxy(myDataUser || {}, {
 					get: function (list, item) {
 						return (myDataUser = LibraryModules.UserStore.getCurrentUser()) && myDataUser[item];
