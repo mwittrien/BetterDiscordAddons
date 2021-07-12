@@ -623,9 +623,9 @@ module.exports = (_ => {
 				if (typeof plugin.setLabelsByLanguage == "function") plugin.labels = plugin.setLabelsByLanguage();
 				if (typeof plugin.changeLanguageStrings == "function") plugin.changeLanguageStrings();
 			};
-			if (LibraryModules.LanguageStore.chosenLocale) translate();
+			if (LibraryModules.LanguageStore.chosenLocale || LibraryModules.LanguageStore._chosenLocale || LibraryModules.SettingsStore.locale) translate();
 			else BDFDB.TimeUtils.interval(interval => {
-				if (LibraryModules.LanguageStore.chosenLocale) {
+				if (LibraryModules.LanguageStore.chosenLocale || LibraryModules.LanguageStore._chosenLocale || LibraryModules.SettingsStore.locale) {
 					BDFDB.TimeUtils.clear(interval);
 					translate();
 				}
@@ -4421,7 +4421,7 @@ module.exports = (_ => {
 				BDFDB.LanguageUtils = {};
 				BDFDB.LanguageUtils.languages = Object.assign({}, InternalData.Languages);
 				BDFDB.LanguageUtils.getLanguage = function () {
-					let lang = LibraryModules.LanguageStore.chosenLocale || LibraryModules.SettingsStore.locale || "en";
+					let lang = LibraryModules.LanguageStore.chosenLocale || LibraryModules.LanguageStore._chosenLocale || LibraryModules.SettingsStore.locale || "en";
 					if (lang == "en-GB" || lang == "en-US") lang = "en";
 					let langIds = lang.split("-");
 					let langId = langIds[0];
@@ -4520,7 +4520,7 @@ module.exports = (_ => {
 					return "";
 				};
 				BDFDB.TimeUtils.interval(interval => {
-					if (LibraryModules.LanguageStore.chosenLocale) {
+					if (LibraryModules.LanguageStore.chosenLocale || LibraryModules.LanguageStore._chosenLocale || LibraryModules.SettingsStore.locale) {
 						BDFDB.TimeUtils.clear(interval);
 						let language = BDFDB.LanguageUtils.getLanguage();
 						if (language) BDFDB.LanguageUtils.languages.$discord = Object.assign({}, language, {name: `Discord (${language.name})`});
