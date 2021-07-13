@@ -755,12 +755,52 @@ body::after {
 }
 
 .divider-JfaTT5.hasContent-1cNJDh {							/* divider				hascontent							*/
-	border-color: transparent;
+	border-width: calc(1px * (1 - var(--usechatbubbles)));
+}
+.divider-JfaTT5.hasContent-1cNJDh::before {
+	content: "";
+	position: absolute;
+	top: -0.6rem;
+	bottom: -0.6rem;
+	right: -0.2rem;
+	left: 0;
+	background: rgba(var(--transparencycolor), calc(var(--messagetransparency) * 0.5));
+	border-radius: 5px;
+	pointer-events: none;
+	z-index: -1;
 }
 .content-1o0f9g {											/* divider				content								*/
-	background-color: rgba(var(--transparencycolor), .2);
-	width: 100%;
-	text-align: center;
+	position: absolute;
+	background-color: transparent;
+	padding: 2px 8px;
+	width: unset;
+}
+.content-1o0f9g::before,
+.content-1o0f9g::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	pointer-events: none;
+	opacity: calc(1 - var(--usechatbubbles));
+	z-index: -1;
+}
+.content-1o0f9g::before {
+	background: var(--background) var(--backgroundposition)/var(--backgroundsize);
+	background-attachment: fixed;
+}
+.content-1o0f9g::after {
+	background-color: rgba(var(--transparencycolor), var(--transparencyalpha));
+	backdrop-filter: blur(var(--backgroundblur));
+}
+.unreadPill-2HyYtt {										/* divider				unreadpill							*/
+	border-radius: calc(4px * var(--usechatbubbles)) 4px 4px calc(4px * var(--usechatbubbles));
+	padding-left: calc(4px * var(--usechatbubbles) + 1px * (1 - var(--usechatbubbles)));
+}
+.unreadPillCap-3_K2q2 {										/* divider				unreadpillcap						*/
+	opacity: calc(1 - var(--usechatbubbles));
 }
 
 .hasMore-3POVhk:hover {
