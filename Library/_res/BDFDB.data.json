@@ -5016,6 +5016,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"133053172234190848": 	{"active": true,		"tier": "t2",		"text": "",					"color": "",			"id": "Shacomancer (blastor)"},
 		"798499176220327966": 	{"active": true,		"tier": "t2",		"text": "",					"color": "",			"id": ".void (DsOp)"},
 		"89482511343702016": 	{"active": true,		"tier": "t3",		"text": "",					"color": "#0080ff",		"id": "AzukiPuddles"},
 		"222808775722008587": 	{"active": true,		"tier": "t2",		"text": "",					"color": "",			"id": "Riyshin (AbÖz)"},
