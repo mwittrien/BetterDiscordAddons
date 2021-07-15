@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.6
+ * @version 1.7.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,10 +19,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.7.6",
+			"version": "1.7.7",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
+		"changeLog": {
+			"fixed": {
+				"Crashs": "I am on vacation now for 8 days, so I won't be able to fix issues"
+			}
+		}
 	};
 	
 	const DiscordObjects = {};
@@ -273,11 +278,8 @@ module.exports = (_ => {
 	};
 	BDFDB.ObjectUtils.isProxy = function (obj) {
 		if (!obj && typeof obj !== "object") return false;
-		try {
-			window.postMessage({"_____BDFDB______": obj}, "*");
-		} catch (error) {
-			if (error && error.code === 25 && error.toString().indexOf("': #<Object>") > -1) return true; // DATA_CLONE_ERR
-		}
+		const testValue = obj.oASdiAShDhSAIDHSAIODHSAIDHSIOADHISADHIOSAHDISAHDIOSHADISAHasdiadISAodHiOAdasih;
+		if (typeof testValue == "string" && !testValue) return true;
 		return false;
 	};
 	BDFDB.ObjectUtils.get = function (nodeOrObj, valuePath) {
@@ -1116,7 +1118,10 @@ module.exports = (_ => {
 				properties.push(getExport);
 				getExport = true;
 			}
-			return InternalBDFDB.findModule("prop", JSON.stringify(properties), m => properties.every(prop => m[prop] !== undefined), getExport);
+			return InternalBDFDB.findModule("prop", JSON.stringify(properties), m => properties.every(prop => {
+				const value = m[prop];
+				return value !== undefined && !(typeof value == "string" && !value);
+			}), getExport);
 		};
 		BDFDB.ModuleUtils.findByName = function (name, getExport) {
 			return InternalBDFDB.findModule("name", JSON.stringify(name), m => m.displayName === name || m.render && m.render.displayName === name, typeof getExport != "boolean" ? true : getExport);
@@ -1137,7 +1142,10 @@ module.exports = (_ => {
 				protoProps.push(getExport);
 				getExport = true;
 			}
-			return InternalBDFDB.findModule("proto", JSON.stringify(protoProps), m => m.prototype && protoProps.every(prop => m.prototype[prop] !== undefined), getExport);
+			return InternalBDFDB.findModule("proto", JSON.stringify(protoProps), m => m.prototype && protoProps.every(prop => {
+				const value = m.prototype[prop];
+				return value !== undefined && !(typeof value == "string" && !value);
+			}), getExport);
 		};
 	
 		BDFDB.ObserverUtils = {};
