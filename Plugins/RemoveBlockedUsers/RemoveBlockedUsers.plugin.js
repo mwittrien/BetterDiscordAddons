@@ -426,11 +426,17 @@ module.exports = (_ => {
 			}
 
 			processPrivateChannelCallParticipants (e) {
-				if (this.settings.places.voiceChat && BDFDB.ArrayUtils.is(e.instance.props.participants)) e.instance.props.participants = [].concat(e.instance.props.participants).filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+				if (this.settings.places.voiceChat) {
+					if (BDFDB.ArrayUtils.is(e.instance.props.participants)) e.instance.props.participants = [].concat(e.instance.props.participants).filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+					if (BDFDB.ArrayUtils.is(e.instance.props.filteredParticipants)) e.instance.props.filteredParticipants = [].concat(e.instance.props.filteredParticipants).filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+				}
 			}
 			
 			processChannelCall (e) {
-				if (this.settings.places.voiceChat && BDFDB.ArrayUtils.is(e.instance.props.participants)) e.instance.props.participants = [].concat(e.instance.props.participants).filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+				if (this.settings.places.voiceChat) {
+					if (BDFDB.ArrayUtils.is(e.instance.props.participants)) e.instance.props.participants = [].concat(e.instance.props.participants).filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+					if (BDFDB.ArrayUtils.is(e.instance.props.filteredParticipants)) e.instance.props.filteredParticipants = [].concat(e.instance.props.filteredParticipants).filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+				}
 			}
 
 			processUserSummaryItem (e) {
