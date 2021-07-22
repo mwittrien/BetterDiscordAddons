@@ -5050,7 +5050,7 @@ module.exports = (_ => {
 				return style;
 			}
 			getColor() {
-				return this.props.value ? (this.props.type === InternalComponents.NativeSubComponents.Checkbox.Types.INVERTED ? BDFDB.DiscordConstants.Colors.WHITE : this.props.color) : "transparent";
+				return this.props.value ? (InternalComponents.NativeSubComponents.Checkbox.Types && this.props.type === InternalComponents.NativeSubComponents.Checkbox.Types.INVERTED ? BDFDB.DiscordConstants.Colors.WHITE : this.props.color) : "transparent";
 			}
 			handleChange(e) {
 				this.props.value = typeof this.props.getValue == "function" ? this.props.getValue(this.props.value, e) : !this.props.value;
