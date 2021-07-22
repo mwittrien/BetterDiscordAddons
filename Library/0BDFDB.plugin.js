@@ -5034,7 +5034,7 @@ module.exports = (_ => {
 				style = Object.assign({}, style);
 				this.props.color = typeof this.props.getColor == "function" ? this.props.getColor(this.props.value) : this.props.color;
 				style.borderColor = this.props.color;
-				switch (this.props.type && InternalComponents.NativeSubComponents.Checkbox.Types) {
+				if (InternalComponents.NativeSubComponents.Checkbox.Types) switch (this.props.type) {
 					case InternalComponents.NativeSubComponents.Checkbox.Types.DEFAULT:
 						style.borderColor = this.props.color;
 						break;
