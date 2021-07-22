@@ -5033,14 +5033,15 @@ module.exports = (_ => {
 				if (!this.props.value) return style;
 				style = Object.assign({}, style);
 				this.props.color = typeof this.props.getColor == "function" ? this.props.getColor(this.props.value) : this.props.color;
-				switch (this.props.type) {
+				style.borderColor = this.props.color;
+				switch (this.props.type && InternalComponents.NativeSubComponents.Checkbox.Types) {
 					case InternalComponents.NativeSubComponents.Checkbox.Types.DEFAULT:
 						style.borderColor = this.props.color;
 						break;
 					case InternalComponents.NativeSubComponents.Checkbox.Types.GHOST:
 						let color = BDFDB.ColorUtils.setAlpha(this.props.color, 0.15, "RGB");
-						style.borderColor = color;
 						style.backgroundColor = color;
+						style.borderColor = color;
 						break;
 					case InternalComponents.NativeSubComponents.Checkbox.Types.INVERTED:
 						style.backgroundColor = this.props.color;
