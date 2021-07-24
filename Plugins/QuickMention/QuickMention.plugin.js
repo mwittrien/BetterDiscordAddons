@@ -2,7 +2,7 @@
  * @name QuickMention
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.2
+ * @version 1.0.3
  * @description Adds a Mention Button to the Message Options Bar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,20 @@ module.exports = (_ => {
 		"info": {
 			"name": "QuickMention",
 			"author": "DevilBro",
-			"version": "1.0.2",
+			"version": "1.0.3",
 			"description": "Adds a Mention Button to the Message Options Bar"
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -68,7 +76,7 @@ module.exports = (_ => {
 			onStop () {}
 		
 			onMessageOptionToolbar (e) {
-				if (!e.instance.props.expanded && e.instance.props.message.author.id != BDFDB.UserUtils.me.id && (BDFDB.UserUtils.can("SEND_MESSAGES") || e.instance.props.channel && (e.instance.props.channel.isDM() || e.instance.props.channel.isGroupDM()))) {
+				if (e.instance.props.message.author.id != BDFDB.UserUtils.me.id && (BDFDB.UserUtils.can("SEND_MESSAGES") || e.instance.props.channel && (e.instance.props.channel.isDM() || e.instance.props.channel.isGroupDM()))) {
 					e.returnvalue.props.children.splice(1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						key: "mention",
 						text: BDFDB.LanguageUtils.LanguageStrings.MENTION,

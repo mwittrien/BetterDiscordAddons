@@ -2,7 +2,7 @@
  * @name EditServers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.1
+ * @version 2.3.3
  * @description Allows you to locally edit Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,17 +17,25 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditServers",
 			"author": "DevilBro",
-			"version": "2.3.1",
+			"version": "2.3.3",
 			"description": "Allows you to locally edit Servers"
 		},
 		"changeLog": {
 			"fixed": {
-				"Settings": "Shown again"
+				"Invite Icon": "Fixed Icon being squashed for non squarish icons"
 			}
 		}
 	};
 	
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -88,7 +96,7 @@ module.exports = (_ => {
 					before: {
 						Guild: "render",
 						GuildIconWrapper: "render",
-						MutualGuilds: "render",
+						MutualGuilds: "default",
 						QuickSwitcher: "render",
 						QuickSwitchChannelResult: "render",
 						GuildSidebar: "render",
@@ -108,23 +116,16 @@ module.exports = (_ => {
 				};
 				
 				this.patchPriority = 7;
+				
+				this.css = `
+					${BDFDB.dotCN.inviteguildicon} {
+						background-size: cover;
+						object-fit: cover;
+					}
+				`;
 			}
 			
-			onStart () {
-				// REMOVE 07.05.2021
-				let oldData = BDFDB.DataUtils.load(this);
-				if (oldData.settings) {
-					this.settings.general = BDFDB.ObjectUtils.filter(oldData.settings, k => k.indexOf("changeIn") == -1, true);
-					this.settings.places = Object.entries(BDFDB.ObjectUtils.filter(oldData.settings, k => k.indexOf("changeIn") == 0, true)).reduce((n, p) => {
-						let k = p[0].replace("changeIn", "");
-						n[k[0].toLowerCase() + k.slice(1)] = p[1];
-						return n;
-					}, {});
-					BDFDB.DataUtils.save(this.settings.general, this, "general");
-					BDFDB.DataUtils.save(this.settings.places, this, "places");
-					BDFDB.DataUtils.remove(this, "settings");
-				}
-				
+			onStart () {				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.IconUtils, "getGuildBannerURL", {instead: e => {
 					let guild = BDFDB.LibraryModules.GuildStore.getGuild(e.methodArguments[0].id);
 					if (guild) {
@@ -317,7 +318,10 @@ module.exports = (_ => {
 			}
 
 			processMutualGuilds (e) {
-				if (this.settings.places.mutualGuilds) for (let i in e.instance.props.mutualGuilds) e.instance.props.mutualGuilds[i].guild = this.getGuildData(e.instance.props.mutualGuilds[i].guild.id);
+				if (this.settings.places.mutualGuilds) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "GuildRow"});
+					if (index > -1) for (let row of children) if (row && row.props && row.props.guild) row.props.guild = this.getGuildData(row.props.guild.id);
+				}
 			}
 
 			processQuickSwitcher (e) {

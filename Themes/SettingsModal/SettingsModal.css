@@ -1,3 +1,5 @@
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
+
 :root {
 	--settingsmodalbackground: transparent;
 	--settingsmodalwidth: 960px;
@@ -97,6 +99,9 @@
 }
 #app-mount .layer-3QrUeG ~ .layer-3QrUeG .settingsToolbar-wu4yfQ {
 	display: none !important;
+}
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG .header-2RyJ0Y {
+	max-width: calc(var(--settingsmodalwidth) - 730px) !important;
 }
 
 #app-mount .root-3R2ngo {

@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.3
+ * @version 2.0.5
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,18 +17,25 @@ module.exports = (_ => {
 		"info": {
 			"name": "PersonalPins",
 			"author": "DevilBro",
-			"version": "2.0.3",
+			"version": "2.0.5",
 			"description": "Allows you to locally pin Messages"
 		},
 		"changeLog": {
-			"improved": {
-				"Performance": "Added Pagination to the Notes Popout to reduce the Stress for People who saved a lot of Notes",
-				"Pagination": "Fixed some Performance Issues"
-			},
+			"fixed": {
+				"Canary Crash": ""
+			}
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -120,6 +127,7 @@ module.exports = (_ => {
 					});
 				}
 				if (updateData) BDFDB.DataUtils.save(notes, _this, "notes");
+				let allCount = messages.length;
 				let currentChannel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId()) || {};
 				switch (popoutProps.selectedFilter.value) {
 					case "channel":
@@ -139,7 +147,7 @@ module.exports = (_ => {
 				}
 				BDFDB.ArrayUtils.keySort(messages, popoutProps.selectedSort.value);
 				if (popoutProps.selectedOrder.value != "descending") messages.reverse();
-				return messages;
+				return [messages, allCount];
 			}
 			renderMessage(note, message, channel) {
 				if (!message || !channel) return null;
@@ -160,7 +168,9 @@ module.exports = (_ => {
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 								tag: "span",
 								className: BDFDB.disCN.messagespopoutchannelname,
-								onClick: _ => BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id)),
+								onClick: _ => {
+									if (!channel.guild_id || BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id)) BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id));
+								},
 								children: channelName ? ((channel.guild_id ? "#" : "@") + channelName) : "???"
 							}),
 							popoutProps.selectedFilter.value == "all" ? BDFDB.ReactUtils.createElement("span", {
@@ -181,7 +191,7 @@ module.exports = (_ => {
 							BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.messagespopoutactionbuttons,
 								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									(!channel.guild_id || BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id)) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 										className: BDFDB.disCN.messagespopoutjumpbutton,
 										onClick: _ => BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id, message.id)),
 										children: BDFDB.ReactUtils.createElement("div", {
@@ -203,7 +213,7 @@ module.exports = (_ => {
 															BDFDB.LibraryRequires.electron.clipboard.write({image: BDFDB.LibraryRequires.electron.nativeImage.createFromBuffer(body)});
 														}
 														else {
-															let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env["HOME"], "personalpinstemp.png");
+															let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.resourcesPath, "personalpinstemp.png");
 															BDFDB.LibraryRequires.fs.writeFileSync(file, body, {encoding: null});
 															BDFDB.LibraryRequires.electron.clipboard.write({image: file});
 															BDFDB.LibraryRequires.fs.unlinkSync(file);
@@ -236,7 +246,7 @@ module.exports = (_ => {
 			}
 			render() {
 				let searchTimeout;
-				const messages = this.filterMessages();
+				const [messages, allCount] = this.filterMessages();
 				return BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 					children: [
 						BDFDB.ReactUtils.createElement("div", {
@@ -251,7 +261,7 @@ module.exports = (_ => {
 										children: [
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 												className: BDFDB.disCN.messagespopouttitle,
-												children: _this.labels.popout_note
+												children: `${_this.labels.popout_note} - ${messages.length}/${allCount}`
 											}),
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
 												query: popoutProps.searchKey,
@@ -894,19 +904,19 @@ module.exports = (_ => {
 						};
 					case "ru":		// Russian
 						return {
-							context_pinoption:					"Запишите сообщение",
-							context_unpinoption:				"Удалить заметку",
-							context_updateoption:				"Обновить заметку",
-							popout_filter_all:					"Все серверы",
+							context_pinoption:					"Сохранить сообщение",
+							context_unpinoption:				"Удалить из сохранённых",
+							context_updateoption:				"Обновить в сохранённых",
+							popout_filter_all:					"Все сервера",
 							popout_filter_channel:				"Канал",
 							popout_filter_server:				"Сервер",
-							popout_note:						"Замечания",
+							popout_note:						"Сохранённые сообщения",
 							popout_pinoption:					"Запись",
-							popout_sort_messagetime:			"Дата сообщения",
-							popout_sort_notetime:				"Дата записи",
-							toast_noteadd:						"Сообщение добавлено в блокнот",
-							toast_noteremove:					"Сообщение удалено из записной книжки",
-							toast_noteupdate:					"Обновил сообщение в блокноте"
+							popout_sort_messagetime:			"Дата отправки",
+							popout_sort_notetime:				"Дата сохранения",
+							toast_noteadd:						"Сообщение сохранено",
+							toast_noteremove:					"Сообщение удалено из сохранённых",
+							toast_noteupdate:					"Сообщение обновлено в сохранённых"
 						};
 					case "sv":		// Swedish
 						return {

@@ -2,7 +2,7 @@
  * @name MessageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.9
+ * @version 1.9.2
  * @description Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,20 @@ module.exports = (_ => {
 		"info": {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
-			"version": "1.8.9",
+			"version": "1.9.2",
 			"description": "Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)"
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -81,14 +89,13 @@ module.exports = (_ => {
 						"Edit_Message":				{name: "Edit Message",			func: this.doEdit,		value: {click: 1, 	keycombo: []}		},
 						"Delete_Message":			{name: "Delete Message",		func: this.doDelete,	value: {click: 0, 	keycombo: [46]}		},
 						"Pin/Unpin_Message":		{name: "Pin/Unpin Message",		func: this.doPinUnPin,	value: {click: 0, 	keycombo: [17]}		},
-						"Reply_to_Message":			{name: "Reply to Message",		func: this.doReply,		value: {click: 0, 	keycombo: [17,84]}	},
+						"Reply_to_Message":			{name: "Reply to Message",		func: this.doReply,		value: {click: 0, 	keycombo: [17,72]}	},
 						"React_to_Message":			{name: "Open React Menu",		func: this.doOpenReact,	value: {click: 0, 	keycombo: [17,83]}	},
 						"Copy_Raw":					{name: "Copy raw Message",		func: this.doCopyRaw,	value: {click: 0, 	keycombo: [17,68]}	},
 						"Copy_Link":				{name: "Copy Message Link",		func: this.doCopyLink,	value: {click: 0, 	keycombo: [17,81]}	},
 						"__Quote_Message":			{name: "Quote Message",			func: this.doQuote,		value: {click: 0, 	keycombo: [17,87]}, plugin: "CustomQuoter"},
 						"__Note_Message":			{name: "Note Message",			func: this.doNote,		value: {click: 0, 	keycombo: [16]}, 	plugin: "PersonalPins"},
-						"__Translate_Message":		{name: "Translate Message",		func: this.doTranslate,	value: {click: 0, 	keycombo: [20]}, 	plugin: "GoogleTranslateOption"},
-						"__Reveal_Spoilers":		{name: "Reveal All Spoilers",	func: this.doReveal,	value: {click: 0, 	keycombo: [17,74]}, plugin: "RevealAllSpoilersOption"}
+						"__Translate_Message":		{name: "Translate Message",		func: this.doTranslate,	value: {click: 0, 	keycombo: [20]}, 	plugin: "Translator"}
 					}
 				};
 				
@@ -304,6 +311,7 @@ module.exports = (_ => {
 			}
 
 			onClick (event, message) {
+				if (BDFDB.DOMUtils.getParent(BDFDB.dotCNC.messagebuttons + BDFDB.dotCN.spoilerhidden, event.target)) return;
 				let type = event.type;
 				if (!firedEvents.includes(type)) {
 					firedEvents.push(type);
@@ -320,14 +328,14 @@ module.exports = (_ => {
 							BDFDB.ListenerUtils.stopEvent(event);
 							BDFDB.TimeUtils.clear(clickTimeout);
 							if (!this.hasDoubleClickOverwrite(enabledBindings[priorityAction])) {
-								this.defaults.bindings[priorityAction].func.apply(this, [{messageDiv, message}, priorityAction]);
+								BDFDB.TimeUtils.suppress(_ => this.defaults.bindings[priorityAction].func.apply(this, [{messageDiv, message}, priorityAction, event]), "", this)();
 							}
 							else clickTimeout = BDFDB.TimeUtils.timeout(_ => {
-								this.defaults.bindings[priorityAction].func.apply(this, [{messageDiv, message}, priorityAction]);
+								BDFDB.TimeUtils.suppress(_ => this.defaults.bindings[priorityAction].func.apply(this, [{messageDiv, message}, priorityAction, event]), "", this)();
 							}, 500);
 						}
 					}
-					BDFDB.TimeUtils.timeout(_ => {BDFDB.ArrayUtils.remove(firedEvents, type, true)});
+					BDFDB.TimeUtils.timeout(_ => BDFDB.ArrayUtils.remove(firedEvents, type, true));
 				}
 			}
 
@@ -358,7 +366,7 @@ module.exports = (_ => {
 				return false;
 			}
 
-			doDelete ({messageDiv, message}, action) {
+			doDelete ({messageDiv, message}, action, event) {
 				let deleteLink = messageDiv.parentElement.querySelector(BDFDB.dotCNS.messagelocalbotoperations + BDFDB.dotCN.anchor);
 				if (deleteLink) deleteLink.click();
 				else if (BDFDB.DiscordConstants.MessageTypesDeletable[message.type]) {
@@ -370,14 +378,14 @@ module.exports = (_ => {
 				}
 			}
 
-			doEdit ({messageDiv, message}, action) {
+			doEdit ({messageDiv, message}, action, event) {
 				if (message.author.id == BDFDB.UserUtils.me.id && !messageDiv.querySelector(BDFDB.dotCN.messagechanneltextarea)) {
 					BDFDB.LibraryModules.MessageUtils.startEditMessage(message.channel_id, message.id, message.content);
 					if (toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.EDITING_MESSAGE), {type: "success"});
 				}
 			}
 
-			doOpenReact ({messageDiv, message}, action) {
+			doOpenReact ({messageDiv, message}, action, event) {
 				let reactButton = messageDiv.querySelector(`${BDFDB.dotCN.messagetoolbarbutton}[aria-label="${BDFDB.LanguageUtils.LanguageStrings.ADD_REACTION}"]`);
 				if (reactButton) {
 					reactButton.click();
@@ -385,7 +393,7 @@ module.exports = (_ => {
 				}
 			}
 
-			doPinUnPin ({messageDiv, message}, action) {
+			doPinUnPin ({messageDiv, message}, action, event) {
 				if (message.state == BDFDB.DiscordConstants.MessageStates.SENT) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 					if (channel && (BDFDB.DMUtils.isDMChannel(channel.id) || BDFDB.UserUtils.can("MANAGE_MESSAGES")) && (message.type == BDFDB.DiscordConstants.MessageTypes.DEFAULT || message.type == BDFDB.DiscordConstants.MessageTypes.REPLY)) {
@@ -401,24 +409,24 @@ module.exports = (_ => {
 				}
 			}
 			
-			doReply ({messageDiv, message}, action) {
+			doReply ({messageDiv, message}, action, event) {
 				if (message.state == BDFDB.DiscordConstants.MessageStates.SENT) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 					if (channel && (BDFDB.DMUtils.isDMChannel(channel.id) || BDFDB.UserUtils.can("SEND_MESSAGES")) && (message.type == BDFDB.DiscordConstants.MessageTypes.DEFAULT || message.type == BDFDB.DiscordConstants.MessageTypes.REPLY)) {
-						BDFDB.LibraryModules.MessageManageUtils.replyToMessage(channel, message);
+						BDFDB.LibraryModules.MessageManageUtils.replyToMessage(channel, message, event);
 						if (toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.NOTIFICATION_REPLY), {type: "success"});
 					}
 				}
 			}
 
-			doCopyRaw ({messageDiv, message}, action) {
+			doCopyRaw ({messageDiv, message}, action, event) {
 				if (message.content) {
 					BDFDB.LibraryRequires.electron.clipboard.write({text: message.content});
 					if (toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.COPIED_TEXT), {type: "success"});
 				}
 			}
 
-			doCopyLink ({messageDiv, message}, action) {
+			doCopyLink ({messageDiv, message}, action, event) {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 				if (channel) {
 					BDFDB.LibraryModules.MessageManageUtils.copyLink(channel, message);
@@ -426,30 +434,24 @@ module.exports = (_ => {
 				}
 			}
 
-			doQuote ({messageDiv, message}, action) {
+			doQuote ({messageDiv, message}, action, event) {
 				if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Quote_Message.plugin)) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 					if (channel) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Quote_Message.plugin).quote(channel, message);
 				}
 			}
 
-			doNote ({messageDiv, message}, action) {
+			doNote ({messageDiv, message}, action, event) {
 				if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Note_Message.plugin)) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 					if (channel) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Note_Message.plugin).addMessageToNotes(message, channel);
 				}
 			}
 
-			doTranslate ({messageDiv, message}, action) {
+			doTranslate ({messageDiv, message}, action, event) {
 				if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Translate_Message.plugin)) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 					if (channel) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Translate_Message.plugin).translateMessage(message, channel);
-				}
-			}
-
-			doReveal ({messageDiv, message}, action) {
-				if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Reveal_Spoilers.plugin)) {
-					BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Reveal_Spoilers.plugin).revealAllSpoilers(messageDiv);
 				}
 			}
 			

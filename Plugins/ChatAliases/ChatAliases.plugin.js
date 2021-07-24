@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.0
+ * @version 2.3.2
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,17 +17,25 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.3.0",
+			"version": "2.3.2",
 			"description": "Allows you to configure your own Aliases/Commands"
 		},
 		"changeLog": {
 			"improved": {
-				"Case Equalization": "Equalizes the case for case insensitive non-regex Aliases (Thats becomes That's not that's)"
+				"Autocomplete Menu": ""
 			}
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -65,7 +73,9 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var aliases = {}, commandAliases = {}, commandSentinel;
+		var aliases = {}, commandSentinel;
+		
+		const AUTOCOMPLETE_ALIAS_OPTION = "ALIASES";
 	
 		return class ChatAliases extends Plugin {
 			onLoad () {
@@ -105,7 +115,7 @@ module.exports = (_ => {
 				
 				this.css = `
 					${BDFDB.dotCNS.aliasautocomplete + BDFDB.dotCN.autocompleteinner} {
-						max-height: 50vh;
+						max-height: 480px;
 					}
 					${BDFDB.dotCN.autocompleteicon} {
 						flex: 0 0 auto;
@@ -116,69 +126,56 @@ module.exports = (_ => {
 			onStart () {
 				aliases = BDFDB.DataUtils.load(this, "words");
 				commandSentinel = BDFDB.LibraryModules.AutocompleteSentinels && BDFDB.LibraryModules.AutocompleteSentinels.COMMAND_SENTINEL || "/";
-				commandAliases = BDFDB.ObjectUtils.filter(aliases, key => key.startsWith(commandSentinel), true);
 				
+				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_PRIORITY) BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_PRIORITY.unshift(AUTOCOMPLETE_ALIAS_OPTION);
 				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) {
-					BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.ALIASES = {
+					BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS[AUTOCOMPLETE_ALIAS_OPTION] = {
 						autoSelect: true,
-						getPlainText: (eventOrIndex, config, autocompletes) => {
-							let aliasData = eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.alias : typeof eventOrIndex == "number" && autocompletes.aliases[eventOrIndex];
-							return aliasData.word;
-						},
-						getRawText: (eventOrIndex, config, autocompletes) => {
-							let aliasData = eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.alias : typeof eventOrIndex == "number" && autocompletes.aliases[eventOrIndex];
-							return aliasData.file ? aliasData.word : BDFDB.StringUtils.insertNRST(aliasData.replace);
-						},
-						getSentinel: _ => {
-							return "";
-						},
-						matches: (channel, what, wordLowercase, what2, config, rawValue) => {
-							let currentLastWord = BDFDB.StringUtils.findMatchCaseless(wordLowercase, rawValue, true);
-							if (currentLastWord.length >= this.settings.amounts.minAliasLength) for (let word in aliases) {
+						matches: (channel, guild, currentWord, _, config) => {
+							if (currentWord.length >= this.settings.amounts.minAliasLength) for (let word in aliases) {
 								let aliasData = aliases[word];
 								if (!aliasData.regex && aliasData.autoc) {
 									if (aliasData.exact) {
-										if (aliasData.case && word.indexOf(currentLastWord) == 0) return true;
-										else if (!aliasData.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) return true;
+										if (aliasData.case && word.indexOf(currentWord) == 0) return true;
+										else if (!aliasData.case && word.toLowerCase().indexOf(currentWord.toLowerCase()) == 0) return true;
 									}
 									else {
-										if (aliasData.case && word.indexOf(currentLastWord) > -1) return true;
-										else if (!aliasData.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) return true;
+										if (aliasData.case && word.indexOf(currentWord) > -1) return true;
+										else if (!aliasData.case && word.toLowerCase().indexOf(currentWord.toLowerCase()) > -1) return true;
 									}
 								}
 							}
 							return false;
 						},
-						queryResults: (channel, wordLowercase, config, rawValue) => {
-							if (rawValue == commandSentinel) return;
-							let currentLastWord = BDFDB.StringUtils.findMatchCaseless(wordLowercase, rawValue, true);
+						queryResults: (channel, guild, currentWord, config) => {
+							if (currentWord == commandSentinel) return;
 							let matches = [];
 							for (let word in aliases) {
 								let aliasData = Object.assign({word}, aliases[word]);
 								if (!aliasData.regex && aliasData.autoc) {
 									if (aliasData.exact) {
-										if (aliasData.case && word.indexOf(currentLastWord) == 0) matches.push(aliasData);
-										else if (!aliasData.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) matches.push(aliasData);
+										if (aliasData.case && word.indexOf(currentWord) == 0) matches.push(aliasData);
+										else if (!aliasData.case && word.toLowerCase().indexOf(currentWord.toLowerCase()) == 0) matches.push(aliasData);
 									}
 									else {
-										if (aliasData.case && word.indexOf(currentLastWord) > -1) matches.push(aliasData);
-										else if (!aliasData.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) matches.push(aliasData);
+										if (aliasData.case && word.indexOf(currentWord) > -1) matches.push(aliasData);
+										else if (!aliasData.case && word.toLowerCase().indexOf(currentWord.toLowerCase()) > -1) matches.push(aliasData);
 									}
 								}
 							}
-							if (matches.length) return {aliases: matches};
+							if (matches.length) return {results: {aliases: matches}};
 						},
-						renderResults: (channel, wordLowercase, currentSelected, setSelected, chooseSelected, state, config, autocompletes) => {
-							return autocompletes && autocompletes.aliases && [
+						renderResults: (results, currentSelected, channel, guild, currenWord, config, setSelected, chooseSelected) => {
+							return results && results.aliases && [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteItems.Title, {
 									title: [
 										"Aliases: ",
 										BDFDB.ReactUtils.createElement("strong", {
-											children: wordLowercase
+											children: currenWord
 										})
 									]
 								}),
-								autocompletes.aliases.map((aliasData, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteItems.Generic, {
+								results.aliases.map((aliasData, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteItems.Generic, {
 									onClick: chooseSelected,
 									onHover: setSelected,
 									index: i,
@@ -188,42 +185,20 @@ module.exports = (_ => {
 									description: BDFDB.StringUtils.insertNRST(aliasData.replace)
 								}))
 							].flat(10).filter(n => n);
+						},
+						onSelect: (results, index, _, config) => {
+							config.insertText(results.aliases[index].file ? results.aliases[index].word : BDFDB.StringUtils.insertNRST(results.aliases[index].replace));
+							return {};
 						}
 					};
-					BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.COMMANDS, "renderResults", {before: e => {
-						let m = Array.from(e.methodArguments).find(n => n && n.commands);
-						if (m) {
-							let currentLastWord = commandSentinel + e.methodArguments[1];
-							if (currentLastWord.length >= this.settings.amounts.minAliasLength) for (let word in commandAliases) {
-								let aliasData = commandAliases[word];
-								let name = word.slice(1);
-								let command = {
-									id: "chatalias-" + name,
-									name: name,
-									description: BDFDB.StringUtils.insertNRST(aliasData.replace)
-								};
-								if (!aliasData.regex && aliasData.autoc) {
-									if (aliasData.exact) {
-										if (aliasData.case && word.indexOf(currentLastWord) == 0) m.commands.push(command);
-										else if (!aliasData.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) m.commands.push(command);
-									}
-									else {
-										if (aliasData.case && word.indexOf(currentLastWord) > -1) m.commands.push(command);
-										else if (!aliasData.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) m.commands.push(command);
-									}
-								}
-							}
-						}
-					}});
 				}
 
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			
 			onStop () {
-				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) {
-					delete BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.ALIASES;
-				}
+				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_PRIORITY) BDFDB.ArrayUtils.remove(BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_PRIORITY, AUTOCOMPLETE_ALIAS_OPTION, true);
+				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) delete BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS[AUTOCOMPLETE_ALIAS_OPTION];
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 
@@ -345,7 +320,6 @@ module.exports = (_ => {
 								onClick: _ => {
 									BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added Aliases?", _ => {
 										aliases = {};
-										commandAliases = {};
 										BDFDB.DataUtils.remove(this, "words");
 										BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 									});
@@ -431,13 +405,6 @@ module.exports = (_ => {
 				if (!BDFDB.PatchUtils.isPatched(this, e.instance, "submitUpload")) BDFDB.PatchUtils.patch(this, e.instance, "submitUpload", {before: e2 => {
 					if (this.settings.places.upload) this.handleSubmit(e, e2, 1);
 				}}, {force: true, noCache: true});
-			}
-			
-			processAutocomplete (e) {
-				if (e.returnvalue.props.children && e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.aliasautocomplete) > -1) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.autocompleteinner]]});
-					if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Scrollers.Thin, children[index].props);
-				}
 			}
 			
 			handleSubmit (e, e2, textIndex) {

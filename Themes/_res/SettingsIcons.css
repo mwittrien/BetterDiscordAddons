@@ -4,8 +4,11 @@
 	--settingsiconsgap: 14px;
 }
 
+.sidebarRegion-VFTUkN {
+	flex-basis: calc(218px + (var(--usesettingsicons) * (var(--settingsiconssize) + var(--settingsiconsgap))));
+}
 .sidebar-CFHs9e {
-	width: calc(218px + (var(--usesettingsicons)*(var(--settingsiconssize)+var(--settingsiconsgap))));
+	width: calc(218px + (var(--usesettingsicons) * (var(--settingsiconssize) + var(--settingsiconsgap))));
 }
 #bd-settings-sidebar .ui-tab-bar-item,
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ {
@@ -17,15 +20,19 @@
 	content: "";
 	position: relative;
 	flex: 0 0 auto;
-	width: calc(var(--usesettingsicons)*var(--settingsiconssize));
-	height: calc(var(--usesettingsicons)*var(--settingsiconssize));
-	margin-right: calc(var(--usesettingsicons)*var(--settingsiconsgap));
+	width: calc(var(--usesettingsicons) * var(--settingsiconssize));
+	height: calc(var(--usesettingsicons) * var(--settingsiconssize));
+	margin-right: calc(var(--usesettingsicons) * var(--settingsiconsgap));
 	background: currentColor;
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/questionmark.svg) center/contain no-repeat;
 }
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="My Account-tab" i]::before,
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="My-Account-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/account.svg) center/contain no-repeat;
+}
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Profile Customization-tab" i]::before,
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Profile-Customization-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/profile.svg) center/contain no-repeat;
 }
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Privacy & Safety-tab" i]::before,
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Privacy-&-Safety-tab" i]::before,
@@ -38,6 +45,9 @@
 }
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Connections-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/connections.svg) center/contain no-repeat;
+}
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Subscriptions-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/subscriptions.svg) center/contain no-repeat;
 }
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Discord Nitro-tab" i]::before,
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Discord-Nitro-tab" i]::before {
@@ -164,6 +174,9 @@
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="ROLES-tab" i]::before,
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="PERMISSIONS-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/roles.svg) center/contain no-repeat;
+}
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="STICKERS-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/stickers.svg) center/contain no-repeat;
 }
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="AUDIT_LOG-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/audit.svg) center/contain no-repeat;

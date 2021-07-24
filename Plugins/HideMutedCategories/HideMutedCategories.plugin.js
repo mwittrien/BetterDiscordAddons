@@ -27,7 +27,15 @@ module.exports = (_ => {
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -115,11 +123,11 @@ module.exports = (_ => {
 					let tree = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
 					if (tree) {
 						let childrenRender = tree.props.children;
-						tree.props.children = (...args) => {
+						tree.props.children = BDFDB.TimeUtils.suppress((...args) => {
 							let children = childrenRender(...args);
 							this.patchList(e.instance.props.guild.id, children);
 							return children;
-						};
+						}, "", this);
 					}
 					else this.patchList(e.instance.props.guild.id, e.returnvalue);
 				}

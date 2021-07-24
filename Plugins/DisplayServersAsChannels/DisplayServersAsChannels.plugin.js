@@ -27,7 +27,15 @@ module.exports = (_ => {
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -160,11 +168,11 @@ module.exports = (_ => {
 			processGuilds (e) {
 				if (typeof e.returnvalue.props.children == "function") {
 					let childrenRender = e.returnvalue.props.children;
-					e.returnvalue.props.children = (...args) => {
+					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 						let children = childrenRender(...args);
 						this.checkTree(children);
 						return children;
-					};
+					}, "", this);
 				}
 				else this.checkTree(e.returnvalue);
 			}
@@ -173,11 +181,11 @@ module.exports = (_ => {
 				let tree = BDFDB.ReactUtils.findChild(returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
 				if (tree) {
 					let childrenRender = tree.props.children;
-					tree.props.children = (...args) => {
+					tree.props.children = BDFDB.TimeUtils.suppress((...args) => {
 						let children = childrenRender(...args);
 						this.handleGuilds(children);
 						return children;
-					};
+					}, "", this);
 				}
 				else this.handleGuilds(returnvalue);
 			}
@@ -292,11 +300,11 @@ module.exports = (_ => {
 						};
 						if (children[index].props.children && children[index].props.children.props && typeof children[index].props.children.props.children == "function") {
 							let childrenRender = children[index].props.children.props.children;
-							children[index].props.children.props.children = (...args) => {
+							children[index].props.children.props.children = BDFDB.TimeUtils.suppress((...args) => {
 								let renderedChildren = childrenRender(...args);
 								insertBadges(renderedChildren);
 								return renderedChildren;
-							};
+							}, "", this);
 						}
 						else insertBadges(children[index]);
 					}
@@ -342,11 +350,11 @@ module.exports = (_ => {
 					};
 					if (typeof children[index].props.children == "function") {
 						let childrenRender = children[index].props.children;
-						children[index].props.children = (...args) => {
+						children[index].props.children = BDFDB.TimeUtils.suppress((...args) => {
 							let renderedChildren = childrenRender(...args);
 							insertElements(renderedChildren);
 							return renderedChildren;
-						};
+						}, "", this);
 					}
 					else insertElements(children[index]);
 				}

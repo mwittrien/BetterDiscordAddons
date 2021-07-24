@@ -1,16 +1,15 @@
 @import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/SupporterBadge.css);
 
 :root {
-	--bdfdb-blurple: var(--brand-experiment, #5865f2);
-	--bdfdb-green: var(--status-positive-background, #3ba55c);
-	--bdfdb-yellow: var(--status-warning-background, #faa61a);
-	--bdfdb-red: var(--status-danger-background, #ed4245);
+	--bdfdb-blurple: var(--brand-experiment, hsl(235, calc(var(--saturation-factor, 1) * 85.6%), 64.7%));
+	--bdfdb-green: hsl(139, calc(var(--saturation-factor, 1) * 47.3%), 43.9%);
+	--bdfdb-yellow: hsl(38, calc(var(--saturation-factor, 1) * 95.7%), 54.1%);
+	--bdfdb-red: hsl(359, calc(var(--saturation-factor, 1) * 82.6%), 59.4%);
 }
 
 img:not([src]), img[src=""], img[src="null"] {
 	opacity: 0;
 }
-
 [REPLACE_CLASS_appmount] > [REPLACE_CLASS_itemlayercontainer],
 [REPLACE_CLASS_appmount] > [REPLACE_CLASS_popouts] {
 	position: fixed;
@@ -385,12 +384,15 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 [REPLACE_CLASS_discoverycardtitlebutton] {
 	display: flex;
-	margin-left: 4px;
+	justify-content: center;
+	align-items: center;
+	margin-left: 6px;
 }
 [REPLACE_CLASS_discoverycard] [REPLACE_CLASS_favbuttoncontainer] {
 	width: 20px;
 	height: 20px;
 	flex: 0 0 auto;
+	margin-left: 3px;
 }
 [REPLACE_CLASS_discoverycard] [REPLACE_CLASS_favbuttoncontainer] [REPLACE_CLASS_giffavoritesize] {
 	width: 20px;
@@ -470,14 +472,18 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-top: 8px;
 	user-select: text;
 }
+[REPLACE_CLASS_userprofilenametag] + [REPLACE_CLASS_userinfodate],
 [REPLACE_CLASS_userinfodate] + [REPLACE_CLASS_userinfodate] {
 	margin-top: 0;
 }
 [REPLACE_CLASS_userinfodate] + *:not([REPLACE_CLASS_userinfodate]) {
 	margin-top: 6px;
 }
-[REPLACE_CLASS_userprofile] [class*='topSection']:not([class*='topSectionNormal']) [REPLACE_CLASS_userinfodate] {
-	color: hsla(0,0%,100%,.6);
+[REPLACE_CLASS_userprofile] [REPLACE_CLASS_userinfodate] {
+	margin-left: 16px;
+}
+[REPLACE_CLASS_userprofile] [REPLACE_CLASS_userinfodate]:last-child {
+	margin-bottom: 16px;
 }
 
 [REPLACE_CLASS_avatardisabled] {
@@ -572,6 +578,9 @@ img:not([src]), img[src=""], img[src="null"] {
 	height: 20px;
 }
 
+[REPLACE_CLASS_hotkeywrapper] {
+	min-width: 200px;
+}
 [REPLACE_CLASS_hotkeywrapper] [REPLACE_CLASS_hotkeycontainer] {
 	flex: 1 1 auto;
 }
@@ -1408,6 +1417,21 @@ img:not([src]), img[src=""], img[src="null"] {
 	[REPLACE_CLASS_layermodalmedium], [REPLACE_CLASS_modalsizemedium] {
 		max-height: 75vh;
 	}
+}
+
+[REPLACE_CLASS_usersettingssociallink][href*="/Lightcord/" i]::before {
+	content: "" !important;
+	display: block !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	position: fixed !important;
+	top: 0 !important;
+	right: 0 !important;
+	bottom: 0 !important;
+	left: 0 !important;
+	background: #18191c linear-gradient(var(--background-floating), var(--background-floating)) !important;
+	-webkit-app-region: drag !important;
+	z-index: 1000000 !important;
 }
 
 .platform-win [REPLACE_CLASS_toasts] {

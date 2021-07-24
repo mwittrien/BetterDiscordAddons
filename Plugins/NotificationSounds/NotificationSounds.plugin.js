@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.6.0
+ * @version 3.6.2
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,26 @@ module.exports = (_ => {
 		"info": {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
-			"version": "3.6.0",
+			"version": "3.6.2",
 			"description": "Allows you to replace the native Sounds with custom Sounds"
+		},
+		"changeLog": {
+			"improved": {
+				"Sounds": "Sounds are no longer hard coded and rather fetched from Discords code, meaning if they add a new sound the plugin should automatically include it in its settings",
+				"Default Sound Choices": "Added the Sounds from Discords Sound Packs (Chaos, Uncle, Yachty) as possible Choices"
+			}
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -68,57 +82,23 @@ module.exports = (_ => {
 		
 		var currentDevice = defaultDevice, createdAudios = {}, repatchIncoming;
 		
-		/* NEVER CHANGE THE SRC LINKS IN THE PLUGIN FILE, TO ADD NEW SOUNDS ADD THEM IN THE SETTINGS GUI IN THE PLUGINS PAGE */
-		const types = {
-			"message1":					{implemented: true,		name: "New Chat Message",			src: "/assets/dd920c06a01e5bb8b09678581e29d56f.mp3",	mute: true,		focus: null,	include: true},
-			"dm":						{implemented: true,		name: "Direct Message",				src: "/assets/84c9fa3d07da865278bd77c97d952db4.mp3",	mute: true,		focus: true,	include: false},
-			"mentioned":				{implemented: true,		name: "Mentioned",					src: "/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute: true,		focus: true,	include: false},
-			"role":						{implemented: true,		name: "Mentioned (role)",			src: "/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute: true,		focus: true,	include: false},
-			"everyone":					{implemented: true,		name: "Mentioned (@everyone)",		src: "/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute: true,		focus: true,	include: false},
-			"here":						{implemented: true,		name: "Mentioned (@here)",			src: "/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute: true,		focus: true,	include: false},
-			"deafen":					{implemented: true,		name: "Voicechat Deafen",			src: "/assets/e4d539271704b87764dc465b1a061abd.mp3",	mute: false,	focus: null,	include: true},
-			"mute":						{implemented: true,		name: "Voicechat Mute",				src: "/assets/429d09ee3b86e81a75b5e06d3fb482be.mp3",	mute: false,	focus: null,	include: true},
-			"disconnect":				{implemented: true,		name: "Voicechat Disconnect",		src: "/assets/7e125dc075ec6e5ae796e4c3ab83abb3.mp3",	mute: false,	focus: null,	include: true},
-			"undeafen":					{implemented: true,		name: "Voicechat Undeafen",			src: "/assets/5a000a0d4dff083d12a1d4fc2c7cbf66.mp3",	mute: false,	focus: null,	include: true},
-			"unmute":					{implemented: true,		name: "Voicechat Unmute",			src: "/assets/43805b9dd757ac4f6b9b58c1a8ee5f0d.mp3",	mute: false,	focus: null,	include: true},
-			"user_join":				{implemented: true,		name: "Voicechat User Joined",		src: "/assets/5dd43c946894005258d85770f0d10cff.mp3",	mute: false,	focus: null,	include: true},
-			"user_leave":				{implemented: true,		name: "Voicechat User Left",		src: "/assets/4fcfeb2cba26459c4750e60f626cebdc.mp3",	mute: false,	focus: null,	include: true},
-			"user_moved":				{implemented: true,		name: "Voicechat User Moved",		src: "/assets/e81d11590762728c1b811eadfa5be766.mp3",	mute: false,	focus: null,	include: true},
-			"reconnect":				{implemented: false,	name: "Voicechat Reconnect",		src: "/assets/471cfd0005b112ff857705e894bf41a6.mp3",	mute: true,		focus: null,	include: true},
-			"ptt_start":				{implemented: true,		name: "Push2Talk Start",			src: "/assets/8b63833c8d252fedba6b9c4f2517c705.mp3",	mute: false,	focus: null,	include: true},
-			"ptt_stop":					{implemented: true,		name: "Push2Talk Stop",				src: "/assets/74ab980d6890a0fa6aa0336182f9f620.mp3",	mute: false,	focus: null,	include: true},
-			"call_calling":				{implemented: true,		name: "Outgoing Call",				src: "/assets/c6e92752668dde4eee5923d70441579f.mp3",	mute: null,		focus: null,	include: true},
-			"call_ringing":				{implemented: true,		name: "Incoming Call",				src: "/assets/84a1b4e11d634dbfa1e5dd97a96de3ad.mp3",	mute: null,		focus: null,	include: true},
-			"call_ringing_beat":		{implemented: false,	name: "Incoming Call Beat",			src: "/assets/b9411af07f154a6fef543e7e442e4da9.mp3",	mute: null,		focus: null,	include: true},
-			"call_ringing_halloween":	{implemented: false,	name: "Incoming Call Halloween",	src: "/assets/bceeb2ba92c01584dcaafc957f769bae.mp3",	mute: null,		focus: null,	include: true},
-			"stream_started":			{implemented: true,		name: "Stream Started",				src: "/assets/9ca817f41727edc1b2f1bc4f1911107c.mp3",	mute: false,	focus: null,	include: true},
-			"stream_ended":				{implemented: true,		name: "Stream Ended",				src: "/assets/4e30f98aa537854f79f49a76af822bbc.mp3",	mute: false,	focus: null,	include: true},
-			"stream_user_joined":		{implemented: true,		name: "Stream User Joined",			src: "/assets/5827bbf9a67c61cbb0e02ffbf434b654.mp3",	mute: false,	focus: null,	include: true},
-			"stream_user_left":			{implemented: true,		name: "Stream User Left",			src: "/assets/7cdcdcbc426cc43583365a671c24b740.mp3",	mute: false,	focus: null,	include: true},
-			"ddr-down":					{implemented: true,		name: "HotKeys Window Down",		src: "/assets/71f048f8aa7d4b24bf4268a87cbbb192.mp3",	mute: false,	focus: null,	include: true},
-			"ddr-left":					{implemented: true,		name: "HotKeys Window Left",		src: "/assets/1de04408e62b5d52ae3ebbb91e9e1978.mp3",	mute: false,	focus: null,	include: true},
-			"ddr-right":				{implemented: true,		name: "HotKeys Window Right",		src: "/assets/2c0433f93db8449e4a82b76dc520cb29.mp3",	mute: false,	focus: null,	include: true},
-			"ddr-up":					{implemented: true,		name: "HotKeys Window Up",			src: "/assets/68472713f7a62c7c37e0a6a5d5a1faeb.mp3",	mute: false,	focus: null,	include: true},
-			"mention1":					{implemented: false,	name: "Mention Ping",				src: "/assets/fa4d62c3cbc80733bf1f01b9c6f181de.mp3",	mute: true,		focus: null,	include: true},
-			"mention2":					{implemented: false,	name: "Mention Ping 2",				src: "/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute: true,		focus: null,	include: true},
-			"mention3":					{implemented: false,	name: "Mention Ping 3",				src: "/assets/84c9fa3d07da865278bd77c97d952db4.mp3",	mute: true,		focus: null,	include: true},	
-			"message2":					{implemented: false,	name: "New Chatmessage 2",			src: "/assets/15fe810f6cfab609c7fcda61652b9b34.mp3",	mute: true,		focus: null,	include: true},
-			"message3":					{implemented: false,	name: "New Chatmessage 3",			src: "/assets/53ce6a92d3c233e8b4ac529d34d374e4.mp3",	mute: true,		focus: null,	include: true},
-			"human_man":				{implemented: false,	name: "Human Man Voice",			src: "/assets/a37dcd6272ae41cf49295d58c9806fe3.mp3",	mute: true,		focus: null,	include: true},
-			"robot_man":				{implemented: false,	name: "Robot Man Voice",			src: "/assets/66598bea6e59eb8acdf32cf2d9d75ba9.mp3",	mute: true,		focus: null,	include: true},
-			"discodo":					{implemented: false,	name: "Discodo Launch",				src: "/assets/ae7d16bb2eea76b9b9977db0fad66658.mp3",	mute: true,		focus: null,	include: true},
-			"overlayunlock":			{implemented: false,	name: "Overlay Unlocked",			src: "/assets/ad322ffe0a88436296158a80d5d11baa.mp3",	mute: true,		focus: null,	include: true}
+		let types = {};
+		
+		const message1Types = {
+			dm:			{src: "./message3.mp3", name: "Message (Direct Message)"},
+			mentioned:	{src: "./message2.mp3", name: "Message Mentioned"},
+			reply:		{src: "./message2.mp3", name: "Message Mentioned (reply)"},
+			role:		{src: "./mention1.mp3", name: "Message Mentioned (role)"},
+			everyone:	{src: "./mention2.mp3", name: "Message Mentioned (@everyone)"},
+			here:		{src: "./mention3.mp3", name: "Message Mentioned (@here)"}
 		};
-
-		/* NEVER CHANGE THE SRC LINKS IN THE PLUGIN FILE, TO ADD NEW SOUNDS ADD THEM IN THE SETTINGS GUI IN THE PLUGINS PAGE */
+		
 		const defaultAudios = {
 			"---": {
-				"---":						null
+				"---": null
 			},
 			"Discord": {}
 		};
-		
-		for (let id in types) if (types[id].include) defaultAudios.Discord[types[id].name] = types[id].src;
 		
 		const WebAudioSound = class WebAudioSound {
 			constructor (type) {
@@ -198,6 +178,40 @@ module.exports = (_ => {
 				};
 				
 				this.patchPriority = 9;
+				
+				const soundKeys = BDFDB.LibraryModules.SoundParser.keys();
+				for (let key of soundKeys) {	
+					const id = key.replace("./", "").replace(".mp3", "");
+					const name = id == "reconnect" ? "Invited To Speak" : id.replace("ddr-", "HotKeys_").replace("ptt_", "Push2Talk_").split("_").map(BDFDB.LibraryModules.StringUtils.upperCaseFirstChar).join(" ").replace(/1$/g, "");
+					const src = BDFDB.LibraryModules.SoundParser(key);	
+					
+					let soundPackName = id.split("_")[0];
+					if (soundPackName != id && soundKeys.filter(n => n.indexOf(`./${soundPackName}`) > -1).length > 10) {
+						soundPackName = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(soundPackName);
+						if (!defaultAudios[soundPackName]) defaultAudios[soundPackName] = {};
+						defaultAudios[soundPackName][name.replace(new RegExp(`${soundPackName} `, "i"), "").replace(/bootup/i, "Discodo")] = src;
+					}
+					else {
+						defaultAudios.Discord[name] = src;
+						if (this.isSoundUsedAnywhere(id)) types[id] = {
+							name: name,
+							src: src,
+							mute: id.startsWith("call_") ? null : false,
+							focus: null
+						};
+						if (id == "message1") {
+							types[id].mute = true;
+							for (let subType in message1Types) types[subType] = {
+								name: message1Types[subType].name,
+								src: BDFDB.LibraryModules.SoundParser(message1Types[subType].src),
+								mute: true,
+								focus: true
+							}
+						}
+					}
+					types = BDFDB.ObjectUtils.sort(types, "name");
+				}
+				for (let pack in defaultAudios) defaultAudios[pack] = BDFDB.ObjectUtils.sort(defaultAudios[pack]);
 			}
 			
 			onStart () {
@@ -234,8 +248,8 @@ module.exports = (_ => {
 							}
 							else if (BDFDB.LibraryModules.MentionUtils.isRawMessageMentioned(message, BDFDB.UserUtils.me.id)) {
 								if (message.mentions.length && !this.isSuppressMentionEnabled(guildId, message.channel_id) && !(choices.mentioned.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) for (let mention of message.mentions) if (mention.id == BDFDB.UserUtils.me.id) {
-									this.fireEvent("mentioned");
-									this.playAudio("mentioned");
+									this.fireEvent(message.message_reference ? "reply" : "mentioned");
+									this.playAudio(message.message_reference ? "reply" : "mentioned");
 									return;
 								}
 								if (guildId && message.mention_roles.length && !BDFDB.LibraryModules.MutedUtils.isSuppressRolesEnabled(guildId, message.channel_id) && !(choices.role.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
@@ -270,12 +284,13 @@ module.exports = (_ => {
 						e.stopOriginalMethodCall();
 						BDFDB.TimeUtils.timeout(_ => {
 							if (type == "message1") {
-								if (firedEvents["dm"]) firedEvents["dm"] = false;
-								else if (firedEvents["mentioned"]) firedEvents["mentioned"] = false;
-								else if (firedEvents["role"]) firedEvents["role"] = false;
-								else if (firedEvents["everyone"]) firedEvents["everyone"] = false;
-								else if (firedEvents["here"]) firedEvents["here"] = false;
-								else this.playAudio(type);
+								let called = false;
+								for (let subType in message1Types) if (firedEvents[subType]) {
+									delete firedEvents[subType];
+									called = true;
+									break;
+								}
+								if (!called) this.playAudio(type);
 							}
 							else this.playAudio(type);
 						});
@@ -290,9 +305,6 @@ module.exports = (_ => {
 					}
 					else BDFDB.LogUtils.warn(`Could not create Sound for "${e.methodArguments[0]}".`, this);
 				}});
-				
-				
-				for (let key in defaultAudios) defaultAudios[key] = BDFDB.ObjectUtils.sort(defaultAudios[key]);
 
 				this.loadAudios();
 				this.loadChoices();
@@ -331,7 +343,7 @@ module.exports = (_ => {
 									type: "Switch",
 									mini: true,
 									grow: 0,
-									label: "Mute when Channel focused:",
+									label: "Mute when Channel focused",
 									value: choices[type].focus,
 									onChange: value => {
 										choices[type].focus = value;
@@ -342,7 +354,17 @@ module.exports = (_ => {
 									type: "Switch",
 									mini: true,
 									grow: 0,
-									label: "Mute in DnD:",
+									label: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+										children: [
+											"Mute in",
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Status, {
+												style: {marginLeft: 6},
+												size: 12,
+												status: BDFDB.DiscordConstants.StatusTypes.DND
+											})
+										]
+									}),
 									value: choices[type].mute,
 									onChange: value => {
 										choices[type].mute = value;
@@ -365,8 +387,9 @@ module.exports = (_ => {
 											options: Object.keys(audios).map(name => ({value: name, label: name})),
 											searchable: true,
 											onChange: value => {
+												const categorySounds = audios[value] || {};
 												choices[type].category = value;
-												choices[type].sound = Object.keys(audios[value] || {})[0];
+												choices[type].sound = categorySounds[types[type].name] ? types[type].name : Object.keys(categorySounds)[0];
 												this.saveChoice(type, true);
 												BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 											}
@@ -521,7 +544,7 @@ module.exports = (_ => {
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Sound Configuration",
 							collapseStates: collapseStates,
-							children: Object.keys(BDFDB.ObjectUtils.filter(types, typeData => typeData.implemented)).map(type => createSoundCard(type)).flat(10).filter(n => n)
+							children: Object.keys(types).map(createSoundCard).flat(10).filter(n => n)
 						}));
 						
 						let removeableCategories = [{value: removeAllKey, label: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL}].concat(Object.keys(audios).filter(category => !(defaultAudios[category] && !Object.keys(audios[category] || {}).filter(sound => defaultAudios[category][sound] === undefined).length)).map(name => ({value: name, label: name})));
@@ -686,7 +709,11 @@ module.exports = (_ => {
 
 			fireEvent (type) {
 				firedEvents[type] = true;
-				BDFDB.TimeUtils.timeout(_ => {firedEvents[type] = false;},3000);
+				BDFDB.TimeUtils.timeout(_ => delete firedEvents[type], 3000);
+			}
+			
+			isSoundUsedAnywhere (type) {
+				return type != "human_man" && type != "robot_man" && type != "discodo" && type != "overlayunlock" && type != "call_ringing_beat" && !(type != "message1" && /\d$/.test(type));
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));

@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.2.8
+ * @version 4.3.7
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,17 +17,20 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.2.8",
+			"version": "4.3.7",
 			"description": "Allows you to locally edit Users"
-		},
-		"changeLog": {
-			"improved": {
-				"New User Popout": "Fixed for the new User Popout, which will be released soon-ish, again and again and again, stop changing Stuff Discord, STOOOOOOOOOOOOOOOOOOOOP JESUS"
-			}
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -92,7 +95,8 @@ module.exports = (_ => {
 						activity:			{value: true, 		description: "Activity Page"},
 						userPopout:			{value: true, 		description: "User Popouts"},
 						userProfile:		{value: true, 		description: "User Profile Modal"},
-						autcocompletes:		{value: true, 		description: "Autocomplete Menu"},
+						mutualFriends:		{value: true, 		description: "Mutual Friends"},
+						autocompletes:		{value: true, 		description: "Autocomplete Menu"},
 						guildSettings:		{value: true, 		description: "Server Settings"},
 						quickSwitcher:		{value: true, 		description: "Quick Switcher"},
 						searchPopout:		{value: true, 		description: "Search Popout"},
@@ -106,10 +110,11 @@ module.exports = (_ => {
 						HeaderBarContainer: "render",
 						ChannelEditorContainer: "render",
 						AutocompleteUserResult: "render",
-						UserPopout: "render",
-						UserProfile: "render",
+						UserPopoutInfo: "UserPopoutInfo",
+						UserProfileModal: "default",
+						UserProfileModalHeader: "default",
 						UserInfo: "default",
-						NowPlayingHeader: "Header",
+						NowPlayingItem: "default",
 						VoiceUser: "render",
 						RTCConnectionVoiceUsers: "default",
 						Account: "render",
@@ -140,8 +145,9 @@ module.exports = (_ => {
 						AutocompleteUserResult: "render",
 						DiscordTag: "default",
 						NameTag: "default",
-						UserPopoutInfo: "default",
-						NowPlayingHeader: "Header",
+						UserPopoutContainer: "type",
+						UserPopoutInfo: "UserPopoutInfo",
+						MutualFriends: "default",
 						VoiceUser: "render",
 						Account: "render",
 						PrivateChannelEmptyMessage: "default",
@@ -169,18 +175,21 @@ module.exports = (_ => {
 				this.patchPriority = 3;
 				
 				this.css = `
+					${BDFDB.dotCN.messageavatar} {
+						background-size: cover;
+						object-fit: cover;
+					}
 					${BDFDB.dotCNS.chat + BDFDB.dotCN.messageusername}:hover > span[style*="color"],
 					${BDFDB.dotCN.voicedetailschannel}:hover > span[style*="color"] {
 						text-decoration: underline;
 					}
 					${BDFDB.dotCNS.dmchannel + BDFDB.dotCN.bottag} {
-						display: inline;
 						margin-left: 4px;
 					}
-					${BDFDB.dotCNS.userinfo + BDFDB.dotCN.userinfodiscriminator} {
+					${BDFDB.dotCNS.peoplesuser + BDFDB.dotCN.peoplesdiscriminator} {
 						display: none;
 					}
-					${BDFDB.dotCNS.userinfohovered + BDFDB.dotCN.userinfodiscriminator} {
+					${BDFDB.dotCNS.peoplesuserhovered + BDFDB.dotCN.peoplesdiscriminator} {
 						display: block;
 					}
 					${BDFDB.dotCN.messagemarkup} span[style*="linear-gradient"] code.inline,
@@ -191,21 +200,7 @@ module.exports = (_ => {
 				`;
 			}
 			
-			onStart () {
-				// REMOVE 16.05.2021
-				let oldData = BDFDB.DataUtils.load(this);
-				if (oldData.settings) {
-					this.settings.general = BDFDB.ObjectUtils.filter(oldData.settings, k => k.indexOf("changeIn") == -1, true);
-					this.settings.places = Object.entries(BDFDB.ObjectUtils.filter(oldData.settings, k => k.indexOf("changeIn") == 0, true)).reduce((n, p) => {
-						let k = p[0].replace("changeIn", "");
-						n[k[0].toLowerCase() + k.slice(1)] = p[1];
-						return n;
-					}, {});
-					BDFDB.DataUtils.save(this.settings.general, this, "general");
-					BDFDB.DataUtils.save(this.settings.places, this, "places");
-					BDFDB.DataUtils.remove(this, "settings");
-				}
-				
+			onStart () {				
 				let observer = new MutationObserver(_ => {this.changeAppTitle();});
 				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name: "appTitleObserver", instance: observer}, {childList: true});
 				
@@ -248,23 +243,31 @@ module.exports = (_ => {
 					let userArray = [];
 					for (let id in changedUsers) if (changedUsers[id] && changedUsers[id].name) {
 						let user = BDFDB.LibraryModules.UserStore.getUser(id);
-						if (user && (e.methodArguments[0].recipients.includes(id) || (e.methodArguments[0].guild_id && BDFDB.LibraryModules.MemberStore.getMember(e.methodArguments[0].guild_id, id)))) userArray.push(Object.assign({
-							lowerCaseName: changedUsers[id].name.toLowerCase(),
-							user
+						let member = user && e.methodArguments[0].guild_id && BDFDB.LibraryModules.MemberStore.getMember(e.methodArguments[0].guild_id, id);
+						if (user && (e.methodArguments[0].recipients.includes(id) || member)) userArray.push(Object.assign({
+							comparator: changedUsers[id].name,
+							nick: member && member.nick || null,
+							score: 0,
+							user: user
 						}, changedUsers[id]));
 					}
-					userArray = BDFDB.ArrayUtils.keySort(userArray.filter(n => e.returnValue.users.every(comp => comp.user.id != n.user.id) && n.lowerCaseName.indexOf(e.methodArguments[1]) != -1), "lowerCaseName");
-					e.returnValue.users = [].concat(e.returnValue.users, userArray.map(n => {return {user: n.user};})).slice(0, BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS);
+					userArray = BDFDB.ArrayUtils.keySort(userArray.filter(n => e.returnValue.results.users.every(comp => comp.user.id != n.user.id) && n.comparator.toLowerCase().indexOf(e.methodArguments[2].toLowerCase()) != -1), "lowerCaseName");
+					e.returnValue.results.users = [].concat(e.returnValue.results.users, userArray.map(n => ({user: n.user}))).slice(0, BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS);
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.IconUtils, "getUserBannerURL", {instead: e => {
 					let user = BDFDB.LibraryModules.UserStore.getUser(e.methodArguments[0].id);
 					if (user) {
-						if (e.methodArguments[0].id == "278543574059057154") return user.banner;
+						if (user.id == "278543574059057154") return user.banner;
 						let data = changedUsers[user.id];
 						if (data && data.banner && !data.removeBanner) return data.banner;
 					}
 					return e.callOriginalMethod();
+				}});
+				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.StatusMetaUtils, "findActivity", {after: e => {
+					let data = changedUsers[e.methodArguments[0]];
+					if (data && (data.removeStatus || data.status || data.statusEmoji) && (e.returnValue && e.returnValue.type === BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS || !e.returnValue && e.methodArguments[1] && e.methodArguments[1].toString().indexOf("type===") > -1 && e.methodArguments[1].toString().indexOf("CUSTOM_STATUS") > -1)) return this.createCustomStatus(changedUsers[e.methodArguments[0]]);
 				}});
 				
 				this.forceUpdateAll();
@@ -413,8 +416,15 @@ module.exports = (_ => {
 						if (data && data.name) e.instance.props.nick = data.name;
 					}
 					else {
-						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "AutocompleteRowHeading"});
-						if (userName) this.changeUserColor(userName, e.instance.props.user.id);
+						if (typeof e.returnvalue.props.children == "function") {
+							let childrenRender = e.returnvalue.props.children;
+							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
+								let children = childrenRender(...args);
+								let userName = BDFDB.ReactUtils.findChild(children, {name: "AutocompleteRowHeading"});
+								if (userName) this.changeUserColor(userName, e.instance.props.user.id);
+								return children;
+							}, "", this);
+						}
 					}
 				}
 			}
@@ -458,16 +468,10 @@ module.exports = (_ => {
 							changeBackground = true;
 							tagClass = BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag;
 							break;
-						case BDFDB.disCN.userprofilenametag:
-							change = this.settings.places.userProfile;
-							guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-							changeBackground = true;
-							tagClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
-							break;
 						case BDFDB.disCN.guildsettingsinviteusername:
 							change = this.settings.places.guildSettings;
 							break;
-						case BDFDB.disCN.userinfodiscordtag:
+						case BDFDB.disCN.peoplesdiscordtag:
 							change = this.settings.places.friendList;
 							tagClass = BDFDB.disCN.bottagnametag;
 							break;
@@ -475,6 +479,12 @@ module.exports = (_ => {
 					switch (e.instance.props.usernameClass) {
 						case BDFDB.disCN.messagereactionsmodalusername:
 							change = this.settings.places.reactions && !BDFDB.LibraryModules.MemberStore.getNick(BDFDB.LibraryModules.LastGuildStore.getGuildId(), e.instance.props.user.id);
+							break;
+						case BDFDB.disCN.userprofileusername:
+							change = this.settings.places.userProfile;
+							guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
+							changeBackground = true;
+							tagClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
 							break;
 					}
 					if (change) {
@@ -491,43 +501,45 @@ module.exports = (_ => {
 				}
 			}
 
-			processUserPopout (e) {
-				if (e.instance.props.user && this.settings.places.userPopout) {
-					let data = changedUsers[e.instance.props.user.id];
-					if (data) {
-						e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
-						if (data.name && !(data.useServerNick && e.instance.props.nickname)) {
-							let name = [data.name, data.showServerNick && e.instance.props.nickname && `(${e.instance.props.nickname})`].filter(n => n).join(" ");
-							e.instance.props.nickname = name;
-							if (e.instance.props.guildMember) e.instance.props.guildMember = Object.assign({}, e.instance.props.guildMember, {nick: name});
-						}
-						if (data.removeStatus || data.status || data.statusEmoji) e.instance.props.customStatusActivity = this.createCustomStatus(data);
-					}
-				}
+			processUserPopoutContainer (e) {
+				if (e.returnvalue.props.user && this.settings.places.userPopout && changedUsers[e.returnvalue.props.user.id]) e.returnvalue.props.user = this.getUserData(e.returnvalue.props.user.id, true, true);
 			}
 
 			processUserPopoutInfo (e) {
 				if (e.instance.props.user && this.settings.places.userPopout) {
 					let data = changedUsers[e.instance.props.user.id];
-					if (data && (data.color1 || data.color2 || data.tag)) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
-						if (index > -1) {
-							this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground: true});
-							if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
-							this.injectBadge(children[index].props.children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
-								tagClass: BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag,
-								inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
-							});
+					if (!data) return;
+					if (!e.returnvalue) {
+						if (data.name && !(data.useServerNick && e.instance.props.nickname)) e.instance.props.nickname = [data.name, data.showServerNick && e.instance.props.nickname && `(${e.instance.props.nickname})`].filter(n => n).join(" ");
+					}
+					else {
+						if (data.color1 || data.color2 || data.tag) {
+							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
+							if (index > -1) {
+								this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground: true});
+								if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
+								this.injectBadge(children[index].props.children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
+									tagClass: BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag,
+									inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
+								});
+							}
 						}
 					}
 				}
 			}
 
-			processUserProfile (e) {
-				if (e.instance.props.user && this.settings.places.userProfile) {
-					e.instance.props.user = this.getUserData(e.instance.props.user.id);
-					let data = changedUsers[e.instance.props.user.id];
-					if (data && (data.removeStatus || data.status || data.statusEmoji)) e.instance.props.customStatusActivity = this.createCustomStatus(data);
+			processUserProfileModal (e) {
+				if (e.instance.props.user && this.settings.places.userProfile) e.instance.props.user = this.getUserData(e.instance.props.user.id);
+			}
+
+			processUserProfileModalHeader (e) {
+				if (e.instance.props.user && this.settings.places.userProfile) e.instance.props.user = this.getUserData(e.instance.props.user.id);
+			}
+
+			processMutualFriends (e) {
+				if (this.settings.places.mutualFriends) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FriendRow"});
+					if (index > -1) for (let row of children) if (row && row.props && row.props.user) row.props.user = this.getUserData(row.props.user.id);
 				}
 			}
 
@@ -545,17 +557,24 @@ module.exports = (_ => {
 				}
 			}
 
-			processNowPlayingHeader (e) {
-				if (BDFDB.ObjectUtils.is(e.instance.props.priorityUser) && e.instance.props.priorityUser.user && this.settings.places.friendList) {
-					if (!e.returnvalue) {
-						let titleIsName = e.instance.props.priorityUser.user.username == e.instance.props.title;
-						e.instance.props.priorityUser.user = this.getUserData(e.instance.props.priorityUser.user.id);
-						if (titleIsName) e.instance.props.title = e.instance.props.priorityUser.user.username;
+			processNowPlayingItem (e) {
+				let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {name: "NowPlayingHeader"});
+				if (index > -1) for (let child of children) if (child && child.props && child.props.party) {
+					if (child.type && child.type.displayName == "NowPlayingHeader") {
+						const type = child.type;
+						child.type = (...args) => {
+							const returnValue = type(...args);
+							if (BDFDB.ObjectUtils.get(returnValue, "props.priorityUser.user.username") == returnValue.props.title) {
+								returnValue.props.title = BDFDB.ReactUtils.createElement("span", {children: returnValue.props.title});
+								this.changeUserColor(returnValue.props.title, returnValue.props.priorityUser.user.id);
+							}
+							return returnValue;
+						};
 					}
-					else {
-						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Header"});
-						if (userName) this.changeUserColor(userName, e.instance.props.priorityUser.user.id);
-					}
+					child.props.party = Object.assign({}, child.props.party);
+					if (child.props.party.partiedMembers) for (let i in child.props.party.partiedMembers) if (child.props.party.partiedMembers[i]) child.props.party.partiedMembers[i] = this.getUserData(child.props.party.partiedMembers[i].id);
+					if (child.props.party.priorityMembers) for (let i in child.props.party.priorityMembers) if (child.props.party.priorityMembers[i]) child.props.party.priorityMembers[i] = Object.assign({}, child.props.party.priorityMembers[i], {user: this.getUserData(child.props.party.priorityMembers[i].user.id)});
+					if (child.props.party.voiceChannels) for (let i in child.props.party.voiceChannels) if (child.props.party.voiceChannels[i]) child.props.party.voiceChannels[i] = Object.assign({}, child.props.party.voiceChannels[i], {members: [].concat(child.props.party.voiceChannels[i].members).map(user => this.getUserData(user.id))});
 				}
 			}
 			
@@ -599,12 +618,12 @@ module.exports = (_ => {
 							let tooltip = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Tooltip"});
 							if (tooltip && typeof tooltip.props.children == "function") {
 								let renderChildren = tooltip.props.children;
-								tooltip.props.children = (...args) => {
+								tooltip.props.children = BDFDB.TimeUtils.suppress((...args) => {
 									let renderedChildren = renderChildren(...args);
 									let userName = BDFDB.ReactUtils.findChild(renderedChildren, {name: "PanelTitle"});
 									if (userName) this.changeUserColor(userName, e.instance.props.currentUser.id);
 									return renderedChildren;
-								}
+								}, "", this);
 							}
 						}
 					}
@@ -617,7 +636,7 @@ module.exports = (_ => {
 					let name = this.getUserData(recipientId).username;
 					let avatar = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {props: "src"});
 					if (avatar) avatar.props.src = this.getUserAvatar(recipientId);
-					let userName = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {name: "h1"});
+					let userName = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {name: "EmptyMessageHeader"});
 					if (userName) {
 						userName.props.children = BDFDB.ReactUtils.createElement("span", {children: name});
 						this.changeUserColor(userName.props.children, recipientId);
@@ -669,36 +688,45 @@ module.exports = (_ => {
 			}
 			
 			processMessageUsername (e) {
-				if (e.instance.props.message && this.settings.places.chatWindow && this.shouldchat(e.instance.props.message.channel_id)) {
-					let data = changedUsers[e.instance.props.message.author.id];
-					if (!e.returnvalue) {
-						let message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {author: this.getUserData(e.instance.props.message.author.id, true, false, e.instance.props.message.author)}));
-						if (data) {
-							let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.message.author.id) || {}).colorString || data.color1;
-							if (color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
-						}
+				if (!e.instance.props.message || !this.settings.places.chatWindow || !this.shouldchat(e.instance.props.message.channel_id)) return;
+				const author = e.instance.props.userOverride || e.instance.props.message.author;
+				let data = changedUsers[author.id];
+				if (!data) return;
+				if (!e.returnvalue) {
+					let color1 = data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, author.id) || {}).colorString || data.color1;
+					color1 = color1 && BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
+					if (e.instance.props.userOverride) e.instance.props.userOverride = this.getUserData(author.id)
+					else {
+						let message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {author: this.getUserData(author.id, true, false, author)}));
+						if (color1) message.colorString = color1;
 						e.instance.props.message = message;
 					}
-					else if (e.returnvalue.props.children) {
-						if (data && (data.color1 || data.color2)) {
-							let messageUsername = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
-							if (messageUsername) {
-								if (messageUsername.props && typeof messageUsername.props.children == "function") {
-									let renderChildren = messageUsername.props.children;
-									messageUsername.props.children = (...args) => {
-										let renderedChildren = renderChildren(...args);
-										this.changeUserColor(renderedChildren, e.instance.props.message.author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
-										return renderedChildren;
-									}
-								}
-								else this.changeUserColor(messageUsername, e.instance.props.message.author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
+					let member = BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, author.id);
+					e.instance.props.author = Object.assign({}, e.instance.props.author, {
+						nick: (data.useServerNick && member && member.nick || [data.name, data.showServerNick && member && member.nick && `(${member.nick})`].filter(n => n).join(" ")) || e.instance.props.author.nick,
+						guildMemberAvatar: (data.removeIcon ? null : data.url) || e.instance.props.author.guildMemberAvatar,
+						colorString: color1 || e.instance.props.author.colorString
+					});
+				}
+				else if (e.returnvalue.props.children) {
+					if (data.color1 || data.color2) {
+						let messageUsername = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
+						if (messageUsername) {
+							if (messageUsername.props && typeof messageUsername.props.children == "function") {
+								let renderChildren = messageUsername.props.children;
+								messageUsername.props.children = BDFDB.TimeUtils.suppress((...args) => {
+									let renderedChildren = renderChildren(...args);
+									this.changeUserColor(renderedChildren, author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
+									return renderedChildren;
+								}, "", this);
 							}
+							else this.changeUserColor(messageUsername, author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
 						}
-						this.injectBadge(e.returnvalue.props.children, e.instance.props.message.author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.compact ? 0 : 2, {
-							tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
-							useRem: true
-						});
 					}
+					this.injectBadge(e.returnvalue.props.children, author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.compact ? 0 : 2, {
+						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
+						useRem: true
+					});
 				}
 			}
 			
@@ -793,11 +821,11 @@ module.exports = (_ => {
 				if (e.instance.props.userId && this.settings.places.mentions && changedUsers[e.instance.props.userId] && this.shouldchat()) {
 					if (typeof e.returnvalue.props.children == "function") {
 						let renderChildren = e.returnvalue.props.children;
-						e.returnvalue.props.children = (...args) => {
+						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 							let children = renderChildren(...args);
 							this.changeMention(BDFDB.ReactUtils.findChild(children, {name: "Mention"}), changedUsers[e.instance.props.userId]);
 							return children;
-						};
+						}, "", this);
 					}
 					else this.changeMention(BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Mention"}), changedUsers[e.instance.props.userId]);
 				}
@@ -814,11 +842,11 @@ module.exports = (_ => {
 					if (data.name || data.color1) {
 						if (typeof e.returnvalue.props.children == "function") {
 							let renderChildren = e.returnvalue.props.children;
-							e.returnvalue.props.children = (...args) => {
+							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 								let children = renderChildren(...args);
 								this.changeMention(children, data);
 								return children;
-							};
+							}, "", this);
 						}
 						else this.changeMention(e.returnvalue, data);
 					}
@@ -1001,11 +1029,11 @@ module.exports = (_ => {
 					let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: c => c && c.props && !isNaN(parseInt(c.props.id))});
 					if (avatar && typeof avatar.props.children == "function") {
 						let childrenRender = avatar.props.children;
-						avatar.props.children = (...args) => {
+						avatar.props.children = BDFDB.TimeUtils.suppress((...args) => {
 							let renderedChildren = childrenRender(...args);
 							if (renderedChildren && renderedChildren.props) renderedChildren.props.icon = this.getUserAvatar(recipientId);
 							return renderedChildren;
-						};
+						}, "", this);
 					}
 				}
 			}
@@ -1023,9 +1051,9 @@ module.exports = (_ => {
 					else {
 						e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getUserData(e.instance.props.user.id).username});
 						this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {modify: BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "hovered", "selected", "hasUnreadMessages", "muted")});
-						e.returnvalue.props.name = [e.returnvalue.props.name];
 						e.returnvalue.props.avatar.props.src = this.getUserAvatar(e.instance.props.user.id);
-						this.injectBadge(e.returnvalue.props.name, e.instance.props.user.id, null, 1);
+						e.returnvalue.props.decorators = [e.returnvalue.props.decorators].flat(10);
+						this.injectBadge(e.returnvalue.props.decorators, e.instance.props.user.id, null, 1);
 					}
 				}
 			}
@@ -1085,7 +1113,7 @@ module.exports = (_ => {
 				if (e.instance.props.channel && e.instance.props.channel.isDM() && this.settings.places.recentDms && typeof e.returnvalue.props.children == "function") {
 					let recipientId = e.instance.props.channel.getRecipientId();
 					let renderChildren = e.returnvalue.props.children;
-					e.returnvalue.props.children = (...args) => {
+					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 						let renderedChildren = renderChildren(...args);
 						let userName = BDFDB.ReactUtils.findChild(renderedChildren, {name: "PanelSubtext"});
 						if (userName) {
@@ -1093,7 +1121,7 @@ module.exports = (_ => {
 							this.changeUserColor(userName, recipientId);
 						}
 						return renderedChildren;
-					};
+					}, "", this);
 				}
 			}
 
@@ -1472,6 +1500,7 @@ module.exports = (_ => {
 													children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.EmojiPickerButton, {
 														emoji: data.statusEmoji,
 														allowManagedEmojis: true,
+														allowManagedEmojisUsage: true,
 														ref: instance => {if (instance) statusEmojiInput = instance;},
 														onSelect: value => {newData.statusEmoji = value;}
 													})
