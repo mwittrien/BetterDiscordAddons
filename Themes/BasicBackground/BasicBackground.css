@@ -115,8 +115,9 @@
 		4.	AUTOCOMPLETEMENU
 		5.	MEMBERLIST
 		6.	SEARCHPAGE
-		7.	CALL
-		8.	UNAVAILABLESCREEN
+		7.	THREADS
+		8.	CALL
+		9.	UNAVAILABLESCREEN
 	7.	PEOPLES
 	8.	STORE/NITRO
 	9.	LIBRARY
@@ -205,6 +206,7 @@ body,														/* body														*/
 #app-mount .privateChannels-1nO12o,							/* dmchannels												*/
 #app-mount .panels-j1Uci_ > *,								/* account/voice		inner								*/
 #app-mount .chat-3bRxxu,									/* chat					container							*/
+#app-mount .threadSidebar-1o3BTy,							/* chat					thread sidebar						*/
 #app-mount .wrapper-3vR61M,									/* chat					messages loading					*/
 #app-mount .noChannel-Z1DQK7,								/* nochannel												*/
 #app-mount .members-1998pB,									/* members													*/
@@ -665,6 +667,22 @@ body::after {
 
 
 /* ~~~~		6.		CHAT							~~~~ */
+
+.chat-3bRxxu.threadSidebarOpen-vdkwIh {
+	border-radius: 0;
+}
+.chat-3bRxxu.threadSidebarOpen-vdkwIh .content-yTz4x3::after {
+	content: "";
+	display: block;
+	position: static;
+	min-width: 408px;
+	width: 29vw;
+}
+@media (max-width: 1150px) {
+	.chat-3bRxxu.threadSidebarOpen-vdkwIh .content-yTz4x3::after {
+		display: none;
+	}
+}
 
 /* ----		6.1.	CHANNELHEADER					---- */
 
@@ -1332,6 +1350,9 @@ body::after {
 	border-top-right-radius: calc(8px * (1 - (var(--memberlisttransparency) / (var(--memberlisttransparency) + 0.00000000000000000000001))));
 	border-top-left-radius: calc(8px * (1 - (var(--guildchanneltransparency) / (var(--guildchanneltransparency) + 0.00000000000000000000001))));
 }
+.threadSidebarOpen-vdkwIh .form-2fGMdU {
+	border-top-right-radius: 8px;
+}
 .form-2fGMdU::before {
 	display: none;
 }
@@ -1517,7 +1538,53 @@ body::after {
 	text-shadow: 1px 1px var(--textshadow);
 }
 
-/* ----		6.7.	CALL							---- */
+/* ----		6.7.	THREADS							---- */
+
+.threadSidebar-1o3BTy {
+	position: absolute;
+	top: 48px;
+	right: 0;
+	bottom: 0;
+	border-radius: 0;
+	z-index: 100;
+}
+.threadSidebar-1o3BTy .container-1r6BKw {										/* searchpage			header								*/
+	background-color: rgba(var(--transparencycolor), calc(var(--guildchanneltransparency) * 0.8));
+	box-shadow: unset;
+	border-radius: 0 0 0 8px;
+}
+.threadSidebar-1o3BTy .form-2fGMdU {
+	border-radius: 8px 0 0 0;
+}
+@media (max-width: 1150px) {
+	.threadSidebar-1o3BTy::before,
+	.threadSidebar-1o3BTy::after {
+		content: "";
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		left: 0;
+		pointer-events: none;
+		z-index: -1;
+	}
+	.threadSidebar-1o3BTy::before {
+		background: var(--background) var(--backgroundposition)/var(--backgroundsize);
+		background-attachment: fixed;
+	}
+	.threadSidebar-1o3BTy::after {
+		background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + var(--memberlisttransparency) * 0.85));
+		backdrop-filter: blur(var(--backgroundblur));
+	}
+	.threadSidebar-1o3BTy .container-1r6BKw {
+		border-radius: 0;
+	}
+	.threadSidebar-1o3BTy .form-2fGMdU {
+		border-radius: 0;
+	}
+}
+
+/* ----		6.8.	CALL							---- */
 
 #app-mount .root-3JVdIJ {									/* popout				inner								*/
 	background-color: transparent;
@@ -1622,7 +1689,7 @@ body::after {
 	box-shadow: 0 1px 0 rgba(var(--transparencycolor), .2), 0 1.5px 0 rgba(var(--transparencycolor), .05), 0 2px 0 rgba(var(--transparencycolor), .05);
 }
 
-/* ----		6.8.	UNAVAILABLESCREEN				---- */
+/* ----		6.9.	UNAVAILABLESCREEN				---- */
 
 .category-2haXBH,											/* loadingplaceholders										*/
 .channelIcon-1TvDoP,
