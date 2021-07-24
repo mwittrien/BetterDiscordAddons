@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.5
+ * @version 1.0.6
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditRoles",
 			"author": "DevilBro",
-			"version": "1.0.5",
+			"version": "1.0.6",
 			"description": "Allows you to locally edit Roles"
 		},
 		"changeLog": {
 			"fixed": {
-				"Colorless Names": "Fixed issue where changing the name of a role without changing the color, would result in usernames to become colorless"
+				"Crashs": ""
 			}
 		}
 	};
@@ -79,15 +79,26 @@ module.exports = (_ => {
 			onLoad () {
 				this.patchedModules = {
 					before: {
+						ChannelMembers: "render",
 						MemberListItem: "render",
-						ChannelMembers: "render"
+						UserPopoutBody: "default"
 					}
 				};
 			}
 			
 			onStart () {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.GuildStore, "getGuild", {after: e => {
-					if (e.returnValue) e.returnValue = this.changeRolesInGuild(e.returnValue);
+					if (e.returnValue) e.returnValue = this.changeRolesInGuild(e.returnValue, true);
+				}});
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.PermissionRoleUtils, "getHighestRole", {after: e => {
+					if (e.returnValue && changedRoles[e.returnValue.id]) {
+						let data = changedRoles[e.returnValue.id];
+						e.returnValue = Object.assign({}, e.returnValue, {
+							name: data.name || e.returnValue.name,
+							color: data.color ? BDFDB.ColorUtils.convert(data.color, "INT") : e.returnValue.color,
+							colorString: data.color ? BDFDB.ColorUtils.convert(data.color, "HEX") : e.returnValue.colorString
+						});
+					}
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MemberStore, "getMember", {after: e => {
 					if (e.returnValue) {
@@ -207,14 +218,6 @@ module.exports = (_ => {
 					e.returnvalue.props.children
 				].flat(10).filter(n => n);
 			}
-			
-			processMemberListItem (e) {
-				if (e.instance.props.user) {
-					let member = BDFDB.LibraryModules.MemberStore.getMember(e.instance.props.guildId, e.instance.props.user.id);
-					if (member) e.instance.props.colorString = member.colorString;
-				}
-			}
-		
 			processChannelMembers (e) {
 				e.instance.props.groups = [].concat(e.instance.props.groups);
 				for (let i in e.instance.props.groups) if (e.instance.props.groups[i].type == "GROUP") {
@@ -228,11 +231,22 @@ module.exports = (_ => {
 				}
 			}
 			
+			processMemberListItem (e) {
+				if (e.instance.props.user) {
+					let member = BDFDB.LibraryModules.MemberStore.getMember(e.instance.props.guildId, e.instance.props.user.id);
+					if (member) e.instance.props.colorString = member.colorString;
+				}
+			}
+			
+			processUserPopoutBody (e) {
+				if (e.instance.props.guild) e.instance.props.guild = this.changeRolesInGuild(e.instance.props.guild);
+			}
+			
 			getGuildFromRoleId (roleId) {
 				return BDFDB.LibraryModules.FolderStore.getFlattenedGuilds().find(g => g.roles[roleId]);
 			}
 			
-			changeRolesInGuild (guild) {
+			changeRolesInGuild (guild, useNative) {
 				let changed = false, roles = Object.assign({}, guild.roles);
 				for (let id in guild.roles) {
 					let data = changedRoles[id];
@@ -245,7 +259,8 @@ module.exports = (_ => {
 						});
 					}
 				}
-				return !changed ? guild : (new BDFDB.DiscordObjects.Guild(Object.assign({}, guild, {roles})));
+				if (useNative) guild.roles = roles;
+				return !changed || useNative ? guild : (new BDFDB.DiscordObjects.Guild(Object.assign({}, guild, {roles})));
 			}
 
 			openRoleSettingsModal (role) {
