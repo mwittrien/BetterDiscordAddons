@@ -502,6 +502,10 @@ img:not([src]), img[src=""], img[src="null"] {
 	width: inherit !important;
 	height: inherit !important;
 }
+[REPLACE_CLASS_messageavatar][REPLACE_CLASS_bdfdbbadgeavatar] [REPLACE_CLASS_messageavatar] {
+	position: static !important;
+	margin: unset !important;
+}
 
 [REPLACE_CLASS_favbuttoncontainer] {
 	display: flex;

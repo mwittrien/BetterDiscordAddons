@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.7
+ * @version 1.7.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,13 +19,20 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.7.7",
+			"version": "1.7.8",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
 		"changeLog": {
+			"progress": {
+				"Vacation": "I am back from Vacation"
+			},
 			"fixed": {
-				"Crashs": "I am on vacation now for 8 days, so I won't be able to fix issues"
+				"Text Scrollers": "No longer get stuck at the end position sometimes",
+				"Popups": "Open again (PersonalPins, ClickableMentions, Date Formatters, etc.)"
+			},
+			"added": {
+				"Data Attributes": "Added user id data attribute to body"
 			}
 		}
 	};
@@ -2905,9 +2912,15 @@ module.exports = (_ => {
 			return user && user instanceof BDFDB.DiscordObjects.User;
 		};
 		var myDataUser = LibraryModules.UserStore && LibraryModules.UserStore.getCurrentUser && LibraryModules.UserStore.getCurrentUser();
+		if (myDataUser) document.body.setAttribute(InternalData.userIdAttribute, myDataUser.id);
 		BDFDB.UserUtils.me = new Proxy(myDataUser || {}, {
 			get: function (list, item) {
-				return (myDataUser = (LibraryModules.UserStore && LibraryModules.UserStore.getCurrentUser && LibraryModules.UserStore.getCurrentUser() || {})) && myDataUser[item];
+				if (!myDataUser) {
+					myDataUser = LibraryModules.UserStore && LibraryModules.UserStore.getCurrentUser && LibraryModules.UserStore.getCurrentUser();
+					if (myDataUser) document.body.setAttribute(InternalData.userIdAttribute, myDataUser.id);
+				}
+				return myDataUser ? myDataUser[item] : null;
+				
 			}
 		});
 		BDFDB.UserUtils.getStatus = function (id = BDFDB.UserUtils.me.id) {
@@ -3827,8 +3840,8 @@ module.exports = (_ => {
 			footerChildren = footerChildren.concat(config.footerChildren).filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
 			
 			if (contentChildren.length) {
-				if (typeof config.onClose != "function") config.onClose = _ => {};
 				if (typeof config.onOpen != "function") config.onOpen = _ => {};
+				if (typeof config.onClose != "function") config.onClose = _ => {};
 				
 				let name = plugin.name || (typeof plugin.getName == "function" ? plugin.getName() : null);
 				name = typeof name == "string" ? name : null;
@@ -4487,6 +4500,7 @@ module.exports = (_ => {
 				let stringObj = LibraryModules.LanguageStore.Messages[item];
 				if (stringObj && typeof stringObj == "object" && typeof stringObj.format == "function") {
 					let i = 0, returnvalue, formatVars = {};
+					"aaaa (aaabbb) (cccc)"
 					while (!returnvalue && i < 10) {
 						i++;
 						try {returnvalue = stringObj.format(formatVars, false);}
@@ -4494,6 +4508,10 @@ module.exports = (_ => {
 							returnvalue = null;
 							let value = values.shift();
 							formatVars[err.toString().split("for: ")[1]] = value != null ? (value === 0 ? "0" : value) : "undefined";
+							if (stringObj.intMessage) {
+								try {for (let hook of stringObj.intMessage.format(formatVars).match(/\([^\(\)]+\)/gi)) formatVars[hook.replace(/[\(\)]/g, "")] = n => n;}
+								catch (err2) {if (item == "USER_ACTIVITY_LISTENING_ARTISTS") console.log(2, err2, formatVars);}
+							}
 						}
 					}
 					if (returnvalue) return parseLanguageStringObj(returnvalue);
@@ -5179,30 +5197,6 @@ module.exports = (_ => {
 					BDFDB.ReactUtils.forceUpdate(this);
 				}
 			}
-			componentDidMount() {
-				this.domElementRef = {current: BDFDB.DOMUtils.getParent(BDFDB.dotCN.itemlayer, BDFDB.ReactUtils.findDOMNode(this))};
-				let popoutContainerInstance = BDFDB.ReactUtils.findOwner(this.domElementRef.current, {name: "BDFDB_PopoutContainer", unlimited: true, up: true});
-				if (popoutContainerInstance) {
-					let mouseDown = event => {
-						if (!this.domElementRef.current || !document.contains(this.domElementRef.current)) document.removeEventListener("mousedown", mouseDown);
-						else if (!this.domElementRef.current.contains(event.target)) {
-							let mouseUp = event => {
-								if (!this.domElementRef.current || !document.contains(this.domElementRef.current)) {
-									document.removeEventListener("mousedown", mouseDown);
-									document.removeEventListener("mouseup", mouseUp);
-								}
-								else if (!this.domElementRef.current.contains(event.target)) {
-									document.removeEventListener("mousedown", mouseDown);
-									document.removeEventListener("mouseup", mouseUp);
-									popoutContainerInstance.handleClick(event);
-								}
-							};
-							document.addEventListener("mouseup", mouseUp);
-						}
-					};
-					document.addEventListener("mousedown", mouseDown);
-				}
-			}
 			render() {
 				if (this.state.isGradient) this.props.color = Object.assign({}, this.props.color);
 				
@@ -5560,6 +5554,9 @@ module.exports = (_ => {
 					animation: InternalComponents.LibraryComponents.PopoutContainer.Animation.TRANSLATE,
 					position: InternalComponents.LibraryComponents.PopoutContainer.Positions.BOTTOM,
 					align: InternalComponents.LibraryComponents.PopoutContainer.Align.CENTER,
+					shouldShow: swatches.props.pickerOpen,
+					onClick: _ => swatches.props.pickerOpen = true,
+					onClose: _ => delete swatches.props.pickerOpen,
 					renderPopout: _ => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ColorPicker, Object.assign({}, swatches.props.pickerConfig, {
 						color: swatches.props.color,
 						onColorChange: color => {
@@ -5595,6 +5592,7 @@ module.exports = (_ => {
 					isCustom: this.props.colors.length,
 					isSelected: this.props.customSelected,
 					isDisabled: this.props.disabled,
+					pickerOpen: this.props.pickerOpen,
 					style: {margin: 0}
 				});
 				return !this.props.colors.length ? BDFDB.ReactUtils.createElement("div", {
@@ -6612,6 +6610,7 @@ module.exports = (_ => {
 		InternalComponents.LibraryComponents.Popout = reactInitialized && class BDFDB_Popout extends LibraryModules.React.Component {
 			componentDidMount() {
 				this.props.containerInstance.popout = this;
+				if (typeof this.props.onOpen == "function") this.props.onOpen(this.props.containerInstance, this);
 			}
 			componentWillUnmount() {
 				delete this.props.containerInstance.popout;
@@ -6625,7 +6624,7 @@ module.exports = (_ => {
 				return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PopoutFocusLock, {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.popoutwrapper, BDFDB.disCN.popout, positionClass, this.props.invert && pos && pos != "bottom" && BDFDB.disCN.popoutinvert, arrowClass, !this.props.shadow && BDFDB.disCN.popoutnoshadow),
 					id: this.props.id,
-					onClick: e => {e.stopPropagation();},
+					onClick: e => e.stopPropagation(),
 					style: Object.assign({}, this.props.style, {
 						position: this.props.isChild ? "relative" : "absolute"
 					}),
@@ -6642,53 +6641,60 @@ module.exports = (_ => {
 		InternalComponents.LibraryComponents.PopoutContainer = reactInitialized && class BDFDB_PopoutContainer extends LibraryModules.React.Component {
 			componentDidMount() {
 				let basePopout = BDFDB.ReactUtils.findOwner(this, {name: "BasePopout"});
-				if (!basePopout || !basePopout.handleClick) return;
-				this.handleClick = e => basePopout.handleClick(BDFDB.ObjectUtils.is(e) ? e : (new MouseEvent({})));
-				this.close = basePopout.close;
-				this.domElementRef = basePopout.domElementRef;
+				if (basePopout) this.domElementRef = basePopout.domElementRef;
 			}
 			render() {
 				let child = (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children) || BDFDB.ReactUtils.createElement("div", {style: {height: "100%", width: "100%"}});
 				child.props.className = BDFDB.DOMUtils.formatClassName(child.props.className, this.props.className);
-				let childClick = child.props.onClick, childContextMenu = child.props.onContextMenu;
+				const toggle = state => {
+					if (this.props.changing) return;
+					const newState = state === undefined ? !this.props.shouldShow : state;
+					if (newState != this.props.shouldShow) {
+						this.props.shouldShow = newState;
+						if (newState) BDFDB.TimeUtils.timeout(_ => {
+							const documentClick = event => {
+								let node = BDFDB.ReactUtils.findDOMNode(this.popout);
+								if (!node || !document.contains(node) || node != event.target && document.contains(event.target) && !node.contains(event.target)) {
+									document.removeEventListener("click", documentClick);
+									if (node) toggle(false);
+								}
+							};
+							document.addEventListener("click", documentClick);
+						}, 1000);
+						BDFDB.ReactUtils.forceUpdate(this);
+					}
+				};
+				const childProps = Object.assign({}, child.props);
 				child.props.onClick = (e, childThis) => {
 					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
-						if ((this.props.openOnClick || this.props.openOnClick === undefined) && typeof this.handleClick == "function") this.handleClick(e);
+						if ((this.props.openOnClick || this.props.openOnClick === undefined)) toggle(true);
 						if (typeof this.props.onClick == "function") this.props.onClick(e, this);
-						if (typeof childClick == "function") childClick(e, childThis);
+						if (typeof childProps.onClick == "function") childProps.onClick(e, childThis);
 					}
 					else e.stopPropagation();
 				};
 				child.props.onContextMenu = (e, childThis) => {
 					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
-						if (this.props.openOnContextMenu && typeof this.handleClick == "function") this.handleClick(e);
+						if (this.props.openOnContextMenu) toggle(true);
 						if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
-						if (typeof childContextMenu == "function") childContextMenu(e, childThis);
+						if (typeof childProps.onContextMenu == "function") childProps.onContextMenu(e, childThis);
 					}
 					else e.stopPropagation();
 				};
 				return BDFDB.ReactUtils.createElement(LibraryModules.React.Fragment, {
 					children: BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.PopoutContainer, Object.assign({}, this.props, {
+						shouldShow: this.props.shouldShow ? true : false,
 						children: _ => child,
-						renderPopout: e => {
-							const documentClick = event => {
-								let node = BDFDB.ReactUtils.findDOMNode(this.popout);
-								if (!node || !document.contains(node) || node != event.target && document.contains(event.target) && !node.contains(event.target)) {
-									document.removeEventListener("click", documentClick);
-									if (node && typeof this.close == "function") this.close();
-								}
-							};
-							document.addEventListener("click", documentClick);
-							return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Popout, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-								className: this.props.popoutClassName,
-								containerInstance: this,
-								isChild: true,
-								position: e.position,
-								style: this.props.popoutStyle,
-								onClose: typeof this.props.onClose == "function" ? this.props.onClose.bind(this) : _ => {},
-								children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(this) : null
-							}), "popoutStyle", "popoutClassName"));
-						}
+						renderPopout: e => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Popout, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+							className: this.props.popoutClassName,
+							containerInstance: this,
+							isChild: true,
+							position: e.position,
+							style: this.props.popoutStyle,
+							onOpen: typeof this.props.onOpen == "function" ? this.props.onOpen.bind(this) : _ => {},
+							onClose: typeof this.props.onClose == "function" ? this.props.onClose.bind(this) : _ => {},
+							children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(this) : null
+						}), "popoutStyle", "popoutClassName", "shouldShow", "changing", "renderPopout", "openOnClick", "onClick", "openOnContextMenu", "onContextMenu"))
 					}))
 				});
 			}
@@ -7615,7 +7621,7 @@ module.exports = (_ => {
 								ele.firstElementChild.style.setProperty("left", `${v.value}px`, "important");
 							});
 							scroll = p => {
-								const display = ele.firstElementChild.style.getPropertyValue("display", "inline");
+								const display = ele.firstElementChild.style.getPropertyValue("display");
 								ele.firstElementChild.style.setProperty("display", "inline", "important");
 								const innerWidth = BDFDB.DOMUtils.getRects(ele.firstElementChild).width;
 								const outerWidth = BDFDB.DOMUtils.getRects(ele).width;
@@ -7632,7 +7638,7 @@ module.exports = (_ => {
 						if (typeof this.props.onClick == "function") this.props.onClick(e, this);
 					},
 					onMouseEnter: e => {
-						if (BDFDB.DOMUtils.getRects(e.currentTarget).width < BDFDB.DOMUtils.getRects(e.currentTarget.firstElementChild).width) {
+						if (BDFDB.DOMUtils.getRects(e.currentTarget).width < BDFDB.DOMUtils.getRects(e.currentTarget.firstElementChild).width || e.currentTarget.firstElementChild.style.getPropertyValue("display") != "inline") {
 							scrolling = true;
 							scroll(1);
 						}
@@ -7855,21 +7861,21 @@ module.exports = (_ => {
 		};
 
 		const BDFDB_Patrons = Object.assign({}, InternalData.BDFDB_Patrons), BDFDB_Patron_Tiers = Object.assign({}, InternalData.BDFDB_Patron_Tiers);
-		InternalBDFDB._processAvatarRender = function (user, avatar) {
+		InternalBDFDB._processAvatarRender = function (user, avatar, className) {
 			if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user) && (avatar.props.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) == -1) {
 				avatar.props[InternalData.userIdAttribute] = user.id;
-				let role = "", note = "", color, link, className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")), addBadge = InternalBDFDB.settings.general.showSupportBadges;
+				let role = "", note = "", color, link, addBadge = InternalBDFDB.settings.general.showSupportBadges;
 				if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
 					link = "https://www.patreon.com/MircoWittrien";
 					role = BDFDB_Patrons[user.id].text || (BDFDB_Patron_Tiers[BDFDB_Patrons[user.id].tier] || {}).text;
 					note = BDFDB_Patrons[user.id].text && (BDFDB_Patron_Tiers[BDFDB_Patrons[user.id].tier] || {}).text;
 					color = BDFDB_Patrons[user.id].color;
-					className = BDFDB.DOMUtils.formatClassName(className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN[`bdfdbsupporter${BDFDB_Patrons[user.id].tier}`]);
+					className = BDFDB.DOMUtils.formatClassName(avatar.props.className, className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN[`bdfdbsupporter${BDFDB_Patrons[user.id].tier}`]);
 				}
 				if (user.id == InternalData.myId) {
 					addBadge = true;
 					role = `Theme ${BDFDB.LanguageUtils.LibraryStrings.developer}`;
-					className = BDFDB.DOMUtils.formatClassName(className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbdev);
+					className = BDFDB.DOMUtils.formatClassName(avatar.props.className, className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbdev);
 				}
 				if (role) {
 					delete avatar.props[InternalData.userIdAttribute];
@@ -7934,7 +7940,7 @@ module.exports = (_ => {
 					let renderChildren = avatarWrapper.props.children;
 					avatarWrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
 						let renderedChildren = renderChildren(...args);
-						return InternalBDFDB._processAvatarRender(e.instance.props.message.author, renderedChildren) || renderedChildren;
+						return InternalBDFDB._processAvatarRender(e.instance.props.message.author, renderedChildren, BDFDB.disCN.messageavatar) || renderedChildren;
 					});
 				}
 				else if (avatarWrapper && avatarWrapper.type == "img") e.returnvalue.props.children[0] = InternalBDFDB._processAvatarRender(e.instance.props.message.author, avatarWrapper) || avatarWrapper;
