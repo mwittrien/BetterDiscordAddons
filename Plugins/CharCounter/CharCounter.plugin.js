@@ -188,7 +188,7 @@ module.exports = (_ => {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._charcountercounter, type && BDFDB.disCN[`_charcounter${typeMap[type] || type}counter`]),
 					refClass: refClass,
 					parsing: parsing,
-					max: maxLengths[type] || (BDFDB.LibraryModules.NitroUtils.canUseIncreasedMessageLength(BDFDB.UserUtils.me) && BDFDB.DiscordUtils.getExperiment("premiumContentLengthAvailable") !== false ? BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH_PREMIUM : BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH),
+					max: maxLengths[type] || (BDFDB.LibraryModules.NitroUtils.canUseIncreasedMessageLength(BDFDB.UserUtils.me) ? BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH_PREMIUM : BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH),
 					onChange: instance => {
 						let node = BDFDB.ReactUtils.findDOMNode(instance);
 						let form = node && BDFDB.DOMUtils.getParent(BDFDB.dotCN.chatform, node);

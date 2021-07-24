@@ -2,7 +2,7 @@
  * @name OpenSteamLinksInApp
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.1
+ * @version 1.1.2
  * @description Opens Steam Links in Steam instead of your Browser
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "OpenSteamLinksInApp",
 			"author": "DevilBro",
-			"version": "1.1.1",
+			"version": "1.1.2",
 			"description": "Opens Steam Links in Steam instead of your Browser"
-		},
-		"changeLog": {
-			"added": {
-				"Short Invites": "Added support for https://s.team/ links"
-			}
 		}
 	};
 

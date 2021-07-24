@@ -1,5 +1,5 @@
 /**
- * @name SendLargeMessages
+ * @name SplitLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
  * @version 1.6.8
@@ -8,14 +8,14 @@
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
  * @website https://mwittrien.github.io/
- * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SendLargeMessages/
- * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/SendLargeMessages/SendLargeMessages.plugin.js
+ * @source https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SplitLargeMessages/
+ * @updateUrl https://mwittrien.github.io/BetterDiscordAddons/Plugins/SplitLargeMessages/SplitLargeMessages.plugin.js
  */
 
 module.exports = (_ => {
 	const config = {
 		"info": {
-			"name": "SendLargeMessages",
+			"name": "SplitLargeMessages",
 			"author": "DevilBro",
 			"version": "1.6.8",
 			"description": "Allows you to enter larger Messages, which will automatically split into several smaller Messages"
@@ -76,7 +76,7 @@ module.exports = (_ => {
 		const messageDelay = 1000; //changing at own risk, might result in bans or mutes
 		let maxMessageLength = 2000;
 	
-		return class SendLargeMessages extends Plugin {
+		return class SplitLargeMessages extends Plugin {
 			onLoad () {
 				this.defaults = {
 					general: {

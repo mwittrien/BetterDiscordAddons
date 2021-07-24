@@ -5,6 +5,7 @@
 		"OwnerTag": "StaffTag",
 		"RemoveBlockedMessages": "RemoveBlockedUsers",
 		"RevealAllSpoilersOption": "RevealAllSpoilers",
+		"SendLargeMessages": "SplitLargeMessages",
 		"SteamProfileLink": "OpenSteamLinksInApp"
 	},
 	"LibraryRequires": ["child_process", "electron", "fs", "path", "process", "request"],

@@ -46,7 +46,6 @@
  - [Remove Blocked Users](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveBlockedUsers) - Removes blocked Messages/Users
  - [Remove Nicknames](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveNicknames) - Replaces Nicknames with Accountnames
  - [Reveal All Spoilers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RevealAllSpoilers) - Allows you to reveal all Spoilers within a Message/Status by holding the Ctrl Key and clicking a Spoiler
- - [Send Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SendLargeMessages) - Allows you to enter larger Messages, which will automatically split into several smaller Messages
  - [Server Counter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerCounter) - Adds a Server Counter to the Server List
  - [Server Details](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerDetails) - Shows Server Details in the Server List Tooltip
  - [Server Folders](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerFolders) - Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
@@ -55,6 +54,7 @@
  - [Show Connections](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowConnections) - Shows the connected Accounts of a User in the UserPopout
  - [Show Hidden Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowHiddenChannels) - Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  - [Spell Check](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpellCheck) - Adds a Spell Check to all Message Inputs
+ - [Split Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SplitLargeMessages) - Allows you to enter larger Messages, which will automatically split into several smaller Messages
  - [Spotify Controls](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpotifyControls) - Adds a Control Panel while listening to Spotify on a connected Account
  - [Staff Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/StaffTag) - Adds a Crown/Tag to Server Owners (or Admins/Management)
  - [Theme Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeRepo) - Allows you to download all Themes from BD's Website within Discord

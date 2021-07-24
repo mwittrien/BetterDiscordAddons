@@ -1260,6 +1260,7 @@ img[src="/assets/4697ec960e57790ad4f6251af4c246b4.svg"] {	/* widgetsettings		wid
 	background: rgb(var(--accentcolor));
 }
 .audioMetadata-3zOuGv::before {
+	flex: 0 0 auto !important;
 	background-position: top center !important;
 }
 .attachment-33OFj0 .icon-1kp3fr + *::before,
