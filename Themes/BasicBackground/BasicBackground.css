@@ -1005,8 +1005,8 @@ body::after {
 	background-color: rgba(var(--transparencycolor), var(--messagetransparency));
 	border-radius: 50%;
 	left: calc(1px * (-58 * var(--usechatbubbles) + -48 * (1 - var(--usechatbubbles))));
-	height: 25px;
-	width: 25px;
+	height: 25px !important;
+	width: 25px !important;
 	margin: unset;
 	margin-right: 1rem;
 	padding: 0;
