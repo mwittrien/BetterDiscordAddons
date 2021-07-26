@@ -1231,7 +1231,7 @@ body::after {
 	background-color: rgba(var(--transparencycolor), .2);
 }
 #app-mount .spoilerText-3p6IlD.hidden-HHr2R9 {				/* messageelement		hiddenspoiler						*/
-	background-color: rgba(var(--transparencycolor), .5);
+	background-color: rgba(var(--transparencycolor), .6);
 }
 
 .icon-2Po-VO[style*="/assets/5da4cdab01d4d89c593c48c62ae0d937.svg"] {		/* systemmessage			pinicon									*/
