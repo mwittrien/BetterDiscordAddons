@@ -202,6 +202,7 @@ module.exports = (_ => {
 					before: {
 						Channels: "render",
 						ChannelCategoryItem: "type",
+						ChannelItem: "default",
 						VoiceUsers: "render"
 					},
 					after: {
@@ -492,31 +493,34 @@ module.exports = (_ => {
 			
 			processChannelItem (e) {
 				if (e.instance.props.channel && this.isChannelHidden(e.instance.props.channel.id)) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ChannelItemIcon"});
-					let channelChildren = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelchildren]]});
-					if (channelChildren && channelChildren.props && channelChildren.props.children) {
-						channelChildren.props.children = [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_LOCKED_SHORT,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-								className: BDFDB.disCN.channeliconitem,
-								style: {display: "block"},
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									className: BDFDB.disCN.channelactionicon,
-									name: BDFDB.LibraryComponents.SvgIcon.Names.LOCK_CLOSED
+					if (!e.returnvalue) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._showhiddenchannelshiddenchannel);
+					else {
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ChannelItemIcon"});
+						let channelChildren = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelchildren]]});
+						if (channelChildren && channelChildren.props && channelChildren.props.children) {
+							channelChildren.props.children = [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_LOCKED_SHORT,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									className: BDFDB.disCN.channeliconitem,
+									style: {display: "block"},
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										className: BDFDB.disCN.channelactionicon,
+										name: BDFDB.LibraryComponents.SvgIcon.Names.LOCK_CLOSED
+									})
 								})
-							})
-						})];
-					}
-					if (!(e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE && e.instance.props.connected)) {
-						let wrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelwrapper]]});
-						if (wrapper) {
-							wrapper.props.onMouseDown = _ => {};
-							wrapper.props.onMouseUp = _ => {};
+							})];
 						}
-						let mainContent = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelmaincontent]]});
-						if (mainContent) {
-							mainContent.props.onClick = _ => {};
-							mainContent.props.href = null;
+						if (!(e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE && e.instance.props.connected)) {
+							let wrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelwrapper]]});
+							if (wrapper) {
+								wrapper.props.onMouseDown = _ => {};
+								wrapper.props.onMouseUp = _ => {};
+							}
+							let mainContent = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelmaincontent]]});
+							if (mainContent) {
+								mainContent.props.onClick = _ => {};
+								mainContent.props.href = null;
+							}
 						}
 					}
 				}

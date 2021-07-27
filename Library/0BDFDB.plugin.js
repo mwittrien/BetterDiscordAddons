@@ -5051,24 +5051,23 @@ module.exports = (_ => {
 				if (!this.props.value) return style;
 				style = Object.assign({}, style);
 				this.props.color = typeof this.props.getColor == "function" ? this.props.getColor(this.props.value) : this.props.color;
-				style.borderColor = this.props.color;
-				if (InternalComponents.NativeSubComponents.Checkbox.Types) switch (this.props.type) {
-					case InternalComponents.NativeSubComponents.Checkbox.Types.DEFAULT:
+				if (InternalComponents.LibraryComponents.Checkbox.Types) switch (this.props.type) {
+					case InternalComponents.LibraryComponents.Checkbox.Types.DEFAULT:
 						style.borderColor = this.props.color;
 						break;
-					case InternalComponents.NativeSubComponents.Checkbox.Types.GHOST:
+					case InternalComponents.LibraryComponents.Checkbox.Types.GHOST:
 						let color = BDFDB.ColorUtils.setAlpha(this.props.color, 0.15, "RGB");
 						style.backgroundColor = color;
 						style.borderColor = color;
 						break;
-					case InternalComponents.NativeSubComponents.Checkbox.Types.INVERTED:
+					case InternalComponents.LibraryComponents.Checkbox.Types.INVERTED:
 						style.backgroundColor = this.props.color;
 						style.borderColor = this.props.color;
 				}
 				return style;
 			}
 			getColor() {
-				return this.props.value ? (InternalComponents.NativeSubComponents.Checkbox.Types && this.props.type === InternalComponents.NativeSubComponents.Checkbox.Types.INVERTED ? BDFDB.DiscordConstants.Colors.WHITE : this.props.color) : "transparent";
+				return this.props.value ? (InternalComponents.LibraryComponents.Checkbox.Types && this.props.type === InternalComponents.LibraryComponents.Checkbox.Types.INVERTED ? BDFDB.DiscordConstants.Colors.WHITE : this.props.color) : "transparent";
 			}
 			handleChange(e) {
 				this.props.value = typeof this.props.getValue == "function" ? this.props.getValue(this.props.value, e) : !this.props.value;
@@ -5101,7 +5100,7 @@ module.exports = (_ => {
 							})
 						}),
 						BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.checkbox, this.props.shape, this.props.value && BDFDB.disCN.checkboxchecked),
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.checkbox, BDFDB.disCN["checkbox" + this.props.shape], this.props.value && BDFDB.disCN.checkboxchecked),
 							style: Object.assign({
 								width: this.props.size,
 								height: this.props.size,
@@ -5119,6 +5118,16 @@ module.exports = (_ => {
 				});
 			}
 		};
+		InternalComponents.LibraryComponents.Checkbox.Types = {
+			DEFAULT: "DEFAULT",
+			GHOST: "GHOST",
+			INVERTED: "INVERTED"
+		};
+		InternalComponents.LibraryComponents.Checkbox.Shapes = {
+			BOX: "box",
+			ROUND: "round"
+		};
+		InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.Checkbox, {type: InternalComponents.LibraryComponents.Checkbox.Types.INVERTED, shape: InternalComponents.LibraryComponents.Checkbox.Shapes.ROUND});
 		
 		InternalComponents.LibraryComponents.Clickable = reactInitialized && class BDFDB_Clickable extends LibraryModules.React.Component {
 			handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}

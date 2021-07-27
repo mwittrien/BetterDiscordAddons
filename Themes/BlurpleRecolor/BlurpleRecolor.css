@@ -2043,6 +2043,10 @@ a.metadataName-14STf- {
 .checkbox-1ix_J3.checked-3_4uQ9[style*="border-color: hsl(235, "] {
 	border-color: rgb(var(--accentcolor)) !important;
 }
+.checkbox-1ix_J3 path[fill*="hsl(227, "],
+.checkbox-1ix_J3 path[fill*="hsl(235, "] {
+	fill: rgb(var(--accentcolor)) !important;
+}
 
 .container-3auIfb {											/* switch				unchecked							*/
 	background-color: rgb(114, 118, 125) !important;

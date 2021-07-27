@@ -2,7 +2,7 @@
  * @name RevealAllSpoilers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.7
+ * @version 1.0.8
  * @description Allows you to reveal all Spoilers within a Message/Status by holding the Ctrl Key and clicking a Spoiler
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,14 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RevealAllSpoilers",
 			"author": "DevilBro",
-			"version": "1.0.7",
+			"version": "1.0.8",
 			"description": "Allows you to reveal all Spoilers within a Message/Status by holding the Ctrl Key and clicking a Spoiler"
 		},
 		"changeLog": {
-			"improved": {
-				"Plugin Name": "Changed to clarify the Usage",
-				"Behaviour": "You no longer need to right click a message and press reveal all, simply hold Ctrl and click a Spoiler",
-				"About Me": "Also works on About Mes"
+			"fixed": {
+				"Replies": "No longer reveals spoilers within reply preview if revealing all spoilers within a message"
 			}
 		}
 	};
@@ -97,7 +95,7 @@ module.exports = (_ => {
 					if (e2.methodArguments[0].ctrlKey) {
 						BDFDB.ListenerUtils.stopEvent(e2.methodArguments[0]);
 						let parent = BDFDB.DOMUtils.getParent(BDFDB.dotCN.message, e2.methodArguments[0].target) || e2.methodArguments[0].target.parentElement;
-						if (parent) for (let spoiler of parent.querySelectorAll(BDFDB.dotCN.spoilerhidden)) spoiler.click();
+						if (parent) for (let spoiler of parent.querySelectorAll(BDFDB.dotCN.spoilerhidden)) if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagerepliedmessagepreview, spoiler)) spoiler.click();
 					}
 				}}, {force: true, noCache: true});
 			}
