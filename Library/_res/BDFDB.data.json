@@ -115,6 +115,7 @@
 		"SearchPageUtils": {"props": ["searchNextPage", "searchPreviousPage"]},
 		"SettingsStore": {"props": ["guildPositions", "theme"]},
 		"SettingsUtils": {"props": ["updateRemoteSettings", "updateLocalSettings"]},
+		"SimpleMarkdownComponents": {"strings": ["customEmoji", "emojiTooltipPosition", "timestampTooltip"]},
 		"SimpleMarkdownParser": {"props": ["parseBlock", "parseInline", "defaultOutput"]},
 		"SlateUtils": {"props": ["serialize", "deserialize"], "notProps": ["getFlag"]},
 		"SlateSelectionUtils": {"props": ["serialize", "serializeSelection"]},
