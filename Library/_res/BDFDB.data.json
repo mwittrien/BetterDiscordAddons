@@ -137,6 +137,7 @@
 		"StringUtils": {"props": ["cssValueToNumber", "upperCaseFirstChar"]},
 		"TimestampUtils": {"props": ["fromTimestamp", "extractTimestamp"]},
 		"TimeUtils": {"props": ["calendarFormat", "dateFormat"]},
+		"ThreadStore": {"props": ["isActive", "getThreadsForGuild"]},
 		"UnreadGuildUtils": {"props": ["hasUnread", "getUnreadGuilds"]},
 		"UnreadChannelUtils": {"props": ["getUnreadCount", "getOldestUnreadMessageId"]},
 		"UploadUtils": {"props": ["upload", "instantBatchUpload"]},
