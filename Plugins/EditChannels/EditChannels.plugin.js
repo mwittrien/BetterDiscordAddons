@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.2
+ * @version 4.3.3
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.3.2",
+			"version": "4.3.3",
 			"description": "Allows you to locally edit Channels"
 		},
 		"changeLog": {
-			"fixed": {
-				"Autocomplete Menu": ""
+			"improved": {
+				"Threads": "Works flawlessly with Threads now"
 			}
 		}
 	};
@@ -83,11 +83,13 @@ module.exports = (_ => {
 					},
 					places: {
 						chatTextarea:		{value: true, 			description: "Chat Textarea"},
+						chatWindow:			{value: true, 			description: "Messages"},
 						mentions:			{value: true, 			description: "Mentions"},
 						channelList:		{value: true, 			description: "Channel/Group List"},
 						channelHeader:		{value: true, 			description: "Channel/Group Header"},
 						recentDms:			{value: true, 			description: "Group Notifications"},
 						recentMentions:		{value: true, 			description: "Recent Mentions Popout"},
+						threads:			{value: true, 			description: "Thread Overview"},
 						autocompletes:		{value: true, 			description: "Autocomplete Menu"},
 						auditLog:			{value: true, 			description: "Audit Log"},
 						inviteLog:			{value: true, 			description: "Invite Log"},
@@ -101,12 +103,15 @@ module.exports = (_ => {
 				this.patchedModules = {
 					before: {
 						ChannelEditorContainer: "render",
+						TextChannelEmptyMessage: "default",
+						ThreadEmptyMessage: "default",
 						AutocompleteChannelResult: "render",
 						AuditLog: "render",
 						SettingsInvites: "render",
 						HeaderBarContainer: "render",
 						ChannelCategoryItem: "type",
 						ChannelItem: "default",
+						GuildSidebarThreadListEntry: "type",
 						QuickSwitchChannelResult: "render",
 						SearchPopoutComponent: "render",
 						MessageContent: "type"
@@ -115,8 +120,11 @@ module.exports = (_ => {
 						AutocompleteChannelResult: "render",
 						AuditLog: "render",
 						HeaderBarContainer: "render",
+						ThreadSidebar: "default",
+						ThreadCard: "type",
 						FocusRing: "default",
 						ChannelItem: "default",
+						GuildSidebarThreadListEntry: "type",
 						DirectMessage: "render",
 						PrivateChannel: "render",
 						QuickSwitchChannelResult: "render",
@@ -270,9 +278,17 @@ module.exports = (_ => {
 			}
 			
 			processChannelEditorContainer (e) {
-				if (!e.instance.props.disabled && e.instance.props.channel && (BDFDB.ChannelUtils.isTextChannel(e.instance.props.channel) || e.instance.props.channel.isGroupDM()) && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && this.settings.places.chatTextarea) {
+				if (!e.instance.props.disabled && e.instance.props.channel && (BDFDB.ChannelUtils.isTextChannel(e.instance.props.channel) || e.instance.props.channel.isThread() || e.instance.props.channel.isGroupDM()) && (e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.SIDEBAR) && this.settings.places.chatTextarea) {
 					if (changedChannels[e.instance.props.channel.id] && changedChannels[e.instance.props.channel.id].name) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `#${changedChannels[e.instance.props.channel.id].name}`);
 				}
+			}
+			
+			processTextChannelEmptyMessage (e) {
+				if (e.instance.props.channel && changedChannels[e.instance.props.channel.id] && this.settings.places.chatWindow) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
+			}
+			
+			processThreadEmptyMessage (e) {
+				if (e.instance.props.channel && changedChannels[e.instance.props.channel.id] && this.settings.places.chatWindow) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
 			}
 
 			processAutocompleteChannelResult (e) {
@@ -318,32 +334,80 @@ module.exports = (_ => {
 					for (let id in e.instance.props.invites) e.instance.props.invites[id] = new BDFDB.DiscordObjects.Invite(Object.assign({}, e.instance.props.invites[id], {channel: this.getChannelData(e.instance.props.invites[id].channel.id)}));
 				}
 			}
-
+			
 			processHeaderBarContainer (e) {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
-				if (channel && (BDFDB.ChannelUtils.isTextChannel(channel) || channel.isGroupDM()) && this.settings.places.channelHeader) {
+				if (channel && (BDFDB.ChannelUtils.isTextChannel(channel) || channel.isGroupDM() || channel.isThread()) && this.settings.places.channelHeader) {
+					let thread;
+					if (channel.isThread()) {
+						thread = channel;
+						channel = BDFDB.LibraryModules.ChannelStore.getChannel(thread.parent_id);
+					}
 					if (!e.returnvalue) {
-						let channelName = BDFDB.ReactUtils.findChild(e.instance, {name: ["Title", "ChannelName"]});
-						if (channelName) {
-							if (channelName.props.children) {
-								if (changedChannels[channel.id] && changedChannels[channel.id].name) channelName.props.children = channel.isGroupDM() ? this.getGroupName(channel.id) : this.getChannelData(channel.id).name;
-								this.changeChannelColor(channelName, channel.id);
+						let channelNames = BDFDB.ReactUtils.findChild(e.instance, {all: true, name: ["Title", "ChannelName"]});
+						if (channelNames.length) {
+							if (channelNames[0].props.children) {
+								if (changedChannels[channel.id] && changedChannels[channel.id].name) channelNames[0].props.children = channel.isGroupDM() ? this.getGroupName(channel.id) : this.getChannelData(channel.id).name;
+								this.changeChannelColor(channelNames[0], channel.id);
 							}
-							if (channelName.props.channel) channelName.props.channel = this.getChannelData(channel.id);
+							if (channelNames[0].props.channel) channelNames[0].props.channel = this.getChannelData(channel.id);
+							if (thread && channelNames[1].props.children) {
+								if (changedChannels[thread.id] && changedChannels[thread.id].name) channelNames[1].props.children = this.getChannelData(thread.id).name;
+								this.changeChannelColor(channelNames[1], thread.id);
+							}
 						}
 					}
 					else {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {name: "Icon"});
-						if (index > -1) {
-							let icon = BDFDB.ReactUtils.createElement(children[index].props.icon, {
-								className: BDFDB.disCN.channelheadericon
-							});
-							this.changeChannelIconColor(icon, channel.id);
-							children[index] = BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.channelheadericonwrapper,
-								children: icon
-							})
+						let channelIcons = BDFDB.ReactUtils.findChild(e.instance, {all: true, name: "Icon"});
+						if (channelIcons.length) {
+							if (channelIcons[0].props.icon) {
+								let iconRender = channelIcons[0].props.icon;
+								channelIcons[0].props.icon = BDFDB.TimeUtils.suppress((...args) => {
+									let icon = iconRender(...args);
+									this.changeChannelIconColor(icon, channel.id);
+									return icon;
+								}, "", this);
+							}
+							if (thread && channelIcons[1].props.icon) {
+								let iconRender = channelIcons[1].props.icon;
+								channelIcons[1].props.icon = BDFDB.TimeUtils.suppress((...args) => {
+									let icon = iconRender(...args);
+									this.changeChannelIconColor(icon, thread.id);
+									return icon;
+								}, "", this);
+							}
 						}
+					}
+				}
+			}
+			
+			processThreadSidebar (e) {
+				if (changedChannels[e.instance.props.channelId] && this.settings.places.channelHeader) {
+					let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: ["Title", "ChannelName"]});
+					if (channelName && channelName.props.children) {
+						if (changedChannels[e.instance.props.channelId].name) channelName.props.children = this.getChannelData(e.instance.props.channelId).name;
+						this.changeChannelColor(channelName, e.instance.props.channelId);
+					}
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "Icon"});
+					if (index > -1) {
+						let icon = BDFDB.ReactUtils.createElement(children[index].props.icon, {
+							className: BDFDB.disCN.channelheadericon
+						});
+						this.changeChannelIconColor(icon, e.instance.props.channelId);
+						children[index] = BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.channelheadericonwrapper,
+							children: icon
+						})
+					}
+				}
+			}
+
+			processThreadCard (e) {
+				if (changedChannels[e.instance.props.threadId] && this.settings.places.threads) {
+					let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.threadcardname]]});
+					if (channelName) {
+						if (changedChannels[e.instance.props.threadId].name) channelName.props.children = changedChannels[e.instance.props.threadId].name;
+						this.changeChannelColor(channelName, e.instance.props.threadId);
 					}
 				}
 			}
@@ -391,7 +455,7 @@ module.exports = (_ => {
 			processChannelCategoryItem (e) {
 				if (e.instance.props.channel && this.settings.places.channelList) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id, true, e.instance.props.channel);
 			}
-
+			
 			processChannelItem (e) {
 				if (e.instance.props.channel && this.settings.places.channelList) {
 					if (!e.returnvalue) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id, true, e.instance.props.channel);
@@ -415,6 +479,17 @@ module.exports = (_ => {
 								return returnValue;
 							}, "", this);
 						}
+					}
+				}
+			}
+
+			processGuildSidebarThreadListEntry (e) {
+				if (e.instance.props.thread && this.settings.places.channelList) {
+					if (!e.returnvalue) e.instance.props.thread = this.getChannelData(e.instance.props.thread.id, true, e.instance.props.thread);
+					else {
+						let modify = BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "muted", "locked", "selected", "unread", "connected", "hovered");
+						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelnameinner]]});
+						if (channelName) this.changeChannelColor(channelName, e.instance.props.thread.id, modify);
 					}
 				}
 			}
@@ -508,31 +583,39 @@ module.exports = (_ => {
 				if (BDFDB.ArrayUtils.is(e.instance.props.content) && this.settings.places.mentions) for (let ele of e.instance.props.content) {
 					if (BDFDB.ReactUtils.isValidElement(ele) && ele.type && ele.type.displayName == "Tooltip" && typeof ele.props.children == "function") {
 						let children = ele.props.children({});
-						if (children && children.type.displayName == "Mention" && children.props.children && typeof children.props.children[0] == "string" && children.props.children[0][0] == "#") {
-							let channelName = children.props.children[0].slice(1);
-							let guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-							let channels = guildId && (BDFDB.LibraryModules.GuildChannelStore.getChannels(guildId)[0] || BDFDB.LibraryModules.GuildChannelStore.getChannels(guildId).SELECTABLE);
-							if (Array.isArray(channels)) for (let channelObj of channels) {
-								if (channelName == channelObj.channel.name) {
-									let category = BDFDB.LibraryModules.ChannelStore.getChannel(channelObj.channel.parent_id);
-									if (!category || category && ele.props.text == category.name) {
-										if (category) {
-											let categoryData = changedChannels[category.id];
-											if (categoryData && categoryData.name) ele.props.text = categoryData.name;
-										}
-										let name = (changedChannels[channelObj.channel.id] || {}).name;
-										let color = this.getChannelDataColor(channelObj.channel.id);
-										if (name || color) {
-											let renderChildren = ele.props.children;
-											ele.props.children = (...args) => {
-												let children = renderChildren(...args);
-												this.changeMention(children, {name, color});
-												return children;
+						if (children && children.type.displayName == "Mention") {
+							const checkChild = label => {
+								if (label[0] != "#") return;
+								let channelName = label.slice(1);
+								let guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
+								let channels = guildId && [].concat(BDFDB.LibraryModules.GuildChannelStore.getChannels(guildId).SELECTABLE, Object.keys(BDFDB.LibraryModules.ThreadStore.getThreadsForGuild(guildId)).map(id => ({channel: BDFDB.LibraryModules.ChannelStore.getChannel(id)})));
+								if (BDFDB.ArrayUtils.is(channels)) for (let channelObj of channels) {
+									if (channelName == channelObj.channel.name) {
+										let category = BDFDB.LibraryModules.ChannelStore.getChannel(channelObj.channel.parent_id);
+										if (!category || category && ele.props.text == category.name) {
+											if (category) {
+												let categoryData = changedChannels[category.id];
+												if (categoryData && categoryData.name) ele.props.text = categoryData.name;
 											}
+											let name = (changedChannels[channelObj.channel.id] || {}).name;
+											let color = this.getChannelDataColor(channelObj.channel.id);
+											if (name || color) {
+												let renderChildren = ele.props.children;
+												ele.props.children = (...args) => {
+													let children = renderChildren(...args);
+													this.changeMention(children, {name, color});
+													return children;
+												}
+											}
+											break;
 										}
-										break;
 									}
 								}
+							};
+							if (typeof children.props.children == "string") checkChild(children.props.children);
+							else if (BDFDB.ArrayUtils.is(children.props.children)) for (let i in children.props.children) {
+								if (typeof children.props.children[i] == "string") checkChild(children.props.children[i]);
+								else if (BDFDB.ArrayUtils.is(children.props.children[i])) for (let j in children.props.children[i]) if (typeof children.props.children[i][j] == "string") checkChild(children.props.children[i][j]);
 							}
 						}
 					}
@@ -559,33 +642,21 @@ module.exports = (_ => {
 			
 			changeMention (mention, data) {
 				if (data.name) {
-					if (typeof mention.props.children == "string") mention.props.children = "#" + data.name;
-					else if (BDFDB.ArrayUtils.is(mention.props.children)) {
-						if (mention.props.children[0] == "#") mention.props.children[1] = data.name;
-						else mention.props.children[0] = "#" + data.name;
-					}
-				}
-				if (data.color) {
-					let color = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color) ? data.color[0] : data.color, "RGBA");
-					let color_200 = BDFDB.ColorUtils.change(color, 200);
-					let color_a30 = BDFDB.ColorUtils.setAlpha(color, 0.3, "RGBA");
-					mention.props.style = Object.assign({}, mention.props.style, {
-						background: color_a30,
-						color: color_200
-					});
-					let onMouseEnter = mention.props.onMouseEnter || ( _ => {});
-					mention.props.onMouseEnter = event => {
-						onMouseEnter(event);
-						event.target.style.setProperty("background", color, "important");
-						event.target.style.setProperty("color", "#fff", "important");
+					const changeMentionName = (child, name) => {
+						if (!child) return;
+						if (BDFDB.ArrayUtils.is(child)) for (let i in child) {
+							if (typeof child[i] == "string" && child[i][0] == "#") {
+								if (child[i] == "#") child[parseInt(i) + 1] = data.name;
+								else child[i] = "#" + data.name;
+							}
+							else changeMentionName(child[i]);
+						}
+						else if (child.props && typeof child.props.children == "string" && child.props.children[0] == "#") child.props.children = "#" + data.name;
+						else if (child.props && BDFDB.ArrayUtils.is(child.props.children)) changeMentionName(child.props.children);
 					};
-					let onMouseLeave = mention.props.onMouseLeave || ( _ => {});
-					mention.props.onMouseLeave = event => {
-						onMouseLeave(event);
-						event.target.style.setProperty("background", color_a30, "important");
-						event.target.style.setProperty("color", color_200, "important");
-					};
+					changeMentionName(mention);
 				}
+				if (data.color) mention.props.color = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color) ? data.color[0] : data.color, "INT");
 			}
 
 			changeAppTitle () {
@@ -622,8 +693,15 @@ module.exports = (_ => {
 				let color = child && this.getChannelDataColor(channelId);
 				if (color && this.settings.general.changeChannelIcon) {
 					color = modify ? this.chooseColor(BDFDB.ObjectUtils.is(color) ? color[0] : color, modify) : BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color) ? color[0] : color, "RGBA");
-					child.props.color = color || "currentColor";
-					if (color) child.props.foreground = null;
+					if (color) {
+						child.props.foreground = null;
+						child.props.color = color || "currentColor";
+						child.props.children = [child.props.children].flat(10).filter(n => n);
+						for (let c of child.props.children) {
+							if (c && c.props && c.props.fill == "currentColor") c.props.fill = color || "currentColor";
+							if (c && c.props && c.props.path == "currentColor") c.props.path = color || "currentColor";
+						}
+					}
 				}
 			}
 
@@ -641,7 +719,7 @@ module.exports = (_ => {
 			getChannelDataColor (channelId) {
 				if (changedChannels[channelId] && changedChannels[channelId].color) return changedChannels[channelId].color;
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
-				let category = channel && channel.parent_id && BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id);
+				let category = channel && (channel.isThread() ? BDFDB.LibraryModules.ChannelStore.getChannel((BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.ChannelStore.getChannel(channel.id).parent_id) || {}).parent_id) : BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id));
 				if (category && changedChannels[category.id] && changedChannels[category.id].inheritColor && changedChannels[category.id].color) return changedChannels[category.id].color;
 				return null;
 			}
