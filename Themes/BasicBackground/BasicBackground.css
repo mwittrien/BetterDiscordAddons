@@ -595,6 +595,9 @@ body::after {
 .notInteractive-1X92pj.modeSelected-346R90 .subtitle-3V1p2E {
 	color: var(--interactive-normal);
 }
+.spine--Wla_O {												/* channel				thread spine						*/
+	color: var(--channels-default);
+}
 
 .wrapper-2tAnRe {											/* voicechat			limit								*/
 	background-color: rgba(var(--transparencycolor), .15);
