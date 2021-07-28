@@ -151,7 +151,8 @@ module.exports = (_ => {
 				if (!this.props.downloadable)	themes = themes.filter(theme => theme.state != themeStates.DOWNLOADABLE);
 				if (searchString) 	{
 					let usedSearchString = searchString.toUpperCase();
-					themes = themes.filter(theme => theme.search.indexOf(usedSearchString) > -1);
+					let spacelessUsedSearchString = usedSearchString.replace(/\s/g, "");
+					themes = themes.filter(theme => theme.search.indexOf(usedSearchString) > -1 || plugin.search.indexOf(spacelessUsedSearchString) > -1);
 				}
 				
 				BDFDB.ArrayUtils.keySort(themes, this.props.sortKey.toLowerCase());
