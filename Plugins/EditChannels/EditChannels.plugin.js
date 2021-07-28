@@ -105,6 +105,7 @@ module.exports = (_ => {
 						ChannelEditorContainer: "render",
 						TextChannelEmptyMessage: "default",
 						ThreadEmptyMessage: "default",
+						SystemMessageWrapper: "type",
 						AutocompleteChannelResult: "render",
 						AuditLog: "render",
 						SettingsInvites: "render",
@@ -117,6 +118,8 @@ module.exports = (_ => {
 						MessageContent: "type"
 					},
 					after: {
+						ThreadMessageAccessories: "default",
+						ThreadCreated: "default",
 						AutocompleteChannelResult: "render",
 						AuditLog: "render",
 						HeaderBarContainer: "render",
@@ -289,6 +292,31 @@ module.exports = (_ => {
 			
 			processThreadEmptyMessage (e) {
 				if (e.instance.props.channel && changedChannels[e.instance.props.channel.id] && this.settings.places.chatWindow) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
+			}
+			
+			processSystemMessageWrapper (e) {
+				if (e.instance.props.channel && changedChannels[e.instance.props.channel.id] && this.settings.places.chatWindow) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
+			}
+			
+			processThreadCreated (e) {
+				if (e.instance.props.message && e.instance.props.message.messageReference && e.instance.props.message.messageReference.channel_id && changedChannels[e.instance.props.message.messageReference.channel_id] && this.settings.places.chatWindow) {
+					let channelName = BDFDB.ObjectUtils.get(e, "returnvalue.props.children.2.props.children.0");
+					if (changedChannels[e.instance.props.message.messageReference.channel_id].name) channelName.props.children = [changedChannels[e.instance.props.message.messageReference.channel_id].name];
+					this.changeChannelColor(channelName, e.instance.props.message.messageReference.channel_id);
+				}
+			}
+			
+			processThreadMessageAccessories (e) {
+				if (e.returnvalue.props.channel && changedChannels[e.returnvalue.props.channel.id] && this.settings.places.chatWindow) {
+					e.returnvalue.props.channel = this.getChannelData(e.returnvalue.props.channel.id);
+					let type = e.returnvalue.type;
+					e.returnvalue.type = BDFDB.TimeUtils.suppress((...args) => {
+						let returnValue = type(...args);
+						let channelName = BDFDB.ReactUtils.findChild(returnValue, {props: [["className", BDFDB.disCN.messagesystemname]]});
+						this.changeChannelColor(channelName, e.instance.props.message.messageReference.channel_id);
+						return returnValue;
+					}, "", this);
+				}
 			}
 
 			processAutocompleteChannelResult (e) {
