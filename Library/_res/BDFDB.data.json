@@ -244,6 +244,7 @@
 			"SearchResults": {"class": "searchresultswrap"},
 			"SearchResultsInner": {"strings": ["SEARCH_HIDE_BLOCKED_MESSAGES", "totalResults", "SEARCH_PAGE_SIZE"]},
 			"StandardSidebarView": {"class": "settingswindowstandardsidebarview"},
+			"ThreadHeaderBarContainer": {"strings": ["channelId", "collectThreadMetadata", "SIDEBAR"]},
 			"TypingUsers": {"class": "typing"},
 			"UnavailableGuildsButton": {"props": ["UnavailableGuildsButton"]},
 			"UnreadDMs": {"class": "guildsscroller"},
