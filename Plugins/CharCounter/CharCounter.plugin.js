@@ -2,7 +2,7 @@
  * @name CharCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.5
+ * @version 1.5.6
  * @description Adds a Character Counter to most Inputs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "CharCounter",
 			"author": "DevilBro",
-			"version": "1.5.5",
+			"version": "1.5.6",
 			"description": "Adds a Character Counter to most Inputs"
 		},
 		"changeLog": {
@@ -82,6 +82,7 @@ module.exports = (_ => {
 		const typeMap = {
 			normal: "chat",
 			sidebar: "chat",
+			thread_creation: "threadcreation",
 			form: "upload"
 		};
 	
@@ -114,6 +115,10 @@ module.exports = (_ => {
 					${BDFDB.dotCN._charcountereditcounter} {
 						right: 0;
 						bottom: -1.3em;
+					}
+					${BDFDB.dotCN._charcounterthreadcreationcounter} {
+						right: 0;
+						bottom: -1.1em;
 					}
 					${BDFDB.dotCN._charcounteruploadcounter} {
 						right: 0;
@@ -153,6 +158,7 @@ module.exports = (_ => {
 			}
 
 			processChannelTextAreaContainer (e) {
+				console.log(e);
 				let editorContainer = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelEditorContainer"});
 				if (editorContainer && editorContainer.props.type && !editorContainer.props.disabled) {
 					if (!BDFDB.ArrayUtils.is(e.returnvalue.props.children)) e.returnvalue.props.children = [e.returnvalue.props.children];
