@@ -2459,6 +2459,7 @@
 		"messagemarkupissending": ["MessageBody", "isSending"],
 		"messagemarkuprtl": ["MessageBody", "markupRtl"],
 		"messagemarkuptimestamp": ["MessageMarkup", "timestamp"],
+		"messagemarkuptimestamptooltip": ["MessageMarkup", "timestampTooltip"],
 		"messagementioned": ["Message", "mentioned"],
 		"messagepopout": ["MessagePopout", "message"],
 		"messageoperations": ["MessageOperations", "operations"],
