@@ -351,6 +351,10 @@
 }
 
 /* ----		3.2.	TEXTAREA						---- */
+
+.channelTextAreaInnerFocused-M_uztw {
+	border-color: rgb(var(--accentcolor));
+}
 															/* textarea				follow channel icon					*/
 .image-3XsqGc[src="/assets/dc7e9e55b3a6d39d24acdd650ecc2ef3.svg"] {
 	object-position: -999999px -999999px;
