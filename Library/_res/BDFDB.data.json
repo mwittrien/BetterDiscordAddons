@@ -852,6 +852,7 @@
 			"nickCounter": "nickCounter-tJrO_4",
 			"popoutNoteCounter": "popoutNoteCounter-62U4Rh",
 			"profileNoteCounter": "profileNoteCounter-p0fWA_",
+			"threadCreation": "threadCreation-p0fWA_",
 			"uploadCounter": "uploadCounter-iEGQQk"
 		},
 		"CreationDate": {
@@ -1382,6 +1383,7 @@
 		"_charcounternickcounter": ["CharCounter", "nickCounter"],
 		"_charcounterpopoutnotecounter": ["CharCounter", "popoutNoteCounter"],
 		"_charcounterprofilenotecounter": ["CharCounter", "profileNoteCounter"],
+		"_charcounterthreadcreationcounter": ["CharCounter", "threadCreation"],
 		"_charcounteruploadcounter": ["CharCounter", "uploadCounter"],
 		"_creationdatedate": ["CreationDate", "date"],
 		"_customstatuspresetscustomstatusitem": ["CustomStatusPresets", "customStatusItem"],
