@@ -158,7 +158,6 @@ module.exports = (_ => {
 			}
 
 			processChannelTextAreaContainer (e) {
-				console.log(e);
 				let editorContainer = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelEditorContainer"});
 				if (editorContainer && editorContainer.props.type && !editorContainer.props.disabled) {
 					if (!BDFDB.ArrayUtils.is(e.returnvalue.props.children)) e.returnvalue.props.children = [e.returnvalue.props.children];
