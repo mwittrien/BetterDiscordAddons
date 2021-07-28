@@ -2952,6 +2952,7 @@
 		"themeundefined": ["NotFound", "themeUndefined"],
 		"threadcard": ["ThreadCard", "container"],
 		"threadcardauthor": ["ThreadCard", "authorName"],
+		"threadcardavatar": ["ThreadCard", "avatar"],
 		"threadcardname": ["ThreadCard", "threadName"],
 		"tip": ["Tip", "tip"],
 		"tipblock": ["Tip", "block"],
