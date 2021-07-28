@@ -148,8 +148,8 @@ module.exports = (_ => {
 				if (!this.props.outdated)		plugins = plugins.filter(plugin => plugin.state != pluginStates.OUTDATED);
 				if (!this.props.downloadable)	plugins = plugins.filter(plugin => plugin.state != pluginStates.DOWNLOADABLE);
 				if (searchString) 	{
-					let usedSearchString = searchString.toUpperCase();
-					plugins = plugins.filter(plugin => plugin.search.indexOf(usedSearchString) > -1);
+					let usedSearchString = searchString.toUpperCase().replace(" ", "");
+					plugins = plugins.filter(plugin => plugin.search.replace(" ", "").indexOf(usedSearchString) > -1);
 				}
 				
 				BDFDB.ArrayUtils.keySort(plugins, this.props.sortKey.toLowerCase());
