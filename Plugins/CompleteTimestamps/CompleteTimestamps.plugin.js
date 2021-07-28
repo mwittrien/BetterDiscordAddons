@@ -176,11 +176,6 @@ module.exports = (_ => {
 
 			processTooltip (e) {
 				if (typeof e.instance.props.tooltipClassName == "string" && e.instance.props.tooltipClassName.indexOf(BDFDB.disCN.messagemarkuptimestamptooltip) > -1) {
-				}
-			}
-
-			processTooltip (e) {
-				if (typeof e.instance.props.tooltipClassName == "string" && e.instance.props.tooltipClassName.indexOf("timestampTooltip-2YTl4z") > -1) {
 					e.instance.props._originalText = e.instance.props._originalText || e.instance.props.text;
 					if (this.settings.general.showInMarkup) {
 						if (tooltipIsSame) e.instance.props.delay = 99999999999999999999;
