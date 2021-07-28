@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.9
+ * @version 2.3.0
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "Translator",
 			"author": "DevilBro",
-			"version": "2.2.9",
+			"version": "2.3.0",
 			"description": "Allows you to translate Messages and your outgoing Messages within Discord"
 		},
 		"changeLog": {
 			"improved": {
-				"Plugin Name": "Changed to clarify the Usage"
+				"Threads": "Works flawlessly with Threads now"
 			}
 		}
 	};
@@ -389,11 +389,6 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				// REMOVE 25.05.2021
-				let loadedFavorites = BDFDB.DataUtils.load(this, "favorites");
-				if (BDFDB.ObjectUtils.is(loadedFavorites) && Object.keys(loadedFavorites).length) BDFDB.DataUtils.save(Object.keys(loadedFavorites), this, "favorites")
-				
-				
 				this.forceUpdateAll();
 			}
 			
@@ -622,7 +617,7 @@ module.exports = (_ => {
 			processChannelTextAreaContainer (e) {
 				if (this.settings.general.addTranslateButton) {
 					let editor = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelEditorContainer"});
-					if (editor && editor.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && !editor.props.disabled) {
+					if (editor && (editor.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL || editor.props.type == BDFDB.DiscordConstants.TextareaTypes.SIDEBAR) && !editor.props.disabled) {
 						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.textareapickerbuttons]]});
 						if (index > -1 && children[index].props && children[index].props.children) children[index].props.children.unshift(BDFDB.ReactUtils.createElement(TranslateButtonComponent, {
 							channelId: e.instance.props.channel.id
