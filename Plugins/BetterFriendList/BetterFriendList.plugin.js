@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.6
+ * @version 1.3.7
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,16 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterFriendList",
 			"author": "DevilBro",
-			"version": "1.3.6",
+			"version": "1.3.7",
 			"description": "Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount"
 		},
 		"changeLog": {
-			"added": {
-				"Hidden": "You can now hide Friends from your Friend List and put them into an extra category, allowing you to clean up your list without hurting someones feelings"
-			},
 			"fixed": {
-				"Online Count": "No longer includes hidden Friends",
-				"Actions Overflow/Miss-Align": "Should look normal now"
+				"Refresh": "No longer need to switch pages to refresh search/sort"
 			}
 		}
 	};
@@ -299,7 +295,7 @@ module.exports = (_ => {
 					}
 					return newSection;
 				});
-				if (!BDFDB.PatchUtils.isPatched(this, e.instance.props, "getSectionTitle")) BDFDB.PatchUtils.patch(this, e.instance.props, "getSectionTitle", {after: e2 => {
+				BDFDB.PatchUtils.patch(this, e.instance.props, "getSectionTitle", {after: e2 => {
 					if (typeof e2.returnValue == "string") {
 						let users = e.instance.props.statusSections.flat(10);
 						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -386,7 +382,7 @@ module.exports = (_ => {
 			processPeopleListItem (e) {
 				if (e.node) {
 					BDFDB.TimeUtils.clear(rerenderTimeout);
-					rerenderTimeout = BDFDB.TimeUtils.timeout(_ => {BDFDB.PatchUtils.forceAllUpdates(this, "TabBar");}, 1000);
+					rerenderTimeout = BDFDB.TimeUtils.timeout(_ => BDFDB.PatchUtils.forceAllUpdates(this, "TabBar"), 1000);
 				}
 				else {
 					if (e.instance.props.user.id == placeHolderId) return null;
@@ -430,7 +426,7 @@ module.exports = (_ => {
 			}
 			
 			rerenderList () {
-				let selectedButton = document.querySelector(BDFDB.dotCNS.peoplestabbar + BDFDB.dotCN.settingsitemselected);
+				let selectedButton = document.querySelector(BDFDB.dotCN.dmchannel + BDFDB.dotCN.namecontainerselected);
 				if (selectedButton) selectedButton.click();
 			}
 
