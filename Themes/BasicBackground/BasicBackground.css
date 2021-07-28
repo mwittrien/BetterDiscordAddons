@@ -939,9 +939,9 @@ body::after {
 }
 #app-mount .repliedMessage-VokQwo::before,					/* message				reply spine							*/
 #app-mount .repliedMessage-VokQwo::after,
-#app-mount .spine-1UneWn::before,							/* message				command spine							*/
+#app-mount .spine-1UneWn::before,							/* message				command spine						*/
 #app-mount .spine-1UneWn::after {
-	--avatar-size: 40px;
+	--avatar-size: 38px;
 	--gutter: 16px;
 	--spine-width: 2px;
 	content: "";
@@ -952,9 +952,9 @@ body::after {
 	top: 50%;
 	right: unset;
 	bottom: 0;
-	left: calc(-1*var(--avatar-size) - (6px*var(--usechatbubbles)));
+	left: calc(-1 * var(--avatar-size) - (6px * var(--usechatbubbles)));
 	width: calc(var(--avatar-size) - 4px);
-	margin: calc(-1*var(--spine-width)/2) var(--reply-spacing) calc(.125rem - 4px) calc(-1*var(--spine-width)/2);
+	margin: calc(-1 * var(--spine-width)/2) var(--reply-spacing) calc(.125rem - 4px) calc(-1 * var(--spine-width)/2);
 	border-right: 0 solid var(--background-accent);
 	border-left: var(--spine-width) solid var(--background-accent);
 }
@@ -975,7 +975,7 @@ body::after {
 #app-mount .compact-T3H92H .spine-1UneWn::before,
 #app-mount .compact-T3H92H .spine-1UneWn::after {
 	--avatar-size: 20px;
-	left: calc(-1*var(--avatar-size));
+	left: calc(-1 * var(--avatar-size));
 }
 #app-mount .repliedMessage-VokQwo::before,
 #app-mount .spine-1UneWn::before {
@@ -983,7 +983,7 @@ body::after {
 }
 #app-mount .repliedMessage-VokQwo::after,
 #app-mount .spine-1UneWn::after {
-	border-color: rgba(var(--textbrighter), calc(0.5 * (1 - var(--usechatbubbles))));
+	border-color: rgba(var(--textbrighter), calc(0.3 * (1 - var(--usechatbubbles))));
 }
 #app-mount .compact-T3H92H .repliedMessage-VokQwo::before,
 #app-mount .compact-T3H92H .spine-1UneWn::before {
@@ -992,6 +992,48 @@ body::after {
 #app-mount .compact-T3H92H .repliedMessage-VokQwo::after,
 #app-mount .compact-T3H92H .spine-1UneWn::after {
 	border-color: rgba(var(--textbrighter), .3);
+}
+
+#app-mount .cozy-3raOZG.hasThread-2k82W0::before,			/* message				thread spine						*/
+#app-mount .cozy-3raOZG.hasThread-2k82W0::after,
+#app-mount .compact-T3H92H.hasThread-2k82W0::before {
+	--avatar-size: 38px;
+	--gutter: 16px;
+	--spine-width: 2px;
+	content: "";
+	display: block;
+	position: absolute;
+	top: 2rem;
+	bottom: 29px;
+	left: calc(var(--avatar-size) * (1 - var(--usechatbubbles)) - var(--avatar-size) * var(--usechatbubbles));
+	width: calc(var(--avatar-size) - 10px + (4px * var(--usechatbubbles)));
+	margin: calc(-1 * var(--spine-width)/2) var(--reply-spacing) calc(.125rem - 4px) calc(-1 * var(--spine-width)/2);
+	border-top: 0 solid var(--background-accent);
+	border-right: 0 solid var(--background-accent);
+	border-bottom: var(--spine-width) solid var(--background-accent);
+	border-left: var(--spine-width) solid var(--background-accent);
+	border-bottom-left-radius: 8px;
+}
+#app-mount .cozy-3raOZG.hasThread-2k82W0::before {
+	border-color: rgba(var(--transparencycolor), calc(0.5 * var(--usechatbubbles)));
+}
+#app-mount .cozy-3raOZG.hasThread-2k82W0::after {
+	border-color: rgba(var(--textbrighter), calc(0.3 * (1 - var(--usechatbubbles))));
+}
+#app-mount .compact-T3H92H.hasThread-2k82W0::before {
+	left: calc(var(--avatar-size) + 11px);
+	width: calc(var(--avatar-size) - 13px);
+	border-color: rgba(var(--textbrighter), .3);
+}
+#app-mount .compact-T3H92H.hasThread-2k82W0 .contents-2mQqc9:before {
+	border-color: rgba(var(--textbrighter), .3);
+}
+
+.spine-5jbOmI {
+	border-color: rgba(var(--textbrighter), .3);
+}
+.hasThread-2k82W0 .spine-5jbOmI {
+	display: none;
 }
 
 .cozy-3I4Ja9.content-2Kddbs {								/* message				command content						*/
