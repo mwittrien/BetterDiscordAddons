@@ -2457,6 +2457,7 @@
 		"messagemarkupisfailed": ["MessageBody", "isFailed"],
 		"messagemarkupissending": ["MessageBody", "isSending"],
 		"messagemarkuprtl": ["MessageBody", "markupRtl"],
+		"messagemarkuptimestamp": ["MessageMarkup", "timestamp"],
 		"messagementioned": ["Message", "mentioned"],
 		"messagepopout": ["MessagePopout", "message"],
 		"messageoperations": ["MessageOperations", "operations"],
