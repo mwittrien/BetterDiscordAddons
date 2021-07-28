@@ -179,9 +179,6 @@
 			"DirectMessage",
 			"GuildIcon"
 		],
-		"MemoComponent": [],
-		"SubRender": [],
-		"NonPrototype": [],
 		"Finder": {
 			"Account": {"class": "accountinfo"},
 			"App": {"class": "app"},
