@@ -227,11 +227,9 @@ body,														/* body														*/
 	border: none;
 }
 
-#app-mount .sidebarRegion-VFTUkN {							/* settings				sidebar								*/
-	background-color: rgba(var(--transparencycolor), .2);
-}
+#app-mount .sidebarRegion-VFTUkN,							/* settings				sidebar								*/
 #app-mount .sidebar-_0OpfR {								/* sidebarlist			sidebar								*/
-	background-color: rgba(var(--transparencycolor), .2);
+	background-color: rgba(var(--transparencycolor), calc(.2 * (var(--transparencyalpha) / (var(--transparencyalpha) + 0.00000000000000000000001)));
 }
 
 #app-mount {												/* app-mount												*/
