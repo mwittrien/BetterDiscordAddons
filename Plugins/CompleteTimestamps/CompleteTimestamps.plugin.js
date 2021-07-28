@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.7
+ * @version 1.5.8
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CompleteTimestamps",
 			"author": "DevilBro",
-			"version": "1.5.7",
+			"version": "1.5.8",
 			"description": "Replaces Timestamps with your own custom Timestamps"
 		},
 		"changeLog": {
-			"fixed": {
-				"Works again": "",
-				"Edit Stamp Compact Mode": "Fixed Issue where the (edited) stamp would grow in size in compact mode"
+			"added": {
+				"Markup Timestamps": "Now also targets message markup timestamps"
 			}
 		}
 	};
@@ -85,9 +84,11 @@ module.exports = (_ => {
 					general: {
 						showInChat:				{value: true, 			description: "Replace Chat Timestamps with complete Timestamps"},
 						showInEmbed:			{value: true, 			description: "Replace Embed Timestamps with complete Timestamps"},
+						showInMarkup:			{value: true, 			description: "Replace Markup Timestamps with complete Timestamps"},
 						showInAuditLogs:		{value: true, 			description: "Replace Audit Log Timestamps with complete Timestamps"},
 						changeForChat:			{value: true, 			description: "Change the Time for Chat Time Tooltips"},
-						changeForEdit:			{value: true, 			description: "Change the Time for Edited Time Tooltips"}
+						changeForEdit:			{value: true, 			description: "Change the Time for Edited Time Tooltips"},
+						changeForMarkup:		{value: true, 			description: "Change the Time for Markup Timestamp Tooltips"}
 					},
 					dates: {
 						timestampDate:			{value: {}, 			description: "Chat Timestamp"},
@@ -96,6 +97,9 @@ module.exports = (_ => {
 				};
 				
 				this.patchedModules = {
+					before: {
+						Tooltip: "render"
+					},
 					after: {
 						Message: "default",
 						MessageTimestamp: "default",
@@ -170,6 +174,29 @@ module.exports = (_ => {
 				BDFDB.MessageUtils.rerenderAll();
 			}
 
+			processTooltip (e) {
+				if (typeof e.instance.props.tooltipClassName == "string" && e.instance.props.tooltipClassName.indexOf(BDFDB.disCN.messagemarkuptimestamptooltip) > -1) {
+				}
+			}
+
+			processTooltip (e) {
+				if (typeof e.instance.props.tooltipClassName == "string" && e.instance.props.tooltipClassName.indexOf("timestampTooltip-2YTl4z") > -1) {
+					e.instance.props._originalText = e.instance.props._originalText || e.instance.props.text;
+					if (this.settings.general.showInMarkup) {
+						if (tooltipIsSame) e.instance.props.delay = 99999999999999999999;
+						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, new Date(e.instance.props._originalText));
+						let renderChildren = e.instance.props.children;
+						e.instance.props.children = (...args) => {
+							let renderedChildren = renderChildren(...args);
+							if (BDFDB.ArrayUtils.is(renderedChildren.props.children)) renderedChildren.props.children[1] = timestamp;
+							else renderedChildren.props.children = timestamp;
+							return renderedChildren;
+						};
+					}
+					if (this.settings.general.changeForMarkup) e.instance.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props._originalText);
+				}
+			}
+			
 			processMessage (e) {
 				if (MessageTimestampComponent) {
 					let timestamp = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: c => c && c.type && c.type.type && c.type.type.displayName == "MessageTimestamp"});
@@ -185,7 +212,6 @@ module.exports = (_ => {
 					if (this.settings.general.changeForEdit) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
 				}
 				else {
-					if (this.settings.general.changeForChat) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
 					if (this.settings.general.showInChat && !e.instance.props.cozyAlt) {
 						if (tooltipIsSame) tooltipWrapper.props.delay = 99999999999999999999;
 						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.timestamp._i);
@@ -198,6 +224,7 @@ module.exports = (_ => {
 						};
 						this.setMaxWidth(e.returnvalue, e.instance.props.compact);
 					}
+					if (this.settings.general.changeForChat) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
 				}
 			}
 
