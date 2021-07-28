@@ -2,7 +2,7 @@
  * @name CharCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.4
+ * @version 1.5.5
  * @description Adds a Character Counter to most Inputs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CharCounter",
 			"author": "DevilBro",
-			"version": "1.5.4",
+			"version": "1.5.5",
 			"description": "Adds a Character Counter to most Inputs"
 		},
 		"changeLog": {
 			"improved": {
-				"Nitro Max Message Length": "Now uses 4000 as Max Limit when the user has the permissions to"
+				"Threads": "Works flawlessly with Threads now"
 			}
 		}
 	};
@@ -81,6 +81,7 @@ module.exports = (_ => {
 		};
 		const typeMap = {
 			normal: "chat",
+			sidebar: "chat",
 			form: "upload"
 		};
 	

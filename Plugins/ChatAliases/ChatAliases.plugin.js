@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.2
+ * @version 2.3.3
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.3.2",
+			"version": "2.3.3",
 			"description": "Allows you to configure your own Aliases/Commands"
 		},
 		"changeLog": {
 			"improved": {
-				"Autocomplete Menu": ""
+				"Threads": "Works flawlessly with Threads now"
 			}
 		}
 	};
@@ -390,19 +390,19 @@ module.exports = (_ => {
 			}
 			
 			processChannelTextAreaForm (e) {
-				if (!BDFDB.PatchUtils.isPatched(this, e.instance, "handleSendMessage")) BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {before: e2 => {
+				BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {before: e2 => {
 					if (this.settings.places.normal) this.handleSubmit(e, e2, 0);
 				}}, {force: true, noCache: true});
 			}
 			
 			processMessageEditor (e) {
-				if (!BDFDB.PatchUtils.isPatched(this, e.instance, "onSubmit")) BDFDB.PatchUtils.patch(this, e.instance, "onSubmit", {before: e2 => {
+				BDFDB.PatchUtils.patch(this, e.instance, "onSubmit", {before: e2 => {
 					if (this.settings.places.edit) this.handleSubmit(e, e2, 0);
 				}}, {force: true, noCache: true});
 			}
 			
 			processUpload (e) {
-				if (!BDFDB.PatchUtils.isPatched(this, e.instance, "submitUpload")) BDFDB.PatchUtils.patch(this, e.instance, "submitUpload", {before: e2 => {
+				BDFDB.PatchUtils.patch(this, e.instance, "submitUpload", {before: e2 => {
 					if (this.settings.places.upload) this.handleSubmit(e, e2, 1);
 				}}, {force: true, noCache: true});
 			}
