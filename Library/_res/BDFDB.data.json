@@ -5059,8 +5059,7 @@
 		"174868361040232448": 	{"active": false,		"tier": "t2",		"text": "",					"color": "",			"id": "GIBBU (Ian) Note: Asked to disable"},
 		"363785301195358221": 	{"active": true,		"tier": "t2",		"text": "",					"color": "",			"id": "TRENT (KABEL)"},
 		"443943393660239872": 	{"active": false,		"tier": "t3",		"text": "",					"color": "",			"id": "SARGE (PaSh)"},
-		"620397524494057513": 	{"active": true,		"tier": "t3",		"text": "",					"color": "",			"id": "FUSL"},
-		"838434341197316126": 	{"active": true,		"tier": "t4",		"text": "Allmächtig",		"color": "",			"id": "ZeroAccess"}
+		"620397524494057513": 	{"active": true,		"tier": "t3",		"text": "",					"color": "",			"id": "FUSL"}
 	},
 	"BDFDB_Patron_Tiers": {
 		"t1": {
