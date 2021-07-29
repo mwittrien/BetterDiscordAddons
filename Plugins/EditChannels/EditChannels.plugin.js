@@ -281,7 +281,7 @@ module.exports = (_ => {
 			}
 			
 			processChannelEditorContainer (e) {
-				if (!e.instance.props.disabled && e.instance.props.channel && (BDFDB.ChannelUtils.isTextChannel(e.instance.props.channel) || e.instance.props.channel.isThread() || e.instance.props.channel.isGroupDM()) && (e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.SIDEBAR) && this.settings.places.chatTextarea) {
+				if (!e.instance.props.disabled && e.instance.props.channel && (BDFDB.ChannelUtils.isTextChannel(e.instance.props.channel) || BDFDB.ChannelUtils.isThread(e.instance.props.channel) || e.instance.props.channel.isGroupDM()) && (e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.SIDEBAR) && this.settings.places.chatTextarea) {
 					if (changedChannels[e.instance.props.channel.id] && changedChannels[e.instance.props.channel.id].name) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `#${changedChannels[e.instance.props.channel.id].name}`);
 				}
 			}
@@ -365,9 +365,9 @@ module.exports = (_ => {
 			
 			processHeaderBarContainer (e) {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
-				if (channel && (BDFDB.ChannelUtils.isTextChannel(channel) || channel.isGroupDM() || channel.isThread()) && this.settings.places.channelHeader) {
+				if (channel && (BDFDB.ChannelUtils.isTextChannel(channel) || channel.isGroupDM() || BDFDB.ChannelUtils.isThread(channel)) && this.settings.places.channelHeader) {
 					let thread;
-					if (channel.isThread()) {
+					if (BDFDB.ChannelUtils.isThread(channel)) {
 						thread = channel;
 						channel = BDFDB.LibraryModules.ChannelStore.getChannel(thread.parent_id);
 					}
@@ -669,6 +669,7 @@ module.exports = (_ => {
 			}
 			
 			changeMention (mention, data) {
+				if (!mention) return;
 				if (data.name) {
 					const changeMentionName = (child, name) => {
 						if (!child) return;
@@ -747,7 +748,7 @@ module.exports = (_ => {
 			getChannelDataColor (channelId) {
 				if (changedChannels[channelId] && changedChannels[channelId].color) return changedChannels[channelId].color;
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
-				let category = channel && (channel.isThread() ? BDFDB.LibraryModules.ChannelStore.getChannel((BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.ChannelStore.getChannel(channel.id).parent_id) || {}).parent_id) : BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id));
+				let category = channel && (BDFDB.ChannelUtils.isThread(channel) ? BDFDB.LibraryModules.ChannelStore.getChannel((BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.ChannelStore.getChannel(channel.id).parent_id) || {}).parent_id) : BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id));
 				if (category && changedChannels[category.id] && changedChannels[category.id].inheritColor && changedChannels[category.id].color) return changedChannels[category.id].color;
 				return null;
 			}
