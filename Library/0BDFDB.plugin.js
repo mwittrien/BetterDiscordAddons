@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.9
+ * @version 1.7.10
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,22 +19,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.7.9",
+			"version": "1.7.10",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
-		"changeLog": {
-			"progress": {
-				"Vacation": "I am back from Vacation"
-			},
-			"fixed": {
-				"Text Scrollers": "No longer get stuck at the end position sometimes",
-				"Popups": "Open again (PersonalPins, ClickableMentions, Date Formatters, etc.)"
-			},
-			"added": {
-				"Data Attributes": "Added user id data attribute to body"
-			}
-		}
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
 	};
 	
 	const DiscordObjects = {};
@@ -2197,9 +2185,9 @@ module.exports = (_ => {
 							methodArguments: arguments,
 							originalMethod: originalMethod,
 							originalMethodName: methodName,
-							callOriginalMethod: _ => {if (!stopCall) data.returnValue = data.originalMethod.apply(data.thisObject, data.methodArguments)},
-							callOriginalMethodAfterwards: _ => {callInstead = true;},
-							stopOriginalMethodCall: _ => {stopCall = true;}
+							callOriginalMethod: _ => data.returnValue = data.originalMethod.apply(data.thisObject, data.methodArguments),
+							callOriginalMethodAfterwards: _ => callInstead = true,
+							stopOriginalMethodCall: _ => stopCall = true
 						};
 						if (module.BDFDB_patches && module.BDFDB_patches[methodName]) {
 							for (let priority in module.BDFDB_patches[methodName].before) for (let id in BDFDB.ObjectUtils.sort(module.BDFDB_patches[methodName].before[priority])) {
@@ -3061,8 +3049,12 @@ module.exports = (_ => {
 			let channel = typeof channelOrId == "string" ? LibraryModules.ChannelStore.getChannel(channelOrId) : channelOrId;
 			return BDFDB.ObjectUtils.is(channel) && (channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_TEXT || channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_STORE || channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_ANNOUNCEMENT);
 		};
+		BDFDB.ChannelUtils.isThread = function (channelOrId) {
+			let channel = typeof channelOrId == "string" ? LibraryModules.ChannelStore.getChannel(channelOrId) : channelOrId;
+			return channel && channel.isThread();
+		};
 		BDFDB.ChannelUtils.markAsRead = function (channelIds) {
-			let unreadChannels = [channelIds].flat(10).filter(id => id && typeof id == "string" && BDFDB.ChannelUtils.isTextChannel(id) && (LibraryModules.UnreadChannelUtils.hasUnread(id) || LibraryModules.UnreadChannelUtils.getMentionCount(id) > 0)).map(id => ({
+			let unreadChannels = [channelIds].flat(10).filter(id => id && typeof id == "string" && (BDFDB.ChannelUtils.isTextChannel(id) || BDFDB.ChannelUtils.isThread(id)) && (LibraryModules.UnreadChannelUtils.hasUnread(id) || LibraryModules.UnreadChannelUtils.getMentionCount(id) > 0)).map(id => ({
 				channelId: id,
 				messageId: LibraryModules.UnreadChannelUtils.lastMessageId(id)
 			}));
@@ -4510,7 +4502,7 @@ module.exports = (_ => {
 							formatVars[err.toString().split("for: ")[1]] = value != null ? (value === 0 ? "0" : value) : "undefined";
 							if (stringObj.intMessage) {
 								try {for (let hook of stringObj.intMessage.format(formatVars).match(/\([^\(\)]+\)/gi)) formatVars[hook.replace(/[\(\)]/g, "")] = n => n;}
-								catch (err2) {if (item == "USER_ACTIVITY_LISTENING_ARTISTS") console.log(2, err2, formatVars);}
+								catch (err2) {}
 							}
 						}
 					}

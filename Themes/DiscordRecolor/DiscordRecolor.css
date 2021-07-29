@@ -2200,6 +2200,9 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 .icon-RTGJu3.targetMember-2iuwxX::before {
 	-webkit-mask: url(https://discord.com/assets/af043346e036ef7b1aac1cf42cd1e699.svg);
 }
+.icon-RTGJu3.thread-1y5rGU::before {
+	-webkit-mask: url(https://discord.com/assets/071cf571ff2467f7fefaa2287c82bc58.svg);
+}
 .icon-RTGJu3.targetPermission-ZRUN5n::before {
 	-webkit-mask: url(https://discord.com/assets/2a37995eb832bae805190a93ba043857.svg);
 }
@@ -2220,6 +2223,15 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 .icon-RTGJu3.targetIntegration-3rnyMN::before {
 	-webkit-mask: url(https://discord.com/assets/da8463a04b4a289801d2516f50eb4c19.svg);
+}
+.icon-RTGJu3.targetSticker-2Z_JhN::before {
+	-webkit-mask: url(https://discord.com/assets/a4e8185fe5f5aadd2f861bbc9c779298.svg);
+}
+.icon-RTGJu3.targetStageInstance-29rvVP::before {
+	-webkit-mask: url(https://discord.com/assets/0c3abaf62cd500adbc022c85e06676a7.svg);
+}
+.icon-RTGJu3.targetGuildScheduledEvent-1EbkkW::before {
+	-webkit-mask: url(https://discord.com/assets/adcbafa0017394ce023dd551a67f31c2.svg);
 }
 
 #app-mount .rolePills-32B_DQ {
