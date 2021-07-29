@@ -8323,7 +8323,7 @@ module.exports = (_ => {
 			};
 			BDFDB.DevUtils.generateLanguageStrings = function (strings, config = {}) {
 				const language = config.language || "en";
-				const languages = BDFDB.ArrayUtils.removeCopies(BDFDB.ArrayUtils.is(config.languages) ? config.languages : ["en"].concat(BDFDB.LibraryModules.LanguageStore.languages.filter(n => n.enabled).map(n => {
+				const languages = BDFDB.ArrayUtils.removeCopies(BDFDB.ArrayUtils.is(config.languages) ? config.languages : ["en"].concat((BDFDB.LibraryModules.LanguageStore.languages || BDFDB.LibraryModules.LanguageStore._languages).filter(n => n.enabled).map(n => {
 					if (BDFDB.LanguageUtils.languages[n.code]) return n.code;
 					else {
 						const code = n.code.split("-")[0];

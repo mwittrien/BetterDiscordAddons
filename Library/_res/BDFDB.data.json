@@ -1011,8 +1011,10 @@
 		},
 		"StaffTag": {
 			"adminIcon": "admin-Kv1Hp_",
+			"groupOwnerIcon": "groupOwner-g6FlmA",
 			"managementIcon": "management-3fF_o8",
-			"ownerIcon": "owner-FfFh3B"
+			"ownerIcon": "owner-FfFh3B",
+			"threadCreatorIcon": "threadCreator-lp5sXo"
 		},
 		"ThemeRepo": {
 			"dragBar": "dragBar-4FsRaa",
@@ -1501,8 +1503,10 @@
 		"_spotifycontrolstimeline": ["SpotifyControls", "timeline"],
 		"_spotifycontrolsvolumeslider": ["SpotifyControls", "volumeSlider"],
 		"_stafftagadminicon": ["StaffTag", "adminIcon"],
+		"_stafftaggroupownericon": ["StaffTag", "groupOwnerIcon"],
 		"_stafftagmanagementicon": ["StaffTag", "managementIcon"],
 		"_stafftagownericon": ["StaffTag", "ownerIcon"],
+		"_stafftagthreadcreatoricon": ["StaffTag", "threadCreatorIcon"],
 		"_themerepodragbar": ["ThemeRepo", "dragBar"],
 		"_themerepodragcorner": ["ThemeRepo", "dragCorner"],
 		"_themerepodraginterface": ["ThemeRepo", "dragInterface"],
