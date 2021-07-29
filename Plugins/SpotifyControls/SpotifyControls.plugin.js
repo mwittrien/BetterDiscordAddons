@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.7
+ * @version 1.1.8
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.1.7",
+			"version": "1.1.8",
 			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
+		},
+		"changeLog": {
+			"fixed": {
+				"Direct Messages List": "Fixed and Issue where the Plugin would cause the DM List to jump to the top if a DM was selected"
+			}
 		}
 	};
 
@@ -143,7 +148,6 @@ module.exports = (_ => {
 				let coverSrc = BDFDB.LibraryModules.AssetUtils.getAssetImage(lastSong.application_id, lastSong.assets.large_image);
 				showActivity = showActivity != undefined ? showActivity : (BDFDB.LibraryModules.ConnectionStore.getAccounts().find(n => n.type == "spotify") || {}).show_activity;
 				currentVolume = this.props.draggingVolume ? currentVolume : socketDevice.device.volume_percent;
-				
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._spotifycontrolscontainer, this.props.maximized && BDFDB.disCN._spotifycontrolscontainermaximized, this.props.timeline && BDFDB.disCN._spotifycontrolscontainerwithtimeline),
 					children: [
@@ -469,11 +473,10 @@ module.exports = (_ => {
 				};
 				
 				this.patchedModules = {
-					after: {
-						AppView: "default"
+					before: {
+						AnalyticsContext: "render"
 					}
 				};
-				
 				
 				this.css = `
 					@font-face {
@@ -804,30 +807,16 @@ module.exports = (_ => {
 				BDFDB.DiscordUtils.rerenderAll();
 			}
 
-			processAppView (e) {
-				let injected = this.injectPlayer(e.returnvalue);
-				if (!injected) {
-					let channels = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelSidebar"});
-					if (channels) {
-						let type = channels.type;
-						channels.type = (...args) => {
-							let appliedType = type(...args);
-							this.injectPlayer(appliedType);
-							return appliedType;
-						};
-					}
-				}
-			}
-			
-			injectPlayer (parent) {
-				let [children, index] = BDFDB.ReactUtils.findParent(parent, {props: [["section", BDFDB.DiscordConstants.AnalyticsSections.ACCOUNT_PANEL]]});
-				if (index > -1) children.splice(index - 1, 0, BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
-					song: BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false),
-					maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
-					timeline: this.settings.general.addTimeline,
-					activityToggle: this.settings.general.addActivityButton
-				}, true));
-				return index > -1;
+			processAnalyticsContext (e) {
+				if (e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.ACCOUNT_PANEL) e.instance.props.children = [
+					BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
+						song: BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false),
+						maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
+						timeline: this.settings.general.addTimeline,
+						activityToggle: this.settings.general.addActivityButton
+					}, true),
+					e.instance.props.children
+				].flat(10);
 			}
 			
 			updatePlayer (song) {
