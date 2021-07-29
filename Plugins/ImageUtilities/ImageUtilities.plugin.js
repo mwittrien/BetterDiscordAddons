@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.4
+ * @version 4.4.5
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.4.4",
+			"version": "4.4.5",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		},
 		"changeLog": {
 			"fixed": {
-				"Bigger Stream Preview": "Works now with the Plugin"
+				"Copy Image Linux": "Should work now"
 			}
 		}
 	};
@@ -1061,7 +1061,7 @@ module.exports = (_ => {
 							BDFDB.LibraryRequires.electron.clipboard.write({image: BDFDB.LibraryRequires.electron.nativeImage.createFromBuffer(body)});
 						}
 						else {
-							let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.resourcesPath, "imageutilstempimg.png");
+							let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env.USERPROFILE || BDFDB.LibraryRequires.process.env.HOMEPATH || BDFDB.LibraryRequires.process.env.HOME, "imageutilstempimg.png");
 							BDFDB.LibraryRequires.fs.writeFileSync(file, body, {encoding: null});
 							BDFDB.LibraryRequires.electron.clipboard.write({image: file});
 							BDFDB.LibraryRequires.fs.unlinkSync(file);

@@ -213,7 +213,7 @@ module.exports = (_ => {
 															BDFDB.LibraryRequires.electron.clipboard.write({image: BDFDB.LibraryRequires.electron.nativeImage.createFromBuffer(body)});
 														}
 														else {
-															let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.resourcesPath, "personalpinstemp.png");
+															let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env.USERPROFILE || BDFDB.LibraryRequires.process.env.HOMEPATH || BDFDB.LibraryRequires.process.env.HOME, "personalpinstemp.png");
 															BDFDB.LibraryRequires.fs.writeFileSync(file, body, {encoding: null});
 															BDFDB.LibraryRequires.electron.clipboard.write({image: file});
 															BDFDB.LibraryRequires.fs.unlinkSync(file);
