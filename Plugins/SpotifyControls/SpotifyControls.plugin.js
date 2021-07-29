@@ -681,19 +681,6 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				// REMOVE 24.04.2021
-				let oldData = BDFDB.DataUtils.load(this);
-				if (oldData.settings) {
-					this.settings.general = oldData.settings;
-					BDFDB.DataUtils.save(this.settings.general, this, "general");
-					BDFDB.DataUtils.remove(this, "settings");
-				}
-				if (oldData.buttonConfigs) {
-					this.settings.buttons = oldData.buttonConfigs;
-					BDFDB.DataUtils.save(this.settings.buttons, this, "buttons");
-					BDFDB.DataUtils.remove(this, "buttonConfigs");
-				}
-				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SpotifyTrackUtils, "getActivity", {after: e => {
 					if (e.methodArguments[0] !== false) {
 						if (e.returnValue && e.returnValue.name == "Spotify") this.updatePlayer(e.returnValue);
@@ -709,11 +696,11 @@ module.exports = (_ => {
 					return false;
 				}});
 				
-				this.forceUpdateAll();
+				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			
 			onStop () {
-				this.forceUpdateAll();
+				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 
 			getSettingsPanel (collapseStates = {}) {				
@@ -798,13 +785,8 @@ module.exports = (_ => {
 			onSettingsClosed () {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
-					this.forceUpdateAll();
+					BDFDB.PatchUtils.forceAllUpdates(this);
 				}
-			}
-		
-			forceUpdateAll () {				
-				BDFDB.PatchUtils.forceAllUpdates(this);
-				BDFDB.DiscordUtils.rerenderAll();
 			}
 
 			processAnalyticsContext (e) {
