@@ -229,7 +229,7 @@ body,														/* body														*/
 
 #app-mount .sidebarRegion-VFTUkN,							/* settings				sidebar								*/
 #app-mount .sidebar-_0OpfR {								/* sidebarlist			sidebar								*/
-	background-color: rgba(var(--transparencycolor), calc(.2 * (var(--transparencyalpha) / (var(--transparencyalpha) + 0.00000000000000000000001)));
+	background-color: rgba(var(--transparencycolor), calc(0.2 * (var(--transparencyalpha) / (var(--transparencyalpha) + 0.00000000000000000000001))));
 }
 
 #app-mount {												/* app-mount												*/
