@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.11
+ * @version 1.7.12
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.7.11",
+			"version": "1.7.12",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -1955,18 +1955,18 @@ module.exports = (_ => {
 					methodNames = BDFDB.ArrayUtils.removeCopies(methodNames).flat(10).filter(n => n);
 					if (methodNames.includes("componentDidMount")) InternalBDFDB.initiateProcess(plugin, type, {
 						instance: instance,
-						methodname: "componentDidMount",
-						patchtypes: pluginData.patchTypes[type],
 						returnvalue: undefined,
-						original: undefined
+						component: undefined,
+						methodname: "componentDidMount",
+						patchtypes: pluginData.patchTypes[type]
 					});
 					if (methodNames.includes("render")) forceRender = true;
 					else if (!forceRender && methodNames.includes("componentDidUpdate")) InternalBDFDB.initiateProcess(plugin, type, {
 						instance: instance,
-						methodname: "componentDidUpdate",
-						patchtypes: pluginData.patchTypes[type],
 						returnvalue: undefined,
-						original: undefined
+						component: undefined,
+						methodname: "componentDidUpdate",
+						patchtypes: pluginData.patchTypes[type]
 					});
 				}
 				if (forceRender) BDFDB.ReactUtils.forceUpdate(instance);
@@ -2055,9 +2055,9 @@ module.exports = (_ => {
 						patchMethods[patchType] = e => InternalBDFDB.initiateProcess(pluginData.plugin, type, {
 							instance: e.thisObject,
 							returnvalue: e.returnValue,
+							component: toBePatched,
 							methodname: e.originalMethodName,
-							patchtypes: [patchType],
-							original: toBePatched[pluginData.patchTypes[patchType]]
+							patchtypes: [patchType]
 						});
 						BDFDB.PatchUtils.patch(pluginData.plugin, toBePatched, pluginData.patchTypes[patchType], patchMethods, {name});
 					}
