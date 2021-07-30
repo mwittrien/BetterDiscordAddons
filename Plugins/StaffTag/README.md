@@ -30,3 +30,5 @@ Different Types:
 ![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Plugins/StaffTag/_res/screenshot3.png)
 
 ![screenshot4](https://mwittrien.github.io/BetterDiscordAddons/Plugins/StaffTag/_res/screenshot4.png)
+
+![screenshot5](https://mwittrien.github.io/BetterDiscordAddons/Plugins/StaffTag/_res/screenshot5.png)

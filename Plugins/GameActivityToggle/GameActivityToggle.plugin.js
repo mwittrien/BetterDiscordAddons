@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.3
+ * @version 1.0.4
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "GameActivityToggle",
 			"author": "DevilBro",
-			"version": "1.0.3",
+			"version": "1.0.4",
 			"description": "Adds a Quick-Toggle Game Activity Button"
 		},
 		"changeLog": {
 			"improved": {
-				"Volume": "Now uses same Volume as Mute/Deafen Button"
+				"Cached State": "Now saves the state of your activity status, to avoid the activity status being turned off on each start of discord, this is an issue with Discord btw and not the plugin"
 			}
 		}
 	};
@@ -92,7 +92,7 @@ module.exports = (_ => {
 					})),
 					onClick: _ => {
 						_this.settings.general[!BDFDB.LibraryModules.SettingsStore.showCurrentGame ? "playEnable" : "playDisable"] && BDFDB.LibraryModules.SoundUtils.playSound(_this.settings.selections[!BDFDB.LibraryModules.SettingsStore.showCurrentGame ? "enableSound" : "disableSound"], .4);
-						BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({showCurrentGame: !BDFDB.LibraryModules.SettingsStore.showCurrentGame})
+						BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({showCurrentGame: !BDFDB.LibraryModules.SettingsStore.showCurrentGame});
 					}
 				}));
 			}
@@ -124,8 +124,19 @@ module.exports = (_ => {
 				};
 			}
 			
-			onStart () {	
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SettingsUtils, "updateLocalSettings", {after: e => BDFDB.ReactUtils.forceUpdate(toggleButton)});
+			onStart () {
+				let cachedState = BDFDB.DataUtils.load(this, "cachedState");
+				if (!cachedState.date || (new Date() - cachedState.date) > 1000*60*60*24*3) {
+					cachedState.value = BDFDB.LibraryModules.SettingsStore.showCurrentGame;
+					cachedState.date = new Date();
+					BDFDB.DataUtils.save(cachedState, this, "cachedState");
+				}
+				else if (cachedState.value != null && cachedState.value != BDFDB.LibraryModules.SettingsStore.showCurrentGame) BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({showCurrentGame: cachedState.value});
+				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SettingsUtils, "updateLocalSettings", {after: e => {
+					BDFDB.ReactUtils.forceUpdate(toggleButton);
+					BDFDB.DataUtils.save({date: new Date(), value: BDFDB.LibraryModules.SettingsStore.showCurrentGame}, this, "cachedState");
+				}});
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
