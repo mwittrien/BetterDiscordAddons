@@ -193,7 +193,6 @@
 			"ChannelCategoryItem": {"strings": ["muted", "channel", "collapsed"], "exported": true},
 			"ChannelMember": {"class": "member"},
 			"ChannelMembers": {"class": "members"},
-			"ChannelMessage": {"props": ["ThreadStarterChatMessage"]},
 			"Channels": {"class": "guildchannels"},
 			"ChannelTextAreaForm": {"class": "chatform"},
 			"ChannelWindow": {"class": "chatcontent"},
