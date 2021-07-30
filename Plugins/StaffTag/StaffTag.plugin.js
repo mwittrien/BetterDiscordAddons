@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.7
+ * @version 1.4.8
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "StaffTag",
 			"author": "DevilBro",
-			"version": "1.4.7",
+			"version": "1.4.8",
 			"description": "Adds a Crown/Tag to Server Owners (or Admins/Management)"
 		},
 		"changeLog": {
@@ -415,11 +415,10 @@ module.exports = (_ => {
 				const channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId || BDFDB.LibraryModules.LastChannelStore.getChannelId());
 				if (!channel) return userTypes.NONE;
 				const guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
-				const isOwner = channel.ownerId == user.id || guild && guild.ownerId == user.id, isGroupDM = channel.isGroupDM(), isThread = BDFDB.ChannelUtils.isThread(channel);
 				
-				if (this.settings.tagTypes.owners && isOwner && !isGroupDM && !isThread) return userTypes.OWNER;
-				else if (this.settings.tagTypes.groupOwners && isOwner && isGroupDM) return userTypes.GROUP_OWNER;
-				else if (this.settings.tagTypes.threadCreators && isOwner && isThread) return userTypes.THREAD_CREATOR;
+				if (this.settings.tagTypes.owners && guild && guild.ownerId == user.id) return userTypes.OWNER;
+				else if (this.settings.tagTypes.groupOwners && channel.ownerId == user.id && channel.isGroupDM()) return userTypes.GROUP_OWNER;
+				else if (this.settings.tagTypes.threadCreators && channel.ownerId == user.id && BDFDB.ChannelUtils.isThread(channel)) return userTypes.THREAD_CREATOR;
 				else if (this.settings.tagTypes.admins && BDFDB.UserUtils.can("ADMINISTRATOR", user.id)) return userTypes.ADMIN;
 				else if (this.settings.tagTypes.managementG && BDFDB.UserUtils.can("MANAGE_GUILD", user.id) || this.settings.tagTypes.managementC && BDFDB.UserUtils.can("MANAGE_CHANNELS", user.id) || this.settings.tagTypes.managementR && BDFDB.UserUtils.can("MANAGE_ROLES", user.id) || this.settings.tagTypes.managementU && (BDFDB.UserUtils.can("BAN_MEMBERS", user.id) || BDFDB.UserUtils.can("KICK_MEMBERS", user.id)) || this.settings.tagTypes.managementM && BDFDB.UserUtils.can("MANAGE_MESSAGES", user.id)) return userTypes.MANAGEMENT;
 				return userTypes.NONE;
