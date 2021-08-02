@@ -4,11 +4,12 @@
 	--settingsiconsgap: 14px;
 }
 
-.sidebarRegion-VFTUkN {
-	flex-basis: calc(218px + (var(--usesettingsicons) * (var(--settingsiconssize) + var(--settingsiconsgap))));
+body #app-mount .sidebarRegion-VFTUkN {
+	flex-basis: calc(218px + (var(--usesettingsicons) * (var(--settingsiconssize) + var(--settingsiconsgap)))) !important;
 }
-.sidebar-CFHs9e {
-	width: calc(218px + (var(--usesettingsicons) * (var(--settingsiconssize) + var(--settingsiconsgap))));
+body #app-mount .sidebar-CFHs9e,
+body #app-mount .layer-3QrUeG ~ .layer-3QrUeG .sidebar-CFHs9e {
+	width: calc(218px + (var(--usesettingsicons) * (var(--settingsiconssize) + var(--settingsiconsgap)))) !important;
 }
 #bd-settings-sidebar .ui-tab-bar-item,
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ {

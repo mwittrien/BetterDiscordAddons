@@ -57,10 +57,12 @@
 	padding: unset !important;
 	overflow: hidden !important;
 }
-#app-mount .layer-3QrUeG ~ .layer-3QrUeG .sidebar-CFHs9e,
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG .sidebar-CFHs9e {
+	width: 218px !important;
+	padding: 20px 6px 20px 20px !important;
+}
 #app-mount .layer-3QrUeG ~ .layer-3QrUeG .contentColumnDefault-1VQkGM {
-	padding-top: 20px !important;
-	padding-bottom: 20px !important;
+	padding: 20px 40px !important;
 }
 #app-mount .layer-3QrUeG ~ .layer-3QrUeG .sidebar-dLM-kh {
 	height: var(--settingsmodalheight) !important;
