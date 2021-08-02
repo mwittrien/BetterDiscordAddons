@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.5
+ * @version 1.7.6
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,15 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.7.5",
+			"version": "1.7.6",
 			"description": "Shows a Notification when a Friend or a User, you choose to observe, changes their Status"
 		},
 		"changeLog": {
 			"fixed": {
-				"$statusOld $status": "Both work now"
-			},
-			"improved": {
-				"Default Settings": "Added extended Options to configure a default Setup for new Users"
+				"Crash": ""
 			}
 		}
 	};
@@ -753,7 +750,7 @@ module.exports = (_ => {
 			injectCounter (returnvalue) {
 				let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {name: "ConnectedUnreadDMs"});
 				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(FriendOnlineCounterComponent, {
-					amount: BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount()
+					amount: this.getOnlineCount()
 				}));
 			}
 			
@@ -812,6 +809,10 @@ module.exports = (_ => {
 			activityIsSame (id, status) {
 				return BDFDB.equals(BDFDB.ObjectUtils.extract(userStatusStore[id].activity, "name", "details", "state", "emoji"), status && BDFDB.ObjectUtils.extract(status.activity, "name", "details", "state", "emoji"));
 			}
+			
+			getOnlineCount () {
+				return Object.entries(BDFDB.LibraryModules.RelationshipStore.getRelationships()).filter(n => n[1] == BDFDB.DiscordConstants.RelationshipTypes.FRIEND && BDFDB.LibraryModules.StatusMetaUtils.getStatus(n[0]) != BDFDB.DiscordConstants.StatusTypes.OFFLINE).length;
+			}
 
 			startInterval () {
 				BDFDB.TimeUtils.clear(checkInterval);
@@ -824,7 +825,7 @@ module.exports = (_ => {
 				for (let id in observedUsers) userStatusStore[id] = this.getStatusWithMobileAndActivity(id, observedUsers[id], clientStatuses);
 				
 				checkInterval = BDFDB.TimeUtils.interval(_ => {
-					let amount = BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount();
+					let amount = this.getOnlineCount();
 					if (friendCounter && friendCounter.props.amount != amount) {
 						friendCounter.props.amount = amount;
 						BDFDB.ReactUtils.forceUpdate(friendCounter);
