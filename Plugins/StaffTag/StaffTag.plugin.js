@@ -25,6 +25,11 @@ module.exports = (_ => {
 				"Thread Creators": "Added a dark gray crown for Thread Creators (they no longe appear as Server Owners)",
 				"Server Owner/Group Owner": "Split the settings for Server and Group Owners, you can now change/disable them separately"
 			}
+		},
+		"changeLog": {
+			"fixed": {
+				"Member List Position": ""
+			}
 		}
 	};
 
@@ -139,14 +144,11 @@ module.exports = (_ => {
 					${BDFDB.dotCN.memberownericon + BDFDB.dotCN._stafftagthreadcreatoricon} {
 						color: var(--text-muted);
 					}
+					${BDFDB.dotCN.memberownericon} {
+						top: 0px;
+					}
 					${BDFDB.dotCNS.message + BDFDB.dotCN.memberownericon} {
 						top: 2px;
-					}
-					${BDFDB.dotCNS.voicecontent + BDFDB.dotCN.memberownericon} {
-						top: 0px;
-					}
-					${BDFDB.dotCNS.userprofile + BDFDB.dotCN.memberownericon} {
-						top: 0px;
 					}
 					${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.memberownericon} {
 						top: 1px;

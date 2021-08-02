@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.0
+ * @version 1.8.1
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowBadgesInChat",
 			"author": "DevilBro",
-			"version": "1.8.0",
+			"version": "1.8.1",
 			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList"
 		},
 		"changeLog": {
-			"improved": {
-				"Plugin Name": "Changed to clarify the Usage",
-				"DM List": "Also works in DM List now"
+			"fixed": {
+				"Chat Position": ""
 			}
 		}
 	};
@@ -149,7 +148,7 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN._showbadgesinchatbadgeschat} {
 						position: relative;
-						top: 2px;
+						top: 4px;
 					}
 					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN._showbadgesinchatbadgeschat} {
 						top: 0;
