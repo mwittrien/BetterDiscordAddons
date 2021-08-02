@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.6
+ * @version 2.2.7
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
-			"version": "2.2.6",
+			"version": "2.2.7",
 			"description": "Allows you to download all Themes from BD's Website within Discord"
 		}
 	};
@@ -152,7 +152,7 @@ module.exports = (_ => {
 				if (searchString) 	{
 					let usedSearchString = searchString.toUpperCase();
 					let spacelessUsedSearchString = usedSearchString.replace(/\s/g, "");
-					themes = themes.filter(theme => theme.search.indexOf(usedSearchString) > -1 || plugin.search.indexOf(spacelessUsedSearchString) > -1);
+					themes = themes.filter(theme => theme.search.indexOf(usedSearchString) > -1 || theme.search.indexOf(spacelessUsedSearchString) > -1);
 				}
 				
 				BDFDB.ArrayUtils.keySort(themes, this.props.sortKey.toLowerCase());
