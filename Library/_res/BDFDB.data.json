@@ -1148,7 +1148,7 @@
 		"AuditLogPopout": {"props": ["guildSettingsAuditLogsUserFilterPopout"]},
 		"AuthBox": {"props": ["authBox"]},
 		"Autocomplete": {"props": ["autocomplete", "autocompleteRow"]},
-		"AutocompleteAliases": {"props": ["autocompleteLayer", "stickerAutoComplete"]},
+		"AutocompleteAliases": {"props": ["autocomplete", "stickerAutoComplete"]},
 		"Avatar": {"props": ["avatar", "mask", "wrapper"]},
 		"AvatarIcon": {"props": ["iconActiveLarge", "iconActiveMedium"]},
 		"Backdrop": {"props": ["backdrop", "withLayer"]},
