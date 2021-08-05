@@ -683,7 +683,7 @@ module.exports = (_ => {
 				if (e.instance.props.message) {
 					let translation = translatedMessages[e.instance.props.message.id];
 					if (translation && translation.content) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						text: `${BDFDB.LanguageUtils.getName(translation.input)} ➝ ${BDFDB.LanguageUtils.LibraryStrings.to} ${BDFDB.LanguageUtils.getName(translation.output)}`,
+						text: `${BDFDB.LanguageUtils.getName(translation.input)} ➝ ${BDFDB.LanguageUtils.getName(translation.output)}`,
 						tooltipConfig: {style: "max-width: 400px"},
 						children: BDFDB.ReactUtils.createElement("span", {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.messagetimestamp, BDFDB.disCN.messagetimestampinline, BDFDB.disCN._translatortranslated),
