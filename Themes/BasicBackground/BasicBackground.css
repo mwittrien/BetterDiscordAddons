@@ -3317,6 +3317,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .root-3QyAh1 .avatar-AvHqJA {								/* modal				avatar								*/
 	background-color: transparent;
 	border-color: transparent;
+	box-sizing: content-box;
 }
 #app-mount .body-r6_QPy {									/* modal				body								*/
 	background-color: transparent;
@@ -4318,9 +4319,11 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .userPopout-xaxa6l .banner-2QYc2d {							/* popout				banner								*/
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 16 120 A 46 46 0 0 1 62 76 A 46 46 0 0 1 108 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
 }
-.userPopout-xaxa6l .avatar-37jOim {							/* popout				avatar								*/
+.userPopout-xaxa6l .avatar-37jOim,							/* popout				avatar								*/
+.userPopout-xaxa6l .avatarWrapper {							/* popout				status everywhere					*/
 	background-color: transparent;
 	border-color: transparent;
+	box-sizing: content-box;
 }
 
 #app-mount .body-3HBlXn,									/* popout				body								*/
