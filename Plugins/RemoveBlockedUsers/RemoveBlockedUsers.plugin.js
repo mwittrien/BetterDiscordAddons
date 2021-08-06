@@ -22,7 +22,7 @@ module.exports = (_ => {
 		},
 		"changeLog": {
 			"fixed": {
-				"Voice Channels": ""
+				"Voice Channels": "."
 			}
 		}
 	};
