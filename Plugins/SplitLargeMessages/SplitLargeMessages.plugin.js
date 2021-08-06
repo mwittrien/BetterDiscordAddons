@@ -22,7 +22,7 @@ module.exports = (_ => {
 		},
 		"changeLog": {
 			"improved": {
-				"Threads": "Works flawlessly with Threads now"
+				"Threads": "Works flawlessly with Threads now."
 			}
 		}
 	};
