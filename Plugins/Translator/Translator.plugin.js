@@ -22,7 +22,7 @@ module.exports = (_ => {
 		},
 		"changeLog": {
 			"fixed": {
-				"Yandex": "Fixed crashes with Yandex"
+				"Yandex": "Fixed crashes with Yandex."
 			},
 			"added": {
 				"Baidu": "Added"
