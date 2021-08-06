@@ -22,7 +22,7 @@ module.exports = (_ => {
 		},
 		"changeLog": {
 			"fixed": {
-				"Replies": "No longer reveals spoilers within reply preview if revealing all spoilers within a message"
+				"Replies": "No longer reveals spoilers within reply preview if revealing all spoilers within a message."
 			}
 		}
 	};
