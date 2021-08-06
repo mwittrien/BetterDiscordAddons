@@ -95,7 +95,8 @@ module.exports = (_ => {
 
 			openInSteam (url) {
 				BDFDB.LibraryRequires.request(url, (error, response, body) => {
-					if (BDFDB.LibraryRequires.electron.shell.openExternal("steam://openurl/" + response.request.href));
+					if (error) return;
+					else if (BDFDB.LibraryRequires.electron.shell.openExternal("steam://openurl/" + response.request.href));
 					else BDFDB.DiscordUtils.openLink(response.request.href);
 				});
 			}
