@@ -341,7 +341,8 @@ module.exports = (_ => {
 					"sl": "slo",
 					"sv": "swe",
 					"vi": "vie",
-					"zh-CN": "wyw",
+					"zh": "wyw",
+					"zh-CN": "zh",
 					"zh-TW": "cht"
 				},
 				key: "xxxxxxxxx xxxxxx xxxxxxxxxx"
