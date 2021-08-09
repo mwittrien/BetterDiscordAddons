@@ -2356,7 +2356,10 @@ module.exports = (_ => {
 		
 		for (let name in InternalData.LibraryModules) {
 			if (InternalData.LibraryModules[name].props) {
-				if (InternalData.LibraryModules[name].nonProps) LibraryModules[name] = BDFDB.ModuleUtils.find(m => InternalData.LibraryModules[name].props.every(prop => typeof m[prop] == "function") && InternalData.LibraryModules[name].nonProps.every(prop => typeof m[prop] != "function"));
+				if (InternalData.LibraryModules[name].nonProps) LibraryModules[name] = BDFDB.ModuleUtils.find(m => InternalData.LibraryModules[name].props.every(prop => {
+					const value = m[prop];
+					return value !== undefined && !(typeof value == "string" && !value);
+				}) && InternalData.LibraryModules[name].nonProps.every(prop => m[prop] === undefined));
 				else LibraryModules[name] = BDFDB.ModuleUtils.findByProperties(InternalData.LibraryModules[name].props);
 			}
 			else if (InternalData.LibraryModules[name].strings) LibraryModules[name] = BDFDB.ModuleUtils.findByString(InternalData.LibraryModules[name].strings);
