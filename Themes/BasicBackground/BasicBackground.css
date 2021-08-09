@@ -6600,6 +6600,23 @@ html .channelTabs-noFavs {
 	padding: 0 6px;
 }
 
+html #channelTabs-settingsMenu {
+	position: absolute;
+	right: 0;
+	background: rgba(var(--transparencycolor), calc(0.05 + var(--guildchanneltransparency) * 2));
+	box-shadow: 0 1px 0 rgba(var(--transparencycolor), .2), 0 1.5px 0 rgba(var(--transparencycolor), .05), 0 2px 0 rgba(var(--transparencycolor), .05);
+	border-radius: 0;
+	min-height: 34px;
+	height: unset;
+	float: unset;
+	cursor: pointer;
+}
+html #channelTabs-settingsMenu:hover rect[fill] {
+	fill: white;
+}
+html .channelTabs-tabContainer {
+	margin-right: 40px;
+}
 html .channelTabs-tab,
 html .channelTabs-fav {
 	display: flex;
@@ -6634,13 +6651,27 @@ html .channelTabs-fav .channelTabs-unreadBadge {
 	transform: unset !important;
 	float: unset !important;
 }
+html .channelTabs-tab > *:first-child {
+	display: flex !important;
+	align-items: center !important;
+	flex: 1 1 auto !important;
+}
 html .channelTabs-tabIcon,
 html .channelTabs-favIcon {
+	display: inline-flex !important;
+	position: static !important;
 	margin-right: 6px !important;
+}
+html .channelTabs-tabIcon[src=""],
+html .channelTabs-favIcon[src=""] {
+	display: none !important;
 }
 html .channelTabs-tabName,
 html .channelTabs-favName {
+	display: inline-flex !important;
+	position: static !important;
 	margin: 0 !important;
+	width: unset !important;
 	font-size: 16px;
 	line-height: 20px;
 	font-weight: 500;
@@ -6663,10 +6694,9 @@ html .channelTabs-tab.channelTabs-selected .channelTabs-closeTab {
 	font-size: 14px;
 	line-height: unset;
 }
-html .channelTabs-closeTab:hover,
-html .channelTabs-tab.channelTabs-selected .channelTabs-closeTab:hover {
-	background: #f04747;
-	color: var(--interactive-active);
+html .channelTabs-closeTab:hover {
+	background: rgb(237, 66, 69) !important;
+	color: var(--interactive-active) !important;
 }
 html .channelTabs-newTab {
 	position: static;
