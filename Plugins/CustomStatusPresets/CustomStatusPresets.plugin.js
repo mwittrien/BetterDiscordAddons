@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.6
+ * @version 1.0.7
  * @description Allows you to save Custom Statuses as Quick Select
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,17 +17,25 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomStatusPresets",
 			"author": "DevilBro",
-			"version": "1.0.6",
+			"version": "1.0.7",
 			"description": "Allows you to save Custom Statuses as Quick Select"
 		},
 		"changeLog": {
-			"added": {
-				"Online Status": "The online status now also gets saved in the preset"
+			"fixed": {
+				"Status/Overflow": "Fixed some Issues with very long Status causing overflow issues"
 			}
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -253,6 +261,9 @@ module.exports = (_ => {
 						overflow: visible;
 						white-space: unset;
 					}
+					#status-picker${BDFDB.dotCN.menu} #status-picker-custom-status ${BDFDB.dotCN.customstatusitem} {
+						grid-template-rows: minmax(24px, auto) 1fr;
+					}
 					#status-picker${BDFDB.dotCN.menu} #status-picker-custom-status ${BDFDB.dotCN.customstatusitemcustom},
 					#status-picker${BDFDB.dotCN.menu} #status-picker-custom-status ${BDFDB.dotCN.customstatusitemcustomwithemoji} {
 						display: flex;
@@ -284,6 +295,7 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN._customstatuspresetsstatus} {
 						margin-right: 6px;
+						flex: 0 0 auto;
 					}
 					${BDFDB.dotCN._customstatuspresetssortdivider} {
 						background: ${BDFDB.DiscordConstants.Colors.STATUS_GREEN};
@@ -367,7 +379,9 @@ module.exports = (_ => {
 											className: BDFDB.disCN._customstatuspresetsstatus,
 											status: presets[id].status || BDFDB.DiscordConstants.StatusTypes.ONLINE
 										}),
-										presets[id].text
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+											children: presets[id].text
+										})
 									]
 								}),
 								imageUrl: presets[id].emojiInfo && (presets[id].emojiInfo.id ? BDFDB.LibraryModules.IconUtils.getEmojiURL(presets[id].emojiInfo) : BDFDB.LibraryModules.EmojiStateUtils.getURL(presets[id].emojiInfo.name)),

@@ -17,16 +17,16 @@ Turns Settings Windows like User-/Channel-/Serversettings and Boost Overview int
 
 User Settings:
 
-![cover](https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/_res/screenshot1.png)
+![cover](https://mwittrien.github.io/BetterDiscordAddons/Themes/SettingsModal/_res/cover.png)
 
 Server Settings:
 
-![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/_res/screenshot1.png)
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Themes/SettingsModal/_res/screenshot1.png)
 
 Channel Settings:
 
-![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/_res/screenshot2.png)
+![screenshot2](https://mwittrien.github.io/BetterDiscordAddons/Themes/SettingsModal/_res/screenshot2.png)
 
 Boost Overview Page:
 
-![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/_res/screenshot3.png)
+![screenshot3](https://mwittrien.github.io/BetterDiscordAddons/Themes/SettingsModal/_res/screenshot3.png)

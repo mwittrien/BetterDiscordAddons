@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.4
+ * @version 1.0.6
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,17 +17,25 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditRoles",
 			"author": "DevilBro",
-			"version": "1.0.4",
+			"version": "1.0.6",
 			"description": "Allows you to locally edit Roles"
 		},
 		"changeLog": {
 			"fixed": {
-				"Role Names": "Fixed issue where the role name was changed to the role color string and not the name"
+				"Crashs": ""
 			}
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -71,16 +79,26 @@ module.exports = (_ => {
 			onLoad () {
 				this.patchedModules = {
 					before: {
+						ChannelMembers: "render",
 						MemberListItem: "render",
-						UserPopout: "render",
-						ChannelMembers: "render"
+						UserPopoutBody: "default"
 					}
 				};
 			}
 			
 			onStart () {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.GuildStore, "getGuild", {after: e => {
-					if (e.returnValue) e.returnValue = this.changeRolesInGuild(e.returnValue);
+					if (e.returnValue) e.returnValue = this.changeRolesInGuild(e.returnValue, true);
+				}});
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.PermissionRoleUtils, "getHighestRole", {after: e => {
+					if (e.returnValue && changedRoles[e.returnValue.id]) {
+						let data = changedRoles[e.returnValue.id];
+						e.returnValue = Object.assign({}, e.returnValue, {
+							name: data.name || e.returnValue.name,
+							color: data.color ? BDFDB.ColorUtils.convert(data.color, "INT") : e.returnValue.color,
+							colorString: data.color ? BDFDB.ColorUtils.convert(data.color, "HEX") : e.returnValue.colorString
+						});
+					}
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MemberStore, "getMember", {after: e => {
 					if (e.returnValue) {
@@ -89,7 +107,7 @@ module.exports = (_ => {
 							let role;
 							for (let id of e.returnValue.roles) if (guild.roles[id] && guild.roles[id].colorString && (!role || role.position < guild.roles[id].position)) role = guild.roles[id];
 							let data = role && changedRoles[role.id];
-							if (data) e.returnValue = Object.assign({}, e.returnValue, {colorString: data.color ? BDFDB.ColorUtils.convert(data.color, "HEX") : null});
+							if (data) e.returnValue = Object.assign({}, e.returnValue, {colorString: data.color ? BDFDB.ColorUtils.convert(data.color, "HEX") : e.returnValue.colorString});
 						}
 					}
 				}});
@@ -200,18 +218,6 @@ module.exports = (_ => {
 					e.returnvalue.props.children
 				].flat(10).filter(n => n);
 			}
-			
-			processMemberListItem (e) {
-				if (e.instance.props.user) {
-					let member = BDFDB.LibraryModules.MemberStore.getMember(e.instance.props.guildId, e.instance.props.user.id);
-					if (member) e.instance.props.colorString = member.colorString;
-				}
-			}
-			
-			processUserPopout (e) {
-				if (e.instance.props.user && e.instance.props.guild && e.instance.props.guildMember) e.instance.props.guild = this.changeRolesInGuild(e.instance.props.guild);
-			}
-		
 			processChannelMembers (e) {
 				e.instance.props.groups = [].concat(e.instance.props.groups);
 				for (let i in e.instance.props.groups) if (e.instance.props.groups[i].type == "GROUP") {
@@ -225,11 +231,22 @@ module.exports = (_ => {
 				}
 			}
 			
+			processMemberListItem (e) {
+				if (e.instance.props.user) {
+					let member = BDFDB.LibraryModules.MemberStore.getMember(e.instance.props.guildId, e.instance.props.user.id);
+					if (member) e.instance.props.colorString = member.colorString;
+				}
+			}
+			
+			processUserPopoutBody (e) {
+				if (e.instance.props.guild) e.instance.props.guild = this.changeRolesInGuild(e.instance.props.guild);
+			}
+			
 			getGuildFromRoleId (roleId) {
 				return BDFDB.LibraryModules.FolderStore.getFlattenedGuilds().find(g => g.roles[roleId]);
 			}
 			
-			changeRolesInGuild (guild) {
+			changeRolesInGuild (guild, useNative) {
 				let changed = false, roles = Object.assign({}, guild.roles);
 				for (let id in guild.roles) {
 					let data = changedRoles[id];
@@ -242,7 +259,8 @@ module.exports = (_ => {
 						});
 					}
 				}
-				return !changed ? guild : (new BDFDB.DiscordObjects.Guild(Object.assign({}, guild, {roles})));
+				if (useNative) guild.roles = roles;
+				return !changed || useNative ? guild : (new BDFDB.DiscordObjects.Guild(Object.assign({}, guild, {roles})));
 			}
 
 			openRoleSettingsModal (role) {

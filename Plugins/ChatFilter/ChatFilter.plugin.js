@@ -2,7 +2,7 @@
  * @name ChatFilter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.5.2
+ * @version 3.5.4
  * @description Allows you to censor Words or block complete Messages/Statuses
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,17 +17,25 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatFilter",
 			"author": "DevilBro",
-			"version": "3.5.2",
+			"version": "3.5.4",
 			"description": "Allows you to censor Words or block complete Messages/Statuses"
 		},
 		"changeLog": {
 			"fixed": {
-				"Tag": "Fixed censored/blocked tag for new structure"
+				"Custom Statuses": ""
 			}
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -66,23 +74,23 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var oldBlockedMessages, oldCensoredMessages, words;
-		var settings = {}, replaces = {}, configs = {};
-	
+		
+		const configs = {
+			empty: 					{value: false,				noBlocked: false,		description: "Allow the Replacement Value to be empty (ignoring the default)"},
+			case: 					{value: false,				noBlocked: false,		description: "Handle the Word Value case sensitive"},
+			exact: 					{value: true,				noBlocked: false,		description: "Handle the Word Value as an exact Word and not as part of a Word"},
+			segment: 				{value: false,				noBlocked: true,		description: "Only replace the caught Segment of the Word with the Replacement"},
+			regex: 					{value: false,				noBlocked: false,		description: "Handle the Word Value as a RegExp String"}
+		};
+		
 		return class ChatFilter extends Plugin {
 			onLoad () {
 				this.defaults = {
-					configs: {
-						empty: 					{value: false,				noBlocked: false,		description: "Allow the Replacement Value to be empty (ignoring the default)"},
-						case: 					{value: false,				noBlocked: false,		description: "Handle the Word Value case sensitive"},
-						exact: 					{value: true,				noBlocked: false,		description: "Handle the Word Value as an exact Word and not as part of a Word"},
-						segment: 				{value: false,				noBlocked: true,		description: "Only replace the caught Segment of the Word with the Replacement"},
-						regex: 					{value: false,				noBlocked: false,		description: "Handle the Word Value as a RegExp String"}
-					},
 					replaces: {
 						blocked: 				{value: "~~BLOCKED~~",		description: "Default Replacement Value for blocked Messages: "},
 						censored:				{value: "$!%&%!&",			description: "Default Replacement Value for censored Messages: "}
 					},
-					settings: {
+					general: {
 						addContextMenu:			{value: true,				description: "Add a Context Menu Entry to faster add new blocked/censored Words"},
 						targetMessages:			{value: true,				description: "Check Messages for blocked/censored Words"},
 						targetStatuses:			{value: true,				description: "Check Custom Statuses for blocked/censored Words"},
@@ -94,8 +102,6 @@ module.exports = (_ => {
 					before: {
 						Message: "default",
 						MessageContent: "type",
-						UserPopout: "render",
-						UserProfile: "render",
 						UserInfo: "default",
 						MemberListItem: "render",
 						PrivateChannel: "render"
@@ -122,6 +128,19 @@ module.exports = (_ => {
 				words = BDFDB.DataUtils.load(this, "words");
 				for (let rType in this.defaults.replaces) if (!BDFDB.ObjectUtils.is(words[rType])) words[rType] = {};
 				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.StatusMetaUtils, "findActivity", {after: e => {
+					if (this.settings.general.targetStatuses && e.returnValue && e.returnValue.state && e.returnValue.type === BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS) {
+						let {content} = this.parseMessage({
+							content: e.returnValue.state,
+							embeds: [],
+							id: "status",
+							author: BDFDB.LibraryModules.UserStore.getUser(e.methodArguments[0])
+						});
+						if (content) return Object.assign({}, e.returnValue, {state: content});
+						else if (!e.returnValue.emoji) return null;
+					}
+				}});
+				
 				this.forceUpdateAll();
 			}
 			
@@ -139,18 +158,18 @@ module.exports = (_ => {
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Settings",
 							collapseStates: collapseStates,
-							children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							children: Object.keys(this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "Switch",
 								plugin: this,
-								keys: ["settings", key],
-								label: this.defaults.settings[key].description,
-								value: settings[key]
-							})).concat(Object.keys(replaces).map(rType => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								keys: ["general", key],
+								label: this.defaults.general[key].description,
+								value: this.settings.general[key]
+							})).concat(Object.keys(this.defaults.replaces).map(rType => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "TextInput",
 								plugin: this,
 								keys: ["replaces", rType],
 								label: this.defaults.replaces[rType].description,
-								value: replaces[rType],
+								value: this.settings.replaces[rType],
 								placeholder: this.defaults.replaces[rType].value
 							})))
 						}));
@@ -173,11 +192,11 @@ module.exports = (_ => {
 								this.createInputs(values)
 							].flat(10).filter(n => n)
 						}));
-						for (let rType in replaces) if (!BDFDB.ObjectUtils.isEmpty(words[rType])) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+						for (let rType in this.defaults.replaces) if (!BDFDB.ObjectUtils.isEmpty(words[rType])) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: `Added ${rType} Words`,
 							collapseStates: collapseStates,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
-								settings: Object.keys(this.defaults.configs).filter(n => !this.defaults.configs[n]["no" + BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(rType)]),
+								settings: Object.keys(configs).filter(n => !configs[n]["no" + BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(rType)]),
 								data: Object.keys(words[rType]).map(wordValue => Object.assign({}, words[rType][wordValue], {
 									key: wordValue,
 									label: wordValue
@@ -223,7 +242,7 @@ module.exports = (_ => {
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Remove All",
 							collapseStates: collapseStates,
-							children: Object.keys(replaces).map(rType => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							children: Object.keys(this.defaults.replaces).map(rType => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 								type: "Button",
 								color: BDFDB.LibraryComponents.Button.Colors.RED,
 								label: `Remove all ${rType} Words`,
@@ -270,11 +289,7 @@ module.exports = (_ => {
 				}
 			}
 		
-			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
-				replaces = BDFDB.DataUtils.get(this, "replaces");
-				configs = BDFDB.DataUtils.get(this, "configs");
-					
+			forceUpdateAll () {					
 				oldBlockedMessages = {};
 				oldCensoredMessages = {};
 				
@@ -284,18 +299,18 @@ module.exports = (_ => {
 
 			onNativeContextMenu (e) {
 				if (e.instance.props.value && e.instance.props.value.trim()) {
-					if ((e.instance.props.type == "NATIVE_TEXT" || e.instance.props.type == "CHANNEL_TEXT_AREA") && settings.addContextMenu) this.injectItem(e, e.instance.props.value.trim());
+					if ((e.instance.props.type == "NATIVE_TEXT" || e.instance.props.type == "CHANNEL_TEXT_AREA") && this.settings.general.addContextMenu) this.injectItem(e, e.instance.props.value.trim());
 				}
 			}
 
 			onSlateContextMenu (e) {
 				let text = document.getSelection().toString().trim();
-				if (text && settings.addContextMenu) this.injectItem(e, text);
+				if (text && this.settings.general.addContextMenu) this.injectItem(e, text);
 			}
 
 			onMessageContextMenu (e) {
 				let text = document.getSelection().toString().trim();
-				if (text && settings.addContextMenu) this.injectItem(e, text);
+				if (text && this.settings.general.addContextMenu) this.injectItem(e, text);
 			}
 		 
 			injectItem (e, text) {
@@ -312,7 +327,7 @@ module.exports = (_ => {
 			}
 
 			processMessages (e) {
-				if (settings.targetMessages) {
+				if (this.settings.general.targetMessages) {
 					e.returnvalue.props.children.props.channelStream = [].concat(e.returnvalue.props.children.props.channelStream);
 					for (let i in e.returnvalue.props.children.props.channelStream) {
 						let message = e.returnvalue.props.children.props.channelStream[i].content;
@@ -346,7 +361,7 @@ module.exports = (_ => {
 			}
 
 			processMessage (e) {
-				if (settings.targetMessages) {
+				if (this.settings.general.targetMessages) {
 					let repliedMessage = e.instance.props.childrenRepliedMessage;
 					if (repliedMessage && repliedMessage.props && repliedMessage.props.children && repliedMessage.props.children.props && repliedMessage.props.children.props.referencedMessage && repliedMessage.props.children.props.referencedMessage.message && (oldBlockedMessages[repliedMessage.props.children.props.referencedMessage.message.id] || oldCensoredMessages[repliedMessage.props.children.props.referencedMessage.message.id])) {
 						let {blocked, censored, content, embeds} = this.parseMessage(repliedMessage.props.children.props.referencedMessage.message);
@@ -356,7 +371,7 @@ module.exports = (_ => {
 			}
 
 			processMessageContent (e) {
-				if (e.instance.props.message && settings.targetMessages) {
+				if (e.instance.props.message && this.settings.general.targetMessages) {
 					if (!e.returnvalue) {
 						if (oldBlockedMessages[e.instance.props.message.id]) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._chatfilterblocked);
 						if (oldCensoredMessages[e.instance.props.message.id] && e.instance.props.message.content != oldCensoredMessages[e.instance.props.message.id].content) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._chatfiltercensored);
@@ -378,14 +393,6 @@ module.exports = (_ => {
 				}
 			}
 
-			processUserPopout (e) {
-				this.checkStatus(e);
-			}
-
-			processUserProfile (e) {
-				this.checkStatus(e);
-			}
-
 			processUserInfo (e) {
 				this.checkActivities(e);
 			}
@@ -398,16 +405,8 @@ module.exports = (_ => {
 				this.checkActivities(e);
 			}
 			
-			checkStatus (e) {
-				if (settings.targetStatuses && e.instance.props.customStatusActivity && e.instance.props.user) {
-					let {content} = this.parseMessage({content: e.instance.props.customStatusActivity.state, embeds: [], id: "status", author: e.instance.props.user});
-					if (content) e.instance.props.customStatusActivity = Object.assign({}, e.instance.props.customStatusActivity, {state: content});
-					else if (!e.instance.props.customStatusActivity.emoji) delete e.instance.props.customStatusActivity;
-				}
-			}
-			
 			checkActivities (e) {
-				if (settings.targetStatuses && e.instance.props.activities && e.instance.props.activities.length && e.instance.props.user) {
+				if (this.settings.general.targetStatuses && e.instance.props.activities && e.instance.props.activities.length && e.instance.props.user) {
 					let index = e.instance.props.activities.findIndex(n => n && n.type == BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
 					if (index > -1 && e.instance.props.activities[index].state) {
 						let {content} = this.parseMessage({content: e.instance.props.activities[index].state, embeds: [], id: "status", author: e.instance.props.user});
@@ -439,11 +438,11 @@ module.exports = (_ => {
 				let content = (oldBlockedMessages[message.id] || oldCensoredMessages[message.id] || {}).content || message.content;
 				let embeds = [].concat((oldBlockedMessages[message.id] || oldCensoredMessages[message.id] || {}).embeds || message.embeds);
 				let isContent = content && typeof content == "string";
-				if ((isContent || embeds.length) && (message.author.id != BDFDB.UserUtils.me.id || settings.targetOwn)) {
+				if ((isContent || embeds.length) && (message.author.id != BDFDB.UserUtils.me.id || this.settings.general.targetOwn)) {
 					let blockedReplace;
 					for (let bWord in words.blocked) {
 						let compareContent = [isContent && content, embeds.map(e => e.rawDescription)].flat(10).filter(n => n).join(" ");
-						blockedReplace = words.blocked[bWord].empty ? "" : (words.blocked[bWord].replace || replaces.blocked);
+						blockedReplace = words.blocked[bWord].empty ? "" : (words.blocked[bWord].replace || this.settings.replaces.blocked);
 						let reg = this.createReg(bWord, words.blocked[bWord]);
 						if (words.blocked[bWord].regex || bWord.indexOf(" ") > -1) {
 							if (isContent && this.testWord(compareContent, reg)) blocked = true;
@@ -458,11 +457,11 @@ module.exports = (_ => {
 					}
 					if (blocked) return {blocked, censored, content: blockedReplace, embeds: []};
 					else {
-						let checkCensor = string => {
+						const checkCensor = string => {
 							let singleCensored = false;
 							string = string.replace(/([\n\t\r])/g, " $1 ");
 							for (let cWord in words.censored) {
-								let censoredReplace = words.censored[cWord].empty ? "" : (words.censored[cWord].replace || replaces.censored);
+								let censoredReplace = words.censored[cWord].empty ? "" : (words.censored[cWord].replace || this.settings.replaces.censored);
 								let reg = this.createReg(cWord, words.censored[cWord]);
 								let newString = [];
 								if (words.censored[cWord].segment || words.censored[cWord].regex || cWord.indexOf(" ") > -1) {
@@ -514,13 +513,13 @@ module.exports = (_ => {
 			}
 
 			createReg (word, config) {
-				let escapedWord = config.regex ? word : BDFDB.StringUtils.regEscape(word);
-				return new RegExp(BDFDB.StringUtils.htmlEscape(config.exact ? "^" + escapedWord + "$" : escapedWord), `${config.case ? "" : "i"}${config.exact ? "" : "g"}`);
+				let escapedWord = config.regex ? word : BDFDB.StringUtils.htmlEscape(BDFDB.StringUtils.regEscape(word));
+				return new RegExp(config.exact ? "^" + escapedWord + "$" : escapedWord, `${config.case ? "" : "i"}${config.exact ? "" : "g"}`);
 			}
 
 			openAddModal (wordValue) {
 				let values = {wordValue, replaceValue: "", choice: "blocked"};
-				let configs = BDFDB.ObjectUtils.map(this.defaults.configs, n => n.value);
+				let newConfigs = BDFDB.ObjectUtils.map(configs, n => n.value);
 				
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
@@ -530,9 +529,9 @@ module.exports = (_ => {
 						this.createInputs(values),
 						Object.keys(configs).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Switch",
-							label: this.defaults.configs[key].description,
-							value: configs[key],
-							onChange: value => {configs[key] = value;}
+							label: configs[key].description,
+							value: newConfigs[key],
+							onChange: value => {newConfigs[key] = value;}
 						}))
 					].flat(10).filter(n => n),
 					buttons: [{
@@ -542,7 +541,7 @@ module.exports = (_ => {
 						close: true,
 						ref: instance => {if (instance) values.addButton = instance;},
 						onClick: _ => {
-							this.saveWord(values, configs);
+							this.saveWord(values, newConfigs);
 							this.forceUpdateAll();
 						}
 					}]
@@ -595,7 +594,7 @@ module.exports = (_ => {
 				];
 			}
 
-			saveWord (values, wordConfigs = configs) {
+			saveWord (values, wordConfigs = BDFDB.ObjectUtils.map(configs, n => n.value)) {
 				if (!values.wordValue || !values.choice) return;
 				if (!BDFDB.ObjectUtils.is(words[values.choice])) words[values.choice] = {};
 				words[values.choice][values.wordValue] = {

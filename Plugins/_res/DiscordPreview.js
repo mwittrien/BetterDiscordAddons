@@ -65,8 +65,13 @@
 					
 					if (data.nativeCSS) {
 						let theme = document.createElement("style");
-						theme.classList.add(data.reason);
 						theme.innerText = data.nativeCSS;
+						document.head.appendChild(theme);
+					}
+					
+					if (data.bdCSS) {
+						let theme = document.createElement("style");
+						theme.innerText = data.bdCSS;
 						document.head.appendChild(theme);
 					}
 					

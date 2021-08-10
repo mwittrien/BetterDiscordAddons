@@ -2,7 +2,7 @@
  * @name EmojiStatistics
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.7
+ * @version 2.9.8
  * @description Shows you an Overview of Emojis and Emoji Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,25 @@ module.exports = (_ => {
 		"info": {
 			"name": "EmojiStatistics",
 			"author": "DevilBro",
-			"version": "2.9.7",
+			"version": "2.9.8",
 			"description": "Shows you an Overview of Emojis and Emoji Servers"
+		},
+		"changeLog": {
+			"improved": {
+				"Swapped Position": "Swapped Position with the Diversity Selector"
+			}
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -89,6 +102,9 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.emojipicker + BDFDB.dotCN._emojistatisticsstatisticsbutton} {
 						width: 24px;
 						height: 24px;
+						grid-column: 2/3;
+					}
+					${BDFDB.dotCNS.emojipicker + BDFDB.dotCN.emojipickerdiversityselector} {
 						grid-column: 3/4;
 					}
 				`;
@@ -105,7 +121,7 @@ module.exports = (_ => {
 			processEmojiPicker (e) {
 				this.loadEmojiList();
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "DiversitySelector"});
-				if (index > -1) children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: this.labels.modal_header,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 						className: BDFDB.disCN._emojistatisticsstatisticsbutton,

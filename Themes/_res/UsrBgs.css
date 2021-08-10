@@ -1,0 +1,30 @@
+#app-mount .userPopout-xaxa6l .popoutBanner-19WKGg,
+#app-mount .userPopout-xaxa6l .profileBanner-33-uE1 {
+	height: 120px !important;
+	max-height: var(--user-background, 60px) !important;
+}
+#app-mount .root-3QyAh1 .profileBanner-33-uE1 {
+	height: 240px !important;
+	max-height: var(--user-background, 120px) !important;
+}
+#app-mount .popoutBanner-19WKGg::before,
+#app-mount .profileBanner-33-uE1::before {
+	content: "";
+	position: absolute;
+	background: #000 var(--user-background) var(--user-popout-position, center)/cover no-repeat;
+	background-attachment: var(--user-background, fixed);
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+#app-mount .userPopout-xaxa6l .avatarPositionNormal-aZjAsn {
+	top: 76px !important;
+	margin-top: var(--user-background, -60px) !important;
+}
+#app-mount .userPopout-xaxa6l .headerTop-3vNv-a {
+	padding: 58px 16px 16px;
+}
+#app-mount .root-3QyAh1 .headerTop-547GTz {
+	min-height: 32px;
+}

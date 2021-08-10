@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.7
+ * @version 1.5.8
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,18 +17,25 @@ module.exports = (_ => {
 		"info": {
 			"name": "CompleteTimestamps",
 			"author": "DevilBro",
-			"version": "1.5.7",
+			"version": "1.5.8",
 			"description": "Replaces Timestamps with your own custom Timestamps"
 		},
 		"changeLog": {
-			"fixed": {
-				"Works again": "",
-				"Edit Stamp Compact Mode": "Fixed Issue where the (edited) stamp would grow in size in compact mode"
+			"added": {
+				"Markup Timestamps": "Now also targets message markup timestamps"
 			}
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -77,9 +84,11 @@ module.exports = (_ => {
 					general: {
 						showInChat:				{value: true, 			description: "Replace Chat Timestamps with complete Timestamps"},
 						showInEmbed:			{value: true, 			description: "Replace Embed Timestamps with complete Timestamps"},
+						showInMarkup:			{value: true, 			description: "Replace Markup Timestamps with complete Timestamps"},
 						showInAuditLogs:		{value: true, 			description: "Replace Audit Log Timestamps with complete Timestamps"},
 						changeForChat:			{value: true, 			description: "Change the Time for Chat Time Tooltips"},
-						changeForEdit:			{value: true, 			description: "Change the Time for Edited Time Tooltips"}
+						changeForEdit:			{value: true, 			description: "Change the Time for Edited Time Tooltips"},
+						changeForMarkup:		{value: true, 			description: "Change the Time for Markup Timestamp Tooltips"}
 					},
 					dates: {
 						timestampDate:			{value: {}, 			description: "Chat Timestamp"},
@@ -88,6 +97,9 @@ module.exports = (_ => {
 				};
 				
 				this.patchedModules = {
+					before: {
+						Tooltip: "render"
+					},
 					after: {
 						Message: "default",
 						MessageTimestamp: "default",
@@ -162,6 +174,24 @@ module.exports = (_ => {
 				BDFDB.MessageUtils.rerenderAll();
 			}
 
+			processTooltip (e) {
+				if (typeof e.instance.props.tooltipClassName == "string" && e.instance.props.tooltipClassName.indexOf(BDFDB.disCN.messagemarkuptimestamptooltip) > -1) {
+					e.instance.props._originalText = e.instance.props._originalText || e.instance.props.text;
+					if (this.settings.general.showInMarkup) {
+						if (tooltipIsSame) e.instance.props.delay = 99999999999999999999;
+						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, new Date(e.instance.props._originalText));
+						let renderChildren = e.instance.props.children;
+						e.instance.props.children = (...args) => {
+							let renderedChildren = renderChildren(...args);
+							if (BDFDB.ArrayUtils.is(renderedChildren.props.children)) renderedChildren.props.children[1] = timestamp;
+							else renderedChildren.props.children = timestamp;
+							return renderedChildren;
+						};
+					}
+					if (this.settings.general.changeForMarkup) e.instance.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props._originalText);
+				}
+			}
+			
 			processMessage (e) {
 				if (MessageTimestampComponent) {
 					let timestamp = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: c => c && c.type && c.type.type && c.type.type.displayName == "MessageTimestamp"});
@@ -177,7 +207,6 @@ module.exports = (_ => {
 					if (this.settings.general.changeForEdit) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
 				}
 				else {
-					if (this.settings.general.changeForChat) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
 					if (this.settings.general.showInChat && !e.instance.props.cozyAlt) {
 						if (tooltipIsSame) tooltipWrapper.props.delay = 99999999999999999999;
 						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.timestamp._i);
@@ -190,13 +219,7 @@ module.exports = (_ => {
 						};
 						this.setMaxWidth(e.returnvalue, e.instance.props.compact);
 					}
-				}
-			}
-			
-			processMessageContent (e) {
-				if (e.instance.props.message.editedTimestamp && this.settings.general.changeForEdit) {
-					let editStamp = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "SuffixEdited"});
-					if (editStamp) console.log(editStamp);
+					if (this.settings.general.changeForChat) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
 				}
 			}
 
@@ -211,11 +234,11 @@ module.exports = (_ => {
 					};
 					if (typeof e.returnvalue.props.children == "function") {
 						let childrenRender = e.returnvalue.props.children;
-						e.returnvalue.props.children = (...args) => {
+						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 							let children = childrenRender(...args);
 							process(children);
 							return children;
-						};
+						}, "", this);
 					}
 					else process(e.returnvalue);
 				}
@@ -232,11 +255,11 @@ module.exports = (_ => {
 				if (e.instance.props.log && this.settings.general.showInAuditLogs) {
 					if (typeof e.returnvalue.props.children == "function") {
 						let childrenRender = e.returnvalue.props.children;
-						e.returnvalue.props.children = (...args) => {
+						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 							let children = childrenRender(...args);
 							this.editLog(e.instance.props.log, children);
 							return children;
-						};
+						}, "", this);
 					}
 					else this.editLog(e.instance.props.log, e.returnvalue);
 				}
