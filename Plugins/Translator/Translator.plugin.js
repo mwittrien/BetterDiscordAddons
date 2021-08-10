@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.1
+ * @version 2.3.2
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,15 +17,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "Translator",
 			"author": "DevilBro",
-			"version": "2.3.1",
+			"version": "2.3.2",
 			"description": "Allows you to translate Messages and your outgoing Messages within Discord"
 		},
 		"changeLog": {
 			"fixed": {
-				"Yandex": "Fixed crashes with Yandex."
+				"Yandex": "Fixed crashes with Yandex"
 			},
 			"added": {
-				"Baidu": "Added"
+				"Baidu": "Added",
+				"Google": "Added zh-TW"
 			}
 		}
 	};
@@ -287,7 +288,7 @@ module.exports = (_ => {
 			"0":"−−−−−", "1":"·−−−−", "2":"··−−−", "3":"···−−", "4":"····−", "5":"·····", "6":"−····", "7":"−−···", "8":"−−−··", "9":"−−−−·", "!":"−·−·−−", "\"":"·−··−·", "$":"···−··−", "&":"·−···", "'":"·−−−−·", "(":"−·−−·", ")":"−·−−·−", "+":"·−·−·", ",":"−−··−−", "-":"−····−", ".":"·−·−·−", "/":"−··−·", ":":"−−−···", ";":"−·−·−·", "=":"−···−", "?":"··−−··", "@":"·−−·−·", "a":"·−", "b":"−···", "c":"−·−·", "d":"−··", "e":"·", "f":"··−·", "g":"−−·", "h":"····", "i":"··", "j":"·−−−", "k":"−·−", "l":"·−··", "m":"−−", "n":"−·", "o":"−−−", "p":"·−−·", "q":"−−·−", "r":"·−·", "s":"···", "t":"−", "u":"··−", "v":"···−", "w":"·−−", "x":"−··−", "y":"−·−−", "z":"−−··", "·":"e", "··":"i", "···":"s", "····":"h", "·····":"5", "····−":"4", "···−":"v", "···−··−":"$", "···−−":"3", "··−":"u", "··−·":"f", "··−−··":"?", "··−−·−":"_", "··−−−":"2", "·−":"a", "·−·":"r", "·−··":"l", "·−···":"&", "·−··−·":"\"", "·−·−·":"+", "·−·−·−":".", "·−−":"w", "·−−·":"p", "·−−·−·":"@", "·−−−":"j", "·−−−−":"1", "·−−−−·":"'", "−":"t", "−·":"n", "−··":"d", "−···":"b", "−····":"6", "−····−":"-", "−···−":"=", "−··−":"x", "−··−·":"/", "−·−":"k", "−·−·":"c", "−·−·−·":";", "−·−·−−":"!", "−·−−":"y", "−·−−·":"(", "−·−−·−":")", "−−":"m", "−−·":"g", "−−··":"z", "−−···":"7", "−−··−−":",", "−−·−":"q", "−−−":"o", "−−−··":"8", "−−−···":":", "−−−−·":"9", "−−−−−":"0", "_":"··−−·−"
 		};
 		
-		const googleLanguages = ["af","am","ar","az","be","bg","bn","bs","ca","ceb","co","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fr","fy","ga","gd","gl","gu","ha","haw","hi","hmn","hr","ht","hu","hy","id","ig","is","it","iw","ja","jw","ka","kk","km","kn","ko","ku","ky","la","lb","lo","lt","lv","mg","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","ny","or","pa","pl","ps","pt","ro","ru","rw","sd","si","sk","sl","sm","sn","so","sq","sr","st","su","sv","sw","ta","te","tg","th","tk","tl","tr","tt","ug","uk","ur","uz","vi","xh","yi","yo","zh-CN","zu"];
+		const googleLanguages = ["af","am","ar","az","be","bg","bn","bs","ca","ceb","co","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fr","fy","ga","gd","gl","gu","ha","haw","hi","hmn","hr","ht","hu","hy","id","ig","is","it","iw","ja","jw","ka","kk","km","kn","ko","ku","ky","la","lb","lo","lt","lv","mg","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","ny","or","pa","pl","ps","pt","ro","ru","rw","sd","si","sk","sl","sm","sn","so","sq","sr","st","su","sv","sw","ta","te","tg","th","tk","tl","tr","tt","ug","uk","ur","uz","vi","xh","yi","yo","zh-CN","zh-TW","zu"];
 		const translationEngines = {
 			googleapi: {
 				name: "Google",
@@ -341,8 +342,7 @@ module.exports = (_ => {
 					"sl": "slo",
 					"sv": "swe",
 					"vi": "vie",
-					"zh": "wyw",
-					"zh-CN": "zh",
+					"zh-CN": "wyw",
 					"zh-TW": "cht"
 				},
 				key: "xxxxxxxxx xxxxxx xxxxxxxxxx"
@@ -684,7 +684,7 @@ module.exports = (_ => {
 				if (e.instance.props.message) {
 					let translation = translatedMessages[e.instance.props.message.id];
 					if (translation && translation.content) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						text: `${BDFDB.LanguageUtils.getName(translation.input)} ➝ ${BDFDB.LanguageUtils.getName(translation.output)}`,
+						text: `${BDFDB.LanguageUtils.getName(translation.input)} ➝ ${BDFDB.LanguageUtils.LibraryStrings.to} ${BDFDB.LanguageUtils.getName(translation.output)}`,
 						tooltipConfig: {style: "max-width: 400px"},
 						children: BDFDB.ReactUtils.createElement("span", {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.messagetimestamp, BDFDB.disCN.messagetimestampinline, BDFDB.disCN._translatortranslated),
@@ -1320,7 +1320,7 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
-							context_translator:		"Търсене превод",
+							context_translator:					"Търсене превод",
 							context_messagetranslateoption:		"Превод на съобщението",
 							context_messageuntranslateoption:	"Превод на съобщението",
 							popout_translateoption:				"Превод",
@@ -1332,7 +1332,7 @@ module.exports = (_ => {
 						};
 					case "da":		// Danish
 						return {
-							context_translator:		"Søg oversættelse",
+							context_translator:					"Søg oversættelse",
 							context_messagetranslateoption:		"Oversæt besked",
 							context_messageuntranslateoption:	"Ikke-oversat besked",
 							popout_translateoption:				"Oversætte",
@@ -1344,7 +1344,7 @@ module.exports = (_ => {
 						};
 					case "de":		// German
 						return {
-							context_translator:		"Übersetzung suchen",
+							context_translator:					"Übersetzung suchen",
 							context_messagetranslateoption:		"Nachricht übersetzen",
 							context_messageuntranslateoption:	"Nachricht unübersetzen",
 							popout_translateoption:				"Übersetzen",
@@ -1356,7 +1356,7 @@ module.exports = (_ => {
 						};
 					case "el":		// Greek
 						return {
-							context_translator:		"Αναζήτηση μετάφρασης",
+							context_translator:					"Αναζήτηση μετάφρασης",
 							context_messagetranslateoption:		"Μετάφραση μηνύματος",
 							context_messageuntranslateoption:	"Μη μετάφραση μηνύματος",
 							popout_translateoption:				"Μεταφράζω",
@@ -1368,7 +1368,7 @@ module.exports = (_ => {
 						};
 					case "es":		// Spanish
 						return {
-							context_translator:		"Buscar traducción",
+							context_translator:					"Buscar traducción",
 							context_messagetranslateoption:		"Traducir mensaje",
 							context_messageuntranslateoption:	"Mensaje sin traducir",
 							popout_translateoption:				"Traducir",
@@ -1380,7 +1380,7 @@ module.exports = (_ => {
 						};
 					case "fi":		// Finnish
 						return {
-							context_translator:		"Hae käännöstä",
+							context_translator:					"Hae käännöstä",
 							context_messagetranslateoption:		"Käännä viesti",
 							context_messageuntranslateoption:	"Käännä viesti",
 							popout_translateoption:				"Kääntää",
@@ -1392,7 +1392,7 @@ module.exports = (_ => {
 						};
 					case "fr":		// French
 						return {
-							context_translator:		"Recherche de traduction",
+							context_translator:					"Recherche de traduction",
 							context_messagetranslateoption:		"Traduire le message",
 							context_messageuntranslateoption:	"Message non traduit",
 							popout_translateoption:				"Traduire",
@@ -1404,7 +1404,7 @@ module.exports = (_ => {
 						};
 					case "hr":		// Croatian
 						return {
-							context_translator:		"Pretraži prijevod",
+							context_translator:					"Pretraži prijevod",
 							context_messagetranslateoption:		"Prevedi poruku",
 							context_messageuntranslateoption:	"Prevedi poruku",
 							popout_translateoption:				"Prevedi",
@@ -1416,7 +1416,7 @@ module.exports = (_ => {
 						};
 					case "hu":		// Hungarian
 						return {
-							context_translator:		"Keresés a fordításban",
+							context_translator:					"Keresés a fordításban",
 							context_messagetranslateoption:		"Üzenet lefordítása",
 							context_messageuntranslateoption:	"Az üzenet lefordítása",
 							popout_translateoption:				"fordít",
@@ -1428,7 +1428,7 @@ module.exports = (_ => {
 						};
 					case "it":		// Italian
 						return {
-							context_translator:		"Cerca traduzione",
+							context_translator:					"Cerca traduzione",
 							context_messagetranslateoption:		"Traduci messaggio",
 							context_messageuntranslateoption:	"Annulla traduzione messaggio",
 							popout_translateoption:				"Tradurre",
@@ -1440,7 +1440,7 @@ module.exports = (_ => {
 						};
 					case "ja":		// Japanese
 						return {
-							context_translator:		"翻訳を検索",
+							context_translator:					"翻訳を検索",
 							context_messagetranslateoption:		"メッセージの翻訳",
 							context_messageuntranslateoption:	"メッセージの翻訳解除",
 							popout_translateoption:				"翻訳する",
@@ -1452,7 +1452,7 @@ module.exports = (_ => {
 						};
 					case "ko":		// Korean
 						return {
-							context_translator:		"번역 검색",
+							context_translator:					"번역 검색",
 							context_messagetranslateoption:		"메시지 번역",
 							context_messageuntranslateoption:	"메시지 번역 취소",
 							popout_translateoption:				"옮기다",
@@ -1464,7 +1464,7 @@ module.exports = (_ => {
 						};
 					case "lt":		// Lithuanian
 						return {
-							context_translator:		"Paieškos vertimas",
+							context_translator:					"Paieškos vertimas",
 							context_messagetranslateoption:		"Versti pranešimą",
 							context_messageuntranslateoption:	"Išversti pranešimą",
 							popout_translateoption:				"Išversti",
@@ -1476,7 +1476,7 @@ module.exports = (_ => {
 						};
 					case "nl":		// Dutch
 						return {
-							context_translator:		"Zoek vertaling",
+							context_translator:					"Zoek vertaling",
 							context_messagetranslateoption:		"Bericht vertalen",
 							context_messageuntranslateoption:	"Bericht onvertalen",
 							popout_translateoption:				"Vertalen",
@@ -1488,7 +1488,7 @@ module.exports = (_ => {
 						};
 					case "no":		// Norwegian
 						return {
-							context_translator:		"Søk i oversettelse",
+							context_translator:					"Søk i oversettelse",
 							context_messagetranslateoption:		"Oversett melding",
 							context_messageuntranslateoption:	"Ikke oversett melding",
 							popout_translateoption:				"Oversette",
@@ -1500,7 +1500,7 @@ module.exports = (_ => {
 						};
 					case "pl":		// Polish
 						return {
-							context_translator:		"Wyszukaj tłumaczenie",
+							context_translator:					"Wyszukaj tłumaczenie",
 							context_messagetranslateoption:		"Przetłumacz wiadomość",
 							context_messageuntranslateoption:	"Nieprzetłumacz wiadomość",
 							popout_translateoption:				"Tłumaczyć",
@@ -1512,7 +1512,7 @@ module.exports = (_ => {
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							context_translator:		"Tradução de pesquisa",
+							context_translator:					"Tradução de pesquisa",
 							context_messagetranslateoption:		"Traduzir mensagem",
 							context_messageuntranslateoption:	"Mensagem não traduzida",
 							popout_translateoption:				"Traduzir",
@@ -1524,7 +1524,7 @@ module.exports = (_ => {
 						};
 					case "ro":		// Romanian
 						return {
-							context_translator:		"Căutare traducere",
+							context_translator:					"Căutare traducere",
 							context_messagetranslateoption:		"Traduceți mesajul",
 							context_messageuntranslateoption:	"Untraduceți mesajul",
 							popout_translateoption:				"Traduceți",
@@ -1536,7 +1536,7 @@ module.exports = (_ => {
 						};
 					case "ru":		// Russian
 						return {
-							context_translator:		"Искать перевод",
+							context_translator:					"Искать перевод",
 							context_messagetranslateoption:		"Перевести сообщение",
 							context_messageuntranslateoption:	"Непереведенное сообщение",
 							popout_translateoption:				"Переведите",
@@ -1548,7 +1548,7 @@ module.exports = (_ => {
 						};
 					case "sv":		// Swedish
 						return {
-							context_translator:		"Sök översättning",
+							context_translator:					"Sök översättning",
 							context_messagetranslateoption:		"Översätt meddelande",
 							context_messageuntranslateoption:	"Untranslate meddelande",
 							popout_translateoption:				"Översätt",
@@ -1560,7 +1560,7 @@ module.exports = (_ => {
 						};
 					case "th":		// Thai
 						return {
-							context_translator:		"ค้นหาคำแปล",
+							context_translator:					"ค้นหาคำแปล",
 							context_messagetranslateoption:		"แปลข้อความ",
 							context_messageuntranslateoption:	"ยกเลิกการแปลข้อความ",
 							popout_translateoption:				"แปลภาษา",
@@ -1572,7 +1572,7 @@ module.exports = (_ => {
 						};
 					case "tr":		// Turkish
 						return {
-							context_translator:		"Çeviri ara",
+							context_translator:					"Çeviri ara",
 							context_messagetranslateoption:		"Mesajı Çevir",
 							context_messageuntranslateoption:	"Çeviriyi Kaldır Mesajı",
 							popout_translateoption:				"Çevirmek",
@@ -1584,7 +1584,7 @@ module.exports = (_ => {
 						};
 					case "uk":		// Ukrainian
 						return {
-							context_translator:		"Пошук перекладу",
+							context_translator:					"Пошук перекладу",
 							context_messagetranslateoption:		"Перекласти повідомлення",
 							context_messageuntranslateoption:	"Неперекладене повідомлення",
 							popout_translateoption:				"Перекласти",
@@ -1596,7 +1596,7 @@ module.exports = (_ => {
 						};
 					case "vi":		// Vietnamese
 						return {
-							context_translator:		"Tìm kiếm bản dịch",
+							context_translator:					"Tìm kiếm bản dịch",
 							context_messagetranslateoption:		"Dịch tin nhắn",
 							context_messageuntranslateoption:	"Thư chưa dịch",
 							popout_translateoption:				"Phiên dịch",
@@ -1608,7 +1608,7 @@ module.exports = (_ => {
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
-							context_translator:		"搜索翻译",
+							context_translator:					"搜索翻译",
 							context_messagetranslateoption:		"翻译消息",
 							context_messageuntranslateoption:	"取消翻译消息",
 							popout_translateoption:				"翻译",
@@ -1620,7 +1620,7 @@ module.exports = (_ => {
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
-							context_translator:		"搜索翻譯",
+							context_translator:					"搜索翻譯",
 							context_messagetranslateoption:		"翻譯訊息",
 							context_messageuntranslateoption:	"取消翻譯訊息",
 							popout_translateoption:				"翻譯",
@@ -1632,7 +1632,7 @@ module.exports = (_ => {
 						};
 					default:		// English
 						return {
-							context_translator:		"Search Translation",
+							context_translator:					"Search Translation",
 							context_messagetranslateoption:		"Translate Message",
 							context_messageuntranslateoption:	"Untranslate Message",
 							popout_translateoption:				"Translate",
