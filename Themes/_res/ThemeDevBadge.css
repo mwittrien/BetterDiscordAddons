@@ -19,18 +19,3 @@
 .selected-aXhQR6 .dev-A7f2Rx.hasBadge-4rT8_u .badge-7R_W3s {
 	filter: brightness(80%) !important;
 }
-
-.link-1IoFq-[href*="/Lightcord/" i]::before {
-	content: "" !important;
-	display: block !important;
-	visibility: visible !important;
-	opacity: 1 !important;
-	position: fixed !important;
-	top: 0 !important;
-	right: 0 !important;
-	bottom: 0 !important;
-	left: 0 !important;
-	background: #18191c linear-gradient(var(--background-floating), var(--background-floating)) !important;
-	-webkit-app-region: drag !important;
-	z-index: 1000000 !important;
-}
