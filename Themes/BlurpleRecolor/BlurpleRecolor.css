@@ -249,41 +249,41 @@
 	color: rgb(var(--accentcolor));
 }
 
-.backgroundFlash-24qWLN {
+.backgroundFlash-24qWLN[style*="88, 101, 242"] {
 	background-color: var(--message-background-flash) !important;
 }
-.backgroundFlash-24qWLN[style*="background-color: rgb(114, 137, 218)"],
-.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 1"] {
+.backgroundFlash-24qWLN[style*="background-color: rgb(88, 101, 242)"],
+.backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 1"] {
 	--message-background-flash: rgba(var(--accentcolor), 1);
 }
-.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.9"] {
+.backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.9"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.9);
 }
-.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.8"] {
+.backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.8"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.8);
 }
-.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.7"] {
+.backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.7"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.7);
 }
-.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.6"] {
+.backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.6"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.6);
 }
-.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.5"] {
+.backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.5"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.5);
 }
-.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.4"] {
+.backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.4"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.4);
 }
-.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.3"] {
+.backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.3"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.3);
 }
-.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.2"] {
+.backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.2"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.2);
 }
-.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.1"] {
+.backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0.1"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.1);
 }
-.backgroundFlash-24qWLN[style*="background-color: rgba(114, 137, 218, 0.0"] {
+.backgroundFlash-24qWLN[style*="background-color: rgba(88, 101, 242, 0)"] {
 	--message-background-flash: rgba(var(--accentcolor), 0);
 }
 
