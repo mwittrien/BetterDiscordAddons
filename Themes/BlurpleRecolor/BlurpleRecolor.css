@@ -503,6 +503,7 @@
 .crossBlurple--iGG5Y {
 	background-image: url(https://discord.com/assets/c13a0b03a798023c27155fad5f0c7a61.png);
 }
+.background-ujHpbY[style*="background-color: rgb(92, 100, 244)"],
 .background-ujHpbY[style*="background-color: hsl(235, "],
 .background-ujHpbY[style*="background-color: hsl(227, "] {
 	background-color: rgb(var(--accentcolor)) !important;
