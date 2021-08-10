@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.13
+ * @version 1.7.14
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,15 +19,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.7.13",
+			"version": "1.7.14",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
-		"changeLog": {
-			"fixed": {
-				"Date Formatter": "No longer shows future dates as 'today'"
-			}
-		}
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
 	};
 	
 	const DiscordObjects = {};
@@ -973,52 +968,186 @@ module.exports = (_ => {
 
 	
 	const request = require("request"), fs = require("fs"), path = require("path");
-	const cssPath = path.join(BDFDB.BDUtils.getPluginsFolder(), "0BDFDB.raw.css");
-	const dataPath = path.join(BDFDB.BDUtils.getPluginsFolder(), "0BDFDB.data.json");
 	
-	const loadBackup = _ => {
-		const backup = fs.existsSync(dataPath) && (fs.readFileSync(dataPath) || "").toString() || null;
-		if (!backup) BdApi.alert("Error", "Could not initiate BDFDB Library Plugin. Check your Internet Connection and make sure GitHub isn't blocked by your Network or try disabling your VPN/Proxy.");
-		return backup;
+	InternalBDFDB.writeConfig = function (path, config) {
+		try {fs.writeFileSync(path, JSON.stringify(config, null, "	"));}
+		catch (err) {}
+	};
+	InternalBDFDB.readConfig = function (path) {
+		try {return JSON.parse(fs.readFileSync(path));}
+		catch (err) {return {};}
 	};
 	
-	let InternalData, libraryCSS;
+	BDFDB.DataUtils = {};
+	BDFDB.DataUtils.save = function (data, plugin, key, id) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
+		let pluginName = typeof plugin === "string" ? plugin : plugin.name;
+		let fileName = pluginName == "BDFDB" ? "0BDFDB" : pluginName;
+		let configPath = path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".config.json");
+		
+		let config = Cache.data[pluginName] !== undefined ? Cache.data[pluginName] : (InternalBDFDB.readConfig(configPath) || {});
+		
+		if (key === undefined) config = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
+		else {
+			if (id === undefined) config[key] = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
+			else {
+				if (!BDFDB.ObjectUtils.is(config[key])) config[key] = {};
+				config[key][id] = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
+			}
+		}
+		
+		let configIsObject = BDFDB.ObjectUtils.is(config);
+		if (key !== undefined && configIsObject && BDFDB.ObjectUtils.is(config[key]) && BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
+		if (BDFDB.ObjectUtils.isEmpty(config)) {
+			delete Cache.data[pluginName];
+			if (fs.existsSync(configPath)) fs.unlinkSync(configPath);
+		}
+		else {
+			if (configIsObject) config = BDFDB.ObjectUtils.sort(config);
+			Cache.data[pluginName] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
+			InternalBDFDB.writeConfig(configPath, config);
+		}
+	};
+
+	BDFDB.DataUtils.load = function (plugin, key, id) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
+		let pluginName = typeof plugin === "string" ? plugin : plugin.name;
+		let fileName = pluginName == "BDFDB" ? "0BDFDB" : pluginName;
+		let configPath = path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".config.json");
+		
+		let config = Cache.data[pluginName] !== undefined ? Cache.data[pluginName] : (InternalBDFDB.readConfig(configPath) || {});
+		let configIsObject = BDFDB.ObjectUtils.is(config);
+		Cache.data[pluginName] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
+		
+		if (key === undefined) return config;
+		else {
+			let keyData = configIsObject ? (BDFDB.ObjectUtils.is(config[key]) || config[key] === undefined ? BDFDB.ObjectUtils.deepAssign({}, config[key]) : config[key]) : null;
+			if (id === undefined) return keyData;
+			else return !BDFDB.ObjectUtils.is(keyData) || keyData[id] === undefined ? null : keyData[id];
+		}
+	};
+	BDFDB.DataUtils.remove = function (plugin, key, id) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
+		let pluginName = typeof plugin === "string" ? plugin : plugin.name;
+		let fileName = pluginName == "BDFDB" ? "0BDFDB" : pluginName;
+		let configPath = path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".config.json");
+		
+		let config = Cache.data[pluginName] !== undefined ? Cache.data[pluginName] : (InternalBDFDB.readConfig(configPath) || {});
+		let configIsObject = BDFDB.ObjectUtils.is(config);
+		
+		if (key === undefined || !configIsObject) config = {};
+		else {
+			if (id === undefined) delete config[key];
+			else if (BDFDB.ObjectUtils.is(config[key])) delete config[key][id];
+		}
+		
+		if (BDFDB.ObjectUtils.is(config[key]) && BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
+		if (BDFDB.ObjectUtils.isEmpty(config)) {
+			delete Cache.data[pluginName];
+			if (fs.existsSync(configPath)) fs.unlinkSync(configPath);
+		}
+		else {
+			if (configIsObject) config = BDFDB.ObjectUtils.sort(config);
+			Cache.data[pluginName] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
+			InternalBDFDB.writeConfig(configPath, config);
+		}
+	};
+	BDFDB.DataUtils.get = function (plugin, key, id) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
+		plugin = typeof plugin == "string" ? BDFDB.BDUtils.getPlugin(plugin) : plugin;
+		const defaults = plugin && plugin.defaults;
+		if (!BDFDB.ObjectUtils.is(defaults) || key && !BDFDB.ObjectUtils.is(defaults[key])) return id === undefined ? {} : null;
+		let oldC = BDFDB.DataUtils.load(plugin), newC = {}, update = false;
+		const checkLayer = (i, j) => {
+			let isObj = BDFDB.ObjectUtils.is(defaults[i][j].value);
+			if (!newC[i]) newC[i] = {};
+			if (oldC[i] == null || oldC[i][j] == null || isObj && (!BDFDB.ObjectUtils.is(oldC[i][j]) || Object.keys(defaults[i][j].value).some(n => defaults[i][j].value[n] != null && !BDFDB.sameProto(defaults[i][j].value[n], oldC[i][j][n])))) {
+				newC[i][j] = isObj ? BDFDB.ObjectUtils.deepAssign({}, defaults[i][j].value) : defaults[i][j].value;
+				update = true;
+			}
+			else newC[i][j] = oldC[i][j];
+		};
+		if (key) {for (let j in defaults[key]) checkLayer(key, j);}
+		else {for (let i in defaults) if (BDFDB.ObjectUtils.is(defaults[i])) for (let j in defaults[i]) checkLayer(i, j);}
+		if (update) BDFDB.DataUtils.save(Object.assign({}, oldC, newC), plugin);
+		
+		if (key === undefined) return newC;
+		else if (id === undefined) return newC[key] === undefined ? {} : newC[key];
+		else return newC[key] === undefined || newC[key][id] === undefined ? null : newC[key][id];
+	};
+	
+	const cssFileName = "0BDFDB.raw.css";
+	const dataFileName = "0BDFDB.data.json";
+	const cssFilePath = path.join(BDFDB.BDUtils.getPluginsFolder(), cssFileName);
+	const dataFilePath = path.join(BDFDB.BDUtils.getPluginsFolder(), dataFileName);
+	let InternalData, libHashes = {}, oldLibHashes = BDFDB.DataUtils.load(BDFDB, "hashes"), libraryCSS;
+	
+	const getBackup = (fileName, path) => {
+		return libHashes[fileName] && oldLibHashes[fileName] && libHashes[fileName] == oldLibHashes[fileName] && fs.existsSync(path) && (fs.readFileSync(path) || "").toString();
+	};
+	const requestLibraryHashes = tryAgain => {
+		request("https://api.github.com/repos/mwittrien/BetterDiscordAddons/contents/Library/_res/", {headers: {"user-agent": "node.js"}}, (e, r, b) => {
+			if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryHashes(), 10000);
+			try {
+				b = JSON.parse(b);
+				libHashes[cssFileName] = (b.find(n => n && n.name == cssFileName) || {}).sha;
+				libHashes[dataFileName] = (b.find(n => n && n.name == dataFileName) || {}).sha;
+				BDFDB.DataUtils.save(libHashes, BDFDB, "hashes")
+				requestLibraryData(true);
+			}
+			catch (err) {requestLibraryData(true);}
+		});
+	};
 	const requestLibraryData = tryAgain => {
-		request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.raw.css`, (e, r, b) => {
+		const parseCSS = css => {
+			libraryCSS = css;
+		
+			const backupData = getBackup(dataFileName, dataFilePath);
+			if (backupData) parseData(backupData);
+			else request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/${dataFileName}`, (e, r, b) => {
+				if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryData(), 10000);
+				if (!e && b && r.statusCode == 200) parseData(b, true);
+				else parseData(fs.existsSync(dataFilePath) && (fs.readFileSync(dataFilePath) || "").toString());
+			});
+		};
+		const parseData = (dataString, fetched) => {
+			try {InternalData = JSON.parse(dataString);}
+			catch (err) {
+				if (fetched) {
+					try {
+						dataString = fs.existsSync(dataFilePath) && (fs.readFileSync(dataFilePath) || "").toString();
+						InternalData = JSON.parse(dataString);
+					}
+					catch (err2) {BDFDB.LogUtils.error(["Failed to initiate Library!", "Failed Fetch!", dataString ? "Corrupt Backup." : "No Backup.", , err2]);}
+				}
+				else BDFDB.LogUtils.error(["Failed to initiate Library!", dataString ? "Corrupt Backup." : "No Backup.", err]);
+			}
+			if (fetched && dataString) fs.writeFile(dataFilePath, dataString, _ => {});
+				
+			InternalBDFDB.getWebModuleReq = function () {
+				if (!InternalBDFDB.getWebModuleReq.req) {
+					const id = "BDFDB-WebModules";
+					const req = window.webpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
+					delete req.m[id];
+					delete req.c[id];
+					InternalBDFDB.getWebModuleReq.req = req;
+				}
+				return InternalBDFDB.getWebModuleReq.req;
+			};
+			
+			if (InternalData) loadLibrary();
+			else BdApi.alert("Error", "Could not initiate BDFDB Library Plugin. Check your Internet Connection and make sure GitHub isn't blocked by your Network or try disabling your VPN/Proxy.");
+		};
+		
+		const backupCSS = getBackup(cssFileName, cssFilePath);
+		if (backupCSS) parseCSS(backupCSS);
+		else request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/${cssFileName}`, (e, r, b) => {
 			if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryData(), 10000);
-			libraryCSS = !e && b && r.statusCode == 200 ? b : fs.existsSync(cssPath) && (fs.readFileSync(cssPath) || "").toString();
-			request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.data.json`, BDFDB.TimeUtils.suppress((e2, r2, b2) => {
-				if (e2 || !b2 || r2.statusCode != 200) {
-					if (tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryData(), 10000);
-					else {
-						BDFDB.LogUtils.error(["Failed to fetch JSON from GitHub. Could not load data.json!", e2 || ""]);
-						b2 = loadBackup();
-					}
-				}
-				try {InternalData = JSON.parse(b2);}
-				catch (err) {
-					BDFDB.LogUtils.error(["Failed to parse fetched JSON. Could not load data.json!", err]);
-					b2 = null;
-					InternalData = JSON.parse(loadBackup());
-				}
-				if (!e && b && r.statusCode == 200) fs.writeFile(cssPath, b, _ => {});
-				if (!e2 && b2 && r2.statusCode == 200) fs.writeFile(dataPath, b2, _ => {});
-				
-				InternalBDFDB.getWebModuleReq = function () {
-					if (!InternalBDFDB.getWebModuleReq.req) {
-						const id = "BDFDB-WebModules";
-						const req = window.webpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
-						delete req.m[id];
-						delete req.c[id];
-						InternalBDFDB.getWebModuleReq.req = req;
-					}
-					return InternalBDFDB.getWebModuleReq.req;
-				};
-				
-				// ADD async proxy check
-				
-				loadLibrary();
-			}, "Could not initiate Library!"));
+			if (!e && b && r.statusCode == 200) {
+				fs.writeFile(cssFilePath, b, _ => {});
+				parseCSS(b);
+			}
+			else parseCSS(fs.existsSync(cssFilePath) && (fs.readFileSync(cssFilePath) || "").toString());
 		});
 	};
 	const loadLibrary = _ => {
@@ -2386,7 +2515,7 @@ module.exports = (_ => {
 			if (component && component.defaultProps) for (let key in component.defaultProps) if (props[key] == null) props[key] = component.defaultProps[key];
 			try {
 				let child = LibraryModules.React.createElement(component || "div", props) || null;
-				if (errorWrap) return LibraryModules.React.createElement(InternalComponents.ErrorBoundary, {}, child) || null;
+				if (errorWrap) return LibraryModules.React.createElement(InternalComponents.ErrorBoundary, {key: child && child.key || ""}, child) || null;
 				else return child;
 			}
 			catch (err) {BDFDB.LogUtils.error(["Could not create React Element!", err]);}
@@ -3117,113 +3246,6 @@ module.exports = (_ => {
 		BDFDB.DMUtils.markAsRead = function (dmIds) {
 			let unreadDMs = [dmIds].flat(10).filter(id => id && typeof id == "string" && BDFDB.DMUtils.isDMChannel(id) && (LibraryModules.UnreadChannelUtils.hasUnread(id) || LibraryModules.UnreadChannelUtils.getMentionCount(id) > 0));
 			if (unreadDMs.length) for (let i in unreadDMs) BDFDB.TimeUtils.timeout(_ => LibraryModules.AckUtils.ack(unreadDMs[i]), i * 1000);
-		};
-
-		InternalBDFDB.writeConfig = function (path, config) {
-			try {LibraryRequires.fs.writeFileSync(path, JSON.stringify(config, null, "	"));}
-			catch (err) {}
-		};
-		InternalBDFDB.readConfig = function (path) {
-			try {return JSON.parse(LibraryRequires.fs.readFileSync(path));}
-			catch (err) {return {};}
-		};
-		
-		BDFDB.DataUtils = {};
-		BDFDB.DataUtils.save = function (data, plugin, key, id) {
-			plugin = plugin == BDFDB && InternalBDFDB || plugin;
-			let pluginName = typeof plugin === "string" ? plugin : plugin.name;
-			let fileName = pluginName == "BDFDB" ? "0BDFDB" : pluginName;
-			let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".config.json");
-			
-			let config = Cache.data[pluginName] !== undefined ? Cache.data[pluginName] : (InternalBDFDB.readConfig(configPath) || {});
-			
-			if (key === undefined) config = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
-			else {
-				if (id === undefined) config[key] = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
-				else {
-					if (!BDFDB.ObjectUtils.is(config[key])) config[key] = {};
-					config[key][id] = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
-				}
-			}
-			
-			let configIsObject = BDFDB.ObjectUtils.is(config);
-			if (key !== undefined && configIsObject && BDFDB.ObjectUtils.is(config[key]) && BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
-			if (BDFDB.ObjectUtils.isEmpty(config)) {
-				delete Cache.data[pluginName];
-				if (LibraryRequires.fs.existsSync(configPath)) LibraryRequires.fs.unlinkSync(configPath);
-			}
-			else {
-				if (configIsObject) config = BDFDB.ObjectUtils.sort(config);
-				Cache.data[pluginName] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
-				InternalBDFDB.writeConfig(configPath, config);
-			}
-		};
-
-		BDFDB.DataUtils.load = function (plugin, key, id) {
-			plugin = plugin == BDFDB && InternalBDFDB || plugin;
-			let pluginName = typeof plugin === "string" ? plugin : plugin.name;
-			let fileName = pluginName == "BDFDB" ? "0BDFDB" : pluginName;
-			let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".config.json");
-			
-			let config = Cache.data[pluginName] !== undefined ? Cache.data[pluginName] : (InternalBDFDB.readConfig(configPath) || {});
-			let configIsObject = BDFDB.ObjectUtils.is(config);
-			Cache.data[pluginName] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
-			
-			if (key === undefined) return config;
-			else {
-				let keyData = configIsObject ? (BDFDB.ObjectUtils.is(config[key]) || config[key] === undefined ? BDFDB.ObjectUtils.deepAssign({}, config[key]) : config[key]) : null;
-				if (id === undefined) return keyData;
-				else return !BDFDB.ObjectUtils.is(keyData) || keyData[id] === undefined ? null : keyData[id];
-			}
-		};
-		BDFDB.DataUtils.remove = function (plugin, key, id) {
-			plugin = plugin == BDFDB && InternalBDFDB || plugin;
-			let pluginName = typeof plugin === "string" ? plugin : plugin.name;
-			let fileName = pluginName == "BDFDB" ? "0BDFDB" : pluginName;
-			let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".config.json");
-			
-			let config = Cache.data[pluginName] !== undefined ? Cache.data[pluginName] : (InternalBDFDB.readConfig(configPath) || {});
-			let configIsObject = BDFDB.ObjectUtils.is(config);
-			
-			if (key === undefined || !configIsObject) config = {};
-			else {
-				if (id === undefined) delete config[key];
-				else if (BDFDB.ObjectUtils.is(config[key])) delete config[key][id];
-			}
-			
-			if (BDFDB.ObjectUtils.is(config[key]) && BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
-			if (BDFDB.ObjectUtils.isEmpty(config)) {
-				delete Cache.data[pluginName];
-				if (LibraryRequires.fs.existsSync(configPath)) LibraryRequires.fs.unlinkSync(configPath);
-			}
-			else {
-				if (configIsObject) config = BDFDB.ObjectUtils.sort(config);
-				Cache.data[pluginName] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
-				InternalBDFDB.writeConfig(configPath, config);
-			}
-		};
-		BDFDB.DataUtils.get = function (plugin, key, id) {
-			plugin = plugin == BDFDB && InternalBDFDB || plugin;
-			plugin = typeof plugin == "string" ? BDFDB.BDUtils.getPlugin(plugin) : plugin;
-			const defaults = plugin && plugin.defaults;
-			if (!BDFDB.ObjectUtils.is(defaults) || key && !BDFDB.ObjectUtils.is(defaults[key])) return id === undefined ? {} : null;
-			let oldC = BDFDB.DataUtils.load(plugin), newC = {}, update = false;
-			const checkLayer = (i, j) => {
-				let isObj = BDFDB.ObjectUtils.is(defaults[i][j].value);
-				if (!newC[i]) newC[i] = {};
-				if (oldC[i] == null || oldC[i][j] == null || isObj && (!BDFDB.ObjectUtils.is(oldC[i][j]) || Object.keys(defaults[i][j].value).some(n => defaults[i][j].value[n] != null && !BDFDB.sameProto(defaults[i][j].value[n], oldC[i][j][n])))) {
-					newC[i][j] = isObj ? BDFDB.ObjectUtils.deepAssign({}, defaults[i][j].value) : defaults[i][j].value;
-					update = true;
-				}
-				else newC[i][j] = oldC[i][j];
-			};
-			if (key) {for (let j in defaults[key]) checkLayer(key, j);}
-			else {for (let i in defaults) if (BDFDB.ObjectUtils.is(defaults[i])) for (let j in defaults[i]) checkLayer(i, j);}
-			if (update) BDFDB.DataUtils.save(Object.assign({}, oldC, newC), plugin);
-			
-			if (key === undefined) return newC;
-			else if (id === undefined) return newC[key] === undefined ? {} : newC[key];
-			else return newC[key] === undefined || newC[key][id] === undefined ? null : newC[key][id];
 		};
 		
 		BDFDB.ColorUtils = {};
@@ -8443,7 +8465,7 @@ module.exports = (_ => {
 			if (pluginName) BDFDB.TimeUtils.timeout(_ => BDFDB.BDUtils.reloadPlugin(pluginName));
 		}
 	};
-	requestLibraryData(true);
+	requestLibraryHashes(true);
 	
 	return class BDFDB_Frame {
 		getName () {return config.info.name;}

@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.8
+ * @version 1.1.9
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.1.8",
+			"version": "1.1.9",
 			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
 		},
 		"changeLog": {
 			"fixed": {
-				"Direct Messages List": "Fixed and Issue where the Plugin would cause the DM List to jump to the top if a DM was selected"
+				"Duplicates": "No longer creates Duplicate Controls"
 			}
 		}
 	};
@@ -792,12 +792,13 @@ module.exports = (_ => {
 			processAnalyticsContext (e) {
 				if (e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.ACCOUNT_PANEL) e.instance.props.children = [
 					BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
+						key: "SPOTIFY_CONTROLS",
 						song: BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false),
 						maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
 						timeline: this.settings.general.addTimeline,
 						activityToggle: this.settings.general.addActivityButton
 					}, true),
-					e.instance.props.children
+					[e.instance.props.children].flat(10).filter(n => !n || n.key != "SPOTIFY_CONTROLS")
 				].flat(10);
 			}
 			
