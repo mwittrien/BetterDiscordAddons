@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.1
+ * @version 1.2.8
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,17 +17,25 @@ module.exports = (_ => {
 		"info": {
 			"name": "LastMessageDate",
 			"author": "DevilBro",
-			"version": "1.2.1",
+			"version": "1.2.8",
 			"description": "Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal"
 		},
 		"changeLog": {
-			"improved": {
-				"New Settings": "Changed the Settings Panel for the Plugin, Settings got reset sowwy ~w~"
+			"fixed": {
+				"User Popout": "No Longer requires you to open the Popout twice"
 			}
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -65,13 +73,16 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var loadedUsers, requestedUsers, languages;
-		var settings = {}, choices = {}, formats = {}, amounts = {};
+		var _this;
+		var loadedUsers, requestedUsers, queuedInstances, languages;
+		var currentPopout, currentProfile;
 		
 		return class LastMessageDate extends Plugin {
 			onLoad () {
+				_this = this;
 				loadedUsers = {};
 				requestedUsers = {};
+				queuedInstances = {};
 
 				this.defaults = {
 					general: {
@@ -88,8 +99,10 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					after: {
-						UserPopout: "render",
-						AnalyticsContext: "render"
+						UserPopoutContainer: "type",
+						UserPopoutInfo: "UserPopoutInfo",
+						UserProfileModal: "default",
+						UserProfileModalHeader: "default"
 					}
 				};
 			}
@@ -169,62 +182,73 @@ module.exports = (_ => {
 				}
 			}
 
-			processUserPopout (e) {
-				if (e.instance.props.user && e.instance.props.guild && this.settings.places.userPopout) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
-					if (index > -1) this.injectDate(e.instance, children, 2, e.instance.props.user, e.instance.props.guild.id);
+			processUserPopoutContainer (e) {
+				currentPopout = e.instance;
+			}
+			
+			processUserPopoutInfo (e) {
+				if (currentPopout && e.instance.props.user && this.settings.places.userPopout) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["DiscordTag", "ColoredFluxTag"]});
+					if (index > -1) this.injectDate(children, index + 1, e.instance.props.user, currentPopout.props.guildId);
 				}
 			}
 
-			processAnalyticsContext (e) {
-				if (typeof e.returnvalue.props.children == "function" && e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.PROFILE_MODAL && this.settings.places.userProfile) {
-					let renderChildren = e.returnvalue.props.children;
-					e.returnvalue.props.children = (...args) => {
-						let renderedChildren = renderChildren(...args);
-						let [children, index] = BDFDB.ReactUtils.findParent(renderedChildren, {name: ["DiscordTag", "ColoredFluxTag"]});
-						if (index > -1) this.injectDate(e.instance, children, 1, children[index].props.user, BDFDB.ReactUtils.findValue(e.instance, "guildId", {up: true}));
-						return renderedChildren;
-					};
+			processUserProfileModal (e) {
+				currentProfile = e.instance;
+			}
+			
+			processUserProfileModalHeader (e) {
+				if (currentProfile && e.instance.props.user && this.settings.places.userProfile) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["DiscordTag", "ColoredFluxTag"]});
+					if (index > -1) this.injectDate(children, index + 1, e.instance.props.user, currentProfile.props.guildId);
 				}
 			}
 
-			injectDate (instance, children, index, user, guildId) {
+			injectDate (children, index, user, guildId) {
 				if (!guildId) guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-				if (!BDFDB.ArrayUtils.is(children) || !user || user.discriminator == "0000") return;
+				if (!BDFDB.ArrayUtils.is(children) || !user || user.isNonUserBot()) return;
 				let isGuild = guildId && guildId != BDFDB.DiscordConstants.ME;
 				guildId = isGuild ? guildId : BDFDB.LibraryModules.LastChannelStore.getChannelId();
 				if (!guildId) return;
+				
 				if (!loadedUsers[guildId]) loadedUsers[guildId] = {};
 				if (!requestedUsers[guildId]) requestedUsers[guildId] = {};
-				if (!BDFDB.ArrayUtils.is(requestedUsers[guildId][user.id])) {
-					requestedUsers[guildId][user.id] = [instance];
+				if (!queuedInstances[guildId]) queuedInstances[guildId] = {};
+				
+				if (loadedUsers[guildId][user.id] === undefined && !requestedUsers[guildId][user.id]) {
+					requestedUsers[guildId][user.id] = true;
+					queuedInstances[guildId][user.id] = [].concat(queuedInstances[guildId][user.id]).filter(n => n);
 					BDFDB.LibraryModules.APIUtils.get({
 						url: isGuild ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(guildId) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(guildId),
 						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({author_id: user.id})
 					}).then(result => {
+						delete requestedUsers[guildId][user.id];
 						if (typeof result.body.retry_after != "number") {
 							if (result.body.messages && Array.isArray(result.body.messages[0])) {
-								for (let message of result.body.messages[0]) if (message.hit && message.author.id == user.id) {
-									loadedUsers[guildId][user.id] = new Date(message.timestamp);
-								}
+								for (let message of result.body.messages[0]) if (message.hit && message.author.id == user.id) loadedUsers[guildId][user.id] = new Date(message.timestamp);
 							}
 							else loadedUsers[guildId][user.id] = null;
-							for (let queuedInstance of requestedUsers[guildId][user.id]) BDFDB.ReactUtils.forceUpdate(queuedInstance);
+							BDFDB.ReactUtils.forceUpdate(queuedInstances[guildId][user.id]);
+							delete queuedInstances[guildId][user.id];
 						}
-						else {
-							delete requestedUsers[guildId][user.id];
-							BDFDB.TimeUtils.timeout(_ => this.injectDate(instance, children, index, user), result.body.retry_after + 500);
-						}
+						else BDFDB.TimeUtils.timeout(_ => this.injectDate(children, index, user, guildId), result.body.retry_after + 500);
 					});
 				}
-				else if (loadedUsers[guildId][user.id] === undefined) requestedUsers[guildId][user.id].push(instance);
-				else {
-					let timestamp = loadedUsers[guildId][user.id] ? BDFDB.LibraryComponents.DateInput.format(this.settings.dates.lastMessageDate, loadedUsers[guildId][user.id]) : "---";
-					children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-						className: BDFDB.disCNS._lastmessagedatedate + BDFDB.disCNS.userinfodate + BDFDB.disCN.textrow,
-						children: this.settings.general.displayText ? this.labels.last_message.replace("{{time}}", timestamp) : timestamp
-					}));
-				}
+				children.splice(index, 0, BDFDB.ReactUtils.createElement(class extends BDFDB.ReactUtils.Component {
+					render() {
+						if (loadedUsers[guildId][user.id] === undefined) {
+							if (queuedInstances[guildId][user.id].indexOf(this) == -1) queuedInstances[guildId][user.id].push(this);
+							return null;
+						}
+						else {
+							let timestamp = loadedUsers[guildId][user.id] ? BDFDB.LibraryComponents.DateInput.format(_this.settings.dates.lastMessageDate, loadedUsers[guildId][user.id]) : "---";
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+								className: BDFDB.disCNS._lastmessagedatedate + BDFDB.disCNS.userinfodate + BDFDB.disCN.textrow,
+								children: _this.settings.general.displayText ? _this.labels.last_message.replace("{{time}}", timestamp) : timestamp
+							});
+						}
+					}
+				}));
 			}
 
 			setLabelsByLanguage () {
@@ -232,6 +256,10 @@ module.exports = (_ => {
 					case "bg":		// Bulgarian
 						return {
 							last_message:						"Последно съобщение на {{time}}"
+						};
+					case "cs":		// Czech
+						return {
+							last_message:						"Poslední zpráva v {{time}}"
 						};
 					case "da":		// Danish
 						return {
@@ -256,6 +284,10 @@ module.exports = (_ => {
 					case "fr":		// French
 						return {
 							last_message:						"Dernier message le {{time}}"
+						};
+					case "hi":		// Hindi
+						return {
+							last_message:						"अंतिम संदेश {{time}} को"
 						};
 					case "hr":		// Croatian
 						return {
@@ -335,7 +367,7 @@ module.exports = (_ => {
 						};
 					default:		// English
 						return {
-							last_message:						"Last message on {{time}}"
+							last_message:						"Last Message on {{time}}"
 						};
 				}
 			}

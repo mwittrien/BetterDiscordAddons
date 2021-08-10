@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.7
+ * @version 3.0.2
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,20 +17,25 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "2.9.7",
+			"version": "3.0.2",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
 		},
 		"changeLog": {
 			"improved": {
-				"Channel Topic": "Formatting Channel Topic in Access Modal (makes Links clickable, etc)"
-			},
-			"fixed": {
-				"Settings": "Show again"
+				"Threads": "Added the Channel Info Modal for Threads, it's not possible to see a list of all threads in a server, because Discord only sends you the info a thread after you attempted to join it, which isn't possible with private threads (it's similar like server invites)"
 			}
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -85,15 +90,15 @@ module.exports = (_ => {
 			GUILD_ANNOUNCEMENT: "NEWS_CHANNEL",
 			GUILD_STORE: "STORE_CHANNEL",
 			GUILD_CATEGORY: "CATEGORY",
-			GUILD_STAGE_VOICE: "STAGE_CHANNEL"
+			GUILD_STAGE_VOICE: "STAGE_CHANNEL",
+			PUBLIC_THREAD: "THREAD",
+			PRIVATE_THREAD: "PRIVATE_THREAD"
 		};
-
-		const channelIcons = {
-			GUILD_TEXT: `M 5.88657 21 C 5.57547 21 5.3399 20.7189 5.39427 20.4126 L 6.00001 17 H 2.59511 C 2.28449 17 2.04905 16.7198 2.10259 16.4138 L 2.27759 15.4138 C 2.31946 15.1746 2.52722 15 2.77011 15 H 6.35001 L 7.41001 9 H 4.00511 C 3.69449 9 3.45905 8.71977 3.51259 8.41381 L 3.68759 7.41381 C 3.72946 7.17456 3.93722 7 4.18011 7 H 7.76001 L 8.39677 3.41262 C 8.43914 3.17391 8.64664 3 8.88907 3 H 9.87344 C 10.1845 3 10.4201 3.28107 10.3657 3.58738 L 9.76001 7 H 15.76 L 16.3968 3.41262 C 16.4391 3.17391 16.6466 3 16.8891 3 H 17.8734 C 18.1845 3 18.4201 3.28107 18.3657 3.58738 L 17.76 7 H 21.1649 C 21.4755 7 21.711 7.28023 21.6574 7.58619 L 21.4824 8.58619 C 21.4406 8.82544 21.2328 9 20.9899 9 H 17.41 L 16.35 15 H 19.7549 C 20.0655 15 20.301 15.2802 20.2474 15.5862 L 20.0724 16.5862 C 20.0306 16.8254 19.8228 17 19.5799 17 H 16 L 15.3632 20.5874 C 15.3209 20.8261 15.1134 21 14.8709 21 H 13.8866 C 13.5755 21 13.3399 20.7189 13.3943 20.4126 L 14 17 H 8.00001 L 7.36325 20.5874 C 7.32088 20.8261 7.11337 21 6.87094 21 H 5.88657Z M 9.41045 9 L 8.35045 15 H 14.3504 L 15.4104 9 H 9.41045 Z`,
-			GUILD_VOICE: `M 11.383 3.07904 C 11.009 2.92504 10.579 3.01004 10.293 3.29604 L 6 8.00204 H 3 C 2.45 8.00204 2 8.45304 2 9.00204 V 15.002 C 2 15.552 2.45 16.002 3 16.002 H 6 L 10.293 20.71 C 10.579 20.996 11.009 21.082 11.383 20.927 C 11.757 20.772 12 20.407 12 20.002 V 4.00204 C 12 3.59904 11.757 3.23204 11.383 3.07904Z M 14 5.00195 V 7.00195 C 16.757 7.00195 19 9.24595 19 12.002 C 19 14.759 16.757 17.002 14 17.002 V 19.002 C 17.86 19.002 21 15.863 21 12.002 C 21 8.14295 17.86 5.00195 14 5.00195Z M 14 9.00195 C 15.654 9.00195 17 10.349 17 12.002 C 17 13.657 15.654 15.002 14 15.002 V 13.002 C 14.551 13.002 15 12.553 15 12.002 C 15 11.451 14.551 11.002 14 11.002 V 9.00195 Z`,
-			GUILD_ANNOUNCEMENT: `M 3.9 8.26 H 2 V 15.2941 H 3.9 V 8.26 Z M 19.1 4 V 5.12659 L 4.85 8.26447 V 18.1176 C 4.85 18.5496 5.1464 18.9252 5.5701 19.0315 L 9.3701 19.9727 C 9.4461 19.9906 9.524 20 9.6 20 C 9.89545 20 10.1776 19.8635 10.36 19.6235 L 12.7065 16.5242 L 19.1 17.9304 V 19.0588 H 21 V 4 H 19.1 Z M 9.2181 17.9944 L 6.75 17.3826 V 15.2113 L 10.6706 16.0753 L 9.2181 17.9944 Z`,
-			GUILD_STORE: `M 21.707 13.293l -11 -11 C 10.519 2.105 10.266 2 10 2 H 3c -0.553 0 -1 0.447 -1 1 v 7 c 0 0.266 0.105 0.519 0.293 0.707l11 11 c 0.195 0.195 0.451 0.293 0.707 0.293 s 0.512 -0.098 0.707 -0.293l7 -7 c 0.391 -0.391 0.391 -1.023 0 -1.414 z M 7 9c -1.106 0 -2 -0.896 -2 -2 0 -1.106 0.894 -2 2 -2 1.104 0 2 0.894 2 2 0 1.104 -0.896 2 -2 2 z`,
-			DEFAULT: `M 11.44 0 c 4.07 0 8.07 1.87 8.07 6.35 c 0 4.13 -4.74 5.72 -5.75 7.21 c -0.76 1.11 -0.51 2.67 -2.61 2.67 c -1.37 0 -2.03 -1.11 -2.03 -2.13 c 0 -3.78 5.56 -4.64 5.56 -7.76 c 0 -1.72 -1.14 -2.73 -3.05 -2.73 c -4.07 0 -2.48 4.19 -5.56 4.19 c -1.11 0 -2.07 -0.67 -2.07 -1.94 C 4 2.76 7.56 0 11.44 0 z M 11.28 18.3 c 1.43 0 2.61 1.17 2.61 2.61 c 0 1.43 -1.18 2.61 -2.61 2.61 c -1.43 0 -2.61 -1.17 -2.61 -2.61 C 8.68 19.48 9.85 18.3 11.28 18.3 z`
+		
+		const sortOrders = {
+			NATIVE: {value: "native", label: "Native Category in correct Order"},
+			BOTTOM: {value: "bottom", label: "Native Category at the bottom"},
+			EXTRA: {value: "extra", label: "Extra Category 'Hidden'"}
 		};
 		
 		const UserRowComponent = class UserRow extends BdApi.React.Component {
@@ -116,10 +121,14 @@ module.exports = (_ => {
 							size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40,
 							onClick: _ => {
 								if (accessModal) accessModal.props.onClose();
-								BDFDB.LibraryModules.UserProfileUtils.open(this.props.user.id);
+								BDFDB.LibraryModules.UserProfileModalUtils.openUserProfileModal({
+									userId: this.props.user.id,
+									guildId: this.props.guildId
+								});
 							}
 						})
 					}),
+					labelClassName: BDFDB.disCN.nametag,
 					label: [
 						BDFDB.ReactUtils.createElement("span", {
 							className: BDFDB.disCN.username,
@@ -152,7 +161,7 @@ module.exports = (_ => {
 								borderRadius: "50%",
 								height: "100%",
 								width: "100%",
-								backgroundColor: BDFDB.ColorUtils.convert(this.props.role.colorString || BDFDB.DiscordConstants.Colors.PRIMARY_DARK_300, "RGB")
+								backgroundColor: BDFDB.ColorUtils.convert(this.props.role.colorString, "RGB") || BDFDB.DiscordConstants.Colors.PRIMARY_DARK_300
 							}
 						})
 					}),
@@ -170,11 +179,17 @@ module.exports = (_ => {
 				overrideTypes = Object.keys(BDFDB.DiscordConstants.PermissionOverrideType);
 				 
 				this.defaults = {
+					sortOrder: {
+						hidden: {
+							value: sortOrders[Object.keys(sortOrders)[0]].value,
+							description: "Sorts hidden Channels in",
+							options: Object.keys(sortOrders).map(n => sortOrders[n])
+						}
+					},
 					general: {
-						sortNative:				{value: true, 	description: "Sort hidden Channels in the native Order instead of an extra Category"},
-						showVoiceUsers:			{value: true, 	description: "Show connected Users in hidden Voice Channels"},
-						alwaysCollapse:			{value: false, 	description: "Always collapse 'Hidden' Category after switching Servers"},
-						showForNormal:			{value: true,	description: "Add Access-Overview ContextMenu Entry for non-hidden Channels"}
+						alwaysCollapse:			{value: false, 		description: "Always collapse 'Hidden' Category after switching Servers"},
+						showVoiceUsers:			{value: true, 		description: "Show connected Users in hidden Voice Channels"},
+						showForNormal:			{value: true,		description: "Add Access-Overview ContextMenu Entry for non-hidden Channels"}
 					},
 					channels: {
 						GUILD_TEXT:				{value: true},
@@ -189,6 +204,7 @@ module.exports = (_ => {
 					before: {
 						Channels: "render",
 						ChannelCategoryItem: "type",
+						ChannelItem: "default",
 						VoiceUsers: "render"
 					},
 					after: {
@@ -253,6 +269,10 @@ module.exports = (_ => {
 					let all = this.getAllChannels();
 					for (let channel_id in all) if (all[channel_id].guild_id == e.methodArguments[0] && !e.returnValue[channel_id] && (all[channel_id].type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY && all[channel_id].type != BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE)) e.returnValue[channel_id] = {id: channel_id, name: all[channel_id].name};
 				}});
+				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.ChannelIconUtils, "getChannelIconComponent", {before: e => {
+					if (e.methodArguments[2] && e.methodArguments[2].locked && e.methodArguments[0] && this.isChannelHidden(e.methodArguments[0].id)) e.methodArguments[2].locked = false;
+				}});
 
 				this.forceUpdateAll();
 			}
@@ -268,16 +288,26 @@ module.exports = (_ => {
 					children: _ => {
 						let settingsItems = [];
 				
+						for (let key in this.defaults.selections) settingsItems.push();
+						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Settings",
 							collapseStates: collapseStates,
-							children: Object.keys(this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							children: Object.keys(this.defaults.sortOrder).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Select",
+								plugin: this,
+								keys: ["sortOrder", key],
+								label: this.defaults.sortOrder[key].description,
+								basis: "50%",
+								options: this.defaults.sortOrder[key].options,
+								value: this.settings.sortOrder[key]
+							})).concat(Object.keys(this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "Switch",
 								plugin: this,
 								keys: ["general", key],
 								label: this.defaults.general[key].description,
 								value: this.settings.general[key]
-							})).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 								title: "Show Channels:",
 								children: Object.keys(this.defaults.channels).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 									type: "Switch",
@@ -339,13 +369,31 @@ module.exports = (_ => {
 					if (e.instance.props.channel.id.endsWith("hidden") && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY) {
 						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ChannelMuteItem"});
 						if (index > -1) children.splice(index, 1);
+						[children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mark-channel-read", group: true});
+						children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+							children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								label: this.labels.context_changeorder,
+								id: BDFDB.ContextMenuUtils.createItemId(this.name, "change_order"),
+								children: Object.keys(sortOrders).filter(n => sortOrders[n].value != sortOrders.EXTRA.value).map(n => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+									children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+										label: this.labels["context_changeorder_" + sortOrders[n].value],
+										id: BDFDB.ContextMenuUtils.createItemId(this.name, "change_order", sortOrders[n].value),
+										action: _ => {
+											this.settings.sortOrder.hidden = sortOrders[n].value;
+											BDFDB.DataUtils.save(this.settings.sortOrder, this, "sortOrder");
+											this.forceUpdateAll();
+										}
+									})
+								}))
+							})
+						}));
 					}
 					let isHidden = this.isChannelHidden(e.instance.props.channel.id);
 					if (isHidden || this.settings.general.showForNormal) {
 						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mark-channel-read", group: true});
 						children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 							children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-								label: BDFDB.LanguageUtils.LanguageStrings.CHANNEL + " " + BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY,
+								label: this.labels.context_channelaccess,
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "permissions"),
 								action: _ => this.openAccessModal(e.instance.props.channel, !isHidden)
 							})
@@ -397,7 +445,7 @@ module.exports = (_ => {
 						if (catId != "_categories") e.instance.props.categories[catId] = e.instance.props.categories[catId].filter(n => !this.isChannelHidden(n.channel.id));
 						for (let channelObj of e.instance.props.categories[catId]) if (channelObj.index > index) index = parseInt(channelObj.index);
 					}
-					if (!this.settings.general.sortNative) {
+					if (this.settings.sortOrder.hidden == sortOrders.EXTRA.value) {
 						hiddenCategory = new BDFDB.DiscordObjects.Channel({
 							guild_id: e.instance.props.guild.id,
 							id: hiddenId,
@@ -421,7 +469,8 @@ module.exports = (_ => {
 						if (!BDFDB.ArrayUtils.is(e.instance.props.channels[channelType])) e.instance.props.channels[channelType] = [];
 						for (let channel of hiddenChannels[type]) {
 							let hiddenChannel = new BDFDB.DiscordObjects.Channel(Object.assign({}, channel, {
-								parent_id: hiddenCategory ? hiddenId : channel.parent_id
+								parent_id: hiddenCategory ? hiddenId : channel.parent_id,
+								position: this.settings.sortOrder.hidden == sortOrders.BOTTOM.value ? 999999999 : channel.position
 							}));
 							let parent_id = hiddenChannel.parent_id || "null";
 							e.instance.props.categories[parent_id].push({
@@ -446,35 +495,34 @@ module.exports = (_ => {
 			
 			processChannelItem (e) {
 				if (e.instance.props.channel && this.isChannelHidden(e.instance.props.channel.id)) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "Icon"});
-					if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-						nativeClass: true,
-						iconSVG: `<svg class="${BDFDB.disCN.channelicon}" width="24" height="24" viewBox="0 0 24 24"><mask id="${this.name + e.instance.props.channel.id}" fill="black"><path d="M 0 0 H 24 V 24 H 0 Z" fill="white"></path><path d="M24 0 H 13 V 12 H 24 Z" fill="black"></path></mask><path mask="url(#${this.name + e.instance.props.channel.id})" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="${this.channelIcons[BDFDB.DiscordConstants.ChannelTypes[e.instance.props.channel.type]] || this.channelIcons.DEFAULT}"></path><path fill="currentColor" d="M 21.025 5 V 4 C 21.025 2.88 20.05 2 19 2 C 17.95 2 17 2.88 17 4 V 5 C 16.4477 5 16 5.44772 16 6 V 9 C 16 9.55228 16.4477 10 17 10 H 19 H 21 C 21.5523 10 22 9.55228 22 9 V 5.975C22 5.43652 21.5635 5 21.025 5 Z M 20 5 H 18 V 4 C 18 3.42857 18.4667 3 19 3 C 19.5333 3 20 3.42857 20 4 V 5 Z"></path></svg>`
-					});
-					let channelChildren = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelchildren]]});
-					if (channelChildren && channelChildren.props && channelChildren.props.children) {
-						channelChildren.props.children = [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_LOCKED_SHORT,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-								className: BDFDB.disCN.channeliconitem,
-								style: {display: "block"},
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									className: BDFDB.disCN.channelactionicon,
-									name: BDFDB.LibraryComponents.SvgIcon.Names.LOCK_CLOSED
+					if (!e.returnvalue) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._showhiddenchannelshiddenchannel);
+					else {
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ChannelItemIcon"});
+						let channelChildren = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelchildren]]});
+						if (channelChildren && channelChildren.props && channelChildren.props.children) {
+							channelChildren.props.children = [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_LOCKED_SHORT,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									className: BDFDB.disCN.channeliconitem,
+									style: {display: "block"},
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										className: BDFDB.disCN.channelactionicon,
+										name: BDFDB.LibraryComponents.SvgIcon.Names.LOCK_CLOSED
+									})
 								})
-							})
-						})];
-					}
-					if (!(e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE && e.instance.props.connected)) {
-						let wrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelwrapper]]});
-						if (wrapper) {
-							wrapper.props.onMouseDown = _ => {};
-							wrapper.props.onMouseUp = _ => {};
+							})];
 						}
-						let mainContent = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelmaincontent]]});
-						if (mainContent) {
-							mainContent.props.onClick = _ => {};
-							mainContent.props.href = null;
+						if (!(e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE && e.instance.props.connected)) {
+							let wrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelwrapper]]});
+							if (wrapper) {
+								wrapper.props.onMouseDown = _ => {};
+								wrapper.props.onMouseUp = _ => {};
+							}
+							let mainContent = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelmaincontent]]});
+							if (mainContent) {
+								mainContent.props.onClick = _ => {};
+								mainContent.props.href = null;
+							}
 						}
 					}
 				}
@@ -530,14 +578,16 @@ module.exports = (_ => {
 			}
 			
 			openAccessModal (channel, allowed) {
+				let isThread = channel.isThread();
 				let guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
 				let myMember = guild && BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id);
-				let category = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.ChannelStore.getChannel(channel.id).parent_id);
+				let parentChannel = isThread && BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.ChannelStore.getChannel(channel.id).parent_id);
+				let category = parentChannel && parentChannel.parent_id && BDFDB.LibraryModules.ChannelStore.getChannel(parentChannel.parent_id) || BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.ChannelStore.getChannel(channel.id).parent_id);
 				let lightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
 				
 				let addUser = (id, users) => {
 					let user = BDFDB.LibraryModules.UserStore.getUser(id);
-					if (user) allowedUsers.push(Object.assign({}, user, BDFDB.LibraryModules.MemberStore.getMember(guild.id, id) || {}));
+					if (user) users.push(Object.assign({}, user, BDFDB.LibraryModules.MemberStore.getMember(guild.id, id) || {}));
 					else users.push({id: id, username: `UserId: ${id}`, fetchable: true});
 				};
 				let checkPerm = permString => {
@@ -556,7 +606,7 @@ module.exports = (_ => {
 						deniedRoles.push(guild.roles[id]);
 						if (guild.roles[id] && guild.roles[id].name == "@everyone") everyoneDenied = true;
 					}
-					else if ((channel.permissionOverwrites[id].type == BDFDB.DiscordConstants.PermissionOverrideType.MEMBER || overrideTypes[channel.permissionOverwrites[id].type] == BDFDB.DiscordConstants.PermissionOverrideType.MEMBER) && checkPerm(channel.permissionOverwrites[id].den)) {
+					else if ((channel.permissionOverwrites[id].type == BDFDB.DiscordConstants.PermissionOverrideType.MEMBER || overrideTypes[channel.permissionOverwrites[id].type] == BDFDB.DiscordConstants.PermissionOverrideType.MEMBER) && checkPerm(channel.permissionOverwrites[id].deny)) {
 						addUser(id, deniedUsers);
 					}
 				}
@@ -570,46 +620,56 @@ module.exports = (_ => {
 				for (let user of allowedUsers) allowedElements.push(BDFDB.ReactUtils.createElement(UserRowComponent, {user: user, guildId: guild.id, channelId: channel.id}));
 				for (let role of deniedRoles) deniedElements.push(BDFDB.ReactUtils.createElement(RoleRowComponent, {role: role, guildId: guild.id, channelId: channel.id}));
 				for (let user of deniedUsers) deniedElements.push(BDFDB.ReactUtils.createElement(UserRowComponent, {user: user, guildId: guild.id, channelId: channel.id}));
+				
+				const infoStrings = [
+					isThread && {
+						title: BDFDB.LanguageUtils.LanguageStrings.THREAD_NAME,
+						text: channel.name
+					}, !isThread && {
+						title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_NAME,
+						text: channel.name
+					}, channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE ? {
+						title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_BITRATE,
+						text: channel.bitrate || "---"
+					} : {
+						title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_TOPIC,
+						text: BDFDB.ReactUtils.markdownParse(channel.topic || "---")
+					}, {
+						title: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_TYPE,
+						text: BDFDB.LanguageUtils.LanguageStrings[typeNameMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]]
+					}, isThread && parentChannel && {
+						title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_NAME,
+						text: parentChannel.name
+					}, {
+						title: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_NAME,
+						text: category && category.name || BDFDB.LanguageUtils.LanguageStrings.NO_CATEGORY
+					}
+				].map((formLabel, i) => formLabel && [
+					i == 0 ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+						className: BDFDB.disCN.marginbottom20
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						title: `${formLabel.title}:`,
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.marginbottom20, i == 0 && BDFDB.disCN.margintop8),
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
+							className: BDFDB.disCN.marginleft8,
+							children: formLabel.text
+						})
+					})
+				]).flat(10).filter(n => n);
 
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
 					header: BDFDB.LanguageUtils.LanguageStrings.CHANNEL + " " + BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY,
 					subHeader: "#" + channel.name,
 					className: BDFDB.disCN._showhiddenchannelsaccessmodal,
-					contentClassName: BDFDB.disCN.listscroller,
+					contentClassName: BDFDB.DOMUtils.formatClassName(!isThread && BDFDB.disCN.listscroller),
 					onOpen: modalInstance => {if (modalInstance) accessModal = modalInstance;},
-					children: [
+					children: isThread ? infoStrings : [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							className: BDFDB.disCN.modalsubinner,
 							tab: BDFDB.LanguageUtils.LanguageStrings.OVERLAY_SETTINGS_GENERAL_TAB,
-							children: [{
-									title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_NAME,
-									text: channel.name
-								}, channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE ? {
-									title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_BITRATE,
-									text: channel.bitrate || "---"
-								} : {
-									title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_TOPIC,
-									text: BDFDB.ReactUtils.markdownParse(channel.topic || "---")
-								}, {
-									title: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_TYPE,
-									text: BDFDB.LanguageUtils.LanguageStrings[typeNameMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]]
-								}, {
-									title: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_NAME,
-									text: category && category.name || BDFDB.LanguageUtils.LanguageStrings.NO_CATEGORY
-								}].map((formLabel, i) => formLabel && [
-									i == 0 ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-										className: BDFDB.disCN.marginbottom20
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-										title: `${formLabel.title}:`,
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.marginbottom20, i == 0 && BDFDB.disCN.margintop8),
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
-											className: BDFDB.disCN.marginleft8,
-											children: formLabel.text
-										})
-									})
-								]).flat(10).filter(n => n)
+							children: infoStrings
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_allowed,
@@ -635,162 +695,290 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
+							context_changeorder:				"Промяна на реда на скритите канали",
+							context_changeorder_bottom:			"Родна категория в долната част",
+							context_changeorder_native:			"Родна категория в правилен ред",
+							context_channelaccess:				"Достъп до канал",
 							context_hidehidden:					"Скриване на заключените канали",
 							modal_allowed:						"Разрешено",
 							modal_denied:						"Отрича се"
 						};
+					case "cs":		// Czech
+						return {
+							context_changeorder:				"Změnit pořadí skrytých kanálů",
+							context_changeorder_bottom:			"Nativní kategorie dole",
+							context_changeorder_native:			"Nativní kategorie ve správném pořadí",
+							context_channelaccess:				"Přístup ke kanálu",
+							context_hidehidden:					"Skrýt zamčené kanály",
+							modal_allowed:						"Povoleno",
+							modal_denied:						"Odepřeno"
+						};
 					case "da":		// Danish
 						return {
+							context_changeorder:				"Skift rækkefølge for skjulte kanaler",
+							context_changeorder_bottom:			"Indfødt kategori i bunden",
+							context_changeorder_native:			"Native Kategori i korrekt rækkefølge",
+							context_channelaccess:				"Kanaltilgang",
 							context_hidehidden:					"Skjul låste kanaler",
 							modal_allowed:						"Tilladt",
 							modal_denied:						"Nægtet"
 						};
 					case "de":		// German
 						return {
+							context_changeorder:				"Reihenfolge der versteckten Kanäle ändern",
+							context_changeorder_bottom:			"Native Kategorie ganz unten",
+							context_changeorder_native:			"Native Kategorie in der richtigen Reihenfolge",
+							context_channelaccess:				"Kanalzugriff",
 							context_hidehidden:					"Versteckte Kanäle ausblenden",
 							modal_allowed:						"Erlaubt",
 							modal_denied:						"Verweigert"
 						};
 					case "el":		// Greek
 						return {
+							context_changeorder:				"Αλλαγή σειράς κρυφών καναλιών",
+							context_changeorder_bottom:			"Εγγενής κατηγορία στο κάτω μέρος",
+							context_changeorder_native:			"Εγγενής κατηγορία σε σωστή σειρά",
+							context_channelaccess:				"Πρόσβαση καναλιού",
 							context_hidehidden:					"Απόκρυψη κλειδωμένων καναλιών",
 							modal_allowed:						"Επιτρεπόμενο",
 							modal_denied:						"Απορρίφθηκε"
 						};
 					case "es":		// Spanish
 						return {
+							context_changeorder:				"Cambiar el orden de los canales ocultos",
+							context_changeorder_bottom:			"Categoría nativa en la parte inferior",
+							context_changeorder_native:			"Categoría nativa en el orden correcto",
+							context_channelaccess:				"Acceso al canal",
 							context_hidehidden:					"Ocultar canales bloqueados",
 							modal_allowed:						"Permitido",
 							modal_denied:						"Negado"
 						};
 					case "fi":		// Finnish
 						return {
+							context_changeorder:				"Muuta piilotettujen kanavien järjestystä",
+							context_changeorder_bottom:			"Alkuperäinen luokka alareunassa",
+							context_changeorder_native:			"Alkuperäinen luokka oikeassa järjestyksessä",
+							context_channelaccess:				"Kanavan käyttöoikeus",
 							context_hidehidden:					"Piilota lukitut kanavat",
 							modal_allowed:						"Sallittu",
 							modal_denied:						"Kielletty"
 						};
 					case "fr":		// French
 						return {
+							context_changeorder:				"Modifier l'ordre des canaux cachés",
+							context_changeorder_bottom:			"Catégorie native en bas",
+							context_changeorder_native:			"Catégorie native dans le bon ordre",
+							context_channelaccess:				"Accès à la chaîne",
 							context_hidehidden:					"Masquer les salons verrouillées",
 							modal_allowed:						"Permis",
 							modal_denied:						"Refusé"
 						};
+					case "hi":		// Hindi
+						return {
+							context_changeorder:				"हिडन चैनल ऑर्डर बदलें",
+							context_changeorder_bottom:			"नीचे की ओर मूल श्रेणी",
+							context_changeorder_native:			"मूल श्रेणी सही क्रम में",
+							context_channelaccess:				"चैनल एक्सेस",
+							context_hidehidden:					"बंद चैनल छुपाएं Hide",
+							modal_allowed:						"अनुमति है",
+							modal_denied:						"निषेध"
+						};
 					case "hr":		// Croatian
 						return {
+							context_changeorder:				"Promijenite redoslijed skrivenih kanala",
+							context_changeorder_bottom:			"Izvorna kategorija na dnu",
+							context_changeorder_native:			"Izvorna kategorija u ispravnom redoslijedu",
+							context_channelaccess:				"Pristup kanalu",
 							context_hidehidden:					"Sakrij zaključane kanale",
 							modal_allowed:						"Dopuštena",
 							modal_denied:						"Odbijen"
 						};
 					case "hu":		// Hungarian
 						return {
+							context_changeorder:				"Rejtett csatornák sorrendjének módosítása",
+							context_changeorder_bottom:			"Natív kategória az alján",
+							context_changeorder_native:			"Natív kategória helyes sorrendben",
+							context_channelaccess:				"Csatornához való hozzáférés",
 							context_hidehidden:					"Zárt csatornák elrejtése",
 							modal_allowed:						"Megengedett",
 							modal_denied:						"Megtagadva"
 						};
 					case "it":		// Italian
 						return {
+							context_changeorder:				"Modifica l'ordine dei canali nascosti",
+							context_changeorder_bottom:			"Categoria nativa in basso",
+							context_changeorder_native:			"Categoria nativa nell'ordine corretto",
+							context_channelaccess:				"Accesso al canale",
 							context_hidehidden:					"Nascondi canali bloccati",
 							modal_allowed:						"Consentito",
 							modal_denied:						"Negato"
 						};
 					case "ja":		// Japanese
 						return {
+							context_changeorder:				"非表示チャネルの順序を変更する",
+							context_changeorder_bottom:			"下部のネイティブカテゴリ",
+							context_changeorder_native:			"正しい順序のネイティブカテゴリ",
+							context_channelaccess:				"チャネルアクセス",
 							context_hidehidden:					"ロックされたチャンネルを非表示にする",
 							modal_allowed:						"許可",
 							modal_denied:						"拒否されました"
 						};
 					case "ko":		// Korean
 						return {
+							context_changeorder:				"숨겨진 채널 순서 변경",
+							context_changeorder_bottom:			"하단의 기본 카테고리",
+							context_changeorder_native:			"올바른 순서의 네이티브 카테고리",
+							context_channelaccess:				"채널 액세스",
 							context_hidehidden:					"잠긴 채널 숨기기",
 							modal_allowed:						"허용됨",
 							modal_denied:						"거부 됨"
 						};
 					case "lt":		// Lithuanian
 						return {
+							context_changeorder:				"Keisti paslėptų kanalų tvarką",
+							context_changeorder_bottom:			"Gimtoji kategorija apačioje",
+							context_changeorder_native:			"Gimtoji kategorija teisinga tvarka",
+							context_channelaccess:				"Prieiga prie kanalo",
 							context_hidehidden:					"Slėpti užrakintus kanalus",
 							modal_allowed:						"Leidžiama",
 							modal_denied:						"Paneigta"
 						};
 					case "nl":		// Dutch
 						return {
+							context_changeorder:				"Wijzig de volgorde van verborgen kanalen",
+							context_changeorder_bottom:			"Native categorie onderaan",
+							context_changeorder_native:			"Native categorie in de juiste volgorde",
+							context_channelaccess:				"Kanaaltoegang",
 							context_hidehidden:					"Verberg vergrendelde kanalen",
 							modal_allowed:						"Toegestaan",
 							modal_denied:						"Geweigerd"
 						};
 					case "no":		// Norwegian
 						return {
+							context_changeorder:				"Endre rekkefølgen på skjulte kanaler",
+							context_changeorder_bottom:			"Innfødt kategori nederst",
+							context_changeorder_native:			"Innfødt kategori i riktig rekkefølge",
+							context_channelaccess:				"Kanaltilgang",
 							context_hidehidden:					"Skjul låste kanaler",
 							modal_allowed:						"Tillatt",
 							modal_denied:						"Nektet"
 						};
 					case "pl":		// Polish
 						return {
+							context_changeorder:				"Zmień kolejność ukrytych kanałów",
+							context_changeorder_bottom:			"Kategoria natywna na dole",
+							context_changeorder_native:			"Kategoria natywna we właściwej kolejności",
+							context_channelaccess:				"Dostęp do kanałów",
 							context_hidehidden:					"Ukryj zablokowane kanały",
 							modal_allowed:						"Dozwolony",
 							modal_denied:						"Odmówiono"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
+							context_changeorder:				"Alterar a ordem dos canais ocultos",
+							context_changeorder_bottom:			"Categoria nativa na parte inferior",
+							context_changeorder_native:			"Categoria nativa na ordem correta",
+							context_channelaccess:				"Acesso ao canal",
 							context_hidehidden:					"Ocultar canais bloqueados",
 							modal_allowed:						"Permitido",
 							modal_denied:						"Negado"
 						};
 					case "ro":		// Romanian
 						return {
+							context_changeorder:				"Schimbați comanda canalelor ascunse",
+							context_changeorder_bottom:			"Categorie nativă în partea de jos",
+							context_changeorder_native:			"Categorie nativă în ordine corectă",
+							context_channelaccess:				"Acces la canal",
 							context_hidehidden:					"Ascundeți canalele blocate",
 							modal_allowed:						"Permis",
 							modal_denied:						"Negat"
 						};
 					case "ru":		// Russian
 						return {
+							context_changeorder:				"Изменить порядок скрытых каналов",
+							context_changeorder_bottom:			"Родная категория внизу",
+							context_changeorder_native:			"Собственная категория в правильном порядке",
+							context_channelaccess:				"Доступ к каналу",
 							context_hidehidden:					"Скрыть заблокированные каналы",
 							modal_allowed:						"Разрешенный",
 							modal_denied:						"Отказано"
 						};
 					case "sv":		// Swedish
 						return {
+							context_changeorder:				"Ändra ordning för dolda kanaler",
+							context_changeorder_bottom:			"Naturlig kategori längst ner",
+							context_changeorder_native:			"Naturlig kategori i rätt ordning",
+							context_channelaccess:				"Kanaltillgång",
 							context_hidehidden:					"Dölj låsta kanaler",
 							modal_allowed:						"Tillåtet",
 							modal_denied:						"Förnekad"
 						};
 					case "th":		// Thai
 						return {
+							context_changeorder:				"เปลี่ยนลำดับช่องที่ซ่อนอยู่",
+							context_changeorder_bottom:			"หมวดหมู่ดั้งเดิมที่ด้านล่าง",
+							context_changeorder_native:			"หมวดหมู่ดั้งเดิมในลำดับที่ถูกต้อง",
+							context_channelaccess:				"การเข้าถึงช่อง",
 							context_hidehidden:					"ซ่อนช่องที่ถูกล็อก",
 							modal_allowed:						"ได้รับอนุญาต",
 							modal_denied:						"ถูกปฏิเสธ"
 						};
 					case "tr":		// Turkish
 						return {
+							context_changeorder:				"Gizli Kanal Sırasını Değiştir",
+							context_changeorder_bottom:			"Altta Yerel Kategori",
+							context_changeorder_native:			"Yerel Kategori doğru sırada",
+							context_channelaccess:				"Kanal Erişimi",
 							context_hidehidden:					"Kilitli Kanalları Gizle",
 							modal_allowed:						"İzin veriliyor",
 							modal_denied:						"Reddedildi"
 						};
 					case "uk":		// Ukrainian
 						return {
+							context_changeorder:				"Змінити порядок прихованих каналів",
+							context_changeorder_bottom:			"Рідна категорія внизу",
+							context_changeorder_native:			"Рідна категорія в правильному порядку",
+							context_channelaccess:				"Доступ до каналу",
 							context_hidehidden:					"Сховати заблоковані канали",
 							modal_allowed:						"Дозволено",
 							modal_denied:						"Заперечується"
 						};
 					case "vi":		// Vietnamese
 						return {
+							context_changeorder:				"Thay đổi thứ tự các kênh bị ẩn",
+							context_changeorder_bottom:			"Danh mục Gốc ở dưới cùng",
+							context_changeorder_native:			"Danh mục gốc theo đúng thứ tự",
+							context_channelaccess:				"Quyền truy cập kênh",
 							context_hidehidden:					"Ẩn các kênh đã khóa",
 							modal_allowed:						"Được phép",
 							modal_denied:						"Phủ định"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
+							context_changeorder:				"更改隐藏频道顺序",
+							context_changeorder_bottom:			"底部的原生类别",
+							context_changeorder_native:			"正确顺序的本地类别",
+							context_channelaccess:				"频道访问",
 							context_hidehidden:					"隐藏锁定的频道",
 							modal_allowed:						"允许的",
 							modal_denied:						"被拒绝"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
+							context_changeorder:				"更改隱藏頻道順序",
+							context_changeorder_bottom:			"底部的原生類別",
+							context_changeorder_native:			"正確順序的本地類別",
+							context_channelaccess:				"頻道訪問",
 							context_hidehidden:					"隱藏鎖定的頻道",
 							modal_allowed:						"允許的",
 							modal_denied:						"被拒絕"
 						};
 					default:		// English
 						return {
+							context_changeorder:				"Change Hidden Channels Order",
+							context_changeorder_bottom:			"Native Category at the bottom",
+							context_changeorder_native:			"Native Category in correct Order",
+							context_channelaccess:				"Channel Access",
 							context_hidehidden:					"Hide Locked Channels",
 							modal_allowed:						"Permitted",
 							modal_denied:						"Denied"

@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.2
+ * @version 2.2.7
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,20 +17,20 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
-			"version": "2.2.2",
+			"version": "2.2.7",
 			"description": "Allows you to download all Themes from BD's Website within Discord"
-		},
-		"changeLog": {
-			"improved": {
-				"Thumbnail Conversion": "Moved Thumbnail Conversion to Card Component to reduce stress on BD Website"
-			},
-			"fixed": {
-				"Settings": "No longer get reset"
-			}
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -85,37 +85,34 @@ module.exports = (_ => {
 		};
 		const buttonData = {
 			INSTALLED: {
-				colorClass: "GREEN",
-				backgroundColor: "STATUS_GREEN",
+				backgroundColor: "var(--bdfdb-green)",
 				icon: "CHECKMARK",
 				text: "USER_SETTINGS_VOICE_INSTALLED_LABEL"
 			},
 			OUTDATED: {
-				colorClass: "RED",
-				backgroundColor: "STATUS_RED",
+				backgroundColor: "var(--bdfdb-red)",
 				icon: "CLOSE",
 				text: "outdated"
 			},
 			DOWNLOADABLE: {
-				colorClass: "BRAND",
 				backgroundColor: "var(--bdfdb-blurple)",
 				icon: "DOWNLOAD",
 				text: "download"
 			}
 		};
 		const reverseSorts = [
-			"DOWNLOADS", "LIKES", "FAV", "NEW"
+			"RELEASEDATE", "DOWNLOADS", "LIKES", "FAV"
 		];
 		const sortKeys = {
 			NAME:			"Name",
-			AUTHOR:			"Author",
+			AUTHORNAME:		"Author",
 			VERSION:		"Version",
 			DESCRIPTION:	"Description",
+			RELEASEDATE:	"Release Date",
 			STATE:			"Update State",
 			DOWNLOADS:		"Downloads",
 			LIKES:			"Likes",
-			FAV:			"Favorites",
-			NEW:			"New Themes"
+			FAV:			"Favorites"
 		};
 		const orderKeys = {
 			ASC:			"ascending",
@@ -142,7 +139,7 @@ module.exports = (_ => {
 					const installedTheme = _this.getInstalledTheme(theme);
 					const state = installedTheme ? (theme.version && BDFDB.NumberUtils.compareVersions(theme.version, _this.getString(installedTheme.version)) ? themeStates.OUTDATED : themeStates.INSTALLED) : themeStates.DOWNLOADABLE;
 					return Object.assign(theme, {
-						search: [theme.name, theme.version, theme.author, theme.description, theme.tags].flat(10).filter(n => typeof n == "string").join(" ").toUpperCase(),
+						search: [theme.name, theme.version, theme.authorname, theme.description, theme.tags].flat(10).filter(n => typeof n == "string").join(" ").toUpperCase(),
 						description: theme.description || "No Description found",
 						fav: favorites.includes(theme.id) && 1,
 						new: state == themeStates.DOWNLOADABLE && !cachedThemes.includes(theme.id) && 1,
@@ -154,13 +151,13 @@ module.exports = (_ => {
 				if (!this.props.downloadable)	themes = themes.filter(theme => theme.state != themeStates.DOWNLOADABLE);
 				if (searchString) 	{
 					let usedSearchString = searchString.toUpperCase();
-					themes = themes.filter(theme => theme.search.indexOf(usedSearchString) > -1);
+					let spacelessUsedSearchString = usedSearchString.replace(/\s/g, "");
+					themes = themes.filter(theme => theme.search.indexOf(usedSearchString) > -1 || theme.search.indexOf(spacelessUsedSearchString) > -1);
 				}
 				
-				const sortKey = !this.props.sortKey || this.props.sortKey == "NEW" && !themes.some(theme => theme.new) ? Object.keys(sortKeys)[0] : this.props.sortKey;
-				BDFDB.ArrayUtils.keySort(themes, sortKey.toLowerCase());
+				BDFDB.ArrayUtils.keySort(themes, this.props.sortKey.toLowerCase());
 				if (this.props.orderKey == "DESC") themes.reverse();
-				if (reverseSorts.includes(sortKey)) themes.reverse();
+				if (reverseSorts.includes(this.props.sortKey)) themes.reverse();
 				return themes;
 			}
 			openPreview() {
@@ -262,6 +259,7 @@ module.exports = (_ => {
 						classes: JSON.stringify(BDFDB.DiscordClasses),
 						classModules: JSON.stringify(BDFDB.DiscordClassModules),
 						nativeCSS: (nativeCSS || "").replace(/\/assets\//g, document.location.origin + "/assets/").replace(/[\t\r\n]/g, ""),
+						bdCSS: (document.querySelector("#bd-stylesheet") || {}).innerText || "",
 						htmlClassName: document.documentElement.className,
 						titleBar: titleBar && titleBar.outerHTML || ""
 					});
@@ -523,7 +521,7 @@ module.exports = (_ => {
 													mode: childMode,
 													filter: childType == "file" && "image"
 												},
-												label: varName[0].toUpperCase() + varName.slice(1),
+												label: varName.split("-").map(BDFDB.LibraryModules.StringUtils.upperCaseFirstChar).join(" "),
 												note: varDescription && varDescription.indexOf("*") == 0 ? varDescription.slice(1) : varDescription,
 												basis: "70%",
 												value: oldValue,
@@ -729,16 +727,31 @@ module.exports = (_ => {
 										})
 									]
 								}),
-								BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN.discoverycardiconwrapper,
-									children: BDFDB.ReactUtils.createElement("div", {
-										className: BDFDB.disCN.discoverycardicon,
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-											nativeClass: true,
-											iconSVG: `<svg width="100%" height="100%" viewBox="0 0 24 24"><path fill="currentColor" d="m 14.69524,1.9999881 c -0.17256,0 -0.34519,0.065 -0.47686,0.1969 L 8.8655531,7.5498683 16.449675,15.134198 21.802502,9.7812182 c 0.26333,-0.2633 0.26333,-0.6904 0,-0.9537 L 20.7902,7.8168183 c -0.22885,-0.2289 -0.58842,-0.2633 -0.85606,-0.081 l -2.127134,1.4452499 1.437076,-2.1418399 c 0.17949,-0.2675 0.14486,-0.6251001 -0.083,-0.8528001 l -2.195488,-2.19433 c -0.20264,-0.2026 -0.51169,-0.2562 -0.7698,-0.1318 l -0.37921,0.1839 0.18228,-0.4036001 c 0.11521,-0.2555 0.0599,-0.5553 -0.13834,-0.7535 l -0.68843,-0.6901 c -0.131639,-0.13172 -0.30429,-0.19701 -0.476854,-0.19701 z M 7.8695308,8.5459582 6.3201566,10.095378 c -0.126449,0.1264 -0.196927,0.298 -0.196927,0.4769 0,0.1788 0.07043,0.3505 0.196927,0.4769 l 1.469627,1.46967 c 0.283151,0.2832 0.421272,0.6744 0.377578,1.07255 -0.04365,0.3979 -0.264001,0.7495 -0.602173,0.9651 -4.3184212,2.75283 -4.720939,3.15533 -4.853187,3.28763 -0.9493352,0.9493 -0.9493352,2.494471 0,3.443871 0.9502793,0.9503 2.4954759,0.9484 3.4437772,0 0.132338,-0.1323 0.534965,-0.535 3.2875378,-4.853321 0.215049,-0.3374 0.5670574,-0.5568 0.9651044,-0.6006 0.399307,-0.044 0.790042,0.094 1.072518,0.376 l 1.469626,1.46967 c 0.26328,0.2633 0.69043,0.2633 0.95371,0 l 1.549374,-1.54942 z M 4.4762059,18.571608 c 0.243902,0 0.487705,0.092 0.673783,0.2783 0.3722,0.3722 0.3722,0.975401 0,1.347601 -0.3722,0.3722 -0.97541,0.3722 -1.3475649,0 -0.3722,-0.3722 -0.3722,-0.975401 0,-1.347601 0.1861,-0.1861 0.42988,-0.2783 0.6737819,-0.2783 z"/></svg>`
-										})
-									})
-								})
+								BDFDB.ReactUtils.createElement(class extends BDFDB.ReactUtils.Component {
+									render() {
+										return BDFDB.ReactUtils.createElement("div", {
+											className: BDFDB.disCN.discoverycardiconwrapper,
+											children: this.props.data.author && this.props.data.author.discord_avatar_hash && this.props.data.author.discord_snowflake && !this.props.data.author.discord_avatar_failed ? BDFDB.ReactUtils.createElement("img", {
+												className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.discoverycardicon, !this.props.data.author.discord_avatar_loaded && BDFDB.disCN.discoverycardiconloading),
+												src: `https://cdn.discordapp.com/avatars/${this.props.data.author.discord_snowflake}/${this.props.data.author.discord_avatar_hash}.webp?size=128`,
+												onLoad: _ => {
+													this.props.data.author.discord_avatar_loaded = true;
+													BDFDB.ReactUtils.forceUpdate(this);
+												},
+												onError: _ => {
+													this.props.data.author.discord_avatar_failed = true;
+													BDFDB.ReactUtils.forceUpdate(this);
+												}
+											}) : BDFDB.ReactUtils.createElement("div", {
+												className: BDFDB.disCN.discoverycardicon,
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+													nativeClass: true,
+													iconSVG: `<svg width="100%" height="100%" viewBox="0 0 24 24"><path fill="currentColor" d="m 14.69524,1.9999881 c -0.17256,0 -0.34519,0.065 -0.47686,0.1969 L 8.8655531,7.5498683 16.449675,15.134198 21.802502,9.7812182 c 0.26333,-0.2633 0.26333,-0.6904 0,-0.9537 L 20.7902,7.8168183 c -0.22885,-0.2289 -0.58842,-0.2633 -0.85606,-0.081 l -2.127134,1.4452499 1.437076,-2.1418399 c 0.17949,-0.2675 0.14486,-0.6251001 -0.083,-0.8528001 l -2.195488,-2.19433 c -0.20264,-0.2026 -0.51169,-0.2562 -0.7698,-0.1318 l -0.37921,0.1839 0.18228,-0.4036001 c 0.11521,-0.2555 0.0599,-0.5553 -0.13834,-0.7535 l -0.68843,-0.6901 c -0.131639,-0.13172 -0.30429,-0.19701 -0.476854,-0.19701 z M 7.8695308,8.5459582 6.3201566,10.095378 c -0.126449,0.1264 -0.196927,0.298 -0.196927,0.4769 0,0.1788 0.07043,0.3505 0.196927,0.4769 l 1.469627,1.46967 c 0.283151,0.2832 0.421272,0.6744 0.377578,1.07255 -0.04365,0.3979 -0.264001,0.7495 -0.602173,0.9651 -4.3184212,2.75283 -4.720939,3.15533 -4.853187,3.28763 -0.9493352,0.9493 -0.9493352,2.494471 0,3.443871 0.9502793,0.9503 2.4954759,0.9484 3.4437772,0 0.132338,-0.1323 0.534965,-0.535 3.2875378,-4.853321 0.215049,-0.3374 0.5670574,-0.5568 0.9651044,-0.6006 0.399307,-0.044 0.790042,0.094 1.072518,0.376 l 1.469626,1.46967 c 0.26328,0.2633 0.69043,0.2633 0.95371,0 l 1.549374,-1.54942 z M 4.4762059,18.571608 c 0.243902,0 0.487705,0.092 0.673783,0.2783 0.3722,0.3722 0.3722,0.975401 0,1.347601 -0.3722,0.3722 -0.97541,0.3722 -1.3475649,0 -0.3722,-0.3722 -0.3722,-0.975401 0,-1.347601 0.1861,-0.1861 0.42988,-0.2783 0.6737819,-0.2783 z"/></svg>`
+												})
+											})
+										});
+									}
+								}, this.props)
 							]							
 						}),
 						BDFDB.ReactUtils.createElement("div", {
@@ -779,6 +792,20 @@ module.exports = (_ => {
 												BDFDB.ReactUtils.forceUpdate(this);
 											}
 										}),
+										this.props.data.latestSourceUrl && 
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+											text: BDFDB.LanguageUtils.LanguageStrings.SCREENSHARE_SOURCE,
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+												className: BDFDB.disCN.discoverycardtitlebutton,
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+													nativeClass: true,
+													width: 16,
+													height: 16,
+													name: BDFDB.LibraryComponents.SvgIcon.Names.GITHUB
+												})
+											}),
+											onClick: _ => BDFDB.DiscordUtils.openLink(this.props.data.latestSourceUrl)
+										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
 											className: BDFDB.disCN.discoverycardtitlebutton,
 											isFavorite: this.props.data.fav,
@@ -793,7 +820,7 @@ module.exports = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.discoverycardauthor,
-									children: `by ${this.props.data.author}`
+									children: `by ${this.props.data.authorname}`
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Scrollers.Thin, {
 									className: BDFDB.disCN.discoverycarddescription,
@@ -841,6 +868,7 @@ module.exports = (_ => {
 												BDFDB.ReactUtils.createElement(RepoCardDownloadButtonComponent, {
 													...buttonData[(Object.entries(themeStates).find(n => n[1] == this.props.data.state) || [])[0]],
 													installed: this.props.data.state == themeStates.INSTALLED,
+													outdated: this.props.data.state == themeStates.OUTDATED,
 													onDownload: _ => {
 														list && BDFDB.LibraryRequires.request(this.props.data.rawSourceUrl, (error, response, body) => {
 															if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Theme "${this.props.data.name}"`), {type: "danger"});
@@ -874,30 +902,37 @@ module.exports = (_ => {
 		
 		const RepoCardDownloadButtonComponent = class ThemeCardDownloadButton extends BdApi.React.Component {
 			render() {
+				const backgroundColor = this.props.doDelete ? buttonData.OUTDATED.backgroundColor : this.props.doUpdate ? buttonData.INSTALLED.backgroundColor : this.props.backgroundColor;
 				return BDFDB.ReactUtils.createElement("button", {
 					className: BDFDB.disCN.discoverycardbutton,
-					style: {backgroundColor: this.props.delete ? BDFDB.DiscordConstants.Colors.STATUS_RED : (BDFDB.DiscordConstants.Colors[this.props.backgroundColor] || this.props.backgroundColor)},
+					style: {backgroundColor: BDFDB.DiscordConstants.Colors[backgroundColor] || backgroundColor},
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 							className: BDFDB.disCN.discoverycardstaticon,
 							width: 16,
 							height: 16,
-							name: this.props.delete ? BDFDB.LibraryComponents.SvgIcon.Names.TRASH : BDFDB.LibraryComponents.SvgIcon.Names[this.props.icon]
+							name: this.props.doDelete ? BDFDB.LibraryComponents.SvgIcon.Names.TRASH : this.props.doUpdate ? BDFDB.LibraryComponents.SvgIcon.Names.DOWNLOAD : BDFDB.LibraryComponents.SvgIcon.Names[this.props.icon]
 						}),
-						this.props.delete ? BDFDB.LanguageUtils.LanguageStrings.APPLICATION_CONTEXT_MENU_UNINSTALL : (BDFDB.LanguageUtils.LibraryStringsCheck[this.props.text] ? BDFDB.LanguageUtils.LibraryStrings[this.props.text] : BDFDB.LanguageUtils.LanguageStrings[this.props.text])
+						this.props.doDelete ? BDFDB.LanguageUtils.LanguageStrings.APPLICATION_CONTEXT_MENU_UNINSTALL : this.props.doUpdate ? BDFDB.LanguageUtils.LanguageStrings.GAME_ACTION_BUTTON_UPDATE : (BDFDB.LanguageUtils.LibraryStringsCheck[this.props.text] ? BDFDB.LanguageUtils.LibraryStrings[this.props.text] : BDFDB.LanguageUtils.LanguageStrings[this.props.text])
 					],
 					onClick: _ => {
-						if (this.props.delete) typeof this.props.onDelete == "function" && this.props.onDelete();
-						else typeof this.props.onDelete == "function" && this.props.onDownload();
+						if (this.props.doDelete) typeof this.props.onDelete == "function" && this.props.onDelete();
+						else typeof this.props.onDownload == "function" && this.props.onDownload();
 					},
-					onMouseEnter: this.props.installed && (_ => {
-						this.props.delete = true;
+					onMouseEnter: this.props.installed ? (_ => {
+						this.props.doDelete = true;
 						BDFDB.ReactUtils.forceUpdate(this);
-					}),
-					onMouseLeave: this.props.installed && (_ => {
-						this.props.delete = false;
+					}) : this.props.outdated ? (_ => {
+						this.props.doUpdate = true;
 						BDFDB.ReactUtils.forceUpdate(this);
-					})
+					}) : (_ => {}),
+					onMouseLeave: this.props.installed ? (_ => {
+						this.props.doDelete = false;
+						BDFDB.ReactUtils.forceUpdate(this);
+					}) : this.props.outdated ? (_ => {
+						this.props.doUpdate = false;
+						BDFDB.ReactUtils.forceUpdate(this);
+					}) : (_ => {})
 				});
 			}
 		};
@@ -978,7 +1013,7 @@ module.exports = (_ => {
 											label: sortKeys[this.props.sortKey],
 											value: this.props.sortKey
 										},
-										options: Object.keys(sortKeys).filter(n => n != "NEW" || grabbedThemes.some(t => !cachedThemes.includes(t.id))).map(key => ({
+										options: Object.keys(sortKeys).map(key => ({
 											label: sortKeys[key],
 											value: key
 										})),
@@ -1136,8 +1171,32 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				// REMOVE 01.05.2021
-				BDFDB.DataUtils.remove(this, "newentriesdata");
+				BDFDB.PatchUtils.patch(this, (BDFDB.ModuleUtils.findByName("SettingsView") || {}).prototype, "getPredicateSections", {after: e => {
+					if (BDFDB.ArrayUtils.is(e.returnValue) && e.returnValue.findIndex(n => n.section && (n.section.toLowerCase() == "changelog" || n.section == BDFDB.DiscordConstants.UserSettingsSections.CHANGE_LOG || n.section.toLowerCase() == "logout" || n.section == BDFDB.DiscordConstants.UserSettingsSections.LOGOUT))) {
+						e.returnValue = e.returnValue.filter(n => n.section != "themerepo");
+						let index = e.returnValue.indexOf(e.returnValue.find(n => n.section == "pluginrepo") || e.returnValue.find(n => n.section == "themes") || e.returnValue.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS) || e.returnValue.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.HYPESQUAD_ONLINE));
+						if (index > -1) {
+							e.returnValue.splice(index + 1, 0, {
+								section: "themerepo",
+								label: "Theme Repo",
+								element: _ => {
+									let options = Object.assign({}, this.settings.filters);
+									options.updated = options.updated && !showOnlyOutdated;
+									options.outdated = options.outdated || showOnlyOutdated;
+									options.downloadable = options.downloadable && !showOnlyOutdated;
+									options.sortKey = forcedSort || Object.keys(sortKeys)[0];
+									options.orderKey = forcedOrder || Object.keys(orderKeys)[0];
+									options.useLightMode = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
+									options.useThemeFixer = false;
+									options.useCustomCSS = false;
+									
+									return BDFDB.ReactUtils.createElement(RepoListComponent, options);
+								}
+							});
+							if (!e.returnValue.find(n => n.section == "plugins" || n.section == "pluginrepo")) e.returnValue.splice(index + 1, 0, {section: "DIVIDER"});
+						}
+					}
+				}});
 				
 				this.forceUpdateAll();
 
@@ -1184,30 +1243,6 @@ module.exports = (_ => {
 			
 			processSettingsView (e) {
 				if (e.node) searchString = "";
-				else if (BDFDB.ArrayUtils.is(e.instance.props.sections) && e.instance.props.sections[0] && e.instance.props.sections[0].label == BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS) {
-					e.instance.props.sections = e.instance.props.sections.filter(n => n.section != "themerepo");
-					let index = e.instance.props.sections.indexOf(e.instance.props.sections.find(n => n.section == "pluginrepo") || e.instance.props.sections.find(n => n.section == "themes") || e.instance.props.sections.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS) || e.instance.props.sections.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.HYPESQUAD_ONLINE));
-					if (index > -1) {
-						e.instance.props.sections.splice(index + 1, 0, {
-							section: "themerepo",
-							label: "Theme Repo",
-							element: _ => {
-								let options = Object.assign({}, this.settings.filters);
-								options.updated = options.updated && !showOnlyOutdated;
-								options.outdated = options.outdated || showOnlyOutdated;
-								options.downloadable = options.downloadable && !showOnlyOutdated;
-								options.sortKey = forcedSort || Object.keys(sortKeys)[0];
-								options.orderKey = forcedOrder || Object.keys(orderKeys)[0];
-								options.useLightMode = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
-								options.useThemeFixer = false;
-								options.useCustomCSS = false;
-								
-								return BDFDB.ReactUtils.createElement(RepoListComponent, options);
-							}
-						});
-						if (!e.instance.props.sections.find(n => n.section == "plugins" || n.section == "pluginrepo")) e.instance.props.sections.splice(index + 1, 0, {section: "DIVIDER"});
-					}
-				}
 			}
 			
 			processStandardSidebarView (e) {
@@ -1243,7 +1278,7 @@ module.exports = (_ => {
 				
 				const checkTheme = _ => {
 					if (checksRunning > 20) return;
-					else if (grabbedThemes.every(t => t.loaded || !t.latestSourceUrl) || !this.started || !loading.is) {
+					else if (grabbedThemes.every(t => t.loaded || (!t.latestSourceUrl && !t.latest_source_url)) || !this.started || !loading.is) {
 						if (!callbackCalled) {
 							callbackCalled = true;
 							if (!this.started) return BDFDB.TimeUtils.clear(loading.timeout);
@@ -1283,7 +1318,7 @@ module.exports = (_ => {
 										contents: BDFDB.LanguageUtils.LanguageStrings.OPEN,
 										close: true,
 										onClick: _ => {
-											forcedSort = "NEW";
+											forcedSort = "RELEASEDATE";
 											forcedOrder = "ASC";
 											BDFDB.LibraryModules.UserSettingsUtils.open("themerepo");
 										}
@@ -1313,18 +1348,24 @@ module.exports = (_ => {
 					else if (checkIndex > grabbedThemes.length) return;
 					
 					const theme = grabbedThemes[checkIndex++];
-					if (!theme || !theme.latestSourceUrl) checkTheme();
+					if (!theme || (!theme.latestSourceUrl && !theme.latest_source_url)) checkTheme();
 					else {
 						checksRunning++;
+						theme.releasedate = new Date(theme.releaseDate || theme.release_date || 0).getTime();
+						theme.latestSourceUrl = theme.latestSourceUrl || theme.latest_source_url;
 						theme.rawSourceUrl = theme.latestSourceUrl.replace("https://github.com/", "https://raw.githubusercontent.com/").replace(/\/blob\/(.{32,})/i, "/$1");
+						theme.thumbnailUrl = theme.thumbnailUrl || theme.thumbnail_url;
 						theme.thumbnailUrl = theme.thumbnailUrl ? (theme.thumbnailUrl.startsWith("https://") ? theme.thumbnailUrl : `https://betterdiscord.app${theme.thumbnailUrl}`) : "";
+						delete theme.release_date;
+						delete theme.latest_source_url;
+						delete theme.thumbnail_url;
 						BDFDB.LibraryRequires.request(theme.rawSourceUrl, (error, response, body) => {
 							if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
-								theme.name = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar((/@name\s+([^\s^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || theme.name || "");
-								theme.author = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || theme.author;
+								theme.name = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar((/@name\s+([^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || theme.name || "");
+								theme.authorname = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || theme.author.display_name || theme.author;
 								const version = (/@version\s+(.+)|\/\/\**META.*["']version["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1];
-								if (version) {
-									theme.version = version;
+								if (version) theme.version = version;
+								if (theme.version) {
 									const installedTheme = this.getInstalledTheme(theme);
 									if (installedTheme && BDFDB.NumberUtils.compareVersions(version, this.getString(installedTheme.version))) outdatedEntries++;
 								}
@@ -1365,6 +1406,7 @@ module.exports = (_ => {
 				BDFDB.LibraryRequires.request("https://api.betterdiscord.app/v1/store/themes", (error, response, body) => {
 					if (!error && body) try {
 						grabbedThemes = BDFDB.ArrayUtils.keySort(JSON.parse(body).filter(n => n), "name");
+						
 						BDFDB.DataUtils.save(BDFDB.ArrayUtils.numSort(grabbedThemes.map(n => n.id)).join(" "), this, "cached");
 						
 						loading = {is: true, timeout: BDFDB.TimeUtils.timeout(_ => {
@@ -1410,12 +1452,12 @@ module.exports = (_ => {
 			}
 			
 			getInstalledTheme (theme) {
-				if (!theme || typeof theme.author != "string") return;
+				if (!theme || typeof theme.authorname != "string") return;
 				const iTheme = BDFDB.BDUtils.getTheme(theme.name, false, true);
-				if (iTheme && theme.author.toUpperCase() == this.getString(iTheme.author).toUpperCase()) return iTheme;
+				if (iTheme && theme.authorname.toUpperCase() == this.getString(iTheme.author).toUpperCase()) return iTheme;
 				else if (theme.rawSourceUrl && window.BdApi && BdApi.Themes && typeof BdApi.Themes.getAll == "function") {
 					const filename = theme.rawSourceUrl.split("/").pop();
-					for (let t of BdApi.Themes.getAll()) if (t.filename == filename && theme.author.toUpperCase() == this.getString(t.author).toUpperCase()) return t;
+					for (let t of BdApi.Themes.getAll()) if (t.filename == filename && theme.authorname.toUpperCase() == this.getString(t.author).toUpperCase()) return t;
 				}
 			}
 

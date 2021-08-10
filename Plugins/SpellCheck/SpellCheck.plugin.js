@@ -2,7 +2,7 @@
  * @name SpellCheck
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.6
+ * @version 1.5.7
  * @description Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,20 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpellCheck",
 			"author": "DevilBro",
-			"version": "1.5.6",
+			"version": "1.5.7",
 			"description": "Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary"
 		}
 	};
 	
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -61,7 +69,6 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var languages, dictionaries, langDictionaries, languageToasts, checkTimeout, currentText;
-		var settings = {}, choices = {}, amounts = {};
 	
 		return class SpellCheck extends Plugin {
 			onLoad () {
@@ -71,15 +78,15 @@ module.exports = (_ => {
 				languageToasts = {};
 				
 				this.defaults = {
-					settings: {
-						downloadDictionary:			{value: false, 								description: "Use local dictionary file (downloads dictionary on first usage)"}
+					general: {
+						downloadDictionary:			{value: false, 								description: "Use local Dictionary File (downloads Dictionary on first Usage)"}
 					},
 					choices: {
-						dictionaryLanguage:			{value: "en", 	force: true,				description: "Primary Language: "},
-						secondaryLanguage:			{value: "-", 	force: false,				description: "Secondary Language: "}
+						dictionaryLanguage:			{value: "en", 	force: true,				description: "Primary Language"},
+						secondaryLanguage:			{value: "-", 	force: false,				description: "Secondary Language"}
 					},
 					amounts: {
-						maxSimilarAmount:			{value: 6, 		min: 1,		max: 30,		description: "Maximal Amount of suggested Words: "}
+						maxSimilarAmount:			{value: 6, 		min: 1,		max: 30,		description: "Maximal Amount of suggested Words"}
 					}
 				};
 			
@@ -97,26 +104,34 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				// REMOVE 28.05.2021
+				let oldData = BDFDB.DataUtils.load(this);
+				if (oldData.settings) {
+					this.settings.general = oldData.settings;
+					BDFDB.DataUtils.save(this.settings.general, this, "general");
+					BDFDB.DataUtils.remove(this, "settings");
+				}
+				
 				BDFDB.LibraryRequires.request("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpellCheck/dic", (error, response, body) => {
 					let dictionaryLanguageIds = Array.from(BDFDB.DOMUtils.create(body).querySelectorAll(`[href*="/mwittrien/BetterDiscordAddons/blob/master/Plugins/SpellCheck/dic/"]`)).map(n => n.innerText.split(".")[0]).filter(n => n);
 					languages = BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, langId => dictionaryLanguageIds.includes(langId), true);
 					
 					if (BDFDB.LibraryModules.SpellCheckStore && BDFDB.LibraryModules.SpellCheckStore.isEnabled()) BDFDB.LibraryModules.SpellCheckUtils.toggleSpellcheck();
 
-					this.forceUpdateAll();
+					BDFDB.PatchUtils.forceAllUpdates(this);
 					
-					for (let key in choices) {
-						if (key == "dictionaryLanguage" && !languages[choices[key]]) {
-							choices[key] = "en";
-							BDFDB.DataUtils.save(choices[key], this, "choices", key);
+					for (let key in this.settings.choices) {
+						if (key == "dictionaryLanguage" && !languages[this.settings.choices[key]]) {
+							this.settings.choices[key] = "en";
+							BDFDB.DataUtils.save(this.settings.choices[key], this, "choices", key);
 						}
-						this.setDictionary(key, choices[key]);
+						this.setDictionary(key, this.settings.choices[key]);
 					}
 				});
 			}
 			
 			onStop () {
-				this.forceUpdateAll();
+				BDFDB.PatchUtils.forceAllUpdates(this);
 				
 				BDFDB.DOMUtils.remove(BDFDB.dotCN._spellcheckoverlay);
 
@@ -124,78 +139,77 @@ module.exports = (_ => {
 			}
 
 			getSettingsPanel (collapseStates = {}) {
-				let ownDictionary = BDFDB.DataUtils.load(this, "owndics", choices.dictionaryLanguage) || [];
-				let settingsPanel, settingsItems = [];
+				let ownDictionary = BDFDB.DataUtils.load(this, "owndics", this.settings.choices.dictionaryLanguage) || [];
 				
-				for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					className: BDFDB.disCN.marginbottom8,
-					type: "Switch",
-					plugin: this,
-					keys: ["settings", key],
-					label: this.defaults.settings[key].description,
-					value: settings[key]
-				}));
+				let settingsPanel;
+				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, {
+					collapseStates: collapseStates,
+					children: _ => {
+						let settingsItems = [];
 				
-				for (let key in choices) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					className: BDFDB.disCN.marginbottom8,
-					type: "Select",
-					plugin: this,
-					keys: ["choices", key],
-					label: this.defaults.choices[key].description,
-					basis: "70%",
-					value: choices[key],
-					options: (this.defaults.choices[key].force ? [] : [{value: "-", label: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_NOTHING}]).concat(BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => ({value: id, label: this.getLanguageName(lang)})))),
-					searchable: true,
-					onChange: value => {
-						this.setDictionary(key, value);
-						BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel);
+						for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							className: BDFDB.disCN.marginbottom8,
+							type: "Switch",
+							plugin: this,
+							keys: ["general", key],
+							label: this.defaults.general[key].description,
+							value: this.settings.general[key]
+						}));
+						
+						for (let key in this.defaults.choices) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							className: BDFDB.disCN.marginbottom8,
+							type: "Select",
+							plugin: this,
+							keys: ["choices", key],
+							label: this.defaults.choices[key].description,
+							basis: "70%",
+							value: this.settings.choices[key],
+							options: (this.defaults.choices[key].force ? [] : [{value: "-", label: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_NOTHING}]).concat(BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => ({value: id, label: this.getLanguageName(lang)})))),
+							searchable: true,
+							onChange: value => {
+								this.setDictionary(key, value);
+								BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel);
+							}
+						}));
+						
+						for (let key in this.defaults.amounts) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							className: BDFDB.disCN.marginbottom8,
+							type: "TextInput",
+							childProps: {
+								type: "number"
+							},
+							plugin: this,
+							keys: ["amounts", key],
+							label: this.defaults.amounts[key].description,
+							basis: "20%",
+							min: this.defaults.amounts[key].min,
+							max: this.defaults.amounts[key].max,
+							value: this.settings.amounts[key]
+						}));
+						
+						if (ownDictionary.length) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							title: "Your own Dictionary:",
+							children: ownDictionary.map(word => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
+								children: word.toLowerCase(),
+								onRemove: _ => {
+									BDFDB.ArrayUtils.remove(ownDictionary, word);
+									BDFDB.DataUtils.save(ownDictionary, this, "owndics", this.settings.choices.dictionaryLanguage);
+									dictionaries.dictionaryLanguage = this.formatDictionary(langDictionaries.dictionaryLanguage.concat(ownDictionary));
+									BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel);
+								}
+							}))
+						}));
+						
+						return settingsItems;
 					}
-				}));
-				
-				for (let key in amounts) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					className: BDFDB.disCN.marginbottom8,
-					type: "TextInput",
-					childProps: {
-						type: "number"
-					},
-					plugin: this,
-					keys: ["amounts", key],
-					label: this.defaults.amounts[key].description,
-					basis: "20%",
-					min: this.defaults.amounts[key].min,
-					max: this.defaults.amounts[key].max,
-					value: amounts[key]
-				}));
-				
-				if (ownDictionary.length) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-					title: "Your own Dictionary:",
-					children: ownDictionary.map(word => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
-						children: word.toLowerCase(),
-						onRemove: _ => {
-							BDFDB.ArrayUtils.remove(ownDictionary, word);
-							BDFDB.DataUtils.save(ownDictionary, this, "owndics", choices.dictionaryLanguage);
-							dictionaries.dictionaryLanguage = this.formatDictionary(langDictionaries.dictionaryLanguage.concat(ownDictionary));
-							BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel);
-						}
-					}))
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+				});
 			}
 
 			onSettingsClosed () {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
-					this.forceUpdateAll();
+					BDFDB.PatchUtils.forceAllUpdates(this);
 				}
-			}
-		
-			forceUpdateAll () {
-				settings = BDFDB.DataUtils.get(this, "settings");
-				choices = BDFDB.DataUtils.get(this, "choices");
-				amounts = BDFDB.DataUtils.get(this, "amounts");
-				
-				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 
 			onSlateContextMenu (e) {
@@ -323,12 +337,12 @@ module.exports = (_ => {
 				word = word.split(" ")[0].split("\n")[0].split("\r")[0].split("\t")[0];
 				if (word) {
 					let wordLow = word.toLowerCase();
-					if (languages[choices.dictionaryLanguage]) {
-						let ownDictionary = BDFDB.DataUtils.load(this, "owndics", choices.dictionaryLanguage) || [];
+					if (languages[this.settings.choices.dictionaryLanguage]) {
+						let ownDictionary = BDFDB.DataUtils.load(this, "owndics", this.settings.choices.dictionaryLanguage) || [];
 						if (!ownDictionary.includes(wordLow)) {
 							ownDictionary.push(wordLow);
-							BDFDB.DataUtils.save(ownDictionary, this, "owndics", choices.dictionaryLanguage);
-							BDFDB.NotificationUtils.toast(this.labels.toast_wordadd.replace("{{var0}}", word).replace("{{var1}}", this.getLanguageName(languages[choices.dictionaryLanguage])), {type: "success"});
+							BDFDB.DataUtils.save(ownDictionary, this, "owndics", this.settings.choices.dictionaryLanguage);
+							BDFDB.NotificationUtils.toast(this.labels.toast_wordadd.replace("{{var0}}", word).replace("{{var1}}", this.getLanguageName(languages[this.settings.choices.dictionaryLanguage])), {type: "success"});
 							dictionaries.dictionaryLanguage = this.formatDictionary(langDictionaries.dictionaryLanguage.concat(ownDictionary));
 						}
 					}
@@ -367,7 +381,7 @@ module.exports = (_ => {
 								if (!BDFDB.LibraryRequires.fs.existsSync(folder)) BDFDB.LibraryRequires.fs.mkdirSync(folder);
 								BDFDB.LibraryRequires.fs.writeFile(filePath, body, _ => {});
 							}
-							langDictionaries[key] = body.toLowerCase().replace(/\r/g, "").split("\n");
+							langDictionaries[key] = body.toLowerCase().replace(/\r/g, "").replace(/\s/g, "\n").split("\n");
 							dictionaries[key] = this.formatDictionary(langDictionaries[key].concat(ownDictionary));
 							BDFDB.NotificationUtils.toast(this.labels.toast_dictionary_success.replace("{{var0}}", this.getLanguageName(languages[lang])), {
 								type: "success",
@@ -376,11 +390,11 @@ module.exports = (_ => {
 						}
 					};
 					
-					if (settings.downloadDictionary && BDFDB.LibraryRequires.fs.existsSync(filePath)) BDFDB.LibraryRequires.fs.readFile(filePath, (error, buffer) => {
+					if (this.settings.general.downloadDictionary && BDFDB.LibraryRequires.fs.existsSync(filePath)) BDFDB.LibraryRequires.fs.readFile(filePath, (error, buffer) => {
 						parse(error, buffer, buffer.toString(), false);
 					});
 					else BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, body) => {
-						parse(error, response, body, settings.downloadDictionary);
+						parse(error, response, body, this.settings.general.downloadDictionary);
 					});
 				}
 				else {
@@ -424,7 +438,7 @@ module.exports = (_ => {
 
 			getSimilarWords (word) {
 				let similarWords = [];
-				if (amounts.maxSimilarAmount > 0) {
+				if (this.settings.amounts.maxSimilarAmount > 0) {
 					let firstLetterLower = word.charAt(0).toLowerCase();
 					let possibilities = [];
 					for (let key in dictionaries) if (dictionaries[key] && dictionaries[key][firstLetterLower]) possibilities = possibilities.concat(BDFDB.ObjectUtils.toArray(dictionaries[key][firstLetterLower]).flat());
@@ -438,13 +452,13 @@ module.exports = (_ => {
 					let amount = 0;
 					for (let value of Object.keys(similarities).sort().reverse()) {
 						for (let similarWord of similarities[value]) {
-							if (amount < amounts.maxSimilarAmount && !similarWords.includes(similarWord)) {
+							if (amount < this.settings.amounts.maxSimilarAmount && !similarWords.includes(similarWord)) {
 								similarWords.push(similarWord);
 								amount++;
 							}
-							if (amount >= amounts.maxSimilarAmount) break;
+							if (amount >= this.settings.amounts.maxSimilarAmount) break;
 						}
-						if (amount >= amounts.maxSimilarAmount) break;
+						if (amount >= this.settings.amounts.maxSimilarAmount) break;
 					}
 				}
 				return similarWords;

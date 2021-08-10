@@ -27,7 +27,15 @@ module.exports = (_ => {
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -121,6 +129,7 @@ module.exports = (_ => {
 						position: relative;
 						top: -1px;
 						margin-right: 6px;
+						background-color: var(--background-accent);
 					}
 					${BDFDB.dotCN._pindmspinnedchannelsheaderarrow} {
 						flex: 0;
@@ -399,11 +408,11 @@ module.exports = (_ => {
 					else {
 						if (typeof e.returnvalue.props.children == "function") {
 							let childrenRender = e.returnvalue.props.children;
-							e.returnvalue.props.children = (...args) => {
+							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 								let children = childrenRender(...args);
 								this.injectCategories(e.instance, children, categories);
 								return children;
-							};
+							}, "", this);
 						}
 						else this.injectCategories(e.instance, e.returnvalue, categories);
 					}
@@ -591,13 +600,12 @@ module.exports = (_ => {
 										}),
 										unreadAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
 											className: BDFDB.disCN._pindmspinnedchannelsheaderamount,
-											count: unreadAmount,
-											style: {backgroundColor: BDFDB.DiscordConstants.Colors.STATUS_RED}
+											count: unreadAmount
 										}) : null,
 										this.settings.general.channelAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
 											className: BDFDB.disCN._pindmspinnedchannelsheaderamount,
 											count: foundDMs.length,
-											style: {backgroundColor: "var(--bdfdb-blurple)"}
+											disableColor: true
 										}) : null,
 										BDFDB.ReactUtils.createElement("div", {
 											className: BDFDB.disCNS._pindmspinnedchannelsheaderarrow + BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
@@ -1064,6 +1072,19 @@ module.exports = (_ => {
 							header_pinneddms:					"Закачени директни съобщения",
 							modal_colorpicker1:					"Категория цвят"
 						};
+					case "cs":		// Czech
+						return {
+							context_addtonewcategory:			"Přidat do nové kategorie",
+							context_disablepredefined:			"Deaktivovat předdefinovanou kategorii",
+							context_inpredefined:				"Připnuté v předdefinované katrgorii",
+							context_pinchannel:					"Připnout do seznamu kanálů",
+							context_pindm:						"Připnout do PZ",
+							context_pinguild:					"Připnout do seznamu serverů",
+							context_unpinchannel:				"Odepnout ze seznamu kanálů",
+							context_unpinguild:					"Odepnout ze seznamu serverů",
+							header_pinneddms:					"Připnuté přímé zprávy",
+							modal_colorpicker1:					"Barva kategorie"
+						};
 					case "da":		// Danish
 						return {
 							context_addtonewcategory:			"Føj til ny kategori",
@@ -1141,6 +1162,19 @@ module.exports = (_ => {
 							context_unpinguild:					"Détacher de la liste des serveurs",
 							header_pinneddms:					"Messages privés épinglés",
 							modal_colorpicker1:					"Couleur de la catégorie"
+						};
+					case "hi":		// Hindi
+						return {
+							context_addtonewcategory:			"नई श्रेणी में जोड़ें",
+							context_disablepredefined:			"पूर्वनिर्धारित श्रेणी को निष्क्रिय करें",
+							context_inpredefined:				"एक पूर्वनिर्धारित श्रेणी में पिन किया गया",
+							context_pinchannel:					"चैनल सूची में पिन करें",
+							context_pindm:						"पिन डीएम",
+							context_pinguild:					"सर्वर सूची में पिन करें",
+							context_unpinchannel:				"चैनल सूची से अलग करें",
+							context_unpinguild:					"सर्वर सूची से अलग करें",
+							header_pinneddms:					"पिन किए गए सीधे संदेश",
+							modal_colorpicker1:					"श्रेणी रंग"
 						};
 					case "hr":		// Croatian
 						return {

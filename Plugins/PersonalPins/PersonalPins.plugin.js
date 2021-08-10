@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.2
+ * @version 2.0.5
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,25 @@ module.exports = (_ => {
 		"info": {
 			"name": "PersonalPins",
 			"author": "DevilBro",
-			"version": "2.0.2",
+			"version": "2.0.5",
 			"description": "Allows you to locally pin Messages"
+		},
+		"changeLog": {
+			"fixed": {
+				"Canary Crash": ""
+			}
 		}
 	};
 
-	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return (window.Lightcord || window.LightCord) ? class {
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return "Do not use LightCord!";}
+		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
+		start() {}
+		stop() {}
+	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -73,6 +86,7 @@ module.exports = (_ => {
 		const orderKeys = ["ascending", "descending"];
 		
 		const popoutProps = {};
+		let notes = {};
 	
 		const NotesPopoutComponent = class NotesPopout extends BdApi.React.Component {
 			containsSearchkey(data, key, searchKey) {
@@ -80,7 +94,7 @@ module.exports = (_ => {
 				return value && value.toUpperCase().indexOf(searchKey) > -1;
 			}
 			filterMessages() {
-				let messages = [], notes = BDFDB.DataUtils.load(_this, "notes"), updateData = false;
+				let messages = [], updateData = false;
 				for (let guild_id in notes) for (let channel_id in notes[guild_id]) for (let message_idPOS in notes[guild_id][channel_id]) {
 					let message = JSON.parse(notes[guild_id][channel_id][message_idPOS].message);
 					message.author = new BDFDB.DiscordObjects.User(message.author);
@@ -113,6 +127,7 @@ module.exports = (_ => {
 					});
 				}
 				if (updateData) BDFDB.DataUtils.save(notes, _this, "notes");
+				let allCount = messages.length;
 				let currentChannel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId()) || {};
 				switch (popoutProps.selectedFilter.value) {
 					case "channel":
@@ -132,12 +147,7 @@ module.exports = (_ => {
 				}
 				BDFDB.ArrayUtils.keySort(messages, popoutProps.selectedSort.value);
 				if (popoutProps.selectedOrder.value != "descending") messages.reverse();
-				return Object.keys(messages).length ? 
-					messages.map(messageData => this.renderMessage(messageData.note, messageData.message, messageData.channel)).flat(10).filter(n => n) :
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateCenter, {
-						msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
-						image: BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight ? "/assets/03c7541028afafafd1a9f6a81cb7f149.svg" : "/assets/6793e022dc1b065b21f12d6df02f91bd.svg"
-					});
+				return [messages, allCount];
 			}
 			renderMessage(note, message, channel) {
 				if (!message || !channel) return null;
@@ -151,87 +161,92 @@ module.exports = (_ => {
 						channelName = channelName + ((BDFDB.LibraryModules.UserStore.getUser(dmuser_id) || {}).username || BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER);
 					}
 				}
-				return [popoutProps.selectedFilter.value == "channel" ? null : BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCN.messagespopoutchannelseparator,
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-							tag: "span",
-							className: BDFDB.disCN.messagespopoutchannelname,
-							onClick: _ => BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id)),
-							children: channelName ? ((channel.guild_id ? "#" : "@") + channelName) : "???"
-						}),
-						popoutProps.selectedFilter.value == "all" ? BDFDB.ReactUtils.createElement("span", {
-							className: BDFDB.disCN.messagespopoutguildname,
-							children: channel.guild_id ? (BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {}).name || BDFDB.LanguageUtils.LanguageStrings.GUILD_UNAVAILABLE_HEADER : BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES
-						}) : null
-					]
-				}), BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCN.messagespopoutgroupwrapper,
-					key: message.id,
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessageGroup, {
-							className: BDFDB.disCN.messagespopoutgroupcozy,
-							message: message,
-							channel: channel,
-							onContextMenu: e => BDFDB.MessageUtils.openMenu(message, e, true)
-						}),
-						BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN.messagespopoutactionbuttons,
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-									className: BDFDB.disCN.messagespopoutjumpbutton,
-									onClick: _ => BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id, message.id)),
-									children: BDFDB.ReactUtils.createElement("div", {
-										children: BDFDB.LanguageUtils.LanguageStrings.JUMP
-									})
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-									className: BDFDB.disCN.messagespopoutjumpbutton,
-									onClick: _ => {
-										if (message.content || message.attachments.length > 1) {
-											let text = message.content || "";
-											for (let attachment of message.attachments) if (attachment.url) text += ((text ? "\n" : "") + attachment.url);
-											BDFDB.LibraryRequires.electron.clipboard.write({text});
-										}
-										else if (message.attachments.length == 1 && message.attachments[0].url) {
-											BDFDB.LibraryRequires.request(message.attachments[0].url, {encoding: null}, (error, response, body) => {
-												if (body) {
-													if (BDFDB.LibraryRequires.process.platform === "win32" || BDFDB.LibraryRequires.process.platform === "darwin") {
-														BDFDB.LibraryRequires.electron.clipboard.write({image: BDFDB.LibraryRequires.electron.nativeImage.createFromBuffer(body)});
+				return [
+					popoutProps.selectedFilter.value == "channel" ? null : BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.messagespopoutchannelseparator,
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+								tag: "span",
+								className: BDFDB.disCN.messagespopoutchannelname,
+								onClick: _ => {
+									if (!channel.guild_id || BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id)) BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id));
+								},
+								children: channelName ? ((channel.guild_id ? "#" : "@") + channelName) : "???"
+							}),
+							popoutProps.selectedFilter.value == "all" ? BDFDB.ReactUtils.createElement("span", {
+								className: BDFDB.disCN.messagespopoutguildname,
+								children: channel.guild_id ? (BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {}).name || BDFDB.LanguageUtils.LanguageStrings.GUILD_UNAVAILABLE_HEADER : BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES
+							}) : null
+						]
+					}), BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.messagespopoutgroupwrapper,
+						key: message.id,
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessageGroup, {
+								className: BDFDB.disCN.messagespopoutgroupcozy,
+								message: message,
+								channel: channel,
+								onContextMenu: e => BDFDB.MessageUtils.openMenu(message, e, true)
+							}),
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.messagespopoutactionbuttons,
+								children: [
+									(!channel.guild_id || BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id)) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+										className: BDFDB.disCN.messagespopoutjumpbutton,
+										onClick: _ => BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id, message.id)),
+										children: BDFDB.ReactUtils.createElement("div", {
+											children: BDFDB.LanguageUtils.LanguageStrings.JUMP
+										})
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+										className: BDFDB.disCN.messagespopoutjumpbutton,
+										onClick: _ => {
+											if (message.content || message.attachments.length > 1) {
+												let text = message.content || "";
+												for (let attachment of message.attachments) if (attachment.url) text += ((text ? "\n" : "") + attachment.url);
+												BDFDB.LibraryRequires.electron.clipboard.write({text});
+											}
+											else if (message.attachments.length == 1 && message.attachments[0].url) {
+												BDFDB.LibraryRequires.request(message.attachments[0].url, {encoding: null}, (error, response, body) => {
+													if (body) {
+														if (BDFDB.LibraryRequires.process.platform === "win32" || BDFDB.LibraryRequires.process.platform === "darwin") {
+															BDFDB.LibraryRequires.electron.clipboard.write({image: BDFDB.LibraryRequires.electron.nativeImage.createFromBuffer(body)});
+														}
+														else {
+															let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env.USERPROFILE || BDFDB.LibraryRequires.process.env.HOMEPATH || BDFDB.LibraryRequires.process.env.HOME, "personalpinstemp.png");
+															BDFDB.LibraryRequires.fs.writeFileSync(file, body, {encoding: null});
+															BDFDB.LibraryRequires.electron.clipboard.write({image: file});
+															BDFDB.LibraryRequires.fs.unlinkSync(file);
+														}
 													}
-													else {
-														let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env["HOME"], "personalpinstemp.png");
-														BDFDB.LibraryRequires.fs.writeFileSync(file, body, {encoding: null});
-														BDFDB.LibraryRequires.electron.clipboard.write({image: file});
-														BDFDB.LibraryRequires.fs.unlinkSync(file);
-													}
-												}
-											});
-										}
-									},
-									children: BDFDB.ReactUtils.createElement("div", {
-										children: BDFDB.LanguageUtils.LanguageStrings.COPY
+												});
+											}
+										},
+										children: BDFDB.ReactUtils.createElement("div", {
+											children: BDFDB.LanguageUtils.LanguageStrings.COPY
+										})
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+										look: BDFDB.LibraryComponents.Button.Looks.BLANK,
+										size: BDFDB.LibraryComponents.Button.Sizes.NONE,
+										onClick: _ => {
+											_this.removeNoteData(note);
+											BDFDB.ReactUtils.forceUpdate(this);
+										},
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+											className: BDFDB.disCN.messagespopoutclosebutton,
+											name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE
+										})
 									})
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-									look: BDFDB.LibraryComponents.Button.Looks.BLANK,
-									size: BDFDB.LibraryComponents.Button.Sizes.NONE,
-									onClick: _ => {
-										_this.removeNoteData(note);
-										BDFDB.ReactUtils.forceUpdate(this);
-									},
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-										className: BDFDB.disCN.messagespopoutclosebutton,
-										name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE
-									})
-								})
-							]
-						})
-					]
-				})];
+								]
+							})
+						]
+					})
+				];
 			}
 			render() {
 				let searchTimeout;
+				const [messages, allCount] = this.filterMessages();
 				return BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 					children: [
 						BDFDB.ReactUtils.createElement("div", {
@@ -246,7 +261,7 @@ module.exports = (_ => {
 										children: [
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 												className: BDFDB.disCN.messagespopouttitle,
-												children: _this.labels.popout_note
+												children: `${_this.labels.popout_note} - ${messages.length}/${allCount}`
 											}),
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
 												query: popoutProps.searchKey,
@@ -302,9 +317,15 @@ module.exports = (_ => {
 								]
 							})
 						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Scrollers.Thin, {
+						messages.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PaginatedList, {
 							className: BDFDB.disCN.messagespopout,
-							children: this.filterMessages()
+							items: messages,
+							amount: 25,
+							copyToBottom: true,
+							renderItem: messageData => this.renderMessage(messageData.note, messageData.message, messageData.channel).flat(10).filter(n => n)
+						}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateCenter, {
+							msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
+							image: BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight ? "/assets/03c7541028afafafd1a9f6a81cb7f149.svg" : "/assets/6793e022dc1b065b21f12d6df02f91bd.svg"
 						})
 					]
 				});
@@ -331,6 +352,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				notes = BDFDB.DataUtils.load(this, "notes");
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			
@@ -359,10 +381,11 @@ module.exports = (_ => {
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Button",
 							color: BDFDB.LibraryComponents.Button.Colors.RED,
-							label: "Delete all notes",
-							onClick: _ => {
-								BDFDB.ModalUtils.confirm(this, "Are you sure you want to delete all pinned Notes?", _ => BDFDB.DataUtils.remove(this, "notes"));
-							},
+							label: "Delete all Notes",
+							onClick: _ => BDFDB.ModalUtils.confirm(this, "Are you sure you want to delete all pinned Notes?", _ => {
+								notes = {};
+								BDFDB.DataUtils.remove(this, "notes");
+							}),
 							children: BDFDB.LanguageUtils.LanguageStrings.DELETE
 						}));
 						
@@ -426,17 +449,25 @@ module.exports = (_ => {
 			onMessageOptionToolbar (e) {
 				if (e.instance.props.expanded && e.instance.props.message && e.instance.props.channel) {
 					let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
-					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						key: note ? "unpin-note" : "pin-note",
-						text: note ? this.labels.context_unpinoption : this.labels.context_pinoption,
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-							className: BDFDB.disCN.messagetoolbarbutton,
-							onClick: _ => this.addMessageToNotes(e.instance.props.message, e.instance.props.channel),
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCN.messagetoolbaricon,
-								iconSVG: note ? pinIconDelete : pinIcon
+					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(class extends BdApi.React.Component {
+						render() {
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								key: note ? "unpin-note" : "pin-note",
+								text: _ => note ? _this.labels.context_unpinoption : _this.labels.context_pinoption,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									className: BDFDB.disCN.messagetoolbarbutton,
+									onClick: _ => {
+										_this.addMessageToNotes(e.instance.props.message, e.instance.props.channel);
+										note = _this.getNoteData(e.instance.props.message, e.instance.props.channel);
+										BDFDB.ReactUtils.forceUpdate(this);
+									},
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										className: BDFDB.disCN.messagetoolbaricon,
+										iconSVG: note ? pinIconDelete : pinIcon
+									})
+								})
 							})
-						})
+						}
 					}));
 					if (this.isNoteOutdated(note, e.instance.props.message)) e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						key: "update-note",
@@ -494,7 +525,6 @@ module.exports = (_ => {
 
 			addMessageToNotes (message, channel) {
 				if (!message) return;
-				let notes = BDFDB.DataUtils.load(this, "notes");
 				channel = channel || BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 				let guild_id = channel.guild_id || BDFDB.DiscordConstants.ME;
 				notes[guild_id] = notes[guild_id] || {};
@@ -514,15 +544,14 @@ module.exports = (_ => {
 			}
 			
 			isNoteOutdated (note, message) {
-				let notemessage = note && JSON.parse(note.message), keys = ["content", "embeds", "attachment"];
-				return notemessage && !BDFDB.equals(BDFDB.ObjectUtils.extract(notemessage, keys), BDFDB.ObjectUtils.extract(message, keys));
+				let noteMessage = note && JSON.parse(note.message), keys = ["content", "embeds", "attachment"];
+				return noteMessage && !BDFDB.equals(BDFDB.ObjectUtils.extract(noteMessage, keys), BDFDB.ObjectUtils.extract(message, keys));
 			}
 
 			getNoteData (message, channel) {
 				if (!message) return;
 				channel = channel || BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 				let guild_id = channel.guild_id || BDFDB.DiscordConstants.ME;
-				let notes = BDFDB.DataUtils.load(this, "notes");
 				return notes[guild_id] && notes[guild_id][channel.id] && notes[guild_id][channel.id][message.id];
 			}
 
@@ -531,7 +560,6 @@ module.exports = (_ => {
 				let channel = JSON.parse(note.channel);
 				if (!message || !channel) return;
 				let guild_id = channel.guild_id || BDFDB.DiscordConstants.ME;
-				let notes = BDFDB.DataUtils.load(this, "notes");
 				notes[guild_id][channel.id][note.id].message = JSON.stringify(newmessage);
 				BDFDB.DataUtils.save(notes, this, "notes");
 				BDFDB.NotificationUtils.toast(this.labels.toast_noteupdate, {type: "info"});
@@ -542,7 +570,6 @@ module.exports = (_ => {
 				let channel = JSON.parse(note.channel);
 				if (!message || !channel) return;
 				let guild_id = channel.guild_id || BDFDB.DiscordConstants.ME;
-				let notes = BDFDB.DataUtils.load(this, "notes");
 				delete notes[guild_id][channel.id][note.id];
 				if (BDFDB.ObjectUtils.isEmpty(notes[guild_id][channel.id])) {
 					delete notes[guild_id][channel.id];
@@ -570,6 +597,22 @@ module.exports = (_ => {
 							toast_noteadd:						"Съобщението е добавено към бележника",
 							toast_noteremove:					"Съобщението е премахнато от бележника",
 							toast_noteupdate:					"Актуализира съобщението в бележника"
+						};
+					case "cs":		// Czech
+						return {
+							context_pinoption:					"Poznamenat zprávu",
+							context_unpinoption:				"Odebrat poznámku",
+							context_updateoption:				"Aktualizovat poznámku",
+							popout_filter_all:					"Všechny servery",
+							popout_filter_channel:				"Kanál",
+							popout_filter_server:				"Server",
+							popout_note:						"Poznámky",
+							popout_pinoption:					"Poznámka",
+							popout_sort_messagetime:			"Datum zprávy",
+							popout_sort_notetime:				"Datum poznámky",
+							toast_noteadd:						"Zpráva přidána do poznámek",
+							toast_noteremove:					"Zpráva odebrána z poznámek",
+							toast_noteupdate:					"Zpráva v poznámkách aktualizována"
 						};
 					case "da":		// Danish
 						return {
@@ -666,6 +709,22 @@ module.exports = (_ => {
 							toast_noteadd:						"Message ajouté au carnet",
 							toast_noteremove:					"Message supprimé du carnet",
 							toast_noteupdate:					"Mise à jour du message dans le carnet"
+						};
+					case "hi":		// Hindi
+						return {
+							context_pinoption:					"नोट संदेश",
+							context_unpinoption:				"नोट हटाएं",
+							context_updateoption:				"अद्यतन नोट",
+							popout_filter_all:					"सभी सर्वर",
+							popout_filter_channel:				"चैनल",
+							popout_filter_server:				"सर्वर",
+							popout_note:						"टिप्पणियाँ",
+							popout_pinoption:					"ध्यान दें",
+							popout_sort_messagetime:			"संदेश दिनांक",
+							popout_sort_notetime:				"नोट दिनांक",
+							toast_noteadd:						"संदेश नोटबुक में जोड़ा गया",
+							toast_noteremove:					"नोटबुक से संदेश हटाया गया",
+							toast_noteupdate:					"नोटबुक में संदेश अपडेट किया गया"
 						};
 					case "hr":		// Croatian
 						return {
@@ -845,19 +904,19 @@ module.exports = (_ => {
 						};
 					case "ru":		// Russian
 						return {
-							context_pinoption:					"Запишите сообщение",
-							context_unpinoption:				"Удалить заметку",
-							context_updateoption:				"Обновить заметку",
-							popout_filter_all:					"Все серверы",
+							context_pinoption:					"Сохранить сообщение",
+							context_unpinoption:				"Удалить из сохранённых",
+							context_updateoption:				"Обновить в сохранённых",
+							popout_filter_all:					"Все сервера",
 							popout_filter_channel:				"Канал",
 							popout_filter_server:				"Сервер",
-							popout_note:						"Замечания",
+							popout_note:						"Сохранённые сообщения",
 							popout_pinoption:					"Запись",
-							popout_sort_messagetime:			"Дата сообщения",
-							popout_sort_notetime:				"Дата записи",
-							toast_noteadd:						"Сообщение добавлено в блокнот",
-							toast_noteremove:					"Сообщение удалено из записной книжки",
-							toast_noteupdate:					"Обновил сообщение в блокноте"
+							popout_sort_messagetime:			"Дата отправки",
+							popout_sort_notetime:				"Дата сохранения",
+							toast_noteadd:						"Сообщение сохранено",
+							toast_noteremove:					"Сообщение удалено из сохранённых",
+							toast_noteupdate:					"Сообщение обновлено в сохранённых"
 						};
 					case "sv":		// Swedish
 						return {
