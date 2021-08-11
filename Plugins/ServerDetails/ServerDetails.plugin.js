@@ -93,7 +93,7 @@ module.exports = (_ => {
 				let owner = BDFDB.LibraryModules.UserStore.getUser(this.props.guild.ownerId);
 				if (!owner && !this.state.fetchedOwner) {
 					this.state.fetchedOwner = true;
-					BDFDB.LibraryModules.UserFetchUtils.getUser(this.props.guild.ownerId).then(_ => BDFDB.ReactUtils.forceUpdate(this));
+					BDFDB.LibraryModules.UserProfileUtils.getUser(this.props.guild.ownerId).then(_ => BDFDB.ReactUtils.forceUpdate(this));
 				}
 				let src = this.props.guild.getIconURL(this.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(this.props.guild.icon));
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
