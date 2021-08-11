@@ -179,7 +179,7 @@ module.exports = (_ => {
 					e.instance.props._originalText = e.instance.props._originalText || e.instance.props.text;
 					if (this.settings.general.showInMarkup) {
 						if (tooltipIsSame) e.instance.props.delay = 99999999999999999999;
-						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, new Date(e.instance.props._originalText));
+						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props._originalText);
 						let renderChildren = e.instance.props.children;
 						e.instance.props.children = (...args) => {
 							let renderedChildren = renderChildren(...args);

@@ -5889,7 +5889,18 @@ module.exports = (_ => {
 			return date.toLocaleString(language).replace(date.toLocaleDateString(language), "$date").replace(date.toLocaleTimeString(language, {hourCycle: "h12"}), "$time12").replace(date.toLocaleTimeString(language, {hourCycle: "h11"}), "$time12").replace(date.toLocaleTimeString(language, {hourCycle: "h24"}), "$time").replace(date.toLocaleTimeString(language, {hourCycle: "h23"}), "$time");
 		};
 		InternalComponents.LibraryComponents.DateInput.parseDate = function (date, offset) {
-			let timeObj = typeof date == "string" || typeof date == "number" ? new Date(date) : date;
+			let timeObj = date;
+			if (typeof timeObj == "string") {
+				const language = BDFDB.LanguageUtils.getLanguage().id;
+				for (let i = 0; i < 12; i++) {
+					const tempDate = new Date();
+					tempDate.setMonth(i);
+					timeObj = timeObj.replace(tempDate.toLocaleDateString(language, {month:"long"}), tempDate.toLocaleDateString("en", {month:"short"}));
+				}
+				timeObj = new Date(timeObj);
+			}
+			else if (typeof timeObj == "number") timeObj = new Date(timeObj);
+			
 			if (timeObj.toString() == "Invalid Date") timeObj = new Date(parseInt(date));
 			if (timeObj.toString() == "Invalid Date" || typeof timeObj.toLocaleDateString != "function") timeObj = new Date();
 			offset = offset != null && parseFloat(offset);
