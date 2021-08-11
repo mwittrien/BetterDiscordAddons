@@ -276,12 +276,6 @@ module.exports = (_ => {
 	BDFDB.ObjectUtils.is = function (obj) {
 		return obj && !Array.isArray(obj) && !Set.prototype.isPrototypeOf(obj) && (typeof obj == "function" || typeof obj == "object");
 	};
-	BDFDB.ObjectUtils.isProxy = function (obj) {
-		if (!obj && typeof obj !== "object") return false;
-		const testValue = obj.oASdiAShDhSAIDHSAIODHSAIDHSIOADHISADHIOSAHDISAHDIOSHADISAHasdiadISAodHiOAdasih;
-		if (typeof testValue == "string" && !testValue) return true;
-		return false;
-	};
 	BDFDB.ObjectUtils.get = function (nodeOrObj, valuePath) {
 		if (!nodeOrObj || !valuePath) return null;
 		let obj = Node.prototype.isPrototypeOf(nodeOrObj) ? BDFDB.ReactUtils.getInstance(nodeOrObj) : nodeOrObj;
@@ -1204,18 +1198,6 @@ module.exports = (_ => {
 				}
 				else BDFDB.LogUtils.warn(`${cacheString} [${type}] not found in WebModules`);
 			}
-		};
-		const proxyStates = {};
-		InternalBDFDB.isSearchableModule = function (m, path) {
-			if (m && (typeof m == "object" || typeof m == "function")) {
-				path = [path].flat(10).join(" ");
-				if (proxyStates[path] !== undefined) return !proxyStates[path];
-				else {
-					proxyStates[path] = BDFDB.ObjectUtils.isProxy(m);
-					return !proxyStates[path];
-				}
-			}
-			return false;
 		};
 		
 		BDFDB.ModuleUtils = {};
