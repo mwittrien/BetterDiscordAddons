@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.5
+ * @version 2.0.6
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "PersonalPins",
 			"author": "DevilBro",
-			"version": "2.0.5",
+			"version": "2.0.6",
 			"description": "Allows you to locally pin Messages"
 		},
 		"changeLog": {
 			"fixed": {
-				"Canary Crash": ""
+				"Crash": "No longer tries to render System Messages in the Notes Popup"
 			}
 		}
 	};
@@ -116,12 +116,12 @@ module.exports = (_ => {
 							notes[guild_id][channel_id][message_idPOS].channel = JSON.stringify(channel);
 						}
 					}
-					messages.push({
+					if (!BDFDB.MessageUtils.isSystemMessage(message)) messages.push({
 						note: notes[guild_id][channel_id][message_idPOS],
-						channel_id,
-						guild_id,
-						message,
-						channel,
+						channel_id: channel_id,
+						guild_id: guild_id,
+						message: message,
+						channel: channel,
 						messagetime: notes[guild_id][channel_id][message_idPOS].timestamp,
 						notetime: notes[guild_id][channel_id][message_idPOS].addedat
 					});
@@ -131,10 +131,10 @@ module.exports = (_ => {
 				let currentChannel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId()) || {};
 				switch (popoutProps.selectedFilter.value) {
 					case "channel":
-						messages = messages.filter(messageData => messageData.channel_id == currentChannel.id);
+						messages = messages.filter(m => m.channel_id == currentChannel.id);
 						break;
 					case "server":
-						messages = messages.filter(messageData => messageData.guild_id == (currentChannel.guild_id || BDFDB.DiscordConstants.ME));
+						messages = messages.filter(m => m.guild_id == (currentChannel.guild_id || BDFDB.DiscordConstants.ME));
 						break;
 					case "allservers":
 						messages = messages;
@@ -143,7 +143,7 @@ module.exports = (_ => {
 				let searchKey = popoutProps.searchKey.toUpperCase();
 				if (searchKey) {
 					let searchValues = ["content", "author.username", "rawDescription", "author.name"];
-					messages = messages.filter(messageData => searchValues.some(key => this.containsSearchkey(messageData.message, key, searchKey) || messageData.message.embeds.some(embed => this.containsSearchkey(embed, key, searchKey))));
+					messages = messages.filter(m => searchValues.some(key => this.containsSearchkey(m.message, key, searchKey) || m.message.embeds.some(embed => this.containsSearchkey(embed, key, searchKey))));
 				}
 				BDFDB.ArrayUtils.keySort(messages, popoutProps.selectedSort.value);
 				if (popoutProps.selectedOrder.value != "descending") messages.reverse();

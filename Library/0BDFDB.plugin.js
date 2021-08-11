@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.14
+ * @version 1.7.15
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.7.14",
+			"version": "1.7.15",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -3005,6 +3005,9 @@ module.exports = (_ => {
 		};
 
 		BDFDB.MessageUtils = {};
+		BDFDB.MessageUtils.isSystemMessage = function (message) {
+			return message && !BDFDB.DiscordConstants.USER_MESSAGE_TYPES.has(message.type) && (message.type !== BDFDB.DiscordConstants.MessageTypes.APPLICATION_COMMAND || message.interaction == null);
+		};
 		BDFDB.MessageUtils.rerenderAll = function (instant) {
 			BDFDB.TimeUtils.clear(BDFDB.MessageUtils.rerenderAll.timeout);
 			BDFDB.MessageUtils.rerenderAll.timeout = BDFDB.TimeUtils.timeout(_ => {
@@ -8005,7 +8008,7 @@ module.exports = (_ => {
 		};
 		
 		const ContextMenuTypes = ["UserSettingsCog", "UserProfileActions", "User", "Developer", "Slate", "GuildFolder", "GroupDM", "SystemMessage", "Message", "Native", "Role", "Guild", "Channel"];
-		const QueuedComponents = BDFDB.ArrayUtils.removeCopies([].concat(ContextMenuTypes.map(n => n + "ContextMenu"), ["GuildHeaderContextMenu", "MessageOptionContextMenu", "MessageOptionToolbar"]));	
+		const QueuedComponents = BDFDB.ArrayUtils.removeCopies([].concat(ContextMenuTypes.map(n => n + "ContextMenu"), ["GuildHeaderContextMenu", "SystemMessageOptionContextMenu", "SystemMessageOptionToolbar", "MessageOptionContextMenu", "MessageOptionToolbar"]));	
 		InternalBDFDB.addContextListeners = function (plugin) {
 			plugin = plugin == BDFDB && InternalBDFDB || plugin;
 			for (let type of QueuedComponents) if (typeof plugin[`on${type}`] == "function") {
@@ -8061,17 +8064,17 @@ module.exports = (_ => {
 		}});
 		
 		BDFDB.PatchUtils.patch(BDFDB, BDFDB.ObjectUtils.get(BDFDB.ModuleUtils.findByString("renderReactions", "canAddNewReactions", "showMoreUtilities", false), "exports.default"), "type", {after: e => {
-			if (document.querySelector(BDFDB.dotCN.emojipicker) || !BDFDB.ObjectUtils.toArray(PluginStores.loaded).filter(p => p.started).some(p => p.onMessageOptionContextMenu || p.onMessageOptionToolbar)) return;
+			if (document.querySelector(BDFDB.dotCN.emojipicker) || !BDFDB.ObjectUtils.toArray(PluginStores.loaded).filter(p => p.started).some(p => p.onSystemMessageOptionContextMenu || p.onSystemMessageOptionToolbar || p.onMessageOptionContextMenu || p.onMessageOptionToolbar)) return;
 			let toolbar = BDFDB.ReactUtils.findChild(e.returnValue, {filter: c => c && c.props && c.props.showMoreUtilities != undefined && c.props.showEmojiPicker != undefined && c.props.setPopout != undefined});
 			if (toolbar) BDFDB.PatchUtils.patch(BDFDB, toolbar, "type", {after: e2 => {
 				let menu = BDFDB.ReactUtils.findChild(e2.returnValue, {filter: c => c && c.props && typeof c.props.onRequestClose == "function" && c.props.onRequestClose.toString().indexOf("moreUtilities") > -1});
-				InternalBDFDB.executeExtraPatchedPatches("MessageOptionToolbar", {instance: {props: e2.methodArguments[0]}, returnvalue: e2.returnValue, methodname: "default"});
+				InternalBDFDB.executeExtraPatchedPatches(BDFDB.MessageUtils.isSystemMessage(e2.methodArguments[0] && e2.methodArguments[0].message) ? "SystemMessageOptionToolbar" : "MessageOptionToolbar", {instance: {props: e2.methodArguments[0]}, returnvalue: e2.returnValue, methodname: "default"});
 				if (menu && typeof menu.props.renderPopout == "function") {
 					let renderPopout = menu.props.renderPopout;
 					menu.props.renderPopout = BDFDB.TimeUtils.suppress((...args) => {
 						let renderedPopout = renderPopout(...args);
 						BDFDB.PatchUtils.patch(BDFDB, renderedPopout, "type", {after: e3 => {
-							InternalBDFDB.executeExtraPatchedPatches("MessageOptionContextMenu", {instance: {props: e3.methodArguments[0]}, returnvalue: e3.returnValue, methodname: "default"});
+							InternalBDFDB.executeExtraPatchedPatches(BDFDB.MessageUtils.isSystemMessage(e3.methodArguments[0] && e3.methodArguments[0].message) ? "SystemMessageOptionContextMenu" : "MessageOptionContextMenu", {instance: {props: e3.methodArguments[0]}, returnvalue: e3.returnValue, methodname: "default"});
 						}}, {noCache: true});
 						return renderedPopout;
 					});
