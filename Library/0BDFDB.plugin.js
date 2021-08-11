@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.15
+ * @version 1.8.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,10 +19,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.7.15",
+			"version": "1.8.0",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
+		"changeLog": {
+			"improved": {
+				"Performance": "Startup time was reduced to a 1/10 and overall performance was improved, Might need a Reload with Ctrl+R to work flawlessly"
+			}
+		}
 	};
 	
 	const DiscordObjects = {};
@@ -1123,7 +1128,7 @@ module.exports = (_ => {
 				else BDFDB.LogUtils.error(["Failed to initiate Library!", dataString ? "Corrupt Backup." : "No Backup.", err]);
 			}
 			if (fetched && dataString) fs.writeFile(dataFilePath, dataString, _ => {});
-				
+			
 			InternalBDFDB.getWebModuleReq = function () {
 				if (!InternalBDFDB.getWebModuleReq.req) {
 					const id = "BDFDB-WebModules";
@@ -1220,11 +1225,9 @@ module.exports = (_ => {
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
 				if (m && (typeof m == "object" || typeof m == "function") && filter(m)) return getExport ? m : req.c[i];
-				if (m && m.__esModule) {
-					for (let j in m) if (InternalBDFDB.isSearchableModule(m[j], [i, j]) && filter(m[j])) return getExport ? m[j] : req.c[i];
-					if (m.default && (typeof m.default == "object" || typeof m.default == "function")) {
-						for (let j in m.default) if (InternalBDFDB.isSearchableModule(m.default[j], [i, "default", j]) && filter(m.default[j])) return getExport ? m.default[j] : req.c[i];
-					}
+				if (m && m.__esModule && m.default && (typeof m.default == "object" || typeof m.default == "function")) {
+					if (filter(m.default)) return getExport ? m.default : req.c[i];
+					else if (m.default.type && (typeof m.default.type == "object" || typeof m.default.type == "function") && filter(m.default.type)) return getExport ? m.default.type : req.c[i];
 				}
 			}
 			for (let i in req.m) if (req.m.hasOwnProperty(i)) {
@@ -1253,7 +1256,7 @@ module.exports = (_ => {
 			}), getExport);
 		};
 		BDFDB.ModuleUtils.findByName = function (name, getExport) {
-			return InternalBDFDB.findModule("name", JSON.stringify(name), m => m.displayName === name || m.render && m.render.displayName === name, typeof getExport != "boolean" ? true : getExport);
+			return InternalBDFDB.findModule("name", JSON.stringify(name), m => m.displayName === name || m.render && m.render.displayName === name || m[name] && m[name].displayName === name, typeof getExport != "boolean" ? true : getExport);
 		};
 		BDFDB.ModuleUtils.findByString = function (...strings) {
 			strings = strings.flat(10);
@@ -2474,7 +2477,8 @@ module.exports = (_ => {
 	
 		for (let name in InternalData.DiscordObjects) {
 			if (InternalData.DiscordObjects[name].props) DiscordObjects[name] = BDFDB.ModuleUtils.findByPrototypes(InternalData.DiscordObjects[name].props);
-			else if (InternalData.DiscordObjects[name].protos) DiscordObjects[name] = BDFDB.ModuleUtils.find(m => m.prototype && InternalData.DiscordObjects[name].protos.every(proto => m.prototype[proto] && (!InternalData.DiscordObjects[name].array || Array.isArray(m.prototype[proto]))));
+			else if (InternalData.DiscordObjects[name].strings) DiscordObjects[name] = BDFDB.ModuleUtils.findByString(InternalData.DiscordObjects[name].strings);
+			if (InternalData.DiscordObjects[name].value) DiscordObjects[name] = (DiscordObjects[name] || {})[InternalData.DiscordObjects[name].value];
 		}
 		BDFDB.DiscordObjects = Object.assign({}, DiscordObjects);
 		

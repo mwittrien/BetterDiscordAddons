@@ -15,7 +15,7 @@
 		"Invite": {"props": ["getExpiresAt", "isExpired"]},
 		"Message": {"props": ["getReaction", "isEdited", "getChannelId"]},
 		"Messages": {"props": ["jumpToMessage", "hasAfterCached", "forEach"]},
-		"Relationship": {"protos": ["comparator"], "array": true},
+		"Relationship": {"strings": ["status", "mutualGuilds", "nickname"], "value": "Row"},
 		"Timestamp": {"props": ["add", "dayOfYear", "hasAlignedHourOffset"]},
 		"User": {"props": ["hasFlag", "isLocalBot", "isClaimed"]}
 	},
