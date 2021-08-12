@@ -336,7 +336,7 @@
 		"Scrollers None": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerNone"},
 		"Scrollers Thin": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerThin"},
 		"Spinner": {"name": "Spinner"},
-		"Status": {"name": "Status"},
+		"Status": {"name": "Status", "value": "Status"},
 		"StatusPickerPopout": {"strings": ["\"StatusPickerPopout\""], "value": "default"},
 		"TextElement": {"name": "Text"},
 		"UserBadges": {"props": ["BadgeSizes"]},
