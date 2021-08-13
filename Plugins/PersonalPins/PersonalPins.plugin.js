@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.6
+ * @version 2.0.7
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "PersonalPins",
 			"author": "DevilBro",
-			"version": "2.0.6",
+			"version": "2.0.7",
 			"description": "Allows you to locally pin Messages"
-		},
-		"changeLog": {
-			"fixed": {
-				"Crash": "No longer tries to render System Messages in the Notes Popup"
-			}
 		}
 	};
 
@@ -353,6 +348,14 @@ module.exports = (_ => {
 			
 			onStart () {
 				notes = BDFDB.DataUtils.load(this, "notes");
+				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
+					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.MESSAGE_DELETE) {
+						let note = this.getNoteData({id: e.methodArguments[0].id, channel_id: e.methodArguments[0].channelId});
+						if (note) this.removeNoteData(note, true);
+					}
+				}});
+				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			
@@ -565,7 +568,7 @@ module.exports = (_ => {
 				BDFDB.NotificationUtils.toast(this.labels.toast_noteupdate, {type: "info"});
 			}
 
-			removeNoteData (note) {
+			removeNoteData (note, noToast = false) {
 				let message = JSON.parse(note.message);
 				let channel = JSON.parse(note.channel);
 				if (!message || !channel) return;
@@ -576,7 +579,7 @@ module.exports = (_ => {
 					if (BDFDB.ObjectUtils.isEmpty(notes[guild_id])) delete notes[guild_id];
 				}
 				BDFDB.DataUtils.save(notes, this, "notes");
-				BDFDB.NotificationUtils.toast(this.labels.toast_noteremove, {type: "danger"});
+				if (!noToast) BDFDB.NotificationUtils.toast(this.labels.toast_noteremove, {type: "danger"});
 			}
 
 
