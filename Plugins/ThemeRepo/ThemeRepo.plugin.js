@@ -1207,7 +1207,7 @@ module.exports = (_ => {
 			
 			onStop () {
 				BDFDB.TimeUtils.clear(updateInterval);
-				BDFDB.TimeUtils.clear(loading.timeout);
+				BDFDB.TimeUtils.clear(loading && loading.timeout);
 
 				this.forceUpdateAll();
 
