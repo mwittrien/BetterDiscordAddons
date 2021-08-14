@@ -4937,7 +4937,7 @@ module.exports = (_ => {
 						nativeClass: this.props.nativeClass
 					})
 				});
-				return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Button, {
+				const button = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Button, {
 					look: InternalComponents.LibraryComponents.Button.Looks.BLANK,
 					size: InternalComponents.LibraryComponents.Button.Sizes.NONE,
 					"aria-label": this.props.label,
@@ -4950,6 +4950,10 @@ module.exports = (_ => {
 					onMouseLeave: this.props.onMouseLeave,
 					children: this.props.tooltip && this.props.tooltip.text ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, Object.assign({}, this.props.tooltip, {children: inner})) : inner
 				});
+				return (this.props.className || "").indexOf(BDFDB.disCN.textareapickerbutton) > -1 ? BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN.textareapickerbuttoncontainer,
+					children: button
+				}) : button;
 			}
 		};
 		InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.ChannelTextAreaButton, {tabIndex: 0});
