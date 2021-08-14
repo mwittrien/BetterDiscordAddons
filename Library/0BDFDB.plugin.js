@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.0
+ * @version 1.8.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,11 +19,14 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.8.0",
+			"version": "1.8.1",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
 		"changeLog": {
+			"fixed": {
+				"3 Dot Menu Crash": "Fixed Crash when opening the 3 Dot Message Options Menu while a Bot with Application Commands is in the Server"
+			},
 			"improved": {
 				"Performance": "Startup time was reduced to a 1/10 and overall performance was improved, Might need a Reload with Ctrl+R to work flawlessly"
 			}
@@ -5084,7 +5087,7 @@ module.exports = (_ => {
 				return this.props.value ? (InternalComponents.LibraryComponents.Checkbox.Types && this.props.type === InternalComponents.LibraryComponents.Checkbox.Types.INVERTED ? BDFDB.DiscordConstants.Colors.WHITE : this.props.color) : "transparent";
 			}
 			handleChange(e) {
-				this.props.value = typeof this.props.getValue == "function" ? this.props.getValue(this.props.value, e) : !this.props.value;
+				this.props.value = typeof this.props.getValue == "function" ? this.props.getValue(this.props.value, e, this) : !this.props.value;
 				if (typeof this.props.onChange == "function") this.props.onChange(this.props.value, this);
 				BDFDB.ReactUtils.forceUpdate(this);
 			}
@@ -8070,6 +8073,7 @@ module.exports = (_ => {
 					let renderPopout = menu.props.renderPopout;
 					menu.props.renderPopout = BDFDB.TimeUtils.suppress((...args) => {
 						let renderedPopout = renderPopout(...args);
+						renderedPopout.props.updatePosition = _ => {};
 						BDFDB.PatchUtils.patch(BDFDB, renderedPopout, "type", {after: e3 => {
 							InternalBDFDB.executeExtraPatchedPatches(BDFDB.MessageUtils.isSystemMessage(e3.methodArguments[0] && e3.methodArguments[0].message) ? "SystemMessageOptionContextMenu" : "MessageOptionContextMenu", {instance: {props: e3.methodArguments[0]}, returnvalue: e3.returnValue, methodname: "default"});
 						}}, {noCache: true});
