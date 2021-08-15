@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.9
+ * @version 1.2.0
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.1.9",
+			"version": "1.2.0",
 			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
 		},
 		"changeLog": {
-			"fixed": {
-				"Duplicates": "No longer creates Duplicate Controls"
+			"improved": {
+				"CSS Variable": "Added CSS variable for the spotify green"
 			}
 		}
 	};
@@ -332,7 +332,7 @@ module.exports = (_ => {
 														defaultValue: currentVolume,
 														digits: 0,
 														barStyles: {height: 6, top: 3},
-														fillStyles: {backgroundColor: BDFDB.DiscordConstants.Colors.SPOTIFY},
+														fillStyles: {backgroundColor: "var(--SC-spotify-green)"},
 														onValueRender: value => {
 															this.props.draggingVolume = true;
 															currentVolume = value;
@@ -485,6 +485,9 @@ module.exports = (_ => {
 						font-weight: 400;
 						font-style: normal
 					}
+					:root {
+						--SC-spotify-green: ${BDFDB.DiscordConstants.Colors.SPOTIFY};
+					}
 					${BDFDB.dotCN._spotifycontrolscontainer} {
 						display: flex;
 						flex-direction: column;
@@ -522,7 +525,7 @@ module.exports = (_ => {
 						background: var(--text-normal);
 					}
 					${BDFDB.dotCN._spotifycontrolstimeline}:hover ${BDFDB.dotCN._spotifycontrolsbarfill} {
-						background: ${BDFDB.DiscordConstants.Colors.SPOTIFY};
+						background: var(--SC-spotify-green);
 					}
 					${BDFDB.dotCN._spotifycontrolsbargrabber} {
 						display: none;
@@ -627,7 +630,7 @@ module.exports = (_ => {
 						font-family: glue1-spoticon !important;
 					}
 					${BDFDB.dotCNS._spotifycontrolscontainer + BDFDB.dotCN.accountinfobutton + BDFDB.dotCN._spotifycontrolsbuttonactive} {
-						color: ${BDFDB.DiscordConstants.Colors.SPOTIFY};
+						color: var(--SC-spotify-green);
 					}
 					${BDFDB.dotCN._spotifycontrolscontainer + BDFDB.dotCN._spotifycontrolscontainermaximized} {
 						padding-top: 0;
