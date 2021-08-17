@@ -980,24 +980,24 @@ body::after {
 }
 #app-mount .repliedMessage-VokQwo::before,
 #app-mount .spine-1UneWn::before {
-	border-color: rgba(var(--transparencycolor), calc(0.5 * var(--usechatbubbles)));
+	border-color: rgba(var(--textbrighter), calc(0.3 * (1 - var(--usechatbubbles))));
 }
 #app-mount .repliedMessage-VokQwo::after,
 #app-mount .spine-1UneWn::after {
-	border-color: rgba(var(--textbrighter), calc(0.3 * (1 - var(--usechatbubbles))));
+	border-color: rgba(var(--transparencycolor), calc(0.5 * var(--usechatbubbles)));
 }
 #app-mount .compact-T3H92H .repliedMessage-VokQwo::before,
 #app-mount .compact-T3H92H .spine-1UneWn::before {
-	border-color: transparent;
+	border-color: rgba(var(--textbrighter), .3);
 }
 #app-mount .compact-T3H92H .repliedMessage-VokQwo::after,
 #app-mount .compact-T3H92H .spine-1UneWn::after {
-	border-color: rgba(var(--textbrighter), .3);
+	border-color: transparent;
 }
 
 #app-mount .cozy-3raOZG.hasThread-2k82W0::before,			/* message				thread spine						*/
 #app-mount .cozy-3raOZG.hasThread-2k82W0::after,
-#app-mount .compact-T3H92H.hasThread-2k82W0::before {
+#app-mount .compact-T3H92H.hasThread-2k82W0::after {
 	--avatar-size: 38px;
 	--gutter: 16px;
 	--spine-width: 2px;
@@ -1016,17 +1016,20 @@ body::after {
 	border-bottom-left-radius: 8px;
 }
 #app-mount .cozy-3raOZG.hasThread-2k82W0::before {
-	border-color: rgba(var(--transparencycolor), calc(0.5 * var(--usechatbubbles)));
-}
-#app-mount .cozy-3raOZG.hasThread-2k82W0::after {
 	border-color: rgba(var(--textbrighter), calc(0.3 * (1 - var(--usechatbubbles))));
 }
-#app-mount .compact-T3H92H.hasThread-2k82W0::before {
+#app-mount .cozy-3raOZG.hasThread-2k82W0::after {
+	border-color: rgba(var(--transparencycolor), calc(0.5 * var(--usechatbubbles)));
+}
+#app-mount .message-2qnXI6.mentioned-xhSam7.hasThread-2k82W0::before {
+	background-color: transparent;
+}
+#app-mount .compact-T3H92H.hasThread-2k82W0::after {
 	left: calc(var(--avatar-size) + 11px);
 	width: calc(var(--avatar-size) - 13px);
 	border-color: rgba(var(--textbrighter), .3);
 }
-#app-mount .compact-T3H92H.hasThread-2k82W0 .contents-2mQqc9:before {
+#app-mount .compact-T3H92H.hasThread-2k82W0 .contents-2mQqc9::before {
 	border-color: rgba(var(--textbrighter), .3);
 }
 
