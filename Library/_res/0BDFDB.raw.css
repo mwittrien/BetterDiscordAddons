@@ -10,8 +10,8 @@
 img:not([src]), img[src=""], img[src="null"] {
 	opacity: 0;
 }
-[REPLACE_CLASS_appmount] > [REPLACE_CLASS_itemlayercontainer],
-[REPLACE_CLASS_appmount] > [REPLACE_CLASS_popouts] {
+
+[REPLACE_CLASS_appmount] > [REPLACE_CLASS_itemlayercontainer] {
 	position: fixed;
 	z-index: 1001;
 }

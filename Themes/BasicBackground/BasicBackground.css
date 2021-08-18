@@ -4144,10 +4144,6 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	z-index: 1010;
 }
 
-#app-mount .popout-2iWAc-:not(.noShadow-3pu20z) {
-	box-shadow: 0 0 1px rgba(var(--transparencycolor), .2), 0 1px 4px rgba(var(--transparencycolor), .1);
-}
-
 #app-mount .loadingPopout-qYljDW,							/* loading popout											*/
 #app-mount .container-7uh5fX,								/* browser popout											*/
 #app-mount .themedPopout-1TrfdI {							/* themed popout											*/

@@ -3113,52 +3113,6 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 /* ~~~~		11.		POPOUTS							~~~~ */
 
-#app-mount .popout-2iWAc- {
-	box-shadow: 0 0 1px rgba(0,0,0,.82), 0 1px 4px rgba(0,0,0,.1);
-}
-#app-mount .popoutRight-1veHKi.arrowAlignmentMiddle-NBGtsX::before {
-	border-right-color: var(--background-floating) !important;
-}
-#app-mount .popoutLeft-3aViER.arrowAlignmentMiddle-NBGtsX::before {
-	border-left-color: var(--background-floating) !important;
-}
-#app-mount .popoutBottom-2GAFPg.arrowAlignmentMiddle-NBGtsX::before,
-#app-mount .popoutBottom-2GAFPg.arrowAlignmentTop-1yftWI::before,
-#app-mount .popoutBottomLeft-1pG8B4.arrowAlignmentMiddle-NBGtsX::before,
-#app-mount .popoutBottomLeft-1pG8B4.arrowAlignmentTop-1yftWI::before,
-#app-mount .popoutBottomRight-2Rno5S.arrowAlignmentMiddle-NBGtsX::before,
-#app-mount .popoutBottomRight-2Rno5S.arrowAlignmentTop-1yftWI::before {
-	border-bottom-color: var(--background-floating) !important;
-}
-#app-mount .popoutTop-3WSJtH::before,
-#app-mount .popoutTopLeft-3B0mFf::before,
-#app-mount .popoutTopRight-1lc8Mq::before {
-	border-top-color: rgba(0,0,0,.1) !important;
-}
-#app-mount .popoutTop-3WSJtH::after,
-#app-mount .popoutTopLeft-3B0mFf::after,
-#app-mount .popoutTopRight-1lc8Mq::after {
-	border-top-color: var(--background-floating) !important;
-}
-#app-mount .popout-xwjvsX.popoutRight-1veHKi.arrowAlignmentMiddle-NBGtsX:before {
-	border-right-color: var(--background-secondary) !important;
-}
-#app-mount .popout-xwjvsX.popoutLeft-3aViER.arrowAlignmentMiddle-NBGtsX:before {
-	border-left-color: var(--background-secondary) !important;
-}
-#app-mount .popout-xwjvsX.popoutBottom-2GAFPg.arrowAlignmentMiddle-NBGtsX:before,
-#app-mount .popout-xwjvsX.popoutBottom-2GAFPg.arrowAlignmentTop-1yftWI:before,
-#app-mount .popout-xwjvsX.popoutBottomLeft-1pG8B4.arrowAlignmentMiddle-NBGtsX:before,
-#app-mount .popout-xwjvsX.popoutBottomLeft-1pG8B4.arrowAlignmentTop-1yftWI:before,
-#app-mount .popout-xwjvsX.popoutBottomRight-2Rno5S.arrowAlignmentMiddle-NBGtsX:before,
-#app-mount .popout-xwjvsX.popoutBottomRight-2Rno5S.arrowAlignmentTop-1yftWI:before {
-	border-bottom-color: var(--background-secondary) !important;
-}
-#app-mount .popout-xwjvsX.popoutTop-3WSJtH:after,
-#app-mount .popout-xwjvsX.popoutTopLeft-3B0mFf:after,
-#app-mount .popout-xwjvsX.popoutTopRight-1lc8Mq:after {
-	border-top-color: var(--background-secondary) !important;
-}
 #app-mount .content-1nP7fx {
 	background-color: var(--background-floating) !important;
 }

@@ -1756,39 +1756,6 @@ a.metadataName-14STf- {
 
 /* ~~~~		11.		POPOUTS							~~~~ */
 
-.popoutLeft-3aViER.arrowAlignmentTop-1yftWI::before {
-	border-left-color: #rgb(var(--accentcolor));
-}
-.popoutRight-1veHKi.arrowAlignmentTop-1yftWI::before {
-	border-right-color: #rgb(var(--accentcolor));
-}
-.popoutBottom-2GAFPg.arrowAlignmentMiddle-NBGtsX::before,
-.popoutBottom-2GAFPg.arrowAlignmentTop-1yftWI::before,
-.popoutBottomLeft-1pG8B4.arrowAlignmentMiddle-NBGtsX::before,
-.popoutBottomLeft-1pG8B4.arrowAlignmentTop-1yftWI::before,
-.popoutBottomRight-2Rno5S.arrowAlignmentMiddle-NBGtsX::before,
-.popoutBottomRight-2Rno5S.arrowAlignmentTop-1yftWI::before,
-.theme-light.popoutBottom-2GAFPg.arrowAlignmentMiddle-NBGtsX::before,
-.theme-light.popoutBottom-2GAFPg.arrowAlignmentTop-1yftWI::before,
-.theme-light.popoutBottomLeft-1pG8B4.arrowAlignmentMiddle-NBGtsX::before,
-.theme-light.popoutBottomLeft-1pG8B4.arrowAlignmentTop-1yftWI::before,
-.theme-light.popoutBottomRight-2Rno5S.arrowAlignmentMiddle-NBGtsX::before,
-.theme-light.popoutBottomRight-2Rno5S.arrowAlignmentTop-1yftWI::before {
-	border-bottom-color: #rgb(var(--accentcolor));
-}
-.popoutInvert-3TZnzz:not(.popoutBottom-2GAFPg).popoutTop-3WSJtH.arrowAlignmentMiddle-NBGtsX::before,
-.popoutInvert-3TZnzz:not(.popoutBottom-2GAFPg).popoutTop-3WSJtH.arrowAlignmentTop-1yftWI::before,
-.popoutInvert-3TZnzz:not(.popoutBottom-2GAFPg).popoutTopRight-1lc8Mq.arrowAlignmentMiddle-NBGtsX::before,
-.popoutInvert-3TZnzz:not(.popoutBottom-2GAFPg).popoutTopRight-1lc8Mq.arrowAlignmentTop-1yftWI::before {
-	border-top-color: #rgb(var(--accentcolor));
-}
-.theme-light.contentNarrowMedia-W7SHxH.topArrow-1B63md::before,
-.theme-light .contentNarrowNoMedia-Il01H1.topArrow-1B63md::before,
-.theme-light.contentWideNoMedia-22TIu6.topArrow-1B63md::before,
-.theme-light .contentWideNoMedia-22TIu6.topArrow-1B63md::before {
-	border-bottom-color: #rgb(var(--accentcolor));
-}
-
 .selectedBrand-1UKrSX {										/* popout				combobox selected brand				*/
 	background-color: rgb(var(--accentcolor));
 }

@@ -227,7 +227,6 @@
 			"Note": {"class": "usernotetextarea"},
 			"PeoplePageList": {"strings": ["FriendsSections", "emptyStateContainer"]},
 			"PopoutContainer": {"class": "popout"},
-			"Popouts": {"class": "popouts"},
 			"PrivateChannelCall": {"class": "callcurrentcontainer"},
 			"PrivateChannelCallParticipants": {"class": "callcurrentcontainer"},
 			"PrivateChannelRecipientsInvitePopout": {"class": "searchpopoutdmaddpopout"},

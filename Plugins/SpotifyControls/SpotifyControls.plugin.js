@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.0
+ * @version 1.2.1
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.2.0",
+			"version": "1.2.1",
 			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
 		},
 		"changeLog": {
-			"improved": {
-				"CSS Variable": "Added CSS variable for the spotify green"
+			"fixed": {
+				"Show Activity": "Show Activity Button has correct state on start up"
 			}
 		}
 	};
@@ -146,7 +146,8 @@ module.exports = (_ => {
 				
 				let playerSize = this.props.maximized ? "big" : "small";
 				let coverSrc = BDFDB.LibraryModules.AssetUtils.getAssetImage(lastSong.application_id, lastSong.assets.large_image);
-				showActivity = showActivity != undefined ? showActivity : (BDFDB.LibraryModules.ConnectionStore.getAccounts().find(n => n.type == "spotify") || {}).show_activity;
+				let connection = (BDFDB.LibraryModules.ConnectionStore.getAccounts().find(n => n.type == "spotify") || {});
+				showActivity = showActivity != undefined ? showActivity : (connection.show_activity || connection.showActivity);
 				currentVolume = this.props.draggingVolume ? currentVolume : socketDevice.device.volume_percent;
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._spotifycontrolscontainer, this.props.maximized && BDFDB.disCN._spotifycontrolscontainermaximized, this.props.timeline && BDFDB.disCN._spotifycontrolscontainerwithtimeline),
@@ -384,7 +385,6 @@ module.exports = (_ => {
 					position: BDFDB.LibraryComponents.PopoutContainer.Positions.TOP,
 					align: BDFDB.LibraryComponents.PopoutContainer.Align.CENTER,
 					arrow: true,
-					shadow: true,
 					renderPopout: this.props.renderPopout
 				}) : button;
 	}
