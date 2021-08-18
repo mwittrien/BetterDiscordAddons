@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.2
+ * @version 1.8.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,16 +19,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.8.2",
+			"version": "1.8.3",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
 		"changeLog": {
 			"fixed": {
-				"3 Dot Menu Crash": "Fixed Crash when opening the 3 Dot Message Options Menu while a Bot with Application Commands is in the Server"
-			},
-			"improved": {
-				"Performance": "Startup time was reduced to a 1/10 and overall performance was improved, Might need a Reload with Ctrl+R to work flawlessly"
+				"Popout Arrows": ""
 			}
 		}
 	};
@@ -6663,20 +6660,12 @@ module.exports = (_ => {
 			render() {
 				if (!this.props.wrap) return this.props.children;
 				let pos = typeof this.props.position == "string" ? this.props.position.toLowerCase() : null;
-				let positionClass = pos && DiscordClasses["popout" + pos] ? BDFDB.disCN["popout" + pos] : BDFDB.disCN.popouttop;
-				let arrowClass = !this.props.arrow ? BDFDB.disCN.popoutnoarrow : (pos && pos.indexOf("top") > -1 && pos != "top" ? BDFDB.disCN.popoutarrowalignmenttop : BDFDB.disCN.popoutarrowalignmentmiddle);
 				return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PopoutFocusLock, {
-					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.popoutwrapper, BDFDB.disCN.popout, positionClass, this.props.invert && pos && pos != "bottom" && BDFDB.disCN.popoutinvert, arrowClass, !this.props.shadow && BDFDB.disCN.popoutnoshadow),
+					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.popoutwrapper, this.props.className, this.props.themed && BDFDB.disCN.popoutthemedpopout, this.props.arrow  && BDFDB.disCN.popoutarrow, this.props.arrow && (pos == "top" ? BDFDB.disCN.popoutarrowtop : BDFDB.disCN.popoutarrowbottom)),
 					id: this.props.id,
 					onClick: e => e.stopPropagation(),
-					style: Object.assign({}, this.props.style, {
-						position: this.props.isChild ? "relative" : "absolute"
-					}),
-					children: BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.themed && BDFDB.disCN.popoutthemedpopout),
-						style: BDFDB.ObjectUtils.extract(this.props, "padding", "height", "maxHeight", "minHeight", "width", "maxWidth", "minWidth"),
-						children: this.props.children
-					})
+					style: BDFDB.ObjectUtils.extract(this.props, "padding", "height", "maxHeight", "minHeight", "width", "maxWidth", "minWidth"),
+					children: this.props.children
 				});
 			}
 		};
@@ -6957,7 +6946,7 @@ module.exports = (_ => {
 				})) : null;
 				let margin = this.props.margin != null ? this.props.margin : (this.props.mini ? 0 : 8);
 				return BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.settingsrow, BDFDB.disCN.settingsrowcontainer, this.props.disabled && BDFDB.disCN.settingsrowdisabled, margin != null && (BDFDB.DiscordClasses[`marginbottom${margin}`] && BDFDB.disCN[`marginbottom${margin}`] || margin == 0 && BDFDB.disCN.marginreset)),
+					className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.settingsrow, BDFDB.disCN.settingsrowcontainer, this.props.disabled && BDFDB.disCN.settingsrowdisabled, margin != null && (DiscordClasses[`marginbottom${margin}`] && BDFDB.disCN[`marginbottom${margin}`] || margin == 0 && BDFDB.disCN.marginreset)),
 					id: this.props.id,
 					children: [
 						this.props.dividerTop ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
