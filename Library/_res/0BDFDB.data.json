@@ -2709,7 +2709,7 @@
 		"pictureinpicturewindow": ["PictureInPicture", "pictureInPictureWindow"],
 		"popoutarrow": ["BDFDB", "popoutArrow"],
 		"popoutarrowbottom": ["BDFDB", "popoutArrowBottom"],
-		"popoutarrowbottom": ["BDFDB", "popoutArrowTop"],
+		"popoutarrowtop": ["BDFDB", "popoutArrowTop"],
 		"popoutthemedpopout": ["BDFDB", "themedPopout"],
 		"popoutwrapper": ["BDFDB", "popoutWrapper"],
 		"quickmessage": ["QuickMessage", "input"],
