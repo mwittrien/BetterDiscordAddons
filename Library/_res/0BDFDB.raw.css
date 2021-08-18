@@ -1076,7 +1076,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	content: "";
 	display: block;
 	position: absolute;
-	border: 8px solid var(--background-floating);
+	border: 8px solid var(--background-secondary);
 	border-right-color: transparent;
 	border-left-color: transparent;
 	left: calc(50% - 8px);
@@ -1109,9 +1109,6 @@ img:not([src]), img[src=""], img[src="null"] {
 	-webkit-box-direction: normal;
 	-ms-flex-direction: column;
 	flex-direction: column;
-}
-[REPLACE_CLASS_popoutthemedpopout][REPLACE_CLASS_popoutarrow]::before {
-	border: 8px solid var(--background-secondary);
 }
 
 [REPLACE_CLASS__repomodal] {
