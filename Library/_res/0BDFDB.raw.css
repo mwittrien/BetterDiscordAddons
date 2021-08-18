@@ -195,7 +195,7 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_searchbarwrapper] {
 	padding: 10px;
 }
-[REPLACE_CLASS_popout] [REPLACE_CLASS_searchbarwrapper] {
+[REPLACE_CLASS_popoutwrapper] [REPLACE_CLASS_searchbarwrapper] {
 	padding: 0 0 5px 0;
 	border-bottom: 1px solid var(--background-modifier-accent);
 }
