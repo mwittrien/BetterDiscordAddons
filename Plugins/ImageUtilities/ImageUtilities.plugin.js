@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.5
+ * @version 4.4.6
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.4.5",
+			"version": "4.4.6",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		},
 		"changeLog": {
 			"fixed": {
-				"Copy Image Linux": "Should work now"
+				"Double Zoom Lens": "No longer gets the zoom lens stuck on right click"
 			}
 		}
 	};
@@ -921,12 +921,15 @@ module.exports = (_ => {
 								pane.style.setProperty("height", imgRects.height * this.settings.zoomSettings.zoomLevel + "px", "important");
 							};
 							lens.update();
+							
+							e.node.style.setProperty("pointer-events", "none", "important");
 
 							let dragging = event2 => {
 								event = event2;
 								lens.update();
 							};
 							let releasing = _ => {
+								e.node.style.removeProperty("pointer-events");
 								this.cleanupListeners("Zoom");
 								document.removeEventListener("mousemove", dragging);
 								document.removeEventListener("mouseup", releasing);
