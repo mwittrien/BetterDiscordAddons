@@ -508,9 +508,9 @@ module.exports = (_ => {
 
 			onGuildContextMenu (e) {
 				if (e.instance.props.guild && this.settings.places.guildIcons) {
-					let banner = BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildheader, e.instance.props.target) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildchannels, e.instance.props.target) && !e.instance.props.target.className && e.instance.props.target.parentElement.firstElementChild == e.instance.props.target;
-					if (banner) {
-						if (e.instance.props.guild.banner) this.injectItem(e, (BDFDB.LibraryModules.IconUtils.getGuildBannerURL(e.instance.props.guild) || "").replace(/\.webp|\.gif/, ".png"));
+					if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildheader, e.instance.props.target) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildchannels, e.instance.props.target) && !e.instance.props.target.className && e.instance.props.target.parentElement.firstElementChild == e.instance.props.target) {
+						let banner = BDFDB.GuildUtils.getBanner(e.instance.props.guild.id);
+						if (banner) this.injectItem(e, banner.replace(/\.webp|\.gif/, ".png"));
 					}
 					else if (e.type != "GuildChannelListContextMenu") this.injectItem(e, (e.instance.props.guild.getIconURL() || "").replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.icon) && e.instance.props.guild.getIconURL(true));
 				}
@@ -1017,8 +1017,9 @@ module.exports = (_ => {
 			}
 			
 			processUserBanner (e) {
-				if (e.instance.props.user && this.settings.places.userAvatars && BDFDB.UserUtils.getBanner(e.instance.props.user.id)) e.returnvalue.props.onContextMenu = event => {
-					let validUrls = this.filterUrls((e.instance.props.user.getBannerURL() || "").replace(/\.webp|\.gif/, ".png"), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.banner) && e.instance.props.user.getBannerURL(true));
+				let banner = e.instance.props.user && this.settings.places.userAvatars && BDFDB.UserUtils.getBanner(e.instance.props.user.id);
+				if (banner) e.returnvalue.props.onContextMenu = event => {
+					let validUrls = this.filterUrls(banner.replace(/\.webp|\.gif/, ".png"), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.banner) && e.instance.props.user.getBannerURL(true));
 					if (validUrls.length) BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 						children: validUrls.length == 1 ? this.createSubMenus({}, validUrls) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.IMAGE + " " + BDFDB.LanguageUtils.LanguageStrings.ACTIONS,
