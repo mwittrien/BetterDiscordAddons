@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.3
+ * @version 1.8.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,15 +19,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.8.3",
+			"version": "1.8.4",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
-		"changeLog": {
-			"fixed": {
-				"Popout Arrows": ""
-			}
-		}
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
 	};
 	
 	const DiscordObjects = {};
@@ -5581,9 +5576,16 @@ module.exports = (_ => {
 					animation: InternalComponents.LibraryComponents.PopoutContainer.Animation.TRANSLATE,
 					position: InternalComponents.LibraryComponents.PopoutContainer.Positions.BOTTOM,
 					align: InternalComponents.LibraryComponents.PopoutContainer.Align.CENTER,
-					shouldShow: swatches.props.pickerOpen,
+					open: swatches.props.pickerOpen,
 					onClick: _ => swatches.props.pickerOpen = true,
-					onClose: _ => delete swatches.props.pickerOpen,
+					onOpen: _ => {
+						swatches.props.pickerOpen = true;
+						if (typeof swatches.props.onPickerOpen == "function") swatches.props.onPickerOpen(this);
+					},
+					onClose: _ => {
+						delete swatches.props.pickerOpen;
+						if (typeof swatches.props.onPickerClose == "function") swatches.props.onPickerClose(this);
+					},
 					renderPopout: _ => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ColorPicker, Object.assign({}, swatches.props.pickerConfig, {
 						color: swatches.props.color,
 						onColorChange: color => {
@@ -5603,7 +5605,6 @@ module.exports = (_ => {
 				return swatch;
 			}
 			render() {
-				let i = 0;
 				this.props.color = BDFDB.ObjectUtils.is(this.props.color) ? this.props.color : BDFDB.ColorUtils.convert(this.props.color, "RGBA");
 				this.props.colors = (BDFDB.ArrayUtils.is(this.props.colors) ? this.props.colors : [null, 5433630, 3066993, 1752220, 3447003, 3429595, 8789737, 10181046, 15277667, 15286558, 15158332, 15105570, 15844367, 13094093, 7372936, 6513507, 16777215, 3910932, 2067276, 1146986, 2123412, 2111892, 7148717, 7419530, 11342935, 11345940, 10038562, 11027200, 12745742, 9936031, 6121581, 2894892]).map(c => BDFDB.ColorUtils.convert(c, "RGBA"));
 				this.props.colorRows = this.props.colors.length ? [this.props.colors.slice(0, parseInt(this.props.colors.length/2)), this.props.colors.slice(parseInt(this.props.colors.length/2))] : [];
@@ -5612,24 +5613,21 @@ module.exports = (_ => {
 				this.props.customSelected = !!this.props.customColor;
 				this.props.pickerConfig = BDFDB.ObjectUtils.is(this.props.pickerConfig) ? this.props.pickerConfig : {gradient: true, alpha: true};
 				
-				let customSwatch = BDFDB.ReactUtils.createElement(this.ColorSwatch, {
-					swatches: this,
-					color: this.props.customColor,
-					isSingle: !this.props.colors.length,
-					isCustom: this.props.colors.length,
-					isSelected: this.props.customSelected,
-					isDisabled: this.props.disabled,
-					pickerOpen: this.props.pickerOpen,
-					style: {margin: 0}
-				});
-				return !this.props.colors.length ? BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCN.colorpickerswatchsinglewrapper,
-					children: customSwatch
-				}) : BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickerswatches, BDFDB.disCN.colorpickerswatchescontainer, this.props.disabled && BDFDB.disCN.colorpickerswatchesdisabled),
+				const isSingle = !this.props.colors.length;
+				return BDFDB.ReactUtils.createElement("div", {
+					className: isSingle ? BDFDB.disCN.colorpickerswatchsinglewrapper : BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickerswatches, BDFDB.disCN.colorpickerswatchescontainer, this.props.disabled && BDFDB.disCN.colorpickerswatchesdisabled),
 					children: [
-						customSwatch,
-						BDFDB.ReactUtils.createElement("div", {
+						BDFDB.ReactUtils.createElement(this.ColorSwatch, {
+							swatches: this,
+							color: this.props.customColor,
+							isSingle: isSingle,
+							isCustom: !isSingle,
+							isSelected: this.props.customSelected,
+							isDisabled: this.props.disabled,
+							pickerOpen: this.props.pickerOpen,
+							style: {margin: 0}
+						}),
+						!isSingle && BDFDB.ReactUtils.createElement("div", {
 							children: this.props.colorRows.map(row => BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.colorpickerrow,
 								children: row.map(color => BDFDB.ReactUtils.createElement(this.ColorSwatch, {
@@ -6673,62 +6671,62 @@ module.exports = (_ => {
 		
 		InternalComponents.LibraryComponents.PopoutContainer = reactInitialized && class BDFDB_PopoutContainer extends LibraryModules.React.Component {
 			componentDidMount() {
-				let basePopout = BDFDB.ReactUtils.findOwner(this, {name: "BasePopout"});
-				if (basePopout) this.domElementRef = basePopout.domElementRef;
+				this.toggle = this.toggle.bind(this);
+				this.onDocumentClicked = this.onDocumentClicked.bind(this);
+				this.domElementRef = BDFDB.ReactUtils.createRef();
+				this.domElementRef.current = BDFDB.ReactUtils.findDOMNode(this);
+			}
+			onDocumentClicked() {
+				const node = BDFDB.ReactUtils.findDOMNode(this.popout);
+				if (!node || !document.contains(node) || node != event.target && document.contains(event.target) && !node.contains(event.target)) this.toggle();
+			}
+			toggle() {
+				this.props.open = !this.props.open;
+				BDFDB.ReactUtils.forceUpdate(this);
 			}
 			render() {
-				let child = (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children) || BDFDB.ReactUtils.createElement("div", {style: {height: "100%", width: "100%"}});
+				const child = (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children) || BDFDB.ReactUtils.createElement("div", {style: {height: "100%", width: "100%"}});
 				child.props.className = BDFDB.DOMUtils.formatClassName(child.props.className, this.props.className);
-				const toggle = state => {
-					if (this.props.changing) return;
-					const newState = state === undefined ? !this.props.shouldShow : state;
-					if (newState != this.props.shouldShow) {
-						this.props.shouldShow = newState;
-						if (newState) BDFDB.TimeUtils.timeout(_ => {
-							const documentClick = event => {
-								let node = BDFDB.ReactUtils.findDOMNode(this.popout);
-								if (!node || !document.contains(node) || node != event.target && document.contains(event.target) && !node.contains(event.target)) {
-									document.removeEventListener("click", documentClick);
-									if (node) toggle(false);
-								}
-							};
-							document.addEventListener("click", documentClick);
-						}, 1000);
-						BDFDB.ReactUtils.forceUpdate(this);
-					}
-				};
 				const childProps = Object.assign({}, child.props);
 				child.props.onClick = (e, childThis) => {
-					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
-						if ((this.props.openOnClick || this.props.openOnClick === undefined)) toggle(true);
-						if (typeof this.props.onClick == "function") this.props.onClick(e, this);
-						if (typeof childProps.onClick == "function") childProps.onClick(e, childThis);
-					}
-					else e.stopPropagation();
+					if ((this.props.openOnClick || this.props.openOnClick === undefined)) this.toggle();
+					if (typeof this.props.onClick == "function") this.props.onClick(e, this);
+					if (typeof childProps.onClick == "function") childProps.onClick(e, childThis);
 				};
 				child.props.onContextMenu = (e, childThis) => {
-					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
-						if (this.props.openOnContextMenu) toggle(true);
-						if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
-						if (typeof childProps.onContextMenu == "function") childProps.onContextMenu(e, childThis);
-					}
-					else e.stopPropagation();
+					if (this.props.openOnContextMenu) this.toggle();
+					if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
+					if (typeof childProps.onContextMenu == "function") childProps.onContextMenu(e, childThis);
 				};
 				return BDFDB.ReactUtils.createElement(LibraryModules.React.Fragment, {
-					children: BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.PopoutContainer, Object.assign({}, this.props, {
-						shouldShow: this.props.shouldShow ? true : false,
-						children: _ => child,
-						renderPopout: e => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Popout, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-							className: this.props.popoutClassName,
-							containerInstance: this,
-							isChild: true,
-							position: e.position,
-							style: this.props.popoutStyle,
-							onOpen: typeof this.props.onOpen == "function" ? this.props.onOpen.bind(this) : _ => {},
-							onClose: typeof this.props.onClose == "function" ? this.props.onClose.bind(this) : _ => {},
-							children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(this) : null
-						}), "popoutStyle", "popoutClassName", "shouldShow", "changing", "renderPopout", "openOnClick", "onClick", "openOnContextMenu", "onContextMenu"))
-					}))
+					onClick: this.toggle,
+					children: [
+						child,
+						this.props.open && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.AppReferencePositionLayer, {
+							onMount: _ => BDFDB.TimeUtils.timeout(_ => document.addEventListener("click", this.onDocumentClicked)),
+							onUnmount: _ => document.removeEventListener("click", this.onDocumentClicked),
+							position: this.props.position,
+							align: this.props.align,
+							reference: this.domElementRef,
+							children: _ => {
+								const popout = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Popout, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+									className: this.props.popoutClassName,
+									containerInstance: this,
+									position: this.props.position,
+									style: this.props.popoutStyle,
+									onOpen: typeof this.props.onOpen == "function" ? this.props.onOpen.bind(this) : _ => {},
+									onClose: typeof this.props.onClose == "function" ? this.props.onClose.bind(this) : _ => {},
+									children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(this) : null
+								}), "popoutStyle", "popoutClassName", "shouldShow", "changing", "renderPopout", "openOnClick", "onClick", "openOnContextMenu", "onContextMenu"));
+								const animation = Object.entries(InternalComponents.LibraryComponents.PopoutContainer.Animation).find(n => n[1] == this.props.animation);
+								return !animation || this.props.animation == InternalComponents.LibraryComponents.PopoutContainer.Animation.NONE ? popout : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PopoutCSSAnimator, {
+									position: this.props.position,
+									type: InternalComponents.LibraryComponents.PopoutCSSAnimator.Types[animation[0]],
+									children: popout
+								});
+							}
+						})
+					]
 				});
 			}
 		};
@@ -7526,8 +7524,8 @@ module.exports = (_ => {
 					BDFDB.ReactUtils.forceUpdate(this);
 				}, 1000);
 				this.props.focused = true;
-				this.handleChange.bind(this)(value);
-				this.handleInput.bind(this)(value);
+				this.handleChange.apply(this, [value]);
+				this.handleInput.apply(this, [value]);
 			}
 			componentDidMount() {
 				if (this.props.type == "file") {
@@ -7539,7 +7537,7 @@ module.exports = (_ => {
 				input = input.querySelector("input") || input;
 				if (input && !input.patched) {
 					input.addEventListener("keydown", e => {
-						this.handleKeyDown.bind(this)(e);
+						this.handleKeyDown.apply(this, [e]);
 						e.stopImmediatePropagation();
 					});
 					input.patched = true;
@@ -7560,14 +7558,17 @@ module.exports = (_ => {
 						maxLength: this.props.type == "file" ? false : this.props.maxLength,
 						style: this.props.width ? {width: `${this.props.width}px`} : {},
 						ref: this.props.inputRef
-					}), "errorMessage", "focused", "error", "success", "inputClassName", "inputChildren", "valuePrefix", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "noAlpha", "filter", "useFilePath", "searchFolders")),
+					}), "errorMessage", "focused", "error", "success", "inputClassName", "inputChildren", "valuePrefix", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "colorPickerOpen", "noAlpha", "filter", "useFilePath", "searchFolders")),
 					this.props.inputChildren,
 					this.props.type == "color" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
 						wrap: true,
 						children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ColorSwatches, {
 							colors: [],
 							color: this.props.value && this.props.mode == "comp" ? BDFDB.ColorUtils.convert(this.props.value.split(","), "RGB") : this.props.value,
-							onColorChange: color => this.handleChange(!color ? "" : (this.props.mode == "comp" ? BDFDB.ColorUtils.convert(color, "RGBCOMP").slice(0, 3).join(",") : BDFDB.ColorUtils.convert(color, this.props.noAlpha ? "RGB" : "RGBA"))),
+							onColorChange: color => this.handleChange.apply(this, [!color ? "" : (this.props.mode == "comp" ? BDFDB.ColorUtils.convert(color, "RGBCOMP").slice(0, 3).join(",") : BDFDB.ColorUtils.convert(color, this.props.noAlpha ? "RGB" : "RGBA"))]),
+							pickerOpen: this.props.colorPickerOpen,
+							onPickerOpen: _ => this.props.colorPickerOpen = true,
+							onPickerClose: _ => delete this.props.colorPickerOpen,
 							ref: this.props.controlsRef,
 							pickerConfig: {gradient: false, alpha: this.props.mode != "comp" && !this.props.noAlpha}
 						})
