@@ -288,6 +288,7 @@
 	"LibraryComponents": {
 		"Anchor": {"name": "Anchor"},
 		"Animations": {"props": ["Controller", "Spring"], "assign": true},
+		"AppReferencePositionLayer": {"name": "AppReferencePositionLayer"},
 		"AutocompleteItems": {"props": ["Generic", "User", "Command"]},
 		"AutocompleteMenu": {"name": "Autocomplete"},
 		"AvatarComponents": {"props": ["AnimatedAvatar"]},
