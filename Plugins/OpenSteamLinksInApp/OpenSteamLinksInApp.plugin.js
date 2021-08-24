@@ -2,7 +2,7 @@
  * @name OpenSteamLinksInApp
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.3
+ * @version 1.1.4
  * @description Opens Steam Links in Steam instead of your Browser
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "OpenSteamLinksInApp",
 			"author": "DevilBro",
-			"version": "1.1.3",
+			"version": "1.1.4",
 			"description": "Opens Steam Links in Steam instead of your Browser"
 		},
 		"changeLog": {
 			"fixed": {
-				"HTTP Links": "Also works with http links and not only with https links"
+				"Zoomable Images": "No longer tries to open zoomable Images inside Steam"
 			}
 		}
 	};
@@ -81,7 +81,9 @@ module.exports = (_ => {
 			onLoad () {}
 			
 			onStart () {
-				for (let key in urls) BDFDB.ListenerUtils.add(this, document, "click", BDFDB.ArrayUtils.removeCopies(urls[key].map(url => url.indexOf("http") == 0 ? (url.indexOf("https://") == 0 ? [`a[href^="${url}"]`, `a[href^="${url.replace(/https:\/\//i, "http://")}"]`] : `a[href^="${url}"]`) : `a[href*="${url}"][href*="${key}"]`).flat(10).filter(n => n)).join(", "), e => this.openIn(e, key, e.currentTarget.href));
+				for (let key in urls) BDFDB.ListenerUtils.add(this, document, "click", BDFDB.ArrayUtils.removeCopies(urls[key].map(url => url.indexOf("http") == 0 ? (url.indexOf("https://") == 0 ? [`a[href^="${url}"]`, `a[href^="${url.replace(/https:\/\//i, "http://")}"]`] : `a[href^="${url}"]`) : `a[href*="${url}"][href*="${key}"]`).flat(10).filter(n => n)).join(", "), e => {
+					if (!(e.currentTarget.className && e.currentTarget.className.indexOf(BDFDB.disCN.imagezoom) > -1)) this.openIn(e, key, e.currentTarget.href);
+				});
 			}
 			
 			onStop () {}
