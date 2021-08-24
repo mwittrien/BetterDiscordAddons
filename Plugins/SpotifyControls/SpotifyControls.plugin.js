@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.1
+ * @version 1.2.2
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.2.1",
+			"version": "1.2.2",
 			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
 		},
 		"changeLog": {
-			"fixed": {
-				"Show Activity": "Show Activity Button has correct state on start up"
+			"improved": {
+				"Ordder": "Spotify Controls Panel will always be the first panel above account details/voice connection state/listen alongs"
 			}
 		}
 	};
@@ -488,6 +488,10 @@ module.exports = (_ => {
 					:root {
 						--SC-spotify-green: ${BDFDB.DiscordConstants.Colors.SPOTIFY};
 					}
+					${BDFDB.dotCN.channelpanels} {
+	display: flex;
+	flex-direction: column;
+					}
 					${BDFDB.dotCN._spotifycontrolscontainer} {
 						display: flex;
 						flex-direction: column;
@@ -497,6 +501,7 @@ module.exports = (_ => {
 						border-bottom: 1px solid var(--background-modifier-accent);
 						padding: 0 8px;
 						box-sizing: border-box;
+						order: -1;
 					}
 					${BDFDB.dotCN._spotifycontrolscontainer + BDFDB.dotCN._spotifycontrolscontainerwithtimeline} {
 						padding-top: 8px;
