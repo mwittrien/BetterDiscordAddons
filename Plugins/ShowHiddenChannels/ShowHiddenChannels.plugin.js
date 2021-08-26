@@ -660,7 +660,7 @@ module.exports = (_ => {
 
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
-					header: BDFDB.LanguageUtils.LanguageStrings.CHANNEL + " " + BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY,
+					header: this.labels.context_channelaccess,
 					subHeader: "#" + channel.name,
 					className: BDFDB.disCN._showhiddenchannelsaccessmodal,
 					contentClassName: BDFDB.DOMUtils.formatClassName(!isThread && BDFDB.disCN.listscroller),
