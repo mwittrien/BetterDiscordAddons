@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.7
+ * @version 1.7.8
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.7.7",
+			"version": "1.7.8",
 			"description": "Shows a Notification when a Friend or a User, you choose to observe, changes their Status"
 		},
 		"changeLog": {
-			"added": {
-				"Time Log Option": "You can now disable the time log for users, in case you only want the time log for your important friends",
-				"Log In Option": "You can now enable the login option, this will notify you in case a user changed his status from offline to any other status (so enabling only offline and login will only notify you about logout and logins, no notifications about status changes from example online to dnd)"
+			"fixed": {
+				"Log In Option": "Now also works for Desktop Notifications"
 			}
 		}
 	};
@@ -849,7 +848,7 @@ module.exports = (_ => {
 						let user = BDFDB.LibraryModules.UserStore.getUser(id);
 						let status = this.getStatusWithMobileAndActivity(id, observedUsers[id], clientStatuses);
 						let customChanged = false, loginNotice = false;
-						if (user && (!observedUsers[id][status.name] && observedUsers[id].login && status.name != "offline" && userStatusStore[id].name == "offline" && (loginNotice = true) || observedUsers[id][status.name] && (
+						if (user && (!observedUsers[id][status.name] && observedUsers[id].login && status.name != BDFDB.DiscordConstants.StatusTypes.OFFLINE && userStatusStore[id].name == BDFDB.DiscordConstants.StatusTypes.OFFLINE && (loginNotice = true) || observedUsers[id][status.name] && (
 							observedUsers[id].custom && (
 								userStatusStore[id].custom != status.custom && ((customChanged = status.custom) || true) ||
 								(customChanged = status.custom && !this.activityIsSame(id, status))
@@ -891,7 +890,7 @@ module.exports = (_ => {
 										BDFDB.LibraryModules.WindowUtils.focus();
 									}
 								};
-								if (observedUsers[id][status.name] == notificationTypes.DESKTOP.value) {
+								if ((loginNotice ? observedUsers[id].login : observedUsers[id][status.name]) == notificationTypes.DESKTOP.value) {
 									let desktopString = string.replace(/\$user/g, `${name}${this.settings.general.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/\$statusOld/g, oldStatusName).replace(/\$status/g, statusName);
 									if (status.activity) desktopString = desktopString.replace(/\$song|\$game/g, status.activity.name || status.activity.details || "").replace(/\$artist|\$custom/g, [status.activity.emoji && status.activity.emoji.name, status.activity.state].filter(n => n).join(" ") || "");
 									if (status.mobile) desktopString += " (mobile)";

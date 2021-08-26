@@ -7785,7 +7785,7 @@ module.exports = (_ => {
 		
 		for (let type in InternalComponents.NativeSubComponents) if (InternalComponents.LibraryComponents[type]) for (let key in InternalComponents.NativeSubComponents[type]) if (key != "displayName" && key != "name" && (typeof InternalComponents.NativeSubComponents[type][key] != "function" || key.charAt(0) == key.charAt(0).toUpperCase())) {
 			if (key == "defaultProps") InternalComponents.LibraryComponents[type][key] = Object.assign({}, InternalComponents.LibraryComponents[type][key], InternalComponents.NativeSubComponents[type][key]);
-			else InternalComponents.LibraryComponents[type][key] = InternalComponents.NativeSubComponents[type][key];
+			else if (!InternalComponents.LibraryComponents[type][key]) InternalComponents.LibraryComponents[type][key] = InternalComponents.NativeSubComponents[type][key];
 		}
 		BDFDB.LibraryComponents = Object.assign({}, InternalComponents.LibraryComponents);
 		
