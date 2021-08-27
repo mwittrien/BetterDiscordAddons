@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.2
+ * @version 1.2.3
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.2.2",
+			"version": "1.2.3",
 			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
 		},
 		"changeLog": {
-			"improved": {
-				"Ordder": "Spotify Controls Panel will always be the first panel above account details/voice connection state/listen alongs"
+			"fixed": {
+				"Volume Popout": "No longer closes after a second"
 			}
 		}
 	};
@@ -144,7 +144,6 @@ module.exports = (_ => {
 				}
 				if (!lastSong) return null;
 				
-				let playerSize = this.props.maximized ? "big" : "small";
 				let coverSrc = BDFDB.LibraryModules.AssetUtils.getAssetImage(lastSong.application_id, lastSong.assets.large_image);
 				let connection = (BDFDB.LibraryModules.ConnectionStore.getAccounts().find(n => n.type == "spotify") || {});
 				showActivity = showActivity != undefined ? showActivity : (connection.show_activity || connection.showActivity);
@@ -225,7 +224,7 @@ module.exports = (_ => {
 										children: [
 											BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
 												type: "share",
-												playerSize: playerSize,
+												player: this,
 												style: this.props.maximized ? {marginRight: 4} : {},
 												onClick: _ => {
 													let url = BDFDB.ObjectUtils.get(playbackState, "item.external_urls.spotify") || BDFDB.ObjectUtils.get(playbackState, "context.external_urls.spotify");
@@ -238,7 +237,7 @@ module.exports = (_ => {
 											}),
 											BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
 												type: "shuffle",
-												playerSize: playerSize,
+												player: this,
 												active: playbackState.shuffle_state,
 												disabled: socketDevice.device.is_restricted,
 												onClick: _ => {
@@ -251,7 +250,7 @@ module.exports = (_ => {
 											}),
 											BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
 												type: "previous",
-												playerSize: playerSize,
+												player: this,
 												disabled: socketDevice.device.is_restricted,
 												onClick: _ => {
 													if (previousIsClicked || !_this.settings.general.doubleBack) {
@@ -271,7 +270,7 @@ module.exports = (_ => {
 											}),
 											BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
 												type: "pauseplay",
-												playerSize: playerSize,
+												player: this,
 												icon: this.props.song ? 0 : 1,
 												disabled: socketDevice.device.is_restricted,
 												onClick: _ => {
@@ -287,7 +286,7 @@ module.exports = (_ => {
 											}),
 											BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
 												type: "next",
-												playerSize: playerSize,
+												player: this,
 												disabled: socketDevice.device.is_restricted,
 												onClick: _ => {
 													this.request(socketDevice.socket, socketDevice.device, "next");
@@ -295,7 +294,7 @@ module.exports = (_ => {
 											}),
 											BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
 												type: "repeat",
-												playerSize: playerSize,
+												player: this,
 												icon: playbackState.repeat_state != repeatStates[2] ? 0 : 1,
 												active: playbackState.repeat_state != repeatStates[0],
 												disabled: socketDevice.device.is_restricted,
@@ -309,7 +308,7 @@ module.exports = (_ => {
 											}),
 											BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
 												type: "volume",
-												playerSize: playerSize,
+												player: this,
 												icon: Math.ceil(currentVolume/34),
 												disabled: socketDevice.device.is_restricted,
 												style: this.props.maximized ? {marginLeft: 4} : {},
@@ -370,7 +369,8 @@ module.exports = (_ => {
 		};
 		const SpotifyControlsButtonComponent = class SpotifyControlsButton extends BdApi.React.Component {
 			render() {
-				if (!this.props.playerSize || !_this.settings.buttons[this.props.type] || !_this.settings.buttons[this.props.type][this.props.playerSize]) return null;
+				let playerSize = this.props.player.props.maximized ? "big" : "small";
+				if (!playerSize || !_this.settings.buttons[this.props.type] || !_this.settings.buttons[this.props.type][playerSize]) return null;
 				let button = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.accountinfobutton, this.props.disabled ? BDFDB.disCN.accountinfobuttondisabled : BDFDB.disCN.accountinfobuttonenabled, this.props.active && BDFDB.disCN._spotifycontrolsbuttonactive),
 					look: BDFDB.LibraryComponents.Button.Looks.BLANK,
@@ -378,13 +378,16 @@ module.exports = (_ => {
 					children: _this.defaults.buttons[this.props.type] && _this.defaults.buttons[this.props.type].icons ? (_this.defaults.buttons[this.props.type].icons[this.props.icon] || _this.defaults.buttons[this.props.type].icons[0]) : "?",
 					onClick: this.props.disabled ? _ => {} : this.props.onClick,
 					onContextMenu: this.props.disabled ? _ => {} : this.props.onContextMenu,
-				}), "active", "disabled", "renderPopout", "icon", "type", "playerSize"));
+				}), "active", "disabled", "renderPopout", "icon", "type"));
 				return !this.props.disabled && typeof this.props.renderPopout == "function" ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
 					children: button,
 					animation: BDFDB.LibraryComponents.PopoutContainer.Animation.SCALE,
 					position: BDFDB.LibraryComponents.PopoutContainer.Positions.TOP,
 					align: BDFDB.LibraryComponents.PopoutContainer.Align.CENTER,
 					arrow: true,
+					open: this.props.player.props.buttonStates.indexOf(this.props.type) > -1,
+					onOpen: _ => this.props.player.props.buttonStates.push(this.props.type),
+					onClose: _ => BDFDB.ArrayUtils.remove(this.props.player.props.buttonStates, this.props.type, true),
 					renderPopout: this.props.renderPopout
 				}) : button;
 	}
@@ -803,6 +806,7 @@ module.exports = (_ => {
 						key: "SPOTIFY_CONTROLS",
 						song: BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false),
 						maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
+						buttonStates: [],
 						timeline: this.settings.general.addTimeline,
 						activityToggle: this.settings.general.addActivityButton
 					}, true),

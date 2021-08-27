@@ -1083,10 +1083,10 @@ img:not([src]), img[src=""], img[src="null"] {
 	z-index: 1;
 }
 [REPLACE_CLASS_popoutarrowtop] {
-	margin-top: -16px;
+	margin-bottom: 8px;
 }
 [REPLACE_CLASS_popoutarrowbottom] {
-	margin-top: 16px;
+	margin-top: 8px;
 }
 [REPLACE_CLASS_popoutarrowtop]::before {
 	border-bottom-color: transparent;
