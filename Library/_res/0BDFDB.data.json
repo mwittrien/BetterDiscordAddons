@@ -197,6 +197,7 @@
 			"ChannelTextAreaForm": {"class": "chatform"},
 			"ChannelWindow": {"class": "chatcontent"},
 			"ChatMessage": {"strings": ["childrenMessageContent", "childrenRepliedMessage", "message.id"]},
+			"CircleIconButton": {"class": "guildbuttoninner"},
 			"CustomStatusModal": {"class": "customstatusmodal"},
 			"DirectMessage": {"class": "guildouter"},
 			"EmojiPicker": {"strings": ["EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"]},
