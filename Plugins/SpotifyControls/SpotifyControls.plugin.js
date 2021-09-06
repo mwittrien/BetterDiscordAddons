@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.3
+ * @version 1.2.4
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.2.3",
+			"version": "1.2.4",
 			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
 		},
 		"changeLog": {
 			"fixed": {
-				"Volume Popout": "No longer closes after a second"
+				"Previous": "Double click to previous work again"
 			}
 		}
 	};
@@ -255,6 +255,7 @@ module.exports = (_ => {
 												onClick: _ => {
 													if (previousIsClicked || !_this.settings.general.doubleBack) {
 														previousIsClicked = false;
+														BDFDB.TimeUtils.clear(previousDoubleTimeout);
 														this.request(socketDevice.socket, socketDevice.device, "previous");
 													}
 													else {
