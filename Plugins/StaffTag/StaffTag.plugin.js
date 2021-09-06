@@ -431,7 +431,7 @@ module.exports = (_ => {
 					case "bg":		// Bulgarian
 						return {
 							management:							"Управление",
-							creator:							"{{var0}} създател"
+							creator:							"Cъздател {{var0}}"
 						};
 					case "cs":		// Czech
 						return {
@@ -531,7 +531,7 @@ module.exports = (_ => {
 					case "ru":		// Russian
 						return {
 							management:							"Управление",
-							creator:							"{{var0}} создатель"
+							creator:							"Cоздатель {{var0}}"
 						};
 					case "sv":		// Swedish
 						return {
