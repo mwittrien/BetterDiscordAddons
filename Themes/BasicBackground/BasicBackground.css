@@ -642,7 +642,7 @@ body::after {
 .panels-j1Uci_ .wrapper-24pKcD > * {						/* account/voice		inner								*/
 	border: none;
 }
-.panels-j1Uci_ > *:not(:empty) + * {
+.panels-j1Uci_ > *:not(:empty) ~ *:not(:empty) {
 	border-top: 1px solid rgba(var(--transparencycolor), .2);
 }
 
