@@ -131,7 +131,7 @@ module.exports = (_ => {
 						ChannelReply: "default",
 						MemberListItem: "render",
 						AuditLogs: "render",
-						AuditLog: "render",
+						GuildSettingsAuditLogEntry: "render",
 						GuildSettingsEmoji: "render",
 						MemberCard: "render",
 						SettingsInvites: "render",
@@ -962,7 +962,7 @@ module.exports = (_ => {
 				}
 			}
 
-			processAuditLog (e) {
+			processGuildSettingsAuditLogEntry (e) {
 				if (e.instance.props.log && this.settings.places.guildSettings) {
 					if (e.instance.props.log.user) e.instance.props.log.user = this.getUserData(e.instance.props.log.user.id);
 					if (e.instance.props.log.target && e.instance.props.log.targetType == "USER") e.instance.props.log.target = this.getUserData(e.instance.props.log.target.id);

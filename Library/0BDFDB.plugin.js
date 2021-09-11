@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.4
+ * @version 1.8.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.8.4",
+			"version": "1.8.5",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -7705,9 +7705,9 @@ module.exports = (_ => {
 				let childProps = Object.assign({}, child.props);
 				let shown = false;
 				child.props.onMouseEnter = (e, childThis) => {
-					if (!shown && !e.currentTarget.BDFDBtooltipShown) {
+					if (!shown && !e.currentTarget.BDFDBtooltipShown && !(this.props.onlyShowOnShift && !e.shiftKey) && !(this.props.onlyShowOnCtrl && !e.ctrlKey)) {
 						e.currentTarget.BDFDBtooltipShown = shown = true;
-						this.tooltip = BDFDB.TooltipUtils.create(e.currentTarget, typeof this.props.text == "function" ? this.props.text(this) : this.props.text, Object.assign({
+						this.tooltip = BDFDB.TooltipUtils.create(e.currentTarget, typeof this.props.text == "function" ? this.props.text(this, e) : this.props.text, Object.assign({
 							note: this.props.note,
 							delay: this.props.delay
 						}, this.props.tooltipConfig, {
@@ -7728,12 +7728,12 @@ module.exports = (_ => {
 				child.props.onClick = (e, childThis) => {
 					if (typeof this.props.onClick == "function") this.props.onClick(e, this);
 					if (typeof childProps.onClick == "function") childProps.onClick(e, childThis);
-					if (typeof this.props.text == "function") this.updateTooltip(this.props.text(this));
+					if (typeof this.props.text == "function") this.updateTooltip(this.props.text(this, e));
 				};
 				child.props.onContextMenu = (e, childThis) => {
 					if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
 					if (typeof childProps.onContextMenu == "function") childProps.onContextMenu(e, childThis);
-					if (typeof this.props.text == "function") this.updateTooltip(this.props.text(this));
+					if (typeof this.props.text == "function") this.updateTooltip(this.props.text(this, e));
 				};
 				return BDFDB.ReactUtils.createElement(LibraryModules.React.Fragment, {
 					children: child

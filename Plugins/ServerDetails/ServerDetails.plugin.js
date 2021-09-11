@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.6
+ * @version 1.0.7
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerDetails",
 			"author": "DevilBro",
-			"version": "1.0.6",
+			"version": "1.0.7",
 			"description": "Shows Server Details in the Server List Tooltip"
+		},
+		"changeLog": {
+			"added": {
+				"Shift": "Added Shift Key Option"
+			}
 		}
 	};
 
@@ -82,6 +87,7 @@ module.exports = (_ => {
 				}
 			}
 			render() {
+				if (_this.settings.general.onlyShowOnShift && !this.props.shiftKey) return null;
 				if (_this.settings.amounts.tooltipDelay && !this.state.delayed) {
 					BDFDB.TimeUtils.timeout(_ => {
 						this.state.delayed = true;
@@ -164,6 +170,9 @@ module.exports = (_ => {
 				_this = this;
 				
 				this.defaults = {
+					general: {
+						onlyShowOnShift:	{value: false,	description: "Only show the Details Tooltip, while holding 'Shift'"}
+					},
 					items: {
 						icon:				{value: true, 	description: "GUILD_CREATE_UPLOAD_ICON_LABEL"},
 						owner:				{value: true, 	description: "GUILD_OWNER"},
@@ -238,6 +247,18 @@ module.exports = (_ => {
 					collapseStates: collapseStates,
 					children: _ => {
 						let settingsItems = [];
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Settings",
+							collapseStates: collapseStates,
+							children: Object.keys(this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["general", key],
+								label: this.defaults.general[key].description,
+								value: this.settings.general[key]
+							}))
+						}));
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Tooltip Items",
@@ -334,7 +355,8 @@ module.exports = (_ => {
 							list: true,
 							offset: 12
 						}),
-						text: _ => BDFDB.ReactUtils.createElement(GuildDetailsComponent, {
+						text: (instance, event) => BDFDB.ReactUtils.createElement(GuildDetailsComponent, {
+							shiftKey: event.shiftKey,
 							tooltipContainer: tooltipContainer,
 							guild: e.instance.props.guild
 						})

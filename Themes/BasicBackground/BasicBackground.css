@@ -282,6 +282,9 @@ body::before {
 body::after {
 	backdrop-filter: blur(var(--backgroundblur));
 }
+.layer-3QrUeG {
+	z-index: 1000;
+}
 .container-16j22k::before,
 .layer-3QrUeG ~ .layer-3QrUeG::before,
 .root-3R2ngo::before,
@@ -514,9 +517,11 @@ body::after {
 	background-color: rgba(var(--transparencycolor), .2);
 }
 
+.container-3O_wAf,
 .channelNotice-1-XFjC {										/* notice				container							*/
 	box-shadow: inset 0 -1px 0 rgba(var(--transparencycolor), .3);
 }
+.container-3O_wAf,
 .channelNotice-1-XFjC.invite-OjTXrW,
 .channelNotice-1-XFjC.guildMFAWarning-3GEzs8,
 .channelNotice-1-XFjC.maxMembersCount-3E4zND,
@@ -633,10 +638,11 @@ body::after {
 
 /* ----		5.4.	ACCOUNT/VOICE/GOLIVE			---- */
 
-.panels-j1Uci_ > * {										/* account/voice		inner								*/
+.panels-j1Uci_ > *,											/* account/voice		inner								*/
+.panels-j1Uci_ .wrapper-24pKcD > * {						/* account/voice		inner								*/
 	border: none;
 }
-.panels-j1Uci_ > * + * {
+.panels-j1Uci_ > *:not(:empty) + * {
 	border-top: 1px solid rgba(var(--transparencycolor), .2);
 }
 
@@ -2649,6 +2655,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .icon-3_8HGa {												/* rolesettings			everyone role icon					*/
 	background-color: rgba(var(--transparencycolor), .4);
 }
+.titleContainer-2CXtJo,										/* rolesettings			roles list header					*/
 .header-2mZ9Ov {											/* rolesettings			perms list header					*/
 	background-color: transparent;
 }

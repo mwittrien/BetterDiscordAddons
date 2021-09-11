@@ -107,7 +107,7 @@ module.exports = (_ => {
 						ThreadEmptyMessage: "default",
 						SystemMessageWrapper: "type",
 						AutocompleteChannelResult: "render",
-						AuditLog: "render",
+						GuildSettingsAuditLogEntry: "render",
 						SettingsInvites: "render",
 						HeaderBarContainer: "render",
 						ChannelCategoryItem: "type",
@@ -121,7 +121,7 @@ module.exports = (_ => {
 						ThreadMessageAccessories: "default",
 						ThreadCreated: "default",
 						AutocompleteChannelResult: "render",
-						AuditLog: "render",
+						GuildSettingsAuditLogEntry: "render",
 						HeaderBarContainer: "render",
 						ThreadSidebar: "default",
 						ThreadCard: "type",
@@ -345,7 +345,7 @@ module.exports = (_ => {
 				}
 			}
 
-			processAuditLog (e) {
+			processGuildSettingsAuditLogEntry (e) {
 				let channel = BDFDB.ObjectUtils.get(e.instance, "props.log.options.channel");
 				if (channel && this.settings.places.auditLog) {
 					if (!e.returnvalue) e.instance.props.log.options.channel = this.getChannelData(channel.id);
