@@ -3189,7 +3189,7 @@
 	"Languages": {
 		"$discord": 	{"name":"Discord (English)",			"id":"en",		"ownlang":"English"},
 		"af":			{"name":"Afrikaans",					"id":"af",		"ownlang":"Afrikaans"},
-		"sq":			{"name":"Albanian",						"id":"sq",		"ownlang":"Shqiptar"},
+		"sq":			{"name":"Albanian",						"id":"sq",		"ownlang":"Shqip"},
 		"am":			{"name":"Amharic",						"id":"am",		"ownlang":"አማርኛ"},
 		"ar":			{"name":"Arabic",						"id":"ar",		"ownlang":"اللغة العربية"},
 		"hy":			{"name":"Armenian",						"id":"hy",		"ownlang":"Հայերեն"},
