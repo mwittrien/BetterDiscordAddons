@@ -649,14 +649,14 @@ module.exports = (_ => {
 						};
 					case "pl":		// Polish
 						return {
-							context_favorizefriend:				"Dodaj przyjaciela do ulubionych",
-							context_hidefriend:					"Ukryj przyjaciela",
-							context_unfavorizefriend:			"Usuń przyjaciela z ulubionych",
-							context_unhidefriend:				"Odkryj przyjaciela",
+							context_favorizefriend:				"Dodaj znajomego do ulubionych",
+							context_hidefriend:					"Ukryj znajomego",
+							context_unfavorizefriend:			"Usuń znajomego z ulubionych",
+							context_unhidefriend:				"Pokaż znajomego",
 							favorites:							"Ulubione",
-							hidden:								"Ukryty",
-							incoming:							"Przychodzący",
-							outgoing:							"Towarzyski"
+							hidden:								"Ukryci",
+							incoming:							"Przychodzące",
+							outgoing:							"Wychodzące"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
