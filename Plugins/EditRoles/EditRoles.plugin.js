@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.6
+ * @version 1.0.7
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditRoles",
 			"author": "DevilBro",
-			"version": "1.0.6",
+			"version": "1.0.7",
 			"description": "Allows you to locally edit Roles"
 		},
 		"changeLog": {
+			"added": {
+				"Icons": "Added support for the upcoming role icon feature"
+			},
 			"fixed": {
-				"Crashs": ""
+				"Reset": "Fixed Roles not reseting properly in some places"
 			}
 		}
 	};
@@ -73,12 +76,13 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var changedRoles = {};
+		var changedRoles = {}, cachedRoles = {};
 		
 		return class EditRoles extends Plugin {
 			onLoad () {
 				this.patchedModules = {
 					before: {
+						MessageHeader: "default",
 						ChannelMembers: "render",
 						MemberListItem: "render",
 						UserPopoutBody: "default"
@@ -104,12 +108,22 @@ module.exports = (_ => {
 					if (e.returnValue) {
 						let guild = BDFDB.LibraryModules.GuildStore.getGuild(e.methodArguments[0]);
 						if (guild) {
-							let role;
-							for (let id of e.returnValue.roles) if (guild.roles[id] && guild.roles[id].colorString && (!role || role.position < guild.roles[id].position)) role = guild.roles[id];
-							let data = role && changedRoles[role.id];
-							if (data) e.returnValue = Object.assign({}, e.returnValue, {colorString: data.color ? BDFDB.ColorUtils.convert(data.color, "HEX") : e.returnValue.colorString});
+							let colorRole, iconRole;
+							for (let id of e.returnValue.roles) {
+								if (guild.roles[id] && guild.roles[id].colorString && (!colorRole || colorRole.position < guild.roles[id].position)) colorRole = guild.roles[id];
+								if (guild.roles[id] && guild.roles[id].icon && (!iconRole || iconRole.position < guild.roles[id].position)) iconRole = guild.roles[id];
+							}
+							let color = colorRole && changedRoles[colorRole.id] && changedRoles[colorRole.id].color;
+							if (color) e.returnValue = Object.assign({}, e.returnValue, {colorString: BDFDB.ColorUtils.convert(color, "HEX")});
+							if (iconRole && changedRoles[iconRole.id] && changedRoles[iconRole.id].icon) e.returnValue = Object.assign({}, e.returnValue, {iconRoleId: iconRole.id});
 						}
 					}
+				}});
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RoleIconUtils, "getRoleIconSource", {after: e => {
+					if (e.returnValue && changedRoles[e.methodArguments[0]] && changedRoles[e.methodArguments[0]].icon) return changedRoles[e.methodArguments[0]].icon;
+				}});
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RoleIconUtils, "guildCanUseRoleIcons", {after: e => {
+					if (e.returnValue === false && Object.keys(e.methodArguments[0].roles).some(roleId => changedRoles[roleId] && changedRoles[roleId].icon)) return true;
 				}});
 				
 				this.forceUpdateAll();
@@ -132,7 +146,7 @@ module.exports = (_ => {
 							label: "Reset all Roles",
 							onClick: _ => {
 								BDFDB.ModalUtils.confirm(this, this.labels.confirm_resetall, _ => {
-									BDFDB.DataUtils.remove(this, "roles");
+									this.resetRoles();
 									this.forceUpdateAll();
 								});
 							},
@@ -204,7 +218,7 @@ module.exports = (_ => {
 										disabled: !changedRoles[e.instance.props.id],
 										action: event => {
 											let remove = _ => {
-												BDFDB.DataUtils.remove(this, "roles", e.instance.props.id);
+												this.resetRoles(e.instance.props.id);
 												this.forceUpdateAll(true);
 											};
 											if (event.shiftKey) remove();
@@ -218,6 +232,7 @@ module.exports = (_ => {
 					e.returnvalue.props.children
 				].flat(10).filter(n => n);
 			}
+			
 			processChannelMembers (e) {
 				e.instance.props.groups = [].concat(e.instance.props.groups);
 				for (let i in e.instance.props.groups) if (e.instance.props.groups[i].type == "GROUP") {
@@ -254,18 +269,35 @@ module.exports = (_ => {
 						changed = true;
 						roles[id] = Object.assign({}, roles[id], {
 							name: data.name || roles[id].name,
+							icon: data.icon || roles[id].icon,
 							color: data.color ? BDFDB.ColorUtils.convert(data.color, "INT") : roles[id].color,
 							colorString: data.color ? BDFDB.ColorUtils.convert(data.color, "HEX") : roles[id].colorString
 						});
 					}
 				}
+				if (useNative && changed && !cachedRoles[guild.id]) cachedRoles[guild.id] = guild.roles;
 				if (useNative) guild.roles = roles;
 				return !changed || useNative ? guild : (new BDFDB.DiscordObjects.Guild(Object.assign({}, guild, {roles})));
+			}
+			
+			resetRoles (id) {
+				if (id) {
+					let guild = this.getGuildFromRoleId(id);
+					if (guild && cachedRoles[guild.id]) guild.roles = Object.assign({}, guild.roles, {[id]: cachedRoles[guild.id][id]});
+					BDFDB.DataUtils.remove(this, "roles", id);
+				}
+				else {
+					for (let guild of BDFDB.LibraryModules.FolderStore.getFlattenedGuilds()) if (cachedRoles[guild.id]) guild.roles = cachedRoles[guild.id];
+					cachedRoles = {};
+					BDFDB.DataUtils.remove(this, "roles");
+				}
 			}
 
 			openRoleSettingsModal (role) {
 				let data = changedRoles[role.id] || {};
 				let newData = Object.assign({}, data);
+				
+				let iconInput;
 				
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
@@ -280,7 +312,7 @@ module.exports = (_ => {
 									value: data.name,
 									placeholder: role.name,
 									autoFocus: true,
-									onChange: value => {newData.name = value;}
+									onChange: value => newData.name = value
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 									className: BDFDB.disCN.dividerdefault
@@ -298,7 +330,59 @@ module.exports = (_ => {
 										alpha: false,
 										gradient: false
 									},
-									onColorChange: value => {newData.color = value;}
+									onColorChange: value => newData.color = value
+								})
+							]
+						}),
+						BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.marginbottom20,
+							children: [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+									className: BDFDB.disCNS.dividerdefault + BDFDB.disCN.marginbottom20
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+									className: BDFDB.disCN.marginbottom8,
+									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+									direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
+									children: [
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+											className: BDFDB.disCN.marginreset,
+											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+											children: BDFDB.LibraryModules.LanguageStore.Messages.FORM_LABEL_ROLE_ICON
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+											type: "Switch",
+											margin: 0,
+											grow: 0,
+											label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
+											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+											value: data.removeIcon,
+											onChange: value => {
+												newData.removeIcon = value;
+												if (value) {
+													delete iconInput.props.success;
+													delete iconInput.props.errorMessage;
+													iconInput.props.disabled = true;
+													BDFDB.ReactUtils.forceUpdate(iconInput);
+												}
+												else {
+													iconInput.props.disabled = false;
+													this.checkUrl(iconInput.props.value, iconInput).then(returnValue => newData.icon = returnValue);
+												}
+											}
+										})
+									]
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+									success: !data.removeIcon && data.icon,
+									maxLength: 100000000000000000000,
+									value: data.icon,
+									placeholder: role.icon,
+									disabled: data.removeIcon,
+									ref: instance => {if (instance) iconInput = instance;},
+									onChange: (value, instance) => {
+										this.checkUrl(value, instance).then(returnValue => newData.icon = returnValue);
+									}
 								})
 							]
 						})
@@ -310,7 +394,7 @@ module.exports = (_ => {
 						onClick: _ => {
 							let changed = false;
 							if (Object.keys(newData).every(key => newData[key] == null || newData[key] == false) && (changed = true)) {
-								BDFDB.DataUtils.remove(this, "roles", role.id);
+								this.resetRoles(role.id);
 							}
 							else if (!BDFDB.equals(newData, data) && (changed = true)) {
 								BDFDB.DataUtils.save(newData, this, "roles", role.id);
@@ -318,6 +402,40 @@ module.exports = (_ => {
 							if (changed) this.forceUpdateAll();
 						}
 					}]
+				});
+			}
+			
+			checkUrl (url, instance) {
+				return new Promise(callback => {
+					BDFDB.TimeUtils.clear(instance.checkTimeout);
+					url = url && url.trim();
+					if (!url || instance.props.disabled) {
+						delete instance.props.success;
+						delete instance.props.errorMessage;
+						callback("");
+						BDFDB.ReactUtils.forceUpdate(instance);
+					}
+					else instance.checkTimeout = BDFDB.TimeUtils.timeout(_ => {
+						BDFDB.LibraryRequires.request(url, (error, response, result) => {
+							delete instance.checkTimeout;
+							if (instance.props.disabled) {
+								delete instance.props.success;
+								delete instance.props.errorMessage;
+								callback("");
+							}
+							else if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
+								instance.props.success = true;
+								delete instance.props.errorMessage;
+								callback(url);
+							}
+							else {
+								delete instance.props.success;
+								instance.props.errorMessage = this.labels.modal_invalidurl;
+								callback("");
+							}
+							BDFDB.ReactUtils.forceUpdate(instance);
+						});
+					}, 1000);
 				});
 			}
 			
