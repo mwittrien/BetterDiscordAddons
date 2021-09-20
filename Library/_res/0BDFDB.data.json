@@ -3180,6 +3180,8 @@
 	},
 	"myId": "278543574059057154",
 	"myGuildId": "410787888507256842",
+	"authorIdAttribute": "data-author-id",
+	"authorSelfAttribute": "data-is-author-self",
 	"userIdAttribute": "data-user-id",
 	"userBackgroundsProperties": {
 		"background": "--user-background",
