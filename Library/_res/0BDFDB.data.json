@@ -112,6 +112,7 @@
 		"RecentMentionUtils": {"props": ["deleteRecentMention", "fetchRecentMentions"]},
 		"RelationshipStore": {"props": ["getFriendIDs", "getRelationships"]},
 		"RelationshipUtils": {"props": ["addRelationship", "removeRelationship"]},
+		"RoleIconUtils": {"props": ["getRoleIconSource"]},
 		"SearchPageUtils": {"props": ["searchNextPage", "searchPreviousPage"]},
 		"SettingsStore": {"props": ["guildPositions", "theme"]},
 		"SettingsUtils": {"props": ["updateRemoteSettings", "updateLocalSettings"]},
