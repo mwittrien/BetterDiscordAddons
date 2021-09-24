@@ -25,7 +25,8 @@ module.exports = (_ => {
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
 		"changeLog": {
 			"added": {
-				"data-user-id": "Added to Friends List Entries"
+				"data-user-id": "Added to Friends List Entries",
+				"data-author-is-friend": "Added to Friends Flag to Messages"
 			},
 			"fixed": {
 				"Server Changes": "Fixed Stuff for anything changing Servers (ServerDetails, DisplayServerAsChannels)"
@@ -7914,6 +7915,7 @@ module.exports = (_ => {
 				}
 				if (message) {
 					e.returnvalue.props.children.props[InternalData.authorIdAttribute] = message.author.id;
+					if (BDFDB.LibraryModules.FriendUtils.isFriend(message.author.id)) e.returnvalue.props.children.props[InternalData.authorFriendAttribute] = true;
 					if (message.author.id == BDFDB.UserUtils.me.id) e.returnvalue.props.children.props[InternalData.authorSelfAttribute] = true;
 				}
 			}
