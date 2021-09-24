@@ -4015,6 +4015,9 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .role-3paDXR .roleCircle-3DE8xJ[style*="background-color: rgb(185, 187, 190)"] {
 	background-color: rgb(var(--textbrighter)) !important;
 }
+#app-mount .role-3paDXR .roleIcon-228VjM {
+	z-index: 1;
+}
 
 /* ----		13.14.	GUILDWELCOMEMODAL				---- */
 
@@ -4387,6 +4390,9 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	opacity: 1;
 	z-index: 2000;
 	cursor: pointer;
+}
+#app-mount .role-2irmRk .roleIcon-228VjM {
+	z-index: 1;
 }
 
 .textarea-2r0oV8:focus {									/* body					note 								*/
