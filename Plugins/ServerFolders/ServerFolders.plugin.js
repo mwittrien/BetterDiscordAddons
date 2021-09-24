@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.9.3
+ * @version 6.9.4
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "6.9.3",
+			"version": "6.9.4",
 			"description": "Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders"
-		},
-		"changeLog": {
-			"fixed": {
-				"Mentioned Bar": "No longer shows for Foldered Servers in extra Column"
-			},
 		}
 	};
 
@@ -74,7 +69,7 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var _this;
-		var folderStates, folderReads, guildStates;
+		var folderStates, folderReads, guildStates, currentGuild, forceCloseTimeout;
 		var folderConfigs = {}, customIcons = {};
 
 		const folderIcons = [
@@ -416,7 +411,7 @@ module.exports = (_ => {
 						AppView: "default",
 						Guilds: "render",
 						GuildFolder: "render",
-						Guild: ["componentDidMount", "render"],
+						Guild: "default",
 						GuildFolderSettingsModal: ["componentDidMount", "render"]
 					}
 				};
@@ -481,13 +476,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				// REMOVE 24.04.2021
-				let oldData = BDFDB.DataUtils.load(this);
-				if (oldData.settings) {
-					this.settings.general = oldData.settings;
-					BDFDB.DataUtils.save(this.settings.general, this, "general");
-					BDFDB.DataUtils.remove(this, "settings");
-				}
+				currentGuild = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 				
 				let forceClosing = false;
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.GuildUtils, "toggleGuildFolderExpand", {after: e => {
@@ -785,6 +774,17 @@ module.exports = (_ => {
 			}
 
 			processGuild (e) {
+				BDFDB.TimeUtils.clear(forceCloseTimeout);
+				forceCloseTimeout = BDFDB.TimeUtils.timeout(_ => {
+					let newCurrentGuild = BDFDB.LibraryModules.LastGuildStore.getGuildId();
+					if (newCurrentGuild != currentGuild && newCurrentGuild) {
+						let folder = BDFDB.GuildUtils.getFolder(newCurrentGuild);
+						if (this.settings.general.closeAllFolders) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (!folder || openFolderId != folder.folderId || !this.settings.general.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
+						else if (folder && this.settings.general.closeTheFolder && !this.settings.general.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folder.folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId);
+					}
+					currentGuild = newCurrentGuild;
+				}, 1000);
+				
 				let folder = BDFDB.GuildUtils.getFolder(e.instance.props.guild.id);
 				if (folder) {
 					let state = this.getState(e.instance);
@@ -809,11 +809,6 @@ module.exports = (_ => {
 						});
 					}
 				}
-				if (e.node) BDFDB.ListenerUtils.add(this, e.node, "click", _ => {BDFDB.TimeUtils.timeout(_ => {
-					let folder = BDFDB.GuildUtils.getFolder(e.instance.props.guild.id);
-					if (this.settings.general.closeAllFolders) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (!folder || openFolderId != folder.folderId || !this.settings.general.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
-					else if (folder && this.settings.general.closeTheFolder && !this.settings.general.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folder.folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId);
-				})});
 			}
 			
 			processGuildFolderSettingsModal (e) {
