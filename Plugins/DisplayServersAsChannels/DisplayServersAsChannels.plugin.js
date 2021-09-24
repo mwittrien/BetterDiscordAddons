@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.1
+ * @version 1.5.2
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "DisplayServersAsChannels",
 			"author": "DevilBro",
-			"version": "1.5.1",
+			"version": "1.5.2",
 			"description": "Displays Servers in a similar way as Channels"
-		},
-		"changeLog": {
-			"fixed": {
-				"HideServersChannelsRedux": "Works with it now"
-			},
 		}
 	};
 
@@ -92,7 +87,7 @@ module.exports = (_ => {
 						Guilds: "render",
 						DefaultHomeButton: "DefaultHomeButton",
 						DirectMessage: "render",
-						Guild: "render",
+						Guild: "default",
 						GuildFolder: "render",
 						CircleIconButton: "render",
 						UnavailableGuildsButton: "UnavailableGuildsButton"
