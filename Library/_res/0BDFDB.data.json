@@ -204,7 +204,7 @@
 			"EmojiPicker": {"strings": ["EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"]},
 			"FocusRing": {"props": ["FocusRingScope"]},
 			"GuestHomeButton": {"props": ["GuestHomeButton"]},
-			"Guild": {"class": "guildouter"},
+			"Guild": {"subComponent": "ConnectedGuild"},
 			"GuildFolder": {"class": "guildfolderwrapper", "special": [{"path": "return.memoizedProps.folderId"}, {"path": "return.memoizedProps.guildIds"}]},
 			"GuildIcon": {"class": "avataricon"},
 			"GuildRoleSettings": {"class": "settingswindowcontentregion"},
