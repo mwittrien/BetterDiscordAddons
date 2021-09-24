@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.6
+ * @version 1.8.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,10 +19,18 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.8.6",
+			"version": "1.8.7",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
+		"changeLog": {
+			"added": {
+				"data-user-id": "Added to Friends List Entries"
+			},
+			"fixed": {
+				"Server Changes": "Fixed Stuff for anything changing Servers (ServerDetails, DisplayServerAsChannels)"
+			}
+		}
 	};
 	
 	const DiscordObjects = {};
@@ -2122,6 +2130,7 @@ module.exports = (_ => {
 					stringFind: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].strings,
 					propertyFind: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].props,
 					specialFilter: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].special && InternalBDFDB.createFilter(InternalData.ModuleUtilsConfig.Finder[unmappedType].special),
+					subComponent: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].subComponent,
 					forceObserve: InternalData.ModuleUtilsConfig.ForceObserve.includes(unmappedType),
 					exported: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].exported || false,
 					mapped: InternalData.ModuleUtilsConfig.PatchMap[type]
@@ -2133,12 +2142,10 @@ module.exports = (_ => {
 				if (component) InternalBDFDB.patchComponent(pluginData, config.nonRender ? (BDFDB.ModuleUtils.find(m => m == component && m, config.exported) || {}).exports : component, type, config);
 				else {
 					let mappedType = config.mapped ? config.mapped + " _ _ " + type : type;
-					let name = mappedType.split(" _ _ ")[0];
-					if (config.mapped) {
-						for (let patchType in plugin.patchedModules) if (plugin.patchedModules[patchType][type]) {
-							plugin.patchedModules[patchType][mappedType] = plugin.patchedModules[patchType][type];
-							delete plugin.patchedModules[patchType][type];
-						}
+					let name = config.subComponent || mappedType.split(" _ _ ")[0];
+					if (config.mapped) for (let patchType in plugin.patchedModules) if (plugin.patchedModules[patchType][type]) {
+						plugin.patchedModules[patchType][mappedType] = plugin.patchedModules[patchType][type];
+						delete plugin.patchedModules[patchType][type];
 					}
 					
 					let patchSpecial = (func, argument) => {
@@ -2166,12 +2173,26 @@ module.exports = (_ => {
 					toBePatched = toBePatched && toBePatched.type && typeof toBePatched.type.render == "function" ? toBePatched.type : toBePatched;
 					for (let pluginData of pluginDataObjs) for (let patchType in pluginData.patchTypes) {
 						let patchMethods = {};
-						patchMethods[patchType] = e => InternalBDFDB.initiateProcess(pluginData.plugin, type, {
+						patchMethods[patchType] = !config.subComponent ? (e => InternalBDFDB.initiateProcess(pluginData.plugin, type, {
 							instance: e.thisObject,
 							returnvalue: e.returnValue,
 							component: toBePatched,
 							methodname: e.originalMethodName,
 							patchtypes: [patchType]
+						})) : (e => {
+							if (typeof e.returnValue.type != "function") return;
+							const originalType = e.returnValue.type;
+							e.returnValue.type = BDFDB.TimeUtils.suppress((...args) => {
+								const returnValue = originalType(...args);
+								InternalBDFDB.initiateProcess(pluginData.plugin, type, {
+									instance: {props: args[0]},
+									returnvalue: returnValue,
+									component: toBePatched,
+									methodname: e.originalMethodName,
+									patchtypes: [patchType]
+								});
+								return returnValue;
+							});
 						});
 						BDFDB.PatchUtils.patch(pluginData.plugin, toBePatched, pluginData.patchTypes[patchType], patchMethods, {name});
 					}
@@ -7868,6 +7889,7 @@ module.exports = (_ => {
 				MemberListItem: ["componentDidMount", "componentDidUpdate"],
 				PrivateChannel: ["componentDidMount", "componentDidUpdate"],
 				AnalyticsContext: ["componentDidMount", "componentDidUpdate"],
+				PeopleListItem: ["componentDidMount", "componentDidUpdate"],
 				DiscordTag: "default"
 			}
 		};
@@ -7996,6 +8018,9 @@ module.exports = (_ => {
 			const wrapper = e.node.querySelector(BDFDB.dotCNC.userpopout + BDFDB.dotCN.userprofile) || e.node;
 			InternalBDFDB._processAvatarMount(user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), wrapper);
 			InternalBDFDB._processUserInfoNode(user, wrapper);
+		};
+		InternalBDFDB.processPeopleListItem = function (e) {
+			if (e.instance.props.user) e.node.setAttribute(InternalData.userIdAttribute, e.instance.props.user.id);
 		};
 		InternalBDFDB.processDiscordTag = function (e) {
 			if (e.instance && e.instance.props && e.returnvalue && e.instance.props.user) e.returnvalue.props.user = e.instance.props.user;
