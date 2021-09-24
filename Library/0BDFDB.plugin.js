@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.7
+ * @version 1.8.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.8.7",
+			"version": "1.8.8",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
@@ -2172,30 +2172,31 @@ module.exports = (_ => {
 					instance = instance[BDFDB.ReactUtils.instanceKey] && instance[BDFDB.ReactUtils.instanceKey].type ? instance[BDFDB.ReactUtils.instanceKey].type : instance;
 					let toBePatched = config.nonPrototype || !instance.prototype ? instance : instance.prototype;
 					toBePatched = toBePatched && toBePatched.type && typeof toBePatched.type.render == "function" ? toBePatched.type : toBePatched;
-					for (let pluginData of pluginDataObjs) for (let patchType in pluginData.patchTypes) {
-						let patchMethods = {};
-						patchMethods[patchType] = !config.subComponent ? (e => InternalBDFDB.initiateProcess(pluginData.plugin, type, {
-							instance: e.thisObject,
-							returnvalue: e.returnValue,
-							component: toBePatched,
-							methodname: e.originalMethodName,
-							patchtypes: [patchType]
-						})) : (e => {
-							if (typeof e.returnValue.type != "function") return;
-							const originalType = e.returnValue.type;
-							e.returnValue.type = BDFDB.TimeUtils.suppress((...args) => {
-								const returnValue = originalType(...args);
-								InternalBDFDB.initiateProcess(pluginData.plugin, type, {
-									instance: {props: args[0]},
-									returnvalue: returnValue,
+					if (config.subComponent) {
+						for (let pluginData of pluginDataObjs) BDFDB.PatchUtils.patch(pluginData.plugin, toBePatched, "default", {after: e => {
+							for (let patchType in pluginData.patchTypes) BDFDB.PatchUtils.patch(pluginData.plugin, e.returnValue, "type", {
+								[patchType]: e2 => InternalBDFDB.initiateProcess(pluginData.plugin, type, {
+									instance: e2.thisObject,
+									returnvalue: e2.returnValue,
 									component: toBePatched,
 									methodname: e.originalMethodName,
 									patchtypes: [patchType]
-								});
-								return returnValue;
-							});
-						});
-						BDFDB.PatchUtils.patch(pluginData.plugin, toBePatched, pluginData.patchTypes[patchType], patchMethods, {name});
+								})
+							}, {name, noCache: true});
+						}}, {name});
+					}
+					else {
+						for (let pluginData of pluginDataObjs) for (let patchType in pluginData.patchTypes) {
+							BDFDB.PatchUtils.patch(pluginData.plugin, toBePatched, pluginData.patchTypes[patchType], {
+								[patchType]: e => InternalBDFDB.initiateProcess(pluginData.plugin, type, {
+									instance: e.thisObject,
+									returnvalue: e.returnValue,
+									component: toBePatched,
+									methodname: e.originalMethodName,
+									patchtypes: [patchType]
+								})
+							}, {name});
+						}
 					}
 				}
 			}

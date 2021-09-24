@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.7
+ * @version 1.0.8
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerDetails",
 			"author": "DevilBro",
-			"version": "1.0.7",
+			"version": "1.0.8",
 			"description": "Shows Server Details in the Server List Tooltip"
-		},
-		"changeLog": {
-			"added": {
-				"Shift": "Added Shift Key Option"
-			}
 		}
 	};
 
@@ -198,7 +193,7 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					after: {
-						Guild: "render"
+						Guild: "default"
 					}
 				};
 				
@@ -337,9 +332,9 @@ module.exports = (_ => {
 					}
 				`);
 				
-				BDFDB.PatchUtils.forceAllUpdates(this);
+				BDFDB.GuildUtils.rerenderAll();
 			}
-
+			
 			processGuild (e) {
 				if (BDFDB.GuildUtils.is(e.instance.props.guild)) {
 					let tooltipContainer;
