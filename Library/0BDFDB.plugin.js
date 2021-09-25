@@ -1,4 +1,4 @@
-/* @name BDFDB
+/** @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
  * @version 1.8.9
