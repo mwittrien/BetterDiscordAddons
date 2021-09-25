@@ -2458,6 +2458,7 @@
 		"messagegroupblockedrevealed": ["MessageElements", "revealed"],
 		"messageheader": ["MessageBody", "header"],
 		"messageheadertext": ["MessageBody", "headerText"],
+		"messagelistitem": ["Message", "messageListItem"],
 		"messagelocalbot": ["Message", "ephemeral"],
 		"messagelocalboticon": ["MessageLocalBot", "icon"],
 		"messagelocalbotoperations": ["MessageLocalBot", "ephemeralMessage"],
