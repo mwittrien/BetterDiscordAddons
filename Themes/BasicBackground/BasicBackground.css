@@ -5907,9 +5907,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .select-2TCrqx [class*="css-"][class*="-indicatorContainer"] {
 	color: var(--text-normal);
 }
-.selectedIcon-3uS11H {
-	color: var(--interactive-active);
-}
+.option-3KoAJB,
 #app-mount .optionNormal-12VR9V,
 .css-1gfjib6-option,
 .css-1yz4bi9-option,
@@ -5918,6 +5916,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .1);
 	color: var(--interactive-normal);
 }
+.option-3KoAJB:hover,
 #app-mount .optionNormal-12VR9V:hover,
 .css-pkcurw-option,
 .css-rzbxvl-option,
@@ -5926,12 +5925,16 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .3);
 	color: var(--interactive-hover);
 }
+.option-3KoAJB[aria-selected=true],
 #app-mount .optionActive-KkAdqq,
 .css-1gxgi19-option,
 .css-1ba14n5-option,
 .css-6qzljd-option,
 .css-1ba14n5-option {
 	background-color: rgba(var(--transparencycolor), .5);
+	color: var(--interactive-active);
+}
+.selectedIcon-3uS11H {
 	color: var(--interactive-active);
 }
 .role-3ulsK-:hover {
@@ -5948,10 +5951,10 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	box-shadow: 0px 1px 5px 0px rgba(var(--transparencycolor), .3);
 	overflow: hidden;
 }
-.popout-VcNcHB .content-3YMskv::before,
+.popout-VcNcHB::before,
 .container-3LUQwT::before,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::before,
-.popout-VcNcHB .content-3YMskv::after,
+.popout-VcNcHB::after,
 .container-3LUQwT::after,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::after {
 	content: "";
@@ -5965,13 +5968,13 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	pointer-events: none;
 	z-index: -1;
 }
-.popout-VcNcHB .content-3YMskv::before,
+.popout-VcNcHB::before,
 .container-3LUQwT::before,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::before {
 	background: var(--popout) var(--popoutposition)/var(--popoutsize);
 	background-attachment: fixed;
 }
-.popout-VcNcHB .content-3YMskv::after,
+.popout-VcNcHB::after,
 .container-3LUQwT::after,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
