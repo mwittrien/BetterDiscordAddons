@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.8
+ * @version 4.4.9
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.4.8",
+			"version": "4.4.9",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
+		},
+		"changeLog": {
+			"fixed": {
+				"Gallery Mode": ""
+			}
 		}
 	};
 	
@@ -1095,7 +1100,7 @@ module.exports = (_ => {
 			}
 
 			getMessageGroupOfImage (src) {
-				if (src && this.settings.general.enableGallery) for (let message of document.querySelectorAll(BDFDB.dotCN.message)) for (let img of message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")) if (this.isSameImage(src, img)) {
+				if (src && this.settings.general.enableGallery) for (let message of document.querySelectorAll(BDFDB.dotCN.messagelistitem)) for (let img of message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")) if (this.isSameImage(src, img)) {
 					let previousSiblings = [], nextSiblings = [];
 					let previousSibling = message.previousSibling, nextSibling = message.nextSibling;
 					if (!BDFDB.DOMUtils.containsClass(message, BDFDB.disCN.messagegroupstart)) while (previousSibling) {
@@ -1110,7 +1115,7 @@ module.exports = (_ => {
 						}
 						else nextSibling = null;
 					}
-					return [].concat(previousSiblings.reverse(), message, nextSiblings).filter(n => n && BDFDB.DOMUtils.containsClass(n, BDFDB.disCN.message));
+					return [].concat(previousSiblings.reverse(), message, nextSiblings).filter(n => n && BDFDB.DOMUtils.containsClass(n, BDFDB.disCN.messagelistitem));
 				}
 				return [];
 			}
