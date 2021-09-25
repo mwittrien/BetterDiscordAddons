@@ -2,7 +2,7 @@
  * @name EditServers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.3
+ * @version 2.3.4
  * @description Allows you to locally edit Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditServers",
 			"author": "DevilBro",
-			"version": "2.3.3",
+			"version": "2.3.4",
 			"description": "Allows you to locally edit Servers"
-		},
-		"changeLog": {
-			"fixed": {
-				"Invite Icon": "Fixed Icon being squashed for non squarish icons"
-			}
 		}
 	};
 	
@@ -94,7 +89,7 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					before: {
-						Guild: "render",
+						Guild: "default",
 						GuildIconWrapper: "render",
 						MutualGuilds: "default",
 						QuickSwitcher: "render",
@@ -105,7 +100,7 @@ module.exports = (_ => {
 					},
 					after: {
 						RecentsChannelHeader: "default",
-						Guild: "render",
+						Guild: "default",
 						BlobMask: "render",
 						GuildIconWrapper: "render",
 						GuildIcon: "render",
@@ -201,6 +196,7 @@ module.exports = (_ => {
 				changedGuilds = BDFDB.DataUtils.load(this, "servers");
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
+				BDFDB.GuildUtils.rerenderAll();
 			}
 		
 			onGuildContextMenu (e) {
