@@ -1,7 +1,8 @@
-/** @name BDFDB
+/**
+ * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.9
+ * @version 1.9.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -18,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.8.9",
+			"version": "1.9.0",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
@@ -28,7 +29,8 @@ module.exports = (_ => {
 				"data-author-is-friend": "Added to Friends Flag to Messages"
 			},
 			"fixed": {
-				"Server Changes": "Fixed Stuff for anything changing Servers (ServerDetails, DisplayServerAsChannels)"
+				"Server Changes": "Fixed Stuff for anything changing Servers (ServerDetails, DisplayServerAsChannels)",
+				"React Search": "Fixed some Incompatibilities with other Plugins"
 			}
 		}
 	};
@@ -2607,10 +2609,17 @@ module.exports = (_ => {
 							}
 						}
 					}
-					else if (children.props && children.props.children) {
-						depth++;
-						result = getChild(children.props.children);
-						depth--;
+					else {
+						if (children.props && children.props.children) {
+							depth++;
+							result = getChild(children.props.children);
+							depth--;
+						}
+						if (!result && children.props && children.props.child) {
+							depth++;
+							result = getChild(children.props.child);
+							depth--;
+						}
 					}
 				}
 				else {
@@ -2625,10 +2634,17 @@ module.exports = (_ => {
 								}
 							}
 						}
-						else if (child.props && child.props.children) {
-							depth++;
-							result = getChild(child.props.children);
-							depth--;
+						else {
+							if (child.props && child.props.children) {
+								depth++;
+								result = getChild(child.props.children);
+								depth--;
+							}
+							if (!result && child.props && child.props.child) {
+								depth++;
+								result = getChild(child.props.child);
+								depth--;
+							}
 						}
 						if (result) break;
 					}
@@ -2837,9 +2853,15 @@ module.exports = (_ => {
 				if (!children) return result;
 				if (!BDFDB.ArrayUtils.is(children)) {
 					if (check(children)) result = found(children);
-					else if (children.props && children.props.children) {
-						parent = children;
-						result = getParent(children.props.children);
+					else {
+						if (children.props && children.props.children) {
+							parent = children;
+							result = getParent(children.props.children);
+						}
+						if (!(result && result[1] > -1) && children.props && children.props.child) {
+							parent = children;
+							result = getParent(children.props.child);
+						}
 					}
 				}
 				else {
@@ -2852,9 +2874,15 @@ module.exports = (_ => {
 							parent = children;
 							result = found(children[i]);
 						}
-						else if (children[i].props && children[i].props.children) {
-							parent = children[i];
-							result = getParent(children[i].props.children);
+						else {
+							if (children[i].props && children[i].props.children) {
+								parent = children[i];
+								result = getParent(children[i].props.children);
+							}
+							if (!(result && result[1] > -1) && children[i].props && children[i].props.child) {
+								parent = children[i];
+								result = getParent(children[i].props.child);
+							}
 						}
 					}
 				}
@@ -6212,7 +6240,7 @@ module.exports = (_ => {
 							onMouseUp: this.handleMouseUp.bind(this),
 							onClick: this.handleClick.bind(this),
 							onContextMenu: this.handleContextMenu.bind(this),
-							icon: this.props.guild.getIconURL(this.props.iconSize || 256, this.state.hovered && this.props.animatable),
+							icon: this.props.guild.getIconURL(this.props.iconSize || 96, this.state.hovered && this.props.animatable),
 							selected: this.props.selected || this.state.hovered
 						})
 					})
