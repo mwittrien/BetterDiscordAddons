@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.8
+ * @version 1.0.9
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerDetails",
 			"author": "DevilBro",
-			"version": "1.0.8",
+			"version": "1.0.9",
 			"description": "Shows Server Details in the Server List Tooltip"
 		}
 	};
@@ -96,14 +96,14 @@ module.exports = (_ => {
 					this.state.fetchedOwner = true;
 					BDFDB.LibraryModules.UserProfileUtils.getUser(this.props.guild.ownerId).then(_ => BDFDB.ReactUtils.forceUpdate(this));
 				}
-				let src = this.props.guild.getIconURL(this.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(this.props.guild.icon));
+				let src = this.props.guild.getIconURL(4096, this.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(this.props.guild.icon));
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 					direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
 					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 					children: [
 						_this.settings.items.icon && (src ? BDFDB.ReactUtils.createElement("img", {
 							className: BDFDB.disCN._serverdetailsicon,
-							src: src.replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "")
+							src: src
 						}) : BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN._serverdetailsicon,
 							children: this.props.guild.acronym

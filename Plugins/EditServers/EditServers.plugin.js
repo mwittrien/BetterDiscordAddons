@@ -403,11 +403,11 @@ module.exports = (_ => {
 					newGuildObject.acronym = data.shortName && data.shortName.replace(/\s/g, "") || BDFDB.LibraryModules.StringUtils.getAcronym(!data.ignoreCustomName && data.name || nativeObject.name);
 					if (data.removeIcon) {
 						newGuildObject.icon = null;
-						newGuildObject.getIconURL = _ => {return null;};
+						newGuildObject.getIconURL = _ => null;
 					}
 					else if (data.url) {
 						newGuildObject.icon = data.url;
-						newGuildObject.getIconURL = _ => {return data.url;};
+						newGuildObject.getIconURL = _ => data.url;
 					}
 					if (data.removeBanner) newGuildObject.banner = null;
 					else if (data.banner) newGuildObject.banner = data.banner;
