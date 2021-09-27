@@ -158,7 +158,6 @@ module.exports = (_ => {
 						VoiceUser: "render",
 						Account: "render",
 						PrivateChannelEmptyMessage: "default",
-						MessageHeader: "default",
 						MessageUsername: "default",
 						MessageContent: "type",
 						Reaction: "render",
@@ -1105,6 +1104,8 @@ module.exports = (_ => {
 						if (data && data.name) userName.props.children = data.name;
 						this.changeUserColor(userName, e.instance.props.result.user.id);
 					}
+					let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.searchpopoutdisplayavatar]]});
+					if (avatar) avatar.props.src = this.getUserAvatar(e.instance.props.result.user.id);
 				}
 			}
 			
