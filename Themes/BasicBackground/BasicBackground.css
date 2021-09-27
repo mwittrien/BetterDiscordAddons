@@ -6028,6 +6028,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 
 #app-mount .gameIcon-gg34Dz {								/* activity icon											*/
+	background: rgba(var(--textbrightest), .1);
 	color: var(--header-primary);
 }
 
