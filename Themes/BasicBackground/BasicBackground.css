@@ -6445,15 +6445,18 @@ html .colorDefault-XdNdIp .bg-8df5St::after {
 
 /* ----		18.5.	PERMISSIONVIEWER				---- */
 
-#permissions-modal-wrapper #permissions-modal {				/* modal				container							*/
+html #permissions-modal-wrapper {								/* modal				wrapper							*/
+    z-index: 1001;
+}
+html #permissions-modal-wrapper #permissions-modal {			/* modal				container							*/
 	background-color: transparent;
 	border: none;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 	position: relative;
 	overflow: hidden;
 }
-#permissions-modal-wrapper #permissions-modal::before,
-#permissions-modal-wrapper #permissions-modal::after {
+html #permissions-modal-wrapper #permissions-modal::before,
+html #permissions-modal-wrapper #permissions-modal::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -6465,44 +6468,44 @@ html .colorDefault-XdNdIp .bg-8df5St::after {
 	pointer-events: none;
 	z-index: -1;
 }
-#permissions-modal-wrapper #permissions-modal::before {
+html #permissions-modal-wrapper #permissions-modal::before {
 	background: var(--popout) var(--popoutposition)/var(--popoutsize);
 	background-attachment: fixed;
 }
-#permissions-modal-wrapper #permissions-modal::after {
+html #permissions-modal-wrapper #permissions-modal::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
 	backdrop-filter: blur(var(--popoutblur));
 }
-#permissions-modal-wrapper .header {
+html #permissions-modal-wrapper .header {
 	background-color: rgba(var(--transparencycolor), .2);
 	box-shadow: 0 2px 3px 0 rgba(var(--transparencycolor), .2);
 	color: var(--header-primary);
 }
-#permissions-modal-wrapper .modal-body {
+html #permissions-modal-wrapper .modal-body {
 	background-color: transparent;
 }
-#permissions-modal-wrapper .scroller-title {
+html #permissions-modal-wrapper .scroller-title {
 	border-bottom: 1px solid rgba(var(--transparencycolor), .3);
 }
-#permissions-modal-wrapper .role-side {
+html #permissions-modal-wrapper .role-side {
 	background-color: rgba(var(--transparencycolor), .1);
 }
-#permissions-modal-wrapper .role-item {
+html #permissions-modal-wrapper .role-item {
 	color: var(--text-normal);
 }
-#permissions-modal-wrapper .role-item:hover {
+html #permissions-modal-wrapper .role-item:hover {
 	background-color: rgba(var(--transparencycolor), .1);
 }
-#permissions-modal-wrapper .role-item.selected {
+html #permissions-modal-wrapper .role-item.selected {
 	background-color: rgba(var(--transparencycolor), .2);
 }
-#permissions-modal-wrapper .perm-side {
+html #permissions-modal-wrapper .perm-side {
 	background-color: transparent;
 }
-#permissions-modal-wrapper .perm-item {
+html #permissions-modal-wrapper .perm-item {
 	box-shadow: inset 0 -1px 0 var(--background-modifier-accent);
 }
-#permissions-modal-wrapper .perm-name {
+html #permissions-modal-wrapper .perm-name {
 	color: var(--header-secondary);
 }
 

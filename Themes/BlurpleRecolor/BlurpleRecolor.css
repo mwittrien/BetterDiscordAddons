@@ -2042,6 +2042,7 @@ a.metadataName-14STf- {
 }
 .container-3auIfb[style*="background-color: hsl(139, "] path[fill],
 .container-3auIfb[style*="background-color: hsl(227, "] path[fill],
+.container-3auIfb[style*="background-color: hsl(235, "] path[fill],
 .container-3auIfb:active path[fill] {
 	fill: rgb(var(--accentcolor)) !important;
 }
