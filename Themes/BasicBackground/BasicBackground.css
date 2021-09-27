@@ -6027,6 +6027,10 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	opacity: 0.6;
 }
 
+#app-mount .gameIcon-gg34Dz {								/* activity icon											*/
+	color: var(--header-primary);
+}
+
 #app-mount .invalidPoop-pnUbq7 {							/* erroricon			invalidpoop							*/
 	background-color: rgba(var(--transparencycolor), .3);
 	opacity: 0.7;

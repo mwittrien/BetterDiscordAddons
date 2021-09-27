@@ -750,6 +750,10 @@ html .iconBadge-2wi9r4 {
 	opacity: .5;
 }
 
+#app-mount .gameIcon-gg34Dz {
+	color: var(--header-primary);
+}
+
 #app-mount .noResults-3LFG4E {
 	background: transparent;
 }
