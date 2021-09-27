@@ -497,7 +497,7 @@ module.exports = (_ => {
 			}
 
 			onSwitch () {
-				if (typeof BDFDB === "object" && this.settings.general.forceOpenFolder) {
+				if (typeof BDFDB === "object" && BDFDB.loaded && this.settings.general.forceOpenFolder) {
 					let folder = BDFDB.GuildUtils.getFolder(BDFDB.LibraryModules.LastGuildStore.getGuildId());
 					if (folder && !BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folder.folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId);
 				}

@@ -148,16 +148,21 @@ module.exports = (_ => {
 				}
 			}
 			stop () {
-				if (this.stopping) return;
-				this.stopping = true;
-				BDFDB.TimeUtils.timeout(_ => {delete this.stopping;});
-				
-				BDFDB.TimeUtils.suppress(_ => {
-					if (typeof this.onStop == "function") this.onStop();
-					BDFDB.PluginUtils.clear(this);
-				}, "Failed to stop Plugin!", config.info)();
+				if (window.BDFDB_Global.loading) {
+					if (PluginStores.delayed.starts.includes(this)) PluginStores.delayed.starts.splice(PluginStores.delayed.starts.indexOf(this), 1);
+				}
+				else {
+					if (this.stopping) return;
+					this.stopping = true;
+					BDFDB.TimeUtils.timeout(_ => {delete this.stopping;});
+					
+					BDFDB.TimeUtils.suppress(_ => {
+						if (typeof this.onStop == "function") this.onStop();
+						BDFDB.PluginUtils.clear(this);
+					}, "Failed to stop Plugin!", config.info)();
 
-				delete this.started;
+					delete this.started;
+				}
 			}
 		};
 	};
@@ -6567,8 +6572,8 @@ module.exports = (_ => {
 							BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextInput, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 								className: BDFDB.disCN.inputmultilast,
 								inputClassName: BDFDB.disCN.inputmultifield,
-								onFocus: e => {this.setState({focused: true})},
-								onBlur: e => {this.setState({focused: false})}
+								onFocus: e => this.setState({focused: true}),
+								onBlur: e => this.setState({focused: false})
 							}), "children", "innerClassName"))
 						]
 					})
