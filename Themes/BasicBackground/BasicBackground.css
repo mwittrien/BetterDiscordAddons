@@ -2310,6 +2310,21 @@ body::after {
 	background-color: transparent;
 }
 
+.colorSwatch-3g4qA8 {										/* profilesettings		colorswatch							*/
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.colorSwatch-3g4qA8 > [role="radio"] {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.colorSwatch-3g4qA8 > .dropperIconButton-2shYII {
+	width: 69px;
+	margin: auto;
+}
+
 .accountList-33MS45 {										/* connections			container							*/
 	background-color: rgba(var(--transparencycolor), .4);
 }

@@ -1870,6 +1870,21 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	object-position: -999999px -999999px;
 }
 
+.colorSwatch-3g4qA8 {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.colorSwatch-3g4qA8 > [role="radio"] {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.colorSwatch-3g4qA8 > .dropperIconButton-2shYII {
+	width: 69px;
+	margin: auto;
+}
+
 #app-mount .authedApp-mj2Hmd {
 	background-color: var(--background-secondary);
 }
