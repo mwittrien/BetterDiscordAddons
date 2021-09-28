@@ -92,6 +92,10 @@
 	--font-display: var(--font) !important;
 }
 
+html {
+	color: var(--header-primary);
+}
+
 
 /* ~~~~		0.		TABLE OF CONTENTS				~~~~ */
 /*
@@ -121,7 +125,7 @@
 	7.	PEOPLES
 	8.	STORE/NITRO
 	9.	LIBRARY
-	10.	DISCOVERY
+	10.	DISCOVERY/UNIHUB
 	11.	USERSETTINGS
 	12.	GUILDSETTINGS
 	13.	MODALS
@@ -216,6 +220,7 @@ body,														/* body														*/
 #app-mount .container-lRFx4q,								/* peoples				activity list						*/
 #app-mount .applicationStore-1pNvnv,						/* nitro													*/
 #app-mount .pageWrapper-1PgVDX,								/* guilddiscovery											*/
+#app-mount .pageWrapper-1x6lGh,								/* unihub													*/
 #app-mount .scrollerBase-289Jih,							/* scroller													*/
 #app-mount .scroller-2FKFPG,								/* scroller old												*/
 #app-mount .standardSidebarView-3F1I7i,						/* settings													*/
@@ -2087,30 +2092,42 @@ body::after {
 }
 
 
-/* ~~~~		10.		DISCOVERY						~~~~ */
+/* ~~~~		10.		DISCOVERY/UNIHUB				~~~~ */
 
-.categoryItem-1QIroW:hover .itemInner-gPkiWb{				/* guilddiscovery		categoryitem						*/
+.categoryItem-1QIroW:hover .itemInner-gPkiWb,				/* guilddiscovery		categoryitem						*/
+.optionItem-2VncuF:hover .itemInner-UDJ4Ex {				/* unihub				categoryitem						*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
-.categoryItem-1QIroW.selectedCategoryItem-FHKU_o .itemInner-gPkiWb {
+.categoryItem-1QIroW.selectedCategoryItem-FHKU_o .itemInner-gPkiWb,
+.optionItem-2VncuF.selectedOptionItem-3v62YZ .itemInner-UDJ4Ex {
 	background-color: rgb(var(--accentcolor));
 	text-shadow: 1px 1px var(--textshadow);
 }
-.categoryItem-1QIroW.selectedCategoryItem-FHKU_o .itemInner-gPkiWb svg:not(.svg-2V3M55) {
+.categoryItem-1QIroW.selectedCategoryItem-FHKU_o .itemInner-gPkiWb svg:not(.svg-2V3M55),
+.optionItem-2VncuF.selectedOptionItem-3v62YZ .itemInner-UDJ4Ex svg:not(.svg-2V3M55) {
 	filter: drop-shadow(1px 1px var(--textshadow));
 }
 
-#app-mount .pageWrapper-1PgVDX {							/* guilddiscovery		container							*/
+#app-mount .pageWrapper-1PgVDX,								/* guilddiscovery		container							*/
+#app-mount .pageWrapper-1x6lGh {							/* unihub				container							*/
 	color: var(--header-primary);
 }
-#app-mount .card-3DjzTQ {									/* guildcard			container							*/
+#app-mount .pageWrapper-1PgVDX .searchBox-2_mAlO,			/* guilddiscovery		searchbox							*/
+#app-mount .pageWrapper-1x6lGh .searchBox-2R4IbA {			/* unihub				searchbox							*/
+	background-color: #fff;
+}
+#app-mount .card-3DjzTQ,									/* guilddiscovery		card								*/
+#app-mount .card-Rhm0MB {									/* unihub				card								*/
 	background-color: rgba(var(--transparencycolor), .3);
 }
-#app-mount .iconMask-3b8GzQ {								/* guildcard			iconmask							*/
+#app-mount .iconMask-3b8GzQ,								/* guilddiscovery		iconmask							*/
+#app-mount .iconMask-IeE9AR {								/* unihub				iconmask							*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
 #app-mount .card-3DjzTQ:hover,
-#app-mount .iconMask-3b8GzQ:hover {
+#app-mount .iconMask-3b8GzQ:hover,
+#app-mount .card-Rhm0MB:hover,
+#app-mount .iconMask-IeE9AR:hover {
 	background-color: rgba(var(--transparencycolor), .4);
 }
 #app-mount .cardPlaceholder-1zrbbe {						/* guildcard			placeholder							*/
@@ -2118,6 +2135,15 @@ body::after {
 }
 #app-mount .loading-17PYl_ {								/* guildcard			loading								*/
 	background-color: rgba(var(--transparencycolor), .5);
+}
+
+#app-mount .addEntryCard-11Q874 {							/* add entry card											*/
+	background-color: rgba(var(--transparencycolor),.2);
+	border-color: var(--interactive-normal);
+}
+#app-mount .addEntryCard-11Q874:hover {
+	background-color: rgba(var(--transparencycolor),.4);
+	border-color: var(--interactive-active);
 }
 
 .emojiContainer-1u-_sQ {									/* search				emojicontainer						*/
@@ -3358,25 +3384,31 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 
 /* ----		13.2.	GUILDADD/CREATION				----- */
 
-.container-UC8Ug1 {											/* modal				item								*/
+.container-UC8Ug1,											/* create modal			item								*/
+.guildRow-35jjhr {											/* hub modal			item								*/
 	background-color: rgb(var(--transparencycolor), .2);
 	border: none;
 }
-.container-UC8Ug1:hover {
+.container-UC8Ug1:hover,
+.guildRow-35jjhr:hover {
 	background-color: rgb(var(--transparencycolor), .4);
 }
-.text-1FOLJS {												/* modal				text								*/
+.text-1FOLJS,												/* create modal			text								*/
+.guildName-GeVAOH {											/* hub modal			text								*/
 	color: var(--header-secondary);
 }
-.container-UC8Ug1:hover .text-1FOLJS {
+.container-UC8Ug1:hover .text-1FOLJS,
+.guildRow-35jjhr:hover .guildName-GeVAOH {
 	color: var(--header-primary);
 }
-.arrow-hynWUl {												/* modal				arrow								*/
+.arrow-hynWUl,												/* create modal			arrow								*/
+.guildName-GeVAOH ~ img {									/* hub modal			arrow								*/
 	object-position: -999999px -999999px;
 	-webkit-mask: url(https://discord.com/assets/69a0ea5dbf79a129c81a0cb171b60b7a.svg) center/cover no-repeat;
 	background: var(--header-secondary);
 }
-.container-UC8Ug1:hover .arrow-hynWUl {
+.container-UC8Ug1:hover .arrow-hynWUl,
+.guildRow-35jjhr:hover .guildName-GeVAOH ~ img {
 	background: var(--header-primary);
 }
 .input--jS-j2 {												/* modal				invite input						*/
@@ -6011,7 +6043,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .filterLabel-2yQNPl {
 	color: var(--header-secondary);
 }
-#app-mount .searchBox-3Y2Vi7:not(.searchBox-2_mAlO) {
+#app-mount .searchBox-3Y2Vi7 {
 	background-color: rgba(var(--transparencycolor), .3);
 	box-shadow: 0 2px 5px 0 rgba(var(--transparencycolor), .2);
 }
