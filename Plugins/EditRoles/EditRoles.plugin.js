@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.7
+ * @version 1.0.8
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,15 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditRoles",
 			"author": "DevilBro",
-			"version": "1.0.7",
+			"version": "1.0.8",
 			"description": "Allows you to locally edit Roles"
 		},
 		"changeLog": {
-			"added": {
-				"Icons": "Added support for the upcoming role icon feature"
-			},
 			"fixed": {
-				"Reset": "Fixed Roles not reseting properly in some places"
+				"Icons": "Work again"
 			}
 		}
 	};
@@ -119,10 +116,10 @@ module.exports = (_ => {
 						}
 					}
 				}});
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RoleIconUtils, "getRoleIconSource", {after: e => {
-					if (e.returnValue && changedRoles[e.methodArguments[0]] && changedRoles[e.methodArguments[0]].icon) return changedRoles[e.methodArguments[0]].icon;
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RoleIconUtils, "getRoleIconData", {after: e => {
+					if (e.returnValue && e.methodArguments[0].id && changedRoles[e.methodArguments[0].id] && changedRoles[e.methodArguments[0].id].icon) return {customIconSrc: changedRoles[e.methodArguments[0].id].icon};
 				}});
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RoleIconUtils, "guildCanUseRoleIcons", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RoleIconUtils, "canGuildUseRoleIcons", {after: e => {
 					if (e.returnValue === false && Object.keys(e.methodArguments[0].roles).some(roleId => changedRoles[roleId] && changedRoles[roleId].icon)) return true;
 				}});
 				
