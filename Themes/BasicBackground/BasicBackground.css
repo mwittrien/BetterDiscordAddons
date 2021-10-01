@@ -1646,6 +1646,9 @@ body::after {
 
 /* ----		6.8.	CALL							---- */
 
+#app-mount .wrapper-3lJCnD {
+	z-index: 1002;
+}
 #app-mount .root-3JVdIJ {									/* popout				inner								*/
 	background-color: transparent;
 	border: none;
