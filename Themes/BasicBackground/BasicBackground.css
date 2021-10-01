@@ -3256,7 +3256,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .modal-qgFCbT::after {
 	display: none;
 }
-.header-1TKi98 > .wrapper-1sSZUt {
+.header-1TKi98 > .wrapper-1sSZUt:first-child {
 	flex: 1 0 auto;
 }
 #app-mount .separator-2-RRj_ {

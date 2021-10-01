@@ -2437,7 +2437,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	color: var(--header-secondary);
 }
 
-.header-1TKi98 > .wrapper-1sSZUt {
+.header-1TKi98 > .wrapper-1sSZUt:first-child {
 	flex: 1 0 auto;
 }
 
