@@ -161,6 +161,7 @@ html {
 		21.	REPORTPROBLEM
 		22.	DISPATCHERROR
 		23.	HYPESQUADQUIZ
+		24.	NITROFEATUREMODAL
 	11.	POPOUTS
 		1.	USERPOPOUT
 		2.	EMOJIPICKER
@@ -3128,6 +3129,16 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 #app-mount .separator-PE-_y1 {
 	background-color: var(--background-accent);
+}
+
+/* ----		10.24.	NITROFEATUREMODAL				---- */
+
+#app-mount .cardImageBackground-1zqQ8d {
+	background: #000;
+	opacity: 0.5;
+}
+#app-mount .cardInfo-62VDSb {
+	background: var(--background-floating);
 }
 
 

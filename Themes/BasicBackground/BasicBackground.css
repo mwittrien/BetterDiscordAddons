@@ -149,6 +149,7 @@ html {
 		18.	PHONEVERIFICATIONMODAL
 		19.	NOTIFICATIONSMODAL
 		20.	DISCOVERYENTRYMODAL
+		21.	NITROFEATUREMODAL
 	14.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -4169,6 +4170,16 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 .checkboxWrapper-SkhIWG.row-3QHy4I.checked-3_4uQ9 .colorStandard-2KCXvj {
 	color: var(--header-primary);
+}
+
+/* ----		13.21.	NITROFEATUREMODAL				---- */
+
+#app-mount .cardImageBackground-1zqQ8d {
+	background: #000;
+	opacity: 0.5;
+}
+#app-mount .cardInfo-62VDSb {
+	background: rgba(var(--transparencycolor),.4);
 }
 
 
