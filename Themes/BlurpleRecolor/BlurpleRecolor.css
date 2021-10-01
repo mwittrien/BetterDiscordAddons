@@ -112,6 +112,7 @@
 		15.	CUSTOMSTATUSMODAL
 		16.	DISCOVERYENTRYMODAL
 		17.	NICKNAMEMODAL
+		18.	NITROFEATUREMODAL
 	11.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -1747,10 +1748,27 @@ a.metadataName-14STf- {
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/discovery_house.svg) center/contain no-repeat !important;
 }
 
-/* ----		10.17.	NICKNAMEMODAL				---- */
+/* ----		10.17.	NICKNAMEMODAL					---- */
 
 .reset-2Ufv5M.lookLink-9FtZy-.colorLink-35jkBc {
 	color: rgb(var(--accentcolor));
+}
+
+/* ----		10.18.	NITROFEATUREMODAL				---- */
+
+.modalContent-1I0U-j {
+	background: linear-gradient(180deg, rgb(var(--accentcolor)) 60%, rgb(var(--accentcolor2)));
+}
+#app-mount .modalFooter-2a3syI {
+	background: rgb(var(--accentcolor2));
+	box-shadow: unset;
+}
+#app-mount .cardImageBackground-1zqQ8d {
+	background: #000;
+	opacity: 0.5;
+}
+#app-mount .cardInfo-62VDSb {
+	background: var(--background-floating);
 }
 
 
