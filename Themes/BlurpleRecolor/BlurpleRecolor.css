@@ -750,6 +750,17 @@
 	background: var(--accentcolor-hover);
 }
 
+#app-mount .tier1ProfilePerk-2fHnq4 {						/* nitropage			tier 1 profile icon					*/
+	color: rgb(var(--accentcolor));
+	filter: brightness(75%);
+}
+#app-mount .tier1BoostPerk-2scivP {							/* nitropage			tier 1 boost icon					*/
+	color: rgb(var(--accentcolor2));
+}
+#app-mount .tier1UploadPerk-othO4W {						/* nitropage			tier 1 upload icon					*/
+	color: rgb(var(--accentcolor));
+}
+
 .marketingLogoImage-2SzXIR {								/* boostsettings		boost header						*/
 	position: relative;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_bg.svg) center/cover no-repeat;
