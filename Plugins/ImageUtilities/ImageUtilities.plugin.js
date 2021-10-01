@@ -214,6 +214,8 @@ module.exports = (_ => {
 					${BDFDB.dotCN._imageutilitiesgallery},
 					${BDFDB.dotCN._imageutilitiesdetailsadded} {
 						transform: unset !important;
+						filter: unset !important;
+						backdrop-filter: unset !important;
 					}
 					${BDFDB.dotCN._imageutilitiessibling} {
 						display: flex;
