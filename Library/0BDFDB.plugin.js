@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.0
+ * @version 1.9.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.9.0",
+			"version": "1.9.1",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
@@ -29,6 +29,7 @@ module.exports = (_ => {
 				"data-author-is-friend": "Added to Friends Flag to Messages"
 			},
 			"fixed": {
+				"BD Browser": "fixed compartibility issues",
 				"Server Changes": "Fixed Stuff for anything changing Servers (ServerDetails, DisplayServerAsChannels)",
 				"React Search": "Fixed some Incompatibilities with other Plugins"
 			}
@@ -2843,7 +2844,8 @@ module.exports = (_ => {
 			config.key = config.key && [config.key].flat().filter(n => n);
 			config.props = config.props && [config.props].flat().filter(n => n);
 			config.filter = typeof config.filter == "function" && config.filter;
-			let parent = firstArray = instance;
+			let parent, firstArray;
+			parent = firstArray = instance;
 			while (!BDFDB.ArrayUtils.is(firstArray) && firstArray.props && firstArray.props.children) firstArray = firstArray.props.children;
 			if (!BDFDB.ArrayUtils.is(firstArray)) {
 				if (parent && parent.props) {
@@ -4424,7 +4426,8 @@ module.exports = (_ => {
 		const DiscordClasses = Object.assign({}, InternalData.DiscordClasses);
 		BDFDB.DiscordClasses = Object.assign({}, DiscordClasses);
 		InternalBDFDB.getDiscordClass = function (item, selector) {
-			let className = fallbackClassName = DiscordClassModules.BDFDB.BDFDBundefined + "-" + InternalBDFDB.generateClassId();
+			let className, fallbackClassName;
+			className = fallbackClassName = DiscordClassModules.BDFDB.BDFDBundefined + "-" + InternalBDFDB.generateClassId();
 			if (DiscordClasses[item] === undefined) {
 				BDFDB.LogUtils.warn([item, "not found in DiscordClasses"]);
 				return className;
