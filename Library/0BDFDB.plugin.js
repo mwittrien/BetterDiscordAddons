@@ -29,7 +29,7 @@ module.exports = (_ => {
 				"data-author-is-friend": "Added to Friends Flag to Messages"
 			},
 			"fixed": {
-				"BD Browser": "fixed compartibility issues",
+				"BD Browser": "Fixed compartibility issues",
 				"Server Changes": "Fixed Stuff for anything changing Servers (ServerDetails, DisplayServerAsChannels)",
 				"React Search": "Fixed some Incompatibilities with other Plugins"
 			}
