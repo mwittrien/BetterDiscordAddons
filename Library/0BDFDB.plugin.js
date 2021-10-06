@@ -290,8 +290,8 @@ module.exports = (_ => {
 		if (!nodeOrObj || !valuePath) return null;
 		let obj = Node.prototype.isPrototypeOf(nodeOrObj) ? BDFDB.ReactUtils.getInstance(nodeOrObj) : nodeOrObj;
 		if (!BDFDB.ObjectUtils.is(obj)) return null;
-		let found = obj, values = valuePath.split(".").filter(n => n);
-		for (value of values) {
+		let found = obj;
+		for (const value of valuePath.split(".").filter(n => n)) {
 			if (!found) return null;
 			found = found[value];
 		}
