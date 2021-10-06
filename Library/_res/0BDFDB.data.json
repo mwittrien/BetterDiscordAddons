@@ -8,7 +8,7 @@
 		"SendLargeMessages": "SplitLargeMessages",
 		"SteamProfileLink": "OpenSteamLinksInApp"
 	},
-	"LibraryRequires": ["child_process", "electron", "fs", "path", "process", "request"],
+	"LibraryRequires": ["electron", "fs", "path", "process", "request"],
 	"DiscordObjects": {
 		"Channel": {"props": ["getRecipientId", "isManaged", "getGuildId"]},
 		"Guild": {"props": ["getIconURL", "getMaxEmojiSlots", "getRole"]},
