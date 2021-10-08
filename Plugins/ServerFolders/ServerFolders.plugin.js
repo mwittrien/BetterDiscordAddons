@@ -409,7 +409,7 @@ module.exports = (_ => {
 				this.patchedModules = {
 					after: {
 						AppView: "default",
-						Guilds: "render",
+						Guilds: "type",
 						GuildFolder: "render",
 						Guild: "default",
 						GuildFolderSettingsModal: ["componentDidMount", "render"]
