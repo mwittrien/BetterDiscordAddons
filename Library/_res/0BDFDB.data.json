@@ -209,7 +209,7 @@
 			"GuildFolder": {"class": "guildfolderwrapper", "special": [{"path": "return.memoizedProps.folderId"}, {"path": "return.memoizedProps.guildIds"}]},
 			"GuildIcon": {"class": "avataricon"},
 			"GuildRoleSettings": {"class": "settingswindowcontentregion"},
-			"Guilds": {"class": "guildswrapper"},
+			"Guilds": {"strings": ["guildsnav", "ListNavigatorProvider"]},
 			"GuildSettings": {"class": "layer"},
 			"GuildSettingsBans": {"class": "guildsettingsbannedcard"},
 			"GuildSettingsEmoji": {"class": "guildsettingsemojicard"},
