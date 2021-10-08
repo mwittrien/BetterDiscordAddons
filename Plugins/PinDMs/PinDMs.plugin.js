@@ -98,11 +98,11 @@ module.exports = (_ => {
 				this.patchedModules = {
 					before: {
 						PrivateChannelsList: "render",
-						UnreadDMs: "render"
+						UnreadDMs: "default"
 					},
 					after: {
 						PrivateChannelsList: "render",
-						UnreadDMs: "render",
+						UnreadDMs: "default",
 						PrivateChannel: ["render", "componentDidMount"],
 						DirectMessage: ["render", "componentDidMount", "componentWillUnmount"]
 					}
@@ -176,27 +176,11 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				// REMOVE 24.04.2021
-				if (!BDFDB.DataUtils.load(this, "pinned", BDFDB.UserUtils.me.id)) {
-					let pinned = {};
-					let channelListPinned = BDFDB.DataUtils.load(this, "dmCategories");
-					let guildListPinned = BDFDB.DataUtils.load(this, "pinnedRecents");
-					if (!BDFDB.ObjectUtils.isEmpty(channelListPinned)) pinned.channelList = channelListPinned;
-					if (!BDFDB.ObjectUtils.isEmpty(guildListPinned)) pinned.guildList = guildListPinned;
-					if (pinned.channelList || pinned.guildList) BDFDB.DataUtils.save(pinned, this, "pinned", BDFDB.UserUtils.me.id);
-				}
 				this.forceUpdateAll();
 			}
 			
 			onStop () {
 				this.forceUpdateAll();
-				
-				let unreadDMsInstance = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name: "UnreadDMs", unlimited: true});
-				if (unreadDMsInstance) {
-					delete unreadDMsInstance.props.pinnedPrivateChannelIds;
-					unreadDMsInstance.props.unreadPrivateChannelIds = BDFDB.LibraryModules.DirectMessageUnreadStore.getUnreadPrivateChannelIds();
-					BDFDB.ReactUtils.forceUpdate(unreadDMsInstance);
-				}
 			}
 
 			getSettingsPanel (collapseStates = {}) {
@@ -664,7 +648,7 @@ module.exports = (_ => {
 							children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCNS.guildouter + BDFDB.disCN._pindmsrecentplaceholder,
 								children: BDFDB.ReactUtils.createElement("div", {
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Items.DragPlaceholder, {})
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.DragPlaceholder, {})
 								})
 							}));
 						}
@@ -775,7 +759,7 @@ module.exports = (_ => {
 											if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 												BDFDB.ListenerUtils.stopEvent(event);
 												draggedChannel = e.instance.props.channel.id;
-												BDFDB.PatchUtils.forceAllUpdates(this, "UnreadDMs");
+												BDFDB.GuildUtils.rerenderAll();
 												let dragPreview = this.createDragPreview(e.node, event2);
 												document.removeEventListener("mousemove", mousemove);
 												document.removeEventListener("mouseup", mouseup);
@@ -786,14 +770,14 @@ module.exports = (_ => {
 													let update = maybeHoveredChannel != hoveredChannel;
 													if (maybeHoveredChannel) hoveredChannel = maybeHoveredChannel;
 													else hoveredChannel = null; 
-													if (update) BDFDB.PatchUtils.forceAllUpdates(this, "UnreadDMs");
+													if (update) BDFDB.GuildUtils.rerenderAll();
 												};
 												let releasing = event3 => {
 													BDFDB.DOMUtils.remove(dragPreview);
 													if (hoveredChannel) releasedChannel = hoveredChannel;
 													else draggedChannel = null;
 													hoveredChannel = null;
-													BDFDB.PatchUtils.forceAllUpdates(this, "UnreadDMs");
+													BDFDB.GuildUtils.rerenderAll();
 													document.removeEventListener("mousemove", dragging);
 													document.removeEventListener("mouseup", releasing);
 												};

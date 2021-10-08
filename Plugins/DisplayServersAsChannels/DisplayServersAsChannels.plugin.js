@@ -84,13 +84,13 @@ module.exports = (_ => {
 
 				this.patchedModules = {
 					after: {
-						Guilds: "render",
+						Guilds: "type",
 						DefaultHomeButton: "DefaultHomeButton",
 						DirectMessage: "render",
 						Guild: "default",
 						GuildFolder: "render",
 						CircleIconButton: "render",
-						UnavailableGuildsButton: "UnavailableGuildsButton"
+						UnavailableGuildsButton: "default"
 					}
 				};
 			}
@@ -161,36 +161,11 @@ module.exports = (_ => {
 			}
 		
 			processGuilds (e) {
-				if (typeof e.returnvalue.props.children == "function") {
-					let childrenRender = e.returnvalue.props.children;
-					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
-						let children = childrenRender(...args);
-						this.checkTree(children);
-						return children;
-					}, "", this);
-				}
-				else this.checkTree(e.returnvalue);
-			}
-			
-			checkTree (returnvalue) {
-				let tree = BDFDB.ReactUtils.findChild(returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
-				if (tree) {
-					let childrenRender = tree.props.children;
-					tree.props.children = BDFDB.TimeUtils.suppress((...args) => {
-						let children = childrenRender(...args);
-						this.handleGuilds(children);
-						return children;
-					}, "", this);
-				}
-				else this.handleGuilds(returnvalue);
-			}
-			
-			handleGuilds (returnvalue) {
-				let [errorChildren, errorIndex] = BDFDB.ReactUtils.findParent(returnvalue, {name: "FluxContainer(<Unknown>)"});
-				if (errorIndex > -1) errorChildren[errorIndex] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Items.UnavailableGuildsButton, {
+				let [errorChildren, errorIndex] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FluxContainer(<Unknown>)"});
+				if (errorIndex > -1) errorChildren[errorIndex] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.UnavailableGuildsButton, {
 					unavailableGuilds: BDFDB.LibraryModules.GuildUnavailableStore.totalUnavailableGuilds
 				});
-				let scroller = BDFDB.ReactUtils.findChild(returnvalue, {props: [["className", BDFDB.disCN.guildsscroller]]});
+				let scroller = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildsscroller]]});
 				if (scroller) {
 					scroller.props.fade = true;
 					scroller.type = BDFDB.LibraryComponents.Scrollers.Thin;
