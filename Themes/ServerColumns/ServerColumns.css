@@ -42,13 +42,13 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 }
 .wrapper-3NnKdC .scroller-1Bvpku,
 .wrapper-3NnKdC .scroller-1Bvpku > [role="tree"],
-.wrapper-3NnKdC .listItem-GuPuDH + div[aria-label]:not([class]) {
+.wrapper-3NnKdC .listItem-1hlISG + div[aria-label]:not([class]) {
 	margin: 0 !important;
 	display: flex !important;
 	flex-flow: row wrap !important;
 	align-content: flex-start !important;
 }
-.wrapper-3NnKdC .listItem-GuPuDH {
+.wrapper-3NnKdC .listItem-1hlISG {
 	margin: calc(1px * var(--guildgap)) calc(1px * (12 * var(--guildsize)/50)) calc(1px * var(--guildgap)) 0 !important;
 }
 .wrapper-3NnKdC #server-search {
@@ -57,10 +57,10 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 .wrapper-3NnKdC #server-search .pill-3YxEhL {
 	display: none;
 }
-.wrapper-3NnKdC .listItem-GuPuDH:first-child .listItemWrapper-KhRmzM {
+.wrapper-3NnKdC .listItem-1hlISG:first-child .listItemWrapper-KhRmzM {
 	margin: 0 calc(1px * (((var(--guildsize) + 12 * var(--guildsize)/50) * (var(--columns) - 1))/2)) calc(1px * var(--guildgap)) calc(1px * ((((var(--guildsize) + 12 * var(--guildsize)/50) * (var(--columns) - 1))/2))) !important;
 }
-.wrapper-3NnKdC .listItem-GuPuDH:first-child .pill-1Z5PKm ~ .listItemWrapper-KhRmzM {
+.wrapper-3NnKdC .listItem-1hlISG:first-child .pill-1Z5PKm ~ .listItemWrapper-KhRmzM {
 	margin: 0 calc(1px * ((((var(--guildsize) + 12 * var(--guildsize)/50) * (var(--columns) - 1))/2) * (1 - var(--aligndms)))) 0 calc(1px * (((0 * var(--aligndms)) + ((((var(--guildsize) + 12 * var(--guildsize)/50) * (var(--columns) - 1))/2) * (1 - var(--aligndms)))))) !important;
 }
 .wrapper-3NnKdC .blobContainer-pmnxKB,
@@ -68,8 +68,11 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 .wrapper-3NnKdC .guildsError-g6NwOI {
 	margin: 0 !important;
 }
-.wrapper-3NnKdC .listItem-GuPuDH {
+.wrapper-3NnKdC .listItem-1hlISG {
 	width: auto !important;
+}
+.tutorialContainer-2sGCg9 {
+	width: 100%;
 }
 .wrapper-3NnKdC .placeholderMask-3v3K7P,
 .wrapper-3NnKdC .svg-1X37T1,
@@ -108,15 +111,15 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 .wrapper-3NnKdC .pill-1aYSec {	/* 	button	*/
 	left: calc(-10px * var(--guildsize)/50) !important;
 }
-.wrapper-3NnKdC .guildSeparator-33mFX6 {
+.wrapper-3NnKdC .guildSeparator-EOYZLM {
 	width: calc(1px * ((var(--guildsize) + 12 * var(--guildsize)/50) * var(--columns) - (12 * var(--guildsize)/50))) !important;
 	margin: calc(1px * (var(--guildsize)/10)) 0 !important;
 	display: block !important;
 }
-.wrapper-3NnKdC [role=tree] ~ .listItem-GuPuDH .listItemWrapper-KhRmzM,
-.wrapper-3NnKdC [role=tree] ~ * .listItem-GuPuDH .listItemWrapper-KhRmzM,
-.wrapper-3NnKdC .listItem-GuPuDH + div[aria-label]:not([class]) ~ .listItem-GuPuDH .listItemWrapper-KhRmzM,
-.wrapper-3NnKdC .listItem-GuPuDH + div[aria-label]:not([class]) ~ * .listItem-GuPuDH .listItemWrapper-KhRmzM {
+.wrapper-3NnKdC [role=tree] ~ .listItem-1hlISG .listItemWrapper-KhRmzM,
+.wrapper-3NnKdC [role=tree] ~ * .listItem-1hlISG .listItemWrapper-KhRmzM,
+.wrapper-3NnKdC .listItem-1hlISG + div[aria-label]:not([class]) ~ .listItem-1hlISG .listItemWrapper-KhRmzM,
+.wrapper-3NnKdC .listItem-1hlISG + div[aria-label]:not([class]) ~ * .listItem-1hlISG .listItemWrapper-KhRmzM {
 	margin: 0 !important;
 }
 .wrapper-3NnKdC .guildsError-g6NwOI {
@@ -171,7 +174,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	margin: calc(1px * var(--guildgap)) calc(1px * (12 * var(--guildsize)/50)) calc(1px * var(--guildgap)) 0 !important;
 	width: calc(1px * var(--guildsize)) !important;
 }
-.wrapper-3NnKdC .wrapper-3Njo_c > .listItem-GuPuDH {
+.wrapper-3NnKdC .wrapper-3Njo_c > .listItem-1hlISG {
 	margin: 0 !important;
 }
 .wrapper-3NnKdC .wrapper-3Njo_c [role="group"] {
@@ -180,10 +183,10 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	margin-bottom: 0 !important;
 	padding-left: 1px !important;
 }
-.wrapper-3NnKdC .wrapper-3Njo_c [role="group"] .listItem-GuPuDH {
+.wrapper-3NnKdC .wrapper-3Njo_c [role="group"] .listItem-1hlISG {
 	margin: 6px 0 !important;
 }
-.wrapper-3NnKdC .wrapper-3Njo_c [role="group"] .listItem-GuPuDH:last-child {
+.wrapper-3NnKdC .wrapper-3Njo_c [role="group"] .listItem-1hlISG:last-child {
 	margin-bottom: 0 !important;
 }
 .wrapper-3NnKdC .expandedFolderBackground-1cujaW {
