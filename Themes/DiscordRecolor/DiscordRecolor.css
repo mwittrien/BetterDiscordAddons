@@ -752,7 +752,7 @@ html .iconBadge-2wi9r4 {
 }
 
 #app-mount .gameIcon-gg34Dz {
-	background: rgba(var(--textbrightest), .1);
+	background-color: rgba(var(--textbrightest), .1);
 	color: var(--header-primary);
 }
 
