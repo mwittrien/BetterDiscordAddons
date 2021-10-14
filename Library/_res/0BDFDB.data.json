@@ -91,6 +91,7 @@
 		"MentionUtils": {"props": ["isRawMessageMentioned", "isMentioned"]},
 		"MessageAuthorUtils": {"props": ["getMessageAuthor", "useNullableMessageAuthor"]},
 		"MessageManageUtils": {"props": ["copyLink", "replyToMessage"]},
+		"MessageParser": {"props": ["parseEmbedTitle", "defaultRules"]},
 		"MessagePinUtils": {"props": ["pinMessage", "unpinMessage"]},
 		"MessageReplyStore": {"props": ["getPendingReply"]},
 		"MessageReplyUtils": {"props": ["createPendingReply", "deletePendingReply"]},
