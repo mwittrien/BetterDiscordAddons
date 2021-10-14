@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.9
+ * @version 1.6.0
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CompleteTimestamps",
 			"author": "DevilBro",
-			"version": "1.5.9",
+			"version": "1.6.0",
 			"description": "Replaces Timestamps with your own custom Timestamps"
 		},
 		"changeLog": {
 			"fixed": {
-				"Markup Timestamps": "Now also targets message markup timestamps completely"
+				"Markup Timestamps": "Fixed issue where Markup Timestamps sometimes, wouldn't get parsed correctly"
 			}
 		}
 	};
@@ -97,15 +97,12 @@ module.exports = (_ => {
 				};
 				
 				this.patchedModules = {
-					before: {
-						Tooltip: "render"
-					},
 					after: {
 						Message: "default",
 						MessageTimestamp: "default",
 						Embed: "render",
 						SystemMessage: "default",
-						AuditLog: "render"
+						GuildSettingsAuditLogEntry: "render"
 					}
 				};
 				
@@ -117,6 +114,22 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				BDFDB.LibraryModules.MessageParser && BDFDB.LibraryModules.MessageParser.defaultRules && BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageParser.defaultRules.timestamp, "react", {after: e => {
+					const date = 1e3*Number(e.methodArguments[0].timestamp);
+					if (this.settings.general.showInMarkup) {
+						if (tooltipIsSame) e.returnValue.props.delay = 99999999999999999999;
+						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, date);
+						let renderChildren = e.returnValue.props.children;
+						e.returnValue.props.children = (...args) => {
+							let renderedChildren = renderChildren(...args);
+							if (BDFDB.ArrayUtils.is(renderedChildren.props.children)) renderedChildren.props.children[1] = timestamp;
+							else renderedChildren.props.children = timestamp;
+							return renderedChildren;
+						};
+					}
+					if (this.settings.general.changeForMarkup) e.returnValue.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, date);
+				}});
+				
 				this.forceUpdateAll();
 			}
 			
@@ -172,24 +185,6 @@ module.exports = (_ => {
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.MessageUtils.rerenderAll();
-			}
-
-			processTooltip (e) {
-				if (typeof e.instance.props.tooltipClassName == "string" && e.instance.props.tooltipClassName.indexOf(BDFDB.disCN.messagemarkuptimestamptooltip) > -1) {
-					e.instance.props._originalText = e.instance.props._originalText || e.instance.props.text;
-					if (this.settings.general.showInMarkup) {
-						if (tooltipIsSame) e.instance.props.delay = 99999999999999999999;
-						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props._originalText);
-						let renderChildren = e.instance.props.children;
-						e.instance.props.children = (...args) => {
-							let renderedChildren = renderChildren(...args);
-							if (BDFDB.ArrayUtils.is(renderedChildren.props.children)) renderedChildren.props.children[1] = timestamp;
-							else renderedChildren.props.children = timestamp;
-							return renderedChildren;
-						};
-					}
-					if (this.settings.general.changeForMarkup) e.instance.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props._originalText);
-				}
 			}
 			
 			processMessage (e) {
@@ -251,7 +246,7 @@ module.exports = (_ => {
 				}
 			}
 
-			processAuditLog (e) {
+			processGuildSettingsAuditLogEntry (e) {
 				if (e.instance.props.log && this.settings.general.showInAuditLogs) {
 					if (typeof e.returnvalue.props.children == "function") {
 						let childrenRender = e.returnvalue.props.children;
@@ -297,7 +292,6 @@ module.exports = (_ => {
 							}
 						`);
 					}
-					 
 				}
 			}
 		};
