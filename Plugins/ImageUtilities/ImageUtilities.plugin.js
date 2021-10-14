@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.0
+ * @version 4.5.1
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.5.0",
+			"version": "4.5.1",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		},
 		"changeLog": {
 			"fixed": {
-				"Server Avatar": "Uses the Server Avatar now, if the user has one",
-				"Animated Banners": "Can be downloaded as gifs now"
+				"Banner Resolution": "No longer uses a low res Version for User Banners"
 			}
 		}
 	};
@@ -1018,7 +1017,7 @@ module.exports = (_ => {
 			processUserBanner (e) {
 				let banner = e.instance.props.user && this.settings.places.userAvatars && BDFDB.UserUtils.getBanner(e.instance.props.user.id);
 				if (banner) e.returnvalue.props.onContextMenu = event => {
-					let validUrls = this.filterUrls(banner.replace(/\.webp|\.gif/, ".png"), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.banner) && e.instance.props.user.getBannerURL(4096, true));
+					let validUrls = this.filterUrls((e.instance.props.user.getBannerURL(4096) || banner).replace(/\.webp|\.gif/, ".png"), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.banner) && e.instance.props.user.getBannerURL(4096, true));
 					if (validUrls.length) BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 						children: validUrls.length == 1 ? this.createSubMenus({}, validUrls) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.IMAGE + " " + BDFDB.LanguageUtils.LanguageStrings.ACTIONS,
