@@ -22,7 +22,7 @@ module.exports = (_ => {
 		},
 		"changeLog": {
 			"fixed": {
-				"Log In Option": "Now also Works for Desktop Notifications"
+				"Status Crash": "No longer crashes Discord when clicking on the status notification adn trying to open the DM of a User you don't share a DM with"
 			}
 		}
 	};
@@ -862,7 +862,7 @@ module.exports = (_ => {
 									if (this.settings.general.openOnClick) {
 										let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id)
 										if (DMid) BDFDB.LibraryModules.ChannelUtils.selectPrivateChannel(DMid);
-										else BDFDB.LibraryModules.DirectMessageUtils.openPrivateChannel(BDFDB.UserUtils.me.id, user.id);
+										else BDFDB.LibraryModules.DirectMessageUtils.openPrivateChannel(user.id);
 										BDFDB.LibraryModules.WindowUtils.focus();
 									}
 								};
