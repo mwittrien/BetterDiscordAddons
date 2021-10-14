@@ -145,6 +145,7 @@
 		"UnreadChannelUtils": {"props": ["getUnreadCount", "getOldestUnreadMessageId"]},
 		"UploadUtils": {"props": ["upload", "instantBatchUpload"]},
 		"URLParser": {"props": ["parse", "resolveObject"]},
+		"UserBioParser": {"props": ["parseBioReact"]},
 		"UserFetchUtils": {"props": ["fetchCurrentUser", "getUser"]},
 		"UserNameUtils": {"props": ["getName", "getNickname"]},
 		"UserProfileModalUtils": {"props": ["openUserProfileModal", "closeUserProfileModal"]},
