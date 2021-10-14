@@ -236,7 +236,27 @@
 	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/channelnotice_upsell_accent.svg) center 12px no-repeat;
 }
-
+.art-ve5jc3 {
+	position: relative;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/channelnotice_upsell_details.svg) center/cover no-repeat;
+}
+.art-ve5jc3::before,
+.art-ve5jc3::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 4.5%;
+	left: 0;
+	pointer-events: none;
+}
+.art-ve5jc3::before {
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/channelnotice_upsell_bg.svg) center/cover no-repeat;
+}
+.art-ve5jc3::after {
+	background: rgb(var(--accentcolor));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/channelnotice_upsell_accent.svg) center/cover no-repeat;
+}
 
 /* ~~~~		3.		CHAT							~~~~ */
 
