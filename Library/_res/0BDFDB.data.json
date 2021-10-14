@@ -280,7 +280,7 @@
 		"QuickSelect": {"name": "QuickSelectWrapper"},
 		"RadioGroup": {"name": "RadioGroup"},
 		"SearchBar": {"name": "SearchBar", "protos": ["focus"]},
-		"SearchableSelect": {"name": "SearchableSelect"},
+		"SearchableSelect": {"name": "SingleSelect"},
 		"Select": {"name": "SelectTempWrapper"},
 		"Slider": {"name": "Slider"},
 		"Switch": {"name": "Switch"},
