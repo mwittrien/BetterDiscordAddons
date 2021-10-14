@@ -2,7 +2,7 @@
  * @name GoogleSearchReplace
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.1
+ * @version 1.3.2
  * @description Replaces the default Google Text Search with a custom Search Engine
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleSearchReplace",
 			"author": "DevilBro",
-			"version": "1.3.1",
+			"version": "1.3.2",
 			"description": "Replaces the default Google Text Search with a custom Search Engine"
 		},
 		"changeLog": {
 			"added": {
-				"StackOverflow": "Added StackOverflow as search engine"
+				"Ecosia": "Added Ecosia as search engine"
 			}
 		}
 	};
@@ -85,6 +85,7 @@ module.exports = (_ => {
 						Bing: 				{value: true, 	name: "Bing", 					url: "https://www.bing.com/search?q=" + textUrlReplaceString},
 						DogPile:			{value: true, 	name: "DogPile", 				url: "http://www.dogpile.com/search/web?q=" + textUrlReplaceString},
 						DuckDuckGo:			{value: true, 	name: "DuckDuckGo", 			url: "https://duckduckgo.com/?q=" + textUrlReplaceString},
+						Ecosia:				{value: true, 	name: "Ecosia", 				url: "https://www.ecosia.org/search?q=" + textUrlReplaceString},
 						GitHub: 			{value: true, 	name: "GitHub", 				url: "https://github.com/search?q=" + textUrlReplaceString},
 						Google: 			{value: true, 	name: "Google", 				url: "https://www.google.com/search?q=" + textUrlReplaceString},
 						GoogleScholar: 		{value: true, 	name: "Google Scholar", 		url: "https://scholar.google.com/scholar?q=" + textUrlReplaceString},
