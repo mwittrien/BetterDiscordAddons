@@ -252,7 +252,6 @@
 			"ThreadSidebar": {"strings": ["channelId", "collectThreadMetadata", "SIDEBAR"]},
 			"TypingUsers": {"class": "typing"},
 			"UnavailableGuildsButton": {"strings": ["className", "default.guildsError"]},
-			"UnreadDMs": {"class": "guildsscroller"},
 			"Upload": {"class": "uploadmodal"},
 			"UserHook": {"class": "auditloguserhook"},
 			"UserSettingsAppearance": {"class": "usersettingsappearancepreview"},
