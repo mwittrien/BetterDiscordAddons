@@ -1166,6 +1166,7 @@ img[src="/assets/4697ec960e57790ad4f6251af4c246b4.svg"] {	/* widgetsettings		wid
 	-webkit-mask: url(https://discord.com/assets/4a2618502278029ce88adeea179ed435.svg) center/cover no-repeat;
 }
 .profileBadge-2niAfJ[src="/assets/fbafa6adb7c49a6a2c3822521ff2af2f.svg"] {
+	object-position: -999999px -999999px;
 	background: rgb(var(--accentcolor2)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/boostbadge_lvl4_details.svg) center/cover no-repeat;
 	-webkit-mask: url(https://discord.com/assets/fbafa6adb7c49a6a2c3822521ff2af2f.svg) center/cover no-repeat;
 }
