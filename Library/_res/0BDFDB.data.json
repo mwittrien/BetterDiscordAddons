@@ -217,6 +217,7 @@
 			"GuildSettingsEmoji": {"class": "guildsettingsemojicard"},
 			"GuildSettingsMembers": {"class": "guildsettingsmembercard"},
 			"GuildSidebar": {"class": "guildchannels"},
+			"HomeButton": {"strings": ["showDMsOnly", "DefaultHomeButton"]},
 			"I18nLoaderWrapper": {"class": "app"},
 			"InstantInviteModal": {"class": "invitemodalwrapper"},
 			"InvitationCard": {"class": "invitemodalinviterow"},
