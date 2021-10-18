@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.2
+ * @version 1.5.3
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "DisplayServersAsChannels",
 			"author": "DevilBro",
-			"version": "1.5.2",
+			"version": "1.5.3",
 			"description": "Displays Servers in a similar way as Channels"
 		}
 	};
@@ -85,7 +85,7 @@ module.exports = (_ => {
 				this.patchedModules = {
 					after: {
 						Guilds: "type",
-						DefaultHomeButton: "DefaultHomeButton",
+						HomeButton: "type",
 						DirectMessage: "render",
 						Guild: "default",
 						GuildFolder: "render",
@@ -172,7 +172,7 @@ module.exports = (_ => {
 				}
 			}
 			
-			processDefaultHomeButton (e) {
+			processHomeButton (e) {
 				this.removeTooltip(e.returnvalue);
 				this.removeMask(e.returnvalue);
 				this.addElementName(e.returnvalue, BDFDB.LanguageUtils.LanguageStrings.HOME);
@@ -232,9 +232,23 @@ module.exports = (_ => {
 			}
 			
 			processCircleIconButton (e) {
-				this.removeTooltip(e.returnvalue);
-				this.removeMask(e.returnvalue);
-				this.addElementName(e.returnvalue, e.instance.props.tooltipText, {
+				const child = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: n => n.props && n.props.id && typeof n.props.children == "function"});
+				if (child) {
+					let renderChildren = child.props.children;
+					child.props.children = BDFDB.TimeUtils.suppress((...args) => {
+						let renderedChildren = renderChildren(...args);
+						renderedChildren = BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {children: renderedChildren});
+						this._processCircleIconButton(e.instance, renderedChildren);
+						return renderedChildren;
+					});
+				}
+				else this._processCircleIconButton(e.instance, e.returnvalue);
+			}
+			
+			_processCircleIconButton (instance, returnvalue) {
+				this.removeTooltip(returnvalue);
+				this.removeMask(returnvalue);
+				this.addElementName(returnvalue, instance.props.tooltip, {
 					wrap: true,
 					backgroundColor: "transparent"
 				});
