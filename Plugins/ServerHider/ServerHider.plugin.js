@@ -2,7 +2,7 @@
  * @name ServerHider
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.2.0
+ * @version 6.2.1
  * @description Allows you to hide certain Servers in your Server List
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerHider",
 			"author": "DevilBro",
-			"version": "6.2.0",
+			"version": "6.2.1",
 			"description": "Allows you to hide certain Servers in your Server List"
-		},
-		"changeLog": {
-			"added": {
-				"Streamer Mode": "Added Option to only hide Servers while in Streamer Mode"
-			}
 		}
 	};
 
@@ -83,14 +78,14 @@ module.exports = (_ => {
 				
 				this.patchedModules = {
 					after: {
-						Guilds: "render"
+						Guilds: "type"
 					}
 				};
 			}
 			
 			onStart () {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
-					if (e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.STREAMER_MODE_UPDATE) BDFDB.PatchUtils.forceAllUpdates(this);
+					if (e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.STREAMER_MODE_UPDATE) BDFDB.GuildUtils.rerenderAll(true);
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.FolderStore, "getGuildFolderById", {after: e => {
@@ -103,11 +98,11 @@ module.exports = (_ => {
 					}
 				}});
 
-				BDFDB.PatchUtils.forceAllUpdates(this);
+				BDFDB.GuildUtils.rerenderAll();
 			}
 			
 			onStop () {
-				BDFDB.PatchUtils.forceAllUpdates(this);
+				BDFDB.GuildUtils.rerenderAll();
 			}
 
 			getSettingsPanel (collapseStates = {}) {
@@ -132,7 +127,7 @@ module.exports = (_ => {
 							onClick: _ => {
 								BDFDB.ModalUtils.confirm(this, "Are you sure you want to unhide all Servers and Folders?", _ => {
 									BDFDB.DataUtils.save([], this, "hidden");
-									BDFDB.PatchUtils.forceAllUpdates(this);
+									BDFDB.GuildUtils.rerenderAll(true);
 								});
 							},
 							children: BDFDB.LanguageUtils.LanguageStrings.RESET
@@ -192,37 +187,12 @@ module.exports = (_ => {
 			}
 		
 			processGuilds (e) {
-				if (typeof e.returnvalue.props.children == "function") {
-					let childrenRender = e.returnvalue.props.children;
-					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
-						let children = childrenRender(...args);
-						this.checkTree(children);
-						return children;
-					}, "", this);
-				}
-				else this.checkTree(e.returnvalue);
-			}
-			
-			checkTree (returnvalue) {
-				let tree = BDFDB.ReactUtils.findChild(returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
-				if (tree) {
-					let childrenRender = tree.props.children;
-					tree.props.children = BDFDB.TimeUtils.suppress((...args) => {
-						let children = childrenRender(...args);
-						this.handleGuilds(children);
-						return children;
-					}, "", this);
-				}
-				else this.handleGuilds(returnvalue);
-			}
-
-			handleGuilds (returnvalue) {
 				if (this.settings.general.onlyHideInStream && !BDFDB.LibraryModules.StreamerModeStore.enabled) return;
 				let hiddenEles = BDFDB.DataUtils.load(this, "hidden");
 				let hiddenGuildIds = hiddenEles.servers || [];
 				let hiddenFolderIds = hiddenEles.folders || [];
 				if (hiddenGuildIds.length || hiddenFolderIds.length) {
-					let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props: ["folderId", "guildId"], someProps: true});
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: ["folderId", "guildId"], someProps: true});
 					if (index > -1) for (let i in children) if (children[i] && children[i].props) {
 						if (children[i].props.folderId) {
 							if (hiddenFolderIds.includes(children[i].props.folderId)) children[i] = null;
@@ -330,7 +300,7 @@ module.exports = (_ => {
 							let switchInstances = BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_Switch", all: true, unlimited: true});
 							for (let switchIns of switchInstances) switchIns.props.value = enabled;
 							BDFDB.ReactUtils.forceUpdate(switchInstances);
-							BDFDB.PatchUtils.forceAllUpdates(this);
+							BDFDB.GuildUtils.rerenderAll(true);
 						}
 					}]
 				});
@@ -341,7 +311,7 @@ module.exports = (_ => {
 				if (force || (force === undefined && array.includes(id))) BDFDB.ArrayUtils.remove(array, id, true);
 				else array.push(id);
 				BDFDB.DataUtils.save(array, this, "hidden", type);
-				BDFDB.PatchUtils.forceAllUpdates(this);
+				BDFDB.GuildUtils.rerenderAll(true);
 			}
 
 			setLabelsByLanguage () {
