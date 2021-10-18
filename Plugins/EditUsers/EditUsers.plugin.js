@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.8
+ * @version 4.3.9
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.3.8",
+			"version": "4.3.9",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
-			"improved": {
-				"Threads": "Works flawlessly with Threads now"
+			"fixed": {
+				"Server Avatars": "Fixed Server Avatars not being changed in Messages"
 			}
 		}
 	};
@@ -214,11 +214,15 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageAuthorUtils, ["default", "getMessageAuthor"], {after: e => {
 					if (this.settings.places.chatWindow && e.methodArguments[0] && e.methodArguments[0].author && changedUsers[e.methodArguments[0].author.id] && this.shouldChangeInChat(e.methodArguments[0].channel_id)) {
 						let data = changedUsers[e.methodArguments[0].author.id];
-						if (data.name || data.color1) {
+						if (data) {
 							let member = BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.methodArguments[0].channel_id) || {}).guild_id, e.methodArguments[0].author.id);
 							let color1 = data.color1 && data.useRoleColor && member && member.colorString || data.color1;
-							if (data.name) e.returnValue.nick = data.useServerNick && member && member.nick || [data.name, data.showServerNick && member && member.nick && `(${member.nick})`].filter(n => n).join(" ");
-							if (color1) e.returnValue.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
+							color1 = color1 && BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
+							e.returnValue = Object.assign({}, e.returnValue, {
+								nick: (data.useServerNick && member && member.nick || [data.name, data.showServerNick && member && member.nick && `(${member.nick})`].filter(n => n).join(" ")) || e.returnValue.nick,
+								guildMemberAvatar: (data.removeIcon || data.url) ? null : e.returnValue.guildMemberAvatar,
+								colorString: color1 || e.returnValue.colorString
+							});
 						}
 					}
 				}});
@@ -730,7 +734,7 @@ module.exports = (_ => {
 					let member = BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, author.id);
 					e.instance.props.author = Object.assign({}, e.instance.props.author, {
 						nick: (data.useServerNick && member && member.nick || [data.name, data.showServerNick && member && member.nick && `(${member.nick})`].filter(n => n).join(" ")) || e.instance.props.author.nick,
-						guildMemberAvatar: (data.removeIcon ? null : data.url) || e.instance.props.author.guildMemberAvatar,
+						guildMemberAvatar: (data.removeIcon || data.url) ? null : e.instance.props.author.guildMemberAvatar,
 						colorString: color1 || e.instance.props.author.colorString
 					});
 				}
@@ -1245,11 +1249,13 @@ module.exports = (_ => {
 						newUserObject.avatar = null;
 						newUserObject.avatarURL = null;
 						newUserObject.getAvatarURL = _ => null;
+						newUserObject.guildMemberAvatars = {};
 					}
 					else if (data.url) {
 						newUserObject.avatar = data.url;
 						newUserObject.avatarURL = data.url;
 						newUserObject.getAvatarURL = _ => data.url;
+						newUserObject.guildMemberAvatars = {};
 					}
 					if (data.removeBanner) {
 						newUserObject.banner = null;
