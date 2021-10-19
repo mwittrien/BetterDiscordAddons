@@ -2210,7 +2210,6 @@ module.exports = (_ => {
 		};
 		InternalBDFDB.checkEle = function (pluginDataObjs, ele, type, config) {
 			pluginDataObjs = [pluginDataObjs].flat(10).filter(n => n);
-			let unmappedType = type.split(" _ _ ")[1] || type;
 			let ins = BDFDB.ReactUtils.getInstance(ele);
 			if (typeof config.specialFilter == "function") {
 				let component = config.specialFilter(ins);
@@ -2225,7 +2224,8 @@ module.exports = (_ => {
 				}
 			}
 			else {
-				ins = BDFDB.ReactUtils.findConstructor(ins, "Channels") || BDFDB.ReactUtils.findConstructor(ins, "Channels", {up: true}) || ins;
+				let unmappedType = type.split(" _ _ ")[1] || type;
+				ins = BDFDB.ReactUtils.findConstructor(ins, unmappedType) || BDFDB.ReactUtils.findConstructor(ins, unmappedType, {up: true}) || ins;
 				InternalBDFDB.patchComponent(pluginDataObjs, ins, type, config);
 				BDFDB.PatchUtils.forceAllUpdates(pluginDataObjs.map(n => n.plugin), type);
 				return true;
