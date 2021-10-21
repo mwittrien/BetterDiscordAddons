@@ -1581,7 +1581,7 @@ a.metadataName-14STf- {
 	background: #ffcd4b linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.5));
 }
 .wrapper-3nSjSv {											/* modal				boostaddwrapper						*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.5));
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor2), 0.5));
 }
 .wrapper-3nSjSv::before,									/* modal				boostangel							*/
 .wrapper-3nSjSv::after {
@@ -1601,7 +1601,7 @@ a.metadataName-14STf- {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostangel_accent2.svg) center/cover no-repeat;
 }
 #app-mount .wrapper-3nSjSv .lookInverted-2D7oAl.colorBrand-3pXr91 {
-	color: rgb(var(--accentcolor2)) !important;
+	color: rgb(var(--accentcolor)) !important;
 }
 .tierMarkerLabelPlusIcon-1OS7E9 {							/* modal				prebuy icon							*/
 	color: rgb(var(--accentcolor2));
