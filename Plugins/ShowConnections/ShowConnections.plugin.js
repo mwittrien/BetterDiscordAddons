@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.7
+ * @version 1.0.8
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowConnections",
 			"author": "DevilBro",
-			"version": "1.0.7",
+			"version": "1.0.8",
 			"description": "Shows the connected Accounts of a User in the UserPopout"
-		},
-		"changeLog": {
-			"fixed": {
-				"Icons": "Show again"
-			}
 		}
 	};
 
@@ -247,7 +242,7 @@ module.exports = (_ => {
 							];
 						}
 					}
-				}));
+				}, true));
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
