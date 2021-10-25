@@ -5038,7 +5038,7 @@
 	},
 	"BDFDB_Patrons": {
 		"824768928369606667": 	{"active": true,		"tier": "t2",		"text": "",					"color": "",			"id": "Kubox (HajJa)"},
-		"507464069100601363": 	{"active": true,		"tier": "t3",		"text": "",					"color": "",			"id": "MircoPortmann"},
+		"507464069100601363": 	{"active": true,		"tier": "t2",		"text": "",					"color": "",			"id": "MircoPortmann"},
 		"798499176220327966": 	{"active": true,		"tier": "t2",		"text": "",					"color": "",			"id": ".void (DsOp)"},
 		"89482511343702016": 	{"active": true,		"tier": "t3",		"text": "",					"color": "#0080ff",		"id": "AzukiPuddles"},
 		"222808775722008587": 	{"active": false,		"tier": "t2",		"text": "",					"color": "",			"id": "Riyshin (AbÖz)"},
