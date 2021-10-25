@@ -354,7 +354,7 @@
 }
 .message-15tBk4 strong:hover,
 #app-mount .interactive:hover {
-	background-color: var(--brand-experiment);
+	background-color: rgb(var(--accentcolor));
 	color: #fff;
 }
 
