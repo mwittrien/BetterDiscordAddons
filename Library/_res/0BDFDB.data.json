@@ -133,7 +133,7 @@
 		"StageChannelLiveStore": {"props": ["getAllLiveStageChannels", "useAllLiveStageChannels"]},
 		"StageChannelStore": {"props": ["getStageInstanceByChannel", "getAllStageInstances"]},
 		"StateStoreUtils": {"props": ["useStateFromStores", "useStateFromStoresArray"]},
-		"StatusMetaUtils": {"props": ["getApplicationActivity", "getStatus"]},
+		"StatusMetaUtils": {"props": ["getApplicationActivity", "getStatus", "getState"]},
 		"StoreChangeUtils": {"props": ["get", "set", "clear", "remove"]},
 		"StreamerModeStore": {"props": ["disableSounds", "hidePersonalInformation"]},
 		"StreamUtils": {"props": ["getActiveStreamForUser", "getAllApplicationStreams"]},
