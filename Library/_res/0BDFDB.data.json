@@ -44,7 +44,7 @@
 		"ContextMenuUtils": {"props": ["closeContextMenu", "openContextMenu"]},
 		"CopyLinkUtils": {"props": ["SUPPORTS_COPY", "copy"]},
 		"CurrentUserStore": {"props": ["getCurrentUser"]},
-		"CurrentVoiceUtils": {"props": ["getAveragePing", "isConnected"]},
+		"CurrentVoiceUtils": {"props": ["getAveragePing", "getChannelId"]},
 		"CustomStatusConstants": {"props": ["ClearAfterValues", "STATUS_MAX_LENGTH"]},
 		"DesktopNotificationUtils": {"props": ["showNotification", "requestPermission"]},
 		"DirectMessageStore": {"props": ["getPrivateChannelIds"]},
