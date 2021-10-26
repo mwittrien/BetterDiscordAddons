@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.1
+ * @version 4.5.2
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.5.1",
+			"version": "4.5.2",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		},
 		"changeLog": {
 			"fixed": {
-				"Banner Resolution": "No longer uses a low res Version for User Banners"
+				"Image Details as Header": "Works again"
 			}
 		}
 	};
@@ -103,7 +103,7 @@ module.exports = (_ => {
 			"wmv":		{copyable: false,	searchable: false,	video: true}
 		};
 		
-		const ImageDetails = class ImageDetails extends BdApi.React.Component {
+		const ImageDetailsComponent = class ImageDetails extends BdApi.React.Component {
 			componentDidMount() {
 				this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "attachment", {up: true});
 				BDFDB.ReactUtils.forceUpdate(this);
@@ -291,22 +291,20 @@ module.exports = (_ => {
 				});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MediaComponentUtils, "renderImageComponent", {after: e => {
-					if (this.settings.general.showAsHeader && e.returnValue && e.returnValue.type && (e.returnValue.type.displayName == "LazyImageZoomable" || e.returnValue.type.displayName == "LazyImage") && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedmedia) == -1 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedthumbnail) == -1) {
-						return BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN.embedwrapper,
-							children: [
-								BDFDB.ReactUtils.createElement(ImageDetails, {
-									original: e.methodArguments[0].original,
-									attachment: {
-										height: 0,
-										width: 0,
-										filename: "unknown.png"
-									}
-								}),
-								e.returnValue
-							]
-						});
-					}
+					if (this.settings.general.showAsHeader && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedmedia) == -1 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedthumbnail) == -1 && BDFDB.ReactUtils.findChild(e.returnValue, {name: ["LazyImageZoomable", "LazyImage"]})) return BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.embedwrapper,
+						children: [
+							BDFDB.ReactUtils.createElement(ImageDetailsComponent, {
+								original: e.methodArguments[0].original,
+								attachment: {
+									height: 0,
+									width: 0,
+									filename: "unknown.png"
+								}
+							}),
+							e.returnValue
+						]
+					});
 				}});
 
 				this.forceUpdateAll();
