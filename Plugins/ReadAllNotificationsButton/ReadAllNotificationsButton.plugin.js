@@ -2,7 +2,7 @@
  * @name ReadAllNotificationsButton
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.9
+ * @version 1.7.0
  * @description Adds a Clear Button to the Server List and the Mentions Popout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ReadAllNotificationsButton",
 			"author": "DevilBro",
-			"version": "1.6.9",
+			"version": "1.7.0",
 			"description": "Adds a Clear Button to the Server List and the Mentions Popout"
 		}
 	};
@@ -289,7 +289,7 @@ module.exports = (_ => {
 			}
 
 			processRecentsHeader (e) {
-				if (this.settings.general.addClearButton && e.instance.props.tab == "Recent Mentions") e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
+				if (this.settings.general.addClearButton && e.instance.props.tab == BDFDB.LibraryModules.InboxUtils.InboxTab.MENTIONS) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						text: `${BDFDB.LanguageUtils.LanguageStrings.CLOSE} (${BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL})`,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
