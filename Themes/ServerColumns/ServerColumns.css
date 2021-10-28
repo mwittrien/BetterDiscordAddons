@@ -141,7 +141,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	display: flex !important;
 	justify-content: center !important;
 	width: calc(1px * (var(--guildsize) * var(--columns) + 20 * (var(--guildsize)/50) + 14 * (var(--guildsize)/50) * (var(--columns) - 1) - (20 * var(--guildsize)/50) calc(10px * var(--guildsize)/50))) !important;
-	margin: calc(1px * var(--guildgap)) 0 calc(1px * var(--guildgap)) 0 !important;
+	margin: 0 !important;
 	font-size: calc(1px * ((var(--guildsize)/8) + 3)) !important;
 }
 .wrapper-3NnKdC #bd-pub-li,
@@ -154,6 +154,9 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 .wrapper-3NnKdC .frame-oXWS21 {
 	text-align: center !important;
 	margin: calc(1px * var(--guildgap)) calc(1px * (((var(--guildsize) + 12 * var(--guildsize)/50) * (var(--columns) - 1) - ((var(--guildsize)*4/5) + 12 * var(--guildsize)/50) + var(--guildsize))/2)) calc(1px * var(--guildgap)) calc(1px * (((var(--guildsize) + 12 * var(--guildsize)/50) * (var(--columns) - 1) - ((var(--guildsize)*4/5) + 12 * var(--guildsize)/50) + var(--guildsize))/2)) !important;
+}
+.wrapper-3NnKdC .tutorialContainer-2sGCg9 #bd-pub-li {
+	margin-top: calc(2px * var(--guildgap)) !important;
 }
 .wrapper-3NnKdC #sort-button > div,
 .wrapper-3NnKdC #bd-pub-li #bd-pub-button,
