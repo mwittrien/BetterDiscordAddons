@@ -256,6 +256,7 @@
 			"UnavailableGuildsButton": {"strings": ["className", ".default.guildsError"]},
 			"Upload": {"class": "uploadmodal"},
 			"UserHook": {"class": "auditloguserhook"},
+			"UserMention": {"strings": ["UserMention", "userId", "getAvatarURL"]},
 			"UserSettingsAppearance": {"class": "usersettingsappearancepreview"},
 			"V2C_ContentColumn": {"class": "settingswindowcontentcolumn", "special": [{"path": "return.stateNode.props.title", "value": ["PLUGINS", "THEMES"]}]}
 		},
