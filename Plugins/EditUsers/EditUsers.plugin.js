@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.9
+ * @version 4.4.0
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.3.9",
+			"version": "4.4.0",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
-			"fixed": {
-				"Server Avatars": "Fixed Server Avatars not being changed in Messages"
+			"added": {
+				"Show Accountname": "Similar to 'Show Nickname' you can now enable 'Show Name' which will always show the account name of a user in '()', 'Show Nickname' has a higher priority than 'Show Name'"
 			}
 		}
 	};
@@ -162,7 +162,7 @@ module.exports = (_ => {
 						MessageContent: "type",
 						Reaction: "render",
 						ReactorsComponent: "render",
-						UserMention: "default",
+						UserMention: "UserMention",
 						RichUserMention: "UserMention",
 						ChannelReply: "default",
 						MemberListItem: "render",
@@ -219,7 +219,7 @@ module.exports = (_ => {
 							let color1 = data.color1 && data.useRoleColor && member && member.colorString || data.color1;
 							color1 = color1 && BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
 							e.returnValue = Object.assign({}, e.returnValue, {
-								nick: (data.useServerNick && member && member.nick || [data.name, data.showServerNick && member && member.nick && `(${member.nick})`].filter(n => n).join(" ")) || e.returnValue.nick,
+								nick: this.getUserNick(e.methodArguments[0].author.id, member && member.nick),
 								guildMemberAvatar: (data.removeIcon || data.url) ? null : e.returnValue.guildMemberAvatar,
 								colorString: color1 || e.returnValue.colorString
 							});
@@ -540,7 +540,7 @@ module.exports = (_ => {
 					let data = changedUsers[e.instance.props.user.id];
 					if (!data) return;
 					if (!e.returnvalue) {
-						if (data.name && !(data.useServerNick && e.instance.props.nickname)) e.instance.props.nickname = [data.name, data.showServerNick && e.instance.props.nickname && `(${e.instance.props.nickname})`].filter(n => n).join(" ");
+						e.instance.props.nickname = this.getUserNick(e.instance.props.user.id, e.instance.props.nickname);
 					}
 					else {
 						if (data.color1 || data.color2 || data.tag) {
@@ -615,7 +615,7 @@ module.exports = (_ => {
 						let data = changedUsers[e.instance.props.user.id];
 						if (data && data.name) {
 							let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), e.instance.props.user.id);
-							if (!member || !member.nick || !data.useServerNick) e.instance.props.nick = [data.name, data.showServerNick && member && member.nick && `(${member.nick})`].filter(n => n).join(" ");
+							e.instance.props.nick = this.getUserNick(e.instance.props.user.id, e.instance.props.nick);
 						}
 					}
 					else {
@@ -631,7 +631,7 @@ module.exports = (_ => {
 					if (data) {
 						e.instance.props.voiceStates[i] = Object.assign({}, e.instance.props.voiceStates[i]);
 						e.instance.props.voiceStates[i].user = this.getUserData(e.instance.props.voiceStates[i].user.id);
-						if (data.name && (!e.instance.props.voiceStates[i].member.nick || !data.useServerNick)) e.instance.props.voiceStates[i].nick = [data.name, data.showServerNick && e.instance.props.voiceStates[i].member.nick && `(${e.instance.props.voiceStates[i].member.nick})`].filter(n => n).join(" ");
+						e.instance.props.voiceStates[i].nick = this.getUserNick(e.instance.props.voiceStates[i].user.id, e.instance.props.voiceStates[i].member.nick);
 					}
 				}
 			}
@@ -733,7 +733,7 @@ module.exports = (_ => {
 					}
 					let member = BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, author.id);
 					e.instance.props.author = Object.assign({}, e.instance.props.author, {
-						nick: (data.useServerNick && member && member.nick || [data.name, data.showServerNick && member && member.nick && `(${member.nick})`].filter(n => n).join(" ")) || e.instance.props.author.nick,
+						nick: this.getUserNick(e.instance.props.author.id, member && member.nick),
 						guildMemberAvatar: (data.removeIcon || data.url) ? null : e.instance.props.author.guildMemberAvatar,
 						colorString: color1 || e.instance.props.author.colorString
 					});
@@ -933,7 +933,7 @@ module.exports = (_ => {
 						if (data) {
 							if (data.name) {
 								let member = BDFDB.LibraryModules.MemberStore.getMember(e.instance.props.channel.guild_id, e.instance.props.user.id);
-								if (!member || !member.nick || !data.useServerNick) e.instance.props.nick = [data.name, data.showServerNick && member && member.nick && `(${member.nick})`].filter(n => n).join(" ");
+								e.instance.props.nick = this.getUserNick(e.instance.props.user.id, member && member.nick);
 							}
 							if (data.removeStatus || data.status || data.statusEmoji) {
 								e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
@@ -1046,6 +1046,7 @@ module.exports = (_ => {
 			processDirectMessage (e) {
 				if (e.instance.props.channel && e.instance.props.channel.isDM() && this.settings.places.recentDms) {
 					let recipientId = e.instance.props.channel.getRecipientId();
+					if (!recipientId || !changedUsers[recipientId]) return;
 					let tooltip = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ListItemTooltip"});
 					if (tooltip) tooltip.props.text = this.getUserData(recipientId).username;
 					let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: c => c && c.props && !isNaN(parseInt(c.props.id))});
@@ -1272,6 +1273,14 @@ module.exports = (_ => {
 				return new BDFDB.DiscordObjects.User(user);
 			}
 			
+			getUserNick (userId, nick, change = true) {
+				let user = BDFDB.LibraryModules.UserStore.getUser(userId);
+				if (!user) return "";
+				let data = change && changedUsers[user.id];
+				if (data) return (data.useServerNick && nick || data.name && [data.name, data.showServerNick && nick && `(${nick})` || data.showAccountName && user.username && `(${user.username})`].filter(n => n).join(" ")) || nick || "";
+				return "";
+			}
+			
 			getUserAvatar (userId, change = true) {
 				let user = BDFDB.LibraryModules.UserStore.getUser(userId);
 				if (!user) return "";
@@ -1335,43 +1344,58 @@ module.exports = (_ => {
 							tab: this.labels.modal_tabheader1,
 							children: [
 								BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN.marginbottom20,
+									className: BDFDB.disCN.marginbottom8,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 											className: BDFDB.disCN.marginbottom8,
 											align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 											direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
-											children: [
-												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
-													className: BDFDB.disCN.marginreset,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-													children: this.labels.modal_username
-												}),
-												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-													type: "Switch",
-													margin: 0,
-													grow: 0,
-													label: this.labels.modal_showservernick,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-													value: data.showServerNick,
-													onChange: value => {newData.showServerNick = value}
-												}),
-												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-													type: "Switch",
-													margin: 0,
-													grow: 0,
-													label: this.labels.modal_useservernick,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-													value: data.useServerNick,
-													onChange: value => {newData.useServerNick = value}
-												})
-											]
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+												className: BDFDB.disCN.marginreset,
+												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+												children: this.labels.modal_username
+											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 											value: data.name,
 											placeholder: member.nick || user.username,
 											autoFocus: true,
-											onChange: value => {newData.name = value;}
+											onChange: value => newData.name = value
+										})
+									]
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+									className: BDFDB.disCN.marginbottom20,
+									justify: BDFDB.LibraryComponents.Flex.Justify.END,
+									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+									direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
+									children: [
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+											type: "Switch",
+											margin: 0,
+											grow: 0,
+											label: this.labels.modal_showaccountname,
+											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+											value: data.showAccountName,
+											onChange: value => newData.showAccountName = value
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+											type: "Switch",
+											margin: 0,
+											grow: 0,
+											label: this.labels.modal_showservernick,
+											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+											value: data.showServerNick,
+											onChange: value => newData.showServerNick = value
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+											type: "Switch",
+											margin: 0,
+											grow: 0,
+											label: this.labels.modal_useservernick,
+											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+											value: data.useServerNick,
+											onChange: value => newData.useServerNick = value
 										})
 									]
 								}),
@@ -1380,7 +1404,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 										value: data.tag,
-										onChange: value => {newData.tag = value;}
+										onChange: value => newData.tag = value
 									})
 								}),
 								BDFDB.ReactUtils.createElement("div", {
@@ -1413,9 +1437,7 @@ module.exports = (_ => {
 														}
 														else {
 															avatarInput.props.disabled = false;
-															this.checkUrl(avatarInput.props.value, avatarInput).then(returnValue => {
-																newData.url = returnValue;
-															});
+															this.checkUrl(avatarInput.props.value, avatarInput).then(returnValue => newData.url = returnValue);
 														}
 													}
 												})
@@ -1429,9 +1451,7 @@ module.exports = (_ => {
 											disabled: data.removeIcon,
 											ref: instance => {if (instance) avatarInput = instance;},
 											onChange: (value, instance) => {
-												this.checkUrl(value, instance).then(returnValue => {
-													newData.url = returnValue;
-												});
+												this.checkUrl(value, instance).then(returnValue => newData.url = returnValue);
 											}
 										})
 									]
@@ -1467,9 +1487,7 @@ module.exports = (_ => {
 														}
 														else {
 															bannerInput.props.disabled = false;
-															this.checkUrl(bannerInput.props.value, bannerInput).then(returnValue => {
-																newData.banner = returnValue;
-															});
+															this.checkUrl(bannerInput.props.value, bannerInput).then(returnValue => newData.banner = returnValue);
 														}
 													}
 												})
@@ -1483,9 +1501,7 @@ module.exports = (_ => {
 											disabled: data.removeBanner || user.id == "278543574059057154",
 											ref: instance => {if (instance) bannerInput = instance;},
 											onChange: (value, instance) => {
-												this.checkUrl(value, instance).then(returnValue => {
-													newData.banner = returnValue;
-												});
+												this.checkUrl(value, instance).then(returnValue => newData.banner = returnValue);
 											}
 										})
 									]
@@ -1528,7 +1544,7 @@ module.exports = (_ => {
 														allowManagedEmojis: true,
 														allowManagedEmojisUsage: true,
 														ref: instance => {if (instance) statusEmojiInput = instance;},
-														onSelect: value => {newData.statusEmoji = value;}
+														onSelect: value => newData.statusEmoji = value
 													})
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
@@ -1538,7 +1554,7 @@ module.exports = (_ => {
 													placeholder: activity && activity.type == BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS && activity.state || "",
 													disabled: data.removeStatus,
 													ref: instance => {if (instance) statusInput = instance;},
-													onChange: value => {newData.status = value;}
+													onChange: value => newData.status = value
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 													size: BDFDB.LibraryComponents.Button.Sizes.NONE,
@@ -1570,7 +1586,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color1,
-										onColorChange: value => {newData.color1 = value;}
+										onColorChange: value => newData.color1 = value
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -1578,7 +1594,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color2,
-										onColorChange: value => {newData.color2 = value;}
+										onColorChange: value => newData.color2 = value
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -1587,7 +1603,7 @@ module.exports = (_ => {
 									label: this.labels.modal_userolecolor,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 									value: data.useRoleColor,
-									onChange: value => {newData.useRoleColor = value;}
+									onChange: value => newData.useRoleColor = value
 								})
 							]
 						}),
@@ -1601,7 +1617,7 @@ module.exports = (_ => {
 										color: data.color3,
 										disabled: data.ignoreTagColor,
 										ref: instance => {if (instance) colorPicker3 = instance;},
-										onColorChange: value => {newData.color3 = value;}
+										onColorChange: value => newData.color3 = value
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -1611,7 +1627,7 @@ module.exports = (_ => {
 										color: data.color4,
 										disabled: data.ignoreTagColor,
 										ref: instance => {if (instance) colorPicker4 = instance;},
-										onColorChange: value => {newData.color4 = value;}
+										onColorChange: value => newData.color4 = value
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -1637,7 +1653,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color5,
-										onColorChange: value => {newData.color5 = value;}
+										onColorChange: value => newData.color5 = value
 									})
 								})
 							]
@@ -1714,6 +1730,7 @@ module.exports = (_ => {
 							modal_header:						"Локални потребителски настройки",
 							modal_ignoretagcolor:				"Използвайте Цвят на ролята",
 							modal_invalidurl:					"Невалиден адрес",
+							modal_showaccountname:				"Покажи име",
 							modal_showservernick:				"Показване на псевдонима",
 							modal_tabheader1:					"Потребител",
 							modal_tabheader2:					"Име Цвят",
@@ -1740,6 +1757,7 @@ module.exports = (_ => {
 							modal_header:						"Místní nastavení uživatele",
 							modal_ignoretagcolor:				"Použijte barvu role",
 							modal_invalidurl:					"Neplatná URL",
+							modal_showaccountname:				"Zobrazit jméno",
 							modal_showservernick:				"Zobrazit přezdívku",
 							modal_tabheader1:					"Uživatel",
 							modal_tabheader2:					"Název Barva",
@@ -1766,6 +1784,7 @@ module.exports = (_ => {
 							modal_header:						"Lokale brugerindstillinger",
 							modal_ignoretagcolor:				"Brug rollefarve",
 							modal_invalidurl:					"Ugyldig URL",
+							modal_showaccountname:				"Vis navn",
 							modal_showservernick:				"Vis kaldenavn",
 							modal_tabheader1:					"Bruger",
 							modal_tabheader2:					"Navnfarve",
@@ -1792,6 +1811,7 @@ module.exports = (_ => {
 							modal_header:						"Lokale Benutzereinstellungen",
 							modal_ignoretagcolor:				"Rollenfarbe verwenden",
 							modal_invalidurl:					"Ungültige URL",
+							modal_showaccountname:				"Name anzeigen",
 							modal_showservernick:				"Nicknamen anzeigen",
 							modal_tabheader1:					"Benutzer",
 							modal_tabheader2:					"Namensfarbe",
@@ -1807,8 +1827,8 @@ module.exports = (_ => {
 						};
 					case "el":		// Greek
 						return {
-							confirm_reset:						"Είστε βέβαιοι ότι θέλετε να επαναφέρετε αυτόν τον χρήστη;",
-							confirm_resetall:					"Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλους τους χρήστες;",
+							confirm_reset:						"Είστε βέβαιοι ότι θέλετε να επαναφέρετε αυτόν τον χρήστη,",
+							confirm_resetall:					"Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλους τους χρήστες,",
 							context_localusersettings:			"Ρυθμίσεις τοπικού χρήστη",
 							modal_colorpicker1:					"Χρώμα ονόματος",
 							modal_colorpicker2:					"Χρώμα του φόντου",
@@ -1818,6 +1838,7 @@ module.exports = (_ => {
 							modal_header:						"Ρυθμίσεις τοπικού χρήστη",
 							modal_ignoretagcolor:				"Χρησιμοποιήστε το χρώμα του ρόλου",
 							modal_invalidurl:					"Μη έγκυρη διεύθυνση URL",
+							modal_showaccountname:				"Εμφάνιση ονόματος",
 							modal_showservernick:				"Εμφάνιση ψευδωνύμου",
 							modal_tabheader1:					"Χρήστης",
 							modal_tabheader2:					"Χρώμα ονόματος",
@@ -1844,6 +1865,7 @@ module.exports = (_ => {
 							modal_header:						"Configuración de usuario local",
 							modal_ignoretagcolor:				"Usar color de rol",
 							modal_invalidurl:					"URL invalida",
+							modal_showaccountname:				"Mostrar nombre",
 							modal_showservernick:				"Mostrar apodo",
 							modal_tabheader1:					"Usuario",
 							modal_tabheader2:					"Color del nombre",
@@ -1870,6 +1892,7 @@ module.exports = (_ => {
 							modal_header:						"Paikalliset käyttäjäasetukset",
 							modal_ignoretagcolor:				"Käytä rooliväriä",
 							modal_invalidurl:					"Virheellinen URL",
+							modal_showaccountname:				"Näytä nimi",
 							modal_showservernick:				"Näytä lempinimi",
 							modal_tabheader1:					"Käyttäjä",
 							modal_tabheader2:					"Nimen väri",
@@ -1896,6 +1919,7 @@ module.exports = (_ => {
 							modal_header:						"Paramètres locaux de l'utilisateur",
 							modal_ignoretagcolor:				"Utiliser la couleur du rôle",
 							modal_invalidurl:					"URL invalide",
+							modal_showaccountname:				"Afficher le nom",
 							modal_showservernick:				"Afficher le surnom",
 							modal_tabheader1:					"Utilisateur",
 							modal_tabheader2:					"Couleur du nom",
@@ -1922,6 +1946,7 @@ module.exports = (_ => {
 							modal_header:						"स्थानीय उपयोगकर्ता सेटिंग्स",
 							modal_ignoretagcolor:				"भूमिका रंग का प्रयोग करें",
 							modal_invalidurl:					"असामान्य यूआरएल",
+							modal_showaccountname:				"नाम दिखाएं",
 							modal_showservernick:				"उपनाम दिखाएं",
 							modal_tabheader1:					"उपयोगकर्ता",
 							modal_tabheader2:					"नाम रंग",
@@ -1948,6 +1973,7 @@ module.exports = (_ => {
 							modal_header:						"Postavke lokalnog korisnika",
 							modal_ignoretagcolor:				"Koristite boju uloga",
 							modal_invalidurl:					"Neispravna poveznica",
+							modal_showaccountname:				"Prikaži ime",
 							modal_showservernick:				"Prikaži nadimak",
 							modal_tabheader1:					"Korisnik",
 							modal_tabheader2:					"Naziv Boja",
@@ -1974,6 +2000,7 @@ module.exports = (_ => {
 							modal_header:						"Helyi felhasználói beállítások",
 							modal_ignoretagcolor:				"Használja a Szerepszínt",
 							modal_invalidurl:					"Érvénytelen URL",
+							modal_showaccountname:				"Név megjelenítése",
 							modal_showservernick:				"Becenév megjelenítése",
 							modal_tabheader1:					"Felhasználó",
 							modal_tabheader2:					"Név színe",
@@ -2000,6 +2027,7 @@ module.exports = (_ => {
 							modal_header:						"Impostazioni utente locale",
 							modal_ignoretagcolor:				"Usa colore ruolo",
 							modal_invalidurl:					"URL non valido",
+							modal_showaccountname:				"Mostra nome",
 							modal_showservernick:				"Mostra soprannome",
 							modal_tabheader1:					"Utente",
 							modal_tabheader2:					"Nome Colore",
@@ -2026,6 +2054,7 @@ module.exports = (_ => {
 							modal_header:						"ローカルユーザー設定",
 							modal_ignoretagcolor:				"役割の色を使用する",
 							modal_invalidurl:					"無効なURL",
+							modal_showaccountname:				"名前を表示",
 							modal_showservernick:				"ニックネームを表示",
 							modal_tabheader1:					"ユーザー",
 							modal_tabheader2:					"名前の色",
@@ -2052,6 +2081,7 @@ module.exports = (_ => {
 							modal_header:						"로컬 사용자 설정",
 							modal_ignoretagcolor:				"역할 색상 사용",
 							modal_invalidurl:					"잘못된 URL",
+							modal_showaccountname:				"이름 표시",
 							modal_showservernick:				"닉네임 표시",
 							modal_tabheader1:					"사용자",
 							modal_tabheader2:					"이름 색상",
@@ -2078,6 +2108,7 @@ module.exports = (_ => {
 							modal_header:						"Vietinio vartotojo nustatymai",
 							modal_ignoretagcolor:				"Naudokite vaidmens spalvą",
 							modal_invalidurl:					"Neteisingas URL",
+							modal_showaccountname:				"Rodyti pavadinimą",
 							modal_showservernick:				"Rodyti slapyvardį",
 							modal_tabheader1:					"Vartotojas",
 							modal_tabheader2:					"Pavadinimo spalva",
@@ -2104,6 +2135,7 @@ module.exports = (_ => {
 							modal_header:						"Lokale gebruikersinstellingen",
 							modal_ignoretagcolor:				"Gebruik rolkleur",
 							modal_invalidurl:					"Ongeldige URL",
+							modal_showaccountname:				"Toon naam",
 							modal_showservernick:				"Bijnaam weergeven",
 							modal_tabheader1:					"Gebruiker",
 							modal_tabheader2:					"Naamkleur",
@@ -2130,6 +2162,7 @@ module.exports = (_ => {
 							modal_header:						"Lokale brukerinnstillinger",
 							modal_ignoretagcolor:				"Bruk rollefarge",
 							modal_invalidurl:					"Ugyldig URL",
+							modal_showaccountname:				"Vis navn",
 							modal_showservernick:				"Vis kallenavn",
 							modal_tabheader1:					"Bruker",
 							modal_tabheader2:					"Navnfarge",
@@ -2156,6 +2189,7 @@ module.exports = (_ => {
 							modal_header:						"Ustawienia użytkownika lokalnego",
 							modal_ignoretagcolor:				"Użyj koloru roli",
 							modal_invalidurl:					"Nieprawidłowy URL",
+							modal_showaccountname:				"Pokaż nazwę",
 							modal_showservernick:				"Pokaż pseudonim",
 							modal_tabheader1:					"Użytkownik",
 							modal_tabheader2:					"Nazwa Kolor",
@@ -2182,6 +2216,7 @@ module.exports = (_ => {
 							modal_header:						"Configurações de usuário local",
 							modal_ignoretagcolor:				"Use a cor da função",
 							modal_invalidurl:					"URL inválida",
+							modal_showaccountname:				"Mostrar nome",
 							modal_showservernick:				"Mostrar apelido",
 							modal_tabheader1:					"Do utilizador",
 							modal_tabheader2:					"Cor do Nome",
@@ -2208,6 +2243,7 @@ module.exports = (_ => {
 							modal_header:						"Setări locale ale utilizatorului",
 							modal_ignoretagcolor:				"Utilizați culoarea rolului",
 							modal_invalidurl:					"URL invalid",
+							modal_showaccountname:				"Afișează numele",
 							modal_showservernick:				"Afișează porecla",
 							modal_tabheader1:					"Utilizator",
 							modal_tabheader2:					"Culoare nume",
@@ -2234,6 +2270,7 @@ module.exports = (_ => {
 							modal_header:						"Настройки локального пользователя",
 							modal_ignoretagcolor:				"Использовать цвет роли",
 							modal_invalidurl:					"Неверная ссылка",
+							modal_showaccountname:				"Показать имя",
 							modal_showservernick:				"Показать ник",
 							modal_tabheader1:					"Пользователь",
 							modal_tabheader2:					"Цвет имени",
@@ -2260,6 +2297,7 @@ module.exports = (_ => {
 							modal_header:						"Lokala användarinställningar",
 							modal_ignoretagcolor:				"Använd rollfärg",
 							modal_invalidurl:					"Ogiltig URL",
+							modal_showaccountname:				"Visa namn",
 							modal_showservernick:				"Visa smeknamn",
 							modal_tabheader1:					"Användare",
 							modal_tabheader2:					"Namnfärg",
@@ -2286,6 +2324,7 @@ module.exports = (_ => {
 							modal_header:						"การตั้งค่าผู้ใช้ภายใน",
 							modal_ignoretagcolor:				"ใช้สีของบทบาท",
 							modal_invalidurl:					"URL ไม่ถูกต้อง",
+							modal_showaccountname:				"แสดงชื่อ",
 							modal_showservernick:				"แสดงชื่อเล่น",
 							modal_tabheader1:					"ผู้ใช้",
 							modal_tabheader2:					"ชื่อสี",
@@ -2312,6 +2351,7 @@ module.exports = (_ => {
 							modal_header:						"Yerel Kullanıcı Ayarları",
 							modal_ignoretagcolor:				"Rol Rengini Kullan",
 							modal_invalidurl:					"Geçersiz URL",
+							modal_showaccountname:				"İsim göster",
 							modal_showservernick:				"Takma adı göster",
 							modal_tabheader1:					"Kullanıcı",
 							modal_tabheader2:					"İsim Rengi",
@@ -2338,6 +2378,7 @@ module.exports = (_ => {
 							modal_header:						"Налаштування локального користувача",
 							modal_ignoretagcolor:				"Використовуйте колір ролі",
 							modal_invalidurl:					"Недійсна URL-адреса",
+							modal_showaccountname:				"Показати ім'я",
 							modal_showservernick:				"Показати псевдонім",
 							modal_tabheader1:					"Користувач",
 							modal_tabheader2:					"Назва Колір",
@@ -2364,6 +2405,7 @@ module.exports = (_ => {
 							modal_header:						"Cài đặt người dùng cục bộ",
 							modal_ignoretagcolor:				"Sử dụng màu vai trò",
 							modal_invalidurl:					"URL không hợp lệ",
+							modal_showaccountname:				"Hiện tên",
 							modal_showservernick:				"Hiển thị biệt hiệu",
 							modal_tabheader1:					"Người dùng",
 							modal_tabheader2:					"Tên màu",
@@ -2390,6 +2432,7 @@ module.exports = (_ => {
 							modal_header:						"本地用户设置",
 							modal_ignoretagcolor:				"使用角色颜色",
 							modal_invalidurl:					"无效的网址",
+							modal_showaccountname:				"显示名称",
 							modal_showservernick:				"显示昵称",
 							modal_tabheader1:					"用户",
 							modal_tabheader2:					"名称颜色",
@@ -2416,6 +2459,7 @@ module.exports = (_ => {
 							modal_header:						"本地用戶設置",
 							modal_ignoretagcolor:				"使用角色顏色",
 							modal_invalidurl:					"無效的網址",
+							modal_showaccountname:				"顯示名稱",
 							modal_showservernick:				"顯示暱稱",
 							modal_tabheader1:					"用戶",
 							modal_tabheader2:					"名稱顏色",
@@ -2442,6 +2486,7 @@ module.exports = (_ => {
 							modal_header:						"Local User Settings",
 							modal_ignoretagcolor:				"Use Role Color",
 							modal_invalidurl:					"Invalid URL",
+							modal_showaccountname:				"Show Name",
 							modal_showservernick:				"Show Nickname",
 							modal_tabheader1:					"User",
 							modal_tabheader2:					"Name Color",
