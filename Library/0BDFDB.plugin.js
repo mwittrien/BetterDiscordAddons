@@ -2100,13 +2100,19 @@ module.exports = (_ => {
 				if (typeof plugin[`process${type}`] == "function") {
 					if (typeof e.methodname == "string" && (e.methodname.indexOf("componentDid") == 0 || e.methodname.indexOf("componentWill") == 0)) {
 						e.node = BDFDB.ReactUtils.findDOMNode(e.instance);
-						if (e.node) return plugin[`process${type}`](e);
+						if (e.node) {
+							let tempReturn = plugin[`process${type}`](e);
+							return tempReturn !== undefined ? tempReturn : e.returnvalue;
+						}
 						else BDFDB.TimeUtils.timeout(_ => {
 							e.node = BDFDB.ReactUtils.findDOMNode(e.instance);
-							if (e.node) return plugin[`process${type}`](e);
+							if (e.node) plugin[`process${type}`](e);
 						});
 					}
-					else if (e.returnvalue || e.patchtypes.includes("before")) return plugin[`process${type}`](e);
+					else if (e.returnvalue || e.patchtypes.includes("before")) {
+						let tempReturn = plugin[`process${type}`](e);
+						return tempReturn !== undefined ? tempReturn : e.returnvalue;
+					}
 				}
 			}
 		};
