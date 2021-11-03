@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.9.5
+ * @version 6.9.7
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "6.9.5",
+			"version": "6.9.7",
 			"description": "Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders"
+		},
+		"changeLog": {
+			"fixed": {
+				"Server Changes": "Works again after Discords 100th Change for Servers"
+			}
 		}
 	};
 
@@ -410,8 +415,9 @@ module.exports = (_ => {
 					after: {
 						AppView: "default",
 						Guilds: "type",
-						GuildFolder: "render",
-						Guild: "default",
+						FolderItem: "default",
+						FolderHeader: "default",
+						GuildItem: "default",
 						GuildFolderSettingsModal: ["componentDidMount", "render"]
 					}
 				};
@@ -686,29 +692,30 @@ module.exports = (_ => {
 				}
 			}
 			
-			processGuildFolder (e) {
+			processFolderItem (e) {
+				if (!e.instance.props.folderNode) return;
 				let expandedFolders = BDFDB.LibraryModules.FolderUtils.getExpandedFolders();
 				if (expandedFolders.size) BDFDB.DOMUtils.addClass(document.body, BDFDB.disCN._serverfoldersfoldercontentisopen);
 				else BDFDB.DOMUtils.removeClassFromDOM(BDFDB.disCN._serverfoldersfoldercontentisopen);
 				
-				let data = this.getFolderConfig(e.instance.props.folderId);
+				let data = this.getFolderConfig(e.instance.props.folderNode.id);
 				if (data.muteFolder) for (let guildId of e.instance.props.guildIds) if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId)) BDFDB.LibraryModules.GuildNotificationsUtils.updateGuildNotificationSettings(guildId, {muted: true, suppress_everyone: true});
 				
 				let state = this.getState(e.instance);
-				if (folderStates[e.instance.props.folderId] && !BDFDB.equals(state, folderStates[e.instance.props.folderId])) {
+				if (folderStates[e.instance.props.folderNode.id] && !BDFDB.equals(state, folderStates[e.instance.props.folderNode.id])) {
 					if (data.autoRead && (state.unread || state.badge > 0)) {
-						BDFDB.TimeUtils.clear(folderReads[e.instance.props.folderId]);
-						folderReads[e.instance.props.folderId] = BDFDB.TimeUtils.timeout(_ => {
+						BDFDB.TimeUtils.clear(folderReads[e.instance.props.folderNode.id]);
+						folderReads[e.instance.props.folderNode.id] = BDFDB.TimeUtils.timeout(_ => {
 							BDFDB.GuildUtils.markAsRead(e.instance.props.guildIds);
 						}, 10000);
 					}
 					BDFDB.ReactUtils.forceUpdate(folderGuildContent);
 				}
-				folderStates[e.instance.props.folderId] = state;
+				folderStates[e.instance.props.folderNode.id] = state;
 				
 				let [tooltipParent, tooltipIndex] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["ListItemTooltip", "BDFDB_TooltipContainer"]});
 				if (tooltipIndex > -1) tooltipParent[tooltipIndex] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					text: e.instance.props.folderName || BDFDB.FolderUtils.getDefaultName(e.instance.props.folderId),
+					text: e.instance.props.folderNode.name || e.instance.props.defaultFolderName,
 					tooltipConfig: {
 						type: "right",
 						list: true,
@@ -718,27 +725,6 @@ module.exports = (_ => {
 					},
 					children: tooltipParent[tooltipIndex].props.children
 				});
-				if (e.instance.props.expanded || data.useCloseIcon) {
-					let folderIcons = this.loadAllIcons(), icontype = e.instance.props.expanded ? "openicon" : "closedicon";
-					let icon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? this.createBase64SVG(folderIcons[data.iconID][icontype], data.color1, data.color2) : folderIcons[data.iconID][icontype]) : null;
-					if (icon) {
-						let [folderIconParent, folderIconIndex] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
-						if (folderIconIndex > -1) folderIconParent[folderIconIndex] = BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN.guildfoldericonwrapper,
-							style: {background: `url(${icon}) center/cover no-repeat`}
-						});
-					}
-				}
-				if (this.settings.general.showCountBadge) {
-					let mask = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "BlobMask"});
-					if (mask) {
-						mask.props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.getBadgeWidthForValue(e.instance.props.guildIds.length);
-						mask.props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
-							count: e.instance.props.guildIds.length,
-							style: {backgroundColor: "var(--bdfdb-blurple)"}
-						});
-					}
-				}
 				if (this.settings.general.extraColumn) {
 					e.returnvalue.props.children[0] = null;
 					e.returnvalue.props.children[2] = BDFDB.ReactUtils.createElement("div", {
@@ -747,8 +733,34 @@ module.exports = (_ => {
 					});
 				}
 			}
-
-			processGuild (e) {
+			
+			processFolderHeader (e) {
+				if (!e.instance.props.folderNode) return;
+				let data = this.getFolderConfig(e.instance.props.folderNode.id);
+				if (e.instance.props.expanded || data.useCloseIcon) {
+					let folderIcons = this.loadAllIcons(), icontype = e.instance.props.expanded ? "openicon" : "closedicon";
+					let icon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? this.createBase64SVG(folderIcons[data.iconID][icontype], data.color1, data.color2) : folderIcons[data.iconID][icontype]) : null;
+					if (icon) {
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIconContent"});
+						if (index > -1) children[index] = BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.guildfoldericonwrapper,
+							style: {background: `url(${icon}) center/cover no-repeat`}
+						});
+					}
+				}
+				if (this.settings.general.showCountBadge) {
+					let mask = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "BlobMask"});
+					if (mask) {
+						mask.props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.getBadgeWidthForValue(e.instance.props.folderNode.children.length);
+						mask.props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
+							count: e.instance.props.folderNode.children.length,
+							style: {backgroundColor: "var(--bdfdb-blurple)"}
+						});
+					}
+				}
+			}
+			
+			processGuildItem (e) {
 				BDFDB.TimeUtils.clear(forceCloseTimeout);
 				forceCloseTimeout = BDFDB.TimeUtils.timeout(_ => {
 					let newCurrentGuild = BDFDB.LibraryModules.LastGuildStore.getGuildId();
@@ -984,6 +996,7 @@ module.exports = (_ => {
 				for (let key in instance.props) {
 					if (typeof instance.props[key] != "object" && typeof instance.props[key] != "function") state[key] = instance.props[key];
 					else if (Array.isArray(instance.props[key])) state[key] = instance.props[key].length;
+					else if (key == "mediaState") Object.assign(state, instance.props[key]);
 				}
 				return state;
 			}
