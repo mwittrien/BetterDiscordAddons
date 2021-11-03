@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.9
+ * @version 1.1.0
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerDetails",
 			"author": "DevilBro",
-			"version": "1.0.9",
+			"version": "1.1.0",
 			"description": "Shows Server Details in the Server List Tooltip"
+		},
+		"changeLog": {
+			"fixed": {
+				"Server Changes": "Works again after Discords 100th Change for Servers"
+			}
 		}
 	};
 
@@ -193,7 +198,7 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					after: {
-						Guild: "default"
+						GuildItem: "default"
 					}
 				};
 				
@@ -224,7 +229,7 @@ module.exports = (_ => {
 			
 			onStart () {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryComponents.GuildComponents.Guild.prototype, "render", {after: e => {
-					this.processGuild({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"});
+					this.processGuildItem({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"});
 				}});
 
 				this.forceUpdateAll();
@@ -335,7 +340,7 @@ module.exports = (_ => {
 				BDFDB.GuildUtils.rerenderAll();
 			}
 			
-			processGuild (e) {
+			processGuildItem (e) {
 				if (BDFDB.GuildUtils.is(e.instance.props.guild)) {
 					let tooltipContainer;
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});

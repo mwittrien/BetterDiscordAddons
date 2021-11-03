@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.3
+ * @version 1.5.5
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "DisplayServersAsChannels",
 			"author": "DevilBro",
-			"version": "1.5.3",
+			"version": "1.5.5",
 			"description": "Displays Servers in a similar way as Channels"
+		},
+		"changeLog": {
+			"fixed": {
+				"Server Changes": "Works again after Discords 100th Change for Servers"
+			}
 		}
 	};
 
@@ -87,8 +92,9 @@ module.exports = (_ => {
 						Guilds: "type",
 						HomeButton: "type",
 						DirectMessage: "render",
-						Guild: "default",
-						GuildFolder: "render",
+						GuildItem: "default",
+						FolderItem: "default",
+						FolderHeader: "default",
 						CircleIconButton: "render",
 						UnavailableGuildsButton: "default"
 					}
@@ -174,7 +180,7 @@ module.exports = (_ => {
 			
 			processHomeButton (e) {
 				this.removeTooltip(e.returnvalue);
-				this.removeMask(e.returnvalue);
+				e.returnvalue = this.removeMask(e.returnvalue);
 				this.addElementName(e.returnvalue, BDFDB.LanguageUtils.LanguageStrings.HOME);
 			}
 			
@@ -182,17 +188,17 @@ module.exports = (_ => {
 				if (e.instance.props.channel.id) {
 					let text = BDFDB.ReactUtils.findValue(e.returnvalue, "text");
 					this.removeTooltip(e.returnvalue);
-					this.removeMask(e.returnvalue);
+					e.returnvalue = this.removeMask(e.returnvalue);
 					this.addElementName(e.returnvalue, text, {
 						isDm: true
 					});
 				}
 			}
 			
-			processGuild (e) {
+			processGuildItem (e) {
 				if (e.instance.props.guild) {
 					if (!BDFDB.BDUtils.isPluginEnabled("ServerDetails")) this.removeTooltip(e.returnvalue);
-					this.removeMask(e.returnvalue);
+					e.returnvalue = this.removeMask(e.returnvalue);
 					this.addElementName(e.returnvalue, e.instance.props.guild.name, {
 						badges: [
 							this.settings.general.showGuildIcon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Icon, {
@@ -212,13 +218,18 @@ module.exports = (_ => {
 				}
 			}
 			
-			processGuildFolder (e) {
-				if (e.instance.props.folderId) {
-					this.removeTooltip(e.returnvalue);
-					this.removeMask(e.returnvalue);
-					let folderColor = BDFDB.ColorUtils.convert(e.instance.props.folderColor, "HEX") || "var(--bdfdb-blurple)";
-					let folderSize = Math.round(this.settings.amounts.serverElementHeight * 0.6);
-					this.addElementName(e.returnvalue, e.instance.props.folderName || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER, {
+			processFolderItem (e) {
+				if (e.instance.props.folderNode) this.removeTooltip(e.returnvalue);
+			}
+			
+			processFolderHeader (e) {
+				if (e.instance.props.folderNode) {
+					e.returnvalue = this.removeMask(e.returnvalue);
+					let folderColor = BDFDB.ColorUtils.convert(e.instance.props.folderNode.color, "HEX") || "var(--bdfdb-blurple)";
+					let folderSize = Math.round(this.settings.amounts.serverElementHeight * 0.725);
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIconContent"});
+					if (index > -1) children[index] = null;
+					this.addElementName(e.returnvalue, e.instance.props.folderNode.name || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER, {
 						wrap: true,
 						backgroundColor: e.instance.props.expanded && BDFDB.ColorUtils.setAlpha(folderColor, 0.2),
 						badges: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
@@ -236,19 +247,19 @@ module.exports = (_ => {
 				if (child) {
 					let renderChildren = child.props.children;
 					child.props.children = BDFDB.TimeUtils.suppress((...args) => {
-						let renderedChildren = renderChildren(...args);
-						renderedChildren = BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {children: renderedChildren});
-						this._processCircleIconButton(e.instance, renderedChildren);
-						return renderedChildren;
+						let childE = {instance: e.instance, returnvalue: renderChildren(...args)};
+						childE.returnvalue = BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {children: childE.returnvalue});
+						this._processCircleIconButton(childE);
+						return childE.returnvalue;
 					});
 				}
-				else this._processCircleIconButton(e.instance, e.returnvalue);
+				else this._processCircleIconButton(e);
 			}
 			
-			_processCircleIconButton (instance, returnvalue) {
-				this.removeTooltip(returnvalue);
-				this.removeMask(returnvalue);
-				this.addElementName(returnvalue, instance.props.tooltip, {
+			_processCircleIconButton (e) {
+				this.removeTooltip(e.returnvalue);
+				e.returnvalue = this.removeMask(e.returnvalue);
+				this.addElementName(e.returnvalue, e.instance.props.tooltip, {
 					wrap: true,
 					backgroundColor: "transparent"
 				});
@@ -269,6 +280,8 @@ module.exports = (_ => {
 			
 			removeMask (parent) {
 				let [children, index] = BDFDB.ReactUtils.findParent(parent, {name: "BlobMask"});
+				let parentIsMask = index == -1 && parent.type.displayName == "BlobMask";
+				if (parentIsMask) [children, index] = [[parent], 0];
 				if (index > -1) {
 					let badges = [];
 					for (let key of Object.keys(children[index].props)) {
@@ -293,7 +306,9 @@ module.exports = (_ => {
 						else insertBadges(children[index]);
 					}
 					children[index] = children[index].props.children;
+					if (parentIsMask) return children[index];
 				}
+				return parent;
 			}
 			
 			addElementName (parent, name, options = {}) {
