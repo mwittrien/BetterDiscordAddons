@@ -2,7 +2,7 @@
  * @name EditServers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.4
+ * @version 2.3.5
  * @description Allows you to locally edit Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditServers",
 			"author": "DevilBro",
-			"version": "2.3.4",
+			"version": "2.3.5",
 			"description": "Allows you to locally edit Servers"
+		},
+		"changeLog": {
+			"fixed": {
+				"Server Changes": "Works again after Discords 100th Change for Servers"
+			}
 		}
 	};
 	
@@ -89,7 +94,7 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					before: {
-						Guild: "default",
+						GuildItem: "default",
 						GuildIconWrapper: "render",
 						MutualGuilds: "default",
 						QuickSwitcher: "render",
@@ -100,7 +105,7 @@ module.exports = (_ => {
 					},
 					after: {
 						RecentsChannelHeader: "default",
-						Guild: "default",
+						GuildItem: "default",
 						BlobMask: "render",
 						GuildIconWrapper: "render",
 						GuildIcon: "render",
@@ -132,8 +137,8 @@ module.exports = (_ => {
 				}});
 
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryComponents.GuildComponents.Guild.prototype, "render", {
-					before: e => {this.processGuild({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"});},
-					after: e => {this.processGuild({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"});}
+					before: e => this.processGuildItem({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"}),
+					after: e => this.processGuildItem({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"})
 				});
 				
 				this.forceUpdateAll();
@@ -234,10 +239,10 @@ module.exports = (_ => {
 				}
 			}
 
-			processGuild (e) {
+			processGuildItem (e) {
 				if (BDFDB.GuildUtils.is(e.instance.props.guild) && e.instance.props.guild.joinedAt && this.settings.places.guildList) {
-					e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
-					if (e.returnvalue) {
+					if (!e.returnvalue) e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
+					else {
 						let data = changedGuilds[e.instance.props.guild.id];
 						if (data && (data.color3 || data.color4)) {
 							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
@@ -399,11 +404,11 @@ module.exports = (_ => {
 					newGuildObject.acronym = data.shortName && data.shortName.replace(/\s/g, "") || BDFDB.LibraryModules.StringUtils.getAcronym(!data.ignoreCustomName && data.name || nativeObject.name);
 					if (data.removeIcon) {
 						newGuildObject.icon = null;
-						newGuildObject.getIconURL = _ => null;
+						newGuildObject.getIconURL = _ => {return null;};
 					}
 					else if (data.url) {
 						newGuildObject.icon = data.url;
-						newGuildObject.getIconURL = _ => data.url;
+						newGuildObject.getIconURL = _ => {return data.url;};
 					}
 					if (data.removeBanner) newGuildObject.banner = null;
 					else if (data.banner) newGuildObject.banner = data.banner;
