@@ -197,6 +197,10 @@
 	border-bottom-color: rgb(var(--accentcolor));
 }
 
+.progressBar-UDQ4AC {										/* channel header		progress bar 						*/
+	background-image: linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor2)));
+}
+
 .channelNotice-1-XFjC::before,								/* channel notice											*/
 .channelNotice-1-XFjC::after,
 .channelNotice-3DDmsB::before,
@@ -950,7 +954,6 @@
 
 
 .avatarUploaderInnerSquare-1VbIoA {							/* mainsettings			uploadbanner 						*/
-	background-color: rgb(255, 255, 255);
 	background-image: linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor2)));
 }
 .premiumGuildAvailabilityIndicator-3eYBzr {					/* mainsettings			uploadbanner indicator				*/
