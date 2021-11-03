@@ -5710,13 +5710,17 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	color: rgb(var(--textdarkest));
 }
 
+#app-mount .borderPrimary-2uDO4f {
+	border-color: rgb(var(--textdarkest)); !important;
+}
+
 #app-mount .lookInverted-2D7oAl.colorTransparent-1ewNp9 .spinnerItem-3GlVyU {
 	background-color: rgba(var(--textbrightest),.1);
 }
 #app-mount .lookFilled-1Gx00P.colorTransparent-1ewNp9 .spinnerItem-3GlVyU,
 #app-mount .lookOutlined-3sRXeN.colorTransparent-1ewNp9 .spinnerItem-3GlVyU,
 #app-mount .lookLink-9FtZy-.colorTransparent-1ewNp9 .spinnerItem-3GlVyU {
-	background-color: var(--header-primary);
+	background-color: rgb(var(--textbrightest));
 }
 
 #app-mount .lookFilled-1Gx00P.colorTransparent-1ewNp9:hover,
@@ -5730,7 +5734,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .lookFilled-1Gx00P.colorTransparent-1ewNp9,
 #app-mount .lookFilled-1Gx00P.colorTransparent-1ewNp9:disabled {
 	background-color: rgba(var(--textbrightest),.1);
-	color: var(--header-primary);
+	color: rgb(var(--textbrightest));
 }
 
 #app-mount .lookInverted-2D7oAl.colorTransparent-1ewNp9:hover,
@@ -5743,31 +5747,35 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 #app-mount .lookInverted-2D7oAl.colorTransparent-1ewNp9,
 #app-mount .lookInverted-2D7oAl.colorTransparent-1ewNp9:disabled  {
-	background-color: var(--header-primary);
+	background-color: rgb(var(--textbrightest));
 	color: rgba(var(--textbrightest),.1);
 }
 
 #app-mount .lookOutlined-3sRXeN.hoverTransparent-2Lz5CN.hasHover-3X1-zV:hover {
 	background-color: rgba(var(--textbrighter),.1);
-	border-color: var(--interactive-hover);
+	border-color: rgb(var(--textbrightest));
 }
 #app-mount .lookOutlined-3sRXeN.hoverTransparent-2Lz5CN.hasHover-3X1-zV:active {
 	background-color: rgba(var(--textbrightest),.1);
-	border-color: var(--header-primary);
+	border-color: rgb(var(--textbrightest));
 }
 #app-mount .lookOutlined-3sRXeN.colorTransparent-1ewNp9,
 #app-mount .lookOutlined-3sRXeN.colorTransparent-1ewNp9:disabled {
 	background-color: transparent;
-	color: var(--text-normal);
+	color: rgb(var(--textbright));
 }
 
 #app-mount .lookLink-9FtZy-.colorTransparent-1ewNp9 {
-	color: var(--text-normal);
+	color: rgb(var(--textbright));
 }
 #app-mount .lookLink-9FtZy-.colorTransparent-1ewNp9:hover .contents-18-Yxp,
 #app-mount .lookLink-9FtZy-.hoverTransparent-2Lz5CN.hasHover-3X1-zV:hover .contents-18-Yxp {
 	background-image: linear-gradient(0deg, transparent,transparent 1px,rgb(var(--textbrighter)) 0,rgb(var(--textbrighter)) 2px,transparent 0);
-	color: var(--text-normal);
+	color: rgb(var(--textbright));
+}
+
+#app-mount .borderTransparent-2nVGk5 {
+	border-color: rgb(var(--textbrightest)) !important;
 }
 
 /* ----		15.3.	INPUTS							---- */

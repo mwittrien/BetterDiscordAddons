@@ -948,6 +948,17 @@
 
 /* ~~~~		9.		GUILDSETTINGS					~~~~ */
 
+
+.avatarUploaderInnerSquare-1VbIoA {							/* mainsettings			uploadbanner 						*/
+	background-color: rgb(255, 255, 255);
+	background-image: linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor2)));
+}
+.premiumGuildAvailabilityIndicator-3eYBzr {					/* mainsettings			uploadbanner indicator				*/
+	align-items: center;
+}
+.unlockedIcon-2_goS1 {										/* mainsettings			uploadbanner enabled				*/
+	color: rgb(var(--accentcolor2));
+}
 .banner-aJsFyZ {											/* rolesettings			intro banner 						*/
 	border-radius: 5px;
 }
@@ -1974,57 +1985,83 @@ a.metadataName-14STf- {
 
 #app-mount .lookInverted-2D7oAl.colorBrand-3pXr91 .spinnerItem-3GlVyU,
 #app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91 .spinnerItem-3GlVyU,
-#app-mount .lookLink-9FtZy-.colorBrand-3pXr91 .spinnerItem-3GlVyU {
+#app-mount .lookLink-9FtZy-.colorBrand-3pXr91 .spinnerItem-3GlVyU,
+#app-mount .lookInverted-2D7oAl.colorBrandNew-g5lmBU .spinnerItem-3GlVyU,
+#app-mount .lookOutlined-3sRXeN.colorBrandNew-g5lmBU .spinnerItem-3GlVyU,
+#app-mount .lookLink-9FtZy-.colorBrandNew-g5lmBU .spinnerItem-3GlVyU {
 	background-color: rgb(var(--accentcolor));
 }
 
 #app-mount .btn-1PnLxm.btnPrimary-1jluZW:hover:not(:disabled),
 #app-mount .lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-7qQbGO):hover,
-#app-mount .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover {
+#app-mount .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover,
+#app-mount .lookFilled-1Gx00P.colorBrandNew-g5lmBU:not(.buttonColor-7qQbGO):hover,
+#app-mount .lookFilled-1Gx00P.hoverBrandNew-OURftq.hasHover-3X1-zV:hover {
 	background: var(--accentcolor-hover);
 }
 #app-mount .lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-7qQbGO):active,
-#app-mount .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:active {
+#app-mount .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:active,
+#app-mount .lookFilled-1Gx00P.colorBrandNew-g5lmBU:not(.buttonColor-7qQbGO):active,
+#app-mount .lookFilled-1Gx00P.hoverBrandNew-OURftq.hasHover-3X1-zV:active {
 	background: var(--accentcolor-active);
 }
 #app-mount .btn-1PnLxm.btnPrimary-1jluZW,
 #app-mount .lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-7qQbGO),
-#app-mount .lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-7qQbGO):disabled {
+#app-mount .lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-7qQbGO):disabled,
+#app-mount .lookFilled-1Gx00P.colorBrandNew-g5lmBU:not(.buttonColor-7qQbGO),
+#app-mount .lookFilled-1Gx00P.colorBrandNew-g5lmBU:not(.buttonColor-7qQbGO):disabled {
 	background: rgb(var(--accentcolor));
 }
 
 #app-mount .lookInverted-2D7oAl.colorBrand-3pXr91:hover,
-#app-mount .lookInverted-2D7oAl.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover {
+#app-mount .lookInverted-2D7oAl.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover,
+#app-mount .lookInverted-2D7oAl.colorBrandNew-g5lmBU:hover,
+#app-mount .lookInverted-2D7oAl.hoverBrandNew-OURftq.hasHover-3X1-zV:hover {
 	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
 }
 #app-mount .lookInverted-2D7oAl.colorBrand-3pXr91:active,
-#app-mount .lookInverted-2D7oAl.hoverBrand-1_Fxlk.hasHover-3X1-zV:active {
+#app-mount .lookInverted-2D7oAl.hoverBrand-1_Fxlk.hasHover-3X1-zV:active,
+#app-mount .lookInverted-2D7oAl.colorBrandNew-g5lmBU:active,
+#app-mount .lookInverted-2D7oAl.hoverBrandNew-OURftq.hasHover-3X1-zV:active {
 	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
 }
 #app-mount .lookInverted-2D7oAl.colorBrand-3pXr91,
+#app-mount .lookInverted-2D7oAl.colorBrand-3pXr91:disabled,
+#app-mount .lookInverted-2D7oAl.colorBrandNew-g5lmBU,
 #app-mount .lookInverted-2D7oAl.colorBrand-3pXr91:disabled {
 	color: rgb(var(--accentcolor));
 }
 
-#app-mount .lookOutlined-3sRXeN.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover {
+#app-mount .lookOutlined-3sRXeN.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover,
+#app-mount .lookOutlined-3sRXeN.hoverBrandNew-OURftq.hasHover-3X1-zV:hover {
 	border-color: rgba(var(--accentcolor), 0.6);
 }
-#app-mount .lookOutlined-3sRXeN.hoverBrand-1_Fxlk.hasHover-3X1-zV:active {
+#app-mount .lookOutlined-3sRXeN.hoverBrand-1_Fxlk.hasHover-3X1-zV:active,
+#app-mount .lookOutlined-3sRXeN.hoverBrandNew-OURftq.hasHover-3X1-zV:active {
 	background-color: rgba(var(--accentcolor), 0.1);
 	border-color: rgb(var(--accentcolor));
 }
 #app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91,
-#app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91:disabled {
+#app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91:disabled
+#app-mount .lookOutlined-3sRXeN.colorBrandNew-g5lmBU,,
+#app-mount .lookOutlined-3sRXeN.colorBrandNew-g5lmBU:disabled {
 	border-color: rgba(var(--accentcolor), 0.1);
 	color: rgb(var(--accentcolor));
 }
 
-#app-mount .lookLink-9FtZy-.colorBrand-3pXr91 {
+#app-mount .lookLink-9FtZy-.colorBrand-3pXr91,
+#app-mount .lookLink-9FtZy-.colorBrandNew-g5lmBU {
 	color: rgb(var(--accentcolor));
 }
-#app-mount .lookLink-9FtZy-.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover .contents-18-Yxp {
+#app-mount .lookLink-9FtZy-.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover .contents-18-Yxp,
+#app-mount .lookLink-9FtZy-.hoverBrandNew-OURftq.hasHover-3X1-zV:hover .contents-18-Yxp {
 	background-image: linear-gradient(0deg, transparent, transparent 1px, rgb(var(--accentcolor)) 0, rgb(var(--accentcolor)) 2px, transparent 0);
 	color: rgb(var(--accentcolor));
+}
+
+#app-mount .borderBrand-1gITAL,
+#app-mount .borderBrandNew-15fytK {
+	border-color: rgb(var(--accentcolor)) !important;
 }
 
 /* ----		12.3.	INPUTS							---- */

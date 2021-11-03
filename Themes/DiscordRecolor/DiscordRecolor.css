@@ -443,6 +443,10 @@ html .iconBadge-2wi9r4 {
 	color: var(--header-primary);
 }
 
+#app-mount .borderPrimary-2uDO4f {
+	border-color: var(--header-primary) !important;
+}
+
 #app-mount .lookInverted-2D7oAl.colorTransparent-1ewNp9 .spinnerItem-3GlVyU {
 	background-color: rgba(var(--textbrightest),.1);
 }
@@ -501,6 +505,10 @@ html .iconBadge-2wi9r4 {
 #app-mount .lookLink-9FtZy-.hoverTransparent-2Lz5CN.hasHover-3X1-zV:hover .contents-18-Yxp {
 	background-image: linear-gradient(0deg, transparent,transparent 1px,rgb(var(--textbrighter)) 0,rgb(var(--textbrighter)) 2px,transparent 0);
 	color: var(--text-normal);
+}
+
+#app-mount .borderTransparent-2nVGk5 {
+	border-color: var(--text-normal) !important;
 }
 
 /* ----		1.3.	INPUTS							---- */
