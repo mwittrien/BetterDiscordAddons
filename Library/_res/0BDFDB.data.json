@@ -209,7 +209,7 @@
 			"FocusRing": {"props": ["FocusRingScope"]},
 			"GuestHomeButton": {"props": ["GuestHomeButton"]},
 			"GuildIcon": {"class": "avataricon"},
-			"GuildItem": {"strings": ["selectedChannelId", "guildNode", "lowerBadgeWidth"]}},
+			"GuildItem": {"strings": ["selectedChannelId", "guildNode", "lowerBadgeWidth"]},
 			"GuildRoleSettings": {"class": "settingswindowcontentregion"},
 			"Guilds": {"subComponent": {"type": "type", "children": true, "strings": ["guildsnav", "ListNavigatorProvider"]}},
 			"GuildSettings": {"class": "layer"},
