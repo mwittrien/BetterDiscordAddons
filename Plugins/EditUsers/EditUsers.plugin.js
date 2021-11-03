@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.0
+ * @version 4.4.1
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.4.0",
+			"version": "4.4.1",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
@@ -219,7 +219,7 @@ module.exports = (_ => {
 							let color1 = data.color1 && data.useRoleColor && member && member.colorString || data.color1;
 							color1 = color1 && BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color1) ? color1[0] : color1, "HEX");
 							e.returnValue = Object.assign({}, e.returnValue, {
-								nick: this.getUserNick(e.methodArguments[0].author.id, member && member.nick),
+								nick: this.getUserNick(e.methodArguments[0].author.id, member && member.nick) || e.returnValue.nick,
 								guildMemberAvatar: (data.removeIcon || data.url) ? null : e.returnValue.guildMemberAvatar,
 								colorString: color1 || e.returnValue.colorString
 							});
@@ -733,7 +733,7 @@ module.exports = (_ => {
 					}
 					let member = BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, author.id);
 					e.instance.props.author = Object.assign({}, e.instance.props.author, {
-						nick: this.getUserNick(e.instance.props.author.id, member && member.nick),
+						nick: this.getUserNick(e.instance.props.author.id, member && member.nick) || e.instance.props.author.nick,
 						guildMemberAvatar: (data.removeIcon || data.url) ? null : e.instance.props.author.guildMemberAvatar,
 						colorString: color1 || e.instance.props.author.colorString
 					});
