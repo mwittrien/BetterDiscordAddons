@@ -1223,7 +1223,7 @@
 		"GuildFolder": {"props": ["folder", "expandedFolderIconWrapper"]},
 		"GuildHeader": {"props": ["header", "name", "bannerImage"]},
 		"GuildHeaderButton": {"props": ["button", "open"]},
-		"GuildItem": {"props": ["listItem", "participating"]},
+		"GuildItem": {"props": ["listItem", "participating"], "length": 10, "smaller": true},
 		"GuildIcon": {"props": ["acronym", "selected", "wrapper"]},
 		"GuildInvite": {"props": ["wrapper", "guildIconJoined"]},
 		"GuildSeparator": {"props": ["guildSeparator"]},

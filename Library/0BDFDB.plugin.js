@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.6
+ * @version 1.9.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.9.6",
+			"version": "1.9.7",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -6168,7 +6168,7 @@ module.exports = (_ => {
 			}
 			componentDidMount() {
 				let node = BDFDB.ReactUtils.findDOMNode(this);
-				if (node) for (let child of node.querySelectorAll("a")) child.setAttribute("draggable", false);
+				if (node && node.nodeType != Node.TEXT_NODE) for (let child of node.querySelectorAll("a")) child.setAttribute("draggable", false);
 			}
 			render() {
 				if (!this.props.guild) return null;
@@ -6201,7 +6201,7 @@ module.exports = (_ => {
 					className: BDFDB.disCN.guildcontainer,
 					children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.BlobMask, {
 						selected: this.state.isDropHovering || this.props.selected || this.state.hovered,
-						upperBadge: this.props.unavailable ? LibraryModules.GuildBadgeUtils.renderUnavailableBadge() : LibraryModules.GuildBadgeUtils.renderIconBadge(BDFDB.ObjectUtils.extract(this.props, "audio", "video", "screenshare", "liveStage", "hasLiveVoiceChannel", "participating", "participatingInStage")),
+						upperBadge: this.props.unavailable ? LibraryModules.GuildBadgeUtils.renderUnavailableBadge() : LibraryModules.GuildBadgeUtils.renderMediaBadge(BDFDB.ObjectUtils.extract(this.props, "audio", "video", "screenshare", "liveStage", "hasLiveVoiceChannel", "participating", "participatingInStage")),
 						lowerBadge: this.props.badge > 0 ? LibraryModules.GuildBadgeUtils.renderMentionBadge(this.props.badge) : null,
 						lowerBadgeWidth: InternalComponents.LibraryComponents.Badges.getBadgeWidthForValue(this.props.badge),
 						children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.NavItem, {
@@ -6227,8 +6227,6 @@ module.exports = (_ => {
 						})
 					})
 				});
-					
-				if (this.props.draggable && typeof this.props.connectDragSource == "function") guild = this.props.connectDragSource(guild);
 				
 				let children = [
 					this.props.list || this.props.pill ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.Pill, {
