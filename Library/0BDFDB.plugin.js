@@ -7554,8 +7554,8 @@ module.exports = (_ => {
 			handleMouseEnter(e) {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);}
 			handleMouseLeave(e) {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);}
 			handleNumberButton(ins, value) {
-				BDFDB.TimeUtils.clear(ins.pressedTimeout);
-				ins.pressedTimeout = BDFDB.TimeUtils.timeout(_ => {
+				BDFDB.TimeUtils.clear(this.pressedTimeout);
+				this.pressedTimeout = BDFDB.TimeUtils.timeout(_ => {
 					delete this.props.focused;
 					BDFDB.ReactUtils.forceUpdate(this);
 				}, 1000);
