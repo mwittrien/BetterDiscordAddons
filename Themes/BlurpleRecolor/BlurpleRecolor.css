@@ -21,6 +21,7 @@
 	--logo-primary: rgb(var(--accentcolor));
 }
 .theme-dark, .theme-light {
+	--text-brand: rgb(var(--accentcolor));
 	--text-link: rgb(var(--linkcolor));
 	--text-link-low-saturation: rgb(var(--linkcolor));
 	--info-help-background: rgba(var(--linkcolor),.1);
