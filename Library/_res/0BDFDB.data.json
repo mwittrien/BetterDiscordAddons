@@ -31,6 +31,7 @@
 		"AutocompleteOptions": {"props": ["AUTOCOMPLETE_OPTIONS"]},
 		"AutocompleteSentinels": {"props": ["CHANNEL_SENTINEL", "COMMAND_SENTINEL"]},
 		"BadgeUtils": {"props": ["getBadgeCountString", "getBadgeWidthForValue"]},
+		"BannerUtils": {"props": ["getUserBannerURLForContext"]},
 		"CallUtils": {"props": ["getCalls", "isCallActive"]},
 		"CategoryCollapseStore": {"props": ["getCollapsedCategories", "isCollapsed"]},
 		"CategoryCollapseUtils": {"props": ["categoryCollapse", "categoryCollapseAll"]},
