@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.3
+ * @version 4.3.4
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.3.3",
+			"version": "4.3.4",
 			"description": "Allows you to locally edit Channels"
 		},
 		"changeLog": {
@@ -537,6 +537,29 @@ module.exports = (_ => {
 							return renderedChildren;
 						}, "", this);
 					}
+				}
+			}
+
+			processPrivateChannel (e) {
+				if (typeof e.returnvalue.props.children == "function") {
+					let childrenRender = e.returnvalue.props.children;
+					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
+						let children = childrenRender(...args);
+						this._processPrivateChannel(e.instance, children);
+						return children;
+					}, "", this);
+				}
+				else this._processPrivateChannel(e.instance, e.returnvalue);
+			}
+
+			_processPrivateChannel (instance, returnvalue) {
+				if (instance.props.channel && instance.props.channel.isGroupDM() && this.settings.places.channelList) {
+					if (changedChannels[instance.props.channel.id] && changedChannels[instance.props.channel.id].name) {
+						returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(instance.props.channel.id)});
+					}
+					this.changeChannelColor(returnvalue.props.name, instance.props.channel.id, {modify: BDFDB.ObjectUtils.extract(Object.assign({}, instance.props, instance.state), "hovered", "selected", "hasUnreadMessages", "muted")});
+					returnvalue.props.name = [returnvalue.props.name];
+					returnvalue.props.avatar.props.src = this.getGroupIcon(instance.props.channel.id);
 				}
 			}
 

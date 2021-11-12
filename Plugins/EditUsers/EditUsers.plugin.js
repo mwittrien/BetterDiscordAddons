@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.3
+ * @version 4.4.4
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.4.3",
+			"version": "4.4.4",
 			"description": "Allows you to locally edit Users"
-		},
-		"changeLog": {
-			"fixed": {
-				"Banner": "Work again"
-			}
 		}
 	};
 
@@ -1072,7 +1067,7 @@ module.exports = (_ => {
 					}
 				}
 			}
-
+			
 			processPrivateChannel (e) {
 				if (e.instance.props.user && this.settings.places.dmsList && changedUsers[e.instance.props.user.id]) {
 					if (!e.returnvalue) {
@@ -1084,13 +1079,25 @@ module.exports = (_ => {
 						}
 					}
 					else {
-						e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getUserData(e.instance.props.user.id).username});
-						this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {modify: BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "hovered", "selected", "hasUnreadMessages", "muted")});
-						e.returnvalue.props.avatar.props.src = this.getUserAvatar(e.instance.props.user.id);
-						e.returnvalue.props.decorators = [e.returnvalue.props.decorators].flat(10);
-						this.injectBadge(e.returnvalue.props.decorators, e.instance.props.user.id, null, 1);
+						if (typeof e.returnvalue.props.children == "function") {
+							let childrenRender = e.returnvalue.props.children;
+							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
+								let children = childrenRender(...args);
+								this._processPrivateChannel(e.instance, children);
+								return children;
+							}, "", this);
+						}
+						else this._processPrivateChannel(e.instance, e.returnvalue);
 					}
 				}
+			}
+
+			_processPrivateChannel (instance, returnvalue) {
+				returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getUserData(instance.props.user.id).username});
+				this.changeUserColor(returnvalue.props.name, instance.props.user.id, {modify: BDFDB.ObjectUtils.extract(Object.assign({}, instance.props, instance.state), "hovered", "selected", "hasUnreadMessages", "muted")});
+				returnvalue.props.avatar.props.src = this.getUserAvatar(instance.props.user.id);
+				returnvalue.props.decorators = [returnvalue.props.decorators].flat(10);
+				this.injectBadge(returnvalue.props.decorators, instance.props.user.id, null, 1);
 			}
 
 			processQuickSwitchUserResult (e) {

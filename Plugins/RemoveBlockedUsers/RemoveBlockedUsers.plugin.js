@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.3
+ * @version 1.3.4
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedUsers",
 			"author": "DevilBro",
-			"version": "1.3.3",
+			"version": "1.3.4",
 			"description": "Removes blocked Messages/Users"
 		}
 	};
@@ -415,7 +415,17 @@ module.exports = (_ => {
 						e.instance.props.channel = new BDFDB.DiscordObjects.Channel(Object.assign({}, e.instance.props.channel, {rawRecipients: e.instance.props.channel.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id)), recipients: e.instance.props.channel.recipients.filter(id => !id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(id))}));
 					}
 					else {
-						if (!e.instance.props.channel.name) e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
+						if (!e.instance.props.channel.name) {
+							if (typeof e.returnvalue.props.children == "function") {
+								let childrenRender = e.returnvalue.props.children;
+								e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
+									let children = childrenRender(...args);
+									children.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
+									return children;
+								}, "", this);
+							}
+							else e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
+						}
 					}
 				}
 			}
