@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.5
+ * @version 1.8.6
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "PinDMs",
 			"author": "DevilBro",
-			"version": "1.8.5",
+			"version": "1.8.6",
 			"description": "Allows you to pin DMs, making them appear at the top of your DMs/ServerList"
-		},
-		"changeLog": {
-			"fixed": {
-				"Canary": "Fixed for Canary"
-			}
 		}
 	};
 
@@ -696,17 +691,17 @@ module.exports = (_ => {
 								let childrenRender = e.returnvalue.props.children;
 								e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 									let children = childrenRender(...args);
-									this._processPrivateChannel(e.instance, children);
+									this._processPrivateChannel(e.instance, children, category);
 									return children;
 								}, "", this);
 							}
-							else this._processPrivateChannel(e.instance, e.returnvalue);
+							else this._processPrivateChannel(e.instance, e.returnvalue, category);
 						}
 					}
 				}
 			}
 			
-			_processPrivateChannel (instance, returnvalue) {
+			_processPrivateChannel (instance, returnvalue, category) {
 				returnvalue.props.children = [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						text: BDFDB.LanguageUtils.LanguageStrings.UNPIN,
