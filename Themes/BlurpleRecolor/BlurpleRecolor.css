@@ -712,32 +712,39 @@
 
 /* ~~~~		8.		USERSETTINGS					~~~~ */
 
-.premiumTabItem-1QTfBr[aria-selected=false] {				/* settingsitems		item								*/
+.item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Discord Nitro-tab" i],
+.item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Discord-Nitro-tab" i],
+.item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Subscriptions-tab" i] {
 	color: rgb(var(--accentcolor)) !important;
 }
-.premiumTabItem-1QTfBr[aria-selected=false]:hover {
+.item-PXvHYJ:hover[aria-controls="Discord Nitro-tab" i],
+.item-PXvHYJ:hover[aria-controls="Discord-Nitro-tab" i],
+.item-PXvHYJ:hover[aria-controls="Subscriptions-tab" i] {
 	background-color: rgb(var(--accentcolor), 0.1) !important;
 }
-.premiumTabItem-1QTfBr[aria-selected=true] {
+.item-PXvHYJ.selected-3s45Ha[aria-controls="Discord Nitro-tab" i],
+.item-PXvHYJ.selected-3s45Ha[aria-controls="Discord-Nitro-tab" i],
+.item-PXvHYJ.selected-3s45Ha[aria-controls="Subscriptions-tab" i] {
 	background-color: rgb(var(--accentcolor)) !important;
 }
 .item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Nitro Server Boost-tab" i],
 .item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Nitro-Server-Boost-tab" i],
-.serverBoostTabItem-2hFTIN[aria-selected=false] {
+.item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="GUILD_PREMIUM-tab" i] {
 	color: rgb(var(--accentcolor2)) !important;
 }
 .item-PXvHYJ:hover[aria-controls="Nitro Server Boost-tab" i],
 .item-PXvHYJ:hover[aria-controls="Nitro-Server-Boost-tab" i],
-.serverBoostTabItem-2hFTIN[aria-selected=false]:hover {
+.item-PXvHYJ:hover[aria-controls="GUILD_PREMIUM-tab" i] {
 	background-color: rgb(var(--accentcolor2), 0.1) !important;
 }
 .item-PXvHYJ.selected-3s45Ha[aria-controls="Nitro Server Boost-tab" i],
 .item-PXvHYJ.selected-3s45Ha[aria-controls="Nitro-Server-Boost-tab" i],
-.serverBoostTabItem-2hFTIN[aria-selected=true] {
+.item-PXvHYJ.selected-3s45Ha[aria-controls="GUILD_PREMIUM-tab" i] {
 	background-color: rgb(var(--accentcolor2)) !important;
 }
 .item-PXvHYJ .icon-Zc-uZZ,
-.item-PXvHYJ .icon-3Povsy {
+.item-PXvHYJ .icon-3Povsy,
+.premiumLabel-fDtYys svg {
 	fill: currentColor;
 }
 

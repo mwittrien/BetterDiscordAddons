@@ -25,6 +25,7 @@ body #app-mount .layer-3QrUeG ~ .layer-3QrUeG .sidebar-CFHs9e {
 	height: calc(var(--usesettingsicons) * var(--settingsiconssize));
 	margin-right: calc(var(--usesettingsicons) * var(--settingsiconsgap));
 	background: currentColor;
+	z-index: 2;
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/questionmark.svg) center/contain no-repeat;
 }
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="My Account-tab" i]::before,
@@ -236,7 +237,8 @@ body #app-mount .layer-3QrUeG ~ .layer-3QrUeG .sidebar-CFHs9e {
 	display: none;
 }
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ .icon-Zc-uZZ,
-.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ .icon-3Povsy {
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ .icon-3Povsy,
+.sidebar-CFHs9e .side-8zPYf6 .premiumLabel-fDtYys svg {
 	transform: scaleX(calc(1 - var(--usesettingsicons)));
 }
 
