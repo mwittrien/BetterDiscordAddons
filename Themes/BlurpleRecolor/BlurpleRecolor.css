@@ -1,15 +1,14 @@
-﻿@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
-
+/* Blurple */
 :root {
-	--accentcolor:					88,101,242;
+	--accentcolor:					77, 2, 77;
 	--accentcolor2:					255,115,250;
-	--linkcolor:					0,176,244;
+	--linkcolor:					158, 7, 158;
 	--dangercolor: 					237,66,69;
 	
-	--accentcolor-hover:			rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255,255,255,.15), rgba(255,255,255,.15));
-	--accentcolor-active:			rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255,255,255,.3), rgba(255,255,255,.3));
-	--accentcolor2-hover:			rgb(var(--accentcolor2)) linear-gradient(0deg, rgba(255,255,255,.15), rgba(255,255,255,.15));
-	--accentcolor2-active:			rgb(var(--accentcolor2)) linear-gradient(0deg, rgba(255,255,255,.3), rgba(255,255,255,.3));
+	--accentcolor-hover:			rgb(var(--accentcolor)) linear-gradient(0deg, rgba(77, 2, 77,.15), rgba(77, 2, 77,.15));
+	--accentcolor-active:			rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(77, 2, 77,.3));
+	--accentcolor2-hover:			rgb(var(--accentcolor2)) linear-gradient(0deg, rgba(255, 0, 255, 0.15), rgba(0, 0, 0, 0.15));
+	--accentcolor2-active:			rgb(var(--accentcolor2)) linear-gradient(0deg, rgba(77, 2, 77,.3), rgba(77, 2, 77,.3));
 	
 	--bdfdb-blurple:				rgb(var(--accentcolor)) !important;
 	--bd-blue:						rgb(var(--accentcolor)) !important;
