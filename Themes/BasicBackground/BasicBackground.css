@@ -5830,6 +5830,12 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .input-cIJ7To:hover:not(:focus) {
 	border-color: rgb(var(--transparencycolor));
 }
+.textInput-Qjzn11 {											/* textinput												*/
+	background-color: rgba(var(--transparencycolor), .1);
+}
+.textInput-Qjzn11 .input-cIJ7To {
+	background: transparent;
+}
 
 #app-mount .prefixInput-14nUik {
 	background-color: rgba(0,0,0,.1);
@@ -5994,6 +6000,9 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .1);
 	border-color: rgba(var(--transparencycolor), .3);
 }
+.lookFilled-22uAsw.select-2fjwPw:hover {
+	border-color: rgb(var(--transparencycolor));
+}
 .lookFilled-22uAsw.select-2fjwPw:hover.open-kZ53_U,
 .lookFilled-22uAsw.open-kZ53_U {
 	border-color: rgb(var(--transparencycolor)) rgb(var(--transparencycolor)) rgba(var(--transparencycolor), .3);
@@ -6064,9 +6073,11 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	overflow: hidden;
 }
 .popout-VcNcHB::before,
+.popout-VcNcHB.scrollerBase-289Jih .content-3YMskv::before,
 .container-3LUQwT::before,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::before,
 .popout-VcNcHB::after,
+.popout-VcNcHB.scrollerBase-289Jih .content-3YMskv::after,
 .container-3LUQwT::after,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::after {
 	content: "";
@@ -6081,16 +6092,22 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	z-index: -1;
 }
 .popout-VcNcHB::before,
+.popout-VcNcHB.scrollerBase-289Jih .content-3YMskv::before,
 .container-3LUQwT::before,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::before {
 	background: var(--popout) var(--popoutposition)/var(--popoutsize);
 	background-attachment: fixed;
 }
 .popout-VcNcHB::after,
+.popout-VcNcHB.scrollerBase-289Jih .content-3YMskv::after,
 .container-3LUQwT::after,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
 	backdrop-filter: blur(var(--popoutblur));
+}
+.popout-VcNcHB.scrollerBase-289Jih::before,
+.popout-VcNcHB.scrollerBase-289Jih::after {
+	display: none;
 }
 
 /* ----		15.4.	SEARCHBARS						---- */

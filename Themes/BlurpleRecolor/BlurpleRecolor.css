@@ -2154,17 +2154,13 @@ a.metadataName-14STf- {
 }
 
 .theme-light .select-2fjwPw:focus,							/* dropdown select		nitro subscription					*/
-.theme-light .lookFilled-22uAsw.select-2fjwPw:focus {
-	border-color: rgb(var(--accentcolor));
-}
-.theme-light .lookFilled-22uAsw.select-2fjwPw:hover.open-kZ53_U,
-.theme-light .lookFilled-22uAsw.open-kZ53_U {
-	border-color: rgb(var(--accentcolor)) rgb(var(--accentcolor)) #b9bbbe;
-}
+.theme-light .lookFilled-22uAsw.select-2fjwPw:focus,
 .theme-dark .select-2fjwPw:focus,
 .theme-dark .lookFilled-22uAsw.select-2fjwPw:focus {
 	border-color: rgb(var(--accentcolor));
 }
+.theme-light .lookFilled-22uAsw.select-2fjwPw:hover.open-kZ53_U,
+.theme-light .lookFilled-22uAsw.open-kZ53_U,
 .theme-dark .lookFilled-22uAsw.select-2fjwPw:hover.open-kZ53_U,
 .theme-dark .lookFilled-22uAsw.open-kZ53_U {
 	border-color: rgb(var(--accentcolor)) rgb(var(--accentcolor)) rgba(0, 0, 0, 0.3);
