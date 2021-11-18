@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.2
+ * @version 3.0.3
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "3.0.2",
+			"version": "3.0.3",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
 		},
 		"changeLog": {
-			"improved": {
-				"Threads": "Added the Channel Info Modal for Threads, it's not possible to see a list of all threads in a server, because Discord only sends you the info a thread after you attempted to join it, which isn't possible with private threads (it's similar like server invites)"
+			"fixed": {
+				"Lock Channels": "Fixed an issue where having locked channels hidden and being allowed into a channel (via new role for example) would make visiting the channel impossible"
 			}
 		}
 	};
@@ -433,7 +433,7 @@ module.exports = (_ => {
 					for (let catId in e.instance.props.categories) e.instance.props.categories[catId] = [].concat(e.instance.props.categories[catId]);
 					e.instance.props.channels = Object.assign({}, e.instance.props.channels);
 					for (let type in e.instance.props.channels) e.instance.props.channels[type] = [].concat(e.instance.props.channels[type]);
-						
+					
 					let hiddenId = e.instance.props.guild.id + "_hidden";
 					
 					delete e.instance.props.categories[hiddenId];
@@ -494,7 +494,7 @@ module.exports = (_ => {
 			}
 			
 			processChannelItem (e) {
-				if (e.instance.props.channel && this.isChannelHidden(e.instance.props.channel.id)) {
+				if (e.instance.props.channel && !blackList.includes(e.instance.props.channel.guild_id) && this.isChannelHidden(e.instance.props.channel.id)) {
 					if (!e.returnvalue) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._showhiddenchannelshiddenchannel);
 					else {
 						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ChannelItemIcon"});
@@ -578,7 +578,7 @@ module.exports = (_ => {
 			}
 			
 			openAccessModal (channel, allowed) {
-				let isThread = channel.isThread();
+				let isThread = BDFDB.ChannelUtils.isThread(channel);
 				let guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
 				let myMember = guild && BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id);
 				let parentChannel = isThread && BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.ChannelStore.getChannel(channel.id).parent_id);
@@ -660,7 +660,7 @@ module.exports = (_ => {
 
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
-					header: this.labels.context_channelaccess,
+					header: BDFDB.LanguageUtils.LanguageStrings.CHANNEL + " " + BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY,
 					subHeader: "#" + channel.name,
 					className: BDFDB.disCN._showhiddenchannelsaccessmodal,
 					contentClassName: BDFDB.DOMUtils.formatClassName(!isThread && BDFDB.disCN.listscroller),
