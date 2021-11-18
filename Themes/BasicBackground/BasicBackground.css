@@ -4920,16 +4920,27 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .resultsGroup-r_nuzN .searchLearnMore-3SQUAj a {
 	color: var(--text-normal);
 }
+#app-mount .resultsGroup-r_nuzN .header-2N-gMV,
+#app-mount .resultsGroup-r_nuzN .plusIcon-v0BTrL {
+	color: var(--text-normal);
+}
 #app-mount .option-96V44q::after {
 	display: none;
 }
+#app-mount .option-96V44q:hover,
 #app-mount .option-96V44q.selected-rZcOL- {
 	background-color: rgba(var(--transparencycolor), .2);
 }
+#app-mount .option-96V44q:hover::before,
 #app-mount .option-96V44q.selected-rZcOL-::before {
 	background-color: rgb(var(--accentcolor));
 	border-radius: 3px;
 	width: 34px;
+}
+#app-mount .option-96V44q:hover .plusIcon-v0BTrL,
+#app-mount .option-96V44q.selected-rZcOL- .plusIcon-v0BTrL {
+	color: white;
+	opacity: 1;
 }
 #app-mount .option-96V44q .answer-1n6g43,
 #app-mount .option-96V44q .nonText-3CRkO0,
@@ -4951,7 +4962,73 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .searchOption-zQ-1l6 .answer-1n6g43 {
 	color: var(--text-muted);
 }
+#app-mount .searchResultChannelCategory-1l0lSn,
+#app-mount .searchResultChannelIcon-1DnTme {
+	color: var(--text-muted);
+}
+
+#app-mount .calendarPicker-2yf6Ci .react-datepicker {
+	background: transparent;
+}
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__day:not(.react-datepicker__day--outside-month) {
+	border-color: rgba(var(--transparencycolor), .5);
+}
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__day--outside-month {
+	background: rgba(var(--transparencycolor), .5);
+	border-color: transparent;
+}
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__header,
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__month-container,
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__day--disabled:not(.react-datepicker__day--outside-month) {
+	background: rgba(var(--transparencycolor), .2);
+}
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__header {
+	padding-bottom: 5px;
+}
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__navigation {
+	background: transparent;
+	border-color: rgba(var(--textbrightest), .5);
+	top: 30px;
+}
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__navigation::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	-webkit-mask: url(https://discord.com/assets/7619529e87dad31fd2ae83d9b9583e49.svg) center/6px 12px no-repeat;
+	background-color: rgb(var(--textbrightest));
+}
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__navigation--previous {
+	left: 30px;
+}
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__navigation--next {
+	right: 30px;
+}
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__current-month {
+	border-color: transparent;
+	padding: 10px 0;
+}
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__current-month,
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__day-name,
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__day:not(.react-datepicker__day--disabled):hover,
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__day:not(.react-datepicker__day--disabled):not(.react-datepicker__day--outside-month),
+#app-mount .calendarPicker-2yf6Ci .datePickerHint-3Q1Udw .hint-165cR4,
+#app-mount .calendarPicker-2yf6Ci .datePickerHint-3Q1Udw .hintValue-29ny8Z {
+	color: var(--header-primary);
+}
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__day--disabled:not(.react-datepicker__day--outside-month) {
+	color: var(--header-secondary);
+}
+#app-mount .calendarPicker-2yf6Ci .react-datepicker__day--outside-month {
+	color: var(--text-muted);
+}
 #app-mount .datePicker--XZbmJ .datePickerHint-3Q1Udw {
+	margin: 0;
+	padding: 20px;
+	display: flex;
+	justify-content: center;
 	border-top-color: var(--background-modifier-accent);
 }
 #app-mount .datePicker--XZbmJ .datePickerHint-3Q1Udw .hint-165cR4 {
@@ -4962,74 +5039,6 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 #app-mount .datePicker--XZbmJ .datePickerHint-3Q1Udw .hintValue-29ny8Z:hover {
 	text-shadow: 1px 1px var(--textshadow);
-}
-#app-mount .searchResultChannelCategory-1l0lSn,
-#app-mount .searchResultChannelIcon-1DnTme {
-	color: var(--text-muted);
-}
-
-#app-mount .calendarPicker-2yf6Ci .react-datepicker {
-	background: transparent;
-}
-#app-mount .datePicker--XZbmJ .react-datepicker__day:not(.react-datepicker__day--outside-month) {
-	border-color: rgba(var(--transparencycolor), .5);
-}
-#app-mount .datePicker--XZbmJ .react-datepicker__day--outside-month {
-	background: rgba(var(--transparencycolor), .5);
-	border-color: transparent;
-}
-#app-mount .datePicker--XZbmJ .react-datepicker__header,
-#app-mount .datePicker--XZbmJ .react-datepicker__month-container,
-#app-mount .datePicker--XZbmJ .react-datepicker__day--disabled:not(.react-datepicker__day--outside-month) {
-	background: rgba(var(--transparencycolor), .2);
-}
-#app-mount .datePicker--XZbmJ .react-datepicker__header {
-	padding-bottom: 5px;
-}
-#app-mount .datePicker--XZbmJ .react-datepicker__navigation {
-	background: transparent;
-	border-color: rgba(var(--textbrightest), .5);
-	top: 30px;
-}
-#app-mount .datePicker--XZbmJ .react-datepicker__navigation::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	-webkit-mask: url(https://discord.com/assets/7619529e87dad31fd2ae83d9b9583e49.svg) center/6px 12px no-repeat;
-	background-color: rgb(var(--textbrightest));
-}
-#app-mount .datePicker--XZbmJ .react-datepicker__navigation--previous {
-	left: 30px;
-}
-#app-mount .datePicker--XZbmJ .react-datepicker__navigation--next {
-	right: 30px;
-}
-#app-mount .datePicker--XZbmJ .react-datepicker__current-month {
-	border-color: transparent;
-	padding: 10px 0;
-}
-#app-mount .datePicker--XZbmJ .react-datepicker__current-month,
-#app-mount .datePicker--XZbmJ .react-datepicker__day-name,
-#app-mount .datePicker--XZbmJ .react-datepicker__day:not(.react-datepicker__day--disabled):hover,
-#app-mount .datePicker--XZbmJ .react-datepicker__day:not(.react-datepicker__day--disabled):not(.react-datepicker__day--outside-month),
-#app-mount .datePicker--XZbmJ .datePickerHint-3Q1Udw .hint-165cR4,
-#app-mount .datePicker--XZbmJ .datePickerHint-3Q1Udw .hintValue-29ny8Z {
-	color: var(--header-primary);
-}
-#app-mount .datePicker--XZbmJ .react-datepicker__day--disabled:not(.react-datepicker__day--outside-month) {
-	color: var(--header-secondary);
-}
-#app-mount .datePicker--XZbmJ .react-datepicker__day--outside-month {
-	color: var(--text-muted);
-}
-#app-mount .datePicker--XZbmJ .datePickerHint-3Q1Udw {
-	margin: 0;
-	padding: 20px;
-	display: flex;
-	justify-content: center;
 }
 
 /* ----		14.6.	COLORPICKER						---- */
