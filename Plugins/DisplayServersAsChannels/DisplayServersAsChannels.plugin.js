@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.5
+ * @version 1.5.6
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "DisplayServersAsChannels",
 			"author": "DevilBro",
-			"version": "1.5.5",
+			"version": "1.5.6",
 			"description": "Displays Servers in a similar way as Channels"
-		},
-		"changeLog": {
-			"fixed": {
-				"Server Changes": "Works again after Discords 100th Change for Servers"
-			}
 		}
 	};
 
@@ -105,7 +100,7 @@ module.exports = (_ => {
 				BDFDB.DOMUtils.addClass(document.body, BDFDB.disCN._displayserversaschannelsstyled);
 
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryComponents.GuildComponents.Guild.prototype, "render", {after: e => {
-					if (e.thisObject.props.list) this.processGuild({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"});
+					if (e.thisObject.props.list) this.processGuildItem({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"});
 				}});
 
 				this.forceUpdateAll();
