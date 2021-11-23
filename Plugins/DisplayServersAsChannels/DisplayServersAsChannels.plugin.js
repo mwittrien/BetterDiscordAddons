@@ -521,6 +521,7 @@ module.exports = (_ => {
 						padding-left: 8px;
 					}
 
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildplaceholdermask},
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildiconwrapper},
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolder},
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildbuttoninner},
@@ -528,7 +529,16 @@ module.exports = (_ => {
 						border-radius: 4px;
 						overflow: hidden;
 					}
-					
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildplaceholdermask},
+						background-color: var(--background-primary);
+						border-radius: 4px;
+						height: ${this.settings.amounts.serverElementHeight}px;
+						width: ${this.settings.amounts.serverListWidth}px;
+					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildplaceholdermask} > *,
+						display: none;
+					}
+
 					${BDFDB.dotCN._displayserversaschannelsstyled} .typingindicator-guild,
 					${BDFDB.dotCN._displayserversaschannelsstyled} .typingindicator-dms,
 					${BDFDB.dotCN._displayserversaschannelsstyled} .typingindicator-folder {
