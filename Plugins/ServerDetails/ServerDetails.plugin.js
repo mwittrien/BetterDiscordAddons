@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.0
+ * @version 1.1.1
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerDetails",
 			"author": "DevilBro",
-			"version": "1.1.0",
+			"version": "1.1.1",
 			"description": "Shows Server Details in the Server List Tooltip"
 		},
 		"changeLog": {
-			"fixed": {
-				"Server Changes": "Works again after Discords 100th Change for Servers"
+			"progress": {
+				"Region Section": "Region Section was removed and replaced by the Language Section"
 			}
 		}
 	};
@@ -141,9 +141,9 @@ module.exports = (_ => {
 							prefix: BDFDB.LanguageUtils.LanguageStrings.ROLES,
 							string: Object.keys(this.props.guild.roles).length
 						}),
-						_this.settings.items.region && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
-							prefix: BDFDB.LanguageUtils.LanguageStrings.REGION,
-							string: this.props.guild.region
+						_this.settings.items.language && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+							prefix: BDFDB.LanguageUtils.LanguageStrings.LANGUAGE,
+							string: BDFDB.LanguageUtils.getName(BDFDB.LanguageUtils.languages[this.props.guild.preferredLocale]) || this.props.guild.preferredLocale
 						})
 					].flat(10).filter(n => n)
 				});
@@ -182,7 +182,7 @@ module.exports = (_ => {
 						channels:			{value: true, 	description: "CHANNELS"},
 						roles:				{value: true, 	description: "ROLES"},
 						boosts:				{value: true, 	description: "boosts"},
-						region:				{value: true, 	description: "REGION"}
+						language:			{value: true, 	description: "LANGUAGE"}
 					},
 					dates: {
 						tooltipDates:		{value: {}, 	description: "Tooltip Dates"}
