@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.4
+ * @version 1.3.5
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedUsers",
 			"author": "DevilBro",
-			"version": "1.3.4",
+			"version": "1.3.5",
 			"description": "Removes blocked Messages/Users"
+		},
+		"changeLog": {
+			"fixed": {
+				"Member List Scroll Issue": "Fixed Issue where the Member list would stop loading Users after a certain scroll length"
+			}
 		}
 	};
 
@@ -359,8 +364,8 @@ module.exports = (_ => {
 					let newRows = [], newGroups = [];
 					for (let i in e.instance.props.rows) {
 						let row = e.instance.props.rows[i];
-						if (row.type != "MEMBER") newRows.push(row);
-						else if (!row.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(row.user.id)) newRows.push(row);
+						if (!row || row.type != "MEMBER") newRows[i] = row;
+						else if (!row.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(row.user.id)) newRows[i] = row;
 						else {
 							let found = false, rowIndex = i - 1;
 							while (!found && rowIndex > -1) {
@@ -381,8 +386,11 @@ module.exports = (_ => {
 						newGroups[i] = Object.assign({}, e.instance.props.groups[i], {index: indexSum});
 						if (e.instance.props.groups[i].count > 0) indexSum += (e.instance.props.groups[i].count + 1);
 					}
+					if (e.instance.props.rows.length > 2000 && !window.a) window.a = e.instance.props.rows;
+					
+					for (let i in newRows) if (newRows[i] && newRows[i].type == "GROUP" && newRows[i].count <= 0) newRows[i] = null;
 					e.instance.props.groups = newGroups.filter(g => g && g.count > 0);
-					e.instance.props.rows = newRows.filter(r => r && (r.type != "GROUP" || r.count > 0));
+					e.instance.props.rows = newRows;
 				}
 			}
 			

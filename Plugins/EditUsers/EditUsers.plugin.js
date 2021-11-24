@@ -160,7 +160,7 @@ module.exports = (_ => {
 						MessageContent: "type",
 						Reaction: "render",
 						ReactorsComponent: "render",
-						UserMention: "UserMention",
+						UserMention: "default",
 						RichUserMention: "UserMention",
 						ChannelReply: "default",
 						MemberListItem: "render",
