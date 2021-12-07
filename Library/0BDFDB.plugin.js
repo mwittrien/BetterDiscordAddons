@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.9
+ * @version 2.0.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "1.9.9",
+			"version": "2.0.0",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -8285,7 +8285,7 @@ module.exports = (_ => {
 			return e.methodArguments[0].id == InternalData.myId ? e.methodArguments[0].banner : e.callOriginalMethod();
 		}});
 		
-		BDFDB.PatchUtils.patch(this, LibraryModules.BannerUtils, "getUserBannerURLForContext", {instead: e => {
+		BDFDB.PatchUtils.patch(BDFDB, LibraryModules.BannerUtils, "getUserBannerURLForContext", {instead: e => {
 			return e.methodArguments[0].user && e.methodArguments[0].user.id == InternalData.myId ? e.methodArguments[0].user.banner : e.callOriginalMethod();
 		}});
 		
