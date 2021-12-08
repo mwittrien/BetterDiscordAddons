@@ -478,7 +478,7 @@ module.exports = (_ => {
 						return {
 							boosts:								"Бустеры",
 							creation_date:						"Дата создания",
-							join_date:							"Дате вступления"
+							join_date:							"Дата вступления"
 						};
 					case "sv":		// Swedish
 						return {
