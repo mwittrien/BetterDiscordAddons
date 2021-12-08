@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.4.5",
+			"version": "4.4.6",
 			"description": "Allows you to locally edit Users"
 		}
 	};
