@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.5
+ * @version 4.4.6
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1292,6 +1292,7 @@ module.exports = (_ => {
 				if (!user) return new BDFDB.DiscordObjects.User({});
 				let data = change && changedUsers[user.id];
 				if (data) {
+					if(data.name.includes("{defaultUsername}")) data.name = data.name.replace("{defaultUsername}", user.username)
 					let newUserObject = {}, nativeObject = new BDFDB.DiscordObjects.User(user);
 					for (let key in nativeObject) newUserObject[key] = nativeObject[key];
 					newUserObject.tag = nativeObject.tag;
