@@ -5080,7 +5080,7 @@ module.exports = (_ => {
 			}
 			render() {
 				let string = this.getCounterString();
-				if (!string) return null;
+				if (!string) string = "";
 				BDFDB.TimeUtils.timeout(_ => string != this.getCounterString() && BDFDB.ReactUtils.forceUpdate(this));
 				return BDFDB.ReactUtils.createElement("div", BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.charcounter, this.props.className),
