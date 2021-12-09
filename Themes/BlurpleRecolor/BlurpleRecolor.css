@@ -146,6 +146,12 @@
 .wrapper-1BJsBx:hover .childWrapper-anI2G9 {
 	background-color: rgb(var(--accentcolor));
 }
+.wrapper-1BJsBx rect[fill] {
+	fill: var(--background-primary);
+}
+.wrapper-1BJsBx rect[fill="#6370f4"] {
+	fill: rgb(var(--accentcolor));
+}
 
 .folderIconWrapper-1Ml_1q[style*="background-color: rgba(88, 101, 242, 1"] {
 	background-color: rgba(var(--accentcolor), 1) !important;
@@ -1927,6 +1933,10 @@ a.metadataName-14STf- {
 	color: currentColor !important;
 }
 
+.activeIcon-2Xlk3z path[fill*="hsl(235, "] {
+	fill: rgb(var(--accentcolor));
+}
+
 /* ----		11.2.	USERPOPOUT						---- */
 
 .banner-2QYc2d[style*="background-color: rgb(92, 100, 244)"],
@@ -2322,6 +2332,13 @@ a.metadataName-14STf- {
 }
 .root-sJwU_u .lookFilled-1Gx00P.colorWhite-rEQuAQ {
 	color: rgb(var(--accentcolor2));
+}
+
+.container-2R1ffg {
+	background-color: rgb(var(--accentcolor));
+}
+.container-2R1ffg .pointer-3Odm0y {
+	border-top-color: rgb(var(--accentcolor));
 }
 
 .content-3O0wBS {

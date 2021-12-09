@@ -415,6 +415,9 @@ body::after {
 #bd-pub-button:hover {
 	text-shadow: 1px 1px var(--textshadow);
 }
+.wrapper-1BJsBx rect[fill] {
+	fill: rgba(var(--transparencycolor), .3);
+}
 .noIcon-1a_FrS {											/* acronym				minicontainer						*/
 	background-color: rgba(var(--transparencycolor), .3);
 }
@@ -3720,13 +3723,19 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .wrapper-3Q5DdO .canvas-3XuBXe {							/* login				movingshadow						*/
 	display: none;
 }
-.theme-dark.authBox-hW6HRx,									/* login				modal								*/
-.theme-light.authBox-hW6HRx {
-	background-color: rgba(var(--transparencycolor), .5);
-	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
+#app-mount .authBox-hW6HRx {								/* login				modal body							*/
+	background-color: transparent;
+	box-shadow: none;
 	color: var(--text-muted);
 	position: relative;
 	overflow: hidden;
+}
+#app-mount .authBox-hW6HRx.authBoxExpanded-2jqaBe {			/* login				modal body expanded					*/
+	background-color: rgba(var(--transparencycolor), .5);
+	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
+}
+#app-mount .navRow-3bgpKd {									/* modal				modal footer						*/
+	background-color: rgba(var(--transparencycolor), .2);
 }
 
 /* ----		13.9.	TERMACCEPTMODAL					---- */

@@ -2715,12 +2715,16 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 .theme-light.authBox-hW6HRx::before {
 	background-image: url(https://discord.com/assets/4f004ac9be168ac6ee18fc442a52ab53.svg);
 }
+.theme-dark.navRow-3bgpKd,
+.theme-light.navRow-3bgpKd {
+	background: var(--background-secondary);
+}
 .subText-1XkjIB strong {
 	color: rgba(var(--textbright),.9);
 }
 #app-mount .authBoxWithMobileBanner-1Iy9y7 {
-	color: var(--text-muted);
 	background: var(--background-primary);
+	color: var(--text-muted);
 }
 
 /* ----		10.9.	TERMACCEPTMODAL					---- */
