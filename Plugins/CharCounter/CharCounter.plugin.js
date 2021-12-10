@@ -175,6 +175,7 @@ module.exports = (_ => {
 							plugin: this,
 							keys: ["sliders", key],
 							basis: "30%",
+							digits: 0,
 							label: this.defaults.sliders[key].description,
 							value: this.settings.sliders[key]
 						}));
