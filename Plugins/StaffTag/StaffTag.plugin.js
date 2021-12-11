@@ -561,7 +561,7 @@ module.exports = (_ => {
 					case "zh-CN":	// Chinese (China)
 						return {
 							management:							"管理",
-							creator:							"{{var0}}创建者"
+							creator:							"{{var0}} 创建者"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
