@@ -748,7 +748,7 @@ module.exports = (_ => {
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
-							context_favorizefriend:				"添加好友到到收藏夹",
+							context_favorizefriend:				"添加好友到收藏夹",
 							context_hidefriend:					"隐藏好友",
 							context_unfavorizefriend:			"从收藏夹中移除好友",
 							context_unhidefriend:				"取消隐藏好友",
