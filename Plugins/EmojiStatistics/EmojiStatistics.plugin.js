@@ -445,22 +445,22 @@ module.exports = (_ => {
 					case "zh-CN":	// Chinese (China)
 						return {
 							modal_header:						"表情符号统计",
-							modal_titlescopies:					"份数",
+							modal_titlescopies:					"数量",
 							modal_titlesglobal:					"全球",
 							modal_titlesicon:					"图标",
 							modal_titleslocal:					"本地",
 							modal_titlesname:					"服务器名称",
-							modal_titlestotal:					"总"
+							modal_titlestotal:					"总计"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							modal_header:						"表情符號統計",
-							modal_titlescopies:					"份數",
+							modal_titlescopies:					"數量",
 							modal_titlesglobal:					"全球",
-							modal_titlesicon:					"圖標",
+							modal_titlesicon:					"圖示",
 							modal_titleslocal:					"本地",
-							modal_titlesname:					"服務器名稱",
-							modal_titlestotal:					"總"
+							modal_titlesname:					"伺服器名稱",
+							modal_titlestotal:					"總計"
 						};
 					default:		// English
 						return {
