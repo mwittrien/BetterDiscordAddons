@@ -1543,28 +1543,28 @@ module.exports = (_ => {
 					case "zh-CN":	// Chinese (China)
 						return {
 							context_copy:						"复制 {{var0}}",
-							context_lenssize:					"镜片尺寸",
-							context_saveas:						"将 {{var0}} 另存为 ...",
-							context_searchwith:					"用搜索 {{var0}} ...",
+							context_lenssize:					"缩放尺寸",
+							context_saveas:						"将 {{var0}} 另存到...",
+							context_searchwith:					"搜索 {{var0}} 使用...",
 							context_view:						"查看 {{var0}}",
 							submenu_disabled:					"全部禁用",
 							toast_copy_failed:					"{{var0}} 无法复制到剪贴板",
 							toast_copy_success:					"{{var0}} 已复制到剪贴板",
-							toast_save_failed:					"{{var0}} 无法保存在'{{var1}}'中",
-							toast_save_success:					"{{var0}} 已保存在'{{var1}}'中"
+							toast_save_failed:					"{{var0}} 无法保存到'{{var1}}'",
+							toast_save_success:					"{{var0}} 已保存到'{{var1}}'"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							context_copy:						"複製 {{var0}}",
-							context_lenssize:					"鏡片尺寸",
-							context_saveas:						"將 {{var0}} 另存為 ...",
-							context_searchwith:					"用搜索 {{var0}} ...",
-							context_view:						"查看 {{var0}}",
-							submenu_disabled:					"全部禁用",
-							toast_copy_failed:					"{{var0}} 無法複製到剪貼板",
-							toast_copy_success:					"{{var0}} 已復製到剪貼板",
-							toast_save_failed:					"{{var0}} 無法保存在'{{var1}}'中",
-							toast_save_success:					"{{var0}} 已保存在'{{var1}}'中"
+							context_lenssize:					"縮放尺寸",
+							context_saveas:						"將 {{var0}} 另存到...",
+							context_searchwith:					"搜尋 {{var0}} 使用...",
+							context_view:						"預覽 {{var0}}",
+							submenu_disabled:					"全部關閉",
+							toast_copy_failed:					"{{var0}} 無法複製到剪貼簿",
+							toast_copy_success:					"{{var0}} 已複製到剪貼簿",
+							toast_save_failed:					"{{var0}} 無法儲存到 '{{var1}}'",
+							toast_save_success:					"{{var0}} 已儲存到 '{{var1}}'"
 						};
 					default:		// English
 						return {
