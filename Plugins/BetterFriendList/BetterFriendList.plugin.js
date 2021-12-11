@@ -748,25 +748,25 @@ module.exports = (_ => {
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
-							context_favorizefriend:				"将朋友添加到收藏夹",
-							context_hidefriend:					"隐藏朋友",
-							context_unfavorizefriend:			"从收藏夹中删除朋友",
+							context_favorizefriend:				"添加好友到到收藏夹",
+							context_hidefriend:					"隐藏好友",
+							context_unfavorizefriend:			"从收藏夹中移除好友",
 							context_unhidefriend:				"取消隐藏好友",
 							favorites:							"收藏夹",
-							hidden:								"隐",
-							incoming:							"进来的",
-							outgoing:							"外向"
+							hidden:								"隐藏",
+							incoming:							"导入",
+							outgoing:							"导出"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
-							context_favorizefriend:				"將朋友添加到收藏夾",
-							context_hidefriend:					"隱藏朋友",
-							context_unfavorizefriend:			"從收藏夾中刪除朋友",
+							context_favorizefriend:				"新增好友到我的最愛",
+							context_hidefriend:					"隱藏好友",
+							context_unfavorizefriend:			"從我的最愛中移除好友",
 							context_unhidefriend:				"取消隱藏好友",
-							favorites:							"收藏夾",
-							hidden:								"隱",
-							incoming:							"傳入",
-							outgoing:							"外向"
+							favorites:							"我的最愛",
+							hidden:								"隱藏",
+							incoming:							"匯入",
+							outgoing:							"匯出"
 						};
 					default:		// English
 						return {
