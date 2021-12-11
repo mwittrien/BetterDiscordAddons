@@ -1648,19 +1648,19 @@ module.exports = (_ => {
 							popout_untranslateoption:			"取消翻译",
 							toast_translating:					"正在翻译",
 							toast_translating_failed:			"翻译失败",
-							toast_translating_tryanother:		"尝试其他翻译器",
+							toast_translating_tryanother:		"尝试其它翻译器",
 							translated_watermark:				"已翻译"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
-							context_translator:					"搜索翻譯",
+							context_translator:					"搜尋翻譯",
 							context_messagetranslateoption:		"翻譯訊息",
 							context_messageuntranslateoption:	"取消翻譯訊息",
 							popout_translateoption:				"翻譯",
 							popout_untranslateoption:			"取消翻譯",
 							toast_translating:					"正在翻譯",
-							toast_translating_failed:			"翻譯失敗",
-							toast_translating_tryanother:		"嘗試其他翻譯器",
+							toast_translating_failed:			"無法翻譯",
+							toast_translating_tryanother:		"嘗試其它翻譯器",
 							translated_watermark:				"已翻譯"
 						};
 					default:		// English
