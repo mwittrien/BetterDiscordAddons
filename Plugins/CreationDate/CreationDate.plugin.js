@@ -296,7 +296,7 @@ module.exports = (_ => {
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
-							created_at:							"創建於{{time}}"
+							created_at:							"建立於{{time}}"
 						};
 					default:		// English
 						return {

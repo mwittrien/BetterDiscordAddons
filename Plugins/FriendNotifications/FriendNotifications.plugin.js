@@ -1107,14 +1107,14 @@ module.exports = (_ => {
 					case "zh-CN":	// Chinese (China)
 						return {
 							clear_log:							"您确定要清除时间记录吗？",
-							status_listening:					"倾听",
-							status_playing:						"玩"
+							status_listening:					"聆听中",
+							status_playing:						"游戏中"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							clear_log:							"您確定要清除時間記錄嗎？",
-							status_listening:					"傾聽",
-							status_playing:						"玩"
+							status_listening:					"聆聽中",
+							status_playing:						"遊戲中"
 						};
 					default:		// English
 						return {
