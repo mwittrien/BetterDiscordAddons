@@ -2,7 +2,7 @@
  * @name EditServers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.5
+ * @version 2.3.6
  * @description Allows you to locally edit Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditServers",
 			"author": "DevilBro",
-			"version": "2.3.5",
+			"version": "2.3.6",
 			"description": "Allows you to locally edit Servers"
 		},
 		"changeLog": {
 			"fixed": {
-				"Server Changes": "Works again after Discords 100th Change for Servers"
+				"Server Header": "Fixed changes not appearing in the Server Header in the Channel List"
 			}
 		}
 	};
@@ -100,7 +100,7 @@ module.exports = (_ => {
 						QuickSwitcher: "render",
 						QuickSwitchChannelResult: "render",
 						GuildSidebar: "render",
-						GuildHeader: "render",
+						GuildHeader: "type",
 						InviteGuildName: "GuildName"
 					},
 					after: {
@@ -110,7 +110,7 @@ module.exports = (_ => {
 						GuildIconWrapper: "render",
 						GuildIcon: "render",
 						NavItem: "default",
-						GuildHeader: "render",
+						GuildHeader: "type",
 						WelcomeArea: "default"
 					}
 				};
