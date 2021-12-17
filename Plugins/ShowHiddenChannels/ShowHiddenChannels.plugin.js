@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.3
+ * @version 3.0.4
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "3.0.3",
+			"version": "3.0.4",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
 		},
 		"changeLog": {
 			"fixed": {
-				"Lock Channels": "Fixed an issue where having locked channels hidden and being allowed into a channel (via new role for example) would make visiting the channel impossible"
+				"Channel Access": "No longer shows a users as able to have access to a channel when they are only able to connect/write in a channel but can't actually see it"
 			}
 		}
 	};
@@ -591,7 +591,7 @@ module.exports = (_ => {
 					else users.push({id: id, username: `UserId: ${id}`, fetchable: true});
 				};
 				let checkPerm = permString => {
-					return ((permString | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == permString || (permString | BDFDB.DiscordConstants.Permissions.READ_MESSAGE_HISTORY) == permString || channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE && (permString | BDFDB.DiscordConstants.Permissions.CONNECT) == permString);
+					return ((permString | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == permString && ((permString | BDFDB.DiscordConstants.Permissions.READ_MESSAGE_HISTORY) == permString || channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE && (permString | BDFDB.DiscordConstants.Permissions.CONNECT) == permString));
 				};
 				
 				let allowedRoles = [], allowedUsers = [], deniedRoles = [], deniedUsers = [], everyoneDenied = false;
