@@ -208,6 +208,7 @@
 			"DirectMessage": {"class": "guildouter"},
 			"EmojiPicker": {"strings": ["EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"]},
 			"FocusRing": {"props": ["FocusRingScope"]},
+			"GuildHeader": {"strings": ["bannerVisible", "guildBanner", "onContextMenu"]},
 			"GuildIcon": {"class": "avataricon"},
 			"GuildItem": {"strings": ["selectedChannelId", "guildNode", "lowerBadgeWidth"]},
 			"GuildRoleSettings": {"class": "settingswindowcontentregion"},
