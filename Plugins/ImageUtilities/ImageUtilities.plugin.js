@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.3
+ * @version 4.5.4
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.5.3",
+			"version": "4.5.4",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		}
 	};
@@ -620,11 +620,6 @@ module.exports = (_ => {
 				return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: [
 						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: BDFDB.LanguageUtils.LanguageStrings.OPEN_LINK,
-							id: BDFDB.ContextMenuUtils.createItemId(this.name, "open-link"),
-							action: _ => BDFDB.DiscordUtils.openLink(urlData.original)
-						}),
-						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-link"),
 							action: _ => {
@@ -639,6 +634,16 @@ module.exports = (_ => {
 								BDFDB.LibraryRequires.electron.clipboard.write({text: urlData.file});
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED, {type: "success"});
 							}
+						}),
+						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							label: BDFDB.LanguageUtils.LanguageStrings.OPEN_LINK,
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, "open-link"),
+							action: _ => BDFDB.DiscordUtils.openLink(urlData.original)
+						}),
+						!this.isValid(urlData.file, "copyable") ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							label: this.labels.context_copy.replace("{{var0}}", type),
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-file"),
+							action: _ => this.copyFile(urlData.file)
 						}),
 						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_view.replace("{{var0}}", type),
@@ -675,11 +680,6 @@ module.exports = (_ => {
 								});
 								img.src = urlData.file;
 							}
-						}),
-						!this.isValid(urlData.file, "copyable") ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: this.labels.context_copy.replace("{{var0}}", type),
-							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-file"),
-							action: _ => this.copyFile(urlData.file)
 						}),
 						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_saveas.replace("{{var0}}", type),
@@ -1013,7 +1013,7 @@ module.exports = (_ => {
 			processUserBanner (e) {
 				let banner = e.instance.props.user && this.settings.places.userAvatars && BDFDB.UserUtils.getBanner(e.instance.props.user.id);
 				if (banner) e.returnvalue.props.onContextMenu = event => {
-					let validUrls = this.filterUrls((e.instance.props.user.getBannerURL(4096) || banner).replace(/\.webp|\.gif/, ".png"), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.banner) && e.instance.props.user.getBannerURL(4096, true));
+					let validUrls = this.filterUrls(banner, BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.banner) && BDFDB.UserUtils.getBanner(e.instance.props.user.id, true));
 					if (validUrls.length) BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 						children: validUrls.length == 1 ? this.createSubMenus({}, validUrls) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.IMAGE + " " + BDFDB.LanguageUtils.LanguageStrings.ACTIONS,
