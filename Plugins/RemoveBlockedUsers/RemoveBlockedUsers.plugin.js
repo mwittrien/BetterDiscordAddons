@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.5
+ * @version 1.3.6
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedUsers",
 			"author": "DevilBro",
-			"version": "1.3.5",
+			"version": "1.3.6",
 			"description": "Removes blocked Messages/Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"Member List Scroll Issue": "Fixed Issue where the Member list would stop loading Users after a certain scroll length"
+				"Server Notifications": "No longer kills all server notification icons"
 			}
 		}
 	};
@@ -148,7 +148,7 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
 					if (e.returnValue && this.settings.notifcations.messages) {
 						let count = BDFDB.LibraryModules.UnreadChannelUtils.getUnreadCount(e.methodArguments[0]);
-						if (count < BDFDB.DiscordConstants.MAX_MESSAGES_PER_CHANNEL) {
+						if (count > 0 && count < BDFDB.DiscordConstants.MAX_MESSAGES_PER_CHANNEL) {
 							let id = BDFDB.LibraryModules.UnreadChannelUtils.lastMessageId(e.methodArguments[0]);
 							let message = id && BDFDB.LibraryModules.MessageStore.getMessage(e.methodArguments[0], id);
 							if (message && message.blocked) {
@@ -165,7 +165,7 @@ module.exports = (_ => {
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadGuildUtils, "hasUnread", {after: e => {
 					if (e.returnValue && this.settings.notifcations.messages) {
-						return BDFDB.LibraryModules.GuildChannelStore.getChannels(e.methodArguments[0]).SELECTABLE.map(n => n.channel && n.channel.id).filter(n => n && n != "null").some(BDFDB.LibraryModules.UnreadChannelUtils.hasUnread);
+						return BDFDB.LibraryModules.GuildChannelStore.getChannels(e.methodArguments[0]).SELECTABLE.map(n => n.channel && n.channel.id).filter(n => n && n != "null").map(id => BDFDB.LibraryModules.UnreadChannelUtils.hasUnread(id));
 					}
 				}});
 				
