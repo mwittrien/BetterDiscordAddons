@@ -3114,10 +3114,10 @@ module.exports = (_ => {
 			if (!user) return window.location.origin + "/assets/1f0bfc0865d324c2587920a7d80c609b.png";
 			else return ((user.avatar ? "" : window.location.origin) + LibraryModules.IconUtils.getUserAvatarURL(user)).split("?")[0];
 		};
-		BDFDB.UserUtils.getBanner = function (id = BDFDB.UserUtils.me.id) {
+		BDFDB.UserUtils.getBanner = function (id = BDFDB.UserUtils.me.id, canAnimate = false) {
 			let user = LibraryModules.UserStore.getUser(id);
 			if (!user || !user.banner) return "";
-			return LibraryModules.IconUtils.getUserBannerURL(user).split("?")[0];
+			return LibraryModules.IconUtils.getUserBannerURL(Object.assign({}, user, {canAnimate})).split("?")[0];
 		};
 		BDFDB.UserUtils.can = function (permission, id = BDFDB.UserUtils.me.id, channelId = LibraryModules.LastChannelStore.getChannelId()) {
 			if (!BDFDB.DiscordConstants.Permissions[permission]) BDFDB.LogUtils.warn([permission, "not found in Permissions"]);
