@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.2
+ * @version 2.0.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.0.2",
+			"version": "2.0.3",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -621,9 +621,9 @@ module.exports = (_ => {
 				if (typeof plugin.setLabelsByLanguage == "function") plugin.labels = plugin.setLabelsByLanguage();
 				if (typeof plugin.changeLanguageStrings == "function") plugin.changeLanguageStrings();
 			};
-			if (LibraryModules.LanguageStore.chosenLocale || LibraryModules.LanguageStore._chosenLocale || LibraryModules.SettingsStore.locale) translate();
+			if (LibraryModules.LanguageStore.chosenLocale || LibraryModules.LanguageStore._chosenLocale || BDFDB.DicordUtils.getSettings("locale")) translate();
 			else BDFDB.TimeUtils.interval(interval => {
-				if (LibraryModules.LanguageStore.chosenLocale || LibraryModules.LanguageStore._chosenLocale || LibraryModules.SettingsStore.locale) {
+				if (LibraryModules.LanguageStore.chosenLocale || LibraryModules.LanguageStore._chosenLocale || BDFDB.DicordUtils.getSettings("locale")) {
 					BDFDB.TimeUtils.clear(interval);
 					translate();
 				}
@@ -4283,7 +4283,7 @@ module.exports = (_ => {
 			}
 		};
 		BDFDB.DiscordUtils.isDevModeEnabled = function () {
-			return LibraryModules.SettingsStore.developerMode;
+			return BDFDB.DiscordUtils.getSettings("developerMode");
 		};
 		BDFDB.DiscordUtils.getExperiment = function (id) {
 			if (!id) return null;
@@ -4291,10 +4291,14 @@ module.exports = (_ => {
 			return module && (module.getCurrentConfig({}) || {})[id];
 		};
 		BDFDB.DiscordUtils.getTheme = function () {
-			return LibraryModules.SettingsStore.theme != "dark" ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
+			return BDFDB.DiscordUtils.getSettings("theme") != "dark" ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
 		};
 		BDFDB.DiscordUtils.getMode = function () {
-			return LibraryModules.SettingsStore.messageDisplayCompact ? "compact" : "cozy";
+			return BDFDB.DiscordUtils.getSettings("messageDisplayCompact") ? "compact" : "cozy";
+		};
+		BDFDB.DiscordUtils.getSettings = function (key) {
+			const settings = Object.assign({}, typeof LibraryModules.SettingsStore.getAllSettings == "function" ? LibraryModules.SettingsStore.getAllSettings() : LibraryModules.SettingsStore);
+			return key == null ? settings : (settings[key] != null ? settings[key] : LibraryModules.SettingsStore[key]);
 		};
 		BDFDB.DiscordUtils.getZoomFactor = function () {
 			let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
@@ -4497,7 +4501,7 @@ module.exports = (_ => {
 		BDFDB.LanguageUtils = {};
 		BDFDB.LanguageUtils.languages = Object.assign({}, InternalData.Languages);
 		BDFDB.LanguageUtils.getLanguage = function () {
-			let lang = LibraryModules.LanguageStore.chosenLocale || LibraryModules.LanguageStore._chosenLocale || LibraryModules.SettingsStore.locale || "en";
+			let lang = LibraryModules.LanguageStore.chosenLocale || LibraryModules.LanguageStore._chosenLocale || BDFDB.DiscordUtils.getSettings("locale") || "en";
 			if (lang == "en-GB" || lang == "en-US") lang = "en";
 			let langIds = lang.split("-");
 			let langId = langIds[0];
@@ -4601,7 +4605,7 @@ module.exports = (_ => {
 			return "";
 		};
 		BDFDB.TimeUtils.interval(interval => {
-			if (LibraryModules.LanguageStore.chosenLocale || LibraryModules.LanguageStore._chosenLocale || LibraryModules.SettingsStore.locale) {
+			if (LibraryModules.LanguageStore.chosenLocale || LibraryModules.LanguageStore._chosenLocale || BDFDB.DiscordUtils.getSettings("locale")) {
 				BDFDB.TimeUtils.clear(interval);
 				let language = BDFDB.LanguageUtils.getLanguage();
 				if (language) BDFDB.LanguageUtils.languages.$discord = Object.assign({}, language, {name: `Discord (${language.name})`});
