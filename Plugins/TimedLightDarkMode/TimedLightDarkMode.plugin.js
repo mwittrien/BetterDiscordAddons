@@ -2,7 +2,7 @@
  * @name TimedLightDarkMode
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.0
+ * @version 1.1.1
  * @description Adds a Time Slider to the Appearance Settings
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "TimedLightDarkMode",
 			"author": "DevilBro",
-			"version": "1.1.0",
+			"version": "1.1.1",
 			"description": "Adds a Time Slider to the Appearance Settings"
 		}
 	};
@@ -91,7 +91,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SettingsUtils, "updateLocalSettings", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SettingsUtilsOld, "updateLocalSettings", {after: e => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].theme && settings.running) {
 						BDFDB.TimeUtils.clear(changeTimeout);
 						disableChanging = true;
@@ -178,8 +178,8 @@ module.exports = (_ => {
 
 			changeTheme (dark) {
 				let theme = BDFDB.DiscordUtils.getTheme();
-				if (dark && theme == BDFDB.disCN.themelight) BDFDB.LibraryModules.SettingsUtils.updateLocalSettings({theme: "dark"});
-				else if (!dark && theme == BDFDB.disCN.themedark) BDFDB.LibraryModules.SettingsUtils.updateLocalSettings({theme: "light"});
+				if (dark && theme == BDFDB.disCN.themelight) BDFDB.LibraryModules.SettingsUtilsOld.updateLocalSettings({theme: "dark"});
+				else if (!dark && theme == BDFDB.disCN.themedark) BDFDB.LibraryModules.SettingsUtilsOld.updateLocalSettings({theme: "light"});
 			}
 
 			showCurrentTime (grabber) {

@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.5
+ * @version 1.0.6
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "GameActivityToggle",
 			"author": "DevilBro",
-			"version": "1.0.5",
+			"version": "1.0.6",
 			"description": "Adds a Quick-Toggle Game Activity Button"
 		}
 	};
@@ -76,7 +76,7 @@ module.exports = (_ => {
 				toggleButton = this;
 			}
 			render() {
-				const enabled = BDFDB.DiscordUtils.getSettings("showCurrentGame");
+				const enabled = BDFDB.DiscordUtils.getSettings("ShowCurrentGame");
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PanelButton, Object.assign({}, this.props, {
 					tooltipText: enabled ? _this.labels.disable_activity : _this.labels.enable_activity,
 					icon: iconProps => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, Object.assign({}, iconProps, {
@@ -87,9 +87,9 @@ module.exports = (_ => {
 						name: enabled ? BDFDB.LibraryComponents.SvgIcon.Names.GAMEPAD : BDFDB.LibraryComponents.SvgIcon.Names.GAMEPAD_DISABLED
 					})),
 					onClick: _ => {
-						const shouldEnable = !BDFDB.DiscordUtils.getSettings("showCurrentGame");
+						const shouldEnable = !BDFDB.DiscordUtils.getSettings("ShowCurrentGame");
 						_this.settings.general[shouldEnable ? "playEnable" : "playDisable"] && BDFDB.LibraryModules.SoundUtils.playSound(_this.settings.selections[shouldEnable ? "enableSound" : "disableSound"], .4);
-						BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({showCurrentGame: shouldEnable});
+						BDFDB.DiscordUtils.setSettings("ShowCurrentGame", shouldEnable);
 					}
 				}));
 			}

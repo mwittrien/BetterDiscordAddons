@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.9.7
+ * @version 6.9.8
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "6.9.7",
+			"version": "6.9.8",
 			"description": "Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders"
-		},
-		"changeLog": {
-			"fixed": {
-				"Server Changes": "Works again after Discords 100th Change for Servers"
-			}
 		}
 	};
 
@@ -1097,7 +1092,7 @@ module.exports = (_ => {
 					else guildFolders.push(oldFolder);
 				}
 				for (let folder of guildFolders) for (let fGuildId of folder.guildIds) guildPositions.push(fGuildId);
-				BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({guildPositions, guildFolders});
+				BDFDB.LibraryModules.SettingsUtilsOld.updateRemoteSettings({guildPositions, guildFolders});
 			}
 			
 			createFolder (guildIds) {
@@ -1118,7 +1113,7 @@ module.exports = (_ => {
 					else guildFolders.push(oldFolder);
 				}
 				for (let folder of guildFolders) for (let fGuildId of folder.guildIds) guildPositions.push(fGuildId);
-				BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({guildPositions, guildFolders});
+				BDFDB.LibraryModules.SettingsUtilsOld.updateRemoteSettings({guildPositions, guildFolders});
 			}
 			
 			removeFolder (folderId) {
@@ -1130,7 +1125,7 @@ module.exports = (_ => {
 					else guildFolders.push(oldFolder);
 				}
 				for (let folder of guildFolders) for (let fGuildId of folder.guildIds) guildPositions.push(fGuildId);
-				BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({guildPositions, guildFolders});
+				BDFDB.LibraryModules.SettingsUtilsOld.updateRemoteSettings({guildPositions, guildFolders});
 			}
 			
 			addGuildToFolder (folderId, guildId) {
@@ -1145,7 +1140,7 @@ module.exports = (_ => {
 					else if (oldFolder.guildIds[0] != guildId) guildFolders.push(oldFolder);
 				}
 				for (let folder of guildFolders) for (let fGuildId of folder.guildIds) guildPositions.push(fGuildId);
-				BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({guildPositions, guildFolders});
+				BDFDB.LibraryModules.SettingsUtilsOld.updateRemoteSettings({guildPositions, guildFolders});
 			}
 			
 			removeGuildFromFolder (folderId, guildId) {
@@ -1160,7 +1155,7 @@ module.exports = (_ => {
 					else guildFolders.push(oldFolder);
 				}
 				for (let folder of guildFolders) for (let fGuildId of folder.guildIds) guildPositions.push(fGuildId);
-				BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({guildPositions, guildFolders});
+				BDFDB.LibraryModules.SettingsUtilsOld.updateRemoteSettings({guildPositions, guildFolders});
 			}
 
 			createDragPreview (div, event) {

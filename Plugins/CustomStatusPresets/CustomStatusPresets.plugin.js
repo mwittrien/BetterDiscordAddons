@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.7
+ * @version 1.0.8
  * @description Allows you to save Custom Statuses as Quick Select
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomStatusPresets",
 			"author": "DevilBro",
-			"version": "1.0.7",
+			"version": "1.0.8",
 			"description": "Allows you to save Custom Statuses as Quick Select"
-		},
-		"changeLog": {
-			"fixed": {
-				"Status/Overflow": "Fixed some Issues with very long Status causing overflow issues"
-			}
 		}
 	};
 
@@ -393,7 +388,7 @@ module.exports = (_ => {
 										let date = new Date;
 										expiresAt = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime() - date.getTime();
 									}
-									BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({
+									BDFDB.LibraryModules.SettingsUtilsOld.updateRemoteSettings({
 										status: presets[id].status,
 										customStatus: {
 											text: presets[id].text && presets[id].text.length > 0 ? presets[id].text : null,
