@@ -1313,6 +1313,9 @@ img[src="/assets/4697ec960e57790ad4f6251af4c246b4.svg"] {	/* widgetsettings		wid
 	object-position: -999999px -999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_bg.svg) center/contain no-repeat !important;
 }
+.uploadContainer-21JzET .icon-HQGNTD {
+	background-size: 72px 96px !important;
+}
 .uploadModal-2ifh8j .icon-kyxXVr:not(.image-2yrs5j),
 .uploadModalIn-1z07Bv .icon-kyxXVr:not(.image-2yrs5j) {
 	background-size: 72px 96px !important;
@@ -1355,6 +1358,7 @@ img[src="/assets/4697ec960e57790ad4f6251af4c246b4.svg"] {	/* widgetsettings		wid
 	width: 108px;
 	height: 144px;
 	margin-left: 46px;
+	-webkit-mask-size: 72px 96px !important;
 }
 .uploadModal-2ifh8j .icon-kyxXVr:not(.image-2yrs5j)::before,
 .uploadModal-2ifh8j .icon-kyxXVr:not(.image-2yrs5j)::after,
@@ -1376,7 +1380,7 @@ img[src="/assets/4697ec960e57790ad4f6251af4c246b4.svg"] {	/* widgetsettings		wid
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_details.svg) center/contain no-repeat;
 }
 .attachment-33OFj0 .icon-1kp3fr + *::after,
-.uploadContainer-21JzET .icon-HQGNTD::after,
+.uploadContainer-21JzET .icon-HQGNTD.unknown-KRWjnq::after,
 .uploadModal-2ifh8j .icon-kyxXVr.unknown-3TPTMr::after,
 .uploadModal-2ifh8j .icon-kyxXVr:not(.image-2yrs5j)::after,
 .uploadModalIn-1z07Bv .icon-kyxXVr:not(.image-2yrs5j)::after {
