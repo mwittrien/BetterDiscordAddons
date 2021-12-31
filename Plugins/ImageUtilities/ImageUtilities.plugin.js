@@ -1440,9 +1440,9 @@ module.exports = (_ => {
 						return {
 							context_copy:						"Copiar {{var0}}",
 							context_lenssize:					"Tamanho da lente",
-							context_saveas:						"Salve {{var0}} como ...",
-							context_searchwith:					"Pesquise {{var0}} com ...",
-							context_view:						"Veja {{var0}}",
+							context_saveas:						"Salvar {{var0}} como ...",
+							context_searchwith:					"Pesquisar {{var0}} com ...",
+							context_view:						"Visualizar {{var0}}",
 							submenu_disabled:					"Todos desativados",
 							toast_copy_failed:					"{{var0}} não pôde ser copiado para a área de transferência",
 							toast_copy_success:					"{{var0}} foi copiado para a área de transferência",
