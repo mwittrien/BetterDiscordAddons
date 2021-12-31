@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.6
+ * @version 1.0.7
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "GameActivityToggle",
 			"author": "DevilBro",
-			"version": "1.0.6",
+			"version": "1.0.7",
 			"description": "Adds a Quick-Toggle Game Activity Button"
 		}
 	};
@@ -76,7 +76,8 @@ module.exports = (_ => {
 				toggleButton = this;
 			}
 			render() {
-				const enabled = BDFDB.DiscordUtils.getSettings("ShowCurrentGame");
+				const enabled = this.props.forceState != undefined ? this.props.forceState : BDFDB.DiscordUtils.getSettings("ShowCurrentGame");
+				delete this.props.forceState;
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PanelButton, Object.assign({}, this.props, {
 					tooltipText: enabled ? _this.labels.disable_activity : _this.labels.enable_activity,
 					icon: iconProps => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, Object.assign({}, iconProps, {
@@ -123,16 +124,18 @@ module.exports = (_ => {
 			
 			onStart () {
 				let cachedState = BDFDB.DataUtils.load(this, "cachedState");
+				let state = BDFDB.DiscordUtils.getSettings("ShowCurrentGame");
 				if (!cachedState.date || (new Date() - cachedState.date) > 1000*60*60*24*3) {
-					cachedState.value = BDFDB.LibraryModules.SettingsStore.showCurrentGame;
+					cachedState.value = state;
 					cachedState.date = new Date();
 					BDFDB.DataUtils.save(cachedState, this, "cachedState");
 				}
-				else if (cachedState.value != null && cachedState.value != BDFDB.LibraryModules.SettingsStore.showCurrentGame) BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({showCurrentGame: cachedState.value});
+				else if (cachedState.value != null && cachedState.value != state) BDFDB.DiscordUtils.setSettings("ShowCurrentGame", cachedState.value);
 				
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SettingsUtils, "updateLocalSettings", {after: e => {
+				if (BDFDB.LibraryModules.SettingsUtils) BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SettingsUtils.ShowCurrentGame, "updateSetting", {after: e => {
+					if (toggleButton) toggleButton.props.forceState = e.methodArguments[0];
 					BDFDB.ReactUtils.forceUpdate(toggleButton);
-					BDFDB.DataUtils.save({date: new Date(), value: BDFDB.LibraryModules.SettingsStore.showCurrentGame}, this, "cachedState");
+					BDFDB.DataUtils.save({date: new Date(), value: BDFDB.DiscordUtils.getSettings("ShowCurrentGame")}, this, "cachedState");
 				}});
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
