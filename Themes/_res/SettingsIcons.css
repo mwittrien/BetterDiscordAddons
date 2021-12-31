@@ -130,6 +130,10 @@ body #app-mount .layer-3QrUeG ~ .layer-3QrUeG .sidebar-CFHs9e {
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Hotspot-Options-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/hotspots.svg) center/contain no-repeat;
 }
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Dismissible Content Options-tab" i]::before,
+.sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="Dismissible-Content-Options-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/dismissable.svg) center/contain no-repeat;
+}
 #bd-settings-sidebar .ui-tab-bar-item:nth-child(3)::before,
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ.bd-settings-tab::before,
 .sidebar-CFHs9e .side-8zPYf6 .item-PXvHYJ[aria-controls="pc-general-tab" i]::before,
