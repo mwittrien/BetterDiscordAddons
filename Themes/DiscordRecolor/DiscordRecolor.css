@@ -1344,10 +1344,13 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 
 #app-mount .outer-1AjyKL.active-1xchHY,
-#app-mount .outer-1AjyKL.interactive-3B9GmY:hover {
+#app-mount .outer-1AjyKL.interactive-3B9GmY:hover,
+#app-mount .outer-2JOHae.active-1W_Gl9,
+#app-mount .outer-2JOHae.interactive-2zD88a:hover {
 	background-color: var(--background-floating);
 }
-#app-mount .inset-3sAvek {
+#app-mount .inset-3sAvek,
+#app-mount .inset-SbsSFp {
 	background-color: var(--background-secondary);
 }
 

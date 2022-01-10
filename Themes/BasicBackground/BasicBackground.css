@@ -1780,31 +1780,42 @@ body::after {
 	border-color: rgb(var(--transparencycolor));
 }
 
-.peopleListItem-2nzedh .actionButton-uPB8Fs {				/* peoples				actionbutton						*/
+.peopleListItem-2nzedh .actionButton-uPB8Fs,				/* peoples				actionbutton						*/
+.peopleListItem-u6dGxF .actionButton-3-B2x {				/* peoples				actionbutton						*/
 	background-color: rgba(var(--transparencycolor), .1);
 }
-.peopleListItem-2nzedh .actionButton-uPB8Fs:hover {
+.peopleListItem-2nzedh .actionButton-uPB8Fs:hover,
+.peopleListItem-u6dGxF .actionButton-3-B2x:hover {
 	background-color: rgb(var(--accentcolor));
 }
-.peopleListItem-2nzedh .actionButton-uPB8Fs:hover svg {
+.peopleListItem-2nzedh .actionButton-uPB8Fs:hover svg,
+.peopleListItem-u6dGxF .actionButton-3-B2x:hover svg {
 	filter: drop-shadow(1px 1px var(--textshadow));
 }
 .peopleListItem-2nzedh.active-rhSpJJ,
-.peopleListItem-2nzedh:hover {
+.peopleListItem-2nzedh:hover,
+.peopleListItem-u6dGxF.active-2UF8Zh,
+.peopleListItem-u6dGxF:hover {
 	background-color: rgba(var(--transparencycolor), .3);
 }
 .peopleListItem-2nzedh.active-rhSpJJ .actionButton-uPB8Fs,
-.peopleListItem-2nzedh:hover .actionButton-uPB8Fs {
+.peopleListItem-2nzedh:hover .actionButton-uPB8Fs,
+.peopleListItem-u6dGxF.active-2UF8Zh .actionButton-3-B2x,
+.peopleListItem-u6dGxF:hover .actionButton-3-B2x {
 	background-color: rgba(var(--transparencycolor), .3);
 }
-#app-mount .outer-1AjyKL {									/* playing				card								*/
+#app-mount .outer-1AjyKL,									/* playing				card								*/
+#app-mount .outer-2JOHae {									/* playing				card								*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
 #app-mount .outer-1AjyKL.active-1xchHY,
-#app-mount .outer-1AjyKL.interactive-3B9GmY:hover {
+#app-mount .outer-1AjyKL.interactive-3B9GmY:hover,
+#app-mount .outer-2JOHae.active-1W_Gl9,
+#app-mount .outer-2JOHae.interactive-2zD88a:hover {
 	background-color: rgba(var(--transparencycolor), .4);
 }
-#app-mount .inset-3sAvek {									/* playing				card inner							*/
+#app-mount .inset-3sAvek,									/* playing				card inner							*/
+#app-mount .inset-SbsSFp {									/* playing				card inner							*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
 .emptyCard-1RJw8n {											/* playing				empty card							*/
