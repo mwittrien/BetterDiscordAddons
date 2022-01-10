@@ -1319,7 +1319,8 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 /* ~~~~		4.		PEOPLES							~~~~ */
 
-#app-mount .container-1D34oG {
+#app-mount .container-1D34oG,
+#app-mount .container-2cd8Mz {
 	background-color: var(--background-primary);
 }
 
