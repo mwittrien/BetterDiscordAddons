@@ -720,40 +720,60 @@
 
 .item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Discord Nitro-tab" i],
 .item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Discord-Nitro-tab" i],
-.item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Subscriptions-tab" i] {
+.item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Subscriptions-tab" i],
+.item-3XjbnG:not(.selected-g-kMVV)[aria-controls="Discord Nitro-tab" i],
+.item-3XjbnG:not(.selected-g-kMVV)[aria-controls="Discord-Nitro-tab" i],
+.item-3XjbnG:not(.selected-g-kMVV)[aria-controls="Subscriptions-tab" i] {
 	color: rgb(var(--accentcolor)) !important;
 }
 .item-PXvHYJ:hover[aria-controls="Discord Nitro-tab" i],
 .item-PXvHYJ:hover[aria-controls="Discord-Nitro-tab" i],
-.item-PXvHYJ:hover[aria-controls="Subscriptions-tab" i] {
+.item-PXvHYJ:hover[aria-controls="Subscriptions-tab" i],
+.item-3XjbnG:hover[aria-controls="Discord Nitro-tab" i],
+.item-3XjbnG:hover[aria-controls="Discord-Nitro-tab" i],
+.item-3XjbnG:hover[aria-controls="Subscriptions-tab" i] {
 	background-color: rgb(var(--accentcolor), 0.1) !important;
 }
 .item-PXvHYJ.selected-3s45Ha[aria-controls="Discord Nitro-tab" i],
 .item-PXvHYJ.selected-3s45Ha[aria-controls="Discord-Nitro-tab" i],
-.item-PXvHYJ.selected-3s45Ha[aria-controls="Subscriptions-tab" i] {
+.item-PXvHYJ.selected-3s45Ha[aria-controls="Subscriptions-tab" i],
+.item-3XjbnG.selected-g-kMVV[aria-controls="Discord Nitro-tab" i],
+.item-3XjbnG.selected-g-kMVV[aria-controls="Discord-Nitro-tab" i],
+.item-3XjbnG.selected-g-kMVV[aria-controls="Subscriptions-tab" i] {
 	background-color: rgb(var(--accentcolor)) !important;
 }
 .item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Nitro Server Boost-tab" i],
 .item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="Nitro-Server-Boost-tab" i],
-.item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="GUILD_PREMIUM-tab" i] {
+.item-PXvHYJ:not(.selected-3s45Ha)[aria-controls="GUILD_PREMIUM-tab" i],
+.item-3XjbnG:not(.selected-g-kMVV)[aria-controls="Nitro Server Boost-tab" i],
+.item-3XjbnG:not(.selected-g-kMVV)[aria-controls="Nitro-Server-Boost-tab" i],
+.item-3XjbnG:not(.selected-g-kMVV)[aria-controls="GUILD_PREMIUM-tab" i] {
 	color: rgb(var(--accentcolor2)) !important;
 }
 .item-PXvHYJ:hover[aria-controls="Nitro Server Boost-tab" i],
 .item-PXvHYJ:hover[aria-controls="Nitro-Server-Boost-tab" i],
-.item-PXvHYJ:hover[aria-controls="GUILD_PREMIUM-tab" i] {
+.item-PXvHYJ:hover[aria-controls="GUILD_PREMIUM-tab" i],
+.item-3XjbnG:hover[aria-controls="Nitro Server Boost-tab" i],
+.item-3XjbnG:hover[aria-controls="Nitro-Server-Boost-tab" i],
+.item-3XjbnG:hover[aria-controls="GUILD_PREMIUM-tab" i] {
 	background-color: rgb(var(--accentcolor2), 0.1) !important;
 }
 .item-PXvHYJ.selected-3s45Ha[aria-controls="Nitro Server Boost-tab" i],
 .item-PXvHYJ.selected-3s45Ha[aria-controls="Nitro-Server-Boost-tab" i],
-.item-PXvHYJ.selected-3s45Ha[aria-controls="GUILD_PREMIUM-tab" i] {
+.item-PXvHYJ.selected-3s45Ha[aria-controls="GUILD_PREMIUM-tab" i],
+.item-3XjbnG.selected-g-kMVV[aria-controls="Nitro Server Boost-tab" i],
+.item-3XjbnG.selected-g-kMVV[aria-controls="Nitro-Server-Boost-tab" i],
+.item-3XjbnG.selected-g-kMVV[aria-controls="GUILD_PREMIUM-tab" i] {
 	background-color: rgb(var(--accentcolor2)) !important;
 }
-.item-PXvHYJ .icon-Zc-uZZ,
 .item-PXvHYJ .icon-3Povsy,
-.premiumLabel-fDtYys svg {
+.premiumLabel-fDtYys svg,
+.item-PXvHYJ .icon-3FU6Ir,
+.premiumLabel-V52REm svg {
 	fill: currentColor;
 }
-.item-PXvHYJ svg[fill="#FF73FA"] {
+.item-PXvHYJ svg[fill="#FF73FA"],
+.item-3XjbnG svg[fill="#FF73FA"] {
 	fill: rgb(var(--accentcolor2));
 }
 
@@ -978,6 +998,9 @@
 }
 .unlockedIcon-2_goS1 {										/* mainsettings			uploadbanner enabled				*/
 	color: rgb(var(--accentcolor2));
+}
+.guildBoostingIcon-24g6Y- {									/* mainsettings			guild boosting icon					*/
+	color: rgb(var(--accentcolor));
 }
 .banner-aJsFyZ {											/* rolesettings			intro banner 						*/
 	border-radius: 5px;
