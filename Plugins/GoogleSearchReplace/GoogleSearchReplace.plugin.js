@@ -2,7 +2,7 @@
  * @name GoogleSearchReplace
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.2
+ * @version 1.3.3
  * @description Replaces the default Google Text Search with a custom Search Engine
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "GoogleSearchReplace",
 			"author": "DevilBro",
-			"version": "1.3.2",
+			"version": "1.3.3",
 			"description": "Replaces the default Google Text Search with a custom Search Engine"
-		},
-		"changeLog": {
-			"added": {
-				"Ecosia": "Added Ecosia as search engine"
-			}
 		}
 	};
 	
@@ -83,22 +78,23 @@ module.exports = (_ => {
 						_all: 				{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url: null},
 						Ask: 				{value: true, 	name: "Ask", 					url: "https://ask.com/web?q=" + textUrlReplaceString},
 						Bing: 				{value: true, 	name: "Bing", 					url: "https://www.bing.com/search?q=" + textUrlReplaceString},
-						DogPile:			{value: true, 	name: "DogPile", 				url: "http://www.dogpile.com/search/web?q=" + textUrlReplaceString},
+						DogPile:			{value: false, 	name: "DogPile", 				url: "http://www.dogpile.com/search/web?q=" + textUrlReplaceString},
 						DuckDuckGo:			{value: true, 	name: "DuckDuckGo", 			url: "https://duckduckgo.com/?q=" + textUrlReplaceString},
-						Ecosia:				{value: true, 	name: "Ecosia", 				url: "https://www.ecosia.org/search?q=" + textUrlReplaceString},
-						GitHub: 			{value: true, 	name: "GitHub", 				url: "https://github.com/search?q=" + textUrlReplaceString},
+						Ecosia:				{value: false, 	name: "Ecosia", 				url: "https://www.ecosia.org/search?q=" + textUrlReplaceString},
+						GitHub: 			{value: false, 	name: "GitHub", 				url: "https://github.com/search?q=" + textUrlReplaceString},
 						Google: 			{value: true, 	name: "Google", 				url: "https://www.google.com/search?q=" + textUrlReplaceString},
-						GoogleScholar: 		{value: true, 	name: "Google Scholar", 		url: "https://scholar.google.com/scholar?q=" + textUrlReplaceString},
+						GoogleScholar: 		{value: false, 	name: "Google Scholar", 		url: "https://scholar.google.com/scholar?q=" + textUrlReplaceString},
 						Quora: 				{value: true, 	name: "Quora", 					url: "https://www.quora.com/search?q=" + textUrlReplaceString},
-						Qwant: 				{value: true, 	name: "Qwant", 					url: "https://www.qwant.com/?t=all&q=" + textUrlReplaceString},
-						UrbanDictionary: 	{value: true, 	name: "Urban Dictionary", 		url: "https://www.urbandictionary.com/define.php?term=" + textUrlReplaceString},
-						Searx: 				{value: true, 	name: "Searx", 					url: "https://searx.info/?q=" + textUrlReplaceString},
+						Qwant: 				{value: false, 	name: "Qwant", 					url: "https://www.qwant.com/?t=all&q=" + textUrlReplaceString},
+						UrbanDictionary: 	{value: false, 	name: "Urban Dictionary", 		url: "https://www.urbandictionary.com/define.php?term=" + textUrlReplaceString},
+						Searx: 				{value: false, 	name: "Searx", 					url: "https://searx.info/?q=" + textUrlReplaceString},
 						StackOverflow: 		{value: true, 	name: "Stack Overflow", 		url: "https://stackoverflow.com/search?q=" + textUrlReplaceString},
-						Startpage: 			{value: true, 	name: "Startpage", 				url: "https://www.startpage.com/sp/search?q=" + textUrlReplaceString},
-						WolframAlpha:		{value: true, 	name: "Wolfram Alpha", 			url: "https://www.wolframalpha.com/input/?i=" + textUrlReplaceString},
+						Startpage: 			{value: false, 	name: "Startpage", 				url: "https://www.startpage.com/sp/search?q=" + textUrlReplaceString},
+						Whoogle: 			{value: false, 	name: "Whoogle", 				url: "https://search.sethforprivacy.com/search?q=" + textUrlReplaceString},
+						WolframAlpha:		{value: false, 	name: "Wolfram Alpha", 			url: "https://www.wolframalpha.com/input/?i=" + textUrlReplaceString},
 						Yandex: 			{value: true, 	name: "Yandex", 				url: "https://yandex.com/search/?text=" + textUrlReplaceString},
 						Yahoo: 				{value: true, 	name: "Yahoo", 					url: "https://search.yahoo.com/search?p=" + textUrlReplaceString},
-						YouTube: 			{value: true, 	name: "YouTube", 				url: "https://www.youtube.com/results?q=" + textUrlReplaceString}
+						YouTube: 			{value: false, 	name: "YouTube", 				url: "https://www.youtube.com/results?q=" + textUrlReplaceString}
 					}
 				};
 			}

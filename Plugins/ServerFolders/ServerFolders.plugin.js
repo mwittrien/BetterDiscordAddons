@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.9.8
+ * @version 6.9.9
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "6.9.8",
+			"version": "6.9.9",
 			"description": "Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders"
 		}
 	};
@@ -694,14 +694,14 @@ module.exports = (_ => {
 				else BDFDB.DOMUtils.removeClassFromDOM(BDFDB.disCN._serverfoldersfoldercontentisopen);
 				
 				let data = this.getFolderConfig(e.instance.props.folderNode.id);
-				if (data.muteFolder) for (let guildId of e.instance.props.guildIds) if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId)) BDFDB.LibraryModules.GuildNotificationsUtils.updateGuildNotificationSettings(guildId, {muted: true, suppress_everyone: true});
+				if (data.muteFolder) for (let guildId of e.instance.props.folderNode.children.map(n => n.id)) if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId)) BDFDB.LibraryModules.GuildNotificationsUtils.updateGuildNotificationSettings(guildId, {muted: true, suppress_everyone: true});
 				
 				let state = this.getState(e.instance);
 				if (folderStates[e.instance.props.folderNode.id] && !BDFDB.equals(state, folderStates[e.instance.props.folderNode.id])) {
 					if (data.autoRead && (state.unread || state.badge > 0)) {
 						BDFDB.TimeUtils.clear(folderReads[e.instance.props.folderNode.id]);
 						folderReads[e.instance.props.folderNode.id] = BDFDB.TimeUtils.timeout(_ => {
-							BDFDB.GuildUtils.markAsRead(e.instance.props.guildIds);
+							BDFDB.GuildUtils.markAsRead(e.instance.props.folderNode.children.map(n => n.id));
 						}, 10000);
 					}
 					BDFDB.ReactUtils.forceUpdate(folderGuildContent);
