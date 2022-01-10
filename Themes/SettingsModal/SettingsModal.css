@@ -6,7 +6,8 @@
 	--settingsmodalheight: 80vh;
 }
 
-#app-mount .baseLayer-35bLyl {
+#app-mount .baseLayer-35bLyl,
+#app-mount .baseLayer-W6S8cY {
 	opacity: 1 !important;
 	transform: unset !important;
 	will-change: unset !important;
@@ -15,7 +16,8 @@
 	transition-property: inherit !important;
 	animation: inherit !important;
 }
-#app-mount .layer-3QrUeG.stop-animations:first-child::after {
+#app-mount .layer-3QrUeG.stop-animations:first-child::after,
+#app-mount .layer-86YKbF.stop-animations:first-child::after {
 	content: "" !important;
 	position: fixed !important;
 	background: rgb(0, 0, 0) !important;
@@ -30,7 +32,8 @@
 	pointer-events: none !important;
 }
 
-#app-mount .layer-3QrUeG ~ .layer-3QrUeG {
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG,
+#app-mount .layer-86YKbF ~ .layer-86YKbF {
 	position: absolute !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -48,7 +51,9 @@
 	z-index: 1000 !important;
 }
 #app-mount .layer-3QrUeG ~ .layer-3QrUeG > div,
-#app-mount .layer-3QrUeG ~ .layer-3QrUeG .standardSidebarView-3F1I7i {
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG .standardSidebarView-3F1I7i,
+#app-mount .layer-86YKbF ~ .layer-86YKbF > div,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .standardSidebarView-E9Pc3j {
 	position: static !important;
 	border-radius: unset !important;
 	width: 100% !important;
@@ -57,26 +62,35 @@
 	padding: unset !important;
 	overflow: hidden !important;
 }
-#app-mount .layer-3QrUeG ~ .layer-3QrUeG .sidebar-CFHs9e {
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG .sidebar-CFHs9e,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 	width: 218px !important;
 	padding: 20px 6px 20px 20px !important;
 }
-#app-mount .layer-3QrUeG ~ .layer-3QrUeG .contentColumnDefault-1VQkGM {
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG .contentColumnDefault-1VQkGM,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .contentColumnDefault-3eyv5o {
 	padding: 20px 40px !important;
 }
-#app-mount .layer-3QrUeG ~ .layer-3QrUeG .sidebar-dLM-kh {
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG .sidebar-dLM-kh,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-3K3Z4C {
 	height: var(--settingsmodalheight) !important;
 }
-#app-mount .layer-3QrUeG ~ .layer-3QrUeG .repoHeader-2KfNvH {
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG .repoHeader-2KfNvH,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .repoHeader-2KfNvH {
 	max-width: calc(var(--settingsmodalwidth) - 256px) !important;;
 }
-#app-mount .layer-3QrUeG ~ .layer-3QrUeG .standardSidebarView-3F1I7i .editor {
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG .standardSidebarView-3F1I7i .editor,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .standardSidebarView-E9Pc3j .editor {
 	height: calc(var(--settingsmodalheight) - 120px) !important;
 }
 #app-mount .layer-3QrUeG ~ .layer-3QrUeG .toolsContainer-1edPuj,
 #app-mount .layer-3QrUeG ~ .layer-3QrUeG .toolsContainer-1edPuj .tools-3-3s-N,
 #app-mount .layer-3QrUeG ~ .layer-3QrUeG .toolsContainer-1edPuj .container-1sFeqf,
-#app-mount .layer-3QrUeG ~ .layer-3QrUeG .toolsContainer-1edPuj .closeButton-1tv5uR {
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG .toolsContainer-1edPuj .closeButton-1tv5uR,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .toolsContainer-25FL6V,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .toolsContainer-25FL6V .tools-kIrEGr,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .toolsContainer-25FL6V .container-O54IuJ,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .toolsContainer-25FL6V .closeButton-PCZcma {
 	position: absolute !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -94,15 +108,18 @@
 	opacity: 0 !important;
 	cursor: default !important;
 }
-#app-mount .layer-3QrUeG ~ .layer-3QrUeG .toolsContainer-1edPuj {
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG .toolsContainer-1edPuj,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .toolsContainer-25FL6V {
 	position: fixed !important;
 	top: 22px !important;
 	z-index: -1 !important;
 }
-#app-mount .layer-3QrUeG ~ .layer-3QrUeG .settingsToolbar-wu4yfQ {
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG .settingsToolbar-wu4yfQ,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .settingsToolbar-wu4yfQ {
 	display: none !important;
 }
-#app-mount .layer-3QrUeG ~ .layer-3QrUeG .header-2RyJ0Y {
+#app-mount .layer-3QrUeG ~ .layer-3QrUeG .header-2RyJ0Y,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .header-2Kx1US {
 	max-width: calc(var(--settingsmodalwidth) - 730px) !important;
 }
 
