@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.7
+ * @version 1.0.8
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "GameActivityToggle",
 			"author": "DevilBro",
-			"version": "1.0.7",
+			"version": "1.0.8",
 			"description": "Adds a Quick-Toggle Game Activity Button"
 		}
 	};
@@ -135,7 +135,7 @@ module.exports = (_ => {
 				if (BDFDB.LibraryModules.SettingsUtils) BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SettingsUtils.ShowCurrentGame, "updateSetting", {after: e => {
 					if (toggleButton) toggleButton.props.forceState = e.methodArguments[0];
 					BDFDB.ReactUtils.forceUpdate(toggleButton);
-					BDFDB.DataUtils.save({date: new Date(), value: BDFDB.DiscordUtils.getSettings("ShowCurrentGame")}, this, "cachedState");
+					BDFDB.DataUtils.save({date: new Date(), value: e.methodArguments[0]}, this, "cachedState");
 				}});
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
