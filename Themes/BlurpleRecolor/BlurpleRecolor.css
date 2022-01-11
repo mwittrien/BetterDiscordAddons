@@ -2494,13 +2494,16 @@ a.metadataName-1KMZtB {
 	background: var(--accentcolor-active);
 }
 
-.bd-button {
+.bd-button,
+.bd-addon-modal-footer .bd-button {
 	background: var(--bd-blue);
 }
-.bd-button:hover {
+.bd-button:hover,
+.bd-addon-modal-footer .bd-button:hover {
 	background: var(--accentcolor-hover);
 }
-.bd-button:active {
+.bd-button:active,
+.bd-addon-modal-footer .bd-button:active {
 	background: var(--accentcolor-active);
 }
 

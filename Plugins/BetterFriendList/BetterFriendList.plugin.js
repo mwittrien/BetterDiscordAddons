@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.9
+ * @version 1.4.0
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterFriendList",
 			"author": "DevilBro",
-			"version": "1.3.9",
+			"version": "1.4.0",
 			"description": "Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount"
-		},
-		"changeLog": {
-			"fixed": {
-				"Count": "No longer says Count = 0 for all categories if hidden is disabled"
-			}
 		}
 	};
 
@@ -286,6 +281,10 @@ module.exports = (_ => {
 			}
 
 			processPeopleListSectionedLazy (e) {
+				this.processPeopleListSectionedNonLazy(e);
+			}
+			
+			processPeopleListSectionedNonLazy (e) {
 				if (this.settings.general.addFavorizedCategory) {
 					if (isFavoritesSelected) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && favorizedFriends.indexOf(entry.user.id) > -1));
 				}
@@ -334,8 +333,8 @@ module.exports = (_ => {
 									children: this.settings.general.addFavorizedCategory && isFavoritesSelected ? `${this.labels.favorites} - ${users.filter(u => u && u.key != placeHolderId).length}` : this.settings.general.addHiddenCategory && isHiddenSelected ? `${this.labels.hidden} - ${users.filter(u => u && u.key != placeHolderId).length}` : e2.returnValue.replace(users.length, users.filter(u => u && u.key != placeHolderId).length)
 								}),
 								this.settings.general.addSortOptions && [
-									{key: "usernameLower", label: BDFDB.LanguageUtils.LanguageStrings.FRIENDS_COLUMN_NAME},
-									{key: "statusIndex", label: BDFDB.LanguageUtils.LanguageStrings.FRIENDS_COLUMN_STATUS}
+									{key: "usernameLower", label: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME},
+									{key: "statusIndex", label: BDFDB.LanguageUtils.LibraryStrings.status}
 								].filter(n => n).map(data => BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercellwrapper, BDFDB.disCN.tableheadercell, BDFDB.disCN._betterfriendlistnamecell, sortKey == data.key && BDFDB.disCN.tableheadercellsorted, BDFDB.disCN.tableheadercellclickable),
 									children: BDFDB.ReactUtils.createElement("div", {
@@ -389,10 +388,6 @@ module.exports = (_ => {
 						type: !currentSection || !Object.entries(BDFDB.DiscordConstants.FriendsSections).find(n => n[1] == currentSection) ? BDFDB.DiscordConstants.FriendsSections.ALL : currentSection
 					})
 				});
-			}
-			
-			processPeopleListSectionedNonLazy (e) {
-				this.processPeopleListSectionedLazy(e);
 			}
 			
 			processFriendRow (e) {
