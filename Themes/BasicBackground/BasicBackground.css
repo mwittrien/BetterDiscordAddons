@@ -3893,12 +3893,12 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	color: var(--header-secondary);
 }
 
-#app-mount .ctaBar-2UsjF2 {									/* current boost stats	container							*/
+#app-mount .ctaBar-Nhk8yY {									/* current boost stats	container							*/
 	position: relative;
 	background-color: rgba(var(--transparencycolor), .4);
 	background-image: none;
 }
-#app-mount .ctaBar-2UsjF2::before {
+#app-mount .ctaBar-Nhk8yY::before {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -3956,14 +3956,14 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .tier-1EY-yj {												/* modal				boostaddwrapper tier						*/
 	background-color: rgb(var(--transparencycolor), .3);
 }
-#app-mount .giftIcon-ZxlWk5 {								/* modal				gifticon							*/
+#app-mount .giftIcon-2kmx1K {								/* modal				gifticon							*/
 	color: var(--header-secondary);
 	margin: 0 18px;
 }
-#app-mount .button-38aScr .giftIcon-ZxlWk5 {
+#app-mount .button-38aScr .giftIcon-2kmx1K {
 	color: currentColor;
 }
-#app-mount .badgeIconWithoutSubscribers-3A9Xol {
+#app-mount .badgeIconWithoutSubscribers-1hjTfX {
 	color: var(--text-muted);
 }
 #app-mount .tierPill-1yRO48 {

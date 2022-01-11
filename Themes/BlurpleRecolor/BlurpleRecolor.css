@@ -1592,20 +1592,20 @@ a.metadataName-1KMZtB {
 /* ----		10.8.	GUILDBOOSTMODAL					---- */
 
 															/* modal				boost header						*/
-.headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] {
+.headerGraphic-1PsHkb[src="/assets/071e743e602763497a5e394510b68f28.svg"] {
 	object-position: -999999px -999999px;
 	width: 96px;
 	height: 60px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_bg.svg) center/cover no-repeat;
 }
-.headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] + *:not(svg),
-.headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] + svg + * {
+.headerGraphic-1PsHkb[src="/assets/071e743e602763497a5e394510b68f28.svg"] + *:not(svg),
+.headerGraphic-1PsHkb[src="/assets/071e743e602763497a5e394510b68f28.svg"] + svg + * {
 	position: relative;
 }
-.headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] + *:not(svg)::before,
-.headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] + svg + *::before,
-.headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] + *:not(svg)::after,
-.headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] + svg + *::after {
+.headerGraphic-1PsHkb[src="/assets/071e743e602763497a5e394510b68f28.svg"] + *:not(svg)::before,
+.headerGraphic-1PsHkb[src="/assets/071e743e602763497a5e394510b68f28.svg"] + svg + *::before,
+.headerGraphic-1PsHkb[src="/assets/071e743e602763497a5e394510b68f28.svg"] + *:not(svg)::after,
+.headerGraphic-1PsHkb[src="/assets/071e743e602763497a5e394510b68f28.svg"] + svg + *::after {
 	content: "";
 	position: absolute;
 	top: -132px;
@@ -1614,20 +1614,20 @@ a.metadataName-1KMZtB {
 	height: 60px;
 	pointer-events: none;
 }
-.headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] + *:not(svg)::before,
-.headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] + svg + *::before {
+.headerGraphic-1PsHkb[src="/assets/071e743e602763497a5e394510b68f28.svg"] + *:not(svg)::before,
+.headerGraphic-1PsHkb[src="/assets/071e743e602763497a5e394510b68f28.svg"] + svg + *::before {
 	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_accent.svg) center/cover no-repeat;
 }
-.headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] + *:not(svg)::after,
-.headerGraphic-nVhv-X[src="/assets/50f02014a2ac385c90461d9a4b80e482.svg"] + svg + *::after {
+.headerGraphic-1PsHkb[src="/assets/071e743e602763497a5e394510b68f28.svg"] + *:not(svg)::after,
+.headerGraphic-1PsHkb[src="/assets/071e743e602763497a5e394510b68f28.svg"] + svg + *::after {
 	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostheader_accent2.svg) center/cover no-repeat;
 }
-.badgeIconWithSubscribers-3PlMu9 {							/* modal				sub badge icon						*/
+.badgeIconWithSubscribers-2WYJsQ {							/* modal				sub badge icon						*/
 	color: rgb(var(--accentcolor2));
 }
-#app-mount .icon-QVoPRH {									/* modal				perkicon general					*/
+#app-mount .icon-3dkE_X {									/* modal				perkicon general					*/
 	color: rgb(var(--accentcolor2));
 }
 															/* modal				tiermarker in progress tier3		*/
