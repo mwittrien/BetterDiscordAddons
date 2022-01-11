@@ -7,24 +7,24 @@
 	--aligndms: 1;
 }
 
-.titleBar-1it3bQ.typeMacOS-3EmCyP,
-.titleBar-1it3bQ.typeMacOS-3EmCyP .macButtons-2MuSAC,
+.titleBar-1it3bQ.typeMacOS-3V4xXE,
+.titleBar-1it3bQ.typeMacOS-3V4xXE .macButtons-eIdy0e,
 .wrapper-1_HaEi,
 .wrapper-1_HaEi .unreadMentionsIndicatorTop-2bTgUU,
 .wrapper-1_HaEi .unreadMentionsIndicatorBottom-3RJMnQ {
 	width: calc(1px * (var(--guildsize) * var(--columns) + 20 * (var(--guildsize)/50) + 14 * (var(--guildsize)/50) * (var(--columns) - 1))) !important;
 }
-.titleBar-1it3bQ.typeMacOS-3EmCyP .macButtons-2MuSAC {
+.titleBar-1it3bQ.typeMacOS-3V4xXE .macButtons-eIdy0e {
 	padding-right: calc(1px * ((var(--guildsize) + 12 * var(--guildsize)/50) * var(--columns) - 50)) !important;
 }
-body.folderContentIsOpen-zz6FgW .titleBar-1it3bQ.typeMacOS-3EmCyP,
-body.folderContentIsOpen-zz6FgW .titleBar-1it3bQ.typeMacOS-3EmCyP .macButtons-2MuSAC {
+body.folderContentIsOpen-zz6FgW .titleBar-1it3bQ.typeMacOS-3V4xXE,
+body.folderContentIsOpen-zz6FgW .titleBar-1it3bQ.typeMacOS-3V4xXE .macButtons-eIdy0e {
 	width: calc(2px * ((var(--guildsize) + 12 * var(--guildsize)/50) * var(--columns) + 35 - 25)) !important;
 }
-body.folderContentIsOpen-zz6FgW .titleBar-1it3bQ.typeMacOS-3EmCyP .macButtons-2MuSAC {
+body.folderContentIsOpen-zz6FgW .titleBar-1it3bQ.typeMacOS-3V4xXE .macButtons-eIdy0e {
 	padding-right: calc(1px * ((var(--guildsize) + 12 * var(--guildsize)/50) * var(--columns) * 2 - 40)) !important;
 }
-.titleBar-1it3bQ.typeMacOS-3EmCyP.typeMacOSWithFrame-3R_i5S .macButtons-2MuSAC {
+.titleBar-1it3bQ.typeMacOS-3V4xXE.typeMacOSWithFrame-1XEpN7 .macButtons-eIdy0e {
 	margin-top: 0 !important;
 	margin-right: 0 !important;
 }
