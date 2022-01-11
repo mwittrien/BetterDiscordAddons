@@ -1419,11 +1419,11 @@ img:not([src]), img[src=""], img[src="null"] {
 	opacity: 1;
 }
 
-[REPLACE_CLASS_layermodallarge], [REPLACE_CLASS_modalsizelarge] {
+[REPLACE_CLASS_modallarge], [REPLACE_CLASS_modalsublarge] {
 	max-height: 95vh;
 }
 @media only screen and (max-height: 900px) {
-	[REPLACE_CLASS_layermodalmedium], [REPLACE_CLASS_modalsizemedium] {
+	[REPLACE_CLASS_modalmedium], [REPLACE_CLASS_modalsubmedium] {
 		max-height: 75vh;
 	}
 }
