@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.8
+ * @version 1.0.9
  * @description Allows you to save Custom Statuses as Quick Select
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomStatusPresets",
 			"author": "DevilBro",
-			"version": "1.0.8",
+			"version": "1.0.9",
 			"description": "Allows you to save Custom Statuses as Quick Select"
 		}
 	};
@@ -70,6 +70,13 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		var _this;
 		var presets = {};
+		
+		const ClearAfterValues = {
+			HOURS_1: 3600000
+			HOURS_4: 14400000
+			MINUTES_30: 1800000
+			TODAY: "TODAY"
+		};
 		
 		const CustomStatusInputComponent = class CustomStatusInput extends BdApi.React.Component {
 			handleChange() {
@@ -380,11 +387,11 @@ module.exports = (_ => {
 									]
 								}),
 								imageUrl: presets[id].emojiInfo && (presets[id].emojiInfo.id ? BDFDB.LibraryModules.IconUtils.getEmojiURL(presets[id].emojiInfo) : BDFDB.LibraryModules.EmojiStateUtils.getURL(presets[id].emojiInfo.name)),
-								hint: !presets[id].clearAfter ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : presets[id].clearAfter == BDFDB.LibraryModules.CustomStatusConstants.ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", presets[id].clearAfter/3600000),
+								hint: !presets[id].clearAfter ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : presets[id].clearAfter == CustomStatusConstants.ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", presets[id].clearAfter/3600000),
 								action: _ => {
 									if (!presets[id]) return;
 									let expiresAt = presets[id].clearAfter ? presets[id].clearAfter : null;
-									if (presets[id].clearAfter === BDFDB.LibraryModules.CustomStatusConstants.ClearAfterValues.TODAY) {
+									if (presets[id].clearAfter === ClearAfterValues.TODAY) {
 										let date = new Date;
 										expiresAt = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime() - date.getTime();
 									}
