@@ -2781,10 +2781,10 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 /* ----		10.11.	GUILDBOOSTMODAL						---- */
 
-#app-mount .perksModal-fSYqOq {
+#app-mount .perksModal-CLcR1c {
 	background: var(--background-primary);
 }
-#app-mount .perksModal-fSYqOq::before {
+#app-mount .perksModal-CLcR1c::before {
 	content: "";
 	position: fixed;
 	top: 0;
@@ -2795,17 +2795,17 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	-webkit-mask: url(https://discord.com/assets/c486dc65ce2877eeb18e4c39bb49507a.svg) bottom/100% no-repeat;
 	pointer-events: none;
 }
-#app-mount .headerLogo--hLLAk {
+#app-mount .headerLogo-2M4f14 {
 	color: var(--header-primary);
 }
-#app-mount .tierHeaderLocked-1s2JJz {
+#app-mount .tierHeaderLocked-3ItHYn {
 	background-color: var(--background-floating);
 	color: var(--text-muted);
 }
-#app-mount .tierLock-3CSxSX {
+#app-mount .tierLock-1uBqZ0 {
 	color: var(--interactive-muted);
 }
-#app-mount .tierBody-16Chc9 {
+#app-mount .tierBody-3ju-rc {
 	background-color: var(--background-tertiary);
 	border-color: var(--background-secondary);
 }

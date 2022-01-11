@@ -3843,7 +3843,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 
 /* ----		13.11.	GUILDBOOSTMODAL					---- */
 
-#app-mount .perksModal-fSYqOq {								/* modal				wrapper								*/
+#app-mount .perksModal-CLcR1c {								/* modal				wrapper								*/
 	background-color: transparent;
 }
 .carouselContainer-2-vIZS {									/* modal				scrollercontainer					*/
@@ -3916,20 +3916,20 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .4);
 }
 
-#app-mount .headerLogo--hLLAk {
+#app-mount .headerLogo-2M4f14 {
 	color: var(--header-primary);
 }
-#app-mount .tierHeaderLocked-1s2JJz {						/* modal				tierheaderlocked 					*/
+#app-mount .tierHeaderLocked-3ItHYn {						/* modal				tierheaderlocked 					*/
 	background-color: rgba(var(--transparencycolor), .4);
 	color: var(--text-muted);
 }
-#app-mount .tierLock-3CSxSX {								/* modal				tierlock 							*/
+#app-mount .tierLock-1uBqZ0 {								/* modal				tierlock 							*/
 	color: var(--interactive-muted);
 }
-#app-mount .tierHeaderUnlocked-1n-OTI {						/* modal				tierheaderunlocked 					*/
+#app-mount .tierHeaderUnlocked-1IvR2R {						/* modal				tierheaderunlocked 					*/
 	background-color: rgba(var(--transparencycolor), .5);
 }
-#app-mount .tierBody-16Chc9 {								/* modal				tierbody 							*/
+#app-mount .tierBody-3ju-rc {								/* modal				tierbody 							*/
 	background-color: rgba(var(--transparencycolor), .3);
 }
 #app-mount .tierMarkerBackground-G8FoN4 {					/* modal				tiermilestone 						*/

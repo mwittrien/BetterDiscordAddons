@@ -126,7 +126,7 @@
 #app-mount .root-2zfUH6.enterDone-menWZ8 {
 	transform: unset !important;
 }
-#app-mount .perksModal-fSYqOq {
+#app-mount .perksModal-CLcR1c {
 	position: static !important;
 	border-radius: unset !important;
 	width: 100% !important;
@@ -134,15 +134,15 @@
 	margin: unset !important;
 	padding: unset !important;
 }
-#app-mount .perksModal-fSYqOq::before {
+#app-mount .perksModal-CLcR1c::before {
 	width: var(--settingsmodalwidth) !important;
 	height: var(--settingsmodalheight) !important;
 	margin: auto !important;
 }
-#app-mount .perksModalContentWrapper-2HU6uL {
+#app-mount .perksModalContentWrapper-3RHugb {
 	padding: 10px 0 10px !important;
 }
-#app-mount .root-2zfUH6 .perksModal-fSYqOq .carousel-6MSnEI {
+#app-mount .root-2zfUH6 .perksModal-CLcR1c .carousel-3dvee9 {
 	margin-left: calc(-0.5 * (100vw - var(--settingsmodalwidth))) !important;
 }
 #app-mount .root-2zfUH6 .closeWrapper-9ScmSq,
