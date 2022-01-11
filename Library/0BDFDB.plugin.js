@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.4
+ * @version 2.0.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,10 +19,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.0.4",
+			"version": "2.0.5",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
+		"changeLog": {
+			"progress": {
+				"Update Fixes": "Slowly fixing all the Shit Discord broke"
+			}
+		}
 	};
 	
 	const DiscordObjects = {};
@@ -1187,14 +1192,14 @@ module.exports = (_ => {
 			else return "";
 		};
 		
-		InternalBDFDB.findModule = function (type, cacheString, filter, getExport) {
+		InternalBDFDB.findModule = function (type, cacheString, filter, useExport) {
 			if (!BDFDB.ObjectUtils.is(Cache.modules[type])) Cache.modules[type] = {module: {}, export: {}};
-			if (getExport && Cache.modules[type].export[cacheString]) return Cache.modules[type].export[cacheString];
-			else if (!getExport && Cache.modules[type].module[cacheString]) return Cache.modules[type].module[cacheString];
+			if (useExport && Cache.modules[type].export[cacheString]) return Cache.modules[type].export[cacheString];
+			else if (!useExport && Cache.modules[type].module[cacheString]) return Cache.modules[type].module[cacheString];
 			else {
-				let m = BDFDB.ModuleUtils.find(filter, getExport);
+				let m = BDFDB.ModuleUtils.find(filter, {useExport: useExport});
 				if (m) {
-					if (getExport) Cache.modules[type].export[cacheString] = m;
+					if (useExport) Cache.modules[type].export[cacheString] = m;
 					else Cache.modules[type].module[cacheString] = m;
 					return m;
 				}
@@ -1203,65 +1208,78 @@ module.exports = (_ => {
 		};
 		
 		BDFDB.ModuleUtils = {};
-		BDFDB.ModuleUtils.find = function (filter, getExport) {
-			getExport = typeof getExport != "boolean" ? true : getExport;
+		BDFDB.ModuleUtils.find = function (filter, config = {}) {
+			let useExport = typeof config.useExport != "boolean" ? true : config.useExport;
+			let onlySearchUnloaded = typeof config.onlySearchUnloaded != "boolean" ? false : config.onlySearchUnloaded;
 			let req = InternalBDFDB.getWebModuleReq();
-			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
+			if (!onlySearchUnloaded) for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports, r = null;
-				if (m && (typeof m == "object" || typeof m == "function") && !!(r = filter(m))) return getExport ? r : req.c[i];
+				if (m && (typeof m == "object" || typeof m == "function") && !!(r = filter(m))) return useExport ? r : req.c[i];
 				if (m && m.__esModule && m.default && (typeof m.default == "object" || typeof m.default == "function")) {
-					if (!!(r = filter(m.default))) return getExport ? r : req.c[i];
-					else if (m.default.type && (typeof m.default.type == "object" || typeof m.default.type == "function") && !!(r = filter(m.default.type))) return getExport ? r : req.c[i];
+					if (!!(r = filter(m.default))) return useExport ? r : req.c[i];
+					else if (m.default.type && (typeof m.default.type == "object" || typeof m.default.type == "function") && !!(r = filter(m.default.type))) return useExport ? r : req.c[i];
 				}
 			}
 			for (let i in req.m) if (req.m.hasOwnProperty(i)) {
 				let m = req.m[i];
-				if (m && typeof m == "function" && filter(m)) {
-					if (req.c[i]) return getExport ? req.c[i].exports : req.c[i];
-					else {
+				if (m && typeof m == "function") {
+					if (req.c[i] && !onlySearchUnloaded && filter(m)) return useExport ? req.c[i].exports : req.c[i];
+					if (!req.c[i] && onlySearchUnloaded && filter(m)) {
 						let resolved = {}, resolved2 = {};
 						m(resolved, resolved2, req);
 						let trueResolved = resolved2 && BDFDB.ObjectUtils.isEmpty(resolved2) ? resolved : resolved2;
-						return getExport ? trueResolved.exports : trueResolved;
+						return useExport ? trueResolved.exports : trueResolved;
 					}
 				}
 			}
 		};
 		BDFDB.ModuleUtils.findByProperties = function (...properties) {
 			properties = properties.flat(10);
-			let getExport = properties.pop();
-			if (typeof getExport != "boolean") {
-				properties.push(getExport);
-				getExport = true;
+			let useExport = properties.pop();
+			if (typeof useExport != "boolean") {
+				properties.push(useExport);
+				useExport = true;
 			}
 			return InternalBDFDB.findModule("prop", JSON.stringify(properties), m => properties.every(prop => {
 				const value = m[prop];
 				return value !== undefined && !(typeof value == "string" && !value);
-			}) && m, getExport);
+			}) && m, useExport);
 		};
-		BDFDB.ModuleUtils.findByName = function (name, getExport) {
-			return InternalBDFDB.findModule("name", JSON.stringify(name), m => m.displayName === name && m || m.render && m.render.displayName === name && m || m[name] && m[name].displayName === name && m[name], typeof getExport != "boolean" ? true : getExport);
+		BDFDB.ModuleUtils.findByName = function (name, useExport) {
+			return InternalBDFDB.findModule("name", JSON.stringify(name), m => m.displayName === name && m || m.render && m.render.displayName === name && m || m[name] && m[name].displayName === name && m[name], typeof useExport != "boolean" ? true : useExport);
 		};
 		BDFDB.ModuleUtils.findByString = function (...strings) {
 			strings = strings.flat(10);
-			let getExport = strings.pop();
-			if (typeof getExport != "boolean") {
-				strings.push(getExport);
-				getExport = true;
+			let useExport = strings.pop();
+			if (typeof useExport != "boolean") {
+				strings.push(useExport);
+				useExport = true;
 			}
-			return InternalBDFDB.findModule("string", JSON.stringify(strings), m => strings.every(string => typeof m == "function" && (m.toString().indexOf(string) > -1 || typeof m.__originalMethod == "function" && m.__originalMethod.toString().indexOf(string) > -1 || typeof m.__originalFunction == "function" && m.__originalFunction.toString().indexOf(string) > -1) || BDFDB.ObjectUtils.is(m) && typeof m.type == "function" && m.type.toString().indexOf(string) > -1) && m, getExport);
+			return InternalBDFDB.findModule("string", JSON.stringify(strings), m => strings.every(string => typeof m == "function" && (m.toString().indexOf(string) > -1 || typeof m.__originalMethod == "function" && m.__originalMethod.toString().indexOf(string) > -1 || typeof m.__originalFunction == "function" && m.__originalFunction.toString().indexOf(string) > -1) || BDFDB.ObjectUtils.is(m) && typeof m.type == "function" && m.type.toString().indexOf(string) > -1) && m, useExport);
 		};
 		BDFDB.ModuleUtils.findByPrototypes = function (...protoProps) {
 			protoProps = protoProps.flat(10);
-			let getExport = protoProps.pop();
-			if (typeof getExport != "boolean") {
-				protoProps.push(getExport);
-				getExport = true;
+			let useExport = protoProps.pop();
+			if (typeof useExport != "boolean") {
+				protoProps.push(useExport);
+				useExport = true;
 			}
 			return InternalBDFDB.findModule("proto", JSON.stringify(protoProps), m => m.prototype && protoProps.every(prop => {
 				const value = m.prototype[prop];
 				return value !== undefined && !(typeof value == "string" && !value);
-			}) && m, getExport);
+			}) && m, useExport);
+		};
+		BDFDB.ModuleUtils.findStringObject = function (props, config = {}) {
+			return BDFDB.ModuleUtils.find(m => {
+				let amount = Object.keys(m).length;
+				return (!config.length || (config.smaller ? amount < config.length : amount == config.length)) && [props].flat(10).every(prop => typeof m[prop] == "string") && m;
+			}) || BDFDB.ModuleUtils.find(m => {
+				if (typeof m != "function") return false;
+				let stringified = m.toString().replace(/\s/g, "");
+				if (stringified.indexOf("e=>{e.exports={") != 0) return false;
+				let amount = stringified.split(":\"").length - 1;
+				return (!config.length || (config.smaller ? amount < config.length : amount == config.length)) && [props].flat(10).every(string => stringified.indexOf(`${string}:`) > -1) && m;
+			}, {onlySearchUnloaded: true});
 		};
 	
 		BDFDB.ObserverUtils = {};
@@ -2145,7 +2163,7 @@ module.exports = (_ => {
 				config.nonPrototype = !!(config.subComponent && config.subComponent.strings || config.stringFind || config.subComponent && config.subComponent.props || config.propertyFind || config.nonRender);
 				
 				let component = InternalData.ModuleUtilsConfig.LoadedInComponents[type] && BDFDB.ObjectUtils.get(InternalComponents, InternalData.ModuleUtilsConfig.LoadedInComponents[type]);
-				if (component) InternalBDFDB.patchComponent(pluginData, config.nonRender ? (BDFDB.ModuleUtils.find(m => m == component && m, config.exported) || {}).exports : component, type, config);
+				if (component) InternalBDFDB.patchComponent(pluginData, config.nonRender ? (BDFDB.ModuleUtils.find(m => m == component && m, {useExport: config.exported}) || {}).exports : component, type, config);
 				else {
 					let mappedType = config.mapped ? config.mapped + " _ _ " + type : type;
 					let name = config.subComponent && config.subComponent.name || mappedType.split(" _ _ ")[0];
@@ -2221,7 +2239,7 @@ module.exports = (_ => {
 				let component = config.specialFilter(ins);
 				if (component) {
 					if (config.nonRender) {
-						let exports = (BDFDB.ModuleUtils.find(m => m == component && m, false) || {}).exports;
+						let exports = (BDFDB.ModuleUtils.find(m => m == component && m, {useExport: false}) || {}).exports;
 						InternalBDFDB.patchComponent(pluginDataObjs, InternalBDFDB.isMemoOrForwardRef(exports) ? exports.default : exports, type, config);
 					}
 					else InternalBDFDB.patchComponent(pluginDataObjs, component, type, config);
@@ -4410,10 +4428,7 @@ module.exports = (_ => {
 		};
 		
 		const DiscordClassModules = Object.assign({}, InternalData.CustomClassModules);
-		for (let name in InternalData.DiscordClassModules) {
-			if (InternalData.DiscordClassModules[name].length) DiscordClassModules[name] = BDFDB.ModuleUtils.find(m => InternalData.DiscordClassModules[name].props.every(prop => typeof m[prop] == "string") && (InternalData.DiscordClassModules[name].smaller ? Object.keys(m).length < InternalData.DiscordClassModules[name].length : Object.keys(m).length == InternalData.DiscordClassModules[name].length) && m);
-			else DiscordClassModules[name] = BDFDB.ModuleUtils.findByProperties(InternalData.DiscordClassModules[name].props);
-		}
+		for (let name in InternalData.DiscordClassModules) DiscordClassModules[name] = BDFDB.ModuleUtils.findStringObject(InternalData.DiscordClassModules[name].props, Object.assign({}, InternalData.DiscordClassModules[name]));
 		BDFDB.DiscordClassModules = Object.assign({}, DiscordClassModules);
 		
 		const DiscordClasses = Object.assign({}, InternalData.DiscordClasses);
@@ -8108,7 +8123,7 @@ module.exports = (_ => {
 			if (BDFDB.ObjectUtils.is(menu) && menu.type && menu.type.displayName) {
 				for (let type of ContextMenuTypes) if (menu.type.displayName.indexOf(type) > -1) {
 					let patchType = type + "ContextMenu";
-					let module = BDFDB.ModuleUtils.find(m => m == menu.type && m, false);
+					let module = BDFDB.ModuleUtils.find(m => m == menu.type && m, {useExport: false});
 					if (module && module.exports && module.exports.default && PluginStores.patchQueues[patchType]) {
 						PluginStores.patchQueues[patchType].modules.push(module);
 						PluginStores.patchQueues[patchType].modules = BDFDB.ArrayUtils.removeCopies(PluginStores.patchQueues[patchType].modules);
