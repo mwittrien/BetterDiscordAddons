@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.5
+ * @version 2.0.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,13 +19,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.0.5",
+			"version": "2.0.6",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
 		"changeLog": {
 			"progress": {
 				"Update Fixes": "Slowly fixing all the Shit Discord broke"
+			},
+			"fixed": {
+				"Context Menu Entries": "Plugins that try to add right click menu entries, work again, some menus need to be opened once for the plugin entries to be added properly, so open them twice once"
 			}
 		}
 	};
@@ -8089,6 +8092,20 @@ module.exports = (_ => {
 				for (let module of PluginStores.patchQueues[type].modules) InternalBDFDB.patchContextMenuForPlugin(plugin, type, module);
 			}
 		};
+		InternalBDFDB.checkContextMenuForPlugin = function (menu) {
+			if (BDFDB.ObjectUtils.is(menu) && menu.type && menu.type.displayName) {
+				for (let type of ContextMenuTypes) if (menu.type.displayName.indexOf(type) > -1) {
+					let patchType = type + "ContextMenu";
+					let module = BDFDB.ModuleUtils.find(m => m == menu.type && m, {useExport: false});
+					if (module && module.exports && module.exports.default && PluginStores.patchQueues[patchType]) {
+						PluginStores.patchQueues[patchType].modules.push(module);
+						PluginStores.patchQueues[patchType].modules = BDFDB.ArrayUtils.removeCopies(PluginStores.patchQueues[patchType].modules);
+						for (let plugin of PluginStores.patchQueues[patchType].query) InternalBDFDB.patchContextMenuForPlugin(plugin, patchType, module);
+					}
+					break;
+				}
+			}
+		};
 		InternalBDFDB.patchContextMenuForPlugin = function (plugin, type, module) {
 			plugin = plugin == BDFDB && InternalBDFDB || plugin;
 			if (module && module.exports && module.exports.default) BDFDB.PatchUtils.patch(plugin, module.exports, "default", {after: e => {
@@ -8119,19 +8136,10 @@ module.exports = (_ => {
 		
 		for (let type of QueuedComponents) if (!PluginStores.patchQueues[type]) PluginStores.patchQueues[type] = {query: [], modules: []};
 		BDFDB.PatchUtils.patch(BDFDB, LibraryModules.ContextMenuUtils, "openContextMenu", {before: e => {
-			let menu = e.methodArguments[1]();
-			if (BDFDB.ObjectUtils.is(menu) && menu.type && menu.type.displayName) {
-				for (let type of ContextMenuTypes) if (menu.type.displayName.indexOf(type) > -1) {
-					let patchType = type + "ContextMenu";
-					let module = BDFDB.ModuleUtils.find(m => m == menu.type && m, {useExport: false});
-					if (module && module.exports && module.exports.default && PluginStores.patchQueues[patchType]) {
-						PluginStores.patchQueues[patchType].modules.push(module);
-						PluginStores.patchQueues[patchType].modules = BDFDB.ArrayUtils.removeCopies(PluginStores.patchQueues[patchType].modules);
-						for (let plugin of PluginStores.patchQueues[patchType].query) InternalBDFDB.patchContextMenuForPlugin(plugin, patchType, module);
-					}
-					break;
-				}
-			}
+			InternalBDFDB.checkContextMenuForPlugin(e.methodArguments[1]());
+		}});
+		BDFDB.PatchUtils.patch(BDFDB, LibraryModules.ContextMenuUtils, "openContextMenuLazy", {before: e => {
+			e.methodArguments[1]().then(result => InternalBDFDB.checkContextMenuForPlugin(result()));
 		}});
 		
 		BDFDB.PatchUtils.patch(BDFDB, BDFDB.ObjectUtils.get(BDFDB.ModuleUtils.findByString("renderReactions", "canAddNewReactions", "showMoreUtilities", false), "exports.default"), "type", {after: e => {
