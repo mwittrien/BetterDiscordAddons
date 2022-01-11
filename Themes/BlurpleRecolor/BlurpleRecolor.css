@@ -388,17 +388,17 @@
 	border-color: rgb(var(--accentcolor));
 }
 															/* textarea				follow channel icon					*/
-.image-3FliiM[src="/assets/dc7e9e55b3a6d39d24acdd650ecc2ef3.svg"] {
+.image-3FliiM[src="/assets/60ea1d16163c13845ccf31e70fd6528b.svg"] {
 	object-position: -999999px -999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_followchannel_bg.svg) center/contain no-repeat;
 	width: 47px;
 	height: 60px;
 	margin-bottom: -8px;
 }
-.image-3FliiM[src="/assets/dc7e9e55b3a6d39d24acdd650ecc2ef3.svg"] + * {
+.image-3FliiM[src="/assets/60ea1d16163c13845ccf31e70fd6528b.svg"] + * {
 	overflow: visible;
 }
-.image-3FliiM[src="/assets/dc7e9e55b3a6d39d24acdd650ecc2ef3.svg"] + *::after {
+.image-3FliiM[src="/assets/60ea1d16163c13845ccf31e70fd6528b.svg"] + *::after {
 	content: "";
 	position: absolute;
 	bottom: 8px;
@@ -410,17 +410,39 @@
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_followchannel_accent.svg) center/contain no-repeat;
 }
 															/* textarea				verify email icon					*/
-.image-3FliiM[src="/assets/b0df989dede2e65a2d631874ffe04de0.svg"] {
+.image-3FliiM[src="/assets/0e33fc3f60b69ba9b0247df60d589439.svg"] {
 	object-position: -999999px -999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_verifyemail_bg.svg) center/contain no-repeat;
 	width: 65px;
 	height: 60px;
 	margin-bottom: -16px;
 }
-.image-3FliiM[src="/assets/b0df989dede2e65a2d631874ffe04de0.svg"] + * {
+.image-3FliiM[src="/assets/0e33fc3f60b69ba9b0247df60d589439.svg"] + * {
 	overflow: visible;
 }
-.image-3FliiM[src="/assets/b0df989dede2e65a2d631874ffe04de0.svg"] + *::after {
+.image-3FliiM[src="/assets/0e33fc3f60b69ba9b0247df60d589439.svg"] + *::after {
+	content: "";
+	position: absolute;
+	bottom: 0px;
+	left: 16px;
+	width: 65px;
+	height: 60px;
+	pointer-events: none;
+	background: rgb(var(--accentcolor));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_verifyemail_accent.svg) center/contain no-repeat;
+}
+															/* textarea				verify phone icon					*/
+.image-3FliiM[src="/assets/45372ebbfad1c491747d6f5b7117fd88.svg"] {
+	object-position: -999999px -999999px;
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/chatnotice_verifyemail_bg.svg) center/contain no-repeat;
+	width: 65px;
+	height: 60px;
+	margin-bottom: -16px;
+}
+.image-3FliiM[src="/assets/45372ebbfad1c491747d6f5b7117fd88.svg"] + * {
+	overflow: visible;
+}
+.image-3FliiM[src="/assets/45372ebbfad1c491747d6f5b7117fd88.svg"] + *::after {
 	content: "";
 	position: absolute;
 	bottom: 0px;
