@@ -7930,6 +7930,7 @@ module.exports = (_ => {
 				EmojiPickerListRow: "default"
 			},
 			after: {
+				Menu: "default",
 				SettingsView: "componentDidMount",
 				Shakeable: "render",
 				Message: "default",
@@ -7942,10 +7943,46 @@ module.exports = (_ => {
 			}
 		};
 		
+		const menuExtraPatches = {};
+		InternalBDFDB.processMenu = function (e) {
+			if (e.instance.props.navId) switch (e.instance.props.navId) {
+				case "guild-header-popout":
+					if (menuExtraPatches["guild-header-popout"]) return;
+					menuExtraPatches["guild-header-popout"] = true;
+					BDFDB.TimeUtils.interval((interval, count) => {
+						if (count > 20) return BDFDB.TimeUtils.clear(interval);
+						else {
+							let module = BDFDB.ModuleUtils.findByString("guild-header-popout");
+							if (module) BDFDB.PatchUtils.patch(BDFDB, module.default.prototype, "render", {after: e => {
+								BDFDB.PatchUtils.patch(BDFDB, e.returnValue.type, "type", {after: e2 => {
+									InternalBDFDB.executeExtraPatchedPatches("GuildHeaderContextMenu", {
+										instance: {props: e2.methodArguments[0]},
+										returnvalue: e2.returnValue,
+										component: e.returnValue,
+										methodname: "type",
+										type: "GuildHeaderContextMenu"
+									});
+								}}, {noCache: true});
+							}});
+						}
+					}, 500);
+					return;
+				case "dev-context":
+					if (menuExtraPatches["dev-context"]) return;
+					menuExtraPatches["dev-context"] = true;
+					BDFDB.PatchUtils.patch(BDFDB, (BDFDB.ModuleUtils.findByName("useCopyIdItem", false) || {}).exports, "default", {after: e => {
+						if (!e.returnValue) e.returnValue = false;
+					}}, {priority: 10});
+					BDFDB.PatchUtils.patch(BDFDB, e.component, "default", {after: e => {
+						if (!e.returnValue.props.children) LibraryModules.ContextMenuUtils.closeContextMenu();
+					}}, {priority: 10});
+					return;
+			}
+		};
 		
 		InternalBDFDB.processSettingsView = function (e) {
 			if (e.node && e.node.parentElement && e.node.parentElement.getAttribute("aria-label") == BDFDB.DiscordConstants.Layers.USER_SETTINGS) InternalBDFDB.addListObserver(e.node.parentElement);
-		}
+		};
 	
 		let AppViewExport = BDFDB.ModuleUtils.findByName("AppView", false);
 		if (AppViewExport) InternalBDFDB.processShakeable = function (e) {
@@ -8109,7 +8146,13 @@ module.exports = (_ => {
 		InternalBDFDB.patchContextMenuForPlugin = function (plugin, type, module) {
 			plugin = plugin == BDFDB && InternalBDFDB || plugin;
 			if (module && module.exports && module.exports.default) BDFDB.PatchUtils.patch(plugin, module.exports, "default", {after: e => {
-				if (e.returnValue && typeof plugin[`on${type}`] == "function") plugin[`on${type}`]({instance: {props: e.methodArguments[0]}, returnvalue: e.returnValue, methodname: "default", type: module.exports.default.displayName});
+				if (e.returnValue && typeof plugin[`on${type}`] == "function") plugin[`on${type}`]({
+					instance: {props: e.methodArguments[0]},
+					returnvalue: e.returnValue,
+					component: module.exports,
+					methodname: "default",
+					type: module.exports.default.displayName
+				});
 			}});
 		};
 		InternalBDFDB.executeExtraPatchedPatches = function (type, e) {
@@ -8161,19 +8204,6 @@ module.exports = (_ => {
 				}
 			}}, {once: true});
 		}});
-		
-		BDFDB.PatchUtils.patch(BDFDB, BDFDB.ObjectUtils.get(BDFDB.ModuleUtils.findByString("guild-header-popout", false), "exports.default.prototype"), "render", {after: e => {
-			BDFDB.PatchUtils.patch(BDFDB, e.returnValue.type, "type", {after: e2 => {
-				InternalBDFDB.executeExtraPatchedPatches("GuildHeaderContextMenu", {instance: {props: e2.methodArguments[0]}, returnvalue: e2.returnValue, methodname: "type"});
-			}}, {noCache: true});
-		}});
-		
-		BDFDB.PatchUtils.patch(BDFDB, (BDFDB.ModuleUtils.findByName("useCopyIdItem", false) || {}).exports, "default", {after: e => {
-			if (!e.returnValue) e.returnValue = false;
-		}}, {priority: 10});
-		BDFDB.PatchUtils.patch(BDFDB, (BDFDB.ModuleUtils.findByName("DeveloperContextMenu", false) || {}).exports, "default", {after: e => {
-			if (!e.returnValue.props.children) LibraryModules.ContextMenuUtils.closeContextMenu();
-		}}, {priority: 10});
 		
 		let languageChangeTimeout;
 		if (LibraryModules.SettingsUtilsOld) BDFDB.PatchUtils.patch(BDFDB, LibraryModules.SettingsUtilsOld, ["updateRemoteSettings", "updateLocalSettings"], {after: e => {
