@@ -1,14 +1,14 @@
-#app-mount .userPopout-xaxa6l .popoutBanner-19WKGg,
-#app-mount .userPopout-xaxa6l .profileBanner-33-uE1 {
+#app-mount .userPopout-2j1gM4 .popoutBanner-3cqRD9,
+#app-mount .userPopout-2j1gM4 .profileBanner-1owKI5 {
 	height: 120px !important;
 	max-height: var(--user-background, 60px) !important;
 }
-#app-mount .root-3QyAh1 .profileBanner-33-uE1 {
+#app-mount .root-8LYsGj .profileBanner-1owKI5 {
 	height: 240px !important;
 	max-height: var(--user-background, 120px) !important;
 }
-#app-mount .popoutBanner-19WKGg::before,
-#app-mount .profileBanner-33-uE1::before {
+#app-mount .popoutBanner-3cqRD9::before,
+#app-mount .profileBanner-1owKI5::before {
 	content: "";
 	position: absolute;
 	background: #000 var(--user-background) var(--user-popout-position, center)/cover no-repeat;
@@ -18,13 +18,13 @@
 	bottom: 0;
 	left: 0;
 }
-#app-mount .userPopout-xaxa6l .avatarPositionNormal-aZjAsn {
+#app-mount .userPopout-2j1gM4 .avatarPositionNormal-2jWoC2 {
 	top: 76px !important;
 	margin-top: var(--user-background, -60px) !important;
 }
-#app-mount .userPopout-xaxa6l .headerTop-3vNv-a {
+#app-mount .userPopout-2j1gM4 .headerTop-3GPUSF {
 	padding: 58px 16px 16px;
 }
-#app-mount .root-3QyAh1 .headerTop-547GTz {
+#app-mount .root-8LYsGj .headerTop-1PNKck {
 	min-height: 32px;
 }
