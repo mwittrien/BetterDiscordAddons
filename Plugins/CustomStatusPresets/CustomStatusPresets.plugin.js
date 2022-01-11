@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomStatusPresets",
 			"author": "DevilBro",
-			"version": "1.0.9",
+			"version": "1.1.0",
 			"description": "Allows you to save Custom Statuses as Quick Select"
 		}
 	};
