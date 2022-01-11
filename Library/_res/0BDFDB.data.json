@@ -1190,7 +1190,7 @@
 		"ErrorScreen": {"props": ["wrapper", "flexWrapper", "note"]},
 		"ExpressionPicker": {"props": ["contentWrapper", "navButton", "navList"]},
 		"File": {"props": ["downloadButton", "fileNameLink"]},
-		"Flex": {"props": ["alignBaseline", "alignCenter"]},
+		"Flex": {"props": ["alignBaseline", "alignCenter"], "length": 24, "smaller": true},
 		"FlexChild": {"props": ["flexChild", "flex"]},
 		"FlowerStar": {"props": ["flowerStarContainer", "flowerStar"]},
 		"FormText": {"props": ["description", "modeDefault"]},

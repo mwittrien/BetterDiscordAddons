@@ -1150,11 +1150,11 @@ module.exports = (_ => {
 							context_disablepredefined:			"사전 정의 된 카테고리 비활성화",
 							context_inpredefined:				"사전 정의 된 카테고리에 고정됨",
 							context_pinchannel:					"채널 목록에 고정",
-							context_pindm:						"쪽지 고정",
+							context_pindm:						"개인 메시지 고정",
 							context_pinguild:					"서버 목록에 고정",
 							context_unpinchannel:				"채널 목록에서 분리",
 							context_unpinguild:					"서버 목록에서 분리",
-							header_pinneddms:					"고정 된 쪽지",
+							header_pinneddms:					"고정 된 개인 메시지",
 							modal_colorpicker1:					"카테고리 색상"
 						};
 					case "lt":		// Lithuanian
