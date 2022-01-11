@@ -1097,22 +1097,6 @@
 			"themeUndefined": "theme-undefined",
 			"voiceDraggable": "draggable-1KoBzC"
 		},
-		"ColorPicker": {
-			"colorPickerCustom": "colorPickerCustom-2CWBn2",
-			"colorPickerDropper": "colorPickerDropper-3c2mIf",
-			"colorPickerDropperFg": "colorPickerDropperFg-3jYKWI",
-			"colorPickerRow": "colorPickerRow-1LgLnl",
-			"colorPickerSwatch": "colorPickerSwatch-5GX3Ve",
-			"container": "container-3sNMIc",
-			"custom": "custom-2SJn4n",
-			"customContainer": "customContainer-3fZxdw",
-			"customColorPickerInput": "customColorPickerInput-14pB0r",
-			"default": "default-cS_caM",
-			"defaultContainer": "defaultContainer-Z8qCJn",
-			"disabled": "disabled-1C4eHl",
-			"input": "input-GfazGc",
-			"noColor": "noColor-1pdBDm"
-		},
 		"ColorPickerInner": {
 			"hue": "hue-13HAGb",
 			"saturation": "saturation-1FDvtn",
@@ -1185,6 +1169,7 @@
 		"ChatWindow": {"props": ["chat", "channelTextArea", "chatContent"]},
 		"Checkbox": {"props": ["checkboxWrapper", "round"]},
 		"Clamped": {"props": ["clamped"]},
+		"ColorPicker": {"props": ["colorPickerCustom", "colorPickerDropper"]},
 		"Combobox": {"props": ["combobox", "itemLabel"]},
 		"Cursor": {"props": ["cursorDefault", "userSelectNone"]},
 		"CustomStatusIcon": {"props": ["textRuler", "emoji", "icon"]},
