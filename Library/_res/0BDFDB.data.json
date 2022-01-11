@@ -3337,6 +3337,7 @@
 			"first": "Първо",
 			"from": "От",
 			"gradient": "Градиент",
+			"installed": "Инсталирани"
 			"last": "Последно",
 			"left": "Наляво",
 			"loading": "Зарежда се {{var0}}",
@@ -3396,6 +3397,7 @@
 			"first": "První",
 			"from": "Z",
 			"gradient": "Spád",
+			"installed": "Nainstalováno"
 			"last": "Poslední",
 			"left": "Vlevo, odjet",
 			"loading": "Načítání {{var0}}",
@@ -3455,6 +3457,7 @@
 			"first": "Først",
 			"from": "Fra",
 			"gradient": "Gradient",
+			"installed": "Installeret"
 			"last": "Sidst",
 			"left": "Venstre",
 			"loading": "Indlæser {{var0}}",
@@ -3514,6 +3517,7 @@
 			"first": "Zuerst",
 			"from": "Von",
 			"gradient": "Gradient",
+			"installed": "Installiert"
 			"last": "Zuletzt",
 			"left": "Links",
 			"loading": "Lädt {{var0}}",
@@ -3573,6 +3577,7 @@
 			"first": "Πρώτα",
 			"from": "Από",
 			"gradient": "Βαθμίδα",
+			"installed": "Εγκατασταθεί"
 			"last": "Τελευταίος",
 			"left": "Αριστερά",
 			"loading": "Φόρτωση {{var0}}",
@@ -3632,6 +3637,7 @@
 			"first": "Primero",
 			"from": "Desde",
 			"gradient": "Degradado",
+			"installed": "Instalado"
 			"last": "Último",
 			"left": "Izquierda",
 			"loading": "Cargando {{var0}}",
@@ -3691,6 +3697,7 @@
 			"first": "Ensimmäinen",
 			"from": "Alkaen",
 			"gradient": "Kaltevuus",
+			"installed": "Asennettu"
 			"last": "Kestää",
 			"left": "Vasen",
 			"loading": "Ladataan {{var0}}",
@@ -3750,6 +3757,7 @@
 			"first": "Première",
 			"from": "De",
 			"gradient": "Pente",
+			"installed": "Installée"
 			"last": "Dernier",
 			"left": "Gauche",
 			"loading": "Chargement de {{var0}}",
@@ -3809,6 +3817,7 @@
 			"first": "प्रथम",
 			"from": "से",
 			"gradient": "ढाल",
+			"installed": "स्थापित"
 			"last": "पिछले",
 			"left": "बाएं",
 			"loading": "लोड हो रहा है {{var0}}",
@@ -3868,6 +3877,7 @@
 			"first": "Prvi",
 			"from": "Iz",
 			"gradient": "Gradijent",
+			"installed": "Instaliran"
 			"last": "Posljednji",
 			"left": "Lijevo",
 			"loading": "Učitavanje {{var0}}",
@@ -3927,6 +3937,7 @@
 			"first": "Első",
 			"from": "Erről",
 			"gradient": "Gradiens",
+			"installed": "Telepítve"
 			"last": "Utolsó",
 			"left": "Bal",
 			"loading": "{{var0}} betöltése",
@@ -3986,6 +3997,7 @@
 			"first": "Primo",
 			"from": "A partire dal",
 			"gradient": "Pendenza",
+			"installed": "Installato"
 			"last": "Scorso",
 			"left": "Sinistra",
 			"loading": "Caricamento di {{var0}}",
@@ -4045,6 +4057,7 @@
 			"first": "最初",
 			"from": "から",
 			"gradient": "勾配",
+			"installed": "インストール済み"
 			"last": "最終",
 			"left": "左",
 			"loading": "を読み込んでいます {{var0}}",
@@ -4104,6 +4117,7 @@
 			"first": "먼저",
 			"from": "에서",
 			"gradient": "구배",
+			"installed": "설치된"
 			"last": "마지막",
 			"left": "왼쪽",
 			"loading": "로드 중 {{var0}}",
@@ -4163,6 +4177,7 @@
 			"first": "Pirmas",
 			"from": "Nuo",
 			"gradient": "Gradientas",
+			"installed": "Įdiegta"
 			"last": "Paskutinis",
 			"left": "Kairėje",
 			"loading": "Įkeliama {{var0}}",
@@ -4222,6 +4237,7 @@
 			"first": "Eerste",
 			"from": "Van",
 			"gradient": "Verloop",
+			"installed": "Geïnstalleerd"
 			"last": "Laatste",
 			"left": "Links",
 			"loading": "Laden {{var0}}",
@@ -4281,6 +4297,7 @@
 			"first": "Først",
 			"from": "Fra",
 			"gradient": "Gradient",
+			"installed": "Installert"
 			"last": "Siste",
 			"left": "Venstre",
 			"loading": "Laster inn {{var0}}",
@@ -4340,6 +4357,7 @@
 			"first": "Pierwszy",
 			"from": "Od",
 			"gradient": "Gradient",
+			"installed": "Zainstalowany"
 			"last": "Ostatni",
 			"left": "Lewo",
 			"loading": "Ładowanie {{var0}}",
@@ -4399,6 +4417,7 @@
 			"first": "Primeiro",
 			"from": "De",
 			"gradient": "Gradiente",
+			"installed": "Instalado"
 			"last": "Último",
 			"left": "Esquerda",
 			"loading": "Carregando {{var0}}",
@@ -4458,6 +4477,7 @@
 			"first": "Primul",
 			"from": "Din",
 			"gradient": "Gradient",
+			"installed": "Instalat"
 			"last": "Ultimul",
 			"left": "Stânga",
 			"loading": "Se încarcă {{var0}}",
@@ -4517,6 +4537,7 @@
 			"first": "Первый",
 			"from": "Из",
 			"gradient": "Градиент",
+			"installed": "Установлен"
 			"last": "Последний",
 			"left": "Слева",
 			"loading": "Загрузка {{var0}}",
@@ -4576,6 +4597,7 @@
 			"first": "Först",
 			"from": "Från",
 			"gradient": "Lutning",
+			"installed": "Installerat"
 			"last": "Sista",
 			"left": "Vänster",
 			"loading": "Laddar {{var0}}",
@@ -4635,6 +4657,7 @@
 			"first": "อันดับแรก",
 			"from": "จาก",
 			"gradient": "ไล่ระดับสี",
+			"installed": "ติดตั้งแล้ว"
 			"last": "ล่าสุด",
 			"left": "ซ้าย",
 			"loading": "กำลังโหลด{{var0}}",
@@ -4694,6 +4717,7 @@
 			"first": "İlk",
 			"from": "Nereden",
 			"gradient": "Gradyan",
+			"installed": "Kurulmuş"
 			"last": "Son",
 			"left": "Ayrıldı",
 			"loading": "Yükleniyor {{var0}}",
@@ -4753,6 +4777,7 @@
 			"first": "Спочатку",
 			"from": "Від",
 			"gradient": "Градієнт",
+			"installed": "Встановлено"
 			"last": "Останній",
 			"left": "Ліворуч",
 			"loading": "Завантаження {{var0}}",
@@ -4812,6 +4837,7 @@
 			"first": "Đầu tiên",
 			"from": "Từ",
 			"gradient": "Dốc",
+			"installed": "Cài đặt"
 			"last": "Cuối cùng",
 			"left": "Trái",
 			"loading": "Đang tải {{var0}}",
@@ -4871,6 +4897,7 @@
 			"first": "第一",
 			"from": "从",
 			"gradient": "梯度",
+			"installed": "已安装"
 			"last": "持续",
 			"left": "剩下",
 			"loading": "正在加载 {{var0}}",
@@ -4930,6 +4957,7 @@
 			"first": "第一",
 			"from": "從",
 			"gradient": "梯度",
+			"installed": "已安裝"
 			"last": "持續",
 			"left": "剩下",
 			"loading": "正在加載 {{var0}}",
@@ -4989,6 +5017,7 @@
 			"first": "First",
 			"from": "From",
 			"gradient": "Gradient",
+			"installed": "Installed"
 			"last": "Last",
 			"left": "Left",
 			"loading": "Loading {{var0}}",
