@@ -1184,7 +1184,7 @@
 		"ChannelTextAreaButton": {"props": ["buttonWrapper", "active"]},
 		"ChannelTextAreaCharCounter": {"props": ["characterCount", "error"]},
 		"ChannelTextAreaSlate": {"props": ["slateContainer", "placeholder"]},
-		"ChatWindow": {"props": ["chat", "channelTextArea", "threadSidebar"]},
+		"ChatWindow": {"props": ["chat", "channelTextArea", "chatContent"]},
 		"Checkbox": {"props": ["checkboxWrapper", "round"]},
 		"Clamped": {"props": ["clamped"]},
 		"Combobox": {"props": ["combobox", "itemLabel"]},
