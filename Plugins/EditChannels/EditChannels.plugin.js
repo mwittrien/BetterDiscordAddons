@@ -945,7 +945,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.forceUpdate(instance);
 					}
 					else instance.checkTimeout = BDFDB.TimeUtils.timeout(_ => {
-						BDFDB.LibraryRequires.request(url, (error, response, result) => {
+						BDFDB.LibraryRequires.request(url, {agentOptions: {rejectUnauthorized: false}}, (error, response, result) => {
 							delete instance.checkTimeout;
 							if (instance.props.disabled) {
 								delete instance.props.success;

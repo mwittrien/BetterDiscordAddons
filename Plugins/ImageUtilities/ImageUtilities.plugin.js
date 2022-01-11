@@ -1026,7 +1026,7 @@ module.exports = (_ => {
 			
 			downloadFile (url, path, fallbackUrl, alternativeName) {
 				url = url.startsWith("/assets") ? (window.location.origin + url) : url;
-				BDFDB.LibraryRequires.request(url, {encoding: null}, (error, response, body) => {
+				BDFDB.LibraryRequires.request(url, {agentOptions: {rejectUnauthorized: false}, encoding: null}, (error, response, body) => {
 					let type = this.isValid(url, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
 					if (error || response.statusCode != 200) {
 						if (fallbackUrl) this.downloadFile(fallbackUrl, path, null, alternativeName);
@@ -1043,7 +1043,7 @@ module.exports = (_ => {
 			
 			downloadFileAs (url, fallbackUrl, alternativeName) {
 				url = url.startsWith("/assets") ? (window.location.origin + url) : url;
-				BDFDB.LibraryRequires.request(url, {encoding: null}, (error, response, body) => {
+				BDFDB.LibraryRequires.request(url, {agentOptions: {rejectUnauthorized: false}, encoding: null}, (error, response, body) => {
 					let type = this.isValid(url, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
 					if (error || response.statusCode != 200) {
 						if (fallbackUrl) this.downloadFileAs(fallbackUrl, null, alternativeName);
@@ -1061,7 +1061,7 @@ module.exports = (_ => {
 			}
 			
 			copyFile (url) {
-				BDFDB.LibraryRequires.request(url, {encoding: null}, (error, response, body) => {
+				BDFDB.LibraryRequires.request(url, {agentOptions: {rejectUnauthorized: false}, encoding: null}, (error, response, body) => {
 					let type = this.isValid(url, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
 					if (error) BDFDB.NotificationUtils.toast(this.labels.toast_copy_failed.replace("{{var0}}", type), {type: "danger"});
 					else if (body) {
