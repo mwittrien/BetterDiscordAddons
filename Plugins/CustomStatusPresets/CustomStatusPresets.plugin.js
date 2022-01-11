@@ -72,9 +72,9 @@ module.exports = (_ => {
 		var presets = {};
 		
 		const ClearAfterValues = {
-			HOURS_1: 3600000
-			HOURS_4: 14400000
-			MINUTES_30: 1800000
+			HOURS_1: 3600000,
+			HOURS_4: 14400000,
+			MINUTES_30: 1800000,
 			TODAY: "TODAY"
 		};
 		
