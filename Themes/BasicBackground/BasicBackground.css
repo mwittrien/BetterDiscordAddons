@@ -213,7 +213,7 @@ body,														/* body														*/
 #app-mount .privateChannels-oVe7HL,							/* dmchannels												*/
 #app-mount .panels-3wFtMD > *,								/* account/voice		inner								*/
 #app-mount .chat-2ZfjoI,									/* chat					container							*/
-#app-mount .threadSidebar-1o3BTy,							/* chat					thread sidebar						*/
+#app-mount .container-3XgAHv,								/* chat					thread sidebar						*/
 #app-mount .wrapper-3HVHpV,									/* chat					messages loading					*/
 #app-mount .noChannel-Z1DQK7,								/* nochannel												*/
 #app-mount .members-3WRCEx,									/* members													*/
@@ -1605,7 +1605,7 @@ body::after {
 
 /* ----		6.7.	THREADS							---- */
 
-.threadSidebar-1o3BTy {
+.container-3XgAHv {											/* threadsidebar											*/
 	position: absolute;
 	top: 48px;
 	right: 0;
@@ -1613,17 +1613,17 @@ body::after {
 	border-radius: 0;
 	z-index: 100;
 }
-.threadSidebar-1o3BTy .container-ZMc96U {										/* searchpage			header								*/
+.container-3XgAHv .container-ZMc96U {						/* threadsidebar		header								*/
 	background-color: rgba(var(--transparencycolor), calc(var(--guildchanneltransparency) * 0.8));
 	box-shadow: unset;
 	border-radius: 0 0 0 8px;
 }
-.threadSidebar-1o3BTy .form-3gdLxP {
+.container-3XgAHv .form-3gdLxP {							/* threadsidebar		form								*/
 	border-radius: 8px 0 0 0;
 }
 @media (max-width: 1150px) {
-	.threadSidebar-1o3BTy::before,
-	.threadSidebar-1o3BTy::after {
+	.container-3XgAHv::before,
+	.container-3XgAHv::after {
 		content: "";
 		position: absolute;
 		top: 0;
@@ -1633,18 +1633,18 @@ body::after {
 		pointer-events: none;
 		z-index: -1;
 	}
-	.threadSidebar-1o3BTy::before {
+	.container-3XgAHv::before {
 		background: var(--background) var(--backgroundposition)/var(--backgroundsize);
 		background-attachment: fixed;
 	}
-	.threadSidebar-1o3BTy::after {
+	.container-3XgAHv::after {
 		background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + var(--memberlisttransparency) * 0.85));
 		backdrop-filter: blur(var(--backgroundblur));
 	}
-	.threadSidebar-1o3BTy .container-ZMc96U {
+	.container-3XgAHv .container-ZMc96U {
 		border-radius: 0;
 	}
-	.threadSidebar-1o3BTy .form-3gdLxP {
+	.container-3XgAHv .form-3gdLxP {
 		border-radius: 0;
 	}
 }
