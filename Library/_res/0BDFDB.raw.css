@@ -512,6 +512,8 @@ img:not([src]), img[src=""], img[src="null"] {
 	display: flex;
 	position: relative;
 	cursor: pointer;
+	width: 24px;
+	height: 24px;
 }
 
 [REPLACE_CLASS_menuhint] {
