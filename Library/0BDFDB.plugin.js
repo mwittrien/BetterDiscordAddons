@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.6
+ * @version 2.0.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,18 +19,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.0.6",
+			"version": "2.0.7",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
-		"changeLog": {
-			"progress": {
-				"Update Fixes": "Slowly fixing all the Shit Discord broke"
-			},
-			"fixed": {
-				"Context Menu Entries": "Plugins that try to add right click menu entries, work again, some menus need to be opened once for the plugin entries to be added properly, so open them twice once"
-			}
-		}
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
 	};
 	
 	const DiscordObjects = {};
@@ -1195,7 +1187,7 @@ module.exports = (_ => {
 			else return "";
 		};
 		
-		InternalBDFDB.findModule = function (type, cacheString, filter, useExport) {
+		InternalBDFDB.findModule = function (type, cacheString, filter, useExport, noWarnings = false) {
 			if (!BDFDB.ObjectUtils.is(Cache.modules[type])) Cache.modules[type] = {module: {}, export: {}};
 			if (useExport && Cache.modules[type].export[cacheString]) return Cache.modules[type].export[cacheString];
 			else if (!useExport && Cache.modules[type].module[cacheString]) return Cache.modules[type].module[cacheString];
@@ -1206,7 +1198,7 @@ module.exports = (_ => {
 					else Cache.modules[type].module[cacheString] = m;
 					return m;
 				}
-				else BDFDB.LogUtils.warn(`${cacheString} [${type}] not found in WebModules`);
+				else if (!noWarnings) BDFDB.LogUtils.warn(`${cacheString} [${type}] not found in WebModules`);
 			}
 		};
 		
@@ -1248,8 +1240,8 @@ module.exports = (_ => {
 				return value !== undefined && !(typeof value == "string" && !value);
 			}) && m, useExport);
 		};
-		BDFDB.ModuleUtils.findByName = function (name, useExport) {
-			return InternalBDFDB.findModule("name", JSON.stringify(name), m => m.displayName === name && m || m.render && m.render.displayName === name && m || m[name] && m[name].displayName === name && m[name], typeof useExport != "boolean" ? true : useExport);
+		BDFDB.ModuleUtils.findByName = function (name, useExport, noWarnings = false) {
+			return InternalBDFDB.findModule("name", JSON.stringify(name), m => m.displayName === name && m || m.render && m.render.displayName === name && m || m[name] && m[name].displayName === name && m[name], typeof useExport != "boolean" ? true : useExport, noWarnings);
 		};
 		BDFDB.ModuleUtils.findByString = function (...strings) {
 			strings = strings.flat(10);
@@ -2151,15 +2143,17 @@ module.exports = (_ => {
 				let pluginData = {plugin: plugin, patchTypes: patchedModules[type]};
 				let unmappedType = type.split(" _ _ ")[1] || type;
 				
+				let finderData = InternalData.ModuleUtilsConfig.Finder[unmappedType];
 				let config = {
-					classNames: [InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].class].flat(10).filter(n => DiscordClasses[n]),
-					stringFind: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].strings,
-					propertyFind: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].props,
-					specialFilter: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].special && InternalBDFDB.createFilter(InternalData.ModuleUtilsConfig.Finder[unmappedType].special),
-					subComponent: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].subComponent,
-					forceObserve: InternalData.ModuleUtilsConfig.ForceObserve.includes(unmappedType),
-					exported: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].exported || false,
-					path: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].path,
+					classNames: [finderData && finderData.class].flat(10).filter(n => DiscordClasses[n]),
+					lazyLoaded: finderData && finderData.lazyLoaded,
+					stringFind: finderData && finderData.strings,
+					propertyFind: finderData && finderData.props,
+					specialFilter: finderData && finderData.special && InternalBDFDB.createFilter(finderData.special),
+					subComponent: finderData && finderData.subComponent,
+					forceObserve: finderData && finderData.forceObserve,
+					exported: finderData && finderData.exported || false,
+					path: finderData && finderData.path,
 					mapped: InternalData.ModuleUtilsConfig.PatchMap[type]
 				};
 				config.nonRender = config.specialFilter || BDFDB.ObjectUtils.toArray(pluginData.patchTypes).flat(10).filter(n => n && !InternalData.ModuleUtilsConfig.InstanceFunctions.includes(n)).length > 0;
@@ -2181,7 +2175,7 @@ module.exports = (_ => {
 						exports = config.path && BDFDB.ObjectUtils.get(exports, config.path) || exports;
 						exports && InternalBDFDB.patchComponent(pluginData, InternalBDFDB.isMemoOrForwardRef(exports) ? exports.default : exports, mappedType, config);
 					};
-					if (config.classNames.length) InternalBDFDB.checkForInstance(pluginData, mappedType, config);
+					if (config.classNames.length) InternalBDFDB.searchComponent(pluginData, mappedType, config);
 					else if (config.subComponent && config.subComponent.strings || config.stringFind) patchSpecial("findByString", config.subComponent && config.subComponent.strings || config.stringFind);
 					else if (config.subComponent && config.subComponent.props || config.propertyFind) patchSpecial("findByProperties", config.subComponent && config.subComponent.props || config.propertyFind);
 					else if (config.nonRender) patchSpecial("findByName", name);
@@ -2235,7 +2229,7 @@ module.exports = (_ => {
 		InternalBDFDB.isMemoOrForwardRef = function (exports) {
 			return exports && exports.default && typeof exports.default.$$typeof == "symbol" && ((exports.default.$$typeof.toString() || "").indexOf("memo") > -1 || (exports.default.$$typeof.toString() || "").indexOf("forward_ref") > -1);
 		};
-		InternalBDFDB.checkEle = function (pluginDataObjs, ele, type, config) {
+		InternalBDFDB.checkElementForComponent = function (pluginDataObjs, ele, type, config) {
 			pluginDataObjs = [pluginDataObjs].flat(10).filter(n => n);
 			let ins = BDFDB.ReactUtils.getInstance(ele);
 			if (typeof config.specialFilter == "function") {
@@ -2261,9 +2255,9 @@ module.exports = (_ => {
 			}
 			return false;
 		};
-		InternalBDFDB.checkForInstance = function (pluginData, type, config) {
+		InternalBDFDB.searchComponent = function (pluginData, type, config) {
 			let instanceFound = false;
-			if (!config.forceObserve) {
+			if (!config.forceObserve && !config.lazyLoaded) {
 				const app = document.querySelector(BDFDB.dotCN.app);
 				if (app) {
 					let appIns = BDFDB.ReactUtils.findConstructor(app, type, {unlimited: true}) || BDFDB.ReactUtils.findConstructor(app, type, {unlimited: true, up: true});
@@ -2272,9 +2266,18 @@ module.exports = (_ => {
 			}
 			if (!instanceFound) {
 				let elementFound = false, classes = config.classNames.map(n => BDFDB.disCN[n]), selector = config.classNames.map(n => BDFDB.dotCN[n]).join(", ");
-				for (let ele of document.querySelectorAll(selector)) {
-					elementFound = InternalBDFDB.checkEle(pluginData, ele, type, config);
-					if (elementFound) break;
+				if (!config.lazyLoaded) {
+					for (let ele of document.querySelectorAll(selector)) {
+						elementFound = InternalBDFDB.checkElementForComponent(pluginData, ele, type, config);
+						if (elementFound) break;
+					}
+				}
+				else {
+					let component = BDFDB.ModuleUtils.findByName(type, false, true);
+					if (component) {
+						elementFound = true;
+						InternalBDFDB.patchComponent(pluginData, component.exports, type, config);
+					}
 				}
 				if (!elementFound) {
 					if (!InternalBDFDB.patchObserverData.observer) {
@@ -2285,7 +2288,14 @@ module.exports = (_ => {
 								for (let type in InternalBDFDB.patchObserverData.data) if (!InternalBDFDB.patchObserverData.data[type].found) {
 									let ele = null;
 									if ((ele = BDFDB.DOMUtils.containsClass(n, ...InternalBDFDB.patchObserverData.data[type].classes) ? n : n.querySelector(InternalBDFDB.patchObserverData.data[type].selector)) != null) {
-										InternalBDFDB.patchObserverData.data[type].found = InternalBDFDB.checkEle(InternalBDFDB.patchObserverData.data[type].plugins, ele, type, InternalBDFDB.patchObserverData.data[type].config);
+										if (!config.lazyLoaded) InternalBDFDB.patchObserverData.data[type].found = InternalBDFDB.checkElementForComponent(InternalBDFDB.patchObserverData.data[type].plugins, ele, type, InternalBDFDB.patchObserverData.data[type].config);
+										else {
+											let component = BDFDB.ModuleUtils.findByName(type, false, true);
+											if (component) {
+												InternalBDFDB.patchObserverData.data[type].found = true;
+												InternalBDFDB.patchComponent(InternalBDFDB.patchObserverData.data[type].plugins, component.exports, type, InternalBDFDB.patchObserverData.data[type].config);
+											}
+										}
 										if (InternalBDFDB.patchObserverData.data[type].found) {
 											delete InternalBDFDB.patchObserverData.data[type];
 											if (BDFDB.ObjectUtils.isEmpty(InternalBDFDB.patchObserverData.data)) {
@@ -6104,9 +6114,15 @@ module.exports = (_ => {
 				BDFDB.ReactUtils.forceUpdate(this);
 			}
 			render() {
-				return BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.favbuttoncontainer, this.props.className),
-					children: BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.FavButton, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {onClick: this.handleClick.bind(this)}), "className"))
+				return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
+					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.favbuttoncontainer, BDFDB.disCN.favbutton, this.props.isFavorite && BDFDB.disCN.favbuttonselected, this.props.className),
+					onClick: this.handleClick.bind(this),
+					children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+						name: InternalComponents.LibraryComponents.SvgIcon.Names[this.props.isFavorite ? "FAVORITE_FILLED" : "FAVORITE"],
+						width: this.props.width || 24,
+						height: this.props.height || 24,
+						className: BDFDB.disCN.favbuttonicon
+					})
 				});
 			}
 		};
