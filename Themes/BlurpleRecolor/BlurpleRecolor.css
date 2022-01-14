@@ -811,7 +811,7 @@
 	border-color: rgb(var(--accentcolor));
 }
 
-.background-3d_SjE .lookLink-9FtZy-.colorLink-35jkBc {
+.background-3d_SjE .lookLink-15mFoz.colorLink-35jkBc {
 	color: rgb(var(--accentcolor));
 }
 .avatarUploaderInner-yEhTv5 {								/* accountsettings		avatar upload						*/
@@ -1705,7 +1705,7 @@ a.metadataName-1KMZtB {
 	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostangel_accent2.svg) center/cover no-repeat;
 }
-#app-mount .wrapper-3Zq_cJ .lookInverted-2D7oAl.colorBrand-3pXr91 {
+#app-mount .wrapper-3Zq_cJ .lookInverted-2mDUMi.colorBrand-I6CyqQ {
 	color: rgb(var(--accentcolor)) !important;
 }
 .tierMarkerLabelPlusIcon-2zLkr7 {							/* modal				prebuy icon							*/
@@ -1887,7 +1887,7 @@ a.metadataName-1KMZtB {
 
 /* ----		10.17.	NICKNAMEMODAL					---- */
 
-.reset-2Ufv5M.lookLink-9FtZy-.colorLink-35jkBc {
+.reset-2Ufv5M.lookLink-15mFoz.colorLink-35jkBc {
 	color: rgb(var(--accentcolor));
 }
 
@@ -2081,84 +2081,84 @@ a.metadataName-1KMZtB {
 
 /* ----		12.2.	BUTTONS							---- */
 
-#app-mount .lookInverted-2D7oAl.colorBrand-3pXr91 .spinnerItem-3GlVyU,
-#app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91 .spinnerItem-3GlVyU,
-#app-mount .lookLink-9FtZy-.colorBrand-3pXr91 .spinnerItem-3GlVyU,
-#app-mount .lookInverted-2D7oAl.colorBrandNew-g5lmBU .spinnerItem-3GlVyU,
-#app-mount .lookOutlined-3sRXeN.colorBrandNew-g5lmBU .spinnerItem-3GlVyU,
-#app-mount .lookLink-9FtZy-.colorBrandNew-g5lmBU .spinnerItem-3GlVyU {
+#app-mount .lookInverted-2mDUMi.colorBrand-I6CyqQ .spinnerItem-3dCJpG,
+#app-mount .lookOutlined-3yKVGo.colorBrand-I6CyqQ .spinnerItem-3dCJpG,
+#app-mount .lookLink-15mFoz.colorBrand-I6CyqQ .spinnerItem-3dCJpG,
+#app-mount .lookInverted-2mDUMi.colorBrandNew-2-gGsS .spinnerItem-3dCJpG,
+#app-mount .lookOutlined-3yKVGo.colorBrandNew-2-gGsS .spinnerItem-3dCJpG,
+#app-mount .lookLink-15mFoz.colorBrandNew-2-gGsS .spinnerItem-3dCJpG {
 	background-color: rgb(var(--accentcolor));
 }
 
 #app-mount .btn-115Sr0.btnPrimary-7AVO-X:hover:not(:disabled),
-#app-mount .lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-3bP3fX):hover,
-#app-mount .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover,
-#app-mount .lookFilled-1Gx00P.colorBrandNew-g5lmBU:not(.buttonColor-3bP3fX):hover,
-#app-mount .lookFilled-1Gx00P.hoverBrandNew-OURftq.hasHover-3X1-zV:hover {
+#app-mount .lookFilled-yCfaCM.colorBrand-I6CyqQ:not(.buttonColor-3bP3fX):hover,
+#app-mount .lookFilled-yCfaCM.hoverBrand-9W5Bs0.hasHover-26V98q:hover,
+#app-mount .lookFilled-yCfaCM.colorBrandNew-2-gGsS:not(.buttonColor-3bP3fX):hover,
+#app-mount .lookFilled-yCfaCM.hoverBrandNew-2zxGm3.hasHover-26V98q:hover {
 	background: var(--accentcolor-hover);
 }
-#app-mount .lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-3bP3fX):active,
-#app-mount .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:active,
-#app-mount .lookFilled-1Gx00P.colorBrandNew-g5lmBU:not(.buttonColor-3bP3fX):active,
-#app-mount .lookFilled-1Gx00P.hoverBrandNew-OURftq.hasHover-3X1-zV:active {
+#app-mount .lookFilled-yCfaCM.colorBrand-I6CyqQ:not(.buttonColor-3bP3fX):active,
+#app-mount .lookFilled-yCfaCM.hoverBrand-9W5Bs0.hasHover-26V98q:active,
+#app-mount .lookFilled-yCfaCM.colorBrandNew-2-gGsS:not(.buttonColor-3bP3fX):active,
+#app-mount .lookFilled-yCfaCM.hoverBrandNew-2zxGm3.hasHover-26V98q:active {
 	background: var(--accentcolor-active);
 }
 #app-mount .btn-115Sr0.btnPrimary-7AVO-X,
-#app-mount .lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-3bP3fX),
-#app-mount .lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-3bP3fX):disabled,
-#app-mount .lookFilled-1Gx00P.colorBrandNew-g5lmBU:not(.buttonColor-3bP3fX),
-#app-mount .lookFilled-1Gx00P.colorBrandNew-g5lmBU:not(.buttonColor-3bP3fX):disabled {
+#app-mount .lookFilled-yCfaCM.colorBrand-I6CyqQ:not(.buttonColor-3bP3fX),
+#app-mount .lookFilled-yCfaCM.colorBrand-I6CyqQ:not(.buttonColor-3bP3fX):disabled,
+#app-mount .lookFilled-yCfaCM.colorBrandNew-2-gGsS:not(.buttonColor-3bP3fX),
+#app-mount .lookFilled-yCfaCM.colorBrandNew-2-gGsS:not(.buttonColor-3bP3fX):disabled {
 	background: rgb(var(--accentcolor));
 }
 
-#app-mount .lookInverted-2D7oAl.colorBrand-3pXr91:hover,
-#app-mount .lookInverted-2D7oAl.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover,
-#app-mount .lookInverted-2D7oAl.colorBrandNew-g5lmBU:hover,
-#app-mount .lookInverted-2D7oAl.hoverBrandNew-OURftq.hasHover-3X1-zV:hover {
+#app-mount .lookInverted-2mDUMi.colorBrand-I6CyqQ:hover,
+#app-mount .lookInverted-2mDUMi.hoverBrand-9W5Bs0.hasHover-26V98q:hover,
+#app-mount .lookInverted-2mDUMi.colorBrandNew-2-gGsS:hover,
+#app-mount .lookInverted-2mDUMi.hoverBrandNew-2zxGm3.hasHover-26V98q:hover {
 	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
 }
-#app-mount .lookInverted-2D7oAl.colorBrand-3pXr91:active,
-#app-mount .lookInverted-2D7oAl.hoverBrand-1_Fxlk.hasHover-3X1-zV:active,
-#app-mount .lookInverted-2D7oAl.colorBrandNew-g5lmBU:active,
-#app-mount .lookInverted-2D7oAl.hoverBrandNew-OURftq.hasHover-3X1-zV:active {
+#app-mount .lookInverted-2mDUMi.colorBrand-I6CyqQ:active,
+#app-mount .lookInverted-2mDUMi.hoverBrand-9W5Bs0.hasHover-26V98q:active,
+#app-mount .lookInverted-2mDUMi.colorBrandNew-2-gGsS:active,
+#app-mount .lookInverted-2mDUMi.hoverBrandNew-2zxGm3.hasHover-26V98q:active {
 	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
 }
-#app-mount .lookInverted-2D7oAl.colorBrand-3pXr91,
-#app-mount .lookInverted-2D7oAl.colorBrand-3pXr91:disabled,
-#app-mount .lookInverted-2D7oAl.colorBrandNew-g5lmBU,
-#app-mount .lookInverted-2D7oAl.colorBrand-3pXr91:disabled {
+#app-mount .lookInverted-2mDUMi.colorBrand-I6CyqQ,
+#app-mount .lookInverted-2mDUMi.colorBrand-I6CyqQ:disabled,
+#app-mount .lookInverted-2mDUMi.colorBrandNew-2-gGsS,
+#app-mount .lookInverted-2mDUMi.colorBrand-I6CyqQ:disabled {
 	color: rgb(var(--accentcolor));
 }
 
-#app-mount .lookOutlined-3sRXeN.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover,
-#app-mount .lookOutlined-3sRXeN.hoverBrandNew-OURftq.hasHover-3X1-zV:hover {
+#app-mount .lookOutlined-3yKVGo.hoverBrand-9W5Bs0.hasHover-26V98q:hover,
+#app-mount .lookOutlined-3yKVGo.hoverBrandNew-2zxGm3.hasHover-26V98q:hover {
 	border-color: rgba(var(--accentcolor), 0.6);
 }
-#app-mount .lookOutlined-3sRXeN.hoverBrand-1_Fxlk.hasHover-3X1-zV:active,
-#app-mount .lookOutlined-3sRXeN.hoverBrandNew-OURftq.hasHover-3X1-zV:active {
+#app-mount .lookOutlined-3yKVGo.hoverBrand-9W5Bs0.hasHover-26V98q:active,
+#app-mount .lookOutlined-3yKVGo.hoverBrandNew-2zxGm3.hasHover-26V98q:active {
 	background-color: rgba(var(--accentcolor), 0.1);
 	border-color: rgb(var(--accentcolor));
 }
-#app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91,
-#app-mount .lookOutlined-3sRXeN.colorBrand-3pXr91:disabled
-#app-mount .lookOutlined-3sRXeN.colorBrandNew-g5lmBU,,
-#app-mount .lookOutlined-3sRXeN.colorBrandNew-g5lmBU:disabled {
+#app-mount .lookOutlined-3yKVGo.colorBrand-I6CyqQ,
+#app-mount .lookOutlined-3yKVGo.colorBrand-I6CyqQ:disabled
+#app-mount .lookOutlined-3yKVGo.colorBrandNew-2-gGsS,,
+#app-mount .lookOutlined-3yKVGo.colorBrandNew-2-gGsS:disabled {
 	border-color: rgba(var(--accentcolor), 0.1);
 	color: rgb(var(--accentcolor));
 }
 
-#app-mount .lookLink-9FtZy-.colorBrand-3pXr91,
-#app-mount .lookLink-9FtZy-.colorBrandNew-g5lmBU {
+#app-mount .lookLink-15mFoz.colorBrand-I6CyqQ,
+#app-mount .lookLink-15mFoz.colorBrandNew-2-gGsS {
 	color: rgb(var(--accentcolor));
 }
-#app-mount .lookLink-9FtZy-.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover .contents-18-Yxp,
-#app-mount .lookLink-9FtZy-.hoverBrandNew-OURftq.hasHover-3X1-zV:hover .contents-18-Yxp {
+#app-mount .lookLink-15mFoz.hoverBrand-9W5Bs0.hasHover-26V98q:hover .contents-3ca1mk,
+#app-mount .lookLink-15mFoz.hoverBrandNew-2zxGm3.hasHover-26V98q:hover .contents-3ca1mk {
 	background-image: linear-gradient(0deg, transparent, transparent 1px, rgb(var(--accentcolor)) 0, rgb(var(--accentcolor)) 2px, transparent 0);
 	color: rgb(var(--accentcolor));
 }
 
-#app-mount .borderBrand-1gITAL,
-#app-mount .borderBrandNew-15fytK {
+#app-mount .borderBrand-P_n17U,
+#app-mount .borderBrandNew-W1AvIG {
 	border-color: rgb(var(--accentcolor)) !important;
 }
 
@@ -2403,7 +2403,7 @@ a.metadataName-1KMZtB {
 .root-sJwU_u::after {
 	border-right-color: rgb(var(--accentcolor2));
 }
-.root-sJwU_u .lookFilled-1Gx00P.colorWhite-rEQuAQ {
+.root-sJwU_u .lookFilled-yCfaCM.colorWhite-rEQuAQ {
 	color: rgb(var(--accentcolor2));
 }
 
