@@ -1100,11 +1100,6 @@
 			"themeUndefined": "theme-undefined",
 			"voiceDraggable": "draggable-1KoBzC"
 		},
-		"ColorPickerInner": {
-			"hue": "hue-13HAGb",
-			"saturation": "saturation-1FDvtn",
-			"wrapper": "wrapper-2AQieU"
-		},
 		"Toast": {
 			"avatar": "avatar-3xmbmC",
 			"bar": "bar-95Sdw1",
@@ -1174,6 +1169,7 @@
 		"Checkbox": {"props": ["checkboxWrapper", "round"]},
 		"Clamped": {"props": ["clamped"]},
 		"ColorPicker": {"props": ["colorPickerCustom", "colorPickerDropper"]},
+		"ColorPickerInner": {"props": ["hue", "saturation"]},
 		"Combobox": {"props": ["combobox", "itemLabel"]},
 		"Cursor": {"props": ["cursorDefault", "userSelectNone"]},
 		"CustomStatusIcon": {"props": ["textRuler", "emoji", "icon"]},
