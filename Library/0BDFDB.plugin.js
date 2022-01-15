@@ -4331,14 +4331,14 @@ module.exports = (_ => {
 			if (!key) return null;
 			else if (LibraryModules.SettingsUtils && (LibraryModules.SettingsUtils[key] || LibraryModules.SettingsUtils[key + "DoNotUseYet"])) return (LibraryModules.SettingsUtils[key] || LibraryModules.SettingsUtils[key + "DoNotUseYet"]).getSetting();
 			else {
-				const value = BDFDB.LibraryModules.SettingsStore.getAllSettings()[key.slice(0, 1).toLowerCase() + key.slice(1)];
+				const value = LibraryModules.SettingsStore.getAllSettings()[key.slice(0, 1).toLowerCase() + key.slice(1)];
 				return value != undefined ? value: null;
 			}
 		};
 		BDFDB.DiscordUtils.setSettings = function (key, value) {
 			if (!key) return;
 			else if (LibraryModules.SettingsUtils && (LibraryModules.SettingsUtils[key] || LibraryModules.SettingsUtils[key + "DoNotUseYet"])) (LibraryModules.SettingsUtils[key] || LibraryModules.SettingsUtils[key + "DoNotUseYet"]).updateSetting(value);
-			else BDFDB.LibraryModules.SettingsUtilsOld.updateRemoteSettings({[key.slice(0, 1).toLowerCase() + key.slice(1)]: value});
+			else LibraryModules.SettingsUtilsOld.updateRemoteSettings({[key.slice(0, 1).toLowerCase() + key.slice(1)]: value});
 		};
 		BDFDB.DiscordUtils.getZoomFactor = function () {
 			let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
@@ -6150,7 +6150,7 @@ module.exports = (_ => {
 							onChange: e => {
 								let file = e.currentTarget.files[0];
 								if (this.refInput && file && (!filter.length || filter.some(n => file.type.indexOf(n) == 0))) {
-									this.refInput.props.value = this.props.searchFolders ? file.path.split(file.name).slice(0, -1).join(file.name) : `${this.props.mode == "url" ? "url('" : ""}${(this.props.useFilePath) ? file.path : `data:${file.type};base64,${BDFDB.LibraryRequires.fs.readFileSync(file.path).toString("base64")}`}${this.props.mode ? "')" : ""}`;
+									this.refInput.props.value = this.props.searchFolders ? file.path.split(file.name).slice(0, -1).join(file.name) : `${this.props.mode == "url" ? "url('" : ""}${(this.props.useFilePath) ? file.path : `data:${file.type};base64,${LibraryRequires.fs.readFileSync(file.path).toString("base64")}`}${this.props.mode ? "')" : ""}`;
 									BDFDB.ReactUtils.forceUpdate(this.refInput);
 									this.refInput.handleChange(this.refInput.props.value);
 								}
@@ -8015,7 +8015,7 @@ module.exports = (_ => {
 				}
 				if (message) {
 					e.returnvalue.props.children.props[InternalData.authorIdAttribute] = message.author.id;
-					if (BDFDB.LibraryModules.FriendUtils.isFriend(message.author.id)) e.returnvalue.props.children.props[InternalData.authorFriendAttribute] = true;
+					if (LibraryModules.RelationshipUtils.isFriend(message.author.id)) e.returnvalue.props.children.props[InternalData.authorFriendAttribute] = true;
 					if (message.author.id == BDFDB.UserUtils.me.id) e.returnvalue.props.children.props[InternalData.authorSelfAttribute] = true;
 				}
 			}
@@ -8492,7 +8492,7 @@ module.exports = (_ => {
 			};
 			BDFDB.DevUtils.generateLanguageStrings = function (strings, config = {}) {
 				const language = config.language || "en";
-				const languages = BDFDB.ArrayUtils.removeCopies(BDFDB.ArrayUtils.is(config.languages) ? config.languages : ["en"].concat((BDFDB.LibraryModules.LanguageStore.languages || BDFDB.LibraryModules.LanguageStore._languages).filter(n => n.enabled).map(n => {
+				const languages = BDFDB.ArrayUtils.removeCopies(BDFDB.ArrayUtils.is(config.languages) ? config.languages : ["en"].concat((LibraryModules.LanguageStore.languages || LibraryModules.LanguageStore._languages).filter(n => n.enabled).map(n => {
 					if (BDFDB.LanguageUtils.languages[n.code]) return n.code;
 					else {
 						const code = n.code.split("-")[0];
@@ -8521,7 +8521,7 @@ module.exports = (_ => {
 						BDFDB.NotificationUtils.toast("Translation copied to clipboard", {
 							type: "success"
 						});
-						BDFDB.LibraryRequires.electron.clipboard.write({text: result});
+						LibraryRequires.electron.clipboard.write({text: result});
 					}
 					else {
 						const callback = translation => {
@@ -8538,7 +8538,7 @@ module.exports = (_ => {
 							}
 							next(languages.shift());
 						};
-						BDFDB.LibraryRequires.request(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${language}&tl=${lang}&dt=t&dj=1&source=input&q=${encodeURIComponent(text)}`, (error, response, result) => {
+						LibraryRequires.request(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${language}&tl=${lang}&dt=t&dj=1&source=input&q=${encodeURIComponent(text)}`, (error, response, result) => {
 							if (!error && result && response.statusCode == 200) {
 								try {callback(JSON.parse(result).sentences.map(n => n && n.trans).filter(n => n).join(""));}
 								catch (err) {callback("");}
