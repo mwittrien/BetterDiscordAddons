@@ -8015,7 +8015,7 @@ module.exports = (_ => {
 				}
 				if (message) {
 					e.returnvalue.props.children.props[InternalData.authorIdAttribute] = message.author.id;
-					if (LibraryModules.RelationshipUtils.isFriend(message.author.id)) e.returnvalue.props.children.props[InternalData.authorFriendAttribute] = true;
+					if (LibraryModules.RelationshipStore.isFriend(message.author.id)) e.returnvalue.props.children.props[InternalData.authorFriendAttribute] = true;
 					if (message.author.id == BDFDB.UserUtils.me.id) e.returnvalue.props.children.props[InternalData.authorSelfAttribute] = true;
 				}
 			}
