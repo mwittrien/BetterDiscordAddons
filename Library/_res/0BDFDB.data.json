@@ -4062,7 +4062,7 @@
 			"loading": "を読み込んでいます {{var0}}",
 			"location": "ロケーション",
 			"order": "シーケンス",
-			"outdated": "時代遅れ",
+			"outdated": "古いバージョン",
 			"please_wait": "お待ちください",
 			"right": "正しい",
 			"save_fail": "{{var0}} は保存できません",
