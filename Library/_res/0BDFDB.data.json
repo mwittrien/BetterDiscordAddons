@@ -115,6 +115,7 @@
 		"RelationshipStore": {"props": ["getFriendIDs", "getRelationships"]},
 		"RelationshipSuggestionUtils": {"props": ["getSuggestionCount", "getSuggestions"]},
 		"RelationshipUtils": {"props": ["addRelationship", "removeRelationship"]},
+		"FriendUtils": {"props": ["addRelationship", "removeRelationship"]},
 		"RoleIconUtils": {"props": ["getRoleIconData"]},
 		"SearchPageUtils": {"props": ["searchNextPage", "searchPreviousPage"]},
 		"SettingsStore": {"props": ["guildPositions", "theme"]},
