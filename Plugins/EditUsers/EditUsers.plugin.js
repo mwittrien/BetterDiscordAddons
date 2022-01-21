@@ -967,7 +967,7 @@ module.exports = (_ => {
 							if (changedUsers[e2.methodArguments[0].user.id].name) userName.props.children = changedUsers[e2.methodArguments[0].user.id].name;
 							this.changeUserColor(userName, e2.methodArguments[0].user.id);
 						}
-						let avatar = BDFDB.ReactUtils.findChild(e2.returnValue, {props: [["className", BDFDB.disCN.auditlogpopoutavatar]]});
+						let avatar = BDFDB.ReactUtils.findChild(e2.returnValue, {props: [["className", BDFDB.disCN.selectfilterpopoutavatar]]});
 						if (avatar) avatar.props.src = this.getUserAvatar(e2.methodArguments[0].user.id);
 					}}}, {force: true, noCache: true});
 				}

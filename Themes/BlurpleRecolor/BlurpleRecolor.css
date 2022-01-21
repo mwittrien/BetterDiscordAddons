@@ -1908,7 +1908,7 @@ a.metadataName-1KMZtB {
 	background-color: rgb(var(--accentcolor));
 }
 .selectedBrand-1AtwYE.focused-qp-W9B,
-.selectedBrand-1AtwYE:hover {
+.selectedBrand-1AtwYE:hover:not(.disabled-Mmpvl7) {
 	background: var(--accentcolor-hover);
 }
 
