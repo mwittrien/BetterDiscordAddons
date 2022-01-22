@@ -4118,7 +4118,7 @@
 			"installed": "설치됨",
 			"last": "마지막",
 			"left": "좌측",
-			"loading": "로딩중 {{var0}}",
+			"loading": "로드 중 {{var0}}",
 			"location": "위치",
 			"order": "순서",
 			"outdated": "구버전",
