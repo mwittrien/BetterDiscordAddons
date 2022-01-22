@@ -2577,8 +2577,8 @@ module.exports = (_ => {
 			else if (node.nodeType == Node.TEXT_NODE) return node.nodeValue;
 			let attributes = {}, importantStyles = [];
 			if (typeof ref == "function") attributes.ref = ref;
-			for (let attr of node.attributes) attributes[attr.name] = attr.value;
-			if (node.attributes.style) attributes.style = BDFDB.ObjectUtils.filter(node.style, n => node.style[n] && isNaN(parseInt(n)), true);
+			if (node.attributes) for (let attr of node.attributes) attributes[attr.name] = attr.value;
+			if (node.attributes && node.attributes.style) attributes.style = BDFDB.ObjectUtils.filter(node.style, n => node.style[n] && isNaN(parseInt(n)), true);
 			attributes.children = [];
 			if (node.style && node.style.cssText) for (let propStr of node.style.cssText.split(";")) if (propStr.endsWith("!important")) {
 				let key = propStr.split(":")[0];
