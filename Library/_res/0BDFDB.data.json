@@ -4096,7 +4096,7 @@
 		"ko": {
 			"add_to": "{{var0}}에 추가",
 			"ascending": "오름차순",
-			"center": "",
+			"center": "중앙",
 			"changelog_added": "새로운 기능",
 			"changelog_fixed": "문제 해결",
 			"changelog_improved": "개선됨",
