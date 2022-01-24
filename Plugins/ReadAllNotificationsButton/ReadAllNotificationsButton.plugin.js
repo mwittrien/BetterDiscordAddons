@@ -101,7 +101,7 @@ module.exports = (_ => {
 						className: BDFDB.disCNS.guildiconwrapper + BDFDB.disCN._readallnotificationsbuttoninner,
 							children: BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN._readallnotificationsbuttonbutton,
-							children: "read all",
+							children: "Read All",
 							onClick: _ => {
 								if (!_this.settings.general.confirmClear) this.clearClick();
 								else BDFDB.ModalUtils.confirm(_this, _this.labels.modal_confirmnotifications, _ => this.clearClick());
