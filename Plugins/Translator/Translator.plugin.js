@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.2
+ * @version 2.3.3
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,29 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "Translator",
 			"author": "DevilBro",
-			"version": "2.3.2",
+			"version": "2.3.3",
 			"description": "Allows you to translate Messages and your outgoing Messages within Discord"
-		},
-		"changeLog": {
-			"fixed": {
-				"Yandex": "Fixed crashes with Yandex"
-			},
-			"added": {
-				"Baidu": "Added",
-				"Google": "Added zh-TW"
-			}
 		}
 	};
 	
-	return (window.Lightcord && !Node.prototype.isPrototypeOf(window.Lightcord) || window.LightCord && !Node.prototype.isPrototypeOf(window.LightCord) || window.Astra && !Node.prototype.isPrototypeOf(window.Astra)) ? class {
-		getName () {return config.info.name;}
-		getAuthor () {return config.info.author;}
-		getVersion () {return config.info.version;}
-		getDescription () {return "Do not use LightCord!";}
-		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
-		start() {}
-		stop() {}
-	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -399,7 +382,7 @@ module.exports = (_ => {
 						Embed: "render"
 					},
 					after: {
-						ChannelTextAreaContainer: "render",
+						ChannelTextAreaButtons: "type",
 						Messages: "type",
 						MessageContent: "type",
 						Embed: "render"
@@ -678,15 +661,11 @@ module.exports = (_ => {
 				if (this.isTranslationEnabled(e.instance.props.channel.id) && isTranslating) e.instance.props.disabled = true;
 			}
 			
-			processChannelTextAreaContainer (e) {
-				if (this.settings.general.addTranslateButton) {
-					let editor = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelEditorContainer"});
-					if (editor && (editor.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL || editor.props.type == BDFDB.DiscordConstants.TextareaTypes.SIDEBAR) && !editor.props.disabled) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.textareapickerbuttons]]});
-						if (index > -1 && children[index].props && children[index].props.children) children[index].props.children.unshift(BDFDB.ReactUtils.createElement(TranslateButtonComponent, {
-							channelId: e.instance.props.channel.id
-						}));
-					}
+			processChannelTextAreaButtons (e) {
+				if (this.settings.general.addTranslateButton && (e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.SIDEBAR) && !e.instance.props.disabled) {
+					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(TranslateButtonComponent, {
+						channelId: e.instance.props.channel.id
+					}));
 				}
 			}
 
