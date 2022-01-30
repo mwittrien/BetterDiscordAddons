@@ -2,7 +2,7 @@
  * @name WriteUpperCase
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.1
+ * @version 1.3.2
  * @description Changes the first Letter of each Sentence in Message Inputs to Uppercase
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,25 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "WriteUpperCase",
 			"author": "DevilBro",
-			"version": "1.3.1",
+			"version": "1.3.2",
 			"description": "Changes the first Letter of each Sentence in Message Inputs to Uppercase"
-		},
-		"changeLog": {
-			"added": {
-				"Quick Toggle": "Added option to add quick toggle to the message input"
-			}
 		}
 	};
 
-	return (window.Lightcord && !Node.prototype.isPrototypeOf(window.Lightcord) || window.LightCord && !Node.prototype.isPrototypeOf(window.LightCord) || window.Astra && !Node.prototype.isPrototypeOf(window.Astra)) ? class {
-		getName () {return config.info.name;}
-		getAuthor () {return config.info.author;}
-		getVersion () {return config.info.version;}
-		getDescription () {return "Do not use LightCord!";}
-		load () {BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)");}
-		start() {}
-		stop() {}
-	} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
@@ -117,7 +104,7 @@ module.exports = (_ => {
 						ChannelEditorContainer: "render"
 					},
 					after: {
-						ChannelTextAreaContainer: "render"
+						ChannelTextAreaButtons: "type"
 					}
 				};
 
@@ -206,16 +193,12 @@ module.exports = (_ => {
 				}
 			}
 			
-			processChannelTextAreaContainer (e) {
-				if (this.settings.general.addQuickToggle) {
-					let editor = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelEditorContainer"});
-					if (editor && !editor.props.disabled) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.textareapickerbuttons]]});
-						if (index > -1 && children[index].props && children[index].props.children) children[index].props.children.unshift(BDFDB.ReactUtils.createElement(QuickToogleButtonComponent, {
-							type: editor.props.type,
-							channelId: e.instance.props.channel.id
-						}));
-					}
+			processChannelTextAreaButtons (e) {
+				if (this.settings.general.addQuickToggle && !e.instance.props.disabled) {
+					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(QuickToogleButtonComponent, {
+						type: e.instance.props.type,
+						channelId: e.instance.props.channel.id
+					}));
 				}
 			}
 		};
