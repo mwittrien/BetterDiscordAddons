@@ -873,8 +873,8 @@ module.exports = (_ => {
 						return {
 							noaccount_header:					"Jotain puuttuu",
 							noaccount_subheader:				"Sinun on yhdistettävä Spotify-tili",
-							noaccount_text:						"Sinulta puuttuu yhdistetty Spotify-tili. Ilman tiliä et voi käyttää Spotify Controls. Yhdistä Spotify-tili Discord-tili napsauttamalla alla olevaa painiketta.",
-							restricted_device:					"Spotify ä ei voi hallita musiikkia toistettaessa rajoitetulla laitteella",
+							noaccount_text:						"Sinulta puuttuu yhdistetty Spotify-tili. Ilman tiliä et voi käyttää Spotify Controlsia. Yhdistä Spotify-tili Discord-tiliisi napsauttamalla alla olevaa painiketta.",
+							restricted_device:					"Spotify ei voi hallita musiikkia toistettaessa rajoitetulla laitteella",
 							toast_copyurl_fail:					"Kappaleen URL-osoitetta ei voitu kopioida leikepöydälle",
 							toast_copyurl_success:				"Kappaleen URL-osoite kopioitiin leikepöydälle"
 						};
