@@ -5055,6 +5055,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"169931777371144192": 	{"active": true,		"tier": "t3",		"text": "",					"color": "",			"id": "DogGodLog (JHa)"},
 		"293806543042904068": 	{"active": true,		"tier": "t2",		"text": "",					"color": "",			"id": "Lopus312"},
 		"89482511343702016": 	{"active": true,		"tier": "t3",		"text": "",					"color": "#0080ff",		"id": "AzukiPuddles"},
 		"919272398832959598": 	{"active": true,		"tier": "t2",		"text": "",					"color": "",			"id": "w_da_woo (NosiGosi)"},
