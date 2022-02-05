@@ -57,7 +57,7 @@
 		"Env": {"props": ["env"]},
 		"FolderStore": {"props": ["getGuildFolderById", "getFlattenedGuilds"]},
 		"FolderUtils": {"props": ["isFolderExpanded", "getExpandedFolders"]},
-		"GuildBadgeUtils": {"props": ["renderUnavailableBadge", "renderMentionBadge"]},
+		"GuildBadgeUtils": {"props": ["renderUnavailableBadge", "renderMediaBadge"]},
 		"GuildBoostUtils": {"props": ["getTierName", "getUserLevel"]},
 		"GuildChannelKeys": {"props": ["GUILD_SELECTABLE_CHANNELS_KEY", "GUILD_VOCAL_CHANNELS_KEY"]},
 		"GuildChannelStore": {"props": ["getChannels", "getDefaultChannel"]},
