@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.8
+ * @version 2.0.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.0.8",
+			"version": "2.0.9",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -8201,13 +8201,25 @@ module.exports = (_ => {
 					if (e.returnValue && e.returnValue.props.children && e.returnValue.props.children.type && e.returnValue.props.children.type.displayName) {
 						let name = e.returnValue.props.children.type.displayName;
 						BDFDB.PatchUtils.patch(plugin, e.returnValue.props.children, "type", {after: e2 => {
-							if (e2.returnValue && typeof plugin[`on${type}`] == "function") plugin[`on${type}`]({
-								instance: {props: e2.methodArguments[0]},
-								returnvalue: e2.returnValue,
-								component: module,
-								methodname: "default",
-								type: name
-							});
+							if (!e2.returnValue || typeof plugin[`on${type}`] != "function") return;
+							else {
+								if (e2.returnValue.props && e2.returnValue.props.children) plugin[`on${type}`]({
+									instance: {props: e2.methodArguments[0]},
+									returnvalue: e2.returnValue,
+									component: module,
+									methodname: "default",
+									type: name
+								});
+								else if (typeof e2.returnValue.type == "function") BDFDB.PatchUtils.patch(plugin, e2.returnValue, "type", {after: e3 => {
+									if (e3.returnValue && typeof plugin[`on${type}`] == "function") plugin[`on${type}`]({
+										instance: {props: e.methodArguments[0]},
+										returnvalue: e3.returnValue,
+										component: module,
+										methodname: "default",
+										type: name
+									});
+								}}, {name: name, noCache: true});
+							}
 						}}, {name: name, noCache: true});
 					}
 				}}, {name: type});
@@ -8252,10 +8264,11 @@ module.exports = (_ => {
 						
 						let found = false, funcString = exports && exports.default && typeof exports.default == "function" && exports.default.toString();
 						if (funcString && funcString.indexOf(".page") > -1 && funcString.indexOf(".section") > -1 && funcString.indexOf(".objectType") > -1) {
-							const returnValue = exports.default();
+							const returnValue = exports.default({});
 							if (returnValue && returnValue.props && returnValue.props.object == BDFDB.DiscordConstants.AnalyticsObjects.CONTEXT_MENU) {
 								for (const type in PluginStores.contextChunkObserver) {
 									if (PluginStores.contextChunkObserver[type].filter(returnValue.props.children.type)) {
+										found = true;
 										if (PluginStores.contextChunkObserver[type].modules.indexOf(exports) == -1) PluginStores.contextChunkObserver[type].modules.push(exports);
 										for (const plugin of PluginStores.contextChunkObserver[type].query) InternalBDFDB.patchContextMenu(plugin, type, exports);
 										break;
