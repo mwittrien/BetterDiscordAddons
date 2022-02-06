@@ -19,11 +19,6 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "1.1.2",
 			"description": "Shows Server Details in the Server List Tooltip"
-		},
-		"changeLog": {
-			"progress": {
-				"Region Section": "Region Section was removed and replaced by the Language Section"
-			}
 		}
 	};
 
