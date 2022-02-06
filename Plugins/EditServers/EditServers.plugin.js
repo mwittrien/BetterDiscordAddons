@@ -2,7 +2,7 @@
  * @name EditServers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.6
+ * @version 2.3.7
  * @description Allows you to locally edit Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditServers",
 			"author": "DevilBro",
-			"version": "2.3.6",
+			"version": "2.3.7",
 			"description": "Allows you to locally edit Servers"
 		},
 		"changeLog": {
@@ -86,7 +86,7 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					before: {
-						GuildItem: "default",
+						GuildItem: "type",
 						GuildIconWrapper: "render",
 						MutualGuilds: "default",
 						QuickSwitcher: "render",
@@ -97,7 +97,7 @@ module.exports = (_ => {
 					},
 					after: {
 						RecentsChannelHeader: "default",
-						GuildItem: "default",
+						GuildItem: "type",
 						BlobMask: "render",
 						GuildIconWrapper: "render",
 						GuildIcon: "render",

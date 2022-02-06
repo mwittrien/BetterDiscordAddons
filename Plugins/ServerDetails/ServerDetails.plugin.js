@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.1
+ * @version 1.1.2
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerDetails",
 			"author": "DevilBro",
-			"version": "1.1.1",
+			"version": "1.1.2",
 			"description": "Shows Server Details in the Server List Tooltip"
 		},
 		"changeLog": {
@@ -190,7 +190,7 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					after: {
-						GuildItem: "default"
+						GuildItem: "type"
 					}
 				};
 				
@@ -470,7 +470,7 @@ module.exports = (_ => {
 						return {
 							boosts:								"Бустеры",
 							creation_date:						"Дата создания",
-							join_date:							"Дата вступления"
+							join_date:							"Дате вступления"
 						};
 					case "sv":		// Swedish
 						return {

@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.6
+ * @version 1.5.7
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "DisplayServersAsChannels",
 			"author": "DevilBro",
-			"version": "1.5.6",
+			"version": "1.5.7",
 			"description": "Displays Servers in a similar way as Channels"
 		}
 	};
@@ -79,7 +79,7 @@ module.exports = (_ => {
 						Guilds: "type",
 						HomeButton: "type",
 						DirectMessage: "render",
-						GuildItem: "default",
+						GuildItem: "type",
 						FolderItem: "default",
 						FolderHeader: "default",
 						CircleIconButton: "render",
