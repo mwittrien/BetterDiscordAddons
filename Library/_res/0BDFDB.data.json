@@ -208,6 +208,7 @@
 			"DirectMessage": {"class": "guildouter", "forceObserve": true},
 			"EmojiPicker": {"strings": ["EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"]},
 			"FocusRing": {"props": ["FocusRingScope"]},
+			"GuildFolderSettingsModal": {"lazyLoaded": true},
 			"GuildHeader": {"strings": ["bannerVisible", "guildBanner", "onContextMenu"]},
 			"GuildIcon": {"class": "avataricon", "forceObserve": true},
 			"GuildItem": {"strings": ["selectedChannelId", "guildNode", "lowerBadgeWidth"]},
@@ -258,8 +259,8 @@
 			"Upload": {"class": "uploadmodal"},
 			"UserHook": {"class": "auditloguserhook"},
 			"UserMention": {"strings": ["UserMention", "userId", "getAvatarURL"]},
-			"UserProfileModal": {"class": "userprofile", "lazyLoaded": true},
-			"UserProfileModalHeader": {"class": "userprofile", "lazyLoaded": true},
+			"UserProfileModal": {"lazyLoaded": true},
+			"UserProfileModalHeader": {"lazyLoaded": true},
 			"UserSettingsAppearance": {"class": "usersettingsappearancepreview"},
 			"V2C_ContentColumn": {"class": "settingswindowcontentcolumn", "special": [{"path": "return.stateNode.props.title", "value": ["PLUGINS", "THEMES"]}]}
 		},
