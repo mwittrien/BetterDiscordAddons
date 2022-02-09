@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.0
+ * @version 2.1.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,13 +19,14 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.1.0",
+			"version": "2.1.1",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
 		"changeLog": {
 			"fixed": {
-				"Context Menus": "Fully work again, no further crashes"
+				"Context Menus": "Fully work again, no further crashes",
+				"Better Friend List": "Fixed Crash"
 			}
 		}
 	};
@@ -2199,6 +2200,7 @@ module.exports = (_ => {
 					lazyLoaded: finderData && finderData.lazyLoaded,
 					stringFind: finderData && finderData.strings,
 					propertyFind: finderData && finderData.props,
+					prototypeFind: finderData && finderData.protos,
 					specialFilter: finderData && finderData.special && InternalBDFDB.createFilter(finderData.special),
 					subComponent: finderData && finderData.subComponent,
 					forceObserve: finderData && finderData.forceObserve,
@@ -2207,7 +2209,7 @@ module.exports = (_ => {
 					mapped: InternalData.ModuleUtilsConfig.PatchMap[type]
 				};
 				config.nonRender = config.specialFilter || BDFDB.ObjectUtils.toArray(pluginData.patchTypes).flat(10).filter(n => n && !InternalData.ModuleUtilsConfig.InstanceFunctions.includes(n)).length > 0;
-				config.nonPrototype = !!(config.subComponent && config.subComponent.strings || config.stringFind || config.subComponent && config.subComponent.props || config.propertyFind || config.nonRender);
+				config.nonPrototype = !!(config.subComponent && config.subComponent.strings || config.stringFind || config.subComponent && config.subComponent.props || config.propertyFind || config.subComponent && config.subComponent.protos || config.prototypeFind || config.nonRender);
 				
 				config.mappedType = config.mapped ? config.mapped + " _ _ " + type : type;
 				config.name = config.subComponent && config.subComponent.name || config.mappedType.split(" _ _ ")[0];
@@ -2230,6 +2232,7 @@ module.exports = (_ => {
 					else if (config.classNames.length) InternalBDFDB.searchComponent(pluginData, config);
 					else if (config.subComponent && config.subComponent.strings || config.stringFind) patchSpecial("findByString", config.subComponent && config.subComponent.strings || config.stringFind);
 					else if (config.subComponent && config.subComponent.props || config.propertyFind) patchSpecial("findByProperties", config.subComponent && config.subComponent.props || config.propertyFind);
+					else if (config.subComponent && config.subComponent.protos || config.prototypeFind) patchSpecial("findByPrototypes", config.subComponent && config.subComponent.protos || config.prototypeFind);
 					else if (config.nonRender) patchSpecial("findByName", config.name);
 					else InternalBDFDB.patchComponent(pluginData, BDFDB.ModuleUtils.findByName(config.name), config);
 				}
@@ -4035,13 +4038,11 @@ module.exports = (_ => {
 		const RealMenuItems = BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup");
 		BDFDB.ContextMenuUtils = {};
 		BDFDB.ContextMenuUtils.open = function (plugin, e, children) {
-			LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Menu, {
-					navId: "bdfdb-context",
-					onClose: LibraryModules.ContextMenuUtils.closeContextMenu,
-					children: children
-				}, true);
-			});
+			LibraryModules.ContextMenuUtils.openContextMenu(e, _ => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Menu, {
+				navId: "bdfdb-context",
+				onClose: LibraryModules.ContextMenuUtils.closeContextMenu,
+				children: children
+			}, true));
 		};
 		BDFDB.ContextMenuUtils.close = function (nodeOrInstance) {
 			if (!BDFDB.ObjectUtils.is(nodeOrInstance)) return;
@@ -6868,25 +6869,21 @@ module.exports = (_ => {
 								align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
 								className: BDFDB.disCN.quickselectclick,
 								onClick: event => {
-									LibraryModules.ContextMenuUtils.openContextMenu(event, _ => {
-										return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Menu, {
-											navId: "bdfdb-quickselect",
-											onClose: LibraryModules.ContextMenuUtils.closeContextMenu,
-											className: this.props.popoutClassName,
-											children: BDFDB.ContextMenuUtils.createItem(InternalComponents.LibraryComponents.MenuItems.MenuGroup, {
-												children: options.map((option, i) => {
-													let selected = option.value && option.value === selectedOption.value || option.key && option.key === selectedOption.key;
-													return BDFDB.ContextMenuUtils.createItem(InternalComponents.LibraryComponents.MenuItems.MenuItem, {
-														label: option.label,
-														id: BDFDB.ContextMenuUtils.createItemId("option", option.key || option.value || i),
-														action: selected ? null : event2 => {
-															this.handleChange.bind(this)(option)
-														}
-													});
-												})
+									LibraryModules.ContextMenuUtils.openContextMenu(event, _ => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Menu, {
+										navId: "bdfdb-quickselect",
+										onClose: LibraryModules.ContextMenuUtils.closeContextMenu,
+										className: this.props.popoutClassName,
+										children: BDFDB.ContextMenuUtils.createItem(InternalComponents.LibraryComponents.MenuItems.MenuGroup, {
+											children: options.map((option, i) => {
+												let selected = option.value && option.value === selectedOption.value || option.key && option.key === selectedOption.key;
+												return BDFDB.ContextMenuUtils.createItem(InternalComponents.LibraryComponents.MenuItems.MenuItem, {
+													label: option.label,
+													id: BDFDB.ContextMenuUtils.createItemId("option", option.key || option.value || i),
+													action: selected ? null : event2 => this.handleChange.bind(this)(option)
+												});
 											})
-										});
-									});
+										})
+									}));
 								},
 								children: [
 									BDFDB.ReactUtils.createElement("div", {
@@ -7971,6 +7968,7 @@ module.exports = (_ => {
 		
 		InternalBDFDB.patchedModules = {
 			before: {
+				SearchBar: "render",
 				EmojiPicker: "type",
 				EmojiPickerListRow: "default"
 			},
@@ -8025,6 +8023,11 @@ module.exports = (_ => {
 			}
 		};
 		
+			
+		InternalBDFDB.processSearchBar = function (e) {
+			if (typeof e.instance.props.query != "string") e.instance.props.query = "";
+		};
+			
 		InternalBDFDB.processSettingsView = function (e) {
 			if (e.node && e.node.parentElement && e.node.parentElement.getAttribute("aria-label") == BDFDB.DiscordConstants.Layers.USER_SETTINGS) InternalBDFDB.addListObserver(e.node.parentElement);
 		};
@@ -8167,6 +8170,7 @@ module.exports = (_ => {
 			let module;
 			if (config.stringFind) module = BDFDB.ModuleUtils.findByString(config.stringFind, false, true);
 			else if (config.propertyFind) module = BDFDB.ModuleUtils.findByProperties(config.propertyFind, false, true);
+			else if (config.prototypeFind) module = BDFDB.ModuleUtils.findByPrototypes(config.prototypeFind, false, true);
 			else module = BDFDB.ModuleUtils.findByName(config.name, false, true);
 			if (module) {
 				let exports = !config.exported && module.exports || module;
@@ -8180,6 +8184,10 @@ module.exports = (_ => {
 					if (config.stringFind) filter = m => [config.stringFind].flat(10).filter(n => n).every(string => typeof m == "function" && (m.toString().indexOf(string) > -1 || typeof m.__originalMethod == "function" && m.__originalMethod.toString().indexOf(string) > -1 || typeof m.__originalFunction == "function" && m.__originalFunction.toString().indexOf(string) > -1) || BDFDB.ObjectUtils.is(m) && typeof m.type == "function" && m.type.toString().indexOf(string) > -1) && m;
 					else if (config.propertyFind) filter = m => [config.propertyFind].flat(10).filter(n => n).every(prop => {
 						const value = m[prop];
+						return value !== undefined && !(typeof value == "string" && !value);
+					}) && m;
+					else if (config.prototypeFind) filter = m =>  m.prototype && [config.prototypeFind].flat(10).filter(n => n).every(prop => {
+						const value = m.prototype[prop];
 						return value !== undefined && !(typeof value == "string" && !value);
 					}) && m;
 					else filter = m => m.displayName === config.name && m || m.render && m.render.displayName === config.name && m || m[config.name] && m[config.name].displayName === name && m[config.name];

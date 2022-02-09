@@ -233,7 +233,6 @@
 			"MessageUsername": {"strings": [".default.username", "colorString", "compact"]},
 			"ModalLayer": {"class": "modal"},
 			"Note": {"class": "usernotetextarea"},
-			"PeopleListSectionedNonLazy": {"strings": ["statusSections", "getSectionTitle", "peopleList"]},
 			"PeoplePageList": {"strings": ["FriendsSections", "emptyStateContainer"]},
 			"PopoutContainer": {"class": "popout"},
 			"PrivateChannelCall": {"class": "callcurrentcontainer"},
@@ -249,6 +248,7 @@
 			"RichChannelMention": {"props": ["ChannelMention"]},
 			"RichUserMention": {"props": ["UserMention"]},
 			"RTCConnection": {"class": "voicedetails"},
+			"SearchBar": {"props": ["SearchIcon"], "path": "default.prototype"},
 			"SearchResults": {"class": "searchresultswrap"},
 			"SearchResultsInner": {"strings": ["SEARCH_HIDE_BLOCKED_MESSAGES", "totalResults", "SEARCH_PAGE_SIZE"]},
 			"StandardSidebarView": {"class": "settingswindowstandardsidebarview"},
@@ -261,8 +261,7 @@
 			"UserMention": {"strings": ["UserMention", "userId", "getAvatarURL"]},
 			"UserProfileModal": {"lazyLoaded": true},
 			"UserProfileModalHeader": {"lazyLoaded": true},
-			"UserSettingsAppearance": {"class": "usersettingsappearancepreview"},
-			"V2C_ContentColumn": {"class": "settingswindowcontentcolumn", "special": [{"path": "return.stateNode.props.title", "value": ["PLUGINS", "THEMES"]}]}
+			"UserSettingsAppearance": {"class": "usersettingsappearancepreview"}
 		},
 		"LoadedInComponents": {
 			"AutocompleteChannelResult": "LibraryComponents.AutocompleteItems.Channel",
@@ -284,7 +283,7 @@
 		"PopoutContainer": {"name": "Popout"},
 		"QuickSelect": {"name": "QuickSelectWrapper"},
 		"RadioGroup": {"name": "RadioGroup"},
-		"SearchBar": {"name": "SearchBar", "protos": ["focus"]},
+		"SearchBar": {"name": "SearchBar", "protos": ["focus", "blur"]},
 		"SearchableSelect": {"name": "SingleSelect"},
 		"Select": {"name": "SelectTempWrapper"},
 		"Slider": {"name": "Slider"},
