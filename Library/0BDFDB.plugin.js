@@ -3145,15 +3145,19 @@ module.exports = (_ => {
 		BDFDB.UserUtils.is = function (user) {
 			return user && user instanceof BDFDB.DiscordObjects.User;
 		};
-		var myDataUser = LibraryModules.UserStore && LibraryModules.UserStore.getCurrentUser && LibraryModules.UserStore.getCurrentUser();
-		if (myDataUser) document.body.setAttribute("data-current-user-id", myDataUser.id);
+		const myDataUser = LibraryModules.UserStore && LibraryModules.UserStore.getCurrentUser && LibraryModules.UserStore.getCurrentUser();
+		if (myDataUser && BDFDB.UserUtils._id != myDataUser.id) {
+			document.body.setAttribute("data-current-user-id", myDataUser.id);
+			BDFDB.UserUtils._id = myDataUser.id;
+		}
 		BDFDB.UserUtils.me = new Proxy(myDataUser || {}, {
 			get: function (list, item) {
-				if (!myDataUser) {
-					myDataUser = LibraryModules.UserStore && LibraryModules.UserStore.getCurrentUser && LibraryModules.UserStore.getCurrentUser();
-					if (myDataUser) document.body.setAttribute("data-current-user-id", myDataUser.id);
+				const user = LibraryModules.UserStore && LibraryModules.UserStore.getCurrentUser && LibraryModules.UserStore.getCurrentUser();
+				if (user && BDFDB.UserUtils._id != user.id) {
+					document.body.setAttribute("data-current-user-id", user.id);
+					BDFDB.UserUtils._id = user.id;
 				}
-				return myDataUser ? myDataUser[item] : null;
+				return user ? user[item] : null;
 				
 			}
 		});
@@ -8150,7 +8154,8 @@ module.exports = (_ => {
 			const user = BDFDB.ReactUtils.findValue(e.instance, "user");
 			if (!user) return;
 			const wrapper = e.node.querySelector(BDFDB.dotCNC.userpopout + BDFDB.dotCN.userprofile) || e.node;
-			InternalBDFDB._processAvatarMount(user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), wrapper);
+			const avatar = e.node.querySelector(BDFDB.dotCN.avatarwrapper);
+			if (avatar) InternalBDFDB._processAvatarMount(user, e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.PROFILE_POPOUT ? avatar.parentElement : avatar, wrapper);
 			InternalBDFDB._processUserInfoNode(user, wrapper);
 		};
 		InternalBDFDB.processPeopleListItem = function (e) {
