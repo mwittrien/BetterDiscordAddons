@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.2
+ * @version 2.1.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,12 +19,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.1.2",
+			"version": "2.1.3",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
 		"changeLog": {
 			"fixed": {
+				"Lazy Components": "Properly patches lazy components now, fixing issues with multiple plugins",
 				"Context Menus": "Fully work again, no further crashes",
 				"Better Friend List": "Fixed Crash"
 			}
@@ -8305,7 +8306,7 @@ module.exports = (_ => {
 						for (const type in PluginStores.chunkObserver) {
 							const foundModule = PluginStores.chunkObserver[type].filter(exports) || exports.default && PluginStores.chunkObserver[type].filter(exports.default);
 							if (foundModule) {
-								InternalBDFDB.patchComponent(PluginStores.chunkObserver[type].query, foundModule, PluginStores.chunkObserver[type].config);
+								InternalBDFDB.patchComponent(PluginStores.chunkObserver[type].query, PluginStores.chunkObserver[type].config.exported ? foundModule : exports, PluginStores.chunkObserver[type].config);
 								removedTypes.push(type);
 								break;
 							}
