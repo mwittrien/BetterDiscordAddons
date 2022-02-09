@@ -6026,7 +6026,7 @@ module.exports = (_ => {
 				.replace(/\$month/g, timeObj.toLocaleDateString(language, {month: "long"}))
 				.replace(/\$dayS/g, timeObj.toLocaleDateString(language, {weekday: "short"}))
 				.replace(/\$day/g, timeObj.toLocaleDateString(language, {weekday: "long"}))
-				.replace(/\$agoAmount/g, daysAgo < 0 ? "" : daysAgo > 1 ? BDFDB.LanguageUtils.LanguageStringsFormat(`GAME_LIBRARY_LAST_PLAYED_${daysAgo > 80 ? "MONTHS" : daysAgo > 30 ? "WEEKS" : "DAYS"}`, daysAgo > 80 ? Math.round(daysAgo/30) : daysAgo > 30 ? Math.round(daysAgo/7) : daysAgo) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
+				.replace(/\$agoAmount/g, daysAgo < 0 ? "" : daysAgo > 1 ? BDFDB.DiscordObjects.Timestamp(timeObj.getTime()).fromNow() : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
 				.replace(/\$agoDays/g, daysAgo < 0 ? "" : daysAgo > 1 ? BDFDB.LanguageUtils.LanguageStringsFormat(`GAME_LIBRARY_LAST_PLAYED_DAYS`, daysAgo) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
 				.replace(/\$agoDate/g, daysAgo < 0 ? "" : daysAgo > 1 ? date : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
 				.replace(/\(\)|\[\]/g, "").replace(/,\s*$|^\s*,/g, "").replace(/ +/g, " ").trim();

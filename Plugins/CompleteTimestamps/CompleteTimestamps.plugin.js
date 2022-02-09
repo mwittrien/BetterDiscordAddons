@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.0
+ * @version 1.6.1
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CompleteTimestamps",
 			"author": "DevilBro",
-			"version": "1.6.0",
+			"version": "1.6.1",
 			"description": "Replaces Timestamps with your own custom Timestamps"
 		},
 		"changeLog": {
-			"fixed": {
-				"Markup Timestamps": "Fixed issue where Markup Timestamps sometimes, wouldn't get parsed correctly"
+			"improved": {
+				"Markup Timestamps": "Only changes Timestamps with no formatting flag or the lowercase f flag, since those are the standard timestamps, meaning it does no longer change markup timestamps with a relative R or full flag F"
 			}
 		}
 	};
@@ -108,7 +108,7 @@ module.exports = (_ => {
 			onStart () {
 				BDFDB.LibraryModules.MessageParser && BDFDB.LibraryModules.MessageParser.defaultRules && BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageParser.defaultRules.timestamp, "react", {after: e => {
 					const date = 1e3*Number(e.methodArguments[0].timestamp);
-					if (this.settings.general.showInMarkup) {
+					if (this.settings.general.showInMarkup && e.methodArguments[0].formatted == BDFDB.LibraryModules.MessageParser.defaultRules.timestamp.parse([null, e.methodArguments[0].timestamp, "f"]).formatted) {
 						if (tooltipIsSame) e.returnValue.props.delay = 99999999999999999999;
 						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, date);
 						let renderChildren = e.returnValue.props.children;
