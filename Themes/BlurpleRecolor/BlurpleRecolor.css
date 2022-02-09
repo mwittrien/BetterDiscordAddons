@@ -979,15 +979,15 @@
 	border-color: rgb(var(--accentcolor));
 }
 															/* streamermodesettings	headerimage							*/
-.noticeIcon-2roSh-[src="/assets/616e078b351d0df460971441949c53a3.svg"] {
+.noticeIcon-2roSh-[src="/assets/c11b69c74029b5deaca9ca7ce1e987b1.svg"] {
 	object-position: -999999px -999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_streamermode_bg.svg) center/contain no-repeat;
 }
-.noticeIcon-2roSh-[src="/assets/616e078b351d0df460971441949c53a3.svg"] + * {
+.noticeIcon-2roSh-[src="/assets/c11b69c74029b5deaca9ca7ce1e987b1.svg"] + * {
 	position: relative;
 }
-.noticeIcon-2roSh-[src="/assets/616e078b351d0df460971441949c53a3.svg"] + *::before,
-.noticeIcon-2roSh-[src="/assets/616e078b351d0df460971441949c53a3.svg"] + *::after {
+.noticeIcon-2roSh-[src="/assets/c11b69c74029b5deaca9ca7ce1e987b1.svg"] + *::before,
+.noticeIcon-2roSh-[src="/assets/c11b69c74029b5deaca9ca7ce1e987b1.svg"] + *::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -996,11 +996,11 @@
 	height: 110px;
 	pointer-events: none;
 }
-.noticeIcon-2roSh-[src="/assets/616e078b351d0df460971441949c53a3.svg"] + *::before {
+.noticeIcon-2roSh-[src="/assets/c11b69c74029b5deaca9ca7ce1e987b1.svg"] + *::before {
 	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_streamermode_accent.svg) center/contain no-repeat;
 }
-.noticeIcon-2roSh-[src="/assets/616e078b351d0df460971441949c53a3.svg"] + *::after {
+.noticeIcon-2roSh-[src="/assets/c11b69c74029b5deaca9ca7ce1e987b1.svg"] + *::after {
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_streamermode_details.svg) center/contain no-repeat;
 }
 

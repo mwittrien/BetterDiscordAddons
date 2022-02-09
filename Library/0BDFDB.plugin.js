@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.9
+ * @version 2.1.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,10 +19,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.0.9",
+			"version": "2.1.0",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
+		"changeLog": {
+			"fixed": {
+				"Context Menus": "Fully work again, no further crashes"
+			}
+		}
 	};
 	
 	const DiscordObjects = {};
@@ -1185,31 +1190,66 @@ module.exports = (_ => {
 			}
 		};
 		
+		InternalBDFDB.getModuleString = function (module) {
+			const id = (BDFDB.ModuleUtils.find(m => m == module && m, {useExport: false}) || {}).id;
+			if (!id) return "";
+			const req = InternalBDFDB.getWebModuleReq();
+			return (req.m[id] || "").toString();
+		};
+		
+		InternalBDFDB.lazyLoadModuleImports = function (moduleString) {
+			if (typeof moduleString !== "string") moduleString = InternalBDFDB.getModuleString(moduleString);
+			if (!moduleString || typeof moduleString !== "string") return BDFDB.LogUtils.error("Trying to lazy load Imports but Module is not a String");
+			const [, promiseMatch, menuRequest] = moduleString.match(/return (Promise\.all\(.+?\))\.then\((.+?)\)\);/) ?? [];
+			if (!promiseMatch) return BDFDB.LogUtils.error("Trying to lazy load Imports but Module does not contain lazy Imports");
+			const imports = promiseMatch.match(/\d+/g)?.map(e => Number(e));
+			const menuIndex = menuRequest.match(/\d+/)?.[0];
+			if (!imports || !menuIndex) return BDFDB.LogUtils.error("Trying to lazy load Imports but could not find Indexes");
+			const req = InternalBDFDB.getWebModuleReq();
+			return Promise.all(imports.map(index => req.e(index))).then(() => req(menuIndex));
+		};
+		
 		BDFDB.ModuleUtils = {};
 		BDFDB.ModuleUtils.find = function (filter, config = {}) {
 			let useExport = typeof config.useExport != "boolean" ? true : config.useExport;
 			let onlySearchUnloaded = typeof config.onlySearchUnloaded != "boolean" ? false : config.onlySearchUnloaded;
-			let req = InternalBDFDB.getWebModuleReq();
+			let all = typeof config.all != "boolean" ? false : config.all;
+			const req = InternalBDFDB.getWebModuleReq();
+			const found = [];
 			if (!onlySearchUnloaded) for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports, r = null;
-				if (m && (typeof m == "object" || typeof m == "function") && !!(r = filter(m))) return useExport ? r : req.c[i];
+				if (m && (typeof m == "object" || typeof m == "function") && !!(r = filter(m))) {
+					if (all) found.push(useExport ? r : req.c[i]);
+					else return useExport ? r : req.c[i];
+				}
 				if (m && m.__esModule && m.default && (typeof m.default == "object" || typeof m.default == "function")) {
-					if (!!(r = filter(m.default))) return useExport ? r : req.c[i];
-					else if (m.default.type && (typeof m.default.type == "object" || typeof m.default.type == "function") && !!(r = filter(m.default.type))) return useExport ? r : req.c[i];
+					if (!!(r = filter(m.default))) {
+						if (all) found.push(useExport ? r : req.c[i]);
+						else return useExport ? r : req.c[i];
+					}
+					else if (m.default.type && (typeof m.default.type == "object" || typeof m.default.type == "function") && !!(r = filter(m.default.type))) {
+						if (all) found.push(useExport ? r : req.c[i]);
+						else return useExport ? r : req.c[i];
+					}
 				}
 			}
 			for (let i in req.m) if (req.m.hasOwnProperty(i)) {
 				let m = req.m[i];
 				if (m && typeof m == "function") {
-					if (req.c[i] && !onlySearchUnloaded && filter(m)) return useExport ? req.c[i].exports : req.c[i];
+					if (req.c[i] && !onlySearchUnloaded && filter(m)) {
+						if (all) found.push(useExport ? req.c[i].exports : req.c[i]);
+						else return useExport ? req.c[i].exports : req.c[i];
+					}
 					if (!req.c[i] && onlySearchUnloaded && filter(m)) {
 						const resolved = {}, resolved2 = {};
 						m(resolved, resolved2, req);
 						const trueResolved = resolved2 && BDFDB.ObjectUtils.isEmpty(resolved2) ? resolved : resolved2;
-						return useExport ? trueResolved.exports : trueResolved;
+						if (all) found.push(useExport ? trueResolved.exports : trueResolved);
+						else return useExport ? trueResolved.exports : trueResolved;
 					}
 				}
 			}
+			if (all) return found;
 		};
 		BDFDB.ModuleUtils.findByProperties = function (...properties) {
 			properties = properties.flat(10);
@@ -3088,11 +3128,13 @@ module.exports = (_ => {
 		BDFDB.MessageUtils.openMenu = function (message, e = mousePosition, slim = false) {
 			if (!message) return;
 			let channel = LibraryModules.ChannelStore.getChannel(message.channel_id);
-			if (channel) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement((BDFDB.ModuleUtils.findByName(slim ? "MessageSearchResultContextMenu" : "MessageContextMenu", false) || {exports: {}}).exports.default, Object.assign({}, e, {
-					message: message,
-					channel: channel
-				}));
+			if (!channel) return;
+			e = BDFDB.ListenerUtils.copyEvent(e.nativeEvent || e, (e.nativeEvent || e).currentTarget);
+			let menu = BDFDB.ModuleUtils.findByName(slim ? "MessageSearchResultContextMenu" : "MessageContextMenu", false, true);
+			if (menu) LibraryModules.ContextMenuUtils.openContextMenu(e, e2 => BDFDB.ReactUtils.createElement(menu.exports.default, Object.assign({}, e2, {message, channel})));
+			else InternalBDFDB.lazyLoadModuleImports(BDFDB.ModuleUtils.findByString(slim ? ["SearchResult", "message:", "openContextMenu"] : ["useHoveredMessage", "useContextMenuUser", "openContextMenu"])).then(_ => {
+				menu = BDFDB.ModuleUtils.findByName(slim ? "MessageSearchResultContextMenu" : "MessageContextMenu", false);
+				if (menu) LibraryModules.ContextMenuUtils.openContextMenu(e, e2 => BDFDB.ReactUtils.createElement(menu.exports.default, Object.assign({}, e2, {message, channel})));
 			});
 		};
 			
@@ -3156,11 +3198,13 @@ module.exports = (_ => {
 			return false;
 		};
 		BDFDB.UserUtils.openMenu = function (user, guildId, e = mousePosition) {
-			if (user && guildId) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement((BDFDB.ModuleUtils.findByName("GuildChannelUserContextMenu", false) || {exports: {}}).exports.default, Object.assign({}, e, {
-					user: user,
-					guildId: guildId
-				}));
+			if (!user || !guildId) return;
+			e = BDFDB.ListenerUtils.copyEvent(e.nativeEvent || e, (e.nativeEvent || e).currentTarget);
+			let menu = BDFDB.ModuleUtils.findByName("GuildChannelUserContextMenu", false, true);
+			if (menu) LibraryModules.ContextMenuUtils.openContextMenu(e, e2 => BDFDB.ReactUtils.createElement(menu.exports.default, Object.assign({}, e2, {user, guildId})));
+			else InternalBDFDB.lazyLoadModuleImports(BDFDB.ModuleUtils.findByString("openUserContextMenu", "user:", "openContextMenu")).then(_ => {
+				menu = BDFDB.ModuleUtils.findByName("GuildChannelUserContextMenu", false);
+				if (menu) LibraryModules.ContextMenuUtils.openContextMenu(e, e2 => BDFDB.ReactUtils.createElement(menu.exports.default, Object.assign({}, e2, {user, guildId})));
 			});
 		};
 
@@ -3184,10 +3228,13 @@ module.exports = (_ => {
 			return LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).find(n => n.guildIds.includes(id));
 		};
 		BDFDB.GuildUtils.openMenu = function (guild, e = mousePosition) {
-			if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement((BDFDB.ModuleUtils.findByName("GuildContextMenu", false) || {exports: {}}).exports.default, Object.assign({}, e, {
-					guild: guild
-				}));
+			if (!guild) return;
+			e = BDFDB.ListenerUtils.copyEvent(e.nativeEvent || e, (e.nativeEvent || e).currentTarget);
+			let menu = BDFDB.ModuleUtils.findByName("GuildContextMenu", false, true);
+			if (menu) LibraryModules.ContextMenuUtils.openContextMenu(e, e2 => BDFDB.ReactUtils.createElement(menu.exports.default, Object.assign({}, e2, {guild})));
+			else InternalBDFDB.lazyLoadModuleImports(BDFDB.ModuleUtils.findByString("renderUnavailableBadge", "guild:", "openContextMenu")).then(_ => {
+				menu = BDFDB.ModuleUtils.findByName("GuildContextMenu", false);
+				if (menu) LibraryModules.ContextMenuUtils.openContextMenu(e, e2 => BDFDB.ReactUtils.createElement(menu.exports.default, Object.assign({}, e2, {guild})));
 			});
 		};
 		BDFDB.GuildUtils.markAsRead = function (guildIds) {
@@ -3274,23 +3321,6 @@ module.exports = (_ => {
 			if (!channel) return "";
 			if (!channel.icon) return channel.isDM() ? BDFDB.UserUtils.getAvatar(channel.recipients[0]) : (channel.isGroupDM() ? window.location.origin + LibraryModules.IconUtils.getChannelIconURL(channel).split("?")[0] : null);
 			return LibraryModules.IconUtils.getChannelIconURL(channel).split("?")[0];
-		};
-		BDFDB.DMUtils.openMenu = function (channel, e = mousePosition) {
-			if (channel) {
-				if (channel.isGroupDM()) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-					return BDFDB.ReactUtils.createElement((BDFDB.ModuleUtils.findByName("GroupDMContextMenu", false) || {exports: {}}).exports.default, Object.assign({}, e, {
-						channel: channel,
-						selected: channel.id == LibraryModules.LastChannelStore.getChannelId()
-					}));
-				});
-				else LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-					return BDFDB.ReactUtils.createElement((BDFDB.ModuleUtils.findByName("DMUserContextMenu", false) || {exports: {}}).exports.default, Object.assign({}, e, {
-						user: LibraryModules.UserStore.getUser(channel.recipients[0]),
-						channel: channel,
-						selected: channel.id == LibraryModules.LastChannelStore.getChannelId()
-					}));
-				});
-			}
 		};
 		BDFDB.DMUtils.markAsRead = function (dmIds) {
 			let unreadDMs = [dmIds].flat(10).filter(id => id && typeof id == "string" && BDFDB.DMUtils.isDMChannel(id) && (LibraryModules.UnreadChannelUtils.hasUnread(id) || LibraryModules.UnreadChannelUtils.getMentionCount(id) > 0));
@@ -8159,7 +8189,7 @@ module.exports = (_ => {
 			}
 		};
 		const QueuedComponents = ["GuildHeaderContextMenu", "SystemMessageOptionContextMenu", "SystemMessageOptionToolbar", "MessageOptionContextMenu", "MessageOptionToolbar"];
-		const ContextMenuTypes = ["UserSettingsCog", "UserProfileActions", "User", "Developer", "Slate", "GuildFolder", "GroupDM", "SystemMessage", "Message", "Native", "Role", "Guild", "Channel"];
+		const ContextMenuTypes = ["UserSettingsCog", "UserProfileActions", "User", "Developer", "Slate", "GuildSettingsRole", "GuildDirectoryEntry", "GuildFolder", "GroupDM", "SystemMessage", "Message", "Native", "Role", "Guild", "Channel"];
 		InternalBDFDB.addQueuePatches = function (plugin) {
 			plugin = plugin == BDFDB && InternalBDFDB || plugin;
 			for (let type of QueuedComponents) if (typeof plugin[`on${type}`] == "function") {
@@ -8179,13 +8209,7 @@ module.exports = (_ => {
 			for (let type of ContextMenuTypes) {
 				type = `${type}ContextMenu`;
 				if (typeof plugin[`on${type}`] == "function") {
-					if (!PluginStores.contextChunkObserver[type]) {
-						PluginStores.contextChunkObserver[type] = {query: [], modules: []};
-						PluginStores.contextChunkObserver[type].filter = m => m && m.displayName && `${ContextMenuTypes.find(t => m.displayName.indexOf(t) > -1)}ContextMenu` == type;
-					}
-					else {
-						for (let module of PluginStores.contextChunkObserver[type].modules) InternalBDFDB.patchContextMenu(plugin, type, module);
-					}
+					for (let module of PluginStores.contextChunkObserver[type].modules) InternalBDFDB.patchContextMenu(plugin, type, module);
 					if (PluginStores.contextChunkObserver[type].query.indexOf(plugin) == -1) {
 						PluginStores.contextChunkObserver[type].query.push(plugin);
 						PluginStores.contextChunkObserver[type].query.sort((x, y) => x.name < y.name ? -1 : x.name > y.name ? 1 : 0);
@@ -8200,27 +8224,31 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(plugin, module, "default", {after: e => {
 					if (e.returnValue && e.returnValue.props.children && e.returnValue.props.children.type && e.returnValue.props.children.type.displayName) {
 						let name = e.returnValue.props.children.type.displayName;
-						BDFDB.PatchUtils.patch(plugin, e.returnValue.props.children, "type", {after: e2 => {
-							if (!e2.returnValue || typeof plugin[`on${type}`] != "function") return;
-							else {
-								if (e2.returnValue.props && e2.returnValue.props.children) plugin[`on${type}`]({
+						let originalReturn = e.returnValue.props.children.type(e.returnValue.props.children.props);
+						let newType = props => {
+							const returnValue = BDFDB.ReactUtils.createElement(originalReturn.type, originalReturn.props);
+							if (returnValue.props.children) {
+								plugin[`on${type}`]({
+									instance: {props: props},
+									returnvalue: returnValue,
+									component: module,
+									methodname: "default",
+									type: name
+								});
+							}
+							else BDFDB.PatchUtils.patch(plugin, returnValue, "type", {after: e2 => {
+								if (e2.returnValue && typeof plugin[`on${type}`] == "function") plugin[`on${type}`]({
 									instance: {props: e2.methodArguments[0]},
 									returnvalue: e2.returnValue,
 									component: module,
 									methodname: "default",
 									type: name
 								});
-								else if (typeof e2.returnValue.type == "function") BDFDB.PatchUtils.patch(plugin, e2.returnValue, "type", {after: e3 => {
-									if (e3.returnValue && typeof plugin[`on${type}`] == "function") plugin[`on${type}`]({
-										instance: {props: e.methodArguments[0]},
-										returnvalue: e3.returnValue,
-										component: module,
-										methodname: "default",
-										type: name
-									});
-								}}, {name: name, noCache: true});
-							}
-						}}, {name: name, noCache: true});
+							}});
+							return returnValue;
+						};
+						newType.displayName = name;
+						e.returnValue.props.children = BDFDB.ReactUtils.createElement(newType, e.returnValue.props.children.props);
 					}
 				}}, {name: type});
 			}
@@ -8268,6 +8296,7 @@ module.exports = (_ => {
 							if (returnValue && returnValue.props && returnValue.props.object == BDFDB.DiscordConstants.AnalyticsObjects.CONTEXT_MENU) {
 								for (const type in PluginStores.contextChunkObserver) {
 									if (PluginStores.contextChunkObserver[type].filter(returnValue.props.children.type)) {
+										exports._BDFDB_ContextMenuWrap = type;
 										found = true;
 										if (PluginStores.contextChunkObserver[type].modules.indexOf(exports) == -1) PluginStores.contextChunkObserver[type].modules.push(exports);
 										for (const plugin of PluginStores.contextChunkObserver[type].query) InternalBDFDB.patchContextMenu(plugin, type, exports);
@@ -8314,6 +8343,15 @@ module.exports = (_ => {
 			};
 		})();
 		
+		for (let type of ContextMenuTypes) {
+			type = `${type}ContextMenu`;
+			if (!PluginStores.contextChunkObserver[type]) {
+				PluginStores.contextChunkObserver[type] = {query: [], modules: []};
+				PluginStores.contextChunkObserver[type].filter = m => m && (m.displayName && m.displayName.endsWith("ContextMenu") && `${ContextMenuTypes.find(t => m.displayName.indexOf(t) > -1)}ContextMenu` == type || m._BDFDB_ContextMenuWrap && m._BDFDB_ContextMenuWrap.endsWith("ContextMenu") && `${ContextMenuTypes.find(t => m._BDFDB_ContextMenuWrap.indexOf(t) > -1)}ContextMenu` == type) && m;
+				PluginStores.contextChunkObserver[type].modules = BDFDB.ModuleUtils.find(PluginStores.contextChunkObserver[type].filter, {all: true});
+			}
+		}
+		
 		InternalBDFDB.patchPlugin(BDFDB);
 		InternalBDFDB.addQueuePatches(BDFDB);
 		InternalBDFDB.addContextChunkObservers(BDFDB);
@@ -8325,14 +8363,26 @@ module.exports = (_ => {
 			let toolbar = BDFDB.ReactUtils.findChild(e.returnValue, {filter: c => c && c.props && c.props.showMoreUtilities != undefined && c.props.showEmojiPicker != undefined && c.props.setPopout != undefined});
 			if (toolbar) BDFDB.PatchUtils.patch(BDFDB, toolbar, "type", {after: e2 => {
 				let menu = BDFDB.ReactUtils.findChild(e2.returnValue, {filter: c => c && c.props && typeof c.props.onRequestClose == "function" && c.props.onRequestClose.toString().indexOf("moreUtilities") > -1});
-				InternalBDFDB.triggerQueuePatch(BDFDB.MessageUtils.isSystemMessage(e2.methodArguments[0] && e2.methodArguments[0].message) ? "SystemMessageOptionToolbar" : "MessageOptionToolbar", {instance: {props: e2.methodArguments[0]}, returnvalue: e2.returnValue, methodname: "default"});
+				let isSystem = BDFDB.MessageUtils.isSystemMessage(e2.methodArguments[0] && e2.methodArguments[0].message);
+				InternalBDFDB.triggerQueuePatch(isSystem ? "SystemMessageOptionToolbar" : "MessageOptionToolbar", {
+					instance: {props: e2.methodArguments[0]},
+					returnvalue: e2.returnValue,
+					methodname: "default",
+					type: isSystem ? "SystemMessageOptionToolbar" : "MessageOptionToolbar"
+				});
 				if (menu && typeof menu.props.renderPopout == "function") {
 					let renderPopout = menu.props.renderPopout;
 					menu.props.renderPopout = BDFDB.TimeUtils.suppress((...args) => {
 						let renderedPopout = renderPopout(...args);
 						renderedPopout.props.updatePosition = _ => {};
 						BDFDB.PatchUtils.patch(BDFDB, renderedPopout, "type", {after: e3 => {
-							InternalBDFDB.triggerQueuePatch(BDFDB.MessageUtils.isSystemMessage(e3.methodArguments[0] && e3.methodArguments[0].message) ? "SystemMessageOptionContextMenu" : "MessageOptionContextMenu", {instance: {props: e3.methodArguments[0]}, returnvalue: e3.returnValue, methodname: "default"});
+							let isSystem = BDFDB.MessageUtils.isSystemMessage(e3.methodArguments[0] && e3.methodArguments[0].message);
+							InternalBDFDB.triggerQueuePatch(isSystem ? "SystemMessageOptionContextMenu" : "MessageOptionContextMenu", {
+								instance: {props: e3.methodArguments[0]},
+								returnvalue: e3.returnValue,
+								methodname: "default",
+								type: isSystem ? "SystemMessageOptionContextMenu" : "MessageOptionContextMenu"
+							});
 						}}, {noCache: true});
 						return renderedPopout;
 					});
