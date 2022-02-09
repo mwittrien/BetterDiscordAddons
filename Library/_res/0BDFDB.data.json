@@ -196,7 +196,7 @@
 			"BannedCard": {"class": "guildsettingsbannedcard"},
 			"Category": {"class": "categorycontainerdefault"},
 			"ChannelCall": {"class": "callcurrentcontainer"},
-			"ChannelCategoryItem": {"strings": ["muted", "channel", "collapsed"], "exported": true},
+			"ChannelCategoryItem": {"strings": ["GUILD_CATEGORY", "CREATE_CHANNEL", "addButtonIcon"], "path": "default.DecoratedComponent"},
 			"ChannelMember": {"class": "member"},
 			"ChannelMembers": {"class": "members"},
 			"Channels": {"class": "guildchannels"},
