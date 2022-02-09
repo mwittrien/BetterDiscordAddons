@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.1
+ * @version 1.4.2
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterFriendList",
 			"author": "DevilBro",
-			"version": "1.4.1",
+			"version": "1.4.2",
 			"description": "Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount"
 		}
 	};
@@ -60,7 +60,7 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var rerenderTimeout, sortKey, sortReversed, searchQuery, searchTimeout;
+		var rerenderTimeout, sortKey, sortReversed;
 		
 		const favorizedFriendsSection = "FAVORIZED_FRIENDS";
 		const hiddenFriendsSection = "HIDDEN_FRIENDS";
@@ -87,7 +87,6 @@ module.exports = (_ => {
 						addFavorizedCategory:	{value: true, 	description: "Adds Favorites Category"},
 						addHiddenCategory:		{value: true, 	description: "Adds Hidden Category"},
 						addSortOptions:			{value: true, 	description: "Adds Sort Options"},
-						addSearchbar:			{value: true, 	description: "Adds a Searchbar"},
 						addMutualGuild:			{value: true, 	description: "Adds mutual Servers in Friend List"}
 					}
 				};
@@ -102,6 +101,7 @@ module.exports = (_ => {
 						TabBar: "render",
 						PeopleListSectionedLazy: "default",
 						PeopleListSectionedNonLazy: "default",
+						PeopleList: "default",
 						FriendRow: "render",
 						PendingRow: "default",
 						BlockedRow: "render",
@@ -118,7 +118,7 @@ module.exports = (_ => {
 						width: 200px;
 					}
 					${BDFDB.dotCN._betterfriendlistnamecell} {
-						width: 150px;
+						width: 200px;
 					}
 					${BDFDB.dotCN.peoplesuser} {
 						flex: 1 1 auto;
@@ -136,7 +136,6 @@ module.exports = (_ => {
 			onStart () {
 				sortKey = null;
 				sortReversed = false;
-				searchQuery = "";
 				isFavoritesSelected = false;
 				isHiddenSelected = false;
 
@@ -280,109 +279,101 @@ module.exports = (_ => {
 			}
 			
 			processPeopleListSectionedNonLazy (e) {
-				if (this.settings.general.addFavorizedCategory) {
-					if (isFavoritesSelected) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && favorizedFriends.indexOf(entry.user.id) > -1));
+				if (!e.returnvalue) {
+					if (this.settings.general.addFavorizedCategory) {
+						if (isFavoritesSelected) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && favorizedFriends.indexOf(entry.user.id) > -1));
+					}
+					if (this.settings.general.addHiddenCategory) {
+						if (isHiddenSelected) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) > -1));
+						else if (([].concat(e.instance.props.statusSections).flat(10)[0] || {}).type == BDFDB.DiscordConstants.RelationshipTypes.FRIEND) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) == -1));
+					}
+					if (sortKey) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => {
+						let newSection = [].concat(section);
+						if (sortKey) {
+							newSection = BDFDB.ArrayUtils.keySort(newSection.map(entry => Object.assign({}, entry, {statusIndex: statusSortOrder[entry.status]})), sortKey);
+							if (sortReversed) newSection.reverse();
+						}
+						if (!newSection.length) {
+							let placeholder = new BDFDB.DiscordObjects.User({
+								id: placeHolderId,
+								username: placeHolderId
+							});
+							if (placeholder) newSection.push(new BDFDB.DiscordObjects.Relationship({
+								activities: [],
+								applicationStream: null,
+								isMobile: false,
+								key: placeHolderId,
+								mutualGuilds: [],
+								mutualGuildsLength: 0,
+								status: "offline",
+								type: BDFDB.DiscordConstants.RelationshipTypes.NONE,
+								user: placeholder,
+								usernameLower: placeholder.usernameNormalized
+							}));
+						}
+						return newSection;
+					});
 				}
-				if (this.settings.general.addHiddenCategory) {
-					if (isHiddenSelected) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) > -1));
-					else if (([].concat(e.instance.props.statusSections).flat(10)[0] || {}).type == BDFDB.DiscordConstants.RelationshipTypes.FRIEND) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) == -1));
-				}
-				if (sortKey || searchQuery) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => {
-					let newSection = [].concat(section);
-					if (searchQuery) {
-						let usedSearchQuery = searchQuery.toLowerCase();
-						newSection = newSection.filter(entry => entry && typeof entry.usernameLower == "string" && entry.usernameLower.indexOf(usedSearchQuery) > -1);
-					}
-					if (sortKey) {
-						newSection = BDFDB.ArrayUtils.keySort(newSection.map(entry => Object.assign({}, entry, {statusIndex: statusSortOrder[entry.status]})), sortKey);
-						if (sortReversed) newSection.reverse();
-					}
-					if (!newSection.length) {
-						let placeholder = new BDFDB.DiscordObjects.User({
-							id: placeHolderId,
-							username: placeHolderId
-						});
-						if (placeholder) newSection.push(new BDFDB.DiscordObjects.Relationship({
-							activities: [],
-							applicationStream: null,
-							isMobile: false,
-							key: placeHolderId,
-							mutualGuilds: [],
-							mutualGuildsLength: 0,
-							status: "offline",
-							type: BDFDB.DiscordConstants.RelationshipTypes.NONE,
-							user: placeholder,
-							usernameLower: placeholder.usernameNormalized
-						}));
-					}
-					return newSection;
-				});
-				BDFDB.PatchUtils.patch(this, e.instance.props, "getSectionTitle", {after: e2 => {
-					if (typeof e2.returnValue == "string") {
-						let users = e.instance.props.statusSections.flat(10);
-						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-							align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-							children: [
-								BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN._betterfriendlisttitle,
-									children: this.settings.general.addFavorizedCategory && isFavoritesSelected ? `${this.labels.favorites} - ${users.filter(u => u && u.key != placeHolderId).length}` : this.settings.general.addHiddenCategory && isHiddenSelected ? `${this.labels.hidden} - ${users.filter(u => u && u.key != placeHolderId).length}` : e2.returnValue.replace(users.length, users.filter(u => u && u.key != placeHolderId).length)
-								}),
-								this.settings.general.addSortOptions && [
-									{key: "usernameLower", label: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME},
-									{key: "statusIndex", label: BDFDB.LanguageUtils.LibraryStrings.status}
-								].filter(n => n).map(data => BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercellwrapper, BDFDB.disCN.tableheadercell, BDFDB.disCN._betterfriendlistnamecell, sortKey == data.key && BDFDB.disCN.tableheadercellsorted, BDFDB.disCN.tableheadercellclickable),
-									children: BDFDB.ReactUtils.createElement("div", {
-										className: BDFDB.disCN.tableheadercellcontent,
-										children: [
-											data.label,
-											sortKey == data.key && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-												className: BDFDB.disCN.tableheadersorticon,
-												name: BDFDB.LibraryComponents.SvgIcon.Names[sortReversed ? "ARROW_UP" : "ARROW_DOWN"]
-											})
-										].filter(n => n)
-									}),
-									onClick: event => {
-										if (sortKey == data.key) {
-											if (!sortReversed) sortReversed = true;
-											else {
-												sortKey = null;
-												sortReversed = false;
-											}
-										}
-										else {
-											sortKey = data.key;
-											sortReversed = false;
-										}
-										this.rerenderList();
-									}
-								})),
-								this.settings.general.addSearchbar && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
-										query: searchQuery,
-										onChange: value => {
-											BDFDB.TimeUtils.clear(searchTimeout);
-											searchTimeout = BDFDB.TimeUtils.timeout(_ => {
-												searchQuery = value;
-												this.rerenderList();
-											}, 1000);
-										},
-										onClear: _ => {
-											searchQuery = "";
-											this.rerenderList();
-										}
-									})
-								})
-							].flat(10).filter(n => n)
-						});
-					}
-				}}, {force: true, noCache: true});
 				if (e.returnvalue && !e.instance.props.statusSections.flat(10).length) e.returnvalue.props.children = BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN.peopleslistempty,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FriendsEmptyState, {
 						type: !currentSection || !Object.entries(BDFDB.DiscordConstants.FriendsSections).find(n => n[1] == currentSection) ? BDFDB.DiscordConstants.FriendsSections.ALL : currentSection
 					})
 				});
+			}
+			
+			processPeopleList (e) {
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SectionTitle"});
+				if (index > -1) {
+					let users = (BDFDB.ReactUtils.findChild(e.returnvalue, {props: ["statusSections"]}) || {props: {statusSections: []}}).props.statusSections.flat(10);
+					let filteredUsers = users;
+					if (this.settings.general.addFavorizedCategory) {
+						if (isFavoritesSelected) filteredUsers = filteredUsers.filter(n => n && n.user && favorizedFriends.indexOf(n.user.id) > -1);
+					}
+					if (this.settings.general.addHiddenCategory) {
+						if (isHiddenSelected) filteredUsers = filteredUsers.filter(n => n && n.user && hiddenFriends.indexOf(n.user.id) > -1);
+						else filteredUsers = filteredUsers.filter(n => n && n.user && hiddenFriends.indexOf(n.user.id) == -1);
+					}
+					children[index].props.title = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+						children: [
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN._betterfriendlisttitle,
+								children: this.settings.general.addFavorizedCategory && isFavoritesSelected ? `${this.labels.favorites} - ${filteredUsers.filter(u => u && u.key != placeHolderId).length}` : this.settings.general.addHiddenCategory && isHiddenSelected ? `${this.labels.hidden} - ${filteredUsers.filter(u => u && u.key != placeHolderId).length}` : children[index].props.title.replace(users.length, filteredUsers.filter(u => u && u.key != placeHolderId).length)
+							}),
+							this.settings.general.addSortOptions && [
+								{key: "usernameLower", label: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME},
+								{key: "statusIndex", label: BDFDB.LanguageUtils.LibraryStrings.status}
+							].filter(n => n).map(data => BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercellwrapper, BDFDB.disCN.tableheadercell, BDFDB.disCN._betterfriendlistnamecell, sortKey == data.key && BDFDB.disCN.tableheadercellsorted, BDFDB.disCN.tableheadercellclickable),
+								children: BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.tableheadercellcontent,
+									children: [
+										data.label,
+										sortKey == data.key && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+											className: BDFDB.disCN.tableheadersorticon,
+											name: BDFDB.LibraryComponents.SvgIcon.Names[sortReversed ? "ARROW_UP" : "ARROW_DOWN"]
+										})
+									].filter(n => n)
+								}),
+								onClick: event => {
+									if (sortKey == data.key) {
+										if (!sortReversed) sortReversed = true;
+										else {
+											sortKey = null;
+											sortReversed = false;
+										}
+									}
+									else {
+										sortKey = data.key;
+										sortReversed = false;
+									}
+									this.rerenderList();
+								}
+							}))
+						].flat(10).filter(n => n)
+					});
+				}
 			}
 			
 			processFriendRow (e) {

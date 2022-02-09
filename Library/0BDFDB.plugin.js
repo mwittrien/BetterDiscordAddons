@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.1
+ * @version 2.1.2
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.1.1",
+			"version": "2.1.2",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
@@ -8235,20 +8235,19 @@ module.exports = (_ => {
 			plugin = plugin == BDFDB && InternalBDFDB || plugin;
 			if (!module.default.displayName || module.default.displayName.indexOf("ContextMenu") == -1) {
 				BDFDB.PatchUtils.patch(plugin, module, "default", {after: e => {
-					if (e.returnValue && e.returnValue.props.children && e.returnValue.props.children.type && e.returnValue.props.children.type.displayName) {
+					if (typeof plugin[`on${type}`] != "function") return;
+					else if (e.returnValue && e.returnValue.props.children && e.returnValue.props.children.type && e.returnValue.props.children.type.displayName) {
 						let name = e.returnValue.props.children.type.displayName;
 						let originalReturn = e.returnValue.props.children.type(e.returnValue.props.children.props);
 						let newType = props => {
 							const returnValue = BDFDB.ReactUtils.createElement(originalReturn.type, originalReturn.props);
-							if (returnValue.props.children) {
-								plugin[`on${type}`]({
-									instance: {props: props},
-									returnvalue: returnValue,
-									component: module,
-									methodname: "default",
-									type: name
-								});
-							}
+							if (returnValue.props.children) plugin[`on${type}`]({
+								instance: {props: props},
+								returnvalue: returnValue,
+								component: module,
+								methodname: "default",
+								type: name
+							});
 							else BDFDB.PatchUtils.patch(plugin, returnValue, "type", {after: e2 => {
 								if (e2.returnValue && typeof plugin[`on${type}`] == "function") plugin[`on${type}`]({
 									instance: {props: e2.methodArguments[0]},
@@ -8266,13 +8265,23 @@ module.exports = (_ => {
 				}}, {name: type});
 			}
 			else BDFDB.PatchUtils.patch(plugin, module, "default", {after: e => {
-				if (e.returnValue && typeof plugin[`on${type}`] == "function") plugin[`on${type}`]({
+				if (typeof plugin[`on${type}`] != "function") return;
+				else if (e.returnValue.props.children) plugin[`on${type}`]({
 					instance: {props: e.methodArguments[0]},
 					returnvalue: e.returnValue,
 					component: module,
 					methodname: "default",
 					type: module.default.displayName
 				});
+				else BDFDB.PatchUtils.patch(plugin, e.returnValue, "type", {after: e2 => {
+					if (e2.returnValue && typeof plugin[`on${type}`] == "function") plugin[`on${type}`]({
+						instance: {props: e2.methodArguments[0]},
+						returnvalue: e2.returnValue,
+						component: module,
+						methodname: "default",
+						type: module.default.displayName
+					});
+				}});
 			}});
 		};
 		
