@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.5
+ * @version 4.4.6
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.4.5",
+			"version": "4.4.6",
 			"description": "Allows you to locally edit Users"
 		}
 	};
@@ -433,7 +433,7 @@ module.exports = (_ => {
 								let userName = BDFDB.ReactUtils.findChild(children, {name: "AutocompleteRowHeading"});
 								if (userName) this.changeUserColor(userName, e.instance.props.user.id);
 								return children;
-							}, "", this);
+							}, "Error in Children Render of AutocompleteUserResult!", this);
 						}
 					}
 				}
@@ -653,7 +653,7 @@ module.exports = (_ => {
 									let userName = BDFDB.ReactUtils.findChild(renderedChildren, {name: "PanelTitle"});
 									if (userName) this.changeUserColor(userName, e.instance.props.currentUser.id);
 									return renderedChildren;
-								}, "", this);
+								}, "Error in Tooltip Children Render of Account!", this);
 							}
 						}
 					}
@@ -748,7 +748,7 @@ module.exports = (_ => {
 									let renderedChildren = renderChildren(...args);
 									this.changeUserColor(renderedChildren, author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
 									return renderedChildren;
-								}, "", this);
+								}, "Error in Children Render of MessageUsername!", this);
 							}
 							else this.changeUserColor(messageUsername, author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
 						}
@@ -859,7 +859,7 @@ module.exports = (_ => {
 							let children = renderChildren(...args);
 							this.changeMention(BDFDB.ReactUtils.findChild(children, {name: "Mention"}), changedUsers[e.instance.props.userId]);
 							return children;
-						}, "", this);
+						}, "Error in Children Render of UserMention!", this);
 					}
 					else this.changeMention(BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Mention"}), changedUsers[e.instance.props.userId]);
 				}
@@ -880,7 +880,7 @@ module.exports = (_ => {
 								let children = renderChildren(...args);
 								this.changeMention(children, data);
 								return children;
-							}, "", this);
+							}, "Error in Children Render of RichUserMention!", this);
 						}
 						else this.changeMention(e.returnvalue, data);
 					}
@@ -959,7 +959,7 @@ module.exports = (_ => {
 							if (changedUsers[e2.methodArguments[0].user.id].name) userName.props.children = changedUsers[e2.methodArguments[0].user.id].name;
 							this.changeUserColor(userName, e2.methodArguments[0].user.id);
 						}
-						let avatar = BDFDB.ReactUtils.findChild(e2.returnValue, {props: [["className", BDFDB.disCN.selectfilterpopoutavatar]]});
+						let avatar = BDFDB.ReactUtils.findChild(e2.returnValue, {props: [["className", BDFDB.disCN.auditlogpopoutavatar]]});
 						if (avatar) avatar.props.src = this.getUserAvatar(e2.methodArguments[0].user.id);
 					}}}, {force: true, noCache: true});
 				}
@@ -1056,7 +1056,7 @@ module.exports = (_ => {
 							let renderedChildren = childrenRender(...args);
 							if (renderedChildren && renderedChildren.props) renderedChildren.props.icon = this.getUserAvatar(recipientId);
 							return renderedChildren;
-						}, "", this);
+						}, "Error in Avatar Render of DirectMessage!", this);
 					}
 				}
 			}
@@ -1078,7 +1078,7 @@ module.exports = (_ => {
 								let children = childrenRender(...args);
 								this._processPrivateChannel(e.instance, children);
 								return children;
-							}, "", this);
+							}, "Error in Children Render of PrivateChannel!", this);
 						}
 						else this._processPrivateChannel(e.instance, e.returnvalue);
 					}
@@ -1086,11 +1086,12 @@ module.exports = (_ => {
 			}
 
 			_processPrivateChannel (instance, returnvalue) {
-				returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getUserData(instance.props.user.id).username});
-				this.changeUserColor(returnvalue.props.name, instance.props.user.id, {modify: BDFDB.ObjectUtils.extract(Object.assign({}, instance.props, instance.state), "hovered", "selected", "hasUnreadMessages", "muted")});
-				returnvalue.props.avatar.props.src = this.getUserAvatar(instance.props.user.id);
-				returnvalue.props.decorators = [returnvalue.props.decorators].flat(10);
-				this.injectBadge(returnvalue.props.decorators, instance.props.user.id, null, 1);
+				const wrapper = returnvalue.props.avatar ? returnvalue : BDFDB.ReactUtils.findChild(returnvalue, {props: ["avatar"]});
+				wrapper.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getUserData(instance.props.user.id).username});
+				this.changeUserColor(wrapper.props.name, instance.props.user.id, {modify: BDFDB.ObjectUtils.extract(Object.assign({}, instance.props, instance.state), "hovered", "selected", "hasUnreadMessages", "muted")});
+				if (wrapper.props.avatar) wrapper.props.avatar.props.src = this.getUserAvatar(instance.props.user.id);
+				wrapper.props.decorators = [wrapper.props.decorators].flat(10);
+				this.injectBadge(wrapper.props.decorators, instance.props.user.id, null, 1);
 			}
 
 			processQuickSwitchUserResult (e) {
@@ -1158,7 +1159,7 @@ module.exports = (_ => {
 							this.changeUserColor(userName, recipientId);
 						}
 						return renderedChildren;
-					}, "", this);
+					}, "Error in Children Render of RTCConnection!", this);
 				}
 			}
 
