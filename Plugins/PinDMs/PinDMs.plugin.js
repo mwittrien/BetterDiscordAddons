@@ -691,7 +691,7 @@ module.exports = (_ => {
 			}
 			
 			_processPrivateChannel (instance, returnvalue, category) {
-				const interactive = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.namecontainerinteractive]]});
+				const interactive = BDFDB.ReactUtils.findChild(returnvalue, {props: [["className", BDFDB.disCN.namecontainerinteractive]]});
 				if (!interactive) return;
 				interactive.props.children.splice(interactive.props.children.length == 1 ? 1 : -1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: BDFDB.LanguageUtils.LanguageStrings.UNPIN,
