@@ -303,6 +303,7 @@
 		"AvatarComponents": {"props": ["AnimatedAvatar"]},
 		"Badges": {"props": ["IconBadge", "NumberBadge"], "assign": true},
 		"CardRemoveButton": {"name": "RemoveButton"},
+		"ChannelTextAreaTypes": {"props": ["ChatInputTypes"], "value": "ChatInputTypes"},
 		"Checkmark": {"name": "Checkmark"},
 		"Connectors": {"props": ["Router", "Link"], "assign": true},
 		"DiscordTag": {"name": "DiscordTag"},
