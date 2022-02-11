@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.8
+ * @version 1.4.9
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,18 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "StaffTag",
 			"author": "DevilBro",
-			"version": "1.4.8",
+			"version": "1.4.9",
 			"description": "Adds a Crown/Tag to Server Owners (or Admins/Management)"
 		},
 		"changeLog": {
-			"improved": {
-				"Thread Creators": "Added a dark gray crown for Thread Creators (they no longe appear as Server Owners)",
-				"Server Owner/Group Owner": "Split the settings for Server and Group Owners, you can now change/disable them separately"
-			}
-		},
-		"changeLog": {
-			"fixed": {
-				"Member List Position": ""
+			"added": {
+				"Ignore Myself": "Added Option to not add tags for yourself"
 			}
 		}
 	};
@@ -97,7 +91,8 @@ module.exports = (_ => {
 						useCrown:					{value: true,	description: "Use the Crown Icon instead of the Bot Tag Style"},
 						useRoleColor:				{value: true, 	description: "Use the Role Color instead of the default Blurple"},
 						useBlackFont:				{value: false,	description: "Use black Font instead of darkening the Role Color on bright Colors"},
-						ignoreBots:					{value: false,	description: "Don't add the Owner/Admin/Management Tag for Bots"}
+						ignoreBots:					{value: false,	description: "Don't add the Owner/Admin/Management Tag for Bots"},
+						ignoreMyself:				{value: false,	description: "Don't add the Owner/Admin/Management Tag for yourself"}
 					},
 					tagTypes: {
 						owners:						{value: true, 	description: "Server Owner Tag"},
@@ -405,7 +400,7 @@ module.exports = (_ => {
 			}
 			
 			getUserType (user, channelId) {
-				if (!user || this.settings.general.ignoreBots && user.bot) return userTypes.NONE;
+				if (!user || this.settings.general.ignoreBots && user.bot || this.settings.general.ignoreMyself && user.id == BDFDB.UserUtils.me.id) return userTypes.NONE;
 				const channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId || BDFDB.LibraryModules.LastChannelStore.getChannelId());
 				if (!channel) return userTypes.NONE;
 				const guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
