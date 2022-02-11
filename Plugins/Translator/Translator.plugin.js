@@ -642,7 +642,7 @@ module.exports = (_ => {
 			
 			processChannelTextAreaForm (e) {
 				BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
-					if (this.isTranslationEnabled(e.instance.props.channel.id)) {
+					if (this.isTranslationEnabled(e.instance.props.channel.id)   && e2.methodArguments[0] != "") {
 						e2.stopOriginalMethodCall();
 						this.translateText(e2.methodArguments[0], messageTypes.SENT, (translation, input, output) => {
 							translation = !translation ? e2.methodArguments[0] : (this.settings.general.sendOriginalMessage ? (translation + "\n\n> *" + e2.methodArguments[0].split("\n").join("*\n> *") + "*") : translation);
