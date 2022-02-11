@@ -1420,35 +1420,40 @@ module.exports = (_ => {
 				if (!BDFDB.ArrayUtils.is(plugin.eventListeners)) plugin.eventListeners = [];
 				let eventCallback = null;
 				if (selector) {
-					if (origEventName == "mouseenter" || origEventName == "mouseleave") {
-						eventCallback = e => {
-							for (let child of e.path) if (typeof child.matches == "function" && child.matches(selector) && !child[namespace + "BDFDB" + origEventName]) {
-								child[namespace + "BDFDB" + origEventName] = true;
-								if (origEventName == "mouseenter") callback(BDFDB.ListenerUtils.copyEvent(e, child));
-								let mouseOut = e2 => {
-									if (e2.target.contains(child) || e2.target == child || !child.contains(e2.target)) {
-										if (origEventName == "mouseleave") callback(BDFDB.ListenerUtils.copyEvent(e, child));
-										delete child[namespace + "BDFDB" + origEventName];
-										document.removeEventListener("mouseout", mouseOut);
-									}
-								};
-								document.addEventListener("mouseout", mouseOut);
-								break;
-							}
-						};
-					}
-					else {
-						eventCallback = e => {
-							for (let child of e.path) if (typeof child.matches == "function" && child.matches(selector)) {
-								callback(BDFDB.ListenerUtils.copyEvent(e, child));
-								break;
-							}
-						};
-					}
+					if (origEventName == "mouseenter" || origEventName == "mouseleave") eventCallback = e => {
+						for (let child of e.path) if (typeof child.matches == "function" && child.matches(selector) && !child[namespace + "BDFDB" + origEventName]) {
+							child[namespace + "BDFDB" + origEventName] = true;
+							if (origEventName == "mouseenter") callback(BDFDB.ListenerUtils.copyEvent(e, child));
+							let mouseOut = e2 => {
+								if (e2.target.contains(child) || e2.target == child || !child.contains(e2.target)) {
+									if (origEventName == "mouseleave") callback(BDFDB.ListenerUtils.copyEvent(e, child));
+									delete child[namespace + "BDFDB" + origEventName];
+									document.removeEventListener("mouseout", mouseOut);
+								}
+							};
+							document.addEventListener("mouseout", mouseOut);
+							break;
+						}
+					};
+					else eventCallback = e => {
+						for (let child of e.path) if (typeof child.matches == "function" && child.matches(selector)) {
+							callback(BDFDB.ListenerUtils.copyEvent(e, child));
+							break;
+						}
+					};
 				}
-				else eventCallback = e => {callback(BDFDB.ListenerUtils.copyEvent(e, ele));};
+				else eventCallback = e => callback(BDFDB.ListenerUtils.copyEvent(e, ele));
+				
+				let observer;
+				if (Node.prototype.isPrototypeOf(ele)) {
+					observer = new MutationObserver(changes => changes.forEach(change => {
+						const nodes = Array.from(change.removedNodes);
+						if (nodes.indexOf(ele) > -1 || nodes.some(n =>  n.contains(ele))) BDFDB.ListenerUtils.remove(plugin, ele, actions, selector);
+					}));
+					observer.observe(document.body, {subtree: true, childList: true});
+				}
 
-				plugin.eventListeners.push({ele, eventName, origEventName, namespace, selector, eventCallback});
+				plugin.eventListeners.push({ele, eventName, origEventName, namespace, selector, eventCallback, observer});
 				ele.addEventListener(eventName, eventCallback, true);
 			}
 		};
@@ -1459,6 +1464,7 @@ module.exports = (_ => {
 				while (plugin.eventListeners.length) {
 					let listener = plugin.eventListeners.pop();
 					listener.ele.removeEventListener(listener.eventName, listener.eventCallback, true);
+					if (listener.observer) listener.observer.disconnect();
 				}
 			}
 			else if (Node.prototype.isPrototypeOf(ele) || ele === window) {
@@ -1470,6 +1476,7 @@ module.exports = (_ => {
 						let removedListeners = [];
 						if (listener.ele == ele && (!eventName || listener.origEventName == eventName) && listener.namespace == namespace && (selector === undefined || listener.selector == selector)) {
 							listener.ele.removeEventListener(listener.eventName, listener.eventCallback, true);
+							if (listener.observer) listener.observer.disconnect();
 							removedListeners.push(listener);
 						}
 						if (removedListeners.length) plugin.eventListeners = plugin.eventListeners.filter(listener => !removedListeners.includes(listener));
@@ -2106,7 +2113,7 @@ module.exports = (_ => {
 			
 			const observer = new MutationObserver(changes => changes.forEach(change => {
 				const nodes = Array.from(change.removedNodes);
-				if (nodes.indexOf(itemLayer) > -1 || nodes.indexOf(anker) > -1 || nodes.some(n => n.contains(anker))) removeTooltip();
+				if (nodes.indexOf(itemLayer) > -1 || nodes.indexOf(anker) > -1 || nodes.some(n =>  n.contains(anker))) removeTooltip();
 			}));
 			observer.observe(document.body, {subtree: true, childList: true});
 			
@@ -3096,7 +3103,7 @@ module.exports = (_ => {
 				LibraryModules.ReactDOM.render(component, node);
 				let observer = new MutationObserver(changes => changes.forEach(change => {
 					let nodes = Array.from(change.removedNodes);
-					if (nodes.indexOf(node) > -1 || nodes.some(n => n.contains(node))) {
+					if (nodes.indexOf(node) > -1 || nodes.some(n =>  n.contains(node))) {
 						observer.disconnect();
 						BDFDB.ReactUtils.unmountComponentAtNode(node);
 					}
