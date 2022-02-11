@@ -197,7 +197,7 @@ module.exports = (_ => {
 			processChannelTextAreaButtons (e) {
 				if (this.settings.general.addQuickToggle && !e.instance.props.disabled) {
 					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(QuickToogleButtonComponent, {
-						type: e.instance.props.type,
+						type: e.instance.props.type.analyticsName || e.instance.props.type,
 						channelId: e.instance.props.channel.id
 					}));
 				}
