@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.3
+ * @version 2.1.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,12 +19,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.1.3",
+			"version": "2.1.4",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
 		"changeLog": {
 			"fixed": {
+				"Context Menus Entry Spam": "Fixed an issue where in some plugin combinations, context menu entries would get mulitplicated",
 				"Lazy Components": "Properly patches lazy components now, fixing issues with multiple plugins",
 				"Context Menus": "Fully work again, no further crashes",
 				"Better Friend List": "Fixed Crash"
@@ -8241,13 +8242,17 @@ module.exports = (_ => {
 		InternalBDFDB.patchContextMenu = function (plugin, type, module) {
 			if (!module || !module.default) return;
 			plugin = plugin == BDFDB && InternalBDFDB || plugin;
-			const call = (props, returnValue, name) => plugin[`on${type}`]({
-				instance: {props: props},
-				returnvalue: returnValue,
-				component: module,
-				methodname: "default",
-				type: name
-			});
+			const call = (props, returnValue, name) => {
+				if (!returnValue || !returnValue.props || !returnValue.props.children || returnValue.props.children.__BDFDBPatchesCalled && returnValue.props.children.__BDFDBPatchesCalled[plugin.name]) return;
+				returnValue.props.children.__BDFDBPatchesCalled = Object.assign({}, returnValue.props.children.__BDFDBPatchesCalled, {[plugin.name]: true});
+				return plugin[`on${type}`]({
+					instance: {props: props},
+					returnvalue: returnValue,
+					component: module,
+					methodname: "default",
+					type: name
+				});
+			};
 			BDFDB.PatchUtils.patch(plugin, module, "default", {after: e => {
 				if (typeof plugin[`on${type}`] != "function") return;
 				else if (e.returnValue && e.returnValue.props.children) {
