@@ -2,7 +2,7 @@
  * @name SplitLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.0
+ * @version 1.7.1
  * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "SplitLargeMessages",
 			"author": "DevilBro",
-			"version": "1.7.0",
+			"version": "1.7.1",
 			"description": "Allows you to enter larger Messages, which will automatically split into several smaller Messages"
-		},
-		"changeLog": {
-			"improved": {
-				"Threads": "Works flawlessly with Threads now."
-			}
 		}
 	};
 
@@ -144,7 +139,7 @@ module.exports = (_ => {
 			}
 			
 			processChannelTextAreaContainer (e) {
-				if (e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.SIDEBAR) {
+				if (e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SlateCharacterCount"});
 					if (index > -1) {
 						let text = BDFDB.LibraryModules.SlateSelectionUtils.serialize(children[index].props.document, "raw");
@@ -162,7 +157,7 @@ module.exports = (_ => {
 			}
 
 			processChannelEditorContainer (e) {
-				if (e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.SIDEBAR) e.instance.props.shouldUploadLongMessages = false;
+				if (e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) e.instance.props.shouldUploadLongMessages = false;
 			}
 
 			formatText (text) {
