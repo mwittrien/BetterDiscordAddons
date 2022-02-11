@@ -8139,7 +8139,7 @@ module.exports = (_ => {
 					avatarWrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
 						let renderedChildren = renderChildren(...args);
 						return InternalBDFDB._processAvatarRender(e.instance.props.message.author, renderedChildren, BDFDB.disCN.messageavatar) || renderedChildren;
-					});
+					}, "Error in Avatar Render of MessageHeader!");
 				}
 				else if (avatarWrapper && avatarWrapper.type == "img") e.returnvalue.props.children[0] = InternalBDFDB._processAvatarRender(e.instance.props.message.author, avatarWrapper) || avatarWrapper;
 			}
@@ -8234,56 +8234,35 @@ module.exports = (_ => {
 		InternalBDFDB.patchContextMenu = function (plugin, type, module) {
 			if (!module || !module.default) return;
 			plugin = plugin == BDFDB && InternalBDFDB || plugin;
-			if (!module.default.displayName || module.default.displayName.indexOf("ContextMenu") == -1) {
-				BDFDB.PatchUtils.patch(plugin, module, "default", {after: e => {
-					if (typeof plugin[`on${type}`] != "function") return;
-					else if (e.returnValue && e.returnValue.props.children && e.returnValue.props.children.type && e.returnValue.props.children.type.displayName) {
+			const call = (props, returnValue, name) => plugin[`on${type}`]({
+				instance: {props: props},
+				returnvalue: returnValue,
+				component: module,
+				methodname: "default",
+				type: name
+			});
+			BDFDB.PatchUtils.patch(plugin, module, "default", {after: e => {
+				if (typeof plugin[`on${type}`] != "function") return;
+				else if (e.returnValue && e.returnValue.props.children) {
+					if (e.returnValue.props.children.type && e.returnValue.props.children.type.displayName) {
 						let name = e.returnValue.props.children.type.displayName;
 						let originalReturn = e.returnValue.props.children.type(e.returnValue.props.children.props);
 						let newType = props => {
 							const returnValue = BDFDB.ReactUtils.createElement(originalReturn.type, originalReturn.props);
-							if (returnValue.props.children) plugin[`on${type}`]({
-								instance: {props: props},
-								returnvalue: returnValue,
-								component: module,
-								methodname: "default",
-								type: name
-							});
+							if (returnValue.props.children) call(props, returnValue, name);
 							else BDFDB.PatchUtils.patch(plugin, returnValue, "type", {after: e2 => {
-								if (e2.returnValue && typeof plugin[`on${type}`] == "function") plugin[`on${type}`]({
-									instance: {props: e2.methodArguments[0]},
-									returnvalue: e2.returnValue,
-									component: module,
-									methodname: "default",
-									type: name
-								});
-							}});
+								if (e2.returnValue && typeof plugin[`on${type}`] == "function") call(e2.methodArguments[0], e2.returnValue, name);
+							}}, {noCache: true});
 							return returnValue;
 						};
 						newType.displayName = name;
 						e.returnValue.props.children = BDFDB.ReactUtils.createElement(newType, e.returnValue.props.children.props);
 					}
-				}}, {name: type});
-			}
-			else BDFDB.PatchUtils.patch(plugin, module, "default", {after: e => {
-				if (typeof plugin[`on${type}`] != "function") return;
-				else if (e.returnValue.props.children) plugin[`on${type}`]({
-					instance: {props: e.methodArguments[0]},
-					returnvalue: e.returnValue,
-					component: module,
-					methodname: "default",
-					type: module.default.displayName
-				});
+				}
 				else BDFDB.PatchUtils.patch(plugin, e.returnValue, "type", {after: e2 => {
-					if (e2.returnValue && typeof plugin[`on${type}`] == "function") plugin[`on${type}`]({
-						instance: {props: e2.methodArguments[0]},
-						returnvalue: e2.returnValue,
-						component: module,
-						methodname: "default",
-						type: module.default.displayName
-					});
-				}});
-			}});
+					if (e2.returnValue && typeof plugin[`on${type}`] == "function") call(e2.methodArguments[0], e2.returnValue, module.default.displayName);
+				}}, {noCache: true});
+			}}, {name: type});
 		};
 		
 		BDFDB.ReactUtils.instanceKey = Object.keys(document.querySelector(BDFDB.dotCN.app) || {}).some(n => n.startsWith("__reactInternalInstance")) ? "_reactInternalFiber" : "_reactInternals";
@@ -8408,7 +8387,7 @@ module.exports = (_ => {
 							});
 						}}, {noCache: true});
 						return renderedPopout;
-					});
+					}, "Error in Popout Render of MessageOptionToolbar!");
 				}
 			}}, {once: true});
 		}});
