@@ -2,7 +2,7 @@
  * @name WriteUpperCase
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.2
+ * @version 1.3.3
  * @description Changes the first Letter of each Sentence in Message Inputs to Uppercase
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "WriteUpperCase",
 			"author": "DevilBro",
-			"version": "1.3.2",
+			"version": "1.3.3",
 			"description": "Changes the first Letter of each Sentence in Message Inputs to Uppercase"
 		}
 	};
@@ -166,7 +166,8 @@ module.exports = (_ => {
 			}
 
 			processChannelEditorContainer (e) {
-				let type = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(e.instance.props.type || "");
+				let type = e.instance.props.type.analyticsName || e.instance.props.type || "";
+				type = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(typeof type != "string" ? "" : type);
 				if (e.instance.props.textValue && e.instance.state.focused && (!type || this.settings.places[type] || !this.defaults.general[type]) && (!this.settings.general.addQuickToggle || channelBlacklist.indexOf(e.instance.props.channel.id) == -1)) {
 					let string = e.instance.props.textValue;
 					if (string.length && !/<[#@][!&]{0,1}\d+>|@here|@everyone|:[A-z0-9_-]+:|[\uD83C-\uDBFF\uDC00-\uDFFF]+/.test(string)) {
