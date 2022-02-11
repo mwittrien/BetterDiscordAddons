@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.2
+ * @version 1.8.4
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowBadgesInChat",
 			"author": "DevilBro",
-			"version": "1.8.2",
+			"version": "1.8.4",
 			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList"
 		}
 	};
@@ -285,15 +285,18 @@ module.exports = (_ => {
 					let childrenRender = e.returnvalue.props.children;
 					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
 						let children = childrenRender(...args);
-						children.props.decorators = [children.props.decorators].flat(10);
-						this.injectBadges(children.props.decorators, e.instance.props.user, null, "dms");
+						this._processPrivateChannel(e.instance, children);
 						return children;
-					}, "", this);
+					}, "Error in Children Render of PrivateChannel!", this);
 				}
-				else {
-					e.returnvalue.props.decorators = [e.returnvalue.props.decorators].flat(10);
-					this.injectBadges(e.returnvalue.props.decorators, e.instance.props.user, null, "dms");
-				}
+				else this._processPrivateChannel(e.instance, e.returnvalue);
+			}
+
+			_processPrivateChannel (instance, returnvalue, a) {
+				const wrapper = returnvalue.props.decorators ? returnvalue : BDFDB.ReactUtils.findChild(returnvalue, {props: ["decorators"]}) || returnvalue;
+				if (!wrapper) return;
+				wrapper.props.decorators = [wrapper.props.decorators].flat(10);
+				this.injectBadges(wrapper.props.decorators, instance.props.user, null, "dms");
 			}
 			
 			processUserProfileBadgeList (e) {

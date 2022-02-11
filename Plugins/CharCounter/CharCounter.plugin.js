@@ -2,7 +2,7 @@
  * @name CharCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.8
+ * @version 1.5.9
  * @description Adds a Character Counter to most Inputs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "CharCounter",
 			"author": "DevilBro",
-			"version": "1.5.8",
+			"version": "1.5.9",
 			"description": "Adds a Character Counter to most Inputs"
 		}
 	};
@@ -181,7 +181,7 @@ module.exports = (_ => {
 				let editorContainer = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelEditorContainer"});
 				if (editorContainer && editorContainer.props.type && !editorContainer.props.disabled) {
 					if (!BDFDB.ArrayUtils.is(e.returnvalue.props.children)) e.returnvalue.props.children = [e.returnvalue.props.children];
-					this.injectCounter(e.returnvalue, e.returnvalue.props.children, editorContainer.props.type, BDFDB.dotCN.textarea);
+					this.injectCounter(e.returnvalue, e.returnvalue.props.children, editorContainer.props.type.analyticsName || editorContainer.props.type, BDFDB.dotCN.textarea);
 				}
 			}
 
