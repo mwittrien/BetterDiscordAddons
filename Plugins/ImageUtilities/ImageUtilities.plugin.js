@@ -842,7 +842,7 @@ module.exports = (_ => {
 					}));
 				}
 				if (e.node) {
-					let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.modal + BDFDB.dotCN.layermodal, e.node);
+					let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node);
 					if (modal) {
 						modal.className = BDFDB.DOMUtils.formatClassName(modal.className, messages.length && BDFDB.disCN._imageutilitiesgallery, this.settings.general.addDetails && BDFDB.disCN._imageutilitiesdetailsadded);
 						this.cleanupListeners("Gallery");
@@ -1025,7 +1025,7 @@ module.exports = (_ => {
 						else BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", ""), {type: "danger"});
 					}
 					else {
-						BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown", response.headers["content-type"].split("/").pop().split("+")[0], 0), body, error => {
+						BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown", this.getFileExtenstion(response.headers["content-type"].split("/").pop().split("+")[0]), 0), body, error => {
 							if (error) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", path), {type: "danger"});
 							else BDFDB.NotificationUtils.toast(this.labels.toast_save_success.replace("{{var0}}", type).replace("{{var1}}", path), {type: "success"});
 						});
@@ -1045,7 +1045,7 @@ module.exports = (_ => {
 						let hrefURL = window.URL.createObjectURL(new Blob([body]));
 						let tempLink = document.createElement("a");
 						tempLink.href = hrefURL;
-						tempLink.download = `${alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown"}.${response.headers["content-type"].split("/").pop().split("+")[0]}`;
+						tempLink.download = `${alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown"}.${this.getFileExtenstion(response.headers["content-type"].split("/").pop().split("+")[0])}`;
 						tempLink.click();
 						window.URL.revokeObjectURL(hrefURL);
 					}
@@ -1088,7 +1088,12 @@ module.exports = (_ => {
 				if (BDFDB.LibraryRequires.fs.existsSync(wholePath)) return this.getFileName(path, fileName, extension, i + 1);
 				else return wholePath;
 			}
-
+			
+			getFileExtenstion (ext) {
+				if (ext == "quicktime") ext = "mov";
+				return ext;
+			}
+			
 			getMessageGroupOfImage (src) {
 				if (src && this.settings.general.enableGallery) for (let message of document.querySelectorAll(BDFDB.dotCN.messagelistitem)) for (let img of message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")) if (this.isSameImage(src, img)) {
 					let previousSiblings = [], nextSiblings = [];
