@@ -8259,6 +8259,7 @@ module.exports = (_ => {
 					if (e.returnValue.props.children.type && e.returnValue.props.children.type.displayName) {
 						let name = e.returnValue.props.children.type.displayName;
 						let originalReturn = e.returnValue.props.children.type(e.returnValue.props.children.props);
+						if (!originalReturn || !originalReturn.type) return;
 						let newType = props => {
 							const returnValue = BDFDB.ReactUtils.createElement(originalReturn.type, originalReturn.props);
 							if (returnValue.props.children) call(props, returnValue, name);
