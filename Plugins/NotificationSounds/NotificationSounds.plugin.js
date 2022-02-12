@@ -279,12 +279,13 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DesktopNotificationUtils, "showNotification", {before: e => {
-					if (e.methodArguments[3] && e.methodArguments[3].sound && e.methodArguments[3].sound.includes("message")) e.methodArguments[3].sound = null;
+					if (e.methodArguments[3] && e.methodArguments[3].sound && e.methodArguments[3].sound.includes("message")) e.methodArguments[3].sound = `_BDFDB_${e.methodArguments[3].sound.split("").reverse().join("")}`;
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
 					let type = e.methodArguments[0];
 					if (!type) return;
-					else if (choices[type]) {
+					if (type.indexOf("_BDFDB_") == 0) type = type.replace("_BDFDB_", "").split("").reverse().join("");
+					if (choices[type]) {
 						e.stopOriginalMethodCall();
 						BDFDB.TimeUtils.timeout(_ => {
 							if (type == "message1") {
