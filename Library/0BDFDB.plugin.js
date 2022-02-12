@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.7
+ * @version 2.1.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,16 +19,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.1.7",
+			"version": "2.1.6",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
 		"changeLog": {
-			"progress": {
-				"Updates": "Yes there have been a lot of Updates in the Last Days, that's because I haven't had time to fix old stuff in the last weeks and Discord changed a lot in the last days. This is the last Update for now, since some of y'all are annoyed by update notifications"
-			},
 			"fixed": {
-				"Context Menu Slider": "Fixed an issue where the volume slider in the User Menu couldn't be dragged properlly",
 				"Context Menus Entry Spam": "Fixed an issue where in some plugin combinations, context menu entries would get mulitplicated",
 				"Lazy Components": "Properly patches lazy components now, fixing issues with multiple plugins",
 				"Context Menus": "Fully work again, no further crashes",
@@ -2152,7 +2148,6 @@ module.exports = (_ => {
 					}
 					methodNames = BDFDB.ArrayUtils.removeCopies(methodNames).flat(10).filter(n => n);
 					if (methodNames.includes("componentDidMount")) InternalBDFDB.initiateProcess(plugin, type, {
-						arguments: [],
 						instance: instance,
 						returnvalue: undefined,
 						component: undefined,
@@ -2161,7 +2156,6 @@ module.exports = (_ => {
 					});
 					if (methodNames.includes("render")) forceRender = true;
 					else if (!forceRender && methodNames.includes("componentDidUpdate")) InternalBDFDB.initiateProcess(plugin, type, {
-						arguments: [],
 						instance: instance,
 						returnvalue: undefined,
 						component: undefined,
@@ -2264,7 +2258,6 @@ module.exports = (_ => {
 						for (let pluginData of pluginDataObjs) BDFDB.PatchUtils.patch(pluginData.plugin, toBePatched, config.subComponent.type || "default", {after: e => {
 							for (let patchType in pluginData.patchTypes) BDFDB.PatchUtils.patch(pluginData.plugin, config.subComponent.children && e.returnValue.props && e.returnValue.props.children ? e.returnValue.props.children[0] || e.returnValue.props.children : e.returnValue , "type", {
 								[patchType]: e2 => InternalBDFDB.initiateProcess(pluginData.plugin, config.mappedType, {
-									arguments: e2.methodArguments,
 									instance: e2.thisObject,
 									returnvalue: e2.returnValue,
 									component: toBePatched,
@@ -2278,7 +2271,6 @@ module.exports = (_ => {
 						for (let pluginData of pluginDataObjs) for (let patchType in pluginData.patchTypes) {
 							BDFDB.PatchUtils.patch(pluginData.plugin, toBePatched, pluginData.patchTypes[patchType], {
 								[patchType]: e => InternalBDFDB.initiateProcess(pluginData.plugin, config.mappedType, {
-									arguments: e.methodArguments,
 									instance: e.thisObject,
 									returnvalue: e.returnValue,
 									component: toBePatched,
@@ -7994,7 +7986,6 @@ module.exports = (_ => {
 				EmojiPickerListRow: "default"
 			},
 			after: {
-				useUserVolumeItem: "default",
 				Menu: "default",
 				SettingsView: "componentDidMount",
 				Shakeable: "render",
@@ -8005,22 +7996,6 @@ module.exports = (_ => {
 				AnalyticsContext: ["componentDidMount", "componentDidUpdate"],
 				PeopleListItem: ["componentDidMount", "componentDidUpdate"],
 				DiscordTag: "default"
-			}
-		};
-		
-		InternalBDFDB.processUseUserVolumeItem = function (e) {
-			if (e.returnvalue) {
-				let id = e.arguments[0];
-				let engine = e.arguments[1] != null ? e.arguments[1] : BDFDB.LibraryComponents.VoiceSettingsConstants.MediaEngineContextTypes.DEFAULT;
-				let localVolume = BDFDB.LibraryModules.MediaDeviceUtils.getLocalVolume(id, engine);
-				e.returnvalue = BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSliderItem, {
-					id: e.returnvalue.props.id,
-					label: e.returnvalue.props.label,
-					value: BDFDB.LibraryComponents.VolumeUtils.amplitudeToPerceptual(localVolume),
-					maxValue: BDFDB.LibraryModules.PlatformUtils.isPlatformEmbedded ? 200 : 100,
-					onValueChange: value => BDFDB.LibraryModules.MediaDeviceSetUtils.setLocalVolume(id, BDFDB.LibraryComponents.VolumeUtils.perceptualToAmplitude(value), engine),
-					onValueRender: value => `${value}%`
-				});
 			}
 		};
 		
@@ -8037,7 +8012,6 @@ module.exports = (_ => {
 							if (module) BDFDB.PatchUtils.patch(BDFDB, module.default.prototype, "render", {after: e => {
 								BDFDB.PatchUtils.patch(BDFDB, e.returnValue.type, "type", {after: e2 => {
 									InternalBDFDB.triggerQueuePatch("GuildHeaderContextMenu", {
-										arguments: e2.methodArguments,
 										instance: {props: e2.methodArguments[0]},
 										returnvalue: e2.returnValue,
 										component: e.returnValue,
@@ -8268,11 +8242,10 @@ module.exports = (_ => {
 		InternalBDFDB.patchContextMenu = function (plugin, type, module) {
 			if (!module || !module.default) return;
 			plugin = plugin == BDFDB && InternalBDFDB || plugin;
-			const call = (args, props, returnValue, name) => {
+			const call = (props, returnValue, name) => {
 				if (!returnValue || !returnValue.props || !returnValue.props.children || returnValue.props.children.__BDFDBPatchesCalled && returnValue.props.children.__BDFDBPatchesCalled[plugin.name]) return;
 				returnValue.props.children.__BDFDBPatchesCalled = Object.assign({}, returnValue.props.children.__BDFDBPatchesCalled, {[plugin.name]: true});
 				return plugin[`on${type}`]({
-					arguments: args,
 					instance: {props: props},
 					returnvalue: returnValue,
 					component: module,
@@ -8283,16 +8256,16 @@ module.exports = (_ => {
 			BDFDB.PatchUtils.patch(plugin, module, "default", {after: e => {
 				if (typeof plugin[`on${type}`] != "function") return;
 				else if (e.returnValue && e.returnValue.props.children) {
-					if (BDFDB.ArrayUtils.is(e.returnValue.props.children)) call(e.methodArguments, e.methodArguments[0], e.returnValue, module.default.displayName);
+					if (BDFDB.ArrayUtils.is(e.returnValue.props.children)) call(e.methodArguments[0], e.returnValue, module.default.displayName);
 					else if (e.returnValue.props.children.type && e.returnValue.props.children.type.displayName) {
 						let name = e.returnValue.props.children.type.displayName;
 						let originalReturn = e.returnValue.props.children.type(e.returnValue.props.children.props);
 						if (!originalReturn || !originalReturn.type) return;
-						let newType = (...args) => {
+						let newType = props => {
 							const returnValue = BDFDB.ReactUtils.createElement(originalReturn.type, originalReturn.props);
-							if (returnValue.props.children) call(args, args[0], returnValue, name);
+							if (returnValue.props.children) call(props, returnValue, name);
 							else BDFDB.PatchUtils.patch(plugin, returnValue, "type", {after: e2 => {
-								if (e2.returnValue && typeof plugin[`on${type}`] == "function") call(e2.methodArguments, e2.methodArguments[0], e2.returnValue, name);
+								if (e2.returnValue && typeof plugin[`on${type}`] == "function") call(e2.methodArguments[0], e2.returnValue, name);
 							}}, {noCache: true});
 							return returnValue;
 						};
@@ -8301,7 +8274,7 @@ module.exports = (_ => {
 					}
 				}
 				else BDFDB.PatchUtils.patch(plugin, e.returnValue, "type", {after: e2 => {
-					if (e2.returnValue && typeof plugin[`on${type}`] == "function") call(e2.methodArguments, e2.methodArguments[0], e2.returnValue, module.default.displayName);
+					if (e2.returnValue && typeof plugin[`on${type}`] == "function") call(e2.methodArguments[0], e2.returnValue, module.default.displayName);
 				}}, {noCache: true});
 			}}, {name: type});
 		};
@@ -8408,7 +8381,6 @@ module.exports = (_ => {
 				let menu = BDFDB.ReactUtils.findChild(e2.returnValue, {filter: c => c && c.props && typeof c.props.onRequestClose == "function" && c.props.onRequestClose.toString().indexOf("moreUtilities") > -1});
 				let isSystem = BDFDB.MessageUtils.isSystemMessage(e2.methodArguments[0] && e2.methodArguments[0].message);
 				InternalBDFDB.triggerQueuePatch(isSystem ? "SystemMessageOptionToolbar" : "MessageOptionToolbar", {
-					arguments: e2.methodArguments,
 					instance: {props: e2.methodArguments[0]},
 					returnvalue: e2.returnValue,
 					methodname: "default",
@@ -8422,7 +8394,6 @@ module.exports = (_ => {
 						BDFDB.PatchUtils.patch(BDFDB, renderedPopout, "type", {after: e3 => {
 							let isSystem = BDFDB.MessageUtils.isSystemMessage(e3.methodArguments[0] && e3.methodArguments[0].message);
 							InternalBDFDB.triggerQueuePatch(isSystem ? "SystemMessageOptionContextMenu" : "MessageOptionContextMenu", {
-								arguments: e3.methodArguments,
 								instance: {props: e3.methodArguments[0]},
 								returnvalue: e3.returnValue,
 								methodname: "default",
