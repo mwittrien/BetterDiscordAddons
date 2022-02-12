@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.6.3
+ * @version 3.6.4
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
-			"version": "3.6.3",
+			"version": "3.6.4",
 			"description": "Allows you to replace the native Sounds with custom Sounds"
 		},
 		"changeLog": {
-			"added": {
-				"Force Play": "Added option to play mention ping sounds even if the server/channel is muted"
+			"fixed": {
+				"Double Play": "No longer plays the default and custom sound when Desktop Notifications are enabled"
 			}
 		}
 	};
@@ -278,6 +278,9 @@ module.exports = (_ => {
 					}
 				}});
 				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DesktopNotificationUtils, "showNotification", {before: e => {
+					if (e.methodArguments[3] && e.methodArguments[3].sound && e.methodArguments[3].sound.includes("message")) e.methodArguments[3].sound = null;
+				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
 					let type = e.methodArguments[0];
 					if (!type) return;
