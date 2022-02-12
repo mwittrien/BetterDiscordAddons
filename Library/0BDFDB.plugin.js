@@ -8208,10 +8208,10 @@ module.exports = (_ => {
 		
 		InternalBDFDB.addChunkObserver = function (pluginData, config) {
 			let module;
-			if (config.stringFind) module = BDFDB.ModuleUtils.findByString(config.stringFind, false, true);
-			else if (config.propertyFind) module = BDFDB.ModuleUtils.findByProperties(config.propertyFind, false, true);
-			else if (config.prototypeFind) module = BDFDB.ModuleUtils.findByPrototypes(config.prototypeFind, false, true);
-			else module = BDFDB.ModuleUtils.findByName(config.name, false, true);
+			if (config.stringFind) module = BDFDB.ModuleUtils.findByString(config.stringFind, config.exported, true);
+			else if (config.propertyFind) module = BDFDB.ModuleUtils.findByProperties(config.propertyFind, config.exported, true);
+			else if (config.prototypeFind) module = BDFDB.ModuleUtils.findByPrototypes(config.prototypeFind, config.exported, true);
+			else module = BDFDB.ModuleUtils.findByName(config.name, config.exported, true);
 			if (module) {
 				let exports = !config.exported && module.exports || module;
 				exports = config.path && BDFDB.ObjectUtils.get(exports, config.path) || exports;

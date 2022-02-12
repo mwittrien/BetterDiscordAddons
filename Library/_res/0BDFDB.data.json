@@ -209,7 +209,7 @@
 			"DirectMessage": {"class": "guildouter", "forceObserve": true},
 			"EmojiPicker": {"strings": ["EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"]},
 			"FocusRing": {"props": ["FocusRingScope"]},
-			"GuildFolderSettingsModal": {"lazyLoaded": true},
+			"GuildFolderSettingsModal": {"lazyLoaded": true, "exported": true},
 			"GuildHeader": {"strings": ["bannerVisible", "guildBanner", "onContextMenu"]},
 			"GuildIcon": {"class": "avataricon", "forceObserve": true},
 			"GuildItem": {"strings": ["selectedChannelId", "guildNode", "lowerBadgeWidth"]},
