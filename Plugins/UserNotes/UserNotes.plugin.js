@@ -2,7 +2,7 @@
  * @name UserNotes
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.6
+ * @version 1.0.7
  * @description Allows you to write User Notes locally
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "UserNotes",
 			"author": "DevilBro",
-			"version": "1.0.6",
+			"version": "1.0.7",
 			"description": "Allows you to write User Notes locally"
-		},
-		"changeLog": {
-			"improved": {
-				"Canary Changes": "Preparing Plugins for the changes that are already done on Discord Canary"
-			}
 		}
 	};
 
@@ -95,6 +90,19 @@ module.exports = (_ => {
 				}));
 				
 				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+			}
+
+			onDMContextMenu (e) {
+				if (e.instance.props.user) {
+					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
+					children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							label: this.labels.user_note,
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, "user-note"),
+							action: _ => this.openNotesModal(e.instance.props.user)
+						})
+					}));
+				}
 			}
 
 			onUserContextMenu (e) {

@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.4
+ * @version 4.5.5
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.5.4",
+			"version": "4.5.5",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		}
 	};
@@ -501,6 +501,10 @@ module.exports = (_ => {
 					}
 					else if (e.type != "GuildChannelListContextMenu") this.injectItem(e, (e.instance.props.guild.getIconURL(4096) || "").replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.icon) && e.instance.props.guild.getIconURL(4096, true));
 				}
+			}
+
+			onDMContextMenu (e) {
+				if (e.instance.props.user && this.settings.places.userAvatars) this.injectItem(e, (e.instance.props.user.getAvatarURL(e.instance.props.guildId, 4096) || "").replace(/\.webp|\.gif/, ".png"), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.avatar) && e.instance.props.user.getAvatarURL(e.instance.props.guildId, 4096, true));
 			}
 
 			onUserContextMenu (e) {

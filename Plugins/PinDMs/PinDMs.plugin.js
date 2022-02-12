@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.7
+ * @version 1.8.8
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "PinDMs",
 			"author": "DevilBro",
-			"version": "1.8.7",
+			"version": "1.8.8",
 			"description": "Allows you to pin DMs, making them appear at the top of your DMs/ServerList"
 		}
 	};
@@ -252,7 +252,7 @@ module.exports = (_ => {
 				BDFDB.DiscordUtils.rerenderAll();
 			}
 
-			onUserContextMenu (e) {
+			onDMContextMenu (e) {
 				if (e.instance.props.user) {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "close-dm"});
 					if (index > -1) {

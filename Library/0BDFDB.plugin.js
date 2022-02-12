@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.4
+ * @version 2.1.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.1.4",
+			"version": "2.1.6",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
@@ -8211,7 +8211,7 @@ module.exports = (_ => {
 			}
 		};
 		const QueuedComponents = ["GuildHeaderContextMenu", "SystemMessageOptionContextMenu", "SystemMessageOptionToolbar", "MessageOptionContextMenu", "MessageOptionToolbar"];
-		const ContextMenuTypes = ["UserSettingsCog", "UserProfileActions", "User", "Developer", "Slate", "GuildSettingsRole", "GuildDirectoryEntry", "GuildFolder", "GroupDM", "SystemMessage", "Message", "Native", "Role", "Guild", "Channel"];
+		const ContextMenuTypes = ["UserSettingsCog", "UserProfileActions", "GroupDM", "DM", "User", "Developer", "Slate", "GuildSettingsRole", "GuildDirectoryEntry", "GuildFolder", "SystemMessage", "Message", "Native", "Role", "Guild", "Channel"];
 		InternalBDFDB.addQueuePatches = function (plugin) {
 			plugin = plugin == BDFDB && InternalBDFDB || plugin;
 			for (let type of QueuedComponents) if (typeof plugin[`on${type}`] == "function") {

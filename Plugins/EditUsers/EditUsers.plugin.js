@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.8
+ * @version 4.4.9
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.4.8",
+			"version": "4.4.9",
 			"description": "Allows you to locally edit Users"
-		},
-		"changeLog": {
-			"improved": {
-				"Colored Text": "If you are using BetterRoleColors to color messages as the same color as the role and set a custom color with EditUsers, the message color will use the custom color again, like it used to with Colored Text in BD"
-			}
 		}
 	};
 
@@ -366,6 +361,10 @@ module.exports = (_ => {
 				this.changeAppTitle();
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.MessageUtils.rerenderAll();
+			}
+		
+			onDMContextMenu (e) {
+				this.onUserContextMenu(e);
 			}
 		
 			onUserContextMenu (e) {
