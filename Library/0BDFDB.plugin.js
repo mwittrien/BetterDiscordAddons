@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.4
+ * @version 2.1.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.1.4",
+			"version": "2.1.5",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
@@ -8243,7 +8243,7 @@ module.exports = (_ => {
 			if (!module || !module.default) return;
 			plugin = plugin == BDFDB && InternalBDFDB || plugin;
 			const call = (props, returnValue, name) => {
-				if (!returnValue || !returnValue.props || !returnValue.props.children || returnValue.props.children.__BDFDBPatchesCalled && returnValue.props.children.__BDFDBPatchesCalled[plugin.name]) return;
+				if (!returnValue || !returnValue.props || !returnValue.props.children || false && returnValue.props.children.__BDFDBPatchesCalled && returnValue.props.children.__BDFDBPatchesCalled[plugin.name]) return;
 				returnValue.props.children.__BDFDBPatchesCalled = Object.assign({}, returnValue.props.children.__BDFDBPatchesCalled, {[plugin.name]: true});
 				return plugin[`on${type}`]({
 					instance: {props: props},
