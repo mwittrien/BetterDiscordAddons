@@ -8256,7 +8256,8 @@ module.exports = (_ => {
 			BDFDB.PatchUtils.patch(plugin, module, "default", {after: e => {
 				if (typeof plugin[`on${type}`] != "function") return;
 				else if (e.returnValue && e.returnValue.props.children) {
-					if (e.returnValue.props.children.type && e.returnValue.props.children.type.displayName) {
+					if (BDFDB.ArrayUtils.is(e.returnValue.props.children)) call(e.methodArguments[0], e.returnValue, module.default.displayName);
+					else if (e.returnValue.props.children.type && e.returnValue.props.children.type.displayName) {
 						let name = e.returnValue.props.children.type.displayName;
 						let originalReturn = e.returnValue.props.children.type(e.returnValue.props.children.props);
 						if (!originalReturn || !originalReturn.type) return;
