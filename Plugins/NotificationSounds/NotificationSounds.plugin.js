@@ -77,6 +77,7 @@ module.exports = (_ => {
 		
 		const message1Types = {
 			dm:			{src: "./message3.mp3", name: "Message (Direct Message)", force: null, focus: true},
+			groupdm:	{src: "./message3.mp3", name: "Message (Group Message)", force: null, focus: true},
 			mentioned:	{src: "./message2.mp3", name: "Message Mentioned", force: false, focus: true},
 			reply:		{src: "./message2.mp3", name: "Message Mentioned (reply)", force: false, focus: true},
 			role:		{src: "./mention1.mp3", name: "Message Mentioned (role)", force: false, focus: true},
@@ -230,11 +231,13 @@ module.exports = (_ => {
 						const message = e.methodArguments[0].message;
 						const guildId = message.guild_id || null;
 						if (message.author.id != BDFDB.UserUtils.me.id && !BDFDB.LibraryModules.RelationshipStore.isBlocked(message.author.id)) {
+							const channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+							const isGroupDM = channel.isGroupDM();
 							const muted = BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId, message.channel_id);
 							const focused = document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id;
-							if (!guildId && !muted && !(choices.dm.focus && focused)) {
-								this.fireEvent("dm");
-								this.playAudio("dm");
+							if (!guildId && !muted && !(choices[isGroupDM ? "groupdm" : "dm"].focus && focused)) {
+								this.fireEvent(isGroupDM ? "groupdm" : "dm");
+								this.playAudio(isGroupDM ? "groupdm" : "dm");
 								return;
 							}
 							else if (BDFDB.LibraryModules.MentionUtils.isRawMessageMentioned(message, BDFDB.UserUtils.me.id)) {
@@ -274,7 +277,7 @@ module.exports = (_ => {
 						}
 					}
 				}});
-
+				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
 					let type = e.methodArguments[0];
 					if (!type) return;
