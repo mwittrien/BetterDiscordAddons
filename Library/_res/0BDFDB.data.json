@@ -84,8 +84,8 @@
 		"LocalSettingsStore": {"props": ["darkSidebar", "keyboardModeEnabled"]},
 		"LoginUtils": {"props": ["login", "logout"]},
 		"MediaComponentUtils": {"props": ["renderImageComponent", "renderAudioComponent"]},
-		"MediaDeviceUtils": {"props": ["getOutputDevices", "getInputDevices"]},
 		"MediaDeviceSetUtils": {"props": ["setOutputDevice", "setInputDevice"]},
+		"MediaDeviceUtils": {"props": ["getOutputDevices", "getInputDevices"]},
 		"MemberCountUtils": {"props": ["getMemberCount", "getMemberCounts"]},
 		"MemberStore": {"props": ["getMember", "getMembers"]},
 		"MentionUtils": {"props": ["isRawMessageMentioned", "isMentioned"]},
@@ -187,6 +187,7 @@
 			"GuildIcon"
 		],
 		"Finder": {
+			"useUserVolumeItem": {"lazyLoaded": true},
 			"Account": {"class": "accountinfo"},
 			"App": {"class": "app"},
 			"AppSkeleton": {"class": "app"},
@@ -354,7 +355,9 @@
 		"UserBadgesKeys": {"props": ["BadgeKeys"], "value": "BadgeKeys"},
 		"UserPopout": {"name": "UserPopoutContainer"},
 		"UserSummaryItem": {"name": "UserSummaryItem"},
-		"VideoForwardRef": {"strings": ["displayName=\"Video\"", "\"video\"", "HTMLImageElement"], "value": "default"}
+		"VideoForwardRef": {"strings": ["displayName=\"Video\"", "\"video\"", "HTMLImageElement"], "value": "default"},
+		"VoiceSettingsConstants": {"props": ["MediaEngineContextTypes", "DEFAULT_VOLUME"]},
+		"VolumeUtils": {"props": ["amplitudeToPerceptual", "perceptualToAmplitude"]}
 	},
 	"SvgIcons": {
 		"ACTIVITY": {
