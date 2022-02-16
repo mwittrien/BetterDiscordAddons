@@ -788,10 +788,8 @@
 .item-3XjbnG.selected-g-kMVV[aria-controls="GUILD_PREMIUM-tab" i] {
 	background-color: rgb(var(--accentcolor2)) !important;
 }
-.item-3XjbnG .icon-3Povsy,
-.premiumLabel-V52REm svg,
 .item-3XjbnG .icon-3FU6Ir,
-.premiumLabel-V52REm svg {
+.premiumLabel-3HPvdB svg {
 	fill: currentColor;
 }
 .item-3XjbnG svg[fill="#FF73FA"],
