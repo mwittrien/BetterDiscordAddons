@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.6
+ * @version 2.2.8
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.2.6",
+			"version": "2.2.8",
 			"description": "Allows you to download all Plugins from BD's Website within Discord"
 		}
 	};
@@ -78,7 +78,7 @@ module.exports = (_ => {
 			INSTALLED: {
 				backgroundColor: "var(--bdfdb-green)",
 				icon: "CHECKMARK",
-				text: "USER_SETTINGS_VOICE_INSTALLED_LABEL"
+				text: "installed"
 			},
 			OUTDATED: {
 				backgroundColor: "var(--bdfdb-red)",
@@ -653,41 +653,17 @@ module.exports = (_ => {
 				
 			}
 			
-			onStart () {
-				BDFDB.PatchUtils.patch(this, (BDFDB.ModuleUtils.findByName("SettingsView") || {}).prototype, "getPredicateSections", {after: e => {
-					if (BDFDB.ArrayUtils.is(e.returnValue) && e.returnValue.findIndex(n => n.section && (n.section.toLowerCase() == "changelog" || n.section == BDFDB.DiscordConstants.UserSettingsSections.CHANGE_LOG || n.section.toLowerCase() == "logout" || n.section == BDFDB.DiscordConstants.UserSettingsSections.LOGOUT))) {
-						e.returnValue = e.returnValue.filter(n => n.section != "pluginrepo");
-						let index = e.returnValue.indexOf(e.returnValue.find(n => n.section == "themes") || e.returnValue.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS) || e.returnValue.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.HYPESQUAD_ONLINE));
-						if (index > -1) {
-							e.returnValue.splice(index + 1, 0, {
-								section: "pluginrepo",
-								label: "Plugin Repo",
-								element: _ => {
-									let options = Object.assign({}, this.settings.filters);
-									options.updated = options.updated && !showOnlyOutdated;
-									options.outdated = options.outdated || showOnlyOutdated;
-									options.downloadable = options.downloadable && !showOnlyOutdated;
-									options.sortKey = forcedSort || Object.keys(sortKeys)[0];
-									options.orderKey = forcedOrder || Object.keys(orderKeys)[0];
-									
-									return BDFDB.ReactUtils.createElement(RepoListComponent, options, true);
-								}
-							});
-							if (!e.returnValue.find(n => n.section == "plugins")) e.returnValue.splice(index + 1, 0, {section: "DIVIDER"});
-						}
-					}
-				}});
-				
+			onStart () {				
 				this.forceUpdateAll();
 
 				this.loadPlugins();
 
-				updateInterval = BDFDB.TimeUtils.interval(_ => {this.checkForNewPlugins();}, 1000*60*30);
+				updateInterval = BDFDB.TimeUtils.interval(_ => this.checkForNewPlugins(), 1000*60*30);
 			}
 			
 			onStop () {
 				BDFDB.TimeUtils.clear(updateInterval);
-				BDFDB.TimeUtils.clear(loading && loading.timeout);
+				BDFDB.TimeUtils.clear(loading.timeout);
 
 				this.forceUpdateAll();
 
@@ -723,6 +699,31 @@ module.exports = (_ => {
 			
 			processSettingsView (e) {
 				if (e.node) searchString = "";
+				else {
+					if (!BDFDB.PatchUtils.isPatched(this, e.component, "getPredicateSections")) BDFDB.PatchUtils.patch(this, e.component, "getPredicateSections", {after: e2 => {
+						if (BDFDB.ArrayUtils.is(e2.returnValue) && e2.returnValue.findIndex(n => n.section && (n.section.toLowerCase() == "changelog" || n.section == BDFDB.DiscordConstants.UserSettingsSections.CHANGE_LOG || n.section.toLowerCase() == "logout" || n.section == BDFDB.DiscordConstants.UserSettingsSections.LOGOUT))) {
+							e2.returnValue = e2.returnValue.filter(n => n.section != "pluginrepo");
+							let index = e2.returnValue.indexOf(e2.returnValue.find(n => n.section == "themes") || e2.returnValue.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS) || e2.returnValue.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.HYPESQUAD_ONLINE));
+							if (index > -1) {
+								e2.returnValue.splice(index + 1, 0, {
+									section: "pluginrepo",
+									label: "Plugin Repo",
+									element: _ => {
+										let options = Object.assign({}, this.settings.filters);
+										options.updated = options.updated && !showOnlyOutdated;
+										options.outdated = options.outdated || showOnlyOutdated;
+										options.downloadable = options.downloadable && !showOnlyOutdated;
+										options.sortKey = forcedSort || Object.keys(sortKeys)[0];
+										options.orderKey = forcedOrder || Object.keys(orderKeys)[0];
+										
+										return BDFDB.ReactUtils.createElement(RepoListComponent, options, true);
+									}
+								});
+								if (!e2.returnValue.find(n => n.section == "plugins")) e2.returnValue.splice(index + 1, 0, {section: "DIVIDER"});
+							}
+						}
+					}});
+				}
 			}
 			
 			processStandardSidebarView (e) {
