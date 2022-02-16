@@ -186,7 +186,6 @@
 			"GuildIcon"
 		],
 		"Finder": {
-			"useUserVolumeItem": {"lazyLoaded": true},
 			"Account": {"class": "accountinfo"},
 			"App": {"class": "app"},
 			"AppSkeleton": {"class": "app"},
