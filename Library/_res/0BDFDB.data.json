@@ -252,6 +252,7 @@
 			"SearchBar": {"props": ["SearchIcon"], "path": "default.prototype"},
 			"SearchResults": {"class": "searchresultswrap"},
 			"SearchResultsInner": {"strings": ["SEARCH_HIDE_BLOCKED_MESSAGES", "totalResults", "SEARCH_PAGE_SIZE"]},
+			"SettingsView": {"lazyLoaded": true},
 			"StandardSidebarView": {"class": "settingswindowstandardsidebarview"},
 			"ThreadCard": {"strings": ["threadId", "gotoThread", "container"]},
 			"ThreadSidebar": {"strings": ["channelId", "collectThreadMetadata", "SIDEBAR"]},
