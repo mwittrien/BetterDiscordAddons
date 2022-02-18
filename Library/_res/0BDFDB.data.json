@@ -1203,7 +1203,7 @@
 		"GoLiveDetails": {"props": ["panel", "gameWrapper"]},
 		"Guild": {"props": ["wrapper", "lowerBadge", "svg"]},
 		"GuildChannels": {"props": ["positionedContainer", "unreadBar"]},
-		"GuildChannelsWrapper": {"props": ["subscribeTooltipWrapper", "container"]},
+		"GuildChannelsWrapper": {"props": ["hubContainer", "container"]},
 		"GuildDiscovery": {"props": ["pageWrapper", "guildList"]},
 		"GuildDm": {"props": ["pill"], "length": 1},
 		"GuildEdges": {"props": ["wrapper", "target", "centerTarget"]},
