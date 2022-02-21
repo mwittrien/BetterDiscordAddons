@@ -1,13 +1,5 @@
 {
-	"PluginNameMap": {
-		"BadgesEverywhere": "ShowBadgesInChat",
-		"GoogleTranslateOption": "Translator",
-		"OwnerTag": "StaffTag",
-		"RemoveBlockedMessages": "RemoveBlockedUsers",
-		"RevealAllSpoilersOption": "RevealAllSpoilers",
-		"SendLargeMessages": "SplitLargeMessages",
-		"SteamProfileLink": "OpenSteamLinksInApp"
-	},
+	"PluginNameMap": {},
 	"LibraryRequires": ["electron", "fs", "path", "process", "request"],
 	"DiscordObjects": {
 		"Channel": {"props": ["getRecipientId", "isManaged", "getGuildId"]},
