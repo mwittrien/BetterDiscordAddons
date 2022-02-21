@@ -184,10 +184,6 @@ module.exports = (_ => {
 			}
 			
 			onDMContextMenu (e) {
-				this.onUserContextMenu(e);
-			}
-			
-			onUserContextMenu (e) {
 				if (e.instance.props.user) {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "remove-friend"});
 					let favorized = favorizedFriends.indexOf(e.instance.props.user.id) > -1;

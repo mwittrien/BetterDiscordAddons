@@ -152,6 +152,42 @@
 		"ZoomUtils": {"props": ["setZoom", "setFontSize"]}
 	},
 	"ModuleUtilsConfig": {
+		"QueuedComponents": [
+			"GuildHeaderContextMenu",
+			"SystemMessageOptionContextMenu",
+			"SystemMessageOptionToolbar",
+			"MessageOptionContextMenu",
+			"MessageOptionToolbar"
+		],
+		"ContextMenuTypes": [
+			"UserSettingsCog",
+			"UserProfileActions",
+			"Event",
+			"GroupDMUser",
+			"GroupDM",
+			"DM",
+			"User",
+			"Developer",
+			"Slate",
+			"GuildSettingsRole",
+			"GuildDirectoryEntry",
+			"GuildFolder",
+			"SystemMessage",
+			"Message",
+			"Native",
+			"Role",
+			"Guild",
+			"Channel"
+		],
+		"ContextMenuTypesMap": {
+			"GroupDMUserContextMenu": "DMContextMenu"
+		},
+		"ContextMenuSubItemsMap": {
+			"UserContextMenu": {
+				"key": "user",
+				"items": ["useHideNoVideoParticipantsItem", "useHideSelfVideoItem", "usePreviewVideoItem", "useChangeIdentityItem", "useMoveToAudienceItem", "useAddFriendNicknameItem", "useAddNoteItem", "useBlockUserItem", "useCallUserItem", "useFocusVideoItem", "useInviteUserToGuildItems", "useMentionUserItem", "useMessageUserItem", "useUserProfileItem", "useUserRolesItems", "useUserVolumeItem", "useWatchStreamItem"]
+			}
+		},
 		"PatchTypes": [
 			"before",
 			"instead",
@@ -264,6 +300,7 @@
 			"QuickSwitchUserResult": "LibraryComponents.QuickSwitchItems.User"
 		}
 	},
+	"ForceLoadedComponents": {},
 	"NativeSubComponents": {
 		"Button": {"props": ["Colors", "Hovers", "Looks"]},
 		"Checkbox": {"name": "Checkbox"},

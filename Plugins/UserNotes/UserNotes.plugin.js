@@ -2,7 +2,7 @@
  * @name UserNotes
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.7
+ * @version 1.0.8
  * @description Allows you to write User Notes locally
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "UserNotes",
 			"author": "DevilBro",
-			"version": "1.0.7",
+			"version": "1.0.8",
 			"description": "Allows you to write User Notes locally"
 		}
 	};
@@ -106,14 +106,12 @@ module.exports = (_ => {
 			}
 
 			onUserContextMenu (e) {
-				if (e.instance.props.user) {
-					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
-					children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: this.labels.user_note,
-							id: BDFDB.ContextMenuUtils.createItemId(this.name, "user-note"),
-							action: _ => this.openNotesModal(e.instance.props.user)
-						})
+				if (e.instance.props.user  && e.subType == "useUserRolesItems") {
+					if (e.returnvalue.length) e.returnvalue.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSeparator, {}));
+					e.returnvalue.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: this.labels.user_note,
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "user-note"),
+						action: _ => this.openNotesModal(e.instance.props.user)
 					}));
 				}
 			}
