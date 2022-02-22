@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.8
+ * @version 2.2.9
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.2.8",
+			"version": "2.2.9",
 			"description": "Allows you to download all Plugins from BD's Website within Discord"
 		}
 	};
@@ -842,7 +842,7 @@ module.exports = (_ => {
 				};
 				
 				BDFDB.LibraryRequires.request("https://api.betterdiscord.app/v1/store/plugins", (error, response, body) => {
-					if (!error && body) try {
+					if (!error && body && response.statusCode == 200) try {
 						grabbedPlugins = BDFDB.ArrayUtils.keySort(JSON.parse(body).filter(n => n), "name");
 						BDFDB.DataUtils.save(BDFDB.ArrayUtils.numSort(grabbedPlugins.map(n => n.id)).join(" "), this, "cached");
 						
@@ -871,6 +871,8 @@ module.exports = (_ => {
 						for (let i = 0; i <= 20; i++) checkPlugin();
 					}
 					catch (err) {BDFDB.NotificationUtils.toast("Failed to load Plugin Store", {type: "danger"});}
+					if (response && response.statusCode == 403) BDFDB.NotificationUtils.toast("Failed to fetch Plugin Store from the Website Api due to DDoS Protection", {type: "danger"});
+					else if (response && response.statusCode == 404) BDFDB.NotificationUtils.toast("Failed to fetch Plugin Store from the Website Api due to Connection Issue", {type: "danger"});
 				});
 			}
 

@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.8
+ * @version 2.2.9
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
-			"version": "2.2.8",
+			"version": "2.2.9",
 			"description": "Allows you to download all Themes from BD's Website within Discord"
 		}
 	};
@@ -1397,7 +1397,7 @@ module.exports = (_ => {
 				};
 				
 				BDFDB.LibraryRequires.request("https://api.betterdiscord.app/v1/store/themes", (error, response, body) => {
-					if (!error && body) try {
+					if (!error && body && response.statusCode == 200) try {
 						grabbedThemes = BDFDB.ArrayUtils.keySort(JSON.parse(body).filter(n => n), "name");
 						
 						BDFDB.DataUtils.save(BDFDB.ArrayUtils.numSort(grabbedThemes.map(n => n.id)).join(" "), this, "cached");
@@ -1427,6 +1427,8 @@ module.exports = (_ => {
 						for (let i = 0; i <= 20; i++) checkTheme();
 					}
 					catch (err) {BDFDB.NotificationUtils.toast("Failed to load Theme Store", {type: "danger"});}
+					if (response && response.statusCode == 403) BDFDB.NotificationUtils.toast("Failed to fetch Theme Store from the Website Api due to DDoS Protection", {type: "danger"});
+					else if (response && response.statusCode == 404) BDFDB.NotificationUtils.toast("Failed to fetch Theme Store from the Website Api due to Connection Issue", {type: "danger"});
 				});
 			}
 
