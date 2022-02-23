@@ -2,7 +2,7 @@
  * @name CharCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.9
+ * @version 1.6.0
  * @description Adds a Character Counter to most Inputs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "CharCounter",
 			"author": "DevilBro",
-			"version": "1.5.9",
+			"version": "1.6.0",
 			"description": "Adds a Character Counter to most Inputs"
 		}
 	};
@@ -72,6 +72,7 @@ module.exports = (_ => {
 			thread_creation: "threadcreation",
 			form: "upload"
 		};
+		const nativeCounters = ["profile_bio_input"];
 	
 		return class CharCounter extends Plugin {
 			onLoad () {
@@ -209,14 +210,14 @@ module.exports = (_ => {
 			}
 			
 			injectCounter (parent, children, type, refClass, parsing) {
-				if (!children) return;
+				if (!children || nativeCounters.indexOf(type) > -1) return;
 				if (parent.props.className) parent.props.className = BDFDB.DOMUtils.formatClassName(parent.props.className, BDFDB.disCN._charcountercounteradded);
 				else parent.props.children = BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN._charcountercounteradded,
 					children: parent.props.children
 				});
 				children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CharCounter, {
-					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._charcountercounter, type && BDFDB.disCN[`_charcounter${typeMap[type] || type}counter`]),
+					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._charcountercounter, type && BDFDB.DiscordClasses[`_charcounter${typeMap[type] || type}counter`] && BDFDB.disCN[`_charcounter${typeMap[type] || type}counter`]),
 					refClass: refClass,
 					parsing: parsing,
 					max: maxLengths[type] || (BDFDB.LibraryModules.NitroUtils.canUseIncreasedMessageLength(BDFDB.UserUtils.me) ? BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH_PREMIUM : BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH),

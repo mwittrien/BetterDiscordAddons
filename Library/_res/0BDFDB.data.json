@@ -163,6 +163,7 @@
 			"UserSettingsCog",
 			"UserProfileActions",
 			"Event",
+			"UserGeneric",
 			"GroupDMUser",
 			"GroupDM",
 			"DM",
@@ -180,7 +181,8 @@
 			"Channel"
 		],
 		"ContextMenuTypesMap": {
-			"GroupDMUserContextMenu": "DMContextMenu"
+			"GroupDMUserContextMenu": "DMContextMenu",
+			"UserGenericContextMenu": "DMContextMenu"
 		},
 		"ContextMenuSubItemsMap": {
 			"UserContextMenu": {
@@ -257,8 +259,11 @@
 			"Message": {"strings": ["childrenMessageContent", "childrenRepliedMessage", "zalgo"]},
 			"MessageHeader": {"strings": ["ANIMATE_CHAT_AVATAR", "showUsernamePopout"]},
 			"Messages": {"strings": ["group-spacing-", "canManageMessages"]},
+			"MessageToolbar": {"strings": ["renderReactions", "canAddNewReactions", "showMoreUtilities"]},
 			"MessageUsername": {"strings": [".default.username", "colorString", "compact"]},
 			"ModalLayer": {"class": "modal"},
+			"MutualFriends": {"lazyLoaded": true},
+			"NicknameSection": {"lazyLoaded": true},
 			"Note": {"class": "usernotetextarea"},
 			"PeoplePageList": {"strings": ["FriendsSections", "emptyStateContainer"]},
 			"PopoutContainer": {"class": "popout"},
@@ -342,14 +347,18 @@
 		"FocusRingScope": {"props": ["FocusRingScope"], "value": "default"},
 		"FormComponents": {"props": ["FormSection", "FormText"], "assign": true},
 		"FriendsEmptyState": {"strings": ["FriendsEmptyState", "FriendsSections"], "value": "default"},
-		"GuildComponents Badge": {"name": "GuildBadge"},
-		"GuildComponents BlobMask": {"name": "BlobMask"},
-		"GuildComponents DragPlaceholder": {"name": "DragPlaceholder"},
-		"GuildComponents Icon": {"name": "GuildIconWrapper"},
-		"GuildComponents MutedText": {"props": ["useMutedUntilText"], "value": "default"},
-		"GuildComponents Pill": {"strings": ["opacity:1,height:", "20:8", "default.item"]},
-		"GuildComponents Separator": {"strings": ["className", "default.guildSeparator"]},
-		"GuildComponents UnavailableGuildsButton": {"strings": ["className", "default.guildsError"]},
+		"GuildComponents": {
+			"children": {
+				"Badge": {"name": "GuildBadge"},
+				"BlobMask": {"name": "BlobMask"},
+				"DragPlaceholder": {"name": "DragPlaceholder"},
+				"Icon": {"name": "GuildIconWrapper"},
+				"MutedText": {"props": ["useMutedUntilText"], "value": "default"},
+				"Pill": {"strings": ["opacity:1,height:", "20:8", "default.item"]},
+				"Separator": {"strings": ["className", "default.guildSeparator"]},
+				"UnavailableGuildsButton": {"strings": ["className", "default.guildsError"]}
+			}
+		},
 		"Header": {"props": ["Sizes", "Tags"]},
 		"HeaderBarComponents": {"name": "HeaderBarContainer"},
 		"Image": {"props": ["ImageReadyStates"]},
@@ -358,8 +367,11 @@
 		"ListHeader": {"name": "ListSectionItem"},
 		"Mask": {"name": "Mask"},
 		"Menu": {"name": "Menu"},
-		"MenuItems": {"props": ["MenuItem", "MenuGroup"], "assign": true},
-		"MenuItems Colors": {"props": ["MenuItemColor"], "value": "MenuItemColor"},
+		"MenuItems": {"props": ["MenuItem", "MenuGroup"], "assign": true,
+			"children": {
+				"Colors": {"props": ["MenuItemColor"], "value": "MenuItemColor"}
+			}
+		},
 		"MessageGroup": {"name": "ChannelMessage"},
 		"MessagesPopoutComponents": {"props": ["Header", "EmptyStateBottom"]},
 		"ModalComponents": {"props": ["ModalContent", "ModalFooter"], "assign": true},
@@ -370,15 +382,22 @@
 		"PopoutFocusLock": {"strings": ["useFocusLock", "useImperativeHandle"], "value": "default"},
 		"PrivateChannelItems": {"props": ["DirectMessage", "GroupDM"]},
 		"QuickSwitchItems": {"props": ["Channel", "GroupDM", "Header"]},
-		"Scrollers Auto": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerAuto"},
-		"Scrollers None": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerNone"},
-		"Scrollers Thin": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerThin"},
+		"Scrollers": {
+			"children": {
+				"Auto": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerAuto"},
+				"None": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerNone"},
+				"Thin": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerThin"}
+			}
+		},
 		"Spinner": {"name": "Spinner"},
 		"Status": {"name": "Status"},
 		"StatusPickerPopout": {"strings": ["\"StatusPickerPopout\""], "value": "default"},
 		"TextElement": {"name": "Text"},
-		"UserBadges": {"props": ["BadgeSizes"]},
-		"UserBadgesKeys": {"props": ["BadgeKeys"], "value": "BadgeKeys"},
+		"UserBadges": {"props": ["BadgeSizes"],
+			"children": {
+				"Keys": {"props": ["BadgeKeys"], "value": "BadgeKeys"}
+			}
+		},
 		"UserPopout": {"name": "UserPopoutContainer"},
 		"UserSummaryItem": {"name": "UserSummaryItem"},
 		"VideoForwardRef": {"strings": ["displayName=\"Video\"", "\"video\"", "HTMLImageElement"], "value": "default"},
