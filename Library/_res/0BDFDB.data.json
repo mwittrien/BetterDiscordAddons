@@ -211,10 +211,6 @@
 			"PopoutContainer": "Popout",
 			"QuickSwitchResult": "Result"
 		},
-		"ForceObserve": [
-			"DirectMessage",
-			"GuildIcon"
-		],
 		"Finder": {
 			"Account": {"class": "accountinfo"},
 			"App": {"class": "app"},

@@ -2362,9 +2362,10 @@ module.exports = (_ => {
 						if (appMount) {
 							Internal.patchObserverData.observer = new MutationObserver(cs => cs.forEach(c => c.addedNodes.forEach(n => {
 								if (!n || !n.tagName) return;
-								for (let type in Internal.patchObserverData.data) if (!Internal.patchObserverData.data[type].found) {
-									let ele = null;
-									if ((ele = BDFDB.DOMUtils.containsClass(n, ...Internal.patchObserverData.data[type].classes) ? n : n.querySelector(Internal.patchObserverData.data[type].selector)) != null) {
+								for (let type in Internal.patchObserverData.data) {
+									if (!Internal.patchObserverData.data[type] || Internal.patchObserverData.data[type].found) return;
+									for (let ele of [BDFDB.DOMUtils.containsClass(n, ...Internal.patchObserverData.data[type].classes) && n].concat([...n.querySelectorAll(Internal.patchObserverData.data[type].selector)]).filter(n => n)) {
+										if (!Internal.patchObserverData.data[type] || Internal.patchObserverData.data[type].found) return;
 										Internal.patchObserverData.data[type].found = Internal.checkElementForComponent(Internal.patchObserverData.data[type].plugins, ele, Internal.patchObserverData.data[type].config);
 										if (Internal.patchObserverData.data[type].found) {
 											delete Internal.patchObserverData.data[type];
