@@ -4658,14 +4658,7 @@ module.exports = (_ => {
 			let string = "";
 			if (typeof obj == "string") string += obj;
 			else if (BDFDB.ObjectUtils.is(obj)) {
-				if (obj.type) {
-					let props = obj.props || obj;
-					let text = props.content || props.children && props.children[0] && props.children[0].toString() || "";
-					if (text) {
-						if (obj.type == "text" || props.content) string = parseLanguageStringObj(text);
-						else string += `<${obj.type}>${parseLanguageStringObj(text)}</${obj.type}>`;
-					}
-				}
+				if (obj.content) string += parseLanguageStringObj(obj.content);
 				else if (obj.children) string += parseLanguageStringObj(obj.children);
 				else if (obj.props) string += parseLanguageStringObj(obj.props);
 			}
