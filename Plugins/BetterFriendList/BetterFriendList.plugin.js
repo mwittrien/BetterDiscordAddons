@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.3
+ * @version 1.4.4
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterFriendList",
 			"author": "DevilBro",
-			"version": "1.4.3",
+			"version": "1.4.4",
 			"description": "Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount"
 		}
 	};
@@ -183,12 +183,11 @@ module.exports = (_ => {
 				this.rerenderList();
 			}
 			
-			onDMContextMenu (e) {
-				if (e.instance.props.user) {
-					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "remove-friend"});
+			onUserContextMenu (e) {
+				if (e.instance.props.user && e.subType == "useUserRelationshipItems") {
 					let favorized = favorizedFriends.indexOf(e.instance.props.user.id) > -1;
 					let hidden = hiddenFriends.indexOf(e.instance.props.user.id) > -1;
-					if (index > -1) children.splice(index + 1, 0, this.settings.general.addFavorizedCategory && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					e.returnvalue.push(this.settings.general.addFavorizedCategory && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: favorized ? this.labels.context_unfavorizefriend : this.labels.context_favorizefriend,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, favorized ? "unfavorize-friend" : "favorize-friend"),
 						action: _ => {
