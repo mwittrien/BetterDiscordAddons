@@ -4658,14 +4658,16 @@ module.exports = (_ => {
 			let string = "";
 			if (typeof obj == "string") string += obj;
 			else if (BDFDB.ObjectUtils.is(obj)) {
-				if (obj.props) string += parseLanguageStringObj(obj.props);
-				else if (obj.type) {
-					let text = obj.content || obj.children && obj.children[0] && obj.children[0].toString() || "";
+				if (obj.type) {
+					let props = obj.props || obj;
+					let text = props.content || props.children && props.children[0] && props.children[0].toString() || "";
 					if (text) {
-						if (obj.type == "text" || obj.content) string = parseLanguageStringObj(text);
+						if (obj.type == "text" || props.content) string = parseLanguageStringObj(text);
 						else string += `<${obj.type}>${parseLanguageStringObj(text)}</${obj.type}>`;
 					}
 				}
+				else if (obj.children) string += parseLanguageStringObj(obj.children);
+				else if (obj.props) string += parseLanguageStringObj(obj.props);
 			}
 			else if (BDFDB.ArrayUtils.is(obj)) for (let ele of obj) string += parseLanguageStringObj(ele);
 			return string;
@@ -4675,7 +4677,6 @@ module.exports = (_ => {
 				let stringObj = Internal.LibraryModules.LanguageStore.Messages[item];
 				if (stringObj && typeof stringObj == "object" && typeof stringObj.format == "function") {
 					let i = 0, returnvalue, formatVars = {};
-					"aaaa (aaabbb) (cccc)"
 					while (!returnvalue && i < 10) {
 						i++;
 						try {returnvalue = stringObj.format(formatVars, false);}
