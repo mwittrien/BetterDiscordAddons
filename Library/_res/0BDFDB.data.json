@@ -2290,6 +2290,7 @@
 		"iconwrapper": ["EmbedActions", "iconWrapper"],
 		"iconwrapperactive": ["EmbedActions", "iconWrapperActive"],
 		"imageaccessory": ["ImageWrapper", "imageAccessory"],
+		"imagealttext": ["MessageElements", "altText"],
 		"imageclickable": ["ImageWrapper", "clickable"],
 		"imageerror": ["ImageWrapper", "imageError"],
 		"imageplaceholder": ["ImageWrapper", "imagePlaceholder"],
