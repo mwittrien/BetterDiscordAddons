@@ -697,9 +697,8 @@ module.exports = (_ => {
 			}
 			
 			_processPrivateChannel (instance, returnvalue, category) {
-				const interactive = BDFDB.ReactUtils.findChild(returnvalue, {props: [["className", BDFDB.disCN.namecontainerinteractive]]});
-				if (!interactive) return;
-				interactive.props.children.splice(interactive.props.children.length == 1 ? 1 : -1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+				let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {name: "CloseButton"});
+				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: BDFDB.LanguageUtils.LanguageStrings.UNPIN,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 						className: BDFDB.disCN._pindmsunpinbutton,
