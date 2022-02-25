@@ -408,11 +408,17 @@ module.exports = (_ => {
 						hint: hint && (_ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
 							hint: hint
 						})),
+						icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+							icon: note ? pinIconDelete : pinIcon
+						}),
 						action: _ => this.addMessageToNotes(e.instance.props.message, e.instance.props.channel)
 					}));
 					if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index > -1 ? index + 1: 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.context_updateoption,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "update-note"),
+						icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+							icon: pinIconUpdate
+						}),
 						action: _ => this.updateNoteData(note, e.instance.props.message)
 					}));
 				}

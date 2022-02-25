@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.5
+ * @version 4.3.6
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.3.5",
+			"version": "4.3.6",
 			"description": "Allows you to locally edit Channels"
 		},
 		"changeLog": {
-			"improved": {
-				"Threads": "Works flawlessly with Threads now"
+			"fixed": {
+				"PlatformIndicators": "Fixed Plugin Issue with PlatformIndicators that broke Features in the DM List"
 			}
 		}
 	};
@@ -512,15 +512,16 @@ module.exports = (_ => {
 
 			processPrivateChannel (e) {
 				if (e.instance.props.channel && e.instance.props.channel.isGroupDM() && this.settings.places.channelList) {
-					if (typeof e.returnvalue.props.children == "function") {
-						let childrenRender = e.returnvalue.props.children;
-						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
+					let wrapper = e.returnvalue && e.returnvalue.props.children && e.returnvalue.props.children.props && typeof e.returnvalue.props.children.props.children == "function" ? e.returnvalue.props.children : e.returnvalue;
+					if (typeof wrapper.props.children == "function") {
+						let childrenRender = wrapper.props.children;
+						wrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
 							let children = childrenRender(...args);
 							this._processPrivateChannel(e.instance, children);
 							return children;
 						}, "Error in Children Render of PrivateChannel!", this);
 					}
-					else this._processPrivateChannel(e.instance, e.returnvalue);
+					else this._processPrivateChannel(e.instance, wrapper);
 				}
 			}
 

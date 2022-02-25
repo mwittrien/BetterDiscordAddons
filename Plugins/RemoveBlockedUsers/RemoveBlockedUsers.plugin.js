@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.7
+ * @version 1.3.8
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedUsers",
 			"author": "DevilBro",
-			"version": "1.3.7",
+			"version": "1.3.8",
 			"description": "Removes blocked Messages/Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"Server Notifications": "No longer kills all server notification icons"
+				"PlatformIndicators": "Fixed Plugin Issue with PlatformIndicators that broke Features in the DM List"
 			}
 		}
 	};
@@ -416,15 +416,16 @@ module.exports = (_ => {
 					}
 					else {
 						if (!e.instance.props.channel.name) {
-							if (typeof e.returnvalue.props.children == "function") {
-								let childrenRender = e.returnvalue.props.children;
-								e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
+							let wrapper = e.returnvalue && e.returnvalue.props.children && e.returnvalue.props.children.props && typeof e.returnvalue.props.children.props.children == "function" ? e.returnvalue.props.children : e.returnvalue;
+							if (typeof wrapper.props.children == "function") {
+								let childrenRender = wrapper.props.children;
+								wrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
 									let children = childrenRender(...args);
 									children.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
 									return children;
 								}, "", this);
 							}
-							else e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
+							else wrapper.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
 						}
 					}
 				}

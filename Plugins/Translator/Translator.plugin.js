@@ -525,10 +525,11 @@ module.exports = (_ => {
 					children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: translated ? this.labels.context_messageuntranslateoption : this.labels.context_messagetranslateoption,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, translated ? "untranslate-message" : "translate-message"),
-						hint: hint && (_ => {
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
-								hint: hint
-							});
+						hint: hint && (_ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+							hint: hint
+						})),
+						icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+							icon: translated ? translateIconUntranslate : translateIcon
 						}),
 						disabled: !translated && isTranslating,
 						action: _ => this.translateMessage(e.instance.props.message, e.instance.props.channel)
@@ -602,11 +603,9 @@ module.exports = (_ => {
 						label: translated ? this.labels.context_messageuntranslateoption : this.labels.context_messagetranslateoption,
 						disabled: isTranslating,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, translated ? "untranslate-message" : "translate-message"),
-						icon: _ => {
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
-								icon: translated ? translateIconUntranslate : translateIcon
-							});
-						},
+						icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+							icon: translated ? translateIconUntranslate : translateIcon
+						}),
 						action: _ => this.translateMessage(e.instance.props.message, e.instance.props.channel)
 					}));
 				}

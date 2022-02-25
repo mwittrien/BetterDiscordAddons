@@ -87,21 +87,23 @@ module.exports = (_ => {
 						messageString && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-message"),
-							hint: hint && (_ => {
-								return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
-									hint: hint
-								});
+							hint: hint && (_ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+								hint: hint
+							})),
+							icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.menuicon,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
 							}),
-							action: _ => {
-								BDFDB.LibraryRequires.electron.clipboard.write({text: messageString});
-							}
+							action: _ => BDFDB.LibraryRequires.electron.clipboard.write({text: messageString})
 						}),
 						embedString && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw Embed)",
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-embed"),
-							action: _ => {
-								BDFDB.LibraryRequires.electron.clipboard.write({text: embedString});
-							}
+							icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.menuicon,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
+							}),
+							action: _ => BDFDB.LibraryRequires.electron.clipboard.write({text: embedString})
 						})
 					].filter(n => n);
 					if (entries.length) {
@@ -119,15 +121,11 @@ module.exports = (_ => {
 					children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-message-raw"),
-						icon: _ => {
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCN.menuicon,
-								name: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
-							});
-						},
-						action: _ => {
-							BDFDB.LibraryRequires.electron.clipboard.write({text: e.instance.props.message.content});
-						}
+						icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+							className: BDFDB.disCN.menuicon,
+							name: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
+						}),
+						action: _ => BDFDB.LibraryRequires.electron.clipboard.write({text: e.instance.props.message.content})
 					}));
 				}
 			}

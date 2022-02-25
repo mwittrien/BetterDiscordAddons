@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.1
+ * @version 4.5.2
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.5.1",
+			"version": "4.5.2",
 			"description": "Allows you to locally edit Users"
+		},
+		"changeLog": {
+			"fixed": {
+				"PlatformIndicators": "Fixed Plugin Issue with PlatformIndicators that broke Features in the DM List"
+			}
 		}
 	};
 
@@ -1093,15 +1098,16 @@ module.exports = (_ => {
 						}
 					}
 					else {
-						if (typeof e.returnvalue.props.children == "function") {
-							let childrenRender = e.returnvalue.props.children;
-							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
+						let wrapper = e.returnvalue && e.returnvalue.props.children && e.returnvalue.props.children.props && typeof e.returnvalue.props.children.props.children == "function" ? e.returnvalue.props.children : e.returnvalue;
+						if (typeof wrapper.props.children == "function") {
+							let childrenRender = wrapper.props.children;
+							wrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
 								let children = childrenRender(...args);
 								this._processPrivateChannel(e.instance, children);
 								return children;
 							}, "Error in Children Render of PrivateChannel!", this);
 						}
-						else this._processPrivateChannel(e.instance, e.returnvalue);
+						else this._processPrivateChannel(e.instance, wrapper);
 					}
 				}
 			}
