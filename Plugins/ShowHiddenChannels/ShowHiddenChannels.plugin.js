@@ -124,12 +124,12 @@ module.exports = (_ => {
 					label: [
 						BDFDB.ReactUtils.createElement("span", {
 							className: BDFDB.disCN.username,
-							children: this.props.user.username,
+							children: (!this.props.user.nick)?this.props.user.username:this.props.user.nick,
 							style: {color: this.props.user.colorString}
 						}),
 						!this.props.user.discriminator ? null : BDFDB.ReactUtils.createElement("span", {
 							className: BDFDB.disCN.listdiscriminator,
-							children: `#${this.props.user.discriminator}`
+							children: (this.props.user.nick?"-"+this.props.user.username:"")+`#${this.props.user.discriminator}`
 						}),
 						this.props.user.bot && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BotTag, {
 							style: {marginLeft: 6}
