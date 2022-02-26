@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.8
+ * @version 4.5.9
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.5.8",
+			"version": "4.5.9",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		}
 	};
@@ -307,11 +307,13 @@ module.exports = (_ => {
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MediaComponentUtils, "renderImageComponent", {
 					before: e => {
-						if (this.settings.general.showInDescription) e.thisObject.props.alt = e.thisObject.props.alt || "__BDFDB__PLACEHOLDER__";
+						if (this.settings.general.showInDescription && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedmedia) == -1 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedthumbnail) == -1 && BDFDB.ReactUtils.findChild(e.returnValue, {name: ["LazyImageZoomable", "LazyImage"]})) {
+							e.thisObject.props.alt = e.thisObject.props.alt || "__BDFDB__PLACEHOLDER__";
+							e.thisObject.props.injectDescription = true;
+						}
 					},
 					after: e => {
-						if (!this.settings.general.showInDescription || !e.methodArguments[0].original) return;
-						else {
+						if (e.thisObject.props.injectDescription) {
 							let altText = BDFDB.ReactUtils.findChild(e.returnValue, {props: [["className", BDFDB.disCN.imagealttext]]});
 							if (!altText) return;
 							altText.props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
