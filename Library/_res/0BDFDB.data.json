@@ -163,10 +163,8 @@
 			"UserSettingsCog",
 			"UserProfileActions",
 			"Event",
-			"UserGeneric",
 			"GroupDMUser",
 			"GroupDM",
-			"DM",
 			"User",
 			"Developer",
 			"Slate",
@@ -181,13 +179,12 @@
 			"Channel"
 		],
 		"ContextMenuTypesMap": {
-			"GroupDMUserContextMenu": "DMContextMenu",
-			"UserGenericContextMenu": "DMContextMenu"
+			"GroupDMUserContextMenu": "UserContextMenu"
 		},
 		"ContextMenuSubItemsMap": {
 			"UserContextMenu": {
-				"key": "user",
-				"items": ["useHideNoVideoParticipantsItem", "useHideSelfVideoItem", "usePreviewVideoItem", "useChangeIdentityItem", "useMoveToAudienceItem", "useAddFriendNicknameItem", "useAddNoteItem", "useBlockUserItem", "useUserRelationshipItems", "useCallUserItem", "useFocusVideoItem", "useInviteUserToGuildItems", "useMentionUserItem", "useMessageUserItem", "useUserProfileItem", "useUserRolesItems", "useUserVolumeItem", "useWatchStreamItem"]
+				"keys": ["user", "channel"],
+				"items": ["useHideNoVideoParticipantsItem", "useHideSelfVideoItem", "usePreviewVideoItem", "useChangeIdentityItem", "useMoveToAudienceItem", "useAddFriendNicknameItem", "useAddNoteItem", "useBlockUserItem", "useUserRelationshipItems", "useUserManagementItems", "useCallUserItem", "useFocusVideoItem", "useInviteUserToGuildItems", "useMentionUserItem", "useMessageUserItem", "useUserProfileItem", "useUserRolesItems", "useUserVolumeItem", "useWatchStreamItem", "useCloseDMItem", "useMuteChannelItem"]
 			}
 		},
 		"PatchTypes": [
@@ -212,6 +209,8 @@
 			"QuickSwitchResult": "Result"
 		},
 		"Finder": {
+			"useMuteChannelItem": {"strings": ["DM", "MenuItem", "Messages.MUTE_CHANNEL"], "lazyLoaded": true},
+			"useUserManagementItems": {"strings": ["canManageUser", "MenuItem", "Messages.BAN_USER"], "lazyLoaded": true},
 			"useUserRelationshipItems": {"strings": ["ContextMenu", "isFriend", "addRelationship", "Messages.REMOVE_FRIEND"], "lazyLoaded": true},
 			"Account": {"class": "accountinfo"},
 			"App": {"class": "app"},

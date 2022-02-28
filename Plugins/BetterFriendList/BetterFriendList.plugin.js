@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.4
+ * @version 1.4.5
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterFriendList",
 			"author": "DevilBro",
-			"version": "1.4.4",
+			"version": "1.4.5",
 			"description": "Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount"
 		}
 	};
@@ -184,7 +184,7 @@ module.exports = (_ => {
 			}
 			
 			onUserContextMenu (e) {
-				if (e.instance.props.user && e.subType == "useUserRelationshipItems") {
+				if (e.instance.props.user && e.subType == "useUserRelationshipItems" && BDFDB.LibraryModules.RelationshipStore.isFriend(e.instance.props.user.id)) {
 					let favorized = favorizedFriends.indexOf(e.instance.props.user.id) > -1;
 					let hidden = hiddenFriends.indexOf(e.instance.props.user.id) > -1;
 					e.returnvalue.push(this.settings.general.addFavorizedCategory && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {

@@ -2,7 +2,7 @@
  * @name BetterNsfwTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.8
+ * @version 1.2.9
  * @description Adds a more noticeable Tag to NSFW Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterNsfwTag",
 			"author": "DevilBro",
-			"version": "1.2.8",
+			"version": "1.2.9",
 			"description": "Adds a more noticeable Tag to NSFW Channels"
 		}
 	};
@@ -83,7 +83,8 @@ module.exports = (_ => {
 			}
 
 			processChannelItem (e) {
-				if (e.instance.props.channel && e.instance.props.channel.nsfw) e.instance.props.children.push(BDFDB.ReactUtils.createElement("div", {
+				if (e.instance.props.channel && e.instance.props.channel.nsfw && !BDFDB.ReactUtils.findChild(e.instance.props.children, {key: "NFSW_TAG"})) e.instance.props.children.push(BDFDB.ReactUtils.createElement("div", {
+					key: "NFSW_TAG",
 					className: BDFDB.disCNS._betternsfwtagtag + BDFDB.disCN.channelchildiconbase,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
 						style: {borderRadius: "3px"},

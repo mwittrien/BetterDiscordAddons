@@ -926,6 +926,9 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_inputnumberbuttons]:hover + [REPLACE_CLASS_input]:not([REPLACE_CLASS_inputfocused]):not([REPLACE_CLASS_inputerror]):not([REPLACE_CLASS_inputsuccess]):not([REPLACE_CLASS_inputdisabled]):not(:focus) {
 	border-color: #040405;
 }
+[REPLACE_CLASS_inputnumberwrapper] [REPLACE_CLASS_input] {
+	text-align: right;
+}
 [REPLACE_CLASS_inputnumberwrapperdefault] [REPLACE_CLASS_input] {
 	padding-right: 25px;
 }
