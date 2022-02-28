@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.1
+ * @version 2.2.2
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.2.1",
+			"version": "2.2.2",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -6589,7 +6589,7 @@ module.exports = (_ => {
 				render() {
 					let value = this.props.state && this.props.state.value || 0;
 					return BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.MenuControlItem, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-						label: typeof this.props.renderLabel == "function" ? this.props.renderLabel(Math.round(value * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits)) : this.props.label,
+						label: typeof this.props.renderLabel == "function" ? this.props.renderLabel(Math.round(value * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits), this) : this.props.label,
 						control: (menuItemProps, ref) => {
 							return BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.menuslidercontainer,
@@ -7204,7 +7204,7 @@ module.exports = (_ => {
 						children: [
 							BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.settingstablecardlabel,
-								children: this.props.renderLabel(props)
+								children: this.props.renderLabel(props, this)
 							}),
 							BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.settingstablecardconfigs,
@@ -8362,12 +8362,12 @@ module.exports = (_ => {
 			Internal.patchContextMenu = function (plugin, type, module) {
 				if (!module || !module.default) return;
 				plugin = plugin == BDFDB && Internal || plugin;
-				const caller = `on${InternalData.ModuleUtilsConfig.ContextMenuTypesMap[type] || type}`;
-				if (!InternalData.ModuleUtilsConfig.ContextMenuSubItemsMap[type]) {
+				const mappedType = InternalData.ModuleUtilsConfig.ContextMenuTypesMap[type] || type;
+				if (!InternalData.ModuleUtilsConfig.ContextMenuSubItemsMap[mappedType]) {
 					const call = (args, props, returnValue, name) => {
 						if (!returnValue || !returnValue.props || !returnValue.props.children || returnValue.props.children.__BDFDBPatchesCalled && returnValue.props.children.__BDFDBPatchesCalled[plugin.name]) return;
 						returnValue.props.children.__BDFDBPatchesCalled = Object.assign({}, returnValue.props.children.__BDFDBPatchesCalled, {[plugin.name]: true});
-						return plugin[caller]({
+						return plugin[`on${mappedType}`]({
 							arguments: args,
 							instance: {props: props},
 							returnvalue: returnValue,
@@ -8377,7 +8377,7 @@ module.exports = (_ => {
 						});
 					};
 					BDFDB.PatchUtils.patch(plugin, module, "default", {after: e => {
-						if (typeof plugin[caller] != "function") return;
+						if (typeof plugin[`on${mappedType}`] != "function") return;
 						else if (e.returnValue && e.returnValue.props.children !== undefined) {
 							if (e.returnValue.props.navId) {
 								e.returnValue.props.children = [e.returnValue.props.children].flat(10);
@@ -8400,22 +8400,30 @@ module.exports = (_ => {
 							}
 						}
 						else BDFDB.PatchUtils.patch(plugin, e.returnValue, "type", {after: e2 => {
-							if (e2.returnValue && typeof plugin[caller] == "function") call(e2.methodArguments, e2.methodArguments[0], e2.returnValue, module.default.displayName);
+							if (e2.returnValue && typeof plugin[`on${mappedType}`] == "function") call(e2.methodArguments, e2.methodArguments[0], e2.returnValue, module.default.displayName);
 						}}, {noCache: true});
 					}}, {name: type});
 				}
 				else {
-					const getProps = (props, key) => {
-						const store = `${Internal.LibraryModules.StringUtils.upperCaseFirstChar(key)}Store`;
-						const getter = `get${Internal.LibraryModules.StringUtils.upperCaseFirstChar(key)}`;
-						return Object.assign({}, BDFDB.ObjectUtils.is(props) ? props : typeof props == "string" ? {id: props} : {}, {[key]: (props && props[key] || Internal.LibraryModules[store] && typeof Internal.LibraryModules[store][getter] == "function" && Internal.LibraryModules[store][getter](props && props.id || props))});
+					const getProps = (props, keys) => {
+						let newProps = Object.assign({}, BDFDB.ObjectUtils.is(props) ? props : typeof props == "string" ? {id: props} : {});
+						for (const key of [keys].flat(10).filter(n => n)) {
+							const store = `${Internal.LibraryModules.StringUtils.upperCaseFirstChar(key)}Store`;
+							const getter = `get${Internal.LibraryModules.StringUtils.upperCaseFirstChar(key)}`;
+							const value = props && props[key] || Internal.LibraryModules[store] && typeof Internal.LibraryModules[store][getter] == "function" && Internal.LibraryModules[store][getter](props && props.id || props);
+							if (value) {
+								newProps = Object.assign(newProps, {[key]: value});
+								break;
+							}
+						}
+						return newProps;
 					};
 					BDFDB.PatchUtils.patch(plugin, module, "default", {after: e => {
-						if (typeof plugin[caller] != "function") return;
+						if (typeof plugin[`on${mappedType}`] != "function") return;
 						e.returnValue = [e.returnValue].flat(10).filter(n => n);
-						return plugin[caller]({
+						return plugin[`on${mappedType}`]({
 							arguments: e.methodArguments,
-							instance: {props: InternalData.ModuleUtilsConfig.ContextMenuSubItemsMap[type].key && getProps(e.methodArguments[0], InternalData.ModuleUtilsConfig.ContextMenuSubItemsMap[type].key) || e.methodArguments[0]},
+							instance: {props: InternalData.ModuleUtilsConfig.ContextMenuSubItemsMap[mappedType].keys && getProps(e.methodArguments[0], InternalData.ModuleUtilsConfig.ContextMenuSubItemsMap[mappedType].keys) || e.methodArguments[0]},
 							returnvalue: e.returnValue,
 							component: module,
 							methodname: "default",
@@ -8458,10 +8466,8 @@ module.exports = (_ => {
 								const returnValue = exports.default({});
 								if (returnValue && returnValue.props && returnValue.props.object == BDFDB.DiscordConstants.AnalyticsObjects.CONTEXT_MENU) {
 									for (const type in PluginStores.contextChunkObserver) {
-										const name = PluginStores.contextChunkObserver[type].filter(returnValue.props.children.type);
-										if (name) {
-											exports.__BDFDB_ContextMenu_Patch_Name = name;
-											exports.__BDFDB_ContextMenuWrapper_Patch_Name = name;
+										if (PluginStores.contextChunkObserver[type].filter(returnValue.props.children)) {
+											exports.__BDFDB_ContextMenuWrapper_Patch_Name = exports.__BDFDB_ContextMenu_Patch_Name;
 											found = true;
 											if (PluginStores.contextChunkObserver[type].modules.indexOf(exports) == -1) PluginStores.contextChunkObserver[type].modules.push(exports);
 											for (const plugin of PluginStores.contextChunkObserver[type].query) Internal.patchContextMenu(plugin, type, exports);
@@ -8471,9 +8477,7 @@ module.exports = (_ => {
 								}
 							}
 							if (!found) for (const type in PluginStores.contextChunkObserver) {
-								const name = PluginStores.contextChunkObserver[type].filter(exports.default);
-								if (name) {
-									exports.__BDFDB_ContextMenu_Patch_Name = name;
+								if (PluginStores.contextChunkObserver[type].filter(exports)) {
 									if (PluginStores.contextChunkObserver[type].modules.indexOf(exports) == -1) PluginStores.contextChunkObserver[type].modules.push(exports);
 									for (const plugin of PluginStores.contextChunkObserver[type].query) Internal.patchContextMenu(plugin, type, exports);
 									break;
@@ -8513,10 +8517,36 @@ module.exports = (_ => {
 			if (InternalData.ModuleUtilsConfig.ContextMenuTypes) for (let type of InternalData.ModuleUtilsConfig.ContextMenuTypes) {
 				type = `${type}ContextMenu`;
 				if (!PluginStores.contextChunkObserver[type]) {
+					const mappedType = InternalData.ModuleUtilsConfig.ContextMenuTypesMap[type] || type;
 					PluginStores.contextChunkObserver[type] = {query: [], modules: []};
-					if (!InternalData.ModuleUtilsConfig.ContextMenuSubItemsMap[type]) PluginStores.contextChunkObserver[type].filter = m => m && (m.displayName && m.displayName.endsWith("ContextMenu") && `${InternalData.ModuleUtilsConfig.ContextMenuTypes.find(t => m.displayName.indexOf(t) > -1)}ContextMenu` == type || m.__BDFDB_ContextMenuWrapper_Patch_Name && m.__BDFDB_ContextMenuWrapper_Patch_Name.endsWith("ContextMenu") && `${InternalData.ModuleUtilsConfig.ContextMenuTypes.find(t => m.__BDFDB_ContextMenuWrapper_Patch_Name.indexOf(t) > -1)}ContextMenu` == type) && type;
-					else PluginStores.contextChunkObserver[type].filter = m => m && (m.displayName && InternalData.ModuleUtilsConfig.ContextMenuSubItemsMap[type].items.indexOf(m.displayName) > -1 && m.displayName || InternalData.ModuleUtilsConfig.ContextMenuSubItemsMap[type].items.find(item => InternalData.ModuleUtilsConfig.Finder[item] && InternalData.ModuleUtilsConfig.Finder[item].strings && Internal.hasModuleStrings(m, InternalData.ModuleUtilsConfig.Finder[item].strings)));
-					PluginStores.contextChunkObserver[type].modules = BDFDB.ModuleUtils.find(PluginStores.contextChunkObserver[type].filter, {all: true});
+					if (!InternalData.ModuleUtilsConfig.ContextMenuSubItemsMap[mappedType]) PluginStores.contextChunkObserver[type].filter = m => {
+						if (!m || !(m.default || m.type)) return;
+						const d = m.default || m.type;
+						if (d.displayName && d.displayName.endsWith("ContextMenu") && `${InternalData.ModuleUtilsConfig.ContextMenuTypes.find(t => d.displayName.indexOf(t) > -1)}ContextMenu` == type) {
+							m.__BDFDB_ContextMenu_Patch_Name = type;
+							return true;
+						}
+						else if (m.__BDFDB_ContextMenuWrapper_Patch_Name && m.__BDFDB_ContextMenuWrapper_Patch_Name.endsWith("ContextMenu") && `${InternalData.ModuleUtilsConfig.ContextMenuTypes.find(t => m.__BDFDB_ContextMenuWrapper_Patch_Name.indexOf(t) > -1)}ContextMenu` == type) {
+							m.__BDFDB_ContextMenu_Patch_Name = type;
+							return true;
+						}
+					};
+					else PluginStores.contextChunkObserver[type].filter = m => {
+						if (!m || !(m.default || m.type)) return;
+						const d = m.default || m.type;
+						if (d.displayName && InternalData.ModuleUtilsConfig.ContextMenuSubItemsMap[mappedType].items.indexOf(d.displayName) > -1) {
+							m.__BDFDB_ContextMenu_Patch_Name = d.displayName;
+							return true;
+						}
+						else {
+							const subType = InternalData.ModuleUtilsConfig.ContextMenuSubItemsMap[mappedType].items.find(item => InternalData.ModuleUtilsConfig.Finder[item] && InternalData.ModuleUtilsConfig.Finder[item].strings && Internal.hasModuleStrings(d, InternalData.ModuleUtilsConfig.Finder[item].strings));
+							if (subType) {
+								m.__BDFDB_ContextMenu_Patch_Name = subType;
+								return true;
+							}
+						}
+					};
+					PluginStores.contextChunkObserver[type].modules = BDFDB.ModuleUtils.find(PluginStores.contextChunkObserver[type].filter, {useExport: false, all: true}).map(m => m.exports).filter(n => n);
 				}
 			}
 			

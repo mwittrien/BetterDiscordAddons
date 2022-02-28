@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.9
+ * @version 4.6.0
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.5.9",
+			"version": "4.6.0",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		}
 	};
@@ -220,6 +220,9 @@ module.exports = (_ => {
 						white-space: nowrap;
 					}
 					${BDFDB.dotCN._imageutilitiesimagedetails} > a {
+						max-width: 300px;
+					}
+					span + ${BDFDB.dotCN._imageutilitiesimagedetails} > a {
 						max-width: 200px;
 					}
 					${BDFDB.dotCN._imageutilitiesimagedetails} > span {
@@ -306,21 +309,12 @@ module.exports = (_ => {
 				});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MediaComponentUtils, "renderImageComponent", {
-					before: e => {
-						if (this.settings.general.showInDescription && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedmedia) == -1 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedthumbnail) == -1 && BDFDB.ReactUtils.findChild(e.returnValue, {name: ["LazyImageZoomable", "LazyImage"]})) {
-							e.thisObject.props.alt = e.thisObject.props.alt || "__BDFDB__PLACEHOLDER__";
-							e.thisObject.props.injectDescription = true;
-						}
-					},
 					after: e => {
-						if (e.thisObject.props.injectDescription) {
-							let altText = BDFDB.ReactUtils.findChild(e.returnValue, {props: [["className", BDFDB.disCN.imagealttext]]});
-							if (!altText) return;
-							altText.props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						if (this.settings.general.showInDescription && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedmedia) == -1 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedthumbnail) == -1 && BDFDB.ReactUtils.findChild(e.returnValue, {name: ["LazyImageZoomable", "LazyImage"]})) {
+							e.returnValue.props.children[1] = BDFDB.ReactUtils.createElement("span", {
+								className: BDFDB.disCN.imagealttext,
 								children: [
-									altText.props.children == "__BDFDB__PLACEHOLDER__" ? null : BDFDB.ReactUtils.createElement("span", {
-										children: altText.props.children
-									}),
+									e.returnValue.props.children[1],
 									BDFDB.ReactUtils.createElement(ImageDetailsComponent, {
 										original: e.methodArguments[0].original,
 										attachment: {
@@ -545,13 +539,9 @@ module.exports = (_ => {
 				}
 			}
 
-			onDMContextMenu (e) {
-				if (e.instance.props.user && this.settings.places.userAvatars) this.injectItem(e, (e.instance.props.user.getAvatarURL(e.instance.props.guildId, 4096) || "").replace(/\.webp|\.gif/, ".png"), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.avatar) && e.instance.props.user.getAvatarURL(e.instance.props.guildId, 4096, true));
-			}
-
 			onUserContextMenu (e) {
-				if (e.instance.props.user && this.settings.places.userAvatars && e.subType == "useUserRolesItems") {
-					let validUrls = this.filterUrls((e.instance.props.user.getAvatarURL(e.instance.props.guildId, 4096) || "").replace(/\.webp|\.gif/, ".png"), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.avatar) && e.instance.props.user.getAvatarURL(e.instance.props.guildId, 4096, true));
+				if (e.instance.props.user && this.settings.places.userAvatars && e.subType == "useBlockUserItem") {
+					let validUrls = this.filterUrls((e.instance.props.user.getAvatarURL(null, 4096) || "").replace(/\.webp|\.gif/, ".png"), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.avatar) && e.instance.props.user.getAvatarURL(null, 4096, true), (e.instance.props.user.getAvatarURL(e.instance.props.guildId, 4096) || "").replace(/\.webp|\.gif/, ".png"), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.avatar) && e.instance.props.user.getAvatarURL(e.instance.props.guildId, 4096, true));
 					if (!validUrls.length) return;
 					
 					if (e.returnvalue.length) e.returnvalue.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSeparator, {}));
@@ -568,9 +558,7 @@ module.exports = (_ => {
 			}
 
 			onNativeContextMenu (e) {
-				if (e.type == "NativeImageContextMenu" && (e.instance.props.href || e.instance.props.src)) {
-					this.injectItem(e, e.instance.props.href || e.instance.props.src);
-				}
+				if (e.type == "NativeImageContextMenu" && (e.instance.props.href || e.instance.props.src)) this.injectItem(e, e.instance.props.href || e.instance.props.src);
 			}
 
 			onMessageContextMenu (e) {
@@ -651,7 +639,19 @@ module.exports = (_ => {
 			
 			createSubMenus (instance, validUrls) {
 				return validUrls.length == 1 ? this.createUrlMenu(instance, validUrls[0]) : validUrls.map((urlData, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-					label: urlData.fileType.toUpperCase(),
+					label: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
+								src: urlData.src || urlData.file,
+								size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
+							}),
+							BDFDB.ReactUtils.createElement("span", {
+								style: {marginLeft: 12},
+								children: urlData.fileType.toUpperCase()
+							})
+						]
+					}),
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "subitem", i),
 					children: this.createUrlMenu(instance, urlData)
 				}));
@@ -696,7 +696,6 @@ module.exports = (_ => {
 							label: this.labels.context_view.replace("{{var0}}", type),
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "view-file"),
 							action: _ => {
-								console.log(urlData);
 								let img = document.createElement(isVideo ? "video" : "img");
 								img.addEventListener(isVideo ? "loadedmetadata" : "load", function() {
 									BDFDB.LibraryModules.ModalUtils.openModal(modalData => {
@@ -781,7 +780,6 @@ module.exports = (_ => {
 				if (clickedImage) e.instance.props.cachedImage = clickedImage;
 				let url = this.getImageSrc(e.instance.props.cachedImage && e.instance.props.cachedImage.src ? e.instance.props.cachedImage : e.instance.props.src);
 				url = this.getImageSrc(typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})).props.src) || url;
-				console.log(url);
 				let isVideo = this.isValid(url, "video");
 				let messages = this.getMessageGroupOfImage(url);
 				if (e.returnvalue) {
@@ -793,12 +791,28 @@ module.exports = (_ => {
 								children: Object.keys(this.defaults.zoomSettings).map(type => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSliderItem, Object.assign({
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, type),
 									value: this.settings.zoomSettings[type],
-									renderLabel: value => {
-										return (this.labels[this.defaults.zoomSettings[type].label] || BDFDB.LanguageUtils.LanguageStrings[this.defaults.zoomSettings[type].label]) + ": " + value + this.defaults.zoomSettings[type].unit;
-									},
-									onValueRender: value => {
-										return value + this.defaults.zoomSettings[type].unit;
-									},
+									renderLabel: (value, instance) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+										children: [
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+												children: `${this.labels[this.defaults.zoomSettings[type].label] || BDFDB.LanguageUtils.LanguageStrings[this.defaults.zoomSettings[type].label]}:`
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+												type: "number",
+												size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
+												style: {width: 70},
+												min: 1,
+												max: this.defaults.zoomSettings[type].maxValue,
+												value: this.settings.zoomSettings[type],
+												onChange: value => value && value >= this.defaults.zoomSettings[type].minValue && instance.handleValueChange(BDFDB.NumberUtils.mapRange([this.defaults.zoomSettings[type].minValue, this.defaults.zoomSettings[type].maxValue], [0, 100], value))
+											}),
+											BDFDB.ReactUtils.createElement("span", {
+												style: {width: 20},
+												children: this.defaults.zoomSettings[type].unit
+											})
+										]
+									}),
+									onValueRender: value => `${value}${this.defaults.zoomSettings[type].unit}`,
 									onValueChange: value => {
 										this.settings.zoomSettings[type] = value;
 										BDFDB.DataUtils.save(this.settings.zoomSettings, this, "zoomSettings");
@@ -880,7 +894,6 @@ module.exports = (_ => {
 							else this.loadImage(e.instance, data.next, "next");
 						}
 					}
-					console.log(e);
 					if (this.settings.general.addDetails) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN._imageutilitiesdetailswrapper,
 						children: [

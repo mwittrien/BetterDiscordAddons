@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.2
+ * @version 4.5.3
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.5.2",
+			"version": "4.5.3",
 			"description": "Allows you to locally edit Users"
-		},
-		"changeLog": {
-			"fixed": {
-				"PlatformIndicators": "Fixed Plugin Issue with PlatformIndicators that broke Features in the DM List"
-			}
 		}
 	};
 
@@ -387,6 +382,18 @@ module.exports = (_ => {
 			}
 		
 			onUserContextMenu (e) {
+				if (e.instance.props.channel && e.instance.props.channel.isDM()) {
+					const user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channel.getRecipientId());
+					if (user && this.settings.places.contextMenu && e.subType == "useMuteChannelItem") {
+						let userName = this.getUserData(user.id).username;
+						if (userName != user.username) {
+							let [muteChildren, muteIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mute-channel"});
+							if (muteIndex > -1) muteChildren[muteIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("MUTE_CHANNEL", `@${userName}`);
+							let [unmuteChildren, unmuteIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "unmute-channel"});
+							if (unmuteIndex > -1) unmuteChildren[unmuteIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("UNMUTE_CHANNEL", `@${userName}`);
+						}
+					}
+				}
 				if (e.instance.props.user) {
 					if (this.settings.places.contextMenu && e.subType == "useUserManagementItems") {
 						let userName = this.getUserData(e.instance.props.user.id).username;
@@ -401,7 +408,7 @@ module.exports = (_ => {
 							if (banIndex > -1) banChildren[banIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("BAN_USER", userName);
 						}
 					}
-					if (e.subType == "useUserRolesItems") {
+					if (e.subType == "useBlockUserItem") {
 						if (e.returnvalue.length) e.returnvalue.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSeparator, {}));
 						e.returnvalue.push(this.createContextMenuEntry(e.instance.props.user));
 					}

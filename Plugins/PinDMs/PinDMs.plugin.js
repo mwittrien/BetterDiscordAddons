@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.9
+ * @version 1.9.0
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "PinDMs",
 			"author": "DevilBro",
-			"version": "1.8.9",
+			"version": "1.9.0",
 			"description": "Allows you to pin DMs, making them appear at the top of your DMs/ServerList"
-		},
-		"changeLog": {
-			"fixed": {
-				"PlatformIndicators": "Fixed Plugin Issue with PlatformIndicators that broke Features in the DM List"
-			}
 		}
 	};
 
@@ -257,31 +252,25 @@ module.exports = (_ => {
 				BDFDB.DiscordUtils.rerenderAll();
 			}
 
-			onDMContextMenu (e) {
-				if (e.instance.props.user) {
-					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "close-dm"});
-					if (index > -1) {
-						let id = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(e.instance.props.user.id);
-						if (id) this.injectItem(e.instance, id, children, index);
-					}
-				}
+			onUserContextMenu (e) {
+				if (e.instance.props.channel && e.subType == "useCloseDMItem") e.returnvalue.unshift(this.createItem(e.instance.props.channel.id));
 			}
 
 			onGroupDMContextMenu (e) {
 				if (e.instance.props.channel) {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "change-icon"});
-					if (index > -1) this.injectItem(e.instance, e.instance.props.channel.id, children, index + 1);
+					if (index > -1) children.splice(index + 1, 0, this.createItem(e.instance.props.channel.id));
 				}
 			}
 
-			injectItem (instance, id, children, index) {
+			createItem (id) {
 				if (!id) return;
 				let pinnedInGuild = this.isPinnedInGuilds(id);
 				
 				let categories = this.sortAndUpdateCategories("channelList", true);
 				let currentCategory = this.getChannelListCategory(id);
 				
-				children.splice(index, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: this.labels.context_pindm,
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-pin"),
 					children: [
@@ -339,7 +328,7 @@ module.exports = (_ => {
 							}
 						})
 					].filter(n => n)
-				}));
+				});
 			}
 			
 			processPrivateChannelsList (e) {

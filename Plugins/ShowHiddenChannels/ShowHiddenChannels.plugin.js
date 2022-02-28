@@ -124,7 +124,7 @@ module.exports = (_ => {
 					label: [
 						BDFDB.ReactUtils.createElement("span", {
 							className: BDFDB.disCN.username,
-							children: this.props.user.username,
+							children: this.props.user.nick || this.props.user.username,
 							style: {color: this.props.user.colorString}
 						}),
 						!this.props.user.discriminator ? null : BDFDB.ReactUtils.createElement("span", {
