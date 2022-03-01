@@ -1536,11 +1536,11 @@ body::after {
 	filter: drop-shadow(1px 1px var(--textshadow));
 }
 
-#app-mount .searchSuggestion-1dxIOj:hover {					/* gifpicker			suggestions							*/
+#app-mount .searchSuggestion-2Dgyvo:hover {					/* gifpicker			suggestions							*/
 	text-shadow: 1px 1px var(--textshadow);
 }
 
-#app-mount .placeholder-2Mfkde {							/* gifpicker			result placeholder					*/
+#app-mount .placeholder-T1Tuu8 {							/* gifpicker			result placeholder					*/
 	background-color: rgba(var(--transparencycolor), .3);
 }
 
@@ -2292,14 +2292,14 @@ body::after {
 }
 
 .accountProfileCard-lbN7n-,									/* accountsettings		container							*/
-.profileBannerPreview-3_l0Wd {								/* accountsettings		preview								*/
+.profileBannerPreview-3mLIdO {								/* accountsettings		preview								*/
 	background: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 }
 .accountProfileCard-lbN7n-::before,
-.profileBannerPreview-3_l0Wd::before,
+.profileBannerPreview-3mLIdO::before,
 .accountProfileCard-lbN7n-::after,
-.profileBannerPreview-3_l0Wd::after {
+.profileBannerPreview-3mLIdO::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -2313,12 +2313,12 @@ body::after {
 	z-index: -1;
 }
 .accountProfileCard-lbN7n-::before,
-.profileBannerPreview-3_l0Wd::before {
+.profileBannerPreview-3mLIdO::before {
 	background: var(--popout) var(--popoutposition)/var(--popoutsize);
 	background-attachment: fixed;
 }
 .accountProfileCard-lbN7n-::after,
-.profileBannerPreview-3_l0Wd::after {
+.profileBannerPreview-3mLIdO::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 	backdrop-filter: blur(var(--popoutblur));
 }
@@ -2326,7 +2326,7 @@ body::after {
 	background-color: transparent;
 	border-color: transparent;
 }
-.profileBannerPreview-3_l0Wd .avatarUploaderInner-Oiob_P {	/* accountsettings		preview avatar						*/
+.profileBannerPreview-3mLIdO .avatarUploaderInner-p38nm2 {	/* accountsettings		preview avatar						*/
 	background-color: transparent;
 	border: unset;
 	margin: 6px;
@@ -2334,7 +2334,7 @@ body::after {
 .accountProfileCard-lbN7n- .banner-1YaD3N {					/* accountsettings		container banner					*/
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 20.576172 120 A 46 46 0 0 1 62 94 A 46 46 0 0 1 103.41992 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
 }
-.profileBannerPreview-3_l0Wd .banner-hcPdsd {				/* accountsettings		preview banner						*/
+.profileBannerPreview-3mLIdO .banner-3D8GgT {				/* accountsettings		preview banner						*/
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 16 120 A 46 46 0 0 1 62 76 A 46 46 0 0 1 108 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
 }
 .questionMark-3V9mGJ svg {									/* accountsettings		questionmark new					*/

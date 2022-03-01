@@ -476,25 +476,25 @@
 	background-color: rgb(var(--accentcolor)) !important;
 }
 
-#app-mount .searchSuggestion-1dxIOj:hover {					/* gifpicker			suggestions							*/
+#app-mount .searchSuggestion-2Dgyvo:hover {					/* gifpicker			suggestions							*/
 	border-color: rgb(var(--accentcolor));
 	background-color: rgb(var(--accentcolor));
 }
-.result-3OpoO7[style*="background-color"] {					/* gifpicker			result loading						*/
+.result-pzZrwj[style*="background-color"] {					/* gifpicker			result loading						*/
 	background-color: rgb(var(--accentcolor)) !important;
 }
-.result-3OpoO7[style*="background-color: rgb(146, 154, 250)"] {
+.result-pzZrwj[style*="background-color: hsl(228,"] {
 	background: var(--accentcolor-hover) !important;
 }
-.result-3OpoO7[style*="background-color: rgb(179, 174, 255)"] {
+.result-pzZrwj[style*="background-color: hsl(244,"] {
 	background: var(--accentcolor-active) !important;
 }
-.theme-light .focused-q9B2e4::after,						/* gifpicker			result hover						*/
-.theme-light .result-3OpoO7:hover::after {
+.theme-light .focused-16Owih::after,						/* gifpicker			result hover						*/
+.theme-light .result-pzZrwj:hover::after {
 	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor)), inset 0 0 0 3px #dcddde;
 }
-.theme-dark .focused-q9B2e4::after,							/* gifpicker			result hover						*/
-.theme-dark .result-3OpoO7:hover::after {
+.theme-dark .focused-16Owih::after,							/* gifpicker			result hover						*/
+.theme-dark .result-pzZrwj:hover::after {
 	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor)), inset 0 0 0 3px #2f3136;
 }
 #app-mount .categoryFadeBlurple-1HuV1x {					/* gifpicker			categoryfade						*/
