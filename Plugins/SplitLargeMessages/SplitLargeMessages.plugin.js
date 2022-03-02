@@ -2,7 +2,7 @@
  * @name SplitLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.1
+ * @version 1.7.2
  * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "SplitLargeMessages",
 			"author": "DevilBro",
-			"version": "1.7.1",
+			"version": "1.7.2",
 			"description": "Allows you to enter larger Messages, which will automatically split into several smaller Messages"
+		},
+		"changeLog": {
+			"fixed": {
+				"Paste": "Pasting a long Message no longer auto converts it into a .txt attachment"
+			}
 		}
 	};
 
@@ -157,7 +162,9 @@ module.exports = (_ => {
 			}
 
 			processChannelEditorContainer (e) {
-				if (e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) e.instance.props.shouldUploadLongMessages = false;
+				if (e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) BDFDB.PatchUtils.patch(this, e.instance, "handlePasteItem", {instead: e2 => {
+					if (!e2.methodArguments[1] || e2.methodArguments[1].kind != "string") e2.callOriginalMethod();
+				}}, {force: true, noCache: true});
 			}
 
 			formatText (text) {
