@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.8
+ * @version 1.3.9
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedUsers",
 			"author": "DevilBro",
-			"version": "1.3.8",
+			"version": "1.3.9",
 			"description": "Removes blocked Messages/Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"PlatformIndicators": "Fixed Plugin Issue with PlatformIndicators that broke Features in the DM List"
+				"Console Log": "Fixed the Console Log Spam causing a Slow Down",
+				"Placeholder": "Fixed Placeholders appearing the the Member List for Blocked Users"
 			}
 		}
 	};
@@ -302,7 +303,7 @@ module.exports = (_ => {
 			}
 			
 			processReactions (e) {
-				if (this.settings.places.reactions && e.returnvalue.props.children && BDFDB.ArrayUtils.is(e.returnvalue.props.children[0])) {
+				if (this.settings.places.reactions && e.returnvalue && e.returnvalue.props.children && BDFDB.ArrayUtils.is(e.returnvalue.props.children[0])) {
 					let updateTimeout, relationshipCount = BDFDB.LibraryModules.RelationshipStore.getRelationshipCount();
 					if (cachedChannelId != e.instance.props.message.channel_id) {
 						cachedReactions = {};
@@ -351,14 +352,13 @@ module.exports = (_ => {
 		
 			processChannelMembers (e) {
 				if (this.settings.places.memberList) {
-					e.instance.props.groups = [].concat(e.instance.props.groups);
-					e.instance.props.rows = [].concat(e.instance.props.rows);
-					let newRows = [], newGroups = [];
+					let hidden = 0, newRows = new Array(e.instance.props.rows.length), newGroups = new Array(e.instance.props.groups.length);
 					for (let i in e.instance.props.rows) {
 						let row = e.instance.props.rows[i];
 						if (!row || row.type != "MEMBER") newRows[i] = row;
 						else if (!row.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(row.user.id)) newRows[i] = row;
 						else {
+							hidden++;
 							let found = false, rowIndex = i - 1;
 							while (!found && rowIndex > -1) {
 								if (newRows[rowIndex] && newRows[rowIndex].type == "GROUP") {
@@ -373,16 +373,34 @@ module.exports = (_ => {
 							}
 						}
 					}
-					let indexSum = 0;
-					for (let i in e.instance.props.groups) {
-						newGroups[i] = Object.assign({}, e.instance.props.groups[i], {index: indexSum});
-						if (e.instance.props.groups[i].count > 0) indexSum += (e.instance.props.groups[i].count + 1);
+					if (hidden) {
+						e.instance.props.groups = [].concat(e.instance.props.groups);
+						e.instance.props.rows = [].concat(e.instance.props.rows);
+						let indexSum = 0;
+						for (let i in e.instance.props.groups) {
+							newGroups[i] = Object.assign({}, e.instance.props.groups[i], {index: indexSum});
+							if (e.instance.props.groups[i].count > 0) indexSum += (e.instance.props.groups[i].count + 1);
+						}
+						for (let i in newRows) if (newRows[i] && newRows[i].type == "GROUP" && newRows[i].count <= 0) {
+							hidden++;
+							newRows[i] = undefined;
+						}
+						const removeEmptyWithin = (array, filter) => {
+							let reversed = [].concat(array).reverse();
+							let prefixLength = 0, suffixLength = 0;
+							for (let i in array) if (array[i] !== undefined) {
+								prefixLength = parseInt(i);
+								break;
+							}
+							for (let i in reversed) if (reversed[i] !== undefined) {
+								suffixLength = parseInt(i);
+								break;
+							}
+							return [].concat(new Array(prefixLength), array.filter(filter), new Array(suffixLength))
+						};
+						e.instance.props.rows = removeEmptyWithin(newRows, n => n);
+						e.instance.props.groups = removeEmptyWithin(newGroups, g => g && g.count > 0);
 					}
-					if (e.instance.props.rows.length > 2000 && !window.a) window.a = e.instance.props.rows;
-					
-					for (let i in newRows) if (newRows[i] && newRows[i].type == "GROUP" && newRows[i].count <= 0) newRows[i] = null;
-					e.instance.props.groups = newGroups.filter(g => g && g.count > 0);
-					e.instance.props.rows = newRows;
 				}
 			}
 			
