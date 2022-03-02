@@ -8198,7 +8198,7 @@ module.exports = (_ => {
 						color = BDFDB_Patrons[user.id].color;
 						className = BDFDB.DOMUtils.formatClassName(avatar.props.className, className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN[`bdfdbsupporter${BDFDB_Patrons[user.id].tier}`]);
 					}
-					if (user.id == InternalData.myId) {
+					else if (user.id == InternalData.myId) {
 						addBadge = true;
 						role = `Theme ${BDFDB.LanguageUtils.LibraryStrings.developer}`;
 						className = BDFDB.DOMUtils.formatClassName(avatar.props.className, className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbdev);
