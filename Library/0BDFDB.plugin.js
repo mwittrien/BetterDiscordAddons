@@ -2600,7 +2600,7 @@ module.exports = (_ => {
 		Internal.LibraryModules = new Proxy(LibraryModules, {
 			get: function (_, item) {
 				if (LibraryModules[item]) return LibraryModules[item];
-				if (!InternalData.LibraryModules[item]) return "div";
+				if (!InternalData.LibraryModules[item]) return null;
 				if (InternalData.LibraryModules[item].props) {
 					if (InternalData.LibraryModules[item].nonProps) {
 						LibraryModules[item] = BDFDB.ModuleUtils.find(m => InternalData.LibraryModules[item].props.every(prop => {
@@ -2613,7 +2613,7 @@ module.exports = (_ => {
 				}
 				else if (InternalData.LibraryModules[item].strings) LibraryModules[item] = BDFDB.ModuleUtils.findByString(InternalData.LibraryModules[item].strings);
 				if (InternalData.LibraryModules[item].value) LibraryModules[item] = (LibraryModules[item] || {})[InternalData.LibraryModules[item].value];
-				return LibraryModules[item] ? LibraryModules[item] : "div";
+				return LibraryModules[item] ? LibraryModules[item] : null;
 			}
 		});
 		

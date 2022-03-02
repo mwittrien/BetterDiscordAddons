@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.6.1
+ * @version 4.6.2
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,10 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.6.1",
+			"version": "4.6.2",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		},
 		"changeLog": {
+			"fixed": {
+				"Details Tooltip": "Works again"
+			},
 			"improved": {
 				"Alt Text": "Larger Image Alt Texts of Images will now be displayed in a new container below the Image Details",
 				"Server Specific Avatars/Banners": "Can also now be target by the context menu",
@@ -169,11 +172,11 @@ module.exports = (_ => {
 						addDetails: 			{value: true,		description: "Add Image Details (Name, Size, Amount) in the Image Modal"},
 						showInDescription:		{value: true, 		description: "Show Image Details in the Footnote below the Image"},
 						showOnHover:			{value: false, 		description: "Show Image Details as Tooltip in the Chat"},
-						enableGallery: 			{value: true,		description: "Display previous/next Images in the same message in the Image Modal"},
+						enableGallery: 			{value: true,		description: "Display previous/next Images in the same Message in the Image Modal"},
 						enableZoom: 			{value: true,		description: "Create a Zoom Lens if you press down on an Image in the Image Modal"},
 						pixelZoom: 				{value: false,		description: "Zoom Lens will be pixelated instead of blurry"},
-						enableCopyImg: 			{value: true,		description: "Add a copy Image Option in the Image Modal"},
-						enableSaveImg: 			{value: true,		description: "Add a save Image as Option in the Image Modal"},
+						enableCopyImg: 			{value: true,		description: "Add a 'Copy Image' Option in the Image Modal"},
+						enableSaveImg: 			{value: true,		description: "Add a 'Save Image as' Option in the Image Modal"},
 					},
 					places: {
 						userAvatars: 			{value: true, 		description: "User Avatars"},
@@ -210,7 +213,8 @@ module.exports = (_ => {
 					},
 					after: {
 						ImageModal: ["render", "componentDidMount"],
-						LazyImage: ["render", "componentDidMount"],
+						LazyImage: "componentDidMount",
+						LazyImageZoomable: "render",
 						UserBanner: "default"
 					}
 				};
@@ -945,7 +949,7 @@ module.exports = (_ => {
 					}
 				}
 			}
-
+			
 			processLazyImage (e) {
 				if (e.node) {
 					if (e.instance.props.resized) e.instance.state.readyState = BDFDB.LibraryComponents.Image.ImageReadyStates.READY;
@@ -1047,24 +1051,6 @@ module.exports = (_ => {
 						});
 					}
 				}
-				else if (e.returnvalue) {
-					if (this.settings.general.showOnHover && e.instance.props.original && e.instance.props.src.indexOf("https://media.discordapp.net/attachments") == 0 && typeof e.returnvalue.props.children == "function") {
-						let attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up: true});
-						if (attachment) {
-							let renderChildren = e.returnvalue.props.children;
-							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
-								return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-									text: `${attachment.filename}\n${BDFDB.NumberUtils.formatBytes(attachment.size)}\n${attachment.width}x${attachment.height}px`,
-									tooltipConfig: {
-										type: "right",
-										delay: this.settings.amounts.hoverDelay
-									},
-									children: renderChildren(...args)
-								});
-							}, "", this);
-						}
-					}
-				}
 				else {
 					if (this.settings.general.resizeImage && BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), {name: "ImageModal", up: true})) {
 						let data = this.settings.general.enableGallery ? this.getSiblingsAndPosition(e.instance.props.src, this.getMessageGroupOfImage(e.instance.props.src)) : {};
@@ -1078,6 +1064,26 @@ module.exports = (_ => {
 						e.instance.props.maxHeight = height;
 						e.instance.props.src = e.instance.props.src.replace(/width=\d+/, `width=${width}`).replace(/height=\d+/, `height=${height}`);
 						e.instance.props.resized = true;
+					}
+				}
+			}
+
+			processLazyImageZoomable (e) {
+				if (this.settings.general.showOnHover && e.instance.props.original && e.instance.props.src.indexOf("https://media.discordapp.net/attachments") == 0) {
+					let attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up: true});
+					if (attachment) {
+						e.returnvalue = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							text: [
+								attachment.filename,
+								BDFDB.NumberUtils.formatBytes(attachment.size),
+								`${attachment.width}x${attachment.height}px`
+							].map(l => BDFDB.ReactUtils.createElement("div", {style: {padding: "2px 0"}, children: l})),
+							tooltipConfig: {
+								type: "right",
+								delay: this.settings.amounts.hoverDelay
+							},
+							children: e.returnvalue
+						});
 					}
 				}
 			}
