@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.6.2
+ * @version 4.6.3
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,11 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.6.2",
+			"version": "4.6.3",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		},
 		"changeLog": {
 			"fixed": {
+				"Open Image": "No longer stops Images from opening when being clicked, when Details Tooltip is enabled",
 				"Details Tooltip": "Works again"
 			},
 			"improved": {
@@ -1072,17 +1073,17 @@ module.exports = (_ => {
 				if (this.settings.general.showOnHover && e.instance.props.original && e.instance.props.src.indexOf("https://media.discordapp.net/attachments") == 0) {
 					let attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up: true});
 					if (attachment) {
-						e.returnvalue = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: [
+						const onMouseEnter = e.returnvalue.props.onMouseEnter;
+						e.returnvalue.props.onMouseEnter = BDFDB.TimeUtils.suppress((...args) => {
+							BDFDB.TooltipUtils.create(args[0].target, [
 								attachment.filename,
 								BDFDB.NumberUtils.formatBytes(attachment.size),
 								`${attachment.width}x${attachment.height}px`
-							].map(l => BDFDB.ReactUtils.createElement("div", {style: {padding: "2px 0"}, children: l})),
-							tooltipConfig: {
+							].map(l => BDFDB.ReactUtils.createElement("div", {style: {padding: "2px 0"}, children: l})), {
 								type: "right",
 								delay: this.settings.amounts.hoverDelay
-							},
-							children: e.returnvalue
+							});
+							return onMouseEnter(...args);
 						});
 					}
 				}
@@ -1654,7 +1655,7 @@ module.exports = (_ => {
 					default:		// English
 						return {
 							context_copy:						"Copy {{var0}}",
-							context_lenssize:					"Lens size",
+							context_lenssize:					"Lens Size",
 							context_saveas:						"Save {{var0}} as ...",
 							context_searchwith:					"Search {{var0}} with ...",
 							context_view:						"View {{var0}}",
