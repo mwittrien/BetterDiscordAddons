@@ -228,7 +228,7 @@ module.exports = (_ => {
 		catch (err) {BDFDB.LogUtils.error([strings, err], config);}
 	}};
 
-	BDFDB.LogUtils.log("Loading Library.");
+	BDFDB.LogUtils.log("Loading Library");
 
 	BDFDB.sameProto = function (a, b) {
 		if (a != null && typeof a == "object") return a.constructor && a.constructor.prototype && typeof a.constructor.prototype.isPrototypeOf == "function" && a.constructor.prototype.isPrototypeOf(b);
@@ -7851,14 +7851,14 @@ module.exports = (_ => {
 					let childProps = Object.assign({}, child.props);
 					let shown = false;
 					child.props.onMouseEnter = (e, childThis) => {
-						if (!shown && !e.currentTarget.BDFDBtooltipShown && !(this.props.onlyShowOnShift && !e.shiftKey) && !(this.props.onlyShowOnCtrl && !e.ctrlKey)) {
-							e.currentTarget.BDFDBtooltipShown = shown = true;
+						if (!shown && !e.currentTarget.__BDFDBtooltipShown && !(this.props.onlyShowOnShift && !e.shiftKey) && !(this.props.onlyShowOnCtrl && !e.ctrlKey)) {
+							e.currentTarget.__BDFDBtooltipShown = shown = true;
 							this.tooltip = BDFDB.TooltipUtils.create(e.currentTarget, typeof this.props.text == "function" ? this.props.text(this, e) : this.props.text, Object.assign({
 								note: this.props.note,
 								delay: this.props.delay
 							}, this.props.tooltipConfig, {
 								onHide: (tooltip, anker) => {
-									delete anker.BDFDBtooltipShown;
+									delete anker.__BDFDBtooltipShown;
 									shown = false;
 									if (this.props.tooltipConfig && typeof this.props.tooltipConfig.onHide == "function") this.props.tooltipConfig.onHide(tooltip, anker);
 								}
