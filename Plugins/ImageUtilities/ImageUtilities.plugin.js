@@ -1654,7 +1654,7 @@ module.exports = (_ => {
 					default:		// English
 						return {
 							context_copy:						"Copy {{var0}}",
-							context_lenssize:					"Lens Size",
+							context_lenssize:					"Lens size",
 							context_saveas:						"Save {{var0}} as ...",
 							context_searchwith:					"Search {{var0}} with ...",
 							context_view:						"View {{var0}}",
