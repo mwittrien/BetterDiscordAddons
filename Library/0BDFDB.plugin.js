@@ -228,7 +228,7 @@ module.exports = (_ => {
 		catch (err) {BDFDB.LogUtils.error([strings, err], config);}
 	}};
 
-	BDFDB.LogUtils.log("Loading Library");
+	BDFDB.LogUtils.log("Loading Library.");
 
 	BDFDB.sameProto = function (a, b) {
 		if (a != null && typeof a == "object") return a.constructor && a.constructor.prototype && typeof a.constructor.prototype.isPrototypeOf == "function" && a.constructor.prototype.isPrototypeOf(b);
