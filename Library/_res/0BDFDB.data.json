@@ -236,7 +236,7 @@
 			"GuildFolderSettingsModal": {"lazyLoaded": true, "exported": true},
 			"GuildHeader": {"strings": ["bannerVisible", "guildBanner", "onContextMenu"]},
 			"GuildIcon": {"class": "avataricon", "forceObserve": true},
-			"GuildItem": {"strings": ["selectedChannelId", "guildNode", "lowerBadgeWidth"]},
+			"GuildItem": {"strings": ["renderUnavailableBadge", "guildNode", "lowerBadgeWidth"]},
 			"GuildRoleSettings": {"class": "settingswindowcontentregion"},
 			"Guilds": {"subComponent": {"type": "type", "children": true, "strings": ["guildsnav", "ListNavigatorProvider"]}},
 			"GuildSettings": {"class": "layer"},
