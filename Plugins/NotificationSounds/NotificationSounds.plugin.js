@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.6.4
+ * @version 3.6.5
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
-			"version": "3.6.4",
+			"version": "3.6.5",
 			"description": "Allows you to replace the native Sounds with custom Sounds"
 		},
 		"changeLog": {
 			"fixed": {
-				"Double Play": "No longer plays the default and custom sound when Desktop Notifications are enabled"
+				"Desktop Notifications no Message Sound": "Plays Message Sound again if Desktop Notifications are enabled"
 			}
 		}
 	};
@@ -186,7 +186,7 @@ module.exports = (_ => {
 							src: src,
 							mute: id.startsWith("call_") ? null : false,
 							force: null,
-							focus: null
+							focus: id == "message1" ? true : false
 						};
 						if (id == "message1") {
 							types[id].mute = true;
@@ -274,23 +274,26 @@ module.exports = (_ => {
 									}
 								}
 							}
+							else if (guildId && !muted && !(choices.message1.focus && focused)) {
+								this.fireEvent("message1");
+								this.playAudio("message1");
+								return;
+							}
 						}
 					}
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DesktopNotificationUtils, "showNotification", {before: e => {
-					if (e.methodArguments[3] && e.methodArguments[3].sound && e.methodArguments[3].sound.includes("message")) e.methodArguments[3].sound = `_BDFDB_${e.methodArguments[3].sound.split("").reverse().join("")}`;
+					if (e.methodArguments[3] && e.methodArguments[3].sound && e.methodArguments[3].sound.includes("message")) e.methodArguments[3].sound = null;
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
 					let type = e.methodArguments[0];
-					if (!type) return;
-					if (type.indexOf("_BDFDB_") == 0) type = type.replace("_BDFDB_", "").split("").reverse().join("");
-					if (choices[type]) {
+					if (type && choices[type]) {
 						e.stopOriginalMethodCall();
 						BDFDB.TimeUtils.timeout(_ => {
 							if (type == "message1") {
 								let called = false;
-								for (let subType in message1Types) if (firedEvents[subType]) {
+								for (let subType of [type].concat(Object.keys(message1Types))) if (firedEvents[subType]) {
 									delete firedEvents[subType];
 									called = true;
 									break;
@@ -303,12 +306,13 @@ module.exports = (_ => {
 					else e.callOriginalMethodAfterwards();
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "createSound", {after: e => {
-					if (choices[e.methodArguments[0]]) {
-						let audio = new WebAudioSound(e.methodArguments[0]);
-						createdAudios[e.methodArguments[0]] = audio;
+					let type = e.methodArguments[0];
+					if (type && choices[type]) {
+						let audio = new WebAudioSound(type);
+						createdAudios[type] = audio;
 						return audio;
 					}
-					else BDFDB.LogUtils.warn(`Could not create Sound for "${e.methodArguments[0]}".`, this);
+					else BDFDB.LogUtils.warn(`Could not create Sound for "${type}".`, this);
 				}});
 
 				this.loadAudios();
