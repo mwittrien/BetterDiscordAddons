@@ -62,6 +62,7 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		var _this;
 		var blacklist, clearing;
+		var mentionedMessages = [];
 		
 		const ReadAllButtonComponent = class ReadAllButton extends BdApi.React.Component {
 			clearClick() {
@@ -280,11 +281,11 @@ module.exports = (_ => {
 			}
 
 			processRecentMentions (e) {
-				if (e.instance.props.header && e.instance.props.header.props) e.instance.props.header.props.messages = e.returnvalue.props.messages;
+				mentionedMessages = e.returnvalue.props.messages;
 			}
 
 			processRecentsHeader (e) {
-				if (this.settings.general.addClearButton && e.instance.props.tab == BDFDB.LibraryModules.InboxUtils.InboxTab.MENTIONS) e.returnvalue.props.children = [
+				if (this.settings.general.addClearButton && mentionedMessages && mentionedMessages.length && e.instance.props.tab == BDFDB.LibraryModules.InboxUtils.InboxTab.MENTIONS) e.returnvalue.props.children = [
 					e.returnvalue.props.children,
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						text: `${BDFDB.LanguageUtils.LanguageStrings.CLOSE} (${BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL})`,
@@ -299,7 +300,7 @@ module.exports = (_ => {
 							onClick: _ => {
 								let clear = _ => {
 									if (clearing) return BDFDB.NotificationUtils.toast(`${this.labels.toast_alreadyclearing} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {type: "danger"});
-									let messages = [].concat(e.instance.props.messages).filter(n => n);
+									let messages = [].concat(mentionedMessages).filter(n => n);
 									if (messages.length) {
 										clearing = true;
 										let toastInterval;
