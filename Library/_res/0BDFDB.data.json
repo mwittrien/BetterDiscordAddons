@@ -246,6 +246,7 @@
 			"GuildSidebar": {"class": "guildchannels"},
 			"HomeButton": {"subComponent": {"type": "HomeButton", "strings": ["showDMsOnly", "DefaultHomeButton"]}},
 			"I18nLoaderWrapper": {"class": "app"},
+			"InboxButton": {"strings": ["inbox-button", "Messages.INBOX"]},
 			"InstantInviteModal": {"class": "invitemodalwrapper"},
 			"InvitationCard": {"class": "invitemodalinviterow"},
 			"InviteGuildName": {"props": ["GuildName", "GuildTemplateName"]},
