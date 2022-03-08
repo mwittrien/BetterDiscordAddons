@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.6.5
+ * @version 3.6.6
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
-			"version": "3.6.5",
+			"version": "3.6.6",
 			"description": "Allows you to replace the native Sounds with custom Sounds"
-		},
-		"changeLog": {
-			"fixed": {
-				"Desktop Notifications no Message Sound": "Plays Message Sound again if Desktop Notifications are enabled"
-			}
 		}
 	};
 
@@ -274,7 +269,7 @@ module.exports = (_ => {
 									}
 								}
 							}
-							else if (guildId && !muted && !(choices.message1.focus && focused)) {
+							else if (false && guildId && !muted && !(choices.message1.focus && focused)) {
 								this.fireEvent("message1");
 								this.playAudio("message1");
 								return;
