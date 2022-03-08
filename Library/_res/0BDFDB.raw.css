@@ -1073,6 +1073,9 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_modalchangelogmodal] [REPLACE_CLASS_changelogsociallink] {
 	margin-right: 12px;
 }
+[REPLACE_CLASS_changelogfooter] {
+	align-items: center;
+}
 
 [REPLACE_CLASS_popoutwrapper] {
 	position: relative;
