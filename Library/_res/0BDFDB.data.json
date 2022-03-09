@@ -944,6 +944,7 @@
 		},
 		"DisplayServersAsChannels": {
 			"badge": "badge-fxFrUP",
+			"muted": "muted-k5Fraa",
 			"name": "name-z5133D",
 			"styled": "styledGuildsAsChannels-DNHtg_"
 		},
@@ -1459,6 +1460,7 @@
 		"_customstatuspresetssortdivider": ["CustomStatusPresets", "sortDivider"],
 		"_customstatuspresetsstatus": ["CustomStatusPresets", "status"],
 		"_displayserversaschannelsbadge": ["DisplayServersAsChannels", "badge"],
+		"_displayserversaschannelsmuted": ["DisplayServersAsChannels", "muted"],
 		"_displayserversaschannelsname": ["DisplayServersAsChannels", "name"],
 		"_displayserversaschannelsstyled": ["DisplayServersAsChannels", "styled"],
 		"_emojistatisticsstatisticsbutton": ["EmojiStatistics", "statisticsButton"],
