@@ -1272,6 +1272,9 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_tooltipcustom] [REPLACE_CLASS_tooltipmutetext] {
 	opacity: .7;
 }
+[REPLACE_CLASS_guildvoicelist] ~ [REPLACE_CLASS_tooltipmutetext] {
+	margin-top: 8px;
+}
 [REPLACE_CLASS_tooltiprowextra]:empty {
 	display: none;
 }
