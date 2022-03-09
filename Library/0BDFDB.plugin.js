@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.2
+ * @version 2.2.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.2.2",
+			"version": "2.2.3",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
@@ -1896,7 +1896,7 @@ module.exports = (_ => {
 			const itemLayerContainer = document.querySelector(BDFDB.dotCN.appmount +  " > " + BDFDB.dotCN.itemlayercontainer);
 			if (!itemLayerContainer || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
 			const id = BDFDB.NumberUtils.generateId(Tooltips);
-			const itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltippointer}"></div><div class="${BDFDB.disCN.tooltipcontent}"></div></div></div>`);
+			const itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltipcontent}"></div><div class="${BDFDB.disCN.tooltippointer}"></div></div></div>`);
 			itemLayerContainer.appendChild(itemLayer);
 			
 			const tooltip = itemLayer.firstElementChild;
@@ -1954,18 +1954,9 @@ module.exports = (_ => {
 			};
 			const setText = newText => {
 				if (BDFDB.ObjectUtils.is(config.guild)) {
-					let channels = Internal.LibraryModules.GuildChannelStore.getChannels(config.guild.id);
-					let voiceChannels = (channels[Internal.LibraryModules.GuildChannelKeys.GUILD_VOCAL_CHANNELS_KEY] || []).filter(c => c.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE).map(c => c.channel.id);
-					let stageChannels = (channels[Internal.LibraryModules.GuildChannelKeys.GUILD_VOCAL_CHANNELS_KEY] || []).filter(c => c.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_STAGE_VOICE && Internal.LibraryModules.StageChannelStore.getStageInstanceByChannel(c.channel.id)).map(c => c.channel.id);
-					let streamOwnerIds = Internal.LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === config.guild.id).map(app => app.ownerId) || [];
-					let streamOwners = streamOwnerIds.map(ownerId => Internal.LibraryModules.UserStore.getUser(ownerId)).filter(n => n);
-					let connectedVoiceUsers = BDFDB.ObjectUtils.toArray(Internal.LibraryModules.VoiceUtils.getVoiceStates(config.guild.id)).map(state => voiceChannels.includes(state.channelId) && state.channelId != config.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && Internal.LibraryModules.UserStore.getUser(state.userId)).filter(n => n);
-					let connectedStageUsers = BDFDB.ObjectUtils.toArray(Internal.LibraryModules.VoiceUtils.getVoiceStates(config.guild.id)).map(state => stageChannels.includes(state.channelId) && state.channelId != config.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && Internal.LibraryModules.UserStore.getUser(state.userId)).filter(n => n);
-					
 					let isMuted = Internal.LibraryModules.MutedUtils.isMuted(config.guild.id);
 					let muteConfig = Internal.LibraryModules.MutedUtils.getMuteConfig(config.guild.id);
 					
-					let hasExtraRow = connectedStageUsers.length || connectedVoiceUsers.length || streamOwners.length;
 					let children = [typeof newText == "function" ? newText() : newText].flat(10).filter(n => typeof n == "string" || BDFDB.ReactUtils.isValidElement(n));
 					
 					BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
@@ -1979,7 +1970,7 @@ module.exports = (_ => {
 										className: BDFDB.disCN.tooltiprowicon
 									}),
 									BDFDB.ReactUtils.createElement("span", {
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext, hasExtraRow && BDFDB.disCN.tooltipguildnametextlimitedsize),
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext),
 										children: fontColorIsGradient ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TextGradientElement, {
 											gradient: BDFDB.ColorUtils.createGradient(config.fontColor),
 											children: config.guild.toString()
@@ -1995,52 +1986,14 @@ module.exports = (_ => {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltiprow, BDFDB.disCN.tooltiprowextra, BDFDB.disCN.tooltipnote),
 								children: config.note
 							}),
-							connectedStageUsers.length && BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.tooltiprow,
-								children: [
-									BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
-										name: Internal.LibraryComponents.SvgIcon.Names.PODIUM,
-										className: BDFDB.disCN.tooltipactivityicon
-									}),
-									BDFDB.ReactUtils.createElement(Internal.LibraryComponents.UserSummaryItem, {
-										users: connectedStageUsers,
-										max: 6
-									})
-								]
-							}),
-							connectedVoiceUsers.length && BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.tooltiprow,
-								children: [
-									BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
-										name: Internal.LibraryComponents.SvgIcon.Names.SPEAKER,
-										className: BDFDB.disCN.tooltipactivityicon
-									}),
-									BDFDB.ReactUtils.createElement(Internal.LibraryComponents.UserSummaryItem, {
-										users: connectedVoiceUsers,
-										max: 6
-									})
-								]
-							}),
-							streamOwners.length && BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.tooltiprow,
-								children: [
-									BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
-										name: Internal.LibraryComponents.SvgIcon.Names.STREAM,
-										className: BDFDB.disCN.tooltipactivityicon
-									}),
-									BDFDB.ReactUtils.createElement(Internal.LibraryComponents.UserSummaryItem, {
-										users: streamOwners,
-										max: 6
-									})
-								]
-							}),
+							BDFDB.ReactUtils.createElement(Internal.LibraryComponents.GuildVoiceList, {guild: config.guild}),
 							isMuted && muteConfig && (muteConfig.end_time == null ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TextElement, {
-								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext, hasExtraRow && BDFDB.disCN.tooltipmutetextwithactivity),
+								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext),
 								size: Internal.LibraryComponents.TextElement.Sizes.SIZE_12,
 								color: Internal.LibraryComponents.TextElement.Colors.MUTED,
 								children: BDFDB.LanguageUtils.LanguageStrings.VOICE_CHANNEL_MUTED
 							}) : BDFDB.ReactUtils.createElement(Internal.LibraryComponents.GuildComponents.MutedText, {
-								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext, hasExtraRow && BDFDB.disCN.tooltipmutetextwithactivity),
+								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext),
 								muteConfig: muteConfig
 							}))
 						].filter(n => n)
@@ -3317,8 +3270,16 @@ module.exports = (_ => {
 			});
 		};
 		BDFDB.GuildUtils.markAsRead = function (guildIds) {
-			let channels = [guildIds].flat(10).filter(id => id && typeof id == "string" && Internal.LibraryModules.GuildStore.getGuild(id)).map(id => BDFDB.ObjectUtils.toArray(Internal.LibraryModules.GuildChannelStore.getChannels(id)).flat(10).filter(n => BDFDB.ObjectUtils.is(n)).map(n => n.channel && n.channel.id)).flat().filter(n => n);
+			guildIds = [guildIds].flat(10).filter(id => id && typeof id == "string" && Internal.LibraryModules.GuildStore.getGuild(id));
+			if (!guildIds) return;
+			let channels = guildIds.map(id => [BDFDB.ObjectUtils.toArray(Internal.LibraryModules.GuildChannelStore.getChannels(id)), Internal.LibraryModules.GuildEventStore.getGuildScheduledEventsForGuild(id)]).flat(10).map(n => n && (n.channel && n.channel.id || n.id)).flat().filter(n => n);
 			if (channels.length) BDFDB.ChannelUtils.markAsRead(channels);
+			let eventChannels = guildIds.map(id => ({
+				channelId: id,
+				readStateType: Internal.LibraryModules.UnreadStateTypes.GUILD_EVENT,
+				messageId: Internal.LibraryModules.UnreadChannelUtils.lastMessageId(id, Internal.LibraryModules.UnreadStateTypes.GUILD_EVENT)
+			})).filter(n => n.messageId);
+			if (eventChannels.length) Internal.LibraryModules.AckUtils.bulkAck(eventChannels);
 		};
 		BDFDB.GuildUtils.rerenderAll = function (instant) {
 			BDFDB.TimeUtils.clear(BDFDB.GuildUtils.rerenderAll.timeout);
@@ -3368,9 +3329,14 @@ module.exports = (_ => {
 			let channel = typeof channelOrId == "string" ? Internal.LibraryModules.ChannelStore.getChannel(channelOrId) : channelOrId;
 			return channel && channel.isThread();
 		};
+		BDFDB.ChannelUtils.isEvent = function (channelOrId) {
+			let channel = typeof channelOrId == "string" ? Internal.LibraryModules.GuildEventStore.getGuildScheduledEvent(channelOrId) : channelOrId;
+			return channel && Internal.LibraryModules.GuildEventStore.getGuildScheduledEvent(channel.id) && true;
+		};
 		BDFDB.ChannelUtils.markAsRead = function (channelIds) {
-			let unreadChannels = [channelIds].flat(10).filter(id => id && typeof id == "string" && (BDFDB.ChannelUtils.isTextChannel(id) || BDFDB.ChannelUtils.isThread(id)) && (Internal.LibraryModules.UnreadChannelUtils.hasUnread(id) || Internal.LibraryModules.UnreadChannelUtils.getMentionCount(id) > 0)).map(id => ({
+			let unreadChannels = [channelIds].flat(10).filter(id => id && typeof id == "string" && ((BDFDB.ChannelUtils.isTextChannel(id) || BDFDB.ChannelUtils.isThread(id)) && (Internal.LibraryModules.UnreadChannelUtils.hasUnread(id) || Internal.LibraryModules.UnreadChannelUtils.getMentionCount(id) > 0))).map(id => ({
 				channelId: id,
+				readStateType: Internal.LibraryModules.UnreadStateTypes.CHANNEL,
 				messageId: Internal.LibraryModules.UnreadChannelUtils.lastMessageId(id)
 			}));
 			if (unreadChannels.length) Internal.LibraryModules.AckUtils.bulkAck(unreadChannels);
@@ -6462,6 +6428,63 @@ module.exports = (_ => {
 					children: icon
 				}) : icon;
 			}, renderIcon: false});
+			
+			CustomComponents.GuildVoiceList = reactInitialized && class BDFDB_GuildVoiceList extends Internal.LibraryModules.React.Component {
+				render() {
+					let channels = Internal.LibraryModules.GuildChannelStore.getChannels(this.props.guild.id);
+					let voiceChannels = (channels[Internal.LibraryModules.GuildChannelKeys.GUILD_VOCAL_CHANNELS_KEY] || []).filter(c => c.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE).map(c => c.channel.id);
+					let stageChannels = (channels[Internal.LibraryModules.GuildChannelKeys.GUILD_VOCAL_CHANNELS_KEY] || []).filter(c => c.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_STAGE_VOICE && Internal.LibraryModules.StageChannelStore.getStageInstanceByChannel(c.channel.id)).map(c => c.channel.id);
+					let streamOwnerIds = Internal.LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === this.props.guild.id).map(app => app.ownerId) || [];
+					let streamOwners = streamOwnerIds.map(ownerId => Internal.LibraryModules.UserStore.getUser(ownerId)).filter(n => n);
+					let connectedVoiceUsers = BDFDB.ObjectUtils.toArray(Internal.LibraryModules.VoiceUtils.getVoiceStates(this.props.guild.id)).map(state => voiceChannels.includes(state.channelId) && state.channelId != this.props.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && Internal.LibraryModules.UserStore.getUser(state.userId)).filter(n => n);
+					let connectedStageUsers = BDFDB.ObjectUtils.toArray(Internal.LibraryModules.VoiceUtils.getVoiceStates(this.props.guild.id)).map(state => stageChannels.includes(state.channelId) && state.channelId != this.props.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && Internal.LibraryModules.UserStore.getUser(state.userId)).filter(n => n);
+					let children = [
+						!connectedStageUsers.length ? null : BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.tooltiprow,
+							children: [
+								BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
+									name: Internal.LibraryComponents.SvgIcon.Names.PODIUM,
+									className: BDFDB.disCN.tooltipactivityicon
+								}),
+								BDFDB.ReactUtils.createElement(Internal.LibraryComponents.UserSummaryItem, {
+									users: connectedStageUsers,
+									max: 6
+								})
+							]
+						}),
+						!connectedVoiceUsers.length ? null : BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.tooltiprow,
+							children: [
+								BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
+									name: Internal.LibraryComponents.SvgIcon.Names.SPEAKER,
+									className: BDFDB.disCN.tooltipactivityicon
+								}),
+								BDFDB.ReactUtils.createElement(Internal.LibraryComponents.UserSummaryItem, {
+									users: connectedVoiceUsers,
+									max: 6
+								})
+							]
+						}),
+						!streamOwners.length ? null : BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.tooltiprow,
+							children: [
+								BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
+									name: Internal.LibraryComponents.SvgIcon.Names.STREAM,
+									className: BDFDB.disCN.tooltipactivityicon
+								}),
+								BDFDB.ReactUtils.createElement(Internal.LibraryComponents.UserSummaryItem, {
+									users: streamOwners,
+									max: 6
+								})
+							]
+						})
+					].filter(n => n);
+					return !children.length ? null : BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.guildvoicelist,
+						children: children
+					});
+				}
+			};
 			
 			CustomComponents.KeybindRecorder = reactInitialized && class BDFDB_KeybindRecorder extends Internal.LibraryModules.React.Component {
 				handleChange(arrays) {

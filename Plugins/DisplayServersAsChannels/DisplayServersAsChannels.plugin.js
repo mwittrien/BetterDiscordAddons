@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.7
+ * @version 1.5.8
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "DisplayServersAsChannels",
 			"author": "DevilBro",
-			"version": "1.5.7",
+			"version": "1.5.8",
 			"description": "Displays Servers in a similar way as Channels"
+		},
+		"changeLog": {
+			"improved": {
+				"Voice/Stream Users": "Shows Voice/Stream Users Tooltip when hovering over a Server",
+				"Muted": "Reduces Opacity of DM/Server Name if they are muted",
+				"New Inbox Position": "Works for the new Inbox Position above the Home Button"
+			}
 		}
 	};
 
@@ -173,6 +180,7 @@ module.exports = (_ => {
 			
 			processDirectMessage (e) {
 				if (e.instance.props.channel.id) {
+					if (e.returnvalue.props.children && e.returnvalue.props.children.props) e.returnvalue.props.children.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.children.props.className, BDFDB.LibraryModules.MutedUtils.isChannelMuted(null, e.instance.props.channel.id) && BDFDB.disCN._displayserversaschannelsmuted);
 					let text = BDFDB.ReactUtils.findValue(e.returnvalue, "text");
 					this.removeTooltip(e.returnvalue);
 					e.returnvalue = this.removeMask(e.returnvalue);
@@ -184,7 +192,8 @@ module.exports = (_ => {
 			
 			processGuildItem (e) {
 				if (e.instance.props.guild) {
-					if (!BDFDB.BDUtils.isPluginEnabled("ServerDetails")) this.removeTooltip(e.returnvalue);
+					e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.LibraryModules.MutedUtils.isMuted(e.instance.props.guild.id) && BDFDB.disCN._displayserversaschannelsmuted);
+					if (!BDFDB.BDUtils.isPluginEnabled("ServerDetails")) this.removeTooltip(e.returnvalue, e.instance.props.guild);
 					e.returnvalue = this.removeMask(e.returnvalue);
 					this.addElementName(e.returnvalue, e.instance.props.guild.name, {
 						badges: [
@@ -260,9 +269,20 @@ module.exports = (_ => {
 				});
 			}
 			
-			removeTooltip (parent) {
+			removeTooltip (parent, guild) {
 				let [children, index] = BDFDB.ReactUtils.findParent(parent, {name: ["Tooltip", "ListItemTooltip", "GuildTooltip", "BDFDB_TooltipContainer"]});
-				if (index > -1) children[index] = children[index].props.children;
+				if (index > -1) {
+					if (!guild) children[index] = children[index].props.children;
+					else children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildVoiceList, {
+							guild: guild
+						}),
+						tooltipConfig: {
+							type: "right"
+						},
+						children: children[index].props.children
+					});
+				}
 			}
 			
 			removeMask (parent) {
@@ -305,7 +325,7 @@ module.exports = (_ => {
 					filter: c => c && c.props && (c.props.id == "home" || !isNaN(parseInt(c.props.id)))
 				});
 				if (index > -1) {
-					let insertElements = returnvalue => {
+					const insertElements = returnvalue => {
 						if (BDFDB.ReactUtils.findChild(parent, {props: [["className", BDFDB.disCN._displayserversaschannelsname]]})) return;
 						let childEles = [
 							[
@@ -366,6 +386,7 @@ module.exports = (_ => {
 						justify-content: flex-start;
 						margin-left: 8px;
 					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildinboxicon},
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildinnerwrapper},
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildinner} {
 						width: ${this.settings.amounts.serverListWidth - 20}px;
@@ -380,19 +401,33 @@ module.exports = (_ => {
 						left: -8px;
 						transform: scaleY(calc(${this.settings.amounts.serverElementHeight}/48));
 					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildinboxicon},
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildiconchildwrapper} {
-						height: ${this.settings.amounts.serverElementHeight}px;
 						width: ${this.settings.amounts.serverListWidth - 20}px;
+						height: ${this.settings.amounts.serverElementHeight}px;
 						padding: 0 8px;
 						box-sizing: border-box;
 						cursor: pointer;
 					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildinboxicon}::before {
+						content: attr(aria-label);
+						flex: 1 0 auto;
+						font-size: ${this.settings.amounts.serverElementHeight / 2}px;
+						font-weight: 500;
+						padding-top: 1px;
+					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildinboxtooltip} {
+						display: none;
+					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildiconchildwrapper + BDFDB.dotCN._displayserversaschannelsname} {
 						flex: 1 1 auto;
 						font-size: ${this.settings.amounts.serverElementHeight / 2}px;
-						font-weight: 400;
+						font-weight: 500;
 						padding-top: 1px;
 						overflow: hidden;
+					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS._displayserversaschannelsmuted + BDFDB.dotCN._displayserversaschannelsname} {
+						opacity: 0.6;
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildiconchildwrapper + BDFDB.dotCN._displayserversaschannelsbadge}:not(:empty) {
 						display: flex;
@@ -507,7 +542,7 @@ module.exports = (_ => {
 						justify-content: flex-start;
 						align-items: center;
 						font-size: ${this.settings.amounts.serverElementHeight / 2}px;
-						font-weight: 400;
+						font-weight: 500;
 						text-transform: capitalize;
 						padding-top: 1px;
 						padding-left: 8px;
@@ -549,7 +584,7 @@ module.exports = (_ => {
 						align-items: center;
 						height: ${this.settings.amounts.serverElementHeight}px;
 						font-size: ${this.settings.amounts.serverElementHeight / 2}px;
-						font-weight: 400;
+						font-weight: 500;
 						padding-left: 8px;
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper} #server-search ${BDFDB.dotCN.guildinner}::after {
