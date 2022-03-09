@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.6.3
+ * @version 4.6.4
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,18 +17,14 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.6.3",
+			"version": "4.6.4",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		},
 		"changeLog": {
 			"fixed": {
-				"Open Image": "No longer stops Images from opening when being clicked, when Details Tooltip is enabled",
-				"Details Tooltip": "Works again"
-			},
-			"improved": {
-				"Alt Text": "Larger Image Alt Texts of Images will now be displayed in a new container below the Image Details",
-				"Server Specific Avatars/Banners": "Can also now be target by the context menu",
-				"Banners": "You can now view user banners in the full resolution (keep in mind that server specific user banners are always saved in a low resolution, because discord doesn't want to waste server space for each banner, can't be bypassed since no high resolution for them exists"
+				"GIFS": "View Image works for GIFs again",
+				"GIFVS": "Works for GIFVs now",
+				"Stickers": "Works for Stickers now"
 			}
 		}
 	};
@@ -588,20 +584,23 @@ module.exports = (_ => {
 			onMessageContextMenu (e) {
 				if (e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
 					if (e.instance.props.attachment) this.injectItem(e, [e.instance.props.attachment.url]);
-					else if (e.instance.props.target.tagName == "A" && e.instance.props.message.embeds && e.instance.props.message.embeds[0] && (e.instance.props.message.embeds[0].type == "image" || e.instance.props.message.embeds[0].type == "video")) this.injectItem(e, [e.instance.props.target.href]);
-					else if (e.instance.props.target.tagName == "IMG" && e.instance.props.target.complete && e.instance.props.target.naturalHeight) {
-						if (BDFDB.DOMUtils.containsClass(e.instance.props.target.parentElement, BDFDB.disCN.imagewrapper)) this.injectItem(e, [{file: e.instance.props.target.src, original: this.getTargetLink(e.instance.props.target)}]);
-						else if (BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.embedauthoricon) && this.settings.places.userAvatars) this.injectItem(e, [e.instance.props.target.src]);
-						else if (BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.emojiold, "emote", false) && this.settings.places.emojis) this.injectItem(e, [{file: e.instance.props.target.src, alternativeName: e.instance.props.target.getAttribute("data-name")}]);
-					}
-					else if (e.instance.props.target.tagName == "VIDEO") {
-						if (BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.embedvideo) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.attachmentvideo, e.instance.props.target)) this.injectItem(e, [{file: e.instance.props.target.src, original: this.getTargetLink(e.instance.props.target)}]);
-					}
 					else {
-						const reaction = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagereaction, e.instance.props.target);
-						if (reaction && this.settings.places.emojis) {
-							const emoji = reaction.querySelector(BDFDB.dotCN.emojiold);
-							if (emoji) this.injectItem(e, [{file: emoji.src, alternativeName: emoji.getAttribute("data-name")}]);
+						const target = e.instance.props.target.tagName == "A" && BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.imageoriginallink) && e.instance.props.target.parentElement.querySelector("img, video") || e.instance.props.target;
+						if (target.tagName == "A" && e.instance.props.message.embeds && e.instance.props.message.embeds[0] && (e.instance.props.message.embeds[0].type == "image" || e.instance.props.message.embeds[0].type == "video" || e.instance.props.message.embeds[0].type == "gifv")) this.injectItem(e, [target.href]);
+						else if (target.tagName == "IMG" && target.complete && target.naturalHeight) {
+							if (BDFDB.DOMUtils.containsClass(target.parentElement, BDFDB.disCN.imagewrapper) || BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.imagesticker)) this.injectItem(e, [{file: target.src, original: this.getTargetLink(target)}]);
+							else if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.embedauthoricon) && this.settings.places.userAvatars) this.injectItem(e, [target.src]);
+							else if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.emojiold, "emote", false) && this.settings.places.emojis) this.injectItem(e, [{file: target.src, alternativeName: target.getAttribute("data-name")}]);
+						}
+						else if (target.tagName == "VIDEO") {
+							if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.embedvideo) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.attachmentvideo, target)) this.injectItem(e, [{file: target.src, original: this.getTargetLink(target)}]);
+						}
+						else {
+							const reaction = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagereaction, target);
+							if (reaction && this.settings.places.emojis) {
+								const emoji = reaction.querySelector(BDFDB.dotCN.emojiold);
+								if (emoji) this.injectItem(e, [{file: emoji.src, alternativeName: emoji.getAttribute("data-name")}]);
+							}
 						}
 					}
 				}
@@ -642,9 +641,9 @@ module.exports = (_ => {
 			filterUrls (...urls) {
 				let addedUrls = [];
 				return urls.filter(n => this.isValid(n && n.file || n)).map(n => {
-					let srcUrl = (n.file || n).replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "").split("%3A")[0];
-					if (srcUrl.startsWith("https://cdn.discordapp.com/") && !srcUrl.endsWith("?size=4096")) srcUrl += "?size=4096";
-					let originalUrl = (n.original || n.file || n).replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "").split("%3A")[0];
+					let srcUrl = (n.file || n).replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/\?size\=\d+&/, "?size=4096&").replace(/[\?\&](height|width)=\d+/g, "").split("%3A")[0];
+					if (srcUrl.startsWith("https://cdn.discordapp.com/") && !srcUrl.endsWith("?size=4096") && !srcUrl.indexOf("?size=4096&") == -1) srcUrl += "?size=4096";
+					let originalUrl = (n.original || n.file || n).replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/\?size\=\d+&/, "?size=4096&").replace(/[\?\&](height|width)=\d+/g, "").split("%3A")[0];
 					let fileUrl = srcUrl;
 					if (fileUrl.indexOf("https://images-ext-1.discordapp.net/external/") > -1 || fileUrl.indexOf("https://images-ext-2.discordapp.net/external/") > -1) {
 						if (fileUrl.split("/https/").length > 1) fileUrl = "https://" + fileUrl.split("/https/").pop();
