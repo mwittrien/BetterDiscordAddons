@@ -2208,6 +2208,7 @@
 		"guildiconwrapper": ["GuildIcon", "wrapper"],
 		"guildinbox": ["GuildsInbox", "listItemWrapper"],
 		"guildinboxicon": ["GuildsInboxIcon", "iconButton"],
+		"guildinboxiconmask": ["GuildsInboxIcon", "iconMask"],
 		"guildinboxiconselected": ["GuildsInboxIcon", "selected"],
 		"guildinner": ["Guild", "wrapper"],
 		"guildinnerwrapper": ["GuildsItems", "listItemWrapper"],
