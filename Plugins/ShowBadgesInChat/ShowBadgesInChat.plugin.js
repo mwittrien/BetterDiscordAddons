@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.6
+ * @version 1.8.7
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowBadgesInChat",
 			"author": "DevilBro",
-			"version": "1.8.6",
+			"version": "1.8.7",
 			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList"
-		},
-		"changeLog": {
-			"fixed": {
-				"PlatformIndicators": "Fixed Plugin Issue with PlatformIndicators that broke Features in the DM List"
-			}
 		}
 	};
 	
@@ -96,10 +91,10 @@ module.exports = (_ => {
 					}
 				};
 				
-				for (let key of Object.keys(BDFDB.LibraryComponents.UserBadges.Keys).filter(n => isNaN(parseInt(n)))) {
+				for (let key of Object.keys(BDFDB.LibraryModules.UserBadgeKeys).filter(n => isNaN(parseInt(n)))) {
 					let basicKey = key.replace(/_LEVEL_\d+/g, "");
 					if (!this.defaults.badges[basicKey]) this.defaults.badges[basicKey] = {value: true, keys: []};
-					this.defaults.badges[basicKey].keys.push(BDFDB.LibraryComponents.UserBadges.Keys[key]);
+					this.defaults.badges[basicKey].keys.push(BDFDB.LibraryModules.UserBadgeKeys[key]);
 				}
 				
 				this.css = `
@@ -402,7 +397,7 @@ module.exports = (_ => {
 				}
 				else for (let key of this.defaults.badges[flag].keys) {
 					let userFlag = flag == "PREMIUM" || flag == "PREMIUM_GUILD_SUBSCRIPTION" ? 0 : BDFDB.DiscordConstants.UserFlags[flag];
-					let keyName = BDFDB.LibraryComponents.UserBadges.Keys[key];
+					let keyName = BDFDB.LibraryModules.UserBadgeKeys[key];
 					if (userFlag == null && keyName) userFlag = BDFDB.DiscordConstants.UserFlags[keyName] != null ? BDFDB.DiscordConstants.UserFlags[keyName] : BDFDB.DiscordConstants.UserFlags[Object.keys(BDFDB.DiscordConstants.UserFlags).find(f => f.indexOf(keyName) > -1 || keyName.indexOf(f) > -1)];
 					if (userFlag != null) {
 						let id;
