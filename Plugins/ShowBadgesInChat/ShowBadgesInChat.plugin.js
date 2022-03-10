@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.7
+ * @version 1.8.8
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowBadgesInChat",
 			"author": "DevilBro",
-			"version": "1.8.7",
+			"version": "1.8.8",
 			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList"
 		}
 	};
@@ -396,13 +396,14 @@ module.exports = (_ => {
 					wrappers.push(this.createBadges(user, null, "settings"));
 				}
 				else for (let key of this.defaults.badges[flag].keys) {
-					let userFlag = flag == "PREMIUM" || flag == "PREMIUM_GUILD_SUBSCRIPTION" ? 0 : BDFDB.DiscordConstants.UserFlags[flag];
+					let userFlag = flag == "PREMIUM" || flag == "GUILD_BOOSTER" ? 0 : BDFDB.DiscordConstants.UserFlags[flag];
 					let keyName = BDFDB.LibraryModules.UserBadgeKeys[key];
 					if (userFlag == null && keyName) userFlag = BDFDB.DiscordConstants.UserFlags[keyName] != null ? BDFDB.DiscordConstants.UserFlags[keyName] : BDFDB.DiscordConstants.UserFlags[Object.keys(BDFDB.DiscordConstants.UserFlags).find(f => f.indexOf(keyName) > -1 || keyName.indexOf(f) > -1)];
+					console.log(key, userFlag, keyName);
 					if (userFlag != null) {
 						let id;
 						if (flag == "PREMIUM") id = specialFlag + "NITRO";
-						else if (keyName && keyName.startsWith("PREMIUM_GUILD_SUBSCRIPTION")) id = specialFlag + "GB_" + keyName.split("_").pop();
+						else if (keyName && keyName.startsWith("GUILD_BOOSTER")) id = specialFlag + "GB_" + keyName.split("_").pop();
 						let user = new BDFDB.DiscordObjects.User({flags: userFlag, id: id});
 						wrappers.push(this.createBadges(user, null, "settings"));
 					}
