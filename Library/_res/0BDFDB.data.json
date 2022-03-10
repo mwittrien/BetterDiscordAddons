@@ -394,7 +394,7 @@
 		"Status": {"name": "Status"},
 		"StatusPickerPopout": {"strings": ["\"StatusPickerPopout\""], "value": "default"},
 		"TextElement": {"name": "Text"},
-		"UserBadges": {"props": ["BadgeSizes"],
+		"UserBadges": {"props": ["BadgeSizes"]},
 		"UserPopout": {"name": "UserPopoutContainer"},
 		"UserSummaryItem": {"name": "UserSummaryItem"},
 		"VideoForwardRef": {"strings": ["displayName=\"Video\"", "\"video\"", "HTMLImageElement"], "value": "default"},
