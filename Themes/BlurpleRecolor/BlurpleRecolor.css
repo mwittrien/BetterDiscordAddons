@@ -1800,11 +1800,11 @@ a.metadataName-1KMZtB {
 
 /* ----		10.13.	SCREENSHAREMODAL				---- */
 
-#app-mount .art-2OaYX0 {															/* settings modal */
+#app-mount .art-1TvEXv {															/* settings modal */
 	position: relative;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/screenshare_header_bg.svg) center/contain no-repeat;
 }
-.art-2OaYX0::after {
+.art-1TvEXv::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -1853,10 +1853,10 @@ a.metadataName-1KMZtB {
 
 /* ----		10.15.	CUSTOMSTATUSMODAL				---- */
 
-.art-2p0nYa {
+.art-2Y6Pk3 {
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/customstatus_header_bg.svg) center/contain no-repeat;
 }
-.art-2p0nYa::after {
+.art-2Y6Pk3::after {
 	content: "";
 	position: absolute;
 	top: 0;

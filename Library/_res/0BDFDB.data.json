@@ -140,6 +140,7 @@
 		"UnreadStateTypes": {"props": ["ReadStateTypes"], "value": "ReadStateTypes"},
 		"UploadUtils": {"props": ["upload", "instantBatchUpload"]},
 		"URLParser": {"props": ["parse", "resolveObject"]},
+		"UserBadgeKeys": {"props": ["BadgeKeys"], "value": "BadgeKeys"},
 		"UserBioParser": {"props": ["parseBioReact"]},
 		"UserFetchUtils": {"props": ["fetchCurrentUser", "getUser"]},
 		"UserNameUtils": {"props": ["getName", "getNickname"]},
@@ -394,10 +395,6 @@
 		"StatusPickerPopout": {"strings": ["\"StatusPickerPopout\""], "value": "default"},
 		"TextElement": {"name": "Text"},
 		"UserBadges": {"props": ["BadgeSizes"],
-			"children": {
-				"Keys": {"props": ["BadgeKeys"], "value": "BadgeKeys"}
-			}
-		},
 		"UserPopout": {"name": "UserPopoutContainer"},
 		"UserSummaryItem": {"name": "UserSummaryItem"},
 		"VideoForwardRef": {"strings": ["displayName=\"Video\"", "\"video\"", "HTMLImageElement"], "value": "default"},
@@ -1230,7 +1227,7 @@
 		"Combobox": {"props": ["combobox", "itemLabel"]},
 		"Cursor": {"props": ["cursorDefault", "userSelectNone"]},
 		"CustomStatusIcon": {"props": ["textRuler", "emoji", "icon"]},
-		"CustomStatusModal": {"props": ["inputContainer", "emojiButton"]},
+		"CustomStatusModal": {"props": ["inputContainer", "emojiButton", "modalRoot"]},
 		"CustomStatusPopout": {"props": ["customStatusItem", "customEmoji"]},
 		"DmAddPopout": {"props": ["popout", "searchBarComponent"]},
 		"DmAddPopoutItems": {"props": ["friendSelected", "friendWrapper"]},
