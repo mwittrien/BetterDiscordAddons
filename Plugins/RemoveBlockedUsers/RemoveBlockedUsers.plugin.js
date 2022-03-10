@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.9
+ * @version 1.4.0
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedUsers",
 			"author": "DevilBro",
-			"version": "1.3.9",
+			"version": "1.4.0",
 			"description": "Removes blocked Messages/Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"Console Log": "Fixed the Console Log Spam causing a Slow Down",
-				"Placeholder": "Fixed Placeholders appearing the the Member List for Blocked Users"
+				"Offline List": "Fixed Issue where switching between servers would remove more and more users from the offline list if someone was blocked"
 			}
 		}
 	};
@@ -352,13 +351,15 @@ module.exports = (_ => {
 		
 			processChannelMembers (e) {
 				if (this.settings.places.memberList) {
-					let hidden = 0, newRows = new Array(e.instance.props.rows.length), newGroups = new Array(e.instance.props.groups.length);
+					let hiddenRows = 0, newRows = new Array(e.instance.props.rows.length), newGroups = new Array(e.instance.props.groups.length);
+					e.instance.props.groups = [].concat(e.instance.props.groups);
+					e.instance.props.rows = [].concat(e.instance.props.rows);
 					for (let i in e.instance.props.rows) {
 						let row = e.instance.props.rows[i];
 						if (!row || row.type != "MEMBER") newRows[i] = row;
 						else if (!row.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(row.user.id)) newRows[i] = row;
 						else {
-							hidden++;
+							hiddenRows++;
 							let found = false, rowIndex = i - 1;
 							while (!found && rowIndex > -1) {
 								if (newRows[rowIndex] && newRows[rowIndex].type == "GROUP") {
@@ -373,16 +374,14 @@ module.exports = (_ => {
 							}
 						}
 					}
-					if (hidden) {
-						e.instance.props.groups = [].concat(e.instance.props.groups);
-						e.instance.props.rows = [].concat(e.instance.props.rows);
+					if (hiddenRows) {
 						let indexSum = 0;
 						for (let i in e.instance.props.groups) {
 							newGroups[i] = Object.assign({}, e.instance.props.groups[i], {index: indexSum});
 							if (e.instance.props.groups[i].count > 0) indexSum += (e.instance.props.groups[i].count + 1);
 						}
 						for (let i in newRows) if (newRows[i] && newRows[i].type == "GROUP" && newRows[i].count <= 0) {
-							hidden++;
+							hiddenRows++;
 							newRows[i] = undefined;
 						}
 						const removeEmptyWithin = (array, filter) => {
