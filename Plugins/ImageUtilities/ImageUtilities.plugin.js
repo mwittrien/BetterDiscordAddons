@@ -230,6 +230,9 @@ module.exports = (_ => {
 					${BDFDB.dotCN._imageutilitiesimagedetails} {
 						display: inline-flex;
 					}
+					${BDFDB.dotCNS.spoilerhidden + BDFDB.dotCN._imageutilitiesimagedetails} {
+						display: none;
+					}
 					span + ${BDFDB.dotCN._imageutilitiesimagedetails} {
 						margin-left: 12px;
 					}
