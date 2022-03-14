@@ -231,7 +231,7 @@ module.exports = (_ => {
 						display: inline-flex;
 					}
 					${BDFDB.dotCNS.spoilerhidden + BDFDB.dotCN._imageutilitiesimagedetails} {
-						display: none;
+						visibility: hidden;
 					}
 					span + ${BDFDB.dotCN._imageutilitiesimagedetails} {
 						margin-left: 12px;
