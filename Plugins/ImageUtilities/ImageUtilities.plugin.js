@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.6.5
+ * @version 4.6.6
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,22 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.6.5",
+			"version": "4.6.6",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
+		},
+		"changeLog": {
+			"progress": {
+				"Settings": "<strong style='color: red;'>SETTINGS HAVE BEEN REORGANIZED AND CAUSED SOME SETTINGS TO RESET, CHECK YOUR PLUGIN SETTINGS IF SOMETHING IS BEHAVING DIFFERENTLY</strong>"
+			},
+			"fixed": {
+				"Banners": "No longer show in low Resolution"
+			},
+			"added": {
+				"Resize in Chat": "Added Option to resize Images in Messages"
+			},
+			"improved": {
+				"Gallery Mode": "Now allows you to switch between all currently loaded Images in a Channel"
+			}
 		}
 	};
 	
@@ -157,29 +171,32 @@ module.exports = (_ => {
 				clickedImage = null;
 				
 				this.defaults = {
-					general: {
-						resizeImage: 			{value: true,		description: "Always resize Image to fit the whole Image Modal"},
-						addDetails: 			{value: true,		description: "Add Image Details (Name, Size, Amount) in the Image Modal"},
-						showInDescription:		{value: true, 		description: "Show Image Details in the Footnote below the Image"},
-						showOnHover:			{value: false, 		description: "Show Image Details as Tooltip in the Chat"},
-						enableGallery: 			{value: true,		description: "Display previous/next Images in the same Message in the Image Modal"},
-						enableZoom: 			{value: true,		description: "Create a Zoom Lens if you press down on an Image in the Image Modal"},
-						pixelZoom: 				{value: false,		description: "Zoom Lens will be pixelated instead of blurry"},
-						enableCopyImg: 			{value: true,		description: "Add a 'Copy Image' Option in the Image Modal"},
-						enableSaveImg: 			{value: true,		description: "Add a 'Save Image as' Option in the Image Modal"},
-					},
-					places: {
-						userAvatars: 			{value: true, 		description: "User Avatars"},
-						groupIcons: 			{value: true, 		description: "Group Icons"},
-						guildIcons: 			{value: true, 		description: "Server Icons"},
-						emojis: 				{value: true, 		description: "Custom Emojis/Emotes"}
-					},
-					amounts: {
-						hoverDelay:				{value: 0, 			min: 0,			description: "Image Tooltip Delay (in ms)"}
+					viewerSettings: {
+						zoomMode: 				{value: true,	description: "Enable Zoom Mode to zoom into Images while holding down your Mouse"},
+						galleryMode: 			{value: true,	description: "Enable Gallery Mode to quick-switch between Images"},
+						details: 				{value: true,	description: "Add Image Details (Name, Size, Amount)"},
+						copyImage: 				{value: true,	description: "Add a 'Copy Image' Option"},
+						saveImage: 				{value: true,	description: "Add a 'Save Image as' Option"},
 					},
 					zoomSettings: {
-						zoomLevel:				{value: 2,			digits: 1,		minValue: 1,	maxValue: 20,		unit: "x",	label: "ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
-						lensSize:				{value: 200,		digits: 0,		minValue: 50, 	maxValue: 5000,		unit: "px",	label: "context_lenssize"}
+						pixelMode: 				{value: false,	label: "Use Pixel Lens instead of a Blur Lens"},
+						zoomLevel:				{value: 2,		digits: 1,	minValue: 1,	maxValue: 20,	unit: "x",		label: "ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
+						lensSize:				{value: 200,	digits: 0,	minValue: 50,	maxValue: 5000,	unit: "px",		label: "context_lenssize"}
+					},
+					resizeSettings: {
+						messages: 				{value: false, 	description: "Messages"},
+						imageViewer: 			{value: false, 	description: "Image Viewer"}
+					},
+					detailsSettings: {
+						footnote:				{value: true, 	description: "in the Image Description"},
+						tooltip:				{value: false, 	description: "as a Hover Tooltip"},
+						tooltipDelay:			{value: 0, 		min: 0,			description: "Image Tooltip Delay (in ms)"}
+					},
+					places: {
+						userAvatars: 			{value: true, 	description: "User Avatars"},
+						groupIcons: 			{value: true, 	description: "Group Icons"},
+						guildIcons: 			{value: true, 	description: "Server Icons"},
+						emojis: 				{value: true, 	description: "Custom Emojis/Emotes"}
 					},
 					engines: {
 						_all: 		{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url: null},
@@ -267,6 +284,15 @@ module.exports = (_ => {
 					${BDFDB.dotCNS._imageutilitiesnext + BDFDB.dotCN._imageutilitiesswitchicon} {
 						left: 10px;
 					}
+					${BDFDB.dotCNS._imageutilitiessibling + BDFDB.dotCN.spinner} {
+						position: absolute;
+					}
+					${BDFDB.dotCNS._imageutilitiesprevious + BDFDB.dotCN.spinner} {
+						right: 21px;
+					}
+					${BDFDB.dotCNS._imageutilitiesnext + BDFDB.dotCN.spinner} {
+						left: 21px;
+					}
 					${BDFDB.dotCN._imageutilitiessibling}:hover ${BDFDB.dotCN._imageutilitiesswitchicon} {
 						background: rgba(0, 0, 0, 0.5);
 					}
@@ -287,6 +313,8 @@ module.exports = (_ => {
 						text-overflow: ellipsis;
 					}
 					${BDFDB.dotCN._imageutilitiesdetailslabel} {
+						display: inline-block;
+						width: 80px;
 						font-weight: 600;
 					}
 					${BDFDB.dotCN._imageutilitieslense} {
@@ -307,14 +335,14 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.ListenerUtils.add(this, document.body, "click", BDFDB.dotCNS.message + BDFDB.dotCNS.imagewrapper + "img", e => {
-					clickedImage = e.target;
-					BDFDB.TimeUtils.timeout(_ => {clickedImage = null;});
+				BDFDB.ListenerUtils.add(this, document.body, "click", BDFDB.dotCNS.message + BDFDB.dotCNS.imagewrapper + BDFDB.dotCNC.imageoriginallink + BDFDB.dotCNS.message + BDFDB.dotCNS.imagewrapper + "img", e => {
+					clickedImage = (BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagewrapper, e.target) || e.target).querySelector("img") || e.target;
+					BDFDB.TimeUtils.timeout(_ => {clickedImage = null;}, 1000);
 				});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MediaComponentUtils, "renderImageComponent", {
 					after: e => {
-						if (this.settings.general.showInDescription && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedmedia) == -1 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedthumbnail) == -1 && BDFDB.ReactUtils.findChild(e.returnValue, {name: ["LazyImageZoomable", "LazyImage"]})) {
+						if (this.settings.detailsSettings.footnote && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedmedia) == -1 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedthumbnail) == -1 && BDFDB.ReactUtils.findChild(e.returnValue, {name: ["LazyImageZoomable", "LazyImage"]})) {
 							const altText = e.returnValue.props.children[1] && e.returnValue.props.children[1].props.children;
 							const details = BDFDB.ReactUtils.createElement(ImageDetailsComponent, {
 								original: e.methodArguments[0].original,
@@ -359,27 +387,58 @@ module.exports = (_ => {
 						let settingsItems = [];
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: "Settings",
+							title: "Image Viewer Settings",
 							collapseStates: collapseStates,
-							children: Object.keys(this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							children: Object.keys(this.defaults.viewerSettings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "Switch",
 								plugin: this,
-								keys: ["general", key],
-								label: this.defaults.general[key].description,
-								value: this.settings.general[key]
-							})).concat(Object.keys(this.defaults.amounts).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								keys: ["viewerSettings", key],
+								label: this.defaults.viewerSettings[key].description,
+								value: this.settings.viewerSettings[key]
+							}))
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Resize Settings",
+							collapseStates: collapseStates,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+								title: "Automatically Resize Images in: ",
+								children: Object.keys(this.defaults.resizeSettings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+									type: "Switch",
+									plugin: this,
+									keys: ["resizeSettings", key],
+									label: this.defaults.resizeSettings[key].description,
+									value: this.settings.resizeSettings[key]
+								}))
+							})
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Image Details Settings",
+							collapseStates: collapseStates,
+							children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+								title: "Show Image Details",
+								children: Object.keys(this.defaults.detailsSettings).filter(key => typeof this.defaults.detailsSettings[key].value == "boolean").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+									type: "Switch",
+									plugin: this,
+									keys: ["detailsSettings", key],
+									label: this.defaults.detailsSettings[key].description,
+									value: this.settings.detailsSettings[key]
+								}))
+							})].concat(Object.keys(this.defaults.detailsSettings).filter(key => typeof this.defaults.detailsSettings[key].value != "boolean").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "TextInput",
 								plugin: this,
-								keys: ["amounts", key],
-								label: this.defaults.amounts[key].description,
+								keys: ["detailsSettings", key],
+								label: this.defaults.detailsSettings[key].description,
+								value: this.settings.detailsSettings[key],
 								basis: "50%",
 								childProps: {type: "number"},
-								min: this.defaults.amounts[key].min,
-								max: this.defaults.amounts[key].max,
-								value: this.settings.amounts[key]
+								min: this.defaults.detailsSettings[key].min,
+								max: this.defaults.detailsSettings[key].max,
 							})))
 						}));
 						
+						const locationInputs = {name: "", location: ""};
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Download Locations",
 							collapseStates: collapseStates,
@@ -387,7 +446,7 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 									className: BDFDB.disCN.marginbottom4,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
-									children: "Add additional Download Locations: "
+									children: "Add additional Download Locations"
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 									className: BDFDB.disCN.marginbottom8,
@@ -397,9 +456,9 @@ module.exports = (_ => {
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 												title: "Name:",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-													className: "input-newlocation input-name",
-													value: "",
-													placeholder: "Name"
+													value: locationInputs.name,
+													placeholder: "Name",
+													onChange: value => locationInputs.name = value
 												})
 											})
 										}),
@@ -407,18 +466,18 @@ module.exports = (_ => {
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 												title: "Location:",
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-													className: "input-newlocation input-location",
-													value: "",
-													placeholder: "Location"
+													value: locationInputs.location,
+													placeholder: "Location",
+													onChange: value => locationInputs.location = value
 												})
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 											style: {marginBottom: 1},
 											onClick: _ => {
-												for (let input of settingsPanel.props._node.querySelectorAll(".input-newlocation " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new Location.", {type: "danger"});
-												let name = settingsPanel.props._node.querySelector(".input-name " + BDFDB.dotCN.input).value.trim();
-												let location = settingsPanel.props._node.querySelector(".input-location " + BDFDB.dotCN.input).value.trim();
+												for (let key in locationInputs) if (!locationInputs[key] || !locationInputs[key].trim()) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new Location", {type: "danger"});
+												let name = locationInputs.name.trim();
+												let location = locationInputs.location.trim();
 												if (ownLocations[name] || name == "Downloads") return BDFDB.NotificationUtils.toast("A Location with the choosen Name already exists, please choose another Name", {type: "danger"});
 												else if (!BDFDB.LibraryRequires.fs.existsSync(location)) return BDFDB.NotificationUtils.toast("The choosen download Location is not a valid Path to a Folder", {type: "danger"});
 												else {
@@ -432,7 +491,7 @@ module.exports = (_ => {
 									]
 								})
 							].concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-								title: "Your own Download Locations:",
+								title: "Your own Download Locations",
 								dividerTop: true,
 								children: Object.keys(ownLocations).map(name => {
 									let locationName = name;
@@ -492,31 +551,30 @@ module.exports = (_ => {
 						}));
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: "Context Menu Entries",
+							title: "Context Menu Settings",
 							collapseStates: collapseStates,
-							children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
-								className: BDFDB.disCN.marginbottom4,
-								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
-								children: "Add additional Context Menu Entry for: "
-							})].concat(Object.keys(this.defaults.places).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-								type: "Switch",
-								plugin: this,
-								keys: ["places", key],
-								label: this.defaults.places[key].description,
-								value: this.settings.places[key]
-							})))
-						}));
-						
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: "Search Engines",
-							collapseStates: collapseStates,
-							children: Object.keys(this.defaults.engines).map(key => key != "_all" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-								type: "Switch",
-								plugin: this,
-								keys: ["engines", key],
-								label: this.defaults.engines[key].name,
-								value: this.settings.engines[key]
-							})).filter(n => n)
+							children: [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+									title: "Add additional Context Menu Entry for",
+									children: Object.keys(this.defaults.places).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+										type: "Switch",
+										plugin: this,
+										keys: ["places", key],
+										label: this.defaults.places[key].description,
+										value: this.settings.places[key]
+									}))
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+									title: "Reverse Image Search Engines",
+									children: Object.keys(this.defaults.engines).filter(key => key != "_all").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+										type: "Switch",
+										plugin: this,
+										keys: ["engines", key],
+										label: this.defaults.engines[key].name,
+										value: this.settings.engines[key]
+									}))
+								})
+							]
 						}));
 						
 						return settingsItems;
@@ -532,7 +590,6 @@ module.exports = (_ => {
 			}
 		
 			forceUpdateAll () {
-				if (this.settings.general.showInDescription && !BDFDB.DiscordUtils.getSettings("ViewImageDescriptions")) BDFDB.DiscordUtils.setSettings("ViewImageDescriptions", true);
 				const loadedLocations = BDFDB.DataUtils.load(this, "ownLocations");
 				ownLocations = Object.assign(!loadedLocations || !loadedLocations.Downloads ? {"Downloads": {enabled:true, location: this.getDownloadLocation()}} : {}, loadedLocations);
 				
@@ -561,7 +618,11 @@ module.exports = (_ => {
 					e.returnvalue.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.isValid(validUrls[0].file, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE + " " + BDFDB.LanguageUtils.LanguageStrings.ACTIONS,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-subitem"),
-						children: this.createSubMenus(e.instance, validUrls, BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_AVATAR)
+						children: this.createSubMenus({
+							instance: e.instance,
+							urls: validUrls,
+							prefix: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_AVATAR
+						})
 					}));
 				}
 			}
@@ -619,7 +680,12 @@ module.exports = (_ => {
 				
 				let type = this.isValid(validUrls[0].file, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
 				let isNative = validUrls.length == 1 && removeIndex > -1;
-				let subMenu = this.createSubMenus(e.instance, validUrls, prefix);
+				let subMenu = this.createSubMenus({
+					instance: e.instance,
+					urls: validUrls,
+					prefix: prefix,
+					target: e.instance.props.target
+				});
 				
 				let [children, index] = isNative ? [removeParent, removeIndex] : BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 				children.splice(index > -1 ? index : children.length, 0, isNative ? subMenu : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
@@ -635,7 +701,7 @@ module.exports = (_ => {
 				let addedUrls = [];
 				return urls.filter(n => this.isValid(n && n.file || n)).map(n => {
 					let srcUrl = (n.file || n).replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/\?size\=\d+&/, "?size=4096&").replace(/[\?\&](height|width)=\d+/g, "").split("%3A")[0];
-					if (srcUrl.startsWith("https://cdn.discordapp.com/") && !srcUrl.endsWith("?size=4096") && !srcUrl.indexOf("?size=4096&") == -1) srcUrl += "?size=4096";
+					if (srcUrl.startsWith("https://cdn.discordapp.com/") && !srcUrl.endsWith("?size=4096") && srcUrl.indexOf("?size=4096&") == -1) srcUrl += "?size=4096";
 					let originalUrl = (n.original || n.file || n).replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/\?size\=\d+&/, "?size=4096&").replace(/[\?\&](height|width)=\d+/g, "").split("%3A")[0];
 					let fileUrl = srcUrl;
 					if (fileUrl.indexOf("https://images-ext-1.discordapp.net/external/") > -1 || fileUrl.indexOf("https://images-ext-2.discordapp.net/external/") > -1) {
@@ -654,15 +720,15 @@ module.exports = (_ => {
 				return file && (!type && (url.indexOf("discord.com/streams/guild:") > -1 || url.indexOf("discordapp.com/streams/guild:") > -1 || url.indexOf("discordapp.net/streams/guild:") > -1 || url.startsWith("https://images-ext-1.discordapp.net/") || url.startsWith("https://images-ext-2.discordapp.net/") || Object.keys(fileTypes).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`))) || type && Object.keys(fileTypes).filter(t => fileTypes[t][type]).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`)));
 			}
 			
-			createSubMenus (instance, validUrls, prefix) {
-				return validUrls.length == 1 ? this.createUrlMenu(instance, validUrls[0]) : validUrls.map((urlData, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-					label: [urlData.isGuildSpecific && BDFDB.LanguageUtils.LanguageStrings.CHANGE_IDENTITY_SERVER_PROFILE, prefix, urlData.fileType.toUpperCase()].filter(n => n).join(" "),
+			createSubMenus (data) {
+				return data.urls.length == 1 ? this.createUrlMenu(data.instance, data.urls[0], data.target) : data.urls.map((urlData, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					label: [urlData.isGuildSpecific && BDFDB.LanguageUtils.LanguageStrings.CHANGE_IDENTITY_SERVER_PROFILE, data.prefix, urlData.fileType.toUpperCase()].filter(n => n).join(" "),
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "subitem", i),
-					children: this.createUrlMenu(instance, urlData)
+					children: this.createUrlMenu(data.instance, urlData, data.target)
 				}));
 			}
 			
-			createUrlMenu (instance, urlData) {
+			createUrlMenu (instance, urlData, target) {
 				let enabledEngines = BDFDB.ObjectUtils.filter(this.settings.engines, n => n);
 				let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
 				let engineKeys = Object.keys(enginesWithoutAll);
@@ -704,6 +770,10 @@ module.exports = (_ => {
 								let img = document.createElement(isVideo ? "video" : "img");
 								img.addEventListener(isVideo ? "loadedmetadata" : "load", function() {
 									BDFDB.LibraryModules.ModalUtils.openModal(modalData => {
+										if (target) {
+											clickedImage = (BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagewrapper, target) || target).querySelector("img") || target;
+											BDFDB.TimeUtils.timeout(_ => {clickedImage = null;}, 1000);
+										}
 										return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalRoot, Object.assign({
 											className: BDFDB.disCN.imagemodal
 										}, modalData, {
@@ -782,19 +852,27 @@ module.exports = (_ => {
 			}
 
 			processImageModal (e) {
-				if (clickedImage) e.instance.props.cachedImage = clickedImage;
-				let url = this.getImageSrc(e.instance.props.cachedImage && e.instance.props.cachedImage.src ? e.instance.props.cachedImage : e.instance.props.src);
+				if (clickedImage) e.instance._cachedImage = clickedImage;
+				let url = this.getImageSrc(e.instance._cachedImage && e.instance._cachedImage.src ? e.instance._cachedImage : e.instance.props.src);
 				url = this.getImageSrc(typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})).props.src) || url;
 				let isVideo = this.isValid(url, "video");
-				let messages = this.getMessageGroupOfImage(url);
+				let messages = this.getAllGalleryImages();
 				if (e.returnvalue) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.downloadlink]]});
 					if (index > -1) {
 						let type = isVideo ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
-						let openContext = event => {
-							BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-								children: Object.keys(this.defaults.zoomSettings).map(type => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSliderItem, Object.assign({
-									id: BDFDB.ContextMenuUtils.createItemId(this.name, type),
+						let openContext = event => BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+							children: Object.keys(this.defaults.zoomSettings).map(type => {
+								let isBoolean = typeof this.defaults.zoomSettings[type].value == "boolean";
+								return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems[isBoolean ? "MenuCheckboxItem" : "MenuSliderItem"], Object.assign({
+									id: BDFDB.ContextMenuUtils.createItemId(this.name, type)
+								}, isBoolean ? {
+									checked: this.settings.zoomSettings[type],
+									action: value => {
+										this.settings.zoomSettings[type] = value;
+										BDFDB.DataUtils.save(this.settings.zoomSettings, this, "zoomSettings");
+									}
+								} : {
 									value: this.settings.zoomSettings[type],
 									renderLabel: (value, instance) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
@@ -822,14 +900,14 @@ module.exports = (_ => {
 										this.settings.zoomSettings[type] = value;
 										BDFDB.DataUtils.save(this.settings.zoomSettings, this, "zoomSettings");
 									}
-								}, BDFDB.ObjectUtils.extract(this.defaults.zoomSettings[type], "digits", "minValue", "maxValue"))))
-							}));
-						};
+								}, BDFDB.ObjectUtils.extract(this.defaults.zoomSettings[type], isBoolean ? ["label"] : ["digits", "minValue", "maxValue"])));
+							})
+						}));
 						children[index] = BDFDB.ReactUtils.createElement("span", {
 							className: BDFDB.disCN._imageutilitiesoperations,
 							children: [
 								children[index],
-								this.settings.general.enableSaveImg && [
+								this.settings.viewerSettings.saveImage && [
 									BDFDB.ReactUtils.createElement("span", {
 										className: BDFDB.disCN.downloadlink,
 										children: "|",
@@ -854,7 +932,7 @@ module.exports = (_ => {
 										}
 									})
 								],
-								this.settings.general.enableCopyImg && this.isValid(url, "copyable") && [
+								this.settings.viewerSettings.copyImage && this.isValid(url, "copyable") && [
 									BDFDB.ReactUtils.createElement("span", {
 										className: BDFDB.disCN.downloadlink,
 										children: "|",
@@ -869,7 +947,7 @@ module.exports = (_ => {
 										}
 									})
 								],
-								this.settings.general.enableZoom && !isVideo && [
+								this.settings.viewerSettings.zoomMode && !isVideo && [
 									BDFDB.ReactUtils.createElement("span", {
 										className: BDFDB.disCN.downloadlink,
 										children: "|",
@@ -887,7 +965,7 @@ module.exports = (_ => {
 					}
 					let imageIndex = 0, amount = 1;
 					if (messages.length) {
-						let data = this.getSiblingsAndPosition(url, messages);
+						let data = this.getSiblingsAndPosition(e.instance._cachedImage || url, messages);
 						imageIndex = data.index;
 						amount = data.amount;
 						if (data.previous) {
@@ -895,11 +973,11 @@ module.exports = (_ => {
 							else this.loadImage(e.instance, data.previous, "previous");
 						}
 						if (data.next) {
-							if (e.instance.nextRef) e.returnvalue.props.children.splice(1, 0, this.createImageWrapper(e.instance, e.instance.nextRef, "next", BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET));
+							if (e.instance.nextRef) e.returnvalue.props.children.push(this.createImageWrapper(e.instance, e.instance.nextRef, "next", BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET));
 							else this.loadImage(e.instance, data.next, "next");
 						}
 					}
-					if (this.settings.general.addDetails) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
+					if (this.settings.viewerSettings.details) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN._imageutilitiesdetailswrapper,
 						children: [
 							e.instance.props.alt && {label: "Alt", text: e.instance.props.alt},
@@ -921,7 +999,7 @@ module.exports = (_ => {
 				if (e.node) {
 					let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node);
 					if (modal) {
-						modal.className = BDFDB.DOMUtils.formatClassName(modal.className, messages.length && BDFDB.disCN._imageutilitiesgallery, this.settings.general.addDetails && BDFDB.disCN._imageutilitiesdetailsadded);
+						modal.className = BDFDB.DOMUtils.formatClassName(modal.className, messages.length && BDFDB.disCN._imageutilitiesgallery, this.settings.viewerSettings.details && BDFDB.disCN._imageutilitiesdetailsadded);
 						this.cleanupListeners("Gallery");
 						if (messages.length) {
 							document.keydownImageUtilitiesGalleryListener = event => {
@@ -945,9 +1023,12 @@ module.exports = (_ => {
 			
 			processLazyImage (e) {
 				if (e.node) {
-					if (e.instance.props.resized) e.instance.state.readyState = BDFDB.LibraryComponents.Image.ImageReadyStates.READY;
+					if (e.instance.props.resized && e.instance.state.readyState != BDFDB.LibraryComponents.Image.ImageReadyStates.READY) {
+						e.instance.state.readyState = BDFDB.LibraryComponents.Image.ImageReadyStates.READY;
+						BDFDB.ReactUtils.forceUpdate(e.instance);
+					}
 					let isVideo = (typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})) || {type: {}}).type.displayName == "Video";
-					if (this.settings.general.enableZoom && !isVideo && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling) && BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.getInstance(e.node), {name: "ImageModal", up: true})) {
+					if (this.settings.viewerSettings.zoomMode && !isVideo && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling) && BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.getInstance(e.node), {name: "ImageModal", up: true})) {
 						e.node.addEventListener("mousedown", event => {
 							if (event.which != 1) return;
 							BDFDB.ListenerUtils.stopEvent(event);
@@ -956,7 +1037,7 @@ module.exports = (_ => {
 							
 							let imgRects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
 
-							let lens = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${this.settings.zoomSettings.lensSize}px !important; height: ${this.settings.zoomSettings.lensSize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * this.settings.zoomSettings.zoomLevel}px; height: ${imgRects.height * this.settings.zoomSettings.zoomLevel}px; position: fixed !important;${this.settings.general.pixelZoom ? " image-rendering: pixelated !important;" : ""}"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
+							let lens = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${this.settings.zoomSettings.lensSize}px !important; height: ${this.settings.zoomSettings.lensSize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * this.settings.zoomSettings.zoomLevel}px; height: ${imgRects.height * this.settings.zoomSettings.zoomLevel}px; position: fixed !important;${this.settings.zoomSettings.pixelMode ? " image-rendering: pixelated !important;" : ""}"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
 							let pane = lens.firstElementChild.firstElementChild;
 							let backdrop = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslensebackdrop}" style="background: rgba(0, 0, 0, 0.3) !important; position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; pointer-events: none !important; z-index: 8000 !important;"></div>`);
 							let appMount = document.querySelector(BDFDB.dotCN.appmount);
@@ -1045,10 +1126,11 @@ module.exports = (_ => {
 					}
 				}
 				else {
-					if (this.settings.general.resizeImage && BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), {name: "ImageModal", up: true})) {
-						let data = this.settings.general.enableGallery ? this.getSiblingsAndPosition(e.instance.props.src, this.getMessageGroupOfImage(e.instance.props.src)) : {};
+					if (!e.instance.props.resized && this.settings.resizeSettings.imageViewer && BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), {name: "ImageModal", up: true})) {
+						console.log(e);
+						let data = this.settings.viewerSettings.galleryMode ? this.getSiblingsAndPosition(e.instance.props.src, this.getAllGalleryImages()) : {};
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
-						let ratio = Math.min((aRects.width * (data.previous || data.next ? 0.8 : 1) - 20) / e.instance.props.width, (aRects.height - (this.settings.general.addDetails ? 310 : 100)) / e.instance.props.height);
+						let ratio = Math.min((aRects.width * (data.previous || data.next ? 0.8 : 1) - 20) / e.instance.props.width, (aRects.height - (this.settings.viewerSettings.details ? 280 : 100)) / e.instance.props.height);
 						let width = Math.round(ratio * e.instance.props.width);
 						let height = Math.round(ratio * e.instance.props.height);
 						e.instance.props.width = width;
@@ -1058,12 +1140,27 @@ module.exports = (_ => {
 						e.instance.props.src = e.instance.props.src.replace(/width=\d+/, `width=${width}`).replace(/height=\d+/, `height=${height}`);
 						e.instance.props.resized = true;
 					}
+					if (!e.instance.props.resized && this.settings.resizeSettings.messages && BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), {name: "LazyImageZoomable", up: true})) {
+						let mRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCNC.messageaccessory + BDFDB.dotCN.messagecontents));
+						let mwRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.messagewrapper));
+						if (mRects.width || mwRects.width) {
+							let ratio = (mRects.width || (mwRects.width - 120)) / e.instance.props.width;
+							let width = Math.round(ratio * e.instance.props.width);
+							let height = Math.round(ratio * e.instance.props.height);
+							e.instance.props.width = width;
+							e.instance.props.maxWidth = width;
+							e.instance.props.height = height;
+							e.instance.props.maxHeight = height;
+							e.instance.props.src = e.instance.props.src.replace(/width=\d+/, `width=${width}`).replace(/height=\d+/, `height=${height}`);
+							e.instance.props.resized = true;
+						}
+					}
 				}
 			}
 
 			processLazyImageZoomable (e) {
-				if (this.settings.general.showOnHover && e.instance.props.original && e.instance.props.src.indexOf("https://media.discordapp.net/attachments") == 0) {
-					let attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up: true});
+				if (this.settings.detailsSettings.tooltip && e.instance.props.original && e.instance.props.src.indexOf("https://media.discordapp.net/attachments") == 0) {
+					const attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up: true});
 					if (attachment) {
 						const onMouseEnter = e.returnvalue.props.onMouseEnter;
 						e.returnvalue.props.onMouseEnter = BDFDB.TimeUtils.suppress((...args) => {
@@ -1073,7 +1170,7 @@ module.exports = (_ => {
 								`${attachment.width}x${attachment.height}px`
 							].map(l => BDFDB.ReactUtils.createElement("div", {style: {padding: "2px 0"}, children: l})), {
 								type: "right",
-								delay: this.settings.amounts.hoverDelay
+								delay: this.settings.detailsSettings.tooltipDelay
 							});
 							return onMouseEnter(...args);
 						});
@@ -1087,10 +1184,18 @@ module.exports = (_ => {
 					const member = BDFDB.LibraryModules.MemberStore.getMember(e.instance.props.guildId, e.instance.props.user.id);
 					let validUrls = this.filterUrls(banner, BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.banner) && BDFDB.UserUtils.getBanner(e.instance.props.user.id, true), member && member.banner && BDFDB.LibraryModules.BannerUtils.getUserBannerURLForContext({user: e.instance.props.user, guildMember: member, canAnimate: false}), member && member.banner && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(member.banner) && BDFDB.LibraryModules.BannerUtils.getUserBannerURLForContext({user: e.instance.props.user, guildMember: member, canAnimate: true}));
 					if (validUrls.length) BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-						children: validUrls.length == 1 ? this.createSubMenus({}, validUrls, BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_BANNER) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						children: validUrls.length == 1 ? this.createSubMenus({
+							instance: {},
+							urls: validUrls,
+							prefix: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_BANNER
+						}) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.IMAGE + " " + BDFDB.LanguageUtils.LanguageStrings.ACTIONS,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-subitem"),
-							children: this.createSubMenus({}, validUrls, BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_BANNER)
+							children: this.createSubMenus({
+								instance: {},
+								urls: validUrls,
+								prefix: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_BANNER
+							})
 						})
 					}));
 				};
@@ -1175,31 +1280,15 @@ module.exports = (_ => {
 				return ext;
 			}
 			
-			getMessageGroupOfImage (src) {
-				if (src && this.settings.general.enableGallery) for (let message of document.querySelectorAll(BDFDB.dotCN.messagelistitem)) for (let img of message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")) if (this.isSameImage(src, img)) {
-					let previousSiblings = [], nextSiblings = [];
-					let previousSibling = message.previousSibling, nextSibling = message.nextSibling;
-					if (!BDFDB.DOMUtils.containsClass(message.firstElementChild, BDFDB.disCN.messagegroupstart)) while (previousSibling) {
-						previousSiblings.push(previousSibling);
-						if (BDFDB.DOMUtils.containsClass(previousSibling.firstElementChild, BDFDB.disCN.messagegroupstart)) previousSibling = null;
-						else previousSibling = previousSibling.previousSibling;
-					}
-					while (nextSibling) {
-						if (!BDFDB.DOMUtils.containsClass(nextSibling.firstElementChild, BDFDB.disCN.messagegroupstart)) {
-							nextSiblings.push(nextSibling);
-							nextSibling = nextSibling.nextSibling;
-						}
-						else nextSibling = null;
-					}
-					return [].concat(previousSiblings.reverse(), message, nextSiblings).filter(n => n && BDFDB.DOMUtils.containsClass(n, BDFDB.disCN.messagelistitem));
-				}
-				return [];
+			getAllGalleryImages () {
+				if (!this.settings.viewerSettings.galleryMode) return [];
+				return Array.from(document.querySelectorAll(BDFDB.dotCNS.messagelistitem + BDFDB.dotCNS.imagewrapper + "img"));
 			}
 			
-			getSiblingsAndPosition (url, messages) {
-				let images = messages.map(n => Array.from(n.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"))).flat().filter(img => !BDFDB.DOMUtils.getParent(BDFDB.dotCN.spoilerhidden, img));
+			getSiblingsAndPosition (imgOrUrl, images) {
+				images = images.flat(10).filter(img => !BDFDB.DOMUtils.getParent(BDFDB.dotCN.spoilerhidden, img));
 				let next, previous, index = 0, amount = images.length;
-				for (let i = 0; i < amount; i++) if (this.isSameImage(url, images[i])) {
+				for (let i = 0; i < amount; i++) if (this.isSameImage(imgOrUrl, images[i])) {
 					index = i;
 					previous = images[i-1];
 					next = images[i+1];
@@ -1266,7 +1355,7 @@ module.exports = (_ => {
 				instance.props.src = imgRef.props.src;
 				instance.props.height = imgRef.props.height;
 				instance.props.width = imgRef.props.width;
-				instance.props.cachedImage = img;
+				instance._cachedImage = img;
 				BDFDB.ReactUtils.forceUpdate(instance);
 			}
 			
