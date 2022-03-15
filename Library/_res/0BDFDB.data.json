@@ -1105,6 +1105,9 @@
 			"outdatedNotice": "outdatedNotice-fw8ams",
 			"repoNotice": "repoNotice-TV3RFr"
 		},
+		"ThemeSettings": {
+			"settingsButton": "settingsButton-h4Rts2"
+		},
 		"TimedLightDarkMode": {
 			"dateGrabber": "dateGrabber-QrRkIX",
 			"timerGrabber": "timerGrabber-zpRAIk",
@@ -1582,6 +1585,7 @@
 		"_themerepopreview": ["ThemeRepo", "preview"],
 		"_themerepopreviewfullscreen": ["ThemeRepo", "previewFullscreen"],
 		"_themerepopreviewmoving": ["ThemeRepo", "previewMoving"],
+		"_themesettingsbutton": ["ThemeSettings", "settingsButton"],
 		"_timedlightdarkmodedategrabber": ["TimedLightDarkMode", "dateGrabber"],
 		"_timedlightdarkmodetimergrabber": ["TimedLightDarkMode", "timerGrabber"],
 		"_timedlightdarkmodetimersettings": ["TimedLightDarkMode", "timerSettings"],
