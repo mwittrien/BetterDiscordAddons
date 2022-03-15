@@ -2,7 +2,7 @@
  * @name ThemeSettings
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.3
+ * @version 1.3.4
  * @description Allows you to change Theme Variables within Discord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeSettings",
 			"author": "DevilBro",
-			"version": "1.3.3",
+			"version": "1.3.4",
 			"description": "Allows you to change Theme Variables within Discord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page"
-		},
-		"changeLog": {
-			"added": {
-				"Reset": "Added a Button to reset all Values back to the Value that was used when you opened the Settings"
-			}
 		}
 	};
 
@@ -79,30 +74,30 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				this.addListObserver(document.querySelector(`${BDFDB.dotCN.layer}[aria-label="${BDFDB.DiscordConstants.Layers.USER_SETTINGS}"]`));
+				for (let settingsView of document.querySelectorAll(BDFDB.dotCN.layer + BDFDB.dotCN.settingswindowstandardsidebarview)) this.addListObserver(BDFDB.DOMUtils.getParent(BDFDB.dotCN.layer, settingsView));
 				BDFDB.ReactUtils.forceUpdate(this);
 			}
 			
 			onStop () {
-				BDFDB.DOMUtils.remove(".theme-settings-button");
+				BDFDB.DOMUtils.remove(BDFDB.dotCN._themesettingsbutton);
 			}
 			
 			processSettingsView (e) {
-				if (e.node && e.node.parentElement && e.node.parentElement.getAttribute("aria-label") == BDFDB.DiscordConstants.Layers.USER_SETTINGS) this.addListObserver(e.node.parentElement);
+				this.addListObserver(BDFDB.DOMUtils.getParent(BDFDB.dotCN.layer, e.node));
 			}
 			
 			addListObserver (layer) {
 				if (!layer) return;
-				BDFDB.ObserverUtils.connect(this, layer, {name: "cardObserver", instance: new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
+				BDFDB.ObserverUtils.connect(this, layer, {name: "cardObserver", instance: new MutationObserver(changes => changes.forEach(change => change.addedNodes.forEach(node => {
 					if (BDFDB.DOMUtils.containsClass(node, BDFDB.disCN._repocard)) this.appendSettingsButton(node);
 					if (node.nodeType != Node.TEXT_NODE) for (let child of node.querySelectorAll(BDFDB.dotCN._repocard)) this.appendSettingsButton(child);
-				});}});})}, {childList: true, subtree: true});
+				})))}, {childList: true, subtree: true});
 				for (let child of layer.querySelectorAll(BDFDB.dotCN._repocard)) this.appendSettingsButton(child);
 				
 			}
 		
 			appendSettingsButton (card) {
-				if (card.querySelector(".theme-settings-button")) return;
+				if (card.querySelector(BDFDB.dotCN._themesettingsbutton)) return;
 				let addon = BDFDB.ObjectUtils.get(BDFDB.ReactUtils.getInstance(card), "return.stateNode.props.addon");
 				if (addon && !addon.plugin && !addon.instance && addon.css) {
 					let css = addon.css.replace(/\r/g, "");
@@ -121,7 +116,7 @@ module.exports = (_ => {
 					if (imports.length || vars.length) {
 						let footerControls = card.querySelector(BDFDB.dotCNS._repofooter + BDFDB.dotCN._repocontrols);
 						let settingsButton = document.createElement("button");
-						settingsButton.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repobutton, BDFDB.disCN._repocontrolsbutton, "theme-settings-button");
+						settingsButton.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repobutton, BDFDB.disCN._repocontrolsbutton, BDFDB.disCN._themesettingsbutton);
 						settingsButton.appendChild(BDFDB.DOMUtils.create(`<svg viewBox="0 0 20 20" style="width: 20px; height: 20px;"><path fill="none" d="M0 0h20v20H0V0z"></path><path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"></path></svg>`));
 						footerControls.insertBefore(settingsButton, footerControls.firstElementChild);
 						settingsButton.addEventListener("click", _ => {
