@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.6.7
+ * @version 3.6.8
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
-			"version": "3.6.7",
+			"version": "3.6.8",
 			"description": "Allows you to replace the native Sounds with custom Sounds"
 		},
 		"changeLog": {
 			"fixed": {
-				"Message Notifications": "No longer plays them for every message or for no messages if desktop notifications are enabled"
+				"Bot Replies": "No longer plays Reply Sound when a Bot responds to a Slash Command"
 			}
 		}
 	};
@@ -243,7 +243,7 @@ module.exports = (_ => {
 							else if (guildId) {
 								if (BDFDB.LibraryModules.MentionUtils.isRawMessageMentioned(message, BDFDB.UserUtils.me.id)) {
 									if (message.mentions.length && !this.isSuppressMentionsEnabled(guildId, message.channel_id)) for (const mention of message.mentions) if (mention.id == BDFDB.UserUtils.me.id) {
-										if (message.message_reference && (!muted || choices.reply.force) && !(choices.reply.focus && focused)) {
+										if (message.message_reference && !message.interaction && (!muted || choices.reply.force) && !(choices.reply.focus && focused)) {
 											this.fireEvent("reply");
 											this.playAudio("reply");
 											return;

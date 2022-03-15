@@ -365,7 +365,7 @@ module.exports = (_ => {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 					if (channel && (BDFDB.UserUtils.can("MANAGE_MESSAGES") || message.author.id == BDFDB.UserUtils.me.id)) {
 						BDFDB.LibraryModules.MessageUtils.deleteMessage(message.channel_id, message.id, message.state != BDFDB.DiscordConstants.MessageStates.SENT);
-						if (toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.GUILD_SETTINGS_FOLLOWER_ANALYTICS_MESSAGE_DELETED), {type: "success"});
+						if (toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(this.labels.toast_message_deleted), {type: "success"});
 					}
 				}
 			}
@@ -459,6 +459,127 @@ module.exports = (_ => {
 					str.push(Object.keys(clickMap).find(type => clickMap[type] == enabledBindings[action].click));
 				}
 				return str.join("+").replace(/ /g, "");
+			}
+
+			setLabelsByLanguage () {
+				switch (BDFDB.LanguageUtils.getLanguage().id) {
+					case "bg":		// Bulgarian
+						return {
+							toast_message_deleted:				"Съобщението беше успешно изтрито"
+						};
+					case "cs":		// Czech
+						return {
+							toast_message_deleted:				"Zpráva byla úspěšně smazána"
+						};
+					case "da":		// Danish
+						return {
+							toast_message_deleted:				"Beskeden blev slettet"
+						};
+					case "de":		// German
+						return {
+							toast_message_deleted:				"Nachricht wurde erfolgreich gelöscht"
+						};
+					case "el":		// Greek
+						return {
+							toast_message_deleted:				"Το μήνυμα διαγράφηκε με επιτυχία"
+						};
+					case "es":		// Spanish
+						return {
+							toast_message_deleted:				"El mensaje fue eliminado con éxito"
+						};
+					case "fi":		// Finnish
+						return {
+							toast_message_deleted:				"Viesti poistettiin onnistuneesti"
+						};
+					case "fr":		// French
+						return {
+							toast_message_deleted:				"Le message a été supprimé avec succès"
+						};
+					case "hi":		// Hindi
+						return {
+							toast_message_deleted:				"संदेश सफलतापूर्वक हटा दिया गया"
+						};
+					case "hr":		// Croatian
+						return {
+							toast_message_deleted:				"Poruka je uspješno izbrisana"
+						};
+					case "hu":		// Hungarian
+						return {
+							toast_message_deleted:				"Az üzenet sikeresen törölve"
+						};
+					case "it":		// Italian
+						return {
+							toast_message_deleted:				"Il messaggio è stato eliminato con successo"
+						};
+					case "ja":		// Japanese
+						return {
+							toast_message_deleted:				"メッセージは正常に削除されました"
+						};
+					case "ko":		// Korean
+						return {
+							toast_message_deleted:				"메시지가 성공적으로 삭제되었습니다."
+						};
+					case "lt":		// Lithuanian
+						return {
+							toast_message_deleted:				"Laiškas sėkmingai ištrintas"
+						};
+					case "nl":		// Dutch
+						return {
+							toast_message_deleted:				"Bericht is succesvol verwijderd"
+						};
+					case "no":		// Norwegian
+						return {
+							toast_message_deleted:				"Meldingen ble slettet"
+						};
+					case "pl":		// Polish
+						return {
+							toast_message_deleted:				"Wiadomość została pomyślnie usunięta"
+						};
+					case "pt-BR":	// Portuguese (Brazil)
+						return {
+							toast_message_deleted:				"A mensagem foi excluída com sucesso"
+						};
+					case "ro":		// Romanian
+						return {
+							toast_message_deleted:				"Mesajul a fost șters cu succes"
+						};
+					case "ru":		// Russian
+						return {
+							toast_message_deleted:				"Сообщение было успешно удалено"
+						};
+					case "sv":		// Swedish
+						return {
+							toast_message_deleted:				"Meddelandet har raderats"
+						};
+					case "th":		// Thai
+						return {
+							toast_message_deleted:				"ลบข้อความเรียบร้อยแล้ว"
+						};
+					case "tr":		// Turkish
+						return {
+							toast_message_deleted:				"Mesaj başarıyla silindi"
+						};
+					case "uk":		// Ukrainian
+						return {
+							toast_message_deleted:				"Повідомлення було успішно видалено"
+						};
+					case "vi":		// Vietnamese
+						return {
+							toast_message_deleted:				"Tin nhắn đã được xóa thành công"
+						};
+					case "zh-CN":	// Chinese (China)
+						return {
+							toast_message_deleted:				"消息已成功删除"
+						};
+					case "zh-TW":	// Chinese (Taiwan)
+						return {
+							toast_message_deleted:				"消息已成功刪除"
+						};
+					default:		// English
+						return {
+							toast_message_deleted:				"Message was successfully deleted"
+						};
+				}
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
