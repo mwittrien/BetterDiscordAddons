@@ -645,12 +645,12 @@ module.exports = (_ => {
 						const target = e.instance.props.target.tagName == "A" && BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.imageoriginallink) && e.instance.props.target.parentElement.querySelector("img, video") || e.instance.props.target;
 						if (target.tagName == "A" && e.instance.props.message.embeds && e.instance.props.message.embeds[0] && (e.instance.props.message.embeds[0].type == "image" || e.instance.props.message.embeds[0].type == "video" || e.instance.props.message.embeds[0].type == "gifv")) this.injectItem(e, [target.href]);
 						else if (target.tagName == "IMG" && target.complete && target.naturalHeight) {
-							if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagewrapper, target) || BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.imagesticker)) this.injectItem(e, [{file: target.src, original: this.getTargetLink(target)}]);
+							if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagewrapper, target) || BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.imagesticker)) this.injectItem(e, [{file: target.src, original: this.getTargetLink(e.instance.props.target) || this.getTargetLink(target)}]);
 							else if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.embedauthoricon) && this.settings.places.userAvatars) this.injectItem(e, [target.src]);
 							else if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.emojiold, "emote", false) && this.settings.places.emojis) this.injectItem(e, [{file: target.src, alternativeName: target.getAttribute("data-name")}]);
 						}
 						else if (target.tagName == "VIDEO") {
-							if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.embedvideo) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.attachmentvideo, target)) this.injectItem(e, [{file: target.src, original: this.getTargetLink(target)}]);
+							if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.embedvideo) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.attachmentvideo, target)) this.injectItem(e, [{file: target.src, original: this.getTargetLink(e.instance.props.target) || this.getTargetLink(target)}]);
 						}
 						else {
 							const reaction = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagereaction, target);
@@ -819,7 +819,7 @@ module.exports = (_ => {
 								}))
 							})
 						}),
-						!this.isValid(urlData.original, "searchable") ? null : engineKeys.length == 1 ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						!this.isValid(urlData.original, "searchable") || !engineKeys.length ? null : engineKeys.length == 1 ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_searchwith.replace("{{var0}}", type).replace("...", this.defaults.engines[engineKeys[0]].name),
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "single-search"),
 							persisting: true,
@@ -1131,7 +1131,6 @@ module.exports = (_ => {
 				}
 				else {
 					if (!e.instance.props.resized && this.settings.resizeSettings.imageViewer && BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), {name: "ImageModal", up: true})) {
-						console.log(e);
 						let data = this.settings.viewerSettings.galleryMode ? this.getSiblingsAndPosition(e.instance.props.src, this.getAllGalleryImages()) : {};
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let ratio = Math.min((aRects.width * (data.previous || data.next ? 0.8 : 1) - 20) / e.instance.props.width, (aRects.height - (this.settings.viewerSettings.details ? 280 : 100)) / e.instance.props.height);
@@ -1214,7 +1213,7 @@ module.exports = (_ => {
 						else BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", ""), {type: "danger"});
 					}
 					else {
-						BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown", this.getFileExtenstion(response.headers["content-type"].split("/").pop().split("+")[0]), 0), body, error => {
+						BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, (alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35), this.getFileExtenstion(response.headers["content-type"].split("/").pop().split("+")[0]), 0), body, error => {
 							if (error) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", path), {type: "danger"});
 							else BDFDB.NotificationUtils.toast(this.labels.toast_save_success.replace("{{var0}}", type).replace("{{var1}}", path), {type: "success"});
 						});
@@ -1234,7 +1233,7 @@ module.exports = (_ => {
 						let hrefURL = window.URL.createObjectURL(new Blob([body]));
 						let tempLink = document.createElement("a");
 						tempLink.href = hrefURL;
-						tempLink.download = `${alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown"}.${this.getFileExtenstion(response.headers["content-type"].split("/").pop().split("+")[0])}`;
+						tempLink.download = `${(alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35)}.${this.getFileExtenstion(response.headers["content-type"].split("/").pop().split("+")[0])}`;
 						tempLink.click();
 						window.URL.revokeObjectURL(hrefURL);
 					}
@@ -1747,6 +1746,7 @@ module.exports = (_ => {
 							submenu_disabled:					"All disabled",
 							toast_copy_failed:					"{{var0}} could not be copied to the Clipboard",
 							toast_copy_success:					"{{var0}} was copied to the Clipboard",
+							toast_message_deleted:				"Message was successfully deleted",
 							toast_save_failed:					"{{var0}} could not be saved in '{{var1}}'",
 							toast_save_success:					"{{var0}} was saved in '{{var1}}'"
 						};
