@@ -3345,14 +3345,17 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background: linear-gradient(90deg, transparent,var(--background-primary) 80%);
 }
 #app-mount .option-ayUoaq:hover,
+#app-mount .option-ayUoaq[aria-selected=true],
 #app-mount .option-ayUoaq.selected-rZcOL- {
 	background-color: var(--background-tertiary);
 }
 #app-mount .option-ayUoaq:hover::after,
+#app-mount .option-ayUoaq[aria-selected=true]::after,
 #app-mount .option-ayUoaq.selected-rZcOL-::after {
 	background: linear-gradient(90deg, transparent, var(--background-tertiary) 50%);
 }
 #app-mount .option-ayUoaq:hover .plusIcon-2V7coV,
+#app-mount .option-ayUoaq[aria-selected=true] .plusIcon-2V7coV,
 #app-mount .option-ayUoaq.selected-rZcOL- .plusIcon-2V7coV {
 	color: var(--header-primary);
 	opacity: 1;
