@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.6.8
+ * @version 3.6.9
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
-			"version": "3.6.8",
+			"version": "3.6.9",
 			"description": "Allows you to replace the native Sounds with custom Sounds"
-		},
-		"changeLog": {
-			"fixed": {
-				"Bot Replies": "No longer plays Reply Sound when a Bot responds to a Slash Command"
-			}
 		}
 	};
 
@@ -286,7 +281,8 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DesktopNotificationUtils, "showNotification", {before: e => {
-					if (e.methodArguments[3] && e.methodArguments[3].sound && e.methodArguments[3].sound.includes("message")) e.methodArguments[3].sound = null;
+					let soundObjIndex = Array.from(e.methodArguments).findIndex(n => n && n.sound);
+					if (soundObjIndex && e.methodArguments[soundObjIndex].sound.includes("message")) e.methodArguments[soundObjIndex].sound = null;
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
 					let type = e.methodArguments[0];
