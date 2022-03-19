@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.6.7
+ * @version 4.6.8
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.6.7",
+			"version": "4.6.8",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		},
 		"changeLog": {
@@ -1011,7 +1011,7 @@ module.exports = (_ => {
 									e.instance.props.alt && {label: "Alt", text: e.instance.props.alt},
 									{label: "Source", text: url},
 									{label: "Size", text: `${e.instance.props.width}x${e.instance.props.height}px`},
-									{label: "Image", text: `${cachedImages && (cachedImages.index + 1) || 1} of ${cachedImages && cachedImages.amount || 1}`}
+									cachedImages && cachedImages.amount && cachedImages.amount > 1 && {label: "Image", text: `${cachedImages.index + 1 || 1} of ${cachedImages.amount}`}
 								].filter(n => n).map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 									className: BDFDB.disCN._imageutilitiesdetails,
 									children: [
@@ -1031,17 +1031,31 @@ module.exports = (_ => {
 							BDFDB.TimeUtils.clear(viewedImageTimeout);
 							let channel = BDFDB.LibraryModules.ChannelStore.getChannel(viewedImage.channelId);
 							BDFDB.LibraryModules.APIUtils.get({
-								url: channel && channel.guild_id ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(channel && channel.guild_id) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(BDFDB.DiscordConstants.ME),
+								url: channel && channel.guild_id ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(channel && channel.guild_id) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(channel.id),
 								query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
 									channel_id: channel && channel.guild_id ? channel && channel.id : null,
 									has: "image",
 									around: viewedImage.messageId
 								})
+							}).catch(result => {
+								cachedImages = {
+									firstReached: null,
+									oldestId: null,
+									all: [],
+									index: -1,
+									amount: 0,
+									newestId: null,
+									lastReached: null
+								};
+								BDFDB.ReactUtils.forceUpdate(e.instance);
 							}).then(result => {
+								let messages = [], index = -1;
 								if (result) {
-									const messages = result.body.messages.flat(10).reverse();
+									messages = result.body.messages.flat(10).reverse();
 									cachedImages = {all: this.filterMessagesForImages(messages, viewedImage)};
-									const index = this.getImageIndex(cachedImages.all, viewedImage);
+									index = this.getImageIndex(cachedImages.all, viewedImage);
+								}
+								if (index > -1) {
 									cachedImages = Object.assign(cachedImages, {
 										firstReached: index == 0,
 										oldestId: messages[0] ? messages[0].id : null,
@@ -1278,6 +1292,7 @@ module.exports = (_ => {
 			}
 			
 			cacheClickedImage (target) {
+				if (!target) return;
 				const image = (BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagewrapper, target) || target).querySelector("img") || target;
 				if (!image) return;
 				const message = BDFDB.ReactUtils.findValue(image, "message", {up: true});
@@ -1393,7 +1408,7 @@ module.exports = (_ => {
 				if (offset > 0 && !cachedImages.lastReached && cachedImages.index == (cachedImages.amount - 1)) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(viewedImage.channelId);
 					BDFDB.LibraryModules.APIUtils.get({
-						url: channel && channel.guild_id ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(channel && channel.guild_id) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(BDFDB.DiscordConstants.ME),
+						url: channel && channel.guild_id ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(channel && channel.guild_id) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(channel.id),
 						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
 							channel_id: channel && channel.guild_id ? channel && channel.id : null,
 							has: "image",
@@ -1419,10 +1434,9 @@ module.exports = (_ => {
 					});
 				}
 				if (offset < 0 && !cachedImages.firstReached && cachedImages.index == 0) {
-					console.log("first");
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(viewedImage.channelId);
 					BDFDB.LibraryModules.APIUtils.get({
-						url: channel && channel.guild_id ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(channel && channel.guild_id) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(BDFDB.DiscordConstants.ME),
+						url: channel && channel.guild_id ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(channel && channel.guild_id) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(channel.id),
 						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
 							channel_id: channel && channel.guild_id ? channel && channel.id : null,
 							has: "image",
