@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.3
+ * @version 4.5.4
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.5.3",
+			"version": "4.5.4",
 			"description": "Allows you to locally edit Users"
+		},
+		"changeLog": {
+			"fixed": {
+				"Voice Channels": "Works in Voice Channels again"
+			}
 		}
 	};
 
@@ -130,8 +135,9 @@ module.exports = (_ => {
 						QuickSwitchUserResult: "render",
 						SearchPopoutComponent: "render",
 						PrivateChannelCallParticipants: "render",
-						VideoParticipants: "default",
 						ChannelCall: "render",
+						ChannelCallGrid: "default",
+						HorizontalVideoParticipants: "default",
 						PictureInPictureVideo: "default",
 						UserSummaryItem: "render"
 					},
@@ -1228,18 +1234,19 @@ module.exports = (_ => {
 				}
 			}
 			
-			processVideoParticipants (e) {
+			processChannelCall (e) {
 				if (BDFDB.ArrayUtils.is(e.instance.props.participants) && this.settings.places.voiceChat) {
 					e.instance.props.participants = [].concat(e.instance.props.participants);
 					for (let i in e.instance.props.participants) if (e.instance.props.participants[i] && e.instance.props.participants[i].user) e.instance.props.participants[i] = Object.assign({}, e.instance.props.participants[i], {user: this.getUserData(e.instance.props.participants[i].user.id)});
 				}
 			}
 			
-			processChannelCall (e) {
-				if (BDFDB.ArrayUtils.is(e.instance.props.participants) && this.settings.places.voiceChat) {
-					e.instance.props.participants = [].concat(e.instance.props.participants);
-					for (let i in e.instance.props.participants) if (e.instance.props.participants[i] && e.instance.props.participants[i].user) e.instance.props.participants[i] = Object.assign({}, e.instance.props.participants[i], {user: this.getUserData(e.instance.props.participants[i].user.id)});
-				}
+			processChannelCallGrid (e) {
+				this.processChannelCall(e);
+			}
+			
+			processHorizontalVideoParticipants (e) {
+				this.processChannelCall(e);
 			}
 			
 			processPictureInPictureVideo (e) {
