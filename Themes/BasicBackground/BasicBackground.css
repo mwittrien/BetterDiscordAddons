@@ -6891,6 +6891,8 @@ html .channelTabs-favName {
 	font-size: 16px;
 	line-height: 20px;
 	font-weight: 500;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 html .channelTabs-tab .channelTabs-tabName ~ *,
