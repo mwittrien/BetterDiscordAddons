@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.6.8
+ * @version 4.6.9
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.6.8",
+			"version": "4.6.9",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
-		},
-		"changeLog": {
-			"improved": {
-				"Gallery Mode Channel Wide": "Gallery Mode now let's you move between all images/gifs in a channel, it will automatically load new images/gifs once you hit the last/first in the current queue"
-			}
 		}
 	};
 	
@@ -892,7 +887,6 @@ module.exports = (_ => {
 				else if (e.methodname == "componentWillUnmount") {
 					firstViewedImage = null;
 					viewedImage = null;
-					cachedImages = null;
 					this.cleanupListeners("Gallery");
 				}
 				else {
@@ -1027,7 +1021,7 @@ module.exports = (_ => {
 					}
 					
 					if (this.settings.viewerSettings.galleryMode && viewedImage) {
-						if (!cachedImages) {
+						if (!cachedImages || this.getImageIndex(cachedImages.all, viewedImage) == -1) {
 							BDFDB.TimeUtils.clear(viewedImageTimeout);
 							let channel = BDFDB.LibraryModules.ChannelStore.getChannel(viewedImage.channelId);
 							BDFDB.LibraryModules.APIUtils.get({
@@ -1075,9 +1069,6 @@ module.exports = (_ => {
 									lastReached: null
 								};
 								BDFDB.ReactUtils.forceUpdate(e.instance);
-							});
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Spinner, {
-								type: BDFDB.LibraryComponents.Spinner.Type.SPINNING_CIRCLE
 							});
 						}
 						else {
@@ -1224,7 +1215,7 @@ module.exports = (_ => {
 						e.instance.props.src = e.instance.props.src.replace(/width=\d+/, `width=${width}`).replace(/height=\d+/, `height=${height}`);
 						e.instance.props.resized = true;
 					}
-					if (this.settings.resizeSettings.messages && BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), {name: "LazyImageZoomable", up: true})) {
+					if (this.settings.resizeSettings.messages && (!e.instance.props.className || e.instance.props.className.indexOf(BDFDB.disCN.embedmedia) == -1) && BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), {name: "LazyImageZoomable", up: true})) {
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let mRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCNC.messageaccessory + BDFDB.dotCN.messagecontents));
 						let mwRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.messagewrapper));
