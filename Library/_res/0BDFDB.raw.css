@@ -162,6 +162,7 @@ img:not([src]), img[src=""], img[src="null"] {
 }
 
 [REPLACE_CLASS_settingsguild] {
+	flex: 0 0 auto;
 	border-radius: 50%;
 	border: 3px solid #43b581;
 	box-sizing: border-box;
@@ -339,7 +340,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	background-color: var(--activity-card-background);
 	border-radius: 10px;
 	padding: 6px;
-	transition: box-shadow .2s ease-out,transform .2s ease-out,background .2s ease-out;
+	transition: box-shadow .2s ease-out, transform .2s ease-out, background .2s ease-out;
 }
 [REPLACE_CLASS_themedark] [REPLACE_CLASS_discoverycardiconwrapper] {
 	background-color: var(--background-secondary-alt);
@@ -1580,6 +1581,18 @@ img:not([src]), img[src=""], img[src="null"] {
 	opacity: 0.3;
 	z-index: 3;
 	transition: all;
+}
+[REPLACE_CLASS_toast]:hover [REPLACE_CLASS_toastbar] {
+	animation-play-state: paused !important;
+}
+[REPLACE_CLASS_toastclosing] [REPLACE_CLASS_toastbar] {
+	animation: unset !important;
+	right: 0 !important;
+	transition: all !important;
+}
+@keyframes toast-bar {
+	from {right: 100%;}
+	to {right: 0;}
 }
 [REPLACE_CLASS_toastdefault] [REPLACE_CLASS_toastbar] {
 	background: var(--header-primary);

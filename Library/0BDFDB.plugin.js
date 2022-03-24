@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.3
+ * @version 2.2.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,10 +19,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.2.3",
+			"version": "2.2.4",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`
+		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
+		"changeLog": {
+			"improved": {
+				"Toast Performance": "Increased Performance, by switching to css animation instead of discord internal animations"
+			}
+		}
 	};
 	
 	const Cache = {data: {}, modules: {}};
@@ -1603,7 +1608,6 @@ module.exports = (_ => {
 				else BDFDB.DOMUtils.addClass(data.toast, type);
 				
 				let disableInteractions = data.config.disableInteractions && typeof data.config.onClick != "function";
-				let start, progress = 0, paused = false
 				let timeout = typeof data.config.timeout == "number" && !disableInteractions ? data.config.timeout : 3000;
 				timeout = (timeout > 0 ? timeout : 600000) + 300;
 				
@@ -1633,6 +1637,7 @@ module.exports = (_ => {
 						data.toast.close();
 					});
 					if (typeof closeTimeout.pause == "function") {
+						let paused = false;
 						data.toast.addEventListener("mouseenter", _ => {
 							if (paused) return;
 							paused = true;
@@ -1641,7 +1646,6 @@ module.exports = (_ => {
 						data.toast.addEventListener("mouseleave", _ => {
 							if (!paused) return;
 							paused = false;
-							start = performance.now() - progress;
 							closeTimeout.resume();
 						});
 					}
@@ -1670,7 +1674,7 @@ module.exports = (_ => {
 						};
 					}
 					render() {
-						return BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
+						return BDFDB.ReactUtils.createElement(Internal.LibraryModules.React.Fragment, {
 							children: [
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.toastbg,
@@ -1696,25 +1700,11 @@ module.exports = (_ => {
 										})
 									].filter(n => n)
 								}),
-								BDFDB.ReactUtils.createElement(class extends Internal.LibraryModules.React.Component {
-									componentDidMount() {
-										start = performance.now();
-										progressInterval = BDFDB.TimeUtils.interval(_ => {
-											if (!paused) BDFDB.ReactUtils.forceUpdate(this);
-										}, 10);
-									}
-									componentWillUnmount() {
-										BDFDB.TimeUtils.clear(progressInterval);
-									}
-									render() {
-										progress = performance.now() - start;
-										return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Animations.animated.div, {
-											className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.toastbar, barColor && BDFDB.disCN.toastcustombar),
-											style: {
-												backgroundColor: barColor,
-												right: `${100 - progress * 100 / timeout}%`
-											}
-										})
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.toastbar, barColor && BDFDB.disCN.toastcustombar),
+									style: {
+										backgroundColor: barColor,
+										animation: `toast-bar ${timeout}ms normal linear`
 									}
 								})
 							]
@@ -1959,7 +1949,7 @@ module.exports = (_ => {
 					
 					let children = [typeof newText == "function" ? newText() : newText].flat(10).filter(n => typeof n == "string" || BDFDB.ReactUtils.isValidElement(n));
 					
-					BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
+					BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(Internal.LibraryModules.React.Fragment, {
 						children: [
 							BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltiprow, BDFDB.disCN.tooltiprowguildname),
@@ -2001,7 +1991,7 @@ module.exports = (_ => {
 				}
 				else {
 					let children = [typeof newText == "function" ? newText() : newText].flat(10).filter(n => typeof n == "string" || BDFDB.ReactUtils.isValidElement(n));
-					children.length && BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
+					children.length && BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(Internal.LibraryModules.React.Fragment, {
 						children: [
 							fontColorIsGradient ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TextGradientElement, {
 								gradient: BDFDB.ColorUtils.createGradient(config.fontColor),
@@ -6351,7 +6341,7 @@ module.exports = (_ => {
 					return this.props.list ? BDFDB.ReactUtils.createElement("div", {
 						ref: null != this.props.setRef ? this.props.setRef : null,
 						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guildouter, BDFDB.disCN._bdguild, this.props.unread && BDFDB.disCN._bdguildunread, this.props.selected && BDFDB.disCN._bdguildselected, this.props.unread && BDFDB.disCN._bdguildunread, this.props.audio && BDFDB.disCN._bdguildaudio, this.props.video && BDFDB.disCN._bdguildvideo),
-						children: BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
+						children: BDFDB.ReactUtils.createElement(Internal.LibraryModules.React.Fragment, {
 							children: children
 						})
 					}) : BDFDB.ReactUtils.createElement("div", {
