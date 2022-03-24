@@ -20,7 +20,7 @@
 .theme-light {
 	--logo-primary: rgb(var(--accentcolor));
 }
-.theme-dark, .theme-light {
+[data-popout-root], html, .theme-dark, .theme-light {
 	--text-brand: rgb(var(--accentcolor));
 	--text-link: rgb(var(--linkcolor));
 	--text-link-low-saturation: rgb(var(--linkcolor));
