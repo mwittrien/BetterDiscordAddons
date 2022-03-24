@@ -85,6 +85,8 @@
 	--background-secondary-alt: rgba(var(--transparencycolor), .35);
 	--background-tertiary: rgba(var(--transparencycolor), .4);
 	--background-floating: rgba(var(--transparencycolor), .5);
+	--background-mobile-primary: rgba(var(--transparencycolor), .2);
+	--background-mobile-secondary: rgba(var(--transparencycolor), .3);
 	--background-modifier-accent: rgba(var(--textbrightest),.1);
 	--elevation-low: 0 1px 5px 0 rgba(var(--transparencycolor), .3);
 	--elevation-high: 0 2px 10px 0 rgba(var(--transparencycolor), .3);
@@ -194,6 +196,7 @@ html {
 		9.	CHANNELTABS
 		10.	TYPINGINDICATOR
 		11.	BADGESEVERYWHERE
+		12.	CHANNELDMS
 	19.	UPDATENOTICE
 	20.	WATERMARK
 */
@@ -3644,6 +3647,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 	position: relative;
 	overflow: hidden;
+	flex: 1 1 auto;
 }
 .quickswitcher-pKcM9U::before,
 .quickswitcher-pKcM9U::after {
@@ -3666,6 +3670,10 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
 	backdrop-filter: blur(var(--popoutblur));
 }
+.root-g14mjS .quickswitcher-pKcM9U::before,
+.root-g14mjS .quickswitcher-pKcM9U::after {
+	display: none;
+}
 .scroller-2qwVWY {
 	background-color: transparent;
 }
@@ -3673,13 +3681,14 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .4);
 	box-shadow: 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 }
-#app-mount .resultFocused-3aIoYe {							/* modal				resultfocused						*/
+#app-mount .resultFocused-3aIoYe,							/* modal				resultfocused						*/
+#app-mount .result-u66Ywh[aria-selected=true] {				/* modal				resultselected						*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
 
 /* ----		13.7.	INVITEMODAL/GROUPCREATE			---- */
 
-#app-mount .contentWrapper-3oy4Xo {								/* modal				guildinvitemodal				*/
+#app-mount .contentWrapper-3oy4Xo {							/* modal				guildinvitemodal				*/
 	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 	position: relative;
@@ -3707,12 +3716,12 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	backdrop-filter: blur(var(--popoutblur));
 }
 
-#app-mount .friendSelected-3cwmD7,								/* modal				groupdmrow						*/
-#app-mount .inviteRow-3vmB7i:hover {							/* modal				guildrow						*/
+#app-mount .friendSelected-3cwmD7,							/* modal				groupdmrow						*/
+#app-mount .inviteRow-3vmB7i:hover {						/* modal				guildrow						*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
-#app-mount .friend-8ZraY7,										/* modal				groupdmrow						*/
-#app-mount .inviteRowName-3H4s_c {								/* modal				username						*/
+#app-mount .friend-8ZraY7,									/* modal				groupdmrow						*/
+#app-mount .inviteRowName-3H4s_c {							/* modal				username						*/
 	color: var(--header-secondary);
 }
 #app-mount .friendSelected-3cwmD7,
@@ -3726,7 +3735,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .subText-1CcYgq {
 	color: var(--header-secondary);
 }
-.tag-15zcD_ {													/* modal				added user						*/
+.tag-15zcD_ {												/* modal				added user						*/
 	background-color: rgb(var(--accentcolor));
 	color: #fff;
 	text-shadow: 1px 1px var(--textshadow);
@@ -6871,6 +6880,7 @@ html .channelTabs-tab > *:first-child {
 	display: flex !important;
 	align-items: center !important;
 	flex: 1 1 auto !important;
+	overflow: hidden !important;
 }
 html .channelTabs-tabIcon,
 html .channelTabs-favIcon {
@@ -7023,6 +7033,12 @@ html .typingindicator-folder {
 }
 .inner-dA0J42:not(.colored-1armap) .profileGuildSubscriberlvl9-1d6zav {
 	-webkit-mask: url(https://discord.com/assets/cfbc2d8ceacfacf07850f986c8165195.svg) center/contain no-repeat;
+}
+
+/* ----		18.12	CHANNELDMS						---- */
+
+.ChannelDms-channelmembers-wrap .ChannelDms-channelmembers-header {
+	background-color: rgba(var(--transparencycolor), var(--memberlisttransparency));
 }
 
 

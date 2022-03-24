@@ -703,6 +703,11 @@ html .iconBadge-2wi9r4 {
 	overflow: hidden;
 }
 
+.side-2ur1Qk .themed-2-lozF.selected-g-kMVV.item-3XjbnG:hover:not(.disabled-1nofHP),
+.topPill-3DJJNV .themed-2-lozF.selected-g-kMVV.item-3XjbnG:hover:not(.disabled-1nofHP) {
+	background-color: var(--background-modifier-selected);
+}
+
 #app-mount .colorPickerCustom-1swUKF {
 	background: var(--background-primary);
 	border-color: var(--background-tertiary);
@@ -4249,6 +4254,7 @@ html .channelTabs-tab > *:first-child {
 	display: flex !important;
 	align-items: center !important;
 	flex: 1 1 auto !important;
+	overflow: hidden !important;
 }
 html .channelTabs-tabIcon,
 html .channelTabs-favIcon {
