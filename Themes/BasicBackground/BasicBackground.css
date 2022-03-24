@@ -6884,7 +6884,7 @@ html .channelTabs-tab > *:first-child {
 }
 html .channelTabs-tabIcon,
 html .channelTabs-favIcon {
-	display: inline-flex !important;
+	display: block !important;
 	position: static !important;
 	margin-right: 6px !important;
 }
@@ -6894,7 +6894,7 @@ html .channelTabs-favIcon[src=""] {
 }
 html .channelTabs-tabName,
 html .channelTabs-favName {
-	display: inline-flex !important;
+	display: block !important;
 	position: static !important;
 	margin: 0 !important;
 	width: unset !important;
