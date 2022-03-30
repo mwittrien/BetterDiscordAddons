@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.0
+ * @version 1.4.1
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedUsers",
 			"author": "DevilBro",
-			"version": "1.4.0",
+			"version": "1.4.1",
 			"description": "Removes blocked Messages/Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"Offline List": "Fixed Issue where switching between servers would remove more and more users from the offline list if someone was blocked"
+				"Notifications": "No longer shows Notification Dots on Channels/Servers if all new Messages are from blocked Ppl"
 			}
 		}
 	};
@@ -140,7 +140,8 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
 					if (e.returnValue && this.settings.notifcations.messages) {
 						let count = BDFDB.LibraryModules.UnreadChannelUtils.getUnreadCount(e.methodArguments[0]);
-						if (count > 0 && count < BDFDB.DiscordConstants.MAX_MESSAGES_PER_CHANNEL) {
+						if (count == 0) return false;
+						else if (count > 0 && count < BDFDB.DiscordConstants.MAX_MESSAGES_PER_CHANNEL) {
 							let id = BDFDB.LibraryModules.UnreadChannelUtils.lastMessageId(e.methodArguments[0]);
 							let message = id && BDFDB.LibraryModules.MessageStore.getMessage(e.methodArguments[0], id);
 							if (message && message.blocked) {
@@ -156,9 +157,7 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadGuildUtils, "hasUnread", {after: e => {
-					if (e.returnValue && this.settings.notifcations.messages) {
-						return BDFDB.LibraryModules.GuildChannelStore.getChannels(e.methodArguments[0]).SELECTABLE.map(n => n.channel && n.channel.id).filter(n => n && n != "null").some(id => BDFDB.LibraryModules.UnreadChannelUtils.hasUnread(id));
-					}
+					if (e.returnValue && this.settings.notifcations.messages) return BDFDB.LibraryModules.GuildChannelStore.getChannels(e.methodArguments[0]).SELECTABLE.map(n => n.channel && n.channel.id).filter(n => n && n != "null").some(id => BDFDB.LibraryModules.UnreadChannelUtils.hasUnread(id));
 				}});
 				
 				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.MENTIONS, "queryResults", {after: e => {
@@ -420,30 +419,42 @@ module.exports = (_ => {
 			}
 
 			processDirectMessage (e) {
-				if (e.instance.props.channel && !e.instance.props.channel.name && e.instance.props.channel.isGroupDM() && this.settings.places.recentDms) {
-					let tooltip = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ListItemTooltip"});
-					if (tooltip) tooltip.props.text = this.getGroupName(e.instance.props.channel.id);
+				if (this.settings.places.recentDms && e.instance.props.channel) {
+					if (e.instance.props.channel.isGroupDM()) {
+						if (!e.instance.props.channel.name) {
+							let tooltip = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ListItemTooltip"});
+							if (tooltip) tooltip.props.text = this.getGroupName(e.instance.props.channel.id);
+						}
+					}
+					else {
+						if (BDFDB.LibraryModules.RelationshipStore.isBlocked(e.instance.props.channel.getRecipientId())) e.returnvalue = null;
+					}
 				}
 			}
 
 			processPrivateChannel (e) {
-				if (this.settings.places.channelList && e.instance.props.channel && e.instance.props.channel.isGroupDM()) {
-					if (!e.returnvalue) {
-						e.instance.props.channel = new BDFDB.DiscordObjects.Channel(Object.assign({}, e.instance.props.channel, {rawRecipients: e.instance.props.channel.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id)), recipients: e.instance.props.channel.recipients.filter(id => !id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(id))}));
+				if (this.settings.places.channelList && e.instance.props.channel) {
+					if (e.instance.props.channel.isGroupDM()) {
+						if (!e.returnvalue) {
+							e.instance.props.channel = new BDFDB.DiscordObjects.Channel(Object.assign({}, e.instance.props.channel, {rawRecipients: e.instance.props.channel.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id)), recipients: e.instance.props.channel.recipients.filter(id => !id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(id))}));
+						}
+						else {
+							if (!e.instance.props.channel.name) {
+								let wrapper = e.returnvalue && e.returnvalue.props.children && e.returnvalue.props.children.props && typeof e.returnvalue.props.children.props.children == "function" ? e.returnvalue.props.children : e.returnvalue;
+								if (typeof wrapper.props.children == "function") {
+									let childrenRender = wrapper.props.children;
+									wrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
+										let children = childrenRender(...args);
+										children.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
+										return children;
+									}, "", this);
+								}
+								else wrapper.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
+							}
+						}
 					}
 					else {
-						if (!e.instance.props.channel.name) {
-							let wrapper = e.returnvalue && e.returnvalue.props.children && e.returnvalue.props.children.props && typeof e.returnvalue.props.children.props.children == "function" ? e.returnvalue.props.children : e.returnvalue;
-							if (typeof wrapper.props.children == "function") {
-								let childrenRender = wrapper.props.children;
-								wrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
-									let children = childrenRender(...args);
-									children.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
-									return children;
-								}, "", this);
-							}
-							else wrapper.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
-						}
+						if (e.returnvalue && BDFDB.LibraryModules.RelationshipStore.isBlocked(e.instance.props.channel.getRecipientId())) e.returnvalue = null;
 					}
 				}
 			}
