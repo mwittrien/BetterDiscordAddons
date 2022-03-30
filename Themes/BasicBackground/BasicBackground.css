@@ -121,7 +121,7 @@ html {
 		4.	AUTOCOMPLETEMENU
 		5.	MEMBERLIST
 		6.	SEARCHPAGE
-		7.	THREADS
+		7.	CHAT SIDEBAR
 		8.	CALL
 		9.	UNAVAILABLESCREEN
 	7.	PEOPLES
@@ -256,6 +256,9 @@ body,														/* body														*/
 	background-color: rgba(var(--transparencycolor), calc(var(--guildchanneltransparency) / 1.5));
 }
 #app-mount .container-ZMc96U.themed-Hp1KC_ {				/* channelheader		container							*/
+	background-color: rgba(var(--transparencycolor), var(--guildchanneltransparency));
+}
+#app-mount .chatHeaderBar-qygUNT {							/* channelheader		sub header							*/
 	background-color: rgba(var(--transparencycolor), var(--guildchanneltransparency));
 }
 #app-mount .membersWrap-3NUR2t {							/* members				container							*/
@@ -691,18 +694,6 @@ body::after {
 
 .chat-2ZfjoI.threadSidebarOpen-1LSXvU {
 	border-radius: 0;
-}
-.chat-2ZfjoI.threadSidebarOpen-1LSXvU .content-1jQy2l::after {
-	content: "";
-	display: block;
-	position: static;
-	min-width: 408px;
-	width: 29vw;
-}
-@media (max-width: 1150px) {
-	.chat-2ZfjoI.threadSidebarOpen-1LSXvU .content-1jQy2l::after {
-		display: none;
-	}
 }
 
 /* ----		6.1.	CHANNELHEADER					---- */
@@ -1606,50 +1597,57 @@ body::after {
 	text-shadow: 1px 1px var(--textshadow);
 }
 
-/* ----		6.7.	THREADS							---- */
+/* ----		6.7.	CHAT SIDEBAR							---- */
 
-.container-3XgAHv {											/* threadsidebar											*/
-	position: absolute;
-	top: 48px;
-	right: 0;
-	bottom: 0;
+.container-3XgAHv {											/* chat					sidebar								*/ 
 	border-radius: 0;
-	z-index: 100;
 }
-.container-3XgAHv .container-ZMc96U {						/* threadsidebar		header								*/
-	background-color: rgba(var(--transparencycolor), calc(var(--guildchanneltransparency) * 0.8));
-	box-shadow: unset;
-	border-radius: 0 0 0 8px;
+.container-3XgAHv.floating-3M3WeH::before,
+.container-3XgAHv.floating-3M3WeH::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
 }
-.container-3XgAHv .form-3gdLxP {							/* threadsidebar		form								*/
-	border-radius: 8px 0 0 0;
+.container-3XgAHv.floating-3M3WeH::before {
+	background: var(--background) var(--backgroundposition)/var(--backgroundsize);
+	background-attachment: fixed;
 }
-@media (max-width: 1150px) {
-	.container-3XgAHv::before,
-	.container-3XgAHv::after {
-		content: "";
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		right: 0;
-		left: 0;
-		pointer-events: none;
-		z-index: -1;
-	}
-	.container-3XgAHv::before {
-		background: var(--background) var(--backgroundposition)/var(--backgroundsize);
-		background-attachment: fixed;
-	}
-	.container-3XgAHv::after {
-		background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + var(--memberlisttransparency) * 0.85));
-		backdrop-filter: blur(var(--backgroundblur));
-	}
-	.container-3XgAHv .container-ZMc96U {
-		border-radius: 0;
-	}
-	.container-3XgAHv .form-3gdLxP {
-		border-radius: 0;
-	}
+.container-3XgAHv.floating-3M3WeH::after {
+	background-color: rgba(var(--transparencycolor), var(--transparencyalpha));
+	backdrop-filter: blur(var(--backgroundblur));
+}
+.chatTarget-3H6mpC.notFloating-cIl-vp ~ .container-3XgAHv {
+	overflow: visible;
+}
+.chatTarget-3H6mpC.notFloating-cIl-vp ~ .container-3XgAHv .container-ZMc96U.themed-Hp1KC_::before {
+	content: "";
+	position: absolute;
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: -8px;
+	width: 8px;
+	background: inherit;
+	box-shadow: inherit;
+	pointer-events: none;
+}
+.chatTarget-3H6mpC.notFloating-cIl-vp ~ .container-3XgAHv .container-ZMc96U.themed-Hp1KC_::after {
+	content: "";
+	position: absolute;
+	display: block;
+	top: 10px;
+	bottom: 10px;
+	left: -3.5px;
+	width: 1px;
+	background: var(--background-modifier-accent);
+	pointer-events: none;
 }
 
 /* ----		6.8.	CALL							---- */
