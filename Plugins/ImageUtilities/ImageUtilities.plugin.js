@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.6.9
+ * @version 4.7.0
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.6.9",
+			"version": "4.7.0",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
+		},
+		"changeLog": {
+			"fixed": {
+				"NSFW/Threads": "Now properly works in NSFW Channels and Threads"
+			}
 		}
 	};
 	
@@ -1021,18 +1026,20 @@ module.exports = (_ => {
 					}
 					
 					if (this.settings.viewerSettings.galleryMode && viewedImage) {
-						if (!cachedImages || this.getImageIndex(cachedImages.all, viewedImage) == -1) {
+						if (!cachedImages || cachedImages.channelId != viewedImage.channelId || cachedImages.amount && this.getImageIndex(cachedImages.all, viewedImage) == -1) {
 							BDFDB.TimeUtils.clear(viewedImageTimeout);
 							let channel = BDFDB.LibraryModules.ChannelStore.getChannel(viewedImage.channelId);
 							BDFDB.LibraryModules.APIUtils.get({
 								url: channel && channel.guild_id ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(channel && channel.guild_id) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(channel.id),
 								query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
-									channel_id: channel && channel.guild_id ? channel && channel.id : null,
+									channel_id: channel && channel.guild_id ? (BDFDB.ChannelUtils.isThread(channel) && channel.parent_id || channel.id) : null,
 									has: "image",
+									include_nsfw: true,
 									around: viewedImage.messageId
 								})
-							}).catch(result => {
+							}).catch(_ => {
 								cachedImages = {
+									channelId: viewedImage.channelId,
 									firstReached: null,
 									oldestId: null,
 									all: [],
@@ -1049,17 +1056,17 @@ module.exports = (_ => {
 									cachedImages = {all: this.filterMessagesForImages(messages, viewedImage)};
 									index = this.getImageIndex(cachedImages.all, viewedImage);
 								}
-								if (index > -1) {
-									cachedImages = Object.assign(cachedImages, {
-										firstReached: index == 0,
-										oldestId: messages[0] ? messages[0].id : null,
-										index: index,
-										amount: cachedImages.all.length,
-										newestId: messages[messages.length-1] ? messages[messages.length-1].id : null,
-										lastReached: index == (cachedImages.all.length - 1)
-									});
-								}
+								if (index > -1) cachedImages = Object.assign(cachedImages, {
+									channelId: viewedImage.channelId,
+									firstReached: index == 0,
+									oldestId: messages[0] ? messages[0].id : null,
+									index: index,
+									amount: cachedImages.all.length,
+									newestId: messages[messages.length-1] ? messages[messages.length-1].id : null,
+									lastReached: index == (cachedImages.all.length - 1)
+								});
 								else cachedImages = {
+									channelId: viewedImage.channelId,
 									firstReached: null,
 									oldestId: null,
 									all: [],
@@ -1385,7 +1392,7 @@ module.exports = (_ => {
 			}
 			
 			filterMessagesForImages (messages, img) {
-				return messages.filter(m => m && m.hit && (m.id == firstViewedImage.messageId || m.id == img.messageId || m.embeds.length || m.attachments.filter(a => !a.filename.startsWith("SPOILER_")).length)).map(m => [m.attachments, m.embeds].flat(10).filter(n => n).map(i => Object.assign({messageId: m.id, channelId: img.channelId}, i, i.thumbnail, i.video))).flat(10);
+				return messages.filter(m => m && m.hit && m.channel_id == img.channelId && (m.id == firstViewedImage.messageId || m.id == img.messageId || m.embeds.length || m.attachments.filter(a => !a.filename.startsWith("SPOILER_")).length)).map(m => [m.attachments, m.embeds].flat(10).filter(n => n).map(i => Object.assign({messageId: m.id, channelId: img.channelId}, i, i.thumbnail, i.video))).flat(10);
 			}
 			
 			switchImages (modalInstance, offset) {
@@ -1401,8 +1408,9 @@ module.exports = (_ => {
 					BDFDB.LibraryModules.APIUtils.get({
 						url: channel && channel.guild_id ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(channel && channel.guild_id) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(channel.id),
 						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
-							channel_id: channel && channel.guild_id ? channel && channel.id : null,
+							channel_id: channel && channel.guild_id ? (BDFDB.ChannelUtils.isThread(channel) && channel.parent_id || channel.id) : null,
 							has: "image",
+							include_nsfw: true,
 							min_id: (BigInt(cachedImages.newestId) - BigInt(1)).toString()
 						})
 					}).then(result => {
@@ -1414,6 +1422,7 @@ module.exports = (_ => {
 								cachedImages = Object.assign(cachedImages, {all: [].concat(cachedImages.all, newCachedImages.slice(lastOldIndex + 1))});
 								const index = this.getImageIndex(cachedImages.all, viewedImage);
 								cachedImages = Object.assign(cachedImages, {
+									channelId: viewedImage.channelId,
 									index: index,
 									amount: cachedImages.all.length,
 									newestId: messages[messages.length-1] ? messages[messages.length-1].id : null,
@@ -1429,8 +1438,9 @@ module.exports = (_ => {
 					BDFDB.LibraryModules.APIUtils.get({
 						url: channel && channel.guild_id ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(channel && channel.guild_id) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(channel.id),
 						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
-							channel_id: channel && channel.guild_id ? channel && channel.id : null,
+							channel_id: channel && channel.guild_id ? (BDFDB.ChannelUtils.isThread(channel) && channel.parent_id || channel.id) : null,
 							has: "image",
+							include_nsfw: true,
 							max_id: (BigInt(cachedImages.oldestId) + BigInt(1)).toString()
 						})
 					}).then(result => {
@@ -1442,6 +1452,7 @@ module.exports = (_ => {
 								cachedImages = Object.assign(cachedImages, {all: [].concat(newCachedImages.slice(0, firstOldIndex), cachedImages.all)});
 								const index = this.getImageIndex(cachedImages.all, viewedImage);
 								cachedImages = Object.assign(cachedImages, {
+									channelId: viewedImage.channelId,
 									firstReached: index == 0,
 									oldestId: messages[0] ? messages[0].id : null,
 									index: index,
