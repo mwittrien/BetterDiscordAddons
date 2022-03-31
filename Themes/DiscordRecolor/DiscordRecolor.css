@@ -119,7 +119,8 @@ html {
 	2.	CHANNELLIST
 		1.	GUILDHEADER
 		2.	CHANNELS
-		3.	ACCOUNT/VOICE/GOLIVE
+		3.	DMCHANNELS
+		4.	ACCOUNT/VOICE/GOLIVE
 	3.	CHAT
 		1.	CHANNELHEADER
 		2.	MESSAGES
@@ -926,7 +927,16 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	color: var(--header-secondary);
 }
 
-/* ----		2.3.	ACCOUNT/VOICE/GOLIVE			---- */
+/* ----		2.3.	DMCHANNELS						---- */
+
+.selected-3veCBZ,
+.selected-3veCBZ:focus-within,
+.selected-3veCBZ:hover {
+	background-color: var(--background-modifier-hover);
+	color: var(--header-primary);
+}
+
+/* ----		2.4.	ACCOUNT/VOICE/GOLIVE			---- */
 
 #app-mount .userList-3HrI62::before {
 	background-color: var(--background-secondary);

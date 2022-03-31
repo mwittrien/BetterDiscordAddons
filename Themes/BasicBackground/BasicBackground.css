@@ -638,14 +638,18 @@ body::after {
 
 /* ----		5.3.	DMCHANNELS						---- */
 
-.channel-1Shao0:hover .layout-1qmrhw {						/* dmchannel/page		inner							*/
+.interactive-1vLZ_I:focus-within,							/* dmchannel/page		inner							*/
+.interactive-1vLZ_I:hover {
 	background-color: rgba(var(--transparencycolor), .2);
 }
-.selected-1-Z6gm.channel-1Shao0 .layout-1qmrhw {
+.selected-3veCBZ,
+.selected-3veCBZ:focus-within,
+.selected-3veCBZ:hover {
 	background-color: rgb(var(--accentcolor));
+	color: var(--header-primary);
 	text-shadow: 1px 1px var(--textshadow);
 }
-.selected-1-Z6gm.channel-1Shao0 .layout-1qmrhw svg:not(.svg-2azL_l) {
+.selected-3veCBZ svg:not(.svg-2azL_l) {
 	filter: drop-shadow(1px 1px var(--textshadow));
 }
 
