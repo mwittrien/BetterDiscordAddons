@@ -2,7 +2,7 @@
  * @name WriteUpperCase
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.4
+ * @version 1.3.5
  * @description Changes the first Letter of each Sentence in Message Inputs to Uppercase
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "WriteUpperCase",
 			"author": "DevilBro",
-			"version": "1.3.4",
+			"version": "1.3.5",
 			"description": "Changes the first Letter of each Sentence in Message Inputs to Uppercase"
-		},
-		"changeLog": {
-			"added": {
-				"QuickMessage": "Now also works for the quick message input in the user popout"
-			}
 		}
 	};
 
@@ -178,8 +173,16 @@ module.exports = (_ => {
 					let string = e.instance.props.textValue;
 					let newString = this.parse(string);
 					if (string != newString) {
-						e.instance.props.textValue = newString;
-						if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.copyRichValue(newString, e.instance.props.richValue);
+						let selection = document.getSelection();
+						let container = selection.anchorNode && BDFDB.DOMUtils.getParent("[contenteditable]", selection.anchorNode.parentElement);
+						if (container && Array.from(container.children).findIndex(n => n && n.contains(selection.anchorNode)) == (container.childElementCount - 1)) {
+							selection.modify("extend", "backward", "paragraphboundary");
+							if (selection.toString().length == selection.anchorNode.textContent.length) {
+								e.instance.props.textValue = newString;
+								if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.toRichValue(newString);
+							}
+							selection.collapseToEnd();
+						}
 					}
 				}
 			}

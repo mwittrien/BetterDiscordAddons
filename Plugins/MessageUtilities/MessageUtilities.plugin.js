@@ -2,7 +2,7 @@
  * @name MessageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.2
+ * @version 1.9.3
  * @description Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
-			"version": "1.9.2",
+			"version": "1.9.3",
 			"description": "Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)"
 		}
 	};
@@ -335,7 +335,7 @@ module.exports = (_ => {
 				let type = event.type;
 				if (!firedEvents.includes(type)) {
 					if (event.which == 27 && settings.clearOnEscape && ChannelTextAreaForm) {
-						ChannelTextAreaForm.setState({textValue: "", richValue: BDFDB.LibraryModules.SlateUtils.deserialize("")});
+						ChannelTextAreaForm.setState({textValue: "", richValue: BDFDB.SlateUtils.toRichValue("")});
 					}
 					BDFDB.TimeUtils.timeout(_ => {BDFDB.ArrayUtils.remove(firedEvents, type, true)});
 				}

@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.4
+ * @version 2.2.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,14 +19,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.2.4",
+			"version": "2.2.5",
 			"description": "Required Library for DevilBro's Plugins"
-		},
-		"rawUrl": `https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js`,
-		"changeLog": {
-			"improved": {
-				"Toast Performance": "Increased Performance, by switching to css animation instead of discord internal animations"
-			}
 		}
 	};
 	
@@ -4233,17 +4227,13 @@ module.exports = (_ => {
 		
 		BDFDB.SlateUtils = {};
 		BDFDB.SlateUtils.isRichValue = function (richValue) {
-			return BDFDB.ObjectUtils.is(richValue) && Internal.LibraryModules.SlateUtils.deserialize("").constructor.prototype.isPrototypeOf(richValue);
+			return richValue && typeof richValue == "object" && BDFDB.SlateUtils.toRichValue("").constructor.prototype.isPrototypeOf(richValue);
 		};
-		BDFDB.SlateUtils.copyRichValue = function (string, richValue) {
-			let newRichValue = Internal.LibraryModules.SlateUtils.deserialize(string);
-			if (BDFDB.SlateUtils.isRichValue(richValue) && richValue._map && richValue._map._root && BDFDB.ArrayUtils.is(richValue._map._root.entries)) {
-				for (let i in richValue._map._root.entries) if (richValue._map._root.entries[i][0] == "selection") {
-					newRichValue._map._root.entries[i] = richValue._map._root.entries[i];
-					break;
-				}
-			}
-			return newRichValue;
+		BDFDB.SlateUtils.toTextValue = function (richValue) {
+			return BDFDB.SlateUtils.isRichValue(richValue) ? Internal.LibraryModules.SlateTextUtils.toTextValue(richValue) : "";
+		};
+		BDFDB.SlateUtils.toRichValue = function (string) {
+			return typeof string == "string" ? Internal.LibraryModules.SlateRichUtils.toRichValue(string) : null;
 		};
 		
 		BDFDB.NumberUtils = {};

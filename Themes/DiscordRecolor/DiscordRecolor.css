@@ -87,6 +87,7 @@
 	--focus-primary: rgb(var(--linkcolor));
 	--guild-header-text-shadow: 0 1px 1px rgba(var(--backgroundfloating),.5);
 	--channeltextarea-background: rgba(var(--backgroundaccent),.8);
+	--input-background: rgba(0,0,0,.1);
 	--activity-card-background: rgb(var(--backgroundtertiary));
 	--textbox-markdown-syntax: rgb(var(--textdark));
 	--deprecated-card-bg: rgba(var(--backgroundtertiary),.6);

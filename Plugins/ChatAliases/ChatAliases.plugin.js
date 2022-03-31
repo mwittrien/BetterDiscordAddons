@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.3
+ * @version 2.3.4
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.3.3",
+			"version": "2.3.4",
 			"description": "Allows you to configure your own Aliases/Commands"
-		},
-		"changeLog": {
-			"improved": {
-				"Threads": "Works flawlessly with Threads now"
-			}
 		}
 	};
 
@@ -406,10 +401,10 @@ module.exports = (_ => {
 					if (messageData.text != null && e2.methodArguments[textIndex] != messageData.text) {
 						e2.methodArguments[textIndex] = messageData.text;
 						e.instance.props.textValue = "";
-						if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.copyRichValue("", e.instance.props.richValue);
+						if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.toRichValue("");
 						if (e.instance.state) {
 							e.instance.state.textValue = "";
-							if (e.instance.state.richValue) e.instance.state.richValue = BDFDB.SlateUtils.copyRichValue("", e.instance.state.richValue);
+							if (e.instance.state.richValue) e.instance.state.richValue = BDFDB.SlateUtils.toRichValue("");
 						}
 						BDFDB.ReactUtils.forceUpdate(e.instance);
 					}

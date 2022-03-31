@@ -2,7 +2,7 @@
  * @name SpellCheck
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.8
+ * @version 1.5.9
  * @description Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpellCheck",
 			"author": "DevilBro",
-			"version": "1.5.8",
+			"version": "1.5.9",
 			"description": "Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary"
 		}
 	};
@@ -249,7 +249,7 @@ module.exports = (_ => {
 			}
 
 			processSlateChannelTextArea (e) {
-				let newText = BDFDB.LibraryModules.SlateUtils.serialize(e.instance.props.value);
+				let newText = BDFDB.SlateUtils.toTextValue(e.instance.props.value);
 				if (newText != currentText) {
 					currentText = newText;
 					BDFDB.DOMUtils.remove(e.node.parentElement.querySelectorAll(BDFDB.dotCN._spellcheckoverlay));
@@ -314,7 +314,7 @@ module.exports = (_ => {
 					}
 					else newString.push(word + (hasNewline ? "\n" : ""));
 				});
-				editor.setValue(BDFDB.SlateUtils.copyRichValue(newString.join(" ").replace(/\n /g, "\n"), editor.props.value));
+				editor.setValue(BDFDB.SlateUtils.toRichValue(newString.join(" ").replace(/\n /g, "\n")));
 			}
 
 			addToOwnDictionary (word) {
