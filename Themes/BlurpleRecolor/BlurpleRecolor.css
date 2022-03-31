@@ -114,6 +114,7 @@
 		16.	DISCOVERYENTRYMODAL
 		17.	NICKNAMEMODAL
 		18.	NITROFEATUREMODAL
+		19.	GUILDBOOSTPROGESSINFO
 	11.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -1913,6 +1914,51 @@ a.metadataName-1KMZtB {
 #app-mount .modalFooter-2a3syI {
 	background: rgb(var(--accentcolor2));
 	box-shadow: unset;
+}
+
+/* ----		10.19.	GUILDBOOSTPROGESSINFO			---- */
+
+.heroImage-1BTx4r[src="/assets/d1dab93347ab65e2b31d9dc39c9c5a9a.svg"] {
+	object-position: -9999999px -9999999px;
+}
+.heroImage-1BTx4r[src="/assets/d1dab93347ab65e2b31d9dc39c9c5a9a.svg"] + *::before,									/* modal				boostangel							*/
+.heroImage-1BTx4r[src="/assets/d1dab93347ab65e2b31d9dc39c9c5a9a.svg"] + *::after {
+	content: "";
+	position: absolute;
+	top: 32px;
+	left: 110px;
+	width: 218px;
+	height: 114px;
+	pointer-events: none;
+}
+.heroImage-1BTx4r[src="/assets/d1dab93347ab65e2b31d9dc39c9c5a9a.svg"] + *::before {
+	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostangel_bg.svg) center/cover no-repeat;
+}
+.heroImage-1BTx4r[src="/assets/d1dab93347ab65e2b31d9dc39c9c5a9a.svg"] + *::after {
+	background: rgb(var(--accentcolor2));
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostangel_accent2.svg) center/cover no-repeat;
+}
+.perkIcon-2DG0tJ path[fill*="hsl(305, "] {
+	fill: rgb(var(--accentcolor2));
+}
+.perkIcon-2DG0tJ path[fill*="#e655d4"] {
+	fill: rgb(var(--accentcolor2));
+	filter: brightness(75%);
+}
+.perkIcon-2DG0tJ path[fill*="#ff73fa"] {
+	fill: rgb(var(--accentcolor2));
+	filter: brightness(150%);
+}
+.perkIcon-2DG0tJ path[fill*="#ffc0ff"] {
+	fill: rgb(var(--accentcolor2));
+	filter: brightness(275%);
+}
+.perkIcon-2DG0tJ path[fill*="#ffdef9"] {
+	fill: rgb(var(--accentcolor2));
+	filter: brightness(350%);
+}
+.perkIcon-2DG0tJ path[fill*="hsl(222, "] {
+	fill: rgb(var(--accentcolor));
 }
 
 
