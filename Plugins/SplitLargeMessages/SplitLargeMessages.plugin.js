@@ -2,7 +2,7 @@
  * @name SplitLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.2
+ * @version 1.7.3
  * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "SplitLargeMessages",
 			"author": "DevilBro",
-			"version": "1.7.2",
+			"version": "1.7.3",
 			"description": "Allows you to enter larger Messages, which will automatically split into several smaller Messages"
-		},
-		"changeLog": {
-			"fixed": {
-				"Paste": "Pasting a long Message no longer auto converts it into a .txt attachment"
-			}
 		}
 	};
 
@@ -146,18 +141,15 @@ module.exports = (_ => {
 			processChannelTextAreaContainer (e) {
 				if (e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SlateCharacterCount"});
-					if (index > -1) {
-						let text = BDFDB.LibraryModules.SlateSelectionUtils.serialize(children[index].props.document, "raw");
-						if (text.length > maxMessageLength) children[index] = BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCNS.textareacharcounter + BDFDB.disCN.textareacharcountererror,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								text: Math.ceil(text.length / maxMessageLength * (39/40)) + " " + BDFDB.LanguageUtils.LanguageStrings.MESSAGES,
-								children: BDFDB.ReactUtils.createElement("span", {
-									children: maxMessageLength - text.length
-								})
+					if (index > -1 && children[index].props.textValue && children[index].props.textValue.length > maxMessageLength) children[index] = BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCNS.textareacharcounter + BDFDB.disCN.textareacharcountererror,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							text: Math.ceil(children[index].props.textValue.length / maxMessageLength * (39/40)) + " " + BDFDB.LanguageUtils.LanguageStrings.MESSAGES,
+							children: BDFDB.ReactUtils.createElement("span", {
+								children: maxMessageLength - children[index].props.textValue.length
 							})
-						});
-					}
+						})
+					});
 				}
 			}
 

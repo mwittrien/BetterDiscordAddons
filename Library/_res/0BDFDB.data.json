@@ -118,7 +118,6 @@
 		"SlateDraftUtils": {"props": ["getRecentlyEditedDrafts", "getDraft"]},
 		"SlateRichUtils": {"props": ["toRichValue", "createEmptyState"]},
 		"SlateTextUtils": {"props": ["toTextValue", "serializeDescendant"]},
-		"SlateSelectionUtils": {"props": ["serialize", "serializeSelection"]},
 		"SlowmodeUtils": {"props": ["getSlowmodeCooldownGuess"]},
 		"SoundParser": {"strings": ["discodo", "ddr-down", "mute"]},
 		"SoundStateUtils": {"props": ["isSoundDisabled", "getDisabledSounds"]},
