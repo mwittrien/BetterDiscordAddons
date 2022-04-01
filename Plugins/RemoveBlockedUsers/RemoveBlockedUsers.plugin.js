@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.1
+ * @version 1.4.2
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedUsers",
 			"author": "DevilBro",
-			"version": "1.4.1",
+			"version": "1.4.3",
 			"description": "Removes blocked Messages/Users"
-		},
-		"changeLog": {
-			"fixed": {
-				"Notifications": "No longer shows Notification Dots on Channels/Servers if all new Messages are from blocked Ppl"
-			}
 		}
 	};
 
@@ -140,8 +135,7 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
 					if (e.returnValue && this.settings.notifcations.messages) {
 						let count = BDFDB.LibraryModules.UnreadChannelUtils.getUnreadCount(e.methodArguments[0]);
-						if (count == 0) return false;
-						else if (count > 0 && count < BDFDB.DiscordConstants.MAX_MESSAGES_PER_CHANNEL) {
+						if (count > 0 && count < BDFDB.DiscordConstants.MAX_MESSAGES_PER_CHANNEL) {
 							let id = BDFDB.LibraryModules.UnreadChannelUtils.lastMessageId(e.methodArguments[0]);
 							let message = id && BDFDB.LibraryModules.MessageStore.getMessage(e.methodArguments[0], id);
 							if (message && message.blocked) {
