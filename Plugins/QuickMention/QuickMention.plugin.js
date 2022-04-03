@@ -2,7 +2,7 @@
  * @name QuickMention
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.3
+ * @version 1.0.4
  * @description Adds a Mention Button to the Message Options Bar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "QuickMention",
 			"author": "DevilBro",
-			"version": "1.0.3",
+			"version": "1.0.4",
 			"description": "Adds a Mention Button to the Message Options Bar"
 		}
 	};
@@ -74,11 +74,9 @@ module.exports = (_ => {
 						text: BDFDB.LanguageUtils.LanguageStrings.MENTION,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 							className: BDFDB.disCN.messagetoolbarbutton,
-							onClick: _ => {
-								BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {
-									content: `<@!${e.instance.props.message.author.id}>`
-								});
-							},
+							onClick: _ => BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {
+								plainText: `<@!${e.instance.props.message.author.id}>`
+							}),
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 								className: BDFDB.disCN.messagetoolbaricon,
 								name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_AT
