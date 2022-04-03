@@ -3,7 +3,7 @@
  * @author DevilBro
  * @authorId 278543574059057154
  * @version 1.0.4
- * @description Adds a Mention Button to the Message Options Bar
+ * @description Adds a Quick Mention Button to the Message Options Bar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
@@ -18,7 +18,7 @@ module.exports = (_ => {
 			"name": "QuickMention",
 			"author": "DevilBro",
 			"version": "1.0.4",
-			"description": "Adds a Mention Button to the Message Options Bar"
+			"description": "Adds a Quick Mention Button to the Message Options Bar"
 		}
 	};
 
