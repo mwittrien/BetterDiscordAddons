@@ -19,14 +19,6 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "1.2.8",
 			"description": "Brings back the Quote Feature and allows you to set your own Quote Formats"
-		},
-		"changeLog": {
-			"improved": {
-				"Date Insert": "Changed the manual Timestamp Placeholders to the new Date Component"
-			},
-			"added": {
-				"Auto new Lines": "Added Option to auto insert new line feeds for Quotes"
-			}
 		}
 	};
 
@@ -378,9 +370,7 @@ module.exports = (_ => {
 						BDFDB.LibraryRequires.electron.clipboard.write({text: text});
 						BDFDB.NotificationUtils.toast(this.labels.toast_quotecopied, {type: "success"});
 					}
-					else {
-						BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {content: [this.settings.general.autoAddNewLine && ChannelTextAreaForm && ChannelTextAreaForm.state.textValue && !this.isNewLine(ChannelTextAreaForm.state.textValue, true) && !this.isNewLine(text, false) && "\n", text, this.settings.general.autoAddNewLine && !this.isNewLine(text, true) && "\n"].filter(n => n).join("")});
-					}
+					else BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {plainText: [this.settings.general.autoAddNewLine && ChannelTextAreaForm && ChannelTextAreaForm.state.textValue && !this.isNewLine(ChannelTextAreaForm.state.textValue, true) && !this.isNewLine(text, false) && "\n", text, this.settings.general.autoAddNewLine && !this.isNewLine(text, true) && "\n"].filter(n => n).join("")});
 				}
 			}
 			
