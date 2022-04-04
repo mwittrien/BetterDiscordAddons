@@ -223,6 +223,7 @@ module.exports = (_ => {
 			parse (string) {
 				if (!string.length || /<[#@][!&]{0,1}\d+>|@here|@everyone|:[A-z0-9_-]+:|[\uD83C-\uDBFF\uDC00-\uDFFF]+/.test(string)) return string;
 				let newString = string, stop = false;
+				let language = BDFDB.LanguageUtils.getLanguage().id;
 				for (let space of spaces) for (let symbol of symbols) if (!stop) {
 					let reg;
 					try {reg = new RegExp((symbol == "." ? "(?<!\\.)" : "") + BDFDB.StringUtils.regEscape(symbol + space), "g");}
@@ -230,9 +231,10 @@ module.exports = (_ => {
 					let sentences = newString.split(reg);
 					for (let i in sentences) {
 						let sentence = sentences[i];
+						let lowSentence = sentence.toLocaleLowerCase(language);
 						let first = sentence.charAt(0);
-						if (first === first.toUpperCase() && (sentence.toLowerCase().indexOf("http") == 0 || sentence.toLowerCase().indexOf("s/") == 0)) sentences[i] = sentence.charAt(0).toLowerCase() + sentence.slice(1);
-						else if (first === first.toLowerCase() && first !== first.toUpperCase() && sentence.toLowerCase().indexOf("http") != 0 && sentence.toLowerCase().indexOf("s/") != 0) sentences[i] = sentence.charAt(0).toUpperCase() + sentence.slice(1);
+						if (first === first.toLocaleUpperCase(language) && (lowSentence.indexOf("http") == 0 || lowSentence.indexOf("s/") == 0)) sentences[i] = sentence.charAt(0).toLocaleLowerCase(language) + sentence.slice(1);
+						else if (first === first.toLocaleLowerCase(language) && first !== first.toLocaleUpperCase(language) && lowSentence.indexOf("http") != 0 && lowSentence.indexOf("s/") != 0) sentences[i] = sentence.charAt(0).toLocaleUpperCase(language) + sentence.slice(1);
 						if (sentence.indexOf("```") > -1) stop = true;
 					}
 					newString = sentences.join(symbol + space);
