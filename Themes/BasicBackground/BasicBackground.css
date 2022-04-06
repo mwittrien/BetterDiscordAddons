@@ -6117,16 +6117,13 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .3);
 	color: var(--interactive-hover);
 }
-.option-2eIyOn[aria-selected=true],
+.option-2eIyOn[aria-selected=true]:not(.option-2eIyOn.multi-1HXDiv),
 #app-mount .optionActive-KkAdqq,
 .css-1gxgi19-option,
 .css-1ba14n5-option,
 .css-6qzljd-option,
 .css-1ba14n5-option {
 	background-color: rgba(var(--transparencycolor), .5);
-	color: var(--interactive-active);
-}
-.selectedIcon-19TbzU {
 	color: var(--interactive-active);
 }
 .role-3ulsK-:hover {
@@ -6143,11 +6140,16 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	box-shadow: 0px 1px 5px 0px rgba(var(--transparencycolor), .3);
 	overflow: hidden;
 }
+.popout-1KHNAq.scrollerBase-_bVAAt > .option-2eIyOn {
+	position: relative;
+}
 .popout-1KHNAq::before,
+.popout-1KHNAq.scrollerBase-_bVAAt > .option-2eIyOn::before,
 .popout-1KHNAq.scrollerBase-_bVAAt .content-2a4AW9::before,
 .container-3LUQwT::before,
 .select-1YfRS9 > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::before,
 .popout-1KHNAq::after,
+.popout-1KHNAq.scrollerBase-_bVAAt > .option-2eIyOn::after,
 .popout-1KHNAq.scrollerBase-_bVAAt .content-2a4AW9::after,
 .container-3LUQwT::after,
 .select-1YfRS9 > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::after {
@@ -6163,6 +6165,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	z-index: -1;
 }
 .popout-1KHNAq::before,
+.popout-1KHNAq.scrollerBase-_bVAAt > .option-2eIyOn::before,
 .popout-1KHNAq.scrollerBase-_bVAAt .content-2a4AW9::before,
 .container-3LUQwT::before,
 .select-1YfRS9 > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::before {
@@ -6170,6 +6173,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-attachment: fixed;
 }
 .popout-1KHNAq::after,
+.popout-1KHNAq.scrollerBase-_bVAAt > .option-2eIyOn::after,
 .popout-1KHNAq.scrollerBase-_bVAAt .content-2a4AW9::after,
 .container-3LUQwT::after,
 .select-1YfRS9 > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]::after {
