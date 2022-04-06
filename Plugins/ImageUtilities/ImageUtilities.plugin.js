@@ -1050,6 +1050,7 @@ module.exports = (_ => {
 								};
 								BDFDB.ReactUtils.forceUpdate(e.instance);
 							}).then(result => {
+								if (!viewedImage) return;
 								let messages = [], index = -1;
 								if (result) {
 									messages = result.body.messages.flat(10).reverse();
@@ -1414,7 +1415,7 @@ module.exports = (_ => {
 							min_id: (BigInt(cachedImages.newestId) - BigInt(1)).toString()
 						})
 					}).then(result => {
-						if (result) {
+						if (result && viewedImage) {
 							const messages = result.body.messages.flat(10).reverse();
 							const newCachedImages = this.filterMessagesForImages(messages, viewedImage);
 							const lastOldIndex = this.getImageIndex(newCachedImages, cachedImages.all[cachedImages.all.length-1]);
@@ -1444,7 +1445,7 @@ module.exports = (_ => {
 							max_id: (BigInt(cachedImages.oldestId) + BigInt(1)).toString()
 						})
 					}).then(result => {
-						if (result) {
+						if (result && viewedImage) {
 							const messages = result.body.messages.flat(10).reverse();
 							const newCachedImages = this.filterMessagesForImages(messages, viewedImage);
 							const firstOldIndex = this.getImageIndex(newCachedImages, cachedImages.all[0]);

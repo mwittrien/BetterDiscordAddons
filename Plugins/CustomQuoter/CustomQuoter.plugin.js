@@ -370,7 +370,9 @@ module.exports = (_ => {
 						BDFDB.LibraryRequires.electron.clipboard.write({text: text});
 						BDFDB.NotificationUtils.toast(this.labels.toast_quotecopied, {type: "success"});
 					}
-					else BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {plainText: [this.settings.general.autoAddNewLine && ChannelTextAreaForm && ChannelTextAreaForm.state.textValue && !this.isNewLine(ChannelTextAreaForm.state.textValue, true) && !this.isNewLine(text, false) && "\n", text, this.settings.general.autoAddNewLine && !this.isNewLine(text, true) && "\n"].filter(n => n).join("")});
+					else BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {
+						plainText: [this.settings.general.autoAddNewLine && ChannelTextAreaForm && ChannelTextAreaForm.state.textValue && !this.isNewLine(ChannelTextAreaForm.state.textValue, true) && !this.isNewLine(text, false) && "\n", text, this.settings.general.autoAddNewLine && !this.isNewLine(text, true) && "\n"].filter(n => n).join("")
+					});
 				}
 			}
 			

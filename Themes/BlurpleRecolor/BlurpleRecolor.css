@@ -369,6 +369,9 @@
 	background-color: rgb(var(--accentcolor));
 	color: #fff;
 }
+.selectedVoid-3Kr388 {
+	background-color: rgb(var(--accentcolor));
+}
 
 .reactionMe-3I9gFK .reactionCount-1zkLcN,					/* reaction				count me							*/
 .reactionMe-3I9gFK:hover .reactionCount-1zkLcN {
