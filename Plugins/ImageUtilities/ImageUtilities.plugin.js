@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.7.0
+ * @version 4.7.1
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.7.0",
+			"version": "4.7.1",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		},
 		"changeLog": {
 			"fixed": {
-				"NSFW/Threads": "Now properly works in NSFW Channels and Threads"
+				"Embed Thumbnails": "No longer tries to resize embed thumbnails, causing embeds to look distorted"
 			}
 		}
 	};
@@ -1223,7 +1223,7 @@ module.exports = (_ => {
 						e.instance.props.src = e.instance.props.src.replace(/width=\d+/, `width=${width}`).replace(/height=\d+/, `height=${height}`);
 						e.instance.props.resized = true;
 					}
-					if (this.settings.resizeSettings.messages && (!e.instance.props.className || e.instance.props.className.indexOf(BDFDB.disCN.embedmedia) == -1) && BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), {name: "LazyImageZoomable", up: true})) {
+					if (this.settings.resizeSettings.messages && (!e.instance.props.className || (e.instance.props.className.indexOf(BDFDB.disCN.embedmedia) == -1 && e.instance.props.className.indexOf(BDFDB.disCN.embedthumbnail) == -1)) && BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), {name: "LazyImageZoomable", up: true})) {
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let mRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCNC.messageaccessory + BDFDB.dotCN.messagecontents));
 						let mwRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.messagewrapper));
