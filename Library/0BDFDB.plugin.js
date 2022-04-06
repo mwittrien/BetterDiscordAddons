@@ -5162,8 +5162,6 @@ module.exports = (_ => {
 			};
 			
 			CustomComponents.Checkbox = reactInitialized && class BDFDB_Checkbox extends Internal.LibraryModules.React.Component {
-				handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
-				handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
 				handleMouseDown(e) {if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);}
 				handleMouseUp(e) {if (typeof this.props.onMouseUp == "function") this.props.onMouseUp(e, this);}
 				handleMouseEnter(e) {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);}
@@ -5217,6 +5215,10 @@ module.exports = (_ => {
 									type: "checkbox",
 									onClick: this.props.disabled || this.props.readOnly ? (_ => {}) : this.handleChange.bind(this),
 									onContextMenu: this.props.disabled || this.props.readOnly ? (_ => {}) : this.handleChange.bind(this),
+									onMouseUp: !this.props.disabled && this.handleMouseDown.bind(this),
+									onMouseDown: !this.props.disabled && this.handleMouseUp.bind(this),
+									onMouseEnter: !this.props.disabled && this.handleMouseEnter.bind(this),
+									onMouseLeave: !this.props.disabled && this.handleMouseLeave.bind(this),
 									checked: this.props.value,
 									style: {
 										width: this.props.size,
@@ -7242,17 +7244,20 @@ module.exports = (_ => {
 								},
 								children: this.props.settings.map(setting => BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.checkboxcontainer,
-									children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Checkbox, {
-										disabled: props.disabled,
-										cardId: props.key,
-										settingId: setting,
-										shape: Internal.LibraryComponents.Checkbox.Shapes && Internal.LibraryComponents.Checkbox.Shapes.ROUND,
-										type: Internal.LibraryComponents.Checkbox.Types && Internal.LibraryComponents.Checkbox.Types.INVERTED,
-										color: this.props.checkboxColor,
-										getColor: this.props.getCheckboxColor,
-										value: props[setting],
-										getValue: this.props.getCheckboxValue,
-										onChange: this.props.onCheckboxChange
+									children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TooltipContainer, {
+										text: setting,
+										children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Checkbox, {
+											disabled: props.disabled,
+											cardId: props.key,
+											settingId: setting,
+											shape: Internal.LibraryComponents.Checkbox.Shapes && Internal.LibraryComponents.Checkbox.Shapes.ROUND,
+											type: Internal.LibraryComponents.Checkbox.Types && Internal.LibraryComponents.Checkbox.Types.INVERTED,
+											color: this.props.checkboxColor,
+											getColor: this.props.getCheckboxColor,
+											value: props[setting],
+											getValue: this.props.getCheckboxValue,
+											onChange: this.props.onCheckboxChange
+										})
 									})
 								})).flat(10).filter(n => n)
 							})
@@ -7919,6 +7924,7 @@ module.exports = (_ => {
 					return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.PopoutContainer, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 						wrap: false,
 						renderPopout: instance => BDFDB.ReactUtils.createElement(Internal.LibraryComponents.UserPopout, {
+							user: Internal.LibraryModules.UserStore.getUser(this.props.userId),
 							userId: this.props.userId,
 							channelId: this.props.channelId,
 							guildId: this.props.guildId
