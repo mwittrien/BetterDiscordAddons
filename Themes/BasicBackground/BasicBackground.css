@@ -674,6 +674,10 @@ body::after {
 	opacity: 1;
 	background-color: rgb(var(--accentcolor));
 }
+.withTagAsButton-OsgQ9L:hover,
+.withTagless-10ooWt:hover {
+	background-color: rgb(var(--accentcolor));
+}
 .button-12Fmur.enabled-9OeuTA:hover svg {
 	filter: drop-shadow(1px 1px var(--textshadow));
 }
