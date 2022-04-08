@@ -30,6 +30,7 @@
 		"ChannelIconUtils": {"props": ["getChannelIconComponent", "getChannelIconTooltipText"]},
 		"ChannelUtils": {"props": ["selectChannel", "selectPrivateChannel"]},
 		"ChannelStore": {"props": ["getChannel", "getDMFromUserId"]},
+		"ChatRestrictionUtils": {"props": ["applyChatRestrictions"]},
 		"ColorUtils": {"props": ["hex2int", "hex2rgb"]},
 		"ConnectionProviderUtils": {"props": ["get", "isSupported", "filter"]},
 		"ConnectionStore": {"props": ["getAccounts", "getLocalAccounts"]},
