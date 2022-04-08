@@ -2994,6 +2994,7 @@
 		"textareabuttonwrapper": ["ChannelTextAreaButton", "buttonWrapper"],
 		"textareacharcounter": ["ChannelTextAreaCharCounter", "characterCount"],
 		"textareacharcountererror": ["ChannelTextAreaCharCounter", "error"],
+		"textareacharcounterupsell": ["ChannelTextAreaCharCounter", "upsell"],
 		"textareadisabled": ["ChannelTextArea", "textAreaDisabled"],
 		"textareafontsize12padding": ["ChannelTextArea", "fontSize12Padding"],
 		"textareafontsize14padding": ["ChannelTextArea", "fontSize14Padding"],
