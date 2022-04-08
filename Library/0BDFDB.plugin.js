@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.6
+ * @version 2.2.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.2.6",
+			"version": "2.2.7",
 			"description": "Required Library for DevilBro's Plugins"
 		}
 	};
@@ -3209,7 +3209,10 @@ module.exports = (_ => {
 			if (!BDFDB.DiscordConstants.Permissions[permission]) BDFDB.LogUtils.warn([permission, "not found in Permissions"]);
 			else {
 				let channel = Internal.LibraryModules.ChannelStore.getChannel(channelId);
-				if (channel) return Internal.LibraryModules.PermissionRoleUtils.can(BDFDB.DiscordConstants.Permissions[permission], id, channel) || Internal.LibraryModules.PermissionRoleUtils.can({permission: BDFDB.DiscordConstants.Permissions[permission], user: id, context: channel});
+				if (channel) {
+					try {return Internal.LibraryModules.PermissionRoleUtils.can(BDFDB.DiscordConstants.Permissions[permission], id, channel) || Internal.LibraryModules.PermissionRoleUtils.can({permission: BDFDB.DiscordConstants.Permissions[permission], user: id, context: channel});}
+					catch (err) {}
+				}
 			}
 			return false;
 		};
