@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.0
+ * @version 1.1.1
  * @description Allows you to save Custom Statuses as Quick Select
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomStatusPresets",
 			"author": "DevilBro",
-			"version": "1.1.0",
+			"version": "1.1.1",
 			"description": "Allows you to save Custom Statuses as Quick Select"
 		}
 	};
@@ -249,7 +249,7 @@ module.exports = (_ => {
 						transform: unset !important;
 					}
 					#status-picker${BDFDB.dotCN.menu} #status-picker-custom-status${BDFDB.dotCN.menulabelcontainer} {
-						padding: 0;
+						padding-left: 0;
 					}
 					#status-picker${BDFDB.dotCN.menu} #status-picker-custom-status ${BDFDB.dotCN.menulabel} {
 						overflow: visible;
@@ -335,71 +335,72 @@ module.exports = (_ => {
 			}
 			
 			processMenu (e) {
+				if (e.instance.props.navId != "status-picker") return;
 				let enabledPresets = BDFDB.ObjectUtils.filter(presets, id => !presets[id].disabled, true);
-				if (e.instance.props.navId == "status-picker" && Object.keys(enabledPresets).length) {
-					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.instance, {id: "custom-status"});
-					if (index > -1 && children[index].props && !children[index].props.children) {
-						let render = children[index].props.render;
-						delete children[index].props.render;
-						children[index] = BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, Object.assign({}, children[index].props, {
-							label: render(),
-							children: Object.keys(BDFDB.ObjectUtils.sort(enabledPresets, "pos")).map(id => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-								id: BDFDB.ContextMenuUtils.createItemId(this.name, "custom-status-preset", id),
-								label: BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN._customstatuspresetscustomstatusitem,
-									children: [
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-											text: BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_CLEAR_CUSTOM_STATUS,
-											tooltipConfig: {
-												zIndex: 2001
+				if (!Object.keys(enabledPresets).length) return;
+				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.instance, {id: "custom-status"});
+				if (index > -1 && children[index].props && !children[index].props.children) {
+					let render = children[index].props.render || children[index].props.label;
+					delete children[index].props.render;
+					delete children[index].props.label;
+					children[index] = BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, Object.assign({}, children[index].props, {
+						label: render(),
+						children: Object.keys(BDFDB.ObjectUtils.sort(enabledPresets, "pos")).map(id => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, "custom-status-preset", id),
+							label: BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN._customstatuspresetscustomstatusitem,
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+										text: BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_CLEAR_CUSTOM_STATUS,
+										tooltipConfig: {
+											zIndex: 2001
+										},
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+											className: BDFDB.disCN._customstatuspresetsdeletebutton,
+											onClick: _ => {
+												delete presets[id];
+												let pos = 0, sortedPresets = BDFDB.ObjectUtils.sort(presets, "pos");
+												for (let id in sortedPresets) presets[id].pos = pos++;
+												BDFDB.DataUtils.save(presets, this, "presets");
 											},
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-												className: BDFDB.disCN._customstatuspresetsdeletebutton,
-												onClick: _ => {
-													delete presets[id];
-													let pos = 0, sortedPresets = BDFDB.ObjectUtils.sort(presets, "pos");
-													for (let id in sortedPresets) presets[id].pos = pos++;
-													BDFDB.DataUtils.save(presets, this, "presets");
-												},
-												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-													className: BDFDB.disCN._customstatuspresetsdeleteicon,
-													name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE_CIRCLE,
-													width: 14,
-													height: 14
-												})
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+												className: BDFDB.disCN._customstatuspresetsdeleteicon,
+												name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE_CIRCLE,
+												width: 14,
+												height: 14
 											})
-										}),
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Status, {
-											className: BDFDB.disCN._customstatuspresetsstatus,
-											status: presets[id].status || BDFDB.DiscordConstants.StatusTypes.ONLINE
-										}),
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-											children: presets[id].text
 										})
-									]
-								}),
-								imageUrl: presets[id].emojiInfo && (presets[id].emojiInfo.id ? BDFDB.LibraryModules.IconUtils.getEmojiURL(presets[id].emojiInfo) : BDFDB.LibraryModules.EmojiStateUtils.getURL(presets[id].emojiInfo.name)),
-								hint: !presets[id].clearAfter ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : presets[id].clearAfter == ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", presets[id].clearAfter/3600000),
-								action: _ => {
-									if (!presets[id]) return;
-									let expiresAt = presets[id].clearAfter ? presets[id].clearAfter : null;
-									if (presets[id].clearAfter === ClearAfterValues.TODAY) {
-										let date = new Date;
-										expiresAt = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime() - date.getTime();
-									}
-									BDFDB.LibraryModules.SettingsUtilsOld.updateRemoteSettings({
-										status: presets[id].status,
-										customStatus: {
-											text: presets[id].text && presets[id].text.length > 0 ? presets[id].text : null,
-											expiresAt: expiresAt ? BDFDB.DiscordObjects.Timestamp().add(expiresAt, "ms").toISOString() : null,
-											emojiId: presets[id].emojiInfo ? presets[id].emojiInfo.id : null,
-											emojiName: presets[id].emojiInfo ? presets[id].emojiInfo.name : null
-										}
-									});
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Status, {
+										className: BDFDB.disCN._customstatuspresetsstatus,
+										status: presets[id].status || BDFDB.DiscordConstants.StatusTypes.ONLINE
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+										children: presets[id].text
+									})
+								]
+							}),
+							imageUrl: presets[id].emojiInfo && (presets[id].emojiInfo.id ? BDFDB.LibraryModules.IconUtils.getEmojiURL(presets[id].emojiInfo) : BDFDB.LibraryModules.EmojiStateUtils.getURL(presets[id].emojiInfo.name)),
+							hint: !presets[id].clearAfter ? BDFDB.LanguageUtils.LanguageStrings.DISPLAY_OPTION_NEVER : presets[id].clearAfter == ClearAfterValues.TODAY ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS_TODAY : BDFDB.LanguageUtils.LanguageStringsFormat("CUSTOM_STATUS_HOURS", presets[id].clearAfter/3600000),
+							action: _ => {
+								if (!presets[id]) return;
+								let expiresAt = presets[id].clearAfter ? presets[id].clearAfter : null;
+								if (presets[id].clearAfter === ClearAfterValues.TODAY) {
+									let date = new Date;
+									expiresAt = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime() - date.getTime();
 								}
-							}))
-						}));
-					}
+								BDFDB.LibraryModules.SettingsUtilsOld.updateRemoteSettings({
+									status: presets[id].status,
+									customStatus: {
+										text: presets[id].text && presets[id].text.length > 0 ? presets[id].text : null,
+										expiresAt: expiresAt ? BDFDB.DiscordObjects.Timestamp().add(expiresAt, "ms").toISOString() : null,
+										emojiId: presets[id].emojiInfo ? presets[id].emojiInfo.id : null,
+										emojiName: presets[id].emojiInfo ? presets[id].emojiInfo.name : null
+									}
+								});
+							}
+						}))
+					}));
 				}
 			}
 			

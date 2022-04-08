@@ -152,8 +152,8 @@ module.exports = (_ => {
 						MutualFriends: "default",
 						VoiceUser: "render",
 						ParticipantsForSelectedParticipant: "default",
-						Account: "render",
 						PrivateChannelEmptyMessage: "default",
+						PanelTitle: "default",
 						MessageUsername: "default",
 						MessageContent: "type",
 						Reaction: "render",
@@ -675,7 +675,7 @@ module.exports = (_ => {
 					}
 				}
 			}
-
+			
 			processAccount (e) {
 				if (e.instance.props.currentUser && this.settings.places.userAccount) {
 					let data = changedUsers[e.instance.props.currentUser.id];
@@ -684,18 +684,16 @@ module.exports = (_ => {
 						if (data && (data.removeStatus || data.status || data.statusEmoji)) e.instance.props.customStatusActivity = this.createCustomStatus(data);
 					}
 					else {
-						if (data && (data.color1 || data.color2)) {
-							let tooltip = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Tooltip"});
-							if (tooltip && typeof tooltip.props.children == "function") {
-								let renderChildren = tooltip.props.children;
-								tooltip.props.children = BDFDB.TimeUtils.suppress((...args) => {
-									let renderedChildren = renderChildren(...args);
-									let userName = BDFDB.ReactUtils.findChild(renderedChildren, {name: "PanelTitle"});
-									if (userName) this.changeUserColor(userName, e.instance.props.currentUser.id);
-									return renderedChildren;
-								}, "Error in Tooltip Children Render of Account!", this);
-							}
-						}
+					}
+				}
+			}
+
+			processPanelTitle (e) {
+				if (this.settings.places.userAccount) {
+					let data = changedUsers[BDFDB.UserUtils.me.id];
+					let user = data && this.getUserData(BDFDB.UserUtils.me.id);
+					if (user && e.instance.props.children == user.username) {
+						if (data.color1 || data.color2) this.changeUserColor(e.returnvalue, BDFDB.UserUtils.me.id);
 					}
 				}
 			}
