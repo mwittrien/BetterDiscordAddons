@@ -140,7 +140,6 @@ module.exports = (_ => {
 						let messages = this.formatText(textValue).filter(n => n);
 						for (let i in messages) BDFDB.TimeUtils.timeout(_ => {
 							let last = i >= messages.length-1;
-							console.log(messages[i].length);
 							e2.originalMethod(!isObject ? messages[i] : (last ? Object.assign({}, originalMethodArguments, {value: messages[i]}) : {stickers: [], uploads: [], value: messages[i]}));
 							if (i >= messages.length-1) BDFDB.NotificationUtils.toast(this.labels.toast_allsent, {type: "success"});
 						}, messageDelay * i * (messages > 4 ? 2 : 1));

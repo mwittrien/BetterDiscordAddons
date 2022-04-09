@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.4
+ * @version 2.3.5
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.3.4",
+			"version": "2.3.5",
 			"description": "Allows you to configure your own Aliases/Commands"
 		}
 	};
@@ -92,8 +92,7 @@ module.exports = (_ => {
 				this.patchedModules = {
 					before: {
 						ChannelTextAreaForm: "render",
-						MessageEditor: "render",
-						Upload: "render"
+						MessageEditor: "render"
 					},
 					after: {
 						Autocomplete: "render"
@@ -378,28 +377,26 @@ module.exports = (_ => {
 			
 			processChannelTextAreaForm (e) {
 				BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {before: e2 => {
-					if (this.settings.places.normal) this.handleSubmit(e, e2, 0);
+					if (this.settings.places.normal) this.handleSubmit(e, e2);
 				}}, {force: true, noCache: true});
 			}
 			
 			processMessageEditor (e) {
 				BDFDB.PatchUtils.patch(this, e.instance, "onSubmit", {before: e2 => {
-					if (this.settings.places.edit) this.handleSubmit(e, e2, 0);
+					if (this.settings.places.edit) this.handleSubmit(e, e2);
 				}}, {force: true, noCache: true});
 			}
 			
-			processUpload (e) {
-				BDFDB.PatchUtils.patch(this, e.instance, "submitUpload", {before: e2 => {
-					if (this.settings.places.upload) this.handleSubmit(e, e2, 1);
-				}}, {force: true, noCache: true});
-			}
-			
-			handleSubmit (e, e2, textIndex) {
+			handleSubmit (e, e2) {
 				if (!this.settings.general.replaceBeforeSend || BDFDB.LibraryModules.SlowmodeUtils.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
-				let messageData = this.formatText(e2.methodArguments[textIndex]);
+				let originalMethodArguments = e2.methodArguments[0];
+				let isObject = BDFDB.ObjectUtils.is(originalMethodArguments);
+				let textValue = isObject ? e2.methodArguments[0].value : e2.methodArguments[0];
+				let messageData = this.formatText(textValue);
 				if (messageData) {
-					if (messageData.text != null && e2.methodArguments[textIndex] != messageData.text) {
-						e2.methodArguments[textIndex] = messageData.text;
+					if (messageData.text != null && textValue != messageData.text) {
+						if (isObject) e2.methodArguments[0].value = messageData.text;
+						else e2.methodArguments[0] = messageData.text;
 						e.instance.props.textValue = "";
 						if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.toRichValue("");
 						if (e.instance.state) {
