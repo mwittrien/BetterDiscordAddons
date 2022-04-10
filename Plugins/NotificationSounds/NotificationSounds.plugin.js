@@ -236,7 +236,7 @@ module.exports = (_ => {
 								return;
 							}
 							else if (guildId) {
-								if (this.isRawMessageMentioned(message, BDFDB.UserUtils.me.id)) {
+								if (BDFDB.LibraryModules.MentionUtils.isRawMessageMentioned({rawMessage: message, userId: BDFDB.UserUtils.me.id})) {
 									if (message.mentions.length && !this.isSuppressMentionsEnabled(guildId, channel.id)) for (const mention of message.mentions) if (mention.id == BDFDB.UserUtils.me.id) {
 										if (message.message_reference && !message.interaction && (!muted || choices.reply.force) && !(choices.reply.focus && focused)) {
 											this.fireEvent("reply");
@@ -722,11 +722,6 @@ module.exports = (_ => {
 				if (createdAudios[type]) createdAudios[type].stop();
 				createdAudios[type] = new WebAudioSound(type);
 				createdAudios[type].play();
-			}
-
-			isRawMessageMentioned (message, userId) {
-				try {return BDFDB.LibraryModules.MentionUtils.isRawMessageMentioned(message, BDFDB.UserUtils.me.id)}
-				catch (err) {return BDFDB.LibraryModules.MentionUtils.isRawMessageMentioned({rawMessage: message, userId: BDFDB.UserUtils.me.id})}
 			}
 			
 			isSuppressMentionsEnabled (guildId, channelId) {
