@@ -1348,6 +1348,9 @@ img[src="/assets/4697ec960e57790ad4f6251af4c246b4.svg"] {	/* widgetsettings		wid
 .uploadModalIn-2w48Zf .uploadDropModal-13Kd20 .inner-rBP-MS .icon-HW4tZ-.two-1t2_74 {
 	filter: drop-shadow(0 0 48px rgba(var(--accentcolor),.5));
 }
+.uploadModalIn-2w48Zf .uploadDropModal-13Kd20.error-3lNz4C .inner-rBP-MS .icon-HW4tZ-.two-1t2_74 {
+	filter: drop-shadow(0 0 48px rgba(216,60,63,.5));
+}
 
 .attachment-1PZZB2 {
 	position: relative;

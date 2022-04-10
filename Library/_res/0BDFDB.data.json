@@ -9,6 +9,7 @@
 		"Messages": {"props": ["jumpToMessage", "hasAfterCached", "forEach"]},
 		"Relationship": {"strings": ["status", "mutualGuilds", "nickname"], "value": "Row"},
 		"Timestamp": {"props": ["add", "dayOfYear", "hasAlignedHourOffset"]},
+		"Upload": {"strings": ["this.item", "this.classification", "this.showLargeMessageDialog"], "value": "Upload"},
 		"User": {"props": ["hasFlag", "isLocalBot", "isClaimed"]}
 	},
 	"LibraryModules": {

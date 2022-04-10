@@ -637,21 +637,16 @@ module.exports = (_ => {
 			
 			processChannelTextAreaForm (e) {
 				BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
-					if (this.isTranslationEnabled(e.instance.props.channel.id)) {
-						let originalMethodArguments = e2.methodArguments[0];
-						let isObject = BDFDB.ObjectUtils.is(originalMethodArguments);
-						let textValue = isObject ? e2.methodArguments[0].value : e2.methodArguments[0];
-						if (textValue) {
-							e2.stopOriginalMethodCall();
-							this.translateText(textValue, messageTypes.SENT, (translation, input, output) => {
-								translation = !translation ? textValue : (this.settings.general.sendOriginalMessage ? (translation + "\n\n> *" + textValue.split("\n").join("*\n> *") + "*") : translation);
-								e2.originalMethod(!isObject ? translation : Object.assign({}, originalMethodArguments, {value: translation}));
-							});
-							return Promise.resolve({
-								shouldClear: true,
-								shouldRefocus: true
-							});
-						}
+					if (this.isTranslationEnabled(e.instance.props.channel.id) && e2.methodArguments[0].value) {
+						e2.stopOriginalMethodCall();
+						this.translateText(e2.methodArguments[0].value, messageTypes.SENT, (translation, input, output) => {
+							translation = !translation ? e2.methodArguments[0].value : (this.settings.general.sendOriginalMessage ? (translation + "\n\n> *" + e2.methodArguments[0].value.split("\n").join("*\n> *") + "*") : translation);
+							e2.originalMethod(Object.assign({}, e2.methodArguments[0], {value: translation}));
+						});
+						return Promise.resolve({
+							shouldClear: true,
+							shouldRefocus: true
+						});
 					}
 					return e2.callOriginalMethodAfterwards();
 				}}, {force: true, noCache: true});

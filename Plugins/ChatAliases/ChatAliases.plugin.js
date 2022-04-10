@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.5
+ * @version 2.3.6
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.3.5",
+			"version": "2.3.6",
 			"description": "Allows you to configure your own Aliases/Commands"
 		}
 	};
@@ -389,14 +389,13 @@ module.exports = (_ => {
 			
 			handleSubmit (e, e2) {
 				if (!this.settings.general.replaceBeforeSend || BDFDB.LibraryModules.SlowmodeUtils.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
-				let originalMethodArguments = e2.methodArguments[0];
-				let isObject = BDFDB.ObjectUtils.is(originalMethodArguments);
-				let textValue = isObject ? e2.methodArguments[0].value : e2.methodArguments[0];
-				let messageData = this.formatText(textValue);
+				let messageData = this.formatText(e2.methodArguments[0].value);
 				if (messageData) {
-					if (messageData.text != null && textValue != messageData.text) {
-						if (isObject) e2.methodArguments[0].value = messageData.text;
-						else e2.methodArguments[0] = messageData.text;
+					if (messageData.files.length > 0 && (BDFDB.DMUtils.isDMChannel(e.instance.props.channel.id) || BDFDB.UserUtils.can("ATTACH_FILES"))) {
+						for (let file of messageData.files) e2.methodArguments[0].uploads.push(new BDFDB.DiscordObjects.Upload({file: file, platform: 1}));
+					}
+					if (messageData.text != null && e2.methodArguments[0].value != messageData.text) {
+						e2.methodArguments[0].value = messageData.text;
 						e.instance.props.textValue = "";
 						if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.toRichValue("");
 						if (e.instance.state) {
@@ -404,11 +403,6 @@ module.exports = (_ => {
 							if (e.instance.state.richValue) e.instance.state.richValue = BDFDB.SlateUtils.toRichValue("");
 						}
 						BDFDB.ReactUtils.forceUpdate(e.instance);
-					}
-					if (messageData.files.length > 0 && (BDFDB.DMUtils.isDMChannel(e.instance.props.channel.id) || BDFDB.UserUtils.can("ATTACH_FILES"))) {
-						let reply = BDFDB.LibraryModules.MessageReplyStore.getPendingReply(e.instance.props.channel.id);
-						if (reply && !messageData.text) BDFDB.LibraryModules.UploadUtils.upload(e.instance.props.channel.id, messageData.files.shift(), "", false);
-						BDFDB.LibraryModules.UploadUtils.instantBatchUpload(e.instance.props.channel.id, messageData.files);
 					}
 				}
 			}

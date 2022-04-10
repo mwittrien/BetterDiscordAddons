@@ -132,15 +132,12 @@ module.exports = (_ => {
 
 			processChannelTextAreaForm (e) {
 				BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
-					let originalMethodArguments = e2.methodArguments[0];
-					let isObject = BDFDB.ObjectUtils.is(originalMethodArguments);
-					let textValue = isObject ? e2.methodArguments[0].value : e2.methodArguments[0];
-					if (textValue.length > maxMessageLength) {
+					if (e2.methodArguments[0].value.length > maxMessageLength) {
 						e2.stopOriginalMethodCall();
-						let messages = this.formatText(textValue).filter(n => n);
+						let messages = this.formatText(e2.methodArguments[0].value).filter(n => n);
 						for (let i in messages) BDFDB.TimeUtils.timeout(_ => {
 							let last = i >= messages.length-1;
-							e2.originalMethod(!isObject ? messages[i] : (last ? Object.assign({}, originalMethodArguments, {value: messages[i]}) : {stickers: [], uploads: [], value: messages[i]}));
+							e2.originalMethod(last ? Object.assign({}, e2.methodArguments[0], {value: messages[i]}) : {stickers: [], uploads: [], value: messages[i]});
 							if (i >= messages.length-1) BDFDB.NotificationUtils.toast(this.labels.toast_allsent, {type: "success"});
 						}, messageDelay * i * (messages > 4 ? 2 : 1));
 						return Promise.resolve({
