@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.1
+ * @version 1.8.2
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "FriendNotifications",
 			"author": "DevilBro",
-			"version": "1.8.1",
+			"version": "1.8.2",
 			"description": "Shows a Notification when a Friend or a User, you choose to observe, changes their Status"
-		},
-		"changeLog": {
-			"fixed": {
-				"Status Crash": "No longer crashes Discord when clicking on the status notification adn trying to open the DM of a User you don't share a DM with"
-			}
 		}
 	};
 
@@ -206,6 +201,8 @@ module.exports = (_ => {
 				timeLog = [];
 				lastTimes = {};
 				friendCounter = null;
+				
+				this.neverSyncData = true;
 
 				this.defaults = {
 					general: {
@@ -274,7 +271,11 @@ module.exports = (_ => {
 				}
 			}
 			
-			onStart () {				
+			onStart () {
+				// REMOVE 09.04.2022
+				let observed = BDFDB.DataUtils.load(this, "observed");
+				if (observed) BDFDB.DataUtils.save(observed, this, "observed");
+				
 				this.startInterval();
 
 				this.forceUpdateAll();
@@ -311,7 +312,7 @@ module.exports = (_ => {
 						for (let id in specificObserved) specificObserved[id][config] = notificationTypes[disabled ? "DISABLED" : notificationType].value;
 					}
 					observed[type] = specificObserved
-					BDFDB.DataUtils.save(observed, this, "observed", BDFDB.UserUtils.me.id);
+					BDFDB.DataUtils.save(observed, this, "observed");
 					this.SettingsUpdated = true;
 					BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 				};
@@ -430,7 +431,7 @@ module.exports = (_ => {
 									let data = observed[type][cardData.id] || Object.assign({}, defaultSettings);
 									data.disabled = !data.disabled;
 									observed[type][data.id] = data;
-									BDFDB.DataUtils.save(observed, this, "observed", BDFDB.UserUtils.me.id);
+									BDFDB.DataUtils.save(observed, this, "observed");
 									this.SettingsUpdated = true;
 									BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 								},
@@ -445,7 +446,7 @@ module.exports = (_ => {
 									}
 									for (let config in statuses) if (data[config] != notificationTypes.DISABLED.value) data[config] = batchType;
 									observed[type][data.id] = data;
-									BDFDB.DataUtils.save(observed, this, "observed", BDFDB.UserUtils.me.id);
+									BDFDB.DataUtils.save(observed, this, "observed");
 									this.SettingsUpdated = true;
 									BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 								}
@@ -465,14 +466,14 @@ module.exports = (_ => {
 							let data = observed[type][instance.props.cardId] || Object.assign({}, defaultSettings);
 							data[instance.props.settingId] = value;
 							observed[type][instance.props.cardId] = data;
-							BDFDB.DataUtils.save(observed, this, "observed", BDFDB.UserUtils.me.id);
+							BDFDB.DataUtils.save(observed, this, "observed");
 							this.SettingsUpdated = true;
 						},
 						noRemove: type == "friends",
 						onRemove: (e, instance) => {
 							let observed = this.getObservedData();
 							delete observed[type][instance.props.cardId];
-							BDFDB.DataUtils.save(observed, this, "observed", BDFDB.UserUtils.me.id);
+							BDFDB.DataUtils.save(observed, this, "observed");
 							BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 							this.SettingsUpdated = true;
 						}
@@ -577,7 +578,7 @@ module.exports = (_ => {
 												let user = /.+#[0-9]{4}/.test(userId) ? BDFDB.LibraryModules.UserStore.findByTag(userId.split("#").slice(0, -1).join("#"), userId.split("#").pop()) : BDFDB.LibraryModules.UserStore.getUser(userId);
 												if (user) {
 													observed.strangers[user.id || userId] = Object.assign({}, defaultSettings);
-													BDFDB.DataUtils.save(observed, this, "observed", BDFDB.UserUtils.me.id);
+													BDFDB.DataUtils.save(observed, this, "observed");
 													BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 													this.SettingsUpdated = true;
 												}
@@ -736,7 +737,7 @@ module.exports = (_ => {
 			}
 			
 			getObservedData () {
-				let observed = Object.assign({friends: {}, strangers: {}}, BDFDB.DataUtils.load(this, "observed", BDFDB.UserUtils.me.id));
+				let observed = Object.assign({friends: {}, strangers: {}}, BDFDB.DataUtils.load(this, "observed"));
 				let friendIds = BDFDB.LibraryModules.RelationshipStore.getFriendIDs();
 				
 				for (let id of friendIds) {
@@ -753,7 +754,7 @@ module.exports = (_ => {
 				
 				delete observed.friends[BDFDB.UserUtils.me.id];
 				delete observed.strangers[BDFDB.UserUtils.me.id];
-				BDFDB.DataUtils.save(observed, this, "observed", BDFDB.UserUtils.me.id);
+				BDFDB.DataUtils.save(observed, this, "observed");
 				
 				return observed;
 			}
@@ -841,6 +842,7 @@ module.exports = (_ => {
 							if (observedUsers[id].timelog == undefined || observedUsers[id].timelog) timeLog.unshift({
 								string: toastString,
 								avatar: avatar,
+								id: id,
 								name: name,
 								status: statusType,
 								mobile: status.mobile,
@@ -930,7 +932,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
 							autoFocus: true,
 							query: "",
-							onChange: (value, instance) => {
+							onChange: value => {
 								BDFDB.TimeUtils.clear(searchTimeout);
 								searchTimeout = BDFDB.TimeUtils.timeout(_ => {
 									let searchString = value.toUpperCase();
@@ -938,7 +940,7 @@ module.exports = (_ => {
 									BDFDB.ReactUtils.forceUpdate(timeLogList);
 								}, 1000);
 							},
-							onClear: instance => {
+							onClear: _ => {
 								timeLogList.props.entries = timeLog;
 								BDFDB.ReactUtils.forceUpdate(timeLogList);
 							}

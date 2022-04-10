@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.8
+ * @version 2.2.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,10 +19,15 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.2.8",
+			"version": "2.2.9",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
+		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
+		"changeLog": {
+			"added": {
+				"Plugin Config Sync": "Allows you to disable the synchronization of plugin config files between Discord Accounts"
+			}
+		}
 	};
 	
 	const Cache = {data: {}, modules: {}};
@@ -41,9 +46,14 @@ module.exports = (_ => {
 	
 	const Internal = Object.assign({}, BDFDB, {
 		patchPriority: 0,
+		forceSyncData: true,
 		settings: {},
 		defaults: {
 			general: {
+				shareData: {
+					value: true,
+					onChange: _ => Cache.data = {}
+				},
 				showToasts: {
 					value: true,
 					isDisabled: data => data.nativeValue,
@@ -973,13 +983,31 @@ module.exports = (_ => {
 	
 	const request = require("request"), fs = require("fs"), path = require("path");
 	
-	Internal.writeConfig = function (path, config) {
-		try {fs.writeFileSync(path, JSON.stringify(config, null, "	"));}
+	Internal.writeConfig = function (plugin, path, config) {
+		let sync = Internal.shouldSyncConfig(plugin);
+		let allData = {};
+		try {allData = JSON.parse(fs.readFileSync(path));}
+		catch (err) {allData = {};}
+		try {
+			BDFDB.ObjectUtils.deepAssign(allData, !sync ? (plugin.neverSyncData ? {[BDFDB.UserUtils.me.id]: config} : {all: config, [BDFDB.UserUtils.me.id]: config}) : {all: config});
+			fs.writeFileSync(path, JSON.stringify(allData, null, "	"));
+		}
 		catch (err) {}
 	};
-	Internal.readConfig = function (path) {
-		try {return JSON.parse(fs.readFileSync(path));}
+	Internal.readConfig = function (plugin, path) {
+		let sync = Internal.shouldSyncConfig(plugin);
+		try {
+			let config = JSON.parse(fs.readFileSync(path));
+			if (config && Object.keys(config).some(n => !(n == "all" || parseInt(n)))) {
+				try {fs.writeFileSync(path, JSON.stringify(!sync ? (plugin.neverSyncData ? {[BDFDB.UserUtils.me.id]: config} : {all: config, [BDFDB.UserUtils.me.id]: config}) : {all: config}, null, "	"));}
+				catch (err) {}
+			}
+			return config && config[sync ? "all" : BDFDB.UserUtils.me.id] || {};
+		}
 		catch (err) {return {};}
+	};
+	Internal.shouldSyncConfig = function (plugin) {
+		return plugin.neverSyncData !== undefined ? !plugin.neverSyncData : (plugin.forceSyncData || Internal.settings.general.shareData);
 	};
 	
 	BDFDB.DataUtils = {};
@@ -989,7 +1017,7 @@ module.exports = (_ => {
 		let fileName = pluginName == "BDFDB" ? "0BDFDB" : pluginName;
 		let configPath = path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".config.json");
 		
-		let config = Cache.data[pluginName] !== undefined ? Cache.data[pluginName] : (Internal.readConfig(configPath) || {});
+		let config = Cache.data[pluginName] !== undefined ? Cache.data[pluginName] : (Internal.readConfig(plugin, configPath) || {});
 		
 		if (key === undefined) config = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
 		else {
@@ -1009,7 +1037,7 @@ module.exports = (_ => {
 		else {
 			if (configIsObject) config = BDFDB.ObjectUtils.sort(config);
 			Cache.data[pluginName] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
-			Internal.writeConfig(configPath, config);
+			Internal.writeConfig(plugin, configPath, config);
 		}
 	};
 
@@ -1019,7 +1047,7 @@ module.exports = (_ => {
 		let fileName = pluginName == "BDFDB" ? "0BDFDB" : pluginName;
 		let configPath = path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".config.json");
 		
-		let config = Cache.data[pluginName] !== undefined ? Cache.data[pluginName] : (Internal.readConfig(configPath) || {});
+		let config = Cache.data[pluginName] !== undefined ? Cache.data[pluginName] : (Internal.readConfig(plugin, configPath) || {});
 		let configIsObject = BDFDB.ObjectUtils.is(config);
 		Cache.data[pluginName] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
 		
@@ -1036,7 +1064,7 @@ module.exports = (_ => {
 		let fileName = pluginName == "BDFDB" ? "0BDFDB" : pluginName;
 		let configPath = path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".config.json");
 		
-		let config = Cache.data[pluginName] !== undefined ? Cache.data[pluginName] : (Internal.readConfig(configPath) || {});
+		let config = Cache.data[pluginName] !== undefined ? Cache.data[pluginName] : (Internal.readConfig(plugin, configPath) || {});
 		let configIsObject = BDFDB.ObjectUtils.is(config);
 		
 		if (key === undefined || !configIsObject) config = {};
@@ -1053,7 +1081,7 @@ module.exports = (_ => {
 		else {
 			if (configIsObject) config = BDFDB.ObjectUtils.sort(config);
 			Cache.data[pluginName] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
-			Internal.writeConfig(configPath, config);
+			Internal.writeConfig(plugin, configPath, config);
 		}
 	};
 	BDFDB.DataUtils.get = function (plugin, key, id) {
@@ -3165,6 +3193,7 @@ module.exports = (_ => {
 			get: function (list, item) {
 				const user = Internal.LibraryModules.UserStore && Internal.LibraryModules.UserStore.getCurrentUser && Internal.LibraryModules.UserStore.getCurrentUser();
 				if (user && BDFDB.UserUtils._id != user.id) {
+					Cache.data = {};
 					document.body.setAttribute("data-current-user-id", user.id);
 					BDFDB.UserUtils._id = user.id;
 				}
@@ -3210,10 +3239,7 @@ module.exports = (_ => {
 			if (!BDFDB.DiscordConstants.Permissions[permission]) BDFDB.LogUtils.warn([permission, "not found in Permissions"]);
 			else {
 				let channel = Internal.LibraryModules.ChannelStore.getChannel(channelId);
-				if (channel) {
-					try {return Internal.LibraryModules.PermissionRoleUtils.can(BDFDB.DiscordConstants.Permissions[permission], id, channel) || Internal.LibraryModules.PermissionRoleUtils.can({permission: BDFDB.DiscordConstants.Permissions[permission], user: id, context: channel});}
-					catch (err) {}
-				}
+				if (channel) return Internal.LibraryModules.PermissionRoleUtils.can({permission: BDFDB.DiscordConstants.Permissions[permission], user: id, context: channel});
 			}
 			return false;
 		};
@@ -9041,7 +9067,8 @@ module.exports = (_ => {
 								value: Internal.settings.general[key],
 								nativeValue: nativeSetting,
 								disabled: disabled
-							}) : true) && (Internal.settings.general[key] || nativeSetting)
+							}) : true) && (Internal.settings.general[key] || nativeSetting),
+							onChange: typeof Internal.defaults.general[key].onChange == "function" ? Internal.defaults.general[key].onChange : (_ => {})
 						}));
 					}
 					settingsItems.push(BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SettingsItem, {
