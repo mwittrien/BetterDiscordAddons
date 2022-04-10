@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.9
+ * @version 2.3.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.2.9",
+			"version": "2.3.0",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
@@ -999,7 +999,8 @@ module.exports = (_ => {
 		try {
 			let config = JSON.parse(fs.readFileSync(path));
 			if (config && Object.keys(config).some(n => !(n == "all" || parseInt(n)))) {
-				try {fs.writeFileSync(path, JSON.stringify(!sync ? (plugin.neverSyncData ? {[BDFDB.UserUtils.me.id]: config} : {all: config, [BDFDB.UserUtils.me.id]: config}) : {all: config}, null, "	"));}
+				config = !sync ? (plugin.neverSyncData ? {[BDFDB.UserUtils.me.id]: config} : {all: config, [BDFDB.UserUtils.me.id]: config}) : {all: config};
+				try {fs.writeFileSync(path, JSON.stringify(config, null, "	"));}
 				catch (err) {}
 			}
 			return config && config[sync ? "all" : BDFDB.UserUtils.me.id] || {};
