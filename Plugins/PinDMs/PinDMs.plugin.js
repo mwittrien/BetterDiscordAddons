@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.0
+ * @version 1.9.1
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "PinDMs",
 			"author": "DevilBro",
-			"version": "1.9.0",
+			"version": "1.9.1",
 			"description": "Allows you to pin DMs, making them appear at the top of your DMs/ServerList"
+		},
+		"changeLog": {
+			"added": {
+				"Predefined Group for Bots": ""
+			}
 		}
 	};
 
@@ -78,6 +83,7 @@ module.exports = (_ => {
 					preCategories: {
 						friends:			{value: {enabled: false, collapsed: false},		description: "FRIENDS"},
 						blocked:			{value: {enabled: false, collapsed: false},		description: "BLOCKED"},
+						bots:				{value: {enabled: false, collapsed: false},		description: "Bots"},
 						groups:				{value: {enabled: false, collapsed: false},		description: "GROUPS"}
 					}
 				};
@@ -212,7 +218,7 @@ module.exports = (_ => {
 							title: "Add predefined Category for:",
 							children: Object.keys(this.defaults.preCategories).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 								type: "Switch",
-								label: BDFDB.LanguageUtils.LanguageStrings[this.defaults.preCategories[key].description],
+								label: BDFDB.LanguageUtils.LanguageStringsCheck[this.defaults.preCategories[key].description] ? BDFDB.LanguageUtils.LanguageStrings[this.defaults.preCategories[key].description] : this.defaults.preCategories[key].description,
 								value: this.settings.preCategories[key].enabled,
 								onChange: value => {
 									this.settings.preCategories[key].enabled = value;
@@ -782,6 +788,7 @@ module.exports = (_ => {
 				if (!channel) return "";
 				else if (this.settings.preCategories.friends.enabled && channel.isDM() && BDFDB.LibraryModules.RelationshipStore.isFriend(channel.recipients[0])) return "friends";
 				else if (this.settings.preCategories.blocked.enabled && channel.isDM() && BDFDB.LibraryModules.RelationshipStore.isBlocked(channel.recipients[0])) return "blocked";
+				else if (this.settings.preCategories.bots.enabled && channel.isDM() && (BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]) || {}).bot) return "bots";
 				else if (this.settings.preCategories.groups.enabled && channel.isGroupDM()) return "groups";
 				return "";
 			}
@@ -815,7 +822,7 @@ module.exports = (_ => {
 						color: null,
 						dms: predefinedDMs[type],
 						id: type,
-						name: BDFDB.LanguageUtils.LanguageStrings[this.defaults.preCategories[type].description]
+						name: BDFDB.LanguageUtils.LanguageStringsCheck[this.defaults.preCategories[type].description] ? BDFDB.LanguageUtils.LanguageStrings[this.defaults.preCategories[type].description] : this.defaults.preCategories[type].description
 					});
 				}
 				return (reverse ? sorted.reverse() : sorted).filter(n => n);
