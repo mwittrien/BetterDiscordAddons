@@ -2,7 +2,7 @@
  * @name ClickableMentions
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.2
+ * @version 1.0.3
  * @description Allows you to open a User Popout by clicking a Mention in your Message Input
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ClickableMentions",
 			"author": "DevilBro",
-			"version": "1.0.2",
+			"version": "1.0.3",
 			"description": "Allows you to open a User Popout by clicking a Mention in your Message Input"
 		}
 	};
@@ -83,21 +83,21 @@ module.exports = (_ => {
 				if (e.instance.props.id && BDFDB.LibraryModules.UserStore.getUser(e.instance.props.id)) {
 					if (typeof e.returnvalue.props.children == "function") {
 						let childrenRender = e.returnvalue.props.children;
-						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
-							return this.injectUserPopoutContainer(e.instance.props, childrenRender(...args))
-						}, "", this);
+						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => this.injectUserPopoutContainer(e.instance.props, childrenRender(...args)), "", this);
 					}
 					else e.returnvalue = this.injectUserPopoutContainer(e.instance.props, e.returnvalue.props.children);
 				}
 			}
 			
 			injectUserPopoutContainer (props, children) {
+				children.props.className = BDFDB.DOMUtils.formatClassName(children.props.className, BDFDB.disCN.cursorpointer);
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserPopoutContainer, {
 					position: BDFDB.LibraryComponents.PopoutContainer.Positions.TOP,
 					align: BDFDB.LibraryComponents.PopoutContainer.Align.CENTER,
+					killEvent: true,
 					userId: props.id,
-					channelId: props.channel && props.channel.id,
-					guildId: props.channel && props.channel.guild_id,
+					channelId: props.channel && props.channel.id || props.channelId,
+					guildId: props.channel && props.channel.guild_id || props.guildId,
 					children: children
 				});
 			}
