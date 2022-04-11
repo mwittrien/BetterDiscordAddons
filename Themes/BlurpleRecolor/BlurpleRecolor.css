@@ -30,6 +30,15 @@
 	--focus-primary: rgb(var(--linkcolor));
 	--control-brand-foreground: rgb(var(--accentcolor)) !important;
 	--control-brand-foreground-new: rgb(var(--accentcolor)) !important;
+	--button-outline-brand-text: rgb(var(--accentcolor)) !important;
+	--button-outline-brand-text-hover: rgb(var(--accentcolor)) !important;
+	--button-outline-brand-text-active: rgb(var(--accentcolor)) !important;
+	--button-outline-brand-background: transparent !important;
+	--button-outline-brand-background-hover: transparent !important;
+	--button-outline-brand-background-active: rgba(var(--accentcolor),.1) !important;
+	--button-outline-brand-border: rgba(var(--accentcolor),.1) !important;
+	--button-outline-brand-border-hover: rgba(var(--accentcolor),.6) !important;
+	--button-outline-brand-border-active: rgb(var(--accentcolor)) !important;
 	--brand-experiment-100: #fdfdfd !important;
 	--brand-experiment-130: #f2f2f2 !important;
 	--brand-experiment-160: #ebebeb !important;
@@ -75,6 +84,9 @@
 	--brand-experiment-85a: rgba(var(--accentcolor),.85) !important;
 	--brand-experiment-90a: rgba(var(--accentcolor),.9) !important;
 	--brand-experiment-95a: rgba(var(--accentcolor),.95) !important;
+	
+	--search-popout-date-picker-hint-value-background: var(--brand-experiment-90a);
+	--search-popout-date-picker-hint-value-background-hover: var(--brand-experiment-430);
 }
 
 
@@ -2118,13 +2130,6 @@ a.metadataName-1KMZtB {
 #app-mount .calendarPicker-sDhzdi .react-datepicker__day.react-datepicker__day--selected::after {
 	background-color: rgb(var(--accentcolor));
 }
-															/* datepicker			hintvalue							*/
-#app-mount .datePicker-70cO23 .datePickerHint-17MnA8 .hintValue-1x-flY {
-	background-color: rgb(var(--accentcolor));
-}
-#app-mount .datePicker-70cO23 .datePickerHint-17MnA8 .hintValue-1x-flY:hover {
-	background: var(--accentcolor-hover);
-}
 
 
 /* ~~~~		12.		GENERAL							~~~~ */
@@ -2204,10 +2209,14 @@ a.metadataName-1KMZtB {
 	color: rgb(var(--accentcolor));
 }
 
+#app-mount .lookOutlined-3yKVGo.colorBrand-I6CyqQ:hover,
+#app-mount .lookOutlined-3yKVGo.colorBrandNew-2-gGsS:hover,
 #app-mount .lookOutlined-3yKVGo.hoverBrand-9W5Bs0.hasHover-26V98q:hover,
 #app-mount .lookOutlined-3yKVGo.hoverBrandNew-2zxGm3.hasHover-26V98q:hover {
 	border-color: rgba(var(--accentcolor), 0.6);
 }
+#app-mount .lookOutlined-3yKVGo.colorBrand-I6CyqQ:active,
+#app-mount .lookOutlined-3yKVGo.colorBrandNew-2-gGsS:active,
 #app-mount .lookOutlined-3yKVGo.hoverBrand-9W5Bs0.hasHover-26V98q:active,
 #app-mount .lookOutlined-3yKVGo.hoverBrandNew-2zxGm3.hasHover-26V98q:active {
 	background-color: rgba(var(--accentcolor), 0.1);
@@ -2215,7 +2224,7 @@ a.metadataName-1KMZtB {
 }
 #app-mount .lookOutlined-3yKVGo.colorBrand-I6CyqQ,
 #app-mount .lookOutlined-3yKVGo.colorBrand-I6CyqQ:disabled
-#app-mount .lookOutlined-3yKVGo.colorBrandNew-2-gGsS,,
+#app-mount .lookOutlined-3yKVGo.colorBrandNew-2-gGsS,
 #app-mount .lookOutlined-3yKVGo.colorBrandNew-2-gGsS:disabled {
 	border-color: rgba(var(--accentcolor), 0.1);
 	color: rgb(var(--accentcolor));
@@ -2550,6 +2559,15 @@ a.metadataName-1KMZtB {
 }
 .bd-server-card.bd-server-card-pinned::after {
 	background: var(--bd-blue);
+}
+
+#app-mount .bd-addon-error {
+	background-color: rgba(var(--transparencycolor), 0.2);
+	border-color: rgba(var(--transparencycolor), 0.2);
+}
+#app-mount .bd-addon-error.expanded,
+#app-mount .bd-addon-error:hover {
+	background-color: rgba(var(--transparencycolor), 0.3);
 }
 
 .bd-modal-wrapper .footer button {

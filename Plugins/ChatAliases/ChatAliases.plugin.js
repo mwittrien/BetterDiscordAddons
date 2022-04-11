@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.6
+ * @version 2.3.7
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.3.6",
+			"version": "2.3.7",
 			"description": "Allows you to configure your own Aliases/Commands"
+		},
+		"changeLog": {
+			"fixed": {
+				"Autocomplete": "Works again"
+			}
 		}
 	};
 
@@ -117,63 +122,63 @@ module.exports = (_ => {
 				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) {
 					BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS[AUTOCOMPLETE_ALIAS_OPTION] = {
 						autoSelect: true,
-						matches: (channel, guild, currentWord, _, config) => {
-							if (currentWord.length >= this.settings.amounts.minAliasLength) for (let word in aliases) {
+						matches: (channel, guild, query, _, editor) => {
+							if (query.length >= this.settings.amounts.minAliasLength) for (let word in aliases) {
 								let aliasData = aliases[word];
 								if (!aliasData.regex && aliasData.autoc) {
 									if (aliasData.exact) {
-										if (aliasData.case && word.indexOf(currentWord) == 0) return true;
-										else if (!aliasData.case && word.toLowerCase().indexOf(currentWord.toLowerCase()) == 0) return true;
+										if (aliasData.case && word.indexOf(query) == 0) return true;
+										else if (!aliasData.case && word.toLowerCase().indexOf(query.toLowerCase()) == 0) return true;
 									}
 									else {
-										if (aliasData.case && word.indexOf(currentWord) > -1) return true;
-										else if (!aliasData.case && word.toLowerCase().indexOf(currentWord.toLowerCase()) > -1) return true;
+										if (aliasData.case && word.indexOf(query) > -1) return true;
+										else if (!aliasData.case && word.toLowerCase().indexOf(query.toLowerCase()) > -1) return true;
 									}
 								}
 							}
 							return false;
 						},
-						queryResults: (channel, guild, currentWord, config) => {
-							if (currentWord == commandSentinel) return;
+						queryResults: (channel, guild, query, editor) => {
+							if (query == commandSentinel) return;
 							let matches = [];
 							for (let word in aliases) {
 								let aliasData = Object.assign({word}, aliases[word]);
 								if (!aliasData.regex && aliasData.autoc) {
 									if (aliasData.exact) {
-										if (aliasData.case && word.indexOf(currentWord) == 0) matches.push(aliasData);
-										else if (!aliasData.case && word.toLowerCase().indexOf(currentWord.toLowerCase()) == 0) matches.push(aliasData);
+										if (aliasData.case && word.indexOf(query) == 0) matches.push(aliasData);
+										else if (!aliasData.case && word.toLowerCase().indexOf(query.toLowerCase()) == 0) matches.push(aliasData);
 									}
 									else {
-										if (aliasData.case && word.indexOf(currentWord) > -1) matches.push(aliasData);
-										else if (!aliasData.case && word.toLowerCase().indexOf(currentWord.toLowerCase()) > -1) matches.push(aliasData);
+										if (aliasData.case && word.indexOf(query) > -1) matches.push(aliasData);
+										else if (!aliasData.case && word.toLowerCase().indexOf(query.toLowerCase()) > -1) matches.push(aliasData);
 									}
 								}
 							}
 							if (matches.length) return {results: {aliases: matches}};
 						},
-						renderResults: (results, currentSelected, channel, guild, currenWord, config, setSelected, chooseSelected) => {
-							return results && results.aliases && [
+						renderResults: data => {
+							return data && data.results && data.results.aliases && [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteItems.Title, {
 									title: [
 										"Aliases: ",
 										BDFDB.ReactUtils.createElement("strong", {
-											children: currenWord
+											children: data.query
 										})
 									]
 								}),
-								results.aliases.map((aliasData, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteItems.Generic, {
-									onClick: chooseSelected,
-									onHover: setSelected,
+								data.results.aliases.map((aliasData, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteItems.Generic, {
+									onClick: data.onClick,
+									onHover: data.onHover,
 									index: i,
-									selected: currentSelected === i,
+									selected: data.selectedIndex === i,
 									alias: aliasData,
 									text: aliasData.word,
 									description: BDFDB.StringUtils.insertNRST(aliasData.replace)
 								}))
 							].flat(10).filter(n => n);
 						},
-						onSelect: (results, index, _, config) => {
-							config.insertText(results.aliases[index].file ? results.aliases[index].word : BDFDB.StringUtils.insertNRST(results.aliases[index].replace));
+						onSelect: (results, index, _, editor) => {
+							editor.insertText(results.aliases[index].file ? results.aliases[index].word : BDFDB.StringUtils.insertNRST(results.aliases[index].replace));
 							return {};
 						}
 					};

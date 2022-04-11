@@ -33,6 +33,7 @@
 	--text-positive: rgb(var(--successcolor));
 	--text-warning: rgb(var(--warningcolor));
 	--text-danger: rgb(var(--dangercolor));
+	
 	--info-positive-background: rgba(var(--successcolor),.1);
 	--info-positive-foreground: rgb(var(--successcolor));
 	--info-positive-text: #fff;
@@ -42,21 +43,85 @@
 	--info-danger-background: rgba(var(--dangercolor),.1);
 	--info-danger-foreground: rgb(var(--dangercolor));
 	--info-danger-text: #fff;
+	
+	--status-positive: rgb(var(--successcolor));
 	--status-positive-background: rgb(var(--successcolor));
 	--status-positive-text: #fff;
+	--status-warning: rgb(var(--warningcolor));
 	--status-warning-background: rgb(var(--warningcolor));
 	--status-warning-text: #fff;
+	--status-danger: rgb(var(--dangercolor));
 	--status-danger-background: rgb(var(--dangercolor));
 	--status-danger-text: #fff;
+	
+	--button-positive-background: rgab(var(--successcolor),.8);
+	--button-positive-background-hover: rgba(var(--successcolor),.9);
+	--button-positive-background-active: rgb(var(--successcolor));
+	--button-positive-background-disabled: rgba(var(--successcolor),.2);
+	--button-warning-background: rgab(var(--warningcolor),.8);
+	--button-warning-background-hover: rgba(var(--warningcolor),.9);
+	--button-warning-background-active: rgb(var(--warningcolor));
+	--button-warning-background-disabled: rgba(var(--warningcolor),.2);
+	--button-danger-background: rgab(var(--dangercolor),.8);
+	--button-danger-background-hover: rgba(var(--dangercolor),.9);
+	--button-danger-background-active: rgb(var(--dangercolor));
+	--button-danger-background-disabled: rgba(var(--dangercolor),.2);
+	--button-secondary-background: rgb(var(--textdarkest));
+	--button-secondary-background-hover: rgb(var(--textdarker));
+	--button-secondary-background-active: rgb(var(--textdark));
+	--button-secondary-background-disabled: rgb(var(--textdarkest));
+
+	--button-outline-positive-text: rgb(var(--successcolor)) !important;
+	--button-outline-positive-text-hover: rgb(var(--successcolor)) !important;
+	--button-outline-positive-text-active: rgb(var(--successcolor)) !important;
+	--button-outline-positive-background: transparent !important;
+	--button-outline-positive-background-hover: transparent !important;
+	--button-outline-positive-background-active: rgba(var(--successcolor),.1) !important;
+	--button-outline-positive-border: rgba(var(--successcolor),.1) !important;
+	--button-outline-positive-border-hover: rgba(var(--successcolor),.6) !important;
+	--button-outline-positive-border-active: rgb(var(--successcolor)) !important;
+	
+	--button-outline-warning-text: rgb(var(--warningcolor)) !important;
+	--button-outline-warning-text-hover: rgb(var(--warningcolor)) !important;
+	--button-outline-warning-text-active: rgb(var(--warningcolor)) !important;
+	--button-outline-warning-background: transparent !important;
+	--button-outline-warning-background-hover: transparent !important;
+	--button-outline-warning-background-active: rgba(var(--warningcolor),.1) !important;
+	--button-outline-warning-border: rgba(var(--warningcolor),.1) !important;
+	--button-outline-warning-border-hover: rgba(var(--warningcolor),.6) !important;
+	--button-outline-warning-border-active: rgb(var(--warningcolor)) !important;
+	
+	--button-outline-danger-text: rgb(var(--dangercolor)) !important;
+	--button-outline-danger-text-hover: rgb(var(--dangercolor)) !important;
+	--button-outline-danger-text-active: rgb(var(--dangercolor)) !important;
+	--button-outline-danger-background: transparent !important;
+	--button-outline-danger-background-hover: transparent !important;
+	--button-outline-danger-background-active: rgba(var(--dangercolor),.1) !important;
+	--button-outline-danger-border: rgba(var(--dangercolor),.1) !important;
+	--button-outline-danger-border-hover: rgba(var(--dangercolor),.6) !important;
+	--button-outline-danger-border-active: rgb(var(--dangercolor)) !important;
+	
+	--button-outline-primary-text: rgb(var(--textbrightest)) !important;
+	--button-outline-primary-text-hover: rgb(var(--textbrightest)) !important;
+	--button-outline-primary-text-active: rgb(var(--textbrightest)) !important;
+	--button-outline-primary-background: transparent !important;
+	--button-outline-primary-background-hover: transparent !important;
+	--button-outline-primary-background-active: rgba(var(--textbrightest),.1) !important;
+	--button-outline-primary-border: rgba(var(--textbrightest),.1) !important;
+	--button-outline-primary-border-hover: rgba(var(--textbrightest),.6) !important;
+	--button-outline-primary-border-active: rgb(var(--textbrightest)) !important;
+	
 	--header-primary: rgb(var(--textbrightest));
 	--header-secondary: rgb(var(--textbright));
 	--text-normal: rgb(var(--textbrighter));
 	--text-muted: rgb(var(--textdarker));
 	--channels-default: rgb(var(--textdark));
+	
 	--interactive-normal: rgb(var(--textbright));
 	--interactive-hover: rgb(var(--textbrighter));
 	--interactive-active: rgb(var(--textbrightest));
 	--interactive-muted: rgb(var(--textdarkest));
+	
 	--background-primary: rgb(var(--backgroundprimary));
 	--background-secondary: rgb(var(--backgroundsecondary));
 	--background-secondary-alt: rgb(var(--backgroundsecondaryalt));
@@ -65,31 +130,58 @@
 	--background-floating: rgb(var(--backgroundfloating));
 	--background-mobile-primary: rgb(var(--backgroundprimary));
 	--background-mobile-secondary: rgb(var(--backgroundsecondary));
+	
 	--background-modifier-hover: rgba(var(--backgroundaccent),.3);
 	--background-modifier-active: rgba(var(--backgroundaccent),.4);
 	--background-modifier-selected: rgba(var(--backgroundaccent),.6);
 	--background-modifier-accent: rgba(var(--textdark),.1);
+	
 	--background-mentioned: rgba(var(--mentioncolor, --warningcolor),.05);
 	--background-mentioned-hover: rgba(var(--mentioncolor, --warningcolor),.08);
 	--background-mentioned-accent: rgb(var(--mentioncolor, --warningcolor));
+	
 	--background-message-hover: rgba(var(--backgroundfloating),.15);
+	--background-message-automod: rgba(var(--dangercolor),.05);
+	--background-message-automod-hover: rgba(var(--dangercolor),.1);
+	
 	--scrollbar-thin-thumb: rgb(var(--backgroundtertiary));
 	--scrollbar-thin-track: transparent;
 	--scrollbar-auto-thumb: rgb(var(--backgroundtertiary));
 	--scrollbar-auto-track: rgb(var(--backgroundsecondary));
 	--scrollbar-auto-scrollbar-color-thumb: rgb(var(--backgroundtertiary));
 	--scrollbar-auto-scrollbar-color-track: rgb(var(--backgroundsecondary));
+	
 	--elevation-stroke: 0 0 0 1px rgba(6,6,7,.08);
 	--elevation-low: 0 1px 0 rgba(6,6,7,.1), 0 1.5px 0 rgba(6,6,7,.25), 0 2px 0 rgba(6,6,7,.025);
 	--elevation-medium: 0 4px 4px rgba(0,0,0,.08);
 	--elevation-high: 0 8px 16px rgba(0,0,0,.16);
+	
 	--logo-primary: rgb(var(--accentcolor));
+	
 	--focus-primary: rgb(var(--linkcolor));
+	
 	--guild-header-text-shadow: 0 1px 1px rgba(var(--backgroundfloating),.5);
+	
 	--channeltextarea-background: rgba(var(--backgroundaccent),.8);
+	
 	--input-background: rgba(0,0,0,.1);
+	
 	--activity-card-background: rgb(var(--backgroundtertiary));
+	
 	--textbox-markdown-syntax: rgb(var(--textdark));
+	
+	--search-popout-option-fade: linear-gradient(90deg,transparent,var(--background-floating) 80%);
+	--search-popout-option-fade-hover: linear-gradient(90deg,transparent,var(--background-primary) 50%);
+	--search-popout-option-user-nickname: var(--text-normal);
+	--search-popout-option-user-username: var(--text-muted);
+	--search-popout-option-filter-text: var(--text-muted);
+	--search-popout-option-non-text-color: var(--text-normal);
+	--search-popout-option-filter-color: var(--text-normal);
+	--search-popout-option-answer-color: var(--text-normal);
+	--search-popout-date-picker-border: 1px solid hsla(214,calc(var(--saturation-factor, 1)*9.1%),15.1%,0.3);
+	--search-popout-date-picker-hint-text: var(--text-normal);
+	--search-popout-date-picker-hint-value-text: #fff;
+	
 	--deprecated-card-bg: rgba(var(--backgroundtertiary),.6);
 	--deprecated-card-editable-bg: rgba(var(--backgroundtertiary),.3);
 	--deprecated-store-bg: rgb(var(--backgroundprimary));
@@ -100,6 +192,7 @@
 	--deprecated-text-input-border-hover: #040405;
 	--deprecated-text-input-border-disabled: #202225;
 	--deprecated-text-input-prefix: rgb(var(--textbrighter));
+	
 	--font-primary: var(--font) !important;
 	--font-display: var(--font) !important;
 }
@@ -424,10 +517,12 @@ html .iconBadge-2wi9r4 {
 	color: var(--background-accent);
 }
 
+#app-mount .lookOutlined-3yKVGo.colorPrimary-2AuQVo:hover,
 #app-mount .lookOutlined-3yKVGo.hoverPrimary-2hqNIm.hasHover-26V98q:hover {
 	border-color: rgba(var(--textbrightest), .6);
 }
-#app-mount .lookOutlined-3yKVGo.hoverPrimary-2hqNIm.hasHover-26V98q:hover {
+#app-mount .lookOutlined-3yKVGo.colorPrimary-2AuQVo:active,
+#app-mount .lookOutlined-3yKVGo.hoverPrimary-2hqNIm.hasHover-26V98q:active {
 	background-color: rgba(var(--textbrightest), .1);
 	border-color: var(--header-primary);
 }
@@ -487,10 +582,12 @@ html .iconBadge-2wi9r4 {
 	color: rgba(var(--textbrightest),.1);
 }
 
+#app-mount .lookOutlined-3yKVGo.colorTransparent-13Bvvi:hover,
 #app-mount .lookOutlined-3yKVGo.hoverTransparent-1F6BzX.hasHover-26V98q:hover {
 	background-color: rgba(var(--textbrighter),.1);
 	border-color: var(--interactive-hover);
 }
+#app-mount .lookOutlined-3yKVGo.colorTransparent-13Bvvi:active,
 #app-mount .lookOutlined-3yKVGo.hoverTransparent-1F6BzX.hasHover-26V98q:active {
 	background-color: rgba(var(--textbrightest),.1);
 	border-color: var(--header-primary);
@@ -3316,93 +3413,21 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 /* ----		11.3.	SEARCHPOPOUT					---- */
 
-.DraftEditor-editorContainer {
-	background-color: transparent;
-	border-left: .1px solid transparent;
-}
-.public-DraftEditorPlaceholder-root {
-	color: var(--channels-default);
-}
-.public-DraftEditorPlaceholder-hasFocus {
-	color: var(--header-secondary);
-}
 #app-mount .searchAnswer-23w-CH,
 #app-mount .searchFilter-2UfsDk {
 	background-color: var(--background-primary);
 	color: var(--header-primary);
 }
 
-#app-mount .container-2McqkF {
+.option-ayUoaq:hover {
 	background-color: var(--background-primary);
-}
-#app-mount .queryContainer-ZunrLZ {
-	border-bottom-color: rgba(var(--backgroundtertiary),.3);
-	color: var(--header-secondary);
-}
-#app-mount .queryContainer-ZunrLZ strong {
-	color: var(--header-primary);
-}
-#app-mount .focused-2FU0YH {
-	background-color: var(--background-tertiary);
-}
-#app-mount .resultsGroup-1BPR25::before {
-	border-top: 1px solid rgba(var(--backgroundtertiary),.3);
-}
-#app-mount .resultsGroup-1BPR25 .header-3A13BX,
-#app-mount .resultsGroup-1BPR25 .plusIcon-2V7coV,
-#app-mount .resultsGroup-1BPR25 .searchClearHistory-2Be-92,
-#app-mount .resultsGroup-1BPR25 .searchLearnMore-7__o_n a {
-	color: var(--text-normal);
-}
-#app-mount .option-ayUoaq::after {
-	background: linear-gradient(90deg, transparent,var(--background-primary) 80%);
-}
-#app-mount .option-ayUoaq:hover,
-#app-mount .option-ayUoaq[aria-selected=true],
-#app-mount .option-ayUoaq.selected-rZcOL- {
-	background-color: var(--background-tertiary);
-}
-#app-mount .option-ayUoaq:hover::after,
-#app-mount .option-ayUoaq[aria-selected=true]::after,
-#app-mount .option-ayUoaq.selected-rZcOL-::after {
-	background: linear-gradient(90deg, transparent, var(--background-tertiary) 50%);
-}
-#app-mount .option-ayUoaq:hover .plusIcon-2V7coV,
-#app-mount .option-ayUoaq[aria-selected=true] .plusIcon-2V7coV,
-#app-mount .option-ayUoaq.selected-rZcOL- .plusIcon-2V7coV {
-	color: var(--header-primary);
-	opacity: 1;
-}
-#app-mount .option-ayUoaq .answer-2fBfuP,
-#app-mount .option-ayUoaq .nonText-3_4gtu,
-#app-mount .option-ayUoaq strong {
-	color: var(--text-normal);
-}
-#app-mount .option-ayUoaq .filter-5YbOzJ {
-	color: var(--text-muted);
-}
-#app-mount .option-ayUoaq.user-23VtPS .displayedNick-2dDbfG {
-	color: var(--text-normal);
-}
-#app-mount .option-ayUoaq.user-23VtPS .displayUsername-14aOpK {
-	color: var(--interactive-muted);
-}
-#app-mount .searchOption-351dTI .filter-5YbOzJ {
-	color: var(--text-normal);
-}
-#app-mount .searchOption-351dTI .answer-2fBfuP {
-	color: var(--text-muted);
-}
-#app-mount .searchResultChannelCategory-3cL8uG,
-#app-mount .searchResultChannelIcon-1Il1Qo {
-	color: var(--text-muted);
 }
 
 #app-mount .calendarPicker-sDhzdi .react-datepicker {
-	background-color: var(--background-primary);
+	background: transparent;
 }
 #app-mount .calendarPicker-sDhzdi .react-datepicker__header {
-	background-color: var(--background-primary);
+	background-color: var(--background-floating);
 	border-color: rgba(var(--backgroundfloating),.2);
 }
 #app-mount .calendarPicker-sDhzdi .react-datepicker__navigation {
@@ -3462,24 +3487,18 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .calendarPicker-sDhzdi .react-datepicker__day:hover {
 	color: var(--header-primary);
 }
+#app-mount .calendarPicker-sDhzdi .react-datepicker__day {
+	background-color: var(--background-secondary);
+}
 #app-mount .calendarPicker-sDhzdi .react-datepicker__day.react-datepicker__day--disabled,
 #app-mount .calendarPicker-sDhzdi .react-datepicker__day.react-datepicker__day--disabled:hover {
-	background-color: var(--background-secondary);
+	background-color: var(--background-floating);
 	color: rgba(var(--textbrightest),.3);
+	cursor: no-drop;
 }
-#app-mount .calendarPicker-sDhzdi .react-datepicker__day--disabled,
 #app-mount .calendarPicker-sDhzdi .react-datepicker__day--outside-month {
-	background-color: var(--background-secondary);
+	background-color: var(--background-tertiary);
 	color: rgba(var(--textbrightest),.3);
-}
-#app-mount .datePicker-70cO23 .datePickerHint-17MnA8 {
-	border-top: 1px solid rgba(var(--backgroundtertiary),.3);
-}
-#app-mount .datePicker-70cO23 .datePickerHint-17MnA8 .hint-3D5yHh {
-	color: var(--text-normal);
-}
-#app-mount .datePicker-70cO23 .datePickerHint-17MnA8 .hintValue-1x-flY {
-	color: var(--header-primary);
 }
 
 /* ----		11.4.	EVERYONEMENTION					---- */

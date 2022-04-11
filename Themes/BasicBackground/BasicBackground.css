@@ -63,10 +63,13 @@
 	--info-danger-background: rgba(var(--dangercolor),.1);
 	--info-danger-foreground: rgb(var(--dangercolor));
 	--info-danger-text: #fff;
+	--status-positive: rgb(var(--successcolor));
 	--status-positive-background: rgb(var(--successcolor));
 	--status-positive-text: #fff;
+	--status-warning: rgb(var(--warningcolor));
 	--status-warning-background: rgb(var(--warningcolor));
 	--status-warning-text: #fff;
+	--status-danger: rgb(var(--dangercolor));
 	--status-danger-background: rgb(var(--dangercolor));
 	--status-danger-text: #fff;
 	--header-primary: rgb(var(--textbrightest));
@@ -88,6 +91,8 @@
 	--background-mobile-primary: rgba(var(--transparencycolor), .2);
 	--background-mobile-secondary: rgba(var(--transparencycolor), .3);
 	--background-modifier-accent: rgba(var(--textbrightest),.1);
+	--background-message-automod: rgba(var(--dangercolor),.05);
+	--background-message-automod-hover: rgba(var(--dangercolor),.1);
 	--elevation-low: 0 1px 5px 0 rgba(var(--transparencycolor), .3);
 	--elevation-high: 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 	--font-primary: var(--font) !important;
@@ -5072,6 +5077,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 #app-mount .calendarPicker-sDhzdi .react-datepicker__day--outside-month {
 	color: var(--text-muted);
+	cursor: no-drop;
 }
 #app-mount .datePicker-70cO23 .datePickerHint-17MnA8 {
 	margin: 0;
