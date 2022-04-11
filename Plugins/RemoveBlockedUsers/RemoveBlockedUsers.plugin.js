@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.3
+ * @version 1.4.5
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedUsers",
 			"author": "DevilBro",
-			"version": "1.4.3",
+			"version": "1.4.5",
 			"description": "Removes blocked Messages/Users"
+		},
+		"changeLog": {
+			"fixed": {
+				"Offline List": "Sometimes clickling a User in the Offline List would cause others to vanish, fixed"
+			},
+			"improved": {
+				"Activity List": "No longer shows blocked ppl in the Activity List (wtf Discord?)"
+			}
 		}
 	};
 
@@ -80,6 +88,7 @@ module.exports = (_ => {
 						memberList:			{value: true, 	description: "Members in List"},
 						voiceList:			{value: true, 	description: "Members in Voice List"},
 						voiceChat:			{value: true, 	description: "Members in Voice Chat"},
+						activity:			{value: true, 	description: "Activity Page"},
 						channelList:		{value: true, 	description: "Channel/Group List"},
 						recentDms:			{value: true, 	description: "Group Notifications"}
 					}
@@ -89,8 +98,8 @@ module.exports = (_ => {
 					before: {
 						Message: "default",
 						ReactorsComponent: "render",
-						ChannelMembers: "render",
 						PrivateChannelRecipients: "default",
+						NowPlayingItem: "default",
 						VoiceUsers: "render",
 						PrivateChannel: "render",
 						PrivateChannelCallParticipants: "render",
@@ -102,7 +111,9 @@ module.exports = (_ => {
 						RecentMentions: "default",
 						Messages: "type",
 						Reactions: "render",
+						ConnectedChannelMembers: "default",
 						MemberListItem: "render",
+						NowPlayingItem: "default",
 						VoiceUser: "render",
 						DirectMessage: "render",
 						PrivateChannel: "render",
@@ -341,58 +352,52 @@ module.exports = (_ => {
 			processReactorsComponent (e) {
 				if (this.settings.places.reactions && BDFDB.ArrayUtils.is(e.instance.props.reactors)) e.instance.props.reactors = e.instance.props.reactors.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id));
 			}
-		
-			processChannelMembers (e) {
-				if (this.settings.places.memberList) {
-					let hiddenRows = 0, newRows = new Array(e.instance.props.rows.length), newGroups = new Array(e.instance.props.groups.length);
-					e.instance.props.groups = [].concat(e.instance.props.groups);
-					e.instance.props.rows = [].concat(e.instance.props.rows);
-					for (let i in e.instance.props.rows) {
-						let row = e.instance.props.rows[i];
-						if (!row || row.type != "MEMBER") newRows[i] = row;
-						else if (!row.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(row.user.id)) newRows[i] = row;
-						else {
-							hiddenRows++;
-							let found = false, rowIndex = i - 1;
-							while (!found && rowIndex > -1) {
-								if (newRows[rowIndex] && newRows[rowIndex].type == "GROUP") {
-									found = true;
-									let groupIndex = e.instance.props.groups.findIndex(r => r.id == newRows[rowIndex].id);
-									if (groupIndex > -1) {
-										e.instance.props.groups[groupIndex] = Object.assign({}, e.instance.props.groups[groupIndex], {count: e.instance.props.groups[groupIndex].count - 1});
-										newRows[rowIndex] = Object.assign({}, newRows[rowIndex], {count: e.instance.props.groups[groupIndex].count});
-									}
+			
+			processConnectedChannelMembers (e) {
+				if (!this.settings.places.memberList) return;
+				let channelMembers = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelMembers"});
+				if (!channelMembers) return;
+				let hiddenRows = false, newRows = new Array(channelMembers.props.rows.length), newGroups = new Array(channelMembers.props.groups.length);
+				for (let i in channelMembers.props.groups) newGroups[i] = Object.assign({}, channelMembers.props.groups[i]);
+				for (let i in channelMembers.props.rows) {
+					let row = channelMembers.props.rows[i];
+					if (!row || row.type != "MEMBER") newRows[i] = row;
+					else if (!row.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(row.user.id)) newRows[i] = row;
+					else {
+						hiddenRows = true;
+						let found = false, rowIndex = i - 1;
+						while (!found && rowIndex > -1) {
+							if (newRows[rowIndex] && newRows[rowIndex].type == "GROUP") {
+								found = true;
+								let groupIndex = newGroups.findIndex(r => r.id == newRows[rowIndex].id);
+								if (groupIndex > -1) {
+									newGroups[groupIndex].count = newGroups[groupIndex].count - 1;
+									newRows[rowIndex].count = newGroups[groupIndex].count;
 								}
-								else rowIndex--;
 							}
+							else rowIndex--;
 						}
 					}
-					if (hiddenRows) {
-						let indexSum = 0;
-						for (let i in e.instance.props.groups) {
-							newGroups[i] = Object.assign({}, e.instance.props.groups[i], {index: indexSum});
-							if (e.instance.props.groups[i].count > 0) indexSum += (e.instance.props.groups[i].count + 1);
+				}
+				if (hiddenRows) {
+					let indexSum = 0;
+					for (let i in newGroups) if (newGroups[i].count > 0) indexSum += (newGroups[i].count + 1);
+					for (let i in newRows) if (newRows[i] && newRows[i].type == "GROUP" && newRows[i].count <= 0) newRows[i] = undefined;
+					const removeEmptyWithin = (array, filter) => {
+						let reversed = [].concat(array).reverse();
+						let prefixLength = 0, suffixLength = 0;
+						for (let i in array) if (array[i] !== undefined) {
+							prefixLength = parseInt(i);
+							break;
 						}
-						for (let i in newRows) if (newRows[i] && newRows[i].type == "GROUP" && newRows[i].count <= 0) {
-							hiddenRows++;
-							newRows[i] = undefined;
+						for (let i in reversed) if (reversed[i] !== undefined) {
+							suffixLength = parseInt(i);
+							break;
 						}
-						const removeEmptyWithin = (array, filter) => {
-							let reversed = [].concat(array).reverse();
-							let prefixLength = 0, suffixLength = 0;
-							for (let i in array) if (array[i] !== undefined) {
-								prefixLength = parseInt(i);
-								break;
-							}
-							for (let i in reversed) if (reversed[i] !== undefined) {
-								suffixLength = parseInt(i);
-								break;
-							}
-							return [].concat(new Array(prefixLength), array.filter(filter), new Array(suffixLength))
-						};
-						e.instance.props.rows = removeEmptyWithin(newRows, n => n);
-						e.instance.props.groups = removeEmptyWithin(newGroups, g => g && g.count > 0);
-					}
+						return [].concat(new Array(prefixLength), array.filter(filter), new Array(suffixLength))
+					};
+					channelMembers.props.rows = removeEmptyWithin(newRows, n => n);
+					channelMembers.props.groups = removeEmptyWithin(newGroups, g => g && g.count > 0);
 				}
 			}
 			
@@ -402,6 +407,28 @@ module.exports = (_ => {
 			
 			processMemberListItem (e) {
 				if (this.settings.places.memberList && e.instance.props.user && BDFDB.LibraryModules.RelationshipStore.isBlocked(e.instance.props.user.id)) return null;
+			}
+
+			processNowPlayingItem (e) {
+				if (this.settings.places.activity) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {name: "NowPlayingHeader"});
+					if (index > -1) for (let child of children) if (child && child.props && child.props.party) {
+						if (!e.returnvalue) {
+							if (child.props.party.priorityMembers) {
+								child.props.party.priorityMembers = child.props.party.priorityMembers.filter(n => !n || !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+								if (!child.props.party.priorityMembers.length) child.props.party.priorityMembers.push({user: new BDFDB.DiscordObjects.User({id: 0, username: ""})});
+							}
+							if (child.props.party.partiedMembers) child.props.party.partiedMembers = child.props.party.partiedMembers.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id));
+							if (child.props.party.voiceChannels) for (let i in child.props.party.voiceChannels) child.props.party.voiceChannels[i] = Object.assign({}, child.props.party.voiceChannels[i], {members: child.props.party.voiceChannels[i].members.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id))});
+						}
+						else {
+							if (child.props.party.priorityMembers && child.props.party.priorityMembers[0].user && child.props.party.priorityMembers[0].user.id == 0) {
+								e.returnvalue = null;
+								break;
+							}
+						}
+					}
+				}
 			}
 		
 			processVoiceUsers (e) {
