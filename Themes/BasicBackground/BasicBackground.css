@@ -2541,63 +2541,50 @@ body::after {
 	background-color: rgba(var(--transparencycolor), .7);
 }
 
-#app-mount .game-3x3aDt {									/* games				card								*/
+#app-mount .game-2f2vPC {									/* games				card								*/
 	box-shadow: 0 1px 0 0 var(--background-modifier-accent);
 }
-#app-mount .gameNameInput-3TuPuA:focus,
-#app-mount .gameNameInput-3TuPuA:hover {
+#app-mount .gameNameInput-2wbDJ9:focus,
+#app-mount .gameNameInput-2wbDJ9:hover {
 	background-color: rgba(var(--transparencycolor), .3);
 	border-color: rgba(var(--transparencycolor), .1);
 }
-#app-mount .gameName-Uw4dbt {								/* games				gamename							*/
+#app-mount .gameName-zbZetm {								/* games				gamename							*/
 	color: var(--header-primary);
 }
-#app-mount .lastPlayed-3aHvxk,								/* games				lastplayed							*/
-#app-mount .overlayStatusText-AHDYB3 {						/* games				overlaystatustext					*/
+#app-mount .lastPlayed-1jum9A,								/* games				lastplayed							*/
+#app-mount .overlayStatusText-In0YrK {						/* games				overlaystatustext					*/
 	color: var(--text-muted);
 }
-#app-mount .overlayToggleIconOn-3_-nGm .fill-MYciTJ {		/* games				overlaystatusicon					*/
+#app-mount .overlayToggleIconOn-21NN2N .fill-297bdf {		/* games				overlaystatusicon					*/
 	fill: var(--text-muted);
 }
-#app-mount .nowPlayingAdd-3lvnXJ {							/* games				descriptionhint						*/
+#app-mount .nowPlayingAdd-3I4RbE {							/* games				descriptionhint						*/
 	color: var(--header-secondary);
 }
-#app-mount .nowPlaying-zBamm2 .gameName-Uw4dbt {
+#app-mount .nowPlaying-3UpuKc .gameName-zbZetm {
 	color: #fff;
 }
-#app-mount .nowPlaying-zBamm2 .lastPlayed-3aHvxk,
-#app-mount .nowPlaying-zBamm2 .overlayStatusText-AHDYB3 {
+#app-mount .nowPlaying-3UpuKc .lastPlayed-1jum9A,
+#app-mount .nowPlaying-3UpuKc .overlayStatusText-In0YrK {
 	color: #b4e1cd;
 }
-#app-mount .nowPlaying-zBamm2 .overlayToggleIconOff-3hGOmN .fill-MYciTJ,
-#app-mount .nowPlaying-zBamm2 .overlayToggleIconOn-3_-nGm .fill-MYciTJ {
+#app-mount .nowPlaying-3UpuKc .overlayToggleIconOff-ps4gGp .fill-297bdf,
+#app-mount .nowPlaying-3UpuKc .overlayToggleIconOn-21NN2N .fill-297bdf {
 	fill: #b4e1cd;
 }
-#app-mount .notDetected-2HEmAp {							/* games				nogame								*/
+#app-mount .notDetected-M3Ghh2 {							/* games				nogame								*/
 	background-color: rgba(var(--transparencycolor), .3);
 }
-#app-mount .notDetected-2HEmAp .lastPlayed-3aHvxk {
+#app-mount .notDetected-M3Ghh2 .lastPlayed-1jum9A {
 	color: var(--header-secondary);
 }
-#app-mount .activeGame-3ncS55 .removeGame-3Le1LJ {
-	background-image: none;
-}
-#app-mount .activeGame-3ncS55 .removeGame-3Le1LJ::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background: var(--header-primary);
-	-webkit-mask: url(https://discord.com/assets/eb69ec9fdd30653a3ade1ab501a7cd3d.svg) center no-repeat;
-}
 
-#app-mount .addGamePopout-3yePJc {							/* games				add game popout						*/
+#app-mount .addGamePopout-2SKNIV {							/* games				add game popout						*/
 	background-color: transparent;
 }
-.addGamePopout-3yePJc::before,
-.addGamePopout-3yePJc::after {
+.addGamePopout-2SKNIV::before,
+.addGamePopout-2SKNIV::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -2609,15 +2596,15 @@ body::after {
 	pointer-events: none;
 	z-index: -1;
 }
-.addGamePopout-3yePJc::before {
+.addGamePopout-2SKNIV::before {
 	background: var(--popout) var(--popoutposition)/var(--popoutsize);
 	background-attachment: fixed;
 }
-.addGamePopout-3yePJc::after {
+.addGamePopout-2SKNIV::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.15));
 	backdrop-filter: blur(var(--popoutblur));
 }
-#app-mount .addGamePopout-3yePJc .cancelButton-1vsI8S {
+#app-mount .addGamePopout-2SKNIV .cancelButton-1_3Ix7 {
 	color: var(--header-primary);
 }
 

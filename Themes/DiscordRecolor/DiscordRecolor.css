@@ -2122,65 +2122,86 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background-color: var(--interactive-muted);
 }
 
+
 .overlayWarningIcon-B1Xv81 {
 	background: url(https://discord.com/assets/afc17a02f2ea7406b0ee518c28414f7c.svg) no-repeat;
 }
-#app-mount .game-3x3aDt {
-	box-shadow: 0 1px 0 0 var(--background-tertiary);
+#app-mount .game-2f2vPC {
+	box-shadow: var(--elevation-low);
 }
-#app-mount .gameNameInput-3TuPuA:focus,
-#app-mount .gameNameInput-3TuPuA:hover {
-	background-color: var(--deprecated-text-input-bg);
-	border-color: var(--deprecated-text-input-border-hover);
-}
-#app-mount .gameName-Uw4dbt {
+#app-mount .gameName-zbZetm {
 	color: var(--header-primary);
 }
-#app-mount .lastPlayed-3aHvxk,
-#app-mount .overlayStatusText-AHDYB3 {
+#app-mount .gameNameInput-2wbDJ9:focus,
+#app-mount .gameNameInput-2wbDJ9:hover {
+	background-color: var(--background-primary);
+	border-color: rgba(var(--textdark),.3);
+}
+#app-mount .lastPlayed-1jum9A,
+#app-mount .overlayStatusText-In0YrK {
 	color: var(--text-muted);
 }
-#app-mount .overlayToggleIconOn-3_-nGm .fill-MYciTJ {
+#app-mount .overlayToggleIconOn-21NN2N .fill-297bdf {
 	fill: var(--text-muted);
 }
-#app-mount .addGamePopout-3yePJc {
+#app-mount .addGamePopout-2SKNIV {
 	background-color: var(--background-primary);
 }
-#app-mount .addGamePopout-3yePJc .cancelButton-1vsI8S {
+#app-mount .addGamePopout-2SKNIV .cancelButton-1_3Ix7 {
 	color: var(--header-primary);
 }
-#app-mount .nowPlayingAdd-3lvnXJ {
+#app-mount .nowPlayingAdd-3I4RbE {
 	color: var(--header-secondary);
 }
-#app-mount .nowPlaying-zBamm2 .gameName-Uw4dbt {
-	color: #fff;
+#app-mount .nowPlaying-3UpuKc {
+	background-color: var(--status-positive-background);
 }
-#app-mount .nowPlaying-zBamm2 .lastPlayed-3aHvxk,
-#app-mount .nowPlaying-zBamm2 .overlayStatusText-AHDYB3 {
-	color: #b4e1cd;
+#app-mount .nowPlaying-3UpuKc .gameName-zbZetm {
+	color: var(--status-positive-text);
 }
-#app-mount .nowPlaying-zBamm2 .overlayToggleIconOff-3hGOmN .fill-MYciTJ,
-#app-mount .nowPlaying-zBamm2 .overlayToggleIconOn-3_-nGm .fill-MYciTJ {
-	fill: #b4e1cd;
+#app-mount .nowPlaying-3UpuKc .gameNameInput-2wbDJ9:focus,
+#app-mount .nowPlaying-3UpuKc .gameNameInput-2wbDJ9:hover {
+	background-color: transparent;
+	border-color: var(--status-positive-text);
 }
-#app-mount .notDetected-2HEmAp {
+#app-mount .nowPlaying-3UpuKc .gameNameInput-2wbDJ9 {
+	position: relative;
+	z-index: 3;
+}
+#app-mount .nowPlaying-3UpuKc .gameNameInput-2wbDJ9 + * {
+	position: relative;
+}
+#app-mount .nowPlaying-3UpuKc .gameNameInput-2wbDJ9:focus + *::before,
+#app-mount .nowPlaying-3UpuKc .gameNameInput-2wbDJ9:hover + *::before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: -24px;
+	left: -5px;
+	width: 240px;
+	height: 24px;
+	border-radius: 3px;
+	background-color: var(--status-positive-text);
+	opacity: 0.3;
+	pointer-events: none;
+	z-index: 2;
+}
+#app-mount .nowPlaying-3UpuKc .lastPlayed-1jum9A,
+#app-mount .nowPlaying-3UpuKc .overlayStatusText-In0YrK {
+	color: var(--status-positive-text);
+}
+#app-mount .nowPlaying-3UpuKc .overlayToggleIconOff-ps4gGp .fill-297bdf,
+#app-mount .nowPlaying-3UpuKc .overlayToggleIconOn-21NN2N .fill-297bdf {
+	fill: var(--status-positive-text);
+}
+#app-mount .notDetected-M3Ghh2 {
 	background-color: var(--background-secondary);
 }
-#app-mount .notDetected-2HEmAp .lastPlayed-3aHvxk {
-	color: var(--header-secondary);
+#app-mount .notDetected-M3Ghh2 .gameName-zbZetm {
+	color: var(--interactive-active);
 }
-#app-mount .activeGame-3ncS55 .removeGame-3Le1LJ {
-	background-image: none;
-}
-#app-mount .activeGame-3ncS55 .removeGame-3Le1LJ::after {
-	content: "";
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background: var(--header-primary);
-	-webkit-mask: url(https://discord.com/assets/eb69ec9fdd30653a3ade1ab501a7cd3d.svg) center no-repeat;
+#app-mount .notDetected-M3Ghh2 .lastPlayed-1jum9A {
+	color: var(--text-muted);
 }
 
 #app-mount .row-2ooh_3 {
