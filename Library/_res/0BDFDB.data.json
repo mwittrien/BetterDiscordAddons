@@ -132,7 +132,7 @@
 		"StateStoreUtils": {"props": ["useStateFromStores", "useStateFromStoresArray"]},
 		"StatusMetaUtils": {"props": ["getApplicationActivity", "getStatus", "getState"]},
 		"StoreChangeUtils": {"props": ["get", "set", "clear", "remove"]},
-		"StreamerModeStore": {"props": ["disableSounds", "hidePersonalInformation"]},
+		"StreamerModeStore": {"strings": ["StreamerModeStore", "hidePersonalInformation", "disableSounds"], "value": "default"},
 		"StreamUtils": {"props": ["getActiveStreamForUser", "getAllApplicationStreams"]},
 		"StringUtils": {"props": ["cssValueToNumber", "upperCaseFirstChar"]},
 		"TimestampUtils": {"props": ["fromTimestamp", "extractTimestamp"]},
