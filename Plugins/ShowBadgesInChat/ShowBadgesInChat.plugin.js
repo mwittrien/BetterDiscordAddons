@@ -399,7 +399,6 @@ module.exports = (_ => {
 					let userFlag = flag == "PREMIUM" || flag == "GUILD_BOOSTER" ? 0 : BDFDB.DiscordConstants.UserFlags[flag];
 					let keyName = BDFDB.LibraryModules.UserBadgeKeys[key];
 					if (userFlag == null && keyName) userFlag = BDFDB.DiscordConstants.UserFlags[keyName] != null ? BDFDB.DiscordConstants.UserFlags[keyName] : BDFDB.DiscordConstants.UserFlags[Object.keys(BDFDB.DiscordConstants.UserFlags).find(f => f.indexOf(keyName) > -1 || keyName.indexOf(f) > -1)];
-					console.log(key, userFlag, keyName);
 					if (userFlag != null) {
 						let id;
 						if (flag == "PREMIUM") id = specialFlag + "NITRO";
