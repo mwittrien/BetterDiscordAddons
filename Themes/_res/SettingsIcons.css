@@ -16,6 +16,10 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 	display: flex;
 	align-items: center;
 }
+#bd-settings-sidebar .ui-tab-bar-item > div,
+.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG > div {
+	flex: 1 0 auto;
+}
 #bd-settings-sidebar .ui-tab-bar-item::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG::before {
 	content: "";
