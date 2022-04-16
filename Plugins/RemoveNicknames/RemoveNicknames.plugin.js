@@ -2,7 +2,7 @@
  * @name RemoveNicknames
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.0
+ * @version 1.4.1
  * @description Replaces Nicknames with Accountnames
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveNicknames",
 			"author": "DevilBro",
-			"version": "1.4.0",
+			"version": "1.4.1",
 			"description": "Replaces Nicknames with Accountnames"
 		},
 		"changeLog": {
@@ -243,7 +243,19 @@ module.exports = (_ => {
 			
 			changeMention (mention, newName) {
 				if (!mention) return;
-				mention.props.children = "@" + newName;
+				const changeMentionName = (child, name) => {
+					if (!child) return;
+					if (BDFDB.ArrayUtils.is(child)) for (let i in child) {
+						if (typeof child[i] == "string" && child[i][0] == "@") {
+							if (child[i] == "@") child[parseInt(i) + 1] = newName;
+							else child[i] = "@" + newName;
+						}
+						else changeMentionName(child[i]);
+					}
+					else if (child.props && typeof child.props.children == "string" && child.props.children[0] == "@") child.props.children = "@" + newName;
+					else if (child.props && child.props.children) changeMentionName(child.props.children);
+				};
+				changeMentionName(mention);
 			}
 
 			processChannelReply (e) {

@@ -628,23 +628,25 @@ module.exports = (_ => {
 			}
 
 			processNowPlayingItem (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {name: "NowPlayingHeader"});
-				if (index > -1) for (let child of children) if (child && child.props && child.props.party) {
-					if (child.type && child.type.displayName == "NowPlayingHeader") {
-						const type = child.type;
-						child.type = (...args) => {
-							const returnValue = type(...args);
-							if (BDFDB.ObjectUtils.get(returnValue, "props.priorityUser.user.username") == returnValue.props.title) {
-								returnValue.props.title = BDFDB.ReactUtils.createElement("span", {children: returnValue.props.title});
-								this.changeUserColor(returnValue.props.title, returnValue.props.priorityUser.user.id);
-							}
-							return returnValue;
-						};
+				if (this.settings.places.activity) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {name: "NowPlayingHeader"});
+					if (index > -1) for (let child of children) if (child && child.props && child.props.party) {
+						if (child.type && child.type.displayName == "NowPlayingHeader") {
+							const type = child.type;
+							child.type = (...args) => {
+								const returnValue = type(...args);
+								if (BDFDB.ObjectUtils.get(returnValue, "props.priorityUser.user.username") == returnValue.props.title) {
+									returnValue.props.title = BDFDB.ReactUtils.createElement("span", {children: returnValue.props.title});
+									this.changeUserColor(returnValue.props.title, returnValue.props.priorityUser.user.id);
+								}
+								return returnValue;
+							};
+						}
+						child.props.party = Object.assign({}, child.props.party);
+						if (child.props.party.partiedMembers) for (let i in child.props.party.partiedMembers) if (child.props.party.partiedMembers[i]) child.props.party.partiedMembers[i] = this.getUserData(child.props.party.partiedMembers[i].id);
+						if (child.props.party.priorityMembers) for (let i in child.props.party.priorityMembers) if (child.props.party.priorityMembers[i]) child.props.party.priorityMembers[i] = Object.assign({}, child.props.party.priorityMembers[i], {user: this.getUserData(child.props.party.priorityMembers[i].user.id)});
+						if (child.props.party.voiceChannels) for (let i in child.props.party.voiceChannels) if (child.props.party.voiceChannels[i]) child.props.party.voiceChannels[i] = Object.assign({}, child.props.party.voiceChannels[i], {members: [].concat(child.props.party.voiceChannels[i].members).map(user => this.getUserData(user.id))});
 					}
-					child.props.party = Object.assign({}, child.props.party);
-					if (child.props.party.partiedMembers) for (let i in child.props.party.partiedMembers) if (child.props.party.partiedMembers[i]) child.props.party.partiedMembers[i] = this.getUserData(child.props.party.partiedMembers[i].id);
-					if (child.props.party.priorityMembers) for (let i in child.props.party.priorityMembers) if (child.props.party.priorityMembers[i]) child.props.party.priorityMembers[i] = Object.assign({}, child.props.party.priorityMembers[i], {user: this.getUserData(child.props.party.priorityMembers[i].user.id)});
-					if (child.props.party.voiceChannels) for (let i in child.props.party.voiceChannels) if (child.props.party.voiceChannels[i]) child.props.party.voiceChannels[i] = Object.assign({}, child.props.party.voiceChannels[i], {members: [].concat(child.props.party.voiceChannels[i].members).map(user => this.getUserData(user.id))});
 				}
 			}
 			
@@ -938,7 +940,7 @@ module.exports = (_ => {
 							else changeMentionName(child[i]);
 						}
 						else if (child.props && typeof child.props.children == "string" && child.props.children[0] == "@") child.props.children = "@" + data.name;
-						else if (child.props && BDFDB.ArrayUtils.is(child.props.children)) changeMentionName(child.props.children);
+						else if (child.props && child.props.children) changeMentionName(child.props.children);
 					};
 					changeMentionName(mention);
 				}
