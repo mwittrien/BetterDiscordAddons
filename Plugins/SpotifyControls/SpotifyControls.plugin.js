@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.4
+ * @version 1.2.5
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.2.4",
+			"version": "1.2.5",
 			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
 		},
 		"changeLog": {
-			"fixed": {
-				"Previous": "Double click to previous work again"
+			"improved": {
+				"Add 'by'": "You can now disable the word 'by' in the author name"
 			}
 		}
 	};
@@ -203,7 +203,7 @@ module.exports = (_ => {
 											color: BDFDB.LibraryComponents.TextElement.Colors.CUSTOM,
 											size: BDFDB.LibraryComponents.TextElement.Sizes.SIZE_12,
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-												children: BDFDB.LanguageUtils.LanguageStringsFormat("USER_ACTIVITY_LISTENING_ARTISTS", lastSong.state)
+												children: _this.settings.general.addBy ? BDFDB.LanguageUtils.LanguageStringsFormat("USER_ACTIVITY_LISTENING_ARTISTS", lastSong.state) : lastSong.state
 											})
 										})
 									]
@@ -383,7 +383,7 @@ module.exports = (_ => {
 					onClose: _ => BDFDB.ArrayUtils.remove(this.props.player.props.buttonStates, this.props.type, true),
 					renderPopout: this.props.renderPopout
 				}) : button;
-	}
+			}
 		};
 		const SpotifyControlsTimelineComponent = class SpotifyControlsTimeline extends BdApi.React.Component {
 			componentDidMount() {
@@ -453,9 +453,10 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
+						addBy: 			{value: true,		description: "Adds the Word 'by' infront of the Author Name"},
 						addTimeline: 		{value: true,		description: "Shows the Song Timeline in the Controls"},
 						addActivityButton: 	{value: true,		description: "Shows the Activity Status Toggle Button in the Controls"},
-						doubleBack: 		{value: true,       description: "Requires the User to press the Back Button twice to go to previous Track"}
+						doubleBack: 		{value: true,		description: "Requires the User to press the Back Button twice to go to previous Track"}
 					},
 					buttons: {
 						share: 				{value: {small: false, big: true},		icons: [""],						description: "Share"},
@@ -485,8 +486,8 @@ module.exports = (_ => {
 						--SC-spotify-green: ${BDFDB.DiscordConstants.Colors.SPOTIFY};
 					}
 					${BDFDB.dotCN.channelpanels} {
-	display: flex;
-	flex-direction: column;
+						display: flex;
+						flex-direction: column;
 					}
 					${BDFDB.dotCN._spotifycontrolscontainer} {
 						display: flex;
