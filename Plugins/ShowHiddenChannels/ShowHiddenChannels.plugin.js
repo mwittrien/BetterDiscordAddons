@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.7
+ * @version 3.0.8
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "3.0.7",
+			"version": "3.0.8",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
 		}
 	};
@@ -210,8 +210,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				let loadedBlackList = BDFDB.DataUtils.load(this, "blacklist");
-				this.saveBlackList(!BDFDB.ArrayUtils.is(loadedBlackList) ? [] : loadedBlackList);
+				this.saveBlackList(this.getBlackList());
 				
 				let loadedCollapseList = BDFDB.DataUtils.load(this, "categorydata");
 				this.saveCollapseList(!BDFDB.ArrayUtils.is(loadedCollapseList) ? [] : loadedCollapseList);
@@ -549,6 +548,12 @@ module.exports = (_ => {
 				}
 				else this.saveBlackList([]);
 				BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+			}
+
+			getBlackList () {
+				let loadedBlackList = BDFDB.DataUtils.load(this, "blacklist");
+				return !BDFDB.ArrayUtils.is(loadedBlackList) ? [] : loadedBlackList;
+			
 			}
 			
 			saveBlackList (savedBlackList) {
