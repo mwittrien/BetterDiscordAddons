@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.0
+ * @version 2.3.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,13 +19,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.3.0",
+			"version": "2.3.1",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 		"changeLog": {
-			"added": {
-				"Plugin Config Sync": "Allows you to disable the synchronization of plugin config files between Discord Accounts"
+			"fixed": {
+				"Plugin Config Sync Issue": "Fixed and Issue where Plugin Configs would restore after a Discord Reload"
 			}
 		}
 	};
@@ -659,6 +659,7 @@ module.exports = (_ => {
 			}
 			if (BDFDB.DOMUtils && BDFDB.DOMUtils.removeLocalStyle) BDFDB.DOMUtils.removeLocalStyle(plugin.name);
 			if (BDFDB.ListenerUtils && BDFDB.ListenerUtils.remove) BDFDB.ListenerUtils.remove(plugin);
+			if (BDFDB.ListenerUtils && BDFDB.ListenerUtils.removeGlobal) BDFDB.ListenerUtils.removeGlobal(plugin);
 			if (BDFDB.StoreChangeUtils && BDFDB.StoreChangeUtils.remove) BDFDB.StoreChangeUtils.remove(plugin);
 			if (BDFDB.ObserverUtils && BDFDB.ObserverUtils.disconnect) BDFDB.ObserverUtils.disconnect(plugin);
 			if (BDFDB.PatchUtils && BDFDB.PatchUtils.unpatch) BDFDB.PatchUtils.unpatch(plugin);
@@ -984,14 +985,10 @@ module.exports = (_ => {
 	const request = require("request"), fs = require("fs"), path = require("path");
 	
 	Internal.writeConfig = function (plugin, path, config) {
-		let sync = Internal.shouldSyncConfig(plugin);
 		let allData = {};
 		try {allData = JSON.parse(fs.readFileSync(path));}
 		catch (err) {allData = {};}
-		try {
-			BDFDB.ObjectUtils.deepAssign(allData, !sync ? (plugin.neverSyncData ? {[BDFDB.UserUtils.me.id]: config} : {all: config, [BDFDB.UserUtils.me.id]: config}) : {all: config});
-			fs.writeFileSync(path, JSON.stringify(allData, null, "	"));
-		}
+		try {fs.writeFileSync(path, JSON.stringify(Object.assign({}, allData, {[Internal.shouldSyncConfig(plugin) ? "all" : BDFDB.UserUtils.me.id]: config}), null, "	"));}
 		catch (err) {}
 	};
 	Internal.readConfig = function (plugin, path) {
@@ -999,7 +996,7 @@ module.exports = (_ => {
 		try {
 			let config = JSON.parse(fs.readFileSync(path));
 			if (config && Object.keys(config).some(n => !(n == "all" || parseInt(n)))) {
-				config = !sync ? (plugin.neverSyncData ? {[BDFDB.UserUtils.me.id]: config} : {all: config, [BDFDB.UserUtils.me.id]: config}) : {all: config};
+				config = {[Internal.shouldSyncConfig(plugin) ? "all" : BDFDB.UserUtils.me.id]: config};
 				try {fs.writeFileSync(path, JSON.stringify(config, null, "	"));}
 				catch (err) {}
 			}
@@ -1543,6 +1540,26 @@ module.exports = (_ => {
 						if (removedListeners.length) plugin.eventListeners = plugin.eventListeners.filter(listener => !removedListeners.includes(listener));
 					}
 				}
+			}
+		};
+		BDFDB.ListenerUtils.addGlobal = function (plugin, id, keybind, action) {
+			plugin = plugin == BDFDB && Internal || plugin;
+			if (!BDFDB.ObjectUtils.is(plugin) || !id || !BDFDB.ArrayUtils.is(keybind) || typeof action != "function") return;
+			if (!BDFDB.ObjectUtils.is(plugin.globalKeybinds)) plugin.globalKeybinds = {};
+			BDFDB.ListenerUtils.removeGlobal(plugin, id);
+			plugin.globalKeybinds[id] = BDFDB.NumberUtils.generateId(Object.entries(plugin.globalKeybinds).map(n => n[1]));
+			BDFDB.LibraryModules.WindowUtils.inputEventRegister(plugin.globalKeybinds[id], keybind, action, {blurred: true, focused: true, keydown: false, keyup: true});
+			return (_ => BDFDB.ListenerUtils.removeGlobal(plugin, id););
+		};
+		BDFDB.ListenerUtils.removeGlobal = function (plugin, id) {
+			if (!BDFDB.ObjectUtils.is(plugin) || !plugin.globalKeybinds) return;
+			if (!id) {
+				for (let cachedId in plugin.globalKeybinds) BDFDB.LibraryModules.WindowUtils.inputEventUnregister(plugin.globalKeybinds[cachedId]);
+				plugin.globalKeybinds = {};
+			}
+			else {
+				BDFDB.LibraryModules.WindowUtils.inputEventUnregister(plugin.globalKeybinds[id]);
+				delete plugin.globalKeybinds[id];
 			}
 		};
 		BDFDB.ListenerUtils.multiAdd = function (node, actions, callback) {

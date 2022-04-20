@@ -2,7 +2,7 @@
  * @name MessageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.3
+ * @version 1.9.4
  * @description Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "MessageUtilities",
 			"author": "DevilBro",
-			"version": "1.9.3",
+			"version": "1.9.4",
 			"description": "Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)"
+		},
+		"changeLog": {
+			"fixed": {
+				"Reply auto Mention off": "No longer auto disables mentions for the reply action if the hotkey uses shift"
+			}
 		}
 	};
 
@@ -405,7 +410,7 @@ module.exports = (_ => {
 				if (message.state == BDFDB.DiscordConstants.MessageStates.SENT) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 					if (channel && (BDFDB.DMUtils.isDMChannel(channel.id) || BDFDB.UserUtils.can("SEND_MESSAGES")) && (message.type == BDFDB.DiscordConstants.MessageTypes.DEFAULT || message.type == BDFDB.DiscordConstants.MessageTypes.REPLY)) {
-						BDFDB.LibraryModules.MessageManageUtils.replyToMessage(channel, message, event);
+						BDFDB.LibraryModules.MessageManageUtils.replyToMessage(channel, message, {});
 						if (toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.NOTIFICATION_REPLY), {type: "success"});
 					}
 				}

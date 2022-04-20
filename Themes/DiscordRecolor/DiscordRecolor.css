@@ -54,15 +54,15 @@
 	--status-danger-background: rgb(var(--dangercolor));
 	--status-danger-text: #fff;
 	
-	--button-positive-background: rgab(var(--successcolor),.8);
+	--button-positive-background: rgba(var(--successcolor),.8);
 	--button-positive-background-hover: rgba(var(--successcolor),.9);
 	--button-positive-background-active: rgb(var(--successcolor));
 	--button-positive-background-disabled: rgba(var(--successcolor),.2);
-	--button-warning-background: rgab(var(--warningcolor),.8);
+	--button-warning-background: rgba(var(--warningcolor),.8);
 	--button-warning-background-hover: rgba(var(--warningcolor),.9);
 	--button-warning-background-active: rgb(var(--warningcolor));
 	--button-warning-background-disabled: rgba(var(--warningcolor),.2);
-	--button-danger-background: rgab(var(--dangercolor),.8);
+	--button-danger-background: rgba(var(--dangercolor),.8);
 	--button-danger-background-hover: rgba(var(--dangercolor),.9);
 	--button-danger-background-active: rgb(var(--dangercolor));
 	--button-danger-background-disabled: rgba(var(--dangercolor),.2);
