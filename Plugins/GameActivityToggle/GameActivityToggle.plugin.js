@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.8
+ * @version 1.0.9
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "GameActivityToggle",
 			"author": "DevilBro",
-			"version": "1.0.8",
+			"version": "1.0.9",
 			"description": "Adds a Quick-Toggle Game Activity Button"
+		},
+		"changeLog": {
+			"added": {
+				"Global Hotkey": ""
+			}
 		}
 	};
 	
@@ -79,16 +84,12 @@ module.exports = (_ => {
 						foreground: BDFDB.disCN.accountinfobuttonstrikethrough,
 						name: enabled ? BDFDB.LibraryComponents.SvgIcon.Names.GAMEPAD : BDFDB.LibraryComponents.SvgIcon.Names.GAMEPAD_DISABLED
 					})),
-					onClick: _ => {
-						const shouldEnable = !BDFDB.DiscordUtils.getSettings("ShowCurrentGame");
-						_this.settings.general[shouldEnable ? "playEnable" : "playDisable"] && BDFDB.LibraryModules.SoundUtils.playSound(_this.settings.selections[shouldEnable ? "enableSound" : "disableSound"], .4);
-						BDFDB.DiscordUtils.setSettings("ShowCurrentGame", shouldEnable);
-					}
+					onClick: _ => _this.toggle()
 				}));
 			}
 		};
 		
-		var sounds = [];
+		var sounds = [], keybind;
 		
 		return class GameActivityToggle extends Plugin {
 			onLoad () {
@@ -130,6 +131,10 @@ module.exports = (_ => {
 					BDFDB.DataUtils.save({date: new Date(), value: e.methodArguments[0]}, this, "cachedState");
 				}});
 				
+				keybind = BDFDB.DataUtils.load(this, "keybind");
+				keybind = BDFDB.ArrayUtils.is(keybind) ? keybind : [];
+				this.activateKeybind();
+				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			
@@ -163,6 +168,32 @@ module.exports = (_ => {
 							onChange: value => BDFDB.LibraryModules.SoundUtils.playSound(value, 0.4)
 						}));
 						
+						settingsItems.push(BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.settingsrowcontainer,
+							children: BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.settingsrowlabel,
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
+										label: "Global Hotkey"
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+										className: BDFDB.disCNS.settingsrowcontrol + BDFDB.disCN.flexchild,
+										grow: 0,
+										wrap: true,
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.KeybindRecorder, {
+											value: !keybind ? [] : keybind,
+											reset: true,
+											onChange: value => {
+												keybind = value;
+												BDFDB.DataUtils.save(this, "keybind", keybind)
+												this.activateKeybind();
+											}
+										})
+									})
+								].flat(10).filter(n => n)
+							})
+						}));
+						
 						return settingsItems;
 					}
 				});
@@ -174,6 +205,18 @@ module.exports = (_ => {
 					e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._gameactivitytoggleadded);
 					children.unshift(BDFDB.ReactUtils.createElement(ActivityToggleComponent, {}));
 				}
+			}
+			
+			activateKeybind () {
+				console.log(keybind);
+				if (keybind && keybind.length) BDFDB.ListenerUtils.addGlobal(this, "GAMEACTIVITY_TOGGLE", keybind, this.toggle);
+				else BDFDB.ListenerUtils.removeGlobal(this, "GAMEACTIVITY_TOGGLE", keybind, this.toggle);
+			}
+			
+			toggle () {
+				const shouldEnable = !BDFDB.DiscordUtils.getSettings("ShowCurrentGame");
+				_this.settings.general[shouldEnable ? "playEnable" : "playDisable"] && BDFDB.LibraryModules.SoundUtils.playSound(_this.settings.selections[shouldEnable ? "enableSound" : "disableSound"], .4);
+				BDFDB.DiscordUtils.setSettings("ShowCurrentGame", shouldEnable);
 			}
 
 			setLabelsByLanguage () {
