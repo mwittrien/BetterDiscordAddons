@@ -1549,7 +1549,7 @@ module.exports = (_ => {
 			BDFDB.ListenerUtils.removeGlobal(plugin, id);
 			plugin.globalKeybinds[id] = BDFDB.NumberUtils.generateId(Object.entries(plugin.globalKeybinds).map(n => n[1]));
 			BDFDB.LibraryModules.WindowUtils.inputEventRegister(plugin.globalKeybinds[id], keybind, action, {blurred: true, focused: true, keydown: false, keyup: true});
-			return (_ => BDFDB.ListenerUtils.removeGlobal(plugin, id););
+			return (_ => BDFDB.ListenerUtils.removeGlobal(plugin, id));
 		};
 		BDFDB.ListenerUtils.removeGlobal = function (plugin, id) {
 			if (!BDFDB.ObjectUtils.is(plugin) || !plugin.globalKeybinds) return;
