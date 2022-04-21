@@ -2187,7 +2187,12 @@ a.metadataName-1KMZtB {
 
 /* ----		12.3.	INPUTS							---- */
 
-															/* textinput			focused								*/
+.input-2g-os5 {												/* textinput												*/
+	border: 1px solid var(--deprecated-text-input-border);
+}
+.input-2g-os5:hover {
+	border-color: var(--deprecated-text-input-border-hover);
+}
 .input-2g-os5:not(.error-8r7mjf):not(.success-3HR983).focused-1AtTHC,
 .input-2g-os5:not(.error-8r7mjf):not(.success-3HR983):focus {
 	border-color: rgb(var(--accentcolor));

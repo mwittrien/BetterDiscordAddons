@@ -363,6 +363,11 @@ module.exports = (_ => {
 		
 			forceUpdateAll () {
 				changedUsers = BDFDB.DataUtils.load(this, "users");
+				// REMOVE 21.04.2022
+				for (let id in changedUsers) if (changedUsers[id].color5) {
+					changedUsers[id].color2 = changedUsers[id].color5;
+					delete changedUsers[id].color5;
+				}
 				
 				this.changeAppTitle();
 				BDFDB.PatchUtils.forceAllUpdates(this);
@@ -509,13 +514,11 @@ module.exports = (_ => {
 			processNameTag (e) {
 				if (e.returnvalue && e.instance.props.user && (e.instance.props.className || e.instance.props.usernameClass)) {
 					let change = false, guildId = null;
-					let changeBackground = false;
 					let tagClass = "";
 					switch (e.instance.props.className) {
 						case BDFDB.disCN.userpopoutheadertagnonickname:
 							change = this.settings.places.userPopout;
 							guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-							changeBackground = true;
 							tagClass = BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag;
 							break;
 						case BDFDB.disCN.guildsettingsinviteusername:
@@ -533,15 +536,12 @@ module.exports = (_ => {
 						case BDFDB.disCN.userprofileusername:
 							change = this.settings.places.userProfile;
 							guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-							changeBackground = true;
 							tagClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
 							break;
 					}
 					if (change) {
 						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.username]]});
-						if (userName) this.changeUserColor(userName, e.instance.props.user.id, {
-							changeBackground: changeBackground
-						});
+						if (userName) this.changeUserColor(userName, e.instance.props.user.id);
 						if (tagClass) this.injectBadge(e.returnvalue.props.children, e.instance.props.user.id, guildId, 2, {
 							tagClass: tagClass,
 							useRem: e.instance.props.useRemSizes,
@@ -583,10 +583,10 @@ module.exports = (_ => {
 						e.instance.props.nickname = nickname ? nickname : null;
 					}
 					else {
-						if (data.color1 || data.color2 || data.tag) {
+						if (data.color1 || data.tag) {
 							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
 							if (index > -1) {
-								this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground: true, aaa:true});
+								this.changeUserColor(children[index], e.instance.props.user.id);
 								if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
 								this.injectBadge(children[index].props.children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
 									tagClass: BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag,
@@ -695,7 +695,7 @@ module.exports = (_ => {
 					let data = changedUsers[BDFDB.UserUtils.me.id];
 					let user = data && this.getUserData(BDFDB.UserUtils.me.id);
 					if (user && e.instance.props.children == user.username) {
-						if (data.color1 || data.color2) this.changeUserColor(e.returnvalue, BDFDB.UserUtils.me.id);
+						if (data.color1) this.changeUserColor(e.returnvalue, BDFDB.UserUtils.me.id);
 					}
 				}
 			}
@@ -735,7 +735,7 @@ module.exports = (_ => {
 					if (content && content.type && content.type.type && content.props.message && this.shouldChangeInChat(content.props.message.channel_id)) {
 						let data = changedUsers[content.props.message.author.id];
 						if (data) {
-							let messageColor = data.color5 || (BDFDB.ObjectUtils.get(BDFDB.BDUtils.getPlugin("BetterRoleColors", true), "settings.modules.chat") && (data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(content.props.message.channel_id) || {}).guild_id, content.props.message.author.id) || {}).colorString || data.color1));
+							let messageColor = data.color2 || (BDFDB.ObjectUtils.get(BDFDB.BDUtils.getPlugin("BetterRoleColors", true), "settings.modules.chat") && (data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(content.props.message.channel_id) || {}).guild_id, content.props.message.author.id) || {}).colorString || data.color1));
 							if (messageColor) {
 								let message = new BDFDB.DiscordObjects.Message(Object.assign({}, content.props.message, {author: this.getUserData(content.props.message.author.id, true, false, content.props.message.author)}));
 								message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(messageColor) ? messageColor[0] : messageColor, "HEX");
@@ -779,7 +779,7 @@ module.exports = (_ => {
 					});
 				}
 				else if (e.returnvalue.props.children) {
-					if (data.color1 || data.color2) {
+					if (data.color1) {
 						let messageUsername = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
 						if (messageUsername) {
 							if (messageUsername.props && typeof messageUsername.props.children == "function") {
@@ -816,7 +816,7 @@ module.exports = (_ => {
 					}
 					else if (e.instance.props.message.state != BDFDB.DiscordConstants.MessageStates.SEND_FAILED) {
 						let data = changedUsers[e.instance.props.message.author.id];
-						let messageColor = data && (data.color5 || (BDFDB.ObjectUtils.get(BDFDB.BDUtils.getPlugin("BetterRoleColors", true), "settings.modules.chat") && (data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.message.author.id) || {}).colorString || data.color1)));
+						let messageColor = data && (data.color2 || (BDFDB.ObjectUtils.get(BDFDB.BDUtils.getPlugin("BetterRoleColors", true), "settings.modules.chat") && (data.color1 && data.useRoleColor && (BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.message.author.id) || {}).colorString || data.color1)));
 						if (messageColor) {
 							if (BDFDB.ObjectUtils.is(messageColor)) e.returnvalue.props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
 								gradient: BDFDB.ColorUtils.createGradient(messageColor),
@@ -983,7 +983,7 @@ module.exports = (_ => {
 						}
 					}
 					else {
-						this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true, guildId: e.instance.props.channel.guild_id});
+						this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {guildId: e.instance.props.channel.guild_id});
 						this.injectBadge(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
 							tagClass: BDFDB.disCN.bottagmember
 						});
@@ -1286,19 +1286,14 @@ module.exports = (_ => {
 			changeUserColor (child, userId, options = {}) {
 				if (BDFDB.ReactUtils.isValidElement(child)) {
 					let data = changedUsers[userId] || {};
-					if (data.color1 || (data.color2 && options.changeBackground)) {
+					if (data.color1) {
 						let childProp = child.props.children ? "children" : "text";
 						let color1 = data.color1 && data.useRoleColor && options.guildId && (BDFDB.LibraryModules.MemberStore.getMember(options.guildId, userId) || {}).colorString || data.color1;
 						let fontColor = options.modify && !(data.useRoleColor && options.guildId) ? this.chooseColor(color1, options.modify) : color1;
-						let backgroundColor = options.changeBackground && data.color2;
 						let fontGradient = BDFDB.ObjectUtils.is(fontColor);
-						if (BDFDB.ObjectUtils.is(child.props.style)) {
-							delete child.props.style.color;
-							delete child.props.style.backgroundColor;
-						}
+						if (BDFDB.ObjectUtils.is(child.props.style)) delete child.props.style.color;
 						child.props[childProp] = BDFDB.ReactUtils.createElement("span", {
 							style: {
-								background: BDFDB.ObjectUtils.is(backgroundColor) ? BDFDB.ColorUtils.createGradient(backgroundColor) : BDFDB.ColorUtils.convert(backgroundColor, "RGBA"),
 								color: fontGradient ? BDFDB.ColorUtils.convert(fontColor[0], "RGBA") : BDFDB.ColorUtils.convert(fontColor, "RGBA")
 							},
 							children: fontGradient ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
@@ -1735,19 +1730,6 @@ module.exports = (_ => {
 									}
 								})
 							]
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-							tab: this.labels.modal_tabheader4,
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: this.labels.modal_colorpicker5,
-									className: BDFDB.disCN.marginbottom20,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-										color: data.color5,
-										onColorChange: value => newData.color5 = value
-									})
-								})
-							]
 						})
 					],
 					buttons: [{
@@ -1814,10 +1796,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Наистина ли искате да нулирате всички потребители?",
 							context_localusersettings:			"Локални потребителски настройки",
 							modal_colorpicker1:					"Име Цвят",
-							modal_colorpicker2:					"Цвят на фона",
+							modal_colorpicker2:					"Цвят на съобщението",
 							modal_colorpicker3:					"Цвят на маркера",
 							modal_colorpicker4:					"Цвят на шрифта",
-							modal_colorpicker5:					"Цвят на шрифта",
 							modal_header:						"Локални потребителски настройки",
 							modal_ignoretagcolor:				"Използвайте Цвят на ролята",
 							modal_invalidurl:					"Невалиден адрес",
@@ -1826,7 +1807,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Потребител",
 							modal_tabheader2:					"Име Цвят",
 							modal_tabheader3:					"Цвят на маркера",
-							modal_tabheader4:					"Цвят на съобщението",
 							modal_useravatar:					"Аватар",
 							modal_username:						"Локално потребителско име",
 							modal_userolecolor:					"Не презаписвайте цвета на ролята",
@@ -1841,10 +1821,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Opravdu chcete resetovat všechny uživatele?",
 							context_localusersettings:			"Místní nastavení uživatele",
 							modal_colorpicker1:					"Název Barva",
-							modal_colorpicker2:					"Barva pozadí",
+							modal_colorpicker2:					"Barva zprávy",
 							modal_colorpicker3:					"Barva značky",
 							modal_colorpicker4:					"Barva fontu",
-							modal_colorpicker5:					"Barva fontu",
 							modal_header:						"Místní nastavení uživatele",
 							modal_ignoretagcolor:				"Použijte barvu role",
 							modal_invalidurl:					"Neplatná URL",
@@ -1853,7 +1832,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Uživatel",
 							modal_tabheader2:					"Název Barva",
 							modal_tabheader3:					"Barva značky",
-							modal_tabheader4:					"Barva zprávy",
 							modal_useravatar:					"Avatar",
 							modal_username:						"Místní uživatelské jméno",
 							modal_userolecolor:					"Nepřepisujte barvu role",
@@ -1868,10 +1846,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Er du sikker på, at du vil nulstille alle brugere?",
 							context_localusersettings:			"Lokale brugerindstillinger",
 							modal_colorpicker1:					"Navnfarve",
-							modal_colorpicker2:					"Baggrundsfarve",
+							modal_colorpicker2:					"Beskedfarve",
 							modal_colorpicker3:					"Tagfarve",
 							modal_colorpicker4:					"Skriftfarve",
-							modal_colorpicker5:					"Skriftfarve",
 							modal_header:						"Lokale brugerindstillinger",
 							modal_ignoretagcolor:				"Brug rollefarve",
 							modal_invalidurl:					"Ugyldig URL",
@@ -1880,7 +1857,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Bruger",
 							modal_tabheader2:					"Navnfarve",
 							modal_tabheader3:					"Tagfarve",
-							modal_tabheader4:					"Beskedfarve",
 							modal_useravatar:					"Avatar",
 							modal_username:						"Lokalt brugernavn",
 							modal_userolecolor:					"Overskriv ikke rollefarven",
@@ -1895,10 +1871,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Möchtest du wirklich alle Benutzer zurücksetzen?",
 							context_localusersettings:			"Lokale Benutzereinstellungen",
 							modal_colorpicker1:					"Namensfarbe",
-							modal_colorpicker2:					"Hintergrundfarbe",
+							modal_colorpicker2:					"Nachrichtenfarbe",
 							modal_colorpicker3:					"Etikettarbe",
 							modal_colorpicker4:					"Schriftfarbe",
-							modal_colorpicker5:					"Schriftfarbe",
 							modal_header:						"Lokale Benutzereinstellungen",
 							modal_ignoretagcolor:				"Rollenfarbe verwenden",
 							modal_invalidurl:					"Ungültige URL",
@@ -1907,7 +1882,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Benutzer",
 							modal_tabheader2:					"Namensfarbe",
 							modal_tabheader3:					"Etikettfarbe",
-							modal_tabheader4:					"Nachrichtenfarbe",
 							modal_useravatar:					"Benutzerbild",
 							modal_username:						"Lokaler Benutzername",
 							modal_userolecolor:					"Rollenfarbe nicht überschreiben",
@@ -1922,10 +1896,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλους τους χρήστες,",
 							context_localusersettings:			"Ρυθμίσεις τοπικού χρήστη",
 							modal_colorpicker1:					"Χρώμα ονόματος",
-							modal_colorpicker2:					"Χρώμα του φόντου",
+							modal_colorpicker2:					"Χρώμα μηνύματος",
 							modal_colorpicker3:					"Χρώμα ετικέτας",
 							modal_colorpicker4:					"Χρώμα γραμματοσειράς",
-							modal_colorpicker5:					"Χρώμα γραμματοσειράς",
 							modal_header:						"Ρυθμίσεις τοπικού χρήστη",
 							modal_ignoretagcolor:				"Χρησιμοποιήστε το χρώμα του ρόλου",
 							modal_invalidurl:					"Μη έγκυρη διεύθυνση URL",
@@ -1934,7 +1907,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Χρήστης",
 							modal_tabheader2:					"Χρώμα ονόματος",
 							modal_tabheader3:					"Χρώμα ετικέτας",
-							modal_tabheader4:					"Χρώμα μηνύματος",
 							modal_useravatar:					"Άβαταρ",
 							modal_username:						"Τοπικό όνομα χρήστη",
 							modal_userolecolor:					"Μην αντικαθιστάτε το χρώμα του ρόλου",
@@ -1949,10 +1921,9 @@ module.exports = (_ => {
 							confirm_resetall:					"¿Está seguro de que desea restablecer a todos los usuarios?",
 							context_localusersettings:			"Configuración de usuario local",
 							modal_colorpicker1:					"Color del nombre",
-							modal_colorpicker2:					"Color de fondo",
+							modal_colorpicker2:					"Color del mensaje",
 							modal_colorpicker3:					"Color de etiqueta",
 							modal_colorpicker4:					"Color de fuente",
-							modal_colorpicker5:					"Color de fuente",
 							modal_header:						"Configuración de usuario local",
 							modal_ignoretagcolor:				"Usar color de rol",
 							modal_invalidurl:					"URL invalida",
@@ -1961,7 +1932,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Usuario",
 							modal_tabheader2:					"Color del nombre",
 							modal_tabheader3:					"Color de etiqueta",
-							modal_tabheader4:					"Color del mensaje",
 							modal_useravatar:					"Avatar",
 							modal_username:						"Nombre de usuario local",
 							modal_userolecolor:					"No sobrescriba el color de la función",
@@ -1976,10 +1946,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Haluatko varmasti nollata kaikki käyttäjät?",
 							context_localusersettings:			"Paikalliset käyttäjäasetukset",
 							modal_colorpicker1:					"Nimen väri",
-							modal_colorpicker2:					"Taustaväri",
+							modal_colorpicker2:					"Viestin väri",
 							modal_colorpicker3:					"Tagin väri",
 							modal_colorpicker4:					"Fontin väri",
-							modal_colorpicker5:					"Fontin väri",
 							modal_header:						"Paikalliset käyttäjäasetukset",
 							modal_ignoretagcolor:				"Käytä rooliväriä",
 							modal_invalidurl:					"Virheellinen URL",
@@ -1988,7 +1957,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Käyttäjä",
 							modal_tabheader2:					"Nimen väri",
 							modal_tabheader3:					"Tagin väri",
-							modal_tabheader4:					"Viestin väri",
 							modal_useravatar:					"Hahmo",
 							modal_username:						"Paikallinen käyttäjätunnus",
 							modal_userolecolor:					"Älä korvaa roolin väriä",
@@ -2003,10 +1971,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Voulez-vous vraiment réinitialiser tous les utilisateurs?",
 							context_localusersettings:			"Paramètres locaux de l'utilisateur",
 							modal_colorpicker1:					"Couleur du nom",
-							modal_colorpicker2:					"Couleur de l'arrière plan",
+							modal_colorpicker2:					"Couleur du message",
 							modal_colorpicker3:					"Couleur de l'étiquette",
 							modal_colorpicker4:					"Couleur de la police",
-							modal_colorpicker5:					"Couleur de la police",
 							modal_header:						"Paramètres locaux de l'utilisateur",
 							modal_ignoretagcolor:				"Utiliser la couleur du rôle",
 							modal_invalidurl:					"URL invalide",
@@ -2015,7 +1982,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Utilisateur",
 							modal_tabheader2:					"Couleur du nom",
 							modal_tabheader3:					"Couleur de l'étiquette",
-							modal_tabheader4:					"Couleur du message",
 							modal_useravatar:					"Avatar",
 							modal_username:						"Nom local d'utilisateur",
 							modal_userolecolor:					"Ne pas écraser la couleur du rôle",
@@ -2030,10 +1996,9 @@ module.exports = (_ => {
 							confirm_resetall:					"क्या आप वाकई सभी उपयोगकर्ताओं को रीसेट करना चाहते हैं?",
 							context_localusersettings:			"स्थानीय उपयोगकर्ता सेटिंग्स",
 							modal_colorpicker1:					"नाम रंग",
-							modal_colorpicker2:					"पीछे का रंग",
+							modal_colorpicker2:					"संदेश रंग",
 							modal_colorpicker3:					"टैग रंग",
 							modal_colorpicker4:					"लिपि का रंग",
-							modal_colorpicker5:					"लिपि का रंग",
 							modal_header:						"स्थानीय उपयोगकर्ता सेटिंग्स",
 							modal_ignoretagcolor:				"भूमिका रंग का प्रयोग करें",
 							modal_invalidurl:					"असामान्य यूआरएल",
@@ -2042,7 +2007,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"उपयोगकर्ता",
 							modal_tabheader2:					"नाम रंग",
 							modal_tabheader3:					"टैग रंग",
-							modal_tabheader4:					"संदेश रंग",
 							modal_useravatar:					"अवतार",
 							modal_username:						"स्थानीय उपयोगकर्ता नाम",
 							modal_userolecolor:					"भूमिका रंग को अधिलेखित न करें",
@@ -2057,10 +2021,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Jeste li sigurni da želite resetirati sve korisnike?",
 							context_localusersettings:			"Postavke lokalnog korisnika",
 							modal_colorpicker1:					"Naziv Boja",
-							modal_colorpicker2:					"Boja pozadine",
+							modal_colorpicker2:					"Boja poruke",
 							modal_colorpicker3:					"Oznaka u boji",
 							modal_colorpicker4:					"Boja fonta",
-							modal_colorpicker5:					"Boja fonta",
 							modal_header:						"Postavke lokalnog korisnika",
 							modal_ignoretagcolor:				"Koristite boju uloga",
 							modal_invalidurl:					"Neispravna poveznica",
@@ -2069,7 +2032,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Korisnik",
 							modal_tabheader2:					"Naziv Boja",
 							modal_tabheader3:					"Oznaka u boji",
-							modal_tabheader4:					"Boja poruke",
 							modal_useravatar:					"Avatar",
 							modal_username:						"Lokalno korisničko ime",
 							modal_userolecolor:					"Nemojte prebrisati boju uloge",
@@ -2084,10 +2046,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Biztosan vissza akarja állítani az összes felhasználót?",
 							context_localusersettings:			"Helyi felhasználói beállítások",
 							modal_colorpicker1:					"Név színe",
-							modal_colorpicker2:					"Háttérszín",
+							modal_colorpicker2:					"Üzenet színe",
 							modal_colorpicker3:					"Címke színe",
 							modal_colorpicker4:					"Betű szín",
-							modal_colorpicker5:					"Betű szín",
 							modal_header:						"Helyi felhasználói beállítások",
 							modal_ignoretagcolor:				"Használja a Szerepszínt",
 							modal_invalidurl:					"Érvénytelen URL",
@@ -2096,7 +2057,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Felhasználó",
 							modal_tabheader2:					"Név színe",
 							modal_tabheader3:					"Címke színe",
-							modal_tabheader4:					"Üzenet színe",
 							modal_useravatar:					"Avatar",
 							modal_username:						"Helyi felhasználónév",
 							modal_userolecolor:					"Ne írja felül a Szerepszínt",
@@ -2110,11 +2070,10 @@ module.exports = (_ => {
 							confirm_reset:						"Sei sicuro di voler reimpostare questo utente?",
 							confirm_resetall:					"Sei sicuro di voler reimpostare tutti gli utenti?",
 							context_localusersettings:			"Impostazioni utente locale",
-							modal_colorpicker1:					"Nome Colore",
-							modal_colorpicker2:					"Colore di sfondo",
+							modal_colorpicker1:					"Colore nome",
+							modal_colorpicker2:					"Colore messaggio",
 							modal_colorpicker3:					"Colore tag",
 							modal_colorpicker4:					"Colore del carattere",
-							modal_colorpicker5:					"Colore del carattere",
 							modal_header:						"Impostazioni utente locale",
 							modal_ignoretagcolor:				"Usa colore ruolo",
 							modal_invalidurl:					"URL non valido",
@@ -2123,7 +2082,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Utente",
 							modal_tabheader2:					"Nome Colore",
 							modal_tabheader3:					"Colore tag",
-							modal_tabheader4:					"Colore messaggio",
 							modal_useravatar:					"Avatar",
 							modal_username:						"Nome utente locale",
 							modal_userolecolor:					"Non sovrascrivere il colore del ruolo",
@@ -2138,10 +2096,9 @@ module.exports = (_ => {
 							confirm_resetall:					"すべてのユーザーをリセットしてもよろしいですか？",
 							context_localusersettings:			"ローカルユーザー設定",
 							modal_colorpicker1:					"名前の色",
-							modal_colorpicker2:					"背景色",
+							modal_colorpicker2:					"メッセージの色",
 							modal_colorpicker3:					"タグの色",
 							modal_colorpicker4:					"フォントの色",
-							modal_colorpicker5:					"フォントの色",
 							modal_header:						"ローカルユーザー設定",
 							modal_ignoretagcolor:				"役割の色を使用する",
 							modal_invalidurl:					"無効なURL",
@@ -2150,7 +2107,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"ユーザー",
 							modal_tabheader2:					"名前の色",
 							modal_tabheader3:					"タグの色",
-							modal_tabheader4:					"メッセージの色",
 							modal_useravatar:					"アバター",
 							modal_username:						"ローカルユーザー名",
 							modal_userolecolor:					"役割の色を上書きしないでください",
@@ -2165,10 +2121,9 @@ module.exports = (_ => {
 							confirm_resetall:					"모든 사용자를 재설정 하시겠습니까?",
 							context_localusersettings:			"로컬 사용자 설정",
 							modal_colorpicker1:					"이름 색상",
-							modal_colorpicker2:					"배경색",
+							modal_colorpicker2:					"메시지 색상",
 							modal_colorpicker3:					"태그 색상",
 							modal_colorpicker4:					"글자 색",
-							modal_colorpicker5:					"글자 색",
 							modal_header:						"로컬 사용자 설정",
 							modal_ignoretagcolor:				"역할 색상 사용",
 							modal_invalidurl:					"잘못된 URL",
@@ -2177,7 +2132,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"사용자",
 							modal_tabheader2:					"이름 색상",
 							modal_tabheader3:					"태그 색상",
-							modal_tabheader4:					"메시지 색상",
 							modal_useravatar:					"화신",
 							modal_username:						"로컬 사용자 이름",
 							modal_userolecolor:					"역할 색상을 덮어 쓰지 마십시오.",
@@ -2192,10 +2146,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Ar tikrai norite iš naujo nustatyti visus naudotojus?",
 							context_localusersettings:			"Vietinio vartotojo nustatymai",
 							modal_colorpicker1:					"Pavadinimo spalva",
-							modal_colorpicker2:					"Fono spalva",
+							modal_colorpicker2:					"Pranešimo spalva",
 							modal_colorpicker3:					"Žymos spalva",
 							modal_colorpicker4:					"Šrifto spalva",
-							modal_colorpicker5:					"Šrifto spalva",
 							modal_header:						"Vietinio vartotojo nustatymai",
 							modal_ignoretagcolor:				"Naudokite vaidmens spalvą",
 							modal_invalidurl:					"Neteisingas URL",
@@ -2204,7 +2157,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Vartotojas",
 							modal_tabheader2:					"Pavadinimo spalva",
 							modal_tabheader3:					"Žymos spalva",
-							modal_tabheader4:					"Pranešimo spalva",
 							modal_useravatar:					"Avataras",
 							modal_username:						"Vietinis vartotojo vardas",
 							modal_userolecolor:					"Neperrašykite vaidmens spalvos",
@@ -2219,10 +2171,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Weet u zeker dat u alle gebruikers wilt resetten?",
 							context_localusersettings:			"Lokale gebruikersinstellingen",
 							modal_colorpicker1:					"Naamkleur",
-							modal_colorpicker2:					"Achtergrondkleur",
+							modal_colorpicker2:					"Berichtkleur",
 							modal_colorpicker3:					"Tagkleur",
 							modal_colorpicker4:					"Letterkleur",
-							modal_colorpicker5:					"Letterkleur",
 							modal_header:						"Lokale gebruikersinstellingen",
 							modal_ignoretagcolor:				"Gebruik rolkleur",
 							modal_invalidurl:					"Ongeldige URL",
@@ -2231,7 +2182,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Gebruiker",
 							modal_tabheader2:					"Naamkleur",
 							modal_tabheader3:					"Tagkleur",
-							modal_tabheader4:					"Berichtkleur",
 							modal_useravatar:					"Avatar",
 							modal_username:						"Lokale gebruikersnaam",
 							modal_userolecolor:					"Overschrijf de rolkleur niet",
@@ -2246,10 +2196,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Er du sikker på at du vil tilbakestille alle brukere?",
 							context_localusersettings:			"Lokale brukerinnstillinger",
 							modal_colorpicker1:					"Navnfarge",
-							modal_colorpicker2:					"Bakgrunnsfarge",
+							modal_colorpicker2:					"Meldingfarge",
 							modal_colorpicker3:					"Merkefarge",
 							modal_colorpicker4:					"Skriftfarge",
-							modal_colorpicker5:					"Skriftfarge",
 							modal_header:						"Lokale brukerinnstillinger",
 							modal_ignoretagcolor:				"Bruk rollefarge",
 							modal_invalidurl:					"Ugyldig URL",
@@ -2258,7 +2207,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Bruker",
 							modal_tabheader2:					"Navnfarge",
 							modal_tabheader3:					"Merkefarge",
-							modal_tabheader4:					"Meldingfarge",
 							modal_useravatar:					"Avatar",
 							modal_username:						"Lokalt brukernavn",
 							modal_userolecolor:					"Ikke skriv rollefargen",
@@ -2273,10 +2221,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Czy na pewno chcesz zresetować wszystkich użytkowników?",
 							context_localusersettings:			"Ustawienia użytkownika lokalnego",
 							modal_colorpicker1:					"Nazwa Kolor",
-							modal_colorpicker2:					"Kolor tła",
+							modal_colorpicker2:					"Kolor wiadomości",
 							modal_colorpicker3:					"Kolor tagu",
 							modal_colorpicker4:					"Kolor czcionki",
-							modal_colorpicker5:					"Kolor czcionki",
 							modal_header:						"Ustawienia użytkownika lokalnego",
 							modal_ignoretagcolor:				"Użyj koloru roli",
 							modal_invalidurl:					"Nieprawidłowy URL",
@@ -2285,7 +2232,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Użytkownik",
 							modal_tabheader2:					"Nazwa Kolor",
 							modal_tabheader3:					"Kolor tagu",
-							modal_tabheader4:					"Kolor wiadomości",
 							modal_useravatar:					"Awatara",
 							modal_username:						"Lokalna nazwa użytkownika",
 							modal_userolecolor:					"Nie zastępuj koloru roli",
@@ -2300,10 +2246,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Tem certeza de que deseja redefinir todos os usuários?",
 							context_localusersettings:			"Configurações de usuário local",
 							modal_colorpicker1:					"Cor do nome",
-							modal_colorpicker2:					"Cor de fundo",
+							modal_colorpicker2:					"Cor da Mensagem",
 							modal_colorpicker3:					"Cor da tag",
 							modal_colorpicker4:					"Cor da fonte",
-							modal_colorpicker5:					"Cor da fonte",
 							modal_header:						"Configurações de usuário local",
 							modal_ignoretagcolor:				"Use a cor da função",
 							modal_invalidurl:					"URL inválida",
@@ -2312,7 +2257,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Do utilizador",
 							modal_tabheader2:					"Cor do Nome",
 							modal_tabheader3:					"Cor da tag",
-							modal_tabheader4:					"Cor da Mensagem",
 							modal_useravatar:					"Avatar",
 							modal_username:						"Nome de usuário local",
 							modal_userolecolor:					"Não sobrescreva a Cor da Função",
@@ -2327,10 +2271,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Sigur doriți să resetați toți utilizatorii?",
 							context_localusersettings:			"Setări locale ale utilizatorului",
 							modal_colorpicker1:					"Culoare nume",
-							modal_colorpicker2:					"Culoare de fundal",
+							modal_colorpicker2:					"Culoarea mesajului",
 							modal_colorpicker3:					"Culoare etichetă",
 							modal_colorpicker4:					"Culoarea fontului",
-							modal_colorpicker5:					"Culoarea fontului",
 							modal_header:						"Setări locale ale utilizatorului",
 							modal_ignoretagcolor:				"Utilizați culoarea rolului",
 							modal_invalidurl:					"URL invalid",
@@ -2339,7 +2282,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Utilizator",
 							modal_tabheader2:					"Culoare nume",
 							modal_tabheader3:					"Culoare etichetă",
-							modal_tabheader4:					"Culoarea mesajului",
 							modal_useravatar:					"Avatar",
 							modal_username:						"Nume utilizator local",
 							modal_userolecolor:					"Nu suprascrieți culoarea rolului",
@@ -2354,10 +2296,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Вы уверены, что хотите сбросить всех пользователей?",
 							context_localusersettings:			"Настройки локального пользователя",
 							modal_colorpicker1:					"Цвет имени",
-							modal_colorpicker2:					"Фоновый цвет",
+							modal_colorpicker2:					"Цвет сообщения",
 							modal_colorpicker3:					"Цвет метки",
 							modal_colorpicker4:					"Цвет шрифта",
-							modal_colorpicker5:					"Цвет шрифта",
 							modal_header:						"Настройки локального пользователя",
 							modal_ignoretagcolor:				"Использовать цвет роли",
 							modal_invalidurl:					"Неверная ссылка",
@@ -2366,7 +2307,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Пользователь",
 							modal_tabheader2:					"Цвет имени",
 							modal_tabheader3:					"Цвет метки",
-							modal_tabheader4:					"Цвет сообщения",
 							modal_useravatar:					"Аватар",
 							modal_username:						"Локальное имя пользователя",
 							modal_userolecolor:					"Не перезаписывайте цвет роли",
@@ -2381,10 +2321,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Är du säker på att du vill återställa alla användare?",
 							context_localusersettings:			"Lokala användarinställningar",
 							modal_colorpicker1:					"Namnfärg",
-							modal_colorpicker2:					"Bakgrundsfärg",
+							modal_colorpicker2:					"Meddelandefärg",
 							modal_colorpicker3:					"Taggfärg",
 							modal_colorpicker4:					"Fontfärg",
-							modal_colorpicker5:					"Fontfärg",
 							modal_header:						"Lokala användarinställningar",
 							modal_ignoretagcolor:				"Använd rollfärg",
 							modal_invalidurl:					"Ogiltig URL",
@@ -2393,7 +2332,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Användare",
 							modal_tabheader2:					"Namnfärg",
 							modal_tabheader3:					"Taggfärg",
-							modal_tabheader4:					"Meddelandefärg",
 							modal_useravatar:					"Avatar",
 							modal_username:						"Lokalt användarnamn",
 							modal_userolecolor:					"Skriv inte över rollfärgen",
@@ -2408,10 +2346,9 @@ module.exports = (_ => {
 							confirm_resetall:					"แน่ใจไหมว่าต้องการรีเซ็ตผู้ใช้ทั้งหมด",
 							context_localusersettings:			"การตั้งค่าผู้ใช้ภายใน",
 							modal_colorpicker1:					"ชื่อสี",
-							modal_colorpicker2:					"สีพื้นหลัง",
+							modal_colorpicker2:					"สีข้อความ",
 							modal_colorpicker3:					"สีแท็ก",
 							modal_colorpicker4:					"สีตัวอักษร",
-							modal_colorpicker5:					"สีตัวอักษร",
 							modal_header:						"การตั้งค่าผู้ใช้ภายใน",
 							modal_ignoretagcolor:				"ใช้สีของบทบาท",
 							modal_invalidurl:					"URL ไม่ถูกต้อง",
@@ -2420,7 +2357,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"ผู้ใช้",
 							modal_tabheader2:					"ชื่อสี",
 							modal_tabheader3:					"สีแท็ก",
-							modal_tabheader4:					"สีข้อความ",
 							modal_useravatar:					"สัญลักษณ์",
 							modal_username:						"ชื่อผู้ใช้ท้องถิ่น",
 							modal_userolecolor:					"อย่าเขียนทับสีของบทบาท",
@@ -2435,10 +2371,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Tüm Kullanıcıları sıfırlamak istediğinizden emin misiniz?",
 							context_localusersettings:			"Yerel Kullanıcı Ayarları",
 							modal_colorpicker1:					"İsim Rengi",
-							modal_colorpicker2:					"Arka plan rengi",
+							modal_colorpicker2:					"Mesaj Rengi",
 							modal_colorpicker3:					"Etiket Rengi",
 							modal_colorpicker4:					"Yazı rengi",
-							modal_colorpicker5:					"Yazı rengi",
 							modal_header:						"Yerel Kullanıcı Ayarları",
 							modal_ignoretagcolor:				"Rol Rengini Kullan",
 							modal_invalidurl:					"Geçersiz URL",
@@ -2447,7 +2382,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Kullanıcı",
 							modal_tabheader2:					"İsim Rengi",
 							modal_tabheader3:					"Etiket Rengi",
-							modal_tabheader4:					"Mesaj Rengi",
 							modal_useravatar:					"Avatar",
 							modal_username:						"Yerel Kullanıcı Adı",
 							modal_userolecolor:					"Rol Renginin üzerine yazmayın",
@@ -2462,10 +2396,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Ви впевнені, що хочете скинути налаштування всіх користувачів?",
 							context_localusersettings:			"Налаштування локального користувача",
 							modal_colorpicker1:					"Назва Колір",
-							modal_colorpicker2:					"Колір фону",
+							modal_colorpicker2:					"Колір повідомлення",
 							modal_colorpicker3:					"Колір тегу",
 							modal_colorpicker4:					"Колір шрифту",
-							modal_colorpicker5:					"Колір шрифту",
 							modal_header:						"Налаштування локального користувача",
 							modal_ignoretagcolor:				"Використовуйте колір ролі",
 							modal_invalidurl:					"Недійсна URL-адреса",
@@ -2474,7 +2407,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Користувач",
 							modal_tabheader2:					"Назва Колір",
 							modal_tabheader3:					"Колір тегу",
-							modal_tabheader4:					"Колір повідомлення",
 							modal_useravatar:					"Аватар",
 							modal_username:						"Локальне ім’я користувача",
 							modal_userolecolor:					"Не перезаписуйте колір ролі",
@@ -2489,10 +2421,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Bạn có chắc chắn muốn đặt lại tất cả Người dùng không?",
 							context_localusersettings:			"Cài đặt người dùng cục bộ",
 							modal_colorpicker1:					"Tên màu",
-							modal_colorpicker2:					"Màu nền",
+							modal_colorpicker2:					"Màu tin nhắn",
 							modal_colorpicker3:					"Màu thẻ",
 							modal_colorpicker4:					"Màu phông chữ",
-							modal_colorpicker5:					"Màu phông chữ",
 							modal_header:						"Cài đặt người dùng cục bộ",
 							modal_ignoretagcolor:				"Sử dụng màu vai trò",
 							modal_invalidurl:					"URL không hợp lệ",
@@ -2501,7 +2432,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"Người dùng",
 							modal_tabheader2:					"Tên màu",
 							modal_tabheader3:					"Màu thẻ",
-							modal_tabheader4:					"Màu tin nhắn",
 							modal_useravatar:					"Hình đại diện",
 							modal_username:						"Tên người dùng cục bộ",
 							modal_userolecolor:					"Không ghi đè Màu vai trò",
@@ -2516,10 +2446,9 @@ module.exports = (_ => {
 							confirm_resetall:					"您确定要重置所有用户吗？",
 							context_localusersettings:			"本地用户设置",
 							modal_colorpicker1:					"名称颜色",
-							modal_colorpicker2:					"背景颜色",
+							modal_colorpicker2:					"讯息颜色",
 							modal_colorpicker3:					"标签颜色",
 							modal_colorpicker4:					"字体颜色",
-							modal_colorpicker5:					"字体颜色",
 							modal_header:						"本地用户设置",
 							modal_ignoretagcolor:				"使用角色颜色",
 							modal_invalidurl:					"无效的网址",
@@ -2528,7 +2457,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"用户",
 							modal_tabheader2:					"名称颜色",
 							modal_tabheader3:					"标签颜色",
-							modal_tabheader4:					"讯息颜色",
 							modal_useravatar:					"头像",
 							modal_username:						"本地用户名",
 							modal_userolecolor:					"不要覆盖角色颜色",
@@ -2543,10 +2471,9 @@ module.exports = (_ => {
 							confirm_resetall:					"您確定要重置所有用戶嗎？",
 							context_localusersettings:			"本地用戶設置",
 							modal_colorpicker1:					"名稱顏色",
-							modal_colorpicker2:					"背景顏色",
+							modal_colorpicker2:					"訊息顏色",
 							modal_colorpicker3:					"標籤顏色",
 							modal_colorpicker4:					"字體顏色",
-							modal_colorpicker5:					"字體顏色",
 							modal_header:						"本地用戶設置",
 							modal_ignoretagcolor:				"使用角色顏色",
 							modal_invalidurl:					"無效的網址",
@@ -2555,7 +2482,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"用戶",
 							modal_tabheader2:					"名稱顏色",
 							modal_tabheader3:					"標籤顏色",
-							modal_tabheader4:					"訊息顏色",
 							modal_useravatar:					"頭像",
 							modal_username:						"本地用戶名",
 							modal_userolecolor:					"不要覆蓋角色顏色",
@@ -2570,10 +2496,9 @@ module.exports = (_ => {
 							confirm_resetall:					"Are you sure you want to reset all Users?",
 							context_localusersettings:			"Local User Settings",
 							modal_colorpicker1:					"Name Color",
-							modal_colorpicker2:					"Background Color",
+							modal_colorpicker2:					"Message Color",
 							modal_colorpicker3:					"Tag Color",
 							modal_colorpicker4:					"Font Color",
-							modal_colorpicker5:					"Font Color",
 							modal_header:						"Local User Settings",
 							modal_ignoretagcolor:				"Use Role Color",
 							modal_invalidurl:					"Invalid URL",
@@ -2582,7 +2507,6 @@ module.exports = (_ => {
 							modal_tabheader1:					"User",
 							modal_tabheader2:					"Name Color",
 							modal_tabheader3:					"Tag Color",
-							modal_tabheader4:					"Message Color",
 							modal_useravatar:					"Avatar",
 							modal_username:						"Local Username",
 							modal_userolecolor:					"Do not overwrite the Role Color",

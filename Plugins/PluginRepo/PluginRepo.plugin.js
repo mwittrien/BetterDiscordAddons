@@ -239,7 +239,6 @@ module.exports = (_ => {
 				if (this.props.data.thumbnailUrl && !this.props.data.thumbnailChecked) {
 					if (!window.Buffer) this.props.data.thumbnailChecked = true;
 					else BDFDB.LibraryRequires.request(this.props.data.thumbnailUrl, {encoding: null}, (error, response, body) => {
-						this.props.data.thumbnailChecked = true;
 						if (response && response.headers["content-type"] && response.headers["content-type"] == "image/gif") {
 							const throwAwayImg = new Image(), instance = this;
 							throwAwayImg.onload = function() {
@@ -249,17 +248,24 @@ module.exports = (_ => {
 									const oldUrl = instance.props.data.thumbnailUrl;
 									instance.props.data.thumbnailUrl = canvas.toDataURL("image/png");
 									instance.props.data.thumbnailGifUrl = oldUrl;
+									instance.props.data.thumbnailChecked = true;
 									BDFDB.ReactUtils.forceUpdate(instance);
-								} catch(err) {
+								}
+								catch (err) {
+									instance.props.data.thumbnailChecked = true;
 									BDFDB.ReactUtils.forceUpdate(instance);
 								}
 							};
 							throwAwayImg.onerror = function() {
+								instance.props.data.thumbnailChecked = true;
 								BDFDB.ReactUtils.forceUpdate(instance);
 							};
 							throwAwayImg.src = "data:" + response.headers["content-type"] + ";base64," + (new Buffer(body).toString("base64"));
 						}
-						else BDFDB.ReactUtils.forceUpdate(this);
+						else {
+							this.props.data.thumbnailChecked = true;
+							BDFDB.ReactUtils.forceUpdate(this);
+						}
 					});
 				}
 				return BDFDB.ReactUtils.createElement("div", {
