@@ -164,7 +164,7 @@
 	
 	--channeltextarea-background: rgba(var(--backgroundaccent),.8);
 	
-	--input-background: rgba(0,0,0,.1);
+	--input-background: rgb(var(--backgroundtertiary));
 	
 	--activity-card-background: rgb(var(--backgroundtertiary));
 	

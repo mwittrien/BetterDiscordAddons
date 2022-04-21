@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.6
+ * @version 4.3.7
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.3.6",
+			"version": "4.3.7",
 			"description": "Allows you to locally edit Channels"
 		},
 		"changeLog": {
 			"fixed": {
-				"PlatformIndicators": "Fixed Plugin Issue with PlatformIndicators that broke Features in the DM List"
+				"App Title": "Fixed an Issue where a changed App Title for a changed Channel would persist to the Friends Page"
 			}
 		}
 	};
@@ -688,7 +688,7 @@ module.exports = (_ => {
 				if (this.settings.places.appTitle) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
 					let title = document.head.querySelector("title");
-					if (title && channel && changedChannels[channel.id] && changedChannels[channel.id].name) {
+					if (title && channel && (document.location.href || "").indexOf(channel.id) > -1 && changedChannels[channel.id] && changedChannels[channel.id].name) {
 						if (BDFDB.ChannelUtils.isTextChannel(channel)) BDFDB.DOMUtils.setText(title, "#" + this.getChannelData(channel.id).name);
 						else if (channel && channel.isGroupDM()) BDFDB.DOMUtils.setText(title, this.getGroupName(channel.id));
 					}

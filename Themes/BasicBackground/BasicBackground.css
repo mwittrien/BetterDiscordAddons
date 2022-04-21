@@ -93,6 +93,8 @@
 	--background-modifier-accent: rgba(var(--textbrightest),.1);
 	--background-message-automod: rgba(var(--dangercolor),.05);
 	--background-message-automod-hover: rgba(var(--dangercolor),.1);
+	--channeltextarea-background: rgba(var(--transparencycolor), .3);
+	--input-background: rgba(var(--transparencycolor), .1);
 	--elevation-low: 0 1px 5px 0 rgba(var(--transparencycolor), .3);
 	--elevation-high: 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 	--font-primary: var(--font) !important;

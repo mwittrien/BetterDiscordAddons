@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.5.4",
+			"version": "4.5.5",
 			"description": "Allows you to locally edit Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"Voice Channels": "Works in Voice Channels again"
+				"App Title": "Fixed an Issue where a changed App Title for a changed User DM would persist to the Friends Page"
 			}
 		}
 	};
@@ -1269,7 +1269,7 @@ module.exports = (_ => {
 			changeAppTitle () {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
 				let title = document.head.querySelector("title");
-				if (title && channel && channel.isDM()) {
+				if (title && channel && channel.isDM() && (document.location.href || "").indexOf(channel.id) > -1) {
 					let user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
 					if (user) BDFDB.DOMUtils.setText(title, "@" + this.getUserData(user.id, this.settings.places.appTitle).username);
 				}
