@@ -457,7 +457,7 @@ module.exports = (_ => {
 			getActiveShortcutString (action) {
 				if (!action) return null;
 				let str = [];
-				if (this.settings.general.addHints && this.settings.bindingsState[action] && enabledBindings[action]) {
+				if (this.settings.general.addHints && enabledBindings[action]) {
 					if (enabledBindings[action].keycombo.length) str.push(BDFDB.LibraryModules.KeyCodeUtils.getString(enabledBindings[action].keycombo));
 					str.push(Object.keys(clickMap).find(type => clickMap[type] == enabledBindings[action].click));
 				}
