@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.7
+ * @version 2.3.8
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.3.7",
+			"version": "2.3.8",
 			"description": "Allows you to configure your own Aliases/Commands"
 		},
 		"changeLog": {
 			"fixed": {
-				"Autocomplete": "Works again"
+				"Attachments": "No longer uploads Attachments to every Message Draft of all Channels in a Server"
 			}
 		}
 	};
@@ -397,6 +397,7 @@ module.exports = (_ => {
 				let messageData = this.formatText(e2.methodArguments[0].value);
 				if (messageData) {
 					if (messageData.files.length > 0 && (BDFDB.DMUtils.isDMChannel(e.instance.props.channel.id) || BDFDB.UserUtils.can("ATTACH_FILES"))) {
+						e2.methodArguments[0].uploads = [].concat(e2.methodArguments[0].uploads);
 						for (let file of messageData.files) e2.methodArguments[0].uploads.push(new BDFDB.DiscordObjects.Upload({file: file, platform: 1}));
 					}
 					if (messageData.text != null && e2.methodArguments[0].value != messageData.text) {
