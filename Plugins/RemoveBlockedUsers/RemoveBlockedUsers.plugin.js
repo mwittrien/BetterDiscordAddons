@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.5
+ * @version 1.4.6
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,15 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedUsers",
 			"author": "DevilBro",
-			"version": "1.4.5",
+			"version": "1.4.6",
 			"description": "Removes blocked Messages/Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"Offline List": "Sometimes clickling a User in the Offline List would cause others to vanish, fixed"
-			},
-			"improved": {
-				"Activity List": "No longer shows blocked ppl in the Activity List (wtf Discord?)"
+				"Server Message Indicator": "No longer shows an unread Indicator for Servers if all new messages are from blocked ppl"
 			}
 		}
 	};
@@ -144,18 +141,15 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
-					if (e.returnValue && this.settings.notifcations.messages) {
-						let count = BDFDB.LibraryModules.UnreadChannelUtils.getUnreadCount(e.methodArguments[0]);
-						if (count > 0 && count < BDFDB.DiscordConstants.MAX_MESSAGES_PER_CHANNEL) {
-							let id = BDFDB.LibraryModules.UnreadChannelUtils.lastMessageId(e.methodArguments[0]);
-							let message = id && BDFDB.LibraryModules.MessageStore.getMessage(e.methodArguments[0], id);
-							if (message && message.blocked) {
-								let oldestId = BDFDB.LibraryModules.UnreadChannelUtils.getOldestUnreadMessageId(e.methodArguments[0]);
-								let messages = BDFDB.LibraryModules.MessageStore.getMessages(e.methodArguments[0]);
-								if (messages && oldestId) {
-									let index = messages._array.indexOf(messages._array.find(c => c.id == oldestId));
-									if (index > -1) return messages._array.slice(index).some(c => !c.blocked);
-								}
+					if (e.returnValue && this.settings.notifcations.messages && BDFDB.LibraryModules.UnreadChannelUtils.getUnreadCount(e.methodArguments[0]) < BDFDB.DiscordConstants.MAX_MESSAGES_PER_CHANNEL) {
+						let id = BDFDB.LibraryModules.UnreadChannelUtils.lastMessageId(e.methodArguments[0]);
+						let message = id && BDFDB.LibraryModules.MessageStore.getMessage(e.methodArguments[0], id);
+						if (message && message.blocked) {
+							let oldestId = BDFDB.LibraryModules.UnreadChannelUtils.getOldestUnreadMessageId(e.methodArguments[0]);
+							let messages = BDFDB.LibraryModules.MessageStore.getMessages(e.methodArguments[0]);
+							if (messages && oldestId) {
+								let index = messages._array.indexOf(messages._array.find(c => c.id == oldestId));
+								if (index > -1) return messages._array.slice(index).some(c => !c.blocked);
 							}
 						}
 					}
