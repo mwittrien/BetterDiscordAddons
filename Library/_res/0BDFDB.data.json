@@ -5314,6 +5314,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"558825053668507650": 	{"active": true,		"tier": "t2",		"text": "",					"color": "",			"id": "duh AshAj"},
 		"839934284101976094": 	{"active": false,		"tier": "t2",		"text": "",					"color": "",			"id": "tacos (CoZha)"},
 		"296567130952826880": 	{"active": true,		"tier": "t2",		"text": "",					"color": "",			"id": "sukumizu (tekki)"},
 		"779410322187354163": 	{"active": true,		"tier": "t3",		"text": "",					"color": "",			"id": "Liam (LiaHu)"},
