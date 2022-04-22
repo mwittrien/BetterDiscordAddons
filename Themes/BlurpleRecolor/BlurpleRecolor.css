@@ -2187,7 +2187,7 @@ a.metadataName-1KMZtB {
 
 /* ----		12.3.	INPUTS							---- */
 
-.input-2g-os5 {												/* textinput												*/
+input.input-2g-os5 {										/* textinput												*/
 	border: 1px solid var(--deprecated-text-input-border);
 }
 .input-2g-os5:hover {

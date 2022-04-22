@@ -190,7 +190,7 @@
 		"ContextMenuSubItemsMap": {
 			"UserContextMenu": {
 				"keys": ["user", "channel"],
-				"items": ["useHideNoVideoParticipantsItem", "useHideSelfVideoItem", "usePreviewVideoItem", "useChangeIdentityItem", "useMoveToAudienceItem", "useAddFriendNicknameItem", "useAddNoteItem", "useBlockUserItem", "useUserRelationshipItems", "useUserManagementItems", "useCallUserItem", "useFocusVideoItem", "useInviteUserToGuildItems", "useMentionUserItem", "useMessageUserItem", "useUserProfileItem", "useUserRolesItems", "useUserVolumeItem", "useWatchStreamItem", "useCloseDMItem", "useMuteChannelItem"]
+				"items": ["useHideNoVideoParticipantsItem", "useHideSelfVideoItem", "usePreviewVideoItem", "useChangeIdentityItem", "useMoveToAudienceItem", "useAddFriendNicknameItem", "useAddNoteItem", "useBlockUserItem", "useUserRelationshipItems", "useUserManagementItems", "useMoveUserVoiceItems", "useCallUserItem", "useFocusVideoItem", "useInviteUserToGuildItems", "useMentionUserItem", "useMessageUserItem", "useUserProfileItem", "useUserRolesItems", "useUserVolumeItem", "useWatchStreamItem", "useCloseDMItem", "useMuteChannelItem"]
 			}
 		},
 		"PatchTypes": [

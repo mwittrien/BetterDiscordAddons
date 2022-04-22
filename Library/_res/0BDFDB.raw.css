@@ -921,8 +921,8 @@ img:not([src]), img[src=""], img[src="null"] {
 	color: var(--interactive-active);
 }
 
-[REPLACE_CLASS_input][REPLACE_CLASS_inputsuccess],
-[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
+input[REPLACE_CLASS_input][REPLACE_CLASS_inputsuccess],
+input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	border-style: solid;
 	border-width: 1px;
 }

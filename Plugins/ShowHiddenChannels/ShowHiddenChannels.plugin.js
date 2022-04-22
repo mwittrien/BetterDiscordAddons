@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.8
+ * @version 3.0.9
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "3.0.8",
+			"version": "3.0.9",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
 		}
 	};
@@ -193,10 +193,12 @@ module.exports = (_ => {
 						Channels: "render",
 						ChannelCategoryItem: "type",
 						ChannelItem: "default",
+						VoiceUser: "render",
 						VoiceUsers: "render"
 					},
 					after: {
-						ChannelItem: "default"
+						ChannelItem: "default",
+						VoiceUser: "render"
 					}
 				};
 				
@@ -351,6 +353,10 @@ module.exports = (_ => {
 				BDFDB.ChannelUtils.rerenderAll();
 			}
 		
+			onUserContextMenu (e) {
+				if ((e.subType == "useUserManagementItems" || e.subType == "useMoveUserVoiceItems" || e.subType == "usePreviewVideoItem") && e.arguments[2] && this.isChannelHidden(e.arguments[2])) return null;
+			}
+			
 			onChannelContextMenu (e) {
 				if (e.instance.props.channel) {
 					if (e.instance.props.channel.id.endsWith("hidden") && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY) {
@@ -376,6 +382,10 @@ module.exports = (_ => {
 						}));
 					}
 					let isHidden = this.isChannelHidden(e.instance.props.channel.id);
+					if (isHidden) {
+						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "invite-people"});
+						if (index > -1) children.splice(index, 1);
+					}
 					if (isHidden || this.settings.general.showForNormal) {
 						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mark-channel-read", group: true});
 						children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
@@ -502,12 +512,12 @@ module.exports = (_ => {
 						if (!(e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE && e.instance.props.connected)) {
 							let wrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelwrapper]]});
 							if (wrapper) {
-								wrapper.props.onMouseDown = _ => {};
-								wrapper.props.onMouseUp = _ => {};
+								wrapper.props.onMouseDown = event => BDFDB.ListenerUtils.stopEvent(event);
+								wrapper.props.onMouseUp = event => BDFDB.ListenerUtils.stopEvent(event);
 							}
 							let mainContent = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelmaincontent]]});
 							if (mainContent) {
-								mainContent.props.onClick = _ => {};
+								mainContent.props.onClick = event => BDFDB.ListenerUtils.stopEvent(event);
 								mainContent.props.href = null;
 							}
 						}
@@ -517,6 +527,25 @@ module.exports = (_ => {
 		
 			processVoiceUsers (e) {
 				if (!this.settings.general.showVoiceUsers && this.isChannelHidden(e.instance.props.channel.id)) e.instance.props.voiceStates = [];
+			}
+		
+			processVoiceUser (e) {
+				let channelId = (BDFDB.LibraryModules.VoiceUtils.getVoiceStateForUser(e.instance.props.user.id) || {}).channelId;
+				if (channelId && this.isChannelHidden(channelId)) {
+					if (!e.returnvalue) {
+						e.instance.props.onClick = event => BDFDB.ListenerUtils.stopEvent(event);
+						e.instance.props.onDoubleClick = event => BDFDB.ListenerUtils.stopEvent(event);
+						e.instance.props.onMouseDown = event => BDFDB.ListenerUtils.stopEvent(event);
+						e.instance.props.onMouseUp = event => BDFDB.ListenerUtils.stopEvent(event);
+						e.instance.props.onKeyDown = event => BDFDB.ListenerUtils.stopEvent(event);
+						e.instance.props.onKeyUp = event => BDFDB.ListenerUtils.stopEvent(event);
+						e.instance.props.onKeyPress = event => BDFDB.ListenerUtils.stopEvent(event);
+					}
+					else {
+						let icons = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.voiceicons]]});
+						if (icons) icons.props.children = [];
+					}
+				}
 			}
 			
 			isChannelHidden (channelId) {
