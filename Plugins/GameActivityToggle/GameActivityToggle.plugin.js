@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.9
+ * @version 1.1.0
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "GameActivityToggle",
 			"author": "DevilBro",
-			"version": "1.0.9",
+			"version": "1.1.0",
 			"description": "Adds a Quick-Toggle Game Activity Button"
 		},
 		"changeLog": {
-			"added": {
-				"Global Hotkey": ""
+			"fixed": {
+				"Global Hotkey": "Now properly saves"
 			}
 		}
 	};
@@ -185,7 +185,7 @@ module.exports = (_ => {
 											reset: true,
 											onChange: value => {
 												keybind = value;
-												BDFDB.DataUtils.save(this, "keybind", keybind)
+												BDFDB.DataUtils.save(keybind, this, "keybind")
 												this.activateKeybind();
 											}
 										})
