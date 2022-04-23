@@ -1230,12 +1230,12 @@ body::after {
 	z-index: -1;
 }
 .wrapper-2vIMkT::before {
-	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background: var(--backgound) var(--popoutposition)/var(--backgroundsize);
 	background-attachment: fixed;
 }
 .wrapper-2vIMkT::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
-	backdrop-filter: blur(var(--popoutblur));
+	backdrop-filter: blur(var(--backgroundblur));
 }
 .button-3bklZh:hover {										/* message				button								*/
 	background-color: rgba(var(--transparencycolor), .2);
@@ -2171,6 +2171,58 @@ body::after {
 }
 #app-mount .loading-3ozbwt {								/* guildcard			loading								*/
 	background-color: rgba(var(--transparencycolor), .5);
+}
+.actionButtonsContainer-2eREP- {							/* guildcard			action button						*/
+	position: relative;
+	background: transparent;
+}
+.actionButtonsContainer-2eREP-::before,
+.actionButtonsContainer-2eREP-::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	border-radius: 4px;
+	pointer-events: none;
+}
+.actionButtonsContainer-2eREP-::before {
+	background: var(--background) var(--backgroundposition)/var(--backgroundsize);
+	background-attachment: fixed;
+}
+.actionButtonsContainer-2eREP-::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
+	backdrop-filter: blur(var(--backgroundblur));
+}
+.spinner-2bMWLW {											/* guildcard			loading spinner						*/
+	background: transparent;
+	transform: none;
+	top: calc(50% - 24px);
+	left: calc(50% - 24px);
+}
+.spinner-2bMWLW::before,
+.spinner-2bMWLW::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	border-radius: 8px;
+	pointer-events: none;
+}
+.spinner-2bMWLW::before {
+	background: var(--background) var(--backgroundposition)/var(--backgroundsize);
+	background-attachment: fixed;
+}
+.spinner-2bMWLW::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.4));
+	backdrop-filter: blur(var(--backgroundblur));
 }
 
 #app-mount .addEntryCard-w9XVzQ {							/* add entry card											*/
