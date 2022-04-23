@@ -1,5 +1,5 @@
 #app-mount .userPopout-2j1gM4 .popoutBanner-3cqRD9,
-#app-mount .userPopout-2j1gM4 .profileBanner-1owKI5 {
+#app-mount .menu-1QACrS .popoutBanner-3cqRD9 {
 	height: 120px !important;
 	max-height: var(--user-background, 60px) !important;
 }
@@ -18,11 +18,13 @@
 	bottom: 0;
 	left: 0;
 }
-#app-mount .userPopout-2j1gM4 .avatarPositionNormal-2jWoC2 {
+#app-mount .userPopout-2j1gM4 .avatarPositionNormal-2jWoC2,
+#app-mount .menu-1QACrS .avatarPositionNormal-2jWoC2 {
 	top: 76px !important;
 	margin-top: var(--user-background, -60px) !important;
 }
-#app-mount .userPopout-2j1gM4 .headerTop-3GPUSF {
+#app-mount .userPopout-2j1gM4 .headerTop-3GPUSF,
+#app-mount .menu-1QACrS .headerTop-3GPUSF {
 	padding: 58px 16px 16px;
 }
 #app-mount .root-8LYsGj .headerTop-1PNKck {

@@ -4483,11 +4483,14 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .activity-1gTu-L {
 	padding: 0 16px 16px;
 }
-.userPopout-2j1gM4 .banner-1YaD3N {							/* popout				banner								*/
+.userPopout-2j1gM4 .banner-1YaD3N,							/* popout				banner								*/
+.menu-1QACrS .banner-1YaD3N {								/* status popout		banner								*/
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 16 120 A 46 46 0 0 1 62 76 A 46 46 0 0 1 108 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
 }
 .userPopout-2j1gM4 .avatar-2Vndt_,							/* popout				avatar								*/
-.userPopout-2j1gM4 .avatarWrapper {							/* popout				status everywhere					*/
+.userPopout-2j1gM4 .avatarWrapper,							/* popout				status everywhere					*/
+.menu-1QACrS .avatar-2Vndt_,								/* status popout		avatar								*/
+.menu-1QACrS .avatarWrapper {								/* status popout		status everywhere					*/
 	background-color: transparent;
 	border-color: transparent;
 	box-sizing: content-box;

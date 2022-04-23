@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.0
+ * @version 1.1.1
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "GameActivityToggle",
 			"author": "DevilBro",
-			"version": "1.1.0",
+			"version": "1.1.1",
 			"description": "Adds a Quick-Toggle Game Activity Button"
 		},
 		"changeLog": {
 			"fixed": {
-				"Global Hotkey": "Now properly saves"
+				"Global Hotkey": "Now properly saves",
+				"Account Switcher Overflow": "Fixed Issue, where the settings button would overflow in the account details, when the account switcher experiment was enabled"
 			}
 		}
 	};
@@ -113,6 +114,12 @@ module.exports = (_ => {
 						Account: "render"
 					}
 				};
+				
+				this.css = `
+					${BDFDB.dotCNC.accountinfowithtagasbutton + BDFDB.dotCN.accountinfowithtagless} {
+						min-width: unset;
+					}
+				`;
 			}
 			
 			onStart () {
