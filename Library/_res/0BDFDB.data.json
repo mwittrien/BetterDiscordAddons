@@ -1654,6 +1654,8 @@
 		"accountinfobuttonstrikethrough": ["AccountDetails", "strikethrough"],
 		"accountinfodetails": ["AccountDetails", "usernameContainer"],
 		"accountinfonametag": ["AccountDetails", "nameTag"],
+		"accountinfowithtagasbutton": ["AccountDetails", "withTagAsButton"],
+		"accountinfowithtagless": ["AccountDetails", "withTagAsButton"],
 		"aliasautocomplete": ["AutocompleteAliases", "autocomplete"],
 		"anchor": ["Anchor", "anchor"],
 		"anchorunderlineonhover": ["Anchor", "anchorUnderlineOnHover"],
