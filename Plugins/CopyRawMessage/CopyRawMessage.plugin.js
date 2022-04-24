@@ -2,7 +2,7 @@
  * @name CopyRawMessage
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.2
+ * @version 1.1.3
  * @description Allows you to copy the raw Contents of a Message
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "CopyRawMessage",
 			"author": "DevilBro",
-			"version": "1.1.2",
+			"version": "1.1.3",
 			"description": "Allows you to copy the raw Contents of a Message"
 		},
 		"changeLog": {
-			"improved": {
-				"Quick Action": "Added Icon to quick action bar. Holding shift while hovering a message shows the quick action bar"
+			"added": {
+				"Embed JSON": "Can now copy embed in json format"
 			}
 		}
 	};
@@ -87,6 +87,7 @@ module.exports = (_ => {
 						messageString && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-message"),
+							type: "Message",
 							hint: hint && (_ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
 								hint: hint
 							})),
@@ -99,17 +100,38 @@ module.exports = (_ => {
 						embedString && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw Embed)",
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-embed"),
+							type: "Embed",
 							icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 								className: BDFDB.disCN.menuicon,
 								name: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
 							}),
 							action: _ => BDFDB.LibraryRequires.electron.clipboard.write({text: embedString})
+						}),
+						embedData && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Embed JSON)",
+							type: "Embed JSON",
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-embed-json"),
+							icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.menuicon,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
+							}),
+							action: _ => BDFDB.LibraryRequires.electron.clipboard.write({text: JSON.stringify(embedData)})
 						})
 					].filter(n => n);
 					if (entries.length) {
 						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
+						children.splice(index > -1 ? index : children.length, 0, );
 						children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-							children: entries
+							children: entries.length > 1 ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT,
+								id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-raw-submenu"),
+								children: entries.map(n => {
+									n.props.label = n.props.type;
+									delete n.props.type;
+									delete n.props.icon;
+									return n;
+								})
+							}) : entries
 						}));
 					}
 				}
