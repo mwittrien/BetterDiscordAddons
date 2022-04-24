@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.1
+ * @version 1.1.2
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "GameActivityToggle",
 			"author": "DevilBro",
-			"version": "1.1.1",
+			"version": "1.1.2",
 			"description": "Adds a Quick-Toggle Game Activity Button"
 		},
 		"changeLog": {
 			"fixed": {
-				"Global Hotkey": "Now properly saves",
-				"Account Switcher Overflow": "Fixed Issue, where the settings button would overflow in the account details, when the account switcher experiment was enabled"
+				"Account Switcher Overflow": "Fixed Issue, where the settings button would overflow in the account details, when the account switcher experiment was enabled, NOW FOR REAL"
 			}
 		}
 	};
@@ -116,8 +115,9 @@ module.exports = (_ => {
 				};
 				
 				this.css = `
-					${BDFDB.dotCNC.accountinfowithtagasbutton + BDFDB.dotCN.accountinfowithtagless} {
-						min-width: unset;
+					${BDFDB.dotCNS._gameactivitytoggleadded + BDFDB.dotCNC.accountinfowithtagasbutton + BDFDB.dotCNS._gameactivitytoggleadded + BDFDB.dotCN.accountinfowithtagless} {
+						flex: 1;
+						min-width: 0;
 					}
 				`;
 			}
@@ -215,7 +215,6 @@ module.exports = (_ => {
 			}
 			
 			activateKeybind () {
-				console.log(keybind);
 				if (keybind && keybind.length) BDFDB.ListenerUtils.addGlobal(this, "GAMEACTIVITY_TOGGLE", keybind, this.toggle);
 				else BDFDB.ListenerUtils.removeGlobal(this, "GAMEACTIVITY_TOGGLE", keybind, this.toggle);
 			}
