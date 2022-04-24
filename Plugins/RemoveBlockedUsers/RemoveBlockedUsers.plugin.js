@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.6
+ * @version 1.4.7
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedUsers",
 			"author": "DevilBro",
-			"version": "1.4.6",
+			"version": "1.4.7",
 			"description": "Removes blocked Messages/Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"Server Message Indicator": "No longer shows an unread Indicator for Servers if all new messages are from blocked ppl"
+				"Placeholders": "Fixed Issue where placeholders would appear in role groups below a role group in which someone was blocked"
 			}
 		}
 	};
@@ -375,7 +375,10 @@ module.exports = (_ => {
 				}
 				if (hiddenRows) {
 					let indexSum = 0;
-					for (let i in newGroups) if (newGroups[i].count > 0) indexSum += (newGroups[i].count + 1);
+					for (let i in newGroups) {
+						newGroups[i].index = indexSum;
+						if (newGroups[i].count > 0) indexSum += (newGroups[i].count + 1);
+					}
 					for (let i in newRows) if (newRows[i] && newRows[i].type == "GROUP" && newRows[i].count <= 0) newRows[i] = undefined;
 					const removeEmptyWithin = (array, filter) => {
 						let reversed = [].concat(array).reverse();
