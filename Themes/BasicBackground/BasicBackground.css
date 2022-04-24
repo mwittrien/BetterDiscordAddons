@@ -2130,17 +2130,21 @@ body::after {
 
 /* ~~~~		10.		DISCOVERY/UNIHUB				~~~~ */
 
-.categoryItem-1QIroW:hover .itemInner-gPkiWb,				/* guilddiscovery		categoryitem						*/
-.optionItem-2tdutc:hover .itemInner-3k3Sn6 {				/* unihub				categoryitem						*/
+.categoryItem-Kc_HK_:hover .layout-1qmrhw,					/* guilddiscovery		categoryitem						*/
+.optionItem-2tdutc:hover .layout-1qmrhw {					/* unihub				categoryitem						*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
-.categoryItem-1QIroW.selectedCategoryItem-FHKU_o .itemInner-gPkiWb,
-.optionItem-2tdutc.selectedOptionItem-3v62YZ .itemInner-3k3Sn6 {
+.categoryItem-Kc_HK_.selected-1-Z6gm .layout-1qmrhw,
+.optionItem-2tdutc.selected-1-Z6gm .layout-1qmrhw {
 	background-color: rgb(var(--accentcolor));
 	text-shadow: 1px 1px var(--textshadow);
 }
-.categoryItem-1QIroW.selectedCategoryItem-FHKU_o .itemInner-gPkiWb svg:not(.svg-2azL_l),
-.optionItem-2tdutc.selectedOptionItem-3v62YZ .itemInner-3k3Sn6 svg:not(.svg-2azL_l) {
+.categoryItem-Kc_HK_ .icon-2iCk7Q,
+.optionItem-2tdutc .icon-2iCk7Q {
+	color: inherit;
+}
+.categoryItem-Kc_HK_.selected-1-Z6gm .layout-1qmrhw svg:not(.svg-2azL_l),
+.optionItem-2tdutc.selected-1-Z6gm .layout-1qmrhw svg:not(.svg-2azL_l) {
 	filter: drop-shadow(1px 1px var(--textshadow));
 }
 
@@ -2346,7 +2350,8 @@ body::after {
 	color: var(--header-secondary);
 }
 
-.cardPrimary-3qRT__, .cardPrimaryEditable-2mz_3i {			/* settingsitems		card								*/
+.cardPrimary-3qRT__,
+.cardPrimaryEditable-2mz_3i {								/* settingsitems		card								*/
 	border-color: rgba(var(--transparencycolor), .1);
 }
 .cardPrimary-3qRT__ {
