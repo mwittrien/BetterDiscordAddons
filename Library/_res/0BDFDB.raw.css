@@ -1027,6 +1027,9 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 [REPLACE_CLASS_modalwrapper] [REPLACE_CLASS_modalheader] > [REPLACE_CLASS_headerwrapper]  {
 	flex: 1 0 auto;
 }
+[REPLACE_CLASS_modalwrapper] [REPLACE_CLASS_modalfooter] [REPLACE_CLASS_button]  {
+	margin-left: 8px;
+}
 [REPLACE_CLASS_modalwrapper] [REPLACE_CLASS_modalclose] [REPLACE_CLASS_buttoncontents] {
 	display: flex;
 	justify-content: center;
