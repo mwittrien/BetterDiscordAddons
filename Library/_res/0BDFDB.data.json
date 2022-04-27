@@ -258,6 +258,7 @@
 			"InviteGuildName": {"props": ["GuildName", "GuildTemplateName"]},
 			"InviteCard": {"class": "guildsettingsinvitecard"},
 			"MemberCard": {"class": "guildsettingsmembercard"},
+			"MemberListItem": {"class": "member"},
 			"MemberRoles": {"props": ["MemberRole"]},
 			"Message": {"strings": ["childrenMessageContent", "childrenRepliedMessage", "zalgo"]},
 			"MessageHeader": {"strings": ["ANIMATE_CHAT_AVATAR", "showUsernamePopout"]},
