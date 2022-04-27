@@ -91,10 +91,10 @@ module.exports = (_ => {
 					}
 				};
 				
-				for (let key of Object.keys(BDFDB.LibraryModules.UserBadgeKeys).filter(n => isNaN(parseInt(n)))) {
+				for (let key of Object.keys(BDFDB.LibraryComponents.UserBadgeKeys).filter(n => isNaN(parseInt(n)))) {
 					let basicKey = key.replace(/_LEVEL_\d+/g, "");
 					if (!this.defaults.badges[basicKey]) this.defaults.badges[basicKey] = {value: true, keys: []};
-					this.defaults.badges[basicKey].keys.push(BDFDB.LibraryModules.UserBadgeKeys[key]);
+					this.defaults.badges[basicKey].keys.push(BDFDB.LibraryComponents.UserBadgeKeys[key]);
 				}
 				
 				this.css = `
@@ -397,7 +397,7 @@ module.exports = (_ => {
 				}
 				else for (let key of this.defaults.badges[flag].keys) {
 					let userFlag = flag == "PREMIUM" || flag == "GUILD_BOOSTER" ? 0 : BDFDB.DiscordConstants.UserFlags[flag];
-					let keyName = BDFDB.LibraryModules.UserBadgeKeys[key];
+					let keyName = BDFDB.LibraryComponents.UserBadgeKeys[key];
 					if (userFlag == null && keyName) userFlag = BDFDB.DiscordConstants.UserFlags[keyName] != null ? BDFDB.DiscordConstants.UserFlags[keyName] : BDFDB.DiscordConstants.UserFlags[Object.keys(BDFDB.DiscordConstants.UserFlags).find(f => f.indexOf(keyName) > -1 || keyName.indexOf(f) > -1)];
 					if (userFlag != null) {
 						let id;
