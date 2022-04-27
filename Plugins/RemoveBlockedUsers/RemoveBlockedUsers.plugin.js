@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.7
+ * @version 1.4.8
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedUsers",
 			"author": "DevilBro",
-			"version": "1.4.7",
+			"version": "1.4.8",
 			"description": "Removes blocked Messages/Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"Placeholders": "Fixed Issue where placeholders would appear in role groups below a role group in which someone was blocked"
+				"Search Page": "Removes the 'we hide x blocked messages from search' message"
 			}
 		}
 	};
@@ -93,6 +93,7 @@ module.exports = (_ => {
 				
 				this.patchedModules = {
 					before: {
+						SearchResults: "render",
 						Message: "default",
 						ReactorsComponent: "render",
 						PrivateChannelRecipients: "default",
@@ -107,6 +108,7 @@ module.exports = (_ => {
 						ChannelPins: "default",
 						RecentMentions: "default",
 						Messages: "type",
+						SearchResultsInner: "default",
 						Reactions: "render",
 						ConnectedChannelMembers: "default",
 						MemberListItem: "render",
@@ -288,6 +290,18 @@ module.exports = (_ => {
 							header.props.message = new BDFDB.DiscordObjects.Message(Object.assign({}, header.props.message, {messageReference: null}));
 						}
 					}
+				}
+			}
+			
+			processSearchResults (e) {
+				console.log(e);
+				if (this.settings.places.messages && e.instance.props.blockCount && e.instance.props.search && e.instance.props.search.totalResults <= BDFDB.DiscordConstants.SEARCH_PAGE_SIZE) e.instance.props.search = Object.assign({}, e.instance.props.search, {totalResults: e.instance.props.search.totalResults - e.instance.props.blockCount});
+			}
+			
+			processSearchResultsInner (e) {
+				if (this.settings.places.messages && e.instance.props.search) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.searchresultsblocked]]});
+					if (index > -1) children.splice(index, 1);
 				}
 			}
 		

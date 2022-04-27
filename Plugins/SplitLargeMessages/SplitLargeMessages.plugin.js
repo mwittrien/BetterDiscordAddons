@@ -2,7 +2,7 @@
  * @name SplitLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.4
+ * @version 1.7.5
  * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "SplitLargeMessages",
 			"author": "DevilBro",
-			"version": "1.7.4",
+			"version": "1.7.5",
 			"description": "Allows you to enter larger Messages, which will automatically split into several smaller Messages"
 		}
 	};
@@ -92,7 +92,7 @@ module.exports = (_ => {
 				maxMessageLength = BDFDB.LibraryModules.NitroUtils.canUseIncreasedMessageLength(BDFDB.UserUtils.me) ? BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH_PREMIUM : BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH;
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.ChatRestrictionUtils, "applyChatRestrictions", {before: e => {
-					if (e.methodArguments[0] && e.methodArguments[0].content) e.methodArguments[0].content = "_";
+					if (e.methodArguments[0] && e.methodArguments[0].content && !this.isSlowDowned(e.methodArguments[0].channel)) e.methodArguments[0].content = "_";
 				}});
 				
 				BDFDB.PatchUtils.forceAllUpdates(this);
@@ -132,7 +132,7 @@ module.exports = (_ => {
 
 			processChannelTextAreaForm (e) {
 				BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
-					if (e2.methodArguments[0].value.length > maxMessageLength) {
+					if (e2.methodArguments[0].value.length > maxMessageLength && !this.isSlowDowned(e.instance.props.channel)) {
 						e2.stopOriginalMethodCall();
 						let messages = this.formatText(e2.methodArguments[0].value).filter(n => n);
 						for (let i in messages) BDFDB.TimeUtils.timeout(_ => {
@@ -152,7 +152,7 @@ module.exports = (_ => {
 			processChannelTextAreaContainer (e) {
 				if (e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SlateCharacterCount"});
-					if (index > -1 && children[index].props.textValue && children[index].props.textValue.length > maxMessageLength) children[index] = BDFDB.ReactUtils.createElement("div", {
+					if (index > -1 && children[index].props.textValue && children[index].props.textValue.length > maxMessageLength && !this.isSlowDowned(e.instance.props.channel)) children[index] = BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS.textareacharcounter + BDFDB.disCN.textareacharcountererror,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							text: Math.ceil(children[index].props.textValue.length / maxMessageLength * (39/40)) + " " + BDFDB.LanguageUtils.LanguageStrings.MESSAGES,
@@ -171,6 +171,10 @@ module.exports = (_ => {
 						if (!e2.methodArguments[1] || e2.methodArguments[1].kind != "string") e2.callOriginalMethod();
 					}}, {force: true, noCache: true});
 				}
+			}
+			
+			isSlowDowned (channel) {
+				return e.instance.props.channel.rateLimitPerUser && !BDFDB.UserUtils.can("MANAGE_CHANNELS", BDFDB.UserUtils.me.id, channel.id) && !BDFDB.UserUtils.can("MANAGE_MESSAGES", BDFDB.UserUtils.me.id, channel.id);
 			}
 
 			formatText (text) {

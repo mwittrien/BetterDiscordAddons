@@ -396,7 +396,7 @@ module.exports = (_ => {
 				if (!this.settings.general.replaceBeforeSend || BDFDB.LibraryModules.SlowmodeUtils.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
 				let messageData = this.formatText(e2.methodArguments[0].value);
 				if (messageData) {
-					if (messageData.files.length > 0 && (BDFDB.DMUtils.isDMChannel(e.instance.props.channel.id) || BDFDB.UserUtils.can("ATTACH_FILES"))) {
+					if (messageData.files.length > 0 && (BDFDB.DMUtils.isDMChannel(e.instance.props.channel.id) || BDFDB.UserUtils.can("ATTACH_FILES", BDFDB.UserUtils.me.id, e.instance.props.channel.id))) {
 						e2.methodArguments[0].uploads = [].concat(e2.methodArguments[0].uploads);
 						for (let file of messageData.files) e2.methodArguments[0].uploads.push(new BDFDB.DiscordObjects.Upload({file: file, platform: 1}));
 					}
