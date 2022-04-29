@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.8
+ * @version 2.3.9
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.3.8",
+			"version": "2.3.9",
 			"description": "Allows you to configure your own Aliases/Commands"
-		},
-		"changeLog": {
-			"fixed": {
-				"Attachments": "No longer uploads Attachments to every Message Draft of all Channels in a Server"
-			}
 		}
 	};
 
@@ -177,8 +172,8 @@ module.exports = (_ => {
 								}))
 							].flat(10).filter(n => n);
 						},
-						onSelect: (results, index, _, editor) => {
-							editor.insertText(results.aliases[index].file ? results.aliases[index].word : BDFDB.StringUtils.insertNRST(results.aliases[index].replace));
+						onSelect: data => {
+							data.options.insertText(data.results.aliases[data.index].file ? data.results.aliases[data.index].word : BDFDB.StringUtils.insertNRST(data.results.aliases[data.index].replace));
 							return {};
 						}
 					};
