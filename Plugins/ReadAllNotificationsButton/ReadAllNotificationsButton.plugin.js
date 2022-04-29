@@ -235,26 +235,20 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsGuildList, {
 							className: BDFDB.disCN.marginbottom20,
 							disabled: BDFDB.DataUtils.load(this, "blacklist"),
-							onClick: disabledGuilds => {
-								this.saveBlacklist(disabledGuilds);
-							}
+							onClick: disabledGuilds => this.saveBlacklist(disabledGuilds)
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Button",
 							color: BDFDB.LibraryComponents.Button.Colors.GREEN,
 							label: "Enable for all Servers",
-							onClick: _ => {
-								this.batchSetGuilds(settingsPanel, collapseStates, true);
-							},
+							onClick: _ => this.batchSetGuilds(settingsPanel, collapseStates, true),
 							children: BDFDB.LanguageUtils.LanguageStrings.ENABLE
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Button",
 							color: BDFDB.LibraryComponents.Button.Colors.PRIMARY,
 							label: "Disable for all Servers",
-							onClick: _ => {
-								this.batchSetGuilds(settingsPanel, collapseStates, false);
-							},
+							onClick: _ => this.batchSetGuilds(settingsPanel, collapseStates, false),
 							children: BDFDB.LanguageUtils.LanguageStrings.DISABLE
 						})
 					]
@@ -303,17 +297,7 @@ module.exports = (_ => {
 									let messages = [].concat(mentionedMessages).filter(n => n);
 									if (messages.length) {
 										clearing = true;
-										let toastInterval;
-										let loadingString = `${this.labels.toast_clearing} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`;
-										let currentLoadingString = loadingString;
-										let toast = BDFDB.NotificationUtils.toast(currentLoadingString, {
-											timeout: 0,
-											onClose: _ => {BDFDB.TimeUtils.clear(toastInterval);}
-										});
-										toastInterval = BDFDB.TimeUtils.interval(_ => {
-											currentLoadingString = currentLoadingString.endsWith(".....") ? loadingString : currentLoadingString + ".";
-											toast.update(currentLoadingString);
-										}, 500);
+										let toast = BDFDB.NotificationUtils.toast(`${this.labels.toast_clearing} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {timeout: 0, ellipsis: true});
 										for (let i = 0; i < messages.length; i++) BDFDB.TimeUtils.timeout(_ => {
 											BDFDB.LibraryModules.RecentMentionUtils.deleteRecentMention(messages[i].id);
 											if (i == messages.length - 1) {

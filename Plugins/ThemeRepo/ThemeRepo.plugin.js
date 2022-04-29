@@ -339,7 +339,10 @@ module.exports = (_ => {
 			}
 			createThemeFile(name, filename, body) {
 				return new Promise(callback => BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getThemesFolder(), filename), body, error => {
-					if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_fail", `Theme "${name}"`), {type: "danger"});
+					if (error) {
+						callback(true);
+						BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_fail", `Theme "${name}"`), {type: "danger"});
+					}
 					else {
 						BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_success", `Theme "${name}"`), {type: "success"});
 						if (_this.settings.general.rnmStart) BDFDB.TimeUtils.timeout(_ => {
@@ -869,16 +872,30 @@ module.exports = (_ => {
 													installed: this.props.data.state == themeStates.INSTALLED,
 													outdated: this.props.data.state == themeStates.OUTDATED,
 													onDownload: _ => {
-														list && BDFDB.LibraryRequires.request(this.props.data.rawSourceUrl, (error, response, body) => {
-															if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Theme "${this.props.data.name}"`), {type: "danger"});
-															else list.createThemeFile(this.props.data.name, this.props.data.rawSourceUrl.split("/").pop(), body).then(_ => {
-																this.props.data.state = themeStates.INSTALLED;
-																BDFDB.ReactUtils.forceUpdate(this);
+														if (!list || this.props.downloading) return;
+														this.props.downloading = true;
+														let loadingToast = BDFDB.NotificationUtils.toast(`${BDFDB.LanguageUtils.LibraryStringsFormat("loading", this.props.data.name)} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {timeout: 0, ellipsis: true});
+														BDFDB.LibraryRequires.request(this.props.data.rawSourceUrl, (error, response, body) => {
+															if (error) {
+																delete this.props.downloading;
+																loadingToast.close();
+																BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Theme "${this.props.data.name}"`), {type: "danger"});
+															}
+															else list.createThemeFile(this.props.data.name, this.props.data.rawSourceUrl.split("/").pop(), body).then(error2 => {
+																delete this.props.downloading;
+																loadingToast.close();
+																if (!error2) {
+																	this.props.data.state = themeStates.INSTALLED;
+																	BDFDB.ReactUtils.forceUpdate(this);
+																}
 															});
 														});
 													},
 													onDelete: _ => {
+														if (this.props.deleting) return;
+														this.props.deleting = true;
 														BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getThemesFolder(), this.props.data.rawSourceUrl.split("/").pop()), error => {
+															delete this.props.deleting;
 															if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_fail", `Theme "${this.props.data.name}"`), {type: "danger"});
 															else {
 																BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_success", `Theme "${this.props.data.name}"`));

@@ -119,7 +119,7 @@ module.exports = (_ => {
 				
 				BDFDB.DOMUtils.remove(BDFDB.dotCN._spellcheckoverlay);
 
-				for (let key in languageToasts) this.killLanguageToast(key);
+				for (let key in languageToasts) languageToasts[key] && languageToasts[key].close();
 			}
 
 			getSettingsPanel (collapseStates = {}) {
@@ -334,26 +334,17 @@ module.exports = (_ => {
 			}
 
 			setDictionary (key, lang) {
-				this.killLanguageToast(key);
+				languageToasts[key] && languageToasts[key].close();
 				if (languages[lang]) {
 					let ownDictionary = BDFDB.DataUtils.load(this, "owndics", lang) || [];
-					let loadingString = `${this.labels.toast_dictionary.replace("{{var0}}", this.getLanguageName(languages[lang]))} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`;
-					let currentLoadingString = loadingString;
-					languageToasts[key] = BDFDB.NotificationUtils.toast(loadingString, {
-						timeout: 0,
-						position: "center"
-					});
-					languageToasts[key].interval = BDFDB.TimeUtils.interval(_ => {
-						currentLoadingString = currentLoadingString.endsWith(".....") ? loadingString : currentLoadingString + ".";
-						languageToasts[key].update(currentLoadingString);
-					}, 500);
+					languageToasts[key] = BDFDB.NotificationUtils.toast(`${this.labels.toast_dictionary.replace("{{var0}}", this.getLanguageName(languages[lang]))} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {timeout: 0, ellipsis: true, position: "center"});
 					languageToasts[key].lang = lang
 					
 					const folder = BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), "dictionaries");
 					const filePath = BDFDB.LibraryRequires.path.join(folder, lang + ".dic");
 					
 					const parse = (error, response, body, download) => {
-						this.killLanguageToast(key);
+						languageToasts[key].close();
 						if (error || (response && body.toLowerCase().indexOf("<!doctype html>") > -1)) {
 							BDFDB.NotificationUtils.toast(this.labels.toast_dictionary_fail.replace("{{var0}}", this.getLanguageName(languages[lang])), {
 								type: "danger",
@@ -396,13 +387,6 @@ module.exports = (_ => {
 					dictionary[firstLetterLower][word.length].push(word);
 					return dictionary;
 				}, {});
-			}
-
-			killLanguageToast (key) {
-				if (languageToasts[key]) {
-					BDFDB.TimeUtils.clear(languageToasts[key].interval);
-					languageToasts[key].close();
-				}
 			}
 
 			isWordNotInDictionary (unformatedWord) {

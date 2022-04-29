@@ -438,26 +438,40 @@ module.exports = (_ => {
 													installed: this.props.data.state == pluginStates.INSTALLED,
 													outdated: this.props.data.state == pluginStates.OUTDATED,
 													onDownload: _ => {
+														if (this.props.downloading) return;
+														this.props.downloading = true;
+														let loadingToast = BDFDB.NotificationUtils.toast(`${BDFDB.LanguageUtils.LibraryStringsFormat("loading", this.props.data.name)} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {timeout: 0, ellipsis: true});
 														BDFDB.LibraryRequires.request(this.props.data.rawSourceUrl, (error, response, body) => {
-															if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
-															else BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.data.rawSourceUrl.split("/").pop()), body, error2 => {
-																if (error2) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
-																else {
-																	BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_success", `Plugin "${this.props.data.name}"`), {type: "success"});
-																	if (_this.settings.general.rnmStart) BDFDB.TimeUtils.timeout(_ => {
-																		if (this.props.data.state == pluginStates.INSTALLED && BDFDB.BDUtils.isPluginEnabled(this.props.data.name) == false) {
-																			BDFDB.BDUtils.enablePlugin(this.props.data.name, false);
-																			BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", this.props.data.name), _this);
-																		}
-																	}, 3000);
-																	this.props.data.state = pluginStates.INSTALLED;
-																	BDFDB.ReactUtils.forceUpdate(this);
-																}
-															})
-														})
+															if (error) {
+																delete this.props.downloading;
+																loadingToast.close();
+																BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
+															}
+															else {
+																BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.data.rawSourceUrl.split("/").pop()), body, error2 => {
+																	delete this.props.downloading;
+																	loadingToast.close();
+																	if (error2) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
+																	else {
+																		BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_success", `Plugin "${this.props.data.name}"`), {type: "success"});
+																		if (_this.settings.general.rnmStart) BDFDB.TimeUtils.timeout(_ => {
+																			if (this.props.data.state == pluginStates.INSTALLED && BDFDB.BDUtils.isPluginEnabled(this.props.data.name) == false) {
+																				BDFDB.BDUtils.enablePlugin(this.props.data.name, false);
+																				BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", this.props.data.name), _this);
+																			}
+																		}, 3000);
+																		this.props.data.state = pluginStates.INSTALLED;
+																		BDFDB.ReactUtils.forceUpdate(this);
+																	}
+																});
+															}
+														});
 													},
 													onDelete: _ => {
+														if (this.props.deleting) return;
+														this.props.deleting = true;
 														BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.data.rawSourceUrl.split("/").pop()), error => {
+															delete this.props.deleting;
 															if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
 															else {
 																BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_success", `Plugin "${this.props.data.name}"`));

@@ -1648,11 +1648,13 @@ module.exports = (_ => {
 				}
 				else BDFDB.DOMUtils.addClass(data.toast, type);
 				
+				let loadingInterval;
 				let disableInteractions = data.config.disableInteractions && typeof data.config.onClick != "function";
 				let timeout = typeof data.config.timeout == "number" && !disableInteractions ? data.config.timeout : 3000;
 				timeout = (timeout > 0 ? timeout : 600000) + 300;
+				if (data.config.ellipsis && typeof data.children == "string") loadingInterval = BDFDB.TimeUtils.interval(_ => data.toast.update(data.children.endsWith(".....") ? data.children.slice(0, -5) : data.children + "."), 500);
 				
-				let progressInterval, closeTimeout = BDFDB.TimeUtils.timeout(_ => data.toast.close(), timeout);
+				let closeTimeout = BDFDB.TimeUtils.timeout(_ => data.toast.close(), timeout);
 				data.toast.close = _ => {
 					BDFDB.TimeUtils.clear(closeTimeout);
 					if (document.contains(data.toast)) {
@@ -1660,6 +1662,7 @@ module.exports = (_ => {
 						data.toast.style.setProperty("pointer-events", "none", "important");
 						BDFDB.TimeUtils.timeout(_ => {
 							if (typeof data.config.onClose == "function") data.config.onClose();
+							BDFDB.TimeUtils.clear(loadingInterval);
 							BDFDB.ArrayUtils.remove(Toasts, id);
 							BDFDB.DOMUtils.removeLocalStyle("BDFDBcustomToast" + id);
 							data.toast.remove();
@@ -1710,7 +1713,7 @@ module.exports = (_ => {
 					componentDidMount() {
 						data.toast.update = newChildren => {
 							if (!newChildren) return;
-							this.props.children = newChildren;
+							data.children = newChildren;
 							BDFDB.ReactUtils.forceUpdate(this);
 						};
 					}
@@ -1731,7 +1734,7 @@ module.exports = (_ => {
 										}),
 										BDFDB.ReactUtils.createElement("div", {
 											className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.toasttext, data.config.textClassName),
-											children: this.props.children
+											children: data.children
 										}),
 										!disableInteractions && BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
 											className: BDFDB.disCN.toastcloseicon,
@@ -1751,7 +1754,7 @@ module.exports = (_ => {
 							]
 						});
 					}
-				}, {children: data.children}), data.toast);
+				}, {}), data.toast);
 				
 				ToastQueues[position].full = (BDFDB.ArrayUtils.sum(Array.from(toasts.childNodes).map(c => {
 					let height = BDFDB.DOMUtils.getRects(c).height;
