@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.2
+ * @version 2.3.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,15 +19,10 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.3.2",
+			"version": "2.3.3",
 			"description": "Required Library for DevilBro's Plugins"
 		},
-		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
-		"changeLog": {
-			"fixed": {
-				"Plugin Config Sync Issue": "Fixed and Issue where Plugin Configs would restore after a Discord Reload"
-			}
-		}
+		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
 	};
 	
 	const Cache = {data: {}, modules: {}};
@@ -8217,9 +8212,13 @@ module.exports = (_ => {
 				if (e.node && e.node.parentElement && e.node.parentElement.getAttribute("aria-label") == BDFDB.DiscordConstants.Layers.USER_SETTINGS) Internal.addListObserver(e.node.parentElement);
 			};
 		
-			let AppViewExport = BDFDB.ModuleUtils.findByName("AppView", false);
+			let AppViewExport = InternalData.ModuleUtilsConfig.Finder.AppView && BDFDB.ModuleUtils.findByString(InternalData.ModuleUtilsConfig.Finder.AppView.strings, false);
 			if (AppViewExport) Internal.processShakeable = function (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "AppView"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => {
+					if (!n || typeof n.type != "function") return;
+					let typeString = n.type.toString();
+					return [InternalData.ModuleUtilsConfig.Finder.AppView.strings].flat(10).filter(n => typeof n == "string").every(string => typeString.indexOf(string) > -1);
+				}});
 				if (index > -1) children[index] = BDFDB.ReactUtils.createElement(AppViewExport.exports.default, children[index].props);
 			};
 			

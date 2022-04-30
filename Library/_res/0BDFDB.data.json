@@ -221,6 +221,7 @@
 			"Account": {"class": "accountinfo"},
 			"App": {"class": "app"},
 			"AppSkeleton": {"class": "app"},
+			"AppView": {"strings": ["darkSidebar", "guilds", "GUILD_CHANNEL", "GUILD_DISCOVERY"]},
 			"AuditLogs": {"class": "auditlog"},
 			"AuthWrapper": {"class": "loginscreen"},
 			"Avatar": {"props": ["AnimatedAvatar"]},
