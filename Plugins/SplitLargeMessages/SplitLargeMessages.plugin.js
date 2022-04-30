@@ -2,7 +2,7 @@
  * @name SplitLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.5
+ * @version 1.7.6
  * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "SplitLargeMessages",
 			"author": "DevilBro",
-			"version": "1.7.5",
+			"version": "1.7.6",
 			"description": "Allows you to enter larger Messages, which will automatically split into several smaller Messages"
 		}
 	};
@@ -174,7 +174,7 @@ module.exports = (_ => {
 			}
 			
 			isSlowDowned (channel) {
-				return e.instance.props.channel.rateLimitPerUser && !BDFDB.UserUtils.can("MANAGE_CHANNELS", BDFDB.UserUtils.me.id, channel.id) && !BDFDB.UserUtils.can("MANAGE_MESSAGES", BDFDB.UserUtils.me.id, channel.id);
+				return channel.rateLimitPerUser && !BDFDB.UserUtils.can("MANAGE_CHANNELS", BDFDB.UserUtils.me.id, channel.id) && !BDFDB.UserUtils.can("MANAGE_MESSAGES", BDFDB.UserUtils.me.id, channel.id);
 			}
 
 			formatText (text) {

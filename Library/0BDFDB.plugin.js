@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.3
+ * @version 2.3.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.3.3",
+			"version": "2.3.4",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
@@ -2425,7 +2425,7 @@ module.exports = (_ => {
 							originalMethod: originalMethod,
 							originalMethodName: methodName,
 							callOriginalMethod: _ => data.returnValue = data.originalMethod.apply(data.thisObject, data.methodArguments),
-							callOriginalMethodAfterwards: _ => callInstead = true,
+							callOriginalMethodAfterwards: _ => (callInstead = true, data.returnValue),
 							stopOriginalMethodCall: _ => stopCall = true
 						};
 						if (module.BDFDB_patches && module.BDFDB_patches[methodName]) {
