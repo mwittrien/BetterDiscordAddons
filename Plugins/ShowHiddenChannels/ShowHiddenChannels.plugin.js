@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.0
+ * @version 3.1.1
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "3.1.0",
+			"version": "3.1.1",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
 		}
 	};
@@ -193,12 +193,10 @@ module.exports = (_ => {
 						Channels: "render",
 						ChannelCategoryItem: "type",
 						ChannelItem: "default",
-						VoiceUsers: "render",
-						VoiceUser: "render"
+						VoiceUsers: "render"
 					},
 					after: {
-						ChannelItem: "default",
-						VoiceUser: "render"
+						ChannelItem: "default"
 					}
 				};
 				
@@ -208,12 +206,6 @@ module.exports = (_ => {
 						bottom: 0;
 						width: 100%;
 					}
-					${BDFDB.dotCN.voiceuser + BDFDB.dotCN._showhiddenchannelshiddenchannel} {
-						width: calc(100% + 8px);
-					}
-					${BDFDB.dotCN.voiceuser + BDFDB.dotCNS._showhiddenchannelshiddenchannel + BDFDB.dotCN.voicecontent} {
-						margin-right: 8px;
-					}
 				`;
 			}
 			
@@ -222,6 +214,11 @@ module.exports = (_ => {
 				
 				let loadedCollapseList = BDFDB.DataUtils.load(this, "categorydata");
 				this.saveCollapseList(!BDFDB.ArrayUtils.is(loadedCollapseList) ? [] : loadedCollapseList);
+				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.GuildUtils, "setChannel", {instead: e => {
+					let channelId = (BDFDB.LibraryModules.VoiceUtils.getVoiceStateForUser(e.methodArguments[1]) || {}).channelId;
+					if (!channelId || !this.isChannelHidden(channelId)) return e.callOriginalMethod();
+				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
 					return e.returnValue && !this.isChannelHidden(e.methodArguments[0]);
@@ -360,7 +357,10 @@ module.exports = (_ => {
 			}
 		
 			onUserContextMenu (e) {
-				if ((e.subType == "useUserManagementItems" || e.subType == "useMoveUserVoiceItems" || e.subType == "usePreviewVideoItem") && e.arguments[2] && this.isChannelHidden(e.arguments[2])) return null;
+				if (e.subType == "useUserManagementItems" || e.subType == "useMoveUserVoiceItems" || e.subType == "usePreviewVideoItem") {
+					let channelId = (BDFDB.LibraryModules.VoiceUtils.getVoiceStateForUser(e.instance.props.user.id) || {}).channelId;
+					if (channelId && this.isChannelHidden(channelId)) return null;
+				}
 			}
 			
 			onChannelContextMenu (e) {
@@ -533,30 +533,6 @@ module.exports = (_ => {
 		
 			processVoiceUsers (e) {
 				if (!this.settings.general.showVoiceUsers && this.isChannelHidden(e.instance.props.channel.id)) e.instance.props.voiceStates = [];
-			}
-		
-			processVoiceUser (e) {
-				let channelId = (BDFDB.LibraryModules.VoiceUtils.getVoiceStateForUser(e.instance.props.user.id) || {}).channelId;
-				if (channelId && this.isChannelHidden(channelId)) {
-					if (!e.returnvalue) {
-						e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._showhiddenchannelshiddenchannel);
-						e.instance.props.onMouseDown = event => BDFDB.ListenerUtils.stopEvent(event);
-						e.instance.props.onClick = event => BDFDB.ListenerUtils.stopEvent(event);
-					}
-					else {
-						let icons = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.voiceicons]]});
-						if (icons) icons.props.children = [];
-						e.returnvalue = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserPopoutContainer, {
-							position: BDFDB.LibraryComponents.PopoutContainer.Positions.RIGHT,
-							align: BDFDB.LibraryComponents.PopoutContainer.Align.TOP,
-							killEvent: true,
-							userId: e.instance.props.user.id,
-							channelId: channelId,
-							guildId: e.instance.props.guild_id,
-							children: e.returnvalue
-						});
-					}
-				}
 			}
 			
 			isChannelHidden (channelId) {
