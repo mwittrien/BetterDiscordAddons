@@ -127,6 +127,7 @@
 		17.	NICKNAMEMODAL
 		18.	NITROFEATUREMODAL
 		19.	GUILDBOOSTPROGESSINFO
+		20.	GUILDACTIVITY
 	11.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -1925,6 +1926,11 @@ a.metadataName-1KMZtB {
 }
 .perkIcon-2DG0tJ path[fill*="hsl(222, "] {
 	fill: rgb(var(--accentcolor));
+}
+
+/* ----		10.20.	GUILDACTIVITY					---- */
+.guildBoostingIconPink-1nDlMP {
+	color: rgb(var(--accentcolor2));
 }
 
 
