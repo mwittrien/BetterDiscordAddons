@@ -657,8 +657,6 @@ module.exports = (_ => {
 			}
 			
 			processChannelTextAreaButtons (e) {
-				console.log(e);
-				console.log(this.settings.general.addTranslateButton && (e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) && !e.instance.props.disabled);
 				if (this.settings.general.addTranslateButton && (e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) && !e.instance.props.disabled) {
 					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(TranslateButtonComponent, {
 						channelId: e.instance.props.channel.id
