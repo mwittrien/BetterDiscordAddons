@@ -399,7 +399,7 @@
 		"Spinner": {"name": "Spinner"},
 		"Status": {"name": "Status"},
 		"StatusPickerPopout": {"strings": ["\"StatusPickerPopout\""], "value": "default"},
-		"TextElement": {"name": "Text"},
+		"TextElement": {"props": ["Colors", "Sizes"]},
 		"UserBadgeKeys": {"props": ["BadgeKeys"], "value": "BadgeKeys"},
 		"UserBadges": {"props": ["BadgeSizes"]},
 		"UserPopout": {"name": "UserPopoutContainer"},
