@@ -526,7 +526,16 @@ module.exports = (_ => {
 			}
 
 			processTabBar (e) {
-				
+				if (this.settings.places.friendsBlocked) {
+					const tabBar = e.returnvalue;
+					if (tabBar) {
+						const props = tabBar.props;
+						if(props.children) {
+							props.children = props.children
+								.filter(tab => tab?.props?.id !== BDFDB.DiscordConstants.FriendsSections.BLOCKED);
+						}
+					}
+				}
 			}
 			
 			getGroupName (channelId) {
