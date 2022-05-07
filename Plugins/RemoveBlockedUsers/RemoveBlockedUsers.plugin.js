@@ -118,7 +118,8 @@ module.exports = (_ => {
 						DirectMessage: "render",
 						PrivateChannel: "render",
 						UserMention: "default",
-						RichUserMention: "UserMention"
+						RichUserMention: "UserMention",
+						TabBar: "render"
 					}
 				};
 				
@@ -522,6 +523,10 @@ module.exports = (_ => {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.mention, BDFDB.disCN.mentionwrapper, e.instance.props.className),
 					children: ["@" + BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER]
 				});
+			}
+
+			processTabBar (e) {
+				
 			}
 			
 			getGroupName (channelId) {
