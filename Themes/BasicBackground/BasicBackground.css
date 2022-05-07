@@ -6865,146 +6865,32 @@ html #permissions-modal-wrapper .perm-name {
 
 /* ----		18.9	CHANNELTABS						---- */
 
-html .channelTabs-tabContainer,
-html .channelTabs-favContainer {
-	display: flex;
-	align-items: center;
-	flex-wrap: wrap;
-	min-height: 28px;
-	height: unset;
-	overflow: hidden;
-	transition: height 0.3s linear;
-}
-html .channelTabs-tabContainer {
-	background: rgba(var(--transparencycolor), calc(0.05 + var(--guildchanneltransparency) * 2));
-	box-shadow: 0 1px 0 rgba(var(--transparencycolor), .2), 0 1.5px 0 rgba(var(--transparencycolor), .05), 0 2px 0 rgba(var(--transparencycolor), .05);
-	padding-top: 6px;
-}
-html .channelTabs-favContainer {
+html #channelTabs-container {
 	background: rgba(var(--transparencycolor), calc(var(--guildchanneltransparency) * 2));
-	padding-top: 3px;
-	padding-bottom: 3px;
 }
-html .channelTabs-noFavs {
-	background: transparent;
-	padding: 0 6px;
-}
-
-html #channelTabs-settingsMenu {
-	position: absolute;
-	right: 0;
-	background: rgba(var(--transparencycolor), calc(0.05 + var(--guildchanneltransparency) * 2));
-	box-shadow: 0 1px 0 rgba(var(--transparencycolor), .2), 0 1.5px 0 rgba(var(--transparencycolor), .05), 0 2px 0 rgba(var(--transparencycolor), .05);
-	border-radius: 0;
-	min-height: 34px;
-	height: unset;
-	float: unset;
-	cursor: pointer;
-}
-html #channelTabs-settingsMenu:hover rect[fill] {
-	fill: white;
-}
-html .channelTabs-tabContainer {
-	margin-right: 40px;
-}
+html #channelTabs-settingsMenu,
+html .channelTabs-tabNav > div,
 html .channelTabs-tab,
 html .channelTabs-fav {
-	display: flex;
-	align-items: center;
-	color: var(--interactive-normal);
-	height: 28px;
-	margin: 0 4px;
-	padding: 0 4px;
 	cursor: pointer;
-}
-html .channelTabs-tab {
-	background: rgba(var(--transparencycolor), .3);
-	border-radius: 5px 5px 0 0;
 }
 html .channelTabs-tab:not(.channelTabs-selected):hover,
 html .channelTabs-fav:hover {
-	background: rgba(var(--transparencycolor), .4);
-	color: var(--interactive-hover);
+	background: rgba(var(--transparencycolor), 0.2);
 }
+html #channelTabs-settingsMenu:hover,
+html .channelTabs-tabContainer .channelTabs-tabNav > div:hover,
 html .channelTabs-tab.channelTabs-selected,
-html .channelTabs-fav:active {
+html .channelTabs-tabContainer .channelTabs-newTab:hover {
 	background: rgb(var(--accentcolor));
-	color: var(--interactive-active);
 }
-html .channelTabs-tab > *,
-html .channelTabs-fav > *,
-html .channelTabs-tab .channelTabs-mentionBadge,
-html .channelTabs-fav .channelTabs-mentionBadge,
-html .channelTabs-tab .channelTabs-unreadBadge,
-html .channelTabs-fav .channelTabs-unreadBadge {
-	position: static !important;
-	transform: unset !important;
-	float: unset !important;
+html #channelTabs-settingsMenu:hover [fill]:not([fill="none"]),
+html .channelTabs-tabContainer .channelTabs-tabNav > div:hover [fill]:not([fill="none"]),
+html .channelTabs-tabContainer .channelTabs-newTab:hover [fill]:not([fill="none"]) {
+	fill: var(--header-primary);
 }
-html .channelTabs-tab > *:first-child {
-	display: flex !important;
-	align-items: center !important;
-	flex: 1 1 auto !important;
-	overflow: hidden !important;
-}
-html .channelTabs-tabIcon,
-html .channelTabs-favIcon {
-	display: block !important;
-	position: static !important;
-	margin-right: 6px !important;
-}
-html .channelTabs-tabIcon[src=""],
-html .channelTabs-favIcon[src=""] {
-	display: none !important;
-}
-html .channelTabs-tabName,
-html .channelTabs-favName {
-	display: block !important;
-	position: static !important;
-	margin: 0 !important;
-	width: unset !important;
-	font-size: 16px;
-	line-height: 20px;
-	font-weight: 500;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-html .channelTabs-tab .channelTabs-tabName ~ *,
-html .channelTabs-fav .channelTabs-favName ~ * {
-	margin: 0 0 0 4px !important;
-}
-html .channelTabs-closeTab,
-html .channelTabs-tab.channelTabs-selected .channelTabs-closeTab {
-	position: static;
-	background: rgba(var(--transparencycolor), .3);
-	color: var(--interactive-hover);
-	border-radius: 50%;
-	width: 14px;
-	height: 14px;
-	min-width: 14px;
-	min-height: 14px;
-	font-size: 14px;
-	line-height: unset;
-}
-html .channelTabs-closeTab:hover {
-	background: rgb(237, 66, 69) !important;
-	color: var(--interactive-active) !important;
-}
-html .channelTabs-newTab {
-	position: static;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background: rgba(var(--transparencycolor), .3);
-	color: var(--interactive-hover);
-	padding: 0;
-	width: 22px;
-	height: 22px;
-}
-html .channelTabs-newTab:hover {
-	background: rgb(var(--accentcolor));
-	color: var(--interactive-active);
+html .channelTabs-tabContainer .channelTabs-tabNav > .channelTabs-tabNavClose:hover {
+	background: rgb(var(--dangercolor));
 }
 
 /* ----		18.10	TYPINGINDICATOR					---- */

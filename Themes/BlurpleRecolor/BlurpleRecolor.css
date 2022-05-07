@@ -974,7 +974,6 @@
 
 /* ~~~~		9.		GUILDSETTINGS					~~~~ */
 
-
 .avatarUploaderInnerSquare-2QeuHk {							/* mainsettings			uploadbanner 						*/
 	background-image: linear-gradient(90deg, rgb(var(--accentcolor)), rgba(var(--accentcolor2)));
 }
@@ -2318,6 +2317,8 @@ input.input-2g-os5 {										/* textinput												*/
 	object-position: -999999px -999999px;
 	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/clydeicon_details.svg) center/contain no-repeat !important;
 }
+[style*="https://cdn.discordapp.com/embed/avatars/0.png"],
+[src*="https://cdn.discordapp.com/embed/avatars/0.png"],
 [style*="/assets/1f0bfc0865d324c2587920a7d80c609b.png"],
 [src*="/assets/1f0bfc0865d324c2587920a7d80c609b.png"] {		/* avatars				blue discord						*/
 	object-position: -999999px -999999px;

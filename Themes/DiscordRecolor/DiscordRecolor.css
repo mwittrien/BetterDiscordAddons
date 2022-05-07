@@ -4197,183 +4197,19 @@ html .powercord-pc-icon:active::before {
 
 /* ----		14.2.	CHANNELTABS						---- */
 
-html .channelTabs-tabContainer,
-html .channelTabs-favContainer {
-	display: flex;
-	align-items: center;
-	flex-wrap: wrap;
-	min-height: 28px;
-	height: unset;
-	overflow: hidden;
-	transition: height 0.3s linear;
-}
-html .channelTabs-tabContainer {
-	background-color: var(--background-secondary-alt);
-	border-bottom: 3px solid var(--background-tertiary);
-	padding-top: 6px;
-	padding-left: 4px;
-}
-html .channelTabs-favContainer {
-	background-color: var(--background-tertiary);
-	padding-top: 3px;
-	padding-bottom: 3px;
-	padding-left: 2px;
-}
-html .channelTabs-noFavs {
-	background: transparent;
-	padding: 0 6px;
-}
-
-html #channelTabs-settingsMenu {
-	position: absolute;
-	right: 0;
-	background: var(--background-secondary-alt);
-	border-radius: 0;
-	min-height: 34px;
-	height: unset;
-	float: unset;
-	cursor: pointer;
-}
-html #channelTabs-settingsMenu:hover rect[fill] {
-	fill: var(--interactive-active);
-}
-html .channelTabs-tabContainer {
-	margin-right: 40px;
-}
+html #channelTabs-settingsMenu,
+html .channelTabs-tabNav > div,
 html .channelTabs-tab,
 html .channelTabs-fav {
-	display: flex;
-	align-items: center;
-	color: var(--interactive-normal);
-	height: 28px;
-	padding: 0 4px;
 	cursor: pointer;
 }
-html .channelTabs-tab {
-	border-radius: 5px 5px 0 0;
-	margin: 0 2px;
+html #channelTabs-settingsMenu:hover [fill]:not([fill="none"]),
+html .channelTabs-tabContainer .channelTabs-tabNav > div:hover [fill]:not([fill="none"]),
+html .channelTabs-tabContainer .channelTabs-newTab:hover [fill]:not([fill="none"]) {
+	fill: var(--header-primary);
 }
-html .channelTabs-fav {
-	border-radius: 5px;
-	margin: 0 4px;
-}
-html .channelTabs-tab {
-	background-color: transparent;
-}
-html .channelTabs-tab:not(.channelTabs-selected):hover,
-html .channelTabs-fav:hover {
-	background-color: var(--background-secondary);
-	color: var(--interactive-hover);
-}
-html .channelTabs-tab.channelTabs-selected,
-html .channelTabs-fav:active {
-	background-color: var(--background-tertiary);
-	color: var(--interactive-active);
-	z-index: 2 !important;
-}
-html .channelTabs-tab > *,
-html .channelTabs-fav > *,
-html .channelTabs-tab .channelTabs-mentionBadge,
-html .channelTabs-fav .channelTabs-mentionBadge,
-html .channelTabs-tab .channelTabs-unreadBadge,
-html .channelTabs-fav .channelTabs-unreadBadge {
-	position: static !important;
-	transform: unset !important;
-	float: unset !important;
-	z-index: 3 !important;
-}
-html .channelTabs-tab::before,
-html .channelTabs-tab::after {
-	content: "";
-	position: absolute;
-	height: 10px;
-	width: 20px;
-	bottom: 0;
-}
-html .channelTabs-tab::before {
-	left: -20px;
-	border-radius: 0 0 8px 0;
-}
-html .channelTabs-tab::after {
-	right: -20px;
-	border-radius: 0 0 0 8px;
-}
-html .channelTabs-tab:not(.channelTabs-selected):hover::before {
-	box-shadow: 8px 0 0 0 var(--background-secondary);
-}
-html .channelTabs-tab:not(.channelTabs-selected):hover::after {
-	box-shadow: -8px 0 0 0 var(--background-secondary);
-}
-html .channelTabs-tab.channelTabs-selected::after {
-	box-shadow: -8px 0 0 0 var(--background-tertiary);
-}
-html .channelTabs-tab.channelTabs-selected::before {
-	box-shadow: 8px 0 0 0 var(--background-tertiary);
-}
-html .channelTabs-tab > *:first-child {
-	display: flex !important;
-	align-items: center !important;
-	flex: 1 1 auto !important;
-	overflow: hidden !important;
-}
-html .channelTabs-tabIcon,
-html .channelTabs-favIcon {
-	display: block !important;
-	position: static !important;
-	margin-right: 6px !important;
-}
-html .channelTabs-tabIcon[src=""],
-html .channelTabs-favIcon[src=""] {
-	display: none !important;
-}
-html .channelTabs-tabName,
-html .channelTabs-favName {
-	display: block !important;
-	position: static !important;
-	margin: 0 !important;
-	width: unset !important;
-	font-size: 16px;
-	line-height: 20px;
-	font-weight: 500;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-html .channelTabs-tab .channelTabs-tabName ~ *,
-html .channelTabs-fav .channelTabs-favName ~ * {
-	margin: 0 0 0 4px !important;
-}
-html .channelTabs-closeTab,
-html .channelTabs-tab.channelTabs-selected .channelTabs-closeTab {
-	background-color: transparent;
-	color: var(--interactive-hover);
-	border-radius: 50%;
-	width: 14px;
-	height: 14px;
-	min-width: 14px;
-	min-height: 14px;
-	font-size: 14px;
-	line-height: unset;
-}
-html .channelTabs-closeTab:hover {
-	background: rgb(var(--dangercolor)) !important;
-	color: var(--interactive-active) !important;
-}
-html .channelTabs-newTab {
-	position: static;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: var(--background-secondary);
-	color: var(--interactive-hover);
-	padding: 0;
-	width: 22px;
-	height: 22px;
-	transition: background-color 0.3s linear, color 0.3s linear;
-}
-html .channelTabs-newTab:hover {
-	background-color: var(--background-primary);
-	color: var(--interactive-active);
+html .channelTabs-tabContainer .channelTabs-tabNav > .channelTabs-tabNavClose:hover {
+	background: rgb(var(--dangercolor));
 }
 
 /* ----		14.3.	TYPINGINDICATOR					---- */
