@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.1
+ * @version 1.1.2
  * @description Allows you to save Custom Statuses as Quick Select
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomStatusPresets",
 			"author": "DevilBro",
-			"version": "1.1.1",
+			"version": "1.1.2",
 			"description": "Allows you to save Custom Statuses as Quick Select"
 		}
 	};
@@ -248,6 +248,11 @@ module.exports = (_ => {
 					${BDFDB.dotCN.animationcontainerscale + BDFDB.dotCN.animationcontainerrender} {
 						transform: unset !important;
 					}
+					${BDFDB.dotCN.menu} #account-edit-custom-status ${BDFDB.dotCN.menuhintcontainer} {
+						margin-right: 8px;
+						margin-left: 0;
+						order: -1;
+					}
 					#status-picker${BDFDB.dotCN.menu} #status-picker-custom-status${BDFDB.dotCN.menulabelcontainer} {
 						padding-left: 0;
 					}
@@ -335,16 +340,16 @@ module.exports = (_ => {
 			}
 			
 			processMenu (e) {
-				if (e.instance.props.navId != "status-picker") return;
+				if (e.instance.props.navId != "status-picker" && e.instance.props.navId != "account") return;
 				let enabledPresets = BDFDB.ObjectUtils.filter(presets, id => !presets[id].disabled, true);
 				if (!Object.keys(enabledPresets).length) return;
-				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.instance, {id: "custom-status"});
+				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.instance, {id: ["custom-status", "set-custom-status", "edit-custom-status"]});
 				if (index > -1 && children[index].props && !children[index].props.children) {
 					let render = children[index].props.render || children[index].props.label;
 					delete children[index].props.render;
 					delete children[index].props.label;
 					children[index] = BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, Object.assign({}, children[index].props, {
-						label: render(),
+						label: typeof render == "function" ? render() : render,
 						children: Object.keys(BDFDB.ObjectUtils.sort(enabledPresets, "pos")).map(id => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "custom-status-preset", id),
 							label: BDFDB.ReactUtils.createElement("div", {
