@@ -87,7 +87,8 @@ module.exports = (_ => {
 						voiceChat:			{value: true, 	description: "Members in Voice Chat"},
 						activity:			{value: true, 	description: "Activity Page"},
 						channelList:		{value: true, 	description: "Channel/Group List"},
-						recentDms:			{value: true, 	description: "Group Notifications"}
+						recentDms:			{value: true, 	description: "Group Notifications"},
+						friendsBlocked:		{value: true, 	description: "Friends Tab (Blocked Users List)"}
 					}
 				};
 				
