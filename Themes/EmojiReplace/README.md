@@ -35,10 +35,14 @@ Microsoft:
 
 ![screenshot5](https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/_res/screenshot5.png)
 
-Samsung:
+OpenMoji:
 
 ![screenshot6](https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/_res/screenshot6.png)
 
+Samsung:
+
+![screenshot6](https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/_res/screenshot7.png)
+
 WhatsApp:
 
-![screenshot7](https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/_res/screenshot7.png)
+![screenshot7](https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/_res/screenshot8.png)
