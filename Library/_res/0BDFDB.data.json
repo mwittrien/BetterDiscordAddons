@@ -1870,6 +1870,7 @@
 		"channeliconcontainer": ["Channel", "iconContainer"],
 		"channeliconitem": ["ChannelContainer", "iconItem"],
 		"channeliconvisibility": ["ChannelContainer", "iconVisibility"],
+		"channelinfo": ["ChannelContainer", "channelInfo"],
 		"channelmaincontent": ["Channel", "mainContent"],
 		"channelmentionsbadge": ["ChannelContainer", "mentionsBadge"],
 		"channelmodeconnected": ["Channel", "modeConnected"],

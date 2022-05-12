@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.8
+ * @version 1.4.9
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedUsers",
 			"author": "DevilBro",
-			"version": "1.4.8",
+			"version": "1.4.9",
 			"description": "Removes blocked Messages/Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"Search Page": "Removes the 'we hide x blocked messages from search' message"
+				"Stage/Voice": "No longer shows blocked Users in the VC Count and Stage Channel Members"
 			}
 		}
 	};
@@ -98,6 +98,7 @@ module.exports = (_ => {
 						ReactorsComponent: "render",
 						PrivateChannelRecipients: "default",
 						NowPlayingItem: "default",
+						ChannelItem: "default",
 						VoiceUsers: "render",
 						PrivateChannel: "render",
 						PrivateChannelCallParticipants: "render",
@@ -113,6 +114,7 @@ module.exports = (_ => {
 						ConnectedChannelMembers: "default",
 						MemberListItem: "render",
 						NowPlayingItem: "default",
+						VoiceUsers: "render",
 						VoiceUser: "render",
 						DirectMessage: "render",
 						PrivateChannel: "render",
@@ -127,6 +129,9 @@ module.exports = (_ => {
 			onStart () {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.ChannelStore, "getChannel", {after: e => {
 					if (e.returnValue && e.returnValue.isGroupDM()) return new BDFDB.DiscordObjects.Channel(Object.assign({}, e.returnValue, {rawRecipients: e.returnValue.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id)), recipients: e.returnValue.recipients.filter(id => !id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(id))}))
+				}});
+				BDFDB.PatchUtils.patch(this, BDFDB.ModuleUtils.findByProperties("getMutableParticipants"), "getMutableParticipants", {after: e => {
+					e.returnValue = e.returnValue.filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RelationshipUtils, "addRelationship", {after: e => {
@@ -294,7 +299,6 @@ module.exports = (_ => {
 			}
 			
 			processSearchResults (e) {
-				console.log(e);
 				if (this.settings.places.messages && e.instance.props.blockCount && e.instance.props.search && e.instance.props.search.totalResults <= BDFDB.DiscordConstants.SEARCH_PAGE_SIZE) e.instance.props.search = Object.assign({}, e.instance.props.search, {totalResults: e.instance.props.search.totalResults - e.instance.props.blockCount});
 			}
 			
@@ -441,9 +445,24 @@ module.exports = (_ => {
 					}
 				}
 			}
+			
+			processChannelItem (e) {
+				if (this.settings.places.voiceList) {
+					let channelInfo = BDFDB.ReactUtils.findChild(e.instance.props.children, {props: [["className", BDFDB.disCN.channelinfo]]});
+					if (channelInfo && channelInfo.props && channelInfo.props.children && channelInfo.props.children.props && BDFDB.ArrayUtils.is(channelInfo.props.children.props.voiceStates)) channelInfo.props.children.props.voiceStates = [].concat(channelInfo.props.children.props.voiceStates).filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+				}
+			}
 		
 			processVoiceUsers (e) {
-				if (this.settings.places.voiceList && BDFDB.ArrayUtils.is(e.instance.props.voiceStates)) e.instance.props.voiceStates = [].concat(e.instance.props.voiceStates).filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+				if (this.settings.places.voiceList && BDFDB.ArrayUtils.is(e.instance.props.voiceStates)) {
+					if (!e.returnvalue) {
+						if (e.instance.props.children && e.instance.props.children.props && e.instance.props.children.props.numAudience) e.instance.props.children.props.numAudience = BDFDB.LibraryModules.StageChannelUtils.getMutableParticipants(e.instance.props.channel.id).length;
+						e.instance.props.voiceStates = [].concat(e.instance.props.voiceStates).filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+					}
+					else {
+						if (e.instance.props.children && e.instance.props.children.props && e.instance.props.children.props.numAudience === 0) return null;
+					}
+				}
 			}
 		
 			processVoiceUser (e) {
