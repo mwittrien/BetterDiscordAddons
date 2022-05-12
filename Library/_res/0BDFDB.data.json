@@ -297,7 +297,7 @@
 			"UnavailableGuildsButton": {"strings": ["className", ".default.guildsError"]},
 			"Upload": {"class": "uploadmodal"},
 			"UserHook": {"class": "auditloguserhook"},
-			"UserMention": {"strings": ["UserMention", "userId", "getAvatarURL"]},
+			"UserMention": {"strings": ["inlinePreview", "getAvatarURL", "userId", "default.getName"]},
 			"UserProfileModal": {"lazyLoaded": true},
 			"UserProfileModalHeader": {"lazyLoaded": true},
 			"UserSettingsAppearance": {"class": "usersettingsappearancepreview"}
