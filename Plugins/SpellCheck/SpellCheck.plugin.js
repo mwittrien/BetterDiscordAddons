@@ -392,7 +392,7 @@ module.exports = (_ => {
 			isWordNotInDictionary (unformatedWord) {
 				let wordLow = unformatedWord.toLowerCase();	
 				if (wordLow.indexOf("http://") != 0 && wordLow.indexOf("https://") != 0) {		
-					let wordSplit = wordWithoutSymbols.split(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\-\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, 9);		
+					let wordSplit = wordLow.split(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\-\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, 9);		
 					for (let i = 0; i < wordSplit.length; ++i) {		
 						let wordStartingPos = /^.{1}'/.test(wordSplit[i]) ? wordSplit[i].split("'")[1] : "";
 						let wordEndingPos = /'.{1}$/.test(wordSplit[i]) ? wordSplit[i].split("'").reverse()[1] : "";
