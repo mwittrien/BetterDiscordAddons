@@ -282,7 +282,7 @@ module.exports = (_ => {
 
 			spellCheckText (string) {
 				let htmlString = [];
-				string.replace(/\n/g, "\n ").split(" ").forEach(word => {
+				string.replace(/\n/g, "\n ").split(/[0-9\ \µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\-\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g).forEach(word => {
 					if (!word) htmlString.push("");
 					else {
 						let hasNewline = word.endsWith("\n");
@@ -390,20 +390,17 @@ module.exports = (_ => {
 			}
 			
 			isWordNotInDictionary (unformatedWord) {
-				let wordLow = unformatedWord.toLowerCase();	
-				if (wordLow.indexOf("http://") != 0 && wordLow.indexOf("https://") != 0) {		
-					let wordSplit = wordLow.split(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\-\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, 9);		
-					for (let i = 0; i < wordSplit.length; ++i) {		
-						let wordStartingPos = /^.{1}'/.test(wordSplit[i]) ? wordSplit[i].split("'")[1] : "";
-						let wordEndingPos = /'.{1}$/.test(wordSplit[i]) ? wordSplit[i].split("'").reverse()[1] : "";
-						for (let key in dictionaries) for (let word of BDFDB.ArrayUtils.removeCopies([wordLow, wordSplit[i], wordStartingPos, wordEndingPos].filter(n => n))) {
-							let firstLetterLower = word.charAt(0);				
-							if (dictionaries[key] && dictionaries[key][firstLetterLower] && dictionaries[key][firstLetterLower][word.length] && dictionaries[key][firstLetterLower][word.length].includes(word))
-								return false;
-						}
-						return true;
+    				let wordLow = unformatedWord.toLowerCase();
+				let wordWithoutSymbols = wordLow.replace(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\-\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, "");
+				if (wordLow.indexOf("http://") != 0 && wordLow.indexOf("https://") != 0 && wordWithoutSymbols && wordWithoutSymbols.length > wordLow.length/2) {
+					let wordStartingPos = /^.{1}'/.test(wordWithoutSymbols) ? wordWithoutSymbols.split("'")[1] : "";
+					let wordEndingPos = /'.{1}$/.test(wordWithoutSymbols) ? wordWithoutSymbols.split("'").reverse()[1] : "";
+					for (let key in dictionaries) for (let word of BDFDB.ArrayUtils.removeCopies([wordLow, wordWithoutSymbols, wordStartingPos, wordEndingPos].filter(n => n))) {
+						let firstLetterLower = word.charAt(0);
+						if (dictionaries[key] && dictionaries[key][firstLetterLower] && dictionaries[key][firstLetterLower][word.length] && dictionaries[key][firstLetterLower][word.length].includes(word)) 
+							return false;
 					}
-					return false;
+					return true;
 				}
 				return false;
 			}
