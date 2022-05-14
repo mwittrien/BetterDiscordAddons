@@ -282,7 +282,7 @@ module.exports = (_ => {
 
 			spellCheckText (string) {
 				let htmlString = [];
-				string.replace(/\n/g, "\n ").split(/[0-9\ \µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\-\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g).forEach(word => {
+				string.replace(/\n/g, "\n ").split(/[0-9\ \@\>\<\|\,\;\.\:\-\_\#\+\*\~\\\´\`\}\=\]\)\[\(\{\/\&\^\t]/g).forEach(word => {
 					if (!word) htmlString.push("");
 					else {
 						let hasNewline = word.endsWith("\n");
@@ -391,7 +391,7 @@ module.exports = (_ => {
 			
 			isWordNotInDictionary (unformatedWord) {
     				let wordLow = unformatedWord.toLowerCase();
-				let wordWithoutSymbols = wordLow.replace(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\-\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, "");
+				let wordWithoutSymbols = wordLow.replace(/[0-9\µ\$\£\€\¥\¢\²\³\?\¿\%\§\"\!\¡\°\n\r]/g, "");
 				if (wordLow.indexOf("http://") != 0 && wordLow.indexOf("https://") != 0 && wordWithoutSymbols && wordWithoutSymbols.length > wordLow.length/2) {
 					let wordStartingPos = /^.{1}'/.test(wordWithoutSymbols) ? wordWithoutSymbols.split("'")[1] : "";
 					let wordEndingPos = /'.{1}$/.test(wordWithoutSymbols) ? wordWithoutSymbols.split("'").reverse()[1] : "";
