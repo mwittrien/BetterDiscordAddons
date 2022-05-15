@@ -130,7 +130,8 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.ChannelStore, "getChannel", {after: e => {
 					if (e.returnValue && e.returnValue.isGroupDM()) return new BDFDB.DiscordObjects.Channel(Object.assign({}, e.returnValue, {rawRecipients: e.returnValue.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id)), recipients: e.returnValue.recipients.filter(id => !id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(id))}))
 				}});
-				BDFDB.PatchUtils.patch(this, BDFDB.ModuleUtils.findByProperties("getMutableParticipants"), "getMutableParticipants", {after: e => {
+			
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.StageChannelUtils, "getMutableParticipants", {after: e => {
 					e.returnValue = e.returnValue.filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
 				}});
 				
