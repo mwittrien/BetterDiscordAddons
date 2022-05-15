@@ -487,6 +487,13 @@
 	fill: var(--text-normal);
 }
 
+.comboNameplate-2LHfRI[style^="color: hsl(227, "],
+.comboNameplate-2LHfRI[style^="color: hsl(235, "],
+.comboNameplate-2LHfRI[style*=" color: hsl(227, "],
+.comboNameplate-2LHfRI[style*=" color: hsl(235, "] {
+	color: rgb(var(--accentcolor)) !important;
+}
+
 /* ----		3.3.	AUTOCOMPLETEMENU				---- */
 
 #app-mount .active-WHsd77 {									/* autocomplete			option active						*/
@@ -2089,6 +2096,9 @@ a.metadataName-1KMZtB {
 .theme-dark .path-lhsLSV,
 .theme-dark .path2-F-M5gP {
 	stroke: rgb(var(--accentcolor));
+}
+.trophyIconContainer-1Mgw0Z [fill="#3498DB"] {
+	fill: rgb(var(--accentcolor));
 }
 
 /* ----		12.1.	TEXT							---- */
