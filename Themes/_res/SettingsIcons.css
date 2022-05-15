@@ -84,6 +84,10 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="Voice-&-Video-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/voice.svg) center/contain no-repeat;
 }
+.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="Powermode Settings-tab" i]::before,
+.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="Powermode-Settings-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/party.svg) center/contain no-repeat;
+}
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="Text & Images-tab" i]::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="Text-&-Images-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/text.svg) center/contain no-repeat;
@@ -251,7 +255,9 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 }
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG .icon-3FU6Ir,
 .sidebar-nqHbhN .side-2ur1Qk .premiumLabel-3HPvdB svg,
-.sidebar-nqHbhN .side-2ur1Qk .tabBarItemContainer-2HdIlr svg {
+.sidebar-nqHbhN .side-2ur1Qk .premiumLabel-3HPvdB img,
+.sidebar-nqHbhN .side-2ur1Qk .tabBarItemContainer-2HdIlr svg,
+.sidebar-nqHbhN .side-2ur1Qk .tabBarItemContainer-2HdIlr img {
 	transform: scaleX(calc(1 - var(--usesettingsicons)));
 }
 
