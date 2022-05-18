@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.5
+ * @version 2.3.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.3.5",
+			"version": "2.3.6",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
@@ -932,7 +932,7 @@ module.exports = (_ => {
 		let app = document.querySelector(BDFDB.dotCN.app);
 		if (!app) return;
 		BDFDB.DOMUtils.addClass(icon, BDFDB.disCN.loadingicon);
-		let loadingIconWrapper = document.querySelector(BDFDB.dotCN.app + ">" + BDFDB.dotCN.loadingiconwrapper)
+		let loadingIconWrapper = document.querySelector(BDFDB.dotCN.app + ">" + BDFDB.dotCN.loadingiconwrapper);
 		if (!loadingIconWrapper) {
 			loadingIconWrapper = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.loadingiconwrapper}"></div>`);
 			app.appendChild(loadingIconWrapper);
@@ -1922,7 +1922,7 @@ module.exports = (_ => {
 		BDFDB.TooltipUtils = {};
 		BDFDB.TooltipUtils.create = function (anker, text, config = {}) {
 			if (!text && !config.guild) return null;
-			const itemLayerContainer = document.querySelector(BDFDB.dotCN.appmount +  " > " + BDFDB.dotCN.itemlayercontainer);
+			const itemLayerContainer = document.querySelector(BDFDB.dotCN.app + " ~ " + BDFDB.dotCNC.itemlayercontainer + BDFDB.dotCN.itemlayercontainer);
 			if (!itemLayerContainer || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
 			const id = BDFDB.NumberUtils.generateId(Tooltips);
 			const itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltipcontent}"></div><div class="${BDFDB.disCN.tooltippointer}"></div></div></div>`);
