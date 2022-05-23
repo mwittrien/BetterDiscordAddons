@@ -8169,6 +8169,7 @@ module.exports = (_ => {
 					Menu: "default",
 					SettingsView: "componentDidMount",
 					Shakeable: "render",
+					Account: ["componentDidMount", "componentDidUpdate"],
 					Message: "default",
 					MessageToolbar: "type",
 					MessageHeader: "default",
@@ -8230,6 +8231,10 @@ module.exports = (_ => {
 					return [InternalData.ModuleUtilsConfig.Finder.AppView.strings].flat(10).filter(n => typeof n == "string").every(string => typeString.indexOf(string) > -1);
 				}});
 				if (index > -1) children[index] = BDFDB.ReactUtils.createElement(AppViewExport.exports.default, children[index].props);
+			};
+			
+			Internal.processAccount = function (e) {
+				Internal._processAvatarMount(e.instance.props.currentUser, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
 			};
 			
 			Internal.processMessage = function (e) {
