@@ -2,7 +2,7 @@
  * @name SpellCheck
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.0
+ * @version 1.6.1
  * @description Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpellCheck",
 			"author": "DevilBro",
-			"version": "1.6.0",
+			"version": "1.6.1",
 			"description": "Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary"
+		},
+		"changeLog": {
+			"improved": {
+				"Conjoined Words": "Now properly splits conjoined words and checks each segment of the conjoinment, for example 'green-blue' will no longer show as error"
+			}
 		}
 	};
 	
@@ -282,36 +287,37 @@ module.exports = (_ => {
 
 			spellCheckText (string) {
 				let htmlString = [];
-				string.replace(/\n/g, "\n ").split(" ").forEach(word => {
-					if (!word) htmlString.push("");
-					else {
-						let hasNewline = word.endsWith("\n");
-						word = word.replace(/\n/g, "");
-						htmlString.push(`<span class="${this.isWordNotInDictionary(word) ? BDFDB.disCN._spellcheckerror : ""}" style="color: transparent !important; text-shadow: none !important;">${BDFDB.StringUtils.htmlEscape(word)}</span>${hasNewline ? "\n" : ""}`);
-					}
+				let splitter = "!?!?!?!?!?!?!?!" + this.name + BDFDB.NumberUtils.generateId() + this.name + "!?!?!?!?!?!?!?!";
+				string.replace(/([0-9\ \@\>\<\|\,\;\.\:\-\_\#\+\*\~\\\´\`\}\=\]\)\[\(\{\/\&\^\t\r\n])/g, "$1" + splitter).split(splitter).forEach(word => {
+					let execReturn = /[0-9\ \@\>\<\|\,\;\.\:\-\_\#\+\*\~\\\´\`\}\=\]\)\[\(\{\/\&\^\t\r\n]$/g.exec(word);
+					if (execReturn) word = word.slice(0, execReturn[0].length * -1);
+					htmlString.push(`<span class="${this.isWordNotInDictionary(word) ? BDFDB.disCN._spellcheckerror : ""}" style="color: transparent !important; text-shadow: none !important;">${BDFDB.StringUtils.htmlEscape(word)}</span>`);
+					if (execReturn) htmlString.push(`<span>${execReturn[0]}</span>`);
 				});
-				return htmlString.join("<span> </span>").replace(/\n /g, "\n");
+				return htmlString.join("").replace(/\n /g, "\n");
 			}
 
 			replaceWord (editor, toBeReplaced, replacement) {
 				if (!editor) return;
 				toBeReplaced = toBeReplaced.toUpperCase();
 				let newString = [];
-				BDFDB.SlateUtils.toTextValue(editor.children).replace(/\n/g, "\n ").split(" ").forEach(word => {
-					let hasNewline = word.endsWith("\n");
-					word = word.replace(/\n/g, "");
+				let splitter = "!?!?!?!?!?!?!?!" + this.name + BDFDB.NumberUtils.generateId() + this.name + "!?!?!?!?!?!?!?!";
+				BDFDB.SlateUtils.toTextValue(editor.children).replace(/([0-9\ \@\>\<\|\,\;\.\:\-\_\#\+\*\~\\\´\`\}\=\]\)\[\(\{\/\&\^\t\r\n])/g, "$1" + splitter).split(splitter).forEach(word => {
+					let execReturn = /[0-9\ \@\>\<\|\,\;\.\:\-\_\#\+\*\~\\\´\`\}\=\]\)\[\(\{\/\&\^\t\r\n]$/g.exec(word);
+					if (execReturn) word = word.slice(0, execReturn[0].length * -1);
 					if (word.toUpperCase() == toBeReplaced) {
 						let firstLetter = word.charAt(0);
 						let isCapitalised = firstLetter.toUpperCase() == firstLetter && firstLetter.toLowerCase() != firstLetter;
-						newString.push((isCapitalised ? replacement.charAt(0).toUpperCase() + replacement.slice(1) : replacement) + (hasNewline ? "\n" : ""));
+						newString.push(isCapitalised ? replacement.charAt(0).toUpperCase() + replacement.slice(1) : replacement);
 					}
-					else newString.push(word + (hasNewline ? "\n" : ""));
+					else newString.push(word);
+					if (execReturn) newString.push(execReturn[0]);
 				});
 				editor.history.stack.splice(editor.history.index + 1, 0, {
 					type: "other",
     				mergeable: false,
     				createdAt: new Date().getTime(),
-    				value: BDFDB.SlateUtils.toRichValue(newString.join(" ").replace(/\n /g, "\n")),
+    				value: BDFDB.SlateUtils.toRichValue(newString.join("")),
 					selection: editor.history.stack[editor.history.index].selection
 				});
 				editor.redo();
