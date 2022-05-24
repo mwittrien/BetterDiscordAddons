@@ -8176,6 +8176,7 @@ module.exports = (_ => {
 					MemberListItem: ["componentDidMount", "componentDidUpdate"],
 					PrivateChannel: ["componentDidMount", "componentDidUpdate"],
 					AnalyticsContext: ["componentDidMount", "componentDidUpdate"],
+					UserPopoutAvatar: "UserPopoutAvatar",
 					PeopleListItem: ["componentDidMount", "componentDidUpdate"],
 					DiscordTag: "default"
 				}
@@ -8214,11 +8215,10 @@ module.exports = (_ => {
 				if (!e.instance.props.children || BDFDB.ArrayUtils.is(e.instance.props.children) && !e.instance.props.children.length) Internal.LibraryModules.ContextMenuUtils.closeContextMenu();
 			};
 			
-				
 			Internal.processSearchBar = function (e) {
 				if (typeof e.instance.props.query != "string") e.instance.props.query = "";
 			};
-				
+			
 			Internal.processSettingsView = function (e) {
 				if (e.node && e.node.parentElement && e.node.parentElement.getAttribute("aria-label") == BDFDB.DiscordConstants.Layers.USER_SETTINGS) Internal.addListObserver(e.node.parentElement);
 			};
@@ -8231,10 +8231,6 @@ module.exports = (_ => {
 					return [InternalData.ModuleUtilsConfig.Finder.AppView.strings].flat(10).filter(n => typeof n == "string").every(string => typeString.indexOf(string) > -1);
 				}});
 				if (index > -1) children[index] = BDFDB.ReactUtils.createElement(AppViewExport.exports.default, children[index].props);
-			};
-			
-			Internal.processAccount = function (e) {
-				Internal._processAvatarMount(e.instance.props.currentUser, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
 			};
 			
 			Internal.processMessage = function (e) {
@@ -8287,8 +8283,9 @@ module.exports = (_ => {
 			};
 
 			const BDFDB_Patrons = Object.assign({}, InternalData.BDFDB_Patrons), BDFDB_Patron_Tiers = Object.assign({}, InternalData.BDFDB_Patron_Tiers);
-			Internal._processAvatarRender = function (user, avatar, className) {
+			Internal._processAvatarRender = function (user, avatar, wrapper, className) {
 				if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user) && (avatar.props.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) == -1) {
+					if (wrapper) wrapper.props[InternalData.userIdAttribute] = user.id;
 					avatar.props[InternalData.userIdAttribute] = user.id;
 					let role = "", note = "", color, link, addBadge = Internal.settings.general.showSupportBadges;
 					if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
@@ -8355,9 +8352,8 @@ module.exports = (_ => {
 					}
 				}
 			};
-			Internal._processUserInfoNode = function (user, wrapper) {
-				if (!user || !wrapper) return;
-				if (InternalData.UserBackgrounds[user.id]) for (let property in InternalData.UserBackgrounds[user.id]) wrapper.style.setProperty(property, InternalData.UserBackgrounds[user.id][property], "important");
+			Internal.processAccount = function (e) {
+				Internal._processAvatarMount(e.instance.props.currentUser, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
 			};
 			Internal.processMessageHeader = function (e) {
 				if (e.instance.props.message && e.instance.props.message.author) {
@@ -8366,7 +8362,7 @@ module.exports = (_ => {
 						let renderChildren = avatarWrapper.props.children;
 						avatarWrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
 							let renderedChildren = renderChildren(...args);
-							return Internal._processAvatarRender(e.instance.props.message.author, renderedChildren, BDFDB.disCN.messageavatar) || renderedChildren;
+							return Internal._processAvatarRender(e.instance.props.message.author, renderedChildren, null, BDFDB.disCN.messageavatar) || renderedChildren;
 						}, "Error in Avatar Render of MessageHeader!");
 					}
 					else if (avatarWrapper && avatarWrapper.type == "img") e.returnvalue.props.children[0] = Internal._processAvatarRender(e.instance.props.message.author, avatarWrapper) || avatarWrapper;
@@ -8382,10 +8378,18 @@ module.exports = (_ => {
 				if (e.instance.props.section != BDFDB.DiscordConstants.AnalyticsSections.PROFILE_MODAL && e.instance.props.section != BDFDB.DiscordConstants.AnalyticsSections.PROFILE_POPOUT) return;
 				const user = BDFDB.ReactUtils.findValue(e.instance, "user");
 				if (!user) return;
+				const avatar = e.instance.props.section != BDFDB.DiscordConstants.AnalyticsSections.PROFILE_POPOUT && e.node.querySelector(BDFDB.dotCN.avatarwrapper);
 				const wrapper = e.node.querySelector(BDFDB.dotCNC.userpopout + BDFDB.dotCN.userprofile) || e.node;
-				const avatar = e.node.querySelector(BDFDB.dotCN.avatarwrapper);
-				if (avatar) Internal._processAvatarMount(user, e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.PROFILE_POPOUT ? avatar.parentElement : avatar, wrapper);
-				Internal._processUserInfoNode(user, wrapper);
+				if (avatar) Internal._processAvatarMount(user, avatar, wrapper);
+				if (wrapper) {
+					wrapper.setAttribute(InternalData.userIdAttribute, user.id);
+					if (InternalData.UserBackgrounds[user.id]) for (let property in InternalData.UserBackgrounds[user.id]) wrapper.style.setProperty(property, InternalData.UserBackgrounds[user.id][property], "important");
+				}
+			};
+			Internal.processUserPopoutAvatar = function (e) {
+				if (!e.instance.props.user) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutavatarwrapper]]});
+				if (index > -1) children[index] = Internal._processAvatarRender(e.instance.props.user, children[index], null, e.instance) || children[index];
 			};
 			Internal.processPeopleListItem = function (e) {
 				if (e.instance.props.user) e.node.setAttribute(InternalData.userIdAttribute, e.instance.props.user.id);
