@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.2
+ * @version 1.1.3
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "GameActivityToggle",
 			"author": "DevilBro",
-			"version": "1.1.2",
+			"version": "1.1.3",
 			"description": "Adds a Quick-Toggle Game Activity Button"
 		},
 		"changeLog": {
-			"fixed": {
-				"Account Switcher Overflow": "Fixed Issue, where the settings button would overflow in the account details, when the account switcher experiment was enabled, NOW FOR REAL"
+			"improved": {
+				"Menu Item Option": "Now allows you to add a Context Menu Item to the new User Account Popup in the bottom left"
 			}
 		}
 	};
@@ -99,6 +99,8 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
+						showButton:			{value: true,					description: "Show Quick Toggle Button"},
+						showItem:			{value: false,					description: "Show Quick Toggle Item"},
 						playEnable:			{value: true,					description: "Play Enable Sound"},
 						playDisable:		{value: true,					description: "Play Disable Sound"}
 					},
@@ -109,6 +111,9 @@ module.exports = (_ => {
 				};
 				
 				this.patchedModules = {
+					before: {
+						Menu: "default"
+					},
 					after: {
 						Account: "render"
 					}
@@ -206,7 +211,29 @@ module.exports = (_ => {
 				});
 			}
 			
+			processMenu (e) {
+				if (!this.settings.general.showItem || e.instance.props.navId != "account") return;
+				let [_, oldIndex] = BDFDB.ContextMenuUtils.findItem(e.instance, {id: BDFDB.ContextMenuUtils.createItemId(this.name, "activity-toggle")});
+				if (oldIndex == -1) {
+					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.instance, {id: ["custom-status", "set-custom-status", "edit-custom-status"]});
+					if (index > -1) {
+						let isChecked = BDFDB.DiscordUtils.getSettings("ShowCurrentGame");
+						children.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, {
+							label: BDFDB.LanguageUtils.LanguageStrings.ACTIVITY_STATUS,
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, "activity-toggle"),
+							icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+								icon: BDFDB.LibraryComponents.SvgIcon.Names.GAMEPAD
+							}),
+							showIconFirst: true,
+							checked: isChecked,
+							action: _ => this.toggle()
+						}));
+					}
+				}
+			}
+			
 			processAccount (e) {
+				if (!this.settings.general.showButton) return;
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "PanelButton"});
 				if (index > -1) {
 					e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._gameactivitytoggleadded);

@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.7
+ * @version 2.3.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.3.7",
+			"version": "2.3.8",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
@@ -4808,7 +4808,7 @@ module.exports = (_ => {
 					},
 					onClick: this.props.disabled ? null : e => {
 						if (!this.props.action) return false;
-						!this.props.persisting && !hasPopout && this.props.onClose();
+						!this.props.persisting && !hasPopout && this.props.onClose && this.props.onClose();
 						this.props.action(e, this);
 					},
 					onMouseEnter: this.props.disabled ? null : e => {
@@ -4821,6 +4821,12 @@ module.exports = (_ => {
 					},
 					"aria-disabled": this.props.disabled,
 					children: [
+						this.props.icon && this.props.showIconFirst && BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.menuiconcontainerleft,
+							children: BDFDB.ReactUtils.createElement(this.props.icon, {
+								className: BDFDB.disCN.menuicon
+							})
+						}),
 						typeof this.props.render == "function" ? this.props.render(this) : this.props.render,
 						(this.props.label || this.props.subtext) && BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.menulabel,
@@ -4836,11 +4842,15 @@ module.exports = (_ => {
 							className: BDFDB.disCN.menuhintcontainer,
 							children: typeof this.props.hint == "function" ? this.props.hint(this) : this.props.hint
 						}),
-						this.props.icon && BDFDB.ReactUtils.createElement("div", {
+						this.props.icon && !this.props.showIconFirst && BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.menuiconcontainer,
 							children: BDFDB.ReactUtils.createElement(this.props.icon, {
 								className: BDFDB.disCN.menuicon
 							})
+						}),
+						this.props.input && BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.menuiconcontainer,
+							children: this.props.input
 						}),
 						this.props.imageUrl && BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.menuimagecontainer,
@@ -4878,12 +4888,8 @@ module.exports = (_ => {
 					isFocused: this.state.hovered && !this.props.disabled
 				}));
 				return isItem ? item : BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Clickable, {
-					onMouseEnter: e => {
-						this.setState({hovered: true});
-					},
-					onMouseLeave: e => {
-						this.setState({hovered: false});
-					},
+					onMouseEnter: e => this.setState({hovered: true}),
+					onMouseLeave: e => this.setState({hovered: false}),
 					children: item
 				});
 			}
@@ -6625,8 +6631,16 @@ module.exports = (_ => {
 					BDFDB.ReactUtils.forceUpdate(this);
 				}
 				render() {
-					return BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.MenuCheckboxItem, Object.assign({}, this.props, {
-						checked: this.props.state && this.props.state.checked,
+					return BDFDB.ReactUtils.createElement(Internal.MenuItem, Object.assign({}, this.props, {
+						input: this.props.state && this.props.state.checked ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
+							className: BDFDB.disCN.menuicon,
+							background: BDFDB.disCN.menucheckbox,
+							foreground: BDFDB.disCN.menucheck,
+							name: Internal.LibraryComponents.SvgIcon.Names.CHECKBOX
+						}) : BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
+							className: BDFDB.disCN.menuicon,
+							name: Internal.LibraryComponents.SvgIcon.Names.CHECKBOX_EMPTY
+						}),
 						action: this.handleClick.bind(this)
 					}));
 				}

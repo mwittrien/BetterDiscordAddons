@@ -299,6 +299,7 @@
 			"Upload": {"class": "uploadmodal"},
 			"UserHook": {"class": "auditloguserhook"},
 			"UserMention": {"strings": ["inlinePreview", "getAvatarURL", "userId", "default.getName"]},
+			"UserPopoutAvatar": {"props": ["UserPopoutAvatar"]},
 			"UserProfileModal": {"lazyLoaded": true},
 			"UserProfileModalHeader": {"lazyLoaded": true},
 			"UserSettingsAppearance": {"class": "usersettingsappearancepreview"}
@@ -2474,6 +2475,7 @@
 		"menuhintcontainer": ["Menu", "hintContainer"],
 		"menuicon": ["Menu", "icon"],
 		"menuiconcontainer": ["Menu", "iconContainer"],
+		"menuiconcontainerleft": ["Menu", "iconContainerLeft"],
 		"menuimage": ["Menu", "image"],
 		"menuimagecontainer": ["Menu", "imageContainer"],
 		"menuitem": ["Menu", "item"],
