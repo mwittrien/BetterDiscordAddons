@@ -2,7 +2,7 @@
  * @name SpellCheck
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.1
+ * @version 1.6.2
  * @description Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpellCheck",
 			"author": "DevilBro",
-			"version": "1.6.1",
+			"version": "1.6.2",
 			"description": "Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary"
 		},
 		"changeLog": {
 			"improved": {
-				"Conjoined Words": "Now properly splits conjoined words and checks each segment of the conjoinment, for example 'green-blue' will no longer show as error"
+				"Conjoined Words": "Now properly splits conjoined words and checks each segment of the conjoinment, for example 'green-blue' will no longer show as error",
+				"Quotes": "Added “ ” ‘ ’ to special symbols"
 			}
 		}
 	};
@@ -288,8 +289,8 @@ module.exports = (_ => {
 			spellCheckText (string) {
 				let htmlString = [];
 				let splitter = "!?!?!?!?!?!?!?!" + this.name + BDFDB.NumberUtils.generateId() + this.name + "!?!?!?!?!?!?!?!";
-				string.replace(/([0-9\ \@\>\<\|\,\;\.\:\-\_\#\+\*\~\\\´\`\}\=\]\)\[\(\{\/\&\^\t\r\n])/g, "$1" + splitter).split(splitter).forEach(word => {
-					let execReturn = /[0-9\ \@\>\<\|\,\;\.\:\-\_\#\+\*\~\\\´\`\}\=\]\)\[\(\{\/\&\^\t\r\n]$/g.exec(word);
+				string.replace(/([0-9\ \@\>\<\|\,\;\.\:\-\_\=\#\+\*\~\"\'\´\`\“\”\‘\’\[\]\(\)\{\}\\\/\&\^\t\r\n])/g, "$1" + splitter).split(splitter).forEach(word => {
+					let execReturn = /[0-9\ \@\>\<\|\,\;\.\:\-\_\=\#\+\*\~\"\'\´\`\“\”\‘\’\[\]\(\)\{\}\\\/\&\^\t\r\n]$/g.exec(word);
 					if (execReturn) word = word.slice(0, execReturn[0].length * -1);
 					htmlString.push(`<span class="${this.isWordNotInDictionary(word) ? BDFDB.disCN._spellcheckerror : ""}" style="color: transparent !important; text-shadow: none !important;">${BDFDB.StringUtils.htmlEscape(word)}</span>`);
 					if (execReturn) htmlString.push(`<span>${execReturn[0]}</span>`);
@@ -302,8 +303,8 @@ module.exports = (_ => {
 				toBeReplaced = toBeReplaced.toUpperCase();
 				let newString = [];
 				let splitter = "!?!?!?!?!?!?!?!" + this.name + BDFDB.NumberUtils.generateId() + this.name + "!?!?!?!?!?!?!?!";
-				BDFDB.SlateUtils.toTextValue(editor.children).replace(/([0-9\ \@\>\<\|\,\;\.\:\-\_\#\+\*\~\\\´\`\}\=\]\)\[\(\{\/\&\^\t\r\n])/g, "$1" + splitter).split(splitter).forEach(word => {
-					let execReturn = /[0-9\ \@\>\<\|\,\;\.\:\-\_\#\+\*\~\\\´\`\}\=\]\)\[\(\{\/\&\^\t\r\n]$/g.exec(word);
+				BDFDB.SlateUtils.toTextValue(editor.children).replace(/([0-9\ \@\>\<\|\,\;\.\:\-\_\=\#\+\*\~\"\'\´\`\“\”\‘\’\[\]\(\)\{\}\\\/\&\^\t\r\n])/g, "$1" + splitter).split(splitter).forEach(word => {
+					let execReturn = /[0-9\ \@\>\<\|\,\;\.\:\-\_\=\#\+\*\~\"\'\´\`\“\”\‘\’\[\]\(\)\{\}\\\/\&\^\t\r\n]$/g.exec(word);
 					if (execReturn) word = word.slice(0, execReturn[0].length * -1);
 					if (word.toUpperCase() == toBeReplaced) {
 						let firstLetter = word.charAt(0);
@@ -397,7 +398,7 @@ module.exports = (_ => {
 
 			isWordNotInDictionary (unformatedWord) {
 				let wordLow = unformatedWord.toLowerCase();
-				let wordWithoutSymbols = wordLow.replace(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\-\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, "");
+				let wordWithoutSymbols = wordLow.replace(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\-\_\#\+\*\~\?\¿\\\´\`\“\”\‘\’\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, "");
 				if (wordLow.indexOf("http://") != 0 && wordLow.indexOf("https://") != 0 && wordWithoutSymbols && wordWithoutSymbols.length > wordLow.length/2) {
 					let wordStartingPos = /^.{1}'/.test(wordWithoutSymbols) ? wordWithoutSymbols.split("'")[1] : "";
 					let wordEndingPos = /'.{1}$/.test(wordWithoutSymbols) ? wordWithoutSymbols.split("'").reverse()[1] : "";
