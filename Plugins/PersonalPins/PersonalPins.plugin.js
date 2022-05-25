@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.0.8
+ * @version 2.0.9
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "PersonalPins",
 			"author": "DevilBro",
-			"version": "2.0.8",
+			"version": "2.0.9",
 			"description": "Allows you to locally pin Messages"
 		}
 	};
@@ -332,8 +332,8 @@ module.exports = (_ => {
 				};
 			
 				this.patchedModules = {
-					after: {
-						HeaderBarContainer: "render"
+					before: {
+						HeaderBar: "default"
 					}
 				};
 			}
@@ -348,11 +348,11 @@ module.exports = (_ => {
 					}
 				}});
 				
-				BDFDB.PatchUtils.forceAllUpdates(this);
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 			
 			onStop () {
-				BDFDB.PatchUtils.forceAllUpdates(this);
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 
 			getSettingsPanel (collapseStates = {}) {
@@ -392,7 +392,7 @@ module.exports = (_ => {
 			onSettingsClosed () {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
-					BDFDB.PatchUtils.forceAllUpdates(this);
+					BDFDB.DiscordUtils.rerenderAll();
 				}
 			}
 
@@ -485,8 +485,8 @@ module.exports = (_ => {
 				}
 			}
 
-			processHeaderBarContainer (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(BDFDB.ObjectUtils.get(e.returnvalue, "props.toolbar"), {name: "FluxContainer(Search)"});
+			processHeaderBar (e) {
+				let [children, index] = BDFDB.ReactUtils.findParent(BDFDB.ObjectUtils.get(e.instance, "props.toolbar"), {name: "FluxContainer(Search)"});
 				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						text: this.labels.popout_note,
