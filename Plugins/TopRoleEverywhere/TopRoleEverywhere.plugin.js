@@ -2,7 +2,7 @@
  * @name TopRoleEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.7
+ * @version 3.0.8
  * @description Adds the highest Role of a User as a Tag
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "TopRoleEverywhere",
 			"author": "DevilBro",
-			"version": "3.0.7",
+			"version": "3.0.8",
 			"description": "Adds the highest Role of a User as a Tag"
-		},
-		"changeLog": {
-			"fixed": {
-				"Role/ID Swap": "Added Option to swap userId/role"
-			}
 		}
 	};
 
@@ -184,12 +179,14 @@ module.exports = (_ => {
 
 			processMessageUsername (e) {
 				if (!e.instance.props.message) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "Popout"});
+				if (index == -1) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
-				if (this.settings.places.chat) this.injectRoleTag(e.returnvalue.props.children, author, "chat", e.instance.props.compact ? 0 : 2, {
+				if (this.settings.places.chat) this.injectRoleTag(children, author, "chat", e.instance.props.compact ? index : (index + 1), {
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true
 				});
-				if (this.settings.general.addUserId) this.injectIdTag(e.returnvalue.props.children, author, "chat", (e.instance.props.compact ? 0 : 2) + (this.settings.general.userIdFirst ? 0 : 1), {
+				if (this.settings.general.addUserId) this.injectIdTag(e.returnvalue.props.children, author, "chat", (e.instance.props.compact ? index : (index + 1)) + (this.settings.general.userIdFirst ? 0 : 1), {
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true
 				});

@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.7
+ * @version 4.3.8
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.3.7",
+			"version": "4.3.8",
 			"description": "Allows you to locally edit Channels"
-		},
-		"changeLog": {
-			"fixed": {
-				"App Title": "Fixed an Issue where a changed App Title for a changed Channel would persist to the Friends Page"
-			}
 		}
 	};
 
@@ -101,7 +96,7 @@ module.exports = (_ => {
 						AutocompleteChannelResult: "render",
 						GuildSettingsAuditLogEntry: "render",
 						SettingsInvites: "render",
-						HeaderBarContainer: "render",
+						HeaderBarContainer: "default",
 						ChannelCategoryItem: "type",
 						ChannelItem: "default",
 						GuildSidebarThreadListEntry: "type",
@@ -114,7 +109,7 @@ module.exports = (_ => {
 						ThreadCreated: "default",
 						AutocompleteChannelResult: "render",
 						GuildSettingsAuditLogEntry: "render",
-						HeaderBarContainer: "render",
+						HeaderBarContainer: "default",
 						ThreadSidebar: "default",
 						ThreadCard: "type",
 						FocusRing: "default",
@@ -223,8 +218,7 @@ module.exports = (_ => {
 				
 				this.changeAppTitle();
 				BDFDB.PatchUtils.forceAllUpdates(this);
-				BDFDB.ChannelUtils.rerenderAll(instant);
-				BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name: "Channel", unlimited: true}));
+				BDFDB.DiscordUtils.rerenderAll(instant);
 			}
 
 			onChannelContextMenu (e) {

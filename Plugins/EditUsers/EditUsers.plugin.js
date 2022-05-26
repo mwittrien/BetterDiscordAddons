@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.4
+ * @version 4.5.6
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.5.5",
+			"version": "4.5.6",
 			"description": "Allows you to locally edit Users"
-		},
-		"changeLog": {
-			"fixed": {
-				"App Title": "Fixed an Issue where a changed App Title for a changed User DM would persist to the Friends Page"
-			}
 		}
 	};
 
@@ -104,7 +99,7 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					before: {
-						HeaderBarContainer: "render",
+						HeaderBarContainer: "default",
 						ChannelEditorContainer: "render",
 						AutocompleteUserResult: "render",
 						UserBanner: "default",
@@ -206,6 +201,12 @@ module.exports = (_ => {
 			onStart () {				
 				let observer = new MutationObserver(_ => {this.changeAppTitle();});
 				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name: "appTitleObserver", instance: observer}, {childList: true});
+			
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.StageChannelUtils, "getMutableParticipants", {after: e => {
+					if (BDFDB.ArrayUtils.is(e.returnValue)) for (let i in e.returnValue) {
+						if (e.returnValue[i] && e.returnValue[i].user && changedUsers[e.returnValue[i].user.id]) e.returnValue[i] = Object.assign({}, e.returnValue[i], {user: this.getUserData(e.returnValue[i].user.id)});
+					}
+				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageAuthorUtils, ["default", "getMessageAuthor"], {after: e => {
 					if (this.settings.places.chatWindow && e.methodArguments[0] && e.methodArguments[0].author && changedUsers[e.methodArguments[0].author.id] && this.shouldChangeInChat(e.methodArguments[0].channel_id)) {
@@ -363,15 +364,10 @@ module.exports = (_ => {
 		
 			forceUpdateAll () {
 				changedUsers = BDFDB.DataUtils.load(this, "users");
-				// REMOVE 21.04.2022
-				for (let id in changedUsers) if (changedUsers[id].color5) {
-					changedUsers[id].color2 = changedUsers[id].color5;
-					delete changedUsers[id].color5;
-				}
 				
 				this.changeAppTitle();
 				BDFDB.PatchUtils.forceAllUpdates(this);
-				BDFDB.MessageUtils.rerenderAll();
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 		
 			onDMContextMenu (e) {
@@ -685,8 +681,6 @@ module.exports = (_ => {
 						e.instance.props.currentUser = this.getUserData(e.instance.props.currentUser.id);
 						if (data && (data.removeStatus || data.status || data.statusEmoji)) e.instance.props.customStatusActivity = this.createCustomStatus(data);
 					}
-					else {
-					}
 				}
 			}
 
@@ -793,7 +787,8 @@ module.exports = (_ => {
 							else this.changeUserColor(messageUsername, author.id, {guildId: (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
 						}
 					}
-					this.injectBadge(e.returnvalue.props.children, author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.compact ? 0 : 2, {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "Popout"});
+					if (index > -1) this.injectBadge(children, author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.compact ? index : (index + 1), {
 						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 						useRem: true
 					});
@@ -944,7 +939,10 @@ module.exports = (_ => {
 					};
 					changeMentionName(mention);
 				}
-				if (data.color1) mention.props.color = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "INT");
+				if (data.color1) {
+					mention.props.color = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "INT");
+					if (mention.props.children && mention.props.children.props) mention.props.children.props.color = mention.props.color;
+				}
 			}
 
 			processChannelReply (e) {

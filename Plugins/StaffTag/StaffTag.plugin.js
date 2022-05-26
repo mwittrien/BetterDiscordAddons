@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.0
+ * @version 1.5.1
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "StaffTag",
 			"author": "DevilBro",
-			"version": "1.5.0",
+			"version": "1.5.1",
 			"description": "Adds a Crown/Tag to Server Owners (or Admins/Management)"
-		},
-		"changeLog": {
-			"added": {
-				"More Management Permission Sub Types": "Added new Sub Types (Threads, Event, Voice Channels [kick, mute, move])"
-			}
 		}
 	};
 
@@ -250,9 +245,11 @@ module.exports = (_ => {
 
 			processMessageUsername (e) {
 				if (!e.instance.props.message || !this.settings.tagPlaces.chat) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "Popout"});
+				if (index == -1) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
 				let userType = this.getUserType(author, e.instance.props.message.channel_id);
-				if (userType) this.injectStaffTag(e.returnvalue.props.children, author, userType, e.instance.props.compact ? 0 : 2, {
+				if (userType) this.injectStaffTag(children, author, userType, e.instance.props.compact ? index : (index + 1), {
 					channelId: e.instance.props.message.channel_id,
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true
