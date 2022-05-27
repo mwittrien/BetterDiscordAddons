@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.8
+ * @version 1.8.9
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowBadgesInChat",
 			"author": "DevilBro",
-			"version": "1.8.8",
+			"version": "1.8.9",
 			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList"
 		}
 	};
@@ -270,8 +270,10 @@ module.exports = (_ => {
 
 			processMessageUsername (e) {
 				if (!e.instance.props.message || !this.settings.places.chat) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "Popout"});
+				if (index == -1) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
-				this.injectBadges(e.returnvalue.props.children, author, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
+				this.injectBadges(children, author, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
 			}
 
 			processMemberListItem (e) {
