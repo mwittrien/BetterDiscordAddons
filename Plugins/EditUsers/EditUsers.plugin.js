@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.6
+ * @version 4.5.7
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.5.6",
+			"version": "4.5.7",
 			"description": "Allows you to locally edit Users"
 		}
 	};
@@ -483,6 +483,7 @@ module.exports = (_ => {
 			processHeaderBarContainer (e) {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
 				if (channel && channel.isDM() && this.settings.places.dmHeader) {
+					console.log(e);
 					let userName = BDFDB.ReactUtils.findChild(e.instance, {name: "Title"});
 					if (userName) {
 						let recipientId = channel.getRecipientId();
@@ -493,12 +494,23 @@ module.exports = (_ => {
 			}
 
 			processChannelCallHeader (e) {
-				if (e.instance.props.channel && e.instance.props.channel.isDM() && this.settings.places.dmHeader) {
-					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Title"});
-					if (userName) {
-						let recipientId = e.instance.props.channel.getRecipientId();
-						userName.props.children = this.getUserData(recipientId).username;
-						this.changeUserColor(userName, recipientId);
+				if (e.instance.props.channel && this.settings.places.dmHeader) {
+					if (e.instance.props.channel.isDM()) {
+						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Title"});
+						if (userName) {
+							let recipientId = e.instance.props.channel.getRecipientId();
+							if (changedUsers[recipientId]) {
+								userName.props.children = this.getUserData(recipientId).username;
+								this.changeUserColor(userName, recipientId);
+							}
+						}
+					}
+					else {
+						let channelTitle = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelTitle"});
+						if (channelTitle && channelTitle.props && channelTitle.props.focusedParticipant && channelTitle.props.focusedParticipant.user && changedUsers[channelTitle.props.focusedParticipant.user.id]) {
+							channelTitle.props.focusedParticipant.user = this.getUserData(channelTitle.props.focusedParticipant.user.id);
+							channelTitle.props.focusedParticipant.userNick = changedUsers[channelTitle.props.focusedParticipant.user.id].name || channelTitle.props.focusedParticipant.userNick;
+						}
 					}
 				}
 			}

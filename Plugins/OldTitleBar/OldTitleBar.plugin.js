@@ -2,7 +2,7 @@
  * @name OldTitleBar
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.2
+ * @version 1.7.3
  * @description Allows you to switch to Discord's old Titlebar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "OldTitleBar",
 			"author": "DevilBro",
-			"version": "1.7.2",
+			"version": "1.7.3",
 			"description": "Allows you to switch to Discord's old Titlebar"
 		}
 	};
@@ -250,15 +250,11 @@ module.exports = (_ => {
 				if (!wrapper) return;
 				let children = BDFDB.ObjectUtils.get(wrapper, "props.toolbar.props.children");
 				if (!children) {
-					let [oldToolbarParent, oldToolbarIndex] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: "OldTitleBar-toolbar"});
-					if (oldToolbarIndex > -1) oldToolbarParent.splice(oldToolbarIndex, 1);
-					let toolbar = BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCNS.channelheadertoolbar + BDFDB.disCN._oldtitlebartoolbar,
-						key: "OldTitleBar-toolbar",
-						children: []
-					});
-					wrapper.props.children.push(toolbar);
-					children = toolbar.props.children;
+					children = [];
+					wrapper.props.toolbar = [
+						wrapper.props.toolbar,
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {children})
+					];
 				}
 				this.injectButtons(children, true);
 			}

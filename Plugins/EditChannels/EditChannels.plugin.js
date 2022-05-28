@@ -329,44 +329,46 @@ module.exports = (_ => {
 			
 			processHeaderBarContainer (e) {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
-				if (channel && (BDFDB.ChannelUtils.isTextChannel(channel) || channel.isGroupDM() || BDFDB.ChannelUtils.isThread(channel)) && this.settings.places.channelHeader) {
+				if (channel && this.settings.places.channelHeader) {
 					let thread;
 					if (BDFDB.ChannelUtils.isThread(channel)) {
 						thread = channel;
 						channel = BDFDB.LibraryModules.ChannelStore.getChannel(thread.parent_id);
 					}
-					if (!e.returnvalue) {
-						let channelNames = BDFDB.ReactUtils.findChild(e.instance, {all: true, name: ["Title", "ChannelName"]});
-						if (channelNames.length) {
-							if (channelNames[0].props.children) {
-								if (changedChannels[channel.id] && changedChannels[channel.id].name) channelNames[0].props.children = channel.isGroupDM() ? this.getGroupName(channel.id) : this.getChannelData(channel.id).name;
-								this.changeChannelColor(channelNames[0], channel.id);
-							}
-							if (channelNames[0].props.channel) channelNames[0].props.channel = this.getChannelData(channel.id);
-							if (thread && channelNames[1].props.children) {
-								if (changedChannels[thread.id] && changedChannels[thread.id].name) channelNames[1].props.children = this.getChannelData(thread.id).name;
-								this.changeChannelColor(channelNames[1], thread.id);
+					if (changedChannels[channel.id] || thread && changedChannels[thread.id]) {
+						if (!e.returnvalue) {
+							let channelNames = BDFDB.ReactUtils.findChild(e.instance, {all: true, name: ["Title", "ChannelName"]});
+							if (channelNames.length) {
+								if (channelNames[0].props.children) {
+									if (changedChannels[channel.id] && changedChannels[channel.id].name) channelNames[0].props.children = channel.isGroupDM() ? this.getGroupName(channel.id) : this.getChannelData(channel.id).name;
+									this.changeChannelColor(channelNames[0], channel.id);
+								}
+								if (channelNames[0].props.channel) channelNames[0].props.channel = this.getChannelData(channel.id);
+								if (thread && channelNames[1].props.children) {
+									if (changedChannels[thread.id] && changedChannels[thread.id].name) channelNames[1].props.children = this.getChannelData(thread.id).name;
+									this.changeChannelColor(channelNames[1], thread.id);
+								}
 							}
 						}
-					}
-					else {
-						let channelIcons = BDFDB.ReactUtils.findChild(e.instance, {all: true, name: "Icon"});
-						if (channelIcons.length) {
-							if (channelIcons[0].props.icon) {
-								let iconRender = channelIcons[0].props.icon;
-								channelIcons[0].props.icon = BDFDB.TimeUtils.suppress((...args) => {
-									let icon = iconRender(...args);
-									this.changeChannelIconColor(icon, channel.id);
-									return icon;
-								}, "Error in Channel Icon Render of HeaderBarContainer!", this);
-							}
-							if (thread && channelIcons[1].props.icon) {
-								let iconRender = channelIcons[1].props.icon;
-								channelIcons[1].props.icon = BDFDB.TimeUtils.suppress((...args) => {
-									let icon = iconRender(...args);
-									this.changeChannelIconColor(icon, thread.id);
-									return icon;
-								}, "Error in Thread Icon Render of HeaderBarContainer!", this);
+						else {
+							let channelIcons = BDFDB.ReactUtils.findChild(e.instance, {all: true, name: "Icon"});
+							if (channelIcons.length) {
+								if (channelIcons[0].props.icon) {
+									let iconRender = channelIcons[0].props.icon;
+									channelIcons[0].props.icon = BDFDB.TimeUtils.suppress((...args) => {
+										let icon = iconRender(...args);
+										this.changeChannelIconColor(icon, channel.id);
+										return icon;
+									}, "Error in Channel Icon Render of HeaderBarContainer!", this);
+								}
+								if (thread && channelIcons[1].props.icon) {
+									let iconRender = channelIcons[1].props.icon;
+									channelIcons[1].props.icon = BDFDB.TimeUtils.suppress((...args) => {
+										let icon = iconRender(...args);
+										this.changeChannelIconColor(icon, thread.id);
+										return icon;
+									}, "Error in Thread Icon Render of HeaderBarContainer!", this);
+								}
 							}
 						}
 					}
