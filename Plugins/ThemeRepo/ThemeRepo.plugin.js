@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.9
+ * @version 2.3.0
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
-			"version": "2.2.9",
+			"version": "2.3.0",
 			"description": "Allows you to download all Themes from BD's Website within Discord"
 		}
 	};
@@ -129,7 +129,7 @@ module.exports = (_ => {
 			filterThemes() {
 				let themes = grabbedThemes.map(theme => {
 					const installedTheme = _this.getInstalledTheme(theme);
-					const state = installedTheme ? (theme.version && BDFDB.NumberUtils.compareVersions(theme.version, _this.getString(installedTheme.version)) ? themeStates.OUTDATED : themeStates.INSTALLED) : themeStates.DOWNLOADABLE;
+					const state = installedTheme ? (theme.version && _this.compareVersions(theme.version, _this.getString(installedTheme.version)) ? themeStates.OUTDATED : themeStates.INSTALLED) : themeStates.DOWNLOADABLE;
 					return Object.assign(theme, {
 						search: [theme.name, theme.version, theme.authorname, theme.description, theme.tags].flat(10).filter(n => typeof n == "string").join(" ").toUpperCase(),
 						description: theme.description || "No Description found",
@@ -1384,7 +1384,7 @@ module.exports = (_ => {
 								if (version) theme.version = version;
 								if (theme.version) {
 									const installedTheme = this.getInstalledTheme(theme);
-									if (installedTheme && BDFDB.NumberUtils.compareVersions(version, this.getString(installedTheme.version))) outdatedEntries++;
+									if (installedTheme && this.compareVersions(version, this.getString(installedTheme.version))) outdatedEntries++;
 								}
 								let text = body.trim();
 								let hasMETAline = text.replace(/\s/g, "").indexOf("//META{"), newMeta = "";
@@ -1468,6 +1468,10 @@ module.exports = (_ => {
 					else if (Array.isArray(obj.props.children)) for (let c of obj.props.children) string += typeof c == "string" ? c : this.getString(c);
 				}
 				return string;
+			}
+
+			compareVersion (v1, v2) {
+				return v1 == v2 || BDFDB.NumberUtils.compareVersions(v1, v2);
 			}
 			
 			getInstalledTheme (theme) {
