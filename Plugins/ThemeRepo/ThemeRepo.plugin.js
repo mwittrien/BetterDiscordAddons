@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.1
+ * @version 2.3.2
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
-			"version": "2.3.1",
+			"version": "2.3.2",
 			"description": "Allows you to download all Themes from BD's Website within Discord"
 		}
 	};
@@ -1471,7 +1471,7 @@ module.exports = (_ => {
 			}
 
 			compareVersions (v1, v2) {
-				return v1 == v2 || BDFDB.NumberUtils.compareVersions(v1, v2);
+				return !(v1 == v2 || !BDFDB.NumberUtils.compareVersions(v1, v2));
 			}
 			
 			getInstalledTheme (theme) {
