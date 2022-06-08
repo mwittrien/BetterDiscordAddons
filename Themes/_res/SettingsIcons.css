@@ -220,6 +220,9 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="COMMUNITY-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/community.svg) center/contain no-repeat;
 }
+.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="text_in_voice-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/voicetext.svg) center/contain no-repeat;
+}
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="ANALYTICS-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/analytics.svg) center/contain no-repeat;
 }

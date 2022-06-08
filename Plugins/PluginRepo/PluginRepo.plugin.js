@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.2.9
+ * @version 2.3.2
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.2.9",
+			"version": "2.3.2",
 			"description": "Allows you to download all Plugins from BD's Website within Discord"
 		}
 	};
@@ -127,7 +127,7 @@ module.exports = (_ => {
 			filterPlugins() {
 				let plugins = grabbedPlugins.map(plugin => {
 					const installedPlugin = _this.getInstalledPlugin(plugin);
-					const state = installedPlugin ? (plugin.version && BDFDB.NumberUtils.compareVersions(plugin.version, _this.getString(installedPlugin.version)) ? pluginStates.OUTDATED : pluginStates.INSTALLED) : pluginStates.DOWNLOADABLE;
+					const state = installedPlugin ? (plugin.version && _this.compareVersions(plugin.version, _this.getString(installedPlugin.version)) ? pluginStates.OUTDATED : pluginStates.INSTALLED) : pluginStates.DOWNLOADABLE;
 					return Object.assign(plugin, {
 						search: [plugin.name, plugin.version, plugin.authorname, plugin.description, plugin.tags].flat(10).filter(n => typeof n == "string").join(" ").toUpperCase(),
 						description: plugin.description || "No Description found",
@@ -845,7 +845,7 @@ module.exports = (_ => {
 								if (version) {
 									plugin.version = version;
 									const installedPlugin = this.getInstalledPlugin(plugin);
-									if (installedPlugin && BDFDB.NumberUtils.compareVersions(version, this.getString(installedPlugin.version))) outdatedEntries++;
+									if (installedPlugin && this.compareVersions(version, this.getString(installedPlugin.version))) outdatedEntries++;
 								}
 							}
 							if (!cachedPlugins.includes(plugin.id)) newEntries++;
@@ -908,6 +908,10 @@ module.exports = (_ => {
 					else if (Array.isArray(obj.props.children)) for (let c of obj.props.children) string += typeof c == "string" ? c : this.getString(c);
 				}
 				return string;
+			}
+
+			compareVersions (v1, v2) {
+				return !(v1 == v2 || !BDFDB.NumberUtils.compareVersions(v1, v2));
 			}
 			
 			getInstalledPlugin (plugin) {

@@ -3374,7 +3374,7 @@ module.exports = (_ => {
 			return channel && Internal.LibraryModules.GuildEventStore.getGuildScheduledEvent(channel.id) && true;
 		};
 		BDFDB.ChannelUtils.markAsRead = function (channelIds) {
-			let unreadChannels = [channelIds].flat(10).filter(id => id && typeof id == "string" && ((BDFDB.ChannelUtils.isTextChannel(id) || BDFDB.ChannelUtils.isThread(id)) && (Internal.LibraryModules.UnreadChannelUtils.hasUnread(id) || Internal.LibraryModules.UnreadChannelUtils.getMentionCount(id) > 0))).map(id => ({
+			let unreadChannels = [channelIds].flat(10).filter(id => id && typeof id == "string" && (BDFDB.LibraryModules.ChannelStore.getChannel(id) || {}).type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY && (Internal.LibraryModules.UnreadChannelUtils.hasUnread(id) || Internal.LibraryModules.UnreadChannelUtils.getMentionCount(id) > 0)).map(id => ({
 				channelId: id,
 				readStateType: Internal.LibraryModules.UnreadStateTypes.CHANNEL,
 				messageId: Internal.LibraryModules.UnreadChannelUtils.lastMessageId(id)

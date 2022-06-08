@@ -267,8 +267,8 @@ module.exports = (_ => {
 			}
 			
 			processChannelEditorContainer (e) {
-				if (!e.instance.props.disabled && e.instance.props.channel && (BDFDB.ChannelUtils.isTextChannel(e.instance.props.channel) || BDFDB.ChannelUtils.isThread(e.instance.props.channel) || e.instance.props.channel.isGroupDM()) && (e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) && this.settings.places.chatTextarea) {
-					if (changedChannels[e.instance.props.channel.id] && changedChannels[e.instance.props.channel.id].name) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `#${changedChannels[e.instance.props.channel.id].name}`);
+				if (!e.instance.props.disabled && e.instance.props.channel && changedChannels[e.instance.props.channel.id] && (e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) && this.settings.places.chatTextarea) {
+					if (changedChannels[e.instance.props.channel.id].name) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `#${changedChannels[e.instance.props.channel.id].name}`);
 				}
 			}
 			
@@ -685,8 +685,8 @@ module.exports = (_ => {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
 					let title = document.head.querySelector("title");
 					if (title && channel && (document.location.href || "").indexOf(channel.id) > -1 && changedChannels[channel.id] && changedChannels[channel.id].name) {
-						if (BDFDB.ChannelUtils.isTextChannel(channel)) BDFDB.DOMUtils.setText(title, "#" + this.getChannelData(channel.id).name);
-						else if (channel && channel.isGroupDM()) BDFDB.DOMUtils.setText(title, this.getGroupName(channel.id));
+						if (channel.isGroupDM()) BDFDB.DOMUtils.setText(title, this.getGroupName(channel.id));
+						else BDFDB.DOMUtils.setText(title, (BDFDB.ChannelUtils.isTextChannel(channel) ? "#" : "") + this.getChannelData(channel.id).name);
 					}
 				}
 			}
