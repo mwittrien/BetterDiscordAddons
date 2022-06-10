@@ -1347,7 +1347,7 @@
 		"Modal": {"props": ["root", "small", "medium"]},
 		"ModalDivider": {"props": ["divider"], "length": 1},
 		"ModalItems": {"props": ["guildName", "checkboxContainer"]},
-		"ModalMiniContent": {"props": ["modal", "content"], "length": 2},
+		"ModalMiniContent": {"props": ["modal", "content", "maxModalWidth"]},
 		"ModalSub": {"props": ["modal", "sizeLarge"]},
 		"NameContainer": {"props": ["nameAndDecorators", "name"]},
 		"NameContainerState": {"props": ["interactive", "selected", "muted"]},
