@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.3
+ * @version 3.1.4
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,11 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "3.1.3",
+			"version": "3.1.4",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
 		},
 		"changeLog": {
 			"fixed": {
+				"Lags": "No longer lags Discord",
+				"Vanishing Categories": "Categories that only contain hidden channels no longer vanish if collapsed",
 				"Works again": "Plugin itself works again, had to remove the option for the separate category 'hidden', since Discord completely remodeled how they structure the channel list internally and i have yet to find an easy way to insert custom categories"
 			}
 		}
@@ -401,11 +403,23 @@ module.exports = (_ => {
 				if (!e.instance.props.guild || blackList.includes(e.instance.props.guild.id)) return;
 				e.instance.props.guildChannels.categories = Object.assign({}, e.instance.props.guildChannels.categories);
 				let sortAtBottom = this.settings.sortOrder.hidden == sortOrders.BOTTOM.value;
-				for (let id in e.instance.props.guildChannels.categories) if (!e.instance.props.guildChannels.categories[id].isCollapsed) e.instance.props.guildChannels.categories[id].shownChannelIds = BDFDB.ObjectUtils.toArray(e.instance.props.guildChannels.categories[id].channels).filter(n => n.renderLevel == renderLevels.SHOW || n.renderLevel == renderLevels.CAN_NOT_SHOW && (!e.instance.props.guildChannels.hideMutedChannels || !e.instance.props.guildChannels.mutedChannelIds.has(n.record.id))).sort((x, y) => {
-					let xPos = x.record.position + (x.record.isVocal() ? 1e4 : 0) + (sortAtBottom && x.renderLevel == renderLevels.CAN_NOT_SHOW ? 1e5 : 0);
-					let yPos = y.record.position + (y.record.isVocal() ? 1e4 : 0) + (sortAtBottom && y.renderLevel == renderLevels.CAN_NOT_SHOW ? 1e5 : 0);
-					return xPos < yPos ? -1 : xPos > yPos ? 1 : 0;
-				}).map(n => n.id);
+				hiddenChannelCache[e.instance.props.guild.id] = [];
+				for (let id in e.instance.props.guildChannels.categories) {
+					let channelArray = BDFDB.ObjectUtils.toArray(e.instance.props.guildChannels.categories[id].channels);
+					for (let n of channelArray) if (n.renderLevel == renderLevels.CAN_NOT_SHOW || n._hidden) {
+						n._hidden = true;
+						if (e.instance.props.guildChannels.hideMutedChannels && e.instance.props.guildChannels.mutedChannelIds.has(n.record.id)) n.renderLevel = renderLevels.DO_NOT_SHOW;
+						else if (e.instance.props.guildChannels.categories[id].isCollapsed) n.renderLevel = renderLevels.WOULD_SHOW_IF_UNCOLLAPSED;
+						else n.renderLevel = renderLevels.SHOW;
+						
+						if (hiddenChannelCache[e.instance.props.guild.id].indexOf(n.record.id) == -1) hiddenChannelCache[e.instance.props.guild.id].push(n.record.id);
+					}
+					e.instance.props.guildChannels.categories[id].shownChannelIds = channelArray.filter(n => n.renderLevel == renderLevels.SHOW).sort((x, y) => {
+						let xPos = x.record.position + (x.record.isVocal() ? 1e4 : 0) + (sortAtBottom && x._hidden ? 1e5 : 0);
+						let yPos = y.record.position + (y.record.isVocal() ? 1e4 : 0) + (sortAtBottom && x._hidden ? 1e5 : 0);
+						return xPos < yPos ? -1 : xPos > yPos ? 1 : 0;
+					}).map(n => n.id);
+				}
 			}
 			
 			processChannelItem (e) {
@@ -450,14 +464,7 @@ module.exports = (_ => {
 			isChannelHidden (channelId) {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
 				if (!channel || !channel.guild_id) return false;
-				let visibleAmount = BDFDB.ArrayUtils.sum(BDFDB.ObjectUtils.toArray((BDFDB.LibraryModules.GuildChannelStore.getChannels(channel.guild_id))).filter(BDFDB.ArrayUtils.is).map(n => n.length)), rolesAmount = (BDFDB.LibraryModules.MemberStore.getMember(channel.guild_id, BDFDB.UserUtils.me.id) || {roles: []}).roles.length;
-				if (!hiddenChannelCache[channel.guild_id] || hiddenChannelCache[channel.guild_id].visibleAmount != visibleAmount || hiddenChannelCache[channel.guild_id].rolesAmount != rolesAmount) hiddenChannelCache[channel.guild_id] = {
-					categories: BDFDB.ModuleUtils.findByName("ChannelListStore").getGuild(channel.guild_id).guildChannels.categories,
-					rolesAmount: rolesAmount,
-					visibleAmount: visibleAmount
-				};
-				let channels = hiddenChannelCache[channel.guild_id].categories[channel.parent_id || "no-parent-channel-id"].channels;
-				return !channels || !channels[channel.id] ? false : channels[channel.id].renderLevel == renderLevels.CAN_NOT_SHOW;
+				return hiddenChannelCache[channel.guild_id] && hiddenChannelCache[channel.guild_id].indexOf(channelId) > -1;
 			}
 			
 			batchSetGuilds (settingsPanel, collapseStates, value) {
