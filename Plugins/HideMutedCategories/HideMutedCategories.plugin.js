@@ -2,7 +2,7 @@
  * @name HideMutedCategories
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.6
+ * @version 1.0.7
  * @description Hides muted Categories, if muted Channels are hidden
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "HideMutedCategories",
 			"author": "DevilBro",
-			"version": "1.0.6",
+			"version": "1.0.7",
 			"description": "Hides muted Categories, if muted Channels are hidden"
-		},
-		"changeLog": {
-			"fixed": {
-				"Unread Bar": "Unread Badge no longer shows in the channel list when an unmuted channel inside a hidden muted category has unread messages"
-			}
 		}
 	};
 
@@ -65,6 +60,13 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
+		const renderLevels = {
+			CAN_NOT_SHOW: 1,
+			DO_NOT_SHOW: 2,
+			WOULD_SHOW_IF_UNCOLLAPSED: 3,
+			SHOW: 4
+		};
+		
 		return class HideMutedCategories extends Plugin {
 			onLoad () {
 				this.patchedModules = {
@@ -88,12 +90,14 @@ module.exports = (_ => {
 			}
 
 			processChannels (e) {
-				if (!e.instance.props.guild || !e.instance.props.collapseMuted) return;
+				if (!e.instance.props.guild || !e.instance.props.guildChannels.hideMutedChannels) return;
 				
 				if (!e.returnvalue) {
-					e.instance.props.categories = Object.assign({}, e.instance.props.categories);
-					
-					for (let catId in e.instance.props.categories) if (BDFDB.LibraryModules.MutedUtils.isChannelMuted(e.instance.props.guild.id, catId)) e.instance.props.categories[catId] = [];
+					e.instance.props.guildChannels.categories = Object.assign({}, e.instance.props.guildChannels.categories);
+					for (let id in e.instance.props.guildChannels.categories) if (e.instance.props.guildChannels.categories[id].isMuted) {
+						let channelArray = BDFDB.ObjectUtils.toArray(e.instance.props.guildChannels.categories[id].channels);
+						for (let n of channelArray) if (n.renderLevel > renderLevels.DO_NOT_SHOW) n.renderLevel = renderLevels.DO_NOT_SHOW;
+					}
 				}
 				else {
 					let topBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelsunreadbartop]]});
