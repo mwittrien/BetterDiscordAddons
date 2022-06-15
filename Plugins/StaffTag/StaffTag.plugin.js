@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.1
+ * @version 1.5.2
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "StaffTag",
 			"author": "DevilBro",
-			"version": "1.5.1",
+			"version": "1.5.2",
 			"description": "Adds a Crown/Tag to Server Owners (or Admins/Management)"
 		}
 	};
@@ -249,7 +249,7 @@ module.exports = (_ => {
 				if (index == -1) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
 				let userType = this.getUserType(author, e.instance.props.message.channel_id);
-				if (userType) this.injectStaffTag(children, author, userType, e.instance.props.compact ? index : (index + 1), {
+				if (userType) this.injectStaffTag(children, author, userType, e.instance.props.compact ? index : (index + 2), {
 					channelId: e.instance.props.message.channel_id,
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true
