@@ -7318,7 +7318,7 @@ module.exports = (_ => {
 								children: this.props.settings.map(setting => BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.checkboxcontainer,
 									children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TooltipContainer, {
-										text: setting,
+										text: setting.toUpperCase(),
 										children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Checkbox, {
 											disabled: props.disabled,
 											cardId: props.key,
