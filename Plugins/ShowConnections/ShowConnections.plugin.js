@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.8
+ * @version 1.0.9
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowConnections",
 			"author": "DevilBro",
-			"version": "1.0.8",
+			"version": "1.0.9",
 			"description": "Shows the connected Accounts of a User in the UserPopout"
+		},
+		"changeLog": {
+			"fixed": {
+				"Bright Icons": "Uses the white version of some icons if dark mode is enabled"
+			},
+			"added": {
+				"Copy Name/Link": "Right clicking an icon will give you the options to copy the name/link of a connection"
+			}
 		}
 	};
 
@@ -205,11 +213,27 @@ module.exports = (_ => {
 												href: url
 											}, {
 												className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._showconnectionsconnection, url && BDFDB.disCN.cursorpointer),
+												onContextMenu: event => {
+													BDFDB.ContextMenuUtils.open(_this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+														children: [
+															BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+																label: BDFDB.LanguageUtils.LibraryStringsFormat("copy", BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME),
+																id: BDFDB.ContextMenuUtils.createItemId(_this.name, "copy-name"),
+																action: _ => BDFDB.LibraryRequires.electron.clipboard.write({text: c.name})
+															}),
+															url && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+																label: BDFDB.LanguageUtils.LibraryStringsFormat("copy", BDFDB.LanguageUtils.LanguageStrings.SEARCH_ANSWER_HAS_LINK),
+																id: BDFDB.ContextMenuUtils.createItemId(_this.name, "copy-url"),
+																action: _ => BDFDB.LibraryRequires.electron.clipboard.write({text: url})
+															})
+														]
+													}));
+												},
 												children: [
 													BDFDB.ReactUtils.createElement("img", {
 														className: BDFDB.disCN._showconnectionsicon,
 														alt: BDFDB.LanguageUtils.LanguageStringsFormat("IMG_ALT_LOGO", provider.name),
-														src: provider.icon[_this.settings.general.useColoredIcons ? "lightSVG" : "whiteSVG"]
+														src: provider.icon[_this.settings.general.useColoredIcons ? (isLightTheme ? "lightSVG" : "darkSVG" ) : "whiteSVG"]
 													}),
 													_this.settings.general.showVerifiedBadge && c.verified && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 														text: BDFDB.LanguageUtils.LanguageStrings.CONNECTION_VERIFIED,
