@@ -689,7 +689,9 @@ module.exports = (_ => {
 			}
 
 			loadChoices () {
-				let loadedChoices = BDFDB.DataUtils.load(this, "choices");
+				let discordBuild = BDFDB.DiscordUtils.getBuild();
+				let choicesName = discordBuild === "stable" ? "choices" : `choices_${discordBuild}`;
+				let loadedChoices = BDFDB.DataUtils.load(this, choicesName);
 				for (let type in types) {
 					let choice = loadedChoices[type] || {}, soundFound = false;
 					for (let category in audios) if (choice.category == category) for (let sound in audios[category]) if (choice.sound == sound) {
@@ -710,7 +712,9 @@ module.exports = (_ => {
 
 			saveChoice (type, play) {
 				if (!choices[type]) return;
-				BDFDB.DataUtils.save(choices[type], this, "choices", type);
+				let discordBuild = BDFDB.DiscordUtils.getBuild();
+				let choicesName = discordBuild === "stable" ? "choices" : `choices_${discordBuild}`;
+				BDFDB.DataUtils.save(choices[type], this, choicesName, type);
 				if (play) {
 					this.SettingsUpdated = true;
 					this.playAudio(type);
