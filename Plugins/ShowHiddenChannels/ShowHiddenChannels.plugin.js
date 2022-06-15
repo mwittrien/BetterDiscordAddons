@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.6
+ * @version 3.1.7
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "3.1.6",
+			"version": "3.1.7",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
 		},
 		"changeLog": {
@@ -25,7 +25,8 @@ module.exports = (_ => {
 				"Lags": "No longer lags Discord",
 				"Vanishing Categories": "Categories that only contain hidden channels no longer vanish if collapsed",
 				"Categoryless Channels": "Now properly reveals channels that got no category, like ticket channels",
-				"Hides some visible Channels": "No longer hides some visible Channels in some weird cases"
+				"Hides some visible Channels": "No longer hides some visible Channels in some weird cases",
+				"Type Selection": "Revealing only certain types of hidden channels works again"
 			}
 		}
 	};
@@ -409,7 +410,7 @@ module.exports = (_ => {
 					if (!category) return;
 					let channelArray = BDFDB.ObjectUtils.toArray(category.channels);
 					for (let n of channelArray) if (n.renderLevel == renderLevels.CAN_NOT_SHOW || n._hidden) {
-						if (show) {
+						if (show && (this.settings.channels[BDFDB.DiscordConstants.ChannelTypes[n.record.type]] || this.settings.channels[BDFDB.DiscordConstants.ChannelTypes[n.record.type]] === undefined)) {
 							n._hidden = true;
 							if (e.instance.props.guildChannels.hideMutedChannels && e.instance.props.guildChannels.mutedChannelIds.has(n.record.id)) n.renderLevel = renderLevels.DO_NOT_SHOW;
 							else if (category.isCollapsed) n.renderLevel = renderLevels.WOULD_SHOW_IF_UNCOLLAPSED;
