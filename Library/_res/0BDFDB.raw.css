@@ -711,16 +711,15 @@ img:not([src]), img[src=""], img[src="null"] {
 	position: relative;
 	width: 100%;
 }
-[REPLACE_CLASS_table] [REPLACE_CLASS_tablespacerheader],
-[REPLACE_CLASS_table] [REPLACE_CLASS_tablestickyheader] {
+[REPLACE_CLASS_table] [REPLACE_CLASS_tablerow]:first-child {
 	padding: 0px 12px 8px 0;
 	margin-bottom: 5px;
 	box-sizing: border-box;
 	background-color: var(--background-primary);
 	border-bottom: 1px solid var(--background-modifier-accent);
 }
-[REPLACE_CLASS_table] [REPLACE_CLASS_tablestickyheader]:first-child {
-	position: absolute;
+[REPLACE_CLASS_table] [REPLACE_CLASS_tablestickyheader] {
+	position: sticky;
 	width: 100%;
 }
 [REPLACE_CLASS_modalsub] [REPLACE_CLASS_table] [REPLACE_CLASS_tablestickyheader]:first-child {

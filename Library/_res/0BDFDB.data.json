@@ -265,6 +265,7 @@
 			"MemberRoles": {"props": ["MemberRole"]},
 			"Message": {"strings": ["childrenMessageContent", "childrenRepliedMessage", "zalgo"]},
 			"MessageHeader": {"strings": ["ANIMATE_CHAT_AVATAR", "showUsernamePopout"]},
+			"MessageReply": {"strings": [".referencedMessage", ".useClickReferencedMessageAuthorUsername"]},
 			"Messages": {"strings": ["group-spacing-", "canManageMessages"]},
 			"MessageToolbar": {"strings": ["renderReactions", "canAddNewReactions", "showMoreUtilities"]},
 			"MessageUsername": {"strings": [".default.username", "colorString", "compact"]},
