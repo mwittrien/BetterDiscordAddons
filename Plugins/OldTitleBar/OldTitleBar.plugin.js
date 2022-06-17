@@ -2,7 +2,7 @@
  * @name OldTitleBar
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.3
+ * @version 1.7.4
  * @description Allows you to switch to Discord's old Titlebar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "OldTitleBar",
 			"author": "DevilBro",
-			"version": "1.7.3",
+			"version": "1.7.4",
 			"description": "Allows you to switch to Discord's old Titlebar"
 		}
 	};
@@ -113,7 +113,10 @@ module.exports = (_ => {
 						iconSVG: `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 6 l13 13 m0 -13 l-13 13"/></svg>`
 					})
 				}));
-				return BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {children: children});
+				return BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN._oldtitlebartoolbar,
+					children: children
+				});
 			}
 		};
 		
@@ -160,8 +163,14 @@ module.exports = (_ => {
 					}
 					
 					${BDFDB.dotCN._oldtitlebartoolbar} {
-						flex: 1 1 auto;
+						display: flex;
+						flex: 1 0 auto;
 						justify-content: flex-end;
+					}
+					
+					${BDFDB.dotCNS.chatthreadsidebaropen + BDFDB.dotCN._oldtitlebartoolbar},
+					${BDFDB.dotCNS.callcurrentchatsidebaropen + BDFDB.dotCN._oldtitlebartoolbar} {
+						display: none;
 					}
 
 					${BDFDB.dotCN._oldtitlebarsettingstoolbar} {
@@ -244,11 +253,11 @@ module.exports = (_ => {
 			processAppSkeleton (e) {
 				this.processApp(e);
 			}
-
+			
 			processHeaderBar (e) {
 				let wrapper = BDFDB.ReactUtils.findChild(e.instance, {props: ["toolbar", "children"]});
 				if (!wrapper) return;
-				let children = BDFDB.ObjectUtils.get(wrapper, "props.toolbar.props.children");
+				let children = BDFDB.ArrayUtils.is(wrapper.props.toolbar) ? wrapper.props.toolbar : BDFDB.ObjectUtils.get(wrapper, "props.toolbar.props.children");
 				if (!children) {
 					children = [];
 					wrapper.props.toolbar = [

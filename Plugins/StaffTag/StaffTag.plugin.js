@@ -146,6 +146,9 @@ module.exports = (_ => {
 						margin-left: 0;
 						margin-right: 4px;
 					}
+					${BDFDB.dotCNS.voiceuser + BDFDB.dotCN.memberownericon}:last-child {
+						margin-right: 4px;
+					}
 				`;
 			}
 			
