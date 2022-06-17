@@ -1001,6 +1001,13 @@
 			"settingsToolbar": "settingsToolbar-wu4yfQ",
 			"toolbar": "toolbar-hRzFw-"
 		},
+		"PersonalPins": {
+			"messageTag": "messageTag-yRSUYg",
+			"messageTagAdd": "messageTagAdd-vKM0VY",
+			"messageTagAddActive": "active-G0VvAY",
+			"messageTagDelete": "messageTagDelete-QaGh6V",
+			"messageTagName": "messageTagName-dT8OZ4"
+		},
 		"PinDMs": {
 			"dragPreview": "dragPreview-nXiByA",
 			"dmChannelPinned": "pinned-0lM4wD",
@@ -1507,6 +1514,11 @@
 		"_oldtitlebarenabled": ["OldTitleBar", "oldTitleBarEnabled"],
 		"_oldtitlebarsettingstoolbar": ["OldTitleBar", "settingsToolbar"],
 		"_oldtitlebartoolbar": ["OldTitleBar", "toolbar"],
+		"_personalpinsmessagetag": ["PersonalPins", "messageTag"],
+		"_personalpinsmessagetagadd": ["PersonalPins", "messageTagAdd"],
+		"_personalpinsmessagetagaddactive": ["PersonalPins", "messageTagAddActive"],
+		"_personalpinsmessagetagdelete": ["PersonalPins", "messageTagDelete"],
+		"_personalpinsmessagetagname": ["PersonalPins", "messageTagName"],
 		"_pindmsdragpreview": ["PinDMs", "dragPreview"],
 		"_pindmsdmchannelpinned": ["PinDMs", "dmChannelPinned"],
 		"_pindmsdmchannelplaceholder": ["PinDMs", "dmChannelPlaceholder"],

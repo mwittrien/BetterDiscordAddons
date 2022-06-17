@@ -200,6 +200,9 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="STICKERS-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/stickers.svg) center/contain no-repeat;
 }
+.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="GUILD_AUTOMOD_MESSAGE_FILTER-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/automoderation.svg) center/contain no-repeat;
+}
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="AUDIT_LOG-tab" i]::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="AUDIT_LOG_V2-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/audit.svg) center/contain no-repeat;
