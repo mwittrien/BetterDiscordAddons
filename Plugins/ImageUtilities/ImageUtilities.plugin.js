@@ -1228,7 +1228,9 @@ module.exports = (_ => {
 						let mRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCNC.messageaccessory + BDFDB.dotCN.messagecontents));
 						let mwRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.messagewrapper));
 						if (mRects.width || mwRects.width) {
-							let ratio = (mRects.width || (mwRects.width - 120)) / e.instance.props.width;
+							let ratio = 1;
+							if (e.instance.props.width >= (mRects.width || (mwRects.width - 120)))
+								ratio = (mRects.width || (mwRects.width - 120)) / e.instance.props.width;
 							let width = Math.round(ratio * e.instance.props.width);
 							let height = Math.round(ratio * e.instance.props.height);
 							if (height > (aRects.height * 0.66)) {
