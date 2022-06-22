@@ -364,6 +364,10 @@
 	color: rgb(var(--accentcolor));
 }
 
+.footerIcon-3nJDhW path[fill*="hsl(197, "] {				/* automod				operations							*/
+	fill: var(--text-link);
+}
+
 .command-2rSEQ7 {											/* command				used command						*/
 	color: rgb(var(--accentcolor));
 }

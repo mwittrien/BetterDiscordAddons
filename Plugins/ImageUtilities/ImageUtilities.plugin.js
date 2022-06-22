@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.7.2
+ * @version 4.7.3
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.7.2",
+			"version": "4.7.3",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		},
 		"changeLog": {
 			"fixed": {
-				"Image Details Footnote": "Works again"
+				"Resize Embeds": "Properly resizes embedded Images",
+				"Resize Images": "No longer resizes Images over the max Width/Height of the original Image causing bluriness"
+			},
+			"added": {
+				"Blur in NSFW": "Added Option to blur Media in NFSW Channels similar to Spoilers"
 			}
 		}
 	};
@@ -204,12 +208,15 @@ module.exports = (_ => {
 				cachedImages = null;
 				
 				this.defaults = {
+					general: {
+						nsfwMode: 				{value: true,	description: "Blur Media that is posted in NSFW Channels"}
+					},
 					viewerSettings: {
 						zoomMode: 				{value: true,	description: "Enable Zoom Mode to zoom into Images while holding down your Mouse"},
 						galleryMode: 			{value: true,	description: "Enable Gallery Mode to quick-switch between Images"},
 						details: 				{value: true,	description: "Add Image Details (Name, Size, Amount)"},
 						copyImage: 				{value: true,	description: "Add a 'Copy Image' Option"},
-						saveImage: 				{value: true,	description: "Add a 'Save Image as' Option"},
+						saveImage: 				{value: true,	description: "Add a 'Save Image as' Option"}
 					},
 					zoomSettings: {
 						pixelMode: 				{value: false,	label: "Use Pixel Lens instead of a Blur Lens"},
@@ -249,12 +256,14 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					before: {
-						LazyImage: "render"
+						LazyImage: "render",
+						SimpleMessageAccessories: "default"
 					},
 					after: {
 						ImageModal: ["render", "componentDidMount", "componentWillUnmount"],
 						LazyImage: "componentDidMount",
 						LazyImageZoomable: "render",
+						Spoiler: "render",
 						UserBanner: "default"
 					}
 				};
@@ -290,6 +299,12 @@ module.exports = (_ => {
 						transform: unset !important;
 						filter: unset !important;
 						backdrop-filter: unset !important;
+					}
+					${BDFDB.dotCNS.imagemodal + BDFDB.notCN._imageutilitiessibling} > ${BDFDB.dotCN.imagewrapper} {
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						min-width: 500px;
 					}
 					${BDFDB.dotCN._imageutilitiessibling} {
 						display: flex;
@@ -418,6 +433,18 @@ module.exports = (_ => {
 					collapseStates: collapseStates,
 					children: _ => {
 						let settingsItems = [];
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "General",
+							collapseStates: collapseStates,
+							children: Object.keys(this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["general", key],
+								label: this.defaults.general[key].description,
+								value: this.settings.general[key]
+							}))
+						}));
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Image Viewer Settings",
@@ -1211,37 +1238,45 @@ module.exports = (_ => {
 					}
 				}
 				else {
-					if (this.settings.resizeSettings.imageViewer && BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), {name: "ImageModal", up: true})) {
+					let reactInstance = BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`);
+					if (this.settings.resizeSettings.imageViewer && BDFDB.ReactUtils.findOwner(reactInstance, {name: "ImageModal", up: true})) {
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let ratio = Math.min((aRects.width * (this.settings.viewerSettings.galleryMode ? 0.8 : 1) - 20) / e.instance.props.width, (aRects.height - (this.settings.viewerSettings.details ? 280 : 100)) / e.instance.props.height);
-						let width = Math.round(ratio * e.instance.props.width);
-						let height = Math.round(ratio * e.instance.props.height);
-						e.instance.props.width = width;
-						e.instance.props.maxWidth = width;
-						e.instance.props.height = height;
-						e.instance.props.maxHeight = height;
-						e.instance.props.src = e.instance.props.src.replace(/width=\d+/, `width=${width}`).replace(/height=\d+/, `height=${height}`);
-						e.instance.props.resized = true;
-					}
-					if (this.settings.resizeSettings.messages && (!e.instance.props.className || (e.instance.props.className.indexOf(BDFDB.disCN.embedmedia) == -1 && e.instance.props.className.indexOf(BDFDB.disCN.embedthumbnail) == -1)) && BDFDB.ReactUtils.findOwner(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), {name: "LazyImageZoomable", up: true})) {
-						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
-						let mRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCNC.messageaccessory + BDFDB.dotCN.messagecontents));
-						let mwRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.messagewrapper));
-						if (mRects.width || mwRects.width) {
-							let ratio = (mRects.width || (mwRects.width - 120)) / e.instance.props.width;
+						if (ratio < 1) {
 							let width = Math.round(ratio * e.instance.props.width);
 							let height = Math.round(ratio * e.instance.props.height);
-							if (height > (aRects.height * 0.66)) {
-								let newHeight = Math.round(aRects.height * 0.66);
-								width = (newHeight/height) * width;
-								height = newHeight;
-							}
 							e.instance.props.width = width;
 							e.instance.props.maxWidth = width;
 							e.instance.props.height = height;
 							e.instance.props.maxHeight = height;
 							e.instance.props.src = e.instance.props.src.replace(/width=\d+/, `width=${width}`).replace(/height=\d+/, `height=${height}`);
 							e.instance.props.resized = true;
+						}
+					}
+					if (this.settings.resizeSettings.messages && (!e.instance.props.className || e.instance.props.className.indexOf(BDFDB.disCN.embedthumbnail) == -1) && BDFDB.ReactUtils.findOwner(reactInstance, {name: "LazyImageZoomable", up: true})) {
+						let embed = BDFDB.ReactUtils.findOwner(reactInstance, {name: "Embed", up: true});
+						if (!embed || !embed.child || embed.child.type != "article") {
+							let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
+							let mRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCNC.messageaccessory + BDFDB.dotCN.messagecontents));
+							let mwRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.messagewrapper));
+							if (mRects.width || mwRects.width) {
+								let ratio = (mRects.width || (mwRects.width - 120)) / e.instance.props.width;
+								if (ratio < 1) {
+									let width = Math.round(ratio * e.instance.props.width);
+									let height = Math.round(ratio * e.instance.props.height);
+									if (height > (aRects.height * 0.66)) {
+										let newHeight = Math.round(aRects.height * 0.66);
+										width = (newHeight/height) * width;
+										height = newHeight;
+									}
+									e.instance.props.width = width;
+									e.instance.props.maxWidth = width;
+									e.instance.props.height = height;
+									e.instance.props.maxHeight = height;
+									e.instance.props.src = e.instance.props.src.replace(/width=\d+/, `width=${width}`).replace(/height=\d+/, `height=${height}`);
+									e.instance.props.resized = true;
+								}
+							}
 						}
 					}
 				}
@@ -1262,8 +1297,36 @@ module.exports = (_ => {
 								delay: this.settings.detailsSettings.tooltipDelay
 							});
 							return onMouseEnter(...args);
-						});
+						}, "Error in onMouseEnter of LazyImageZoomable!");
 					}
+				}
+			}
+
+			processSimpleMessageAccessories (e) {
+				if (this.settings.general.nsfwMode && e.instance.props.channel.nsfw) {
+					e.instance.props.message = new BDFDB.DiscordObjects.Message(e.instance.props.message);
+					e.instance.props.message.attachments = [].concat(e.instance.props.message.attachments);
+					for (let i in e.instance.props.message.attachments) if (e.instance.props.message.attachments[i].spoiler != undefined) {
+						e.instance.props.message.attachments[i] = Object.assign({}, e.instance.props.message.attachments[i], {spoiler: true, nsfw: !e.instance.props.message.attachments[i].spoiler});
+					}
+				}
+			}
+
+			processSpoiler (e) {
+				if (this.settings.general.nsfwMode) {
+					let childrenRender = e.returnvalue.props.children;
+					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
+						let children = childrenRender(...args);
+						let attachment = BDFDB.ReactUtils.findValue(children, "attachment");
+						if (attachment && attachment.nsfw) {
+							let [children2, index] = BDFDB.ReactUtils.findParent(children, {name: "SpoilerWarning"});
+							if (index > -1) children2[index] = BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.spoilerwarning,
+								children: "NSFW"
+							});
+						}
+						return children;
+					}, "Error in Children Render of Spoiler!");
 				}
 			}
 			
