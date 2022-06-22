@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.8
+ * @version 3.1.9
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,16 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "3.1.8",
+			"version": "3.1.9",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
 		},
 		"changeLog": {
-			"fixed": {
-				"Hides some visible Channels": "No longer hides some visible Channels in some weird cases for real now",
-				"Connected Voice Channel": "No longer marks a voice channel as hidden if someone dragged you into it"
-			},
-			"progress": {
-				"'Hidden' Category": "<strong style='color: var(--bdfdb-red);'>For the last time the 'hidden' category at the bottom of the list is dead for now, until I find a way to fix it, which can take weeks, stop asking me about it</strong>"
+			"improved": {
+				"Hidden Categories": "Reveals hidden Categories, which are hidden due to having no channels, can be disabled in the plugin settings"
 			}
 		}
 	};
@@ -194,6 +190,7 @@ module.exports = (_ => {
 						showForNormal:			{value: true,		description: "Add Access-Overview ContextMenu Entry for non-hidden Channels"}
 					},
 					channels: {
+						GUILD_CATEGORY:			{value: true},
 						GUILD_TEXT:				{value: true},
 						GUILD_VOICE:			{value: true},
 						GUILD_ANNOUNCEMENT:		{value: true},
@@ -407,33 +404,45 @@ module.exports = (_ => {
 				e.instance.props.guildChannels = new e.instance.props.guildChannels.constructor(e.instance.props.guildChannels.id);
 				e.instance.props.guildChannels.categories = Object.assign({}, e.instance.props.guildChannels.categories);
 				hiddenChannelCache[e.instance.props.guild.id] = [];
-				let processCategory = category => {
+				let processCategory = (category, insertChannelless) => {
 					if (!category) return;
 					let channelArray = BDFDB.ObjectUtils.toArray(category.channels);
-					for (let n of channelArray) if ((n.renderLevel == renderLevels.CAN_NOT_SHOW || n._hidden) && e.instance.props.selectedVoiceChannelId != n.record.id) {
-						if (show && (this.settings.channels[BDFDB.DiscordConstants.ChannelTypes[n.record.type]] || this.settings.channels[BDFDB.DiscordConstants.ChannelTypes[n.record.type]] === undefined)) {
-							n._hidden = true;
-							if (e.instance.props.guildChannels.hideMutedChannels && e.instance.props.guildChannels.mutedChannelIds.has(n.record.id)) n.renderLevel = renderLevels.DO_NOT_SHOW;
-							else if (category.isCollapsed) n.renderLevel = renderLevels.WOULD_SHOW_IF_UNCOLLAPSED;
-							else n.renderLevel = renderLevels.SHOW;
+					if (channelArray.length) {
+						for (let n of channelArray) if ((n.renderLevel == renderLevels.CAN_NOT_SHOW || n._hidden) && e.instance.props.selectedVoiceChannelId != n.record.id) {
+							if (show && (this.settings.channels[BDFDB.DiscordConstants.ChannelTypes[n.record.type]] || this.settings.channels[BDFDB.DiscordConstants.ChannelTypes[n.record.type]] === undefined)) {
+								n._hidden = true;
+								if (e.instance.props.guildChannels.hideMutedChannels && e.instance.props.guildChannels.mutedChannelIds.has(n.record.id)) n.renderLevel = renderLevels.DO_NOT_SHOW;
+								else if (category.isCollapsed) n.renderLevel = renderLevels.WOULD_SHOW_IF_UNCOLLAPSED;
+								else n.renderLevel = renderLevels.SHOW;
+							}
+							else {
+								delete n._hidden;
+								n.renderLevel = renderLevels.CAN_NOT_SHOW;
+							}
+							
+							if (hiddenChannelCache[e.instance.props.guild.id].indexOf(n.record.id) == -1) hiddenChannelCache[e.instance.props.guild.id].push(n.record.id);
 						}
-						else {
-							delete n._hidden;
-							n.renderLevel = renderLevels.CAN_NOT_SHOW;
-						}
-						
-						if (hiddenChannelCache[e.instance.props.guild.id].indexOf(n.record.id) == -1) hiddenChannelCache[e.instance.props.guild.id].push(n.record.id);
+						category.shownChannelIds = channelArray.filter(n => n.renderLevel == renderLevels.SHOW).sort((x, y) => {
+							let xPos = x.record.position + (x.record.isVocal() ? 1e4 : 0) + (sortAtBottom && x._hidden ? 1e5 : 0);
+							let yPos = y.record.position + (y.record.isVocal() ? 1e4 : 0) + (sortAtBottom && y._hidden ? 1e5 : 0);
+							return xPos < yPos ? -1 : xPos > yPos ? 1 : 0;
+						}).map(n => n.id);
 					}
-					category.shownChannelIds = channelArray.filter(n => n.renderLevel == renderLevels.SHOW).sort((x, y) => {
-						let xPos = x.record.position + (x.record.isVocal() ? 1e4 : 0) + (sortAtBottom && x._hidden ? 1e5 : 0);
-						let yPos = y.record.position + (y.record.isVocal() ? 1e4 : 0) + (sortAtBottom && y._hidden ? 1e5 : 0);
-						return xPos < yPos ? -1 : xPos > yPos ? 1 : 0;
-					}).map(n => n.id);
+					else if (insertChannelless && !category.shouldShowEmptyCategory()) {
+						let shouldShowEmptyCategory = category.shouldShowEmptyCategory;
+						category.shouldShowEmptyCategory = BDFDB.TimeUtils.suppress((...args) => {
+							if (!this.started) {
+								category.shouldShowEmptyCategory = shouldShowEmptyCategory;
+								return false;
+							}
+							else return this.settings.channels.GUILD_CATEGORY && !blackList.includes(e.instance.props.guild.id);
+						}, "Error in shouldShowEmptyCategory of Category Object!");
+					}
 				};
 				processCategory(e.instance.props.guildChannels.favoritesCategory);
-				processCategory(e.instance.props.guildChannels.noParentCategory);
 				processCategory(e.instance.props.guildChannels.recentsCategory);
-				for (let id in e.instance.props.guildChannels.categories) processCategory(e.instance.props.guildChannels.categories[id]);
+				processCategory(e.instance.props.guildChannels.noParentCategory);
+				for (let id in e.instance.props.guildChannels.categories) processCategory(e.instance.props.guildChannels.categories[id], true);
 			}
 			
 			processChannelItem (e) {
