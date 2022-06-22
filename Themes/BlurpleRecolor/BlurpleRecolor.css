@@ -1252,18 +1252,18 @@ img[src="/assets/4697ec960e57790ad4f6251af4c246b4.svg"] {	/* widgetsettings		wid
 
 /* ----		10.2.	GUILDADD/CREATION				---- */
 															/* create guild			create own icon						*/
-.icon-AynerZ[src="/assets/79516499036b21acd5f56ccba0635c38.svg"] {
+.icon-AynerZ[src="/assets/f303eeb986430817ee8a52a9b81aea45.svg"] {
 	object-position: -999999px -999999px;
 	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildcreate_createown_accent.svg) center/contain no-repeat;
 }
-.icon-AynerZ[src="/assets/79516499036b21acd5f56ccba0635c38.svg"] + * {
+.icon-AynerZ[src="/assets/f303eeb986430817ee8a52a9b81aea45.svg"] + * {
 	position: relative;
 	display: flex;
 	align-items: center;
 	overflow: visible;
 }
-.icon-AynerZ[src="/assets/79516499036b21acd5f56ccba0635c38.svg"] + *::after {
+.icon-AynerZ[src="/assets/f303eeb986430817ee8a52a9b81aea45.svg"] + *::after {
 	content: "";
 	position: absolute;
 	left: -56px;
