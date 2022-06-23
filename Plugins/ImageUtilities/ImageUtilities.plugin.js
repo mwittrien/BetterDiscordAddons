@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.7.3
+ * @version 4.7.4
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,16 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.7.3",
+			"version": "4.7.4",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		},
 		"changeLog": {
 			"fixed": {
-				"Resize Embeds": "Properly resizes embedded Images",
-				"Resize Images": "No longer resizes Images over the max Width/Height of the original Image causing bluriness"
-			},
-			"added": {
-				"Blur in NSFW": "Added Option to blur Media in NFSW Channels similar to Spoilers"
+				"Resize Images": "Option to choose between 'NONE', 'ORIGINAL SIZE' and 'WINDOW SIZE' as scale options"
 			}
 		}
 	};
@@ -78,6 +74,12 @@ module.exports = (_ => {
 		var eventTypes = {};
 		
 		const imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
+		
+		const scaleOptions = {
+			NONE: "No Resize",
+			ORINGAL: "Resize to Original Size",
+			WINDOW: "Resize to Window Size"
+		};
 		
 		const fileTypes = {
 			"3gp":		{copyable: false,	searchable: false,	video: true},
@@ -209,7 +211,7 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						nsfwMode: 				{value: true,	description: "Blur Media that is posted in NSFW Channels"}
+						nsfwMode: 				{value: false,	description: "Blur Media that is posted in NSFW Channels"}
 					},
 					viewerSettings: {
 						zoomMode: 				{value: true,	description: "Enable Zoom Mode to zoom into Images while holding down your Mouse"},
@@ -223,9 +225,9 @@ module.exports = (_ => {
 						zoomLevel:				{value: 2,		digits: 1,	minValue: 1,	maxValue: 20,	unit: "x",		label: "ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
 						lensSize:				{value: 200,	digits: 0,	minValue: 50,	maxValue: 5000,	unit: "px",		label: "context_lenssize"}
 					},
-					resizeSettings: {
-						messages: 				{value: false, 	description: "Messages"},
-						imageViewer: 			{value: false, 	description: "Image Viewer"}
+					scaleSettings: {
+						messages: 				{value: "NONE",	description: "Messages"},
+						imageViewer: 			{value: "NONE",	description: "Image Viewer"}
 					},
 					detailsSettings: {
 						footnote:				{value: true, 	description: "in the Image Description"},
@@ -463,12 +465,14 @@ module.exports = (_ => {
 							collapseStates: collapseStates,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 								title: "Automatically Resize Images in: ",
-								children: Object.keys(this.defaults.resizeSettings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-									type: "Switch",
+								children: Object.keys(this.defaults.scaleSettings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+									type: "Select",
 									plugin: this,
-									keys: ["resizeSettings", key],
-									label: this.defaults.resizeSettings[key].description,
-									value: this.settings.resizeSettings[key]
+									keys: ["scaleSettings", key],
+									label: this.defaults.scaleSettings[key].description,
+									basis: "50%",
+									options: Object.keys(scaleOptions).map(n => ({value: n, label: scaleOptions[n]})),
+									value: this.settings.scaleSettings[key]
 								}))
 							})
 						}));
@@ -1239,10 +1243,10 @@ module.exports = (_ => {
 				}
 				else {
 					let reactInstance = BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`);
-					if (this.settings.resizeSettings.imageViewer && BDFDB.ReactUtils.findOwner(reactInstance, {name: "ImageModal", up: true})) {
+					if (this.settings.scaleSettings.imageViewer != "NONE" && BDFDB.ReactUtils.findOwner(reactInstance, {name: "ImageModal", up: true})) {
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let ratio = Math.min((aRects.width * (this.settings.viewerSettings.galleryMode ? 0.8 : 1) - 20) / e.instance.props.width, (aRects.height - (this.settings.viewerSettings.details ? 280 : 100)) / e.instance.props.height);
-						if (ratio < 1) {
+						if (ratio < 1 || this.settings.scaleSettings.imageViewer == "WINDOW") {
 							let width = Math.round(ratio * e.instance.props.width);
 							let height = Math.round(ratio * e.instance.props.height);
 							e.instance.props.width = width;
@@ -1253,7 +1257,7 @@ module.exports = (_ => {
 							e.instance.props.resized = true;
 						}
 					}
-					if (this.settings.resizeSettings.messages && (!e.instance.props.className || e.instance.props.className.indexOf(BDFDB.disCN.embedthumbnail) == -1) && BDFDB.ReactUtils.findOwner(reactInstance, {name: "LazyImageZoomable", up: true})) {
+					if (this.settings.scaleSettings.messages != "NONE" && (!e.instance.props.className || e.instance.props.className.indexOf(BDFDB.disCN.embedthumbnail) == -1) && BDFDB.ReactUtils.findOwner(reactInstance, {name: "LazyImageZoomable", up: true})) {
 						let embed = BDFDB.ReactUtils.findOwner(reactInstance, {name: "Embed", up: true});
 						if (!embed || !embed.child || embed.child.type != "article") {
 							let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
@@ -1261,7 +1265,7 @@ module.exports = (_ => {
 							let mwRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.messagewrapper));
 							if (mRects.width || mwRects.width) {
 								let ratio = (mRects.width || (mwRects.width - 120)) / e.instance.props.width;
-								if (ratio < 1) {
+								if (ratio < 1 || this.settings.scaleSettings.messages == "WINDOW") {
 									let width = Math.round(ratio * e.instance.props.width);
 									let height = Math.round(ratio * e.instance.props.height);
 									if (height > (aRects.height * 0.66)) {
@@ -1304,6 +1308,7 @@ module.exports = (_ => {
 
 			processSimpleMessageAccessories (e) {
 				if (this.settings.general.nsfwMode && e.instance.props.channel.nsfw) {
+					console.log(e);
 					e.instance.props.message = new BDFDB.DiscordObjects.Message(e.instance.props.message);
 					e.instance.props.message.attachments = [].concat(e.instance.props.message.attachments);
 					for (let i in e.instance.props.message.attachments) if (e.instance.props.message.attachments[i].spoiler != undefined) {
