@@ -1018,7 +1018,8 @@
 	background: rgb(var(--accentcolor)) url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/rolebanner_hobbies_details.svg) center/cover no-repeat;
 }
 
-img[src="/assets/4697ec960e57790ad4f6251af4c246b4.svg"] {	/* widgetsettings		widget placeholder image 			*/
+															/* widgetsettings		widget placeholder image 			*/
+.infoItem-Q4HWUe[src="/assets/016a7d812fd4854aa4b7a5b9c539b48d.svg"] {
 	object-position: -999999px -999999px;
 	border-radius: 5px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_widget_details.svg) center/contain no-repeat, linear-gradient(rgb(var(--accentcolor)) 20%, rgba(0,0,0,.3) 20%, rgba(0,0,0,.3));

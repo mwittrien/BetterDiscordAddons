@@ -5867,9 +5867,12 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	color: rgba(var(--textdarkest));
 }
 
+#app-mount .lookOutlined-3yKVGo.colorPrimary-2AuQVo:hover,
 #app-mount .lookOutlined-3yKVGo.hoverPrimary-2hqNIm.hasHover-26V98q:hover {
+	background-color: rgba(var(--textdarkest), .05);
 	border-color: rgba(var(--textdarkest), .6);
 }
+#app-mount .lookOutlined-3yKVGo.colorPrimary-2AuQVo:active,
 #app-mount .lookOutlined-3yKVGo.hoverPrimary-2hqNIm.hasHover-26V98q:active {
 	background-color: rgba(var(--textdarkest), .1);
 	border-color: rgb(var(--textdarkest));
@@ -5890,7 +5893,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 
 #app-mount .borderPrimary-1ygM7_ {
-	border-color: rgb(var(--textdarkest)); !important;
+	border-color: rgb(var(--textdarkest)) !important;
 }
 
 #app-mount .lookInverted-2mDUMi.colorTransparent-13Bvvi .spinnerItem-3dCJpG {
