@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.9
+ * @version 3.2.0
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "3.1.9",
+			"version": "3.2.0",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
-		},
-		"changeLog": {
-			"improved": {
-				"Hidden Categories": "Reveals hidden Categories, which are hidden due to having no channels, can be disabled in the plugin settings"
-			}
 		}
 	};
 
@@ -399,7 +394,7 @@ module.exports = (_ => {
 			}
 			
 			processChannels (e) {
-				if (!e.instance.props.guild) return;
+				if (!e.instance.props.guild || e.instance.props.guild.id.length < 16) return;
 				let show = !blackList.includes(e.instance.props.guild.id), sortAtBottom = this.settings.sortOrder.hidden == sortOrders.BOTTOM.value;
 				e.instance.props.guildChannels = new e.instance.props.guildChannels.constructor(e.instance.props.guildChannels.id);
 				e.instance.props.guildChannels.categories = Object.assign({}, e.instance.props.guildChannels.categories);
