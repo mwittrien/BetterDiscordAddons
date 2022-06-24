@@ -2740,6 +2740,7 @@
 		"noticedefault": ["Notice", "colorDefault"],
 		"noticedownload": ["Notice", "colorDownload"],
 		"noticedismiss": ["Notice", "closeButton"],
+		"noticedismissicon": ["Notice", "closeIcon"],
 		"noticeicon": ["NoticePlatform", "icon"],
 		"noticeiconandroid": ["NoticePlatform", "iconAndroid"],
 		"noticeiconapple": ["NoticePlatform", "iconApple"],
