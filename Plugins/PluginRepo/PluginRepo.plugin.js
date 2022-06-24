@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.2
+ * @version 2.3.3
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "PluginRepo",
 			"author": "DevilBro",
-			"version": "2.3.2",
+			"version": "2.3.3",
 			"description": "Allows you to download all Plugins from BD's Website within Discord"
 		}
 	};
@@ -280,6 +280,7 @@ module.exports = (_ => {
 										this.props.data.thumbnailUrl && this.props.data.thumbnailChecked && BDFDB.ReactUtils.createElement("img", {
 											className: BDFDB.disCN.discoverycardcover,
 											src: this.props.data.thumbnailUrl,
+											loading: "lazy",
 											onMouseEnter: this.props.data.thumbnailGifUrl && (e => e.target.src = this.props.data.thumbnailGifUrl),
 											onMouseLeave: this.props.data.thumbnailGifUrl && (e => e.target.src = this.props.data.thumbnailUrl),
 											onClick: _ => {
@@ -326,6 +327,7 @@ module.exports = (_ => {
 											children: this.props.data.author && this.props.data.author.discord_avatar_hash && this.props.data.author.discord_snowflake && !this.props.data.author.discord_avatar_failed ? BDFDB.ReactUtils.createElement("img", {
 												className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.discoverycardicon, !this.props.data.author.discord_avatar_loaded && BDFDB.disCN.discoverycardiconloading),
 												src: `https://cdn.discordapp.com/avatars/${this.props.data.author.discord_snowflake}/${this.props.data.author.discord_avatar_hash}.webp?size=128`,
+												loading: "lazy",
 												onLoad: _ => {
 													this.props.data.author.discord_avatar_loaded = true;
 													BDFDB.ReactUtils.forceUpdate(this);
