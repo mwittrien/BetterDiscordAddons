@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.7.4
+ * @version 4.7.5
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.7.4",
+			"version": "4.7.5",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
-		},
-		"changeLog": {
-			"fixed": {
-				"Resize Images": "Option to choose between 'NONE', 'ORIGINAL SIZE' and 'WINDOW SIZE' as scale options"
-			}
 		}
 	};
 	
@@ -75,9 +70,9 @@ module.exports = (_ => {
 		
 		const imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
 		
-		const scaleOptions = {
+		const rescaleOptions = {
 			NONE: "No Resize",
-			ORINGAL: "Resize to Original Size",
+			ORIGINAL: "Resize to Original Size",
 			WINDOW: "Resize to Window Size"
 		};
 		
@@ -225,7 +220,7 @@ module.exports = (_ => {
 						zoomLevel:				{value: 2,		digits: 1,	minValue: 1,	maxValue: 20,	unit: "x",		label: "ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
 						lensSize:				{value: 200,	digits: 0,	minValue: 50,	maxValue: 5000,	unit: "px",		label: "context_lenssize"}
 					},
-					scaleSettings: {
+					rescaleSettings: {
 						messages: 				{value: "NONE",	description: "Messages"},
 						imageViewer: 			{value: "NONE",	description: "Image Viewer"}
 					},
@@ -384,6 +379,9 @@ module.exports = (_ => {
 					${BDFDB.dotCNS._imageutilitiesoperations + BDFDB.dotCN.anchor + BDFDB.dotCN.downloadlink} {
 						margin: 0 !important;
 					}
+					${BDFDB.dotCN.embedfull} {
+						max-width: unset !important;
+					}
 				`;
 			}
 			
@@ -465,14 +463,14 @@ module.exports = (_ => {
 							collapseStates: collapseStates,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 								title: "Automatically Resize Images in: ",
-								children: Object.keys(this.defaults.scaleSettings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								children: Object.keys(this.defaults.rescaleSettings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 									type: "Select",
 									plugin: this,
-									keys: ["scaleSettings", key],
-									label: this.defaults.scaleSettings[key].description,
+									keys: ["rescaleSettings", key],
+									label: this.defaults.rescaleSettings[key].description,
 									basis: "50%",
-									options: Object.keys(scaleOptions).map(n => ({value: n, label: scaleOptions[n]})),
-									value: this.settings.scaleSettings[key]
+									options: Object.keys(rescaleOptions).map(n => ({value: n, label: rescaleOptions[n]})),
+									value: this.settings.rescaleSettings[key]
 								}))
 							})
 						}));
@@ -1243,12 +1241,13 @@ module.exports = (_ => {
 				}
 				else {
 					let reactInstance = BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`);
-					if (this.settings.scaleSettings.imageViewer != "NONE" && BDFDB.ReactUtils.findOwner(reactInstance, {name: "ImageModal", up: true})) {
+					if (this.settings.rescaleSettings.imageViewer != "NONE" && BDFDB.ReactUtils.findOwner(reactInstance, {name: "ImageModal", up: true})) {
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let ratio = Math.min((aRects.width * (this.settings.viewerSettings.galleryMode ? 0.8 : 1) - 20) / e.instance.props.width, (aRects.height - (this.settings.viewerSettings.details ? 280 : 100)) / e.instance.props.height);
-						if (ratio < 1 || this.settings.scaleSettings.imageViewer == "WINDOW") {
-							let width = Math.round(ratio * e.instance.props.width);
-							let height = Math.round(ratio * e.instance.props.height);
+						ratio = this.settings.rescaleSettings.imageViewer == "ORIGINAL" && ratio > 1 ? 1 : ratio;
+						let width = Math.round(ratio * e.instance.props.width);
+						let height = Math.round(ratio * e.instance.props.height);
+						if (e.instance.props.width != width || e.instance.props.maxWidth != width || e.instance.props.height != height || e.instance.props.maxHeight != height) {
 							e.instance.props.width = width;
 							e.instance.props.maxWidth = width;
 							e.instance.props.height = height;
@@ -1257,29 +1256,28 @@ module.exports = (_ => {
 							e.instance.props.resized = true;
 						}
 					}
-					if (this.settings.scaleSettings.messages != "NONE" && (!e.instance.props.className || e.instance.props.className.indexOf(BDFDB.disCN.embedthumbnail) == -1) && BDFDB.ReactUtils.findOwner(reactInstance, {name: "LazyImageZoomable", up: true})) {
-						let embed = BDFDB.ReactUtils.findOwner(reactInstance, {name: "Embed", up: true});
-						if (!embed || !embed.child || embed.child.type != "article") {
-							let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
-							let mRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCNC.messageaccessory + BDFDB.dotCN.messagecontents));
-							let mwRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.messagewrapper));
-							if (mRects.width || mwRects.width) {
-								let ratio = (mRects.width || (mwRects.width - 120)) / e.instance.props.width;
-								if (ratio < 1 || this.settings.scaleSettings.messages == "WINDOW") {
-									let width = Math.round(ratio * e.instance.props.width);
-									let height = Math.round(ratio * e.instance.props.height);
-									if (height > (aRects.height * 0.66)) {
-										let newHeight = Math.round(aRects.height * 0.66);
-										width = (newHeight/height) * width;
-										height = newHeight;
-									}
-									e.instance.props.width = width;
-									e.instance.props.maxWidth = width;
-									e.instance.props.height = height;
-									e.instance.props.maxHeight = height;
-									e.instance.props.src = e.instance.props.src.replace(/width=\d+/, `width=${width}`).replace(/height=\d+/, `height=${height}`);
-									e.instance.props.resized = true;
-								}
+					if (this.settings.rescaleSettings.messages != "NONE" && (!e.instance.props.className || e.instance.props.className.indexOf(BDFDB.disCN.embedthumbnail) == -1) && BDFDB.ReactUtils.findOwner(reactInstance, {name: "LazyImageZoomable", up: true})) {
+						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
+						let mRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCNC.messageaccessory + BDFDB.dotCN.messagecontents));
+						let mwRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.messagewrapper));
+						if (mRects.width || mwRects.width) {
+							let embed = BDFDB.ReactUtils.findValue(reactInstance, "embed", {up: true});
+							let ratio = ((mRects.width || (mwRects.width - 120)) - (embed && embed.color ? 100 : 0)) / e.instance.props.width;
+							ratio = this.settings.rescaleSettings.messages == "ORIGINAL" && ratio > 1 ? 1 : ratio;
+							let width = Math.round(ratio * e.instance.props.width);
+							let height = Math.round(ratio * e.instance.props.height);
+							if (height > (aRects.height * 0.66)) {
+								let newHeight = Math.round(aRects.height * 0.66);
+								width = (newHeight/height) * width;
+								height = newHeight;
+							}
+							if (e.instance.props.width != width || e.instance.props.maxWidth != width || e.instance.props.height != height || e.instance.props.maxHeight != height) {
+								e.instance.props.width = width;
+								e.instance.props.maxWidth = width;
+								e.instance.props.height = height;
+								e.instance.props.maxHeight = height;
+								e.instance.props.src = e.instance.props.src.replace(/width=\d+/, `width=${width}`).replace(/height=\d+/, `height=${height}`);
+								e.instance.props.resized = true;
 							}
 						}
 					}
@@ -1308,7 +1306,6 @@ module.exports = (_ => {
 
 			processSimpleMessageAccessories (e) {
 				if (this.settings.general.nsfwMode && e.instance.props.channel.nsfw) {
-					console.log(e);
 					e.instance.props.message = new BDFDB.DiscordObjects.Message(e.instance.props.message);
 					e.instance.props.message.attachments = [].concat(e.instance.props.message.attachments);
 					for (let i in e.instance.props.message.attachments) if (e.instance.props.message.attachments[i].spoiler != undefined) {
@@ -1461,7 +1458,7 @@ module.exports = (_ => {
 			}
 			
 			filterMessagesForImages (messages, img) {
-				return messages.filter(m => m && m.hit && m.channel_id == img.channelId && (m.id == firstViewedImage.messageId || m.id == img.messageId || m.embeds.length || m.attachments.filter(a => !a.filename.startsWith("SPOILER_")).length)).map(m => [m.attachments, m.embeds].flat(10).filter(n => n).map(i => Object.assign({messageId: m.id, channelId: img.channelId}, i, i.thumbnail, i.video))).flat(10);
+				return messages.filter(m => m && m.hit && m.channel_id == img.channelId && (m.id == firstViewedImage.messageId || m.id == img.messageId || m.embeds.length || m.attachments.filter(a => !a.filename.startsWith("SPOILER_")).length)).map(m => [m.attachments, m.embeds].flat(10).filter(n => n).map(i => Object.assign({messageId: m.id, channelId: img.channelId}, i, i.image, i.thumbnail, i.video))).flat(10);
 			}
 			
 			switchImages (modalInstance, offset) {
