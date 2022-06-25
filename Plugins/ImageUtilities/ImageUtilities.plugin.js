@@ -380,7 +380,6 @@ module.exports = (_ => {
 						margin: 0 !important;
 					}
 					${BDFDB.dotCN.embedfull} {
-						max-width: unset !important;
 					}
 				`;
 			}
