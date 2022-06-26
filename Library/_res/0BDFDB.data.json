@@ -5375,6 +5375,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"935758254858973224": 	{"active": true,	"tier": "t3",	"text": "",											"color": "",			"id": "SaneVR (rukin)"},
 		"870962330417102919": 	{"active": false,	"tier": "t2",	"text": "",											"color": "",			"id": "gobber (pobge)"},
 		"335997977938100226": 	{"active": true,	"tier": "t3",	"text": "Cloudy Hub Owner",							"color": "",			"id": "Synax (DaBa)"},
 		"558825053668507650": 	{"active": false,	"tier": "t2",	"text": "",											"color": "",			"id": "duh (AshAj)"},
