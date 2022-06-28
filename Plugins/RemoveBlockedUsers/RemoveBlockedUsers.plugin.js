@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.9
+ * @version 1.5.0
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedUsers",
 			"author": "DevilBro",
-			"version": "1.4.9",
+			"version": "1.5.0",
 			"description": "Removes blocked Messages/Users"
 		},
 		"changeLog": {
 			"fixed": {
-				"Stage/Voice": "No longer shows blocked Users in the VC Count and Stage Channel Members"
+				"Voice Notifications": "Fixed an Issue where nonblocked Users or yourself would stop making noices on join/leave after some occurences"
 			}
 		}
 	};
@@ -176,7 +176,7 @@ module.exports = (_ => {
 				let connectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryModules.VoiceUtils.getVoiceStates(BDFDB.LibraryModules.CurrentVoiceUtils.getGuildId()), n => n && n.channelId == channelId && !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.userId));
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
 					let type = e.methodArguments[0];
-					if (this.settings.notifcations.voiceChat && type == "user_join" || type == "user_leave" || type == "user_moved") {
+					if (this.settings.notifcations.voiceChat && (type == "disconnect" || type == "user_join" || type == "user_leave" || type == "user_moved")) {
 						channelId = BDFDB.LibraryModules.CurrentVoiceUtils.getChannelId();
 						if (channelId) {
 							let allConnectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryModules.VoiceUtils.getVoiceStates(BDFDB.LibraryModules.CurrentVoiceUtils.getGuildId()), n => n && n.channelId == channelId);
@@ -195,7 +195,10 @@ module.exports = (_ => {
 							else e.callOriginalMethodAfterwards();
 							connectedUsers = unblockedUsers;
 						}
-						else e.callOriginalMethodAfterwards();
+						else {
+							connectedUsers = {};
+							e.callOriginalMethodAfterwards();
+						}
 					}
 					else e.callOriginalMethodAfterwards();
 				}});
