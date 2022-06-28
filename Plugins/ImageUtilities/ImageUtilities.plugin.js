@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.7.5
+ * @version 4.7.6
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.7.5",
+			"version": "4.7.6",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		}
 	};
@@ -258,7 +258,7 @@ module.exports = (_ => {
 					},
 					after: {
 						ImageModal: ["render", "componentDidMount", "componentWillUnmount"],
-						LazyImage: "componentDidMount",
+						LazyImage: ["componentDidMount", "componentDidUpdate"],
 						LazyImageZoomable: "render",
 						Spoiler: "render",
 						UserBanner: "default"
@@ -378,8 +378,6 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS._imageutilitiesoperations + BDFDB.dotCN.anchor + BDFDB.dotCN.downloadlink} {
 						margin: 0 !important;
-					}
-					${BDFDB.dotCN.embedfull} {
 					}
 				`;
 			}
@@ -1139,103 +1137,109 @@ module.exports = (_ => {
 			
 			processLazyImage (e) {
 				if (e.node) {
-					if (e.instance.props.resized && e.instance.state.readyState != BDFDB.LibraryComponents.Image.ImageReadyStates.READY) {
-						e.instance.state.readyState = BDFDB.LibraryComponents.Image.ImageReadyStates.READY;
-						BDFDB.ReactUtils.forceUpdate(e.instance);
+					if (e.instance.props.resized) {
+						let embed = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedfull, e.node);
+						if (embed) embed.style.setProperty("max-width", "unset", "important");
+						if (e.instance.state.readyState != BDFDB.LibraryComponents.Image.ImageReadyStates.READY) {
+							e.instance.state.readyState = BDFDB.LibraryComponents.Image.ImageReadyStates.READY;
+							BDFDB.ReactUtils.forceUpdate(e.instance);
+						}
 					}
-					let isVideo = (typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})) || {type: {}}).type.displayName == "Video";
-					if (this.settings.viewerSettings.zoomMode && !isVideo && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling) && BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.getInstance(e.node), {name: "ImageModal", up: true})) {
-						e.node.addEventListener("mousedown", event => {
-							if (event.which != 1) return;
-							BDFDB.ListenerUtils.stopEvent(event);
+					if (e.methodname == "componentDidMount") {
+						let isVideo = (typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})) || {type: {}}).type.displayName == "Video";
+						if (this.settings.viewerSettings.zoomMode && !isVideo && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling) && BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.getInstance(e.node), {name: "ImageModal", up: true})) {
+							e.node.addEventListener("mousedown", event => {
+								if (event.which != 1) return;
+								BDFDB.ListenerUtils.stopEvent(event);
 
-							let vanishObserver;
-							
-							let imgRects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
+								let vanishObserver;
+								
+								let imgRects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
 
-							let lens = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${this.settings.zoomSettings.lensSize}px !important; height: ${this.settings.zoomSettings.lensSize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * this.settings.zoomSettings.zoomLevel}px; height: ${imgRects.height * this.settings.zoomSettings.zoomLevel}px; position: fixed !important;${this.settings.zoomSettings.pixelMode ? " image-rendering: pixelated !important;" : ""}"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
-							let pane = lens.firstElementChild.firstElementChild;
-							let backdrop = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslensebackdrop}" style="background: rgba(0, 0, 0, 0.3) !important; position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; pointer-events: none !important; z-index: 8000 !important;"></div>`);
-							let appMount = document.querySelector(BDFDB.dotCN.appmount);
-							appMount.appendChild(lens);
-							appMount.appendChild(backdrop);
+								let lens = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${this.settings.zoomSettings.lensSize}px !important; height: ${this.settings.zoomSettings.lensSize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * this.settings.zoomSettings.zoomLevel}px; height: ${imgRects.height * this.settings.zoomSettings.zoomLevel}px; position: fixed !important;${this.settings.zoomSettings.pixelMode ? " image-rendering: pixelated !important;" : ""}"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
+								let pane = lens.firstElementChild.firstElementChild;
+								let backdrop = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslensebackdrop}" style="background: rgba(0, 0, 0, 0.3) !important; position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; pointer-events: none !important; z-index: 8000 !important;"></div>`);
+								let appMount = document.querySelector(BDFDB.dotCN.appmount);
+								appMount.appendChild(lens);
+								appMount.appendChild(backdrop);
 
-							let lensRects = BDFDB.DOMUtils.getRects(lens);
-							
-							let halfW = lensRects.width / 2, halfH = lensRects.height / 2;
-							let minX = imgRects.left, maxX = minX + imgRects.width;
-							let minY = imgRects.top, maxY = minY + imgRects.height;
-							
-							lens.update = _ => {
-								let x = event.clientX > maxX ? maxX - halfW : event.clientX < minX ? minX - halfW : event.clientX - halfW;
-								let y = event.clientY > maxY ? maxY - halfH : event.clientY < minY ? minY - halfH : event.clientY - halfH;
-								lens.style.setProperty("left", x + "px", "important");
-								lens.style.setProperty("top", y + "px", "important");
-								lens.style.setProperty("width", this.settings.zoomSettings.lensSize + "px", "important");
-								lens.style.setProperty("height", this.settings.zoomSettings.lensSize + "px", "important");
-								lens.style.setProperty("clip-path", `circle(${(this.settings.zoomSettings.lensSize/2) + 2}px at center)`, "important");
-								lens.firstElementChild.style.setProperty("clip-path", `circle(${this.settings.zoomSettings.lensSize/2}px at center)`, "important");
-								pane.style.setProperty("left", imgRects.left + ((this.settings.zoomSettings.zoomLevel - 1) * (imgRects.left - x - halfW)) + "px", "important");
-								pane.style.setProperty("top", imgRects.top + ((this.settings.zoomSettings.zoomLevel - 1) * (imgRects.top - y - halfH)) + "px", "important");
-								pane.style.setProperty("width", imgRects.width * this.settings.zoomSettings.zoomLevel + "px", "important");
-								pane.style.setProperty("height", imgRects.height * this.settings.zoomSettings.zoomLevel + "px", "important");
-							};
-							lens.update();
-							
-							e.node.style.setProperty("pointer-events", "none", "important");
-
-							let dragging = event2 => {
-								event = event2;
+								let lensRects = BDFDB.DOMUtils.getRects(lens);
+								
+								let halfW = lensRects.width / 2, halfH = lensRects.height / 2;
+								let minX = imgRects.left, maxX = minX + imgRects.width;
+								let minY = imgRects.top, maxY = minY + imgRects.height;
+								
+								lens.update = _ => {
+									let x = event.clientX > maxX ? maxX - halfW : event.clientX < minX ? minX - halfW : event.clientX - halfW;
+									let y = event.clientY > maxY ? maxY - halfH : event.clientY < minY ? minY - halfH : event.clientY - halfH;
+									lens.style.setProperty("left", x + "px", "important");
+									lens.style.setProperty("top", y + "px", "important");
+									lens.style.setProperty("width", this.settings.zoomSettings.lensSize + "px", "important");
+									lens.style.setProperty("height", this.settings.zoomSettings.lensSize + "px", "important");
+									lens.style.setProperty("clip-path", `circle(${(this.settings.zoomSettings.lensSize/2) + 2}px at center)`, "important");
+									lens.firstElementChild.style.setProperty("clip-path", `circle(${this.settings.zoomSettings.lensSize/2}px at center)`, "important");
+									pane.style.setProperty("left", imgRects.left + ((this.settings.zoomSettings.zoomLevel - 1) * (imgRects.left - x - halfW)) + "px", "important");
+									pane.style.setProperty("top", imgRects.top + ((this.settings.zoomSettings.zoomLevel - 1) * (imgRects.top - y - halfH)) + "px", "important");
+									pane.style.setProperty("width", imgRects.width * this.settings.zoomSettings.zoomLevel + "px", "important");
+									pane.style.setProperty("height", imgRects.height * this.settings.zoomSettings.zoomLevel + "px", "important");
+								};
 								lens.update();
-							};
-							let releasing = _ => {
-								e.node.style.removeProperty("pointer-events");
+								
+								e.node.style.setProperty("pointer-events", "none", "important");
+
+								let dragging = event2 => {
+									event = event2;
+									lens.update();
+								};
+								let releasing = _ => {
+									e.node.style.removeProperty("pointer-events");
+									this.cleanupListeners("Zoom");
+									document.removeEventListener("mousemove", dragging);
+									document.removeEventListener("mouseup", releasing);
+									if (vanishObserver) vanishObserver.disconnect();
+									BDFDB.DOMUtils.remove(lens, backdrop);
+									BDFDB.DataUtils.save(this.settings.zoomSettings, this, "zoomSettings");
+								};
+								document.addEventListener("mousemove", dragging);
+								document.addEventListener("mouseup", releasing);
+								
 								this.cleanupListeners("Zoom");
-								document.removeEventListener("mousemove", dragging);
-								document.removeEventListener("mouseup", releasing);
-								if (vanishObserver) vanishObserver.disconnect();
-								BDFDB.DOMUtils.remove(lens, backdrop);
-								BDFDB.DataUtils.save(this.settings.zoomSettings, this, "zoomSettings");
-							};
-							document.addEventListener("mousemove", dragging);
-							document.addEventListener("mouseup", releasing);
-							
-							this.cleanupListeners("Zoom");
-							this.addListener("wheel", "Zoom", event2 => {
-								if (!document.contains(e.node)) this.cleanupListeners("Zoom");
-								else {
-									if (event2.deltaY < 0 && (this.settings.zoomSettings.zoomLevel + 0.1) <= this.defaults.zoomSettings.zoomLevel.maxValue) {
-										this.settings.zoomSettings.zoomLevel += 0.1;
-										lens.update();
+								this.addListener("wheel", "Zoom", event2 => {
+									if (!document.contains(e.node)) this.cleanupListeners("Zoom");
+									else {
+										if (event2.deltaY < 0 && (this.settings.zoomSettings.zoomLevel + 0.1) <= this.defaults.zoomSettings.zoomLevel.maxValue) {
+											this.settings.zoomSettings.zoomLevel += 0.1;
+											lens.update();
+										}
+										else if (event2.deltaY > 0 && (this.settings.zoomSettings.zoomLevel - 0.1) >= this.defaults.zoomSettings.zoomLevel.minValue) {
+											this.settings.zoomSettings.zoomLevel -= 0.1;
+											lens.update();
+										}
 									}
-									else if (event2.deltaY > 0 && (this.settings.zoomSettings.zoomLevel - 0.1) >= this.defaults.zoomSettings.zoomLevel.minValue) {
-										this.settings.zoomSettings.zoomLevel -= 0.1;
-										lens.update();
+								});
+								this.addListener("keydown", "Zoom", event2 => {
+									if (!document.contains(e.node)) this.cleanupListeners("Zoom");
+									else if (!firedEvents.includes("Zoom")) {
+										firedEvents.push("Zoom");
+										if (event2.keyCode == 187 && (this.settings.zoomSettings.zoomLevel + 0.5) <= this.defaults.zoomSettings.zoomLevel.maxValue) {
+											this.settings.zoomSettings.zoomLevel += 0.5;
+											lens.update();
+										}
+										else if (event2.keyCode == 189 && (this.settings.zoomSettings.zoomLevel - 0.5) >= this.defaults.zoomSettings.zoomLevel.minValue) {
+											this.settings.zoomSettings.zoomLevel -= 0.5;
+											lens.update();
+										}
 									}
-								}
+								});
+								this.addListener("keyup", "Zoom", _ => {
+									BDFDB.ArrayUtils.remove(firedEvents, "Zoom", true);
+									if (!document.contains(e.node)) this.cleanupListeners("Zoom");
+								});
+								
+								vanishObserver = new MutationObserver(changes => {if (!document.contains(e.node)) releasing();});
+								vanishObserver.observe(appMount, {childList: true, subtree: true});
 							});
-							this.addListener("keydown", "Zoom", event2 => {
-								if (!document.contains(e.node)) this.cleanupListeners("Zoom");
-								else if (!firedEvents.includes("Zoom")) {
-									firedEvents.push("Zoom");
-									if (event2.keyCode == 187 && (this.settings.zoomSettings.zoomLevel + 0.5) <= this.defaults.zoomSettings.zoomLevel.maxValue) {
-										this.settings.zoomSettings.zoomLevel += 0.5;
-										lens.update();
-									}
-									else if (event2.keyCode == 189 && (this.settings.zoomSettings.zoomLevel - 0.5) >= this.defaults.zoomSettings.zoomLevel.minValue) {
-										this.settings.zoomSettings.zoomLevel -= 0.5;
-										lens.update();
-									}
-								}
-							});
-							this.addListener("keyup", "Zoom", _ => {
-								BDFDB.ArrayUtils.remove(firedEvents, "Zoom", true);
-								if (!document.contains(e.node)) this.cleanupListeners("Zoom");
-							});
-							
-							vanishObserver = new MutationObserver(changes => {if (!document.contains(e.node)) releasing();});
-							vanishObserver.observe(appMount, {childList: true, subtree: true});
-						});
+						}
 					}
 				}
 				else {
