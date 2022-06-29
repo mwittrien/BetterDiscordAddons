@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.6
+ * @version 1.2.7
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpotifyControls",
 			"author": "DevilBro",
-			"version": "1.2.6",
+			"version": "1.2.7",
 			"description": "Adds a Control Panel while listening to Spotify on a connected Account"
 		}
 	};
@@ -90,7 +90,7 @@ module.exports = (_ => {
 							break;
 					};
 					BDFDB.LibraryRequires.request({
-						url: `https://api.spotify.com/v1/me/player${type ? "/" + type : ""}${Object.entries(Object.assign({}, data)).map(n => `?${n[0]}=${n[1]}`).join("")}`,
+						url: `https://api.spotify.com/v1/me/player${type ? "/" + type : ""}?${Object.entries(Object.assign({device_id: device.id}, data)).map(n => `${n[0]}=${n[1]}`).join("&")}`,
 						method: method,
 						headers: {
 							authorization: `Bearer ${socket.accessToken}`
@@ -108,6 +108,7 @@ module.exports = (_ => {
 						else if (response && response.statusCode == 404) {
 							this.props.noDevice = true;
 							BDFDB.NotificationUtils.toast(_this.labels.nodevice_text, {type: "danger", timeout: 60000});
+							lastSong = null;
 							callback({});
 						}
 						else {
@@ -119,6 +120,7 @@ module.exports = (_ => {
 			}
 			render() {
 				let socketDevice = BDFDB.LibraryModules.SpotifyTrackUtils.getActiveSocketAndDevice();
+				if (this.props.song) this.props.noDevice = false;
 				if (!socketDevice || this.props.noDevice) return null;
 				if (this.props.song) {
 					playbackState.is_playing = true;
@@ -243,7 +245,7 @@ module.exports = (_ => {
 											BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
 												type: "previous",
 												player: this,
-												disabled: socketDevice.device.is_restricted,
+												disabled: socketDevice.device.is_restricted || !socketDevice.socket.isPremium,
 												onClick: _ => {
 													if (previousIsClicked || !_this.settings.general.doubleBack) {
 														previousIsClicked = false;
@@ -267,18 +269,8 @@ module.exports = (_ => {
 												icon: this.props.song ? 0 : 1,
 												disabled: socketDevice.device.is_restricted,
 												onClick: _ => {
-													console.log(this);
-													console.log(connection);
-													console.log(BDFDB.LibraryModules.ConnectionStore.getAccounts());
-													console.log(BDFDB.LibraryModules.SpotifyTrackUtils.getActiveSocketAndDevice());
-													if (this.props.song) {
-														playbackState.is_playing = false;
-														this.request(socketDevice.socket, socketDevice.device, "pause");
-													}
-													else {
-														playbackState.is_playing = true;
-														this.request(socketDevice.socket, socketDevice.device, "play");
-													}
+													if (this.props.song) this.request(socketDevice.socket, socketDevice.device, "pause");
+													else this.request(socketDevice.socket, socketDevice.device, "play");
 												}
 											}),
 											BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
@@ -406,13 +398,13 @@ module.exports = (_ => {
 				return `${hours > 0 ? hours + ":" : ""}${hours > 0 && minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`
 			}
 			render() {
-				let maxTime = this.props.song.timestamps.end - this.props.song.timestamps.start;
-				let currentTime = (!playbackState.is_playing && stopTime ? stopTime : new Date()) - this.props.song.timestamps.start;
+				let maxTime = !this.props.song ? 0 : this.props.song.timestamps.end - this.props.song.timestamps.start;
+				let currentTime = !this.props.song ? 0 : (!playbackState.is_playing && stopTime ? stopTime : new Date()) - this.props.song.timestamps.start;
 				currentTime = currentTime > maxTime ? maxTime : currentTime;
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN._spotifycontrolstimeline,
 					children: [
-						BDFDB.ReactUtils.createElement("div", {
+						BDFDB.ReactUtils.createElement(this.props.socket.isPremium ? BDFDB.LibraryComponents.Clickable : "div", {
 							className: BDFDB.disCN._spotifycontrolsbar,
 							children: [
 								BDFDB.ReactUtils.createElement("div", {
@@ -424,7 +416,7 @@ module.exports = (_ => {
 									style: {left: `${currentTime / maxTime * 100}%`}
 								})
 							],
-							onClick: event => {
+							onClick: !this.props.socket.isPremium ? (_ => {}) : event => {
 								let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN._spotifycontrolsbar, event.target));
 								this.props.controls.request(this.props.socket, this.props.device, "seek", {
 									position_ms: Math.round(BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, maxTime], event.clientX))
