@@ -2904,6 +2904,9 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .icon-2PiQ65.applicationCommand-3YMgNf::before {
 	-webkit-mask: url(https://discord.com/assets/561a626f671b8fd8f0c2e85c97df9b04.svg);
 }
+.icon-2PiQ65.autoModerationBlockMessage-97cbNX::before {
+	-webkit-mask: url(https://discord.com/assets/210ac667f45d13bc52020744f008b1ed.svg);
+}
 .icon-2PiQ65.autoModerationRule-2pc9PC::before {
 	-webkit-mask: url(https://discord.com/assets/210ac667f45d13bc52020744f008b1ed.svg);
 }
