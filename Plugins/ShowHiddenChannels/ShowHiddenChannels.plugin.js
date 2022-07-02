@@ -396,7 +396,6 @@ module.exports = (_ => {
 			processChannels (e) {
 				if (!e.instance.props.guild || e.instance.props.guild.id.length < 16) return;
 				let show = !blackList.includes(e.instance.props.guild.id), sortAtBottom = this.settings.sortOrder.hidden == sortOrders.BOTTOM.value;
-				e.instance.props.guildChannels = new e.instance.props.guildChannels.constructor(e.instance.props.guildChannels.id);
 				e.instance.props.guildChannels.categories = Object.assign({}, e.instance.props.guildChannels.categories);
 				hiddenChannelCache[e.instance.props.guild.id] = [];
 				let processCategory = (category, insertChannelless) => {
