@@ -609,6 +609,11 @@
 	background-color: rgb(var(--accentcolor));
 }
 
+.stickers-2JFQr2 .featureTitle-3N9Stg,						/* feature title		stickers							*/
+.featurePremiumGuild-2uV6-N .featureTitle-3N9Stg {			/* feature title		premium								*/
+	color: rgb(var(--accentcolor));
+}
+
 .gridItemGuildSubscription-1sZ0fD::before {
 	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(162, 48, 194), rgba(162, 48, 194, 0.5));
 }
