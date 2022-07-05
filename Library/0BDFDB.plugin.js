@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.2
+ * @version 2.4.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.4.2",
+			"version": "2.4.3",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
@@ -3302,10 +3302,10 @@ module.exports = (_ => {
 		BDFDB.GuildUtils.openMenu = function (guild, e = mousePosition) {
 			if (!guild) return;
 			e = BDFDB.ListenerUtils.copyEvent(e.nativeEvent || e, (e.nativeEvent || e).currentTarget);
-			let menu = BDFDB.ModuleUtils.findByName("GuildContextMenu", false, true);
+			let menu = BDFDB.ModuleUtils.findByName("GuildContextMenuWrapper", false, true);
 			if (menu) Internal.LibraryModules.ContextMenuUtils.openContextMenu(e, e2 => BDFDB.ReactUtils.createElement(menu.exports.default, Object.assign({}, e2, {guild})));
 			else Internal.lazyLoadModuleImports(BDFDB.ModuleUtils.findByString("renderUnavailableBadge", "guild:", "openContextMenu")).then(_ => {
-				menu = BDFDB.ModuleUtils.findByName("GuildContextMenu", false);
+				menu = BDFDB.ModuleUtils.findByName("GuildContextMenuWrapper", false);
 				if (menu) Internal.LibraryModules.ContextMenuUtils.openContextMenu(e, e2 => BDFDB.ReactUtils.createElement(menu.exports.default, Object.assign({}, e2, {guild})));
 			});
 		};
@@ -8236,7 +8236,7 @@ module.exports = (_ => {
 			Internal.processSettingsView = function (e) {
 				if (e.node && e.node.parentElement && e.node.parentElement) Internal.addListObserver(e.node.parentElement);
 			};
-		
+			
 			let AppViewExport = InternalData.ModuleUtilsConfig.Finder.AppView && BDFDB.ModuleUtils.findByString(InternalData.ModuleUtilsConfig.Finder.AppView.strings, false);
 			if (AppViewExport) Internal.processShakeable = function (e) {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => {
@@ -8640,7 +8640,7 @@ module.exports = (_ => {
 					if (!InternalData.ModuleUtilsConfig.ContextMenuSubItemsMap[mappedType]) PluginStores.contextChunkObserver[type].filter = m => {
 						if (!m || !(m.default || m.type)) return;
 						const d = m.default || m.type;
-						if (d.displayName && d.displayName.endsWith("ContextMenu") && `${InternalData.ModuleUtilsConfig.ContextMenuTypes.find(t => d.displayName.indexOf(t) > -1)}ContextMenu` == type) {
+						if (d.displayName && (d.displayName.endsWith("ContextMenu") || d.displayName.endsWith("ContextMenuWrapper")) && `${InternalData.ModuleUtilsConfig.ContextMenuTypes.find(t => d.displayName.indexOf(t) > -1)}ContextMenu` == type) {
 							m.__BDFDB_ContextMenu_Patch_Name = type;
 							return true;
 						}
