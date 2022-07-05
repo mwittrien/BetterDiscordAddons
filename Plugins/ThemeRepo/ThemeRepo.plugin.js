@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.4
+ * @version 2.3.5
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
-			"version": "2.3.4",
+			"version": "2.3.5",
 			"description": "Allows you to download all Themes from BD's Website within Discord"
 		}
 	};
@@ -877,7 +877,7 @@ module.exports = (_ => {
 														if (!list || this.props.downloading) return;
 														this.props.downloading = true;
 														let loadingToast = BDFDB.NotificationUtils.toast(`${BDFDB.LanguageUtils.LibraryStringsFormat("loading", this.props.data.name)} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {timeout: 0, ellipsis: true});
-														let autoloadKey = this.props.data.state == pluginStates.OUTDATED ? "startUpdated" : "startDownloaded";
+														let autoloadKey = this.props.data.state == themeStates ? "startUpdated" : "startDownloaded";
 														BDFDB.LibraryRequires.request(this.props.data.rawSourceUrl, (error, response, body) => {
 															if (error) {
 																delete this.props.downloading;
