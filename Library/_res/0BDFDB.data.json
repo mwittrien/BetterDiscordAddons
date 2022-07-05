@@ -29,7 +29,6 @@
 		"CategoryCollapseStore": {"props": ["getCollapsedCategories", "isCollapsed"]},
 		"CategoryCollapseUtils": {"props": ["categoryCollapse", "categoryCollapseAll"]},
 		"ChannelIconUtils": {"props": ["getChannelIconComponent", "getChannelIconTooltipText"]},
-		"ChannelListHoistedRowsStore": {"strings": ["useIsThreadModerator", ".ChannelListHoistedRow."]},
 		"ChannelListStore": {"name": "ChannelListStore"},
 		"ChannelUtils": {"props": ["selectChannel", "selectPrivateChannel"]},
 		"ChannelStore": {"props": ["getChannel", "getDMFromUserId"]},
