@@ -508,6 +508,29 @@ body::after {
 .wrapper-1_HaEi .bar-2eAyLE:not(.mention-3XBnnZ)::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + var(--guildchanneltransparency) * 1.9 + 0.1));
 }
+.fixedBottomList-1yrBla {
+	background: transparent !important;
+	box-shadow: none !important;
+}
+.fixedBottomList-1yrBla::before,
+.fixedBottomList-1yrBla::after {
+	content: "";
+	position: relative;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	pointer-events: none;
+	z-index: -1;
+}
+.fixedBottomList-1yrBla::before {
+	background: var(--background) var(--backgroundposition)/var(--backgroundsize);
+	background-attachment: fixed;
+}
+.fixedBottomList-1yrBla::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--guildchanneltransparency) * 2));
+	backdrop-filter: blur(var(--backgroundblur));
+}
 
 
 /* ~~~~		5.		CHANNELLIST						~~~~ */
