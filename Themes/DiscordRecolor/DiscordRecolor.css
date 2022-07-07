@@ -122,6 +122,8 @@
 	--interactive-active: rgb(var(--textbrightest));
 	--interactive-muted: rgb(var(--textdarkest));
 	
+	--modal-background: rgb(var(--backgroundprimary));
+	
 	--background-primary: rgb(var(--backgroundprimary));
 	--background-secondary: rgb(var(--backgroundsecondary));
 	--background-secondary-alt: rgb(var(--backgroundsecondaryalt));
