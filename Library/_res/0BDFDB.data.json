@@ -190,6 +190,10 @@
 			"GroupDMUserContextMenu": "UserContextMenu"
 		},
 		"ContextMenuSubItemsMap": {
+			"ChannelContextMenu": {
+				"keys": ["channel"],
+				"items": ["useChannelFavoriteSetNickname", "useChannelGoToOriginalGuildItem", "useChannelCloneItem", "useChannelCopyLinkItem", "useChannelEditItem", "useChannelMarkAsReadItem"]
+			},
 			"UserContextMenu": {
 				"keys": ["user", "channel"],
 				"items": ["useHideNoVideoParticipantsItem", "useHideSelfVideoItem", "usePreviewVideoItem", "useChangeIdentityItem", "useMoveToAudienceItem", "useAddFriendNicknameItem", "useAddNoteItem", "useBlockUserItem", "useUserRelationshipItems", "useUserManagementItems", "useMoveUserVoiceItems", "useCallUserItem", "useFocusVideoItem", "useInviteUserToGuildItems", "useMentionUserItem", "useMessageUserItem", "useUserProfileItem", "useUserRolesItems", "useUserVolumeItem", "useWatchStreamItem", "useCloseDMItem", "useMuteChannelItem"]
@@ -220,6 +224,7 @@
 			"useMuteChannelItem": {"strings": ["DM", "MenuItem", "Messages.MUTE_CHANNEL"], "lazyLoaded": true},
 			"useUserManagementItems": {"strings": ["canManageUser", "MenuItem", "Messages.BAN_USER"], "lazyLoaded": true},
 			"useUserRelationshipItems": {"strings": ["ContextMenu", "isFriend", "addRelationship", "Messages.REMOVE_FRIEND"], "lazyLoaded": true},
+			"useInviteItem": {"strings": ["CREATE_INSTANT_INVITE", "invite-people"]},
 			"Account": {"class": "accountinfo"},
 			"App": {"class": "app"},
 			"AppSkeleton": {"class": "app"},

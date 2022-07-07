@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.2.2
+ * @version 3.2.3
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "3.2.2",
+			"version": "3.2.3",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
 		}
 	};
@@ -202,6 +202,7 @@ module.exports = (_ => {
 						VoiceUsers: "render"
 					},
 					after: {
+						useInviteItem: "default",
 						ChannelItem: "default"
 					}
 				};
@@ -330,41 +331,17 @@ module.exports = (_ => {
 			
 			onChannelContextMenu (e) {
 				if (e.instance.props.channel) {
-					if (e.instance.props.channel.id.endsWith("hidden") && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ChannelMuteItem"});
-						if (index > -1) children.splice(index, 1);
-						[children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mark-channel-read", group: true});
-						children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-							children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-								label: this.labels.context_changeorder,
-								id: BDFDB.ContextMenuUtils.createItemId(this.name, "change_order"),
-								children: Object.keys(sortOrders).filter(n => sortOrders[n].value != sortOrders.EXTRA.value).map(n => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-									children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-										label: this.labels["context_changeorder_" + sortOrders[n].value],
-										id: BDFDB.ContextMenuUtils.createItemId(this.name, "change_order", sortOrders[n].value),
-										action: _ => {
-											this.settings.sortOrder.hidden = sortOrders[n].value;
-											BDFDB.DataUtils.save(this.settings.sortOrder, this, "sortOrder");
-											this.forceUpdateAll();
-										}
-									})
-								}))
-							})
-						}));
-					}
 					let isHidden = this.isChannelHidden(e.instance.props.channel.id);
-					if (isHidden) {
+					if (e.subType == "useChannelMarkAsReadItem" && (isHidden || this.settings.general.showForNormal)) {
 						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "invite-people"});
 						if (index > -1) children.splice(index, 1);
 					}
-					if (isHidden || this.settings.general.showForNormal) {
-						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mark-channel-read", group: true});
-						children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-							children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-								label: this.labels.context_channelaccess,
-								id: BDFDB.ContextMenuUtils.createItemId(this.name, "permissions"),
-								action: _ => this.openAccessModal(e.instance.props.channel, !isHidden)
-							})
+					if (e.subType == "useChannelMarkAsReadItem" && (isHidden || this.settings.general.showForNormal)) {
+						if (e.returnvalue.length) e.returnvalue.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSeparator, {}));
+						e.returnvalue.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							label: this.labels.context_channelaccess,
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, "permissions"),
+							action: _ => this.openAccessModal(e.instance.props.channel, !isHidden)
 						}));
 					}
 				}
@@ -391,6 +368,10 @@ module.exports = (_ => {
 			
 			onGuildHeaderContextMenu (e) {
 				this.onGuildContextMenu(e);
+			}
+			
+			processUseInviteItem (e) {
+				if (e.instance.props.channel && this.isChannelHidden(e.instance.props.channel.id)) return null;
 			}
 			
 			processChannels (e) {
