@@ -5375,6 +5375,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"797199624992849960": 	{"active": true,	"tier": "t3",	"text": "",											"color": "",			"id": "blink (AhBo)"},
 		"384941155558752258": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "jack (j.bev)"},
 		"935758254858973224": 	{"active": true,	"tier": "t3",	"text": "",											"color": "",			"id": "SaneVR (rukin)"},
 		"870962330417102919": 	{"active": false,	"tier": "t2",	"text": "",											"color": "",			"id": "gobber (pobge)"},
