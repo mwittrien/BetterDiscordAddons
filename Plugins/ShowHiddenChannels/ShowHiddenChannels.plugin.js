@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.2.3
+ * @version 3.2.4
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "3.2.3",
+			"version": "3.2.4",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
 		}
 	};
@@ -330,13 +330,9 @@ module.exports = (_ => {
 			}
 			
 			onChannelContextMenu (e) {
-				if (e.instance.props.channel) {
+				if (e.instance.props.channel && e.instance.props.channel.guild_id && e.subType == "useChannelMarkAsReadItem") {
 					let isHidden = this.isChannelHidden(e.instance.props.channel.id);
-					if (e.subType == "useChannelMarkAsReadItem" && (isHidden || this.settings.general.showForNormal)) {
-						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "invite-people"});
-						if (index > -1) children.splice(index, 1);
-					}
-					if (e.subType == "useChannelMarkAsReadItem" && (isHidden || this.settings.general.showForNormal)) {
+					if (isHidden || this.settings.general.showForNormal) {
 						if (e.returnvalue.length) e.returnvalue.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSeparator, {}));
 						e.returnvalue.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_channelaccess,
