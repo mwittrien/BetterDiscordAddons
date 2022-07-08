@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.8
+ * @version 4.3.9
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.3.8",
+			"version": "4.3.9",
 			"description": "Allows you to locally edit Channels"
 		}
 	};
@@ -222,48 +222,49 @@ module.exports = (_ => {
 			}
 
 			onChannelContextMenu (e) {
-				this.injectItem(e);
+				if (e.instance.props.channel && e.subType == "useChannelDeleteItem") {
+					if (e.returnvalue.length) e.returnvalue.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSeparator, {}));
+					e.returnvalue.push(this.createMenuItem(e.instance.props.channel));
+				}
 			}
 			
 			onGroupDMContextMenu (e) {
-				this.injectItem(e);
-			}
-			
-			injectItem (e) {
 				if (e.instance.props.channel) {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 					children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: this.labels.context_localchannelsettings,
-							id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-submenu"),
-							children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-								children: [
-									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-										label: this.labels.submenu_channelsettings,
-										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
-										action: _ => {
-											this.openChannelSettingsModal(e.instance.props.channel);
-										}
-									}),
-									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-										label: this.labels.submenu_resetsettings,
-										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
-										color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
-										disabled: !changedChannels[e.instance.props.channel.id],
-										action: event => {
-											let remove = _ => {
-												BDFDB.DataUtils.remove(this, "channels", e.instance.props.channel.id);
-												this.forceUpdateAll(true);
-											};
-											if (event.shiftKey) remove();
-											else BDFDB.ModalUtils.confirm(this, this.labels.confirm_reset, remove);
-										}
-									})
-								]
-							})
-						})
+						children: this.createMenuItem(e.instance.props.channel)
 					}));
 				}
+			}
+			
+			createMenuItem (channel) {
+				return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					label: this.labels.context_localchannelsettings,
+					id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-submenu"),
+					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+						children: [
+							BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								label: this.labels.submenu_channelsettings,
+								id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
+								action: _ => this.openChannelSettingsModal(channel)
+							}),
+							BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								label: this.labels.submenu_resetsettings,
+								id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
+								color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
+								disabled: !changedChannels[channel.id],
+								action: event => {
+									let remove = _ => {
+										BDFDB.DataUtils.remove(this, "channels", channel.id);
+										this.forceUpdateAll(true);
+									};
+									if (event.shiftKey) remove();
+									else BDFDB.ModalUtils.confirm(this, this.labels.confirm_reset, remove);
+								}
+							})
+						]
+					})
+				});
 			}
 			
 			processChannelEditorContainer (e) {
