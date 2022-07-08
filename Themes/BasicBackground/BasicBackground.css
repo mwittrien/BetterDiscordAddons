@@ -151,15 +151,14 @@ html {
 		10.	DOWNLOADAPPMODAL
 		11.	GUILDBOOSTMODAL
 		12.	REACTIONSMODAL
-		13.	GUILDTEMPLATEMODAL
-		14.	GUILDWELCOMEMODAL
-		15.	GUILDRULESMODAL
-		16.	GUILDFEEDBACKMODAL
-		17.	SCREENSHAREMODAL
-		18.	PHONEVERIFICATIONMODAL
-		19.	NOTIFICATIONSMODAL
-		20.	DISCOVERYENTRYMODAL
-		21.	NITROFEATUREMODAL
+		13.	GUILDWELCOMEMODAL
+		14.	GUILDRULESMODAL
+		15.	GUILDFEEDBACKMODAL
+		16.	SCREENSHAREMODAL
+		17.	PHONEVERIFICATIONMODAL
+		18.	NOTIFICATIONSMODAL
+		19.	DISCOVERYENTRYMODAL
+		20.	NITROFEATUREMODAL
 	14.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -4141,68 +4140,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	color: var(--text-muted);
 }
 
-/* ----		13.13.	GUILDTEMPLATEMODAL				---- */
-
-.ctaSection-3LqbxQ {										/* modal				ctasection							*/
-	background-color: transparent;
-}
-.formSection-23ecNl {										/* modal				formsection							*/
-	background-color: transparent;
-}
-
-.usagePill-16kKHu {											/* modal				usagepill 1							*/
-	background-color: rgba(var(--transparencycolor), .3);
-}
-.usagePill-P-Cmcv {											/* modal				usagePill 2							*/
-	background-color: rgba(var(--transparencycolor), .3);
-}
-
-.channelsWrapper-51IUFR {									/* modal				channelswrapper						*/
-	background-color: rgba(var(--transparencycolor), .3);
-}
-
-.rolesWrapper-1LLZrU {										/* modal				roleswrapper							*/
-	background-color: rgba(var(--transparencycolor), .3);
-}
-
-#app-mount .role-2mCo-N {									/* modal				role								*/
-	border-color: rgba(var(--textbrighter), .6);
-	border-radius: 5px;
-	padding: 0 5px;
-	position: relative;
-}
-#app-mount .role-2mCo-N[style*="border-color: rgba(185, 187, 190, .6)"] {
-	border-color: rgba(var(--textbrighter), .6) !important;
-}
-#app-mount .role-2mCo-N .roleName-3kJr77 {					/* modal				rolename							*/
-	color: rgb(var(--textbrightest));
-	margin: 0;
-	font-weight: normal;
-	position: relative;
-	height: 20px;
-	line-height: 20px;
-	z-index: 1000;
-	pointer-events: none;
-}
-#app-mount .role-2mCo-N .roleCircle-1ER2zO {				/* modal				rolecircle							*/
-	position: absolute;
-	background-color: rgb(var(--textbrighter));
-	border-radius: 3px;
-	opacity: 0.3;
-	height: 100%;
-	width: 100%;
-	margin: 0;
-	left: 0;
-	top: 0;
-}
-#app-mount .role-2mCo-N .roleCircle-1ER2zO[style*="background-color: rgb(185, 187, 190)"] {
-	background-color: rgb(var(--textbrighter)) !important;
-}
-#app-mount .role-2mCo-N .roleIcon-29epUq {
-	z-index: 1;
-}
-
-/* ----		13.14.	GUILDWELCOMEMODAL				---- */
+/* ----		13.13.	GUILDWELCOMEMODAL				---- */
 
 .optionContainer-yOpaLq {									/* modal				option								*/
 	background-color: rgba(var(--transparencycolor), .2);
@@ -4211,7 +4149,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .4);
 }
 
-/* ----		13.15.	GUILDRULESMODAL					---- */
+/* ----		13.14.	GUILDRULESMODAL					---- */
 
 .guildSidebar-UHnQqs {										/* modal				sidebar								*/
 	background-color: rgba(var(--transparencycolor), .4);
@@ -4220,7 +4158,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .2);
 }
 
-/* ----		13.16.	GUILDFEEDBACKMODAL				---- */
+/* ----		13.15.	GUILDFEEDBACKMODAL				---- */
 
 .root-cw9rWQ {												/* modal				items								*/
 	background-color: transparent;
@@ -4236,7 +4174,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgb(var(--transparencycolor), .4);
 }
 
-/* ----		13.17.	SCREENSHAREMODAL				---- */
+/* ----		13.16.	SCREENSHAREMODAL				---- */
 
 #app-mount .sourceThumbnail-3n4cjJ {						/* modal				preview tiles						*/
 	background-color: rgba(var(--transparencycolor), .4);
@@ -4256,7 +4194,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background: rgba(var(--transparencycolor), .5);
 }
 
-/* ----		13.18.	PHONEVERIFICATIONMODAL			---- */
+/* ----		13.17.	PHONEVERIFICATIONMODAL			---- */
 
 .phoneField-3NAPDv {
 	background-color: rgba(var(--transparencycolor), .2);
@@ -4268,7 +4206,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	position: absolute !important;
 }
 
-/* ----		13.19.	NOTIFICATIONSMODAL				---- */
+/* ----		13.18.	NOTIFICATIONSMODAL				---- */
 
 #app-mount .channelName-IPB6B3 {
 	color: var(--header-primary);
@@ -4292,7 +4230,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	border: 1px dashed var(--background-floating);
 }
 
-/* ----		13.20.	DISCOVERYENTRYMODAL				---- */
+/* ----		13.19.	DISCOVERYENTRYMODAL				---- */
 
 .checkboxWrapper-2fDzaA.row-31nALW {
 	background-color: rgba(var(--transparencycolor),.2);
@@ -4307,7 +4245,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	color: var(--header-primary);
 }
 
-/* ----		13.21.	NITROFEATUREMODAL				---- */
+/* ----		13.20.	NITROFEATUREMODAL				---- */
 
 #app-mount .cardImageBackground-1zqQ8d {
 	background: #000;
@@ -4559,14 +4497,21 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	border-color: rgba(var(--textbrighter), .6) !important;
 }
 #app-mount .role-2TIOKu .roleName-2ZJJYR {					/* body					rolename							*/
-	color: rgb(var(--textbrightest));
-	margin: 0;
-	font-weight: normal;
 	position: relative;
+	color: rgb(var(--textbrightest));
 	height: 20px;
 	line-height: 20px;
+	margin: 0;
+	font-weight: normal;
 	z-index: 1000;
 	pointer-events: none;
+}
+#app-mount .role-2TIOKu .roleRemoveButton-17oXnT {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
 }
 #app-mount .role-2TIOKu .roleCircle-1EgnFN {				/* body					rolecircle							*/
 	position: absolute;
@@ -4582,10 +4527,14 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .role-2TIOKu .roleCircle-1EgnFN[style*="background-color: rgb(185, 187, 190)"] {
 	background-color: rgb(var(--textbrighter)) !important;
 }
-#app-mount .role-2TIOKu .roleCircle-1EgnFN:not(:empty):hover {
+#app-mount .role-2TIOKu .roleCircle-1EgnFN:not(:only-child):hover {
 	opacity: 1;
 	z-index: 2000;
 	cursor: pointer;
+}
+#app-mount .role-2TIOKu .roleRemoveIcon-387wKV {
+	z-index: 2001;
+	pointer-events: none;
 }
 #app-mount .role-2TIOKu .roleIcon-29epUq {
 	z-index: 1;
