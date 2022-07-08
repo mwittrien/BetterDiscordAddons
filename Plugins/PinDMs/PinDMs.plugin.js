@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.1
+ * @version 1.9.2
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "PinDMs",
 			"author": "DevilBro",
-			"version": "1.9.1",
+			"version": "1.9.2",
 			"description": "Allows you to pin DMs, making them appear at the top of your DMs/ServerList"
-		},
-		"changeLog": {
-			"added": {
-				"Predefined Group for Bots": ""
-			}
 		}
 	};
 
@@ -259,13 +254,13 @@ module.exports = (_ => {
 			}
 
 			onUserContextMenu (e) {
-				if (e.instance.props.channel && e.subType == "useCloseDMItem") e.returnvalue.unshift(this.createItem(e.instance.props.channel.id));
+				if (e.instance.props.channel && !e.instance.props.channel.guild_id && e.subType == "useCloseDMItem") e.returnvalue.unshift(this.createItem(e.instance.props.channel.id));
 			}
 
-			onGroupDMContextMenu (e) {
-				if (e.instance.props.channel) {
-					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "change-icon"});
-					if (index > -1) children.splice(index + 1, 0, this.createItem(e.instance.props.channel.id));
+			onChannelContextMenu (e) {
+				if (e.instance.props.channel && !e.instance.props.channel.guild_id && e.instance.props.channel.isGroupDM() && e.subType == "useChannelMarkAsReadItem") {
+					if (e.returnvalue.length > 0) e.returnvalue.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSeparator, {}));
+					e.returnvalue.push(this.createItem(e.instance.props.channel.id));
 				}
 			}
 
