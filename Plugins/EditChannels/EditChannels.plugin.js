@@ -519,17 +519,6 @@ module.exports = (_ => {
 				wrapper.props.name = [wrapper.props.name];
 				if (wrapper.props.avatar) wrapper.props.avatar.props.src = this.getGroupIcon(instance.props.channel.id);
 			}
-
-			processPrivateChannel (e) {
-				if (e.instance.props.channel && e.instance.props.channel.isGroupDM() && this.settings.places.channelList) {
-					if (changedChannels[e.instance.props.channel.id] && changedChannels[e.instance.props.channel.id].name) {
-						e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
-					}
-					this.changeChannelColor(e.returnvalue.props.name, e.instance.props.channel.id, {modify: BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "hovered", "selected", "hasUnreadMessages", "muted")});
-					e.returnvalue.props.name = [e.returnvalue.props.name];
-					e.returnvalue.props.avatar.props.src = this.getGroupIcon(e.instance.props.channel.id);
-				}
-			}
 			
 			processQuickSwitchChannelResult (e) {
 				if (e.instance.props.channel && this.settings.places.quickSwitcher) {
