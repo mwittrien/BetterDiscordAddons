@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.9.9
+ * @version 7.0.0
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "6.9.9",
+			"version": "7.0.0",
 			"description": "Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders"
 		}
 	};
@@ -653,8 +653,9 @@ module.exports = (_ => {
 
 			processGuilds (e) {
 				if (this.settings.general.extraColumn) {
-					if (folderGuildContent && (e.instance.props.isAppFullscreen != folderGuildContent.props.isAppFullscreen || e.instance.props.themeOverride != folderGuildContent.props.themeOverride)) {
-						folderGuildContent.props.isAppFullscreen = e.instance.props.isAppFullscreen;
+					let fullscreen = BDFDB.LibraryModules.VoiceChannelUtils.isFullscreenInContext();
+					if (folderGuildContent && (fullscreen != folderGuildContent.props.isAppFullscreen || e.instance.props.themeOverride != folderGuildContent.props.themeOverride)) {
+						folderGuildContent.props.isAppFullscreen = fullscreen;
 						folderGuildContent.props.themeOverride = e.instance.props.themeOverride;
 						BDFDB.ReactUtils.forceUpdate(folderGuildContent);
 					}

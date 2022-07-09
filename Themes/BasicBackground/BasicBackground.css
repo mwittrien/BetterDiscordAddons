@@ -159,6 +159,7 @@ html {
 		18.	NOTIFICATIONSMODAL
 		19.	DISCOVERYENTRYMODAL
 		20.	NITROFEATUREMODAL
+		21.	DIRECTORYMODAL
 	14.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -4269,6 +4270,36 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 #app-mount .cardInfo-62VDSb {
 	background: rgba(var(--transparencycolor),.4);
+}
+
+/* ----		13.21.	DIRECTORYMODAL					---- */
+
+#app-mount .directoryModal-YJsOMv {							/* modal				container							*/
+	background-color: transparent;
+	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
+	position: relative;
+	overflow: hidden;
+}
+.directoryModal-YJsOMv::before,
+.directoryModal-YJsOMv::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.directoryModal-YJsOMv::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+}
+.directoryModal-YJsOMv::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
+	backdrop-filter: blur(var(--popoutblur));
 }
 
 

@@ -259,6 +259,7 @@ html {
 		22.	DISPATCHERROR
 		23.	HYPESQUADQUIZ
 		24.	NITROFEATUREMODAL
+		25.	DIRECTORYMODAL
 	11.	POPOUTS
 		1.	USERPOPOUT
 		2.	EMOJIPICKER
@@ -3305,6 +3306,12 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 #app-mount .cardInfo-62VDSb {
 	background: var(--background-floating);
+}
+
+/* ----		10.25.	DIRECTORYMODAL					---- */
+
+#app-mount .directoryModal-YJsOMv {
+	background: var(--background-primary);
 }
 
 
