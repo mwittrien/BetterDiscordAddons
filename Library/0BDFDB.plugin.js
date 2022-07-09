@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.4
+ * @version 2.4.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.4.4",
+			"version": "2.4.5",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
@@ -4597,50 +4597,50 @@ module.exports = (_ => {
 			while (id.length < 6) id += generationChars[Math.floor(Math.random() * generationChars.length)];
 			return id;
 		};
-		BDFDB.disCN = new Proxy(DiscordClasses, {
+		BDFDB.disCN = new Proxy({}, {
 			get: function (list, item) {
 				return Internal.getDiscordClass(item, false).replace("#", "");
 			}
 		});
-		BDFDB.disCNS = new Proxy(DiscordClasses, {
+		BDFDB.disCNS = new Proxy({}, {
 			get: function (list, item) {
 				return Internal.getDiscordClass(item, false).replace("#", "") + " ";
 			}
 		});
-		BDFDB.disCNC = new Proxy(DiscordClasses, {
+		BDFDB.disCNC = new Proxy({}, {
 			get: function (list, item) {
 				return Internal.getDiscordClass(item, false).replace("#", "") + ",";
 			}
 		});
-		BDFDB.dotCN = new Proxy(DiscordClasses, {
+		BDFDB.dotCN = new Proxy({}, {
 			get: function (list, item) {
 				let className = Internal.getDiscordClass(item, true);
 				return (className.indexOf("#") == 0 ? "" : ".") + className;
 			}
 		});
-		BDFDB.dotCNS = new Proxy(DiscordClasses, {
+		BDFDB.dotCNS = new Proxy({}, {
 			get: function (list, item) {
 				let className = Internal.getDiscordClass(item, true);
 				return (className.indexOf("#") == 0 ? "" : ".") + className + " ";
 			}
 		});
-		BDFDB.dotCNC = new Proxy(DiscordClasses, {
+		BDFDB.dotCNC = new Proxy({}, {
 			get: function (list, item) {
 				let className = Internal.getDiscordClass(item, true);
 				return (className.indexOf("#") == 0 ? "" : ".") + className + ",";
 			}
 		});
-		BDFDB.notCN = new Proxy(DiscordClasses, {
+		BDFDB.notCN = new Proxy({}, {
 			get: function (list, item) {
 				return `:not(.${Internal.getDiscordClass(item, true).split(".")[0]})`;
 			}
 		});
-		BDFDB.notCNS = new Proxy(DiscordClasses, {
+		BDFDB.notCNS = new Proxy({}, {
 			get: function (list, item) {
 				return `:not(.${Internal.getDiscordClass(item, true).split(".")[0]}) `;
 			}
 		});
-		BDFDB.notCNC = new Proxy(DiscordClasses, {
+		BDFDB.notCNC = new Proxy({}, {
 			get: function (list, item) {
 				return `:not(.${Internal.getDiscordClass(item, true).split(".")[0]}),`;
 			}
