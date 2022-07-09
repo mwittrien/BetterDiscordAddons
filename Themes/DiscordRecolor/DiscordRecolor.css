@@ -1085,6 +1085,10 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	display: none;
 }
 
+#app-mount .container-3wLKDe {
+	background-color: var(--background-secondary);
+}
+
 #app-mount .noResultIcon-3o4K-b {
 	background-image: url(https://discord.com/assets/1eed0d895df6e35f164d8ed5e84037d2.svg);
 	opacity: .5;
