@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.3
+ * @version 2.4.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.4.3",
+			"version": "2.4.4",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
@@ -6609,8 +6609,11 @@ module.exports = (_ => {
 						onContextMenu: this.handleContextMenu.bind(this),
 						children: [
 							!this.props.noCircle ? BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.userpopoutrolecircle,
-								style: {backgroundColor: color}
+								className: BDFDB.disCN.userpopoutroleremovebutton,
+								children: BDFDB.ReactUtils.createElement("span", {
+									className: BDFDB.disCN.userpopoutrolecircle,
+									style: {backgroundColor: color}
+								})
 							}) : null,
 							BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.userpopoutrolename,
@@ -8578,7 +8581,6 @@ module.exports = (_ => {
 								}
 							}
 							while (removedTypes.length) delete PluginStores.chunkObserver[removedTypes.pop()];
-							
 							let found = false, funcString = exports && exports.default && typeof exports.default == "function" && exports.default.toString();
 							if (funcString && funcString.indexOf(".page") > -1 && funcString.indexOf(".section") > -1 && funcString.indexOf(".objectType") > -1) {
 								const returnValue = exports.default({});
