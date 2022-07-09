@@ -907,6 +907,7 @@ body::after {
 }
 .message-2CShn3,											/* message				container							*/
 .messagesWrapper-RpOMA3 .wrapper-30-Nkg,					/* message				upload placeholder					*/
+.card-3x20HF .wrapper-30-Nkg,								/* message				home								*/
 .wrapper-15CKyy,											/* message				loading 							*/
 .message-3g3FYR,											/* message				mention popout						*/
 .message-372Ods,											/* message				inbox popout						*/
@@ -970,7 +971,7 @@ body::after {
 #app-mount .repliedMessage-3Z6XBG ~ * .avatar-2e8lTP {
 	top: 24px;
 }
-.container-3FojY8 .avatar-2e8lTP {
+#app-mount .container-3FojY8 .avatar-2e8lTP {
 	left: calc(-10px * var(--usechatbubbles));
 }
 
@@ -1169,6 +1170,7 @@ body::after {
 }
 #app-mount .cozyMessage-1DWF9U,								/* message				container cozy						*/
 #app-mount .messagesWrapper-RpOMA3 .cozy-VmLDNB,			/* message				upload placeholder cozy				*/
+#app-mount .card-3x20HF .cozy-VmLDNB,						/* message				home cozy							*/
 #app-mount .cozy-3hKWhq {									/* message				loading cozy						*/
 	margin-left: calc(80px * var(--usechatbubbles));
 	padding-left: calc(1px * (10 * var(--usechatbubbles) + 72 * (1 - var(--usechatbubbles))));
@@ -1196,6 +1198,19 @@ body::after {
 }
 .messages-23can0 .wrapper-30-Nkg {
 	border-radius: 0;
+}
+
+															/* message				home message						*/
+.interactiveCard-2iMtdk.selected-sszUNx, .interactiveCard-2iMtdk:active,
+.interactiveCard-2iMtdk:hover {
+	border-color: var(--background-secondary);
+}
+.feedItemHeader-txJq98 {
+	border-color: var(--background-primary);
+}
+.interactiveCard-2iMtdk.selected-sszUNx, .interactiveCard-2iMtdk:active .feedItemHeader-txJq98,
+.interactiveCard-2iMtdk:hover .feedItemHeader-txJq98 {
+	border-color: var(--background-secondary);
 }
 
 .avatar-l9Txm5 {											/* message				loading avatar						*/
