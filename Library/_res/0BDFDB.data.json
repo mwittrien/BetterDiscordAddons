@@ -1435,7 +1435,7 @@
 		"UserPopout": {"props": ["userPopout", "body"]},
 		"UserPopoutBody": {"props": ["rolesList", "note"]},
 		"UserPopoutFooter": {"props": ["wumpusTooltip", "footer"]},
-		"UserPopoutHeader": {"props": ["headerTop", "profileBadges"]},
+		"UserPopoutHeader": {"props": ["headerTop", "profileBadges", "aboutMeGuildIcon"]},
 		"UserProfile": {"props": ["root", "tabBarContainer"]},
 		"UserProfileHeader": {"props": ["header", "additionalActionsIcon"]},
 		"UserProfileInfoSection": {"props": ["userInfoSection", "connectedAccounts"]},
