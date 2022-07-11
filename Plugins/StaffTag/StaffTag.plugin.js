@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.3
+ * @version 1.5.4
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "StaffTag",
 			"author": "DevilBro",
-			"version": "1.5.3",
+			"version": "1.5.4",
 			"description": "Adds a Crown/Tag to Server Owners (or Admins/Management)"
 		},
 		"changeLog": {
@@ -300,15 +300,13 @@ module.exports = (_ => {
 					let userType = this.getUserType(e.instance.props.user);
 					if (userType) {
 						let inject = false, tagClass = "";
-						switch (e.instance.props.className) {
-							case BDFDB.disCN.userpopoutheadertagnonickname:
-								inject = this.settings.tagPlaces.userPopout;
-								tagClass = BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag;
-								break;
-							case BDFDB.disCN.userprofilenametag:
-								inject = this.settings.tagPlaces.userProfile;
-								tagClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
-								break;
+						if (e.instance.props.className.indexOf(BDFDB.disCN.userpopoutheadertagnonickname) > -1) {
+							inject = this.settings.tagPlaces.userPopout;
+							tagClass = BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag;
+						}
+						else if (e.instance.props.className.indexOf(BDFDB.disCN.userprofilenametag) > -1) {
+							inject = this.settings.tagPlaces.userProfile;
+							tagClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
 						}
 						if (inject) this.injectStaffTag(e.returnvalue.props.children, e.instance.props.user, userType, 2, {
 							tagClass: tagClass,
