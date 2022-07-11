@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.7
+ * @version 4.5.8
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.5.7",
+			"version": "4.5.8",
 			"description": "Allows you to locally edit Users"
 		}
 	};
@@ -523,29 +523,29 @@ module.exports = (_ => {
 				if (e.returnvalue && e.instance.props.user && (e.instance.props.className || e.instance.props.usernameClass)) {
 					let change = false, guildId = null;
 					let tagClass = "";
-					switch (e.instance.props.className) {
-						case BDFDB.disCN.userpopoutheadertagnonickname:
+					if (e.instance.props.className) {
+						if (e.instance.props.className.indexOf(BDFDB.disCN.userpopoutheadertagnonickname) > -1) {
 							change = this.settings.places.userPopout;
 							guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 							tagClass = BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag;
-							break;
-						case BDFDB.disCN.guildsettingsinviteusername:
+						}
+						else if (e.instance.props.className.indexOf(BDFDB.disCN.guildsettingsinviteusername) > -1) {
 							change = this.settings.places.guildSettings;
-							break;
-						case BDFDB.disCN.peoplesdiscordtag:
+						}
+						else if (e.instance.props.className.indexOf(BDFDB.disCN.peoplesdiscordtag) > -1) {
 							change = this.settings.places.friendList;
 							tagClass = BDFDB.disCN.bottagnametag;
-							break;
+						}
 					}
-					switch (e.instance.props.usernameClass) {
-						case BDFDB.disCN.messagereactionsmodalusername:
+					if (e.instance.props.usernameClass) {
+						if (e.instance.props.usernameClass.indexOf(BDFDB.disCN.messagereactionsmodalusername) > -1) {
 							change = this.settings.places.reactions && !BDFDB.LibraryModules.MemberStore.getNick(BDFDB.LibraryModules.LastGuildStore.getGuildId(), e.instance.props.user.id);
-							break;
-						case BDFDB.disCN.userprofileusername:
+						}
+						else if (e.instance.props.usernameClass.indexOf(BDFDB.disCN.userprofileusername) > -1) {
 							change = this.settings.places.userProfile;
 							guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 							tagClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
-							break;
+						}
 					}
 					if (change) {
 						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.username]]});
@@ -1294,24 +1294,24 @@ module.exports = (_ => {
 			}
 			
 			changeUserColor (child, userId, options = {}) {
-				if (BDFDB.ReactUtils.isValidElement(child)) {
-					let data = changedUsers[userId] || {};
-					if (data.color1) {
-						let childProp = child.props.children ? "children" : "text";
-						let color1 = data.color1 && data.useRoleColor && options.guildId && (BDFDB.LibraryModules.MemberStore.getMember(options.guildId, userId) || {}).colorString || data.color1;
-						let fontColor = options.modify && !(data.useRoleColor && options.guildId) ? this.chooseColor(color1, options.modify) : color1;
-						let fontGradient = BDFDB.ObjectUtils.is(fontColor);
-						if (BDFDB.ObjectUtils.is(child.props.style)) delete child.props.style.color;
-						child.props[childProp] = BDFDB.ReactUtils.createElement("span", {
-							style: {
-								color: fontGradient ? BDFDB.ColorUtils.convert(fontColor[0], "RGBA") : BDFDB.ColorUtils.convert(fontColor, "RGBA")
-							},
-							children: fontGradient ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
-								gradient: BDFDB.ColorUtils.createGradient(fontColor),
-								children: child.props[childProp]
-							}) : child.props[childProp]
-						});
-					}
+				if (!BDFDB.ReactUtils.isValidElement(child)) return;
+				let data = changedUsers[userId] || {};
+				if (data.color1) {
+					let childProp = child.props.children ? "children" : "text";
+					let color1 = data.color1 && data.useRoleColor && options.guildId && (BDFDB.LibraryModules.MemberStore.getMember(options.guildId, userId) || {}).colorString || data.color1;
+					let fontColor = options.modify && !(data.useRoleColor && options.guildId) ? this.chooseColor(color1, options.modify) : color1;
+					let fontGradient = BDFDB.ObjectUtils.is(fontColor);
+					if (BDFDB.ObjectUtils.is(child.props.style)) delete child.props.style.color;
+					if (child.props[childProp].props) delete child.props[childProp].props.color;
+					child.props[childProp] = BDFDB.ReactUtils.createElement("span", {
+						style: {
+							color: fontGradient ? BDFDB.ColorUtils.convert(fontColor[0], "RGBA") : BDFDB.ColorUtils.convert(fontColor, "RGBA")
+						},
+						children: fontGradient ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
+							gradient: BDFDB.ColorUtils.createGradient(fontColor),
+							children: child.props[childProp]
+						}) : child.props[childProp]
+					});
 				}
 			}
 
