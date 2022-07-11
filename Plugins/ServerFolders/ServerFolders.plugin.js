@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.0.0
+ * @version 7.0.1
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "7.0.0",
+			"version": "7.0.1",
 			"description": "Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders"
 		}
 	};
@@ -563,18 +563,14 @@ module.exports = (_ => {
 									label: this.labels.serversubmenu_removefromfolder,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "remove-from-folder"),
 									color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
-									action: _ => {
-										this.removeGuildFromFolder(folder.folderId, e.instance.props.guild.id);
-									}
+									action: _ => this.removeGuildFromFolder(folder.folderId, e.instance.props.guild.id)
 								})
 							] : [
 								BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									label: this.labels.serversubmenu_createfolder,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "create-folder"),
 									disabled: !unfolderedGuilds.length,
-									action: _ => {
-										this.openFolderCreationMenu(unfolderedGuilds, e.instance.props.guild.id);
-									}
+									action: _ => this.openFolderCreationMenu(unfolderedGuilds, e.instance.props.guild.id)
 								}),
 								BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									label: this.labels.serversubmenu_addtofolder,
@@ -583,9 +579,7 @@ module.exports = (_ => {
 									children: folders.map((folder, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: folder.folderName || `${BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER} #${i + 1}`,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "add-to-folder", i + 1),
-										action: _ => {
-											this.addGuildToFolder(folder.folderId, e.instance.props.guild.id);
-										}
+										action: _ => this.addGuildToFolder(folder.folderId, e.instance.props.guild.id)
 									}))
 								})
 							]
@@ -662,20 +656,20 @@ module.exports = (_ => {
 					let topBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbartop]]});
 					if (topBar) {
 						let topIsVisible = topBar.props.isVisible;
-						topBar.props.isVisible = (...args) => {
+						topBar.props.isVisible = BDFDB.TimeUtils.suppress((...args) => {
 							let ids = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
 							args[2] = args[2].filter(id => !ids.includes(id));
-							return topIsVisible(...args);
-						};
+							return topIsVisible(...args) || BDFDB.LibraryModules.UnreadGuildUtils.getMentionCount(args[0]) == 0;
+						}, "Error in isVisible of Top Bar in Guild List!");
 					}
 					let bottomBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbarbottom]]});
 					if (bottomBar) {
 						let bottomIsVisible = bottomBar.props.isVisible;
-						bottomBar.props.isVisible = (...args) => {
+						bottomBar.props.isVisible = BDFDB.TimeUtils.suppress((...args) => {
 							let ids = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
 							args[2] = args[2].filter(id => !ids.includes(id));
-							return bottomIsVisible(...args);
-						};
+							return bottomIsVisible(...args) || BDFDB.LibraryModules.UnreadGuildUtils.getMentionCount(args[0]) == 0;
+						}, "Error in isVisible of Bottom Bar in Guild List!");
 					}
 				}
 			}

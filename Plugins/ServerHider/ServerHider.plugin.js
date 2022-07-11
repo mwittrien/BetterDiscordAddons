@@ -2,7 +2,7 @@
  * @name ServerHider
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.2.2
+ * @version 6.2.3
  * @description Allows you to hide certain Servers in your Server List
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerHider",
 			"author": "DevilBro",
-			"version": "6.2.2",
+			"version": "6.2.3",
 			"description": "Allows you to hide certain Servers in your Server List"
 		}
 	};
@@ -85,7 +85,7 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.FolderStore, "getGuildFolderById", {after: e => {
-					let hiddenGuildIds = BDFDB.DataUtils.load(this, "hidden", "servers") || [];
+					let hiddenGuildIds = hiddenEles.servers || [];
 					if (e.returnValue && hiddenGuildIds.length) {
 						let folder = Object.assign({}, e.returnValue);
 						folder.guildIds = [].concat(folder.guildIds).filter(n => !hiddenGuildIds.includes(n));
@@ -113,7 +113,7 @@ module.exports = (_ => {
 							plugin: this,
 							keys: ["general", key],
 							label: this.defaults.general[key].description,
-							value: this.settings.general[key],
+							value: this.settings.general[key]
 						}));
 				
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -199,6 +199,22 @@ module.exports = (_ => {
 							}
 						}
 						else if (children[i].props.guildNode && hiddenGuildIds.includes(children[i].props.guildNode.id)) children[i] = null;
+					}
+					let topBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbartop]]});
+					if (topBar) {
+						let topIsVisible = topBar.props.isVisible;
+						topBar.props.isVisible = BDFDB.TimeUtils.suppress((...args) => {
+							args[2] = args[2].filter(id => !hiddenGuildIds.includes(id));
+							return topIsVisible(...args) || BDFDB.LibraryModules.UnreadGuildUtils.getMentionCount(args[0]) == 0;
+						}, "Error in isVisible of Top Bar in Guild List!");
+					}
+					let bottomBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbarbottom]]});
+					if (bottomBar) {
+						let bottomIsVisible = bottomBar.props.isVisible;
+						bottomBar.props.isVisible = BDFDB.TimeUtils.suppress((...args) => {
+							args[2] = args[2].filter(id => !hiddenGuildIds.includes(id));
+							return bottomIsVisible(...args) || BDFDB.LibraryModules.UnreadGuildUtils.getMentionCount(args[0]) == 0;
+						}, "Error in isVisible of Bottom Bar in Guild List!");
 					}
 				}
 			}
