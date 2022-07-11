@@ -993,7 +993,7 @@ module.exports = (_ => {
 						}
 					}
 					else {
-						this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {guildId: e.instance.props.channel.guild_id});
+						this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {e: e, guildId: e.instance.props.channel.guild_id});
 						this.injectBadge(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
 							tagClass: BDFDB.disCN.bottagmember
 						});
@@ -1302,7 +1302,7 @@ module.exports = (_ => {
 					let fontColor = options.modify && !(data.useRoleColor && options.guildId) ? this.chooseColor(color1, options.modify) : color1;
 					let fontGradient = BDFDB.ObjectUtils.is(fontColor);
 					if (BDFDB.ObjectUtils.is(child.props.style)) delete child.props.style.color;
-					if (child.props[childProp].props) delete child.props[childProp].props.color;
+					if (child.props[childProp].props && BDFDB.LibraryModules.LocalSettingsStore.roleStyle != "dot") delete child.props[childProp].props.color;
 					child.props[childProp] = BDFDB.ReactUtils.createElement("span", {
 						style: {
 							color: fontGradient ? BDFDB.ColorUtils.convert(fontColor[0], "RGBA") : BDFDB.ColorUtils.convert(fontColor, "RGBA")
