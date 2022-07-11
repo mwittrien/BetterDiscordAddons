@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.2
+ * @version 1.5.3
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,13 @@ module.exports = (_ => {
 		"info": {
 			"name": "StaffTag",
 			"author": "DevilBro",
-			"version": "1.5.2",
+			"version": "1.5.3",
 			"description": "Adds a Crown/Tag to Server Owners (or Admins/Management)"
+		},
+		"changeLog": {
+			"improved": {
+				"Custom Title Option": "Using the crown icons and changing the custom titles, will now also change the title in the tooltip text"
+			}
 		}
 	};
 
@@ -69,6 +74,24 @@ module.exports = (_ => {
 			OWNER: 5
 		};
 		
+		const labelMap = {
+			[userTypes.NONE]: "",
+			[userTypes.MANAGEMENT]: "management",
+			[userTypes.ADMIN]: "admin",
+			[userTypes.THREAD_CREATOR]: "threadCreator",
+			[userTypes.GROUP_OWNER]: "groupOwner",
+			[userTypes.OWNER]: "owner"
+		};
+		
+		const classNameMap = {
+			[userTypes.NONE]: "",
+			[userTypes.MANAGEMENT]: "_stafftagmanagementicon",
+			[userTypes.ADMIN]: "_stafftagadminicon",
+			[userTypes.THREAD_CREATOR]: "_stafftagthreadcreatoricon",
+			[userTypes.GROUP_OWNER]: "_stafftaggroupownericon",
+			[userTypes.OWNER]: "_stafftagownericon"
+		};
+		
 		return class StaffTag extends Plugin {
 			onLoad () {
 				this.patchedModules = {
@@ -83,39 +106,39 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						useCrown:					{value: true,	description: "Use the Crown Icon instead of the Bot Tag Style"},
-						useRoleColor:				{value: true, 	description: "Use the Role Color instead of the default Blurple"},
-						useBlackFont:				{value: false,	description: "Use black Font instead of darkening the Role Color on bright Colors"},
-						ignoreBots:					{value: false,	description: "Don't add the Owner/Admin/Management Tag for Bots"},
-						ignoreMyself:				{value: false,	description: "Don't add the Owner/Admin/Management Tag for yourself"}
+						useCrown:			{value: true,	description: "Use the Crown Icon instead of the Bot Tag Style"},
+						useRoleColor:		{value: true, 	description: "Use the Role Color instead of the default Blurple"},
+						useBlackFont:		{value: false,	description: "Use black Font instead of darkening the Role Color on bright Colors"},
+						ignoreBots:			{value: false,	description: "Don't add the Owner/Admin/Management Tag for Bots"},
+						ignoreMyself:		{value: false,	description: "Don't add the Owner/Admin/Management Tag for yourself"}
 					},
 					tagTypes: {
-						owners:						{value: true, 	description: "Server Owner Tag"},
-						groupOwners:				{value: true, 	description: "Group Owner Tag"},
-						threadCreators:				{value: true, 	description: "Thread Creator Tag"},
-						admins:						{value: true, 	description: "Admin Tag (Admin Permissions)"},
-						managementG:				{value: true, 	description: "Management Tag (Server Management)"},
-						managementC:				{value: true, 	description: "Management Tag (Channel Management)"},
-						managementT:				{value: true, 	description: "Management Tag (Threads Management)"},
-						managementE:				{value: true, 	description: "Management Tag (Events Management)"},
-						managementR:				{value: true, 	description: "Management Tag (Role Management)"},
-						managementU:				{value: true, 	description: "Management Tag (User Management 'Kick/Ban')"},
-						managementV:				{value: true, 	description: "Management Tag (Voice Management 'Mute/Deafen/Move')"},
-						managementM:				{value: true, 	description: "Management Tag (Message Management)"}
+						owners:				{value: true, 	description: "Server Owner Tag"},
+						groupOwners:		{value: true, 	description: "Group Owner Tag"},
+						threadCreators:		{value: true, 	description: "Thread Creator Tag"},
+						admins:				{value: true, 	description: "Admin Tag (Admin Permissions)"},
+						managementG:		{value: true, 	description: "Management Tag (Server Management)"},
+						managementC:		{value: true, 	description: "Management Tag (Channel Management)"},
+						managementT:		{value: true, 	description: "Management Tag (Threads Management)"},
+						managementE:		{value: true, 	description: "Management Tag (Events Management)"},
+						managementR:		{value: true, 	description: "Management Tag (Role Management)"},
+						managementU:		{value: true, 	description: "Management Tag (User Management 'Kick/Ban')"},
+						managementV:		{value: true, 	description: "Management Tag (Voice Management 'Mute/Deafen/Move')"},
+						managementM:		{value: true, 	description: "Management Tag (Message Management)"}
 					},
 					tagPlaces: {
-						chat:						{value: true, 	description: "Messages"},
-						memberList:					{value: true, 	description: "Member List"},
-						voiceList:					{value: true, 	description: "Voice User List"},
-						userPopout:					{value: true, 	description: "User Popouts"},
-						userProfile:				{value: true, 	description: "User Profile Modal"},
+						chat:				{value: true, 	description: "Messages"},
+						memberList:			{value: true, 	description: "Member List"},
+						voiceList:			{value: true, 	description: "Voice User List"},
+						userPopout:			{value: true, 	description: "User Popouts"},
+						userProfile:		{value: true, 	description: "User Profile Modal"},
 					},
-					inputs: {
-						ownOwnerTagName:			{value: "Owner", 		description: "Server Owner Tags"},
-						ownGroupOwnerTagName:		{value: "Group Owner", 	description: "Group Owner Tags"},
-						ownThreadCreatorTagName:	{value: "Creator", 		description: "Thread Creator Tags"},
-						ownAdminTagName:			{value: "Admin", 		description: "Admin Tags"},
-						ownManagementTagName:		{value: "Management", 	description: "Management Tags"}
+					customTitles: {
+						owner:				{value: "",		placeholder: "Owner", 		description: "Server Owner Tags"},
+						groupOwner:			{value: "",		placeholder: "Group Owner",	description: "Group Owner Tags"},
+						threadCreator:		{value: "",		placeholder: "Creator", 	description: "Thread Creator Tags"},
+						admin:				{value: "",		placeholder: "Admin", 		description: "Admin Tags"},
+						management:			{value: "",		placeholder: "Management", 	description: "Management Tags"}
 					}
 				};
 			
@@ -207,15 +230,16 @@ module.exports = (_ => {
 							]
 						}));
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: "Tag Text Settings",
+							title: "Custom Title Settings",
 							collapseStates: collapseStates,
-							children: Object.keys(this.defaults.inputs).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							children: Object.keys(this.defaults.customTitles).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "TextInput",
 								plugin: this,
-								keys: ["inputs", key],
-								label: this.defaults.inputs[key].description,
+								keys: ["customTitles", key],
+								label: this.defaults.customTitles[key].description,
 								basis: "50%",
-								value: this.settings.inputs[key]
+								value: this.settings.customTitles[key],
+								placeholder: this.defaults.customTitles[key].placeholder
 							}))
 						}));
 						
@@ -317,60 +341,21 @@ module.exports = (_ => {
 				if (index > -1) children[index] = null;
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(config.channelId || BDFDB.LibraryModules.LastChannelStore.getChannelId());
 				let member = channel && this.settings.general.useRoleColor ? (BDFDB.LibraryModules.MemberStore.getMember(channel.guild_id, user.id) || {}) : {};
+				
+				let fallbackLabel = this.settings.general.useCrown && this.getLabelFallback(userType);
+				let label = this.getLabel(userType, fallbackLabel);
+				let labelExtra = userType == userTypes.MANAGEMENT && this.getManagementLabel(user);
+				
 				let tag = null;
-				if (this.settings.general.useCrown) {
-					let label, className;
-					switch (userType) {
-						case userTypes.OWNER:
-							label = BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER;
-							className = BDFDB.disCN._stafftagownericon;
-							break;
-						case userTypes.GROUP_OWNER:
-							label = BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER;
-							className = BDFDB.disCN._stafftaggroupownericon;
-							break;
-						case userTypes.THREAD_CREATOR:
-							label = this.labels.creator.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.THREAD);
-							className = BDFDB.disCN._stafftagthreadcreatoricon;
-							break;
-						case userTypes.ADMIN:
-							label = BDFDB.LanguageUtils.LanguageStrings.ADMINISTRATOR;
-							className = BDFDB.disCN._stafftagadminicon;
-							break;
-						case userTypes.MANAGEMENT:
-							label = `${this.labels.management} (${this.getManagementLabel(user)})`;
-							className = BDFDB.disCN._stafftagmanagementicon;
-							break;
-					}
-					tag = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						text: label,
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.memberownericon, className),
-							name: BDFDB.LibraryComponents.SvgIcon.Names.CROWN,
-							"aria-label": label
-						})
-					});
-				}
+				if (this.settings.general.useCrown) tag = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					text: labelExtra ? `${label} (${labelExtra})` : label,
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.memberownericon, classNameMap[userType] && BDFDB.disCN[classNameMap[userType]]),
+						name: BDFDB.LibraryComponents.SvgIcon.Names.CROWN,
+						"aria-label": fallbackLabel
+					})
+				});
 				else {
-					let input, label;
-					switch (userType) {
-						case userTypes.OWNER:
-							input = "ownOwnerTagName";
-							break;
-						case userTypes.GROUP_OWNER:
-							input = "ownGroupOwnerTagName";
-							break;
-						case userTypes.THREAD_CREATOR:
-							input = "ownThreadCreatorTagName";
-							break;
-						case userTypes.ADMIN:
-							input = "ownAdminTagName";
-							break;
-						case userTypes.MANAGEMENT:
-							input = "ownManagementTagName";
-							label = this.getManagementLabel(user);
-							break;
-					}
 					let tagColor = BDFDB.ColorUtils.convert(member.colorString, "RGBA");
 					let isBright = BDFDB.ColorUtils.isBright(tagColor);
 					tagColor = isBright ? (this.settings.general.useBlackFont ? tagColor : BDFDB.ColorUtils.change(tagColor, -0.3)) : tagColor;
@@ -382,14 +367,32 @@ module.exports = (_ => {
 							backgroundColor: config.inverted ? (isBright && this.settings.general.useBlackFont ? "black" : null) : tagColor,
 							color: !config.inverted ? (isBright && this.settings.general.useBlackFont ? "black" : null) : tagColor
 						},
-						tag: this.settings.inputs[input]
+						tag: label
 					});
-					if (label) tag = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						text: label,
+					if (labelExtra) tag = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: labelExtra,
 						children: tag
 					});
 				}
 				children.splice(insertIndex, 0, tag);
+			}
+			
+			getLabelFallback (userType) {
+				switch (userType) {
+					case userTypes.OWNER: return BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER;
+					case userTypes.GROUP_OWNER: return BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER;
+					case userTypes.THREAD_CREATOR: return this.labels.creator.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.THREAD);
+					case userTypes.ADMIN: return BDFDB.LanguageUtils.LanguageStrings.ADMINISTRATOR;
+					case userTypes.MANAGEMENT: return this.labels.management;
+					default: return "";
+				}
+			}
+			
+			getLabel (userType, fallback) {
+				let type = labelMap[userType];
+				if (!type) return fallback || "";
+				else if (!fallback) return this.settings.customTitles[type] || this.defaults.customTitles[type].placeholder;
+				else return this.settings.customTitles[type] && this.settings.customTitles[type].toLowerCase() != this.defaults.customTitles[type].placeholder.toLowerCase() ? this.settings.customTitles[type] : fallback;
 			}
 			
 			getManagementLabel (user) {
