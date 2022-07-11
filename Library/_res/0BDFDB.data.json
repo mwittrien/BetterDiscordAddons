@@ -2902,7 +2902,6 @@
 		"searchpopoutsearchresultchannelcategory": ["SearchPopout", "searchResultChannelCategory"],
 		"searchpopoutsearchresultchannelicon": ["SearchPopout", "searchResultChannelIcon"],
 		"searchpopoutsearchresultchanneliconbackground": ["SearchPopout", "searchResultChannelIconBackground"],
-		"searchpopoutselected": ["SearchPopout", "selected"],
 		"searchpopoutuser": ["SearchPopout", "user"],
 		"searchresultschannelname": ["SearchResultsGroup", "channelName"],
 		"searchresultsblocked": ["SearchResultsGroup", "resultsBlocked"],
