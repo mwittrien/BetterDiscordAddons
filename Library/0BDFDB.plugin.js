@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.5
+ * @version 2.4.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.4.5",
+			"version": "2.4.6",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
@@ -4556,6 +4556,7 @@ module.exports = (_ => {
 			}
 		});
 		BDFDB.DiscordClassModules = Internal.DiscordClassModules;
+		for (let item in InternalData.DiscordClassModules) if (!DiscordClassModules[item]) DiscordClassModules[item] = undefined;
 		
 		const DiscordClasses = Object.assign({}, InternalData.DiscordClasses);
 		BDFDB.DiscordClasses = Object.assign({}, DiscordClasses);
