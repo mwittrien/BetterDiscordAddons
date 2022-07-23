@@ -778,6 +778,10 @@
 	fill: rgb(var(--accentcolor2));
 }
 
+html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
+	background: rgb(var(--accentcolor));
+}
+
 .dot-2s_oHI {												/* settingsitems		dot									*/
 	background-color: rgb(var(--accentcolor));
 }
