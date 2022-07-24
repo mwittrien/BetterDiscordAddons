@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.7.7
+ * @version 4.7.8
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.7.7",
+			"version": "4.7.8",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		}
 	};
@@ -123,7 +123,10 @@ module.exports = (_ => {
 				}
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._imageutilitiessibling, this.props.className),
-					onClick: _ => _this.switchImages(this.props.modalInstance, this.props.offset),
+					onClick: event => {
+						BDFDB.ListenerUtils.stopEvent(event);
+						_this.switchImages(this.props.modalInstance, this.props.offset);
+					},
 					children: [
 						this.props.loadedImage || BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Spinner, {
 							type: BDFDB.LibraryComponents.Spinner.Type.SPINNING_CIRCLE
@@ -347,6 +350,9 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN._imageutilitiessibling}:hover ${BDFDB.dotCN._imageutilitiesswitchicon} {
 						background: rgba(0, 0, 0, 0.5);
+					}
+					${BDFDB.dotCNS._imageutilitiesgallery + BDFDB.dotCN.imagemodalnavbutton} {
+						display: none;
 					}
 					${BDFDB.dotCN._imageutilitiesdetailswrapper} {
 						position: fixed;
@@ -1075,7 +1081,6 @@ module.exports = (_ => {
 					}
 					
 					if (this.settings.viewerSettings.galleryMode && viewedImage) {
-						console.log(viewedImage);
 						if (!cachedImages || cachedImages.channelId != viewedImage.channelId || cachedImages.amount && this.getImageIndex(cachedImages.all, viewedImage) == -1) {
 							BDFDB.TimeUtils.clear(viewedImageTimeout);
 							let channel = BDFDB.LibraryModules.ChannelStore.getChannel(viewedImage.channelId);
