@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.2
+ * @version 1.9.3
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "PinDMs",
 			"author": "DevilBro",
-			"version": "1.9.2",
+			"version": "1.9.3",
 			"description": "Allows you to pin DMs, making them appear at the top of your DMs/ServerList"
 		}
 	};
@@ -826,7 +826,10 @@ module.exports = (_ => {
 			sortDMsByTime (dms, type) {
 				if (dms.length > 1 && this.settings.recentOrder[type]) {
 					let timestamps = BDFDB.LibraryModules.DirectMessageStore.getPrivateChannelIds().reduce((newObj, channelId) => (newObj[channelId] = BDFDB.LibraryModules.UnreadChannelUtils.lastMessageId(channelId), newObj), {});
-					return [].concat(dms).sort(function (x, y) {return timestamps[x] > timestamps[y] ? -1 : timestamps[x] < timestamps[y] ? 1 : 0;});
+					return [].concat(dms).sort(function (x, y) {
+						const xT = parseFloat(timestamps[x]), yT = parseFloat(timestamps[y]);
+						return xT > yT ? -1 : xT < yT ? 1 : 0;
+					});
 				}
 				else return dms;
 			}
