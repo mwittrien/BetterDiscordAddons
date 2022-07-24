@@ -3396,6 +3396,9 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .modal-3Crloo::after {
 	display: none;
 }
+#app-mount .zoomedCarouselModalRoot-1tAxiu {
+	background: transparent !important;
+}
 .header-1zd7se > .wrapper-1HSdhi:first-child {
 	flex: 1 0 auto;
 }

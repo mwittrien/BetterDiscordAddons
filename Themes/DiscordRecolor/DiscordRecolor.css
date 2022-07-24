@@ -2591,6 +2591,9 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	border: none;
 	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary),.3), 0 2px 10px 0 rgba(0,0,0,.2);
 }
+#app-mount .zoomedCarouselModalRoot-1tAxiu {
+	background: transparent !important;
+}
 #app-mount .separator-2lLxgC {
 	box-shadow: 0 1px 0 0 rgba(var(--backgroundtertiary),.3), 0 1px 2px 0 rgba(var(--backgroundtertiary),.3);
 }
