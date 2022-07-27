@@ -918,6 +918,10 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 	color: rgb(var(--accentcolor2));
 }
 
+.backgroundOptionRing-1vvQ0C {								/* text and voice		selection ring						*/
+	border-color: rgb(var(--accentcolor));
+}
+
 .icon-2g_pHb {												/* hypesettings			perk icon							*/
 	position: relative;
 }
