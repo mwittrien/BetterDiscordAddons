@@ -208,7 +208,7 @@
 .background-3Da2vZ {										/* guild header			partnerbadge						*/
 	color: rgb(var(--accentcolor));
 }
-.iconTierThree-3EAOB7 {										/* guild header			icontier3							*/
+.iconTierThree-n2n0gX:not(.boostedGuildTierIconWithVisibleBanner-3XawD_) {
 	color: rgb(var(--accentcolor2));
 }
 .subscribeTooltipWrapper-3ipXtC {							/* guild header			subscribetooltip					*/
