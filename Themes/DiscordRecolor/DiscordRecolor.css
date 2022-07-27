@@ -320,9 +320,6 @@ svg [fill="#4F545C"] {
 	fill: var(--interactive-muted) !important;
 }
 
-::selection {
-	background: rgb(var(--mentioncolor, --warningcolor));
-}
 .highlight {
 	background: rgba(var(--mentioncolor, --warningcolor),.3);
 }

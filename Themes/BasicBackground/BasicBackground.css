@@ -5761,11 +5761,8 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 
 /* ~~~~		15.		GENERAL							~~~~ */
 
-::selection {												/* selection												*/
-	background: rgb(var(--accentcolor));
-}
 .highlight {
-	background: rgb(var(--accentcolor));
+	background: rgb(var(--accentcolor), .3);
 }
 
 #app-mount .elevationLow-26BbEG, #app-mount .elevationLow-3aiJPL, .lightElevationLow-1QzqDT, .darkElevationLow-2LO4eN {

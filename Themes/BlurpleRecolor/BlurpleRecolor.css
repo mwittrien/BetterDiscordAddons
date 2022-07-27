@@ -2100,6 +2100,11 @@ a.metadataName-1KMZtB {
 
 /* ~~~~		12.		GENERAL							~~~~ */
 
+::selection {
+	background: rgb(var(--accentcolor));
+	color: #fff;
+}
+
 .wanderingCubesItem-3Us-UG {								/* loading				cubes								*/
 	background-color: rgb(var(--accentcolor));
 }
