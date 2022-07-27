@@ -378,11 +378,6 @@ module.exports = (_ => {
 					if (!this.settings.places.normal || !this.settings.general.replaceBeforeSend || BDFDB.LibraryModules.SlowmodeUtils.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
 					let messageData = this.formatText(e2.methodArguments[0].value);
 					if (messageData) {
-						if (allowFiles && messageData.files.length > 0 && (BDFDB.DMUtils.isDMChannel(e.instance.props.channel.id) || BDFDB.UserUtils.can("ATTACH_FILES", BDFDB.UserUtils.me.id, e.instance.props.channel.id))) {
-							e2.methodArguments[0].uploads = [].concat(e2.methodArguments[0].uploads);
-							console.log(messageData.files);
-							for (let file of messageData.files) BDFDB.LibraryModules.UploadUtils.instantBatchUpload(e.instance.props.channel.id, file, 0);
-						}
 						if (messageData.text != null && e2.methodArguments[0].value != messageData.text) {
 							e2.methodArguments[0].value = messageData.text;
 							e.instance.props.textValue = "";
