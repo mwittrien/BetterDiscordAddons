@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.0.1
+ * @version 7.0.2
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,8 +17,16 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "7.0.1",
+			"version": "7.0.2",
 			"description": "Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders"
+		},
+		"changeLog": {
+			"fixed": {
+				"Close All Folders": "'CLose all Folders when any Server was selected' is fixed"
+			},
+			"added": {
+				"Show Folder Icon": "Added option to show the folder icon in the extra column at the top of the server list"
+			}
 		}
 	};
 
@@ -107,89 +115,118 @@ module.exports = (_ => {
 							className: BDFDB.disCN.guildsscroller,
 							children: this.props.folders.map(folder => {
 								let data = _this.getFolderConfig(folder.folderId);
-								return folder.guildIds.map(guildId => {
-									return [
-										this.draggedGuild == guildId ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Guild, {
-											guild: BDFDB.LibraryModules.GuildStore.getGuild(guildId),
-											state: true,
-											list: true,
-											tooltipConfig: Object.assign({
-												offset: 12
-											}, data.copyTooltipColor && {
-												backgroundColor: data.color3,
-												fontColor: data.color4,
-											}),
-											onClick: event => {
-												if (BDFDB.ListenerUtils.isPressed(46)) {
-													BDFDB.ListenerUtils.stopEvent(event);
-													_this.removeGuildFromFolder(folder.folderId, guildId);
-												}
-												else {
-													if (_this.settings.general.closeAllFolders) {
-														for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != folder.folderId || !_this.settings.general.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
-													}
-													else if (_this.settings.general.closeTheFolder && !_this.settings.general.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folder.folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId);
-													else BDFDB.ReactUtils.forceUpdate(this);
-												}
-											},
-											onMouseDown: (event, instance) => {
-												event = event.nativeEvent || event;
-												let mouseMove = event2 => {
-													if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
-														BDFDB.ListenerUtils.stopEvent(event);
-														this.draggedGuild = guildId;
-														let dragPreview = _this.createDragPreview(BDFDB.ReactUtils.findDOMNode(instance).cloneNode(true), event2);
-														BDFDB.ReactUtils.forceUpdate(this);
-														document.removeEventListener("mousemove", mouseMove);
-														document.removeEventListener("mouseup", mouseUp);
-														let dragging = event3 => {
-															_this.updateDragPreview(dragPreview, event3);
-															let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._serverfoldersguildplaceholder, event3.target);
-															let hoveredGuild = (BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildouter, placeholder ? placeholder.previousSibling : event3.target), "guild", {up: true}) || {}).id;
-															if (hoveredGuild) {
-																let hoveredGuildFolder = BDFDB.GuildUtils.getFolder(hoveredGuild);
-																if (!hoveredGuildFolder || hoveredGuildFolder.folderId != folder.folderId) hoveredGuild = null;
-															}
-															let update = hoveredGuild != this.hoveredGuild;
-															if (hoveredGuild) this.hoveredGuild = hoveredGuild;
-															else delete this.hoveredGuild; 
-															if (update) BDFDB.ReactUtils.forceUpdate(this);
-														};
-														let releasing = event3 => {
-															BDFDB.ListenerUtils.stopEvent(event3);
-															BDFDB.DOMUtils.remove(dragPreview);
-															if (this.hoveredGuild) {
-																let guildIds = [].concat(folder.guildIds);
-																BDFDB.ArrayUtils.remove(guildIds, this.draggedGuild, true);
-																guildIds.splice(guildIds.indexOf(this.hoveredGuild) + 1, 0, this.draggedGuild);
-																_this.updateFolder(Object.assign({}, folder, {guildIds}));
-															}
-															delete this.draggedGuild;
-															delete this.hoveredGuild;
-															BDFDB.ReactUtils.forceUpdate(this);
-															document.removeEventListener("mousemove", dragging);
-															document.removeEventListener("mouseup", releasing);
-														};
-														document.addEventListener("mousemove", dragging);
-														document.addEventListener("mouseup", releasing);
-													}
-												};
-												let mouseUp = _ => {
-													document.removeEventListener("mousemove", mouseMove);
-													document.removeEventListener("mouseup", mouseUp);
-												};
-												document.addEventListener("mousemove", mouseMove);
-												document.addEventListener("mouseup", mouseUp);
-											}
-										}),
-										this.hoveredGuild != guildId ? null : BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCNS.guildouter + BDFDB.disCN._serverfoldersguildplaceholder,
-											children: BDFDB.ReactUtils.createElement("div", {
-												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.DragPlaceholder, {})
+								let folderIcon = null;
+								if (_this.settings.addFolderIcon) {
+									let folderIcons = _this.loadAllIcons();
+									folderIcon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? _this.createBase64SVG(folderIcons[data.iconID].openicon, data.color1, data.color2) : folderIcons[data.iconID].openicon) : null;
+									folderIcon = folderIcon ? BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN.guildfoldericonwrapper,
+										style: {background: `url(${folderIcon}) center/cover no-repeat`}
+									}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
+										color: BDFDB.ColorUtils.convert(folder.folderColor, "RGB") || "var(--bdfdb-blurple)"
+									});
+								}
+								return [
+									folderIcon && BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN.guildouter,
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.BlobMask, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+												className: BDFDB.disCN.guildfolder,
+												children: BDFDB.ReactUtils.createElement("div", {
+													className: BDFDB.disCN.guildfoldericonwrapper,
+													children: BDFDB.ReactUtils.createElement("div", {
+														className: BDFDB.disCN.guildfoldericonwrapperexpanded,
+														children: folderIcon
+													})
+												})
 											})
 										})
-									]
-								});
+									}),
+									folder.guildIds.map(guildId => {
+										return [
+											this.draggedGuild == guildId ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Guild, {
+												guild: BDFDB.LibraryModules.GuildStore.getGuild(guildId),
+												state: true,
+												list: true,
+												tooltipConfig: Object.assign({
+													offset: 12
+												}, data.copyTooltipColor && {
+													backgroundColor: data.color3,
+													fontColor: data.color4,
+												}),
+												onClick: event => {
+													if (BDFDB.ListenerUtils.isPressed(46)) {
+														BDFDB.ListenerUtils.stopEvent(event);
+														_this.removeGuildFromFolder(folder.folderId, guildId);
+													}
+													else {
+														if (_this.settings.general.closeAllFolders) {
+															for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != folder.folderId || !_this.settings.general.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
+														}
+														else if (_this.settings.general.closeTheFolder && !_this.settings.general.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folder.folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId);
+														else BDFDB.ReactUtils.forceUpdate(this);
+													}
+												},
+												onMouseDown: (event, instance) => {
+													event = event.nativeEvent || event;
+													let mouseMove = event2 => {
+														if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
+															BDFDB.ListenerUtils.stopEvent(event);
+															this.draggedGuild = guildId;
+															let dragPreview = _this.createDragPreview(BDFDB.ReactUtils.findDOMNode(instance).cloneNode(true), event2);
+															BDFDB.ReactUtils.forceUpdate(this);
+															document.removeEventListener("mousemove", mouseMove);
+															document.removeEventListener("mouseup", mouseUp);
+															let dragging = event3 => {
+																_this.updateDragPreview(dragPreview, event3);
+																let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._serverfoldersguildplaceholder, event3.target);
+																let hoveredGuild = (BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildouter, placeholder ? placeholder.previousSibling : event3.target), "guild", {up: true}) || {}).id;
+																if (hoveredGuild) {
+																	let hoveredGuildFolder = BDFDB.GuildUtils.getFolder(hoveredGuild);
+																	if (!hoveredGuildFolder || hoveredGuildFolder.folderId != folder.folderId) hoveredGuild = null;
+																}
+																let update = hoveredGuild != this.hoveredGuild;
+																if (hoveredGuild) this.hoveredGuild = hoveredGuild;
+																else delete this.hoveredGuild; 
+																if (update) BDFDB.ReactUtils.forceUpdate(this);
+															};
+															let releasing = event3 => {
+																BDFDB.ListenerUtils.stopEvent(event3);
+																BDFDB.DOMUtils.remove(dragPreview);
+																if (this.hoveredGuild) {
+																	let guildIds = [].concat(folder.guildIds);
+																	BDFDB.ArrayUtils.remove(guildIds, this.draggedGuild, true);
+																	guildIds.splice(guildIds.indexOf(this.hoveredGuild) + 1, 0, this.draggedGuild);
+																	_this.updateFolder(Object.assign({}, folder, {guildIds}));
+																}
+																delete this.draggedGuild;
+																delete this.hoveredGuild;
+																BDFDB.ReactUtils.forceUpdate(this);
+																document.removeEventListener("mousemove", dragging);
+																document.removeEventListener("mouseup", releasing);
+															};
+															document.addEventListener("mousemove", dragging);
+															document.addEventListener("mouseup", releasing);
+														}
+													};
+													let mouseUp = _ => {
+														document.removeEventListener("mousemove", mouseMove);
+														document.removeEventListener("mouseup", mouseUp);
+													};
+													document.addEventListener("mousemove", mouseMove);
+													document.addEventListener("mouseup", mouseUp);
+												}
+											}),
+											this.hoveredGuild != guildId ? null : BDFDB.ReactUtils.createElement("div", {
+												className: BDFDB.disCNS.guildouter + BDFDB.disCN._serverfoldersguildplaceholder,
+												children: BDFDB.ReactUtils.createElement("div", {
+													children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.DragPlaceholder, {})
+												})
+											})
+										]
+									})
+								];
 							}).filter(n => n).reduce((r, a) => r.concat(a, _this.settings.general.addSeparators ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Separator, {}) : null), [0]).slice(1, -1).flat(10).filter(n => n)
 						})
 					})
@@ -393,8 +430,9 @@ module.exports = (_ => {
 						closeAllFolders:	{value: false, 	description: "Closes all Folders when selecting a Server"},
 						forceOpenFolder:	{value: false, 	description: "Forces a Folder to open when switching to a Server of that Folder"},
 						showCountBadge:		{value: true, 	description: "Displays Badge for Amount of Servers in a Folder"},
-						extraColumn:		{value: true, 	description: "Moves the Servers from opened Folders in an extra Column"},
-						addSeparators:		{value: true, 	description: "Adds Separators between Servers of different Folders in extra Column"}
+						extraColumn:		{value: true, 	description: "Moves the Servers from opened Folders into an extra Column"},
+						addSeparators:		{value: true, 	description: "Adds Separators between Servers of different Folders in extra Column"},
+						addFolderIcon:		{value: false, 	description: "Adds the Folder Icon on the top of the Server List in the extra Column"}
 					}
 				};
 			
@@ -404,7 +442,7 @@ module.exports = (_ => {
 						Guilds: "type",
 						FolderItem: "default",
 						FolderHeader: "default",
-						GuildItem: "default",
+						GuildItem: "type",
 						GuildFolderSettingsModal: ["componentDidMount", "render"]
 					}
 				};
@@ -720,8 +758,8 @@ module.exports = (_ => {
 				if (!e.instance.props.folderNode) return;
 				let data = this.getFolderConfig(e.instance.props.folderNode.id);
 				if (e.instance.props.expanded || data.useCloseIcon) {
-					let folderIcons = this.loadAllIcons(), icontype = e.instance.props.expanded ? "openicon" : "closedicon";
-					let icon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? this.createBase64SVG(folderIcons[data.iconID][icontype], data.color1, data.color2) : folderIcons[data.iconID][icontype]) : null;
+					let folderIcons = this.loadAllIcons(), iconType = e.instance.props.expanded ? "openicon" : "closedicon";
+					let icon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? this.createBase64SVG(folderIcons[data.iconID][iconType], data.color1, data.color2) : folderIcons[data.iconID][iconType]) : null;
 					if (icon) {
 						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIconContent"});
 						if (index > -1) children[index] = BDFDB.ReactUtils.createElement("div", {
