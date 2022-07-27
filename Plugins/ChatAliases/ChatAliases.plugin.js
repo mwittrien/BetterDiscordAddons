@@ -368,37 +368,41 @@ module.exports = (_ => {
 					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: BDFDB.LanguageUtils.LibraryStringsFormat("add_to", "ChatAliases"),
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "add-alias"),
-						action: _ => {
-							this.openAddModal(text.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t"));
-						}
+						action: _ => this.openAddModal(text.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t"))
 					})
 				}));
 			}
 			
 			processChannelTextAreaForm (e) {
 				BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {before: e2 => {
-					if (this.settings.places.normal) this.handleSubmit(e, e2);
+					if (!this.settings.places.normal || !this.settings.general.replaceBeforeSend || BDFDB.LibraryModules.SlowmodeUtils.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
+					let messageData = this.formatText(e2.methodArguments[0].value);
+					if (messageData) {
+						if (allowFiles && messageData.files.length > 0 && (BDFDB.DMUtils.isDMChannel(e.instance.props.channel.id) || BDFDB.UserUtils.can("ATTACH_FILES", BDFDB.UserUtils.me.id, e.instance.props.channel.id))) {
+							e2.methodArguments[0].uploads = [].concat(e2.methodArguments[0].uploads);
+							console.log(messageData.files);
+							for (let file of messageData.files) BDFDB.LibraryModules.UploadUtils.instantBatchUpload(e.instance.props.channel.id, file, 0);
+						}
+						if (messageData.text != null && e2.methodArguments[0].value != messageData.text) {
+							e2.methodArguments[0].value = messageData.text;
+							e.instance.props.textValue = "";
+							if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.toRichValue("");
+							if (e.instance.state) {
+								e.instance.state.textValue = "";
+								if (e.instance.state.richValue) e.instance.state.richValue = BDFDB.SlateUtils.toRichValue("");
+							}
+							BDFDB.ReactUtils.forceUpdate(e.instance);
+						}
+					}
 				}}, {force: true, noCache: true});
 			}
 			
 			processMessageEditor (e) {
 				BDFDB.PatchUtils.patch(this, e.instance, "onSubmit", {before: e2 => {
-					if (this.settings.places.edit) this.handleSubmit(e, e2);
-				}}, {force: true, noCache: true});
-			}
-			
-			handleSubmit (e, e2) {
-				if (!this.settings.general.replaceBeforeSend || BDFDB.LibraryModules.SlowmodeUtils.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
-				let messageData = this.formatText(e2.methodArguments[0].value || e2.methodArguments[0]);
-				if (messageData) {
-					if (e2.methodArguments[0].uploads && messageData.files.length > 0 && (BDFDB.DMUtils.isDMChannel(e.instance.props.channel.id) || BDFDB.UserUtils.can("ATTACH_FILES", BDFDB.UserUtils.me.id, e.instance.props.channel.id))) {
-						e2.methodArguments[0].uploads = [].concat(e2.methodArguments[0].uploads);
-						console.log(messageData.files);
-						for (let file of messageData.files) BDFDB.LibraryModules.UploadUtils.instantBatchUpload(e.instance.props.channel.id, file, 0);
-					}
-					if (messageData.text != null && (e2.methodArguments[0].value || e2.methodArguments[0]) != messageData.text) {
-						if (e2.methodArguments[0].value != undefined) e2.methodArguments[0].value = messageData.text;
-						else e2.methodArguments[0] = messageData.text;
+					if (!this.settings.places.edit || !this.settings.general.replaceBeforeSend || BDFDB.LibraryModules.SlowmodeUtils.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
+					let messageData = this.formatText(e2.methodArguments[0]);
+					if (messageData && messageData.text != null && e2.methodArguments[0] != messageData.text) {
+						e2.methodArguments[0] = messageData.text;
 						e.instance.props.textValue = "";
 						if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.toRichValue("");
 						if (e.instance.state) {
@@ -407,7 +411,7 @@ module.exports = (_ => {
 						}
 						BDFDB.ReactUtils.forceUpdate(e.instance);
 					}
-				}
+				}}, {force: true, noCache: true});
 			}
 
 			formatText (text) {
