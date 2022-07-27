@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.6
+ * @version 2.4.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.4.6",
+			"version": "2.4.7",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
@@ -8215,17 +8215,15 @@ module.exports = (_ => {
 							if (count > 20) return BDFDB.TimeUtils.clear(interval);
 							else {
 								let module = BDFDB.ModuleUtils.findByString("guild-header-popout");
-								if (module) BDFDB.PatchUtils.patch(BDFDB, module.default.prototype, "render", {after: e2 => {
-									BDFDB.PatchUtils.patch(BDFDB, e2.returnValue.type, "type", {after: e3 => {
-										Internal.triggerQueuePatch("GuildHeaderContextMenu", {
-											arguments: e3.methodArguments,
-											instance: {props: e3.methodArguments[0]},
-											returnvalue: e3.returnValue,
-											component: e2.returnValue,
-											methodname: "type",
-											type: "GuildHeaderContextMenu"
-										});
-									}}, {noCache: true});
+								if (module) BDFDB.PatchUtils.patch(BDFDB, module, "type", {after: e2 => {
+									Internal.triggerQueuePatch("GuildHeaderContextMenu", {
+										arguments: e2.methodArguments,
+										instance: {props: e2.methodArguments[0]},
+										returnvalue: e2.returnValue,
+										component: e.returnValue,
+										methodname: "type",
+										type: "GuildHeaderContextMenu"
+									});
 								}});
 							}
 						}, 500);
