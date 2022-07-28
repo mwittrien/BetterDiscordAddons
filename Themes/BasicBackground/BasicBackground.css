@@ -668,6 +668,46 @@ body::after {
 	background-color: rgba(var(--transparencycolor), .2);
 }
 
+#app-mount .streamPreview-I7itZ6 {
+	position: relative;
+	background-color: transparent;
+	color: var(--header-secondary);
+	overflow: hidden;
+}
+.streamPreview-I7itZ6::before,
+.streamPreview-I7itZ6::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	border-radius: 5px;
+	pointer-events: none;
+	z-index: -1;
+}
+.streamPreview-I7itZ6::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+}
+.streamPreview-I7itZ6::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
+	backdrop-filter: blur(var(--popoutblur));
+}
+#app-mount .previewContainer-35LFgt {
+	background-color: transparent;
+}
+#app-mount .watchButton-2YRKxv {
+	border-color: var(--header-secondary);
+	color: var(--header-secondary);
+}
+#app-mount .watchButton-2YRKxv:not([disabled]):hover {
+	border-color: var(--header-primary);
+	color: var(--header-primary);
+}
+
 /* ----		5.3.	DMCHANNELS						---- */
 
 .interactive-1vLZ_I:focus-within,							/* dmchannel/page		inner							*/
@@ -1270,7 +1310,7 @@ body::after {
 	z-index: -1;
 }
 .wrapper-2vIMkT::before {
-	background: var(--backgound) var(--popoutposition)/var(--backgroundsize);
+	background: var(--backgound) var(--backgoundposition)/var(--backgroundsize);
 	background-attachment: fixed;
 }
 .wrapper-2vIMkT::after {

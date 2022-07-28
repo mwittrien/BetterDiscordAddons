@@ -1021,6 +1021,21 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	background-color: var(--background-floating);
 	color: var(--header-secondary);
 }
+#app-mount .streamPreview-I7itZ6 {
+	background-color: var(--background-tertiary);
+	color: var(--header-secondary);
+}
+#app-mount .previewContainer-35LFgt {
+	background-color: var(--background-floating);
+}
+#app-mount .watchButton-2YRKxv {
+	border-color: var(--header-secondary);
+	color: var(--header-secondary);
+}
+#app-mount .watchButton-2YRKxv:not([disabled]):hover {
+	border-color: var(--header-primary);
+	color: var(--header-primary);
+}
 
 /* ----		2.3.	DMCHANNELS						---- */
 
