@@ -2,7 +2,7 @@
  * @name HideMutedCategories
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.8
+ * @version 1.0.9
  * @description Hides muted Categories, if muted Channels are hidden
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "HideMutedCategories",
 			"author": "DevilBro",
-			"version": "1.0.8",
+			"version": "1.0.9",
 			"description": "Hides muted Categories, if muted Channels are hidden"
 		}
 	};
@@ -94,9 +94,12 @@ module.exports = (_ => {
 				
 				if (!e.returnvalue) {
 					e.instance.props.guildChannels.categories = Object.assign({}, e.instance.props.guildChannels.categories);
-					for (let id in e.instance.props.guildChannels.categories) if (e.instance.props.guildChannels.categories[id].isMuted && !(e.instance.props.selectedChannelId && e.instance.props.guildChannels.categories[id].channels[e.instance.props.selectedChannelId]) && !(e.instance.props.selectedVoiceChannelId && e.instance.props.guildChannels.categories[id].channels[e.instance.props.selectedVoiceChannelId]) && BDFDB.ObjectUtils.toArray(e.instance.props.guildChannels.categories[id].channels).filter(n => n.parent_id == id && BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(n.id) > 0).length == 0) {
+					for (let id in e.instance.props.guildChannels.categories) if (e.instance.props.guildChannels.categories[id].isMuted) {
 						let channelArray = BDFDB.ObjectUtils.toArray(e.instance.props.guildChannels.categories[id].channels);
-						for (let n of channelArray) if (n.renderLevel > renderLevels.DO_NOT_SHOW) n.renderLevel = renderLevels.DO_NOT_SHOW;
+						for (let n of channelArray) if (n.renderLevel > renderLevels.DO_NOT_SHOW && n.id != e.instance.props.selectedChannelId && n.id != e.instance.props.selectedVoiceChannelId && BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(n.id) <= 0) {
+							n.renderLevel = renderLevels.DO_NOT_SHOW;
+							BDFDB.ArrayUtils.remove(e.instance.props.guildChannels.categories[id].shownChannelIds, n.id, true);
+						}
 					}
 				}
 				else {
