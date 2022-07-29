@@ -95,7 +95,6 @@ module.exports = (_ => {
 				if (!e.returnvalue) {
 					e.instance.props.guildChannels.categories = Object.assign({}, e.instance.props.guildChannels.categories);
 					for (let id in e.instance.props.guildChannels.categories) if (e.instance.props.guildChannels.categories[id].isMuted) {
-						console.log(e.instance.props.guildChannels.categories[id]);
 						let channelArray = BDFDB.ObjectUtils.toArray(e.instance.props.guildChannels.categories[id].channels);
 						for (let n of channelArray) if (n.renderLevel > renderLevels.DO_NOT_SHOW && n.id != e.instance.props.selectedChannelId && n.id != e.instance.props.selectedVoiceChannelId && BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(n.id) <= 0) {
 							n.renderLevel = renderLevels.CAN_NOT_SHOW;
