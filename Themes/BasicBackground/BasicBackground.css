@@ -4857,31 +4857,31 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	color: var(--interactive-active);
 }
 
-#app-mount .focused-q9B2e4,									/* gifpicker			result								*/
-#app-mount .result-3OpoO7:hover {
+#app-mount .focused-16Owih,									/* gifpicker			result								*/
+#app-mount .result-pzZrwj:hover {
 	box-shadow: 0 11px 22px 1px rgba(var(--transparencycolor), .3);
 }
-#app-mount .placeholder-2Mfkde {
+#app-mount .placeholder-T1Tuu8 {
 	background: rgba(var(--textdarkest),.6);
 }
-#app-mount .endContainer-3FEUTM::after {
-	background-image: url(https://discord.com/assets/0c735bf91232f2a2266e6ba9d6753565.svg);
+#app-mount .endContainer-22e-US::after {
+	background-image: url(https://discord.com/assets/be5f088125f778701a7e4fad471a45da.svg);
 	opacity: 0.6;
 }
-#app-mount .endText-3HHsVy {
+#app-mount .endText-3Ps2ZN {
 	color: var(--header-secondary);
 }
 #app-mount .emptyHintCard-2A7Tng {
 	background-color: rgba(var(--transparencycolor), .2);
 	color: var(--header-secondary);
 }
-#app-mount .backButton-3D5utk {								/* gifpicker			backbutton							*/
+#app-mount .backButton-bSKWLe {								/* gifpicker			backbutton							*/
 	color: var(--interactive-normal);
 }
-#app-mount .backButton-3D5utk:hover {
+#app-mount .backButton-bSKWLe:hover {
 	color: var(--interactive-hover);
 }
-#app-mount .backButton-3D5utk:active {
+#app-mount .backButton-bSKWLe:active {
 	color: var(--interactive-active);
 }
 
