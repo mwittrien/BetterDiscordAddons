@@ -2,7 +2,7 @@
  * @name BetterNsfwTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.9
+ * @version 1.3.0
  * @description Adds a more noticeable Tag to NSFW Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterNsfwTag",
 			"author": "DevilBro",
-			"version": "1.2.9",
+			"version": "1.3.0",
 			"description": "Adds a more noticeable Tag to NSFW Channels"
 		}
 	};
@@ -69,8 +69,12 @@ module.exports = (_ => {
 				};
 				
 				this.css = `
-					${BDFDB.dotCN.channelcontainerdefault}:hover ${BDFDB.dotCN.channeliconitem} + ${BDFDB.dotCN._betternsfwtagtag} {
+					${BDFDB.dotCN._betternsfwtagtag} {
+						margin-left: 2px;
+					}
+					${BDFDB.dotCN.channelcontainerdefault}:hover ${BDFDB.dotCN.channeliconitem} ~ ${BDFDB.dotCN._betternsfwtagtag} {
 						display: none;
+					}
 				`;
 			}
 			
