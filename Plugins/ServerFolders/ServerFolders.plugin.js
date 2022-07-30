@@ -820,9 +820,9 @@ module.exports = (_ => {
 			
 			processGuildFolderSettingsModal (e) {
 				if (e.node) {
-					let root = e.node.parentElement.querySelector(BDFDB.dotCN.layermodal);
-					BDFDB.DOMUtils.addClass(root, BDFDB.disCN.layermodalmedium, BDFDB.disCN.modalwrapper, `${this.name}-modal`);
-					BDFDB.DOMUtils.removeClass(root, BDFDB.disCN.layermodalsmall);
+					let root = e.node.parentElement.querySelector(BDFDB.dotCN.modal);
+					BDFDB.DOMUtils.addClass(root, BDFDB.disCN.modalmedium, BDFDB.disCN.modalwrapper, `${this.name}-modal`);
+					BDFDB.DOMUtils.removeClass(root, BDFDB.disCN.modalsmall);
 				}
 				if (e.returnvalue) {
 					let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(e.instance.props.folderId);
