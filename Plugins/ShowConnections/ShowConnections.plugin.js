@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.9
+ * @version 1.1.0
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,16 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowConnections",
 			"author": "DevilBro",
-			"version": "1.0.9",
+			"version": "1.1.0",
 			"description": "Shows the connected Accounts of a User in the UserPopout"
-		},
-		"changeLog": {
-			"fixed": {
-				"Bright Icons": "Uses the white version of some icons if dark mode is enabled"
-			},
-			"added": {
-				"Copy Name/Link": "Right clicking an icon will give you the options to copy the name/link of a connection"
-			}
 		}
 	};
 
@@ -124,7 +116,7 @@ module.exports = (_ => {
 			
 			onStart () {				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
-					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.USER_PROFILE_FETCH_SUCCESS && e.methodArguments[0].user && e.methodArguments[0].connected_accounts) {
+					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == "USER_PROFILE_FETCH_SUCCESS" && e.methodArguments[0].user && e.methodArguments[0].connected_accounts) {
 						const user = e.methodArguments[0].user;
 						delete requestedUsers[user.id];
 						loadedUsers[user.id] = e.methodArguments[0].connected_accounts;

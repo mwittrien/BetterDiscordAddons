@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.7.0
+ * @version 3.7.1
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "NotificationSounds",
 			"author": "DevilBro",
-			"version": "3.7.0",
+			"version": "3.7.1",
 			"description": "Allows you to replace the native Sounds with custom Sounds"
 		}
 	};
@@ -222,7 +222,7 @@ module.exports = (_ => {
 				}
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dirtyDispatch", {before: e => {
-					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.MESSAGE_CREATE && e.methodArguments[0].message) {
+					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == "MESSAGE_CREATE" && e.methodArguments[0].message) {
 						const message = e.methodArguments[0].message;
 						const guildId = message.guild_id || null;
 						if (message.author.id != BDFDB.UserUtils.me.id && !BDFDB.LibraryModules.RelationshipStore.isBlocked(message.author.id)) {

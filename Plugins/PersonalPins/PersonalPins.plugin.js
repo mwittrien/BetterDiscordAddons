@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.0
+ * @version 2.1.1
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "PersonalPins",
 			"author": "DevilBro",
-			"version": "2.1.0",
+			"version": "2.1.1",
 			"description": "Allows you to locally pin Messages"
-		},
-		"changeLog": {
-			"added": {
-				"Tags": "You can now add tags to notes, they will be included in the search query, allowing you to find notes more easily with your own key words"
-			}
 		}
 	};
 
@@ -426,7 +421,7 @@ module.exports = (_ => {
 				notes = BDFDB.DataUtils.load(this, "notes");
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
-					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.MESSAGE_DELETE) {
+					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == "MESSAGE_DELETE") {
 						let note = this.getNoteData({id: e.methodArguments[0].id, channel_id: e.methodArguments[0].channelId});
 						if (note) this.removeNoteData(note, true);
 					}

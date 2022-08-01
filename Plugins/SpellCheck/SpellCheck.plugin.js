@@ -2,7 +2,7 @@
  * @name SpellCheck
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.3
+ * @version 1.6.4
  * @description Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,14 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "SpellCheck",
 			"author": "DevilBro",
-			"version": "1.6.3",
+			"version": "1.6.4",
 			"description": "Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary"
-		},
-		"changeLog": {
-			"improved": {
-				"Conjoined Words": "Now properly splits conjoined words and checks each segment of the conjoinment, for example 'green-blue' will no longer show as error",
-				"Quotes": "Added “ ” ‘ ’ to special symbols"
-			}
 		}
 	};
 	
@@ -106,7 +100,7 @@ module.exports = (_ => {
 					let dictionaryLanguageIds = Array.from(BDFDB.DOMUtils.create(body).querySelectorAll(`[href*="/mwittrien/BetterDiscordAddons/blob/master/Plugins/SpellCheck/dic/"]`)).map(n => n.innerText.split(".")[0]).filter(n => n);
 					languages = BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, langId => dictionaryLanguageIds.includes(langId), true);
 					
-					if (BDFDB.LibraryModules.SpellCheckStore && BDFDB.LibraryModules.SpellCheckStore.isEnabled()) BDFDB.LibraryModules.DispatchApiUtils.dispatch({type: BDFDB.DiscordConstants.ActionTypes.SPELLCHECK_TOGGLE});
+					if (BDFDB.LibraryModules.SpellCheckStore && BDFDB.LibraryModules.SpellCheckStore.isEnabled()) BDFDB.LibraryModules.DispatchApiUtils.dispatch({type: "SPELLCHECK_TOGGLE"});
 
 					BDFDB.PatchUtils.forceAllUpdates(this);
 					

@@ -2,7 +2,7 @@
  * @name ServerHider
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.2.3
+ * @version 6.2.4
  * @description Allows you to hide certain Servers in your Server List
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerHider",
 			"author": "DevilBro",
-			"version": "6.2.3",
+			"version": "6.2.4",
 			"description": "Allows you to hide certain Servers in your Server List"
 		}
 	};
@@ -81,7 +81,7 @@ module.exports = (_ => {
 				hiddenEles = BDFDB.DataUtils.load(this, "hidden");
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
-					if (e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.STREAMER_MODE_UPDATE) BDFDB.GuildUtils.rerenderAll(true);
+					if (e.methodArguments[0].type == "STREAMER_MODE_UPDATE") BDFDB.GuildUtils.rerenderAll(true);
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.FolderStore, "getGuildFolderById", {after: e => {

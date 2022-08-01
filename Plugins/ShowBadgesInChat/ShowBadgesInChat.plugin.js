@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.0
+ * @version 1.9.1
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowBadgesInChat",
 			"author": "DevilBro",
-			"version": "1.9.0",
+			"version": "1.9.1",
 			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList"
-		},
-		"changeLog": {
-			"improved": {
-				"More Specific Settings": "You can now select more specifically where which Badges will be shown"
-			}
 		}
 	};
 	
@@ -178,27 +173,6 @@ module.exports = (_ => {
 					badgeConfigs[key].key = key;
 				}
 				
-				// REMOVE 15.06.2022
-				let oldPlaces = BDFDB.DataUtils.load(this, "places");
-				let oldBadges = BDFDB.DataUtils.load(this, "badges");
-				let oldIndicators = BDFDB.DataUtils.load(this, "indicators");
-				if (Object.keys(oldBadges).length && Object.keys(oldIndicators).length && Object.keys(oldPlaces).length) {
-					for (let key in oldBadges) {
-						if (!badgeConfigs[key]) badgeConfigs[key] = {};
-						for (let key2 in oldPlaces) badgeConfigs[key][key2] = oldBadges[key] && oldPlaces[key2];
-					}
-					for (let key in oldIndicators) {
-						if (!badgeConfigs[key]) badgeConfigs[key] = {};
-						for (let key2 in oldPlaces) badgeConfigs[key][key2] = oldIndicators[key] && oldPlaces[key2];
-					}
-					BDFDB.DataUtils.remove(this, "general");
-					BDFDB.DataUtils.remove(this, "settings");
-					BDFDB.DataUtils.remove(this, "places");
-					BDFDB.DataUtils.remove(this, "badges");
-					BDFDB.DataUtils.remove(this, "indicators");
-					BDFDB.DataUtils.save(badgeConfigs, this, "badgeConfigs");
-				}
-				
 				let badgeCache = BDFDB.DataUtils.load(this, "badgeCache");
 				if (badgeCache) {
 					let now = (new Date()).getTime(), month = 1000*60*60*24*30;
@@ -227,11 +201,11 @@ module.exports = (_ => {
 					}
 				};
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
-					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.USER_PROFILE_FETCH_FAILURE && e.methodArguments[0].userId) {
+					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == "USER_PROFILE_FETCH_FAILURE" && e.methodArguments[0].userId) {
 						const user = BDFDB.LibraryModules.UserStore.getUser(e.methodArguments[0].userId);
 						processUser(e.methodArguments[0].userId, {user: user || {}, flags: user ? user.publicFlags : 0});
 					}
-					else if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.USER_PROFILE_FETCH_SUCCESS && e.methodArguments[0].user) processUser(e.methodArguments[0].user.id, e.methodArguments[0])
+					else if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == "USER_PROFILE_FETCH_SUCCESS" && e.methodArguments[0].user) processUser(e.methodArguments[0].user.id, e.methodArguments[0])
 				}});
 
 				this.forceUpdateAll();
