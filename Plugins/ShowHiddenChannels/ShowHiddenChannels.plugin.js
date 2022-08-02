@@ -2,7 +2,7 @@
  * @name ShowHiddenChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.2.4
+ * @version 3.2.5
  * @description Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ShowHiddenChannels",
 			"author": "DevilBro",
-			"version": "3.2.4",
+			"version": "3.2.5",
 			"description": "Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)"
 		}
 	};
@@ -395,8 +395,8 @@ module.exports = (_ => {
 							if (hiddenChannelCache[e.instance.props.guild.id].indexOf(n.record.id) == -1) hiddenChannelCache[e.instance.props.guild.id].push(n.record.id);
 						}
 						category.shownChannelIds = channelArray.filter(n => n.renderLevel == renderLevels.SHOW).sort((x, y) => {
-							let xPos = x.record.position + (x.record.isVocal() ? 1e4 : 0) + (sortAtBottom && x._hidden ? 1e5 : 0);
-							let yPos = y.record.position + (y.record.isVocal() ? 1e4 : 0) + (sortAtBottom && y._hidden ? 1e5 : 0);
+							let xPos = x.record.position + (x.record.isGuildVocal() ? 1e4 : 0) + (sortAtBottom && x._hidden ? 1e5 : 0);
+							let yPos = y.record.position + (y.record.isGuildVocal() ? 1e4 : 0) + (sortAtBottom && y._hidden ? 1e5 : 0);
 							return xPos < yPos ? -1 : xPos > yPos ? 1 : 0;
 						}).map(n => n.id);
 					}
