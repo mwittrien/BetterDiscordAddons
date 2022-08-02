@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.9
+ * @version 4.6.0
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.5.9",
+			"version": "4.6.0",
 			"description": "Allows you to locally edit Users"
 		}
 	};
@@ -201,6 +201,10 @@ module.exports = (_ => {
 			onStart () {				
 				let observer = new MutationObserver(_ => {this.changeAppTitle();});
 				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name: "appTitleObserver", instance: observer}, {childList: true});
+			
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UserNameUtils, "getName", {after: e => {
+					if (e.methodArguments[2] && changedUsers[e.methodArguments[2].id] && changedUsers[e.methodArguments[2].id].name) return changedUsers[e.methodArguments[2].id].name;
+				}});
 			
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.StageChannelUtils, "getMutableParticipants", {after: e => {
 					if (BDFDB.ArrayUtils.is(e.returnValue)) for (let i in e.returnValue) {
@@ -493,22 +497,13 @@ module.exports = (_ => {
 			}
 
 			processChannelCallHeader (e) {
-				if (e.instance.props.channel && this.settings.places.dmHeader) {
-					if (e.instance.props.channel.isDM()) {
-						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Title"});
-						if (userName) {
-							let recipientId = e.instance.props.channel.getRecipientId();
-							if (changedUsers[recipientId]) {
-								userName.props.children = this.getUserData(recipientId).username;
-								this.changeUserColor(userName, recipientId);
-							}
-						}
-					}
-					else {
-						let channelTitle = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelTitle"});
-						if (channelTitle && channelTitle.props && channelTitle.props.focusedParticipant && channelTitle.props.focusedParticipant.user && changedUsers[channelTitle.props.focusedParticipant.user.id]) {
-							channelTitle.props.focusedParticipant.user = this.getUserData(channelTitle.props.focusedParticipant.user.id);
-							channelTitle.props.focusedParticipant.userNick = changedUsers[channelTitle.props.focusedParticipant.user.id].name || channelTitle.props.focusedParticipant.userNick;
+				if (e.instance.props.channel && this.settings.places.dmHeader && e.instance.props.channel.isDM()) {
+					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Title"});
+					if (userName) {
+						let recipientId = e.instance.props.channel.getRecipientId();
+						if (changedUsers[recipientId]) {
+							userName.props.children = this.getUserData(recipientId).username;
+							this.changeUserColor(userName, recipientId);
 						}
 					}
 				}
