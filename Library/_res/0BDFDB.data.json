@@ -10,7 +10,7 @@
 		"Relationship": {"strings": ["status", "mutualGuilds", "nickname"], "value": "Row"},
 		"Timestamp": {"props": ["add", "dayOfYear", "hasAlignedHourOffset"]},
 		"Upload": {"strings": [".reactNativeFileIndex", ".NOT_STARTED", ".loaded", ".size"], "value": "CloudFileUpload"},
-		"User": {"props": ["hasFlag", "isLocalBot", "isClaimed"]}
+		"User": {"strings": ["hasFlag", "isLocalBot", "isClaimed"], "value": "default"}
 	},
 	"LibraryModules": {
 		"AckUtils": {"props": ["localAck", "bulkAck"]},
