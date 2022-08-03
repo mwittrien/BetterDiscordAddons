@@ -3852,6 +3852,10 @@ html .bd-settings-group.collapsible .bd-settings-title::after {
 	background-color: var(--background-modifier-selected);
 }
 
+.bd-error-modal-content {
+	padding: 0 10px 16px 10px;
+}
+
 #app-mount .fav {
 	background: var(--interactive-active);
 	width: 16px;

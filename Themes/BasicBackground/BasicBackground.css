@@ -6625,6 +6625,19 @@ html .bd-toast.toast-warn.icon::before {
 	text-shadow: 1px 1px var(--textshadow);
 }
 
+
+.bd-error-modal-content {
+	padding: 0 10px 16px 10px;
+}
+#app-mount .bd-addon-error {
+	background-color: rgba(var(--transparencycolor), 0.2);
+	border-color: rgba(var(--transparencycolor), 0.2);
+}
+#app-mount .bd-addon-error.expanded,
+#app-mount .bd-addon-error:hover {
+	background-color: rgba(var(--transparencycolor), 0.3);
+}
+
 .bd-addon-views .bd-view-button:hover {
 	background-color: rgba(var(--transparencycolor), .3);
 }

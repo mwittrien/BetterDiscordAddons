@@ -1,4 +1,5 @@
 ﻿@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/ThemeDevBadge.css);
 
 :root {
 	--accentcolor:					88,101,242;
@@ -2544,15 +2545,6 @@ input.input-2g-os5 {										/* textinput												*/
 }
 .bd-server-card.bd-server-card-pinned::after {
 	background: var(--bd-blue);
-}
-
-#app-mount .bd-addon-error {
-	background-color: rgba(var(--transparencycolor), 0.2);
-	border-color: rgba(var(--transparencycolor), 0.2);
-}
-#app-mount .bd-addon-error.expanded,
-#app-mount .bd-addon-error:hover {
-	background-color: rgba(var(--transparencycolor), 0.3);
 }
 
 .bd-modal-wrapper .footer button {
