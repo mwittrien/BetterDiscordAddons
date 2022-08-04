@@ -45,7 +45,7 @@
 		"DirectMessageStore": {"props": ["getPrivateChannelIds"]},
 		"DirectMessageUnreadStore": {"props": ["getUnreadPrivateChannelIds"]},
 		"DirectMessageUtils": {"props": ["addRecipient", "openPrivateChannel"]},
-		"DispatchApiUtils": {"props": ["dirtyDispatch", "isDispatching"]},
+		"DispatchApiUtils": {"props": ["dispatch", "isDispatching"]},
 		"DispatchUtils": {"props": ["ComponentDispatch"]},
 		"EmojiUtils": {"props": ["translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji"]},
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},

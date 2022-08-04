@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.9
+ * @version 1.3.0
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "LastMessageDate",
 			"author": "DevilBro",
-			"version": "1.2.9",
+			"version": "1.3.0",
 			"description": "Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal"
 		}
 	};
@@ -95,7 +95,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dirtyDispatch", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == "MESSAGE_CREATE" && e.methodArguments[0].message) {
 						let message = e.methodArguments[0].message;
 						let guildId = message.guild_id || message.channel_id;
