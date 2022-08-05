@@ -261,6 +261,7 @@ module.exports = (_ => {
 					},
 					after: {
 						ImageModal: ["render", "componentDidMount", "componentWillUnmount"],
+						ModalCarousel: "render",
 						LazyImage: ["componentDidMount", "componentDidUpdate"],
 						LazyImageZoomable: "render",
 						Spoiler: "render",
@@ -269,6 +270,18 @@ module.exports = (_ => {
 				};
 				
 				this.css = `
+					${BDFDB.dotCN.messageattachment} {
+						display: grid;
+						position: relative;
+					}
+					${BDFDB.dotCNS.messageattachment + BDFDB.dotCN.messageattachmentremovebutton} {
+						position: absolute;
+						right: -22px;
+						z-index: 1;
+					}
+					${BDFDB.dotCN.messageattachment}:hover ${BDFDB.dotCN.messageattachmentremovebutton} {
+						opacity: 1;
+					}
 					${BDFDB.dotCN._imageutilitiesimagedetails} {
 						display: inline-flex;
 					}
@@ -350,9 +363,6 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN._imageutilitiessibling}:hover ${BDFDB.dotCN._imageutilitiesswitchicon} {
 						background: rgba(0, 0, 0, 0.5);
-					}
-					${BDFDB.dotCNS._imageutilitiesgallery + BDFDB.dotCN.imagemodalnavbutton} {
-						display: none;
 					}
 					${BDFDB.dotCN._imageutilitiesdetailswrapper} {
 						position: fixed;
@@ -942,7 +952,13 @@ module.exports = (_ => {
 					BDFDB.TimeUtils.clear(viewedImageTimeout);
 					
 					let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node);
-					if (modal) modal.className = BDFDB.DOMUtils.formatClassName(modal.className, this.settings.viewerSettings.galleryMode && BDFDB.disCN._imageutilitiesgallery, this.settings.viewerSettings.details && BDFDB.disCN._imageutilitiesdetailsadded);
+					if (modal) {
+						modal.className = BDFDB.DOMUtils.formatClassName(modal.className, this.settings.viewerSettings.galleryMode && BDFDB.disCN._imageutilitiesgallery, this.settings.viewerSettings.details && BDFDB.disCN._imageutilitiesdetailsadded);
+						if (this.settings.viewerSettings.zoomMode) {
+							BDFDB.DOMUtils.addClass(modal, BDFDB.disCN.imagemodal);
+							BDFDB.DOMUtils.removeClass(modal, BDFDB.disCN.modalcarouselmodal, BDFDB.disCN.modalcarouselmodalzoomed);
+						}
+					}
 				}
 				else if (e.methodname == "componentWillUnmount") {
 					firstViewedImage = null;
@@ -1164,6 +1180,13 @@ module.exports = (_ => {
 				}
 			}
 			
+			processModalCarousel (e) {
+				if (this.settings.viewerSettings.zoomMode) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ImageModal"});
+					if (index > -1) return children[index];
+				}
+			}
+			
 			processLazyImage (e) {
 				if (e.node) {
 					if (e.instance.props.resized) {
@@ -1177,6 +1200,7 @@ module.exports = (_ => {
 					if (e.methodname == "componentDidMount") {
 						let isVideo = (typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})) || {type: {}}).type.displayName == "Video";
 						if (this.settings.viewerSettings.zoomMode && !isVideo && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling) && BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.getInstance(e.node), {name: "ImageModal", up: true})) {
+							e.node.style.setProperty("cursor", "zoom-in");
 							e.node.addEventListener("mousedown", event => {
 								if (event.which != 1) return;
 								BDFDB.ListenerUtils.stopEvent(event);
@@ -1220,7 +1244,8 @@ module.exports = (_ => {
 									event = event2;
 									lens.update();
 								};
-								let releasing = _ => {
+								let releasing = event2 => {
+									BDFDB.ListenerUtils.stopEvent(event2);
 									e.node.style.removeProperty("pointer-events");
 									this.cleanupListeners("Zoom");
 									document.removeEventListener("mousemove", dragging);
@@ -1395,6 +1420,7 @@ module.exports = (_ => {
 				if (!message) return;
 				firstViewedImage = {messageId: message.id, channelId: message.channel_id, proxy_url: image.src};
 				viewedImage = firstViewedImage;
+				if (cachedImages) cachedImages.index = this.getImageIndex(cachedImages.all, viewedImage);
 				viewedImageTimeout = BDFDB.TimeUtils.timeout(_ => {
 					firstViewedImage = null;
 					viewedImage = null;
