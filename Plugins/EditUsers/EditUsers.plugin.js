@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.6.0
+ * @version 4.6.1
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.6.0",
+			"version": "4.6.1",
 			"description": "Allows you to locally edit Users"
 		}
 	};
@@ -103,6 +103,7 @@ module.exports = (_ => {
 						ChannelEditorContainer: "render",
 						AutocompleteUserResult: "render",
 						UserBanner: "default",
+						UserPopoutAvatar: "UserPopoutAvatar",
 						UserPopoutInfo: "UserPopoutInfo",
 						UserProfileModal: "default",
 						UserProfileModalHeader: "default",
@@ -272,15 +273,6 @@ module.exports = (_ => {
 					if (user) {
 						if (user.id == "278543574059057154") return user.banner;
 						let data = changedUsers[user.id];
-						if (data && data.banner && !data.removeBanner) return data.banner;
-					}
-					return e.callOriginalMethod();
-				}});
-				
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.BannerUtils, "getUserBannerURLForContext", {instead: e => {
-					if (e.methodArguments[0].user) {
-						if (e.methodArguments[0].user.id == "278543574059057154") return e.methodArguments[0].user.banner;
-						let data = changedUsers[e.methodArguments[0].user.id];
 						if (data && data.banner && !data.removeBanner) return data.banner;
 					}
 					return e.callOriginalMethod();
@@ -573,7 +565,17 @@ module.exports = (_ => {
 			}
 
 			processUserBanner (e) {
-				if (e.instance.props.bannerSrc && e.instance.props.user && e.instance.props.bannerSrc.indexOf(`/${e.instance.props.user.id}/http`) > -1) e.instance.props.bannerSrc = `http${e.instance.props.bannerSrc.split(`/${e.instance.props.user.id}/http`)[1].replace(/\.png\?size=[\d]*$/g, "")}`;
+				if (e.instance.props.user && changedUsers[e.instance.props.user.id]) {
+					if (changedUsers[e.instance.props.user.id].removeBanner) e.instance.props.bannerSrc = null;
+					else if (changedUsers[e.instance.props.user.id].banner) e.instance.props.bannerSrc = changedUsers[e.instance.props.user.id].banner;
+				}
+			}
+
+			processUserPopoutAvatar (e) {
+				if (e.instance.props.displayProfile && e.instance.props.user && changedUsers[e.instance.props.user.id]) {
+					if (changedUsers[e.instance.props.user.id].removeBanner) e.instance.props.displayProfile.banner = null;
+					else if (changedUsers[e.instance.props.user.id].banner) e.instance.props.displayProfile.banner = changedUsers[e.instance.props.user.id].banner;
+				}
 			}
 			
 			processUserPopoutContainer (e) {
