@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.2
+ * @version 1.1.3
  * @description Allows you to save Custom Statuses as Quick Select
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "CustomStatusPresets",
 			"author": "DevilBro",
-			"version": "1.1.2",
+			"version": "1.1.3",
 			"description": "Allows you to save Custom Statuses as Quick Select"
 		}
 	};
@@ -394,14 +394,12 @@ module.exports = (_ => {
 									let date = new Date;
 									expiresAt = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime() - date.getTime();
 								}
-								BDFDB.LibraryModules.SettingsUtilsOld.updateRemoteSettings({
-									status: presets[id].status,
-									customStatus: {
-										text: presets[id].text && presets[id].text.length > 0 ? presets[id].text : null,
-										expiresAt: expiresAt ? BDFDB.DiscordObjects.Timestamp().add(expiresAt, "ms").toISOString() : null,
-										emojiId: presets[id].emojiInfo ? presets[id].emojiInfo.id : null,
-										emojiName: presets[id].emojiInfo ? presets[id].emojiInfo.name : null
-									}
+								if (presets[id].status) BDFDB.LibraryModules.SettingsUtils.StatusSetting.updateSetting(presets[id].status);
+								BDFDB.LibraryModules.SettingsUtils.CustomStatusSetting.updateSetting({
+									text: presets[id].text && presets[id].text.length > 0 ? presets[id].text : "",
+									expiresAtMs: expiresAt ? BDFDB.DiscordObjects.Timestamp().add(expiresAt, "ms").toDate().getTime().toString() : "0",
+									emojiId: presets[id].emojiInfo ? presets[id].emojiInfo.id : "0",
+									emojiName: presets[id].emojiInfo ? presets[id].emojiInfo.name : ""
 								});
 							}
 						}))
