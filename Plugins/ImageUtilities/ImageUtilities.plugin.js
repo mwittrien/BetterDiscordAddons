@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.7.9
+ * @version 4.8.0
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.7.9",
+			"version": "4.8.0",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		}
 	};
@@ -270,18 +270,6 @@ module.exports = (_ => {
 				};
 				
 				this.css = `
-					${BDFDB.dotCN.messageattachment} {
-						display: grid;
-						position: relative;
-					}
-					${BDFDB.dotCNS.messageattachment + BDFDB.dotCN.messageattachmentremovebutton} {
-						position: absolute;
-						right: -22px;
-						z-index: 1;
-					}
-					${BDFDB.dotCN.messageattachment}:hover ${BDFDB.dotCN.messageattachmentremovebutton} {
-						opacity: 1;
-					}
 					${BDFDB.dotCN._imageutilitiesimagedetails} {
 						display: inline-flex;
 					}
@@ -428,6 +416,9 @@ module.exports = (_ => {
 									}),
 									(!altText || altText.length < 50) && details
 								]
+							});
+							e.returnValue.props.children = BDFDB.ReactUtils.createElement("div", {
+								children: e.returnValue.props.children
 							});
 						}
 					}
