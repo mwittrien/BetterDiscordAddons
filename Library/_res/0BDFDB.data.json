@@ -113,7 +113,7 @@
 		"FriendUtils": {"props": ["getFriendIDs", "getRelationships"]},
 		"RoleIconUtils": {"props": ["getRoleIconData"]},
 		"SearchPageUtils": {"props": ["searchNextPage", "searchPreviousPage"]},
-		"SettingsStore": {"props": ["guildPositions", "theme"]},
+		"SettingsStore": {"props": ["getAllSettings", "theme"]},
 		"SettingsUtils": {"props": ["ShowCurrentGame", "DeveloperMode"]},
 		"SettingsUtilsOld": {"props": ["updateLocalSettings", "updateRemoteSettings"]},
 		"SimpleMarkdownComponents": {"strings": ["customEmoji", "emojiTooltipPosition", "timestampTooltip"]},
