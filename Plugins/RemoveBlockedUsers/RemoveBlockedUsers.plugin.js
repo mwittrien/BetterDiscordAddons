@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.1
+ * @version 1.5.2
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "RemoveBlockedUsers",
 			"author": "DevilBro",
-			"version": "1.5.1",
+			"version": "1.5.2",
 			"description": "Removes blocked Messages/Users"
 		}
 	};
@@ -409,29 +409,24 @@ module.exports = (_ => {
 					}
 					for (let i in newRows) if (newRows[i] && newRows[i].type == "GROUP" && newRows[i].count <= 0) newRows[i] = undefined;
 					const removeEmptyWithin = (array, filter) => {
-						let reversed = [].concat(array).reverse();
-						let prefixLength = 0, suffixLength = 0;
-						for (let i in array) if (array[i] !== undefined) {
-							prefixLength = parseInt(i);
-							break;
-						}
+						let reversed = [].concat(array).reverse(), suffixLength = 0;
 						for (let i in reversed) if (reversed[i] !== undefined) {
 							suffixLength = parseInt(i);
 							break;
 						}
-						return [].concat(new Array(prefixLength), array.filter(filter), new Array(suffixLength))
+						return [].concat(array.filter(filter), new Array(suffixLength))
 					};
 					channelMembers.props.rows = removeEmptyWithin(newRows, n => n);
 					channelMembers.props.groups = removeEmptyWithin(newGroups, g => g && g.count > 0);
 				}
 			}
 			
-			processPrivateChannelRecipients (e) {
-				if (this.settings.places.voiceChat && e.instance.props.channel && e.instance.props.channel.isGroupDM()) e.instance.props.channel = new BDFDB.DiscordObjects.Channel(Object.assign({}, e.instance.props.channel, {rawRecipients: e.instance.props.channel.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id)), recipients: e.instance.props.channel.recipients.filter(id => !id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(id))}));
-			}
-			
 			processMemberListItem (e) {
 				if (this.settings.places.memberList && e.instance.props.user && BDFDB.LibraryModules.RelationshipStore.isBlocked(e.instance.props.user.id)) return null;
+			}
+			
+			processPrivateChannelRecipients (e) {
+				if (this.settings.places.voiceChat && e.instance.props.channel && e.instance.props.channel.isGroupDM()) e.instance.props.channel = new BDFDB.DiscordObjects.Channel(Object.assign({}, e.instance.props.channel, {rawRecipients: e.instance.props.channel.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id)), recipients: e.instance.props.channel.recipients.filter(id => !id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(id))}));
 			}
 
 			processNowPlayingItem (e) {

@@ -1195,18 +1195,18 @@ module.exports = (_ => {
 							e.node.addEventListener("mousedown", event => {
 								if (event.which != 1) return;
 								BDFDB.ListenerUtils.stopEvent(event);
-
+								
 								let vanishObserver;
 								
 								let imgRects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
-
+								
 								let lens = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${this.settings.zoomSettings.lensSize}px !important; height: ${this.settings.zoomSettings.lensSize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * this.settings.zoomSettings.zoomLevel}px; height: ${imgRects.height * this.settings.zoomSettings.zoomLevel}px; position: fixed !important;${this.settings.zoomSettings.pixelMode ? " image-rendering: pixelated !important;" : ""}"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
 								let pane = lens.firstElementChild.firstElementChild;
 								let backdrop = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslensebackdrop}" style="background: rgba(0, 0, 0, 0.3) !important; position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; pointer-events: none !important; z-index: 8000 !important;"></div>`);
 								let appMount = document.querySelector(BDFDB.dotCN.appmount);
 								appMount.appendChild(lens);
 								appMount.appendChild(backdrop);
-
+								
 								let lensRects = BDFDB.DOMUtils.getRects(lens);
 								
 								let halfW = lensRects.width / 2, halfH = lensRects.height / 2;
@@ -1230,7 +1230,7 @@ module.exports = (_ => {
 								lens.update();
 								
 								e.node.style.setProperty("pointer-events", "none", "important");
-
+								
 								let dragging = event2 => {
 									event = event2;
 									lens.update();

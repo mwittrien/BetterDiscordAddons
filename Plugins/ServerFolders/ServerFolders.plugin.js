@@ -698,7 +698,7 @@ module.exports = (_ => {
 							let ids = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
 							args[2] = args[2].filter(id => !ids.includes(id));
 							return topIsVisible(...args) || BDFDB.LibraryModules.UnreadGuildUtils.getMentionCount(args[0]) == 0;
-						}, "Error in isVisible of Top Bar in Guild List!");
+						}, "Error in isVisible of Top Bar in Guild List!", this);
 					}
 					let bottomBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbarbottom]]});
 					if (bottomBar) {
@@ -707,7 +707,7 @@ module.exports = (_ => {
 							let ids = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
 							args[2] = args[2].filter(id => !ids.includes(id));
 							return bottomIsVisible(...args) || BDFDB.LibraryModules.UnreadGuildUtils.getMentionCount(args[0]) == 0;
-						}, "Error in isVisible of Bottom Bar in Guild List!");
+						}, "Error in isVisible of Bottom Bar in Guild List!", this);
 					}
 				}
 			}
