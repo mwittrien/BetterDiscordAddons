@@ -3,6 +3,7 @@
 	"LibraryRequires": ["electron", "fs", "path", "process", "request"],
 	"DiscordObjects": {
 		"Channel": {"props": ["getRecipientId", "isManaged", "getGuildId"]},
+		"DisplayProfile": {"props": ["isUsingGuildMemberBio", "getBannerURL"]},
 		"Guild": {"props": ["getIconURL", "getMaxEmojiSlots", "getRole"]},
 		"Invite": {"props": ["getExpiresAt", "isExpired"]},
 		"Message": {"props": ["getReaction", "isEdited", "getChannelId"]},
@@ -81,6 +82,7 @@
 		"MediaComponentUtils": {"props": ["renderImageComponent", "renderAudioComponent"]},
 		"MediaDeviceSetUtils": {"props": ["setOutputDevice", "setInputDevice"]},
 		"MediaDeviceUtils": {"props": ["getOutputDevices", "getInputDevices"]},
+		"MemberDisplayUtils": {"props": ["getDisplayProfile"]},
 		"MemberCountUtils": {"props": ["getMemberCount", "getMemberCounts"]},
 		"MemberStore": {"props": ["getMember", "getMembers"]},
 		"MentionUtils": {"props": ["isRawMessageMentioned", "isMentioned"]},

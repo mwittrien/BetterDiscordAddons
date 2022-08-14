@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.9
+ * @version 2.5.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.4.9",
+			"version": "2.5.0",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
@@ -3256,10 +3256,9 @@ module.exports = (_ => {
 			if (!user) return window.location.origin + "/assets/1f0bfc0865d324c2587920a7d80c609b.png";
 			else return ((user.avatar ? "" : window.location.origin) + Internal.LibraryModules.IconUtils.getUserAvatarURL(user)).split("?")[0];
 		};
-		BDFDB.UserUtils.getBanner = function (id = BDFDB.UserUtils.me.id, canAnimate = false) {
-			let user = Internal.LibraryModules.UserStore.getUser(id);
-			if (!user || !user.banner) return "";
-			return Internal.LibraryModules.IconUtils.getUserBannerURL(Object.assign({}, user, {canAnimate})).split("?")[0];
+		BDFDB.UserUtils.getBanner = function (id = BDFDB.UserUtils.me.id, guildId = Internal.LibraryModules.LastGuildStore.getGuildId(), canAnimate = false) {
+			let displayProfile = Internal.LibraryModules.MemberDisplayUtils.getDisplayProfile(id, guildId);
+			return (Internal.LibraryModules.IconUtils.getUserBannerURL(Object.assign({banner: displayProfile.banner, id: id}, {canAnimate})) || "").split("?")[0];
 		};
 		BDFDB.UserUtils.can = function (permission, id = BDFDB.UserUtils.me.id, channelId = Internal.LibraryModules.LastChannelStore.getChannelId()) {
 			if (!BDFDB.DiscordConstants.Permissions[permission]) BDFDB.LogUtils.warn([permission, "not found in Permissions"]);
@@ -8179,8 +8178,6 @@ module.exports = (_ => {
 			
 			Internal.patchedModules = {
 				before: {
-					UserBanner: "default",
-					UserPopoutAvatar: "UserPopoutAvatar",
 					SearchBar: "render",
 					EmojiPicker: "type",
 					EmojiPickerListRow: "default"
@@ -8250,13 +8247,6 @@ module.exports = (_ => {
 					return [InternalData.ModuleUtilsConfig.Finder.AppView.strings].flat(10).filter(n => typeof n == "string").every(string => typeString.indexOf(string) > -1);
 				}});
 				if (index > -1) children[index] = BDFDB.ReactUtils.createElement(AppViewExport.exports.default, children[index].props);
-			};
-			
-			Internal.processUserBanner = function (e) {
-				if (e.instance.props.user && e.instance.props.user.id == InternalData.myId) {
-					e.instance.props.user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.user.id);
-					if (e.instance.props.user.banner) e.instance.props.bannerSrc = e.instance.props.user.banner;
-				}
 			};
 			
 			Internal.processMessage = function (e) {
@@ -8414,16 +8404,8 @@ module.exports = (_ => {
 			};
 			Internal.processUserPopoutAvatar = function (e) {
 				if (!e.instance.props.user) return;
-				if (!e.returnvalue) {
-					if (e.instance.props.user && e.instance.props.user.id == InternalData.myId) {
-						e.instance.props.user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.user.id);
-						if (e.instance.props.displayProfile) e.instance.props.displayProfile.banner = e.instance.props.user.banner;
-					}
-				}
-				else {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutavatarwrapper]]});
-					if (index > -1) children[index] = Internal._processAvatarRender(e.instance.props.user, children[index], null, e.instance) || children[index];
-				}
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutavatarwrapper]]});
+				if (index > -1) children[index] = Internal._processAvatarRender(e.instance.props.user, children[index], null, e.instance) || children[index];
 			};
 			Internal.processPeopleListItem = function (e) {
 				if (e.instance.props.user) e.node.setAttribute(InternalData.userIdAttribute, e.instance.props.user.id);
@@ -8821,22 +8803,6 @@ module.exports = (_ => {
 				for (let type of newBadges) extraDefaultProps[`${type}Width`] = 16;
 				Internal.setDefaultProps(Internal.LibraryComponents.GuildComponents.BlobMask, extraDefaultProps);
 			}
-			
-			BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.GuildStore, "getGuild", {after: e => {
-				if (e.returnValue && e.methodArguments[0] == InternalData.myGuildId) e.returnValue.banner = `https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.banner.png`;
-			}});
-			
-			BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.UserStore, "getUser", {after: e => {
-				if (e.returnValue && e.methodArguments[0] == InternalData.myId) e.returnValue.banner = `https://mwittrien.github.io/BetterDiscordAddons/Library/_res/DevilBro.banner.png`;
-			}});
-
-			BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.IconUtils, "getGuildBannerURL", {instead: e => {
-				return e.methodArguments[0].id == InternalData.myGuildId ? e.methodArguments[0].banner : e.callOriginalMethod();
-			}});
-
-			BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.IconUtils, "getUserBannerURL", {instead: e => {
-				return e.methodArguments[0].id == InternalData.myId ? e.methodArguments[0].banner : e.callOriginalMethod();
-			}});
 			
 			BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.EmojiStateUtils, "getEmojiUnavailableReason", {after: e => {
 				if (Internal.LibraryComponents.EmojiPickerButton.current && Internal.LibraryComponents.EmojiPickerButton.current.props && Internal.LibraryComponents.EmojiPickerButton.current.props.allowManagedEmojisUsage) return null;

@@ -269,13 +269,21 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.IconUtils, "getUserBannerURL", {instead: e => {
-					let user = BDFDB.LibraryModules.UserStore.getUser(e.methodArguments[0].id);
-					if (user) {
-						if (user.id == "278543574059057154") return user.banner;
-						let data = changedUsers[user.id];
-						if (data && data.banner && !data.removeBanner) return data.banner;
+					let data = changedUsers[e.methodArguments[0].id];
+					if (data) {
+						if (data.removeBanner) return null;
+						else if (data.banner) return data.banner;
 					}
 					return e.callOriginalMethod();
+				}});
+				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MemberDisplayUtils, "getDisplayProfile", {after: e => {
+					let data = changedUsers[e.methodArguments[0]];
+					if (data && (data.banner || data.removeBanner)) {
+						e.returnValue = new BDFDB.DiscordObjects.DisplayProfile(e.returnValue, e.returnValue);
+						if (data.removeBanner) e.returnValue.banner = null;
+						else if (data.banner) e.returnValue.banner = data.banner;
+					}
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.StatusMetaUtils, "findActivity", {after: e => {
