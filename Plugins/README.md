@@ -45,7 +45,7 @@
  - [Read All Notifications Button](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReadAllNotificationsButton) - Adds a Clear Button to the Server List and the Mentions Popout
  - [Remove Blocked Users](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveBlockedUsers) - Removes blocked Messages/Users
  - [Remove Nicknames](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveNicknames) - Replaces Nicknames with Accountnames
- - [Reveal All Spoilers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RevealAllSpoilers) - Allows you to reveal all Spoilers within a Message/Status by holding the Ctrl Key and clicking a Spoiler
+ - [Reveal All Spoilers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RevealAllSpoilers) - Allows you to reveal all Spoilers in either a Message (Ctrl) or the Chat (Ctrl+Shift) and clicking a Spoiler
  - [Server Counter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerCounter) - Adds a Server Counter to the Server List
  - [Server Details](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerDetails) - Shows Server Details in the Server List Tooltip
  - [Server Folders](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerFolders) - Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders

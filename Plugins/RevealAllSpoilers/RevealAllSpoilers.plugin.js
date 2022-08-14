@@ -2,7 +2,7 @@
  * @name RevealAllSpoilers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.8
+ * @version 1.0.9
  * @description Allows you to reveal all Spoilers within a Message/Status by holding the Ctrl Key and clicking a Spoiler
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,12 +17,12 @@ module.exports = (_ => {
 		"info": {
 			"name": "RevealAllSpoilers",
 			"author": "DevilBro",
-			"version": "1.0.8",
+			"version": "1.0.9",
 			"description": "Allows you to reveal all Spoilers within a Message/Status by holding the Ctrl Key and clicking a Spoiler"
 		},
 		"changeLog": {
-			"fixed": {
-				"Replies": "No longer reveals spoilers within reply preview if revealing all spoilers within a message."
+			"added": {
+				"Whole Chat": "Hold Ctrl+Shift and click a spoiler to reveal all spoilers in the current message window"
 			}
 		}
 	};
@@ -86,7 +86,7 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(this, e.instance, "revealSpoiler", {after: e2 => {
 					if (e2.methodArguments[0].ctrlKey) {
 						BDFDB.ListenerUtils.stopEvent(e2.methodArguments[0]);
-						let parent = BDFDB.DOMUtils.getParent(BDFDB.dotCN.message, e2.methodArguments[0].target) || e2.methodArguments[0].target.parentElement;
+						let parent = BDFDB.DOMUtils.getParent(e2.methodArguments[0].shiftKey ? BDFDB.dotCN.messageswrapper : BDFDB.dotCN.message, e2.methodArguments[0].target) || e2.methodArguments[0].target.parentElement;
 						if (parent) for (let spoiler of parent.querySelectorAll(BDFDB.dotCN.spoilerhidden)) if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagerepliedmessagepreview, spoiler)) spoiler.click();
 					}
 				}}, {force: true, noCache: true});
