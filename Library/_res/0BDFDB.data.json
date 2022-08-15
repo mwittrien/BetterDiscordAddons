@@ -116,7 +116,7 @@
 		"FriendUtils": {"props": ["getFriendIDs", "getRelationships"]},
 		"RoleIconUtils": {"props": ["getRoleIconData"]},
 		"SearchPageUtils": {"props": ["searchNextPage", "searchPreviousPage"]},
-		"SettingsStore": {"props": ["getAllSettings", "theme"]},
+		"SettingsStore": {"props": ["getAllSettings", "locale"]},
 		"SettingsUtils": {"props": ["ShowCurrentGame", "DeveloperMode"]},
 		"SettingsUtilsOld": {"props": ["updateLocalSettings", "updateRemoteSettings"]},
 		"SimpleMarkdownComponents": {"strings": ["customEmoji", "emojiTooltipPosition", "timestampTooltip"]},
