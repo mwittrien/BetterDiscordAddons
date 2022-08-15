@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.8.1
+ * @version 4.8.2
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.8.1",
+			"version": "4.8.2",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		}
 	};
@@ -257,6 +257,7 @@ module.exports = (_ => {
 				this.patchedModules = {
 					before: {
 						LazyImage: "render",
+						Spoiler: "render",
 						SimpleMessageAccessories: "default"
 					},
 					after: {
@@ -1363,20 +1364,25 @@ module.exports = (_ => {
 			}
 
 			processSpoiler (e) {
-				if (this.settings.general.nsfwMode) {
-					let childrenRender = e.returnvalue.props.children;
-					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
-						let children = childrenRender(...args);
-						let attachment = BDFDB.ReactUtils.findValue(children, "attachment");
-						if (attachment && attachment.nsfw) {
-							let [children2, index] = BDFDB.ReactUtils.findParent(children, {name: "SpoilerWarning"});
-							if (index > -1) children2[index] = BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.spoilerwarning,
-								children: "NSFW"
-							});
-						}
-						return children;
-					}, "Error in Children Render of Spoiler!");
+				if (!e.returnvalue) {
+					if (this.settings.rescaleSettings.messages != "NONE" && !e.instance.props.inline && e.instance.props.type == "attachment") delete e.instance.props.containerStyles.maxWidth;
+				}
+				else {
+					if (this.settings.general.nsfwMode) {
+						let childrenRender = e.returnvalue.props.children;
+						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
+							let children = childrenRender(...args);
+							let attachment = BDFDB.ReactUtils.findValue(children, "attachment");
+							if (attachment && attachment.nsfw) {
+								let [children2, index] = BDFDB.ReactUtils.findParent(children, {name: "SpoilerWarning"});
+								if (index > -1) children2[index] = BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.spoilerwarning,
+									children: "NSFW"
+								});
+							}
+							return children;
+						}, "Error in Children Render of Spoiler!");
+					}
 				}
 			}
 			
@@ -1420,7 +1426,7 @@ module.exports = (_ => {
 				url = url.startsWith("/assets") ? (window.location.origin + url) : url;
 				BDFDB.LibraryRequires.request(url, {agentOptions: {rejectUnauthorized: false}, encoding: null}, (error, response, body) => {
 					let type = this.isValid(url, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
-					if (error || response.statusCode != 200) {
+					if (error || response.statusCode != 200 || response.headers["content-type"] == "text/html") {
 						if (fallbackUrl) this.downloadFile(fallbackUrl, path, null, alternativeName);
 						else BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", ""), {type: "danger"});
 					}
@@ -1437,7 +1443,7 @@ module.exports = (_ => {
 				url = url.startsWith("/assets") ? (window.location.origin + url) : url;
 				BDFDB.LibraryRequires.request(url, {agentOptions: {rejectUnauthorized: false}, encoding: null}, (error, response, body) => {
 					let type = this.isValid(url, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
-					if (error || response.statusCode != 200) {
+					if (error || response.statusCode != 200 || response.headers["content-type"] == "text/html") {
 						if (fallbackUrl) this.downloadFileAs(fallbackUrl, null, alternativeName);
 						else BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", ""), {type: "danger"});
 					}
