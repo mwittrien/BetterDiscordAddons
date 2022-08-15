@@ -51,6 +51,7 @@
 		"EmojiUtils": {"props": ["translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji"]},
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},
 		"Env": {"props": ["env"]},
+		"FolderSettingsUtils": {"props": ["saveGuildFolders"]},
 		"FolderStore": {"props": ["getGuildFolderById", "getFlattenedGuilds"]},
 		"FolderUtils": {"props": ["isFolderExpanded", "getExpandedFolders"]},
 		"GuildBadgeUtils": {"props": ["renderUnavailableBadge", "renderMediaBadge"]},

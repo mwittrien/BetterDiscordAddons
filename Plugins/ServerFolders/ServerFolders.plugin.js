@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.0.2
+ * @version 7.0.3
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,16 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "ServerFolders",
 			"author": "DevilBro",
-			"version": "7.0.2",
+			"version": "7.0.3",
 			"description": "Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders"
-		},
-		"changeLog": {
-			"fixed": {
-				"Close All Folders": "'CLose all Folders when any Server was selected' is fixed"
-			},
-			"added": {
-				"Show Folder Icon": "Added option to show the folder icon in the extra column at the top of the server list"
-			}
 		}
 	};
 
@@ -664,7 +656,7 @@ module.exports = (_ => {
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "remove-folder"),
 							color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
 							action: event => {
-								BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove the folder${folder.folderName ? ` '${folder.folderName}'` : ""}?`, _ => {
+								BDFDB.ModalUtils.confirm(this, this.labels.foldercontext_removefolder_confirm.replace("{{var0}}", folder.folderName ? `"${folder.folderName}"` : "").trim(), _ => {
 									this.removeFolder(e.instance.props.folderId);
 								});
 							}
@@ -698,7 +690,7 @@ module.exports = (_ => {
 							let ids = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
 							args[2] = args[2].filter(id => !ids.includes(id));
 							return topIsVisible(...args) || BDFDB.LibraryModules.UnreadGuildUtils.getMentionCount(args[0]) == 0;
-						}, "Error in isVisible of Top Bar in Guild List!", this);
+						}, "Error in isVisible of Top Bar in Guild List!");
 					}
 					let bottomBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbarbottom]]});
 					if (bottomBar) {
@@ -707,7 +699,7 @@ module.exports = (_ => {
 							let ids = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
 							args[2] = args[2].filter(id => !ids.includes(id));
 							return bottomIsVisible(...args) || BDFDB.LibraryModules.UnreadGuildUtils.getMentionCount(args[0]) == 0;
-						}, "Error in isVisible of Bottom Bar in Guild List!", this);
+						}, "Error in isVisible of Bottom Bar in Guild List!");
 					}
 				}
 			}
@@ -1117,7 +1109,7 @@ module.exports = (_ => {
 					else guildFolders.push(oldFolder);
 				}
 				for (let folder of guildFolders) for (let fGuildId of folder.guildIds) guildPositions.push(fGuildId);
-				BDFDB.LibraryModules.SettingsUtilsOld.updateRemoteSettings({guildPositions, guildFolders});
+				BDFDB.LibraryModules.FolderSettingsUtils.saveGuildFolders(guildFolders);
 			}
 			
 			createFolder (guildIds) {
@@ -1138,7 +1130,7 @@ module.exports = (_ => {
 					else guildFolders.push(oldFolder);
 				}
 				for (let folder of guildFolders) for (let fGuildId of folder.guildIds) guildPositions.push(fGuildId);
-				BDFDB.LibraryModules.SettingsUtilsOld.updateRemoteSettings({guildPositions, guildFolders});
+				BDFDB.LibraryModules.FolderSettingsUtils.saveGuildFolders(guildFolders);
 			}
 			
 			removeFolder (folderId) {
@@ -1150,7 +1142,7 @@ module.exports = (_ => {
 					else guildFolders.push(oldFolder);
 				}
 				for (let folder of guildFolders) for (let fGuildId of folder.guildIds) guildPositions.push(fGuildId);
-				BDFDB.LibraryModules.SettingsUtilsOld.updateRemoteSettings({guildPositions, guildFolders});
+				BDFDB.LibraryModules.FolderSettingsUtils.saveGuildFolders(guildFolders);
 			}
 			
 			addGuildToFolder (folderId, guildId) {
@@ -1165,7 +1157,7 @@ module.exports = (_ => {
 					else if (oldFolder.guildIds[0] != guildId) guildFolders.push(oldFolder);
 				}
 				for (let folder of guildFolders) for (let fGuildId of folder.guildIds) guildPositions.push(fGuildId);
-				BDFDB.LibraryModules.SettingsUtilsOld.updateRemoteSettings({guildPositions, guildFolders});
+				BDFDB.LibraryModules.FolderSettingsUtils.saveGuildFolders(guildFolders);
 			}
 			
 			removeGuildFromFolder (folderId, guildId) {
@@ -1180,7 +1172,7 @@ module.exports = (_ => {
 					else guildFolders.push(oldFolder);
 				}
 				for (let folder of guildFolders) for (let fGuildId of folder.guildIds) guildPositions.push(fGuildId);
-				BDFDB.LibraryModules.SettingsUtilsOld.updateRemoteSettings({guildPositions, guildFolders});
+				BDFDB.LibraryModules.FolderSettingsUtils.saveGuildFolders(guildFolders);
 			}
 
 			createDragPreview (div, event) {
@@ -1210,6 +1202,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Авто: Маркиране като прочетено",
 							foldercontext_mutefolder:			"Без звук папка",
 							foldercontext_removefolder:			"Изтриване на папка",
+							foldercontext_removefolder_confirm:	"Сигурни ли сте, че искате да изтриете папката {{var0}}",
 							modal_colorpicker1:					"Основен цвят на папката",
 							modal_colorpicker2:					"Вторичен цвят на папката",
 							modal_colorpicker3:					"Цвят на подсказка",
@@ -1230,11 +1223,38 @@ module.exports = (_ => {
 							serversubmenu_createfolder:			"Създай папка",
 							serversubmenu_removefromfolder:		"Премахнете сървъра от папката"
 						};
+					case "cs":		// Czech
+						return {
+							foldercontext_autoreadfolder:		"Auto: Označit jako přečtené",
+							foldercontext_mutefolder:			"Ztlumit složku",
+							foldercontext_removefolder:			"Smazat složku",
+							foldercontext_removefolder_confirm:	"Opravdu chcete smazat složku {{var0}}",
+							modal_colorpicker1:					"Barva primární složky",
+							modal_colorpicker2:					"Barva sekundární složky",
+							modal_colorpicker3:					"Barva popisku",
+							modal_colorpicker4:					"Barva fontu",
+							modal_copytooltipcolor:				"Použijte stejnou barvu pro všechny servery ve složce",
+							modal_customclosed:					"Uzavřená ikona",
+							modal_customopen:					"Otevřít ikonu",
+							modal_custompreview:				"Náhled ikony",
+							modal_iconpicker:					"Výběr složky",
+							modal_swapcolor:					"Pro původní složku použijte druhou barvu",
+							modal_tabheader1:					"Složka",
+							modal_tabheader2:					"Barva složky",
+							modal_tabheader3:					"Barva popisku",
+							modal_tabheader4:					"Vlastní ikony",
+							modal_usecloseicon:					"Místo miniserverů použijte uzavřenou ikonu",
+							servercontext_serverfolders:		"Složka serveru",
+							serversubmenu_addtofolder:			"Přidejte server do složky",
+							serversubmenu_createfolder:			"Vytvořit složku",
+							serversubmenu_removefromfolder:		"Odebrat server ze složky"
+						};
 					case "da":		// Danish
 						return {
 							foldercontext_autoreadfolder:		"Auto: Marker som læst",
 							foldercontext_mutefolder:			"Dæmp mappe",
 							foldercontext_removefolder:			"Slet mappe",
+							foldercontext_removefolder_confirm:	"Er du sikker på, at du vil slette mappen {{var0}}",
 							modal_colorpicker1:					"Primær mappefarve",
 							modal_colorpicker2:					"Sekundær mappefarve",
 							modal_colorpicker3:					"Værktøjstipfarve",
@@ -1260,6 +1280,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Auto: Als gelesen markieren",
 							foldercontext_mutefolder:			"Ordner stummschalten",
 							foldercontext_removefolder:			"Ordner löschen",
+							foldercontext_removefolder_confirm:	"Möchtest du den Ordner {{var0}} wirklich löschen?",
 							modal_colorpicker1:					"Primäre Ordnerfarbe",
 							modal_colorpicker2:					"Sekundäre Ordnerfarbe",
 							modal_colorpicker3:					"Tooltipfarbe",
@@ -1285,6 +1306,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Αυτόματο: Επισήμανση ως αναγνωσμένου",
 							foldercontext_mutefolder:			"Σίγαση φακέλου",
 							foldercontext_removefolder:			"Διαγραφή φακέλου",
+							foldercontext_removefolder_confirm:	"Είστε βέβαιοι ότι θέλετε να διαγράψετε τον φάκελο {{var0}}",
 							modal_colorpicker1:					"Κύριο χρώμα φακέλου",
 							modal_colorpicker2:					"Χρώμα δευτερεύοντος φακέλου",
 							modal_colorpicker3:					"Χρώμα επεξήγησης εργαλείου",
@@ -1310,6 +1332,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Automático: marcar como leído",
 							foldercontext_mutefolder:			"Silenciar carpeta",
 							foldercontext_removefolder:			"Eliminar carpeta",
+							foldercontext_removefolder_confirm:	"¿Está seguro de que desea eliminar la carpeta {{var0}}?",
 							modal_colorpicker1:					"Color de carpeta principal",
 							modal_colorpicker2:					"Color de carpeta secundaria",
 							modal_colorpicker3:					"Color de la información sobre herramientas",
@@ -1335,6 +1358,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Automaattinen: Merkitse luetuksi",
 							foldercontext_mutefolder:			"Mykistä kansio",
 							foldercontext_removefolder:			"Poista kansio",
+							foldercontext_removefolder_confirm:	"Haluatko varmasti poistaa kansion {{var0}}",
 							modal_colorpicker1:					"Ensisijaisen kansion väri",
 							modal_colorpicker2:					"Toissijaisen kansion väri",
 							modal_colorpicker3:					"Työkaluvinkin väri",
@@ -1360,6 +1384,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Auto: marquer comme lu",
 							foldercontext_mutefolder:			"Dossier muet",
 							foldercontext_removefolder:			"Supprimer le dossier",
+							foldercontext_removefolder_confirm:	"Êtes-vous sûr de vouloir supprimer le dossier {{var0}}",
 							modal_colorpicker1:					"Couleur du dossier primaire",
 							modal_colorpicker2:					"Couleur du dossier secondaire",
 							modal_colorpicker3:					"Couleur de l'info-bulle",
@@ -1380,11 +1405,38 @@ module.exports = (_ => {
 							serversubmenu_createfolder:			"Créer le dossier",
 							serversubmenu_removefromfolder:		"Supprimer le serveur du dossier"
 						};
+					case "hi":		// Hindi
+						return {
+							foldercontext_autoreadfolder:		"ऑटो: पढ़ें के रूप में चिह्नित करें",
+							foldercontext_mutefolder:			"मूक फ़ोल्डर",
+							foldercontext_removefolder:			"फोल्डर हटा दें",
+							foldercontext_removefolder_confirm:	"क्या आप वाकई फ़ोल्डर को हटाना चाहते हैं {{var0}}",
+							modal_colorpicker1:					"प्राथमिक फ़ोल्डर रंग",
+							modal_colorpicker2:					"माध्यमिक फ़ोल्डर रंग",
+							modal_colorpicker3:					"टूलटिप रंग",
+							modal_colorpicker4:					"लिपि का रंग",
+							modal_copytooltipcolor:				"एक फ़ोल्डर में सभी सर्वरों के लिए एक ही रंग का प्रयोग करें",
+							modal_customclosed:					"बंद चिह्न",
+							modal_customopen:					"खुला चिह्न",
+							modal_custompreview:				"आइकन पूर्वावलोकन",
+							modal_iconpicker:					"फ़ोल्डर चयन",
+							modal_swapcolor:					"मूल फ़ोल्डर के लिए दूसरे रंग का प्रयोग करें",
+							modal_tabheader1:					"फ़ोल्डर",
+							modal_tabheader2:					"फ़ोल्डर का रंग",
+							modal_tabheader3:					"टूलटिप रंग",
+							modal_tabheader4:					"कस्टम चिह्न",
+							modal_usecloseicon:					"मिनी-सर्वर के बजाय बंद चिह्न का उपयोग करें",
+							servercontext_serverfolders:		"सर्वर फ़ोल्डर",
+							serversubmenu_addtofolder:			"सर्वर को फ़ोल्डर में जोड़ें",
+							serversubmenu_createfolder:			"फोल्डर बनाएं",
+							serversubmenu_removefromfolder:		"फ़ोल्डर से सर्वर निकालें"
+						};
 					case "hr":		// Croatian
 						return {
 							foldercontext_autoreadfolder:		"Automatski: Označi kao pročitano",
 							foldercontext_mutefolder:			"Isključi mapu",
 							foldercontext_removefolder:			"Izbriši mapu",
+							foldercontext_removefolder_confirm:	"Jeste li sigurni da želite izbrisati mapu {{var0}}",
 							modal_colorpicker1:					"Boja primarne mape",
 							modal_colorpicker2:					"Boja sekundarne mape",
 							modal_colorpicker3:					"Boja opisa",
@@ -1410,6 +1462,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Automatikus: Megjelölés olvasottként",
 							foldercontext_mutefolder:			"Mappa némítása",
 							foldercontext_removefolder:			"Mappa törlése",
+							foldercontext_removefolder_confirm:	"Biztosan törli a(z) {{var0}} mappát?",
 							modal_colorpicker1:					"Elsődleges mappa színe",
 							modal_colorpicker2:					"Másodlagos mappa színe",
 							modal_colorpicker3:					"Eszköztár színe",
@@ -1435,6 +1488,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Auto: contrassegna come letto",
 							foldercontext_mutefolder:			"Disattiva cartella",
 							foldercontext_removefolder:			"Elimina cartella",
+							foldercontext_removefolder_confirm:	"Sei sicuro di voler eliminare la cartella {{var0}}",
 							modal_colorpicker1:					"Colore cartella principale",
 							modal_colorpicker2:					"Colore cartella secondaria",
 							modal_colorpicker3:					"Colore della descrizione comando",
@@ -1460,6 +1514,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"自動：既読としてマーク",
 							foldercontext_mutefolder:			"ミュートフォルダ",
 							foldercontext_removefolder:			"フォルダを削除",
+							foldercontext_removefolder_confirm:	"本当にフォルダ {{var0}} を削除しますか?",
 							modal_colorpicker1:					"プライマリフォルダの色",
 							modal_colorpicker2:					"セカンダリフォルダの色",
 							modal_colorpicker3:					"ツールチップの色",
@@ -1485,6 +1540,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"자동 : 읽은 상태로 표시",
 							foldercontext_mutefolder:			"폴더 음소거",
 							foldercontext_removefolder:			"폴더 삭제",
+							foldercontext_removefolder_confirm:	"{{var0}} 폴더를 삭제하시겠습니까?",
 							modal_colorpicker1:					"기본 폴더 색상",
 							modal_colorpicker2:					"보조 폴더 색상",
 							modal_colorpicker3:					"툴팁 색상",
@@ -1510,6 +1566,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Automatinis: pažymėti kaip perskaitytą",
 							foldercontext_mutefolder:			"Nutildyti aplanką",
 							foldercontext_removefolder:			"Ištrinti aplanką",
+							foldercontext_removefolder_confirm:	"Ar tikrai norite ištrinti aplanką {{var0}}",
 							modal_colorpicker1:					"Pagrindinio aplanko spalva",
 							modal_colorpicker2:					"Antrinio aplanko spalva",
 							modal_colorpicker3:					"Patarimo spalva",
@@ -1535,6 +1592,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Auto: Markeer als gelezen",
 							foldercontext_mutefolder:			"Mute map",
 							foldercontext_removefolder:			"Verwijder map",
+							foldercontext_removefolder_confirm:	"Weet u zeker dat u de map {{var0}} wilt verwijderen",
 							modal_colorpicker1:					"Kleur primaire map",
 							modal_colorpicker2:					"Kleur secundaire map",
 							modal_colorpicker3:					"Tooltipkleur",
@@ -1560,6 +1618,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Auto: Merk som lest",
 							foldercontext_mutefolder:			"Demp mappe",
 							foldercontext_removefolder:			"Slett mappe",
+							foldercontext_removefolder_confirm:	"Er du sikker på at du vil slette mappen {{var0}}",
 							modal_colorpicker1:					"Primær mappefarge",
 							modal_colorpicker2:					"Sekundær mappefarge",
 							modal_colorpicker3:					"Verktøytipsfarge",
@@ -1585,6 +1644,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Auto: oznacz jako przeczytane",
 							foldercontext_mutefolder:			"Wycisz folder",
 							foldercontext_removefolder:			"Usunięty folder",
+							foldercontext_removefolder_confirm:	"Czy na pewno chcesz usunąć folder {{var0}}",
 							modal_colorpicker1:					"Główny kolor folderu",
 							modal_colorpicker2:					"Kolor folderu dodatkowego",
 							modal_colorpicker3:					"Kolor podpowiedzi",
@@ -1610,6 +1670,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Auto: Marcar como lido",
 							foldercontext_mutefolder:			"Pasta sem som",
 							foldercontext_removefolder:			"Excluir pasta",
+							foldercontext_removefolder_confirm:	"Tem certeza de que deseja excluir a pasta {{var0}}",
 							modal_colorpicker1:					"Cor da pasta primária",
 							modal_colorpicker2:					"Cor secundária da pasta",
 							modal_colorpicker3:					"Cor da dica de ferramenta",
@@ -1635,6 +1696,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Automat: marcați ca citit",
 							foldercontext_mutefolder:			"Dezactivați folderul",
 							foldercontext_removefolder:			"Ștergeți folderul",
+							foldercontext_removefolder_confirm:	"Sigur doriți să ștergeți dosarul {{var0}}",
 							modal_colorpicker1:					"Culoarea folderului principal",
 							modal_colorpicker2:					"Culoare dosar secundar",
 							modal_colorpicker3:					"Culoarea sfatului de instrumente",
@@ -1660,6 +1722,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Авто: Отметить как прочитанное",
 							foldercontext_mutefolder:			"Отключить папку",
 							foldercontext_removefolder:			"Удалить папку",
+							foldercontext_removefolder_confirm:	"Вы уверены, что хотите удалить папку {{var0}}",
 							modal_colorpicker1:					"Цвет основной папки",
 							modal_colorpicker2:					"Цвет вторичной папки",
 							modal_colorpicker3:					"Цвет всплывающей подсказки",
@@ -1685,6 +1748,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Auto: Markera som läst",
 							foldercontext_mutefolder:			"Tyst mapp",
 							foldercontext_removefolder:			"Ta bort mapp",
+							foldercontext_removefolder_confirm:	"Är du säker på att du vill ta bort mappen {{var0}}",
 							modal_colorpicker1:					"Primär mappfärg",
 							modal_colorpicker2:					"Sekundär mappfärg",
 							modal_colorpicker3:					"Verktygstipsfärg",
@@ -1710,6 +1774,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"อัตโนมัติ: ทำเครื่องหมายว่าอ่านแล้ว",
 							foldercontext_mutefolder:			"ปิดเสียงโฟลเดอร์",
 							foldercontext_removefolder:			"ลบโฟลเดอร์",
+							foldercontext_removefolder_confirm:	"คุณแน่ใจหรือว่าต้องการลบโฟลเดอร์ {{var0}}",
 							modal_colorpicker1:					"สีโฟลเดอร์หลัก",
 							modal_colorpicker2:					"สีโฟลเดอร์รอง",
 							modal_colorpicker3:					"สีคำแนะนำเครื่องมือ",
@@ -1735,6 +1800,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Otomatik: Okundu olarak işaretle",
 							foldercontext_mutefolder:			"Klasörü sessize al",
 							foldercontext_removefolder:			"Klasörü sil",
+							foldercontext_removefolder_confirm:	"{{var0}} Klasörünü silmek istediğinizden emin misiniz?",
 							modal_colorpicker1:					"Birincil klasör rengi",
 							modal_colorpicker2:					"İkincil klasör rengi",
 							modal_colorpicker3:					"Araç ipucu rengi",
@@ -1760,6 +1826,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Авто: Позначити як прочитане",
 							foldercontext_mutefolder:			"Вимкнути папку",
 							foldercontext_removefolder:			"Видалити папку",
+							foldercontext_removefolder_confirm:	"Ви впевнені, що хочете видалити папку {{var0}}",
 							modal_colorpicker1:					"Основний колір папки",
 							modal_colorpicker2:					"Колір вторинної папки",
 							modal_colorpicker3:					"Колір підказки",
@@ -1785,6 +1852,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Tự động: Đánh dấu là đã đọc",
 							foldercontext_mutefolder:			"Thư mục ẩn",
 							foldercontext_removefolder:			"Xóa thư mục",
+							foldercontext_removefolder_confirm:	"Bạn có chắc chắn muốn xóa Thư mục {{var0}} không",
 							modal_colorpicker1:					"Màu thư mục chính",
 							modal_colorpicker2:					"Màu thư mục phụ",
 							modal_colorpicker3:					"Màu chú giải công cụ",
@@ -1810,6 +1878,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"自动：标记为已读",
 							foldercontext_mutefolder:			"静音文件夹",
 							foldercontext_removefolder:			"删除文件夹",
+							foldercontext_removefolder_confirm:	"您确定要删除文件夹 {{var0}}",
 							modal_colorpicker1:					"文件夹主色",
 							modal_colorpicker2:					"文件夹辅色",
 							modal_colorpicker3:					"工具提示颜色",
@@ -1835,6 +1904,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"自動：標記為已讀",
 							foldercontext_mutefolder:			"靜音資料夾",
 							foldercontext_removefolder:			"刪除資料夾",
+							foldercontext_removefolder_confirm:	"您確定要刪除文件夾 {{var0}}",
 							modal_colorpicker1:					"資料夾主色",
 							modal_colorpicker2:					"資料夾輔色",
 							modal_colorpicker3:					"工具提示顏色",
@@ -1860,6 +1930,7 @@ module.exports = (_ => {
 							foldercontext_autoreadfolder:		"Auto: Mark As Read",
 							foldercontext_mutefolder:			"Mute Folder",
 							foldercontext_removefolder:			"Delete Folder",
+							foldercontext_removefolder_confirm:	"Are you sure you want to delete the Folder {{var0}}",
 							modal_colorpicker1:					"Primary Folder Color",
 							modal_colorpicker2:					"Secondary Folder Color",
 							modal_colorpicker3:					"Tooltip Color",
