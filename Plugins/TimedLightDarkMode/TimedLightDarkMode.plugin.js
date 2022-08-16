@@ -2,7 +2,7 @@
  * @name TimedLightDarkMode
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.2
+ * @version 1.1.3
  * @description Adds a Time Slider to the Appearance Settings
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "TimedLightDarkMode",
 			"author": "DevilBro",
-			"version": "1.1.2",
+			"version": "1.1.3",
 			"description": "Adds a Time Slider to the Appearance Settings"
 		}
 	};
@@ -85,6 +85,16 @@ module.exports = (_ => {
 			onStart () {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SettingsUtilsOld, "updateLocalSettings", {after: e => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].theme && settings.running) {
+						BDFDB.TimeUtils.clear(changeTimeout);
+						disableChanging = true;
+						changeTimeout = BDFDB.TimeUtils.timeout(_ => {
+							disableChanging = false;
+						}, 1000*60*10);
+					}
+				}});
+				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AppearanceSettingsUtils, "updateTheme", {after: e => {
+					if (settings.running) {
 						BDFDB.TimeUtils.clear(changeTimeout);
 						disableChanging = true;
 						changeTimeout = BDFDB.TimeUtils.timeout(_ => {
@@ -171,9 +181,10 @@ module.exports = (_ => {
 			}
 
 			changeTheme (dark) {
-				let theme = BDFDB.DiscordUtils.getTheme();
-				if (dark && theme == BDFDB.disCN.themelight) BDFDB.LibraryModules.SettingsUtilsOld.updateLocalSettings({theme: "dark"});
-				else if (!dark && theme == BDFDB.disCN.themedark) BDFDB.LibraryModules.SettingsUtilsOld.updateLocalSettings({theme: "light"});
+				let theme = BDFDB.DiscordUtils.getTheme(), newTheme = null;
+				if (dark && theme == BDFDB.disCN.themelight) newTheme = "dark";
+				else if (!dark && theme == BDFDB.disCN.themedark) newTheme = "light";
+				if (newTheme) BDFDB.LibraryModules.SettingsUtilsOld && BDFDB.LibraryModules.SettingsUtilsOld.updateLocalSettings({theme: newTheme}) || BDFDB.LibraryModules.AppearanceSettingsUtils.updateTheme(newTheme);
 			}
 
 			showCurrentTime (grabber) {

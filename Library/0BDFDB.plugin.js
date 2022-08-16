@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.0
+ * @version 2.5.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.5.0",
+			"version": "2.5.1",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
@@ -4396,7 +4396,7 @@ module.exports = (_ => {
 			if (BDFDB.DiscordUtils.getBuild.build) return BDFDB.DiscordUtils.getBuild.build;
 			else {
 				let build;
-				try {build = window.DiscordNative.app.getReleaseChannel();} 
+				try {build = window.DiscordNative.app.getReleaseChannel();}
 				catch (err) {
 					let version = BDFDB.DiscordUtils.getVersion();
 					if (version) {
@@ -4418,32 +4418,8 @@ module.exports = (_ => {
 				return BDFDB.DiscordUtils.getVersion.version = version;
 			}
 		};
-		BDFDB.DiscordUtils.isDevModeEnabled = function () {
-			return BDFDB.DiscordUtils.getSettings("developerMode");
-		};
-		BDFDB.DiscordUtils.getExperiment = function (id) {
-			if (!id) return null;
-			const module = BDFDB.ModuleUtils.find(m => m.definition && m.definition.defaultConfig && m.definition.defaultConfig[id] != null && typeof m.getCurrentConfig == "function" && m);
-			return module && (module.getCurrentConfig({}) || {})[id];
-		};
 		BDFDB.DiscordUtils.getTheme = function () {
-			return BDFDB.DiscordUtils.getSettings("theme") != "dark" ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
-		};
-		BDFDB.DiscordUtils.getMode = function () {
-			return BDFDB.DiscordUtils.getSettings("messageDisplayCompact") ? "compact" : "cozy";
-		};
-		BDFDB.DiscordUtils.getSettings = function (key) {
-			if (!key) return null;
-			else if (Internal.LibraryModules.SettingsUtils && (Internal.LibraryModules.SettingsUtils[key] || Internal.LibraryModules.SettingsUtils[key + "DoNotUseYet"])) return (Internal.LibraryModules.SettingsUtils[key] || Internal.LibraryModules.SettingsUtils[key + "DoNotUseYet"]).getSetting();
-			else {
-				const value = Internal.LibraryModules.SettingsStore && Internal.LibraryModules.SettingsStore.getAllSettings()[key.slice(0, 1).toLowerCase() + key.slice(1)];
-				return value != undefined ? value: null;
-			}
-		};
-		BDFDB.DiscordUtils.setSettings = function (key, value) {
-			if (!key) return;
-			else if (Internal.LibraryModules.SettingsUtils && (Internal.LibraryModules.SettingsUtils[key] || Internal.LibraryModules.SettingsUtils[key + "DoNotUseYet"])) (Internal.LibraryModules.SettingsUtils[key] || Internal.LibraryModules.SettingsUtils[key + "DoNotUseYet"]).updateSetting(value);
-			else Internal.LibraryModules.SettingsUtilsOld.updateRemoteSettings({[key.slice(0, 1).toLowerCase() + key.slice(1)]: value});
+			return BDFDB.LibraryModules.ThemeSettingsStore.theme != "dark" ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
 		};
 		BDFDB.DiscordUtils.getZoomFactor = function () {
 			let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
@@ -8676,13 +8652,19 @@ module.exports = (_ => {
 			if (InternalData.ModuleUtilsConfig.QueuedComponents) for (let type of InternalData.ModuleUtilsConfig.QueuedComponents) if (!PluginStores.patchQueues[type]) PluginStores.patchQueues[type] = {query: [], modules: []};
 			
 			let languageChangeTimeout;
-			if (Internal.LibraryModules.SettingsUtilsOld) BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.SettingsUtilsOld, ["updateRemoteSettings", "updateLocalSettings"], {after: e => {
+			BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.SettingsUtilsOld, ["updateRemoteSettings", "updateLocalSettings"], {after: e => {
 				if (e.methodArguments[0] && e.methodArguments[0].locale) {
 					BDFDB.TimeUtils.clear(languageChangeTimeout);
 					languageChangeTimeout = BDFDB.TimeUtils.timeout(_ => {
 						for (let pluginName in PluginStores.loaded) if (PluginStores.loaded[pluginName].started) BDFDB.PluginUtils.translate(PluginStores.loaded[pluginName]);
 					}, 10000);
 				}
+			}});
+			BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.AppearanceSettingsUtils, "updateLocale", {after: e => {
+				BDFDB.TimeUtils.clear(languageChangeTimeout);
+				languageChangeTimeout = BDFDB.TimeUtils.timeout(_ => {
+					for (let pluginName in PluginStores.loaded) if (PluginStores.loaded[pluginName].started) BDFDB.PluginUtils.translate(PluginStores.loaded[pluginName]);
+				}, 10000);
 			}});
 			
 			Internal.onSettingsClosed = function () {
