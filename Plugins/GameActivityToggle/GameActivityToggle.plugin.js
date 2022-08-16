@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.3
+ * @version 1.1.4
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "GameActivityToggle",
 			"author": "DevilBro",
-			"version": "1.1.3",
+			"version": "1.1.4",
 			"description": "Adds a Quick-Toggle Game Activity Button"
-		},
-		"changeLog": {
-			"improved": {
-				"Menu Item Option": "Now allows you to add a Context Menu Item to the new User Account Popup in the bottom left"
-			}
 		}
 	};
 	
@@ -73,7 +68,7 @@ module.exports = (_ => {
 				toggleButton = this;
 			}
 			render() {
-				const enabled = this.props.forceState != undefined ? this.props.forceState : BDFDB.DiscordUtils.getSettings("ShowCurrentGame");
+				const enabled = this.props.forceState != undefined ? this.props.forceState : BDFDB.LibraryModules.SettingsUtils.ShowCurrentGame.getSetting();
 				delete this.props.forceState;
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PanelButton, Object.assign({}, this.props, {
 					tooltipText: enabled ? _this.labels.disable_activity : _this.labels.enable_activity,
@@ -129,13 +124,13 @@ module.exports = (_ => {
 			
 			onStart () {
 				let cachedState = BDFDB.DataUtils.load(this, "cachedState");
-				let state = BDFDB.DiscordUtils.getSettings("ShowCurrentGame");
+				let state = BDFDB.LibraryModules.SettingsUtils.ShowCurrentGame.getSetting();
 				if (!cachedState.date || (new Date() - cachedState.date) > 1000*60*60*24*3) {
 					cachedState.value = state;
 					cachedState.date = new Date();
 					BDFDB.DataUtils.save(cachedState, this, "cachedState");
 				}
-				else if (cachedState.value != null && cachedState.value != state) BDFDB.DiscordUtils.setSettings("ShowCurrentGame", cachedState.value);
+				else if (cachedState.value != null && cachedState.value != state) BDFDB.LibraryModules.SettingsUtils.ShowCurrentGame.updateSetting(cachedState.value);
 				
 				if (BDFDB.LibraryModules.SettingsUtils) BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SettingsUtils.ShowCurrentGame, "updateSetting", {after: e => {
 					if (toggleButton) toggleButton.props.forceState = e.methodArguments[0];
@@ -217,7 +212,7 @@ module.exports = (_ => {
 				if (oldIndex == -1) {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.instance, {id: ["custom-status", "set-custom-status", "edit-custom-status"]});
 					if (index > -1) {
-						let isChecked = BDFDB.DiscordUtils.getSettings("ShowCurrentGame");
+						let isChecked = BDFDB.LibraryModules.SettingsUtils.ShowCurrentGame.getSetting();
 						children.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.ACTIVITY_STATUS,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "activity-toggle"),
@@ -247,9 +242,9 @@ module.exports = (_ => {
 			}
 			
 			toggle () {
-				const shouldEnable = !BDFDB.DiscordUtils.getSettings("ShowCurrentGame");
+				const shouldEnable = !BDFDB.LibraryModules.SettingsUtils.ShowCurrentGame.getSetting();
 				_this.settings.general[shouldEnable ? "playEnable" : "playDisable"] && BDFDB.LibraryModules.SoundUtils.playSound(_this.settings.selections[shouldEnable ? "enableSound" : "disableSound"], .4);
-				BDFDB.DiscordUtils.setSettings("ShowCurrentGame", shouldEnable);
+				BDFDB.LibraryModules.SettingsUtils.ShowCurrentGame.updateSetting(shouldEnable);
 			}
 
 			setLabelsByLanguage () {
