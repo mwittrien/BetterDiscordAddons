@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.8.2
+ * @version 4.8.3
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.8.2",
+			"version": "4.8.3",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		}
 	};
@@ -311,6 +311,13 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.imagemodal + BDFDB.notCN._imageutilitiessibling} > ${BDFDB.dotCN.imagewrapper} img {
 						object-fit: contain;
 						width: unset;
+					}
+					${BDFDB.dotCN.imagemodalnavbutton} {
+						background: rgba(0, 0, 0, 0.3);
+						border-radius: 100%;
+					}
+					${BDFDB.dotCN.imagemodalnavbutton}:hover {
+						background: rgba(0, 0, 0, 0.5);
 					}
 					${BDFDB.dotCN._imageutilitiessibling} {
 						display: flex;
@@ -946,7 +953,7 @@ module.exports = (_ => {
 					let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node);
 					if (modal) {
 						modal.className = BDFDB.DOMUtils.formatClassName(modal.className, this.settings.viewerSettings.galleryMode && BDFDB.disCN._imageutilitiesgallery, this.settings.viewerSettings.details && BDFDB.disCN._imageutilitiesdetailsadded);
-						if (this.settings.viewerSettings.zoomMode) {
+						if (this.settings.viewerSettings.galleryMode) {
 							BDFDB.DOMUtils.addClass(modal, BDFDB.disCN.imagemodal);
 							BDFDB.DOMUtils.removeClass(modal, BDFDB.disCN.modalcarouselmodal, BDFDB.disCN.modalcarouselmodalzoomed);
 						}
@@ -1173,7 +1180,7 @@ module.exports = (_ => {
 			}
 			
 			processModalCarousel (e) {
-				if (this.settings.viewerSettings.zoomMode) {
+				if (this.settings.viewerSettings.galleryMode) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ImageModal"});
 					if (index > -1) return children[index];
 				}
