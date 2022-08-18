@@ -1365,7 +1365,7 @@ module.exports = (_ => {
 
 			processSpoiler (e) {
 				if (!e.returnvalue) {
-					if (this.settings.rescaleSettings.messages != "NONE" && !e.instance.props.inline && e.instance.props.type == "attachment") delete e.instance.props.containerStyles.maxWidth;
+					if (this.settings.rescaleSettings.messages != "NONE" && !e.instance.props.inline && e.instance.props.type == "attachment" && e.instance.props.containerStyles) e.instance.props.containerStyles.maxWidth = "100%";
 				}
 				else {
 					if (this.settings.general.nsfwMode) {
