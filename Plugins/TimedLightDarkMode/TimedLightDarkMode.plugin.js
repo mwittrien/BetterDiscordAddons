@@ -83,16 +83,6 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SettingsUtilsOld, "updateLocalSettings", {after: e => {
-					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].theme && settings.running) {
-						BDFDB.TimeUtils.clear(changeTimeout);
-						disableChanging = true;
-						changeTimeout = BDFDB.TimeUtils.timeout(_ => {
-							disableChanging = false;
-						}, 1000*60*10);
-					}
-				}});
-				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AppearanceSettingsUtils, "updateTheme", {after: e => {
 					if (settings.running) {
 						BDFDB.TimeUtils.clear(changeTimeout);
@@ -184,7 +174,7 @@ module.exports = (_ => {
 				let theme = BDFDB.DiscordUtils.getTheme(), newTheme = null;
 				if (dark && theme == BDFDB.disCN.themelight) newTheme = "dark";
 				else if (!dark && theme == BDFDB.disCN.themedark) newTheme = "light";
-				if (newTheme) BDFDB.LibraryModules.SettingsUtilsOld && BDFDB.LibraryModules.SettingsUtilsOld.updateLocalSettings({theme: newTheme}) || BDFDB.LibraryModules.AppearanceSettingsUtils.updateTheme(newTheme);
+				if (newTheme) BDFDB.LibraryModules.AppearanceSettingsUtils.updateTheme(newTheme);
 			}
 
 			showCurrentTime (grabber) {

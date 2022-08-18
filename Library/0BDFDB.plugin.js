@@ -8652,14 +8652,6 @@ module.exports = (_ => {
 			if (InternalData.ModuleUtilsConfig.QueuedComponents) for (let type of InternalData.ModuleUtilsConfig.QueuedComponents) if (!PluginStores.patchQueues[type]) PluginStores.patchQueues[type] = {query: [], modules: []};
 			
 			let languageChangeTimeout;
-			BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.SettingsUtilsOld, ["updateRemoteSettings", "updateLocalSettings"], {after: e => {
-				if (e.methodArguments[0] && e.methodArguments[0].locale) {
-					BDFDB.TimeUtils.clear(languageChangeTimeout);
-					languageChangeTimeout = BDFDB.TimeUtils.timeout(_ => {
-						for (let pluginName in PluginStores.loaded) if (PluginStores.loaded[pluginName].started) BDFDB.PluginUtils.translate(PluginStores.loaded[pluginName]);
-					}, 10000);
-				}
-			}});
 			BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.AppearanceSettingsUtils, "updateLocale", {after: e => {
 				BDFDB.TimeUtils.clear(languageChangeTimeout);
 				languageChangeTimeout = BDFDB.TimeUtils.timeout(_ => {
