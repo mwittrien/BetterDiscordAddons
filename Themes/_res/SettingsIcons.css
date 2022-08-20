@@ -162,10 +162,12 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 }
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="gm-changelog-tab" i] ~ .item-3XjbnG[aria-controls^="gm-" i]::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="plugins-tab" i]::before,
+.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="bd-plugins-tab" i]::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="pc-modulemanager-plugins-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/plugins.svg) center/contain no-repeat;
 }
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="themes-tab" i]::before,
+.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="bd-themes-tab" i]::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="pc-modulemanager-themes-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/themes.svg) center/contain no-repeat;
 }
