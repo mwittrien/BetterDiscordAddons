@@ -12,9 +12,11 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 	width: calc(218px + (var(--usesettingsicons) * (var(--settingsiconssize) + var(--settingsiconsgap)))) !important;
 }
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG {
-	padding-right: calc(var(--usesettingsicons) * var(--settingsiconssize) * 2);
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls] {
+	padding-right: calc(var(--usesettingsicons) * var(--settingsiconssize) * 2);
 }
 
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG::after {
