@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.8.3
+ * @version 4.8.4
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ImageUtilities",
 			"author": "DevilBro",
-			"version": "4.8.3",
+			"version": "4.8.4",
 			"description": "Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)"
 		}
 	};
@@ -1312,7 +1312,7 @@ module.exports = (_ => {
 							e.instance.props.resized = true;
 						}
 					}
-					if (this.settings.rescaleSettings.messages != "NONE" && (!e.instance.props.className || e.instance.props.className.indexOf(BDFDB.disCN.embedthumbnail) == -1) && BDFDB.ReactUtils.findOwner(reactInstance, {name: "LazyImageZoomable", up: true})) {
+					if (this.settings.rescaleSettings.messages != "NONE" && (!e.instance.props.className || e.instance.props.className.indexOf(BDFDB.disCN.embedthumbnail) == -1) && (!e.instance.props.containerClassName || e.instance.props.containerClassName.indexOf(BDFDB.disCN.embedthumbnail) == -1) && BDFDB.ReactUtils.findOwner(reactInstance, {name: "LazyImageZoomable", up: true})) {
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let mRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCNC.messageaccessory + BDFDB.dotCN.messagecontents));
 						let mwRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.messagewrapper));
@@ -1510,7 +1510,7 @@ module.exports = (_ => {
 
 			getImageSrc (img) {
 				if (!img) return null;
-				return (typeof img == "string" ? img : (img.proxy_url || img.src || (img.querySelector("canvas") ? img.querySelector("canvas").src : ""))).split("?width=")[0];
+				return (typeof img == "string" ? img : (img.proxy_url || img.src || (typeof img.querySelector == "function" && img.querySelector("canvas") ? img.querySelector("canvas").src : ""))).split("?width=")[0];
 			}
 			
 			getImageIndex (messages, img) {
