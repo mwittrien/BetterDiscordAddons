@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.6
+ * @version 2.3.7
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
-			"version": "2.3.6",
+			"version": "2.3.7",
 			"description": "Allows you to download all Themes from BD's Website within Discord"
 		}
 	};
@@ -1086,7 +1086,7 @@ module.exports = (_ => {
 						SettingsView: ["render", "componentWillUnmount"]
 					},
 					after: {
-						StandardSidebarView: "render"
+						StandardSidebarView: "default"
 					}
 				};
 				

@@ -2,7 +2,7 @@
  * @name OldTitleBar
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.4
+ * @version 1.7.5
  * @description Allows you to switch to Discord's old Titlebar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "OldTitleBar",
 			"author": "DevilBro",
-			"version": "1.7.4",
+			"version": "1.7.5",
 			"description": "Allows you to switch to Discord's old Titlebar"
 		}
 	};
@@ -138,7 +138,7 @@ module.exports = (_ => {
 					after: {
 						App: "render",
 						AppSkeleton: "render",
-						StandardSidebarView: "render",
+						StandardSidebarView: "default",
 						AuthWrapper: "render"
 					}
 				};
@@ -269,8 +269,10 @@ module.exports = (_ => {
 			}
 
 			processStandardSidebarView (e) {
-				if (!BDFDB.ArrayUtils.is(e.returnvalue.props.children)) e.returnvalue.props.children = [e.returnvalue.props.children];
-				this.injectSettingsToolbar(e.returnvalue.props.children);
+				let sidebarView = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.settingswindowstandardsidebarview]]});
+				if (!sidebarView) return;
+				if (!BDFDB.ArrayUtils.is(sidebarView.props.children)) sidebarView.props.children = [sidebarView.props.children];
+				this.injectSettingsToolbar(sidebarView.props.children);
 			}
 
 			processAuthWrapper (e) {
