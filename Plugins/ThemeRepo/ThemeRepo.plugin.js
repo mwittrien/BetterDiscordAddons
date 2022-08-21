@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.7
+ * @version 2.3.8
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ThemeRepo",
 			"author": "DevilBro",
-			"version": "2.3.7",
+			"version": "2.3.8",
 			"description": "Allows you to download all Themes from BD's Website within Discord"
 		}
 	};
@@ -1233,6 +1233,7 @@ module.exports = (_ => {
 							let index = e2.returnValue.indexOf(e2.returnValue.find(n => n.section == "pluginrepo") || e2.returnValue.find(n => n.section == "themes") || e2.returnValue.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS) || e2.returnValue.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.HYPESQUAD_ONLINE));
 							if (index > -1) {
 								e2.returnValue.splice(index + 1, 0, {
+									className: "themerepo-tab",
 									section: "themerepo",
 									label: "Theme Repo",
 									element: _ => {
