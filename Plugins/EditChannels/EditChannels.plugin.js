@@ -294,7 +294,20 @@ module.exports = (_ => {
 			}
 
 			processAutocompleteChannelResult (e) {
-				console.log(e);
+				if (e.instance.props.channel && this.settings.places.autocompletes) {
+					if (!e.returnvalue) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
+					else {
+						if (typeof e.returnvalue.props.children == "function") {
+							let childrenRender = e.returnvalue.props.children;
+							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
+								let children = childrenRender(...args);
+								let channelName = BDFDB.ReactUtils.findChild(children, {name: "AutocompleteRowHeading"});
+								if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id);
+								return children;
+							}, "Error in Children Render of AutocompleteChannelResult!", this);
+						}
+					}
+				}
 			}
 
 			processGuildSettingsAuditLogEntry (e) {

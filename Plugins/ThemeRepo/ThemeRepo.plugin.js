@@ -684,7 +684,6 @@ module.exports = (_ => {
 											onMouseLeave: this.props.data.thumbnailGifUrl && (e => e.target.src = this.props.data.thumbnailUrl),
 											onClick: _ => {
 												const url = this.props.data.thumbnailGifUrl || this.props.data.thumbnailUrl;
-												console.log(this.props.data);
 												const img = document.createElement("img");
 												img.addEventListener("load", function() {
 													BDFDB.LibraryModules.ModalUtils.openModal(modalData => {

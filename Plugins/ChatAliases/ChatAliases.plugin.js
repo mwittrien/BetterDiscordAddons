@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.1
+ * @version 2.4.2
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.4.1",
+			"version": "2.4.2",
 			"description": "Allows you to configure your own Aliases/Commands"
 		}
 	};
@@ -114,9 +114,11 @@ module.exports = (_ => {
 				
 				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_PRIORITY) BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_PRIORITY.unshift(AUTOCOMPLETE_ALIAS_OPTION);
 				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) {
+					let query = "";
 					BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS[AUTOCOMPLETE_ALIAS_OPTION] = {
 						autoSelect: true,
-						matches: (channel, guild, query, _, options) => {
+						matches: (channel, guild, newQuery, _, options) => {
+							query = newQuery;
 							if (query.length >= this.settings.amounts.minAliasLength) for (let word in aliases) {
 								let aliasData = aliases[word];
 								if (!aliasData.regex && aliasData.autoc) {
@@ -132,7 +134,7 @@ module.exports = (_ => {
 							}
 							return false;
 						},
-						queryResults: (channel, guild, query, options) => {
+						queryResults: (channel, guild, newQuery, options) => {
 							if (query == commandSentinel) return;
 							let matches = [];
 							for (let word in aliases) {
@@ -149,6 +151,7 @@ module.exports = (_ => {
 								}
 							}
 							if (matches.length) return {results: {aliases: matches}};
+							else return {results: {}};
 						},
 						renderResults: data => {
 							return data && data.results && data.results.aliases && [
@@ -156,7 +159,7 @@ module.exports = (_ => {
 									title: [
 										"Aliases: ",
 										BDFDB.ReactUtils.createElement("strong", {
-											children: data.query
+											children: query
 										})
 									]
 								}),
@@ -174,7 +177,7 @@ module.exports = (_ => {
 						onSelect: data => {
 							if (data.results.aliases[data.index].word.indexOf(" ") > -1) {
 								let textValue = BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareawrapall, document.activeElement) || document.querySelector(BDFDB.dotCN.textareawrapall), "textValue");
-								if (textValue) data.options.replaceText(textValue.replace(new RegExp(BDFDB.StringUtils.regEscape(data.results.aliases[data.index].word), "g"), BDFDB.StringUtils.insertNRST(data.results.aliases[data.index].replace)));
+								if (textValue) data.options.replaceText(textValue.replace(new RegExp(BDFDB.StringUtils.regEscape(data.results.aliases[data.index].word), data.results.aliases[data.index].case ? "gi" : "g"), BDFDB.StringUtils.insertNRST(data.results.aliases[data.index].replace)));
 							}
 							else data.options.insertText(BDFDB.StringUtils.insertNRST(data.results.aliases[data.index].replace));
 							return {};
