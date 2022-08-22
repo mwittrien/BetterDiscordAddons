@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.0
+ * @version 2.4.1
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.4.0",
+			"version": "2.4.1",
 			"description": "Allows you to configure your own Aliases/Commands"
 		}
 	};
@@ -172,7 +172,7 @@ module.exports = (_ => {
 							].flat(10).filter(n => n);
 						},
 						onSelect: data => {
-							if (data.results.aliases[data.index].replace.indexOf(" ") > -1) {
+							if (data.results.aliases[data.index].word.indexOf(" ") > -1) {
 								let textValue = BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareawrapall, document.activeElement) || document.querySelector(BDFDB.dotCN.textareawrapall), "textValue");
 								if (textValue) data.options.replaceText(textValue.replace(new RegExp(BDFDB.StringUtils.regEscape(data.results.aliases[data.index].word), "g"), BDFDB.StringUtils.insertNRST(data.results.aliases[data.index].replace)));
 							}
