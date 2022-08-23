@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.3.9
+ * @version 4.4.0
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.3.9",
+			"version": "4.4.0",
 			"description": "Allows you to locally edit Channels"
 		}
 	};
@@ -409,9 +409,10 @@ module.exports = (_ => {
 
 			processFocusRing (e) {
 				if (e.returnvalue && e.returnvalue.props.className) {
-					let change, channelId, nameClass, categoyClass, iconClass, modify = {};
+					let change, hoveredEvents, channelId, nameClass, categoyClass, iconClass, modify = {};
 					if (this.settings.places.channelList && e.returnvalue.props.className.indexOf(BDFDB.disCN.categoryiconvisibility) > -1) {
 						change = true;
+						hoveredEvents = true;
 						channelId = (BDFDB.ReactUtils.findValue(e.returnvalue, "data-list-item-id") || "").split("___").pop();
 						nameClass = BDFDB.disCN.categoryname;
 						iconClass = BDFDB.disCN.categoryicon;
@@ -426,17 +427,36 @@ module.exports = (_ => {
 						iconClass = BDFDB.disCN.searchpopoutsearchresultchannelicon;
 					}
 					if (change && channelId) {
-						if (changedChannels[channelId]) {
-							let name = nameClass && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", nameClass]]});
-							if (name) {
-								name = name.props && name.props.children || name;
-								this.changeChannelColor(BDFDB.ArrayUtils.is(name) ? name.find(c => c.type == "strong") || name[0] : name, channelId, modify);
-							}
-							let icon = iconClass && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", iconClass]]});
-							if (icon) this.changeChannelIconColor(icon, channelId, modify);
+						if (hoveredEvents) {
+							let changeColors = (wrapper, props) => {
+								let color = this.chooseColor(this.getChannelDataColor(channelId), props);
+								let channelName = wrapper.querySelector(`.${nameClass} > *`);
+								let channelIcon = wrapper.querySelector(`.${iconClass}`);
+								if (channelName && channelName.firstElementChild) channelName.firstElementChild.style.setProperty("color", color);
+								if (channelIcon) {
+									for (let path of channelIcon.querySelectorAll('[path*="rgba("], [path*="rgb("]')) path.setAttribute("path", color);
+									for (let fill of channelIcon.querySelectorAll('[fill*="rgba("], [fill*="rgb("]')) fill.setAttribute("fill", color);
+								}
+							};
+							let onMouseEnter = e.instance.props.children.props.onMouseEnter, onMouseLeave = e.instance.props.children.props.onMouseLeave;
+							e.instance.props.children.props.onMouseEnter = BDFDB.TimeUtils.suppress(event => {
+								changeColors(event.currentTarget, {hovered: true});
+								return (onMouseEnter || (_ => {}))(event);
+							}, "Error in onMouseEnter of ChannelItem!", this);
+							e.instance.props.children.props.onMouseLeave = BDFDB.TimeUtils.suppress(event => {
+								changeColors(event.currentTarget, modify);
+								return (onMouseLeave || (_ => {}))(event);
+							}, "Error in onMouseLeave of ChannelItem!", this);
 						}
+						let name = nameClass && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", nameClass]]});
+						if (name) {
+							name = name.props && name.props.children || name;
+							this.changeChannelColor(BDFDB.ArrayUtils.is(name) ? name.find(c => c.type == "strong") || name[0] : name, channelId, modify);
+						}
+						let icon = iconClass && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", iconClass]]});
+						if (icon) this.changeChannelIconColor(icon, channelId, modify);
 						let categoryId = (BDFDB.LibraryModules.ChannelStore.getChannel(channelId) || {}).parent_id;
-						if (categoryId && changedChannels[categoryId]) {
+						if (categoryId) {
 							let categoryName = categoyClass && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", categoyClass]]});
 							if (categoryName) {
 								categoryName.props.children = this.getChannelData(categoryId).name;
@@ -453,9 +473,30 @@ module.exports = (_ => {
 			
 			processChannelItem (e) {
 				if (e.instance.props.channel && this.settings.places.channelList) {
-					if (!e.returnvalue) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id, true, e.instance.props.channel);
+					if (!e.returnvalue) {
+						e.instance.props.channel = this.getChannelData(e.instance.props.channel.id, true, e.instance.props.channel);
+						let changeColors = (wrapper, props) => {
+							let color = this.chooseColor(this.getChannelDataColor(e.instance.props.channel.id), props);
+							let channelName = wrapper.querySelector(BDFDB.dotCN.channelnameinner);
+							let channelIcon = wrapper.querySelector(BDFDB.dotCN.channelicon);
+							if (channelName && channelName.firstElementChild) channelName.firstElementChild.style.setProperty("color", color);
+							if (channelIcon) {
+								for (let path of channelIcon.querySelectorAll('[path*="rgba("], [path*="rgb("]')) path.setAttribute("path", color);
+								for (let fill of channelIcon.querySelectorAll('[fill*="rgba("], [fill*="rgb("]')) fill.setAttribute("fill", color);
+							}
+						};
+						let onMouseEnter = e.instance.props.onMouseEnter, onMouseLeave = e.instance.props.onMouseLeave;
+						e.instance.props.onMouseEnter = BDFDB.TimeUtils.suppress(event => {
+							changeColors(event.currentTarget, {hovered: true});
+							return (onMouseEnter || (_ => {}))(event);
+						}, "Error in onMouseEnter of ChannelItem!", this);
+						e.instance.props.onMouseLeave = BDFDB.TimeUtils.suppress(event => {
+							changeColors(event.currentTarget, BDFDB.ObjectUtils.extract(e.instance.props, "muted", "locked", "selected", "unread", "connected", "hovered"));
+							return (onMouseLeave || (_ => {}))(event);
+						}, "Error in onMouseLeave of ChannelItem!", this);
+					}
 					else {
-						let modify = BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "muted", "locked", "selected", "unread", "connected", "hovered");
+						let modify = BDFDB.ObjectUtils.extract(e.instance.props, "muted", "locked", "selected", "unread", "connected", "hovered");
 						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelnameinner]]});
 						if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id, modify);
 						let channelIcon = this.settings.general.changeChannelIcon && BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ChannelItemIcon"});
@@ -482,7 +523,7 @@ module.exports = (_ => {
 				if (e.instance.props.thread && this.settings.places.channelList) {
 					if (!e.returnvalue) e.instance.props.thread = this.getChannelData(e.instance.props.thread.id, true, e.instance.props.thread);
 					else {
-						let modify = BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "muted", "locked", "selected", "unread", "connected", "hovered");
+						let modify = BDFDB.ObjectUtils.extract(e.instance.props, "muted", "locked", "selected", "unread", "connected", "hovered");
 						let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelnameinner]]});
 						if (channelName) this.changeChannelColor(channelName, e.instance.props.thread.id, modify);
 					}
@@ -719,8 +760,9 @@ module.exports = (_ => {
 			chooseColor (color, config) {
 				if (color) {
 					if (BDFDB.ObjectUtils.is(config)) {
-						if (config.mentions || config.focused || config.hovered || config.selected || config.unread || config.connected) color = BDFDB.ColorUtils.change(color, 0.5);
+						if (config.focused || config.hovered || config.selected || config.connected) color = BDFDB.ColorUtils.change(color, 0.5);
 						else if (config.muted || config.locked) color = BDFDB.ColorUtils.change(color, -0.5);
+						else if (config.mentions || config.unread) color = BDFDB.ColorUtils.change(color, 0.5);
 					}
 					return BDFDB.ColorUtils.convert(color, "RGBA");
 				}
