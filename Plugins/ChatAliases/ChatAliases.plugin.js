@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.2
+ * @version 2.4.3
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "ChatAliases",
 			"author": "DevilBro",
-			"version": "2.4.2",
+			"version": "2.4.3",
 			"description": "Allows you to configure your own Aliases/Commands"
 		}
 	};
@@ -177,7 +177,12 @@ module.exports = (_ => {
 						onSelect: data => {
 							if (data.results.aliases[data.index].word.indexOf(" ") > -1) {
 								let textValue = BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareawrapall, document.activeElement) || document.querySelector(BDFDB.dotCN.textareawrapall), "textValue");
-								if (textValue) data.options.replaceText(textValue.replace(new RegExp(BDFDB.StringUtils.regEscape(data.results.aliases[data.index].word), data.results.aliases[data.index].case ? "gi" : "g"), BDFDB.StringUtils.insertNRST(data.results.aliases[data.index].replace)));
+								if (textValue) {
+									let replace = BDFDB.StringUtils.insertNRST(data.results.aliases[data.index].replace);
+									let escapedQuery = BDFDB.StringUtils.regEscape(query);
+									let config = data.results.aliases[data.index].case ? "gi" : "g";
+									data.options.replaceText(textValue.replace(new RegExp(`(\\s)${escapedQuery}(\\s)`, config), `$1${replace}$2`).replace(new RegExp(`^${escapedQuery}(\\s)`, config), `${replace}$1`).replace(new RegExp(`(\\s)${escapedQuery}$`, config), `$1${replace}`));
+								}
 							}
 							else data.options.insertText(BDFDB.StringUtils.insertNRST(data.results.aliases[data.index].replace));
 							return {};
