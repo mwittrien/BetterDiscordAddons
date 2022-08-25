@@ -118,7 +118,6 @@
 		"RoleIconUtils": {"props": ["getRoleIconData"]},
 		"SearchPageUtils": {"props": ["searchNextPage", "searchPreviousPage"]},
 		"SettingsUtils": {"props": ["ShowCurrentGame", "DeveloperMode"]},
-		"SettingsUtilsOld": {"props": ["updateRemoteSettings", "updateLocalSettings"]},
 		"SimpleMarkdownComponents": {"strings": ["customEmoji", "emojiTooltipPosition", "timestampTooltip"]},
 		"SimpleMarkdownParser": {"props": ["parseBlock", "parseInline", "defaultOutput"]},
 		"SlateDraftUtils": {"props": ["getRecentlyEditedDrafts", "getDraft"]},
