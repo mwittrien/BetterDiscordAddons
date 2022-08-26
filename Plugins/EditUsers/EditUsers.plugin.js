@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.6.1
+ * @version 4.6.2
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.6.1",
+			"version": "4.6.2",
 			"description": "Allows you to locally edit Users"
 		}
 	};
@@ -278,6 +278,7 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MemberDisplayUtils, "getDisplayProfile", {after: e => {
+					if (!e.returnValue) return;
 					let data = changedUsers[e.methodArguments[0]];
 					if (data && (data.banner || data.removeBanner)) {
 						e.returnValue = new BDFDB.DiscordObjects.DisplayProfile(e.returnValue, e.returnValue);
@@ -1579,8 +1580,7 @@ module.exports = (_ => {
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
 													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-													value: data.removeBanner && user.id != "278543574059057154",
-													disabled: user.id == "278543574059057154",
+													value: data.removeBanner,
 													onChange: value => {
 														newData.removeBanner = value;
 														if (value) {
@@ -1602,7 +1602,6 @@ module.exports = (_ => {
 											maxLength: 100000000000000000000,
 											value: data.banner,
 											placeholder: BDFDB.UserUtils.getBanner(user.id),
-											disabled: data.removeBanner || user.id == "278543574059057154",
 											ref: instance => {if (instance) bannerInput = instance;},
 											onChange: (value, instance) => {
 												this.checkUrl(value, instance).then(returnValue => newData.banner = returnValue);

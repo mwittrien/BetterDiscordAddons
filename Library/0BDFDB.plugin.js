@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.1
+ * @version 2.5.2
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -19,7 +19,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BDFDB",
 			"author": "DevilBro",
-			"version": "2.5.1",
+			"version": "2.5.2",
 			"description": "Required Library for DevilBro's Plugins"
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
@@ -3258,7 +3258,7 @@ module.exports = (_ => {
 		};
 		BDFDB.UserUtils.getBanner = function (id = BDFDB.UserUtils.me.id, guildId = Internal.LibraryModules.LastGuildStore.getGuildId(), canAnimate = false) {
 			let displayProfile = Internal.LibraryModules.MemberDisplayUtils.getDisplayProfile(id, guildId);
-			return (Internal.LibraryModules.IconUtils.getUserBannerURL(Object.assign({banner: displayProfile.banner, id: id}, {canAnimate})) || "").split("?")[0];
+			return (Internal.LibraryModules.IconUtils.getUserBannerURL(Object.assign({banner: displayProfile && displayProfile.banner, id: id}, {canAnimate})) || "").split("?")[0];
 		};
 		BDFDB.UserUtils.can = function (permission, id = BDFDB.UserUtils.me.id, channelId = Internal.LibraryModules.LastChannelStore.getChannelId()) {
 			if (!BDFDB.DiscordConstants.Permissions[permission]) BDFDB.LogUtils.warn([permission, "not found in Permissions"]);
@@ -8155,7 +8155,6 @@ module.exports = (_ => {
 			Internal.patchedModules = {
 				before: {
 					SearchBar: "render",
-					EmojiPicker: "type",
 					EmojiPickerListRow: "default"
 				},
 				after: {
@@ -8388,9 +8387,6 @@ module.exports = (_ => {
 			};
 			Internal.processDiscordTag = function (e) {
 				if (e.instance && e.instance.props && e.returnvalue && e.instance.props.user) e.returnvalue.props.user = e.instance.props.user;
-			};
-			Internal.processEmojiPicker = function (e) {
-				if (BDFDB.ObjectUtils.toArray(PluginStores.loaded).filter(p => p.started).some(p => p.onSystemMessageOptionContextMenu || p.onSystemMessageOptionToolbar || p.onMessageOptionContextMenu || p.onMessageOptionToolbar)) e.instance.props.persistSearch = true;
 			};
 			Internal.processEmojiPickerListRow = function (e) {
 				if (e.instance.props.emojiDescriptors && Internal.LibraryComponents.EmojiPickerButton.current && Internal.LibraryComponents.EmojiPickerButton.current.props && Internal.LibraryComponents.EmojiPickerButton.current.props.allowManagedEmojisUsage) for (let i in e.instance.props.emojiDescriptors) e.instance.props.emojiDescriptors[i] = Object.assign({}, e.instance.props.emojiDescriptors[i], {isDisabled: false});
