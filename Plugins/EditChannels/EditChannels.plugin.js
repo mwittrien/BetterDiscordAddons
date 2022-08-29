@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.0
+ * @version 4.4.1
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditChannels",
 			"author": "DevilBro",
-			"version": "4.4.0",
+			"version": "4.4.1",
 			"description": "Allows you to locally edit Channels"
 		}
 	};
@@ -138,23 +138,23 @@ module.exports = (_ => {
 			onStart () {				
 				let observer = new MutationObserver(_ => {this.changeAppTitle();});
 				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name: "appTitleObserver", instance: observer}, {childList: true});
-				
-				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.CHANNELS, "queryResults", {after: e => {
+
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.QuerySearchUtils, "queryChannels", {after: e => {
+					if (!e.methodArguments[0].query) return;
 					let channelArray = [];
-					for (let id in changedChannels) if (changedChannels[id] && changedChannels[id].name) {
+					for (let id of BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds().map(id => Object.keys(BDFDB.LibraryModules.ChannelStore.getMutableGuildChannelsForGuild(id))).flat()) {
 						let channel = BDFDB.LibraryModules.ChannelStore.getChannel(id);
-						let category = channel && channel.parent_id && BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id);
-						let catData = category && changedChannels[category.id] || {};
-						if (BDFDB.ChannelUtils.isTextChannel(channel) && channel.guild_id == e.methodArguments[0].guild_id) channelArray.push(Object.assign({
-							lowerCaseName: changedChannels[id].name.toLowerCase(),
-							lowerCaseCatName: catData && catData.name && catData.name.toLowerCase(),
-							channel,
-							category,
-							catData
-						}, changedChannels[id]));
+						if (channel && !channel.isCategory()) {
+							let category = channel.parent_id && BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id);
+							if (((changedChannels[id] && changedChannels[id].name && changedChannels[id].name.toLocaleLowerCase().indexOf(e.methodArguments[0].query.toLocaleLowerCase()) > -1) || (category && changedChannels[category.id] && changedChannels[category.id].name && changedChannels[category.id].name.toLocaleLowerCase().indexOf(e.methodArguments[0].query.toLocaleLowerCase()) > -1)) && !e.returnValue.find(n => n.record && n.record.id == id && (n.type == BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.VOICE_CHANNEL || n.type == BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.TEXT_CHANNEL))) e.returnValue.push({
+								comparator: channel.name,
+								record: channel,
+								score: 30000,
+								sortable: channel.name.toLocaleLowerCase(),
+								type: channel.isGuildVocal() ? BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.VOICE_CHANNEL : BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.TEXT_CHANNEL
+							});
+						}
 					}
-					channelArray = BDFDB.ArrayUtils.keySort(channelArray.filter(n => e.returnValue.results.channels.every(channel => channel.id != n.channel.id) && (n.lowerCaseName.indexOf(e.methodArguments[2].toLowerCase()) != -1 || (n.lowerCaseCatName && n.lowerCaseCatName.indexOf(e.methodArguments[2].toLowerCase()) != -1))), "lowerCaseName");
-					e.returnValue.results.channels = [].concat(e.returnValue.results.channels, channelArray.map(n => n.channel)).slice(0, BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS);
 				}});
 				
 				this.forceUpdateAll();
@@ -295,14 +295,36 @@ module.exports = (_ => {
 
 			processAutocompleteChannelResult (e) {
 				if (e.instance.props.channel && this.settings.places.autocompletes) {
-					if (!e.returnvalue) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
+					if (!e.returnvalue) {
+						if (e.instance.props.category) e.instance.props.category = this.getChannelData(e.instance.props.category.id);
+						e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
+					}
 					else {
 						if (typeof e.returnvalue.props.children == "function") {
 							let childrenRender = e.returnvalue.props.children;
 							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
+								let modify = Object.assign({}, e.instance.props, e.instance.state);
 								let children = childrenRender(...args);
+								let icon = BDFDB.ReactUtils.findChild(children, {name: "AutocompleteRowIcon"});
+								if (icon) {
+									let iconType = icon.type;
+									icon.type = BDFDB.TimeUtils.suppress((...args2) => {
+										let iconChild = iconType(...args2);
+										if (iconChild.props && iconChild.props.children && typeof iconChild.props.children.type == "function") {
+											let iconChildType = iconChild.props.children.type;
+											iconChild.props.children.type = BDFDB.TimeUtils.suppress((...args3) => {
+												let iconSubChild = iconChildType(...args3);
+												this.changeChannelIconColor(iconSubChild, e.instance.props.channel.id, modify);
+												return iconSubChild;
+											}, "Error in Type of AutocompleteRowIcon Child!", this);
+										}
+										return iconChild;
+									}, "Error in Type of AutocompleteRowIcon!", this);
+								}
 								let channelName = BDFDB.ReactUtils.findChild(children, {name: "AutocompleteRowHeading"});
-								if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id);
+								if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id, modify);
+								let categoryName = e.instance.props.category && BDFDB.ReactUtils.findChild(children, {name: "AutocompleteRowContentSecondary"});
+								if (categoryName) this.changeChannelColor(categoryName, e.instance.props.category.id, modify);
 								return children;
 							}, "Error in Children Render of AutocompleteChannelResult!", this);
 						}
