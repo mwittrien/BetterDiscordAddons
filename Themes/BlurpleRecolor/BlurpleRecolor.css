@@ -2242,6 +2242,9 @@ input.input-2g-os5 {										/* textinput												*/
 #app-mount .prefixInput-w72mM6:not(.error-UVCAd2).focused-2JC6KT {
 	border-color: rgb(var(--accentcolor));
 }
+.addFriendInputWrapper-kkoSV9:focus-within {
+	border-color: rgb(var(--accentcolor));
+}
 															/* checkbox				checked 							*/
 .checkbox-1ycfTw .checkboxInner-1aRh1d .checkboxElement-uwAa9F:checked + span {
 	background-color: rgb(var(--accentcolor));
