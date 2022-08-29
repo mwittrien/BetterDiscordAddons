@@ -2245,6 +2245,9 @@ input.input-2g-os5 {										/* textinput												*/
 .addFriendInputWrapper-kkoSV9:focus-within {
 	border-color: rgb(var(--accentcolor));
 }
+.addFriendInputWrapper-kkoSV9 .input-2g-os5 {
+	border-color: transparent !important;
+}
 															/* checkbox				checked 							*/
 .checkbox-1ycfTw .checkboxInner-1aRh1d .checkboxElement-uwAa9F:checked + span {
 	background-color: rgb(var(--accentcolor));
