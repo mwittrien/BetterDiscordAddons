@@ -141,7 +141,6 @@ module.exports = (_ => {
 
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.QuerySearchUtils, "queryChannels", {after: e => {
 					if (!e.methodArguments[0].query) return;
-					let channelArray = [];
 					for (let id of BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds().map(id => Object.keys(BDFDB.LibraryModules.ChannelStore.getMutableGuildChannelsForGuild(id))).flat()) {
 						let channel = BDFDB.LibraryModules.ChannelStore.getChannel(id);
 						if (channel && !channel.isCategory()) {

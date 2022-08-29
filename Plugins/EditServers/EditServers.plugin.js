@@ -129,7 +129,6 @@ module.exports = (_ => {
 
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.QuerySearchUtils, "queryGuilds", {after: e => {
 					if (!e.methodArguments[0].query) return;
-					let guildArray = [];
 					for (let id in changedGuilds) if (changedGuilds[id] && changedGuilds[id].name && changedGuilds[id].name.toLocaleLowerCase().indexOf(e.methodArguments[0].query.toLocaleLowerCase()) > -1 && !e.returnValue.find(n => n.record && n.record.id == id && n.type == BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.GUILD)) {
 						let guild = BDFDB.LibraryModules.GuildStore.getGuild(id);
 						if (guild) e.returnValue.push({
