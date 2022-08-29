@@ -152,7 +152,6 @@ module.exports = (_ => {
 						PanelTitle: "default",
 						MessageUsername: "default",
 						MessageContent: "type",
-						Reaction: "render",
 						ReactorsComponent: "render",
 						UserMention: "default",
 						RichUserMention: "UserMention",
@@ -875,35 +874,6 @@ module.exports = (_ => {
 			
 			processThreadMessageAccessoryMessage (e) {
 				if (e.instance.props.message && this.settings.places.chatWindow && this.shouldChangeInChat(e.instance.props.message.channel_id)) e.instance.props.message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {author: this.getUserData(e.instance.props.message.author.id)}));
-			}
-			
-			processReaction (e) {
-				if (!this.settings.places.reactions || !e.returnvalue || !this.shouldChangeInChat(e.instance.props.message.channel_id)) return;
-				if (e.instance.props.reactions && e.instance.props.reactions.length) {
-					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id);
-					let guildId = null == channel || channel.isPrivate() ? null : channel.getGuildId();
-					let users = e.instance.props.reactions.filter(user => !BDFDB.LibraryModules.RelationshipStore.isBlocked(user.id)).slice(0, 3).map(user => changedUsers[user.id] && changedUsers[user.id].name || guildId && BDFDB.LibraryModules.MemberStore.getNick(guildId, user.id) || user.username).filter(user => user);
-					if (users.length) {
-						let reaction = e.instance.props.message.getReaction(e.instance.props.emoji);
-						let others = Math.max(0, (reaction && reaction.count || 0) - users.length);
-						let emojiName = BDFDB.LibraryModules.ReactionEmojiUtils.getReactionEmojiName(e.instance.props.emoji);
-						e.returnvalue.props.text = 
-							users.length == 1 ? others > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_1_N", users[0], others, emojiName) :
-							BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_1", users[0], emojiName) :
-							users.length == 2 ? others > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_2_N", users[0], users[1], others, emojiName) :
-							BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_2", users[0], users[1], emojiName) :
-							users.length == 3 ? others > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_3_N", users[0], users[1], users[2], others, emojiName) :
-							BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_3", users[0], users[1], users[2], emojiName) :
-							BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_N", others, emojiName);
-					}
-				}
-				else if (!e.instance.props.reactions) {
-					e.instance.props.reactions = [];
-					BDFDB.LibraryModules.ReactionUtils.getReactions(e.instance.props.message.channel_id, e.instance.props.message.id, e.instance.props.emoji).then(reactions => {
-						e.instance.props.reactions = reactions;
-						BDFDB.ReactUtils.forceUpdate(e.instance);
-					});
-				}
 			}
 			
 			processReactorsComponent (e) {
