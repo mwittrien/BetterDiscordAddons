@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.6.2
+ * @version 4.6.3
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.6.2",
+			"version": "4.6.3",
 			"description": "Allows you to locally edit Users"
 		}
 	};
@@ -165,6 +165,7 @@ module.exports = (_ => {
 						DirectMessage: "render",
 						RTCConnection: "render",
 						PrivateChannel: "render",
+						QuickSwitcherConnected: "default",
 						QuickSwitchUserResult: "render",
 						IncomingCallModal: "default"
 					}
@@ -252,20 +253,45 @@ module.exports = (_ => {
 						}
 					}});
 				}
-				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.MENTIONS, "queryResults", {after: e => {
-					let userArray = [];
-					for (let id in changedUsers) if (changedUsers[id] && changedUsers[id].name) {
+
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.QuerySearchUtils, ["queryDMUsers", "queryFriends"], {after: e => {
+					if (!e.methodArguments[0].query) return;
+					for (let id in changedUsers) if (changedUsers[id] && changedUsers[id].name && changedUsers[id].name.toLocaleLowerCase().indexOf(e.methodArguments[0].query.toLocaleLowerCase()) > -1 && !e.returnValue.find(n => n.record && n.record.id == id && n.type == BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.USER)) {
 						let user = BDFDB.LibraryModules.UserStore.getUser(id);
-						let member = user && e.methodArguments[0].guild_id && BDFDB.LibraryModules.MemberStore.getMember(e.methodArguments[0].guild_id, id);
-						if (user && (e.methodArguments[0].recipients.includes(id) || member)) userArray.push(Object.assign({
-							comparator: changedUsers[id].name,
-							nick: member && member.nick || null,
-							score: 0,
-							user: user
-						}, changedUsers[id]));
+						if (user) e.returnValue.push({
+							comparator: user.username,
+							record: user,
+							score: 10,
+							sortable: user.username.toLocaleLowerCase(),
+							type: BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.USER
+						});
 					}
-					userArray = BDFDB.ArrayUtils.keySort(userArray.filter(n => e.returnValue.results.users.every(comp => comp.user.id != n.user.id) && n.comparator.toLowerCase().indexOf(e.methodArguments[2].toLowerCase()) != -1), "lowerCaseName");
-					e.returnValue.results.users = [].concat(e.returnValue.results.users, userArray.map(n => ({user: n.user}))).slice(0, BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS);
+				}});
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.QuerySearchUtils, "queryGuildUsers", {after: e => {
+					if (!e.methodArguments[0].query) return;
+					for (let id in changedUsers) if (changedUsers[id] && changedUsers[id].name && changedUsers[id].name.toLocaleLowerCase().indexOf(e.methodArguments[0].query.toLocaleLowerCase()) > -1 && !e.returnValue.find(n => n.record && n.record.id == id && n.type == BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.USER)) {
+						let user = BDFDB.LibraryModules.UserStore.getUser(id);
+						let member = user && e.methodArguments[0].guildId && BDFDB.LibraryModules.MemberStore.getMember(e.methodArguments[0].guildId, id);
+						if (user) e.returnValue.push({
+							comparator: member && member.nick ? member.nick.toLocaleLowerCase() : user.username.toLocaleLowerCase(),
+							record: user,
+							score: 0,
+							type: BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.USER
+						});
+					}
+				}});
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.QuerySearchUtils, "queryChannelUsers", {after: e => {
+					if (!e.methodArguments[0].query) return;
+					for (let id in changedUsers) if (changedUsers[id] && changedUsers[id].name && changedUsers[id].name.toLocaleLowerCase().indexOf(e.methodArguments[0].query.toLocaleLowerCase()) > -1 && !e.returnValue.find(n => n.record && n.record.id == id && n.type == BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.USER)) {
+						let user = BDFDB.LibraryModules.UserStore.getUser(id);
+						let member = user && e.methodArguments[0].channelId && BDFDB.LibraryModules.MemberStore.getMember((BDFDB.LibraryModules.ChannelStore.getChannel(e.methodArguments[0].channelId) || {}).guild_id, id);
+						if (user) e.returnValue.push({
+							comparator: member && member.nick ? member.nick.toLocaleLowerCase() : user.username.toLocaleLowerCase(),
+							record: user,
+							score: 0,
+							type: BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.USER
+						});
+					}
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.IconUtils, "getUserBannerURL", {instead: e => {
@@ -1154,6 +1180,20 @@ module.exports = (_ => {
 				this.injectBadge(wrapper.props.decorators, instance.props.user.id, null, 1);
 			}
 
+			processQuickSwitcherConnected (e) {
+				if (e.returnvalue && e.returnvalue.props && e.returnvalue.props.query && (!e.returnvalue.props.queryMode || e.returnvalue.props.queryMode == BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.USER)) {
+					for (let id in changedUsers) if (changedUsers[id] && changedUsers[id].name && changedUsers[id].name.toLocaleLowerCase().indexOf(e.returnvalue.props.query.toLocaleLowerCase()) > -1 && !e.returnvalue.props.results.find(n => n.record && n.record.id == id && n.type == BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.USER)) {
+						let user = BDFDB.LibraryModules.UserStore.getUser(id);
+						if (user) e.returnvalue.props.results.splice(1, 0, {
+							comparator: `${user.username}#${user.discriminator}`,
+							record: user,
+							score: 30000,
+							type: BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.USER
+						});
+					}
+				}
+			}
+			
 			processQuickSwitchUserResult (e) {
 				if (e.instance.props.user && this.settings.places.quickSwitcher) {
 					if (!e.returnvalue) e.instance.props.user = this.getUserData(e.instance.props.user.id);
