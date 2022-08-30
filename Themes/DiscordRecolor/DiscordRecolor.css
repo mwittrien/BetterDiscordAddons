@@ -29,7 +29,7 @@
 	--bdfdb-red:					rgb(var(--dangercolor));
 }
 
-.theme-dark, .theme-light {
+.theme-light, .theme-dark, .theme-amoled {
 	--text-positive: rgb(var(--successcolor));
 	--text-warning: rgb(var(--warningcolor));
 	--text-danger: rgb(var(--dangercolor));

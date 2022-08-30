@@ -50,7 +50,7 @@
 	--bdfdb-red:					rgb(var(--dangercolor));
 }
 
-.theme-light, .theme-dark {
+.theme-light, .theme-dark, .theme-amoled {
 	--text-positive: rgb(var(--successcolor));
 	--text-warning: rgb(var(--warningcolor));
 	--text-danger: rgb(var(--dangercolor));

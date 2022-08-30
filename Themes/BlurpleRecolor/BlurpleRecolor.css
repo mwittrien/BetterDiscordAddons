@@ -21,7 +21,7 @@
 .theme-light {
 	--logo-primary: rgb(var(--accentcolor));
 }
-[data-popout-root], html, .theme-dark, .theme-light {
+[data-popout-root], html, .theme-light, .theme-dark, .theme-amoled {
 	--text-brand: rgb(var(--accentcolor));
 	--text-link: rgb(var(--linkcolor));
 	--text-link-low-saturation: rgb(var(--linkcolor));
