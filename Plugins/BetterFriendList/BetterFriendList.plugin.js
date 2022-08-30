@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.5
+ * @version 1.4.6
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "BetterFriendList",
 			"author": "DevilBro",
-			"version": "1.4.5",
+			"version": "1.4.6",
 			"description": "Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount"
 		}
 	};
@@ -434,7 +434,7 @@ module.exports = (_ => {
 			}
 			
 			rerenderList () {
-				let selectedButton = document.querySelector(BDFDB.dotCN.dmchannel + BDFDB.dotCN.namecontainerselected);
+				let selectedButton = document.querySelector(BDFDB.dotCNS.dmchannel + BDFDB.dotCNS.namecontainerselected + "a");
 				if (selectedButton) selectedButton.click();
 			}
 
