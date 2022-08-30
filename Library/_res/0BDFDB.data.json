@@ -3318,15 +3318,6 @@
 	"myGuildId": "410787888507256842",
 	"mySolana": "8R96iUjP61Z6p6YHrcLX5QccZ93yk3rE6rtKBoupNExz",
 	"myEthereum": "0xaD7C90Ed43c0021d855970B9Ed6282A1922eECEb",
-	"authorIdAttribute": "data-author-id",
-	"authorFriendAttribute": "data-is-author-friend",
-	"authorSelfAttribute": "data-is-author-self",
-	"userIdAttribute": "data-user-id",
-	"userBackgroundsProperties": {
-		"background": "--user-background",
-		"orientation": "--user-popout-position"
-	},
-	"userBackgroundsUrl": "https://discord-custom-covers.github.io/usrbg/dist/usrbg.json",
 	"Languages": {
 		"$discord": 	{"name":"Discord (English)",			"id":"en",		"ownlang":"English"},
 		"af":			{"name":"Afrikaans",					"id":"af",		"ownlang":"Afrikaans"},

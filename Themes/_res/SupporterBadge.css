@@ -31,7 +31,7 @@
 }
 
 /* synax */
-.supporter-Z3FfwL.tier3-yTxjsy.hasBadge-4rT8_u[data-user-id="335997977938100226"] .badge-7R_W3s {
+.supporter-Z3FfwL.tier3-yTxjsy.hasBadge-4rT8_u .badge-7R_W3s[user-id="335997977938100226"] {
 	-webkit-mask: unset !important;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/badges/335997977938100226.png) center/contain no-repeat !important;
 	top: 66% !important;
@@ -41,7 +41,7 @@
 }
 
 /* seivag */
-.supporter-Z3FfwL.tier3-yTxjsy.hasBadge-4rT8_u[data-user-id="226444377482985473"] .badge-7R_W3s {
+.supporter-Z3FfwL.tier3-yTxjsy.hasBadge-4rT8_u .badge-7R_W3s[user-id="226444377482985473"] {
 	-webkit-mask: unset !important;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/badges/226444377482985473.png) center/90% 90% no-repeat, linear-gradient(90deg, #c1dbdc, #9dc1e4) !important;
 	border-radius: 10% !important;
@@ -52,6 +52,6 @@
 }
 
 /* strix */
-.supporter-Z3FfwL.tier3-yTxjsy.hasBadge-4rT8_u[data-user-id="264486632525135883"] .badge-7R_W3s {
+.supporter-Z3FfwL.tier3-yTxjsy.hasBadge-4rT8_u .badge-7R_W3s[user-id="264486632525135883"] {
 	background: linear-gradient(90deg, #f2f7ff, #1e68fc) !important;
 }
