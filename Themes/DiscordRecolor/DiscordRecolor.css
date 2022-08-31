@@ -3361,11 +3361,14 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	box-shadow: 0 0 0 1px rgba(var(--backgroundtertiary),.6), 0 2px 10px 0 rgba(0,0,0,.2);
 }
 .profileColors-3Y0XaR {
-    --profile-body-background-color: rgba(0,0,0,.4) !important;
-    --profile-body-divider-color: var(--background-modifier-accent) !important;
-    --profile-body-divider-opacity: 1 !important;
+    --profile-avatar-border-color: transparent !important;
 }
-
+.userPopoutInnerWithTheme-71l1ON {
+    --profile-avatar-border-color: transparent !important;
+}
+.userPopoutInnerWithTheme-71l1ON .banner-2boKnS {
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 12 120 A 46 46 0 0 1 48 74 A 46 46 0 0 1 104 126 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
+}
 #app-mount .headerNormal-T_seeN {
 	background-color: var(--background-tertiary);
 }
