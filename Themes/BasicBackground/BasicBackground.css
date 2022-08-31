@@ -4514,12 +4514,15 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 
 /* ----		14.2.	USERPOPOUT						---- */
 
-.userPopout-2j1gM4 {										/* popout				container							*/
+.userPopout-2j1gM4,											/* popout				container							*/
+.userPopout-3fydSP {										/* popout new			container							*/
 	background: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 }
 .userPopout-2j1gM4::before,
-.userPopout-2j1gM4::after {
+.userPopout-2j1gM4::after,
+.userPopout-3fydSP::before,
+.userPopout-3fydSP::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -4532,13 +4535,20 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	pointer-events: none;
 	z-index: -1;
 }
-.userPopout-2j1gM4::before {
+.userPopout-2j1gM4::before,
+.userPopout-3fydSP::before {
 	background: var(--popout) var(--popoutposition)/var(--popoutsize);
 	background-attachment: fixed;
 }
-.userPopout-2j1gM4::after {
+.userPopout-2j1gM4::after,
+.userPopout-3fydSP::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 	backdrop-filter: blur(var(--popoutblur));
+}
+.profileColors-3Y0XaR {										/* popout new			profilecolors						*/
+    --profile-body-background-color: rgba(0,0,0,.4) !important;
+    --profile-body-divider-color: var(--background-modifier-accent) !important;
+    --profile-body-divider-opacity: 1 !important;
 }
 #app-mount .headerTop-3GPUSF,								/* popout				header inner						*/
 #app-mount .activity-1gTu-L,								/* popout				activity							*/
@@ -4550,18 +4560,20 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	padding: 0 16px 16px;
 }
 .userPopout-2j1gM4 .banner-1YaD3N,							/* popout				banner								*/
+.userPopout-3fydSP .banner-2boKnS,							/* popout new			banner								*/
 .menu-1QACrS .banner-1YaD3N {								/* status popout		banner								*/
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 16 120 A 46 46 0 0 1 62 76 A 46 46 0 0 1 108 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
 }
-.userPopout-2j1gM4 .avatar-2Vndt_,							/* popout				avatar								*/
+.userPopout-2j1gM4 .wrapper-1VLyxH,							/* popout				avatar								*/
 .userPopout-2j1gM4 .avatarWrapper,							/* popout				status everywhere					*/
-.menu-1QACrS .avatar-2Vndt_,								/* status popout		avatar								*/
+.userPopout-3fydSP .wrapper-1VLyxH,							/* popout new			avatar								*/
+.userPopout-3fydSP .avatarWrapper,							/* popout new			status everywhere					*/
+.menu-1QACrS .wrapper-1VLyxH,								/* status popout		avatar								*/
 .menu-1QACrS .avatarWrapper {								/* status popout		status everywhere					*/
 	background-color: transparent;
 	border-color: transparent;
 	box-sizing: content-box;
 }
-
 #app-mount .body-2wLx-E,									/* popout				body								*/
 #app-mount .bodyInnerWrapper-2bQs1k,						/* popout				body inner							*/
 #app-mount .footer-3naVBw {									/* popout				footer								*/
@@ -4603,7 +4615,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	bottom: 0;
 	left: 0;
 }
-#app-mount .role-2TIOKu .roleCircle-1EgnFN,				/* body					rolecircle							*/
+#app-mount .role-2TIOKu .roleCircle-1EgnFN,					/* body					rolecircle							*/
 #app-mount .role-2TIOKu .roleCircle-3K9O3d {				/* body					rolecircle							*/
 	position: absolute;
 	background-color: rgb(var(--textbrighter));
