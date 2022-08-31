@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.6.3
+ * @version 4.6.4
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "EditUsers",
 			"author": "DevilBro",
-			"version": "4.6.3",
+			"version": "4.6.4",
 			"description": "Allows you to locally edit Users"
 		}
 	};
@@ -104,6 +104,7 @@ module.exports = (_ => {
 						AutocompleteUserResult: "render",
 						UserBanner: "default",
 						UserPopoutAvatar: "UserPopoutAvatar",
+						UsernameSection: "default",
 						UserPopoutInfo: "UserPopoutInfo",
 						UserProfileModal: "default",
 						UserProfileModalHeader: "default",
@@ -143,7 +144,9 @@ module.exports = (_ => {
 						DiscordTag: "default",
 						NameTag: "default",
 						FocusRing: "default",
+						UserPopoutExperimentWrapper: "default",
 						UserPopoutContainer: "type",
+						UsernameSection: "default",
 						UserPopoutInfo: "UserPopoutInfo",
 						MutualFriends: "default",
 						VoiceUser: "render",
@@ -549,6 +552,11 @@ module.exports = (_ => {
 							guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 							tagClass = BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag;
 						}
+						else if (e.instance.props.className.indexOf(BDFDB.disCN.userpopoutusernametagnonickname) > -1) {
+							change = this.settings.places.userPopout;
+							guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
+							tagClass = BDFDB.disCNS.userpopoutusernamebottag + BDFDB.disCN.bottagnametag;
+						}
 						else if (e.instance.props.className.indexOf(BDFDB.disCN.guildsettingsinviteusername) > -1) {
 							change = this.settings.places.guildSettings;
 						}
@@ -612,8 +620,36 @@ module.exports = (_ => {
 				}
 			}
 			
+			processUserPopoutExperimentWrapper (e) {
+				if (e.returnvalue.props.user && this.settings.places.userPopout && changedUsers[e.returnvalue.props.user.id]) e.returnvalue.props.user = this.getUserData(e.returnvalue.props.user.id, true, true);
+			}
+			
 			processUserPopoutContainer (e) {
 				if (e.returnvalue.props.user && this.settings.places.userPopout && changedUsers[e.returnvalue.props.user.id]) e.returnvalue.props.user = this.getUserData(e.returnvalue.props.user.id, true, true);
+			}
+			
+			processUsernameSection (e) {
+				if (e.instance.props.user && this.settings.places.userPopout) {
+					let data = changedUsers[e.instance.props.user.id];
+					if (!data) return;
+					if (!e.returnvalue) {
+						let nickname = this.getUserNick(e.instance.props.user.id, e.instance.props.nickname);
+						e.instance.props.nickname = nickname ? nickname : null;
+					}
+					else {
+						if (data.color1 || data.tag) {
+							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutusernamenickname]]});
+							if (index > -1) {
+								this.changeUserColor(children[index], e.instance.props.user.id);
+								if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
+								this.injectBadge(children[index].props.children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
+									tagClass: BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag,
+									inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
+								});
+							}
+						}
+					}
+				}
 			}
 			
 			processUserPopoutInfo (e) {
