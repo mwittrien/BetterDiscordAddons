@@ -2,7 +2,7 @@
  * @name JoinedAtDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.3
+ * @version 1.3.4
  * @description Displays the Joined At Date of a Member in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "JoinedAtDate",
 			"author": "DevilBro",
-			"version": "1.3.3",
+			"version": "1.3.4",
 			"description": "Displays the Joined At Date of a Member in the UserPopout and UserModal"
-		},
-		"changeLog": {
-			"fixed": {
-				"User Popout": "No Longer requires you to open the Popout twice"
-			}
 		}
 	};
 
@@ -91,7 +86,9 @@ module.exports = (_ => {
 				
 				this.patchedModules = {
 					after: {
+						UserPopoutExperimentWrapper: "default",
 						UserPopoutContainer: "type",
+						UsernameSection: "default",
 						UserPopoutInfo: "UserPopoutInfo",
 						UserProfileModal: "default",
 						UserProfileModalHeader: "default"
@@ -164,8 +161,19 @@ module.exports = (_ => {
 				}
 			}
 
+			processUserPopoutExperimentWrapper (e) {
+				currentPopout = e.instance;
+			}
+
 			processUserPopoutContainer (e) {
 				currentPopout = e.instance;
+			}
+			
+			processUsernameSection (e) {
+				if (currentPopout && e.instance.props.user && this.settings.places.userPopout) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["CopiableField", "ColoredFluxTag"]});
+					if (index > -1) this.injectDate(children, index + 1, e.instance.props.user, currentPopout.props.guildId);
+				}
 			}
 			
 			processUserPopoutInfo (e) {

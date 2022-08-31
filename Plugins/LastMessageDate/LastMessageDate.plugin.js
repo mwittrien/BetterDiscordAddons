@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.0
+ * @version 1.3.1
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,7 +17,7 @@ module.exports = (_ => {
 		"info": {
 			"name": "LastMessageDate",
 			"author": "DevilBro",
-			"version": "1.3.0",
+			"version": "1.3.1",
 			"description": "Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal"
 		}
 	};
@@ -86,7 +86,9 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					after: {
+						UserPopoutExperimentWrapper: "default",
 						UserPopoutContainer: "type",
+						UsernameSection: "default",
 						UserPopoutInfo: "UserPopoutInfo",
 						UserProfileModal: "default",
 						UserProfileModalHeader: "default"
@@ -169,8 +171,19 @@ module.exports = (_ => {
 				}
 			}
 
+			processUserPopoutExperimentWrapper (e) {
+				currentPopout = e.instance;
+			}
+
 			processUserPopoutContainer (e) {
 				currentPopout = e.instance;
+			}
+			
+			processUsernameSection (e) {
+				if (currentPopout && e.instance.props.user && this.settings.places.userPopout) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["CopiableField", "ColoredFluxTag"]});
+					if (index > -1) this.injectDate(children, index + 1, e.instance.props.user, currentPopout.props.guildId);
+				}
 			}
 			
 			processUserPopoutInfo (e) {

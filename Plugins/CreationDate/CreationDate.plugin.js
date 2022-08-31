@@ -2,7 +2,7 @@
  * @name CreationDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.6
+ * @version 1.4.7
  * @description Displays the Creation Date of an Account in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -17,13 +17,8 @@ module.exports = (_ => {
 		"info": {
 			"name": "CreationDate",
 			"author": "DevilBro",
-			"version": "1.4.6",
+			"version": "1.4.7",
 			"description": "Displays the Creation Date of an Account in the UserPopout and UserModal"
-		},
-		"changeLog": {
-			"fixed": {
-				"User Popout": "Fixing Stuff for the User Popout Update, thanks Discord"
-			}
 		}
 	};
 
@@ -82,6 +77,7 @@ module.exports = (_ => {
 				
 				this.patchedModules = {
 					after: {
+						UsernameSection: "default",
 						UserPopoutInfo: "UserPopoutInfo",
 						UserProfileModalHeader: "default"
 					}
@@ -151,6 +147,13 @@ module.exports = (_ => {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
 					BDFDB.PatchUtils.forceAllUpdates(this);
+				}
+			}
+			
+			processUsernameSection (e) {
+				if (e.instance.props.user && this.settings.places.userPopout) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["CopiableField", "ColoredFluxTag"]});
+					if (index > -1) this.injectDate(children, index + 1, e.instance.props.user);
 				}
 			}
 
