@@ -308,7 +308,6 @@ module.exports = (_ => {
 							inject = this.settings.tagPlaces.userProfile;
 							tagClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
 						}
-						console.log(e);
 						if (inject) this.injectStaffTag(e.returnvalue.props.children, e.instance.props.user, userType, 2, {
 							tagClass: tagClass,
 							useRem: e.instance.props.useRemSizes,
