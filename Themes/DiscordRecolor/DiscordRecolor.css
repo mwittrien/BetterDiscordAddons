@@ -2043,34 +2043,34 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	opacity: .5;
 }
 
-#app-mount .subText-1gefwV {
-	color: var(--text-muted);
-}
-#app-mount .codeRedemptionRedirect-3SBiCp {
-	background-color: var(--background-secondary);
-	border-color: var(--background-tertiary);
+#app-mount .codeRedemptionRedirect-2hYMSQ {
+	background: var(--background-modifier-selected);
+	border-color: var(--background-modifier-selected);
 	color: var(--header-primary);
 }
-#app-mount .subTextHeader-25wJmP {
+#app-mount .subText-2zL_27 {
 	color: var(--text-muted);
 }
-#app-mount .subTextRow-kr1tHo {
+#app-mount .subTextHeader-2TGlBa {
+	color: var(--text-muted);
+}
+#app-mount .subTextRow-2c7SIq {
 	color: var(--header-secondary);
 }
-#app-mount .giftCodeRow-6K_ZTf {
+#app-mount .giftCodeRow-3pI-zz {
 	border-color: rgba(var(--textdarkest),.6);
 }
-#app-mount .bodyButtonColor-3koXNs {
+#app-mount .bodyButtonColor-1j4G6V {
 	background: var(--background-tertiary);
 	color: var(--header-primary);
 }
-#app-mount .bodyButtonColor-3koXNs:hover {
+#app-mount .bodyButtonColor-1j4G6V:hover {
 	background: var(--background-secondary);
 }
-#app-mount .bodyButtonColor-3koXNs:active {
+#app-mount .bodyButtonColor-1j4G6V:active {
 	background: var(--background-primary);
 }
-#app-mount .card-3Zmutq {
+#app-mount .card-1j9yy6 {
 	color: var(--header-primary);
 }
 #app-mount .splashArt-175LCr {
