@@ -14,6 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
+		"fixed": {
+			"Modal and Settings": "Add Channel Type: Forum"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -75,7 +78,8 @@ module.exports = (_ => {
 			GUILD_CATEGORY: "CATEGORY",
 			GUILD_STAGE_VOICE: "STAGE_CHANNEL",
 			PUBLIC_THREAD: "THREAD",
-			PRIVATE_THREAD: "PRIVATE_THREAD"
+			PRIVATE_THREAD: "PRIVATE_THREAD",
+			GUILD_FORUM: "FORUM"
 		};
 		
 		const renderLevels = {
@@ -185,7 +189,8 @@ module.exports = (_ => {
 						GUILD_VOICE:			{value: true},
 						GUILD_ANNOUNCEMENT:		{value: true},
 						GUILD_STORE:			{value: true},
-						GUILD_STAGE_VOICE:		{value: true}
+						GUILD_STAGE_VOICE:		{value: true},
+						GUILD_FORUM: 			{value: true}
 					}
 				};
 			
