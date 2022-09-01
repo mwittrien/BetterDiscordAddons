@@ -14,8 +14,6 @@
 
 module.exports = (_ => {
 	if (window.BDFDB_Global && window.BDFDB_Global.PluginUtils && typeof window.BDFDB_Global.PluginUtils.cleanUp == "function") window.BDFDB_Global.PluginUtils.cleanUp(window.BDFDB_Global);
-					
-	window.BDFDB_Global = Object.assign({}, window.BDFDB_Global);
 	
 	const BDFDB = {
 		started: true
@@ -964,6 +962,15 @@ module.exports = (_ => {
 					}
 				}
 			};
+
+			window.BDFDB_Global = Object.assign({
+				started: true,
+				loading: true,
+				PluginUtils: {
+					buildPlugin: BDFDB.PluginUtils.buildPlugin,
+					cleanUp: BDFDB.PluginUtils.cleanUp
+				}
+			}, window.BDFDB_Global);
 			
 			const request = require("request"), fs = require("fs"), path = require("path");
 			
