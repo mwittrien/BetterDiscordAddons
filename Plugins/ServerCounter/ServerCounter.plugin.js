@@ -13,13 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "ServerCounter",
-			"author": "DevilBro",
-			"version": "1.0.5",
-			"description": "Adds a Server Counter to the Server List"
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -88,5 +82,5 @@ module.exports = (_ => {
 				}));
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

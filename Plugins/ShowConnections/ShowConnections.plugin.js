@@ -13,13 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "ShowConnections",
-			"author": "DevilBro",
-			"version": "1.1.0",
-			"description": "Shows the connected Accounts of a User in the UserPopout"
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -253,5 +247,5 @@ module.exports = (_ => {
 				}, true));
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

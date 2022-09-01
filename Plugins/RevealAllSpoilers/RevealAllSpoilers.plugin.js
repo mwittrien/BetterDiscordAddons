@@ -13,18 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "RevealAllSpoilers",
-			"author": "DevilBro",
-			"version": "1.0.9",
-			"description": "Allows you to reveal all Spoilers within a Message/Status by holding the Ctrl Key and clicking a Spoiler"
-		},
-		"changeLog": {
-			"added": {
-				"Whole Chat": "Hold Ctrl+Shift and click a spoiler to reveal all spoilers in the current message window"
-			}
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -92,5 +81,5 @@ module.exports = (_ => {
 				}}, {force: true, noCache: true});
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

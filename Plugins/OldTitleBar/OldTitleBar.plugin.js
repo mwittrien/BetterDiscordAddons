@@ -13,13 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "OldTitleBar",
-			"author": "DevilBro",
-			"version": "1.7.5",
-			"description": "Allows you to switch to Discord's old Titlebar"
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -330,5 +324,5 @@ module.exports = (_ => {
 				return {x: window.screenX, y: window.screenY, width: window.outerWidth, height: window.outerHeight};
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

@@ -13,13 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "EditChannels",
-			"author": "DevilBro",
-			"version": "4.4.1",
-			"description": "Allows you to locally edit Channels"
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -1373,5 +1367,5 @@ module.exports = (_ => {
 				}
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

@@ -13,18 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "MessageUtilities",
-			"author": "DevilBro",
-			"version": "1.9.4",
-			"description": "Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)"
-		},
-		"changeLog": {
-			"fixed": {
-				"Reply auto Mention off": "No longer auto disables mentions for the reply action if the hotkey uses shift"
-			}
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -585,5 +574,5 @@ module.exports = (_ => {
 				}
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

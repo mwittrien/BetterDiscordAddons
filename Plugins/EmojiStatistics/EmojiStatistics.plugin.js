@@ -13,18 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "EmojiStatistics",
-			"author": "DevilBro",
-			"version": "2.9.8",
-			"description": "Shows you an Overview of Emojis and Emoji Servers"
-		},
-		"changeLog": {
-			"improved": {
-				"Swapped Position": "Swapped Position with the Diversity Selector"
-			}
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -467,5 +456,5 @@ module.exports = (_ => {
 				}
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

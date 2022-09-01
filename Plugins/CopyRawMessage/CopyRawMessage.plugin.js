@@ -13,18 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "CopyRawMessage",
-			"author": "DevilBro",
-			"version": "1.1.3",
-			"description": "Allows you to copy the raw Contents of a Message"
-		},
-		"changeLog": {
-			"added": {
-				"Embed JSON": "Can now copy embed in json format"
-			}
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -171,5 +160,5 @@ module.exports = (_ => {
 				}
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

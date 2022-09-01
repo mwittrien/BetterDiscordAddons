@@ -13,13 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "ShowBadgesInChat",
-			"author": "DevilBro",
-			"version": "1.9.1",
-			"description": "Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList"
-		}
+	const changeLog = {
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -446,5 +440,5 @@ module.exports = (_ => {
 				return wrappers;
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

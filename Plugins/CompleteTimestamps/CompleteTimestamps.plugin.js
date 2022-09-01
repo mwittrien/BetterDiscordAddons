@@ -13,18 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "CompleteTimestamps",
-			"author": "DevilBro",
-			"version": "1.6.1",
-			"description": "Replaces Timestamps with your own custom Timestamps"
-		},
-		"changeLog": {
-			"improved": {
-				"Markup Timestamps": "Only changes Timestamps with no formatting flag or the lowercase f flag, since those are the standard timestamps, meaning it does no longer change markup timestamps with a relative R or full flag F"
-			}
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -287,5 +276,5 @@ module.exports = (_ => {
 				}
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

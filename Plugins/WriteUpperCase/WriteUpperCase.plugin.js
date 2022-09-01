@@ -13,13 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "WriteUpperCase",
-			"author": "DevilBro",
-			"version": "1.3.6",
-			"description": "Changes the first Letter of each Sentence in Message Inputs to Uppercase"
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -242,5 +236,5 @@ module.exports = (_ => {
 				return newString;
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

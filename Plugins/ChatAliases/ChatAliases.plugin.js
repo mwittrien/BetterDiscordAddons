@@ -13,13 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "ChatAliases",
-			"author": "DevilBro",
-			"version": "2.4.3",
-			"description": "Allows you to configure your own Aliases/Commands"
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -543,5 +537,5 @@ module.exports = (_ => {
 				BDFDB.DataUtils.save(aliases, this, "words");
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

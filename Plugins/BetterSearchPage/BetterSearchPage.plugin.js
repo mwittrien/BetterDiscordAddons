@@ -13,18 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "BetterSearchPage",
-			"author": "DevilBro",
-			"version": "1.2.0",
-			"description": "Adds some extra Controls to the Search Results Page"
-		},
-		"changeLog": {
-			"fixed": {
-				"Jump Input": "No longer adds jump input if there is only one page of search results"
-			}
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -161,5 +150,5 @@ module.exports = (_ => {
 				}
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

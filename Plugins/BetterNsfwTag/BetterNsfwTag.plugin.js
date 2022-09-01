@@ -13,13 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "BetterNsfwTag",
-			"author": "DevilBro",
-			"version": "1.3.0",
-			"description": "Adds a more noticeable Tag to NSFW Channels"
-		}
+	const changeLog = {
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -97,5 +91,5 @@ module.exports = (_ => {
 				}));
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

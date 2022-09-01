@@ -13,18 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "OpenSteamLinksInApp",
-			"author": "DevilBro",
-			"version": "1.1.4",
-			"description": "Opens Steam Links in Steam instead of your Browser"
-		},
-		"changeLog": {
-			"fixed": {
-				"Zoomable Images": "No longer tries to open zoomable Images inside Steam"
-			}
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -97,5 +86,5 @@ module.exports = (_ => {
 				});
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

@@ -13,13 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "ThemeSettings",
-			"author": "DevilBro",
-			"version": "1.3.4",
-			"description": "Allows you to change Theme Variables within Discord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page"
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -264,5 +258,5 @@ module.exports = (_ => {
 				else BDFDB.NotificationUtils.toast(`Could not find Theme File '${addon.filename}'`, {type: "danger"});
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

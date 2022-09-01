@@ -13,18 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "ChatFilter",
-			"author": "DevilBro",
-			"version": "3.5.5",
-			"description": "Allows you to censor Words or block complete Messages/Statuses"
-		},
-		"changeLog": {
-			"fixed": {
-				"Custom Emojis with segmented Searchs": "Custom Emojis no longer cause segmented Searchs to ignore the rest of a sentence"
-			}
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -599,5 +588,5 @@ module.exports = (_ => {
 				BDFDB.DataUtils.save(words, this, "words");
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

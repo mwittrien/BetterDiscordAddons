@@ -13,13 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "TimedLightDarkMode",
-			"author": "DevilBro",
-			"version": "1.1.3",
-			"description": "Adds a Time Slider to the Appearance Settings"
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -255,5 +249,5 @@ module.exports = (_ => {
 				return [hours, minutes];
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

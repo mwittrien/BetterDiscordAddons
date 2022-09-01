@@ -13,13 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "ForceImagePreviews",
-			"author": "DevilBro",
-			"version": "1.2.0",
-			"description": "Forces unrendered embedded Image Previews to render. Caution: Externals Images can contain malicious code and reveal your IP!"
-		}
+	const changeLog = {
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -169,5 +163,5 @@ module.exports = (_ => {
 				return false;
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();

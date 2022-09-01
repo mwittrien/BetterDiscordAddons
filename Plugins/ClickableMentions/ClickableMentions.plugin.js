@@ -13,13 +13,7 @@
  */
 
 module.exports = (_ => {
-	const config = {
-		"info": {
-			"name": "ClickableMentions",
-			"author": "DevilBro",
-			"version": "1.0.3",
-			"description": "Allows you to open a User Popout by clicking a Mention in your Message Input"
-		}
+	const changeLog = {
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -102,5 +96,5 @@ module.exports = (_ => {
 				});
 			}
 		};
-	})(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();
