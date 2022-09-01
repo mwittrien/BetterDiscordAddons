@@ -1,5 +1,8 @@
 {
 	"PluginNameMap": {},
+	"PluginUrlMap": {
+		"BDFDB": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js"
+	},
 	"LibraryRequires": ["electron", "fs", "path", "process", "request"],
 	"DiscordObjects": {
 		"Channel": {"props": ["getRecipientId", "isManaged", "getGuildId"]},
