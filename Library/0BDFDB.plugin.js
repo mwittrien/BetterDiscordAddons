@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.5
+ * @version 2.5.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,6 +14,8 @@
 
 module.exports = (_ => {
 	if (window.BDFDB_Global && window.BDFDB_Global.PluginUtils && typeof window.BDFDB_Global.PluginUtils.cleanUp == "function") window.BDFDB_Global.PluginUtils.cleanUp(window.BDFDB_Global);
+					
+	window.BDFDB_Global = Object.assign({}, window.BDFDB_Global);
 	
 	const BDFDB = {
 		started: true
