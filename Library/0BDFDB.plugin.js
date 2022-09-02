@@ -18,6 +18,7 @@ module.exports = (_ => {
 	const BDFDB = {
 		started: true
 	};
+	var Internal = {};
 	
 	return class BDFDB_Frame {
 		constructor (meta) {for (let key in meta) {
@@ -36,7 +37,7 @@ module.exports = (_ => {
 			
 			var changeLogs = {};
 			
-			const Internal = Object.assign({}, BDFDB, {
+			Internal = Object.assign({}, BDFDB, {
 				patchPriority: 0,
 				forceSyncData: true,
 				settings: {},
