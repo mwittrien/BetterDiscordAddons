@@ -145,10 +145,10 @@
 #app-mount .root-2zfUH6 .perksModal-CLcR1c .carousel-3dvee9 {
 	margin-left: calc(-0.5 * (100vw - var(--settingsmodalwidth))) !important;
 }
-#app-mount .root-2zfUH6 .closeWrapper-9ScmSq,
-#app-mount .root-2zfUH6 .closeWrapper-9ScmSq .closeContent-I3JbQJ,
-#app-mount .root-2zfUH6 .closeWrapper-9ScmSq .container-O54IuJ,
-#app-mount .root-2zfUH6 .closeWrapper-9ScmSq .closeButton-PCZcma {
+#app-mount .root-2zfUH6 .closeWrapper-1aVqeP,
+#app-mount .root-2zfUH6 .closeWrapper-1aVqeP .closeContent-1uXQiy,
+#app-mount .root-2zfUH6 .closeWrapper-1aVqeP .container-O54IuJ,
+#app-mount .root-2zfUH6 .closeWrapper-1aVqeP .closeButton-PCZcma {
 	position: absolute !important;
 	top: 0 !important;
 	right: 0 !important;
@@ -166,7 +166,7 @@
 	opacity: 0 !important;
 	cursor: default !important;
 }
-#app-mount .root-2zfUH6 .closeWrapper-9ScmSq {
+#app-mount .root-2zfUH6 .closeWrapper-1aVqeP {
 	position: fixed !important;
 	top: 22px !important;
 	z-index: -1 !important;
