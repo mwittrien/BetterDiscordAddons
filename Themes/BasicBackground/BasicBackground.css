@@ -2335,6 +2335,8 @@ body::after {
 .serverBoostTabItem-2hFTIN[aria-selected=true] {
 	text-shadow: 1px 1px var(--textshadow);
 }
+#app-mount .side-2ur1Qk .themed-2-lozF.item-3XjbnG:active:not(.disabled-1nofHP),	/*		sideitems					*/
+#app-mount .topPill-3DJJNV .themed-2-lozF.item-3XjbnG:active:not(.disabled-1nofHP),	/*		tabitems					*/
 #app-mount .side-2ur1Qk .themed-2-lozF.item-3XjbnG:hover:not(.disabled-1nofHP),		/*		sideitems					*/
 #app-mount .topPill-3DJJNV .themed-2-lozF.item-3XjbnG:hover:not(.disabled-1nofHP) {	/*		tabitems					*/
 	background-color: rgba(var(--transparencycolor), .2);
