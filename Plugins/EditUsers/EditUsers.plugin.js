@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.6.4
+ * @version 4.6.5
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -511,7 +511,7 @@ module.exports = (_ => {
 			processHeaderBarContainer (e) {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
 				if (channel && channel.isDM() && this.settings.places.dmHeader) {
-					let userName = BDFDB.ReactUtils.findChild(e.instance, {name: "Title"});
+					let userName = BDFDB.ReactUtils.findChild(e.instance, {props: [["className", BDFDB.disCN.channelheadercursorpointer]]});
 					if (userName) {
 						let recipientId = channel.getRecipientId();
 						userName.props.children = this.getUserData(recipientId).username;
