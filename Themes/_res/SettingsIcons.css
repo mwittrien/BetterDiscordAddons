@@ -47,120 +47,95 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="sessions-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/sessions.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(6)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(7)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(7)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="connections-tab" i]::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="passport-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/connections.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(7)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(8)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(8)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="friend-requests-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/vanityurl.svg) center/contain no-repeat;
 }
 
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(10)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(11)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(11)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="discord-nitro-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/nitro.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(11)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(12)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(12)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="nitro-server-boost-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/boosts.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(12)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(13)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(13)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="subscriptions-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/subscriptions.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(13)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(14)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(14)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="library-inventory-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/gift.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(14)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(15)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(15)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="billing-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/billing.svg) center/contain no-repeat;
 }
 
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(17)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(18)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(18)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="appearance-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/appearance.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(18)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(19)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(19)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="accessibility-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/accessibility.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(19)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(20)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(20)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="voice-&-video-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/voice.svg) center/contain no-repeat;
 }
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="powermode-settings-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/party.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(20)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(21)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(21)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="text-&-images-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/text.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(21)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(22)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(22)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="notifications-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/notifications.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(22)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(23)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(23)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="keybinds-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/keybinds.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(23)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(24)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(24)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="language-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/language.svg) center/contain no-repeat;
 }
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(24)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(25)::before,
+.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(25)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="windows-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/windows.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(24)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(25)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(25)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(26)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(25)::before,
+.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(26)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="streamer-mode-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/streamermode.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(25)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(26)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(26)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(27)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(26)::before,
+.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(27)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="advanced-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/advanced.svg) center/contain no-repeat;
 }
 
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(28)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(29)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(29)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(30)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(29)::before,
+.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(30)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="activity-privacy-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/activityprivacy.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(29)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(30)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(30)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(31)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(30)::before,
+.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(31)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="game-activity-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/games.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(30)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(31)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(31)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(32)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(31)::before,
+.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(32)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="overlay-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/overlay.svg) center/contain no-repeat;
 }
@@ -187,25 +162,6 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/themerepo.svg) center/contain no-repeat !important;
 }
 
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(39)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(40)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(40)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(41)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(40)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(41)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(41)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(42)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(40)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(41)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(41)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(42)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(41)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(42)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(42)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(43)::before,
-.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="changelog-tab" i]::before {
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/changelog.svg) center/contain no-repeat;
-}
 .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(40)::before,
 .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(41)::before,
 .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(41)::before,
@@ -214,16 +170,8 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(42)::before,
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(42)::before,
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(43)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(41)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(42)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(42)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(43)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(42)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(43)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(43)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(44)::before,
-.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="hypesquad-online-tab" i]::before {
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/hypesquad.svg) center/contain no-repeat;
+.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="changelog-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/changelog.svg) center/contain no-repeat;
 }
 .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(41)::before,
 .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(42)::before,
@@ -233,16 +181,8 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(43)::before,
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(43)::before,
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(44)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(42)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(43)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(43)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(44)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(43)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(44)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(44)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(45)::before,
-.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="experiments-tab" i]::before {
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/experiments.svg) center/contain no-repeat;
+.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="hypesquad-online-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/hypesquad.svg) center/contain no-repeat;
 }
 .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(42)::before,
 .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(43)::before,
@@ -252,16 +192,8 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(44)::before,
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(44)::before,
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(45)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(43)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(44)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(44)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(45)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(44)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(45)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(45)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(46)::before,
-.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="developer-options-tab" i]::before {
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/developer.svg) center/contain no-repeat;
+.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="experiments-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/experiments.svg) center/contain no-repeat;
 }
 .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(43)::before,
 .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(44)::before,
@@ -271,16 +203,8 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(45)::before,
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(45)::before,
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(46)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(44)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(45)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(45)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(46)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(45)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(46)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(46)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(47)::before,
-.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="hotspot-options-tab" i]::before {
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/hotspots.svg) center/contain no-repeat;
+.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="developer-options-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/developer.svg) center/contain no-repeat;
 }
 .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(44)::before,
 .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(45)::before,
@@ -290,16 +214,8 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(46)::before,
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(46)::before,
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(47)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(45)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(46)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(46)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(47)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(46)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(47)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(47)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(48)::before,
-.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="dismissible-content-options-tab" i]::before {
-	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/dismissable.svg) center/contain no-repeat;
+.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="hotspot-options-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/hotspots.svg) center/contain no-repeat;
 }
 .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(45)::before,
 .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(46)::before,
@@ -309,14 +225,17 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(47)::before,
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(47)::before,
 .platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(48)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(46)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(47)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(47)::before,
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(48)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG:nth-child(47)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(48)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(48)::before,
-.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i] ~ .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(49)::before,
+.sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="dismissible-content-options-tab" i]::before {
+	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/dismissable.svg) center/contain no-repeat;
+}
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(46)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(47)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(47)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(48)::before,
+.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(47)::before,
+.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG:nth-child(48)::before,
+.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(48)::before,
+.platform-win .sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG.pluginrepo-tab ~ .item-3XjbnG.themerepo-tab ~ .item-3XjbnG:nth-child(49)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="payment-flow-modals-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/paymentmodals.svg) center/contain no-repeat;
 }
