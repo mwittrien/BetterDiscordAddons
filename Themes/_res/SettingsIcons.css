@@ -43,7 +43,7 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="authorized-apps-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/apps.svg) center/contain no-repeat;
 }
-.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG[aria-label="Devices" i]:nth-child(6)::before,
+.sidebar-nqHbhN .side-2ur1Qk[aria-label] .item-3XjbnG:nth-child(6)::before,
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG[aria-controls="sessions-tab" i]::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/settingsicons/sessions.svg) center/contain no-repeat;
 }
