@@ -1661,7 +1661,6 @@
 		"_repocheckboxwrap": ["BD", "switchWrapper"],
 		"_repocontrols": ["BD", "bdControls"],
 		"_repocontrolsbutton": ["BD", "bdControlsButton"],
-		"_repocontrolscustom": ["BDFDB", "bdControlsCustom"],
 		"_repodescription": ["BD", "bdDescription"],
 		"_repodescriptionwrap": ["BD", "bdDescriptionWrap"],
 		"_repoentry": ["BDFDB", "bdRepoEntry"],
