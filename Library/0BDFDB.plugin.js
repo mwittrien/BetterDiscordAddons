@@ -8057,52 +8057,6 @@ module.exports = (_ => {
 					});
 					
 					BDFDB.LibraryComponents = Internal.LibraryComponents;
-					
-					Internal.createCustomControl = function (data) {
-						let controlButton = BDFDB.DOMUtils.create(`<button class="${BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repobutton, BDFDB.disCN._repocontrolsbutton, BDFDB.disCN._repocontrolscustom)}"></button>`);
-						BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
-							nativeClass: true,
-							name: data.svgName,
-							width: 20,
-							height: 20
-						}), controlButton);
-						controlButton.addEventListener("click", _ => {if (typeof data.onClick == "function") data.onClick();});
-						if (data.tooltipText) controlButton.addEventListener("mouseenter", _ => {BDFDB.TooltipUtils.create(controlButton, data.tooltipText);});
-						return controlButton;
-					};
-					Internal.appendCustomControls = function (card) {
-						if (!card || card.querySelector(BDFDB.dotCN._repocontrolscustom)) return;
-						let checkbox = card.querySelector(BDFDB.dotCN._reposwitch);
-						if (!checkbox) return;
-						let props = BDFDB.ObjectUtils.get(BDFDB.ReactUtils.getInstance(card), "return.stateNode.props");
-						let plugin = props && props.addon && (props.addon.plugin || props.addon.instance);
-						if (plugin && (plugin == this || plugin.name && plugin.name && PluginStores.loaded[plugin.name] && PluginStores.loaded[plugin.name] == plugin)) {
-							let url = Internal.getPluginURL(plugin);
-							let controls = [];
-							let footerControls = card.querySelector(BDFDB.dotCNS._repofooter + BDFDB.dotCN._repocontrols);
-							if (plugin.changeLog) controls.push(Internal.createCustomControl({
-								tooltipText: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
-								svgName: Internal.LibraryComponents.SvgIcon.Names.CHANGELOG,
-								onClick: _ => {BDFDB.PluginUtils.openChangeLog(plugin);}
-							}));
-							if (PluginStores.updateData.plugins[url] && PluginStores.updateData.plugins[url].outdated) controls.push(Internal.createCustomControl({
-								tooltipText: BDFDB.LanguageUtils.LanguageStrings.UPDATE_MANUALLY,
-								svgName: Internal.LibraryComponents.SvgIcon.Names.DOWNLOAD,
-								onClick: _ => {BDFDB.PluginUtils.downloadUpdate(plugin.name, url);}
-							}));
-							if (footerControls) for (let control of controls) footerControls.insertBefore(control, footerControls.firstElementChild);
-							else for (let control of controls) checkbox.parentElement.insertBefore(control, checkbox.parentElement.firstElementChild);
-						}
-					};
-					Internal.addListObserver = function (layer) {
-						if (!layer) return;
-						BDFDB.ObserverUtils.connect(BDFDB, layer, {name: "cardObserver", instance: new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(n => {
-							if (BDFDB.DOMUtils.containsClass(n, BDFDB.disCN._repocard)) Internal.appendCustomControls(n);
-							if (n.nodeType != Node.TEXT_NODE) for (let c of n.querySelectorAll(BDFDB.dotCN._repocard)) Internal.appendCustomControls(c);
-							Internal.appendCustomControls(BDFDB.DOMUtils.getParent(BDFDB.dotCN._repocard, n));
-						});}});})}, {childList: true, subtree: true});
-						for (let c of layer.querySelectorAll(BDFDB.dotCN._repocard)) Internal.appendCustomControls(c);
-					};
 
 					const keyDownTimeouts = {};
 					BDFDB.ListenerUtils.add(BDFDB, document, "keydown.BDFDBPressedKeys", e => {
@@ -8133,7 +8087,6 @@ module.exports = (_ => {
 						after: {
 							useCopyIdItem: "default",
 							Menu: "default",
-							SettingsView: "componentDidMount",
 							Shakeable: "render",
 							Account: ["componentDidMount", "componentDidUpdate"],
 							MessageToolbar: "type",
@@ -8179,10 +8132,6 @@ module.exports = (_ => {
 					
 					Internal.processSearchBar = function (e) {
 						if (typeof e.instance.props.query != "string") e.instance.props.query = "";
-					};
-					
-					Internal.processSettingsView = function (e) {
-						if (e.node && e.node.parentElement && e.node.parentElement) Internal.addListObserver(e.node.parentElement);
 					};
 					
 					let AppViewExport = InternalData.ModuleUtilsConfig.Finder.AppView && BDFDB.ModuleUtils.findByString(InternalData.ModuleUtilsConfig.Finder.AppView.strings, false);
