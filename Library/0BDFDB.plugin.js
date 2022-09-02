@@ -15,10 +15,11 @@
 module.exports = (_ => {
 	if (window.BDFDB_Global && window.BDFDB_Global.PluginUtils && typeof window.BDFDB_Global.PluginUtils.cleanUp == "function") window.BDFDB_Global.PluginUtils.cleanUp(window.BDFDB_Global);
 	
-	const BDFDB = {
+	var BDFDB, Internal, LibraryConstants, LibraryModules, LibraryRequires, DiscordObjects, PluginStores;
+	
+	BDFDB = {
 		started: true
 	};
-	var Internal = {};
 	
 	return class BDFDB_Frame {
 		constructor (meta) {for (let key in meta) {
@@ -71,7 +72,7 @@ module.exports = (_ => {
 			});
 			for (let key in Internal.defaults) Internal.settings[key] = {};
 			
-			const LibraryConstants = {
+			LibraryConstants = {
 				ToastIcons: {
 					info: "INFO",
 					danger: "CLOSE_CIRCLE",
@@ -85,7 +86,7 @@ module.exports = (_ => {
 				}
 			};
 			
-			const PluginStores = {
+			PluginStores = {
 				loaded: {},
 				delayed: {
 					loads: [],
@@ -2546,7 +2547,7 @@ module.exports = (_ => {
 
 				BDFDB.DiscordConstants = BDFDB.ModuleUtils.findByProperties("Permissions", "ActivityTypes");
 				
-				const DiscordObjects = {};
+				DiscordObjects = {};
 				Internal.DiscordObjects = new Proxy(DiscordObjects, {
 					get: function (_, item) {
 						if (DiscordObjects[item]) return DiscordObjects[item];
@@ -2559,7 +2560,7 @@ module.exports = (_ => {
 				});
 				BDFDB.DiscordObjects = Internal.DiscordObjects;
 				
-				const LibraryRequires = {};
+				LibraryRequires = {};
 				Internal.LibraryRequires = new Proxy(LibraryRequires, {
 					get: function (_, item) {
 						if (LibraryRequires[item]) return LibraryRequires[item];
@@ -2571,7 +2572,7 @@ module.exports = (_ => {
 				});
 				BDFDB.LibraryRequires = Internal.LibraryRequires;
 				
-				const LibraryModules = {};
+				LibraryModules = {};
 				LibraryModules.LanguageStore = BDFDB.ModuleUtils.find(m => m.Messages && m.Messages.IMAGE && m);
 				LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
 				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode");
