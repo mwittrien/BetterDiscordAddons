@@ -7096,7 +7096,7 @@ module.exports = (_ => {
 								id: this.props.addon && this.props.addon.name && `${this.props.addon.name}-settings`,
 								className: BDFDB.disCN.settingspanel,
 								children: [
-									this.props.addon.changeLog && BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TooltipContainer, {
+									this.props.addon.changeLog && !BDFDB.ObjectUtils.isEmpty(this.props.addon.changeLog) && BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TooltipContainer, {
 										text: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
 										children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Clickable, {
 											className: BDFDB.disCN._repochangelogbutton,
