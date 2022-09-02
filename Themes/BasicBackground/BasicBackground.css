@@ -2343,6 +2343,8 @@ body::after {
 }
 #app-mount .side-2ur1Qk .themed-2-lozF.selected-g-kMVV.item-3XjbnG,
 #app-mount .topPill-3DJJNV .themed-2-lozF.selected-g-kMVV.item-3XjbnG,
+#app-mount .side-2ur1Qk .themed-2-lozF.selected-g-kMVV.item-3XjbnG:active,
+#app-mount .topPill-3DJJNV .themed-2-lozF.selected-g-kMVV.item-3XjbnG:active,
 #app-mount .side-2ur1Qk .themed-2-lozF.selected-g-kMVV.item-3XjbnG:hover,
 #app-mount .topPill-3DJJNV .themed-2-lozF.selected-g-kMVV.item-3XjbnG:hover {
 	background-color: rgb(var(--accentcolor));
@@ -2353,6 +2355,7 @@ body::after {
 #app-mount .foreground-2hyALB {								/* sidebar				sideitemlink						*/
 	background: var(--interactive-normal);
 }
+#app-mount .link-39xJu3:active .foreground-2hyALB,
 #app-mount .link-39xJu3:hover .foreground-2hyALB {
 	background: var(--interactive-active);
 }
