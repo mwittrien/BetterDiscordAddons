@@ -3368,6 +3368,26 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 .userPopoutInnerWithTheme-71l1ON .banner-2boKnS {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 12 120 A 46 46 0 0 1 48 74 A 46 46 0 0 1 104 126 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
 }
+.userPopoutInnerWithTheme-71l1ON::after {
+	content: "";
+	position: absolute;
+	display: block;
+	background: var(--profile-gradient-primary-color);
+	top: 4px;
+	right: 4px;
+	left: 4px;
+	height: 60px;
+	z-index: 1;
+}
+.userPopoutInnerWithBanner-wsoegj::after {
+	height: 120px;
+}
+.userPopoutInnerWithTheme-71l1ON::before {
+	z-index: 2;
+}
+.userPopoutInnerWithTheme-71l1ON > * {
+	z-index: 3;
+}
 .userPopoutInner-PA9zkU {
 	border-radius: 4px;
 }
