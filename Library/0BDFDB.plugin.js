@@ -7093,7 +7093,21 @@ module.exports = (_ => {
 								key: this.props.addon && this.props.addon.name && `${this.props.addon.name}-settingsPanel`,
 								id: this.props.addon && this.props.addon.name && `${this.props.addon.name}-settings`,
 								className: BDFDB.disCN.settingspanel,
-								children: panelItems
+								children: [
+									this.props.addon.changeLog && BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TooltipContainer, {
+										text: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
+										children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Clickable, {
+											className: BDFDB.disCN._repochangelogbutton,
+											children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
+												name: Internal.LibraryComponents.SvgIcon.Names.CHANGELOG,
+												onClick: _ => BDFDB.PluginUtils.openChangeLog(this.props.addon),
+												width: 24,
+												height: 24
+											})
+										})
+									}),
+									panelItems
+								]
 							});
 						}
 					};
