@@ -102,6 +102,7 @@ module.exports = (_ => {
 				chunkObserver: {},
 				contextChunkObserver: {}
 			};
+			
 			const Plugin = function (changeLog) {
 				return class Plugin {
 					constructor (meta) {for (let key in meta) if (!this[key]) this[key] = meta[key];}
