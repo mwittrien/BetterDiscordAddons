@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.7
+ * @version 2.5.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -567,6 +567,13 @@ module.exports = (_ => {
 					PluginStores.updateData.plugins[url] = {name: plugin.name, raw: url, version: plugin.version};
 					
 					BDFDB.PluginUtils.checkUpdate(plugin.name, url);
+					
+					if (plugin.changeLog && typeof plugin.getSettingsPanel != "function") plugin.getSettingsPanel = _ => BDFDB.PluginUtils.createSettingsPanel(plugin, {
+						children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.MessagesPopoutComponents.EmptyStateBottom, {
+							msg: "No Settings available for this Plugin",
+							image: BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight ? "/assets/9b0d90147f7fab54f00dd193fe7f85cd.svg" : "/assets/308e587f3a68412f137f7317206e92c2.svg"
+						})
+					});
 					
 					if (!PluginStores.updateData.interval) PluginStores.updateData.interval = BDFDB.TimeUtils.interval(_ => {
 						BDFDB.PluginUtils.checkAllUpdates();
