@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.9
+ * @version 1.1.0
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -65,6 +65,7 @@ module.exports = (_ => {
 						MessageHeader: "default",
 						ChannelMembers: "render",
 						MemberListItem: "render",
+						UserPopoutBodySection: "default",
 						UserPopoutBody: "default"
 					}
 				};
@@ -232,6 +233,10 @@ module.exports = (_ => {
 					let member = BDFDB.LibraryModules.MemberStore.getMember(e.instance.props.guildId, e.instance.props.user.id);
 					if (member) e.instance.props.colorString = member.colorString;
 				}
+			}
+			
+			processUserPopoutBodySection (e) {
+				if (e.instance.props.guild) e.instance.props.guild = this.changeRolesInGuild(e.instance.props.guild);
 			}
 			
 			processUserPopoutBody (e) {
