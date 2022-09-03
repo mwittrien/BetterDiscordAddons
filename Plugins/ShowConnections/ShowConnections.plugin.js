@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.0
+ * @version 1.1.1
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -68,6 +68,7 @@ module.exports = (_ => {
 				
 				this.patchedModules = {
 					after: {
+						UserPopoutBodySection: "default",
 						UserPopoutBody: "default"
 					}
 				};
@@ -163,6 +164,92 @@ module.exports = (_ => {
 				});
 			}
 
+			processUserPopoutBodySection (e) {
+				if (!e.instance.props.user || e.instance.props.user.isNonUserBot()) return;
+				if (!loadedUsers[e.instance.props.user.id] && !requestedUsers[e.instance.props.user.id]) {
+					requestedUsers[e.instance.props.user.id] = true;
+					queuedInstances[e.instance.props.user.id] = [].concat(queuedInstances[e.instance.props.user.id]).filter(n => n);
+					BDFDB.LibraryModules.UserProfileUtils.fetchProfile(e.instance.props.user.id);
+				}
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "BioSection"});
+				if (index > -1) children.splice(this.settings.general.placeAtTop ? 1 : children.length - 2, 0, BDFDB.ReactUtils.createElement(class extends BDFDB.ReactUtils.Component {
+					render() {
+						if (!loadedUsers[e.instance.props.user.id]) {
+							if (queuedInstances[e.instance.props.user.id].indexOf(this) == -1) queuedInstances[e.instance.props.user.id].push(this);
+							return null;
+						}
+						else {
+							let connections = loadedUsers[e.instance.props.user.id].filter(c => _this.settings.connections[c.type]);
+							if (!connections.length) return null;
+							let isLightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserPopoutSection, {
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Heading, {
+										className: BDFDB.disCN.userpopoutsectiontitle,
+										variant: BDFDB.DiscordClassModules.Heading.eyebrow,
+										children: BDFDB.LanguageUtils.LanguageStrings.CONNECTIONS
+									}),
+									BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN._showconnectionsconnections,
+										children: connections.map(c => {
+											let provider = BDFDB.LibraryModules.ConnectionProviderUtils.get(c.type);
+											let url = _this.settings.general.openWebpage && provider.getPlatformUserUrl && provider.getPlatformUserUrl(c);
+											return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+												text: `${provider.name}: ${c.name}`,
+												tooltipConfig: {backgroundColor: _this.settings.general.useColoredTooltips && BDFDB.ColorUtils.change(provider.color, -0.3), color: !_this.settings.general.useColoredTooltips || !provider.color ? "black" : null},
+												children: BDFDB.ReactUtils.createElement(!url ? "div" : BDFDB.LibraryComponents.Anchor, Object.assign(!url ? {} : {
+													href: url
+												}, {
+													className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._showconnectionsconnection, url && BDFDB.disCN.cursorpointer),
+													onContextMenu: event => {
+														BDFDB.ContextMenuUtils.open(_this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+															children: [
+																BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+																	label: BDFDB.LanguageUtils.LibraryStringsFormat("copy", BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME),
+																	id: BDFDB.ContextMenuUtils.createItemId(_this.name, "copy-name"),
+																	action: _ => BDFDB.LibraryRequires.electron.clipboard.write({text: c.name})
+																}),
+																url && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+																	label: BDFDB.LanguageUtils.LibraryStringsFormat("copy", BDFDB.LanguageUtils.LanguageStrings.SEARCH_ANSWER_HAS_LINK),
+																	id: BDFDB.ContextMenuUtils.createItemId(_this.name, "copy-url"),
+																	action: _ => BDFDB.LibraryRequires.electron.clipboard.write({text: url})
+																})
+															]
+														}));
+													},
+													children: [
+														BDFDB.ReactUtils.createElement("img", {
+															className: BDFDB.disCN._showconnectionsicon,
+															alt: BDFDB.LanguageUtils.LanguageStringsFormat("IMG_ALT_LOGO", provider.name),
+															src: provider.icon[_this.settings.general.useColoredIcons ? (isLightTheme ? "lightSVG" : "darkSVG" ) : "whiteSVG"]
+														}),
+														_this.settings.general.showVerifiedBadge && c.verified && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+															text: BDFDB.LanguageUtils.LanguageStrings.CONNECTION_VERIFIED,
+															tooltipConfig: {color: "brand", type: "bottom"},
+															children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FlowerStar, {
+																className: BDFDB.disCN._showconnectionsverifiedbadge,
+																size: "50%",
+																color: isLightTheme ? BDFDB.DiscordConstants.Colors.STATUS_GREY_200 : BDFDB.DiscordConstants.Colors.PRIMARY_DARK,
+																children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+																	name: BDFDB.LibraryComponents.SvgIcon.Names.CHECKMARK,
+																	width: "70%",
+																	height: "70%",
+																	color: isLightTheme ? BDFDB.DiscordConstants.Colors.STATUS_GREY_500 : BDFDB.DiscordConstants.Colors.WHITE
+																})
+															})
+														})
+													]
+												}))
+											});
+										})
+									})
+								]
+							});
+						}
+					}
+				}, true));
+			}
+			
 			processUserPopoutBody (e) {
 				if (!e.instance.props.user || e.instance.props.user.isNonUserBot()) return;
 				if (!loadedUsers[e.instance.props.user.id] && !requestedUsers[e.instance.props.user.id]) {
