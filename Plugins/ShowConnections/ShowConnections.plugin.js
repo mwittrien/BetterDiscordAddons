@@ -96,7 +96,7 @@ module.exports = (_ => {
 						position: relative;
 						width: 28px;
 						height: 28px;
-						margin: 0 10px 10px 0;
+						margin: 4px 10px 6px 0;
 					}
 					${BDFDB.dotCN._showconnectionsicon} {
 						margin: -15% 0 0 -15%;
