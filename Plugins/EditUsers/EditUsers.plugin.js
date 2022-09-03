@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.6.5
+ * @version 4.6.6
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -98,6 +98,7 @@ module.exports = (_ => {
 						HeaderBarContainer: "default",
 						ChannelEditorContainer: "render",
 						AutocompleteUserResult: "render",
+						UserThemeBanner: "default",
 						UserBanner: "default",
 						UserPopoutAvatar: "UserPopoutAvatar",
 						UsernameSection: "default",
@@ -156,7 +157,6 @@ module.exports = (_ => {
 						RichUserMention: "UserMention",
 						ChannelReply: "default",
 						MemberListItem: "render",
-						UserHook: "render",
 						InvitationCard: "render",
 						InviteModalUserRow: "default",
 						TypingUsers: "render",
@@ -599,6 +599,13 @@ module.exports = (_ => {
 							}
 						}
 					}
+				}
+			}
+
+			processUserThemeBanner (e) {
+				if (e.instance.props.user && changedUsers[e.instance.props.user.id]) {
+					if (changedUsers[e.instance.props.user.id].removeBanner) e.instance.props.bannerSrc = null;
+					else if (changedUsers[e.instance.props.user.id].banner) e.instance.props.bannerSrc = changedUsers[e.instance.props.user.id].banner;
 				}
 			}
 
@@ -1056,12 +1063,6 @@ module.exports = (_ => {
 				if (e.instance.props.log && this.settings.places.guildSettings) {
 					if (e.instance.props.log.user) e.instance.props.log.user = this.getUserData(e.instance.props.log.user.id);
 					if (e.instance.props.log.target && e.instance.props.log.targetType == "USER") e.instance.props.log.target = this.getUserData(e.instance.props.log.target.id);
-				}
-			}
-
-			processUserHook (e) {
-				if (e.instance.props.user && this.settings.places.guildSettings) {
-					this.changeUserColor(e.returnvalue.props.children[0], e.instance.props.user.id);
 				}
 			}
 

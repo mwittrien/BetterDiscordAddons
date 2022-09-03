@@ -3193,16 +3193,12 @@ module.exports = (_ => {
 					return user && user instanceof Internal.DiscordObjects.User;
 				};
 				const myDataUser = Internal.LibraryModules.UserStore && Internal.LibraryModules.UserStore.getCurrentUser && Internal.LibraryModules.UserStore.getCurrentUser();
-				if (myDataUser && BDFDB.UserUtils._id != myDataUser.id) {
-					document.body.setAttribute("data-current-user-id", myDataUser.id);
-					BDFDB.UserUtils._id = myDataUser.id;
-				}
+				if (myDataUser && BDFDB.UserUtils._id != myDataUser.id) BDFDB.UserUtils._id = myDataUser.id;
 				BDFDB.UserUtils.me = new Proxy(myDataUser || {}, {
 					get: function (list, item) {
 						const user = Internal.LibraryModules.UserStore && Internal.LibraryModules.UserStore.getCurrentUser && Internal.LibraryModules.UserStore.getCurrentUser();
 						if (user && BDFDB.UserUtils._id != user.id) {
 							Cache.data = {};
-							document.body.setAttribute("data-current-user-id", user.id);
 							BDFDB.UserUtils._id = user.id;
 						}
 						return user ? user[item] : null;

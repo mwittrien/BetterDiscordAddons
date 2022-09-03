@@ -314,14 +314,14 @@
 			"TypingUsers": {"class": "typing"},
 			"UnavailableGuildsButton": {"strings": ["className", ".default.guildsError"]},
 			"Upload": {"class": "uploadmodal"},
-			"UserHook": {"class": "auditloguserhook"},
 			"UserMention": {"strings": ["inlinePreview", "getAvatarURL", "userId", "default.getName"]},
 			"UserPopoutAvatar": {"props": ["UserPopoutAvatar"]},
 			"UserPopoutBody": {"strings": ["passportCaret", "setNote", "USER_POPOUT"]},
 			"UserPopoutBodySection": {"strings": [".customStatusActivity", ".canDM", ".hidePersonalInformation"]},
 			"UserProfileModal": {"lazyLoaded": true},
 			"UserProfileModalHeader": {"lazyLoaded": true},
-			"UserSettingsAppearance": {"class": "usersettingsappearancepreview"}
+			"UserSettingsAppearance": {"class": "usersettingsappearancepreview"},
+			"UserThemeBanner": {"strings": [".showPremiumBadgeUpsell", ".isPremiumAtLeast", "PremiumTypes"]}
 		},
 		"LoadedInComponents": {
 			"AutocompleteChannelResult": "LibraryComponents.AutocompleteItems.Channel",
