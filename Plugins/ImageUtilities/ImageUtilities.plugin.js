@@ -262,7 +262,7 @@ module.exports = (_ => {
 						LazyImage: ["componentDidMount", "componentDidUpdate"],
 						LazyImageZoomable: "render",
 						Spoiler: "render",
-						UserThemeBanner: "default"
+						UserThemeBanner: "default",
 						UserBanner: "default"
 					}
 				};
