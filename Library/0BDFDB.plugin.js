@@ -1137,7 +1137,6 @@ module.exports = (_ => {
 					else request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/${dataFileName}`, (e, r, b) => {
 						if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryData(), 10000);
 						if (!e && b && r.statusCode == 200) {
-							if (backupObj.backup.replace(/\s/g, "") == b.replace(/\s/g, "")) console.log("yes");
 							if (backupObj.backup && backupObj.backup.replace(/\s/g, "") == b.replace(/\s/g, "")) {
 								libHashes[dataFileName] = oldLibHashes[dataFileName];
 								BDFDB.DataUtils.save(libHashes, BDFDB, "hashes");
