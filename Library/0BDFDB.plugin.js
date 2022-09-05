@@ -1185,6 +1185,7 @@ module.exports = (_ => {
 					plugin = plugin == BDFDB && Internal || plugin;
 					if (BDFDB.ObjectUtils.is(plugin)) {
 						if (InternalData.PluginUrlMap && InternalData.PluginUrlMap[plugin.name]) return InternalData.PluginUrlMap[plugin.name];
+						else if (plugin.updateUrl) return plugin.updateUrl;
 						else {
 							let name = InternalData.PluginNameMap && InternalData.PluginNameMap[plugin.name] || plugin.name;
 							return `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${name}/${name}.plugin.js`;
