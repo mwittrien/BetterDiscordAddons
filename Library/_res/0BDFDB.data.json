@@ -222,6 +222,7 @@
 		"PatchMap": {
 			"AuditLogs": "GuildSettingsAuditLog",
 			"BannedCard": "BannedUser",
+			"ChannelList": "Channels",
 			"ChannelWindow": "Channel",
 			"InvitationCard": "InviteRow",
 			"InviteCard": "InviteRow",
