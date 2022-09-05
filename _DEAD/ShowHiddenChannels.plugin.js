@@ -53,8 +53,14 @@ module.exports = (_ => {
 			
 			onStart () {
 				BDFDB.ModalUtils.open(this, {
-					text: "DUE TO THE NEW PLUGIN GUIDELINES SET BY BETTERDISCORD TAKING EFFECT ON THE 7TH OF SEPTEMBER, SHOWHIDDENCHANNELS WILL NO LONGER BE CONTINUED. CLICK 'DELETE' TO REMOVE THIS EMPTFY PLUGIN FILE.",
 					header: "PLUGIN WAS DISCONTINUED",
+					children: [
+						BDFDB.ReactUtils.createElement("span", {children: "DUE TO THE NEW PLUGIN "}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {href: "https://docs.betterdiscord.app/plugins/introduction/guidelines/", children: "GUIDELINES"}),
+						BDFDB.ReactUtils.createElement("span", {children: " SET BY BETTERDISCORD TAKING EFFECT ON THE 7TH OF SEPTEMBER, SHOWHIDDENCHANNELS WILL NO LONGER BE CONTINUED. CLICK "}),
+						BDFDB.ReactUtils.createElement("strong", {children: "DELETE"}),
+						BDFDB.ReactUtils.createElement("span", {children: " TO REMOVE THIS EMPTY PLUGIN FILE."})
+					],
 					buttons: [
 						{contents: "DELETE", close: true, color: "RED", onClick: _ => {
 							BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), "ShowHiddenChannels.plugin.js"), error => {});
