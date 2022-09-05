@@ -2,7 +2,7 @@
  * @name HideMutedCategories
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.9
+ * @version 1.1.0
  * @description Hides muted Categories, if muted Channels are hidden
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -67,10 +67,10 @@ module.exports = (_ => {
 			onLoad () {
 				this.patchedModules = {
 					before: {
-						Channels: "render"
+						ChannelList: "render"
 					},
 					after: {
-						Channels: "render"
+						ChannelList: "render"
 					}
 				};
 				
@@ -85,7 +85,7 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 
-			processChannels (e) {
+			processChannelList (e) {
 				if (!e.instance.props.guild || !e.instance.props.guildChannels.hideMutedChannels) return;
 				
 				if (!e.returnvalue) {
