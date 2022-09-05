@@ -1023,6 +1023,9 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	flex: 1 1 auto;
 }
 
+[REPLACE_CLASS_modalwrapper] {
+	color: var(--header-secondary);
+}
 [REPLACE_CLASS_modalwrapper] [REPLACE_CLASS_modalheader] > [REPLACE_CLASS_headerwrapper]  {
 	flex: 1 0 auto;
 }
