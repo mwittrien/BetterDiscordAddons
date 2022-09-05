@@ -52,7 +52,6 @@
  - [Server Hider](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerHider) - Allows you to hide certain Servers in your Server List
  - [Show Badges In Chat](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowBadgesInChat) - Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  - [Show Connections](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowConnections) - Shows the connected Accounts of a User in the UserPopout
- - [Show Hidden Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowHiddenChannels) - Displays all hidden Channels, which can't be accessed due to Role Restrictions, this won't allow you to read them (impossible)
  - [Spell Check](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpellCheck) - Adds a Spell Check to all Message Inputs
  - [Split Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SplitLargeMessages) - Allows you to enter larger Messages, which will automatically split into several smaller Messages
  - [Spotify Controls](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpotifyControls) - Adds a Control Panel while listening to Spotify on a connected Account
