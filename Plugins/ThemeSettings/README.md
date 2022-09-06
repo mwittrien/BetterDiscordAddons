@@ -16,3 +16,5 @@ Allows you to change Theme Variables within Discord
 
 
 ![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeSettings/_res/cover.png)
+
+![screenshot1](https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeSettings/_res/screenshot1.png)
