@@ -2,8 +2,8 @@
  * @name ThemeSettings
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.4
- * @description Allows you to change Theme Variables within Discord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page
+ * @version 1.3.5
+ * @description Allows you to change Theme Variables within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		improved: {
+			"Changed Location": "Due to the new Plugin Guidelines, which forbid changes to BDs Plugin/Themes Pages, the option to change the variables for Themes are now inside the Plugin Settings of 'ThemeSettings'"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -61,42 +63,31 @@ module.exports = (_ => {
 		return class ThemeSettings extends Plugin {
 			onLoad () {
 				dir = BDFDB.BDUtils.getThemesFolder();
-			
-				this.patchedModules = {
-					after: {
-						SettingsView: "componentDidMount"
-					}
-				};
-			}
-			
-			onStart () {
-				for (let settingsView of document.querySelectorAll(BDFDB.dotCN.layer + BDFDB.dotCN.settingswindowstandardsidebarview)) this.addListObserver(BDFDB.DOMUtils.getParent(BDFDB.dotCN.layer, settingsView));
-				BDFDB.ReactUtils.forceUpdate(this);
-			}
-			
-			onStop () {
-				BDFDB.DOMUtils.remove(BDFDB.dotCN._themesettingsbutton);
-			}
-			
-			processSettingsView (e) {
-				this.addListObserver(BDFDB.DOMUtils.getParent(BDFDB.dotCN.layer, e.node));
-			}
-			
-			addListObserver (layer) {
-				if (!layer) return;
-				BDFDB.ObserverUtils.connect(this, layer, {name: "cardObserver", instance: new MutationObserver(changes => changes.forEach(change => change.addedNodes.forEach(node => {
-					if (BDFDB.DOMUtils.containsClass(node, BDFDB.disCN._repocard)) this.appendSettingsButton(node);
-					if (node.nodeType != Node.TEXT_NODE) for (let child of node.querySelectorAll(BDFDB.dotCN._repocard)) this.appendSettingsButton(child);
-				})))}, {childList: true, subtree: true});
-				for (let child of layer.querySelectorAll(BDFDB.dotCN._repocard)) this.appendSettingsButton(child);
 				
+				this.css = `
+					${BDFDB.dotCN._themesettingsgrid} {
+						display: grid;
+						grid-template-columns: 50% auto;
+					}
+					${BDFDB.dotCN._themesettingscard} {
+						display: flex;
+						align-items: center;
+						padding: 10px;
+					}
+					${BDFDB.dotCN._themesettingscardname} {
+						flex: 1 1 auto;
+						margin-right: 10px;
+					}
+				`;
 			}
-		
-			appendSettingsButton (card) {
-				if (card.querySelector(BDFDB.dotCN._themesettingsbutton)) return;
-				let addon = BDFDB.ObjectUtils.get(BDFDB.ReactUtils.getInstance(card), "return.stateNode.props.addon");
-				if (addon && !addon.plugin && !addon.instance && addon.css) {
-					let css = addon.css.replace(/\r/g, "");
+			
+			onStart () {}
+			
+			onStop () {}
+			
+			getSettingsPanel () {
+				let themes = window.BdApi && BdApi.Themes && BdApi.Themes.getAll && BdApi.Themes.getAll().map(theme => {
+					let css = theme.css.replace(/\r/g, "");
 					let imports = css.split("\n@import url(").splice(1).map(n => [n.split(");")[0], true]).concat(css.split("\n/* @import url(").splice(1).map(n => [n.split("); */")[0], false]));
 					let vars = css.split(":root");
 					if (vars.length > 1) {
@@ -109,117 +100,131 @@ module.exports = (_ => {
 					}
 					else vars = [];
 					
-					if (imports.length || vars.length) {
-						let footerControls = card.querySelector(BDFDB.dotCNS._repofooter + BDFDB.dotCN._repocontrols);
-						let settingsButton = document.createElement("button");
-						settingsButton.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repobutton, BDFDB.disCN._repocontrolsbutton, BDFDB.disCN._themesettingsbutton);
-						settingsButton.appendChild(BDFDB.DOMUtils.create(`<svg viewBox="0 0 20 20" style="width: 20px; height: 20px;"><path fill="none" d="M0 0h20v20H0V0z"></path><path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"></path></svg>`));
-						footerControls.insertBefore(settingsButton, footerControls.firstElementChild);
-						settingsButton.addEventListener("click", _ => {
-							let importInstances = {}, inputInstances = {};
-							BDFDB.ModalUtils.open(this, {
-								header: `${addon.name} ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
-								subHeader: "",
-								className: BDFDB.disCN._repomodal,
-								headerClassName: BDFDB.disCN._repomodalheader,
-								contentClassName: BDFDB.disCN._repomodalsettings,
-								footerClassName: BDFDB.disCN._repomodalfooter,
-								size: "MEDIUM",
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanel, {
-									addon: addon,
-									children: _ => {
-										let settingsItems = [];
-										
-										let varInputs = [];
-										for (let i in vars) {
-											let varStr = vars[i].split(":");
-											let varName = varStr.shift().trim();
-											varStr = varStr.join(":").split(/;[^A-z0-9]|\/\*/);
-											let varValue = varStr.shift().trim();
-											if (varValue) {
-												let childType = "text", childMode = "";
-												let isColor = BDFDB.ColorUtils.getType(varValue);
-												let isComp = !isColor && /^[0-9 ]+,[0-9 ]+,[0-9 ]+$/g.test(varValue);
-												if (isColor || isComp) {
-													childType = "color";
-													childMode = isComp && "comp";
-												}
-												else {
-													let isUrlFile = /url\(.+\)/gi.test(varValue);
-													let isFile = !isUrlFile && /(http(s)?):\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(varValue);
-													if (isFile || isUrlFile) {
-														childType = "file";
-														childMode = isUrlFile && "url";
-													}
-												}
-												let varDescription = varStr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
-												varInputs.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-													type: "TextInput",
-													margin: 8,
-													childProps: {
-														type: childType,
-														mode: childMode,
-														filter: childType == "file" && "image",
-														ref: instance => {if (instance) inputInstances[i] = instance;}
-													},
-													label: varName.split("-").map(BDFDB.LibraryModules.StringUtils.upperCaseFirstChar).join(" "),
-													note: varDescription && varDescription.indexOf("*") == 0 ? varDescription.slice(1) : varDescription,
-													basis: "70%",
-													name: varName,
-													value: varValue,
-													oldValue: varValue,
-													defaultValue: varValue,
-													placeholder: varValue
-												}));
-											}
-										};
-										
-										if (imports.length) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-											title: "Imports:",
-											dividerBottom: varInputs.length,
-											children: imports.map((impo, i) => {
-												let name = impo[0].split("/").pop().replace(/"/g, "");
-												return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-													type: "Switch",
-													margin: 8,
-													childProps: {ref: instance => {if (instance) importInstances[i] = instance;}},
-													label: name[0].toUpperCase() + name.slice(1),
-													note: impo[0].replace(/"/g, ""),
-													name: impo[0],
-													value: impo[1],
-													oldValue: impo[1].toString(),
-													defaultValue: impo[1].toString()
-												});
-											})
-										}));
-										if (varInputs.length) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-											title: "Variables:",
-											children: varInputs
-										}));
-										
-										return settingsItems;
-									}
+					if (imports.length || vars.length) return {data: theme, imports, vars};
+				}).filter(n => n);
+				return themes && themes.length && BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN._themesettingsgrid,
+					children: themes.map(theme => BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN._themesettingscard,
+						children: [
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN._themesettingscardname,
+								children: theme.data.name
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+								size: BDFDB.LibraryComponents.Button.Sizes.SMALL,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+									children: [
+										BDFDB.ReactUtils.createElement("div", {
+											children: "Edit"
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+											className: BDFDB.disCN.marginleft4,
+											name: BDFDB.LibraryComponents.SvgIcon.Names.PENCIL
+										})
+									]
 								}),
-								buttons: [{
-									contents: BDFDB.LanguageUtils.LanguageStrings.SAVE,
-									color: "BRAND",
-									onClick: _ => this.updateTheme(addon, {imports: importInstances, inputs: inputInstances}, false)
-								}, {
-									contents: BDFDB.LanguageUtils.LanguageStrings.RESET,
-									look: "LINK",
-									onClick: _ => this.updateTheme(addon, {imports: importInstances, inputs: inputInstances}, true)
-								}]
-							});
-						});
-						settingsButton.addEventListener("mouseenter", _ => {
-							BDFDB.TooltipUtils.create(settingsButton, BDFDB.LanguageUtils.LanguageStrings.SETTINGS);
-						});
-					}
-				}
+								onClick: _ => {
+									let importInstances = {}, inputInstances = {};
+									BDFDB.ModalUtils.open(this, {
+										header: `${theme.data.name} ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
+										subHeader: "",
+										size: "MEDIUM",
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanel, {
+											addon: theme.data,
+											children: _ => {
+												let settingsItems = [];
+												
+												let varInputs = [];
+												for (let i in theme.vars) {
+													let varStr = theme.vars[i].split(":");
+													let varName = varStr.shift().trim();
+													varStr = varStr.join(":").split(/;[^A-z0-9]|\/\*/);
+													let varValue = varStr.shift().trim();
+													if (varValue) {
+														let childType = "text", childMode = "";
+														let isColor = BDFDB.ColorUtils.getType(varValue);
+														let isComp = !isColor && /^[0-9 ]+,[0-9 ]+,[0-9 ]+$/g.test(varValue);
+														if (isColor || isComp) {
+															childType = "color";
+															childMode = isComp && "comp";
+														}
+														else {
+															let isUrlFile = /url\(.+\)/gi.test(varValue);
+															let isFile = !isUrlFile && /(http(s)?):\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(varValue);
+															if (isFile || isUrlFile) {
+																childType = "file";
+																childMode = isUrlFile && "url";
+															}
+														}
+														let varDescription = varStr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
+														varInputs.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+															type: "TextInput",
+															margin: 8,
+															childProps: {
+																type: childType,
+																mode: childMode,
+																filter: childType == "file" && "image",
+																ref: instance => {if (instance) inputInstances[i] = instance;}
+															},
+															label: varName.split("-").map(BDFDB.LibraryModules.StringUtils.upperCaseFirstChar).join(" "),
+															note: varDescription && varDescription.indexOf("*") == 0 ? varDescription.slice(1) : varDescription,
+															basis: "70%",
+															name: varName,
+															value: varValue,
+															oldValue: varValue,
+															defaultValue: varValue,
+															placeholder: varValue
+														}));
+													}
+												};
+												
+												if (theme.imports.length) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+													title: "Imports:",
+													dividerBottom: varInputs.length,
+													children: theme.imports.map((impo, i) => {
+														let name = impo[0].split("/").pop().replace(/"/g, "");
+														return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+															type: "Switch",
+															margin: 8,
+															childProps: {ref: instance => {if (instance) importInstances[i] = instance;}},
+															label: name[0].toUpperCase() + name.slice(1),
+															note: impo[0].replace(/"/g, ""),
+															name: impo[0],
+															value: impo[1],
+															oldValue: impo[1].toString(),
+															defaultValue: impo[1].toString()
+														});
+													})
+												}));
+												if (varInputs.length) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+													title: "Variables:",
+													children: varInputs
+												}));
+												
+												return settingsItems;
+											}
+										}),
+										buttons: [{
+											contents: BDFDB.LanguageUtils.LanguageStrings.SAVE,
+											color: "BRAND",
+											onClick: _ => this.updateTheme(theme.data, {imports: importInstances, inputs: inputInstances}, false)
+										}, {
+											contents: BDFDB.LanguageUtils.LanguageStrings.RESET,
+											look: "LINK",
+											onClick: _ => this.updateTheme(theme.data, {imports: importInstances, inputs: inputInstances}, true)
+										}]
+									});
+								}
+							})
+						]
+					}))
+				});
 			}
 			
-			updateTheme (addon, instances, reset) {
-				let path = BDFDB.LibraryRequires.path.join(dir, addon.filename);
+			updateTheme (theme, instances, reset) {
+				let path = BDFDB.LibraryRequires.path.join(dir, theme.filename);
 				let css = BDFDB.LibraryRequires.fs.readFileSync(path).toString();
 				if (css) {
 					let amount = 0;
@@ -253,11 +258,11 @@ module.exports = (_ => {
 					if (amount > 0) {
 						BDFDB.ReactUtils.forceUpdate(BDFDB.ObjectUtils.toArray(instances.imports), BDFDB.ObjectUtils.toArray(instances.inputs));
 						BDFDB.LibraryRequires.fs.writeFileSync(path, css);
-						BDFDB.NotificationUtils.toast(`Updated ${amount} Variable${amount == 1 ? "" : "s"} in '${addon.filename}'`, {type: "success"});
+						BDFDB.NotificationUtils.toast(`Updated ${amount} Variable${amount == 1 ? "" : "s"} in '${theme.filename}'`, {type: "success"});
 					}
-					else BDFDB.NotificationUtils.toast(`There are no changed Variables to be updated in '${addon.filename}'`, {type: "warning"});
+					else BDFDB.NotificationUtils.toast(`There are no changed Variables to be updated in '${theme.filename}'`, {type: "warning"});
 				}
-				else BDFDB.NotificationUtils.toast(`Could not find Theme File '${addon.filename}'`, {type: "danger"});
+				else BDFDB.NotificationUtils.toast(`Could not find Theme File '${theme.filename}'`, {type: "danger"});
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
