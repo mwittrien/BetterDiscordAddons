@@ -470,57 +470,37 @@ module.exports = (_ => {
 					}
 			};
 			BDFDB.BDUtils.isPluginEnabled = function (pluginName) {
-				if (!BdApi) return null;
-				else if (BdApi.Plugins && typeof BdApi.Plugins.isEnabled == "function") return BdApi.Plugins.isEnabled(pluginName);
-				else if (typeof BdApi.isPluginEnabled == "function") return BdApi.isPluginEnabled(pluginName);
+				if (BdApi && BdApi.Plugins && typeof BdApi.Plugins.isEnabled == "function") return BdApi.Plugins.isEnabled(pluginName);
 			};
 			BDFDB.BDUtils.reloadPlugin = function (pluginName) {
-				if (!BdApi) return;
-				else if (BdApi.Plugins && typeof BdApi.Plugins.reload == "function") BdApi.Plugins.reload(pluginName);
-				else if (window.pluginModule) window.pluginModule.reloadPlugin(pluginName);
+				if (BdApi && BdApi.Plugins && typeof BdApi.Plugins.reload == "function") BdApi.Plugins.reload(pluginName);
 			};
 			BDFDB.BDUtils.enablePlugin = function (pluginName) {
-				if (!BdApi) return;
-				else if (BdApi.Plugins && typeof BdApi.Plugins.enable == "function") BdApi.Plugins.enable(pluginName);
-				else if (window.pluginModule) window.pluginModule.startPlugin(pluginName);
+				if (BdApi && BdApi.Plugins && typeof BdApi.Plugins.enable == "function") BdApi.Plugins.enable(pluginName);
 			};
 			BDFDB.BDUtils.disablePlugin = function (pluginName) {
-				if (!BdApi) return;
-				else if (BdApi.Plugins && typeof BdApi.Plugins.disable == "function") BdApi.Plugins.disable(pluginName);
-				else if (window.pluginModule) window.pluginModule.stopPlugin(pluginName);
+				if (BdApi && BdApi.Plugins && typeof BdApi.Plugins.disable == "function") BdApi.Plugins.disable(pluginName);
 			};
 			BDFDB.BDUtils.getPlugin = function (pluginName, hasToBeEnabled = false, overHead = false) {
-				if (BdApi && !hasToBeEnabled || BDFDB.BDUtils.isPluginEnabled(pluginName)) {	
-					if (BdApi.Plugins && typeof BdApi.Plugins.get == "function") {
-						let plugin = BdApi.Plugins.get(pluginName);
-						if (!plugin) return null;
-						if (overHead) return plugin.filename && plugin.exports && plugin.instance ? plugin : {filename: Internal.LibraryRequires.fs.existsSync(Internal.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), `${pluginName}.plugin.js`)) ? `${pluginName}.plugin.js` : null, id: pluginName, name: pluginName, plugin: plugin};
-						else return plugin.filename && plugin.exports && plugin.instance ? plugin.instance : plugin;
-					}
-					else if (window.bdplugins) overHead ? window.bdplugins[pluginName] : (window.bdplugins[pluginName] || {}).plugin;
+				if (BdApi && !hasToBeEnabled || BDFDB.BDUtils.isPluginEnabled(pluginName) && BdApi.Plugins && typeof BdApi.Plugins.get == "function") {
+					let plugin = BdApi.Plugins.get(pluginName);
+					if (!plugin) return null;
+					if (overHead) return plugin.filename && plugin.exports && plugin.instance ? plugin : {filename: Internal.LibraryRequires.fs.existsSync(Internal.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), `${pluginName}.plugin.js`)) ? `${pluginName}.plugin.js` : null, id: pluginName, name: pluginName, plugin: plugin};
+					else return plugin.filename && plugin.exports && plugin.instance ? plugin.instance : plugin;
 				}
 				return null;
 			};
 			BDFDB.BDUtils.isThemeEnabled = function (themeName) {
-				if (!BdApi) return null;
-				else if (BdApi.Themes && typeof BdApi.Themes.isEnabled == "function") return BdApi.Themes.isEnabled(themeName);
-				else if (typeof BdApi.isThemeEnabled == "function") return BdApi.isThemeEnabled(themeName);
+				if (BdApi && BdApi.Themes && typeof BdApi.Themes.isEnabled == "function") return BdApi.Themes.isEnabled(themeName);
 			};
 			BDFDB.BDUtils.enableTheme = function (themeName) {
-				if (!BdApi) return;
-				else if (BdApi.Themes && typeof BdApi.Themes.enable == "function") BdApi.Themes.enable(themeName);
-				else if (window.themeModule) window.themeModule.enableTheme(themeName);
+				if (BdApi && BdApi.Themes && typeof BdApi.Themes.enable == "function") BdApi.Themes.enable(themeName);
 			};
 			BDFDB.BDUtils.disableTheme = function (themeName) {
-				if (!BdApi) return;
-				else if (BdApi.Themes && typeof BdApi.Themes.disable == "function") BdApi.Themes.disable(themeName);
-				else if (window.themeModule) window.themeModule.disableTheme(themeName);
+				if (BdApi && (BdApi.Themes && typeof BdApi.Themes.disable == "function") BdApi.Themes.disable(themeName);
 			};
 			BDFDB.BDUtils.getTheme = function (themeName, hasToBeEnabled = false) {
-				if (BdApi && !hasToBeEnabled || BDFDB.BDUtils.isThemeEnabled(themeName)) {
-					if (BdApi.Themes && typeof BdApi.Themes.get == "function") return BdApi.Themes.get(themeName);
-					else if (window.bdthemes) window.bdthemes[themeName];
-				}
+				if (BdApi && !hasToBeEnabled || BDFDB.BDUtils.isThemeEnabled(themeName) && BdApi.Themes && typeof BdApi.Themes.get == "function") return BdApi.Themes.get(themeName);
 				return null;
 			};
 			BDFDB.BDUtils.settingsIds = {

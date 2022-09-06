@@ -1142,7 +1142,9 @@
 			"repoNotice": "repoNotice-TV3RFr"
 		},
 		"ThemeSettings": {
-			"settingsButton": "settingsButton-h4Rts2"
+			"card": "card-h4Rts2",
+			"cardName": "card-jdf7Rs",
+			"grid": "settingsButton-60jFra"
 		},
 		"TimedLightDarkMode": {
 			"dateGrabber": "dateGrabber-QrRkIX",
@@ -1635,7 +1637,9 @@
 		"_themerepopreview": ["ThemeRepo", "preview"],
 		"_themerepopreviewfullscreen": ["ThemeRepo", "previewFullscreen"],
 		"_themerepopreviewmoving": ["ThemeRepo", "previewMoving"],
-		"_themesettingsbutton": ["ThemeSettings", "settingsButton"],
+		"_themesettingscard": ["ThemeSettings", "card"],
+		"_themesettingscardname": ["ThemeSettings", "cardName"],
+		"_themesettingsgrid": ["ThemeSettings", "grid"],
 		"_timedlightdarkmodedategrabber": ["TimedLightDarkMode", "dateGrabber"],
 		"_timedlightdarkmodetimergrabber": ["TimedLightDarkMode", "timerGrabber"],
 		"_timedlightdarkmodetimersettings": ["TimedLightDarkMode", "timerSettings"],
