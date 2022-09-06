@@ -497,7 +497,7 @@ module.exports = (_ => {
 				if (BdApi && BdApi.Themes && typeof BdApi.Themes.enable == "function") BdApi.Themes.enable(themeName);
 			};
 			BDFDB.BDUtils.disableTheme = function (themeName) {
-				if (BdApi && (BdApi.Themes && typeof BdApi.Themes.disable == "function") BdApi.Themes.disable(themeName);
+				if (BdApi && BdApi.Themes && typeof BdApi.Themes.disable == "function") BdApi.Themes.disable(themeName);
 			};
 			BDFDB.BDUtils.getTheme = function (themeName, hasToBeEnabled = false) {
 				if (BdApi && !hasToBeEnabled || BDFDB.BDUtils.isThemeEnabled(themeName) && BdApi.Themes && typeof BdApi.Themes.get == "function") return BdApi.Themes.get(themeName);
@@ -655,15 +655,7 @@ module.exports = (_ => {
 						let newName = (body.match(/"name"\s*:\s*"([^"]+)"/) || [])[1] || pluginName;
 						let newVersion = (body.match(/@version ([0-9]+\.[0-9]+\.[0-9]+)|['"]([0-9]+\.[0-9]+\.[0-9]+)['"]/i) || []).filter(n => n)[1];
 						if (!newVersion) return callback(null);
-						if (pluginName == newName && BDFDB.NumberUtils.getVersionDifference(newVersion, PluginStores.updateData.plugins[url].version) > 0.2) {
-							BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_force_updated", pluginName), {
-								type: "warning",
-								disableInteractions: true
-							});
-							BDFDB.PluginUtils.downloadUpdate(pluginName, url);
-							return callback(2);
-						}
-						else if (BDFDB.NumberUtils.compareVersions(newVersion, PluginStores.updateData.plugins[url].version)) {
+						if (BDFDB.NumberUtils.compareVersions(newVersion, PluginStores.updateData.plugins[url].version)) {
 							if (PluginStores.updateData.plugins[url]) PluginStores.updateData.plugins[url].outdated = true;
 							BDFDB.PluginUtils.showUpdateNotice(pluginName, url);
 							return callback(1);
