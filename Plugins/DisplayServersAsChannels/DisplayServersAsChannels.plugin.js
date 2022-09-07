@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.9
+ * @version 1.6.0
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -83,6 +83,12 @@ module.exports = (_ => {
 						UnavailableGuildsButton: "default"
 					}
 				};
+				
+				this.css = `
+					${BDFDB.dotCN.forumpagelist} {
+						justify-content: flex-start;
+					}
+				`;
 			}
 			
 			onStart () {				
