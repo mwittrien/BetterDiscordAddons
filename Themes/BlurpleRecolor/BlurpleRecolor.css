@@ -2257,7 +2257,11 @@ input.input-2g-os5 {										/* textinput												*/
 .addFriendInputWrapper-kkoSV9 .input-2g-os5 {
 	border-color: transparent !important;
 }
-															/* checkbox				checked 							*/
+.searchInput-3NGPfp {
+	border: none !important;
+}
+
+														/* checkbox				checked 							*/
 .checkbox-1ycfTw .checkboxInner-1aRh1d .checkboxElement-uwAa9F:checked + span {
 	background-color: rgb(var(--accentcolor));
 	border-color: rgb(var(--accentcolor));
