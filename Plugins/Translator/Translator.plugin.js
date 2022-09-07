@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.9
+ * @version 2.4.1
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,11 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"added": {
+			"Translated Labels": "Translated the Config Popout to all Discord Languages",
+			"Server Specific Translation": "Same as the Channel Specific Translations just for Servers",
+			"Remember Enable State": "Saves the enable State for Translation States"
+		}
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -88,6 +92,7 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.forceUpdate(this);
 							},
 							children: BDFDB.ReactUtils.createElement(TranslateSettingsComponent, {
+								guildId: this.props.guildId,
 								channelId: this.props.channelId
 							})
 						});
@@ -118,7 +123,7 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 							className: BDFDB.disCN.marginbottom8,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
-								label: `Words starting with ${_this.settings.exceptions.wordStart.map(n => '"' + n + '"').join(", ")} will be ignored`
+								label: _this.labels.exception_text.replace("{{var0}}", _this.settings.exceptions.wordStart.map(n => '"' + n + '"').join(", "))
 							})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
@@ -126,25 +131,38 @@ module.exports = (_ => {
 						})
 					],
 					Object.keys(_this.defaults.choices).map(place => {
-						const isSpecific = channelLanguages[this.props.channelId] && channelLanguages[this.props.channelId][place];
+						let isChannelSpecific = channelLanguages[this.props.channelId] && channelLanguages[this.props.channelId][place];
+						let isGuildSpecific = !isChannelSpecific && guildLanguages[this.props.guildId] && guildLanguages[this.props.guildId][place];
 						return Object.keys(_this.defaults.choices[place].value).map(direction => [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-								title: `${BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(direction.toLowerCase())} Language in ${place.toLowerCase()} Messages: `,
+								title: _this.labels[`language_choice_${direction.toLowerCase()}_${place.toLowerCase()}`] + ": ",
 								titleChildren: direction == languageTypes.OUTPUT && [{
-									text: _ => isSpecific ? `${BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(place)} Language Selection will be changed specifically for this Channel` : `${BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(place)} Language Selection will be changed for all Channels`,
-									name: isSpecific ? BDFDB.LibraryComponents.SvgIcon.Names.LOCK_CLOSED : BDFDB.LibraryComponents.SvgIcon.Names.LOCK_OPEN,
-									color: isSpecific && "var(--bdfdb-red)",
+									text: _ => isChannelSpecific ? _this.labels.language_selection_channel : isGuildSpecific ? _this.labels.language_selection_server : _this.labels.language_selection_global,
+									name: isChannelSpecific || isGuildSpecific ? BDFDB.LibraryComponents.SvgIcon.Names.LOCK_CLOSED : BDFDB.LibraryComponents.SvgIcon.Names.LOCK_OPEN,
+									color: isChannelSpecific ? "var(--bdfdb-red)" : isGuildSpecific ? "var(--bdfdb-yellow)" : null,
 									onClick: _ => {
 										if (channelLanguages[this.props.channelId] && channelLanguages[this.props.channelId][place]) {
+											isChannelSpecific = false;
 											delete channelLanguages[this.props.channelId][place];
 											if (BDFDB.ObjectUtils.isEmpty(channelLanguages[this.props.channelId])) delete channelLanguages[this.props.channelId];
 										}
-										else {
+										else if (guildLanguages[this.props.guildId] && guildLanguages[this.props.guildId][place]) {
+											isGuildSpecific = false;
+											isChannelSpecific = true;
+											delete guildLanguages[this.props.guildId][place];
+											if (BDFDB.ObjectUtils.isEmpty(guildLanguages[this.props.guildId])) delete guildLanguages[this.props.guildId];
 											if (!channelLanguages[this.props.channelId]) channelLanguages[this.props.channelId] = {};
 											channelLanguages[this.props.channelId][place] = {};
 											for (let l in languageTypes) channelLanguages[this.props.channelId][place][languageTypes[l]] = _this.getLanguageChoice(languageTypes[l], place, null);
 										}
+										else {
+											isGuildSpecific = true;
+											if (!guildLanguages[this.props.guildId]) guildLanguages[this.props.guildId] = {};
+											guildLanguages[this.props.guildId][place] = {};
+											for (let l in languageTypes) guildLanguages[this.props.guildId][place][languageTypes[l]] = _this.getLanguageChoice(languageTypes[l], place, null);
+										}
 										BDFDB.DataUtils.save(channelLanguages, _this, "channelLanguages");
+										BDFDB.DataUtils.save(guildLanguages, _this, "guildLanguages");
 										
 										BDFDB.ReactUtils.forceUpdate(this);
 									}
@@ -174,7 +192,7 @@ module.exports = (_ => {
 											iconSVG: data.iconSVG
 										})
 									});
-									return data.text ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {text: data.text, children: icon}) : icon;
+									return data.text ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {tooltipConfig: {type: "bottom"}, text: data.text, children: icon}) : icon;
 								}),
 								className: BDFDB.disCN.marginbottom8,
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
@@ -188,7 +206,7 @@ module.exports = (_ => {
 												children: lang.label
 											}),
 											lang.backup && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-												text: "Will use Backup Translator",
+												text: _this.labels.backup_engine_warning,
 												tooltipConfig: {
 													color: "red"
 												},
@@ -223,7 +241,7 @@ module.exports = (_ => {
 						]);
 					}),
 					Object.keys(_this.defaults.engines).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-						title: _this.defaults.engines[key].description,
+						title: _this.labels[`${key}_engine`],
 						className: BDFDB.disCN.marginbottom8,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
 							value: _this.settings.engines[key],
@@ -241,13 +259,13 @@ module.exports = (_ => {
 						type: "Switch",
 						plugin: _this,
 						keys: ["general", key],
-						label: _this.defaults.general[key].description,
+						label: _this.labels[`general_${key}`],
 						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 						value: _this.settings.general[key]
 					})),
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 						type: "Switch",
-						label: "Translate your Messages before sending",
+						label: _this.labels.translate_your_message,
 						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 						value: _this.isTranslationEnabled(this.props.channelId),
 						onChange: value => {
@@ -333,7 +351,7 @@ module.exports = (_ => {
 		var languages = {};
 		var favorites = [];
 		var authKeys = {};
-		var channelLanguages = {};
+		var channelLanguages = {}, guildLanguages = {};
 		var translationEnabledStates = [], isTranslating;
 		var translatedMessages = {}, oldMessages = {};
 		
@@ -356,18 +374,18 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						addTranslateButton:		{value: true, 	popout: false,	description: "Adds a Translate Button to the Channel Textarea"},
-						usePerChatTranslation:	{value: true, 	popout: false,	description: "Enables/Disables the Translator Button State per Channel and not globally"},
-						sendOriginalMessage:	{value: false, 	popout: true,	description: "Also sends the original Message when translating your own Message"},
-						showOriginalMessage:	{value: false, 	popout: true,	description: "Also shows the original Message when translating someones Message"}
+						addTranslateButton:		{value: true, 	popout: false},
+						usePerChatTranslation:	{value: true, 	popout: false},
+						sendOriginalMessage:	{value: false, 	popout: true},
+						showOriginalMessage:	{value: false, 	popout: true}
 					},
 					choices: {},
 					exceptions: {
-						wordStart:				{value: ["!"],			max: 1,		description: "Words starting with any of these will be ignored"}
+						wordStart:				{value: ["!"],	max: 1}
 					},
 					engines: {
-						translator:				{value: "googleapi", 	description: "Translation Engine"},
-						backup:					{value: "----", 		description: "Backup Engine"}
+						translator:				{value: "googleapi"},
+						backup:					{value: "----"}
 					}
 				};
 				for (let m in messageTypes) this.defaults.choices[messageTypes[m]] = {value: Object.keys(languageTypes).reduce((newObj, l) => (newObj[languageTypes[l]] = defaultLanguages[l], newObj), {})};
@@ -416,7 +434,7 @@ module.exports = (_ => {
 							type: "Switch",
 							plugin: this,
 							keys: ["general", key],
-							label: this.defaults.general[key].description,
+							label: this.labels[`general_${key}`],
 							value: this.settings.general[key]
 						}));
 						
@@ -472,7 +490,7 @@ module.exports = (_ => {
 						}));
 						
 						for (let key in this.defaults.exceptions) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-							title: this.defaults.exceptions[key].description,
+							title: this.labels.exception_text.replace("{{var0}}", "").split(" ").map(n => n).join(" "),
 							className: BDFDB.disCN.marginbottom8,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListInput, {
 								placeholder: "New Exception",
@@ -503,6 +521,10 @@ module.exports = (_ => {
 				
 				authKeys = BDFDB.DataUtils.load(this, "authKeys");
 				channelLanguages = BDFDB.DataUtils.load(this, "channelLanguages");
+				guildLanguages = BDFDB.DataUtils.load(this, "guildLanguages");
+				
+				translationEnabledStates = BDFDB.DataUtils.load(this, "translationEnabledStates");
+				translationEnabledStates = BDFDB.ArrayUtils.is(translationEnabledStates) ? translationEnabledStates : [];
 				
 				this.setLanguages();
 				BDFDB.PatchUtils.forceAllUpdates(this);
@@ -656,6 +678,7 @@ module.exports = (_ => {
 			processChannelTextAreaButtons (e) {
 				if (this.settings.general.addTranslateButton && (e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) && !e.instance.props.disabled) {
 					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(TranslateButtonComponent, {
+						guildId: e.instance.props.channel.guild_id ? e.instance.props.channel.guild_id : "@me",
 						channelId: e.instance.props.channel.id
 					}));
 				}
@@ -745,6 +768,7 @@ module.exports = (_ => {
 			toggleTranslation (channelId) {
 				if (!this.isTranslationEnabled(channelId)) translationEnabledStates.push(this.settings.general.usePerChatTranslation ? channelId : "global");
 				else BDFDB.ArrayUtils.remove(translationEnabledStates, this.settings.general.usePerChatTranslation ? channelId : "global", true);
+				BDFDB.DataUtils.save(translationEnabledStates, this, "translationEnabledStates");
 			}
 			
 			isTranslationEnabled (channelId) {
@@ -763,7 +787,7 @@ module.exports = (_ => {
 					!engine.auto && !backup.auto ? {} : {
 						auto: {
 							auto: true,
-							name: "Detect Language",
+							name: this.labels.detect_language,
 							id: "auto"
 						}
 					},
@@ -793,7 +817,10 @@ module.exports = (_ => {
 			getLanguageChoice (direction, place, channelId) {
 				this.setLanguages();
 				let choice;
+				let channel = channelId && BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
+				let guildId = channel ? (channel.guild_id ? channel.guild_id : "@me") : null;
 				if (channelLanguages[channelId] && channelLanguages[channelId][place]) choice = channelLanguages[channelId][place][direction];
+				else if (guildId && guildLanguages[guildId] && guildLanguages[guildId][place]) choice = guildLanguages[guildId][place][direction];
 				else choice = this.settings.choices[place] && this.settings.choices[place][direction];
 				choice = languages[choice] ? choice : Object.keys(languages)[0];
 				choice = direction == languageTypes.OUTPUT && choice == "auto" ? "en" : choice;
@@ -801,9 +828,15 @@ module.exports = (_ => {
 			}
 
 			saveLanguageChoice (choice, direction, place, channelId) {
+				let channel = channelId && BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
+				let guildId = channel ? (channel.guild_id ? channel.guild_id : "@me") : null;
 				if (channelLanguages[channelId] && channelLanguages[channelId][place]) {
 					channelLanguages[channelId][place][direction] = choice;
 					BDFDB.DataUtils.save(channelLanguages, this, "channelLanguages");
+				}
+				else if (guildLanguages[guildId] && guildLanguages[guildId][place]) {
+					guildLanguages[guildId][place][direction] = choice;
+					BDFDB.DataUtils.save(guildLanguages, this, "guildLanguages");
 				}
 				else {
 					this.settings.choices[place][direction] = choice;
@@ -935,11 +968,11 @@ module.exports = (_ => {
 						catch (err) {callback("");}
 					}
 					else {
-						if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Hourly Request Limit reached.`, {
+						if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_hourlylimit}`, {
 							type: "danger",
 							position: "center"
 						});
-						else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server might be down.`, {
+						else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_serverdown}`, {
 							type: "danger",
 							position: "center"
 						});
@@ -962,15 +995,15 @@ module.exports = (_ => {
 						catch (err) {callback("");}
 					}
 					else {
-						if (response.statusCode == 429 || response.statusCode == 456) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Daily Request Limit reached.`, {
+						if (response.statusCode == 429 || response.statusCode == 456) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_dailylimit}`, {
 							type: "danger",
 							position: "center"
 						});
-						else if (response.statusCode == 403) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. API-Key outdated.`, {
+						else if (response.statusCode == 403) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_keyoutdated}`, {
 							type: "danger",
 							position: "center"
 						});
-						else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server might be down.`, {
+						else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_serverdown}`, {
 							type: "danger",
 							position: "center"
 						});
@@ -1008,15 +1041,15 @@ module.exports = (_ => {
 							catch (err) {callback("");}
 						}
 						else {
-							if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Daily Request Limit reached.`, {
+							if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_dailylimit}`, {
 								type: "danger",
 								position: "center"
 							});
-							else if (response.statusCode == 403) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. API-Key outdated.`, {
+							else if (response.statusCode == 403) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_keyoutdated}`, {
 								type: "danger",
 								position: "center"
 							});
-							else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server might be down.`, {
+							else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_serverdown}`, {
 								type: "danger",
 								position: "center"
 							});
@@ -1058,14 +1091,14 @@ module.exports = (_ => {
 						catch (err) {callback("");}
 					}
 					else if (body && body.indexOf('code="408"') > -1) {
-						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Monthly Request Limit reached.`, {
+						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_monthlylimit}`, {
 							type: "danger",
 							position: "center"
 						});
 						callback("");
 					}
 					else {
-						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server down or API-Key outdated.`, {
+						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_serverdown}/${this.labels.error_keyoutdated}`, {
 							type: "danger",
 							position: "center"
 						});
@@ -1098,11 +1131,11 @@ module.exports = (_ => {
 						catch (err) {callback("");}
 					}
 					else {
-						if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Hourly Request Limit reached.`, {
+						if (response.statusCode == 429) BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_hourlylimit}`, {
 							type: "danger",
 							position: "center"
 						});
-						else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server is down or API-key outdated.`, {
+						else BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_serverdown}/${this.labels.error_keyoutdated}`, {
 							type: "danger",
 							position: "center"
 						});
@@ -1143,7 +1176,7 @@ module.exports = (_ => {
 						catch (err) {callback("");}
 					}
 					else {
-						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. Translation Server is down.`, {
+						BDFDB.NotificationUtils.toast(`${this.labels.toast_translating_failed}. ${this.labels.toast_translating_tryanother}. ${this.labels.error_serverdown}`, {
 							type: "danger",
 							position: "center"
 						});
@@ -1328,327 +1361,989 @@ module.exports = (_ => {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
 					case "bg":		// Bulgarian
 						return {
-							context_translator:					"Търсене превод",
+							backup_engine:						"Резервен-Преводач",
+							backup_engine_warning:				"Ще използва Резервен-Преводач",
 							context_messagetranslateoption:		"Превод на съобщението",
 							context_messageuntranslateoption:	"Превод на съобщението",
+							context_translator:					"Търсене превод",
+							detect_language:					"Разпознаване на езика",
+							error_dailylimit:					"Дневният лимит на заявките е достигнат.",
+							error_hourlylimit:					"Почасовият лимит на заявките е достигнат.",
+							error_keyoutdated:					"API-ключът е остарял.",
+							error_monthlylimit:					"Месечният лимит на заявките е достигнат.",
+							error_serverdown:					"Сървърът за превод може да е офлайн.",
+							exception_text:						"Думите, започващи с {{var0}}, ще бъдат игнорирани",
+							general_addTranslateButton:			"Добавя бутон за превод към текстовото поле на канала",
+							general_sendOriginalMessage:		"Също така изпраща оригиналното съобщение, когато превежда вашето изпратено съобщение",
+							general_showOriginalMessage:		"Също така показва оригиналното съобщение при превод на получено съобщение",
+							general_usePerChatTranslation:		"Активира/деактивира състоянието на бутона за преводач за всеки канал, а не глобално",
+							language_choice_input_received:		"Език на въвеждане в получените съобщения",
+							language_choice_input_sent:			"Език на въвеждане в изпратените от вас съобщения",
+							language_choice_output_received:	"Изходен език в получените съобщения",
+							language_choice_output_sent:		"Изходен език в изпратените ви съобщения",
+							language_selection_channel:			"Изборът на език ще бъде променен специално за този канал",
+							language_selection_global:			"Изборът на език ще бъде променен за всички сървъри",
+							language_selection_server:			"Изборът на език ще бъде променен специално за този сървър",
 							popout_translateoption:				"Превод",
 							popout_untranslateoption:			"Непревод",
 							toast_translating:					"Превод",
 							toast_translating_failed:			"Преводът не бе успешен",
 							toast_translating_tryanother:		"Опитайте друг преводач",
-							translated_watermark:				"преведено"
+							translate_your_message:				"Преведете вашите съобщения преди изпращане",
+							translated_watermark:				"преведено",
+							translator_engine:					"Преводач"
+						};
+					case "cs":		// Czech
+						return {
+							backup_engine:						"Backup-Překladatel",
+							backup_engine_warning:				"Použije Backup-Překladatel",
+							context_messagetranslateoption:		"Přeložit zprávu",
+							context_messageuntranslateoption:	"Přeložit zprávu",
+							context_translator:					"Hledat Překlad",
+							detect_language:					"Rozpoznat jazyk",
+							error_dailylimit:					"Denní limit požadavků byl dosažen.",
+							error_hourlylimit:					"Bylo dosaženo limitu hodinového požadavku.",
+							error_keyoutdated:					"Klíč API je zastaralý.",
+							error_monthlylimit:					"Byl dosažen limit měsíčních požadavků.",
+							error_serverdown:					"Překladový server může být offline.",
+							exception_text:						"Slova začínající na {{var0}} budou ignorována",
+							general_addTranslateButton:			"Přidá tlačítko Přeložit do textové oblasti kanálu",
+							general_sendOriginalMessage:		"Při překladu odeslané zprávy také odešle původní zprávu",
+							general_showOriginalMessage:		"Také zobrazuje původní zprávu při překladu přijaté zprávy",
+							general_usePerChatTranslation:		"Povolí/zakáže stav tlačítka překladače pro kanál, nikoli globálně",
+							language_choice_input_received:		"Vstupní jazyk do přijatých zpráv",
+							language_choice_input_sent:			"Zadejte jazyk do odeslaných zpráv",
+							language_choice_output_received:	"Výstupní jazyk v přijatých zprávách",
+							language_choice_output_sent:		"Jazyk výstupu ve vašich odeslaných zprávách",
+							language_selection_channel:			"Výběr jazyka bude změněn speciálně pro tento kanál",
+							language_selection_global:			"Výběr jazyka se změní pro všechny servery",
+							language_selection_server:			"Výběr jazyka bude změněn speciálně pro tento server",
+							popout_translateoption:				"Přeložit",
+							popout_untranslateoption:			"Nepřeložit",
+							toast_translating:					"Překládání",
+							toast_translating_failed:			"Překlad se nezdařil",
+							toast_translating_tryanother:		"Zkuste jiný překladač",
+							translate_your_message:				"Před odesláním si zprávy přeložte",
+							translated_watermark:				"přeloženo",
+							translator_engine:					"Překladatel"
 						};
 					case "da":		// Danish
 						return {
-							context_translator:					"Søg oversættelse",
+							backup_engine:						"Backup-Oversætter",
+							backup_engine_warning:				"Vil bruge Backup-Oversætter",
 							context_messagetranslateoption:		"Oversæt besked",
 							context_messageuntranslateoption:	"Ikke-oversat besked",
+							context_translator:					"Søg oversættelse",
+							detect_language:					"Find sprog",
+							error_dailylimit:					"Daglig anmodningsgrænse nået.",
+							error_hourlylimit:					"Timegrænsen for anmodning er nået.",
+							error_keyoutdated:					"API-nøgle forældet.",
+							error_monthlylimit:					"Månedlig anmodningsgrænse nået.",
+							error_serverdown:					"Oversættelsesserveren er muligvis offline.",
+							exception_text:						"Ord, der begynder med {{var0}}, ignoreres",
+							general_addTranslateButton:			"Tilføjer en Oversæt-knap til kanaltekstområdet",
+							general_sendOriginalMessage:		"Sender også den originale besked, når du oversætter din sendte besked",
+							general_showOriginalMessage:		"Viser også den originale besked, når du oversætter modtaget besked",
+							general_usePerChatTranslation:		"Aktiverer/deaktiverer oversætterknappens tilstand pr. kanal og ikke globalt",
+							language_choice_input_received:		"Inputsprog i modtagne beskeder",
+							language_choice_input_sent:			"Indtast sprog i dine sendte beskeder",
+							language_choice_output_received:	"Outputsprog i modtagne beskeder",
+							language_choice_output_sent:		"Outputsprog i dine sendte beskeder",
+							language_selection_channel:			"Valg af sprog vil blive ændret specifikt for denne kanal",
+							language_selection_global:			"Valg af sprog vil blive ændret for alle servere",
+							language_selection_server:			"Sprogvalg vil blive ændret specifikt for denne server",
 							popout_translateoption:				"Oversætte",
 							popout_untranslateoption:			"Untranslate",
 							toast_translating:					"Oversætter",
 							toast_translating_failed:			"Kunne ikke oversætte",
 							toast_translating_tryanother:		"Prøv en anden oversætter",
-							translated_watermark:				"oversat"
+							translate_your_message:				"Oversæt dine beskeder før afsendelse",
+							translated_watermark:				"oversat",
+							translator_engine:					"Oversætter"
 						};
 					case "de":		// German
 						return {
-							context_translator:					"Übersetzung suchen",
+							backup_engine:						"Backup-Übersetzer",
+							backup_engine_warning:				"Wird Backup-Übersetzer verwenden",
 							context_messagetranslateoption:		"Nachricht übersetzen",
 							context_messageuntranslateoption:	"Nachricht unübersetzen",
+							context_translator:					"Übersetzung suchen",
+							detect_language:					"Sprache erkennen",
+							error_dailylimit:					"Tägliches Anforderungslimit erreicht.",
+							error_hourlylimit:					"Stündliches Anforderungslimit erreicht.",
+							error_keyoutdated:					"API-Schlüssel veraltet.",
+							error_monthlylimit:					"Monatliches Anforderungslimit erreicht.",
+							error_serverdown:					"Der Übersetzungsserver ist möglicherweise offline.",
+							exception_text:						"Wörter, die mit {{var0}} beginnen, werden ignoriert",
+							general_addTranslateButton:			"Fügt dem Textbereich des Kanals eine Schalter zum Übersetzen hinzu",
+							general_sendOriginalMessage:		"Sendet auch die ursprüngliche Nachricht, wenn die gesendete Nachricht übersetzt wird",
+							general_showOriginalMessage:		"Zeigt auch die ursprüngliche Nachricht an, wenn eine empfangene Nachricht übersetzt wird",
+							general_usePerChatTranslation:		"Aktiviert/deaktiviert die Übersetzung pro Kanal und nicht global",
+							language_choice_input_received:		"Eingabesprache in empfangenen Nachrichten",
+							language_choice_input_sent:			"Eingabesprache in gesendeten Nachrichten",
+							language_choice_output_received:	"Ausgabesprache in empfangenen Nachrichten",
+							language_choice_output_sent:		"Ausgabesprache in gesendeten Nachrichten",
+							language_selection_channel:			"Die Sprachauswahl wird speziell für diesen Kanal geändert",
+							language_selection_global:			"Die Sprachauswahl wird für alle Server geändert",
+							language_selection_server:			"Die Sprachauswahl wird speziell für diesen Server geändert",
 							popout_translateoption:				"Übersetzen",
 							popout_untranslateoption:			"Unübersetzen",
 							toast_translating:					"Übersetzen",
 							toast_translating_failed:			"Übersetzung fehlgeschlagen",
 							toast_translating_tryanother:		"Versuch einen anderen Übersetzer",
-							translated_watermark:				"übersetzt"
+							translate_your_message:				"Übersetzt Nachrichten vor dem Senden",
+							translated_watermark:				"übersetzt",
+							translator_engine:					"Übersetzer"
 						};
 					case "el":		// Greek
 						return {
-							context_translator:					"Αναζήτηση μετάφρασης",
+							backup_engine:						"Backup-Μεταφράστης",
+							backup_engine_warning:				"Θα χρησιμοποιήσει Backup-Μεταφράστης",
 							context_messagetranslateoption:		"Μετάφραση μηνύματος",
 							context_messageuntranslateoption:	"Μη μετάφραση μηνύματος",
+							context_translator:					"Αναζήτηση μετάφρασης",
+							detect_language:					"Εντοπισμός γλώσσας",
+							error_dailylimit:					"Συμπληρώθηκε το ημερήσιο όριο αιτημάτων.",
+							error_hourlylimit:					"Συμπληρώθηκε το ωριαίο όριο αιτήματος.",
+							error_keyoutdated:					"Το κλειδί API δεν είναι ενημερωμένο.",
+							error_monthlylimit:					"Συμπληρώθηκε το μηνιαίο όριο αιτημάτων.",
+							error_serverdown:					"Ο διακομιστής μετάφρασης ενδέχεται να είναι εκτός σύνδεσης.",
+							exception_text:						"Οι λέξεις που ξεκινούν με {{var0}} θα αγνοηθούν",
+							general_addTranslateButton:			"Προσθέτει ένα κουμπί μετάφρασης στο Channel Textarea",
+							general_sendOriginalMessage:		"Επίσης στέλνει το αρχικό Μήνυμα κατά τη μετάφραση του απεσταλμένου μηνύματός σας",
+							general_showOriginalMessage:		"Εμφανίζει επίσης το αρχικό Μήνυμα κατά τη μετάφραση ενός ληφθέντος μηνύματος",
+							general_usePerChatTranslation:		"Ενεργοποιεί/απενεργοποιεί την κατάσταση του κουμπιού μεταφραστή ανά κανάλι και όχι καθολικά",
+							language_choice_input_received:		"Γλώσσα εισαγωγής στα ληφθέντα μηνύματα",
+							language_choice_input_sent:			"Εισαγάγετε τη γλώσσα στα απεσταλμένα μηνύματά σας",
+							language_choice_output_received:	"Γλώσσα εξόδου στα ληφθέντα μηνύματα",
+							language_choice_output_sent:		"Γλώσσα εξόδου στα απεσταλμένα μηνύματά σας",
+							language_selection_channel:			"Η επιλογή γλώσσας θα αλλάξει ειδικά για αυτό το κανάλι",
+							language_selection_global:			"Η Επιλογή Γλώσσας θα αλλάξει για όλους τους Διακομιστές",
+							language_selection_server:			"Η επιλογή γλώσσας θα αλλάξει ειδικά για αυτόν τον διακομιστή",
 							popout_translateoption:				"Μεταφράζω",
 							popout_untranslateoption:			"Μη μετάφραση",
 							toast_translating:					"Μετάφραση",
 							toast_translating_failed:			"Αποτυχία μετάφρασης",
 							toast_translating_tryanother:		"Δοκιμάστε έναν άλλο Μεταφραστή",
-							translated_watermark:				"μεταφρασμένο"
+							translate_your_message:				"Μεταφράστε τα Μηνύματά σας πριν τα στείλετε",
+							translated_watermark:				"μεταφρασμένο",
+							translator_engine:					"Μεταφράστης"
 						};
 					case "es":		// Spanish
 						return {
-							context_translator:					"Buscar traducción",
+							backup_engine:						"Backup-Traductor",
+							backup_engine_warning:				"Utilizará Backup-Traductor",
 							context_messagetranslateoption:		"Traducir mensaje",
 							context_messageuntranslateoption:	"Mensaje sin traducir",
+							context_translator:					"Buscar traducción",
+							detect_language:					"Detectar idioma",
+							error_dailylimit:					"Se alcanzó el límite de solicitudes diarias.",
+							error_hourlylimit:					"Se alcanzó el límite de solicitudes por hora.",
+							error_keyoutdated:					"API-Key obsoleta.",
+							error_monthlylimit:					"Se alcanzó el límite de solicitudes mensuales.",
+							error_serverdown:					"El servidor de traducción puede estar fuera de línea.",
+							exception_text:						"Las palabras que comienzan con {{var0}} serán ignoradas",
+							general_addTranslateButton:			"Agrega un botón de traducción al área de texto del canal",
+							general_sendOriginalMessage:		"También envía el mensaje original al traducir su mensaje enviado",
+							general_showOriginalMessage:		"También muestra el mensaje original al traducir un mensaje recibido",
+							general_usePerChatTranslation:		"Habilita/deshabilita el estado del botón del traductor por canal y no globalmente",
+							language_choice_input_received:		"Idioma de entrada en los mensajes recibidos",
+							language_choice_input_sent:			"Idioma de entrada en sus mensajes enviados",
+							language_choice_output_received:	"Idioma de salida en los mensajes recibidos",
+							language_choice_output_sent:		"Idioma de salida en sus mensajes enviados",
+							language_selection_channel:			"La selección de idioma se cambiará específicamente para este canal",
+							language_selection_global:			"La selección de idioma se cambiará para todos los servidores",
+							language_selection_server:			"La selección de idioma se cambiará específicamente para este servidor",
 							popout_translateoption:				"Traducir",
 							popout_untranslateoption:			"No traducir",
 							toast_translating:					"Traductorio",
 							toast_translating_failed:			"No se pudo traducir",
 							toast_translating_tryanother:		"Prueba con otro traductor",
-							translated_watermark:				"traducido"
+							translate_your_message:				"Traduce tus mensajes antes de enviarlos",
+							translated_watermark:				"traducido",
+							translator_engine:					"Traductor"
 						};
 					case "fi":		// Finnish
 						return {
-							context_translator:					"Hae käännöstä",
+							backup_engine:						"Backup-Kääntäjä",
+							backup_engine_warning:				"Käyttää Backup-Kääntäjä",
 							context_messagetranslateoption:		"Käännä viesti",
 							context_messageuntranslateoption:	"Käännä viesti",
+							context_translator:					"Hae käännöstä",
+							detect_language:					"Tunnista kieli",
+							error_dailylimit:					"Päivittäinen pyyntöraja saavutettu.",
+							error_hourlylimit:					"Tuntikohtainen pyyntöraja saavutettu.",
+							error_keyoutdated:					"API-avain vanhentunut.",
+							error_monthlylimit:					"Kuukauden pyyntöraja saavutettu.",
+							error_serverdown:					"Käännöspalvelin saattaa olla offline-tilassa.",
+							exception_text:						"{{var0}} alkavat sanat ohitetaan",
+							general_addTranslateButton:			"Lisää käännöspainikkeen kanavan tekstialueeseen",
+							general_sendOriginalMessage:		"Lähettää myös alkuperäisen viestin kääntäessään lähettämääsi viestiä",
+							general_showOriginalMessage:		"Näyttää myös alkuperäisen viestin käännettäessä vastaanotettua viestiä",
+							general_usePerChatTranslation:		"Ottaa käyttöön/poistaa käytöstä kääntäjän painikkeen tilan kanavakohtaisesti, ei maailmanlaajuisesti",
+							language_choice_input_received:		"Syöttökieli vastaanotetuissa viesteissä",
+							language_choice_input_sent:			"Syötä kieli lähettämiisi viesteihin",
+							language_choice_output_received:	"Tulostuskieli vastaanotetuissa viesteissä",
+							language_choice_output_sent:		"Lähetyskieli lähetetyissä viesteissä",
+							language_selection_channel:			"Kielen valintaa muutetaan erityisesti tätä kanavaa varten",
+							language_selection_global:			"Kielen valintaa muutetaan kaikille palvelimille",
+							language_selection_server:			"Kielen valintaa muutetaan erityisesti tätä palvelinta varten",
 							popout_translateoption:				"Kääntää",
 							popout_untranslateoption:			"Käännä",
 							toast_translating:					"Kääntäminen",
 							toast_translating_failed:			"Käännös epäonnistui",
 							toast_translating_tryanother:		"Kokeile toista kääntäjää",
-							translated_watermark:				"käännetty"
+							translate_your_message:				"Käännä viestisi ennen lähettämistä",
+							translated_watermark:				"käännetty",
+							translator_engine:					"Kääntäjä"
 						};
 					case "fr":		// French
 						return {
-							context_translator:					"Recherche de traduction",
+							backup_engine:						"Backup-Traducteur",
+							backup_engine_warning:				"Utilisera Backup-Traducteur",
 							context_messagetranslateoption:		"Traduire le message",
 							context_messageuntranslateoption:	"Message non traduit",
+							context_translator:					"Recherche de traduction",
+							detect_language:					"Détecter la langue",
+							error_dailylimit:					"Limite quotidienne de requêtes atteinte.",
+							error_hourlylimit:					"Limite horaire de demandes atteinte.",
+							error_keyoutdated:					"Clé API obsolète.",
+							error_monthlylimit:					"Limite mensuelle de demandes atteinte.",
+							error_serverdown:					"Le serveur de traduction est peut-être hors ligne.",
+							exception_text:						"Les mots commençant par {{var0}} seront ignorés",
+							general_addTranslateButton:			"Ajoute un bouton de traduction à la zone de texte du canal",
+							general_sendOriginalMessage:		"Envoie également le message d'origine lors de la traduction de votre message envoyé",
+							general_showOriginalMessage:		"Affiche également le message d'origine lors de la traduction d'un message reçu",
+							general_usePerChatTranslation:		"Active/désactive l'état du bouton du traducteur par canal et non globalement",
+							language_choice_input_received:		"Langue d'entrée dans les messages reçus",
+							language_choice_input_sent:			"Langue d'entrée dans vos messages envoyés",
+							language_choice_output_received:	"Langue de sortie dans les messages reçus",
+							language_choice_output_sent:		"Langue de sortie dans vos messages envoyés",
+							language_selection_channel:			"La sélection de la langue sera modifiée spécifiquement pour ce canal",
+							language_selection_global:			"La sélection de la langue sera modifiée pour tous les serveurs",
+							language_selection_server:			"La sélection de la langue sera modifiée spécifiquement pour ce serveur",
 							popout_translateoption:				"Traduire",
 							popout_untranslateoption:			"Non traduit",
 							toast_translating:					"Traduction en cours",
 							toast_translating_failed:			"Échec de la traduction",
 							toast_translating_tryanother:		"Essayez un autre traducteur",
-							translated_watermark:				"traduit"
+							translate_your_message:				"Traduisez vos messages avant de les envoyer",
+							translated_watermark:				"traduit",
+							translator_engine:					"Traducteur"
+						};
+					case "hi":		// Hindi
+						return {
+							backup_engine:						"बैकअप-अनुवादक",
+							backup_engine_warning:				"बैकअप-अनुवादक का उपयोग करेंगे",
+							context_messagetranslateoption:		"संदेश का अनुवाद करें",
+							context_messageuntranslateoption:	"संदेश का अनुवाद न करें",
+							context_translator:					"अनुवाद खोजें",
+							detect_language:					"भाषा की जांच करो",
+							error_dailylimit:					"दैनिक अनुरोध सीमा पूरी हो गई है।",
+							error_hourlylimit:					"घंटे के अनुरोध की सीमा पूरी हो गई है.",
+							error_keyoutdated:					"एपीआई-कुंजी पुरानी हो चुकी है।",
+							error_monthlylimit:					"मासिक अनुरोध सीमा पूरी हो गई है।",
+							error_serverdown:					"अनुवाद सर्वर ऑफ़लाइन हो सकता है।",
+							exception_text:						"{{var0}} से शुरू होने वाले शब्दों पर ध्यान नहीं दिया जाएगा",
+							general_addTranslateButton:			"चैनल Textarea में एक अनुवाद बटन जोड़ता है",
+							general_sendOriginalMessage:		"आपके भेजे गए संदेश का अनुवाद करते समय मूल संदेश भी भेजता है",
+							general_showOriginalMessage:		"प्राप्त संदेश का अनुवाद करते समय मूल संदेश भी दिखाता है",
+							general_usePerChatTranslation:		"प्रति चैनल अनुवादक बटन स्थिति को सक्षम/अक्षम करता है और विश्व स्तर पर नहीं",
+							language_choice_input_received:		"प्राप्त संदेशों में इनपुट भाषा",
+							language_choice_input_sent:			"आपके भेजे गए संदेशों में इनपुट भाषा",
+							language_choice_output_received:	"प्राप्त संदेशों में आउटपुट भाषा",
+							language_choice_output_sent:		"आपके भेजे गए संदेशों में आउटपुट भाषा",
+							language_selection_channel:			"इस चैनल के लिए भाषा चयन विशेष रूप से बदला जाएगा",
+							language_selection_global:			"सभी सर्वरों के लिए भाषा चयन बदल दिया जाएगा",
+							language_selection_server:			"इस सर्वर के लिए भाषा चयन विशेष रूप से बदल दिया जाएगा",
+							popout_translateoption:				"अनुवाद करना",
+							popout_untranslateoption:			"अनुवाद न करें",
+							toast_translating:					"अनुवाद",
+							toast_translating_failed:			"अनुवाद करने में विफल",
+							toast_translating_tryanother:		"दूसरे अनुवादक का प्रयास करें",
+							translate_your_message:				"भेजने से पहले अपने संदेशों का अनुवाद करें",
+							translated_watermark:				"अनुवाद",
+							translator_engine:					"अनुवादक"
 						};
 					case "hr":		// Croatian
 						return {
-							context_translator:					"Pretraži prijevod",
+							backup_engine:						"Rezervni-Prevoditelj",
+							backup_engine_warning:				"Koristit će se Rezervni-Prevoditelj",
 							context_messagetranslateoption:		"Prevedi poruku",
 							context_messageuntranslateoption:	"Prevedi poruku",
+							context_translator:					"Pretraži prijevod",
+							detect_language:					"Prepoznaj jezik",
+							error_dailylimit:					"Dosegnuto je dnevno ograničenje zahtjeva.",
+							error_hourlylimit:					"Dosegnuto je ograničenje zahtjeva po satu.",
+							error_keyoutdated:					"API-ključ zastario.",
+							error_monthlylimit:					"Dosegnuto je mjesečno ograničenje zahtjeva.",
+							error_serverdown:					"Translation Server možda je offline.",
+							exception_text:						"Riječi koje počinju s {{var0}} bit će zanemarene",
+							general_addTranslateButton:			"Dodaje gumb Prevedi tekstualnom području kanala",
+							general_sendOriginalMessage:		"Također šalje izvornu poruku prilikom prijevoda vaše poslane poruke",
+							general_showOriginalMessage:		"Također prikazuje izvornu poruku prilikom prijevoda primljene poruke",
+							general_usePerChatTranslation:		"Omogućuje/onemogućuje stanje gumba prevoditelja po kanalu, a ne globalno",
+							language_choice_input_received:		"Jezik unosa u primljenim porukama",
+							language_choice_input_sent:			"Jezik unosa u vaše poslane poruke",
+							language_choice_output_received:	"Izlazni jezik u primljenim porukama",
+							language_choice_output_sent:		"Izlazni jezik u vašim poslanim porukama",
+							language_selection_channel:			"Odabir jezika bit će promijenjen posebno za ovaj kanal",
+							language_selection_global:			"Odabir jezika bit će promijenjen za sve poslužitelje",
+							language_selection_server:			"Odabir jezika bit će promijenjen posebno za ovaj poslužitelj",
 							popout_translateoption:				"Prevedi",
 							popout_untranslateoption:			"Neprevedi",
 							toast_translating:					"Prevođenje",
 							toast_translating_failed:			"Prijevod nije uspio",
 							toast_translating_tryanother:		"Pokušajte s drugim prevoditeljem",
-							translated_watermark:				"prevedeno"
+							translate_your_message:				"Prevedite svoje poruke prije slanja",
+							translated_watermark:				"prevedeno",
+							translator_engine:					"Prevoditelj"
 						};
 					case "hu":		// Hungarian
 						return {
-							context_translator:					"Keresés a fordításban",
+							backup_engine:						"Backup-Fordító",
+							backup_engine_warning:				"A Backup-Fordító programot fogja használni",
 							context_messagetranslateoption:		"Üzenet lefordítása",
 							context_messageuntranslateoption:	"Az üzenet lefordítása",
+							context_translator:					"Keresés a fordításban",
+							detect_language:					"Nyelvfelismerés",
+							error_dailylimit:					"Elérte a napi igénylési korlátot.",
+							error_hourlylimit:					"Elérte az óránkénti igénylési korlátot.",
+							error_keyoutdated:					"API-kulcs elavult.",
+							error_monthlylimit:					"Elérte a havi igénylési limitet.",
+							error_serverdown:					"Lehet, hogy a Fordítószerver offline állapotban van.",
+							exception_text:						"A(z) {{var0}} kezdetű szavak figyelmen kívül maradnak",
+							general_addTranslateButton:			"Fordítási gombot ad a csatorna szövegterületéhez",
+							general_sendOriginalMessage:		"Az eredeti üzenetet is elküldi az elküldött üzenet fordítása során",
+							general_showOriginalMessage:		"A fogadott üzenet lefordításakor az eredeti üzenetet is megjeleníti",
+							general_usePerChatTranslation:		"Engedélyezi/letiltja a Fordító gomb állapotát csatornánként, nem pedig globálisan",
+							language_choice_input_received:		"Beviteli nyelv a fogadott üzenetekben",
+							language_choice_input_sent:			"Írja be a nyelvet az elküldött üzenetekben",
+							language_choice_output_received:	"Kimeneti nyelv a fogadott üzenetekben",
+							language_choice_output_sent:		"Kimeneti nyelv az elküldött üzenetekben",
+							language_selection_channel:			"A nyelvválasztás kifejezetten ehhez a csatornához fog módosulni",
+							language_selection_global:			"A nyelv kiválasztása minden szerveren módosul",
+							language_selection_server:			"A nyelvválasztás kifejezetten ehhez a szerverhez módosul",
 							popout_translateoption:				"fordít",
 							popout_untranslateoption:			"Fordítás le",
 							toast_translating:					"Fordítás",
 							toast_translating_failed:			"Nem sikerült lefordítani",
 							toast_translating_tryanother:		"Próbálkozzon másik fordítóval",
-							translated_watermark:				"lefordított"
+							translate_your_message:				"Küldés előtt fordítsa le az üzeneteit",
+							translated_watermark:				"lefordított",
+							translator_engine:					"Fordító"
 						};
 					case "it":		// Italian
 						return {
-							context_translator:					"Cerca traduzione",
+							backup_engine:						"Backup-Traduttore",
+							backup_engine_warning:				"Utilizzerà Backup-Traduttore",
 							context_messagetranslateoption:		"Traduci messaggio",
 							context_messageuntranslateoption:	"Annulla traduzione messaggio",
+							context_translator:					"Cerca traduzione",
+							detect_language:					"Rileva lingua",
+							error_dailylimit:					"Limite di richieste giornaliere raggiunto.",
+							error_hourlylimit:					"Limite di richiesta oraria raggiunto.",
+							error_keyoutdated:					"Chiave API obsoleta.",
+							error_monthlylimit:					"Limite di richieste mensili raggiunto.",
+							error_serverdown:					"Il server di traduzione potrebbe essere offline.",
+							exception_text:						"Le parole che iniziano con {{var0}} verranno ignorate",
+							general_addTranslateButton:			"Aggiunge un pulsante Traduci all'area di testo del canale",
+							general_sendOriginalMessage:		"Invia anche il messaggio originale durante la traduzione del messaggio inviato",
+							general_showOriginalMessage:		"Mostra anche il messaggio originale durante la traduzione di un messaggio ricevuto",
+							general_usePerChatTranslation:		"Abilita/disabilita lo stato del pulsante Translator per canale e non globalmente",
+							language_choice_input_received:		"Lingua di input nei messaggi ricevuti",
+							language_choice_input_sent:			"Inserisci la lingua nei tuoi messaggi inviati",
+							language_choice_output_received:	"Lingua di output nei messaggi ricevuti",
+							language_choice_output_sent:		"Lingua di output nei messaggi inviati",
+							language_selection_channel:			"La selezione della lingua verrà modificata in modo specifico per questo canale",
+							language_selection_global:			"La selezione della lingua verrà modificata per tutti i server",
+							language_selection_server:			"La selezione della lingua verrà modificata in modo specifico per questo server",
 							popout_translateoption:				"Tradurre",
 							popout_untranslateoption:			"Non tradurre",
 							toast_translating:					"Tradurre",
 							toast_translating_failed:			"Impossibile tradurre",
 							toast_translating_tryanother:		"Prova un altro traduttore",
-							translated_watermark:				"tradotto"
+							translate_your_message:				"Traduci i tuoi messaggi prima di inviarli",
+							translated_watermark:				"tradotto",
+							translator_engine:					"Traduttore"
 						};
 					case "ja":		// Japanese
 						return {
-							context_translator:					"翻訳を検索",
+							backup_engine:						"バックアップ翻訳者",
+							backup_engine_warning:				"バックアップ翻訳者 を使用します",
 							context_messagetranslateoption:		"メッセージの翻訳",
 							context_messageuntranslateoption:	"メッセージの翻訳解除",
+							context_translator:					"翻訳を検索",
+							detect_language:					"言語を検出",
+							error_dailylimit:					"1 日のリクエスト上限に達しました。",
+							error_hourlylimit:					"1 時間あたりのリクエスト制限に達しました。",
+							error_keyoutdated:					"API キーが古くなっています。",
+							error_monthlylimit:					"月間リクエスト制限に達しました。",
+							error_serverdown:					"翻訳サーバーがオフラインになっている可能性があります。",
+							exception_text:						"{{var0}} で始まる単語は無視されます",
+							general_addTranslateButton:			"チャンネルのテキストエリアに翻訳ボタンを追加します",
+							general_sendOriginalMessage:		"送信したメッセージを翻訳するときに元のメッセージも送信します",
+							general_showOriginalMessage:		"受信したメッセージを翻訳するときに元のメッセージも表示します",
+							general_usePerChatTranslation:		"グローバルではなく、チャネルごとに翻訳者ボタンの状態を有効/無効にします",
+							language_choice_input_received:		"受信メッセージの入力言語",
+							language_choice_input_sent:			"送信メッセージの入力言語",
+							language_choice_output_received:	"受信メッセージの出力言語",
+							language_choice_output_sent:		"送信メッセージの出力言語",
+							language_selection_channel:			"言語の選択は、このチャンネル専用に変更されます",
+							language_selection_global:			"すべてのサーバーの言語選択が変更されます",
+							language_selection_server:			"言語の選択は、このサーバー専用に変更されます",
 							popout_translateoption:				"翻訳する",
 							popout_untranslateoption:			"翻訳しない",
 							toast_translating:					"翻訳",
 							toast_translating_failed:			"翻訳に失敗しました",
 							toast_translating_tryanother:		"別の翻訳者を試す",
-							translated_watermark:				"翻訳済み"
+							translate_your_message:				"送信する前にメッセージを翻訳する",
+							translated_watermark:				"翻訳済み",
+							translator_engine:					"翻訳者"
 						};
 					case "ko":		// Korean
 						return {
-							context_translator:					"번역 검색",
+							backup_engine:						"백업 번역기",
+							backup_engine_warning:				"백업 번역기를 사용합니다",
 							context_messagetranslateoption:		"메시지 번역",
 							context_messageuntranslateoption:	"메시지 번역 취소",
+							context_translator:					"번역 검색",
+							detect_language:					"언어를 감지",
+							error_dailylimit:					"일일 요청 한도에 도달했습니다.",
+							error_hourlylimit:					"시간당 요청 한도에 도달했습니다.",
+							error_keyoutdated:					"API 키가 오래되었습니다.",
+							error_monthlylimit:					"월간 요청 한도에 도달했습니다.",
+							error_serverdown:					"번역 서버가 오프라인일 수 있습니다.",
+							exception_text:						"{{var0}}로 시작하는 단어는 무시됩니다.",
+							general_addTranslateButton:			"채널 텍스트 영역에 번역 버튼 추가",
+							general_sendOriginalMessage:		"또한 보낸 메시지를 번역할 때 원본 메시지를 보냅니다.",
+							general_showOriginalMessage:		"또한 수신된 메시지를 번역할 때 원본 메시지를 표시합니다.",
+							general_usePerChatTranslation:		"전역이 아닌 채널별로 번역기 버튼 상태를 활성화/비활성화합니다.",
+							language_choice_input_received:		"수신된 메시지의 입력 언어",
+							language_choice_input_sent:			"보낸 메시지의 입력 언어",
+							language_choice_output_received:	"수신된 메시지의 출력 언어",
+							language_choice_output_sent:		"보낸 메시지의 출력 언어",
+							language_selection_channel:			"이 채널에 대해 특별히 언어 선택이 변경됩니다.",
+							language_selection_global:			"모든 서버에 대해 언어 선택이 변경됩니다.",
+							language_selection_server:			"이 서버에 대해 특별히 언어 선택이 변경됩니다.",
 							popout_translateoption:				"옮기다",
 							popout_untranslateoption:			"번역 취소",
 							toast_translating:					"번역 중",
 							toast_translating_failed:			"번역하지 못했습니다.",
 							toast_translating_tryanother:		"다른 번역기 시도",
-							translated_watermark:				"번역"
+							translate_your_message:				"보내기 전에 메시지 번역",
+							translated_watermark:				"번역",
+							translator_engine:					"역자"
 						};
 					case "lt":		// Lithuanian
 						return {
-							context_translator:					"Paieškos vertimas",
+							backup_engine:						"Backup-Vertėjas",
+							backup_engine_warning:				"Naudos Backup-Vertėjas",
 							context_messagetranslateoption:		"Versti pranešimą",
 							context_messageuntranslateoption:	"Išversti pranešimą",
+							context_translator:					"Paieškos vertimas",
+							detect_language:					"Aptikti kalbą",
+							error_dailylimit:					"Pasiektas dienos užklausų limitas.",
+							error_hourlylimit:					"Pasiektas valandinių užklausų limitas.",
+							error_keyoutdated:					"API raktas pasenęs.",
+							error_monthlylimit:					"Pasiektas mėnesio užklausų limitas.",
+							error_serverdown:					"Vertimo serveris gali būti neprisijungęs.",
+							exception_text:						"Žodžiai, prasidedantys {{var0}}, bus ignoruojami",
+							general_addTranslateButton:			"Prie kanalo teksto srities pridedamas vertimo mygtukas",
+							general_sendOriginalMessage:		"Taip pat siunčia originalų pranešimą verčiant jūsų išsiųstą žinutę",
+							general_showOriginalMessage:		"Taip pat rodomas pradinis pranešimas, kai verčiamas gautas pranešimas",
+							general_usePerChatTranslation:		"Įjungia / išjungia Vertėjo mygtuko būseną kiekvienam kanalui, o ne visame pasaulyje",
+							language_choice_input_received:		"Įvesties kalba gautuose pranešimuose",
+							language_choice_input_sent:			"Įveskite kalbą siunčiamuose pranešimuose",
+							language_choice_output_received:	"Išvesties kalba gautuose pranešimuose",
+							language_choice_output_sent:		"Išvesties kalba jūsų išsiųstuose pranešimuose",
+							language_selection_channel:			"Kalbos pasirinkimas bus pakeistas specialiai šiam kanalui",
+							language_selection_global:			"Kalbos pasirinkimas bus pakeistas visiems serveriams",
+							language_selection_server:			"Kalbos pasirinkimas bus pakeistas specialiai šiam serveriui",
 							popout_translateoption:				"Išversti",
 							popout_untranslateoption:			"Neišversti",
 							toast_translating:					"Vertimas",
 							toast_translating_failed:			"Nepavyko išversti",
 							toast_translating_tryanother:		"Išbandykite kitą vertėją",
-							translated_watermark:				"išverstas"
+							translate_your_message:				"Prieš siųsdami išverskite savo pranešimus",
+							translated_watermark:				"išverstas",
+							translator_engine:					"Vertėjas"
 						};
 					case "nl":		// Dutch
 						return {
-							context_translator:					"Zoek vertaling",
+							backup_engine:						"Backup-Vertaler",
+							backup_engine_warning:				"Zal Backup-Vertaler gebruiken",
 							context_messagetranslateoption:		"Bericht vertalen",
 							context_messageuntranslateoption:	"Bericht onvertalen",
+							context_translator:					"Zoek vertaling",
+							detect_language:					"Taal detecteren",
+							error_dailylimit:					"Dagelijkse verzoeklimiet bereikt.",
+							error_hourlylimit:					"Verzoeklimiet per uur bereikt.",
+							error_keyoutdated:					"API-sleutel verouderd.",
+							error_monthlylimit:					"Maandelijkse aanvraaglimiet bereikt.",
+							error_serverdown:					"Vertaalserver is mogelijk offline.",
+							exception_text:						"Woorden die beginnen met {{var0}} worden genegeerd",
+							general_addTranslateButton:			"Voegt een vertaalknop toe aan het kanaaltekstgebied",
+							general_sendOriginalMessage:		"Verzendt ook het originele bericht bij het vertalen van uw verzonden bericht",
+							general_showOriginalMessage:		"Toont ook het originele bericht bij het vertalen van een ontvangen bericht",
+							general_usePerChatTranslation:		"Schakelt de status van de vertaalknop in/uit per kanaal en niet globaal",
+							language_choice_input_received:		"Invoertaal in ontvangen berichten",
+							language_choice_input_sent:			"Invoertaal in uw verzonden berichten",
+							language_choice_output_received:	"Uitvoertaal in ontvangen berichten",
+							language_choice_output_sent:		"Uitvoertaal in uw verzonden berichten",
+							language_selection_channel:			"De taalselectie wordt specifiek voor dit kanaal gewijzigd",
+							language_selection_global:			"Taalkeuze wordt voor alle servers gewijzigd",
+							language_selection_server:			"Taalselectie wordt specifiek voor deze server gewijzigd",
 							popout_translateoption:				"Vertalen",
 							popout_untranslateoption:			"Onvertalen",
 							toast_translating:					"Vertalen",
 							toast_translating_failed:			"Kan niet vertalen",
 							toast_translating_tryanother:		"Probeer een andere vertaler",
-							translated_watermark:				"vertaald"
+							translate_your_message:				"Vertaal uw berichten voordat u ze verzendt",
+							translated_watermark:				"vertaald",
+							translator_engine:					"Vertaler"
 						};
 					case "no":		// Norwegian
 						return {
-							context_translator:					"Søk i oversettelse",
+							backup_engine:						"Backup-Oversetter",
+							backup_engine_warning:				"Vil bruke Backup-Oversetter",
 							context_messagetranslateoption:		"Oversett melding",
 							context_messageuntranslateoption:	"Ikke oversett melding",
+							context_translator:					"Søk i oversettelse",
+							detect_language:					"Oppdage språk",
+							error_dailylimit:					"Daglig forespørselsgrense nådd.",
+							error_hourlylimit:					"Forespørselsgrensen for time nådd.",
+							error_keyoutdated:					"API-nøkkel utdatert.",
+							error_monthlylimit:					"Månedlig forespørselsgrense nådd.",
+							error_serverdown:					"Oversettelsesserveren kan være frakoblet.",
+							exception_text:						"Ord som begynner med {{var0}} vil bli ignorert",
+							general_addTranslateButton:			"Legger til en oversettknapp til kanaltekstområdet",
+							general_sendOriginalMessage:		"Sender også den originale meldingen når du oversetter den sendte meldingen",
+							general_showOriginalMessage:		"Viser også den originale meldingen når du oversetter en mottatt melding",
+							general_usePerChatTranslation:		"Aktiverer/deaktiverer oversetterknappens tilstand per kanal og ikke globalt",
+							language_choice_input_received:		"Inndataspråk i mottatte meldinger",
+							language_choice_input_sent:			"Inntastingsspråk i sendte meldinger",
+							language_choice_output_received:	"Utdataspråk i mottatte meldinger",
+							language_choice_output_sent:		"Utdataspråk i dine sendte meldinger",
+							language_selection_channel:			"Språkvalg vil bli endret spesifikt for denne kanalen",
+							language_selection_global:			"Språkvalg vil bli endret for alle servere",
+							language_selection_server:			"Språkvalg vil bli endret spesifikt for denne serveren",
 							popout_translateoption:				"Oversette",
 							popout_untranslateoption:			"Ikke oversett",
 							toast_translating:					"Oversetter",
 							toast_translating_failed:			"Kunne ikke oversette",
 							toast_translating_tryanother:		"Prøv en annen oversetter",
-							translated_watermark:				"oversatt"
+							translate_your_message:				"Oversett meldingene dine før sending",
+							translated_watermark:				"oversatt",
+							translator_engine:					"Oversetter"
 						};
 					case "pl":		// Polish
 						return {
-							context_translator:					"Wyszukaj tłumaczenie",
+							backup_engine:						"Backup-Tłumacz",
+							backup_engine_warning:				"Użyje Backup-Tłumacz",
 							context_messagetranslateoption:		"Przetłumacz wiadomość",
 							context_messageuntranslateoption:	"Nieprzetłumacz wiadomość",
+							context_translator:					"Wyszukaj tłumaczenie",
+							detect_language:					"Wykryj język",
+							error_dailylimit:					"Osiągnięto dzienny limit żądań.",
+							error_hourlylimit:					"Osiągnięto godzinowy limit żądań.",
+							error_keyoutdated:					"Klucz API jest nieaktualny.",
+							error_monthlylimit:					"Osiągnięto miesięczny limit żądań.",
+							error_serverdown:					"Serwer tłumaczeń może być w trybie offline.",
+							exception_text:						"Słowa zaczynające się od {{var0}} będą ignorowane",
+							general_addTranslateButton:			"Dodaje przycisk Tłumacz do obszaru tekstowego kanału",
+							general_sendOriginalMessage:		"Wysyła również oryginalną wiadomość podczas tłumaczenia wysłanej wiadomości",
+							general_showOriginalMessage:		"Pokazuje również oryginalną wiadomość podczas tłumaczenia otrzymanej wiadomości",
+							general_usePerChatTranslation:		"Włącza/wyłącza stan przycisku translatora na kanał, a nie globalnie",
+							language_choice_input_received:		"Język wprowadzania w odebranych wiadomościach",
+							language_choice_input_sent:			"Język wprowadzania w wysyłanych wiadomościach",
+							language_choice_output_received:	"Język wyjściowy w odebranych wiadomościach",
+							language_choice_output_sent:		"Język wyjściowy w wysłanych wiadomościach",
+							language_selection_channel:			"Wybór języka zostanie zmieniony specjalnie dla tego kanału",
+							language_selection_global:			"Wybór języka zostanie zmieniony dla wszystkich serwerów",
+							language_selection_server:			"Wybór języka zostanie zmieniony specjalnie dla tego serwera",
 							popout_translateoption:				"Tłumaczyć",
 							popout_untranslateoption:			"Nie przetłumacz",
 							toast_translating:					"Tłumaczenie",
 							toast_translating_failed:			"Nie udało się przetłumaczyć",
 							toast_translating_tryanother:		"Wypróbuj innego tłumacza",
-							translated_watermark:				"przetłumaczony"
+							translate_your_message:				"Przetłumacz swoje wiadomości przed wysłaniem",
+							translated_watermark:				"przetłumaczony",
+							translator_engine:					"Tłumacz"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
-							context_translator:					"Tradução de pesquisa",
+							backup_engine:						"Backup-Tradutor",
+							backup_engine_warning:				"Usará o Backup-Tradutor",
 							context_messagetranslateoption:		"Traduzir mensagem",
 							context_messageuntranslateoption:	"Mensagem não traduzida",
+							context_translator:					"Tradução de pesquisa",
+							detect_language:					"Detectar idioma",
+							error_dailylimit:					"Limite de solicitações diárias atingido.",
+							error_hourlylimit:					"Limite de solicitação por hora atingido.",
+							error_keyoutdated:					"Chave de API desatualizada.",
+							error_monthlylimit:					"Limite de solicitação mensal atingido.",
+							error_serverdown:					"O servidor de tradução pode estar offline.",
+							exception_text:						"Palavras que começam com {{var0}} serão ignoradas",
+							general_addTranslateButton:			"Adiciona um botão de tradução à área de texto do canal",
+							general_sendOriginalMessage:		"Também envia a Mensagem original ao traduzir sua Mensagem enviada",
+							general_showOriginalMessage:		"Também mostra a Mensagem original ao traduzir uma Mensagem recebida",
+							general_usePerChatTranslation:		"Habilita/desabilita o estado do botão do tradutor por canal e não globalmente",
+							language_choice_input_received:		"Idioma de entrada nas mensagens recebidas",
+							language_choice_input_sent:			"Idioma de entrada em suas mensagens enviadas",
+							language_choice_output_received:	"Idioma de saída nas mensagens recebidas",
+							language_choice_output_sent:		"Idioma de saída em suas mensagens enviadas",
+							language_selection_channel:			"A seleção de idioma será alterada especificamente para este canal",
+							language_selection_global:			"A seleção de idioma será alterada para todos os servidores",
+							language_selection_server:			"A seleção de idioma será alterada especificamente para este servidor",
 							popout_translateoption:				"Traduzir",
 							popout_untranslateoption:			"Não traduzido",
 							toast_translating:					"Traduzindo",
 							toast_translating_failed:			"Falha ao traduzir",
 							toast_translating_tryanother:		"Tente outro tradutor",
-							translated_watermark:				"traduzido"
+							translate_your_message:				"Traduza suas mensagens antes de enviar",
+							translated_watermark:				"traduzido",
+							translator_engine:					"Tradutor"
 						};
 					case "ro":		// Romanian
 						return {
-							context_translator:					"Căutare traducere",
+							backup_engine:						"Backup-Traducător",
+							backup_engine_warning:				"Va folosi Backup-Traducător",
 							context_messagetranslateoption:		"Traduceți mesajul",
 							context_messageuntranslateoption:	"Untraduceți mesajul",
+							context_translator:					"Căutare traducere",
+							detect_language:					"Detecteaza limba",
+							error_dailylimit:					"Limita zilnică de solicitare a fost atinsă.",
+							error_hourlylimit:					"Limita orară de solicitare a fost atinsă.",
+							error_keyoutdated:					"API-Key este învechită.",
+							error_monthlylimit:					"Limita lunară de solicitare a fost atinsă.",
+							error_serverdown:					"Serverul de traducere ar putea fi offline.",
+							exception_text:						"Cuvintele care încep cu {{var0}} vor fi ignorate",
+							general_addTranslateButton:			"Adaugă un buton de traducere în zona de text a canalului",
+							general_sendOriginalMessage:		"De asemenea, trimite mesajul original atunci când traduceți mesajul trimis",
+							general_showOriginalMessage:		"Afișează, de asemenea, mesajul original atunci când traduceți un mesaj primit",
+							general_usePerChatTranslation:		"Activează/dezactivează starea butonului de traducător pe canal și nu la nivel global",
+							language_choice_input_received:		"Limba de intrare în mesajele primite",
+							language_choice_input_sent:			"Introduceți limba în mesajele trimise",
+							language_choice_output_received:	"Limba de ieșire în mesajele primite",
+							language_choice_output_sent:		"Limba de ieșire în mesajele trimise",
+							language_selection_channel:			"Selectarea limbii va fi modificată special pentru acest canal",
+							language_selection_global:			"Selectarea limbii va fi modificată pentru toate serverele",
+							language_selection_server:			"Selectarea limbii va fi modificată special pentru acest Server",
 							popout_translateoption:				"Traduceți",
 							popout_untranslateoption:			"Netradus",
 							toast_translating:					"Traducere",
 							toast_translating_failed:			"Nu s-a putut traduce",
 							toast_translating_tryanother:		"Încercați un alt traducător",
-							translated_watermark:				"tradus"
+							translate_your_message:				"Traduceți mesajele înainte de a le trimite",
+							translated_watermark:				"tradus",
+							translator_engine:					"Traducător"
 						};
 					case "ru":		// Russian
 						return {
-							context_translator:					"Искать перевод",
+							backup_engine:						"Резервный-Переводчик",
+							backup_engine_warning:				"Буду использовать Резервный-Переводчик",
 							context_messagetranslateoption:		"Перевести сообщение",
 							context_messageuntranslateoption:	"Непереведенное сообщение",
+							context_translator:					"Искать перевод",
+							detect_language:					"Определить язык",
+							error_dailylimit:					"Достигнут дневной лимит запросов.",
+							error_hourlylimit:					"Достигнут лимит почасовых запросов.",
+							error_keyoutdated:					"API-ключ устарел.",
+							error_monthlylimit:					"Достигнут месячный лимит запросов.",
+							error_serverdown:					"Сервер переводов может быть отключен.",
+							exception_text:						"Слова, начинающиеся с {{var0}}, будут игнорироваться.",
+							general_addTranslateButton:			"Добавляет кнопку перевода в текстовую область канала",
+							general_sendOriginalMessage:		"Также отправляет исходное сообщение при переводе отправленного сообщения.",
+							general_showOriginalMessage:		"Также показывает исходное сообщение при переводе полученного сообщения.",
+							general_usePerChatTranslation:		"Включает/отключает состояние кнопки переводчика для каждого канала, а не глобально",
+							language_choice_input_received:		"Язык ввода в полученных сообщениях",
+							language_choice_input_sent:			"Язык ввода в ваших отправленных сообщениях",
+							language_choice_output_received:	"Язык вывода в полученных сообщениях",
+							language_choice_output_sent:		"Язык вывода в ваших отправленных сообщениях",
+							language_selection_channel:			"Выбор языка будет изменен специально для этого канала.",
+							language_selection_global:			"Выбор языка будет изменен для всех серверов.",
+							language_selection_server:			"Выбор языка будет изменен специально для этого сервера",
 							popout_translateoption:				"Переведите",
 							popout_untranslateoption:			"Неперевести",
 							toast_translating:					"Идет перевод",
 							toast_translating_failed:			"Не удалось перевести",
 							toast_translating_tryanother:		"Попробуйте другой переводчик",
-							translated_watermark:				"переведено"
+							translate_your_message:				"Переводите свои сообщения перед отправкой",
+							translated_watermark:				"переведено",
+							translator_engine:					"Переводчик"
 						};
 					case "sv":		// Swedish
 						return {
-							context_translator:					"Sök översättning",
+							backup_engine:						"Backup-Översättare",
+							backup_engine_warning:				"Kommer att använda Backup-Översättare",
 							context_messagetranslateoption:		"Översätt meddelande",
 							context_messageuntranslateoption:	"Untranslate meddelande",
+							context_translator:					"Sök översättning",
+							detect_language:					"Upptäck språk",
+							error_dailylimit:					"Daglig förfrågningsgräns nådd.",
+							error_hourlylimit:					"Begäran per timme nådd.",
+							error_keyoutdated:					"API-nyckel föråldrad.",
+							error_monthlylimit:					"Gränsen för månatlig begäran har nåtts.",
+							error_serverdown:					"Översättningsservern kan vara offline.",
+							exception_text:						"Ord som börjar med {{var0}} kommer att ignoreras",
+							general_addTranslateButton:			"Lägger till en Översätt-knapp i kanaltextområdet",
+							general_sendOriginalMessage:		"Skickar också det ursprungliga meddelandet när du översätter ditt skickade meddelande",
+							general_showOriginalMessage:		"Visar även det ursprungliga meddelandet när ett mottaget meddelande översätts",
+							general_usePerChatTranslation:		"Aktiverar/inaktiverar översättarknappens status per kanal och inte globalt",
+							language_choice_input_received:		"Inmatningsspråk i mottagna meddelanden",
+							language_choice_input_sent:			"Inmatningsspråk i dina skickade meddelanden",
+							language_choice_output_received:	"Utmatningsspråk i mottagna meddelanden",
+							language_choice_output_sent:		"Utmatningsspråk i dina skickade meddelanden",
+							language_selection_channel:			"Språkval kommer att ändras specifikt för denna kanal",
+							language_selection_global:			"Språkval kommer att ändras för alla servrar",
+							language_selection_server:			"Språkval kommer att ändras specifikt för denna server",
 							popout_translateoption:				"Översätt",
 							popout_untranslateoption:			"Untranslate",
 							toast_translating:					"Översätter",
 							toast_translating_failed:			"Det gick inte att översätta",
 							toast_translating_tryanother:		"Prova en annan översättare",
-							translated_watermark:				"översatt"
+							translate_your_message:				"Översätt dina meddelanden innan du skickar",
+							translated_watermark:				"översatt",
+							translator_engine:					"Översättare"
 						};
 					case "th":		// Thai
 						return {
-							context_translator:					"ค้นหาคำแปล",
+							backup_engine:						"สำรอง-นักแปล",
+							backup_engine_warning:				"จะใช้การสำรองข้อมูล-นักแปล",
 							context_messagetranslateoption:		"แปลข้อความ",
 							context_messageuntranslateoption:	"ยกเลิกการแปลข้อความ",
+							context_translator:					"ค้นหาคำแปล",
+							detect_language:					"ตรวจจับภาษา",
+							error_dailylimit:					"ถึงขีดจำกัดคำขอรายวันแล้ว",
+							error_hourlylimit:					"ถึงขีดจำกัดคำขอรายชั่วโมงแล้ว",
+							error_keyoutdated:					"API-Key ล้าสมัยแล้ว",
+							error_monthlylimit:					"ถึงขีดจำกัดคำขอรายเดือนแล้ว",
+							error_serverdown:					"เซิร์ฟเวอร์การแปลอาจออฟไลน์อยู่",
+							exception_text:						"คำที่ขึ้นต้นด้วย {{var0}} จะถูกละเว้น",
+							general_addTranslateButton:			"เพิ่มปุ่มแปลภาษาไปยัง Textarea ของช่อง",
+							general_sendOriginalMessage:		"ส่งข้อความต้นฉบับเมื่อแปลข้อความที่ส่งของคุณ",
+							general_showOriginalMessage:		"ยังแสดงข้อความต้นฉบับเมื่อแปลข้อความที่ได้รับ",
+							general_usePerChatTranslation:		"เปิด/ปิดสถานะปุ่มนักแปลต่อช่องและไม่ใช่ทั่วโลก",
+							language_choice_input_received:		"ป้อนภาษาในข้อความที่ได้รับ",
+							language_choice_input_sent:			"ป้อนภาษาในข้อความที่คุณส่ง",
+							language_choice_output_received:	"ภาษาเอาต์พุตในข้อความที่ได้รับ",
+							language_choice_output_sent:		"ภาษาที่ส่งออกในข้อความที่ส่งของคุณ",
+							language_selection_channel:			"การเลือกภาษาจะมีการเปลี่ยนแปลงเฉพาะสำหรับช่องนี้",
+							language_selection_global:			"การเลือกภาษาจะมีการเปลี่ยนแปลงสำหรับเซิร์ฟเวอร์ทั้งหมด",
+							language_selection_server:			"การเลือกภาษาจะมีการเปลี่ยนแปลงโดยเฉพาะสำหรับเซิร์ฟเวอร์นี้",
 							popout_translateoption:				"แปลภาษา",
 							popout_untranslateoption:			"ไม่แปล",
 							toast_translating:					"กำลังแปล",
 							toast_translating_failed:			"แปลไม่สำเร็จ",
 							toast_translating_tryanother:		"ลองใช้นักแปลคนอื่น",
-							translated_watermark:				"แปล"
+							translate_your_message:				"แปลข้อความของคุณก่อนส่ง",
+							translated_watermark:				"แปล",
+							translator_engine:					"นักแปล"
 						};
 					case "tr":		// Turkish
 						return {
-							context_translator:					"Çeviri ara",
+							backup_engine:						"Yedekleme-Çevirmen",
+							backup_engine_warning:				"Yedekleme-Çevirmen kullanacak",
 							context_messagetranslateoption:		"Mesajı Çevir",
 							context_messageuntranslateoption:	"Çeviriyi Kaldır Mesajı",
+							context_translator:					"Çeviri ara",
+							detect_language:					"Dili Algıla",
+							error_dailylimit:					"Günlük İstek Sınırına ulaşıldı.",
+							error_hourlylimit:					"Saatlik İstek Sınırına ulaşıldı.",
+							error_keyoutdated:					"API Anahtarı güncel değil.",
+							error_monthlylimit:					"Aylık İstek Sınırına ulaşıldı.",
+							error_serverdown:					"Çeviri Sunucusu çevrimdışı olabilir.",
+							exception_text:						"{{var0}} ile başlayan kelimeler yok sayılacak",
+							general_addTranslateButton:			"Kanal Metin Alanına Çevir Düğmesi Ekler",
+							general_sendOriginalMessage:		"Gönderilen Mesajınızı çevirirken orijinal Mesajı da gönderir",
+							general_showOriginalMessage:		"Alınan bir Mesajı tercüme ederken orijinal Mesajı da gösterir.",
+							general_usePerChatTranslation:		"Genel olarak değil, Kanal başına Çevirmen Düğmesi Durumunu Etkinleştirir/Devre Dışı Bırakır",
+							language_choice_input_received:		"Alınan Mesajlarda Giriş Dili",
+							language_choice_input_sent:			"Gönderilen Mesajlarınızda Dil Girin",
+							language_choice_output_received:	"Alınan Mesajlarda Çıktı Dili",
+							language_choice_output_sent:		"Gönderilen Mesajlarınızda Çıktı Dili",
+							language_selection_channel:			"Dil Seçimi bu Kanal için özel olarak değiştirilecektir.",
+							language_selection_global:			"Tüm Sunucular için Dil Seçimi değiştirilecek",
+							language_selection_server:			"Dil Seçimi bu Sunucuya özel olarak değiştirilecektir.",
 							popout_translateoption:				"Çevirmek",
 							popout_untranslateoption:			"Çevirmeyi kaldır",
 							toast_translating:					"Çeviri",
 							toast_translating_failed:			"Tercüme edilemedi",
 							toast_translating_tryanother:		"Başka bir Çevirmen deneyin",
-							translated_watermark:				"tercüme"
+							translate_your_message:				"Göndermeden önce Mesajlarınızı çevirin",
+							translated_watermark:				"tercüme",
+							translator_engine:					"Çevirmen"
 						};
 					case "uk":		// Ukrainian
 						return {
-							context_translator:					"Пошук перекладу",
+							backup_engine:						"Резервний-перекладач",
+							backup_engine_warning:				"Використовуватиме Резервний-Перекладач",
 							context_messagetranslateoption:		"Перекласти повідомлення",
 							context_messageuntranslateoption:	"Неперекладене повідомлення",
+							context_translator:					"Пошук перекладу",
+							detect_language:					"Визначити мову",
+							error_dailylimit:					"Денний ліміт запитів досягнуто.",
+							error_hourlylimit:					"Досягнуто погодинного ліміту запитів.",
+							error_keyoutdated:					"API-ключ застарів.",
+							error_monthlylimit:					"Досягнуто місячного ліміту запитів.",
+							error_serverdown:					"Сервер перекладу може бути офлайн.",
+							exception_text:						"Слова, що починаються з {{var0}}, ігноруватимуться",
+							general_addTranslateButton:			"Додає кнопку перекладу до текстової області каналу",
+							general_sendOriginalMessage:		"Також надсилає оригінальне повідомлення під час перекладу вашого надісланого повідомлення",
+							general_showOriginalMessage:		"Також показує оригінальне повідомлення під час перекладу отриманого повідомлення",
+							general_usePerChatTranslation:		"Вмикає/вимикає стан кнопки перекладача для кожного каналу, а не глобально",
+							language_choice_input_received:		"Мова введення в отриманих повідомленнях",
+							language_choice_input_sent:			"Мова введення у ваших надісланих повідомленнях",
+							language_choice_output_received:	"Мова виводу в отриманих повідомленнях",
+							language_choice_output_sent:		"Мова виведення у ваших надісланих повідомленнях",
+							language_selection_channel:			"Вибір мови буде змінено спеціально для цього каналу",
+							language_selection_global:			"Вибір мови буде змінено для всіх серверів",
+							language_selection_server:			"Вибір мови буде змінено спеціально для цього сервера",
 							popout_translateoption:				"Перекласти",
 							popout_untranslateoption:			"Неперекласти",
 							toast_translating:					"Переклад",
 							toast_translating_failed:			"Не вдалося перекласти",
 							toast_translating_tryanother:		"Спробуйте іншого перекладача",
-							translated_watermark:				"переклав"
+							translate_your_message:				"Перекладіть свої повідомлення перед надсиланням",
+							translated_watermark:				"переклав",
+							translator_engine:					"Перекладач"
 						};
 					case "vi":		// Vietnamese
 						return {
-							context_translator:					"Tìm kiếm bản dịch",
+							backup_engine:						"Backup-Gười phiên dịch",
+							backup_engine_warning:				"Sẽ sử dụng Backup-Gười phiên dịch",
 							context_messagetranslateoption:		"Dịch tin nhắn",
 							context_messageuntranslateoption:	"Thư chưa dịch",
+							context_translator:					"Tìm kiếm bản dịch",
+							detect_language:					"Phát hiện ngôn ngữ",
+							error_dailylimit:					"Đã đạt đến Giới hạn Yêu cầu Hàng ngày.",
+							error_hourlylimit:					"Đã đạt đến Giới hạn Yêu cầu Hàng giờ.",
+							error_keyoutdated:					"API-Key đã lỗi thời.",
+							error_monthlylimit:					"Đã đạt đến Giới hạn Yêu cầu Hàng tháng.",
+							error_serverdown:					"Máy chủ dịch có thể ngoại tuyến.",
+							exception_text:						"Các từ bắt đầu bằng {{var0}} sẽ bị bỏ qua",
+							general_addTranslateButton:			"Thêm nút dịch vào vùng văn bản của kênh",
+							general_sendOriginalMessage:		"Đồng thời gửi Tin nhắn gốc khi dịch Tin nhắn đã gửi của bạn",
+							general_showOriginalMessage:		"Đồng thời hiển thị Tin nhắn gốc khi dịch một Tin nhắn đã nhận",
+							general_usePerChatTranslation:		"Bật / tắt Trạng thái nút dịch trên mỗi kênh và không bật trên toàn cầu",
+							language_choice_input_received:		"Nhập Ngôn ngữ trong Tin nhắn đã nhận",
+							language_choice_input_sent:			"Nhập Ngôn ngữ trong Tin nhắn đã gửi của bạn",
+							language_choice_output_received:	"Ngôn ngữ đầu ra trong Tin nhắn đã nhận",
+							language_choice_output_sent:		"Ngôn ngữ đầu ra trong Tin nhắn đã gửi của bạn",
+							language_selection_channel:			"Lựa chọn ngôn ngữ sẽ được thay đổi cụ thể cho Kênh này",
+							language_selection_global:			"Lựa chọn ngôn ngữ sẽ được thay đổi cho tất cả các Máy chủ",
+							language_selection_server:			"Lựa chọn ngôn ngữ sẽ được thay đổi cụ thể cho Máy chủ này",
 							popout_translateoption:				"Phiên dịch",
 							popout_untranslateoption:			"Chưa dịch",
 							toast_translating:					"Phiên dịch",
 							toast_translating_failed:			"Không dịch được",
 							toast_translating_tryanother:		"Thử một Trình dịch khác",
-							translated_watermark:				"đã dịch"
+							translate_your_message:				"Dịch Tin nhắn của bạn trước khi gửi",
+							translated_watermark:				"đã dịch",
+							translator_engine:					"Người phiên dịch"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
-							context_translator:					"搜索翻译",
+							backup_engine:						"备份翻译器",
+							backup_engine_warning:				"将使用备份翻译器",
 							context_messagetranslateoption:		"翻译消息",
 							context_messageuntranslateoption:	"取消翻译消息",
+							context_translator:					"搜索翻译",
+							detect_language:					"检测语言",
+							error_dailylimit:					"已达到每日请求限制。",
+							error_hourlylimit:					"已达到每小时请求限制。",
+							error_keyoutdated:					"API 密钥已过时。",
+							error_monthlylimit:					"已达到每月请求限制。",
+							error_serverdown:					"翻译服务器可能离线。",
+							exception_text:						"以 {{var0}} 开头的单词将被忽略",
+							general_addTranslateButton:			"将翻译按钮添加到频道文本区域",
+							general_sendOriginalMessage:		"翻译您发送的消息时也会发送原始消息",
+							general_showOriginalMessage:		"翻译收到的消息时还显示原始消息",
+							general_usePerChatTranslation:		"启用/禁用每个通道而不是全局的转换器按钮状态",
+							language_choice_input_received:		"收到消息中的输入语言",
+							language_choice_input_sent:			"在您发送的消息中输入语言",
+							language_choice_output_received:	"接收消息中的输出语言",
+							language_choice_output_sent:		"您发送的消息中的输出语言",
+							language_selection_channel:			"将专门为此频道更改语言选择",
+							language_selection_global:			"将更改所有服务器的语言选择",
+							language_selection_server:			"语言选择将专门为此服务器更改",
 							popout_translateoption:				"翻译",
 							popout_untranslateoption:			"取消翻译",
 							toast_translating:					"正在翻译",
 							toast_translating_failed:			"翻译失败",
 							toast_translating_tryanother:		"尝试其它翻译器",
-							translated_watermark:				"已翻译"
+							translate_your_message:				"发送前翻译您的消息",
+							translated_watermark:				"已翻译",
+							translator_engine:					"译者"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
-							context_translator:					"搜尋翻譯",
+							backup_engine:						"備份翻譯器",
+							backup_engine_warning:				"將使用備份翻譯器",
 							context_messagetranslateoption:		"翻譯訊息",
 							context_messageuntranslateoption:	"取消翻譯訊息",
+							context_translator:					"搜尋翻譯",
+							detect_language:					"檢測語言",
+							error_dailylimit:					"已達到每日請求限制。",
+							error_hourlylimit:					"已達到每小時請求限制。",
+							error_keyoutdated:					"API 密鑰已過時。",
+							error_monthlylimit:					"已達到每月請求限制。",
+							error_serverdown:					"翻譯服務器可能離線。",
+							exception_text:						"以 {{var0}} 開頭的單詞將被忽略",
+							general_addTranslateButton:			"將翻譯按鈕添加到頻道文本區域",
+							general_sendOriginalMessage:		"翻譯您發送的消息時也會發送原始消息",
+							general_showOriginalMessage:		"翻譯收到的消息時還顯示原始消息",
+							general_usePerChatTranslation:		"啟用/禁用每個通道而不是全局的轉換器按鈕狀態",
+							language_choice_input_received:		"收到消息中的輸入語言",
+							language_choice_input_sent:			"在您發送的消息中輸入語言",
+							language_choice_output_received:	"接收消息中的輸出語言",
+							language_choice_output_sent:		"您發送的消息中的輸出語言",
+							language_selection_channel:			"將專門為此頻道更改語言選擇",
+							language_selection_global:			"將更改所有服務器的語言選擇",
+							language_selection_server:			"語言選擇將專門為此服務器更改",
 							popout_translateoption:				"翻譯",
 							popout_untranslateoption:			"取消翻譯",
 							toast_translating:					"正在翻譯",
 							toast_translating_failed:			"無法翻譯",
 							toast_translating_tryanother:		"嘗試其它翻譯器",
-							translated_watermark:				"已翻譯"
+							translate_your_message:				"發送前翻譯您的消息",
+							translated_watermark:				"已翻譯",
+							translator_engine:					"譯者"
 						};
 					default:		// English
 						return {
-							context_translator:					"Search Translation",
+							backup_engine:						"Backup-Translator",
+							backup_engine_warning:				"Will use Backup-Translator",
 							context_messagetranslateoption:		"Translate Message",
 							context_messageuntranslateoption:	"Untranslate Message",
+							context_translator:					"Search Translation",
+							detect_language:					"Detect Language",
+							error_dailylimit:					"Daily Request Limit reached.",
+							error_hourlylimit:					"Hourly Request Limit reached.",
+							error_keyoutdated:					"API-Key outdated.",
+							error_monthlylimit:					"Monthly Request Limit reached.",
+							error_serverdown:					"Translation Server might be offline.",
+							exception_text:						"Words starting with {{var0}} will be ignored",
+							general_addTranslateButton:			"Adds a Translate Button to the Channel Textarea",
+							general_sendOriginalMessage:		"Also sends the original Message when translating your sent Message",
+							general_showOriginalMessage:		"Also shows the original Message when translating a received Message",
+							general_usePerChatTranslation:		"Enables/Disables the Translator Button State per Channel and not globally",
+							language_choice_input_received:		"Input Language in received Messages",
+							language_choice_input_sent:			"Input Language in your sent Messages",
+							language_choice_output_received:	"Output Language in received Messages",
+							language_choice_output_sent:		"Output Language in your sent Messages",
+							language_selection_channel:			"Language Selection will be changed specifically for this Channel",
+							language_selection_global:			"Language Selection will be changed for all Servers",
+							language_selection_server:			"Language Selection will be changed specifically for this Server",
 							popout_translateoption:				"Translate",
 							popout_untranslateoption:			"Untranslate",
 							toast_translating:					"Translating",
 							toast_translating_failed:			"Failed to translate",
 							toast_translating_tryanother:		"Try another Translator",
-							translated_watermark:				"translated"
+							translate_your_message:				"Translate your Messages before sending",
+							translated_watermark:				"translated",
+							translator_engine:					"Translator"
 						};
 				}
 			}
