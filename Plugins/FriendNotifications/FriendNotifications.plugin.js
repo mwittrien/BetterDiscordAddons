@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.2
+ * @version 1.8.3
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,10 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		added: {
+			"Show Timestamp": "Added option to show the timestamp in the notification",
+			"Screensharing": "Added option to notify you when a user starts screensharing in one of your servers"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -92,6 +95,10 @@ module.exports = (_ => {
 			streaming: {
 				value: false,
 				checkActivity: true,
+				sound: true
+			},
+			screensharing: {
+				value: false,
 				sound: true
 			},
 			offline: {
@@ -202,10 +209,11 @@ module.exports = (_ => {
 
 				this.defaults = {
 					general: {
-						addOnlineCount:		{value: true, 	description: "Add an Online Friend Counter to the Server List (Click to open Time Log)"},
-						showDiscriminator:	{value: false, 	description: "Add the User Discriminator"},
-						muteOnDND:			{value: false, 	description: "Do not notify me when I am in DnD Status"},
-						openOnClick:		{value: false, 	description: "Open the DM when you click a Notification"}
+						addOnlineCount:		{value: true, 	description: "Adds an Online Friend Counter to the Server List (Click to open Time Log)"},
+						showDiscriminator:	{value: false, 	description: "Adds the User Discriminator"},
+						showTimestamp:		{value: false, 	description: "Adds the Timestamp"},
+						muteOnDND:			{value: false, 	description: "Does not notify you when you are in DnD Status"},
+						openOnClick:		{value: false, 	description: "Opens the DM when you click a Notification"}
 					},
 					notificationStrings: {
 						online: 			{value: "$user changed status to '$status'"},
@@ -214,6 +222,7 @@ module.exports = (_ => {
 						playing: 			{value: "$user started playing '$game'"},
 						listening: 			{value: "$user started listening to '$song'"},
 						streaming: 			{value: "$user started streaming '$game'"},
+						screensharing: 		{value: "$user started screensharing"},
 						offline: 			{value: "$user changed status to '$status'"},
 						login: 				{value: "$user just logged in '$status'"},
 						custom: 			{value: "$user changed status to '$custom'"}
@@ -224,7 +233,7 @@ module.exports = (_ => {
 					},
 					amounts: {
 						toastTime:			{value: 5, 		min: 1,		description: "Amount of Seconds a Toast Notification stays on Screen: "},
-						checkInterval:		{value: 10, 	min: 5,		description: "Check Users every X Seconds: "}
+						checkInterval:		{value: 10, 	min: 5,		description: "Checks Users every X Seconds: "}
 					}
 				};
 			
@@ -268,10 +277,6 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				// REMOVE 09.04.2022
-				let observed = BDFDB.DataUtils.load(this, "observed");
-				if (observed) BDFDB.DataUtils.save(observed, this, "observed");
-				
 				this.startInterval();
 
 				this.forceUpdateAll();
@@ -756,10 +761,12 @@ module.exports = (_ => {
 			}
 
 			getStatusWithMobileAndActivity (id, config, clientStatuses) {
+				let voiceState = BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds().map(BDFDB.LibraryModules.VoiceUtils.getVoiceStates).map(BDFDB.ObjectUtils.toArray).flat(10).find(n => n.selfStream & n.userId == id && BDFDB.LibraryModules.ChannelStore.getChannel(n.channelId) && BDFDB.UserUtils.can("VIEW_CHANNEL", BDFDB.UserUtils.me.id, n.channelId));
 				let status = {
 					name: BDFDB.UserUtils.getStatus(id),
 					activity: null,
 					custom: false,
+					screensharing: voiceState ? voiceState.channelId : null,
 					mobile: clientStatuses && clientStatuses[id] && Object.keys(clientStatuses[id]).length == 1 && !!clientStatuses[id].mobile
 				};
 				let activity = BDFDB.UserUtils.getActivity(id) || BDFDB.UserUtils.getCustomStatus(id);
@@ -767,7 +774,7 @@ module.exports = (_ => {
 					let isCustom = activity.type == BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS;
 					let activityName = isCustom ? "custom" : BDFDB.DiscordConstants.ActivityTypes[activity.type].toLowerCase();
 					if (statuses[activityName] && config[activityName]) {
-						Object.assign(status, {name: isCustom ? status.name : activityName, activity: Object.assign({}, activity), custom: isCustom});
+						Object.assign(status, {name: isCustom ? status.name : activityName, activity: Object.assign({}, activity), custom: isCustom, screensharing: false});
 						if (activity.type == BDFDB.DiscordConstants.ActivityTypes.STREAMING || activity.type == BDFDB.DiscordConstants.ActivityTypes.LISTENING) delete status.activity.name;
 						else if (activity.type == BDFDB.DiscordConstants.ActivityTypes.PLAYING) {
 							delete status.activity.details;
@@ -812,12 +819,14 @@ module.exports = (_ => {
 					for (let id in observedUsers) if (!observedUsers[id].disabled) {
 						let user = BDFDB.LibraryModules.UserStore.getUser(id);
 						let status = this.getStatusWithMobileAndActivity(id, observedUsers[id], clientStatuses);
-						let customChanged = false, loginNotice = false;
+						let transitionChannelId = null;
+						let customChanged = false, loginNotice = false, screensharingNotice = false;
 						if (user && (!observedUsers[id][status.name] && observedUsers[id].login && status.name != BDFDB.DiscordConstants.StatusTypes.OFFLINE && userStatusStore[id].name == BDFDB.DiscordConstants.StatusTypes.OFFLINE && (loginNotice = true) || observedUsers[id][status.name] && (
 							observedUsers[id].custom && (
 								userStatusStore[id].custom != status.custom && ((customChanged = status.custom) || true) ||
 								(customChanged = status.custom && !this.activityIsSame(id, status))
 							) ||
+							observedUsers[id].screensharing && status.screensharing && userStatusStore[id].screensharing != status.screensharing  && (screensharingNotice = true) ||
 							observedUsers[id].mobile && userStatusStore[id].mobile != status.mobile ||
 							statuses[status.name].checkActivity && !this.activityIsSame(id, status) ||
 							userStatusStore[id].name != status.name
@@ -830,7 +839,7 @@ module.exports = (_ => {
 							let statusName = this.getStatusName(id, status);
 							let oldStatusName = this.getStatusName(id, userStatusStore[id]);
 							
-							let string = this.settings.notificationStrings[customChanged ? "custom" : loginNotice ? "login" : status.name] || "'$user' changed status to '$status'";
+							let string = this.settings.notificationStrings[screensharingNotice ? "screensharing" : customChanged ? "custom" : loginNotice ? "login" : status.name] || "'$user' changed status to '$status'";
 							let toastString = BDFDB.StringUtils.htmlEscape(string).replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.StringUtils.htmlEscape(name)}</strong>${this.settings.general.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/'{0,1}\$statusOld'{0,1}/g, `<strong>${oldStatusName}</strong>`).replace(/'{0,1}\$status'{0,1}/g, `<strong>${statusName}</strong>`);
 							if (status.activity) toastString = toastString.replace(/'{0,1}\$song'{0,1}|'{0,1}\$game'{0,1}/g, `<strong>${status.activity.name || status.activity.details || ""}</strong>`).replace(/'{0,1}\$artist'{0,1}|'{0,1}\$custom'{0,1}/g, `<strong>${[status.activity.emoji && status.activity.emoji.name, status.activity.state].filter(n => n).join(" ") || ""}</strong>`);
 							
@@ -850,10 +859,16 @@ module.exports = (_ => {
 								
 								let openChannel = _ => {
 									if (this.settings.general.openOnClick) {
-										let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id)
-										if (DMid) BDFDB.LibraryModules.ChannelUtils.selectPrivateChannel(DMid);
-										else BDFDB.LibraryModules.DirectMessageUtils.openPrivateChannel(user.id);
-										BDFDB.LibraryModules.WindowUtils.focus();
+										if (status.screensharing) {
+											BDFDB.LibraryModules.ChannelUtils.selectVoiceChannel(status.screensharing);
+											BDFDB.LibraryModules.WindowUtils.focus();
+										}
+										else {
+											let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id)
+											if (DMid) BDFDB.LibraryModules.ChannelUtils.selectPrivateChannel(DMid);
+											else BDFDB.LibraryModules.DirectMessageUtils.openPrivateChannel(user.id);
+											BDFDB.LibraryModules.WindowUtils.focus();
+										}
 									}
 								};
 								if ((loginNotice ? observedUsers[id].login : observedUsers[id][status.name]) == notificationTypes.DESKTOP.value) {
@@ -861,18 +876,28 @@ module.exports = (_ => {
 									if (status.activity) desktopString = desktopString.replace(/\$song|\$game/g, status.activity.name || status.activity.details || "").replace(/\$artist|\$custom/g, [status.activity.emoji && status.activity.emoji.name, status.activity.state].filter(n => n).join(" ") || "");
 									if (status.mobile) desktopString += " (mobile)";
 									let notificationSound = this.settings.notificationSounds["desktop" + status.name] || {};
-									BDFDB.NotificationUtils.desktop(desktopString, {
+									BDFDB.NotificationUtils.desktop([desktopString, this.settings.general.showTimeLog && BDFDB.LibraryComponents.DateInput.format(this.settings.dates.logDate, timestamp)].filter(n => n).join("\n\n"), {
 										icon: avatar,
 										silent: notificationSound.mute,
 										sound: notificationSound.song,
 										onClick: openChannel
 									});
 								}
-								else BDFDB.NotificationUtils.toast(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+								else BDFDB.NotificationUtils.toast(BDFDB.ReactUtils.createElement("div", {
 									children: [
-										BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(toastString)),
-										this.createStatusDot(statusType, status.mobile, {marginLeft: 6})
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+											align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+											children: [
+												BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(toastString)),
+												this.createStatusDot(statusType, status.mobile, {marginLeft: 6})
+											]
+										}),
+										this.settings.general.showTimestamp && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+											className: BDFDB.disCN.margintop4,
+											size: BDFDB.LibraryComponents.TextElement.Sizes.SIZE_12,
+											color: BDFDB.LibraryComponents.TextElement.Colors.MUTED,
+											children: BDFDB.LibraryComponents.DateInput.format(this.settings.dates.logDate, timestamp)
+										})
 									]
 								}), {
 									timeout: this.settings.amounts.toastTime * 1000,
