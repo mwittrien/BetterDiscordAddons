@@ -771,8 +771,15 @@ body::after {
 
 /* ~~~~		6.		CHAT							~~~~ */
 
-.chat-2ZfjoI.threadSidebarOpen-1LSXvU {
+.chat-2ZfjoI.threadSidebarOpen-1LSXvU {						/* chat					threadsidebar open					*/
 	border-radius: 0;
+}
+
+.container-3YcgdM {											/* forum				first message container				*/
+	border-color: var(--background-floating);
+}
+.divider-AZrXIA {											/* forum				fat divider							*/
+	background: var(--background-floating);
 }
 
 /* ----		6.1.	CHANNELHEADER					---- */

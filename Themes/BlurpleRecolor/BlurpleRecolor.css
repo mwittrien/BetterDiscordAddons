@@ -396,7 +396,12 @@
 	color: rgb(var(--accentcolor));
 }
 .reaction-2A2y9y.reactionMe-3I9gFK {						/* reaction				wrapper me							*/
-	background-color: rgba(var(--accentcolor), 0.3);
+	background-color: rgba(var(--accentcolor), .3);
+}
+.reaction-102jx9:hover,										/* reaction				add react							*/
+.addReactButton-3bSQb6:hover,								/* reaction				add new react						*/
+.buttonInner-3aRbcx:hover {
+	border-color: rgba(var(--accentcolor), .5);
 }
 															/* attachment			upload bar							*/
 .progressBar-1T6LYX[style*="background-color: hsl(227, "],
@@ -2336,6 +2341,10 @@ input.input-2g-os5 {										/* textinput												*/
 	background-color: rgb(var(--accentcolor));
 }
 .botTagInvert-1nKcq_ {										/* bottag				inverted							*/
+	color: rgb(var(--accentcolor));
+}
+.botTagOP-3pUTXu {											/* bottag				op									*/
+	background: white linear-gradient(rgba(var(--accentcolor), .5), rgba(var(--accentcolor), .5));
 	color: rgb(var(--accentcolor));
 }
 
