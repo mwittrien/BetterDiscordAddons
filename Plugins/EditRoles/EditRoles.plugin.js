@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.0
+ * @version 1.1.1
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -72,9 +72,6 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.GuildStore, "getGuild", {after: e => {
-					if (e.returnValue) e.returnValue = this.changeRolesInGuild(e.returnValue, true);
-				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.PermissionRoleUtils, "getHighestRole", {after: e => {
 					if (e.returnValue && changedRoles[e.returnValue.id]) {
 						let data = changedRoles[e.returnValue.id];
@@ -160,14 +157,15 @@ module.exports = (_ => {
 				if (e.subType == "useUserRolesItems") {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "roles"});
 					if (index > -1 && children[index].props && BDFDB.ArrayUtils.is(children[index].props.children)) for (let child of children[index].props.children) {
-						if (child && child.props && typeof child.props.label == "function") {
+						if (child && child.props && typeof child.props.label == "function" && changedRoles[child.props.id]) {
+							let data = changedRoles[child.props.id];
 							let renderLabel = child.props.label;
-							child.props.label = (...args) => {
+							child.props.label = BDFDB.TimeUtils.suppress((...args) => {
 								let label = renderLabel(...args);
-								let onContextMenu = typeof label.props.onContextMenu == "function" ? label.props.onContextMenu : (_ => {});
-								label.props.onContextMenu = event => BDFDB.LibraryModules.ContextMenuUtils.openContextMenu(event, e => BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("DeveloperContextMenu"), Object.assign({}, e2, {id: child.props.id})));
+								if (data.color && label.props.children[0] && label.props.children[0].props) label.props.children[0].props.color = BDFDB.ColorUtils.convert(data.color, "hex");
+								if (data.name && label.props.children[1] && label.props.children[1].props && label.props.children[1].props.children) label.props.children[1].props.children = data.name;
 								return label;
-							};
+							}, "Error in renderLabel of UserRolesItems", this);
 						}
 					}
 				}
