@@ -5393,6 +5393,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"226444377482985473": 	{"active": true,	"tier": "t3",	"text": "xoxo",										"color": "",			"id": "seivag (zij)"},
 		"276137824460210178": 	{"active": true,	"tier": "t3",	"text": "FFXIV DRK Main for life!",					"color": "#1f0046",		"id": "werewolf (MaMa)"},
 		"507464069100601363": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "Cracky (MiPo)"},
 		"620397524494057513": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "FUSL"},
