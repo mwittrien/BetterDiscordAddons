@@ -102,6 +102,19 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/rofl.png") !important;
 }
 
+/* smiling_face_with_tear */
+.diversityEmojiItemImage-1pfGqI[src='/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg")'], 
+.emoji-4YP39J[src='/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg'], .emoji-4YP39J[style*='background-image: url("/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg")'], 
+.emojiImage-1mTIfi[src='/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg")'], 
+.image-21g2ca[src='/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg'], .image-21g2ca[style*='background-image: url("/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg")'], 
+.icon-Yl4xbA[src='/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg")'], 
+.emoji-1kNQp2[src='/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg")'], 
+.roleIcon-3-WL_I[src='/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg")'], 
+.emoji[src='/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg'], .emoji[style*='background-image: url("/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/smiling_face_with_tear.png") !important;
+}
+
 /* relaxed */
 .diversityEmojiItemImage-1pfGqI[src='/assets/b426f77f42bb709bcb2faa23602d2dc4.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/b426f77f42bb709bcb2faa23602d2dc4.svg")'], 
 .emoji-4YP39J[src='/assets/b426f77f42bb709bcb2faa23602d2dc4.svg'], .emoji-4YP39J[style*='background-image: url("/assets/b426f77f42bb709bcb2faa23602d2dc4.svg")'], 
@@ -191,19 +204,6 @@
 .emoji[src='/assets/817f965bd1fd796777908e6c8052d665.svg'], .emoji[style*='background-image: url("/assets/817f965bd1fd796777908e6c8052d665.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/relieved.png") !important;
-}
-
-/* smiling_face_with_tear */
-.diversityEmojiItemImage-1pfGqI[src='/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg")'], 
-.emoji-4YP39J[src='/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg'], .emoji-4YP39J[style*='background-image: url("/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg")'], 
-.emojiImage-1mTIfi[src='/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg")'], 
-.image-21g2ca[src='/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg'], .image-21g2ca[style*='background-image: url("/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg")'], 
-.icon-Yl4xbA[src='/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg")'], 
-.emoji-1kNQp2[src='/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg")'], 
-.roleIcon-3-WL_I[src='/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg")'], 
-.emoji[src='/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg'], .emoji[style*='background-image: url("/assets/4fc5b1ef776d4ae648d813da6eb6704f.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/smiling_face_with_tear.png") !important;
 }
 
 /* heart_eyes */
@@ -399,6 +399,19 @@
 .emoji[src='/assets/5f80f04e6ee97feebdd00feff92ced82.svg'], .emoji[style*='background-image: url("/assets/5f80f04e6ee97feebdd00feff92ced82.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/sunglasses.png") !important;
+}
+
+/* disguised_face */
+.diversityEmojiItemImage-1pfGqI[src='/assets/5963476960a5b3a9cf36e7bf8b435928.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/5963476960a5b3a9cf36e7bf8b435928.svg")'], 
+.emoji-4YP39J[src='/assets/5963476960a5b3a9cf36e7bf8b435928.svg'], .emoji-4YP39J[style*='background-image: url("/assets/5963476960a5b3a9cf36e7bf8b435928.svg")'], 
+.emojiImage-1mTIfi[src='/assets/5963476960a5b3a9cf36e7bf8b435928.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/5963476960a5b3a9cf36e7bf8b435928.svg")'], 
+.image-21g2ca[src='/assets/5963476960a5b3a9cf36e7bf8b435928.svg'], .image-21g2ca[style*='background-image: url("/assets/5963476960a5b3a9cf36e7bf8b435928.svg")'], 
+.icon-Yl4xbA[src='/assets/5963476960a5b3a9cf36e7bf8b435928.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/5963476960a5b3a9cf36e7bf8b435928.svg")'], 
+.emoji-1kNQp2[src='/assets/5963476960a5b3a9cf36e7bf8b435928.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/5963476960a5b3a9cf36e7bf8b435928.svg")'], 
+.roleIcon-3-WL_I[src='/assets/5963476960a5b3a9cf36e7bf8b435928.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/5963476960a5b3a9cf36e7bf8b435928.svg")'], 
+.emoji[src='/assets/5963476960a5b3a9cf36e7bf8b435928.svg'], .emoji[style*='background-image: url("/assets/5963476960a5b3a9cf36e7bf8b435928.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/disguised_face.png") !important;
 }
 
 /* star_struck */
@@ -635,19 +648,6 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/triumph.png") !important;
 }
 
-/* face_exhaling */
-.diversityEmojiItemImage-1pfGqI[src='/assets/7669a083750f34a23def85b9afe351ab.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/7669a083750f34a23def85b9afe351ab.svg")'], 
-.emoji-4YP39J[src='/assets/7669a083750f34a23def85b9afe351ab.svg'], .emoji-4YP39J[style*='background-image: url("/assets/7669a083750f34a23def85b9afe351ab.svg")'], 
-.emojiImage-1mTIfi[src='/assets/7669a083750f34a23def85b9afe351ab.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/7669a083750f34a23def85b9afe351ab.svg")'], 
-.image-21g2ca[src='/assets/7669a083750f34a23def85b9afe351ab.svg'], .image-21g2ca[style*='background-image: url("/assets/7669a083750f34a23def85b9afe351ab.svg")'], 
-.icon-Yl4xbA[src='/assets/7669a083750f34a23def85b9afe351ab.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/7669a083750f34a23def85b9afe351ab.svg")'], 
-.emoji-1kNQp2[src='/assets/7669a083750f34a23def85b9afe351ab.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/7669a083750f34a23def85b9afe351ab.svg")'], 
-.roleIcon-3-WL_I[src='/assets/7669a083750f34a23def85b9afe351ab.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/7669a083750f34a23def85b9afe351ab.svg")'], 
-.emoji[src='/assets/7669a083750f34a23def85b9afe351ab.svg'], .emoji[style*='background-image: url("/assets/7669a083750f34a23def85b9afe351ab.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/face_exhaling.png") !important;
-}
-
 /* angry */
 .diversityEmojiItemImage-1pfGqI[src='/assets/4a1e59abafc2145af813eda8bf82a49d.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/4a1e59abafc2145af813eda8bf82a49d.svg")'], 
 .emoji-4YP39J[src='/assets/4a1e59abafc2145af813eda8bf82a49d.svg'], .emoji-4YP39J[style*='background-image: url("/assets/4a1e59abafc2145af813eda8bf82a49d.svg")'], 
@@ -713,19 +713,6 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/flushed.png") !important;
 }
 
-/* face_in_clouds */
-.diversityEmojiItemImage-1pfGqI[src='/assets/cffbe7d3b392eec446456db6adea7704.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/cffbe7d3b392eec446456db6adea7704.svg")'], 
-.emoji-4YP39J[src='/assets/cffbe7d3b392eec446456db6adea7704.svg'], .emoji-4YP39J[style*='background-image: url("/assets/cffbe7d3b392eec446456db6adea7704.svg")'], 
-.emojiImage-1mTIfi[src='/assets/cffbe7d3b392eec446456db6adea7704.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/cffbe7d3b392eec446456db6adea7704.svg")'], 
-.image-21g2ca[src='/assets/cffbe7d3b392eec446456db6adea7704.svg'], .image-21g2ca[style*='background-image: url("/assets/cffbe7d3b392eec446456db6adea7704.svg")'], 
-.icon-Yl4xbA[src='/assets/cffbe7d3b392eec446456db6adea7704.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/cffbe7d3b392eec446456db6adea7704.svg")'], 
-.emoji-1kNQp2[src='/assets/cffbe7d3b392eec446456db6adea7704.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/cffbe7d3b392eec446456db6adea7704.svg")'], 
-.roleIcon-3-WL_I[src='/assets/cffbe7d3b392eec446456db6adea7704.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/cffbe7d3b392eec446456db6adea7704.svg")'], 
-.emoji[src='/assets/cffbe7d3b392eec446456db6adea7704.svg'], .emoji[style*='background-image: url("/assets/cffbe7d3b392eec446456db6adea7704.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/face_in_clouds.png") !important;
-}
-
 /* hot_face */
 .diversityEmojiItemImage-1pfGqI[src='/assets/372518b135d414f92edcd06b89e1468b.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/372518b135d414f92edcd06b89e1468b.svg")'], 
 .emoji-4YP39J[src='/assets/372518b135d414f92edcd06b89e1468b.svg'], .emoji-4YP39J[style*='background-image: url("/assets/372518b135d414f92edcd06b89e1468b.svg")'], 
@@ -750,6 +737,19 @@
 .emoji[src='/assets/10ba107674fdf2d100be5592e7c85c74.svg'], .emoji[style*='background-image: url("/assets/10ba107674fdf2d100be5592e7c85c74.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/cold_face.png") !important;
+}
+
+/* face_in_clouds */
+.diversityEmojiItemImage-1pfGqI[src='/assets/cffbe7d3b392eec446456db6adea7704.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/cffbe7d3b392eec446456db6adea7704.svg")'], 
+.emoji-4YP39J[src='/assets/cffbe7d3b392eec446456db6adea7704.svg'], .emoji-4YP39J[style*='background-image: url("/assets/cffbe7d3b392eec446456db6adea7704.svg")'], 
+.emojiImage-1mTIfi[src='/assets/cffbe7d3b392eec446456db6adea7704.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/cffbe7d3b392eec446456db6adea7704.svg")'], 
+.image-21g2ca[src='/assets/cffbe7d3b392eec446456db6adea7704.svg'], .image-21g2ca[style*='background-image: url("/assets/cffbe7d3b392eec446456db6adea7704.svg")'], 
+.icon-Yl4xbA[src='/assets/cffbe7d3b392eec446456db6adea7704.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/cffbe7d3b392eec446456db6adea7704.svg")'], 
+.emoji-1kNQp2[src='/assets/cffbe7d3b392eec446456db6adea7704.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/cffbe7d3b392eec446456db6adea7704.svg")'], 
+.roleIcon-3-WL_I[src='/assets/cffbe7d3b392eec446456db6adea7704.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/cffbe7d3b392eec446456db6adea7704.svg")'], 
+.emoji[src='/assets/cffbe7d3b392eec446456db6adea7704.svg'], .emoji[style*='background-image: url("/assets/cffbe7d3b392eec446456db6adea7704.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/face_in_clouds.png") !important;
 }
 
 /* scream */
@@ -854,19 +854,6 @@
 .emoji[src='/assets/6ba3855f5ea79b9b014e66b28c54429c.svg'], .emoji[style*='background-image: url("/assets/6ba3855f5ea79b9b014e66b28c54429c.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/face_with_hand_over_mouth.png") !important;
-}
-
-/* yawning_face */
-.diversityEmojiItemImage-1pfGqI[src='/assets/e899188d7f6b611acdca8b91abc2f104.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/e899188d7f6b611acdca8b91abc2f104.svg")'], 
-.emoji-4YP39J[src='/assets/e899188d7f6b611acdca8b91abc2f104.svg'], .emoji-4YP39J[style*='background-image: url("/assets/e899188d7f6b611acdca8b91abc2f104.svg")'], 
-.emojiImage-1mTIfi[src='/assets/e899188d7f6b611acdca8b91abc2f104.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/e899188d7f6b611acdca8b91abc2f104.svg")'], 
-.image-21g2ca[src='/assets/e899188d7f6b611acdca8b91abc2f104.svg'], .image-21g2ca[style*='background-image: url("/assets/e899188d7f6b611acdca8b91abc2f104.svg")'], 
-.icon-Yl4xbA[src='/assets/e899188d7f6b611acdca8b91abc2f104.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/e899188d7f6b611acdca8b91abc2f104.svg")'], 
-.emoji-1kNQp2[src='/assets/e899188d7f6b611acdca8b91abc2f104.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/e899188d7f6b611acdca8b91abc2f104.svg")'], 
-.roleIcon-3-WL_I[src='/assets/e899188d7f6b611acdca8b91abc2f104.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/e899188d7f6b611acdca8b91abc2f104.svg")'], 
-.emoji[src='/assets/e899188d7f6b611acdca8b91abc2f104.svg'], .emoji[style*='background-image: url("/assets/e899188d7f6b611acdca8b91abc2f104.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/yawning_face.png") !important;
 }
 
 /* shushing_face */
@@ -1025,6 +1012,19 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/astonished.png") !important;
 }
 
+/* yawning_face */
+.diversityEmojiItemImage-1pfGqI[src='/assets/e899188d7f6b611acdca8b91abc2f104.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/e899188d7f6b611acdca8b91abc2f104.svg")'], 
+.emoji-4YP39J[src='/assets/e899188d7f6b611acdca8b91abc2f104.svg'], .emoji-4YP39J[style*='background-image: url("/assets/e899188d7f6b611acdca8b91abc2f104.svg")'], 
+.emojiImage-1mTIfi[src='/assets/e899188d7f6b611acdca8b91abc2f104.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/e899188d7f6b611acdca8b91abc2f104.svg")'], 
+.image-21g2ca[src='/assets/e899188d7f6b611acdca8b91abc2f104.svg'], .image-21g2ca[style*='background-image: url("/assets/e899188d7f6b611acdca8b91abc2f104.svg")'], 
+.icon-Yl4xbA[src='/assets/e899188d7f6b611acdca8b91abc2f104.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/e899188d7f6b611acdca8b91abc2f104.svg")'], 
+.emoji-1kNQp2[src='/assets/e899188d7f6b611acdca8b91abc2f104.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/e899188d7f6b611acdca8b91abc2f104.svg")'], 
+.roleIcon-3-WL_I[src='/assets/e899188d7f6b611acdca8b91abc2f104.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/e899188d7f6b611acdca8b91abc2f104.svg")'], 
+.emoji[src='/assets/e899188d7f6b611acdca8b91abc2f104.svg'], .emoji[style*='background-image: url("/assets/e899188d7f6b611acdca8b91abc2f104.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/yawning_face.png") !important;
+}
+
 /* sleeping */
 .diversityEmojiItemImage-1pfGqI[src='/assets/711ac22a92d00f844023ded91f820e8c.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/711ac22a92d00f844023ded91f820e8c.svg")'], 
 .emoji-4YP39J[src='/assets/711ac22a92d00f844023ded91f820e8c.svg'], .emoji-4YP39J[style*='background-image: url("/assets/711ac22a92d00f844023ded91f820e8c.svg")'], 
@@ -1062,6 +1062,19 @@
 .emoji[src='/assets/387d45cfc608c20850306f85bc143f09.svg'], .emoji[style*='background-image: url("/assets/387d45cfc608c20850306f85bc143f09.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/sleepy.png") !important;
+}
+
+/* face_exhaling */
+.diversityEmojiItemImage-1pfGqI[src='/assets/7669a083750f34a23def85b9afe351ab.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/7669a083750f34a23def85b9afe351ab.svg")'], 
+.emoji-4YP39J[src='/assets/7669a083750f34a23def85b9afe351ab.svg'], .emoji-4YP39J[style*='background-image: url("/assets/7669a083750f34a23def85b9afe351ab.svg")'], 
+.emojiImage-1mTIfi[src='/assets/7669a083750f34a23def85b9afe351ab.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/7669a083750f34a23def85b9afe351ab.svg")'], 
+.image-21g2ca[src='/assets/7669a083750f34a23def85b9afe351ab.svg'], .image-21g2ca[style*='background-image: url("/assets/7669a083750f34a23def85b9afe351ab.svg")'], 
+.icon-Yl4xbA[src='/assets/7669a083750f34a23def85b9afe351ab.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/7669a083750f34a23def85b9afe351ab.svg")'], 
+.emoji-1kNQp2[src='/assets/7669a083750f34a23def85b9afe351ab.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/7669a083750f34a23def85b9afe351ab.svg")'], 
+.roleIcon-3-WL_I[src='/assets/7669a083750f34a23def85b9afe351ab.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/7669a083750f34a23def85b9afe351ab.svg")'], 
+.emoji[src='/assets/7669a083750f34a23def85b9afe351ab.svg'], .emoji[style*='background-image: url("/assets/7669a083750f34a23def85b9afe351ab.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/face_exhaling.png") !important;
 }
 
 /* dizzy_face */
@@ -1220,19 +1233,6 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/cowboy.png") !important;
 }
 
-/* disguised_face */
-.diversityEmojiItemImage-1pfGqI[src='/assets/5963476960a5b3a9cf36e7bf8b435928.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/5963476960a5b3a9cf36e7bf8b435928.svg")'], 
-.emoji-4YP39J[src='/assets/5963476960a5b3a9cf36e7bf8b435928.svg'], .emoji-4YP39J[style*='background-image: url("/assets/5963476960a5b3a9cf36e7bf8b435928.svg")'], 
-.emojiImage-1mTIfi[src='/assets/5963476960a5b3a9cf36e7bf8b435928.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/5963476960a5b3a9cf36e7bf8b435928.svg")'], 
-.image-21g2ca[src='/assets/5963476960a5b3a9cf36e7bf8b435928.svg'], .image-21g2ca[style*='background-image: url("/assets/5963476960a5b3a9cf36e7bf8b435928.svg")'], 
-.icon-Yl4xbA[src='/assets/5963476960a5b3a9cf36e7bf8b435928.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/5963476960a5b3a9cf36e7bf8b435928.svg")'], 
-.emoji-1kNQp2[src='/assets/5963476960a5b3a9cf36e7bf8b435928.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/5963476960a5b3a9cf36e7bf8b435928.svg")'], 
-.roleIcon-3-WL_I[src='/assets/5963476960a5b3a9cf36e7bf8b435928.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/5963476960a5b3a9cf36e7bf8b435928.svg")'], 
-.emoji[src='/assets/5963476960a5b3a9cf36e7bf8b435928.svg'], .emoji[style*='background-image: url("/assets/5963476960a5b3a9cf36e7bf8b435928.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/disguised_face.png") !important;
-}
-
 /* smiling_imp */
 .diversityEmojiItemImage-1pfGqI[src='/assets/54b9902837fed72b7551edb77b30b96e.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/54b9902837fed72b7551edb77b30b96e.svg")'], 
 .emoji-4YP39J[src='/assets/54b9902837fed72b7551edb77b30b96e.svg'], .emoji-4YP39J[style*='background-image: url("/assets/54b9902837fed72b7551edb77b30b96e.svg")'], 
@@ -1286,14 +1286,14 @@
 }
 
 /* clown */
-.diversityEmojiItemImage-1pfGqI[src='/assets/19fc9fc6001951c7370b1fd74e1570f1.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/19fc9fc6001951c7370b1fd74e1570f1.svg")'], 
-.emoji-4YP39J[src='/assets/19fc9fc6001951c7370b1fd74e1570f1.svg'], .emoji-4YP39J[style*='background-image: url("/assets/19fc9fc6001951c7370b1fd74e1570f1.svg")'], 
-.emojiImage-1mTIfi[src='/assets/19fc9fc6001951c7370b1fd74e1570f1.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/19fc9fc6001951c7370b1fd74e1570f1.svg")'], 
-.image-21g2ca[src='/assets/19fc9fc6001951c7370b1fd74e1570f1.svg'], .image-21g2ca[style*='background-image: url("/assets/19fc9fc6001951c7370b1fd74e1570f1.svg")'], 
-.icon-Yl4xbA[src='/assets/19fc9fc6001951c7370b1fd74e1570f1.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/19fc9fc6001951c7370b1fd74e1570f1.svg")'], 
-.emoji-1kNQp2[src='/assets/19fc9fc6001951c7370b1fd74e1570f1.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/19fc9fc6001951c7370b1fd74e1570f1.svg")'], 
-.roleIcon-3-WL_I[src='/assets/19fc9fc6001951c7370b1fd74e1570f1.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/19fc9fc6001951c7370b1fd74e1570f1.svg")'], 
-.emoji[src='/assets/19fc9fc6001951c7370b1fd74e1570f1.svg'], .emoji[style*='background-image: url("/assets/19fc9fc6001951c7370b1fd74e1570f1.svg")'] {
+.diversityEmojiItemImage-1pfGqI[src='/assets/9b323e96266a2cbf1fa0b07a547418be.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/9b323e96266a2cbf1fa0b07a547418be.svg")'], 
+.emoji-4YP39J[src='/assets/9b323e96266a2cbf1fa0b07a547418be.svg'], .emoji-4YP39J[style*='background-image: url("/assets/9b323e96266a2cbf1fa0b07a547418be.svg")'], 
+.emojiImage-1mTIfi[src='/assets/9b323e96266a2cbf1fa0b07a547418be.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/9b323e96266a2cbf1fa0b07a547418be.svg")'], 
+.image-21g2ca[src='/assets/9b323e96266a2cbf1fa0b07a547418be.svg'], .image-21g2ca[style*='background-image: url("/assets/9b323e96266a2cbf1fa0b07a547418be.svg")'], 
+.icon-Yl4xbA[src='/assets/9b323e96266a2cbf1fa0b07a547418be.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/9b323e96266a2cbf1fa0b07a547418be.svg")'], 
+.emoji-1kNQp2[src='/assets/9b323e96266a2cbf1fa0b07a547418be.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/9b323e96266a2cbf1fa0b07a547418be.svg")'], 
+.roleIcon-3-WL_I[src='/assets/9b323e96266a2cbf1fa0b07a547418be.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/9b323e96266a2cbf1fa0b07a547418be.svg")'], 
+.emoji[src='/assets/9b323e96266a2cbf1fa0b07a547418be.svg'], .emoji[style*='background-image: url("/assets/9b323e96266a2cbf1fa0b07a547418be.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/clown.png") !important;
 }
@@ -2702,84 +2702,6 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/ok_hand_tone5.png") !important;
 }
 
-/* pinching_hand */
-.diversityEmojiItemImage-1pfGqI[src='/assets/2f99d51172fe3346316961fe4f67fe30.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/2f99d51172fe3346316961fe4f67fe30.svg")'], 
-.emoji-4YP39J[src='/assets/2f99d51172fe3346316961fe4f67fe30.svg'], .emoji-4YP39J[style*='background-image: url("/assets/2f99d51172fe3346316961fe4f67fe30.svg")'], 
-.emojiImage-1mTIfi[src='/assets/2f99d51172fe3346316961fe4f67fe30.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/2f99d51172fe3346316961fe4f67fe30.svg")'], 
-.image-21g2ca[src='/assets/2f99d51172fe3346316961fe4f67fe30.svg'], .image-21g2ca[style*='background-image: url("/assets/2f99d51172fe3346316961fe4f67fe30.svg")'], 
-.icon-Yl4xbA[src='/assets/2f99d51172fe3346316961fe4f67fe30.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/2f99d51172fe3346316961fe4f67fe30.svg")'], 
-.emoji-1kNQp2[src='/assets/2f99d51172fe3346316961fe4f67fe30.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/2f99d51172fe3346316961fe4f67fe30.svg")'], 
-.roleIcon-3-WL_I[src='/assets/2f99d51172fe3346316961fe4f67fe30.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/2f99d51172fe3346316961fe4f67fe30.svg")'], 
-.emoji[src='/assets/2f99d51172fe3346316961fe4f67fe30.svg'], .emoji[style*='background-image: url("/assets/2f99d51172fe3346316961fe4f67fe30.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/pinching_hand.png") !important;
-}
-
-/* pinching_hand_tone1 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/03c1065498cc4370b8e0deb867d14b80.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/03c1065498cc4370b8e0deb867d14b80.svg")'], 
-.emoji-4YP39J[src='/assets/03c1065498cc4370b8e0deb867d14b80.svg'], .emoji-4YP39J[style*='background-image: url("/assets/03c1065498cc4370b8e0deb867d14b80.svg")'], 
-.emojiImage-1mTIfi[src='/assets/03c1065498cc4370b8e0deb867d14b80.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/03c1065498cc4370b8e0deb867d14b80.svg")'], 
-.image-21g2ca[src='/assets/03c1065498cc4370b8e0deb867d14b80.svg'], .image-21g2ca[style*='background-image: url("/assets/03c1065498cc4370b8e0deb867d14b80.svg")'], 
-.icon-Yl4xbA[src='/assets/03c1065498cc4370b8e0deb867d14b80.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/03c1065498cc4370b8e0deb867d14b80.svg")'], 
-.emoji-1kNQp2[src='/assets/03c1065498cc4370b8e0deb867d14b80.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/03c1065498cc4370b8e0deb867d14b80.svg")'], 
-.roleIcon-3-WL_I[src='/assets/03c1065498cc4370b8e0deb867d14b80.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/03c1065498cc4370b8e0deb867d14b80.svg")'], 
-.emoji[src='/assets/03c1065498cc4370b8e0deb867d14b80.svg'], .emoji[style*='background-image: url("/assets/03c1065498cc4370b8e0deb867d14b80.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/pinching_hand_tone1.png") !important;
-}
-
-/* pinching_hand_tone2 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg")'], 
-.emoji-4YP39J[src='/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg'], .emoji-4YP39J[style*='background-image: url("/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg")'], 
-.emojiImage-1mTIfi[src='/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg")'], 
-.image-21g2ca[src='/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg'], .image-21g2ca[style*='background-image: url("/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg")'], 
-.icon-Yl4xbA[src='/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg")'], 
-.emoji-1kNQp2[src='/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg")'], 
-.roleIcon-3-WL_I[src='/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg")'], 
-.emoji[src='/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg'], .emoji[style*='background-image: url("/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/pinching_hand_tone2.png") !important;
-}
-
-/* pinching_hand_tone3 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/08ad6577195036baf6de481b81c0c453.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/08ad6577195036baf6de481b81c0c453.svg")'], 
-.emoji-4YP39J[src='/assets/08ad6577195036baf6de481b81c0c453.svg'], .emoji-4YP39J[style*='background-image: url("/assets/08ad6577195036baf6de481b81c0c453.svg")'], 
-.emojiImage-1mTIfi[src='/assets/08ad6577195036baf6de481b81c0c453.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/08ad6577195036baf6de481b81c0c453.svg")'], 
-.image-21g2ca[src='/assets/08ad6577195036baf6de481b81c0c453.svg'], .image-21g2ca[style*='background-image: url("/assets/08ad6577195036baf6de481b81c0c453.svg")'], 
-.icon-Yl4xbA[src='/assets/08ad6577195036baf6de481b81c0c453.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/08ad6577195036baf6de481b81c0c453.svg")'], 
-.emoji-1kNQp2[src='/assets/08ad6577195036baf6de481b81c0c453.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/08ad6577195036baf6de481b81c0c453.svg")'], 
-.roleIcon-3-WL_I[src='/assets/08ad6577195036baf6de481b81c0c453.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/08ad6577195036baf6de481b81c0c453.svg")'], 
-.emoji[src='/assets/08ad6577195036baf6de481b81c0c453.svg'], .emoji[style*='background-image: url("/assets/08ad6577195036baf6de481b81c0c453.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/pinching_hand_tone3.png") !important;
-}
-
-/* pinching_hand_tone4 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/599a69e42323cd729713d99769324a8b.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/599a69e42323cd729713d99769324a8b.svg")'], 
-.emoji-4YP39J[src='/assets/599a69e42323cd729713d99769324a8b.svg'], .emoji-4YP39J[style*='background-image: url("/assets/599a69e42323cd729713d99769324a8b.svg")'], 
-.emojiImage-1mTIfi[src='/assets/599a69e42323cd729713d99769324a8b.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/599a69e42323cd729713d99769324a8b.svg")'], 
-.image-21g2ca[src='/assets/599a69e42323cd729713d99769324a8b.svg'], .image-21g2ca[style*='background-image: url("/assets/599a69e42323cd729713d99769324a8b.svg")'], 
-.icon-Yl4xbA[src='/assets/599a69e42323cd729713d99769324a8b.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/599a69e42323cd729713d99769324a8b.svg")'], 
-.emoji-1kNQp2[src='/assets/599a69e42323cd729713d99769324a8b.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/599a69e42323cd729713d99769324a8b.svg")'], 
-.roleIcon-3-WL_I[src='/assets/599a69e42323cd729713d99769324a8b.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/599a69e42323cd729713d99769324a8b.svg")'], 
-.emoji[src='/assets/599a69e42323cd729713d99769324a8b.svg'], .emoji[style*='background-image: url("/assets/599a69e42323cd729713d99769324a8b.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/pinching_hand_tone4.png") !important;
-}
-
-/* pinching_hand_tone5 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/664094c83e37a7056f6584bd9f3f2773.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/664094c83e37a7056f6584bd9f3f2773.svg")'], 
-.emoji-4YP39J[src='/assets/664094c83e37a7056f6584bd9f3f2773.svg'], .emoji-4YP39J[style*='background-image: url("/assets/664094c83e37a7056f6584bd9f3f2773.svg")'], 
-.emojiImage-1mTIfi[src='/assets/664094c83e37a7056f6584bd9f3f2773.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/664094c83e37a7056f6584bd9f3f2773.svg")'], 
-.image-21g2ca[src='/assets/664094c83e37a7056f6584bd9f3f2773.svg'], .image-21g2ca[style*='background-image: url("/assets/664094c83e37a7056f6584bd9f3f2773.svg")'], 
-.icon-Yl4xbA[src='/assets/664094c83e37a7056f6584bd9f3f2773.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/664094c83e37a7056f6584bd9f3f2773.svg")'], 
-.emoji-1kNQp2[src='/assets/664094c83e37a7056f6584bd9f3f2773.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/664094c83e37a7056f6584bd9f3f2773.svg")'], 
-.roleIcon-3-WL_I[src='/assets/664094c83e37a7056f6584bd9f3f2773.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/664094c83e37a7056f6584bd9f3f2773.svg")'], 
-.emoji[src='/assets/664094c83e37a7056f6584bd9f3f2773.svg'], .emoji[style*='background-image: url("/assets/664094c83e37a7056f6584bd9f3f2773.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/pinching_hand_tone5.png") !important;
-}
-
 /* pinched_fingers */
 .diversityEmojiItemImage-1pfGqI[src='/assets/24494e7542e5cb86e1821f11bcdad52e.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/24494e7542e5cb86e1821f11bcdad52e.svg")'], 
 .emoji-4YP39J[src='/assets/24494e7542e5cb86e1821f11bcdad52e.svg'], .emoji-4YP39J[style*='background-image: url("/assets/24494e7542e5cb86e1821f11bcdad52e.svg")'], 
@@ -2856,6 +2778,84 @@
 .emoji[src='/assets/c829443df39b9b4adfbc86ca6854dda8.svg'], .emoji[style*='background-image: url("/assets/c829443df39b9b4adfbc86ca6854dda8.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/pinched_fingers_tone5.png") !important;
+}
+
+/* pinching_hand */
+.diversityEmojiItemImage-1pfGqI[src='/assets/2f99d51172fe3346316961fe4f67fe30.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/2f99d51172fe3346316961fe4f67fe30.svg")'], 
+.emoji-4YP39J[src='/assets/2f99d51172fe3346316961fe4f67fe30.svg'], .emoji-4YP39J[style*='background-image: url("/assets/2f99d51172fe3346316961fe4f67fe30.svg")'], 
+.emojiImage-1mTIfi[src='/assets/2f99d51172fe3346316961fe4f67fe30.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/2f99d51172fe3346316961fe4f67fe30.svg")'], 
+.image-21g2ca[src='/assets/2f99d51172fe3346316961fe4f67fe30.svg'], .image-21g2ca[style*='background-image: url("/assets/2f99d51172fe3346316961fe4f67fe30.svg")'], 
+.icon-Yl4xbA[src='/assets/2f99d51172fe3346316961fe4f67fe30.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/2f99d51172fe3346316961fe4f67fe30.svg")'], 
+.emoji-1kNQp2[src='/assets/2f99d51172fe3346316961fe4f67fe30.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/2f99d51172fe3346316961fe4f67fe30.svg")'], 
+.roleIcon-3-WL_I[src='/assets/2f99d51172fe3346316961fe4f67fe30.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/2f99d51172fe3346316961fe4f67fe30.svg")'], 
+.emoji[src='/assets/2f99d51172fe3346316961fe4f67fe30.svg'], .emoji[style*='background-image: url("/assets/2f99d51172fe3346316961fe4f67fe30.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/pinching_hand.png") !important;
+}
+
+/* pinching_hand_tone1 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/03c1065498cc4370b8e0deb867d14b80.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/03c1065498cc4370b8e0deb867d14b80.svg")'], 
+.emoji-4YP39J[src='/assets/03c1065498cc4370b8e0deb867d14b80.svg'], .emoji-4YP39J[style*='background-image: url("/assets/03c1065498cc4370b8e0deb867d14b80.svg")'], 
+.emojiImage-1mTIfi[src='/assets/03c1065498cc4370b8e0deb867d14b80.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/03c1065498cc4370b8e0deb867d14b80.svg")'], 
+.image-21g2ca[src='/assets/03c1065498cc4370b8e0deb867d14b80.svg'], .image-21g2ca[style*='background-image: url("/assets/03c1065498cc4370b8e0deb867d14b80.svg")'], 
+.icon-Yl4xbA[src='/assets/03c1065498cc4370b8e0deb867d14b80.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/03c1065498cc4370b8e0deb867d14b80.svg")'], 
+.emoji-1kNQp2[src='/assets/03c1065498cc4370b8e0deb867d14b80.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/03c1065498cc4370b8e0deb867d14b80.svg")'], 
+.roleIcon-3-WL_I[src='/assets/03c1065498cc4370b8e0deb867d14b80.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/03c1065498cc4370b8e0deb867d14b80.svg")'], 
+.emoji[src='/assets/03c1065498cc4370b8e0deb867d14b80.svg'], .emoji[style*='background-image: url("/assets/03c1065498cc4370b8e0deb867d14b80.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/pinching_hand_tone1.png") !important;
+}
+
+/* pinching_hand_tone2 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg")'], 
+.emoji-4YP39J[src='/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg'], .emoji-4YP39J[style*='background-image: url("/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg")'], 
+.emojiImage-1mTIfi[src='/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg")'], 
+.image-21g2ca[src='/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg'], .image-21g2ca[style*='background-image: url("/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg")'], 
+.icon-Yl4xbA[src='/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg")'], 
+.emoji-1kNQp2[src='/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg")'], 
+.roleIcon-3-WL_I[src='/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg")'], 
+.emoji[src='/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg'], .emoji[style*='background-image: url("/assets/3fa9750a187819d0bb9a2ce4fa4e61a5.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/pinching_hand_tone2.png") !important;
+}
+
+/* pinching_hand_tone3 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/08ad6577195036baf6de481b81c0c453.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/08ad6577195036baf6de481b81c0c453.svg")'], 
+.emoji-4YP39J[src='/assets/08ad6577195036baf6de481b81c0c453.svg'], .emoji-4YP39J[style*='background-image: url("/assets/08ad6577195036baf6de481b81c0c453.svg")'], 
+.emojiImage-1mTIfi[src='/assets/08ad6577195036baf6de481b81c0c453.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/08ad6577195036baf6de481b81c0c453.svg")'], 
+.image-21g2ca[src='/assets/08ad6577195036baf6de481b81c0c453.svg'], .image-21g2ca[style*='background-image: url("/assets/08ad6577195036baf6de481b81c0c453.svg")'], 
+.icon-Yl4xbA[src='/assets/08ad6577195036baf6de481b81c0c453.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/08ad6577195036baf6de481b81c0c453.svg")'], 
+.emoji-1kNQp2[src='/assets/08ad6577195036baf6de481b81c0c453.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/08ad6577195036baf6de481b81c0c453.svg")'], 
+.roleIcon-3-WL_I[src='/assets/08ad6577195036baf6de481b81c0c453.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/08ad6577195036baf6de481b81c0c453.svg")'], 
+.emoji[src='/assets/08ad6577195036baf6de481b81c0c453.svg'], .emoji[style*='background-image: url("/assets/08ad6577195036baf6de481b81c0c453.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/pinching_hand_tone3.png") !important;
+}
+
+/* pinching_hand_tone4 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/599a69e42323cd729713d99769324a8b.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/599a69e42323cd729713d99769324a8b.svg")'], 
+.emoji-4YP39J[src='/assets/599a69e42323cd729713d99769324a8b.svg'], .emoji-4YP39J[style*='background-image: url("/assets/599a69e42323cd729713d99769324a8b.svg")'], 
+.emojiImage-1mTIfi[src='/assets/599a69e42323cd729713d99769324a8b.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/599a69e42323cd729713d99769324a8b.svg")'], 
+.image-21g2ca[src='/assets/599a69e42323cd729713d99769324a8b.svg'], .image-21g2ca[style*='background-image: url("/assets/599a69e42323cd729713d99769324a8b.svg")'], 
+.icon-Yl4xbA[src='/assets/599a69e42323cd729713d99769324a8b.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/599a69e42323cd729713d99769324a8b.svg")'], 
+.emoji-1kNQp2[src='/assets/599a69e42323cd729713d99769324a8b.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/599a69e42323cd729713d99769324a8b.svg")'], 
+.roleIcon-3-WL_I[src='/assets/599a69e42323cd729713d99769324a8b.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/599a69e42323cd729713d99769324a8b.svg")'], 
+.emoji[src='/assets/599a69e42323cd729713d99769324a8b.svg'], .emoji[style*='background-image: url("/assets/599a69e42323cd729713d99769324a8b.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/pinching_hand_tone4.png") !important;
+}
+
+/* pinching_hand_tone5 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/664094c83e37a7056f6584bd9f3f2773.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/664094c83e37a7056f6584bd9f3f2773.svg")'], 
+.emoji-4YP39J[src='/assets/664094c83e37a7056f6584bd9f3f2773.svg'], .emoji-4YP39J[style*='background-image: url("/assets/664094c83e37a7056f6584bd9f3f2773.svg")'], 
+.emojiImage-1mTIfi[src='/assets/664094c83e37a7056f6584bd9f3f2773.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/664094c83e37a7056f6584bd9f3f2773.svg")'], 
+.image-21g2ca[src='/assets/664094c83e37a7056f6584bd9f3f2773.svg'], .image-21g2ca[style*='background-image: url("/assets/664094c83e37a7056f6584bd9f3f2773.svg")'], 
+.icon-Yl4xbA[src='/assets/664094c83e37a7056f6584bd9f3f2773.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/664094c83e37a7056f6584bd9f3f2773.svg")'], 
+.emoji-1kNQp2[src='/assets/664094c83e37a7056f6584bd9f3f2773.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/664094c83e37a7056f6584bd9f3f2773.svg")'], 
+.roleIcon-3-WL_I[src='/assets/664094c83e37a7056f6584bd9f3f2773.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/664094c83e37a7056f6584bd9f3f2773.svg")'], 
+.emoji[src='/assets/664094c83e37a7056f6584bd9f3f2773.svg'], .emoji[style*='background-image: url("/assets/664094c83e37a7056f6584bd9f3f2773.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/pinching_hand_tone5.png") !important;
 }
 
 /* point_left */
@@ -4548,19 +4548,6 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/eyes.png") !important;
 }
 
-/* brain */
-.diversityEmojiItemImage-1pfGqI[src='/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg")'], 
-.emoji-4YP39J[src='/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg'], .emoji-4YP39J[style*='background-image: url("/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg")'], 
-.emojiImage-1mTIfi[src='/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg")'], 
-.image-21g2ca[src='/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg'], .image-21g2ca[style*='background-image: url("/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg")'], 
-.icon-Yl4xbA[src='/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg")'], 
-.emoji-1kNQp2[src='/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg")'], 
-.roleIcon-3-WL_I[src='/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg")'], 
-.emoji[src='/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg'], .emoji[style*='background-image: url("/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/brain.png") !important;
-}
-
 /* anatomical_heart */
 .diversityEmojiItemImage-1pfGqI[src='/assets/4cd3151267b3c4033da1226fb48105f9.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/4cd3151267b3c4033da1226fb48105f9.svg")'], 
 .emoji-4YP39J[src='/assets/4cd3151267b3c4033da1226fb48105f9.svg'], .emoji-4YP39J[style*='background-image: url("/assets/4cd3151267b3c4033da1226fb48105f9.svg")'], 
@@ -4587,17 +4574,17 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/lungs.png") !important;
 }
 
-/* bone */
-.diversityEmojiItemImage-1pfGqI[src='/assets/dc147b62a179d59b5098c926628ebab1.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/dc147b62a179d59b5098c926628ebab1.svg")'], 
-.emoji-4YP39J[src='/assets/dc147b62a179d59b5098c926628ebab1.svg'], .emoji-4YP39J[style*='background-image: url("/assets/dc147b62a179d59b5098c926628ebab1.svg")'], 
-.emojiImage-1mTIfi[src='/assets/dc147b62a179d59b5098c926628ebab1.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/dc147b62a179d59b5098c926628ebab1.svg")'], 
-.image-21g2ca[src='/assets/dc147b62a179d59b5098c926628ebab1.svg'], .image-21g2ca[style*='background-image: url("/assets/dc147b62a179d59b5098c926628ebab1.svg")'], 
-.icon-Yl4xbA[src='/assets/dc147b62a179d59b5098c926628ebab1.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/dc147b62a179d59b5098c926628ebab1.svg")'], 
-.emoji-1kNQp2[src='/assets/dc147b62a179d59b5098c926628ebab1.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/dc147b62a179d59b5098c926628ebab1.svg")'], 
-.roleIcon-3-WL_I[src='/assets/dc147b62a179d59b5098c926628ebab1.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/dc147b62a179d59b5098c926628ebab1.svg")'], 
-.emoji[src='/assets/dc147b62a179d59b5098c926628ebab1.svg'], .emoji[style*='background-image: url("/assets/dc147b62a179d59b5098c926628ebab1.svg")'] {
+/* brain */
+.diversityEmojiItemImage-1pfGqI[src='/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg")'], 
+.emoji-4YP39J[src='/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg'], .emoji-4YP39J[style*='background-image: url("/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg")'], 
+.emojiImage-1mTIfi[src='/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg")'], 
+.image-21g2ca[src='/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg'], .image-21g2ca[style*='background-image: url("/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg")'], 
+.icon-Yl4xbA[src='/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg")'], 
+.emoji-1kNQp2[src='/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg")'], 
+.roleIcon-3-WL_I[src='/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg")'], 
+.emoji[src='/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg'], .emoji[style*='background-image: url("/assets/0bf5972bff8b8b4c26621bd5cd25d839.svg")'] {
 	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/bone.png") !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/brain.png") !important;
 }
 
 /* speaking_head */
@@ -4730,84 +4717,6 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/baby_tone5.png") !important;
 }
 
-/* girl */
-.diversityEmojiItemImage-1pfGqI[src='/assets/af1464f289927a54e50e5b6ad684f540.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/af1464f289927a54e50e5b6ad684f540.svg")'], 
-.emoji-4YP39J[src='/assets/af1464f289927a54e50e5b6ad684f540.svg'], .emoji-4YP39J[style*='background-image: url("/assets/af1464f289927a54e50e5b6ad684f540.svg")'], 
-.emojiImage-1mTIfi[src='/assets/af1464f289927a54e50e5b6ad684f540.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/af1464f289927a54e50e5b6ad684f540.svg")'], 
-.image-21g2ca[src='/assets/af1464f289927a54e50e5b6ad684f540.svg'], .image-21g2ca[style*='background-image: url("/assets/af1464f289927a54e50e5b6ad684f540.svg")'], 
-.icon-Yl4xbA[src='/assets/af1464f289927a54e50e5b6ad684f540.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/af1464f289927a54e50e5b6ad684f540.svg")'], 
-.emoji-1kNQp2[src='/assets/af1464f289927a54e50e5b6ad684f540.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/af1464f289927a54e50e5b6ad684f540.svg")'], 
-.roleIcon-3-WL_I[src='/assets/af1464f289927a54e50e5b6ad684f540.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/af1464f289927a54e50e5b6ad684f540.svg")'], 
-.emoji[src='/assets/af1464f289927a54e50e5b6ad684f540.svg'], .emoji[style*='background-image: url("/assets/af1464f289927a54e50e5b6ad684f540.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/girl.png") !important;
-}
-
-/* girl_tone1 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/496b126281f4a1af2d52e3e055b32fc7.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/496b126281f4a1af2d52e3e055b32fc7.svg")'], 
-.emoji-4YP39J[src='/assets/496b126281f4a1af2d52e3e055b32fc7.svg'], .emoji-4YP39J[style*='background-image: url("/assets/496b126281f4a1af2d52e3e055b32fc7.svg")'], 
-.emojiImage-1mTIfi[src='/assets/496b126281f4a1af2d52e3e055b32fc7.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/496b126281f4a1af2d52e3e055b32fc7.svg")'], 
-.image-21g2ca[src='/assets/496b126281f4a1af2d52e3e055b32fc7.svg'], .image-21g2ca[style*='background-image: url("/assets/496b126281f4a1af2d52e3e055b32fc7.svg")'], 
-.icon-Yl4xbA[src='/assets/496b126281f4a1af2d52e3e055b32fc7.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/496b126281f4a1af2d52e3e055b32fc7.svg")'], 
-.emoji-1kNQp2[src='/assets/496b126281f4a1af2d52e3e055b32fc7.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/496b126281f4a1af2d52e3e055b32fc7.svg")'], 
-.roleIcon-3-WL_I[src='/assets/496b126281f4a1af2d52e3e055b32fc7.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/496b126281f4a1af2d52e3e055b32fc7.svg")'], 
-.emoji[src='/assets/496b126281f4a1af2d52e3e055b32fc7.svg'], .emoji[style*='background-image: url("/assets/496b126281f4a1af2d52e3e055b32fc7.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/girl_tone1.png") !important;
-}
-
-/* girl_tone2 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/1fde6d802203c3fe50946542d7ab9e95.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/1fde6d802203c3fe50946542d7ab9e95.svg")'], 
-.emoji-4YP39J[src='/assets/1fde6d802203c3fe50946542d7ab9e95.svg'], .emoji-4YP39J[style*='background-image: url("/assets/1fde6d802203c3fe50946542d7ab9e95.svg")'], 
-.emojiImage-1mTIfi[src='/assets/1fde6d802203c3fe50946542d7ab9e95.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/1fde6d802203c3fe50946542d7ab9e95.svg")'], 
-.image-21g2ca[src='/assets/1fde6d802203c3fe50946542d7ab9e95.svg'], .image-21g2ca[style*='background-image: url("/assets/1fde6d802203c3fe50946542d7ab9e95.svg")'], 
-.icon-Yl4xbA[src='/assets/1fde6d802203c3fe50946542d7ab9e95.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/1fde6d802203c3fe50946542d7ab9e95.svg")'], 
-.emoji-1kNQp2[src='/assets/1fde6d802203c3fe50946542d7ab9e95.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/1fde6d802203c3fe50946542d7ab9e95.svg")'], 
-.roleIcon-3-WL_I[src='/assets/1fde6d802203c3fe50946542d7ab9e95.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/1fde6d802203c3fe50946542d7ab9e95.svg")'], 
-.emoji[src='/assets/1fde6d802203c3fe50946542d7ab9e95.svg'], .emoji[style*='background-image: url("/assets/1fde6d802203c3fe50946542d7ab9e95.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/girl_tone2.png") !important;
-}
-
-/* girl_tone3 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/53069313ab2fd0e906179cb8335e3147.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/53069313ab2fd0e906179cb8335e3147.svg")'], 
-.emoji-4YP39J[src='/assets/53069313ab2fd0e906179cb8335e3147.svg'], .emoji-4YP39J[style*='background-image: url("/assets/53069313ab2fd0e906179cb8335e3147.svg")'], 
-.emojiImage-1mTIfi[src='/assets/53069313ab2fd0e906179cb8335e3147.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/53069313ab2fd0e906179cb8335e3147.svg")'], 
-.image-21g2ca[src='/assets/53069313ab2fd0e906179cb8335e3147.svg'], .image-21g2ca[style*='background-image: url("/assets/53069313ab2fd0e906179cb8335e3147.svg")'], 
-.icon-Yl4xbA[src='/assets/53069313ab2fd0e906179cb8335e3147.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/53069313ab2fd0e906179cb8335e3147.svg")'], 
-.emoji-1kNQp2[src='/assets/53069313ab2fd0e906179cb8335e3147.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/53069313ab2fd0e906179cb8335e3147.svg")'], 
-.roleIcon-3-WL_I[src='/assets/53069313ab2fd0e906179cb8335e3147.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/53069313ab2fd0e906179cb8335e3147.svg")'], 
-.emoji[src='/assets/53069313ab2fd0e906179cb8335e3147.svg'], .emoji[style*='background-image: url("/assets/53069313ab2fd0e906179cb8335e3147.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/girl_tone3.png") !important;
-}
-
-/* girl_tone4 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/cc6c11d5845f38a77e01660e002f2de3.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/cc6c11d5845f38a77e01660e002f2de3.svg")'], 
-.emoji-4YP39J[src='/assets/cc6c11d5845f38a77e01660e002f2de3.svg'], .emoji-4YP39J[style*='background-image: url("/assets/cc6c11d5845f38a77e01660e002f2de3.svg")'], 
-.emojiImage-1mTIfi[src='/assets/cc6c11d5845f38a77e01660e002f2de3.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/cc6c11d5845f38a77e01660e002f2de3.svg")'], 
-.image-21g2ca[src='/assets/cc6c11d5845f38a77e01660e002f2de3.svg'], .image-21g2ca[style*='background-image: url("/assets/cc6c11d5845f38a77e01660e002f2de3.svg")'], 
-.icon-Yl4xbA[src='/assets/cc6c11d5845f38a77e01660e002f2de3.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/cc6c11d5845f38a77e01660e002f2de3.svg")'], 
-.emoji-1kNQp2[src='/assets/cc6c11d5845f38a77e01660e002f2de3.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/cc6c11d5845f38a77e01660e002f2de3.svg")'], 
-.roleIcon-3-WL_I[src='/assets/cc6c11d5845f38a77e01660e002f2de3.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/cc6c11d5845f38a77e01660e002f2de3.svg")'], 
-.emoji[src='/assets/cc6c11d5845f38a77e01660e002f2de3.svg'], .emoji[style*='background-image: url("/assets/cc6c11d5845f38a77e01660e002f2de3.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/girl_tone4.png") !important;
-}
-
-/* girl_tone5 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/aec96b451fef5f357bb8c6edca9168dd.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/aec96b451fef5f357bb8c6edca9168dd.svg")'], 
-.emoji-4YP39J[src='/assets/aec96b451fef5f357bb8c6edca9168dd.svg'], .emoji-4YP39J[style*='background-image: url("/assets/aec96b451fef5f357bb8c6edca9168dd.svg")'], 
-.emojiImage-1mTIfi[src='/assets/aec96b451fef5f357bb8c6edca9168dd.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/aec96b451fef5f357bb8c6edca9168dd.svg")'], 
-.image-21g2ca[src='/assets/aec96b451fef5f357bb8c6edca9168dd.svg'], .image-21g2ca[style*='background-image: url("/assets/aec96b451fef5f357bb8c6edca9168dd.svg")'], 
-.icon-Yl4xbA[src='/assets/aec96b451fef5f357bb8c6edca9168dd.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/aec96b451fef5f357bb8c6edca9168dd.svg")'], 
-.emoji-1kNQp2[src='/assets/aec96b451fef5f357bb8c6edca9168dd.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/aec96b451fef5f357bb8c6edca9168dd.svg")'], 
-.roleIcon-3-WL_I[src='/assets/aec96b451fef5f357bb8c6edca9168dd.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/aec96b451fef5f357bb8c6edca9168dd.svg")'], 
-.emoji[src='/assets/aec96b451fef5f357bb8c6edca9168dd.svg'], .emoji[style*='background-image: url("/assets/aec96b451fef5f357bb8c6edca9168dd.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/girl_tone5.png") !important;
-}
-
 /* child */
 .diversityEmojiItemImage-1pfGqI[src='/assets/e361b8723c20d3049457fd449a2cf0ce.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/e361b8723c20d3049457fd449a2cf0ce.svg")'], 
 .emoji-4YP39J[src='/assets/e361b8723c20d3049457fd449a2cf0ce.svg'], .emoji-4YP39J[style*='background-image: url("/assets/e361b8723c20d3049457fd449a2cf0ce.svg")'], 
@@ -4884,6 +4793,84 @@
 .emoji[src='/assets/cece3d1439975e3678bb956fd99a6b16.svg'], .emoji[style*='background-image: url("/assets/cece3d1439975e3678bb956fd99a6b16.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/child_tone5.png") !important;
+}
+
+/* girl */
+.diversityEmojiItemImage-1pfGqI[src='/assets/af1464f289927a54e50e5b6ad684f540.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/af1464f289927a54e50e5b6ad684f540.svg")'], 
+.emoji-4YP39J[src='/assets/af1464f289927a54e50e5b6ad684f540.svg'], .emoji-4YP39J[style*='background-image: url("/assets/af1464f289927a54e50e5b6ad684f540.svg")'], 
+.emojiImage-1mTIfi[src='/assets/af1464f289927a54e50e5b6ad684f540.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/af1464f289927a54e50e5b6ad684f540.svg")'], 
+.image-21g2ca[src='/assets/af1464f289927a54e50e5b6ad684f540.svg'], .image-21g2ca[style*='background-image: url("/assets/af1464f289927a54e50e5b6ad684f540.svg")'], 
+.icon-Yl4xbA[src='/assets/af1464f289927a54e50e5b6ad684f540.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/af1464f289927a54e50e5b6ad684f540.svg")'], 
+.emoji-1kNQp2[src='/assets/af1464f289927a54e50e5b6ad684f540.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/af1464f289927a54e50e5b6ad684f540.svg")'], 
+.roleIcon-3-WL_I[src='/assets/af1464f289927a54e50e5b6ad684f540.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/af1464f289927a54e50e5b6ad684f540.svg")'], 
+.emoji[src='/assets/af1464f289927a54e50e5b6ad684f540.svg'], .emoji[style*='background-image: url("/assets/af1464f289927a54e50e5b6ad684f540.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/girl.png") !important;
+}
+
+/* girl_tone1 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/496b126281f4a1af2d52e3e055b32fc7.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/496b126281f4a1af2d52e3e055b32fc7.svg")'], 
+.emoji-4YP39J[src='/assets/496b126281f4a1af2d52e3e055b32fc7.svg'], .emoji-4YP39J[style*='background-image: url("/assets/496b126281f4a1af2d52e3e055b32fc7.svg")'], 
+.emojiImage-1mTIfi[src='/assets/496b126281f4a1af2d52e3e055b32fc7.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/496b126281f4a1af2d52e3e055b32fc7.svg")'], 
+.image-21g2ca[src='/assets/496b126281f4a1af2d52e3e055b32fc7.svg'], .image-21g2ca[style*='background-image: url("/assets/496b126281f4a1af2d52e3e055b32fc7.svg")'], 
+.icon-Yl4xbA[src='/assets/496b126281f4a1af2d52e3e055b32fc7.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/496b126281f4a1af2d52e3e055b32fc7.svg")'], 
+.emoji-1kNQp2[src='/assets/496b126281f4a1af2d52e3e055b32fc7.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/496b126281f4a1af2d52e3e055b32fc7.svg")'], 
+.roleIcon-3-WL_I[src='/assets/496b126281f4a1af2d52e3e055b32fc7.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/496b126281f4a1af2d52e3e055b32fc7.svg")'], 
+.emoji[src='/assets/496b126281f4a1af2d52e3e055b32fc7.svg'], .emoji[style*='background-image: url("/assets/496b126281f4a1af2d52e3e055b32fc7.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/girl_tone1.png") !important;
+}
+
+/* girl_tone2 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/1fde6d802203c3fe50946542d7ab9e95.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/1fde6d802203c3fe50946542d7ab9e95.svg")'], 
+.emoji-4YP39J[src='/assets/1fde6d802203c3fe50946542d7ab9e95.svg'], .emoji-4YP39J[style*='background-image: url("/assets/1fde6d802203c3fe50946542d7ab9e95.svg")'], 
+.emojiImage-1mTIfi[src='/assets/1fde6d802203c3fe50946542d7ab9e95.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/1fde6d802203c3fe50946542d7ab9e95.svg")'], 
+.image-21g2ca[src='/assets/1fde6d802203c3fe50946542d7ab9e95.svg'], .image-21g2ca[style*='background-image: url("/assets/1fde6d802203c3fe50946542d7ab9e95.svg")'], 
+.icon-Yl4xbA[src='/assets/1fde6d802203c3fe50946542d7ab9e95.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/1fde6d802203c3fe50946542d7ab9e95.svg")'], 
+.emoji-1kNQp2[src='/assets/1fde6d802203c3fe50946542d7ab9e95.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/1fde6d802203c3fe50946542d7ab9e95.svg")'], 
+.roleIcon-3-WL_I[src='/assets/1fde6d802203c3fe50946542d7ab9e95.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/1fde6d802203c3fe50946542d7ab9e95.svg")'], 
+.emoji[src='/assets/1fde6d802203c3fe50946542d7ab9e95.svg'], .emoji[style*='background-image: url("/assets/1fde6d802203c3fe50946542d7ab9e95.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/girl_tone2.png") !important;
+}
+
+/* girl_tone3 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/53069313ab2fd0e906179cb8335e3147.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/53069313ab2fd0e906179cb8335e3147.svg")'], 
+.emoji-4YP39J[src='/assets/53069313ab2fd0e906179cb8335e3147.svg'], .emoji-4YP39J[style*='background-image: url("/assets/53069313ab2fd0e906179cb8335e3147.svg")'], 
+.emojiImage-1mTIfi[src='/assets/53069313ab2fd0e906179cb8335e3147.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/53069313ab2fd0e906179cb8335e3147.svg")'], 
+.image-21g2ca[src='/assets/53069313ab2fd0e906179cb8335e3147.svg'], .image-21g2ca[style*='background-image: url("/assets/53069313ab2fd0e906179cb8335e3147.svg")'], 
+.icon-Yl4xbA[src='/assets/53069313ab2fd0e906179cb8335e3147.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/53069313ab2fd0e906179cb8335e3147.svg")'], 
+.emoji-1kNQp2[src='/assets/53069313ab2fd0e906179cb8335e3147.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/53069313ab2fd0e906179cb8335e3147.svg")'], 
+.roleIcon-3-WL_I[src='/assets/53069313ab2fd0e906179cb8335e3147.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/53069313ab2fd0e906179cb8335e3147.svg")'], 
+.emoji[src='/assets/53069313ab2fd0e906179cb8335e3147.svg'], .emoji[style*='background-image: url("/assets/53069313ab2fd0e906179cb8335e3147.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/girl_tone3.png") !important;
+}
+
+/* girl_tone4 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/cc6c11d5845f38a77e01660e002f2de3.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/cc6c11d5845f38a77e01660e002f2de3.svg")'], 
+.emoji-4YP39J[src='/assets/cc6c11d5845f38a77e01660e002f2de3.svg'], .emoji-4YP39J[style*='background-image: url("/assets/cc6c11d5845f38a77e01660e002f2de3.svg")'], 
+.emojiImage-1mTIfi[src='/assets/cc6c11d5845f38a77e01660e002f2de3.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/cc6c11d5845f38a77e01660e002f2de3.svg")'], 
+.image-21g2ca[src='/assets/cc6c11d5845f38a77e01660e002f2de3.svg'], .image-21g2ca[style*='background-image: url("/assets/cc6c11d5845f38a77e01660e002f2de3.svg")'], 
+.icon-Yl4xbA[src='/assets/cc6c11d5845f38a77e01660e002f2de3.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/cc6c11d5845f38a77e01660e002f2de3.svg")'], 
+.emoji-1kNQp2[src='/assets/cc6c11d5845f38a77e01660e002f2de3.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/cc6c11d5845f38a77e01660e002f2de3.svg")'], 
+.roleIcon-3-WL_I[src='/assets/cc6c11d5845f38a77e01660e002f2de3.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/cc6c11d5845f38a77e01660e002f2de3.svg")'], 
+.emoji[src='/assets/cc6c11d5845f38a77e01660e002f2de3.svg'], .emoji[style*='background-image: url("/assets/cc6c11d5845f38a77e01660e002f2de3.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/girl_tone4.png") !important;
+}
+
+/* girl_tone5 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/aec96b451fef5f357bb8c6edca9168dd.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/aec96b451fef5f357bb8c6edca9168dd.svg")'], 
+.emoji-4YP39J[src='/assets/aec96b451fef5f357bb8c6edca9168dd.svg'], .emoji-4YP39J[style*='background-image: url("/assets/aec96b451fef5f357bb8c6edca9168dd.svg")'], 
+.emojiImage-1mTIfi[src='/assets/aec96b451fef5f357bb8c6edca9168dd.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/aec96b451fef5f357bb8c6edca9168dd.svg")'], 
+.image-21g2ca[src='/assets/aec96b451fef5f357bb8c6edca9168dd.svg'], .image-21g2ca[style*='background-image: url("/assets/aec96b451fef5f357bb8c6edca9168dd.svg")'], 
+.icon-Yl4xbA[src='/assets/aec96b451fef5f357bb8c6edca9168dd.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/aec96b451fef5f357bb8c6edca9168dd.svg")'], 
+.emoji-1kNQp2[src='/assets/aec96b451fef5f357bb8c6edca9168dd.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/aec96b451fef5f357bb8c6edca9168dd.svg")'], 
+.roleIcon-3-WL_I[src='/assets/aec96b451fef5f357bb8c6edca9168dd.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/aec96b451fef5f357bb8c6edca9168dd.svg")'], 
+.emoji[src='/assets/aec96b451fef5f357bb8c6edca9168dd.svg'], .emoji[style*='background-image: url("/assets/aec96b451fef5f357bb8c6edca9168dd.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/girl_tone5.png") !important;
 }
 
 /* boy */
@@ -4964,84 +4951,6 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/boy_tone5.png") !important;
 }
 
-/* woman */
-.diversityEmojiItemImage-1pfGqI[src='/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg")'], 
-.emoji-4YP39J[src='/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg'], .emoji-4YP39J[style*='background-image: url("/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg")'], 
-.emojiImage-1mTIfi[src='/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg")'], 
-.image-21g2ca[src='/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg'], .image-21g2ca[style*='background-image: url("/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg")'], 
-.icon-Yl4xbA[src='/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg")'], 
-.emoji-1kNQp2[src='/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg")'], 
-.roleIcon-3-WL_I[src='/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg")'], 
-.emoji[src='/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg'], .emoji[style*='background-image: url("/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/woman.png") !important;
-}
-
-/* woman_tone1 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/4a8440d0f005eb46ed688d214a7f8792.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/4a8440d0f005eb46ed688d214a7f8792.svg")'], 
-.emoji-4YP39J[src='/assets/4a8440d0f005eb46ed688d214a7f8792.svg'], .emoji-4YP39J[style*='background-image: url("/assets/4a8440d0f005eb46ed688d214a7f8792.svg")'], 
-.emojiImage-1mTIfi[src='/assets/4a8440d0f005eb46ed688d214a7f8792.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/4a8440d0f005eb46ed688d214a7f8792.svg")'], 
-.image-21g2ca[src='/assets/4a8440d0f005eb46ed688d214a7f8792.svg'], .image-21g2ca[style*='background-image: url("/assets/4a8440d0f005eb46ed688d214a7f8792.svg")'], 
-.icon-Yl4xbA[src='/assets/4a8440d0f005eb46ed688d214a7f8792.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/4a8440d0f005eb46ed688d214a7f8792.svg")'], 
-.emoji-1kNQp2[src='/assets/4a8440d0f005eb46ed688d214a7f8792.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/4a8440d0f005eb46ed688d214a7f8792.svg")'], 
-.roleIcon-3-WL_I[src='/assets/4a8440d0f005eb46ed688d214a7f8792.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/4a8440d0f005eb46ed688d214a7f8792.svg")'], 
-.emoji[src='/assets/4a8440d0f005eb46ed688d214a7f8792.svg'], .emoji[style*='background-image: url("/assets/4a8440d0f005eb46ed688d214a7f8792.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/woman_tone1.png") !important;
-}
-
-/* woman_tone2 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .diversityEmojiItemImage-1pfGqI[alt=":woman_tone2:"], body .diversityEmojiItemImage-1pfGqI[alt="👩🏼"], 
-.emoji-4YP39J[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .emoji-4YP39J[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .emoji-4YP39J[alt=":woman_tone2:"], body .emoji-4YP39J[alt="👩🏼"], 
-.emojiImage-1mTIfi[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .emojiImage-1mTIfi[alt=":woman_tone2:"], body .emojiImage-1mTIfi[alt="👩🏼"], 
-.image-21g2ca[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .image-21g2ca[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .image-21g2ca[alt=":woman_tone2:"], body .image-21g2ca[alt="👩🏼"], 
-.icon-Yl4xbA[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .icon-Yl4xbA[alt=":woman_tone2:"], body .icon-Yl4xbA[alt="👩🏼"], 
-.emoji-1kNQp2[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .emoji-1kNQp2[alt=":woman_tone2:"], body .emoji-1kNQp2[alt="👩🏼"], 
-.roleIcon-3-WL_I[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .roleIcon-3-WL_I[alt=":woman_tone2:"], body .roleIcon-3-WL_I[alt="👩🏼"], 
-.emoji[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .emoji[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .emoji[alt=":woman_tone2:"], body .emoji[alt="👩🏼"] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/woman_tone2.png") !important;
-}
-
-/* woman_tone3 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg")'], 
-.emoji-4YP39J[src='/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg'], .emoji-4YP39J[style*='background-image: url("/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg")'], 
-.emojiImage-1mTIfi[src='/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg")'], 
-.image-21g2ca[src='/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg'], .image-21g2ca[style*='background-image: url("/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg")'], 
-.icon-Yl4xbA[src='/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg")'], 
-.emoji-1kNQp2[src='/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg")'], 
-.roleIcon-3-WL_I[src='/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg")'], 
-.emoji[src='/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg'], .emoji[style*='background-image: url("/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/woman_tone3.png") !important;
-}
-
-/* woman_tone4 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg")'], 
-.emoji-4YP39J[src='/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg'], .emoji-4YP39J[style*='background-image: url("/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg")'], 
-.emojiImage-1mTIfi[src='/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg")'], 
-.image-21g2ca[src='/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg'], .image-21g2ca[style*='background-image: url("/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg")'], 
-.icon-Yl4xbA[src='/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg")'], 
-.emoji-1kNQp2[src='/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg")'], 
-.roleIcon-3-WL_I[src='/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg")'], 
-.emoji[src='/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg'], .emoji[style*='background-image: url("/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/woman_tone4.png") !important;
-}
-
-/* woman_tone5 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/fba1d9956db585299f85d53dd8474256.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/fba1d9956db585299f85d53dd8474256.svg")'], 
-.emoji-4YP39J[src='/assets/fba1d9956db585299f85d53dd8474256.svg'], .emoji-4YP39J[style*='background-image: url("/assets/fba1d9956db585299f85d53dd8474256.svg")'], 
-.emojiImage-1mTIfi[src='/assets/fba1d9956db585299f85d53dd8474256.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/fba1d9956db585299f85d53dd8474256.svg")'], 
-.image-21g2ca[src='/assets/fba1d9956db585299f85d53dd8474256.svg'], .image-21g2ca[style*='background-image: url("/assets/fba1d9956db585299f85d53dd8474256.svg")'], 
-.icon-Yl4xbA[src='/assets/fba1d9956db585299f85d53dd8474256.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/fba1d9956db585299f85d53dd8474256.svg")'], 
-.emoji-1kNQp2[src='/assets/fba1d9956db585299f85d53dd8474256.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/fba1d9956db585299f85d53dd8474256.svg")'], 
-.roleIcon-3-WL_I[src='/assets/fba1d9956db585299f85d53dd8474256.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/fba1d9956db585299f85d53dd8474256.svg")'], 
-.emoji[src='/assets/fba1d9956db585299f85d53dd8474256.svg'], .emoji[style*='background-image: url("/assets/fba1d9956db585299f85d53dd8474256.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/woman_tone5.png") !important;
-}
-
 /* adult */
 .diversityEmojiItemImage-1pfGqI[src='/assets/5c0074506e0e63ae5ac8646fa17910c0.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/5c0074506e0e63ae5ac8646fa17910c0.svg")'], 
 .emoji-4YP39J[src='/assets/5c0074506e0e63ae5ac8646fa17910c0.svg'], .emoji-4YP39J[style*='background-image: url("/assets/5c0074506e0e63ae5ac8646fa17910c0.svg")'], 
@@ -5118,6 +5027,84 @@
 .emoji[src='/assets/ded81139c0261716ede8918707ad348b.svg'], .emoji[style*='background-image: url("/assets/ded81139c0261716ede8918707ad348b.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/adult_tone5.png") !important;
+}
+
+/* woman */
+.diversityEmojiItemImage-1pfGqI[src='/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg")'], 
+.emoji-4YP39J[src='/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg'], .emoji-4YP39J[style*='background-image: url("/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg")'], 
+.emojiImage-1mTIfi[src='/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg")'], 
+.image-21g2ca[src='/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg'], .image-21g2ca[style*='background-image: url("/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg")'], 
+.icon-Yl4xbA[src='/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg")'], 
+.emoji-1kNQp2[src='/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg")'], 
+.roleIcon-3-WL_I[src='/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg")'], 
+.emoji[src='/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg'], .emoji[style*='background-image: url("/assets/55393c8aa1b07ef9bbbba4ec6bd9b562.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/woman.png") !important;
+}
+
+/* woman_tone1 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/4a8440d0f005eb46ed688d214a7f8792.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/4a8440d0f005eb46ed688d214a7f8792.svg")'], 
+.emoji-4YP39J[src='/assets/4a8440d0f005eb46ed688d214a7f8792.svg'], .emoji-4YP39J[style*='background-image: url("/assets/4a8440d0f005eb46ed688d214a7f8792.svg")'], 
+.emojiImage-1mTIfi[src='/assets/4a8440d0f005eb46ed688d214a7f8792.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/4a8440d0f005eb46ed688d214a7f8792.svg")'], 
+.image-21g2ca[src='/assets/4a8440d0f005eb46ed688d214a7f8792.svg'], .image-21g2ca[style*='background-image: url("/assets/4a8440d0f005eb46ed688d214a7f8792.svg")'], 
+.icon-Yl4xbA[src='/assets/4a8440d0f005eb46ed688d214a7f8792.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/4a8440d0f005eb46ed688d214a7f8792.svg")'], 
+.emoji-1kNQp2[src='/assets/4a8440d0f005eb46ed688d214a7f8792.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/4a8440d0f005eb46ed688d214a7f8792.svg")'], 
+.roleIcon-3-WL_I[src='/assets/4a8440d0f005eb46ed688d214a7f8792.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/4a8440d0f005eb46ed688d214a7f8792.svg")'], 
+.emoji[src='/assets/4a8440d0f005eb46ed688d214a7f8792.svg'], .emoji[style*='background-image: url("/assets/4a8440d0f005eb46ed688d214a7f8792.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/woman_tone1.png") !important;
+}
+
+/* woman_tone2 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .diversityEmojiItemImage-1pfGqI[alt=":woman_tone2:"], body .diversityEmojiItemImage-1pfGqI[alt="👩🏼"], 
+.emoji-4YP39J[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .emoji-4YP39J[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .emoji-4YP39J[alt=":woman_tone2:"], body .emoji-4YP39J[alt="👩🏼"], 
+.emojiImage-1mTIfi[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .emojiImage-1mTIfi[alt=":woman_tone2:"], body .emojiImage-1mTIfi[alt="👩🏼"], 
+.image-21g2ca[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .image-21g2ca[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .image-21g2ca[alt=":woman_tone2:"], body .image-21g2ca[alt="👩🏼"], 
+.icon-Yl4xbA[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .icon-Yl4xbA[alt=":woman_tone2:"], body .icon-Yl4xbA[alt="👩🏼"], 
+.emoji-1kNQp2[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .emoji-1kNQp2[alt=":woman_tone2:"], body .emoji-1kNQp2[alt="👩🏼"], 
+.roleIcon-3-WL_I[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .roleIcon-3-WL_I[alt=":woman_tone2:"], body .roleIcon-3-WL_I[alt="👩🏼"], 
+.emoji[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .emoji[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .emoji[alt=":woman_tone2:"], body .emoji[alt="👩🏼"] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/woman_tone2.png") !important;
+}
+
+/* woman_tone3 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg")'], 
+.emoji-4YP39J[src='/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg'], .emoji-4YP39J[style*='background-image: url("/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg")'], 
+.emojiImage-1mTIfi[src='/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg")'], 
+.image-21g2ca[src='/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg'], .image-21g2ca[style*='background-image: url("/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg")'], 
+.icon-Yl4xbA[src='/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg")'], 
+.emoji-1kNQp2[src='/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg")'], 
+.roleIcon-3-WL_I[src='/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg")'], 
+.emoji[src='/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg'], .emoji[style*='background-image: url("/assets/d6b7df4fe1250ec05349f57d8a36e72b.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/woman_tone3.png") !important;
+}
+
+/* woman_tone4 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg")'], 
+.emoji-4YP39J[src='/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg'], .emoji-4YP39J[style*='background-image: url("/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg")'], 
+.emojiImage-1mTIfi[src='/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg")'], 
+.image-21g2ca[src='/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg'], .image-21g2ca[style*='background-image: url("/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg")'], 
+.icon-Yl4xbA[src='/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg")'], 
+.emoji-1kNQp2[src='/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg")'], 
+.roleIcon-3-WL_I[src='/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg")'], 
+.emoji[src='/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg'], .emoji[style*='background-image: url("/assets/c54fc3caa4686b1c8b5e435efb4e248d.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/woman_tone4.png") !important;
+}
+
+/* woman_tone5 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/fba1d9956db585299f85d53dd8474256.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/fba1d9956db585299f85d53dd8474256.svg")'], 
+.emoji-4YP39J[src='/assets/fba1d9956db585299f85d53dd8474256.svg'], .emoji-4YP39J[style*='background-image: url("/assets/fba1d9956db585299f85d53dd8474256.svg")'], 
+.emojiImage-1mTIfi[src='/assets/fba1d9956db585299f85d53dd8474256.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/fba1d9956db585299f85d53dd8474256.svg")'], 
+.image-21g2ca[src='/assets/fba1d9956db585299f85d53dd8474256.svg'], .image-21g2ca[style*='background-image: url("/assets/fba1d9956db585299f85d53dd8474256.svg")'], 
+.icon-Yl4xbA[src='/assets/fba1d9956db585299f85d53dd8474256.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/fba1d9956db585299f85d53dd8474256.svg")'], 
+.emoji-1kNQp2[src='/assets/fba1d9956db585299f85d53dd8474256.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/fba1d9956db585299f85d53dd8474256.svg")'], 
+.roleIcon-3-WL_I[src='/assets/fba1d9956db585299f85d53dd8474256.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/fba1d9956db585299f85d53dd8474256.svg")'], 
+.emoji[src='/assets/fba1d9956db585299f85d53dd8474256.svg'], .emoji[style*='background-image: url("/assets/fba1d9956db585299f85d53dd8474256.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/woman_tone5.png") !important;
 }
 
 /* man */
@@ -5666,84 +5653,6 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_red_haired_tone5.png") !important;
 }
 
-/* blond_haired_woman */
-.diversityEmojiItemImage-1pfGqI[src='/assets/06054e507640fe08208a805a880bd57b.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/06054e507640fe08208a805a880bd57b.svg")'], 
-.emoji-4YP39J[src='/assets/06054e507640fe08208a805a880bd57b.svg'], .emoji-4YP39J[style*='background-image: url("/assets/06054e507640fe08208a805a880bd57b.svg")'], 
-.emojiImage-1mTIfi[src='/assets/06054e507640fe08208a805a880bd57b.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/06054e507640fe08208a805a880bd57b.svg")'], 
-.image-21g2ca[src='/assets/06054e507640fe08208a805a880bd57b.svg'], .image-21g2ca[style*='background-image: url("/assets/06054e507640fe08208a805a880bd57b.svg")'], 
-.icon-Yl4xbA[src='/assets/06054e507640fe08208a805a880bd57b.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/06054e507640fe08208a805a880bd57b.svg")'], 
-.emoji-1kNQp2[src='/assets/06054e507640fe08208a805a880bd57b.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/06054e507640fe08208a805a880bd57b.svg")'], 
-.roleIcon-3-WL_I[src='/assets/06054e507640fe08208a805a880bd57b.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/06054e507640fe08208a805a880bd57b.svg")'], 
-.emoji[src='/assets/06054e507640fe08208a805a880bd57b.svg'], .emoji[style*='background-image: url("/assets/06054e507640fe08208a805a880bd57b.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/blond_haired_woman.png") !important;
-}
-
-/* blond_haired_woman_tone1 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/143017f50097887c1b7c8e414c543702.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/143017f50097887c1b7c8e414c543702.svg")'], 
-.emoji-4YP39J[src='/assets/143017f50097887c1b7c8e414c543702.svg'], .emoji-4YP39J[style*='background-image: url("/assets/143017f50097887c1b7c8e414c543702.svg")'], 
-.emojiImage-1mTIfi[src='/assets/143017f50097887c1b7c8e414c543702.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/143017f50097887c1b7c8e414c543702.svg")'], 
-.image-21g2ca[src='/assets/143017f50097887c1b7c8e414c543702.svg'], .image-21g2ca[style*='background-image: url("/assets/143017f50097887c1b7c8e414c543702.svg")'], 
-.icon-Yl4xbA[src='/assets/143017f50097887c1b7c8e414c543702.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/143017f50097887c1b7c8e414c543702.svg")'], 
-.emoji-1kNQp2[src='/assets/143017f50097887c1b7c8e414c543702.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/143017f50097887c1b7c8e414c543702.svg")'], 
-.roleIcon-3-WL_I[src='/assets/143017f50097887c1b7c8e414c543702.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/143017f50097887c1b7c8e414c543702.svg")'], 
-.emoji[src='/assets/143017f50097887c1b7c8e414c543702.svg'], .emoji[style*='background-image: url("/assets/143017f50097887c1b7c8e414c543702.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/blond_haired_woman_tone1.png") !important;
-}
-
-/* blond_haired_woman_tone2 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .diversityEmojiItemImage-1pfGqI[alt=":blond_haired_woman_tone2:"], body .diversityEmojiItemImage-1pfGqI[alt="👱🏼‍♀️"], 
-.emoji-4YP39J[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .emoji-4YP39J[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .emoji-4YP39J[alt=":blond_haired_woman_tone2:"], body .emoji-4YP39J[alt="👱🏼‍♀️"], 
-.emojiImage-1mTIfi[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .emojiImage-1mTIfi[alt=":blond_haired_woman_tone2:"], body .emojiImage-1mTIfi[alt="👱🏼‍♀️"], 
-.image-21g2ca[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .image-21g2ca[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .image-21g2ca[alt=":blond_haired_woman_tone2:"], body .image-21g2ca[alt="👱🏼‍♀️"], 
-.icon-Yl4xbA[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .icon-Yl4xbA[alt=":blond_haired_woman_tone2:"], body .icon-Yl4xbA[alt="👱🏼‍♀️"], 
-.emoji-1kNQp2[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .emoji-1kNQp2[alt=":blond_haired_woman_tone2:"], body .emoji-1kNQp2[alt="👱🏼‍♀️"], 
-.roleIcon-3-WL_I[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .roleIcon-3-WL_I[alt=":blond_haired_woman_tone2:"], body .roleIcon-3-WL_I[alt="👱🏼‍♀️"], 
-.emoji[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .emoji[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .emoji[alt=":blond_haired_woman_tone2:"], body .emoji[alt="👱🏼‍♀️"] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/blond_haired_woman_tone2.png") !important;
-}
-
-/* blond_haired_woman_tone3 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/1a79354704635a634dbd5b962b903c59.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/1a79354704635a634dbd5b962b903c59.svg")'], 
-.emoji-4YP39J[src='/assets/1a79354704635a634dbd5b962b903c59.svg'], .emoji-4YP39J[style*='background-image: url("/assets/1a79354704635a634dbd5b962b903c59.svg")'], 
-.emojiImage-1mTIfi[src='/assets/1a79354704635a634dbd5b962b903c59.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/1a79354704635a634dbd5b962b903c59.svg")'], 
-.image-21g2ca[src='/assets/1a79354704635a634dbd5b962b903c59.svg'], .image-21g2ca[style*='background-image: url("/assets/1a79354704635a634dbd5b962b903c59.svg")'], 
-.icon-Yl4xbA[src='/assets/1a79354704635a634dbd5b962b903c59.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/1a79354704635a634dbd5b962b903c59.svg")'], 
-.emoji-1kNQp2[src='/assets/1a79354704635a634dbd5b962b903c59.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/1a79354704635a634dbd5b962b903c59.svg")'], 
-.roleIcon-3-WL_I[src='/assets/1a79354704635a634dbd5b962b903c59.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/1a79354704635a634dbd5b962b903c59.svg")'], 
-.emoji[src='/assets/1a79354704635a634dbd5b962b903c59.svg'], .emoji[style*='background-image: url("/assets/1a79354704635a634dbd5b962b903c59.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/blond_haired_woman_tone3.png") !important;
-}
-
-/* blond_haired_woman_tone4 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/16c3030a75cdc92940e5b56976b667d0.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/16c3030a75cdc92940e5b56976b667d0.svg")'], 
-.emoji-4YP39J[src='/assets/16c3030a75cdc92940e5b56976b667d0.svg'], .emoji-4YP39J[style*='background-image: url("/assets/16c3030a75cdc92940e5b56976b667d0.svg")'], 
-.emojiImage-1mTIfi[src='/assets/16c3030a75cdc92940e5b56976b667d0.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/16c3030a75cdc92940e5b56976b667d0.svg")'], 
-.image-21g2ca[src='/assets/16c3030a75cdc92940e5b56976b667d0.svg'], .image-21g2ca[style*='background-image: url("/assets/16c3030a75cdc92940e5b56976b667d0.svg")'], 
-.icon-Yl4xbA[src='/assets/16c3030a75cdc92940e5b56976b667d0.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/16c3030a75cdc92940e5b56976b667d0.svg")'], 
-.emoji-1kNQp2[src='/assets/16c3030a75cdc92940e5b56976b667d0.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/16c3030a75cdc92940e5b56976b667d0.svg")'], 
-.roleIcon-3-WL_I[src='/assets/16c3030a75cdc92940e5b56976b667d0.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/16c3030a75cdc92940e5b56976b667d0.svg")'], 
-.emoji[src='/assets/16c3030a75cdc92940e5b56976b667d0.svg'], .emoji[style*='background-image: url("/assets/16c3030a75cdc92940e5b56976b667d0.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/blond_haired_woman_tone4.png") !important;
-}
-
-/* blond_haired_woman_tone5 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg")'], 
-.emoji-4YP39J[src='/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg'], .emoji-4YP39J[style*='background-image: url("/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg")'], 
-.emojiImage-1mTIfi[src='/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg")'], 
-.image-21g2ca[src='/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg'], .image-21g2ca[style*='background-image: url("/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg")'], 
-.icon-Yl4xbA[src='/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg")'], 
-.emoji-1kNQp2[src='/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg")'], 
-.roleIcon-3-WL_I[src='/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg")'], 
-.emoji[src='/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg'], .emoji[style*='background-image: url("/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/blond_haired_woman_tone5.png") !important;
-}
-
 /* blond_haired_person */
 .diversityEmojiItemImage-1pfGqI[src='/assets/97522f4ddbac0a424e63064f7b7baea9.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/97522f4ddbac0a424e63064f7b7baea9.svg")'], 
 .emoji-4YP39J[src='/assets/97522f4ddbac0a424e63064f7b7baea9.svg'], .emoji-4YP39J[style*='background-image: url("/assets/97522f4ddbac0a424e63064f7b7baea9.svg")'], 
@@ -5820,6 +5729,84 @@
 .emoji[src='/assets/39ec79f4c6a6eefc1535f001700c4cc9.svg'], .emoji[style*='background-image: url("/assets/39ec79f4c6a6eefc1535f001700c4cc9.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/blond_haired_person_tone5.png") !important;
+}
+
+/* blond_haired_woman */
+.diversityEmojiItemImage-1pfGqI[src='/assets/06054e507640fe08208a805a880bd57b.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/06054e507640fe08208a805a880bd57b.svg")'], 
+.emoji-4YP39J[src='/assets/06054e507640fe08208a805a880bd57b.svg'], .emoji-4YP39J[style*='background-image: url("/assets/06054e507640fe08208a805a880bd57b.svg")'], 
+.emojiImage-1mTIfi[src='/assets/06054e507640fe08208a805a880bd57b.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/06054e507640fe08208a805a880bd57b.svg")'], 
+.image-21g2ca[src='/assets/06054e507640fe08208a805a880bd57b.svg'], .image-21g2ca[style*='background-image: url("/assets/06054e507640fe08208a805a880bd57b.svg")'], 
+.icon-Yl4xbA[src='/assets/06054e507640fe08208a805a880bd57b.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/06054e507640fe08208a805a880bd57b.svg")'], 
+.emoji-1kNQp2[src='/assets/06054e507640fe08208a805a880bd57b.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/06054e507640fe08208a805a880bd57b.svg")'], 
+.roleIcon-3-WL_I[src='/assets/06054e507640fe08208a805a880bd57b.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/06054e507640fe08208a805a880bd57b.svg")'], 
+.emoji[src='/assets/06054e507640fe08208a805a880bd57b.svg'], .emoji[style*='background-image: url("/assets/06054e507640fe08208a805a880bd57b.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/blond_haired_woman.png") !important;
+}
+
+/* blond_haired_woman_tone1 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/143017f50097887c1b7c8e414c543702.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/143017f50097887c1b7c8e414c543702.svg")'], 
+.emoji-4YP39J[src='/assets/143017f50097887c1b7c8e414c543702.svg'], .emoji-4YP39J[style*='background-image: url("/assets/143017f50097887c1b7c8e414c543702.svg")'], 
+.emojiImage-1mTIfi[src='/assets/143017f50097887c1b7c8e414c543702.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/143017f50097887c1b7c8e414c543702.svg")'], 
+.image-21g2ca[src='/assets/143017f50097887c1b7c8e414c543702.svg'], .image-21g2ca[style*='background-image: url("/assets/143017f50097887c1b7c8e414c543702.svg")'], 
+.icon-Yl4xbA[src='/assets/143017f50097887c1b7c8e414c543702.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/143017f50097887c1b7c8e414c543702.svg")'], 
+.emoji-1kNQp2[src='/assets/143017f50097887c1b7c8e414c543702.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/143017f50097887c1b7c8e414c543702.svg")'], 
+.roleIcon-3-WL_I[src='/assets/143017f50097887c1b7c8e414c543702.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/143017f50097887c1b7c8e414c543702.svg")'], 
+.emoji[src='/assets/143017f50097887c1b7c8e414c543702.svg'], .emoji[style*='background-image: url("/assets/143017f50097887c1b7c8e414c543702.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/blond_haired_woman_tone1.png") !important;
+}
+
+/* blond_haired_woman_tone2 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .diversityEmojiItemImage-1pfGqI[alt=":blond_haired_woman_tone2:"], body .diversityEmojiItemImage-1pfGqI[alt="👱🏼‍♀️"], 
+.emoji-4YP39J[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .emoji-4YP39J[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .emoji-4YP39J[alt=":blond_haired_woman_tone2:"], body .emoji-4YP39J[alt="👱🏼‍♀️"], 
+.emojiImage-1mTIfi[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .emojiImage-1mTIfi[alt=":blond_haired_woman_tone2:"], body .emojiImage-1mTIfi[alt="👱🏼‍♀️"], 
+.image-21g2ca[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .image-21g2ca[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .image-21g2ca[alt=":blond_haired_woman_tone2:"], body .image-21g2ca[alt="👱🏼‍♀️"], 
+.icon-Yl4xbA[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .icon-Yl4xbA[alt=":blond_haired_woman_tone2:"], body .icon-Yl4xbA[alt="👱🏼‍♀️"], 
+.emoji-1kNQp2[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .emoji-1kNQp2[alt=":blond_haired_woman_tone2:"], body .emoji-1kNQp2[alt="👱🏼‍♀️"], 
+.roleIcon-3-WL_I[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .roleIcon-3-WL_I[alt=":blond_haired_woman_tone2:"], body .roleIcon-3-WL_I[alt="👱🏼‍♀️"], 
+.emoji[src='/assets/4e5c39b2653bdcbb7021443b051094b4.svg'], .emoji[style*='background-image: url("/assets/4e5c39b2653bdcbb7021443b051094b4.svg")'], body .emoji[alt=":blond_haired_woman_tone2:"], body .emoji[alt="👱🏼‍♀️"] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/blond_haired_woman_tone2.png") !important;
+}
+
+/* blond_haired_woman_tone3 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/1a79354704635a634dbd5b962b903c59.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/1a79354704635a634dbd5b962b903c59.svg")'], 
+.emoji-4YP39J[src='/assets/1a79354704635a634dbd5b962b903c59.svg'], .emoji-4YP39J[style*='background-image: url("/assets/1a79354704635a634dbd5b962b903c59.svg")'], 
+.emojiImage-1mTIfi[src='/assets/1a79354704635a634dbd5b962b903c59.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/1a79354704635a634dbd5b962b903c59.svg")'], 
+.image-21g2ca[src='/assets/1a79354704635a634dbd5b962b903c59.svg'], .image-21g2ca[style*='background-image: url("/assets/1a79354704635a634dbd5b962b903c59.svg")'], 
+.icon-Yl4xbA[src='/assets/1a79354704635a634dbd5b962b903c59.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/1a79354704635a634dbd5b962b903c59.svg")'], 
+.emoji-1kNQp2[src='/assets/1a79354704635a634dbd5b962b903c59.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/1a79354704635a634dbd5b962b903c59.svg")'], 
+.roleIcon-3-WL_I[src='/assets/1a79354704635a634dbd5b962b903c59.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/1a79354704635a634dbd5b962b903c59.svg")'], 
+.emoji[src='/assets/1a79354704635a634dbd5b962b903c59.svg'], .emoji[style*='background-image: url("/assets/1a79354704635a634dbd5b962b903c59.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/blond_haired_woman_tone3.png") !important;
+}
+
+/* blond_haired_woman_tone4 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/16c3030a75cdc92940e5b56976b667d0.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/16c3030a75cdc92940e5b56976b667d0.svg")'], 
+.emoji-4YP39J[src='/assets/16c3030a75cdc92940e5b56976b667d0.svg'], .emoji-4YP39J[style*='background-image: url("/assets/16c3030a75cdc92940e5b56976b667d0.svg")'], 
+.emojiImage-1mTIfi[src='/assets/16c3030a75cdc92940e5b56976b667d0.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/16c3030a75cdc92940e5b56976b667d0.svg")'], 
+.image-21g2ca[src='/assets/16c3030a75cdc92940e5b56976b667d0.svg'], .image-21g2ca[style*='background-image: url("/assets/16c3030a75cdc92940e5b56976b667d0.svg")'], 
+.icon-Yl4xbA[src='/assets/16c3030a75cdc92940e5b56976b667d0.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/16c3030a75cdc92940e5b56976b667d0.svg")'], 
+.emoji-1kNQp2[src='/assets/16c3030a75cdc92940e5b56976b667d0.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/16c3030a75cdc92940e5b56976b667d0.svg")'], 
+.roleIcon-3-WL_I[src='/assets/16c3030a75cdc92940e5b56976b667d0.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/16c3030a75cdc92940e5b56976b667d0.svg")'], 
+.emoji[src='/assets/16c3030a75cdc92940e5b56976b667d0.svg'], .emoji[style*='background-image: url("/assets/16c3030a75cdc92940e5b56976b667d0.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/blond_haired_woman_tone4.png") !important;
+}
+
+/* blond_haired_woman_tone5 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg")'], 
+.emoji-4YP39J[src='/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg'], .emoji-4YP39J[style*='background-image: url("/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg")'], 
+.emojiImage-1mTIfi[src='/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg")'], 
+.image-21g2ca[src='/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg'], .image-21g2ca[style*='background-image: url("/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg")'], 
+.icon-Yl4xbA[src='/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg")'], 
+.emoji-1kNQp2[src='/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg")'], 
+.roleIcon-3-WL_I[src='/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg")'], 
+.emoji[src='/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg'], .emoji[style*='background-image: url("/assets/a60fef3c60fd7285b1c9077eadea4ffa.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/blond_haired_woman_tone5.png") !important;
 }
 
 /* blond_haired_man */
@@ -6446,84 +6433,6 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/bearded_person_tone5.png") !important;
 }
 
-/* man_beard */
-.diversityEmojiItemImage-1pfGqI[src='/assets/43910a2315d80e54680078da1d9bee20.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/43910a2315d80e54680078da1d9bee20.svg")'], 
-.emoji-4YP39J[src='/assets/43910a2315d80e54680078da1d9bee20.svg'], .emoji-4YP39J[style*='background-image: url("/assets/43910a2315d80e54680078da1d9bee20.svg")'], 
-.emojiImage-1mTIfi[src='/assets/43910a2315d80e54680078da1d9bee20.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/43910a2315d80e54680078da1d9bee20.svg")'], 
-.image-21g2ca[src='/assets/43910a2315d80e54680078da1d9bee20.svg'], .image-21g2ca[style*='background-image: url("/assets/43910a2315d80e54680078da1d9bee20.svg")'], 
-.icon-Yl4xbA[src='/assets/43910a2315d80e54680078da1d9bee20.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/43910a2315d80e54680078da1d9bee20.svg")'], 
-.emoji-1kNQp2[src='/assets/43910a2315d80e54680078da1d9bee20.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/43910a2315d80e54680078da1d9bee20.svg")'], 
-.roleIcon-3-WL_I[src='/assets/43910a2315d80e54680078da1d9bee20.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/43910a2315d80e54680078da1d9bee20.svg")'], 
-.emoji[src='/assets/43910a2315d80e54680078da1d9bee20.svg'], .emoji[style*='background-image: url("/assets/43910a2315d80e54680078da1d9bee20.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_beard.png") !important;
-}
-
-/* man_tone1_beard */
-.diversityEmojiItemImage-1pfGqI[src='/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg")'], 
-.emoji-4YP39J[src='/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg'], .emoji-4YP39J[style*='background-image: url("/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg")'], 
-.emojiImage-1mTIfi[src='/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg")'], 
-.image-21g2ca[src='/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg'], .image-21g2ca[style*='background-image: url("/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg")'], 
-.icon-Yl4xbA[src='/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg")'], 
-.emoji-1kNQp2[src='/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg")'], 
-.roleIcon-3-WL_I[src='/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg")'], 
-.emoji[src='/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg'], .emoji[style*='background-image: url("/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_tone1_beard.png") !important;
-}
-
-/* man_tone2_beard */
-.diversityEmojiItemImage-1pfGqI[src='/assets/b5768a9acaa6944a8d61754c2333132f.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/b5768a9acaa6944a8d61754c2333132f.svg")'], 
-.emoji-4YP39J[src='/assets/b5768a9acaa6944a8d61754c2333132f.svg'], .emoji-4YP39J[style*='background-image: url("/assets/b5768a9acaa6944a8d61754c2333132f.svg")'], 
-.emojiImage-1mTIfi[src='/assets/b5768a9acaa6944a8d61754c2333132f.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/b5768a9acaa6944a8d61754c2333132f.svg")'], 
-.image-21g2ca[src='/assets/b5768a9acaa6944a8d61754c2333132f.svg'], .image-21g2ca[style*='background-image: url("/assets/b5768a9acaa6944a8d61754c2333132f.svg")'], 
-.icon-Yl4xbA[src='/assets/b5768a9acaa6944a8d61754c2333132f.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/b5768a9acaa6944a8d61754c2333132f.svg")'], 
-.emoji-1kNQp2[src='/assets/b5768a9acaa6944a8d61754c2333132f.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/b5768a9acaa6944a8d61754c2333132f.svg")'], 
-.roleIcon-3-WL_I[src='/assets/b5768a9acaa6944a8d61754c2333132f.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/b5768a9acaa6944a8d61754c2333132f.svg")'], 
-.emoji[src='/assets/b5768a9acaa6944a8d61754c2333132f.svg'], .emoji[style*='background-image: url("/assets/b5768a9acaa6944a8d61754c2333132f.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_tone2_beard.png") !important;
-}
-
-/* man_tone3_beard */
-.diversityEmojiItemImage-1pfGqI[src='/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg")'], 
-.emoji-4YP39J[src='/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg'], .emoji-4YP39J[style*='background-image: url("/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg")'], 
-.emojiImage-1mTIfi[src='/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg")'], 
-.image-21g2ca[src='/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg'], .image-21g2ca[style*='background-image: url("/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg")'], 
-.icon-Yl4xbA[src='/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg")'], 
-.emoji-1kNQp2[src='/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg")'], 
-.roleIcon-3-WL_I[src='/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg")'], 
-.emoji[src='/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg'], .emoji[style*='background-image: url("/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_tone3_beard.png") !important;
-}
-
-/* man_tone4_beard */
-.diversityEmojiItemImage-1pfGqI[src='/assets/fb85748cbf6237665a63d0be4a86e87f.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/fb85748cbf6237665a63d0be4a86e87f.svg")'], 
-.emoji-4YP39J[src='/assets/fb85748cbf6237665a63d0be4a86e87f.svg'], .emoji-4YP39J[style*='background-image: url("/assets/fb85748cbf6237665a63d0be4a86e87f.svg")'], 
-.emojiImage-1mTIfi[src='/assets/fb85748cbf6237665a63d0be4a86e87f.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/fb85748cbf6237665a63d0be4a86e87f.svg")'], 
-.image-21g2ca[src='/assets/fb85748cbf6237665a63d0be4a86e87f.svg'], .image-21g2ca[style*='background-image: url("/assets/fb85748cbf6237665a63d0be4a86e87f.svg")'], 
-.icon-Yl4xbA[src='/assets/fb85748cbf6237665a63d0be4a86e87f.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/fb85748cbf6237665a63d0be4a86e87f.svg")'], 
-.emoji-1kNQp2[src='/assets/fb85748cbf6237665a63d0be4a86e87f.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/fb85748cbf6237665a63d0be4a86e87f.svg")'], 
-.roleIcon-3-WL_I[src='/assets/fb85748cbf6237665a63d0be4a86e87f.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/fb85748cbf6237665a63d0be4a86e87f.svg")'], 
-.emoji[src='/assets/fb85748cbf6237665a63d0be4a86e87f.svg'], .emoji[style*='background-image: url("/assets/fb85748cbf6237665a63d0be4a86e87f.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_tone4_beard.png") !important;
-}
-
-/* man_tone5_beard */
-.diversityEmojiItemImage-1pfGqI[src='/assets/4e2cfb47767914d79f828f0d034a314e.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/4e2cfb47767914d79f828f0d034a314e.svg")'], 
-.emoji-4YP39J[src='/assets/4e2cfb47767914d79f828f0d034a314e.svg'], .emoji-4YP39J[style*='background-image: url("/assets/4e2cfb47767914d79f828f0d034a314e.svg")'], 
-.emojiImage-1mTIfi[src='/assets/4e2cfb47767914d79f828f0d034a314e.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/4e2cfb47767914d79f828f0d034a314e.svg")'], 
-.image-21g2ca[src='/assets/4e2cfb47767914d79f828f0d034a314e.svg'], .image-21g2ca[style*='background-image: url("/assets/4e2cfb47767914d79f828f0d034a314e.svg")'], 
-.icon-Yl4xbA[src='/assets/4e2cfb47767914d79f828f0d034a314e.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/4e2cfb47767914d79f828f0d034a314e.svg")'], 
-.emoji-1kNQp2[src='/assets/4e2cfb47767914d79f828f0d034a314e.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/4e2cfb47767914d79f828f0d034a314e.svg")'], 
-.roleIcon-3-WL_I[src='/assets/4e2cfb47767914d79f828f0d034a314e.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/4e2cfb47767914d79f828f0d034a314e.svg")'], 
-.emoji[src='/assets/4e2cfb47767914d79f828f0d034a314e.svg'], .emoji[style*='background-image: url("/assets/4e2cfb47767914d79f828f0d034a314e.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_tone5_beard.png") !important;
-}
-
 /* woman_beard */
 .diversityEmojiItemImage-1pfGqI[src='/assets/c0c269468c9c961894e2271efad76cdf.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/c0c269468c9c961894e2271efad76cdf.svg")'], 
 .emoji-4YP39J[src='/assets/c0c269468c9c961894e2271efad76cdf.svg'], .emoji-4YP39J[style*='background-image: url("/assets/c0c269468c9c961894e2271efad76cdf.svg")'], 
@@ -6602,82 +6511,82 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/woman_tone5_beard.png") !important;
 }
 
-/* older_woman */
-.diversityEmojiItemImage-1pfGqI[src='/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg")'], 
-.emoji-4YP39J[src='/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg'], .emoji-4YP39J[style*='background-image: url("/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg")'], 
-.emojiImage-1mTIfi[src='/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg")'], 
-.image-21g2ca[src='/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg'], .image-21g2ca[style*='background-image: url("/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg")'], 
-.icon-Yl4xbA[src='/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg")'], 
-.emoji-1kNQp2[src='/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg")'], 
-.roleIcon-3-WL_I[src='/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg")'], 
-.emoji[src='/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg'], .emoji[style*='background-image: url("/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg")'] {
+/* man_beard */
+.diversityEmojiItemImage-1pfGqI[src='/assets/43910a2315d80e54680078da1d9bee20.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/43910a2315d80e54680078da1d9bee20.svg")'], 
+.emoji-4YP39J[src='/assets/43910a2315d80e54680078da1d9bee20.svg'], .emoji-4YP39J[style*='background-image: url("/assets/43910a2315d80e54680078da1d9bee20.svg")'], 
+.emojiImage-1mTIfi[src='/assets/43910a2315d80e54680078da1d9bee20.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/43910a2315d80e54680078da1d9bee20.svg")'], 
+.image-21g2ca[src='/assets/43910a2315d80e54680078da1d9bee20.svg'], .image-21g2ca[style*='background-image: url("/assets/43910a2315d80e54680078da1d9bee20.svg")'], 
+.icon-Yl4xbA[src='/assets/43910a2315d80e54680078da1d9bee20.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/43910a2315d80e54680078da1d9bee20.svg")'], 
+.emoji-1kNQp2[src='/assets/43910a2315d80e54680078da1d9bee20.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/43910a2315d80e54680078da1d9bee20.svg")'], 
+.roleIcon-3-WL_I[src='/assets/43910a2315d80e54680078da1d9bee20.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/43910a2315d80e54680078da1d9bee20.svg")'], 
+.emoji[src='/assets/43910a2315d80e54680078da1d9bee20.svg'], .emoji[style*='background-image: url("/assets/43910a2315d80e54680078da1d9bee20.svg")'] {
 	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/older_woman.png") !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_beard.png") !important;
 }
 
-/* older_woman_tone1 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg")'], 
-.emoji-4YP39J[src='/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg'], .emoji-4YP39J[style*='background-image: url("/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg")'], 
-.emojiImage-1mTIfi[src='/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg")'], 
-.image-21g2ca[src='/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg'], .image-21g2ca[style*='background-image: url("/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg")'], 
-.icon-Yl4xbA[src='/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg")'], 
-.emoji-1kNQp2[src='/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg")'], 
-.roleIcon-3-WL_I[src='/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg")'], 
-.emoji[src='/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg'], .emoji[style*='background-image: url("/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg")'] {
+/* man_tone1_beard */
+.diversityEmojiItemImage-1pfGqI[src='/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg")'], 
+.emoji-4YP39J[src='/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg'], .emoji-4YP39J[style*='background-image: url("/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg")'], 
+.emojiImage-1mTIfi[src='/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg")'], 
+.image-21g2ca[src='/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg'], .image-21g2ca[style*='background-image: url("/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg")'], 
+.icon-Yl4xbA[src='/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg")'], 
+.emoji-1kNQp2[src='/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg")'], 
+.roleIcon-3-WL_I[src='/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg")'], 
+.emoji[src='/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg'], .emoji[style*='background-image: url("/assets/653a8e1d8e8736fbe8a01d1d0599a7b4.svg")'] {
 	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/older_woman_tone1.png") !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_tone1_beard.png") !important;
 }
 
-/* older_woman_tone2 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/1e12e16f853ba36453a70434d09a4244.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/1e12e16f853ba36453a70434d09a4244.svg")'], 
-.emoji-4YP39J[src='/assets/1e12e16f853ba36453a70434d09a4244.svg'], .emoji-4YP39J[style*='background-image: url("/assets/1e12e16f853ba36453a70434d09a4244.svg")'], 
-.emojiImage-1mTIfi[src='/assets/1e12e16f853ba36453a70434d09a4244.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/1e12e16f853ba36453a70434d09a4244.svg")'], 
-.image-21g2ca[src='/assets/1e12e16f853ba36453a70434d09a4244.svg'], .image-21g2ca[style*='background-image: url("/assets/1e12e16f853ba36453a70434d09a4244.svg")'], 
-.icon-Yl4xbA[src='/assets/1e12e16f853ba36453a70434d09a4244.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/1e12e16f853ba36453a70434d09a4244.svg")'], 
-.emoji-1kNQp2[src='/assets/1e12e16f853ba36453a70434d09a4244.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/1e12e16f853ba36453a70434d09a4244.svg")'], 
-.roleIcon-3-WL_I[src='/assets/1e12e16f853ba36453a70434d09a4244.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/1e12e16f853ba36453a70434d09a4244.svg")'], 
-.emoji[src='/assets/1e12e16f853ba36453a70434d09a4244.svg'], .emoji[style*='background-image: url("/assets/1e12e16f853ba36453a70434d09a4244.svg")'] {
+/* man_tone2_beard */
+.diversityEmojiItemImage-1pfGqI[src='/assets/b5768a9acaa6944a8d61754c2333132f.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/b5768a9acaa6944a8d61754c2333132f.svg")'], 
+.emoji-4YP39J[src='/assets/b5768a9acaa6944a8d61754c2333132f.svg'], .emoji-4YP39J[style*='background-image: url("/assets/b5768a9acaa6944a8d61754c2333132f.svg")'], 
+.emojiImage-1mTIfi[src='/assets/b5768a9acaa6944a8d61754c2333132f.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/b5768a9acaa6944a8d61754c2333132f.svg")'], 
+.image-21g2ca[src='/assets/b5768a9acaa6944a8d61754c2333132f.svg'], .image-21g2ca[style*='background-image: url("/assets/b5768a9acaa6944a8d61754c2333132f.svg")'], 
+.icon-Yl4xbA[src='/assets/b5768a9acaa6944a8d61754c2333132f.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/b5768a9acaa6944a8d61754c2333132f.svg")'], 
+.emoji-1kNQp2[src='/assets/b5768a9acaa6944a8d61754c2333132f.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/b5768a9acaa6944a8d61754c2333132f.svg")'], 
+.roleIcon-3-WL_I[src='/assets/b5768a9acaa6944a8d61754c2333132f.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/b5768a9acaa6944a8d61754c2333132f.svg")'], 
+.emoji[src='/assets/b5768a9acaa6944a8d61754c2333132f.svg'], .emoji[style*='background-image: url("/assets/b5768a9acaa6944a8d61754c2333132f.svg")'] {
 	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/older_woman_tone2.png") !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_tone2_beard.png") !important;
 }
 
-/* older_woman_tone3 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/78cdafcb7c7b771045575eae6b9877c4.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/78cdafcb7c7b771045575eae6b9877c4.svg")'], 
-.emoji-4YP39J[src='/assets/78cdafcb7c7b771045575eae6b9877c4.svg'], .emoji-4YP39J[style*='background-image: url("/assets/78cdafcb7c7b771045575eae6b9877c4.svg")'], 
-.emojiImage-1mTIfi[src='/assets/78cdafcb7c7b771045575eae6b9877c4.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/78cdafcb7c7b771045575eae6b9877c4.svg")'], 
-.image-21g2ca[src='/assets/78cdafcb7c7b771045575eae6b9877c4.svg'], .image-21g2ca[style*='background-image: url("/assets/78cdafcb7c7b771045575eae6b9877c4.svg")'], 
-.icon-Yl4xbA[src='/assets/78cdafcb7c7b771045575eae6b9877c4.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/78cdafcb7c7b771045575eae6b9877c4.svg")'], 
-.emoji-1kNQp2[src='/assets/78cdafcb7c7b771045575eae6b9877c4.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/78cdafcb7c7b771045575eae6b9877c4.svg")'], 
-.roleIcon-3-WL_I[src='/assets/78cdafcb7c7b771045575eae6b9877c4.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/78cdafcb7c7b771045575eae6b9877c4.svg")'], 
-.emoji[src='/assets/78cdafcb7c7b771045575eae6b9877c4.svg'], .emoji[style*='background-image: url("/assets/78cdafcb7c7b771045575eae6b9877c4.svg")'] {
+/* man_tone3_beard */
+.diversityEmojiItemImage-1pfGqI[src='/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg")'], 
+.emoji-4YP39J[src='/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg'], .emoji-4YP39J[style*='background-image: url("/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg")'], 
+.emojiImage-1mTIfi[src='/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg")'], 
+.image-21g2ca[src='/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg'], .image-21g2ca[style*='background-image: url("/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg")'], 
+.icon-Yl4xbA[src='/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg")'], 
+.emoji-1kNQp2[src='/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg")'], 
+.roleIcon-3-WL_I[src='/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg")'], 
+.emoji[src='/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg'], .emoji[style*='background-image: url("/assets/e67b8fcfcc7e2dac5f450a1774a16dca.svg")'] {
 	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/older_woman_tone3.png") !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_tone3_beard.png") !important;
 }
 
-/* older_woman_tone4 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg")'], 
-.emoji-4YP39J[src='/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg'], .emoji-4YP39J[style*='background-image: url("/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg")'], 
-.emojiImage-1mTIfi[src='/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg")'], 
-.image-21g2ca[src='/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg'], .image-21g2ca[style*='background-image: url("/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg")'], 
-.icon-Yl4xbA[src='/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg")'], 
-.emoji-1kNQp2[src='/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg")'], 
-.roleIcon-3-WL_I[src='/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg")'], 
-.emoji[src='/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg'], .emoji[style*='background-image: url("/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg")'] {
+/* man_tone4_beard */
+.diversityEmojiItemImage-1pfGqI[src='/assets/fb85748cbf6237665a63d0be4a86e87f.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/fb85748cbf6237665a63d0be4a86e87f.svg")'], 
+.emoji-4YP39J[src='/assets/fb85748cbf6237665a63d0be4a86e87f.svg'], .emoji-4YP39J[style*='background-image: url("/assets/fb85748cbf6237665a63d0be4a86e87f.svg")'], 
+.emojiImage-1mTIfi[src='/assets/fb85748cbf6237665a63d0be4a86e87f.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/fb85748cbf6237665a63d0be4a86e87f.svg")'], 
+.image-21g2ca[src='/assets/fb85748cbf6237665a63d0be4a86e87f.svg'], .image-21g2ca[style*='background-image: url("/assets/fb85748cbf6237665a63d0be4a86e87f.svg")'], 
+.icon-Yl4xbA[src='/assets/fb85748cbf6237665a63d0be4a86e87f.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/fb85748cbf6237665a63d0be4a86e87f.svg")'], 
+.emoji-1kNQp2[src='/assets/fb85748cbf6237665a63d0be4a86e87f.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/fb85748cbf6237665a63d0be4a86e87f.svg")'], 
+.roleIcon-3-WL_I[src='/assets/fb85748cbf6237665a63d0be4a86e87f.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/fb85748cbf6237665a63d0be4a86e87f.svg")'], 
+.emoji[src='/assets/fb85748cbf6237665a63d0be4a86e87f.svg'], .emoji[style*='background-image: url("/assets/fb85748cbf6237665a63d0be4a86e87f.svg")'] {
 	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/older_woman_tone4.png") !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_tone4_beard.png") !important;
 }
 
-/* older_woman_tone5 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/30b585e56c563bf1b0fcca4d516546c3.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/30b585e56c563bf1b0fcca4d516546c3.svg")'], 
-.emoji-4YP39J[src='/assets/30b585e56c563bf1b0fcca4d516546c3.svg'], .emoji-4YP39J[style*='background-image: url("/assets/30b585e56c563bf1b0fcca4d516546c3.svg")'], 
-.emojiImage-1mTIfi[src='/assets/30b585e56c563bf1b0fcca4d516546c3.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/30b585e56c563bf1b0fcca4d516546c3.svg")'], 
-.image-21g2ca[src='/assets/30b585e56c563bf1b0fcca4d516546c3.svg'], .image-21g2ca[style*='background-image: url("/assets/30b585e56c563bf1b0fcca4d516546c3.svg")'], 
-.icon-Yl4xbA[src='/assets/30b585e56c563bf1b0fcca4d516546c3.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/30b585e56c563bf1b0fcca4d516546c3.svg")'], 
-.emoji-1kNQp2[src='/assets/30b585e56c563bf1b0fcca4d516546c3.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/30b585e56c563bf1b0fcca4d516546c3.svg")'], 
-.roleIcon-3-WL_I[src='/assets/30b585e56c563bf1b0fcca4d516546c3.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/30b585e56c563bf1b0fcca4d516546c3.svg")'], 
-.emoji[src='/assets/30b585e56c563bf1b0fcca4d516546c3.svg'], .emoji[style*='background-image: url("/assets/30b585e56c563bf1b0fcca4d516546c3.svg")'] {
+/* man_tone5_beard */
+.diversityEmojiItemImage-1pfGqI[src='/assets/4e2cfb47767914d79f828f0d034a314e.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/4e2cfb47767914d79f828f0d034a314e.svg")'], 
+.emoji-4YP39J[src='/assets/4e2cfb47767914d79f828f0d034a314e.svg'], .emoji-4YP39J[style*='background-image: url("/assets/4e2cfb47767914d79f828f0d034a314e.svg")'], 
+.emojiImage-1mTIfi[src='/assets/4e2cfb47767914d79f828f0d034a314e.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/4e2cfb47767914d79f828f0d034a314e.svg")'], 
+.image-21g2ca[src='/assets/4e2cfb47767914d79f828f0d034a314e.svg'], .image-21g2ca[style*='background-image: url("/assets/4e2cfb47767914d79f828f0d034a314e.svg")'], 
+.icon-Yl4xbA[src='/assets/4e2cfb47767914d79f828f0d034a314e.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/4e2cfb47767914d79f828f0d034a314e.svg")'], 
+.emoji-1kNQp2[src='/assets/4e2cfb47767914d79f828f0d034a314e.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/4e2cfb47767914d79f828f0d034a314e.svg")'], 
+.roleIcon-3-WL_I[src='/assets/4e2cfb47767914d79f828f0d034a314e.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/4e2cfb47767914d79f828f0d034a314e.svg")'], 
+.emoji[src='/assets/4e2cfb47767914d79f828f0d034a314e.svg'], .emoji[style*='background-image: url("/assets/4e2cfb47767914d79f828f0d034a314e.svg")'] {
 	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/older_woman_tone5.png") !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_tone5_beard.png") !important;
 }
 
 /* older_adult */
@@ -6756,6 +6665,84 @@
 .emoji[src='/assets/973da4215ff91a11314b977449b93400.svg'], .emoji[style*='background-image: url("/assets/973da4215ff91a11314b977449b93400.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/older_adult_tone5.png") !important;
+}
+
+/* older_woman */
+.diversityEmojiItemImage-1pfGqI[src='/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg")'], 
+.emoji-4YP39J[src='/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg'], .emoji-4YP39J[style*='background-image: url("/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg")'], 
+.emojiImage-1mTIfi[src='/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg")'], 
+.image-21g2ca[src='/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg'], .image-21g2ca[style*='background-image: url("/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg")'], 
+.icon-Yl4xbA[src='/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg")'], 
+.emoji-1kNQp2[src='/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg")'], 
+.roleIcon-3-WL_I[src='/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg")'], 
+.emoji[src='/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg'], .emoji[style*='background-image: url("/assets/15ebfdae28b2b852cce176b5cd7b8c72.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/older_woman.png") !important;
+}
+
+/* older_woman_tone1 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg")'], 
+.emoji-4YP39J[src='/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg'], .emoji-4YP39J[style*='background-image: url("/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg")'], 
+.emojiImage-1mTIfi[src='/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg")'], 
+.image-21g2ca[src='/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg'], .image-21g2ca[style*='background-image: url("/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg")'], 
+.icon-Yl4xbA[src='/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg")'], 
+.emoji-1kNQp2[src='/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg")'], 
+.roleIcon-3-WL_I[src='/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg")'], 
+.emoji[src='/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg'], .emoji[style*='background-image: url("/assets/aa7bf6e0fcfe11448dbc18ac74cb77a5.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/older_woman_tone1.png") !important;
+}
+
+/* older_woman_tone2 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/1e12e16f853ba36453a70434d09a4244.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/1e12e16f853ba36453a70434d09a4244.svg")'], 
+.emoji-4YP39J[src='/assets/1e12e16f853ba36453a70434d09a4244.svg'], .emoji-4YP39J[style*='background-image: url("/assets/1e12e16f853ba36453a70434d09a4244.svg")'], 
+.emojiImage-1mTIfi[src='/assets/1e12e16f853ba36453a70434d09a4244.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/1e12e16f853ba36453a70434d09a4244.svg")'], 
+.image-21g2ca[src='/assets/1e12e16f853ba36453a70434d09a4244.svg'], .image-21g2ca[style*='background-image: url("/assets/1e12e16f853ba36453a70434d09a4244.svg")'], 
+.icon-Yl4xbA[src='/assets/1e12e16f853ba36453a70434d09a4244.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/1e12e16f853ba36453a70434d09a4244.svg")'], 
+.emoji-1kNQp2[src='/assets/1e12e16f853ba36453a70434d09a4244.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/1e12e16f853ba36453a70434d09a4244.svg")'], 
+.roleIcon-3-WL_I[src='/assets/1e12e16f853ba36453a70434d09a4244.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/1e12e16f853ba36453a70434d09a4244.svg")'], 
+.emoji[src='/assets/1e12e16f853ba36453a70434d09a4244.svg'], .emoji[style*='background-image: url("/assets/1e12e16f853ba36453a70434d09a4244.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/older_woman_tone2.png") !important;
+}
+
+/* older_woman_tone3 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/78cdafcb7c7b771045575eae6b9877c4.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/78cdafcb7c7b771045575eae6b9877c4.svg")'], 
+.emoji-4YP39J[src='/assets/78cdafcb7c7b771045575eae6b9877c4.svg'], .emoji-4YP39J[style*='background-image: url("/assets/78cdafcb7c7b771045575eae6b9877c4.svg")'], 
+.emojiImage-1mTIfi[src='/assets/78cdafcb7c7b771045575eae6b9877c4.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/78cdafcb7c7b771045575eae6b9877c4.svg")'], 
+.image-21g2ca[src='/assets/78cdafcb7c7b771045575eae6b9877c4.svg'], .image-21g2ca[style*='background-image: url("/assets/78cdafcb7c7b771045575eae6b9877c4.svg")'], 
+.icon-Yl4xbA[src='/assets/78cdafcb7c7b771045575eae6b9877c4.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/78cdafcb7c7b771045575eae6b9877c4.svg")'], 
+.emoji-1kNQp2[src='/assets/78cdafcb7c7b771045575eae6b9877c4.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/78cdafcb7c7b771045575eae6b9877c4.svg")'], 
+.roleIcon-3-WL_I[src='/assets/78cdafcb7c7b771045575eae6b9877c4.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/78cdafcb7c7b771045575eae6b9877c4.svg")'], 
+.emoji[src='/assets/78cdafcb7c7b771045575eae6b9877c4.svg'], .emoji[style*='background-image: url("/assets/78cdafcb7c7b771045575eae6b9877c4.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/older_woman_tone3.png") !important;
+}
+
+/* older_woman_tone4 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg")'], 
+.emoji-4YP39J[src='/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg'], .emoji-4YP39J[style*='background-image: url("/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg")'], 
+.emojiImage-1mTIfi[src='/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg")'], 
+.image-21g2ca[src='/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg'], .image-21g2ca[style*='background-image: url("/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg")'], 
+.icon-Yl4xbA[src='/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg")'], 
+.emoji-1kNQp2[src='/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg")'], 
+.roleIcon-3-WL_I[src='/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg")'], 
+.emoji[src='/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg'], .emoji[style*='background-image: url("/assets/d7e881e9c28cd1bb65f722c0fcfb2b2f.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/older_woman_tone4.png") !important;
+}
+
+/* older_woman_tone5 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/30b585e56c563bf1b0fcca4d516546c3.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/30b585e56c563bf1b0fcca4d516546c3.svg")'], 
+.emoji-4YP39J[src='/assets/30b585e56c563bf1b0fcca4d516546c3.svg'], .emoji-4YP39J[style*='background-image: url("/assets/30b585e56c563bf1b0fcca4d516546c3.svg")'], 
+.emojiImage-1mTIfi[src='/assets/30b585e56c563bf1b0fcca4d516546c3.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/30b585e56c563bf1b0fcca4d516546c3.svg")'], 
+.image-21g2ca[src='/assets/30b585e56c563bf1b0fcca4d516546c3.svg'], .image-21g2ca[style*='background-image: url("/assets/30b585e56c563bf1b0fcca4d516546c3.svg")'], 
+.icon-Yl4xbA[src='/assets/30b585e56c563bf1b0fcca4d516546c3.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/30b585e56c563bf1b0fcca4d516546c3.svg")'], 
+.emoji-1kNQp2[src='/assets/30b585e56c563bf1b0fcca4d516546c3.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/30b585e56c563bf1b0fcca4d516546c3.svg")'], 
+.roleIcon-3-WL_I[src='/assets/30b585e56c563bf1b0fcca4d516546c3.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/30b585e56c563bf1b0fcca4d516546c3.svg")'], 
+.emoji[src='/assets/30b585e56c563bf1b0fcca4d516546c3.svg'], .emoji[style*='background-image: url("/assets/30b585e56c563bf1b0fcca4d516546c3.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/older_woman_tone5.png") !important;
 }
 
 /* older_man */
@@ -19381,19 +19368,6 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_with_probing_cane_tone1.png") !important;
 }
 
-/* man_with_probing_cane_tone3 */
-.diversityEmojiItemImage-1pfGqI[src='/assets/8f3a905f0366b419540a323536fcaddc.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/8f3a905f0366b419540a323536fcaddc.svg")'], 
-.emoji-4YP39J[src='/assets/8f3a905f0366b419540a323536fcaddc.svg'], .emoji-4YP39J[style*='background-image: url("/assets/8f3a905f0366b419540a323536fcaddc.svg")'], 
-.emojiImage-1mTIfi[src='/assets/8f3a905f0366b419540a323536fcaddc.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/8f3a905f0366b419540a323536fcaddc.svg")'], 
-.image-21g2ca[src='/assets/8f3a905f0366b419540a323536fcaddc.svg'], .image-21g2ca[style*='background-image: url("/assets/8f3a905f0366b419540a323536fcaddc.svg")'], 
-.icon-Yl4xbA[src='/assets/8f3a905f0366b419540a323536fcaddc.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/8f3a905f0366b419540a323536fcaddc.svg")'], 
-.emoji-1kNQp2[src='/assets/8f3a905f0366b419540a323536fcaddc.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/8f3a905f0366b419540a323536fcaddc.svg")'], 
-.roleIcon-3-WL_I[src='/assets/8f3a905f0366b419540a323536fcaddc.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/8f3a905f0366b419540a323536fcaddc.svg")'], 
-.emoji[src='/assets/8f3a905f0366b419540a323536fcaddc.svg'], .emoji[style*='background-image: url("/assets/8f3a905f0366b419540a323536fcaddc.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_with_probing_cane_tone3.png") !important;
-}
-
 /* man_with_probing_cane_tone2 */
 .diversityEmojiItemImage-1pfGqI[src='/assets/5e0daa215cfde475c1396a2901991d65.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/5e0daa215cfde475c1396a2901991d65.svg")'], 
 .emoji-4YP39J[src='/assets/5e0daa215cfde475c1396a2901991d65.svg'], .emoji-4YP39J[style*='background-image: url("/assets/5e0daa215cfde475c1396a2901991d65.svg")'], 
@@ -19405,6 +19379,19 @@
 .emoji[src='/assets/5e0daa215cfde475c1396a2901991d65.svg'], .emoji[style*='background-image: url("/assets/5e0daa215cfde475c1396a2901991d65.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_with_probing_cane_tone2.png") !important;
+}
+
+/* man_with_probing_cane_tone3 */
+.diversityEmojiItemImage-1pfGqI[src='/assets/8f3a905f0366b419540a323536fcaddc.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/8f3a905f0366b419540a323536fcaddc.svg")'], 
+.emoji-4YP39J[src='/assets/8f3a905f0366b419540a323536fcaddc.svg'], .emoji-4YP39J[style*='background-image: url("/assets/8f3a905f0366b419540a323536fcaddc.svg")'], 
+.emojiImage-1mTIfi[src='/assets/8f3a905f0366b419540a323536fcaddc.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/8f3a905f0366b419540a323536fcaddc.svg")'], 
+.image-21g2ca[src='/assets/8f3a905f0366b419540a323536fcaddc.svg'], .image-21g2ca[style*='background-image: url("/assets/8f3a905f0366b419540a323536fcaddc.svg")'], 
+.icon-Yl4xbA[src='/assets/8f3a905f0366b419540a323536fcaddc.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/8f3a905f0366b419540a323536fcaddc.svg")'], 
+.emoji-1kNQp2[src='/assets/8f3a905f0366b419540a323536fcaddc.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/8f3a905f0366b419540a323536fcaddc.svg")'], 
+.roleIcon-3-WL_I[src='/assets/8f3a905f0366b419540a323536fcaddc.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/8f3a905f0366b419540a323536fcaddc.svg")'], 
+.emoji[src='/assets/8f3a905f0366b419540a323536fcaddc.svg'], .emoji[style*='background-image: url("/assets/8f3a905f0366b419540a323536fcaddc.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/man_with_probing_cane_tone3.png") !important;
 }
 
 /* man_with_probing_cane_tone4 */
@@ -20629,6 +20616,19 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/family_man_girl_girl.png") !important;
 }
 
+/* knot */
+.diversityEmojiItemImage-1pfGqI[src='/assets/d8cd8872f217c51e8cab323d5681a6e9.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/d8cd8872f217c51e8cab323d5681a6e9.svg")'], 
+.emoji-4YP39J[src='/assets/d8cd8872f217c51e8cab323d5681a6e9.svg'], .emoji-4YP39J[style*='background-image: url("/assets/d8cd8872f217c51e8cab323d5681a6e9.svg")'], 
+.emojiImage-1mTIfi[src='/assets/d8cd8872f217c51e8cab323d5681a6e9.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/d8cd8872f217c51e8cab323d5681a6e9.svg")'], 
+.image-21g2ca[src='/assets/d8cd8872f217c51e8cab323d5681a6e9.svg'], .image-21g2ca[style*='background-image: url("/assets/d8cd8872f217c51e8cab323d5681a6e9.svg")'], 
+.icon-Yl4xbA[src='/assets/d8cd8872f217c51e8cab323d5681a6e9.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/d8cd8872f217c51e8cab323d5681a6e9.svg")'], 
+.emoji-1kNQp2[src='/assets/d8cd8872f217c51e8cab323d5681a6e9.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/d8cd8872f217c51e8cab323d5681a6e9.svg")'], 
+.roleIcon-3-WL_I[src='/assets/d8cd8872f217c51e8cab323d5681a6e9.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/d8cd8872f217c51e8cab323d5681a6e9.svg")'], 
+.emoji[src='/assets/d8cd8872f217c51e8cab323d5681a6e9.svg'], .emoji[style*='background-image: url("/assets/d8cd8872f217c51e8cab323d5681a6e9.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/knot.png") !important;
+}
+
 /* yarn */
 .diversityEmojiItemImage-1pfGqI[src='/assets/d57f2dafc1768e2fa3fbdae18d04a17f.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/d57f2dafc1768e2fa3fbdae18d04a17f.svg")'], 
 .emoji-4YP39J[src='/assets/d57f2dafc1768e2fa3fbdae18d04a17f.svg'], .emoji-4YP39J[style*='background-image: url("/assets/d57f2dafc1768e2fa3fbdae18d04a17f.svg")'], 
@@ -20653,6 +20653,19 @@
 .emoji[src='/assets/04ae66e9535ee04c36ebc2489bbd0351.svg'], .emoji[style*='background-image: url("/assets/04ae66e9535ee04c36ebc2489bbd0351.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/thread.png") !important;
+}
+
+/* sewing_needle */
+.diversityEmojiItemImage-1pfGqI[src='/assets/e615f9bfc59c57cc6ad2a1bd5df68264.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/e615f9bfc59c57cc6ad2a1bd5df68264.svg")'], 
+.emoji-4YP39J[src='/assets/e615f9bfc59c57cc6ad2a1bd5df68264.svg'], .emoji-4YP39J[style*='background-image: url("/assets/e615f9bfc59c57cc6ad2a1bd5df68264.svg")'], 
+.emojiImage-1mTIfi[src='/assets/e615f9bfc59c57cc6ad2a1bd5df68264.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/e615f9bfc59c57cc6ad2a1bd5df68264.svg")'], 
+.image-21g2ca[src='/assets/e615f9bfc59c57cc6ad2a1bd5df68264.svg'], .image-21g2ca[style*='background-image: url("/assets/e615f9bfc59c57cc6ad2a1bd5df68264.svg")'], 
+.icon-Yl4xbA[src='/assets/e615f9bfc59c57cc6ad2a1bd5df68264.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/e615f9bfc59c57cc6ad2a1bd5df68264.svg")'], 
+.emoji-1kNQp2[src='/assets/e615f9bfc59c57cc6ad2a1bd5df68264.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/e615f9bfc59c57cc6ad2a1bd5df68264.svg")'], 
+.roleIcon-3-WL_I[src='/assets/e615f9bfc59c57cc6ad2a1bd5df68264.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/e615f9bfc59c57cc6ad2a1bd5df68264.svg")'], 
+.emoji[src='/assets/e615f9bfc59c57cc6ad2a1bd5df68264.svg'], .emoji[style*='background-image: url("/assets/e615f9bfc59c57cc6ad2a1bd5df68264.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/sewing_needle.png") !important;
 }
 
 /* coat */
@@ -20837,6 +20850,19 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/sari.png") !important;
 }
 
+/* thong_sandal */
+.diversityEmojiItemImage-1pfGqI[src='/assets/6985843ccf92dd8c22735b3c832a1acd.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/6985843ccf92dd8c22735b3c832a1acd.svg")'], 
+.emoji-4YP39J[src='/assets/6985843ccf92dd8c22735b3c832a1acd.svg'], .emoji-4YP39J[style*='background-image: url("/assets/6985843ccf92dd8c22735b3c832a1acd.svg")'], 
+.emojiImage-1mTIfi[src='/assets/6985843ccf92dd8c22735b3c832a1acd.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/6985843ccf92dd8c22735b3c832a1acd.svg")'], 
+.image-21g2ca[src='/assets/6985843ccf92dd8c22735b3c832a1acd.svg'], .image-21g2ca[style*='background-image: url("/assets/6985843ccf92dd8c22735b3c832a1acd.svg")'], 
+.icon-Yl4xbA[src='/assets/6985843ccf92dd8c22735b3c832a1acd.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/6985843ccf92dd8c22735b3c832a1acd.svg")'], 
+.emoji-1kNQp2[src='/assets/6985843ccf92dd8c22735b3c832a1acd.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/6985843ccf92dd8c22735b3c832a1acd.svg")'], 
+.roleIcon-3-WL_I[src='/assets/6985843ccf92dd8c22735b3c832a1acd.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/6985843ccf92dd8c22735b3c832a1acd.svg")'], 
+.emoji[src='/assets/6985843ccf92dd8c22735b3c832a1acd.svg'], .emoji[style*='background-image: url("/assets/6985843ccf92dd8c22735b3c832a1acd.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/thong_sandal.png") !important;
+}
+
 /* womans_flat_shoe */
 .diversityEmojiItemImage-1pfGqI[src='/assets/3a604b4ffe92262b9303fbb545f9bd43.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/3a604b4ffe92262b9303fbb545f9bd43.svg")'], 
 .emoji-4YP39J[src='/assets/3a604b4ffe92262b9303fbb545f9bd43.svg'], .emoji-4YP39J[style*='background-image: url("/assets/3a604b4ffe92262b9303fbb545f9bd43.svg")'], 
@@ -20926,19 +20952,6 @@
 .emoji[src='/assets/48eee58d8732624417222c0ae7e360b3.svg'], .emoji[style*='background-image: url("/assets/48eee58d8732624417222c0ae7e360b3.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/hiking_boot.png") !important;
-}
-
-/* thong_sandal */
-.diversityEmojiItemImage-1pfGqI[src='/assets/6985843ccf92dd8c22735b3c832a1acd.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/6985843ccf92dd8c22735b3c832a1acd.svg")'], 
-.emoji-4YP39J[src='/assets/6985843ccf92dd8c22735b3c832a1acd.svg'], .emoji-4YP39J[style*='background-image: url("/assets/6985843ccf92dd8c22735b3c832a1acd.svg")'], 
-.emojiImage-1mTIfi[src='/assets/6985843ccf92dd8c22735b3c832a1acd.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/6985843ccf92dd8c22735b3c832a1acd.svg")'], 
-.image-21g2ca[src='/assets/6985843ccf92dd8c22735b3c832a1acd.svg'], .image-21g2ca[style*='background-image: url("/assets/6985843ccf92dd8c22735b3c832a1acd.svg")'], 
-.icon-Yl4xbA[src='/assets/6985843ccf92dd8c22735b3c832a1acd.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/6985843ccf92dd8c22735b3c832a1acd.svg")'], 
-.emoji-1kNQp2[src='/assets/6985843ccf92dd8c22735b3c832a1acd.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/6985843ccf92dd8c22735b3c832a1acd.svg")'], 
-.roleIcon-3-WL_I[src='/assets/6985843ccf92dd8c22735b3c832a1acd.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/6985843ccf92dd8c22735b3c832a1acd.svg")'], 
-.emoji[src='/assets/6985843ccf92dd8c22735b3c832a1acd.svg'], .emoji[style*='background-image: url("/assets/6985843ccf92dd8c22735b3c832a1acd.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Samsung/people/thong_sandal.png") !important;
 }
 
 /* socks */
