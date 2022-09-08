@@ -193,6 +193,19 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/JoyPixels/travel/probing_cane.png") !important;
 }
 
+/* crutch */
+.diversityEmojiItemImage-1pfGqI[src='/assets/88a3e1f7e33e6740e980498f8b05aac0.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/88a3e1f7e33e6740e980498f8b05aac0.svg")'], 
+.emoji-4YP39J[src='/assets/88a3e1f7e33e6740e980498f8b05aac0.svg'], .emoji-4YP39J[style*='background-image: url("/assets/88a3e1f7e33e6740e980498f8b05aac0.svg")'], 
+.emojiImage-1mTIfi[src='/assets/88a3e1f7e33e6740e980498f8b05aac0.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/88a3e1f7e33e6740e980498f8b05aac0.svg")'], 
+.image-21g2ca[src='/assets/88a3e1f7e33e6740e980498f8b05aac0.svg'], .image-21g2ca[style*='background-image: url("/assets/88a3e1f7e33e6740e980498f8b05aac0.svg")'], 
+.icon-Yl4xbA[src='/assets/88a3e1f7e33e6740e980498f8b05aac0.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/88a3e1f7e33e6740e980498f8b05aac0.svg")'], 
+.emoji-1kNQp2[src='/assets/88a3e1f7e33e6740e980498f8b05aac0.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/88a3e1f7e33e6740e980498f8b05aac0.svg")'], 
+.roleIcon-3-WL_I[src='/assets/88a3e1f7e33e6740e980498f8b05aac0.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/88a3e1f7e33e6740e980498f8b05aac0.svg")'], 
+.emoji[src='/assets/88a3e1f7e33e6740e980498f8b05aac0.svg'], .emoji[style*='background-image: url("/assets/88a3e1f7e33e6740e980498f8b05aac0.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/JoyPixels/travel/crutch.png") !important;
+}
+
 /* manual_wheelchair */
 .diversityEmojiItemImage-1pfGqI[src='/assets/5f99f7506e0a777509a134a0692b1396.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/5f99f7506e0a777509a134a0692b1396.svg")'], 
 .emoji-4YP39J[src='/assets/5f99f7506e0a777509a134a0692b1396.svg'], .emoji-4YP39J[style*='background-image: url("/assets/5f99f7506e0a777509a134a0692b1396.svg")'], 
@@ -282,6 +295,19 @@
 .emoji[src='/assets/17368d92d73b6f8b824d8925c474c91e.svg'], .emoji[style*='background-image: url("/assets/17368d92d73b6f8b824d8925c474c91e.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/JoyPixels/travel/auto_rickshaw.png") !important;
+}
+
+/* wheel */
+.diversityEmojiItemImage-1pfGqI[src='/assets/48fa2b2a410d7be930d2c4708afaabcf.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/48fa2b2a410d7be930d2c4708afaabcf.svg")'], 
+.emoji-4YP39J[src='/assets/48fa2b2a410d7be930d2c4708afaabcf.svg'], .emoji-4YP39J[style*='background-image: url("/assets/48fa2b2a410d7be930d2c4708afaabcf.svg")'], 
+.emojiImage-1mTIfi[src='/assets/48fa2b2a410d7be930d2c4708afaabcf.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/48fa2b2a410d7be930d2c4708afaabcf.svg")'], 
+.image-21g2ca[src='/assets/48fa2b2a410d7be930d2c4708afaabcf.svg'], .image-21g2ca[style*='background-image: url("/assets/48fa2b2a410d7be930d2c4708afaabcf.svg")'], 
+.icon-Yl4xbA[src='/assets/48fa2b2a410d7be930d2c4708afaabcf.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/48fa2b2a410d7be930d2c4708afaabcf.svg")'], 
+.emoji-1kNQp2[src='/assets/48fa2b2a410d7be930d2c4708afaabcf.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/48fa2b2a410d7be930d2c4708afaabcf.svg")'], 
+.roleIcon-3-WL_I[src='/assets/48fa2b2a410d7be930d2c4708afaabcf.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/48fa2b2a410d7be930d2c4708afaabcf.svg")'], 
+.emoji[src='/assets/48fa2b2a410d7be930d2c4708afaabcf.svg'], .emoji[style*='background-image: url("/assets/48fa2b2a410d7be930d2c4708afaabcf.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/JoyPixels/travel/wheel.png") !important;
 }
 
 /* rotating_light */
@@ -752,6 +778,19 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/JoyPixels/travel/ship.png") !important;
 }
 
+/* ring_buoy */
+.diversityEmojiItemImage-1pfGqI[src='/assets/15d18d67d91396deba83eae167ebc1f2.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/15d18d67d91396deba83eae167ebc1f2.svg")'], 
+.emoji-4YP39J[src='/assets/15d18d67d91396deba83eae167ebc1f2.svg'], .emoji-4YP39J[style*='background-image: url("/assets/15d18d67d91396deba83eae167ebc1f2.svg")'], 
+.emojiImage-1mTIfi[src='/assets/15d18d67d91396deba83eae167ebc1f2.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/15d18d67d91396deba83eae167ebc1f2.svg")'], 
+.image-21g2ca[src='/assets/15d18d67d91396deba83eae167ebc1f2.svg'], .image-21g2ca[style*='background-image: url("/assets/15d18d67d91396deba83eae167ebc1f2.svg")'], 
+.icon-Yl4xbA[src='/assets/15d18d67d91396deba83eae167ebc1f2.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/15d18d67d91396deba83eae167ebc1f2.svg")'], 
+.emoji-1kNQp2[src='/assets/15d18d67d91396deba83eae167ebc1f2.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/15d18d67d91396deba83eae167ebc1f2.svg")'], 
+.roleIcon-3-WL_I[src='/assets/15d18d67d91396deba83eae167ebc1f2.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/15d18d67d91396deba83eae167ebc1f2.svg")'], 
+.emoji[src='/assets/15d18d67d91396deba83eae167ebc1f2.svg'], .emoji[style*='background-image: url("/assets/15d18d67d91396deba83eae167ebc1f2.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/JoyPixels/travel/ring_buoy.png") !important;
+}
+
 /* anchor */
 .diversityEmojiItemImage-1pfGqI[src='/assets/3935fe40246bcfa69647ca92a58761a5.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/3935fe40246bcfa69647ca92a58761a5.svg")'], 
 .emoji-4YP39J[src='/assets/3935fe40246bcfa69647ca92a58761a5.svg'], .emoji-4YP39J[style*='background-image: url("/assets/3935fe40246bcfa69647ca92a58761a5.svg")'], 
@@ -763,6 +802,19 @@
 .emoji[src='/assets/3935fe40246bcfa69647ca92a58761a5.svg'], .emoji[style*='background-image: url("/assets/3935fe40246bcfa69647ca92a58761a5.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/JoyPixels/travel/anchor.png") !important;
+}
+
+/* hook */
+.diversityEmojiItemImage-1pfGqI[src='/assets/0b7d8392d45f50e895f03eb2c1e2fb6c.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/0b7d8392d45f50e895f03eb2c1e2fb6c.svg")'], 
+.emoji-4YP39J[src='/assets/0b7d8392d45f50e895f03eb2c1e2fb6c.svg'], .emoji-4YP39J[style*='background-image: url("/assets/0b7d8392d45f50e895f03eb2c1e2fb6c.svg")'], 
+.emojiImage-1mTIfi[src='/assets/0b7d8392d45f50e895f03eb2c1e2fb6c.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/0b7d8392d45f50e895f03eb2c1e2fb6c.svg")'], 
+.image-21g2ca[src='/assets/0b7d8392d45f50e895f03eb2c1e2fb6c.svg'], .image-21g2ca[style*='background-image: url("/assets/0b7d8392d45f50e895f03eb2c1e2fb6c.svg")'], 
+.icon-Yl4xbA[src='/assets/0b7d8392d45f50e895f03eb2c1e2fb6c.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/0b7d8392d45f50e895f03eb2c1e2fb6c.svg")'], 
+.emoji-1kNQp2[src='/assets/0b7d8392d45f50e895f03eb2c1e2fb6c.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/0b7d8392d45f50e895f03eb2c1e2fb6c.svg")'], 
+.roleIcon-3-WL_I[src='/assets/0b7d8392d45f50e895f03eb2c1e2fb6c.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/0b7d8392d45f50e895f03eb2c1e2fb6c.svg")'], 
+.emoji[src='/assets/0b7d8392d45f50e895f03eb2c1e2fb6c.svg'], .emoji[style*='background-image: url("/assets/0b7d8392d45f50e895f03eb2c1e2fb6c.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/JoyPixels/travel/hook.png") !important;
 }
 
 /* fuelpump */
