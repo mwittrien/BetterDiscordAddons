@@ -115,19 +115,6 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Facebook/activity/flying_disc.png") !important;
 }
 
-/* boomerang */
-.diversityEmojiItemImage-1pfGqI[src='/assets/914776cd7f1e6684424542e0793cf54b.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/914776cd7f1e6684424542e0793cf54b.svg")'], 
-.emoji-4YP39J[src='/assets/914776cd7f1e6684424542e0793cf54b.svg'], .emoji-4YP39J[style*='background-image: url("/assets/914776cd7f1e6684424542e0793cf54b.svg")'], 
-.emojiImage-1mTIfi[src='/assets/914776cd7f1e6684424542e0793cf54b.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/914776cd7f1e6684424542e0793cf54b.svg")'], 
-.image-21g2ca[src='/assets/914776cd7f1e6684424542e0793cf54b.svg'], .image-21g2ca[style*='background-image: url("/assets/914776cd7f1e6684424542e0793cf54b.svg")'], 
-.icon-Yl4xbA[src='/assets/914776cd7f1e6684424542e0793cf54b.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/914776cd7f1e6684424542e0793cf54b.svg")'], 
-.emoji-1kNQp2[src='/assets/914776cd7f1e6684424542e0793cf54b.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/914776cd7f1e6684424542e0793cf54b.svg")'], 
-.roleIcon-3-WL_I[src='/assets/914776cd7f1e6684424542e0793cf54b.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/914776cd7f1e6684424542e0793cf54b.svg")'], 
-.emoji[src='/assets/914776cd7f1e6684424542e0793cf54b.svg'], .emoji[style*='background-image: url("/assets/914776cd7f1e6684424542e0793cf54b.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Facebook/activity/boomerang.png") !important;
-}
-
 /* 8ball */
 .diversityEmojiItemImage-1pfGqI[src='/assets/0cfd4882c0646d504900c90166d80cf8.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/0cfd4882c0646d504900c90166d80cf8.svg")'], 
 .emoji-4YP39J[src='/assets/0cfd4882c0646d504900c90166d80cf8.svg'], .emoji-4YP39J[style*='background-image: url("/assets/0cfd4882c0646d504900c90166d80cf8.svg")'], 
@@ -232,6 +219,19 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Facebook/activity/cricket_game.png") !important;
 }
 
+/* boomerang */
+.diversityEmojiItemImage-1pfGqI[src='/assets/914776cd7f1e6684424542e0793cf54b.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/914776cd7f1e6684424542e0793cf54b.svg")'], 
+.emoji-4YP39J[src='/assets/914776cd7f1e6684424542e0793cf54b.svg'], .emoji-4YP39J[style*='background-image: url("/assets/914776cd7f1e6684424542e0793cf54b.svg")'], 
+.emojiImage-1mTIfi[src='/assets/914776cd7f1e6684424542e0793cf54b.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/914776cd7f1e6684424542e0793cf54b.svg")'], 
+.image-21g2ca[src='/assets/914776cd7f1e6684424542e0793cf54b.svg'], .image-21g2ca[style*='background-image: url("/assets/914776cd7f1e6684424542e0793cf54b.svg")'], 
+.icon-Yl4xbA[src='/assets/914776cd7f1e6684424542e0793cf54b.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/914776cd7f1e6684424542e0793cf54b.svg")'], 
+.emoji-1kNQp2[src='/assets/914776cd7f1e6684424542e0793cf54b.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/914776cd7f1e6684424542e0793cf54b.svg")'], 
+.roleIcon-3-WL_I[src='/assets/914776cd7f1e6684424542e0793cf54b.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/914776cd7f1e6684424542e0793cf54b.svg")'], 
+.emoji[src='/assets/914776cd7f1e6684424542e0793cf54b.svg'], .emoji[style*='background-image: url("/assets/914776cd7f1e6684424542e0793cf54b.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Facebook/activity/boomerang.png") !important;
+}
+
 /* goal */
 .diversityEmojiItemImage-1pfGqI[src='/assets/ff63bac8b064e04d31a32eeae8ccd7dc.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/ff63bac8b064e04d31a32eeae8ccd7dc.svg")'], 
 .emoji-4YP39J[src='/assets/ff63bac8b064e04d31a32eeae8ccd7dc.svg'], .emoji-4YP39J[style*='background-image: url("/assets/ff63bac8b064e04d31a32eeae8ccd7dc.svg")'], 
@@ -269,6 +269,19 @@
 .emoji[src='/assets/c82b382a4e972f005a98e29131b773d9.svg'], .emoji[style*='background-image: url("/assets/c82b382a4e972f005a98e29131b773d9.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Facebook/activity/kite.png") !important;
+}
+
+/* playground_slide */
+.diversityEmojiItemImage-1pfGqI[src='/assets/cff6060797f2c4bd00f86b2e1e9860e3.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/cff6060797f2c4bd00f86b2e1e9860e3.svg")'], 
+.emoji-4YP39J[src='/assets/cff6060797f2c4bd00f86b2e1e9860e3.svg'], .emoji-4YP39J[style*='background-image: url("/assets/cff6060797f2c4bd00f86b2e1e9860e3.svg")'], 
+.emojiImage-1mTIfi[src='/assets/cff6060797f2c4bd00f86b2e1e9860e3.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/cff6060797f2c4bd00f86b2e1e9860e3.svg")'], 
+.image-21g2ca[src='/assets/cff6060797f2c4bd00f86b2e1e9860e3.svg'], .image-21g2ca[style*='background-image: url("/assets/cff6060797f2c4bd00f86b2e1e9860e3.svg")'], 
+.icon-Yl4xbA[src='/assets/cff6060797f2c4bd00f86b2e1e9860e3.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/cff6060797f2c4bd00f86b2e1e9860e3.svg")'], 
+.emoji-1kNQp2[src='/assets/cff6060797f2c4bd00f86b2e1e9860e3.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/cff6060797f2c4bd00f86b2e1e9860e3.svg")'], 
+.roleIcon-3-WL_I[src='/assets/cff6060797f2c4bd00f86b2e1e9860e3.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/cff6060797f2c4bd00f86b2e1e9860e3.svg")'], 
+.emoji[src='/assets/cff6060797f2c4bd00f86b2e1e9860e3.svg'], .emoji[style*='background-image: url("/assets/cff6060797f2c4bd00f86b2e1e9860e3.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Facebook/activity/playground_slide.png") !important;
 }
 
 /* bow_and_arrow */
@@ -4236,6 +4249,19 @@
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Facebook/activity/trumpet.png") !important;
 }
 
+/* accordion */
+.diversityEmojiItemImage-1pfGqI[src='/assets/45868a261eb6ede08e6ce627d8d15993.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/45868a261eb6ede08e6ce627d8d15993.svg")'], 
+.emoji-4YP39J[src='/assets/45868a261eb6ede08e6ce627d8d15993.svg'], .emoji-4YP39J[style*='background-image: url("/assets/45868a261eb6ede08e6ce627d8d15993.svg")'], 
+.emojiImage-1mTIfi[src='/assets/45868a261eb6ede08e6ce627d8d15993.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/45868a261eb6ede08e6ce627d8d15993.svg")'], 
+.image-21g2ca[src='/assets/45868a261eb6ede08e6ce627d8d15993.svg'], .image-21g2ca[style*='background-image: url("/assets/45868a261eb6ede08e6ce627d8d15993.svg")'], 
+.icon-Yl4xbA[src='/assets/45868a261eb6ede08e6ce627d8d15993.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/45868a261eb6ede08e6ce627d8d15993.svg")'], 
+.emoji-1kNQp2[src='/assets/45868a261eb6ede08e6ce627d8d15993.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/45868a261eb6ede08e6ce627d8d15993.svg")'], 
+.roleIcon-3-WL_I[src='/assets/45868a261eb6ede08e6ce627d8d15993.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/45868a261eb6ede08e6ce627d8d15993.svg")'], 
+.emoji[src='/assets/45868a261eb6ede08e6ce627d8d15993.svg'], .emoji[style*='background-image: url("/assets/45868a261eb6ede08e6ce627d8d15993.svg")'] {
+	background: transparent !important;
+	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Facebook/activity/accordion.png") !important;
+}
+
 /* guitar */
 .diversityEmojiItemImage-1pfGqI[src='/assets/e048d897c44345a409d66888bf61f72d.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/e048d897c44345a409d66888bf61f72d.svg")'], 
 .emoji-4YP39J[src='/assets/e048d897c44345a409d66888bf61f72d.svg'], .emoji-4YP39J[style*='background-image: url("/assets/e048d897c44345a409d66888bf61f72d.svg")'], 
@@ -4273,19 +4299,6 @@
 .emoji[src='/assets/e1d2ae13fd4dd03d7ae81a48ea4ea424.svg'], .emoji[style*='background-image: url("/assets/e1d2ae13fd4dd03d7ae81a48ea4ea424.svg")'] {
 	background: transparent !important;
 	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Facebook/activity/violin.png") !important;
-}
-
-/* accordion */
-.diversityEmojiItemImage-1pfGqI[src='/assets/45868a261eb6ede08e6ce627d8d15993.svg'], .diversityEmojiItemImage-1pfGqI[style*='background-image: url("/assets/45868a261eb6ede08e6ce627d8d15993.svg")'], 
-.emoji-4YP39J[src='/assets/45868a261eb6ede08e6ce627d8d15993.svg'], .emoji-4YP39J[style*='background-image: url("/assets/45868a261eb6ede08e6ce627d8d15993.svg")'], 
-.emojiImage-1mTIfi[src='/assets/45868a261eb6ede08e6ce627d8d15993.svg'], .emojiImage-1mTIfi[style*='background-image: url("/assets/45868a261eb6ede08e6ce627d8d15993.svg")'], 
-.image-21g2ca[src='/assets/45868a261eb6ede08e6ce627d8d15993.svg'], .image-21g2ca[style*='background-image: url("/assets/45868a261eb6ede08e6ce627d8d15993.svg")'], 
-.icon-Yl4xbA[src='/assets/45868a261eb6ede08e6ce627d8d15993.svg'], .icon-Yl4xbA[style*='background-image: url("/assets/45868a261eb6ede08e6ce627d8d15993.svg")'], 
-.emoji-1kNQp2[src='/assets/45868a261eb6ede08e6ce627d8d15993.svg'], .emoji-1kNQp2[style*='background-image: url("/assets/45868a261eb6ede08e6ce627d8d15993.svg")'], 
-.roleIcon-3-WL_I[src='/assets/45868a261eb6ede08e6ce627d8d15993.svg'], .roleIcon-3-WL_I[style*='background-image: url("/assets/45868a261eb6ede08e6ce627d8d15993.svg")'], 
-.emoji[src='/assets/45868a261eb6ede08e6ce627d8d15993.svg'], .emoji[style*='background-image: url("/assets/45868a261eb6ede08e6ce627d8d15993.svg")'] {
-	background: transparent !important;
-	content: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/emojis/Facebook/activity/accordion.png") !important;
 }
 
 /* game_die */
