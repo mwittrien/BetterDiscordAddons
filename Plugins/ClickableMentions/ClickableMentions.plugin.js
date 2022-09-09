@@ -2,7 +2,7 @@
  * @name ClickableMentions
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.3
+ * @version 1.0.4
  * @description Allows you to open a User Popout by clicking a Mention in your Message Input
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -60,7 +60,8 @@ module.exports = (_ => {
 			onLoad () {
 				this.patchedModules = {
 					after: {
-						RichUserMention: "UserMention"
+						RichUserMention: "UserMention",
+						RichRoleMention: "RoleMention"
 					}
 				};
 				
@@ -76,26 +77,36 @@ module.exports = (_ => {
 			}
 			
 			processRichUserMention (e) {
-				if (e.instance.props.id && BDFDB.LibraryModules.UserStore.getUser(e.instance.props.id)) {
-					if (typeof e.returnvalue.props.children == "function") {
-						let childrenRender = e.returnvalue.props.children;
-						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => this.injectUserPopoutContainer(e.instance.props, childrenRender(...args)), "", this);
-					}
-					else e.returnvalue = this.injectUserPopoutContainer(e.instance.props, e.returnvalue.props.children);
-				}
+				if (e.instance.props.id && BDFDB.LibraryModules.UserStore.getUser(e.instance.props.id)) return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserMention, {
+					className: "mention",
+					userId: e.instance.props.id,
+					channelId: e.instance.props.channelId,
+					guildId: e.instance.props.guildId,
+					inlinePreview: false
+				});
 			}
 			
-			injectUserPopoutContainer (props, children) {
-				children.props.className = BDFDB.DOMUtils.formatClassName(children.props.className, BDFDB.disCN.cursorpointer);
-				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserPopoutContainer, {
-					position: BDFDB.LibraryComponents.PopoutContainer.Positions.TOP,
-					align: BDFDB.LibraryComponents.PopoutContainer.Align.CENTER,
-					killEvent: true,
-					userId: props.id,
-					channelId: props.channel && props.channel.id || props.channelId,
-					guildId: props.channel && props.channel.guild_id || props.guildId,
-					children: children
-				});
+			processRichRoleMention (e) {
+				if (e.instance.props.id && e.instance.props.guildId && e.instance.props.id != e.instance.props.guildId) {
+					let guild = BDFDB.LibraryModules.GuildStore.getGuild(e.instance.props.guildId);
+					let channelId = e.instance.props.channelId;
+					if (!channelId) {
+						let currentChannelId = BDFDB.LibraryModules.LastChannelStore.getChannelId();
+						channelId = BDFDB.LibraryModules.GuildChannelStore.getSelectableChannelIds(guild.id).indexOf(currentChannelId) > -1 ? currentChannelId : BDFDB.LibraryModules.GuildChannelStore.getDefaultChannel(guild.id).id;
+					}
+					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.RoleMention, {
+						type: "mention",
+						children: [`@${guild.roles[e.instance.props.id].name}`],
+						content: [
+							{type: "text", content: `@${guild.roles[e.instance.props.id].name}`}
+						],
+						roleColor: guild.roles[e.instance.props.id].color,
+						roleId: e.instance.props.id,
+						channelId: channelId,
+						guildId: e.instance.props.guildId,
+						inlinePreview: false
+					});
+				}
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
