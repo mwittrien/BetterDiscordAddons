@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.1
+ * @version 1.1.2
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -62,11 +62,16 @@ module.exports = (_ => {
 			onLoad () {
 				this.patchedModules = {
 					before: {
+						RoleMention: "default",
+						AutocompleteRoleResult: "render",
 						MessageHeader: "default",
 						ChannelMembers: "render",
 						MemberListItem: "render",
 						UserPopoutBodySection: "default",
 						UserPopoutBody: "default"
+					},
+					after: {
+						RichRoleMention: "RoleMention"
 					}
 				};
 			}
@@ -211,6 +216,30 @@ module.exports = (_ => {
 					}),
 					e.returnvalue.props.children
 				].flat(10).filter(n => n);
+			}
+			
+			processRichRoleMention (e) {
+				if (e.instance.props.id && changedRoles[e.instance.props.id]) {
+					e.returnvalue.props.color = changedRoles[e.instance.props.id].color ? BDFDB.ColorUtils.convert(changedRoles[e.instance.props.id].color, "int") : e.returnvalue.props.color;
+					e.returnvalue.props.children[1] = changedRoles[e.instance.props.id].name || e.returnvalue.props.children[1];
+				}
+			}
+			
+			processRoleMention (e) {
+				if (e.instance.props.roleId && changedRoles[e.instance.props.roleId]) {
+					e.instance.props.roleColor = changedRoles[e.instance.props.roleId].color ? BDFDB.ColorUtils.convert(changedRoles[e.instance.props.roleId].color, "int") : e.instance.props.roleColor;
+					e.instance.props.children = [`@${changedRoles[e.instance.props.roleId].name || e.instance.props.children[1]}`];
+					if (e.instance.props.content && e.instance.props.content[0]) e.instance.props.content[0].content = `@${changedRoles[e.instance.props.roleId].name || e.instance.props.children[1]}`;
+				}
+			}
+			
+			processAutocompleteRoleResult (e) {
+				if (e.instance.props.role && changedRoles[e.instance.props.role.id]) {
+					e.instance.props.role = Object.assign({}, e.instance.props.role);
+					e.instance.props.role.color = changedRoles[e.instance.props.role.id].color ? BDFDB.ColorUtils.convert(changedRoles[e.instance.props.role.id].color, "int") : e.instance.props.role.color;
+					e.instance.props.role.colorString = changedRoles[e.instance.props.role.id].color ? BDFDB.ColorUtils.convert(changedRoles[e.instance.props.role.id].color, "hex") : e.instance.props.role.colorString;
+					e.instance.props.role.name = changedRoles[e.instance.props.role.id].name || e.instance.props.role.name;
+				}
 			}
 			
 			processChannelMembers (e) {

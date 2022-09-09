@@ -327,6 +327,7 @@
 		},
 		"LoadedInComponents": {
 			"AutocompleteChannelResult": "LibraryComponents.AutocompleteItems.Channel",
+			"AutocompleteRoleResult": "LibraryComponents.AutocompleteItems.Role",
 			"AutocompleteUserResult": "LibraryComponents.AutocompleteItems.User",
 			"QuickSwitchChannelResult": "LibraryComponents.QuickSwitchItems.Channel",
 			"QuickSwitchGroupDMResult": "LibraryComponents.QuickSwitchItems.GroupDM",
