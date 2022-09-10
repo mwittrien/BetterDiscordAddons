@@ -2,7 +2,7 @@
  * @name ClickableMentions
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.4
+ * @version 1.0.5
  * @description Allows you to open a User Popout by clicking a Mention in your Message Input
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -59,9 +59,13 @@ module.exports = (_ => {
 		return class ClickableMentions extends Plugin {
 			onLoad () {
 				this.patchedModules = {
+					before: {
+						RoleMention: "default"
+					},
 					after: {
 						RichUserMention: "UserMention",
-						RichRoleMention: "RoleMention"
+						RichRoleMention: "RoleMention",
+						RoleMention: "default"
 					}
 				};
 				
@@ -95,7 +99,7 @@ module.exports = (_ => {
 						channelId = BDFDB.LibraryModules.GuildChannelStore.getSelectableChannelIds(guild.id).indexOf(currentChannelId) > -1 ? currentChannelId : BDFDB.LibraryModules.GuildChannelStore.getDefaultChannel(guild.id).id;
 					}
 					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.RoleMention, {
-						type: "mention",
+						type: "mention_textarea",
 						children: [`@${guild.roles[e.instance.props.id].name}`],
 						content: [
 							{type: "text", content: `@${guild.roles[e.instance.props.id].name}`}
@@ -106,6 +110,18 @@ module.exports = (_ => {
 						guildId: e.instance.props.guildId,
 						inlinePreview: false
 					});
+				}
+			}
+			
+			processRoleMention (e) {
+				if (!e.returnvalue) {
+					if (e.instance.props.type == "mention_textarea") {
+						e.instance.props.type = "mention";
+						e.instance.props.place = "textarea";
+					}
+				}
+				else if (e.instance.props.place == "textarea") {
+					e.returnvalue.props.align = BDFDB.LibraryComponents.PopoutContainer.Align.BOTTOM;
 				}
 			}
 		};
