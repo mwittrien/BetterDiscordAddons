@@ -2,7 +2,7 @@
  * @name CustomQuoter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.9
+ * @version 1.3.0
  * @description Brings back the Quote Feature and allows you to set your own Quote Formats
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -245,7 +245,8 @@ module.exports = (_ => {
 								"$channelName will be replaced with the Name of the Channel",
 								"$serverId will be replaced with the ID of the Server",
 								"$serverName will be replaced with the Name of the Server",
-								"$timestamp will be replaced with the Timestamp of the quoted Message"
+								"$timestamp will be replaced with the Formatted Timestamp of the quoted Message",
+								"$unixTimestamp will be replaced with the Unix Timestamp of the quoted Message"
 							].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
 								type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
 								children: string
@@ -414,6 +415,7 @@ module.exports = (_ => {
 					.replace("$serverId", guild.id || "")
 					.replace("$serverName", guild.name || "")
 					.replace("$timestamp", BDFDB.LibraryComponents.DateInput.format(this.settings.dates.quoteDate, new Date(message.editedTimestamp || message.timestamp)))
+					.replace("$unixTimestamp", Math.round(new Date(message.editedTimestamp || message.timestamp).getTime() / 1000))
 					.replace("$quote", quotedLines || "")
 					.replace("$rawQuote", unquotedLines.join("\n") || "");
 			}
