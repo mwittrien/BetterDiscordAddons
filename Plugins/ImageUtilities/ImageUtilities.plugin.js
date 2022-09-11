@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.8.5
+ * @version 4.8.6
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -691,7 +691,7 @@ module.exports = (_ => {
 					
 					if (e.returnvalue.length) e.returnvalue.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSeparator, {}));
 					e.returnvalue.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.isValid(validUrls[0].file, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE + " " + BDFDB.LanguageUtils.LanguageStrings.ACTIONS,
+						label: this.isValid(validUrls[0].file, "video") ? this.labels.context_videoactions : this.labels.context_imageactions,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-subitem"),
 						children: this.createSubMenus({
 							instance: e.instance,
@@ -713,7 +713,7 @@ module.exports = (_ => {
 					
 					if (e.returnvalue.length) e.returnvalue.unshift(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSeparator, {}));
 					e.returnvalue.unshift(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.isValid(validUrls[0].file, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE + " " + BDFDB.LanguageUtils.LanguageStrings.ACTIONS,
+						label: this.isValid(validUrls[0].file, "video") ? this.labels.context_videoactions : this.labels.context_imageactions,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-subitem"),
 						children: this.createSubMenus({
 							instance: e.instance,
@@ -772,7 +772,6 @@ module.exports = (_ => {
 				let [removeParent2, removeIndex2] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "copy-image", group: true});
 				if (removeIndex2 > -1) removeParent2.splice(removeIndex2, 1);
 				
-				let type = this.isValid(validUrls[0].file, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
 				let isNative = validUrls.length == 1 && removeIndex > -1;
 				let subMenu = this.createSubMenus({
 					instance: e.instance,
@@ -784,7 +783,7 @@ module.exports = (_ => {
 				let [children, index] = isNative ? [removeParent, removeIndex] : BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 				children.splice(index > -1 ? index : children.length, 0, isNative ? subMenu : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: type + " " + BDFDB.LanguageUtils.LanguageStrings.ACTIONS,
+						label: this.isValid(validUrls[0].file, "video") ? this.labels.context_videoactions : this.labels.context_imageactions,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-subitem"),
 						children: subMenu
 					})
@@ -1399,7 +1398,7 @@ module.exports = (_ => {
 							urls: validUrls,
 							prefix: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_BANNER
 						}) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: BDFDB.LanguageUtils.LanguageStrings.IMAGE + " " + BDFDB.LanguageUtils.LanguageStrings.ACTIONS,
+							label: this.labels.context_imageactions,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-subitem"),
 							children: this.createSubMenus({
 								instance: {},
@@ -1420,7 +1419,7 @@ module.exports = (_ => {
 							urls: validUrls,
 							prefix: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_BANNER
 						}) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: BDFDB.LanguageUtils.LanguageStrings.IMAGE + " " + BDFDB.LanguageUtils.LanguageStrings.ACTIONS,
+							label: this.labels.context_imageactions,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-subitem"),
 							children: this.createSubMenus({
 								instance: {},
@@ -1649,9 +1648,11 @@ module.exports = (_ => {
 					case "bg":		// Bulgarian
 						return {
 							context_copy:						"Копирайте {{var0}}",
+							context_imageactions:				"Действия с изображения",
 							context_lenssize:					"Размер на обектива",
 							context_saveas:						"Запазете {{var0}} като ...",
 							context_searchwith:					"Търсете {{var0}} с ...",
+							context_videoactions:				"Видео действия",
 							context_view:						"Преглед {{var0}}",
 							submenu_disabled:					"Всички инвалиди",
 							toast_copy_failed:					"{{var0}} не можа да бъде копиран в клипборда",
@@ -1662,9 +1663,11 @@ module.exports = (_ => {
 					case "cs":		// Czech
 						return {
 							context_copy:						"Zkopírovat {{var0}}",
+							context_imageactions:				"Akce s obrázky",
 							context_lenssize:					"Velikost lupy",
 							context_saveas:						"Uložit {{var0}} jako...",
 							context_searchwith:					"Hledat {{var0}} pomocí...",
+							context_videoactions:				"Video akce",
 							context_view:						"Zobrazit {{var0}}",
 							submenu_disabled:					"Vše zakázáno",
 							toast_copy_failed:					"{{var0}} nemohl být zkopírován do schránky",
@@ -1675,9 +1678,11 @@ module.exports = (_ => {
 					case "da":		// Danish
 						return {
 							context_copy:						"Kopiér {{var0}}",
+							context_imageactions:				"Billedhandlinger",
 							context_lenssize:					"Objektivstørrelse",
 							context_saveas:						"Gem {{var0}} som ...",
 							context_searchwith:					"Søg i {{var0}} med ...",
+							context_videoactions:				"Videohandlinger",
 							context_view:						"Se {{var0}}",
 							submenu_disabled:					"Alle handicappede",
 							toast_copy_failed:					"{{var0}} kunne ikke kopieres til udklipsholderen",
@@ -1688,9 +1693,11 @@ module.exports = (_ => {
 					case "de":		// German
 						return {
 							context_copy:						"{{var0}} kopieren",
+							context_imageactions:				"Bildaktionen",
 							context_lenssize:					"Linsengröße",
 							context_saveas:						"{{var0}} speichern als ...",
 							context_searchwith:					"{{var0}} suchen mit ...",
+							context_videoactions:				"Videoaktionen",
 							context_view:						"{{var0}} ansehen",
 							submenu_disabled:					"Alle deaktiviert",
 							toast_copy_failed:					"{{var0}} konnte nicht in die Zwischenablage kopiert werden",
@@ -1701,9 +1708,11 @@ module.exports = (_ => {
 					case "el":		// Greek
 						return {
 							context_copy:						"Αντιγραφή {{var0}}",
+							context_imageactions:				"Ενέργειες εικόνας",
 							context_lenssize:					"Μέγεθος φακού",
 							context_saveas:						"Αποθήκευση {{var0}} ως ...",
 							context_searchwith:					"Αναζήτηση {{var0}} με ...",
+							context_videoactions:				"Ενέργειες βίντεο",
 							context_view:						"Προβολή {{var0}}",
 							submenu_disabled:					"Όλα τα άτομα με ειδικές ανάγκες",
 							toast_copy_failed:					"Δεν ήταν δυνατή η αντιγραφή του {{var0}} στο πρόχειρο",
@@ -1714,9 +1723,11 @@ module.exports = (_ => {
 					case "es":		// Spanish
 						return {
 							context_copy:						"Copiar {{var0}}",
+							context_imageactions:				"Acciones de imagen",
 							context_lenssize:					"Tamaño de la lente",
 							context_saveas:						"Guardar {{var0}} como ...",
 							context_searchwith:					"Buscar {{var0}} con ...",
+							context_videoactions:				"Acciones de vídeo",
 							context_view:						"Ver {{var0}}",
 							submenu_disabled:					"Todos discapacitados",
 							toast_copy_failed:					"{{var0}} no se pudo copiar al portapapeles",
@@ -1727,9 +1738,11 @@ module.exports = (_ => {
 					case "fi":		// Finnish
 						return {
 							context_copy:						"Kopioi {{var0}}",
+							context_imageactions:				"Kuvatoiminnot",
 							context_lenssize:					"Linssin koko",
 							context_saveas:						"Tallenna {{var0}} nimellä ...",
 							context_searchwith:					"Tee haku {{var0}} ...",
+							context_videoactions:				"Videotoiminnot",
 							context_view:						"Näytä {{var0}}",
 							submenu_disabled:					"Kaikki vammaiset",
 							toast_copy_failed:					"Kohdetta {{var0}} ei voitu kopioida leikepöydälle",
@@ -1740,9 +1753,11 @@ module.exports = (_ => {
 					case "fr":		// French
 						return {
 							context_copy:						"Copier {{var0}}",
+							context_imageactions:				"Actions sur les images",
 							context_lenssize:					"Taille de l'objectif",
 							context_saveas:						"Enregistrer {{var0}} sous ...",
 							context_searchwith:					"Rechercher {{var0}} avec ...",
+							context_videoactions:				"Actions vidéo",
 							context_view:						"Afficher {{var0}}",
 							submenu_disabled:					"Tout désactivé",
 							toast_copy_failed:					"{{var0}} n'a pas pu être copié dans le presse-papiers",
@@ -1753,9 +1768,11 @@ module.exports = (_ => {
 					case "hi":		// Hindi
 						return {
 							context_copy:						"कॉपी {{var0}}",
+							context_imageactions:				"छवि क्रियाएँ",
 							context_lenssize:					"लेंस का आकार",
 							context_saveas:						"{{var0}} को इस रूप में सेव करें...",
 							context_searchwith:					"इसके साथ {{var0}} खोजें ...",
+							context_videoactions:				"वीडियो क्रिया",
 							context_view:						"देखें {{var0}}",
 							submenu_disabled:					"सभी अक्षम",
 							toast_copy_failed:					"{{var0}} को क्लिपबोर्ड पर कॉपी नहीं किया जा सका",
@@ -1766,9 +1783,11 @@ module.exports = (_ => {
 					case "hr":		// Croatian
 						return {
 							context_copy:						"Kopiraj {{var0}}",
+							context_imageactions:				"Radnje slike",
 							context_lenssize:					"Veličina leće",
 							context_saveas:						"Spremi {{var0}} kao ...",
 							context_searchwith:					"Traži {{var0}} sa ...",
+							context_videoactions:				"Video radnje",
 							context_view:						"Pogledajte {{var0}}",
 							submenu_disabled:					"Svi invalidi",
 							toast_copy_failed:					"{{var0}} nije moguće kopirati u međuspremnik",
@@ -1779,9 +1798,11 @@ module.exports = (_ => {
 					case "hu":		// Hungarian
 						return {
 							context_copy:						"{{var0}} másolása",
+							context_imageactions:				"Képműveletek",
 							context_lenssize:					"Lencse mérete",
 							context_saveas:						"{{var0}} mentése másként ...",
 							context_searchwith:					"Keresés a következőben: {{var0}} a következővel:",
+							context_videoactions:				"Videóműveletek",
 							context_view:						"Megtekintés: {{var0}}",
 							submenu_disabled:					"Minden fogyatékkal él",
 							toast_copy_failed:					"A {{var0}} fájl nem másolható a vágólapra",
@@ -1792,9 +1813,11 @@ module.exports = (_ => {
 					case "it":		// Italian
 						return {
 							context_copy:						"Copia {{var0}}",
+							context_imageactions:				"Azioni immagine",
 							context_lenssize:					"Dimensione della lente",
 							context_saveas:						"Salva {{var0}} come ...",
 							context_searchwith:					"Cerca {{var0}} con ...",
+							context_videoactions:				"Azioni video",
 							context_view:						"Visualizza {{var0}}",
 							submenu_disabled:					"Tutti disabilitati",
 							toast_copy_failed:					"{{var0}} non può essere copiato negli appunti",
@@ -1805,9 +1828,11 @@ module.exports = (_ => {
 					case "ja":		// Japanese
 						return {
 							context_copy:						"{{var0}} をコピーします",
+							context_imageactions:				"画像アクション",
 							context_lenssize:					"レンズサイズ",
 							context_saveas:						"{{var0}} を...として保存します",
 							context_searchwith:					"{{var0}} を...で検索",
+							context_videoactions:				"ビデオ アクション",
 							context_view:						"{{var0}} を表示",
 							submenu_disabled:					"すべて無効",
 							toast_copy_failed:					"{{var0}} をクリップボードにコピーできませんでした",
@@ -1818,9 +1843,11 @@ module.exports = (_ => {
 					case "ko":		// Korean
 						return {
 							context_copy:						"{{var0}} 복사",
+							context_imageactions:				"이미지 작업",
 							context_lenssize:					"렌즈 크기",
 							context_saveas:						"{{var0}} 을 다른 이름으로 저장 ...",
 							context_searchwith:					"{{var0}} 검색 ...",
+							context_videoactions:				"비디오 작업",
 							context_view:						"{{var0}} 보기",
 							submenu_disabled:					"모두 비활성화 됨",
 							toast_copy_failed:					"{{var0}} 을 클립 보드에 복사 할 수 없습니다.",
@@ -1831,9 +1858,11 @@ module.exports = (_ => {
 					case "lt":		// Lithuanian
 						return {
 							context_copy:						"Kopijuoti {{var0}}",
+							context_imageactions:				"Vaizdo veiksmai",
 							context_lenssize:					"Objektyvo dydis",
 							context_saveas:						"Išsaugoti '{{var0}}' kaip ...",
 							context_searchwith:					"Ieškoti {{var0}} naudojant ...",
+							context_videoactions:				"Vaizdo įrašų veiksmai",
 							context_view:						"Žiūrėti {{var0}}",
 							submenu_disabled:					"Visi neįgalūs",
 							toast_copy_failed:					"{{var0}} nepavyko nukopijuoti į mainų sritį",
@@ -1844,9 +1873,11 @@ module.exports = (_ => {
 					case "nl":		// Dutch
 						return {
 							context_copy:						"Kopieer {{var0}}",
+							context_imageactions:				"Afbeeldingsacties",
 							context_lenssize:					"Lens Maat",
 							context_saveas:						"Bewaar {{var0}} als ...",
 							context_searchwith:					"Zoek {{var0}} met ...",
+							context_videoactions:				"Video-acties",
 							context_view:						"Bekijk {{var0}}",
 							submenu_disabled:					"Allemaal uitgeschakeld",
 							toast_copy_failed:					"{{var0}} kan niet naar het klembord worden gekopieerd",
@@ -1857,9 +1888,11 @@ module.exports = (_ => {
 					case "no":		// Norwegian
 						return {
 							context_copy:						"Kopier {{var0}}",
+							context_imageactions:				"Bildehandlinger",
 							context_lenssize:					"Linsestørrelse",
 							context_saveas:						"Lagre {{var0}} som ...",
 							context_searchwith:					"Søk på {{var0}} med ...",
+							context_videoactions:				"Videohandlinger",
 							context_view:						"Vis {{var0}}",
 							submenu_disabled:					"Alle funksjonshemmede",
 							toast_copy_failed:					"{{var0}} kunne ikke kopieres til utklippstavlen",
@@ -1870,9 +1903,11 @@ module.exports = (_ => {
 					case "pl":		// Polish
 						return {
 							context_copy:						"Kopiuj {{var0}}",
+							context_imageactions:				"Działania związane z obrazem",
 							context_lenssize:					"Rozmiar soczewki",
 							context_saveas:						"Zapisz {{var0}} jako ...",
 							context_searchwith:					"Wyszukaj {{var0}} za pomocą ...",
+							context_videoactions:				"Akcje wideo",
 							context_view:						"Wyświetl {{var0}}",
 							submenu_disabled:					"Wszystkie wyłączone",
 							toast_copy_failed:					"Nie można skopiować {{var0}} do schowka",
@@ -1883,9 +1918,11 @@ module.exports = (_ => {
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
 							context_copy:						"Copiar {{var0}}",
+							context_imageactions:				"Ações de imagem",
 							context_lenssize:					"Tamanho da lente",
 							context_saveas:						"Salvar {{var0}} como ...",
 							context_searchwith:					"Pesquisar {{var0}} com ...",
+							context_videoactions:				"Ações de vídeo",
 							context_view:						"Visualizar {{var0}}",
 							submenu_disabled:					"Todos desativados",
 							toast_copy_failed:					"{{var0}} não pôde ser copiado para a área de transferência",
@@ -1896,9 +1933,11 @@ module.exports = (_ => {
 					case "ro":		// Romanian
 						return {
 							context_copy:						"Copiați {{var0}}",
+							context_imageactions:				"Acțiuni de imagine",
 							context_lenssize:					"Dimensiunea obiectivului",
 							context_saveas:						"Salvați {{var0}} ca ...",
 							context_searchwith:					"Căutați {{var0}} cu ...",
+							context_videoactions:				"Acțiuni video",
 							context_view:						"Vizualizați {{var0}}",
 							submenu_disabled:					"Toate sunt dezactivate",
 							toast_copy_failed:					"{{var0}} nu a putut fi copiat în clipboard",
@@ -1909,9 +1948,11 @@ module.exports = (_ => {
 					case "ru":		// Russian
 						return {
 							context_copy:						"Скопируйте {{var0}}",
+							context_imageactions:				"Действия с изображением",
 							context_lenssize:					"Размер линзы",
 							context_saveas:						"Сохранить {{var0}} как ...",
 							context_searchwith:					"Искать {{var0}} с помощью ...",
+							context_videoactions:				"Действия с видео",
 							context_view:						"Посмотреть {{var0}}",
 							submenu_disabled:					"Все отключены",
 							toast_copy_failed:					"{{var0}} не удалось скопировать в буфер обмена",
@@ -1922,9 +1963,11 @@ module.exports = (_ => {
 					case "sv":		// Swedish
 						return {
 							context_copy:						"Kopiera {{var0}}",
+							context_imageactions:				"Bildåtgärder",
 							context_lenssize:					"Linsstorlek",
 							context_saveas:						"Spara {{var0}} som ...",
 							context_searchwith:					"Sök {{var0}} med ...",
+							context_videoactions:				"Videoåtgärder",
 							context_view:						"Visa {{var0}}",
 							submenu_disabled:					"Alla funktionshindrade",
 							toast_copy_failed:					"{{var0}} kunde inte kopieras till Urklipp",
@@ -1935,9 +1978,11 @@ module.exports = (_ => {
 					case "th":		// Thai
 						return {
 							context_copy:						"คัดลอก{{var0}}",
+							context_imageactions:				"การทำงานของรูปภาพ",
 							context_lenssize:					"ขนาดเลนส์",
 							context_saveas:						"บันทึก{{var0}}เป็น ...",
 							context_searchwith:					"ค้นหา{{var0}} ้วย ...",
+							context_videoactions:				"การกระทำของวิดีโอ",
 							context_view:						"ดู{{var0}}",
 							submenu_disabled:					"ปิดใช้งานทั้งหมด",
 							toast_copy_failed:					"ไม่สามารถคัดลอก{{var0}}ไปยังคลิปบอร์ดได้",
@@ -1948,9 +1993,11 @@ module.exports = (_ => {
 					case "tr":		// Turkish
 						return {
 							context_copy:						"{{var0}} kopyala",
+							context_imageactions:				"Görüntü Eylemleri",
 							context_lenssize:					"Lens Boyutu",
 							context_saveas:						"{{var0}} farklı kaydet ...",
 							context_searchwith:					"{{var0}} şununla ara ...",
+							context_videoactions:				"Video Eylemleri",
 							context_view:						"{{var0}} görüntüle",
 							submenu_disabled:					"Hepsi devre dışı",
 							toast_copy_failed:					"{{var0}} panoya kopyalanamadı",
@@ -1961,9 +2008,11 @@ module.exports = (_ => {
 					case "uk":		// Ukrainian
 						return {
 							context_copy:						"Копіювати {{var0}}",
+							context_imageactions:				"Дії із зображеннями",
 							context_lenssize:					"Розмір лінзи",
 							context_saveas:						"Збережіть {{var0}} як ...",
 							context_searchwith:					"Шукати {{var0}} за допомогою ...",
+							context_videoactions:				"Відео дії",
 							context_view:						"Переглянути {{var0}}",
 							submenu_disabled:					"Всі інваліди",
 							toast_copy_failed:					"Не вдалося скопіювати {{var0}} у буфер обміну",
@@ -1974,9 +2023,11 @@ module.exports = (_ => {
 					case "vi":		// Vietnamese
 						return {
 							context_copy:						"Sao chép {{var0}}",
+							context_imageactions:				"Hành động hình ảnh",
 							context_lenssize:					"Kích thước ống kính",
 							context_saveas:						"Lưu {{var0}} dưới dạng ...",
 							context_searchwith:					"Tìm kiếm {{var0}} bằng ...",
+							context_videoactions:				"Hành động video",
 							context_view:						"Xem {{var0}}",
 							submenu_disabled:					"Tất cả đã bị vô hiệu hóa",
 							toast_copy_failed:					"Không thể sao chép {{var0}} vào khay nhớ tạm",
@@ -1987,9 +2038,11 @@ module.exports = (_ => {
 					case "zh-CN":	// Chinese (China)
 						return {
 							context_copy:						"复制 {{var0}}",
+							context_imageactions:				"图像动作",
 							context_lenssize:					"缩放尺寸",
 							context_saveas:						"将 {{var0}} 另存到...",
 							context_searchwith:					"搜索 {{var0}} 使用...",
+							context_videoactions:				"视频动作",
 							context_view:						"查看 {{var0}}",
 							submenu_disabled:					"全部禁用",
 							toast_copy_failed:					"{{var0}} 无法复制到剪贴板",
@@ -2000,9 +2053,11 @@ module.exports = (_ => {
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							context_copy:						"複製 {{var0}}",
+							context_imageactions:				"圖像動作",
 							context_lenssize:					"縮放尺寸",
 							context_saveas:						"將 {{var0}} 另存到...",
 							context_searchwith:					"搜尋 {{var0}} 使用...",
+							context_videoactions:				"視頻動作",
 							context_view:						"預覽 {{var0}}",
 							submenu_disabled:					"全部關閉",
 							toast_copy_failed:					"{{var0}} 無法複製到剪貼簿",
@@ -2013,9 +2068,11 @@ module.exports = (_ => {
 					default:		// English
 						return {
 							context_copy:						"Copy {{var0}}",
+							context_imageactions:				"Image Actions",
 							context_lenssize:					"Lens Size",
 							context_saveas:						"Save {{var0}} as ...",
 							context_searchwith:					"Search {{var0}} with ...",
+							context_videoactions:				"Video Actions",
 							context_view:						"View {{var0}}",
 							submenu_disabled:					"All disabled",
 							toast_copy_failed:					"{{var0}} could not be copied to the Clipboard",
