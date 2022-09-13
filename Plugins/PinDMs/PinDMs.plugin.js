@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.3
+ * @version 1.9.4
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		improved: {
+			"Predefined Categories": "You can now overwrite predefined categories, meaning you can add a channel from one of the predefined to a custom one, making not appear in the predefined anymore"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -274,33 +276,25 @@ module.exports = (_ => {
 						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_pinchannel,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-channelist"),
-							children: this.getPredefinedCategory(id) ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-									label: this.labels.context_inpredefined,
-									id: BDFDB.ContextMenuUtils.createItemId(this.name, "in-predefined"),
-									disabled: true
-								}) : [
+							children: [
 								BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 									children: currentCategory ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.context_unpinchannel,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "unpin-channellist"),
 										color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
-										action: _ => {
-											this.removeFromCategory(id, currentCategory, "channelList");
-										}
+										action: _ => this.removeFromCategory(id, currentCategory, "channelList")
 									}) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.context_addtonewcategory,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "new-channellist"),
 										color: BDFDB.LibraryComponents.MenuItems.Colors.BRAND,
-										action: _ => {
-											this.openCategorySettingsModal({
-												id: this.generateID("channelList").toString(),
-												name: `${this.labels.header_pinneddms} #${categories.length + 1}`,
-												dms: [id],
-												pos: categories.length,
-												collapsed: false,
-												color: null
-											}, "channelList", true);
-										}
+										action: _ => this.openCategorySettingsModal({
+											id: this.generateId("channelList"),
+											name: `${this.labels.header_pinneddms} #${categories.length + 1}`,
+											dms: [id],
+											pos: categories.length,
+											collapsed: false,
+											color: null
+										}, "channelList", true)
 									})
 								}),
 								categories.length ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
@@ -526,9 +520,7 @@ module.exports = (_ => {
 													BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 														label: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_SETTINGS,
 														id: BDFDB.ContextMenuUtils.createItemId(this.name, "category-settings"),
-														action: _ => {
-															this.openCategorySettingsModal(category, "channelList");
-														}
+														action: _ => this.openCategorySettingsModal(category, "channelList")
 													}),
 													BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 														label: BDFDB.LanguageUtils.LanguageStrings.DELETE_CATEGORY,
@@ -738,11 +730,11 @@ module.exports = (_ => {
 				else BDFDB.DataUtils.remove(this, "pinned", BDFDB.UserUtils.me.id);
 			}
 
-			generateID (type) {
+			generateId (type) {
 				if (!type) return null;
 				let categories = this.getPinnedChannels(type);
 				let id = Math.round(Math.random() * 10000000000000000);
-				return categories[id] ? this.generateID() : id;
+				return categories[id] ? this.generateId() : id.toString();
 			}
 			
 			filterDMs (dms, removePredefined) {
@@ -774,7 +766,7 @@ module.exports = (_ => {
 			}
 			
 			getPredefinedCategory (id) {
-				if (!id) return "";
+				if (!id || this.getChannelListCategory(id)) return "";
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(id);
 				if (!channel) return "";
 				else if (this.settings.preCategories.friends.enabled && channel.isDM() && BDFDB.LibraryModules.RelationshipStore.isFriend(channel.recipients[0])) return "friends";
@@ -962,7 +954,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Добавяне към нова категория",
 							context_disablepredefined:			"Деактивирайте предварително определена категория",
-							context_inpredefined:				"Фиксирано в предварително дефинирана категория",
 							context_pinchannel:					"Фиксиране към списъка с канали",
 							context_pindm:						"Закачете директно съобщение",
 							context_pinguild:					"Фиксиране към списъка със сървъри",
@@ -975,7 +966,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Přidat do nové kategorie",
 							context_disablepredefined:			"Deaktivovat předdefinovanou kategorii",
-							context_inpredefined:				"Připnuté v předdefinované katrgorii",
 							context_pinchannel:					"Připnout do seznamu kanálů",
 							context_pindm:						"Připnout do PZ",
 							context_pinguild:					"Připnout do seznamu serverů",
@@ -988,7 +978,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Føj til ny kategori",
 							context_disablepredefined:			"Deaktiver foruddefineret kategori",
-							context_inpredefined:				"Fastgjort i en foruddefineret kategori",
 							context_pinchannel:					"Fastgør til kanallisten",
 							context_pindm:						"Pin direkte besked",
 							context_pinguild:					"Fastgør til serverlisten",
@@ -1001,7 +990,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Zur neuen Kategorie hinzufügen",
 							context_disablepredefined:			"Vordefinierte Kategorie deaktivieren",
-							context_inpredefined:				"In vordefinierter Kategorie angeheftet",
 							context_pinchannel:					"An Kanalliste anheften",
 							context_pindm:						"Direktnachricht anheften",
 							context_pinguild:					"An Serverliste anheften",
@@ -1014,7 +1002,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Προσθήκη σε νέα κατηγορία",
 							context_disablepredefined:			"Απενεργοποίηση προκαθορισμένης κατηγορίας",
-							context_inpredefined:				"Καρφιτσώθηκε σε μια προκαθορισμένη κατηγορία",
 							context_pinchannel:					"Καρφίτσωμα στη λίστα καναλιών",
 							context_pindm:						"Καρφιτσώστε το άμεσο μήνυμα",
 							context_pinguild:					"Καρφίτσωμα στη λίστα διακομιστών",
@@ -1027,7 +1014,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Agregar a una nueva categoría",
 							context_disablepredefined:			"Desactivar categoría predefinida",
-							context_inpredefined:				"Anclado en una categoría predefinida",
 							context_pinchannel:					"Anclar a la lista de canales",
 							context_pindm:						"Pin de mensaje directo",
 							context_pinguild:					"Anclar a la lista de servidores",
@@ -1040,7 +1026,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Lisää uuteen luokkaan",
 							context_disablepredefined:			"Poista ennalta määritetty luokka käytöstä",
-							context_inpredefined:				"Kiinnitetty ennalta määritettyyn luokkaan",
 							context_pinchannel:					"Kiinnitä kanavaluetteloon",
 							context_pindm:						"Kiinnitä suora viesti",
 							context_pinguild:					"Kiinnitä palvelinluetteloon",
@@ -1053,7 +1038,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Ajouter à une nouvelle catégorie",
 							context_disablepredefined:			"Désactiver la catégorie prédéfinie",
-							context_inpredefined:				"Épinglé dans une catégorie prédéfinie",
 							context_pinchannel:					"Épingler à la liste des salons",
 							context_pindm:						"Épingler le message privé",
 							context_pinguild:					"Épingler à la liste des serveurs",
@@ -1066,7 +1050,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"नई श्रेणी में जोड़ें",
 							context_disablepredefined:			"पूर्वनिर्धारित श्रेणी को निष्क्रिय करें",
-							context_inpredefined:				"एक पूर्वनिर्धारित श्रेणी में पिन किया गया",
 							context_pinchannel:					"चैनल सूची में पिन करें",
 							context_pindm:						"पिन डीएम",
 							context_pinguild:					"सर्वर सूची में पिन करें",
@@ -1079,7 +1062,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Dodaj u novu kategoriju",
 							context_disablepredefined:			"Deaktivirajte unaprijed definiranu kategoriju",
-							context_inpredefined:				"Prikvačeno u unaprijed definiranoj kategoriji",
 							context_pinchannel:					"Prikvači na popis kanala",
 							context_pindm:						"Prikvači izravnu poruku",
 							context_pinguild:					"Prikvači na popis poslužitelja",
@@ -1092,7 +1074,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Hozzáadás új kategóriához",
 							context_disablepredefined:			"Deaktiválja az előre definiált kategóriát",
-							context_inpredefined:				"Előre meghatározott kategóriában rögzítve",
 							context_pinchannel:					"Rögzítés a csatornalistához",
 							context_pindm:						"Közvetlen üzenet rögzítése",
 							context_pinguild:					"Rögzítés a kiszolgáló listához",
@@ -1105,7 +1086,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Aggiungi a una nuova categoria",
 							context_disablepredefined:			"Disattiva la categoria predefinita",
-							context_inpredefined:				"Bloccato in una categoria predefinita",
 							context_pinchannel:					"Fissa all'elenco dei canali",
 							context_pindm:						"Metti il ​​messaggio diretto",
 							context_pinguild:					"Aggiungi all'elenco dei server",
@@ -1118,7 +1098,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"新しいカテゴリに追加",
 							context_disablepredefined:			"事前定義されたカテゴリを非アクティブ化",
-							context_inpredefined:				"事前定義されたカテゴリに固定",
 							context_pinchannel:					"チャネルリストに固定",
 							context_pindm:						"ダイレクトメッセージを固定する",
 							context_pinguild:					"サーバーリストに固定する",
@@ -1131,7 +1110,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"새 카테고리에 추가",
 							context_disablepredefined:			"사전 정의 된 카테고리 비활성화",
-							context_inpredefined:				"사전 정의 된 카테고리에 고정됨",
 							context_pinchannel:					"채널 목록에 고정",
 							context_pindm:						"개인 메시지 고정",
 							context_pinguild:					"서버 목록에 고정",
@@ -1144,7 +1122,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Pridėti prie naujos kategorijos",
 							context_disablepredefined:			"Išjunkite iš anksto nustatytą kategoriją",
-							context_inpredefined:				"Prisegta iš anksto nustatytoje kategorijoje",
 							context_pinchannel:					"Prisegti prie kanalų sąrašo",
 							context_pindm:						"Prisegti tiesioginį pranešimą",
 							context_pinguild:					"Prisegti prie serverio sąrašo",
@@ -1157,7 +1134,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Toevoegen aan nieuwe categorie",
 							context_disablepredefined:			"Schakel de voorgedefinieerde categorie uit",
-							context_inpredefined:				"Vastgezet in een vooraf gedefinieerde categorie",
 							context_pinchannel:					"Vastzetten op kanalenlijst",
 							context_pindm:						"Direct bericht vastzetten",
 							context_pinguild:					"Vastzetten op serverlijst",
@@ -1170,7 +1146,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Legg til i ny kategori",
 							context_disablepredefined:			"Deaktiver forhåndsdefinert kategori",
-							context_inpredefined:				"Festet i en forhåndsdefinert kategori",
 							context_pinchannel:					"Fest til kanallisten",
 							context_pindm:						"Fest direkte melding",
 							context_pinguild:					"Fest til serverlisten",
@@ -1183,7 +1158,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Dodaj do nowej kategorii",
 							context_disablepredefined:			"Dezaktywuj predefiniowaną kategorię",
-							context_inpredefined:				"Przypięty w predefiniowanej kategorii",
 							context_pinchannel:					"Przypnij do listy kanałów",
 							context_pindm:						"Przypnij bezpośrednią wiadomość",
 							context_pinguild:					"Przypnij do listy serwerów",
@@ -1196,7 +1170,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Adicionar à nova categoria",
 							context_disablepredefined:			"Desativar categoria predefinida",
-							context_inpredefined:				"Fixado em uma categoria predefinida",
 							context_pinchannel:					"Fixar na lista de canais",
 							context_pindm:						"Fixar mensagem direta",
 							context_pinguild:					"Fixar na lista de servidores",
@@ -1209,7 +1182,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Adăugați la o nouă categorie",
 							context_disablepredefined:			"Dezactivați categoria predefinită",
-							context_inpredefined:				"Fixat într-o categorie predefinită",
 							context_pinchannel:					"Fixați în lista de canale",
 							context_pindm:						"Fixați mesajul direct",
 							context_pinguild:					"Fixați pe lista serverului",
@@ -1222,7 +1194,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Добавить в новую категорию",
 							context_disablepredefined:			"Отключить предопределенную категорию",
-							context_inpredefined:				"Закреплено в предопределенной категории",
 							context_pinchannel:					"Закрепить в списке каналов",
 							context_pindm:						"Закрепить прямую переписку",
 							context_pinguild:					"Закрепить в списке серверов",
@@ -1235,7 +1206,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Lägg till i ny kategori",
 							context_disablepredefined:			"Inaktivera fördefinierad kategori",
-							context_inpredefined:				"Fästs i en fördefinierad kategori",
 							context_pinchannel:					"Fäst i kanallistan",
 							context_pindm:						"Fäst direktmeddelande",
 							context_pinguild:					"Fäst i serverlistan",
@@ -1248,7 +1218,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"เพิ่มในหมวดหมู่ใหม่",
 							context_disablepredefined:			"ปิดใช้งานหมวดหมู่ที่กำหนดไว้ล่วงหน้า",
-							context_inpredefined:				"ตรึงไว้ในหมวดหมู่ที่กำหนดไว้ล่วงหน้า",
 							context_pinchannel:					"ตรึงในรายการช่อง",
 							context_pindm:						"ตรึงข้อความโดยตรง",
 							context_pinguild:					"ปักหมุดรายการเซิร์ฟเวอร์",
@@ -1261,7 +1230,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Yeni kategoriye ekle",
 							context_disablepredefined:			"Önceden tanımlanmış kategoriyi devre dışı bırakın",
-							context_inpredefined:				"Önceden tanımlanmış bir kategoriye sabitlenmiş",
 							context_pinchannel:					"Kanal listesine sabitle",
 							context_pindm:						"Doğrudan mesajı sabitle",
 							context_pinguild:					"Sunucu listesine sabitle",
@@ -1274,7 +1242,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Додати до нової категорії",
 							context_disablepredefined:			"Вимкнути заздалегідь визначену категорію",
-							context_inpredefined:				"Закріплено в наперед визначеній категорії",
 							context_pinchannel:					"Закріпити в списку каналів",
 							context_pindm:						"Закріпити пряме повідомлення",
 							context_pinguild:					"Закріпити на списку серверів",
@@ -1287,7 +1254,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Thêm vào danh mục mới",
 							context_disablepredefined:			"Hủy kích hoạt danh mục xác định trước",
-							context_inpredefined:				"Được ghim trong một danh mục xác định trước",
 							context_pinchannel:					"Ghim vào danh sách kênh",
 							context_pindm:						"Ghim tin nhắn trực tiếp",
 							context_pinguild:					"Ghim vào danh sách máy chủ",
@@ -1300,7 +1266,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"添加到新类别",
 							context_disablepredefined:			"停用预定义类别",
-							context_inpredefined:				"固定在预定义的类别中",
 							context_pinchannel:					"固定到频道列表",
 							context_pindm:						"固定直接讯息",
 							context_pinguild:					"固定到服务器列表",
@@ -1313,7 +1278,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"添加到新類別",
 							context_disablepredefined:			"停用預定義類別",
-							context_inpredefined:				"固定在預定義的類別中",
 							context_pinchannel:					"固定到頻道列表",
 							context_pindm:						"固定直接訊息",
 							context_pinguild:					"固定到服務器列表",
@@ -1326,7 +1290,6 @@ module.exports = (_ => {
 						return {
 							context_addtonewcategory:			"Add to new Category",
 							context_disablepredefined:			"Deactivate predefined Category",
-							context_inpredefined:				"Pinned in a predefined Category",
 							context_pinchannel:					"Pin to Channel List",
 							context_pindm:						"Pin DM",
 							context_pinguild:					"Pin to Server List",
