@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.6.6
+ * @version 4.6.7
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -101,6 +101,7 @@ module.exports = (_ => {
 						UserThemeBanner: "default",
 						UserBanner: "default",
 						UserPopoutAvatar: "UserPopoutAvatar",
+						UserThemePopoutHeader: "default",
 						UsernameSection: "default",
 						UserPopoutInfo: "UserPopoutInfo",
 						UserProfileModal: "default",
@@ -617,6 +618,15 @@ module.exports = (_ => {
 			}
 
 			processUserPopoutAvatar (e) {
+				if (this.settings.places.userPopout && e.instance.props.user && changedUsers[e.instance.props.user.id]) e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
+				if (e.instance.props.displayProfile && e.instance.props.user && changedUsers[e.instance.props.user.id]) {
+					if (changedUsers[e.instance.props.user.id].removeBanner) e.instance.props.displayProfile.banner = null;
+					else if (changedUsers[e.instance.props.user.id].banner) e.instance.props.displayProfile.banner = changedUsers[e.instance.props.user.id].banner;
+				}
+			}
+
+			processUserThemePopoutHeader (e) {
+				if (this.settings.places.userPopout && e.instance.props.user && changedUsers[e.instance.props.user.id]) e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
 				if (e.instance.props.displayProfile && e.instance.props.user && changedUsers[e.instance.props.user.id]) {
 					if (changedUsers[e.instance.props.user.id].removeBanner) e.instance.props.displayProfile.banner = null;
 					else if (changedUsers[e.instance.props.user.id].banner) e.instance.props.displayProfile.banner = changedUsers[e.instance.props.user.id].banner;

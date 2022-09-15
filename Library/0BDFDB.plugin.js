@@ -8100,6 +8100,7 @@ module.exports = (_ => {
 							PrivateChannel: ["componentDidMount", "componentDidUpdate"],
 							AnalyticsContext: ["componentDidMount", "componentDidUpdate"],
 							UserPopoutAvatar: "UserPopoutAvatar",
+							UserThemePopoutHeader: "default",
 							DiscordTag: "default"
 						}
 					};
@@ -8283,6 +8284,19 @@ module.exports = (_ => {
 						if (!e.instance.props.user) return;
 						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutavatarwrapper]]});
 						if (index > -1) children[index] = Internal._processAvatarRender(e.instance.props.user, children[index], null, e.instance) || children[index];
+					};
+					Internal.processUserThemePopoutHeader = function (e) {
+						if (!e.instance.props.user) return;
+						let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: n => n && typeof n.type == "function" && n.type.toString().indexOf(".avatarSrc") > -1});
+						if (avatar) {
+							let type = avatar.type;
+							avatar.type = BDFDB.TimeUtils.suppress((...args) => {
+								let returnValue = type(...args);
+								let [children, index] = BDFDB.ReactUtils.findParent(returnValue, {props: [["className", BDFDB.disCN.userpopoutthemedavatarwrapper]]});
+								if (index > -1) children[index] = Internal._processAvatarRender(e.instance.props.user, children[index], null, e.instance) || children[index];
+								return returnValue;
+							}, "Error in Type Render of UserThemePopoutAvatar!");
+						}
 					};
 					Internal.processDiscordTag = function (e) {
 						if (e.instance && e.instance.props && e.returnvalue && e.instance.props.user) e.returnvalue.props.user = e.instance.props.user;
@@ -8864,8 +8878,6 @@ module.exports = (_ => {
 							if (stringKeys.length) next(languages.shift());
 						};
 						BDFDB.DevUtils.req = Internal.getWebModuleReq();
-						
-						window.BDFDB = BDFDB;
 					}
 					
 					if (libraryCSS) BDFDB.DOMUtils.appendLocalStyle("BDFDB", libraryCSS.replace(/[\n\t\r]/g, "").replace(/\[REPLACE_CLASS_([A-z0-9_]+?)\]/g, (a, b) => BDFDB.dotCN[b]));
