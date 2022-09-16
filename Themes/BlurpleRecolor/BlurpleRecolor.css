@@ -2268,6 +2268,7 @@ input.input-2g-os5 {										/* textinput												*/
 	border-color: rgb(var(--accentcolor));
 }
 .addFriendInputWrapper-kkoSV9 .input-2g-os5 {
+	background-color: transparent !important;
 	border-color: transparent !important;
 }
 .searchInput-3NGPfp {

@@ -1860,14 +1860,19 @@ body::after {
 
 /* ~~~~		7.		PEOPLES							~~~~ */
 
-.wrapper-1cBijl {											/* friendsadd			inputcontainer						*/
+.addFriendInputWrapper-kkoSV9 {								/* friendsadd			inputcontainer						*/
 	background-color: rgba(var(--transparencycolor), .1);
 	border-color: rgba(var(--transparencycolor), .3);
 }
-.wrapper-1cBijl:hover {
+.addFriendInputWrapper-kkoSV9:hover:not(:focus-within) {
 	border-color: rgb(var(--transparencycolor));
 }
-
+.container-3tKtM_ {											/* friendsadd			explore option						*/
+	border: none;
+}
+.container-3tKtM_:hover {
+	background-color: var(--background-floating);
+}
 .peopleListItem-u6dGxF .actionButton-3-B2x-,				/* peoples				actionbutton						*/
 .peopleListItem-u6dGxF .actionButton-3-B2x {				/* peoples				actionbutton						*/
 	background-color: rgba(var(--transparencycolor), .1);
