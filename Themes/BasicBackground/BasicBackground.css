@@ -1860,14 +1860,14 @@ body::after {
 
 /* ~~~~		7.		PEOPLES							~~~~ */
 
-.addFriendInputWrapper-kkoSV9 {								/* friendsadd			inputcontainer						*/
+.addFriendInputWrapper-kkoSV9 {								/* peoples				add friend							*/
 	background-color: rgba(var(--transparencycolor), .1);
 	border-color: rgba(var(--transparencycolor), .3);
 }
 .addFriendInputWrapper-kkoSV9:hover:not(:focus-within) {
 	border-color: rgb(var(--transparencycolor));
 }
-.container-3tKtM_ {											/* friendsadd			explore option						*/
+.container-3tKtM_ {											/* peoples				explore option						*/
 	border: none;
 }
 .container-3tKtM_:hover {
