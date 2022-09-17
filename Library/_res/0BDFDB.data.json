@@ -146,6 +146,7 @@
 		"TimestampUtils": {"props": ["fromTimestamp", "extractTimestamp"]},
 		"TimeUtils": {"props": ["calendarFormat", "dateFormat"]},
 		"ThemeSettingsStore": {"props": ["theme"]},
+		"ThreadConfigStore": {"props": ["hasJoined", "isMuted"]},
 		"ThreadStore": {"props": ["isActive", "getThreadsForGuild"]},
 		"UnreadGuildUtils": {"props": ["hasUnread", "getTotalMentionCount"]},
 		"UnreadChannelUtils": {"props": ["getUnreadCount", "getOldestUnreadMessageId"]},
