@@ -224,7 +224,7 @@ module.exports = (_ => {
 						if (message.author.id != BDFDB.UserUtils.me.id && !BDFDB.LibraryModules.RelationshipStore.isBlocked(message.author.id)) {
 							const channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 							const isGroupDM = channel.isGroupDM();
-							const muted = channel.isThread() ? BDFDB.LibraryModules.ThreadConfigStore.isMuted(channel.id) : BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId, channel.id);
+							const muted = BDFDB.ChannelUtils.isThread(channel) ? BDFDB.LibraryModules.ThreadConfigStore.isMuted(channel.id) : BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId, channel.id);
 							const focused = document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == channel.id;
 							if (!guildId && !muted && !(choices[isGroupDM ? "groupdm" : "dm"].focus && focused)) {
 								this.fireEvent(isGroupDM ? "groupdm" : "dm");
