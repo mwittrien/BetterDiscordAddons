@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.9
+ * @version 2.6.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -3319,6 +3319,10 @@ module.exports = (_ => {
 				BDFDB.ChannelUtils.isThread = function (channelOrId) {
 					let channel = typeof channelOrId == "string" ? Internal.LibraryModules.ChannelStore.getChannel(channelOrId) : channelOrId;
 					return channel && channel.isThread();
+				};
+				BDFDB.ChannelUtils.isForumPost = function (channelOrId) {
+					let channel = typeof channelOrId == "string" ? Internal.LibraryModules.ChannelStore.getChannel(channelOrId) : channelOrId;
+					return channel && channel.parentChannelThreadType && channel.parentChannelThreadType == BDFDB.DiscordConstants.ChannelTypes.GUILD_FORUM;
 				};
 				BDFDB.ChannelUtils.isEvent = function (channelOrId) {
 					let channel = typeof channelOrId == "string" ? Internal.LibraryModules.GuildEventStore.getGuildScheduledEvent(channelOrId) : channelOrId;
