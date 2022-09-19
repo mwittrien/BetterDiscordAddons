@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.5
+ * @version 1.5.6
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -60,15 +60,17 @@ module.exports = (_ => {
 			NONE: 0,
 			MANAGEMENT: 1,
 			ADMIN: 2,
+			FORUM_CREATOR: 3,
 			THREAD_CREATOR: 3,
-			GROUP_OWNER: 4,
-			OWNER: 5
+			GROUP_OWNER: 5,
+			OWNER: 6
 		};
 		
 		const labelMap = {
 			[userTypes.NONE]: "",
 			[userTypes.MANAGEMENT]: "management",
 			[userTypes.ADMIN]: "admin",
+			[userTypes.FORUM_CREATOR]: "forumCreator",
 			[userTypes.THREAD_CREATOR]: "threadCreator",
 			[userTypes.GROUP_OWNER]: "groupOwner",
 			[userTypes.OWNER]: "owner"
@@ -78,6 +80,7 @@ module.exports = (_ => {
 			[userTypes.NONE]: "",
 			[userTypes.MANAGEMENT]: "_stafftagmanagementicon",
 			[userTypes.ADMIN]: "_stafftagadminicon",
+			[userTypes.FORUM_CREATOR]: "_stafftagforumcreatoricon",
 			[userTypes.THREAD_CREATOR]: "_stafftagthreadcreatoricon",
 			[userTypes.GROUP_OWNER]: "_stafftaggroupownericon",
 			[userTypes.OWNER]: "_stafftagownericon"
@@ -98,16 +101,17 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						useCrown:			{value: true,	description: "Use the Crown Icon instead of the Bot Tag Style"},
-						useRoleColor:		{value: true, 	description: "Use the Role Color instead of the default Blurple"},
-						useBlackFont:		{value: false,	description: "Use black Font instead of darkening the Role Color on bright Colors"},
-						ignoreBots:			{value: false,	description: "Don't add the Owner/Admin/Management Tag for Bots"},
-						ignoreMyself:		{value: false,	description: "Don't add the Owner/Admin/Management Tag for yourself"}
+						useCrown:			{value: true,	description: "Uses the Crown Icon instead of the Bot Tag Style"},
+						useRoleColor:		{value: true, 	description: "Uses the Role Color instead of the default Blurple"},
+						useBlackFont:		{value: false,	description: "Uses black Font instead of darkening the Role Color on bright Colors"},
+						ignoreBots:			{value: false,	description: "Doesn't add the Owner/Admin/Management Tag for Bots"},
+						ignoreMyself:		{value: false,	description: "Doesn't add the Owner/Admin/Management Tag for yourself"}
 					},
 					tagTypes: {
 						owners:				{value: true, 	description: "Server Owner Tag"},
 						groupOwners:		{value: true, 	description: "Group Owner Tag"},
 						threadCreators:		{value: true, 	description: "Thread Creator Tag"},
+						forumCreators:		{value: true, 	description: "Forum Creator Tag"},
 						admins:				{value: true, 	description: "Admin Tag (Admin Permissions)"},
 						managementG:		{value: true, 	description: "Management Tag (Server Management)"},
 						managementC:		{value: true, 	description: "Management Tag (Channel Management)"},
@@ -128,6 +132,7 @@ module.exports = (_ => {
 					customTitles: {
 						owner:				{value: "",		placeholder: "Owner", 		description: "Server Owner Tags"},
 						groupOwner:			{value: "",		placeholder: "Group Owner",	description: "Group Owner Tags"},
+						forumCreator:		{value: "",		placeholder: "Creator", 	description: "Forum Creator Tags"},
 						threadCreator:		{value: "",		placeholder: "Creator", 	description: "Thread Creator Tags"},
 						admin:				{value: "",		placeholder: "Admin", 		description: "Admin Tags"},
 						management:			{value: "",		placeholder: "Management", 	description: "Management Tags"}
@@ -141,6 +146,7 @@ module.exports = (_ => {
 					${BDFDB.dotCN.memberownericon + BDFDB.dotCN._stafftagmanagementicon} {
 						color: #88540b;
 					}
+					${BDFDB.dotCN.memberownericon + BDFDB.dotCN._stafftagforumcreatoricon},
 					${BDFDB.dotCN.memberownericon + BDFDB.dotCN._stafftagthreadcreatoricon} {
 						color: var(--text-muted);
 					}
@@ -354,7 +360,7 @@ module.exports = (_ => {
 				
 				let fallbackLabel = this.settings.general.useCrown && this.getLabelFallback(userType);
 				let label = this.getLabel(userType, fallbackLabel);
-				let labelExtra = userType == userTypes.MANAGEMENT && this.getManagementLabel(user);
+				let labelExtra = userType == userTypes.FORUM_CREATOR ? BDFDB.LanguageUtils.LanguageStrings.BOT_TAG_FORUM_ORIGINAL_POSTER_TOOLTIP : userType == userTypes.MANAGEMENT && this.getManagementLabel(user);
 				
 				let tag = null;
 				if (this.settings.general.useCrown) tag = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
@@ -391,6 +397,7 @@ module.exports = (_ => {
 				switch (userType) {
 					case userTypes.OWNER: return BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER;
 					case userTypes.GROUP_OWNER: return BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER;
+					case userTypes.FORUM_CREATOR: return BDFDB.LanguageUtils.LanguageStrings.BOT_TAG_FORUM_ORIGINAL_POSTER;
 					case userTypes.THREAD_CREATOR: return this.labels.creator.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.THREAD);
 					case userTypes.ADMIN: return BDFDB.LanguageUtils.LanguageStrings.ADMINISTRATOR;
 					case userTypes.MANAGEMENT: return this.labels.management;
@@ -411,7 +418,6 @@ module.exports = (_ => {
 					this.settings.tagTypes.managementC && BDFDB.UserUtils.can("MANAGE_CHANNELS", user.id) && BDFDB.LanguageUtils.LanguageStrings.CHANNELS,
 					this.settings.tagTypes.managementT && BDFDB.UserUtils.can("MANAGE_THREADS", user.id) && BDFDB.LanguageUtils.LanguageStrings.THREADS,
 					this.settings.tagTypes.managementE && BDFDB.UserUtils.can("MANAGE_EVENTS", user.id) && BDFDB.LanguageUtils.LanguageStrings.GUILD_EVENTS,
-					this.settings.tagTypes.managementC && BDFDB.UserUtils.can("MANAGE_CHANNELS", user.id) && BDFDB.LanguageUtils.LanguageStrings.CHANNELS,
 					this.settings.tagTypes.managementR && BDFDB.UserUtils.can("MANAGE_ROLES", user.id) && BDFDB.LanguageUtils.LanguageStrings.ROLES,
 					this.settings.tagTypes.managementU && (BDFDB.UserUtils.can("BAN_MEMBERS", user.id) || BDFDB.UserUtils.can("KICK_MEMBERS", user.id)) && BDFDB.LanguageUtils.LanguageStrings.MEMBERS,
 					this.settings.tagTypes.managementV && (BDFDB.UserUtils.can("MUTE_MEMBERS", user.id) || BDFDB.UserUtils.can("DEAFEN_MEMBERS", user.id) || BDFDB.UserUtils.can("MOVE_MEMBERS", user.id)) && BDFDB.LanguageUtils.LanguageStrings.VOICE_AND_VIDEO,
@@ -427,7 +433,8 @@ module.exports = (_ => {
 				
 				if (this.settings.tagTypes.owners && guild && guild.ownerId == user.id) return userTypes.OWNER;
 				else if (this.settings.tagTypes.groupOwners && channel.ownerId == user.id && channel.isGroupDM()) return userTypes.GROUP_OWNER;
-				else if (this.settings.tagTypes.threadCreators && channel.ownerId == user.id && BDFDB.ChannelUtils.isThread(channel)) return userTypes.THREAD_CREATOR;
+				else if (this.settings.tagTypes.forumCreators && channel.ownerId == user.id && BDFDB.ChannelUtils.isForumPost(channel)) return userTypes.FORUM_CREATOR;
+				else if (this.settings.tagTypes.threadCreators && channel.ownerId == user.id && BDFDB.ChannelUtils.isThread(channel) && !BDFDB.ChannelUtils.isForumPost(channel)) return userTypes.THREAD_CREATOR;
 				else if (this.settings.tagTypes.admins && BDFDB.UserUtils.can("ADMINISTRATOR", user.id)) return userTypes.ADMIN;
 				else if (this.settings.tagTypes.managementG && BDFDB.UserUtils.can("MANAGE_GUILD", user.id) || this.settings.tagTypes.managementC && BDFDB.UserUtils.can("MANAGE_CHANNELS", user.id) || this.settings.tagTypes.managementR && BDFDB.UserUtils.can("MANAGE_ROLES", user.id) || this.settings.tagTypes.managementU && (BDFDB.UserUtils.can("BAN_MEMBERS", user.id) || BDFDB.UserUtils.can("KICK_MEMBERS", user.id)) || this.settings.tagTypes.managementM && BDFDB.UserUtils.can("MANAGE_MESSAGES", user.id)) return userTypes.MANAGEMENT;
 				return userTypes.NONE;
