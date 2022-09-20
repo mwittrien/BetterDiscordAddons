@@ -5,8 +5,10 @@
 .supporter-Z3FfwL::before {
 	display: none !important;
 }
-.supporter-Z3FfwL.hasBadge-4rT8_u .mask-1FEkla {
+.supporter-Z3FfwL.hasBadge-4rT8_u .mask-1FEkla foreignObject {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path fill="white" d="M 0,0 H 1 V 1 H 0.29565217 V 0.8 c 0,-0.1 -0.0347826,-0.14 -0.12173913,-0.14 H 0 Z"/></svg>') center/cover no-repeat;
+	overflow: hidden;
+	border-radius: 50%;
 }
 .avatar-2e8lTP.supporter-Z3FfwL.hasBadge-4rT8_u > img {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path fill="white" d="M 0,0 H 1 V 1 H 0.34565217 V 0.82 c 0,-0.1 -0.0347826,-0.14 -0.12173913,-0.14 H 0 Z"/></svg>') center/cover no-repeat;
