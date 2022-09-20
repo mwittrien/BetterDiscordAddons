@@ -2469,10 +2469,12 @@ body::after {
 	border: unset;
 	margin: 6px;
 }
-.accountProfileCard-lbN7n- .banner-1YaD3N {					/* accountsettings		container banner					*/
+															/* accountsettings		container banner					*/
+.accountProfileCard-lbN7n- *:not(foreignObject) > .banner-1YaD3N {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 20.576172 120 A 46 46 0 0 1 62 94 A 46 46 0 0 1 103.41992 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
 }
-.profileBannerPreview-3mLIdO .banner-3D8GgT {				/* accountsettings		preview banner						*/
+															/* accountsettings		preview banner						*/
+.profileBannerPreview-3mLIdO *:not(foreignObject) > .banner-3D8GgT {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 16 120 A 46 46 0 0 1 62 76 A 46 46 0 0 1 108 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
 }
 .questionMark-3V9mGJ svg {									/* accountsettings		questionmark new					*/
@@ -3532,7 +3534,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .root-8LYsGj .topSection-13QKHs {				/* modal				topsection							*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
-.root-8LYsGj .banner-1YaD3N {								/* modal				banner								*/
+.root-8LYsGj *:not(foreignObject) > .banner-1YaD3N {		/* modal				banner								*/
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="240" viewBox="0 0 2400 240" fill="none"><path fill="black" d="M 0 0 L 0 240 L 16 240 A 69 69 0 0 1 85 172 A 69 69 0 0 1 152 240 L 2400 240 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
 }
 .root-8LYsGj .avatar-3QF_VA {								/* modal				avatar								*/
@@ -4547,12 +4549,12 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .activity-1gTu-L {
 	padding: 0 16px 16px;
 }
-.userPopout-2j1gM4 .banner-1YaD3N,							/* popout				banner								*/
-.userPopout-3fydSP .banner-2boKnS,							/* popout new			banner								*/
-.menu-1QACrS .banner-1YaD3N {								/* status popout		banner								*/
+.userPopout-2j1gM4 *:not(foreignObject) > .banner-1YaD3N,	/* popout				banner								*/
+.userPopout-3fydSP *:not(foreignObject) > .banner-2boKnS,	/* popout new			banner								*/
+.menu-1QACrS *:not(foreignObject) > .banner-1YaD3N {		/* status popout		banner								*/
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 16 120 A 46 46 0 0 1 62 76 A 46 46 0 0 1 108 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
 }
-.userPopout-3fydSP .userPopoutInnerWithTheme-71l1ON .banner-2boKnS {
+.userPopout-3fydSP .userPopoutInnerWithTheme-71l1ON *:not(foreignObject) > .banner-2boKnS {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 12 120 A 46 46 0 0 1 48 74 A 46 46 0 0 1 104 126 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
 }
 .userPopoutInnerWithTheme-71l1ON::after {
@@ -5869,7 +5871,9 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background: rgb(var(--accentcolor));
 }
 .clickable-28SzVr:active .layout-1qmrhw,
-.clickable-28SzVr.selected-1-Z6gm .layout-1qmrhw {
+.selected-1-Z6gm .layout-1qmrhw,
+.selected-1-Z6gm:hover .layout-1qmrhw,
+.selected-1-Z6gm:active .layout-1qmrhw {
 	background-color: rgb(var(--accentcolor));
 	text-shadow: 1px 1px var(--textshadow);
 }
