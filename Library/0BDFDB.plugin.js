@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.6.0
+ * @version 2.6.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -627,6 +627,7 @@ module.exports = (_ => {
 					if (!BDFDB.ObjectUtils.is(plugin)) return;
 					if (plugin == window.BDFDB_Global) {
 						if (Internal.removeChunkObserver) Internal.removeChunkObserver();
+						if (Internal.patchObserverData && Internal.patchObserverData.observer && typeof Internal.patchObserverData.observer.disconnect == "function") Internal.patchObserverData.observer.disconnect();
 						let updateNotice = BDFDB.dotCN && document.querySelector(BDFDB.dotCN.noticeupdate);
 						if (updateNotice) updateNotice.close();
 						BDFDB.TimeUtils.clear(PluginStores && PluginStores.updateData && PluginStores.updateData.interval);
@@ -2296,8 +2297,8 @@ module.exports = (_ => {
 						}
 					}
 					else {
-						let unmappedType = config.mappedType.split(" _ _ ")[1] || config.mappedType;
-						let constructor = BDFDB.ReactUtils.findConstructor(ins, unmappedType) || BDFDB.ReactUtils.findConstructor(ins, unmappedType, {up: true});
+						let trueType = config.mappedType.split(" _ _ ")[0];
+						let constructor = BDFDB.ReactUtils.findConstructor(ins, trueType) || BDFDB.ReactUtils.findConstructor(ins, trueType, {up: true});
 						if (constructor) {
 							Internal.patchComponent(pluginDataObjs, constructor, config);
 							BDFDB.PatchUtils.forceAllUpdates(pluginDataObjs.map(n => n.plugin), config.mappedType);
