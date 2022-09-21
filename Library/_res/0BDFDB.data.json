@@ -256,7 +256,7 @@
 			"CircleIconButton": {"strings": ["className", ".default.circleIconButton"]},
 			"CustomStatusModal": {"class": "customstatusmodal"},
 			"DirectMessage": {"class": "guildouter", "forceObserve": true},
-			"FocusRing": {"props": ["FocusRingScope"]},
+			"FocusRing": {"props": ["FocusRing", "FocusRingScope"]},
 			"GuildFavorites": {"strings": [".favoriteIcon", "FAVORITES_GUILD_NAME"]},
 			"GuildFolderSettingsModal": {"lazyLoaded": true, "exported": true},
 			"GuildHeader": {"strings": ["bannerVisible", "guildBanner", "onContextMenu"]},

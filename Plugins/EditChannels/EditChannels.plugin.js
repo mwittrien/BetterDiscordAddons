@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.1
+ * @version 4.4.2
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -108,7 +108,7 @@ module.exports = (_ => {
 						HeaderBarContainer: "default",
 						ThreadSidebar: "default",
 						ThreadCard: "type",
-						FocusRing: "default",
+						FocusRing: "FocusRing",
 						ChannelItem: "default",
 						GuildSidebarThreadListEntry: "type",
 						DirectMessage: "render",

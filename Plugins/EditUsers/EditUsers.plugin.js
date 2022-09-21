@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.6.7
+ * @version 4.6.8
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -141,7 +141,7 @@ module.exports = (_ => {
 						AutocompleteUserResult: "render",
 						DiscordTag: "default",
 						NameTag: "default",
-						FocusRing: "default",
+						FocusRing: "FocusRing",
 						UserPopoutExperimentWrapper: "default",
 						UserPopoutContainer: "type",
 						UsernameSection: "default",
