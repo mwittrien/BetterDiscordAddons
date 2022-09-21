@@ -5867,6 +5867,8 @@ module.exports = (_ => {
 														"$day will be replaced with the Weekday Name",
 														"$dayS will be replaced with the Weekday Name (Short Form)",
 														"$agoAmount will be replaced with ('Today', 'Yesterday', 'x days/weeks/months ago')",
+														"$agoWeekday will be replaced with ('Today', 'Yesterday', $day)",
+														"$agoWeekdayS will be replaced with ('Today', 'Yesterday', $dayS)",
 														"$agoDays will be replaced with ('Today', 'Yesterday', 'x days ago')",
 														"$agoDate will be replaced with ('Today', 'Yesterday', $date)"
 													], {marginRight: 6}),
@@ -6036,7 +6038,9 @@ module.exports = (_ => {
 							.replace(/\$dayS/g, timeObj.toLocaleDateString(language, {weekday: "short"}))
 							.replace(/\$day/g, timeObj.toLocaleDateString(language, {weekday: "long"}))
 							.replace(/\$agoAmount/g, daysAgo < 0 ? "" : daysAgo > 1 ? Internal.DiscordObjects.Timestamp(timeObj.getTime()).fromNow() : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
-							.replace(/\$agoDays/g, daysAgo < 0 ? "" : daysAgo > 1 ? BDFDB.LanguageUtils.LanguageStringsFormat(`GAME_LIBRARY_LAST_PLAYED_DAYS`, daysAgo) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
+							.replace(/\$agoWeekdayS/g, daysAgo < 0 ? "" : daysAgo > 1 ? Internal.DiscordObjects.Timestamp(timeObj.getTime()).fromNow() : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
+							.replace(/\$agoDays/g, daysAgo < 0 ? "" : daysAgo > 1 ? timeObj.toLocaleDateString(language, {weekday: "short"}) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
+							.replace(/\$agoDay/g, daysAgo < 0 ? "" : daysAgo > 1 ? timeObj.toLocaleDateString(language, {weekday: "long"}) : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
 							.replace(/\$agoDate/g, daysAgo < 0 ? "" : daysAgo > 1 ? date : BDFDB.LanguageUtils.LanguageStrings[`SEARCH_SHORTCUT_${daysAgo == 1 ? "YESTERDAY" : "TODAY"}`])
 							.replace(/\(\)|\[\]/g, "").replace(/,\s*$|^\s*,/g, "").replace(/ +/g, " ").trim();
 					};
