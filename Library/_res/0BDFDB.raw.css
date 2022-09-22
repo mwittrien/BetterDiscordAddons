@@ -1158,13 +1158,13 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	display: flex;
 	flex-direction: column;
 	padding-top: 60px;
-	padding-right: 40px;
+	padding-right: 70px;
 }
 [REPLACE_CLASS__repolistheader] > * {
 	max-width: 740px;
 	min-width: 460px;
 	padding-left: 40px;
-	padding-right: 40px;
+	padding-right: 20px;
 }
 [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofooter] {
 	display: flex;
