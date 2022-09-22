@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.8.6
+ * @version 4.8.7
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		added: {
+			"Jump Button": "Added Option to add a Jump to Message Button in Gallery Mode"
+		}
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -205,17 +207,18 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						nsfwMode: 				{value: false,	description: "Blur Media that is posted in NSFW Channels"}
+						nsfwMode: 				{value: false,	description: "Blurs Media that is posted in NSFW Channels"}
 					},
 					viewerSettings: {
-						zoomMode: 				{value: true,	description: "Enable Zoom Mode to zoom into Images while holding down your Mouse"},
-						galleryMode: 			{value: true,	description: "Enable Gallery Mode to quick-switch between Images"},
-						details: 				{value: true,	description: "Add Image Details (Name, Size, Amount)"},
-						copyImage: 				{value: true,	description: "Add a 'Copy Image' Option"},
-						saveImage: 				{value: true,	description: "Add a 'Save Image as' Option"}
+						zoomMode: 				{value: true,	description: "Enables Zoom Mode to zoom into Images while holding down your Mouse"},
+						galleryMode: 			{value: true,	description: "Enables Gallery Mode to quick-switch between Images"},
+						details: 				{value: true,	description: "Adds Image Details (Name, Size, Amount)"},
+						copyImage: 				{value: true,	description: "Adds a 'Copy Image' Option"},
+						saveImage: 				{value: true,	description: "Adds a 'Save Image as' Option"},
+						jumpTo: 				{value: true,	description: "Adds a 'Jump to Message' Option in Gallery Mode"}
 					},
 					zoomSettings: {
-						pixelMode: 				{value: false,	label: "Use Pixel Lens instead of a Blur Lens"},
+						pixelMode: 				{value: false,	label: "Uses Pixel Lens instead of a Blur Lens"},
 						zoomLevel:				{value: 2,		digits: 1,	minValue: 1,	maxValue: 20,	unit: "x",		label: "ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
 						lensSize:				{value: 200,	digits: 0,	minValue: 50,	maxValue: 5000,	unit: "px",		label: "context_lenssize"}
 					},
@@ -1053,6 +1056,24 @@ module.exports = (_ => {
 										}
 									})
 								],
+								this.settings.viewerSettings.galleryMode && viewedImage && this.settings.viewerSettings.jumpTo && [
+									BDFDB.ReactUtils.createElement("span", {
+										className: BDFDB.disCN.downloadlink,
+										children: "|",
+										style: {margin: "0 5px"}
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
+										className: BDFDB.disCN.downloadlink, 
+										children: BDFDB.LanguageUtils.LanguageStrings.JUMP,
+										onClick: event => {
+											let layerContainer = !event.shiftKey && BDFDB.DOMUtils.getParent(BDFDB.dotCN.itemlayercontainer, event.currentTarget)
+											let backdrop = layerContainer && layerContainer.querySelector(BDFDB.dotCN.backdrop);
+											if (backdrop) backdrop.click();
+											let channel = BDFDB.LibraryModules.ChannelStore.getChannel(viewedImage.channelId);
+											if (channel) BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id, viewedImage.messageId));
+										}
+									})
+								],
 								this.settings.viewerSettings.zoomMode && !isVideo && [
 									BDFDB.ReactUtils.createElement("span", {
 										className: BDFDB.disCN.downloadlink,
@@ -1472,7 +1493,7 @@ module.exports = (_ => {
 						else BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", ""), {type: "danger"});
 					}
 					else {
-						let hrefURL = window.URL.createObjectURL(new Blob([body]));
+						let hrefURL = window.URL.createObjectURL(new Blob([body], {type: response.headers["content-type"]}));
 						let tempLink = document.createElement("a");
 						tempLink.href = hrefURL;
 						tempLink.download = `${(alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35)}.${this.getFileExtenstion(response.headers["content-type"].split("/").pop().split("+")[0])}`;
