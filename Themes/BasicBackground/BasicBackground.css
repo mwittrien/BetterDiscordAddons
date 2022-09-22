@@ -607,10 +607,17 @@ body::after {
 .wrapper-NhbLHG:hover .content-1gYQeQ {						/* channel				content								*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
+.wrapper-NhbLHG:hover .content-1gYQeQ [style*="color: var(--text-muted)"] {
+	color: var(--header-secondary) !important;
+}
 .modeSelected-3DmyhH .content-1gYQeQ,
 .modeSelected-3DmyhH:hover .content-1gYQeQ {
 	background-color: rgb(var(--accentcolor));
 	text-shadow: 1px 1px var(--textshadow);
+}
+.modeSelected-3DmyhH .content-1gYQeQ [style*="color: var(--text-muted)"],
+.modeSelected-3DmyhH:hover .content-1gYQeQ [style*="color: var(--text-muted)"] {
+	color: var(--header-secondary) !important;
 }
 .modeSelected-3DmyhH .content-1gYQeQ svg,
 .modeSelected-3DmyhH:hover .content-1gYQeQ svg {
@@ -781,6 +788,18 @@ body::after {
 }
 .divider-AZrXIA {											/* forum				fat divider							*/
 	background: var(--background-floating);
+}
+#app-mount .container-2qVG6q.isOpen-2OXbFs {				/* forum				selected post						*/
+	background-color: rgb(var(--accentcolor));
+    text-shadow: 1px 1px var(--textshadow);
+}
+#app-mount .container-2qVG6q.isOpen-2OXbFs .defaultColor-24IHKz,
+#app-mount .container-2qVG6q.isOpen-2OXbFs [style*="color: var(--header-secondary)"] {
+	color: var(--header-primary) !important;
+}
+#app-mount .container-2qVG6q.isOpen-2OXbFs .author-22H8ZU a,
+#app-mount .container-2qVG6q.isOpen-2OXbFs [style*="color: var(--text-muted)"] {
+	color: var(--header-secondary) !important;
 }
 
 /* ----		6.1.	CHANNELHEADER					---- */
