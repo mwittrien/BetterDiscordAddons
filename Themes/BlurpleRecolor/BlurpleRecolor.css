@@ -1225,6 +1225,35 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 
 /* ----		10.1.	USERMODAL						---- */
 
+.discordMemberCreatedAtIcon-126if8 {
+	background: transparent !important;
+	width: 24px !important;
+	height: 24px !important;
+	line-height: 24px !important;
+	padding: 0 !important;
+}
+.discordMemberCreatedAtText-15sN5q {
+	position: relative;
+	width: 100%;
+	overflow: hidden;
+}
+.discordMemberCreatedAtText-15sN5q > * {
+	position: absolute;
+	font-family: var(--font-primary);
+    font-size: 16px;
+    line-height: 24px;
+	font-weight: 600;
+	top: 0;
+	left: 0;
+	transition: top .5s;
+}
+.discordMemberCreatedAtText-15sN5q:not(:hover) > *:first-child {
+	top: -24px;
+}
+.discordMemberCreatedAtText-15sN5q:hover > *:last-child {
+	top: 24px;
+}
+
 .profileBadge-12r2Nm[src="/assets/48d5bdcffe9e7848067c2e187f1ef951.svg"],
 .profileBadge-2YySEb[src="/assets/48d5bdcffe9e7848067c2e187f1ef951.svg"] {
 	object-position: -999999px -999999px;
