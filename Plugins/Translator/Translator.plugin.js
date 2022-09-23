@@ -490,7 +490,7 @@ module.exports = (_ => {
 						}));
 						
 						for (let key in this.defaults.exceptions) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-							title: this.labels.exception_text.replace("{{var0}}", "").split(" ").map(n => n).join(" "),
+							title: this.labels.exception_text.replace("{{var0}}", "").split(" ").filter(n => n).join(" "),
 							className: BDFDB.disCN.marginbottom8,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListInput, {
 								placeholder: "New Exception",
