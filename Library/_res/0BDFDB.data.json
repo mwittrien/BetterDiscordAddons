@@ -110,6 +110,7 @@
 		"PermissionRoleUtils": {"props": ["can", "ALLOW", "DENY"]},
 		"PermissionUtils": {"props": ["getChannelPermissions", "can"]},
 		"PreferencesContext": {"props": ["AccessibilityPreferencesContext"]},
+		"PremiumConstants": {"props": ["PremiumTypes", "BoostedGuildFeatures"]},
 		"QuerySearchUtils": {"props": ["queryGuilds", "queryGroupDMs"]},
 		"QueryUtils": {"props": ["AutocompleterQuerySymbols", "AutocompleterResultTypes"]},
 		"ReactionEmojiUtils": {"props": ["getReactionEmojiName", "getReactionEmojiName"]},
