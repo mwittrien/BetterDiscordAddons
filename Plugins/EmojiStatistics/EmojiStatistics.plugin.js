@@ -2,7 +2,7 @@
  * @name EmojiStatistics
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.8
+ * @version 2.9.9
  * @description Shows you an Overview of Emojis and Emoji Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -62,7 +62,7 @@ module.exports = (_ => {
 			onLoad () {
 				this.patchedModules = {
 					after: {
-						EmojiPicker: "type"
+						EmojiPicker: "render"
 					}
 				};
 				
