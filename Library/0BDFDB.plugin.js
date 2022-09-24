@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.6.3
+ * @version 2.6.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4117,7 +4117,7 @@ module.exports = (_ => {
 					config.id = config.id && [config.id].flat().filter(n => n);
 					let contextMenu = BDFDB.ReactUtils.findChild(returnvalue, {props: "navId"}) || (BDFDB.ArrayUtils.is(returnvalue) ? {props: {children: returnvalue}} : null);
 					if (contextMenu) {
-						let children = [contextMenu.props.children].flat(10);
+						let children = BDFDB.ArrayUtils.is(contextMenu.props.children) ? contextMenu.props.children : [contextMenu.props.children];
 						for (let i in children) {
 							if (children[i] && children[i].type == RealMenuItems.MenuGroup) {
 								if (BDFDB.ArrayUtils.is(children[i].props.children)) {
