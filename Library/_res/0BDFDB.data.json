@@ -16,8 +16,18 @@
 		"Timestamp": {"props": ["add", "dayOfYear", "hasAlignedHourOffset"]},
 		"User": {"strings": ["UserFlags", "hasFlag", "deserialize"]}
 	},
+	"CustomDiscordConstants": {
+		"MAX_GUILD_FOLDER_NAME_LENGTH": 32
+	},
 	"DiscordConstants": {
-		"Colors": ["SPOTIFY", "STATUS_RED"]
+		"ActivityTypes": ["STREAMING", "LISTENING", "CUSTOM_STATUS"],
+		"ChannelTypes": ["GUILD_TEXT", "GUILD_STORE", "DM"],
+		"Colors": ["SPOTIFY", "STATUS_RED"],
+		"FriendsSections": ["ALL", "ONLINE", "ADD_FRIEND"],
+		"KeyboardDeviceTypes": ["KEYBOARD_KEY", "MOUSE_BUTTON"],
+		"MessageTypes": ["CHAT_INPUT_COMMAND", "CHANNEL_PINNED_MESSAGE"],
+		"RelationshipTypes": ["FRIEND", "PENDING_INCOMING", "PENDING_OUTGOING"],
+		"StatusTypes": ["STREAMING", "UNKNOWN", "DND"]
 	},
 	"LibraryModules": {
 		"AckUtils": {"props": ["localAck", "bulkAck"]},
