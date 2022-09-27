@@ -141,7 +141,7 @@ module.exports = (_ => {
 				if (popoutProps.selectedFilter.value != "channel" && !channelName && channel.recipients.length > 0) {
 					for (let dmuser_id of channel.recipients) {
 						channelName = channelName ? channelName + ", @" : channelName;
-						channelName = channelName + ((BDFDB.LibraryModules.UserStore.getUser(dmuser_id) || {}).username || BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER);
+						channelName = channelName + ((BDFDB.LibraryStores.UserStore.getUser(dmuser_id) || {}).username || BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER);
 					}
 				}
 				return [

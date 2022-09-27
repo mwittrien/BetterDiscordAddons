@@ -137,7 +137,7 @@ module.exports = (_ => {
 
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.QuerySearchUtils, "queryChannels", {after: e => {
 					if (!e.methodArguments[0].query) return;
-					for (let id of BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds().map(id => Object.keys(BDFDB.LibraryStores.ChannelStore.getMutableGuildChannelsForGuild(id))).flat()) {
+					for (let id of BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds().map(id => Object.keys(BDFDB.LibraryStores.ChannelStore.getMutableGuildChannelsForGuild(id))).flat()) {
 						let channel = BDFDB.LibraryStores.ChannelStore.getChannel(id);
 						if (channel && !channel.isCategory()) {
 							let category = channel.parent_id && BDFDB.LibraryStores.ChannelStore.getChannel(channel.parent_id);
@@ -433,7 +433,7 @@ module.exports = (_ => {
 						channelId = (BDFDB.ReactUtils.findValue(e.returnvalue, "data-list-item-id") || "").split("___").pop();
 						nameClass = BDFDB.disCN.categoryname;
 						iconClass = BDFDB.disCN.categoryicon;
-						modify = {muted: BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(BDFDB.LibraryModules.LastGuildStore.getGuildId(), channelId)};
+						modify = {muted: BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), channelId)};
 					}
 					else if (this.settings.places.searchPopout && e.returnvalue.props.className.indexOf(BDFDB.disCN.searchpopoutoption) > -1) {
 						change = true;
@@ -655,8 +655,8 @@ module.exports = (_ => {
 							const checkChild = label => {
 								if (label[0] != "#") return;
 								let channelName = label.slice(1);
-								let guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-								let channels = guildId && [].concat(BDFDB.LibraryModules.GuildChannelStore.getChannels(guildId).SELECTABLE, Object.keys(BDFDB.LibraryStores.ActiveThreadsStore.getThreadsForGuild(guildId)).map(id => ({channel: BDFDB.LibraryStores.ChannelStore.getChannel(id)})));
+								let guildId = BDFDB.LibraryStores.SelectedGuildStore.getGuildId();
+								let channels = guildId && [].concat(BDFDB.LibraryStores.GuildChannelStore.getChannels(guildId).SELECTABLE, Object.keys(BDFDB.LibraryStores.ActiveThreadsStore.getThreadsForGuild(guildId)).map(id => ({channel: BDFDB.LibraryStores.ChannelStore.getChannel(id)})));
 								if (BDFDB.ArrayUtils.is(channels)) for (let channelObj of channels) {
 									if (channelName == channelObj.channel.name) {
 										let category = BDFDB.LibraryStores.ChannelStore.getChannel(channelObj.channel.parent_id);
@@ -810,7 +810,7 @@ module.exports = (_ => {
 			getGroupName (channelId) {
 				let channel = this.getChannelData(channelId);
 				if (channel.name) return channel.name;
-				let recipients = channel.recipients.map(BDFDB.LibraryModules.UserStore.getUser).filter(n => n);
+				let recipients = channel.recipients.map(BDFDB.LibraryStores.UserStore.getUser).filter(n => n);
 				return recipients.length > 0 ? recipients.map(u => u.toString()).join(", ") : BDFDB.LanguageUtils.LanguageStrings.UNNAMED;
 			}
 			

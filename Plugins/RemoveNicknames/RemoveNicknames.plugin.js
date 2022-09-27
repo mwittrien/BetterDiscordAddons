@@ -166,7 +166,7 @@ module.exports = (_ => {
 
 			processTypingUsers (e) {
 				if (BDFDB.ObjectUtils.is(e.instance.props.typingUsers) && Object.keys(e.instance.props.typingUsers).length && this.settings.places.typing) {
-					let users = Object.keys(e.instance.props.typingUsers).filter(id => id != BDFDB.UserUtils.me.id).filter(id => !BDFDB.LibraryModules.RelationshipStore.isBlocked(id)).map(id => BDFDB.LibraryModules.UserStore.getUser(id)).filter(user => user);
+					let users = Object.keys(e.instance.props.typingUsers).filter(id => id != BDFDB.UserUtils.me.id).filter(id => !BDFDB.LibraryStores.RelationshipStore.isBlocked(id)).map(id => BDFDB.LibraryStores.UserStore.getUser(id)).filter(user => user);
 					if (users.length) {
 						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.typingtext]]});
 						if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) for (let child of children[index].props.children) if (child.type == "strong") {
@@ -181,7 +181,7 @@ module.exports = (_ => {
 				if (e.instance.props.reactions) {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id);
 					let guildId = null == channel || channel.isPrivate() ? null : channel.getGuildId();
-					let users = e.instance.props.reactions.filter(user => !BDFDB.LibraryModules.RelationshipStore.isBlocked(user.id)).slice(0, 3).map(user => this.getNewName(user) || guildId && BDFDB.LibraryModules.MemberStore.getNick(guildId, user.id) || user.username).filter(user => user);
+					let users = e.instance.props.reactions.filter(user => !BDFDB.LibraryStores.RelationshipStore.isBlocked(user.id)).slice(0, 3).map(user => this.getNewName(user) || guildId && BDFDB.LibraryStores.GuildMemberStore.getNick(guildId, user.id) || user.username).filter(user => user);
 					if (users.length) {
 						let reaction = e.instance.props.message.getReaction(e.instance.props.emoji);
 						let others = Math.max(0, (reaction && reaction.count || 0) - users.length);
@@ -204,7 +204,7 @@ module.exports = (_ => {
 			
 			processUserMention (e) {
 				if (e.instance.props.userId && this.settings.places.mentions) {
-					let newName = this.getNewName(BDFDB.LibraryModules.UserStore.getUser(e.instance.props.userId));
+					let newName = this.getNewName(BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId));
 					if (!newName) return;
 					if (typeof e.returnvalue.props.children == "function") {
 						let renderChildren = e.returnvalue.props.children;
@@ -220,7 +220,7 @@ module.exports = (_ => {
 			
 			processRichUserMention (e) {
 				if (e.instance.props.id && this.settings.places.mentions && typeof e.returnvalue.props.children == "function") {
-					let newName = this.getNewName(BDFDB.LibraryModules.UserStore.getUser(e.instance.props.id));
+					let newName = this.getNewName(BDFDB.LibraryStores.UserStore.getUser(e.instance.props.id));
 					if (newName) {
 						let renderChildren = e.returnvalue.props.children;
 						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
@@ -265,8 +265,8 @@ module.exports = (_ => {
 
 			getNewName (user) {
 				if (!user) return null;
-				let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), user.id) || {};
-				let origUser = BDFDB.LibraryModules.UserStore.getUser(user.id) || {};
+				let member = BDFDB.LibraryStores.GuildMemberStore.getMember(BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), user.id) || {};
+				let origUser = BDFDB.LibraryStores.UserStore.getUser(user.id) || {};
 				let EditUsers = BDFDB.BDUtils.getPlugin("EditUsers", true);
 				let username = EditUsers && EditUsers.getUserData(user, true, false, origUser).username || user.username;
 				if (!member.nick || user.id == BDFDB.UserUtils.me.id && !this.settings.general.replaceOwn || user.bot && !this.settings.general.replaceBots) return username != origUser.username ? username : (member.nick || username);

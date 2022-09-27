@@ -69,19 +69,19 @@ module.exports = (_ => {
 				BDFDB.GuildUtils.markAsRead(guildIds.filter(id => id && !blacklist.includes(id)));
 			}
 			getGuilds() {
-				return BDFDB.LibraryModules.FolderStore.getFlattenedGuilds().map(g => g.id).filter(n => n);
+				return BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuilds().map(g => g.id).filter(n => n);
 			}
 			getUnread() {
-				return this.getGuilds().filter(id => BDFDB.LibraryModules.UnreadGuildUtils.hasUnread(id) || BDFDB.LibraryModules.UnreadGuildUtils.getMentionCount(id) > 0);
+				return this.getGuilds().filter(id => BDFDB.LibraryStores.GuildReadStateStore.hasUnread(id) || BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(id) > 0);
 			}
 			getPinged() {
-				return this.getGuilds().filter(id => BDFDB.LibraryModules.UnreadGuildUtils.getMentionCount(id) > 0);
+				return this.getGuilds().filter(id => BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(id) > 0);
 			}
 			getMuted() {
-				return this.getGuilds().filter(id => BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(id));
+				return this.getGuilds().filter(id => BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(id));
 			}
 			getPingedDMs() {
-				return BDFDB.LibraryStores.ChannelStore.getSortedPrivateChannels().map(c => c.id).filter(id => id && BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id) > 0);
+				return BDFDB.LibraryStores.ChannelStore.getSortedPrivateChannels().map(c => c.id).filter(id => id && BDFDB.LibraryStores.ReadStateStore.getMentionCount(id) > 0);
 			}
 			render() {
 				return BDFDB.ReactUtils.createElement("div", {
@@ -314,7 +314,7 @@ module.exports = (_ => {
 			
 			batchSetGuilds (settingsPanel, collapseStates, value) {
 				if (!value) {
-					for (let id of BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds()) blacklist.push(id);
+					for (let id of BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds()) blacklist.push(id);
 					this.saveBlacklist(BDFDB.ArrayUtils.removeCopies(blacklist));
 				}
 				else this.saveBlacklist([]);

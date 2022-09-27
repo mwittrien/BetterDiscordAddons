@@ -381,7 +381,7 @@ module.exports = (_ => {
 			
 			processChannelTextAreaForm (e) {
 				BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {before: e2 => {
-					if (!this.settings.places.normal || !this.settings.general.replaceBeforeSend || BDFDB.LibraryModules.SlowmodeUtils.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
+					if (!this.settings.places.normal || !this.settings.general.replaceBeforeSend || BDFDB.LibraryStores.SlowmodeStore.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
 					let messageData = this.formatText(e2.methodArguments[0].value);
 					if (messageData) {
 						if (messageData.text != null && e2.methodArguments[0].value != messageData.text) {
@@ -400,7 +400,7 @@ module.exports = (_ => {
 			
 			processMessageEditor (e) {
 				BDFDB.PatchUtils.patch(this, e.instance, "onSubmit", {before: e2 => {
-					if (!this.settings.places.edit || !this.settings.general.replaceBeforeSend || BDFDB.LibraryModules.SlowmodeUtils.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
+					if (!this.settings.places.edit || !this.settings.general.replaceBeforeSend || BDFDB.LibraryStores.SlowmodeStore.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
 					let messageData = this.formatText(e2.methodArguments[0]);
 					if (messageData && messageData.text != null && e2.methodArguments[0] != messageData.text) {
 						e2.methodArguments[0] = messageData.text;

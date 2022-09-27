@@ -157,7 +157,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DirectMessageUnreadStore, "getUnreadPrivateChannelIds", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.PrivateChannelReadStateStore, "getUnreadPrivateChannelIds", {after: e => {
 					let sortedRecents = this.sortAndUpdate("guildList");
 					if (sortedRecents.length) {
 						const dms = [];
@@ -448,7 +448,7 @@ module.exports = (_ => {
 							if (category && draggedCategory != category.id) {
 								let color = BDFDB.ColorUtils.convert(category.color, "RGBA");
 								let foundDMs = this.filterDMs(category.dms, !category.predefined);
-								let unreadAmount = this.settings.general.unreadAmount && BDFDB.ArrayUtils.sum(foundDMs.map(id => BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id)));
+								let unreadAmount = this.settings.general.unreadAmount && BDFDB.ArrayUtils.sum(foundDMs.map(id => BDFDB.LibraryStores.ReadStateStore.getMentionCount(id)));
 								return category.predefined && foundDMs.length < 1 ? null : [
 									BDFDB.ReactUtils.createElement("h2", {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.dmchannelheadercontainer, BDFDB.disCN._pindmspinnedchannelsheadercontainer, category.collapsed && BDFDB.disCN._pindmspinnedchannelsheadercollapsed, color && BDFDB.disCN._pindmspinnedchannelsheadercolored, BDFDB.disCN.namecontainernamecontainer),
@@ -769,9 +769,9 @@ module.exports = (_ => {
 				if (!id || this.getChannelListCategory(id)) return "";
 				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(id);
 				if (!channel) return "";
-				else if (this.settings.preCategories.friends.enabled && channel.isDM() && BDFDB.LibraryModules.RelationshipStore.isFriend(channel.recipients[0])) return "friends";
-				else if (this.settings.preCategories.blocked.enabled && channel.isDM() && BDFDB.LibraryModules.RelationshipStore.isBlocked(channel.recipients[0])) return "blocked";
-				else if (this.settings.preCategories.bots.enabled && channel.isDM() && (BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]) || {}).bot) return "bots";
+				else if (this.settings.preCategories.friends.enabled && channel.isDM() && BDFDB.LibraryStores.RelationshipStore.isFriend(channel.recipients[0])) return "friends";
+				else if (this.settings.preCategories.blocked.enabled && channel.isDM() && BDFDB.LibraryStores.RelationshipStore.isBlocked(channel.recipients[0])) return "blocked";
+				else if (this.settings.preCategories.bots.enabled && channel.isDM() && (BDFDB.LibraryStores.UserStore.getUser(channel.recipients[0]) || {}).bot) return "bots";
 				else if (this.settings.preCategories.groups.enabled && channel.isGroupDM()) return "groups";
 				return "";
 			}
@@ -792,7 +792,7 @@ module.exports = (_ => {
 				if (!BDFDB.equals(data, newData)) this.savePinnedChannels(newData, type);
 				if (type == "channelList" && Object.keys(this.settings.preCategories).some(type => this.settings.preCategories[type].enabled)) {
 					let predefinedDMs = {};
-					for (let channelId of BDFDB.LibraryModules.DirectMessageStore.getPrivateChannelIds()) {
+					for (let channelId of BDFDB.LibraryStores.PrivateChannelSortStore.getPrivateChannelIds()) {
 						let category = this.getPredefinedCategory(channelId);
 						if (category) {
 							if (!predefinedDMs[category]) predefinedDMs[category] = [];
@@ -813,7 +813,7 @@ module.exports = (_ => {
 			
 			sortDMsByTime (dms, type) {
 				if (dms.length > 1 && this.settings.recentOrder[type]) {
-					let timestamps = BDFDB.LibraryModules.DirectMessageStore.getPrivateChannelIds().reduce((newObj, channelId) => (newObj[channelId] = BDFDB.LibraryModules.UnreadChannelUtils.lastMessageId(channelId), newObj), {});
+					let timestamps = BDFDB.LibraryStores.PrivateChannelSortStore.getPrivateChannelIds().reduce((newObj, channelId) => (newObj[channelId] = BDFDB.LibraryStores.ReadStateStore.lastMessageId(channelId), newObj), {});
 					return [].concat(dms).sort(function (x, y) {
 						const xT = parseFloat(timestamps[x]), yT = parseFloat(timestamps[y]);
 						return xT > yT ? -1 : xT < yT ? 1 : 0;

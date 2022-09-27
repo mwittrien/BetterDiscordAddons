@@ -180,7 +180,7 @@ module.exports = (_ => {
 			}
 			
 			onUserContextMenu (e) {
-				if (e.instance.props.user && e.subType == "useUserRelationshipItems" && BDFDB.LibraryModules.RelationshipStore.isFriend(e.instance.props.user.id)) {
+				if (e.instance.props.user && e.subType == "useUserRelationshipItems" && BDFDB.LibraryStores.RelationshipStore.isFriend(e.instance.props.user.id)) {
 					let favorized = favorizedFriends.indexOf(e.instance.props.user.id) > -1;
 					let hidden = hiddenFriends.indexOf(e.instance.props.user.id) > -1;
 					e.returnvalue.push(this.settings.general.addFavorizedCategory && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -233,7 +233,7 @@ module.exports = (_ => {
 					}
 					else {
 						if (this.settings.general.addTotalAmount) {
-							let relationships = BDFDB.LibraryModules.RelationshipStore.getRelationships(), relationshipCount = {};
+							let relationships = BDFDB.LibraryStores.RelationshipStore.getRelationships(), relationshipCount = {};
 							for (let type in BDFDB.DiscordConstants.RelationshipTypes) relationshipCount[type] = 0;
 							for (let id in relationships) if (!this.settings.general.addHiddenCategory || (hiddenFriends.indexOf(id) == -1 || relationships[id] != BDFDB.DiscordConstants.RelationshipTypes.FRIEND)) relationshipCount[relationships[id]]++;
 							for (let child of e.returnvalue.props.children) if (child && child.props.id != BDFDB.DiscordConstants.FriendsSections.ADD_FRIEND) {
@@ -246,7 +246,7 @@ module.exports = (_ => {
 										newChildren.push(this.createBadge(favorizedFriends.filter(id => relationships[id] == BDFDB.DiscordConstants.RelationshipTypes.FRIEND).length));
 										break;
 									case BDFDB.DiscordConstants.FriendsSections.ONLINE:
-										newChildren.push(this.createBadge(Object.entries(relationships).filter(n => n[1] == BDFDB.DiscordConstants.RelationshipTypes.FRIEND && !(this.settings.general.addHiddenCategory && hiddenFriends.indexOf(n[0]) > -1) && BDFDB.LibraryModules.StatusMetaUtils.getStatus(n[0]) != BDFDB.DiscordConstants.StatusTypes.OFFLINE).length));
+										newChildren.push(this.createBadge(Object.entries(relationships).filter(n => n[1] == BDFDB.DiscordConstants.RelationshipTypes.FRIEND && !(this.settings.general.addHiddenCategory && hiddenFriends.indexOf(n[0]) > -1) && BDFDB.LibraryStores.PresenceStore.getStatus(n[0]) != BDFDB.DiscordConstants.StatusTypes.OFFLINE).length));
 										break;
 									case BDFDB.DiscordConstants.FriendsSections.PENDING:
 										newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING], this.labels.incoming, relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING] > 0));

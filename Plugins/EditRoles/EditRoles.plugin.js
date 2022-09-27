@@ -87,7 +87,7 @@ module.exports = (_ => {
 						});
 					}
 				}});
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MemberStore, "getMember", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.GuildMemberStore, "getMember", {after: e => {
 					if (e.returnValue) {
 						let guild = BDFDB.LibraryStores.GuildStore.getGuild(e.methodArguments[0]);
 						if (guild) {
@@ -257,7 +257,7 @@ module.exports = (_ => {
 			
 			processMemberListItem (e) {
 				if (e.instance.props.user) {
-					let member = BDFDB.LibraryModules.MemberStore.getMember(e.instance.props.guildId, e.instance.props.user.id);
+					let member = BDFDB.LibraryStores.GuildMemberStore.getMember(e.instance.props.guildId, e.instance.props.user.id);
 					if (member) e.instance.props.colorString = member.colorString;
 				}
 			}
@@ -271,7 +271,7 @@ module.exports = (_ => {
 			}
 			
 			getGuildFromRoleId (roleId) {
-				return BDFDB.LibraryModules.FolderStore.getFlattenedGuilds().find(g => g.roles[roleId]);
+				return BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuilds().find(g => g.roles[roleId]);
 			}
 			
 			changeRolesInGuild (guild, useNative) {
@@ -300,7 +300,7 @@ module.exports = (_ => {
 					BDFDB.DataUtils.remove(this, "roles", id);
 				}
 				else {
-					for (let guild of BDFDB.LibraryModules.FolderStore.getFlattenedGuilds()) if (cachedRoles[guild.id]) guild.roles = cachedRoles[guild.id];
+					for (let guild of BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuilds()) if (cachedRoles[guild.id]) guild.roles = cachedRoles[guild.id];
 					cachedRoles = {};
 					BDFDB.DataUtils.remove(this, "roles");
 				}

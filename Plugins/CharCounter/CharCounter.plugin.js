@@ -216,7 +216,7 @@ module.exports = (_ => {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._charcountercounter, type && BDFDB.DiscordClasses[`_charcounter${typeMap[type] || type}counter`] && BDFDB.disCN[`_charcounter${typeMap[type] || type}counter`]),
 					refClass: refClass,
 					parsing: parsing,
-					max: maxLengths[type] || (BDFDB.LibraryModules.NitroUtils.canUseIncreasedMessageLength(BDFDB.LibraryModules.UserStore.getCurrentUser()) ? BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH_PREMIUM : BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH),
+					max: maxLengths[type] || (BDFDB.LibraryModules.NitroUtils.canUseIncreasedMessageLength(BDFDB.LibraryStores.UserStore.getCurrentUser()) ? BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH_PREMIUM : BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH),
 					showPercentage: this.settings.sliders.showPercentage,
 					onChange: instance => {
 						let node = BDFDB.ReactUtils.findDOMNode(instance);

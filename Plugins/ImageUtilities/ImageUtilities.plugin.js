@@ -687,8 +687,8 @@ module.exports = (_ => {
 
 			onUserContextMenu (e) {
 				if (e.instance.props.user && this.settings.places.userAvatars && e.subType == "useBlockUserItem") {
-					const guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-					const member = BDFDB.LibraryModules.MemberStore.getMember(guildId, e.instance.props.user.id);
+					const guildId = BDFDB.LibraryStores.SelectedGuildStore.getGuildId();
+					const member = BDFDB.LibraryStores.GuildMemberStore.getMember(guildId, e.instance.props.user.id);
 					let validUrls = this.filterUrls((e.instance.props.user.getAvatarURL(null, 4096) || "").replace(/\.webp|\.gif/, ".png"), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.avatar) && e.instance.props.user.getAvatarURL(null, 4096, true), (e.instance.props.user.getAvatarURL(guildId, 4096) || "").replace(/\.webp|\.gif/, ".png"), member && member.avatar && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(member.avatar) && e.instance.props.user.getAvatarURL(guildId, 4096, true));
 					if (!validUrls.length) return;
 					
@@ -1641,7 +1641,7 @@ module.exports = (_ => {
 					naturalWidth: viewedImage.width,
 					naturalHeight: viewedImage.height,
 					play: true,
-					playOnHover: !!BDFDB.LibraryModules.LocalSettingsStore.useReducedMotion
+					playOnHover: !!BDFDB.LibraryStores.AccessibilityStore.useReducedMotion
 				}));
 				BDFDB.ReactUtils.forceUpdate(modalInstance);
 			}

@@ -79,7 +79,7 @@ module.exports = (_ => {
 					className: BDFDB.disCNS.guildouter + BDFDB.disCN._servercounterservercountwrap,
 					children: BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS.guildslabel + BDFDB.disCN._servercounterservercount,
-						children: `${BDFDB.LanguageUtils.LanguageStrings.SERVERS} – ${BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds().length}`
+						children: `${BDFDB.LanguageUtils.LanguageStrings.SERVERS} – ${BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds().length}`
 					})
 				}));
 			}

@@ -494,7 +494,7 @@ module.exports = (_ => {
 						let settingsItems = [];
 						
 						let observed = this.getObservedData();
-						let friendIds = BDFDB.LibraryModules.RelationshipStore.getFriendIDs();
+						let friendIds = BDFDB.LibraryStores.RelationshipStore.getFriendIDs();
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 							title: "Settings",
@@ -546,8 +546,8 @@ module.exports = (_ => {
 							}))
 						}));
 						
-						let friendCards = Object.keys(observed.friends).map(BDFDB.LibraryModules.UserStore.getUser).filter(n => n);
-						let strangerCards = Object.keys(observed.strangers).map(BDFDB.LibraryModules.UserStore.getUser).filter(n => n);
+						let friendCards = Object.keys(observed.friends).map(BDFDB.LibraryStores.UserStore.getUser).filter(n => n);
+						let strangerCards = Object.keys(observed.strangers).map(BDFDB.LibraryStores.UserStore.getUser).filter(n => n);
 						
 						if (friendCards.length) settingsItems.push(createUserList(friendCards.map(user => Object.assign({}, user, observed.friends[user.id], {
 							key: user.id,
@@ -576,7 +576,7 @@ module.exports = (_ => {
 											else if (friendIds.includes(userId)) BDFDB.NotificationUtils.toast("User is already a Friend of yours, please use the 'Friend-List' Area to configure them", {type: "danger"});
 											else if (observed.strangers[userId]) BDFDB.NotificationUtils.toast("User is already being observed as a 'Stranger'", {type: "danger"});
 											else {
-												let user = /.+#[0-9]{4}/.test(userId) ? BDFDB.LibraryModules.UserStore.findByTag(userId.split("#").slice(0, -1).join("#"), userId.split("#").pop()) : BDFDB.LibraryModules.UserStore.getUser(userId);
+												let user = /.+#[0-9]{4}/.test(userId) ? BDFDB.LibraryStores.UserStore.findByTag(userId.split("#").slice(0, -1).join("#"), userId.split("#").pop()) : BDFDB.LibraryStores.UserStore.getUser(userId);
 												if (user) {
 													observed.strangers[user.id || userId] = Object.assign({}, defaultSettings);
 													BDFDB.DataUtils.save(observed, this, "observed");
@@ -739,10 +739,10 @@ module.exports = (_ => {
 			
 			getObservedData () {
 				let observed = Object.assign({friends: {}, strangers: {}}, BDFDB.DataUtils.load(this, "observed"));
-				let friendIds = BDFDB.LibraryModules.RelationshipStore.getFriendIDs();
+				let friendIds = BDFDB.LibraryStores.RelationshipStore.getFriendIDs();
 				
 				for (let id of friendIds) {
-					let user = BDFDB.LibraryModules.UserStore.getUser(id);
+					let user = BDFDB.LibraryStores.UserStore.getUser(id);
 					if (user) {
 						observed.friends[id] = Object.assign({}, defaultSettings, observed.friends[id] || observed.strangers[id]);
 						delete observed.strangers[id];
@@ -761,7 +761,7 @@ module.exports = (_ => {
 			}
 
 			getStatusWithMobileAndActivity (id, config, clientStatuses) {
-				let voiceState = BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds().map(BDFDB.LibraryModules.VoiceUtils.getVoiceStates).map(BDFDB.ObjectUtils.toArray).flat(10).find(n => n.selfStream & n.userId == id && BDFDB.LibraryStores.ChannelStore.getChannel(n.channelId) && BDFDB.UserUtils.can("VIEW_CHANNEL", BDFDB.UserUtils.me.id, n.channelId));
+				let voiceState = BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds().map(BDFDB.LibraryStores.SortedVoiceStateStore.getVoiceStates).map(BDFDB.ObjectUtils.toArray).flat(10).find(n => n.selfStream & n.userId == id && BDFDB.LibraryStores.ChannelStore.getChannel(n.channelId) && BDFDB.UserUtils.can("VIEW_CHANNEL", BDFDB.UserUtils.me.id, n.channelId));
 				let status = {
 					name: BDFDB.UserUtils.getStatus(id),
 					activity: null,
@@ -796,7 +796,7 @@ module.exports = (_ => {
 			}
 			
 			getOnlineCount () {
-				return Object.entries(BDFDB.LibraryModules.RelationshipStore.getRelationships()).filter(n => n[1] == BDFDB.DiscordConstants.RelationshipTypes.FRIEND && BDFDB.LibraryModules.StatusMetaUtils.getStatus(n[0]) != BDFDB.DiscordConstants.StatusTypes.OFFLINE).length;
+				return Object.entries(BDFDB.LibraryStores.RelationshipStore.getRelationships()).filter(n => n[1] == BDFDB.DiscordConstants.RelationshipTypes.FRIEND && BDFDB.LibraryStores.PresenceStore.getStatus(n[0]) != BDFDB.DiscordConstants.StatusTypes.OFFLINE).length;
 			}
 
 			startInterval () {
@@ -806,7 +806,7 @@ module.exports = (_ => {
 				observedUsers = Object.assign({}, data.strangers, data.friends);
 				delete observedUsers[BDFDB.UserUtils.me.id];
 				
-				let clientStatuses = BDFDB.LibraryModules.StatusMetaUtils.getState().clientStatuses;
+				let clientStatuses = BDFDB.LibraryStores.PresenceStore.getState().clientStatuses;
 				for (let id in observedUsers) userStatusStore[id] = this.getStatusWithMobileAndActivity(id, observedUsers[id], clientStatuses);
 				
 				checkInterval = BDFDB.TimeUtils.interval(_ => {
@@ -815,9 +815,9 @@ module.exports = (_ => {
 						friendCounter.props.amount = amount;
 						BDFDB.ReactUtils.forceUpdate(friendCounter);
 					}
-					clientStatuses = BDFDB.LibraryModules.StatusMetaUtils.getState().clientStatuses;
+					clientStatuses = BDFDB.LibraryStores.PresenceStore.getState().clientStatuses;
 					for (let id in observedUsers) if (!observedUsers[id].disabled) {
-						let user = BDFDB.LibraryModules.UserStore.getUser(id);
+						let user = BDFDB.LibraryStores.UserStore.getUser(id);
 						let status = this.getStatusWithMobileAndActivity(id, observedUsers[id], clientStatuses);
 						let transitionChannelId = null;
 						let customChanged = false, loginNotice = false, screensharingNotice = false;
@@ -866,7 +866,7 @@ module.exports = (_ => {
 										else {
 											let DMid = BDFDB.LibraryStores.ChannelStore.getDMFromUserId(user.id)
 											if (DMid) BDFDB.LibraryModules.ChannelUtils.selectPrivateChannel(DMid);
-											else BDFDB.LibraryModules.DirectMessageUtils.openPrivateChannel(user.id);
+											else BDFDB.LibraryModules.PrivateChannelUtils.openPrivateChannel(user.id);
 											BDFDB.LibraryModules.WindowUtils.focus();
 										}
 									}

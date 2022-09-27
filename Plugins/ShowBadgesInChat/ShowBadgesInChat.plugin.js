@@ -206,7 +206,7 @@ module.exports = (_ => {
 				};
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == "USER_PROFILE_FETCH_FAILURE" && e.methodArguments[0].userId) {
-						const user = BDFDB.LibraryModules.UserStore.getUser(e.methodArguments[0].userId);
+						const user = BDFDB.LibraryStores.UserStore.getUser(e.methodArguments[0].userId);
 						processUser(e.methodArguments[0].userId, {user: user || {}, flags: user ? user.publicFlags : 0});
 					}
 					else if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == "USER_PROFILE_FETCH_SUCCESS" && e.methodArguments[0].user) processUser(e.methodArguments[0].user.id, e.methodArguments[0])
@@ -415,7 +415,7 @@ module.exports = (_ => {
 						if (level == BDFDB.LibraryModules.GuildBoostUtils.getUserLevel(date)) fakeGuildBoostDate = date;
 					}
 				}
-				let member = guildId && BDFDB.LibraryModules.MemberStore.getMember(guildId, user.id);
+				let member = guildId && BDFDB.LibraryStores.GuildMemberStore.getMember(guildId, user.id);
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserBadges.default, {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._showbadgesinchatbadges, BDFDB.disCN[`_showbadgesinchatbadges${place.toLowerCase()}`]),
 					user: user,

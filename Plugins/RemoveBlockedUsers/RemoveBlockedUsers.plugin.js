@@ -121,11 +121,11 @@ module.exports = (_ => {
 			
 			onStart () {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.ChannelStore, "getChannel", {after: e => {
-					if (e.returnValue && e.returnValue.isGroupDM()) return new BDFDB.DiscordObjects.Channel(Object.assign({}, e.returnValue, {rawRecipients: e.returnValue.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id)), recipients: e.returnValue.recipients.filter(id => !id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(id))}))
+					if (e.returnValue && e.returnValue.isGroupDM()) return new BDFDB.DiscordObjects.Channel(Object.assign({}, e.returnValue, {rawRecipients: e.returnValue.rawRecipients.filter(n => !n || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id)), recipients: e.returnValue.recipients.filter(id => !id || !BDFDB.LibraryStores.RelationshipStore.isBlocked(id))}))
 				}});
 			
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.StageChannelUtils, "getMutableParticipants", {after: e => {
-					e.returnValue = e.returnValue.filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.StageChannelParticipantStore, "getMutableParticipants", {after: e => {
+					e.returnValue = e.returnValue.filter(n => !n.user || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.user.id));
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RelationshipUtils, "addRelationship", {after: e => {
@@ -133,21 +133,21 @@ module.exports = (_ => {
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RelationshipUtils, "removeRelationship", {after: e => this.forceUpdateAll()});
 				
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "getUnreadCount", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.ReadStateStore, "getUnreadCount", {after: e => {
 					if (e.returnValue && this.settings.notifcations.messages && e.returnValue < BDFDB.DiscordConstants.MAX_MESSAGES_PER_CHANNEL) {
-						let sub = 0, messages = [].concat(BDFDB.LibraryModules.MessageStore.getMessages(e.methodArguments[0])._array).reverse();
+						let sub = 0, messages = [].concat(BDFDB.LibraryStores.MessageStore.getMessages(e.methodArguments[0])._array).reverse();
 						for (let i = 0; i < e.returnValue; i++) if (messages[i] && messages[i].blocked) sub++;
 						e.returnValue -= sub;
 					}
 				}});
 				
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
-					if (e.returnValue && this.settings.notifcations.messages && BDFDB.LibraryModules.UnreadChannelUtils.getUnreadCount(e.methodArguments[0]) < BDFDB.DiscordConstants.MAX_MESSAGES_PER_CHANNEL) {
-						let id = BDFDB.LibraryModules.UnreadChannelUtils.lastMessageId(e.methodArguments[0]);
-						let message = id && BDFDB.LibraryModules.MessageStore.getMessage(e.methodArguments[0], id);
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.ReadStateStore, "hasUnread", {after: e => {
+					if (e.returnValue && this.settings.notifcations.messages && BDFDB.LibraryStores.ReadStateStore.getUnreadCount(e.methodArguments[0]) < BDFDB.DiscordConstants.MAX_MESSAGES_PER_CHANNEL) {
+						let id = BDFDB.LibraryStores.ReadStateStore.lastMessageId(e.methodArguments[0]);
+						let message = id && BDFDB.LibraryStores.MessageStore.getMessage(e.methodArguments[0], id);
 						if (message && message.blocked) {
-							let oldestId = BDFDB.LibraryModules.UnreadChannelUtils.getOldestUnreadMessageId(e.methodArguments[0]);
-							let messages = BDFDB.LibraryModules.MessageStore.getMessages(e.methodArguments[0]);
+							let oldestId = BDFDB.LibraryStores.ReadStateStore.getOldestUnreadMessageId(e.methodArguments[0]);
+							let messages = BDFDB.LibraryStores.MessageStore.getMessages(e.methodArguments[0]);
 							if (messages && oldestId) {
 								let index = messages._array.indexOf(messages._array.find(c => c.id == oldestId));
 								if (index > -1) return messages._array.slice(index).some(c => !c.blocked);
@@ -156,29 +156,29 @@ module.exports = (_ => {
 					}
 				}});
 				
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadGuildUtils, "hasUnread", {after: e => {
-					if (e.returnValue && this.settings.notifcations.messages) return BDFDB.LibraryModules.GuildChannelStore.getChannels(e.methodArguments[0]).SELECTABLE.map(n => n.channel && n.channel.id).filter(n => n && n != "null").some(id => BDFDB.LibraryModules.UnreadChannelUtils.hasUnread(id));
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.GuildReadStateStore, "hasUnread", {after: e => {
+					if (e.returnValue && this.settings.notifcations.messages) return BDFDB.LibraryStores.GuildChannelStore.getChannels(e.methodArguments[0]).SELECTABLE.map(n => n.channel && n.channel.id).filter(n => n && n != "null").some(id => BDFDB.LibraryStores.ReadStateStore.hasUnread(id));
 				}});
 				
 				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS.MENTIONS, "queryResults", {after: e => {
-					if (this.settings.places.autocompletes && e.returnValue.results && e.returnValue.results.users) e.returnValue.results.users = e.returnValue.results.users.filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+					if (this.settings.places.autocompletes && e.returnValue.results && e.returnValue.results.users) e.returnValue.results.users = e.returnValue.results.users.filter(n => !n.user || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.user.id));
 				}});
 				
 				let muteTimeout;
-				let channelId = BDFDB.LibraryModules.CurrentVoiceUtils.getChannelId();
-				let connectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryModules.VoiceUtils.getVoiceStates(BDFDB.LibraryModules.CurrentVoiceUtils.getGuildId()), n => n && n.channelId == channelId && !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.userId));
+				let channelId = BDFDB.LibraryStores.RTCConnectionStore.getChannelId();
+				let connectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryStores.SortedVoiceStateStore.getVoiceStates(BDFDB.LibraryStores.RTCConnectionStore.getGuildId()), n => n && n.channelId == channelId && !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.userId));
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
 					let type = e.methodArguments[0];
 					if (this.settings.notifcations.voiceChat && (type == "disconnect" || type == "user_join" || type == "user_leave" || type == "user_moved")) {
-						channelId = BDFDB.LibraryModules.CurrentVoiceUtils.getChannelId();
+						channelId = BDFDB.LibraryStores.RTCConnectionStore.getChannelId();
 						if (channelId) {
-							let allConnectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryModules.VoiceUtils.getVoiceStates(BDFDB.LibraryModules.CurrentVoiceUtils.getGuildId()), n => n && n.channelId == channelId);
-							let unblockedUsers = BDFDB.ObjectUtils.filter(allConnectedUsers, n => n && !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.userId));
-							let unmutedBlockedUsers = BDFDB.ObjectUtils.toArray(allConnectedUsers).filter(n => n && BDFDB.LibraryModules.RelationshipStore.isBlocked(n.userId) && !BDFDB.LibraryModules.MediaDeviceUtils.isLocalMute(n.userId));
+							let allConnectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryStores.SortedVoiceStateStore.getVoiceStates(BDFDB.LibraryStores.RTCConnectionStore.getGuildId()), n => n && n.channelId == channelId);
+							let unblockedUsers = BDFDB.ObjectUtils.filter(allConnectedUsers, n => n && !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.userId));
+							let unmutedBlockedUsers = BDFDB.ObjectUtils.toArray(allConnectedUsers).filter(n => n && BDFDB.LibraryStores.RelationshipStore.isBlocked(n.userId) && !BDFDB.LibraryStores.MediaEngineStore.isLocalMute(n.userId));
 							if (unmutedBlockedUsers.length) {
 								BDFDB.TimeUtils.clear(muteTimeout);
 								muteTimeout = BDFDB.TimeUtils.timeout(_ => {
-									while (unmutedBlockedUsers.length) BDFDB.LibraryModules.MediaDeviceSetUtils.toggleLocalMute(unmutedBlockedUsers.pop().userId);
+									while (unmutedBlockedUsers.length) BDFDB.LibraryModules.MediaEngineUtils.toggleLocalMute(unmutedBlockedUsers.pop().userId);
 								}, 1000);
 							}
 							if (Object.keys(unblockedUsers).length == Object.keys(connectedUsers).length) {
@@ -273,7 +273,7 @@ module.exports = (_ => {
 						let messages = messagesIns.props.messages;
 						messagesIns.props.messages = new BDFDB.DiscordObjects.Messages(messages);
 						for (let key in messages) messagesIns.props.messages[key] = messages[key];
-						messagesIns.props.messages._array = [].concat(messagesIns.props.messages._array.filter(n => !n.author || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.author.id)));
+						messagesIns.props.messages._array = [].concat(messagesIns.props.messages._array.filter(n => !n.author || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.author.id)));
 						if (messagesIns.props.oldestUnreadMessageId && messagesIns.props.messages._array.every(n => n.id != messagesIns.props.oldestUnreadMessageId)) messagesIns.props.oldestUnreadMessageId = null;
 					}
 				}
@@ -282,7 +282,7 @@ module.exports = (_ => {
 			processMessage (e) {
 				if (this.settings.places.replies) {
 					let repliedMessage = e.instance.props.childrenRepliedMessage;
-					if (repliedMessage && repliedMessage.props && repliedMessage.props.children && repliedMessage.props.children.props && repliedMessage.props.children.props.referencedMessage && repliedMessage.props.children.props.referencedMessage.message && repliedMessage.props.children.props.referencedMessage.message.author && BDFDB.LibraryModules.RelationshipStore.isBlocked(repliedMessage.props.children.props.referencedMessage.message.author.id)) {
+					if (repliedMessage && repliedMessage.props && repliedMessage.props.children && repliedMessage.props.children.props && repliedMessage.props.children.props.referencedMessage && repliedMessage.props.children.props.referencedMessage.message && repliedMessage.props.children.props.referencedMessage.message.author && BDFDB.LibraryStores.RelationshipStore.isBlocked(repliedMessage.props.children.props.referencedMessage.message.author.id)) {
 						delete e.instance.props.childrenRepliedMessage;
 						let header = e.instance.props.childrenHeader;
 						if (header && header.props) {
@@ -307,16 +307,16 @@ module.exports = (_ => {
 			}
 		
 			processChannelPins (e) {
-				if (this.settings.places.pins && e.returnvalue.props && e.returnvalue.props.children && e.returnvalue.props.children.props && BDFDB.ArrayUtils.is(e.returnvalue.props.children.props.messages)) e.returnvalue.props.children.props.messages = e.returnvalue.props.children.props.messages.filter(n => !n || !n.author || !n.author.id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.author.id));
+				if (this.settings.places.pins && e.returnvalue.props && e.returnvalue.props.children && e.returnvalue.props.children.props && BDFDB.ArrayUtils.is(e.returnvalue.props.children.props.messages)) e.returnvalue.props.children.props.messages = e.returnvalue.props.children.props.messages.filter(n => !n || !n.author || !n.author.id || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.author.id));
 			}
 			
 			processRecentMentions (e) {
-				if (this.settings.places.inbox && BDFDB.ArrayUtils.is(e.returnvalue.props.messages)) e.returnvalue.props.messages = e.returnvalue.props.messages.filter(n => !n || !n.author || !n.author.id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.author.id));
+				if (this.settings.places.inbox && BDFDB.ArrayUtils.is(e.returnvalue.props.messages)) e.returnvalue.props.messages = e.returnvalue.props.messages.filter(n => !n || !n.author || !n.author.id || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.author.id));
 			}
 			
 			processReactions (e) {
 				if (this.settings.places.reactions && e.returnvalue && e.returnvalue.props.children && BDFDB.ArrayUtils.is(e.returnvalue.props.children[0])) {
-					let updateTimeout, relationshipCount = BDFDB.LibraryModules.RelationshipStore.getRelationshipCount();
+					let updateTimeout, relationshipCount = BDFDB.LibraryStores.RelationshipStore.getRelationshipCount();
 					if (cachedChannelId != e.instance.props.message.channel_id) {
 						cachedReactions = {};
 						cachedChannelId = e.instance.props.message.channel_id;
@@ -335,7 +335,7 @@ module.exports = (_ => {
 								if (!reactions || !reactions.length) return;
 								let someBlocked = false;
 								let filteredReactions = reactions.filter(n => {
-									let isBlocked = n && BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id);
+									let isBlocked = n && BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id);
 									someBlocked = someBlocked || isBlocked;
 									return !isBlocked;
 								});
@@ -359,15 +359,15 @@ module.exports = (_ => {
 			}
 		
 			processReactorsComponent (e) {
-				if (this.settings.places.reactions && BDFDB.ArrayUtils.is(e.instance.props.reactors)) e.instance.props.reactors = e.instance.props.reactors.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id));
+				if (this.settings.places.reactions && BDFDB.ArrayUtils.is(e.instance.props.reactors)) e.instance.props.reactors = e.instance.props.reactors.filter(n => !n || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id));
 			}
 			
 			processActiveThread (e) {
 				if (!this.settings.places.threads) return;
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => n && n.type && n.type.toString().indexOf(".getMostRecentMessage") > -1});
 				if (index > -1 && children[index].props && children[index].props.channel) {
-					let message = BDFDB.LibraryModules.MessageStore.getMessage(children[index].props.channel.id, children[index].props.channel.lastMessageId);
-					if (message && BDFDB.LibraryModules.RelationshipStore.isBlocked(message.author.id)) children[index] = null;
+					let message = BDFDB.LibraryStores.MessageStore.getMessage(children[index].props.channel.id, children[index].props.channel.lastMessageId);
+					if (message && BDFDB.LibraryStores.RelationshipStore.isBlocked(message.author.id)) children[index] = null;
 				}
 			}
 			
@@ -380,7 +380,7 @@ module.exports = (_ => {
 				for (let i in channelMembers.props.rows) {
 					let row = channelMembers.props.rows[i];
 					if (!row || row.type != "MEMBER") newRows[i] = row;
-					else if (!row.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(row.user.id)) newRows[i] = row;
+					else if (!row.user || !BDFDB.LibraryStores.RelationshipStore.isBlocked(row.user.id)) newRows[i] = row;
 					else {
 						hiddenRows = true;
 						let found = false, rowIndex = i - 1;
@@ -418,11 +418,11 @@ module.exports = (_ => {
 			}
 			
 			processMemberListItem (e) {
-				if (this.settings.places.memberList && e.instance.props.user && BDFDB.LibraryModules.RelationshipStore.isBlocked(e.instance.props.user.id)) return null;
+				if (this.settings.places.memberList && e.instance.props.user && BDFDB.LibraryStores.RelationshipStore.isBlocked(e.instance.props.user.id)) return null;
 			}
 			
 			processPrivateChannelRecipients (e) {
-				if (this.settings.places.voiceChat && e.instance.props.channel && e.instance.props.channel.isGroupDM()) e.instance.props.channel = new BDFDB.DiscordObjects.Channel(Object.assign({}, e.instance.props.channel, {rawRecipients: e.instance.props.channel.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id)), recipients: e.instance.props.channel.recipients.filter(id => !id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(id))}));
+				if (this.settings.places.voiceChat && e.instance.props.channel && e.instance.props.channel.isGroupDM()) e.instance.props.channel = new BDFDB.DiscordObjects.Channel(Object.assign({}, e.instance.props.channel, {rawRecipients: e.instance.props.channel.rawRecipients.filter(n => !n || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id)), recipients: e.instance.props.channel.recipients.filter(id => !id || !BDFDB.LibraryStores.RelationshipStore.isBlocked(id))}));
 			}
 
 			processNowPlayingItem (e) {
@@ -431,11 +431,11 @@ module.exports = (_ => {
 					if (index > -1) for (let child of children) if (child && child.props && child.props.party) {
 						if (!e.returnvalue) {
 							if (child.props.party.priorityMembers) {
-								child.props.party.priorityMembers = child.props.party.priorityMembers.filter(n => !n || !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+								child.props.party.priorityMembers = child.props.party.priorityMembers.filter(n => !n || !n.user || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.user.id));
 								if (!child.props.party.priorityMembers.length) child.props.party.priorityMembers.push({user: new BDFDB.DiscordObjects.User({id: 0, username: ""})});
 							}
-							if (child.props.party.partiedMembers) child.props.party.partiedMembers = child.props.party.partiedMembers.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id));
-							if (child.props.party.voiceChannels) for (let i in child.props.party.voiceChannels) child.props.party.voiceChannels[i] = Object.assign({}, child.props.party.voiceChannels[i], {members: child.props.party.voiceChannels[i].members.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id))});
+							if (child.props.party.partiedMembers) child.props.party.partiedMembers = child.props.party.partiedMembers.filter(n => !n || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id));
+							if (child.props.party.voiceChannels) for (let i in child.props.party.voiceChannels) child.props.party.voiceChannels[i] = Object.assign({}, child.props.party.voiceChannels[i], {members: child.props.party.voiceChannels[i].members.filter(n => !n || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id))});
 						}
 						else {
 							if (child.props.party.priorityMembers && child.props.party.priorityMembers[0].user && child.props.party.priorityMembers[0].user.id == 0) {
@@ -451,7 +451,7 @@ module.exports = (_ => {
 				if (this.settings.places.voiceList) {
 					let channelInfo = BDFDB.ReactUtils.findChild(e.instance.props.children, {props: [["className", BDFDB.disCN.channelinfo]]});
 					if (channelInfo && channelInfo.props && channelInfo.props.children && channelInfo.props.children.props && BDFDB.ArrayUtils.is(channelInfo.props.children.props.voiceStates)) {
-						let newVoiceStates = [].concat(channelInfo.props.children.props.voiceStates).filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+						let newVoiceStates = [].concat(channelInfo.props.children.props.voiceStates).filter(n => !n.user || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.user.id));
 						if (channelInfo.props.children.props.channel.userLimit) channelInfo.props.children.props.channel = new BDFDB.DiscordObjects.Channel(Object.assign({}, channelInfo.props.children.props.channel, {userLimit: channelInfo.props.children.props.channel.userLimit - (channelInfo.props.children.props.voiceStates.length - newVoiceStates.length)}));
 						channelInfo.props.children.props.voiceStates = newVoiceStates;
 					}
@@ -461,8 +461,8 @@ module.exports = (_ => {
 			processVoiceUsers (e) {
 				if (this.settings.places.voiceList && BDFDB.ArrayUtils.is(e.instance.props.voiceStates)) {
 					if (!e.returnvalue) {
-						if (e.instance.props.children && e.instance.props.children.props && e.instance.props.children.props.numAudience) e.instance.props.children.props.numAudience = BDFDB.LibraryModules.StageChannelUtils.getMutableParticipants(e.instance.props.channel.id).length;
-						e.instance.props.voiceStates = [].concat(e.instance.props.voiceStates).filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+						if (e.instance.props.children && e.instance.props.children.props && e.instance.props.children.props.numAudience) e.instance.props.children.props.numAudience = BDFDB.LibraryStores.StageChannelParticipantStore.getMutableParticipants(e.instance.props.channel.id).length;
+						e.instance.props.voiceStates = [].concat(e.instance.props.voiceStates).filter(n => !n.user || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.user.id));
 					}
 					else {
 						if (e.instance.props.children && e.instance.props.children.props && e.instance.props.children.props.numAudience === 0) return null;
@@ -471,7 +471,7 @@ module.exports = (_ => {
 			}
 		
 			processVoiceUser (e) {
-				if (this.settings.places.voiceList && e.instance.props.user && BDFDB.LibraryModules.RelationshipStore.isBlocked(e.instance.props.user.id)) return null;
+				if (this.settings.places.voiceList && e.instance.props.user && BDFDB.LibraryStores.RelationshipStore.isBlocked(e.instance.props.user.id)) return null;
 			}
 
 			processDirectMessage (e) {
@@ -483,7 +483,7 @@ module.exports = (_ => {
 						}
 					}
 					else {
-						if (BDFDB.LibraryModules.RelationshipStore.isBlocked(e.instance.props.channel.getRecipientId())) e.returnvalue = null;
+						if (BDFDB.LibraryStores.RelationshipStore.isBlocked(e.instance.props.channel.getRecipientId())) e.returnvalue = null;
 					}
 				}
 			}
@@ -492,7 +492,7 @@ module.exports = (_ => {
 				if (this.settings.places.channelList && e.instance.props.channel) {
 					if (e.instance.props.channel.isGroupDM()) {
 						if (!e.returnvalue) {
-							e.instance.props.channel = new BDFDB.DiscordObjects.Channel(Object.assign({}, e.instance.props.channel, {rawRecipients: e.instance.props.channel.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id)), recipients: e.instance.props.channel.recipients.filter(id => !id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(id))}));
+							e.instance.props.channel = new BDFDB.DiscordObjects.Channel(Object.assign({}, e.instance.props.channel, {rawRecipients: e.instance.props.channel.rawRecipients.filter(n => !n || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id)), recipients: e.instance.props.channel.recipients.filter(id => !id || !BDFDB.LibraryStores.RelationshipStore.isBlocked(id))}));
 						}
 						else {
 							if (!e.instance.props.channel.name) {
@@ -510,38 +510,38 @@ module.exports = (_ => {
 						}
 					}
 					else {
-						if (e.returnvalue && BDFDB.LibraryModules.RelationshipStore.isBlocked(e.instance.props.channel.getRecipientId())) e.returnvalue = null;
+						if (e.returnvalue && BDFDB.LibraryStores.RelationshipStore.isBlocked(e.instance.props.channel.getRecipientId())) e.returnvalue = null;
 					}
 				}
 			}
 
 			processPrivateChannelCallParticipants (e) {
 				if (this.settings.places.voiceChat) {
-					if (BDFDB.ArrayUtils.is(e.instance.props.participants)) e.instance.props.participants = [].concat(e.instance.props.participants).filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
-					if (BDFDB.ArrayUtils.is(e.instance.props.filteredParticipants)) e.instance.props.filteredParticipants = [].concat(e.instance.props.filteredParticipants).filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+					if (BDFDB.ArrayUtils.is(e.instance.props.participants)) e.instance.props.participants = [].concat(e.instance.props.participants).filter(n => !n.user || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.user.id));
+					if (BDFDB.ArrayUtils.is(e.instance.props.filteredParticipants)) e.instance.props.filteredParticipants = [].concat(e.instance.props.filteredParticipants).filter(n => !n.user || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.user.id));
 				}
 			}
 			
 			processChannelCall (e) {
 				if (this.settings.places.voiceChat) {
-					if (BDFDB.ArrayUtils.is(e.instance.props.participants)) e.instance.props.participants = [].concat(e.instance.props.participants).filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
-					if (BDFDB.ArrayUtils.is(e.instance.props.filteredParticipants)) e.instance.props.filteredParticipants = [].concat(e.instance.props.filteredParticipants).filter(n => !n.user || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.user.id));
+					if (BDFDB.ArrayUtils.is(e.instance.props.participants)) e.instance.props.participants = [].concat(e.instance.props.participants).filter(n => !n.user || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.user.id));
+					if (BDFDB.ArrayUtils.is(e.instance.props.filteredParticipants)) e.instance.props.filteredParticipants = [].concat(e.instance.props.filteredParticipants).filter(n => !n.user || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.user.id));
 				}
 			}
 
 			processUserSummaryItem (e) {
-				if (this.settings.places.memberList && BDFDB.ArrayUtils.is(e.instance.props.users)) e.instance.props.users = [].concat(e.instance.props.users).filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id));
+				if (this.settings.places.memberList && BDFDB.ArrayUtils.is(e.instance.props.users)) e.instance.props.users = [].concat(e.instance.props.users).filter(n => !n || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id));
 			}
 			
 			processUserMention (e) {
-				if (e.instance.props.userId && this.settings.places.mentions && BDFDB.LibraryModules.RelationshipStore.isBlocked(e.instance.props.userId)) return BDFDB.ReactUtils.createElement("span", {
+				if (e.instance.props.userId && this.settings.places.mentions && BDFDB.LibraryStores.RelationshipStore.isBlocked(e.instance.props.userId)) return BDFDB.ReactUtils.createElement("span", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.mention, BDFDB.disCN.mentionwrapper, e.instance.props.className),
 					children: ["@" + BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER]
 				});
 			}
 			
 			processRichUserMention (e) {
-				if (e.instance.props.id && this.settings.places.mentions && BDFDB.LibraryModules.RelationshipStore.isBlocked(e.instance.props.id)) return BDFDB.ReactUtils.createElement("span", {
+				if (e.instance.props.id && this.settings.places.mentions && BDFDB.LibraryStores.RelationshipStore.isBlocked(e.instance.props.id)) return BDFDB.ReactUtils.createElement("span", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.mention, BDFDB.disCN.mentionwrapper, e.instance.props.className),
 					children: ["@" + BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER]
 				});
@@ -550,7 +550,7 @@ module.exports = (_ => {
 			getGroupName (channelId) {
 				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(channelId);
 				if (channel.name) return channel.name;
-				let recipients = channel.recipients.map(BDFDB.LibraryModules.UserStore.getUser).filter(n => n && !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id));
+				let recipients = channel.recipients.map(BDFDB.LibraryStores.UserStore.getUser).filter(n => n && !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id));
 				return recipients.length > 0 ? recipients.map(u => u.toString()).join(", ") : BDFDB.LanguageUtils.LanguageStrings.UNNAMED;
 			}
 		};

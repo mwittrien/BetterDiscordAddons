@@ -79,7 +79,7 @@ module.exports = (_ => {
 					}, _this.settings.amounts.tooltipDelay * 1000);
 					return null;
 				}
-				let owner = BDFDB.LibraryModules.UserStore.getUser(this.props.guild.ownerId);
+				let owner = BDFDB.LibraryStores.UserStore.getUser(this.props.guild.ownerId);
 				if (!owner && !this.state.fetchedOwner) {
 					this.state.fetchedOwner = true;
 					BDFDB.LibraryModules.UserProfileUtils.getUser(this.props.guild.ownerId).then(_ => BDFDB.ReactUtils.forceUpdate(this));
@@ -118,7 +118,7 @@ module.exports = (_ => {
 						}),
 						_this.settings.items.channels && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 							prefix: BDFDB.LanguageUtils.LanguageStrings.CHANNELS,
-							string: BDFDB.LibraryModules.GuildChannelStore.getChannels(this.props.guild.id).count
+							string: BDFDB.LibraryStores.GuildChannelStore.getChannels(this.props.guild.id).count
 						}),
 						_this.settings.items.roles && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 							prefix: BDFDB.LanguageUtils.LanguageStrings.ROLES,

@@ -161,7 +161,7 @@ module.exports = (_ => {
 				if (favoritesIndex > -1) favoritesChildren[favoritesIndex] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Favorites, {});
 				let [errorChildren, errorIndex] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FluxContainer(<Unknown>)"});
 				if (errorIndex > -1) errorChildren[errorIndex] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.UnavailableGuildsButton, {
-					unavailableGuilds: BDFDB.LibraryModules.GuildUnavailableStore.totalUnavailableGuilds
+					unavailableGuilds: BDFDB.LibraryStores.GuildAvailabilityStore.totalUnavailableGuilds
 				});
 				let scroller = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildsscroller]]});
 				if (scroller) {
@@ -184,7 +184,7 @@ module.exports = (_ => {
 			
 			processDirectMessage (e) {
 				if (e.instance.props.channel.id) {
-					if (e.returnvalue.props.children && e.returnvalue.props.children.props) e.returnvalue.props.children.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.children.props.className, BDFDB.LibraryModules.MutedUtils.isChannelMuted(null, e.instance.props.channel.id) && BDFDB.disCN._displayserversaschannelsmuted);
+					if (e.returnvalue.props.children && e.returnvalue.props.children.props) e.returnvalue.props.children.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.children.props.className, BDFDB.LibraryStores.UserGuildSettingsStore.isChannelMuted(null, e.instance.props.channel.id) && BDFDB.disCN._displayserversaschannelsmuted);
 					let text = BDFDB.ReactUtils.findValue(e.returnvalue, "text");
 					this.removeTooltip(e.returnvalue);
 					e.returnvalue = this.removeMask(e.returnvalue);
@@ -196,7 +196,7 @@ module.exports = (_ => {
 			
 			processGuildItem (e) {
 				if (e.instance.props.guild) {
-					e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.LibraryModules.MutedUtils.isMuted(e.instance.props.guild.id) && BDFDB.disCN._displayserversaschannelsmuted);
+					e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.LibraryStores.UserGuildSettingsStore.isMuted(e.instance.props.guild.id) && BDFDB.disCN._displayserversaschannelsmuted);
 					if (!BDFDB.BDUtils.isPluginEnabled("ServerDetails")) this.removeTooltip(e.returnvalue, e.instance.props.guild);
 					e.returnvalue = this.removeMask(e.returnvalue);
 					this.addElementName(e.returnvalue, e.instance.props.guild.name, {

@@ -123,7 +123,7 @@ module.exports = (_ => {
 			loadEmojiList () {
 				emojiReplicaList = {};
 				let guilds = BDFDB.LibraryStores.GuildStore.getGuilds();
-				for (let id in guilds) for (let emoji of BDFDB.LibraryModules.GuildEmojiStore.getGuildEmoji(id)) {
+				for (let id in guilds) for (let emoji of BDFDB.LibraryStores.EmojiStore.getGuildEmoji(id)) {
 					if (emoji.managed) emojiReplicaList[emoji.name] = emojiReplicaList[emoji.name] != undefined;
 				}
 			}
@@ -161,7 +161,7 @@ module.exports = (_ => {
 								else return item[data.key];
 							}
 						})),
-						data: BDFDB.LibraryModules.FolderStore.getFlattenedGuilds().map((guild, i) => {
+						data: BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuilds().map((guild, i) => {
 							let itemData = {
 								index: i,
 								guild: guild,
@@ -169,7 +169,7 @@ module.exports = (_ => {
 								local: 0,
 								copies: 0
 							}
-							for (let emoji of BDFDB.LibraryModules.GuildEmojiStore.getGuildEmoji(guild.id)) {
+							for (let emoji of BDFDB.LibraryStores.EmojiStore.getGuildEmoji(guild.id)) {
 								if (emoji.managed) {
 									itemData.global++;
 									if (emojiReplicaList[emoji.name]) itemData.copies++;

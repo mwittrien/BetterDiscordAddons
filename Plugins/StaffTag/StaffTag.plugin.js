@@ -356,7 +356,7 @@ module.exports = (_ => {
 				let [_, index] = BDFDB.ReactUtils.findParent(children, {props: [["text", [BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER, BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER]]]});
 				if (index > -1) children[index] = null;
 				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(config.channelId || BDFDB.LibraryModules.LastChannelStore.getChannelId());
-				let member = channel && this.settings.general.useRoleColor ? (BDFDB.LibraryModules.MemberStore.getMember(channel.guild_id, user.id) || {}) : {};
+				let member = channel && this.settings.general.useRoleColor ? (BDFDB.LibraryStores.GuildMemberStore.getMember(channel.guild_id, user.id) || {}) : {};
 				
 				let fallbackLabel = this.settings.general.useCrown && this.getLabelFallback(userType);
 				let label = this.getLabel(userType, fallbackLabel);

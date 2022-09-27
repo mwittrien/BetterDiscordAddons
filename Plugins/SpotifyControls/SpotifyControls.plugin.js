@@ -94,7 +94,7 @@ module.exports = (_ => {
 					}, (error, response, result) => {
 						if (response && response.statusCode == 401) {
 							BDFDB.LibraryModules.SpotifyUtils.getAccessToken(socket.accountId).then(promiseResult => {
-								let newSocketDevice = BDFDB.LibraryModules.SpotifyTrackUtils.getActiveSocketAndDevice();
+								let newSocketDevice = BDFDB.LibraryStores.SpotifyStore.getActiveSocketAndDevice();
 								this.request(newSocketDevice.socket, newSocketDevice.device, type, data).then(_ => {
 									try {callback(JSON.parse(result));}
 									catch (err) {callback({});}
@@ -115,7 +115,7 @@ module.exports = (_ => {
 				});
 			}
 			render() {
-				let socketDevice = BDFDB.LibraryModules.SpotifyTrackUtils.getActiveSocketAndDevice();
+				let socketDevice = BDFDB.LibraryStores.SpotifyStore.getActiveSocketAndDevice();
 				if (this.props.song) this.props.noDevice = false;
 				if (!socketDevice || this.props.noDevice) return null;
 				if (this.props.song) {
@@ -135,7 +135,7 @@ module.exports = (_ => {
 				if (!lastSong) return null;
 				
 				let coverSrc = BDFDB.LibraryModules.AssetUtils.getAssetImage(lastSong.application_id, lastSong.assets.large_image);
-				let connection = (BDFDB.LibraryModules.ConnectionStore.getAccounts().find(n => n.type == "spotify") || {});
+				let connection = (BDFDB.LibraryStores.ConnectedAccountsStore.getAccounts().find(n => n.type == "spotify") || {});
 				showActivity = showActivity != undefined ? showActivity : (connection.show_activity || connection.showActivity);
 				currentVolume = this.props.draggingVolume ? currentVolume : socketDevice.device.volume_percent;
 				return BDFDB.ReactUtils.createElement("div", {
@@ -180,7 +180,7 @@ module.exports = (_ => {
 												onClick: event => {
 													BDFDB.ListenerUtils.stopEvent(event);
 													showActivity = !showActivity;
-													let account = BDFDB.LibraryModules.ConnectionStore.getAccounts().find(n => n.type == "spotify");
+													let account = BDFDB.LibraryStores.ConnectedAccountsStore.getAccounts().find(n => n.type == "spotify");
 													account && BDFDB.LibraryModules.ConnectionUtils.setShowActivity("spotify", account.id, showActivity);
 												}
 											})
@@ -381,7 +381,7 @@ module.exports = (_ => {
 				updateInterval = BDFDB.TimeUtils.interval(_ => {
 					if (!this.updater || typeof this.updater.isMounted != "function" || !this.updater.isMounted(this)) BDFDB.TimeUtils.clear(updateInterval);
 					else if (playbackState.is_playing) {
-						let song = BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false);
+						let song = BDFDB.LibraryStores.SpotifyStore.getActivity(false);
 						if (!song) BDFDB.ReactUtils.forceUpdate(controls);
 						else if (playbackState.is_playing) BDFDB.ReactUtils.forceUpdate(this);
 					}
@@ -676,14 +676,14 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SpotifyTrackUtils, "getActivity", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.SpotifyStore, "getActivity", {after: e => {
 					if (e.methodArguments[0] !== false) {
 						if (e.returnValue && e.returnValue.name == "Spotify") this.updatePlayer(e.returnValue);
 						else if (!e.returnValue) this.updatePlayer(null);
 					}
 				}});
 
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SpotifyTrackUtils, "wasAutoPaused", {instead: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.SpotifyStore, "wasAutoPaused", {instead: e => {
 					return false;
 				}});
 
@@ -705,7 +705,7 @@ module.exports = (_ => {
 					children: _ => {
 						let settingsItems = [];
 						
-						if (!BDFDB.LibraryModules.SpotifyTrackUtils.hasConnectedAccount()) BDFDB.ModalUtils.open(this, {
+						if (!BDFDB.LibraryStores.SpotifyStore.hasConnectedAccount()) BDFDB.ModalUtils.open(this, {
 							size: "SMALL",
 							header: `${this.name}: ${this.labels.noaccount_header}...`,
 							subHeader: this.labels.noaccount_subheader,
@@ -788,7 +788,7 @@ module.exports = (_ => {
 				if (e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.ACCOUNT_PANEL) e.instance.props.children = [
 					BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
 						key: "SPOTIFY_CONTROLS",
-						song: BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false),
+						song: BDFDB.LibraryStores.SpotifyStore.getActivity(false),
 						maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
 						buttonStates: [],
 						timeline: this.settings.general.addTimeline,

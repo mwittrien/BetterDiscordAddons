@@ -1998,8 +1998,8 @@ module.exports = (_ => {
 					};
 					const setText = newText => {
 						if (BDFDB.ObjectUtils.is(config.guild)) {
-							let isMuted = Internal.LibraryModules.MutedUtils.isMuted(config.guild.id);
-							let muteConfig = Internal.LibraryModules.MutedUtils.getMuteConfig(config.guild.id);
+							let isMuted = Internal.LibraryStores.UserGuildSettingsStore.isMuted(config.guild.id);
+							let muteConfig = Internal.LibraryStores.UserGuildSettingsStore.getMuteConfig(config.guild.id);
 							
 							let children = [typeof newText == "function" ? newText() : newText].flat(10).filter(n => typeof n == "string" || BDFDB.ReactUtils.isValidElement(n));
 							
@@ -3207,11 +3207,11 @@ module.exports = (_ => {
 				BDFDB.UserUtils.is = function (user) {
 					return user && user instanceof Internal.DiscordObjects.User;
 				};
-				const myDataUser = Internal.LibraryModules.UserStore && Internal.LibraryModules.UserStore.getCurrentUser && Internal.LibraryModules.UserStore.getCurrentUser();
+				const myDataUser = Internal.LibraryStores.UserStore && Internal.LibraryStores.UserStore.getCurrentUser && Internal.LibraryStores.UserStore.getCurrentUser();
 				if (myDataUser && BDFDB.UserUtils._id != myDataUser.id) BDFDB.UserUtils._id = myDataUser.id;
 				BDFDB.UserUtils.me = new Proxy(myDataUser || {}, {
 					get: function (list, item) {
-						const user = Internal.LibraryModules.UserStore && Internal.LibraryModules.UserStore.getCurrentUser && Internal.LibraryModules.UserStore.getCurrentUser();
+						const user = Internal.LibraryStores.UserStore && Internal.LibraryStores.UserStore.getCurrentUser && Internal.LibraryStores.UserStore.getCurrentUser();
 						if (user && BDFDB.UserUtils._id != user.id) {
 							Cache.data = {};
 							BDFDB.UserUtils._id = user.id;
@@ -3222,7 +3222,7 @@ module.exports = (_ => {
 				BDFDB.UserUtils.getStatus = function (id = BDFDB.UserUtils.me.id) {
 					id = typeof id == "number" ? id.toFixed() : id;
 					let activity = BDFDB.UserUtils.getActivity(id);
-					return activity && activity.type == Internal.DiscordConstants.ActivityTypes.STREAMING ? "streaming" : Internal.LibraryModules.StatusMetaUtils.getStatus(id);
+					return activity && activity.type == Internal.DiscordConstants.ActivityTypes.STREAMING ? "streaming" : Internal.LibraryStores.PresenceStore.getStatus(id);
 				};
 				BDFDB.UserUtils.getStatusColor = function (status, useColor) {
 					if (!Internal.DiscordConstants.Colors) return null;
@@ -3238,19 +3238,19 @@ module.exports = (_ => {
 					}
 				};
 				BDFDB.UserUtils.getActivity = function (id = BDFDB.UserUtils.me.id) {
-					for (let activity of Internal.LibraryModules.StatusMetaUtils.getActivities(id)) if (activity.type != Internal.DiscordConstants.ActivityTypes.CUSTOM_STATUS) return activity;
+					for (let activity of Internal.LibraryStores.PresenceStore.getActivities(id)) if (activity.type != Internal.DiscordConstants.ActivityTypes.CUSTOM_STATUS) return activity;
 					return null;
 				};
 				BDFDB.UserUtils.getCustomStatus = function (id = BDFDB.UserUtils.me.id) {
-					for (let activity of Internal.LibraryModules.StatusMetaUtils.getActivities(id)) if (activity.type == Internal.DiscordConstants.ActivityTypes.CUSTOM_STATUS) return activity;
+					for (let activity of Internal.LibraryStores.PresenceStore.getActivities(id)) if (activity.type == Internal.DiscordConstants.ActivityTypes.CUSTOM_STATUS) return activity;
 					return null;
 				};
 				BDFDB.UserUtils.getAvatar = function (id = BDFDB.UserUtils.me.id) {
-					let user = Internal.LibraryModules.UserStore.getUser(id);
+					let user = Internal.LibraryStores.UserStore.getUser(id);
 					if (!user) return window.location.origin + "/assets/1f0bfc0865d324c2587920a7d80c609b.png";
 					else return ((user.avatar ? "" : window.location.origin) + Internal.LibraryModules.IconUtils.getUserAvatarURL(user)).split("?")[0];
 				};
-				BDFDB.UserUtils.getBanner = function (id = BDFDB.UserUtils.me.id, guildId = Internal.LibraryModules.LastGuildStore.getGuildId(), canAnimate = false) {
+				BDFDB.UserUtils.getBanner = function (id = BDFDB.UserUtils.me.id, guildId = Internal.LibraryStores.SelectedGuildStore.getGuildId(), canAnimate = false) {
 					let displayProfile = Internal.LibraryModules.MemberDisplayUtils.getDisplayProfile(id, guildId);
 					return (Internal.LibraryModules.IconUtils.getUserBannerURL(Object.assign({banner: displayProfile && displayProfile.banner, id: id}, {canAnimate})) || "").split("?")[0];
 				};
@@ -3290,7 +3290,7 @@ module.exports = (_ => {
 					return Internal.LibraryModules.IconUtils.getGuildBannerURL(guild).split("?")[0];
 				};
 				BDFDB.GuildUtils.getFolder = function (id) {
-					return Internal.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).find(n => n.guildIds.includes(id));
+					return Internal.LibraryStores.SortedGuildStore.guildFolders.filter(n => n.folderId).find(n => n.guildIds.includes(id));
 				};
 				BDFDB.GuildUtils.openMenu = function (guild, e = mousePosition) {
 					if (!guild) return;
@@ -3305,12 +3305,12 @@ module.exports = (_ => {
 				BDFDB.GuildUtils.markAsRead = function (guildIds) {
 					guildIds = [guildIds].flat(10).filter(id => id && typeof id == "string" && Internal.LibraryStores.GuildStore.getGuild(id));
 					if (!guildIds) return;
-					let channels = guildIds.map(id => [BDFDB.ObjectUtils.toArray(Internal.LibraryModules.GuildChannelStore.getChannels(id)), Internal.LibraryModules.GuildEventStore.getGuildScheduledEventsForGuild(id)]).flat(10).map(n => n && (n.channel && n.channel.id || n.id)).flat().filter(n => n);
+					let channels = guildIds.map(id => [BDFDB.ObjectUtils.toArray(Internal.LibraryStores.GuildChannelStore.getChannels(id)), Internal.LibraryStores.GuildScheduledEventStore.getGuildScheduledEventsForGuild(id)]).flat(10).map(n => n && (n.channel && n.channel.id || n.id)).flat().filter(n => n);
 					if (channels.length) BDFDB.ChannelUtils.markAsRead(channels);
 					let eventChannels = guildIds.map(id => ({
 						channelId: id,
 						readStateType: Internal.LibraryModules.UnreadStateTypes.GUILD_EVENT,
-						messageId: Internal.LibraryModules.UnreadChannelUtils.lastMessageId(id, Internal.LibraryModules.UnreadStateTypes.GUILD_EVENT)
+						messageId: Internal.LibraryStores.ReadStateStore.lastMessageId(id, Internal.LibraryModules.UnreadStateTypes.GUILD_EVENT)
 					})).filter(n => n.messageId);
 					if (eventChannels.length) Internal.LibraryModules.AckUtils.bulkAck(eventChannels);
 				};
@@ -3326,7 +3326,7 @@ module.exports = (_ => {
 					return BDFDB.ReactUtils.findValue(div, "folderId", {up: true});
 				};
 				BDFDB.FolderUtils.getDefaultName = function (folderId) {
-					let folder = Internal.LibraryModules.FolderStore.getGuildFolderById(folderId);
+					let folder = Internal.LibraryStores.SortedGuildStore.getGuildFolderById(folderId);
 					if (!folder) return "";
 					let rest = 2 * Internal.DiscordConstants.MAX_GUILD_FOLDER_NAME_LENGTH;
 					let names = [], allNames = folder.guildIds.map(guildId => (Internal.LibraryStores.GuildStore.getGuild(guildId) || {}).name).filter(n => n);
@@ -3356,14 +3356,14 @@ module.exports = (_ => {
 					return channel && channel.parentChannelThreadType && channel.parentChannelThreadType == Internal.DiscordConstants.ChannelTypes.GUILD_FORUM;
 				};
 				BDFDB.ChannelUtils.isEvent = function (channelOrId) {
-					let channel = typeof channelOrId == "string" ? Internal.LibraryModules.GuildEventStore.getGuildScheduledEvent(channelOrId) : channelOrId;
-					return channel && Internal.LibraryModules.GuildEventStore.getGuildScheduledEvent(channel.id) && true;
+					let channel = typeof channelOrId == "string" ? Internal.LibraryStores.GuildScheduledEventStore.getGuildScheduledEvent(channelOrId) : channelOrId;
+					return channel && Internal.LibraryStores.GuildScheduledEventStore.getGuildScheduledEvent(channel.id) && true;
 				};
 				BDFDB.ChannelUtils.markAsRead = function (channelIds) {
-					let unreadChannels = [channelIds].flat(10).filter(id => id && typeof id == "string" && (BDFDB.LibraryStores.ChannelStore.getChannel(id) || {}).type != Internal.DiscordConstants.ChannelTypes.GUILD_CATEGORY && (Internal.LibraryModules.UnreadChannelUtils.hasUnread(id) || Internal.LibraryModules.UnreadChannelUtils.getMentionCount(id) > 0)).map(id => ({
+					let unreadChannels = [channelIds].flat(10).filter(id => id && typeof id == "string" && (BDFDB.LibraryStores.ChannelStore.getChannel(id) || {}).type != Internal.DiscordConstants.ChannelTypes.GUILD_CATEGORY && (Internal.LibraryStores.ReadStateStore.hasUnread(id) || Internal.LibraryStores.ReadStateStore.getMentionCount(id) > 0)).map(id => ({
 						channelId: id,
 						readStateType: Internal.LibraryModules.UnreadStateTypes.CHANNEL,
-						messageId: Internal.LibraryModules.UnreadChannelUtils.lastMessageId(id)
+						messageId: Internal.LibraryStores.ReadStateStore.lastMessageId(id)
 					}));
 					if (unreadChannels.length) Internal.LibraryModules.AckUtils.bulkAck(unreadChannels);
 				};
@@ -3394,7 +3394,7 @@ module.exports = (_ => {
 					return Internal.LibraryModules.IconUtils.getChannelIconURL(channel).split("?")[0];
 				};
 				BDFDB.DMUtils.markAsRead = function (dmIds) {
-					let unreadDMs = [dmIds].flat(10).filter(id => id && typeof id == "string" && BDFDB.DMUtils.isDMChannel(id) && (Internal.LibraryModules.UnreadChannelUtils.hasUnread(id) || Internal.LibraryModules.UnreadChannelUtils.getMentionCount(id) > 0));
+					let unreadDMs = [dmIds].flat(10).filter(id => id && typeof id == "string" && BDFDB.DMUtils.isDMChannel(id) && (Internal.LibraryStores.ReadStateStore.hasUnread(id) || Internal.LibraryStores.ReadStateStore.getMentionCount(id) > 0));
 					if (unreadDMs.length) for (let i in unreadDMs) BDFDB.TimeUtils.timeout(_ => Internal.LibraryModules.AckUtils.ack(unreadDMs[i]), i * 1000);
 				};
 				
@@ -4429,7 +4429,7 @@ module.exports = (_ => {
 					}
 				};
 				BDFDB.DiscordUtils.getTheme = function () {
-					return BDFDB.LibraryModules.ThemeSettingsStore.theme != "dark" ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
+					return BDFDB.LibraryStores.ThemeStore.theme != "dark" ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
 				};
 				BDFDB.DiscordUtils.getZoomFactor = function () {
 					let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
@@ -6307,7 +6307,7 @@ module.exports = (_ => {
 							if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
 						}
 						handleMouseDown(e) {
-							if (!this.props.unavailable && this.props.guild && this.props.selectedChannelId) Internal.LibraryModules.DirectMessageUtils.preload(this.props.guild.id, this.props.selectedChannelId);
+							if (!this.props.unavailable && this.props.guild && this.props.selectedChannelId) Internal.LibraryModules.PrivateChannelUtils.preload(this.props.guild.id, this.props.selectedChannelId);
 							if (e.button == 0 && typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);
 						}
 						handleMouseUp(e) {
@@ -6333,25 +6333,25 @@ module.exports = (_ => {
 							this.props.guildId = this.props.guild.id;
 							this.props.selectedChannelId = Internal.LibraryModules.LastChannelStore.getChannelId(this.props.guild.id);
 							
-							let currentVoiceChannel = Internal.LibraryStores.ChannelStore.getChannel(Internal.LibraryModules.CurrentVoiceUtils.getChannelId());
-							let hasVideo = currentVoiceChannel && Internal.LibraryModules.VoiceUtils.hasVideo(currentVoiceChannel);
+							let currentVoiceChannel = Internal.LibraryStores.ChannelStore.getChannel(Internal.LibraryStores.RTCConnectionStore.getChannelId());
+							let hasVideo = currentVoiceChannel && Internal.LibraryStores.SortedVoiceStateStore.hasVideo(currentVoiceChannel);
 							
-							this.props.selected = this.props.state ? Internal.LibraryModules.LastGuildStore.getGuildId() == this.props.guild.id : false;
-							this.props.unread = this.props.state ? Internal.LibraryModules.UnreadGuildUtils.hasUnread(this.props.guild.id) : false;
-							this.props.badge = this.props.state ? Internal.LibraryModules.UnreadGuildUtils.getMentionCount(this.props.guild.id) : 0;
+							this.props.selected = this.props.state ? Internal.LibraryStores.SelectedGuildStore.getGuildId() == this.props.guild.id : false;
+							this.props.unread = this.props.state ? Internal.LibraryStores.GuildReadStateStore.hasUnread(this.props.guild.id) : false;
+							this.props.badge = this.props.state ? Internal.LibraryStores.GuildReadStateStore.getMentionCount(this.props.guild.id) : 0;
 							
 							this.props.mediaState = Object.assign({}, this.props.mediaState, {
 								audio: this.props.state ? currentVoiceChannel && currentVoiceChannel.guild_id == this.props.guild.id && !hasVideo : false,
 								video: this.props.state ? currentVoiceChannel && currentVoiceChannel.guild_id == this.props.guild.id && hasVideo : false,
-								screenshare: this.props.state ? !!Internal.LibraryModules.StreamUtils.getAllApplicationStreams().filter(stream => stream.guildId == this.props.guild.id)[0] : false,
-								liveStage: this.props.state ? Object.keys(Internal.LibraryModules.StageChannelStore.getStageInstancesByGuild(this.props.guild.id)).length > 0 : false,
-								hasLiveVoiceChannel: this.props.state && false ? !Internal.LibraryModules.MutedUtils.isMuted(this.props.guild.id) && BDFDB.ObjectUtils.toArray(Internal.LibraryModules.VoiceUtils.getVoiceStates(this.props.guild.id)).length > 0 : false,
-								participating: this.props.state ? Internal.LibraryModules.CurrentVoiceUtils.getGuildId() == this.props.guild.id : false,
+								screenshare: this.props.state ? !!Internal.LibraryStores.ApplicationStreamingStore.getAllApplicationStreams().filter(stream => stream.guildId == this.props.guild.id)[0] : false,
+								liveStage: this.props.state ? Object.keys(Internal.LibraryStores.StageInstanceStore.getStageInstancesByGuild(this.props.guild.id)).length > 0 : false,
+								hasLiveVoiceChannel: this.props.state && false ? !Internal.LibraryStores.UserGuildSettingsStore.isMuted(this.props.guild.id) && BDFDB.ObjectUtils.toArray(Internal.LibraryStores.SortedVoiceStateStore.getVoiceStates(this.props.guild.id)).length > 0 : false,
+								participating: this.props.state ? Internal.LibraryStores.RTCConnectionStore.getGuildId() == this.props.guild.id : false,
 								participatingInStage: this.props.state ? currentVoiceChannel && currentVoiceChannel.guild_id == this.props.guild.id && currentVoiceChannel.isGuildStageVoice() : false
 							});
 							
 							this.props.animatable = this.props.state ? this.props.guild.icon && Internal.LibraryModules.IconUtils.isAnimatedIconHash(this.props.guild.icon) : false;
-							this.props.unavailable = this.props.state ? Internal.LibraryModules.GuildUnavailableStore.unavailableGuilds.includes(this.props.guild.id) : false;
+							this.props.unavailable = this.props.state ? Internal.LibraryStores.GuildAvailabilityStore.unavailableGuilds.includes(this.props.guild.id) : false;
 						
 							let isDraggedGuild = this.props.draggingGuildId === this.props.guild.id;
 							let guild = isDraggedGuild ? BDFDB.ReactUtils.createElement("div", {
@@ -6482,13 +6482,13 @@ module.exports = (_ => {
 					
 					CustomComponents.GuildVoiceList = reactInitialized && class BDFDB_GuildVoiceList extends Internal.LibraryModules.React.Component {
 						render() {
-							let channels = Internal.LibraryModules.GuildChannelStore.getChannels(this.props.guild.id);
+							let channels = Internal.LibraryStores.GuildChannelStore.getChannels(this.props.guild.id);
 							let voiceChannels = (channels[Internal.LibraryModules.GuildChannelKeys.GUILD_VOCAL_CHANNELS_KEY] || []).filter(c => c.channel.type == Internal.DiscordConstants.ChannelTypes.GUILD_VOICE).map(c => c.channel.id);
-							let stageChannels = (channels[Internal.LibraryModules.GuildChannelKeys.GUILD_VOCAL_CHANNELS_KEY] || []).filter(c => c.channel.type == Internal.DiscordConstants.ChannelTypes.GUILD_STAGE_VOICE && Internal.LibraryModules.StageChannelStore.getStageInstanceByChannel(c.channel.id)).map(c => c.channel.id);
-							let streamOwnerIds = Internal.LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === this.props.guild.id).map(app => app.ownerId) || [];
-							let streamOwners = streamOwnerIds.map(ownerId => Internal.LibraryModules.UserStore.getUser(ownerId)).filter(n => n);
-							let connectedVoiceUsers = BDFDB.ObjectUtils.toArray(Internal.LibraryModules.VoiceUtils.getVoiceStates(this.props.guild.id)).map(state => voiceChannels.includes(state.channelId) && state.channelId != this.props.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && Internal.LibraryModules.UserStore.getUser(state.userId)).filter(n => n);
-							let connectedStageUsers = BDFDB.ObjectUtils.toArray(Internal.LibraryModules.VoiceUtils.getVoiceStates(this.props.guild.id)).map(state => stageChannels.includes(state.channelId) && state.channelId != this.props.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && Internal.LibraryModules.UserStore.getUser(state.userId)).filter(n => n);
+							let stageChannels = (channels[Internal.LibraryModules.GuildChannelKeys.GUILD_VOCAL_CHANNELS_KEY] || []).filter(c => c.channel.type == Internal.DiscordConstants.ChannelTypes.GUILD_STAGE_VOICE && Internal.LibraryStores.StageInstanceStore.getStageInstanceByChannel(c.channel.id)).map(c => c.channel.id);
+							let streamOwnerIds = Internal.LibraryStores.ApplicationStreamingStore.getAllApplicationStreams().filter(app => app.guildId === this.props.guild.id).map(app => app.ownerId) || [];
+							let streamOwners = streamOwnerIds.map(ownerId => Internal.LibraryStores.UserStore.getUser(ownerId)).filter(n => n);
+							let connectedVoiceUsers = BDFDB.ObjectUtils.toArray(Internal.LibraryStores.SortedVoiceStateStore.getVoiceStates(this.props.guild.id)).map(state => voiceChannels.includes(state.channelId) && state.channelId != this.props.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && Internal.LibraryStores.UserStore.getUser(state.userId)).filter(n => n);
+							let connectedStageUsers = BDFDB.ObjectUtils.toArray(Internal.LibraryStores.SortedVoiceStateStore.getVoiceStates(this.props.guild.id)).map(state => stageChannels.includes(state.channelId) && state.channelId != this.props.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && Internal.LibraryStores.UserStore.getUser(state.userId)).filter(n => n);
 							let children = [
 								!connectedStageUsers.length ? null : BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.tooltiprow,
@@ -7109,7 +7109,7 @@ module.exports = (_ => {
 							return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex, {
 								className: this.props.className,
 								wrap: Internal.LibraryComponents.Flex.Wrap.WRAP,
-								children: [this.props.includeDMs && {name: BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES, acronym: "DMs", id: Internal.DiscordConstants.ME, getIconURL: _ => {}}].concat(Internal.LibraryModules.FolderStore.getFlattenedGuilds()).filter(n => n).map(guild => BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TooltipContainer, {
+								children: [this.props.includeDMs && {name: BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES, acronym: "DMs", id: Internal.DiscordConstants.ME, getIconURL: _ => {}}].concat(Internal.LibraryStores.SortedGuildStore.getFlattenedGuilds()).filter(n => n).map(guild => BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TooltipContainer, {
 									text: guild.name,
 									children: BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.DOMUtils.formatClassName(this.props.guildClassName, BDFDB.disCN.settingsguild, this.props.disabled.includes(guild.id) && BDFDB.disCN.settingsguilddisabled),
@@ -8020,7 +8020,7 @@ module.exports = (_ => {
 							return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.PopoutContainer, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 								wrap: false,
 								renderPopout: instance => BDFDB.ReactUtils.createElement(Internal.LibraryComponents.UserPopout, {
-									user: Internal.LibraryModules.UserStore.getUser(this.props.userId),
+									user: Internal.LibraryStores.UserStore.getUser(this.props.userId),
 									userId: this.props.userId,
 									channelId: this.props.channelId,
 									guildId: this.props.guildId
