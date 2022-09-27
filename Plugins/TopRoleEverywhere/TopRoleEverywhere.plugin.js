@@ -232,18 +232,18 @@ module.exports = (_ => {
 							color: isBright && this.settings.general.useBlackFont ? "black" : null
 						},
 						tag: role.name,
-						onContextMenu: role.id ? e => {this.openRoleContextMenu(e, role);} : null
+						onContextMenu: role.id ? event => this.openRoleContextMenu(event, role) : null
 					});
 				}
 				else return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MemberRole, {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._toproleseverywheretag, BDFDB.disCN[`_toproleseverywhere${type}tag`], BDFDB.disCN._toproleseverywhererolestyle),
 					role: role,
-					onContextMenu: role.id ? e => {this.openRoleContextMenu(e, role);} : null
+					onContextMenu: role.id ? event => this.openRoleContextMenu(event, role) : null
 				});
 			}
 			
-			openRoleContextMenu (e, role) {
-				BDFDB.LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
+			openRoleContextMenu (event, role) {
+				BDFDB.LibraryModules.ContextMenuUtils.openContextMenu(event, function (e) {
 					return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("DeveloperContextMenu"), Object.assign({}, e, {id: role.id}));
 				});
 			}

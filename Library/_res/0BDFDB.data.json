@@ -69,6 +69,10 @@
 		},
 		"ApplicationAssetUtils": {
 			"getAssetImage": ["ApplicationAssetUtils", "getAssetImage"]
+		},
+		"ContextMenuUtils": {
+			"openContextMenu": ["renderLazy"],
+			"closeContextMenu": ["type:\"CONTEXT_MENU_CLOSE\""]
 		}
 	},
 	"LibraryModules": {
@@ -81,18 +85,10 @@
 		"AppearanceSettingsUtils": {"props": ["updateLocale", "updateTheme"]},
 		"ApplicationAssetUtils": {"strings": ["ApplicationAssetUtils", "getAssetImage"], "exported": false, "value": "exports"},
 		"ArrayUtils": {"props": ["isArrayLike", "zipObject"]},
-		"AutocompleteOptions": {"props": ["AUTOCOMPLETE_OPTIONS"]},
-		"AutocompleteSentinels": {"props": ["CHANNEL_SENTINEL", "COMMAND_SENTINEL"]},
-		"BadgeUtils": {"props": ["getBadgeCountString", "getBadgeWidthForValue"]},
-		"BannerUtils": {"props": ["getUserBannerURLForContext"]},
-		"CategoryCollapseUtils": {"props": ["categoryCollapse", "categoryCollapseAll"]},
-		"ChannelIconUtils": {"props": ["getChannelIconComponent", "getChannelIconTooltipText"]},
 		"ChannelUtils": {"props": ["selectChannel", "selectPrivateChannel"]},
-		"ChatRestrictionUtils": {"props": ["applyChatRestrictions"]},
-		"ColorUtils": {"props": ["hex2int", "hex2rgb"]},
 		"ConnectionProviderUtils": {"props": ["get", "isSupported", "filter"]},
 		"ConnectionUtils": {"props": ["setShowActivity", "setVisibility"]},
-		"ContextMenuUtils": {"props": ["closeContextMenu", "openContextMenu"]},
+		"ContextMenuUtils": {"strings": ["renderLazy", "type:\"CONTEXT_MENU_CLOSE\""], "exported": false, "value": "exports"},
 		"CopyLinkUtils": {"props": ["SUPPORTS_COPY", "copy"]},
 		"CurrentUserStore": {"props": ["getCurrentUser"]},
 		"DesktopNotificationUtils": {"props": ["showNotification", "requestPermission"]},
@@ -143,6 +139,7 @@
 		"RelationshipSuggestionUtils": {"props": ["getSuggestionCount", "getSuggestions"]},
 		"RelationshipUtils": {"props": ["addRelationship", "removeRelationship"]},
 		"RoleIconUtils": {"props": ["getRoleIconData"]},
+		"RTCConnectionUtils": {"props": ["getChannelId", "getGuildId", "getRTCConnectionId"]},
 		"SearchPageUtils": {"props": ["searchNextPage", "searchPreviousPage"]},
 		"SettingsUtils": {"props": ["ShowCurrentGame", "DeveloperMode"]},
 		"SimpleMarkdownComponents": {"strings": ["customEmoji", "emojiTooltipPosition", "timestampTooltip"]},
