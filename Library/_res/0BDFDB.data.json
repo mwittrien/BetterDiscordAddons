@@ -73,6 +73,9 @@
 		"ContextMenuUtils": {
 			"openContextMenu": ["renderLazy"],
 			"closeContextMenu": ["type:\"CONTEXT_MENU_CLOSE\""]
+		},
+		"DispatchUtils": {
+			"ComponentDispatch": ["object Object"]
 		}
 	},
 	"LibraryModules": {
@@ -89,11 +92,10 @@
 		"ConnectionProviderUtils": {"props": ["get", "isSupported", "filter"]},
 		"ConnectionUtils": {"props": ["setShowActivity", "setVisibility"]},
 		"ContextMenuUtils": {"strings": ["renderLazy", "type:\"CONTEXT_MENU_CLOSE\""], "exported": false, "value": "exports"},
-		"CopyLinkUtils": {"props": ["SUPPORTS_COPY", "copy"]},
 		"CurrentUserStore": {"props": ["getCurrentUser"]},
 		"DesktopNotificationUtils": {"props": ["showNotification", "requestPermission"]},
 		"DispatchApiUtils": {"props": ["dispatch", "isDispatching"]},
-		"DispatchUtils": {"props": ["ComponentDispatch"]},
+		"DispatchUtils": {"strings": ["dispatchToLastSubscribed", "setMaxListeners"]},
 		"EmojiUtils": {"props": ["translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji"]},
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},
 		"Env": {"props": ["env"]},
@@ -148,6 +150,7 @@
 		"SlateTextUtils": {"props": ["toTextValue", "serializeDescendant"]},
 		"SoundParser": {"strings": ["discodo", "ddr-down", "mute"]},
 		"SoundUtils": {"props": ["playSound", "createSound"]},
+		"SortedGuildUtils": {"props": ["getSortedGuilds", "getFlattenedGuildIds"]},
 		"SpotifyUtils": {"props": ["setActiveDevice", "pause"]},
 		"StageChannelLiveStore": {"props": ["getAllLiveStageChannels", "useAllLiveStageChannels"]},
 		"StateStoreUtils": {"props": ["useStateFromStores", "useStateFromStoresArray"]},
