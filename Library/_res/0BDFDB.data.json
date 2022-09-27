@@ -137,7 +137,6 @@
 		"PremiumConstants": {"props": ["PremiumTypes", "BoostedGuildFeatures"]},
 		"PrivateChannelUtils": {"props": ["addRecipient", "openPrivateChannel"]},
 		"QuerySearchUtils": {"props": ["queryGuilds", "queryGroupDMs"]},
-		"QueryUtils": {"props": ["AutocompleterQuerySymbols", "AutocompleterResultTypes"]},
 		"ReactionEmojiUtils": {"props": ["getReactionEmojiName", "getReactionEmojiName"]},
 		"ReactionUtils": {"props": ["addReaction", "removeReaction"]},
 		"RecentMentionUtils": {"props": ["deleteRecentMention", "fetchRecentMentions"]},

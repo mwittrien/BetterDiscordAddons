@@ -141,12 +141,12 @@ module.exports = (_ => {
 						let channel = BDFDB.LibraryStores.ChannelStore.getChannel(id);
 						if (channel && !channel.isCategory()) {
 							let category = channel.parent_id && BDFDB.LibraryStores.ChannelStore.getChannel(channel.parent_id);
-							if (((changedChannels[id] && changedChannels[id].name && changedChannels[id].name.toLocaleLowerCase().indexOf(e.methodArguments[0].query.toLocaleLowerCase()) > -1) || (category && changedChannels[category.id] && changedChannels[category.id].name && changedChannels[category.id].name.toLocaleLowerCase().indexOf(e.methodArguments[0].query.toLocaleLowerCase()) > -1)) && !e.returnValue.find(n => n.record && n.record.id == id && (n.type == BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.VOICE_CHANNEL || n.type == BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.TEXT_CHANNEL))) e.returnValue.push({
+							if (((changedChannels[id] && changedChannels[id].name && changedChannels[id].name.toLocaleLowerCase().indexOf(e.methodArguments[0].query.toLocaleLowerCase()) > -1) || (category && changedChannels[category.id] && changedChannels[category.id].name && changedChannels[category.id].name.toLocaleLowerCase().indexOf(e.methodArguments[0].query.toLocaleLowerCase()) > -1)) && !e.returnValue.find(n => n.record && n.record.id == id && (n.type == BDFDB.DiscordConstants.AutocompleterResultTypes.VOICE_CHANNEL || n.type == BDFDB.DiscordConstants.AutocompleterResultTypes.TEXT_CHANNEL))) e.returnValue.push({
 								comparator: channel.name,
 								record: channel,
 								score: 30000,
 								sortable: channel.name.toLocaleLowerCase(),
-								type: channel.isGuildVocal() ? BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.VOICE_CHANNEL : BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.TEXT_CHANNEL
+								type: channel.isGuildVocal() ? BDFDB.DiscordConstants.AutocompleterResultTypes.VOICE_CHANNEL : BDFDB.DiscordConstants.AutocompleterResultTypes.TEXT_CHANNEL
 							});
 						}
 					}
