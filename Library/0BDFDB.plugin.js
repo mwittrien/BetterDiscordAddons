@@ -2542,8 +2542,6 @@ module.exports = (_ => {
 						}
 					}
 				};
-
-				BDFDB.DiscordConstants = BDFDB.ModuleUtils.findByProperties("Permissions", "ActivityTypes") || {};
 				
 				DiscordConstants = {};
 				Internal.DiscordConstants = new Proxy(DiscordConstants, {
