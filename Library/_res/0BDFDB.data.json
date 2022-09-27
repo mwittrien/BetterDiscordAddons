@@ -42,6 +42,8 @@
 		"AnalyticsObjects": ["CONTEXT_MENU", "TOOLTIP", "CHANNEL"],
 		"AnalyticsPages": ["AUTH", "GUILD_CHANNEL", "CUSTOM_STATUS_MODAL"],
 		"AnalyticsSections": ["CHANNEL_LIST", "ACCOUNT_PANEL", "MEMBER_LIST"],
+		"AutocompleterQuerySymbols": ["VOICE_CHANNEL", "TEXT_CHANNEL", "USER", "APPLICATION"],
+		"AutocompleterResultTypes": ["VOICE_CHANNEL", "TEXT_CHANNEL", "USER", "LINK"],
 		"ChannelTypes": ["GUILD_TEXT", "GUILD_STORE", "DM"],
 		"Colors": ["SPOTIFY", "STATUS_RED"],
 		"ComponentActions": ["INSERT_TEXT", "TEXTAREA_FOCUS"],
