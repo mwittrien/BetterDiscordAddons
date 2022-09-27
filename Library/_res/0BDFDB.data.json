@@ -20,6 +20,7 @@
 		"MAX_GUILD_FOLDER_NAME_LENGTH": 32,
 		"MAX_MESSAGE_LENGTH": 2000,
 		"MAX_MESSAGE_LENGTH_PREMIUM": 4000,
+		"MAX_MESSAGES_PER_CHANNEL": 50,
 		"MAX_VIDEO_HEIGHT": 720,
 		"MAX_VIDEO_WIDTH": 1280,
 		"ME": "@me",
@@ -42,7 +43,10 @@
 		"Permissions": ["ADMINISTRATOR", "MANAGE_MESSAGES", "MANAGE_ROLES", "MANAGE_GUILD_EXPRESSIONS"],
 		"RelationshipTypes": ["FRIEND", "PENDING_INCOMING", "PENDING_OUTGOING"],
 		"Routes": ["CHANNEL_THREAD_VIEW", "MESSAGE_REQUESTS"],
-		"StatusTypes": ["STREAMING", "UNKNOWN", "DND"]
+		"StatusTypes": ["STREAMING", "UNKNOWN", "DND"],
+		"UserFlags": ["HYPESQUAD", "BUG_HUNTER_LEVEL_1", "STAFF"],
+		"UserNotificationSettings": ["NULL", "NO_MESSAGES", "ALL_MESSAGES"],
+		"UserSettingsSections": ["ACCOUNT", "DEVELOPER_OPTIONS", "DISMISSIBLE_CONTENT_OPTIONS"]
 	},
 	"LibraryModules": {
 		"AckUtils": {"props": ["localAck", "bulkAck"]},
