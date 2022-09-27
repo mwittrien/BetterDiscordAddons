@@ -18,9 +18,12 @@
 	},
 	"CustomDiscordConstants": {
 		"MAX_GUILD_FOLDER_NAME_LENGTH": 32,
+		"MAX_MESSAGE_LENGTH": 2000,
+		"MAX_MESSAGE_LENGTH_PREMIUM": 4000,
 		"MAX_VIDEO_HEIGHT": 720,
 		"MAX_VIDEO_WIDTH": 1280,
-		"ME": "@me"
+		"ME": "@me",
+		"SEARCH_PAGE_SIZE": 25
 	},
 	"DiscordConstants": {
 		"ActivityTypes": ["STREAMING", "LISTENING", "CUSTOM_STATUS"],
@@ -29,12 +32,15 @@
 		"AnalyticsSections": ["CHANNEL_LIST", "ACCOUNT_PANEL", "MEMBER_LIST"],
 		"ChannelTypes": ["GUILD_TEXT", "GUILD_STORE", "DM"],
 		"Colors": ["SPOTIFY", "STATUS_RED"],
+		"ComponentActions": ["INSERT_TEXT", "TEXTAREA_FOCUS"],
+		"EndPoints": ["CAPTCHA", "GUILD", "MESSAGES"],
 		"FriendsSections": ["ALL", "ONLINE", "ADD_FRIEND"],
 		"KeyboardDeviceTypes": ["KEYBOARD_KEY", "MOUSE_BUTTON"],
+		"MessageStates": ["SENT", "SENDING", "SEND_FAILED"],
 		"MessageTypes": ["CHAT_INPUT_COMMAND", "CHANNEL_PINNED_MESSAGE"],
 		"Permissions": ["ADMINISTRATOR", "MANAGE_MESSAGES", "MANAGE_ROLES", "MANAGE_GUILD_EXPRESSIONS"],
 		"RelationshipTypes": ["FRIEND", "PENDING_INCOMING", "PENDING_OUTGOING"],
-		"Routes": ["CAPTCHA", "GUILD", "MESSAGES"],
+		"Routes": ["CHANNEL_THREAD_VIEW", "MESSAGE_REQUESTS"],
 		"StatusTypes": ["STREAMING", "UNKNOWN", "DND"]
 	},
 	"LibraryModules": {
