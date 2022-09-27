@@ -1097,8 +1097,7 @@ module.exports = (_ => {
 					libraryCSS = css;
 				
 					const backupObj = getBackup(dataFileName, dataFilePath);
-					// REMOVE
-					if (backupObj.backup && backupObj.hashIsSame || true) parseData(backupObj.backup);
+					if (backupObj.backup && backupObj.hashIsSame) parseData(backupObj.backup);
 					else request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/${dataFileName}`, (e, r, b) => {
 						if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryData(), 10000);
 						if (!e && b && r.statusCode == 200) {
@@ -4105,7 +4104,7 @@ module.exports = (_ => {
 				const RealMenuItems = BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup");
 				BDFDB.ContextMenuUtils = {};
 				BDFDB.ContextMenuUtils.open = function (plugin, e, children) {
-					Internal.LibraryModules.ContextMenuUtils.openContextMenu(e, _ => BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Menu, {
+					Internal.LibraryModules.ContextMenuUtils.openContextMenu(e || mousePosition, _ => BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Menu, {
 						navId: "bdfdb-context",
 						onClose: Internal.LibraryModules.ContextMenuUtils.closeContextMenu,
 						children: children
