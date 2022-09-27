@@ -15,7 +15,7 @@
 module.exports = (_ => {
 	if (window.BDFDB_Global && window.BDFDB_Global.PluginUtils && typeof window.BDFDB_Global.PluginUtils.cleanUp == "function") window.BDFDB_Global.PluginUtils.cleanUp(window.BDFDB_Global);
 	
-	var BDFDB, Internal, LibraryConstants, LibraryModules, LibraryRequires, DiscordObjects, PluginStores;
+	var BDFDB, Internal, LibraryConstants, LibraryModules, LibraryRequires, DiscordConstants, DiscordObjects, PluginStores;
 	
 	BDFDB = {
 		started: true
@@ -1966,7 +1966,7 @@ module.exports = (_ => {
 										children: [
 											BDFDB.ReactUtils.createElement(Internal.LibraryComponents.GuildComponents.Badge, {
 												guild: config.guild,
-												size: Internal.LibraryModules.StringUtils.cssValueToNumber(Internal.DiscordClassModules.TooltipGuild.iconSize),
+												size: BDFDB.StringUtils.cssValueToNumber(Internal.DiscordClassModules.TooltipGuild.iconSize),
 												className: BDFDB.disCN.tooltiprowicon
 											}),
 											BDFDB.ReactUtils.createElement("span", {
@@ -2544,6 +2544,17 @@ module.exports = (_ => {
 				};
 
 				BDFDB.DiscordConstants = BDFDB.ModuleUtils.findByProperties("Permissions", "ActivityTypes") || {};
+				
+				DiscordConstants = {};
+				Internal.DiscordConstants = new Proxy(DiscordConstants, {
+					get: function (_, item) {
+						if (DiscordConstants[item]) return DiscordConstants[item];
+						if (!InternalData.DiscordConstants[item]) return {};
+						DiscordConstants[item] = BDFDB.ModuleUtils.findByPrototypes(InternalData.DiscordConstants[item]);
+						return DiscordConstants[item] ? DiscordConstants[item] : {};
+					}
+				});
+				BDFDB.DiscordConstants = Internal.DiscordConstants;
 				
 				DiscordObjects = {};
 				Internal.DiscordObjects = new Proxy(DiscordObjects, {
@@ -4174,7 +4185,16 @@ module.exports = (_ => {
 				BDFDB.StringUtils = {};
 				BDFDB.StringUtils.upperCaseFirstChar = function (string) {
 					if (typeof string != "string") return "";
-					else return string.slice(0, 1).toUpperCase() + string.slice(1);
+					else return "".concat(string.charAt(0).toUpperCase()).concat(string.slice(1));
+				};
+				BDFDB.StringUtils.getAcronym = function (string) {
+					if (typeof string != "string") return "";
+					return string.replace(/'s /g," ").replace(/\w+/g, n => n[0]).replace(/\s/g, "");
+				};
+				BDFDB.StringUtils.cssValueToNumber = function (string) {
+					if (typeof string != "string") return 0;
+					const value = parseInt(string, 10);
+					return isNaN(value) ? 0 : value;
 				};
 				BDFDB.StringUtils.htmlEscape = function (string) {
 					let ele = document.createElement("div");
