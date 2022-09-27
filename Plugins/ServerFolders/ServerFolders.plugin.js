@@ -85,7 +85,7 @@ module.exports = (_ => {
 			render() {
 				let closing = this.props.closing;
 				delete this.props.closing;
-				let folders = Array.from(BDFDB.LibraryStores.ExpandedGuildFolderStore.getExpandedFolders()).map(folderId => BDFDB.LibraryStores.SortedGuildStore.getGuildFolderById(folderId)).filter(folder => folder && folder.guildIds);
+				let folders = Array.from(BDFDB.LibraryStores.ExpandedGuildFolderStore.getExpandedFolders()).map(folderId => BDFDB.LibraryModules.SortedGuildUtils.getGuildFolderById(folderId)).filter(folder => folder && folder.guildIds);
 				this.props.folders = folders.length || closing ? folders : (this.props.folders || []);
 				BDFDB.TimeUtils.clear(this._rerenderTimeout);
 				if (!folders.length && this.props.folders.length && !closing) this._rerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
@@ -576,9 +576,9 @@ module.exports = (_ => {
 			onGuildContextMenu (e) {
 				if (document.querySelector(BDFDB.dotCN.modalwrapper)) return;
 				if (e.instance.props.guild) {
-					let folders = BDFDB.LibraryStores.SortedGuildStore.guildFolders.filter(n => n.folderId);
+					let folders = BDFDB.LibraryModules.SortedGuildUtils.guildFolders.filter(n => n.folderId);
 					let folder = BDFDB.GuildUtils.getFolder(e.instance.props.guild.id);
-					let unfolderedGuilds = BDFDB.LibraryStores.SortedGuildStore.getSortedGuilds().filter(n => !n.folderId).map(n => n.guilds[0]).filter(n => n);
+					let unfolderedGuilds = BDFDB.LibraryModules.SortedGuildUtils.getSortedGuilds().filter(n => !n.folderId).map(n => n.guilds[0]).filter(n => n);
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 					children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -617,7 +617,7 @@ module.exports = (_ => {
 			onGuildFolderContextMenu (e) {
 				if (document.querySelector(BDFDB.dotCN.modalwrapper)) return;
 				if (e.instance.props.target && e.instance.props.folderId) {
-					let folder = BDFDB.LibraryStores.SortedGuildStore.getGuildFolderById(e.instance.props.folderId);
+					let folder = BDFDB.LibraryModules.SortedGuildUtils.getGuildFolderById(e.instance.props.folderId);
 					let data = this.getFolderConfig(e.instance.props.folderId);
 					let muted = data.muteFolder && folder.guildIds.every(guildid => BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(guildid));
 					if (data.muteFolder != muted) {
@@ -683,7 +683,7 @@ module.exports = (_ => {
 					if (topBar) {
 						let topIsVisible = topBar.props.isVisible;
 						topBar.props.isVisible = BDFDB.TimeUtils.suppress((...args) => {
-							let ids = BDFDB.LibraryStores.SortedGuildStore.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
+							let ids = BDFDB.LibraryModules.SortedGuildUtils.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
 							args[2] = args[2].filter(id => !ids.includes(id));
 							return topIsVisible(...args) || BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(args[0]) == 0;
 						}, "Error in isVisible of Top Bar in Guild List!");
@@ -692,7 +692,7 @@ module.exports = (_ => {
 					if (bottomBar) {
 						let bottomIsVisible = bottomBar.props.isVisible;
 						bottomBar.props.isVisible = BDFDB.TimeUtils.suppress((...args) => {
-							let ids = BDFDB.LibraryStores.SortedGuildStore.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
+							let ids = BDFDB.LibraryModules.SortedGuildUtils.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
 							args[2] = args[2].filter(id => !ids.includes(id));
 							return bottomIsVisible(...args) || BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(args[0]) == 0;
 						}, "Error in isVisible of Bottom Bar in Guild List!");
@@ -813,7 +813,7 @@ module.exports = (_ => {
 					BDFDB.DOMUtils.removeClass(root, BDFDB.disCN.modalsmall);
 				}
 				if (e.returnvalue) {
-					let folder = BDFDB.LibraryStores.SortedGuildStore.getGuildFolderById(e.instance.props.folderId);
+					let folder = BDFDB.LibraryModules.SortedGuildUtils.getGuildFolderById(e.instance.props.folderId);
 					let data = this.getFolderConfig(e.instance.props.folderId);
 					let newData = Object.assign({}, data, {folderName: folder.folderName});
 					
@@ -990,7 +990,7 @@ module.exports = (_ => {
 			generateId (prefix) {
 				if (prefix == "folder") {
 					let id = Math.floor(Math.random() * 4294967296);
-					return BDFDB.LibraryStores.SortedGuildStore.guildFolders.every(n => !n.folderId || n.folderId != id) ? id : this.generateId(prefix);
+					return BDFDB.LibraryModules.SortedGuildUtils.guildFolders.every(n => !n.folderId || n.folderId != id) ? id : this.generateId(prefix);
 				}
 				else {
 					let data = BDFDB.DataUtils.load(this, prefix + "s");
@@ -1010,7 +1010,7 @@ module.exports = (_ => {
 			}
 			
 			getFolderConfig (folderId) {
-				let folder = BDFDB.LibraryStores.SortedGuildStore.getGuildFolderById(folderId) || {};
+				let folder = BDFDB.LibraryModules.SortedGuildUtils.getGuildFolderById(folderId) || {};
 				let data = folderConfigs[folderId] || {
 					iconID: 			"-1",
 					muteFolder: 		false,
@@ -1099,7 +1099,7 @@ module.exports = (_ => {
 			}
 			
 			updateFolder (folder) {
-				let oldGuildFolders = [].concat(BDFDB.LibraryStores.SortedGuildStore.guildFolders), guildFolders = [], guildPositions = [];
+				let oldGuildFolders = [].concat(BDFDB.LibraryModules.SortedGuildUtils.guildFolders), guildFolders = [], guildPositions = [];
 				for (let oldFolder of oldGuildFolders) {
 					if (oldFolder.folderId == folder.folderId) guildFolders.push(Object.assign({}, oldFolder, folder));
 					else guildFolders.push(oldFolder);
@@ -1112,7 +1112,7 @@ module.exports = (_ => {
 				if (!guildIds) return;
 				guildIds = [guildIds].flat(10);
 				if (!guildIds.length) return;
-				let oldGuildFolders = [].concat(BDFDB.LibraryStores.SortedGuildStore.guildFolders), guildFolders = [], guildPositions = [], added = false;
+				let oldGuildFolders = [].concat(BDFDB.LibraryModules.SortedGuildUtils.guildFolders), guildFolders = [], guildPositions = [], added = false;
 				for (let oldFolder of oldGuildFolders) {
 					if (!oldFolder.folderId && guildIds.includes(oldFolder.guildIds[0])) {
 						if (!added) {
@@ -1130,7 +1130,7 @@ module.exports = (_ => {
 			}
 			
 			removeFolder (folderId) {
-				let oldGuildFolders = [].concat(BDFDB.LibraryStores.SortedGuildStore.guildFolders), guildFolders = [], guildPositions = [];
+				let oldGuildFolders = [].concat(BDFDB.LibraryModules.SortedGuildUtils.guildFolders), guildFolders = [], guildPositions = [];
 				for (let oldFolder of oldGuildFolders) {
 					if (oldFolder.folderId == folderId) {
 						for (let guildId of oldFolder.guildIds) guildFolders.push({guildIds: [guildId]});
@@ -1142,7 +1142,7 @@ module.exports = (_ => {
 			}
 			
 			addGuildToFolder (folderId, guildId) {
-				let oldGuildFolders = [].concat(BDFDB.LibraryStores.SortedGuildStore.guildFolders), guildFolders = [], guildPositions = [];
+				let oldGuildFolders = [].concat(BDFDB.LibraryModules.SortedGuildUtils.guildFolders), guildFolders = [], guildPositions = [];
 				for (let oldFolder of oldGuildFolders) {
 					if (oldFolder.folderId) {
 						let newFolder = Object.assign({}, oldFolder);
@@ -1157,7 +1157,7 @@ module.exports = (_ => {
 			}
 			
 			removeGuildFromFolder (folderId, guildId) {
-				let oldGuildFolders = [].concat(BDFDB.LibraryStores.SortedGuildStore.guildFolders), guildFolders = [], guildPositions = [];
+				let oldGuildFolders = [].concat(BDFDB.LibraryModules.SortedGuildUtils.guildFolders), guildFolders = [], guildPositions = [];
 				for (let oldFolder of oldGuildFolders) {
 					if (oldFolder.folderId == folderId) {
 						let newFolder = Object.assign({}, oldFolder);

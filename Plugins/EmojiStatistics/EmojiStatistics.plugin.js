@@ -161,7 +161,7 @@ module.exports = (_ => {
 								else return item[data.key];
 							}
 						})),
-						data: BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuilds().map((guild, i) => {
+						data: BDFDB.LibraryModules.SortedGuildUtils.getFlattenedGuilds().map((guild, i) => {
 							let itemData = {
 								index: i,
 								guild: guild,

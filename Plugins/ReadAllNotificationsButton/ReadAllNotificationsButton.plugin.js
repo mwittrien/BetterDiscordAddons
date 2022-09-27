@@ -69,7 +69,7 @@ module.exports = (_ => {
 				BDFDB.GuildUtils.markAsRead(guildIds.filter(id => id && !blacklist.includes(id)));
 			}
 			getGuilds() {
-				return BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuilds().map(g => g.id).filter(n => n);
+				return BDFDB.LibraryModules.SortedGuildUtils.getFlattenedGuilds().map(g => g.id).filter(n => n);
 			}
 			getUnread() {
 				return this.getGuilds().filter(id => BDFDB.LibraryStores.GuildReadStateStore.hasUnread(id) || BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(id) > 0);
@@ -314,7 +314,7 @@ module.exports = (_ => {
 			
 			batchSetGuilds (settingsPanel, collapseStates, value) {
 				if (!value) {
-					for (let id of BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds()) blacklist.push(id);
+					for (let id of BDFDB.LibraryModules.SortedGuildUtils.getFlattenedGuildIds()) blacklist.push(id);
 					this.saveBlacklist(BDFDB.ArrayUtils.removeCopies(blacklist));
 				}
 				else this.saveBlacklist([]);

@@ -80,7 +80,7 @@ module.exports = (_ => {
 					if (e.methodArguments[0].type == "STREAMER_MODE_UPDATE") BDFDB.GuildUtils.rerenderAll(true);
 				}});
 				
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.SortedGuildStore, "getGuildFolderById", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SortedGuildUtils, "getGuildFolderById", {after: e => {
 					let hiddenGuildIds = hiddenEles.servers || [];
 					if (e.returnValue && hiddenGuildIds.length) {
 						let folder = Object.assign({}, e.returnValue);
@@ -220,8 +220,8 @@ module.exports = (_ => {
 				
 				let hiddenGuildIds = hiddenEles && hiddenEles.servers || [];
 				let hiddenFolderIds = hiddenEles && hiddenEles.folders || [];
-				let guilds = BDFDB.LibraryStores.SortedGuildStore.guildFolders.map(n => n.guildIds).flat(10).map(guildId => BDFDB.LibraryStores.GuildStore.getGuild(guildId)).filter(n => n);
-				let folders = BDFDB.LibraryStores.SortedGuildStore.guildFolders.filter(n => n.folderId);
+				let guilds = BDFDB.LibraryModules.SortedGuildUtils.guildFolders.map(n => n.guildIds).flat(10).map(guildId => BDFDB.LibraryStores.GuildStore.getGuild(guildId)).filter(n => n);
+				let folders = BDFDB.LibraryModules.SortedGuildUtils.guildFolders.filter(n => n.folderId);
 				let foldersAdded = [];
 				
 				BDFDB.ModalUtils.open(this, {

@@ -761,7 +761,7 @@ module.exports = (_ => {
 			}
 
 			getStatusWithMobileAndActivity (id, config, clientStatuses) {
-				let voiceState = BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuildIds().map(BDFDB.LibraryStores.SortedVoiceStateStore.getVoiceStates).map(BDFDB.ObjectUtils.toArray).flat(10).find(n => n.selfStream & n.userId == id && BDFDB.LibraryStores.ChannelStore.getChannel(n.channelId) && BDFDB.UserUtils.can("VIEW_CHANNEL", BDFDB.UserUtils.me.id, n.channelId));
+				let voiceState = BDFDB.LibraryModules.SortedGuildUtils.getFlattenedGuildIds().map(BDFDB.LibraryStores.SortedVoiceStateStore.getVoiceStates).map(BDFDB.ObjectUtils.toArray).flat(10).find(n => n.selfStream & n.userId == id && BDFDB.LibraryStores.ChannelStore.getChannel(n.channelId) && BDFDB.UserUtils.can("VIEW_CHANNEL", BDFDB.UserUtils.me.id, n.channelId));
 				let status = {
 					name: BDFDB.UserUtils.getStatus(id),
 					activity: null,

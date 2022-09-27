@@ -271,7 +271,7 @@ module.exports = (_ => {
 			}
 			
 			getGuildFromRoleId (roleId) {
-				return BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuilds().find(g => g.roles[roleId]);
+				return BDFDB.LibraryModules.SortedGuildUtils.getFlattenedGuilds().find(g => g.roles[roleId]);
 			}
 			
 			changeRolesInGuild (guild, useNative) {
@@ -300,7 +300,7 @@ module.exports = (_ => {
 					BDFDB.DataUtils.remove(this, "roles", id);
 				}
 				else {
-					for (let guild of BDFDB.LibraryStores.SortedGuildStore.getFlattenedGuilds()) if (cachedRoles[guild.id]) guild.roles = cachedRoles[guild.id];
+					for (let guild of BDFDB.LibraryModules.SortedGuildUtils.getFlattenedGuilds()) if (cachedRoles[guild.id]) guild.roles = cachedRoles[guild.id];
 					cachedRoles = {};
 					BDFDB.DataUtils.remove(this, "roles");
 				}
