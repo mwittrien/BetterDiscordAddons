@@ -64,18 +64,21 @@
 		"AckUtils": {
 			"ack": ["type:\"CHANNEL_ACK\"", "messageId", "channelId"],
 			"bulkAck": ["type:\"BULK_ACK\""]
+		},
+		"ApplicationAssetUtils": {
+			"getAssetImage": ["ApplicationAssetUtils", "getAssetImage"]
 		}
 	},
 	"LibraryModules": {
 		"AckUtils": {"strings": ["type:\"BULK_ACK\""], "exported": false, "value": "exports"},
 		"ActivityUtils": {"props": ["sendActivityInvite", "updateActivity"]},
-		"APIEncodeUtils": {"props": ["stringify", "parse", "encode"]},
-		"APIUtils": {"props": ["getAPIBaseURL"]},
 		"AnalyticsUtils": {"props": ["isThrottled", "track"]},
 		"AnimationUtils": {"props": ["spring", "decay"]},
+		"APIEncodeUtils": {"props": ["stringify", "parse", "encode"]},
+		"APIUtils": {"props": ["getAPIBaseURL"]},
 		"AppearanceSettingsUtils": {"props": ["updateLocale", "updateTheme"]},
+		"ApplicationAssetUtils": {"strings": ["ApplicationAssetUtils", "getAssetImage"], "exported": false, "value": "exports"},
 		"ArrayUtils": {"props": ["isArrayLike", "zipObject"]},
-		"AssetUtils": {"props": ["getAssetImage", "getAssetIds"]},
 		"AutocompleteOptions": {"props": ["AUTOCOMPLETE_OPTIONS"]},
 		"AutocompleteSentinels": {"props": ["CHANNEL_SENTINEL", "COMMAND_SENTINEL"]},
 		"BadgeUtils": {"props": ["getBadgeCountString", "getBadgeWidthForValue"]},

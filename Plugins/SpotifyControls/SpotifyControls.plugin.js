@@ -134,7 +134,7 @@ module.exports = (_ => {
 				}
 				if (!lastSong) return null;
 				
-				let coverSrc = BDFDB.LibraryModules.AssetUtils.getAssetImage(lastSong.application_id, lastSong.assets.large_image);
+				let coverSrc = BDFDB.LibraryModules.ApplicationAssetUtils.getAssetImage(lastSong.application_id, lastSong.assets.large_image);
 				let connection = (BDFDB.LibraryStores.ConnectedAccountsStore.getAccounts().find(n => n.type == "spotify") || {});
 				showActivity = showActivity != undefined ? showActivity : (connection.show_activity || connection.showActivity);
 				currentVolume = this.props.draggingVolume ? currentVolume : socketDevice.device.volume_percent;
