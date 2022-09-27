@@ -355,7 +355,7 @@ module.exports = (_ => {
 				if (!BDFDB.ArrayUtils.is(children) || !user) return;
 				let [_, index] = BDFDB.ReactUtils.findParent(children, {props: [["text", [BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER, BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER]]]});
 				if (index > -1) children[index] = null;
-				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(config.channelId || BDFDB.LibraryModules.LastChannelStore.getChannelId());
+				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(config.channelId || BDFDB.LibraryStores.SelectedChannelStore.getChannelId());
 				let member = channel && this.settings.general.useRoleColor ? (BDFDB.LibraryStores.GuildMemberStore.getMember(channel.guild_id, user.id) || {}) : {};
 				
 				let fallbackLabel = this.settings.general.useCrown && this.getLabelFallback(userType);
@@ -427,7 +427,7 @@ module.exports = (_ => {
 			
 			getUserType (user, channelId) {
 				if (!user || this.settings.general.ignoreBots && user.bot || this.settings.general.ignoreMyself && user.id == BDFDB.UserUtils.me.id) return userTypes.NONE;
-				const channel = BDFDB.LibraryStores.ChannelStore.getChannel(channelId || BDFDB.LibraryModules.LastChannelStore.getChannelId());
+				const channel = BDFDB.LibraryStores.ChannelStore.getChannel(channelId || BDFDB.LibraryStores.SelectedChannelStore.getChannelId());
 				if (!channel) return userTypes.NONE;
 				const guild = BDFDB.LibraryStores.GuildStore.getGuild(channel.guild_id);
 				

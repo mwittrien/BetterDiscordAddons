@@ -111,7 +111,7 @@ module.exports = (_ => {
 				}
 				if (updateData) BDFDB.DataUtils.save(notes, _this, "notes");
 				let allCount = messages.length;
-				let currentChannel = BDFDB.LibraryStores.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId()) || {};
+				let currentChannel = BDFDB.LibraryStores.ChannelStore.getChannel(BDFDB.LibraryStores.SelectedChannelStore.getChannelId()) || {};
 				switch (popoutProps.selectedFilter.value) {
 					case "channel":
 						messages = messages.filter(m => m.channel_id == currentChannel.id);

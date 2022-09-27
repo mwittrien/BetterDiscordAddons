@@ -1346,7 +1346,7 @@ module.exports = (_ => {
 			}
 
 			changeAppTitle () {
-				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
+				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(BDFDB.LibraryStores.SelectedChannelStore.getChannelId());
 				let title = document.head.querySelector("title");
 				if (title && channel && channel.isDM() && (document.location.href || "").indexOf(channel.id) > -1) {
 					let user = BDFDB.LibraryStores.UserStore.getUser(channel.recipients[0]);
@@ -1356,7 +1356,7 @@ module.exports = (_ => {
 			
 			shouldChangeInChat (channelId) {
 				if (this.settings.types.servers && this.settings.types.dms) return true;
-				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(channelId || BDFDB.LibraryModules.LastChannelStore.getChannelId());
+				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(channelId || BDFDB.LibraryStores.SelectedChannelStore.getChannelId());
 				let isDm = channel && (channel.isDM() || channel.isGroupDM());
 				if (channel && (this.settings.types.servers && !isDm || this.settings.types.dms && isDm)) return true;
 				return false;

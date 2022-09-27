@@ -196,7 +196,7 @@ module.exports = (_ => {
 			processQuickMessage (e) {
 				if (!this.settings.places.quickmessage) return;
 				let input = e.returnvalue.props.inputRef.current;
-				let channelId = BDFDB.LibraryModules.LastChannelStore.getChannelId();
+				let channelId = BDFDB.LibraryStores.SelectedChannelStore.getChannelId();
 				if (this.settings.general.addQuickToggle) e.returnvalue = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 					children: [
 						e.returnvalue,

@@ -888,7 +888,7 @@ module.exports = (_ => {
 					callback(translation == text ? "" : translation, input, output);
 				};
 				let [newText, excepts, translate] = this.removeExceptions(text.trim(), place);
-				let channelId = BDFDB.LibraryModules.LastChannelStore.getChannelId();
+				let channelId = BDFDB.LibraryStores.SelectedChannelStore.getChannelId();
 				let input = Object.assign({}, languages[this.getLanguageChoice(languageTypes.INPUT, place, channelId)]);
 				let output = Object.assign({}, languages[this.getLanguageChoice(languageTypes.OUTPUT, place, channelId)]);
 				if (translate && input.id != output.id) {

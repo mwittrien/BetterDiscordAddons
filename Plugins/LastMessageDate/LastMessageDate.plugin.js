@@ -204,7 +204,7 @@ module.exports = (_ => {
 				if (!guildId) guildId = BDFDB.LibraryStores.SelectedGuildStore.getGuildId();
 				if (!BDFDB.ArrayUtils.is(children) || !user || user.isNonUserBot()) return;
 				let isGuild = guildId && guildId != BDFDB.DiscordConstants.ME;
-				guildId = isGuild ? guildId : BDFDB.LibraryModules.LastChannelStore.getChannelId();
+				guildId = isGuild ? guildId : BDFDB.LibraryStores.SelectedChannelStore.getChannelId();
 				if (!guildId) return;
 				
 				if (!loadedUsers[guildId]) loadedUsers[guildId] = {};

@@ -95,7 +95,7 @@ module.exports = (_ => {
 					let guild = BDFDB.LibraryStores.GuildStore.getGuild(e.instance.props.guildId);
 					let channelId = e.instance.props.channelId;
 					if (!channelId) {
-						let currentChannelId = BDFDB.LibraryModules.LastChannelStore.getChannelId();
+						let currentChannelId = BDFDB.LibraryStores.SelectedChannelStore.getChannelId();
 						channelId = BDFDB.LibraryStores.GuildChannelStore.getSelectableChannelIds(guild.id).indexOf(currentChannelId) > -1 ? currentChannelId : BDFDB.LibraryStores.GuildChannelStore.getDefaultChannel(guild.id).id;
 					}
 					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.RoleMention, {
