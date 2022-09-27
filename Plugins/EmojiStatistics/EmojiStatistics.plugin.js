@@ -122,7 +122,7 @@ module.exports = (_ => {
 
 			loadEmojiList () {
 				emojiReplicaList = {};
-				let guilds = BDFDB.LibraryModules.GuildStore.getGuilds();
+				let guilds = BDFDB.LibraryStores.GuildStore.getGuilds();
 				for (let id in guilds) for (let emoji of BDFDB.LibraryModules.GuildEmojiStore.getGuildEmoji(id)) {
 					if (emoji.managed) emojiReplicaList[emoji.name] = emojiReplicaList[emoji.name] != undefined;
 				}

@@ -62,7 +62,6 @@
 	"LibraryModules": {
 		"AckUtils": {"props": ["localAck", "bulkAck"]},
 		"ActivityUtils": {"props": ["sendActivityInvite", "updateActivity"]},
-		"ActiveThreadsStore": {"name": "ActiveThreadsStore"},
 		"APIEncodeUtils": {"props": ["stringify", "parse", "encode"]},
 		"APIUtils": {"props": ["getAPIBaseURL"]},
 		"AnalyticsUtils": {"props": ["isThrottled", "track"]},
@@ -78,8 +77,6 @@
 		"CategoryCollapseStore": {"props": ["getCollapsedCategories", "isCollapsed"]},
 		"CategoryCollapseUtils": {"props": ["categoryCollapse", "categoryCollapseAll"]},
 		"ChannelIconUtils": {"props": ["getChannelIconComponent", "getChannelIconTooltipText"]},
-		"ChannelListStore": {"name": "ChannelListStore"},
-		"ChannelStore": {"name": "ChannelStore"},
 		"ChannelUtils": {"props": ["selectChannel", "selectPrivateChannel"]},
 		"ChatRestrictionUtils": {"props": ["applyChatRestrictions"]},
 		"ColorUtils": {"props": ["hex2int", "hex2rgb"]},

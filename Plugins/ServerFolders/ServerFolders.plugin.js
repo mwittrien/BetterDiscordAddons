@@ -134,7 +134,7 @@ module.exports = (_ => {
 									folder.guildIds.map(guildId => {
 										return [
 											this.draggedGuild == guildId ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Guild, {
-												guild: BDFDB.LibraryModules.GuildStore.getGuild(guildId),
+												guild: BDFDB.LibraryStores.GuildStore.getGuild(guildId),
 												state: true,
 												list: true,
 												tooltipConfig: Object.assign({

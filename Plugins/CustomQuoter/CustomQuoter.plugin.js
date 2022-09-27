@@ -382,7 +382,7 @@ module.exports = (_ => {
 				
 				let quoteFormat = formats[choice] || formats.Standard || "";
 				
-				let guild = channel.guild_id ? (BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {id: channel.guild_id, name: "Test Server"}) : {id: BDFDB.DiscordConstants.ME, name: BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES};
+				let guild = channel.guild_id ? (BDFDB.LibraryStores.GuildStore.getGuild(channel.guild_id) || {id: channel.guild_id, name: "Test Server"}) : {id: BDFDB.DiscordConstants.ME, name: BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES};
 				let member = guild && BDFDB.LibraryModules.MemberStore.getMember(guild.id, message.author.id);
 				
 				let content = message.content;

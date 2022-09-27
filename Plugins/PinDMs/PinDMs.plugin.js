@@ -738,7 +738,7 @@ module.exports = (_ => {
 			}
 			
 			filterDMs (dms, removePredefined) {
-				return dms.filter(id => BDFDB.LibraryModules.ChannelStore.getChannel(id) && !(removePredefined && this.getPredefinedCategory(id)));
+				return dms.filter(id => BDFDB.LibraryStores.ChannelStore.getChannel(id) && !(removePredefined && this.getPredefinedCategory(id)));
 			}
 
 			addToCategory (id, category, type) {
@@ -767,7 +767,7 @@ module.exports = (_ => {
 			
 			getPredefinedCategory (id) {
 				if (!id || this.getChannelListCategory(id)) return "";
-				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(id);
+				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(id);
 				if (!channel) return "";
 				else if (this.settings.preCategories.friends.enabled && channel.isDM() && BDFDB.LibraryModules.RelationshipStore.isFriend(channel.recipients[0])) return "friends";
 				else if (this.settings.preCategories.blocked.enabled && channel.isDM() && BDFDB.LibraryModules.RelationshipStore.isBlocked(channel.recipients[0])) return "blocked";
@@ -920,7 +920,7 @@ module.exports = (_ => {
 				sortedDMs = sortedDMs.filter(n => n);
 				for (let pos in sortedDMs) {
 					newData[sortedDMs[pos]] = parseInt(pos);
-					if (BDFDB.LibraryModules.ChannelStore.getChannel(sortedDMs[pos])) existingDMs.push(sortedDMs[pos]);
+					if (BDFDB.LibraryStores.ChannelStore.getChannel(sortedDMs[pos])) existingDMs.push(sortedDMs[pos]);
 				}
 				if (!BDFDB.equals(data, newData)) this.savePinnedChannels(newData, this);
 				return this.sortDMsByTime(existingDMs, type);

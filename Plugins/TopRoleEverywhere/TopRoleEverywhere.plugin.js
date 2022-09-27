@@ -197,7 +197,7 @@ module.exports = (_ => {
 
 			injectRoleTag (children, user, type, insertIndex, config = {}) {
 				if (!BDFDB.ArrayUtils.is(children) || !user) return;
-				let guild = BDFDB.LibraryModules.GuildStore.getGuild(BDFDB.LibraryModules.LastGuildStore.getGuildId());
+				let guild = BDFDB.LibraryStores.GuildStore.getGuild(BDFDB.LibraryModules.LastGuildStore.getGuildId());
 				if (!guild || user.bot && this.settings.general.disableForBots) return;
 				let role = BDFDB.LibraryModules.PermissionRoleUtils.getHighestRole(guild, user.id);
 				if (this.settings.general.showOwnerRole && user.id == guild.ownerId) role = Object.assign({}, role, {name: BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER, ownerRole: true});

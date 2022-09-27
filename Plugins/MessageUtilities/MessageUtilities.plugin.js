@@ -356,7 +356,7 @@ module.exports = (_ => {
 				let deleteLink = messageDiv.parentElement.querySelector(BDFDB.dotCNS.messagelocalbotoperations + BDFDB.dotCN.anchor);
 				if (deleteLink) deleteLink.click();
 				else if (BDFDB.DiscordConstants.MessageTypeGroups.DELETABLE.has(message.type)) {
-					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 					if (channel && (BDFDB.UserUtils.can("MANAGE_MESSAGES") || message.author.id == BDFDB.UserUtils.me.id)) {
 						BDFDB.LibraryModules.MessageUtils.deleteMessage(message.channel_id, message.id, message.state != BDFDB.DiscordConstants.MessageStates.SENT);
 						if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(this.labels.toast_message_deleted), {type: "success"});
@@ -381,7 +381,7 @@ module.exports = (_ => {
 
 			doPinUnPin ({messageDiv, message}, action, event) {
 				if (message.state == BDFDB.DiscordConstants.MessageStates.SENT) {
-					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 					if (channel && (BDFDB.DMUtils.isDMChannel(channel.id) || BDFDB.UserUtils.can("MANAGE_MESSAGES")) && BDFDB.DiscordConstants.MessageTypeGroups.USER_MESSAGE.has(message.type)) {
 						if (message.pinned) {
 							BDFDB.LibraryModules.MessagePinUtils.unpinMessage(channel, message.id);
@@ -397,7 +397,7 @@ module.exports = (_ => {
 			
 			doReply ({messageDiv, message}, action, event) {
 				if (message.state == BDFDB.DiscordConstants.MessageStates.SENT) {
-					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 					if (channel && (BDFDB.DMUtils.isDMChannel(channel.id) || BDFDB.UserUtils.can("SEND_MESSAGES")) && BDFDB.DiscordConstants.MessageTypeGroups.USER_MESSAGE.has(message.type)) {
 						BDFDB.LibraryModules.MessageManageUtils.replyToMessage(channel, message, {});
 						if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.NOTIFICATION_REPLY), {type: "success"});
@@ -413,7 +413,7 @@ module.exports = (_ => {
 			}
 
 			doCopyLink ({messageDiv, message}, action, event) {
-				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 				if (channel) {
 					BDFDB.LibraryModules.MessageManageUtils.copyLink(channel, message);
 					if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED), {type: "success"});
@@ -422,21 +422,21 @@ module.exports = (_ => {
 
 			doQuote ({messageDiv, message}, action, event) {
 				if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Quote_Message.plugin)) {
-					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 					if (channel) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Quote_Message.plugin).quote(channel, message);
 				}
 			}
 
 			doNote ({messageDiv, message}, action, event) {
 				if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Note_Message.plugin)) {
-					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 					if (channel) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Note_Message.plugin).addMessageToNotes(message, channel);
 				}
 			}
 
 			doTranslate ({messageDiv, message}, action, event) {
 				if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Translate_Message.plugin)) {
-					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 					if (channel) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Translate_Message.plugin).translateMessage(message, channel);
 				}
 			}

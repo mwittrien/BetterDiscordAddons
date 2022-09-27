@@ -120,7 +120,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.ChannelStore, "getChannel", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.ChannelStore, "getChannel", {after: e => {
 					if (e.returnValue && e.returnValue.isGroupDM()) return new BDFDB.DiscordObjects.Channel(Object.assign({}, e.returnValue, {rawRecipients: e.returnValue.rawRecipients.filter(n => !n || !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id)), recipients: e.returnValue.recipients.filter(id => !id || !BDFDB.LibraryModules.RelationshipStore.isBlocked(id))}))
 				}});
 			
@@ -548,7 +548,7 @@ module.exports = (_ => {
 			}
 			
 			getGroupName (channelId) {
-				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
+				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(channelId);
 				if (channel.name) return channel.name;
 				let recipients = channel.recipients.map(BDFDB.LibraryModules.UserStore.getUser).filter(n => n && !BDFDB.LibraryModules.RelationshipStore.isBlocked(n.id));
 				return recipients.length > 0 ? recipients.map(u => u.toString()).join(", ") : BDFDB.LanguageUtils.LanguageStrings.UNNAMED;

@@ -110,7 +110,7 @@ module.exports = (_ => {
 			
 			onStart () {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.IconUtils, "getGuildBannerURL", {instead: e => {
-					let guild = BDFDB.LibraryModules.GuildStore.getGuild(e.methodArguments[0].id);
+					let guild = BDFDB.LibraryStores.GuildStore.getGuild(e.methodArguments[0].id);
 					if (guild) {
 						let data = changedGuilds[guild.id];
 						if (data && data.banner && !data.removeBanner) return data.banner;
@@ -126,7 +126,7 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.QuerySearchUtils, "queryGuilds", {after: e => {
 					if (!e.methodArguments[0].query) return;
 					for (let id in changedGuilds) if (changedGuilds[id] && changedGuilds[id].name && changedGuilds[id].name.toLocaleLowerCase().indexOf(e.methodArguments[0].query.toLocaleLowerCase()) > -1 && !e.returnValue.find(n => n.record && n.record.id == id && n.type == BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.GUILD)) {
-						let guild = BDFDB.LibraryModules.GuildStore.getGuild(id);
+						let guild = BDFDB.LibraryStores.GuildStore.getGuild(id);
 						if (guild) e.returnValue.push({
 							comparator: guild.name,
 							record: guild,
@@ -262,7 +262,7 @@ module.exports = (_ => {
 				if (this.settings.places.guildList) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "NavItem"});
 					if (index > -1 && children[index].props.to && children[index].props.to.pathname) {
-						let guild = BDFDB.LibraryModules.GuildStore.getGuild((children[index].props.to.pathname.split("/channels/")[1] || "").split("/")[0]);
+						let guild = BDFDB.LibraryStores.GuildStore.getGuild((children[index].props.to.pathname.split("/channels/")[1] || "").split("/")[0]);
 						if (guild) {
 							let data = changedGuilds[guild.id];
 							if (data) {
@@ -362,7 +362,7 @@ module.exports = (_ => {
 			processGuildHeader (e) {
 				if (e.instance.props.guild && this.settings.places.guildHeader) {
 					e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
-					let oldName = (BDFDB.LibraryModules.GuildStore.getGuild(e.instance.props.guild.id) || {}).name;
+					let oldName = (BDFDB.LibraryStores.GuildStore.getGuild(e.instance.props.guild.id) || {}).name;
 					if (e.returnvalue && this.settings.general.addOriginalTooltip && oldName != e.instance.props.guild.name) {
 						e.returnvalue.props.children[0] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							text: oldName,
@@ -381,7 +381,7 @@ module.exports = (_ => {
 			
 			processWelcomeArea (e) {
 				if (e.instance.props.channel && this.settings.places.chat) {
-					let name = (BDFDB.LibraryModules.GuildStore.getGuild(e.instance.props.channel.guild_id) || {}).name;
+					let name = (BDFDB.LibraryStores.GuildStore.getGuild(e.instance.props.channel.guild_id) || {}).name;
 					let guildName = name && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", "titleName-3-Lp3Z"]]});
 					if (guildName && guildName.props && BDFDB.ArrayUtils.is(guildName.props.children)) {
 						for (let child of guildName.props.children) if (child && child.props && BDFDB.ArrayUtils.is(child.props.children) && child.props.children[0] == name) {
@@ -393,7 +393,7 @@ module.exports = (_ => {
 			}
 			
 			getGuildData (guildId, change = true) {
-				let guild = BDFDB.LibraryModules.GuildStore.getGuild(guildId);
+				let guild = BDFDB.LibraryStores.GuildStore.getGuild(guildId);
 				if (!guild) return new BDFDB.DiscordObjects.Guild({});
 				let data = change && changedGuilds[guild.id];
 				if (data) {
@@ -431,7 +431,7 @@ module.exports = (_ => {
 			}
 
 			openGuildSettingsModal (guildId) {
-				let guild = BDFDB.LibraryModules.GuildStore.getGuild(guildId);
+				let guild = BDFDB.LibraryStores.GuildStore.getGuild(guildId);
 				if (!guild) return;
 				let data = changedGuilds[guild.id] || {};
 				let newData = Object.assign({}, data);
@@ -704,7 +704,7 @@ module.exports = (_ => {
 
 			setBanner (id, data) {
 				data = data || {};
-				let guild = BDFDB.LibraryModules.GuildStore.getGuild(id);
+				let guild = BDFDB.LibraryStores.GuildStore.getGuild(id);
 				if (!guild) return;
 				if (guild.EditServersCachedBanner === undefined) guild.EditServersCachedBanner = guild.banner;
 				guild.banner = data.removeBanner ? null : (data.banner || guild.EditServersCachedBanner);

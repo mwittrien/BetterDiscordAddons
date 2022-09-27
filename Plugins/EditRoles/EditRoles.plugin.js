@@ -89,7 +89,7 @@ module.exports = (_ => {
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MemberStore, "getMember", {after: e => {
 					if (e.returnValue) {
-						let guild = BDFDB.LibraryModules.GuildStore.getGuild(e.methodArguments[0]);
+						let guild = BDFDB.LibraryStores.GuildStore.getGuild(e.methodArguments[0]);
 						if (guild) {
 							let colorRole, iconRole;
 							for (let id of e.returnValue.roles) {

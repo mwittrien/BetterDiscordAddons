@@ -93,7 +93,7 @@ module.exports = (_ => {
 					message = new BDFDB.DiscordObjects.Message(message);
 					let channel = notes[guild_id][channel_id][message_idPOS].channel && new BDFDB.DiscordObjects.Channel(JSON.parse(notes[guild_id][channel_id][message_idPOS].channel));
 					if (!channel) {
-						channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+						channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 						if (channel) {
 							updateData = true;
 							notes[guild_id][channel_id][message_idPOS].channel = JSON.stringify(channel);
@@ -111,7 +111,7 @@ module.exports = (_ => {
 				}
 				if (updateData) BDFDB.DataUtils.save(notes, _this, "notes");
 				let allCount = messages.length;
-				let currentChannel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId()) || {};
+				let currentChannel = BDFDB.LibraryStores.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId()) || {};
 				switch (popoutProps.selectedFilter.value) {
 					case "channel":
 						messages = messages.filter(m => m.channel_id == currentChannel.id);
@@ -135,7 +135,7 @@ module.exports = (_ => {
 			renderMessage(note, message, channel) {
 				if (!message || !channel) return null;
 				let channelName = channel.name;
-				let guild = channel.guild_id && BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
+				let guild = channel.guild_id && BDFDB.LibraryStores.GuildStore.getGuild(channel.guild_id);
 				let role = guild && BDFDB.LibraryModules.PermissionRoleUtils.getHighestRole(guild, message.author.id);
 				if (role) message.colorString = role.colorString;
 				if (popoutProps.selectedFilter.value != "channel" && !channelName && channel.recipients.length > 0) {
@@ -152,13 +152,13 @@ module.exports = (_ => {
 								tag: "span",
 								className: BDFDB.disCN.messagespopoutchannelname,
 								onClick: _ => {
-									if (!channel.guild_id || BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id)) BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id));
+									if (!channel.guild_id || BDFDB.LibraryStores.GuildStore.getGuild(channel.guild_id)) BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id));
 								},
 								children: channelName ? ((channel.guild_id ? "#" : "@") + channelName) : "???"
 							}),
 							popoutProps.selectedFilter.value == "all" ? BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.disCN.messagespopoutguildname,
-								children: channel.guild_id ? (BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {}).name || BDFDB.LanguageUtils.LanguageStrings.GUILD_UNAVAILABLE_HEADER : BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES
+								children: channel.guild_id ? (BDFDB.LibraryStores.GuildStore.getGuild(channel.guild_id) || {}).name || BDFDB.LanguageUtils.LanguageStrings.GUILD_UNAVAILABLE_HEADER : BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES
 							}) : null
 						]
 					}),
@@ -175,7 +175,7 @@ module.exports = (_ => {
 							BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.messagespopoutactionbuttons,
 								children: [
-									(!channel.guild_id || BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id)) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									(!channel.guild_id || BDFDB.LibraryStores.GuildStore.getGuild(channel.guild_id)) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 										className: BDFDB.disCN.messagespopoutjumpbutton,
 										onClick: _ => BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id, message.id)),
 										children: BDFDB.ReactUtils.createElement("div", {
@@ -601,7 +601,7 @@ module.exports = (_ => {
 
 			addMessageToNotes (message, channel) {
 				if (!message) return;
-				channel = channel || BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+				channel = channel || BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 				let guild_id = channel.guild_id || BDFDB.DiscordConstants.ME;
 				notes[guild_id] = notes[guild_id] || {};
 				notes[guild_id][channel.id] = notes[guild_id][channel.id] || {}
@@ -626,7 +626,7 @@ module.exports = (_ => {
 
 			getNoteData (message, channel) {
 				if (!message) return;
-				channel = channel || BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+				channel = channel || BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 				let guild_id = channel.guild_id || BDFDB.DiscordConstants.ME;
 				return notes[guild_id] && notes[guild_id][channel.id] && notes[guild_id][channel.id][message.id];
 			}

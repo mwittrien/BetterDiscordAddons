@@ -817,7 +817,7 @@ module.exports = (_ => {
 			getLanguageChoice (direction, place, channelId) {
 				this.setLanguages();
 				let choice;
-				let channel = channelId && BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
+				let channel = channelId && BDFDB.LibraryStores.ChannelStore.getChannel(channelId);
 				let guildId = channel ? (channel.guild_id ? channel.guild_id : "@me") : null;
 				if (channelLanguages[channelId] && channelLanguages[channelId][place]) choice = channelLanguages[channelId][place][direction];
 				else if (guildId && guildLanguages[guildId] && guildLanguages[guildId][place]) choice = guildLanguages[guildId][place][direction];
@@ -828,7 +828,7 @@ module.exports = (_ => {
 			}
 
 			saveLanguageChoice (choice, direction, place, channelId) {
-				let channel = channelId && BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
+				let channel = channelId && BDFDB.LibraryStores.ChannelStore.getChannel(channelId);
 				let guildId = channel ? (channel.guild_id ? channel.guild_id : "@me") : null;
 				if (channelLanguages[channelId] && channelLanguages[channelId][place]) {
 					channelLanguages[channelId][place][direction] = choice;

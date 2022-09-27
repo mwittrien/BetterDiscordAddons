@@ -81,7 +81,7 @@ module.exports = (_ => {
 				return this.getGuilds().filter(id => BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(id));
 			}
 			getPingedDMs() {
-				return BDFDB.LibraryModules.ChannelStore.getSortedPrivateChannels().map(c => c.id).filter(id => id && BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id) > 0);
+				return BDFDB.LibraryStores.ChannelStore.getSortedPrivateChannels().map(c => c.id).filter(id => id && BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id) > 0);
 			}
 			render() {
 				return BDFDB.ReactUtils.createElement("div", {

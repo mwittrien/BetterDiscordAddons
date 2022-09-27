@@ -310,7 +310,7 @@ module.exports = (_ => {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "Popout"});
 				if (index == -1) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
-				this.injectBadges(children, author, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
+				this.injectBadges(children, author, (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");
 			}
 
 			processMemberListItem (e) {

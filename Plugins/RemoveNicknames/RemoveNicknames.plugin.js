@@ -179,7 +179,7 @@ module.exports = (_ => {
 			
 			processReaction (e) {
 				if (e.instance.props.reactions) {
-					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id);
+					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id);
 					let guildId = null == channel || channel.isPrivate() ? null : channel.getGuildId();
 					let users = e.instance.props.reactions.filter(user => !BDFDB.LibraryModules.RelationshipStore.isBlocked(user.id)).slice(0, 3).map(user => this.getNewName(user) || guildId && BDFDB.LibraryModules.MemberStore.getNick(guildId, user.id) || user.username).filter(user => user);
 					if (users.length) {

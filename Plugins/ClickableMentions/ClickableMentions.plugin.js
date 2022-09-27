@@ -92,7 +92,7 @@ module.exports = (_ => {
 			
 			processRichRoleMention (e) {
 				if (e.instance.props.id && e.instance.props.guildId && e.instance.props.id != e.instance.props.guildId) {
-					let guild = BDFDB.LibraryModules.GuildStore.getGuild(e.instance.props.guildId);
+					let guild = BDFDB.LibraryStores.GuildStore.getGuild(e.instance.props.guildId);
 					let channelId = e.instance.props.channelId;
 					if (!channelId) {
 						let currentChannelId = BDFDB.LibraryModules.LastChannelStore.getChannelId();

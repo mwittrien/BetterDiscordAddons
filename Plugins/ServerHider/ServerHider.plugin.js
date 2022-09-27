@@ -220,7 +220,7 @@ module.exports = (_ => {
 				
 				let hiddenGuildIds = hiddenEles && hiddenEles.servers || [];
 				let hiddenFolderIds = hiddenEles && hiddenEles.folders || [];
-				let guilds = BDFDB.LibraryModules.FolderStore.guildFolders.map(n => n.guildIds).flat(10).map(guildId => BDFDB.LibraryModules.GuildStore.getGuild(guildId)).filter(n => n);
+				let guilds = BDFDB.LibraryModules.FolderStore.guildFolders.map(n => n.guildIds).flat(10).map(guildId => BDFDB.LibraryStores.GuildStore.getGuild(guildId)).filter(n => n);
 				let folders = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId);
 				let foldersAdded = [];
 				

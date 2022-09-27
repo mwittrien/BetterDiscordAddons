@@ -1344,6 +1344,59 @@ module.exports = (_ => {
 						return (!config.length || (config.smaller ? amount < config.length : amount == config.length)) && [props].flat(10).every(string => stringified.indexOf(`${string}:`) > -1) && m;
 					}, {onlySearchUnloaded: true});
 				};
+				
+				DiscordConstants = {};
+				Internal.DiscordConstants = new Proxy(DiscordConstants, {
+					get: function (_, item) {
+						if (InternalData.CustomDiscordConstants && InternalData.CustomDiscordConstants[item]) return InternalData.CustomDiscordConstants[item];
+						if (DiscordConstants[item]) return DiscordConstants[item];
+						if (!InternalData.DiscordConstants[item]) {
+							BDFDB.LogUtils.warn([item, "Object not found in DiscordConstants"]);
+							return {};
+						}
+						DiscordConstants[item] = BDFDB.ModuleUtils.findByProperties(InternalData.DiscordConstants[item]);
+						return DiscordConstants[item] ? DiscordConstants[item] : {};
+					}
+				});
+				BDFDB.DiscordConstants = Internal.DiscordConstants;
+				
+				DiscordObjects = {};
+				Internal.DiscordObjects = new Proxy(DiscordObjects, {
+					get: function (_, item) {
+						if (DiscordObjects[item]) return DiscordObjects[item];
+						if (!InternalData.DiscordObjects[item]) return (function () {});
+						let defaultExport = InternalData.DiscordObjects[item].exported == undefined ? true : InternalData.DiscordObjects[item].exported;
+						if (InternalData.DiscordObjects[item].name) DiscordObjects[item] = BDFDB.ModuleUtils.findByName(InternalData.DiscordObjects[item].name, defaultExport);
+						else if (InternalData.DiscordObjects[item].props) DiscordObjects[item] = BDFDB.ModuleUtils.findByPrototypes(InternalData.DiscordObjects[item].props, defaultExport);
+						else if (InternalData.DiscordObjects[item].strings) DiscordObjects[item] = BDFDB.ModuleUtils.findByString(InternalData.DiscordObjects[item].strings, defaultExport);
+						if (InternalData.DiscordObjects[item].value) DiscordObjects[item] = (DiscordObjects[item] || {})[InternalData.DiscordObjects[item].value];
+						return DiscordObjects[item] ? DiscordObjects[item] : (function () {});
+					}
+				});
+				BDFDB.DiscordObjects = Internal.DiscordObjects;
+				
+				LibraryRequires = {};
+				Internal.LibraryRequires = new Proxy(LibraryRequires, {
+					get: function (_, item) {
+						if (LibraryRequires[item]) return LibraryRequires[item];
+						if (InternalData.LibraryRequires.indexOf(item) == -1) return (function () {});
+						try {LibraryRequires[item] = require(item);}
+						catch (err) {}
+						return LibraryRequires[item] ? LibraryRequires[item] : (function () {});
+					}
+				});
+				BDFDB.LibraryRequires = Internal.LibraryRequires;
+				
+				LibraryStores = {};
+				Internal.LibraryStores = new Proxy(LibraryStores, {
+					get: function (_, item) {
+						if (LibraryStores[item]) return LibraryStores[item];
+						LibraryStores[item] = BDFDB.ModuleUtils.find(m => m && typeof m.getName == "function" && m.getName() == item && m);
+						if (!LibraryStores[item]) BDFDB.LogUtils.warn(item, "could not be found in Webmodule Stores");
+						return LibraryStores[item] ? LibraryStores[item] : null;
+					}
+				});
+				BDFDB.LibraryStores = Internal.LibraryStores;
 			
 				BDFDB.ObserverUtils = {};
 				BDFDB.ObserverUtils.connect = function (plugin, eleOrSelec, observer, config = {childList: true}) {
@@ -2534,59 +2587,6 @@ module.exports = (_ => {
 					}
 				};
 				
-				DiscordConstants = {};
-				Internal.DiscordConstants = new Proxy(DiscordConstants, {
-					get: function (_, item) {
-						if (InternalData.CustomDiscordConstants && InternalData.CustomDiscordConstants[item]) return InternalData.CustomDiscordConstants[item];
-						if (DiscordConstants[item]) return DiscordConstants[item];
-						if (!InternalData.DiscordConstants[item]) {
-							BDFDB.LogUtils.warn([item, "Object not found in DiscordConstants"]);
-							return {};
-						}
-						DiscordConstants[item] = BDFDB.ModuleUtils.findByProperties(InternalData.DiscordConstants[item]);
-						return DiscordConstants[item] ? DiscordConstants[item] : {};
-					}
-				});
-				BDFDB.DiscordConstants = Internal.DiscordConstants;
-				
-				DiscordObjects = {};
-				Internal.DiscordObjects = new Proxy(DiscordObjects, {
-					get: function (_, item) {
-						if (DiscordObjects[item]) return DiscordObjects[item];
-						if (!InternalData.DiscordObjects[item]) return (function () {});
-						let defaultExport = InternalData.DiscordObjects[item].exported == undefined ? true : InternalData.DiscordObjects[item].exported;
-						if (InternalData.DiscordObjects[item].name) DiscordObjects[item] = BDFDB.ModuleUtils.findByName(InternalData.DiscordObjects[item].name, defaultExport);
-						else if (InternalData.DiscordObjects[item].props) DiscordObjects[item] = BDFDB.ModuleUtils.findByPrototypes(InternalData.DiscordObjects[item].props, defaultExport);
-						else if (InternalData.DiscordObjects[item].strings) DiscordObjects[item] = BDFDB.ModuleUtils.findByString(InternalData.DiscordObjects[item].strings, defaultExport);
-						if (InternalData.DiscordObjects[item].value) DiscordObjects[item] = (DiscordObjects[item] || {})[InternalData.DiscordObjects[item].value];
-						return DiscordObjects[item] ? DiscordObjects[item] : (function () {});
-					}
-				});
-				BDFDB.DiscordObjects = Internal.DiscordObjects;
-				
-				LibraryRequires = {};
-				Internal.LibraryRequires = new Proxy(LibraryRequires, {
-					get: function (_, item) {
-						if (LibraryRequires[item]) return LibraryRequires[item];
-						if (InternalData.LibraryRequires.indexOf(item) == -1) return (function () {});
-						try {LibraryRequires[item] = require(item);}
-						catch (err) {}
-						return LibraryRequires[item] ? LibraryRequires[item] : (function () {});
-					}
-				});
-				BDFDB.LibraryRequires = Internal.LibraryRequires;
-				
-				LibraryStores = {};
-				Internal.LibraryStores = new Proxy(LibraryStores, {
-					get: function (_, item) {
-						if (LibraryStores[item]) return LibraryStores[item];
-						LibraryStores[item] = BDFDB.ModuleUtils.find(m => m && typeof m.getName == "function" && m.getName() == item && m);
-						if (!LibraryStores[item]) BDFDB.LogUtils.warn(item, "could not be found in Webmodule Stores");
-						return LibraryStores[item] ? LibraryStores[item] : null;
-					}
-				});
-				BDFDB.LibraryStores = Internal.LibraryStores;
-				
 				LibraryModules = {};
 				LibraryModules.LanguageStore = BDFDB.ModuleUtils.find(m => m.Messages && m.Messages.IMAGE && m);
 				LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
@@ -3192,7 +3192,7 @@ module.exports = (_ => {
 				};
 				BDFDB.MessageUtils.openMenu = function (message, e = mousePosition, slim = false) {
 					if (!message) return;
-					let channel = Internal.LibraryModules.ChannelStore.getChannel(message.channel_id);
+					let channel = Internal.LibraryStores.ChannelStore.getChannel(message.channel_id);
 					if (!channel) return;
 					e = BDFDB.ListenerUtils.copyEvent(e.nativeEvent || e, (e.nativeEvent || e).currentTarget);
 					let menu = BDFDB.ModuleUtils.findByName(slim ? "MessageSearchResultContextMenu" : "MessageContextMenu", false, true);
@@ -3257,7 +3257,7 @@ module.exports = (_ => {
 				BDFDB.UserUtils.can = function (permission, id = BDFDB.UserUtils.me.id, channelId = Internal.LibraryModules.LastChannelStore.getChannelId()) {
 					if (!Internal.DiscordConstants.Permissions[permission]) BDFDB.LogUtils.warn([permission, "not found in Permissions"]);
 					else {
-						let channel = Internal.LibraryModules.ChannelStore.getChannel(channelId);
+						let channel = Internal.LibraryStores.ChannelStore.getChannel(channelId);
 						if (channel) return Internal.LibraryModules.PermissionRoleUtils.can({permission: Internal.DiscordConstants.Permissions[permission], user: id, context: channel});
 					}
 					return false;
@@ -3280,12 +3280,12 @@ module.exports = (_ => {
 					return guild instanceof Internal.DiscordObjects.Guild || Object.keys(new Internal.DiscordObjects.Guild({})).every(key => keys.indexOf(key) > -1);
 				};
 				BDFDB.GuildUtils.getIcon = function (id) {
-					let guild = Internal.LibraryModules.GuildStore.getGuild(id);
+					let guild = Internal.LibraryStores.GuildStore.getGuild(id);
 					if (!guild || !guild.icon) return "";
 					return Internal.LibraryModules.IconUtils.getGuildIconURL(guild).split("?")[0];
 				};
 				BDFDB.GuildUtils.getBanner = function (id) {
-					let guild = Internal.LibraryModules.GuildStore.getGuild(id);
+					let guild = Internal.LibraryStores.GuildStore.getGuild(id);
 					if (!guild || !guild.banner) return "";
 					return Internal.LibraryModules.IconUtils.getGuildBannerURL(guild).split("?")[0];
 				};
@@ -3303,7 +3303,7 @@ module.exports = (_ => {
 					});
 				};
 				BDFDB.GuildUtils.markAsRead = function (guildIds) {
-					guildIds = [guildIds].flat(10).filter(id => id && typeof id == "string" && Internal.LibraryModules.GuildStore.getGuild(id));
+					guildIds = [guildIds].flat(10).filter(id => id && typeof id == "string" && Internal.LibraryStores.GuildStore.getGuild(id));
 					if (!guildIds) return;
 					let channels = guildIds.map(id => [BDFDB.ObjectUtils.toArray(Internal.LibraryModules.GuildChannelStore.getChannels(id)), Internal.LibraryModules.GuildEventStore.getGuildScheduledEventsForGuild(id)]).flat(10).map(n => n && (n.channel && n.channel.id || n.id)).flat().filter(n => n);
 					if (channels.length) BDFDB.ChannelUtils.markAsRead(channels);
@@ -3329,7 +3329,7 @@ module.exports = (_ => {
 					let folder = Internal.LibraryModules.FolderStore.getGuildFolderById(folderId);
 					if (!folder) return "";
 					let rest = 2 * Internal.DiscordConstants.MAX_GUILD_FOLDER_NAME_LENGTH;
-					let names = [], allNames = folder.guildIds.map(guildId => (Internal.LibraryModules.GuildStore.getGuild(guildId) || {}).name).filter(n => n);
+					let names = [], allNames = folder.guildIds.map(guildId => (Internal.LibraryStores.GuildStore.getGuild(guildId) || {}).name).filter(n => n);
 					for (let name of allNames) if (name.length < rest || names.length === 0) {
 						names.push(name);
 						rest -= name.length;
@@ -3344,15 +3344,15 @@ module.exports = (_ => {
 					return channel instanceof Internal.DiscordObjects.Channel || Object.keys(new Internal.DiscordObjects.Channel({})).every(key => keys.indexOf(key) > -1);
 				};
 				BDFDB.ChannelUtils.isTextChannel = function (channelOrId) {
-					let channel = typeof channelOrId == "string" ? Internal.LibraryModules.ChannelStore.getChannel(channelOrId) : channelOrId;
+					let channel = typeof channelOrId == "string" ? Internal.LibraryStores.ChannelStore.getChannel(channelOrId) : channelOrId;
 					return BDFDB.ObjectUtils.is(channel) && (channel.type == Internal.DiscordConstants.ChannelTypes.GUILD_TEXT || channel.type == Internal.DiscordConstants.ChannelTypes.GUILD_STORE || channel.type == Internal.DiscordConstants.ChannelTypes.GUILD_ANNOUNCEMENT);
 				};
 				BDFDB.ChannelUtils.isThread = function (channelOrId) {
-					let channel = typeof channelOrId == "string" ? Internal.LibraryModules.ChannelStore.getChannel(channelOrId) : channelOrId;
+					let channel = typeof channelOrId == "string" ? Internal.LibraryStores.ChannelStore.getChannel(channelOrId) : channelOrId;
 					return channel && channel.isThread();
 				};
 				BDFDB.ChannelUtils.isForumPost = function (channelOrId) {
-					let channel = typeof channelOrId == "string" ? Internal.LibraryModules.ChannelStore.getChannel(channelOrId) : channelOrId;
+					let channel = typeof channelOrId == "string" ? Internal.LibraryStores.ChannelStore.getChannel(channelOrId) : channelOrId;
 					return channel && channel.parentChannelThreadType && channel.parentChannelThreadType == Internal.DiscordConstants.ChannelTypes.GUILD_FORUM;
 				};
 				BDFDB.ChannelUtils.isEvent = function (channelOrId) {
@@ -3360,7 +3360,7 @@ module.exports = (_ => {
 					return channel && Internal.LibraryModules.GuildEventStore.getGuildScheduledEvent(channel.id) && true;
 				};
 				BDFDB.ChannelUtils.markAsRead = function (channelIds) {
-					let unreadChannels = [channelIds].flat(10).filter(id => id && typeof id == "string" && (BDFDB.LibraryModules.ChannelStore.getChannel(id) || {}).type != Internal.DiscordConstants.ChannelTypes.GUILD_CATEGORY && (Internal.LibraryModules.UnreadChannelUtils.hasUnread(id) || Internal.LibraryModules.UnreadChannelUtils.getMentionCount(id) > 0)).map(id => ({
+					let unreadChannels = [channelIds].flat(10).filter(id => id && typeof id == "string" && (BDFDB.LibraryStores.ChannelStore.getChannel(id) || {}).type != Internal.DiscordConstants.ChannelTypes.GUILD_CATEGORY && (Internal.LibraryModules.UnreadChannelUtils.hasUnread(id) || Internal.LibraryModules.UnreadChannelUtils.getMentionCount(id) > 0)).map(id => ({
 						channelId: id,
 						readStateType: Internal.LibraryModules.UnreadStateTypes.CHANNEL,
 						messageId: Internal.LibraryModules.UnreadChannelUtils.lastMessageId(id)
@@ -3384,11 +3384,11 @@ module.exports = (_ => {
 				
 				BDFDB.DMUtils = {};
 				BDFDB.DMUtils.isDMChannel = function (id) {
-					let channel = Internal.LibraryModules.ChannelStore.getChannel(id);
+					let channel = Internal.LibraryStores.ChannelStore.getChannel(id);
 					return BDFDB.ObjectUtils.is(channel) && (channel.isDM() || channel.isGroupDM());
 				};
 				BDFDB.DMUtils.getIcon = function (id) {
-					let channel = Internal.LibraryModules.ChannelStore.getChannel(id);
+					let channel = Internal.LibraryStores.ChannelStore.getChannel(id);
 					if (!channel) return "";
 					if (!channel.icon) return channel.isDM() ? BDFDB.UserUtils.getAvatar(channel.recipients[0]) : (channel.isGroupDM() ? window.location.origin + Internal.LibraryModules.IconUtils.getChannelIconURL(channel).split("?")[0] : null);
 					return Internal.LibraryModules.IconUtils.getChannelIconURL(channel).split("?")[0];
@@ -6333,7 +6333,7 @@ module.exports = (_ => {
 							this.props.guildId = this.props.guild.id;
 							this.props.selectedChannelId = Internal.LibraryModules.LastChannelStore.getChannelId(this.props.guild.id);
 							
-							let currentVoiceChannel = Internal.LibraryModules.ChannelStore.getChannel(Internal.LibraryModules.CurrentVoiceUtils.getChannelId());
+							let currentVoiceChannel = Internal.LibraryStores.ChannelStore.getChannel(Internal.LibraryModules.CurrentVoiceUtils.getChannelId());
 							let hasVideo = currentVoiceChannel && Internal.LibraryModules.VoiceUtils.hasVideo(currentVoiceChannel);
 							
 							this.props.selected = this.props.state ? Internal.LibraryModules.LastGuildStore.getGuildId() == this.props.guild.id : false;

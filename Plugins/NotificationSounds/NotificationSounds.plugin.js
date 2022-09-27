@@ -222,7 +222,7 @@ module.exports = (_ => {
 						const message = e.methodArguments[0].message;
 						const guildId = message.guild_id || null;
 						if (message.author.id != BDFDB.UserUtils.me.id && !BDFDB.LibraryModules.RelationshipStore.isBlocked(message.author.id)) {
-							const channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+							const channel = BDFDB.LibraryStores.ChannelStore.getChannel(message.channel_id);
 							const isGroupDM = channel.isGroupDM();
 							const muted = BDFDB.ChannelUtils.isThread(channel) ? BDFDB.LibraryModules.ThreadConfigStore.isMuted(channel.id) : BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId, channel.id);
 							const focused = document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == channel.id;

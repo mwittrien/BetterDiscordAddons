@@ -137,10 +137,10 @@ module.exports = (_ => {
 
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.QuerySearchUtils, "queryChannels", {after: e => {
 					if (!e.methodArguments[0].query) return;
-					for (let id of BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds().map(id => Object.keys(BDFDB.LibraryModules.ChannelStore.getMutableGuildChannelsForGuild(id))).flat()) {
-						let channel = BDFDB.LibraryModules.ChannelStore.getChannel(id);
+					for (let id of BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds().map(id => Object.keys(BDFDB.LibraryStores.ChannelStore.getMutableGuildChannelsForGuild(id))).flat()) {
+						let channel = BDFDB.LibraryStores.ChannelStore.getChannel(id);
 						if (channel && !channel.isCategory()) {
-							let category = channel.parent_id && BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id);
+							let category = channel.parent_id && BDFDB.LibraryStores.ChannelStore.getChannel(channel.parent_id);
 							if (((changedChannels[id] && changedChannels[id].name && changedChannels[id].name.toLocaleLowerCase().indexOf(e.methodArguments[0].query.toLocaleLowerCase()) > -1) || (category && changedChannels[category.id] && changedChannels[category.id].name && changedChannels[category.id].name.toLocaleLowerCase().indexOf(e.methodArguments[0].query.toLocaleLowerCase()) > -1)) && !e.returnValue.find(n => n.record && n.record.id == id && (n.type == BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.VOICE_CHANNEL || n.type == BDFDB.LibraryModules.QueryUtils.AutocompleterResultTypes.TEXT_CHANNEL))) e.returnValue.push({
 								comparator: channel.name,
 								record: channel,
@@ -346,12 +346,12 @@ module.exports = (_ => {
 			}
 			
 			processHeaderBarContainer (e) {
-				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
+				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.channelId);
 				if (channel && this.settings.places.channelHeader) {
 					let thread;
 					if (BDFDB.ChannelUtils.isThread(channel)) {
 						thread = channel;
-						channel = BDFDB.LibraryModules.ChannelStore.getChannel(thread.parent_id);
+						channel = BDFDB.LibraryStores.ChannelStore.getChannel(thread.parent_id);
 					}
 					if (changedChannels[channel.id] || thread && changedChannels[thread.id]) {
 						if (!e.returnvalue) {
@@ -472,7 +472,7 @@ module.exports = (_ => {
 						}
 						let icon = iconClass && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", iconClass]]});
 						if (icon) this.changeChannelIconColor(icon, channelId, modify);
-						let categoryId = (BDFDB.LibraryModules.ChannelStore.getChannel(channelId) || {}).parent_id;
+						let categoryId = (BDFDB.LibraryStores.ChannelStore.getChannel(channelId) || {}).parent_id;
 						if (categoryId) {
 							let categoryName = categoyClass && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", categoyClass]]});
 							if (categoryName) {
@@ -656,10 +656,10 @@ module.exports = (_ => {
 								if (label[0] != "#") return;
 								let channelName = label.slice(1);
 								let guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-								let channels = guildId && [].concat(BDFDB.LibraryModules.GuildChannelStore.getChannels(guildId).SELECTABLE, Object.keys(BDFDB.LibraryModules.ThreadStore.getThreadsForGuild(guildId)).map(id => ({channel: BDFDB.LibraryModules.ChannelStore.getChannel(id)})));
+								let channels = guildId && [].concat(BDFDB.LibraryModules.GuildChannelStore.getChannels(guildId).SELECTABLE, Object.keys(BDFDB.LibraryStores.ActiveThreadsStore.getThreadsForGuild(guildId)).map(id => ({channel: BDFDB.LibraryStores.ChannelStore.getChannel(id)})));
 								if (BDFDB.ArrayUtils.is(channels)) for (let channelObj of channels) {
 									if (channelName == channelObj.channel.name) {
-										let category = BDFDB.LibraryModules.ChannelStore.getChannel(channelObj.channel.parent_id);
+										let category = BDFDB.LibraryStores.ChannelStore.getChannel(channelObj.channel.parent_id);
 										if (!category || category && ele.props.text == category.name) {
 											if (category) {
 												let categoryData = changedChannels[category.id];
@@ -730,7 +730,7 @@ module.exports = (_ => {
 
 			changeAppTitle () {
 				if (this.settings.places.appTitle) {
-					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
+					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
 					let title = document.head.querySelector("title");
 					if (title && channel && (document.location.href || "").indexOf(channel.id) > -1 && changedChannels[channel.id] && changedChannels[channel.id].name) {
 						if (channel.isGroupDM()) BDFDB.DOMUtils.setText(title, this.getGroupName(channel.id));
@@ -788,14 +788,14 @@ module.exports = (_ => {
 			
 			getChannelDataColor (channelId) {
 				if (changedChannels[channelId] && changedChannels[channelId].color) return changedChannels[channelId].color;
-				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
-				let category = channel && (BDFDB.ChannelUtils.isThread(channel) ? BDFDB.LibraryModules.ChannelStore.getChannel((BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.ChannelStore.getChannel(channel.id).parent_id) || {}).parent_id) : BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id));
+				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(channelId);
+				let category = channel && (BDFDB.ChannelUtils.isThread(channel) ? BDFDB.LibraryStores.ChannelStore.getChannel((BDFDB.LibraryStores.ChannelStore.getChannel(BDFDB.LibraryStores.ChannelStore.getChannel(channel.id).parent_id) || {}).parent_id) : BDFDB.LibraryStores.ChannelStore.getChannel(channel.parent_id));
 				if (category && changedChannels[category.id] && changedChannels[category.id].inheritColor && changedChannels[category.id].color) return changedChannels[category.id].color;
 				return null;
 			}
 			
 			getChannelData (channelId, change = true, fallbackData) {
-				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
+				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(channelId);
 				if (!channel && BDFDB.ObjectUtils.is(fallbackData) || channel && BDFDB.ObjectUtils.is(fallbackData) && channel.name != fallbackData.name) channel = fallbackData;
 				if (!channel) return new BDFDB.DiscordObjects.Channel({});
 				let data = change && changedChannels[channel.id];
@@ -815,7 +815,7 @@ module.exports = (_ => {
 			}
 			
 			getGroupIcon (channelId, change = true) {
-				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId);
+				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(channelId);
 				if (!channel) return "";
 				let data = change && changedChannels[channel.id];
 				if (data) {

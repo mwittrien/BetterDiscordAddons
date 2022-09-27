@@ -761,7 +761,7 @@ module.exports = (_ => {
 			}
 
 			getStatusWithMobileAndActivity (id, config, clientStatuses) {
-				let voiceState = BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds().map(BDFDB.LibraryModules.VoiceUtils.getVoiceStates).map(BDFDB.ObjectUtils.toArray).flat(10).find(n => n.selfStream & n.userId == id && BDFDB.LibraryModules.ChannelStore.getChannel(n.channelId) && BDFDB.UserUtils.can("VIEW_CHANNEL", BDFDB.UserUtils.me.id, n.channelId));
+				let voiceState = BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds().map(BDFDB.LibraryModules.VoiceUtils.getVoiceStates).map(BDFDB.ObjectUtils.toArray).flat(10).find(n => n.selfStream & n.userId == id && BDFDB.LibraryStores.ChannelStore.getChannel(n.channelId) && BDFDB.UserUtils.can("VIEW_CHANNEL", BDFDB.UserUtils.me.id, n.channelId));
 				let status = {
 					name: BDFDB.UserUtils.getStatus(id),
 					activity: null,
@@ -864,7 +864,7 @@ module.exports = (_ => {
 											BDFDB.LibraryModules.WindowUtils.focus();
 										}
 										else {
-											let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id)
+											let DMid = BDFDB.LibraryStores.ChannelStore.getDMFromUserId(user.id)
 											if (DMid) BDFDB.LibraryModules.ChannelUtils.selectPrivateChannel(DMid);
 											else BDFDB.LibraryModules.DirectMessageUtils.openPrivateChannel(user.id);
 											BDFDB.LibraryModules.WindowUtils.focus();
