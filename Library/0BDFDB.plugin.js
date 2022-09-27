@@ -2546,6 +2546,7 @@ module.exports = (_ => {
 				DiscordConstants = {};
 				Internal.DiscordConstants = new Proxy(DiscordConstants, {
 					get: function (_, item) {
+						if (InternalData.CustomDiscordConstants && InternalData.CustomDiscordConstants[item]) return InternalData.CustomDiscordConstants[item];
 						if (DiscordConstants[item]) return DiscordConstants[item];
 						if (!InternalData.DiscordConstants[item]) {
 							BDFDB.LogUtils.warn([item, "Object not found in DiscordConstants"]);
