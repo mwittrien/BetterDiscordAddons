@@ -149,7 +149,6 @@
 		"UnreadStateTypes": {"props": ["ReadStateTypes"], "value": "ReadStateTypes"},
 		"UploadUtils": {"props": ["upload", "instantBatchUpload"]},
 		"URLParser": {"props": ["parse", "resolveObject"]},
-		"UserBadgeKeys": {"props": ["BadgeKeys"], "value": "BadgeKeys"},
 		"UserBioParser": {"props": ["parseBioReact"]},
 		"UserFetchUtils": {"props": ["fetchCurrentUser", "getUser"]},
 		"UserProfileModalUtils": {"props": ["openUserProfileModal", "closeUserProfileModal"]},
