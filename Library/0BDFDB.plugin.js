@@ -1244,7 +1244,7 @@ module.exports = (_ => {
 								if (all) found.push(defaultExport ? r : req.c[i]);
 								else return defaultExport ? r : req.c[i];
 							}
-							else for (let key of Object.keys(m)) if (key.length < 3 && m[key] && !!(r = filter(m[key]))) {
+							else for (let key of Object.keys(m)) if (key.length < 4 && m[key] && !!(r = filter(m[key]))) {
 								if (all) found.push(defaultExport ? r : req.c[i]);
 								else return defaultExport ? r : req.c[i];
 							}
@@ -2547,7 +2547,10 @@ module.exports = (_ => {
 				Internal.DiscordConstants = new Proxy(DiscordConstants, {
 					get: function (_, item) {
 						if (DiscordConstants[item]) return DiscordConstants[item];
-						if (!InternalData.DiscordConstants[item]) return {};
+						if (!InternalData.DiscordConstants[item]) {
+							BDFDB.LogUtils.warn([item, "Object not found in DiscordConstants"]);
+							return {};
+						}
 						DiscordConstants[item] = BDFDB.ModuleUtils.findByProperties(InternalData.DiscordConstants[item]);
 						return DiscordConstants[item] ? DiscordConstants[item] : {};
 					}
