@@ -21,12 +21,16 @@
 	},
 	"DiscordConstants": {
 		"ActivityTypes": ["STREAMING", "LISTENING", "CUSTOM_STATUS"],
+		"AnalyticsObjects": ["CONTEXT_MENU", "TOOLTIP", "CHANNEL"],
+		"AnalyticsPages": ["AUTH", "GUILD_CHANNEL", "CUSTOM_STATUS_MODAL"],
+		"AnalyticsSections": ["CHANNEL_LIST", "ACCOUNT_PANEL", "MEMBER_LIST"],
 		"ChannelTypes": ["GUILD_TEXT", "GUILD_STORE", "DM"],
 		"Colors": ["SPOTIFY", "STATUS_RED"],
 		"FriendsSections": ["ALL", "ONLINE", "ADD_FRIEND"],
 		"KeyboardDeviceTypes": ["KEYBOARD_KEY", "MOUSE_BUTTON"],
 		"MessageTypes": ["CHAT_INPUT_COMMAND", "CHANNEL_PINNED_MESSAGE"],
 		"RelationshipTypes": ["FRIEND", "PENDING_INCOMING", "PENDING_OUTGOING"],
+		"Routes": ["CAPTCHA", "GUILD", "MESSAGES"],
 		"StatusTypes": ["STREAMING", "UNKNOWN", "DND"]
 	},
 	"LibraryModules": {
