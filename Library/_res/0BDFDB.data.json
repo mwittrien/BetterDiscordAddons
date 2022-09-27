@@ -37,6 +37,7 @@
 		"FriendsSections": ["ALL", "ONLINE", "ADD_FRIEND"],
 		"KeyboardDeviceTypes": ["KEYBOARD_KEY", "MOUSE_BUTTON"],
 		"MessageStates": ["SENT", "SENDING", "SEND_FAILED"],
+		"MessageTypeGroups": ["USER_MESSAGE", "DELETABLE"],
 		"MessageTypes": ["CHAT_INPUT_COMMAND", "CHANNEL_PINNED_MESSAGE"],
 		"Permissions": ["ADMINISTRATOR", "MANAGE_MESSAGES", "MANAGE_ROLES", "MANAGE_GUILD_EXPRESSIONS"],
 		"RelationshipTypes": ["FRIEND", "PENDING_INCOMING", "PENDING_OUTGOING"],
