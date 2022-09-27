@@ -179,7 +179,7 @@ module.exports = (_ => {
 							title: `Added ${rType} Words`,
 							collapseStates: collapseStates,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
-								settings: Object.keys(configs).filter(n => !configs[n]["no" + BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(rType)]),
+								settings: Object.keys(configs).filter(n => !configs[n]["no" + BDFDB.StringUtils.upperCaseFirstChar(rType)]),
 								data: Object.keys(words[rType]).map(wordValue => Object.assign({}, words[rType][wordValue], {
 									key: wordValue,
 									label: wordValue

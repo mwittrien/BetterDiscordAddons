@@ -250,7 +250,7 @@ module.exports = (_ => {
 			}
 			
 			formatTimestamp (format, date) {
-				return BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(BDFDB.LibraryComponents.DateInput.format(format, date));
+				return BDFDB.StringUtils.upperCaseFirstChar(BDFDB.LibraryComponents.DateInput.format(format, date));
 			}
 			
 			setMaxWidth (timestamp, compact) {

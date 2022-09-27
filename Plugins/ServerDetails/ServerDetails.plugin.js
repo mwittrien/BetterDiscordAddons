@@ -143,7 +143,7 @@ module.exports = (_ => {
 						children: this.props.string
 					})
 				] : BDFDB.ReactUtils.createElement("div", {
-					children: `${BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(this.props.prefix)}: ${this.props.string}`
+					children: `${BDFDB.StringUtils.upperCaseFirstChar(this.props.prefix)}: ${this.props.string}`
 				});
 			}
 		};

@@ -537,7 +537,7 @@ module.exports = (_ => {
 							collapseStates: collapseStates,
 							children: ["disabled"].concat(Object.keys(defaultSettings)).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 								type: "Switch",
-								label: BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(key),
+								label: BDFDB.StringUtils.upperCaseFirstChar(key),
 								value: !!defaultSettings[key],
 								onChange: value => {
 									defaultSettings[key] = !!statuses[key] ? notificationTypes[value ? "TOAST" : "DISABLED"].value : value;
@@ -627,7 +627,7 @@ module.exports = (_ => {
 								plugin: this,
 								keys: ["notificationStrings", key],
 								placeholder: this.defaults.notificationStrings[key].value,
-								label: BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(key),
+								label: BDFDB.StringUtils.upperCaseFirstChar(key),
 								basis: "80%",
 								value: this.settings.notificationStrings[key]
 							})))
@@ -646,7 +646,7 @@ module.exports = (_ => {
 									direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
-											label: `${key.split(/(desktop)|(toast)/).filter(n => n).map(n => BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(n)).join("-")} Notification Sound`,
+											label: `${key.split(/(desktop)|(toast)/).filter(n => n).map(n => BDFDB.StringUtils.upperCaseFirstChar(n)).join("-")} Notification Sound`,
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 											type: "Switch",

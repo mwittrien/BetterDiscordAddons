@@ -400,7 +400,7 @@ module.exports = (_ => {
 					let newGuildObject = {}, nativeObject = new BDFDB.DiscordObjects.Guild(guild);
 					for (let key in nativeObject) newGuildObject[key] = nativeObject[key];
 					newGuildObject.name = data.name || nativeObject.name;
-					newGuildObject.acronym = data.shortName && data.shortName.replace(/\s/g, "") || BDFDB.LibraryModules.StringUtils.getAcronym(!data.ignoreCustomName && data.name || nativeObject.name);
+					newGuildObject.acronym = data.shortName && data.shortName.replace(/\s/g, "") || BDFDB.StringUtils.getAcronym(!data.ignoreCustomName && data.name || nativeObject.name);
 					if (data.removeIcon) {
 						newGuildObject.icon = null;
 						newGuildObject.getIconURL = _ => {return null;};
@@ -457,7 +457,7 @@ module.exports = (_ => {
 										onChange: value => {
 											newData.name = value;
 											if (!newData.ignoreCustomName) {
-												acronymInput.props.placeholder = value && BDFDB.LibraryModules.StringUtils.getAcronym(value) || guild.acronym;
+												acronymInput.props.placeholder = value && BDFDB.StringUtils.getAcronym(value) || guild.acronym;
 												BDFDB.ReactUtils.forceUpdate(acronymInput);
 											}
 										}
@@ -470,7 +470,7 @@ module.exports = (_ => {
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 										value: data.shortName,
 										ref: instance => {if (instance) acronymInput = instance;},
-										placeholder: !data.ignoreCustomName && data.name && BDFDB.LibraryModules.StringUtils.getAcronym(data.name) || guild.acronym,
+										placeholder: !data.ignoreCustomName && data.name && BDFDB.StringUtils.getAcronym(data.name) || guild.acronym,
 										onChange: value => {newData.shortName = value;}
 									})
 								}),
@@ -482,7 +482,7 @@ module.exports = (_ => {
 									value: data.ignoreCustomName,
 									onChange: value => {
 										newData.ignoreCustomName = value;
-										acronymInput.props.placeholder = !value && newData.name && BDFDB.LibraryModules.StringUtils.getAcronym(newData.name) || guild.acronym;
+										acronymInput.props.placeholder = !value && newData.name && BDFDB.StringUtils.getAcronym(newData.name) || guild.acronym;
 										BDFDB.ReactUtils.forceUpdate(acronymInput);
 									}
 								}),

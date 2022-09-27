@@ -1239,9 +1239,15 @@ module.exports = (_ => {
 					const found = [];
 					if (!onlySearchUnloaded) for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 						let m = req.c[i].exports, r = null;
-						if (m && (typeof m == "object" || typeof m == "function") && !!(r = filter(m))) {
-							if (all) found.push(defaultExport ? r : req.c[i]);
-							else return defaultExport ? r : req.c[i];
+						if (m && (typeof m == "object" || typeof m == "function")) {
+							if (!!(r = filter(m))) {
+								if (all) found.push(defaultExport ? r : req.c[i]);
+								else return defaultExport ? r : req.c[i];
+							}
+							else for (let key of Object.keys(m)) if (key.length < 3 && m[key] && !!(r = filter(m[key]))) {
+								if (all) found.push(defaultExport ? r : req.c[i]);
+								else return defaultExport ? r : req.c[i];
+							}
 						}
 						if (m && m.__esModule && m.default && (typeof m.default == "object" || typeof m.default == "function")) {
 							if (!!(r = filter(m.default))) {
@@ -2149,7 +2155,7 @@ module.exports = (_ => {
 				Internal.initiateProcess = function (plugin, type, e) {
 					plugin = plugin == BDFDB && Internal || plugin;
 					if (BDFDB.ObjectUtils.is(plugin) && !plugin.stopping && e.instance) {
-						type = Internal.LibraryModules.StringUtils.upperCaseFirstChar(type.split(" _ _ ")[1] || type).replace(/[^A-z0-9]|_/g, "");
+						type = BDFDB.StringUtils.upperCaseFirstChar(type.split(" _ _ ")[1] || type).replace(/[^A-z0-9]|_/g, "");
 						if (typeof plugin[`process${type}`] == "function") {
 							if (typeof e.methodname == "string" && (e.methodname.indexOf("componentDid") == 0 || e.methodname.indexOf("componentWill") == 0)) {
 								e.node = BDFDB.ReactUtils.findDOMNode(e.instance);
@@ -2567,7 +2573,7 @@ module.exports = (_ => {
 				BDFDB.LibraryRequires = Internal.LibraryRequires;
 				
 				LibraryModules = {};
-				LibraryModules.LanguageStore = BDFDB.ModuleUtils.find(m => (m.Messages && m.Messages.IMAGE || m.IMAGE && m.CHANGE_LOG) && m);
+				LibraryModules.LanguageStore = BDFDB.ModuleUtils.find(m => m.Messages && m.Messages.IMAGE && m);
 				LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
 				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode");
 				Internal.LibraryModules = new Proxy(LibraryModules, {
@@ -4166,6 +4172,10 @@ module.exports = (_ => {
 				};
 
 				BDFDB.StringUtils = {};
+				BDFDB.StringUtils.upperCaseFirstChar = function (string) {
+					if (typeof string != "string") return "";
+					else return string.slice(0, 1).toUpperCase() + string.slice(1);
+				};
 				BDFDB.StringUtils.htmlEscape = function (string) {
 					let ele = document.createElement("div");
 					ele.innerText = string;
@@ -4361,7 +4371,7 @@ module.exports = (_ => {
 					}
 				};
 				BDFDB.DiscordUtils.getLanguage = function () {
-					return Internal.LibraryModules.LanguageStore && (Internal.LibraryModules.LanguageStore.chosenLocale || Internal.LibraryModules.LanguageStore._chosenLocale) || document.querySelector("html[lang]").getAttribute("lang") || BDFDB.DicordUtils.getSettings("locale");
+					return Internal.LibraryModules.LanguageStore && (Internal.LibraryModules.LanguageStore.chosenLocale || Internal.LibraryModules.LanguageStore._chosenLocale) || document.querySelector("html[lang]").getAttribute("lang");
 				};
 				BDFDB.DiscordUtils.getBuild = function () {
 					if (BDFDB.DiscordUtils.getBuild.build) return BDFDB.DiscordUtils.getBuild.build;
@@ -8441,8 +8451,8 @@ module.exports = (_ => {
 							const getProps = (props, keys) => {
 								let newProps = Object.assign({}, BDFDB.ObjectUtils.is(props) ? props : typeof props == "string" ? {id: props} : {});
 								for (const key of [keys].flat(10).filter(n => n)) {
-									const store = `${Internal.LibraryModules.StringUtils.upperCaseFirstChar(key)}Store`;
-									const getter = `get${Internal.LibraryModules.StringUtils.upperCaseFirstChar(key)}`;
+									const store = `${BDFDB.StringUtils.upperCaseFirstChar(key)}Store`;
+									const getter = `get${BDFDB.StringUtils.upperCaseFirstChar(key)}`;
 									const value = props && props[key] || Internal.LibraryModules[store] && typeof Internal.LibraryModules[store][getter] == "function" && Internal.LibraryModules[store][getter](props && props.id || props);
 									if (value) {
 										newProps = Object.assign(newProps, {[key]: value});
@@ -8853,7 +8863,7 @@ module.exports = (_ => {
 								if (!lang) {
 									let formatTranslation = (l, s, i) => {
 										l = l == "en" ? "default" : l;
-										return config.cached && config.cached[l] && config.cached[l][stringKeys[i]] || (translations[language][i][0] == translations[language][i][0].toUpperCase() ? Internal.LibraryModules.StringUtils.upperCaseFirstChar(s) : s);
+										return config.cached && config.cached[l] && config.cached[l][stringKeys[i]] || (translations[language][i][0] == translations[language][i][0].toUpperCase() ? BDFDB.StringUtils.upperCaseFirstChar(s) : s);
 									};
 									let format = config.asObject ? ((l, isNotFirst) => {
 										return `${isNotFirst ? "," : ""}\n\t\t"${l == "en" ? "default" : l}": {${translations[l].map((s, i) => `\n\t\t\t"${stringKeys[i]}": "${formatTranslation(l, s, i)}"`).join(",")}\n\t\t}`;
@@ -8963,7 +8973,7 @@ module.exports = (_ => {
 		getSettingsPanel (collapseStates = {}) {
 			let settingsPanel;
 			let getString = (type, key, property) => {
-				return BDFDB.LanguageUtils.LibraryStringsCheck[`settings_${key}_${property}`] ? BDFDB.LanguageUtils.LibraryStringsFormat(`settings_${key}_${property}`, BDFDB.BDUtils.getSettingsProperty("name", BDFDB.BDUtils.settingsIds[key]) || Internal.LibraryModules.StringUtils.upperCaseFirstChar(key.replace(/([A-Z])/g, " $1"))) : Internal.defaults[type][key][property];
+				return BDFDB.LanguageUtils.LibraryStringsCheck[`settings_${key}_${property}`] ? BDFDB.LanguageUtils.LibraryStringsFormat(`settings_${key}_${property}`, BDFDB.BDUtils.getSettingsProperty("name", BDFDB.BDUtils.settingsIds[key]) || BDFDB.StringUtils.upperCaseFirstChar(key.replace(/([A-Z])/g, " $1"))) : Internal.defaults[type][key][property];
 			};
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, {
 				collapseStates: collapseStates,

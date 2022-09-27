@@ -72,7 +72,7 @@ module.exports = (_ => {
 			onStop () {}
 		
 			openIn (e, key, url) {
-				let platform = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(key);
+				let platform = BDFDB.StringUtils.upperCaseFirstChar(key);
 				if (url && !url.startsWith("https://images-ext-1.discord") && !url.startsWith("https://images-ext-2.discord") && typeof this[`openIn${platform}`] == "function") {
 					BDFDB.ListenerUtils.stopEvent(e);
 					this[`openIn${platform}`](url);

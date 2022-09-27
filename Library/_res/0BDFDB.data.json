@@ -16,6 +16,9 @@
 		"Timestamp": {"props": ["add", "dayOfYear", "hasAlignedHourOffset"]},
 		"User": {"strings": ["UserFlags", "hasFlag", "deserialize"]}
 	},
+	"DiscordConstants": {
+		"Colors": ["SPOTIFY", "STATUS_RED"]
+	},
 	"LibraryModules": {
 		"AckUtils": {"props": ["localAck", "bulkAck"]},
 		"ActivityUtils": {"props": ["sendActivityInvite", "updateActivity"]},
@@ -142,7 +145,6 @@
 		"StoreChangeUtils": {"props": ["get", "set", "clear", "remove"]},
 		"StreamerModeStore": {"strings": ["StreamerModeStore", "hidePersonalInformation", "disableSounds"], "value": "default"},
 		"StreamUtils": {"props": ["getActiveStreamForUser", "getAllApplicationStreams"]},
-		"StringUtils": {"props": ["cssValueToNumber", "upperCaseFirstChar"]},
 		"TimestampUtils": {"props": ["fromTimestamp", "extractTimestamp"]},
 		"TimeUtils": {"props": ["calendarFormat", "dateFormat"]},
 		"ThemeSettingsStore": {"props": ["theme"]},

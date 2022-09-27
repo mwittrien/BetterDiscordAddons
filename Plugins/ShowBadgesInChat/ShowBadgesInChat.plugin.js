@@ -252,7 +252,7 @@ module.exports = (_ => {
 												BDFDB.ReactUtils.forceUpdate(instance);
 												this.SettingsUpdated = true;
 											},
-											children: cardData.key.split("_").map(n => BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(n.toLowerCase())).join(" ")
+											children: cardData.key.split("_").map(n => BDFDB.StringUtils.upperCaseFirstChar(n.toLowerCase())).join(" ")
 										})
 									}),
 									this.createSettingsBadges(cardData.key)

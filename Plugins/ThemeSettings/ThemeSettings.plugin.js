@@ -168,7 +168,7 @@ module.exports = (_ => {
 																filter: childType == "file" && "image",
 																ref: instance => {if (instance) inputInstances[i] = instance;}
 															},
-															label: varName.split("-").map(BDFDB.LibraryModules.StringUtils.upperCaseFirstChar).join(" "),
+															label: varName.split("-").map(BDFDB.StringUtils.upperCaseFirstChar).join(" "),
 															note: varDescription && varDescription.indexOf("*") == 0 ? varDescription.slice(1) : varDescription,
 															basis: "70%",
 															name: varName,
