@@ -1171,13 +1171,15 @@ module.exports = (_ => {
 				Internal.findModule = function (type, cacheString, filter, config = {}) {
 					if (!BDFDB.ObjectUtils.is(Cache.modules[type])) Cache.modules[type] = {module: {}, export: {}};
 					let defaultExport = typeof config.defaultExport != "boolean" ? true : config.defaultExport;
-					if (defaultExport && Cache.modules[type].export[cacheString]) return Cache.modules[type].export[cacheString];
-					else if (!defaultExport && Cache.modules[type].module[cacheString]) return Cache.modules[type].module[cacheString];
+					if (!config.all && defaultExport && Cache.modules[type].export[cacheString]) return Cache.modules[type].export[cacheString];
+					else if (!config.all && !defaultExport && Cache.modules[type].module[cacheString]) return Cache.modules[type].module[cacheString];
 					else {
 						let m = BDFDB.ModuleUtils.find(filter, config);
 						if (m) {
-							if (defaultExport) Cache.modules[type].export[cacheString] = m;
-							else Cache.modules[type].module[cacheString] = m;
+							if (!config.all) {
+								if (defaultExport) Cache.modules[type].export[cacheString] = m;
+								else Cache.modules[type].module[cacheString] = m;
+							}
 							return m;
 						}
 						else if (!config.noWarnings) BDFDB.LogUtils.warn(`${cacheString} [${type}] not found in WebModules`);
