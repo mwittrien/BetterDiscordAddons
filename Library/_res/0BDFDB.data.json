@@ -17,7 +17,10 @@
 		"User": {"strings": ["UserFlags", "hasFlag", "deserialize"]}
 	},
 	"CustomDiscordConstants": {
-		"MAX_GUILD_FOLDER_NAME_LENGTH": 32
+		"MAX_GUILD_FOLDER_NAME_LENGTH": 32,
+		"MAX_VIDEO_HEIGHT": 720,
+		"MAX_VIDEO_WIDTH": 1280,
+		"ME": "@me"
 	},
 	"DiscordConstants": {
 		"ActivityTypes": ["STREAMING", "LISTENING", "CUSTOM_STATUS"],
@@ -29,6 +32,7 @@
 		"FriendsSections": ["ALL", "ONLINE", "ADD_FRIEND"],
 		"KeyboardDeviceTypes": ["KEYBOARD_KEY", "MOUSE_BUTTON"],
 		"MessageTypes": ["CHAT_INPUT_COMMAND", "CHANNEL_PINNED_MESSAGE"],
+		"Permissions": ["ADMINISTRATOR", "MANAGE_MESSAGES", "MANAGE_ROLES", "MANAGE_GUILD_EXPRESSIONS"],
 		"RelationshipTypes": ["FRIEND", "PENDING_INCOMING", "PENDING_OUTGOING"],
 		"Routes": ["CAPTCHA", "GUILD", "MESSAGES"],
 		"StatusTypes": ["STREAMING", "UNKNOWN", "DND"]
