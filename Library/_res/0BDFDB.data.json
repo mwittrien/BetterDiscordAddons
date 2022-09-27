@@ -78,7 +78,6 @@
 		"InviteUtils": {"props": ["acceptInvite", "createInvite"]},
 		"KeyCodeUtils": {"props": ["toCombo", "keyToCode"], "assign": true},
 		"KeyEvents": {"props": ["aliases", "code", "codes"]},
-		"LanguageStore": {"props": ["Messages", "getLanguages"]},
 		"LastChannelStore": {"props": ["getLastSelectedChannelId"]},
 		"LastGuildStore": {"props": ["getLastSelectedGuildId"]},
 		"LinkUtils": {"props": ["handleClick", "isLinkTrusted"]},
