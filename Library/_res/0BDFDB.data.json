@@ -1498,7 +1498,7 @@
 		"UserPopoutSectionTitle": {"props": ["title", "body"]},
 		"UserPopoutUsernameSection": {"props": ["userTagNoNickname", "nickname", "headerBotTag"]},
 		"UserProfile": {"props": ["root", "tabBarContainer"]},
-		"UserProfileHeader": {"props": ["header", "additionalActionsIcon"]},
+		"UserProfileHeader": {"props": ["header", "additionalActionsIcon", "nameTag"]},
 		"UserProfileInfoSection": {"props": ["userInfoSection", "note"]},
 		"UserProfileList": {"props": ["listAvatar", "listRow"]},
 		"UserProfileListGuild": {"props": ["guildAvatar", "guildAvatarWithoutIcon"]},
