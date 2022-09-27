@@ -900,7 +900,7 @@ module.exports = (_ => {
 			processMessageContent (e) {
 				if (e.instance.props.message && this.settings.places.chatWindow && this.shouldChangeInChat(e.instance.props.message.channel_id)) {
 					if (!e.returnvalue) {
-						if (e.instance.props.message.type != BDFDB.DiscordConstants.MessageTypes.DEFAULT && e.instance.props.message.type != BDFDB.DiscordConstants.MessageTypes.REPLY) {
+						if (!BDFDB.DiscordConstants.MessageTypeGroups.USER_MESSAGE.has(message.type)) {
 							let message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {author: this.getUserData(e.instance.props.message.author.id, true, false, e.instance.props.message.author)}));
 							let data = changedUsers[e.instance.props.message.author.id];
 							if (data) {

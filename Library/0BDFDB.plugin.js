@@ -571,7 +571,7 @@ module.exports = (_ => {
 				BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", ""), plugin);
 				if (Internal.settings.general.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", `${plugin.name} v${plugin.version}`), {
 					disableInteractions: true,
-					barColor: BDFDB.DiscordConstants.Colors && BDFDB.DiscordConstants.Colors.STATUS_GREEN
+					barColor: BDFDB.DiscordConstants.Colors.STATUS_GREEN
 				});
 				
 				if (plugin.css) BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
@@ -588,7 +588,7 @@ module.exports = (_ => {
 				BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", ""), plugin);
 				if (Internal.settings.general.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", `${plugin.name} v${plugin.version}`), {
 					disableInteractions: true,
-					barColor: BDFDB.DiscordConstants.Colors && BDFDB.DiscordConstants.Colors.STATUS_RED
+					barColor: BDFDB.DiscordConstants.Colors.STATUS_RED
 				});
 				
 				const url = Internal.getPluginURL(plugin);
@@ -3168,7 +3168,7 @@ module.exports = (_ => {
 
 				BDFDB.MessageUtils = {};
 				BDFDB.MessageUtils.isSystemMessage = function (message) {
-					return message && message.type !== BDFDB.DiscordConstants.MessageTypes.DEFAULT && message.type !== BDFDB.DiscordConstants.MessageTypes.REPLY && (message.type !== BDFDB.DiscordConstants.MessageTypes.CHAT_INPUT_COMMAND || message.interaction == null);
+					return message && !BDFDB.DiscordConstants.MessageTypeGroups.USER_MESSAGE.has(message.type) && (message.type !== BDFDB.DiscordConstants.MessageTypes.CHAT_INPUT_COMMAND || message.interaction == null);
 				};
 				BDFDB.MessageUtils.rerenderAll = function (instant) {
 					BDFDB.TimeUtils.clear(BDFDB.MessageUtils.rerenderAll.timeout);
@@ -4904,9 +4904,9 @@ module.exports = (_ => {
 					render() {
 						if (this.state.hasError) return Internal.LibraryModules.React.createElement("span", {
 							style: {
-								background: BDFDB.DiscordConstants && BDFDB.DiscordConstants.Colors && BDFDB.DiscordConstants.Colors.PRIMARY_DARK,
+								background: BDFDB.DiscordConstants.Colors.PRIMARY_DARK,
 								borderRadius: 5,
-								color: BDFDB.DiscordConstants && BDFDB.DiscordConstants.Colors && BDFDB.DiscordConstants.Colors.STATUS_RED,
+								color: BDFDB.DiscordConstants.Colors.STATUS_RED,
 								fontSize: 12,
 								fontWeight: 600,
 								padding: 6,
@@ -7690,8 +7690,8 @@ module.exports = (_ => {
 					};
 					Internal.setDefaultProps(CustomComponents.Switch, {
 						size: CustomComponents.Switch.Sizes.DEFAULT,
-						uncheckedColor: BDFDB.DiscordConstants.Colors && BDFDB.DiscordConstants.Colors.PRIMARY_DARK_400,
-						checkedColor: BDFDB.DiscordConstants.Colors && BDFDB.DiscordConstants.Colors.BRAND
+						uncheckedColor: BDFDB.DiscordConstants.Colors.PRIMARY_DARK_400,
+						checkedColor: BDFDB.DiscordConstants.Colors.BRAND
 					});
 					
 					CustomComponents.TabBar = reactInitialized && class BDFDB_TabBar extends Internal.LibraryModules.React.Component {
