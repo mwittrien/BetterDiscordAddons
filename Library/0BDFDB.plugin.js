@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.6.4
+ * @version 2.6.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -18,7 +18,12 @@ module.exports = (_ => {
 	var BDFDB, Internal, LibraryConstants, LibraryModules, LibraryRequires, DiscordConstants, DiscordObjects, PluginStores;
 	
 	BDFDB = {
-		started: true
+		started: true,
+		changeLog: {
+			fixed: {
+				"No more Console Spam": "Fixed some Stuff that spammed the Console with Errors and could cause Crashs, this is not a final Fix and it will take several days or even weeks till all my Plugins are fixed"
+			}
+		}
 	};
 	
 	return class BDFDB_Frame {
@@ -4020,7 +4025,13 @@ module.exports = (_ => {
 						let name = plugin.name || (typeof plugin.getName == "function" ? plugin.getName() : null);
 						name = typeof name == "string" ? name : null;
 						let oldTransitionState = 0;
-						Internal.LibraryModules.ModalUtils.openModal(props => {
+						!Internal.LibraryModules.ModalUtils ? BdApi.alert(BDFDB.ReactUtils.createElement("div", {
+								style: {"display": "flex", "flex-direction": "column"},
+								children: [
+									config.header,
+									typeof config.subHeader == "string" || BDFDB.ReactUtils.isValidElement(config.subHeader) ? config.subHeader : (name || "")
+								].filter(n => n).map(n => BDFDB.ReactUtils.createElement("span", {children: n}))
+							}), config.content || config.children) : Internal.LibraryModules.ModalUtils.openModal(props => {
 							modalProps = props;
 							return BDFDB.ReactUtils.createElement(class BDFDB_Modal extends Internal.LibraryModules.React.Component {
 								render() {
