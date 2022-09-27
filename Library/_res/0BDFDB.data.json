@@ -33,7 +33,7 @@
 		"ChannelTypes": ["GUILD_TEXT", "GUILD_STORE", "DM"],
 		"Colors": ["SPOTIFY", "STATUS_RED"],
 		"ComponentActions": ["INSERT_TEXT", "TEXTAREA_FOCUS"],
-		"EndPoints": ["CAPTCHA", "GUILD", "MESSAGES"],
+		"Endpoints": ["CAPTCHA", "GUILD", "MESSAGES"],
 		"FriendsSections": ["ALL", "ONLINE", "ADD_FRIEND"],
 		"KeyboardDeviceTypes": ["KEYBOARD_KEY", "MOUSE_BUTTON"],
 		"MessageStates": ["SENT", "SENDING", "SEND_FAILED"],
