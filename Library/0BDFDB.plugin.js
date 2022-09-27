@@ -571,7 +571,7 @@ module.exports = (_ => {
 				BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", ""), plugin);
 				if (Internal.settings.general.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", `${plugin.name} v${plugin.version}`), {
 					disableInteractions: true,
-					barColor: BDFDB.DiscordConstants.Colors.STATUS_GREEN
+					barColor: BDFDB.DiscordConstants.Colors && BDFDB.DiscordConstants.Colors.STATUS_GREEN
 				});
 				
 				if (plugin.css) BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
@@ -588,7 +588,7 @@ module.exports = (_ => {
 				BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", ""), plugin);
 				if (Internal.settings.general.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", `${plugin.name} v${plugin.version}`), {
 					disableInteractions: true,
-					barColor: BDFDB.DiscordConstants.Colors.STATUS_RED
+					barColor: BDFDB.DiscordConstants.Colors && BDFDB.DiscordConstants.Colors.STATUS_RED
 				});
 				
 				const url = Internal.getPluginURL(plugin);
@@ -613,9 +613,9 @@ module.exports = (_ => {
 						if (typeof plugin.setLabelsByLanguage == "function") plugin.labels = plugin.setLabelsByLanguage();
 						if (typeof plugin.changeLanguageStrings == "function") plugin.changeLanguageStrings();
 					};
-					if (Internal.LibraryModules.LanguageStore.chosenLocale || Internal.LibraryModules.LanguageStore._chosenLocale || BDFDB.DicordUtils.getSettings("locale")) translate();
+					if (BDFDB.DiscordUtils.getLanguage()) translate();
 					else BDFDB.TimeUtils.interval(interval => {
-						if (Internal.LibraryModules.LanguageStore.chosenLocale || Internal.LibraryModules.LanguageStore._chosenLocale || BDFDB.DicordUtils.getSettings("locale")) {
+						if (BDFDB.DiscordUtils.getLanguage()) {
 							BDFDB.TimeUtils.clear(interval);
 							translate();
 						}
@@ -2537,7 +2537,7 @@ module.exports = (_ => {
 					}
 				};
 
-				BDFDB.DiscordConstants = BDFDB.ModuleUtils.findByProperties("Permissions", "ActivityTypes");
+				BDFDB.DiscordConstants = BDFDB.ModuleUtils.findByProperties("Permissions", "ActivityTypes") || {};
 				
 				DiscordObjects = {};
 				Internal.DiscordObjects = new Proxy(DiscordObjects, {
@@ -2567,7 +2567,7 @@ module.exports = (_ => {
 				BDFDB.LibraryRequires = Internal.LibraryRequires;
 				
 				LibraryModules = {};
-				LibraryModules.LanguageStore = BDFDB.ModuleUtils.find(m => m.Messages && m.Messages.IMAGE && m);
+				LibraryModules.LanguageStore = BDFDB.ModuleUtils.find(m => (m.Messages && m.Messages.IMAGE || m.IMAGE && m.CHANGE_LOG) && m);
 				LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
 				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode");
 				Internal.LibraryModules = new Proxy(LibraryModules, {
@@ -2597,8 +2597,8 @@ module.exports = (_ => {
 					return Internal.LibraryModules.KeyCodeUtils.toString([keyArray].flat(10).filter(n => n).map(keyCode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, Internal.LibraryModules.KeyCodeUtils.keyToCode((Object.entries(Internal.LibraryModules.KeyEvents.codes).find(n => n[1] == keyCode && Internal.LibraryModules.KeyCodeUtils.keyToCode(n[0], null)) || [])[0], null) || keyCode]), true);
 				};
 				
-				BDFDB.ReactUtils = Object.assign({}, Internal.LibraryModules.React, Internal.LibraryModules.ReactDOM);
-				BDFDB.ReactUtils.childrenToArray = function (parent) {
+				const MyReact = {};
+				MyReact.childrenToArray = function (parent) {
 					if (parent && parent.props && parent.props.children && !BDFDB.ArrayUtils.is(parent.props.children)) {
 						const child = parent.props.children;
 						parent.props.children = [];
@@ -2606,7 +2606,7 @@ module.exports = (_ => {
 					}
 					return parent.props.children;
 				}
-				BDFDB.ReactUtils.createElement = function (component, props = {}, errorWrap = false) {
+				MyReact.createElement = function (component, props = {}, errorWrap = false) {
 					if (component && component.defaultProps) for (let key in component.defaultProps) if (props[key] == null) props[key] = component.defaultProps[key];
 					try {
 						let child = Internal.LibraryModules.React.createElement(component || "div", props) || null;
@@ -2616,23 +2616,24 @@ module.exports = (_ => {
 					catch (err) {BDFDB.LogUtils.error(["Could not create React Element!", err]);}
 					return null;
 				};
-				BDFDB.ReactUtils.objectToReact = function (obj) {
+				MyReact.objectToReact = function (obj) {
 					if (!obj) return null;
 					else if (typeof obj == "string") return obj;
 					else if (BDFDB.ObjectUtils.is(obj)) return BDFDB.ReactUtils.createElement(obj.type || obj.props && obj.props.href && "a" || "div", !obj.props ?  {} : Object.assign({}, obj.props, {
-						children: obj.props.children ? BDFDB.ReactUtils.objectToReact(obj.props.children) : null
+						children: obj.props.children ? MyReact.objectToReact(obj.props.children) : null
 					}));
-					else if (BDFDB.ArrayUtils.is(obj)) return obj.map(n => BDFDB.ReactUtils.objectToReact(n));
+					else if (BDFDB.ArrayUtils.is(obj)) return obj.map(n => MyReact.objectToReact(n));
 					else return null;
 				};
-				BDFDB.ReactUtils.markdownParse = function (str) {
-					if (!BDFDB.ReactUtils.markdownParse.parser || !BDFDB.ReactUtils.markdownParse.render) {
-						BDFDB.ReactUtils.markdownParse.parser = Internal.LibraryModules.SimpleMarkdownParser.parserFor(Internal.LibraryModules.SimpleMarkdownParser.defaultRules);
-						BDFDB.ReactUtils.markdownParse.render = Internal.LibraryModules.SimpleMarkdownParser.reactFor(Internal.LibraryModules.SimpleMarkdownParser.ruleOutput(Internal.LibraryModules.SimpleMarkdownParser.defaultRules, "react"));
+				MyReact.markdownParse = function (str) {
+					if (!Internal.LibraryModules.SimpleMarkdownParser) return null;
+					if (!MyReact.markdownParse.parser || !MyReact.markdownParse.render) {
+						MyReact.markdownParse.parser = Internal.LibraryModules.SimpleMarkdownParser.parserFor(Internal.LibraryModules.SimpleMarkdownParser.defaultRules);
+						MyReact.markdownParse.render = Internal.LibraryModules.SimpleMarkdownParser.reactFor(Internal.LibraryModules.SimpleMarkdownParser.ruleOutput(Internal.LibraryModules.SimpleMarkdownParser.defaultRules, "react"));
 					}
-					return BDFDB.ReactUtils.markdownParse.render(BDFDB.ReactUtils.markdownParse.parser(str, {inline: true}));
+					return MyReact.render && MyReact.parser ? MyReact.render(MyReact.parser(str, {inline: true})) : null;
 				};
-				BDFDB.ReactUtils.elementToReact = function (node, ref) {
+				MyReact.elementToReact = function (node, ref) {
 					if (BDFDB.ReactUtils.isValidElement(node)) return node;
 					else if (!Node.prototype.isPrototypeOf(node)) return null;
 					else if (node.nodeType == Node.TEXT_NODE) return node.nodeValue;
@@ -2648,12 +2649,12 @@ module.exports = (_ => {
 						let camelprop = key.replace(/-([a-z]?)/g, (m, g) => g.toUpperCase());
 						if (attributes.style[camelprop] != null) importantStyles.push(key);
 					}
-					for (let child of node.childNodes) attributes.children.push(BDFDB.ReactUtils.elementToReact(child));
+					for (let child of node.childNodes) attributes.children.push(MyReact.elementToReact(child));
 					attributes.className = BDFDB.DOMUtils.formatClassName(attributes.className, attributes.class);
 					delete attributes.class;
 					return BDFDB.ReactUtils.forceStyle(BDFDB.ReactUtils.createElement(node.tagName, attributes), importantStyles);
 				};
-				BDFDB.ReactUtils.forceStyle = function (reactEle, styles) {
+				MyReact.forceStyle = function (reactEle, styles) {
 					if (!BDFDB.ReactUtils.isValidElement(reactEle)) return null;
 					if (!BDFDB.ObjectUtils.is(reactEle.props.style) || !BDFDB.ArrayUtils.is(styles) || !styles.length) return reactEle;
 					let ref = reactEle.ref;
@@ -2667,7 +2668,7 @@ module.exports = (_ => {
 					};
 					return reactEle;
 				};
-				BDFDB.ReactUtils.findChild = function (nodeOrInstance, config) {
+				MyReact.findChild = function (nodeOrInstance, config) {
 					if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props && !config.filter) return config.all ? [] : null;
 					let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 					if (!BDFDB.ObjectUtils.is(instance) && !BDFDB.ArrayUtils.is(instance)) return null;
@@ -2752,7 +2753,7 @@ module.exports = (_ => {
 						return key != null && props[key] != null && value != null && (key == "className" ? (" " + props[key] + " ").indexOf(" " + value + " ") > -1 : BDFDB.equals(props[key], value));
 					}
 				};
-				BDFDB.ReactUtils.setChild = function (parent, stringOrChild) {
+				MyReact.setChild = function (parent, stringOrChild) {
 					if (!BDFDB.ReactUtils.isValidElement(parent) || (!BDFDB.ReactUtils.isValidElement(stringOrChild) && typeof stringOrChild != "string" && !BDFDB.ArrayUtils.is(stringOrChild))) return;
 					let set = false;
 					checkParent(parent);
@@ -2777,7 +2778,7 @@ module.exports = (_ => {
 						}
 					}
 				};
-				BDFDB.ReactUtils.findConstructor = function (nodeOrInstance, types, config = {}) {
+				MyReact.findConstructor = function (nodeOrInstance, types, config = {}) {
 					if (!BDFDB.ObjectUtils.is(config)) return null;
 					if (!nodeOrInstance || !types) return config.all ? (config.group ? {} : []) : null;
 					let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
@@ -2842,13 +2843,13 @@ module.exports = (_ => {
 						return result;
 					}
 				};
-				BDFDB.ReactUtils.findDOMNode = function (instance) {
+				MyReact.findDOMNode = function (instance) {
 					if (Node.prototype.isPrototypeOf(instance)) return instance;
 					if (!instance || !instance.updater || typeof instance.updater.isMounted !== "function" || !instance.updater.isMounted(instance)) return null;
 					let node = Internal.LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.ObjectUtils.get(instance, "child.stateNode");
 					return Node.prototype.isPrototypeOf(node) ? node : null;
 				};
-				BDFDB.ReactUtils.findOwner = function (nodeOrInstance, config) {
+				MyReact.findOwner = function (nodeOrInstance, config) {
 					if (!BDFDB.ObjectUtils.is(config)) return null;
 					if (!nodeOrInstance || !config.name && !config.type && !config.key && !config.props && !config.filter) return config.all ? (config.group ? {} : []) : null;
 					let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
@@ -2922,7 +2923,7 @@ module.exports = (_ => {
 						return result;
 					}
 				};
-				BDFDB.ReactUtils.findParent = function (nodeOrInstance, config) {
+				MyReact.findParent = function (nodeOrInstance, config) {
 					if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props && !config.filter) return [null, -1];
 					let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 					if (!BDFDB.ObjectUtils.is(instance) && !BDFDB.ArrayUtils.is(instance) || instance.props && typeof instance.props.children == "function") return [null, -1];
@@ -2998,7 +2999,7 @@ module.exports = (_ => {
 						return key != null && props[key] != null && value != null && (key == "className" ? (" " + props[key] + " ").indexOf(" " + value + " ") > -1 : BDFDB.equals(props[key], value));
 					}
 				};
-				BDFDB.ReactUtils.findProps = function (nodeOrInstance, config) {
+				MyReact.findProps = function (nodeOrInstance, config) {
 					if (!BDFDB.ObjectUtils.is(config)) return null;
 					if (!nodeOrInstance || !config.name && !config.key) return null;
 					let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
@@ -3038,7 +3039,7 @@ module.exports = (_ => {
 						return result;
 					}
 				};
-				BDFDB.ReactUtils.findValue = function (nodeOrInstance, searchKey, config = {}) {
+				MyReact.findValue = function (nodeOrInstance, searchKey, config = {}) {
 					if (!BDFDB.ObjectUtils.is(config)) return null;
 					if (!nodeOrInstance || typeof searchKey != "string") return config.all ? [] : null;
 					let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
@@ -3102,17 +3103,17 @@ module.exports = (_ => {
 						return result;
 					}
 				};
-				BDFDB.ReactUtils.forceUpdate = function (...instances) {
+				MyReact.forceUpdate = function (...instances) {
 					for (let ins of instances.flat(10).filter(n => n)) if (ins.updater && typeof ins.updater.isMounted == "function" && ins.updater.isMounted(ins)) ins.forceUpdate();
 				};
-				BDFDB.ReactUtils.getInstance = function (node) {
+				MyReact.getInstance = function (node) {
 					if (!BDFDB.ObjectUtils.is(node)) return null;
 					return node[Object.keys(node).find(key => key.startsWith("__reactInternalInstance") || key.startsWith("__reactFiber"))];
 				};
-				BDFDB.ReactUtils.isCorrectInstance = function (instance, name) {
+				MyReact.isCorrectInstance = function (instance, name) {
 					return instance && ((instance.type && (instance.type.render && instance.type.render.displayName === name || instance.type.displayName === name || instance.type.name === name || instance.type === name)) || instance.render && (instance.render.displayName === name || instance.render.name === name) || instance.displayName == name || instance.name === name);
 				};
-				BDFDB.ReactUtils.render = function (component, node) {
+				MyReact.render = function (component, node) {
 					if (!BDFDB.ReactUtils.isValidElement(component) || !Node.prototype.isPrototypeOf(node)) return;
 					try {
 						Internal.LibraryModules.ReactDOM.render(component, node);
@@ -3127,7 +3128,7 @@ module.exports = (_ => {
 					}
 					catch (err) {BDFDB.LogUtils.error(["Could not render React Element!", err]);}
 				};
-				BDFDB.ReactUtils.hookCall = function (callback, args) {
+				MyReact.hookCall = function (callback, args) {
 					if (typeof callback != "function") return null;
 					let returnValue = null, tempNode = document.createElement("div");
 					BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(_ => {
@@ -3137,6 +3138,14 @@ module.exports = (_ => {
 					BDFDB.ReactUtils.unmountComponentAtNode(tempNode);
 					return returnValue;
 				};
+				BDFDB.ReactUtils = new Proxy(LibraryModules, {
+					get: function (_, item) {
+						if (MyReact[item]) return MyReact[item];
+						else if (LibraryModules.React[item]) return LibraryModules.React[item];
+						else if (LibraryModules.ReactDOM[item]) return LibraryModules.ReactDOM[item];
+						else return null;
+					}
+				});
 
 				BDFDB.MessageUtils = {};
 				BDFDB.MessageUtils.isSystemMessage = function (message) {
@@ -3196,6 +3205,7 @@ module.exports = (_ => {
 					return activity && activity.type == BDFDB.DiscordConstants.ActivityTypes.STREAMING ? "streaming" : Internal.LibraryModules.StatusMetaUtils.getStatus(id);
 				};
 				BDFDB.UserUtils.getStatusColor = function (status, useColor) {
+					if (!BDFDB.DiscordConstants.Colors) return null;
 					status = typeof status == "string" ? status.toLowerCase() : null;
 					switch (status) {
 						case "online": return useColor ? BDFDB.DiscordConstants.Colors.STATUS_GREEN_600 : "var(--bdfdb-green)";
@@ -4350,6 +4360,9 @@ module.exports = (_ => {
 						return BDFDB.DiscordUtils.getFolder.folder = folder;
 					}
 				};
+				BDFDB.DiscordUtils.getLanguage = function () {
+					return Internal.LibraryModules.LanguageStore && (Internal.LibraryModules.LanguageStore.chosenLocale || Internal.LibraryModules.LanguageStore._chosenLocale) || document.querySelector("html[lang]").getAttribute("lang") || BDFDB.DicordUtils.getSettings("locale");
+				};
 				BDFDB.DiscordUtils.getBuild = function () {
 					if (BDFDB.DiscordUtils.getBuild.build) return BDFDB.DiscordUtils.getBuild.build;
 					else {
@@ -4592,12 +4605,13 @@ module.exports = (_ => {
 					}
 				});
 			
-				const LanguageStrings = Internal.LibraryModules.LanguageStore && Internal.LibraryModules.LanguageStore._proxyContext ? Object.assign({}, Internal.LibraryModules.LanguageStore._proxyContext.defaultMessages) : {};
+				const LanguageStrings = Internal.LibraryModules.LanguageStore && Internal.LibraryModules.LanguageStore._proxyContext ? Object.assign({}, Internal.LibraryModules.LanguageStore._proxyContext.defaultMessages) : Internal.LibraryModules.LanguageStore;
+				const LanguageStringsObj = Internal.LibraryModules.LanguageStore.Messages || Internal.LibraryModules.LanguageStore;
 				const LibraryStrings = Object.assign({}, InternalData.LibraryStrings);
 				BDFDB.LanguageUtils = {};
 				BDFDB.LanguageUtils.languages = Object.assign({}, InternalData.Languages);
 				BDFDB.LanguageUtils.getLanguage = function () {
-					let lang = Internal.LibraryModules.LanguageStore.chosenLocale || Internal.LibraryModules.LanguageStore._chosenLocale || BDFDB.DiscordUtils.getSettings("locale") || "en";
+					let lang = BDFDB.DiscordUtils.getLanguage() || "en";
 					if (lang == "en-GB" || lang == "en-US") lang = "en";
 					let langIds = lang.split("-");
 					let langId = langIds[0];
@@ -4612,7 +4626,7 @@ module.exports = (_ => {
 				};
 				BDFDB.LanguageUtils.LanguageStrings = new Proxy(LanguageStrings, {
 					get: function (list, item) {
-						let stringObj = Internal.LibraryModules.LanguageStore.Messages[item];
+						let stringObj = LanguageStringsObj[item];
 						if (!stringObj) BDFDB.LogUtils.warn([item, "not found in BDFDB.LanguageUtils.LanguageStrings"]);
 						else {
 							if (stringObj && typeof stringObj == "object" && typeof stringObj.format == "function") return BDFDB.LanguageUtils.LanguageStringsFormat(item);
@@ -4623,7 +4637,7 @@ module.exports = (_ => {
 				});
 				BDFDB.LanguageUtils.LanguageStringsCheck = new Proxy(LanguageStrings, {
 					get: function (list, item) {
-						return !!Internal.LibraryModules.LanguageStore.Messages[item];
+						return !!LanguageStringsObj[item];
 					}
 				});
 				let parseLanguageStringObj = obj => {
@@ -4639,7 +4653,7 @@ module.exports = (_ => {
 				};
 				BDFDB.LanguageUtils.LanguageStringsFormat = function (item, ...values) {
 					if (item) {
-						let stringObj = Internal.LibraryModules.LanguageStore.Messages[item];
+						let stringObj = LanguageStringsObj[item];
 						if (stringObj && typeof stringObj == "object" && typeof stringObj.format == "function") {
 							let i = 0, returnvalue, formatVars = {};
 							while (!returnvalue && i < 10) {
@@ -4699,7 +4713,7 @@ module.exports = (_ => {
 					return "";
 				};
 				BDFDB.TimeUtils.interval(interval => {
-					if (Internal.LibraryModules.LanguageStore.chosenLocale || Internal.LibraryModules.LanguageStore._chosenLocale || BDFDB.DiscordUtils.getSettings("locale")) {
+					if (BDFDB.DiscordUtils.getLanguage()) {
 						BDFDB.TimeUtils.clear(interval);
 						let language = BDFDB.LanguageUtils.getLanguage();
 						if (language) BDFDB.LanguageUtils.languages.$discord = Object.assign({}, language, {name: `Discord (${language.name})`});
@@ -7644,8 +7658,8 @@ module.exports = (_ => {
 					};
 					Internal.setDefaultProps(CustomComponents.Switch, {
 						size: CustomComponents.Switch.Sizes.DEFAULT,
-						uncheckedColor: BDFDB.DiscordConstants.Colors.PRIMARY_DARK_400,
-						checkedColor: BDFDB.DiscordConstants.Colors.BRAND
+						uncheckedColor: BDFDB.DiscordConstants.Colors && BDFDB.DiscordConstants.Colors.PRIMARY_DARK_400,
+						checkedColor: BDFDB.DiscordConstants.Colors && BDFDB.DiscordConstants.Colors.BRAND
 					});
 					
 					CustomComponents.TabBar = reactInitialized && class BDFDB_TabBar extends Internal.LibraryModules.React.Component {
@@ -8602,7 +8616,7 @@ module.exports = (_ => {
 						BDFDB.PatchUtils.forceAllUpdates(BDFDB);
 					};
 					
-					if (Internal.LibraryComponents.GuildComponents.BlobMask) {
+					if (Internal.LibraryComponents.GuildComponents.BlobMask && Internal.LibraryComponents.GuildComponents.BlobMask.prototype) {
 						let newBadges = ["lowerLeftBadge", "upperLeftBadge"];
 						BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryComponents.GuildComponents.BlobMask.prototype, "render", {
 							before: e => {

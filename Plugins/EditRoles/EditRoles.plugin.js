@@ -361,7 +361,7 @@ module.exports = (_ => {
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 											className: BDFDB.disCN.marginreset,
 											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-											children: BDFDB.LibraryModules.LanguageStore.Messages.FORM_LABEL_ROLE_ICON
+											children: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ROLE_ICON
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 											type: "Switch",
