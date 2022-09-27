@@ -2548,7 +2548,7 @@ module.exports = (_ => {
 					get: function (_, item) {
 						if (DiscordConstants[item]) return DiscordConstants[item];
 						if (!InternalData.DiscordConstants[item]) return {};
-						DiscordConstants[item] = BDFDB.ModuleUtils.findByPrototypes(InternalData.DiscordConstants[item]);
+						DiscordConstants[item] = BDFDB.ModuleUtils.findByProperties(InternalData.DiscordConstants[item]);
 						return DiscordConstants[item] ? DiscordConstants[item] : {};
 					}
 				});
