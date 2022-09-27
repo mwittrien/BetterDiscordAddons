@@ -62,6 +62,7 @@
 	},
 	"LibraryModulesFunctionsMap": {
 		"AckUtils": {
+			"ack": ["type:\"CHANNEL_ACK\"", "messageId", "channelId"],
 			"bulkAck": ["type:\"BULK_ACK\""]
 		}
 	},
