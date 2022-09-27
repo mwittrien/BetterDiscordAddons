@@ -177,7 +177,7 @@ module.exports = (_ => {
 			}
 		
 			processGuilds (e) {
-				if (this.settings.general.onlyHideInStream && !BDFDB.LibraryModules.StreamerModeStore.enabled) return;
+				if (this.settings.general.onlyHideInStream && !BDFDB.LibraryStores.StreamerModeStore.enabled) return;
 				let hiddenGuildIds = hiddenEles.servers || [];
 				let hiddenFolderIds = hiddenEles.folders || [];
 				if (hiddenGuildIds.length || hiddenFolderIds.length) {

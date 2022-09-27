@@ -316,7 +316,7 @@ module.exports = (_ => {
 				if (callListenerModule) {
 					callListenerModule.terminate();
 					BDFDB.PatchUtils.patch(this, callListenerModule, "handleRingUpdate", {instead: e => {
-						if (BDFDB.LibraryModules.CallUtils.getCalls().filter(call => call.ringing.length > 0 && BDFDB.LibraryModules.VoiceUtils.getCurrentClientVoiceChannelId() === call.channelId).length > 0 && !BDFDB.LibraryModules.SoundStateUtils.isSoundDisabled("call_calling") && !BDFDB.LibraryModules.StreamerModeStore.disableSounds) {
+						if (BDFDB.LibraryModules.CallUtils.getCalls().filter(call => call.ringing.length > 0 && BDFDB.LibraryModules.VoiceUtils.getCurrentClientVoiceChannelId() === call.channelId).length > 0 && !BDFDB.LibraryModules.SoundStateUtils.isSoundDisabled("call_calling") && !BDFDB.LibraryStores.StreamerModeStore.disableSounds) {
 							createdAudios["call_calling"].loop();
 						}
 						else createdAudios["call_calling"].stop();
@@ -714,7 +714,7 @@ module.exports = (_ => {
 			}
 
 			playAudio (type) {
-				if (this.dontPlayAudio(type) || BDFDB.LibraryModules.StreamerModeStore.disableSounds) return;
+				if (this.dontPlayAudio(type) || BDFDB.LibraryStores.StreamerModeStore.disableSounds) return;
 				if (createdAudios[type]) createdAudios[type].stop();
 				createdAudios[type] = new WebAudioSound(type);
 				createdAudios[type].play();

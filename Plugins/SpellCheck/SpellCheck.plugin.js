@@ -96,7 +96,7 @@ module.exports = (_ => {
 					let dictionaryLanguageIds = Array.from(BDFDB.DOMUtils.create(body).querySelectorAll(`[href*="/mwittrien/BetterDiscordAddons/blob/master/Plugins/SpellCheck/dic/"]`)).map(n => n.innerText.split(".")[0]).filter(n => n);
 					languages = BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, langId => dictionaryLanguageIds.includes(langId), true);
 					
-					if (BDFDB.LibraryModules.SpellCheckStore && BDFDB.LibraryModules.SpellCheckStore.isEnabled()) BDFDB.LibraryModules.DispatchApiUtils.dispatch({type: "SPELLCHECK_TOGGLE"});
+					if (BDFDB.LibraryStores.SpellCheckStore && BDFDB.LibraryStores.SpellCheckStore.isEnabled()) BDFDB.LibraryModules.DispatchApiUtils.dispatch({type: "SPELLCHECK_TOGGLE"});
 
 					BDFDB.PatchUtils.forceAllUpdates(this);
 					
