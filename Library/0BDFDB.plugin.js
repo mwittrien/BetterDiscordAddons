@@ -3309,8 +3309,8 @@ module.exports = (_ => {
 					if (channels.length) BDFDB.ChannelUtils.markAsRead(channels);
 					let eventChannels = guildIds.map(id => ({
 						channelId: id,
-						readStateType: Internal.LibraryModules.UnreadStateTypes.GUILD_EVENT,
-						messageId: Internal.LibraryStores.ReadStateStore.lastMessageId(id, Internal.LibraryModules.UnreadStateTypes.GUILD_EVENT)
+						readStateType: Internal.DiscordConstants.ReadStateTypes.GUILD_EVENT,
+						messageId: Internal.LibraryStores.ReadStateStore.lastMessageId(id, Internal.DiscordConstants.ReadStateTypes.GUILD_EVENT)
 					})).filter(n => n.messageId);
 					if (eventChannels.length) Internal.LibraryModules.AckUtils.bulkAck(eventChannels);
 				};
@@ -3362,7 +3362,7 @@ module.exports = (_ => {
 				BDFDB.ChannelUtils.markAsRead = function (channelIds) {
 					let unreadChannels = [channelIds].flat(10).filter(id => id && typeof id == "string" && (BDFDB.LibraryStores.ChannelStore.getChannel(id) || {}).type != Internal.DiscordConstants.ChannelTypes.GUILD_CATEGORY && (Internal.LibraryStores.ReadStateStore.hasUnread(id) || Internal.LibraryStores.ReadStateStore.getMentionCount(id) > 0)).map(id => ({
 						channelId: id,
-						readStateType: Internal.LibraryModules.UnreadStateTypes.CHANNEL,
+						readStateType: Internal.DiscordConstants.ReadStateTypes.CHANNEL,
 						messageId: Internal.LibraryStores.ReadStateStore.lastMessageId(id)
 					}));
 					if (unreadChannels.length) Internal.LibraryModules.AckUtils.bulkAck(unreadChannels);
