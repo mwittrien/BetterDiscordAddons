@@ -3167,7 +3167,7 @@ module.exports = (_ => {
 
 				BDFDB.MessageUtils = {};
 				BDFDB.MessageUtils.isSystemMessage = function (message) {
-					return message && !BDFDB.DiscordConstants.USER_MESSAGE_TYPES.has(message.type) && (message.type !== BDFDB.DiscordConstants.MessageTypes.APPLICATION_COMMAND || message.interaction == null);
+					return message && message.type !== BDFDB.DiscordConstants.MessageTypes.DEFAULT && message.type !== BDFDB.DiscordConstants.MessageTypes.REPLY && (message.type !== BDFDB.DiscordConstants.MessageTypes.CHAT_INPUT_COMMAND || message.interaction == null);
 				};
 				BDFDB.MessageUtils.rerenderAll = function (instant) {
 					BDFDB.TimeUtils.clear(BDFDB.MessageUtils.rerenderAll.timeout);
