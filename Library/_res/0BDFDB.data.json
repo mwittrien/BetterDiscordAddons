@@ -59,8 +59,13 @@
 		"UserNotificationSettings": ["NULL", "NO_MESSAGES", "ALL_MESSAGES"],
 		"UserSettingsSections": ["ACCOUNT", "DEVELOPER_OPTIONS", "DISMISSIBLE_CONTENT_OPTIONS"]
 	},
+	"LibraryModulesFunctionsMap": {
+		"AckUtils": {
+			"bulkAck": ["type:\"BULK_ACK\""]
+		}
+	},
 	"LibraryModules": {
-		"AckUtils": {"props": ["localAck", "bulkAck"]},
+		"AckUtils": {"strings": ["type:\"BULK_ACK\""], "exported": false, "value": "exports"},
 		"ActivityUtils": {"props": ["sendActivityInvite", "updateActivity"]},
 		"APIEncodeUtils": {"props": ["stringify", "parse", "encode"]},
 		"APIUtils": {"props": ["getAPIBaseURL"]},
@@ -155,8 +160,7 @@
 		"UserProfileUtils": {"props": ["fetchMutualFriends", "fetchProfile"]},
 		"UserSettingsUtils": {"props": ["open", "updateAccount"]},
 		"Utilities": {"props": ["flatMap", "cloneDeep"]},
-		"WindowUtils": {"props": ["minimize", "maximize", "close"]},
-		"ZoomUtils": {"props": ["setZoom", "setFontSize"]}
+		"WindowUtils": {"props": ["minimize", "maximize", "close"]}
 	},
 	"ModuleUtilsConfig": {
 		"QueuedComponents": [
