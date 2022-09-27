@@ -24,7 +24,18 @@
 		"MAX_VIDEO_HEIGHT": 720,
 		"MAX_VIDEO_WIDTH": 1280,
 		"ME": "@me",
-		"SEARCH_PAGE_SIZE": 25
+		"SEARCH_PAGE_SIZE": 25,
+		"ToastIcons": {
+			"info": "INFO",
+			"danger": "CLOSE_CIRCLE",
+			"success": "CHECKMARK_CIRCLE",
+			"warning": "WARNING"
+		},
+		"ToastPositions": {
+			"center": "toastscenter",
+			"left": "toastsleft",
+			"right": "toastsright"
+		}
 	},
 	"DiscordConstants": {
 		"ActivityTypes": ["STREAMING", "LISTENING", "CUSTOM_STATUS"],
@@ -51,6 +62,7 @@
 	"LibraryModules": {
 		"AckUtils": {"props": ["localAck", "bulkAck"]},
 		"ActivityUtils": {"props": ["sendActivityInvite", "updateActivity"]},
+		"ActiveThreadsStore": {"name": "ActiveThreadsStore"},
 		"APIEncodeUtils": {"props": ["stringify", "parse", "encode"]},
 		"APIUtils": {"props": ["getAPIBaseURL"]},
 		"AnalyticsUtils": {"props": ["isThrottled", "track"]},
@@ -67,8 +79,8 @@
 		"CategoryCollapseUtils": {"props": ["categoryCollapse", "categoryCollapseAll"]},
 		"ChannelIconUtils": {"props": ["getChannelIconComponent", "getChannelIconTooltipText"]},
 		"ChannelListStore": {"name": "ChannelListStore"},
+		"ChannelStore": {"name": "ChannelStore"},
 		"ChannelUtils": {"props": ["selectChannel", "selectPrivateChannel"]},
-		"ChannelStore": {"props": ["getChannel", "getDMFromUserId"]},
 		"ChatRestrictionUtils": {"props": ["applyChatRestrictions"]},
 		"ColorUtils": {"props": ["hex2int", "hex2rgb"]},
 		"ConnectionProviderUtils": {"props": ["get", "isSupported", "filter"]},
@@ -178,7 +190,6 @@
 		"TimeUtils": {"props": ["calendarFormat", "dateFormat"]},
 		"ThemeSettingsStore": {"props": ["theme"]},
 		"ThreadConfigStore": {"props": ["hasJoined", "isMuted"]},
-		"ThreadStore": {"props": ["isActive", "getThreadsForGuild"]},
 		"UnreadGuildUtils": {"props": ["hasUnread", "getTotalMentionCount"]},
 		"UnreadChannelUtils": {"props": ["getUnreadCount", "getOldestUnreadMessageId"]},
 		"UnreadStateTypes": {"props": ["ReadStateTypes"], "value": "ReadStateTypes"},
