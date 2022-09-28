@@ -2279,7 +2279,7 @@ module.exports = (_ => {
 											methodname: e.originalMethodName,
 											patchtypes: [patchType]
 										})
-									}, {name, noCache: true});
+									}, {name: config.name, noCache: true});
 								}}, {name: config.name});
 							}
 							else {
@@ -4356,8 +4356,19 @@ module.exports = (_ => {
 					for (let i in newV.reverse()) newValue += (newV[i] * (10 ** i));
 					return (newValue - oldValue) / (10 ** (length-1));
 				};
-
+				
+				var SettingsStore;
 				BDFDB.DiscordUtils = {};
+				BDFDB.DiscordUtils.getSettings = function (typeName) {
+					if (!SettingsStore) SettingsStore = (Object.entries(BDFDB.ModuleUtils.findByProperties("updateAsync", {defaultExport: false}).exports).find(n => n && n[1] && n[1].ProtoClass && n[1].ProtoClass.typeName && n[1].ProtoClass.typeName.indexOf("Preload") > -1) || [])[1];
+					if (SettingsStore) return typeName ? (SettingsStore.getCurrentValue() || {})[guildFolders] : SettingsStore.getCurrentValue() || {};
+				};
+				BDFDB.DiscordUtils = {};
+				BDFDB.DiscordUtils.setSettings = function (typeName, writer) {
+					if (!typeName || typeof writer != "function") return;
+					if (!SettingsStore) SettingsStore = (Object.entries(BDFDB.ModuleUtils.findByProperties("updateAsync", {defaultExport: false}).exports).find(n => n && n[1] && n[1].ProtoClass && n[1].ProtoClass.typeName && n[1].ProtoClass.typeName.indexOf("Preload") > -1) || [])[1];
+					if (SettingsStore) SettingsStore.updateAsyn(typeName, writer, BDFDB.DiscordConstants.UserSettingsActionTypes.SLOW_USER_ACTION);
+				};
 				BDFDB.DiscordUtils.openLink = function (url, config = {}) {
 					if ((config.inBuilt || config.inBuilt === undefined && Internal.settings.general.useChromium) && Internal.LibraryRequires.electron && Internal.LibraryRequires.electron.remote) {
 						let browserWindow = new Internal.LibraryRequires.electron.remote.BrowserWindow({

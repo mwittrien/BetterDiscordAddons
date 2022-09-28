@@ -60,6 +60,7 @@
 		"StatusTypes": ["STREAMING", "UNKNOWN", "DND"],
 		"UserFlags": ["HYPESQUAD", "BUG_HUNTER_LEVEL_1", "STAFF"],
 		"UserNotificationSettings": ["NULL", "NO_MESSAGES", "ALL_MESSAGES"],
+		"UserSettingsActionTypes": ["SLOW_USER_ACTION", "DAILY"],
 		"UserSettingsSections": ["ACCOUNT", "DEVELOPER_OPTIONS", "DISMISSIBLE_CONTENT_OPTIONS"]
 	},
 	"LibraryModulesFunctionsMap": {
