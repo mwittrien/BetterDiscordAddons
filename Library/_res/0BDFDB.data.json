@@ -5406,6 +5406,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"868869934082560010": 	{"active": true,	"tier": "t3",	"text": "",											"color": "",			"id": "oaklaza"},
 		"96563253466898432": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "katsuro"},
 		"446383444763869184": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "ari (ArCl)"},
 		"226444377482985473": 	{"active": true,	"tier": "t3",	"text": "xoxo",										"color": "",			"id": "seivag (zij)"},
