@@ -275,7 +275,7 @@ module.exports = (_ => {
 			}
 
 			processRecentsHeader (e) {
-				if (this.settings.general.addClearButton && mentionedMessages && mentionedMessages.length && e.instance.props.tab == BDFDB.LibraryModules.InboxUtils.InboxTab.MENTIONS) e.returnvalue.props.children = [
+				if (this.settings.general.addClearButton && mentionedMessages && mentionedMessages.length && e.instance.props.tab == BDFDB.DiscordConstants.InboxTabs.MENTIONS) e.returnvalue.props.children = [
 					e.returnvalue.props.children,
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						text: `${BDFDB.LanguageUtils.LanguageStrings.CLOSE} (${BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL})`,
