@@ -2565,6 +2565,7 @@ module.exports = (_ => {
 				};
 				
 				LibraryModules = {};
+				const OriginalModules = {};
 				LibraryModules.LanguageStore = BDFDB.ModuleUtils.find(m => m.Messages && m.Messages.IMAGE && m);
 				LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
 				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode");
@@ -2586,15 +2587,17 @@ module.exports = (_ => {
 						else if (InternalData.LibraryModules[item].name) LibraryModules[item] = BDFDB.ModuleUtils.findByName(InternalData.LibraryModules[item].name, {defaultExport});
 						else if (InternalData.LibraryModules[item].strings) LibraryModules[item] = BDFDB.ModuleUtils.findByString(InternalData.LibraryModules[item].strings, {defaultExport});
 						if (InternalData.LibraryModules[item].value) LibraryModules[item] = (LibraryModules[item] || {})[InternalData.LibraryModules[item].value];
+						if (InternalData.LibraryModules[item].assign) LibraryModules[item] = Object.assign({}, LibraryModules[item]);
 						if (LibraryModules[item] && InternalData.LibraryModulesFunctionsMap && InternalData.LibraryModulesFunctionsMap[item]) {
-							let module = LibraryModules[item], mapped = {};
-							LibraryModules[item] = new Proxy(Object.assign({}, module, InternalData.LibraryModulesFunctionsMap[item]), {
+							OriginalModules[item] = LibraryModules[item];
+							const mappedItems = {};
+							LibraryModules[item] = new Proxy(Object.assign({}, OriginalModules[item], InternalData.LibraryModulesFunctionsMap[item]), {
 								get: function (_, item2) {
-									if (mapped[item2]) return module[mapped[item2]];
-									if (!InternalData.LibraryModulesFunctionsMap[item][item2]) return module[item2];
-									let foundFunc = Object.entries(module).find(n => InternalData.LibraryModulesFunctionsMap[item][item2].flat(10).every(string => n && n.toString().indexOf(string) > -1));
+									if (mappedItems[item2]) return OriginalModules[item][mappedItems[item2]];
+									if (!InternalData.LibraryModulesFunctionsMap[item][item2]) return OriginalModules[item][item2];
+									let foundFunc = Object.entries(OriginalModules[item]).find(n => InternalData.LibraryModulesFunctionsMap[item][item2].flat(10).every(string => n && n.toString().indexOf(string) > -1));
 									if (foundFunc) {
-										mapped[item2] = foundFunc[0];
+										mappedItems[item2] = foundFunc[0];
 										return foundFunc[1];
 									}
 								}
@@ -2605,8 +2608,8 @@ module.exports = (_ => {
 				});
 				BDFDB.LibraryModules = Internal.LibraryModules;
 				
-				if (Internal.LibraryModules.KeyCodeUtils) Internal.LibraryModules.KeyCodeUtils.getString = function (keyArray) {
-					return Internal.LibraryModules.KeyCodeUtils.toString([keyArray].flat(10).filter(n => n).map(keyCode => [Internal.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, Internal.LibraryModules.KeyCodeUtils.keyToCode((Object.entries(Internal.LibraryModules.KeyEvents.codes).find(n => n[1] == keyCode && Internal.LibraryModules.KeyCodeUtils.keyToCode(n[0], null)) || [])[0], null) || keyCode]), true);
+				if (Internal.LibraryModules.KeyCodeUtils && OriginalModules.KeyCodeUtils) OriginalModules.KeyCodeUtils.getString = function (keyArray) {
+					return Internal.LibraryModules.KeyCodeUtils.toName([keyArray].flat(10).filter(n => n).map(keyCode => [Internal.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, Internal.LibraryModules.KeyCodeUtils.keyToCode((Object.entries(Internal.LibraryModules.KeyEvents.codes).find(n => n[1] == keyCode && Internal.LibraryModules.KeyCodeUtils.keyToCode(n[0], null)) || [])[0], null) || keyCode]), true);
 				};
 				
 				const MyReact = {};
@@ -4357,18 +4360,7 @@ module.exports = (_ => {
 					return (newValue - oldValue) / (10 ** (length-1));
 				};
 				
-				var SettingsStore;
 				BDFDB.DiscordUtils = {};
-				BDFDB.DiscordUtils.getSettings = function (typeName) {
-					if (!SettingsStore) SettingsStore = (Object.entries(BDFDB.ModuleUtils.findByProperties("updateAsync", {defaultExport: false}).exports).find(n => n && n[1] && n[1].ProtoClass && n[1].ProtoClass.typeName && n[1].ProtoClass.typeName.indexOf("Preload") > -1) || [])[1];
-					if (SettingsStore) return typeName ? (SettingsStore.getCurrentValue() || {})[guildFolders] : SettingsStore.getCurrentValue() || {};
-				};
-				BDFDB.DiscordUtils = {};
-				BDFDB.DiscordUtils.setSettings = function (typeName, writer) {
-					if (!typeName || typeof writer != "function") return;
-					if (!SettingsStore) SettingsStore = (Object.entries(BDFDB.ModuleUtils.findByProperties("updateAsync", {defaultExport: false}).exports).find(n => n && n[1] && n[1].ProtoClass && n[1].ProtoClass.typeName && n[1].ProtoClass.typeName.indexOf("Preload") > -1) || [])[1];
-					if (SettingsStore) SettingsStore.updateAsyn(typeName, writer, BDFDB.DiscordConstants.UserSettingsActionTypes.SLOW_USER_ACTION);
-				};
 				BDFDB.DiscordUtils.openLink = function (url, config = {}) {
 					if ((config.inBuilt || config.inBuilt === undefined && Internal.settings.general.useChromium) && Internal.LibraryRequires.electron && Internal.LibraryRequires.electron.remote) {
 						let browserWindow = new Internal.LibraryRequires.electron.remote.BrowserWindow({
@@ -6486,8 +6478,8 @@ module.exports = (_ => {
 					CustomComponents.GuildVoiceList = reactInitialized && class BDFDB_GuildVoiceList extends Internal.LibraryModules.React.Component {
 						render() {
 							let channels = Internal.LibraryStores.GuildChannelStore.getChannels(this.props.guild.id);
-							let voiceChannels = (channels[Internal.LibraryModules.GuildChannelKeys.GUILD_VOCAL_CHANNELS_KEY] || []).filter(c => c.channel.type == Internal.DiscordConstants.ChannelTypes.GUILD_VOICE).map(c => c.channel.id);
-							let stageChannels = (channels[Internal.LibraryModules.GuildChannelKeys.GUILD_VOCAL_CHANNELS_KEY] || []).filter(c => c.channel.type == Internal.DiscordConstants.ChannelTypes.GUILD_STAGE_VOICE && Internal.LibraryStores.StageInstanceStore.getStageInstanceByChannel(c.channel.id)).map(c => c.channel.id);
+							let voiceChannels = (channelsVOCAL || []).filter(c => c.channel.type == Internal.DiscordConstants.ChannelTypes.GUILD_VOICE).map(c => c.channel.id);
+							let stageChannels = (channelsVOCAL || []).filter(c => c.channel.type == Internal.DiscordConstants.ChannelTypes.GUILD_STAGE_VOICE && Internal.LibraryStores.StageInstanceStore.getStageInstanceByChannel(c.channel.id)).map(c => c.channel.id);
 							let streamOwnerIds = Internal.LibraryStores.ApplicationStreamingStore.getAllApplicationStreams().filter(app => app.guildId === this.props.guild.id).map(app => app.ownerId) || [];
 							let streamOwners = streamOwnerIds.map(ownerId => Internal.LibraryStores.UserStore.getUser(ownerId)).filter(n => n);
 							let connectedVoiceUsers = BDFDB.ObjectUtils.toArray(Internal.LibraryStores.SortedVoiceStateStore.getVoiceStates(this.props.guild.id)).map(state => voiceChannels.includes(state.channelId) && state.channelId != this.props.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && Internal.LibraryStores.UserStore.getUser(state.userId)).filter(n => n);

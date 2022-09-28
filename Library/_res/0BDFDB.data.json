@@ -45,10 +45,12 @@
 		"AutocompleterQuerySymbols": ["VOICE_CHANNEL", "TEXT_CHANNEL", "USER", "APPLICATION"],
 		"AutocompleterResultTypes": ["VOICE_CHANNEL", "TEXT_CHANNEL", "USER", "LINK"],
 		"ChannelTypes": ["GUILD_TEXT", "GUILD_STORE", "DM"],
+		"ChannelTypeGroups": ["GUILD_TEXTUAL", "GUILD_VOCAL", "ALL_DMS"],
 		"Colors": ["SPOTIFY", "STATUS_RED"],
 		"ComponentActions": ["INSERT_TEXT", "TEXTAREA_FOCUS"],
 		"Endpoints": ["CAPTCHA", "GUILD", "MESSAGES"],
 		"FriendsSections": ["ALL", "ONLINE", "ADD_FRIEND"],
+		"InboxTabs": ["MENTIONS", "UNREADS"],
 		"KeyboardDeviceTypes": ["KEYBOARD_KEY", "MOUSE_BUTTON"],
 		"MessageStates": ["SENT", "SENDING", "SEND_FAILED"],
 		"MessageTypeGroups": ["USER_MESSAGE", "DELETABLE"],
@@ -77,6 +79,17 @@
 		},
 		"DispatchUtils": {
 			"ComponentDispatch": ["object Object"]
+		},
+		"FolderSettingsUtils": {
+			"saveGuildFolders": ["guildFolders"]
+		},
+		"GuildBoostUtils": {
+			"getUserLevel": ["\"months\"", "next"]
+		},
+		"KeyCodeUtils": {
+			"codeToKey": ["[\"\"+", "MACOS"],
+			"keyToCode": ["Unrecognized DeviceType"],
+			"toName": ["appVersion"]
 		}
 	},
 	"LibraryModules": {
@@ -100,17 +113,14 @@
 		"EmojiUtils": {"props": ["translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji"]},
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},
 		"Env": {"props": ["env"]},
-		"GuildBadgeUtils": {"props": ["renderUnavailableBadge", "renderMediaBadge"]},
-		"GuildBoostUtils": {"props": ["getTierName", "getUserLevel"]},
-		"GuildChannelKeys": {"props": ["GUILD_SELECTABLE_CHANNELS_KEY", "GUILD_VOCAL_CHANNELS_KEY"]},
+		"FolderSettingsUtils": {"props": ["updateLocale", "updateTheme"], "exported": false, "value": "exports"},
+		"GuildBoostUtils": {"strings": ["getPremiumTypeSubscription", "PREMIUM_GUILD_TIER_1"], "exported": false, "value": "exports"},
 		"GuildNotificationsUtils": {"props": ["updateChannelOverrideSettings", "updateGuildNotificationSettings"]},
 		"GuildUtils": {"props": ["selectGuild", "transitionToGuildSync"]},
 		"HistoryUtils": {"props": ["transitionTo", "replaceWith", "getHistory"]},
 		"IconUtils": {"props": ["getGuildIconURL", "getGuildBannerURL"]},
-		"ImageEditUtils": {"props": ["getPrimaryColorForAvatar", "getRatio"]},
-		"InboxUtils": {"props": ["InboxTab", "InboxSettings"]},
 		"InviteUtils": {"props": ["acceptInvite", "createInvite"]},
-		"KeyCodeUtils": {"props": ["toCombo", "keyToCode"], "assign": true},
+		"KeyCodeUtils": {"strings": ["Unrecognized DeviceType", "GAMEPAD"], "exported": false, "value": "exports", "assign": true},
 		"KeyEvents": {"props": ["aliases", "code", "codes"]},
 		"LinkUtils": {"props": ["handleClick", "isLinkTrusted"]},
 		"LoginUtils": {"props": ["login", "logout"]},
