@@ -132,6 +132,10 @@
 		},
 		"SlateTextUtils": {
 			"toTextValue": ["ignoreTrailingEmptyNodes"]
+		},
+		"SoundUtils": {
+			"createSound": ["return new"],
+			"playSound": ["getSoundpack"]
 		}
 	},
 	"LibraryModules": {
@@ -191,10 +195,10 @@
 		"SettingsUtils": {"props": ["ShowCurrentGame", "DeveloperMode"]},
 		"SimpleMarkdownComponents": {"strings": ["customEmoji", "emojiTooltipPosition", "timestampTooltip"]},
 		"SimpleMarkdownParser": {"props": ["parseBlock", "parseInline", "defaultOutput"]},
-		"SlateRichUtils": {"strings": ["textValue", "richValue", "text:\"\""], "nonString": ["className"], "exported": false, "value": "exports"},
-		"SlateTextUtils": {"strings": ["ignoreTrailingEmptyNodes", "preventEmojiSurrogates"], "nonString": ["className"], "exported": false, "value": "exports"},
+		"SlateRichUtils": {"strings": ["textValue", "richValue", "text:\"\""], "nonString": ["createElement"], "exported": false, "value": "exports"},
+		"SlateTextUtils": {"strings": ["ignoreTrailingEmptyNodes", "preventEmojiSurrogates"], "nonString": ["createElement"], "exported": false, "value": "exports"},
 		"SoundParser": {"strings": ["discodo", "ddr-down", "mute"]},
-		"SoundUtils": {"props": ["playSound", "createSound"]},
+		"SoundUtils": {"strings": [".play()", ".disableSounds", "getSoundpack"], "nonString": ["createElement"], "exported": false, "value": "exports"},
 		"SortedGuildUtils": {"props": ["getSortedGuilds", "getFlattenedGuildIds"]},
 		"SpotifyUtils": {"props": ["setActiveDevice", "pause"]},
 		"StageChannelLiveStore": {"props": ["getAllLiveStageChannels", "useAllLiveStageChannels"]},
