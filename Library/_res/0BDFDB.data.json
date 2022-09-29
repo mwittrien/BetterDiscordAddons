@@ -86,10 +86,29 @@
 		"GuildBoostUtils": {
 			"getUserLevel": ["\"months\"", "next"]
 		},
+		"HistoryUtils": {
+			"transitionTo": ["transitionTo - Transitioning to external path"]
+		},
 		"KeyCodeUtils": {
 			"codeToKey": ["[\"\"+", "MACOS"],
 			"keyToCode": ["Unrecognized DeviceType"],
 			"toName": ["appVersion"]
+		},
+		"MediaComponentUtils": {
+			"renderImageComponent": ["renderAdjacentContent", "imageContent"]
+		},
+		"MemberDisplayUtils": {
+			"getDisplayProfile": [");return null"]
+		},
+		"MentionUtils": {
+			"isRawMessageMentioned": ["rawMessage", "mention_everyone", "mentionUsers"]
+		},
+		"MessageManageUtils": {
+			"copyLink": [".guild_id"],
+			"replyToMessage": ["showMentionToggle", "shouldMention"]
+		},
+		"ModalUtils": {
+			"openModal": [".modalKey", ".instant", ".Layer", ".onCloseRequest"]
 		}
 	},
 	"LibraryModules": {
@@ -117,27 +136,24 @@
 		"GuildBoostUtils": {"strings": ["getPremiumTypeSubscription", "PREMIUM_GUILD_TIER_1"], "exported": false, "value": "exports"},
 		"GuildNotificationsUtils": {"props": ["updateChannelOverrideSettings", "updateGuildNotificationSettings"]},
 		"GuildUtils": {"props": ["selectGuild", "transitionToGuildSync"]},
-		"HistoryUtils": {"props": ["transitionTo", "replaceWith", "getHistory"]},
+		"HistoryUtils": {"strings": ["transitionTo - Transitioning to external path"], "exported": false, "value": "exports"},
 		"IconUtils": {"props": ["getGuildIconURL", "getGuildBannerURL"]},
 		"InviteUtils": {"props": ["acceptInvite", "createInvite"]},
 		"KeyCodeUtils": {"strings": ["Unrecognized DeviceType", "GAMEPAD"], "exported": false, "value": "exports", "assign": true},
 		"KeyEvents": {"props": ["aliases", "code", "codes"]},
-		"LinkUtils": {"props": ["handleClick", "isLinkTrusted"]},
 		"LoginUtils": {"props": ["login", "logout"]},
-		"MediaComponentUtils": {"props": ["renderImageComponent", "renderAudioComponent"]},
+		"MediaComponentUtils": {"strings": ["renderAdjacentContent", "imageContent"], "exported": false, "value": "exports"},
 		"MediaEngineUtils": {"props": ["setOutputDevice", "setInputDevice"]},
-		"MemberDisplayUtils": {"props": ["getDisplayProfile"]},
-		"MentionUtils": {"props": ["isRawMessageMentioned", "isMentioned"]},
-		"MessageAuthorUtils": {"props": ["getMessageAuthor", "useNullableMessageAuthor"]},
-		"MessageManageUtils": {"props": ["copyLink", "replyToMessage"]},
+		"MemberDisplayUtils": {"strings": ["getUserProfile", "getGuildMemberProfile", "_userProfile"], "exported": false, "value": "exports"},
+		"MentionUtils": {"strings": ["rawMessage", "mention_everyone", "mentionUsers"], "exported": false, "value": "exports"},
+		"MessageManageUtils": {"strings": ["showMentionToggle", "SEND_FAILED", "shouldMention"], "exported": false, "value": "exports"},
 		"MessageParser": {"props": ["parseEmbedTitle", "defaultRules"]},
 		"MessagePinUtils": {"props": ["pinMessage", "unpinMessage"]},
 		"MessageUtils": {"props": ["receiveMessage", "editMessage"]},
-		"ModalUtils": {"props": ["openModal", "hasModalOpen"]},
+		"ModalUtils": {"strings": ["modalKey", "instant", "contextKey"], "nonStrings": ["LOGIN_REQUIRED_ACTIONS_MODAL_KEY"], "exported": false, "value": "exports"},
 		"NitroUtils": {"props": ["canUseIncreasedMessageLength", "canUploadAnimatedAvatar"]},
 		"NotificationSettingsUtils": {"props": ["setDesktopType", "setTTSType"]},
-		"NotificationUtils": {"props": ["makeTextChatNotification", "shouldNotify"]},
-		"PlatformUtils": {"props": ["isWindows", "isLinux"]},
+		"PlatformUtils": {"strings": ["return/^win/.test"], "exported": false, "value": "exports"},
 		"PendingReplyUtils": {"props": ["createPendingReply", "deletePendingReply"]},
 		"PermissionRoleUtils": {"props": ["can", "ALLOW", "DENY"]},
 		"PreferencesContext": {"props": ["AccessibilityPreferencesContext"]},
