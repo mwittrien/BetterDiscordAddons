@@ -252,9 +252,6 @@ module.exports = (_ => {
 										newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING], this.labels.incoming, relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_INCOMING] > 0));
 										newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.PENDING_OUTGOING], this.labels.outgoing));
 										break;
-									case BDFDB.DiscordConstants.FriendsSections.SUGGESTIONS:
-										newChildren.push(this.createBadge(BDFDB.LibraryModules.RelationshipSuggestionUtils.getSuggestionCount()));
-										break;
 									case BDFDB.DiscordConstants.FriendsSections.BLOCKED:
 										newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.BLOCKED]));
 										break;
