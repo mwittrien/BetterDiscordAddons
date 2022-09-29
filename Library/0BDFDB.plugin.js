@@ -4360,6 +4360,22 @@ module.exports = (_ => {
 				};
 				
 				BDFDB.DiscordUtils = {};
+				BDFDB.DiscordUtils.getSetting = function (category, key) {
+					if (!category || !key) return;
+					return BDFDB.LibraryStores.UserSettingsProtoStore && BDFDB.LibraryStores.UserSettingsProtoStore.settings[category] && BDFDB.LibraryStores.UserSettingsProtoStore.settings[category][key] && BDFDB.LibraryStores.UserSettingsProtoStore.settings[category][key].value;
+				};
+				BDFDB.DiscordUtils.setSetting = function (category, key, value) {
+					if (!category || !key) return;
+					let store = BDFDB.DiscordUtils.getSettingsStore();
+					if (store) store.updateAsync("status", settings => {
+						if (!settings) return;
+						if (!settings[key]) settings[key] = {};
+						settings[key].value = value;
+					}, Internal.DiscordConstants.UserSettingsActionTypes.INFREQUENT_USER_ACTION);
+				};
+				BDFDB.DiscordUtils.getSettingsStore = function () {
+					return BDFDB.LibraryModules.UserSettingsProtoUtils && (Object.entries(BDFDB.LibraryModules.UserSettingsProtoUtils).find(n => n && n[1] && n[1].updateAsync && n[1].ProtoClass && n[1].ProtoClass.typeName && n[1].ProtoClass.typeName.endsWith(".PreloadedUserSettings")) || [])[1];
+				};
 				BDFDB.DiscordUtils.openLink = function (url, config = {}) {
 					if ((config.inBuilt || config.inBuilt === undefined && Internal.settings.general.useChromium) && Internal.LibraryRequires.electron && Internal.LibraryRequires.electron.remote) {
 						let browserWindow = new Internal.LibraryRequires.electron.remote.BrowserWindow({
