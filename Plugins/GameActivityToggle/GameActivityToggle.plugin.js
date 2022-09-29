@@ -130,7 +130,7 @@ module.exports = (_ => {
 				
 				let SettingsStore = BDFDB.DiscordUtils.getSettingsStore();
 				if (SettingsStore) BDFDB.PatchUtils.patch(this, SettingsStore, "updateAsync", {after: e => {
-					let newSettings = {};
+					let newSettings = {value: undefined};
 					e.methodArguments[1](newSettings);
 					if (newSettings.showCurrentGame != undefined) {
 						if (toggleButton) toggleButton.props.forceState = newSettings.showCurrentGame.value;

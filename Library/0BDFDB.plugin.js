@@ -4370,7 +4370,8 @@ module.exports = (_ => {
 					if (store) store.updateAsync("status", settings => {
 						if (!settings) return;
 						if (!settings[key]) settings[key] = {};
-						settings[key].value = value;
+						if (BDFDB.ObjectUtils.is(value)) for (let k in value) settings[key][k] = value[k];
+						else settings[key].value = value;
 					}, Internal.DiscordConstants.UserSettingsActionTypes.INFREQUENT_USER_ACTION);
 				};
 				BDFDB.DiscordUtils.getSettingsStore = function () {
