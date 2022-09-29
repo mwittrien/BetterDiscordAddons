@@ -60,10 +60,10 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					general: {
-						replaceOwn:			{value: false, 			description: "Replace your own Name"},
-						replaceBots:		{value: true, 			description: "Replace the Nickname of Bots"},
-						addNickname:		{value: false, 			description: "Add Nickname as Parentheses"},
-						swapPositions:		{value: false, 			description: "Swap the Position of Username and Nickname"},
+						replaceOwn:			{value: false, 			description: "Replaces your own Name"},
+						replaceBots:		{value: true, 			description: "Replaces the Nickname of Bots"},
+						addNickname:		{value: false, 			description: "Adds Nickname as Parentheses"},
+						swapPositions:		{value: false, 			description: "Swaps the Position of Username and Nickname"},
 					},
 					places: {
 						chat:				{value: true, 			description: "Messages"},
