@@ -109,6 +109,15 @@
 		},
 		"ModalUtils": {
 			"openModal": [".modalKey", ".instant", ".Layer", ".onCloseRequest"]
+		},
+		"PreferencesContext": {
+			"AccessibilityPreferencesContext": ["object Object"]
+		},
+		"ReactionEmojiUtils": {
+			"getReactionEmojiName": ["convertSurrogateToName"]
+		},
+		"ReactionUtils": {
+			"getReactions": [".apply("]
 		}
 	},
 	"LibraryModules": {
@@ -154,16 +163,13 @@
 		"NitroUtils": {"props": ["canUseIncreasedMessageLength", "canUploadAnimatedAvatar"]},
 		"NotificationSettingsUtils": {"props": ["setDesktopType", "setTTSType"]},
 		"PlatformUtils": {"strings": ["return/^win/.test"], "exported": false, "value": "exports"},
-		"PendingReplyUtils": {"props": ["createPendingReply", "deletePendingReply"]},
 		"PermissionRoleUtils": {"props": ["can", "ALLOW", "DENY"]},
-		"PreferencesContext": {"props": ["AccessibilityPreferencesContext"]},
-		"PremiumConstants": {"props": ["PremiumTypes", "BoostedGuildFeatures"]},
+		"PreferencesContext": {"strings": ["reducedMotion", "forcedColors", "alwaysShowLinkDecorations", "createContext"], "exported": false, "value": "exports"},
 		"PrivateChannelUtils": {"props": ["addRecipient", "openPrivateChannel"]},
 		"QuerySearchUtils": {"props": ["queryGuilds", "queryGroupDMs"]},
-		"ReactionEmojiUtils": {"props": ["getReactionEmojiName", "getReactionEmojiName"]},
-		"ReactionUtils": {"props": ["addReaction", "removeReaction"]},
+		"ReactionEmojiUtils": {"strings": ["optionallyDiverseSequence,animated", "convertSurrogateToName"], "exported": false, "value": "exports"},
+		"ReactionUtils": {"strings": ["\"MESSAGE_REACTION_ADD\"", "\"MESSAGE_REACTION_REMOVE\"", "\"@me\""], "exported": false, "value": "exports"},
 		"RecentMentionUtils": {"props": ["deleteRecentMention", "fetchRecentMentions"]},
-		"RelationshipSuggestionUtils": {"props": ["getSuggestionCount", "getSuggestions"]},
 		"RelationshipUtils": {"props": ["addRelationship", "removeRelationship"]},
 		"RoleIconUtils": {"props": ["getRoleIconData"]},
 		"RTCConnectionUtils": {"props": ["getChannelId", "getGuildId", "getRTCConnectionId"]},
