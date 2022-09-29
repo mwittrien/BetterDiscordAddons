@@ -210,7 +210,7 @@
 		"SoundUtils": {"strings": [".play()", ".disableSounds", "getSoundpack"], "nonString": ["createElement"], "exported": false, "value": "exports"},
 		"SortedGuildUtils": {"props": ["getSortedGuilds", "getFlattenedGuildIds"]},
 		"SpotifyUtils": {"strings": ["\"SPOTIFY_SET_ACTIVE_DEVICE\"", "deviceId", "accountId"], "exported": false, "value": "exports"},
-		"StateStoreUtils": {"props": ["useStateFromStores", "useStateFromStoresArray"]},
+		"StateStoreUtils": {"strings": ["this._currentDispatchActionType"], "exported": false, "value": "exports"},
 		"StoreChangeUtils": {"props": ["get", "set", "clear", "remove"]},
 		"TimestampUtils": {"props": ["fromTimestamp", "extractTimestamp"]},
 		"UploadUtils": {"props": ["upload", "instantBatchUpload"]},
