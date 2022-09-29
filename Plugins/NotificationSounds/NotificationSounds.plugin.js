@@ -134,7 +134,7 @@ module.exports = (_ => {
 					audio.src = this._src && this._src.startsWith("data") ? this._src.replace(/ /g, "") : this._src;
 					audio.onloadeddata = _ => {
 						audio.volume = Math.min((BDFDB.LibraryStores.MediaEngineStore.getOutputVolume() / 100) * (this._volume / 100) * (volumes.globalVolume / 100), 1);
-						BDFDB.LibraryModules.PlatformUtils.embedded && audio.setSinkId(currentDevice || defaultDevice);
+						BDFDB.DiscordUtils.isPlaformEmbedded() && audio.setSinkId(currentDevice || defaultDevice);
 						callback(audio);
 					};
 					audio.onerror = _ => errorCallback(new Error("could not play audio"));
@@ -196,7 +196,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				if (BDFDB.LibraryModules.PlatformUtils.embedded) {
+				if (BDFDB.DiscordUtils.isPlaformEmbedded()) {
 					let change = _ => {
 						if (window.navigator.mediaDevices && window.navigator.mediaDevices.enumerateDevices) {
 							window.navigator.mediaDevices.enumerateDevices().then(enumeratedDevices => {
