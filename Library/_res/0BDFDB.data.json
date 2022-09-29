@@ -128,8 +128,10 @@
 			"searchPreviousPage": ["(e,-t)}"]
 		},
 		"SlateRichUtils": {
-			"searchNextPage": ["(e,t)}"],
-			"searchPreviousPage": ["(e,-t)}"]
+			"toRichValue": [".split(\"\\n\")"]
+		},
+		"SlateTextUtils": {
+			"toTextValue": ["ignoreTrailingEmptyNodes"]
 		}
 	},
 	"LibraryModules": {
@@ -190,7 +192,7 @@
 		"SimpleMarkdownComponents": {"strings": ["customEmoji", "emojiTooltipPosition", "timestampTooltip"]},
 		"SimpleMarkdownParser": {"props": ["parseBlock", "parseInline", "defaultOutput"]},
 		"SlateRichUtils": {"strings": ["textValue", "richValue", "text:\"\""], "nonString": ["className"], "exported": false, "value": "exports"},
-		"SlateTextUtils": {"props": ["toTextValue", "serializeDescendant"]},
+		"SlateTextUtils": {"strings": ["ignoreTrailingEmptyNodes", "preventEmojiSurrogates"], "nonString": ["className"], "exported": false, "value": "exports"},
 		"SoundParser": {"strings": ["discodo", "ddr-down", "mute"]},
 		"SoundUtils": {"props": ["playSound", "createSound"]},
 		"SortedGuildUtils": {"props": ["getSortedGuilds", "getFlattenedGuildIds"]},
