@@ -1186,9 +1186,12 @@ module.exports = (_ => {
 					}
 				};
 				
-				Internal.hasModuleStrings = function (module, strings, ignoreCase) {
-					const toString = n => ignoreCase ? n.toString().toLowerCase() : n.toString();
-					return [strings].flat(10).filter(n => typeof n == "string").map(ignoreCase ? (n => n.toLowerCase()) : (n => n)).every(string => typeof module == "function" && (toString(module).indexOf(string) > -1 || typeof module.__originalMethod == "function" && toString(module.__originalMethod).indexOf(string) > -1 || typeof module.__originalFunction == "function" && toString(module.__originalFunction).indexOf(string) > -1) || BDFDB.ObjectUtils.is(module) && typeof module.type == "function" && toString(module.type).indexOf(string) > -1);
+				Internal.checkModuleStrings = function (module, strings, config = {}) {
+					const check = (s1, s2) => {
+						s1 = config.ignoreCase ? s1.toString().toLowerCase() : s1.toString();
+						return config.hasNot ? s1.indexOf(s2) == -1 : s1.indexOf(s2) > -1;
+					};
+					return [strings].flat(10).filter(n => typeof n == "string").map(config.ignoreCase ? (n => n.toLowerCase()) : (n => n)).every(string => typeof module == "function" && (check(module, string) || typeof module.__originalMethod == "function" && check(module.__originalMethod, string) || typeof module.__originalFunction == "function" && check(module.__originalFunction, string)) || BDFDB.ObjectUtils.is(module) && typeof module.type == "function" && check(module.type, string));
 				};
 				
 				Internal.getModuleString = function (module) {
@@ -1294,7 +1297,7 @@ module.exports = (_ => {
 						strings.push(config);
 						config = {};
 					}
-					return Internal.findModule("string", JSON.stringify(strings), m => Internal.hasModuleStrings(m, strings) && m, config);
+					return Internal.findModule("string", JSON.stringify(strings), m => Internal.checkModuleStrings(m, strings) && m, config);
 				};
 				BDFDB.ModuleUtils.findByPrototypes = function (...protoProps) {
 					protoProps = protoProps.flat(10);
@@ -2574,18 +2577,14 @@ module.exports = (_ => {
 						if (LibraryModules[item]) return LibraryModules[item];
 						if (!InternalData.LibraryModules[item]) return null;
 						let defaultExport = typeof InternalData.LibraryModules[item].exported != "boolean" ? true : InternalData.LibraryModules[item].exported;
-						if (InternalData.LibraryModules[item].props) {
-							if (InternalData.LibraryModules[item].nonProps) {
-								LibraryModules[item] = BDFDB.ModuleUtils.find(m => InternalData.LibraryModules[item].props.every(prop => {
-									const value = m[prop];
-									return value !== undefined && !(typeof value == "string" && !value);
-								}) && InternalData.LibraryModules[item].nonProps.every(prop => m[prop] === undefined) && m, {defaultExport});
-								if (!LibraryModules[item]) BDFDB.LogUtils.warn(`${JSON.stringify([InternalData.LibraryModules[item].props, InternalData.LibraryModules[item].nonProps].flat(10))} [props + nonProps] not found in WebModules`);
-							}
-							else LibraryModules[item] = BDFDB.ModuleUtils.findByProperties(InternalData.LibraryModules[item].props, {defaultExport});
-						}
+						if (InternalData.LibraryModules[item].props) LibraryModules[item] = BDFDB.ModuleUtils.findByProperties(InternalData.LibraryModules[item].props, {defaultExport});
 						else if (InternalData.LibraryModules[item].name) LibraryModules[item] = BDFDB.ModuleUtils.findByName(InternalData.LibraryModules[item].name, {defaultExport});
-						else if (InternalData.LibraryModules[item].strings) LibraryModules[item] = BDFDB.ModuleUtils.findByString(InternalData.LibraryModules[item].strings, {defaultExport});
+						else if (InternalData.LibraryModules[item].strings) {
+							if (InternalData.LibraryModules[item].nonStrings) {
+								LibraryModules[item] = Internal.findModule("strings + nonStrings", JSON.stringify([InternalData.LibraryModules[item].strings, InternalData.LibraryModules[item].nonStrings].flat(10)), m => Internal.checkModuleStrings(m, InternalData.LibraryModules[item].strings) && Internal.checkModuleStrings(m, InternalData.LibraryModules[item].nonStrings, {hasNot: true}) && m, {defaultExport});
+							}
+							else LibraryModules[item] = BDFDB.ModuleUtils.findByString(InternalData.LibraryModules[item].strings, {defaultExport});
+						}
 						if (InternalData.LibraryModules[item].value) LibraryModules[item] = (LibraryModules[item] || {})[InternalData.LibraryModules[item].value];
 						if (InternalData.LibraryModules[item].assign) LibraryModules[item] = Object.assign({}, LibraryModules[item]);
 						if (LibraryModules[item] && InternalData.LibraryModulesFunctionsMap && InternalData.LibraryModulesFunctionsMap[item]) {
@@ -4380,6 +4379,9 @@ module.exports = (_ => {
 					else window.open(url, "_blank");
 				};
 				window.DiscordNative && window.DiscordNative.app && window.DiscordNative.app.getPath("appData").then(path => {BDFDB.DiscordUtils.getFolder.base = path;});
+				BDFDB.DiscordUtils.isPlaformEmbedded = function () {
+					return Internal.LibraryModules.PlatformUtils && (Object.entries(Internal.LibraryModules.PlatformUtils).find(n => typeof n[1] == "boolean") || [])[1] || false;
+				};
 				BDFDB.DiscordUtils.getFolder = function () {
 					if (!BDFDB.DiscordUtils.getFolder.base) return "";
 					else if (BDFDB.DiscordUtils.getFolder.folder) return BDFDB.DiscordUtils.getFolder.folder;
@@ -8382,7 +8384,7 @@ module.exports = (_ => {
 							if (!PluginStores.chunkObserver[config.mappedType]) {
 								PluginStores.chunkObserver[config.mappedType] = {query: [], config};
 								let filter;
-								if (config.stringFind) filter = m => m && Internal.hasModuleStrings(m, config.stringFind) && m;
+								if (config.stringFind) filter = m => m && Internal.checkModuleStrings(m, config.stringFind) && m;
 								else if (config.propertyFind) filter = m => [config.propertyFind].flat(10).filter(n => n).every(prop => {
 									const value = m[prop];
 									return value !== undefined && !(typeof value == "string" && !value);
@@ -8613,7 +8615,7 @@ module.exports = (_ => {
 									return true;
 								}
 								else {
-									const subType = InternalData.ModuleUtilsConfig.ContextMenuSubItemsMap[mappedType].items.find(item => InternalData.ModuleUtilsConfig.Finder[item] && InternalData.ModuleUtilsConfig.Finder[item].strings && Internal.hasModuleStrings(d, InternalData.ModuleUtilsConfig.Finder[item].strings));
+									const subType = InternalData.ModuleUtilsConfig.ContextMenuSubItemsMap[mappedType].items.find(item => InternalData.ModuleUtilsConfig.Finder[item] && InternalData.ModuleUtilsConfig.Finder[item].strings && Internal.checkModuleStrings(d, InternalData.ModuleUtilsConfig.Finder[item].strings));
 									if (subType) {
 										m.__BDFDB_ContextMenu_Patch_Name = subType;
 										return true;
@@ -8812,7 +8814,7 @@ module.exports = (_ => {
 							console.log(window.t);
 						};
 						BDFDB.DevUtils.findCodeAny = function (...strings) {
-							window.t = {"$filter":(m => Internal.hasModuleStrings(m, strings, true))};
+							window.t = {"$filter":(m => Internal.checkModuleStrings(m, strings, {ignoreCase: true}))};
 							for (let i in BDFDB.DevUtils.req.c) if (BDFDB.DevUtils.req.c.hasOwnProperty(i)) {
 								let m = BDFDB.DevUtils.req.c[i].exports;
 								if (m && typeof m == "function" && window.t.$filter(m)) window.t["module_" + i] = {string: m.toString(), func: m};
