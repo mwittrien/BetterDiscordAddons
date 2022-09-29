@@ -179,7 +179,7 @@
 		"ReactionUtils": {"strings": ["\"MESSAGE_REACTION_ADD\"", "\"MESSAGE_REACTION_REMOVE\"", "\"@me\""], "exported": false, "value": "exports"},
 		"RecentMentionUtils": {"props": ["deleteRecentMention", "fetchRecentMentions"]},
 		"RelationshipUtils": {"props": ["addRelationship", "removeRelationship"]},
-		"RoleIconUtils": {"strings": [".ROLE_ICONS", "convertSurrogateToName", "customIconSrc"], "exported": false, "value": "exports"},,
+		"RoleIconUtils": {"strings": [".ROLE_ICONS", "convertSurrogateToName", "customIconSrc"], "exported": false, "value": "exports"},
 		"RTCConnectionUtils": {"props": ["getChannelId", "getGuildId", "getRTCConnectionId"]},
 		"SearchPageUtils": {"strings": ["searchId", "sort_by", "sort_order"], "exported": false, "value": "exports"}
 		"SettingsUtils": {"props": ["ShowCurrentGame", "DeveloperMode"]},
