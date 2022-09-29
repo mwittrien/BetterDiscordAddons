@@ -124,7 +124,7 @@
 			"getRoleIconData": ["convertSurrogateToName", "customIconSrc"]
 		},
 		"SearchPageUtils": {
-			"searchNextPage": ["(e,t)}],
+			"searchNextPage": ["(e,t)}"],
 			"searchPreviousPage": ["(e,-t)}"]
 		}
 	},
