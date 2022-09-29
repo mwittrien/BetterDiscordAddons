@@ -390,8 +390,8 @@ module.exports = (_ => {
 									let date = new Date;
 									expiresAt = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime() - date.getTime();
 								}
-								if (presets[id].status) BDFDB.LibraryModules.SettingsUtils.StatusSetting.updateSetting(presets[id].status);
-								BDFDB.LibraryModules.SettingsUtils.CustomStatusSetting.updateSetting({
+								if (presets[id].status) BDFDB.DiscordUtils.setSetting("status", "status", presets[id].status);
+								BDFDB.DiscordUtils.setSetting("status", "customStatus", {
 									text: presets[id].text && presets[id].text.length > 0 ? presets[id].text : "",
 									expiresAtMs: expiresAt ? BDFDB.DiscordObjects.Timestamp().add(expiresAt, "ms").toDate().getTime().toString() : "0",
 									emojiId: presets[id].emojiInfo ? presets[id].emojiInfo.id : "0",
