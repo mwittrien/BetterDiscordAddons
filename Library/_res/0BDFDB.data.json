@@ -5460,6 +5460,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"323494393828999168": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "polak (SzKu)"},
 		"543435944582447104": 	{"active": true,	"tier": "t3",	"text": "",											"color": "",			"id": "oaklaza"},
 		"96563253466898432": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "katsuro"},
 		"446383444763869184": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "ari (ArCl)"},
