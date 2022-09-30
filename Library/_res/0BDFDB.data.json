@@ -50,6 +50,7 @@
 		"FriendsSections": ["ALL", "ONLINE", "ADD_FRIEND"],
 		"InboxTabs": ["MENTIONS", "UNREADS"],
 		"KeyboardDeviceTypes": ["KEYBOARD_KEY", "MOUSE_BUTTON"],
+		"MenuItemColors": ["BRAND", "GREEN", "PREMIUM_GRADIENT"],
 		"MessageStates": ["SENT", "SENDING", "SEND_FAILED"],
 		"MessageTypeGroups": ["USER_MESSAGE", "DELETABLE"],
 		"MessageTypes": ["CHAT_INPUT_COMMAND", "CHANNEL_PINNED_MESSAGE"],
