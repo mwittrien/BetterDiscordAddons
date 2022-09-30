@@ -2400,6 +2400,7 @@ module.exports = (_ => {
 					let patchPriority = !isNaN(config.priority) ? config.priority : (BDFDB.ObjectUtils.is(plugin) && !isNaN(plugin.patchPriority) ? plugin.patchPriority : 5);
 					patchPriority = patchPriority < 1 ? (plugin == Internal ? 0 : 1) : (patchPriority > 9 ? (plugin == Internal ? 10 : 9) : Math.round(patchPriority));
 					if (!BDFDB.ObjectUtils.is(module.BDFDB_patches)) module.BDFDB_patches = {};
+					if (!module.BDFDB_patches) return;
 					methodNames = [methodNames].flat(10).filter(n => n);
 					let cancel = _ => {BDFDB.PatchUtils.unpatch(plugin, module, methodNames);};
 					for (let methodName of methodNames) if (module[methodName] == null || typeof module[methodName] == "function") {
