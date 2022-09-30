@@ -15,7 +15,12 @@
 module.exports = (_ => {
 	if (window.BDFDB_Global && window.BDFDB_Global.PluginUtils && typeof window.BDFDB_Global.PluginUtils.cleanUp == "function") window.BDFDB_Global.PluginUtils.cleanUp(window.BDFDB_Global);
 	
-	var BDFDB, Internal, LibraryStores, LibraryModules, LibraryRequires, DiscordConstants, DiscordObjects, PluginStores;
+	var BDFDB, Internal;
+	var LibraryRequires = {};
+	var DiscordObjects = {}, DiscordConstants = {};
+	var LibraryStores = {}, LibraryModules = {};
+	var LibraryComponents = {}, NativeSubComponents = {}, CustomComponents = {};
+	var PluginStores = {};
 	
 	BDFDB = {
 		started: true,
@@ -1324,7 +1329,6 @@ module.exports = (_ => {
 					}, {onlySearchUnloaded: true});
 				};
 				
-				DiscordConstants = {};
 				Internal.DiscordConstants = new Proxy(DiscordConstants, {
 					get: function (_, item) {
 						if (InternalData.CustomDiscordConstants && InternalData.CustomDiscordConstants[item]) return InternalData.CustomDiscordConstants[item];
@@ -1339,7 +1343,6 @@ module.exports = (_ => {
 				});
 				BDFDB.DiscordConstants = Internal.DiscordConstants;
 				
-				DiscordObjects = {};
 				Internal.DiscordObjects = new Proxy(DiscordObjects, {
 					get: function (_, item) {
 						if (DiscordObjects[item]) return DiscordObjects[item];
@@ -1352,7 +1355,6 @@ module.exports = (_ => {
 				});
 				BDFDB.DiscordObjects = Internal.DiscordObjects;
 				
-				LibraryRequires = {};
 				Internal.LibraryRequires = new Proxy(LibraryRequires, {
 					get: function (_, item) {
 						if (LibraryRequires[item]) return LibraryRequires[item];
@@ -1364,7 +1366,6 @@ module.exports = (_ => {
 				});
 				BDFDB.LibraryRequires = Internal.LibraryRequires;
 				
-				LibraryStores = {};
 				Internal.LibraryStores = new Proxy(LibraryStores, {
 					get: function (_, item) {
 						if (LibraryStores[item]) return LibraryStores[item];
@@ -2566,7 +2567,6 @@ module.exports = (_ => {
 					}
 				};
 				
-				LibraryModules = {};
 				LibraryModules.LanguageStore = BDFDB.ModuleUtils.find(m => m.Messages && m.Messages.IMAGE && m);
 				LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
 				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode");
@@ -2592,7 +2592,7 @@ module.exports = (_ => {
 								get: function (_, item2) {
 									if (InternalData.LibraryModules[item]._mappedItems[item2]) return InternalData.LibraryModules[item]._originalModule[InternalData.LibraryModules[item]._mappedItems[item2]];
 									if (!InternalData.LibraryModules[item].map[item2]) return InternalData.LibraryModules[item]._originalModule[item2];
-									let foundFunc = Object.entries(InternalData.LibraryModules[item]._originalModule).find(n => InternalData.LibraryModules[item].map[item2].flat(10).every(string => n && n.toString().indexOf(string) > -1));
+									let foundFunc = Object.entries(InternalData.LibraryModules[item]._originalModule).find(n => InternalData.LibraryModules[item].map[item2].flat(10).every(string => n && n[1] && (typeof n[1] == "function" ? n[1].toString() : (_ => {try {return JSON.stringify(n[1])}catch(err){return n[1].toString()}})()).indexOf(string) > -1));
 									if (foundFunc) {
 										InternalData.LibraryModules[item]._mappedItems[item2] = foundFunc[0];
 										return foundFunc[1];
@@ -4100,8 +4100,16 @@ module.exports = (_ => {
 						]
 					});
 				};
-			
-				const RealMenuItems = BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup");
+				
+				const MappedMenuItems = {}, RealMenuItems = BDFDB.ModuleUtils.find(m => {
+					if (!m || typeof m != "function") return false;
+					let string = m.toString();
+					return string.endsWith("{return null}}") && string.indexOf("(){return null}") > -1 && string.indexOf("catch(") == -1;
+				});
+				if (!RealMenuItems) {
+					RealMenuItems = {};
+					BDFDB.LogUtils.error(["could not find Module for MenuItems"]);
+				}
 				BDFDB.ContextMenuUtils = {};
 				BDFDB.ContextMenuUtils.open = function (plugin, e, children) {
 					Internal.LibraryModules.ContextMenuUtils.openContextMenu(e || mousePosition, _ => BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Menu, {
@@ -4939,8 +4947,6 @@ module.exports = (_ => {
 				};
 				
 				const loadComponents = _ => {
-					const CustomComponents = {};
-					
 					CustomComponents.AutoFocusCatcher = reactInitialized && class BDFDB_AutoFocusCatcher extends Internal.LibraryModules.React.Component {
 						render() {
 							const style = {padding: 0, margin: 0, border: "none", width: 0, maxWidth: 0, height: 0, maxHeight: 0, visibility: "hidden"};
@@ -8071,7 +8077,6 @@ module.exports = (_ => {
 						}
 					};
 					
-					const NativeSubComponents = {};
 					Internal.NativeSubComponents = new Proxy(NativeSubComponents, {
 						get: function (_, item) {
 							if (NativeSubComponents[item]) return NativeSubComponents[item];
@@ -8088,7 +8093,6 @@ module.exports = (_ => {
 						}
 					});
 					
-					const LibraryComponents = {};
 					Internal.LibraryComponents = new Proxy(LibraryComponents, {
 						get: function (_, item) {
 							if (LibraryComponents[item]) return LibraryComponents[item];
@@ -8099,6 +8103,11 @@ module.exports = (_ => {
 								else if (InternalData.LibraryComponents[item].props) LibraryComponents[item] = BDFDB.ModuleUtils.findByProperties(InternalData.LibraryComponents[item].props);
 								if (InternalData.LibraryComponents[item].value) LibraryComponents[item] = (LibraryComponents[item] || {})[InternalData.LibraryComponents[item].value];
 								if (InternalData.LibraryComponents[item].assign) LibraryComponents[item] = Object.assign({}, LibraryComponents[item]);
+								if (LibraryComponents[item] && InternalData.LibraryComponents[item].funcStrings) LibraryComponents[item] = (Object.entries(LibraryComponents[item]).find(n => {
+									if (!n || !n[1]) return;
+									let funcString = n[1].toString();
+									return [InternalData.LibraryComponents[item].funcStrings].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1);
+								}) || [])[1]
 							}
 							if (CustomComponents[item]) LibraryComponents[item] = LibraryComponents[item] ? Object.assign({}, LibraryComponents[item], CustomComponents[item]) : CustomComponents[item];
 							
@@ -8112,7 +8121,7 @@ module.exports = (_ => {
 							if (InternalData.LibraryComponents[item] && InternalData.LibraryComponents[item].children) {
 								const SubComponents = LibraryComponents[item] && typeof LibraryComponents[item] == "object" ? LibraryComponents[item] : {};
 								const InternalParentData = InternalData.LibraryComponents[item].children;
-								LibraryComponents[item] = new Proxy(BDFDB.ObjectUtils.is(SubComponents) ? SubComponents : {}, {
+								LibraryComponents[item] = new Proxy(SubComponents, {
 									get: function (_, item2) {
 										if (CustomComponents[item] && CustomComponents[item][item2]) return CustomComponents[item][item2];
 										if (SubComponents[item2]) return SubComponents[item2];
@@ -8137,6 +8146,38 @@ module.exports = (_ => {
 								});
 							}
 							return LibraryComponents[item] ? LibraryComponents[item] : "div";
+						}
+					});
+					
+					for (let type of Object.keys(RealMenuItems)) {
+						let children = BDFDB.ObjectUtils.get(BDFDB.ReactUtils.hookCall(Internal.LibraryComponents.Menu, {hideScroller: true, children: BDFDB.ReactUtils.createElement(RealMenuItems[type], {})}), "props.children.props.children.props.children");
+						let menuItem = (BDFDB.ArrayUtils.is(children) ? children : []).flat(10).filter(n => n)[0];
+						if (menuItem) {
+							let menuItemsProps = BDFDB.ReactUtils.findValue(menuItem, "menuItemProps");
+							if (menuItemsProps && menuItemsProps.id == "undefined-empty") MappedMenuItems.MenuGroup = type;
+							else if (menuItemsProps && menuItemsProps.role) {
+								switch (menuItemsProps.role) {
+									case "menuitemcheckbox": MappedMenuItems.MenuCheckboxItem = type; break;
+									case "menuitemradio": MappedMenuItems.MenuRadioItem = type; break;
+									case "menuitem": {
+										if (Object.keys(menuItem.props).includes("children")) MappedMenuItems.MenuControlItem = type;
+										else if (Object.keys(menuItem.props).includes("hasSubmenu")) MappedMenuItems.MenuItem = type;
+										break;
+									}
+								}
+							}
+							else {
+								let key = BDFDB.ReactUtils.findValue(menuItem, "key");
+								if (typeof key == "string" && key.startsWith("separator")) MappedMenuItems.MenuSeparator = type;
+							}
+						}
+					}
+					LibraryComponents.MenuItems = new Proxy(RealMenuItems, {
+						get: function (_, item) {
+							if (RealMenuItems[item]) return RealMenuItems[item];
+							if (CustomComponents.MenuItems[item]) return CustomComponents.MenuItems[item];
+							if (MappedMenuItems[item] && RealMenuItems[MappedMenuItems[item]]) return RealMenuItems[MappedMenuItems[item]];
+							return null;
 						}
 					});
 					
