@@ -171,10 +171,10 @@ module.exports = (_ => {
 									className: BDFDB.disCN._friendnotificationslogtime,
 									children: BDFDB.LibraryComponents.DateInput.format(_this.settings.dates.logDate, log.timestamp)
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatars.Avatar, {
 									className: BDFDB.disCN._friendnotificationslogavatar,
 									src: log.avatar,
-									size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
+									size: BDFDB.LibraryComponents.Avatars.Sizes.SIZE_40
 								}),
 								_this.createStatusDot(log.status, log.mobile, {marginRight: 6}),
 								BDFDB.ReactUtils.createElement("div", {
@@ -422,11 +422,11 @@ module.exports = (_ => {
 							}
 						},
 						renderLabel: cardData => [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatars.Avatar, {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.listavatar, cardData.disabled && BDFDB.disCN.avatardisabled),
 								src: BDFDB.UserUtils.getAvatar(cardData.id),
 								status: BDFDB.UserUtils.getStatus(cardData.id),
-								size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40,
+								size: BDFDB.LibraryComponents.Avatars.Sizes.SIZE_40,
 								onClick: _ => {
 									let observed = this.getObservedData();
 									let data = observed[type][cardData.id] || Object.assign({}, defaultSettings);

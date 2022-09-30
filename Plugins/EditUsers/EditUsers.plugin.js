@@ -363,10 +363,10 @@ module.exports = (_ => {
 							label: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 								children: !Object.keys(changedUsers).length ? BDFDB.LanguageUtils.LanguageStrings.NONE : Object.keys(changedUsers).filter(BDFDB.LibraryStores.UserStore.getUser).map(id => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 									text: this.getUserData(id).username,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatars.Avatar, {
 										className: BDFDB.disCN.listavatar,
 										src: this.getUserAvatar(id),
-										size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_32,
+										size: BDFDB.LibraryComponents.Avatars.Sizes.SIZE_32,
 										onClick: _ => this.openUserSettingsModal(BDFDB.LibraryStores.UserStore.getUser(id))
 									})
 								}))

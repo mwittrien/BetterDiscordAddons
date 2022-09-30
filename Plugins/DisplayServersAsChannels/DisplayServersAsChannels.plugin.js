@@ -333,9 +333,9 @@ module.exports = (_ => {
 						if (BDFDB.ReactUtils.findChild(parent, {props: [["className", BDFDB.disCN._displayserversaschannelsname]]})) return;
 						let childEles = [
 							[
-								options.isDm && returnvalue.props.icon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
+								options.isDm && returnvalue.props.icon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatars.Avatar, {
 									src: returnvalue.props.icon,
-									size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_24
+									size: BDFDB.LibraryComponents.Avatars.Sizes.SIZE_24
 								}),
 								options.badges,
 							].flat(10).filter(n => n).map(badge => BDFDB.ReactUtils.createElement("div", {

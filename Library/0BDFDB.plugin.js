@@ -1688,9 +1688,9 @@ module.exports = (_ => {
 						toasts.appendChild(data.toast);
 						BDFDB.TimeUtils.timeout(_ => BDFDB.DOMUtils.removeClass(data.toast, BDFDB.disCN.toastopening));
 						
-						let icon = data.config.avatar ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.AvatarComponents.default, {
+						let icon = data.config.avatar ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Avatars.Avatar, {
 							src: data.config.avatar,
-							size: Internal.LibraryComponents.AvatarComponents.Sizes.SIZE_24
+							size: Internal.LibraryComponents.Avatars.Sizes.SIZE_24
 						}) : ((data.config.icon || data.config.type && Internal.DiscordConstants.ToastIcons[data.config.type]) ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
 							name: data.config.type && Internal.DiscordConstants.ToastIcons[data.config.type] && Internal.LibraryComponents.SvgIcon.Names[Internal.DiscordConstants.ToastIcons[data.config.type]],
 							iconSVG: data.config.icon,
@@ -8101,18 +8101,29 @@ module.exports = (_ => {
 						get: function (_, item) {
 							if (LibraryComponents[item]) return LibraryComponents[item];
 							if (!InternalData.LibraryComponents[item] && !CustomComponents[item]) return "div";
+							
 							if (InternalData.LibraryComponents[item]) {
-								if (InternalData.LibraryComponents[item].name) LibraryComponents[item] = BDFDB.ModuleUtils.findByName(InternalData.LibraryComponents[item].name);
-								else if (InternalData.LibraryComponents[item].strings) LibraryComponents[item] = BDFDB.ModuleUtils.findByString(InternalData.LibraryComponents[item].strings);
-								else if (InternalData.LibraryComponents[item].props) LibraryComponents[item] = BDFDB.ModuleUtils.findByProperties(InternalData.LibraryComponents[item].props);
+								let defaultExport = typeof InternalData.LibraryComponents[item].exported != "boolean" ? true : InternalData.LibraryComponents[item].exported;
+								if (InternalData.LibraryComponents[item].props) LibraryComponents[item] = BDFDB.ModuleUtils.findByProperties(InternalData.LibraryComponents[item].props, {defaultExport});
+								else if (InternalData.LibraryComponents[item].name) LibraryComponents[item] = BDFDB.ModuleUtils.findByName(InternalData.LibraryComponents[item].name, {defaultExport});
+								else if (InternalData.LibraryComponents[item].strings) {
+									if (InternalData.LibraryComponents[item].nonStrings) {
+										LibraryComponents[item] = Internal.findModule("strings + nonStrings", JSON.stringify([InternalData.LibraryComponents[item].strings, InternalData.LibraryComponents[item].nonStrings].flat(10)), m => Internal.checkModuleStrings(m, InternalData.LibraryComponents[item].strings) && Internal.checkModuleStrings(m, InternalData.LibraryComponents[item].nonStrings, {hasNot: true}) && m, {defaultExport});
+									}
+									else LibraryComponents[item] = BDFDB.ModuleUtils.findByString(InternalData.LibraryComponents[item].strings, {defaultExport});
+								}
 								if (InternalData.LibraryComponents[item].value) LibraryComponents[item] = (LibraryComponents[item] || {})[InternalData.LibraryComponents[item].value];
 								if (InternalData.LibraryComponents[item].assign) LibraryComponents[item] = Object.assign({}, LibraryComponents[item]);
-								if (LibraryComponents[item] && InternalData.LibraryComponents[item].funcStrings) LibraryComponents[item] = (Object.entries(LibraryComponents[item]).find(n => {
-									if (!n || !n[1]) return;
-									let funcString = n[1].toString();
-									return [InternalData.LibraryComponents[item].funcStrings].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1);
-								}) || [])[1]
+								if (LibraryComponents[item]) {
+									if (InternalData.LibraryComponents[item].funcStrings) LibraryComponents[item] = (Object.entries(LibraryComponents[item]).find(n => {
+										if (!n || !n[1]) return;
+										let funcString = n[1].toString();
+										return [InternalData.LibraryComponents[item].funcStrings].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1);
+									}) || [])[1]
+									if (InternalData.LibraryComponents[item].map) LibraryComponents[item] = Internal.mappifyModule(LibraryComponents[item], InternalData.LibraryComponents[item]);
+								}
 							}
+							
 							if (CustomComponents[item]) LibraryComponents[item] = LibraryComponents[item] ? Object.assign({}, LibraryComponents[item], CustomComponents[item]) : CustomComponents[item];
 							
 							const NativeComponent = LibraryComponents[item] && Internal.NativeSubComponents[item];
@@ -8326,8 +8337,8 @@ module.exports = (_ => {
 								className = BDFDB.DOMUtils.formatClassName(avatar.props.className, className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbdev);
 							}
 							if (role) {
-								if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement(Internal.LibraryComponents.AvatarComponents.default, Object.assign({}, avatar.props, {
-									size: Internal.LibraryComponents.AvatarComponents.Sizes.SIZE_40
+								if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Avatars.Avatar, Object.assign({}, avatar.props, {
+									size: Internal.LibraryComponents.Avatars.Sizes.SIZE_40
 								}));
 								delete avatar.props.className;
 								let newProps = {
