@@ -428,11 +428,6 @@
 		"ListHeader": {"name": "ListSectionItem"},
 		"Mask": {"name": "Mask"},
 		"Menu": {"name": "Menu"},
-		"MenuItems": {"props": ["MenuItem", "MenuGroup"], "assign": true,
-			"children": {
-				"Colors": {"props": ["MenuItemColor"], "value": "MenuItemColor"}
-			}
-		},
 		"MessageGroup": {"name": "ChannelMessage"},
 		"MessagesPopoutComponents": {"props": ["Header", "EmptyStateBottom"]},
 		"ModalComponents": {"props": ["ModalContent", "ModalFooter"], "assign": true},
