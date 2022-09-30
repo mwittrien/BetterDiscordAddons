@@ -7,14 +7,12 @@
 	"LibraryRequires": ["electron", "fs", "path", "process", "request"],
 	"DiscordObjects": {
 		"Channel": {"props": ["getRecipientId", "isManaged", "getGuildId"]},
-		"DisplayProfile": {"props": ["isUsingGuildMemberBio", "getBannerURL"]},
 		"Guild": {"props": ["getIconURL", "getMaxEmojiSlots", "getRole"]},
 		"Invite": {"props": ["getExpiresAt", "isExpired"]},
 		"Message": {"props": ["getReaction", "isEdited", "getChannelId"]},
 		"Messages": {"props": ["jumpToMessage", "hasAfterCached", "forEach"]},
-		"Relationship": {"name": "FriendsStore", "exported": false, "value": "Row"},
 		"Timestamp": {"props": ["add", "dayOfYear", "hasAlignedHourOffset"]},
-		"User": {"strings": ["UserFlags", "hasFlag", "deserialize"]}
+		"User": {"props": ["addGuildAvatarHash", "isLocalBot"]}
 	},
 	"CustomDiscordConstants": {
 		"MAX_GUILD_FOLDER_NAME_LENGTH": 32,
@@ -65,157 +63,132 @@
 		"UserSettingsActionTypes": ["SLOW_USER_ACTION", "DAILY"],
 		"UserSettingsSections": ["ACCOUNT", "DEVELOPER_OPTIONS", "DISMISSIBLE_CONTENT_OPTIONS"]
 	},
-	"LibraryModulesFunctionsMap": {
-		"AckUtils": {
+	"LibraryModules": {
+		"AckUtils": {"strings": ["type:\"BULK_ACK\""], "exported": false, "value": "exports", "map": {
 			"ack": ["type:\"CHANNEL_ACK\"", "messageId", "channelId"],
 			"bulkAck": ["type:\"BULK_ACK\""]
-		},
-		"ApplicationAssetUtils": {
-			"getAssetImage": ["ApplicationAssetUtils", "getAssetImage"]
-		},
-		"ContextMenuUtils": {
-			"openContextMenu": ["renderLazy"],
-			"closeContextMenu": ["type:\"CONTEXT_MENU_CLOSE\""]
-		},
-		"DispatchUtils": {
-			"ComponentDispatch": ["object Object"]
-		},
-		"FolderSettingsUtils": {
-			"saveGuildFolders": ["guildFolders"]
-		},
-		"GuildBoostUtils": {
-			"getUserLevel": ["\"months\"", "next"]
-		},
-		"HistoryUtils": {
-			"transitionTo": ["transitionTo - Transitioning to external path"]
-		},
-		"KeyCodeUtils": {
-			"codeToKey": ["[\"\"+", "MACOS"],
-			"keyToCode": ["Unrecognized DeviceType"],
-			"toName": ["appVersion"]
-		},
-		"MediaComponentUtils": {
-			"renderImageComponent": ["renderAdjacentContent", "imageContent"]
-		},
-		"MemberDisplayUtils": {
-			"getDisplayProfile": [");return null"]
-		},
-		"MentionUtils": {
-			"isRawMessageMentioned": ["rawMessage", "mention_everyone", "mentionUsers"]
-		},
-		"MessageManageUtils": {
-			"copyLink": [".guild_id"],
-			"replyToMessage": ["showMentionToggle", "shouldMention"]
-		},
-		"ModalUtils": {
-			"openModal": [".modalKey", ".instant", ".Layer", ".onCloseRequest"]
-		},
-		"PreferencesContext": {
-			"AccessibilityPreferencesContext": ["object Object"]
-		},
-		"ReactionEmojiUtils": {
-			"getReactionEmojiName": ["convertSurrogateToName"]
-		},
-		"ReactionUtils": {
-			"getReactions": [".apply("]
-		},
-		"RoleIconUtils": {
-			"canGuildUseRoleIcons": [".ROLE_ICONS"],
-			"getRoleIconData": ["convertSurrogateToName", "customIconSrc"]
-		},
-		"SearchPageUtils": {
-			"searchNextPage": ["(e,t)}"],
-			"searchPreviousPage": ["(e,-t)}"]
-		},
-		"SlateRichUtils": {
-			"toRichValue": [".split(\"\\n\")"]
-		},
-		"SlateTextUtils": {
-			"toTextValue": ["ignoreTrailingEmptyNodes"]
-		},
-		"SoundUtils": {
-			"createSound": ["return new"],
-			"playSound": ["getSoundpack"]
-		},
-		"SpotifyUtils": {
-			"getAccessToken": ["SPOTIFY_ACCOUNT_ACCESS_TOKEN_REVOKE", "CONNECTION_ACCESS_TOKEN"],
-			"pause": ["SPOTIFY_PLAYER_PAUSE"],
-			"play": ["SPOTIFY_PLAYER_PLAY"]
-		},
-		"UserProfileUtils": {
-			"fetchProfile": [".apply("],
-			"getUser": ["\"USER_UPDATE\""]
-		}
-	},
-	"LibraryModules": {
-		"AckUtils": {"strings": ["type:\"BULK_ACK\""], "exported": false, "value": "exports"},
+		}},
 		"ActivityUtils": {"props": ["sendActivityInvite", "updateActivity"]},
 		"AnalyticsUtils": {"props": ["isThrottled", "track"]},
 		"AnimationUtils": {"props": ["spring", "decay"]},
 		"APIEncodeUtils": {"props": ["stringify", "parse", "encode"]},
 		"APIUtils": {"props": ["getAPIBaseURL"]},
 		"AppearanceSettingsUtils": {"props": ["updateLocale", "updateTheme"]},
-		"ApplicationAssetUtils": {"strings": ["ApplicationAssetUtils", "getAssetImage"], "exported": false, "value": "exports"},
+		"ApplicationAssetUtils": {"strings": ["ApplicationAssetUtils", "getAssetImage"], "exported": false, "value": "exports", "map": {
+			"getAssetImage": ["ApplicationAssetUtils", "getAssetImage"]
+		}},
 		"ArrayUtils": {"props": ["isArrayLike", "zipObject"]},
 		"ChannelUtils": {"props": ["selectChannel", "selectPrivateChannel"]},
 		"ConnectionProviderUtils": {"props": ["get", "isSupported", "filter"]},
 		"ConnectionUtils": {"props": ["setShowActivity", "setVisibility"]},
-		"ContextMenuUtils": {"strings": ["renderLazy", "type:\"CONTEXT_MENU_CLOSE\""], "exported": false, "value": "exports"},
+		"ContextMenuUtils": {"strings": ["renderLazy", "type:\"CONTEXT_MENU_CLOSE\""], "exported": false, "value": "exports", "map": {
+			"openContextMenu": ["renderLazy"],
+			"closeContextMenu": ["type:\"CONTEXT_MENU_CLOSE\""]
+		}},
 		"CurrentUserStore": {"props": ["getCurrentUser"]},
 		"DesktopNotificationUtils": {"props": ["showNotification", "requestPermission"]},
 		"DispatchApiUtils": {"props": ["dispatch", "isDispatching"]},
-		"DispatchUtils": {"strings": ["dispatchToLastSubscribed", "setMaxListeners"]},
+		"DispatchUtils": {"strings": ["dispatchToLastSubscribed", "setMaxListeners"], "map": {
+			"ComponentDispatch": ["object Object"]
+		}},
 		"EmojiUtils": {"props": ["translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji"]},
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},
 		"Env": {"props": ["env"]},
-		"FolderSettingsUtils": {"props": ["updateLocale", "updateTheme"], "exported": false, "value": "exports"},
-		"GuildBoostUtils": {"strings": ["getPremiumTypeSubscription", "PREMIUM_GUILD_TIER_1"], "exported": false, "value": "exports"},
+		"FolderSettingsUtils": {"props": ["updateLocale", "updateTheme"], "exported": false, "value": "exports", "map": {
+			"saveGuildFolders": ["guildFolders"]
+		}},
+		"GuildBoostUtils": {"strings": ["getPremiumTypeSubscription", "PREMIUM_GUILD_TIER_1"], "exported": false, "value": "exports", "map": {
+			"getUserLevel": ["\"months\"", "next"]
+		}},
 		"GuildNotificationsUtils": {"props": ["updateChannelOverrideSettings", "updateGuildNotificationSettings"]},
 		"GuildUtils": {"props": ["selectGuild", "transitionToGuildSync"]},
-		"HistoryUtils": {"strings": ["transitionTo - Transitioning to external path"], "exported": false, "value": "exports"},
+		"HistoryUtils": {"strings": ["transitionTo - Transitioning to external path"], "exported": false, "value": "exports", "map": {
+			"transitionTo": ["transitionTo - Transitioning to external path"]
+		}},
 		"IconUtils": {"props": ["getGuildIconURL", "getGuildBannerURL"]},
 		"InviteUtils": {"props": ["acceptInvite", "createInvite"]},
-		"KeyCodeUtils": {"strings": ["Unrecognized DeviceType", "GAMEPAD"], "exported": false, "value": "exports", "assign": true},
+		"KeyCodeUtils": {"strings": ["Unrecognized DeviceType", "GAMEPAD"], "exported": false, "value": "exports", "assign": true, "map": {
+			"codeToKey": ["[\"\"+", "MACOS"],
+			"keyToCode": ["Unrecognized DeviceType"],
+			"toName": ["appVersion"]
+		}},
 		"KeyEvents": {"props": ["aliases", "code", "codes"]},
 		"LoginUtils": {"props": ["login", "logout"]},
-		"MediaComponentUtils": {"strings": ["renderAdjacentContent", "imageContent"], "exported": false, "value": "exports"},
+		"MediaComponentUtils": {"strings": ["renderAdjacentContent", "imageContent"], "exported": false, "value": "exports", "map": {
+			"renderImageComponent": ["renderAdjacentContent", "imageContent"]
+		}},
 		"MediaEngineUtils": {"props": ["setOutputDevice", "setInputDevice"]},
-		"MemberDisplayUtils": {"strings": ["getUserProfile", "getGuildMemberProfile", "_userProfile"], "exported": false, "value": "exports"},
-		"MentionUtils": {"strings": ["rawMessage", "mention_everyone", "mentionUsers"], "exported": false, "value": "exports"},
-		"MessageManageUtils": {"strings": ["showMentionToggle", "SEND_FAILED", "shouldMention"], "exported": false, "value": "exports"},
+		"MemberDisplayUtils": {"strings": ["getUserProfile", "getGuildMemberProfile", "_userProfile"], "exported": false, "value": "exports", "map": {
+			"getDisplayProfile": [");return null"]
+		}},
+		"MentionUtils": {"strings": ["rawMessage", "mention_everyone", "mentionUsers"], "exported": false, "value": "exports", "map": {
+			"isRawMessageMentioned": ["rawMessage", "mention_everyone", "mentionUsers"]
+		}},
+		"MessageManageUtils": {"strings": ["showMentionToggle", "SEND_FAILED", "shouldMention"], "exported": false, "value": "exports", "map": {
+			"copyLink": [".guild_id"],
+			"replyToMessage": ["showMentionToggle", "shouldMention"]
+		}},
 		"MessageParser": {"props": ["parseEmbedTitle", "defaultRules"]},
 		"MessagePinUtils": {"props": ["pinMessage", "unpinMessage"]},
 		"MessageUtils": {"props": ["receiveMessage", "editMessage"]},
-		"ModalUtils": {"strings": ["modalKey", "instant", "contextKey"], "nonStrings": ["LOGIN_REQUIRED_ACTIONS_MODAL_KEY"], "exported": false, "value": "exports"},
+		"ModalUtils": {"strings": ["modalKey", "instant", "contextKey"], "nonStrings": ["LOGIN_REQUIRED_ACTIONS_MODAL_KEY"], "exported": false, "value": "exports", "map": {
+			"openModal": [".modalKey", ".instant", ".Layer", ".onCloseRequest"]
+		}},
 		"NitroUtils": {"props": ["canUseIncreasedMessageLength", "canUploadAnimatedAvatar"]},
 		"NotificationSettingsUtils": {"props": ["setDesktopType", "setTTSType"]},
 		"PlatformUtils": {"strings": ["return/^win/.test"], "exported": false, "value": "exports"},
 		"PermissionRoleUtils": {"props": ["can", "ALLOW", "DENY"]},
-		"PreferencesContext": {"strings": ["reducedMotion", "forcedColors", "alwaysShowLinkDecorations", "createContext"], "exported": false, "value": "exports"},
+		"PreferencesContext": {"strings": ["reducedMotion", "forcedColors", "alwaysShowLinkDecorations", "createContext"], "exported": false, "value": "exports", "map": {
+			"AccessibilityPreferencesContext": ["object Object"]
+		}},
 		"PrivateChannelUtils": {"props": ["addRecipient", "openPrivateChannel"]},
 		"QuerySearchUtils": {"props": ["queryGuilds", "queryGroupDMs"]},
-		"ReactionEmojiUtils": {"strings": ["optionallyDiverseSequence,animated", "convertSurrogateToName"], "exported": false, "value": "exports"},
-		"ReactionUtils": {"strings": ["\"MESSAGE_REACTION_ADD\"", "\"MESSAGE_REACTION_REMOVE\"", "\"@me\""], "exported": false, "value": "exports"},
+		"ReactionEmojiUtils": {"strings": ["optionallyDiverseSequence,animated", "convertSurrogateToName"], "exported": false, "value": "exports", "map": {
+			"getReactionEmojiName": ["convertSurrogateToName"]
+		}},
+		"ReactionUtils": {"strings": ["\"MESSAGE_REACTION_ADD\"", "\"MESSAGE_REACTION_REMOVE\"", "\"@me\""], "exported": false, "value": "exports", "map": {
+			"getReactions": [".apply("]
+		}},
 		"RecentMentionUtils": {"props": ["deleteRecentMention", "fetchRecentMentions"]},
 		"RelationshipUtils": {"props": ["addRelationship", "removeRelationship"]},
-		"RoleIconUtils": {"strings": [".ROLE_ICONS", "convertSurrogateToName", "customIconSrc"], "exported": false, "value": "exports"},
+		"RoleIconUtils": {"strings": [".ROLE_ICONS", "convertSurrogateToName", "customIconSrc"], "exported": false, "value": "exports", "map": {
+			"canGuildUseRoleIcons": [".ROLE_ICONS"],
+			"getRoleIconData": ["convertSurrogateToName", "customIconSrc"]
+		}},
 		"RTCConnectionUtils": {"props": ["getChannelId", "getGuildId", "getRTCConnectionId"]},
-		"SearchPageUtils": {"strings": ["searchId", "sort_by", "sort_order"], "exported": false, "value": "exports"},
+		"SearchPageUtils": {"strings": ["searchId", "sort_by", "sort_order"], "exported": false, "value": "exports", "map": {
+			"searchNextPage": ["(e,t)}"],
+			"searchPreviousPage": ["(e,-t)}"]
+		}},
 		"SettingsUtils": {"strings": ["ON_FOR_LARGE_GUILDS", "updateSetting", "useSetting"], "exported": false, "value": "exports"},
 		"SimpleMarkdownComponents": {"strings": ["customEmoji", "emojiTooltipPosition", "timestampTooltip"]},
 		"SimpleMarkdownParser": {"props": ["parseBlock", "parseInline", "defaultOutput"]},
-		"SlateRichUtils": {"strings": ["textValue", "richValue", "text:\"\""], "nonString": ["createElement"], "exported": false, "value": "exports"},
-		"SlateTextUtils": {"strings": ["ignoreTrailingEmptyNodes", "preventEmojiSurrogates"], "nonString": ["createElement"], "exported": false, "value": "exports"},
+		"SlateRichUtils": {"strings": ["textValue", "richValue", "text:\"\""], "nonString": ["createElement"], "exported": false, "value": "exports", "map": {
+			"toRichValue": [".split(\"\\n\")"]
+		}},
+		"SlateTextUtils": {"strings": ["ignoreTrailingEmptyNodes", "preventEmojiSurrogates"], "nonString": ["createElement"], "exported": false, "value": "exports", "map": {
+			"toTextValue": ["ignoreTrailingEmptyNodes"]
+		}},
 		"SoundParser": {"strings": ["discodo", "ddr-down", "mute"]},
-		"SoundUtils": {"strings": [".play()", ".disableSounds", "getSoundpack"], "nonString": ["createElement"], "exported": false, "value": "exports"},
+		"SoundUtils": {"strings": [".play()", ".disableSounds", "getSoundpack"], "nonString": ["createElement"], "exported": false, "value": "exports", "map": {
+			"createSound": ["return new"],
+			"playSound": ["getSoundpack"]
+		}},
 		"SortedGuildUtils": {"props": ["getSortedGuilds", "getFlattenedGuildIds"]},
-		"SpotifyUtils": {"strings": ["\"SPOTIFY_SET_ACTIVE_DEVICE\"", "deviceId", "accountId"], "exported": false, "value": "exports"},
+		"SpotifyUtils": {"strings": ["\"SPOTIFY_SET_ACTIVE_DEVICE\"", "deviceId", "accountId"], "exported": false, "value": "exports", "map": {
+			"getAccessToken": ["SPOTIFY_ACCOUNT_ACCESS_TOKEN_REVOKE", "CONNECTION_ACCESS_TOKEN"],
+			"pause": ["SPOTIFY_PLAYER_PAUSE"],
+			"play": ["SPOTIFY_PLAYER_PLAY"]
+		}},
 		"StateStoreUtils": {"strings": ["this._currentDispatchActionType"], "exported": false, "value": "exports"},
 		"StoreChangeUtils": {"props": ["get", "set", "clear", "remove"]},
 		"TimestampUtils": {"props": ["fromTimestamp", "extractTimestamp"]},
 		"UploadUtils": {"props": ["upload", "instantBatchUpload"]},
 		"URLParser": {"props": ["parse", "resolveObject"]},
-		"UserProfileUtils": {"strings": ["USER_AGREEMENTS", "user cannot be undefined"], "exported": false, "value": "exports"},
+		"UserProfileUtils": {"strings": ["USER_AGREEMENTS", "user cannot be undefined"], "exported": false, "value": "exports", "map": {
+			"fetchProfile": [".apply("],
+			"getUser": ["\"USER_UPDATE\""]
+		}},
 		"UserSettingsProtoUtils": {"strings": ["UserSettingsProtoLastWriteTimes"], "exported": false, "value": "exports"},
 		"UserSettingsUtils": {"props": ["open", "updateAccount"]},
 		"Utilities": {"props": ["flatMap", "cloneDeep"]},
