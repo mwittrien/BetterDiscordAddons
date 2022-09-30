@@ -4792,7 +4792,7 @@ module.exports = (_ => {
 						if (openedItem == this.props.id) openedItem = null;
 					}
 					render() {
-						let color = (typeof this.props.color == "string" ? this.props.color : Internal.LibraryComponents.MenuItems.Colors.DEFAULT).toLowerCase();
+						let color = (typeof this.props.color == "string" ? this.props.color : Internal.DiscordConstants.MenuItemColors.DEFAULT).toLowerCase();
 						let isCustomColor = false;
 						if (color) {
 							if (DiscordClasses[`menu${color}`]) color = color;
@@ -4800,7 +4800,7 @@ module.exports = (_ => {
 								isCustomColor = true;
 								color = BDFDB.ColorUtils.convert(color, "RGBA");
 							}
-							else color = (Internal.LibraryComponents.MenuItems.Colors.DEFAULT || "").toLowerCase();
+							else color = (Internal.DiscordConstants.MenuItemColors.DEFAULT || "").toLowerCase();
 						}
 						let renderPopout, onClose, hasPopout = BDFDB.ObjectUtils.is(this.props.popoutProps);
 						if (hasPopout) {

@@ -217,7 +217,7 @@ module.exports = (_ => {
 									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.submenu_resetsettings,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
-										color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
+										color: BDFDB.DiscordConstants.MenuItemColors.DANGER,
 										disabled: !changedGuilds[e.instance.props.guild.id],
 										action: event => {
 											let remove = _ => {

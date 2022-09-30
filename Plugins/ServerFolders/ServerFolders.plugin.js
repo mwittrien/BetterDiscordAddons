@@ -588,7 +588,7 @@ module.exports = (_ => {
 								BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									label: this.labels.serversubmenu_removefromfolder,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "remove-from-folder"),
-									color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
+									color: BDFDB.DiscordConstants.MenuItemColors.DANGER,
 									action: _ => this.removeGuildFromFolder(folder.folderId, e.instance.props.guild.id)
 								})
 							] : [
@@ -650,7 +650,7 @@ module.exports = (_ => {
 						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.foldercontext_removefolder,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "remove-folder"),
-							color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
+							color: BDFDB.DiscordConstants.MenuItemColors.DANGER,
 							action: event => {
 								BDFDB.ModalUtils.confirm(this, this.labels.foldercontext_removefolder_confirm.replace("{{var0}}", folder.folderName ? `"${folder.folderName}"` : "").trim(), _ => {
 									this.removeFolder(e.instance.props.folderId);

@@ -154,7 +154,7 @@ module.exports = (_ => {
 						for (let key in enabledEngines) items.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.defaults.engines[key].name,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "search", key),
-							color: key == "_all" ? BDFDB.LibraryComponents.MenuItems.Colors.DANGER : BDFDB.LibraryComponents.MenuItems.Colors.DEFAULT,
+							color: key == "_all" ? BDFDB.DiscordConstants.MenuItemColors.DANGER : BDFDB.DiscordConstants.MenuItemColors.DEFAULT,
 							persisting: true,
 							action: event => {
 								if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);

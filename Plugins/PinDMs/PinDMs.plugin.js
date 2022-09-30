@@ -281,12 +281,12 @@ module.exports = (_ => {
 									children: currentCategory ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.context_unpinchannel,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "unpin-channellist"),
-										color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
+										color: BDFDB.DiscordConstants.MenuItemColors.DANGER,
 										action: _ => this.removeFromCategory(id, currentCategory, "channelList")
 									}) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.context_addtonewcategory,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "new-channellist"),
-										color: BDFDB.LibraryComponents.MenuItems.Colors.BRAND,
+										color: BDFDB.DiscordConstants.MenuItemColors.BRAND,
 										action: _ => this.openCategorySettingsModal({
 											id: this.generateId("channelList"),
 											name: `${this.labels.header_pinneddms} #${categories.length + 1}`,
@@ -312,7 +312,7 @@ module.exports = (_ => {
 						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels[pinnedInGuild ? "context_unpinguild" : "context_pinguild"],
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, pinnedInGuild ? "unpin-serverlist" : "pin-serverlist"),
-							color: pinnedInGuild ? BDFDB.LibraryComponents.MenuItems.Colors.DANGER : BDFDB.LibraryComponents.MenuItems.Colors.DEFAULT,
+							color: pinnedInGuild ? BDFDB.DiscordConstants.MenuItemColors.DANGER : BDFDB.DiscordConstants.MenuItemColors.DEFAULT,
 							action: _ => {
 								if (!pinnedInGuild) this.addPin(id, "guildList");
 								else this.removePin(id, "guildList");
@@ -525,7 +525,7 @@ module.exports = (_ => {
 													BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 														label: BDFDB.LanguageUtils.LanguageStrings.DELETE_CATEGORY,
 														id: BDFDB.ContextMenuUtils.createItemId(this.name, "remove-category"),
-														color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
+														color: BDFDB.DiscordConstants.MenuItemColors.DANGER,
 														action: _ => {
 															let newData = this.getPinnedChannels("channelList");
 															delete newData[category.id];
