@@ -2569,7 +2569,6 @@ module.exports = (_ => {
 				};
 				
 				LibraryModules = {};
-				const OriginalModules = {};
 				LibraryModules.LanguageStore = BDFDB.ModuleUtils.find(m => m.Messages && m.Messages.IMAGE && m);
 				LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
 				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode");
@@ -2588,16 +2587,16 @@ module.exports = (_ => {
 						}
 						if (InternalData.LibraryModules[item].value) LibraryModules[item] = (LibraryModules[item] || {})[InternalData.LibraryModules[item].value];
 						if (InternalData.LibraryModules[item].assign) LibraryModules[item] = Object.assign({}, LibraryModules[item]);
-						if (LibraryModules[item] && InternalData.LibraryModulesFunctionsMap && InternalData.LibraryModulesFunctionsMap[item]) {
-							OriginalModules[item] = LibraryModules[item];
-							const mappedItems = {};
-							LibraryModules[item] = new Proxy(Object.assign({}, OriginalModules[item], InternalData.LibraryModulesFunctionsMap[item]), {
+						if (LibraryModules[item] && InternalData.LibraryModules[item].map) {
+							InternalData.LibraryModules[item]._originalModule = LibraryModules[item];
+							InternalData.LibraryModules[item]._mappedItems = {};
+							LibraryModules[item] = new Proxy(Object.assign({}, InternalData.LibraryModules[item]._originalModule[item], InternalData.LibraryModules[item].map), {
 								get: function (_, item2) {
-									if (mappedItems[item2]) return OriginalModules[item][mappedItems[item2]];
-									if (!InternalData.LibraryModulesFunctionsMap[item][item2]) return OriginalModules[item][item2];
-									let foundFunc = Object.entries(OriginalModules[item]).find(n => InternalData.LibraryModulesFunctionsMap[item][item2].flat(10).every(string => n && n.toString().indexOf(string) > -1));
+									if (InternalData.LibraryModules[item]._mappedItems[item2]) return InternalData.LibraryModules[item]._originalModule[item][InternalData.LibraryModules[item]._mappedItems[item2]];
+									if (!InternalData.LibraryModules[item].map[item2]) return InternalData.LibraryModules[item]._originalModule[item][item2];
+									let foundFunc = Object.entries(InternalData.LibraryModules[item]._originalModule[item]).find(n => InternalData.LibraryModulesFunctionsMap[item][item2].flat(10).every(string => n && n.toString().indexOf(string) > -1));
 									if (foundFunc) {
-										mappedItems[item2] = foundFunc[0];
+										InternalData.LibraryModules[item]._mappedItems[item2] = foundFunc[0];
 										return foundFunc[1];
 									}
 								}
@@ -2608,7 +2607,7 @@ module.exports = (_ => {
 				});
 				BDFDB.LibraryModules = Internal.LibraryModules;
 				
-				if (Internal.LibraryModules.KeyCodeUtils && OriginalModules.KeyCodeUtils) OriginalModules.KeyCodeUtils.getString = function (keyArray) {
+				if (Internal.LibraryModules.KeyCodeUtils && InternalData.LibraryModules.KeyCodeUtils._originalModule) InternalData.LibraryModules.KeyCodeUtils._originalModule.getString = function (keyArray) {
 					return Internal.LibraryModules.KeyCodeUtils.toName([keyArray].flat(10).filter(n => n).map(keyCode => [Internal.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, Internal.LibraryModules.KeyCodeUtils.keyToCode((Object.entries(Internal.LibraryModules.KeyEvents.codes).find(n => n[1] == keyCode && Internal.LibraryModules.KeyCodeUtils.keyToCode(n[0], null)) || [])[0], null) || keyCode]), true);
 				};
 				
