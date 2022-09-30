@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.6.5
+ * @version 2.6.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -21,7 +21,7 @@ module.exports = (_ => {
 		started: true,
 		changeLog: {
 			fixed: {
-				"No more Console Spam": "Fixed some Stuff that spammed the Console with Errors and could cause Crashs, this is not a final Fix and it will take several days or even weeks till all my Plugins are fixed"
+				"Preparing for final Update": "Plugins are STILL broken, might get to fix everything today, just maybe tho"
 			}
 		}
 	};
@@ -1126,8 +1126,8 @@ module.exports = (_ => {
 					
 					Internal.getWebModuleReq = function () {
 						if (!Internal.getWebModuleReq.req) {
-							const id = "BDFDB-WebModules";
-							const req = window.webpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
+							const id = "BDFDB-WebModules_" + Math.floor(Math.random() * 10000000000000000);
+							const req = webpackChunkdiscord_app.push([[id], {}, req => req]);
 							delete req.m[id];
 							delete req.c[id];
 							Internal.getWebModuleReq.req = req;
