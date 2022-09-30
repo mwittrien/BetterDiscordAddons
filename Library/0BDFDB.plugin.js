@@ -2567,6 +2567,24 @@ module.exports = (_ => {
 					}
 				};
 				
+				Internal.mappifyModule = (module, data) => {
+					data._originalModule = module;
+					data._mappedItems = {};
+					return new Proxy(Object.assign({}, data._originalModule, data.map), {
+						get: function (_, item) {
+							if (data._mappedItems[item]) return data._originalModule[data._mappedItems[item]];
+							if (!data.map[item]) return data._originalModule[item];
+							let foundFunc = Object.entries(data._originalModule).find(n => data.map[item].flat(10).every(string => {
+								return n && n[1] && (typeof n[1] == "function" ? n[1].toString() : (_ => {try {return JSON.stringify(n[1])}catch(err){return n[1].toString()}})()).indexOf(string) > -1;
+							}));
+							if (foundFunc) {
+								data._mappedItems[item] = foundFunc[0];
+								return foundFunc[1];
+							}
+						}
+					});
+				};
+				
 				LibraryModules.LanguageStore = BDFDB.ModuleUtils.find(m => m.Messages && m.Messages.IMAGE && m);
 				LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
 				LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode");
@@ -2585,21 +2603,7 @@ module.exports = (_ => {
 						}
 						if (InternalData.LibraryModules[item].value) LibraryModules[item] = (LibraryModules[item] || {})[InternalData.LibraryModules[item].value];
 						if (InternalData.LibraryModules[item].assign) LibraryModules[item] = Object.assign({}, LibraryModules[item]);
-						if (LibraryModules[item] && InternalData.LibraryModules[item].map) {
-							InternalData.LibraryModules[item]._originalModule = LibraryModules[item];
-							InternalData.LibraryModules[item]._mappedItems = {};
-							LibraryModules[item] = new Proxy(Object.assign({}, InternalData.LibraryModules[item]._originalModule, InternalData.LibraryModules[item].map), {
-								get: function (_, item2) {
-									if (InternalData.LibraryModules[item]._mappedItems[item2]) return InternalData.LibraryModules[item]._originalModule[InternalData.LibraryModules[item]._mappedItems[item2]];
-									if (!InternalData.LibraryModules[item].map[item2]) return InternalData.LibraryModules[item]._originalModule[item2];
-									let foundFunc = Object.entries(InternalData.LibraryModules[item]._originalModule).find(n => InternalData.LibraryModules[item].map[item2].flat(10).every(string => n && n[1] && (typeof n[1] == "function" ? n[1].toString() : (_ => {try {return JSON.stringify(n[1])}catch(err){return n[1].toString()}})()).indexOf(string) > -1));
-									if (foundFunc) {
-										InternalData.LibraryModules[item]._mappedItems[item2] = foundFunc[0];
-										return foundFunc[1];
-									}
-								}
-							});
-						}
+						if (LibraryModules[item] && InternalData.LibraryModules[item].map) LibraryModules[item] = Internal.mappifyModule(LibraryModules[item], InternalData.LibraryModules[item]);
 						return LibraryModules[item] ? LibraryModules[item] : null;
 					}
 				});
@@ -8144,6 +8148,7 @@ module.exports = (_ => {
 										return SubComponents[item2] ? SubComponents[item2] : "div";
 									}
 								});
+								if (LibraryComponents[item] && InternalData.LibraryComponents[item].map) LibraryComponents[item] = Internal.mappifyModule(LibraryComponents[item], InternalData.LibraryComponents[item]);
 							}
 							return LibraryComponents[item] ? LibraryComponents[item] : "div";
 						}

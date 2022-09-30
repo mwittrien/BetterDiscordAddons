@@ -90,7 +90,7 @@
 		"DesktopNotificationUtils": {"props": ["showNotification", "requestPermission"]},
 		"DispatchApiUtils": {"props": ["dispatch", "isDispatching"]},
 		"DispatchUtils": {"strings": ["dispatchToLastSubscribed", "setMaxListeners"], "map": {
-			"ComponentDispatch": ["object Object"]
+			"ComponentDispatch": ["_eventsCount"]
 		}},
 		"EmojiUtils": {"props": ["translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji"]},
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},
@@ -388,12 +388,14 @@
 		"TooltipContainer": {"name": "Tooltip"}
 	},
 	"LibraryComponents": {
-		"Anchor": {"name": "Anchor"},
+		"Anchor": {"strings": ["anchorUnderlineOnHover", "noreferrer noopener"]},
 		"Animations": {"props": ["Controller", "Spring"], "assign": true},
-		"AppReferencePositionLayer": {"name": "AppReferencePositionLayer"},
-		"AutocompleteItems": {"props": ["Generic", "User", "Command"]},
-		"AutocompleteMenu": {"name": "Autocomplete"},
-		"AvatarComponents": {"props": ["AnimatedAvatar"]},
+		"AppReferencePositionLayer": {"strings": ["\"onMount\"", "\"onUnmount\""], "funcStrings": ["createRef"]},
+		"Avatars": {"strings": ["\"statusColor\"", "ONLINE", "isMobile"], "map": {
+			"AnimatedAvatar": ["compare"],
+			"Avatar": ["statusColor"],
+			"Sizes": ["SIZE_32"]
+		}},
 		"Badges": {"props": ["IconBadge", "NumberBadge"], "assign": true},
 		"ChannelTextAreaTypes": {"props": ["ChatInputTypes"], "value": "ChatInputTypes"},
 		"Checkmark": {"name": "Checkmark"},
@@ -428,7 +430,7 @@
 		"LazyImage": {"name": "LazyImage"},
 		"ListHeader": {"name": "ListSectionItem"},
 		"Mask": {"name": "Mask"},
-		"Menu": {"name": "Menu"},
+		"Menu": {"strings": ["Menu API only allows Items and groups of Items as children"], "funcStrings": ["keyboardModeEnabled"]},
 		"MessageGroup": {"name": "ChannelMessage"},
 		"MessagesPopoutComponents": {"props": ["Header", "EmptyStateBottom"]},
 		"ModalComponents": {"props": ["ModalContent", "ModalFooter"], "assign": true},
@@ -447,7 +449,6 @@
 				"Thin": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerThin"}
 			}
 		},
-		"SliderMarkerPositions": {"props": ["MarkerPositions"], "value": "MarkerPositions"},
 		"Spinner": {"name": "Spinner"},
 		"Status": {"name": "Status"},
 		"StatusPickerPopout": {"strings": ["\"StatusPickerPopout\""], "value": "default"},
