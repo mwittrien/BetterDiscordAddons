@@ -2649,6 +2649,21 @@ html .newBadge-1LcB6t[style*="background-color: hsl(235, "] {
 	background: var(--accentcolor-active);
 }
 
+.bd-description-wrap .banner {
+	background: var(--background-primary);
+	border-color: var(--background-secondary);
+    color: var(--header-secondary);
+    font-size: 14px;
+    line-height: 18px;
+}
+.banner.banner-danger {
+	background: var(--background-secondary);
+	border-color: rgb(var(--dangercolor));
+}
+.banner-danger .bd-icon {
+	fill: rgb(var(--dangercolor));
+}
+
 .bd-addon-views .bd-view-button.selected {
 	background: var(--bd-blue);
 }
