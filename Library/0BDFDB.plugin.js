@@ -2594,7 +2594,7 @@ module.exports = (_ => {
 								get: function (_, item2) {
 									if (InternalData.LibraryModules[item]._mappedItems[item2]) return InternalData.LibraryModules[item]._originalModule[InternalData.LibraryModules[item]._mappedItems[item2]];
 									if (!InternalData.LibraryModules[item].map[item2]) return InternalData.LibraryModules[item]._originalModule[item2];
-									let foundFunc = Object.entries(InternalData.LibraryModules[item]._originalModule).find(n => InternalData.LibraryModulesFunctionsMap[item][item2].flat(10).every(string => n && n.toString().indexOf(string) > -1));
+									let foundFunc = Object.entries(InternalData.LibraryModules[item]._originalModule).find(n => InternalData.LibraryModules[item].map[item2].flat(10).every(string => n && n.toString().indexOf(string) > -1));
 									if (foundFunc) {
 										InternalData.LibraryModules[item]._mappedItems[item2] = foundFunc[0];
 										return foundFunc[1];
