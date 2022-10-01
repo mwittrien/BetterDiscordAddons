@@ -6714,6 +6714,45 @@ module.exports = (_ => {
 						}
 					};
 					
+					CustomComponents.MenuItems.MenuControlItem = reactInitialized && class BDFDB_MenuControlItem extends Internal.LibraryModules.React.Component {
+						render() {
+							let effectRef = BDFDB.ReactUtils.useRef(null);
+							let controlRef = BDFDB.ReactUtils.useRef(null);
+							
+							BDFDB.ReactUtils.useLayoutEffect((_ => {
+								if (this.props.isFocused) {
+									BDFDB.LibraryStores.AccessibilityStore.keyboardModeEnabled && controlRef.current && controlRef.current.scrollIntoView({
+										block: "nearest"
+									});
+									controlRef.current && controlRef.current.focus();
+								}
+								else controlRef.current && controlRef.current.blur && controlRef.current.blur(controlRef.current);
+							}), [this.props.isFocused]);
+							
+							return BDFDB.ReactUtils.createElement("div", Object.assign({
+								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN[`menu${(this.props.color && DiscordClasses[`menu${this.props.color.toLowerCase()}`] || Internal.DiscordConstants.MenuItemColors.DEFAULT || "").toLowerCase()}`], this.props.disabled && BDFDB.disCN.menudisabled, this.props.showDefaultFocus && this.props.isFocused && BDFDB.disCN.menufocused, !this.props.showDefaultFocus && BDFDB.disCN.menuhideinteraction),
+								onClick: BDFDB.ReactUtils.useCallback((_ => {
+									if (!controlRef.current || !controlRef.current.activate || !controlRef.current.activate.call(controlRef.current)) this.props.onClose();
+								}), [this.props.onClose]),
+								"aria-disabled": this.props.disabled,
+								children: [
+									this.props.label && BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN.menulabelcontainer,
+										children: BDFDB.ReactUtils.createElement("div", {
+											className: BDFDB.disCN.menulabel,
+											children: this.props.label
+										})
+									}),
+									typeof this.props.control == "function" && this.props.control({
+										onClose: this.props.onClose,
+										disabled: this.props.disabled,
+										isFocused: this.props.isFocused
+									}, controlRef)
+								]
+							}, this.props.menuItemProps));
+						}
+					};
+					
 					CustomComponents.MenuItems.MenuSliderItem = reactInitialized && class BDFDB_MenuSliderItem extends Internal.LibraryModules.React.Component {
 						handleValueChange(value) {
 							if (this.props.state) {
@@ -8114,7 +8153,7 @@ module.exports = (_ => {
 							
 							if (CustomComponents[item]) LibraryComponents[item] = LibraryComponents[item] ? Object.assign({}, LibraryComponents[item], CustomComponents[item]) : CustomComponents[item];
 							
-							if (InternalData.LibraryComponents[item].children) {
+							if (InternalData.LibraryComponents[item] && InternalData.LibraryComponents[item].children) {
 								const SubComponents = LibraryComponents[item] && typeof LibraryComponents[item] == "object" ? LibraryComponents[item] : {};
 								const InternalParentData = InternalData.LibraryComponents[item].children;
 								LibraryComponents[item] = new Proxy(SubComponents, {
