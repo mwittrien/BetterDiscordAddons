@@ -6771,7 +6771,7 @@ module.exports = (_ => {
 						}
 						render() {
 							let value = this.props.state && this.props.state.value || 0;
-							return BDFDB.ReactUtils.createElement(Internal.NativeSubComponents.MenuControlItem, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+							return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.MenuItems.MenuControlItem, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 								label: typeof this.props.renderLabel == "function" ? this.props.renderLabel(Math.round(value * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits), this) : this.props.label,
 								control: (menuItemProps, ref) => {
 									return BDFDB.ReactUtils.createElement("div", {
