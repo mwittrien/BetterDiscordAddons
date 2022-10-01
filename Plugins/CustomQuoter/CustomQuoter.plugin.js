@@ -248,7 +248,7 @@ module.exports = (_ => {
 								"$timestamp will be replaced with the Formatted Timestamp of the quoted Message",
 								"$unixTimestamp will be replaced with the Unix Timestamp of the quoted Message"
 							].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
-								type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
+								type: BDFDB.LibraryComponents.FormComponents.FormText.Types.DESCRIPTION,
 								children: string
 							}))
 						}));
