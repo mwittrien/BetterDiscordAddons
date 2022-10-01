@@ -2567,22 +2567,44 @@ module.exports = (_ => {
 					}
 				};
 				
-				Internal.mappifyModule = (module, data) => {
-					data._originalModule = module;
-					data._mappedItems = {};
-					return new Proxy(Object.assign({}, data._originalModule, data.map), {
-						get: function (_, item) {
-							if (data._mappedItems[item]) return data._originalModule[data._mappedItems[item]];
-							if (!data.map[item]) return data._originalModule[item];
-							let foundFunc = Object.entries(data._originalModule).find(n => data.map[item].flat(10).every(string => {
-								return n && n[1] && (typeof n[1] == "function" ? n[1].toString() : (_ => {try {return JSON.stringify(n[1])}catch(err){return n[1].toString()}})()).indexOf(string) > -1;
-							}));
-							if (foundFunc) {
-								data._mappedItems[item] = foundFunc[0];
-								return foundFunc[1];
+				Internal.findModuleViaData = (moduleStorage, dataStorage, item) => {
+					if (dataStorage[item]) {
+						let defaultExport = typeof dataStorage[item].exported != "boolean" ? true : dataStorage[item].exported;
+						if (dataStorage[item].props) moduleStorage[item] = BDFDB.ModuleUtils.findByProperties(dataStorage[item].props, {defaultExport});
+						else if (dataStorage[item].name) moduleStorage[item] = BDFDB.ModuleUtils.findByName(dataStorage[item].name, {defaultExport});
+						else if (dataStorage[item].strings) {
+							if (dataStorage[item].nonStrings) {
+								moduleStorage[item] = Internal.findModule("strings + nonStrings", JSON.stringify([dataStorage[item].strings, dataStorage[item].nonStrings].flat(10)), m => Internal.checkModuleStrings(m, dataStorage[item].strings) && Internal.checkModuleStrings(m, dataStorage[item].nonStrings, {hasNot: true}) && m, {defaultExport});
+							}
+							else moduleStorage[item] = BDFDB.ModuleUtils.findByString(dataStorage[item].strings, {defaultExport});
+						}
+						if (dataStorage[item].value) moduleStorage[item] = (moduleStorage[item] || {})[dataStorage[item].value];
+						if (dataStorage[item].assign) moduleStorage[item] = Object.assign({}, moduleStorage[item]);
+						if (moduleStorage[item]) {
+							if (dataStorage[item].funcStrings) moduleStorage[item] = (Object.entries(moduleStorage[item]).find(n => {
+								if (!n || !n[1]) return;
+								let funcString = n[1].toString();
+								return [dataStorage[item].funcStrings].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1);
+							}) || [])[1];
+							if (dataStorage[item].map) {
+								dataStorage[item]._originalModule = moduleStorage[item];
+								dataStorage[item]._mappedItems = {};
+								moduleStorage[item] = new Proxy(Object.assign({}, dataStorage[item]._originalModule, dataStorage[item].map), {
+									get: function (_, item2) {
+										if (dataStorage[item]._mappedItems[item2]) return dataStorage[item]._originalModule[dataStorage[item]._mappedItems[item2]];
+										if (!dataStorage[item].map[item2]) return dataStorage[item]._originalModule[item2];
+										let foundFunc = Object.entries(dataStorage[item]._originalModule).find(n => dataStorage[item].map[item2].flat(10).every(string => {
+											return n && n[1] && (typeof n[1] == "function" ? n[1].toString() : (_ => {try {return JSON.stringify(n[1])}catch(err){return n[1].toString()}})()).indexOf(string) > -1;
+										}));
+										if (foundFunc) {
+											dataStorage[item]._mappedItems[item2] = foundFunc[0];
+											return foundFunc[1];
+										}
+									}
+								});
 							}
 						}
-					});
+					}
 				};
 				
 				LibraryModules.LanguageStore = BDFDB.ModuleUtils.find(m => m.Messages && m.Messages.IMAGE && m);
@@ -2592,18 +2614,9 @@ module.exports = (_ => {
 					get: function (_, item) {
 						if (LibraryModules[item]) return LibraryModules[item];
 						if (!InternalData.LibraryModules[item]) return null;
-						let defaultExport = typeof InternalData.LibraryModules[item].exported != "boolean" ? true : InternalData.LibraryModules[item].exported;
-						if (InternalData.LibraryModules[item].props) LibraryModules[item] = BDFDB.ModuleUtils.findByProperties(InternalData.LibraryModules[item].props, {defaultExport});
-						else if (InternalData.LibraryModules[item].name) LibraryModules[item] = BDFDB.ModuleUtils.findByName(InternalData.LibraryModules[item].name, {defaultExport});
-						else if (InternalData.LibraryModules[item].strings) {
-							if (InternalData.LibraryModules[item].nonStrings) {
-								LibraryModules[item] = Internal.findModule("strings + nonStrings", JSON.stringify([InternalData.LibraryModules[item].strings, InternalData.LibraryModules[item].nonStrings].flat(10)), m => Internal.checkModuleStrings(m, InternalData.LibraryModules[item].strings) && Internal.checkModuleStrings(m, InternalData.LibraryModules[item].nonStrings, {hasNot: true}) && m, {defaultExport});
-							}
-							else LibraryModules[item] = BDFDB.ModuleUtils.findByString(InternalData.LibraryModules[item].strings, {defaultExport});
-						}
-						if (InternalData.LibraryModules[item].value) LibraryModules[item] = (LibraryModules[item] || {})[InternalData.LibraryModules[item].value];
-						if (InternalData.LibraryModules[item].assign) LibraryModules[item] = Object.assign({}, LibraryModules[item]);
-						if (LibraryModules[item] && InternalData.LibraryModules[item].map) LibraryModules[item] = Internal.mappifyModule(LibraryModules[item], InternalData.LibraryModules[item]);
+						
+						Internal.findModuleViaData(LibraryModules, InternalData.LibraryModules, item);
+						
 						return LibraryModules[item] ? LibraryModules[item] : null;
 					}
 				});
@@ -8086,25 +8099,7 @@ module.exports = (_ => {
 							if (NativeSubComponents[item]) return NativeSubComponents[item];
 							if (!InternalData.NativeSubComponents[item]) return "div";
 							
-							let defaultExport = typeof InternalData.NativeSubComponents[item].exported != "boolean" ? true : InternalData.NativeSubComponents[item].exported;
-							if (InternalData.NativeSubComponents[item].props) NativeSubComponents[item] = BDFDB.ModuleUtils.findByProperties(InternalData.NativeSubComponents[item].props, {defaultExport});
-							else if (InternalData.NativeSubComponents[item].name) NativeSubComponents[item] = BDFDB.ModuleUtils.findByName(InternalData.NativeSubComponents[item].name, {defaultExport});
-							else if (InternalData.NativeSubComponents[item].strings) {
-								if (InternalData.NativeSubComponents[item].nonStrings) {
-									NativeSubComponents[item] = Internal.findModule("strings + nonStrings", JSON.stringify([InternalData.NativeSubComponents[item].strings, InternalData.NativeSubComponents[item].nonStrings].flat(10)), m => Internal.checkModuleStrings(m, InternalData.NativeSubComponents[item].strings) && Internal.checkModuleStrings(m, InternalData.NativeSubComponents[item].nonStrings, {hasNot: true}) && m, {defaultExport});
-								}
-								else NativeSubComponents[item] = BDFDB.ModuleUtils.findByString(InternalData.NativeSubComponents[item].strings, {defaultExport});
-							}
-							if (InternalData.NativeSubComponents[item].value) NativeSubComponents[item] = (NativeSubComponents[item] || {})[InternalData.NativeSubComponents[item].value];
-							if (InternalData.NativeSubComponents[item].assign) NativeSubComponents[item] = Object.assign({}, NativeSubComponents[item]);
-							if (NativeSubComponents[item]) {
-								if (InternalData.NativeSubComponents[item].funcStrings) NativeSubComponents[item] = (Object.entries(NativeSubComponents[item]).find(n => {
-									if (!n || !n[1]) return;
-									let funcString = n[1].toString();
-									return [InternalData.NativeSubComponents[item].funcStrings].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1);
-								}) || [])[1]
-								if (InternalData.NativeSubComponents[item].map) NativeSubComponents[item] = Internal.mappifyModule(NativeSubComponents[item], InternalData.NativeSubComponents[item]);
-							}
+							Internal.findModuleViaData(NativeSubComponents, InternalData.NativeSubComponents, item);
 							
 							return NativeSubComponents[item] ? NativeSubComponents[item] : "div";
 						}
@@ -8115,38 +8110,11 @@ module.exports = (_ => {
 							if (LibraryComponents[item]) return LibraryComponents[item];
 							if (!InternalData.LibraryComponents[item] && !CustomComponents[item]) return "div";
 							
-							if (InternalData.LibraryComponents[item]) {
-								let defaultExport = typeof InternalData.LibraryComponents[item].exported != "boolean" ? true : InternalData.LibraryComponents[item].exported;
-								if (InternalData.LibraryComponents[item].props) LibraryComponents[item] = BDFDB.ModuleUtils.findByProperties(InternalData.LibraryComponents[item].props, {defaultExport});
-								else if (InternalData.LibraryComponents[item].name) LibraryComponents[item] = BDFDB.ModuleUtils.findByName(InternalData.LibraryComponents[item].name, {defaultExport});
-								else if (InternalData.LibraryComponents[item].strings) {
-									if (InternalData.LibraryComponents[item].nonStrings) {
-										LibraryComponents[item] = Internal.findModule("strings + nonStrings", JSON.stringify([InternalData.LibraryComponents[item].strings, InternalData.LibraryComponents[item].nonStrings].flat(10)), m => Internal.checkModuleStrings(m, InternalData.LibraryComponents[item].strings) && Internal.checkModuleStrings(m, InternalData.LibraryComponents[item].nonStrings, {hasNot: true}) && m, {defaultExport});
-									}
-									else LibraryComponents[item] = BDFDB.ModuleUtils.findByString(InternalData.LibraryComponents[item].strings, {defaultExport});
-								}
-								if (InternalData.LibraryComponents[item].value) LibraryComponents[item] = (LibraryComponents[item] || {})[InternalData.LibraryComponents[item].value];
-								if (InternalData.LibraryComponents[item].assign) LibraryComponents[item] = Object.assign({}, LibraryComponents[item]);
-								if (LibraryComponents[item]) {
-									if (InternalData.LibraryComponents[item].funcStrings) LibraryComponents[item] = (Object.entries(LibraryComponents[item]).find(n => {
-										if (!n || !n[1]) return;
-										let funcString = n[1].toString();
-										return [InternalData.LibraryComponents[item].funcStrings].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1);
-									}) || [])[1]
-									if (InternalData.LibraryComponents[item].map) LibraryComponents[item] = Internal.mappifyModule(LibraryComponents[item], InternalData.LibraryComponents[item]);
-								}
-							}
+							Internal.findModuleViaData(LibraryComponents, InternalData.LibraryComponents, item);
 							
 							if (CustomComponents[item]) LibraryComponents[item] = LibraryComponents[item] ? Object.assign({}, LibraryComponents[item], CustomComponents[item]) : CustomComponents[item];
 							
-							const NativeComponent = LibraryComponents[item] && Internal.NativeSubComponents[item];
-							if (NativeComponent && typeof NativeComponent != "string") {
-								for (let key in NativeComponent) if (key != "displayName" && key != "name" && (typeof NativeComponent[key] != "function" || key.charAt(0) == key.charAt(0).toUpperCase())) {
-									if (key == "defaultProps") LibraryComponents[item][key] = Object.assign({}, LibraryComponents[item][key], NativeComponent[key]);
-									else if (!LibraryComponents[item][key]) LibraryComponents[item][key] = NativeComponent[key];
-								}
-							}
-							if (InternalData.LibraryComponents[item] && InternalData.LibraryComponents[item].children) {
+							if (InternalData.LibraryComponents[item].children) {
 								const SubComponents = LibraryComponents[item] && typeof LibraryComponents[item] == "object" ? LibraryComponents[item] : {};
 								const InternalParentData = InternalData.LibraryComponents[item].children;
 								LibraryComponents[item] = new Proxy(SubComponents, {
@@ -8172,7 +8140,14 @@ module.exports = (_ => {
 										return SubComponents[item2] ? SubComponents[item2] : "div";
 									}
 								});
-								if (LibraryComponents[item] && InternalData.LibraryComponents[item].map) LibraryComponents[item] = Internal.mappifyModule(LibraryComponents[item], InternalData.LibraryComponents[item]);
+							}
+							
+							const NativeComponent = LibraryComponents[item] && Internal.NativeSubComponents[item];
+							if (NativeComponent && typeof NativeComponent != "string") {
+								for (let key in NativeComponent) if (key != "displayName" && key != "name" && (typeof NativeComponent[key] != "function" || key.charAt(0) == key.charAt(0).toUpperCase())) {
+									if (key == "defaultProps") LibraryComponents[item][key] = Object.assign({}, LibraryComponents[item][key], NativeComponent[key]);
+									else if (!LibraryComponents[item][key]) LibraryComponents[item][key] = NativeComponent[key];
+								}
 							}
 							return LibraryComponents[item] ? LibraryComponents[item] : "div";
 						}
