@@ -8084,7 +8084,7 @@ module.exports = (_ => {
 					Internal.NativeSubComponents = new Proxy(NativeSubComponents, {
 						get: function (_, item) {
 							if (NativeSubComponents[item]) return NativeSubComponents[item];
-							if (!InternalData.NativeSubComponents[item] && !CustomComponents[item]) return "div";
+							if (!InternalData.NativeSubComponents[item]) return "div";
 							
 							let defaultExport = typeof InternalData.NativeSubComponents[item].exported != "boolean" ? true : InternalData.NativeSubComponents[item].exported;
 							if (InternalData.NativeSubComponents[item].props) NativeSubComponents[item] = BDFDB.ModuleUtils.findByProperties(InternalData.NativeSubComponents[item].props, {defaultExport});
