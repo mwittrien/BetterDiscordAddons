@@ -1208,8 +1208,8 @@ module.exports = (_ => {
 					if (e.instance.props.resized) {
 						let embed = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedfull, e.node);
 						if (embed) embed.style.setProperty("max-width", "unset", "important");
-						if (e.instance.state.readyState != BDFDB.LibraryComponents.Image.ImageReadyStates.READY) {
-							e.instance.state.readyState = BDFDB.LibraryComponents.Image.ImageReadyStates.READY;
+						if (e.instance.state.readyState != BDFDB.LibraryComponents.ImageComponents.ImageReadyStates.READY) {
+							e.instance.state.readyState = BDFDB.LibraryComponents.ImageComponents.ImageReadyStates.READY;
 							BDFDB.ReactUtils.forceUpdate(e.instance);
 						}
 					}

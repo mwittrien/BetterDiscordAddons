@@ -413,7 +413,6 @@
 			"FormText": [".type", ".DEFAULT"],
 			"FormTitle": [".tag", "variant:\"text"]
 		}},
-		"FriendsEmptyState": {"strings": ["FriendsEmptyState", "FriendsSections"], "value": "default"},
 		"GuildComponents": {
 			"children": {
 				"Badge": {"name": "GuildBadge"},
@@ -428,9 +427,12 @@
 			}
 		},
 		"Header": {"props": ["Sizes", "Tags"]},
-		"Heading": {"name": "Heading"},
-		"HeaderBarComponents": {"name": "HeaderBarContainer"},
-		"Image": {"props": ["ImageReadyStates"]},
+		"Heading": {"strings": ["data-excessive", ".defaultColor"]},
+		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
+		"ImageComponents": {"strings": ["containerRef", "zoomable", "LOADING"], "exported": false, "value": "exports", "map": {
+			"Image": ["containerRef"],
+			"ImageReadyStates": ["LOADING", "ERROR"]
+		}},
 		"ImageModal": {"name": "ImageModal"},
 		"LazyImage": {"name": "LazyImage"},
 		"ListHeader": {"name": "ListSectionItem"},
