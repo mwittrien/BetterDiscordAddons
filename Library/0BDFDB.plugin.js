@@ -8084,15 +8084,28 @@ module.exports = (_ => {
 					Internal.NativeSubComponents = new Proxy(NativeSubComponents, {
 						get: function (_, item) {
 							if (NativeSubComponents[item]) return NativeSubComponents[item];
-							if (!InternalData.NativeSubComponents[item]) return "div";
-							if (InternalData.NativeSubComponents[item].name) {
-								if (InternalData.NativeSubComponents[item].protos) {
-									NativeSubComponents[item] = BDFDB.ModuleUtils.find(m => m && m.displayName == InternalData.NativeSubComponents[item].name && m.prototype && InternalData.NativeSubComponents[item].protos.every(proto => m.prototype[proto]) && m);
-									if (!NativeSubComponents[item]) BDFDB.LogUtils.warn(`${JSON.stringify([InternalData.NativeSubComponents[item].name, InternalData.NativeSubComponents[item].protos].flat(10))} [name + protos] not found in WebModules`);
+							if (!InternalData.NativeSubComponents[item] && !CustomComponents[item]) return "div";
+							
+							let defaultExport = typeof InternalData.NativeSubComponents[item].exported != "boolean" ? true : InternalData.NativeSubComponents[item].exported;
+							if (InternalData.NativeSubComponents[item].props) NativeSubComponents[item] = BDFDB.ModuleUtils.findByProperties(InternalData.NativeSubComponents[item].props, {defaultExport});
+							else if (InternalData.NativeSubComponents[item].name) NativeSubComponents[item] = BDFDB.ModuleUtils.findByName(InternalData.NativeSubComponents[item].name, {defaultExport});
+							else if (InternalData.NativeSubComponents[item].strings) {
+								if (InternalData.NativeSubComponents[item].nonStrings) {
+									NativeSubComponents[item] = Internal.findModule("strings + nonStrings", JSON.stringify([InternalData.NativeSubComponents[item].strings, InternalData.NativeSubComponents[item].nonStrings].flat(10)), m => Internal.checkModuleStrings(m, InternalData.NativeSubComponents[item].strings) && Internal.checkModuleStrings(m, InternalData.NativeSubComponents[item].nonStrings, {hasNot: true}) && m, {defaultExport});
 								}
-								else NativeSubComponents[item] = BDFDB.ModuleUtils.findByName(InternalData.NativeSubComponents[item].name);
+								else NativeSubComponents[item] = BDFDB.ModuleUtils.findByString(InternalData.NativeSubComponents[item].strings, {defaultExport});
 							}
-							else if (InternalData.NativeSubComponents[item].props) NativeSubComponents[item] = BDFDB.ModuleUtils.findByProperties(InternalData.NativeSubComponents[item].props);
+							if (InternalData.NativeSubComponents[item].value) NativeSubComponents[item] = (NativeSubComponents[item] || {})[InternalData.NativeSubComponents[item].value];
+							if (InternalData.NativeSubComponents[item].assign) NativeSubComponents[item] = Object.assign({}, NativeSubComponents[item]);
+							if (NativeSubComponents[item]) {
+								if (InternalData.NativeSubComponents[item].funcStrings) NativeSubComponents[item] = (Object.entries(NativeSubComponents[item]).find(n => {
+									if (!n || !n[1]) return;
+									let funcString = n[1].toString();
+									return [InternalData.NativeSubComponents[item].funcStrings].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1);
+								}) || [])[1]
+								if (InternalData.NativeSubComponents[item].map) NativeSubComponents[item] = Internal.mappifyModule(NativeSubComponents[item], InternalData.NativeSubComponents[item]);
+							}
+							
 							return NativeSubComponents[item] ? NativeSubComponents[item] : "div";
 						}
 					});
