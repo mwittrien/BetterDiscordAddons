@@ -463,7 +463,7 @@
 			"GroupDM": [".getGuildId"],
 			"LinkButton": [".apply(this"]
 		}},
-		"RoleMention": {"strings": ["rolePopout", "inlinePreview"], "funcStrings": ["inlinePreview"]}
+		"RoleMention": {"strings": ["rolePopout", "inlinePreview"], "funcStrings": ["inlinePreview"]},
 		"Scrollers": {
 			"children": {
 				"Auto": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerAuto"},
