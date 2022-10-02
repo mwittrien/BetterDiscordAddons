@@ -130,6 +130,7 @@ module.exports = (_ => {
 				
 				let SettingsStore = BDFDB.DiscordUtils.getSettingsStore();
 				if (SettingsStore) BDFDB.PatchUtils.patch(this, SettingsStore, "updateAsync", {after: e => {
+					if (e.methodArguments[0] != "status") return;
 					let newSettings = {value: undefined};
 					e.methodArguments[1](newSettings);
 					if (newSettings.showCurrentGame != undefined) {
