@@ -59,7 +59,6 @@
 		"ReadStateTypes": ["GUILD_EVENT", "NOTIFICATION_CENTER", "CHANNEL"],
 		"RelationshipTypes": ["FRIEND", "PENDING_INCOMING", "PENDING_OUTGOING"],
 		"Routes": ["CHANNEL_THREAD_VIEW", "MESSAGE_REQUESTS"],
-		"StatusTypes": ["STREAMING", "UNKNOWN", "DND"],
 		"UserFlags": ["HYPESQUAD", "BUG_HUNTER_LEVEL_1", "STAFF"],
 		"UserNotificationSettings": ["NULL", "NO_MESSAGES", "ALL_MESSAGES"],
 		"UserSettingsActionTypes": ["SLOW_USER_ACTION", "DAILY"],
@@ -475,7 +474,11 @@
 			"Types": ["WANDERING_CUBES", "CHASING_DOTS"],
 			"Spinner": ["LOADING"]
 		}},
-		"Status": {"name": "Status"},
+		"StatusComponents": {"strings": ["{mask", ".mask,", "UNKNOWN"], "exported": false, "value": "exports", "map": {
+			"AnimatedStatus": ["useSpring"],
+			"Status": [".mask,"],
+			"Types": ["UNKNOWN", "INVISIBLE"]
+		}},
 		"StatusPickerPopout": {"strings": ["\"StatusPickerPopout\""], "value": "default"},
 		"TextElement": {"strings": [".strong,", ".STANDARD"]},
 		"Timeout": {"protos": ["start", "stop", "isStarted"]},

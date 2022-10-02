@@ -489,10 +489,10 @@ module.exports = (_ => {
 											mini: true,
 											grow: 0,
 											label: "Mute in",
-											labelChildren: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Status, {
+											labelChildren: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {
 												style: {marginLeft: 6},
 												size: 12,
-												status: BDFDB.DiscordConstants.StatusTypes.DND
+												status: BDFDB.LibraryComponents.StatusComponents.Types.DND
 											}),
 											value: choices[type].mute,
 											onChange: value => {

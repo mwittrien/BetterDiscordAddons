@@ -372,9 +372,9 @@ module.exports = (_ => {
 											})
 										})
 									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Status, {
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {
 										className: BDFDB.disCN._customstatuspresetsstatus,
-										status: presets[id].status || BDFDB.DiscordConstants.StatusTypes.ONLINE
+										status: presets[id].status || BDFDB.LibraryComponents.StatusComponents.Types.ONLINE
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 										children: presets[id].text
