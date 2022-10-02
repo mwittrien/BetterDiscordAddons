@@ -208,8 +208,8 @@ module.exports = (_ => {
 							justify: BDFDB.LibraryComponents.Flex.Justify.CENTER,
 							style: {marginTop: "50%"},
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Spinner, {
-									type: BDFDB.LibraryComponents.Spinner.Type.WANDERING_CUBES
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SpinnerComponents.Spinner, {
+									type: BDFDB.LibraryComponents.SpinnerComponents.Types.WANDERING_CUBES
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 									className: BDFDB.disCN.margintop20,
@@ -255,8 +255,8 @@ module.exports = (_ => {
 								direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
 								justify: BDFDB.LibraryComponents.Flex.Justify.CENTER,
 								style: {marginTop: "50%"},
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Spinner, {
-									type: BDFDB.LibraryComponents.Spinner.Type.WANDERING_CUBES
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SpinnerComponents.Spinner, {
+									type: BDFDB.LibraryComponents.SpinnerComponents.Types.WANDERING_CUBES
 								})
 							}) : [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {

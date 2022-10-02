@@ -126,8 +126,8 @@ module.exports = (_ => {
 						_this.switchImages(this.props.modalInstance, this.props.offset);
 					},
 					children: [
-						this.props.loadedImage || BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Spinner, {
-							type: BDFDB.LibraryComponents.Spinner.Type.SPINNING_CIRCLE
+						this.props.loadedImage || BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SpinnerComponents.Spinner, {
+							type: BDFDB.LibraryComponents.SpinnerComponents.Types.SPINNING_CIRCLE
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 							className: BDFDB.disCNS._imageutilitiesswitchicon + BDFDB.disCN.svgicon,

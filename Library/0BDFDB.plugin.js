@@ -5080,8 +5080,8 @@ module.exports = (_ => {
 								style: this.props.style,
 								rel: this.props.rel,
 								children: [
-									this.props.submitting && !this.props.disabled ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Spinner, {
-										type: Internal.LibraryComponents.Spinner.Type.PULSING_ELLIPSIS,
+									this.props.submitting && !this.props.disabled ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SpinnerComponents.Spinner, {
+										type: Internal.LibraryComponents.SpinnerComponents.Types.PULSING_ELLIPSIS,
 										className: BDFDB.disCN.buttonspinner,
 										itemClassName: BDFDB.disCN.buttonspinneritem
 									}) : null,

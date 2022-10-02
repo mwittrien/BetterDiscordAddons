@@ -456,11 +456,14 @@
 		}},
 		"Paginator": {"strings": ["totalPageCount", "selectedPage"]},
 		"PanelButton": {"strings": ["Masks.PANEL_BUTTON"]},
-		"PopoutCSSAnimator": {"name": "PopoutCSSAnimator"},
-		"PopoutFocusLock": {"strings": ["useFocusLock", "useImperativeHandle"], "value": "default"},
+		"PopoutFocusLock": {"strings": ["impressionName", "useImperativeHandle"], "funcStrings": ["{}"]},
 		"PrivateChannelItems": {"props": ["DirectMessage", "GroupDM"]},
-		"QuickSwitchItems": {"props": ["Channel", "GroupDM", "Header"]},
-		"RoleMention": {"strings": ["rolePopout", "RoleMention"], "value": "default"},
+		"PrivateChannelItems": {"strings": ["handleCloseButtonMouseDown", "LEAVE_GROUP_DM_MANAGED_BODY"], "exported": false, "value": "exports", "map": {
+			"DirectMessage": ["getUser", "getRecipientId"],
+			"GroupDM": [".getGuildId"],
+			"LinkButton": [".apply(this"]
+		}},
+		"RoleMention": {"strings": ["rolePopout", "inlinePreview"], "funcStrings": ["inlinePreview"]}
 		"Scrollers": {
 			"children": {
 				"Auto": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerAuto"},
@@ -468,7 +471,10 @@
 				"Thin": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerThin"}
 			}
 		},
-		"Spinner": {"name": "Spinner"},
+		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "CHASING_DOTS"], "exported": false, "value": "exports", "map": {
+			"Types": ["WANDERING_CUBES", "CHASING_DOTS"],
+			"Spinner": ["LOADING"],
+		}},
 		"Status": {"name": "Status"},
 		"StatusPickerPopout": {"strings": ["\"StatusPickerPopout\""], "value": "default"},
 		"TextElement": {"strings": [".strong,", ".STANDARD"]},
