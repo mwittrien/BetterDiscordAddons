@@ -416,10 +416,10 @@ module.exports = (_ => {
 					}
 				}
 				let member = guildId && BDFDB.LibraryStores.GuildMemberStore.getMember(guildId, user.id);
-				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserBadges.default, {
+				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserBadgeComponents.UserBadges, {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._showbadgesinchatbadges, BDFDB.disCN[`_showbadgesinchatbadges${place.toLowerCase()}`]),
 					user: user,
-					size: BDFDB.LibraryComponents.UserBadges.BadgeSizes.SIZE_18,
+					size: BDFDB.LibraryComponents.UserBadgeComponents.Sizes.SIZE_18,
 					custom: true,
 					place: place,
 					premiumSince: loadedUsers[user.id] && loadedUsers[user.id].premium_since ? new Date(loadedUsers[user.id].premium_since) : (user.id == (specialFlag + "NITRO") ? new Date() : null),

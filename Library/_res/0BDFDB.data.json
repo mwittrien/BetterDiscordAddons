@@ -186,6 +186,7 @@
 		"TimestampUtils": {"props": ["fromTimestamp", "extractTimestamp"]},
 		"UploadUtils": {"props": ["upload", "instantBatchUpload"]},
 		"URLParser": {"props": ["parse", "resolveObject"]},
+		"UserNameUtils": {"props": ["getNickname", "getName", "useName"]},
 		"UserProfileUtils": {"strings": ["USER_AGREEMENTS", "user cannot be undefined"], "exported": false, "value": "exports", "map": {
 			"fetchProfile": [".apply("],
 			"getUser": ["\"USER_UPDATE\""]
@@ -479,18 +480,18 @@
 			"Status": [".mask,"],
 			"Types": ["UNKNOWN", "INVISIBLE"]
 		}},
-		"StatusPickerPopout": {"strings": ["\"StatusPickerPopout\""], "value": "default"},
 		"TextElement": {"strings": [".strong,", ".STANDARD"]},
 		"Timeout": {"protos": ["start", "stop", "isStarted"]},
-		"UserBadgeKeys": {"props": ["BadgeKeys"], "value": "BadgeKeys"},
 		"UserBadges": {"props": ["BadgeSizes"]},
+		"UserBadgeComponents": {"strings": [".PROFILE_USER_BADGES", "SIZE_24"], "exported": false, "value": "exports", "map": {
+			"UserBadges": [".PROFILE_USER_BADGES"],
+			"Sizes": ["\"SIZE_24\":"]
+		}},
 		"UserMention": {"strings": [".inlinePreview", "renderPopout", ".openContextMenu", ".isMobile"]},
 		"UserPopout": {"name": "UserPopoutContainer"},
 		"UserPopoutSection": {"name": "UserPopoutSection"},
 		"UserSummaryItem": {"name": "UserSummaryItem"},
-		"VideoForwardRef": {"strings": ["displayName=\"Video\"", "\"video\"", "HTMLImageElement"], "value": "default"},
-		"VoiceSettingsConstants": {"props": ["MediaEngineContextTypes", "DEFAULT_VOLUME"]},
-		"VolumeUtils": {"props": ["amplitudeToPerceptual", "perceptualToAmplitude"]}
+		"VideoForwardRef": {"strings": ["displayName=\"Video\"", "\"video\"", "HTMLImageElement"], "value": "default"}
 	},
 	"SvgIcons": {
 		"ACTIVITY": {
