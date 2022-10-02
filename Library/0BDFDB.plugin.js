@@ -2571,6 +2571,7 @@ module.exports = (_ => {
 					if (dataStorage[item]) {
 						let defaultExport = typeof dataStorage[item].exported != "boolean" ? true : dataStorage[item].exported;
 						if (dataStorage[item].props) moduleStorage[item] = BDFDB.ModuleUtils.findByProperties(dataStorage[item].props, {defaultExport});
+						else if (dataStorage[item].protos) moduleStorage[item] = BDFDB.ModuleUtils.findByPrototypes(dataStorage[item].protos, {defaultExport});
 						else if (dataStorage[item].name) moduleStorage[item] = BDFDB.ModuleUtils.findByName(dataStorage[item].name, {defaultExport});
 						else if (dataStorage[item].strings) {
 							if (dataStorage[item].nonStrings) {
@@ -6716,43 +6717,41 @@ module.exports = (_ => {
 						}
 					};
 					
-					CustomComponents.MenuItems.MenuControlItem = reactInitialized && class BDFDB_MenuControlItem extends Internal.LibraryModules.React.Component {
-						render() {
-							let effectRef = BDFDB.ReactUtils.useRef(null);
-							let controlRef = BDFDB.ReactUtils.useRef(null);
-							
-							BDFDB.ReactUtils.useLayoutEffect((_ => {
-								if (this.props.isFocused) {
-									BDFDB.LibraryStores.AccessibilityStore.keyboardModeEnabled && controlRef.current && controlRef.current.scrollIntoView({
-										block: "nearest"
-									});
-									controlRef.current && controlRef.current.focus();
-								}
-								else controlRef.current && controlRef.current.blur && controlRef.current.blur(controlRef.current);
-							}), [this.props.isFocused]);
-							
-							return BDFDB.ReactUtils.createElement("div", Object.assign({
-								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN[`menu${(this.props.color && DiscordClasses[`menu${this.props.color.toLowerCase()}`] || Internal.DiscordConstants.MenuItemColors.DEFAULT || "").toLowerCase()}`], this.props.disabled && BDFDB.disCN.menudisabled, this.props.showDefaultFocus && this.props.isFocused && BDFDB.disCN.menufocused, !this.props.showDefaultFocus && BDFDB.disCN.menuhideinteraction),
-								onClick: BDFDB.ReactUtils.useCallback((_ => {
-									if (!controlRef.current || !controlRef.current.activate || !controlRef.current.activate.call(controlRef.current)) this.props.onClose();
-								}), [this.props.onClose]),
-								"aria-disabled": this.props.disabled,
-								children: [
-									this.props.label && BDFDB.ReactUtils.createElement("div", {
-										className: BDFDB.disCN.menulabelcontainer,
-										children: BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN.menulabel,
-											children: this.props.label
-										})
-									}),
-									typeof this.props.control == "function" && this.props.control({
-										onClose: this.props.onClose,
-										disabled: this.props.disabled,
-										isFocused: this.props.isFocused
-									}, controlRef)
-								]
-							}, this.props.menuItemProps));
-						}
+					CustomComponents.MenuItems.MenuControlItem = function (props) {
+						let effectRef = BDFDB.ReactUtils.useRef(null);
+						let controlRef = BDFDB.ReactUtils.useRef(null);
+						
+						BDFDB.ReactUtils.useLayoutEffect((_ => {
+							if (props.isFocused) {
+								BDFDB.LibraryStores.AccessibilityStore.keyboardModeEnabled && controlRef.current && controlRef.current.scrollIntoView({
+									block: "nearest"
+								});
+								controlRef.current && controlRef.current.focus();
+							}
+							else controlRef.current && controlRef.current.blur && controlRef.current.blur(controlRef.current);
+						}), [props.isFocused]);
+						
+						return BDFDB.ReactUtils.createElement("div", Object.assign({
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN[`menu${(props.color && DiscordClasses[`menu${props.color.toLowerCase()}`] || Internal.DiscordConstants.MenuItemColors.DEFAULT || "").toLowerCase()}`], props.disabled && BDFDB.disCN.menudisabled, props.showDefaultFocus && props.isFocused && BDFDB.disCN.menufocused, !props.showDefaultFocus && BDFDB.disCN.menuhideinteraction),
+							onClick: BDFDB.ReactUtils.useCallback((_ => {
+								if (!controlRef.current || !controlRef.current.activate || !controlRef.current.activate.call(controlRef.current)) props.onClose();
+							}), [props.onClose]),
+							"aria-disabled": props.disabled,
+							children: [
+								props.label && BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.menulabelcontainer,
+									children: BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN.menulabel,
+										children: props.label
+									})
+								}),
+								typeof props.control == "function" && props.control({
+									onClose: props.onClose,
+									disabled: props.disabled,
+									isFocused: props.isFocused
+								}, controlRef)
+							]
+						}, props.menuItemProps));
 					};
 					
 					CustomComponents.MenuItems.MenuSliderItem = reactInitialized && class BDFDB_MenuSliderItem extends Internal.LibraryModules.React.Component {
@@ -7068,6 +7067,18 @@ module.exports = (_ => {
 						}
 					};
 					Internal.setDefaultProps(CustomComponents.PopoutContainer, {wrap: true});
+					
+					CustomComponents.PopoutCSSAnimator = function (props) {
+						let positionState = BDFDB.ReactUtils.useState(props.position != null);
+						let animationState = BDFDB.ReactUtils.useState((_ => new Internal.LibraryComponents.Timeout));
+						BDFDB.ReactUtils.useEffect((_ => (_ => animationState[0].stop())), [animationState[0]]);
+						BDFDB.ReactUtils.useEffect(_ => (props.position && T.start(10, (_ => positionState[1](true)))), [props.position, animationState[0]]);
+						let position = typeof props.position == "string" && props.position.replace("window_", "");
+						return BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.DOMUtils.formatClassName(DiscordClasses[`animationcontainer${position}`] && BDFDB.disCN[`animationcontainer${position}`]
+							children: props.children
+						})
+					};
 					
 					CustomComponents.QuickSelect = reactInitialized && class BDFDB_QuickSelect extends Internal.LibraryModules.React.Component {
 						handleChange(option) {
