@@ -456,7 +456,7 @@
 		}},
 		"Paginator": {"strings": ["totalPageCount", "selectedPage"]},
 		"PanelButton": {"strings": ["Masks.PANEL_BUTTON"]},
-		"PopoutFocusLock": {"strings": ["impressionName", "useImperativeHandle"], "funcStrings": ["{}"]},
+		"PopoutFocusLock": {"strings": ["impressionName", "useImperativeHandle"], "funcStrings": ["impressionName"]},
 		"PrivateChannelItems": {"props": ["DirectMessage", "GroupDM"]},
 		"PrivateChannelItems": {"strings": ["handleCloseButtonMouseDown", "LEAVE_GROUP_DM_MANAGED_BODY"], "exported": false, "value": "exports", "map": {
 			"DirectMessage": ["getUser", "getRecipientId"],
@@ -464,13 +464,7 @@
 			"LinkButton": [".apply(this"]
 		}},
 		"RoleMention": {"strings": ["rolePopout", "inlinePreview"], "funcStrings": ["inlinePreview"]},
-		"Scrollers": {
-			"children": {
-				"Auto": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerAuto"},
-				"None": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerNone"},
-				"Thin": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerThin"}
-			}
-		},
+		"Scrollers": {"strings": [".fade", ".auto", "paddingFix", "getScrollerNode"], "exported": false, "value": "exports"},
 		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "CHASING_DOTS"], "exported": false, "value": "exports", "map": {
 			"Spinner": ["LOADING"],
 			"Types": ["WANDERING_CUBES", "CHASING_DOTS"]
@@ -487,11 +481,10 @@
 			"UserBadges": [".PROFILE_USER_BADGES"],
 			"Sizes": ["\"SIZE_24\":"]
 		}},
-		"UserMention": {"strings": [".inlinePreview", "renderPopout", ".openContextMenu", ".isMobile"]},
-		"UserPopout": {"name": "UserPopoutContainer"},
-		"UserPopoutSection": {"name": "UserPopoutSection"},
-		"UserSummaryItem": {"name": "UserSummaryItem"},
-		"VideoForwardRef": {"strings": ["displayName=\"Video\"", "\"video\"", "HTMLImageElement"], "value": "default"}
+		"UserPopout": {"strings": ["canViewThemes?", "Unexpected missing user"], "funcStrings": ["canViewThemes"]},
+		"UserPopoutSection": {"strings": [".section,", ".lastSection"]},
+		"UserSummaryItem": {"strings": ["popoutUserId:", ".clickableAvatar"]},
+		"VideoForwardRef": {"strings": ["HTMLSourceElement", "autoPlay"], "funcStrings": ["externalRef"]}
 	},
 	"SvgIcons": {
 		"ACTIVITY": {

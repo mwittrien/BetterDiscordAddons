@@ -2585,24 +2585,28 @@ module.exports = (_ => {
 							if (dataStorage[item].funcStrings) moduleStorage[item] = (Object.entries(moduleStorage[item]).find(n => {
 								if (!n || !n[1]) return;
 								let funcString = typeof n[1] == "function" ? n[1].toString() : (_ => {try {return JSON.stringify(n[1])}catch(err){return n[1].toString()}})();
-								return [dataStorage[item].funcStrings].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1);
+								let renderFuncString = typeof n[1].render == "function" && n[1].render.toString() || "";
+								return [dataStorage[item].funcStrings].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1 || renderFuncString.indexOf(string) > -1);
 							}) || [])[1];
 							if (dataStorage[item].map) {
 								dataStorage[item]._originalModule = moduleStorage[item];
 								dataStorage[item]._mappedItems = {};
 								moduleStorage[item] = new Proxy(Object.assign({}, dataStorage[item]._originalModule, dataStorage[item].map), {
 									get: function (_, item2) {
+										if (dataStorage[item]._originalModule[item2]) return dataStorage[item]._originalModule[item2];
 										if (dataStorage[item]._mappedItems[item2]) return dataStorage[item]._originalModule[dataStorage[item]._mappedItems[item2]];
 										if (!dataStorage[item].map[item2]) return dataStorage[item]._originalModule[item2];
 										let foundFunc = Object.entries(dataStorage[item]._originalModule).find(n => {
 											if (!n || !n[1]) return;
 											let funcString = typeof n[1] == "function" ? n[1].toString() : (_ => {try {return JSON.stringify(n[1])}catch(err){return n[1].toString()}})();
-											return [dataStorage[item].map[item2]].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1);
+											let renderFuncString = typeof n[1].render == "function" && n[1].render.toString() || "";
+											return [dataStorage[item].map[item2]].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1 || renderFuncString.indexOf(string) > -1);
 										});
 										if (foundFunc) {
 											dataStorage[item]._mappedItems[item2] = foundFunc[0];
 											return foundFunc[1];
 										}
+										return "div";
 									}
 								});
 							}
@@ -8117,6 +8121,23 @@ module.exports = (_ => {
 						}
 					};
 					
+					CustomComponents.UserMention = reactInitialized && class BDFDB_UserMention extends Internal.LibraryModules.React.Component {
+						render() {
+							let user = this.props.user || Internal.LibraryStores.UserStore.getUser(this.props.userId);
+							let channel = Internal.LibraryStores.ChannelStore.getChannel(this.props.channelId);
+							let guildId = this.props.guildId || channel && channel.guild_id;
+							let mention = BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Clickable, {
+								className: this.props.className,
+								onContextMenu: event => BDFDB.UserUtils.openMenu(user, guildId, event),
+								children: "@" + BDFDB.LibraryModules.UserNameUtils.getName(guildId, this.props.channelId, user)
+							});
+							return this.props.inlinePreview ? mention : BDFDB.ReactUtils.createElement(Internal.LibraryComponents.UserPopoutContainer, Object.assign({}, this.props, {
+								position: Internal.LibraryComponents.PopoutContainer.Positions.RIGHT,
+								children: mention
+							}));
+						}
+					};
+					
 					const VideoInner = function (props) {
 						let ref = BDFDB.ReactUtils.useRef(null);
 						BDFDB.ReactUtils.useEffect(_ => {
@@ -8167,34 +8188,6 @@ module.exports = (_ => {
 							
 							if (CustomComponents[item]) LibraryComponents[item] = LibraryComponents[item] ? Object.assign({}, LibraryComponents[item], CustomComponents[item]) : CustomComponents[item];
 							
-							if (InternalData.LibraryComponents[item] && InternalData.LibraryComponents[item].children) {
-								const SubComponents = LibraryComponents[item] && typeof LibraryComponents[item] == "object" ? LibraryComponents[item] : {};
-								const InternalParentData = InternalData.LibraryComponents[item].children;
-								LibraryComponents[item] = new Proxy(SubComponents, {
-									get: function (_, item2) {
-										if (CustomComponents[item] && CustomComponents[item][item2]) return CustomComponents[item][item2];
-										if (SubComponents[item2]) return SubComponents[item2];
-										if (!InternalParentData[item2]) return "div";
-										if (InternalParentData[item2].name) SubComponents[item2] = BDFDB.ModuleUtils.findByName(InternalParentData[item2].name);
-										else if (InternalParentData[item2].strings) SubComponents[item2] = BDFDB.ModuleUtils.findByString(InternalParentData[item2].strings);
-										else if (InternalParentData[item2].props) SubComponents[item2] = BDFDB.ModuleUtils.findByProperties(InternalParentData[item2].props); 
-										
-										if (InternalParentData[item2].value) SubComponents[item2] = (SubComponents[item2] || {})[InternalParentData[item2].value];
-										if (InternalParentData[item2].assign) SubComponents[item] = Object.assign({}, SubComponents[item2]);
-										if (CustomComponents[item2]) SubComponents[item2] = SubComponents[item2] ? Object.assign({}, SubComponents[item2], CustomComponents[item2]) : CustomComponents[item2];
-										
-										const NativeComponent = Internal.NativeSubComponents[item2];
-										if (NativeComponent && typeof NativeComponent != "string") {
-											for (let key in NativeComponent) if (key != "displayName" && key != "name" && (typeof NativeComponent[key] != "function" || key.charAt(0) == key.charAt(0).toUpperCase())) {
-												if (key == "defaultProps") SubComponents[item2][key] = Object.assign({}, SubComponents[item2][key], NativeComponent[key]);
-												else if (!SubComponents[item2][key]) SubComponents[item2][key] = NativeComponent[key];
-											}
-										}
-										return SubComponents[item2] ? SubComponents[item2] : "div";
-									}
-								});
-							}
-							
 							const NativeComponent = LibraryComponents[item] && Internal.NativeSubComponents[item];
 							if (NativeComponent && typeof NativeComponent != "string") {
 								for (let key in NativeComponent) if (key != "displayName" && key != "name" && (typeof NativeComponent[key] != "function" || key.charAt(0) == key.charAt(0).toUpperCase())) {
@@ -8205,6 +8198,30 @@ module.exports = (_ => {
 							return LibraryComponents[item] ? LibraryComponents[item] : "div";
 						}
 					});
+					
+					if (InternalData.LibraryComponents.Scrollers && Internal.LibraryComponents.Scrollers) {
+						InternalData.LibraryComponents.Scrollers._originalModule = Internal.LibraryComponents.Scrollers;
+						InternalData.LibraryComponents.Scrollers._mappedItems = {};
+						for (let type of Object.keys(Internal.LibraryComponents.Scrollers)) if (Internal.LibraryComponents.Scrollers[type] && typeof Internal.LibraryComponents.Scrollers[type].render == "function") {
+							let scroller = BDFDB.ReactUtils.hookCall(Internal.LibraryComponents.Scrollers[type].render, {});
+							if (scroller && scroller.props && scroller.props.className) {
+								let mappedType = "";
+								switch (scroller.props.className) {
+									case BDFDB.disCN.scrollerthin: mappedType = "Thin"; break; 
+									case BDFDB.disCN.scrollerauto: mappedType = "Auto"; break; 
+									case BDFDB.disCN.scrollernone: mappedType = "None"; break; 
+								}
+								if (mappedType) InternalData.LibraryComponents.Scrollers._mappedItems[mappedType] = type;
+							}
+						}
+						Internal.LibraryComponents.Scrollers = new Proxy(Object.assign({}, InternalData.LibraryComponents.Scrollers._originalModule), {
+							get: function (_, item) {
+								if (InternalData.LibraryComponents.Scrollers._originalModule[item]) return InternalData.LibraryComponents.Scrollers._originalModule[item];
+								if (InternalData.LibraryComponents.Scrollers._mappedItems[item]) return InternalData.LibraryComponents.Scrollers._originalModule[InternalData.LibraryComponents.Scrollers._mappedItems[item]];
+								return "div";
+							}
+						});
+					}
 					
 					for (let type of Object.keys(RealMenuItems)) {
 						let children = BDFDB.ObjectUtils.get(BDFDB.ReactUtils.hookCall(Internal.LibraryComponents.Menu, {hideScroller: true, children: BDFDB.ReactUtils.createElement(RealMenuItems[type], {})}), "props.children.props.children.props.children");
