@@ -7055,7 +7055,7 @@ module.exports = (_ => {
 												children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(this) : null
 											}), "popoutStyle", "popoutClassName", "shouldShow", "changing", "renderPopout", "openOnClick", "onClick", "openOnContextMenu", "onContextMenu"));
 											const animation = Object.entries(Internal.LibraryComponents.PopoutContainer.Animation).find(n => n[1] == this.props.animation);
-											return !animation || this.props.animation == Internal.LibraryComponents.PopoutContainer.Animation.NONE ? popout : BDFDB.ReactUtils.createElement(Internal.LibraryComponents.PopoutCSSAnimator, {
+											return !animation || animation[0] == Internal.LibraryComponents.PopoutContainer.Animation.NONE ? popout : BDFDB.ReactUtils.createElement(Internal.LibraryComponents.PopoutCSSAnimator, {
 												position: this.props.position,
 												type: Internal.LibraryComponents.PopoutCSSAnimator.Types[animation[0]],
 												children: popout
@@ -7073,9 +7073,10 @@ module.exports = (_ => {
 						let animationState = BDFDB.ReactUtils.useState((_ => new Internal.LibraryComponents.Timeout));
 						BDFDB.ReactUtils.useEffect((_ => (_ => animationState[0].stop())), [animationState[0]]);
 						BDFDB.ReactUtils.useEffect(_ => (props.position && T.start(10, (_ => positionState[1](true)))), [props.position, animationState[0]]);
-						let position = typeof props.position == "string" && props.position.replace("window_", "");
+						const position = typeof props.position == "string" && props.position.replace("window_", "");
+						const animation = (Object.entries(Internal.LibraryComponents.PopoutContainer.Animation).find(n => n[1] == this.props.animation) || ["NONE"])[0].toLowerCase();
 						return BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(DiscordClasses[`animationcontainer${position}`] && BDFDB.disCN[`animationcontainer${position}`]
+							className: BDFDB.DOMUtils.formatClassName(DiscordClasses[`animationcontainer${position}`] && BDFDB.disCN[`animationcontainer${animation}`], DiscordClasses[`animationcontainer${animation}`] && BDFDB.disCN[`animationcontainer${position}`], positionState[0] && BDFDB.disCN.animationcontainerdidrender),
 							children: props.children
 						})
 					};
