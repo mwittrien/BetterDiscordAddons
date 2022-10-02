@@ -473,7 +473,7 @@
 		},
 		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "CHASING_DOTS"], "exported": false, "value": "exports", "map": {
 			"Types": ["WANDERING_CUBES", "CHASING_DOTS"],
-			"Spinner": ["LOADING"],
+			"Spinner": ["LOADING"]
 		}},
 		"Status": {"name": "Status"},
 		"StatusPickerPopout": {"strings": ["\"StatusPickerPopout\""], "value": "default"},
