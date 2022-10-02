@@ -471,8 +471,8 @@
 			}
 		},
 		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "CHASING_DOTS"], "exported": false, "value": "exports", "map": {
-			"Types": ["WANDERING_CUBES", "CHASING_DOTS"],
-			"Spinner": ["LOADING"]
+			"Spinner": ["LOADING"],
+			"Types": ["WANDERING_CUBES", "CHASING_DOTS"]
 		}},
 		"StatusComponents": {"strings": ["{mask", ".mask,", "UNKNOWN"], "exported": false, "value": "exports", "map": {
 			"AnimatedStatus": ["useSpring"],
