@@ -5455,6 +5455,8 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"105509397211406336": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "samtino (SgJeff)"},
+		"142377892565876736": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "ken (JimC)"},
 		"323494393828999168": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "polak (SzKu)"},
 		"543435944582447104": 	{"active": true,	"tier": "t3",	"text": "",											"color": "",			"id": "oaklaza"},
 		"96563253466898432": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "katsuro"},
