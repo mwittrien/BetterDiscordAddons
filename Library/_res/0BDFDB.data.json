@@ -5455,6 +5455,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"711765867016224798": 	{"active": true,	"tier": "t3",	"text": "",											"color": "",			"id": "jthunter (JeHu)"},
 		"105509397211406336": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "samtino (SgJeff)"},
 		"142377892565876736": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "ken (JimC)"},
 		"323494393828999168": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "polak (SzKu)"},
