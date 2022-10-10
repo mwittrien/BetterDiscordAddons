@@ -196,8 +196,7 @@ module.exports = (_ => {
 			forceUpdateAll () {
 				changedGuilds = BDFDB.DataUtils.load(this, "servers");
 				
-				BDFDB.PatchUtils.forceAllUpdates(this);
-				BDFDB.GuildUtils.rerenderAll();
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 		
 			onGuildContextMenu (e) {

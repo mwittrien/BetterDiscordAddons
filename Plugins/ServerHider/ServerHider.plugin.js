@@ -77,7 +77,7 @@ module.exports = (_ => {
 				hiddenEles = BDFDB.DataUtils.load(this, "hidden");
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
-					if (e.methodArguments[0].type == "STREAMER_MODE_UPDATE") BDFDB.GuildUtils.rerenderAll(true);
+					if (e.methodArguments[0].type == "STREAMER_MODE_UPDATE") BDFDB.DiscordUtils.rerenderAll(true);
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SortedGuildUtils, "getGuildFolderById", {after: e => {
@@ -90,11 +90,11 @@ module.exports = (_ => {
 					}
 				}});
 
-				BDFDB.GuildUtils.rerenderAll();
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 			
 			onStop () {
-				BDFDB.GuildUtils.rerenderAll();
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 
 			getSettingsPanel (collapseStates = {}) {
@@ -119,7 +119,7 @@ module.exports = (_ => {
 							onClick: _ => {
 								BDFDB.ModalUtils.confirm(this, "Are you sure you want to unhide all Servers and Folders?", _ => {
 									BDFDB.DataUtils.save([], this, "hidden");
-									BDFDB.GuildUtils.rerenderAll(true);
+									BDFDB.DiscordUtils.rerenderAll(true);
 								});
 							},
 							children: BDFDB.LanguageUtils.LanguageStrings.RESET
@@ -303,7 +303,7 @@ module.exports = (_ => {
 							BDFDB.DataUtils.save(hiddenEles, this, "hidden");
 							for (let i in switchInstances) switchInstances[i].props.value = enabled;
 							BDFDB.ReactUtils.forceUpdate(BDFDB.ObjectUtils.toArray(switchInstances));
-							BDFDB.GuildUtils.rerenderAll(true);
+							BDFDB.DiscordUtils.rerenderAll(true);
 						}
 					}]
 				});
@@ -315,7 +315,7 @@ module.exports = (_ => {
 				else array.push(id);
 				hiddenEles = Object.assign({}, hiddenEles, {[type]: array});
 				BDFDB.DataUtils.save(hiddenEles, this, "hidden");
-				BDFDB.GuildUtils.rerenderAll(true);
+				BDFDB.DiscordUtils.rerenderAll(true);
 			}
 
 			setLabelsByLanguage () {

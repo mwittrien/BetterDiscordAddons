@@ -291,8 +291,7 @@ module.exports = (_ => {
 			forceUpdateAll () {
 				defaultSettings = Object.assign(BDFDB.ObjectUtils.map(statuses, status => notificationTypes[status.value ? "TOAST" : "DISABLED"].value), {timelog: true}, BDFDB.DataUtils.load(this, "defaultSettings"));
 				
-				BDFDB.GuildUtils.rerenderAll();
-				BDFDB.PatchUtils.forceAllUpdates(this);
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 
 			getSettingsPanel (collapseStates = {}) {

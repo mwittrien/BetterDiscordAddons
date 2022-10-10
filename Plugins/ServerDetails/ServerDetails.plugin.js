@@ -320,7 +320,7 @@ module.exports = (_ => {
 					}
 				`);
 				
-				BDFDB.GuildUtils.rerenderAll();
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 			
 			processGuildItem (e) {

@@ -66,11 +66,11 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.GuildUtils.rerenderAll();
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 			
 			onStop () {
-				BDFDB.GuildUtils.rerenderAll();
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 		
 			processGuilds (e) {

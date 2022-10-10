@@ -151,9 +151,8 @@ module.exports = (_ => {
 				}
 			}
 		
-			forceUpdateAll () {				
-				BDFDB.PatchUtils.forceAllUpdates(this);
-				BDFDB.GuildUtils.rerenderAll();
+			forceUpdateAll () {
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 		
 			processGuilds (e) {

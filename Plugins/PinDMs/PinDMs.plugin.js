@@ -903,7 +903,7 @@ module.exports = (_ => {
 						if (!Object.keys(this.settings.preCategories).every(type => this.settings.preCategories[type].enabled) && BDFDB.ObjectUtils.isEmpty(this.getPinnedChannels(type))) this.forceUpdateAll();
 						break;
 					case "guildList": 
-						BDFDB.GuildUtils.rerenderAll(true);
+						BDFDB.DiscordUtils.rerenderAll(true);
 						break;
 				}
 			}
