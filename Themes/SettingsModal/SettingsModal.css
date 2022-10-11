@@ -64,11 +64,14 @@
 #app-mount .layer-86YKbF ~ .layer-86YKbF .contentColumnDefault-3eyv5o {
 	padding: 20px 40px !important;
 }
+#app-mount .layer-86YKbF ~ .layer-86YKbF .repoHeader-2KfNvH {
+	padding-bottom: 0 !important;
+}
+#app-mount .layer-86YKbF ~ .layer-86YKbF .repoScroller-9JnAPs {
+	padding-top: 0 !important;
+}
 #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-3K3Z4C {
 	height: var(--settingsmodalheight) !important;
-}
-#app-mount .layer-86YKbF ~ .layer-86YKbF .repoHeader-2KfNvH {
-	max-width: calc(var(--settingsmodalwidth) - 258px) !important;
 }
 #app-mount .layer-86YKbF ~ .layer-86YKbF .standardSidebarView-E9Pc3j .editor {
 	height: calc(var(--settingsmodalheight) - 120px) !important;
