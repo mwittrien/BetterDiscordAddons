@@ -271,7 +271,7 @@ img:not([src]), img[src=""], img[src="null"] {
 [REPLACE_CLASS_discoverycards] {
 	display: grid;
 	grid-gap: 16px;
-	grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(312px, 1fr));
 	padding: 10px 0;
 }
 [REPLACE_CLASS_discoverycard] {
@@ -1145,18 +1145,26 @@ input[REPLACE_CLASS_input][REPLACE_CLASS_inputerror] {
 	right: 14px;
 }
 
-[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS_settingswindowtoolscontainer] {
-	margin-top: -140px;
+[REPLACE_CLASS__repo] {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	width: 100%;
+	height: 100%;
 }
-[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS_settingswindowcontentregionscroller] {
-	height: calc(100% - 140px);
-}
-[REPLACE_CLASS__repolistwrapper] [REPLACE_CLASS_settingswindowcontentcolumn] {
-	padding-top: 20px;
+[REPLACE_CLASS__repo] ~ [REPLACE_CLASS_settingswindowtoolscontainer] {
+	position: absolute;
+	right: 0;
+	margin-right: 21px;
 }
 [REPLACE_CLASS__repolistheader] {
 	display: flex;
 	flex-direction: column;
+	padding-right: 100px;
+	padding-bottom: 0;
+}
+[REPLACE_CLASS__repolistscroller] {
+	padding-top: 0;
 }
 [REPLACE_CLASS__repoentry] [REPLACE_CLASS__repofooter] {
 	display: flex;
