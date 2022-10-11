@@ -55,7 +55,7 @@ module.exports = (_ => {
 				BDFDB.ModalUtils.open(this, {
 					header: "PLUGIN WAS DISCONTINUED",
 					children: [
-						BDFDB.ReactUtils.createElement("span", {children: "BETTERDISCORD DEVS ARE WORKING ON A NATIVE IMPLEMENTATION OF SETTINGS FOR THEMES, THAT'S WHY I DECIDED TO ALREADY DROP THEMESETTINGS, HAVING TO FIX ONE LESS PLUGIN"}),
+						BDFDB.ReactUtils.createElement("span", {children: "BETTERDISCORD DEVS ARE WORKING ON A NATIVE IMPLEMENTATION OF SETTINGS FOR THEMES, THAT'S WHY I DECIDED TO ALREADY DROP THEMESETTINGS, HAVING TO FIX ONE LESS PLUGIN "}),
 						BDFDB.ReactUtils.createElement("strong", {children: "DELETE"}),
 						BDFDB.ReactUtils.createElement("span", {children: " TO REMOVE THIS EMPTY PLUGIN FILE."})
 					],
