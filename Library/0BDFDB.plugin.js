@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.6.7
+ * @version 2.6.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2379,7 +2379,10 @@ module.exports = (_ => {
 				};
 				
 				Internal.isCorrectModule = function (module, type, useCache = false) {
-					if (!InternalData.PatchModules || !InternalData.PatchModules[type]) return false;
+					if (!InternalData.PatchModules || !InternalData.PatchModules[type]) {
+						BDFDB.LogUtils.warn(`[${type}] not found in PatchModules InternalData`);
+						return false;
+					}
 					else if (useCache && Cache && Cache.modules && Cache.modules.patch && Cache.modules.patch[type] == module) return true;
 					else {
 						let foundModule = null;
@@ -7804,6 +7807,7 @@ module.exports = (_ => {
 					}
 					render() {
 						let child = (typeof this.props.children == "function" ? this.props.children() : (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children)) || BDFDB.ReactUtils.createElement("div", {});
+						if (!child || !child.props) return null;
 						child.props.className = BDFDB.DOMUtils.formatClassName(child.props.className, this.props.className);
 						let childProps = Object.assign({}, child.props);
 						let shown = false;
@@ -8321,15 +8325,19 @@ module.exports = (_ => {
 						let module = e.methodArguments[0] && (e.methodArguments[0].type || e.methodArguments[0].render || e.methodArguments[0]);
 						if (!module || typeof module != "function") return;
 						if (PluginStores.modulePatches.after && e.returnValue && e.returnValue.type) for (const type in PluginStores.modulePatches.after) if (Internal.isCorrectModule(module, type, true)) {
-							for (let plugin of PluginStores.modulePatches.after[type].flat(10)) if (!BDFDB.PatchUtils.isPatched(plugin, e.returnValue, "type")) {
-								BDFDB.PatchUtils.patch(plugin, e.returnValue, "type", {after: e2 => Internal.initiatePatch(plugin, type, {
-									arguments: e2.methodArguments,
-									instance: e2.thisObject,
-									returnvalue: e2.returnValue,
-									component: e.methodArguments[0],
-									name: type,
-									methodname: "type",
-									patchtypes: ["after"]
+							for (let plugin of PluginStores.modulePatches.after[type].flat(10)) {
+								let patchModule = e.returnValue, patchFunction = "type";
+								if (e.returnValue.type && e.returnValue.type.prototype && typeof e.returnValue.type.prototype.render == "function") {
+									patchModule = e.returnValue.type.prototype, patchFunction = "render";
+								}
+								if (!BDFDB.PatchUtils.isPatched(plugin, patchModule, patchFunction)) BDFDB.PatchUtils.patch(plugin, patchModule, patchFunction, {after: e2 => Internal.initiatePatch(plugin, type, {
+										arguments: e2.methodArguments,
+										instance: e2.thisObject,
+										returnvalue: e2.returnValue,
+										component: e.methodArguments[0],
+										name: type,
+										methodname: patchFunction,
+										patchtypes: ["after"]
 								})});
 							}
 							break;
