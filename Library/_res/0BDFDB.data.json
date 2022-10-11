@@ -128,9 +128,6 @@
 		"MentionUtils": {"strings": ["rawMessage", "mention_everyone", "mentionUsers"], "exported": false, "value": "exports", "map": {
 			"isRawMessageMentioned": ["rawMessage", "mention_everyone", "mentionUsers"]
 		}},
-		"MessageComponentUtils": {"strings": ["ANIMATE_CHAT_AVATAR", "interactionUsernameProfile"], "exported": false, "value": "exports", "map": {
-			"useHoveredMessage": ["ANIMATE_CHAT_AVATAR"]
-		}},
 		"MessageManageUtils": {"strings": ["showMentionToggle", "SEND_FAILED", "shouldMention"], "exported": false, "value": "exports", "map": {
 			"copyLink": [".guild_id"],
 			"replyToMessage": ["showMentionToggle", "shouldMention"]
@@ -170,14 +167,14 @@
 		"SettingsUtils": {"strings": ["ON_FOR_LARGE_GUILDS", "updateSetting", "useSetting"], "exported": false, "value": "exports"},
 		"SimpleMarkdownComponents": {"strings": ["customEmoji", "emojiTooltipPosition", "timestampTooltip"]},
 		"SimpleMarkdownParser": {"props": ["parseBlock", "parseInline", "defaultOutput"]},
-		"SlateRichUtils": {"strings": ["textValue", "richValue", "text:\"\""], "nonStrings": ["createElement"], "exported": false, "value": "exports", "map": {
+		"SlateRichUtils": {"strings": ["textValue", "richValue", "text:\"\""], "nonString": ["createElement"], "exported": false, "value": "exports", "map": {
 			"toRichValue": [".split(\"\\n\")"]
 		}},
-		"SlateTextUtils": {"strings": ["ignoreTrailingEmptyNodes", "preventEmojiSurrogates"], "nonStrings": ["createElement"], "exported": false, "value": "exports", "map": {
+		"SlateTextUtils": {"strings": ["ignoreTrailingEmptyNodes", "preventEmojiSurrogates"], "nonString": ["createElement"], "exported": false, "value": "exports", "map": {
 			"toTextValue": ["ignoreTrailingEmptyNodes"]
 		}},
 		"SoundParser": {"strings": ["discodo", "ddr-down", "mute"]},
-		"SoundUtils": {"strings": [".play()", ".disableSounds", "getSoundpack"], "nonStrings": ["createElement"], "exported": false, "value": "exports", "map": {
+		"SoundUtils": {"strings": [".play()", ".disableSounds", "getSoundpack"], "nonString": ["createElement"], "exported": false, "value": "exports", "map": {
 			"createSound": ["return new"],
 			"playSound": ["getSoundpack"]
 		}},
@@ -193,9 +190,6 @@
 		"UploadUtils": {"props": ["upload", "instantBatchUpload"]},
 		"URLParser": {"props": ["parse", "resolveObject"]},
 		"UserNameUtils": {"props": ["getNickname", "getName", "useName"]},
-		"UserPopoutUtils": {"strings": ["Cannot moderate", "user:", "showMute"], "exported": false, "value": "exports", "map": {
-			"openUserContextMenu": ["showMute"]
-		}},
 		"UserProfileUtils": {"strings": ["USER_AGREEMENTS", "user cannot be undefined"], "exported": false, "value": "exports", "map": {
 			"fetchProfile": [".apply("],
 			"getUser": ["\"USER_UPDATE\""]
@@ -205,6 +199,177 @@
 		"Utilities": {"props": ["flatMap", "cloneDeep"]},
 		"WindowUtils": {"props": ["minimize", "maximize", "close"]}
 	},
+	"ModuleUtilsConfig": {
+		"QueuedComponents": [
+			"GuildHeaderContextMenu",
+			"SystemMessageOptionContextMenu",
+			"SystemMessageOptionToolbar",
+			"MessageOptionContextMenu",
+			"MessageOptionToolbar"
+		],
+		"ContextMenuTypes": [
+			"UserSettingsCog",
+			"UserProfileActions",
+			"Event",
+			"GroupDMUser",
+			"GroupDM",
+			"User",
+			"Developer",
+			"Slate",
+			"GuildSettingsRole",
+			"GuildDirectoryEntry",
+			"GuildFolder",
+			"SystemMessage",
+			"Message",
+			"Native",
+			"Role",
+			"Guild",
+			"Channel"
+		],
+		"ContextMenuTypesMap": {
+			"GroupDMUserContextMenu": "UserContextMenu",
+			"GroupDMContextMenu": "ChannelContextMenu"
+		},
+		"ContextMenuSubItemsMap": {
+			"ChannelContextMenu": {
+				"keys": ["channel"],
+				"items": ["useChannelLeaveItem", "useChannelDeleteItem", "useChannelFavoriteSetNickname", "useChannelGoToOriginalGuildItem", "useChannelCloneItem", "useChannelCopyLinkItem", "useChannelEditItem", "useChannelMarkAsReadItem"]
+			},
+			"UserContextMenu": {
+				"keys": ["user", "channel"],
+				"items": ["useHideNoVideoParticipantsItem", "useHideSelfVideoItem", "usePreviewVideoItem", "useChangeIdentityItem", "useMoveToAudienceItem", "useAddFriendNicknameItem", "useAddNoteItem", "useBlockUserItem", "useUserRelationshipItems", "useUserManagementItems", "useMoveUserVoiceItems", "useCallUserItem", "useFocusVideoItem", "useInviteUserToGuildItems", "useMentionUserItem", "useMessageUserItem", "useUserProfileItem", "useUserRolesItems", "useUserVolumeItem", "useWatchStreamItem", "useCloseDMItem", "useMuteChannelItem"]
+			}
+		},
+		"PatchTypes": [
+			"before",
+			"instead",
+			"after"
+		],
+		"InstanceFunctions": [
+			"render",
+			"componentDidMount",
+			"componentDidUpdate",
+			"componentWillUnmount"
+		],
+		"PatchMap": {
+			"AuditLogs": "GuildSettingsAuditLog",
+			"BannedCard": "BannedUser",
+			"ChannelList": "Channels",
+			"ChannelWindow": "Channel",
+			"InvitationCard": "InviteRow",
+			"InviteCard": "InviteRow",
+			"MemberCard": "Member",
+			"PopoutContainer": "Popout",
+			"QuickSwitchResult": "Result"
+		},
+		"Finder": {
+			"useMuteChannelItem": {"strings": ["DM", "MenuItem", "Messages.MUTE_CHANNEL"], "lazyLoaded": true},
+			"useUserManagementItems": {"strings": ["canManageUser", "MenuItem", "Messages.BAN_USER"], "lazyLoaded": true},
+			"useUserRelationshipItems": {"strings": ["ContextMenu", "isFriend", "addRelationship", "Messages.REMOVE_FRIEND"], "lazyLoaded": true},
+			"useInviteItem": {"strings": ["CREATE_INSTANT_INVITE", "invite-people"], "lazyLoaded": true},
+			"Account": {"class": "accountinfo"},
+			"ActiveThread": {"strings": [".threadId", ".gotoThread", ".showChannelName"]},
+			"App": {"class": "app"},
+			"AppSkeleton": {"class": "app"},
+			"AppView": {"strings": ["darkSidebar", "guilds", "GUILD_CHANNEL", "GUILD_DISCOVERY"]},
+			"AuditLogs": {"class": "auditlog"},
+			"AuthWrapper": {"class": "loginscreen"},
+			"Avatar": {"props": ["AnimatedAvatar"]},
+			"BannedCard": {"class": "guildsettingsbannedcard"},
+			"Category": {"class": "categorycontainerdefault"},
+			"ChannelCall": {"class": "callcurrentcontainer"},
+			"ChannelCategoryItem": {"strings": ["GUILD_CATEGORY", "CREATE_CHANNEL", "addButtonIcon"], "path": "default.DecoratedComponent"},
+			"ChannelMember": {"class": "member"},
+			"ChannelMembers": {"class": "members"},
+			"ChannelList": {"class": "guildchannels"},
+			"ChannelTextAreaForm": {"class": "chatform"},
+			"ChannelWindow": {"class": "chatcontent"},
+			"ChatMessage": {"strings": ["childrenMessageContent", "childrenRepliedMessage", "message.id"]},
+			"CircleIconButton": {"strings": ["className", ".default.circleIconButton"]},
+			"CustomStatusModal": {"class": "customstatusmodal"},
+			"DirectMessage": {"class": "guildouter", "forceObserve": true},
+			"FocusRing": {"props": ["FocusRing", "FocusRingScope"]},
+			"GuildFavorites": {"strings": [".favoriteIcon", "FAVORITES_GUILD_NAME"]},
+			"GuildFolderSettingsModal": {"lazyLoaded": true, "exported": true},
+			"GuildHeader": {"strings": ["bannerVisible", "guildBanner", "onContextMenu"]},
+			"GuildIcon": {"class": "avataricon", "forceObserve": true},
+			"GuildItem": {"strings": ["renderUnavailableBadge", "guildNode", "lowerBadgeWidth"]},
+			"GuildRoleSettings": {"class": "settingswindowcontentregion"},
+			"Guilds": {"subComponent": {"type": "type", "children": true, "strings": ["guildsnav", "ListNavigatorProvider"]}},
+			"GuildSettings": {"class": "layer"},
+			"GuildSettingsBans": {"class": "guildsettingsbannedcard"},
+			"GuildSettingsEmoji": {"class": "guildsettingsemojicard"},
+			"GuildSettingsMembers": {"class": "guildsettingsmembercard"},
+			"GuildSidebar": {"class": "guildchannels"},
+			"HomeButton": {"subComponent": {"type": "HomeButton"}},
+			"I18nLoaderWrapper": {"class": "app"},
+			"InboxButton": {"strings": ["inbox-button", "Messages.INBOX"]},
+			"InstantInviteModal": {"class": "invitemodalwrapper"},
+			"InvitationCard": {"class": "invitemodalinviterow"},
+			"InviteGuildName": {"props": ["GuildName", "GuildTemplateName"]},
+			"InviteCard": {"class": "guildsettingsinvitecard"},
+			"MemberCard": {"class": "guildsettingsmembercard"},
+			"MemberListItem": {"class": "member"},
+			"MemberRoles": {"props": ["MemberRole"]},
+			"Message": {"strings": ["childrenMessageContent", "childrenRepliedMessage", "zalgo"]},
+			"MessageHeader": {"strings": ["ANIMATE_CHAT_AVATAR", "showUsernamePopout"]},
+			"MessageReply": {"strings": [".referencedMessage", ".useClickReferencedMessageAuthorUsername"]},
+			"Messages": {"strings": ["group-spacing-", "canManageMessages"]},
+			"MessageToolbar": {"strings": ["renderReactions", "canAddNewReactions", "showMoreUtilities"]},
+			"MessageUsername": {"strings": [".default.username", "colorString", "compact"]},
+			"ModalLayer": {"class": "modal"},
+			"MutualGuilds": {"lazyLoaded": true},
+			"MutualFriends": {"lazyLoaded": true},
+			"NicknameSection": {"lazyLoaded": true},
+			"Note": {"class": "usernotetextarea"},
+			"PeoplePageList": {"strings": ["FriendsSections", "emptyStateContainer"]},
+			"PopoutContainer": {"class": "popout"},
+			"PrivateChannelCall": {"class": "callcurrentcontainer"},
+			"PrivateChannelCallParticipants": {"class": "callcurrentcontainer"},
+			"PrivateChannelRecipientsInvitePopout": {"class": "searchpopoutdmaddpopout"},
+			"PrivateChannelsList": {"class": "dmchannelsscroller"},
+			"QuickSwitchChannelResult": {"class": "quickswitchresult"},
+			"QuickSwitchGuildResult": {"class": "quickswitchresult"},
+			"QuickSwitchResult": {"class": "quickswitchresult"},
+			"Reaction": {"class": "messagereactionme"},
+			"Reactor": {"class": "messagereactionsmodalreactor"},
+			"ReactorsComponent": {"class": "messagereactionsmodalreactor"},
+			"RecentsHeader": {"strings": ["expanded", "CompactRecentsHeader"]},
+			"RichChannelMention": {"props": ["ChannelMention"]},
+			"RichRoleMention": {"props": ["RoleMention"]},
+			"RichUserMention": {"props": ["UserMention"]},
+			"RoleMention": {"strings": ["rolePopout", "RoleMention"]},
+			"RTCConnection": {"class": "voicedetails"},
+			"SearchBar": {"props": ["SearchIcon"], "path": "default.prototype"},
+			"SearchResults": {"class": "searchresultswrap"},
+			"SearchResultsInner": {"strings": ["SEARCH_HIDE_BLOCKED_MESSAGES", "totalResults", "SEARCH_PAGE_SIZE"]},
+			"SettingsView": {"lazyLoaded": true, "exported": true},
+			"StandardSidebarView": {"strings": ["standardSidebarView", "getThemeClass", "mobileSidebarHeader"]},
+			"ThreadCard": {"strings": ["threadId", "gotoThread", "container"]},
+			"ThreadSidebar": {"strings": ["channelId", "collectThreadMetadata", "SIDEBAR"]},
+			"TypingUsers": {"class": "typing"},
+			"UnavailableGuildsButton": {"strings": ["className", ".default.guildsError"]},
+			"Upload": {"class": "uploadmodal"},
+			"UserMention": {"strings": [".inlinePreview", "renderPopout", ".openContextMenu", ".isMobile"]},
+			"UserPopoutAvatar": {"props": ["UserPopoutAvatar"]},
+			"UserPopoutBodySection": {"strings": [".customStatusActivity", ".canDM", ".hidePersonalInformation"]},
+			"UserProfileModal": {"lazyLoaded": true},
+			"UserProfileModalHeader": {"lazyLoaded": true},
+			"UserSettingsAppearance": {"class": "usersettingsappearancepreview"},
+			"UserThemeBanner": {"strings": [".showPremiumBadgeUpsell", ".isPremiumAtLeast", "PremiumTypes"]},
+			"UserThemePopoutHeader": {"strings": [".avatarPositionPremiumNoBanner", "syncProfileThemeWithUserTheme"]}
+		},
+		"LoadedInComponents": {
+			"AutocompleteChannelResult": "LibraryComponents.AutocompleteItems.Channel",
+			"AutocompleteRoleResult": "LibraryComponents.AutocompleteItems.Role",
+			"AutocompleteUserResult": "LibraryComponents.AutocompleteItems.User",
+			"QuickSwitchChannelResult": "LibraryComponents.QuickSwitchItems.Channel",
+			"QuickSwitchGroupDMResult": "LibraryComponents.QuickSwitchItems.GroupDM",
+			"QuickSwitchGuildResult": "LibraryComponents.QuickSwitchItems.Guild",
+			"QuickSwitchUserResult": "LibraryComponents.QuickSwitchItems.User"
+		}
+	},
+	"ForceLoadedComponents": {},
 	"NativeSubComponents": {
 		"Button": {"props": ["Colors", "Hovers", "Looks"]},
 		"Checkbox": {"props": ["Aligns", "Shapes", "Types"]},
@@ -251,6 +416,19 @@
 			"FormText": [".type", ".DEFAULT"],
 			"FormTitle": [".tag", "variant:\"text"]
 		}},
+		"GuildComponents": {
+			"children": {
+				"Badge": {"name": "GuildBadge"},
+				"BlobMask": {"name": "BlobMask"},
+				"DragPlaceholder": {"name": "DragPlaceholder"},
+				"Favorites": {"strings": [".favoriteIcon", "FAVORITES_GUILD_NAME"]},
+				"Icon": {"name": "GuildIconWrapper"},
+				"MutedText": {"props": ["useMutedUntilText"], "value": "default"},
+				"Pill": {"strings": ["opacity:1,height:", "20:8", "default.item"]},
+				"Separator": {"strings": ["className", "default.guildSeparator"]},
+				"UnavailableGuildsButton": {"strings": ["className", "default.guildsError"]}
+			}
+		},
 		"Header": {"props": ["Sizes", "Tags"]},
 		"Heading": {"strings": ["data-excessive", ".defaultColor"]},
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
@@ -259,10 +437,6 @@
 			"ImageReadyStates": ["LOADING", "ERROR"]
 		}},
 		"ImageModal": {"strings": ["mobileCloseWrapper", "closeAction"]},
-		"LayerContainerComponents": {"strings": ["layerContainerElement", "LayerProvider"], "exported": false, "value": "exports", "map": {
-			"createLayer": [".createContext"],
-			"LayerContainer": [".layerContainer", "missing parent"]
-		}},
 		"LazyImage": {"strings": ["LOADING", "visibilityObserver"]},
 		"ListHeader": {"strings": [".container", "\"h2\"", "[\"aria-label\"]"]},
 		"Mask": {"props": "Masks"},
@@ -314,48 +488,6 @@
 		"UserPopoutSection": {"strings": [".section,", ".lastSection"]},
 		"UserSummaryItem": {"strings": ["popoutUserId:", ".clickableAvatar"]},
 		"VideoForwardRef": {"strings": ["HTMLSourceElement", "autoPlay"], "funcStrings": ["externalRef"]}
-	},
-	"PatchModules": {
-		"Account": {"protos": ["renderAvatarWithPopout", "renderCopiableNameTag", "renderCopiedSuccess"]},
-		"AnalyticsContext": {"props": ["ObjectTypes", "Objects", "Pages", "Sections"]},
-		"BlobMask": {"protos": ["getBadgePositionInterpolation", "getUpperBadgeStyles"]},
-		"DiscordTag": {"strings": ["hidePersonalInformation", "isVerifiedBot", "botType"]},
-		"DMUserContextMenu": {"strings": ["USER_ACTIONS_MENU_LABEL", "navId:\"user", ".DM_USER_MENU"]},
-		"EmojiPickerListRow": {"strings": ["emojiSize", "surrogateCodePoint", "EMOJI_FAVORITE_TOOLTIP"]},
-		"GroupDMUserContextMenu": {"strings": ["USER_ACTIONS_MENU_LABEL", "navId:\"user", ".GROUP_DM_USER_MENU"]},
-		"GuildContextMenu": {"strings": ["GUILD_ACTIONS_MENU_LABEL", "navId:\"guild", "GuildContextMenu"]},
-		"GuildChannelUserContextMenu": {"strings": ["USER_ACTIONS_MENU_LABEL", "navId:\"user", ".GUILD_CHANNEL_USER_MENU"]},
-		"GuildSidebar": {"strings": ["\"guildsnav\"", "unreadMentionsIndicatorBottom"]},
-		"LayerProvider": {"strings": ["layerContainerElement", "getContextValue"]},
-		"MemberListItem": {"protos": ["renderOwner", "renderDecorators", "renderPremium"]},
-		"Menu": {"strings": ["\"empty\"", "getItemProps", "isUsingKeyboardNavigation"]},
-		"MessageContextMenu": {"strings": ["MESSAGE_ACTIONS_MENU_LABEL", "navId:\"message", "getGuildId"]},
-		"MessageHeader": {"strings": ["showTimestampOnHover", "usernameClassName", "isVisibleOnlyOnHover:"]},
-		"MessageSearchResultContextMenu": {"strings": ["MESSAGE_ACTIONS_MENU_LABEL", "navId:\"message"], "nonStrings": ["getGuildId"]},
-		"ParticipantsForSelectedParticipant": {"strings": ["ACTIVITY", "maxVisibleUsers", "participantType"]},
-		"PrivateChannel": {"strings": ["LEAVE_GROUP_DM_MANAGED_BODY", "handleCloseButtonMouseDown", "handleLeaveGroup"]},
-		"SearchBar": {"strings": [").inputRef", ".containerRef", ".handleOnChange"]},
-		"SearchResult": {"strings": [".onJump", "message:", "handleMessageClick"]},
-		"Shakeable": {"protos": ["shake", "getDefaultAnimProps", "stop"]},
-		"TransitionGroup": {"protos": ["performAppear", "performEnter", "performLeave"]},
-		"UseCopyIdItem": {"strings": ["\"devmode-copy-id\""]},
-		"UserGenericContextMenu": {"strings": ["USER_ACTIONS_MENU_LABEL", "navId:\"user", ".USER_GENERIC_MENU"]},
-		"UsernameSection": {"strings": [".shouldCopyOnClick", ".userTagDiscriminatorNoNickname"]},
-		"UserPopoutAvatar": {"strings": ["isNonUserBot", "avatarHintInnerText", "avatarDecorationHint"]},
-		"UserPopoutInfo": {"strings": [".hasCustomStatus", ".premiumGuildSince", "openPremiumSettings"]},
-		"UserProfileModalHeader": {"strings": [".friendToken", ".additionalActionsIcon", "onMessage"]},
-		"UserThemedPopoutHeader": {"strings": [".avatarPositionPremiumNoBanner", "syncProfileThemeWithUserTheme"]}
-	},
-	"ModuleUtilsConfig": {
-		"QueuedComponents": [],
-		"ContextMenuTypes": [],
-		"ContextMenuTypesMap": {},
-		"ContextMenuSubItemsMap": {},
-		"PatchTypes": [],
-		"InstanceFunctions": [],
-		"PatchMap": {},
-		"Finder": {},
-		"LoadedInComponents": {}
 	},
 	"SvgIcons": {
 		"ACTIVITY": {
