@@ -5458,6 +5458,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"829934731771772948": 	{"active": true,	"tier": "t3",	"text": "",											"color": "",			"id": "SweetCandy (pizza)"},
 		"711765867016224798": 	{"active": true,	"tier": "t3",	"text": "I thought this was my Wendy's Order",		"color": "",			"id": "jthunter (JeHu)"},
 		"105509397211406336": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "samtino (SgJeff)"},
 		"142377892565876736": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "ken (JimC)"},
