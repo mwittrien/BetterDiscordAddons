@@ -249,7 +249,7 @@
 			"FormNotice": [".iconClassName", ".imageData"],
 			"FormSection": ["sectionTitle", "titleId"],
 			"FormText": [".type", ".DEFAULT"],
-			"FormTitle": [".tag", "variant:\"text"]
+			"FormTitle": [".tag", ".errorSeparator"]
 		}},
 		"Header": {"props": ["Sizes", "Tags"]},
 		"Heading": {"strings": ["data-excessive", ".defaultColor"]},
