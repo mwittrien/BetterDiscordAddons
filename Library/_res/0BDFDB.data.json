@@ -4,7 +4,8 @@
 		"BDFDB": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 		"CreationDate": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/CreationDate.plugin.js",
 		"JoinedAtDate": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/JoinedAtDate.plugin.js",
-		"ShowHiddenChannels": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/ShowHiddenChannels.plugin.js"
+		"ShowHiddenChannels": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/ShowHiddenChannels.plugin.js",
+		"ThemeSettings": "https://mwittrien.github.io/BetterDiscordAddons/_DEAD/ThemeSettings.plugin.js"
 	},
 	"LibraryRequires": ["electron", "fs", "path", "process", "request"],
 	"DiscordObjects": {

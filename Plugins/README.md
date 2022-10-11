@@ -55,7 +55,6 @@
  - [Spotify Controls](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpotifyControls) - Adds a Control Panel while listening to Spotify on a connected Account
  - [Staff Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/StaffTag) - Adds a Crown/Tag to Server Owners (or Admins/Management)
  - [Theme Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeRepo) - Allows you to download all Themes from BD's Website within Discord
- - [Theme Settings](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeSettings) - Allows you to change Theme Variables within Discord
  - [Timed Light Dark Mode](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TimedLightDarkMode) - Adds a Time Slider to the Appearance Settings
  - [Top Role Everywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TopRoleEverywhere) - Adds the highest Role of a User as a Tag
  - [Translator](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/Translator) - Allows you to translate Messages and your outgoing Messages within Discord
