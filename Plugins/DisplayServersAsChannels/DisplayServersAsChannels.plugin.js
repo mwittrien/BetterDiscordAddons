@@ -200,10 +200,10 @@ module.exports = (_ => {
 					e.returnvalue = this.removeMask(e.returnvalue);
 					this.addElementName(e.returnvalue, e.instance.props.guild.name, {
 						badges: [
-							this.settings.general.showGuildIcon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Icon, {
+							this.settings.general.showGuildIcon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildIconComponents.Icon, {
 								animate: e.instance.props.animatable && e.instance.state && e.instance.state.hovered,
 								guild: e.instance.props.guild,
-								size: BDFDB.LibraryComponents.GuildComponents.Icon.Sizes.SMALLER
+								size: BDFDB.LibraryComponents.GuildIconComponents.Icon.Sizes.SMALLER
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Badge, {
 								size: this.settings.amounts.serverElementHeight * 0.5,
