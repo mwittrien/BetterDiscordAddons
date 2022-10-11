@@ -154,14 +154,6 @@ module.exports = (_ => {
 					]
 				};
 				
-				this.patchedModules = {
-					after: {
-						Guilds: "type",
-						RecentMentions: "default",
-						RecentsHeader: "default"
-					}
-				};
-				
 				this.css = `
 					${BDFDB.dotCN.messagespopouttabbar} {
 						flex: 1 0 auto;
