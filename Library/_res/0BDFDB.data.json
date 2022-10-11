@@ -337,6 +337,7 @@
 		"MessageContextMenu": {"strings": ["MESSAGE_ACTIONS_MENU_LABEL", "navId:\"message", "getGuildId"]},
 		"MessageHeader": {"strings": ["showTimestampOnHover", "usernameClassName", "isVisibleOnlyOnHover:"]},
 		"MessageSearchResultContextMenu": {"strings": ["MESSAGE_ACTIONS_MENU_LABEL", "navId:\"message"], "nonStrings": ["getGuildId"]},
+		"PanelButton": {"strings": ["Masks.PANEL_BUTTON"]},
 		"ParticipantsForSelectedParticipant": {"strings": ["ACTIVITY", "maxVisibleUsers", "participantType"]},
 		"PrivateChannel": {"strings": ["LEAVE_GROUP_DM_MANAGED_BODY", "handleCloseButtonMouseDown", "handleLeaveGroup"]},
 		"RecentMentions": {"strings": ["canCloseAllMessages", "RECENT_MENTIONS", "badgeable"]},
