@@ -167,7 +167,7 @@ module.exports = (_ => {
 											grow: 1,
 											shrink: 0,
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
-												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H2,
+												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H1,
 												className: BDFDB.disCN.marginreset,
 												children: `Plugin Repo — ${loading.is ? 0 : this.props.entries.length || 0}/${loading.is ? 0 : grabbedPlugins.length}`
 											})
