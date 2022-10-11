@@ -3571,35 +3571,6 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	opacity: .5;
 }
 
-.discordMemberCreatedAtIcon-126if8 {
-	background: transparent !important;
-	width: 24px !important;
-	height: 24px !important;
-	line-height: 24px !important;
-	padding: 0 !important;
-}
-.discordMemberCreatedAtText-15sN5q {
-	position: relative;
-	width: 100%;
-	overflow: hidden;
-}
-.discordMemberCreatedAtText-15sN5q > * {
-	position: absolute;
-	font-family: var(--font-primary);
-    font-size: 16px;
-    line-height: 24px;
-	font-weight: 600;
-	top: 0;
-	left: 0;
-	transition: top .5s;
-}
-.discordMemberCreatedAtText-15sN5q:not(:hover) > *:first-child {
-	top: -24px;
-}
-.discordMemberCreatedAtText-15sN5q:hover > *:last-child {
-	top: 24px;
-}
-
 /* ----		13.2.	GUILDADD/CREATION				----- */
 
 .container-x8Y1ix,											/* create modal			item								*/
