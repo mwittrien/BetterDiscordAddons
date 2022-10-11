@@ -243,6 +243,7 @@
 		"Emoji": {"strings": ["emojiName", "shouldAnimate", "jumboable"], "funcStrings": ["autoplay"]},
 		"EmojiButton": {"strings": ["renderButtonContents", "PickerPerRow", "SELECT_EMOJI"]},
 		"EmojiPicker": {"strings": ["emojiSize", "inExpressionPicker", ",emojiPaddingHorizontal:"], "funcStrings": ["compare"]},
+		"GuildIcon": {"strings": ["SMOL", "badgeStrokeColor"], "funcStrings": ["compare"]},
 		"Flex": {"props": ["Wrap", "Direction", "Child"]},
 		"FlowerStar": {"strings": ["flowerStarContainer", "createElement"]},
 		"FocusRingScope": {"strings": ["containerRef", "themeOptions", "setContainer"], "exported": false, "value": "exports", "funcStrings": ["ringTarget was not"]},
@@ -253,6 +254,10 @@
 			"FormSection": ["sectionTitle", "titleId"],
 			"FormText": [".type", ".DEFAULT"],
 			"FormTitle": [".tag", ".errorSeparator"]
+		}},
+		"GuildIconComponents": {"strings": ["SMOL", "badgeStrokeColor"], "map": {
+			"Icon": [".apply"],
+			"Sizes": ["\"SMOL\"", "\"SMALLER\""]
 		}},
 		"Header": {"props": ["Sizes", "Tags"]},
 		"Heading": {"strings": ["data-excessive", ".defaultColor"]},
