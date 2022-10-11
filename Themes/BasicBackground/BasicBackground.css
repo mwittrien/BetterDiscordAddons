@@ -782,7 +782,30 @@ body::after {
 .chat-2ZfjoI.threadSidebarOpen-1LSXvU {						/* chat					threadsidebar open					*/
 	border-radius: 0;
 }
-
+#app-mount .background-fkKrXt .container-2Hi7Km,
+#app-mount .background-fkKrXt .container-xwOzwi,
+#app-mount .background-fkKrXt .container-3rZ3XA,
+#app-mount .background-fkKrXt .icon-2IDTxf,
+#app-mount .background-fkKrXt .containerCard-2kwJKN,
+#app-mount .background-fkKrXt .containerCard-2kwJKN:hover,
+#app-mount .background-fkKrXt .interactiveCard-2iMtdk,
+#app-mount .container-3wLKDe .mainCard-3KBsBI,
+#app-mount .container-3wLKDe .sidebarCard-1Gn1ch {
+	background: var(--background-secondary);
+}
+@media (max-width: 1300px) {
+	.container-xwOzwi,
+	.container-3rZ3XA {
+		background: none !important;
+	}
+}
+#app-mount .background-fkKrXt .containerCard-2kwJKN {
+	border-color: var(--background-secondary);
+}
+#app-mount .background-fkKrXt .container-3HMTms:hover,
+#app-mount .container-3wLKDe .pill-3pRQlO {
+	background: var(--background-tertiary);
+}
 .container-3YcgdM {											/* forum				first message container				*/
 	border-color: var(--background-floating);
 }
