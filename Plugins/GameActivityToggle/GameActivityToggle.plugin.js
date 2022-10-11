@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.4
+ * @version 1.1.5
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -101,13 +101,13 @@ module.exports = (_ => {
 					}
 				};
 				
-				this.patchedModules = {
-					before: {
-						Menu: "default"
-					},
-					after: {
-						Account: "render"
-					}
+				this.modulePatches = {
+					before: [
+						"Menu"
+					],
+					after: [
+						"Account"
+					]
 				};
 				
 				this.css = `
@@ -144,11 +144,11 @@ module.exports = (_ => {
 				keybind = BDFDB.ArrayUtils.is(keybind) ? keybind : [];
 				this.activateKeybind();
 				
-				BDFDB.PatchUtils.forceAllUpdates(this);
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 			
 			onStop () {
-				BDFDB.PatchUtils.forceAllUpdates(this);
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 
 			getSettingsPanel (collapseStates = {}) {
@@ -211,21 +211,20 @@ module.exports = (_ => {
 			processMenu (e) {
 				if (!this.settings.general.showItem || e.instance.props.navId != "account") return;
 				let [_, oldIndex] = BDFDB.ContextMenuUtils.findItem(e.instance, {id: BDFDB.ContextMenuUtils.createItemId(this.name, "activity-toggle")});
-				if (oldIndex == -1) {
-					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.instance, {id: ["custom-status", "set-custom-status", "edit-custom-status"]});
-					if (index > -1) {
-						let isChecked = BDFDB.DiscordUtils.getSetting("status", "showCurrentGame");
-						children.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, {
-							label: BDFDB.LanguageUtils.LanguageStrings.ACTIVITY_STATUS,
-							id: BDFDB.ContextMenuUtils.createItemId(this.name, "activity-toggle"),
-							icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
-								icon: BDFDB.LibraryComponents.SvgIcon.Names.GAMEPAD
-							}),
-							showIconFirst: true,
-							checked: isChecked,
-							action: _ => this.toggle()
-						}));
-					}
+				if (oldIndex > -1) return;
+				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.instance, {id: ["custom-status", "set-custom-status", "edit-custom-status"]});
+				if (index > -1) {
+					let isChecked = BDFDB.DiscordUtils.getSetting("status", "showCurrentGame");
+					children.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, {
+						label: BDFDB.LanguageUtils.LanguageStrings.ACTIVITY_STATUS,
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "activity-toggle"),
+						icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+							icon: BDFDB.LibraryComponents.SvgIcon.Names.GAMEPAD
+						}),
+						showIconFirst: true,
+						checked: isChecked,
+						action: _ => this.toggle()
+					}));
 				}
 			}
 			
@@ -245,7 +244,7 @@ module.exports = (_ => {
 			
 			toggle () {
 				const shouldEnable = !BDFDB.DiscordUtils.getSetting("status", "showCurrentGame");
-				_this.settings.general[shouldEnable ? "playEnable" : "playDisable"] && BDFDB.LibraryModules.SoundUtils.playSound(_this.settings.selections[shouldEnable ? "enableSound" : "disableSound"], .4);
+				this.settings.general[shouldEnable ? "playEnable" : "playDisable"] && BDFDB.LibraryModules.SoundUtils.playSound(this.settings.selections[shouldEnable ? "enableSound" : "disableSound"], .4);
 				BDFDB.DiscordUtils.setSetting("status", "showCurrentGame", shouldEnable);
 			}
 
