@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.6.9
+ * @version 2.7.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -3891,7 +3891,7 @@ module.exports = (_ => {
 					else {
 						if (props.render || props.persisting || BDFDB.ObjectUtils.is(props.popoutProps) || (typeof props.color == "string" && !DiscordClasses[`menu${props.color.toLowerCase()}`])) component = Internal.MenuItem;
 						if (BDFDB.ObjectUtils.toArray(RealMenuItems).some(c => c == component)) return BDFDB.ReactUtils.createElement(component, props);
-						else return BDFDB.ReactUtils.createElement(RealMenuItems.MenuItem, {
+						else return BDFDB.ReactUtils.createElement(LibraryComponents.MenuItems.MenuItem, {
 							id: props.id,
 							disabled: props.disabled,
 							customItem: true,
@@ -3917,7 +3917,7 @@ module.exports = (_ => {
 					if (contextMenu) {
 						let children = BDFDB.ArrayUtils.is(contextMenu.props.children) ? contextMenu.props.children : [contextMenu.props.children];
 						for (let i in children) {
-							if (children[i] && children[i].type == RealMenuItems.MenuGroup) {
+							if (children[i] && children[i].type == LibraryComponents.MenuItems.MenuGroup) {
 								if (BDFDB.ArrayUtils.is(children[i].props.children)) {
 									for (let j in children[i].props.children) if (check(children[i].props.children[j])) {
 										if (config.group) return [children, parseInt(i)];
@@ -3945,6 +3945,7 @@ module.exports = (_ => {
 						return [children, -1];
 					}
 					return [null, -1];
+					
 					function check (child) {
 						if (!child) return false;
 						let props = child.stateNode ? child.stateNode.props : child.props;
@@ -8290,6 +8291,8 @@ module.exports = (_ => {
 						let module = e.methodArguments[0] && (e.methodArguments[0].type || e.methodArguments[0].render || e.methodArguments[0]);
 						if (!module || typeof module != "function") return;
 						if (PluginStores.modulePatches.before) for (const type in PluginStores.modulePatches.before) if (Internal.isCorrectModule(module, type, true)) {
+							let children = [...e.methodArguments].slice(2);
+							if (children.length && (!e.methodArguments[1].children || !e.methodArguments[1].children.length)) e.methodArguments[1].children = children;
 							for (let plugin of PluginStores.modulePatches.before[type].flat(10)) Internal.initiatePatch(plugin, type, {
 								arguments: e.methodArguments,
 								instance: {props: e.methodArguments[1]},
