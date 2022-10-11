@@ -2,7 +2,7 @@
  * @name ReadAllNotificationsButton
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.2
+ * @version 1.7.3
  * @description Adds a Clear Button to the Server List and the Mentions Popout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -137,8 +137,8 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						addClearButton:		{value: true, 	description: "Add a 'Clear Mentions' button to the recent mentions popout"},
-						confirmClear:		{value: false, 	description: "Ask for your confirmation before clearing reads"}
+						addClearButton:		{value: true, 	description: "Adds a 'Clear Mentions' button to the recent mentions popout"},
+						confirmClear:		{value: false, 	description: "Asks for your confirmation before clearing reads"}
 					},
 					batch: {
 						guilds:				{value: true, 	description: "unread Servers"},
@@ -222,6 +222,18 @@ module.exports = (_ => {
 					}))
 				}));
 				
+				let listInstance = null, batchSetGuilds = value => {
+					if (!value) {
+						for (let id of BDFDB.LibraryModules.SortedGuildUtils.getFlattenedGuildIds()) blacklist.push(id);
+						blacklist = BDFDB.ArrayUtils.removeCopies(blacklist);
+					}
+					else blacklist = [];
+					this.saveBlacklist(blacklist);
+					if (listInstance) {
+						listInstance.props.disabled = blacklist;
+						BDFDB.ReactUtils.forceUpdate(listInstance);
+					}
+				};
 				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 					title: "Server Black List",
 					collapseStates: collapseStates,
@@ -229,20 +241,21 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsGuildList, {
 							className: BDFDB.disCN.marginbottom20,
 							disabled: BDFDB.DataUtils.load(this, "blacklist"),
-							onClick: disabledGuilds => this.saveBlacklist(disabledGuilds)
+							onClick: disabledGuilds => this.saveBlacklist(disabledGuilds),
+							ref: instance => {listInstance = instance;}
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Button",
 							color: BDFDB.LibraryComponents.Button.Colors.GREEN,
 							label: "Enable for all Servers",
-							onClick: _ => this.batchSetGuilds(settingsPanel, collapseStates, true),
+							onClick: _ => batchSetGuilds(true),
 							children: BDFDB.LanguageUtils.LanguageStrings.ENABLE
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Button",
 							color: BDFDB.LibraryComponents.Button.Colors.PRIMARY,
 							label: "Disable for all Servers",
-							onClick: _ => this.batchSetGuilds(settingsPanel, collapseStates, false),
+							onClick: _ => batchSetGuilds(false),
 							children: BDFDB.LanguageUtils.LanguageStrings.DISABLE
 						})
 					]
@@ -307,15 +320,6 @@ module.exports = (_ => {
 						})
 					})
 				].flat(10);
-			}
-			
-			batchSetGuilds (settingsPanel, collapseStates, value) {
-				if (!value) {
-					for (let id of BDFDB.LibraryModules.SortedGuildUtils.getFlattenedGuildIds()) blacklist.push(id);
-					this.saveBlacklist(BDFDB.ArrayUtils.removeCopies(blacklist));
-				}
-				else this.saveBlacklist([]);
-				BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 			}
 			
 			saveBlacklist (savedBlacklist) {
