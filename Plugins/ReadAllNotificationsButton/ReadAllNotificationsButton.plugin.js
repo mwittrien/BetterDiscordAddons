@@ -2,7 +2,7 @@
  * @name ReadAllNotificationsButton
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.1
+ * @version 1.7.2
  * @description Adds a Clear Button to the Server List and the Mentions Popout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -58,7 +58,6 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		var _this;
 		var blacklist, clearing;
-		var mentionedMessages = [];
 		
 		const ReadAllButtonComponent = class ReadAllButton extends BdApi.React.Component {
 			clearClick() {
@@ -146,6 +145,13 @@ module.exports = (_ => {
 						muted:				{value: false, 	description: "muted unread Servers"},
 						dms:				{value: false, 	description: "unread DMs"}
 					}
+				};
+			
+				this.modulePatches = {
+					after: [
+						"GuildsBar",
+						"InboxHeader"
+					]
 				};
 				
 				this.patchedModules = {
@@ -264,18 +270,18 @@ module.exports = (_ => {
 				BDFDB.DiscordUtils.rerenderAll();
 			}
 			
-			processGuilds (e) {
+			processGuildsBar (e) {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "UnreadDMs"});
 				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(ReadAllButtonComponent, {}));
 			}
 
-			processRecentMentions (e) {
-				mentionedMessages = e.returnvalue.props.messages;
-			}
-
-			processRecentsHeader (e) {
-				if (this.settings.general.addClearButton && mentionedMessages && mentionedMessages.length && e.instance.props.tab == BDFDB.DiscordConstants.InboxTabs.MENTIONS) e.returnvalue.props.children = [
-					e.returnvalue.props.children,
+			processInboxHeader (e) {
+				if (!this.settings.general.addClearButton || e.instance.props.tab != BDFDB.DiscordConstants.InboxTabs.MENTIONS) return;
+				let mentionedMessages = BDFDB.LibraryStores.RecentMentionsStore.getMentions();
+				if (!mentionedMessages || !mentionedMessages.length) return;
+				let controls = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.messagespopoutcontrols]]});
+				if (controls) controls.props.children = [
+					controls.props.children,
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						text: `${BDFDB.LanguageUtils.LanguageStrings.CLOSE} (${BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL})`,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
