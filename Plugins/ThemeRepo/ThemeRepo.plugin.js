@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.9
+ * @version 2.4.0
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -58,7 +58,7 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		var _this;
 		
-		var list, header;
+		var list;
 		
 		var loading, cachedThemes, grabbedThemes, generatorThemes, updateInterval;
 		var searchString, searchTimeout, forcedSort, forcedOrder, showOnlyOutdated;
@@ -186,189 +186,291 @@ module.exports = (_ => {
 					data: theme
 				})).filter(n => n);
 				
-				BDFDB.TimeUtils.timeout(_ => {
-					if (!loading.is && header && this.props.entries.length != header.props.amount) {
-						header.props.amount = this.props.entries.length;
-						BDFDB.ReactUtils.forceUpdate(header);
-					}
-				});
-				
 				if (forceRerenderGenerator && this.props.tab == "Generator") BDFDB.TimeUtils.timeout(_ => {
 					forceRerenderGenerator = false;
 					BDFDB.ReactUtils.forceUpdate(this);
 				});
 				
-				return [
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-						tab: "Themes",
-						open: this.props.tab == "Themes",
-						render: false,
-						children: loading.is ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-							direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
-							justify: BDFDB.LibraryComponents.Flex.Justify.CENTER,
-							style: {marginTop: "50%"},
+				return BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN._repo,
+					children: [
+						BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCNS._repolistheader + BDFDB.disCN.settingswindowcontentcolumndefault,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SpinnerComponents.Spinner, {
-									type: BDFDB.LibraryComponents.SpinnerComponents.Types.WANDERING_CUBES
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+									className: BDFDB.disCN.marginbottom4,
+									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+									children: [
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+											grow: 1,
+											shrink: 0,
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H2,
+												className: BDFDB.disCN.marginreset,
+												children: `Theme Repo — ${loading.is ? 0 : this.props.entries.length || 0}/${loading.is ? 0 : grabbedThemes.length}`
+											})
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
+												autoFocus: true,
+												query: searchString,
+												onChange: value => {
+													if (loading.is) return;
+													BDFDB.TimeUtils.clear(searchTimeout);
+													searchTimeout = BDFDB.TimeUtils.timeout(_ => {
+														searchString = value.replace(/[<|>]/g, "");
+														BDFDB.ReactUtils.forceUpdate(this);
+													}, 1000);
+												},
+												onClear: _ => {
+													if (loading.is) return;
+													searchString = "";
+													BDFDB.ReactUtils.forceUpdate(this);
+												}
+											})
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+											size: BDFDB.LibraryComponents.Button.Sizes.TINY,
+											children: BDFDB.LanguageUtils.LibraryStrings.check_for_updates,
+											onClick: _ => {
+												if (loading.is) return;
+												loading = {is: false, timeout: null, amount: 0};
+												_this.loadThemes();
+											}
+										})
+									]
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-									className: BDFDB.disCN.margintop20,
-									style: {textAlign: "center"},
-									children: `${BDFDB.LanguageUtils.LibraryStringsFormat("loading", "Theme Repo")} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+									className: BDFDB.disCNS.tabbarcontainer + BDFDB.disCN.tabbarcontainerbottom,
+									align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+									children: [
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar, {
+												className: BDFDB.disCN.tabbar,
+												itemClassName: BDFDB.disCN.tabbaritem,
+												type: BDFDB.LibraryComponents.TabBar.Types.TOP,
+												selectedItem: this.props.tab,
+												items: [{value: "Themes"}, {value: "Generator"}, {value: BDFDB.LanguageUtils.LanguageStrings.SETTINGS}],
+												onItemSelect: value => {
+													this.props.tab = value;
+													BDFDB.ReactUtils.forceUpdate(this);
+												}
+											})
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
+												label: BDFDB.LanguageUtils.LibraryStrings.sort_by + ":",
+												value: {
+													label: sortKeys[this.props.sortKey],
+													value: this.props.sortKey
+												},
+												options: Object.keys(sortKeys).map(key => ({
+													label: sortKeys[key],
+													value: key
+												})),
+												onChange: key => {
+													this.props.sortKey = key;
+													BDFDB.ReactUtils.forceUpdate(this);
+												}
+											})
+										}),
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
+												label: BDFDB.LanguageUtils.LibraryStrings.order + ":",
+												value: {
+													label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[this.props.orderKey]],
+													value: this.props.orderKey
+												},
+												options: Object.keys(orderKeys).map(key => ({
+													label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[key]],
+													value: key
+												})),
+												onChange: key => {
+													this.props.orderKey = key;
+													BDFDB.ReactUtils.forceUpdate(this);
+												}
+											})
+										})
+									]
 								})
 							]
-						}) : BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN.discoverycards,
-							children: this.props.entries
-						})
-					}),
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-						tab: "Generator",
-						open: this.props.tab == "Generator",
-						render: false,
-						children: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-								type: "Select",
-								margin: 20,
-								label: "Choose a Generator Theme",
-								basis: "60%",
-								value: this.props.currentGenerator || "-----",
-								options: [{value: "-----", label: "-----"}, nativeCSSvars && {value: "nativediscord", label: "Discord"}].concat(generatorThemes.map(t => ({value: t.id, label: t.name || "-----"})).sort((x, y) => (x.label < y.label ? -1 : x.label > y.label ? 1 : 0))).filter(n => n),
-								onChange: value => {
-									let generatorTheme = generatorThemes.find(t => t.id == value);
-									if (generatorTheme || value == "nativediscord") {
-										if (this.props.currentGenerator) forceRerenderGenerator = true;
-										this.props.currentGenerator = value;
-										this.props.currentGeneratorIsNative = value == "nativediscord";
-										this.props.generatorValues = {};
-									}
-									else {
-										delete this.props.currentGenerator;
-										delete this.props.currentGeneratorIsNative;
-										delete this.props.generatorValues;
-									}
-									delete this.props.currentTheme;
-									BDFDB.ReactUtils.forceUpdate(this);
-								}
-							}),
-							!this.props.currentGenerator ? null : (forceRerenderGenerator ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-								direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
-								justify: BDFDB.LibraryComponents.Flex.Justify.CENTER,
-								style: {marginTop: "50%"},
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SpinnerComponents.Spinner, {
-									type: BDFDB.LibraryComponents.SpinnerComponents.Types.WANDERING_CUBES
-								})
-							}) : [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-									className: BDFDB.disCN.marginbottom20,
-									type: "Button",
-									label: "Download generated Theme",
-									children: "Download",
-									onClick: _ => {
-										if (this.props.currentGeneratorIsNative) {
-											this.createThemeFile("Discord", "Discord.theme.css", `/**\n * @name Discord\n * @description Allow you to easily customize Discord's native Look  \n * @author DevilBro\n * @version 1.0.0\n * @authorId 278543574059057154\n * @invite Jx3TjNS\n * @donate https://www.paypal.me/MircoWittrien\n * @patreon https://www.patreon.com/MircoWittrien\n */\n\n` + this.generateTheme(nativeCSSvars), "startDownloaded");
-										}
-										else {
-											let generatorTheme = generatorThemes.find(t => t.id == this.props.currentGenerator);
-											if (generatorTheme) this.createThemeFile(generatorTheme.name, generatorTheme.rawSourceUrl.split("/").pop(), this.generateTheme(generatorTheme.fullCSS), "startDownloaded");
-										}
-									}
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Scrollers.Auto, {
+							className: BDFDB.disCNS._repolistscroller + BDFDB.disCN.settingswindowcontentcolumndefault,
+							children: [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+									tab: "Themes",
+									open: this.props.tab == "Themes",
+									render: false,
+									children: loading.is ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+										direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+										justify: BDFDB.LibraryComponents.Flex.Justify.CENTER,
+										style: {marginTop: "50%"},
+										children: [
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SpinnerComponents.Spinner, {
+												type: BDFDB.LibraryComponents.SpinnerComponents.Types.WANDERING_CUBES
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+												className: BDFDB.disCN.margintop20,
+												style: {textAlign: "center"},
+												children: `${BDFDB.LanguageUtils.LibraryStringsFormat("loading", "Theme Repo")} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`
+											})
+										]
+									}) : BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN.discoverycards,
+										children: this.props.entries
+									})
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-									className: BDFDB.disCN.marginbottom20
-								}),
-								(_ => {
-									let generatorTheme = generatorThemes.find(t => t.id == this.props.currentGenerator);
-									let vars = this.props.currentGeneratorIsNative ? nativeCSSvars.split(".theme-dark, .theme-light") : ((generatorTheme || {}).fullCSS || "").split(":root");
-									if (vars.length < 2) return null;
-									vars = vars[1].replace(/\t\(/g, " (").replace(/\r|\t| {2,}/g, "").replace(/\/\*\n*((?!\/\*|\*\/).|\n)*\n+((?!\/\*|\*\/).|\n)*\n*\*\//g, "").replace(/\n\/\*.*?\*\//g, "").replace(/\n/g, "");
-									vars = vars.split("{");
-									vars.shift();
-									vars = vars.join("{").replace(/\s*(:|;|--|\*)\s*/g, "$1");
-									vars = vars.split("}")[0];
-									vars = (vars.endsWith(";") ? vars.slice(0, -1) : vars).slice(2).split(/;--|\*\/--/);
-									let inputRefs = [];
-									for (let varStr of vars) {
-										varStr = varStr.split(":");
-										let varName = varStr.shift().trim();
-										varStr = varStr.join(":").split(/;[^A-z0-9]|\/\*/);
-										let oldValue = varStr.shift().trim();
-										if (oldValue) {
-											let childType = "text", childMode = "";
-											let isColor = BDFDB.ColorUtils.getType(oldValue);
-											let isComp = !isColor && /^[0-9 ]+,[0-9 ]+,[0-9 ]+$/g.test(oldValue);
-											if (isColor || isComp) {
-												childType = "color";
-												childMode = isComp && "comp";
-											}
-											else {
-												let isUrlFile = /url\(.+\)/gi.test(oldValue);
-												let isFile = !isUrlFile && /(http(s)?):\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(oldValue);
-												if (isFile || isUrlFile) {
-													childType = "file";
-													childMode = isUrlFile && "url";
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+									tab: "Generator",
+									open: this.props.tab == "Generator",
+									render: false,
+									children: [
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+											type: "Select",
+											margin: 20,
+											label: "Choose a Generator Theme",
+											basis: "60%",
+											value: this.props.currentGenerator || "-----",
+											options: [{value: "-----", label: "-----"}, nativeCSSvars && {value: "nativediscord", label: "Discord"}].concat(generatorThemes.map(t => ({value: t.id, label: t.name || "-----"})).sort((x, y) => (x.label < y.label ? -1 : x.label > y.label ? 1 : 0))).filter(n => n),
+											onChange: value => {
+												let generatorTheme = generatorThemes.find(t => t.id == value);
+												if (generatorTheme || value == "nativediscord") {
+													if (this.props.currentGenerator) forceRerenderGenerator = true;
+													this.props.currentGenerator = value;
+													this.props.currentGeneratorIsNative = value == "nativediscord";
+													this.props.generatorValues = {};
 												}
+												else {
+													delete this.props.currentGenerator;
+													delete this.props.currentGeneratorIsNative;
+													delete this.props.generatorValues;
+												}
+												delete this.props.currentTheme;
+												BDFDB.ReactUtils.forceUpdate(this);
 											}
-											let varDescription = varStr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
-											this.props.generatorValues[varName] = {value: oldValue, oldValue};
-											inputRefs.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-												dividerBottom: vars[vars.length-1] != varStr,
-												type: "TextInput",
-												childProps: {
-													type: childType,
-													mode: childMode,
-													filter: childType == "file" && "image"
-												},
-												label: varName.split("-").map(BDFDB.StringUtils.upperCaseFirstChar).join(" "),
-												note: varDescription && varDescription.indexOf("*") == 0 ? varDescription.slice(1) : varDescription,
-												basis: "70%",
-												value: oldValue,
-												placeholder: oldValue,
+										}),
+										!this.props.currentGenerator ? null : (forceRerenderGenerator ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+											direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+											justify: BDFDB.LibraryComponents.Flex.Justify.CENTER,
+											style: {marginTop: "50%"},
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SpinnerComponents.Spinner, {
+												type: BDFDB.LibraryComponents.SpinnerComponents.Types.WANDERING_CUBES
+											})
+										}) : [
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+												className: BDFDB.disCN.marginbottom20,
+												type: "Button",
+												label: "Download generated Theme",
+												children: "Download",
+												onClick: _ => {
+													if (this.props.currentGeneratorIsNative) {
+														this.createThemeFile("Discord", "Discord.theme.css", `/**\n * @name Discord\n * @description Allow you to easily customize Discord's native Look  \n * @author DevilBro\n * @version 1.0.0\n * @authorId 278543574059057154\n * @invite Jx3TjNS\n * @donate https://www.paypal.me/MircoWittrien\n * @patreon https://www.patreon.com/MircoWittrien\n */\n\n` + this.generateTheme(nativeCSSvars), "startDownloaded");
+													}
+													else {
+														let generatorTheme = generatorThemes.find(t => t.id == this.props.currentGenerator);
+														if (generatorTheme) this.createThemeFile(generatorTheme.name, generatorTheme.rawSourceUrl.split("/").pop(), this.generateTheme(generatorTheme.fullCSS), "startDownloaded");
+													}
+												}
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+												className: BDFDB.disCN.marginbottom20
+											}),
+											(_ => {
+												let generatorTheme = generatorThemes.find(t => t.id == this.props.currentGenerator);
+												let vars = this.props.currentGeneratorIsNative ? nativeCSSvars.split(".theme-dark, .theme-light") : ((generatorTheme || {}).fullCSS || "").split(":root");
+												if (vars.length < 2) return null;
+												vars = vars[1].replace(/\t\(/g, " (").replace(/\r|\t| {2,}/g, "").replace(/\/\*\n*((?!\/\*|\*\/).|\n)*\n+((?!\/\*|\*\/).|\n)*\n*\*\//g, "").replace(/\n\/\*.*?\*\//g, "").replace(/\n/g, "");
+												vars = vars.split("{");
+												vars.shift();
+												vars = vars.join("{").replace(/\s*(:|;|--|\*)\s*/g, "$1");
+												vars = vars.split("}")[0];
+												vars = (vars.endsWith(";") ? vars.slice(0, -1) : vars).slice(2).split(/;--|\*\/--/);
+												let inputRefs = [];
+												for (let varStr of vars) {
+													varStr = varStr.split(":");
+													let varName = varStr.shift().trim();
+													varStr = varStr.join(":").split(/;[^A-z0-9]|\/\*/);
+													let oldValue = varStr.shift().trim();
+													if (oldValue) {
+														let childType = "text", childMode = "";
+														let isColor = BDFDB.ColorUtils.getType(oldValue);
+														let isComp = !isColor && /^[0-9 ]+,[0-9 ]+,[0-9 ]+$/g.test(oldValue);
+														if (isColor || isComp) {
+															childType = "color";
+															childMode = isComp && "comp";
+														}
+														else {
+															let isUrlFile = /url\(.+\)/gi.test(oldValue);
+															let isFile = !isUrlFile && /(http(s)?):\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(oldValue);
+															if (isFile || isUrlFile) {
+																childType = "file";
+																childMode = isUrlFile && "url";
+															}
+														}
+														let varDescription = varStr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
+														this.props.generatorValues[varName] = {value: oldValue, oldValue};
+														inputRefs.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+															dividerBottom: vars[vars.length-1] != varStr,
+															type: "TextInput",
+															childProps: {
+																type: childType,
+																mode: childMode,
+																filter: childType == "file" && "image"
+															},
+															label: varName.split("-").map(BDFDB.StringUtils.upperCaseFirstChar).join(" "),
+															note: varDescription && varDescription.indexOf("*") == 0 ? varDescription.slice(1) : varDescription,
+															basis: "70%",
+															value: oldValue,
+															placeholder: oldValue,
+															onChange: value => {
+																BDFDB.TimeUtils.clear(updateGeneratorTimeout);
+																updateGeneratorTimeout = BDFDB.TimeUtils.timeout(_ => this.props.generatorValues[varName] = {value, oldValue}, 1000);
+															}
+														}));
+													}
+												}
+												return inputRefs;
+											})()
+										])
+									].flat(10).filter(n => n)
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+									tab: BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
+									open: this.props.tab == BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
+									render: false,
+									children: [
+										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+											title: "Show following Themes",
+											children: Object.keys(_this.defaults.filters).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+												type: "Switch",
+												plugin: _this,
+												keys: ["filters", key],
+												label: _this.defaults.filters[key].description,
+												value: _this.settings.filters[key],
 												onChange: value => {
-													BDFDB.TimeUtils.clear(updateGeneratorTimeout);
-													updateGeneratorTimeout = BDFDB.TimeUtils.timeout(_ => this.props.generatorValues[varName] = {value, oldValue}, 1000);
+													this.props[key] = _this.settings.filters[key] = value;
+													BDFDB.ReactUtils.forceUpdate(this);
 												}
-											}));
-										}
-									}
-									return inputRefs;
-								})()
-							])
-						].flat(10).filter(n => n)
-					}),
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-						tab: BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
-						open: this.props.tab == BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
-						render: false,
-						children: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
-								title: "Show following Themes",
-								children: Object.keys(_this.defaults.filters).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-									type: "Switch",
-									plugin: _this,
-									keys: ["filters", key],
-									label: _this.defaults.filters[key].description,
-									value: _this.settings.filters[key],
-									onChange: value => {
-										this.props[key] = _this.settings.filters[key] = value;
-										BDFDB.ReactUtils.forceUpdate(this);
-									}
-								}))
-							}),
-							Object.keys(_this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-								type: "Switch",
-								plugin: _this,
-								keys: ["general", key],
-								label: _this.defaults.general[key].description,
-								value: _this.settings.general[key],
-								onChange: value => {
-									_this.settings.general[key] = value;
-									BDFDB.ReactUtils.forceUpdate(this);
-								}
-							}))
-						].flat(10).filter(n => n)
-					})
-				];
+											}))
+										}),
+										Object.keys(_this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+											type: "Switch",
+											plugin: _this,
+											keys: ["general", key],
+											label: _this.defaults.general[key].description,
+											value: _this.settings.general[key],
+											onChange: value => {
+												_this.settings.general[key] = value;
+												BDFDB.ReactUtils.forceUpdate(this);
+											}
+										}))
+									].flat(10).filter(n => n)
+								})
+							]
+						})
+					]
+				});
 			}
 		};
 		
@@ -655,116 +757,6 @@ module.exports = (_ => {
 				});
 			}
 		};
-		
-		const RepoListHeaderComponent = class ThemeListHeader extends BdApi.React.Component {
-			componentDidMount() {
-				header = this;
-			}
-			render() {
-				if (!this.props.tab) this.props.tab = "Themes";
-				return BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCN._repolistheader,
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-							className: BDFDB.disCN.marginbottom4,
-							align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-									grow: 1,
-									shrink: 0,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
-										tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H2,
-										className: BDFDB.disCN.marginreset,
-										children: `Theme Repo — ${loading.is ? 0 : this.props.amount || 0}/${loading.is ? 0 : grabbedThemes.length}`
-									})
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
-										autoFocus: true,
-										query: searchString,
-										onChange: (value, instance) => {
-											if (loading.is) return;
-											BDFDB.TimeUtils.clear(searchTimeout);
-											searchTimeout = BDFDB.TimeUtils.timeout(_ => {
-												searchString = value.replace(/[<|>]/g, "");
-												BDFDB.ReactUtils.forceUpdate(this, list);
-											}, 1000);
-										},
-										onClear: instance => {
-											if (loading.is) return;
-											searchString = "";
-											BDFDB.ReactUtils.forceUpdate(this, list);
-										}
-									})
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-									size: BDFDB.LibraryComponents.Button.Sizes.TINY,
-									children: BDFDB.LanguageUtils.LibraryStrings.check_for_updates,
-									onClick: _ => {
-										if (loading.is) return;
-										loading = {is: false, timeout: null, amount: 0};
-										_this.loadThemes();
-									}
-								})
-							]
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-							className: BDFDB.disCNS.tabbarcontainer + BDFDB.disCN.tabbarcontainerbottom,
-							align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar, {
-										className: BDFDB.disCN.tabbar,
-										itemClassName: BDFDB.disCN.tabbaritem,
-										type: BDFDB.LibraryComponents.TabBar.Types.TOP,
-										selectedItem: this.props.tab,
-										items: [{value: "Themes"}, {value: "Generator"}, {value: BDFDB.LanguageUtils.LanguageStrings.SETTINGS}],
-										onItemSelect: value => {
-											this.props.tab = list.props.tab = value;
-											BDFDB.ReactUtils.forceUpdate(list);
-										}
-									})
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
-										label: BDFDB.LanguageUtils.LibraryStrings.sort_by + ":",
-										value: {
-											label: sortKeys[this.props.sortKey],
-											value: this.props.sortKey
-										},
-										options: Object.keys(sortKeys).map(key => ({
-											label: sortKeys[key],
-											value: key
-										})),
-										onChange: key => {
-											this.props.sortKey = list.props.sortKey = key;
-											BDFDB.ReactUtils.forceUpdate(this, list);
-										}
-									})
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
-										label: BDFDB.LanguageUtils.LibraryStrings.order + ":",
-										value: {
-											label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[this.props.orderKey]],
-											value: this.props.orderKey
-										},
-										options: Object.keys(orderKeys).map(key => ({
-											label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[key]],
-											value: key
-										})),
-										onChange: key => {
-											this.props.orderKey = list.props.orderKey = key;
-											BDFDB.ReactUtils.forceUpdate(this, list);
-										}
-									})
-								})
-							]
-						})
-					]
-				});
-			}
-		};
 	
 		return class ThemeRepo extends Plugin {
 			onLoad () {
@@ -791,13 +783,14 @@ module.exports = (_ => {
 					}
 				};
 			
-				this.patchedModules = {
-					before: {
-						SettingsView: ["render", "componentWillUnmount"]
-					},
-					after: {
-						StandardSidebarView: "default"
-					}
+				this.modulePatches = {
+					before: [
+						"SettingsView",
+						"StandardSidebarView"
+					],
+					componentWillUnmount: [
+						"SettingsView"
+					]
 				};
 			}
 			
@@ -847,8 +840,8 @@ module.exports = (_ => {
 			
 			processSettingsView (e) {
 				if (e.node) searchString = "";
-				else {
-					if (!BDFDB.PatchUtils.isPatched(this, e.component, "getPredicateSections")) BDFDB.PatchUtils.patch(this, e.component, "getPredicateSections", {after: e2 => {
+				else if (e.component.prototype && !BDFDB.PatchUtils.isPatched(this, e.component.prototype, "getPredicateSections")) {
+					BDFDB.PatchUtils.patch(this, e.component.prototype, "getPredicateSections", {after: e2 => {
 						if (BDFDB.ArrayUtils.is(e2.returnValue) && e2.returnValue.findIndex(n => n.section && (n.section.toLowerCase() == "changelog" || n.section == BDFDB.DiscordConstants.UserSettingsSections.CHANGE_LOG || n.section.toLowerCase() == "logout" || n.section == BDFDB.DiscordConstants.UserSettingsSections.LOGOUT))) {
 							e2.returnValue = e2.returnValue.filter(n => n.section != "themerepo");
 							let index = e2.returnValue.indexOf(e2.returnValue.find(n => n.section == "pluginrepo") || e2.returnValue.find(n => n.section == "themes") || e2.returnValue.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS) || e2.returnValue.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.HYPESQUAD_ONLINE));
@@ -879,20 +872,7 @@ module.exports = (_ => {
 			}
 			
 			processStandardSidebarView (e) {
-				if (e.instance.props.section == "themerepo") {
-					let content = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.settingswindowcontentregion]]});
-					if (content) content.props.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repolistwrapper, content.props.className);
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.settingswindowcontentregionscroller]]});
-					if (index > -1) {
-						let options = {};
-						options.sortKey = forcedSort || Object.keys(sortKeys)[0];
-						options.orderKey = forcedOrder || Object.keys(orderKeys)[0];
-						children[index] = [
-							BDFDB.ReactUtils.createElement(RepoListHeaderComponent, options),
-							children[index]
-						];
-					}
-				}
+				if (e.instance.props.section == "themerepo") e.instance.props.contentType = "custom";
 			}
 			
 			generateTheme (fullCSS, generatorValues) {
@@ -1062,7 +1042,7 @@ module.exports = (_ => {
 						});
 						BDFDB.PluginUtils.addLoadingIcon(loadingIcon);
 						
-						BDFDB.ReactUtils.forceUpdate(list, header);
+						BDFDB.ReactUtils.forceUpdate(list);
 						
 						for (let i = 0; i <= 20; i++) checkTheme();
 					}
