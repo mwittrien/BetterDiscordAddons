@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.3
+ * @version 1.8.4
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,10 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		added: {
-			"Show Timestamp": "Added option to show the timestamp in the notification",
-			"Screensharing": "Added option to notify you when a user starts screensharing in one of your servers"
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -237,10 +234,10 @@ module.exports = (_ => {
 					}
 				};
 			
-				this.patchedModules = {
-					after: {
-						Guilds: "type"
-					}
+				this.modulePatches = {
+					after: [
+						"GuildsBar"
+					]
 				};
 		
 				this.css = `
@@ -728,7 +725,8 @@ module.exports = (_ => {
 				}
 			}
 			
-			processGuilds (e) {
+			processGuildsBar (e) {
+				console.log(e);
 				if (!this.settings.general.addOnlineCount) return;
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "UnreadDMs"});
 				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(FriendOnlineCounterComponent, {
