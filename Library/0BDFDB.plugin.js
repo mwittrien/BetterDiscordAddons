@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.7.1
+ * @version 2.7.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1104,7 +1104,7 @@ module.exports = (_ => {
 					libraryCSS = css;
 				
 					const backupObj = getBackup(dataFileName, dataFilePath);
-					if (backupObj.backup && backupObj.hashIsSame || true) parseData(backupObj.backup);
+					if (backupObj.backup && backupObj.hashIsSame) parseData(backupObj.backup);
 					else request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/${dataFileName}`, (e, r, b) => {
 						if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryData(), 10000);
 						if (!e && b && r.statusCode == 200) {
@@ -2383,15 +2383,12 @@ module.exports = (_ => {
 					else if (useCache && Cache && Cache.modules && Cache.modules.patch && Cache.modules.patch[type] == module) return true;
 					else {
 						let foundModule = null;
-						if (InternalData.PatchModules[type].strings) foundModule = Internal.checkModuleStrings(module._originalFunction || module, InternalData.PatchModules[type].strings) ? module : null;
+						if (InternalData.PatchModules[type].strings) foundModule = Internal.checkModuleStrings(module, InternalData.PatchModules[type].strings) ? module : null;
+						if (InternalData.PatchModules[type].nonStrings) foundModule = Internal.checkModuleStrings(module, InternalData.PatchModules[type].nonStrings, {hasNot: true}) ? module : null;
 						if (InternalData.PatchModules[type].props) foundModule = Internal.checkModuleProps(module, InternalData.PatchModules[type].props) ? module : null;
+						if (InternalData.PatchModules[type].nonProps) foundModule = Internal.checkModuleProps(module, InternalData.PatchModules[type].nonProps, {hasNot: true}) ? module : null;
 						if (InternalData.PatchModules[type].protos) foundModule = Internal.checkModuleProtos(module, InternalData.PatchModules[type].protos) ? module : null;
-						if (foundModule) {
-							if (InternalData.PatchModules[type].nonStrings) foundModule = Internal.checkModuleStrings(module._originalFunction || module, InternalData.PatchModules[type].nonStrings, {hasNot: true}) ? module : null;
-							if (InternalData.PatchModules[type].nonProps) foundModule = Internal.checkModuleProps(module, InternalData.PatchModules[type].nonProps, {hasNot: true}) ? module : null;
-							if (InternalData.PatchModules[type].nonProtos) foundModule = Internal.checkModuleProtos(module, InternalData.PatchModules[type].nonProtos, {hasNot: true}) ? module : null;
-						}
-						if (type == "GuildChannelUserContextMenu" && module._originalFunction) console.log(foundModule, module);
+						if (InternalData.PatchModules[type].nonProtos) foundModule = Internal.checkModuleProtos(module, InternalData.PatchModules[type].nonProtos, {hasNot: true}) ? module : null;
 						if (foundModule) {
 							if (useCache) {
 								if (!Cache.modules.patch) Cache.modules.patch = {};
