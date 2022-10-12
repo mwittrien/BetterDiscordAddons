@@ -3890,10 +3890,6 @@ html .bd-toast {
 	color: var(--header-primary);
 }
 
-#bd-pub-button {
-	background-color: var(--background-primary);
-}
-
 html .bd-settings-group.collapsible .bd-settings-title:hover {
 	color: var(--text-normal);
 	cursor: pointer;

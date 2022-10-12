@@ -2593,15 +2593,8 @@ html .newBadge-1LcB6t[style*="background-color: hsl(235, "] {
 
 /* ~~~~		13.		BDSUPPORT						~~~~ */
 
-#bd-pub-button {
-	color: var(--text-normal);
-	transition: background-color .15s ease-out, color .15s ease-out;
-}
-#bd-pub-button:hover {
-	background-color: rgb(var(--accentcolor));
-}
-#bd-pub-button:active {
-	background: var(--accentcolor-hover);
+.bd-notice-info {
+	--color: rgb(var(--accentcolor));
 }
 #pubslayer button:hover {
 	background: var(--accentcolor-hover);

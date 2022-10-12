@@ -419,15 +419,13 @@ body::after {
 
 /* ~~~~		4.		GUILDLIST						~~~~ */
 
-.childWrapper-1j_1ub,										/* homebutton/acronym	innerwrap							*/
-#bd-pub-button {											/* publicbutton			innerwrap							*/
+.childWrapper-1j_1ub {										/* homebutton/acronym	innerwrap							*/
 	background-color: rgba(var(--transparencycolor), .3);
 	color: var(--text-normal);
 	font-weight: 500;
 }
 .wrapper-3kah-n:hover .childWrapper-1j_1ub,
-.wrapper-3kah-n.selected-1Drb7Z .childWrapper-1j_1ub,
-#bd-pub-button:hover {
+.wrapper-3kah-n.selected-1Drb7Z .childWrapper-1j_1ub {
 	text-shadow: 1px 1px var(--textshadow);
 }
 .wrapper-3kah-n rect[fill] {
