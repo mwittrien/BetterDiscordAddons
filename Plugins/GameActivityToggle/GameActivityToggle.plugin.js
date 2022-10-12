@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.5
+ * @version 1.1.6
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -136,7 +136,7 @@ module.exports = (_ => {
 					if (newSettings.showCurrentGame != undefined) {
 						if (toggleButton) toggleButton.props.forceState = newSettings.showCurrentGame.value;
 						BDFDB.ReactUtils.forceUpdate(toggleButton);
-						BDFDB.DataUtils.save({date: new Date(), value: e.methodArguments[0]}, this, "cachedState");
+						BDFDB.DataUtils.save({date: new Date(), value: newSettings.showCurrentGame.value}, this, "cachedState");
 					}
 				}});
 				
