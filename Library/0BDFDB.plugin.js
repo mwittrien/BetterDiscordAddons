@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.7.0
+ * @version 2.7.2
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -570,7 +570,9 @@ module.exports = (_ => {
 				
 				if (plugin.css) BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
 				
+				BDFDB.PatchUtils.unpatch(plugin);
 				Internal.addModulePatches(plugin);
+				Internal.addContextPatches(plugin);
 
 				BDFDB.PluginUtils.translate(plugin);
 
@@ -1104,7 +1106,7 @@ module.exports = (_ => {
 					libraryCSS = css;
 				
 					const backupObj = getBackup(dataFileName, dataFilePath);
-					if (backupObj.backup && backupObj.hashIsSame) parseData(backupObj.backup);
+					if (backupObj.backup && backupObj.hashIsSame || true) parseData(backupObj.backup);
 					else request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/${dataFileName}`, (e, r, b) => {
 						if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryData(), 10000);
 						if (!e && b && r.statusCode == 200) {
@@ -2152,7 +2154,6 @@ module.exports = (_ => {
 				
 				Internal.addModulePatches = function (plugin) {
 					plugin = plugin == BDFDB && Internal || plugin;
-					BDFDB.PatchUtils.unpatch(plugin);
 					if (!plugin || !plugin.modulePatches) return;
 					let patchPriority = !isNaN(plugin.patchPriority) ? plugin.patchPriority : 5;
 					patchPriority = patchPriority < 1 ? (plugin == Internal ? 0 : 1) : (patchPriority > 9 ? (plugin == Internal ? 10 : 9) : Math.round(patchPriority));
@@ -2166,6 +2167,15 @@ module.exports = (_ => {
 							}
 							else BDFDB.LogUtils.warn(`[${type}] not found in PatchModules InternalData`, plugin);
 						}
+					}
+				};
+				Internal.addContextPatches = function (plugin) {
+					if (!InternalData.ContextMenuTypes || !BdApi || !BdApi.ContextMenu || typeof BdApi.ContextMenu.patch != "function") return;
+					plugin = plugin == BDFDB && Internal || plugin;
+					if (!plugin) return;
+					for (let type in InternalData.ContextMenuTypes) if (typeof plugin[`on${type}`] == "function") {
+						if (!BDFDB.ArrayUtils.is(plugin.patchCancels)) plugin.patchCancels = [];
+						plugin.patchCancels.push(BdApi.ContextMenu.patch(InternalData.ContextMenuTypes[type], (returnValue, props) => typeof plugin[`on${type}`] == "function" && plugin[`on${type}`]({returnvalue: returnValue, instance: {props}})));
 					}
 				};
 				Internal.initiatePatch = function (plugin, type, e) {
@@ -2383,12 +2393,15 @@ module.exports = (_ => {
 					else if (useCache && Cache && Cache.modules && Cache.modules.patch && Cache.modules.patch[type] == module) return true;
 					else {
 						let foundModule = null;
-						if (InternalData.PatchModules[type].strings) foundModule = Internal.checkModuleStrings(module, InternalData.PatchModules[type].strings) ? module : null;
-						if (InternalData.PatchModules[type].nonStrings) foundModule = Internal.checkModuleStrings(module, InternalData.PatchModules[type].nonStrings, {hasNot: true}) ? module : null;
+						if (InternalData.PatchModules[type].strings) foundModule = Internal.checkModuleStrings(module._originalFunction || module, InternalData.PatchModules[type].strings) ? module : null;
 						if (InternalData.PatchModules[type].props) foundModule = Internal.checkModuleProps(module, InternalData.PatchModules[type].props) ? module : null;
-						if (InternalData.PatchModules[type].nonProps) foundModule = Internal.checkModuleProps(module, InternalData.PatchModules[type].nonProps, {hasNot: true}) ? module : null;
 						if (InternalData.PatchModules[type].protos) foundModule = Internal.checkModuleProtos(module, InternalData.PatchModules[type].protos) ? module : null;
-						if (InternalData.PatchModules[type].nonProtos) foundModule = Internal.checkModuleProtos(module, InternalData.PatchModules[type].nonProtos, {hasNot: true}) ? module : null;
+						if (foundModule) {
+							if (InternalData.PatchModules[type].nonStrings) foundModule = Internal.checkModuleStrings(module._originalFunction || module, InternalData.PatchModules[type].nonStrings, {hasNot: true}) ? module : null;
+							if (InternalData.PatchModules[type].nonProps) foundModule = Internal.checkModuleProps(module, InternalData.PatchModules[type].nonProps, {hasNot: true}) ? module : null;
+							if (InternalData.PatchModules[type].nonProtos) foundModule = Internal.checkModuleProtos(module, InternalData.PatchModules[type].nonProtos, {hasNot: true}) ? module : null;
+						}
+						if (type == "GuildChannelUserContextMenu" && module._originalFunction) console.log(foundModule, module);
 						if (foundModule) {
 							if (useCache) {
 								if (!Cache.modules.patch) Cache.modules.patch = {};
@@ -3017,7 +3030,7 @@ module.exports = (_ => {
 					if (!user) return;
 					if (guildId && !channelId) channelId = (BDFDB.LibraryStores.GuildChannelStore.getDefaultChannel(guildId) || {}).id;
 					e = BDFDB.ListenerUtils.copyEvent(e.nativeEvent || e, (e.nativeEvent || e).currentTarget);
-					let type = channelId ? "GuildChannelUserContextMenu" : "UserGenericContextMenu";
+					let type = channelId ? "UserMemberContextMenu" : "UserGenericContextMenu";
 					let moduleFindData = InternalData.PatchModules[type] && InternalData.PatchModules[type].strings;
 					if (!moduleFindData) return;
 					let menu = BDFDB.ModuleUtils.findByString(moduleFindData, {noWarnings: true});
@@ -8284,7 +8297,9 @@ module.exports = (_ => {
 				changeLogs = BDFDB.DataUtils.load(BDFDB, "changeLogs");
 				BDFDB.PluginUtils.checkChangeLog(BDFDB);
 				
+				BDFDB.PatchUtils.unpatch(BDFDB);
 				Internal.addModulePatches(BDFDB);
+				Internal.addContextPatches(BDFDB);
 				
 				BDFDB.PatchUtils.patch(BDFDB, LibraryModules.React, "createElement", {
 					before: e => {
