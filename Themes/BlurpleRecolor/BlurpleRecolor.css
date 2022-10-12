@@ -2596,12 +2596,7 @@ html .newBadge-1LcB6t[style*="background-color: hsl(235, "] {
 .bd-notice-info {
 	--color: rgb(var(--accentcolor));
 }
-#pubslayer button:hover {
-	background: var(--accentcolor-hover);
-}
-#pubslayer button:active {
-	background: var(--accentcolor-active);
-}
+
 .bd-server-card.bd-server-card-pinned::after {
 	background: var(--bd-blue);
 }
