@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.0
+ * @version 2.4.1
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"fixed": {
+			"Lags and Crashes": "No Longer breaks"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -182,9 +184,7 @@ module.exports = (_ => {
 			render() {
 				if (!this.props.tab) this.props.tab = "Themes";
 				
-				this.props.entries = (!loading.is && grabbedThemes.length ? this.filterThemes() : []).map(theme => BDFDB.ReactUtils.createElement(RepoCardComponent, {
-					data: theme
-				})).filter(n => n);
+				const entries = (!loading.is && grabbedThemes.length ? this.filterThemes() : []);
 				
 				if (forceRerenderGenerator && this.props.tab == "Generator") BDFDB.TimeUtils.timeout(_ => {
 					forceRerenderGenerator = false;
@@ -207,7 +207,7 @@ module.exports = (_ => {
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H1,
 												className: BDFDB.disCN.marginreset,
-												children: `Theme Repo — ${loading.is ? 0 : this.props.entries.length || 0}/${loading.is ? 0 : grabbedThemes.length}`
+												children: `Theme Repo — ${loading.is ? 0 : entries.length || 0}/${loading.is ? 0 : grabbedThemes.length}`
 											})
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
@@ -318,7 +318,9 @@ module.exports = (_ => {
 										]
 									}) : BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN.discoverycards,
-										children: this.props.entries
+										children: entries.map(theme => BDFDB.ReactUtils.createElement(RepoCardComponent, {
+											data: theme
+										})).filter(n => n)
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
@@ -476,40 +478,12 @@ module.exports = (_ => {
 		
 		const RepoCardComponent = class ThemeCard extends BdApi.React.Component {
 			render() {
-				if (this.props.data.thumbnailUrl && !this.props.data.thumbnailChecked) {
-					if (!window.Buffer) this.props.data.thumbnailChecked = true;
-					else BDFDB.LibraryRequires.request(this.props.data.thumbnailUrl, {encoding: null}, (error, response, body) => {
-						if (response && response.headers["content-type"] && response.headers["content-type"] == "image/gif") {
-							const throwAwayImg = new Image(), instance = this;
-							throwAwayImg.onload = function() {
-								const canvas = document.createElement("canvas");
-								canvas.getContext("2d").drawImage(throwAwayImg, 0, 0, canvas.width = this.width, canvas.height = this.height);
-								try {
-									const oldUrl = instance.props.data.thumbnailUrl;
-									instance.props.data.thumbnailUrl = canvas.toDataURL("image/png");
-									instance.props.data.thumbnailGifUrl = oldUrl;
-									instance.props.data.thumbnailChecked = true;
-									BDFDB.ReactUtils.forceUpdate(instance);
-								}
-								catch (err) {
-									instance.props.data.thumbnailChecked = true;
-									BDFDB.ReactUtils.forceUpdate(instance);
-								}
-							};
-							throwAwayImg.onerror = function() {
-								instance.props.data.thumbnailChecked = true;
-								BDFDB.ReactUtils.forceUpdate(instance);
-							};
-							throwAwayImg.src = "data:" + response.headers["content-type"] + ";base64," + (new Buffer(body).toString("base64"));
-						}
-						else {
-							this.props.data.thumbnailChecked = true;
-							BDFDB.ReactUtils.forceUpdate(this);
-						}
-					});
-				}
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN.discoverycard,
+					onMouseEnter: _ => {
+						this.props.hovered = true;
+						BDFDB.ReactUtils.forceUpdate(this);
+					},
 					children: [
 						BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.discoverycardheader,
@@ -517,34 +491,29 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.discoverycardcoverwrapper,
 									children: [
-										this.props.data.thumbnailUrl && this.props.data.thumbnailChecked && BDFDB.ReactUtils.createElement("img", {
+										this.props.data.thumbnailUrl && this.props.hovered && BDFDB.ReactUtils.createElement("img", {
 											className: BDFDB.disCN.discoverycardcover,
 											src: this.props.data.thumbnailUrl,
-											loading: "lazy",
-											onMouseEnter: this.props.data.thumbnailGifUrl && (e => e.target.src = this.props.data.thumbnailGifUrl),
-											onMouseLeave: this.props.data.thumbnailGifUrl && (e => e.target.src = this.props.data.thumbnailUrl),
 											onClick: _ => {
-												const url = this.props.data.thumbnailGifUrl || this.props.data.thumbnailUrl;
+												const url = this.props.data.thumbnailUrl;
 												const img = document.createElement("img");
 												img.addEventListener("load", function() {
-													BDFDB.LibraryModules.ModalUtils.openModal(modalData => {
-														return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalRoot, Object.assign({
-															className: BDFDB.disCN.imagemodal
-														}, modalData, {
-															size: BDFDB.LibraryComponents.ModalComponents.ModalSize.DYNAMIC,
-															"aria-label": BDFDB.LanguageUtils.LanguageStrings.IMAGE,
-															children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
-																animated: false,
-																src: url,
-																original: url,
-																width: this.width,
-																height: this.height,
-																className: BDFDB.disCN.imagemodalimage,
-																shouldAnimate: true,
-																renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
-															})
-														}), true);
-													});
+													BDFDB.LibraryModules.ModalUtils.openModal(modalData => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalRoot, Object.assign({
+														className: BDFDB.disCN.imagemodal
+													}, modalData, {
+														size: BDFDB.LibraryComponents.ModalComponents.ModalSize.DYNAMIC,
+														"aria-label": BDFDB.LanguageUtils.LanguageStrings.IMAGE,
+														children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
+															animated: false,
+															src: url,
+															original: url,
+															width: this.width,
+															height: this.height,
+															className: BDFDB.disCN.imagemodalimage,
+															shouldAnimate: true,
+															renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
+														})
+													}), true));
 												});
 												img.src = url;
 											}
@@ -560,32 +529,16 @@ module.exports = (_ => {
 										})
 									]
 								}),
-								BDFDB.ReactUtils.createElement(class extends BDFDB.ReactUtils.Component {
-									render() {
-										return BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN.discoverycardiconwrapper,
-											children: this.props.data.author && this.props.data.author.discord_avatar_hash && this.props.data.author.discord_snowflake && !this.props.data.author.discord_avatar_failed ? BDFDB.ReactUtils.createElement("img", {
-												className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.discoverycardicon, !this.props.data.author.discord_avatar_loaded && BDFDB.disCN.discoverycardiconloading),
-												src: `https://cdn.discordapp.com/avatars/${this.props.data.author.discord_snowflake}/${this.props.data.author.discord_avatar_hash}.webp?size=128`,
-												loading: "lazy",
-												onLoad: _ => {
-													this.props.data.author.discord_avatar_loaded = true;
-													BDFDB.ReactUtils.forceUpdate(this);
-												},
-												onError: _ => {
-													this.props.data.author.discord_avatar_failed = true;
-													BDFDB.ReactUtils.forceUpdate(this);
-												}
-											}) : BDFDB.ReactUtils.createElement("div", {
-												className: BDFDB.disCN.discoverycardicon,
-												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-													nativeClass: true,
-													iconSVG: `<svg width="100%" height="100%" viewBox="0 0 24 24"><path fill="currentColor" d="m 14.69524,1.9999881 c -0.17256,0 -0.34519,0.065 -0.47686,0.1969 L 8.8655531,7.5498683 16.449675,15.134198 21.802502,9.7812182 c 0.26333,-0.2633 0.26333,-0.6904 0,-0.9537 L 20.7902,7.8168183 c -0.22885,-0.2289 -0.58842,-0.2633 -0.85606,-0.081 l -2.127134,1.4452499 1.437076,-2.1418399 c 0.17949,-0.2675 0.14486,-0.6251001 -0.083,-0.8528001 l -2.195488,-2.19433 c -0.20264,-0.2026 -0.51169,-0.2562 -0.7698,-0.1318 l -0.37921,0.1839 0.18228,-0.4036001 c 0.11521,-0.2555 0.0599,-0.5553 -0.13834,-0.7535 l -0.68843,-0.6901 c -0.131639,-0.13172 -0.30429,-0.19701 -0.476854,-0.19701 z M 7.8695308,8.5459582 6.3201566,10.095378 c -0.126449,0.1264 -0.196927,0.298 -0.196927,0.4769 0,0.1788 0.07043,0.3505 0.196927,0.4769 l 1.469627,1.46967 c 0.283151,0.2832 0.421272,0.6744 0.377578,1.07255 -0.04365,0.3979 -0.264001,0.7495 -0.602173,0.9651 -4.3184212,2.75283 -4.720939,3.15533 -4.853187,3.28763 -0.9493352,0.9493 -0.9493352,2.494471 0,3.443871 0.9502793,0.9503 2.4954759,0.9484 3.4437772,0 0.132338,-0.1323 0.534965,-0.535 3.2875378,-4.853321 0.215049,-0.3374 0.5670574,-0.5568 0.9651044,-0.6006 0.399307,-0.044 0.790042,0.094 1.072518,0.376 l 1.469626,1.46967 c 0.26328,0.2633 0.69043,0.2633 0.95371,0 l 1.549374,-1.54942 z M 4.4762059,18.571608 c 0.243902,0 0.487705,0.092 0.673783,0.2783 0.3722,0.3722 0.3722,0.975401 0,1.347601 -0.3722,0.3722 -0.97541,0.3722 -1.3475649,0 -0.3722,-0.3722 -0.3722,-0.975401 0,-1.347601 0.1861,-0.1861 0.42988,-0.2783 0.6737819,-0.2783 z"/></svg>`
-												})
-											})
-										});
-									}
-								}, this.props)
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.discoverycardiconwrapper,
+									children: BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN.discoverycardicon,
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+											nativeClass: true,
+											iconSVG: `<svg width="100%" height="100%" viewBox="0 0 24 24"><path fill="currentColor" d="m 14.69524,1.9999881 c -0.17256,0 -0.34519,0.065 -0.47686,0.1969 L 8.8655531,7.5498683 16.449675,15.134198 21.802502,9.7812182 c 0.26333,-0.2633 0.26333,-0.6904 0,-0.9537 L 20.7902,7.8168183 c -0.22885,-0.2289 -0.58842,-0.2633 -0.85606,-0.081 l -2.127134,1.4452499 1.437076,-2.1418399 c 0.17949,-0.2675 0.14486,-0.6251001 -0.083,-0.8528001 l -2.195488,-2.19433 c -0.20264,-0.2026 -0.51169,-0.2562 -0.7698,-0.1318 l -0.37921,0.1839 0.18228,-0.4036001 c 0.11521,-0.2555 0.0599,-0.5553 -0.13834,-0.7535 l -0.68843,-0.6901 c -0.131639,-0.13172 -0.30429,-0.19701 -0.476854,-0.19701 z M 7.8695308,8.5459582 6.3201566,10.095378 c -0.126449,0.1264 -0.196927,0.298 -0.196927,0.4769 0,0.1788 0.07043,0.3505 0.196927,0.4769 l 1.469627,1.46967 c 0.283151,0.2832 0.421272,0.6744 0.377578,1.07255 -0.04365,0.3979 -0.264001,0.7495 -0.602173,0.9651 -4.3184212,2.75283 -4.720939,3.15533 -4.853187,3.28763 -0.9493352,0.9493 -0.9493352,2.494471 0,3.443871 0.9502793,0.9503 2.4954759,0.9484 3.4437772,0 0.132338,-0.1323 0.534965,-0.535 3.2875378,-4.853321 0.215049,-0.3374 0.5670574,-0.5568 0.9651044,-0.6006 0.399307,-0.044 0.790042,0.094 1.072518,0.376 l 1.469626,1.46967 c 0.26328,0.2633 0.69043,0.2633 0.95371,0 l 1.549374,-1.54942 z M 4.4762059,18.571608 c 0.243902,0 0.487705,0.092 0.673783,0.2783 0.3722,0.3722 0.3722,0.975401 0,1.347601 -0.3722,0.3722 -0.97541,0.3722 -1.3475649,0 -0.3722,-0.3722 -0.3722,-0.975401 0,-1.347601 0.1861,-0.1861 0.42988,-0.2783 0.6737819,-0.2783 z"/></svg>`
+										})
+									})
+								})
 							]							
 						}),
 						BDFDB.ReactUtils.createElement("div", {
@@ -974,9 +927,10 @@ module.exports = (_ => {
 						delete theme.thumbnail_url;
 						BDFDB.LibraryRequires.request(theme.rawSourceUrl, (error, response, body) => {
 							if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
-								theme.name = BDFDB.StringUtils.upperCaseFirstChar((/@name\s+([^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || theme.name || "");
-								theme.authorname = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1] || theme.author.display_name || theme.author;
-								const version = (/@version\s+(.+)|\/\/\**META.*["']version["']\s*:\s*["'](.+?)["']/i.exec(body) || []).filter(n => n)[1];
+								const META = body.split("*/")[0];
+								theme.name = BDFDB.StringUtils.upperCaseFirstChar((/@name\s+([^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || theme.name || "");
+								theme.authorname = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || theme.author.display_name || theme.author;
+								const version = (/@version\s+(.+)|\/\/\**META.*["']version["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1];
 								if (version) theme.version = version;
 								if (theme.version) {
 									const installedTheme = this.getInstalledTheme(theme);
