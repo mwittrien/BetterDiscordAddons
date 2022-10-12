@@ -596,7 +596,9 @@
 .background-L8lGH6[style*="background-color: hsl(227, "] {
 	background-color: rgb(var(--accentcolor)) !important;
 }
-
+.border-2Vy6FN.voiceChannelEffect-1J1MWE {
+	box-shadow: inset 0 0 0 2px rgb(var(--accentcolor)), inset 0 0 0 3px rgb(var(--accentcolor));
+}
 
 /* ~~~~		4.		PEOPLES							~~~~ */
 
