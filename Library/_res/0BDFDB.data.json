@@ -342,6 +342,7 @@
 		"Account": {"protos": ["renderAvatarWithPopout", "renderCopiableNameTag", "renderCopiedSuccess"]},
 		"AnalyticsContext": {"props": ["ObjectTypes", "Objects", "Pages", "Sections"]},
 		"BlobMask": {"protos": ["getBadgePositionInterpolation", "getUpperBadgeStyles"]},
+		"ChannelSidebar": {"strings": [".ACCOUNT_PANEL", ".panels"]},
 		"ConnectedLazyImageZoomable": {"strings": ["{isWindowFocused", ",appContext:"]},
 		"DiscordTag": {"strings": ["hidePersonalInformation", "isVerifiedBot", "botType"]},
 		"EmojiPickerListRow": {"strings": ["emojiSize", "surrogateCodePoint", "EMOJI_FAVORITE_TOOLTIP"]},
