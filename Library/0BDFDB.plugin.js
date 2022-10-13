@@ -2164,6 +2164,7 @@ module.exports = (_ => {
 								if (!PluginStores.modulePatches[patchType][type]) PluginStores.modulePatches[patchType][type] = [];
 								if (!PluginStores.modulePatches[patchType][type][patchPriority]) PluginStores.modulePatches[patchType][type][patchPriority] = [];
 								PluginStores.modulePatches[patchType][type][patchPriority].push(plugin);
+								if (PluginStores.modulePatches[patchType][type][patchPriority].length > 1) PluginStores.modulePatches[patchType][type][patchPriority] = BDFDB.ArrayUtils.keySort(PluginStores.modulePatches[patchType][type][patchPriority], "name");
 							}
 							else BDFDB.LogUtils.warn(`[${type}] not found in PatchModules InternalData`, plugin);
 						}
