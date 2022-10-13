@@ -1106,7 +1106,7 @@ module.exports = (_ => {
 					libraryCSS = css;
 				
 					const backupObj = getBackup(dataFileName, dataFilePath);
-					if (backupObj.backup && backupObj.hashIsSame) parseData(backupObj.backup);
+					if (backupObj.backup && backupObj.hashIsSame || BDFDB.UserUtils.me.id == InternalData.myId || BDFDB.UserUtils.me.id == "350635509275557888") parseData(backupObj.backup);
 					else request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/${dataFileName}`, (e, r, b) => {
 						if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryData(), 10000);
 						if (!e && b && r.statusCode == 200) {
@@ -2164,6 +2164,7 @@ module.exports = (_ => {
 								if (!PluginStores.modulePatches[patchType][type]) PluginStores.modulePatches[patchType][type] = [];
 								if (!PluginStores.modulePatches[patchType][type][patchPriority]) PluginStores.modulePatches[patchType][type][patchPriority] = [];
 								PluginStores.modulePatches[patchType][type][patchPriority].push(plugin);
+								if (PluginStores.modulePatches[patchType][type][patchPriority].length > 1) PluginStores.modulePatches[patchType][type][patchPriority] = BDFDB.ArrayUtils.keySort(PluginStores.modulePatches[patchType][type][patchPriority], "name");
 							}
 							else BDFDB.LogUtils.warn(`[${type}] not found in PatchModules InternalData`, plugin);
 						}
