@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.7
+ * @version 1.2.8
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -74,20 +74,19 @@ module.exports = (_ => {
 			}
 			request(socket, device, type, data) {
 				return new Promise(callback => {
-					let method = "PUT";
+					let method = "put";
 					switch (type) {
 						case "next":
 						case "previous":
-							method = "POST";
+							method = "post";
 							break;
 						case "get":
 							type = "";
-							method = "GET";
+							method = "get";
 							break;
 					};
-					BDFDB.LibraryRequires.request({
+					BDFDB.LibraryRequires.request[method]({
 						url: `https://api.spotify.com/v1/me/player${type ? "/" + type : ""}?${Object.entries(Object.assign({device_id: device.id}, data)).map(n => `${n[0]}=${n[1]}`).join("&")}`,
-						method: method,
 						headers: {
 							authorization: `Bearer ${socket.accessToken}`
 						}
@@ -443,7 +442,7 @@ module.exports = (_ => {
 				
 				this.defaults = {
 					general: {
-						addBy: 			{value: true,		description: "Adds the Word 'by' infront of the Author Name"},
+						addBy: 				{value: true,		description: "Adds the Word 'by' infront of the Author Name"},
 						addTimeline: 		{value: true,		description: "Shows the Song Timeline in the Controls"},
 						addActivityButton: 	{value: true,		description: "Shows the Activity Status Toggle Button in the Controls"},
 						doubleBack: 		{value: true,		description: "Requires the User to press the Back Button twice to go to previous Track"}
@@ -459,10 +458,10 @@ module.exports = (_ => {
 					}
 				};
 				
-				this.patchedModules = {
-					before: {
-						AnalyticsContext: "render"
-					}
+				this.modulePatches = {
+					after: [
+						"ChannelSidebar"
+					]
 				};
 				
 				this.css = `
@@ -691,11 +690,11 @@ module.exports = (_ => {
 					return false;
 				}});
 				
-				BDFDB.PatchUtils.forceAllUpdates(this);
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 			
 			onStop () {
-				BDFDB.PatchUtils.forceAllUpdates(this);
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 
 			getSettingsPanel (collapseStates = {}) {				
@@ -780,22 +779,20 @@ module.exports = (_ => {
 			onSettingsClosed () {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
-					BDFDB.PatchUtils.forceAllUpdates(this);
+					BDFDB.DiscordUtils.rerenderAll();
 				}
 			}
 
-			processAnalyticsContext (e) {
-				if (e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.ACCOUNT_PANEL) e.instance.props.children = [
-					BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
-						key: "SPOTIFY_CONTROLS",
-						song: BDFDB.LibraryStores.SpotifyStore.getActivity(false),
-						maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
-						buttonStates: [],
-						timeline: this.settings.general.addTimeline,
-						activityToggle: this.settings.general.addActivityButton
-					}, true),
-					[e.instance.props.children].flat(10).filter(n => !n || n.key != "SPOTIFY_CONTROLS")
-				].flat(10);
+			processChannelSidebar (e) {
+				let panels = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelpanels]]});
+				if (panels) panels.props.children.unshift(BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
+					key: "SPOTIFY_CONTROLS",
+					song: BDFDB.LibraryStores.SpotifyStore.getActivity(false),
+					maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
+					buttonStates: [],
+					timeline: this.settings.general.addTimeline,
+					activityToggle: this.settings.general.addActivityButton
+				}, true));
 			}
 			
 			updatePlayer (song) {
