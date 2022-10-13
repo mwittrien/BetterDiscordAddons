@@ -1391,7 +1391,7 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 .uploadContainer-TCg-Ji .icon-2bPCaV,
 .audioMetadata-1Hrt8T::before,
 .uploadModal-2ie9O_ .icon-HW4tZ-:not(img),
-.uploadModalIn-2w48Zf .icon-HW4tZ-:not(img) {
+.icon-HW4tZ-:not(img) {
 	object-position: -999999px -999999px;
 	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_bg.svg) center/contain no-repeat !important;
 }
@@ -1399,7 +1399,7 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 	background-size: 72px 96px !important;
 }
 .uploadModal-2ie9O_ .icon-HW4tZ-:not(img),
-.uploadModalIn-2w48Zf .icon-HW4tZ-:not(img) {
+.icon-HW4tZ-:not(img) {
 	background-size: 72px 96px !important;
 }
 .attachment-1PZZB2 .icon-1KCy88 + *::before,
@@ -1410,8 +1410,8 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 .audioMetadata-1Hrt8T > *:first-child::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-:not(img)::before,
 .uploadModal-2ie9O_ .icon-HW4tZ-:not(img)::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-:not(img)::before,
-.uploadModalIn-2w48Zf .icon-HW4tZ-:not(img)::after {
+.icon-HW4tZ-:not(img)::before,
+.icon-HW4tZ-:not(img)::after {
 	content: "";
 	position: absolute;
 	pointer-events: none;
@@ -1444,8 +1444,8 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 }
 .uploadModal-2ie9O_ .icon-HW4tZ-:not(img)::before,
 .uploadModal-2ie9O_ .icon-HW4tZ-:not(img)::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-:not(img)::before,
-.uploadModalIn-2w48Zf .icon-HW4tZ-:not(img)::after {
+.icon-HW4tZ-:not(img)::before,
+.icon-HW4tZ-:not(img)::after {
 	width: 100px;
 	height: 130px;
 	-webkit-mask-size: 72px 96px !important;
@@ -1458,63 +1458,63 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 .uploadContainer-TCg-Ji .icon-2bPCaV::before,
 .audioMetadata-1Hrt8T > *:first-child::before,
 .uploadModal-2ie9O_ .icon-HW4tZ-:not(img)::before,
-.uploadModalIn-2w48Zf .icon-HW4tZ-:not(img)::before {
+.icon-HW4tZ-:not(img)::before {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_details.svg) center/contain no-repeat;
 }
 .attachment-1PZZB2 .icon-1KCy88 + *::after,
 .uploadContainer-TCg-Ji .icon-2bPCaV.unknown-1HSceW::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-.unknown-3ClW7Z::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-:not(img)::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-:not(img)::after {
+.icon-HW4tZ-:not(img)::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/common/empty.svg) center/contain no-repeat;
 }
 .attachment-1PZZB2 .icon-1KCy88[title="acrobat"] + *::after,
 .uploadContainer-TCg-Ji .icon-2bPCaV.acrobat-3i7zSC::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-.acrobat-2-m_um::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-.acrobat-2-m_um::after {
+.icon-HW4tZ-.acrobat-2-m_um::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_acrobat_accent.svg) center/contain no-repeat;
 }
 .attachment-1PZZB2 .icon-1KCy88[title="ae"] + *::after,
 .uploadContainer-TCg-Ji .icon-2bPCaV.ae-1ZAdFv::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-.ae-1bPydY::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-.ae-1bPydY::after {
+.icon-HW4tZ-.ae-1bPydY::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_ae_accent.svg) center/contain no-repeat;
 }
 .attachment-1PZZB2 .icon-1KCy88[title="ai"] + *::after,
 .uploadContainer-TCg-Ji .icon-2bPCaV.ai-3QkK4s::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-.ai-1QhRgT::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-.ai-1QhRgT::after {
+.icon-HW4tZ-.ai-1QhRgT::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_ai_accent.svg) center/contain no-repeat;
 }
 .attachment-1PZZB2 .icon-1KCy88[title="archive"] + *::after,
 .uploadContainer-TCg-Ji .icon-2bPCaV.archive-1zydwk::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-.archive-2bNoJA::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-.archive-2bNoJA::after {
+.icon-HW4tZ-.archive-2bNoJA::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_archive_accent.svg) center/contain no-repeat;
 }
 .attachment-1PZZB2 .icon-1KCy88[title="audio"] + *::after,
 .uploadContainer-TCg-Ji .icon-2bPCaV.audio-bZBBRF::after,
 .audioMetadata-1Hrt8T > *:first-child::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-.audio-YC1s9s::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-.audio-YC1s9s::after {
+.icon-HW4tZ-.audio-YC1s9s::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_audio_accent.svg) center/contain no-repeat;
 }
 .attachment-1PZZB2 .icon-1KCy88[title="code"] + *::after,
 .uploadContainer-TCg-Ji .icon-2bPCaV.code-1hTP09::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-.code-rRQnfi::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-.code-rRQnfi::after {
+.icon-HW4tZ-.code-rRQnfi::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_code_accent.svg) center/contain no-repeat;
 }
 .attachment-1PZZB2 .icon-1KCy88[title="document"] + *::after,
 .uploadContainer-TCg-Ji .icon-2bPCaV.document-3AUmU1::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-.document-1u6V3N::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-.document-1u6V3N::after {
+.icon-HW4tZ-.document-1u6V3N::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_document_accent.svg) center/contain no-repeat;
 }
 .attachment-1PZZB2 .icon-1KCy88[title="image"] + *::after,
 .uploadContainer-TCg-Ji .icon-2bPCaV.image-1091CL::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-.image-2ssF8k::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-.image-2ssF8k::after {
+.icon-HW4tZ-.image-2ssF8k::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_image_accent.svg) center/contain no-repeat;
 }
 .attachment-1PZZB2 .icon-1KCy88[title="photoshop"] + *::after,
@@ -1523,32 +1523,32 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 .uploadContainer-TCg-Ji .icon-2bPCaV.ps-1mWY_j::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-.photoshop-LN9Et_::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-.ps-1C6rg4::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-.photoshop-LN9Et_::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-.ps-1C6rg4::after {
+.icon-HW4tZ-.photoshop-LN9Et_::after,
+.icon-HW4tZ-.ps-1C6rg4::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_photoshop_accent.svg) center/contain no-repeat;
 }
 .attachment-1PZZB2 .icon-1KCy88[title="sketch"] + *::after,
 .uploadContainer-TCg-Ji .icon-2bPCaV.sketch-1CwZfM::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-.sketch-t3m6M1::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-.sketch-t3m6M1::after {
+.icon-HW4tZ-.sketch-t3m6M1::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_sketch_accent.svg) center/contain no-repeat;
 }
 .attachment-1PZZB2 .icon-1KCy88[title="spreadsheet"] + *::after,
 .uploadContainer-TCg-Ji .icon-2bPCaV.spreadsheet-34d5T3::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-.spreadsheet-1wEQpO::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-.spreadsheet-1wEQpO::after {
+.icon-HW4tZ-.spreadsheet-1wEQpO::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_spreadsheet_accent.svg) center/contain no-repeat;
 }
 .attachment-1PZZB2 .icon-1KCy88[title="video"] + *::after,
 .uploadContainer-TCg-Ji .icon-2bPCaV.video-qa3DnY::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-.video-L7uQxc::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-.video-L7uQxc::after {
+.icon-HW4tZ-.video-L7uQxc::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_video_accent.svg) center/contain no-repeat;
 }
 .attachment-1PZZB2 .icon-1KCy88[title="webcode"] + *::after,
 .uploadContainer-TCg-Ji .icon-2bPCaV.webcode-3EYK4X::after,
 .uploadModal-2ie9O_ .icon-HW4tZ-.webcode-18ObW7::after,
-.uploadModalIn-2w48Zf .icon-HW4tZ-.webcode-18ObW7::after {
+.icon-HW4tZ-.webcode-18ObW7::after {
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/files_webcode_accent.svg) center/contain no-repeat;
 }
 .filenameLinkWrapper-3Rc6sk,

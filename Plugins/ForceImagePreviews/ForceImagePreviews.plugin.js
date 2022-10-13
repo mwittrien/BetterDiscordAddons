@@ -65,7 +65,7 @@ module.exports = (_ => {
 				
 				this.patchedModules = {
 					before: {
-						SimpleMessageAccessories: "default"
+						MessageAccessories: "default"
 					}
 				};
 			}
@@ -80,7 +80,7 @@ module.exports = (_ => {
 				BDFDB.MessageUtils.rerenderAll();
 			}
 		
-			processSimpleMessageAccessories (e) {
+			processMessageAccessories (e) {
 				if (e.instance.props.message && e.instance.props.message.content) {
 					let message = new BDFDB.DiscordObjects.Message(e.instance.props.message);
 					for (let link of e.instance.props.message.content.split(/\n|\s|\r|\t|\0/g)) if (link.indexOf("https://") > -1 || link.indexOf("http://") > -1) {

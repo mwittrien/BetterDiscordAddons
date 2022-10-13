@@ -98,7 +98,7 @@ module.exports = (_ => {
 						HeaderBarContainer: "default",
 						ChannelEditorContainer: "render",
 						AutocompleteUserResult: "render",
-						UserThemeBanner: "default",
+						UserThemedBanner: "default",
 						UserBanner: "default",
 						UserBannerMask: "default",
 						UserPopoutAvatar: "UserPopoutAvatar",
@@ -604,7 +604,7 @@ module.exports = (_ => {
 				}
 			}
 
-			processUserThemeBanner (e) {
+			processUserThemedBanner (e) {
 				this.processUserBanner(e);
 			}
 
