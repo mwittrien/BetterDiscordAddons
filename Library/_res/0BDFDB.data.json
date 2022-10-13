@@ -5363,6 +5363,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"106257021795323904": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "cryo (AlSk)"},
 		"546917684810481665": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "felix (LogR)"},
 		"148234730523852800": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "inbroso (MaEp)"},
 		"829934731771772948": 	{"active": true,	"tier": "t3",	"text": "",											"color": "",			"id": "SweetCandy (pizza)"},
