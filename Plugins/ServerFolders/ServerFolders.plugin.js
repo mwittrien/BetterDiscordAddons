@@ -427,7 +427,7 @@ module.exports = (_ => {
 				this.patchedModules = {
 					after: {
 						AppView: "default",
-						Guilds: "type",
+						GuildsBar: "type",
 						FolderItem: "default",
 						FolderHeader: "default",
 						GuildItem: "type",

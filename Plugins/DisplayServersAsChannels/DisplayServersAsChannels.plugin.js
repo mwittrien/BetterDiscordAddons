@@ -72,7 +72,7 @@ module.exports = (_ => {
 
 				this.patchedModules = {
 					after: {
-						Guilds: "type",
+						GuildsBar: "type",
 						HomeButton: "type",
 						GuildFavorites: "default",
 						DirectMessage: "render",

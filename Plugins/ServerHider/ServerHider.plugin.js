@@ -2,7 +2,7 @@
  * @name ServerHider
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.2.4
+ * @version 6.2.5
  * @description Allows you to hide certain Servers in your Server List
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -66,10 +66,10 @@ module.exports = (_ => {
 					}
 				};
 				
-				this.patchedModules = {
-					after: {
-						Guilds: "type"
-					}
+				this.modulePatches = {
+					after: [
+						"GuildsBar"
+					]
 				};
 			}
 			
@@ -131,24 +131,8 @@ module.exports = (_ => {
 			}
 			
 			onGuildContextMenu (e) {
-				if (document.querySelector(BDFDB.dotCN.modalwrapper)) return;
-				if (e.type == "GuildIconNewContextMenu") {
-					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "create", group: true});
-					this.injectItem(e.instance, children, -1);
-				}
-				else {
-					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
-					this.injectItem(e.instance, children, index);
-				}
-			}
-
-			onGuildFolderContextMenu (e) {
-				if (document.querySelector(BDFDB.dotCN.modalwrapper)) return;
+				if (document.querySelector(BDFDB.dotCN.modalwrapper) || !BDFDB.DOMUtils.getParent(BDFDB.dotCN.guilds, e.instance.props.target)) return;
 				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
-				this.injectItem(e.instance, children, index);
-			}
-			
-			injectItem (instance, children, index) {
 				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: [
 						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -161,12 +145,12 @@ module.exports = (_ => {
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "openmenu"),
 										action: _ => this.showHideModal()
 									}),
-									!instance.props.guild && !instance.props.folderId ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-										label: instance.props.guild ? this.labels.submenu_hideserver : this.labels.submenu_hidefolder,
+									!e.instance.props.guild && !e.instance.props.folderId ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+										label: e.instance.props.guild ? this.labels.submenu_hideserver : this.labels.submenu_hidefolder,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "hide"),
 										action: _ => {
-											if (instance.props.guild) this.toggleItem(hiddenEles && hiddenEles.servers || [], instance.props.guild.id, "servers");
-											else this.toggleItem(hiddenEles && hiddenEles.folders || [] || [], instance.props.folderId, "folders");
+											if (e.instance.props.guild) this.toggleItem(hiddenEles && hiddenEles.servers || [], e.instance.props.guild.id, "servers");
+											else this.toggleItem(hiddenEles && hiddenEles.folders || [] || [], e.instance.props.folderId, "folders");
 										}
 									})
 								].filter(n => n)
@@ -176,7 +160,7 @@ module.exports = (_ => {
 				}));
 			}
 		
-			processGuilds (e) {
+			processGuildsBar (e) {
 				if (this.settings.general.onlyHideInStream && !BDFDB.LibraryStores.StreamerModeStore.enabled) return;
 				let hiddenGuildIds = hiddenEles.servers || [];
 				let hiddenFolderIds = hiddenEles.folders || [];
@@ -241,18 +225,13 @@ module.exports = (_ => {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
 									prefix: BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN.listavatar,
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.BlobMask, {
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-												className: BDFDB.disCN.guildfolder,
-												children: BDFDB.ReactUtils.createElement("div", {
-													className: BDFDB.disCN.guildfoldericonwrapper,
-													children: BDFDB.ReactUtils.createElement("div", {
-														className: BDFDB.disCN.guildfoldericonwrapperexpanded,
-														children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-															name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
-															color: BDFDB.ColorUtils.convert(folder.folderColor, "RGB") || "var(--bdfdb-blurple)"
-														})
-													})
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+											className: BDFDB.disCN.guildfoldericonwrapper,
+											children: BDFDB.ReactUtils.createElement("div", {
+												className: BDFDB.disCN.guildfoldericonwrapperexpanded,
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+													name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
+													color: BDFDB.ColorUtils.convert(folder.folderColor, "RGB") || "var(--bdfdb-blurple)"
 												})
 											})
 										})
@@ -270,11 +249,10 @@ module.exports = (_ => {
 								className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
-								prefix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Guild, {
+								prefix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildIconComponents.Icon, {
 									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.listavatar, folder && BDFDB.disCN.marginleft8),
 									guild: guild,
-									menu: false,
-									tooltip: false
+									size: BDFDB.LibraryComponents.GuildIconComponents.Icon.Sizes.MEDIUM
 								}),
 								label: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 									children: guild.name
