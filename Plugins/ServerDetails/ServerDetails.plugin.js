@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.2
+ * @version 1.1.3
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -110,7 +110,7 @@ module.exports = (_ => {
 						}),
 						_this.settings.items.members && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 							prefix: BDFDB.LanguageUtils.LanguageStrings.MEMBERS,
-							string: BDFDB.LibraryModules.MemberCountUtils.getMemberCount(this.props.guild.id)
+							string: BDFDB.LibraryStores.GuildMemberCountStore.getMemberCount(this.props.guild.id)
 						}),
 						_this.settings.items.boosts && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
 							prefix: _this.labels.boosts,
@@ -179,10 +179,10 @@ module.exports = (_ => {
 					}
 				};
 			
-				this.patchedModules = {
-					after: {
-						GuildItem: "type"
-					}
+				this.modulePatches = {
+					after: [
+						"GuildItem"
+					]
 				};
 				
 				this.patchPriority = 9;
@@ -211,10 +211,6 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryComponents.GuildComponents.Guild.prototype, "render", {after: e => {
-					this.processGuildItem({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"});
-				}});
-
 				this.forceUpdateAll();
 			}
 			
@@ -324,27 +320,26 @@ module.exports = (_ => {
 			}
 			
 			processGuildItem (e) {
-				if (BDFDB.GuildUtils.is(e.instance.props.guild)) {
-					let tooltipContainer;
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
-					if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, Object.assign({}, children[index].props, {
-						ref: instance => {if (instance) tooltipContainer = instance;},
-						tooltipConfig:  Object.assign({
-							backgroundColor: this.settings.colors.tooltipColor
-						}, children[index].props.tooltipConfig, {
-							className: !this.settings.amounts.tooltipDelay && BDFDB.disCN._serverdetailstooltip,
-							type: "right",
-							guild: e.instance.props.guild,
-							list: true,
-							offset: 12
-						}),
-						text: (instance, event) => BDFDB.ReactUtils.createElement(GuildDetailsComponent, {
-							shiftKey: event.shiftKey,
-							tooltipContainer: tooltipContainer,
-							guild: e.instance.props.guild
-						})
-					}));
-				}
+				if (!BDFDB.GuildUtils.is(e.instance.props.guild)) return;
+				let tooltipContainer;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
+				if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, Object.assign({}, children[index].props, {
+					ref: instance => {if (instance) tooltipContainer = instance;},
+					tooltipConfig:  Object.assign({
+						backgroundColor: this.settings.colors.tooltipColor
+					}, children[index].props.tooltipConfig, {
+						className: !this.settings.amounts.tooltipDelay && BDFDB.disCN._serverdetailstooltip,
+						type: "right",
+						guild: e.instance.props.guild,
+						list: true,
+						offset: 12
+					}),
+					text: (instance, event) => BDFDB.ReactUtils.createElement(GuildDetailsComponent, {
+						shiftKey: event.shiftKey,
+						tooltipContainer: tooltipContainer,
+						guild: e.instance.props.guild
+					})
+				}));
 			}
 
 			setLabelsByLanguage () {
@@ -461,7 +456,7 @@ module.exports = (_ => {
 						return {
 							boosts:								"Бустеры",
 							creation_date:						"Дата создания",
-							join_date:							"Датa вступления"
+							join_date:							"Дате вступления"
 						};
 					case "sv":		// Swedish
 						return {
