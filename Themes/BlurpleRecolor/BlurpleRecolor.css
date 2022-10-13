@@ -2595,10 +2595,6 @@ html .newBadge-1LcB6t[style*="background-color: hsl(235, "] {
 
 /* ~~~~		13.		BDSUPPORT						~~~~ */
 
-.bd-notice-info {
-	--color: rgb(var(--accentcolor));
-}
-
 .bd-server-card.bd-server-card-pinned::after {
 	background: var(--bd-blue);
 }
