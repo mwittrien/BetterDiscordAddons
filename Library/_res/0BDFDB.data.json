@@ -336,7 +336,7 @@
 		"MessageContextMenu": "message",
 		"ThreadContextMenu": "thread-context",
 		"UserContextMenu": "user-context",
-		"UserSettingsContextMenu": "user-settings-cog"
+		"UserSettingsCogContextMenu": "user-settings-cog"
 	},
 	"PatchModules": {
 		"Account": {"protos": ["renderAvatarWithPopout", "renderCopiableNameTag", "renderCopiedSuccess"]},
