@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.8.7
+ * @version 4.8.8
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,9 +14,6 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		added: {
-			"Jump Button": "Added Option to add a Jump to Message Button in Gallery Mode"
-		}
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -253,26 +250,40 @@ module.exports = (_ => {
 					}
 				};
 			
-				this.patchedModules = {
-					before: {
-						LazyImage: "render",
-						Spoiler: "render",
-						MessageAccessories: "default"
-					},
-					after: {
-						ImageModal: ["render", "componentDidMount", "componentWillUnmount"],
-						ModalCarousel: "render",
-						LazyImage: ["componentDidMount", "componentDidUpdate"],
-						LazyImageZoomable: "render",
-						Spoiler: "render",
-						UserThemedBanner: "default",
-						UserBanner: "default"
-					}
+				this.modulePatches = {
+					before: [
+						"MessageAccessories",
+						"Spoiler"
+					],
+					after: [
+						"ImageModal",
+						"LazyImage",
+						"LazyImageZoomable",
+						"ModalCarousel",
+						"Spoiler",
+						"UserBanner",
+						"UserThemedBanner"
+					],
+					componentDidMount: [
+						"ImageModal",
+						"LazyImage"
+					],
+					componentDidUpdate: [
+						"LazyImage"
+					],
+					componentWillUnmount: [
+						"ImageModal"
+					]
 				};
 				
 				this.css = `
 					${BDFDB.dotCN._imageutilitiesimagedetails} {
 						display: inline-flex;
+						font-weight: 500;
+						color: var(--text-muted);
+						font-size: 12px;
+						margin: .25rem 0 .75rem;
+						line-height: 16px;
 					}
 					${BDFDB.dotCNS.spoilerhidden + BDFDB.dotCN._imageutilitiesimagedetails} {
 						visibility: hidden;
@@ -400,37 +411,6 @@ module.exports = (_ => {
 			
 			onStart () {
 				BDFDB.ListenerUtils.add(this, document.body, "click", BDFDB.dotCNS.message + BDFDB.dotCNS.imagewrapper + BDFDB.dotCNC.imageoriginallink + BDFDB.dotCNS.message + BDFDB.dotCNS.imagewrapper + "img", e => this.cacheClickedImage(e.target));
-				
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MediaComponentUtils, "renderImageComponent", {
-					after: e => {
-						if (this.settings.detailsSettings.footnote && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedmedia) == -1 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedthumbnail) == -1 && BDFDB.ReactUtils.findChild(e.returnValue, {name: ["ConnectedLazyImageZoomable", "LazyImageZoomable", "LazyImage"]})) {
-							const altText = e.returnValue.props.children[1] && e.returnValue.props.children[1].props.children;
-							const details = BDFDB.ReactUtils.createElement(ImageDetailsComponent, {
-								original: e.methodArguments[0].original,
-								attachment: {
-									height: 0,
-									width: 0,
-									filename: "unknown.png"
-								}
-							});
-							e.returnValue.props.children[1] = BDFDB.ReactUtils.createElement("span", {
-								className: BDFDB.disCN.imagealttext,
-								children: [
-									altText && altText.length >= 50 && BDFDB.ReactUtils.createElement("div", {
-										children: details
-									}),
-									altText && BDFDB.ReactUtils.createElement("span", {
-										children: altText
-									}),
-									(!altText || altText.length < 50) && details
-								]
-							});
-							e.returnValue.props.children = BDFDB.ReactUtils.createElement("div", {
-								children: e.returnValue.props.children
-							});
-						}
-					}
-				});
 
 				this.forceUpdateAll();
 			}
@@ -681,55 +661,24 @@ module.exports = (_ => {
 						let banner = BDFDB.GuildUtils.getBanner(e.instance.props.guild.id);
 						if (banner) this.injectItem(e, [banner.replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.banner && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.banner), banner], BDFDB.LanguageUtils.LibraryStrings.guildbanner);
 					}
-					else if (e.type != "GuildChannelListContextMenu") this.injectItem(e, [(e.instance.props.guild.getIconURL(4096) || "").replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.icon) && e.instance.props.guild.getIconURL(4096, true)], BDFDB.LanguageUtils.LibraryStrings.guildicon);
+					else if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.channels, e.instance.props.target)) this.injectItem(e, [(e.instance.props.guild.getIconURL(4096) || "").replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.icon) && e.instance.props.guild.getIconURL(4096, true)], BDFDB.LanguageUtils.LibraryStrings.guildicon);
 				}
 			}
 
 			onUserContextMenu (e) {
-				if (e.instance.props.user && this.settings.places.userAvatars && e.subType == "useBlockUserItem") {
+				if (e.instance.props.user && this.settings.places.userAvatars) {
 					const guildId = BDFDB.LibraryStores.SelectedGuildStore.getGuildId();
 					const member = BDFDB.LibraryStores.GuildMemberStore.getMember(guildId, e.instance.props.user.id);
-					let validUrls = this.filterUrls((e.instance.props.user.getAvatarURL(null, 4096) || "").replace(/\.webp|\.gif/, ".png"), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.avatar) && e.instance.props.user.getAvatarURL(null, 4096, true), (e.instance.props.user.getAvatarURL(guildId, 4096) || "").replace(/\.webp|\.gif/, ".png"), member && member.avatar && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(member.avatar) && e.instance.props.user.getAvatarURL(guildId, 4096, true));
-					if (!validUrls.length) return;
-					
-					if (e.returnvalue.length) e.returnvalue.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSeparator, {}));
-					e.returnvalue.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.isValid(validUrls[0].file, "video") ? this.labels.context_videoactions : this.labels.context_imageactions,
-						id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-subitem"),
-						children: this.createSubMenus({
-							instance: e.instance,
-							urls: validUrls,
-							prefix: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_AVATAR
-						})
-					}));
+					this.injectItem(e, [(e.instance.props.user.getAvatarURL(null, 4096) || "").replace(/\.webp|\.gif/, ".png"), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.avatar) && e.instance.props.user.getAvatarURL(null, 4096, true), (e.instance.props.user.getAvatarURL(guildId, 4096) || "").replace(/\.webp|\.gif/, ".png"), member && member.avatar && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(member.avatar) && e.instance.props.user.getAvatarURL(guildId, 4096, true)]);
 				}
 			}
 
 			onGroupDMContextMenu (e) {
-				if (e.instance.props.channel && e.instance.props.channel.isGroupDM() && this.settings.places.groupIcons) this.injectItem(e, );
+				if (e.instance.props.channel && e.instance.props.channel.isGroupDM() && this.settings.places.groupIcons) this.injectItem(e, [(BDFDB.DMUtils.getIcon(e.instance.props.channel.id) || "").replace(/\.webp|\.gif/, ".png")]);
 			}
 
-			onChannelContextMenu (e) {
-				if (e.instance.props.channel && e.instance.props.channel.isGroupDM() && this.settings.places.groupIcons && e.subType == "useChannelLeaveItem") {
-					let validUrls = this.filterUrls((BDFDB.DMUtils.getIcon(e.instance.props.channel.id) || "").replace(/\.webp|\.gif/, ".png"));
-					if (!validUrls.length) return;
-					
-					if (e.returnvalue.length) e.returnvalue.unshift(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSeparator, {}));
-					e.returnvalue.unshift(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.isValid(validUrls[0].file, "video") ? this.labels.context_videoactions : this.labels.context_imageactions,
-						id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-subitem"),
-						children: this.createSubMenus({
-							instance: e.instance,
-							urls: validUrls,
-							prefix: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_AVATAR
-						})
-					}));
-				}
-			}
-
-
-			onNativeContextMenu (e) {
-				if (e.type == "NativeImageContextMenu" && (e.instance.props.href || e.instance.props.src)) this.injectItem(e, [e.instance.props.href || e.instance.props.src]);
+			onImageContextMenu (e) {
+				if (e.instance.props.href || e.instance.props.src) this.injectItem(e, [e.instance.props.href || e.instance.props.src]);
 			}
 
 			onMessageContextMenu (e) {
@@ -774,6 +723,8 @@ module.exports = (_ => {
 				}
 				let [removeParent2, removeIndex2] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "copy-image", group: true});
 				if (removeIndex2 > -1) removeParent2.splice(removeIndex2, 1);
+				let [removeParent3, removeIndex3] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "save-image", group: true});
+				if (removeIndex3 > -1) removeParent3.splice(removeIndex3, 1);
 				
 				let isNative = validUrls.length == 1 && removeIndex > -1;
 				let subMenu = this.createSubMenus({
@@ -1358,7 +1309,8 @@ module.exports = (_ => {
 			}
 
 			processLazyImageZoomable (e) {
-				if (this.settings.detailsSettings.tooltip && e.instance.props.original && e.instance.props.src.indexOf("https://media.discordapp.net/attachments") == 0) {
+				if (!e.instance.props.original || e.instance.props.src.indexOf("https://media.discordapp.net/attachments") != 0) return;
+				if (this.settings.detailsSettings.tooltip) {
 					const attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up: true});
 					if (attachment) {
 						const onMouseEnter = e.returnvalue.props.onMouseEnter;
@@ -1374,6 +1326,21 @@ module.exports = (_ => {
 							return onMouseEnter(...args);
 						}, "Error in onMouseEnter of LazyImageZoomable!");
 					}
+				}
+				if (this.settings.detailsSettings.footnote && (e.instance.props.className || "").indexOf(BDFDB.disCN.embedmedia) == -1 && (e.instance.props.className || "").indexOf(BDFDB.disCN.embedthumbnail) == -1) {
+					e.returnvalue = BDFDB.ReactUtils.createElement("div", {
+						children: [
+							e.returnvalue,
+							BDFDB.ReactUtils.createElement(ImageDetailsComponent, {
+								original: e.instance.props.original,
+								attachment: {
+									height: 0,
+									width: 0,
+									filename: "unknown.png"
+								}
+							})
+						]
+					});
 				}
 			}
 
@@ -1392,26 +1359,28 @@ module.exports = (_ => {
 					if (this.settings.rescaleSettings.messages != "NONE" && !e.instance.props.inline && e.instance.props.type == "attachment" && e.instance.props.containerStyles) e.instance.props.containerStyles.maxWidth = "100%";
 				}
 				else {
-					if (this.settings.general.nsfwMode) {
+					if (this.settings.general.nsfwMode && typeof e.returnvalue.props.children == "function") {
 						let childrenRender = e.returnvalue.props.children;
 						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
-							let children = childrenRender(...args);
-							let attachment = BDFDB.ReactUtils.findValue(children, "attachment");
+							let returnedChildren = childrenRender(...args);
+							let attachment = BDFDB.ReactUtils.findValue(returnedChildren, "attachment");
 							if (attachment && attachment.nsfw) {
-								let [children2, index] = BDFDB.ReactUtils.findParent(children, {name: "SpoilerWarning"});
-								if (index > -1) children2[index] = BDFDB.ReactUtils.createElement("div", {
+								let [children, index] = BDFDB.ReactUtils.findParent(returnedChildren, {name: "SpoilerWarning"});
+								if (index > -1) children[index] = BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.spoilerwarning,
 									children: "NSFW"
 								});
 							}
-							return children;
+							return returnedChildren;
 						}, "Error in Children Render of Spoiler!");
 					}
 				}
 			}
 			
 			processUserThemedBanner (e) {
-				if (this.settings.places.userAvatars && e.instance.props.displayProfile && e.instance.props.displayProfile.banner) e.returnvalue.props.onContextMenu = event => {
+				if (!this.settings.places.userAvatars || !e.instance.props.displayProfile || !e.instance.props.displayProfile.banner) return;
+				let div = BDFDB.ReactUtils.findChild(e.returnvalue, {type: "div"});
+				if (div) div.props.onContextMenu = event => {
 					let validUrls = this.filterUrls(BDFDB.UserUtils.getBanner(e.instance.props.user.id, null, false), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.displayProfile._userProfile.banner) && BDFDB.UserUtils.getBanner(e.instance.props.user.id, null, true), e.instance.props.displayProfile._guildMemberProfile.banner && BDFDB.UserUtils.getBanner(e.instance.props.user.id, e.instance.props.guildId, false), e.instance.props.displayProfile._guildMemberProfile.banner && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.displayProfile._guildMemberProfile.banner) && BDFDB.UserUtils.getBanner(e.instance.props.user.id, e.instance.props.guildId, true));
 					if (validUrls.length) BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 						children: validUrls.length == 1 ? this.createSubMenus({
@@ -1432,24 +1401,7 @@ module.exports = (_ => {
 			}
 			
 			processUserBanner (e) {
-				if (this.settings.places.userAvatars && e.instance.props.displayProfile && e.instance.props.displayProfile.banner) e.returnvalue.props.onContextMenu = event => {
-					let validUrls = this.filterUrls(BDFDB.UserUtils.getBanner(e.instance.props.user.id, null, false), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.displayProfile._userProfile.banner) && BDFDB.UserUtils.getBanner(e.instance.props.user.id, null, true), e.instance.props.displayProfile._guildMemberProfile.banner && BDFDB.UserUtils.getBanner(e.instance.props.user.id, e.instance.props.guildId, false), e.instance.props.displayProfile._guildMemberProfile.banner && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.displayProfile._guildMemberProfile.banner) && BDFDB.UserUtils.getBanner(e.instance.props.user.id, e.instance.props.guildId, true));
-					if (validUrls.length) BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-						children: validUrls.length == 1 ? this.createSubMenus({
-							instance: {},
-							urls: validUrls,
-							prefix: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_BANNER
-						}) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: this.labels.context_imageactions,
-							id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-subitem"),
-							children: this.createSubMenus({
-								instance: {},
-								urls: validUrls,
-								prefix: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_BANNER
-							})
-						})
-					}));
-				};
+				this.processUserThemedBanner(e);
 			}
 			
 			cacheClickedImage (target) {
