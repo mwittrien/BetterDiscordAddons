@@ -6489,7 +6489,7 @@ module.exports = (_ => {
 					return BDFDB.ReactUtils.createElement("div", Object.assign({
 						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN[`menu${(props.color && DiscordClasses[`menu${props.color.toLowerCase()}`] || Internal.DiscordConstants.MenuItemColors.DEFAULT || "").toLowerCase()}`], props.disabled && BDFDB.disCN.menudisabled, props.showDefaultFocus && props.isFocused && BDFDB.disCN.menufocused, !props.showDefaultFocus && BDFDB.disCN.menuhideinteraction),
 						onClick: BDFDB.ReactUtils.useCallback((_ => {
-							if (!controlRef.current || !controlRef.current.activate || !controlRef.current.activate.call(controlRef.current)) props.onClose();
+							if (!controlRef.current || !controlRef.current.activate || !controlRef.current.activate.call(controlRef.current)) typeof props.onClose == "function" && props.onClose();
 						}), [props.onClose]),
 						"aria-disabled": props.disabled,
 						children: [
