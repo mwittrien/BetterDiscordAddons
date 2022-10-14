@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.7.5
+ * @version 2.7.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -26,7 +26,7 @@ module.exports = (_ => {
 		started: true,
 		changeLog: {
 			fixed: {
-				"Menu Slider": "Fixed Issue where Sliders in Context Menus would get stuck"
+				"Library fully funcational again": "I will slowly begin releasing updates for all my Plugins, you can find a list of which Plugins are fixed on my Support Server"
 			}
 		}
 	};
@@ -873,7 +873,7 @@ module.exports = (_ => {
 							name: BDFDB.LanguageUtils.LibraryStringsFormat("send", "Solana"),
 							icon: "PHANTOM",
 							onClick: _ => {
-								BDFDB.LibraryModules.WindowUtils.copy(InternalData.mySolana);
+								BDFDB.LibraryRequires.electron.clipboard.write({text: InternalData.mySolana});
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("clipboard_success", "Phantom Wallet Key"), {
 									type: "success"
 								});
@@ -882,7 +882,7 @@ module.exports = (_ => {
 							name: BDFDB.LanguageUtils.LibraryStringsFormat("send", "Ethereum"),
 							icon: "METAMASK",
 							onClick: _ => {
-								BDFDB.LibraryModules.WindowUtils.copy(InternalData.myEthereum);
+								BDFDB.LibraryRequires.electron.clipboard.write({text: InternalData.myEthereum});
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("clipboard_success", "MetaMask Wallet Key"), {
 									type: "success"
 								});
@@ -8039,6 +8039,7 @@ module.exports = (_ => {
 					],
 					after: [
 						"DiscordTag",
+						"Menu",
 						"UseCopyIdItem",
 						"UserPopoutAvatar",
 						"UserThemedPopoutHeader"
@@ -8246,6 +8247,9 @@ module.exports = (_ => {
 				};
 				Internal.processMemberListItem = function (e) {
 					Internal._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
+				};
+				Internal.processMenu = function (e) {
+					if (!e.instance.props.children || BDFDB.ArrayUtils.is(e.instance.props.children) && !e.instance.props.children.length) Internal.LibraryModules.ContextMenuUtils.closeContextMenu();
 				};
 				Internal.processMessageHeader = function (e) {
 					if (e.instance.props.message && e.instance.props.message.author) {
@@ -8529,7 +8533,7 @@ module.exports = (_ => {
 								BDFDB.NotificationUtils.toast("Translation copied to clipboard", {
 									type: "success"
 								});
-								BDFDB.LibraryModules.WindowUtils.copy(result);
+								Internal.LibraryRequires.electron.clipboard.write({text: result});
 							}
 							else {
 								const callback = translation => {
