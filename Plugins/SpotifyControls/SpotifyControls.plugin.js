@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.8
+ * @version 1.2.9
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -218,7 +218,7 @@ module.exports = (_ => {
 												onClick: _ => {
 													let url = BDFDB.ObjectUtils.get(playbackState, "item.external_urls.spotify") || BDFDB.ObjectUtils.get(playbackState, "context.external_urls.spotify");
 													if (url) {
-														BDFDB.LibraryRequires.electron.clipboard.write({text: url});
+														BDFDB.LibraryModules.WindowUtils.copy(url);
 														BDFDB.NotificationUtils.toast(_this.labels.toast_copyurl_success, {type: "success"});
 													}
 													else BDFDB.NotificationUtils.toast(_this.labels.toast_copyurl_fail, {type: "danger"});
