@@ -407,7 +407,7 @@ module.exports = (_ => {
 
 			doCopyRaw ({messageDiv, message}, action, event) {
 				if (message.content) {
-					BDFDB.LibraryRequires.electron.clipboard.write({text: message.content});
+					BDFDB.LibraryModules.WindowUtils.copy(message.content);
 					if (this.settings.toasts[action]) BDFDB.NotificationUtils.toast(this.formatToast(BDFDB.LanguageUtils.LanguageStrings.COPIED_TEXT), {type: "success"});
 				}
 			}

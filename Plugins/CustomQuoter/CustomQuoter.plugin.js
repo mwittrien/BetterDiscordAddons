@@ -364,7 +364,7 @@ module.exports = (_ => {
 				let text = this.parseQuote(message, channel);
 				if (text && text.length) {
 					if (shift && !this.settings.general.alwaysCopy || !shift && this.settings.general.alwaysCopy || !(BDFDB.DMUtils.isDMChannel(channel.id) || BDFDB.UserUtils.can("SEND_MESSAGES"))) {
-						BDFDB.LibraryRequires.electron.clipboard.write({text: text});
+						BDFDB.LibraryModules.WindowUtils.copy(text);
 						BDFDB.NotificationUtils.toast(this.labels.toast_quotecopied, {type: "success"});
 					}
 					else BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {

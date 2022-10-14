@@ -207,12 +207,12 @@ module.exports = (_ => {
 																BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 																	label: BDFDB.LanguageUtils.LibraryStringsFormat("copy", BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME),
 																	id: BDFDB.ContextMenuUtils.createItemId(_this.name, "copy-name"),
-																	action: _ => BDFDB.LibraryRequires.electron.clipboard.write({text: c.name})
+																	action: _ => BDFDB.LibraryModules.WindowUtils.copy(c.name)
 																}),
 																url && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 																	label: BDFDB.LanguageUtils.LibraryStringsFormat("copy", BDFDB.LanguageUtils.LanguageStrings.SEARCH_ANSWER_HAS_LINK),
 																	id: BDFDB.ContextMenuUtils.createItemId(_this.name, "copy-url"),
-																	action: _ => BDFDB.LibraryRequires.electron.clipboard.write({text: url})
+																	action: _ => BDFDB.LibraryModules.WindowUtils.copy(url)
 																})
 															]
 														}));
@@ -293,12 +293,12 @@ module.exports = (_ => {
 															BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 																label: BDFDB.LanguageUtils.LibraryStringsFormat("copy", BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME),
 																id: BDFDB.ContextMenuUtils.createItemId(_this.name, "copy-name"),
-																action: _ => BDFDB.LibraryRequires.electron.clipboard.write({text: c.name})
+																action: _ => BDFDB.LibraryModules.WindowUtils.copy(c.name)
 															}),
 															url && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 																label: BDFDB.LanguageUtils.LibraryStringsFormat("copy", BDFDB.LanguageUtils.LanguageStrings.SEARCH_ANSWER_HAS_LINK),
 																id: BDFDB.ContextMenuUtils.createItemId(_this.name, "copy-url"),
-																action: _ => BDFDB.LibraryRequires.electron.clipboard.write({text: url})
+																action: _ => BDFDB.LibraryModules.WindowUtils.copy(url)
 															})
 														]
 													}));

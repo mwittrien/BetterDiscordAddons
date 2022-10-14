@@ -188,18 +188,18 @@ module.exports = (_ => {
 											if (message.content || message.attachments.length > 1) {
 												let text = message.content || "";
 												for (let attachment of message.attachments) if (attachment.url) text += ((text ? "\n" : "") + attachment.url);
-												BDFDB.LibraryRequires.electron.clipboard.write({text});
+												BDFDB.LibraryModules.WindowUtils.copy(text);
 											}
 											else if (message.attachments.length == 1 && message.attachments[0].url) {
 												BDFDB.LibraryRequires.request(message.attachments[0].url, {encoding: null}, (error, response, body) => {
 													if (body) {
 														if (BDFDB.LibraryRequires.process.platform === "win32" || BDFDB.LibraryRequires.process.platform === "darwin") {
-															BDFDB.LibraryRequires.electron.clipboard.write({image: BDFDB.LibraryRequires.electron.nativeImage.createFromBuffer(body)});
+															BDFDB.LibraryModules.WindowUtils.copyImage(BDFDB.LibraryRequires.electron.nativeImage.createFromBuffer(body));
 														}
 														else {
 															let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env.USERPROFILE || BDFDB.LibraryRequires.process.env.HOMEPATH || BDFDB.LibraryRequires.process.env.HOME, "personalpinstemp.png");
 															BDFDB.LibraryRequires.fs.writeFileSync(file, body, {encoding: null});
-															BDFDB.LibraryRequires.electron.clipboard.write({image: file});
+															BDFDB.LibraryModules.WindowUtils.copyImage(file);
 															BDFDB.LibraryRequires.fs.unlinkSync(file);
 														}
 													}
