@@ -127,7 +127,7 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RelationshipUtils, "addRelationship", {after: e => {
-					if (e.methodArguments[2] == BDFDB.DiscordConstants.RelationshipTypes.BLOCKED) this.forceUpdateAll();
+					if (e.methodArguments[2] == BDFDB.DiscordConstants.RelationshipTypes.BLOCKED) BDFDB.DiscordUtils.rerenderAll();
 				}});
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RelationshipUtils, "removeRelationship", {after: e => this.forceUpdateAll()});
 				
@@ -195,11 +195,11 @@ module.exports = (_ => {
 					else e.callOriginalMethodAfterwards();
 				}});
 				
-				this.forceUpdateAll();
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 			
 			onStop () {
-				this.forceUpdateAll();
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 
 			getSettingsPanel (collapseStates = {}) {
@@ -239,13 +239,8 @@ module.exports = (_ => {
 			onSettingsClosed () {
 				if (this.SettingsUpdated) {
 					delete this.SettingsUpdated;
-					this.forceUpdateAll();
+					BDFDB.DiscordUtils.rerenderAll();
 				}
-			}
-		
-			forceUpdateAll () {				
-				BDFDB.PatchUtils.forceAllUpdates(this);
-				BDFDB.MessageUtils.rerenderAll();
 			}
 		
 			processMessages (e) {
