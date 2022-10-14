@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.7.6
+ * @version 2.7.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2844,7 +2844,7 @@ module.exports = (_ => {
 						depth++;
 						let result = undefined;
 						if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxDepth && performance.now() - start < maxTime) {
-							let keys = Object.getOwnPropertyNames(instance);
+							let keys = Object.keys(instance);
 							for (let i = 0; result === undefined && i < keys.length; i++) {
 								let key = keys[i];
 								if (key && !blacklist[key]) {
