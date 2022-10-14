@@ -1439,7 +1439,9 @@ module.exports = (_ => {
 			
 			downloadFileAs (url, fallbackUrl, alternativeName) {
 				url = url.startsWith("/assets") ? (window.location.origin + url) : url;
-				BDFDB.LibraryRequires.request(url, {agentOptions: {rejectUnauthorized: false}, encoding: null}, (error, response, body) => {
+				BDFDB.LibraryRequires.request(url, {agentOptions: {rejectUnauthorized: false}, headers: {"Content-Type": "application/json"}}, (error, response, body) => {
+					console.log(body);
+					return;
 					let type = this.isValid(url, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
 					if (error || response.statusCode != 200 || response.headers["content-type"].indexOf("text/html") > -1) {
 						if (fallbackUrl) this.downloadFileAs(fallbackUrl, null, alternativeName);
