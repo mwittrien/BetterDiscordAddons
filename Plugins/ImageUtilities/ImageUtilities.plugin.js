@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.8.9
+ * @version 4.9.0
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1160,6 +1160,12 @@ module.exports = (_ => {
 					if (e.instance.props.resized) {
 						let embed = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedfull, e.node);
 						if (embed) embed.style.setProperty("max-width", "unset", "important");
+						for (let ele of [e.node.style.getPropertyValue("width") && e.node, ...e.node.querySelectorAll("[style*='width:']")].filter(n => n)) {
+							ele.style.setProperty("width", e.instance.props.width + "px");
+							ele.style.setProperty("max-width", e.instance.props.width + "px");
+							ele.style.setProperty("height", e.instance.props.height + "px");
+							ele.style.setProperty("max-height", e.instance.props.height + "px");
+						}
 						if (e.instance.state.readyState != BDFDB.LibraryComponents.ImageComponents.ImageReadyStates.READY) {
 							e.instance.state.readyState = BDFDB.LibraryComponents.ImageComponents.ImageReadyStates.READY;
 							BDFDB.ReactUtils.forceUpdate(e.instance);
