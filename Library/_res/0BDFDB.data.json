@@ -101,6 +101,7 @@
 		"EmojiUtils": {"props": ["translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji"]},
 		"EmojiStateUtils": {"props": ["getURL", "isEmojiDisabled"]},
 		"Env": {"props": ["env"]},
+		"FileRequestUtils": {"props": ["getFileData", "getImageData"]},
 		"FolderSettingsUtils": {"props": ["updateLocale", "updateTheme"], "exported": false, "value": "exports", "map": {
 			"saveGuildFolders": ["guildFolders"]
 		}},
