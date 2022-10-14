@@ -804,7 +804,6 @@ module.exports = (_ => {
 
 			setLabelsByLanguage () {
 				switch (BDFDB.LanguageUtils.getLanguage().id) {
-					
 					case "bg":		// Bulgarian
 						return {
 							noaccount_header:					"Нещо липсва",

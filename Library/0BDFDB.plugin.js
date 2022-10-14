@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.7.4
+ * @version 2.7.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -26,7 +26,7 @@ module.exports = (_ => {
 		started: true,
 		changeLog: {
 			fixed: {
-				"Library fully funcational again": "I will slowly begin releasing updates for all my Plugins, you can find a list of which Plugins are fixed on my Support Server"
+				"Menu Slider": "Fixed Issue where Sliders in Context Menus would get stuck"
 			}
 		}
 	};
@@ -873,7 +873,7 @@ module.exports = (_ => {
 							name: BDFDB.LanguageUtils.LibraryStringsFormat("send", "Solana"),
 							icon: "PHANTOM",
 							onClick: _ => {
-								BDFDB.LibraryRequires.electron.clipboard.write({text: InternalData.mySolana});
+								BDFDB.LibraryModules.WindowUtils.copy(InternalData.mySolana);
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("clipboard_success", "Phantom Wallet Key"), {
 									type: "success"
 								});
@@ -882,7 +882,7 @@ module.exports = (_ => {
 							name: BDFDB.LanguageUtils.LibraryStringsFormat("send", "Ethereum"),
 							icon: "METAMASK",
 							onClick: _ => {
-								BDFDB.LibraryRequires.electron.clipboard.write({text: InternalData.myEthereum});
+								BDFDB.LibraryModules.WindowUtils.copy(InternalData.myEthereum);
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("clipboard_success", "MetaMask Wallet Key"), {
 									type: "success"
 								});
@@ -6827,13 +6827,21 @@ module.exports = (_ => {
 					let positionState = BDFDB.ReactUtils.useState(props.position != null);
 					let animationState = BDFDB.ReactUtils.useState((_ => new Internal.LibraryComponents.Timeout));
 					BDFDB.ReactUtils.useEffect((_ => (_ => animationState[0].stop())), [animationState[0]]);
-					BDFDB.ReactUtils.useEffect(_ => (props.position && T.start(10, (_ => positionState[1](true)))), [props.position, animationState[0]]);
+					BDFDB.ReactUtils.useEffect(_ => (props.position && animationState[0].start(10, (_ => positionState[1](true)))), [props.position, animationState[0]]);
 					const position = typeof props.position == "string" && props.position.replace("window_", "");
-					const animation = (Object.entries(Internal.LibraryComponents.PopoutContainer.Animation).find(n => n[1] == this.props.animation) || ["NONE"])[0].toLowerCase();
+					const animation = (Object.entries(Internal.LibraryComponents.PopoutContainer.Animation).find(n => n[1] == props.animation) || ["NONE"])[0].toLowerCase();
 					return BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.DOMUtils.formatClassName(DiscordClasses[`animationcontainer${position}`] && BDFDB.disCN[`animationcontainer${animation}`], DiscordClasses[`animationcontainer${animation}`] && BDFDB.disCN[`animationcontainer${position}`], positionState[0] && BDFDB.disCN.animationcontainerdidrender),
+						className: BDFDB.DOMUtils.formatClassName(DiscordClasses[`animationcontainer${position}`] && BDFDB.disCN[`animationcontainer${position}`], DiscordClasses[`animationcontainer${animation}`] && BDFDB.disCN[`animationcontainer${animation}`], positionState[0] && BDFDB.disCN.animationcontainerrender),
 						children: props.children
 					})
+				};
+				CustomComponents.PopoutCSSAnimator.Types = {
+					"1": "TRANSLATE",
+					"2": "SCALE",
+					"3": "FADE",
+					"TRANSLATE": "1",
+					"SCALE": "2",
+					"FADE": "3"
 				};
 				
 				CustomComponents.QuickSelect = reactInitialized && class BDFDB_QuickSelect extends Internal.LibraryModules.React.Component {
@@ -8039,7 +8047,6 @@ module.exports = (_ => {
 					],
 					after: [
 						"DiscordTag",
-						"Menu",
 						"UseCopyIdItem",
 						"UserPopoutAvatar",
 						"UserThemedPopoutHeader"
@@ -8247,9 +8254,6 @@ module.exports = (_ => {
 				};
 				Internal.processMemberListItem = function (e) {
 					Internal._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
-				};
-				Internal.processMenu = function (e) {
-					if (!e.instance.props.children || BDFDB.ArrayUtils.is(e.instance.props.children) && !e.instance.props.children.length) Internal.LibraryModules.ContextMenuUtils.closeContextMenu();
 				};
 				Internal.processMessageHeader = function (e) {
 					if (e.instance.props.message && e.instance.props.message.author) {
@@ -8533,7 +8537,7 @@ module.exports = (_ => {
 								BDFDB.NotificationUtils.toast("Translation copied to clipboard", {
 									type: "success"
 								});
-								Internal.LibraryRequires.electron.clipboard.write({text: result});
+								BDFDB.LibraryModules.WindowUtils.copy(result);
 							}
 							else {
 								const callback = translation => {
