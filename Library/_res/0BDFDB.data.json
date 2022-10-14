@@ -5363,6 +5363,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"378752493485817868": 	{"active": true,	"tier": "t3",	"text": "",											"color": "",			"id": "BananaBunny (AnWa)"},
 		"106257021795323904": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "cryo (AlSk)"},
 		"546917684810481665": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "felix (LogR)"},
 		"148234730523852800": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "inbroso (MaEp)"},
