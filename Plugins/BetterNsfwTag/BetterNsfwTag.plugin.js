@@ -2,7 +2,7 @@
  * @name BetterNsfwTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.0
+ * @version 1.3.1
  * @description Adds a more noticeable Tag to NSFW Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -58,10 +58,10 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		return class BetterNsfwTag extends Plugin {
 			onLoad () {
-				this.patchedModules = {
-					after: {
-						ChannelItem: "default"
-					}
+				this.modulePatches = {
+					after: [
+						"ChannelItem"
+					]
 				};
 				
 				this.css = `
