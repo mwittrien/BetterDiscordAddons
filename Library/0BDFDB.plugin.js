@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.7.7
+ * @version 2.7.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -8013,6 +8013,8 @@ module.exports = (_ => {
 					before: [
 						"BlobMask",
 						"EmojiPickerListRow",
+						"Menu",
+						"MessageActionsContextMenu",
 						"MessageHeader",
 						"SearchBar"
 					],
@@ -8226,6 +8228,9 @@ module.exports = (_ => {
 				Internal.processMemberListItem = function (e) {
 					Internal._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
 				};
+				Internal.processMessageActionsContextMenu = function (e) {
+					e.instance.props.updatePosition = _ => {};
+				};
 				Internal.processMessageHeader = function (e) {
 					if (e.instance.props.message && e.instance.props.message.author) {
 						if (e.instance.props.avatar && e.instance.props.avatar.props && typeof e.instance.props.avatar.props.children == "function") {
@@ -8281,8 +8286,11 @@ module.exports = (_ => {
 						let module = e.methodArguments[0] && (e.methodArguments[0].type || e.methodArguments[0].render || e.methodArguments[0]);
 						if (!module || typeof module != "function") return;
 						if (PluginStores.modulePatches.before) for (const type in PluginStores.modulePatches.before) if (Internal.isCorrectModule(module, type, true)) {
-							let children = [...e.methodArguments].slice(2);
-							if (children.length && (!e.methodArguments[1].children || !e.methodArguments[1].children.length)) e.methodArguments[1].children = children;
+							let hasArgumentChildren = false, children = [...e.methodArguments].slice(2);
+							if (children.length && e.methodArguments[1].children === undefined) {
+								hasArgumentChildren = true;
+								e.methodArguments[1].children = children;
+							}
 							for (let plugin of PluginStores.modulePatches.before[type].flat(10)) Internal.initiatePatch(plugin, type, {
 								arguments: e.methodArguments,
 								instance: {props: e.methodArguments[1]},
@@ -8292,6 +8300,11 @@ module.exports = (_ => {
 								methodname: "default",
 								patchtypes: ["before"]
 							});
+							if (hasArgumentChildren) {
+								[].splice.call(e.methodArguments, 2);
+								for (let child of e.methodArguments[1].children) [].push.call(e.methodArguments, child);
+								delete e.methodArguments[1].children;
+							}
 							break;
 						}
 						if (PluginStores.modulePatches.after && module.prototype && typeof module.prototype.render == "function") {
