@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.9.0
+ * @version 4.9.1
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"fixed": {
+			"Last Update": "Hopefully this fixes all bugs this time"
+		}
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -1160,12 +1162,15 @@ module.exports = (_ => {
 					if (e.instance.props.resized) {
 						let embed = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedfull, e.node);
 						if (embed) embed.style.setProperty("max-width", "unset", "important");
+						let embedinline = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedinlinemedia, e.node);
+						if (embedinline) embedinline.style.setProperty("max-width", "unset", "important");
 						for (let ele of [e.node.style.getPropertyValue("width") && e.node, ...e.node.querySelectorAll("[style*='width:']")].filter(n => n)) {
 							ele.style.setProperty("width", e.instance.props.width + "px");
 							ele.style.setProperty("max-width", e.instance.props.width + "px");
 							ele.style.setProperty("height", e.instance.props.height + "px");
 							ele.style.setProperty("max-height", e.instance.props.height + "px");
 						}
+						for (let ele of [e.node.src && e.node, ...e.node.querySelectorAll("[src]")].filter(n => n)) ele.src = ele.src.split("?width")[0].split("?height")[0].split("?size")[0];
 						if (e.instance.state.readyState != BDFDB.LibraryComponents.ImageComponents.ImageReadyStates.READY) {
 							e.instance.state.readyState = BDFDB.LibraryComponents.ImageComponents.ImageReadyStates.READY;
 							BDFDB.ReactUtils.forceUpdate(e.instance);
