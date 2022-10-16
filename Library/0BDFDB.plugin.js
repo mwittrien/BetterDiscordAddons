@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.7.9
+ * @version 2.8.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4120,7 +4120,7 @@ module.exports = (_ => {
 				BDFDB.DiscordUtils.setSetting = function (category, key, value) {
 					if (!category || !key) return;
 					let store = BDFDB.DiscordUtils.getSettingsStore();
-					if (store) store.updateAsync("status", settings => {
+					if (store) store.updateAsync(category, settings => {
 						if (!settings) return;
 						if (!settings[key]) settings[key] = {};
 						if (BDFDB.ObjectUtils.is(value)) for (let k in value) settings[key][k] = value[k];
