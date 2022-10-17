@@ -255,10 +255,12 @@
 			"FormText": [".type", ".DEFAULT"],
 			"FormTitle": [".tag", ".errorSeparator"]
 		}},
+		"GuildBadge": {"strings": ["VERIFIED_AND_PARTNERED", "renderBadge", "flowerStarClassName"], "funcStrings": [".apply("]},
 		"GuildIconComponents": {"strings": ["SMOL", "badgeStrokeColor"], "map": {
 			"Icon": [".apply"],
 			"Sizes": ["\"SMOL\"", "\"SMALLER\""]
 		}},
+		"GuildTooltipMutedText": {"strings": [".muteConfig", "color:\"text-muted\""]},
 		"Header": {"props": ["Sizes", "Tags"]},
 		"Heading": {"strings": ["data-excessive", ".defaultColor"]},
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
@@ -348,6 +350,8 @@
 		"ChannelMembers": {"strings": ["MEMBER_LIST_VIEWED", "getDimensions", "member-"]},
 		"ChannelPins": {"strings": ["PINNED_MESSAGES", "renderEmptyState", "listName"]},
 		"ChannelSidebar": {"strings": ["ACCOUNT_PANEL", "RTC_CONNECTION_PANEL", "ACCOUNT_A11Y_LABEL"]},
+		"ChannelTextAreaContainer": {"strings": ["TOGGLE_EMOJI_POPOUT", "textValue", "richValue"]},
+		"ChannelTextAreaForm": {"strings": ["renderApplicationCommandIcon", "handleTextareaChange", "handleSendMessage"]},
 		"ConnectedLazyImageZoomable": {"strings": ["{isWindowFocused", ",appContext:"]},
 		"DirectMessage": {"strings": ["getRecipientId", "Controller", "handleContextMenu", ".DM"]},
 		"DiscordTag": {"strings": ["hidePersonalInformation", "isVerifiedBot", "botType"]},
