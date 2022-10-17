@@ -114,6 +114,12 @@ module.exports = (_ => {
 				});
 			}
 			render() {
+				const SpotifyShareSong = BdApi.Webpack.getModule((module) => {
+				if (module.dispatchToLastSubscribed !== undefined) {
+				return module.emitter.listeners('SHAKE_APP').length > 0
+				}
+				return false
+				}, { searchExports: true })
 				let socketDevice = BDFDB.LibraryStores.SpotifyStore.getActiveSocketAndDevice();
 				if (this.props.song) this.props.noDevice = false;
 				if (!socketDevice || this.props.noDevice) return null;
@@ -218,7 +224,8 @@ module.exports = (_ => {
 												onClick: _ => {
 													let url = BDFDB.ObjectUtils.get(playbackState, "item.external_urls.spotify") || BDFDB.ObjectUtils.get(playbackState, "context.external_urls.spotify");
 													if (url) {
-														BDFDB.LibraryModules.WindowUtils.copy(url);
+														//BDFDB.LibraryModules.WindowUtils.copy(url);
+														SpotifyShareSong.dispatch('INSERT_TEXT',{ plainText: url })
 														BDFDB.NotificationUtils.toast(_this.labels.toast_copyurl_success, {type: "success"});
 													}
 													else BDFDB.NotificationUtils.toast(_this.labels.toast_copyurl_fail, {type: "danger"});
@@ -1092,7 +1099,7 @@ module.exports = (_ => {
 							nodevice_text:						"Discord lost the connection to the last device that was playing Spotify, open Spotify on the device again and manually resume the song",
 							restricted_device:					"Can not control Spotify while playing Music on restricted Device",
 							toast_copyurl_fail:					"Song URL could not be copied to clipboard",
-							toast_copyurl_success:				"Song URL was copied to clipboard"
+							toast_copyurl_success:				"Song URL was pasted into message box! Enjoy sharing it :3"
 						};
 				}
 			}
