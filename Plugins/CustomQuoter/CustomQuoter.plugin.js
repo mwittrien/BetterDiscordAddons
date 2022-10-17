@@ -2,7 +2,7 @@
  * @name CustomQuoter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.0
+ * @version 1.3.1
  * @description Brings back the Quote Feature and allows you to set your own Quote Formats
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -56,7 +56,7 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var _this, ChannelTextAreaForm;
+		var _this, ChannelTextAreaContainer;
 		var formats = {}, format = null;
 		
 		const PreviewMessageComponent = class PreviewMessage extends BdApi.React.Component {
@@ -98,10 +98,14 @@ module.exports = (_ => {
 			onLoad () {
 				_this = this;
 				
-				this.patchedModules = {
-					before: {
-						ChannelTextAreaForm: "render"
-					}
+				this.modulePatches = {
+					before: [
+						"ChannelTextAreaContainer"
+					],
+					after: [
+						"MessageActionsContextMenu",
+						"MessageToolbar"
+					]
 				};
 				
 				this.defaults = {
@@ -313,7 +317,7 @@ module.exports = (_ => {
 				}
 			}
 			
-			onMessageOptionContextMenu (e) {
+			processMessageActionsContextMenu (e) {
 				if (e.instance.props.message && e.instance.props.channel) {
 					let [quoteChildren, quoteIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "quote"});
 					if (quoteIndex == -1) {
@@ -333,7 +337,7 @@ module.exports = (_ => {
 				}
 			}
 		
-			onMessageOptionToolbar (e) {
+			processMessageToolbar (e) {
 				if ((e.instance.props.expanded || !this.settings.general.holdShiftToolbar) && e.instance.props.message && e.instance.props.channel) {
 					let quoteButton = BDFDB.ReactUtils.findChild(e.returnvalue, {key: "quote"});
 					if (!quoteButton) {
@@ -356,8 +360,8 @@ module.exports = (_ => {
 				}
 			}
 		
-			processChannelTextAreaForm (e) {
-				ChannelTextAreaForm = e.instance;
+			processChannelTextAreaContainer (e) {
+				if (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY) ChannelTextAreaContainer = e.instance
 			}
 			
 			quote (channel, message, shift) {
@@ -368,7 +372,7 @@ module.exports = (_ => {
 						BDFDB.NotificationUtils.toast(this.labels.toast_quotecopied, {type: "success"});
 					}
 					else BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {
-						plainText: [this.settings.general.autoAddNewLine && ChannelTextAreaForm && ChannelTextAreaForm.state.textValue && !this.isNewLine(ChannelTextAreaForm.state.textValue, true) && !this.isNewLine(text, false) && "\n", text, this.settings.general.autoAddNewLine && !this.isNewLine(text, true) && "\n"].filter(n => n).join("")
+						plainText: [this.settings.general.autoAddNewLine && ChannelTextAreaContainer && ChannelTextAreaContainer.props.textValue && !this.isNewLine(ChannelTextAreaContainer.props.textValue, true) && !this.isNewLine(text, false) && "\n", text, this.settings.general.autoAddNewLine && !this.isNewLine(text, true) && "\n"].filter(n => n).join("")
 					});
 				}
 			}
