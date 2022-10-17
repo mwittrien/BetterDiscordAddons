@@ -2094,6 +2094,7 @@
 		"embedfull": ["Embed", "embedFull"],
 		"embedgiftag": ["Embed", "embedGIFTag"],
 		"embedgrid": ["Embed", "grid"],
+		"embedgridcontainer": ["Embed", "gridContainer"],
 		"embedhasthumbnail": ["Embed", "hasThumbnail"],
 		"embedhiddenspoiler": ["Embed", "hiddenSpoiler"],
 		"embediframe": ["Embed", "embedIframe"],
