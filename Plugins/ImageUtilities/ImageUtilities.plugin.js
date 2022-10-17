@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.9.1
+ * @version 4.9.2
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -15,7 +15,7 @@
 module.exports = (_ => {
 	const changeLog = {
 		"fixed": {
-			"Last Update": "Hopefully this fixes all bugs this time"
+			"Last Update": "Hopefully this fixes all bugs this time, really now"
 		}
 	};
 	
@@ -1160,10 +1160,10 @@ module.exports = (_ => {
 			processLazyImage (e) {
 				if (e.node) {
 					if (e.instance.props.resized) {
-						let embed = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedfull, e.node);
-						if (embed) embed.style.setProperty("max-width", "unset", "important");
-						let embedinline = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedinlinemedia, e.node);
-						if (embedinline) embedinline.style.setProperty("max-width", "unset", "important");
+						for (let selector of ["embedfull", "embedinlinemedia", "embedgridcontainer"]) {
+							let parent = BDFDB.DOMUtils.getParent(BDFDB.dotCN[selector], e.node);
+							if (parent) parent.style.setProperty("max-width", "unset", "important");
+						}
 						for (let ele of [e.node.style.getPropertyValue("width") && e.node, ...e.node.querySelectorAll("[style*='width:']")].filter(n => n)) {
 							ele.style.setProperty("width", e.instance.props.width + "px");
 							ele.style.setProperty("max-width", e.instance.props.width + "px");
