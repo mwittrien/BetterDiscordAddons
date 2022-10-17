@@ -166,33 +166,24 @@ module.exports = (_ => {
 				let muteTimeout;
 				let channelId = BDFDB.LibraryModules.RTCConnectionUtils.getChannelId();
 				let connectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryStores.SortedVoiceStateStore.getVoiceStates(BDFDB.LibraryModules.RTCConnectionUtils.getGuildId()), n => n && n.channelId == channelId && !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.userId));
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {before: e => {
 					let type = e.methodArguments[0];
-					if (this.settings.notifications.voiceChat && (type == "disconnect" || type == "user_join" || type == "user_leave" || type == "user_moved")) {
-						channelId = BDFDB.LibraryModules.RTCConnectionUtils.getChannelId();
-						if (channelId) {
-							let allConnectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryStores.SortedVoiceStateStore.getVoiceStates(BDFDB.LibraryModules.RTCConnectionUtils.getGuildId()), n => n && n.channelId == channelId);
-							let unblockedUsers = BDFDB.ObjectUtils.filter(allConnectedUsers, n => n && !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.userId));
-							let unmutedBlockedUsers = BDFDB.ObjectUtils.toArray(allConnectedUsers).filter(n => n && BDFDB.LibraryStores.RelationshipStore.isBlocked(n.userId) && !BDFDB.LibraryStores.MediaEngineStore.isLocalMute(n.userId));
-							if (unmutedBlockedUsers.length) {
-								BDFDB.TimeUtils.clear(muteTimeout);
-								muteTimeout = BDFDB.TimeUtils.timeout(_ => {
-									while (unmutedBlockedUsers.length) BDFDB.LibraryModules.MediaEngineUtils.toggleLocalMute(unmutedBlockedUsers.pop().userId);
-								}, 1000);
-							}
-							if (Object.keys(unblockedUsers).length == Object.keys(connectedUsers).length) {
-								e.stopOriginalMethodCall();
-								e.methodArguments[0] = null;
-							}
-							else e.callOriginalMethodAfterwards();
-							connectedUsers = unblockedUsers;
+					if (!this.settings.notifications.voiceChat || !["disconnect", "user_join", "user_leave", "user_moved"].includes(type)) return;
+					channelId = BDFDB.LibraryModules.RTCConnectionUtils.getChannelId();
+					if (channelId) {
+						let allConnectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryStores.SortedVoiceStateStore.getVoiceStates(BDFDB.LibraryModules.RTCConnectionUtils.getGuildId()), n => n && n.channelId == channelId);
+						let unblockedUsers = BDFDB.ObjectUtils.filter(allConnectedUsers, n => n && !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.userId));
+						let unmutedBlockedUsers = BDFDB.ObjectUtils.toArray(allConnectedUsers).filter(n => n && BDFDB.LibraryStores.RelationshipStore.isBlocked(n.userId) && !BDFDB.LibraryStores.MediaEngineStore.isLocalMute(n.userId));
+						if (unmutedBlockedUsers.length) {
+							BDFDB.TimeUtils.clear(muteTimeout);
+							muteTimeout = BDFDB.TimeUtils.timeout(_ => {
+								while (unmutedBlockedUsers.length) BDFDB.LibraryModules.MediaEngineUtils.toggleLocalMute(unmutedBlockedUsers.pop().userId);
+							}, 1000);
 						}
-						else {
-							connectedUsers = {};
-							e.callOriginalMethodAfterwards();
-						}
+						if (Object.keys(unblockedUsers).length == Object.keys(connectedUsers).length) e.methodArguments[0] = null;
+						connectedUsers = unblockedUsers;
 					}
-					else e.callOriginalMethodAfterwards();
+					else connectedUsers = {};
 				}});
 				
 				BDFDB.DiscordUtils.rerenderAll();
