@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.8.0
+ * @version 2.8.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -25,9 +25,6 @@ module.exports = (_ => {
 	BDFDB = {
 		started: true,
 		changeLog: {
-			fixed: {
-				"Menu Slider": "Fixed Issue where Sliders in Context Menus would get stuck"
-			}
 		}
 	};
 	
@@ -1960,13 +1957,12 @@ module.exports = (_ => {
 							let muteConfig = Internal.LibraryStores.UserGuildSettingsStore.getMuteConfig(config.guild.id);
 							
 							let children = [typeof newText == "function" ? newText() : newText].flat(10).filter(n => typeof n == "string" || BDFDB.ReactUtils.isValidElement(n));
-							
 							BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(Internal.LibraryModules.React.Fragment, {
 								children: [
 									BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltiprow, BDFDB.disCN.tooltiprowguildname),
 										children: [
-											BDFDB.ReactUtils.createElement(Internal.LibraryComponents.GuildComponents.Badge, {
+											BDFDB.ReactUtils.createElement(Internal.LibraryComponents.GuildBadge, {
 												guild: config.guild,
 												size: BDFDB.StringUtils.cssValueToNumber(Internal.DiscordClassModules.TooltipGuild.iconSize),
 												className: BDFDB.disCN.tooltiprowicon
@@ -1994,7 +1990,7 @@ module.exports = (_ => {
 										size: Internal.LibraryComponents.TextElement.Sizes.SIZE_12,
 										color: Internal.LibraryComponents.TextElement.Colors.MUTED,
 										children: BDFDB.LanguageUtils.LanguageStrings.VOICE_CHANNEL_MUTED
-									}) : BDFDB.ReactUtils.createElement(Internal.LibraryComponents.GuildComponents.MutedText, {
+									}) : BDFDB.ReactUtils.createElement(Internal.LibraryComponents.GuildTooltipMutedText, {
 										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipmutetext),
 										muteConfig: muteConfig
 									}))
@@ -6251,8 +6247,9 @@ module.exports = (_ => {
 						let stageChannels = (channels.VOCAL || []).filter(c => c.channel.type == Internal.DiscordConstants.ChannelTypes.GUILD_STAGE_VOICE && Internal.LibraryStores.StageInstanceStore.getStageInstanceByChannel(c.channel.id)).map(c => c.channel.id);
 						let streamOwnerIds = Internal.LibraryStores.ApplicationStreamingStore.getAllApplicationStreams().filter(app => app.guildId === this.props.guild.id).map(app => app.ownerId) || [];
 						let streamOwners = streamOwnerIds.map(ownerId => Internal.LibraryStores.UserStore.getUser(ownerId)).filter(n => n);
-						let connectedVoiceUsers = BDFDB.ObjectUtils.toArray(Internal.LibraryStores.SortedVoiceStateStore.getVoiceStates(this.props.guild.id)).map(state => voiceChannels.includes(state.channelId) && state.channelId != this.props.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && Internal.LibraryStores.UserStore.getUser(state.userId)).filter(n => n);
-						let connectedStageUsers = BDFDB.ObjectUtils.toArray(Internal.LibraryStores.SortedVoiceStateStore.getVoiceStates(this.props.guild.id)).map(state => stageChannels.includes(state.channelId) && state.channelId != this.props.guild.afkChannelId && !streamOwnerIds.includes(state.userId) && Internal.LibraryStores.UserStore.getUser(state.userId)).filter(n => n);
+						let voiceStates = BDFDB.ObjectUtils.toArray(Internal.LibraryStores.SortedVoiceStateStore.getVoiceStates(this.props.guild.id)).flat(10);
+						let connectedVoiceUsers = voiceStates.map(n => voiceChannels.includes(n.voiceState.channelId) && n.voiceState.channelId != this.props.guild.afkChannelId && !streamOwnerIds.includes(n.voiceState.userId) && Internal.LibraryStores.UserStore.getUser(n.voiceState.userId)).filter(n => n);
+						let connectedStageUsers = voiceStates.map(n => stageChannels.includes(n.voiceState.channelId) && n.voiceState.channelId != this.props.guild.afkChannelId && !streamOwnerIds.includes(n.voiceState.userId) && Internal.LibraryStores.UserStore.getUser(n.voiceState.userId)).filter(n => n);
 						let children = [
 							!connectedStageUsers.length ? null : BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.tooltiprow,

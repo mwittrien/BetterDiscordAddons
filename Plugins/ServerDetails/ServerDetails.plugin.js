@@ -71,6 +71,11 @@ module.exports = (_ => {
 			}
 			render() {
 				if (_this.settings.general.onlyShowOnShift && !this.props.shiftKey) return null;
+				let owner = BDFDB.LibraryStores.UserStore.getUser(this.props.guild.ownerId);
+				if (!owner && !this.state.fetchedOwner) {
+					this.state.fetchedOwner = true;
+					BDFDB.LibraryModules.UserProfileUtils.getUser(this.props.guild.ownerId).then(_ => BDFDB.ReactUtils.forceUpdate(this));
+				}
 				if (_this.settings.amounts.tooltipDelay && !this.state.delayed) {
 					BDFDB.TimeUtils.timeout(_ => {
 						this.state.delayed = true;
@@ -78,11 +83,6 @@ module.exports = (_ => {
 						BDFDB.ReactUtils.forceUpdate(this);
 					}, _this.settings.amounts.tooltipDelay * 1000);
 					return null;
-				}
-				let owner = BDFDB.LibraryStores.UserStore.getUser(this.props.guild.ownerId);
-				if (!owner && !this.state.fetchedOwner) {
-					this.state.fetchedOwner = true;
-					BDFDB.LibraryModules.UserProfileUtils.getUser(this.props.guild.ownerId).then(_ => BDFDB.ReactUtils.forceUpdate(this));
 				}
 				let src = this.props.guild.getIconURL(4096, this.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(this.props.guild.icon));
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
