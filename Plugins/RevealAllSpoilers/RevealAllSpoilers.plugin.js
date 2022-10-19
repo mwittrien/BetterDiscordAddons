@@ -2,7 +2,7 @@
  * @name RevealAllSpoilers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.9
+ * @version 1.1.0
  * @description Allows you to reveal all Spoilers within a Message/Status by holding the Ctrl Key and clicking a Spoiler
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -58,10 +58,10 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		return class RevealAllSpoilers extends Plugin {
 			onLoad () {
-				this.patchedModules = {
-					after: {
-						Spoiler: "render"
-					}
+				this.modulePatches = {
+					after: [
+						"Spoiler"
+					]
 				};
 			}
 			
