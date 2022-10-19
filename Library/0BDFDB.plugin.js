@@ -2203,6 +2203,7 @@ module.exports = (_ => {
 							if (!patches[type]) {
 								const originalMethod = module[methodName].__originalFunction || module[methodName];
 								const internalData = (Object.entries(InternalData.LibraryModules).find(n => n && n[0] && LibraryModules[n[0]] == module && n[1] && n[1]._originalModule && n[1]._mappedItems[methodName]) || [])[1];
+								const name = internalData && internalData[0] || config.name || (module.constructor ? (module.constructor.displayName || module.constructor.name) : "module");
 								const mainCancel = BdApi.Patcher[type](Internal.name, internalData && internalData._originalModule || module, internalData && internalData._mappedItems[methodName] || methodName, function(...args) {
 									const data = {
 										component: module,
@@ -8304,7 +8305,7 @@ module.exports = (_ => {
 										name: type,
 										methodname: patchFunction,
 										patchtypes: ["after"]
-									})});
+									})}, {name: type});
 								}
 								break;
 							}
@@ -8320,7 +8321,7 @@ module.exports = (_ => {
 										name: type,
 										methodname: patchType,
 										patchtypes: ["after"]
-									})});
+									})}, {name: type});
 								}
 								break;
 							}
@@ -8337,7 +8338,7 @@ module.exports = (_ => {
 								name: type,
 								methodname: "type",
 								patchtypes: ["after"]
-							})}, {noCache: true});
+							})}, {name: type, noCache: true});
 							break;
 						}
 					}
