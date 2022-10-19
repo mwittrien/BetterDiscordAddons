@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.8.2
+ * @version 2.8.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2205,19 +2205,26 @@ module.exports = (_ => {
 								const internalData = (Object.entries(InternalData.LibraryModules).find(n => n && n[0] && LibraryModules[n[0]] == module && n[1] && n[1]._originalModule && n[1]._mappedItems[methodName]) || [])[1];
 								const name = internalData && internalData[0] || config.name || (module.constructor ? (module.constructor.displayName || module.constructor.name) : "module");
 								const mainCancel = BdApi.Patcher[type](Internal.name, internalData && internalData._originalModule || module, internalData && internalData._mappedItems[methodName] || methodName, function(...args) {
+									let callInsteadAfterwards = false, stopInsteadCall = false;
 									const data = {
 										component: module,
 										methodArguments: args[1],
 										returnValue: args[2],
 										originalMethod: originalMethod,
-										originalMethodName: methodName,
-										callOriginalMethod: _ => data.returnValue = data.originalMethod.apply(this && this !== window ? this : {}, data.methodArguments)
+										originalMethodName: methodName
 									};
+									if (type == "instead") {
+										data.callOriginalMethod = _ => data.returnValue = data.originalMethod.apply(this && this !== window ? this : {}, data.methodArguments);
+										data.callOriginalMethodAfterwards = _ => (callInsteadAfterwards = true, data.returnValue);
+										data.stopOriginalMethodCall = _ => stopInsteadCall = true;
+									}
 									if (args[0] != module) data.instance = args[0] || {props: args[1][0]};
 									for (let priority in patches[type].plugins) for (let id in BDFDB.ObjectUtils.sort(patches[type].plugins[priority])) {
 										let tempReturn = BDFDB.TimeUtils.suppress(patches[type].plugins[priority][id], `"${type}" callback of ${methodName} in ${name}`, {name: patches[type].plugins[priority][id].pluginName, version: patches[type].plugins[priority][id].pluginVersion})(data);
 										if (type != "before" && tempReturn !== undefined) data.returnValue = tempReturn;
 									}
+									if (type == "instead" && callInsteadAfterwards && !stopInsteadCall) BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${methodName} in ${name}`, {name: "Discord"})();
+									
 									if (type != "before") return (methodName == "render" || methodName == "default") && data.returnValue === undefined ? null : data.returnValue;
 								});
 								patches[type] = {plugins: {}, cancel: _ => {
