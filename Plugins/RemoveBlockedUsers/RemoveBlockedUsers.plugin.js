@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.4
+ * @version 1.5.5
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,10 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		fixed: {
+			"Audio": "Fixed voice channels sounds not playing",
+			"Now Playing": "Fixed noew playing item popup fixating itself to the top left",
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -103,7 +106,6 @@ module.exports = (_ => {
 						"ChannelPins",
 						"DirectMessage",
 						"MemberListItem",
-						"NowPlayingItem",
 						"PrivateChannel",
 						"Reactions",
 						"RecentMentions",
@@ -180,7 +182,7 @@ module.exports = (_ => {
 								while (unmutedBlockedUsers.length) BDFDB.LibraryModules.MediaEngineUtils.toggleLocalMute(unmutedBlockedUsers.pop().userId);
 							}, 1000);
 						}
-						if (Object.keys(unblockedUsers).length == Object.keys(connectedUsers).length) e.methodArguments[0] = null;
+						if (Object.keys(unblockedUsers).length != Object.keys(connectedUsers).length) e.methodArguments[1] = 0;
 						connectedUsers = unblockedUsers;
 					}
 					else connectedUsers = {};
@@ -412,20 +414,12 @@ module.exports = (_ => {
 				if (!this.settings.places.activity) return;
 				let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {name: "NowPlayingHeader"});
 				if (index > -1) for (let child of children) if (child && child.props && child.props.party) {
-					if (!e.returnvalue) {
-						if (child.props.party.priorityMembers) {
-							child.props.party.priorityMembers = child.props.party.priorityMembers.filter(n => !n || !n.user || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.user.id));
-							if (!child.props.party.priorityMembers.length) child.props.party.priorityMembers.push({user: new BDFDB.DiscordObjects.User({id: 0, username: ""})});
-						}
-						if (child.props.party.partiedMembers) child.props.party.partiedMembers = child.props.party.partiedMembers.filter(n => !n || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id));
-						if (child.props.party.voiceChannels) for (let i in child.props.party.voiceChannels) child.props.party.voiceChannels[i] = Object.assign({}, child.props.party.voiceChannels[i], {members: child.props.party.voiceChannels[i].members.filter(n => !n || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id))});
+					if (child.props.party.priorityMembers) {
+						child.props.party.priorityMembers = child.props.party.priorityMembers.filter(n => !n || !n.user || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.user.id));
+						if (!child.props.party.priorityMembers.length) child.props.party.priorityMembers.push({user: new BDFDB.DiscordObjects.User({id: 0, username: ""})});
 					}
-					else {
-						if (child.props.party.priorityMembers && child.props.party.priorityMembers[0].user && child.props.party.priorityMembers[0].user.id == 0) {
-							e.returnvalue = null;
-							break;
-						}
-					}
+					if (child.props.party.partiedMembers) child.props.party.partiedMembers = child.props.party.partiedMembers.filter(n => !n || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id));
+					if (child.props.party.voiceChannels) for (let i in child.props.party.voiceChannels) child.props.party.voiceChannels[i] = Object.assign({}, child.props.party.voiceChannels[i], {members: child.props.party.voiceChannels[i].members.filter(n => !n || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id))});
 				}
 			}
 			
