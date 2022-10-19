@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.9.2
+ * @version 4.9.3
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -15,7 +15,7 @@
 module.exports = (_ => {
 	const changeLog = {
 		"fixed": {
-			"Last Update": "Hopefully this fixes all bugs this time, really now"
+			"Last Update": "Hopefully this fixes all bugs this time, really now, promise"
 		}
 	};
 	
@@ -1071,14 +1071,15 @@ module.exports = (_ => {
 							BDFDB.TimeUtils.clear(viewedImageTimeout);
 							let channel = BDFDB.LibraryStores.ChannelStore.getChannel(viewedImage.channelId);
 							BDFDB.LibraryModules.APIUtils.get({
-								url: channel && channel.guild_id ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(channel && channel.guild_id) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(channel.id),
+								url: BDFDB.DiscordConstants.Endpoints.MESSAGES(channel.id),
 								query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
 									channel_id: channel && channel.guild_id ? (BDFDB.ChannelUtils.isThread(channel) && channel.parent_id || channel.id) : null,
 									has: "image",
 									include_nsfw: true,
+									limit: 100,
 									around: viewedImage.messageId
 								})
-							}).catch(_ => {
+							}).catch(err => {
 								cachedImages = {
 									channelId: viewedImage.channelId,
 									firstReached: null,
@@ -1094,7 +1095,7 @@ module.exports = (_ => {
 								if (!viewedImage) return;
 								let messages = [], index = -1;
 								if (result) {
-									messages = result.body.messages.flat(10).reverse();
+									messages = result.body.flat(10).reverse();
 									cachedImages = {all: this.filterMessagesForImages(messages, viewedImage)};
 									index = this.getImageIndex(cachedImages.all, viewedImage);
 								}
@@ -1507,7 +1508,7 @@ module.exports = (_ => {
 			}
 			
 			filterMessagesForImages (messages, img) {
-				return messages.filter(m => m && m.hit && m.channel_id == img.channelId && (m.id == firstViewedImage.messageId || m.id == img.messageId || m.embeds.length || m.attachments.filter(a => !a.filename.startsWith("SPOILER_")).length)).map(m => [m.attachments, m.embeds].flat(10).filter(n => n).map(i => Object.assign({messageId: m.id, channelId: img.channelId}, i, i.image, i.thumbnail, i.video))).flat(10);
+				return messages.filter(m => m && m.channel_id == img.channelId && (m.id == firstViewedImage.messageId || m.id == img.messageId || m.embeds.length || m.attachments.filter(a => !a.filename.startsWith("SPOILER_")).length)).map(m => [m.attachments, m.embeds].flat(10).filter(n => n).map(i => Object.assign({messageId: m.id, channelId: img.channelId}, i, i.image, i.thumbnail, i.video))).flat(10);
 			}
 			
 			switchImages (modalInstance, offset) {
@@ -1521,29 +1522,26 @@ module.exports = (_ => {
 				if (offset > 0 && !cachedImages.lastReached && cachedImages.index == (cachedImages.amount - 1)) {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(viewedImage.channelId);
 					BDFDB.LibraryModules.APIUtils.get({
-						url: channel && channel.guild_id ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(channel && channel.guild_id) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(channel.id),
+						url: BDFDB.DiscordConstants.Endpoints.MESSAGES(channel.id),
 						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
 							channel_id: channel && channel.guild_id ? (BDFDB.ChannelUtils.isThread(channel) && channel.parent_id || channel.id) : null,
 							has: "image",
 							include_nsfw: true,
-							min_id: (BigInt(cachedImages.newestId) - BigInt(1)).toString()
+							limit: 100,
+							after: (BigInt(cachedImages.newestId) - BigInt(1)).toString()
 						})
 					}).then(result => {
 						if (result && viewedImage) {
-							const messages = result.body.messages.flat(10).reverse();
-							const newCachedImages = this.filterMessagesForImages(messages, viewedImage);
-							const lastOldIndex = this.getImageIndex(newCachedImages, cachedImages.all[cachedImages.all.length-1]);
-							if (lastOldIndex > -1) {
-								cachedImages = Object.assign(cachedImages, {all: [].concat(cachedImages.all, newCachedImages.slice(lastOldIndex + 1))});
-								const index = this.getImageIndex(cachedImages.all, viewedImage);
-								cachedImages = Object.assign(cachedImages, {
-									channelId: viewedImage.channelId,
-									index: index,
-									amount: cachedImages.all.length,
-									newestId: messages[messages.length-1] ? messages[messages.length-1].id : null,
-									lastReached: index == (cachedImages.all.length - 1)
-								});
-							}
+							const messages = result.body.flat(10).reverse();
+							Object.assign(cachedImages, {all: BDFDB.ArrayUtils.removeCopies([].concat(cachedImages.all, this.filterMessagesForImages(messages, viewedImage)))});
+							const index = this.getImageIndex(cachedImages.all, viewedImage);
+							cachedImages = Object.assign(cachedImages, {
+								channelId: viewedImage.channelId,
+								index: index,
+								amount: cachedImages.all.length,
+								newestId: messages[messages.length-1] ? messages[messages.length-1].id : null,
+								lastReached: index == (cachedImages.all.length - 1)
+							});
 							BDFDB.ReactUtils.forceUpdate(modalInstance);
 						}
 					});
@@ -1551,29 +1549,26 @@ module.exports = (_ => {
 				if (offset < 0 && !cachedImages.firstReached && cachedImages.index == 0) {
 					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(viewedImage.channelId);
 					BDFDB.LibraryModules.APIUtils.get({
-						url: channel && channel.guild_id ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(channel && channel.guild_id) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(channel.id),
+						url: BDFDB.DiscordConstants.Endpoints.MESSAGES(channel.id),
 						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
 							channel_id: channel && channel.guild_id ? (BDFDB.ChannelUtils.isThread(channel) && channel.parent_id || channel.id) : null,
 							has: "image",
 							include_nsfw: true,
-							max_id: (BigInt(cachedImages.oldestId) + BigInt(1)).toString()
+							limit: 100,
+							before: (BigInt(cachedImages.oldestId) + BigInt(1)).toString()
 						})
 					}).then(result => {
 						if (result && viewedImage) {
-							const messages = result.body.messages.flat(10).reverse();
-							const newCachedImages = this.filterMessagesForImages(messages, viewedImage);
-							const firstOldIndex = this.getImageIndex(newCachedImages, cachedImages.all[0]);
-							if (firstOldIndex > -1) {
-								cachedImages = Object.assign(cachedImages, {all: [].concat(newCachedImages.slice(0, firstOldIndex), cachedImages.all)});
-								const index = this.getImageIndex(cachedImages.all, viewedImage);
-								cachedImages = Object.assign(cachedImages, {
-									channelId: viewedImage.channelId,
-									firstReached: index == 0,
-									oldestId: messages[0] ? messages[0].id : null,
-									index: index,
-									amount: cachedImages.all.length
-								});
-							}
+							const messages = result.body.flat(10).reverse();
+							Object.assign(cachedImages, {all: BDFDB.ArrayUtils.removeCopies([].concat(this.filterMessagesForImages(messages, viewedImage), cachedImages.all))});
+							const index = this.getImageIndex(cachedImages.all, viewedImage);
+							cachedImages = Object.assign(cachedImages, {
+								channelId: viewedImage.channelId,
+								firstReached: index == 0,
+								oldestId: messages[0] ? messages[0].id : null,
+								index: index,
+								amount: cachedImages.all.length
+							});
 							BDFDB.ReactUtils.forceUpdate(modalInstance);
 						}
 					});
