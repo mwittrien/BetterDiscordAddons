@@ -2,8 +2,8 @@
  * @name QuickMention
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.4
- * @description Adds a Quick Mention Button to the Message Options Bar
+ * @version 1.0.5
+ * @description Adds a Mention Button to the Message Options Bar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
@@ -57,13 +57,19 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		return class QuickMention extends Plugin {
-			onLoad () {}
+			onLoad () {
+				this.modulePatches = {
+					after: [
+						"MessageToolbar"
+					]
+				};
+			}
 			
 			onStart () {}
 			
 			onStop () {}
 		
-			onMessageOptionToolbar (e) {
+			processMessageToolbar (e) {
 				if (e.instance.props.message.author.id != BDFDB.UserUtils.me.id && (BDFDB.UserUtils.can("SEND_MESSAGES") || e.instance.props.channel && (e.instance.props.channel.isDM() || e.instance.props.channel.isGroupDM()))) {
 					e.returnvalue.props.children.splice(1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						key: "mention",
