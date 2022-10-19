@@ -299,38 +299,38 @@
 .backgroundFlash-1X5jVs[style*="88, 101, 242"] {
 	background-color: var(--message-background-flash) !important;
 }
-.backgroundFlash-1X5jVs[style*="background-color: rgb(88, 101, 242)"],
-.backgroundFlash-1X5jVs[style*="background-color: rgba(88, 101, 242, 1"] {
+.backgroundFlash-1X5jVs[style*="background-color: rgb(148, 156, 247)"],
+.backgroundFlash-1X5jVs[style*="background-color: rgba(148, 156, 247, 1"] {
 	--message-background-flash: rgba(var(--accentcolor), 1);
 }
-.backgroundFlash-1X5jVs[style*="background-color: rgba(88, 101, 242, 0.9"] {
+.backgroundFlash-1X5jVs[style*="background-color: rgba(148, 156, 247, 0.9"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.9);
 }
-.backgroundFlash-1X5jVs[style*="background-color: rgba(88, 101, 242, 0.8"] {
+.backgroundFlash-1X5jVs[style*="background-color: rgba(148, 156, 247, 0.8"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.8);
 }
-.backgroundFlash-1X5jVs[style*="background-color: rgba(88, 101, 242, 0.7"] {
+.backgroundFlash-1X5jVs[style*="background-color: rgba(148, 156, 247, 0.7"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.7);
 }
-.backgroundFlash-1X5jVs[style*="background-color: rgba(88, 101, 242, 0.6"] {
+.backgroundFlash-1X5jVs[style*="background-color: rgba(148, 156, 247, 0.6"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.6);
 }
-.backgroundFlash-1X5jVs[style*="background-color: rgba(88, 101, 242, 0.5"] {
+.backgroundFlash-1X5jVs[style*="background-color: rgba(148, 156, 247, 0.5"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.5);
 }
-.backgroundFlash-1X5jVs[style*="background-color: rgba(88, 101, 242, 0.4"] {
+.backgroundFlash-1X5jVs[style*="background-color: rgba(148, 156, 247, 0.4"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.4);
 }
-.backgroundFlash-1X5jVs[style*="background-color: rgba(88, 101, 242, 0.3"] {
+.backgroundFlash-1X5jVs[style*="background-color: rgba(148, 156, 247, 0.3"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.3);
 }
-.backgroundFlash-1X5jVs[style*="background-color: rgba(88, 101, 242, 0.2"] {
+.backgroundFlash-1X5jVs[style*="background-color: rgba(148, 156, 247, 0.2"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.2);
 }
-.backgroundFlash-1X5jVs[style*="background-color: rgba(88, 101, 242, 0.1"] {
+.backgroundFlash-1X5jVs[style*="background-color: rgba(148, 156, 247, 0.1"] {
 	--message-background-flash: rgba(var(--accentcolor), 0.1);
 }
-.backgroundFlash-1X5jVs[style*="background-color: rgba(88, 101, 242, 0)"] {
+.backgroundFlash-1X5jVs[style*="background-color: rgba(148, 156, 247, 0)"] {
 	--message-background-flash: rgba(var(--accentcolor), 0);
 }
 
@@ -2497,14 +2497,6 @@ html .newBadge-1LcB6t[style*="background-color: hsl(235, "] {
 }
 .colorBrand-2hgZSE .button-1iHNQ2:hover {
 	color: rgb(var(--accentcolor));
-}
-.notice-2HEN-u powercord-announcement[style*="background-color: rgb(88, 101, 242)"],
-.notice-2HEN-u powercord-announcement[style*="background-color: rgb(114, 137, 218)"] {
-	background-color: rgb(var(--accentcolor)) !important;
-}
-.notice-2HEN-u powercord-announcement[style*="background-color: rgb(88, 101, 242)"] .button-1iHNQ2:hover,
-.notice-2HEN-u powercord-announcement[style*="background-color: rgb(114, 137, 218)"] .button-1iHNQ2:hover {
-	color: rgb(var(--accentcolor)) !important;
 }
 .notice-12Koq- {											/* preview notice											*/
 	background: #000000 linear-gradient(90deg, rgba(var(--accentcolor), 0.5), rgba(var(--accentcolor), 0.5));
