@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.1
+ * @version 2.4.2
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -397,7 +397,9 @@ module.exports = (_ => {
 					after: [
 						"ChannelTextAreaButtons",
 						"Embed",
-						"MessageContent"
+						"MessageActionsContextMenu",
+						"MessageContent",
+						"MessageToolbar"
 					]
 				};
 
@@ -549,11 +551,7 @@ module.exports = (_ => {
 				}
 			}
 			
-			onNativeContextMenu (e) {
-				this.injectSearchItem(e);
-			}
-			
-			onSlateContextMenu (e) {
+			onTextAreaContextMenu (e) {
 				this.injectSearchItem(e);
 			}
 			
@@ -565,6 +563,9 @@ module.exports = (_ => {
 					children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "search-translation"),
+							icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+								icon: translateIcon
+							}),
 							disabled: isTranslating,
 							label: this.labels.context_translator,
 							persisting: true,
@@ -572,14 +573,14 @@ module.exports = (_ => {
 								let item = BDFDB.DOMUtils.getParent(BDFDB.dotCN.menuitem, event.target);
 								if (item) {
 									let createTooltip = _ => {
-										BDFDB.TooltipUtils.create(item, [
+										BDFDB.TooltipUtils.create(item, !foundTranslation ? this.labels.toast_translating_failed : [
 											`${BDFDB.LanguageUtils.LibraryStrings.from} ${foundInput.name}:`,
 											text,
 											`${BDFDB.LanguageUtils.LibraryStrings.to} ${foundOutput.name}:`,
 											foundTranslation
 										].map(n => BDFDB.ReactUtils.createElement("div", {children: n})), {
 											type: "right",
-											color: "black",
+											color: foundTranslation ? "black" : "red",
 											className: "googletranslate-tooltip"
 										});
 									};
@@ -597,6 +598,7 @@ module.exports = (_ => {
 												foundTranslation = translation, foundInput = input, foundOutput = output;
 												createTooltip();
 											}
+											else createTooltip();
 										});
 									}
 								}
@@ -606,7 +608,7 @@ module.exports = (_ => {
 				}
 			}
 			
-			onMessageOptionContextMenu (e) {
+			processMessageActionsContextMenu (e) {
 				if (e.instance.props.message && e.instance.props.channel) {
 					let translated = !!translatedMessages[e.instance.props.message.id];
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
@@ -622,7 +624,7 @@ module.exports = (_ => {
 				}
 			}
 		
-			onMessageOptionToolbar (e) {
+			processMessageToolbar (e) {
 				if (e.instance.props.expanded && e.instance.props.message && e.instance.props.channel) {
 					let translated = !!translatedMessages[e.instance.props.message.id];
 					e.returnvalue.props.children.unshift();
