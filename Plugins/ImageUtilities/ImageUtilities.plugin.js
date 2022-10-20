@@ -1451,21 +1451,7 @@ module.exports = (_ => {
 			
 			downloadFileAs (url, fallbackUrl, alternativeName) {
 				url = url.startsWith("/assets") ? (window.location.origin + url) : url;
-				BDFDB.LibraryRequires.request(url, {agentOptions: {rejectUnauthorized: false}, headers: {"Content-Type": "application/json"}}, (error, response, body) => {
-					let type = this.isValid(url, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
-					if (error || response.statusCode != 200 || response.headers["content-type"].indexOf("text/html") > -1) {
-						if (fallbackUrl) this.downloadFileAs(fallbackUrl, null, alternativeName);
-						else BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", ""), {type: "danger"});
-					}
-					else {
-						let hrefURL = window.URL.createObjectURL(new Blob([Buffer.from(body)], {type: response.headers["content-type"]}));
-						let tempLink = document.createElement("a");
-						tempLink.href = hrefURL;
-						tempLink.download = `${(alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35)}.${this.getFileExtenstion(response.headers["content-type"].split("/").pop().split("+")[0])}`;
-						tempLink.click();
-						window.URL.revokeObjectURL(hrefURL);
-					}
-				});
+				BDFDB.LibraryModules.WindowUtils.saveImage(url.startsWith("/assets") ? (window.location.origin + url) : url);
 			}
 			
 			copyFile (url) {
