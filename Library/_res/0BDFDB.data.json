@@ -399,6 +399,7 @@
 		"SearchResult": {"strings": [".onJump", "message:", "handleMessageClick"]},
 		"SearchResults": {"strings": ["SEARCH_ERROR", "emptyResultsText", "isSearching"]},
 		"SearchResultsInner": {"strings": ["SEARCH_HIDE_BLOCKED_MESSAGES", "totalResults", "\"search-result-\""]},
+		"SearchResultsPagination": {"strings": [".pageLength", ".changePage", "maxVisiblePages"]},
 		"SettingsView": {"strings": ["tabBarItemContainer", "PROFILE_CUSTOMIZATION", "badgeCount"]},
 		"Shakeable": {"protos": ["shake", "getDefaultAnimProps", "stop"]},
 		"Spoiler": {"strings": ["revealSpoiler", ".onReveal"]},
