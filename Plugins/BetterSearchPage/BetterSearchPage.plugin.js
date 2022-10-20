@@ -108,7 +108,6 @@ module.exports = (_ => {
 			processSearchResultsInner (e) {
 				if (!e.instance.props.search) return;
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SearchResultsPagination"});
-				console.log(children, index);
 				if (index == -1) return;
 				let currentPage = parseInt(Math.floor(e.instance.props.search.offset / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) + 1;
 				let maxPage = e.instance.props.search.totalResults > 5000 ? parseInt(Math.ceil(5000 / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) : parseInt(Math.ceil(e.instance.props.search.totalResults / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE));
