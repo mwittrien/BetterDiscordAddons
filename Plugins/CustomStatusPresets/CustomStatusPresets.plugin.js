@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.3
+ * @version 1.1.4
  * @description Allows you to save Custom Statuses as Quick Select
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -226,14 +226,13 @@ module.exports = (_ => {
 			onLoad () {
 				_this = this;
 				
-				this.patchedModules = {
-					before: {
-						Menu: "default"
-					},
-					after: {
-						Account: "render",
-						CustomStatusModal: "render"
-					}
+				this.modulePatches = {
+					before: [
+						"Menu"
+					],
+					after: [
+						"CustomStatusModal"
+					]
 				};
 				
 				this.css = `
@@ -404,9 +403,10 @@ module.exports = (_ => {
 			}
 			
 			processCustomStatusModal (e) {
+				let footer = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ModalFooter"});
+				if (!footer) return;
 				let id = BDFDB.NumberUtils.generateId(Object.keys(presets));
-				let footer = BDFDB.ReactUtils.findChild(e.returnvalue, {name: ["ModalFooter", "Footer"]});
-				if (footer) footer.props.children.splice(1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+				footer.props.children.splice(1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 					color: BDFDB.disCN.modalcancelbutton,
 					look: BDFDB.LibraryComponents.Button.Looks.LINK,
 					onClick: event => {
