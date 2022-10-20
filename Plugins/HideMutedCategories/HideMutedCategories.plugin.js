@@ -2,7 +2,7 @@
  * @name HideMutedCategories
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.0
+ * @version 1.1.1
  * @description Hides muted Categories, if muted Channels are hidden
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -65,13 +65,13 @@ module.exports = (_ => {
 		
 		return class HideMutedCategories extends Plugin {
 			onLoad () {
-				this.patchedModules = {
-					before: {
-						ChannelList: "render"
-					},
-					after: {
-						ChannelList: "render"
-					}
+				this.modulePatches = {
+					before: [
+						"ChannelsList"
+					],
+					after: [
+						"ChannelsList"
+					]
 				};
 				
 				this.patchPriority = 9;
@@ -85,7 +85,7 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 
-			processChannelList (e) {
+			processChannelsList (e) {
 				if (!e.instance.props.guild || !e.instance.props.guildChannels.hideMutedChannels) return;
 				
 				if (!e.returnvalue) {
@@ -102,29 +102,37 @@ module.exports = (_ => {
 					let topBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelsunreadbartop]]});
 					if (topBar) {
 						let topIsVisible = topBar.props.isVisible;
-						topBar.props.isVisible = (...args) => {
+						topBar.props.isVisible = BDFDB.TimeUtils.suppress((...args) => {
 							args[2] = args[2].filter(id => !this.isCategoryMuted(e.instance.props.guildId, id));
 							return args[2].some(id => BDFDB.LibraryStores.ReadStateStore.hasUnread(id) || BDFDB.LibraryStores.ReadStateStore.getMentionCount(id)) ? topIsVisible(...args) : true;
-						};
+						}, "Error in isVisible of Top Bar in ChannelsList!", this);
 					}
 					let bottomBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelsunreadbarbottom]]});
 					if (bottomBar) {
 						let bottomIsVisible = bottomBar.props.isVisible;
-						bottomBar.props.isVisible = (...args) => {
+						bottomBar.props.isVisible = BDFDB.TimeUtils.suppress((...args) => {
 							args[2] = args[2].filter(id => !this.isCategoryMuted(e.instance.props.guildId, id));
 							return args[2].some(id => BDFDB.LibraryStores.ReadStateStore.hasUnread(id) || BDFDB.LibraryStores.ReadStateStore.getMentionCount(id)) ? bottomIsVisible(...args) : true;
-						};
+						}, "Error in isVisible of Bottom Bar in ChannelsList!", this);
 					}
 					let tree = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: n => n && n.props && typeof n.props.children == "function"});
-					if (tree) {
-						let childrenRender = tree.props.children;
-						tree.props.children = BDFDB.TimeUtils.suppress((...args) => {
-							let children = childrenRender(...args);
-							this.patchList(e.instance.props.guild.id, BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.selectedChannelId), BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.selectedVoiceChannelId), children);
-							return children;
-						}, "", this);
-					}
-					else this.patchList(e.instance.props.guild.id, BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.selectedChannelId), BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.selectedVoiceChannelId), e.returnvalue);
+					if (!tree) return;
+					let childrenRender = tree.props.children;
+					tree.props.children = BDFDB.TimeUtils.suppress((...args) => {
+						let children = childrenRender(...args);
+						let list = BDFDB.ReactUtils.findChild(children, {props: [["className", BDFDB.disCN.channelsscroller]]});
+						if (list) {
+							let selectedChannel = BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.selectedChannelId);
+							let selectedVoiceChannel = BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.selectedVoiceChannelId);
+							let renderSection = list.props.renderSection;
+							list.props.renderSection = BDFDB.TimeUtils.suppress((...args2) => {
+								let section = renderSection(...args2);
+								if (section && section.props && section.props.channel && BDFDB.LibraryStores.UserGuildSettingsStore.isChannelMuted(e.instance.props.guild.id, section.props.channel.id) && !(selectedChannel && selectedChannel.parent_id == section.props.channel.id) && !(selectedVoiceChannel && selectedVoiceChannel.parent_id == section.props.channel.id) && BDFDB.ObjectUtils.toArray(BDFDB.LibraryStores.ChannelStore.getMutableGuildChannelsForGuild(e.instance.props.guild.id)).filter(n => n.parent_id == section.props.channel.id && BDFDB.LibraryStores.ReadStateStore.getMentionCount(n.id) > 0).length == 0) return null;
+								else return section;
+							}, "Error in renderSection of ChannelsList!", this);
+						}
+						return children;
+					}, "Error in Child Render of ChannelsList!", this);
 				}
 			}
 			
@@ -135,15 +143,6 @@ module.exports = (_ => {
 			}
 		
 			patchList (guildId, selectedChannel, selectedVoiceChannel, returnvalue) {
-				let list = BDFDB.ReactUtils.findChild(returnvalue, {props: [["className", BDFDB.disCN.channelsscroller]]});
-				if (list) {
-					let renderSection = list.props.renderSection;
-					list.props.renderSection = (...args) => {
-						let section = renderSection(...args);
-						if (section && section.props && section.props.channel && BDFDB.LibraryStores.UserGuildSettingsStore.isChannelMuted(guildId, section.props.channel.id) && !(selectedChannel && selectedChannel.parent_id == section.props.channel.id) && !(selectedVoiceChannel && selectedVoiceChannel.parent_id == section.props.channel.id) && BDFDB.ObjectUtils.toArray(BDFDB.LibraryStores.ChannelStore.getMutableGuildChannelsForGuild(guildId)).filter(n => n.parent_id == section.props.channel.id && BDFDB.LibraryStores.ReadStateStore.getMentionCount(n.id) > 0).length == 0) return null;
-						else return section;
-					};
-				}
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
