@@ -420,6 +420,7 @@
 		"UserPopoutInfo": {"strings": [".hasCustomStatus", ".premiumGuildSince", "openPremiumSettings"]},
 		"UserProfileModalHeader": {"strings": [".friendToken", ".additionalActionsIcon", "onMessage"]},
 		"UserSummaryItem": {"protos": ["renderMoreUsers", "renderUsers", "renderIcon"]},
+		"UserSettingsAppearance": {"protos": ["renderTheme", "renderDisplayMode", "renderMessageGroupSpacingSlider"]},
 		"UserThemedBanner": {"strings": [".showPremiumBadgeUpsell", ".isPremiumAtLeast", ".SETTINGS"]},
 		"UserThemedPopoutBody": {"strings": [".customStatusActivity", ".canDM", ".hidePersonalInformation"]},
 		"UserThemedPopoutHeader": {"strings": [".avatarPositionPremiumNoBanner", "syncProfileThemeWithUserTheme"]},
