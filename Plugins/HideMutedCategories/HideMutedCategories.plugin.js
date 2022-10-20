@@ -141,9 +141,6 @@ module.exports = (_ => {
 				let channel = BDFDB.LibraryStores.ChannelStore.getChannel(channelId);
 				return channel && channel.parent_id && BDFDB.LibraryStores.UserGuildSettingsStore.isChannelMuted(guildId, channel.parent_id);
 			}
-		
-			patchList (guildId, selectedChannel, selectedVoiceChannel, returnvalue) {
-			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
 })();
