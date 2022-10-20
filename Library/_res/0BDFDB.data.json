@@ -336,6 +336,7 @@
 		"GuildHeaderContextMenu": "guild-header-popout",
 		"ImageContextMenu": "image-context",
 		"MessageContextMenu": "message",
+		"TextAreaContextMenu": "textarea-context",
 		"ThreadContextMenu": "thread-context",
 		"UserContextMenu": "user-context",
 		"UserSettingsCogContextMenu": "user-settings-cog"
@@ -397,7 +398,7 @@
 		"SearchBar": {"strings": [").inputRef", ".containerRef", ".handleOnChange"]},
 		"SearchResult": {"strings": [".onJump", "message:", "handleMessageClick"]},
 		"SearchResults": {"strings": ["SEARCH_ERROR", "emptyResultsText", "isSearching"]},
-		"SearchResultsInner": {"strings": ["SEARCH_HIDE_BLOCKED_MESSAGES", "totalResults", "SEARCH_PAGE_SIZE"]},
+		"SearchResultsInner": {"strings": ["SEARCH_HIDE_BLOCKED_MESSAGES", "totalResults", "\"search-result-\""]},
 		"SettingsView": {"strings": ["tabBarItemContainer", "PROFILE_CUSTOMIZATION", "badgeCount"]},
 		"Shakeable": {"protos": ["shake", "getDefaultAnimProps", "stop"]},
 		"Spoiler": {"strings": ["revealSpoiler", ".onReveal"]},
