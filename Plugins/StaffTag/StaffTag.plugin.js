@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.6
+ * @version 1.5.7
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -88,15 +88,16 @@ module.exports = (_ => {
 		
 		return class StaffTag extends Plugin {
 			onLoad () {
-				this.patchedModules = {
-					after: {
-						MemberListItem: "render",
-						MessageUsername: "default",
-						VoiceUser: "render",
-						NameTag: "default",
-						UsernameSection: "default",
-						UserPopoutInfo: "UserPopoutInfo"
-					}
+				
+				this.modulePatches = {
+					after: [
+						"MemberListItem",
+						"MessageUsername",
+						"NameTag",
+						"UsernameSection",
+						"UserPopoutInfo",
+						"VoiceUser"
+					]
 				};
 				
 				this.defaults = {
@@ -270,7 +271,7 @@ module.exports = (_ => {
 
 			processMessageUsername (e) {
 				if (!e.instance.props.message || !this.settings.tagPlaces.chat) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "Popout"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => n && n.props && typeof n.props.renderPopout == "function"});
 				if (index == -1) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
 				let userType = this.getUserType(author, e.instance.props.message.channel_id);
