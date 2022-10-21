@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.7.3
+ * @version 3.7.4
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -62,7 +62,7 @@ module.exports = (_ => {
 		const removeAllKey = "REMOVE_ALL_BDFDB_DEVILBRO_DO_NOT_COPY";
 		const defaultDevice = "default";
 		
-		var currentDevice = defaultDevice, createdAudios = {}, repatchIncoming;
+		var currentDevice = defaultDevice, createdAudios = {};
 		
 		let types = {};
 		
@@ -299,7 +299,7 @@ module.exports = (_ => {
 					}
 					else e.callOriginalMethodAfterwards();
 				}});
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "createSound", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, ["createSound", "createSoundpackSound"], {after: e => {
 					let type = e.methodArguments[0];
 					if (type && choices[type]) {
 						let audio = new WebAudioSound(type);
@@ -311,18 +311,6 @@ module.exports = (_ => {
 
 				this.loadAudios();
 				this.loadChoices();
-				
-				let callListenerModule = BDFDB.ModuleUtils.findByProperties("handleRingUpdate");
-				if (callListenerModule) {
-					callListenerModule.terminate();
-					BDFDB.PatchUtils.patch(this, callListenerModule, "handleRingUpdate", {instead: e => {
-						if (BDFDB.LibraryStores.CallStore.getCalls().filter(call => call.ringing.length > 0 && BDFDB.LibraryStores.SortedVoiceStateStore.getCurrentClientVoiceChannelId() === call.channelId).length > 0 && !BDFDB.LibraryStores.NotificationSettingsStore.isSoundDisabled("call_calling") && !BDFDB.LibraryStores.StreamerModeStore.disableSounds) {
-							createdAudios["call_calling"].loop();
-						}
-						else createdAudios["call_calling"].stop();
-					}});
-					callListenerModule.initialize();
-				}
 				
 				this.forceUpdateAll();
 			}
@@ -672,9 +660,8 @@ module.exports = (_ => {
 			}
 		
 			forceUpdateAll () {
-				repatchIncoming = true;
-				createdAudios["call_calling"] = BDFDB.LibraryModules.SoundUtils.createSound("call_calling");
 				volumes = BDFDB.DataUtils.get(this, "volumes");
+				if (BDFDB.LibraryStores.SoundpackStore) BDFDB.LibraryStores.SoundpackStore.emitChange();
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.DiscordUtils.rerenderAll();
 			}

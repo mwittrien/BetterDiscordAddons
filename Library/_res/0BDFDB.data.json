@@ -183,6 +183,7 @@
 		"SoundParser": {"strings": ["discodo", "ddr-down", "mute"]},
 		"SoundUtils": {"strings": [".play()", ".disableSounds", "getSoundpack"], "nonStrings": ["createElement"], "exported": false, "value": "exports", "map": {
 			"createSound": ["return new"],
+			"createSoundpackSound": [");return"],
 			"playSound": ["getSoundpack"]
 		}},
 		"SortedGuildUtils": {"props": ["getSortedGuilds", "getFlattenedGuildIds"]},
