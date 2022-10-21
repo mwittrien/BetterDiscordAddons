@@ -395,6 +395,7 @@
 		"PrivateChannel": {"strings": ["LEAVE_GROUP_DM_MANAGED_BODY", "handleCloseButtonMouseDown", "handleLeaveGroup"]},
 		"PrivateChannelRecipients": {"strings": [".membersWrap", "recipients"]},
 		"PrivateChannelsList": {"strings": ["privateChannelIds", "privateChannelRecipientsInviteButtonIcon"]},
+		"QuickMessage": {"strings": ["QUICK_DM_USER", ".NORMAL"]},
 		"Reactions": {"strings": ["disableTransitionAppear", "reactionsCount:", "message.reactions.length"]},
 		"Reactor": {"strings": ["currentUser cannot be undefined", "reactorDefault"]},
 		"ReactorsComponent": {"strings": ["hasMore", "emoji", "spinnerMore"]},

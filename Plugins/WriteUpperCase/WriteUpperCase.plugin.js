@@ -2,7 +2,7 @@
  * @name WriteUpperCase
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.6
+ * @version 1.3.7
  * @description Changes the first Letter of each Sentence in Message Inputs to Uppercase
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -16,7 +16,7 @@ module.exports = (_ => {
 	const changeLog = {
 		
 	};
-
+	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		constructor (meta) {for (let key in meta) this[key] = meta[key];}
 		getName () {return this.name;}
@@ -96,14 +96,14 @@ module.exports = (_ => {
 					}
 				};
 				
-				this.patchedModules = {
-					before: {
-						ChannelEditorContainer: "render"
-					},
-					after: {
-						ChannelTextAreaButtons: "type",
-						QuickMessage: "default"
-					}
+				this.modulePatches = {
+					before: [
+						"ChannelTextAreaEditor"
+					],
+					after: [
+						"ChannelTextAreaButtons",
+						"QuickMessage"
+					]
 				};
 				
 				this.css = `
@@ -158,14 +158,10 @@ module.exports = (_ => {
 					BDFDB.PatchUtils.forceAllUpdates(this);
 				}
 			}
-		
-			forceUpdateAll () {
-				BDFDB.PatchUtils.forceAllUpdates(this);
-			}
 
-			processChannelEditorContainer (e) {
+			processChannelTextAreaEditor (e) {
 				let type = e.instance.props.type.analyticsName || e.instance.props.type || "";
-				if (e.instance.props.textValue && e.instance.state.focused && (!type || this.settings.places[type] || !this.defaults.places[type]) && (!this.settings.general.addQuickToggle || channelBlacklist.indexOf(e.instance.props.channel.id) == -1)) {
+				if (e.instance.props.textValue && e.instance.props.focused && (!type || this.settings.places[type] || !this.defaults.places[type]) && (!this.settings.general.addQuickToggle || channelBlacklist.indexOf(e.instance.props.channel.id) == -1)) {
 					let string = e.instance.props.textValue;
 					let newString = this.parse(string);
 					if (string != newString) {
