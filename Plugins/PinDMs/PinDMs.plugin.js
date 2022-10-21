@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.4
+ * @version 1.9.5
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -81,15 +81,22 @@ module.exports = (_ => {
 					}
 				};
 				
-				this.patchedModules = {
-					before: {
-						PrivateChannelsList: "render"
-					},
-					after: {
-						PrivateChannelsList: "render",
-						PrivateChannel: ["render", "componentDidMount"],
-						DirectMessage: ["render", "componentDidMount", "componentWillUnmount"]
-					}
+				this.modulePatches = {
+					before: [
+						"PrivateChannelsList"
+					],
+					after: [
+						"DirectMessage",
+						"PrivateChannel",
+						"PrivateChannelsList"
+					],
+					componentDidMount: [
+						"DirectMessage",
+						"PrivateChannel"
+					],
+					componentWillUnmount: [
+						"DirectMessage"
+					]
 				};
 				
 				this.css = `
@@ -157,7 +164,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.PrivateChannelReadStateStore, "getUnreadPrivateChannelIds", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DirectMessageUnreadStore, "getUnreadPrivateChannelIds", {after: e => {
 					let sortedRecents = this.sortAndUpdate("guildList");
 					if (sortedRecents.length) {
 						const dms = [];
@@ -252,13 +259,18 @@ module.exports = (_ => {
 			}
 
 			onUserContextMenu (e) {
-				if (e.instance.props.channel && !e.instance.props.channel.guild_id && e.subType == "useCloseDMItem") e.returnvalue.unshift(this.createItem(e.instance.props.channel.id));
+				if (e.instance.props.channel && !e.instance.props.channel.guild_id) {
+					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "close-dm"});
+					children.splice(index > -1 ? index : children.length, 0, this.createItem(e.instance.props.channel.id));
+				}
 			}
 
-			onChannelContextMenu (e) {
-				if (e.instance.props.channel && !e.instance.props.channel.guild_id && e.instance.props.channel.isGroupDM() && e.subType == "useChannelMarkAsReadItem") {
-					if (e.returnvalue.length > 0) e.returnvalue.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSeparator, {}));
-					e.returnvalue.push(this.createItem(e.instance.props.channel.id));
+			onGroupDMContextMenu (e) {
+				if (e.instance.props.channel) {
+					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "change-icon", group: true});
+					children.splice(index > -1 ? index + 1 : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+						children: this.createItem(e.instance.props.channel.id)
+					}));
 				}
 			}
 

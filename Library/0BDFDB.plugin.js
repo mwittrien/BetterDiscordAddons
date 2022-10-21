@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.8.3
+ * @version 2.8.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4724,6 +4724,7 @@ module.exports = (_ => {
 					handleMouseEnter(e) {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);}
 					handleMouseLeave(e) {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);}
 					getBadgeWidthForValue(e) {return e < 10 ? 16 : e < 100 ? 22 : 30}
+					getBadgeCountString(e) {return e < 1e3 ? "" + e : Math.min(Math.floor(e/1e3), 9) + "k+"}
 					render() {
 						return BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.badgenumberbadge, this.props.shape && Internal.LibraryComponents.Badges.BadgeShapes[this.props.shape] || Internal.LibraryComponents.Badges.BadgeShapes.ROUND),
@@ -4735,7 +4736,7 @@ module.exports = (_ => {
 							onContextMenu: this.handleContextMenu.bind(this),
 							onMouseEnter: this.handleMouseEnter.bind(this),
 							onMouseLeave: this.handleMouseLeave.bind(this),
-							children: Internal.LibraryComponents.Badges.getBadgeCountString(this.props.count)
+							children: this.getBadgeCountString(this.props.count)
 						});
 					}
 				};
