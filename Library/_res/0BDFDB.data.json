@@ -388,6 +388,7 @@
 		"MessageToolbar": {"strings": ["Messages.MORE", "hasDeveloperMode", "openPopoutType"]},
 		"ModalCarousel": {"strings": [".gotoNext", "currentIndex", "gotoPrevThrottled"]},
 		"ModalFooter": {"strings": [".footerSeparator", ".separator", "Direction.HORIZONTAL_REVERSE"]},
+		"NameTag": {"strings": ["invertColor:", "usernameClass", "discriminatorClass"]},
 		"NowPlayingHeader": {"strings": ["ACTIVITY_FEED_NOW_PLAYING_HEADER", "partiedMembers"]},
 		"NowPlayingItem": {"strings": [".wrapper", "padded:"]},
 		"PanelButton": {"strings": ["Masks.PANEL_BUTTON"]},
