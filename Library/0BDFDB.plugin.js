@@ -8231,7 +8231,6 @@ module.exports = (_ => {
 					if (index > -1) children[index] = Internal._processAvatarRender(e.instance.props.user, children[index], e.instance) || children[index];
 				};
 				Internal.processUserThemedPopoutAvatar = function (e) {
-					console.log(e);
 					if (!e.instance.props.user) return;
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutthemedavatarwrapper]]});
 					if (index > -1) children[index] = Internal._processAvatarRender(e.instance.props.user, children[index], e.instance) || children[index];
