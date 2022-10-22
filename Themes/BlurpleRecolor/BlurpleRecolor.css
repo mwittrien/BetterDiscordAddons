@@ -2397,6 +2397,10 @@ html .newBadge-1LcB6t[style*="background-color: hsl(235, "] {
 	color: rgb(var(--accentcolor)) !important;
 }
 
+#app-mount .tag-2N0orS {
+	background: rgb(255, 255, 255) linear-gradient(45deg, rgb(var(--accentcolor)), rgba(var(--accentcolor), 0.5));
+}
+
 .verified-1Jv_7P {											/* verifiedbadge											*/
 	color: rgb(var(--accentcolor));
 }
