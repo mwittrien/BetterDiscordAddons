@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.8.5
+ * @version 2.8.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1091,7 +1091,7 @@ module.exports = (_ => {
 					libraryCSS = css;
 				
 					const backupObj = getBackup(dataFileName, dataFilePath);
-					if (backupObj.backup && backupObj.hashIsSame) parseData(backupObj.backup);
+					if (backupObj.backup && backupObj.hashIsSame || true) parseData(backupObj.backup);
 					else request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/${dataFileName}`, (e, r, b) => {
 						if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryData(), 10000);
 						if (!e && b && r.statusCode == 200) {
@@ -8002,7 +8002,7 @@ module.exports = (_ => {
 						"DiscordTag",
 						"UseCopyIdItem",
 						"UserPopoutAvatar",
-						"UserThemedPopoutHeader"
+						"UserThemedPopoutAvatar"
 					],
 					componentDidMount: [
 						"Account",
@@ -8230,18 +8230,11 @@ module.exports = (_ => {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutavatarwrapper]]});
 					if (index > -1) children[index] = Internal._processAvatarRender(e.instance.props.user, children[index], e.instance) || children[index];
 				};
-				Internal.processUserThemedPopoutHeader = function (e) {
+				Internal.processUserThemedPopoutAvatar = function (e) {
+					console.log(e);
 					if (!e.instance.props.user) return;
-					let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: n => n && typeof n.type == "function" && n.type.toString().indexOf(".avatarSrc") > -1});
-					if (avatar) {
-						let type = avatar.type;
-						avatar.type = BDFDB.TimeUtils.suppress((...args) => {
-							let returnValue = type(...args);
-							let [children, index] = BDFDB.ReactUtils.findParent(returnValue, {props: [["className", BDFDB.disCN.userpopoutthemedavatarwrapper]]});
-							if (index > -1) children[index] = Internal._processAvatarRender(e.instance.props.user, children[index], e.instance) || children[index];
-							return returnValue;
-						}, "Error in Type Render of UserThemePopoutAvatar!");
-					}
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutthemedavatarwrapper]]});
+					if (index > -1) children[index] = Internal._processAvatarRender(e.instance.props.user, children[index], e.instance) || children[index];
 				};
 				
 				MyReact.instanceKey = Object.keys(document.querySelector(BDFDB.dotCN.app) || {}).some(n => n.startsWith("__reactInternalInstance")) ? "_reactInternalFiber" : "_reactInternals";
