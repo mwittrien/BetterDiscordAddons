@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.3
+ * @version 1.1.4
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -148,7 +148,7 @@ module.exports = (_ => {
 				this.modulePatches = {
 					after: [
 						"UserPopoutBody",
-						"UserThemedPopoutBody"
+						"UserRolesSection"
 					]
 				};
 				
@@ -169,7 +169,6 @@ module.exports = (_ => {
 					${BDFDB.dotCN._showconnectionsconnections} {
 						display: flex;
 						flex-wrap: wrap;
-						margin-bottom: 6px;
 					}
 					${BDFDB.dotCN._showconnectionsconnection} {
 						position: relative;
@@ -239,17 +238,21 @@ module.exports = (_ => {
 				});
 			}
 
-			processUserThemedPopoutBody (e) {
+			processUserRolesSection (e) {
 				if (!e.instance.props.user || e.instance.props.user.isNonUserBot()) return;
 				if (!loadedUsers[e.instance.props.user.id] && !requestedUsers[e.instance.props.user.id]) {
 					requestedUsers[e.instance.props.user.id] = true;
 					queuedInstances[e.instance.props.user.id] = [].concat(queuedInstances[e.instance.props.user.id]).filter(n => n);
 					BDFDB.LibraryModules.UserProfileUtils.fetchProfile(e.instance.props.user.id);
 				}
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "UserBioSection"});
-				if (index > -1) children.splice(this.settings.general.placeAtTop ? 1 : children.length - 2, 0, BDFDB.ReactUtils.createElement(UserConnectionsComponents, {
+				let connections = BDFDB.ReactUtils.createElement(UserConnectionsComponents, {
 					user: e.instance.props.user
-				}, true));
+				}, true);
+				e.returnvalue = [
+					this.settings.general.placeAtTop && connections,
+					e.returnvalue,
+					!this.settings.general.placeAtTop && connections
+				].filter(n => n);
 			}
 			
 			processUserPopoutBody (e) {

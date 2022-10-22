@@ -418,6 +418,7 @@
 		"UseCopyIdItem": {"strings": ["\"devmode-copy-id\""]},
 		"UserBanner": {"strings": [".bannerSrc", ".viewerPremiumOverride", ".SETTINGS"]},
 		"UserBioSection": {"strings": [".isUsingGuildBio", "aboutMeGuildIcon", "GUILD_IDENTITY_BIO_TOAST"]},
+		"UserRolesSection": {"strings": [".rolePillBorder", "numRoles", "roleClassName"]},
 		"UserGenericContextMenu": {"strings": ["USER_ACTIONS_MENU_LABEL", "navId:\"user", ".USER_GENERIC_MENU"]},
 		"UserMemberContextMenu": {"strings": ["USER_ACTIONS_MENU_LABEL", "navId:\"user", ".GUILD_CHANNEL_USER_MENU"]},
 		"UsernameSection": {"strings": [".shouldCopyOnClick", ".userTagDiscriminatorNoNickname"]},
@@ -428,8 +429,8 @@
 		"UserSummaryItem": {"protos": ["renderMoreUsers", "renderUsers", "renderIcon"]},
 		"UserSettingsAppearance": {"protos": ["renderTheme", "renderDisplayMode", "renderMessageGroupSpacingSlider"]},
 		"UserThemedBanner": {"strings": [".showPremiumBadgeUpsell", ".isPremiumAtLeast", ".SETTINGS"]},
+		"UserThemedPopoutAvatar": {"strings": [".avatarPositionPremiumNoBanner", "VIEW_PROFILE"]},
 		"UserThemedPopoutBody": {"strings": [".customStatusActivity", ".canDM", ".hidePersonalInformation"]},
-		"UserThemedPopoutHeader": {"strings": [".avatarPositionPremiumNoBanner", "syncProfileThemeWithUserTheme"]},
 		"VoiceUser": {"protos": ["renderPrioritySpeaker", "renderIcons", "renderAvatar"]},
 		"VoiceUsers": {"strings": ["hidePreview", "previewIsOpen", "previewUserIdAfterDelay"]}
 	},
