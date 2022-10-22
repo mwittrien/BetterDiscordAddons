@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.8.6
+ * @version 2.8.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -8566,13 +8566,12 @@ module.exports = (_ => {
 			requestLibraryHashes(true);
 			
 			this.loaded = true;
-			if (!BDFDB.BDUtils.isPluginEnabled(this.name)) BDFDB.BDUtils.enablePlugin(this.name);
 		}
 		start () {
 			if (!this.loaded) this.load();
 		}
 		stop () {
-			if (!BDFDB.BDUtils.isPluginEnabled(this.name)) BDFDB.BDUtils.enablePlugin(this.name);
+			
 		}
 		
 		getSettingsPanel (collapseStates = {}) {
