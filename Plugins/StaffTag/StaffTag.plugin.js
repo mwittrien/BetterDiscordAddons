@@ -2,7 +2,7 @@
  * @name StaffTag
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.7
+ * @version 1.5.8
  * @description Adds a Crown/Tag to Server Owners (or Admins/Management)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -90,9 +90,11 @@ module.exports = (_ => {
 			onLoad () {
 				
 				this.modulePatches = {
+					before: [
+						"MessageHeader"
+					],
 					after: [
 						"MemberListItem",
-						"MessageUsername",
 						"NameTag",
 						"UsernameSection",
 						"UserPopoutInfo",
@@ -269,9 +271,9 @@ module.exports = (_ => {
 				}
 			}
 
-			processMessageUsername (e) {
+			processMessageHeader (e) {
 				if (!e.instance.props.message || !this.settings.tagPlaces.chat) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => n && n.props && typeof n.props.renderPopout == "function"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.instance.props.username, {filter: n => n && n.props && typeof n.props.renderPopout == "function"});
 				if (index == -1) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
 				let userType = this.getUserType(author, e.instance.props.message.channel_id);
