@@ -2,7 +2,7 @@
  * @name CharCounter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.1
+ * @version 1.6.2
  * @description Adds a Character Counter to most Inputs
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -57,7 +57,6 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		const maxLengths = {
-			nick: 32,
 			customstatus: 128,
 			popoutnote: 256,
 			profilenote: 256
@@ -72,13 +71,12 @@ module.exports = (_ => {
 	
 		return class CharCounter extends Plugin {
 			onLoad () {
-				this.patchedModules = {
-					after: {
-						ChannelTextAreaContainer: "render",
-						Note: "render",
-						NicknameSection: "default",
-						CustomStatusModal: "render"
-					}
+				this.modulePatches = {
+					after: [
+						"ChannelTextAreaContainer",
+						"CustomStatusModal",
+						"Note"
+					]
 				};
 				
 				this.defaults = {
@@ -113,10 +111,6 @@ module.exports = (_ => {
 					${BDFDB.dotCN._charcounteruploadcounter} {
 						right: 0;
 						bottom: -1.0em;
-					}
-					${BDFDB.dotCN._charcounternickcounter} {
-						right: 0 !important;
-						top: -1.5em;
 					}
 					${BDFDB.dotCN._charcountercustomstatuscounter} {
 						right: 0 !important;
@@ -183,7 +177,8 @@ module.exports = (_ => {
 			}
 
 			processNote (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["TextAreaAutosize", "TextArea", "PlainTextArea"]});
+				console.log(e);
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => n && n.props && n.props.autoCorrect != undefined});
 				if (index > -1) this.injectCounter(e.returnvalue, children, e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.usernotepopout) > -1 ? "popoutnote" : "profilenote", "textarea");
 			}
 
