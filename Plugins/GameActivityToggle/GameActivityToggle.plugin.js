@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.6
+ * @version 1.1.7
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -238,8 +238,8 @@ module.exports = (_ => {
 			}
 			
 			activateKeybind () {
-				if (keybind && keybind.length) BDFDB.ListenerUtils.addGlobal(this, "GAMEACTIVITY_TOGGLE", keybind, this.toggle);
-				else BDFDB.ListenerUtils.removeGlobal(this, "GAMEACTIVITY_TOGGLE", keybind, this.toggle);
+				if (keybind && keybind.length) BDFDB.ListenerUtils.addGlobal(this, "GAMEACTIVITY_TOGGLE", keybind, _ => this.toggle());
+				else BDFDB.ListenerUtils.removeGlobal(this, "GAMEACTIVITY_TOGGLE");
 			}
 			
 			toggle () {

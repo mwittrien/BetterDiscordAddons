@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.8.7
+ * @version 2.8.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1524,6 +1524,11 @@ module.exports = (_ => {
 						}
 					}
 				};
+				const leftSideMap = {
+					16: 160,
+					17: 170,
+					18: 164
+				};
 				BDFDB.ListenerUtils.addGlobal = function (plugin, id, keybind, action) {
 					plugin = plugin == BDFDB && Internal || plugin;
 					if (!BDFDB.ObjectUtils.is(plugin) || !id || !BDFDB.ArrayUtils.is(keybind) || typeof action != "function") return;
@@ -1531,6 +1536,11 @@ module.exports = (_ => {
 					BDFDB.ListenerUtils.removeGlobal(plugin, id);
 					plugin.globalKeybinds[id] = BDFDB.NumberUtils.generateId(Object.entries(plugin.globalKeybinds).map(n => n[1]));
 					BDFDB.LibraryModules.WindowUtils.inputEventRegister(plugin.globalKeybinds[id], keybind.map(n => [0, n]), action, {blurred: true, focused: true, keydown: false, keyup: true});
+					if (Object.keys(leftSideMap).some(key => keybind.indexOf(parseInt(key)) > -1)) {
+						const alternativeId = id + "___ALTERNATIVE";
+						plugin.globalKeybinds[alternativeId] = BDFDB.NumberUtils.generateId(Object.entries(plugin.globalKeybinds).map(n => n[1]));
+						BDFDB.LibraryModules.WindowUtils.inputEventRegister(plugin.globalKeybinds[alternativeId], keybind.map(n => [0, leftSideMap[n] ?? n]), action, {blurred: true, focused: true, keydown: false, keyup: true});
+					}
 					return (_ => BDFDB.ListenerUtils.removeGlobal(plugin, id));
 				};
 				BDFDB.ListenerUtils.removeGlobal = function (plugin, id) {
@@ -1542,6 +1552,9 @@ module.exports = (_ => {
 					else {
 						BDFDB.LibraryModules.WindowUtils.inputEventUnregister(plugin.globalKeybinds[id]);
 						delete plugin.globalKeybinds[id];
+						const alternativeId = id + "___ALTERNATIVE";
+						BDFDB.LibraryModules.WindowUtils.inputEventUnregister(plugin.globalKeybinds[alternativeId]);
+						delete plugin.globalKeybinds[alternativeId];
 					}
 				};
 				BDFDB.ListenerUtils.multiAdd = function (node, actions, callback) {
