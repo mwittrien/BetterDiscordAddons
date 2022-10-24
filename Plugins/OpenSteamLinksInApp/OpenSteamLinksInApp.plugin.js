@@ -2,7 +2,7 @@
  * @name OpenSteamLinksInApp
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.4
+ * @version 1.1.5
  * @description Opens Steam Links in Steam instead of your Browser
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -65,7 +65,7 @@ module.exports = (_ => {
 			
 			onStart () {
 				for (let key in urls) BDFDB.ListenerUtils.add(this, document, "click", BDFDB.ArrayUtils.removeCopies(urls[key].map(url => url.indexOf("http") == 0 ? (url.indexOf("https://") == 0 ? [`a[href^="${url}"]`, `a[href^="${url.replace(/https:\/\//i, "http://")}"]`] : `a[href^="${url}"]`) : `a[href*="${url}"][href*="${key}"]`).flat(10).filter(n => n)).join(", "), e => {
-					if (!(e.currentTarget.className && e.currentTarget.className.indexOf(BDFDB.disCN.imagezoom) > -1)) this.openIn(e, key, e.currentTarget.href);
+					if (!(e.currentTarget.className && e.currentTarget.className.indexOf(BDFDB.disCN.imagezoom) > -1) && !BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagezoom, e.currentTarget)) this.openIn(e, key, e.currentTarget.href);
 				});
 			}
 			
@@ -82,10 +82,15 @@ module.exports = (_ => {
 			}
 
 			openInSteam (url) {
-				BDFDB.LibraryRequires.request(url, (error, response, body) => {
-					if (BDFDB.LibraryRequires.electron.shell.openExternal("steam://openurl/" + response.request.href));
-					else BDFDB.DiscordUtils.openLink(response.request.href);
-				});
+				const xhr = new XMLHttpRequest();
+				xhr.open("GET", url, true);
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState != 4) return;
+					let responseUrl = xhr.responseURL || url;
+					if (BDFDB.LibraryRequires.electron.shell.openExternal("steam://openurl/" + responseUrl));
+					else BDFDB.DiscordUtils.openLink(responseUrl);
+				};
+				xhr.send(null);
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));

@@ -2,7 +2,7 @@
  * @name TopRoleEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.9
+ * @version 3.1.0
  * @description Adds the highest Role of a User as a Tag
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -75,12 +75,14 @@ module.exports = (_ => {
 					}
 				};
 				
-				this.patchedModules = {
-					after: {
-						MemberListItem: "render",
-						MessageUsername: "default",
-						VoiceUser: "render"
-					}
+				this.modulePatches = {
+					before: [
+						"MessageHeader"
+					],
+					after: [
+						"MemberListItem",
+						"VoiceUser"
+					]
 				};
 				
 				this.patchPriority = 4;
@@ -173,9 +175,9 @@ module.exports = (_ => {
 				});
 			}
 
-			processMessageUsername (e) {
+			processMessageHeader (e) {
 				if (!e.instance.props.message) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "Popout"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.instance.props.username, {filter: n => n && n.props && typeof n.props.renderPopout == "function"});
 				if (index == -1) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
 				if (this.settings.places.chat) this.injectRoleTag(children, author, "chat", e.instance.props.compact ? index : (index + 2), {
