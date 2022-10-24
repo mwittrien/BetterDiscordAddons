@@ -369,6 +369,7 @@
 		"GuildsBar": {"strings": ["unreadMentionsIndicatorTop", "disableAppDownload", ".GUILD_MEMBER_VERIFICATION"]},
 		"GuildSidebar": {"strings": ["\"guildsnav\"", "unreadMentionsIndicatorBottom"]},
 		"GuildTooltip": {"strings": ["tooltipClassName", "includeActivity", "listItemTooltip"]},
+		"HeaderBar": {"strings": [".hamburger", "scrollable", "themed"]},
 		"ImageModal": {"strings": ["._mobileCloseRef", "mobileCloseWrapper", "renderMobileCloseButton", "\"ESC\""]},
 		"InboxHeader": {"strings": [".UNREADS", ".TODOS", ".controls"]},
 		"LayerProvider": {"strings": ["layerContainerElement", "getContextValue"]},
