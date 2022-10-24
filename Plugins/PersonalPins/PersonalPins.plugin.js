@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.1
+ * @version 2.1.2
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -191,19 +191,7 @@ module.exports = (_ => {
 												BDFDB.LibraryModules.WindowUtils.copy(text);
 											}
 											else if (message.attachments.length == 1 && message.attachments[0].url) {
-												BDFDB.LibraryRequires.request(message.attachments[0].url, {encoding: null}, (error, response, body) => {
-													if (body) {
-														if (BDFDB.LibraryRequires.process.platform === "win32" || BDFDB.LibraryRequires.process.platform === "darwin") {
-															BDFDB.LibraryModules.WindowUtils.copyImage(BDFDB.LibraryRequires.electron.nativeImage.createFromBuffer(body));
-														}
-														else {
-															let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env.USERPROFILE || BDFDB.LibraryRequires.process.env.HOMEPATH || BDFDB.LibraryRequires.process.env.HOME, "personalpinstemp.png");
-															BDFDB.LibraryRequires.fs.writeFileSync(file, body, {encoding: null});
-															BDFDB.LibraryModules.WindowUtils.copyImage(file);
-															BDFDB.LibraryRequires.fs.unlinkSync(file);
-														}
-													}
-												});
+												BDFDB.LibraryModules.WindowUtils.copyImage(message.attachments[0].url);
 											}
 										},
 										children: BDFDB.ReactUtils.createElement("div", {
@@ -380,10 +368,14 @@ module.exports = (_ => {
 					}
 				};
 			
-				this.patchedModules = {
-					before: {
-						HeaderBar: "default"
-					}
+				this.modulePatches = {
+					before: [
+						"HeaderBar"
+					],
+					after: [
+						"MessageActionsContextMenu",
+						"MessageToolbar"
+					]
 				};
 				
 				this.css = `
@@ -499,7 +491,7 @@ module.exports = (_ => {
 				}
 			}
 			
-			onMessageOptionContextMenu (e) {
+			processMessageActionsContextMenu (e) {
 				if (e.instance.props.message && e.instance.props.channel) {
 					let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
@@ -522,7 +514,7 @@ module.exports = (_ => {
 				}
 			}
 		
-			onMessageOptionToolbar (e) {
+			processMessageToolbar (e) {
 				if (e.instance.props.expanded && e.instance.props.message && e.instance.props.channel) {
 					let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
 					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(class extends BdApi.React.Component {
@@ -561,8 +553,9 @@ module.exports = (_ => {
 			}
 
 			processHeaderBar (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(BDFDB.ObjectUtils.get(e.instance, "props.toolbar"), {name: "FluxContainer(Search)"});
-				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
+				if (!e.instance.props.toolbar) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.instance.props.toolbar, {key: "members"});
+				if (index > -1) children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						text: this.labels.popout_note,
 						tooltipConfig: {type: "bottom"},
