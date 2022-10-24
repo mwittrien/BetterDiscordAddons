@@ -2,7 +2,7 @@
  * @name SplitLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.7
+ * @version 1.7.8
  * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -67,14 +67,14 @@ module.exports = (_ => {
 					}
 				};
 				
-				this.patchedModules = {
-					before: {
-						ChannelTextAreaForm: "render",
-						ChannelTextAreaEditor: "render"
-					},
-					after: {
-						ChannelTextAreaContainer: "render",
-					}
+				this.modulePatches = {
+					before: [
+						"ChannelTextAreaContainer",
+						"ChannelTextAreaEditor"
+					],
+					after: [
+						"ChannelTextAreaContainer"
+					]
 				};
 				
 				this.css = `
@@ -125,29 +125,30 @@ module.exports = (_ => {
 					BDFDB.PatchUtils.forceAllUpdates(this);
 				}
 			}
-
-			processChannelTextAreaForm (e) {
-				BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
-					if (e2.methodArguments[0].value.length > maxMessageLength && !this.isSlowDowned(e.instance.props.channel)) {
-						e2.stopOriginalMethodCall();
-						let messages = this.formatText(e2.methodArguments[0].value).filter(n => n);
-						for (let i in messages) BDFDB.TimeUtils.timeout(_ => {
-							let last = i >= messages.length-1;
-							e2.originalMethod(last ? Object.assign({}, e2.methodArguments[0], {value: messages[i]}) : {stickers: [], uploads: [], value: messages[i]});
-							if (i >= messages.length-1) BDFDB.NotificationUtils.toast(this.labels.toast_allsent, {type: "success"});
-						}, messageDelay * i * (messages > 4 ? 2 : 1));
-						return Promise.resolve({
-							shouldClear: true,
-							shouldRefocus: true
-						});
-					}
-					else return e2.callOriginalMethodAfterwards();
-				}}, {force: true, noCache: true});
-			}
 			
 			processChannelTextAreaContainer (e) {
-				if (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SlateCharacterCount"});
+				if (e.instance.props.type != BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL && e.instance.props.type != BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY && e.instance.props.type != BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) return;
+				if (!e.returnvalue) {
+					BDFDB.PatchUtils.patch(this, e.instance.props, "onSubmit", {instead: e2 => {
+						console.log(e2);
+						if (e2.methodArguments[0].value.length > maxMessageLength && !this.isSlowDowned(e.instance.props.channel)) {
+							e2.stopOriginalMethodCall();
+							let messages = this.formatText(e2.methodArguments[0].value).filter(n => n);
+							for (let i in messages) BDFDB.TimeUtils.timeout(_ => {
+								let last = i >= messages.length-1;
+								e2.originalMethod(last ? Object.assign({}, e2.methodArguments[0], {value: messages[i]}) : {stickers: [], uploads: [], value: messages[i]});
+								if (i >= messages.length-1) BDFDB.NotificationUtils.toast(this.labels.toast_allsent, {type: "success"});
+							}, messageDelay * i * (messages > 4 ? 2 : 1));
+							return Promise.resolve({
+								shouldClear: true,
+								shouldRefocus: true
+							});
+						}
+						else return e2.callOriginalMethodAfterwards();
+					}});
+				}
+				else {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ChannelTextAreaCounter"});
 					if (index > -1 && children[index].props.textValue && children[index].props.textValue.length > maxMessageLength && !this.isSlowDowned(e.instance.props.channel)) children[index] = BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS.textareacharcounter + BDFDB.disCN.textareacharcountererror,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
@@ -161,12 +162,7 @@ module.exports = (_ => {
 			}
 
 			processChannelTextAreaEditor (e) {
-				if (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) {
-					e.instance.props.uploadPromptCharacterCount = 999999999999999;
-					BDFDB.PatchUtils.patch(this, e.instance, "handlePasteItem", {instead: e2 => {
-						if (!e2.methodArguments[1] || e2.methodArguments[1].kind != "string") e2.callOriginalMethod();
-					}}, {force: true, noCache: true});
-				}
+				if (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) e.instance.props.uploadPromptCharacterCount = 999999999999999;
 			}
 			
 			isSlowDowned (channel) {
