@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.8.8
+ * @version 2.8.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4886,7 +4886,7 @@ module.exports = (_ => {
 					getCounterString() {
 						let input = this.refElement || {}, string = "";
 						if (BDFDB.DOMUtils.containsClass(this.refElement, BDFDB.disCN.textarea)) {
-							let instance = BDFDB.ReactUtils.findOwner(input, {name: "ChannelEditorContainer", up: true});
+							let instance = BDFDB.ReactUtils.findOwner(input, {name: "ChannelTextAreaEditor", up: true});
 							if (instance) string = instance.props.textValue;
 							else string = input.value || input.textContent || "";
 						}

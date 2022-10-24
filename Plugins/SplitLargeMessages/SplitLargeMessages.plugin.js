@@ -70,7 +70,7 @@ module.exports = (_ => {
 				this.patchedModules = {
 					before: {
 						ChannelTextAreaForm: "render",
-						ChannelEditorContainer: "render"
+						ChannelTextAreaEditor: "render"
 					},
 					after: {
 						ChannelTextAreaContainer: "render",
@@ -160,7 +160,7 @@ module.exports = (_ => {
 				}
 			}
 
-			processChannelEditorContainer (e) {
+			processChannelTextAreaEditor (e) {
 				if (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) {
 					e.instance.props.uploadPromptCharacterCount = 999999999999999;
 					BDFDB.PatchUtils.patch(this, e.instance, "handlePasteItem", {instead: e2 => {

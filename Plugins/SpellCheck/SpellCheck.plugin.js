@@ -80,7 +80,7 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					after: {
-						ChannelEditorContainer: ["componentDidMount", "componentDidUpdate"]
+						ChannelTextAreaEditor: ["componentDidMount", "componentDidUpdate"]
 					}
 				};
 				
@@ -238,7 +238,7 @@ module.exports = (_ => {
 				}
 			}
 
-			processChannelEditorContainer (e) {
+			processChannelTextAreaEditor (e) {
 				let newText = BDFDB.SlateUtils.toTextValue(e.instance.props.richValue);
 				if (newText != currentText) {
 					currentText = newText;

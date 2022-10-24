@@ -85,7 +85,7 @@ module.exports = (_ => {
 			
 				this.patchedModules = {
 					before: {
-						ChannelEditorContainer: "render",
+						ChannelTextAreaEditor: "render",
 						TextChannelEmptyMessage: "default",
 						ThreadEmptyMessage: "default",
 						SystemMessageWrapper: "type",
@@ -249,7 +249,7 @@ module.exports = (_ => {
 				}
 			}
 			
-			processChannelEditorContainer (e) {
+			processChannelTextAreaEditor (e) {
 				if (!e.instance.props.disabled && e.instance.props.channel && changedChannels[e.instance.props.channel.id] && (e.instance.props.type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || e.instance.props.type == BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) && this.settings.places.chatTextarea) {
 					if (changedChannels[e.instance.props.channel.id].name) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `#${changedChannels[e.instance.props.channel.id].name}`);
 				}
