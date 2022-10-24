@@ -1,5 +1,5 @@
 /**
- * @name CreationDate
+ * @name ForceImagePreviews
  * @author DevilBro
  * @authorId 278543574059057154
  * @version 9.9.9
@@ -48,21 +48,21 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		return class CreationDate extends Plugin {
+		return class ForceImagePreviews extends Plugin {
 			onLoad () {}
 			
 			onStart () {
 				BDFDB.ModalUtils.open(this, {
 					header: "PLUGIN WAS DISCONTINUED",
 					children: [
-						BDFDB.ReactUtils.createElement("span", {children: "DISCORD ADDED THIS FEATURE BY THEMSELVES, MAKING THIS PLUGIN USELESS "}),
+						BDFDB.ReactUtils.createElement("span", {children: "THIS PLUGIN ALWAYS HAD A SLIGHT SECURITY RISK, SINCE IT LOADED IMAGES FROM EXTERNAL WEBSITES, DUE TO THE NEW PLUGIN GUIDELINES AND MY OWN OPINION ON NOT FURTHER RISKING OTHER USERS, I DECIDED TO DISCONTINUE THIS PLUGIN "}),
 						BDFDB.ReactUtils.createElement("strong", {children: "DELETE"}),
 						BDFDB.ReactUtils.createElement("span", {children: " TO REMOVE THIS EMPTY PLUGIN FILE."})
 					],
 					buttons: [
 						{contents: "DELETE", close: true, color: "RED", onClick: _ => {
-							BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), "CreationDate.plugin.js"), error => {});
-							BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), "CreationDate.config.json"), error => {});
+							BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), "ForceImagePreviews.plugin.js"), error => {});
+							BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), "ForceImagePreviews.config.json"), error => {});
 						}}
 					]
 				});

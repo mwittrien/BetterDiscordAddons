@@ -25,7 +25,6 @@
  - [Edit Servers](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditServers) - Allows you to locally edit Servers
  - [Edit Users](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers) - Allows you to locally edit Users
  - [Emoji Statistics](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EmojiStatistics) - Shows you an Overview of Emojis and Emoji Servers
- - [Force Image Previews](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ForceImagePreviews) - Forces unrendered embedded Image Previews to render
  - [Friend Notifications](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FriendNotifications) - Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  - [Game Activity Toggle](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GameActivityToggle) - Adds a Quick-Toggle Game Activity Button
  - [Google Search Replace](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleSearchReplace) - Replaces the default Google Text Search with a custom Search Engine
