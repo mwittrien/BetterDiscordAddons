@@ -2,7 +2,7 @@
  * @name MessageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.4
+ * @version 1.9.5
  * @description Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -88,12 +88,12 @@ module.exports = (_ => {
 					}
 				};
 				
-				this.patchedModules = {
-					before: {
-						Menu: "default",
-						Message: "default",
-						ChannelTextAreaForm: "render"
-					}
+				this.modulePatches = {
+					before: [
+						"ChannelTextAreaForm",
+						"Menu",
+						"Message"
+					]
 				};
 				
 				for (let type in this.defaults.bindings) {
