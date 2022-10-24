@@ -355,6 +355,7 @@
 		"ChannelsList": {"protos": ["isUnreadVisible", "renderBottomUnread", "getSectionRowsFromChannel"]},
 		"ChannelTextAreaButtons": {"strings": [".buttons", "\"expression\"", "activeCommandOption"]},
 		"ChannelTextAreaContainer": {"strings": ["TOGGLE_EMOJI_POPOUT", "textValue", "richValue"]},
+		"ChannelTextAreaCounter": {"strings": [".flairContainer", "CHARACTER_COUNT_CLOSE_TO_LIMIT"]},
 		"ChannelTextAreaEditor": {"strings": ["onHideAutocomplete", "onMaybeShowAutocomplete", "uploadPromptCharacterCount", "_focusBlurQueue"]},
 		"ChannelTextAreaForm": {"strings": ["renderApplicationCommandIcon", "handleTextareaChange", "handleSendMessage"]},
 		"ConnectedLazyImageZoomable": {"strings": ["{isWindowFocused", ",appContext:"]},
