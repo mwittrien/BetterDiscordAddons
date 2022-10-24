@@ -62,7 +62,8 @@
 		"ReadStateTypes": ["GUILD_EVENT", "NOTIFICATION_CENTER", "CHANNEL"],
 		"RelationshipTypes": ["FRIEND", "PENDING_INCOMING", "PENDING_OUTGOING"],
 		"Routes": ["CHANNEL_THREAD_VIEW", "MESSAGE_REQUESTS"],
-		"UserFlags": ["HYPESQUAD", "BUG_HUNTER_LEVEL_1", "STAFF"],
+		"UserBadges": ["HYPESQUAD", "BUG_HUNTER_LEVEL_1", "STAFF"],
+		"UserFlags": ["MFA_SMS", "VERIFIED_BOT"],
 		"UserNotificationSettings": ["NULL", "NO_MESSAGES", "ALL_MESSAGES"],
 		"UserSettingsActionTypes": ["SLOW_USER_ACTION", "DAILY"],
 		"UserSettingsSections": ["ACCOUNT", "DEVELOPER_OPTIONS", "DISMISSIBLE_CONTENT_OPTIONS"]
@@ -415,6 +416,7 @@
 		"TransitionGroup": {"protos": ["performAppear", "performEnter", "performLeave"]},
 		"UnreadDMs": {"strings": ["getMutablePrivateChannels", "selectedVoiceGuildId", ".selectedVoiceChannelId"]},
 		"UseCopyIdItem": {"strings": ["\"devmode-copy-id\""]},
+		"UserBadges": {"strings": [".PROFILE_USER_BADGES", "SIZE_24"]},
 		"UserBanner": {"strings": [".bannerSrc", ".viewerPremiumOverride", ".SETTINGS"]},
 		"UserBioSection": {"strings": [".isUsingGuildBio", "aboutMeGuildIcon", "GUILD_IDENTITY_BIO_TOAST"]},
 		"UserRolesSection": {"strings": [".rolePillBorder", "numRoles", "roleClassName"]},
