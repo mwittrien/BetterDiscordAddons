@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.2
+ * @version 2.1.3
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -554,8 +554,8 @@ module.exports = (_ => {
 
 			processHeaderBar (e) {
 				if (!e.instance.props.toolbar) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.instance.props.toolbar, {key: "members"});
-				if (index > -1) children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
+				let [children, index] = BDFDB.ReactUtils.findParent(e.instance.props.toolbar, {props: [["className", BDFDB.disCN.channelheadersearch]]});
+				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						text: this.labels.popout_note,
 						tooltipConfig: {type: "bottom"},
