@@ -667,7 +667,7 @@ module.exports = (_ => {
 						});
 					}
 					return e2.callOriginalMethodAfterwards();
-				}}, {force: true, noCache: true});
+				}}, {noCache: true});
 			}
 
 			processChannelTextAreaEditor (e) {

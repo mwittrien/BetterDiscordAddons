@@ -395,7 +395,7 @@ module.exports = (_ => {
 							BDFDB.ReactUtils.forceUpdate(e.instance);
 						}
 					}
-				}}, {force: true, noCache: true});
+				}}, {noCache: true});
 			}
 			
 			processMessageEditor (e) {
@@ -412,7 +412,7 @@ module.exports = (_ => {
 						}
 						BDFDB.ReactUtils.forceUpdate(e.instance);
 					}
-				}}, {force: true, noCache: true});
+				}}, {noCache: true});
 			}
 
 			formatText (text) {

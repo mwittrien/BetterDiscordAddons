@@ -80,7 +80,7 @@ module.exports = (_ => {
 						let parent = BDFDB.DOMUtils.getParent(e2.methodArguments[0].shiftKey ? BDFDB.dotCN.messageswrapper : BDFDB.dotCN.message, e2.methodArguments[0].target) || e2.methodArguments[0].target.parentElement;
 						if (parent) for (let spoiler of parent.querySelectorAll(BDFDB.dotCN.spoilerhidden)) if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagerepliedmessagepreview, spoiler)) spoiler.click();
 					}
-				}}, {force: true, noCache: true});
+				}}, {noCache: true});
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));

@@ -1072,7 +1072,7 @@ module.exports = (_ => {
 						}
 						let avatar = BDFDB.ReactUtils.findChild(e2.returnValue, {props: [["className", BDFDB.disCN.auditlogpopoutavatar]]});
 						if (avatar) avatar.props.src = this.getUserAvatar(e2.methodArguments[0].user.id);
-					}}}, {force: true, noCache: true});
+					}}}, {noCache: true});
 				}
 			}
 

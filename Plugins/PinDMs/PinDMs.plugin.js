@@ -414,7 +414,7 @@ module.exports = (_ => {
 								].filter(n => n);
 							}
 						}
-					}}, {force: true, noCache: true});
+					}}, {noCache: true});
 				}
 			}
 			
