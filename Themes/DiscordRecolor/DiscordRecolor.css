@@ -28,7 +28,9 @@
 	--bdfdb-red:					rgb(var(--dangercolor));
 }
 
-.theme-light, .theme-dark, .theme-amoled {
+.theme-light:not(.userProfileOuterThemed-3EfHmv),
+.theme-dark:not(.userProfileOuterThemed-3EfHmv),
+.theme-amoled:not(.userProfileOuterThemed-3EfHmv) {
 	--text-positive: rgb(var(--successcolor));
 	--text-warning: rgb(var(--warningcolor));
 	--text-danger: rgb(var(--dangercolor));
