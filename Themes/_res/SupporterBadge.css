@@ -12,7 +12,9 @@
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path fill="white" d="M 0 0 L 0 0.67578125 C 0.049283231 0.67827525 0.10122152 0.67545966 0.14648438 0.67578125 C 0.29721162 0.67685225 0.33353587 0.69859943 0.33398438 0.84960938 C 0.33413352 0.89982534 0.33402166 0.93722907 0.33398438 1 L 1 1 L 1 0 L 0 0 z"/></svg>') center/cover no-repeat;
 }
 .supporter-Z3FfwL.hasBadge-4rT8_u .avatarHint-k7pYop,
-.supporter-Z3FfwL.hasBadge-4rT8_u ~ .avatarHint-k7pYop {
+.supporter-Z3FfwL.hasBadge-4rT8_u ~ .avatarHint-k7pYop,
+.supporter-Z3FfwL.hasBadge-4rT8_u .avatarHint-2g3Mcd,
+.supporter-Z3FfwL.hasBadge-4rT8_u ~ .avatarHint-2g3Mcd {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path fill="white" d="M 0 0 L 0 0.67578125 C 0.049283231 0.67827525 0.10122152 0.67545966 0.14648438 0.67578125 C 0.29721162 0.67685225 0.33353587 0.69859943 0.33398438 0.84960938 C 0.33413352 0.89982534 0.33402166 0.93722907 0.33398438 1 L 1 1 L 1 0 L 0 0 z"/></svg>') center/cover no-repeat;
 }
 .supporter-Z3FfwL.hasBadge-4rT8_u .badge-7R_W3s {
