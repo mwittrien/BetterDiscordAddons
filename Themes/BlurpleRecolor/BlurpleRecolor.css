@@ -603,7 +603,7 @@
 /* ~~~~		4.		PEOPLES							~~~~ */
 
 .container-2rNpDV {											/* stagelive			cover								*/
-	background: #fff linear-gradient(rgba(var(--accentcolor),.8) 75%, rgb(var(--accentcolor)) 75%, rgb(var(--accentcolor)));
+	background: rgb(255, 255, 255) linear-gradient(rgba(var(--accentcolor),.8) 75%, rgb(var(--accentcolor)) 75%, rgb(var(--accentcolor)));
 }
 .container-2rNpDV .illustration-h6_gtD {
 	opacity: .8;
@@ -2569,6 +2569,13 @@ html .newBadge-1LcB6t[style*="background-color: hsl(235, "] {
 }
 .pointer-3ClhC2 {
 	border-top-color: rgb(var(--accentcolor));
+}
+
+.contentPremium-_Y0-cX {
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), .7))
+}
+.contentPremium-_Y0-cX .lookInverted-2mDUMi.colorBrand-I6CyqQ {
+	color: rgb(var(--accentcolor2)) !important;
 }
 
 /* ----		12.9.	TOASTS							---- */
