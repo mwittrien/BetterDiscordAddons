@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.8.9
+ * @version 2.9.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -25,6 +25,9 @@ module.exports = (_ => {
 	BDFDB = {
 		started: true,
 		changeLog: {
+			"fixed": {
+				"Double Execution": "Patching certain stuff no longer executes them twice/thrice etc."
+			}
 		}
 	};
 	
@@ -1091,7 +1094,7 @@ module.exports = (_ => {
 					libraryCSS = css;
 				
 					const backupObj = getBackup(dataFileName, dataFilePath);
-					if (backupObj.backup && backupObj.hashIsSame) parseData(backupObj.backup);
+					if (backupObj.backup && backupObj.hashIsSame || true) parseData(backupObj.backup);
 					else request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/${dataFileName}`, (e, r, b) => {
 						if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryData(), 10000);
 						if (!e && b && r.statusCode == 200) {
@@ -2210,9 +2213,8 @@ module.exports = (_ => {
 					
 					for (let methodName of methodNames) if (module[methodName] == null || typeof module[methodName] == "function") {
 						if (!module[methodName]) module[methodName] = _ => {return null};
-						if (!config.noCache && !module[methodName].BDFDB_Patches) module[methodName].BDFDB_Patches = {};
-						let patches = !config.noCache ? module[methodName].BDFDB_Patches : {};
-						if (patches) for (let type in patchMethods) {
+						let patches = module[methodName].BDFDB_Patches || {};
+						for (let type in patchMethods) {
 							if (!patches[type]) {
 								const originalMethod = module[methodName].__originalFunction || module[methodName];
 								const internalData = (Object.entries(InternalData.LibraryModules).find(n => n && n[0] && LibraryModules[n[0]] == module && n[1] && n[1]._originalModule && n[1]._mappedItems[methodName]) || [])[1];
@@ -2240,6 +2242,7 @@ module.exports = (_ => {
 									
 									if (type != "before") return (methodName == "render" || methodName == "default") && data.returnValue === undefined ? null : data.returnValue;
 								});
+								module[methodName].BDFDB_Patches = patches;
 								patches[type] = {plugins: {}, cancel: _ => {
 									if (!config.noCache) BDFDB.ArrayUtils.remove(Internal.patchCancels, patches[type].cancel, true);
 									delete patches[type];
