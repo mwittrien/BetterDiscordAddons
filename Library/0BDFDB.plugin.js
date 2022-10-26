@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.0
+ * @version 2.9.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2465,7 +2465,7 @@ module.exports = (_ => {
 				MyReact.objectToReact = function (obj) {
 					if (!obj) return null;
 					else if (typeof obj == "string") return obj;
-					else if (BDFDB.ObjectUtils.is(obj)) return BDFDB.ReactUtils.createElement(obj.type || obj.props && obj.props.href && "a" || "div", !obj.props ?  {} : Object.assign({}, obj.props, {
+					else if (BDFDB.ObjectUtils.is(obj)) return BDFDB.ReactUtils.createElement(obj.type && typeof obj.type == "function" || typeof obj.type == "string" ? obj.type : (obj.props && obj.props.href && "a" || "div"), !obj.props ? {} : Object.assign({}, obj.props, {
 						children: obj.props.children ? MyReact.objectToReact(obj.props.children) : null
 					}));
 					else if (BDFDB.ArrayUtils.is(obj)) return obj.map(n => MyReact.objectToReact(n));
