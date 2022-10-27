@@ -2,7 +2,7 @@
  * @name MessageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.5
+ * @version 1.9.6
  * @description Adds several Quick Actions for Messages (Delete, Edit, Pin, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		fixed: {
+			"ESC": "Works again"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -90,9 +92,11 @@ module.exports = (_ => {
 				
 				this.modulePatches = {
 					before: [
-						"ChannelTextAreaForm",
 						"Menu",
 						"Message"
+					],
+					after: [
+						"ChannelTextAreaForm"
 					]
 				};
 				
