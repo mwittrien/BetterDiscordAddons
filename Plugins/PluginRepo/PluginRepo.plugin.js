@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.9
+ * @version 2.4.0
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"fixed": {
-			"Lags and Crashes": "No Longer breaks"
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -514,15 +512,11 @@ module.exports = (_ => {
 													onDelete: _ => {
 														if (this.props.deleting) return;
 														this.props.deleting = true;
-														BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.data.rawSourceUrl.split("/").pop()), error => {
-															delete this.props.deleting;
-															if (error) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
-															else {
-																BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_success", `Plugin "${this.props.data.name}"`));
-																this.props.data.state = pluginStates.DOWNLOADABLE;
-																BDFDB.ReactUtils.forceUpdate(this);
-															}
-														});
+														BDFDB.LibraryRequires.fs.unlinkSync(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.data.rawSourceUrl.split("/").pop()));
+														delete this.props.deleting;
+														BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("delete_success", `Plugin "${this.props.data.name}"`));
+														this.props.data.state = pluginStates.DOWNLOADABLE;
+														BDFDB.ReactUtils.forceUpdate(this);
 													}
 												})
 											]
