@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.5
+ * @version 1.5.6
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,10 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		fixed: {
-			"Audio": "Fixed voice channels sounds not playing",
-			"Now Playing": "Fixed noew playing item popup fixating itself to the top left",
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -103,6 +100,7 @@ module.exports = (_ => {
 					],
 					after: [
 						"ActiveThread",
+						"BlockedMessageGroup",
 						"ChannelPins",
 						"DirectMessage",
 						"MemberListItem",
@@ -267,6 +265,11 @@ module.exports = (_ => {
 				}
 			}
 		
+			processBlockedMessageGroup (e) {
+				if (!this.settings.places.messages) return;
+				return null;
+			}
+			
 			processMessage (e) {
 				if (!this.settings.places.replies) return;
 				let repliedMessage = e.instance.props.childrenRepliedMessage;
