@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.1
+ * @version 2.9.2
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -3896,34 +3896,24 @@ module.exports = (_ => {
 					if (!returnvalue || !BDFDB.ObjectUtils.is(config) || !config.label && !config.id) return [null, -1];
 					config.label = config.label && [config.label].flat().filter(n => n);
 					config.id = config.id && [config.id].flat().filter(n => n);
-					let contextMenu = BDFDB.ReactUtils.findChild(returnvalue, {props: "navId"}) || (BDFDB.ArrayUtils.is(returnvalue) ? {props: {children: returnvalue}} : null);
+					let contextMenu = BDFDB.ArrayUtils.is(returnvalue) ? {props: {children: returnvalue}} : BDFDB.ReactUtils.findChild(returnvalue, {props: "navId"});
 					if (contextMenu) {
 						let children = BDFDB.ArrayUtils.is(contextMenu.props.children) ? contextMenu.props.children : [contextMenu.props.children];
-						for (let i in children) {
-							if (children[i] && children[i].type == LibraryComponents.MenuItems.MenuGroup) {
-								if (BDFDB.ArrayUtils.is(children[i].props.children)) {
-									for (let j in children[i].props.children) if (check(children[i].props.children[j])) {
-										if (config.group) return [children, parseInt(i)];
-										else return [children[i].props.children, parseInt(j)];
-									}
+						for (let i in children) if (children[i]) {
+							if (check(children[i])) return [children, parseInt(i)];
+							else if (children[i].props) {
+								if (BDFDB.ArrayUtils.is(children[i].props.children) && children[i].props.children.length) {
+									let [possibleChildren, possibleIndex] = BDFDB.ContextMenuUtils.findItem(children[i].props.children, config);
+									if (possibleIndex > -1) return [possibleChildren, possibleIndex];
 								}
-								else if (children[i] && children[i].props) {
-									if (check(children[i].props.children)) {
-										if (config.group) return [children, parseInt(i)];
-										else {
-											children[i].props.children = [children[i].props.children];
-											return [children[i].props.children, 0];
-										}
-									}
-									else if (children[i].props.children && children[i].props.children.props && BDFDB.ArrayUtils.is(children[i].props.children.props.children)) {
-										for (let j in children[i].props.children.props.children) if (check(children[i].props.children.props.children[j])) {
-											if (config.group) return [children, parseInt(i)];
-											else return [children[i].props.children.props.children, parseInt(j)];
-										}
+								else if (check(children[i].props.children)) {
+									if (config.group) return [children, parseInt(i)];
+									else {
+										children[i].props.children = [children[i].props.children];
+										return [children[i].props.children, 0];
 									}
 								}
 							}
-							else if (check(children[i])) return [children, parseInt(i)];
 						}
 						return [children, -1];
 					}
