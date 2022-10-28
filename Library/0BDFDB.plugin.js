@@ -15,6 +15,8 @@
 module.exports = (_ => {
 	if (window.BDFDB_Global && window.BDFDB_Global.PluginUtils && typeof window.BDFDB_Global.PluginUtils.cleanUp == "function") window.BDFDB_Global.PluginUtils.cleanUp(window.BDFDB_Global);
 	
+	const request = require("request"), fs = require("fs"), path = require("path");
+	
 	var BDFDB, Internal;
 	var LibraryRequires = {};
 	var DiscordObjects = {}, DiscordConstants = {};
@@ -529,7 +531,8 @@ module.exports = (_ => {
 				}
 			};
 			
-			
+			const cssFileName = "0BDFDB.raw.css", dataFileName = "0BDFDB.data.json";
+			const cssFilePath = path.join(BDFDB.BDUtils.getPluginsFolder(), cssFileName), dataFilePath = path.join(BDFDB.BDUtils.getPluginsFolder(), dataFileName);
 			BDFDB.PluginUtils = {};
 			BDFDB.PluginUtils.buildPlugin = function (changeLog) {
 				return [Plugin(changeLog), BDFDB];
@@ -909,7 +912,16 @@ module.exports = (_ => {
 				loadingIconWrapper.appendChild(icon);
 			};
 			BDFDB.PluginUtils.createSettingsPanel = function (addon, props) {
-				if (!window.BDFDB_Global.loaded) return "Could not initiate BDFDB Library Plugin! Can not create Settings Panel!";
+				if (!window.BDFDB_Global.loaded) return BdApi.React.createElement("div", {
+					style: {"color": "var(--header-secondary)", "white-space": "pre-wrap"},
+					children: [
+						"Could not initiate BDFDB Library Plugin! Can not create Settings Panel!\n\nTry deleting the ",
+						BdApi.React.createElement("strong", {children: dataFileName}),
+						" File in your ",
+						BdApi.React.createElement("strong", {children: BDFDB.BDUtils.getPluginsFolder()}),
+						"\nDirectory and reload Discord afterwards!"
+					]
+				});
 				addon = addon == BDFDB && Internal || addon;
 				if (!BDFDB.ObjectUtils.is(addon)) return;
 				let settingsProps = props;
@@ -942,8 +954,6 @@ module.exports = (_ => {
 					cleanUp: BDFDB.PluginUtils.cleanUp
 				}
 			}, window.BDFDB_Global);
-			
-			const request = require("request"), fs = require("fs"), path = require("path");
 			
 			Internal.writeConfig = function (plugin, path, config) {
 				let allData = {};
@@ -1066,11 +1076,6 @@ module.exports = (_ => {
 				else if (id === undefined) return newC[key] === undefined ? {} : newC[key];
 				else return newC[key] === undefined || newC[key][id] === undefined ? null : newC[key][id];
 			};
-			
-			const cssFileName = "0BDFDB.raw.css";
-			const dataFileName = "0BDFDB.data.json";
-			const cssFilePath = path.join(BDFDB.BDUtils.getPluginsFolder(), cssFileName);
-			const dataFilePath = path.join(BDFDB.BDUtils.getPluginsFolder(), dataFileName);
 			let InternalData, libHashes = {}, oldLibHashes = BDFDB.DataUtils.load(BDFDB, "hashes"), libraryCSS;
 			
 			const getBackup = (fileName, path) => {
@@ -1094,7 +1099,7 @@ module.exports = (_ => {
 					libraryCSS = css;
 				
 					const backupObj = getBackup(dataFileName, dataFilePath);
-					if (backupObj.backup && backupObj.hashIsSame) parseData(backupObj.backup);
+					if (backupObj.backup && backupObj.hashIsSame || true) parseData(backupObj.backup);
 					else request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/${dataFileName}`, (e, r, b) => {
 						if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryData(), 10000);
 						if (!e && b && r.statusCode == 200) {
