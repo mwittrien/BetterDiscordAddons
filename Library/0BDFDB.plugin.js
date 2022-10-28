@@ -27,9 +27,7 @@ module.exports = (_ => {
 	BDFDB = {
 		started: true,
 		changeLog: {
-			"fixed": {
-				"Double Execution": "Patching certain stuff no longer executes them twice/thrice etc."
-			}
+			
 		}
 	};
 	
