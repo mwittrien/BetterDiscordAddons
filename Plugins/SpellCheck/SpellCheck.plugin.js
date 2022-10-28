@@ -2,7 +2,7 @@
  * @name SpellCheck
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.4
+ * @version 1.6.5
  * @description Adds a Spell Check to all Message Inputs. Select a Word and Right Click it to add it to your Dictionary
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -78,10 +78,13 @@ module.exports = (_ => {
 					}
 				};
 			
-				this.patchedModules = {
-					after: {
-						ChannelTextAreaEditor: ["componentDidMount", "componentDidUpdate"]
-					}
+				this.modulePatches = {
+					componentDidMount: [
+						"ChannelTextAreaEditor"
+					],
+					componentDidUpdate: [
+						"ChannelTextAreaEditor"
+					]
 				};
 				
 				this.css = `
@@ -96,7 +99,7 @@ module.exports = (_ => {
 					let dictionaryLanguageIds = Array.from(BDFDB.DOMUtils.create(body).querySelectorAll(`[href*="/mwittrien/BetterDiscordAddons/blob/master/Plugins/SpellCheck/dic/"]`)).map(n => n.innerText.split(".")[0]).filter(n => n);
 					languages = BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, langId => dictionaryLanguageIds.includes(langId), true);
 					
-					if (BDFDB.LibraryStores.SpellCheckStore && BDFDB.LibraryStores.SpellCheckStore.isEnabled()) BDFDB.LibraryModules.DispatchApiUtils.dispatch({type: "SPELLCHECK_TOGGLE"});
+					if (BDFDB.LibraryStores.SpellcheckStore && BDFDB.LibraryStores.SpellcheckStore.isEnabled()) BDFDB.LibraryModules.DispatchApiUtils.dispatch({type: "SPELLCHECK_TOGGLE"});
 
 					BDFDB.PatchUtils.forceAllUpdates(this);
 					
@@ -192,7 +195,7 @@ module.exports = (_ => {
 				}
 			}
 
-			onSlateContextMenu (e) {
+			onTextAreaContextMenu (e) {
 				let [removeParent, removeIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "spellcheck", group: true});
 				if (removeIndex > -1) removeParent.splice(removeIndex, 1);
 				[removeParent, removeIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "correction-0", group: true});
@@ -362,8 +365,8 @@ module.exports = (_ => {
 						}
 					};
 					
-					if (this.settings.general.downloadDictionary && BDFDB.LibraryRequires.fs.existsSync(filePath)) BDFDB.LibraryRequires.fs.readFile(filePath, (error, buffer) => {
-						parse(error, buffer, buffer.toString(), false);
+					if (this.settings.general.downloadDictionary && BDFDB.LibraryRequires.fs.existsSync(filePath)) BDFDB.LibraryRequires.fs.readFile(filePath, "", (error, buffer) => {
+						parse(error, buffer, Buffer.from(buffer).toString(), false);
 					});
 					else BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, body) => {
 						parse(error, response, body, this.settings.general.downloadDictionary);
