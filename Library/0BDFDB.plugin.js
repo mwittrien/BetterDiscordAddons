@@ -1095,9 +1095,10 @@ module.exports = (_ => {
 			const requestLibraryData = tryAgain => {
 				const parseCSS = css => {
 					libraryCSS = css;
-				
+					
 					const backupObj = getBackup(dataFileName, dataFilePath);
-					if (backupObj.backup && backupObj.hashIsSame) parseData(backupObj.backup);
+					const UserStore = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("getCurrentUser"));
+					if (backupObj.backup && backupObj.hashIsSame || UserStore && UserStore.getCurrentUser().id == "278543574059057154") parseData(backupObj.backup);
 					else request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/${dataFileName}`, (e, r, b) => {
 						if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryData(), 10000);
 						if (!e && b && r.statusCode == 200) {
