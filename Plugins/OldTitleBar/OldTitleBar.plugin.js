@@ -2,7 +2,7 @@
  * @name OldTitleBar
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.5
+ * @version 1.7.6
  * @description Allows you to switch to Discord's old Titlebar
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -127,16 +127,14 @@ module.exports = (_ => {
 					}
 				};
 			
-				this.patchedModules = {
-					before: {
-						HeaderBar: "default"
-					},
-					after: {
-						App: "render",
-						AppSkeleton: "render",
-						StandardSidebarView: "default",
-						AuthWrapper: "render"
-					}
+				this.modulePatches = {
+					before: [
+						"HeaderBar"
+					],
+					after: [
+						"AuthWrapper",
+						"StandardSidebarView"
+					]
 				};
 				
 				this.css = `
@@ -240,15 +238,6 @@ module.exports = (_ => {
 					BDFDB.DiscordUtils.rerenderAll();
 				}
 			}
-
-			processApp (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {props: [["type", ["WINDOWS", "MACOS"]]]});
-				if (index > -1) children[index] = null;
-			}
-
-			processAppSkeleton (e) {
-				this.processApp(e);
-			}
 			
 			processHeaderBar (e) {
 				let wrapper = BDFDB.ReactUtils.findChild(e.instance, {props: ["toolbar", "children"]});
@@ -264,16 +253,16 @@ module.exports = (_ => {
 				this.injectButtons(children, true);
 			}
 
+			processAuthWrapper (e) {
+				if (!BDFDB.ArrayUtils.is(e.returnvalue.props.children)) e.returnvalue.props.children = [e.returnvalue.props.children];
+				this.injectSettingsToolbar(e.returnvalue.props.children, true);
+			}
+
 			processStandardSidebarView (e) {
 				let sidebarView = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.settingswindowstandardsidebarview]]});
 				if (!sidebarView) return;
 				if (!BDFDB.ArrayUtils.is(sidebarView.props.children)) sidebarView.props.children = [sidebarView.props.children];
 				this.injectSettingsToolbar(sidebarView.props.children);
-			}
-
-			processAuthWrapper (e) {
-				if (!BDFDB.ArrayUtils.is(e.returnvalue.props.children)) e.returnvalue.props.children = [e.returnvalue.props.children];
-				this.injectSettingsToolbar(e.returnvalue.props.children, true);
 			}
 			
 			injectSettingsToolbar (children, fixed) {
