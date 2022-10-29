@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.9.3
+ * @version 4.9.4
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"fixed": {
-			"Last Update": "Hopefully this fixes all bugs this time, really now, promise"
-		}
+		
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -719,17 +717,18 @@ module.exports = (_ => {
 			injectItem (e, urls, prefix) {
 				let validUrls = this.filterUrls(...urls);
 				if (!validUrls.length) return;
-				let [removeParent, removeIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "copy-native-link", group: true});
-				if (removeIndex > -1) {
-					removeParent.splice(removeIndex, 1);
-					removeIndex -= 1;
+				let isNative = false;
+				let [nativeParent, nativeIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "copy-native-link", group: true});
+				if (nativeIndex > -1) {
+					if (validUrls.length == 1) isNative = true;
+					nativeParent.splice(nativeIndex, 1);
+					nativeIndex -= 1;
 				}
-				let [removeParent2, removeIndex2] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "copy-image", group: true});
-				if (removeIndex2 > -1) removeParent2.splice(removeIndex2, 1);
-				let [removeParent3, removeIndex3] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "save-image", group: true});
-				if (removeIndex3 > -1) removeParent3.splice(removeIndex3, 1);
+				for (let id of ["open-native-link", "copy-image", "save-image"]) {
+					let [removeParent, removeIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: id, group: true});
+					if (removeIndex > -1) removeParent.splice(removeIndex, 1);
+				}
 				
-				let isNative = validUrls.length == 1 && removeIndex > -1;
 				let subMenu = this.createSubMenus({
 					instance: e.instance,
 					urls: validUrls,
@@ -737,7 +736,7 @@ module.exports = (_ => {
 					target: e.instance.props.target
 				});
 				
-				let [children, index] = isNative ? [removeParent, removeIndex] : BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
+				let [children, index] = isNative ? [nativeParent, nativeIndex] : BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 				children.splice(index > -1 ? index : children.length, 0, isNative ? subMenu : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.isValid(validUrls[0].file, "video") ? this.labels.context_videoactions : this.labels.context_imageactions,
@@ -792,7 +791,7 @@ module.exports = (_ => {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-link"),
 							action: _ => {
-								BDFDB.LibraryModules.WindowUtils.copy(urlData.original);
+								BDFDB.LibraryModules.WindowUtils.copy(urlData.original.split("?size")[0]);
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED, {type: "success"});
 							}
 						}),
@@ -800,7 +799,7 @@ module.exports = (_ => {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_MEDIA_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-media-link"),
 							action: _ => {
-								BDFDB.LibraryModules.WindowUtils.copy(urlData.file);
+								BDFDB.LibraryModules.WindowUtils.copy(urlData.file.split("?size")[0]);
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED, {type: "success"});
 							}
 						}),
