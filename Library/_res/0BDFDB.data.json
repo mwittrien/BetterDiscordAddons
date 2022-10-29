@@ -362,7 +362,7 @@
 		"ChannelTextAreaCounter": {"strings": [".flairContainer", "CHARACTER_COUNT_CLOSE_TO_LIMIT"]},
 		"ChannelTextAreaEditor": {"strings": ["onHideAutocomplete", "onMaybeShowAutocomplete", "uploadPromptCharacterCount", "_focusBlurQueue"]},
 		"ChannelTextAreaForm": {"strings": ["renderApplicationCommandIcon", "handleTextareaChange", "handleSendMessage"]},
-		"CircleIconButton": {"strings": [".tooltip", "focusProps", "aria-disabled"]},
+		"CircleIconButton": {"strings": [".circleIconButton", "lowerBadge", ".circleButtonMask"]},
 		"Clickable": {"strings": [".ENTER", "preventDefault", ").handleKeyPress"]},
 		"ConnectedLazyImageZoomable": {"strings": ["{isWindowFocused", ",appContext:"]},
 		"CustomStatusModal": {"protos": ["renderCustomStatusInput", "renderClearAfter", "getEmojiButtonRenderer"]},
