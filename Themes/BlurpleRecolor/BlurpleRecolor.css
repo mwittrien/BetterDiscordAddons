@@ -2122,6 +2122,12 @@ a.metadataName-1KMZtB {
 .userProfileOuterThemed-3EfHmv .upsell-27kXsw {
 	background: rgb(255, 255, 255) linear-gradient(90deg, var(--profile-gradient-primary-color, rgb(var(--accentcolor2))), var(--profile-gradient-primary-color, rgba(var(--accentcolor2), .7)));
 }
+.userProfileOuterThemed-3EfHmv .upsell-27kXsw > * {
+	color: var(--header-primary) !important;
+}
+.userProfileOuterThemed-3EfHmv .upsell-27kXsw path[fill] {
+	fill: currentColor !important;
+}
 .banner-1YaD3N[style*="background-color: rgb(92, 100, 244)"],
 .banner-1YaD3N[style*="background-color: hsl(227, "],
 .banner-1YaD3N[style*="background-color: hsl(235, "],
