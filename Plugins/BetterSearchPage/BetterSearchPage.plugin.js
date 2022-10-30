@@ -2,7 +2,7 @@
  * @name BetterSearchPage
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.1
+ * @version 1.2.2
  * @description Adds some extra Controls to the Search Results Page
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -83,7 +83,7 @@ module.exports = (_ => {
 			getSettingsPanel (collapseStates = {}) {
 				let settingsPanel, settingsItems = [];
 				
-				for (let key in general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 					type: "Switch",
 					plugin: this,
 					keys: ["general", key],
