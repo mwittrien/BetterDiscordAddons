@@ -150,6 +150,10 @@
 		"NitroUtils": {"props": ["canUseIncreasedMessageLength", "canUploadAnimatedAvatar"]},
 		"NotificationSettingsUtils": {"props": ["setDesktopType", "setTTSType"]},
 		"PlatformUtils": {"strings": ["return/^win/.test"], "exported": false, "value": "exports", "map": {
+			"isAndroid": ["\"android\""],
+			"isDarwin": ["\"darwin\""],
+			"isIOS": ["ios"],
+			"isLinux": ["\"linux\""],
 			"isWindows": ["return/^win/.test"]
 		}},
 		"PermissionRoleUtils": {"props": ["can", "ALLOW", "DENY"]},
