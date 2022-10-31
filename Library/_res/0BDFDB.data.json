@@ -379,6 +379,7 @@
 		"FolderHeader": {"strings": [".folderNode", "expandedFolderIconWrapper", "forceCircular"]},
 		"FolderIcon": {"strings": [".folderNode", "folderIconWrapper", "closedFolderIconWrapper"]},
 		"FolderItem": {"strings": [".folderNode", "expandedFolderBackground", "onExpandCollapse"]},
+		"FolderItemWrapper": {"strings": [".folderNode", "getActiveStreamForUser", "currentActiveVoiceType"]},
 		"GuildChannelListContextMenu": {"strings": ["GUILD_ACTIONS_MENU_LABEL", "\"guild-context\",\"aria-label\""]},
 		"GuildContextMenu": {"strings": ["GUILD_ACTIONS_MENU_LABEL", "navId:\"guild", "GuildContextMenu"]},
 		"GuildFavorites": {"strings": [".favoriteIcon", "FAVORITES_GUILD_NAME"]},
