@@ -51,6 +51,7 @@
 		"ChannelTypeGroups": ["GUILD_TEXTUAL", "GUILD_VOCAL", "ALL_DMS"],
 		"Colors": ["SPOTIFY", "STATUS_RED"],
 		"ComponentActions": ["INSERT_TEXT", "TEXTAREA_FOCUS"],
+		"EmojiSprites": ["DiversityPerRow", "PickerPerRow"],
 		"Endpoints": ["CAPTCHA", "GUILD", "MESSAGES"],
 		"FriendsSections": ["ALL", "ONLINE", "ADD_FRIEND"],
 		"InboxTabs": ["MENTIONS", "UNREADS"],

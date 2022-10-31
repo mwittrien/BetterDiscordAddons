@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.1
+ * @version 1.6.2
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -60,7 +60,8 @@ module.exports = (_ => {
 			onLoad () {
 				this.defaults = {
 					general: {
-						showGuildIcon:					{value: true, 	description: "Shows a Icon for Servers"},
+						showGuildIcon:					{value: true, 	description: "Adds the Server Icon"},
+						addFolderColor:					{value: true, 	description: "Recolors the Folder's Server List Background to the Folder Color"},
 					},
 					amounts: {
 						serverListWidth:				{value: 240, 	min: 45,		description: "Server List Width in px: "},
@@ -74,8 +75,8 @@ module.exports = (_ => {
 					after: [
 						"CircleIconButton",
 						"DirectMessage",
-						"FolderItem",
 						"FolderHeader",
+						"FolderItemWrapper",
 						"GuildFavorites",
 						"GuildItem",
 						"GuildsBar",
@@ -87,6 +88,10 @@ module.exports = (_ => {
 				this.css = `
 					${BDFDB.dotCN.forumpagelist} {
 						justify-content: flex-start;
+					}
+					${BDFDB.dotCN.guilds} [style*="--folder-color"] ${BDFDB.dotCN.guildfolderexpandedbackground} {
+						background: var(--folder-color) !important;
+						opacity: 0.2 !important;
 					}
 				`;
 			}
@@ -156,6 +161,20 @@ module.exports = (_ => {
 				if (scroller) {
 					scroller.props.fade = true;
 					scroller.type = BDFDB.LibraryComponents.Scrollers.Thin;
+					let padding = parseInt(BDFDB.LibraryModules.PlatformUtils.isWindows() ? 4 : BDFDB.LibraryModules.PlatformUtils.isDarwin() ? 0 : 12) + 10;
+					let isVisible = (currentItem, t, items) => {
+						if (!scroller.ref || !scroller.ref.current) return false;
+						const index = items.findIndex(item => typeof item == "string" || !item ? currentItem === item : item.includes(currentItem));
+						if (index < 0) return false;
+						let size = this.settings.amounts.serverElementHeight * index + padding;
+						if (!t) size += 40;
+						const state = scroller.ref.current.getScrollerState();
+						return !!(!t && size >= state.scrollTop || t && size + parseInt(this.settings.amounts.serverElementHeight) <= state.scrollTop + state.offsetHeight);
+					};
+					let topBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbartop]]});
+					if (topBar) topBar.props.isVisible = BDFDB.TimeUtils.suppress(isVisible, "Error in isVisible of Top Bar in Guild List!");
+					let bottomBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbarbottom]]});
+					if (bottomBar) bottomBar.props.isVisible = BDFDB.TimeUtils.suppress(isVisible, "Error in isVisible of Bottom Bar in Guild List!");
 				}
 			}
 			
@@ -205,11 +224,6 @@ module.exports = (_ => {
 				});
 			}
 			
-			processFolderItem (e) {
-				if (!e.instance.props.folderNode) return;
-				this.removeTooltip(e.returnvalue);
-			}
-			
 			processFolderHeader (e) {
 				if (!e.instance.props.folderNode) return;
 				e.returnvalue = this.removeMask(e.returnvalue, true);
@@ -226,6 +240,15 @@ module.exports = (_ => {
 						height: folderSize,
 						name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER
 					})
+				});
+			}
+			
+			processFolderItemWrapper (e) {
+				if (!e.instance.props.folderNode) return;
+				let folderColor = this.settings.general.addFolderColor && BDFDB.LibraryStores.ExpandedGuildFolderStore.isFolderExpanded(e.instance.props.folderNode.id) && BDFDB.ColorUtils.convert(e.instance.props.folderNode.color, "HEX");
+				if (folderColor) e.returnvalue = BDFDB.ReactUtils.createElement("div", {
+					style: {"--folder-color": folderColor},
+					children: e.returnvalue
 				});
 			}
 			
