@@ -5439,6 +5439,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"396874979167174666": 	{"active": true,	"tier": "t3",	"text": "",											"color": "",			"id": "error (RiRo)"},
 		"676593137581424652": 	{"active": true,	"tier": "t3",	"text": "",											"color": "",			"id": "Crohnus (shaggy)"},
 		"378752493485817868": 	{"active": true,	"tier": "t3",	"text": "",											"color": "",			"id": "BananaBunny (AnWa)"},
 		"106257021795323904": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "cryo (AlSk)"},
