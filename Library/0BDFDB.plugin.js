@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.3
+ * @version 2.9.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -6728,32 +6728,35 @@ module.exports = (_ => {
 					}
 					onDocumentClicked() {
 						const node = BDFDB.ReactUtils.findDOMNode(this.popout);
-						if (!node || !document.contains(node) || node != event.target && document.contains(event.target) && !node.contains(event.target)) this.toggle();
+						if (!node || !document.contains(node) || node != event.target && document.contains(event.target) && !node.contains(event.target)) this.toggle(false);
 					}
-					toggle() {
-						this.props.open = !this.props.open;
+					toggle(forceState) {
+						this.props.open = forceState != undefined ? forceState : !this.props.open;
 						BDFDB.ReactUtils.forceUpdate(this);
 					}
 					render() {
-						const child = (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children) || BDFDB.ReactUtils.createElement("div", {style: {height: "100%", width: "100%"}});
-						child.props.className = BDFDB.DOMUtils.formatClassName(child.props.className, this.props.className);
-						const childProps = Object.assign({}, child.props);
-						child.props.onClick = (e, childThis) => {
-							if ((this.props.openOnClick || this.props.openOnClick === undefined)) this.toggle();
-							if (typeof this.props.onClick == "function") this.props.onClick(e, this);
-							if (typeof childProps.onClick == "function") childProps.onClick(e, childThis);
-							if (this.props.killEvent || childProps.killEvent) BDFDB.ListenerUtils.stopEvent(e);
-						};
-						child.props.onContextMenu = (e, childThis) => {
-							if (this.props.openOnContextMenu) this.toggle();
-							if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
-							if (typeof childProps.onContextMenu == "function") childProps.onContextMenu(e, childThis);
-							if (this.props.killEvent || childProps.killEvent) BDFDB.ListenerUtils.stopEvent(e);
-						};
+						if (!this.props._rendered) {
+							this.props._rendered = true;
+							const child = (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children) || BDFDB.ReactUtils.createElement("div", {style: {height: "100%", width: "100%"}});
+							child.props.className = BDFDB.DOMUtils.formatClassName(child.props.className, this.props.className);
+							const childProps = Object.assign({}, child.props);
+							child.props.onClick = (e, childThis) => {
+								if ((this.props.openOnClick || this.props.openOnClick === undefined)) this.toggle(1);
+								if (typeof this.props.onClick == "function") this.props.onClick(e, this);
+								if (typeof childProps.onClick == "function") childProps.onClick(e, childThis);
+								if (this.props.killEvent || childProps.killEvent) BDFDB.ListenerUtils.stopEvent(e);
+							};
+							child.props.onContextMenu = (e, childThis) => {
+								if (this.props.openOnContextMenu) this.toggle(2);
+								if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
+								if (typeof childProps.onContextMenu == "function") childProps.onContextMenu(e, childThis);
+								if (this.props.killEvent || childProps.killEvent) BDFDB.ListenerUtils.stopEvent(e);
+							};
+							this.props.children = child;
+						}
 						return BDFDB.ReactUtils.createElement(Internal.LibraryModules.React.Fragment, {
-							onClick: this.toggle,
 							children: [
-								child,
+								this.props.children,
 								this.props.open && BDFDB.ReactUtils.createElement(Internal.LibraryComponents.AppReferencePositionLayer, {
 									onMount: _ => BDFDB.TimeUtils.timeout(_ => document.addEventListener("click", this.onDocumentClicked)),
 									onUnmount: _ => document.removeEventListener("click", this.onDocumentClicked),
