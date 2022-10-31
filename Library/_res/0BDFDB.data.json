@@ -149,7 +149,9 @@
 		}},
 		"NitroUtils": {"props": ["canUseIncreasedMessageLength", "canUploadAnimatedAvatar"]},
 		"NotificationSettingsUtils": {"props": ["setDesktopType", "setTTSType"]},
-		"PlatformUtils": {"strings": ["return/^win/.test"], "exported": false, "value": "exports"},
+		"PlatformUtils": {"strings": ["return/^win/.test"], "exported": false, "value": "exports", "map": {
+			"isWindows": ["return/^win/.test"]
+		}}},
 		"PermissionRoleUtils": {"props": ["can", "ALLOW", "DENY"]},
 		"PreferencesContext": {"strings": ["reducedMotion", "forcedColors", "alwaysShowLinkDecorations", "createContext"], "exported": false, "value": "exports", "map": {
 			"AccessibilityPreferencesContext": ["object Object"]
