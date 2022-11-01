@@ -46,3 +46,6 @@ Samsung:
 WhatsApp:
 
 ![screenshot7](https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/_res/screenshot8.png)
+
+TODO:
+- add MS 3D fluentui emojis
