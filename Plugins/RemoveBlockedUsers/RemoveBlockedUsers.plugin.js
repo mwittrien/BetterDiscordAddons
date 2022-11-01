@@ -129,7 +129,7 @@ module.exports = (_ => {
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RelationshipUtils, "addRelationship", {after: e => {
 					if (e.methodArguments[2] == BDFDB.DiscordConstants.RelationshipTypes.BLOCKED) BDFDB.DiscordUtils.rerenderAll();
 				}});
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RelationshipUtils, "removeRelationship", {after: e => this.forceUpdateAll()});
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.RelationshipUtils, "removeRelationship", {after: e => BDFDB.DiscordUtils.rerenderAll()});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.ReadStateStore, "getUnreadCount", {after: e => {
 					if (e.returnValue && this.settings.notifications.messages && e.returnValue < BDFDB.DiscordConstants.MAX_MESSAGES_PER_CHANNEL) {
