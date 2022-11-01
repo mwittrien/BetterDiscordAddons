@@ -177,7 +177,6 @@ module.exports = (_ => {
 			}
 
 			processNote (e) {
-				console.log(e);
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => n && n.props && n.props.autoCorrect != undefined});
 				if (index > -1) this.injectCounter(e.returnvalue, children, e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.usernotepopout) > -1 ? "popoutnote" : "profilenote", "textarea");
 			}
