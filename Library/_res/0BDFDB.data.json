@@ -1503,7 +1503,7 @@
 		"UserPopoutFooter": {"props": ["wumpusTooltip", "footer"]},
 		"UserPopoutHeader": {"props": ["headerTop", "profileBadges", "aboutMeGuildIcon"]},
 		"UserPopoutSection": {"props": ["section", "lastSection"]},
-		"UserPopoutSectionTitle": {"props": ["title", "body"]},
+		"UserPopoutSectionTitle": {"props": ["title", "body"], "length": 2},
 		"UserPopoutUsernameSection": {"props": ["userTagNoNickname", "nickname", "headerBotTag"]},
 		"UserProfile": {"props": ["root", "tabBarContainer"]},
 		"UserProfileHeader": {"props": ["header", "additionalActionsIcon", "nameTag"]},
