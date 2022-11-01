@@ -2,7 +2,7 @@
  * @name ChatFilter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.5.5
+ * @version 3.5.6
  * @description Allows you to censor Words or block complete Messages/Statuses
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -81,19 +81,19 @@ module.exports = (_ => {
 					}
 				};
 			
-				this.patchedModules = {
-					before: {
-						Message: "default",
-						MessageContent: "type",
-						UserInfo: "default",
-						MemberListItem: "render",
-						PrivateChannel: "render"
-					},
-					after: {
-						Messages: "type",
-						MessageContent: "type",
-						Embed: "render"
-					}
+				this.modulePatches = {
+					before: [
+						"MemberListItem",
+						"Message",
+						"MessageContent",
+						"Messages",
+						"PrivateChannel",
+						"UserInfo"
+					],
+					after: [
+						"Embed",
+						"MessageContent"
+					]
 				};
 				
 				this.css = `
@@ -310,16 +310,15 @@ module.exports = (_ => {
 			}
 
 			processMessages (e) {
-				if (this.settings.general.targetMessages) {
-					e.returnvalue.props.children.props.channelStream = [].concat(e.returnvalue.props.children.props.channelStream);
-					for (let i in e.returnvalue.props.children.props.channelStream) {
-						let message = e.returnvalue.props.children.props.channelStream[i].content;
-						if (message) {
-							if (BDFDB.ArrayUtils.is(message.attachments)) this.checkMessage(e.returnvalue.props.children.props.channelStream[i], message);
-							else if (BDFDB.ArrayUtils.is(message)) for (let j in message) {
-								let childMessage = message[j].content;
-								if (childMessage && BDFDB.ArrayUtils.is(childMessage.attachments)) this.checkMessage(message[j], childMessage);
-							}
+				if (!this.settings.general.targetMessages) return;
+				e.instance.props.channelStream = [].concat(e.instance.props.channelStream);
+				for (let i in e.instance.props.channelStream) {
+					let message = e.instance.props.channelStream[i].content;
+					if (message) {
+						if (BDFDB.ArrayUtils.is(message.attachments)) this.checkMessage(e.instance.props.channelStream[i], message);
+						else if (BDFDB.ArrayUtils.is(message)) for (let j in message) {
+							let childMessage = message[j].content;
+							if (childMessage && BDFDB.ArrayUtils.is(childMessage.attachments)) this.checkMessage(message[j], childMessage);
 						}
 					}
 				}
@@ -344,36 +343,33 @@ module.exports = (_ => {
 			}
 
 			processMessage (e) {
-				if (this.settings.general.targetMessages) {
-					let repliedMessage = e.instance.props.childrenRepliedMessage;
-					if (repliedMessage && repliedMessage.props && repliedMessage.props.children && repliedMessage.props.children.props && repliedMessage.props.children.props.referencedMessage && repliedMessage.props.children.props.referencedMessage.message && (oldBlockedMessages[repliedMessage.props.children.props.referencedMessage.message.id] || oldCensoredMessages[repliedMessage.props.children.props.referencedMessage.message.id])) {
-						let {blocked, censored, content, embeds} = this.parseMessage(repliedMessage.props.children.props.referencedMessage.message);
-						repliedMessage.props.children.props.referencedMessage.message = new BDFDB.DiscordObjects.Message(Object.assign({}, repliedMessage.props.children.props.referencedMessage.message, {content, embeds}));
-					}
+				if (!this.settings.general.targetMessages) return;
+				let repliedMessage = e.instance.props.childrenRepliedMessage;
+				if (repliedMessage && repliedMessage.props && repliedMessage.props.children && repliedMessage.props.children.props && repliedMessage.props.children.props.referencedMessage && repliedMessage.props.children.props.referencedMessage.message && (oldBlockedMessages[repliedMessage.props.children.props.referencedMessage.message.id] || oldCensoredMessages[repliedMessage.props.children.props.referencedMessage.message.id])) {
+					let {blocked, censored, content, embeds} = this.parseMessage(repliedMessage.props.children.props.referencedMessage.message);
+					repliedMessage.props.children.props.referencedMessage.message = new BDFDB.DiscordObjects.Message(Object.assign({}, repliedMessage.props.children.props.referencedMessage.message, {content, embeds}));
 				}
 			}
 
 			processMessageContent (e) {
-				if (e.instance.props.message && this.settings.general.targetMessages) {
-					if (!e.returnvalue) {
-						if (oldBlockedMessages[e.instance.props.message.id]) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._chatfilterblocked);
-						if (oldCensoredMessages[e.instance.props.message.id] && e.instance.props.message.content != oldCensoredMessages[e.instance.props.message.id].content) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._chatfiltercensored);
-					}
-					else {
-						if (oldBlockedMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldBlockedMessages[e.instance.props.message.id].content, "blocked"));
-						if (oldCensoredMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldCensoredMessages[e.instance.props.message.id].content, "censored"));
-					}
+				if (!this.settings.general.targetMessages || !e.instance.props.message) return;
+				if (!e.returnvalue) {
+					if (oldBlockedMessages[e.instance.props.message.id]) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._chatfilterblocked);
+					if (oldCensoredMessages[e.instance.props.message.id] && e.instance.props.message.content != oldCensoredMessages[e.instance.props.message.id].content) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._chatfiltercensored);
+				}
+				else {
+					if (oldBlockedMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldBlockedMessages[e.instance.props.message.id].content, "blocked"));
+					if (oldCensoredMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldCensoredMessages[e.instance.props.message.id].content, "censored"));
 				}
 			}
 
 			processEmbed (e) {
-				if (e.instance.props.embed && e.instance.props.embed.censored && oldCensoredMessages[e.instance.props.embed.message_id]) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.embeddescription]]});
-					if (index > -1) children[index].props.children = [
-						children[index].props.children,
-						this.createStamp(oldCensoredMessages[e.instance.props.embed.message_id].embeds[e.instance.props.embed.index].rawDescription, "censored")
-					].flat(10).filter(n => n);
-				}
+				if (!this.settings.general.targetMessages || !e.instance.props.embed || !e.instance.props.embed.censored || !oldCensoredMessages[e.instance.props.embed.message_id]) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.embeddescription]]});
+				if (index > -1) children[index].props.children = [
+					children[index].props.children,
+					this.createStamp(oldCensoredMessages[e.instance.props.embed.message_id].embeds[e.instance.props.embed.index].rawDescription, "censored")
+				].flat(10).filter(n => n);
 			}
 
 			processUserInfo (e) {
@@ -389,15 +385,14 @@ module.exports = (_ => {
 			}
 			
 			checkActivities (e) {
-				if (this.settings.general.targetStatuses && e.instance.props.activities && e.instance.props.activities.length && e.instance.props.user) {
-					let index = e.instance.props.activities.findIndex(n => n && n.type == BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
-					if (index > -1 && e.instance.props.activities[index].state) {
-						let {content} = this.parseMessage({content: e.instance.props.activities[index].state, embeds: [], id: "status", author: e.instance.props.user});
-						if (content) e.instance.props.activities[index] = Object.assign({}, e.instance.props.activities[index], {state: content});
-						else if (!e.instance.props.activities[index].emoji) {
-							e.instance.props.activities = [].concat(e.instance.props.activities);
-							e.instance.props.activities.splice(index, 1);
-						}
+				if (!this.settings.general.targetStatuses || !e.instance.props.activities || !e.instance.props.activities.length || !e.instance.props.user) return;
+				let index = e.instance.props.activities.findIndex(n => n && n.type == BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
+				if (index > -1 && e.instance.props.activities[index].state) {
+					let {content} = this.parseMessage({content: e.instance.props.activities[index].state, embeds: [], id: "status", author: e.instance.props.user});
+					if (content) e.instance.props.activities[index] = Object.assign({}, e.instance.props.activities[index], {state: content});
+					else if (!e.instance.props.activities[index].emoji) {
+						e.instance.props.activities = [].concat(e.instance.props.activities);
+						e.instance.props.activities.splice(index, 1);
 					}
 				}
 			}
