@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.4
+ * @version 1.1.5
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -148,7 +148,7 @@ module.exports = (_ => {
 				this.modulePatches = {
 					after: [
 						"UserPopoutBody",
-						"UserRolesSection"
+						"UserConnectionsSection"
 					]
 				};
 				
@@ -156,7 +156,6 @@ module.exports = (_ => {
 					general: {
 						useColoredIcons:	{value: true, 	description: "Uses colored Version of the Icons"},
 						useColoredTooltips:	{value: true, 	description: "Uses colored Version of the Tooltips"},
-						placeAtTop:			{value: false, 	description: "Places the Connections at the Top of the UserPopout Body"},
 						showVerifiedBadge:	{value: true, 	description: "Shows the Badge for verified Connections"},
 						openWebpage:		{value: true, 	description: "Opens the Connection Page when clicking the Icon"}
 					},
@@ -238,21 +237,20 @@ module.exports = (_ => {
 				});
 			}
 
-			processUserRolesSection (e) {
-				if (!e.instance.props.user || e.instance.props.user.isNonUserBot()) return;
-				if (!loadedUsers[e.instance.props.user.id] && !requestedUsers[e.instance.props.user.id]) {
-					requestedUsers[e.instance.props.user.id] = true;
-					queuedInstances[e.instance.props.user.id] = [].concat(queuedInstances[e.instance.props.user.id]).filter(n => n);
-					BDFDB.LibraryModules.UserProfileUtils.fetchProfile(e.instance.props.user.id);
+			processUserConnectionsSection (e) {
+				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
+				if (!user || user.isNonUserBot()) return;
+				if (!loadedUsers[user.id] && !requestedUsers[user.id]) {
+					requestedUsers[user.id] = true;
+					queuedInstances[user.id] = [].concat(queuedInstances[user.id]).filter(n => n);
+					BDFDB.LibraryModules.UserProfileUtils.fetchProfile(user.id);
 				}
-				let connections = BDFDB.ReactUtils.createElement(UserConnectionsComponents, {
-					user: e.instance.props.user
-				}, true);
 				e.returnvalue = [
-					this.settings.general.placeAtTop && connections,
 					e.returnvalue,
-					!this.settings.general.placeAtTop && connections
-				].filter(n => n);
+					BDFDB.ReactUtils.createElement(UserConnectionsComponents, {
+						user: user
+					}, true)
+				];
 			}
 			
 			processUserPopoutBody (e) {
@@ -263,7 +261,7 @@ module.exports = (_ => {
 					BDFDB.LibraryModules.UserProfileUtils.fetchProfile(e.instance.props.user.id);
 				}
 				let bodyInner = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutbodyinnerwrapper]]});
-				if (bodyInner) bodyInner.props.children.splice(this.settings.general.placeAtTop ? 1 : bodyInner.props.children.length - 2, 0, BDFDB.ReactUtils.createElement(UserConnectionsComponents, {
+				if (bodyInner) bodyInner.props.children.splice(bodyInner.props.children.length - 2, 0, BDFDB.ReactUtils.createElement(UserConnectionsComponents, {
 					old: true,
 					user: e.instance.props.user
 				}, true));
