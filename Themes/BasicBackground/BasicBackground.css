@@ -4692,6 +4692,9 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .role-2TIOKu[style*="border-color: rgba(185, 187, 190, .6)"] {
 	border-color: rgba(var(--textbrighter), .6) !important;
 }
+#app-mount .rolePillBorder-RiRiuN:not(.actionButton-1YKTU0) {
+	border-width: 0;
+}
 #app-mount .role-2TIOKu .roleName-2ZJJYR {					/* body					rolename							*/
 	position: relative;
 	color: rgb(var(--textbrightest));
