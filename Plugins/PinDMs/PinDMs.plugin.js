@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.5
+ * @version 1.9.6
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		improved: {
-			"Predefined Categories": "You can now overwrite predefined categories, meaning you can add a channel from one of the predefined to a custom one, making not appear in the predefined anymore"
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -370,10 +368,8 @@ module.exports = (_ => {
 						e.instance.props.pinnedChannelIds[category.id] = [];
 						for (let id of this.sortDMsByTime(this.filterDMs(category.dms, !category.predefined), "channelList").reverse()) {
 							BDFDB.ArrayUtils.remove(e.instance.props.privateChannelIds, id, true);
-							if (!category.collapsed || e.instance.props.selectedChannelId == id) {
-								e.instance.props.privateChannelIds.unshift(id);
-								e.instance.props.pinnedChannelIds[category.id].push(id);
-							}
+							e.instance.props.privateChannelIds.unshift(id);
+							e.instance.props.pinnedChannelIds[category.id].push(id);
 						}
 					}
 				}
@@ -393,7 +389,7 @@ module.exports = (_ => {
 								index: e2.methodArguments[2]
 							}))) : null;
 							
-							let category = categories[e2.methodArguments[0] - 1]; // WRONG
+							let category = categories[e2.methodArguments[0] - 1];
 							if (category) {
 								if (!id || (category.collapsed && e.instance.props.selectedChannelId != id) || !this.filterDMs(category.dms, !category.predefined).includes(id) || draggedCategory == category.id || draggedChannel == id) e2.returnValue = null;
 								else if (hoveredCategory == category.id && [].concat(category.dms).reverse()[0] == id) e2.returnValue = [
