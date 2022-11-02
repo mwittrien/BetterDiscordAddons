@@ -706,7 +706,7 @@ module.exports = (_ => {
 			}
 
 			processMessageReply (e) {
-				if (!e.instance.props.referencedMessage || !translatedMessages[e.instance.props.referencedMessage.message.id]) return;
+				if (!e.instance.props.referencedMessage || !e.instance.props.referencedMessage.message || !translatedMessages[e.instance.props.referencedMessage.message.id]) return;
 				e.instance.props.referencedMessage = Object.assign({}, e.instance.props.referencedMessage);
 				e.instance.props.referencedMessage.message = new BDFDB.DiscordObjects.Message(e.instance.props.referencedMessage.message);
 				e.instance.props.referencedMessage.message.content = translatedMessages[e.instance.props.referencedMessage.message.id].content;
