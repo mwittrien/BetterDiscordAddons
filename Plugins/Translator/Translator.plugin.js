@@ -1006,8 +1006,8 @@ module.exports = (_ => {
 			
 			iTranslateTranslate (data, callback) {
 				let translate = _ => {
-					BDFDB.LibraryRequires.request.post({
-						url: "https://web-api.itranslateapp.com/v3/texts/translate",
+					BDFDB.LibraryRequires.request("https://web-api.itranslateapp.com/v3/texts/translate", {
+						method: "post",
 						headers: {
 							"API-KEY": authKeys.itranslate && authKeys.itranslate.key || data.engine.APIkey
 						},
@@ -1138,8 +1138,8 @@ module.exports = (_ => {
 			
 			baiduTranslate (data, callback) {
 				const credentials = (authKeys.baidu && authKeys.baidu.key || "20210425000799880 e12h9h4rh39r8h12r8 D90usZcbznwthzKC1KOb").split(" ");
-				BDFDB.LibraryRequires.request.post({
-					url: "https://fanyi-api.baidu.com/api/trans/vip/translate",
+				BDFDB.LibraryRequires.request("https://fanyi-api.baidu.com/api/trans/vip/translate", {
+					method: "post",
 					form: {
 						from: translationEngines.baidu.parser[data.input.id] || data.input.id,
 						to: translationEngines.baidu.parser[data.output.id] || data.output.id,
