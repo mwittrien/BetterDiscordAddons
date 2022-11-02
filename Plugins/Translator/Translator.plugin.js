@@ -1150,7 +1150,6 @@ module.exports = (_ => {
 						sign: this.MD5(credentials[0] + data.text + salt + (credentials[2] || credentials[1]))
 					}
 				}, (error, response, result) => {
-					console.log(error, response, result);
 					if (!error && result && response.statusCode == 200) {
 						try {
 							result = JSON.parse(result) || {};
