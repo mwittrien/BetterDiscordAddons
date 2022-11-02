@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.4
+ * @version 2.9.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -153,6 +153,43 @@ module.exports = (_ => {
 				};
 			};
 
+			const requestFunction = function (...args) {
+				let {url, uIndex} = args[0] && typeof args[0] == "string" ? {url: args[0], uIndex: 0} : (args[1] && typeof args[1] == "object" && typeof args[1].url == "string" ? {url: args[1], uIndex: 1} : {url: null, uIndex: -1});
+				if (!url || typeof url != "string") return;
+				let {callback, cIndex} = args[1] && typeof args[1] == "function" ? {callback: args[1], cIndex: 1} : (args[2] && typeof args[2] == "function" ? {callback: args[2], cIndex: 2} : {callback: null, cIndex: -1});
+				if (typeof callback != "function") return;
+				let config = args[0] && typeof args[0] == "object" ? args[0] : (args[1] && typeof args[1] == "object" && args[1]);
+				let timeout = 600000;
+				if (config && config.form && typeof config.form == "object") {
+					let query = Object.entries(config.form).map(n => n[0] + "=" + n[1]).join("&");
+					if (query) {
+						if (uIndex == 0) args[0] += `?${query}`;
+						else if (uIndex == 1) args[1].url += `?${query}`;
+					}
+				}
+				if (config && !isNaN(parseInt(config.timeout)) && config.timeout > 0) timeout = config.timeout;
+				let killed = false, timeoutObj = BDFDB.TimeUtils.timeout(_ => {
+					killed = true;
+					BDFDB.TimeUtils.clear(timeoutObj);
+					callback(new Error(`Request Timeout after ${timeout}ms`), {
+						aborted: false,
+						complete: true,
+						end: undefined,
+						headers: {},
+						method: null,
+						rawHeaders: [],
+						statusCode: 408,
+						statusMessage: "OK",
+						url: ""
+					}, null);
+				}, timeout);
+				args[cIndex] = (...args2) => {
+					BDFDB.TimeUtils.clear(timeoutObj);
+					if (!killed) callback(...args2);
+				};
+				return request(...args);
+			};
+
 			BDFDB.LogUtils = {};
 			Internal.console = function (type, config = {}) {
 				if (!console[type]) return;
@@ -227,7 +264,7 @@ module.exports = (_ => {
 			}};
 
 			BDFDB.LogUtils.log("Loading Library");
-
+			
 			BDFDB.sameProto = function (a, b) {
 				if (a != null && typeof a == "object") return a.constructor && a.constructor.prototype && typeof a.constructor.prototype.isPrototypeOf == "function" && a.constructor.prototype.isPrototypeOf(b);
 				else return typeof a == typeof b;
@@ -652,7 +689,7 @@ module.exports = (_ => {
 			};
 			BDFDB.PluginUtils.checkUpdate = function (pluginName, url) {
 				if (pluginName && url && PluginStores.updateData.plugins[url]) return new Promise(callback => {
-					Internal.LibraryRequires.request(url, (error, response, body) => {
+					requestFunction(url, {timeout: 60000}, (error, response, body) => {
 						if (error || !PluginStores.updateData.plugins[url]) return callback(null);
 						let newName = (body.match(/"name"\s*:\s*"([^"]+)"/) || [])[1] || pluginName;
 						let newVersion = (body.match(/@version ([0-9]+\.[0-9]+\.[0-9]+)|['"]([0-9]+\.[0-9]+\.[0-9]+)['"]/i) || []).filter(n => n)[1];
@@ -777,7 +814,7 @@ module.exports = (_ => {
 				}
 			};
 			BDFDB.PluginUtils.downloadUpdate = function (pluginName, url) {
-				if (pluginName && url) Internal.LibraryRequires.request(url, (error, response, body) => {
+				if (pluginName && url) requestFunction(url, {timeout: 60000}, (error, response, body) => {
 					if (error) {
 						BDFDB.PluginUtils.removeUpdateNotice(pluginName);
 						BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_update_failed", pluginName), {
@@ -1080,7 +1117,7 @@ module.exports = (_ => {
 				return {backup: fs.existsSync(path) && (fs.readFileSync(path) || "").toString(), hashIsSame: libHashes[fileName] && oldLibHashes[fileName] && libHashes[fileName] == oldLibHashes[fileName]};
 			};
 			const requestLibraryHashes = tryAgain => {
-				request("https://api.github.com/repos/mwittrien/BetterDiscordAddons/contents/Library/_res/", {headers: {"user-agent": "node.js"}}, (e, r, b) => {
+				requestFunction("https://api.github.com/repos/mwittrien/BetterDiscordAddons/contents/Library/_res/", {headers: {"user-agent": "node.js"}, timeout: 60000}, (e, r, b) => {
 					if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryHashes(), 10000);
 					try {
 						b = JSON.parse(b);
@@ -1099,7 +1136,7 @@ module.exports = (_ => {
 					const backupObj = getBackup(dataFileName, dataFilePath);
 					const UserStore = BdApi.Webpack.getModule(BdApi.Webpack.Filters.byProps("getCurrentUser"));
 					if (backupObj.backup && backupObj.hashIsSame || UserStore && UserStore.getCurrentUser().id == "278543574059057154") parseData(backupObj.backup);
-					else request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/${dataFileName}`, (e, r, b) => {
+					else requestFunction(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/${dataFileName}`, {timeout: 60000}, (e, r, b) => {
 						if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryData(), 10000);
 						if (!e && b && r.statusCode == 200) {
 							if (backupObj.backup && backupObj.backup.replace(/\s/g, "") == b.replace(/\s/g, "")) {
@@ -1142,7 +1179,7 @@ module.exports = (_ => {
 				
 				const backupObj = getBackup(cssFileName, cssFilePath);
 				if (backupObj.backup && backupObj.hashIsSame) parseCSS(backupObj.backup);
-				else request.get(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/${cssFileName}`, (e, r, b) => {
+				else requestFunction(`https://mwittrien.github.io/BetterDiscordAddons/Library/_res/${cssFileName}`, {timeout: 60000}, (e, r, b) => {
 					if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryData(), 10000);
 					if (!e && b && r.statusCode == 200) {
 						if (backupObj.backup && backupObj.backup.replace(/\s/g, "") == b.replace(/\s/g, "")) {
@@ -1357,6 +1394,7 @@ module.exports = (_ => {
 				
 				Internal.LibraryRequires = new Proxy(LibraryRequires, {
 					get: function (_, item) {
+						if (item == "request") return requestFunction;
 						if (LibraryRequires[item]) return LibraryRequires[item];
 						if (InternalData.LibraryRequires.indexOf(item) == -1) return (function () {});
 						try {LibraryRequires[item] = require(item);}
@@ -8530,7 +8568,7 @@ module.exports = (_ => {
 									}
 									next(languages.shift());
 								};
-								Internal.LibraryRequires.request(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${language}&tl=${lang}&dt=t&dj=1&source=input&q=${encodeURIComponent(text)}`, (error, response, result) => {
+								requestFunction(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${language}&tl=${lang}&dt=t&dj=1&source=input&q=${encodeURIComponent(text)}`, (error, response, result) => {
 									if (!error && result && response.statusCode == 200) {
 										try {callback(JSON.parse(result).sentences.map(n => n && n.trans).filter(n => n).join(""));}
 										catch (err) {callback("");}

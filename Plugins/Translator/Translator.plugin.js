@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.3
+ * @version 2.4.4
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -340,7 +340,7 @@ module.exports = (_ => {
 					"zh-CN": "zh",
 					"zh-TW": "cht"
 				},
-				key: "xxxxxxxxx xxxxxx xxxxxxxxxx"
+				key: "appId (number) key (string)"
 			}
 		};
 		
@@ -1137,18 +1137,20 @@ module.exports = (_ => {
 			}
 			
 			baiduTranslate (data, callback) {
-				const credentials = (authKeys.baidu && authKeys.baidu.key || "20210425000799880 e12h9h4rh39r8h12r8 D90usZcbznwthzKC1KOb").split(" ");
+				const credentials = (authKeys.baidu && authKeys.baidu.key || "20221009001380882 TOPnUKz8jJ32AZNOuUhX").split(" ");
+				const salt = BDFDB.NumberUtils.generateId();
 				BDFDB.LibraryRequires.request("https://fanyi-api.baidu.com/api/trans/vip/translate", {
 					method: "post",
 					form: {
 						from: translationEngines.baidu.parser[data.input.id] || data.input.id,
 						to: translationEngines.baidu.parser[data.output.id] || data.output.id,
-						q: data.text,
+						q: encodeURIComponent(data.text),
 						appid: credentials[0],
-						salt: credentials[1],
-						sign: this.MD5(credentials[0] + data.text + credentials[1] + credentials[2])
+						salt: salt,
+						sign: this.MD5(credentials[0] + data.text + salt + (credentials[2] || credentials[1]))
 					}
 				}, (error, response, result) => {
+					console.log(error, response, result);
 					if (!error && result && response.statusCode == 200) {
 						try {
 							result = JSON.parse(result) || {};
