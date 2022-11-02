@@ -2,7 +2,7 @@
  * @name PinDMs
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.6
+ * @version 1.9.7
  * @description Allows you to pin DMs, making them appear at the top of your DMs/ServerList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -162,7 +162,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DirectMessageUnreadStore, "getUnreadPrivateChannelIds", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.PrivateChannelReadStateStore, "getUnreadPrivateChannelIds", {after: e => {
 					let sortedRecents = this.sortAndUpdate("guildList");
 					if (sortedRecents.length) {
 						const dms = [];
