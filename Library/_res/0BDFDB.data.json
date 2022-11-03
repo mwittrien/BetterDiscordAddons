@@ -330,7 +330,7 @@
 			"UserBadges": [".PROFILE_USER_BADGES"],
 			"Sizes": ["\"SIZE_24\":"]
 		}},
-		"UserPopout": {"strings": ["canViewThemes?", "Unexpected missing user"], "funcStrings": ["canViewThemes"]},
+		"UserPopout": {"strings": [")().canViewThemes?r.createElement"]},
 		"UserPopoutSection": {"strings": [".section,", ".lastSection"]},
 		"UserSummaryItem": {"strings": ["popoutUserId:", ".clickableAvatar"]},
 		"VideoForwardRef": {"strings": ["HTMLSourceElement", "autoPlay"], "funcStrings": ["externalRef"]}
@@ -464,9 +464,12 @@
 		"UserMemberContextMenu": {"strings": ["USER_ACTIONS_MENU_LABEL", "navId:\"user", ".GUILD_CHANNEL_USER_MENU"]},
 		"UserMemberSinceSection": {"strings": [".userId", "headingClassName", "().title", ".guildMember"]},
 		"UsernameSection": {"strings": [".shouldCopyOnClick", ".userTagDiscriminatorNoNickname"]},
+		"UserPopout": {"strings": [")().canViewThemes?r.createElement"]},
 		"UserPopoutAvatar": {"strings": ["isNonUserBot", "avatarHintInnerText", "avatarDecorationHint"]},
 		"UserPopoutBody": {"strings": ["isNonUserBot", "customStatusActivity", "bodyInnerWrapper"]},
 		"UserPopoutInfo": {"strings": [".hasCustomStatus", ".premiumGuildSince", "openPremiumSettings"]},
+		"UserProfile": {"strings": [".PROFILE_MODAL", "USER_INFO_CONNECTIONS", ".topSection"]},
+		"UserProfileBody": {"strings": [".userInfoSectionHeader", "Messages.NOTE", "connectedAccounts:"]},
 		"UserProfileHeader": {"strings": [".friendToken", ".additionalActionsIcon", "onMessage"]},
 		"UserRolesSection": {"strings": [".rolePillBorder", "numRoles", "roleClassName"]},
 		"UserSummaryItem": {"protos": ["renderMoreUsers", "renderUsers", "renderIcon"]},
