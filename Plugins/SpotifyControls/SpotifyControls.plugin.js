@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.9
+ * @version 1.3.0
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -85,12 +85,8 @@ module.exports = (_ => {
 							method = "get";
 							break;
 					};
-					BDFDB.LibraryRequires.request[method]({
-						url: `https://api.spotify.com/v1/me/player${type ? "/" + type : ""}?${Object.entries(Object.assign({device_id: device.id}, data)).map(n => `${n[0]}=${n[1]}`).join("&")}`,
-						headers: {
-							authorization: `Bearer ${socket.accessToken}`
-						}
-					}, (error, response, result) => {
+					BDFDB.LibraryRequires.request(`https://api.spotify.com/v1/me/player${type ? "/" + type : ""}?${Object.entries(Object.assign({device_id: device.id}, data)).map(n => `${n[0]}=${n[1]}`).join("&")}`, {method: method, headers: {authorization: `Bearer ${socket.accessToken}`}}, (error, response, result) => {
+						console.log(response);
 						if (response && response.statusCode == 401) {
 							BDFDB.LibraryModules.SpotifyUtils.getAccessToken(socket.accountId).then(promiseResult => {
 								let newSocketDevice = BDFDB.LibraryStores.SpotifyStore.getActiveSocketAndDevice();
