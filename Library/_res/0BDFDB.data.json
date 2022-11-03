@@ -461,6 +461,7 @@
 		"UserInfo": {"strings": [".botTag", "isMobile:", ".discordTag"]},
 		"UserGenericContextMenu": {"strings": ["USER_ACTIONS_MENU_LABEL", "navId:\"user", ".USER_GENERIC_MENU"]},
 		"UserMemberContextMenu": {"strings": ["USER_ACTIONS_MENU_LABEL", "navId:\"user", ".GUILD_CHANNEL_USER_MENU"]},
+		"UserMemberSinceSection": {"strings": [".userId", "headingClassName:l", ".guildMember"]},
 		"UsernameSection": {"strings": [".shouldCopyOnClick", ".userTagDiscriminatorNoNickname"]},
 		"UserPopoutAvatar": {"strings": ["isNonUserBot", "avatarHintInnerText", "avatarDecorationHint"]},
 		"UserPopoutBody": {"strings": ["isNonUserBot", "customStatusActivity", "bodyInnerWrapper"]},
