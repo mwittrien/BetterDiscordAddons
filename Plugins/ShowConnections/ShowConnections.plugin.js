@@ -61,80 +61,83 @@ module.exports = (_ => {
 		
 		const UserConnectionsComponents = class UserConnections extends BdApi.React.Component {
 			render() {
+				if (!loadedUsers[this.props.user.id] && !requestedUsers[this.props.user.id]) {
+					requestedUsers[this.props.user.id] = true;
+					queuedInstances[this.props.user.id] = [].concat(queuedInstances[this.props.user.id]).filter(n => n);
+					BDFDB.LibraryModules.UserProfileUtils.fetchProfile(this.props.user.id);
+				}
 				if (!loadedUsers[this.props.user.id]) {
 					if (queuedInstances[this.props.user.id].indexOf(this) == -1) queuedInstances[this.props.user.id].push(this);
 					return null;
 				}
-				else {
-					let connections = loadedUsers[this.props.user.id].filter(c => _this.settings.connections[c.type]);
-					if (!connections.length) return null;
-					let isLightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
-					let children = [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Heading, {
-							className: BDFDB.disCN.userpopoutsectiontitle,
-							variant: "eyebrow",
-							color: this.props.old ? "header-secondary" : null,
-							children: BDFDB.LanguageUtils.LanguageStrings.CONNECTIONS
-						}),
-						BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN._showconnectionsconnections,
-							children: connections.map(c => {
-								let provider = BDFDB.LibraryModules.ConnectionProviderUtils.get(c.type);
-								let url = _this.settings.general.openWebpage && provider.getPlatformUserUrl && provider.getPlatformUserUrl(c);
-								return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-									text: `${provider.name}: ${c.name}`,
-									tooltipConfig: {backgroundColor: _this.settings.general.useColoredTooltips && BDFDB.ColorUtils.change(provider.color, -0.3), color: !_this.settings.general.useColoredTooltips || !provider.color ? "black" : null},
-									children: BDFDB.ReactUtils.createElement(!url ? "div" : BDFDB.LibraryComponents.Anchor, Object.assign(!url ? {} : {
-										href: url
-									}, {
-										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._showconnectionsconnection, url && BDFDB.disCN.cursorpointer),
-										onContextMenu: event => {
-											BDFDB.ContextMenuUtils.open(_this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-												children: [
-													BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-														label: BDFDB.LanguageUtils.LibraryStringsFormat("copy", BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME),
-														id: BDFDB.ContextMenuUtils.createItemId(_this.name, "copy-name"),
-														action: _ => BDFDB.LibraryModules.WindowUtils.copy(c.name)
-													}),
-													url && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-														label: BDFDB.LanguageUtils.LibraryStringsFormat("copy", BDFDB.LanguageUtils.LanguageStrings.SEARCH_ANSWER_HAS_LINK),
-														id: BDFDB.ContextMenuUtils.createItemId(_this.name, "copy-url"),
-														action: _ => BDFDB.LibraryModules.WindowUtils.copy(url)
-													})
-												]
-											}));
-										},
-										children: [
-											BDFDB.ReactUtils.createElement("img", {
-												className: BDFDB.disCN._showconnectionsicon,
-												alt: BDFDB.LanguageUtils.LanguageStringsFormat("IMG_ALT_LOGO", provider.name),
-												src: provider.icon[_this.settings.general.useColoredIcons ? (isLightTheme ? "lightSVG" : "darkSVG" ) : "whiteSVG"]
-											}),
-											_this.settings.general.showVerifiedBadge && c.verified && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-												text: BDFDB.LanguageUtils.LanguageStrings.CONNECTION_VERIFIED,
-												tooltipConfig: {color: "brand", type: "bottom"},
-												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FlowerStar, {
-													className: BDFDB.disCN._showconnectionsverifiedbadge,
-													size: "50%",
-													color: isLightTheme ? BDFDB.DiscordConstants.Colors.STATUS_GREY_200 : BDFDB.DiscordConstants.Colors.PRIMARY_DARK,
-													children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-														name: BDFDB.LibraryComponents.SvgIcon.Names.CHECKMARK,
-														width: "70%",
-														height: "70%",
-														color: isLightTheme ? BDFDB.DiscordConstants.Colors.STATUS_GREY_500 : BDFDB.DiscordConstants.Colors.WHITE
-													})
+				let connections = loadedUsers[this.props.user.id].filter(c => _this.settings.connections[c.type]);
+				if (!connections.length) return null;
+				let isLightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
+				let children = [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Heading, {
+						className: BDFDB.disCN.userpopoutsectiontitle,
+						variant: "eyebrow",
+						color: this.props.old ? "header-secondary" : null,
+						children: BDFDB.LanguageUtils.LanguageStrings.CONNECTIONS
+					}),
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN._showconnectionsconnections,
+						children: connections.map(c => {
+							let provider = BDFDB.LibraryModules.ConnectionProviderUtils.get(c.type);
+							let url = _this.settings.general.openWebpage && provider.getPlatformUserUrl && provider.getPlatformUserUrl(c);
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: `${provider.name}: ${c.name}`,
+								tooltipConfig: {backgroundColor: _this.settings.general.useColoredTooltips && BDFDB.ColorUtils.change(provider.color, -0.3), color: !_this.settings.general.useColoredTooltips || !provider.color ? "black" : null},
+								children: BDFDB.ReactUtils.createElement(!url ? "div" : BDFDB.LibraryComponents.Anchor, Object.assign(!url ? {} : {
+									href: url
+								}, {
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._showconnectionsconnection, url && BDFDB.disCN.cursorpointer),
+									onContextMenu: event => {
+										BDFDB.ContextMenuUtils.open(_this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+											children: [
+												BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+													label: BDFDB.LanguageUtils.LibraryStringsFormat("copy", BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME),
+													id: BDFDB.ContextMenuUtils.createItemId(_this.name, "copy-name"),
+													action: _ => BDFDB.LibraryModules.WindowUtils.copy(c.name)
+												}),
+												url && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+													label: BDFDB.LanguageUtils.LibraryStringsFormat("copy", BDFDB.LanguageUtils.LanguageStrings.SEARCH_ANSWER_HAS_LINK),
+													id: BDFDB.ContextMenuUtils.createItemId(_this.name, "copy-url"),
+													action: _ => BDFDB.LibraryModules.WindowUtils.copy(url)
+												})
+											]
+										}));
+									},
+									children: [
+										BDFDB.ReactUtils.createElement("img", {
+											className: BDFDB.disCN._showconnectionsicon,
+											alt: BDFDB.LanguageUtils.LanguageStringsFormat("IMG_ALT_LOGO", provider.name),
+											src: provider.icon[_this.settings.general.useColoredIcons ? (isLightTheme ? "lightSVG" : "darkSVG" ) : "whiteSVG"]
+										}),
+										_this.settings.general.showVerifiedBadge && c.verified && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+											text: BDFDB.LanguageUtils.LanguageStrings.CONNECTION_VERIFIED,
+											tooltipConfig: {color: "brand", type: "bottom"},
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FlowerStar, {
+												className: BDFDB.disCN._showconnectionsverifiedbadge,
+												size: "50%",
+												color: isLightTheme ? BDFDB.DiscordConstants.Colors.STATUS_GREY_200 : BDFDB.DiscordConstants.Colors.PRIMARY_DARK,
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+													name: BDFDB.LibraryComponents.SvgIcon.Names.CHECKMARK,
+													width: "70%",
+													height: "70%",
+													color: isLightTheme ? BDFDB.DiscordConstants.Colors.STATUS_GREY_500 : BDFDB.DiscordConstants.Colors.WHITE
 												})
 											})
-										]
-									}))
-								});
-							})
+										})
+									]
+								}))
+							});
 						})
-					];
-					return this.props.old ? children : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserPopoutSection, {
-						children: children
-					});
-				}
+					})
+				];
+				return this.props.old ? children : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserPopoutSection, {
+					children: children
+				});
 			}
 		};
 		
@@ -240,11 +243,6 @@ module.exports = (_ => {
 			processUserConnectionsSection (e) {
 				let user = e.instance.props.user || BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId);
 				if (!user || user.isNonUserBot()) return;
-				if (!loadedUsers[user.id] && !requestedUsers[user.id]) {
-					requestedUsers[user.id] = true;
-					queuedInstances[user.id] = [].concat(queuedInstances[user.id]).filter(n => n);
-					BDFDB.LibraryModules.UserProfileUtils.fetchProfile(user.id);
-				}
 				e.returnvalue = [
 					e.returnvalue,
 					BDFDB.ReactUtils.createElement(UserConnectionsComponents, {
@@ -255,11 +253,6 @@ module.exports = (_ => {
 			
 			processUserPopoutBody (e) {
 				if (!e.instance.props.user || e.instance.props.user.isNonUserBot()) return;
-				if (!loadedUsers[e.instance.props.user.id] && !requestedUsers[e.instance.props.user.id]) {
-					requestedUsers[e.instance.props.user.id] = true;
-					queuedInstances[e.instance.props.user.id] = [].concat(queuedInstances[e.instance.props.user.id]).filter(n => n);
-					BDFDB.LibraryModules.UserProfileUtils.fetchProfile(e.instance.props.user.id);
-				}
 				let bodyInner = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutbodyinnerwrapper]]});
 				if (bodyInner) bodyInner.props.children.splice(bodyInner.props.children.length - 2, 0, BDFDB.ReactUtils.createElement(UserConnectionsComponents, {
 					old: true,
