@@ -1065,7 +1065,7 @@
 			"switchIcon": "switchIcon-QY6cR4"
 		},
 		"LastMessageDate": {
-			"date": "lastMessageDate-ocEw13"
+			"icon": "icon-ocEw13"
 		},
 		"OldTitleBar": {
 			"oldTitleBarEnabled": "oldTitleBarEnabled-D8ppJQ",
@@ -1592,7 +1592,7 @@
 		"_imageutilitiesprevious": ["ImageUtilities", "previous"],
 		"_imageutilitiessibling": ["ImageUtilities", "sibling"],
 		"_imageutilitiesswitchicon": ["ImageUtilities", "switchIcon"],
-		"_lastmessagedatedate": ["LastMessageDate", "date"],
+		"_lastmessagedateicon": ["LastMessageDate", "icon"],
 		"_oldtitlebarenabled": ["OldTitleBar", "oldTitleBarEnabled"],
 		"_oldtitlebarsettingstoolbar": ["OldTitleBar", "settingsToolbar"],
 		"_oldtitlebartoolbar": ["OldTitleBar", "toolbar"],
