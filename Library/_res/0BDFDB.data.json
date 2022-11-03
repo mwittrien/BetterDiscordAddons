@@ -3302,8 +3302,9 @@
 		"userpopoutroles": ["Role", "root"],
 		"userpopoutsetidentitylink": ["UserPopout", "setIdentityLink"],
 		"userpopoutsection": ["UserPopoutSection", "section"],
+		"userpopoutsectionbody": ["UserPopoutSectionTitle", "body"]
 		"userpopoutsectionlast": ["UserPopoutSection", "lastSection"],
-		"userpopoutsectiontitle": ["UserPopoutSectionTitle", "title"],
+		"userpopoutsectiontitle": ["UserPopoutSectionTitle", "title"],,
 		"userpopoutthemedavatar": ["UserPopoutAvatar", "avatar"],
 		"userpopoutthemedavatarwrapper": ["UserPopoutAvatar", "avatarWrapper"],
 		"userpopoutusernamebottag": ["UserPopoutUsernameSection", "headerBotTag"],
