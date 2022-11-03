@@ -467,7 +467,7 @@
 		"UserPopoutAvatar": {"strings": ["isNonUserBot", "avatarHintInnerText", "avatarDecorationHint"]},
 		"UserPopoutBody": {"strings": ["isNonUserBot", "customStatusActivity", "bodyInnerWrapper"]},
 		"UserPopoutInfo": {"strings": [".hasCustomStatus", ".premiumGuildSince", "openPremiumSettings"]},
-		"UserProfileModalHeader": {"strings": [".friendToken", ".additionalActionsIcon", "onMessage"]},
+		"UserProfileHeader": {"strings": [".friendToken", ".additionalActionsIcon", "onMessage"]},
 		"UserRolesSection": {"strings": [".rolePillBorder", "numRoles", "roleClassName"]},
 		"UserSummaryItem": {"protos": ["renderMoreUsers", "renderUsers", "renderIcon"]},
 		"UserSettingsAppearance": {"protos": ["renderTheme", "renderDisplayMode", "renderMessageGroupSpacingSlider"]},

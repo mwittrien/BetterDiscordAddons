@@ -105,8 +105,8 @@ module.exports = (_ => {
 						UserThemePopoutHeader: "default",
 						UsernameSection: "default",
 						UserPopoutInfo: "UserPopoutInfo",
-						UserProfileModal: "default",
-						UserProfileModalHeader: "default",
+						UserProfile: "default",
+						UserProfileHeader: "default",
 						UserInfo: "default",
 						NowPlayingItem: "default",
 						VoiceUser: "render",
@@ -696,11 +696,11 @@ module.exports = (_ => {
 				}
 			}
 
-			processUserProfileModal (e) {
+			processUserProfile (e) {
 				if (e.instance.props.user && this.settings.places.userProfile) e.instance.props.user = this.getUserData(e.instance.props.user.id);
 			}
 
-			processUserProfileModalHeader (e) {
+			processUserProfileHeader (e) {
 				if (e.instance.props.user && this.settings.places.userProfile) e.instance.props.user = this.getUserData(e.instance.props.user.id);
 			}
 

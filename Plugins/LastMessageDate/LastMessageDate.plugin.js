@@ -86,8 +86,8 @@ module.exports = (_ => {
 						UserPopoutContainer: "type",
 						UsernameSection: "default",
 						UserPopoutInfo: "UserPopoutInfo",
-						UserProfileModal: "default",
-						UserProfileModalHeader: "default"
+						UserProfile: "default",
+						UserProfileHeader: "default"
 					}
 				};
 			}
@@ -189,11 +189,11 @@ module.exports = (_ => {
 				}
 			}
 
-			processUserProfileModal (e) {
+			processUserProfile (e) {
 				currentProfile = e.instance;
 			}
 			
-			processUserProfileModalHeader (e) {
+			processUserProfileHeader (e) {
 				if (currentProfile && e.instance.props.user && this.settings.places.userProfile) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["DiscordTag", "ColoredFluxTag"]});
 					if (index > -1) this.injectDate(children, index + 1, e.instance.props.user, currentProfile.props.guildId);
