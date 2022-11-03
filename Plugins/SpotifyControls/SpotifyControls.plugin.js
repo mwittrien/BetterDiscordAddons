@@ -85,7 +85,7 @@ module.exports = (_ => {
 							method = "get";
 							break;
 					};
-					BDFDB.LibraryRequires.request(`https://api.spotify.com/v1/me/player${type ? "/" + type : ""}?${Object.entries(Object.assign({device_id: device.id}, data)).map(n => `${n[0]}=${n[1]}`).join("&")}`, {method: method, headers: {authorization: `Bearer ${socket.accessToken}`}}, (error, response, result) => {
+					BDFDB.LibraryRequires.request(`https://api.spotify.com/v1/me/player${type ? "/" + type : ""}`, {method: method, form: Object.assign({device_id: device.id}, data), headers: {authorization: `Bearer ${socket.accessToken}`}}, (error, response, result) => {
 						if (response && response.statusCode == 401) {
 							BDFDB.LibraryModules.SpotifyUtils.getAccessToken(socket.accountId).then(promiseResult => {
 								let newSocketDevice = BDFDB.LibraryStores.SpotifyStore.getActiveSocketAndDevice();
