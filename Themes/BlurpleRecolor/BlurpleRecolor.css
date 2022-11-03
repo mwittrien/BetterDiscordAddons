@@ -847,6 +847,10 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 	background: var(--accentcolor-hover);
 }
 
+.premiumFeatureBorder-3vL7bn {								/* profilesettings		premium border						*/
+	border-color: rgb(var(--accentcolor));
+}
+
 #app-mount .tier1ProfilePerk-2IBE1c {						/* nitropage			tier 1 profile icon					*/
 	color: rgb(var(--accentcolor));
 	filter: brightness(75%);
