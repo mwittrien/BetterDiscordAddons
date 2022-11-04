@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.5
+ * @version 2.9.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2186,10 +2186,29 @@ module.exports = (_ => {
 						if (!PluginStores.modulePatches[patchType]) PluginStores.modulePatches[patchType] = {};
 						for (let type of plugin.modulePatches[patchType]) {
 							if (InternalData.PatchModules[type]) {
-								if (!PluginStores.modulePatches[patchType][type]) PluginStores.modulePatches[patchType][type] = [];
-								if (!PluginStores.modulePatches[patchType][type][patchPriority]) PluginStores.modulePatches[patchType][type][patchPriority] = [];
-								PluginStores.modulePatches[patchType][type][patchPriority].push(plugin);
-								if (PluginStores.modulePatches[patchType][type][patchPriority].length > 1) PluginStores.modulePatches[patchType][type][patchPriority] = BDFDB.ArrayUtils.keySort(PluginStores.modulePatches[patchType][type][patchPriority], "name");
+								let found = false;
+								if (patchType == "before" || patchType == "after") {
+									let exports = (BDFDB.ModuleUtils.find(m => Internal.isCorrectModule(m, type) && m, {defaultExport: false}) || {}).exports;
+									if (exports && !exports.default) for (let key of Object.keys(exports)) if (typeof exports[key] == "function" && !(exports[key].prototype && exports[key].prototype.render) && Internal.isCorrectModule(exports[key], type, false) && exports[key].toString().length < 50000) {
+										found = true;
+										BDFDB.PatchUtils.patch(plugin, exports, key, {[patchType]: e => Internal.initiatePatch(plugin, type, {
+											arguments: e.methodArguments,
+											instance: e.instance,
+											returnvalue: e.returnValue,
+											component: exports[key],
+											name: type,
+											methodname: "render",
+											patchtypes: [patchType]
+										})}, {name: type});
+										break;
+									}
+								}
+								if (!found) {
+									if (!PluginStores.modulePatches[patchType][type]) PluginStores.modulePatches[patchType][type] = [];
+									if (!PluginStores.modulePatches[patchType][type][patchPriority]) PluginStores.modulePatches[patchType][type][patchPriority] = [];
+									PluginStores.modulePatches[patchType][type][patchPriority].push(plugin);
+									if (PluginStores.modulePatches[patchType][type][patchPriority].length > 1) PluginStores.modulePatches[patchType][type][patchPriority] = BDFDB.ArrayUtils.keySort(PluginStores.modulePatches[patchType][type][patchPriority], "name");
+								}
 							}
 							else BDFDB.LogUtils.warn(`[${type}] not found in PatchModules InternalData`, plugin);
 						}
