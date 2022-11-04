@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.7
+ * @version 1.5.8
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -109,6 +109,7 @@ module.exports = (_ => {
 						"RecentMentions",
 						"RichUserMention",
 						"SearchResultsInner",
+						"UserMention",
 						"VoiceUser",
 						"VoiceUsers"
 					]
@@ -480,7 +481,7 @@ module.exports = (_ => {
 									let children = childrenRender(...args);
 									children.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
 									return children;
-								}, "", this);
+								}, "Error in Children Render of PrivateChannel!", this);
 							}
 							else wrapper.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getGroupName(e.instance.props.channel.id)});
 						}
@@ -501,19 +502,22 @@ module.exports = (_ => {
 				if (this.settings.places.memberList && BDFDB.ArrayUtils.is(e.instance.props.users)) e.instance.props.users = [].concat(e.instance.props.users).filter(n => !n || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id));
 			}
 			
-			// TODO FIX IN react FUNCTION BDFDB.ModuleUtils.findByString(".inlinePreview", "renderPopout", "mention", {all: true})
-			processUserMention (e) {
-				if (e.instance.props.userId && this.settings.places.mentions && BDFDB.LibraryStores.RelationshipStore.isBlocked(e.instance.props.userId)) return BDFDB.ReactUtils.createElement("span", {
-					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.mention, BDFDB.disCN.mentionwrapper, e.instance.props.className),
-					children: ["@" + BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER]
-				});
-			}
-			
 			processRichUserMention (e) {
 				if (e.instance.props.id && this.settings.places.mentions && BDFDB.LibraryStores.RelationshipStore.isBlocked(e.instance.props.id)) return BDFDB.ReactUtils.createElement("span", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.mention, BDFDB.disCN.mentionwrapper, e.instance.props.className),
 					children: ["@" + BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER]
 				});
+			}
+			
+			processUserMention (e) {
+				if (e.instance.props.userId && this.settings.places.mentions && BDFDB.LibraryStores.RelationshipStore.isBlocked(e.instance.props.userId)) {
+					let childrenRender = e.returnvalue.props.children;
+					e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
+						let children = childrenRender(...args);
+						if (children && children.props) children.props.children = "@" + BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER;
+						return children;
+					}, "Error in Children Render of PrivateChannel!", this);
+				}
 			}
 			
 			getGroupName (channelId) {
