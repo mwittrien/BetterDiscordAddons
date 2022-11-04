@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.3
+ * @version 4.4.4
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -487,10 +487,11 @@ module.exports = (_ => {
 				let getChannelFromSectionRow = e.instance.props.guildChannels.getChannelFromSectionRow.bind(e.instance.props.guildChannels);
 				e.instance.props.guildChannels.getChannelFromSectionRow = BDFDB.TimeUtils.suppress((...args) => {
 					let returnValue = getChannelFromSectionRow(...args);
-					if (returnValue.channel && returnValue.category) returnValue = Object.assign({}, returnValue, {
-						channel: Object.assign({}, returnValue.channel, {record: this.getChannelData(returnValue.channel.record.id)}),
-						category: Object.assign({}, returnValue.category, {record: this.getChannelData(returnValue.category.record.id)})
-					});
+					if (returnValue.channel && returnValue.category) {
+						returnValue = Object.assign({}, returnValue);
+						returnValue.channel.record = this.getChannelData(returnValue.channel.record.id);
+						returnValue.category.record = this.getChannelData(returnValue.category.record.id);
+					}
 					return returnValue;
 				}, "Error in getChannelFromSectionRow of ChannelsList!", this);
 			}
