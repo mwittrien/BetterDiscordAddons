@@ -454,6 +454,7 @@
 		"Reactor": {"strings": ["currentUser cannot be undefined", "reactorDefault"]},
 		"ReactorsComponent": {"strings": ["hasMore", "emoji", "spinnerMore"]},
 		"RecentMentions": {"strings": ["canCloseAllMessages", "RECENT_MENTIONS", "badgeable"]},
+		"RecentsChannelHeader": {"strings": ["\"ArrowRight\"", "gotoChannel:"]},
 		"RichUserMention": {"strings": ["hidePersonalInformation", "getUser", "userTooltip"]},
 		"SearchBar": {"strings": [").inputRef", ".containerRef", ".handleOnChange"]},
 		"SearchPopout": {"strings": [".handleHintClick", ".selectedIndex", "token.start"]},
