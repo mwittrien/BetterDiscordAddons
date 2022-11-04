@@ -6798,13 +6798,13 @@ module.exports = (_ => {
 							child.props.className = BDFDB.DOMUtils.formatClassName(child.props.className, this.props.className);
 							const childProps = Object.assign({}, child.props);
 							child.props.onClick = (e, childThis) => {
-								if ((this.props.openOnClick || this.props.openOnClick === undefined)) this.toggle(1);
+								if ((this.props.openOnClick || this.props.openOnClick === undefined)) this.toggle();
 								if (typeof this.props.onClick == "function") this.props.onClick(e, this);
 								if (typeof childProps.onClick == "function") childProps.onClick(e, childThis);
 								if (this.props.killEvent || childProps.killEvent) BDFDB.ListenerUtils.stopEvent(e);
 							};
 							child.props.onContextMenu = (e, childThis) => {
-								if (this.props.openOnContextMenu) this.toggle(2);
+								if (this.props.openOnContextMenu) this.toggle();
 								if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
 								if (typeof childProps.onContextMenu == "function") childProps.onContextMenu(e, childThis);
 								if (this.props.killEvent || childProps.killEvent) BDFDB.ListenerUtils.stopEvent(e);

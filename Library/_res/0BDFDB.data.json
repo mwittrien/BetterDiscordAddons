@@ -238,7 +238,7 @@
 	"LibraryComponents": {
 		"Anchor": {"strings": ["anchorUnderlineOnHover", "noreferrer noopener"]},
 		"Animations": {"props": ["Controller", "Spring"]},
-		"AppReferencePositionLayer": {"strings": ["\"onMount\"", "\"onUnmount\""], "funcStrings": ["createRef"]},
+		"AppReferencePositionLayer": {"strings": ["\"onMount\"", "\"onUnmount\""]},
 		"Avatars": {"strings": ["\"statusColor\"", "ONLINE", "isMobile"], "exported": false, "value": "exports", "map": {
 			"AnimatedAvatar": ["compare"],
 			"Avatar": ["statusColor"],
