@@ -2,7 +2,7 @@
  * @name TopRoleEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.0
+ * @version 3.1.1
  * @description Adds the highest Role of a User as a Tag
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -184,7 +184,7 @@ module.exports = (_ => {
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true
 				});
-				if (this.settings.general.addUserId) this.injectIdTag(e.returnvalue.props.children, author, "chat", (e.instance.props.compact ? index : (index + 2)) + (this.settings.general.userIdFirst ? 0 : 1), {
+				if (this.settings.general.addUserId) this.injectIdTag(children, author, "chat", (e.instance.props.compact ? index : (index + 2)) + (this.settings.general.userIdFirst ? 0 : 1), {
 					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 					useRem: true
 				});
