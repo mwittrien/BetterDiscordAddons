@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.2
+ * @version 1.3.3
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -180,18 +180,6 @@ module.exports = (_ => {
 					children: _ => {
 						let settingsItems = [];
 						
-						settingsItems.push(Object.keys(this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-							type: "Switch",
-							plugin: this,
-							keys: ["general", key],
-							label: key == "displayText" ? this.defaults.general[key].description.replace("{{presuffix}}", this.labels.last_message.replace("{{time}}", "").trim()) : this.defaults.general[key].description,
-							value: this.settings.general[key]
-						})));
-						
-						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-							className: BDFDB.disCN.marginbottom8
-						}));
-						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 							title: "Add Date in:",
 							children: Object.keys(this.defaults.places).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
@@ -209,8 +197,6 @@ module.exports = (_ => {
 						
 						settingsItems.push(Object.keys(this.defaults.dates).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.DateInput, Object.assign({}, this.settings.dates[key], {
 							label: this.defaults.dates[key].description,
-							prefix: _ => (this.settings.general.displayText && this.labels.last_message.split("{{time}}")[0] || "").trim(),
-							suffix: _ => (this.settings.general.displayText && this.labels.last_message.split("{{time}}")[1] || "").trim(),
 							onChange: valueObj => {
 								this.SettingsUpdated = true;
 								this.settings.dates[key] = valueObj;
