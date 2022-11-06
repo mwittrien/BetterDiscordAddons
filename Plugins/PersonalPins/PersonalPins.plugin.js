@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.3
+ * @version 2.1.4
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -81,6 +81,7 @@ module.exports = (_ => {
 				for (let guild_id in notes) for (let channel_id in notes[guild_id]) for (let message_idPOS in notes[guild_id][channel_id]) {
 					let message = JSON.parse(notes[guild_id][channel_id][message_idPOS].message);
 					message.author = new BDFDB.DiscordObjects.User(message.author);
+					if (message.interaction && message.interaction.user) message.interaction.user = new BDFDB.DiscordObjects.User(message.interaction.user);
 					message.timestamp = new BDFDB.DiscordObjects.Timestamp(message.timestamp);
 					message.editedTimestamp = message.editedTimestamp && new BDFDB.DiscordObjects.Timestamp(message.editedTimestamp);
 					if (message.customRenderedContent && message.customRenderedContent.content.length) message.customRenderedContent.content = BDFDB.ReactUtils.objectToReact(message.customRenderedContent.content);
@@ -171,7 +172,7 @@ module.exports = (_ => {
 								message: message,
 								channel: channel,
 								onContextMenu: e => BDFDB.MessageUtils.openMenu(message, e, true)
-							}),
+							}, true),
 							BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.messagespopoutactionbuttons,
 								children: [
@@ -580,7 +581,7 @@ module.exports = (_ => {
 						popoutProps.selectedSort = popoutProps.selectedSort || this.getPopoutValue(this.settings.choices.defaultSort || sortKeys[0], "sort");
 						popoutProps.selectedOrder = popoutProps.selectedOrder || this.getPopoutValue(this.settings.choices.defaultOrder || orderKeys[0], "order");
 						popoutProps.searchKey = popoutProps.searchKey || "";
-						return BDFDB.ReactUtils.createElement(NotesPopoutComponent, {});
+						return BDFDB.ReactUtils.createElement(NotesPopoutComponent, {}, true);
 					}
 				}));
 			}

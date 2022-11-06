@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.5
+ * @version 1.1.6
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -72,7 +72,7 @@ module.exports = (_ => {
 				}
 				let connections = loadedUsers[this.props.user.id].filter(c => _this.settings.connections[c.type]);
 				if (!connections.length) return null;
-				let isLightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
+				let isLightTheme = (!this.props.theme || this.props.theme == "light") && BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
 				let children = [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Heading, {
 						className: BDFDB.disCN.userpopoutsectiontitle,
@@ -150,8 +150,8 @@ module.exports = (_ => {
 				
 				this.modulePatches = {
 					after: [
-						"UserPopoutBody",
-						"UserConnectionsSection"
+						"UserConnectionsSection",
+						"UserPopoutBody"
 					]
 				};
 				
@@ -246,7 +246,8 @@ module.exports = (_ => {
 				e.returnvalue = [
 					e.returnvalue,
 					BDFDB.ReactUtils.createElement(UserConnectionsComponents, {
-						user: user
+						user: user,
+						theme: e.instance.props.theme
 					}, true)
 				];
 			}
