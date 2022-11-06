@@ -66,7 +66,6 @@ module.exports = (_ => {
 						"ChannelMembers",
 						"MemberListItem",
 						"MessageContent",
-						"RoleMention",
 						"UserPopoutBody",
 						"UserThemedPopoutBody"
 					],
