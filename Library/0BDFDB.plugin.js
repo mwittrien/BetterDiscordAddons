@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.7
+ * @version 2.9.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2187,7 +2187,7 @@ module.exports = (_ => {
 						for (let type of plugin.modulePatches[patchType]) {
 							if (InternalData.PatchModules[type]) {
 								let found = false;
-								if (patchType == "before" || patchType == "after") {
+								if (!InternalData.PatchModules[type].noSearch && (patchType == "before" || patchType == "after")) {
 									let exports = (BDFDB.ModuleUtils.find(m => Internal.isCorrectModule(m, type) && m, {defaultExport: false}) || {}).exports;
 									if (exports && !exports.default) for (let key of Object.keys(exports)) if (typeof exports[key] == "function" && !(exports[key].prototype && exports[key].prototype.render) && Internal.isCorrectModule(exports[key], type, false) && exports[key].toString().length < 50000) {
 										found = true;

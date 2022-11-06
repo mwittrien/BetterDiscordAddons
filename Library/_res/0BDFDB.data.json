@@ -238,7 +238,7 @@
 	"LibraryComponents": {
 		"Anchor": {"strings": ["anchorUnderlineOnHover", "noreferrer noopener"]},
 		"Animations": {"props": ["Controller", "Spring"]},
-		"AppReferencePositionLayer": {"strings": ["\"onMount\"", "\"onUnmount\""]},
+		"AppReferencePositionLayer": {"strings": ["\"onMount\"", "\"onUnmount\""], "funcStrings": ["createRef"]},
 		"Avatars": {"strings": ["\"statusColor\"", "ONLINE", "isMobile"], "exported": false, "value": "exports", "map": {
 			"AnimatedAvatar": ["compare"],
 			"Avatar": ["statusColor"],
@@ -422,7 +422,7 @@
 		"MessageContent": {"strings": [".SEND_FAILED", "editedTimestamp", ".MESSAGE_EDITED"]},
 		"MessageContextMenu": {"strings": ["MESSAGE_ACTIONS_MENU_LABEL", "navId:\"message", "getGuildId"]},
 		"MessageGroup": {"strings": ["backgroundFlash", "renderMediaEmbeds", "THREAD_STARTER_MESSAG"]},
-		"MessageHeader": {"strings": ["showTimestampOnHover", "usernameClassName", "isVisibleOnlyOnHover:"]},
+		"MessageHeader": {"strings": ["showTimestampOnHover", "usernameClassName", "isVisibleOnlyOnHover:"], "noSearch": true},
 		"MessageReply": {"strings": [".isFirstMessageInForumPost", ".referencedUsernameProfile", "referencedMessage"]},
 		"Messages": {"strings": ["messageGroupSpacing", "groupSpacing", "jumpToPresent"]},
 		"MessageSearchResultContextMenu": {"strings": ["MESSAGE_ACTIONS_MENU_LABEL", "navId:\"message"], "nonStrings": ["getGuildId"]},
