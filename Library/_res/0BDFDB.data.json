@@ -386,6 +386,7 @@
 		"DirectMessage": {"strings": ["getRecipientId", "Controller", "handleContextMenu", ".DM"]},
 		"DiscordTag": {"strings": ["hidePersonalInformation", "isVerifiedBot", "botType"]},
 		"Embed": {"strings": ["gridContainer", "renderEmbedContent", "hasThumbnail"]},
+		"EmojiPicker": {"strings": [".pickerIntention", "inExpressionPicker"]},
 		"EmojiPickerListRow": {"strings": ["emojiSize", "surrogateCodePoint", "EMOJI_FAVORITE_TOOLTIP"]},
 		"FocusRingScope": {"strings": ["FocusRing", "ringTarget was not"]},
 		"FolderHeader": {"strings": [".folderNode", "expandedFolderIconWrapper", "forceCircular"]},

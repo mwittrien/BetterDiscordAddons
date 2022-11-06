@@ -2,7 +2,7 @@
  * @name EmojiStatistics
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.9
+ * @version 3.0.0
  * @description Shows you an Overview of Emojis and Emoji Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -56,14 +56,15 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var emojiReplicaList;
+		var emojiReplicaList, EmojiPicker;
 		
 		return class EmojiStatistics extends Plugin {
 			onLoad () {
-				this.patchedModules = {
-					after: {
-						EmojiPicker: "render"
-					}
+				this.modulePatches = {
+					after: [
+						"EmojiPicker",
+						"EmojiPickerHeader"
+					]
 				};
 				
 				this.css = `
@@ -85,6 +86,7 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.emojipicker + BDFDB.dotCN._emojistatisticsstatisticsbutton} {
 						width: 24px;
 						height: 24px;
+						margin-right: 12px;
 						grid-column: 2/3;
 					}
 					${BDFDB.dotCNS.emojipicker + BDFDB.dotCN.emojipickerdiversityselector} {
@@ -102,9 +104,12 @@ module.exports = (_ => {
 			}
 
 			processEmojiPicker (e) {
+				EmojiPicker = e.instance;
+			}
+			
+			processEmojiPickerHeader (e) {
 				this.loadEmojiList();
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "DiversitySelector"});
-				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+				e.returnvalue.props.children.splice(e.returnvalue.props.children.length - 2, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: this.labels.modal_header,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 						className: BDFDB.disCN._emojistatisticsstatisticsbutton,
@@ -115,7 +120,7 @@ module.exports = (_ => {
 					}),
 					onClick: _ => {
 						this.showEmojiInformationModal();
-						e.instance.props.closePopout();
+						if (EmojiPicker && EmojiPicker.props.closePopout) EmojiPicker.props.closePopout();
 					}
 				}));
 			}
@@ -150,10 +155,9 @@ module.exports = (_ => {
 							cellClassName: BDFDB.disCN[`_emojistatistics${data.cell}cell`],
 							renderHeader: _ => this.labels[`modal_titles${data.key}`],
 							render: item => {
-								if (data.key == "icon") return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Guild, {
+								if (data.key == "icon") return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildIconComponents.Icon, {
 									guild: item.guild,
-									menu: false,
-									tooltip: false
+									size: BDFDB.LibraryComponents.GuildIconComponents.Icon.Sizes.MEDIUM
 								});
 								else if (data.key == "name") return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 									children: item.guild.name
