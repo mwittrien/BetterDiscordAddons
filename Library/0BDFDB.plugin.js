@@ -7909,11 +7909,12 @@ module.exports = (_ => {
 						let guildId = this.props.guildId || channel && channel.guild_id;
 						let mention = BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Clickable, {
 							className: this.props.className,
-							onContextMenu: event => BDFDB.UserUtils.openMenu(user, guildId, event),
+							onContextMenu: event => BDFDB.UserUtils.openMenu(user, guildId, channel.id, event),
 							children: "@" + BDFDB.LibraryModules.UserNameUtils.getName(guildId, this.props.channelId, user)
 						});
 						return this.props.inlinePreview ? mention : BDFDB.ReactUtils.createElement(Internal.LibraryComponents.UserPopoutContainer, Object.assign({}, this.props, {
 							position: Internal.LibraryComponents.PopoutContainer.Positions.RIGHT,
+							align: Internal.LibraryComponents.PopoutContainer.Align.BOTTOM,
 							children: mention
 						}));
 					}
