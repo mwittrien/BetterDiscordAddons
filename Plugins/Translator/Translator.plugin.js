@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.4
+ * @version 2.4.5
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -414,6 +414,13 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageUtils, "startEditMessage", {before: e => {
+					if (e.methodArguments[1] && oldMessages[e.methodArguments[1]] && oldMessages[e.methodArguments[1]].content) e.methodArguments[2] = oldMessages[e.methodArguments[1]].content;
+				}});
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageUtils, "editMessage", {before: e => {
+					delete translatedMessages[e.methodArguments[1]];
+					delete oldMessages[e.methodArguments[1]];
+				}});
 				this.forceUpdateAll();
 			}
 			
@@ -531,7 +538,7 @@ module.exports = (_ => {
 
 			onMessageContextMenu (e) {
 				if (e.instance.props.message && e.instance.props.channel) {
-					let translated = translatedMessages[e.instance.props.message.id];
+					let translated = !!translatedMessages[e.instance.props.message.id];
 					let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Translate_Message") : null;
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
 					if (index == -1) [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["edit", "add-reaction", "quote"]});
