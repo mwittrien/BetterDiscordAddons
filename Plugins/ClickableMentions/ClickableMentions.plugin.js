@@ -2,7 +2,7 @@
  * @name ClickableMentions
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.0.5
+ * @version 1.0.6
  * @description Allows you to open a User Popout by clicking a Mention in your Message Input
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -58,15 +58,10 @@ module.exports = (_ => {
 	} : (([Plugin, BDFDB]) => {
 		return class ClickableMentions extends Plugin {
 			onLoad () {
-				this.patchedModules = {
-					before: {
-						RoleMention: "default"
-					},
-					after: {
-						RichUserMention: "UserMention",
-						RichRoleMention: "RoleMention",
-						RoleMention: "default"
-					}
+				this.modulePatches = {
+					after: [
+						"RichUserMention"
+					]
 				};
 				
 				this.patchPriority = 9;
@@ -81,48 +76,15 @@ module.exports = (_ => {
 			}
 			
 			processRichUserMention (e) {
-				if (e.instance.props.id && BDFDB.LibraryStores.UserStore.getUser(e.instance.props.id)) return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserMention, {
-					className: "mention",
+				if (!e.instance.props.id || !BDFDB.LibraryStores.UserStore.getUser(e.instance.props.id) || typeof e.returnvalue.props.children != "function") return;
+				let childrenRender = e.returnvalue.props.children;
+				e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserPopoutContainer, Object.assign({}, e.instance.props, {
+					killEvent: true,
 					userId: e.instance.props.id,
-					channelId: e.instance.props.channelId,
-					guildId: e.instance.props.guildId,
-					inlinePreview: false
-				});
-			}
-			
-			processRichRoleMention (e) {
-				if (e.instance.props.id && e.instance.props.guildId && e.instance.props.id != e.instance.props.guildId) {
-					let guild = BDFDB.LibraryStores.GuildStore.getGuild(e.instance.props.guildId);
-					let channelId = e.instance.props.channelId;
-					if (!channelId) {
-						let currentChannelId = BDFDB.LibraryStores.SelectedChannelStore.getChannelId();
-						channelId = BDFDB.LibraryStores.GuildChannelStore.getSelectableChannelIds(guild.id).indexOf(currentChannelId) > -1 ? currentChannelId : BDFDB.LibraryStores.GuildChannelStore.getDefaultChannel(guild.id).id;
-					}
-					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.RoleMention, {
-						type: "mention_textarea",
-						children: [`@${guild.roles[e.instance.props.id].name}`],
-						content: [
-							{type: "text", content: `@${guild.roles[e.instance.props.id].name}`}
-						],
-						roleColor: guild.roles[e.instance.props.id].color,
-						roleId: e.instance.props.id,
-						channelId: channelId,
-						guildId: e.instance.props.guildId,
-						inlinePreview: false
-					});
-				}
-			}
-			
-			processRoleMention (e) {
-				if (!e.returnvalue) {
-					if (e.instance.props.type == "mention_textarea") {
-						e.instance.props.type = "mention";
-						e.instance.props.place = "textarea";
-					}
-				}
-				else if (e.instance.props.place == "textarea") {
-					e.returnvalue.props.align = BDFDB.LibraryComponents.PopoutContainer.Align.BOTTOM;
-				}
+					position: BDFDB.LibraryComponents.PopoutContainer.Positions.RIGHT,
+					align: BDFDB.LibraryComponents.PopoutContainer.Align.BOTTOM,
+					children: childrenRender(...args)
+				})), "Error in Children Render of RichUserMention", this);
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
