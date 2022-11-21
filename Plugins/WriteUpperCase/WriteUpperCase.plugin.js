@@ -107,7 +107,7 @@ module.exports = (_ => {
 				};
 				
 				this.css = `
-					${BDFDB.dotCNS.userpopoutfooter + BDFDB.dotCNS.flex + BDFDB.dotCN.inputwrapper} {
+					${BDFDB.dotCNS.userpopoutmessageinputcontainer + BDFDB.dotCNS.flex + BDFDB.dotCN.inputwrapper} {
 						flex: 1 1 auto;
 					}
 				`;

@@ -118,7 +118,7 @@ module.exports = (_ => {
 						display: inline-flex;
 						margin: 0 0 0 0.3rem;
 					}
-					${BDFDB.dotCNS._toproleseverywhererolestyle + BDFDB.dotCN.userpopoutrolecircle} {
+					${BDFDB.dotCNS._toproleseverywhererolestyle + BDFDB.dotCN.userrolecircle} {
 						flex: 0 0 auto;
 					}
 				`;

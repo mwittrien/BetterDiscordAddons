@@ -66,8 +66,7 @@ module.exports = (_ => {
 						"ChannelMembers",
 						"MemberListItem",
 						"MessageContent",
-						"UserPopoutBody",
-						"UserThemedPopoutBody"
+						"UserPopoutBody"
 					],
 					after: [
 						"RichRoleMention"
@@ -254,10 +253,6 @@ module.exports = (_ => {
 				if (!e.instance.props.user) return;
 				let member = BDFDB.LibraryStores.GuildMemberStore.getMember(e.instance.props.guildId, e.instance.props.user.id);
 				if (member) e.instance.props.colorString = member.colorString;
-			}
-			
-			processUserThemedPopoutBody (e) {
-				if (e.instance.props.guild) e.instance.props.guild = this.changeRolesInGuild(e.instance.props.guild);
 			}
 			
 			processUserPopoutBody (e) {

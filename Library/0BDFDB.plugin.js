@@ -6421,20 +6421,20 @@ module.exports = (_ => {
 					render() {
 						let color = BDFDB.ColorUtils.convert(this.props.role.colorString, "RGB") || Internal.DiscordConstants.Colors.PRIMARY_DARK_300;
 						return BDFDB.ReactUtils.createElement("li", {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.userpopoutrole, this.props.className),
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.userrole, this.props.className),
 							style: {borderColor: BDFDB.ColorUtils.setAlpha(color, 0.6)},
 							onClick: this.handleClick.bind(this),
 							onContextMenu: this.handleContextMenu.bind(this),
 							children: [
 								!this.props.noCircle ? BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN.userpopoutroleremovebutton,
+									className: BDFDB.disCN.userroleremovebutton,
 									children: BDFDB.ReactUtils.createElement("span", {
-										className: BDFDB.disCN.userpopoutrolecircle,
+										className: BDFDB.disCN.userrolecircle,
 										style: {backgroundColor: color}
 									})
 								}) : null,
 								BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN.userpopoutrolename,
+									className: BDFDB.disCN.userrolename,
 									children: this.props.role.name
 								})
 							].filter(n => n)
@@ -8072,8 +8072,7 @@ module.exports = (_ => {
 					after: [
 						"DiscordTag",
 						"UseCopyIdItem",
-						"UserPopoutAvatar",
-						"UserThemedPopoutAvatar"
+						"UserPopoutAvatar"
 					],
 					componentDidMount: [
 						"Account",
@@ -8164,7 +8163,7 @@ module.exports = (_ => {
 					const user = BDFDB.ReactUtils.findValue(e.instance, "user");
 					if (!user) return;
 					const avatar = e.instance.props.section != Internal.DiscordConstants.AnalyticsSections.PROFILE_POPOUT && e.node.querySelector(BDFDB.dotCN.avatarwrapper);
-					const wrapper = e.node.querySelector(BDFDB.dotCNC.userpopout + BDFDB.dotCN.userprofile) || e.node;
+					const wrapper = e.node.querySelector(BDFDB.dotCNC.userpopoutouter + BDFDB.dotCN.userprofilemodal) || e.node;
 					if (avatar) Internal._processAvatarMount(user, avatar, wrapper);
 				};
 				Internal.processBlobMask = function (e) {
@@ -8299,11 +8298,6 @@ module.exports = (_ => {
 				Internal.processUserPopoutAvatar = function (e) {
 					if (!e.instance.props.user) return;
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutavatarwrapper]]});
-					if (index > -1) children[index] = Internal._processAvatarRender(e.instance.props.user, children[index], e.instance) || children[index];
-				};
-				Internal.processUserThemedPopoutAvatar = function (e) {
-					if (!e.instance.props.user) return;
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutthemedavatarwrapper]]});
 					if (index > -1) children[index] = Internal._processAvatarRender(e.instance.props.user, children[index], e.instance) || children[index];
 				};
 				
