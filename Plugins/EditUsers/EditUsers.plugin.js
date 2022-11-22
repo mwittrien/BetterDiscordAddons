@@ -550,11 +550,6 @@ module.exports = (_ => {
 							guildId = BDFDB.LibraryStores.SelectedGuildStore.getGuildId();
 							tagClass = BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag;
 						}
-						else if (e.instance.props.className.indexOf(BDFDB.disCN.userpopoutusernametagnonickname) > -1) {
-							change = this.settings.places.userPopout;
-							guildId = BDFDB.LibraryStores.SelectedGuildStore.getGuildId();
-							tagClass = BDFDB.disCNS.userpopoutusernamebottag + BDFDB.disCN.bottagnametag;
-						}
 						else if (e.instance.props.className.indexOf(BDFDB.disCN.guildsettingsinviteusername) > -1) {
 							change = this.settings.places.guildSettings;
 						}
@@ -658,7 +653,7 @@ module.exports = (_ => {
 					}
 					else {
 						if (data.color1 || data.tag) {
-							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutusernamenickname]]});
+							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
 							if (index > -1) {
 								this.changeUserColor(children[index], e.instance.props.user.id);
 								if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
