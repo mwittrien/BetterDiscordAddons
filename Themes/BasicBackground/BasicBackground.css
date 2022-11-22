@@ -1058,6 +1058,7 @@ body::after {
 	top: 2px;
 	left: calc(-70px * var(--usechatbubbles) + 16px);
 }
+#app-mount .messageItemBody-2EpHAK.hasReply-2Cr4KE .avatar-2e8lTP,
 #app-mount .repliedMessage-3Z6XBG ~ * .avatar-2e8lTP {
 	top: 24px;
 }
