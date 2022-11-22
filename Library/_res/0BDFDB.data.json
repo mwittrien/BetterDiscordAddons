@@ -332,7 +332,7 @@
 			"UserBadges": [".PROFILE_USER_BADGES"],
 			"Sizes": ["\"SIZE_24\":"]
 		}},
-		"UserPopout": {"strings": [")().canViewThemes?r.createElement"]},
+		"UserPopout": {"strings": ["\"userId\"", "\"Unexpected missing user\"", "getUser"]},
 		"UserPopoutSection": {"strings": [".section,", ".lastSection"]},
 		"UserSummaryItem": {"strings": ["popoutUserId:", ".clickableAvatar"]},
 		"VideoForwardRef": {"strings": ["HTMLSourceElement", "autoPlay"], "funcStrings": ["externalRef"]}
@@ -500,7 +500,7 @@
 		"UserMemberSinceSection": {"strings": [".userId", "headingClassName", "().title", ".guildMember"]},
 		"UserMention": {"strings": [".inlinePreview", "\"@\"", "renderPopout:"]},
 		"UsernameSection": {"strings": [".shouldCopyOnClick", ".userTagDiscriminatorNoNickname"]},
-		"UserPopout": {"strings": [")().canViewThemes?r.createElement"]},
+		"UserPopout": {"strings": ["\"userId\"", "\"Unexpected missing user\"", "getUser"]},
 		"UserPopoutAvatar": {"strings": [".avatarDecorationHint", ".VIEW_PROFILE"], "noSearch": true},
 		"UserPopoutBody": {"strings": [".customStatusActivity", ".canDM", ".hidePersonalInformation", ".showCopiableUsername"]},
 		"UserPopoutInfo": {"strings": [".hasCustomStatus", ".premiumGuildSince", "openPremiumSettings"]},
