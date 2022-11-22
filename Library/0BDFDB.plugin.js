@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.8
+ * @version 2.9.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1228,7 +1228,7 @@ module.exports = (_ => {
 						s1 = config.ignoreCase ? s1.toString().toLowerCase() : s1.toString();
 						return config.hasNot ? s1.indexOf(s2) == -1 : s1.indexOf(s2) > -1;
 					};
-					return [strings].flat(10).filter(n => typeof n == "string").map(config.ignoreCase ? (n => n.toLowerCase()) : (n => n)).every(string => module && ((typeof module == "function" || typeof module == "strings") && (check(module, string) || typeof module.__originalFunction == "function" && check(module.__originalFunction, string)) || typeof module.type == "function" && check(module.type, string) || (typeof module == "function" || typeof module == "object") && module.prototype && Object.keys(module.prototype).filter(n => n.indexOf("render") == 0).some(n => check(module.prototype[n], string))));
+					return [strings].flat(10).filter(n => typeof n == "string").map(config.ignoreCase ? (n => n.toLowerCase()) : (n => n)).every(string => module && ((typeof module == "function" || typeof module == "string") && (check(module, string) || typeof module.__originalFunction == "function" && check(module.__originalFunction, string)) || typeof module.type == "function" && check(module.type, string) || (typeof module == "function" || typeof module == "object") && module.prototype && Object.keys(module.prototype).filter(n => n.indexOf("render") == 0).some(n => check(module.prototype[n], string))));
 				};
 				Internal.checkModuleProps = function (module, properties, config = {}) {
 					return [properties].flat(10).filter(n => typeof n == "string").every(prop => {
@@ -8313,9 +8313,9 @@ module.exports = (_ => {
 				Internal.addContextPatches(BDFDB);
 				
 				const possibleRenderPaths = ["render", "type", "type.render"];
-				BDFDB.PatchUtils.patch(BDFDB, LibraryModules.React, "createElement", {
+				const createElementPatches = {
 					before: e => {
-						if (!e.methodArguments[0] || typeof e.methodArguments[0] == "strings") return;
+						if (!e.methodArguments[0] || typeof e.methodArguments[0] == "string") return;
 						let renderFunction = null;
 						if (typeof e.methodArguments[0] == "function") renderFunction = e.methodArguments[0];
 						else for (const path of possibleRenderPaths) {
@@ -8401,7 +8401,9 @@ module.exports = (_ => {
 							break;
 						}
 					}
-				});
+				};
+				BDFDB.PatchUtils.patch(BDFDB, LibraryModules.React, "createElement", createElementPatches);
+				if (Internal.LibraryModules.InternalReactUtils) for (let key in Internal.LibraryModules.InternalReactUtils) if (typeof Internal.LibraryModules.InternalReactUtils[key] == "function" && Internal.LibraryModules.InternalReactUtils[key].toString().indexOf("return{$$typeof:") > -1) BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.InternalReactUtils, key, createElementPatches);
 				
 				let languageChangeTimeout;
 				BDFDB.PatchUtils.patch(BDFDB, Internal.LibraryModules.AppearanceSettingsUtils, "updateLocale", {after: e => {

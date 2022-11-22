@@ -118,6 +118,7 @@
 		}},
 		"IconUtils": {"props": ["getGuildIconURL", "getGuildBannerURL"]},
 		"InviteUtils": {"props": ["acceptInvite", "createInvite"]},
+		"InternalReactUtils": {"props": ["jsx", "jsxs", "Fragment"]},
 		"KeyCodeUtils": {"strings": ["Unrecognized DeviceType", "GAMEPAD"], "exported": false, "value": "exports", "assign": true, "map": {
 			"codeToKey": ["[\"\"+", "MACOS"],
 			"keyToCode": ["Unrecognized DeviceType"],
