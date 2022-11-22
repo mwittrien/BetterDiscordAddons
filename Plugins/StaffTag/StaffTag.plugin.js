@@ -307,7 +307,7 @@ module.exports = (_ => {
 						}
 						else if (e.instance.props.className.indexOf(BDFDB.disCN.userprofilenametag) > -1) {
 							inject = this.settings.tagPlaces.userProfile;
-							tagClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
+							tagClass = BDFDB.disCN.bottagnametag;
 						}
 						if (inject) this.injectStaffTag(e.returnvalue.props.children, e.instance.props.user, userType, 2, {
 							tagClass: tagClass,
