@@ -184,14 +184,14 @@
 		"SettingsUtils": {"strings": ["ON_FOR_LARGE_GUILDS", "updateSetting", "useSetting"], "exported": false, "value": "exports"},
 		"SimpleMarkdownComponents": {"strings": ["customEmoji", "emojiTooltipPosition", "timestampTooltip"]},
 		"SimpleMarkdownParser": {"props": ["parseBlock", "parseInline", "defaultOutput"]},
-		"SlateRichUtils": {"strings": ["textValue", "richValue", "text:\"\""], "nonStrings": ["createElement"], "exported": false, "value": "exports", "map": {
+		"SlateRichUtils": {"strings": ["textValue", "richValue", "text:\"\""], "nonStrings": [".jsx)"], "exported": false, "value": "exports", "map": {
 			"toRichValue": [".split(\"\\n\")"]
 		}},
-		"SlateTextUtils": {"strings": ["ignoreTrailingEmptyNodes", "preventEmojiSurrogates"], "nonStrings": ["createElement"], "exported": false, "value": "exports", "map": {
+		"SlateTextUtils": {"strings": ["ignoreTrailingEmptyNodes", "preventEmojiSurrogates"], "nonStrings": [".jsx)"], "exported": false, "value": "exports", "map": {
 			"toTextValue": ["ignoreTrailingEmptyNodes"]
 		}},
 		"SoundParser": {"strings": ["discodo", "ddr-down", "mute"]},
-		"SoundUtils": {"strings": [".play()", ".disableSounds", "getSoundpack"], "nonStrings": ["createElement"], "exported": false, "value": "exports", "map": {
+		"SoundUtils": {"strings": [".play()", ".disableSounds", "getSoundpack"], "nonStrings": [".jsx)"], "exported": false, "value": "exports", "map": {
 			"createSound": ["return new"],
 			"createSoundpackSound": [");return"],
 			"playSound": ["getSoundpack"]
@@ -228,7 +228,7 @@
 		"PopoutContainer": {"props": ["Positions", "Align", "Animation", "defaultProps"]},
 		"RadioGroup": {"strings": ["itemInfoClassName", "hasSelection", ".radioItemIconClassName"]},
 		"SearchBar": {"strings": [").inputRef", ".containerRef", ".handleOnChange"]},
-		"SearchableSelect": {"strings": ["serialize", "haspopup", ".maxVisibleItems"], "exported": false, "value": "exports", "funcStrings": [".onChange,", "createElement"]},
+		"SearchableSelect": {"strings": ["serialize", "haspopup", ".maxVisibleItems"], "exported": false, "value": "exports", "funcStrings": [".onChange,", ".jsx)"]},
 		"Slider": {"strings": [".stickToMarkers", "sortedMarkers"]},
 		"TabBar": {"props": ["Looks", "Header", "Panel"]},
 		"Table": {"props": ["SortDirection", "defaultProps"]},
@@ -256,13 +256,14 @@
 		"EmojiButton": {"strings": ["renderButtonContents", "PickerPerRow", "SELECT_EMOJI"]},
 		"EmojiPicker": {"strings": ["emojiSize", "inExpressionPicker", ",emojiPaddingHorizontal:"], "funcStrings": ["compare"]},
 		"Flex": {"props": ["Wrap", "Direction", "Child"]},
-		"FlowerStar": {"strings": ["flowerStarContainer", "createElement"]},
+		"FlowerStar": {"strings": ["flowerStarContainer", ".jsx)"]},
 		"FocusRingScope": {"strings": ["FocusRing", "ringTarget was not"]},
 		"FormComponents": {"props": ["INPUT_PLACEHOLDER", "LABEL_SELECTED"], "exported": false, "value": "exports", "map": {
 			"FormDivider": [".divider"],
 			"FormItem": [".titleClassName", "required"],
 			"FormNotice": [".iconClassName", ".imageData"],
 			"FormSection": ["sectionTitle", "titleId"],
+			"FormTags": ["\"H1\":\"h1\"", "\"H2\":\"h2\""],
 			"FormText": [".type", ".DEFAULT"],
 			"FormTitle": [".tag", ".errorSeparator"]
 		}},
@@ -360,9 +361,9 @@
 		"AuthWrapper": {"protos": ["renderDefault", "renderMobile", "mobileReplaceWith"]},
 		"AutocompleteChannelResult": {"strings": [".channel", ".category", ".type===", ".GUILD_CATEGORY?", "().icon"]},
 		"AutocompleteRoleResult": {"strings": [".hideDescription", ".colorString", ".Messages.MENTION_USERS_WITH_ROLE"]},
-		"AutocompleteRowContentPrimary": {"strings": ["createElement(\"div\"", "autocompleteRowContentPrimary"]},
-		"AutocompleteRowContentSecondary": {"strings": ["createElement(", "autocompleteRowContentSecondary"]},
-		"AutocompleteRowIcon": {"strings": ["createElement(\"div\"", "autocompleteRowIcon"]},
+		"AutocompleteRowContentPrimary": {"strings": [".jsx)(\"div\"", "autocompleteRowContentPrimary"]},
+		"AutocompleteRowContentSecondary": {"strings": [".jsx)(", "autocompleteRowContentSecondary"]},
+		"AutocompleteRowIcon": {"strings": [".jsx)(\"div\"", "autocompleteRowIcon"]},
 		"AutocompleteUserResult": {"strings": [".descriptionUsername", ".descriptionDiscriminator", "\"#\"", "Sizes.SIZE_24"]},
 		"BlobMask": {"protos": ["getBadgePositionInterpolation", "getUpperBadgeStyles"]},
 		"BlockedMessageGroup": {"strings": ["collapsed-message-item", "isBeforeGroup", "collapsedReason"]},
@@ -500,7 +501,7 @@
 		"UserMention": {"strings": [".inlinePreview", "\"@\"", "renderPopout:"]},
 		"UsernameSection": {"strings": [".shouldCopyOnClick", ".userTagDiscriminatorNoNickname"]},
 		"UserPopout": {"strings": [")().canViewThemes?r.createElement"]},
-		"UserPopoutAvatar": {"strings": [".avatarPositionPremiumNoBanner", "VIEW_PROFILE"]},
+		"UserPopoutAvatar": {"strings": [".avatarDecorationHint", ".VIEW_PROFILE"], "noSearch": true},
 		"UserPopoutBody": {"strings": [".customStatusActivity", ".canDM", ".hidePersonalInformation", ".showCopiableUsername"]},
 		"UserPopoutInfo": {"strings": [".hasCustomStatus", ".premiumGuildSince", "openPremiumSettings"]},
 		"UserProfile": {"strings": [".PROFILE_MODAL", "USER_INFO_CONNECTIONS", ".topSection"]},
