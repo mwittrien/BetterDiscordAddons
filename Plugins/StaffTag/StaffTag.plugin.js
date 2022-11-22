@@ -97,7 +97,6 @@ module.exports = (_ => {
 						"MemberListItem",
 						"NameTag",
 						"UsernameSection",
-						"UserPopoutInfo",
 						"VoiceUser"
 					]
 				};
@@ -319,22 +318,6 @@ module.exports = (_ => {
 			}
 			
 			processUsernameSection (e) {
-				if (e.instance.props.user && this.settings.tagPlaces.userPopout) {
-					let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
-					if (userType) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
-						if (index > -1) {
-							if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
-							this.injectStaffTag(children[index].props.children, e.instance.props.user, userType, 2, {
-								tagClass: BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag,
-								inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
-							});
-						}
-					}
-				}
-			}
-			
-			processUserPopoutInfo (e) {
 				if (e.instance.props.user && this.settings.tagPlaces.userPopout) {
 					let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
 					if (userType) {
