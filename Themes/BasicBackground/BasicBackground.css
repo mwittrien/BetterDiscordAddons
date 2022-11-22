@@ -790,7 +790,7 @@ body::after {
 #app-mount .background-fkKrXt .interactiveCard-2iMtdk,
 #app-mount .container-3wLKDe .mainCard-3KBsBI,
 #app-mount .container-3wLKDe .sidebarCard-1Gn1ch {
-	background: var(--background-secondary);
+	background-color: var(--background-secondary);
 }
 @media (max-width: 1300px) {
 	.container-xwOzwi,
