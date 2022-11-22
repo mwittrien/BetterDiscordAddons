@@ -3836,7 +3836,7 @@ module.exports = (_ => {
 													BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
 														children: [
 															BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormTitle, {
-																tag: Internal.LibraryComponents.FormComponents.FormTitle.Tags.H4,
+																tag: Internal.LibraryComponents.FormComponents.FormTags.H4,
 																children: config.header
 															}),
 															BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TextElement, {
@@ -5170,7 +5170,7 @@ module.exports = (_ => {
 										BDFDB.ReactUtils.forceUpdate(this);
 									},
 									children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormTitle, {
-										tag: Internal.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+										tag: Internal.LibraryComponents.FormComponents.FormTags.H5,
 										className: BDFDB.disCN.collapsecontainertitle,
 										children: this.props.title
 									})
@@ -6087,7 +6087,7 @@ module.exports = (_ => {
 										this.props.title != null || this.props.error != null ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
 											wrap: true,
 											children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormTitle, {
-												tag: this.props.tag || Internal.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+												tag: this.props.tag || Internal.LibraryComponents.FormComponents.FormTags.H5,
 												disabled: this.props.disabled,
 												required: this.props.required,
 												error: this.props.error,
@@ -7052,7 +7052,7 @@ module.exports = (_ => {
 								}) : null,
 								typeof this.props.title == "string" ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormTitle, {
 									className: BDFDB.disCN.marginbottom4,
-									tag: Internal.LibraryComponents.FormComponents.FormTitle.Tags.H3,
+									tag: Internal.LibraryComponents.FormComponents.FormTags.H3,
 									children: this.props.title
 								}) : null,
 								BDFDB.ReactUtils.createElement("div", {

@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.5
+ * @version 2.4.6
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -256,13 +256,13 @@ module.exports = (_ => {
 						plugin: _this,
 						keys: ["general", key],
 						label: _this.labels[`general_${key}`],
-						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+						tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 						value: _this.settings.general[key]
 					})),
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 						type: "Switch",
 						label: _this.labels.translate_your_message,
-						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+						tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 						value: _this.isTranslationEnabled(this.props.channelId),
 						onChange: value => {
 							_this.toggleTranslation(this.props.channelId);
@@ -459,7 +459,7 @@ module.exports = (_ => {
 										children: [
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 												className: BDFDB.disCN.marginreset,
-												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+												tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 												children: translationEngines[key].name
 											}),
 											translationEngines[key].premium && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -467,7 +467,7 @@ module.exports = (_ => {
 												margin: 0,
 												grow: 0,
 												label: "Paid Version",
-												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+												tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 												value: authKeys[key] && authKeys[key].paid,
 												onChange: value => {
 													if (!authKeys[key]) authKeys[key] = {};

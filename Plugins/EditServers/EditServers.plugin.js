@@ -477,7 +477,7 @@ module.exports = (_ => {
 									type: "Switch",
 									className: BDFDB.disCN.marginbottom20,
 									label: this.labels.modal_ignorecustomname,
-									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 									value: data.ignoreCustomName,
 									onChange: value => {
 										newData.ignoreCustomName = value;
@@ -495,7 +495,7 @@ module.exports = (_ => {
 											children: [
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 													className: BDFDB.disCN.marginreset,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 													children: BDFDB.LanguageUtils.LibraryStrings.guildicon
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -503,7 +503,7 @@ module.exports = (_ => {
 													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 													value: data.removeIcon,
 													onChange: value => {
 														newData.removeIcon = value;
@@ -548,7 +548,7 @@ module.exports = (_ => {
 											children: [
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 													className: BDFDB.disCN.marginreset,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 													children: BDFDB.LanguageUtils.LibraryStrings.guildbanner
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -556,7 +556,7 @@ module.exports = (_ => {
 													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 													value: data.removeBanner && guild.id != "410787888507256842",
 													disabled: guild.id == "410787888507256842",
 													onChange: value => {

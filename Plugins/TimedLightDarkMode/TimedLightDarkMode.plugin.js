@@ -2,7 +2,7 @@
  * @name TimedLightDarkMode
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.4
+ * @version 1.1.5
  * @description Adds a Time Slider to the Appearance Settings
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -114,7 +114,7 @@ module.exports = (_ => {
 								keys: ["general", "running"],
 								value: this.settings.general.running,
 								label: `${BDFDB.LanguageUtils.LanguageStrings.THEME} Timer`,
-								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+								tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 								childProps: {
 									checkedColor: BDFDB.DiscordConstants.Colors.STATUS_GREEN_600
 								},

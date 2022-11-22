@@ -878,7 +878,7 @@ module.exports = (_ => {
 									type: "Switch",
 									margin: 20,
 									label: this.labels.modal_usecloseicon,
-									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 									value: data.useCloseIcon,
 									onChange: value => {newData.useCloseIcon = value;}
 								})
@@ -910,7 +910,7 @@ module.exports = (_ => {
 									type: "Switch",
 									margin: 20,
 									label: this.labels.modal_swapcolor,
-									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 									value: data.swapColors,
 									onChange: value => {newData.swapColors = value;}
 								})
@@ -940,7 +940,7 @@ module.exports = (_ => {
 									type: "Switch",
 									margin: 20,
 									label: this.labels.modal_copytooltipcolor,
-									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 									value: data.copyTooltipColor,
 									onChange: value => {newData.copyTooltipColor = value;}
 								})

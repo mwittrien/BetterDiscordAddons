@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.3
+ * @version 1.9.4
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -231,7 +231,7 @@ module.exports = (_ => {
 						let settingsItems = [];
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 							className: BDFDB.disCN.marginbottom4,
-							tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
+							tag: BDFDB.LibraryComponents.FormComponents.FormTags.H3,
 							children: "Show Badges in"
 						}));
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {

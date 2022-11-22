@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.5
+ * @version 4.4.6
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -832,7 +832,7 @@ module.exports = (_ => {
 							type: "Switch",
 							margin: 20,
 							label: this.labels.modal_inheritcolor,
-							tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+							tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 							value: channel.isCategory() && data.inheritColor,
 							disabled: !channel.isCategory(),
 							onChange: value => {newData.inheritColor = value;}
@@ -850,7 +850,7 @@ module.exports = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 											className: BDFDB.disCN.marginreset,
-											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+											tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 											children: this.labels.modal_channelicon
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -858,7 +858,7 @@ module.exports = (_ => {
 											margin: 0,
 											grow: 0,
 											label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+											tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 											value: data.removeIcon,
 											onChange: value => {
 												newData.removeIcon = value;

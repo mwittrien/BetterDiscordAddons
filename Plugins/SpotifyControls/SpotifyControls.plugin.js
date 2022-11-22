@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.0
+ * @version 1.3.1
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -729,7 +729,7 @@ module.exports = (_ => {
 							collapseStates: collapseStates,
 							children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 								className: BDFDB.disCN.marginbottom4,
-								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
+								tag: BDFDB.LibraryComponents.FormComponents.FormTags.H3,
 								children: "Add Control Buttons in small and/or big Player Version: "
 							})].concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
 								settings: Object.keys(this.defaults.buttons[Object.keys(this.defaults.buttons)[0]].value),

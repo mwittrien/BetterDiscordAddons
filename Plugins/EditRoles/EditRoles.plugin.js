@@ -2,7 +2,7 @@
  * @name EditRoles
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.3
+ * @version 1.1.4
  * @description Allows you to locally edit Roles
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -349,7 +349,7 @@ module.exports = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 											className: BDFDB.disCN.marginreset,
-											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+											tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 											children: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ROLE_ICON
 										}),
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -357,7 +357,7 @@ module.exports = (_ => {
 											margin: 0,
 											grow: 0,
 											label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+											tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 											value: data.removeIcon,
 											onChange: value => {
 												newData.removeIcon = value;

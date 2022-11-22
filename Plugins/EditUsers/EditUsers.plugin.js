@@ -1517,7 +1517,7 @@ module.exports = (_ => {
 											direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 												className: BDFDB.disCN.marginreset,
-												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+												tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 												children: this.labels.modal_username
 											})
 										}),
@@ -1540,7 +1540,7 @@ module.exports = (_ => {
 											margin: 0,
 											grow: 0,
 											label: this.labels.modal_showaccountname,
-											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+											tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 											value: data.showAccountName,
 											onChange: value => newData.showAccountName = value
 										}),
@@ -1549,7 +1549,7 @@ module.exports = (_ => {
 											margin: 0,
 											grow: 0,
 											label: this.labels.modal_showservernick,
-											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+											tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 											value: data.showServerNick,
 											onChange: value => newData.showServerNick = value
 										}),
@@ -1558,7 +1558,7 @@ module.exports = (_ => {
 											margin: 0,
 											grow: 0,
 											label: this.labels.modal_useservernick,
-											tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+											tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 											value: data.useServerNick,
 											onChange: value => newData.useServerNick = value
 										})
@@ -1582,7 +1582,7 @@ module.exports = (_ => {
 											children: [
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 													className: BDFDB.disCN.marginreset,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 													children: this.labels.modal_useravatar
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -1590,7 +1590,7 @@ module.exports = (_ => {
 													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 													value: data.removeIcon,
 													onChange: value => {
 														newData.removeIcon = value;
@@ -1631,7 +1631,7 @@ module.exports = (_ => {
 											children: [
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 													className: BDFDB.disCN.marginreset,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 													children: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_PROFILE_BANNER
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -1639,7 +1639,7 @@ module.exports = (_ => {
 													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 													value: data.removeBanner,
 													onChange: value => {
 														newData.removeBanner = value;
@@ -1679,7 +1679,7 @@ module.exports = (_ => {
 											children: [
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 													className: BDFDB.disCN.marginreset,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 													children: BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -1687,7 +1687,7 @@ module.exports = (_ => {
 													margin: 0,
 													grow: 0,
 													label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-													tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+													tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 													value: data.removeStatus,
 													onChange: value => {
 														newData.removeStatus = value;
@@ -1764,7 +1764,7 @@ module.exports = (_ => {
 									type: "Switch",
 									margin: 20,
 									label: this.labels.modal_userolecolor,
-									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 									value: data.useRoleColor,
 									onChange: value => newData.useRoleColor = value
 								})
@@ -1797,7 +1797,7 @@ module.exports = (_ => {
 									type: "Switch",
 									margin: 20,
 									label: this.labels.modal_ignoretagcolor,
-									tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 									value: data.ignoreTagColor,
 									onChange: value => {
 										newData.ignoreTagColor = value;
