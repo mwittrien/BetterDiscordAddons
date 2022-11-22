@@ -104,7 +104,6 @@ module.exports = (_ => {
 						UserPopoutAvatar: "UserPopoutAvatar",
 						UserThemePopoutHeader: "default",
 						UsernameSection: "default",
-						UserPopoutInfo: "UserPopoutInfo",
 						UserProfile: "default",
 						UserProfileHeader: "default",
 						UserInfo: "default",
@@ -644,30 +643,6 @@ module.exports = (_ => {
 			}
 			
 			processUsernameSection (e) {
-				if (e.instance.props.user && this.settings.places.userPopout) {
-					let data = changedUsers[e.instance.props.user.id];
-					if (!data) return;
-					if (!e.returnvalue) {
-						let nickname = this.getUserNick(e.instance.props.user.id, e.instance.props.nickname);
-						e.instance.props.nickname = nickname ? nickname : null;
-					}
-					else {
-						if (data.color1 || data.tag) {
-							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
-							if (index > -1) {
-								this.changeUserColor(children[index], e.instance.props.user.id);
-								if (!BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children = [children[index].props.children].flat(10);
-								this.injectBadge(children[index].props.children, e.instance.props.user.id, BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), 2, {
-									tagClass: BDFDB.disCNS.userpopoutheaderbottag + BDFDB.disCN.bottagnametag,
-									inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
-								});
-							}
-						}
-					}
-				}
-			}
-			
-			processUserPopoutInfo (e) {
 				if (e.instance.props.user && this.settings.places.userPopout) {
 					let data = changedUsers[e.instance.props.user.id];
 					if (!data) return;
