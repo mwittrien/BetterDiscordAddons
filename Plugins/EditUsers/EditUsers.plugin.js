@@ -564,7 +564,7 @@ module.exports = (_ => {
 						else if (e.instance.props.usernameClass.indexOf(BDFDB.disCN.userprofileusername) > -1) {
 							change = this.settings.places.userProfile;
 							guildId = BDFDB.LibraryStores.SelectedGuildStore.getGuildId();
-							tagClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
+							tagClass = BDFDB.disCN.bottagnametag;
 						}
 					}
 					if (change) {
