@@ -2433,15 +2433,15 @@ input.input-2g-os5 {										/* textinput												*/
 	background-color: rgb(114, 118, 125) !important;
 	transition: background-color .1s ease-out;
 }															/* switch				checked								*/
-.container-2nx-BQ[style*="background-color: hsl(59, "],
-.container-2nx-BQ[style*="background-color: hsl(88, "],
+.container-2nx-BQ[style*="background-color: rgb(59, "],
+.container-2nx-BQ[style*="background-color: rgb(88, "],
 .container-2nx-BQ[style*="background-color: hsl(139, "],
 .container-2nx-BQ[style*="background-color: hsl(227, "],
 .container-2nx-BQ[style*="background-color: hsl(235, "] {
 	background-color: rgba(var(--accentcolor), 0.8) !important;
 }
-.container-2nx-BQ[style*="background-color: hsl(59, "]:hover,
-.container-2nx-BQ[style*="background-color: hsl(88, "]:hover,
+.container-2nx-BQ[style*="background-color: rgb(59, "]:hover,
+.container-2nx-BQ[style*="background-color: rgb(88, "]:hover,
 .container-2nx-BQ[style*="background-color: hsl(139, "]:hover,
 .container-2nx-BQ[style*="background-color: hsl(227, "]:hover,
 .container-2nx-BQ[style*="background-color: hsl(235, "]:hover {
@@ -2453,8 +2453,8 @@ input.input-2g-os5 {										/* textinput												*/
 .container-2nx-BQ path[fill] {
 	fill: rgb(114, 118, 125) !important;
 }
-.container-2nx-BQ[style*="background-color: hsl(59, "] path[fill],
-.container-2nx-BQ[style*="background-color: hsl(88, "] path[fill],
+.container-2nx-BQ[style*="background-color: rgb(59, "] path[fill],
+.container-2nx-BQ[style*="background-color: rgb(88, "] path[fill],
 .container-2nx-BQ[style*="background-color: hsl(139, "] path[fill],
 .container-2nx-BQ[style*="background-color: hsl(227, "] path[fill],
 .container-2nx-BQ[style*="background-color: hsl(235, "] path[fill],
