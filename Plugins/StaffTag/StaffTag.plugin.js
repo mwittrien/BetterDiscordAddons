@@ -143,10 +143,10 @@ module.exports = (_ => {
 			
 				this.css = `
 					${BDFDB.dotCN.memberownericon + BDFDB.dotCN._stafftagadminicon} {
-						color: #aaa9ad;
+						color: var(--text-brand);
 					}
 					${BDFDB.dotCN.memberownericon + BDFDB.dotCN._stafftagmanagementicon} {
-						color: #88540b;
+						color: var(--text-danger);
 					}
 					${BDFDB.dotCN.memberownericon + BDFDB.dotCN._stafftagforumcreatoricon},
 					${BDFDB.dotCN.memberownericon + BDFDB.dotCN._stafftagthreadcreatoricon} {
