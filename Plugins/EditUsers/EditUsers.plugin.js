@@ -57,6 +57,7 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var changedUsers = {};
+		var appTitleObserver;
 	
 		return class EditUsers extends Plugin {
 			onLoad () {
@@ -199,9 +200,9 @@ module.exports = (_ => {
 				`;
 			}
 			
-			onStart () {				
-				let observer = new MutationObserver(_ => {this.changeAppTitle();});
-				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name: "appTitleObserver", instance: observer}, {childList: true});
+			onStart () {
+				appTitleObserver = new MutationObserver(_ => this.changeAppTitle());
+				appTitleObserver.observe(document.head.querySelector("title"), {childList: true});
 			
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.RelationshipStore, "getName", {after: e => {
 					if (e.methodArguments[2] && changedUsers[e.methodArguments[2].id] && changedUsers[e.methodArguments[2].id].name) return changedUsers[e.methodArguments[2].id].name;
@@ -321,6 +322,7 @@ module.exports = (_ => {
 			}
 			
 			onStop () {
+				if (appTitleObserver) appTitleObserver.disconnect();
 				this.forceUpdateAll();
 			}
 

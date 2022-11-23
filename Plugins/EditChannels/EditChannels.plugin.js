@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.6
+ * @version 4.4.7
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -57,6 +57,7 @@ module.exports = (_ => {
 		}
 	} : (([Plugin, BDFDB]) => {
 		var changedChannels = {};
+		var appTitleObserver;
 	
 		return class EditChannels extends Plugin {
 			onLoad () {
@@ -131,9 +132,9 @@ module.exports = (_ => {
 				`;
 			}
 			
-			onStart () {				
-				let observer = new MutationObserver(_ => {this.changeAppTitle();});
-				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name: "appTitleObserver", instance: observer}, {childList: true});
+			onStart () {
+				appTitleObserver = new MutationObserver(_ => this.changeAppTitle());
+				appTitleObserver.observe(document.head.querySelector("title"), {childList: true});
 
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.QuerySearchUtils, "queryChannels", {after: e => {
 					if (!e.methodArguments[0].query) return;
@@ -156,6 +157,7 @@ module.exports = (_ => {
 			}
 			
 			onStop () {
+				if (appTitleObserver) appTitleObserver.disconnect();
 				this.forceUpdateAll();
 			}
 
