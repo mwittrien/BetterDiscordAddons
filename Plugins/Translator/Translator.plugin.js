@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.6
+ * @version 2.4.7
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1108,8 +1108,8 @@ module.exports = (_ => {
 			
 			papagoTranslate (data, callback) {
 				const credentials = (authKeys.papago && authKeys.papago.key || "kUNGxtAmTJQFbaFehdjk zC70k3VhpM").split(" ");
-				BDFDB.LibraryRequires.request.post({
-					url: "https://openapi.naver.com/v1/papago/n2mt",
+				BDFDB.LibraryRequires.request("https://openapi.naver.com/v1/papago/n2mt", {
+					method: "post",
 					form: {
 						source: data.input.id,
 						target: data.output.id,
