@@ -64,7 +64,7 @@
 		"ReadStateTypes": ["GUILD_EVENT", "NOTIFICATION_CENTER", "CHANNEL"],
 		"RelationshipTypes": ["FRIEND", "PENDING_INCOMING", "PENDING_OUTGOING"],
 		"Routes": ["CHANNEL_THREAD_VIEW", "MESSAGE_REQUESTS"],
-		"UserBadges": ["HYPESQUAD", "BUG_HUNTER_LEVEL_1", "STAFF"],
+		"UserBadges": ["HYPESQUAD", "GUILD_BOOSTER_LEVEL_1", "STAFF"],
 		"UserFlags": ["MFA_SMS", "VERIFIED_BOT"],
 		"UserNotificationSettings": ["NULL", "NO_MESSAGES", "ALL_MESSAGES"],
 		"UserSettingsActionTypes": ["SLOW_USER_ACTION", "DAILY"],
