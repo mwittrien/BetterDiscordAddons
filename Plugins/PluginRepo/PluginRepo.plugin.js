@@ -678,7 +678,7 @@ module.exports = (_ => {
 			}
 			
 			processStandardSidebarView (e) {
-				if (e.instance.props.section == "pluginrepo") e.instance.props.contentType = "custom";
+				if (e.instance.props && e.instance.props.section == "pluginrepo") e.instance.props.contentType = "custom";
 			}
 
 			loadPlugins () {

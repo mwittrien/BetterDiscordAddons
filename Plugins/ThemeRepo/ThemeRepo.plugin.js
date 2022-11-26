@@ -819,7 +819,7 @@ module.exports = (_ => {
 			}
 			
 			processStandardSidebarView (e) {
-				if (e.instance.props.section == "themerepo") e.instance.props.contentType = "custom";
+				if (e.instance.props && e.instance.props.section == "themerepo") e.instance.props.contentType = "custom";
 			}
 			
 			generateTheme (fullCSS, generatorValues) {
