@@ -384,9 +384,9 @@ body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 	display: none;
 }
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG .icon-3FU6Ir,
-.sidebar-nqHbhN .side-2ur1Qk .premiumLabel-3HPvdB svg,
+.sidebar-nqHbhN .side-2ur1Qk .premiumLabel-3HPvdB > svg,
 .sidebar-nqHbhN .side-2ur1Qk .premiumLabel-3HPvdB img,
-.sidebar-nqHbhN .side-2ur1Qk .tabBarItemContainer-2HdIlr svg,
+.sidebar-nqHbhN .side-2ur1Qk .tabBarItemContainer-2HdIlr > svg,
 .sidebar-nqHbhN .side-2ur1Qk .tabBarItemContainer-2HdIlr img {
 	transform: scaleX(calc(1 - var(--usesettingsicons)));
 }
