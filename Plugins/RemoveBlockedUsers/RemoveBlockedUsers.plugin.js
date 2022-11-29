@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.8
+ * @version 1.5.9
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -99,7 +99,7 @@ module.exports = (_ => {
 						"VoiceUsers"
 					],
 					after: [
-						"ActiveThread",
+						"ThreadCard",
 						"BlockedMessageGroup",
 						"ChannelPins",
 						"DirectMessage",
@@ -354,7 +354,7 @@ module.exports = (_ => {
 				if (this.settings.places.reactions && BDFDB.ArrayUtils.is(e.instance.props.reactors)) e.instance.props.reactors = e.instance.props.reactors.filter(n => !n || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id));
 			}
 			
-			processActiveThread (e) {
+			processThreadCard (e) {
 				if (!this.settings.places.threads) return;
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => n && n.type && n.type.toString().indexOf(".getMostRecentMessage") > -1});
 				if (index > -1 && children[index].props && children[index].props.channel) {
@@ -419,6 +419,7 @@ module.exports = (_ => {
 				if (!this.settings.places.activity) return;
 				let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {name: "NowPlayingHeader"});
 				if (index > -1) for (let child of children) if (child && child.props && child.props.party) {
+					child.props.party = Object.assign({}, child.props.party);
 					if (child.props.party.priorityMembers) {
 						child.props.party.priorityMembers = child.props.party.priorityMembers.filter(n => !n || !n.user || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.user.id));
 						if (!child.props.party.priorityMembers.length) child.props.party.priorityMembers.push({user: new BDFDB.DiscordObjects.User({id: 0, username: ""})});

@@ -130,7 +130,7 @@ module.exports = (_ => {
 						PrivateChannelRecipientsInvitePopout: "render",
 						QuickSwitchUserResult: "render",
 						SearchPopoutComponent: "render",
-						PrivateChannelCallParticipants: "render",
+						VoiceCallParticipants: "render",
 						ChannelCall: "render",
 						ChannelCallGrid: "default",
 						HorizontalVideoParticipants: "default",
@@ -1255,7 +1255,7 @@ module.exports = (_ => {
 				}
 			}
 
-			processPrivateChannelCallParticipants (e) {
+			processVoiceCallParticipants (e) {
 				if (BDFDB.ArrayUtils.is(e.instance.props.participants) && this.settings.places.dmCalls) {
 					e.instance.props.participants = [].concat(e.instance.props.participants);
 					for (let i in e.instance.props.participants) if (e.instance.props.participants[i] && e.instance.props.participants[i].user) e.instance.props.participants[i] = Object.assign({}, e.instance.props.participants[i], {user: this.getUserData(e.instance.props.participants[i].user.id)});

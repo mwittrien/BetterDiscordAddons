@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.8
+ * @version 4.4.9
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -88,6 +88,7 @@ module.exports = (_ => {
 					before: [
 						"AuditLogEntry",
 						"AutocompleteChannelResult",
+						"ChannelEmptyMessages",
 						"ChannelsList",
 						"ChannelTextAreaEditor",
 						"ChannelThreadItem",
@@ -97,8 +98,6 @@ module.exports = (_ => {
 						"RecentsChannelHeader",
 						"SearchPopout",
 						"SystemMessageWrapper",
-						"TextChannelEmptyMessage",
-						"ThreadEmptyMessage",
 						"ThreadMessageAccessories"
 					],
 					after: [
@@ -265,12 +264,9 @@ module.exports = (_ => {
 				if (changedChannels[e.instance.props.channel.id].name) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `#${changedChannels[e.instance.props.channel.id].name}`);
 			}
 			
-			processTextChannelEmptyMessage (e) {
-				if (this.settings.places.chatWindow && e.instance.props.channel && changedChannels[e.instance.props.channel.id]) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
-			}
-			
-			processThreadEmptyMessage (e) {
-				if (this.settings.places.chatWindow && e.instance.props.channel && changedChannels[e.instance.props.channel.id]) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
+			processChannelEmptyMessages (e) {
+				if (!this.settings.places.chatWindow || !e.instance.props.channel || !changedChannels[e.instance.props.channel.id]) return;
+				e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
 			}
 			
 			processSystemMessageWrapper (e) {
@@ -872,9 +868,7 @@ module.exports = (_ => {
 												}
 												else {
 													iconInput.props.disabled = false;
-													this.checkUrl(iconInput.props.value, iconInput).then(returnValue => {
-														newData.url = returnValue;
-													});
+													this.checkUrl(iconInput.props.value, iconInput).then(returnValue => newData.url = returnValue);
 												}
 											}
 										})
@@ -888,9 +882,7 @@ module.exports = (_ => {
 									disabled: data.removeIcon,
 									ref: instance => {if (instance) iconInput = instance;},
 									onChange: (value, instance) => {
-										this.checkUrl(value, instance).then(returnValue => {
-											newData.url = returnValue;
-										});
+										this.checkUrl(value, instance).then(returnValue => newData.url = returnValue);
 									}
 								})
 							]
@@ -931,27 +923,25 @@ module.exports = (_ => {
 						callback("");
 						BDFDB.ReactUtils.forceUpdate(instance);
 					}
-					else instance.checkTimeout = BDFDB.TimeUtils.timeout(_ => {
-						BDFDB.LibraryRequires.request(url, {agentOptions: {rejectUnauthorized: false}}, (error, response, result) => {
-							delete instance.checkTimeout;
-							if (instance.props.disabled) {
-								delete instance.props.success;
-								delete instance.props.errorMessage;
-								callback("");
-							}
-							else if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
-								instance.props.success = true;
-								delete instance.props.errorMessage;
-								callback(url);
-							}
-							else {
-								delete instance.props.success;
-								instance.props.errorMessage = this.labels.modal_invalidurl;
-								callback("");
-							}
-							BDFDB.ReactUtils.forceUpdate(instance);
-						});
-					}, 1000);
+					else instance.checkTimeout = BDFDB.TimeUtils.timeout(_ => BDFDB.LibraryRequires.request(url, {agentOptions: {rejectUnauthorized: false}}, (error, response, result) => {
+						delete instance.checkTimeout;
+						if (instance.props.disabled) {
+							delete instance.props.success;
+							delete instance.props.errorMessage;
+							callback("");
+						}
+						else if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
+							instance.props.success = true;
+							delete instance.props.errorMessage;
+							callback(url);
+						}
+						else {
+							delete instance.props.success;
+							instance.props.errorMessage = this.labels.modal_invalidurl;
+							callback("");
+						}
+						BDFDB.ReactUtils.forceUpdate(instance);
+					}), 1000);
 				});
 			}
 
