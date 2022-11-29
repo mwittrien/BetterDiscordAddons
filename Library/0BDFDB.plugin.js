@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.9
+ * @version 3.0.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2382,6 +2382,10 @@ module.exports = (_ => {
 							return true;
 						}
 					}
+					return false;
+				};
+				Internal.isCorrectModuleButDontPatch = function (type) {
+					if (type == "MessageToolbar" && document.querySelector(BDFDB.dotCN.emojipicker)) return true;
 					return false;
 				};
 				Internal.findModuleViaData = (moduleStorage, dataStorage, item) => {
@@ -8204,7 +8208,7 @@ module.exports = (_ => {
 					},
 					after: e => {
 						if (!e.methodArguments[0] || typeof e.methodArguments[0] != "function" || (e.methodArguments[0].prototype && typeof e.methodArguments[0].prototype.render == "function") || !PluginStores.modulePatches.after) return;
-						else for (const type in PluginStores.modulePatches.after) if (Internal.isCorrectModule(e.methodArguments[0], type, true)) {
+						else for (const type in PluginStores.modulePatches.after) if (Internal.isCorrectModule(e.methodArguments[0], type, true) && !Internal.isCorrectModuleButDontPatch(type)) {
 							for (let plugin of PluginStores.modulePatches.after[type].flat(10)) BDFDB.PatchUtils.patch(plugin, e.returnValue, "type", {after: e2 => Internal.initiatePatch(plugin, type, {
 								arguments: e2.methodArguments,
 								instance: e2.instance,
