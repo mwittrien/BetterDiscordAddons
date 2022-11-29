@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.9.9
+ * @version 3.0.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2384,6 +2384,10 @@ module.exports = (_ => {
 					}
 					return false;
 				};
+				Internal.isCorrectModuleButDontPatch = function (type) {
+					if (type == "MessageToolbar" && document.querySelector(BDFDB.dotCN.emojipicker)) return true;
+					return false;
+				};
 				Internal.findModuleViaData = (moduleStorage, dataStorage, item) => {
 					if (dataStorage[item]) {
 						let defaultExport = typeof dataStorage[item].exported != "boolean" ? true : dataStorage[item].exported;
@@ -4148,26 +4152,25 @@ module.exports = (_ => {
 					BDFDB.TimeUtils.clear(BDFDB.DiscordUtils.rerenderAll.timeout);
 					BDFDB.DiscordUtils.rerenderAll.timeout = BDFDB.TimeUtils.timeout(_ => {
 						let ShakeableIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.appcontainer), {name: "Shakeable", unlimited: true, up: true});
-						let ShakeablePrototype = BDFDB.ObjectUtils.get(ShakeableIns, `${BDFDB.ReactUtils.instanceKey}.type.prototype`);
-						if (ShakeableIns && ShakeablePrototype) {
-							let parentSelector = "", notices = document.querySelector("#bd-notices");
-							if (notices) {
-								let parentClasses = []
-								for (let i = 0, parent = notices.parentElement; i < 3; i++, parent = parent.parentElement) parentClasses.push(parent.className);
-								parentSelector = parentClasses.reverse().map(n => !n ? "*" : `.${n.split(" ").join(".")}`).join(" > ");
-							}
-							BDFDB.PatchUtils.patch({name: "BDFDB DiscordUtils"}, ShakeablePrototype, "render", {after: e => {
-								e.returnValue.props.children = typeof e.returnValue.props.children == "function" ? (_ => {return null;}) : [];
-								BDFDB.ReactUtils.forceUpdate(ShakeableIns);
-								if (parentSelector) BDFDB.TimeUtils.timeout(_ => {
-									if (!document.contains(notices)) {
-										let parent = document.querySelector(parentSelector) || document.querySelector(BDFDB.dotCN.app).parentElement;
-										if (parent) parent.insertBefore(notices, parent.firstElementChild);
-									}
-								}, 1000);
-							}}, {once: true});
-							BDFDB.ReactUtils.forceUpdate(ShakeableIns);
+						let ShakeableType = ShakeableIns && BDFDB.ObjectUtils.get(ShakeableIns, `${BDFDB.ReactUtils.instanceKey}.type`);
+						if (!ShakeableType) return;
+						let parentSelector = "", notices = document.querySelector("#bd-notices");
+						if (notices) {
+							let parentClasses = []
+							for (let i = 0, parent = notices.parentElement; i < 3; i++, parent = parent.parentElement) parentClasses.push(parent.className);
+							parentSelector = parentClasses.reverse().map(n => !n ? "*" : `.${n.split(" ").join(".")}`).join(" > ");
 						}
+						BDFDB.PatchUtils.patch({name: "BDFDB DiscordUtils"}, ShakeableType.prototype, "render", {after: e => {
+							e.returnValue = BDFDB.ReactUtils.createElement(ShakeableType, ShakeableIns.props);
+							BDFDB.ReactUtils.forceUpdate(ShakeableIns);
+							if (parentSelector) BDFDB.TimeUtils.timeout(_ => {
+								if (!document.contains(notices)) {
+									let parent = document.querySelector(parentSelector) || document.querySelector(BDFDB.dotCN.app).parentElement;
+									if (parent) parent.insertBefore(notices, parent.firstElementChild);
+								}
+							}, 1000);
+						}}, {once: true});
+						BDFDB.ReactUtils.forceUpdate(ShakeableIns);
 					}, instant ? 0 : 1000);
 				};
 				
@@ -8204,7 +8207,7 @@ module.exports = (_ => {
 					},
 					after: e => {
 						if (!e.methodArguments[0] || typeof e.methodArguments[0] != "function" || (e.methodArguments[0].prototype && typeof e.methodArguments[0].prototype.render == "function") || !PluginStores.modulePatches.after) return;
-						else for (const type in PluginStores.modulePatches.after) if (Internal.isCorrectModule(e.methodArguments[0], type, true)) {
+						else for (const type in PluginStores.modulePatches.after) if (Internal.isCorrectModule(e.methodArguments[0], type, true) && !Internal.isCorrectModuleButDontPatch(type)) {
 							for (let plugin of PluginStores.modulePatches.after[type].flat(10)) BDFDB.PatchUtils.patch(plugin, e.returnValue, "type", {after: e2 => Internal.initiatePatch(plugin, type, {
 								arguments: e2.methodArguments,
 								instance: e2.instance,
