@@ -2,7 +2,7 @@
  * @name RemoveNicknames
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.1
+ * @version 1.4.2
  * @description Replaces Nicknames with Accountnames
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -67,7 +67,6 @@ module.exports = (_ => {
 					},
 					places: {
 						chat:				{value: true, 			description: "Messages"},
-						reactions:			{value: true, 			description: "Reactions"},
 						mentions:			{value: true, 			description: "Mentions"},
 						voiceChat:			{value: true, 			description: "Voice Channels"},
 						memberList:			{value: true, 			description: "Member List"},
@@ -76,24 +75,23 @@ module.exports = (_ => {
 					}
 				};
 			
-				this.patchedModules = {
-					before: {
-						AutocompleteUserResult: "render",
-						VoiceUser: "render",
-						ChannelReply: "default",
-						MemberListItem: "render"
-					},
-					after: {
-						TypingUsers: "render",
-						Reaction: "render",
-						UserMention: "default",
-						RichUserMention: "UserMention"
-					}
+				this.modulePatches = {
+					before: [
+						"AutocompleteUserResult",
+						"ChannelReply",
+						"MemberListItem",
+						"VoiceUser"
+					],
+					after: [
+						"RichUserMention",
+						"TypingUsers",
+						"UserMention"
+					]
 				};
 			}
 			
 			onStart () {
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageAuthorUtils, ["default", "getMessageAuthor"], {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageAuthorUtils, ["getAuthor", "getMessageAuthor"], {after: e => {
 					if (this.settings.places.chat && e.methodArguments[0] && e.methodArguments[0].author) {
 						let newName = this.getNewName(e.methodArguments[0].author);
 						if (newName) e.returnValue.nick = newName;
@@ -175,31 +173,6 @@ module.exports = (_ => {
 						}
 					}
 				}
-			}
-			
-			processReaction (e) {
-				if (e.instance.props.reactions) {
-					let channel = BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id);
-					let guildId = null == channel || channel.isPrivate() ? null : channel.getGuildId();
-					let users = e.instance.props.reactions.filter(user => !BDFDB.LibraryStores.RelationshipStore.isBlocked(user.id)).slice(0, 3).map(user => this.getNewName(user) || guildId && BDFDB.LibraryStores.GuildMemberStore.getNick(guildId, user.id) || user.username).filter(user => user);
-					if (users.length) {
-						let reaction = e.instance.props.message.getReaction(e.instance.props.emoji);
-						let others = Math.max(0, (reaction && reaction.count || 0) - users.length);
-						let emojiName = BDFDB.LibraryModules.ReactionEmojiUtils.getReactionEmojiName(e.instance.props.emoji);
-						e.returnvalue.props.text = 
-							users.length == 1 ? others > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_1_N", users[0], others, emojiName) :
-							BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_1", users[0], emojiName) :
-							users.length == 2 ? others > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_2_N", users[0], users[1], others, emojiName) :
-							BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_2", users[0], users[1], emojiName) :
-							users.length == 3 ? others > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_3_N", users[0], users[1], users[2], others, emojiName) :
-							BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_3", users[0], users[1], users[2], emojiName) :
-							BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_N", others, emojiName);
-					}
-				}
-				else BDFDB.LibraryModules.ReactionUtils.getReactions(e.instance.props.message.channel_id, e.instance.props.message.id, e.instance.props.emoji).then(reactions => {
-					e.instance.props.reactions = reactions;
-					BDFDB.ReactUtils.forceUpdate(e.instance);
-				});
 			}
 			
 			processUserMention (e) {
