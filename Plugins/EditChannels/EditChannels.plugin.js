@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.7
+ * @version 4.4.8
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -91,7 +91,7 @@ module.exports = (_ => {
 						"ChannelsList",
 						"ChannelTextAreaEditor",
 						"ChannelThreadItem",
-						"GuildSettingsInvites",
+						"GuildInvites",
 						"MessageContent",
 						"QuickSwitchChannelResult",
 						"RecentsChannelHeader",
@@ -340,7 +340,7 @@ module.exports = (_ => {
 				}
 			}
 
-			processGuildSettingsInvites (e) {
+			processGuildInvites (e) {
 				if (!this.settings.places.inviteLog || !e.instance.props.invites) return;
 				e.instance.props.invites = Object.assign({}, e.instance.props.invites);
 				for (let id in e.instance.props.invites) e.instance.props.invites[id] = new BDFDB.DiscordObjects.Invite(Object.assign({}, e.instance.props.invites[id], {channel: this.getChannelData(e.instance.props.invites[id].channel.id)}));
