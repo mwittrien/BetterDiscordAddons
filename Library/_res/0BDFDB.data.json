@@ -3317,6 +3317,7 @@
 		"userprofilemodal": ["UserProfile", "root"],
 		"userprofilenametag": ["UserProfileUsernameSection", "nameTag"],
 		"userprofileouter": ["UserTheme", "userProfileModalOuter"],
+		"userprofileusername": ["UserProfileUsernameSection", "username"],
 		"username": ["NameTag", "username"],
 		"usernotepopout": ["NotFound", "userPopoutNote"],
 		"usernoteprofile": ["UserProfileInfoSection", "note"],
