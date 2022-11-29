@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.7.0
+ * @version 4.7.1
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -200,7 +200,7 @@ module.exports = (_ => {
 				appTitleObserver = new MutationObserver(_ => this.changeAppTitle());
 				appTitleObserver.observe(document.head.querySelector("title"), {childList: true});
 			
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.RelationshipStore, "getName", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UserNameUtils, "getName", {after: e => {
 					if (e.methodArguments[2] && changedUsers[e.methodArguments[2].id] && changedUsers[e.methodArguments[2].id].name) return changedUsers[e.methodArguments[2].id].name;
 				}});
 			

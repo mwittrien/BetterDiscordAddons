@@ -91,9 +91,13 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UserNameUtils, "getName", {after: e => {
+					return this.getNewName(e.methodArguments[2], e.methodArguments[0]);
+				}});
+				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageAuthorUtils, ["getAuthor", "getMessageAuthor"], {after: e => {
 					if (this.settings.places.chat && e.methodArguments[0] && e.methodArguments[0].author) {
-						let newName = this.getNewName(e.methodArguments[0].author);
+						let newName = this.getNewName(e.methodArguments[0].author, (BDFDB.LibraryStores.ChannelStore.getChannel(e.methodArguments[0].channel_id) || {}).guild_id);
 						if (newName) e.returnValue.nick = newName;
 					}
 				}});
@@ -144,8 +148,7 @@ module.exports = (_ => {
 			}
 		
 			forceUpdateAll () {
-				BDFDB.PatchUtils.forceAllUpdates(this);
-				BDFDB.MessageUtils.rerenderAll();
+				BDFDB.DiscordUtils.rerenderAll();
 			}
 
 			processAutocompleteUserResult (e) {
@@ -157,7 +160,7 @@ module.exports = (_ => {
 
 			processVoiceUser (e) {
 				if (e.instance.props.user && e.instance.props.nick && this.settings.places.voiceChat) {
-					let newName = this.getNewName(e.instance.props.user);
+					let newName = this.getNewName(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.guild_id);
 					if (newName) e.instance.props.nick = newName;
 				}
 			}
@@ -177,7 +180,7 @@ module.exports = (_ => {
 			
 			processUserMention (e) {
 				if (e.instance.props.userId && this.settings.places.mentions) {
-					let newName = this.getNewName(BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId));
+					let newName = this.getNewName(BDFDB.LibraryStores.UserStore.getUser(e.instance.props.userId), (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.channelId) || {}).guild_id);
 					if (!newName) return;
 					if (typeof e.returnvalue.props.children == "function") {
 						let renderChildren = e.returnvalue.props.children;
@@ -193,7 +196,7 @@ module.exports = (_ => {
 			
 			processRichUserMention (e) {
 				if (e.instance.props.id && this.settings.places.mentions && typeof e.returnvalue.props.children == "function") {
-					let newName = this.getNewName(BDFDB.LibraryStores.UserStore.getUser(e.instance.props.id));
+					let newName = this.getNewName(BDFDB.LibraryStores.UserStore.getUser(e.instance.props.id), e.instance.props.guildId);
 					if (newName) {
 						let renderChildren = e.returnvalue.props.children;
 						e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
@@ -224,24 +227,25 @@ module.exports = (_ => {
 
 			processChannelReply (e) {
 				if (e.instance.props.reply && e.instance.props.reply.message && this.settings.places.chat) {
-					let newName = this.getNewName(e.instance.props.reply.message.author);
+					let newName = this.getNewName(e.instance.props.reply.message.author, e.instance.props.reply.channel && e.instance.props.reply.channel.guild_id);
 					if (newName) e.instance.props.reply.message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.reply.message, {nick: newName}));
 				}
 			}
 
 			processMemberListItem (e) {
 				if (e.instance.props.user && e.instance.props.nick && this.settings.places.memberList) {
-					let newName = this.getNewName(e.instance.props.user);
+					let newName = this.getNewName(e.instance.props.user, e.instance.props.channel.guild_id);
 					if (newName) e.instance.props.nick = newName;
 				}
 			}
 
-			getNewName (user) {
+			getNewName (user, guildId = BDFDB.LibraryStores.SelectedGuildStore.getGuildId()) {
 				if (!user) return null;
-				let member = BDFDB.LibraryStores.GuildMemberStore.getMember(BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), user.id) || {};
+				let member = BDFDB.LibraryStores.GuildMemberStore.getMember(guildId, user.id) || {};
 				let origUser = BDFDB.LibraryStores.UserStore.getUser(user.id) || {};
 				let EditUsers = BDFDB.BDUtils.getPlugin("EditUsers", true);
 				let username = EditUsers && EditUsers.getUserData(user, true, false, origUser).username || user.username;
+				if (!member) return username;
 				if (!member.nick || user.id == BDFDB.UserUtils.me.id && !this.settings.general.replaceOwn || user.bot && !this.settings.general.replaceBots) return username != origUser.username ? username : (member.nick || username);
 				return this.settings.general.addNickname ? (this.settings.general.swapPositions ? (member.nick + " (" + username + ")") : (username + " (" + member.nick + ")")) : username;
 			}
