@@ -491,6 +491,7 @@
 		"UseCopyIdItem": {"strings": ["\"devmode-copy-id\""]},
 		"UserBadges": {"strings": [".PROFILE_USER_BADGES", "SIZE_24"]},
 		"UserBanner": {"strings": [".showPremiumBadgeUpsell", ".isPremiumAtLeast", ".SETTINGS"]},
+		"UserBannerMask": {"strings": [".overrideAvatarDecorationURL", "hasBannerImage:", "foreignObject"]},
 		"UserBioSection": {"strings": [".isUsingGuildBio", "aboutMeGuildIcon", "GUILD_IDENTITY_BIO_TOAST"]},
 		"UserConnectionsSection": {"strings": [".applicationRoleConnections)", ".CONNECTIONS_ROLE_POPOUT_VIEW_ALL"]},
 		"UserInfo": {"strings": [".botTag", "isMobile:", ".discordTag"]},
