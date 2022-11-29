@@ -136,6 +136,10 @@
 		"MentionUtils": {"strings": ["rawMessage", "mention_everyone", "mentionUsers"], "exported": false, "value": "exports", "map": {
 			"isRawMessageMentioned": ["rawMessage", "mention_everyone", "mentionUsers"]
 		}},
+		"MessageAuthorUtils": {"strings": [".friendNickname", "colorRoleName:null"], "exported": false, "value": "exports", "map": {
+			"getAuthor": ["Result cannot be null because the message is not null"],
+			"getMessageAuthor": [".getChannel(e.channel_id)", "(e.author"]
+		}},
 		"MessageComponentUtils": {"strings": ["ANIMATE_CHAT_AVATAR", "interactionUsernameProfile"], "exported": false, "value": "exports", "map": {
 			"useHoveredMessage": ["ANIMATE_CHAT_AVATAR"]
 		}},
