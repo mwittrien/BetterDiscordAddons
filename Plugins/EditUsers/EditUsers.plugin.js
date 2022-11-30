@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.7.1
+ * @version 4.7.2
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -154,7 +154,8 @@ module.exports = (_ => {
 						"PrivateChannel",
 						"QuickSwitchUserResult",
 						"RTCConnection",
-						"ReactorsComponent",
+						"Reactor",
+						"Reactors",
 						"RichUserMention",
 						"SearchPopoutOption",
 						"ThreadCardDescription",
@@ -493,10 +494,7 @@ module.exports = (_ => {
 					}
 				}
 				if (e.instance.props.usernameClass) {
-					if (e.instance.props.usernameClass.indexOf(BDFDB.disCN.messagereactionsmodalusername) > -1) {
-						change = this.settings.places.reactions && !BDFDB.LibraryStores.GuildMemberStore.getNick(BDFDB.LibraryStores.SelectedGuildStore.getGuildId(), e.instance.props.user.id);
-					}
-					else if (e.instance.props.usernameClass.indexOf(BDFDB.disCN.userprofileusername) > -1) {
+					if (e.instance.props.usernameClass.indexOf(BDFDB.disCN.userprofileusername) > -1) {
 						change = this.settings.places.userProfile;
 						guildId = BDFDB.LibraryStores.SelectedGuildStore.getGuildId();
 						tagClass = BDFDB.disCN.bottagnametag;
@@ -848,30 +846,15 @@ module.exports = (_ => {
 				ownerName.props.color = data.color1 && (data.useRoleColor && ownerName.props.color || BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "HEX")) || ownerName.props.color;
 			}
 			
-			processReactorsComponent (e) {
+			processReactors (e) {
 				if (!this.settings.places.reactions || !BDFDB.ArrayUtils.is(e.instance.props.reactors) || !this.shouldChangeInChat(e.instance.props.channel.id)) return;
-				if (!e.returnvalue) {
-					for (let i in e.instance.props.reactors) if (!BDFDB.LibraryStores.GuildMemberStore.getNick(e.instance.props.guildId, e.instance.props.reactors[i].id)) e.instance.props.reactors[i] = this.getUserData(e.instance.props.reactors[i].id, true, false, e.instance.props.reactors[i]);
-				}
-				else {
-					let renderRow = e.returnvalue.props.renderRow;
-					e.returnvalue.props.renderRow = (...args) => {
-						let row = renderRow(...args);
-						if (row && row.props && row.props.user && changedUsers[row.props.user.id]) {
-							let type = row.type;
-							row.type = (...args2) => {
-								let result = type(...args2);
-								let nickName = BDFDB.LibraryStores.GuildMemberStore.getNick(row.props.guildId, row.props.user.id) && BDFDB.ReactUtils.findChild(result, {props: [["className", BDFDB.disCN.messagereactionsmodalnickname]]});
-								if (nickName) {
-									if (changedUsers[row.props.user.id].name) BDFDB.ReactUtils.setChild(nickName, changedUsers[row.props.user.id].name);
-									this.changeUserColor(nickName, row.props.user.id);
-								}
-								return result;
-							};
-						}
-						return row;
-					};
-				}
+				for (let i in e.instance.props.reactors) if (!BDFDB.LibraryStores.GuildMemberStore.getNick(e.instance.props.guildId, e.instance.props.reactors[i].id)) e.instance.props.reactors[i] = this.getUserData(e.instance.props.reactors[i].id, true, false, e.instance.props.reactors[i]);
+			}
+			
+			processReactor (e) {
+				if (!this.settings.places.reactions || !e.instance.props.user || !changedUsers[e.instance.props.user.id] || !this.shouldChangeInChat(e.instance.props.channel.id)) return;
+				let nickName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.messagereactionsmodalnickname]]});
+				if (nickName) this.changeUserColor(nickName, e.instance.props.user.id);
 			}
 			
 			processUserMention (e) {
