@@ -3673,9 +3673,8 @@ module.exports = (_ => {
 							}
 							contentChildren.push(child);
 						}
-						if (tabBarItems.length) headerChildren.push(BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex, {
+						if (tabBarItems.length) headerChildren.push(BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.tabbarcontainer,
-							align: Internal.LibraryComponents.Flex.Align.CENTER,
 							children: [
 								BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TabBar, {
 									className: BDFDB.disCN.tabbar,
