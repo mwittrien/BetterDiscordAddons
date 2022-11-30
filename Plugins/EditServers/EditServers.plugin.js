@@ -2,7 +2,7 @@
  * @name EditServers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.9
+ * @version 2.4.0
  * @description Allows you to locally edit Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -93,7 +93,6 @@ module.exports = (_ => {
 						"GuildIconWrapper",
 						"GuildItem",
 						"UserProfileMutualGuilds",
-						"NavItem",
 						"RecentsChannelHeader"
 					]
 				};
@@ -269,37 +268,7 @@ module.exports = (_ => {
 				let change = true;
 				if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.guildfolderguildicon) > -1) change = this.settings.places.guildList;
 				else if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.listavatar) > -1) change = this.settings.places.mutualGuilds;
-				if (change) {
-					let data = changedGuilds[e.instance.props.guild.id];
-					e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
-					let fontGradient = BDFDB.ObjectUtils.is(data.color2);
-					e.instance.props.style = Object.assign({}, e.instance.props.style, {
-						background: BDFDB.ObjectUtils.is(data.color1) ? BDFDB.ColorUtils.createGradient(data.color1) : BDFDB.ColorUtils.convert(data.color1, "RGBA"),
-						color: !fontGradient && BDFDB.ColorUtils.convert(data.color2, "RGBA")
-					});
-					if (fontGradient) e.instance.props.children[0] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
-						gradient: BDFDB.ColorUtils.createGradient(data.color2),
-						children: e.instance.props.children[0]
-					});
-				}
-			}
-			
-			processNavItem (e) {
-				if (!this.settings.places.guildList || !e.instance.props["data-list-item-id"]) return;
-				let guildId = e.instance.props["data-list-item-id"].split("_").pop();
-				let data = guildId && changedGuilds[guildId];
-				if (!data) return;
-				let guildAcronym = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildiconacronym]]});
-				if (!guildAcronym) return;
-				let fontGradient = BDFDB.ObjectUtils.is(data.color2);
-				guildAcronym.props.style = Object.assign({}, guildAcronym.props.style, {
-					background: BDFDB.ObjectUtils.is(data.color1) ? BDFDB.ColorUtils.createGradient(data.color1) : BDFDB.ColorUtils.convert(data.color1, "RGBA"),
-					color: !fontGradient && BDFDB.ColorUtils.convert(data.color2, "RGBA")
-				});
-				if (fontGradient) guildAcronym.props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
-					gradient: BDFDB.ColorUtils.createGradient(data.color2),
-					children: guildAcronym.props.children
-				});
+				if (change) e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
 			}
 
 			processUserProfileMutualGuilds (e) {
@@ -463,9 +432,7 @@ module.exports = (_ => {
 														}
 														else {
 															iconInput.props.disabled = false;
-															this.checkUrl(iconInput.props.value, iconInput).then(returnValue => {
-																newData.url = returnValue;
-															});
+															this.checkUrl(iconInput.props.value, iconInput).then(returnValue => newData.url = returnValue);
 														}
 													}
 												})
@@ -479,9 +446,7 @@ module.exports = (_ => {
 											disabled: data.removeIcon,
 											ref: instance => {if (instance) iconInput = instance;},
 											onChange: (value, instance) => {
-												this.checkUrl(value, instance).then(returnValue => {
-													newData.url = returnValue;
-												});
+												this.checkUrl(value, instance).then(returnValue => newData.url = returnValue);
 											}
 										})
 									]
@@ -517,9 +482,7 @@ module.exports = (_ => {
 														}
 														else {
 															bannerInput.props.disabled = false;
-															this.checkUrl(bannerInput.props.value, bannerInput).then(returnValue => {
-																newData.url = returnValue;
-															});
+															this.checkUrl(bannerInput.props.value, bannerInput).then(returnValue => newData.url = returnValue);
 														}
 													}
 												})
@@ -533,9 +496,7 @@ module.exports = (_ => {
 											disabled: data.removeBanner || guild.id == "410787888507256842",
 											ref: instance => {if (instance) bannerInput = instance;},
 											onChange: (value, instance) => {
-												this.checkUrl(value, instance).then(returnValue => {
-													newData.banner = returnValue;
-												});
+												this.checkUrl(value, instance).then(returnValue => newData.banner = returnValue);
 											}
 										})
 									]
@@ -546,37 +507,12 @@ module.exports = (_ => {
 							tab: this.labels.modal_tabheader2,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: this.labels.modal_colorpicker1,
-									className: BDFDB.disCN.marginbottom20,
-									children: [
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-											color: data.color1,
-											onColorChange: value => {newData.color1 = value;}
-										})
-									]
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-									title: this.labels.modal_colorpicker2,
-									className: BDFDB.disCN.marginbottom20,
-									children: [
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-											color: data.color2,
-											onColorChange: value => {newData.color2 = value;}
-										})
-									]
-								})
-							]
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-							tab: this.labels.modal_tabheader3,
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 									title: this.labels.modal_colorpicker3,
 									className: BDFDB.disCN.marginbottom20,
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 											color: data.color3,
-											onColorChange: value => {newData.color3 = value;}
+											onColorChange: value => newData.color3 = value
 										})
 									]
 								}),
@@ -586,7 +522,7 @@ module.exports = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 											color: data.color4,
-											onColorChange: value => {newData.color4 = value;}
+											onColorChange: value => newData.color4 = value
 										})
 									]
 								})
@@ -674,8 +610,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Използвайте оригиналното име на сървъра за съкращението на сървъра",
 							modal_invalidurl:					"Невалиден адрес",
 							modal_tabheader1:					"Сървър",
-							modal_tabheader2:					"Цвят на иконата",
-							modal_tabheader3:					"Цвят на подсказка",
+							modal_tabheader2:					"Цвят на подсказка",
 							submenu_resetsettings:				"Нулиране на сървъра",
 							submenu_serversettings:				"Промяна на настройките"
 						};
@@ -694,8 +629,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Brug det originale servernavn til serverakronymet",
 							modal_invalidurl:					"Ugyldig URL",
 							modal_tabheader1:					"Server",
-							modal_tabheader2:					"Ikonfarve",
-							modal_tabheader3:					"Værktøjstip farve",
+							modal_tabheader2:					"Værktøjstip farve",
 							submenu_resetsettings:				"Nulstil server",
 							submenu_serversettings:				"Ændre indstillinger"
 						};
@@ -714,8 +648,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Verwenden Sie den ursprünglichen Servernamen für das Serverakronym",
 							modal_invalidurl:					"Ungültige URL",
 							modal_tabheader1:					"Server",
-							modal_tabheader2:					"Symbolfarbe",
-							modal_tabheader3:					"Tooltipfarbe",
+							modal_tabheader2:					"Tooltipfarbe",
 							submenu_resetsettings:				"Server zurücksetzen",
 							submenu_serversettings:				"Einstellungen ändern"
 						};
@@ -734,8 +667,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Χρησιμοποιήστε το αρχικό όνομα διακομιστή για το αρκτικόλεξο διακομιστή",
 							modal_invalidurl:					"Μη έγκυρη διεύθυνση URL",
 							modal_tabheader1:					"Υπηρέτης",
-							modal_tabheader2:					"Χρώμα εικονιδίου",
-							modal_tabheader3:					"Χρώμα επεξήγησης εργαλείου",
+							modal_tabheader2:					"Χρώμα επεξήγησης εργαλείου",
 							submenu_resetsettings:				"Επαναφορά διακομιστή",
 							submenu_serversettings:				"Αλλαξε ρυθμίσεις"
 						};
@@ -754,8 +686,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Utilice el nombre del servidor original para el acrónimo del servidor",
 							modal_invalidurl:					"URL invalida",
 							modal_tabheader1:					"Servidor",
-							modal_tabheader2:					"Color del icono",
-							modal_tabheader3:					"Color de información sobre herramientas",
+							modal_tabheader2:					"Color de información sobre herramientas",
 							submenu_resetsettings:				"Restablecer servidor",
 							submenu_serversettings:				"Cambiar ajustes"
 						};
@@ -774,8 +705,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Käytä palvelimen lyhenteessä alkuperäistä palvelimen nimeä",
 							modal_invalidurl:					"Virheellinen URL",
 							modal_tabheader1:					"Palvelin",
-							modal_tabheader2:					"Kuvakkeen väri",
-							modal_tabheader3:					"Työkaluvihjeen väri",
+							modal_tabheader2:					"Työkaluvihjeen väri",
 							submenu_resetsettings:				"Nollaa palvelin",
 							submenu_serversettings:				"Vaihda asetuksia"
 						};
@@ -794,8 +724,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Utilisez le nom de serveur d'origine pour l'acronyme de serveur",
 							modal_invalidurl:					"URL invalide",
 							modal_tabheader1:					"Serveur",
-							modal_tabheader2:					"Couleur de l'icône",
-							modal_tabheader3:					"Couleur de l'info-bulle",
+							modal_tabheader2:					"Couleur de l'info-bulle",
 							submenu_resetsettings:				"Réinitialiser le serveur",
 							submenu_serversettings:				"Modifier les paramètres"
 						};
@@ -814,8 +743,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Koristite izvorno ime poslužitelja za kraticu poslužitelja",
 							modal_invalidurl:					"Neispravna poveznica",
 							modal_tabheader1:					"Poslužitelj",
-							modal_tabheader2:					"Ikona Boja",
-							modal_tabheader3:					"Boja opisa",
+							modal_tabheader2:					"Boja opisa",
 							submenu_resetsettings:				"Resetiraj poslužitelj",
 							submenu_serversettings:				"Promijeniti postavke"
 						};
@@ -834,8 +762,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"A kiszolgáló rövidítéshez használja az eredeti kiszolgáló nevet",
 							modal_invalidurl:					"Érvénytelen URL",
 							modal_tabheader1:					"Szerver",
-							modal_tabheader2:					"Ikon színe",
-							modal_tabheader3:					"Tooltip Color",
+							modal_tabheader2:					"Tooltip Color",
 							submenu_resetsettings:				"Reset Server",
 							submenu_serversettings:				"Beállítások megváltoztatása"
 						};
@@ -854,8 +781,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Utilizzare il nome del server originale per l'acronimo del server",
 							modal_invalidurl:					"URL non valido",
 							modal_tabheader1:					"Server",
-							modal_tabheader2:					"Colore dell'icona",
-							modal_tabheader3:					"Colore della descrizione comando",
+							modal_tabheader2:					"Colore della descrizione comando",
 							submenu_resetsettings:				"Reimposta server",
 							submenu_serversettings:				"Cambia impostazioni"
 						};
@@ -874,8 +800,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"サーバーの頭字語には元のサーバー名を使用します",
 							modal_invalidurl:					"無効なURL",
 							modal_tabheader1:					"サーバ",
-							modal_tabheader2:					"アイコンの色",
-							modal_tabheader3:					"ツールチップの色",
+							modal_tabheader2:					"ツールチップの色",
 							submenu_resetsettings:				"サーバーのリセット",
 							submenu_serversettings:				"設定を変更する"
 						};
@@ -894,8 +819,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"서버 약어에 원래 서버 이름 사용",
 							modal_invalidurl:					"잘못된 URL",
 							modal_tabheader1:					"섬기는 사람",
-							modal_tabheader2:					"아이콘 색상",
-							modal_tabheader3:					"툴팁 색상",
+							modal_tabheader2:					"툴팁 색상",
 							submenu_resetsettings:				"서버 재설정",
 							submenu_serversettings:				"설정 변경"
 						};
@@ -914,8 +838,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Serverio akronimui naudokite originalų serverio pavadinimą",
 							modal_invalidurl:					"Neteisingas URL",
 							modal_tabheader1:					"Serveris",
-							modal_tabheader2:					"Piktogramos spalva",
-							modal_tabheader3:					"Patarimo spalva",
+							modal_tabheader2:					"Patarimo spalva",
 							submenu_resetsettings:				"Iš naujo nustatyti serverį",
 							submenu_serversettings:				"Pakeisti nustatymus"
 						};
@@ -934,8 +857,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Gebruik de oorspronkelijke servernaam voor het serveracroniem",
 							modal_invalidurl:					"Ongeldige URL",
 							modal_tabheader1:					"Server",
-							modal_tabheader2:					"Icoonkleur",
-							modal_tabheader3:					"Tooltipkleur",
+							modal_tabheader2:					"Tooltipkleur",
 							submenu_resetsettings:				"Reset server",
 							submenu_serversettings:				"Instellingen veranderen"
 						};
@@ -954,8 +876,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Bruk det originale servernavnet for serverakronymet",
 							modal_invalidurl:					"Ugyldig URL",
 							modal_tabheader1:					"Server",
-							modal_tabheader2:					"Ikonfarge",
-							modal_tabheader3:					"Verktøytipsfarge",
+							modal_tabheader2:					"Verktøytipsfarge",
 							submenu_resetsettings:				"Tilbakestill server",
 							submenu_serversettings:				"Endre innstillinger"
 						};
@@ -974,8 +895,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Użyj oryginalnej nazwy serwera dla akronimu serwera",
 							modal_invalidurl:					"Nieprawidłowy URL",
 							modal_tabheader1:					"Serwer",
-							modal_tabheader2:					"Kolor ikony",
-							modal_tabheader3:					"Kolor etykiety narzędzi",
+							modal_tabheader2:					"Kolor etykiety narzędzi",
 							submenu_resetsettings:				"Zresetuj serwer",
 							submenu_serversettings:				"Zmień ustawienia"
 						};
@@ -994,8 +914,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Use o nome do servidor original para o acrônimo do servidor",
 							modal_invalidurl:					"URL inválida",
 							modal_tabheader1:					"Servidor",
-							modal_tabheader2:					"Cor do ícone",
-							modal_tabheader3:					"Cor da dica de ferramenta",
+							modal_tabheader2:					"Cor da dica de ferramenta",
 							submenu_resetsettings:				"Reiniciar Servidor",
 							submenu_serversettings:				"Mudar configurações"
 						};
@@ -1014,8 +933,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Utilizați numele serverului original pentru acronimul serverului",
 							modal_invalidurl:					"URL invalid",
 							modal_tabheader1:					"Server",
-							modal_tabheader2:					"Culoare pictogramă",
-							modal_tabheader3:					"Culoare sfat",
+							modal_tabheader2:					"Culoare sfat",
 							submenu_resetsettings:				"Resetați serverul",
 							submenu_serversettings:				"Schimbă setările"
 						};
@@ -1034,8 +952,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Используйте исходное имя сервера для аббревиатуры сервера",
 							modal_invalidurl:					"Неверная ссылка",
 							modal_tabheader1:					"Сервер",
-							modal_tabheader2:					"Цвет значка",
-							modal_tabheader3:					"Цвет всплывающей подсказки",
+							modal_tabheader2:					"Цвет всплывающей подсказки",
 							submenu_resetsettings:				"Сбросить сервер",
 							submenu_serversettings:				"Изменить настройки"
 						};
@@ -1054,8 +971,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Använd det ursprungliga servernamnet för servernakronym",
 							modal_invalidurl:					"Ogiltig URL",
 							modal_tabheader1:					"Server",
-							modal_tabheader2:					"Ikonfärg",
-							modal_tabheader3:					"Verktygstipsfärg",
+							modal_tabheader2:					"Verktygstipsfärg",
 							submenu_resetsettings:				"Återställ server",
 							submenu_serversettings:				"Ändra inställningar"
 						};
@@ -1074,8 +990,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"ใช้ชื่อเซิร์ฟเวอร์เดิมสำหรับตัวย่อเซิร์ฟเวอร์",
 							modal_invalidurl:					"URL ไม่ถูกต้อง",
 							modal_tabheader1:					"เซิร์ฟเวอร์",
-							modal_tabheader2:					"ไอคอนสี",
-							modal_tabheader3:					"เคล็ดลับเครื่องมือสี",
+							modal_tabheader2:					"เคล็ดลับเครื่องมือสี",
 							submenu_resetsettings:				"รีเซ็ตเซิร์ฟเวอร์",
 							submenu_serversettings:				"เปลี่ยนการตั้งค่า"
 						};
@@ -1094,8 +1009,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Sunucu Kısaltması için orijinal Sunucu Adını kullanın",
 							modal_invalidurl:					"Geçersiz URL",
 							modal_tabheader1:					"Sunucu",
-							modal_tabheader2:					"Simge Rengi",
-							modal_tabheader3:					"Araç İpucu Rengi",
+							modal_tabheader2:					"Araç İpucu Rengi",
 							submenu_resetsettings:				"Sunucuyu Sıfırla",
 							submenu_serversettings:				"Ayarları değiştir"
 						};
@@ -1114,8 +1028,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Використовуйте оригінальне ім’я сервера для абревіатури сервера",
 							modal_invalidurl:					"Недійсна URL-адреса",
 							modal_tabheader1:					"Сервер",
-							modal_tabheader2:					"Значок Колір",
-							modal_tabheader3:					"Колір підказки",
+							modal_tabheader2:					"Колір підказки",
 							submenu_resetsettings:				"Скинути сервер",
 							submenu_serversettings:				"Змінити налаштування"
 						};
@@ -1134,8 +1047,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Sử dụng tên máy chủ ban đầu cho từ viết tắt máy chủ",
 							modal_invalidurl:					"URL không hợp lệ",
 							modal_tabheader1:					"Người phục vụ",
-							modal_tabheader2:					"Màu biểu tượng",
-							modal_tabheader3:					"Màu chú giải công cụ",
+							modal_tabheader2:					"Màu chú giải công cụ",
 							submenu_resetsettings:				"Đặt lại máy chủ",
 							submenu_serversettings:				"Thay đổi cài đặt"
 						};
@@ -1154,8 +1066,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"使用原始服务器名称作为服务器首字母缩写词",
 							modal_invalidurl:					"无效的网址",
 							modal_tabheader1:					"服务器",
-							modal_tabheader2:					"图标颜色",
-							modal_tabheader3:					"工具提示颜色",
+							modal_tabheader2:					"工具提示颜色",
 							submenu_resetsettings:				"重置服务器",
 							submenu_serversettings:				"更改设置"
 						};
@@ -1174,8 +1085,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"使用原始服務器名稱作為服務器首字母縮寫詞",
 							modal_invalidurl:					"無效的網址",
 							modal_tabheader1:					"服務器",
-							modal_tabheader2:					"圖標顏色",
-							modal_tabheader3:					"工具提示顏色",
+							modal_tabheader2:					"工具提示顏色",
 							submenu_resetsettings:				"重置服務器",
 							submenu_serversettings:				"更改設置"
 						};
@@ -1194,8 +1104,7 @@ module.exports = (_ => {
 							modal_ignorecustomname:				"Use the original Server Name for the Server Acronym",
 							modal_invalidurl:					"Invalid URL",
 							modal_tabheader1:					"Server",
-							modal_tabheader2:					"Icon Color",
-							modal_tabheader3:					"Tooltip Color",
+							modal_tabheader2:					"Tooltip Color",
 							submenu_resetsettings:				"Reset Server",
 							submenu_serversettings:				"Change Settings"
 						};
