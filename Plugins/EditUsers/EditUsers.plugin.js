@@ -120,7 +120,6 @@ module.exports = (_ => {
 						"QuickSwitcher",
 						"QuickSwitchUserResult",
 						"RTCConnectionVoiceUsers",
-						"Reactors",
 						"SearchPopoutOption",
 						"ThreadMessageAccessoryMessage",
 						"UserBanner",
@@ -845,15 +844,12 @@ module.exports = (_ => {
 				ownerName.props.color = data.color1 && (data.useRoleColor && ownerName.props.color || BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "HEX")) || ownerName.props.color;
 			}
 			
-			processReactors (e) {
-				if (!this.settings.places.reactions || !BDFDB.ArrayUtils.is(e.instance.props.reactors) || !this.shouldChangeInChat(e.instance.props.channel.id)) return;
-				for (let i in e.instance.props.reactors) if (!BDFDB.LibraryStores.GuildMemberStore.getNick(e.instance.props.guildId, e.instance.props.reactors[i].id)) e.instance.props.reactors[i] = this.getUserData(e.instance.props.reactors[i].id, true, false, e.instance.props.reactors[i]);
-			}
-			
 			processReactor (e) {
 				if (!this.settings.places.reactions || !e.instance.props.user || !changedUsers[e.instance.props.user.id] || !this.shouldChangeInChat(e.instance.props.channel.id)) return;
 				let nickName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.messagereactionsmodalnickname]]});
 				if (nickName) this.changeUserColor(nickName, e.instance.props.user.id);
+				let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: ["size"]});
+				if (avatar) avatar.props.user = this.getUserData(e.instance.props.user.id);
 			}
 			
 			processUserMention (e) {
