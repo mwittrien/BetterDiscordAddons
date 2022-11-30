@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.3
+ * @version 1.3.4
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"improved": {
+			"Jump To": "Clicking on the Date in the Popout/Profile will now jump to the targeted Message"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -101,8 +103,9 @@ module.exports = (_ => {
 							variant: "eyebrow",
 							children: _this.labels.last_message
 						}),
-						BDFDB.ReactUtils.createElement("div", {
+						BDFDB.ReactUtils.createElement(loadedUsers[this.props.guildId][this.props.user.id] ? BDFDB.LibraryComponents.Clickable : "div", {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.membersince, !this.props.isInPopout && BDFDB.disCN.userprofileinfotext),
+							onClick: _ => loadedUsers[this.props.guildId][this.props.user.id] && BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(channel.guild_id, channel.id, loadedUsers[this.props.guildId][this.props.user.id].id)),
 							children: [
 								!channel ? icon : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 									text: channel.guild_id ? "#" + channel.name : BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES,
