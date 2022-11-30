@@ -2,7 +2,7 @@
  * @name EditServers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.3.8
+ * @version 2.3.9
  * @description Allows you to locally edit Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -67,7 +67,7 @@ module.exports = (_ => {
 					places: {
 						guildList:				{value: true, 			description: "Server List"},
 						guildHeader:			{value: true, 			description: "Server Header"},
-						guildInvites:			{value: true, 			description: "Server Invites"},
+						invites:				{value: true, 			description: "Server Invites"},
 						chat:					{value: true, 			description: "Chat (Welcome Message, etc.)"},
 						mutualGuilds:			{value: true, 			description: "Mutual Servers"},
 						recentMentions:			{value: true, 			description: "Recent Mentions Popout"},
@@ -75,27 +75,27 @@ module.exports = (_ => {
 					}
 				};
 			
-				this.patchedModules = {
-					before: {
-						GuildItem: "type",
-						GuildIconWrapper: "render",
-						QuickSwitchGuildResult: "render",
-						QuickSwitchChannelResult: "render",
-						GuildSidebar: "render",
-						GuildHeader: "type",
-						InviteGuildName: "GuildName"
-					},
-					after: {
-						RecentsChannelHeader: "default",
-						GuildItem: "type",
-						BlobMask: "render",
-						GuildIconWrapper: "render",
-						GuildIcon: "render",
-						MutualGuilds: "default",
-						NavItem: "default",
-						GuildHeader: "type",
-						WelcomeArea: "default"
-					}
+				this.modulePatches = {
+					before: [
+						"GuildHeader",
+						"GuildIconWrapper",
+						"GuildItem",
+						"GuildSidebar",
+						"InviteGuildName",
+						"QuickSwitchChannelResult",
+						"QuickSwitchGuildResult"
+					],
+					after: [
+						"BlobMask",
+						"DefaultChannelEmptyMessage",
+						"GuildHeader",
+						"GuildIcon",
+						"GuildIconWrapper",
+						"GuildItem",
+						"UserProfileMutualGuilds",
+						"NavItem",
+						"RecentsChannelHeader"
+					]
 				};
 				
 				this.patchPriority = 7;
@@ -117,11 +117,6 @@ module.exports = (_ => {
 					}
 					return e.callOriginalMethod();
 				}});
-
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryComponents.GuildComponents.Guild.prototype, "render", {
-					before: e => this.processGuildItem({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"}),
-					after: e => this.processGuildItem({instance: e.thisObject, returnvalue: e.returnValue, methodname: "render"})
-				});
 
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.QuerySearchUtils, "queryGuilds", {after: e => {
 					if (!e.methodArguments[0].query) return;
@@ -200,195 +195,162 @@ module.exports = (_ => {
 			}
 		
 			onGuildContextMenu (e) {
-				if (e.instance.props.guild) {
-					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
-					children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: this.labels.context_localserversettings,
-							id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-submenu"),
-							children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-								children: [
-									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-										label: this.labels.submenu_serversettings,
-										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
-										action: _ => this.openGuildSettingsModal(e.instance.props.guild.id)
-									}),
-									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-										label: this.labels.submenu_resetsettings,
-										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
-										color: BDFDB.DiscordConstants.MenuItemColors.DANGER,
-										disabled: !changedGuilds[e.instance.props.guild.id],
-										action: event => {
-											let remove = _ => {
-												BDFDB.DataUtils.remove(this, "servers", e.instance.props.guild.id);
-												this.forceUpdateAll(true);
-											};
-											if (event.shiftKey) remove();
-											else BDFDB.ModalUtils.confirm(this, this.labels.confirm_reset, remove);
-										}
-									})
-								]
-							})
+				if (!e.instance.props.guild) return;
+				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: this.labels.context_localserversettings,
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-submenu"),
+						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+							children: [
+								BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									label: this.labels.submenu_serversettings,
+									id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
+									action: _ => this.openGuildSettingsModal(e.instance.props.guild.id)
+								}),
+								BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									label: this.labels.submenu_resetsettings,
+									id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
+									color: BDFDB.DiscordConstants.MenuItemColors.DANGER,
+									disabled: !changedGuilds[e.instance.props.guild.id],
+									action: event => {
+										let remove = _ => {
+											BDFDB.DataUtils.remove(this, "servers", e.instance.props.guild.id);
+											this.forceUpdateAll(true);
+										};
+										if (event.shiftKey) remove();
+										else BDFDB.ModalUtils.confirm(this, this.labels.confirm_reset, remove);
+									}
+								})
+							]
 						})
-					}));
-				}
+					})
+				}));
 			}
 
 			processGuildItem (e) {
-				if (BDFDB.GuildUtils.is(e.instance.props.guild) && e.instance.props.guild.joinedAt && this.settings.places.guildList) {
-					if (!e.returnvalue) e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
-					else {
-						let data = changedGuilds[e.instance.props.guild.id];
-						if (data && (data.color3 || data.color4)) {
-							let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
-							if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								tooltipConfig: {
-									type: "right",
-									guild: e.instance.props.guild,
-									list: true,
-									offset: 12,
-									backgroundColor: data.color3,
-									fontColor: data.color4
-								},
-								children: children[index].props.children
-							});
-						}
+				if (!this.settings.places.guildList || !BDFDB.GuildUtils.is(e.instance.props.guild) || !e.instance.props.guild.joinedAt) return;
+				if (!e.returnvalue) e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
+				else {
+					let data = changedGuilds[e.instance.props.guild.id];
+					if (data && (data.color3 || data.color4)) {
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
+						if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							tooltipConfig: {
+								type: "right",
+								guild: e.instance.props.guild,
+								list: true,
+								offset: 12,
+								backgroundColor: data.color3,
+								fontColor: data.color4
+							},
+							children: children[index].props.children
+						});
 					}
 				}
 			}
 
 			processBlobMask (e) {
-				if (this.settings.places.guildList) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "NavItem"});
-					if (index > -1 && children[index].props.to && children[index].props.to.pathname) {
-						let guild = BDFDB.LibraryStores.GuildStore.getGuild((children[index].props.to.pathname.split("/channels/")[1] || "").split("/")[0]);
-						if (guild) {
-							let data = changedGuilds[guild.id];
-							if (data) {
-								if (data.shortName) children[index].props.name = data.shortName.split("").join(" ");
-								else if (data.name && data.ignoreCustomName) children[index].props.name = guild.name;
-							}
-						}
-					}
-				}
-			}
-			
-			processGuildIconWrapper (e) {
-				if (BDFDB.GuildUtils.is(e.instance.props.guild) && e.instance.props.guild.joinedAt) {
-					if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.guildfolderguildicon) > -1) e.instance.props.guild = this.getGuildData(e.instance.props.guild.id, this.settings.places.guildList);
-					else if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.listavatar) > -1) e.instance.props.guild = this.getGuildData(e.instance.props.guild.id, this.settings.places.mutualGuilds);
-					else e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
-				}
+				if (!this.settings.places.guildList) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "NavItem"});
+				if (index == -1 || !children[index].props.to || !children[index].props.to.pathname) return;
+				let guild = BDFDB.LibraryStores.GuildStore.getGuild((children[index].props.to.pathname.split("/channels/")[1] || "").split("/")[0]);
+				if (!guild || !changedGuilds[guild.id]) return;
+				if (changedGuilds[guild.id].shortName) children[index].props.name = changedGuilds[guild.id].shortName.split("").join(" ");
+				else if (changedGuilds[guild.id].name && changedGuilds[guild.id].ignoreCustomName) children[index].props.name = guild.name;
 			}
 			
 			processGuildIcon (e) {
-				if (BDFDB.GuildUtils.is(e.instance.props.guild) && e.instance.props.guild.joinedAt && e.instance.props.style && (!e.instance.props.style.backgroundImage || e.instance.props.style.backgroundImage == "none")) {
+				this.processGuildIconWrapper(e);
+			}
+			
+			processGuildIconWrapper (e) {
+				if (!BDFDB.GuildUtils.is(e.instance.props.guild) || !changedGuilds[e.instance.props.guild.id] || !e.instance.props.guild.joinedAt) return;
+				let change = true;
+				if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.guildfolderguildicon) > -1) change = this.settings.places.guildList;
+				else if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.listavatar) > -1) change = this.settings.places.mutualGuilds;
+				if (change) {
 					let data = changedGuilds[e.instance.props.guild.id];
-					if (data) {
-						if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.guildfolderguildicon) > -1) this.changeGuildIcon(e, data, this.settings.places.guildList);
-						else if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.listavatar) > -1 || BDFDB.ReactUtils.findConstructor(e.instance, "MutualGuild", {up: true})) this.changeGuildIcon(e, data, this.settings.places.mutualGuilds);
-						else this.changeGuildIcon(e, data);
-					}
+					e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
+					let fontGradient = BDFDB.ObjectUtils.is(data.color2);
+					e.instance.props.style = Object.assign({}, e.instance.props.style, {
+						background: BDFDB.ObjectUtils.is(data.color1) ? BDFDB.ColorUtils.createGradient(data.color1) : BDFDB.ColorUtils.convert(data.color1, "RGBA"),
+						color: !fontGradient && BDFDB.ColorUtils.convert(data.color2, "RGBA")
+					});
+					if (fontGradient) e.instance.props.children[0] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
+						gradient: BDFDB.ColorUtils.createGradient(data.color2),
+						children: e.instance.props.children[0]
+					});
 				}
 			}
 			
 			processNavItem (e) {
-				if (this.settings.places.guildList) {
-					let pathname = BDFDB.ObjectUtils.get(e.instance, "props.to.pathname");
-					let data = pathname && changedGuilds[(pathname.split("/channels/")[1] || "").split("/")[0]];
-					if (data) {
-						let guildAcronym = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildiconacronym]]});
-						if (guildAcronym) {
-							let fontGradient = BDFDB.ObjectUtils.is(data.color2);
-							guildAcronym.props.style = Object.assign({}, guildAcronym.props.style, {
-								background: BDFDB.ObjectUtils.is(data.color1) ? BDFDB.ColorUtils.createGradient(data.color1) : BDFDB.ColorUtils.convert(data.color1, "RGBA"),
-								color: !fontGradient && BDFDB.ColorUtils.convert(data.color2, "RGBA")
-							});
-							if (fontGradient) guildAcronym.props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
-								gradient: BDFDB.ColorUtils.createGradient(data.color2),
-								children: guildAcronym.props.children
-							});
-						}
-					}
-				}
+				if (!this.settings.places.guildList || !e.instance.props["data-list-item-id"]) return;
+				let guildId = e.instance.props["data-list-item-id"].split("_").pop();
+				let data = guildId && changedGuilds[guildId];
+				if (!data) return;
+				let guildAcronym = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildiconacronym]]});
+				if (!guildAcronym) return;
+				let fontGradient = BDFDB.ObjectUtils.is(data.color2);
+				guildAcronym.props.style = Object.assign({}, guildAcronym.props.style, {
+					background: BDFDB.ObjectUtils.is(data.color1) ? BDFDB.ColorUtils.createGradient(data.color1) : BDFDB.ColorUtils.convert(data.color1, "RGBA"),
+					color: !fontGradient && BDFDB.ColorUtils.convert(data.color2, "RGBA")
+				});
+				if (fontGradient) guildAcronym.props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
+					gradient: BDFDB.ColorUtils.createGradient(data.color2),
+					children: guildAcronym.props.children
+				});
 			}
 
-			processMutualGuilds (e) {
-				if (this.settings.places.mutualGuilds) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "GuildRow"});
-					if (index > -1) for (let row of children) if (row && row.props && row.props.guild) row.props.guild = this.getGuildData(row.props.guild.id);
-				}
+			processUserProfileMutualGuilds (e) {
+				if (!this.settings.places.mutualGuilds || !e.returnvalue.props.children || !e.returnvalue.props.children.length) return;
+				for (let row of e.returnvalue.props.children) if (row && row.props && row.props.guild) row.props.guild = this.getGuildData(row.props.guild.id);
 			}
-
 
 			processQuickSwitchGuildResult (e) {
-				if (e.instance.props.guild && this.settings.places.quickSwitcher) {
-					e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
-				}
+				if (this.settings.places.quickSwitcher && e.instance.props.guild) e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
 			}
 
 			processQuickSwitchChannelResult (e) {
-				if (e.instance.props.channel && e.instance.props.channel.guild_id && this.settings.places.quickSwitcher) {
-					e.instance.props.children.props.children = this.getGuildData(e.instance.props.channel.guild_id).name;
-				}
+				if (this.settings.places.quickSwitcher && e.instance.props.channel && e.instance.props.channel.guild_id) e.instance.props.children.props.children = this.getGuildData(e.instance.props.channel.guild_id).name;
 			}
 			
 			processRecentsChannelHeader (e) {
-				if (this.settings.places.recentMentions && BDFDB.ArrayUtils.is(e.returnvalue.props.children)) {
-					for (let child of e.returnvalue.props.children) if (child && child.props && child.props.channel && child.type.displayName == "ChannelName") {
-						let oldType = child.type;
-						child.type = (...args) => {
-							let instance = oldType(...args);
-							let guildName = BDFDB.ReactUtils.findChild(instance, {props: [["className", BDFDB.disCN.recentmentionsguildname]]});
-							if (guildName) guildName.props.children = (this.getGuildData(e.instance.props.channel.guild_id) || {}).name || guildName.props.children;
-							return instance;
-						};
-						child.type.displayName = oldType.displayName;
-					}
-				}
+				if (!this.settings.places.recentMentions || !e.instance.props.channel || !e.instance.props.channel.guild_id || !changedGuilds[e.instance.props.channel.guild_id] || !changedGuilds[e.instance.props.channel.guild_id].name) return;
+				let guild = BDFDB.LibraryStores.GuildStore.getGuild(e.instance.props.channel.guild_id);
+				if (!guild) return;
+				let guildName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.recentmentionsguildname]]});
+				if (guildName && typeof guildName.props.children == "string") guildName.props.children = guildName.props.children.replace(guild.name, changedGuilds[e.instance.props.channel.guild_id].name);
 			}
 			
 			processGuildSidebar (e) {
-				if (e.instance.props.guild) {
-					let data = changedGuilds[e.instance.props.guild.id];
-					if (data) {
-						if (data.removeBanner) e.instance.props.guild = new BDFDB.DiscordObjects.Guild(Object.assign({}, e.instance.props.guild, {banner: null}));
-						else if (data.banner) e.instance.props.guild = new BDFDB.DiscordObjects.Guild(Object.assign({}, e.instance.props.guild, {banner: data.banner}));
-					}
-				}
+				if (!e.instance.props.guild || !changedGuilds[e.instance.props.guild.id]) return;
+				if (changedGuilds[e.instance.props.guild.id].removeBanner) e.instance.props.guild = new BDFDB.DiscordObjects.Guild(Object.assign({}, e.instance.props.guild, {banner: null}));
+				else if (changedGuilds[e.instance.props.guild.id].banner) e.instance.props.guild = new BDFDB.DiscordObjects.Guild(Object.assign({}, e.instance.props.guild, {banner: changedGuilds[e.instance.props.guild.id].banner}));
 			}
 			
 			processGuildHeader (e) {
-				if (e.instance.props.guild && this.settings.places.guildHeader) {
-					e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
-					let oldName = (BDFDB.LibraryStores.GuildStore.getGuild(e.instance.props.guild.id) || {}).name;
-					if (e.returnvalue && this.settings.general.addOriginalTooltip && oldName != e.instance.props.guild.name) {
-						e.returnvalue.props.children[0] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: oldName,
-							children: e.returnvalue.props.children[0],
-							tooltipConfig: {type: "right"}
-						});
-					}
+				if (!this.settings.places.guildHeader || !e.instance.props.guild) return;
+				e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
+				let oldName = (BDFDB.LibraryStores.GuildStore.getGuild(e.instance.props.guild.id) || {}).name;
+				if (e.returnvalue && this.settings.general.addOriginalTooltip && oldName != e.instance.props.guild.name) {
+					e.returnvalue.props.children[0] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: oldName,
+						children: e.returnvalue.props.children[0],
+						tooltipConfig: {type: "right"}
+					});
 				}
 			}
 			
 			processInviteGuildName (e) {
-				if (e.instance.props.guild && e.instance.props.guild.joinedAt && this.settings.places.guildInvites) {
-					e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
-				}
+				if (this.settings.places.invites && e.instance.props.guild && e.instance.props.guild.joinedAt) e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
 			}
 			
-			processWelcomeArea (e) {
-				if (e.instance.props.channel && this.settings.places.chat) {
-					let name = (BDFDB.LibraryStores.GuildStore.getGuild(e.instance.props.channel.guild_id) || {}).name;
-					let guildName = name && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", "titleName-3-Lp3Z"]]});
-					if (guildName && guildName.props && BDFDB.ArrayUtils.is(guildName.props.children)) {
-						for (let child of guildName.props.children) if (child && child.props && BDFDB.ArrayUtils.is(child.props.children) && child.props.children[0] == name) {
-							child.props.children = [(this.getGuildData(e.instance.props.channel.guild_id) || {}).name || name];
-							break;
-						}
-					}
-				}
+			processDefaultChannelEmptyMessage (e) {
+				if (!this.settings.places.chat || !e.instance.props.channel || !changedGuilds[e.instance.props.channel.guild_id] || !changedGuilds[e.instance.props.channel.guild_id].name) return;
+				let name = (BDFDB.LibraryStores.GuildStore.getGuild(e.instance.props.channel.guild_id) || {}).name;
+				let guildName = name && BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.defaultchannelwelcometitle]]});
+				if (guildName) for (let child of guildName.props.children) if (child && child.props && child.props.children && child.props.children[0] == name) child.props.children[0] = changedGuilds[e.instance.props.channel.guild_id].name;
 			}
 			
 			getGuildData (guildId, change = true) {
@@ -413,20 +375,6 @@ module.exports = (_ => {
 					return newGuildObject;
 				}
 				return new BDFDB.DiscordObjects.Guild(guild);
-			}
-			
-			changeGuildIcon (e, data, change = true) {
-				if (change) {
-					let fontGradient = BDFDB.ObjectUtils.is(data.color2);
-					e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {
-						background: BDFDB.ObjectUtils.is(data.color1) ? BDFDB.ColorUtils.createGradient(data.color1) : BDFDB.ColorUtils.convert(data.color1, "RGBA"),
-						color: !fontGradient && BDFDB.ColorUtils.convert(data.color2, "RGBA")
-					});
-					if (fontGradient) e.returnvalue.props.children[0] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
-						gradient: BDFDB.ColorUtils.createGradient(data.color2),
-						children: e.returnvalue.props.children[0]
-					});
-				}
 			}
 
 			openGuildSettingsModal (guildId) {
