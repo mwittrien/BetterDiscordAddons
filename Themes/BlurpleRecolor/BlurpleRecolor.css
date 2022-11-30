@@ -386,7 +386,7 @@
 	color: rgb(var(--accentcolor));
 }
 
-.backgroundFlash-1X5jVs[style*="88, 101, 242"] {
+.backgroundFlash-1X5jVs[style*="(148, 156, 247"] {
 	background-color: var(--message-background-flash) !important;
 }
 .backgroundFlash-1X5jVs[style*="background-color: rgb(148, 156, 247)"],
