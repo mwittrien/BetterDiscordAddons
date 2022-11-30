@@ -477,7 +477,7 @@
 		"QuickSwitchUserResult": {"strings": ["getAccessibilityLabel", ".contentUnread", "getDisplayNickname"]},
 		"Reactions": {"strings": ["disableTransitionAppear", "reactionsCount:", "message.reactions.length"]},
 		"Reactor": {"strings": ["currentUser cannot be undefined", "reactorDefault"]},
-		"ReactorsComponent": {"strings": ["hasMore", "emoji", "spinnerMore"]},
+		"Reactors": {"strings": ["hasMore", "emoji", "spinnerMore"]},
 		"RecentMentions": {"strings": ["canCloseAllMessages", "RECENT_MENTIONS", "badgeable"]},
 		"RecentsChannelHeader": {"strings": [".subtextContainer", ".channelNameSpan", ".channelNameHeader", ".gotoChannel"]},
 		"RichChannelMention": {"strings": ["iconType:", "Messages.DELETED_CHANNEL_PLACEHOLDER"]},

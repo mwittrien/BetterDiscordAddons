@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.9
+ * @version 1.6.0
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -93,7 +93,7 @@ module.exports = (_ => {
 						"Message",
 						"Messages",
 						"NowPlayingItem",
-						"ReactorsComponent",
+						"Reactors",
 						"SearchResults",
 						"UserSummaryItem",
 						"VoiceUsers"
@@ -350,7 +350,7 @@ module.exports = (_ => {
 				if (!e.returnvalue.props.children[emojiArrayIndex].filter(n => n).length) return null;
 			}
 		
-			processReactorsComponent (e) {
+			processReactors (e) {
 				if (this.settings.places.reactions && BDFDB.ArrayUtils.is(e.instance.props.reactors)) e.instance.props.reactors = e.instance.props.reactors.filter(n => !n || !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.id));
 			}
 			

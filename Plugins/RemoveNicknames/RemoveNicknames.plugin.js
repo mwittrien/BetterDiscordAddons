@@ -2,7 +2,7 @@
  * @name RemoveNicknames
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.2
+ * @version 1.4.3
  * @description Replaces Nicknames with Accountnames
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -172,7 +172,7 @@ module.exports = (_ => {
 						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.typingtext]]});
 						if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) for (let child of children[index].props.children) if (child.type == "strong") {
 							let newName = this.getNewName(users.shift());
-							if (newName) BDFDB.ReactUtils.setChild(child, newName);
+							if (newName) child.props.children = newName;
 						}
 					}
 				}
