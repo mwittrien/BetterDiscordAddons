@@ -91,7 +91,6 @@ module.exports = (_ => {
 				this.props.folders = folders.length || closing ? folders : (this.props.folders || []);
 				BDFDB.TimeUtils.clear(this._rerenderTimeout);
 				if (!GuildItemWrapperComponent && folders.length || !folders.length && this.props.folders.length && !closing) this._rerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
-					console.log("rerender");
 					this.props.closing = true;
 					BDFDB.ReactUtils.forceUpdate(this);
 				}, 300);
