@@ -271,7 +271,7 @@
 			"FormText": [".type", ".DEFAULT"],
 			"FormTitle": [".tag", ".errorSeparator"]
 		}},
-		"GuildBadge": {"strings": ["VERIFIED_AND_PARTNERED", "renderBadge", "flowerStarClassName"], "funcStrings": [".apply("]},
+		"GuildBadge": {"strings": ["VERIFIED_AND_PARTNERED", "renderBadge", "flowerStarClassName"]},
 		"GuildIconComponents": {"strings": ["SMOL", "badgeStrokeColor"], "map": {
 			"Icon": [".apply"],
 			"Sizes": ["\"SMOL\"", "\"SMALLER\""]
