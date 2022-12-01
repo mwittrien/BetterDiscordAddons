@@ -14,7 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"progess": {
+		"progress": {
 			"Autocomplete Menu": "Aliases are no longer added to the Autocomplete Menu of the Chat Box, since Discord completely fucked that up, and it's impossible to inject your own stuff anymore"
 		}
 	};
