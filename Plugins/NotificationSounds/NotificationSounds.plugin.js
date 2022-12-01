@@ -157,7 +157,9 @@ module.exports = (_ => {
 				};
 				
 				this.patchPriority = 9;
-				
+			}
+			
+			onStart () {
 				const soundKeys = BDFDB.LibraryModules.SoundParser.keys();
 				for (let key of soundKeys) {	
 					const id = key.replace("./", "").replace(".mp3", "");
@@ -193,9 +195,7 @@ module.exports = (_ => {
 					types = BDFDB.ObjectUtils.sort(types, "name");
 				}
 				for (let pack in defaultAudios) defaultAudios[pack] = BDFDB.ObjectUtils.sort(defaultAudios[pack]);
-			}
-			
-			onStart () {
+				
 				if (BDFDB.DiscordUtils.isPlaformEmbedded()) {
 					let change = _ => {
 						if (window.navigator.mediaDevices && window.navigator.mediaDevices.enumerateDevices) {
