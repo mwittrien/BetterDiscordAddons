@@ -74,10 +74,10 @@ module.exports = (_ => {
 						censored:				{value: "$!%&%!&",			description: "Default Replacement Value for censored Messages: "}
 					},
 					general: {
-						addContextMenu:			{value: true,				description: "Add a Context Menu Entry to faster add new blocked/censored Words"},
-						targetMessages:			{value: true,				description: "Check Messages for blocked/censored Words"},
-						targetStatuses:			{value: true,				description: "Check Custom Statuses for blocked/censored Words"},
-						targetOwn:				{value: true, 				description: "Filter/Block your own Messages/Custom Status"}
+						addContextMenu:			{value: true,				description: "Adds a Context Menu Entry to faster add new blocked/censored Words"},
+						targetMessages:			{value: true,				description: "Checks Messages for blocked/censored Words"},
+						targetStatuses:			{value: true,				description: "Checks Custom Statuses for blocked/censored Words"},
+						targetOwn:				{value: true, 				description: "Filters/Blocks your own Messages/Custom Status"}
 					}
 				};
 			

@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.3
+ * @version 2.4.4
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"progess": {
+			"Autocomplete Menu": "Aliases are no longer added to the Autocomplete Menu of the Chat Box, since Discord completely fucked that up, and it's impossible to inject your own stuff anymore"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -56,142 +58,39 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
-		var aliases = {}, commandSentinel;
-		
-		const AUTOCOMPLETE_ALIAS_OPTION = "ALIASES";
+		var aliases = {};
 	
 		return class ChatAliases extends Plugin {
 			onLoad () {
 				this.defaults = {
 					configs: {
-						case: 				{value: false,		description: "Handle the Word Value case sensitive"},
-						exact: 				{value: true,		description: "Handle the Word Value as an exact Word and not as part of a Word"},
-						autoc: 				{value: true,		description: "Add this Alias in the Autocomplete Menu (not for RegExp)"},
-						regex: 				{value: false,		description: "Handle the Word Value as a RegExp String"}
+						case: 				{value: false,		description: "Handles the Word Value case sensitive"},
+						exact: 				{value: true,		description: "Handles the Word Value as an exact Word and not as part of a Word"},
+						regex: 				{value: false,		description: "Handles the Word Value as a RegExp String"}
 					},
 					general: {
-						replaceBeforeSend:	{value: true, 		inner: false,		description: "Replace Words with your Aliases before a Message is sent"},
-						addContextMenu:		{value: true, 		inner: false,		description: "Add a Context Menu Entry to faster add new Aliases"},
-						addAutoComplete:	{value: true, 		inner: false,		description: "Add an Autocomplete Menu for non-RegExp Aliases"}
+						addContextMenu:		{value: true, 		inner: false,		description: "Adds a Context Menu Entry to more freely add new Aliases"}
 					},
 					places: {
 						normal:				{value: true, 		inner: true,		description: "Normal Message Textarea"},
-						edit:				{value: true, 		inner: true,		description: "Edit Message Textarea"},
-						upload:				{value: true, 		inner: true,		description: "Upload Message Prompt"}
-					},
-					amounts: {
-						minAliasLength:		{value: 2, 			min: 1,				description: "Minimal Character Length to open Autocomplete Menu: "}
+						edit:				{value: true, 		inner: true,		description: "Edit Message Textarea"}
 					}
 				};
 				
-				this.patchedModules = {
-					before: {
-						ChannelTextAreaForm: "render",
-						MessageEditor: "render"
-					},
-					after: {
-						Autocomplete: "render"
-					}
+				this.modulePatches = {
+					before: [
+						"ChannelTextAreaContainer"
+					]
 				};
-				
-				this.css = `
-					${BDFDB.dotCNS.aliasautocomplete + BDFDB.dotCN.autocompleteinner} {
-						max-height: 480px;
-					}
-					${BDFDB.dotCN.autocompleteicon} {
-						flex: 0 0 auto;
-					}
-				`;
 			}
 			
 			onStart () {
 				aliases = BDFDB.DataUtils.load(this, "words");
-				commandSentinel = BDFDB.LibraryModules.AutocompleteSentinels && BDFDB.LibraryModules.AutocompleteSentinels.COMMAND_SENTINEL || "/";
-				
-				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_PRIORITY) BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_PRIORITY.unshift(AUTOCOMPLETE_ALIAS_OPTION);
-				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) {
-					let query = "";
-					BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS[AUTOCOMPLETE_ALIAS_OPTION] = {
-						autoSelect: true,
-						matches: (channel, guild, newQuery, _, options) => {
-							query = newQuery;
-							if (query.length >= this.settings.amounts.minAliasLength) for (let word in aliases) {
-								let aliasData = aliases[word];
-								if (!aliasData.regex && aliasData.autoc) {
-									if (aliasData.exact) {
-										if (aliasData.case && word.indexOf(query) == 0) return true;
-										else if (!aliasData.case && word.toLowerCase().indexOf(query.toLowerCase()) == 0) return true;
-									}
-									else {
-										if (aliasData.case && word.indexOf(query) > -1) return true;
-										else if (!aliasData.case && word.toLowerCase().indexOf(query.toLowerCase()) > -1) return true;
-									}
-								}
-							}
-							return false;
-						},
-						queryResults: (channel, guild, newQuery, options) => {
-							if (query == commandSentinel) return;
-							let matches = [];
-							for (let word in aliases) {
-								let aliasData = Object.assign({word}, aliases[word]);
-								if (!aliasData.regex && aliasData.autoc) {
-									if (aliasData.exact) {
-										if (aliasData.case && word.indexOf(query) == 0) matches.push(aliasData);
-										else if (!aliasData.case && word.toLowerCase().indexOf(query.toLowerCase()) == 0) matches.push(aliasData);
-									}
-									else {
-										if (aliasData.case && word.indexOf(query) > -1) matches.push(aliasData);
-										else if (!aliasData.case && word.toLowerCase().indexOf(query.toLowerCase()) > -1) matches.push(aliasData);
-									}
-								}
-							}
-							if (matches.length) return {results: {aliases: matches}};
-							else return {results: {}};
-						},
-						renderResults: data => {
-							return data && data.results && data.results.aliases && [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteItems.Title, {
-									title: [
-										"Aliases: ",
-										BDFDB.ReactUtils.createElement("strong", {
-											children: query
-										})
-									]
-								}),
-								data.results.aliases.map((aliasData, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteItems.Generic, {
-									onClick: data.onClick,
-									onHover: data.onHover,
-									index: i,
-									selected: data.selectedIndex === i,
-									alias: aliasData,
-									text: aliasData.word,
-									description: BDFDB.StringUtils.insertNRST(aliasData.replace)
-								}))
-							].flat(10).filter(n => n);
-						},
-						onSelect: data => {
-							if (data.results.aliases[data.index].word.indexOf(" ") > -1) {
-								let textValue = BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareawrapall, document.activeElement) || document.querySelector(BDFDB.dotCN.textareawrapall), "textValue");
-								if (textValue) {
-									let replace = BDFDB.StringUtils.insertNRST(data.results.aliases[data.index].replace);
-									let escapedQuery = BDFDB.StringUtils.regEscape(query);
-									let config = data.results.aliases[data.index].case ? "gi" : "g";
-									data.options.replaceText(textValue.replace(new RegExp(`(\\s)${escapedQuery}(\\s)`, config), `$1${replace}$2`).replace(new RegExp(`^${escapedQuery}(\\s)`, config), `${replace}$1`).replace(new RegExp(`(\\s)${escapedQuery}$`, config), `$1${replace}`));
-								}
-							}
-							else data.options.insertText(BDFDB.StringUtils.insertNRST(data.results.aliases[data.index].replace));
-							return {};
-						}
-					};
-				}
 
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			
 			onStop () {
-				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_PRIORITY) BDFDB.ArrayUtils.remove(BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_PRIORITY, AUTOCOMPLETE_ALIAS_OPTION, true);
-				if (BDFDB.LibraryModules.AutocompleteOptions && BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS) delete BDFDB.LibraryModules.AutocompleteOptions.AUTOCOMPLETE_OPTIONS[AUTOCOMPLETE_ALIAS_OPTION];
 				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 
@@ -211,19 +110,7 @@ module.exports = (_ => {
 								keys: ["general", key],
 								label: this.defaults.general[key].description,
 								value: this.settings.general[key]
-							})).concat(Object.keys(this.defaults.amounts).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-								type: "TextInput",
-								childProps: {
-									type: "number"
-								},
-								plugin: this,
-								keys: ["amounts", key],
-								label: this.defaults.amounts[key].description,
-								basis: "20%",
-								min: this.defaults.amounts[key].min,
-								max: this.defaults.amounts[key].max,
-								value: this.settings.amounts[key]
-							}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							})).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
 								title: "Automatically replace Aliases in:",
 								children: Object.keys(this.settings.places).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 									type: "Switch",
@@ -329,7 +216,6 @@ module.exports = (_ => {
 								"Not Case: Will replace Words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe",
 								"Exact: Will replace Words that are exactly the Replacement Value. apple to pear => applepie stays applepie",
 								"Not Exact: Will replace Words anywhere they appear. apple to pear => applepieapple to pearpiepear",
-								"Autoc: Will appear in the Autocomplete Menu (if enabled)",
 								[
 									"Regex: Will treat the entered Word Value as a Regular Expression - ",
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {href: "https://regexr.com/", children: BDFDB.LanguageUtils.LanguageStrings.HELP + "?"})
@@ -352,13 +238,7 @@ module.exports = (_ => {
 				}
 			}
 
-			onNativeContextMenu (e) {
-				if (e.instance.props.value && e.instance.props.value.trim()) {
-					if ((e.instance.props.type == "NATIVE_TEXT" || e.instance.props.type == "CHANNEL_TEXT_AREA") && this.settings.general.addContextMenu) this.injectItem(e, e.instance.props.value.trim());
-				}
-			}
-
-			onSlateContextMenu (e) {
+			onTextAreaContextMenu (e) {
 				let text = document.getSelection().toString().trim();
 				if (text && this.settings.general.addContextMenu) this.injectItem(e, text);
 			}
@@ -379,9 +259,10 @@ module.exports = (_ => {
 				}));
 			}
 			
-			processChannelTextAreaForm (e) {
-				BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {before: e2 => {
-					if (!this.settings.places.normal || !this.settings.general.replaceBeforeSend || BDFDB.LibraryStores.SlowmodeStore.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
+			processChannelTextAreaContainer (e) {
+				if (!this.shouldInject(e.instance.props.type)) return;
+				BDFDB.PatchUtils.patch(this, e.instance.props, "onSubmit", {before: e2 => {
+					if (BDFDB.LibraryStores.SlowmodeStore.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
 					let messageData = this.formatText(e2.methodArguments[0].value);
 					if (messageData) {
 						if (messageData.text != null && e2.methodArguments[0].value != messageData.text) {
@@ -398,21 +279,8 @@ module.exports = (_ => {
 				}}, {noCache: true});
 			}
 			
-			processMessageEditor (e) {
-				BDFDB.PatchUtils.patch(this, e.instance, "onSubmit", {before: e2 => {
-					if (!this.settings.places.edit || !this.settings.general.replaceBeforeSend || BDFDB.LibraryStores.SlowmodeStore.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
-					let messageData = this.formatText(e2.methodArguments[0]);
-					if (messageData && messageData.text != null && e2.methodArguments[0] != messageData.text) {
-						e2.methodArguments[0] = messageData.text;
-						e.instance.props.textValue = "";
-						if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.toRichValue("");
-						if (e.instance.state) {
-							e.instance.state.textValue = "";
-							if (e.instance.state.richValue) e.instance.state.richValue = BDFDB.SlateUtils.toRichValue("");
-						}
-						BDFDB.ReactUtils.forceUpdate(e.instance);
-					}
-				}}, {noCache: true});
+			shouldInject (type) {
+				return this.settings.places.normal && (type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL || type == BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY || type == BDFDB.DiscordConstants.ChannelTextAreaTypes.SIDEBAR) || this.settings.places.edit && type == BDFDB.DiscordConstants.ChannelTextAreaTypes.EDIT;
 			}
 
 			formatText (text) {
@@ -533,7 +401,6 @@ module.exports = (_ => {
 					replace: values.replaceValue,
 					case: aliasConfigs.case,
 					exact: values.wordValue.indexOf(" ") > -1 ? false : aliasConfigs.exact,
-					autoc: aliasConfigs.regex ? false : aliasConfigs.autoc,
 					regex: aliasConfigs.regex
 				};
 				BDFDB.DataUtils.save(aliases, this, "words");
