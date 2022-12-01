@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.9.8
+ * @version 5.0.0
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,14 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		added: {
+			"Gallery Filter": "You can now filter the Gallery by File Type"
+		},
+		fixed: {
+			"Zoom With native Gallery Mode": "Zooming in an Image no longer will close the Image if you are using Discords native Gallery Mode",
+			"Download As Location": "Now properly remembers the last selected Location",
+			"Download Issues": "All Image Download Issues that occured for some people in eastern countries should be fixed now"
+		}
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -73,28 +80,22 @@ module.exports = (_ => {
 		};
 		
 		const fileTypes = {
-			"3gp":		{copyable: false,	searchable: false,	video: true},
-			"3g2":		{copyable: false,	searchable: false,	video: true},
-			"amv":		{copyable: false,	searchable: false,	video: true},
-			"apng":		{copyable: false,	searchable: true,	video: false},
-			"avi":		{copyable: false,	searchable: false,	video: true},
-			"flv":		{copyable: false,	searchable: false,	video: true},
-			"jpeg":		{copyable: true,	searchable: true,	video: false},
-			"jpg":		{copyable: true,	searchable: true,	video: false},
-			"gif":		{copyable: false,	searchable: true,	video: false},
-			"m4v":		{copyable: false,	searchable: false,	video: true},
-			"mkv":		{copyable: false,	searchable: false,	video: true},
-			"mov":		{copyable: false,	searchable: false,	video: true},
-			"mp4":		{copyable: false,	searchable: false,	video: true},
-			"mpeg-1":	{copyable: false,	searchable: false,	video: true},
-			"mpeg-2":	{copyable: false,	searchable: false,	video: true},
-			"ogg":		{copyable: false,	searchable: false,	video: true},
-			"ogv":		{copyable: false,	searchable: false,	video: true},
-			"png":		{copyable: true,	searchable: true,	video: false},
-			"svg":		{copyable: false,	searchable: false,	video: false},
-			"webm":		{copyable: false,	searchable: false,	video: true},
-			"webp":		{copyable: false,	searchable: true,	video: false},
-			"wmv":		{copyable: false,	searchable: false,	video: true}
+			"3gp":		{copyable: false,	searchable: false,	video: true,	signs: [[0x66, 0x74, 0x79, 0x70, 0x33, 0x67]]},
+			"avi":		{copyable: false,	searchable: false,	video: true,	signs: [[0x41, 0x56, 0x49, 0x20]]},
+			"flv":		{copyable: false,	searchable: false,	video: true,	signs: [[0x46, 0x4C, 0x56]]},
+			"jpeg":		{copyable: true,	searchable: true,	video: false,	signs: [[0xFF, 0xD8, 0xFF, 0xEE]]},
+			"jpg":		{copyable: true,	searchable: true,	video: false,	signs: [[0xFF, 0xD8, 0xFF, 0xDB], [0xFF, 0xD8, 0xFF, 0xE0]]},
+			"gif":		{copyable: false,	searchable: true,	video: false,	signs: [[0x47, 0x49, 0x46, 0x38, 0x37, 0x61], [0x47, 0x49, 0x46, 0x38, 0x39, 0x61]]},
+			"mov":		{copyable: false,	searchable: false,	video: true,	signs: [[null, null, null, null, 0x6D, 0x6F, 0x6F, 0x76], [null, null, null, null, 0x66, 0x74, 0x79, 0x70, 0x71, 0x74, 0x20, 0x20]]},
+			"mp4":		{copyable: false,	searchable: false,	video: true,	signs: [[null, null, null, null, 0x66, 0x74, 0x79, 0x70, 0x69, 0x73, 0x6F, 0x6D]]},
+			"mpeg-1":	{copyable: false,	searchable: false,	video: true,	signs: [[0x00, 0x00, 0x01, 0xBA]]},
+			"mpeg-2":	{copyable: false,	searchable: false,	video: true,	signs: [[0x00, 0x00, 0x01, 0xB3]]},
+			"ogg":		{copyable: false,	searchable: false,	video: true,	signs: [[0x4F, 0x67, 0x67, 0x53]]},
+			"png":		{copyable: true,	searchable: true,	video: false,	signs: [[0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]]},
+			"svg":		{copyable: false,	searchable: false,	video: false,	signs: [[0x3C]]},
+			"webm":		{copyable: false,	searchable: false,	video: true,	signs: [[0x1A, 0x45, 0xDF, 0xA3]]},
+			"webp":		{copyable: false,	searchable: true,	video: false,	signs: [[0x57, 0x45, 0x42, 0x50]]},
+			"wmv":		{copyable: false,	searchable: false,	video: true,	signs: [[0x30, 0x26, 0xB2, 0x75, 0x8E, 0x66, 0xCF, 0x11], [0xA6, 0xD9, 0x00, 0xAA, 0x00, 0x62, 0xCE, 0x6C]]}
 		};
 		
 		const LazyImageSiblingComponent = class LazyImageSibling extends BdApi.React.Component {
@@ -215,6 +216,7 @@ module.exports = (_ => {
 						saveImage: 				{value: true,	description: "Adds a 'Save Image as' Option"},
 						jumpTo: 				{value: true,	description: "Adds a 'Jump to Message' Option in Gallery Mode"}
 					},
+					galleryFilter: {},
 					zoomSettings: {
 						pixelMode: 				{value: false,	label: "Uses Pixel Lens instead of a Blur Lens"},
 						zoomLevel:				{value: 2,		digits: 1,	minValue: 1,	maxValue: 20,	unit: "x",		label: "ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
@@ -251,6 +253,8 @@ module.exports = (_ => {
 						Yandex: 	{value: true, 	name: "Yandex", 	url: "https://yandex.com/images/search?url=" + imgUrlReplaceString + "&rpt=imageview"}
 					}
 				};
+				
+				for (let fileType in fileTypes) this.defaults.galleryFilter[fileType] = {value: true};
 			
 				this.modulePatches = {
 					before: [
@@ -263,8 +267,7 @@ module.exports = (_ => {
 						"LazyImageZoomable",
 						"ModalCarousel",
 						"Spoiler",
-						"UserBanner",
-						"UserThemedBanner"
+						"UserBanner"
 					],
 					componentDidMount: [
 						"ImageModal",
@@ -453,6 +456,18 @@ module.exports = (_ => {
 								keys: ["viewerSettings", key],
 								label: this.defaults.viewerSettings[key].description,
 								value: this.settings.viewerSettings[key]
+							}))
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Gallery Filter Settings",
+							collapseStates: collapseStates,
+							children: Object.keys(this.defaults.galleryFilter).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["galleryFilter", key],
+								label: key,
+								value: this.settings.galleryFilter[key]
 							}))
 						}));
 						
@@ -1218,7 +1233,7 @@ module.exports = (_ => {
 								};
 								lens.update();
 								
-								e.node.style.setProperty("pointer-events", "none", "important");
+								for (let ele of [e.node, document.querySelector(BDFDB.dotCN.modalcarouselwrapper)]) if (ele) ele.style.setProperty("pointer-events", "none", "important");
 								
 								let dragging = event2 => {
 									event = event2;
@@ -1226,7 +1241,7 @@ module.exports = (_ => {
 								};
 								let releasing = event2 => {
 									BDFDB.ListenerUtils.stopEvent(event2);
-									e.node.style.removeProperty("pointer-events");
+									for (let ele of [e.node, document.querySelector(BDFDB.dotCN.modalcarouselwrapper)]) if (ele) ele.style.removeProperty("pointer-events");
 									this.cleanupListeners("Zoom");
 									document.removeEventListener("mousemove", dragging);
 									document.removeEventListener("mouseup", releasing);
@@ -1390,7 +1405,7 @@ module.exports = (_ => {
 				}
 			}
 			
-			processUserThemedBanner (e) {
+			processUserBanner (e) {
 				if (!this.settings.places.userAvatars || !e.instance.props.displayProfile || !e.instance.props.displayProfile.banner) return;
 				let div = BDFDB.ReactUtils.findChild(e.returnvalue, {type: "div"});
 				if (div) div.props.onContextMenu = event => {
@@ -1413,10 +1428,6 @@ module.exports = (_ => {
 				};
 			}
 			
-			processUserBanner (e) {
-				this.processUserThemedBanner(e);
-			}
-			
 			cacheClickedImage (target) {
 				if (!target) return;
 				const image = (BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagewrapper, target) || target).querySelector("img") || target;
@@ -1434,14 +1445,12 @@ module.exports = (_ => {
 			
 			downloadFile (url, path, fallbackUrl, alternativeName) {
 				url = url.startsWith("/assets") ? (window.location.origin + url) : url;
-				BDFDB.LibraryRequires.request(url, {agentOptions: {rejectUnauthorized: false}, headers: {"Content-Type": "application/json"}}, (error, response, body) => {
-					let type = this.isValid(url, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
-					if (error || response.statusCode != 200 || response.headers["content-type"].indexOf("text/html") > -1) {
-						if (fallbackUrl) this.downloadFile(fallbackUrl, path, null, alternativeName);
-						else BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", ""), {type: "danger"});
-					}
+				BDFDB.LibraryModules.FileRequestUtils.getFileData(url).then(body => {
+					let extension = this.getFileExtension(new Uint8Array(body));
+					if (!extension) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", path), {type: "danger"});
 					else {
-						BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, (alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35), this.getFileExtenstion(response.headers["content-type"].split("/").pop().split("+")[0]), 0), Buffer.from(body), error => {
+						let type = fileTypes[extension].video ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
+						BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, (alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35), extension, 0), Buffer.from(body), error => {
 							if (error) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", path), {type: "danger"});
 							else BDFDB.NotificationUtils.toast(this.labels.toast_save_success.replace("{{var0}}", type).replace("{{var1}}", path), {type: "success"});
 						});
@@ -1451,7 +1460,18 @@ module.exports = (_ => {
 			
 			downloadFileAs (url, fallbackUrl, alternativeName) {
 				url = url.startsWith("/assets") ? (window.location.origin + url) : url;
-				BDFDB.LibraryModules.WindowUtils.saveImage(url.startsWith("/assets") ? (window.location.origin + url) : url);
+				BDFDB.LibraryModules.FileRequestUtils.getFileData(url).then(body => {
+					let extension = this.getFileExtension(new Uint8Array(body));
+					if (!extension) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", "PC"), {type: "danger"});
+					else {
+						let hrefURL = window.URL.createObjectURL(new Blob([body], {type: this.getMimeType(extension)}));
+						let tempLink = document.createElement("a");
+						tempLink.href = hrefURL;
+						tempLink.download = `${(alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35)}.${extension}`;
+						tempLink.click();
+						window.URL.revokeObjectURL(hrefURL);
+					}
+				});
 			}
 			
 			copyFile (url) {
@@ -1479,9 +1499,14 @@ module.exports = (_ => {
 				else return wholePath;
 			}
 			
-			getFileExtenstion (ext) {
-				if (ext == "quicktime") ext = "mov";
-				return ext;
+			getFileExtension (intArray) {
+				for (let fileType in fileTypes) if (fileTypes[fileType].signs.some(signs => signs.every((hex, i) => hex === null || hex == intArray[i]))) return fileType;
+				return "";
+			}
+			
+			getMimeType (fileType) {
+				if (fileTypes[fileType]) return `${fileTypes[fileType].video ? "video" : "image"}/${fileType == "svg" ? "svg+xml" : fileType}`;
+				return "";
 			}
 
 			getImageSrc (img) {
@@ -1494,7 +1519,13 @@ module.exports = (_ => {
 			}
 			
 			filterMessagesForImages (messages, img) {
-				return messages.filter(m => m && m.channel_id == img.channelId && !BDFDB.LibraryStores.RelationshipStore.isBlocked(m.author.id) && (m.id == firstViewedImage.messageId || m.id == img.messageId || m.embeds.filter(e => e.image || e.thumbnail || e.video).length || m.attachments.filter(a => !a.filename.startsWith("SPOILER_")).length)).map(m => [m.attachments, m.embeds].flat(10).filter(n => n).map(i => Object.assign({m, messageId: m.id, channelId: img.channelId}, i, i.image, i.thumbnail, i.video))).flat(10);
+				return messages.filter(m => m && m.channel_id == img.channelId && !BDFDB.LibraryStores.RelationshipStore.isBlocked(m.author.id) && (m.id == firstViewedImage.messageId || m.id == img.messageId || m.embeds.filter(e => e.image || e.thumbnail || e.video).length || m.attachments.filter(a => !a.filename.startsWith("SPOILER_")).length)).map(m => [m.attachments, m.embeds].flat(10).filter(n => n).map(i => Object.assign({messageId: m.id, channelId: img.channelId}, i, i.image, i.thumbnail, i.video))).flat(10).filter(n => {
+					if (!n) return false;
+					if (!n.content_type || img.proxy_url == n.proxy_url || img.proxy_url == n.url || img.proxy_url == n.href) return true;
+					let extension = (n.content_type.split("/")[1] || "").split("+")[0] || "";
+					if (extension && this.settings.galleryFilter[extension] === false) return false;
+					return true;
+				});
 			}
 			
 			switchImages (modalInstance, offset) {
@@ -1519,7 +1550,7 @@ module.exports = (_ => {
 					}).then(result => {
 						if (result && viewedImage) {
 							const messages = result.body.flat(10).reverse();
-							Object.assign(cachedImages, {all: BDFDB.ArrayUtils.removeCopies([].concat(cachedImages.all, this.filterMessagesForImages(messages, viewedImage)))});
+							Object.assign(cachedImages, {all: this.filterForCopies([].concat(cachedImages.all, this.filterMessagesForImages(messages, viewedImage)))});
 							const index = this.getImageIndex(cachedImages.all, viewedImage);
 							cachedImages = Object.assign(cachedImages, {
 								channelId: viewedImage.channelId,
@@ -1546,7 +1577,7 @@ module.exports = (_ => {
 					}).then(result => {
 						if (result && viewedImage) {
 							const messages = result.body.flat(10).reverse();
-							Object.assign(cachedImages, {all: BDFDB.ArrayUtils.removeCopies([].concat(this.filterMessagesForImages(messages, viewedImage), cachedImages.all))});
+							Object.assign(cachedImages, {all: this.filterForCopies([].concat(this.filterMessagesForImages(messages, viewedImage), cachedImages.all))});
 							const index = this.getImageIndex(cachedImages.all, viewedImage);
 							cachedImages = Object.assign(cachedImages, {
 								channelId: viewedImage.channelId,
@@ -1576,6 +1607,12 @@ module.exports = (_ => {
 					playOnHover: !!BDFDB.LibraryStores.AccessibilityStore.useReducedMotion
 				}));
 				BDFDB.ReactUtils.forceUpdate(modalInstance);
+			}
+			
+			filterForCopies (messages) {
+				let filtered = [];
+				for (let message of messages) if (!filtered.find(n => n.id == message.id)) filtered.push(message);
+				return filtered;
 			}
 			
 			addListener (eventType, type, callback) {
