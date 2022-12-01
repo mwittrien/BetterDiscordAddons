@@ -1676,6 +1676,11 @@ module.exports = (_ => {
 						callback("");
 						BDFDB.ReactUtils.forceUpdate(instance);
 					}
+					else if (url.indexOf("data:") == 0) {
+						instance.props.success = true;
+						delete instance.props.errorMessage;
+						callback(url);
+					}
 					else instance.checkTimeout = BDFDB.TimeUtils.timeout(_ => BDFDB.LibraryRequires.request(url, {agentOptions: {rejectUnauthorized: false}}, (error, response, result) => {
 						delete instance.checkTimeout;
 						if (instance.props.disabled) {
