@@ -2,7 +2,7 @@
  * @name ChatFilter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.5.6
+ * @version 3.5.7
  * @description Allows you to censor Words or block complete Messages/Statuses
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -280,13 +280,7 @@ module.exports = (_ => {
 				BDFDB.MessageUtils.rerenderAll();
 			}
 
-			onNativeContextMenu (e) {
-				if (e.instance.props.value && e.instance.props.value.trim()) {
-					if ((e.instance.props.type == "NATIVE_TEXT" || e.instance.props.type == "CHANNEL_TEXT_AREA") && this.settings.general.addContextMenu) this.injectItem(e, e.instance.props.value.trim());
-				}
-			}
-
-			onSlateContextMenu (e) {
+			onTextAreaContextMenu (e) {
 				let text = document.getSelection().toString().trim();
 				if (text && this.settings.general.addContextMenu) this.injectItem(e, text);
 			}
