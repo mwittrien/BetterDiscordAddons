@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.0.3
+ * @version 7.0.4
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -16,7 +16,7 @@ module.exports = (_ => {
 	const changeLog = {
 		
 	};
-
+	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
 		constructor (meta) {for (let key in meta) this[key] = meta[key];}
 		getName () {return this.name;}
@@ -55,10 +55,12 @@ module.exports = (_ => {
 			template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
 			return template.content.firstElementChild;
 		}
-	} : (([Plugin, BDFDB]) => {
+	} : (([Plugin, BDFDB, meta]) => {
 		var _this;
 		var folderStates, folderReads, guildStates, currentGuild, forceCloseTimeout;
 		var folderConfigs = {}, customIcons = {};
+		
+		var GuildItemWrapperComponent;
 
 		const folderIcons = [
 			{openicon: `<path d="M 200,390 H 955 L 795,770 H 200 Z" fill="REPLACE_FILL2"/><path d="M 176.6,811 C 163.9,811 155.1,802.6 155,784.7 V 212.9 C 157.9,190.5 169,179.8 195.9,176 h 246 c 20.3,3.2 34.5,18.7 41,28.6 C 494.9,228.3 492.9,240.4 494,266 l 313.6,1.3 c 17.6,0.4 23.3,3.7 23.3,3.7 8.6,4.2 14.8,10.7 19,19.5 C 856.3,319.5 854,360 854,360 h 108.9 c 4.4,2.4 13.7,1.2 11.8,23.5 L 815.8,789.4 c -2.1,5.2 -12.5,13.6 -18.7,16.1 -6.8,2.7 -18.5,5.5 -23.9,5.5 z M 767,759 897,430 H 360 L 230,759 Z" fill="REPLACE_FILL1"/>`,
@@ -88,7 +90,8 @@ module.exports = (_ => {
 				let folders = Array.from(BDFDB.LibraryStores.ExpandedGuildFolderStore.getExpandedFolders()).map(folderId => BDFDB.LibraryModules.SortedGuildUtils.getGuildFolderById(folderId)).filter(folder => folder && folder.guildIds);
 				this.props.folders = folders.length || closing ? folders : (this.props.folders || []);
 				BDFDB.TimeUtils.clear(this._rerenderTimeout);
-				if (!folders.length && this.props.folders.length && !closing) this._rerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
+				if (!GuildItemWrapperComponent && folders.length || !folders.length && this.props.folders.length && !closing) this._rerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
+					console.log("rerender");
 					this.props.closing = true;
 					BDFDB.ReactUtils.forceUpdate(this);
 				}, 300);
@@ -101,7 +104,7 @@ module.exports = (_ => {
 						className: BDFDB.disCN.guildstree,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Scrollers.None, {
 							className: BDFDB.disCN.guildsscroller,
-							children: this.props.folders.map(folder => {
+							children: GuildItemWrapperComponent && this.props.folders.map(folder => {
 								let data = _this.getFolderConfig(folder.folderId);
 								let folderIcon = null;
 								if (_this.settings.addFolderIcon) {
@@ -132,16 +135,18 @@ module.exports = (_ => {
 										})
 									}),
 									folder.guildIds.map(guildId => {
+										let guildIstance;
 										return [
-											this.draggedGuild == guildId ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Guild, {
-												guild: BDFDB.LibraryStores.GuildStore.getGuild(guildId),
-												state: true,
-												list: true,
-												tooltipConfig: Object.assign({
-													offset: 12
-												}, data.copyTooltipColor && {
-													backgroundColor: data.color3,
-													fontColor: data.color4,
+											this.draggedGuild == guildId ? null : BDFDB.ReactUtils.createElement("div", {
+												ref: instance => guildIstance = instance,
+												children: BDFDB.ReactUtils.createElement(GuildItemWrapperComponent, {
+													guildNode: {
+														children: [],
+														id: guildId,
+														parentId: folder.folderId,
+														type: "guild",
+														unavailable: false
+													}
 												}),
 												onClick: event => {
 													if (BDFDB.ListenerUtils.isPressed(46)) {
@@ -156,13 +161,13 @@ module.exports = (_ => {
 														else BDFDB.ReactUtils.forceUpdate(this);
 													}
 												},
-												onMouseDown: (event, instance) => {
+												onMouseDown: event => {
 													event = event.nativeEvent || event;
 													let mouseMove = event2 => {
 														if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 															BDFDB.ListenerUtils.stopEvent(event);
 															this.draggedGuild = guildId;
-															let dragPreview = _this.createDragPreview(BDFDB.ReactUtils.findDOMNode(instance).cloneNode(true), event2);
+															let dragPreview = _this.createDragPreview(BDFDB.ReactUtils.findDOMNode(guildIstance).cloneNode(true), event2);
 															BDFDB.ReactUtils.forceUpdate(this);
 															document.removeEventListener("mousemove", mouseMove);
 															document.removeEventListener("mouseup", mouseUp);
@@ -209,13 +214,27 @@ module.exports = (_ => {
 											this.hoveredGuild != guildId ? null : BDFDB.ReactUtils.createElement("div", {
 												className: BDFDB.disCNS.guildouter + BDFDB.disCN._serverfoldersguildplaceholder,
 												children: BDFDB.ReactUtils.createElement("div", {
-													children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.DragPlaceholder, {})
+													children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Mask, {
+														mask: BDFDB.LibraryComponents.Mask.Masks.SQUIRCLE,
+														className: BDFDB.disCN.guildplaceholdermask,
+														width: 48,
+														height: 48,
+														style: {display:"block"},
+														children: BDFDB.ReactUtils.createElement("div", {
+															className: BDFDB.disCN.guildplaceholder
+														})
+													})
 												})
 											})
 										]
 									})
 								];
-							}).filter(n => n).reduce((r, a) => r.concat(a, _this.settings.general.addSeparators ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Separator, {}) : null), [0]).slice(1, -1).flat(10).filter(n => n)
+							}).filter(n => n).reduce((r, a) => r.concat(a, _this.settings.general.addSeparators ? BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.guildouter,
+								children: BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.guildseparator
+								})
+							}) : null), [0]).slice(1, -1).flat(10).filter(n => n)
 						})
 					})
 				});
@@ -388,7 +407,7 @@ module.exports = (_ => {
 													BDFDB.DataUtils.save(customIcons, _this, "customicons");
 													this.props.open = null;
 													this.props.closed = null;
-													BDFDB.PatchUtils.forceAllUpdates(_this, "GuildFolderSettingsModal");
+													BDFDB.PatchUtils.forceAllUpdates(_this, "FolderSettingsModal");
 													BDFDB.NotificationUtils.toast("Custom Icon was added to Selection", {type: "success"});
 												});
 											})
@@ -424,15 +443,20 @@ module.exports = (_ => {
 					}
 				};
 			
-				this.patchedModules = {
-					after: {
-						AppView: "default",
-						GuildsBar: "type",
-						FolderItem: "default",
-						FolderHeader: "default",
-						GuildItem: "type",
-						GuildFolderSettingsModal: ["componentDidMount", "render"]
-					}
+				this.modulePatches = {
+					before: [
+						"GuildItemWrapper"
+					],
+					after: [
+						"FolderHeader",
+						"FolderItem",
+						"FolderSettingsModal",
+						"GuildItem",
+						"GuildsBar",
+					],
+					componentDidMount: [
+						"FolderSettingsModal"
+					]
 				};
 				
 				this.css = `
@@ -661,17 +685,7 @@ module.exports = (_ => {
 				}
 			}
 
-			processAppView (e) {
-				if (this.settings.general.extraColumn) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.guilds]]});
-					if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(FolderGuildContentComponent, {
-						isAppFullscreen: BDFDB.LibraryStores.ChannelRTCStore.isFullscreenInContext(),
-						themeOverride: BDFDB.LibraryStores.AccessibilityStore.darkSidebar
-					}, true));
-				}
-			}
-
-			processGuilds (e) {
+			processGuildsBar (e) {
 				if (this.settings.general.extraColumn) {
 					let fullscreen = BDFDB.LibraryStores.ChannelRTCStore.isFullscreenInContext();
 					if (folderGuildContent && (fullscreen != folderGuildContent.props.isAppFullscreen || e.instance.props.themeOverride != folderGuildContent.props.themeOverride)) {
@@ -697,6 +711,13 @@ module.exports = (_ => {
 							return bottomIsVisible(...args) || BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(args[0]) == 0;
 						}, "Error in isVisible of Bottom Bar in Guild List!");
 					}
+					e.returnvalue = [
+						e.returnvalue,
+						BDFDB.ReactUtils.createElement(FolderGuildContentComponent, {
+							isAppFullscreen: BDFDB.LibraryStores.ChannelRTCStore.isFullscreenInContext(),
+							themeOverride: BDFDB.LibraryStores.AccessibilityStore.darkSidebar
+						}, true)
+					].flat(10);
 				}
 			}
 			
@@ -749,7 +770,7 @@ module.exports = (_ => {
 					let folderIcons = this.loadAllIcons(), iconType = e.instance.props.expanded ? "openicon" : "closedicon";
 					let icon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? this.createBase64SVG(folderIcons[data.iconID][iconType], data.color1, data.color2) : folderIcons[data.iconID][iconType]) : null;
 					if (icon) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIconContent"});
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
 						if (index > -1) children[index] = BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.guildfoldericonwrapper,
 							style: {background: `url(${icon}) center/cover no-repeat`}
@@ -759,13 +780,17 @@ module.exports = (_ => {
 				if (this.settings.general.showCountBadge) {
 					let mask = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "BlobMask"});
 					if (mask) {
-						mask.props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.getBadgeWidthForValue(e.instance.props.folderNode.children.length);
+						mask.props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.NumberBadge.prototype.getBadgeWidthForValue(e.instance.props.folderNode.children.length);
 						mask.props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
 							count: e.instance.props.folderNode.children.length,
 							style: {backgroundColor: "var(--bdfdb-blurple)"}
 						});
 					}
 				}
+			}
+			
+			processGuildItemWrapper (e) {
+				if (e.component) GuildItemWrapperComponent = e.component;
 			}
 			
 			processGuildItem (e) {
@@ -806,7 +831,7 @@ module.exports = (_ => {
 				}
 			}
 			
-			processGuildFolderSettingsModal (e) {
+			processFolderSettingsModal (e) {
 				if (e.node) {
 					let root = e.node.parentElement.querySelector(BDFDB.dotCN.modal);
 					BDFDB.DOMUtils.addClass(root, BDFDB.disCN.modalmedium, BDFDB.disCN.modalwrapper, `${this.name}-modal`);
@@ -819,7 +844,7 @@ module.exports = (_ => {
 					
 					let tabs = {};
 					
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["ModalHeader", "Header"]});
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ModalHeader"});
 					if (index > -1) {
 						children[index].props.className = BDFDB.DOMUtils.formatClassName(children[index].props.className, BDFDB.disCN.modalheaderhassibling),
 						children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -849,7 +874,7 @@ module.exports = (_ => {
 							})
 						}));
 					}
-					[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["ModalContent", "Content"]});
+					[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => n && n.props && n.props.children && n.props.children.type == "form"});
 					if (index > -1) children[index].props.children = [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: this.labels.modal_tabheader1,
@@ -952,7 +977,7 @@ module.exports = (_ => {
 							children: BDFDB.ReactUtils.createElement(FolderIconCustomPreviewComponent, {}, true)
 						})
 					];
-					[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["ModalFooter", "Footer"]});
+					[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ModalFooter"});
 					if (index > -1) children[index].props.children = [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 							children: BDFDB.LanguageUtils.LanguageStrings.SAVE,
