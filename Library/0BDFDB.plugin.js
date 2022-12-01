@@ -3749,7 +3749,7 @@ module.exports = (_ => {
 													BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
 														children: [
 															BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormTitle, {
-																tag: Internal.LibraryComponents.FormComponents.FormTags.H4,
+																tag: Internal.LibraryComponents.FormComponents.FormTags && Internal.LibraryComponents.FormComponents.FormTags.H4,
 																children: config.header
 															}),
 															BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TextElement, {
@@ -4988,7 +4988,7 @@ module.exports = (_ => {
 										BDFDB.ReactUtils.forceUpdate(this);
 									},
 									children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormTitle, {
-										tag: Internal.LibraryComponents.FormComponents.FormTags.H5,
+										tag: Internal.LibraryComponents.FormComponents.FormTags && Internal.LibraryComponents.FormComponents.FormTags.H5,
 										className: BDFDB.disCN.collapsecontainertitle,
 										children: this.props.title
 									})
@@ -5905,7 +5905,7 @@ module.exports = (_ => {
 										this.props.title != null || this.props.error != null ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Flex.Child, {
 											wrap: true,
 											children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormTitle, {
-												tag: this.props.tag || Internal.LibraryComponents.FormComponents.FormTags.H5,
+												tag: this.props.tag || Internal.LibraryComponents.FormComponents.FormTags && Internal.LibraryComponents.FormComponents.FormTags.H5,
 												disabled: this.props.disabled,
 												required: this.props.required,
 												error: this.props.error,
@@ -5919,127 +5919,6 @@ module.exports = (_ => {
 						});
 					}
 				};
-				
-				CustomComponents.GuildComponents = {};
-				CustomComponents.GuildComponents.Guild = reactInitialized && class BDFDB_Guild extends Internal.LibraryModules.React.Component {
-					constructor(props) {
-						super(props);
-						this.state = {hovered: false};
-					}
-					handleMouseEnter(e) {
-						if (!this.props.sorting) this.setState({hovered: true});
-						if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);
-					}
-					handleMouseLeave(e) {
-						if (!this.props.sorting) this.setState({hovered: false});
-						if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
-					}
-					handleMouseDown(e) {
-						if (!this.props.unavailable && this.props.guild && this.props.selectedChannelId) Internal.LibraryModules.PrivateChannelUtils.preload(this.props.guild.id, this.props.selectedChannelId);
-						if (e.button == 0 && typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);
-					}
-					handleMouseUp(e) {
-						if (e.button == 0 && typeof this.props.onMouseUp == "function") this.props.onMouseUp(e, this);
-					}
-					handleClick(e) {
-						if (typeof this.props.onClick == "function") this.props.onClick(e, this);
-					}
-					handleContextMenu(e) {
-						if (this.props.menu) BDFDB.GuildUtils.openMenu(this.props.guild, e);
-						if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
-					}
-					setRef(e) {
-						if (typeof this.props.setRef == "function") this.props.setRef(this.props.guild.id, e)
-					}
-					componentDidMount() {
-						let node = BDFDB.ReactUtils.findDOMNode(this);
-						if (node && node.nodeType != Node.TEXT_NODE) for (let child of node.querySelectorAll("a")) child.setAttribute("draggable", false);
-					}
-					render() {
-						if (!this.props.guild) return null;
-						
-						this.props.guildId = this.props.guild.id;
-						this.props.selectedChannelId = Internal.LibraryStores.SelectedChannelStore.getChannelId(this.props.guild.id);
-						
-						let currentVoiceChannel = Internal.LibraryStores.ChannelStore.getChannel(Internal.LibraryModules.RTCConnectionUtils.getChannelId());
-						let hasVideo = currentVoiceChannel && Internal.LibraryStores.SortedVoiceStateStore.hasVideo(currentVoiceChannel);
-						
-						this.props.selected = this.props.state ? Internal.LibraryStores.SelectedGuildStore.getGuildId() == this.props.guild.id : false;
-						this.props.unread = this.props.state ? Internal.LibraryStores.GuildReadStateStore.hasUnread(this.props.guild.id) : false;
-						this.props.badge = this.props.state ? Internal.LibraryStores.GuildReadStateStore.getMentionCount(this.props.guild.id) : 0;
-						
-						this.props.mediaState = Object.assign({}, this.props.mediaState, {
-							audio: this.props.state ? currentVoiceChannel && currentVoiceChannel.guild_id == this.props.guild.id && !hasVideo : false,
-							video: this.props.state ? currentVoiceChannel && currentVoiceChannel.guild_id == this.props.guild.id && hasVideo : false,
-							screenshare: this.props.state ? !!Internal.LibraryStores.ApplicationStreamingStore.getAllApplicationStreams().filter(stream => stream.guildId == this.props.guild.id)[0] : false,
-							liveStage: this.props.state ? Object.keys(Internal.LibraryStores.StageInstanceStore.getStageInstancesByGuild(this.props.guild.id)).length > 0 : false,
-							hasLiveVoiceChannel: this.props.state && false ? !Internal.LibraryStores.UserGuildSettingsStore.isMuted(this.props.guild.id) && BDFDB.ObjectUtils.toArray(Internal.LibraryStores.SortedVoiceStateStore.getVoiceStates(this.props.guild.id)).length > 0 : false,
-							participating: this.props.state ? Internal.LibraryModules.RTCConnectionUtils.getGuildId() == this.props.guild.id : false,
-							participatingInStage: this.props.state ? currentVoiceChannel && currentVoiceChannel.guild_id == this.props.guild.id && currentVoiceChannel.isGuildStageVoice() : false
-						});
-						
-						this.props.animatable = this.props.state ? this.props.guild.icon && Internal.LibraryModules.IconUtils.isAnimatedIconHash(this.props.guild.icon) : false;
-						this.props.unavailable = this.props.state ? Internal.LibraryStores.GuildAvailabilityStore.unavailableGuilds.includes(this.props.guild.id) : false;
-					
-						let isDraggedGuild = this.props.draggingGuildId === this.props.guild.id;
-						let guild = isDraggedGuild ? BDFDB.ReactUtils.createElement("div", {
-							children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.GuildComponents.DragPlaceholder, {})
-						}) : BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN.guildcontainer,
-							children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.GuildComponents.BlobMask, {
-								selected: this.state.isDropHovering || this.props.selected || this.state.hovered,
-								upperBadge: this.props.unavailable ? Internal.LibraryModules.GuildBadgeUtils.renderUnavailableBadge() : Internal.LibraryModules.GuildBadgeUtils.renderMediaBadge(this.props.mediaState),
-								lowerBadge: this.props.badge > 0 ? Internal.LibraryModules.GuildBadgeUtils.renderMentionBadge(this.props.badge) : null,
-								lowerBadgeWidth: Internal.LibraryComponents.Badges.getBadgeWidthForValue(this.props.badge),
-								children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.NavItem, {
-									to: {
-										pathname: Internal.DiscordConstants.Routes.CHANNEL(this.props.guild.id, this.props.selectedChannelId),
-										state: {
-											analyticsSource: {
-												page: Internal.DiscordConstants.AnalyticsPages.GUILD_CHANNEL,
-												section: Internal.DiscordConstants.AnalyticsSections.CHANNEL_LIST,
-												object: Internal.DiscordConstants.AnalyticsObjects.CHANNEL
-											}
-										}
-									},
-									name: this.props.guild.name,
-									onMouseEnter: this.handleMouseEnter.bind(this),
-									onMouseLeave: this.handleMouseLeave.bind(this),
-									onMouseDown: this.handleMouseDown.bind(this),
-									onMouseUp: this.handleMouseUp.bind(this),
-									onClick: this.handleClick.bind(this),
-									onContextMenu: this.handleContextMenu.bind(this),
-									icon: this.props.guild.getIconURL(this.props.iconSize || 96, this.state.hovered && this.props.animatable),
-									selected: this.props.selected || this.state.hovered
-								})
-							})
-						});
-						
-						let children = [
-							this.props.list || this.props.pill ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.GuildComponents.Pill, {
-								hovered: !isDraggedGuild && this.state.hovered,
-								selected: !isDraggedGuild && this.props.selected,
-								unread: !isDraggedGuild && this.props.unread,
-								className: BDFDB.disCN.guildpill
-							}) : null,
-							!this.props.tooltip ? guild : BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TooltipContainer, {
-								tooltipConfig: Object.assign({type: "right"}, this.props.tooltipConfig, {guild: this.props.list && this.props.guild}),
-								children: guild
-							})
-						].filter(n => n);
-						return this.props.list ? BDFDB.ReactUtils.createElement("div", {
-							ref: null != this.props.setRef ? this.props.setRef : null,
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guildouter, BDFDB.disCN._bdguild, this.props.unread && BDFDB.disCN._bdguildunread, this.props.selected && BDFDB.disCN._bdguildselected, this.props.unread && BDFDB.disCN._bdguildunread, this.props.audio && BDFDB.disCN._bdguildaudio, this.props.video && BDFDB.disCN._bdguildvideo),
-							children: BDFDB.ReactUtils.createElement(Internal.LibraryModules.React.Fragment, {
-								children: children
-							})
-						}) : BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guild, this.props.className),
-							children: children
-						});
-					}
-				};
-				Internal.setDefaultProps(CustomComponents.GuildComponents.Guild, {menu: true, tooltip: true, list: false, state: false, draggable: false, sorting: false});
 				
 				CustomComponents.GuildSummaryItem = reactInitialized && class BDFDB_GuildSummaryItem extends Internal.LibraryModules.React.Component {
 					defaultRenderGuild(guild, isLast) {
@@ -6870,7 +6749,7 @@ module.exports = (_ => {
 								}) : null,
 								typeof this.props.title == "string" ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.FormComponents.FormTitle, {
 									className: BDFDB.disCN.marginbottom4,
-									tag: Internal.LibraryComponents.FormComponents.FormTags.H3,
+									tag: Internal.LibraryComponents.FormComponents.FormTags && Internal.LibraryComponents.FormComponents.FormTags.H3,
 									children: this.props.title
 								}) : null,
 								BDFDB.ReactUtils.createElement("div", {
@@ -7607,8 +7486,10 @@ module.exports = (_ => {
 							ref: instance => {
 								const ele = BDFDB.ReactUtils.findDOMNode(instance);
 								if (ele && ele.parentElement) {
+									BDFDB.DOMUtils.hide(ele);
 									const maxWidth = BDFDB.DOMUtils.getInnerWidth(ele.parentElement);
 									if (maxWidth > 50) ele.style.setProperty("max-width", `${maxWidth}px`);
+									BDFDB.DOMUtils.show(ele);
 									if (!this.props.initiated) BDFDB.TimeUtils.timeout(_ => {
 										this.props.initiated = true;
 										if (document.contains(ele.parentElement)) BDFDB.ReactUtils.forceUpdate(this);
@@ -7858,6 +7739,7 @@ module.exports = (_ => {
 				BDFDB.LibraryComponents = Internal.LibraryComponents;
 
 				const keyDownTimeouts = {};
+				let unfocusedWindow = false;
 				BDFDB.ListenerUtils.add(BDFDB, document, "keydown.BDFDBPressedKeys", e => {
 					if (!pressedKeys.includes(e.which)) {
 						BDFDB.TimeUtils.clear(keyDownTimeouts[e.which]);
@@ -7871,11 +7753,17 @@ module.exports = (_ => {
 					BDFDB.TimeUtils.clear(keyDownTimeouts[e.which]);
 					BDFDB.ArrayUtils.remove(pressedKeys, e.which, true);
 				});
+				BDFDB.ListenerUtils.add(BDFDB, window, "focus.BDFDBPressedKeysReset", e => {
+					if (unfocusedWindow) {
+						pressedKeys = [];
+						unfocusedWindow = false;
+					}
+				});
+				BDFDB.ListenerUtils.add(BDFDB, window, "blur.BDFDBPressedKeysReset", e => {
+					if (!document.querySelector(":hover")) unfocusedWindow = true;
+				});
 				BDFDB.ListenerUtils.add(BDFDB, document, "mousedown.BDFDBMousePosition", e => {
 					mousePosition = e;
-				});
-				BDFDB.ListenerUtils.add(BDFDB, window, "focus.BDFDBPressedKeysReset", e => {
-					pressedKeys = [];
 				});
 				
 				Internal.modulePatches = {

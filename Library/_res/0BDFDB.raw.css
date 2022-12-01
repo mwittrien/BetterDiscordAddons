@@ -126,6 +126,7 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin-bottom: 0;
 }
 [REPLACE_CLASS_collapsecontainertitle] {
+	flex: 1 1 auto;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
