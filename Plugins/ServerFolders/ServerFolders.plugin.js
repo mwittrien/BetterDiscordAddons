@@ -751,7 +751,7 @@ module.exports = (_ => {
 				
 				e.instance.props.folderNode = Object.assign({}, e.instance.props.folderNode, {
 					_childCount: e.instance.props.folderNode.children.length,
-					children: this.settings.general.extraColumn ? [] : e.instance.props.folderNode.children
+					children: this.settings.general.extraColumn && e.instance.props.expanded ? [] : e.instance.props.folderNode.children
 				});
 			}
 			
