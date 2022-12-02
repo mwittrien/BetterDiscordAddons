@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"fixed": {
-			"Scrolling": "Scrolling while extra column disabled works again"
-		}
+		
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -96,9 +94,6 @@ module.exports = (_ => {
 					this.props.closing = true;
 					BDFDB.ReactUtils.forceUpdate(this);
 				}, 300);
-				
-				BDFDB.DOMUtils.toggleClass(document.body, BDFDB.disCN._serverfoldersfoldercontentisopen, !(!folders.length || closing));
-				
 				return BDFDB.ReactUtils.createElement("nav", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guildswrapper, BDFDB.disCN.guilds, this.props.isAppFullscreen && BDFDB.disCN.guildswrapperhidden, this.props.themeOverride && BDFDB.disCN.themedark, BDFDB.disCN._serverfoldersfoldercontent, (!folders.length || closing) && BDFDB.disCN._serverfoldersfoldercontentclosed),
 					children: BDFDB.ReactUtils.createElement("ul", {
@@ -449,16 +444,14 @@ module.exports = (_ => {
 			
 				this.modulePatches = {
 					before: [
-						"FolderItem",
-						"GuildItemWrapper",
-						"GuildsBar"
+						"GuildItemWrapper"
 					],
 					after: [
 						"FolderHeader",
+						"FolderItem",
 						"FolderSettingsModal",
 						"GuildItem",
 						"GuildsBar",
-						"ListItemTooltip"
 					],
 					componentDidMount: [
 						"FolderSettingsModal"
@@ -466,9 +459,6 @@ module.exports = (_ => {
 				};
 				
 				this.css = `
-					${BDFDB.dotCNS._serverfoldershassidebar + BDFDB.dotCN.guildfolderexpandedbackground} {
-						display: none !important;
-					}
 					${BDFDB.dotCN._serverfoldersiconswatch} {
 						position: relative;
 						margin: 3px 3px;
@@ -691,9 +681,7 @@ module.exports = (_ => {
 			}
 
 			processGuildsBar (e) {
-				if (!this.settings.general.extraColumn) return;
-				if (!e.returnvalue) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._serverfoldershassidebar);
-				else {
+				if (this.settings.general.extraColumn) {
 					let fullscreen = BDFDB.LibraryStores.ChannelRTCStore.isFullscreenInContext();
 					if (folderGuildContent && (fullscreen != folderGuildContent.props.isAppFullscreen || e.instance.props.themeOverride != folderGuildContent.props.themeOverride)) {
 						folderGuildContent.props.isAppFullscreen = fullscreen;
@@ -730,9 +718,11 @@ module.exports = (_ => {
 			
 			processFolderItem (e) {
 				if (!e.instance.props.folderNode) return;
+				let expandedFolders = BDFDB.LibraryStores.ExpandedGuildFolderStore.getExpandedFolders();
+				if (expandedFolders.size) BDFDB.DOMUtils.addClass(document.body, BDFDB.disCN._serverfoldersfoldercontentisopen);
+				else BDFDB.DOMUtils.removeClassFromDOM(BDFDB.disCN._serverfoldersfoldercontentisopen);
 				
 				let data = this.getFolderConfig(e.instance.props.folderNode.id);
-				
 				if (data.muteFolder) for (let guildId of e.instance.props.folderNode.children.map(n => n.id)) if (!BDFDB.LibraryStores.UserGuildSettingsStore.isGuildOrCategoryOrChannelMuted(guildId)) BDFDB.LibraryModules.GuildNotificationsUtils.updateGuildNotificationSettings(guildId, {muted: true, suppress_everyone: true});
 				
 				let state = this.getState(e.instance);
@@ -747,17 +737,30 @@ module.exports = (_ => {
 				}
 				folderStates[e.instance.props.folderNode.id] = state;
 				
-				e.instance.props.folderNode = Object.assign({}, e.instance.props.folderNode, {
-					_childCount: e.instance.props.folderNode.children.length,
-					children: this.settings.general.extraColumn ? [] : e.instance.props.folderNode.children
+				let [tooltipParent, tooltipIndex] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["ListItemTooltip", "BDFDB_TooltipContainer"]});
+				if (tooltipIndex > -1) tooltipParent[tooltipIndex] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					text: e.instance.props.folderNode.name || e.instance.props.defaultFolderName,
+					tooltipConfig: {
+						type: "right",
+						list: true,
+						offset: 12,
+						backgroundColor: data.color3,
+						fontColor: data.color4
+					},
+					children: tooltipParent[tooltipIndex].props.children
 				});
+				if (this.settings.general.extraColumn) {
+					e.returnvalue.props.children[0] = null;
+					e.returnvalue.props.children[2] = BDFDB.ReactUtils.createElement("div", {
+						children: e.returnvalue.props.children[2],
+						style: {display: "none"}
+					});
+				}
 			}
 			
 			processFolderHeader (e) {
 				if (!e.instance.props.folderNode) return;
-				
 				let data = this.getFolderConfig(e.instance.props.folderNode.id);
-				
 				if (e.instance.props.expanded || data.useCloseIcon) {
 					let folderIcons = this.loadAllIcons(), iconType = e.instance.props.expanded ? "openicon" : "closedicon";
 					let icon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? this.createBase64SVG(folderIcons[data.iconID][iconType], data.color1, data.color2) : folderIcons[data.iconID][iconType]) : null;
@@ -772,32 +775,13 @@ module.exports = (_ => {
 				if (this.settings.general.showCountBadge) {
 					let mask = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "BlobMask"});
 					if (mask) {
-						mask.props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.NumberBadge.prototype.getBadgeWidthForValue(e.instance.props.folderNode._childCount);
+						mask.props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.NumberBadge.prototype.getBadgeWidthForValue(e.instance.props.folderNode.children.length);
 						mask.props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
-							count: e.instance.props.folderNode._childCount,
+							count: e.instance.props.folderNode.children.length,
 							style: {backgroundColor: "var(--bdfdb-blurple)"}
 						});
 					}
 				}
-			}
-			
-			processListItemTooltip (e) {
-				let folderNodeChild = BDFDB.ReactUtils.findChild(e.instance, {filter: n => n && n.props && n.props.folderNode});
-				if (!folderNodeChild) return;
-				
-				let data = this.getFolderConfig(folderNodeChild.props.folderNode.id);
-				
-				e.returnvalue = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					text: folderNodeChild.props.folderNode.name || folderNodeChild.props.tooltipName,
-					tooltipConfig: {
-						type: "right",
-						list: true,
-						offset: 12,
-						backgroundColor: data.color3,
-						fontColor: data.color4
-					},
-					children: e.returnvalue.props.children
-				});
 			}
 			
 			processGuildItemWrapper (e) {
