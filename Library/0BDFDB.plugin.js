@@ -4145,23 +4145,23 @@ module.exports = (_ => {
 					return parseInt(document.firstElementChild.style.fontSize.replace("%", ""));
 				};
 				BDFDB.DiscordUtils.shake = function () {
-					BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.appinner), {name: "Shakeable", unlimited: true, up: true}).shake();
+					BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.appcontainer), {name: "Shakeable", unlimited: true, up: true}).shake();
 				};
 				BDFDB.DiscordUtils.rerenderAll = function (instant) {
 					BDFDB.TimeUtils.clear(BDFDB.DiscordUtils.rerenderAll.timeout);
 					BDFDB.DiscordUtils.rerenderAll.timeout = BDFDB.TimeUtils.timeout(_ => {
-						let ShakeableIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.appcontainer), {name: "Shakeable", unlimited: true, up: true});
-						let ShakeableType = ShakeableIns && BDFDB.ObjectUtils.get(ShakeableIns, `${BDFDB.ReactUtils.instanceKey}.type`);
-						if (!ShakeableType) return;
+						let LayersProviderIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.layers), {name: "LayersProvider", unlimited: true, up: true});
+						let LayersProviderType = LayersProviderIns && BDFDB.ObjectUtils.get(LayersProviderIns, `${BDFDB.ReactUtils.instanceKey}.type`);
+						if (!LayersProviderType) return;
 						let parentSelector = "", notices = document.querySelector("#bd-notices");
 						if (notices) {
 							let parentClasses = []
 							for (let i = 0, parent = notices.parentElement; i < 3; i++, parent = parent.parentElement) parentClasses.push(parent.className);
 							parentSelector = parentClasses.reverse().map(n => !n ? "*" : `.${n.split(" ").join(".")}`).join(" > ");
 						}
-						BDFDB.PatchUtils.patch({name: "BDFDB DiscordUtils"}, ShakeableType.prototype, "render", {after: e => {
-							e.returnValue = BDFDB.ReactUtils.createElement(ShakeableType, ShakeableIns.props);
-							BDFDB.ReactUtils.forceUpdate(ShakeableIns);
+						BDFDB.PatchUtils.patch({name: "BDFDB DiscordUtils"}, LayersProviderType.prototype, "render", {after: e => {
+							e.returnValue = BDFDB.ReactUtils.createElement(LayersProviderType, LayersProviderIns.props);
+							BDFDB.ReactUtils.forceUpdate(LayersProviderIns);
 							if (parentSelector) BDFDB.TimeUtils.timeout(_ => {
 								if (!document.contains(notices)) {
 									let parent = document.querySelector(parentSelector) || document.querySelector(BDFDB.dotCN.app).parentElement;
@@ -4169,7 +4169,7 @@ module.exports = (_ => {
 								}
 							}, 1000);
 						}}, {once: true});
-						BDFDB.ReactUtils.forceUpdate(ShakeableIns);
+						BDFDB.ReactUtils.forceUpdate(LayersProviderIns);
 					}, instant ? 0 : 1000);
 				};
 				
@@ -6715,7 +6715,6 @@ module.exports = (_ => {
 								return this.props.children(this.props.collapseStates);
 							})() : this.props.children
 						].flat(10).filter(n => n);
-						
 						return BDFDB.ReactUtils.createElement("div", {
 							key: this.props.addon && this.props.addon.name && `${this.props.addon.name}-settingsPanel`,
 							id: this.props.addon && this.props.addon.name && `${this.props.addon.name}-settings`,

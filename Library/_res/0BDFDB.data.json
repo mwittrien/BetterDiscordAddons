@@ -438,6 +438,7 @@
 		"IncomingCallModal": {"strings": [".Messages.INCOMING_VIDEO_CALL_ELLIPSIS", ".isFocused", "maxX:window.innerWidth"]},
 		"InviteGuildName": {"strings": [".guild;return", "().guildName", "().guildNameWrapper"]},
 		"LayerProvider": {"strings": ["layerContainerElement", "getContextValue"]},
+		"LayersProvider": {"strings": ["._currentlyTransitioningKeys", "._keysToEnter", "._keyChildMapping"]},
 		"LazyImage": {"protos": ["loadImage", "getWidth", "getSrc"]},
 		"LazyImageZoomable": {"strings": ["renderLinkComponent", "onCloseImage"]},
 		"ListItemTooltip": {"strings": [".listItemWrapper", "tooltipClassName", "disableWrapper"]},
