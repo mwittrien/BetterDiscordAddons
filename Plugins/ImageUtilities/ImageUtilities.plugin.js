@@ -18,6 +18,7 @@ module.exports = (_ => {
 			"Gallery Filter": "You can now filter the Gallery by File Type"
 		},
 		fixed: {
+			"JPG Images": "Can now be downloaded again",
 			"Zoom With native Gallery Mode": "Zooming in an Image no longer will close the Image if you are using Discords native Gallery Mode",
 			"Download As Location": "Now properly remembers the last selected Location",
 			"Download Issues": "All Image Download Issues that occured for some people in eastern countries should be fixed now"
@@ -84,7 +85,7 @@ module.exports = (_ => {
 			"avi":		{copyable: false,	searchable: false,	video: true,	signs: [[0x41, 0x56, 0x49, 0x20]]},
 			"flv":		{copyable: false,	searchable: false,	video: true,	signs: [[0x46, 0x4C, 0x56]]},
 			"jpeg":		{copyable: true,	searchable: true,	video: false,	signs: [[0xFF, 0xD8, 0xFF, 0xEE]]},
-			"jpg":		{copyable: true,	searchable: true,	video: false,	signs: [[0xFF, 0xD8, 0xFF, 0xDB], [0xFF, 0xD8, 0xFF, 0xE0]]},
+			"jpg":		{copyable: true,	searchable: true,	video: false,	signs: [[0xFF, 0xD8, 0xFF, 0xDB], [0xFF, 0xD8, 0xFF, 0xE0], [0xFF, 0xD8, 0xFF, 0xE1]]},
 			"gif":		{copyable: false,	searchable: true,	video: false,	signs: [[0x47, 0x49, 0x46, 0x38, 0x37, 0x61], [0x47, 0x49, 0x46, 0x38, 0x39, 0x61]]},
 			"mov":		{copyable: false,	searchable: false,	video: true,	signs: [[null, null, null, null, 0x6D, 0x6F, 0x6F, 0x76], [null, null, null, null, 0x66, 0x74, 0x79, 0x70, 0x71, 0x74, 0x20, 0x20]]},
 			"mp4":		{copyable: false,	searchable: false,	video: true,	signs: [[null, null, null, null, 0x66, 0x74, 0x79, 0x70, 0x69, 0x73, 0x6F, 0x6D]]},
