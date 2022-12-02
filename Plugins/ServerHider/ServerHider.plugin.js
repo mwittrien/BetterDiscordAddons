@@ -2,7 +2,7 @@
  * @name ServerHider
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 6.2.5
+ * @version 6.2.6
  * @description Allows you to hide certain Servers in your Server List
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -89,6 +89,12 @@ module.exports = (_ => {
 						return folder;
 					}
 				}});
+				
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryStores.GuildReadStateStore, "getMutableGuildStates", {after: e => {
+					if (!e.returnValue) return;
+					let hiddenGuildIds = hiddenEles && hiddenEles.servers || [];
+					if (hiddenGuildIds.length) for (let id in e.returnValue) if (hiddenGuildIds.includes(id)) e.returnValue[id] = Object.assign({}, e.returnValue[id], {mentionCount: 0, mentionCounts: {}});
+				}});
 
 				BDFDB.DiscordUtils.rerenderAll();
 			}
@@ -164,38 +170,21 @@ module.exports = (_ => {
 				if (this.settings.general.onlyHideInStream && !BDFDB.LibraryStores.StreamerModeStore.enabled) return;
 				let hiddenGuildIds = hiddenEles.servers || [];
 				let hiddenFolderIds = hiddenEles.folders || [];
-				if (hiddenGuildIds.length || hiddenFolderIds.length) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: ["folderNode", "guildNode"], someProps: true});
-					if (index > -1) for (let i in children) if (children[i] && children[i].props) {
-						if (children[i].props.folderNode) {
-							if (hiddenFolderIds.includes(children[i].props.folderNode.id)) children[i] = null;
-							else {
-								let guilds = [].concat(children[i].props.folderNode.children.filter(guild => !hiddenGuildIds.includes(guild.id)));
-								if (guilds.length) {
-									children[i].props.hiddenGuildIds = [].concat(children[i].props.folderNode.children.filter(guild => hiddenGuildIds.includes(guild.id)));
-									children[i].props.folderNode = Object.assign({}, children[i].props.folderNode, {children: guilds});
-								}
-								else children[i] = null;
+				if (!hiddenGuildIds.length && !hiddenFolderIds.length) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: ["folderNode", "guildNode"], someProps: true});
+				if (index > -1) for (let i in children) if (children[i] && children[i].props) {
+					if (children[i].props.folderNode) {
+						if (hiddenFolderIds.includes(children[i].props.folderNode.id)) children[i] = null;
+						else {
+							let guilds = [].concat(children[i].props.folderNode.children.filter(guild => !hiddenGuildIds.includes(guild.id)));
+							if (guilds.length) {
+								children[i].props.hiddenGuildIds = [].concat(children[i].props.folderNode.children.filter(guild => hiddenGuildIds.includes(guild.id)));
+								children[i].props.folderNode = Object.assign({}, children[i].props.folderNode, {children: guilds});
 							}
+							else children[i] = null;
 						}
-						else if (children[i].props.guildNode && hiddenGuildIds.includes(children[i].props.guildNode.id)) children[i] = null;
 					}
-					let topBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbartop]]});
-					if (topBar) {
-						let topIsVisible = topBar.props.isVisible;
-						topBar.props.isVisible = BDFDB.TimeUtils.suppress((...args) => {
-							args[2] = args[2].filter(id => !hiddenGuildIds.includes(id));
-							return topIsVisible(...args) || BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(args[0]) == 0;
-						}, "Error in isVisible of Top Bar in Guild List!");
-					}
-					let bottomBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbarbottom]]});
-					if (bottomBar) {
-						let bottomIsVisible = bottomBar.props.isVisible;
-						bottomBar.props.isVisible = BDFDB.TimeUtils.suppress((...args) => {
-							args[2] = args[2].filter(id => !hiddenGuildIds.includes(id));
-							return bottomIsVisible(...args) || BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(args[0]) == 0;
-						}, "Error in isVisible of Bottom Bar in Guild List!");
-					}
+					else if (children[i].props.guildNode && hiddenGuildIds.includes(children[i].props.guildNode.id)) children[i] = null;
 				}
 			}
 
