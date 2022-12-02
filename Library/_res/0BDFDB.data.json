@@ -5499,6 +5499,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"220161488516546561": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "taimoor"},
 		"396874979167174666": 	{"active": true,	"tier": "t3",	"text": "",											"color": "",			"id": "error (RiRo)"},
 		"676593137581424652": 	{"active": true,	"tier": "t3",	"text": "",											"color": "",			"id": "Crohnus (shaggy)"},
 		"378752493485817868": 	{"active": true,	"tier": "t3",	"text": "",											"color": "",			"id": "BananaBunny (AnWa)"},
