@@ -530,6 +530,10 @@ module.exports = (_ => {
 					${BDFDB.dotCN._serverfoldersfoldercontent + BDFDB.dotCN._serverfoldersfoldercontentclosed} {
 						width: 0 !important;
 					}
+					${BDFDB.dotCNS._serverfoldershassidebar + BDFDB.dotCN.guildfolderwrapper} > [role="group"],
+					${BDFDB.dotCNS._serverfoldershassidebar + BDFDB.dotCN.guildfolderexpandedbackground} {
+						display: none !important;
+					}
 					${BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildfolder} {
 						cursor: default;
 						border-radius: 100%;
