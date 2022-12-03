@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.0.6
+ * @version 7.0.7
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -513,6 +513,7 @@ module.exports = (_ => {
 						opacity: 0.5 !important;
 						z-index: 10000 !important;
 					}
+					${BDFDB.dotCNS._serverfoldershassidebar + BDFDB.dotCN.guildfolderwrapper} > [role="group"],
 					${BDFDB.dotCNS._serverfoldershassidebar + BDFDB.dotCN.guildfolderexpandedbackground} {
 						display: none !important;
 					}
@@ -748,11 +749,6 @@ module.exports = (_ => {
 					BDFDB.ReactUtils.forceUpdate(folderGuildContent);
 				}
 				folderStates[e.instance.props.folderNode.id] = state;
-				
-				e.instance.props.folderNode = Object.assign({}, e.instance.props.folderNode, {
-					_childCount: e.instance.props.folderNode.children.length,
-					children: this.settings.general.extraColumn && e.instance.props.expanded ? [] : e.instance.props.folderNode.children
-				});
 			}
 			
 			processFolderHeader (e) {
@@ -774,9 +770,9 @@ module.exports = (_ => {
 				if (this.settings.general.showCountBadge) {
 					let mask = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "BlobMask"});
 					if (mask) {
-						mask.props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.NumberBadge.prototype.getBadgeWidthForValue(e.instance.props.folderNode._childCount);
+						mask.props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.NumberBadge.prototype.getBadgeWidthForValue(e.instance.props.folderNode.children.length);
 						mask.props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
-							count: e.instance.props.folderNode._childCount,
+							count: e.instance.props.folderNode.children.length,
 							style: {backgroundColor: "var(--bdfdb-blurple)"}
 						});
 					}

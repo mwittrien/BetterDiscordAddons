@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.3
+ * @version 1.1.4
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -61,7 +61,7 @@ module.exports = (_ => {
 		const GuildDetailsComponent = class GuildDetails extends BdApi.React.Component {
 			constructor(props) {
 				super(props);
-				this.state = {fetchedOwner: false, delayed: false, repositioned: false};
+				this.state = {fetchedOwner: false, delayed: false, repositioned: false, forced: false};
 			}
 			componentDidUpdate() {
 				if (_this.settings.amounts.tooltipDelay && this.state.delayed && !this.state.repositioned) {
@@ -70,7 +70,30 @@ module.exports = (_ => {
 				}
 			}
 			render() {
-				if (_this.settings.general.onlyShowOnShift && !this.props.shiftKey) return null;
+				if (_this.settings.general.onlyShowOnShift) {
+					let addListener = expanded => {
+						if (this.props.tooltipContainer && this.props.tooltipContainer.tooltip) BDFDB.DOMUtils.toggleClass(this.props.tooltipContainer.tooltip.firstElementChild, BDFDB.disCN._serverdetailstooltip, expanded);
+						let triggered = false, listener = event => {
+							if (!this.updater.isMounted(this)) return document.removeEventListener(expanded ? "keyup" : "keydown", listener);
+							if (triggered) return;
+							if (event.which != 16 || triggered) return;
+							triggered = true;
+							document.removeEventListener(expanded ? "keyup" : "keydown", listener);
+							this.props.shiftKey = !expanded;
+							this.state.forced = !expanded;
+							this.state.repositioned = false;
+							BDFDB.ReactUtils.forceUpdate(this);
+						};
+						document.addEventListener(expanded ? "keyup" : "keydown", listener);
+					};
+					if (!this.props.shiftKey) {
+						addListener(false);
+						return null;
+					}
+					else {
+						addListener(true);
+					}
+				}
 				let owner = BDFDB.LibraryStores.UserStore.getUser(this.props.guild.ownerId);
 				if (!owner && !this.state.fetchedOwner) {
 					this.state.fetchedOwner = true;
@@ -81,7 +104,7 @@ module.exports = (_ => {
 						this.state.delayed = true;
 						if (this.props.tooltipContainer && this.props.tooltipContainer.tooltip) BDFDB.DOMUtils.addClass(this.props.tooltipContainer.tooltip.firstElementChild, BDFDB.disCN._serverdetailstooltip);
 						BDFDB.ReactUtils.forceUpdate(this);
-					}, _this.settings.amounts.tooltipDelay * 1000);
+					}, this.state.forced ? 0 : (_this.settings.amounts.tooltipDelay * 1000));
 					return null;
 				}
 				let src = this.props.guild.getIconURL(4096, this.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(this.props.guild.icon));
