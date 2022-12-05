@@ -2,7 +2,7 @@
  * @name EditServers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.0
+ * @version 2.4.1
  * @description Allows you to locally edit Servers
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"fixed": {
+			"Banners": "work again"
+		}
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -77,10 +79,10 @@ module.exports = (_ => {
 			
 				this.modulePatches = {
 					before: [
+						"ChannelsList",
 						"GuildHeader",
 						"GuildIconWrapper",
 						"GuildItem",
-						"GuildSidebar",
 						"InviteGuildName",
 						"QuickSwitchChannelResult",
 						"QuickSwitchGuildResult"
@@ -292,15 +294,19 @@ module.exports = (_ => {
 				if (guildName && typeof guildName.props.children == "string") guildName.props.children = guildName.props.children.replace(guild.name, changedGuilds[e.instance.props.channel.guild_id].name);
 			}
 			
-			processGuildSidebar (e) {
-				if (!e.instance.props.guild || !changedGuilds[e.instance.props.guild.id]) return;
-				if (changedGuilds[e.instance.props.guild.id].removeBanner) e.instance.props.guild = new BDFDB.DiscordObjects.Guild(Object.assign({}, e.instance.props.guild, {banner: null}));
-				else if (changedGuilds[e.instance.props.guild.id].banner) e.instance.props.guild = new BDFDB.DiscordObjects.Guild(Object.assign({}, e.instance.props.guild, {banner: changedGuilds[e.instance.props.guild.id].banner}));
+			processChannelsList (e) {
+				if (!this.settings.places.guildHeader || !e.instance.props.guild || !changedGuilds[e.instance.props.guild.id]) return;
+				e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
+				if (e.instance.props.guild.banner && !e.instance.props.guildBanner) e.instance.props.guildBanner = e.instance.props.guild.banner;
 			}
 			
 			processGuildHeader (e) {
-				if (!this.settings.places.guildHeader || !e.instance.props.guild) return;
+				if (!this.settings.places.guildHeader || !e.instance.props.guild || !changedGuilds[e.instance.props.guild.id]) return;
 				e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
+				if (e.instance.props.guild.banner && !e.instance.props.guildBanner) {
+					e.instance.props.bannerVisible = true;
+					e.instance.props.guildBanner = e.instance.props.guild.banner;
+				}
 				let oldName = (BDFDB.LibraryStores.GuildStore.getGuild(e.instance.props.guild.id) || {}).name;
 				if (e.returnvalue && this.settings.general.addOriginalTooltip && oldName != e.instance.props.guild.name) {
 					e.returnvalue.props.children[0] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
