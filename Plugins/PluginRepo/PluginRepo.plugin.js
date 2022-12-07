@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.2
+ * @version 2.4.3
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -122,6 +122,7 @@ module.exports = (_ => {
 			}
 			filterPlugins() {
 				let plugins = grabbedPlugins.map(plugin => {
+					if (plugin.failed) return;
 					const installedPlugin = _this.getInstalledPlugin(plugin);
 					const state = installedPlugin ? (plugin.version && _this.compareVersions(plugin.version, _this.getString(installedPlugin.version)) ? pluginStates.OUTDATED : pluginStates.INSTALLED) : pluginStates.DOWNLOADABLE;
 					return Object.assign(plugin, {
@@ -131,7 +132,7 @@ module.exports = (_ => {
 						new: state == pluginStates.DOWNLOADABLE && !cachedPlugins.includes(plugin.id) && 1,
 						state: state
 					});
-				});
+				}).filter(n => n);
 				if (!this.props.updated)		plugins = plugins.filter(plugin => plugin.state != pluginStates.INSTALLED);
 				if (!this.props.outdated)		plugins = plugins.filter(plugin => plugin.state != pluginStates.OUTDATED);
 				if (!this.props.downloadable)	plugins = plugins.filter(plugin => plugin.state != pluginStates.DOWNLOADABLE);
@@ -483,30 +484,28 @@ module.exports = (_ => {
 														this.props.downloading = true;
 														let loadingToast = BDFDB.NotificationUtils.toast(`${BDFDB.LanguageUtils.LibraryStringsFormat("loading", this.props.data.name)} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {timeout: 0, ellipsis: true});
 														let autoloadKey = this.props.data.state == pluginStates.OUTDATED ? "startUpdated" : "startDownloaded";
-														BDFDB.LibraryRequires.request(this.props.data.rawSourceUrl, (error, response, body) => {
-															if (error) {
+														BDFDB.DiscordUtils.requestFileData(this.props.data.rawSourceUrl, {timeout: 10000}, (error, buffer) => {
+															if (error || !buffer) {
 																delete this.props.downloading;
 																loadingToast.close();
 																BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
 															}
-															else {
-																BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.data.rawSourceUrl.split("/").pop()), body, error2 => {
-																	delete this.props.downloading;
-																	loadingToast.close();
-																	if (error2) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
-																	else {
-																		BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_success", `Plugin "${this.props.data.name}"`), {type: "success"});
-																		if (_this.settings.general[autoloadKey]) BDFDB.TimeUtils.timeout(_ => {
-																			if (this.props.data.state == pluginStates.INSTALLED && BDFDB.BDUtils.isPluginEnabled(this.props.data.name) == false) {
-																				BDFDB.BDUtils.enablePlugin(this.props.data.name, false);
-																				BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", this.props.data.name), _this);
-																			}
-																		}, 3000);
-																		this.props.data.state = pluginStates.INSTALLED;
-																		BDFDB.ReactUtils.forceUpdate(this);
-																	}
-																});
-															}
+															else BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), this.props.data.rawSourceUrl.split("/").pop()), Buffer.from(buffer).toString(), error2 => {
+																delete this.props.downloading;
+																loadingToast.close();
+																if (error2) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_fail", `Plugin "${this.props.data.name}"`), {type: "danger"});
+																else {
+																	BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("save_success", `Plugin "${this.props.data.name}"`), {type: "success"});
+																	if (_this.settings.general[autoloadKey]) BDFDB.TimeUtils.timeout(_ => {
+																		if (this.props.data.state == pluginStates.INSTALLED && BDFDB.BDUtils.isPluginEnabled(this.props.data.name) == false) {
+																			BDFDB.BDUtils.enablePlugin(this.props.data.name, false);
+																			BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", this.props.data.name), _this);
+																		}
+																	}, 3000);
+																	this.props.data.state = pluginStates.INSTALLED;
+																	BDFDB.ReactUtils.forceUpdate(this);
+																}
+															});
 														});
 													},
 													onDelete: _ => {
@@ -579,10 +578,10 @@ module.exports = (_ => {
 
 				this.defaults = {
 					general: {
-						notifyOutdated:		{value: true, 	autoload: false,	description: "Get a Notification when one of your Plugins is outdated"},
-						notifyNewEntries:	{value: true, 	autoload: false,	description: "Get a Notification when there are new Entries in the Repo"},
-						startDownloaded:	{value: false, 	autoload: true,		description: "Start new Plugins after Download"},
-						startUpdated:		{value: false, 	autoload: true,		description: "Start updated Plugins after Download"}
+						notifyOutdated:		{value: true, 	autoload: false,	description: "Shows a Notification when one of your Plugins is outdated"},
+						notifyNewEntries:	{value: true, 	autoload: false,	description: "Shows a Notification when there are new Entries in the Repo"},
+						startDownloaded:	{value: false, 	autoload: true,		description: "Starts new Plugins after Download"},
+						startUpdated:		{value: false, 	autoload: true,		description: "Starts updated Plugins after Download"}
 					},
 					filters: {
 						updated: 			{value: true,	description: "Updated"},
@@ -755,19 +754,23 @@ module.exports = (_ => {
 						delete plugin.release_date;
 						delete plugin.latest_source_url;
 						delete plugin.thumbnail_url;
-						BDFDB.LibraryRequires.request(plugin.rawSourceUrl, (error, response, body) => {
-							if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
-								const META = body.split("*/")[0];
-								plugin.name = BDFDB.StringUtils.upperCaseFirstChar((/@name\s+([^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || plugin.name || "");
-								plugin.authorname = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || plugin.author.display_name || plugin.author;
-								const version = (/@version\s+(.+)|\/\/\**META.*["']version["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1];
-								if (version) {
-									plugin.version = version;
-									const installedPlugin = this.getInstalledPlugin(plugin);
-									if (installedPlugin && this.compareVersions(version, this.getString(installedPlugin.version))) outdatedEntries++;
+						BDFDB.DiscordUtils.requestFileData(plugin.rawSourceUrl, {timeout: 10000}, (error, buffer) => {
+							if (error || !buffer) plugin.failed = true;
+							else {
+								let body = Buffer.from(buffer).toString();
+								if (body && body.indexOf("404: Not Found") != 0) {
+									const META = body.split("*/")[0];
+									plugin.name = BDFDB.StringUtils.upperCaseFirstChar((/@name\s+([^\t^\r^\n]+)|\/\/\**META.*["']name["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || plugin.name || "");
+									plugin.authorname = (/@author\s+(.+)|\/\/\**META.*["']author["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1] || plugin.author.display_name || plugin.author;
+									const version = (/@version\s+(.+)|\/\/\**META.*["']version["']\s*:\s*["'](.+?)["']/i.exec(META) || []).filter(n => n)[1];
+									if (version) {
+										plugin.version = version;
+										const installedPlugin = this.getInstalledPlugin(plugin);
+										if (installedPlugin && this.compareVersions(version, this.getString(installedPlugin.version))) outdatedEntries++;
+									}
 								}
+								if (!cachedPlugins.includes(plugin.id)) newEntries++;
 							}
-							if (!cachedPlugins.includes(plugin.id)) newEntries++;
 							
 							plugin.loaded = true;
 							
