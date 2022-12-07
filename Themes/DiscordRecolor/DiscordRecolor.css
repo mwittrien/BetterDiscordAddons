@@ -1101,7 +1101,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 #app-mount .background-fkKrXt,
 #app-mount .container-3wLKDe {
-	background: var(--background-primary);
+	background-color: var(--background-primary);
 }
 #app-mount .background-fkKrXt .container-2Hi7Km,
 #app-mount .background-fkKrXt .container-xwOzwi,
@@ -1112,7 +1112,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .background-fkKrXt .interactiveCard-2iMtdk,
 #app-mount .container-3wLKDe .mainCard-3KBsBI,
 #app-mount .container-3wLKDe .sidebarCard-1Gn1ch {
-	background: var(--background-secondary);
+	background-color: var(--background-secondary);
 }
 @media (max-width: 1300px) {
 	.container-xwOzwi,
