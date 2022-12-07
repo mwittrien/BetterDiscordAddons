@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.7
+ * @version 1.1.8
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -86,8 +86,6 @@ module.exports = (_ => {
 			onLoad () {
 				_this = this;
 				
-				sounds = [(BDFDB.ModuleUtils.findByString("undeafen", "deafen", "robot_man", "mute", {defaultExport: false}) || {exports: {keys: (_ => [])}}).exports.keys()].flat(10).filter(n => n).map(s => s.replace("./", "").split(".")[0]).sort();
-				
 				this.defaults = {
 					general: {
 						showButton:			{value: true,					description: "Show Quick Toggle Button"},
@@ -119,6 +117,8 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
+				sounds = [BDFDB.LibraryModules.SoundParser && BDFDB.LibraryModules.SoundParser.keys()].flat(10).filter(n => n).map(s => s.replace("./", "").split(".")[0]).sort();
+				
 				let cachedState = BDFDB.DataUtils.load(this, "cachedState");
 				let state = BDFDB.DiscordUtils.getSetting("status", "showCurrentGame");
 				if (!cachedState.date || (new Date() - cachedState.date) > 1000*60*60*24*3) {
@@ -238,6 +238,7 @@ module.exports = (_ => {
 			}
 			
 			activateKeybind () {
+				console.log(keybind);
 				if (keybind && keybind.length) BDFDB.ListenerUtils.addGlobal(this, "GAMEACTIVITY_TOGGLE", keybind, _ => this.toggle());
 				else BDFDB.ListenerUtils.removeGlobal(this, "GAMEACTIVITY_TOGGLE");
 			}

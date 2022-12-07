@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.7
+ * @version 1.4.8
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -96,9 +96,6 @@ module.exports = (_ => {
 					after: [
 						"PeopleList",
 						"PeopleListItem",
-						"PeopleListItemBlocked",
-						"PeopleListItemFriend",
-						"PeopleListItemPending",
 						"PeopleListSectionedLazy",
 						"PeopleListSectionedNonLazy",
 						"TabBar"
@@ -373,18 +370,6 @@ module.exports = (_ => {
 				});
 			}
 			
-			processPeopleListItemFriend (e) {
-				e.returnvalue.props.mutualGuilds = e.instance.props.mutualGuilds;
-			}
-			
-			processPeopleListItemPending (e) {
-				this.processPeopleListItemFriend(e);
-			}
-			
-			processPeopleListItemBlocked (e) {
-				this.processPeopleListItemFriend(e);
-			}
-			
 			processPeopleListItem (e) {
 				if (e.node) {
 					BDFDB.TimeUtils.clear(rerenderTimeout);
@@ -392,28 +377,25 @@ module.exports = (_ => {
 				}
 				else {
 					if (e.instance.props.user.id == placeHolderId) return null;
-					else if (this.settings.general.addMutualGuild && e.instance.props.mutualGuilds && e.instance.props.mutualGuilds.length) {
-						if (typeof e.returnvalue.props.children == "function") {
+					else if (this.settings.general.addMutualGuild) {
+						let mutualGuilds = BDFDB.ArrayUtils.removeCopies([].concat(BDFDB.LibraryStores.GuildMemberStore.memberOf(e.instance.props.user.id), (BDFDB.LibraryStores.UserProfileStore.getMutualGuilds(e.instance.props.user.id) || []).map(n => n && n.guild && n.guild.id)).flat()).filter(n => n);
+						if (mutualGuilds && mutualGuilds.length) {
+							let guildsIds = BDFDB.LibraryModules.SortedGuildUtils.getFlattenedGuildIds();
 							let childrenRender = e.returnvalue.props.children;
 							e.returnvalue.props.children = BDFDB.TimeUtils.suppress((...args) => {
-								let children = childrenRender(...args);
-								this.injectMutualGuilds(children, e.instance.props.mutualGuilds);
-								return children;
+								let returnValue = childrenRender(...args);
+								let [children, index] = BDFDB.ReactUtils.findParent(returnValue, {filter: n => n && n.props && n.props.subText && n.props.user});
+								if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildSummaryItem, {
+									className: BDFDB.disCN._betterfriendlistmutualguilds,
+									guilds: mutualGuilds.sort((x, y) => guildsIds.indexOf(x) < guildsIds.indexOf(y) ? -1 : 1).map(BDFDB.LibraryStores.GuildStore.getGuild),
+									showTooltip: true,
+									max: 10
+								}, true));
+								return returnValue;
 							}, "", this);
 						}
-						else this.injectMutualGuilds(e.returnvalue, e.instance.props.mutualGuilds);
 					}
 				}
-			}
-			
-			injectMutualGuilds (returnvalue, mutualGuilds) {
-				let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {filter: n => n && n.props && n.props.subText && n.props.user});
-				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildSummaryItem, {
-					className: BDFDB.disCN._betterfriendlistmutualguilds,
-					guilds: mutualGuilds,
-					showTooltip: true,
-					max: 10
-				}, true));
 			}
 			
 			createBadge (amount, text, red) {
