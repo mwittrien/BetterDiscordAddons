@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.4.9
+ * @version 4.5.0
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -765,7 +765,7 @@ module.exports = (_ => {
 				if (!channel) return new BDFDB.DiscordObjects.Channel({});
 				let data = change && changedChannels[channel.id];
 				if (data) {
-					let nativeObject = new BDFDB.DiscordObjects.Channel(channel);
+					let nativeObject = new (fallbackData && fallbackData.constructor || BDFDB.DiscordObjects.Channel)(channel);
 					nativeObject.name = data.name || nativeObject.name;
 					return nativeObject;
 				}
