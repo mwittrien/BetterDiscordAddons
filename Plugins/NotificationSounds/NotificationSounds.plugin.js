@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.7.5
+ * @version 3.7.6
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -85,9 +85,9 @@ module.exports = (_ => {
 		
 		const WebAudioSound = class WebAudioSound {
 			constructor (type) {
-				this._name = type;
+				this.name = type;
 				this._src = audios[choices[type].category][choices[type].sound] || types[type].src;
-				this._volume = choices[type].volume;
+				this._volume = choices[type].volume / 100;
 			}
 			loop () {
 				this._ensureAudio().then(audio => {
@@ -133,7 +133,7 @@ module.exports = (_ => {
 					let audio = new Audio;
 					audio.src = this._src && this._src.startsWith("data") ? this._src.replace(/ /g, "") : this._src;
 					audio.onloadeddata = _ => {
-						audio.volume = Math.min((BDFDB.LibraryStores.MediaEngineStore.getOutputVolume() / 100) * (this._volume / 100) * (volumes.globalVolume / 100), 1);
+						audio.volume = Math.min((BDFDB.LibraryStores.MediaEngineStore.getOutputVolume() / 100) * this._volume * (volumes.globalVolume / 100), 1);
 						BDFDB.DiscordUtils.isPlaformEmbedded() && audio.setSinkId(currentDevice || defaultDevice);
 						callback(audio);
 					};
@@ -280,34 +280,46 @@ module.exports = (_ => {
 					let soundObjIndex = Array.from(e.methodArguments).findIndex(n => n && n.sound);
 					if (soundObjIndex && e.methodArguments[soundObjIndex].sound.includes("message")) e.methodArguments[soundObjIndex].sound = null;
 				}});
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
-					let type = e.methodArguments[0];
-					if (type && choices[type]) {
-						e.stopOriginalMethodCall();
-						BDFDB.TimeUtils.timeout(_ => {
-							if (type == "message1") {
-								let called = false;
-								for (let subType of [type].concat(Object.keys(message1Types))) if (firedEvents[subType]) {
-									delete firedEvents[subType];
-									called = true;
-									break;
+				if (BDFDB.LibraryModules.SoundUtils && BDFDB.LibraryModules.SoundUtils.createSound) {
+					let cancel = BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "createSound", {after: e => {
+						if (e.returnValue && e.returnValue.constructor && e.returnValue.constructor.prototype && typeof e.returnValue.constructor.prototype.play == "function") {
+							cancel();
+							BDFDB.PatchUtils.patch(this, e.returnValue.constructor.prototype, ["play", "loop"], {instead: e2 => {
+								let type = e2.instance && e2.instance.name;
+								if (type && choices[type]) {
+									let loop = e2.originalMethodName == "loop";
+									e2.stopOriginalMethodCall();
+									BDFDB.TimeUtils.timeout(_ => {
+										if (type == "message1") {
+											let called = false;
+											for (let subType of [type].concat(Object.keys(message1Types))) if (firedEvents[subType]) {
+												delete firedEvents[subType];
+												called = true;
+												break;
+											}
+											if (!called) this.playAudio(type, loop);
+										}
+										else this.playAudio(type, loop);
+									});
 								}
-								if (!called) this.playAudio(type);
-							}
-							else this.playAudio(type);
-						});
-					}
-					else e.callOriginalMethodAfterwards();
-				}});
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, ["createSound", "createSoundpackSound"], {after: e => {
-					let type = e.methodArguments[0];
-					if (type && choices[type]) {
-						let audio = new WebAudioSound(type);
-						createdAudios[type] = audio;
-						return audio;
-					}
-					else BDFDB.LogUtils.warn(`Could not create Sound for "${type}".`, this);
-				}});
+								else e2.callOriginalMethodAfterwards();
+							}});
+							BDFDB.PatchUtils.patch(this, e.returnValue.constructor.prototype, "stop", {after: e2 => {
+								let type = e2.instance && e2.instance.name;
+								if (type && createdAudios[type]) createdAudios[type].stop();
+							}});
+						}
+						return;
+						let type = e.methodArguments[0];
+						if (type && choices[type]) {
+							let audio = new WebAudioSound(type);
+							createdAudios[type] = audio;
+							return audio;
+						}
+						else BDFDB.LogUtils.warn(`Could not create Sound for "${type}".`, this);
+					}}, {noCache: true});
+					BDFDB.LibraryModules.SoundUtils.createSound("call_calling");
+				}
 
 				this.loadAudios();
 				this.loadChoices();
@@ -661,7 +673,7 @@ module.exports = (_ => {
 		
 			forceUpdateAll () {
 				volumes = BDFDB.DataUtils.get(this, "volumes");
-				if (BDFDB.LibraryStores.SoundpackStore) BDFDB.LibraryStores.SoundpackStore.emitChange();
+				
 				BDFDB.PatchUtils.forceAllUpdates(this);
 				BDFDB.DiscordUtils.rerenderAll();
 			}
@@ -700,11 +712,11 @@ module.exports = (_ => {
 				}
 			}
 
-			playAudio (type) {
+			playAudio (type, loop = false) {
 				if (this.dontPlayAudio(type) || BDFDB.LibraryStores.StreamerModeStore.disableSounds) return;
 				if (createdAudios[type]) createdAudios[type].stop();
 				createdAudios[type] = new WebAudioSound(type);
-				createdAudios[type].play();
+				createdAudios[type][loop ? "loop" : "play"]();
 			}
 			
 			isSuppressMentionsEnabled (guildId, channelId) {
