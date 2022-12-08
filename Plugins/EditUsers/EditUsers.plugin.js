@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.7.2
+ * @version 4.7.3
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -778,11 +778,6 @@ module.exports = (_ => {
 					if (color1) message.colorString = color1;
 					e.instance.props.message = message;
 				}
-				let [children, index] = BDFDB.ReactUtils.findParent(e.instance.props.username, {filter: n => n && n.props && typeof n.props.renderPopout == "function"});
-				if (index > -1) this.injectBadge(children, author.id, (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.compact ? index : (index + 1), {
-					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
-					useRem: true
-				});
 			}
 			
 			processMessageUsername (e) {
@@ -791,13 +786,19 @@ module.exports = (_ => {
 				let data = changedUsers[author.id];
 				if (!data) return;
 				let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {filter: n => n && n.props && typeof n.props.renderPopout == "function"});
-				if (!userName) return;
-				let renderChildren = userName.props.children;
-				userName.props.children = BDFDB.TimeUtils.suppress((...args) => {
-					const returnValue = renderChildren(...args);
-					this.changeUserColor(returnValue, author.id, {guildId: (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
-					return returnValue;
-				}, "Error in Children Render of MessageUsername!", this);
+				if (userName) {
+					let renderChildren = userName.props.children;
+					userName.props.children = BDFDB.TimeUtils.suppress((...args) => {
+						const returnValue = renderChildren(...args);
+						this.changeUserColor(returnValue, author.id, {guildId: (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id});
+						return returnValue;
+					}, "Error in Children Render of MessageUsername!", this);
+				}
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => n && n.props && typeof n.props.renderPopout == "function"});
+				if (index > -1) this.injectBadge(children, author.id, (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, e.instance.props.compact ? index : (index + 1), {
+					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
+					useRem: true
+				});
 			}
 			
 			processMessageContent (e) {
@@ -1213,7 +1214,8 @@ module.exports = (_ => {
 				if (!BDFDB.ReactUtils.isValidElement(child)) return;
 				let data = changedUsers[userId] || {};
 				if (data.color1) {
-					let childProp = child.props.children ? "children" : "text";
+					let childProp = child.props.children ? "children" : child.props.name ? "name" : "text";
+					if (!child.props[childProp]) return;
 					let color1 = data.color1 && data.useRoleColor && options.guildId && (BDFDB.LibraryStores.GuildMemberStore.getMember(options.guildId, userId) || {}).colorString || data.color1;
 					let fontColor = options.modify && !(data.useRoleColor && options.guildId) ? this.chooseColor(color1, options.modify) : color1;
 					let fontGradient = BDFDB.ObjectUtils.is(fontColor);
