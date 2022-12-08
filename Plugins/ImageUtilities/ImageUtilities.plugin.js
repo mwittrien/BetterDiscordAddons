@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.0.1
+ * @version 5.0.2
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1446,31 +1446,37 @@ module.exports = (_ => {
 			
 			downloadFile (url, path, fallbackUrl, alternativeName) {
 				url = url.startsWith("/assets") ? (window.location.origin + url) : url;
-				BDFDB.LibraryModules.FileRequestUtils.getFileData(url).then(body => {
-					let extension = this.getFileExtension(new Uint8Array(body));
-					if (!extension) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", path), {type: "danger"});
+				BDFDB.DiscordUtils.requestFileData(url, {timeout: 3000}, (error, buffer) => {
+					if (error || !buffer) this.downloadFile(fallbackUrl, path, null, alternativeName);
 					else {
-						let type = fileTypes[extension].video ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
-						BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, (alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35), extension, 0), Buffer.from(body), error => {
-							if (error) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", path), {type: "danger"});
-							else BDFDB.NotificationUtils.toast(this.labels.toast_save_success.replace("{{var0}}", type).replace("{{var1}}", path), {type: "success"});
-						});
+						let extension = this.getFileExtension(new Uint8Array(buffer));
+						if (!extension) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", path), {type: "danger"});
+						else {
+							let type = fileTypes[extension].video ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
+							BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, (alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35), extension, 0), Buffer.from(buffer), error => {
+								if (error) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", path), {type: "danger"});
+								else BDFDB.NotificationUtils.toast(this.labels.toast_save_success.replace("{{var0}}", type).replace("{{var1}}", path), {type: "success"});
+							});
+						}
 					}
 				});
 			}
 			
 			downloadFileAs (url, fallbackUrl, alternativeName) {
 				url = url.startsWith("/assets") ? (window.location.origin + url) : url;
-				BDFDB.LibraryModules.FileRequestUtils.getFileData(url).then(body => {
-					let extension = this.getFileExtension(new Uint8Array(body));
-					if (!extension) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", "PC"), {type: "danger"});
+				BDFDB.DiscordUtils.requestFileData(url, {timeout: 3000}, (error, buffer) => {
+					if (error || !buffer) this.downloadFileAs(fallbackUrl, null, alternativeName);
 					else {
-						let hrefURL = window.URL.createObjectURL(new Blob([body], {type: this.getMimeType(extension)}));
-						let tempLink = document.createElement("a");
-						tempLink.href = hrefURL;
-						tempLink.download = `${(alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35)}.${extension}`;
-						tempLink.click();
-						window.URL.revokeObjectURL(hrefURL);
+						let extension = this.getFileExtension(new Uint8Array(buffer));
+						if (!extension) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", "PC"), {type: "danger"});
+						else {
+							let hrefURL = window.URL.createObjectURL(new Blob([buffer], {type: this.getMimeType(extension)}));
+							let tempLink = document.createElement("a");
+							tempLink.href = hrefURL;
+							tempLink.download = `${(alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35)}.${extension}`;
+							tempLink.click();
+							window.URL.revokeObjectURL(hrefURL);
+						}
 					}
 				});
 			}
