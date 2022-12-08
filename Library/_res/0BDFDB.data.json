@@ -182,8 +182,7 @@
 		}},
 		"RTCConnectionUtils": {"props": ["getChannelId", "getGuildId", "getRTCConnectionId"]},
 		"SearchPageUtils": {"strings": ["searchId", "sort_by", "sort_order"], "exported": false, "value": "exports", "map": {
-			"searchNextPage": ["(e,t)}"],
-			"searchPreviousPage": ["(e,-t)}"]
+			"changePage": ["*"]
 		}},
 		"SettingsUtils": {"strings": ["ON_FOR_LARGE_GUILDS", "updateSetting", "useSetting"], "exported": false, "value": "exports"},
 		"SimpleMarkdownComponents": {"strings": ["customEmoji", "emojiTooltipPosition", "timestampTooltip"]},
@@ -410,9 +409,9 @@
 		"FolderItem": {"strings": [".folderNode", "expandedFolderBackground", "onExpandCollapse"]},
 		"FolderItemWrapper": {"strings": [".folderNode", "getActiveStreamForUser", "currentActiveVoiceType"]},
 		"FolderSettingsModal": {"strings": [".handleNameChange=", ".handleSubmit", "folderName:"]},
+		"GuildBans": {"strings": [".Messages.BANS_NO_USERS_BANNED", ".Messages.BANS_SEARCH_PLACEHOLDER", ".getSortedBans"]},
 		"GuildChannelListContextMenu": {"strings": ["GUILD_ACTIONS_MENU_LABEL", "\"guild-context\",\"aria-label\""]},
 		"GuildContextMenu": {"strings": ["GUILD_ACTIONS_MENU_LABEL", "navId:\"guild", "GuildContextMenu"]},
-		"GuildBans": {"strings": [".Messages.BANS_NO_USERS_BANNED", ".Messages.BANS_SEARCH_PLACEHOLDER", ".getSortedBans"]},
 		"GuildEmojis": {"strings": ["getMaxEmojiSlots", "lightSrc:", ".Messages.NO_EMOJI"]},
 		"GuildFavorites": {"strings": [".favoriteIcon", "FAVORITES_GUILD_NAME"]},
 		"GuildHeader": {"strings": [".bannerVisible", ".disableBannerAnimation", "onContextMenu"]},
@@ -500,6 +499,7 @@
 		"SearchPopoutOption": {"strings": [".plusIcon", ".option,", ".filter"]},
 		"SearchResult": {"strings": [".onJump", "message:", "handleMessageClick"]},
 		"SearchResults": {"strings": ["SEARCH_ERROR", "emptyResultsText", "isSearching"]},
+		"SearchResultsHeader": {"strings": [".Messages.SEARCH_OLDEST_SHOR", ".Messages.SEARCH_MOST_RELEVANT_SHORT", ".searchByMode"]},
 		"SearchResultsInner": {"strings": ["SEARCH_HIDE_BLOCKED_MESSAGES", "totalResults", "\"search-result-\""]},
 		"SearchResultsPagination": {"strings": [".pageLength", ".changePage", "maxVisiblePages"]},
 		"SettingsView": {"strings": ["tabBarItemContainer", "PROFILE_CUSTOMIZATION", "badgeCount"]},
@@ -829,6 +829,8 @@
 	"CustomClassModules": {
 		"BDFDB": {
 			"BDFDBundefined": "BDFDB_undefined",
+			"accountDetailsButtonDisabled": "disabled-GROwTe",
+			"accountDetailsButtonEnabled": "enabled-9OeuTA",
 			"avatarDisabled": "disabled-6G33EE",
 			"badge": "badge-7R_W3s",
 			"badgeAvatar": "avatar-hF52Er",
@@ -1298,6 +1300,7 @@
 		},
 		"NotFound": {
 			"_": "",
+			"accountDetailsButton": "button-12Fmur",
 			"emoji": "emoji",
 			"highlight": "highlight",
 			"hoverCardButton": "button-1yVL_7",
@@ -1832,9 +1835,9 @@
 		"accountinfo": ["AccountDetails", "container"],
 		"accountinfoavatar": ["AccountDetails", "avatar"],
 		"accountinfoavatarwrapper": ["AccountDetails", "avatarWrapper"],
-		"accountinfobutton": ["AccountDetailsButtons", "button"],
-		"accountinfobuttondisabled": ["AccountDetailsButtons", "disabled"],
-		"accountinfobuttonenabled": ["AccountDetailsButtons", "enabled"],
+		"accountinfobutton": ["NotFound", "accountDetailsButton"],
+		"accountinfobuttondisabled": ["BDFDB", "accountDetailsButtonDisabled"],
+		"accountinfobuttonenabled": ["BDFDB", "accountDetailsButtonEnabled"],
 		"accountinfobuttonstrikethrough": ["AccountDetails", "strikethrough"],
 		"accountinfodetails": ["AccountDetails", "usernameContainer"],
 		"accountinfonametag": ["AccountDetails", "nameTag"],

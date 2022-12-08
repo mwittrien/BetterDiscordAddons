@@ -109,6 +109,10 @@ img:not([src]), img[src=""], img[src="null"] {
 	margin: 1px;
 }
 
+[REPLACE_CLASS_accountinfobutton][REPLACE_CLASS_accountinfobuttondisabled] {
+	opacity: .4;
+}
+
 [REPLACE_CLASS_marginleft4] {
 	margin-left: 4px;
 }
