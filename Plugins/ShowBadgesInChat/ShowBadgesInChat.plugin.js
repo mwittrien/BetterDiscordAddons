@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.4
+ * @version 1.9.5
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -75,11 +75,9 @@ module.exports = (_ => {
 				specialFlag = BDFDB.NumberUtils.generateId() + "SPECIALFLAG";
 				
 				this.modulePatches = {
-					before: [
-						"MessageHeader"
-					],
 					after: [
 						"MemberListItem",
+						"MessageUsername",
 						"PrivateChannel",
 						"UserBadges"
 					]
@@ -92,6 +90,9 @@ module.exports = (_ => {
 				}
 				
 				this.css = `
+					${BDFDB.dotCN.messageheadertext} {
+						display: inline-flex !important;
+					}
 					${BDFDB.dotCN._showbadgesinchatbadges} {
 						display: inline-flex !important;
 						justify-content: center;
@@ -124,10 +125,6 @@ module.exports = (_ => {
 						display: block;
 						position: static;
 						margin: 0;
-					}
-					${BDFDB.dotCN._showbadgesinchatbadgeschat} {
-						position: relative;
-						top: 4px;
 					}
 					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN._showbadgesinchatbadgeschat} {
 						top: 0;
@@ -307,9 +304,9 @@ module.exports = (_ => {
 				BDFDB.MessageUtils.rerenderAll();
 			}
 
-			processMessageHeader (e) {
+			processMessageUsername (e) {
 				if (!e.instance.props.message) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.instance.props.username, {filter: n => n && n.props && typeof n.props.renderPopout == "function"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => n && n.props && typeof n.props.renderPopout == "function"});
 				if (index == -1) return;
 				const author = e.instance.props.userOverride || e.instance.props.message.author;
 				this.injectBadges(children, author, (BDFDB.LibraryStores.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, "chat");

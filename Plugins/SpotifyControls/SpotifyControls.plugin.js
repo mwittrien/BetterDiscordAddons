@@ -355,7 +355,7 @@ module.exports = (_ => {
 					children: _this.defaults.buttons[this.props.type] && _this.defaults.buttons[this.props.type].icons ? (_this.defaults.buttons[this.props.type].icons[this.props.icon] || _this.defaults.buttons[this.props.type].icons[0]) : "?",
 					onClick: this.props.disabled ? _ => {} : this.props.onClick,
 					onContextMenu: this.props.disabled ? _ => {} : this.props.onContextMenu,
-				}), "active", "disabled", "renderPopout", "icon", "type"));
+				}), "active", "disabled", "renderPopout", "icon", "type", "player"));
 				return !this.props.disabled && typeof this.props.renderPopout == "function" ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
 					children: button,
 					animation: BDFDB.LibraryComponents.PopoutContainer.Animation.SCALE,
