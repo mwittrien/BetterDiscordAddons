@@ -14,15 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		added: {
-			"Gallery Filter": "You can now filter the Gallery by File Type"
-		},
-		fixed: {
-			"JPG Images": "Can now be downloaded again",
-			"Zoom With native Gallery Mode": "Zooming in an Image no longer will close the Image if you are using Discords native Gallery Mode",
-			"Download As Location": "Now properly remembers the last selected Location",
-			"Download Issues": "All Image Download Issues that occured for some people in eastern countries should be fixed now"
-		}
+		
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
