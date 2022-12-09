@@ -692,6 +692,9 @@
 
 /* ~~~~		4.		PEOPLES							~~~~ */
 
+.snowsgivingIcon-3d0pr1 path {
+	fill: rgb(var(--accentcolor));
+}
 .container-2rNpDV {											/* stagelive			cover								*/
 	background: rgb(255, 255, 255) linear-gradient(rgba(var(--accentcolor),.8) 75%, rgb(var(--accentcolor)) 75%, rgb(var(--accentcolor)));
 }

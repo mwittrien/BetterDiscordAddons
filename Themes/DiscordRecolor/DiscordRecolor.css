@@ -1042,9 +1042,13 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 
 .selected-3veCBZ,
 .selected-3veCBZ:focus-within,
-.selected-3veCBZ:hover {
+.selected-3veCBZ:hover,
+.snowsgivingLink-1TZi3c:hover {
 	background-color: var(--background-modifier-hover);
 	color: var(--header-primary);
+}
+.snowsgivingLink-1TZi3c {
+    border-radius: 4px;
 }
 
 /* ----		2.4.	ACCOUNT/VOICE/GOLIVE			---- */

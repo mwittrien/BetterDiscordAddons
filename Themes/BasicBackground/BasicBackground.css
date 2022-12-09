@@ -717,18 +717,29 @@ body::after {
 /* ----		5.3.	DMCHANNELS						---- */
 
 .interactive-1vLZ_I:focus-within,							/* dmchannel/page		inner							*/
-.interactive-1vLZ_I:hover {
+.interactive-1vLZ_I:hover,
+.snowsgivingLink-1TZi3c:hover {
 	background-color: rgba(var(--transparencycolor), .2);
 }
 .selected-3veCBZ,
 .selected-3veCBZ:focus-within,
-.selected-3veCBZ:hover {
+.selected-3veCBZ:hover,
+.snowsgivingLink-1TZi3c:active {
 	background-color: rgb(var(--accentcolor));
 	color: var(--header-primary);
 	text-shadow: 1px 1px var(--textshadow);
 }
+.snowsgivingLink-1TZi3c {
+    border-radius: 4px;
+}
 .selected-3veCBZ svg:not(.svg-2azL_l) {
 	filter: drop-shadow(1px 1px var(--textshadow));
+}
+.snowsgivingLink-1TZi3c:active .snowsgivingIcon-3d0pr1 {
+	filter: drop-shadow(1px 1px var(--textshadow));
+}
+.snowsgivingLink-1TZi3c:active .snowsgivingIcon-3d0pr1 path {
+	fill: var(--header-primary);
 }
 
 .empty-yQo7LQ {												/* loadingplaceholders										*/
