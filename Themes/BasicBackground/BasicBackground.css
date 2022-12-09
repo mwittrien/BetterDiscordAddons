@@ -1073,7 +1073,7 @@ body::after {
 #app-mount .repliedMessage-3Z6XBG ~ * .avatar-2e8lTP {
 	top: 24px;
 }
-#app-mount .container-3FojY8 .avatar-2e8lTP{
+#app-mount .container-3FojY8 .avatar-2e8lTP {
 	left: calc(-10px * var(--usechatbubbles));
 }
 #app-mount .avatarDecoration-34OC0G {						/* message				avatar decoration					*/
