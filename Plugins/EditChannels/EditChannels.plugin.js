@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.0
+ * @version 4.5.1
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -479,7 +479,7 @@ module.exports = (_ => {
 				let getCategoryFromSection = e.instance.props.guildChannels.getCategoryFromSection.bind(e.instance.props.guildChannels);
 				e.instance.props.guildChannels.getCategoryFromSection = BDFDB.TimeUtils.suppress((...args) => {
 					let returnValue = getCategoryFromSection(...args);
-					if (returnValue && returnValue.record) returnValue.record = this.getChannelData(returnValue.record.id);
+					if (returnValue && returnValue.record) returnValue.record = this.getChannelData(returnValue.record.id, true, returnValue.record);
 					return returnValue;
 				}, "Error in getCategoryFromSection of ChannelsList!", this);
 				let getChannelFromSectionRow = e.instance.props.guildChannels.getChannelFromSectionRow.bind(e.instance.props.guildChannels);
@@ -487,8 +487,8 @@ module.exports = (_ => {
 					let returnValue = getChannelFromSectionRow(...args);
 					if (returnValue) {
 						returnValue = Object.assign({}, returnValue);
-						if (returnValue.channel && returnValue.channel.record) returnValue.channel.record = this.getChannelData(returnValue.channel.record.id);
-						if (returnValue.category && returnValue.category.record) returnValue.category.record = this.getChannelData(returnValue.category.record.id);
+						if (returnValue.channel && returnValue.channel.record) returnValue.channel.record = this.getChannelData(returnValue.channel.record.id, true, returnValue.channel.record);
+						if (returnValue.category && returnValue.category.record) returnValue.category.record = this.getChannelData(returnValue.category.record.id, true, returnValue.category.record);
 					}
 					return returnValue;
 				}, "Error in getChannelFromSectionRow of ChannelsList!", this);
@@ -769,7 +769,7 @@ module.exports = (_ => {
 					nativeObject.name = data.name || nativeObject.name;
 					return nativeObject;
 				}
-				return new BDFDB.DiscordObjects.Channel(channel);
+				return fallbackData || (new BDFDB.DiscordObjects.Channel(channel));
 			}
 			
 			getGroupName (channelId) {
