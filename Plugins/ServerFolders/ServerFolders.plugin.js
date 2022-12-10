@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.1.0
+ * @version 7.1.1
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -770,7 +770,7 @@ module.exports = (_ => {
 				
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
 				if (index > -1) {
-					if (parseInt(data.iconID) == -1 && data.useCloseIcon && !e.instance.props.expanded) children[index] = BDFDB.ReactUtils.createElement("div", {
+					if (parseInt(data.iconID) == -1 && data.useClosedIcon && !e.instance.props.expanded) children[index] = BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.guildfoldericonwrapper,
 						children: BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.guildfoldericonwrapperexpanded,
@@ -780,7 +780,7 @@ module.exports = (_ => {
 							})
 						})
 					});
-					else if (e.instance.props.expanded || data.useCloseIcon) {
+					else if (e.instance.props.expanded || data.useClosedIcon) {
 						let folderIcons = this.loadAllIcons(), iconType = e.instance.props.expanded ? "openicon" : "closedicon";
 						let icon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? this.createBase64SVG(folderIcons[data.iconID][iconType], data.color1, data.color2) : folderIcons[data.iconID][iconType]) : null;
 						if (icon) children[index] = BDFDB.ReactUtils.createElement("div", {
@@ -922,7 +922,7 @@ module.exports = (_ => {
 										value: folder.folderName,
 										placeholder: folder.folderName || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER,
 										autoFocus: true,
-										onChange: value => {newData.folderName = value;}
+										onChange: value => newData.folderName = value
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -930,16 +930,16 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(FolderIconPickerComponent, {
 										selectedIcon: data.iconID,
-										onSelect: value => {newData.iconID = value;}
+										onSelect: value => newData.iconID = value
 									}, true)
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 									type: "Switch",
 									margin: 20,
-									label: this.labels.modal_usecloseicon,
+									label: this.labels.modal_useclosedicon,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
-									value: data.useCloseIcon,
-									onChange: value => {newData.useCloseIcon = value;}
+									value: data.useClosedIcon,
+									onChange: value => newData.useClosedIcon = value
 								})
 							]
 						}),
@@ -953,7 +953,7 @@ module.exports = (_ => {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color1,
 										defaultFallback: !data.color1 && !data.swapColors,
-										onColorChange: value => {newData.color1 = value;}
+										onColorChange: value => newData.color1 = value
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -962,7 +962,7 @@ module.exports = (_ => {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color2,
 										defaultFallback: !data.color2 && data.swapColors,
-										onColorChange: value => {newData.color2 = value;}
+										onColorChange: value => newData.color2 = value
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -971,7 +971,7 @@ module.exports = (_ => {
 									label: this.labels.modal_swapcolor,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 									value: data.swapColors,
-									onChange: value => {newData.swapColors = value;}
+									onChange: value => newData.swapColors = value
 								})
 							]
 						}),
@@ -984,7 +984,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color3,
-										onColorChange: value => {newData.color3 = value;}
+										onColorChange: value => newData.color3 = value
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -992,7 +992,7 @@ module.exports = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 										color: data.color4,
-										onColorChange: value => {newData.color4 = value;}
+										onColorChange: value => newData.color4 = value
 									})
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -1001,7 +1001,7 @@ module.exports = (_ => {
 									label: this.labels.modal_copytooltipcolor,
 									tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 									value: data.copyTooltipColor,
-									onChange: value => {newData.copyTooltipColor = value;}
+									onChange: value => newData.copyTooltipColor = value
 								})
 							]
 						}),
@@ -1074,7 +1074,7 @@ module.exports = (_ => {
 					iconID: 			"-1",
 					muteFolder: 		false,
 					autoRead: 			false,
-					useCloseIcon: 		true,
+					useClosedIcon: 		false,
 					swapColors: 		false,
 					copyTooltipColor: 	false,
 					color1: 			null,
@@ -1271,7 +1271,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Цвят на папката",
 							modal_tabheader3:					"Цвят на подсказка",
 							modal_tabheader4:					"Собствени символи",
-							modal_usecloseicon:					"Използвайте затворена икона вместо минисервъра",
+							modal_useclosedicon:					"Използвайте затворена икона вместо минисервъра",
 							servercontext_serverfolders:		"Папка на сървъра",
 							serversubmenu_addtofolder:			"Добавете сървъра към папката",
 							serversubmenu_createfolder:			"Създай папка",
@@ -1297,7 +1297,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Barva složky",
 							modal_tabheader3:					"Barva popisku",
 							modal_tabheader4:					"Vlastní ikony",
-							modal_usecloseicon:					"Místo miniserverů použijte uzavřenou ikonu",
+							modal_useclosedicon:					"Místo miniserverů použijte uzavřenou ikonu",
 							servercontext_serverfolders:		"Složka serveru",
 							serversubmenu_addtofolder:			"Přidejte server do složky",
 							serversubmenu_createfolder:			"Vytvořit složku",
@@ -1323,7 +1323,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Mappefarve",
 							modal_tabheader3:					"Værktøjstipfarve",
 							modal_tabheader4:					"Egne symboler",
-							modal_usecloseicon:					"Brug et lukket ikon i stedet for miniserver",
+							modal_useclosedicon:					"Brug et lukket ikon i stedet for miniserver",
 							servercontext_serverfolders:		"Servermappe",
 							serversubmenu_addtofolder:			"Føj serveren til mappen",
 							serversubmenu_createfolder:			"Opret mappe",
@@ -1349,7 +1349,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Ordnerfarbe",
 							modal_tabheader3:					"Tooltipfarbe",
 							modal_tabheader4:					"Eigene Symbole",
-							modal_usecloseicon:					"Anstelle der Miniserver ein geschlossenes Symbol verwenden",
+							modal_useclosedicon:					"Anstelle der Miniserver ein geschlossenes Symbol verwenden",
 							servercontext_serverfolders:		"Serverordner",
 							serversubmenu_addtofolder:			"Server zum Ordner hinzufügen",
 							serversubmenu_createfolder:			"Ordner erzeugen",
@@ -1375,7 +1375,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Χρώμα φακέλου",
 							modal_tabheader3:					"Χρώμα επεξήγησης εργαλείου",
 							modal_tabheader4:					"Ίδια σύμβολα",
-							modal_usecloseicon:					"Χρησιμοποιήστε ένα κλειστό εικονίδιο αντί για το miniserver",
+							modal_useclosedicon:					"Χρησιμοποιήστε ένα κλειστό εικονίδιο αντί για το miniserver",
 							servercontext_serverfolders:		"Φάκελος διακομιστή",
 							serversubmenu_addtofolder:			"Προσθέστε το διακομιστή στο φάκελο",
 							serversubmenu_createfolder:			"ΔΗΜΙΟΥΡΓΩ φακελο",
@@ -1401,7 +1401,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Color de la carpeta",
 							modal_tabheader3:					"Color de la información sobre herramientas",
 							modal_tabheader4:					"Símbolos propios",
-							modal_usecloseicon:					"Use un icono cerrado en lugar del miniserver",
+							modal_useclosedicon:					"Use un icono cerrado en lugar del miniserver",
 							servercontext_serverfolders:		"Carpeta del servidor",
 							serversubmenu_addtofolder:			"Agrega el servidor a la carpeta",
 							serversubmenu_createfolder:			"Crear carpeta",
@@ -1427,7 +1427,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Kansion väri",
 							modal_tabheader3:					"Työkaluvinkin väri",
 							modal_tabheader4:					"Omat symbolit",
-							modal_usecloseicon:					"Käytä suljetun kuvaketta minipalvelimen sijaan",
+							modal_useclosedicon:					"Käytä suljetun kuvaketta minipalvelimen sijaan",
 							servercontext_serverfolders:		"Palvelinkansio",
 							serversubmenu_addtofolder:			"Lisää palvelin kansioon",
 							serversubmenu_createfolder:			"Luo kansio",
@@ -1453,7 +1453,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Couleur du dossier",
 							modal_tabheader3:					"Couleur de l'info-bulle",
 							modal_tabheader4:					"Propres symboles",
-							modal_usecloseicon:					"Utilisez une icône fermée au lieu du miniserver",
+							modal_useclosedicon:					"Utilisez une icône fermée au lieu du miniserver",
 							servercontext_serverfolders:		"Dossier du serveur",
 							serversubmenu_addtofolder:			"Ajouter le serveur au dossier",
 							serversubmenu_createfolder:			"Créer le dossier",
@@ -1479,7 +1479,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"फ़ोल्डर का रंग",
 							modal_tabheader3:					"टूलटिप रंग",
 							modal_tabheader4:					"कस्टम चिह्न",
-							modal_usecloseicon:					"मिनी-सर्वर के बजाय बंद चिह्न का उपयोग करें",
+							modal_useclosedicon:					"मिनी-सर्वर के बजाय बंद चिह्न का उपयोग करें",
 							servercontext_serverfolders:		"सर्वर फ़ोल्डर",
 							serversubmenu_addtofolder:			"सर्वर को फ़ोल्डर में जोड़ें",
 							serversubmenu_createfolder:			"फोल्डर बनाएं",
@@ -1505,7 +1505,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Boja mape",
 							modal_tabheader3:					"Boja opisa",
 							modal_tabheader4:					"Vlastiti simboli",
-							modal_usecloseicon:					"Upotrijebite zatvorenu ikonu umjesto miniservera",
+							modal_useclosedicon:					"Upotrijebite zatvorenu ikonu umjesto miniservera",
 							servercontext_serverfolders:		"Mapa poslužitelja",
 							serversubmenu_addtofolder:			"Dodajte poslužitelj u mapu",
 							serversubmenu_createfolder:			"Stvori mapu",
@@ -1531,7 +1531,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Mappa színe",
 							modal_tabheader3:					"Eszköztár színe",
 							modal_tabheader4:					"Saját szimbólumok",
-							modal_usecloseicon:					"Használjon zárt ikont a miniszerver helyett",
+							modal_useclosedicon:					"Használjon zárt ikont a miniszerver helyett",
 							servercontext_serverfolders:		"Szerver mappa",
 							serversubmenu_addtofolder:			"Adja hozzá a szervert a mappához",
 							serversubmenu_createfolder:			"Mappa létrehozás",
@@ -1557,7 +1557,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Colore cartella",
 							modal_tabheader3:					"Colore della descrizione comando",
 							modal_tabheader4:					"Simboli propri",
-							modal_usecloseicon:					"Utilizza un'icona chiusa al posto del miniserver",
+							modal_useclosedicon:					"Utilizza un'icona chiusa al posto del miniserver",
 							servercontext_serverfolders:		"Cartella del server",
 							serversubmenu_addtofolder:			"Aggiungi il server alla cartella",
 							serversubmenu_createfolder:			"Creare una cartella",
@@ -1583,7 +1583,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"フォルダーの色",
 							modal_tabheader3:					"ツールチップの色",
 							modal_tabheader4:					"独自のシンボル",
-							modal_usecloseicon:					"ミニサーバーの代わりに閉じたアイコンを使用する",
+							modal_useclosedicon:					"ミニサーバーの代わりに閉じたアイコンを使用する",
 							servercontext_serverfolders:		"サーバーフォルダ",
 							serversubmenu_addtofolder:			"サーバーをフォルダーに追加します",
 							serversubmenu_createfolder:			"フォルダーを作る",
@@ -1609,7 +1609,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"폴더 색상",
 							modal_tabheader3:					"툴팁 색상",
 							modal_tabheader4:					"자신의 기호",
-							modal_usecloseicon:					"미니 서버 대신 닫힌 아이콘 사용",
+							modal_useclosedicon:					"미니 서버 대신 닫힌 아이콘 사용",
 							servercontext_serverfolders:		"서버 폴더",
 							serversubmenu_addtofolder:			"폴더에 서버 추가",
 							serversubmenu_createfolder:			"폴더 생성",
@@ -1635,7 +1635,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Aplanko spalva",
 							modal_tabheader3:					"Patarimo spalva",
 							modal_tabheader4:					"Savo simbolius",
-							modal_usecloseicon:					"Vietoj miniserverio naudokite uždarą piktogramą",
+							modal_useclosedicon:					"Vietoj miniserverio naudokite uždarą piktogramą",
 							servercontext_serverfolders:		"Serverio aplankas",
 							serversubmenu_addtofolder:			"Pridėkite serverį prie aplanko",
 							serversubmenu_createfolder:			"Sukurti aplanką",
@@ -1661,7 +1661,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Mapkleur",
 							modal_tabheader3:					"Tooltipkleur",
 							modal_tabheader4:					"Eigen symbolen",
-							modal_usecloseicon:					"Gebruik een gesloten pictogram in plaats van de miniserver",
+							modal_useclosedicon:					"Gebruik een gesloten pictogram in plaats van de miniserver",
 							servercontext_serverfolders:		"Servermap",
 							serversubmenu_addtofolder:			"Voeg de server toe aan de map",
 							serversubmenu_createfolder:			"Map aanmaken",
@@ -1687,7 +1687,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Mappefarge",
 							modal_tabheader3:					"Verktøytipsfarge",
 							modal_tabheader4:					"Egne symboler",
-							modal_usecloseicon:					"Bruk et lukket ikon i stedet for miniserver",
+							modal_useclosedicon:					"Bruk et lukket ikon i stedet for miniserver",
 							servercontext_serverfolders:		"Servermappe",
 							serversubmenu_addtofolder:			"Legg til serveren i mappen",
 							serversubmenu_createfolder:			"Lag mappe",
@@ -1713,7 +1713,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Kolor folderu",
 							modal_tabheader3:					"Kolor podpowiedzi",
 							modal_tabheader4:					"Własne symbole",
-							modal_usecloseicon:					"Użyj zamkniętej ikony zamiast miniserwera",
+							modal_useclosedicon:					"Użyj zamkniętej ikony zamiast miniserwera",
 							servercontext_serverfolders:		"Folder serwera",
 							serversubmenu_addtofolder:			"Dodaj serwer do folderu",
 							serversubmenu_createfolder:			"Utwórz folder",
@@ -1739,7 +1739,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Cor da pasta",
 							modal_tabheader3:					"Cor da dica de ferramenta",
 							modal_tabheader4:					"Símbolos próprios",
-							modal_usecloseicon:					"Use um ícone fechado em vez do miniserver",
+							modal_useclosedicon:					"Use um ícone fechado em vez do miniserver",
 							servercontext_serverfolders:		"Pasta do servidor",
 							serversubmenu_addtofolder:			"Adicione o servidor à pasta",
 							serversubmenu_createfolder:			"Criar pasta",
@@ -1765,7 +1765,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Culoare dosar",
 							modal_tabheader3:					"Culoarea sfatului de instrumente",
 							modal_tabheader4:					"Simboluri proprii",
-							modal_usecloseicon:					"Folosiți o pictogramă închisă în locul miniserverului",
+							modal_useclosedicon:					"Folosiți o pictogramă închisă în locul miniserverului",
 							servercontext_serverfolders:		"Dosar server",
 							serversubmenu_addtofolder:			"Adăugați serverul în dosar",
 							serversubmenu_createfolder:			"Creeaza dosar",
@@ -1791,7 +1791,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Цвет папки",
 							modal_tabheader3:					"Цвет всплывающей подсказки",
 							modal_tabheader4:					"Собственные символы",
-							modal_usecloseicon:					"Используйте закрытый значок вместо минисервера",
+							modal_useclosedicon:					"Используйте закрытый значок вместо минисервера",
 							servercontext_serverfolders:		"Папка сервера",
 							serversubmenu_addtofolder:			"Добавьте сервер в папку",
 							serversubmenu_createfolder:			"Создать папку",
@@ -1817,7 +1817,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Mappfärg",
 							modal_tabheader3:					"Verktygstipsfärg",
 							modal_tabheader4:					"Egna symboler",
-							modal_usecloseicon:					"Använd en stängd ikon istället för miniserver",
+							modal_useclosedicon:					"Använd en stängd ikon istället för miniserver",
 							servercontext_serverfolders:		"Servermapp",
 							serversubmenu_addtofolder:			"Lägg till servern i mappen",
 							serversubmenu_createfolder:			"Skapa mapp",
@@ -1843,7 +1843,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"สีโฟลเดอร์",
 							modal_tabheader3:					"สีคำแนะนำเครื่องมือ",
 							modal_tabheader4:					"สัญลักษณ์ของตัวเอง",
-							modal_usecloseicon:					"ใช้ไอคอนปิดแทน miniserver",
+							modal_useclosedicon:					"ใช้ไอคอนปิดแทน miniserver",
 							servercontext_serverfolders:		"โฟลเดอร์เซิร์ฟเวอร์",
 							serversubmenu_addtofolder:			"เพิ่มเซิร์ฟเวอร์ลงในโฟลเดอร์",
 							serversubmenu_createfolder:			"สร้างโฟลเดอร์",
@@ -1869,7 +1869,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Klasör rengi",
 							modal_tabheader3:					"Araç ipucu rengi",
 							modal_tabheader4:					"Kendi sembolleri",
-							modal_usecloseicon:					"Miniserver yerine kapalı bir simge kullanın",
+							modal_useclosedicon:					"Miniserver yerine kapalı bir simge kullanın",
 							servercontext_serverfolders:		"Sunucu klasörü",
 							serversubmenu_addtofolder:			"Sunucuyu klasöre ekleyin",
 							serversubmenu_createfolder:			"Klasör oluşturun",
@@ -1895,7 +1895,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Колір папки",
 							modal_tabheader3:					"Колір підказки",
 							modal_tabheader4:					"Власні символи",
-							modal_usecloseicon:					"Використовуйте закритий значок замість мінісервера",
+							modal_useclosedicon:					"Використовуйте закритий значок замість мінісервера",
 							servercontext_serverfolders:		"Папка сервера",
 							serversubmenu_addtofolder:			"Додайте сервер до папки",
 							serversubmenu_createfolder:			"Створити папку",
@@ -1921,7 +1921,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Màu thư mục",
 							modal_tabheader3:					"Màu chú giải công cụ",
 							modal_tabheader4:					"Ký hiệu riêng",
-							modal_usecloseicon:					"Sử dụng biểu tượng đã đóng thay vì trình thu nhỏ",
+							modal_useclosedicon:					"Sử dụng biểu tượng đã đóng thay vì trình thu nhỏ",
 							servercontext_serverfolders:		"Thư mục máy chủ",
 							serversubmenu_addtofolder:			"Thêm máy chủ vào thư mục",
 							serversubmenu_createfolder:			"Tạo thư mục",
@@ -1947,7 +1947,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"文件夹颜色",
 							modal_tabheader3:					"工具提示颜色",
 							modal_tabheader4:					"自定义图标",
-							modal_usecloseicon:					"使用文件夹收起图标代替服务器缩略图",
+							modal_useclosedicon:					"使用文件夹收起图标代替服务器缩略图",
 							servercontext_serverfolders:		"服务器文件夹",
 							serversubmenu_addtofolder:			"将服务器添加到文件夹",
 							serversubmenu_createfolder:			"创建文件夹",
@@ -1973,7 +1973,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"資料夾顏色",
 							modal_tabheader3:					"工具提示顏色",
 							modal_tabheader4:					"客製化圖標",
-							modal_usecloseicon:					"使用資料夾收起圖標代替伺服器縮略圖",
+							modal_useclosedicon:					"使用資料夾收起圖標代替伺服器縮略圖",
 							servercontext_serverfolders:		"伺服器資料夾",
 							serversubmenu_addtofolder:			"將伺服器添加到資料夾",
 							serversubmenu_createfolder:			"創建資料夾",
@@ -1999,7 +1999,7 @@ module.exports = (_ => {
 							modal_tabheader2:					"Folder Color",
 							modal_tabheader3:					"Tooltip Color",
 							modal_tabheader4:					"Custom Icons",
-							modal_usecloseicon:					"Use a closed Icon instead of the Mini-Servers",
+							modal_useclosedicon:					"Use a closed Icon instead of the Mini-Servers",
 							servercontext_serverfolders:		"Server Folder",
 							serversubmenu_addtofolder:			"Add the Server to the Folder",
 							serversubmenu_createfolder:			"Create Folder",
