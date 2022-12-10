@@ -64,7 +64,6 @@ module.exports = (_ => {
 				stickySearchPagination = this;
 			}
 			render() {
-				console.log(SearchResultsPaginationComponent, this);
 				if (!SearchResultsPaginationComponent) return null;
 				return BDFDB.ReactUtils.createElement(SearchResultsPaginationComponent, this.props);
 			}
