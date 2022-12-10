@@ -2,8 +2,8 @@
  * @name BetterSearchPage
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.2.2
- * @description Adds some extra Controls to the Search Results Page
+ * @version 1.2.3
+ * @description Makes the Controls in the Search Results Page sticky
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
  * @patreon https://www.patreon.com/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"improved": {
+			"New Version": "Instead of copying the controls to the top, the controls are now sticky in the list"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -56,94 +58,65 @@ module.exports = (_ => {
 			return template.content.firstElementChild;
 		}
 	} : (([Plugin, BDFDB]) => {
+		var stickySearchPagination, SearchResultsPaginationComponent;
+		const StickySearchPaginationComponent = class StickySearchPagination extends BdApi.React.Component {
+			componentDidMount() {
+				stickySearchPagination = this;
+			}
+			render() {
+				console.log(SearchResultsPaginationComponent, this);
+				if (!SearchResultsPaginationComponent) return null;
+				return BDFDB.ReactUtils.createElement(SearchResultsPaginationComponent, this.props);
+			}
+		};
+		
 		return class BetterSearchPage extends Plugin {
 			onLoad () {
-				this.defaults = {
-					general: {
-						addJumpTo:		{value: true, 	description: "Add a Jump to Input Field (press enter to Jump)"},
-						cloneToTheTop:	{value: true, 	description: "Clone the controls to the top of the Results Page"}
-					}
-				};
-				
 				this.modulePatches = {
+					before: [
+						"SearchResultsPagination"
+					],
 					after: [
-						"SearchResultsInner"
+						"SearchResults"
 					]
 				};
+				
+				this.css = `
+					${BDFDB.dotCN.searchresultspagination} {
+						background-color: var(--background-tertiary);
+					}
+					${BDFDB.dotCNS.searchresultspagination + BDFDB.dotCN.paginationcontainer} {
+						margin-top: 0;
+					}
+					${BDFDB.dotCN.searchresultswrap} [role="list"] ~ ${BDFDB.dotCN.searchresultspagination} {
+						display: none !important;
+					}
+				`;
 			}
 			
 			onStart () {
-				this.forceUpdateAll();
 			}
 			
 			onStop () {
-				this.forceUpdateAll();
 			}
 
-			getSettingsPanel (collapseStates = {}) {
-				let settingsPanel, settingsItems = [];
-				
-				for (let key in this.defaults.general) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-					type: "Switch",
-					plugin: this,
-					keys: ["general", key],
-					label: this.defaults.general[key].description,
-					value: this.settings.general[key]
-				}));
-				
-				return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
-			}
-
-			onSettingsClosed (e) {
-				if (this.SettingsUpdated) {
-					delete this.SettingsUpdated;
-					this.forceUpdateAll();
-				}
-			}
-		
-			forceUpdateAll () {
-				BDFDB.PatchUtils.forceAllUpdates(this);
-			}
-
-			processSearchResultsInner (e) {
+			processSearchResults (e) {
 				if (!e.instance.props.search) return;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SearchResultsPagination"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SearchResultsHeader"});
 				if (index == -1) return;
-				let currentPage = parseInt(Math.floor(e.instance.props.search.offset / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) + 1;
-				let maxPage = e.instance.props.search.totalResults > 5000 ? parseInt(Math.ceil(5000 / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) : parseInt(Math.ceil(e.instance.props.search.totalResults / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE));
-				
-				children[index].props.totalResults = children[index].props.totalResults > 5000 ? 5000 : children[index].props.totalResults;
-				
-				let pagination = children[index].type(children[index].props);
-				if (!pagination || maxPage < 2) return;
-				pagination.props.className = BDFDB.DOMUtils.formatClassName(pagination.props.className, BDFDB.disCN.pagination, BDFDB.disCN._bettersearchpagepagination, this.settings.general.addJumpTo && BDFDB.disCN.paginationmini);
-				
-				if (this.settings.general.addJumpTo) {
-					pagination.props.children = [
-						pagination.props.children,
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-							type: "number",
-							size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
-							value: currentPage,
-							min: 1,
-							max: maxPage,
-							onKeyDown: (event, instance) => {
-								if (event.which == 13) {
-									let page = instance.props.value < 1 ? 1 : (instance.props.value > maxPage ? maxPage : instance.props.value);
-									if (page < currentPage) BDFDB.LibraryModules.SearchPageUtils.searchPreviousPage(e.instance.props.searchId, (currentPage - page) * BDFDB.DiscordConstants.SEARCH_PAGE_SIZE);
-									else if (page > currentPage) BDFDB.LibraryModules.SearchPageUtils.searchNextPage(e.instance.props.searchId, (page - currentPage) * BDFDB.DiscordConstants.SEARCH_PAGE_SIZE);
-								}
-							}
-						})
-					].flat(10).filter(n => n);
+				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(StickySearchPaginationComponent, {
+					changePage: newPage => !e.instance.props.search.searching && BDFDB.LibraryModules.SearchPageUtils.changePage(e.instance.props.searchId, newPage - 1),
+					offset: e.instance.props.search.offset,
+					totalResults: e.instance.props.search.totalResults,
+					pageLength: BDFDB.DiscordConstants.SEARCH_PAGE_SIZE
+				}));
+			}
+			
+			processSearchResultsPagination (e) {
+				if (!SearchResultsPaginationComponent) {
+					SearchResultsPaginationComponent = e.component;
+					BDFDB.ReactUtils.forceUpdate(stickySearchPagination);
 				}
-				children[index] = pagination;
-				if (this.settings.general.cloneToTheTop) {
-					let topPagination = BDFDB.ReactUtils.cloneElement(pagination);
-					topPagination.props.className = BDFDB.DOMUtils.formatClassName(topPagination.props.className, BDFDB.disCN.paginationtop);
-					children.unshift(topPagination);
-				}
-				pagination.props.className = BDFDB.DOMUtils.formatClassName(pagination.props.className, BDFDB.disCN.paginationbottom);
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));

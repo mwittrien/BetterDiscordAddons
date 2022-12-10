@@ -12,7 +12,7 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-%23F96854.svg?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAdhwAAHYcBj+XxZQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAGBSURBVFiF7Za9ThtBFEbPBUpERWMwCorfJjY4aVLxBFHCKyCl4hWQUqVMBULmbfiRCNACqSJsDsXakjHGO8Y7ovFXrmbmO3NnZ74bqrzUeUR8HPP9mdQ60AZawCZQBwK4BC6ADnAUEZeTFhmnsxLjdfVAfXhl/rB66h/1QyUAalu9TzAe1Z26NROAutvf0VvVU7+/CUD9PKP5MMT2VADqhvqvAvOB7tQ1gIXXznpEP4HlxLEpWgH2AEInX0OLv/cUWKwQAKALbKZU4EsGc4AloJ0C8CmD+UDNFIBGRoBGCkAtI8B66i3IpccUgJuMANcpAKcZAc5SAE4yAnRSAA6BXgbzLnBUChARF8DvDAC/IuIqNYzqFYfRrVqDxDCKiL/AV6o5ikdgJyJuBrsrrcBQJX44W0/QVb+NLpoM0B/f6pdwWt2qL3NlWoD+nFV1X/2fYPxg0cCOfdJL+4ESkBqwDTQpQmuNoi2/onjAOsBxRFxPWmTqClSp9w6jOcAcYA7AE1OMk5ulhBZCAAAAAElFTkSuQmCC
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Adds some extra Controls to the Search Results Page
+Makes the Controls in the Search Results Page sticky
 
 
 ![cover](https://mwittrien.github.io/BetterDiscordAddons/Plugins/BetterSearchPage/_res/cover.png)
