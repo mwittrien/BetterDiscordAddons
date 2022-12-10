@@ -1720,7 +1720,8 @@ body::after {
 .searchResultsWrap-5RVOkx {									/* searchpage			container							*/
 	background-color: transparent;
 }
-.searchHeader-1r_ZSh {										/* searchpage			header								*/
+.searchHeader-1r_ZSh,										/* searchpage			header								*/
+.searchHeader-1r_ZSh ~ .container-1-h9mY {					/* searchpage			pagination (BSP)					*/
 	background-color: rgba(var(--transparencycolor), calc(var(--guildchanneltransparency) * 0.8));
 	border-radius: 0 0 0 8px;
 }
