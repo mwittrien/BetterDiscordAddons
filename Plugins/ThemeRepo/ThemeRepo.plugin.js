@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.5
+ * @version 2.4.6
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -638,7 +638,7 @@ module.exports = (_ => {
 																loadingToast.close();
 																BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("download_fail", `Theme "${this.props.data.name}"`), {type: "danger"});
 															}
-															else list.createThemeFile(this.props.data.name, this.props.data.rawSourceUrl.split("/").pop(), body, autoloadKey).then(error2 => {
+															else list.createThemeFile(this.props.data.name, this.props.data.rawSourceUrl.split("/").pop(), Buffer.from(buffer).toString(), autoloadKey).then(error2 => {
 																delete this.props.downloading;
 																loadingToast.close();
 																if (!error2) {
