@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.2
+ * @version 1.6.3
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -167,7 +167,7 @@ module.exports = (_ => {
 			}
 			
 			processMessageTimestamp (e) {
-				let tooltipWrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Tooltip"});
+				let tooltipWrapper = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "TooltipContainer"});
 				if (!tooltipWrapper) return;
 				let childClassName = BDFDB.ObjectUtils.get(e, "instance.props.children.props.className");
 				if (childClassName && childClassName.indexOf(BDFDB.disCN.messageedited) > -1) {

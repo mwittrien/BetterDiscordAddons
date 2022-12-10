@@ -345,7 +345,7 @@ module.exports = (_ => {
 						let key = parseInt(e.returnvalue.props.children[i].key);
 						let keyName = filter && Object.keys(badges).find(n => badges[n].keys.includes(key));
 						if (keyName && badgeConfigs[keyName] && !badgeConfigs[keyName][e.instance.props.place]) e.returnvalue.props.children[i] = null;
-						else if (e.returnvalue.props.children[i].type.displayName == "TooltipContainer" || e.returnvalue.props.children[i].type.displayName == "Tooltip") {
+						else if (typeof e.returnvalue.props.children[i].props.children == "function" && e.returnvalue.props.children[i].props.text) {
 							const childrenRender = e.returnvalue.props.children[i].props.children;
 							e.returnvalue.props.children[i].props.children = (...args) => {
 								const children = childrenRender(...args);

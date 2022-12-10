@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.0.9
+ * @version 7.1.0
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -120,10 +120,13 @@ module.exports = (_ => {
 											className: BDFDB.disCN.guildfoldericonwrapper,
 											style: {background: `url(${folderIcon}) center/cover no-repeat`}
 										}) : BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN.guildfoldericonwrapperexpanded,
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-												name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
-												color: BDFDB.ColorUtils.convert(folder.folderColor, "RGB") || "var(--bdfdb-blurple)"
+											className: BDFDB.disCN.guildfoldericonwrapper,
+											children: BDFDB.ReactUtils.createElement("div", {
+												className: BDFDB.disCN.guildfoldericonwrapperexpanded,
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+													name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
+													style: {color: BDFDB.ColorUtils.convert(folder.folderColor || BDFDB.DiscordConstants.Colors.BRAND, "RGB")}
+												})
 											})
 										});
 									}
@@ -460,14 +463,14 @@ module.exports = (_ => {
 					before: [
 						"FolderItem",
 						"GuildItemWrapper",
-						"GuildsBar"
+						"GuildsBar",
+						"TooltipContainer"
 					],
 					after: [
 						"FolderHeader",
 						"FolderSettingsModal",
 						"GuildItem",
-						"GuildsBar",
-						"ListItemTooltip"
+						"GuildsBar"
 					],
 					componentDidMount: [
 						"FolderSettingsModal"
@@ -767,37 +770,50 @@ module.exports = (_ => {
 				
 				let data = this.getFolderConfig(e.instance.props.folderNode.id);
 				
-				if (e.instance.props.expanded || data.useCloseIcon) {
-					let folderIcons = this.loadAllIcons(), iconType = e.instance.props.expanded ? "openicon" : "closedicon";
-					let icon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? this.createBase64SVG(folderIcons[data.iconID][iconType], data.color1, data.color2) : folderIcons[data.iconID][iconType]) : null;
-					if (icon) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
-						if (index > -1) children[index] = BDFDB.ReactUtils.createElement("div", {
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
+				if (index > -1) {
+					if (parseInt(data.iconID) == -1 && data.useCloseIcon && !e.instance.props.expanded) children[index] = BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.guildfoldericonwrapper,
+						children: BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.guildfoldericonwrapperexpanded,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
+								style: {color: BDFDB.ColorUtils.convert(data.folderColor || BDFDB.DiscordConstants.Colors.BRAND, "RGB")}
+							})
+						})
+					});
+					else if (e.instance.props.expanded || data.useCloseIcon) {
+						let folderIcons = this.loadAllIcons(), iconType = e.instance.props.expanded ? "openicon" : "closedicon";
+						let icon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? this.createBase64SVG(folderIcons[data.iconID][iconType], data.color1, data.color2) : folderIcons[data.iconID][iconType]) : null;
+						if (icon) children[index] = BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.guildfoldericonwrapper,
 							style: {background: `url(${icon}) center/cover no-repeat`}
 						});
 					}
-				}
-				if (this.settings.general.showCountBadge) {
-					let mask = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "BlobMask"});
-					if (mask) {
-						mask.props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.NumberBadge.prototype.getBadgeWidthForValue(e.instance.props.folderNode.children.length);
-						mask.props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
-							count: e.instance.props.folderNode.children.length,
-							style: {backgroundColor: "var(--bdfdb-blurple)"}
-						});
+					if (this.settings.general.showCountBadge) {
+						let mask = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "BlobMask"});
+						if (mask) {
+							mask.props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.NumberBadge.prototype.getBadgeWidthForValue(e.instance.props.folderNode.children.length);
+							mask.props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
+								count: e.instance.props.folderNode.children.length,
+								style: {backgroundColor: "var(--bdfdb-blurple)"}
+							});
+						}
 					}
 				}
 			}
 			
-			processListItemTooltip (e) {
-				let folderNodeChild = BDFDB.ReactUtils.findChild(e.instance, {filter: n => n && n.props && n.props.folderNode});
-				if (!folderNodeChild) return;
+			processTooltipContainer (e) {
+				if (!e.instance.props.tooltipClassName || e.instance.props.tooltipClassName.indexOf(BDFDB.disCN.guildlistitemtooltip) == -1) return;
+				let child = e.instance.props.children({});
+				if (!child || !child.props || !child.props.children || !child.props.children.props || !child.props.children.props.folderNode) return;
 				
-				let data = this.getFolderConfig(folderNodeChild.props.folderNode.id);
-				
-				e.returnvalue = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					text: folderNodeChild.props.folderNode.name || folderNodeChild.props.tooltipName,
+				e.instance.props.shouldShow = false;
+				let data = this.getFolderConfig(child.props.children.props.folderNode.id);
+		
+				let childrenRender = e.instance.props.children;
+				e.instance.props.children = BDFDB.TimeUtils.suppress((...args) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					text: child.props.children.props.folderNode.name || e.instance.props.text,
 					tooltipConfig: {
 						type: "right",
 						list: true,
@@ -805,8 +821,8 @@ module.exports = (_ => {
 						backgroundColor: data.color3,
 						fontColor: data.color4
 					},
-					children: e.returnvalue.props.children
-				});
+					children: childrenRender(...args)
+				}), "Error in children Render of Guild Folder Tooltip!");
 			}
 			
 			processGuildItemWrapper (e) {
