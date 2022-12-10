@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.4.8
+ * @version 1.4.9
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -96,8 +96,6 @@ module.exports = (_ => {
 					after: [
 						"PeopleList",
 						"PeopleListItem",
-						"PeopleListSectionedLazy",
-						"PeopleListSectionedNonLazy",
 						"TabBar"
 					],
 					componentDidMount: [
@@ -274,46 +272,38 @@ module.exports = (_ => {
 			}
 			
 			processPeopleListSectionedNonLazy (e) {
-				if (!e.returnvalue) {
-					if (this.settings.general.addFavorizedCategory) {
-						if (isFavoritesSelected) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && favorizedFriends.indexOf(entry.user.id) > -1));
-					}
-					if (this.settings.general.addHiddenCategory) {
-						if (isHiddenSelected) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) > -1));
-						else if (([].concat(e.instance.props.statusSections).flat(10)[0] || {}).type == BDFDB.DiscordConstants.RelationshipTypes.FRIEND) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) == -1));
-					}
-					if (sortKey) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => {
-						let newSection = [].concat(section);
-						if (sortKey) {
-							newSection = BDFDB.ArrayUtils.keySort(newSection.map(entry => Object.assign({}, entry, {statusIndex: statusSortOrder[entry.status]})), sortKey);
-							if (sortReversed) newSection.reverse();
-						}
-						if (!newSection.length) {
-							let placeholder = new BDFDB.DiscordObjects.User({
-								id: placeHolderId,
-								username: placeHolderId
-							});
-							if (placeholder) newSection.push(new BDFDB.DiscordObjects.Relationship({
-								activities: [],
-								applicationStream: null,
-								isMobile: false,
-								key: placeHolderId,
-								mutualGuilds: [],
-								mutualGuildsLength: 0,
-								status: "offline",
-								type: BDFDB.DiscordConstants.RelationshipTypes.NONE,
-								user: placeholder,
-								usernameLower: placeholder.usernameNormalized
-							}));
-						}
-						return newSection;
-					});
+				if (this.settings.general.addFavorizedCategory) {
+					if (isFavoritesSelected) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && favorizedFriends.indexOf(entry.user.id) > -1));
 				}
-				if (e.returnvalue && !e.instance.props.statusSections.flat(10).length) e.returnvalue.props.children = BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCN.peopleslistempty,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FriendsEmptyState, {
-						type: !currentSection || !Object.entries(BDFDB.DiscordConstants.FriendsSections).find(n => n[1] == currentSection) ? BDFDB.DiscordConstants.FriendsSections.ALL : currentSection
-					})
+				if (this.settings.general.addHiddenCategory) {
+					if (isHiddenSelected) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) > -1));
+					else if (([].concat(e.instance.props.statusSections).flat(10)[0] || {}).type == BDFDB.DiscordConstants.RelationshipTypes.FRIEND) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) == -1));
+				}
+				if (sortKey) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => {
+					let newSection = [].concat(section);
+					if (sortKey) {
+						newSection = BDFDB.ArrayUtils.keySort(newSection.map(entry => Object.assign({}, entry, {statusIndex: statusSortOrder[entry.status]})), sortKey);
+						if (sortReversed) newSection.reverse();
+					}
+					if (!newSection.length) {
+						let placeholder = new BDFDB.DiscordObjects.User({
+							id: placeHolderId,
+							username: placeHolderId
+						});
+						if (placeholder) newSection.push(new BDFDB.DiscordObjects.Relationship({
+							activities: [],
+							applicationStream: null,
+							isMobile: false,
+							key: placeHolderId,
+							mutualGuilds: [],
+							mutualGuildsLength: 0,
+							status: "offline",
+							type: BDFDB.DiscordConstants.RelationshipTypes.NONE,
+							user: placeholder,
+							usernameLower: placeholder.usernameNormalized
+						}));
+					}
+					return newSection;
 				});
 			}
 			
