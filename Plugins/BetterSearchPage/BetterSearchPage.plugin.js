@@ -84,6 +84,9 @@ module.exports = (_ => {
 					${BDFDB.dotCN.searchresultspagination} {
 						background-color: var(--background-tertiary);
 					}
+					${BDFDB.dotCNS.searchresultspagination + BDFDB.dotCN.input} {
+						background-color: var(--background-floating);
+					}
 					${BDFDB.dotCNS.searchresultspagination + BDFDB.dotCN.paginationcontainer} {
 						margin-top: 0;
 					}
