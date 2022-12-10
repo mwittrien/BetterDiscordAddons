@@ -518,7 +518,7 @@
 		"ThreadMessageAccessories": {"strings": ["threadMetadata", "NO_RECENT_THREAD_MESSAGES", ".Messages.THREAD"]},
 		"ThreadMessageAccessoryMessage": {"strings": [".threadMessageAccessoryPlaceholder", ".threadMessageAccessoryContent", "formatInline:"]},
 		"ThreadSidebar": {"strings": [".baseChannelId", ".SIDEBAR", ".THREAD_HEADER_BAR"]},
-		"Tooltip": {"protos": ["renderTooltip", "setDomElement", "shouldShowTooltip", "toggleShow"]},
+		"TooltipContainer": {"protos": ["renderTooltip", "setDomElement", "shouldShowTooltip", "toggleShow"]},
 		"TransitionGroup": {"protos": ["performAppear", "performEnter", "performLeave"]},
 		"TypingUsers": {"strings": ["Easing.quad", ".emphasizeSlowmodeCooldown", ".sequence("]},
 		"UnavailableGuildsButton": {"strings": [".errorInner", ".guildsError", "Messages.PARTIAL_OUTAGE"]},
