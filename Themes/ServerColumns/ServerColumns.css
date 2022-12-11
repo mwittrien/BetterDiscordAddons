@@ -191,6 +191,26 @@ body.folderContentIsOpen-zz6FgW .titleBar-1it3bQ.typeMacOS-3V4xXE .macButtons-eI
 	margin-bottom: 0 !important;
 }
 
+/* SERVERFOLDERS */
+
+.wrapper-1_HaEi.content-Pph8t6 .scroller-3X7KbA {
+	background: red !important;
+	padding-left: 0 !important;
+}
+.wrapper-1_HaEi.content-Pph8t6 .wrapper-38slSD {
+	width: calc(1px * (var(--guildsize) * var(--columns) + 20 * (var(--guildsize)/50) + 14 * (var(--guildsize)/50) * (var(--columns) - 1))) !important;
+}
+.wrapper-1_HaEi.content-Pph8t6 .wrapper-38slSD > .listItem-3SmSlK {
+    margin: calc(1px * var(--guildgap)) 0 !important;
+}
+.wrapper-1_HaEi.content-Pph8t6 .wrapper-38slSD [role="group"] {
+	margin: 0 !important;
+	padding: 0 calc(10px * var(--guildsize)/50) !important;
+    display: flex !important;
+    flex-flow: row wrap !important;
+    justify-content: space-between !important;
+}
+
 html .typingindicator-guild,
 html .typingindicator-dms,
 html .typingindicator-folder {
