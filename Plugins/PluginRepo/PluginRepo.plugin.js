@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.3
+ * @version 2.4.4
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -72,12 +72,12 @@ module.exports = (_ => {
 		};
 		const buttonData = {
 			INSTALLED: {
-				backgroundColor: "var(--bdfdb-green)",
+				backgroundColor: BDFDB.DiscordConstants.ColorVariables["status-positive"],
 				icon: "CHECKMARK",
 				text: "installed"
 			},
 			OUTDATED: {
-				backgroundColor: "var(--bdfdb-red)",
+				backgroundColor: BDFDB.DiscordConstants.ColorVariables["status-danger"],
 				icon: "CLOSE",
 				text: "outdated"
 			},

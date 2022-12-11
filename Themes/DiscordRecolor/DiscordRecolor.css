@@ -22,10 +22,6 @@
 	--backgroundsecondaryalt: 		41,43,47;
 	--backgroundtertiary: 			32,34,37;
 	--backgroundfloating: 			24,25,28;
-	
-	--bdfdb-green:					rgb(var(--successcolor));
-	--bdfdb-yellow:					rgb(var(--warningcolor));
-	--bdfdb-red:					rgb(var(--dangercolor));
 }
 
 .theme-light:not(.userProfileOuterThemed-3EfHmv),

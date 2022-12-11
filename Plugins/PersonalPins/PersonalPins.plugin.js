@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.4
+ * @version 2.1.5
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -395,7 +395,7 @@ module.exports = (_ => {
 						visibility: visible;
 					}
 					${BDFDB.dotCN._personalpinsmessagetag + BDFDB.notCN._personalpinsmessagetagadd}:hover {
-						background-color: var(--bdfdb-red) !important;
+						background-color: ${BDFDB.DiscordConstants.ColorVariables["status-danger"]} !important;
 					}
 					${BDFDB.dotCN._personalpinsmessagetagadd} {
 						font-size: 16px;

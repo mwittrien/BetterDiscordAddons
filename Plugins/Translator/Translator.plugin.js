@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.7
+ * @version 2.4.8
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -135,7 +135,7 @@ module.exports = (_ => {
 								titleChildren: direction == languageTypes.OUTPUT && [{
 									text: _ => isChannelSpecific ? _this.labels.language_selection_channel : isGuildSpecific ? _this.labels.language_selection_server : _this.labels.language_selection_global,
 									name: isChannelSpecific || isGuildSpecific ? BDFDB.LibraryComponents.SvgIcon.Names.LOCK_CLOSED : BDFDB.LibraryComponents.SvgIcon.Names.LOCK_OPEN,
-									color: isChannelSpecific ? "var(--bdfdb-red)" : isGuildSpecific ? "var(--bdfdb-yellow)" : null,
+									color: isChannelSpecific ? BDFDB.DiscordConstants.ColorVariables["status-danger"] : isGuildSpecific ? BDFDB.DiscordConstants.ColorVariables["status-warning"] : null,
 									onClick: _ => {
 										if (channelLanguages[this.props.channelId] && channelLanguages[this.props.channelId][place]) {
 											isChannelSpecific = false;
@@ -210,7 +210,7 @@ module.exports = (_ => {
 													nativeClass: true,
 													width: 20,
 													height: 20,
-													color: "var(--bdfdb-red)",
+													color: BDFDB.DiscordConstants.ColorVariables["status-danger"],
 													name: BDFDB.LibraryComponents.SvgIcon.Names.WARNING
 												})
 											}),
@@ -405,7 +405,7 @@ module.exports = (_ => {
 
 				this.css = `
 					${BDFDB.dotCN._translatortranslatebutton + BDFDB.dotCNS._translatortranslating + BDFDB.dotCN.textareaicon} {
-						color: var(--bdfdb-red) !important;
+						color: ${BDFDB.DiscordConstants.ColorVariables["status-danger"]} !important;
 					}
 					${BDFDB.dotCN._translatorconfigbutton} {
 						margin: 2px 3px 0 6px;

@@ -43,10 +43,6 @@
 	--backdropposition:				center;
 	--backdropsize:					cover;
 	--backdropblur:					unset;
-	
-	--bdfdb-green:					rgb(var(--successcolor));
-	--bdfdb-yellow:					rgb(var(--warningcolor));
-	--bdfdb-red:					rgb(var(--dangercolor));
 }
 
 .theme-light, .theme-dark, .theme-amoled {
