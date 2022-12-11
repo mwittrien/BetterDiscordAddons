@@ -395,7 +395,7 @@ module.exports = (_ => {
 						visibility: visible;
 					}
 					${BDFDB.dotCN._personalpinsmessagetag + BDFDB.notCN._personalpinsmessagetagadd}:hover {
-						background-color: ${BDFDB.DiscordConstants.ColorVariables["status-danger"]} !important;
+						background-color: var(--status-danger) !important;
 					}
 					${BDFDB.dotCN._personalpinsmessagetagadd} {
 						font-size: 16px;
