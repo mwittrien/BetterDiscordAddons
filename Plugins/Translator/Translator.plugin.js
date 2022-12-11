@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.8
+ * @version 2.4.9
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -405,7 +405,7 @@ module.exports = (_ => {
 
 				this.css = `
 					${BDFDB.dotCN._translatortranslatebutton + BDFDB.dotCNS._translatortranslating + BDFDB.dotCN.textareaicon} {
-						color: ${BDFDB.DiscordConstants.ColorVariables["status-danger"]} !important;
+						color: var(--status-danger) !important;
 					}
 					${BDFDB.dotCN._translatorconfigbutton} {
 						margin: 2px 3px 0 6px;
