@@ -340,7 +340,7 @@ module.exports = (_ => {
 							"Right-Click on an Option to toggle",
 							BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.disCN._friendnotificationstypelabel,
-								style: {backgroundColor: BDFDB.DiscordConstants.ColorVariables["status-positive"]},
+								style: {backgroundColor: "var(--status-positive)"},
 								children: "Desktop"
 							}),
 							"Notifications for that User"
@@ -365,7 +365,7 @@ module.exports = (_ => {
 							"Right-Click on an Option Header to toggle",
 							BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.disCN._friendnotificationstypelabel,
-								style: {backgroundColor: BDFDB.DiscordConstants.ColorVariables["status-positive"]},
+								style: {backgroundColor: "var(--status-positive)"},
 								children: "Desktop"
 							}),
 							"Notifications for all Users"
@@ -388,7 +388,7 @@ module.exports = (_ => {
 							"/",
 							BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.disCN._friendnotificationstypelabel,
-								style: {backgroundColor: BDFDB.DiscordConstants.ColorVariables["status-positive"]},
+								style: {backgroundColor: "var(--status-positive)"},
 								children: "Desktop"
 							})
 						]
