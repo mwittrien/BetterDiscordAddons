@@ -73,12 +73,12 @@ module.exports = (_ => {
 		};
 		const buttonData = {
 			INSTALLED: {
-				backgroundColor: BDFDB.DiscordConstants.ColorVariables["status-positive"],
+				backgroundColor: "var(--status-positive)",
 				icon: "CHECKMARK",
 				text: "installed"
 			},
 			OUTDATED: {
-				backgroundColor: BDFDB.DiscordConstants.ColorVariables["status-danger"],
+				backgroundColor: "var(--status-danger)",
 				icon: "CLOSE",
 				text: "outdated"
 			},
