@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.5
+ * @version 1.8.6
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -128,7 +128,7 @@ module.exports = (_ => {
 			DESKTOP: {
 				button: 2,
 				value: 2,
-				color: "var(--bdfdb-green)"
+				color: BDFDB.DiscordConstants.ColorVariables["status-positive"]
 			}
 		};
 		
@@ -340,7 +340,7 @@ module.exports = (_ => {
 							"Right-Click on an Option to toggle",
 							BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.disCN._friendnotificationstypelabel,
-								style: {backgroundColor: "var(--bdfdb-green)"},
+								style: {backgroundColor: BDFDB.DiscordConstants.ColorVariables["status-positive"]},
 								children: "Desktop"
 							}),
 							"Notifications for that User"
@@ -365,7 +365,7 @@ module.exports = (_ => {
 							"Right-Click on an Option Header to toggle",
 							BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.disCN._friendnotificationstypelabel,
-								style: {backgroundColor: "var(--bdfdb-green)"},
+								style: {backgroundColor: BDFDB.DiscordConstants.ColorVariables["status-positive"]},
 								children: "Desktop"
 							}),
 							"Notifications for all Users"
@@ -388,7 +388,7 @@ module.exports = (_ => {
 							"/",
 							BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.disCN._friendnotificationstypelabel,
-								style: {backgroundColor: "var(--bdfdb-green)"},
+								style: {backgroundColor: BDFDB.DiscordConstants.ColorVariables["status-positive"]},
 								children: "Desktop"
 							})
 						]
