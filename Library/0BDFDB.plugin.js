@@ -570,7 +570,7 @@ module.exports = (_ => {
 				BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", ""), plugin);
 				if (Internal.settings.general.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", `${plugin.name} v${plugin.version}`), {
 					disableInteractions: true,
-					barColor: Internal.DiscordConstants.Colors.STATUS_GREEN
+					barColor: Internal.DiscordConstants.ColorVariables["status-positive"]
 				});
 				
 				if (plugin.css) BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
@@ -587,7 +587,7 @@ module.exports = (_ => {
 				BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", ""), plugin);
 				if (Internal.settings.general.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", `${plugin.name} v${plugin.version}`), {
 					disableInteractions: true,
-					barColor: Internal.DiscordConstants.Colors.STATUS_RED
+					barColor: Internal.DiscordConstants.ColorVariables["status-danger"]
 				});
 				
 				const url = Internal.getPluginURL(plugin);
@@ -2943,9 +2943,9 @@ module.exports = (_ => {
 					if (!Internal.DiscordConstants.Colors) return null;
 					status = typeof status == "string" ? status.toLowerCase() : null;
 					switch (status) {
-						case "online": return useColor ? Internal.DiscordConstants.Colors.STATUS_GREEN_600 : "var(--bdfdb-green)";
-						case "idle": return useColor ? Internal.DiscordConstants.Colors.STATUS_YELLOW : "var(--bdfdb-yellow)";
-						case "dnd": return useColor ? Internal.DiscordConstants.Colors.STATUS_RED : "var(--bdfdb-red)";
+						case "online": return useColor ? Internal.DiscordConstants.Colors.STATUS_GREEN_600 : Internal.DiscordConstants.ColorVariables["status-positive"];
+						case "idle": return useColor ? Internal.DiscordConstants.Colors.STATUS_YELLOW : Internal.DiscordConstants.ColorVariables["status-warning"];
+						case "dnd": return useColor ? Internal.DiscordConstants.Colors.STATUS_RED : Internal.DiscordConstants.ColorVariables["status-danger"];
 						case "playing": return useColor ? Internal.DiscordConstants.Colors.BRAND : "var(--bdfdb-blurple)";
 						case "listening": return Internal.DiscordConstants.Colors.SPOTIFY;
 						case "streaming": return Internal.DiscordConstants.Colors.TWITCH;
@@ -4562,7 +4562,7 @@ module.exports = (_ => {
 							style: {
 								background: Internal.DiscordConstants.Colors.PRIMARY_DARK,
 								borderRadius: 5,
-								color: Internal.DiscordConstants.Colors.STATUS_RED,
+								color: Internal.DiscordConstants.ColorVariables["status-danger"],
 								fontSize: 12,
 								fontWeight: 600,
 								padding: 6,
@@ -4613,7 +4613,7 @@ module.exports = (_ => {
 						return BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.badgeiconbadge, this.props.shape && Internal.LibraryComponents.Badges.BadgeShapes[this.props.shape] || Internal.LibraryComponents.Badges.BadgeShapes.ROUND),
 							style: Object.assign({
-								backgroundColor: this.props.disableColor ? null : (this.props.color || Internal.DiscordConstants.Colors.STATUS_RED)
+								backgroundColor: this.props.disableColor ? null : (this.props.color || Internal.DiscordConstants.ColorVariables["status-danger"])
 							}, this.props.style),
 							children: BDFDB.ReactUtils.createElement(Internal.LibraryComponents.SvgIcon, {
 								className: BDFDB.disCN.badgeicon,
@@ -4633,7 +4633,7 @@ module.exports = (_ => {
 						return BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.badgenumberbadge, this.props.shape && Internal.LibraryComponents.Badges.BadgeShapes[this.props.shape] || Internal.LibraryComponents.Badges.BadgeShapes.ROUND),
 							style: Object.assign({
-								backgroundColor: !this.props.disableColor && (this.props.color || Internal.DiscordConstants.Colors.STATUS_RED),
+								backgroundColor: !this.props.disableColor && (this.props.color || Internal.DiscordConstants.ColorVariables["status-danger"]),
 								width: this.getBadgeWidthForValue(this.props.count)
 							}, this.props.style),
 							onClick: this.handleClick.bind(this),
