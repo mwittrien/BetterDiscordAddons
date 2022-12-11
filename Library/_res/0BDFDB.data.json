@@ -50,6 +50,7 @@
 		"ChannelTypes": ["GUILD_TEXT", "GUILD_STORE", "DM"],
 		"ChannelTypeGroups": ["GUILD_TEXTUAL", "GUILD_VOCAL", "ALL_DMS"],
 		"Colors": ["SPOTIFY", "STATUS_RED"],
+		"ColorVariables": ["status-danger", "background-primary"],
 		"ComponentActions": ["INSERT_TEXT", "TEXTAREA_FOCUS"],
 		"EmojiSprites": ["DiversityPerRow", "PickerPerRow"],
 		"Endpoints": ["CAPTCHA", "GUILD", "MESSAGES"],
