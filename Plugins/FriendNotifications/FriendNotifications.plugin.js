@@ -2,7 +2,7 @@
  * @name FriendNotifications
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.8.6
+ * @version 1.8.7
  * @description Shows a Notification when a Friend or a User, you choose to observe, changes their Status
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -128,7 +128,7 @@ module.exports = (_ => {
 			DESKTOP: {
 				button: 2,
 				value: 2,
-				color: BDFDB.DiscordConstants.ColorVariables["status-positive"]
+				color: "var(--status-positive)"
 			}
 		};
 		
