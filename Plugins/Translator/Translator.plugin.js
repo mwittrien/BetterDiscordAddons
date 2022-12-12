@@ -135,7 +135,7 @@ module.exports = (_ => {
 								titleChildren: direction == languageTypes.OUTPUT && [{
 									text: _ => isChannelSpecific ? _this.labels.language_selection_channel : isGuildSpecific ? _this.labels.language_selection_server : _this.labels.language_selection_global,
 									name: isChannelSpecific || isGuildSpecific ? BDFDB.LibraryComponents.SvgIcon.Names.LOCK_CLOSED : BDFDB.LibraryComponents.SvgIcon.Names.LOCK_OPEN,
-									color: isChannelSpecific ? BDFDB.DiscordConstants.ColorVariables["status-danger"] : isGuildSpecific ? BDFDB.DiscordConstants.ColorVariables["status-warning"] : null,
+									color: isChannelSpecific ? "var(--status-danger)" : isGuildSpecific ? "var(--status-warning)" : null,
 									onClick: _ => {
 										if (channelLanguages[this.props.channelId] && channelLanguages[this.props.channelId][place]) {
 											isChannelSpecific = false;
@@ -210,7 +210,7 @@ module.exports = (_ => {
 													nativeClass: true,
 													width: 20,
 													height: 20,
-													color: BDFDB.DiscordConstants.ColorVariables["status-danger"],
+													color: "var(--status-danger)",
 													name: BDFDB.LibraryComponents.SvgIcon.Names.WARNING
 												})
 											}),
