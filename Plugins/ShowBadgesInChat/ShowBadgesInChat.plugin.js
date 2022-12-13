@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.5
+ * @version 1.9.6
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -90,9 +90,6 @@ module.exports = (_ => {
 				}
 				
 				this.css = `
-					${BDFDB.dotCN.messageheadertext} {
-						display: inline-flex !important;
-					}
 					${BDFDB.dotCN._showbadgesinchatbadges} {
 						display: inline-flex !important;
 						justify-content: center;
@@ -125,6 +122,12 @@ module.exports = (_ => {
 						display: block;
 						position: static;
 						margin: 0;
+					}
+					${BDFDB.dotCNS.messageheadertext + BDFDB.dotCN._showbadgesinchatbadgeschat} {
+						top: 0.2rem;
+					}
+					${BDFDB.dotCNS.messageheadertext + BDFDB.dotCN.bottag} {
+						top: 0.4rem;
 					}
 					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN._showbadgesinchatbadgeschat} {
 						top: 0;
