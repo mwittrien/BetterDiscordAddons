@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.0.2
+ * @version 5.0.3
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -87,7 +87,7 @@ module.exports = (_ => {
 			"png":		{copyable: true,	searchable: true,	video: false,	signs: [[0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]]},
 			"svg":		{copyable: false,	searchable: false,	video: false,	signs: [[0x3C]]},
 			"webm":		{copyable: false,	searchable: false,	video: true,	signs: [[0x1A, 0x45, 0xDF, 0xA3]]},
-			"webp":		{copyable: false,	searchable: true,	video: false,	signs: [[0x57, 0x45, 0x42, 0x50]]},
+			"webp":		{copyable: false,	searchable: true,	video: false,	signs: [[0x52, 0x49, 0x46, 0x46, null, null, null, null, 0x57, 0x45, 0x42, 0x50]]},
 			"wmv":		{copyable: false,	searchable: false,	video: true,	signs: [[0x30, 0x26, 0xB2, 0x75, 0x8E, 0x66, 0xCF, 0x11], [0xA6, 0xD9, 0x00, 0xAA, 0x00, 0x62, 0xCE, 0x6C]]}
 		};
 		
@@ -820,7 +820,7 @@ module.exports = (_ => {
 						!this.isValid(urlData.file, "copyable") ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_copy.replace("{{var0}}", type),
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-file"),
-							action: _ => this.copyFile(urlData.original)
+							action: _ => this.copyFile(urlData.src)
 						}),
 						!document.querySelector(BDFDB.dotCN.imagemodal) && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_view.replace("{{var0}}", type),
@@ -862,12 +862,12 @@ module.exports = (_ => {
 						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_saveas.replace("{{var0}}", type),
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "download-file-as"),
-							action: _ => this.downloadFileAs(urlData.original, urlData.src, urlData.alternativeName),
+							action: _ => this.downloadFileAs(urlData.src, urlData.original, urlData.alternativeName),
 							children: locations.length && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 								children: locations.map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, i),
 									label: name,
-									action: _ => this.downloadFile(urlData.original, ownLocations[name].location, urlData.src, urlData.alternativeName)
+									action: _ => this.downloadFile(urlData.src, ownLocations[name].location, urlData.original, urlData.alternativeName)
 								}))
 							})
 						}),
