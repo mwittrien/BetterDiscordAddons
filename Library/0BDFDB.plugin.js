@@ -7790,7 +7790,6 @@ module.exports = (_ => {
 					],
 					after: [
 						"DiscordTag",
-						"I18nLoader",
 						"UseCopyIdItem",
 						"UserPopoutAvatar"
 					],
