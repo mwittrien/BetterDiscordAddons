@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.2
+ * @version 3.0.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4169,26 +4169,21 @@ module.exports = (_ => {
 				BDFDB.DiscordUtils.rerenderAll = function (instant) {
 					BDFDB.TimeUtils.clear(BDFDB.DiscordUtils.rerenderAll.timeout);
 					BDFDB.DiscordUtils.rerenderAll.timeout = BDFDB.TimeUtils.timeout(_ => {
-						let LayersProviderIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.layers), {name: "LayersProvider", unlimited: true, up: true});
-						let LayersProviderType = LayersProviderIns && BDFDB.ObjectUtils.get(LayersProviderIns, `${BDFDB.ReactUtils.instanceKey}.type`);
-						if (!LayersProviderType) return;
+						let I18nLoaderWrapperIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.appmount).firstElementChild, {up: true, unlimited: true, filter: n => n && n.type && typeof n.type.displayName == "string" && n.type.displayName.indexOf("FluxContainer") == 0 && n.stateNode.listener && n.stateNode.listener.stores && n.stateNode.listener.stores.some(k => k && k.getName && k.getName() == "LocaleStore")});
+						if (!I18nLoaderWrapperIns) return;
 						let parentSelector = "", notices = document.querySelector("#bd-notices");
 						if (notices) {
 							let parentClasses = []
 							for (let i = 0, parent = notices.parentElement; i < 3; i++, parent = parent.parentElement) parentClasses.push(parent.className);
 							parentSelector = parentClasses.reverse().map(n => !n ? "*" : `.${n.split(" ").join(".")}`).join(" > ");
 						}
-						BDFDB.PatchUtils.patch({name: "BDFDB DiscordUtils"}, LayersProviderType.prototype, "render", {after: e => {
-							e.returnValue = BDFDB.ReactUtils.createElement(LayersProviderType, LayersProviderIns.props);
-							BDFDB.ReactUtils.forceUpdate(LayersProviderIns);
-							if (parentSelector) BDFDB.TimeUtils.timeout(_ => {
-								if (!document.contains(notices)) {
-									let parent = document.querySelector(parentSelector) || document.querySelector(BDFDB.dotCN.app).parentElement;
-									if (parent) parent.insertBefore(notices, parent.firstElementChild);
-								}
-							}, 1000);
+						if (parentSelector) BDFDB.PatchUtils.patch({name: "BDFDB DiscordUtils"}, I18nLoaderWrapperIns.prototype, "render", {after: e => {
+							if (!document.contains(notices)) {
+								let parent = document.querySelector(parentSelector) || document.querySelector(BDFDB.dotCN.app).parentElement;
+								if (parent) parent.insertBefore(notices, parent.firstElementChild);
+							}
 						}}, {once: true});
-						BDFDB.ReactUtils.forceUpdate(LayersProviderIns);
+						BDFDB.ReactUtils.forceUpdate(I18nLoaderWrapperIns);
 					}, instant ? 0 : 1000);
 				};
 				
@@ -7795,6 +7790,7 @@ module.exports = (_ => {
 					],
 					after: [
 						"DiscordTag",
+						"I18nLoader",
 						"UseCopyIdItem",
 						"UserPopoutAvatar"
 					],
