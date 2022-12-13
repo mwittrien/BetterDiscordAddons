@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.2
+ * @version 1.6.4
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -72,6 +72,9 @@ module.exports = (_ => {
 				this.patchPriority = 9;
 
 				this.modulePatches = {
+					before: [
+						"TooltipContainer"
+					],
 					after: [
 						"CircleIconButton",
 						"DirectMessage",
@@ -86,6 +89,9 @@ module.exports = (_ => {
 				};
 				
 				this.css = `
+					${BDFDB.dotCN.guildlistitemtooltip} {
+						display: none;
+					}
 					${BDFDB.dotCN.forumpagelist} {
 						justify-content: flex-start;
 					}
@@ -282,8 +288,13 @@ module.exports = (_ => {
 				});
 			}
 			
+			processTooltipContainer (e) {
+				if (!e.instance.props.tooltipClassName || e.instance.props.tooltipClassName.indexOf(BDFDB.disCN.guildlistitemtooltip) == -1) return;
+				e.instance.props.shouldShow = false;
+			}
+			
 			removeTooltip (parent, guild) {
-				let [children, index] = BDFDB.ReactUtils.findParent(parent, {name: ["Tooltip", "ListItemTooltip", "GuildTooltip", "BDFDB_TooltipContainer"]});
+				let [children, index] = BDFDB.ReactUtils.findParent(parent, {name: ["ListItemTooltip", "GuildTooltip", "BDFDB_TooltipContainer"]});
 				if (index == -1) return;
 				if (!guild) children[index] = children[index].props.children;
 				else children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
@@ -427,9 +438,6 @@ module.exports = (_ => {
 						font-weight: 500;
 						padding-top: 1px;
 					}
-					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildinboxtooltip} {
-						display: none;
-					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildiconchildwrapper + BDFDB.dotCN._displayserversaschannelsname} {
 						flex: 1 1 auto;
 						font-size: ${this.settings.amounts.serverElementHeight / 2}px;
@@ -502,7 +510,7 @@ module.exports = (_ => {
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderwrapper} [role="group"] {
 						height: auto !important;
 					}
-					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderwrapper} [role="group"] ${BDFDB.dotCN.guildouter}:last-child {
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderwrapper} [role="group"] > ${BDFDB.dotCN.guildouter}:last-child {
 						margin-bottom: 10px;
 					}
 

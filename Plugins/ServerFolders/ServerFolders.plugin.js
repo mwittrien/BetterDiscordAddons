@@ -813,6 +813,7 @@ module.exports = (_ => {
 				e.instance.props.children = BDFDB.TimeUtils.suppress((...args) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: child.props.children.props.folderNode.name || e.instance.props.text,
 					tooltipConfig: {
+						className: BDFDB.disCN.guildlistitemtooltip,
 						type: "right",
 						list: true,
 						offset: 12,
