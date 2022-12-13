@@ -26,6 +26,14 @@
 		"MAX_VIDEO_HEIGHT": 720,
 		"MAX_VIDEO_WIDTH": 1280,
 		"ME": "@me",
+		"MenuItemColors": {
+			"BRAND": "colorBrand",
+			"DANGER": "colorDanger",
+			"DEFAULT": "colorDefault",
+			"PREMIUM": "colorPremium",
+			"PREMIUMGRADIENT": "colorPremiumGradient",
+			"SUCCESS": "colorSuccess"
+		},
 		"SEARCH_PAGE_SIZE": 25,
 		"ToastIcons": {
 			"info": "INFO",
@@ -1478,7 +1486,7 @@
 		"LiveTag": {"props": ["liveLarge", "live"]},
 		"LoadingScreen": {"props": ["container", "problemsText", "problems"]},
 		"Margins": {"props": ["marginBottom4", "marginCenterHorz"]},
-		"Menu": {"props": ["menu", "styleFlexible", "item"]},
+		"Menu": {"props": ["menu", "colorPremiumGradient", "item"]},
 		"MenuCaret": {"props": ["arrow", "open"]},
 		"MenuReactButton": {"props": ["wrapper", "icon", "focused", "button"]},
 		"MenuSlider": {"props": ["slider", "sliderContainer"]},
@@ -2651,6 +2659,7 @@
 		"menucolordanger": ["Menu", "colorDanger"],
 		"menucolordefault": ["Menu", "colorDefault"],
 		"menucolorpremium": ["Menu", "colorPremium"],
+		"menucolorpremiumgradient": ["Menu", "colorPremiumGradient"],
 		"menucustomitem": ["Menu", "customItem"],
 		"menudisabled": ["Menu", "disabled"],
 		"menufocused": ["Menu", "focused"],
