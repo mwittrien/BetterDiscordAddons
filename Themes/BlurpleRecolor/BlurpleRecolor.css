@@ -2153,6 +2153,25 @@ a.metadataName-1KMZtB {
 	color: rgb(var(--accentcolor2));
 }
 
+.colorPremiumGradient-l1Ok7Q:not(.focused-3qFvc8):not(:active) {
+    background-image: linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor)));
+	color: transparent;
+	-webkit-background-clip: text;
+}
+.colorPremiumGradient-l1Ok7Q.focused-3qFvc8,
+.colorPremiumGradient-l1Ok7Q:active:not(.hideInteraction-2jPGL_) {
+    background: linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor)));
+}
+.colorPremiumGradient-l1Ok7Q:not(.focused-3qFvc8):not(:active) .radioSelection-1UHp0b {
+	color: rgb(var(--accentcolor));
+}
+.colorPremiumGradient-l1Ok7Qnot(.focused-3qFvc8):not(:active) .checkbox-hADx5o {
+	color: rgb(var(--accentcolor));
+}
+.colorPremiumGradient-l1Ok7Q.focused-3qFvc8 .check-3HZJs4 {
+	color: rgb(var(--accentcolor));
+}
+
 .colorDanger-3n-KnP:not(.focused-3qFvc8):not(:active) {		/* contextmenu			danger								*/
 	color: var(--status-danger);
 }
