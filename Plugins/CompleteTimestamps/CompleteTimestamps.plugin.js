@@ -62,18 +62,20 @@ module.exports = (_ => {
 			onLoad () {
 				
 				this.defaults = {
-					general: {
-						showInChat:				{value: true, 			description: "Replace Chat Timestamps with complete Timestamps"},
-						showInEmbed:			{value: true, 			description: "Replace Embed Timestamps with complete Timestamps"},
-						showInMarkup:			{value: true, 			description: "Replace Markup Timestamps with complete Timestamps"},
-						showInAuditLogs:		{value: true, 			description: "Replace Audit Log Timestamps with complete Timestamps"},
-						changeForChat:			{value: true, 			description: "Change the Time for Chat Time Tooltips"},
-						changeForEdit:			{value: true, 			description: "Change the Time for Edited Time Tooltips"},
-						changeForMarkup:		{value: true, 			description: "Change the Time for Markup Timestamp Tooltips"}
+					places: {
+						chat:					{value: true, 			description: "Chat Timestamps"},
+						embed:					{value: true, 			description: "Embed Timestamps"},
+						markup:					{value: true, 			description: "Markup Timestamps"},
+						auditLogs:				{value: true, 			description: "Audit Logs Timestamps"}
+					},
+					tooltips: {
+						chat:					{value: true, 			description: "Chat Time Tooltips"},
+						edit:					{value: true, 			description: "Edited Time Tooltips"},
+						markup:					{value: true, 			description: "Markup Timestamp Tooltips"}
 					},
 					dates: {
-						timestampDate:			{value: {}, 			description: "Chat Timestamp"},
-						tooltipDate:			{value: {}, 			description: "Tooltip Timestamp"}
+						timestampDate:			{value: {}, 			description: "Chat Timestamps"},
+						tooltipDate:			{value: {}, 			description: "Tooltip Timestamps"}
 					}
 				};
 				
@@ -95,7 +97,7 @@ module.exports = (_ => {
 			onStart () {
 				BDFDB.LibraryModules.MessageParser && BDFDB.LibraryModules.MessageParser.defaultRules && BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageParser.defaultRules.timestamp, "react", {after: e => {
 					const date = 1e3*Number(e.methodArguments[0].timestamp);
-					if (this.settings.general.showInMarkup && e.methodArguments[0].formatted == BDFDB.LibraryModules.MessageParser.defaultRules.timestamp.parse([null, e.methodArguments[0].timestamp, "f"]).formatted) {
+					if (this.settings.places.markup && e.methodArguments[0].formatted == BDFDB.LibraryModules.MessageParser.defaultRules.timestamp.parse([null, e.methodArguments[0].timestamp, "f"]).formatted) {
 						if (tooltipIsSame) e.returnValue.props.delay = 99999999999999999999;
 						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, date);
 						let renderChildren = e.returnValue.props.children;
@@ -106,7 +108,7 @@ module.exports = (_ => {
 							return renderedChildren;
 						};
 					}
-					if (this.settings.general.changeForMarkup) e.returnValue.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, date);
+					if (this.settings.tooltips.markup) e.returnValue.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, date);
 				}});
 				
 				this.forceUpdateAll();
@@ -125,13 +127,27 @@ module.exports = (_ => {
 					children: _ => {
 						let settingsItems = [];
 						
-						settingsItems.push(Object.keys(this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-							type: "Switch",
-							plugin: this,
-							keys: ["general", key],
-							label: this.defaults.general[key].description,
-							value: this.settings.general[key]
-						})));
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							title: "Change Timestamps to custom Timestamps in:",
+							children: Object.keys(this.defaults.places).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["places", key],
+								label: this.defaults.places[key].description,
+								value: this.settings.places[key]
+							}))
+						}));
+						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelList, {
+							title: "Change Tooltip Timestamps to custom Timestamps for:",
+							children: Object.keys(this.defaults.tooltips).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["tooltips", key],
+								label: this.defaults.tooltips[key].description,
+								value: this.settings.tooltips[key]
+							}))
+						}));
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 							className: BDFDB.disCN.marginbottom8
@@ -171,10 +187,10 @@ module.exports = (_ => {
 				if (!tooltipWrapper) return;
 				let childClassName = BDFDB.ObjectUtils.get(e, "instance.props.children.props.className");
 				if (childClassName && childClassName.indexOf(BDFDB.disCN.messageedited) > -1) {
-					if (this.settings.general.changeForEdit) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
+					if (this.settings.tooltips.edit) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
 				}
 				else {
-					if (this.settings.general.showInChat && !e.instance.props.cozyAlt) {
+					if (this.settings.places.chat && !e.instance.props.cozyAlt) {
 						if (tooltipIsSame) tooltipWrapper.props.delay = 99999999999999999999;
 						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.timestamp._i);
 						let renderChildren = tooltipWrapper.props.children;
@@ -186,12 +202,12 @@ module.exports = (_ => {
 						};
 						this.setMaxWidth(e.returnvalue, e.instance.props.compact);
 					}
-					if (this.settings.general.changeForChat) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
+					if (this.settings.tooltips.chat) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
 				}
 			}
 
 			processEmbed (e) {
-				if (!this.settings.general.showInEmbed || !e.instance.props.embed || !e.instance.props.embed.timestamp) return;
+				if (!this.settings.places.embed || !e.instance.props.embed || !e.instance.props.embed.timestamp) return;
 				let process = returnvalue => {
 					let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props: [["className", BDFDB.disCN.embedfootertext]]});
 					if (index > -1) {
@@ -211,7 +227,7 @@ module.exports = (_ => {
 			}
 
 			processAuditLogEntry (e) {
-				if (!this.settings.general.showInAuditLogs || !e.instance.props.log) return;
+				if (!this.settings.places.auditLogs || !e.instance.props.log) return;
 				let process = returnvalue => {
 					let [children, index] = BDFDB.ReactUtils.findParent(returnvalue, {props: [["className", BDFDB.disCN.auditlogtimestamp]]});
 					if (index > -1) children[index].props.children = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.log.timestampStart._i);
