@@ -5,7 +5,6 @@
 	--accentcolor:					88,101,242;
 	--accentcolor2:					255,115,250;
 	--linkcolor:					0,176,244;
-	--dangercolor: 					237,66,69;
 	
 	--accentcolor-hover:			rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255,255,255,.15), rgba(255,255,255,.15));
 	--accentcolor-active:			rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255,255,255,.3), rgba(255,255,255,.3));
@@ -2155,20 +2154,37 @@ a.metadataName-1KMZtB {
 }
 
 .colorDanger-3n-KnP:not(.focused-3qFvc8):not(:active) {		/* contextmenu			danger								*/
-	color: rgb(var(--dangercolor));
+	color: var(--status-danger);
 }
 .colorDanger-3n-KnP.focused-3qFvc8,
 .colorDanger-3n-KnP:active:not(.hideInteraction-2jPGL_) {
-	background-color: rgb(var(--dangercolor));
+	background-color: var(--status-danger);
 }
 .colorDanger-3n-KnP:not(.focused-3qFvc8):not(:active) .radioSelection-1UHp0b {
-	color: rgb(var(--dangercolor));
+	color: var(--status-danger);
 }
 .colorDanger-3n-KnP:not(.focused-3qFvc8):not(:active) .checkbox-hADx5o {
-	color: rgb(var(--dangercolor));
+	color: var(--status-danger);
 }
 .colorDanger-3n-KnP.focused-3qFvc8 .check-3HZJs4 {
-	color: rgb(var(--dangercolor));
+	color: var(--status-danger);
+}
+
+.colorSuccess-1M2JCA:not(.focused-3qFvc8):not(:active) {		/* contextmenu			danger								*/
+	color: var(--status-success);
+}
+.colorSuccess-1M2JCA.focused-3qFvc8,
+.colorSuccess-1M2JCA:active:not(.hideInteraction-2jPGL_) {
+	background-color: var(--status-success);
+}
+.colorSuccess-1M2JCA:not(.focused-3qFvc8):not(:active) .radioSelection-1UHp0b {
+	color: var(--status-success);
+}
+.colorSuccess-1M2JCA:not(.focused-3qFvc8):not(:active) .checkbox-hADx5o {
+	color: var(--status-success);
+}
+.colorSuccess-1M2JCA.focused-3qFvc8 .check-3HZJs4 {
+	color: var(--status-success);
 }
 
 .colorDefault-CDqZdO[id="status-picker-online"].focused-3qFvc8,
@@ -2759,10 +2775,10 @@ html .newBadge-1LcB6t[style*="background-color: hsl(235, "] {
 }
 .banner.banner-danger {
 	background: var(--background-secondary);
-	border-color: rgb(var(--dangercolor));
+	border-color: var(--status-danger);
 }
 .banner-danger .bd-icon {
-	fill: rgb(var(--dangercolor));
+	fill: var(--status-danger);
 }
 
 .bd-addon-views .bd-view-button.selected {
