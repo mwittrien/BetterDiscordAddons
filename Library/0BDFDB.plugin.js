@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.3
+ * @version 3.0.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4427,7 +4427,7 @@ module.exports = (_ => {
 						let color = (typeof this.props.color == "string" ? this.props.color : Internal.DiscordConstants.MenuItemColors.DEFAULT).toLowerCase();
 						let isCustomColor = false;
 						if (color) {
-							if (InternalData.DiscordClasses[`menu${color}`]) color = color;
+							if (InternalData.DiscordClasses[`menucolor${color}`]) color = color;
 							else if (BDFDB.ColorUtils.getType(color)) {
 								isCustomColor = true;
 								color = BDFDB.ColorUtils.convert(color, "RGBA");
@@ -4448,7 +4448,7 @@ module.exports = (_ => {
 						let focused = !openedItem ? this.props.isFocused : openedItem == this.props.id;
 						let themeDark = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themedark;
 						let item = BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Clickable, Object.assign({
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, (this.props.label || this.props.subtext) && BDFDB.disCN.menulabelcontainer, color && (isCustomColor ? BDFDB.disCN.menucolorcustom : BDFDB.disCN[`menu${color}`]), this.props.disabled && BDFDB.disCN.menudisabled, focused && BDFDB.disCN.menufocused),
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, (this.props.label || this.props.subtext) && BDFDB.disCN.menulabelcontainer, color && (isCustomColor ? BDFDB.disCN.menucolorcustom : BDFDB.disCN[`menucolor${color}`]), this.props.disabled && BDFDB.disCN.menudisabled, focused && BDFDB.disCN.menufocused),
 							style: {
 								color: isCustomColor ? ((focused || this.state.hovered) ? (BDFDB.ColorUtils.isBright(color) ? "#000000" : "#ffffff") : color) : (this.state.hovered ? "#ffffff" : null),
 								background: isCustomColor && (focused || this.state.hovered) && color
@@ -6216,7 +6216,7 @@ module.exports = (_ => {
 					}), [props.isFocused]);
 					
 					return BDFDB.ReactUtils.createElement("div", Object.assign({
-						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN[`menu${(props.color && InternalData.DiscordClasses[`menu${props.color.toLowerCase()}`] || Internal.DiscordConstants.MenuItemColors.DEFAULT || "").toLowerCase()}`], props.disabled && BDFDB.disCN.menudisabled, props.showDefaultFocus && props.isFocused && BDFDB.disCN.menufocused, !props.showDefaultFocus && BDFDB.disCN.menuhideinteraction),
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN[`menucolor${(props.color && InternalData.DiscordClasses[`menucolor${props.color.toLowerCase()}`] || Internal.DiscordConstants.MenuItemColors.DEFAULT || "").toLowerCase()}`], props.disabled && BDFDB.disCN.menudisabled, props.showDefaultFocus && props.isFocused && BDFDB.disCN.menufocused, !props.showDefaultFocus && BDFDB.disCN.menuhideinteraction),
 						onClick: BDFDB.ReactUtils.useCallback((_ => {
 							if (!controlRef.current || !controlRef.current.activate || !controlRef.current.activate.call(controlRef.current)) typeof props.onClose == "function" && props.onClose();
 						}), [props.onClose]),
