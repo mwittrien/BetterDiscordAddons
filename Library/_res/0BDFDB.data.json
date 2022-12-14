@@ -27,12 +27,12 @@
 		"MAX_VIDEO_WIDTH": 1280,
 		"ME": "@me",
 		"MenuItemColors": {
-			"BRAND": "colorBrand",
-			"DANGER": "colorDanger",
-			"DEFAULT": "colorDefault",
-			"PREMIUM": "colorPremium",
-			"PREMIUMGRADIENT": "colorPremiumGradient",
-			"SUCCESS": "colorSuccess"
+			"BRAND": "brand",
+			"DANGER": "danger",
+			"DEFAULT": "default",
+			"PREMIUM": "premium",
+			"PREMIUMGRADIENT": "premiumgradient",
+			"SUCCESS": "success"
 		},
 		"SEARCH_PAGE_SIZE": 25,
 		"ToastIcons": {
@@ -441,6 +441,7 @@
 		"HeaderBarTitleIcon": {"strings": ["HEADER_BAR_BADGE", ".iconBadge", ".iconClassName"]},
 		"HomeButton": {"strings": ["isOnOtherSidebarRoute", "showProgressBadge", "maybeTrackExposure"]},
 		"HomeButtonDefault": {"strings": ["BUTTON_HOME", ".homeIcon", ".DISCODO_ENABLED"]},
+		"I18nLoader": {"strings": [".Messages.I18N_LOCALE_LOADING_ERROR", ".loading"]},
 		"ImageModal": {"strings": ["._mobileCloseRef", "mobileCloseWrapper", "renderMobileCloseButton", "\"ESC\""]},
 		"InboxHeader": {"strings": [".UNREADS", ".TODOS", ".controls"]},
 		"IncomingCallModal": {"strings": [".Messages.INCOMING_VIDEO_CALL_ELLIPSIS", ".isFocused", "maxX:window.innerWidth"]},
@@ -2660,6 +2661,7 @@
 		"menucolordefault": ["Menu", "colorDefault"],
 		"menucolorpremium": ["Menu", "colorPremium"],
 		"menucolorpremiumgradient": ["Menu", "colorPremiumGradient"],
+		"menucolorsuccess": ["Menu", "colorSuccess"],
 		"menucustomitem": ["Menu", "customItem"],
 		"menudisabled": ["Menu", "disabled"],
 		"menufocused": ["Menu", "focused"],
