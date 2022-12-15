@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.0.3
+ * @version 5.0.4
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -94,22 +94,22 @@ module.exports = (_ => {
 		const LazyImageSiblingComponent = class LazyImageSibling extends BdApi.React.Component {
 			render() {
 				if (!this.props.loadedImage) {
-					const instace = this;
+					const instance = this;
 					const imageThrowaway = document.createElement("img");
 					imageThrowaway.addEventListener("load", function() {
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let resizeX = (aRects.width/this.width) * 0.8, resizeY = (aRects.height/this.height) * 0.65
 						let ratio = resizeX < resizeY ? resizeX : resizeY;
-						instace.props.loadedImage = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.LazyImage, {
+						instance.props.loadedImage = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.LazyImage, {
 							src: imageThrowaway.src,
 							width: this.width,
 							height: this.height,
 							maxWidth: this.width * ratio,
 							maxHeight: this.height * ratio
 						});
-						BDFDB.ReactUtils.forceUpdate(instace);
+						BDFDB.ReactUtils.forceUpdate(instance);
 					});
-					imageThrowaway.src = this.props.url;
+					imageThrowaway.src = !_this.isValid(this.props.url, "video") ? this.props.url : _this.getPosterUrl(this.props.url);
 				}
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._imageutilitiessibling, this.props.className),
@@ -170,7 +170,7 @@ module.exports = (_ => {
 								height: 16,
 								onClick: event => {
 									BDFDB.ListenerUtils.stopEvent(event);
-									_this.downloadFileAs(this.props.attachment.proxy_url || this.props.original);
+									_this.downloadFile(this.props.attachment.proxy_url || this.props.original);
 								},
 								onContextMenu: event => {
 									let locations = Object.keys(ownLocations).filter(n => ownLocations[n].enabled);
@@ -779,6 +779,10 @@ module.exports = (_ => {
 				return file && (!type && (url.indexOf("discord.com/streams/guild:") > -1 || url.indexOf("discordapp.com/streams/guild:") > -1 || url.indexOf("discordapp.net/streams/guild:") > -1 || url.startsWith("https://images-ext-1.discordapp.net/") || url.startsWith("https://images-ext-2.discordapp.net/") || Object.keys(fileTypes).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`))) || type && Object.keys(fileTypes).filter(t => fileTypes[t][type]).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`)));
 			}
 			
+			getPosterUrl (url) {
+				return (url || "").replace("https://cdn.discordapp.com", "https://media.discordapp.net").split("?size=")[0] + "?format=jpeg";
+			}
+			
 			createSubMenus (data) {
 				return data.urls.length == 1 ? this.createUrlMenu(data.instance, data.urls[0], data.target) : data.urls.map((urlData, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: [urlData.isGuildSpecific && BDFDB.LanguageUtils.LanguageStrings.CHANGE_IDENTITY_SERVER_PROFILE, data.prefix, urlData.fileType.toUpperCase()].filter(n => n).join(" "),
@@ -845,12 +849,14 @@ module.exports = (_ => {
 												shouldAnimate: true,
 												renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props),
 												children: !isVideo ? null : (videoData => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Video, {
+													poster: _this.getPosterUrl(urlData.src || urlData.file),
 													src: urlData.src || urlData.file,
 													width: videoData.size.width,
 													height: videoData.size.height,
 													naturalWidth: this.videoWidth,
 													naturalHeight: this.videoHeight,
-													play: true
+													play: true,
+													playOnHover: !!BDFDB.LibraryStores.AccessibilityStore.useReducedMotion
 												}))
 											})
 										}), true);
@@ -862,7 +868,7 @@ module.exports = (_ => {
 						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_saveas.replace("{{var0}}", type),
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "download-file-as"),
-							action: _ => this.downloadFileAs(urlData.src, urlData.original, urlData.alternativeName),
+							action: _ => this.downloadFile(urlData.src, null, urlData.original, urlData.alternativeName),
 							children: locations.length && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 								children: locations.map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, i),
@@ -989,7 +995,7 @@ module.exports = (_ => {
 										children: this.labels.context_saveas.replace("{{var0}}", type),
 										onClick: event => {
 											BDFDB.ListenerUtils.stopEvent(event);
-											this.downloadFileAs(url);
+											this.downloadFile(url);
 										},
 										onContextMenu: event => {
 											let locations = Object.keys(ownLocations).filter(n => ownLocations[n].enabled);
@@ -1186,8 +1192,7 @@ module.exports = (_ => {
 						}
 					}
 					if (e.methodname == "componentDidMount") {
-						let isVideo = (typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})) || {type: {}}).type.displayName == "Video";
-						if (this.settings.viewerSettings.zoomMode && !isVideo && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling) && BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.getInstance(e.node), {name: "ImageModal", up: true})) {
+						if (this.settings.viewerSettings.zoomMode && !e.node.querySelector("video") && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling) && BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.getInstance(e.node), {name: "ImageModal", up: true})) {
 							e.node.style.setProperty("cursor", "zoom-in");
 							e.node.addEventListener("mousedown", event => {
 								if (event.which != 1) return;
@@ -1196,8 +1201,7 @@ module.exports = (_ => {
 								let vanishObserver;
 								
 								let imgRects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
-								
-								let lens = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${this.settings.zoomSettings.lensSize}px !important; height: ${this.settings.zoomSettings.lensSize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * this.settings.zoomSettings.zoomLevel}px; height: ${imgRects.height * this.settings.zoomSettings.zoomLevel}px; position: fixed !important;${this.settings.zoomSettings.pixelMode ? " image-rendering: pixelated !important;" : ""}"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
+								let lens = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${this.settings.zoomSettings.lensSize}px !important; height: ${this.settings.zoomSettings.lensSize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;"><${e.node.firstElementChild.tagName} src="${!this.isValid(e.instance.props.src, "video") ? e.instance.props.src : this.getPosterUrl(e.instance.props.src)}" style="width: ${imgRects.width * this.settings.zoomSettings.zoomLevel}px; height: ${imgRects.height * this.settings.zoomSettings.zoomLevel}px; position: fixed !important;${this.settings.zoomSettings.pixelMode ? " image-rendering: pixelated !important;" : ""}"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
 								let pane = lens.firstElementChild.firstElementChild;
 								let backdrop = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslensebackdrop}" style="background: rgba(0, 0, 0, 0.3) !important; position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; pointer-events: none !important; z-index: 8000 !important;"></div>`);
 								let appMount = document.querySelector(BDFDB.dotCN.appmount);
@@ -1436,38 +1440,56 @@ module.exports = (_ => {
 				}, 1000);
 			}
 			
-			downloadFile (url, path, fallbackUrl, alternativeName) {
+			downloadFile (url, path, fallbackUrl, alternativeName, fallbackToRequest) {
+				if (!url) return BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", path || "PC"), {type: "danger"});
 				url = url.startsWith("/assets") ? (window.location.origin + url) : url;
-				BDFDB.DiscordUtils.requestFileData(url, {timeout: 3000}, (error, buffer) => {
-					if (error || !buffer) this.downloadFile(fallbackUrl, path, null, alternativeName);
+				if (!fallbackToRequest) BDFDB.DiscordUtils.requestFileData(url, {timeout: 3000}, (error, buffer) => {
+					if (error || !buffer) {
+						if (fallbackUrl) this.downloadFile(fallbackUrl, path, null, alternativeName);
+						else this.downloadFile(url, path, null, alternativeName, true);
+					}
 					else {
 						let extension = this.getFileExtension(new Uint8Array(buffer));
-						if (!extension) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", path), {type: "danger"});
+						if (!extension) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", path || "PC"), {type: "danger"});
 						else {
 							let type = fileTypes[extension].video ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
-							BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, (alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35), extension, 0), Buffer.from(buffer), error => {
+							if (path) BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, (alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35), extension, 0), Buffer.from(buffer), error => {
 								if (error) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", path), {type: "danger"});
 								else BDFDB.NotificationUtils.toast(this.labels.toast_save_success.replace("{{var0}}", type).replace("{{var1}}", path), {type: "success"});
 							});
+							else {
+								let hrefURL = window.URL.createObjectURL(new Blob([buffer], {type: this.getMimeType(extension)}));
+								let tempLink = document.createElement("a");
+								tempLink.href = hrefURL;
+								tempLink.download = `${(alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35)}.${extension}`;
+								tempLink.click();
+								window.URL.revokeObjectURL(hrefURL);
+							}
 						}
 					}
 				});
-			}
-			
-			downloadFileAs (url, fallbackUrl, alternativeName) {
-				url = url.startsWith("/assets") ? (window.location.origin + url) : url;
-				BDFDB.DiscordUtils.requestFileData(url, {timeout: 3000}, (error, buffer) => {
-					if (error || !buffer) this.downloadFileAs(fallbackUrl, null, alternativeName);
+				else BDFDB.LibraryRequires.request(url, {agentOptions: {rejectUnauthorized: false}, headers: {"Content-Type": "application/json"}}, (error, response, buffer) => {
+					if (error || response.statusCode != 200 || response.headers["content-type"].indexOf("text/html") > -1) {
+						if (fallbackUrl) this.downloadFile(fallbackUrl, path, null, alternativeName, true);
+						else BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", path || "PC"), {type: "danger"});
+					}
 					else {
 						let extension = this.getFileExtension(new Uint8Array(buffer));
-						if (!extension) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", "PC"), {type: "danger"});
+						if (!extension) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", path || "PC"), {type: "danger"});
 						else {
-							let hrefURL = window.URL.createObjectURL(new Blob([buffer], {type: this.getMimeType(extension)}));
-							let tempLink = document.createElement("a");
-							tempLink.href = hrefURL;
-							tempLink.download = `${(alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35)}.${extension}`;
-							tempLink.click();
-							window.URL.revokeObjectURL(hrefURL);
+							let type = fileTypes[extension].video ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
+							if (path) BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, (alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35), extension, 0), Buffer.from(buffer), error => {
+								if (error) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", path), {type: "danger"});
+								else BDFDB.NotificationUtils.toast(this.labels.toast_save_success.replace("{{var0}}", type).replace("{{var1}}", path), {type: "success"});
+							});
+							else {
+								let hrefURL = window.URL.createObjectURL(new Blob([buffer], {type: this.getMimeType(extension)}));
+								let tempLink = document.createElement("a");
+								tempLink.href = hrefURL;
+								tempLink.download = `${(alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35)}.${extension}`;
+								tempLink.click();
+								window.URL.revokeObjectURL(hrefURL);
+							}
 						}
 					}
 				});
@@ -1597,6 +1619,7 @@ module.exports = (_ => {
 				modalInstance.props.width = viewedImage.width;
 				modalInstance.props.height = viewedImage.height;
 				modalInstance.props.children = !isVideo ? null : (videoData => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Video, {
+					poster: viewedImage.proxy_url.replace("https://cdn.discordapp.com", "https://media.discordapp.net").split("?size=")[0] + "?format=jpeg",
 					src: viewedImage.proxy_url,
 					width: videoData.size.width,
 					height: videoData.size.height,
