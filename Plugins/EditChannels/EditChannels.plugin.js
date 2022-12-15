@@ -2,7 +2,7 @@
  * @name EditChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.5.1
+ * @version 4.5.2
  * @description Allows you to locally edit Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -476,12 +476,7 @@ module.exports = (_ => {
 			processChannelsList (e) {
 				if (!this.settings.places.channelList || !e.instance.props.guildChannels) return;
 				e.instance.props.guildChannels = new e.instance.props.guildChannels.constructor(e.instance.props.guild.id, e.instance.props.guildChannels.communitySection && e.instance.props.guildChannels.communitySection.communityRows || []);
-				let getCategoryFromSection = e.instance.props.guildChannels.getCategoryFromSection.bind(e.instance.props.guildChannels);
-				e.instance.props.guildChannels.getCategoryFromSection = BDFDB.TimeUtils.suppress((...args) => {
-					let returnValue = getCategoryFromSection(...args);
-					if (returnValue && returnValue.record) returnValue.record = this.getChannelData(returnValue.record.id, true, returnValue.record);
-					return returnValue;
-				}, "Error in getCategoryFromSection of ChannelsList!", this);
+				for (let id in e.instance.props.guildChannels.categories) e.instance.props.guildChannels.categories[id].record = this.getChannelData(id, true, e.instance.props.guildChannels.categories[id].record);
 				let getChannelFromSectionRow = e.instance.props.guildChannels.getChannelFromSectionRow.bind(e.instance.props.guildChannels);
 				e.instance.props.guildChannels.getChannelFromSectionRow = BDFDB.TimeUtils.suppress((...args) => {
 					let returnValue = getChannelFromSectionRow(...args);
