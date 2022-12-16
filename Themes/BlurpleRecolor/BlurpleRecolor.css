@@ -39,6 +39,7 @@
 	--button-outline-brand-border: rgba(var(--accentcolor),.1) !important;
 	--button-outline-brand-border-hover: rgba(var(--accentcolor),.6) !important;
 	--button-outline-brand-border-active: rgb(var(--accentcolor)) !important;
+	
 	--brand-experiment-100: #fdfdfd !important;
 	--brand-experiment-130: #f2f2f2 !important;
 	--brand-experiment-160: #ebebeb !important;
@@ -84,6 +85,7 @@
 	--brand-experiment-85a: rgba(var(--accentcolor),.85) !important;
 	--brand-experiment-90a: rgba(var(--accentcolor),.9) !important;
 	--brand-experiment-95a: rgba(var(--accentcolor),.95) !important;
+	
 	--brand-100: #fdfdfd !important;
 	--brand-130: #f2f2f2 !important;
 	--brand-160: #ebebeb !important;
@@ -174,6 +176,17 @@
 	--brand-new-85a: rgba(var(--accentcolor),.85) !important;
 	--brand-new-90a: rgba(var(--accentcolor),.9) !important;
 	--brand-new-95a: rgba(var(--accentcolor),.95) !important;
+	
+	--guild-boosting-pink: rgb(var(--accentcolor2)) !important;
+    --guild-boosting-pink-rgb: var(--accentcolor2) !important;
+    --guild-boosting-purple: rgb(var(--accentcolor2)) !important;
+    --guild-boosting-purple-rgb: var(--accentcolor2) !important;
+    --guild-boosting-blue: rgb(var(--accentcolor2)) !important;
+    --guild-boosting-blue-rgb: var(--accentcolor2)1 !important;
+    --guild-boosting-blue-for-gradients: rgb(var(--accentcolor2)) !important;
+    --guild-boosting-blue-for-gradients-rgb: var(--accentcolor2) !important;
+    --guild-boosting-purple-for-gradients: rgb(var(--accentcolor2)) !important;
+    --guild-boosting-purple-for-gradients-rgb: var(--accentcolor2) !important;
 	
 	--search-popout-date-picker-hint-value-background: var(--brand-experiment-90a);
 	--search-popout-date-picker-hint-value-background-hover: var(--brand-experiment-430);
