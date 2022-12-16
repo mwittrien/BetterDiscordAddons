@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.5
+ * @version 3.0.6
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -7642,7 +7642,7 @@ module.exports = (_ => {
 					BDFDB.ReactUtils.useEffect(_ => {
 						if (ref.current) props.play ? ref.current.play() : ref.current.pause();
 					}, [props.play]);
-					return props.naturalWidth <= Internal.DiscordConstants.MAX_VIDEO_WIDTH && props.naturalHeight <= Internal.DiscordConstants.MAX_VIDEO_HEIGHT || props.naturalWidth <= Internal.DiscordConstants.MAX_VIDEO_HEIGHT && props.naturalHeight <= Internal.DiscordConstants.MAX_VIDEO_WIDTH ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.VideoForwardRef, {
+					return props.ignoreMaxSize || props.naturalWidth <= Internal.DiscordConstants.MAX_VIDEO_WIDTH && props.naturalHeight <= Internal.DiscordConstants.MAX_VIDEO_HEIGHT || props.naturalWidth <= Internal.DiscordConstants.MAX_VIDEO_HEIGHT && props.naturalHeight <= Internal.DiscordConstants.MAX_VIDEO_WIDTH ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.VideoForwardRef, {
 						ref: ref,
 						className: props.className,
 						poster: props.poster,
