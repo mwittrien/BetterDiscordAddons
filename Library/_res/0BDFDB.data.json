@@ -162,7 +162,7 @@
 		"ModalUtils": {"strings": ["modalKey", "instant", "contextKey"], "nonStrings": ["LOGIN_REQUIRED_ACTIONS_MODAL_KEY"], "exported": false, "value": "exports", "map": {
 			"openModal": [".modalKey", ".instant", ".Layer", ".onCloseRequest"]
 		}},
-		"NitroUtils": {"props": ["canUseIncreasedMessageLength", "canUploadAnimatedAvatar"]},
+		"NitroUtils": {"props": ["canUseIncreasedMessageLength", "canUsePremiumGuildMemberProfile"]},
 		"NotificationSettingsUtils": {"props": ["setDesktopType", "setTTSType"]},
 		"PlatformUtils": {"strings": ["return/^win/.test"], "exported": false, "value": "exports", "map": {
 			"isAndroid": ["\"android\""],
