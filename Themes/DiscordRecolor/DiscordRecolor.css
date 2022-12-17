@@ -1100,7 +1100,10 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 }
 
 #app-mount .background-fkKrXt,
-#app-mount .container-3wLKDe {
+#app-mount .container-3wLKDe,
+#app-mount .container-2IKOsH,
+#app-mount .header-3xB4vB,
+#app-mount .container-1um7CU {
 	background-color: var(--background-primary);
 }
 #app-mount .background-fkKrXt .container-2Hi7Km,
@@ -1111,7 +1114,8 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .background-fkKrXt .containerCard-2kwJKN:hover,
 #app-mount .background-fkKrXt .interactiveCard-2iMtdk,
 #app-mount .container-3wLKDe .mainCard-3KBsBI,
-#app-mount .container-3wLKDe .sidebarCard-1Gn1ch {
+#app-mount .container-3wLKDe .sidebarCard-1Gn1ch,
+#app-mount .container-2IKOsH .channelRow-4X_3fi {
 	background-color: var(--background-secondary);
 }
 @media (max-width: 1300px) {
@@ -1124,7 +1128,8 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	border-color: var(--background-secondary);
 }
 #app-mount .background-fkKrXt .container-3HMTms:hover,
-#app-mount .container-3wLKDe .pill-3pRQlO {
+#app-mount .container-3wLKDe .pill-3pRQlO,
+#app-mount .container-2IKOsH .channelRow-4X_3fi:hover {
 	background: var(--background-tertiary);
 }
 #app-mount .textContentFooter-2JnNv8 {

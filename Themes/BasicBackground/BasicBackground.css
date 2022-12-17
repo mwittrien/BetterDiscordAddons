@@ -221,7 +221,9 @@ body,														/* body														*/
 #app-mount .privateChannels-oVe7HL,							/* dmchannels												*/
 #app-mount .panels-3wFtMD > *,								/* account/voice		inner								*/
 #app-mount .chat-2ZfjoI,									/* chat					container							*/
-#app-mount .container-3wLKDe,								/* chat					support								*/
+#app-mount .container-3wLKDe,								/* chat					forums								*/
+#app-mount .container-2IKOsH,								/* chat					search								*/
+#app-mount .container-1um7CU,								/* chat					search inner						*/
 #app-mount .container-3XgAHv,								/* chat					thread sidebar						*/
 #app-mount .wrapper-3HVHpV,									/* chat					messages loading					*/
 #app-mount .noChannel-Z1DQK7,								/* nochannel												*/
@@ -796,7 +798,8 @@ body::after {
 #app-mount .background-fkKrXt .containerCard-2kwJKN:hover,
 #app-mount .background-fkKrXt .interactiveCard-2iMtdk,
 #app-mount .container-3wLKDe .mainCard-3KBsBI,
-#app-mount .container-3wLKDe .sidebarCard-1Gn1ch {
+#app-mount .container-3wLKDe .sidebarCard-1Gn1ch,
+#app-mount .container-2IKOsH .channelRow-4X_3fi {
 	background-color: var(--background-secondary);
 }
 @media (max-width: 1300px) {
@@ -809,7 +812,8 @@ body::after {
 	border-color: var(--background-secondary);
 }
 #app-mount .background-fkKrXt .container-3HMTms:hover,
-#app-mount .container-3wLKDe .pill-3pRQlO {
+#app-mount .container-3wLKDe .pill-3pRQlO,
+#app-mount .container-2IKOsH .channelRow-4X_3fi:hover {
 	background: var(--background-tertiary);
 }
 .contentPreview-3fWiuC {									/* forum list			item								*/
