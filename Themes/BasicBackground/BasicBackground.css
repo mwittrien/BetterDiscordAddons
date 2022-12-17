@@ -4534,6 +4534,10 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .item-1OdjEX.colorDanger-3n-KnP:hover:not(.hideInteraction-2jPGL_) {
 	background-color: rgba(var(--dangercolor), .2) !important;
 }
+.item-1OdjEX.colorSuccess-1M2JCA.focused-3qFvc8,
+.item-1OdjEX.colorSuccess-1M2JCA:hover:not(.hideInteraction-2jPGL_) {
+	background-color: rgba(var(--successcolor), .2) !important;
+}
 .item-1OdjEX.colorBrand-3cPPsm.focused-3qFvc8,
 .item-1OdjEX.colorBrand-3cPPsm:hover:not(.hideInteraction-2jPGL_),
 .item-1OdjEX.colorDefault-CDqZdO.focused-3qFvc8[id="user-settings-cog-Subscriptions"],
@@ -4550,11 +4554,21 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .item-1OdjEX.colorDefault-CDqZdO:hover:not(.hideInteraction-2jPGL_)[id="guild-context-guild-settings--GUILD_PREMIUM"] {
 	background-color: rgba(var(--accentcolor2), .2) !important;
 }
+.item-1OdjEX.colorPremiumGradient-l1Ok7Q.focused-3qFvc8,
+.item-1OdjEX.colorPremiumGradient-l1Ok7Q:hover:not(.hideInteraction-2jPGL_) {
+    background: linear-gradient(90deg, rgba(var(--accentcolor2), .2), rgba(var(--accentcolor), .2)) !important;
+}
 #app-mount .item-1OdjEX .checkbox-hADx5o {					/* contextmenu			checkbox 							*/
 	color: rgb(var(--accentcolor));
 }
 #app-mount .item-1OdjEX.colorDanger-3n-KnP .checkbox-hADx5o {
 	color: rgb(var(--dangercolor));
+}
+#app-mount .item-1OdjEX.colorSuccess-1M2JCA .checkbox-hADx5o {
+	color: rgb(var(--successcolor));
+}
+#app-mount .item-1OdjEX.colorPremium-vwmYZQ .checkbox-hADx5o {
+	color: rgb(var(--accentcolor2));
 }
 #app-mount .item-1OdjEX .check-3HZJs4 {						/* contextmenu			checkmark 							*/
 	color: #fff;
