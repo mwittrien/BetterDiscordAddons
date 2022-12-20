@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.4
+ * @version 1.3.5
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,8 +14,8 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"improved": {
-			"Jump To": "Clicking on the Date in the Popout/Profile will now jump to the targeted Message"
+		"fixed": {
+			"NSFW": "Forgot to include nsfw channels in the search, resulting in false timestamps"
 		}
 	};
 
@@ -72,8 +72,12 @@ module.exports = (_ => {
 					queuedInstances[this.props.guildId][this.props.user.id] = [].concat(queuedInstances[this.props.guildId][this.props.user.id]).filter(n => n);
 					BDFDB.LibraryModules.APIUtils.get({
 						url: this.props.isGuild ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(this.props.guildId) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(this.props.channelId),
-						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({author_id: this.props.user.id})
+						query: BDFDB.LibraryModules.APIEncodeUtils.stringify({
+							author_id: this.props.user.id,
+							include_nsfw: true
+						})
 					}).then(result => {
+						console.log(result);
 						delete requestedUsers[this.props.guildId][this.props.user.id];
 						if (typeof result.body.retry_after != "number") {
 							if (result.body.messages && Array.isArray(result.body.messages[0])) {
