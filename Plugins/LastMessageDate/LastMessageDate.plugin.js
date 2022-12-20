@@ -77,7 +77,6 @@ module.exports = (_ => {
 							include_nsfw: true
 						})
 					}).then(result => {
-						console.log(result);
 						delete requestedUsers[this.props.guildId][this.props.user.id];
 						if (typeof result.body.retry_after != "number") {
 							if (result.body.messages && Array.isArray(result.body.messages[0])) {
