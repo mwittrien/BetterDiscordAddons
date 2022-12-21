@@ -1089,6 +1089,10 @@ body::after {
 	top: 2px;
 	left: calc(-70px * var(--usechatbubbles) + 16px - (6.6666666px * var(--decoration-to-avatar-ratio)/2));
 }
+#app-mount .messageItemBody-2EpHAK.hasReply-2Cr4KE .avatarDecoration-34OC0G,
+#app-mount .repliedMessage-3Z6XBG ~ * .avatarDecoration-34OC0G {
+	top: 24px;
+}
 #app-mount .container-3FojY8 .avatarDecoration-34OC0G {
 	left: calc(-10px * var(--usechatbubbles) - (6.6666666px * var(--decoration-to-avatar-ratio)/2));
 }
