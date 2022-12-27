@@ -372,7 +372,7 @@
 		"AuditLogs": {"strings": ["Messages.SEARCH_MEMBERS", "._lastExpandedRef", ".handleActionFilterQueryClear"]},
 		"AuthWrapper": {"protos": ["renderDefault", "renderMobile", "mobileReplaceWith"]},
 		"Autocomplete": {"strings": [".autocompleteInner", "\"innerClassName\"", "().autocomplete,"]},
-		"AutocompleteChannelResult": {"strings": [".channel", ".category", ".type===", ".GUILD_CATEGORY?", "().icon"]},
+		"AutocompleteChannelResult": {"strings": [".channel", ".category", ".type===", ".GUILD_CATEGORY?", "().icon}"]},
 		"AutocompleteRoleResult": {"strings": [".hideDescription", ".colorString", ".Messages.MENTION_USERS_WITH_ROLE"]},
 		"AutocompleteRowContentPrimary": {"strings": [".jsx)(\"div\"", "autocompleteRowContentPrimary"]},
 		"AutocompleteRowContentSecondary": {"strings": [".jsx)(", "autocompleteRowContentSecondary"]},
