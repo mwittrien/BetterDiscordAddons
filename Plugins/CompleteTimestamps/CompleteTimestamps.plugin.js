@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.3
+ * @version 1.6.4
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -190,19 +190,23 @@ module.exports = (_ => {
 					if (this.settings.tooltips.edit) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
 				}
 				else {
-					if (this.settings.places.chat && !e.instance.props.cozyAlt) {
-						if (tooltipIsSame) tooltipWrapper.props.delay = 99999999999999999999;
-						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.timestamp._i);
-						let renderChildren = tooltipWrapper.props.children;
-						tooltipWrapper.props.children = (...args) => {
-							let renderedChildren = renderChildren(...args);
-							if (BDFDB.ArrayUtils.is(renderedChildren.props.children)) renderedChildren.props.children[1] = timestamp;
-							else renderedChildren.props.children = timestamp;
-							return renderedChildren;
-						};
-						this.setMaxWidth(e.returnvalue, e.instance.props.compact);
+					if (!e.instance.props.cozyAlt) {
+						if (this.settings.places.chat) {
+							if (tooltipIsSame) tooltipWrapper.props.delay = 99999999999999999999;
+							let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, e.instance.props.timestamp._i);
+							let renderChildren = tooltipWrapper.props.children;
+							tooltipWrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
+								let renderedChildren = renderChildren(...args);
+								if (BDFDB.ArrayUtils.is(renderedChildren.props.children)) renderedChildren.props.children[1] = timestamp;
+								else renderedChildren.props.children = timestamp;
+								return renderedChildren;
+							}, "Error in Children Render of TooltipContainer in MessageTimestamp!", this);
+							this.setMaxWidth(e.returnvalue, e.instance.props.compact);
+						}
 					}
-					if (this.settings.tooltips.chat) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
+					else {
+						if (this.settings.tooltips.chat) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
+					}
 				}
 			}
 
@@ -221,7 +225,7 @@ module.exports = (_ => {
 						let children = childrenRender(...args);
 						process(children);
 						return children;
-					}, "", this);
+					}, "Error in Children Render of Embed!", this);
 				}
 				else process(e.returnvalue);
 			}
