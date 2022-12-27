@@ -464,7 +464,7 @@
 		"MessageReply": {"strings": [".isFirstMessageInForumPost", ".referencedUsernameProfile", "referencedMessage"]},
 		"Messages": {"strings": ["messageGroupSpacing", "groupSpacing", "jumpToPresent"]},
 		"MessageSearchResultContextMenu": {"strings": ["MESSAGE_ACTIONS_MENU_LABEL", "navId:\"message"], "nonStrings": ["getGuildId"]},
-		"MessageTimestamp": {"strings": [".timestampVisibleOnHover", "MESSAGE_EDITED_TIMESTAMP", ".timestampTooltip"]},
+		"MessageTimestamp": {"strings": [".timestampVisibleOnHover", "MESSAGE_EDITED_TIMESTAMP", ".timestampTooltip"], "noSearch": true},
 		"MessageToolbar": {"strings": ["Messages.MORE", "hasDeveloperMode", "openPopoutType"]},
 		"MessageUsername": {"strings": ["\"username\"", "colorString", "compact", "WINDOW_CENTER"]},
 		"ModalCarousel": {"strings": [".gotoNext", "currentIndex", "gotoPrevThrottled"]},
