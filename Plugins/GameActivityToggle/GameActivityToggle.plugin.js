@@ -238,7 +238,6 @@ module.exports = (_ => {
 			}
 			
 			activateKeybind () {
-				console.log(keybind);
 				if (keybind && keybind.length) BDFDB.ListenerUtils.addGlobal(this, "GAMEACTIVITY_TOGGLE", keybind, _ => this.toggle());
 				else BDFDB.ListenerUtils.removeGlobal(this, "GAMEACTIVITY_TOGGLE");
 			}
