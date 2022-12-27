@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.6
+ * @version 3.0.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -3026,7 +3026,7 @@ module.exports = (_ => {
 				BDFDB.GuildUtils.markAsRead = function (guildIds) {
 					guildIds = [guildIds].flat(10).filter(id => id && typeof id == "string" && Internal.LibraryStores.GuildStore.getGuild(id));
 					if (!guildIds) return;
-					let channels = guildIds.map(id => [BDFDB.ObjectUtils.toArray(Internal.LibraryStores.GuildChannelStore.getChannels(id)), Internal.LibraryStores.GuildScheduledEventStore.getGuildScheduledEventsForGuild(id)]).flat(10).map(n => n && (n.channel && n.channel.id || n.id)).flat().filter(n => n);
+					let channels = guildIds.map(id => [BDFDB.ObjectUtils.toArray(Internal.LibraryStores.GuildChannelStore.getChannels(id)), BDFDB.ObjectUtils.toArray(Internal.LibraryStores.ActiveThreadsStore.getThreadsForGuild(id)).map(BDFDB.ObjectUtils.toArray).flat(), Internal.LibraryStores.GuildScheduledEventStore.getGuildScheduledEventsForGuild(id)]).flat(10).map(n => n && (n.channel && n.channel.id || n.id)).flat().filter(n => n);
 					if (channels.length) BDFDB.ChannelUtils.markAsRead(channels);
 					let eventChannels = guildIds.map(id => ({
 						channelId: id,
