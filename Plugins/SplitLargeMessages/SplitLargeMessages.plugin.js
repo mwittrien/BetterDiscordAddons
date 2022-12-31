@@ -2,7 +2,7 @@
  * @name SplitLargeMessages
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.9
+ * @version 1.8.0
  * @description Allows you to enter larger Messages, which will automatically split into several smaller Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -64,6 +64,9 @@ module.exports = (_ => {
 				this.defaults = {
 					general: {
 						byNewlines:		{value: false, 	description: "Try to split Messages on Newlines instead of Spaces",		note: "This will stop Sentences from being cut, but might result in more Messages being sent"},
+					},
+					amounts: {
+						splitCounter:	{value: 0, 		description: "Messages will be split after roughly X Characters"},
 					}
 				};
 				
@@ -86,6 +89,8 @@ module.exports = (_ => {
 			
 			onStart () {
 				maxMessageLength = BDFDB.LibraryModules.NitroUtils.canUseIncreasedMessageLength(BDFDB.LibraryStores.UserStore.getCurrentUser()) ? BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH_PREMIUM : BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH;
+				
+				console.log(this.settings.amounts.splitCounter);
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.ChatRestrictionUtils, "applyChatRestrictions", {before: e => {
 					if (e.methodArguments[0] && e.methodArguments[0].content && !this.isSlowDowned(e.methodArguments[0].channel)) e.methodArguments[0].content = "_";
@@ -114,6 +119,20 @@ module.exports = (_ => {
 							value: this.settings.general[key]
 						}));
 						
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							type: "TextInput",
+							childProps: {
+								type: "number"
+							},
+							plugin: this,
+							keys: ["amounts", "splitCounter"],
+							label: this.defaults.amounts.splitCounter.description,
+							basis: "20%",
+							min: 1000,
+							max: maxMessageLength,
+							value: this.settings.amounts.splitCounter < 1000 || this.settings.amounts.splitCounter > maxMessageLength ? maxMessageLength : this.settings.amounts.splitCounter
+						}));
+						
 						return settingsItems;
 					}
 				});
@@ -128,9 +147,10 @@ module.exports = (_ => {
 			
 			processChannelTextAreaContainer (e) {
 				if (e.instance.props.type != BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL && e.instance.props.type != BDFDB.DiscordConstants.ChannelTextAreaTypes.NORMAL_WITH_ACTIVITY && e.instance.props.type != BDFDB.LibraryComponents.ChannelTextAreaTypes.SIDEBAR) return;
+				const splitMessageLength = this.settings.amounts.splitCounter < 1000 || this.settings.amounts.splitCounter > maxMessageLength ? maxMessageLength : this.settings.amounts.splitCounter;
 				if (!e.returnvalue) {
 					BDFDB.PatchUtils.patch(this, e.instance.props, "onSubmit", {instead: e2 => {
-						if (e2.methodArguments[0].value.length > maxMessageLength && !this.isSlowDowned(e.instance.props.channel)) {
+						if (e2.methodArguments[0].value.length > splitMessageLength && !this.isSlowDowned(e.instance.props.channel)) {
 							e2.stopOriginalMethodCall();
 							let messages = this.formatText(e2.methodArguments[0].value).filter(n => n);
 							for (let i in messages) BDFDB.TimeUtils.timeout(_ => {
@@ -148,12 +168,12 @@ module.exports = (_ => {
 				}
 				else {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ChannelTextAreaCounter"});
-					if (index > -1 && children[index].props.textValue && children[index].props.textValue.length > maxMessageLength && !this.isSlowDowned(e.instance.props.channel)) children[index] = BDFDB.ReactUtils.createElement("div", {
+					if (index > -1 && children[index].props.textValue && children[index].props.textValue.length > splitMessageLength && !this.isSlowDowned(e.instance.props.channel)) children[index] = BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS.textareacharcounter + BDFDB.disCN.textareacharcountererror,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: Math.ceil(children[index].props.textValue.length / maxMessageLength * (39/40)) + " " + BDFDB.LanguageUtils.LanguageStrings.MESSAGES,
+							text: Math.ceil(children[index].props.textValue.length / splitMessageLength * (39/40)) + " " + BDFDB.LanguageUtils.LanguageStrings.MESSAGES,
 							children: BDFDB.ReactUtils.createElement("span", {
-								children: maxMessageLength - children[index].props.textValue.length
+								children: splitMessageLength - children[index].props.textValue.length
 							})
 						})
 					});
@@ -170,14 +190,15 @@ module.exports = (_ => {
 
 			formatText (text) {
 				const separator = !this.settings.general.byNewlines ? "\n" : " ";
+				const splitMessageLength = this.settings.amounts.splitCounter < 1000 || this.settings.amounts.splitCounter > maxMessageLength ? maxMessageLength : this.settings.amounts.splitCounter;
 				
 				text = text.replace(/\t/g, "    ");
-				let longWords = text.match(new RegExp(`[^${separator.replace("\n", "\\n")}]{${maxMessageLength * (19/20)},}`, "gm"));
+				let longWords = text.match(new RegExp(`[^${separator.replace("\n", "\\n")}]{${splitMessageLength * (19/20)},}`, "gm"));
 				if (longWords) for (let longWord of longWords) {
 					let count1 = 0;
 					let shortWords = [];
 					longWord.split("").forEach(c => {
-						if (shortWords[count1] && (shortWords[count1].length >= maxMessageLength * (19/20) || (c == "\n" && shortWords[count1].length >= maxMessageLength * (19/20) - 100))) count1++;
+						if (shortWords[count1] && (shortWords[count1].length >= splitMessageLength * (19/20) || (c == "\n" && shortWords[count1].length >= splitMessageLength * (19/20) - 100))) count1++;
 						shortWords[count1] = shortWords[count1] ? shortWords[count1] + c : c;
 					});
 					text = text.replace(longWord, shortWords.join(separator));
@@ -185,7 +206,7 @@ module.exports = (_ => {
 				let messages = [];
 				let count2 = 0;
 				text.split(separator).forEach((word) => {
-					if (messages[count2] && (messages[count2] + "" + word).length > maxMessageLength * (39/40)) count2++;
+					if (messages[count2] && (messages[count2] + "" + word).length > splitMessageLength * (39/40)) count2++;
 					messages[count2] = messages[count2] ? messages[count2] + separator + word : word;
 				});
 
