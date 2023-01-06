@@ -1974,8 +1974,9 @@ body::after {
 	background-color: rgba(var(--transparencycolor), .3);
 }
 #app-mount .outer-2JOHae,									/* playing				card								*/
-#app-mount .outer-2JOHae {									/* playing				card								*/
+#app-mount .wrapper-2RrXDg {								/* playing				card								*/
 	background-color: rgba(var(--transparencycolor), .2);
+	border: unset;
 }
 #app-mount .outer-2JOHae.active-1W_Gl9,
 #app-mount .outer-2JOHae.interactive-2zD88a:hover,
@@ -1983,7 +1984,6 @@ body::after {
 #app-mount .outer-2JOHae.interactive-2zD88a:hover {
 	background-color: rgba(var(--transparencycolor), .4);
 }
-#app-mount .inset-SbsSFp,									/* playing				card inner							*/
 #app-mount .inset-SbsSFp {									/* playing				card inner							*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
@@ -4634,6 +4634,9 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .userProfileOuterUnthemed-2b2rsv::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 	backdrop-filter: blur(var(--popoutblur));
+}
+.accountProfilePopoutWrapper-3GskID .overlayBackground-1KgwVi {
+	display: block !important;
 }
 .profileColors-3Y0XaR {										/* popout new			profilecolors						*/
     --profile-body-background-color: rgba(0,0,0,.4) !important;
