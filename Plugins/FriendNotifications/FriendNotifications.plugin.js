@@ -599,23 +599,21 @@ module.exports = (_ => {
 							children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 								className: BDFDB.disCN.marginbottom8,
 								children: BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
+									className: BDFDB.disCNS.settingsrowtitle + BDFDB.disCNS.settingsrowtitledefault + BDFDB.disCN.cursordefault,
 									children: [
-										"Allows you to configure your own Message Strings for the different Statuses. ",
-										BDFDB.ReactUtils.createElement("strong", {children: "$user"}),
-										" is the Placeholder for the User Name, ",
-										BDFDB.ReactUtils.createElement("strong", {children: "$status"}),
-										" for the Status Name, ",
-										BDFDB.ReactUtils.createElement("strong", {children: "$statusOld"}),
-										" for the previous Status Name, ",
-										BDFDB.ReactUtils.createElement("strong", {children: "$custom"}),
-										" for the Custom Status, ",
-										BDFDB.ReactUtils.createElement("strong", {children: "$game"}),
-										" for the Game Name, ",
-										BDFDB.ReactUtils.createElement("strong", {children: "$song"}),
-										" for the Song Name and ",
-										BDFDB.ReactUtils.createElement("strong", {children: "$artist"}),
-										" for the Song Artist."
+										"Allows you to configure your own Message Strings for the different Statuses.",
+										[
+											["$user", " is the Placeholder for the Username"],
+											["$status", " for the Status Name"],
+											["$statusOld", " for the previous Status Name"],
+											["$custom", " for the Custom Status"],
+											["$game", " for the Game Name"],
+											["$song", " for the Song Name"],
+											["$artist", " for the Song Artist"]
+										].map(n => BDFDB.ReactUtils.createElement("div", {children: [
+											BDFDB.ReactUtils.createElement("strong", {children: n[0]}),
+											n[1]
+										]}))
 									]
 								})
 							})].concat(Object.keys(this.defaults.notificationStrings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
