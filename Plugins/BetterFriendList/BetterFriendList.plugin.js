@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.1
+ * @version 1.5.2
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -288,7 +288,7 @@ module.exports = (_ => {
 							children: this.settings.general.addFavorizedCategory && isFavoritesSelected ? `${this.labels.favorites} - ${filteredUsers.filter(u => u && u.key != placeHolderId).length}` : this.settings.general.addHiddenCategory && isHiddenSelected ? `${this.labels.hidden} - ${filteredUsers.filter(u => u && u.key != placeHolderId).length}` : children[index].props.title.replace(users.length, filteredUsers.filter(u => u && u.key != placeHolderId).length)
 						}),
 						this.settings.general.addSortOptions && [
-							{key: "usernameLower", label: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME},
+							{key: "nicknameLower", label: BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS_LABEL_USERNAME},
 							{key: "statusIndex", label: BDFDB.LanguageUtils.LibraryStrings.status}
 						].filter(n => n).map(data => BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercellwrapper, BDFDB.disCN.tableheadercell, BDFDB.disCN._betterfriendlistnamecell, sortKey == data.key && BDFDB.disCN.tableheadercellsorted, BDFDB.disCN.tableheadercellclickable),
@@ -335,10 +335,11 @@ module.exports = (_ => {
 				}
 				if (sortKey) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => {
 					let newSection = [].concat(section);
-					if (sortKey) {
-						newSection = BDFDB.ArrayUtils.keySort(newSection.map(entry => Object.assign({}, entry, {statusIndex: statusSortOrder[entry.status]})), sortKey);
-						if (sortReversed) newSection.reverse();
-					}
+					newSection = BDFDB.ArrayUtils.keySort(newSection.map(entry => Object.assign({}, entry, {
+						statusIndex: statusSortOrder[entry.status],
+						nicknameLower: entry.nickname ? entry.nickname.toLowerCase() : entry.usernameLower
+					})), sortKey);
+					if (sortReversed) newSection.reverse();
 					if (!newSection.length) {
 						let placeholder = new BDFDB.DiscordObjects.User({
 							id: placeHolderId,
