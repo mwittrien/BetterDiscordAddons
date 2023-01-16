@@ -177,12 +177,14 @@
 	--brand-new-90a: rgba(var(--accentcolor),.9) !important;
 	--brand-new-95a: rgba(var(--accentcolor),.95) !important;
 	
+	--premium-perk-blue: rgb(var(--accentcolor)) !important;
+	--premium-perk-pink: rgb(var(--accentcolor2)) !important;
 	--guild-boosting-pink: rgb(var(--accentcolor2)) !important;
     --guild-boosting-pink-rgb: var(--accentcolor2) !important;
     --guild-boosting-purple: rgb(var(--accentcolor2)) !important;
     --guild-boosting-purple-rgb: var(--accentcolor2) !important;
     --guild-boosting-blue: rgb(var(--accentcolor2)) !important;
-    --guild-boosting-blue-rgb: var(--accentcolor2)1 !important;
+    --guild-boosting-blue-rgb: var(--accentcolor2) !important;
     --guild-boosting-blue-for-gradients: rgb(var(--accentcolor2)) !important;
     --guild-boosting-blue-for-gradients-rgb: var(--accentcolor2) !important;
     --guild-boosting-purple-for-gradients: rgb(var(--accentcolor2)) !important;
