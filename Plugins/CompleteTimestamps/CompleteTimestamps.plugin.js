@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.4
+ * @version 1.6.5
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,12 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"improved": {
+			"RelativeTimestamps": "Now works with the Plugin 'RelativeTimestamps"
+		},
+		"added": {
+			"User Member Info": "Hovering over the User Member Info (Member Since) will show a full Timestamp"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -83,7 +88,8 @@ module.exports = (_ => {
 					after: [
 						"AuditLogEntry",
 						"Embed",
-						"MessageTimestamp"
+						"MessageTimestamp",
+						"UserMemberSince"
 					]
 				};
 				
@@ -197,17 +203,32 @@ module.exports = (_ => {
 							let renderChildren = tooltipWrapper.props.children;
 							tooltipWrapper.props.children = BDFDB.TimeUtils.suppress((...args) => {
 								let renderedChildren = renderChildren(...args);
-								if (BDFDB.ArrayUtils.is(renderedChildren.props.children)) renderedChildren.props.children[1] = timestamp;
+								let [children, index] = BDFDB.ReactUtils.findParent(renderedChildren, {props: [["className", BDFDB.disCN.messagetimestampseparator]]});
+								if (index > -1) children[index + 1] = timestamp;
 								else renderedChildren.props.children = timestamp;
 								return renderedChildren;
 							}, "Error in Children Render of TooltipContainer in MessageTimestamp!", this);
 							this.setMaxWidth(e.returnvalue, e.instance.props.compact);
 						}
 					}
-					else {
-						if (this.settings.tooltips.chat) tooltipWrapper.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
+					if (this.settings.tooltips.chat) {
+						let timestamp = this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.timestamp._i);
+						if (tooltipWrapper.props.text && tooltipWrapper.props.text.props && BDFDB.ArrayUtils.is(tooltipWrapper.props.text.props.children)) tooltipWrapper.props.text.props.children[0] = timestamp;
+						else tooltipWrapper.props.text = timestamp;
 					}
 				}
+			}
+			
+			processUserMemberSince (e) {
+				let bodys = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutsectionbody]], all: true});
+				if (bodys[0]) bodys[0].props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					text: this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.userId),
+					children: BDFDB.ReactUtils.createElement("span", {children: bodys[0].props.children})
+				});
+				if (e.instance.props.guildMember && e.instance.props.guildMember.joinedAt && bodys[1]) bodys[1].props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					text: this.formatTimestamp(this.settings.dates.tooltipDate, e.instance.props.guildMember.joinedAt),
+					children: BDFDB.ReactUtils.createElement("span", {children: bodys[1].props.children})
+				});
 			}
 
 			processEmbed (e) {
