@@ -122,8 +122,8 @@
 		}},
 		"GuildNotificationsUtils": {"props": ["updateChannelOverrideSettings", "updateGuildNotificationSettings"]},
 		"GuildUtils": {"props": ["selectGuild", "transitionToGuildSync"]},
-		"HistoryUtils": {"strings": ["transitionTo - Transitioning to external path"], "exported": false, "value": "exports", "map": {
-			"transitionTo": ["transitionTo - Transitioning to external path"]
+		"HistoryUtils": {"strings": ["transitionTo - Transitioning to "], "exported": false, "value": "exports", "map": {
+			"transitionTo": ["transitionTo - Transitioning to "]
 		}},
 		"IconUtils": {"props": ["getGuildIconURL", "getGuildBannerURL"]},
 		"InviteUtils": {"props": ["acceptInvite", "createInvite"]},
