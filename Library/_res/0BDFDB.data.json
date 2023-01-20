@@ -465,7 +465,7 @@
 		"Messages": {"strings": ["messageGroupSpacing", "groupSpacing", "jumpToPresent"]},
 		"MessageSearchResultContextMenu": {"strings": ["MESSAGE_ACTIONS_MENU_LABEL", "navId:\"message"], "nonStrings": ["getGuildId"]},
 		"MessageTimestamp": {"strings": [".timestampVisibleOnHover", "MESSAGE_EDITED_TIMESTAMP", ".timestampTooltip"], "noSearch": true},
-		"MessageToolbar": {"strings": ["Messages.MORE", "hasDeveloperMode", "openOutOfBurstsModal", "Messages.MESSAGE_TODOS_MARK_AS_DONE"]},
+		"MessageToolbar": {"strings": ["Messages.MORE", "hasDeveloperMode", "emojiPicker:", "Messages.MESSAGE_TODOS_MARK_AS_DONE"], "noSearch": true},
 		"MessageUsername": {"strings": ["\"username\"", "colorString", "compact", "WINDOW_CENTER"]},
 		"ModalCarousel": {"strings": [".gotoNext", "currentIndex", "gotoPrevThrottled"]},
 		"ModalHeader": {"strings": [".headerIdIsManaged", ".header,", "Direction.HORIZONTAL"]},
