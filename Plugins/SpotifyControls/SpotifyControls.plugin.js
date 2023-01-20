@@ -495,7 +495,7 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN._spotifycontrolscontainerinner} {
 						display: flex;
-						align-items: center;_spotifycontrolscontaine
+						align-items: center;
 						font-size: 14px;
 						width: 100%;
 					}
@@ -761,7 +761,7 @@ module.exports = (_ => {
 										BDFDB.ReactUtils.createElement("div", {
 											className: BDFDB.disCN._spotifycontrolssettingslabel,
 											children: data.label
-										})``
+										})
 									]
 								}),
 								onCheckboxChange: (value, instance) => {
