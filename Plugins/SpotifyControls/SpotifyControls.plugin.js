@@ -132,7 +132,6 @@ module.exports = (_ => {
 				let connection = (BDFDB.LibraryStores.ConnectedAccountsStore.getAccounts().find(n => n.type == "spotify") || {});
 				showActivity = showActivity != undefined ? showActivity : (connection.show_activity || connection.showActivity);
 				currentVolume = this.props.draggingVolume ? currentVolume : socketDevice.device.volume_percent;
-
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._spotifycontrolscontainer, this.props.maximized && BDFDB.disCN._spotifycontrolscontainermaximized, this.props.timeline && BDFDB.disCN._spotifycontrolscontainerwithtimeline),
 					style: _this.settings.display.topBorder ? {
