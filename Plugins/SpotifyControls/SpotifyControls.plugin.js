@@ -132,8 +132,12 @@ module.exports = (_ => {
 				let connection = (BDFDB.LibraryStores.ConnectedAccountsStore.getAccounts().find(n => n.type == "spotify") || {});
 				showActivity = showActivity != undefined ? showActivity : (connection.show_activity || connection.showActivity);
 				currentVolume = this.props.draggingVolume ? currentVolume : socketDevice.device.volume_percent;
+
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._spotifycontrolscontainer, this.props.maximized && BDFDB.disCN._spotifycontrolscontainermaximized, this.props.timeline && BDFDB.disCN._spotifycontrolscontainerwithtimeline),
+					style: _this.settings.display.topBorder ? {
+						borderTop: "8px solid var(--background-modifier-accent)"
+					} : {},
 					children: [
 						BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN._spotifycontrolscontainerinner,
@@ -450,6 +454,9 @@ module.exports = (_ => {
 						next: 				{value: {small: true, big: true},		icons: [""],						description: "Next"},
 						repeat: 			{value: {small: false, big: true},		icons: ["", ""],					description: "Repeat"},
 						volume: 			{value: {small: false, big: true},		icons: ["", "", "", ""],		description: "Volume"}
+					},
+					display: {
+						topBorder: 			{value: false,		description: "Adds a Top Border to the Expanded Player"}
 					}
 				};
 				
@@ -489,7 +496,7 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN._spotifycontrolscontainerinner} {
 						display: flex;
-						align-items: center;
+						align-items: center;_spotifycontrolscontaine
 						font-size: 14px;
 						width: 100%;
 					}
@@ -755,7 +762,7 @@ module.exports = (_ => {
 										BDFDB.ReactUtils.createElement("div", {
 											className: BDFDB.disCN._spotifycontrolssettingslabel,
 											children: data.label
-										})
+										})``
 									]
 								}),
 								onCheckboxChange: (value, instance) => {
@@ -765,7 +772,19 @@ module.exports = (_ => {
 								}
 							}))
 						}));
-						
+
+						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+							title: "Display Settings",
+							collapseStates: collapseStates,
+							children: Object.keys(this.defaults.display).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+								type: "Switch",
+								plugin: this,
+								keys: ["display", key],
+								label: this.defaults.display[key].description,
+								value: this.settings.display[key]
+							}))
+						}));
+
 						return settingsItems;
 					}
 				});
