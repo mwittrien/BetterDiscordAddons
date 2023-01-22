@@ -292,7 +292,8 @@
 			"Image": ["containerRef"],
 			"ImageReadyStates": ["LOADING", "ERROR"]
 		}},
-		"ImageModal": {"strings": ["mobileCloseWrapper", "closeAction"]},
+		"ImageModal": {"strings": ["renderLinkComponent", ".Messages.OPEN_IN_BROWSER", "animated"]},
+		"ImageVideoModal": {"strings": ["renderLinkComponent", ".Messages.OPEN_IN_BROWSER", "videoWrapper"]},
 		"LayerContainerComponents": {"strings": ["layerContainerElement", "LayerProvider"], "exported": false, "value": "exports", "map": {
 			"createLayer": [".createContext"],
 			"LayerContainer": [".layerContainer", "missing parent"]
@@ -442,7 +443,8 @@
 		"HomeButton": {"strings": ["isOnOtherSidebarRoute", "showProgressBadge", "maybeTrackExposure"]},
 		"HomeButtonDefault": {"strings": ["BUTTON_HOME", ".homeIcon", ".DISCODO_ENABLED"]},
 		"I18nLoader": {"strings": [".Messages.I18N_LOCALE_LOADING_ERROR", ".loading"]},
-		"ImageModal": {"strings": ["._mobileCloseRef", "mobileCloseWrapper", "renderMobileCloseButton", "\"ESC\""]},
+		"ImageModal": {"strings": ["renderLinkComponent", ".Messages.OPEN_IN_BROWSER", "animated"]},
+		"ImageVideoModal": {"strings": ["renderLinkComponent", ".Messages.OPEN_IN_BROWSER", "videoWrapper"]},
 		"InboxHeader": {"strings": [".UNREADS", ".TODOS", ".controls"]},
 		"IncomingCallModal": {"strings": [".Messages.INCOMING_VIDEO_CALL_ELLIPSIS", ".isFocused", "maxX:window.innerWidth"]},
 		"InviteGuildName": {"strings": [".guild;return", "().guildName", "().guildNameWrapper"]},

@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.0.8
+ * @version 5.0.9
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -61,6 +61,7 @@ module.exports = (_ => {
 		var ownLocations = {}, downloadsFolder;
 		
 		var firstViewedImage, viewedImage, viewedImageTimeout;
+		var switchedImageProps;
 		var cachedImages;
 		var eventTypes = {};
 		
@@ -115,7 +116,7 @@ module.exports = (_ => {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._imageutilitiessibling, this.props.className),
 					onClick: event => {
 						BDFDB.ListenerUtils.stopEvent(event);
-						_this.switchImages(this.props.modalInstance, this.props.offset);
+						_this.switchImages(this.props.offset);
 					},
 					children: [
 						this.props.loadedImage || BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SpinnerComponents.Spinner, {
@@ -251,6 +252,7 @@ module.exports = (_ => {
 			
 				this.modulePatches = {
 					before: [
+						"ImageModal",
 						"MessageAccessories",
 						"Spoiler"
 					],
@@ -263,14 +265,13 @@ module.exports = (_ => {
 						"UserBanner"
 					],
 					componentDidMount: [
-						"LazyImage",
-						"ImageModal"
+						"LazyImage"
 					],
 					componentDidUpdate: [
 						"LazyImage"
 					],
 					componentWillUnmount: [
-						"ImageModal"
+						"LazyImage"
 					]
 				};
 				
@@ -913,22 +914,11 @@ module.exports = (_ => {
 			}
 			
 			processImageModal (e) {
-				if (e.methodname == "componentDidMount") {
-					BDFDB.TimeUtils.clear(viewedImageTimeout);
-					
-					let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node);
-					if (modal) {
-						modal.className = BDFDB.DOMUtils.formatClassName(modal.className, this.settings.viewerSettings.galleryMode && BDFDB.disCN._imageutilitiesgallery, this.settings.viewerSettings.details && BDFDB.disCN._imageutilitiesdetailsadded);
-						if (this.settings.viewerSettings.galleryMode) {
-							BDFDB.DOMUtils.addClass(modal, BDFDB.disCN.imagemodal);
-							BDFDB.DOMUtils.removeClass(modal, BDFDB.disCN.modalcarouselmodal, BDFDB.disCN.modalcarouselmodalzoomed);
-						}
+				if (!e.returnvalue) {
+					if (switchedImageProps) {
+						e.instance.props = Object.assign(e.instance.props, switchedImageProps);
+						switchedImageProps = null;
 					}
-				}
-				else if (e.methodname == "componentWillUnmount") {
-					firstViewedImage = null;
-					viewedImage = null;
-					this.cleanupListeners("Gallery");
 				}
 				else {
 					let url = this.getImageSrc(viewedImage && viewedImage.proxy_url || typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})).props.src || e.instance.props.src);
@@ -1078,7 +1068,6 @@ module.exports = (_ => {
 							}));
 						}
 					}
-					
 					if (this.settings.viewerSettings.galleryMode && viewedImage) {
 						if (!cachedImages || cachedImages.channelId != viewedImage.channelId || cachedImages.amount && this.getImageIndex(cachedImages.all, viewedImage) == -1) {
 							BDFDB.TimeUtils.clear(viewedImageTimeout);
@@ -1103,7 +1092,7 @@ module.exports = (_ => {
 									newestId: null,
 									lastReached: null
 								};
-								BDFDB.ReactUtils.forceUpdate(e.instance);
+								this.updateImageModal();
 							}).then(result => {
 								if (!viewedImage) return;
 								let messages = [], index = -1;
@@ -1131,20 +1120,18 @@ module.exports = (_ => {
 									newestId: null,
 									lastReached: null
 								};
-								BDFDB.ReactUtils.forceUpdate(e.instance);
+								this.updateImageModal();
 							});
 						}
 						else {
 							if (cachedImages.all[cachedImages.index - 1]) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(LazyImageSiblingComponent, {
 								className: BDFDB.disCN._imageutilitiesprevious,
-								modalInstance: e.instance,
 								url: this.getImageSrc(cachedImages.all[cachedImages.index - 1].thumbnail || cachedImages.all[cachedImages.index - 1]),
 								offset: -1,
 								svgIcon: BDFDB.LibraryComponents.SvgIcon.Names.LEFT_CARET
 							}));
 							if (cachedImages.all[cachedImages.index + 1]) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(LazyImageSiblingComponent, {
 								className: BDFDB.disCN._imageutilitiesnext,
-								modalInstance: e.instance,
 								url: this.getImageSrc(cachedImages.all[cachedImages.index + 1].thumbnail || cachedImages.all[cachedImages.index + 1]),
 								offset: 1,
 								svgIcon: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET
@@ -1153,8 +1140,8 @@ module.exports = (_ => {
 								this.addListener("keydown", "Gallery", event => {
 									if (!firedEvents.includes("Gallery")) {
 										firedEvents.push("Gallery");
-										if (event.keyCode == 37) this.switchImages(e.instance, -1);
-										else if (event.keyCode == 39) this.switchImages(e.instance, 1);
+										if (event.keyCode == 37) this.switchImages(-1);
+										else if (event.keyCode == 39) this.switchImages(1);
 									}
 								});
 								this.addListener("keyup", "Gallery", _ => BDFDB.ArrayUtils.remove(firedEvents, "Gallery", true));
@@ -1190,7 +1177,22 @@ module.exports = (_ => {
 							BDFDB.ReactUtils.forceUpdate(e.instance);
 						}
 					}
-					if (e.methodname == "componentDidMount" && BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.getInstance(e.node), {name: "ImageModal", up: true})) {
+					if (e.methodname == "componentWillUnmount" && BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagemodal, e.node)) {
+						firstViewedImage = null;
+						viewedImage = null;
+						this.cleanupListeners("Gallery");
+					}
+					if (e.methodname == "componentDidMount" && BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagemodal, e.node)) {
+						BDFDB.TimeUtils.clear(viewedImageTimeout);
+						let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node);
+						if (modal) {
+							modal.className = BDFDB.DOMUtils.formatClassName(modal.className, this.settings.viewerSettings.galleryMode && BDFDB.disCN._imageutilitiesgallery, this.settings.viewerSettings.details && BDFDB.disCN._imageutilitiesdetailsadded);
+							if (this.settings.viewerSettings.galleryMode) {
+								BDFDB.DOMUtils.addClass(modal, BDFDB.disCN.imagemodal);
+								BDFDB.DOMUtils.removeClass(modal, BDFDB.disCN.modalcarouselmodal, BDFDB.disCN.modalcarouselmodalzoomed);
+							}
+						}
+						
 						let isVideo = typeof e.instance.props.children == "function";
 						if (isVideo && !BDFDB.LibraryStores.AccessibilityStore.useReducedMotion) e.node.style.setProperty("pointer-events", "none");
 						if (this.settings.viewerSettings.zoomMode && !isVideo && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling)) {
@@ -1550,7 +1552,7 @@ module.exports = (_ => {
 				});
 			}
 			
-			switchImages (modalInstance, offset) {
+			switchImages (offset) {
 				const newIndex = parseInt(cachedImages.index) + parseInt(offset);
 				if (newIndex < 0 || newIndex > (cachedImages.amount - 1)) return;
 				
@@ -1581,7 +1583,7 @@ module.exports = (_ => {
 								newestId: messages[messages.length-1] ? messages[messages.length-1].id : null,
 								lastReached: index == (cachedImages.all.length - 1)
 							});
-							BDFDB.ReactUtils.forceUpdate(modalInstance);
+							this.updateImageModal();
 						}
 					});
 				}
@@ -1608,29 +1610,35 @@ module.exports = (_ => {
 								index: index,
 								amount: cachedImages.all.length
 							});
-							BDFDB.ReactUtils.forceUpdate(modalInstance);
+							this.updateImageModal();
 						}
 					});
 				}
 				let isVideo = this.isValid(viewedImage.proxy_url, "video");
-				modalInstance.props.animated = !!isVideo;
-				modalInstance.props.original = viewedImage.proxy_url;
-				modalInstance.props.placeholder = isVideo && (viewedImage.thumbnail && viewedImage.thumbnail.proxy_url || viewedImage.proxy_url);
-				modalInstance.props.src = viewedImage.proxy_url;
-				modalInstance.props.width = viewedImage.width;
-				modalInstance.props.height = viewedImage.height;
-				modalInstance.props.children = !isVideo ? null : (videoData => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Video, {
-					ignoreMaxSize: true,
-					poster: viewedImage.proxy_url.replace("https://cdn.discordapp.com", "https://media.discordapp.net").split("?size=")[0] + "?format=jpeg",
+				switchedImageProps = {
+					animated: !!isVideo,
+					original: viewedImage.proxy_url,
+					placeholder: isVideo && (viewedImage.thumbnail && viewedImage.thumbnail.proxy_url || viewedImage.proxy_url),
 					src: viewedImage.proxy_url,
-					width: videoData.size.width,
-					height: videoData.size.height,
-					naturalWidth: viewedImage.width,
-					naturalHeight: viewedImage.height,
-					play: true,
-					playOnHover: !!BDFDB.LibraryStores.AccessibilityStore.useReducedMotion
-				}));
-				BDFDB.ReactUtils.forceUpdate(modalInstance);
+					width: viewedImage.width,
+					height: viewedImage.height,
+					children: !isVideo ? null : (videoData => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Video, {
+						ignoreMaxSize: true,
+						poster: viewedImage.proxy_url.replace("https://cdn.discordapp.com", "https://media.discordapp.net").split("?size=")[0] + "?format=jpeg",
+						src: viewedImage.proxy_url,
+						width: videoData.size.width,
+						height: videoData.size.height,
+						naturalWidth: viewedImage.width,
+						naturalHeight: viewedImage.height,
+						play: true,
+						playOnHover: !!BDFDB.LibraryStores.AccessibilityStore.useReducedMotion
+					}))
+				};
+				this.updateImageModal();
+			}
+			
+			updateImageModal () {
+				BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.imagemodal), {up: true, filter: n => n && n.stateNode && n.stateNode.props && n.stateNode.props.isTopModal && n.stateNode.props.modalKey}));
 			}
 			
 			filterForCopies (messages) {
