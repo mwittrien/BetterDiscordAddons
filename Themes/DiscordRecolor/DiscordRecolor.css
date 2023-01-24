@@ -680,16 +680,16 @@ html .iconBadge-2wi9r4 {
 	color: var(--header-primary);
 }
 
-#app-mount .checkbox-f1HnKB {
+#app-mount .checkbox-1LuCGM {
 	border-color: var(--text-muted);
 }
-#app-mount .checkbox-f1HnKB.checked-1pZh2h[style*="border-color: rgb(79, 84, 92)"],
-#app-mount .checkbox-f1HnKB.checked-1pZh2h:not([style*="border-color:"]):not([style*="background-color:"]) {
+#app-mount .checkbox-1LuCGM.checked-22NTbO[style*="border-color: rgb(79, 84, 92)"],
+#app-mount .checkbox-1LuCGM.checked-22NTbO:not([style*="border-color:"]):not([style*="background-color:"]) {
 	background-color: rgb(var(--accentcolor)) !important;
 	border-color: rgb(var(--accentcolor)) !important;
 }
-#app-mount .checkbox-f1HnKB.checked-1pZh2h[style*="border-color: rgb(79, 84, 92)"] path,
-#app-mount .checkbox-f1HnKB.checked-1pZh2h:not([style*="border-color:"]):not([style*="background-color:"]) path {
+#app-mount .checkbox-1LuCGM.checked-22NTbO[style*="border-color: rgb(79, 84, 92)"] path,
+#app-mount .checkbox-1LuCGM.checked-22NTbO:not([style*="border-color:"]):not([style*="background-color:"]) path {
 	fill: #fff;
 }
 
@@ -2166,7 +2166,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	border-color: var(--background-tertiary);
 }
 
-#app-mount .row-1Tg75B {
+#app-mount .row-3nMNOy {
 	box-shadow: inset 0 -1px 0 rgba(var(--textdarker),.3);
 }
 

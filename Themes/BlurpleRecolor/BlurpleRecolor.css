@@ -2466,16 +2466,16 @@ input.input-2g-os5 {										/* textinput												*/
 	border-color: rgb(var(--accentcolor));
 }
 
-.checkbox-f1HnKB.checked-1pZh2h[style*="background-color: hsl(227, "],
-.checkbox-f1HnKB.checked-1pZh2h[style*="background-color: hsl(235, "] {
+.checkbox-1LuCGM.checked-22NTbO[style*="background-color: hsl(227, "],
+.checkbox-1LuCGM.checked-22NTbO[style*="background-color: hsl(235, "] {
 	background-color: rgb(var(--accentcolor)) !important;
 }
-.checkbox-f1HnKB.checked-1pZh2h[style*="border-color: hsl(227, "],
-.checkbox-f1HnKB.checked-1pZh2h[style*="border-color: hsl(235, "] {
+.checkbox-1LuCGM.checked-22NTbO[style*="border-color: hsl(227, "],
+.checkbox-1LuCGM.checked-22NTbO[style*="border-color: hsl(235, "] {
 	border-color: rgb(var(--accentcolor)) !important;
 }
-.checkbox-f1HnKB path[fill*="hsl(227, "],
-.checkbox-f1HnKB path[fill*="hsl(235, "] {
+.checkbox-1LuCGM path[fill*="hsl(227, "],
+.checkbox-1LuCGM path[fill*="hsl(235, "] {
 	fill: rgb(var(--accentcolor)) !important;
 }
 
