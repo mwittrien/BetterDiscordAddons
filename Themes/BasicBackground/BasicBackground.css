@@ -6324,13 +6324,13 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	color: rgba(var(--textbrightest),.3);
 }
 
-.container-2nx-BQ {											/* checkboxswitch											*/
+.container-1QtPKm {											/* checkboxswitch											*/
 	background-color: rgba(var(--transparencycolor), .3) !important;
 }
-.container-2nx-BQ rect[fill] {
+.container-1QtPKm rect[fill] {
 	fill: var(--header-primary) !important;
 }
-.container-2nx-BQ path[fill] {
+.container-1QtPKm path[fill] {
 	fill: rgb(var(--transparencycolor)) !important;
 }
 
