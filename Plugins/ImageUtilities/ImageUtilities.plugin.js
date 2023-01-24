@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.0.9
+ * @version 5.1.0
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1152,10 +1152,10 @@ module.exports = (_ => {
 			}
 			
 			processModalCarousel (e) {
-				if (this.settings.viewerSettings.galleryMode) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ImageModal"});
-					if (index > -1) return children[index];
-				}
+				if (!this.settings.viewerSettings.galleryMode || !BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ImageModal"})) return;
+				e.returnvalue.props.className = "";
+				e.returnvalue.props.children[0] = null;
+				e.returnvalue.props.children[2] = null;
 			}
 			
 			processLazyImage (e) {
@@ -1182,7 +1182,7 @@ module.exports = (_ => {
 						viewedImage = null;
 						this.cleanupListeners("Gallery");
 					}
-					if (e.methodname == "componentDidMount" && BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagemodal, e.node)) {
+					if (e.methodname == "componentDidMount" && BDFDB.DOMUtils.getParent(BDFDB.dotCNC.imagemodal + BDFDB.dotCN.modalcarouselmodal, e.node)) {
 						BDFDB.TimeUtils.clear(viewedImageTimeout);
 						let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node);
 						if (modal) {
@@ -1615,21 +1615,22 @@ module.exports = (_ => {
 					});
 				}
 				let isVideo = this.isValid(viewedImage.proxy_url, "video");
+				let thisViewedImage = viewedImage;
 				switchedImageProps = {
 					animated: !!isVideo,
-					original: viewedImage.proxy_url,
-					placeholder: isVideo && (viewedImage.thumbnail && viewedImage.thumbnail.proxy_url || viewedImage.proxy_url),
-					src: viewedImage.proxy_url,
-					width: viewedImage.width,
-					height: viewedImage.height,
+					original: thisViewedImage.proxy_url,
+					placeholder: isVideo && (thisViewedImage.thumbnail && thisViewedImage.thumbnail.proxy_url || thisViewedImage.proxy_url),
+					src: thisViewedImage.proxy_url,
+					width: thisViewedImage.width,
+					height: thisViewedImage.height,
 					children: !isVideo ? null : (videoData => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Video, {
 						ignoreMaxSize: true,
-						poster: viewedImage.proxy_url.replace("https://cdn.discordapp.com", "https://media.discordapp.net").split("?size=")[0] + "?format=jpeg",
-						src: viewedImage.proxy_url,
+						poster: thisViewedImage.proxy_url.replace("https://cdn.discordapp.com", "https://media.discordapp.net").split("?size=")[0] + "?format=jpeg",
+						src: thisViewedImage.proxy_url,
 						width: videoData.size.width,
 						height: videoData.size.height,
-						naturalWidth: viewedImage.width,
-						naturalHeight: viewedImage.height,
+						naturalWidth: thisViewedImage.width,
+						naturalHeight: thisViewedImage.height,
 						play: true,
 						playOnHover: !!BDFDB.LibraryStores.AccessibilityStore.useReducedMotion
 					}))
