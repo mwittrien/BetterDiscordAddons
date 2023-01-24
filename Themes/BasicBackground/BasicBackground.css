@@ -6443,22 +6443,22 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .select-1YfRS9 [class*="css-"][class*="-container"] {		/* select				container							*/
 	background-color: transparent;
 }
-.lookFilled-1GseHa.select-1Ia3hD,
+.lookFilled-Zz0IcO.select-Zz0IcO,
 .select-1YfRS9 [class*="css-"][class*="-control"] {
 	background-color: rgba(var(--transparencycolor), .1);
 	border-color: rgba(var(--transparencycolor), .3);
 }
-.lookFilled-1GseHa.select-1Ia3hD:hover {
+.lookFilled-Zz0IcO.select-Zz0IcO:hover {
 	border-color: rgb(var(--transparencycolor));
 }
-.lookFilled-1GseHa.select-1Ia3hD:hover.open-1FRZsK,
-.lookFilled-1GseHa.open-1FRZsK {
+.lookFilled-Zz0IcO.select-Zz0IcO:hover.open-1FRZsK,
+.lookFilled-Zz0IcO.open-1FRZsK {
 	border-color: rgb(var(--transparencycolor)) rgb(var(--transparencycolor)) rgba(var(--transparencycolor), .3);
 }
-.lookFilled-1GseHa.select-1Ia3hD .searchInput-3pIoTy {
+.lookFilled-Zz0IcO.select-Zz0IcO .searchInput-3pIoTy {
 	background: transparent;
 }
-.select-1Ia3hD,
+.select-Zz0IcO,
 .select-1YfRS9 [class*="css-"][class*="-control"] {
 	background-color: var(--deprecated-text-input-bg);
 	border-color: var(--deprecated-text-input-border);

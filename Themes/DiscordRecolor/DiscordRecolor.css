@@ -653,14 +653,14 @@ html .iconBadge-2wi9r4 {
 	background: var(--radio-bar-accent-color) linear-gradient(to right, rgba(255, 255, 255, .2), rgba(255, 255, 255, .2));
 }
 
-.lookFilled-1GseHa.select-1Ia3hD {
+.lookFilled-Zz0IcO.select-Zz0IcO {
 	background-color: var(--deprecated-text-input-bg);
 	border-color: var(--deprecated-text-input-border);
 }
 .searchInput-3pIoTy {
 	background-color: transparent;
 }
-.lookFilled-1GseHa.select-1Ia3hD:hover {
+.lookFilled-Zz0IcO.select-Zz0IcO:hover {
 	border-color: var(--deprecated-text-input-border-hover);
 }
 
