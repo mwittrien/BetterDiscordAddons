@@ -6379,39 +6379,39 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .2);
 }
 
-#app-mount .bar-1Bhnl9 {									/* slider				backgroundbar						*/
+#app-mount .bar-2H7Q9u {									/* slider				backgroundbar						*/
 	background-color: rgba(var(--transparencycolor), .3);
 }
-.grabber-2GQyvM {											/* slider				grabber								*/
+.grabber-3R-Rx9 {											/* slider				grabber								*/
 	background-color: var(--header-primary);
 	border-color: var(--header-primary);
 	box-shadow: 0 3px 1px 0 rgba(var(--transparencycolor), .05), 0 2px 2px 0 rgba(var(--transparencycolor), .1), 0 3px 3px 0 rgba(var(--transparencycolor), .05);
 }
-#app-mount .markValue-2U_-UG {								/* slider				markvalue							*/
+#app-mount .markValue-21gAVC {								/* slider				markvalue							*/
 	color: var(--text-muted);
 }
-#app-mount .defaultValue-19SZ-q .markValue-2U_-UG {
+#app-mount .defaultValue-1-QxQ0 .markValue-21gAVC {
 	color: #43b581;
 }
-#app-mount .markDash-yk2kJ- {
+#app-mount .markDash-1ATsxA {
 	background: transparent;
 	color: rgba(var(--transparencycolor), .3);
 }
-#app-mount .defaultValue-19SZ-q .markDash-yk2kJ- {
+#app-mount .defaultValue-1-QxQ0 .markDash-1ATsxA {
 	color: #43b581;
 }
-#app-mount .markDash-yk2kJ-::before,
-#app-mount .markDash-yk2kJ-::after {
+#app-mount .markDash-1ATsxA::before,
+#app-mount .markDash-1ATsxA::after {
 	content: "";
 	position: absolute;
 	background: currentColor;
 	height: 8px;
 	width: 2px;
 }
-#app-mount .markDash-yk2kJ-::before {
+#app-mount .markDash-1ATsxA::before {
 	top: 14px;
 }
-#app-mount .markDash-yk2kJ-::after {
+#app-mount .markDash-1ATsxA::after {
 	top: 30px;
 }
 #app-mount .bubble-3we2di {									/* slider				bubble								*/
