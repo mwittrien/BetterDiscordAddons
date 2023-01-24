@@ -637,19 +637,19 @@ html .iconBadge-2wi9r4 {
 	color: var(--text-muted);
 }
 
-#app-mount .item-2idW98[aria-checked=true] .radioBar-3w9XY- {
+#app-mount .item-1TA5qI[aria-checked=true] .radioBar-1XgZqD {
 	background: rgb(var(--accentcolor));
 	color: #fff;
 }
-#app-mount .item-2idW98[aria-checked=true] .radioBar-3w9XY- .radioIconForeground-2BMavi {
+#app-mount .item-1TA5qI[aria-checked=true] .radioBar-1XgZqD .radioIconForeground-3wH3aU {
 	color: #fff;
 }
-#app-mount .item-2idW98 .radioBar-3w9XY-[style*="--radio-bar-accent-color"] {
+#app-mount .item-1TA5qI .radioBar-1XgZqD[style*="--radio-bar-accent-color"] {
 	background: var(--radio-bar-accent-color);
 	border: unset;
 	color: #fff;
 }
-#app-mount .item-2idW98[aria-checked=false]:hover .radioBar-3w9XY-[style*="--radio-bar-accent-color"] {
+#app-mount .item-1TA5qI[aria-checked=false]:hover .radioBar-1XgZqD[style*="--radio-bar-accent-color"] {
 	background: var(--radio-bar-accent-color) linear-gradient(to right, rgba(255, 255, 255, .2), rgba(255, 255, 255, .2));
 }
 
