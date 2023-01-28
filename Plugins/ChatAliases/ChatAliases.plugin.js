@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.4
+ * @version 2.4.5
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,8 +14,8 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"progress": {
-			"Autocomplete Menu": "Aliases are no longer added to the Autocomplete Menu of the Chat Box, since Discord completely fucked that up, and it's impossible to inject your own stuff anymore"
+		"improved": {
+			"Alias Order": "Automatically sets a higher priority for longer aliases, to avoid short aliases from overwritting longer ones"
 		}
 	};
 
@@ -290,9 +290,7 @@ module.exports = (_ => {
 					if (!aliases[word].regex && word.indexOf(" ") == -1) wordAliases[word] = aliases[word];
 					else multiAliases[word] = aliases[word];
 				}
-				for (let word of text.trim().split(" ")) {
-					newText.push(this.useAliases(word, wordAliases, true));
-				}
+				for (let word of text.trim().split(" ")) newText.push(this.useAliases(word, wordAliases, true));
 				newText = newText.length == 1 ? newText[0] : newText.join(" ");
 				newText = newText.replace(/ ([\n\t\r]) /g, "$1");
 				newText = this.useAliases(newText, multiAliases, false);
@@ -300,7 +298,7 @@ module.exports = (_ => {
 			}
 
 			useAliases (string, aliases, singleWord) {
-				for (let word in aliases) {
+				for (let word in Object.keys(aliases).filter(n => n).sort((x, y) => x.length > y.length ? -1 : x.length < y.length ? 1 : 0)) {
 					let result = true, replaced = false, tempString1 = string, tempString2 = "";
 					let config = aliases[word];
 					let escpAlias = config.regex ? word : BDFDB.StringUtils.regEscape(word);
