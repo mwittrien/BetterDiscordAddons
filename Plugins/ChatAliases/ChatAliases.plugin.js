@@ -2,7 +2,7 @@
  * @name ChatAliases
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.5
+ * @version 2.4.6
  * @description Allows you to configure your own Aliases/Commands
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -298,7 +298,7 @@ module.exports = (_ => {
 			}
 
 			useAliases (string, aliases, singleWord) {
-				for (let word in Object.keys(aliases).filter(n => n).sort((x, y) => x.length > y.length ? -1 : x.length < y.length ? 1 : 0)) {
+				for (let word of Object.keys(aliases).filter(n => n).sort((x, y) => x.length > y.length ? -1 : x.length < y.length ? 1 : 0)) {
 					let result = true, replaced = false, tempString1 = string, tempString2 = "";
 					let config = aliases[word];
 					let escpAlias = config.regex ? word : BDFDB.StringUtils.regEscape(word);
