@@ -458,7 +458,7 @@
 		"Menu": {"strings": ["\"empty\"", "getItemProps", "isUsingKeyboardNavigation"]},
 		"Message": {"strings": ["childrenMessageContent", "childrenRepliedMessage", "zalgo", ".buttonContainer"]},
 		"MessageAccessories": {"protos": ["renderGiftCodes", "renderEmbeds", "renderActivityInvite"]},
-		"MessageActionsContextMenu": {"strings": ["REPORT_MESSAGE_MENU_OPTION", "message-actions"]},
+		"MessageActionsContextMenu": {"strings": ["canReport:", "navId:\"message-actions\"", "useMessageMenu"]},
 		"MessageContent": {"strings": [".SEND_FAILED", "editedTimestamp", ".MESSAGE_EDITED"]},
 		"MessageContextMenu": {"strings": ["MESSAGE_ACTIONS_MENU_LABEL", "navId:\"message", "getGuildId"]},
 		"MessageGroup": {"strings": ["backgroundFlash", "renderMediaEmbeds", "THREAD_STARTER_MESSAG"]},
