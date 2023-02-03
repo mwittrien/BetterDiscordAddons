@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.9
+ * @version 2.5.0
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -632,31 +632,32 @@ module.exports = (_ => {
 			}
 		
 			processMessageToolbar (e) {
-				if (e.instance.props.expanded && e.instance.props.message && e.instance.props.channel) {
-					let translated = !!translatedMessages[e.instance.props.message.id];
-					e.returnvalue.props.children.unshift();
-					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(class extends BdApi.React.Component {
-						render() {
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								key: translated ? "untranslate-message" : "translate-message",
-								text: _ => translated ? _this.labels.context_messageuntranslateoption : _this.labels.context_messagetranslateoption,
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-									className: BDFDB.disCN.messagetoolbarbutton,
-									onClick: _ => {
-										if (!isTranslating) _this.translateMessage(e.instance.props.message, e.instance.props.channel).then(_ => {
-											translated = !!translatedMessages[e.instance.props.message.id];
-											BDFDB.ReactUtils.forceUpdate(this);
-										});
-									},
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-										className: BDFDB.disCN.messagetoolbaricon,
-										iconSVG: translated ? translateIconUntranslate : translateIcon
-									})
+				if (!e.instance.props.message || !e.instance.props.channel) return;
+				let expanded = !BDFDB.LibraryStores.AccessibilityStore.keyboardModeEnabled && !e.instance.props.showEmojiPicker && !e.instance.props.showEmojiBurstPicker && !e.instance.props.showMoreUtilities && BDFDB.ListenerUtils.isPressed(16);
+				if (!expanded) return;
+				let translated = !!translatedMessages[e.instance.props.message.id];
+				e.returnvalue.props.children.unshift();
+				e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(class extends BdApi.React.Component {
+					render() {
+						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							key: translated ? "untranslate-message" : "translate-message",
+							text: _ => translated ? _this.labels.context_messageuntranslateoption : _this.labels.context_messagetranslateoption,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+								className: BDFDB.disCN.messagetoolbarbutton,
+								onClick: _ => {
+									if (!isTranslating) _this.translateMessage(e.instance.props.message, e.instance.props.channel).then(_ => {
+										translated = !!translatedMessages[e.instance.props.message.id];
+										BDFDB.ReactUtils.forceUpdate(this);
+									});
+								},
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+									className: BDFDB.disCN.messagetoolbaricon,
+									iconSVG: translated ? translateIconUntranslate : translateIcon
 								})
-							});
-						}
-					}));
-				}
+							})
+						});
+					}
+				}));
 			}
 			
 			processChannelTextAreaContainer (e) {

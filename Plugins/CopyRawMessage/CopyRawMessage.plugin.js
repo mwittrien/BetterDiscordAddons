@@ -2,7 +2,7 @@
  * @name CopyRawMessage
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.4
+ * @version 1.1.5
  * @description Allows you to copy the raw Contents of a Message
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -71,61 +71,60 @@ module.exports = (_ => {
 			onStop () {}
 
 			onMessageContextMenu (e) {
-				if (e.instance.props.message) {
-					let content = e.instance.props.message.content;
-					let messageString = [e.instance.props.message.content, BDFDB.ArrayUtils.is(e.instance.props.message.attachments) && e.instance.props.message.attachments.map(n => n.url)].flat(10).filter(n => n).join("\n");
-					let selectedText = document.getSelection().toString().trim();
-					if (selectedText) messageString = BDFDB.StringUtils.extractSelection(messageString, selectedText);
-					let embed = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedwrapper, e.instance.props.target);
-					let embedData = e.instance.props.message.embeds[embed ? Array.from(embed.parentElement.querySelectorAll(BDFDB.dotCN.embedwrapper)).indexOf(embed) : -1];
-					let embedString = embedData && [embedData.rawTitle, embedData.rawDescription, BDFDB.ArrayUtils.is(embedData.fields) && embedData.fields.map(n => [n.rawName, n.rawValue]), BDFDB.ObjectUtils.is(embedData.image) && embedData.image.url, BDFDB.ObjectUtils.is(embedData.footer) && embedData.footer.text].flat(10).filter(n => n).join("\n");
-					if (selectedText) embedString = BDFDB.StringUtils.extractSelection(embedString, selectedText);
-					let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("Copy_Raw") : null;
-					let entries = [
-						messageString && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
-							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-message"),
-							type: "Message",
-							hint: hint && (_ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
-								hint: hint
-							})),
-							icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
-								icon: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
-							}),
-							action: _ => BDFDB.LibraryModules.WindowUtils.copy(messageString)
+				if (!e.instance.props.message) return;
+				let content = e.instance.props.message.content;
+				let messageString = [e.instance.props.message.content, BDFDB.ArrayUtils.is(e.instance.props.message.attachments) && e.instance.props.message.attachments.map(n => n.url)].flat(10).filter(n => n).join("\n");
+				let selectedText = document.getSelection().toString().trim();
+				if (selectedText) messageString = BDFDB.StringUtils.extractSelection(messageString, selectedText);
+				let embed = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedwrapper, e.instance.props.target);
+				let embedData = e.instance.props.message.embeds[embed ? Array.from(embed.parentElement.querySelectorAll(BDFDB.dotCN.embedwrapper)).indexOf(embed) : -1];
+				let embedString = embedData && [embedData.rawTitle, embedData.rawDescription, BDFDB.ArrayUtils.is(embedData.fields) && embedData.fields.map(n => [n.rawName, n.rawValue]), BDFDB.ObjectUtils.is(embedData.image) && embedData.image.url, BDFDB.ObjectUtils.is(embedData.footer) && embedData.footer.text].flat(10).filter(n => n).join("\n");
+				if (selectedText) embedString = BDFDB.StringUtils.extractSelection(embedString, selectedText);
+				let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("Copy_Raw") : null;
+				let entries = [
+					messageString && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-message"),
+						type: "Message",
+						hint: hint && (_ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+							hint: hint
+						})),
+						icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+							icon: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
 						}),
-						embedString && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw Embed)",
-							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-embed"),
-							type: "Embed",
-							icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
-								icon: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
-							}),
-							action: _ => BDFDB.LibraryModules.WindowUtils.copy(embedString)
+						action: _ => BDFDB.LibraryModules.WindowUtils.copy(messageString)
+					}),
+					embedString && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw Embed)",
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-embed"),
+						type: "Embed",
+						icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+							icon: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
 						}),
-						embedData && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Embed JSON)",
-							type: "Embed JSON",
-							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-embed-json"),
-							icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
-								icon: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
-							}),
-							action: _ => BDFDB.LibraryModules.WindowUtils.copy(JSON.stringify(embedData))
+						action: _ => BDFDB.LibraryModules.WindowUtils.copy(embedString)
+					}),
+					embedData && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Embed JSON)",
+						type: "Embed JSON",
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-embed-json"),
+						icon: _ => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+							icon: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
+						}),
+						action: _ => BDFDB.LibraryModules.WindowUtils.copy(JSON.stringify(embedData))
+					})
+				].filter(n => n);
+				if (entries.length) {
+					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "copy-link"});
+					children.splice(index > -1 ? index + 1 : children.length, 0, entries.length > 1 ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT,
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-raw-submenu"),
+						children: entries.map(n => {
+							n.props.label = n.props.type;
+							delete n.props.type;
+							delete n.props.icon;
+							return n;
 						})
-					].filter(n => n);
-					if (entries.length) {
-						let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "copy-link"});
-						children.splice(index > -1 ? index + 1 : children.length, 0, entries.length > 1 ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-							label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT,
-							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-raw-submenu"),
-							children: entries.map(n => {
-								n.props.label = n.props.type;
-								delete n.props.type;
-								delete n.props.icon;
-								return n;
-							})
-						}) : entries);
-					}
+					}) : entries);
 				}
 			}
 
@@ -144,22 +143,23 @@ module.exports = (_ => {
 			}
 		
 			processMessageToolbar (e) {
-				if (e.instance.props.expanded && e.instance.props.message && e.instance.props.channel) {
-					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						key: "copy-message-raw",
-						text: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-							className: BDFDB.disCN.messagetoolbarbutton,
-							onClick: _ => {
-								BDFDB.LibraryModules.WindowUtils.copy(e.instance.props.message.content);
-							},
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCN.messagetoolbaricon,
-								name: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
-							})
+				if (!e.instance.props.message || !e.instance.props.channel) return;
+				let expanded = !BDFDB.LibraryStores.AccessibilityStore.keyboardModeEnabled && !e.instance.props.showEmojiPicker && !e.instance.props.showEmojiBurstPicker && !e.instance.props.showMoreUtilities && BDFDB.ListenerUtils.isPressed(16);
+				if (!expanded) return;
+				e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					key: "copy-message-raw",
+					text: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+						className: BDFDB.disCN.messagetoolbarbutton,
+						onClick: _ => {
+							BDFDB.LibraryModules.WindowUtils.copy(e.instance.props.message.content);
+						},
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+							className: BDFDB.disCN.messagetoolbaricon,
+							name: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
 						})
-					}));
-				}
+					})
+				}));
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));

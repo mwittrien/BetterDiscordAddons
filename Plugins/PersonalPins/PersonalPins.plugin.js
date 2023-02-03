@@ -2,7 +2,7 @@
  * @name PersonalPins
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.1.6
+ * @version 2.1.7
  * @description Allows you to locally pin Messages
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -516,41 +516,42 @@ module.exports = (_ => {
 			}
 		
 			processMessageToolbar (e) {
-				if (e.instance.props.expanded && e.instance.props.message && e.instance.props.channel) {
-					let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
-					e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(class extends BdApi.React.Component {
-						render() {
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								key: note ? "unpin-note" : "pin-note",
-								text: _ => note ? _this.labels.context_unpinoption : _this.labels.context_pinoption,
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-									className: BDFDB.disCN.messagetoolbarbutton,
-									onClick: _ => {
-										_this.addMessageToNotes(e.instance.props.message, e.instance.props.channel);
-										note = _this.getNoteData(e.instance.props.message, e.instance.props.channel);
-										BDFDB.ReactUtils.forceUpdate(this);
-									},
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-										className: BDFDB.disCN.messagetoolbaricon,
-										iconSVG: note ? pinIconDelete : pinIcon
-									})
+				if (!e.instance.props.message || !e.instance.props.channel) return;
+				let expanded = !BDFDB.LibraryStores.AccessibilityStore.keyboardModeEnabled && !e.instance.props.showEmojiPicker && !e.instance.props.showEmojiBurstPicker && !e.instance.props.showMoreUtilities && BDFDB.ListenerUtils.isPressed(16);
+				if (!expanded) return;
+				let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
+				e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(class extends BdApi.React.Component {
+					render() {
+						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							key: note ? "unpin-note" : "pin-note",
+							text: _ => note ? _this.labels.context_unpinoption : _this.labels.context_pinoption,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+								className: BDFDB.disCN.messagetoolbarbutton,
+								onClick: _ => {
+									_this.addMessageToNotes(e.instance.props.message, e.instance.props.channel);
+									note = _this.getNoteData(e.instance.props.message, e.instance.props.channel);
+									BDFDB.ReactUtils.forceUpdate(this);
+								},
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+									className: BDFDB.disCN.messagetoolbaricon,
+									iconSVG: note ? pinIconDelete : pinIcon
 								})
 							})
-						}
-					}));
-					if (this.isNoteOutdated(note, e.instance.props.message)) e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						key: "update-note",
-						text: this.labels.context_updateoption,
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-							className: BDFDB.disCN.messagetoolbarbutton,
-							onClick: _ => this.updateNoteData(note, e.instance.props.message),
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								className: BDFDB.disCN.messagetoolbaricon,
-								iconSVG: pinIconUpdate
-							})
 						})
-					}));
-				}
+					}
+				}));
+				if (this.isNoteOutdated(note, e.instance.props.message)) e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					key: "update-note",
+					text: this.labels.context_updateoption,
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+						className: BDFDB.disCN.messagetoolbarbutton,
+						onClick: _ => this.updateNoteData(note, e.instance.props.message),
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+							className: BDFDB.disCN.messagetoolbaricon,
+							iconSVG: pinIconUpdate
+						})
+					})
+				}));
 			}
 
 			processHeaderBar (e) {

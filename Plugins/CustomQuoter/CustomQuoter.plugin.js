@@ -2,7 +2,7 @@
  * @name CustomQuoter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.1
+ * @version 1.3.2
  * @description Brings back the Quote Feature and allows you to set your own Quote Formats
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -338,25 +338,26 @@ module.exports = (_ => {
 			}
 		
 			processMessageToolbar (e) {
-				if ((e.instance.props.expanded || !this.settings.general.holdShiftToolbar) && e.instance.props.message && e.instance.props.channel) {
-					let quoteButton = BDFDB.ReactUtils.findChild(e.returnvalue, {key: "quote"});
-					if (!quoteButton) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: ["reply", "mark-unread"]});
-						children.splice(index > -1 ? index : (!e.instance.props.expanded ? 1 : 0), 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							key: "quote",
-							text: BDFDB.LanguageUtils.LanguageStrings.QUOTE,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-								className: BDFDB.disCN.messagetoolbarbutton,
-								onClick: _ => {
-									this.quote(e.instance.props.channel, e.instance.props.message);
-								},
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									className: BDFDB.disCN.messagetoolbaricon,
-									name: BDFDB.LibraryComponents.SvgIcon.Names.QUOTE
-								})
+				if (!e.instance.props.message || !e.instance.props.channel) return;
+				let expanded = !BDFDB.LibraryStores.AccessibilityStore.keyboardModeEnabled && !e.instance.props.showEmojiPicker && !e.instance.props.showEmojiBurstPicker && !e.instance.props.showMoreUtilities && BDFDB.ListenerUtils.isPressed(16);
+				if (!expanded && this.settings.general.holdShiftToolbar) return;
+				let quoteButton = BDFDB.ReactUtils.findChild(e.returnvalue, {key: "quote"});
+				if (!quoteButton) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: ["reply", "mark-unread"]});
+					children.splice(index > -1 ? index : (!e.instance.props.expanded ? 1 : 0), 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						key: "quote",
+						text: BDFDB.LanguageUtils.LanguageStrings.QUOTE,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.disCN.messagetoolbarbutton,
+							onClick: _ => {
+								this.quote(e.instance.props.channel, e.instance.props.message);
+							},
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.messagetoolbaricon,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.QUOTE
 							})
-						}));
-					}
+						})
+					}));
 				}
 			}
 		
