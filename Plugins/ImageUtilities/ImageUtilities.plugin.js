@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.1.1
+ * @version 5.1.2
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -694,7 +694,7 @@ module.exports = (_ => {
 
 			onMessageContextMenu (e) {
 				if (!e.instance.props.message || !e.instance.props.channel || !e.instance.props.target) return;
-				if (e.instance.props.attachment) this.injectItem(e, [e.instance.props.attachment.url], null, true);
+				if (e.instance.props.attachment) this.injectItem(e, [{original: e.instance.props.attachment.url, file: e.instance.props.attachment.proxy_url}], null, true);
 				else {
 					const target = e.instance.props.target.tagName == "A" && BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.imageoriginallink) && e.instance.props.target.parentElement.querySelector("img, video") || e.instance.props.target;
 					if (target.tagName == "A" && e.instance.props.message.embeds && e.instance.props.message.embeds[0] && (e.instance.props.message.embeds[0].type == "image" || e.instance.props.message.embeds[0].type == "video" || e.instance.props.message.embeds[0].type == "gifv")) this.injectItem(e, [target.href], null, true);
@@ -1177,10 +1177,13 @@ module.exports = (_ => {
 							BDFDB.ReactUtils.forceUpdate(e.instance);
 						}
 					}
-					if (e.methodname == "componentWillUnmount" && BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagemodal, e.node)) {
-						firstViewedImage = null;
-						viewedImage = null;
-						this.cleanupListeners("Gallery");
+					if (e.methodname == "componentWillUnmount" && BDFDB.DOMUtils.getParent(BDFDB.dotCNC.imagemodal + BDFDB.dotCN.modalcarouselmodal, e.node)) {
+						BDFDB.TimeUtils.clear(viewedImageTimeout);
+						viewedImageTimeout = BDFDB.TimeUtils.timeout(_ => {
+							firstViewedImage = null;
+							viewedImage = null;
+							this.cleanupListeners("Gallery");
+						}, 1000);
 					}
 					if (e.methodname == "componentDidMount" && BDFDB.DOMUtils.getParent(BDFDB.dotCNC.imagemodal + BDFDB.dotCN.modalcarouselmodal, e.node)) {
 						BDFDB.TimeUtils.clear(viewedImageTimeout);
