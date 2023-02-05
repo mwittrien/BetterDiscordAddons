@@ -146,6 +146,7 @@ module.exports = (_ => {
 			render() {
 				return !this.props.attachment ? null : BDFDB.ReactUtils.createElement("span", {
 					className: BDFDB.disCN._imageutilitiesimagedetails,
+					style: this.props.attachment.description ? {"margin-bottom": 0} : {},
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
 							title: this.props.original,
