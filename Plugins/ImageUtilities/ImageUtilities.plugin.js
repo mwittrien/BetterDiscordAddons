@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.1.2
+ * @version 5.1.3
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -138,6 +138,7 @@ module.exports = (_ => {
 			}
 			componentDidUpdate() {
 				if ((!this.props.attachment || !this.props.attachment.size) && !this.props.loaded) {
+					BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagemosaiconebyonegridsingle, BDFDB.ReactUtils.findDOMNode(this)), BDFDB.disCN._imageutilitiesimagedetailsadded);
 					this.props.loaded = true;
 					this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "attachment", {up: true});
 					BDFDB.ReactUtils.forceUpdate(this);
@@ -146,7 +147,6 @@ module.exports = (_ => {
 			render() {
 				return !this.props.attachment ? null : BDFDB.ReactUtils.createElement("span", {
 					className: BDFDB.disCN._imageutilitiesimagedetails,
-					style: this.props.attachment.description ? {"margin-bottom": 0} : {},
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
 							title: this.props.original,
@@ -277,6 +277,16 @@ module.exports = (_ => {
 				};
 				
 				this.css = `
+					${BDFDB.dotCN._imageutilitiesimagedetailsadded} {
+						height: calc(100% - 1rem - 16px) !important;
+						max-height: unset !important;
+					}
+					${BDFDB.dotCN._imageutilitiesimagedetailsadded + BDFDB.dotCNS.imagemosaiconebyonegridsingle + BDFDB.dotCN.imagewrapper} {
+						border-radius: 8px; !important;
+					}
+					${BDFDB.dotCNS._imageutilitiesimagedetailsadded + BDFDB.dotCN.imagealttextcontainer} {
+						bottom: calc(1rem + 16px) !important;
+					}
 					${BDFDB.dotCN._imageutilitiesimagedetails} {
 						display: inline-flex;
 						font-weight: 500;
@@ -1162,7 +1172,7 @@ module.exports = (_ => {
 			processLazyImage (e) {
 				if (e.node) {
 					if (e.instance.props.resized) {
-						for (let selector of ["embedfull", "embedinlinemedia", "embedgridcontainer"]) {
+						for (let selector of ["embedfull", "embedinlinemedia", "embedgridcontainer", "imagemosaicattachmentscontainer"]) {
 							let parent = BDFDB.DOMUtils.getParent(BDFDB.dotCN[selector], e.node);
 							if (parent) parent.style.setProperty("max-width", "unset", "important");
 						}
