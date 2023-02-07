@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.7.3
+ * @version 4.7.4
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -512,11 +512,11 @@ module.exports = (_ => {
 				if (!e.instance.props.user || !changedUsers[e.instance.props.user.id]) return;
 				if (changedUsers[e.instance.props.user.id].removeBanner) {
 					e.instance.props.bannerSrc = null;
-					e.instance.props.displayProfile.banner = null;
+					if (e.instance.props.displayProfile) e.instance.props.displayProfile.banner = null;
 				}
 				else if (changedUsers[e.instance.props.user.id].banner) {
 					e.instance.props.bannerSrc = changedUsers[e.instance.props.user.id].banner;
-					e.instance.props.displayProfile.banner = changedUsers[e.instance.props.user.id].banner;
+					if (e.instance.props.displayProfile) e.instance.props.displayProfile.banner = changedUsers[e.instance.props.user.id].banner;
 				}
 			}
 
