@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.1.3
+ * @version 5.1.4
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -277,12 +277,10 @@ module.exports = (_ => {
 				};
 				
 				this.css = `
-					${BDFDB.dotCN._imageutilitiesimagedetailsadded} {
+					${BDFDB.dotCNS._imageutilitiesimagedetailsadded + BDFDB.dotCN.imagewrapper} {
+						border-radius: 8px; !important;
 						height: calc(100% - 1rem - 16px) !important;
 						max-height: unset !important;
-					}
-					${BDFDB.dotCN._imageutilitiesimagedetailsadded + BDFDB.dotCNS.imagemosaiconebyonegridsingle + BDFDB.dotCN.imagewrapper} {
-						border-radius: 8px; !important;
 					}
 					${BDFDB.dotCNS._imageutilitiesimagedetailsadded + BDFDB.dotCN.imagealttextcontainer} {
 						bottom: calc(1rem + 16px) !important;
@@ -1172,9 +1170,10 @@ module.exports = (_ => {
 			processLazyImage (e) {
 				if (e.node) {
 					if (e.instance.props.resized) {
-						for (let selector of ["embedfull", "embedinlinemedia", "embedgridcontainer", "imagemosaicattachmentscontainer"]) {
+						for (let selector of ["embedfull", "embedinlinemedia", "embedgridcontainer", "imagemosaicattachmentscontainer", "imagemosaiconebyonegridsingle"]) {
 							let parent = BDFDB.DOMUtils.getParent(BDFDB.dotCN[selector], e.node);
 							if (parent) parent.style.setProperty("max-width", "unset", "important");
+							if (parent) parent.style.setProperty("max-height", "unset", "important");
 						}
 						for (let ele of [e.node.style.getPropertyValue("width") && e.node, ...e.node.querySelectorAll("[style*='width:']")].filter(n => n)) {
 							ele.style.setProperty("width", e.instance.props.width + "px");
@@ -1322,7 +1321,7 @@ module.exports = (_ => {
 							e.instance.props.resized = true;
 						}
 					}
-					if (this.settings.rescaleSettings.messages != "NONE" && (!e.instance.props.className || e.instance.props.className.indexOf(BDFDB.disCN.embedthumbnail) == -1) && (!e.instance.props.containerClassName || e.instance.props.containerClassName.indexOf(BDFDB.disCN.embedthumbnail) == -1 && e.instance.props.containerClassName.indexOf(BDFDB.disCN.embedvideoimagecomponent) == -1) && BDFDB.ReactUtils.findOwner(reactInstance, {name: "LazyImageZoomable", up: true})) {
+					if (this.settings.rescaleSettings.messages != "NONE" && (!e.instance.props.className || e.instance.props.className.indexOf(BDFDB.disCN.embedthumbnail) == -1) && (!e.instance.props.containerClassName || e.instance.props.containerClassName.indexOf(BDFDB.disCN.embedthumbnail) == -1 && e.instance.props.containerClassName.indexOf(BDFDB.disCN.embedvideoimagecomponent) == -1) && BDFDB.ReactUtils.findOwner(reactInstance, {name: "LazyImageZoomable", up: true}) && (e.instance.props.mediaLayoutType != "MOSAIC" || (BDFDB.ReactUtils.findValue(reactInstance, "attachments", {up: true}) || []).length < 2)) {
 						let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 						let mRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCNC.messageaccessory + BDFDB.dotCN.messagecontents));
 						let mwRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.messagewrapper));
@@ -1352,7 +1351,7 @@ module.exports = (_ => {
 
 			processLazyImageZoomable (e) {
 				if (!e.instance.props.original || e.instance.props.src.indexOf("https://media.discordapp.net/attachments") != 0) return;
-				if (this.settings.detailsSettings.tooltip) {
+				if (this.settings.detailsSettings.tooltip || this.settings.detailsSettings.footnote && e.instance.props.mediaLayoutType == "MOSAIC" && (BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), "attachments", {up: true}) || []).length > 1) {
 					const attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up: true});
 					if (attachment) {
 						const onMouseEnter = e.returnvalue.props.onMouseEnter;
@@ -1369,7 +1368,7 @@ module.exports = (_ => {
 						}, "Error in onMouseEnter of LazyImageZoomable!");
 					}
 				}
-				if (this.settings.detailsSettings.footnote && (e.instance.props.className || "").indexOf(BDFDB.disCN.embedmedia) == -1 && (e.instance.props.className || "").indexOf(BDFDB.disCN.embedthumbnail) == -1) {
+				if (this.settings.detailsSettings.footnote && (e.instance.props.className || "").indexOf(BDFDB.disCN.embedmedia) == -1 && (e.instance.props.className || "").indexOf(BDFDB.disCN.embedthumbnail) == -1 && (e.instance.props.mediaLayoutType != "MOSAIC" || (BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(e, `instance.${BDFDB.ReactUtils.instanceKey}`), "attachments", {up: true}) || []).length < 2)) {
 					e.returnvalue = BDFDB.ReactUtils.createElement("div", {
 						children: [
 							e.returnvalue,
