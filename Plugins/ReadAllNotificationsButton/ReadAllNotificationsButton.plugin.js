@@ -2,7 +2,7 @@
  * @name ReadAllNotificationsButton
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.3
+ * @version 1.7.4
  * @description Adds a Clear Button to the Server List and the Mentions Popout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -305,7 +305,11 @@ module.exports = (_ => {
 										clearing = true;
 										let toast = BDFDB.NotificationUtils.toast(`${this.labels.toast_clearing} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {timeout: 0, ellipsis: true});
 										for (let i = 0; i < messages.length; i++) BDFDB.TimeUtils.timeout(_ => {
-											BDFDB.LibraryModules.RecentMentionUtils.deleteRecentMention(messages[i].id);
+											BDFDB.LibraryModules.APIUtils.delete({
+												url: BDFDB.DiscordConstants.Endpoints.MENTIONS_MESSAGE_ID(messages[i].id),
+												retries: 2,
+												oldFormErrors: true
+											});
 											if (i == messages.length - 1) {
 												clearing = false;
 												toast.close();
