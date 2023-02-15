@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.1.4
+ * @version 5.1.5
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -120,7 +120,7 @@ module.exports = (_ => {
 					},
 					children: [
 						this.props.loadedImage || BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SpinnerComponents.Spinner, {
-							type: BDFDB.LibraryComponents.SpinnerComponents.Types.SPINNING_CIRCLE
+							type: BDFDB.LibraryComponents.SpinnerComponents.Types.WANDERING_CUBES
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 							className: BDFDB.disCNS._imageutilitiesswitchicon + BDFDB.disCN.svgicon,
@@ -369,6 +369,7 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCNS._imageutilitiessibling + BDFDB.dotCN.spinner} {
 						position: absolute;
+						width: 32px;
 					}
 					${BDFDB.dotCNS._imageutilitiesprevious + BDFDB.dotCN.spinner} {
 						right: 21px;
@@ -922,6 +923,17 @@ module.exports = (_ => {
 				});
 			}
 			
+			processModalCarousel (e) {
+				if (!this.settings.viewerSettings.galleryMode || !BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ImageModal"})) return;
+				e.returnvalue.props.className = "";
+				e.returnvalue.props.children[0] = null;
+				e.returnvalue.props.children[2] = null;
+				if (e.returnvalue.props.children[1] && switchedImageProps) {
+					e.returnvalue.props.children[1].props = Object.assign(e.returnvalue.props.children[1].props, switchedImageProps);
+					switchedImageProps = null;
+				}
+			}
+			
 			processImageModal (e) {
 				if (!e.returnvalue) {
 					if (switchedImageProps) {
@@ -1160,13 +1172,6 @@ module.exports = (_ => {
 				}
 			}
 			
-			processModalCarousel (e) {
-				if (!this.settings.viewerSettings.galleryMode || !BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ImageModal"})) return;
-				e.returnvalue.props.className = "";
-				e.returnvalue.props.children[0] = null;
-				e.returnvalue.props.children[2] = null;
-			}
-			
 			processLazyImage (e) {
 				if (e.node) {
 					if (e.instance.props.resized) {
@@ -1212,7 +1217,6 @@ module.exports = (_ => {
 							e.node.style.setProperty("cursor", "zoom-in");
 							e.node.addEventListener("mousedown", event => {
 								if (event.which != 1 || e.node.querySelector("video")) return;
-								BDFDB.ListenerUtils.stopEvent(event);
 								
 								let vanishObserver;
 								
@@ -1246,7 +1250,7 @@ module.exports = (_ => {
 								};
 								lens.update();
 								
-								for (let ele of [e.node, document.querySelector(BDFDB.dotCN.modalcarouselwrapper)]) if (ele) ele.style.setProperty("pointer-events", "none", "important");
+								for (let ele of [e.node, document.querySelector(BDFDB.dotCN.imagemodal)]) if (ele) ele.style.setProperty("pointer-events", "none", "important");
 								
 								let dragging = event2 => {
 									event = event2;
@@ -1254,7 +1258,7 @@ module.exports = (_ => {
 								};
 								let releasing = event2 => {
 									BDFDB.ListenerUtils.stopEvent(event2);
-									for (let ele of [e.node, document.querySelector(BDFDB.dotCN.modalcarouselwrapper)]) if (ele) ele.style.removeProperty("pointer-events");
+									for (let ele of [e.node, document.querySelector(BDFDB.dotCN.imagemodal)]) if (ele) ele.style.removeProperty("pointer-events");
 									this.cleanupListeners("Zoom");
 									document.removeEventListener("mousemove", dragging);
 									document.removeEventListener("mouseup", releasing);
@@ -1657,7 +1661,7 @@ module.exports = (_ => {
 			
 			filterForCopies (messages) {
 				let filtered = [];
-				for (let message of messages) if (!filtered.find(n => n.messageId == message.messageId)) filtered.push(message);
+				for (let message of messages) if (!filtered.find(n => n.messageId == message.messageId && n.id == message.id)) filtered.push(message);
 				return filtered;
 			}
 			
