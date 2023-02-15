@@ -4542,7 +4542,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 .item-1OdjEX.colorDefault-CDqZdO.focused-3qFvc8,
 .item-1OdjEX.colorDefault-CDqZdO:hover:not(.hideInteraction-2jPGL_) {
-	background-color: rgba(var(--transparencycolor), .2) !important;
+	background-color: rgba(var(--accentcolor), .2) !important;
 }
 .item-1OdjEX.colorDanger-3n-KnP.focused-3qFvc8,
 .item-1OdjEX.colorDanger-3n-KnP:hover:not(.hideInteraction-2jPGL_) {
