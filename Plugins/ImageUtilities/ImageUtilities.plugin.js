@@ -2106,7 +2106,7 @@ module.exports = (_ => {
 							context_copy:						"Copy {{var0}}",
 							context_imageactions:				"Image Actions",
 							context_lenssize:					"Lens Size",
-							context_saveas:						"Save {{var0}} as ...",
+							context_saveas:						"Save {{var0}} to ...",
 							context_searchwith:					"Search {{var0}} with ...",
 							context_videoactions:				"Video Actions",
 							context_view:						"View {{var0}}",
