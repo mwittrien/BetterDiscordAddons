@@ -1266,6 +1266,7 @@ module.exports = (_ => {
 									document.removeEventListener("mouseup", releasing);
 									if (vanishObserver) vanishObserver.disconnect();
 									BDFDB.DOMUtils.remove(lens, backdrop);
+									BDFDB.DataUtils.save(this.settings.zoomSettings, this, "zoomSettings");
 								};
 								document.addEventListener("mousemove", dragging);
 								document.addEventListener("mouseup", releasing);
