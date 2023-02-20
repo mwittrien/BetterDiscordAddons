@@ -2483,15 +2483,19 @@ input.input-2g-os5 {										/* textinput												*/
 	background-color: rgb(114, 118, 125) !important;
 	transition: background-color .1s ease-out;
 }															/* switch				checked								*/
+.container-1QtPKm[style*="background-color: rgb(35, "],
 .container-1QtPKm[style*="background-color: rgb(59, "],
 .container-1QtPKm[style*="background-color: rgb(88, "],
+.container-1QtPKm[style*="background-color: hsl(145, "],
 .container-1QtPKm[style*="background-color: hsl(139, "],
 .container-1QtPKm[style*="background-color: hsl(227, "],
 .container-1QtPKm[style*="background-color: hsl(235, "] {
 	background-color: rgba(var(--accentcolor), 0.8) !important;
 }
+.container-1QtPKm[style*="background-color: rgb(35, "]:hover,
 .container-1QtPKm[style*="background-color: rgb(59, "]:hover,
 .container-1QtPKm[style*="background-color: rgb(88, "]:hover,
+.container-1QtPKm[style*="background-color: hsl(145, "]:hover,
 .container-1QtPKm[style*="background-color: hsl(139, "]:hover,
 .container-1QtPKm[style*="background-color: hsl(227, "]:hover,
 .container-1QtPKm[style*="background-color: hsl(235, "]:hover {
