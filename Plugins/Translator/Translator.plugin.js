@@ -1314,6 +1314,7 @@ module.exports = (_ => {
 			}
 
 			addExceptions (string, excepts) {
+				string = string.replace(/｛｛(\d+)｝｝/g,`{{$1}}`);
 				for (let count in excepts) {
 					let exception = BDFDB.ArrayUtils.is(this.settings.exceptions.wordStart) && this.settings.exceptions.wordStart.some(n => excepts[count].indexOf(n) == 0) ? excepts[count].slice(1) : excepts[count];
 					let newString = string.replace(new RegExp(BDFDB.StringUtils.regEscape(`{{${count}}}`)), exception);
