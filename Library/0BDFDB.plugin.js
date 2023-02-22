@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.7
+ * @version 3.0.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2943,13 +2943,13 @@ module.exports = (_ => {
 					if (!Internal.DiscordConstants.Colors) return null;
 					status = typeof status == "string" ? status.toLowerCase() : null;
 					switch (status) {
-						case "online": return useColor ? Internal.DiscordConstants.Colors.STATUS_GREEN_600 : "var(--status-positive)";
-						case "idle": return useColor ? Internal.DiscordConstants.Colors.STATUS_YELLOW : "var(--status-warning)";
-						case "dnd": return useColor ? Internal.DiscordConstants.Colors.STATUS_RED : "var(--status-danger)";
+						case "online": return useColor ? Internal.DiscordConstants.Colors._GREEN_600 : "var(--status-positive)";
+						case "idle": return useColor ? Internal.DiscordConstants.Colors._YELLOW : "var(--status-warning)";
+						case "dnd": return useColor ? Internal.DiscordConstants.Colors._RED : "var(--status-danger)";
 						case "playing": return useColor ? Internal.DiscordConstants.Colors.BRAND : "var(--bdfdb-blurple)";
 						case "listening": return Internal.DiscordConstants.Colors.SPOTIFY;
 						case "streaming": return Internal.DiscordConstants.Colors.TWITCH;
-						default: return Internal.DiscordConstants.Colors.STATUS_GREY;
+						default: return Internal.DiscordConstants.Colors._GREY;
 					}
 				};
 				BDFDB.UserUtils.getActivity = function (id = BDFDB.UserUtils.me.id) {

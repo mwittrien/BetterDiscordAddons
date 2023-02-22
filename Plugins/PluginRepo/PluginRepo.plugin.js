@@ -2,7 +2,7 @@
  * @name PluginRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.5
+ * @version 2.4.6
  * @description Allows you to download all Plugins from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -370,7 +370,7 @@ module.exports = (_ => {
 											style: {
 												borderRadius: 3,
 												textTransform: "uppercase",
-												background: BDFDB.DiscordConstants.Colors.STATUS_YELLOW
+												background: BDFDB.DiscordConstants.Colors.YELLOW
 											},
 											text: BDFDB.LanguageUtils.LanguageStrings.NEW
 										})

@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.1.1
+ * @version 7.1.2
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -737,7 +737,7 @@ module.exports = (_ => {
 						e.returnvalue,
 						BDFDB.ReactUtils.createElement(FolderGuildContentComponent, {
 							isAppFullscreen: BDFDB.LibraryStores.ChannelRTCStore.isFullscreenInContext(),
-							themeOverride: BDFDB.LibraryStores.AccessibilityStore.darkSidebar
+							themeOverride: BDFDB.LibraryStores.ThemeStore.darkSidebar
 						}, true)
 					].flat(10);
 				}

@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.8
+ * @version 2.4.9
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -522,7 +522,7 @@ module.exports = (_ => {
 											style: {
 												borderRadius: 3,
 												textTransform: "uppercase",
-												background: BDFDB.DiscordConstants.Colors.STATUS_YELLOW
+												background: BDFDB.DiscordConstants.Colors.YELLOW
 											},
 											text: BDFDB.LanguageUtils.LanguageStrings.NEW
 										})

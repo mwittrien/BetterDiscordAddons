@@ -2,7 +2,7 @@
  * @name ChatFilter
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.5.7
+ * @version 3.5.8
  * @description Allows you to censor Words or block complete Messages/Statuses
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -98,7 +98,7 @@ module.exports = (_ => {
 				
 				this.css = `
 					${BDFDB.dotCN._chatfilterblocked} {
-						color: ${BDFDB.DiscordConstants.Colors.STATUS_RED} !important;
+						color: ${BDFDB.DiscordConstants.Colors.RED} !important;
 					}
 					${BDFDB.dotCN.messagerepliedmessagecontentclickable}:hover ${BDFDB.dotCN._chatfilterblocked} {
 						filter: saturate(2);

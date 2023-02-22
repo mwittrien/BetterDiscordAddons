@@ -2,7 +2,7 @@
  * @name TopRoleEverywhere
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.1
+ * @version 3.1.2
  * @description Adds the highest Role of a User as a Tag
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -222,7 +222,7 @@ module.exports = (_ => {
 			
 			createTag (role, type, config = {}) {
 				if (this.settings.general.useOtherStyle) {
-					let tagColor = BDFDB.ColorUtils.convert(role.colorString || BDFDB.DiscordConstants.Colors.PRIMARY_DARK_500, "RGB")
+					let tagColor = BDFDB.ColorUtils.convert(role.colorString || BDFDB.DiscordConstants.Colors.PRIMARY_500, "RGB")
 					let isBright = role.colorString && BDFDB.ColorUtils.isBright(tagColor);
 					tagColor = isBright ? (this.settings.general.useBlackFont ? tagColor : BDFDB.ColorUtils.change(tagColor, -0.3)) : tagColor;
 					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BotTag, {

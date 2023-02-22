@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.4
+ * @version 1.6.5
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -221,7 +221,7 @@ module.exports = (_ => {
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildBadge, {
 							size: this.settings.amounts.serverElementHeight * 0.5,
-							badgeColor: BDFDB.DiscordConstants.Colors.STATUS_GREY,
+							badgeColor: BDFDB.DiscordConstants.Colors.GREY,
 							tooltipColor: BDFDB.LibraryComponents.TooltipContainer.Colors.BLACK,
 							tooltipPosition: BDFDB.LibraryComponents.TooltipContainer.Positions.RIGHT,
 							guild: e.instance.props.guild
@@ -399,7 +399,7 @@ module.exports = (_ => {
 					
 					${BDFDB.dotCNS.themedark + BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsscroller}::-webkit-scrollbar-thumb,
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper + BDFDB.dotCNS.themedark + BDFDB.dotCN.guildsscroller}::-webkit-scrollbar-thumb {
-						background-color: ${BDFDB.DiscordConstants.Colors.PRIMARY_DARK_800};
+						background-color: ${BDFDB.DiscordConstants.Colors.PRIMARY_800};
 					}
 
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} {

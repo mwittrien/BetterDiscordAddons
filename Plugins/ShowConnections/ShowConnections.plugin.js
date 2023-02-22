@@ -2,7 +2,7 @@
  * @name ShowConnections
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.6
+ * @version 1.1.7
  * @description Shows the connected Accounts of a User in the UserPopout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -121,12 +121,12 @@ module.exports = (_ => {
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FlowerStar, {
 													className: BDFDB.disCN._showconnectionsverifiedbadge,
 													size: "50%",
-													color: isLightTheme ? BDFDB.DiscordConstants.Colors.STATUS_GREY_200 : BDFDB.DiscordConstants.Colors.PRIMARY_DARK,
+													color: isLightTheme ? BDFDB.DiscordConstants.Colors.PRIMARY_200 : BDFDB.DiscordConstants.Colors.PRIMARY,
 													children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 														name: BDFDB.LibraryComponents.SvgIcon.Names.CHECKMARK,
 														width: "70%",
 														height: "70%",
-														color: isLightTheme ? BDFDB.DiscordConstants.Colors.STATUS_GREY_500 : BDFDB.DiscordConstants.Colors.WHITE
+														color: isLightTheme ? BDFDB.DiscordConstants.Colors.PRIMARY_500 : BDFDB.DiscordConstants.Colors.WHITE
 													})
 												})
 											})

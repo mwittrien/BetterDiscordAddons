@@ -2,7 +2,7 @@
  * @name CustomStatusPresets
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.4
+ * @version 1.1.5
  * @description Allows you to save Custom Statuses as Quick Select
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -292,7 +292,7 @@ module.exports = (_ => {
 						flex: 0 0 auto;
 					}
 					${BDFDB.dotCN._customstatuspresetssortdivider} {
-						background: ${BDFDB.DiscordConstants.Colors.STATUS_GREEN};
+						background: ${BDFDB.DiscordConstants.Colors.GREEN};
 						height: 2px;
 						margin: 0 26px 8px 0;
 					}
