@@ -328,9 +328,9 @@
 		}},
 		"RoleMention": {"strings": ["rolePopout", "inlinePreview"], "funcStrings": ["inlinePreview"]},
 		"Scrollers": {"strings": [".fade", ".auto", "paddingFix", "getScrollerNode"], "exported": false, "value": "exports"},
-		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "CHASING_DOTS"], "exported": false, "value": "exports", "map": {
-			"Spinner": ["LOADING"],
-			"Types": ["WANDERING_CUBES", "CHASING_DOTS"]
+		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "wanderingCubes", ".spinningCircleInner"], "exported": false, "value": "exports", "map": {
+			"Spinner": [".spinningCircleInner"],
+			"Types": ["WANDERING_CUBES", "wanderingCubes"]
 		}},
 		"StatusComponents": {"strings": ["{mask", ".mask,", "UNKNOWN"], "exported": false, "value": "exports", "map": {
 			"AnimatedStatus": ["useSpring"],

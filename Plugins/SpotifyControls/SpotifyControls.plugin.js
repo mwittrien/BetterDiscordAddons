@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.1
+ * @version 1.3.2
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -467,7 +467,7 @@ module.exports = (_ => {
 						font-style: normal
 					}
 					:root {
-						--SC-spotify-green: ${BDFDB.DiscordConstants.Colors.SPOTIFY};
+						--SC-spotify-green: ${BDFDB.DiscordConstants.Colors.SPOTIFY || "#1db954"};
 					}
 					${BDFDB.dotCN.channelpanels} {
 						display: flex;

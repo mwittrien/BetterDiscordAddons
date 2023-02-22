@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.0
+ * @version 2.5.1
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1324,16 +1324,17 @@ module.exports = (_ => {
 			}
 
 			removeExceptions (string, place) {
+				let emojiRegex = /[\uD83C-\uDBFF\uDC00-\uDFFF]+/;
 				let excepts = {}, newString = [], count = 0;
 				if (place == messageTypes.RECEIVED) {
 					let text = [], i = 0;
-					string.split("").forEach(chara => { 
-						if (chara == "<" && text[i]) i++;
+					string.split("").forEach((chara, index, array) => { 
+						if (chara == "<" && text[i] || emojiRegex.test(chara) && emojiRegex.test(array[index+1])) i++;
 						text[i] = text[i] ? text[i] + chara : chara;
-						if (chara == ">") i++;
+						if (chara == ">" || emojiRegex.test(chara) && emojiRegex.test(array[index-1])) i++;
 					});
 					for (let j in text) {
-						if (text[j].indexOf("<") == 0) {
+						if (text[j].indexOf("<") == 0 || emojiRegex.test(text[j])) {
 							newString.push(`{{${count}}}`);
 							excepts[count] = text[j];
 							count++;
@@ -1344,7 +1345,7 @@ module.exports = (_ => {
 				else {
 					let usedExceptions = BDFDB.ArrayUtils.is(this.settings.exceptions.wordStart) ? this.settings.exceptions.wordStart : [];
 					string.split(" ").forEach(word => {
-						if (word.indexOf("<@!") == 0 || word.indexOf("<#") == 0 || word.indexOf(":") == 0 || word.indexOf("<:") == 0 || word.indexOf("<a:") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || usedExceptions.some(n => word.indexOf(n) == 0 && word.length > 1)) {
+						if (emojiRegex.test(word) || word.indexOf("<@!") == 0 || word.indexOf("<#") == 0 || word.indexOf(":") == 0 || word.indexOf("<:") == 0 || word.indexOf("<a:") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || usedExceptions.some(n => word.indexOf(n) == 0 && word.length > 1)) {
 							newString.push(`{{${count}}}`);
 							excepts[count] = word;
 							count++;
