@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.3
+ * @version 2.5.4
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1315,7 +1315,7 @@ module.exports = (_ => {
 			addExceptions (string, excepts) {
 				for (let count in excepts) {
 					let exception = BDFDB.ArrayUtils.is(this.settings.exceptions.wordStart) && this.settings.exceptions.wordStart.some(n => excepts[count].indexOf(n) == 0) ? excepts[count].slice(1) : excepts[count];
-					let newString = string.replace(new RegExp(BDFDB.StringUtils.regEscape(`[｛{]\s*[｛{]\s*${count}\s*[｝}]\s*[｝}]`)), exception);
+					let newString = string.replace(new RegExp(`[｛\{]\\s*[｛\{]\\s*${count}\\s*[｝\}]\\s*[｝\}]`), exception);
 					if (newString == string) string = newString + " " + exception;
 					else string = newString;
 				}
