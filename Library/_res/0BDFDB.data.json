@@ -1341,6 +1341,12 @@
 			"userPopoutNote": "note-6O4w9y",
 			"voiceDraggable": "draggable-1KoBzC"
 		},
+		"ModalCarousel": {
+			"carouselModal": "carouselModal-1eUFoq",
+			"nav": "nav-3QIE8_",
+			"navNext": "navNext-1mR5ku nav-3QIE8_",
+			"navPrev": "navPrev-1L-o1J nav-3QIE8_"
+		},
 		"Toast": {
 			"avatar": "avatar-3xmbmC",
 			"bar": "bar-95Sdw1",
@@ -1479,7 +1485,6 @@
 		"IconDirection": {"props": ["directionDown", "directionUp"]},
 		"ImageAssets": {"props": ["pngImage", "stickerAsset"]},
 		"ImageModal": {"props": ["image", "modal"], "length": 4, "smaller": true},
-		"ImageModalNavigation": {"props": ["nav", "navPrev", "navNext"]},
 		"ImageMosaic": {"props": ["lazyImg", "oneByOneGridSingle"]},
 		"ImageWrapper": {"props": ["clickable", "imageWrapperBackground"]},
 		"Input": {"props": ["inputMini", "inputDefault"]},
@@ -1526,7 +1531,6 @@
 		"MessageToolbar": {"props": ["container", "icon", "isHeader"]},
 		"MessageToolbarItems": {"props": ["wrapper", "button", "separator"]},
 		"Modal": {"props": ["root", "small", "medium"]},
-		"ModalCarousel": {"props": ["carouselModal", "carousel"]},
 		"ModalCarouselWrapper": {"props": ["modalCarouselWrapper", "zoomedCarouselModalRoot"]},
 		"ModalDivider": {"props": ["divider"], "length": 1},
 		"ModalItems": {"props": ["guildName", "checkboxContainer"]},
@@ -2529,9 +2533,9 @@
 		"imageplaceholderoverlay": ["ImageWrapper", "imagePlaceholderOverlay"],
 		"imagemodal": ["ImageModal", "modal"],
 		"imagemodalimage": ["ImageModal", "image"],
-		"imagemodalnavbutton": ["ImageModalNavigation", "nav"],
-		"imagemodalnavbuttonprev": ["ImageModalNavigation", "navPrev"],
-		"imagemodalnavbuttonnext": ["ImageModalNavigation", "navNext"],
+		"imagemodalnavbutton": ["ModalCarousel", "nav"],
+		"imagemodalnavbuttonprev": ["ModalCarousel", "navPrev"],
+		"imagemodalnavbuttonnext": ["ModalCarousel", "navNext"],
 		"imagemosaicattachmentscontainer": ["ImageMosaic", "mediaAttachmentsContainer"],
 		"imagemosaiconebyonegridsingle": ["ImageMosaic", "oneByOneGridSingle"],
 		"imagesticker": ["ImageAssets", "stickerAsset"],

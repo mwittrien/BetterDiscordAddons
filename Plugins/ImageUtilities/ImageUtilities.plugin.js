@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.1.5
+ * @version 5.1.6
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -316,11 +316,14 @@ module.exports = (_ => {
 					${BDFDB.dotCN._imageutilitiesimagedetails} > span {
 						max-width: 100px;
 					}
-					${BDFDB.dotCN._imageutilitiesgallery},
-					${BDFDB.dotCN._imageutilitiesdetailsadded} {
+					${BDFDB.dotCNS._imageutilitiesgallery + BDFDB.dotCN.modal},
+					${BDFDB.dotCNS._imageutilitiesdetailsadded + BDFDB.dotCN.modal} {
 						transform: unset !important;
 						filter: unset !important;
 						backdrop-filter: unset !important;
+					}
+					${BDFDB.dotCN._imageutilitiesgallery} ~ ${BDFDB.dotCN.imagemodalnavbutton} {
+						display: none;
 					}
 					${BDFDB.dotCNS.imagemodal + BDFDB.notCN._imageutilitiessibling} > ${BDFDB.dotCN.imagewrapper} {
 						display: flex;
@@ -1205,7 +1208,7 @@ module.exports = (_ => {
 						BDFDB.TimeUtils.clear(viewedImageTimeout);
 						let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node);
 						if (modal) {
-							modal.className = BDFDB.DOMUtils.formatClassName(modal.className, this.settings.viewerSettings.galleryMode && BDFDB.disCN._imageutilitiesgallery, this.settings.viewerSettings.details && BDFDB.disCN._imageutilitiesdetailsadded);
+							modal.parentElement.className = BDFDB.DOMUtils.formatClassName(modal.parentElement.className, this.settings.viewerSettings.galleryMode && BDFDB.disCN._imageutilitiesgallery, this.settings.viewerSettings.details && BDFDB.disCN._imageutilitiesdetailsadded);
 							if (this.settings.viewerSettings.galleryMode) {
 								BDFDB.DOMUtils.addClass(modal, BDFDB.disCN.imagemodal);
 								BDFDB.DOMUtils.removeClass(modal, BDFDB.disCN.modalcarouselmodal, BDFDB.disCN.modalcarouselmodalzoomed);
