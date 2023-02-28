@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.8
+ * @version 3.0.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1094,14 +1094,16 @@ module.exports = (_ => {
 			const requestLibraryHashes = tryAgain => {
 				requestFunction("https://api.github.com/repos/mwittrien/BetterDiscordAddons/contents/Library/_res/", {headers: {"user-agent": "node.js"}, timeout: 60000}, (e, r, b) => {
 					if ((e || !b || r.statusCode != 200) && tryAgain) return BDFDB.TimeUtils.timeout(_ => requestLibraryHashes(), 10000);
-					try {
-						b = JSON.parse(b);
-						libHashes[cssFileName] = (b.find(n => n && n.name == cssFileName) || {}).sha;
-						libHashes[dataFileName] = (b.find(n => n && n.name == dataFileName) || {}).sha;
-						BDFDB.DataUtils.save(libHashes, BDFDB, "hashes");
+					else {
+						try {
+							b = JSON.parse(b);
+							libHashes[cssFileName] = (b.find(n => n && n.name == cssFileName) || {}).sha;
+							libHashes[dataFileName] = (b.find(n => n && n.name == dataFileName) || {}).sha;
+							BDFDB.DataUtils.save(libHashes, BDFDB, "hashes");
+						}
+						catch (err) {}
 						requestLibraryData(true);
 					}
-					catch (err) {requestLibraryData(true);}
 				});
 			};
 			const requestLibraryData = tryAgain => {
@@ -3815,11 +3817,11 @@ module.exports = (_ => {
 					});
 				};
 				
-				const MappedMenuItems = {}, RealMenuItems = BDFDB.ModuleUtils.find(m => {
+				var MappedMenuItems = {}, RealMenuItems = BDFDB.ModuleUtils.find(m => {
 					if (!m || typeof m != "function") return false;
 					let string = m.toString();
 					return string.endsWith("{return null}}") && string.indexOf("(){return null}") > -1 && string.indexOf("catch(") == -1;
-				});
+				}) || BDFDB.ModuleUtils.findByString("(){return null}function");
 				if (!RealMenuItems) {
 					RealMenuItems = {};
 					BDFDB.LogUtils.error(["could not find Module for MenuItems"]);
@@ -7722,7 +7724,8 @@ module.exports = (_ => {
 					});
 				}
 				
-				for (let type of Object.keys(RealMenuItems)) {
+				const RealFilteredMenuItems = Object.keys(RealMenuItems).filter(type => typeof RealMenuItems[type] == "function" && RealMenuItems[type].toString().endsWith("{return null}"));
+				for (let type of RealFilteredMenuItems) {
 					let children = BDFDB.ObjectUtils.get(BDFDB.ReactUtils.hookCall(Internal.LibraryComponents.Menu, {hideScroller: true, children: BDFDB.ReactUtils.createElement(RealMenuItems[type], {})}), "props.children.props.children.props.children");
 					let menuItem = (BDFDB.ArrayUtils.is(children) ? children : []).flat(10).filter(n => n)[0];
 					if (menuItem) {
@@ -7745,7 +7748,7 @@ module.exports = (_ => {
 						}
 					}
 				}
-				LibraryComponents.MenuItems = new Proxy(RealMenuItems, {
+				LibraryComponents.MenuItems = new Proxy(RealFilteredMenuItems.reduce((a, v) => ({ ...a, [v]: v}), {}) , {
 					get: function (_, item) {
 						if (RealMenuItems[item]) return RealMenuItems[item];
 						if (CustomComponents.MenuItems[item]) return CustomComponents.MenuItems[item];
