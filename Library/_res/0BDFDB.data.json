@@ -327,7 +327,7 @@
 			"LinkButton": [".apply(this"]
 		}},
 		"RoleMention": {"strings": ["rolePopout", "inlinePreview"], "funcStrings": ["inlinePreview"]},
-		"Scrollers": {"strings": [".fade", ".auto", "paddingFix", "getScrollerNode"], "exported": false, "value": "exports"},
+		"Scrollers": {"strings": ["().thin", "().none", "().auto", "().fade"], "exported": false, "value": "exports"},
 		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "wanderingCubes", ".spinningCircleInner"], "exported": false, "value": "exports", "map": {
 			"Spinner": [".spinningCircleInner"],
 			"Types": ["WANDERING_CUBES", "wanderingCubes"]
