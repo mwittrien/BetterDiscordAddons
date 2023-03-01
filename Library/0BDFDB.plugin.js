@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.0.9
+ * @version 3.1.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4577,6 +4577,17 @@ module.exports = (_ => {
 					}
 				};
 				
+				Internal.NativeSubComponents = new Proxy(NativeSubComponents, {
+					get: function (_, item) {
+						if (NativeSubComponents[item]) return NativeSubComponents[item];
+						if (!InternalData.NativeSubComponents[item]) return "div";
+						
+						Internal.findModuleViaData(NativeSubComponents, InternalData.NativeSubComponents, item);
+						
+						return NativeSubComponents[item] ? NativeSubComponents[item] : "div";
+					}
+				});
+				
 				CustomComponents.AutoFocusCatcher = reactInitialized && class BDFDB_AutoFocusCatcher extends Internal.LibraryModules.React.Component {
 					render() {
 						const style = {padding: 0, margin: 0, border: "none", width: 0, maxWidth: 0, height: 0, maxHeight: 0, visibility: "hidden"};
@@ -6560,6 +6571,22 @@ module.exports = (_ => {
 						});
 					}
 				};
+				CustomComponents.PopoutContainer.Align = {
+					BOTTOM: "bottom",
+					CENTER: "center",
+					LEFT: "left",
+					RIGHT: "right",
+					TOP: "top"
+				};
+				CustomComponents.PopoutContainer.Positions = {
+					BOTTOM: "bottom",
+					CENTER: "center",
+					LEFT: "left",
+					RIGHT: "right",
+					TOP: "top",
+					WINDOW_CENTER: "window_center"
+				};
+				CustomComponents.PopoutContainer.ObjectProperties = ["Animation"];
 				Internal.setDefaultProps(CustomComponents.PopoutContainer, {wrap: true});
 				
 				CustomComponents.PopoutCSSAnimator = function (props) {
@@ -7669,17 +7696,6 @@ module.exports = (_ => {
 					}
 				};
 				
-				Internal.NativeSubComponents = new Proxy(NativeSubComponents, {
-					get: function (_, item) {
-						if (NativeSubComponents[item]) return NativeSubComponents[item];
-						if (!InternalData.NativeSubComponents[item]) return "div";
-						
-						Internal.findModuleViaData(NativeSubComponents, InternalData.NativeSubComponents, item);
-						
-						return NativeSubComponents[item] ? NativeSubComponents[item] : "div";
-					}
-				});
-				
 				Internal.LibraryComponents = new Proxy(LibraryComponents, {
 					get: function (_, item) {
 						if (LibraryComponents[item]) return LibraryComponents[item];
@@ -7695,6 +7711,7 @@ module.exports = (_ => {
 								if (key == "defaultProps") LibraryComponents[item][key] = Object.assign({}, LibraryComponents[item][key], NativeComponent[key]);
 								else if (!LibraryComponents[item][key]) LibraryComponents[item][key] = NativeComponent[key];
 							}
+							if (LibraryComponents[item].ObjectProperties) for (let key of LibraryComponents[item].ObjectProperties) if (!LibraryComponents[item][key]) LibraryComponents[item][key] = {};
 						}
 						return LibraryComponents[item] ? LibraryComponents[item] : "div";
 					}
