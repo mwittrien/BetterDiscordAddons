@@ -3465,20 +3465,23 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	z-index: 1010;
 }
 
-#app-mount .root-g14mjS,									/* modal				container (foldersettings)			*/
+#app-mount .root-1CAIjD,									/* modal				container (foldersettings)			*/
 #app-mount .modal-2RrUKJ {									/* modal				container							*/
 	background-color: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 	position: relative;
 	border-radius: 5px;
 }
-.root-g14mjS > *,
+#app-mount .rootWithShadow-2hdL2J {
+	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
+}
+.root-1CAIjD > *,
 .modal-2RrUKJ > * {
 	z-index: 1;
 }
-.root-g14mjS::before,
+.root-1CAIjD::before,
 .modal-2RrUKJ::before,
-.root-g14mjS::after,
+.root-1CAIjD::after,
 .modal-2RrUKJ::after {
 	content: "";
 	position: absolute;
@@ -3492,19 +3495,19 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	pointer-events: none;
 	z-index: -1;
 }
-.root-g14mjS::before,
+.root-1CAIjD::before,
 .modal-2RrUKJ::before {
 	background: var(--popout) var(--popoutposition)/var(--popoutsize);
 	background-attachment: fixed;
 }
-.root-g14mjS::after,
+.root-1CAIjD::after,
 .modal-2RrUKJ::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
 	backdrop-filter: blur(var(--popoutblur));
 }
-.root-g14mjS .modal-2RrUKJ::before,
+.root-1CAIjD .modal-2RrUKJ::before,
 .modal-3Crloo::before,
-.root-g14mjS .modal-2RrUKJ::after,
+.root-1CAIjD .modal-2RrUKJ::after,
 .modal-3Crloo::after {
 	display: none;
 }
@@ -3897,8 +3900,8 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.2));
 	backdrop-filter: blur(var(--popoutblur));
 }
-.root-g14mjS .quickswitcher-pKcM9U::before,
-.root-g14mjS .quickswitcher-pKcM9U::after {
+.root-1CAIjD .quickswitcher-pKcM9U::before,
+.root-1CAIjD .quickswitcher-pKcM9U::after {
 	display: none;
 }
 .scroller-2qwVWY {
