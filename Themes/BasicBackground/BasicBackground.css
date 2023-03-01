@@ -4510,15 +4510,15 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 
 /* ----		14.1.	CONTEXTMENU						---- */
 
-.menu-1QACrS,												/* contextmenu			fixed								*/
-.submenu-1apzyU {											/* contextmenu			submenu								*/
+.menu-2TXYjN,												/* contextmenu			fixed								*/
+.submenu-3ycVEH {											/* contextmenu			submenu								*/
 	background: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 }
-.menu-1QACrS::before,
-.submenu-1apzyU::before,
-.menu-1QACrS::after,
-.submenu-1apzyU::after {
+.menu-2TXYjN::before,
+.submenu-3ycVEH::before,
+.menu-2TXYjN::after,
+.submenu-3ycVEH::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -4531,17 +4531,17 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	pointer-events: none;
 	z-index: -1;
 }
-.menu-1QACrS::before,
-.submenu-1apzyU::before {
+.menu-2TXYjN::before,
+.submenu-3ycVEH::before {
 	background: var(--popout) var(--popoutposition)/var(--popoutsize);
 	background-attachment: fixed;
 }
-.menu-1QACrS::after,
-.submenu-1apzyU::after {
+.menu-2TXYjN::after,
+.submenu-3ycVEH::after {
 	background: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.3));
 	backdrop-filter: blur(var(--popoutblur));
 }
-.submenu-1apzyU {
+.submenu-3ycVEH {
 	position: relative;
 }
 .container-3AL15u {											/* contextmenu			searchbar							*/
@@ -4671,7 +4671,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .userPopout-3fydSP *:not(foreignObject) > .banner-2boKnS,		/* popout new			banner								*/
 .userPopout-29jUdN *:not(foreignObject) > .banner-2boKnS,		/* popout new new		banner								*/
 .userPopoutOuter-3AVBmJ *:not(foreignObject) > .banner-2boKnS,	/* popout new new new	banner								*/
-.menu-1QACrS *:not(foreignObject) > .banner-1YaD3N {			/* status popout		banner								*/
+.menu-2TXYjN *:not(foreignObject) > .banner-1YaD3N {			/* status popout		banner								*/
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 16 120 A 46 46 0 0 1 62 76 A 46 46 0 0 1 108 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
 }
 .userPopout-3fydSP .userPopoutInnerWithTheme-71l1ON *:not(foreignObject) > .banner-2boKnS,
@@ -4723,8 +4723,8 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .userPopout-29jUdN .avatarWrapper,							/* popout new new		status everywhere					*/
 .userPopoutOuter-3AVBmJ .wrapper-1VLyxH,					/* popout new new new	avatar								*/
 .userPopoutOuter-3AVBmJ .avatarWrapper,						/* popout new new new	status everywhere					*/
-.menu-1QACrS .wrapper-1VLyxH,								/* status popout		avatar								*/
-.menu-1QACrS .avatarWrapper {								/* status popout		status everywhere					*/
+.menu-2TXYjN .wrapper-1VLyxH,								/* status popout		avatar								*/
+.menu-2TXYjN .avatarWrapper {								/* status popout		status everywhere					*/
 	background-color: transparent;
 	border-color: transparent;
 	box-sizing: content-box;
