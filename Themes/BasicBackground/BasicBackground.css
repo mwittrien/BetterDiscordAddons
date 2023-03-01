@@ -78,6 +78,7 @@
 	--interactive-muted: rgb(var(--textdarkest));
 	--logo-primary: rgb(var(--textbrightest));
 	--modal-background: rgba(var(--transparencycolor), .2);
+	--modal-footer-background: rgba(var(--transparencycolor), .2);
 	--background-accent: rgba(var(--transparencycolor), .1);
 	--background-primary: rgba(var(--transparencycolor), .2);
 	--background-secondary: rgba(var(--transparencycolor), .3);
@@ -3520,10 +3521,13 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .5);
 	border: none;
 }
-#app-mount .footer-31IekZ {									/* modal				footer							*/
+#app-mount .footer-IubaaS,
+#app-mount .footer-1Ip3Sd {									/* modal				footer							*/
 	background-color: rgba(var(--transparencycolor), .2);
-	box-shadow: none;
 	z-index: 0;
+}
+#app-mount .footerSeparator-3U8YsT {
+	box-shadow: none;
 }
 #app-mount .footer-3Zgy_M {									/* modal				footer info						*/
 	background-color: rgba(var(--transparencycolor), .3);
