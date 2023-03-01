@@ -440,7 +440,7 @@ body::after {
 	background-color: rgba(var(--transparencycolor), .3);
 }
 #app-mount .circleIconButton-1VxDrg.selected-2r1Hvo {
-	background-color: var(--status-green-600);
+	background-color: var(--green-360);
 }
 
 #app-mount .guildIconUnavailable-3IYARS,					/* guilderror			miniicon							*/
