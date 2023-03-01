@@ -119,6 +119,8 @@
 	--interactive-active: rgb(var(--textbrightest));
 	--interactive-muted: rgb(var(--textdarkest));
 	
+	--home-background: rgb(var(--backgroundprimary));
+	
 	--modal-background: rgb(var(--backgroundprimary));
 	--modal-footer-background: rgb(var(--backgroundsecondary));
 	
