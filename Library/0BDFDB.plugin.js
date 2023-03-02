@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.3
+ * @version 3.1.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4562,7 +4562,7 @@ module.exports = (_ => {
 					render() {
 						if (this.state.hasError) return Internal.LibraryModules.React.createElement("span", {
 							style: {
-								background: Internal.DiscordConstants.Colors.PRIMARY_DARK,
+								background: Internal.DiscordConstants.Colors.PRIMARY,
 								borderRadius: 5,
 								color: "var(--status-danger)",
 								fontSize: 12,
@@ -6148,7 +6148,7 @@ module.exports = (_ => {
 					handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
 					handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
 					render() {
-						let color = BDFDB.ColorUtils.convert(this.props.role.colorString, "RGB") || Internal.DiscordConstants.Colors.PRIMARY_DARK_300;
+						let color = BDFDB.ColorUtils.convert(this.props.role.colorString, "RGB") || Internal.DiscordConstants.Colors.PRIMARY_300;
 						return BDFDB.ReactUtils.createElement("li", {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.userrole, this.props.className),
 							style: {borderColor: BDFDB.ColorUtils.setAlpha(color, 0.6)},
@@ -7199,7 +7199,7 @@ module.exports = (_ => {
 					let mini = props.size == Internal.LibraryComponents.Switch.Sizes.MINI;
 					
 					return BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Animations.animated.div, {
-						className: BDFDB.DOMUtils.formatClassName(props.className, BDFDB.disCN.switch, mini && BDFDB.disCN.switchmini),
+						className: BDFDB.DOMUtils.formatClassName(props.className, BDFDB.disCN.switch, mini && BDFDB.disCN.switchmini, "default-colors"),
 						onMouseDown: _ => {
 							return !props.disabled && state[1](true);
 						},
@@ -7313,7 +7313,7 @@ module.exports = (_ => {
 				};
 				Internal.setDefaultProps(CustomComponents.Switch, {
 					size: CustomComponents.Switch.Sizes.DEFAULT,
-					uncheckedColor: Internal.DiscordConstants.Colors.PRIMARY_DARK_400,
+					uncheckedColor: Internal.DiscordConstants.Colors.PRIMARY_400,
 					checkedColor: Internal.DiscordConstants.Colors.BRAND
 				});
 				
