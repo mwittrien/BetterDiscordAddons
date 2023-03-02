@@ -2258,6 +2258,7 @@ a.metadataName-1KMZtB {
 	color: currentColor !important;
 }
 
+.activeIcon-1ykRnF path[fill*="hsl(234, "],
 .activeIcon-1ykRnF path[fill*="hsl(235, "] {
 	fill: rgb(var(--accentcolor));
 }
