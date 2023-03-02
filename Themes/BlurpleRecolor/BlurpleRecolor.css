@@ -2558,9 +2558,7 @@ input.input-2g-os5 {										/* textinput												*/
 	background: white linear-gradient(rgba(var(--accentcolor), .5), rgba(var(--accentcolor), .5));
 	color: rgb(var(--accentcolor));
 }
-															/* bottag				new forum post						*/
-html .newBadge-1LcB6t[style*="background-color: hsl(227, "],
-html .newBadge-1LcB6t[style*="background-color: hsl(235, "] {
+.newBadge-1LcB6t {											/* bottag				new forum post						*/
 	background: white linear-gradient(rgba(var(--accentcolor), .5), rgba(var(--accentcolor), .5)) !important;
 	color: rgb(var(--accentcolor)) !important;
 }
