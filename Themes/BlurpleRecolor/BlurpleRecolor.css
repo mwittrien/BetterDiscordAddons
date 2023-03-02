@@ -2577,6 +2577,7 @@ html .newBadge-1LcB6t[style*="background-color: hsl(235, "] {
 	filter: brightness(75%);
 }
 
+.base-3IDx3L[style*="background-color: rgb(88, 101, 242)"],
 .base-3IDx3L[style*="background-color: hsl(227, "],
 .base-3IDx3L[style*="background-color: hsl(235, "] {
 	background-color: rgb(var(--accentcolor)) !important;
