@@ -2509,8 +2509,10 @@ input.input-2g-os5 {										/* textinput												*/
 .container-1QtPKm path[fill] {
 	fill: rgb(114, 118, 125) !important;
 }
+.container-1QtPKm[style*="background-color: rgb(35, "] path[fill],
 .container-1QtPKm[style*="background-color: rgb(59, "] path[fill],
 .container-1QtPKm[style*="background-color: rgb(88, "] path[fill],
+.container-1QtPKm[style*="background-color: hsl(145, "] path[fill],
 .container-1QtPKm[style*="background-color: hsl(139, "] path[fill],
 .container-1QtPKm[style*="background-color: hsl(227, "] path[fill],
 .container-1QtPKm[style*="background-color: hsl(235, "] path[fill],
