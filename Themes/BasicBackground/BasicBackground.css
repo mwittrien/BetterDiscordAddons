@@ -4768,8 +4768,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	bottom: 0;
 	left: 0;
 }
-#app-mount .role-2TIOKu .roleCircle-1EgnFN,					/* body					rolecircle							*/
-#app-mount .role-2TIOKu .roleCircle-3K9O3d {				/* body					rolecircle							*/
+#app-mount .role-2TIOKu .roleCircle-3TFUOr {				/* body					rolecircle							*/
 	position: absolute;
 	background-color: rgb(var(--textbrighter));
 	border-radius: 3px;
@@ -4780,12 +4779,10 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	left: 0;
 	top: 0;
 }
-#app-mount .role-2TIOKu .roleCircle-1EgnFN[style*="background-color: rgb(185, 187, 190)"],
-#app-mount .role-2TIOKu .roleCircle-3K9O3d[style*="background-color: rgb(185, 187, 190)"] {
+#app-mount .role-2TIOKu .roleCircle-3TFUOr[style*="background-color: rgb(185, 187, 190)"] {
 	background-color: rgb(var(--textbrighter)) !important;
 }
-#app-mount .role-2TIOKu .roleCircle-1EgnFN:not(:only-child):hover,
-#app-mount .role-2TIOKu .roleCircle-3K9O3d:not(:only-child):hover {
+#app-mount .role-2TIOKu .roleCircle-3TFUOr:not(:only-child):hover {
 	opacity: 1;
 	z-index: 2000;
 	cursor: pointer;
