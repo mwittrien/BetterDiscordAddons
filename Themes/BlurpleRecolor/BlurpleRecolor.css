@@ -2222,28 +2222,20 @@ a.metadataName-1KMZtB {
 	color: var(--status-success);
 }
 
-.colorDefault-2_rLdz[id="status-picker-online"].focused-3LIdPu,
-.colorDefault-2_rLdz[id="status-picker-online"]:active:not(.hideInteraction-1vQrZJ),
-.colorDefault-2_rLdz[id="status-picker-online--online"].focused-3LIdPu,
-.colorDefault-2_rLdz[id="status-picker-online--online"]:active:not(.hideInteraction-1vQrZJ) {
+.colorDefault-2_rLdz[id="account-status-picker--online"].focused-3LIdPu,
+.colorDefault-2_rLdz[id="account-status-picker--online"]:active:not(.hideInteraction-1vQrZJ) {
 	background-color: rgb(59,165,92);
 }
-.colorDefault-2_rLdz[id="status-picker-idle"].focused-3LIdPu,
-.colorDefault-2_rLdz[id="status-picker-idle"]:active:not(.hideInteraction-1vQrZJ),
-.colorDefault-2_rLdz[id="status-picker-online--idle"].focused-3LIdPu,
-.colorDefault-2_rLdz[id="status-picker-online--idle"]:active:not(.hideInteraction-1vQrZJ) {
+.colorDefault-2_rLdz[id="account-status-picker--idle"].focused-3LIdPu,
+.colorDefault-2_rLdz[id="account-status-picker--idle"]:active:not(.hideInteraction-1vQrZJ) {
 	background-color: rgb(250,166,26);
 }
-.colorDefault-2_rLdz[id="status-picker-dnd"].focused-3LIdPu,
-.colorDefault-2_rLdz[id="status-picker-dnd"]:active:not(.hideInteraction-1vQrZJ),
-.colorDefault-2_rLdz[id="status-picker-online--dnd"].focused-3LIdPu,
-.colorDefault-2_rLdz[id="status-picker-online--dnd"]:active:not(.hideInteraction-1vQrZJ) {
+.colorDefault-2_rLdz[id="account-status-picker--dnd"].focused-3LIdPu,
+.colorDefault-2_rLdz[id="account-status-picker--dnd"]:active:not(.hideInteraction-1vQrZJ) {
 	background-color: rgb(237,66,69);
 }
-.colorDefault-2_rLdz[id="status-picker-invisible"].focused-3LIdPu,
-.colorDefault-2_rLdz[id="status-picker-invisible"]:active:not(.hideInteraction-1vQrZJ),
-.colorDefault-2_rLdz[id="status-picker-online--invisible"].focused-3LIdPu,
-.colorDefault-2_rLdz[id="status-picker-online--invisible"]:active:not(.hideInteraction-1vQrZJ) {
+.colorDefault-2_rLdz[id="account-status-picker--invisible"].focused-3LIdPu,
+.colorDefault-2_rLdz[id="account-status-picker--invisible"]:active:not(.hideInteraction-1vQrZJ) {
 	background-color: rgb(116,127,141);
 }
 .colorDefault-2_rLdz.focused-3LIdPu .status-2DiCMd,
