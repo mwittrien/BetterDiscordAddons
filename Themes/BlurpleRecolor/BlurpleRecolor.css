@@ -2132,6 +2132,7 @@ a.metadataName-1KMZtB {
 .colorBrand-3cPPsm:not(.focused-3qFvc8):not(:active) {		/* contextmenu			brand								*/
 	color: rgb(var(--accentcolor));
 }
+.menu-KSaHL1 .menuItemFocused-2cC4Ku,
 .colorBrand-3cPPsm.focused-3qFvc8,
 .colorBrand-3cPPsm:active:not(.hideInteraction-2jPGL_),
 .colorDefault-CDqZdO.focused-3qFvc8,
