@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.5
+ * @version 1.6.6
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -174,7 +174,7 @@ module.exports = (_ => {
 						if (index < 0) return false;
 						let size = this.settings.amounts.serverElementHeight * index + padding;
 						if (!t) size += 40;
-						const state = scroller.ref.current.getScrollerState();
+						const state = typeof scroller.ref.current.getScrollerState == "function" ? scroller.ref.current.getScrollerState() : Node.prototype.isPrototypeOf(scroller.ref.current) ? scroller.ref.current : {};
 						return !!(!t && size >= state.scrollTop || t && size + parseInt(this.settings.amounts.serverElementHeight) <= state.scrollTop + state.offsetHeight);
 					};
 					let topBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbartop]]});
@@ -408,7 +408,6 @@ module.exports = (_ => {
 						justify-content: flex-start;
 						margin-left: 8px;
 					}
-					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildinboxicon},
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildinnerwrapper},
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildinner} {
 						width: ${this.settings.amounts.serverListWidth - 20}px;
@@ -423,20 +422,12 @@ module.exports = (_ => {
 						left: -8px;
 						transform: scaleY(calc(${this.settings.amounts.serverElementHeight}/48));
 					}
-					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildinboxicon},
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildiconchildwrapper} {
 						width: ${this.settings.amounts.serverListWidth - 20}px;
 						height: ${this.settings.amounts.serverElementHeight}px;
 						padding: 0 8px;
 						box-sizing: border-box;
 						cursor: pointer;
-					}
-					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildinboxicon}::before {
-						content: attr(aria-label);
-						flex: 1 0 auto;
-						font-size: ${this.settings.amounts.serverElementHeight / 2}px;
-						font-weight: 500;
-						padding-top: 1px;
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildiconchildwrapper + BDFDB.dotCN._displayserversaschannelsname} {
 						flex: 1 1 auto;
