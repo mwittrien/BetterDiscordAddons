@@ -6702,6 +6702,10 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	box-shadow: 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 	color: #fff;
 }
+#app-mount .tooltipPointer-1KkjI2,
+#app-mount .tooltipPointer-1awMxk {
+	border-right-color: rgb(var(--accentcolor));
+}
 #app-mount .guildNameText-74xXQn {
 	color: #fff;
 }
@@ -6710,26 +6714,22 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 #app-mount .tooltip-16UpTB,
 #app-mount .tooltip-1_vJJI,
-#app-mount .tooltipPrimary-3qLMbS,
-#app-mount .tooltipGrey-lpLZjh,
-#app-mount .tooltipBlack-vMYxvw {
+#app-mount .tooltipPrimary-2466a2,
+#app-mount .tooltipGrey-1nKbfD,
+#app-mount .tooltipBlack-3X399X {
 	background-color: rgb(var(--accentcolor));
 	color: #fff;
 	text-shadow: 1px 1px var(--textshadow);
 }
-#app-mount .tooltipPrimary-3qLMbS .note-e4Jh6_,
-#app-mount .tooltipGrey-lpLZjh .note-e4Jh6_,
-#app-mount .tooltipBlack-vMYxvw .note-e4Jh6_ {
+#app-mount .tooltipPrimary-2466a2 .note-e4Jh6_,
+#app-mount .tooltipGrey-1nKbfD .note-e4Jh6_,
+#app-mount .tooltipBlack-3X399X .note-e4Jh6_ {
 	color: #bbb;
 }
-#app-mount .tooltipPrimary-3qLMbS .tooltipPointer-3L49xb,
-#app-mount .tooltipGrey-lpLZjh .tooltipPointer-3L49xb,
-#app-mount .tooltipBlack-vMYxvw .tooltipPointer-3L49xb {
+#app-mount .tooltipPrimary-2466a2 .tooltipPointer-sMBQqe,
+#app-mount .tooltipGrey-1nKbfD .tooltipPointer-sMBQqe,
+#app-mount .tooltipBlack-3X399X .tooltipPointer-sMBQqe {
 	border-top-color: rgb(var(--accentcolor));
-}
-#app-mount .tooltipPointer-1KkjI2,
-#app-mount .tooltipPointer-1awMxk {
-	border-right-color: rgb(var(--accentcolor));
 }
 .emptyUser-2FDCJv {
 	background: rgba(var(--transparencycolor), .5);
