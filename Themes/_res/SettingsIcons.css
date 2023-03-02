@@ -8,7 +8,7 @@ body #app-mount .sidebarRegion-1VBisG {
 	flex-basis: calc(218px + (var(--usesettingsicons) * (var(--settingsiconssize) + var(--settingsiconsgap)))) !important;
 }
 body #app-mount .sidebar-nqHbhN,
-body #app-mount .layer-fP3xEz ~ .layer-fP3xEz .sidebar-nqHbhN {
+body #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 	width: calc(218px + (var(--usesettingsicons) * (var(--settingsiconssize) + var(--settingsiconsgap)))) !important;
 }
 .sidebar-nqHbhN .side-2ur1Qk .item-3XjbnG {
