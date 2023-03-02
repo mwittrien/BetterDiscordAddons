@@ -4542,51 +4542,51 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .container-3AL15u {											/* contextmenu			searchbar							*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
-.item-1OdjEX.colorDefault-CDqZdO.focused-3qFvc8,
-.item-1OdjEX.colorDefault-CDqZdO:hover:not(.hideInteraction-2jPGL_) {
+.item-5ApiZt.colorDefault-2_rLdz.focused-3LIdPu,
+.item-5ApiZt.colorDefault-2_rLdz:hover:not(.hideInteraction-1vQrZJ) {
 	background-color: rgba(var(--accentcolor), .2) !important;
 }
-.item-1OdjEX.colorDanger-3n-KnP.focused-3qFvc8,
-.item-1OdjEX.colorDanger-3n-KnP:hover:not(.hideInteraction-2jPGL_) {
+.item-5ApiZt.colorDanger-3umuSx.focused-3LIdPu,
+.item-5ApiZt.colorDanger-3umuSx:hover:not(.hideInteraction-1vQrZJ) {
 	background-color: rgba(var(--dangercolor), .2) !important;
 }
-.item-1OdjEX.colorSuccess-1M2JCA.focused-3qFvc8,
-.item-1OdjEX.colorSuccess-1M2JCA:hover:not(.hideInteraction-2jPGL_) {
+.item-5ApiZt.colorSuccess-1ZVGh2.focused-3LIdPu,
+.item-5ApiZt.colorSuccess-1ZVGh2:hover:not(.hideInteraction-1vQrZJ) {
 	background-color: rgba(var(--successcolor), .2) !important;
 }
-.item-1OdjEX.colorBrand-3cPPsm.focused-3qFvc8,
-.item-1OdjEX.colorBrand-3cPPsm:hover:not(.hideInteraction-2jPGL_),
-.item-1OdjEX.colorDefault-CDqZdO.focused-3qFvc8[id="user-settings-cog-Subscriptions"],
-.item-1OdjEX.colorDefault-CDqZdO:hover:not(.hideInteraction-2jPGL_)[id="user-settings-cog-Subscriptions"],
-.item-1OdjEX.colorDefault-CDqZdO.focused-3qFvc8[id="user-settings-cog-Discord_Nitro"],
-.item-1OdjEX.colorDefault-CDqZdO:hover:not(.hideInteraction-2jPGL_)[id="user-settings-cog-Discord_Nitro"] {
+.item-5ApiZt.colorBrand-26tvUE.focused-3LIdPu,
+.item-5ApiZt.colorBrand-26tvUE:hover:not(.hideInteraction-1vQrZJ),
+.item-5ApiZt.colorDefault-2_rLdz.focused-3LIdPu[id="user-settings-cog-Subscriptions"],
+.item-5ApiZt.colorDefault-2_rLdz:hover:not(.hideInteraction-1vQrZJ)[id="user-settings-cog-Subscriptions"],
+.item-5ApiZt.colorDefault-2_rLdz.focused-3LIdPu[id="user-settings-cog-Discord_Nitro"],
+.item-5ApiZt.colorDefault-2_rLdz:hover:not(.hideInteraction-1vQrZJ)[id="user-settings-cog-Discord_Nitro"] {
 	background-color: rgba(var(--accentcolor), .2) !important;
 }
-.item-1OdjEX.colorPremium-vwmYZQ.focused-3qFvc8,
-.item-1OdjEX.colorPremium-vwmYZQ:hover:not(.hideInteraction-2jPGL_),
-.item-1OdjEX.colorDefault-CDqZdO.focused-3qFvc8[id="user-settings-cog-Nitro_Server_Boost"],
-.item-1OdjEX.colorDefault-CDqZdO:hover:not(.hideInteraction-2jPGL_)[id="user-settings-cog-Nitro_Server_Boost"],
-.item-1OdjEX.colorDefault-CDqZdO.focused-3qFvc8[id="guild-context-guild-settings--GUILD_PREMIUM"],
-.item-1OdjEX.colorDefault-CDqZdO:hover:not(.hideInteraction-2jPGL_)[id="guild-context-guild-settings--GUILD_PREMIUM"] {
+.item-5ApiZt.colorPremium-2N9Y8_.focused-3LIdPu,
+.item-5ApiZt.colorPremium-2N9Y8_:hover:not(.hideInteraction-1vQrZJ),
+.item-5ApiZt.colorDefault-2_rLdz.focused-3LIdPu[id="user-settings-cog-Nitro_Server_Boost"],
+.item-5ApiZt.colorDefault-2_rLdz:hover:not(.hideInteraction-1vQrZJ)[id="user-settings-cog-Nitro_Server_Boost"],
+.item-5ApiZt.colorDefault-2_rLdz.focused-3LIdPu[id="guild-context-guild-settings--GUILD_PREMIUM"],
+.item-5ApiZt.colorDefault-2_rLdz:hover:not(.hideInteraction-1vQrZJ)[id="guild-context-guild-settings--GUILD_PREMIUM"] {
 	background-color: rgba(var(--accentcolor2), .2) !important;
 }
-.item-1OdjEX.colorPremiumGradient-l1Ok7Q.focused-3qFvc8,
-.item-1OdjEX.colorPremiumGradient-l1Ok7Q:hover:not(.hideInteraction-2jPGL_) {
+.item-5ApiZt.colorPremiumGradient-38tGFG.focused-3LIdPu,
+.item-5ApiZt.colorPremiumGradient-38tGFG:hover:not(.hideInteraction-1vQrZJ) {
     background: linear-gradient(90deg, rgba(var(--accentcolor2), .2), rgba(var(--accentcolor), .2)) !important;
 }
-#app-mount .item-1OdjEX .checkbox-hADx5o {					/* contextmenu			checkbox 							*/
+#app-mount .item-5ApiZt .checkbox-397WsK {					/* contextmenu			checkbox 							*/
 	color: rgb(var(--accentcolor));
 }
-#app-mount .item-1OdjEX.colorDanger-3n-KnP .checkbox-hADx5o {
+#app-mount .item-5ApiZt.colorDanger-3umuSx .checkbox-397WsK {
 	color: rgb(var(--dangercolor));
 }
-#app-mount .item-1OdjEX.colorSuccess-1M2JCA .checkbox-hADx5o {
+#app-mount .item-5ApiZt.colorSuccess-1ZVGh2 .checkbox-397WsK {
 	color: rgb(var(--successcolor));
 }
-#app-mount .item-1OdjEX.colorPremium-vwmYZQ .checkbox-hADx5o {
+#app-mount .item-5ApiZt.colorPremium-2N9Y8_ .checkbox-397WsK {
 	color: rgb(var(--accentcolor2));
 }
-#app-mount .item-1OdjEX .check-3HZJs4 {						/* contextmenu			checkmark 							*/
+#app-mount .item-5ApiZt .check-3-73a4 {						/* contextmenu			checkmark 							*/
 	color: #fff;
 	stroke: var(--textshadow);
 }
