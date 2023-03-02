@@ -7646,6 +7646,14 @@ module.exports = (_ => {
 						});
 					}
 				};
+				CustomComponents.TooltipContainer.Positions = {
+					BOTTOM: "bottom",
+					CENTER: "center",
+					LEFT: "left",
+					RIGHT: "right",
+					TOP: "top",
+					WINDOW_CENTER: "window_center"
+				};
 				
 				CustomComponents.UserPopoutContainer = reactInitialized && class BDFDB_UserPopoutContainer extends Internal.LibraryModules.React.Component {
 					render() {
