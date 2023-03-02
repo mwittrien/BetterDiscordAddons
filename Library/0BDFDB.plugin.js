@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.0
+ * @version 3.1.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2465,14 +2465,14 @@ module.exports = (_ => {
 					}
 					return parent.props.children;
 				}
-				MyReact.createElement = function (component, props = {}, errorWrap = false) {
+				MyReact.createElement = function (component, props = {}, errorWrap = false, ignoreErrors = false) {
 					if (component && component.defaultProps) for (let key in component.defaultProps) if (props[key] == null) props[key] = component.defaultProps[key];
 					try {
 						let child = Internal.LibraryModules.React.createElement(component || "div", props) || null;
 						if (errorWrap) return Internal.LibraryModules.React.createElement(Internal.ErrorBoundary, {key: child && child.key || ""}, child) || null;
 						else return child;
 					}
-					catch (err) {BDFDB.LogUtils.error(["Could not create React Element!", err]);}
+					catch (err) {!ignoreErrors && BDFDB.LogUtils.error(["Could not create React Element!", err]);}
 					return null;
 				};
 				MyReact.objectToReact = function (obj) {
@@ -2847,7 +2847,7 @@ module.exports = (_ => {
 					if (!BDFDB.ObjectUtils.is(node)) return null;
 					return node[Object.keys(node).find(key => key.startsWith("__reactInternalInstance") || key.startsWith("__reactFiber"))];
 				};
-				MyReact.render = function (component, node) {
+				MyReact.render = function (component, node, ignoreErrors = false) {
 					if (!BDFDB.ReactUtils.isValidElement(component) || !Node.prototype.isPrototypeOf(node)) return;
 					try {
 						Internal.LibraryModules.ReactDOM.render(component, node);
@@ -2860,15 +2860,15 @@ module.exports = (_ => {
 						}));
 						observer.observe(document.body, {subtree: true, childList: true});
 					}
-					catch (err) {BDFDB.LogUtils.error(["Could not render React Element!", err]);}
+					catch (err) {!ignoreErrors && BDFDB.LogUtils.error(["Could not render React Element!", err]);}
 				};
-				MyReact.hookCall = function (callback, args) {
+				MyReact.hookCall = function (callback, args, ignoreErrors = false) {
 					if (typeof callback != "function") return null;
 					let returnValue = null, tempNode = document.createElement("div");
 					BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(_ => {
 						returnValue = callback(args);
 						return null;
-					}), tempNode);
+					}, {}, false, ignoreErrors), tempNode, ignoreErrors);
 					BDFDB.ReactUtils.unmountComponentAtNode(tempNode);
 					return returnValue;
 				};
@@ -7340,6 +7340,19 @@ module.exports = (_ => {
 						}), "itemClassName", "items", "renderItem"));
 					}
 				};
+				CustomComponents.TabBar.Types = {
+					SIDE: "side",
+					TOP: "top",
+					TOP_PILL: "top-pill"
+				};
+				CustomComponents.TabBar.Looks = {
+					0: "GREY",
+					1: "BRAND",
+					2: "CUSTOM",
+					GREY: 0,
+					BRAND: 1,
+					CUSTOM: 2
+				};
 				
 				CustomComponents.Table = reactInitialized && class BDFDB_Table extends Internal.LibraryModules.React.Component {
 					render() {
@@ -7743,7 +7756,7 @@ module.exports = (_ => {
 				
 				const RealFilteredMenuItems = Object.keys(RealMenuItems).filter(type => typeof RealMenuItems[type] == "function" && RealMenuItems[type].toString().endsWith("{return null}"));
 				for (let type of RealFilteredMenuItems) {
-					let children = BDFDB.ObjectUtils.get(BDFDB.ReactUtils.hookCall(Internal.LibraryComponents.Menu, {hideScroller: true, children: BDFDB.ReactUtils.createElement(RealMenuItems[type], {})}), "props.children.props.children.props.children");
+					let children = BDFDB.ObjectUtils.get(BDFDB.ReactUtils.hookCall(Internal.LibraryComponents.Menu, {hideScroller: true, children: BDFDB.ReactUtils.createElement(RealMenuItems[type], {})}, true), "props.children.props.children.props.children");
 					let menuItem = (BDFDB.ArrayUtils.is(children) ? children : []).flat(10).filter(n => n)[0];
 					if (menuItem) {
 						let menuItemsProps = BDFDB.ReactUtils.findValue(menuItem, "menuItemProps");

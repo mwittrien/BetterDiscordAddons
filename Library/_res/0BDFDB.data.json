@@ -1565,7 +1565,7 @@
 		"RecentMentions": {"props": ["recentMentionsPopout"]},
 		"RecentMentionsHeader": {"props": ["channelName", "channelHeader", "dmIcon"]},
 		"Role": {"props": ["roleName", "roleRemoveIcon"]},
-		"RoleCircle": {"props": ["roleCircle", "flex"]},
+		"RoleCircle": {"props": ["roleCircle", "dot"]},
 		"RoleIcon": {"props": ["clickable", "roleIcon"], "length": 4, "smaller": true},
 		"Roles": {"props": ["rolePill", "roles", "rolePillBorder"]},
 		"Scrollbar": {"props": ["scrollbar", "scrollbarGhost"]},
