@@ -5,7 +5,7 @@
 .supporter-Z3FfwL::before {
 	display: none !important;
 }
-.supporter-Z3FfwL.hasBadge-4rT8_u .mask-1FEkla {
+.supporter-Z3FfwL.hasBadge-4rT8_u .mask-1y0tyc {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><path fill="white" d="m 0,0 v 0.588 c 0.04285503,0.002169 0.08764096,-2.7964e-4 0.127,0 0.1310673,9.3123e-4 0.16260999,0.0186869 0.163,0.15 2.5938e-4,0.0873322 0,0.262 0,0.262 H 1 V 0 Z"/></svg>') center/cover no-repeat;
 }
 .avatar-2e8lTP.supporter-Z3FfwL.hasBadge-4rT8_u > img {
@@ -28,7 +28,7 @@
 	width: 30% !important;
 	height: 30% !important;
 }
-.supporter-Z3FfwL.hasBadge-4rT8_u .mask-1FEkla[width="32"][height="32"] ~ .badge-7R_W3s {
+.supporter-Z3FfwL.hasBadge-4rT8_u .mask-1y0tyc[width="32"][height="32"] ~ .badge-7R_W3s {
 	margin-top: -8% !important;
 	margin-left: -6% !important;
 }
