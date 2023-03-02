@@ -2392,22 +2392,22 @@ body::after {
 /* ~~~~		11.		USERSETTINGS					~~~~ */
 
 .premiumTabItem-1QTfBr[aria-selected=true],
-.item-3XjbnG.selected-g-kMVV[aria-controls="Nitro Server Boost-tab"],
+.item-2GWPIy.selected-1sf9UK[aria-controls="Nitro Server Boost-tab"],
 .serverBoostTabItem-2hFTIN[aria-selected=true] {
 	text-shadow: 1px 1px var(--textshadow);
 }
-#app-mount .side-2ur1Qk .themed-2-lozF.item-3XjbnG:active:not(.disabled-1nofHP),	/*		sideitems					*/
-#app-mount .topPill-3DJJNV .themed-2-lozF.item-3XjbnG:active:not(.disabled-1nofHP),	/*		tabitems					*/
-#app-mount .side-2ur1Qk .themed-2-lozF.item-3XjbnG:hover:not(.disabled-1nofHP),		/*		sideitems					*/
-#app-mount .topPill-3DJJNV .themed-2-lozF.item-3XjbnG:hover:not(.disabled-1nofHP) {	/*		tabitems					*/
+#app-mount .side-1lrxIh .themed-qqoYp3.item-2GWPIy:active:not(.disabled-2G98Nl),	/*		sideitems					*/
+#app-mount .topPill-2vcLsa .themed-qqoYp3.item-2GWPIy:active:not(.disabled-2G98Nl),	/*		tabitems					*/
+#app-mount .side-1lrxIh .themed-qqoYp3.item-2GWPIy:hover:not(.disabled-2G98Nl),		/*		sideitems					*/
+#app-mount .topPill-2vcLsa .themed-qqoYp3.item-2GWPIy:hover:not(.disabled-2G98Nl) {	/*		tabitems					*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
-#app-mount .side-2ur1Qk .themed-2-lozF.selected-g-kMVV.item-3XjbnG,
-#app-mount .topPill-3DJJNV .themed-2-lozF.selected-g-kMVV.item-3XjbnG,
-#app-mount .side-2ur1Qk .themed-2-lozF.selected-g-kMVV.item-3XjbnG:active,
-#app-mount .topPill-3DJJNV .themed-2-lozF.selected-g-kMVV.item-3XjbnG:active,
-#app-mount .side-2ur1Qk .themed-2-lozF.selected-g-kMVV.item-3XjbnG:hover,
-#app-mount .topPill-3DJJNV .themed-2-lozF.selected-g-kMVV.item-3XjbnG:hover {
+#app-mount .side-1lrxIh .themed-qqoYp3.selected-1sf9UK.item-2GWPIy,
+#app-mount .topPill-2vcLsa .themed-qqoYp3.selected-1sf9UK.item-2GWPIy,
+#app-mount .side-1lrxIh .themed-qqoYp3.selected-1sf9UK.item-2GWPIy:active,
+#app-mount .topPill-2vcLsa .themed-qqoYp3.selected-1sf9UK.item-2GWPIy:active,
+#app-mount .side-1lrxIh .themed-qqoYp3.selected-1sf9UK.item-2GWPIy:hover,
+#app-mount .topPill-2vcLsa .themed-qqoYp3.selected-1sf9UK.item-2GWPIy:hover {
 	background-color: rgb(var(--accentcolor));
 	color: #fff;
 	text-shadow: 1px 1px var(--textshadow);
@@ -7451,10 +7451,10 @@ html:only-child > head + body div.app-3xd6d0 > div.app-2CXKsg > div.layers-OrUES
 	pointer-events: none !important;
 	z-index: -1 !important;
 }
-html:only-child > head + body div.app-3xd6d0 > div.app-2CXKsg > div.layers-OrUESM.layers-1YQhyW > div.layer-86YKbF.baseLayer-W6S8cY + div.layer-fP3xEz > div.standardSidebarView-E9Pc3j > div.sidebarRegion-1VBisG > div.sidebarRegionScroller-FXiQOh.thin-31rlnD.scrollerBase-1Pkza4.fade-1R6FHN > nav.sidebar-nqHbhN > div.side-2ur1Qk > div.info-3pQQBb {
+html:only-child > head + body div.app-3xd6d0 > div.app-2CXKsg > div.layers-OrUESM.layers-1YQhyW > div.layer-86YKbF.baseLayer-W6S8cY + div.layer-fP3xEz > div.standardSidebarView-E9Pc3j > div.sidebarRegion-1VBisG > div.sidebarRegionScroller-FXiQOh.thin-31rlnD.scrollerBase-1Pkza4.fade-1R6FHN > nav.sidebar-nqHbhN > div.side-1lrxIh > div.info-3pQQBb {
 	position: relative !important;
 }
-html:only-child > head + body div.app-3xd6d0 > div.app-2CXKsg > div.layers-OrUESM.layers-1YQhyW > div.layer-86YKbF.baseLayer-W6S8cY + div.layer-fP3xEz > div.standardSidebarView-E9Pc3j > div.sidebarRegion-1VBisG > div.sidebarRegionScroller-FXiQOh.thin-31rlnD.scrollerBase-1Pkza4.fade-1R6FHN > nav.sidebar-nqHbhN > div.side-2ur1Qk > div.info-3pQQBb::after {
+html:only-child > head + body div.app-3xd6d0 > div.app-2CXKsg > div.layers-OrUESM.layers-1YQhyW > div.layer-86YKbF.baseLayer-W6S8cY + div.layer-fP3xEz > div.standardSidebarView-E9Pc3j > div.sidebarRegion-1VBisG > div.sidebarRegionScroller-FXiQOh.thin-31rlnD.scrollerBase-1Pkza4.fade-1R6FHN > nav.sidebar-nqHbhN > div.side-1lrxIh > div.info-3pQQBb::after {
 	content: "BasicBackground by" !important;
 	font-size: 12px !important;
 	color: var(--text-muted) !important;
@@ -7473,7 +7473,7 @@ html:only-child > head + body div.app-3xd6d0 > div.app-2CXKsg > div.layers-OrUES
 	transform: unset !important;
 	animation: unset !important;
 }
-html:only-child > head + body div.app-3xd6d0 > div.app-2CXKsg > div.layers-OrUESM.layers-1YQhyW > div.layer-86YKbF.baseLayer-W6S8cY + div.layer-fP3xEz > div.standardSidebarView-E9Pc3j > div.sidebarRegion-1VBisG > div.sidebarRegionScroller-FXiQOh.thin-31rlnD.scrollerBase-1Pkza4.fade-1R6FHN > nav.sidebar-nqHbhN > div.side-2ur1Qk > div.info-3pQQBb::before {
+html:only-child > head + body div.app-3xd6d0 > div.app-2CXKsg > div.layers-OrUESM.layers-1YQhyW > div.layer-86YKbF.baseLayer-W6S8cY + div.layer-fP3xEz > div.standardSidebarView-E9Pc3j > div.sidebarRegion-1VBisG > div.sidebarRegionScroller-FXiQOh.thin-31rlnD.scrollerBase-1Pkza4.fade-1R6FHN > nav.sidebar-nqHbhN > div.side-1lrxIh > div.info-3pQQBb::before {
 	content: "DevilBro" !important;
 	font-size: 12px !important;
 	color: rgb(var(--accentcolor)) !important;
