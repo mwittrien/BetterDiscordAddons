@@ -298,7 +298,7 @@
 			"createLayer": [".createContext"],
 			"LayerContainer": [".layerContainer", "missing parent"]
 		}},
-		"LazyImage": {"strings": ["LOADING", "visibilityObserver"]},
+		"LazyImage": {"protos": ["loadImage", "getRatio", "getSrc"]},
 		"ListHeader": {"strings": [".container", "\"h2\"", "[\"aria-label\"]"]},
 		"Mask": {"props": "Masks"},
 		"Menu": {"strings": ["Menu API only allows Items and groups of Items as children"], "funcStrings": ["keyboardModeEnabled"]},
@@ -450,7 +450,7 @@
 		"InviteGuildName": {"strings": [".guild;return", "().guildName", "().guildNameWrapper"]},
 		"LayerProvider": {"strings": ["layerContainerElement", "getContextValue"]},
 		"LayersProvider": {"strings": ["._currentlyTransitioningKeys", "._keysToEnter", "._keyChildMapping"]},
-		"LazyImage": {"protos": ["loadImage", "getWidth", "getSrc"]},
+		"LazyImage": {"protos": ["loadImage", "getRatio", "getSrc"]},
 		"LazyImageZoomable": {"strings": ["renderLinkComponent", "onCloseImage"]},
 		"ListItemTooltip": {"strings": [".listItemWrapper", "tooltipClassName", "disableWrapper"]},
 		"MemberListItem": {"protos": ["renderOwner", "renderDecorators", "renderPremium"]},
