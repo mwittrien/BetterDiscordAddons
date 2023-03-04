@@ -2,7 +2,7 @@
  * @name TimedLightDarkMode
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.6
+ * @version 1.1.7
  * @description Adds a Time Slider to the Appearance Settings
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -100,11 +100,10 @@ module.exports = (_ => {
 			}
 
 			processUserSettingsAppearance (e) {
-				let formItem = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "FormItem", props: [["title", BDFDB.LanguageUtils.LanguageStrings.THEME]]});
-				if (!formItem || !formItem.props) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FormItem", filter: n => n && n.props && n.props.options && n.props.options[0] && n.props.options[0].value == "dark"});
+				if (index == -1 || !children[index] || !children[index].props) return;
 				let slider;
-				formItem.props.children = [
-					formItem.props.children,
+				children.splice(index + 1, 0, [
 					BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS._timedlightdarkmodetimersettings + BDFDB.disCN.margintop20,
 						children: [
@@ -135,7 +134,7 @@ module.exports = (_ => {
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 						className: BDFDB.disCNS.margintop20 + BDFDB.disCN.marginbottom8
 					})
-				].flat(10).filter(n => n);
+				]);
 			}
 
 			startInterval () {
