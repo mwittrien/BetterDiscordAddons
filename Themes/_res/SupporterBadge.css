@@ -38,19 +38,3 @@
 .selected-1-Z6gm .supporter-Z3FfwL.hasBadge-4rT8_u .badge-7R_W3s {
 	filter: brightness(80%) !important;
 }
-
-/* seivag */
-.supporter-Z3FfwL.tier3-yTxjsy.hasBadge-4rT8_u .badge-7R_W3s[user-id="226444377482985473"] {
-	-webkit-mask: unset !important;
-	background: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/badges/226444377482985473.png) center/cover no-repeat !important;
-	border-radius: 10% !important;
-	top: 71% !important;
-	left: 1% !important;
-	width: 30% !important;
-	height: 30% !important;
-}
-
-/* strix */
-.supporter-Z3FfwL.tier3-yTxjsy.hasBadge-4rT8_u .badge-7R_W3s[user-id="1027026862708379849"] {
-	background: linear-gradient(90deg, #f2f7ff, #1e68fc) !important;
-}
