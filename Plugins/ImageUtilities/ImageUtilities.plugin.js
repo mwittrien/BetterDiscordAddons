@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.1.6
+ * @version 5.1.7
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -133,12 +133,12 @@ module.exports = (_ => {
 		
 		const ImageDetailsComponent = class ImageDetails extends BdApi.React.Component {
 			componentDidMount() {
+				BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagemosaiconebyonegridsingle, BDFDB.ReactUtils.findDOMNode(this)), BDFDB.disCN._imageutilitiesimagedetailsadded);
 				this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "attachment", {up: true});
 				BDFDB.ReactUtils.forceUpdate(this);
 			}
 			componentDidUpdate() {
 				if ((!this.props.attachment || !this.props.attachment.size) && !this.props.loaded) {
-					BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagemosaiconebyonegridsingle, BDFDB.ReactUtils.findDOMNode(this)), BDFDB.disCN._imageutilitiesimagedetailsadded);
 					this.props.loaded = true;
 					this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, `${BDFDB.ReactUtils.instanceKey}.return`), "attachment", {up: true});
 					BDFDB.ReactUtils.forceUpdate(this);
@@ -682,9 +682,9 @@ module.exports = (_ => {
 
 			onGuildContextMenu (e) {
 				if (!this.settings.places.guildIcons || !e.instance.props.guild) return;
-				if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildheader, e.instance.props.target) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildchannels, e.instance.props.target) && !e.instance.props.target.className && e.instance.props.target.parentElement.firstElementChild == e.instance.props.target) {
+				if (BDFDB.DOMUtils.getParent(BDFDB.dotCNC.guildheader + BDFDB.dotCN.guildchannels, e.instance.props.target) && (!e.instance.props.target.className && e.instance.props.target.parentElement.firstElementChild == e.instance.props.target) || (e.instance.props.target.className && e.instance.props.target.className.indexOf(BDFDB.disCN.guildheaderbanneranimatedhoverlayer) > -1)) {
 					let banner = BDFDB.GuildUtils.getBanner(e.instance.props.guild.id);
-					if (banner) this.injectItem(e, [banner.replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.banner && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.banner), banner], BDFDB.LanguageUtils.LibraryStrings.guildbanner);
+					if (banner) this.injectItem(e, [banner.replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.banner && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.banner) && banner.replace(/\.webp|\.png/, ".gif")], BDFDB.LanguageUtils.LibraryStrings.guildbanner);
 				}
 				else if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.channels, e.instance.props.target)) this.injectItem(e, [(e.instance.props.guild.getIconURL(4096) || "").replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.icon) && e.instance.props.guild.getIconURL(4096, true)], BDFDB.LanguageUtils.LibraryStrings.guildicon);
 			}
