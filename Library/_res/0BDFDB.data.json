@@ -2410,6 +2410,7 @@
 		"guildfoldericonwrapperexpanded": ["GuildFolder", "expandedFolderIconWrapper"],
 		"guildfolderwrapper": ["GuildFolder", "wrapper"],
 		"guildheader": ["GuildHeader", "container"],
+		"guildheaderbanneranimatedhoverlayer": ["GuildHeader", "animatedBannerHoverLayer"],
 		"guildheaderbannerimage": ["GuildHeader", "bannerImage"],
 		"guildheaderbannerimagecontainer": ["GuildHeader", "animatedContainer"],
 		"guildheaderbannervisible": ["GuildHeader", "bannerVisible"],
