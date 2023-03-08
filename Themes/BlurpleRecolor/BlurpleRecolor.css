@@ -435,7 +435,7 @@
 	--message-background-flash: rgba(var(--accentcolor), 0.1);
 }
 .backgroundFlash-1X5jVs[style*="background-color: rgba(148, 156, 247, 0)"] {
-	--message-background-flash: rgba(var(--accentcolor), 0);
+	--message-background-flash: rgba(var(--accentcolor), 0.05);
 }
 
 .embedFull-1HGV2S[style*="border-color: hsl(216, "],
