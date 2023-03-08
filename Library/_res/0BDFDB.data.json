@@ -93,6 +93,7 @@
 		"ApplicationAssetUtils": {"strings": ["ApplicationAssetUtils", "getAssetImage"], "exported": false, "value": "exports", "map": {
 			"getAssetImage": ["ApplicationAssetUtils", "getAssetImage"]
 		}},
+		"AppUtils": {"props": ["clipboard", "os"]},
 		"ArrayUtils": {"props": ["isArrayLike", "zipObject"]},
 		"ChannelUtils": {"props": ["selectChannel", "selectPrivateChannel"]},
 		"ChatRestrictionUtils": {"strings": ["openWarningPopout", "userCanUsePremiumMessageLength"], "exported": false, "value": "exports", "map": {

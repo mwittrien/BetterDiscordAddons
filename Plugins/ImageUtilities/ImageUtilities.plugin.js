@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.1.7
+ * @version 5.1.8
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -707,25 +707,23 @@ module.exports = (_ => {
 			}
 
 			onMessageContextMenu (e) {
+				console.log(e);
 				if (!e.instance.props.message || !e.instance.props.channel || !e.instance.props.target) return;
-				if (e.instance.props.attachment) this.injectItem(e, [{original: e.instance.props.attachment.url, file: e.instance.props.attachment.proxy_url}], null, true);
+				const target = e.instance.props.target.tagName == "A" && BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.imageoriginallink) && e.instance.props.target.parentElement.querySelector("img, video") || e.instance.props.target;
+				if (target.tagName == "A" && e.instance.props.message.embeds && e.instance.props.message.embeds[0] && (e.instance.props.message.embeds[0].type == "image" || e.instance.props.message.embeds[0].type == "video" || e.instance.props.message.embeds[0].type == "gifv")) this.injectItem(e, [target.href], null, true);
+				else if (target.tagName == "IMG" && target.complete && target.naturalHeight) {
+					if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagewrapper, target) || BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.imagesticker)) this.injectItem(e, [{file: target.src, original: this.getTargetLink(e.instance.props.target) || this.getTargetLink(target)}], null, true);
+					else if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.embedauthoricon) && this.settings.places.userAvatars) this.injectItem(e, [target.src], null, true);
+					else if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.emojiold, "emote", false) && this.settings.places.emojis) this.injectItem(e, [{file: target.src, alternativeName: target.getAttribute("data-name")}], null, true);
+				}
+				else if (target.tagName == "VIDEO") {
+					if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.embedvideo) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.attachmentvideo, target)) this.injectItem(e, [{file: target.src, original: this.getTargetLink(e.instance.props.target) || this.getTargetLink(target)}], null, true);
+				}
 				else {
-					const target = e.instance.props.target.tagName == "A" && BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.imageoriginallink) && e.instance.props.target.parentElement.querySelector("img, video") || e.instance.props.target;
-					if (target.tagName == "A" && e.instance.props.message.embeds && e.instance.props.message.embeds[0] && (e.instance.props.message.embeds[0].type == "image" || e.instance.props.message.embeds[0].type == "video" || e.instance.props.message.embeds[0].type == "gifv")) this.injectItem(e, [target.href], null, true);
-					else if (target.tagName == "IMG" && target.complete && target.naturalHeight) {
-						if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagewrapper, target) || BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.imagesticker)) this.injectItem(e, [{file: target.src, original: this.getTargetLink(e.instance.props.target) || this.getTargetLink(target)}], null, true);
-						else if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.embedauthoricon) && this.settings.places.userAvatars) this.injectItem(e, [target.src], null, true);
-						else if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.emojiold, "emote", false) && this.settings.places.emojis) this.injectItem(e, [{file: target.src, alternativeName: target.getAttribute("data-name")}], null, true);
-					}
-					else if (target.tagName == "VIDEO") {
-						if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.embedvideo) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.attachmentvideo, target)) this.injectItem(e, [{file: target.src, original: this.getTargetLink(e.instance.props.target) || this.getTargetLink(target)}], null, true);
-					}
-					else {
-						const reaction = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagereaction, target);
-						if (reaction && this.settings.places.emojis) {
-							const emoji = reaction.querySelector(BDFDB.dotCN.emojiold);
-							if (emoji) this.injectItem(e, [{file: emoji.src, alternativeName: emoji.getAttribute("data-name")}], null, true);
-						}
+					const reaction = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagereaction, target);
+					if (reaction && this.settings.places.emojis) {
+						const emoji = reaction.querySelector(BDFDB.dotCN.emojiold);
+						if (emoji) this.injectItem(e, [{file: emoji.src, alternativeName: emoji.getAttribute("data-name")}], null, true);
 					}
 				}
 			}
@@ -771,10 +769,8 @@ module.exports = (_ => {
 			filterUrls (...urls) {
 				let addedUrls = [];
 				return urls.filter(n => this.isValid(n && n.file || n)).map(n => {
-					let srcUrl = (n.file || n).replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/\?size\=\d+&/, "?size=4096&").replace(/[\?\&](height|width)=\d+/g, "").split("%3A")[0];
-					if (srcUrl.startsWith("https://cdn.discordapp.com/") && !srcUrl.endsWith("?size=4096") && srcUrl.indexOf("?size=4096&") == -1) srcUrl += "?size=4096";
-					let originalUrl = (n.original || n.file || n).replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/\?size\=\d+&/, "?size=4096&").replace(/[\?\&](height|width)=\d+/g, "").split("%3A")[0];
-					if (originalUrl.startsWith("https://cdn.discordapp.com/") && !originalUrl.endsWith("?size=4096") && originalUrl.indexOf("?size=4096&") == -1) originalUrl += "?size=4096";
+					let srcUrl = (n.file || n).replace(/^url\(|\)$|"|'/g, "");
+					let originalUrl = (n.original || n.file || n).replace(/^url\(|\)$|"|'/g, "");
 					let fileUrl = srcUrl;
 					if (fileUrl.indexOf("https://images-ext-1.discordapp.net/external/") > -1 || fileUrl.indexOf("https://images-ext-2.discordapp.net/external/") > -1) {
 						if (fileUrl.split("/https/").length > 1) fileUrl = "https://" + fileUrl.split("/https/").pop();
@@ -1077,7 +1073,7 @@ module.exports = (_ => {
 								className: BDFDB.disCN._imageutilitiesdetailswrapper,
 								children: [
 									e.instance.props.alt && {label: "Alt", text: e.instance.props.alt},
-									{label: "Source", text: url},
+									{label: "Source", text: url.split("?width")[0].split("?height")[0].split("?size")[0]},
 									{label: "Size", text: `${e.instance.props.width}x${e.instance.props.height}px`},
 									cachedImages && cachedImages.amount && cachedImages.amount > 1 && {label: "Image", text: `${cachedImages.index + 1 || 1} of ${cachedImages.amount}`}
 								].filter(n => n).map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
@@ -1456,6 +1452,7 @@ module.exports = (_ => {
 				if (!image) return;
 				const message = BDFDB.ReactUtils.findValue(image, "message", {up: true});
 				if (!message) return;
+				BDFDB.DOMUtils.hide(document.querySelectorAll(BDFDB.dotCN.tooltip));
 				firstViewedImage = {messageId: message.id, channelId: message.channel_id, proxy_url: image.src};
 				viewedImage = firstViewedImage;
 				if (cachedImages) cachedImages.index = this.getImageIndex(cachedImages.all, viewedImage);
@@ -1557,7 +1554,7 @@ module.exports = (_ => {
 
 			getImageSrc (img) {
 				if (!img) return null;
-				return (typeof img == "string" ? img : (img.proxy_url || img.src || (typeof img.querySelector == "function" && img.querySelector("canvas") ? img.querySelector("canvas").src : ""))).split("?width=")[0];
+				return (typeof img == "string" ? img : (img.proxy_url || img.src || (typeof img.querySelector == "function" && img.querySelector("canvas") ? img.querySelector("canvas").src : "")));
 			}
 			
 			getImageIndex (messages, img) {
