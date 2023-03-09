@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.4
+ * @version 3.1.5
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4164,6 +4164,14 @@ module.exports = (_ => {
 				};
 				BDFDB.DiscordUtils.getFontScale = function () {
 					return parseInt(document.firstElementChild.style.fontSize.replace("%", ""));
+				};
+				BDFDB.DiscordUtils.playSound = function (value, volume) {
+					if (!BDFDB.DiscordUtils.playSound.init) {
+						BDFDB.DiscordUtils.playSound.init = true;
+						BDFDB.LibraryModules.SoundParser && BDFDB.LibraryModules.SoundParser.keys && BDFDB.LibraryModules.SoundParser.keys();
+						BDFDB.LibraryStores.SoundpackStore && BDFDB.LibraryStores.SoundpackStore.getSoundpack && BDFDB.LibraryStores.SoundpackStore.getSoundpack();
+					}
+					BDFDB.LibraryModules.SoundUtils.playSound(value, volume);
 				};
 				BDFDB.DiscordUtils.shake = function () {
 					BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.appcontainer), {name: "Shakeable", unlimited: true, up: true}).shake();
