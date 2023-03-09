@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.7.6
+ * @version 3.7.7
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -86,8 +86,8 @@ module.exports = (_ => {
 		const WebAudioSound = class WebAudioSound {
 			constructor (type) {
 				this.name = type;
-				this._src = audios[choices[type].category][choices[type].sound] || types[type].src;
-				this._volume = choices[type].volume / 100;
+				this._src = choices[type] && audios[choices[type].category][choices[type].sound] || types[type] && types[type].src || BDFDB.LibraryModules.SoundParser(`./${type}.mp3`);
+				this._volume = (choices[type] ? choices[type].volume : 100) / 100;
 			}
 			loop () {
 				this._ensureAudio().then(audio => {
@@ -286,8 +286,8 @@ module.exports = (_ => {
 							cancel();
 							BDFDB.PatchUtils.patch(this, e.returnValue.constructor.prototype, ["play", "loop"], {instead: e2 => {
 								let type = e2.instance && e2.instance.name;
+								let loop = e2.originalMethodName == "loop";
 								if (type && choices[type]) {
-									let loop = e2.originalMethodName == "loop";
 									e2.stopOriginalMethodCall();
 									BDFDB.TimeUtils.timeout(_ => {
 										if (type == "message1") {
@@ -302,7 +302,7 @@ module.exports = (_ => {
 										else this.playAudio(type, loop);
 									});
 								}
-								else e2.callOriginalMethodAfterwards();
+								else this.playAudio(type, loop);
 							}});
 							BDFDB.PatchUtils.patch(this, e.returnValue.constructor.prototype, "stop", {after: e2 => {
 								let type = e2.instance && e2.instance.name;
@@ -726,7 +726,7 @@ module.exports = (_ => {
 
 			dontPlayAudio (type) {
 				let status = BDFDB.UserUtils.getStatus();
-				return choices[type].mute && (status == "dnd" || status == "streaming");
+				return choices[type] && choices[type].mute && (status == "dnd" || status == "streaming");
 			}
 
 			fireEvent (type) {

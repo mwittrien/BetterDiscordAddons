@@ -2,7 +2,7 @@
  * @name GameActivityToggle
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.9
+ * @version 1.2.0
  * @description Adds a Quick-Toggle Game Activity Button
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -174,7 +174,7 @@ module.exports = (_ => {
 							basis: "50%",
 							options: sounds.map(o => ({value: o, label: o.split(/[-_]/g).map(BDFDB.StringUtils.upperCaseFirstChar).join(" ")})),
 							value: this.settings.selections[key],
-							onChange: value => BDFDB.DiscordUtils.playSound(value, .4)
+							onChange: value => BDFDB.LibraryModules.SoundUtils.playSound(value, .4)
 						}));
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement("div", {
@@ -244,7 +244,7 @@ module.exports = (_ => {
 			
 			toggle () {
 				const shouldEnable = !BDFDB.DiscordUtils.getSetting("status", "showCurrentGame");
-				this.settings.general[shouldEnable ? "playEnable" : "playDisable"] && BDFDB.DiscordUtils.playSound(this.settings.selections[shouldEnable ? "enableSound" : "disableSound"], .4);
+				this.settings.general[shouldEnable ? "playEnable" : "playDisable"] && BDFDB.LibraryModules.SoundUtils.playSound(this.settings.selections[shouldEnable ? "enableSound" : "disableSound"], .4);
 				BDFDB.DiscordUtils.setSetting("status", "showCurrentGame", shouldEnable);
 			}
 
