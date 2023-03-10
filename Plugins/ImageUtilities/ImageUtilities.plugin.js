@@ -832,7 +832,7 @@ module.exports = (_ => {
 						!this.isValid(urlData.file, "copyable") ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_copy.replace("{{var0}}", type),
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-file"),
-							action: _ => this.copyFile(urlData.src)
+							action: _ => this.copyFile({url: urlData.src, fallbackUrl: urlData.file || urlData.original})
 						}),
 						!document.querySelector(BDFDB.dotCN.imagemodal) && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_view.replace("{{var0}}", type),
@@ -1029,7 +1029,7 @@ module.exports = (_ => {
 										children: this.labels.context_copy.replace("{{var0}}", type),
 										onClick: event => {
 											BDFDB.ListenerUtils.stopEvent(event);
-											this.copyFile(url);
+											this.copyFile({url: url});
 										}
 									})
 								],
@@ -1461,65 +1461,60 @@ module.exports = (_ => {
 				}, 1000);
 			}
 			
-			downloadFile (urls, path, alternativeName, fallbackToRequest) {
-				if (!urls) return BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", path || "PC"), {type: "danger"});
+			requestFile (urls, onLoad, onError, config = {}) {
+				if (!urls || typeof onLoad != "function") return typeof onError == "function" && onError();
 				let url = urls.url.startsWith("/assets") ? (window.location.origin + urls.url) : urls.url;
-				if (!fallbackToRequest) BDFDB.DiscordUtils.requestFileData(url, {timeout: 3000}, (error, buffer) => {
+				let isResized = !config.orignalSizeChecked && (url.indexOf("?width=") > -1 || url.indexOf("?height=") > -1 || url.indexOf("?size=") > -1);
+				if (!config.fallbackToRequest) BDFDB.DiscordUtils.requestFileData(isResized ? url.split("?width")[0].split("?height")[0].split("?size")[0] : url, {timeout: 3000}, (error, buffer) => {
 					if (error || !buffer) {
-						if (urls.fallbackUrl && urls.url != urls.fallbackUrl) this.downloadFile({url: urls.fallbackUrl, oldUrl: urls.url}, path, alternativeName);
-						else this.downloadFile({url: urls.oldUrl || urls.url, fallbackUrl: urls.oldUrl ? urls.url : undefined}, path, alternativeName, true);
+						if (isResized) this.requestFile(urls, onLoad, onError, {orignalSizeChecked: true});
+						else if (urls.fallbackUrl && urls.url != urls.fallbackUrl) this.requestFile({url: urls.fallbackUrl, oldUrl: urls.url}, onLoad, onError);
+						else this.requestFile({url: urls.oldUrl || urls.url, fallbackUrl: urls.oldUrl ? urls.url : undefined}, onLoad, onError, {fallbackToRequest: true});
 					}
-					else {
-						let extension = this.getFileExtension(new Uint8Array(buffer));
-						if (!extension) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", path || "PC"), {type: "danger"});
-						else {
-							let type = fileTypes[extension].video ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
-							if (path) BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, (alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35), extension, 0), Buffer.from(buffer), error => {
-								if (error) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", path), {type: "danger"});
-								else BDFDB.NotificationUtils.toast(this.labels.toast_save_success.replace("{{var0}}", type).replace("{{var1}}", path), {type: "success"});
-							});
-							else {
-								let hrefURL = window.URL.createObjectURL(new Blob([buffer], {type: this.getMimeType(extension)}));
-								let tempLink = document.createElement("a");
-								tempLink.href = hrefURL;
-								tempLink.download = `${(alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35)}.${extension}`;
-								tempLink.click();
-								window.URL.revokeObjectURL(hrefURL);
-							}
-						}
-					}
+					else onLoad(url, buffer);
 				});
-				else BDFDB.LibraryRequires.request(url, {agentOptions: {rejectUnauthorized: false}, headers: {"Content-Type": "application/json"}}, (error, response, buffer) => {
+				else BDFDB.LibraryRequires.request(isResized ? url.split("?width")[0].split("?height")[0].split("?size")[0] : url, {agentOptions: {rejectUnauthorized: false}, headers: {"Content-Type": "application/json"}}, (error, response, buffer) => {
 					if (error || response.statusCode != 200 || response.headers["content-type"].indexOf("text/html") > -1) {
-						if (urls.fallbackUrl && urls.url != urls.fallbackUrl) this.downloadFile({url: urls.fallbackUrl}, path, alternativeName, true);
-						else BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", path || "PC"), {type: "danger"});
+						if (isResized) this.requestFile(urls, onLoad, onError, {orignalSizeChecked: true, fallbackToRequest: true});
+						else if (urls.fallbackUrl && urls.url != urls.fallbackUrl) this.requestFile({url: urls.fallbackUrl}, onLoad, onError, {fallbackToRequest: true});
+						else if (typeof onError == "function") onError();
 					}
-					else {
-						let extension = this.getFileExtension(new Uint8Array(buffer));
-						if (!extension) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", path || "PC"), {type: "danger"});
-						else {
-							let type = fileTypes[extension].video ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
-							if (path) BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, (alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35), extension, 0), Buffer.from(buffer), error => {
-								if (error) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", path), {type: "danger"});
-								else BDFDB.NotificationUtils.toast(this.labels.toast_save_success.replace("{{var0}}", type).replace("{{var1}}", path), {type: "success"});
-							});
-							else {
-								let hrefURL = window.URL.createObjectURL(new Blob([buffer], {type: this.getMimeType(extension)}));
-								let tempLink = document.createElement("a");
-								tempLink.href = hrefURL;
-								tempLink.download = `${(alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35)}.${extension}`;
-								tempLink.click();
-								window.URL.revokeObjectURL(hrefURL);
-							}
-						}
-					}
+					else onLoad(url, buffer);
 				});
 			}
 			
-			copyFile (url) {
-				let type = this.isValid(url, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
-				BDFDB.LibraryModules.WindowUtils.copyImage(url);
-				BDFDB.NotificationUtils.toast(this.labels.toast_copy_success.replace("{{var0}}", type), {type: "success"});
+			downloadFile (urls, path, alternativeName) {
+				this.requestFile(urls, (url, buffer) => {
+					let extension = this.getFileExtension(new Uint8Array(buffer));
+					if (!extension) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", path || "PC"), {type: "danger"});
+					else {
+						let type = fileTypes[extension].video ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
+						if (path) BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, (alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35), extension, 0), Buffer.from(buffer), error => {
+							if (error) BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", type).replace("{{var1}}", path), {type: "danger"});
+							else BDFDB.NotificationUtils.toast(this.labels.toast_save_success.replace("{{var0}}", type).replace("{{var1}}", path), {type: "success"});
+						});
+						else {
+							let hrefURL = window.URL.createObjectURL(new Blob([buffer], {type: this.getMimeType(extension)}));
+							let tempLink = document.createElement("a");
+							tempLink.href = hrefURL;
+							tempLink.download = `${(alternativeName || url.split("/").pop().split(".").slice(0, -1).join(".") || "unknown").slice(0, 35)}.${extension}`;
+							tempLink.click();
+							window.URL.revokeObjectURL(hrefURL);
+						}
+					}
+				}, _ => {
+					BDFDB.NotificationUtils.toast(this.labels.toast_save_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE).replace("{{var1}}", path || "PC"), {type: "danger"});
+				});
+			}
+			
+			copyFile (urls) {
+				this.requestFile(urls, (url, buffer) => {
+					let type = this.isValid(url, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
+					BDFDB.LibraryModules.WindowUtils.copyImage(url);
+					BDFDB.NotificationUtils.toast(this.labels.toast_copy_success.replace("{{var0}}", type), {type: "success"});
+				}, _ => {
+					BDFDB.NotificationUtils.toast(this.labels.toast_copy_failed.replace("{{var0}}", BDFDB.LanguageUtils.LanguageStrings.IMAGE), {type: "danger"});
+				});
 			}
 			
 			getDownloadLocation () {
