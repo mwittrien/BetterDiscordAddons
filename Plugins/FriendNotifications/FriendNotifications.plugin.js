@@ -14,8 +14,8 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"added": {
-			"$nick": "New placeholder for friend nicknames"
+		"fixed": {
+			"Screensharing Notice": ""
 		}
 	};
 
