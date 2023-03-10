@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.0
+ * @version 1.6.1
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -166,13 +166,13 @@ module.exports = (_ => {
 				
 				let muteTimeout;
 				let channelId = BDFDB.LibraryModules.RTCConnectionUtils.getChannelId();
-				let connectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryStores.SortedVoiceStateStore.getVoiceStates(BDFDB.LibraryModules.RTCConnectionUtils.getGuildId()), n => n && n.channelId == channelId && !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.userId));
+				let connectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryStores.SortedVoiceStateStore.getVoiceStates(BDFDB.LibraryModules.RTCConnectionUtils.getGuildId()), n => n && n.voiceState && n.voiceState.channelId == channelId && !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.voiceState.userId));
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {before: e => {
 					let type = e.methodArguments[0];
 					if (!this.settings.notifications.voiceChat || !["disconnect", "user_join", "user_leave", "user_moved"].includes(type)) return;
 					channelId = BDFDB.LibraryModules.RTCConnectionUtils.getChannelId();
 					if (channelId) {
-						let allConnectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryStores.SortedVoiceStateStore.getVoiceStates(BDFDB.LibraryModules.RTCConnectionUtils.getGuildId()), n => n && n.channelId == channelId);
+						let allConnectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryStores.SortedVoiceStateStore.getVoiceStates(BDFDB.LibraryModules.RTCConnectionUtils.getGuildId()), n => n && n.voiceState && n.voiceState.channelId == channelId);
 						let unblockedUsers = BDFDB.ObjectUtils.filter(allConnectedUsers, n => n && !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.userId));
 						let unmutedBlockedUsers = BDFDB.ObjectUtils.toArray(allConnectedUsers).filter(n => n && BDFDB.LibraryStores.RelationshipStore.isBlocked(n.userId) && !BDFDB.LibraryStores.MediaEngineStore.isLocalMute(n.userId));
 						if (unmutedBlockedUsers.length) {
