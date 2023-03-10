@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.7.4
+ * @version 4.7.5
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -146,6 +146,7 @@ module.exports = (_ => {
 						"GuildInvitationRow",
 						"IncomingCallModal",
 						"MemberListItem",
+						"Mention",
 						"MessageContent",
 						"MessageUsername",
 						"NameTag",
@@ -191,6 +192,14 @@ module.exports = (_ => {
 					${BDFDB.dotCN.messagemarkup} span[style*="linear-gradient"] blockquote,
 					${BDFDB.dotCN.messagemarkup} span[style*="linear-gradient"] ${BDFDB.dotCN.spoilertext} {
 						color: var(--text-normal);
+					}
+					${BDFDB.dotCN.mention}[style*="--edited-mention-color"] {
+						background-color: rgba(var(--edited-mention-color), .1) !important;
+						color: rgb(var(--edited-mention-color)) !important;
+					}
+					${BDFDB.dotCN.mention + BDFDB.dotCN.mentioninteractive}[style*="--edited-mention-color"]:hover {
+						background-color: rgba(var(--edited-mention-color), .3) !important;
+						color: rgb(var(--edited-mention-color)) !important;
 					}
 				`;
 			}
@@ -905,8 +914,16 @@ module.exports = (_ => {
 				}
 				if (data.color1) {
 					mention.props.color = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "INT");
-					if (mention.props.children && mention.props.children.props) mention.props.children.props.color = mention.props.color;
+					mention.props["edited-mention-color"] = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "RGBCOMP").slice(0, 3).join(",");
+					if (mention.props.children && mention.props.children.props) {
+						mention.props.children.props.color = mention.props.color;
+						mention.props.children.props["edited-mention-color"] = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "RGBCOMP").slice(0, 3).join(",");
+					}
 				}
+			}
+			
+			processMention (e) {
+				if (e.instance.props["edited-mention-color"]) e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {"--edited-mention-color": e.instance.props["edited-mention-color"]});
 			}
 
 			processChannelReply (e) {

@@ -455,7 +455,7 @@
 		"LazyImageZoomable": {"strings": ["renderLinkComponent", "onCloseImage"]},
 		"ListItemTooltip": {"strings": [".listItemWrapper", "tooltipClassName", "disableWrapper"]},
 		"MemberListItem": {"protos": ["renderOwner", "renderDecorators", "renderPremium"]},
-		"Mention": {"strings": [".iconType", ".color,", "CHANNEL_BROWSER_TITLE"]},
+		"Mention": {"strings": [".iconType", ".color,", "),backgroundColor:"]},
 		"Menu": {"strings": ["\"empty\"", "getItemProps", "isUsingKeyboardNavigation"]},
 		"Message": {"strings": ["childrenMessageContent", "childrenRepliedMessage", "zalgo", ".buttonContainer"]},
 		"MessageAccessories": {"protos": ["renderGiftCodes", "renderEmbeds", "renderActivityInvite"]},
