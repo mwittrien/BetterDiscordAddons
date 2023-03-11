@@ -542,8 +542,8 @@
 		"UserBannerMask": {"strings": [".overrideAvatarDecorationURL", "hasBannerImage:", "foreignObject"]},
 		"UserBioSection": {"strings": [".isUsingGuildBio", "aboutMeGuildIcon", "GUILD_IDENTITY_BIO_TOAST"]},
 		"UserConnectionsSection": {"strings": [".applicationRoleConnections)", ".CONNECTIONS_ROLE_POPOUT_VIEW_ALL"]},
-		"UserInfo": {"strings": [".botTag", "isMobile:", ".discordTag"]},
 		"UserGenericContextMenu": {"strings": ["USER_ACTIONS_MENU_LABEL", "navId:\"user", ".USER_GENERIC_MENU"]},
+		"UserInfo": {"strings": [".botTag", "isMobile:", ".discordTag"]},
 		"UserMemberContextMenu": {"strings": ["USER_ACTIONS_MENU_LABEL", "navId:\"user", ".GUILD_CHANNEL_USER_MENU"]},
 		"UserMemberSince": {"strings": [".memberSinceContainer", ".USER_PROFILE_DISCORD_MEMBER_SINCE"]},
 		"UserMemberSinceSection": {"strings": [".userId", "headingClassName", "().title", ".guildMember"]},
@@ -561,6 +561,7 @@
 		"UserRolesSection": {"strings": [".rolePillBorder", "numRoles", "roleClassName"]},
 		"UserSummaryItem": {"protos": ["renderMoreUsers", "renderUsers", "renderIcon"]},
 		"UserSettingsAppearance": {"protos": ["renderTheme", "renderDisplayMode", "renderMessageGroupSpacingSlider"]},
+		"UserTheme": {"strings": [".profileColors", "useDefaultClientTheme:"], "noSearch": true},
 		"VideoBackground": {"strings": [".backgroundSrc", ".pulseSpeakingIndicator", ".avatarWrapper"]},
 		"VoiceUser": {"protos": ["renderPrioritySpeaker", "renderIcons", "renderAvatar"]},
 		"VoiceUsers": {"strings": ["hidePreview", "previewIsOpen", "previewUserIdAfterDelay"]}
