@@ -66,6 +66,7 @@ module.exports = (_ => {
 						_all: 				{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url: null},
 						Ask: 				{value: true, 	name: "Ask", 					url: "https://ask.com/web?q=" + textUrlReplaceString},
 						Bing: 				{value: true, 	name: "Bing", 					url: "https://www.bing.com/search?q=" + textUrlReplaceString},
+						Brave:				{value: true, 	name: "Brave",					url: "https://search.brave.com/search?q=%s" + textUrlReplaceString},
 						DogPile:			{value: false, 	name: "DogPile", 				url: "http://www.dogpile.com/search/web?q=" + textUrlReplaceString},
 						DuckDuckGo:			{value: true, 	name: "DuckDuckGo", 			url: "https://duckduckgo.com/?q=" + textUrlReplaceString},
 						Ecosia:				{value: false, 	name: "Ecosia", 				url: "https://www.ecosia.org/search?q=" + textUrlReplaceString},
