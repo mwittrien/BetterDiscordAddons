@@ -156,6 +156,7 @@ html {
 		19.	DISCOVERYENTRYMODAL
 		20.	NITROFEATUREMODAL
 		21.	DIRECTORYMODAL
+		22.	ACTIVITYSHAREMODAL
 	14.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -178,6 +179,7 @@ html {
 		19.	ACTIVETHREADLISTPOPOUT
 		20.	ROLEMEMBERSPOPOUT
 		21.	FORUMFILTERPOPOUT
+		22.	ACTIVITYSHAREPOPOUT
 	15.	GENERAL
 		1.	TEXT
 		2.	BUTTONS
@@ -4424,6 +4426,15 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	backdrop-filter: blur(var(--popoutblur));
 }
 
+/* ----		13.22.	ACTIVITYSHAREMODAL				---- */
+
+.shelfTopBackground-R55ED9 {
+	z-index: 2;
+}
+.scrollTierBackgroundUpsell-2oh_9T {
+	background: rgba(var(--accentcolor), .1);
+}
+
 
 /* ~~~~		14.		POPOUTS							~~~~ */
 
@@ -6023,6 +6034,38 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-attachment: fixed;
 }
 .container-3kfp0r::after {
+	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
+	backdrop-filter: blur(var(--popoutblur));
+}
+
+/* ----		14.22.	ACTIVITYSHAREPOPOUT				---- */
+
+#app-mount .container-1jQZ2U {								/* popout													*/
+	background-color: transparent;
+	border: none;
+	border-radius: 5px;
+	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
+	position: relative;
+}
+.container-1jQZ2U::before,
+.container-1jQZ2U::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	border-radius: 5px;
+	pointer-events: none;
+	z-index: -1;
+}
+.container-1jQZ2U::before {
+	background: var(--popout) var(--popoutposition)/var(--popoutsize);
+	background-attachment: fixed;
+}
+.container-1jQZ2U::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 	backdrop-filter: blur(var(--popoutblur));
 }
