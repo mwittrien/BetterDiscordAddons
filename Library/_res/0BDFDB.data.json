@@ -230,6 +230,9 @@
 		}},
 		"UserSettingsProtoUtils": {"strings": ["UserSettingsProtoLastWriteTimes"], "exported": false, "value": "exports"},
 		"UserSettingsUtils": {"props": ["open", "updateAccount"]},
+		"UserThemeUtils": {"strings": [".default]", ".getUserProfile", ".getGuildMemberProfile"], "exported": false, "value": "exports", "map": {
+			"getUserProfile": [".default]"]
+		}},
 		"Utilities": {"props": ["flatMap", "cloneDeep"]},
 		"WindowUtils": {"props": ["minimize", "maximize", "close"]}
 	},
