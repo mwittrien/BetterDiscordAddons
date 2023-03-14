@@ -754,6 +754,7 @@ body::after {
 
 .panels-3wFtMD > *,											/* account/voice		inner								*/
 .panels-3wFtMD .wrapper-3Hk9OB > * {						/* account/voice		inner								*/
+	background: none;
 	border: none;
 }
 .panels-3wFtMD > *:not(:empty) ~ *:not(:empty) {
@@ -1853,6 +1854,9 @@ body::after {
 
 #app-mount .wrapper-1gVUIN {								/* call					voice wrapper					*/
 	background-color: rgba(var(--transparencycolor), calc(var(--guildchanneltransparency) * 0.8));
+}
+#app-mount .callContainer-HtHELf {							/* call					voice wrapper inner				*/
+	background-color: rgba(var(--transparencycolor), calc((1 - (var(--guildchanneltransparency) * 0.8)) * 0.8));
 }
 #app-mount .root-22AK9z {									/* call					root							*/
 	color: var(--header-primary);
