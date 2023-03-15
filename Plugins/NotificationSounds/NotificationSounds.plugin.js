@@ -69,11 +69,11 @@ module.exports = (_ => {
 		const message1Types = {
 			dm:			{src: "./message3.mp3", name: "Message (Direct Message)", force: null, focus: true},
 			groupdm:	{src: "./message3.mp3", name: "Message (Group Message)", force: null, focus: true},
-			mentioned:	{src: "./message2.mp3", name: "Message Mentioned", force: false, focus: true},
-			reply:		{src: "./message2.mp3", name: "Message Mentioned (reply)", force: false, focus: true},
-			role:		{src: "./mention1.mp3", name: "Message Mentioned (role)", force: false, focus: true},
-			everyone:	{src: "./mention2.mp3", name: "Message Mentioned (@everyone)", force: false, focus: true},
-			here:		{src: "./mention3.mp3", name: "Message Mentioned (@here)", force: false, focus: true}
+			mentioned:	{src: "./message2.mp3", name: "Mention", force: false, focus: true},
+			reply:		{src: "./message2.mp3", name: "Message (reply)", force: false, focus: true},
+			role:		{src: "./mention1.mp3", name: "Message (role)", force: false, focus: true},
+			everyone:	{src: "./mention2.mp3", name: "Message (@everyone)", force: false, focus: true},
+			here:		{src: "./mention3.mp3", name: "Message (@here)", force: false, focus: true}
 		};
 		
 		const defaultAudios = {
@@ -309,14 +309,6 @@ module.exports = (_ => {
 								if (type && createdAudios[type]) createdAudios[type].stop();
 							}});
 						}
-						return;
-						let type = e.methodArguments[0];
-						if (type && choices[type]) {
-							let audio = new WebAudioSound(type);
-							createdAudios[type] = audio;
-							return audio;
-						}
-						else BDFDB.LogUtils.warn(`Could not create Sound for "${type}".`, this);
 					}}, {noCache: true});
 					BDFDB.LibraryModules.SoundUtils.createSound("call_calling");
 				}
@@ -489,11 +481,18 @@ module.exports = (_ => {
 											mini: true,
 											grow: 0,
 											label: "Mute in",
-											labelChildren: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {
-												style: {marginLeft: 6},
-												size: 12,
-												status: BDFDB.LibraryComponents.StatusComponents.Types.DND
-											}),
+											labelChildren: [
+												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {
+													style: {marginLeft: 6},
+													size: 12,
+													status: BDFDB.LibraryComponents.StatusComponents.Types.DND
+												}),
+												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {
+													style: {marginLeft: 6},
+													size: 12,
+													status: BDFDB.LibraryComponents.StatusComponents.Types.STREAMING
+												})
+											],
 											value: choices[type].mute,
 											onChange: value => {
 												choices[type].mute = value;
