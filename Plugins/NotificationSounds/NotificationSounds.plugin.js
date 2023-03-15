@@ -70,10 +70,10 @@ module.exports = (_ => {
 			dm:			{src: "./message3.mp3", name: "Message (Direct Message)", force: null, focus: true},
 			groupdm:	{src: "./message3.mp3", name: "Message (Group Message)", force: null, focus: true},
 			mentioned:	{src: "./message2.mp3", name: "Mention", force: false, focus: true},
-			reply:		{src: "./message2.mp3", name: "Message (reply)", force: false, focus: true},
-			role:		{src: "./mention1.mp3", name: "Message (role)", force: false, focus: true},
-			everyone:	{src: "./mention2.mp3", name: "Message (@everyone)", force: false, focus: true},
-			here:		{src: "./mention3.mp3", name: "Message (@here)", force: false, focus: true}
+			reply:		{src: "./message2.mp3", name: "Mention (reply)", force: false, focus: true},
+			role:		{src: "./mention1.mp3", name: "Mention (role)", force: false, focus: true},
+			everyone:	{src: "./mention2.mp3", name: "Mention (@everyone)", force: false, focus: true},
+			here:		{src: "./mention3.mp3", name: "Mention (@here)", force: false, focus: true}
 		};
 		
 		const defaultAudios = {
