@@ -245,9 +245,7 @@ module.exports = (_ => {
 			}
 			
 			openRoleContextMenu (event, role) {
-				BDFDB.LibraryModules.ContextMenuUtils.openContextMenu(event, function (e) {
-					return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("DeveloperContextMenu"), Object.assign({}, e, {id: role.id}));
-				});
+				BDFDB.LibraryModules.ContextMenuUtils.openContextMenu(event, e => BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("DeveloperContextMenu"), Object.assign({}, e, {id: role.id})));
 			}
 		};
 	})(window.BDFDB_Global.PluginUtils.buildPlugin(changeLog));
