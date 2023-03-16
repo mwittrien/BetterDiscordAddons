@@ -141,7 +141,8 @@
 		}},
 		"MediaEngineUtils": {"props": ["setOutputDevice", "setInputDevice"]},
 		"MemberDisplayUtils": {"strings": ["getUserProfile", "getGuildMemberProfile", "_userProfile"], "exported": false, "value": "exports", "map": {
-			"getDisplayProfile": [");return null"]
+			"getDisplayProfile": ["getUserProfile"],
+			"getUserProfile": ["function(){return"]
 		}},
 		"MentionUtils": {"strings": ["rawMessage", "mention_everyone", "mentionUsers"], "exported": false, "value": "exports", "map": {
 			"isRawMessageMentioned": ["rawMessage", "mention_everyone", "mentionUsers"]
@@ -230,9 +231,6 @@
 		}},
 		"UserSettingsProtoUtils": {"strings": ["UserSettingsProtoLastWriteTimes"], "exported": false, "value": "exports"},
 		"UserSettingsUtils": {"props": ["open", "updateAccount"]},
-		"UserThemeUtils": {"strings": [".default]", ".getUserProfile", ".getGuildMemberProfile"], "exported": false, "value": "exports", "map": {
-			"getUserProfile": [".default]"]
-		}},
 		"Utilities": {"props": ["flatMap", "cloneDeep"]},
 		"WindowUtils": {"props": ["minimize", "maximize", "close"]}
 	},

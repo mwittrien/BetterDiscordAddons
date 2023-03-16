@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.7.6
+ * @version 4.7.7
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -284,7 +284,7 @@ module.exports = (_ => {
 					return e.callOriginalMethod();
 				}});
 				
-				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UserThemeUtils, "getUserProfile", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MemberDisplayUtils, "getUserProfile", {after: e => {
 					if (!e.returnValue || !changedUsers[e.methodArguments[0]] || !changedUsers[e.methodArguments[0]].color5 && !changedUsers[e.methodArguments[0]].color6 && !changedUsers[e.methodArguments[0]].color7) return;
 					let newProfileObject = {};
 					for (let key in e.returnValue) newProfileObject[key] = e.returnValue[key];
