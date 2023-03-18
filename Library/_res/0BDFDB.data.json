@@ -259,8 +259,7 @@
 		}},
 		"Avatars": {"strings": ["\"statusColor\"", "ONLINE", "isMobile"], "exported": false, "value": "exports", "map": {
 			"AnimatedAvatar": ["compare"],
-			"Avatar": ["statusColor"],
-			"Sizes": ["SIZE_32"]
+			"Avatar": ["statusColor"]
 		}},
 		"Badges": {"strings": ["disableColor", "baseShapeRound", "textBadge"], "exported": false, "value": "exports", "map": {
 			"BadgeShapes": ["baseShapeRoundRight", "baseShapeRoundLeft"],
@@ -337,10 +336,9 @@
 			"Spinner": [".spinningCircleInner"],
 			"Types": ["WANDERING_CUBES", "wanderingCubes"]
 		}},
-		"StatusComponents": {"strings": ["{mask", ".mask,", "UNKNOWN"], "exported": false, "value": "exports", "map": {
-			"AnimatedStatus": ["useSpring"],
-			"Status": [".mask,"],
-			"Types": ["UNKNOWN", "INVISIBLE"]
+		"StatusComponents": {"strings": ["().status}", ".isMobile", ".ONLINE"], "exported": false, "value": "exports", "map": {
+			"Status": ["().status}", ".isMobile", ".ONLINE"],
+			"Types": ["\"online\"", "\"unknown\""]
 		}},
 		"Text": {"strings": ["lineClamp:", ".selectable", ".defaultColor"]},
 		"TextElement": {"strings": [".strong,", ".STANDARD"]},
