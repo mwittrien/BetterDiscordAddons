@@ -259,7 +259,7 @@
 			"Avatar": ["statusColor"],
 			"Sizes": ["SIZE_32"]
 		}},
-		"Badges": {"strings": ["baseShapeRound", "textBadge"], "exported": false, "value": "exports", "map": {
+		"Badges": {"strings": ["disableColor", "baseShapeRound", "textBadge"], "exported": false, "value": "exports", "map": {
 			"BadgeShapes": ["baseShapeRoundRight", "baseShapeRoundLeft"],
 			"IconBadge": [".iconBadge"],
 			"NumberBadge": [".numberBadge"],
@@ -329,7 +329,7 @@
 			"LinkButton": [".apply(this"]
 		}},
 		"RoleMention": {"strings": ["rolePopout", "inlinePreview"], "funcStrings": ["inlinePreview"]},
-		"Scrollers": {"strings": ["().thin", "().none", "().auto", "().fade"], "exported": false, "value": "exports"},
+		"Scrollers": {"strings": ["().thin", "().none", "().auto", "().fade)}"], "exported": false, "value": "exports"},
 		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "wanderingCubes", ".spinningCircleInner"], "exported": false, "value": "exports", "map": {
 			"Spinner": [".spinningCircleInner"],
 			"Types": ["WANDERING_CUBES", "wanderingCubes"]
@@ -1622,7 +1622,7 @@
 		"UserSettingsSocialLinks": {"props": ["socialLinks", "link"]},
 		"UserSummaryItem": {"props": ["avatarContainerMasked", "container"]},
 		"UserTheme": {"props": ["userPopoutOuter", "userProfileOuter"]},
-		"Video": {"props": ["video", "fullScreen"]},
+		"Video": {"props": ["video", "fullScreen", "chatSidebarOpen"]},
 		"VoiceChannel": {"props": ["avatarSpeaking", "voiceUser"]},
 		"VoiceChannelLimit": {"props": ["total", "users", "wrapper"]},
 		"VoiceChannelList": {"props": ["list", "collapsed"]},
