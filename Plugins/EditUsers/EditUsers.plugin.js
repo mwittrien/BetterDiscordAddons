@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.7.7
+ * @version 4.7.8
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,10 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"added": {
-			"Settings Restructure": "Slightly changed the settings layout of the customization modal",
-			"Theme Settings": "You can now change the color sheme of other users"
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -355,7 +352,7 @@ module.exports = (_ => {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatars.Avatar, {
 										className: BDFDB.disCN.listavatar,
 										src: this.getUserAvatar(id),
-										size: BDFDB.LibraryComponents.Avatars.Sizes.SIZE_32,
+										size: BDFDB.LibraryComponents.AvatarConstants.Sizes.SIZE_32,
 										onClick: _ => this.openUserSettingsModal(BDFDB.LibraryStores.UserStore.getUser(id))
 									})
 								}))
