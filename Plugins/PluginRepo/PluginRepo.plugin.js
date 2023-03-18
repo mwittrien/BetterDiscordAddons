@@ -636,13 +636,15 @@ module.exports = (_ => {
 			onUserSettingsCogContextMenu (e) {
 				BDFDB.TimeUtils.timeout(_ => {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["label", ["BandagedBD", "BetterDiscord"]]]});
-					if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: "Plugin Repo",
-						id: BDFDB.ContextMenuUtils.createItemId(this.name, "repo"),
-						action: _ => {
-							BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo");
-						}
-					}));
+					if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) {
+						let item = BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							label: "Plugin Repo",
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, "repo"),
+							action: _ => BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo")
+						});
+						if (children[index].props.children.find(n => n && n.props && n.props.id == "themerepo-repo")) children[index].props.children.splice(children[index].props.children.length-1, 0, item);
+						else children[index].props.children.push(item);
+					}
 				});
 			}
 			

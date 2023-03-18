@@ -779,9 +779,7 @@ module.exports = (_ => {
 					if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: "Theme Repo",
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "repo"),
-						action: _ => {
-							BDFDB.LibraryModules.UserSettingsUtils.open("themerepo");
-						}
+						action: _ => BDFDB.LibraryModules.UserSettingsUtils.open("themerepo")
 					}));
 				});
 			}
