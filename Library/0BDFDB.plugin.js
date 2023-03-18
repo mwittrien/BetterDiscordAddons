@@ -2945,13 +2945,13 @@ module.exports = (_ => {
 					if (!Internal.DiscordConstants.Colors) return null;
 					status = typeof status == "string" ? status.toLowerCase() : null;
 					switch (status) {
-						case "online": return useColor ? Internal.DiscordConstants.Colors._GREEN_600 : "var(--status-positive)";
-						case "idle": return useColor ? Internal.DiscordConstants.Colors._YELLOW : "var(--status-warning)";
-						case "dnd": return useColor ? Internal.DiscordConstants.Colors._RED : "var(--status-danger)";
+						case "online": return useColor ? Internal.DiscordConstants.Colors.GREEN_600 : "var(--status-positive)";
+						case "idle": return useColor ? Internal.DiscordConstants.Colors.YELLOW : "var(--status-warning)";
+						case "dnd": return useColor ? Internal.DiscordConstants.Colors.RED : "var(--status-danger)";
 						case "playing": return useColor ? Internal.DiscordConstants.Colors.BRAND : "var(--bdfdb-blurple)";
 						case "listening": return Internal.DiscordConstants.Colors.SPOTIFY;
 						case "streaming": return Internal.DiscordConstants.Colors.TWITCH;
-						default: return Internal.DiscordConstants.Colors._GREY;
+						default: return Internal.DiscordConstants.Colors.GREY;
 					}
 				};
 				BDFDB.UserUtils.getActivity = function (id = BDFDB.UserUtils.me.id) {
