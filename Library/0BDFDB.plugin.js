@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.6
+ * @version 3.1.7
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2945,13 +2945,13 @@ module.exports = (_ => {
 					if (!Internal.DiscordConstants.Colors) return null;
 					status = typeof status == "string" ? status.toLowerCase() : null;
 					switch (status) {
-						case "online": return useColor ? Internal.DiscordConstants.Colors.GREEN_600 : "var(--status-positive)";
-						case "idle": return useColor ? Internal.DiscordConstants.Colors.YELLOW : "var(--status-warning)";
-						case "dnd": return useColor ? Internal.DiscordConstants.Colors.RED : "var(--status-danger)";
+						case "online": return useColor ? Internal.DiscordConstants.Colors.GREEN_360 : "var(--status-positive)";
+						case "idle": return useColor ? Internal.DiscordConstants.Colors.YELLOW_300 : "var(--status-warning)";
+						case "dnd": return useColor ? Internal.DiscordConstants.Colors.RED_RED_400 : "var(--status-danger)";
 						case "playing": return useColor ? Internal.DiscordConstants.Colors.BRAND : "var(--bdfdb-blurple)";
 						case "listening": return Internal.DiscordConstants.Colors.SPOTIFY;
 						case "streaming": return Internal.DiscordConstants.Colors.TWITCH;
-						default: return Internal.DiscordConstants.Colors.GREY;
+						default: return Internal.DiscordConstants.Colors.PRIMARY_400;
 					}
 				};
 				BDFDB.UserUtils.getActivity = function (id = BDFDB.UserUtils.me.id) {
@@ -4562,7 +4562,7 @@ module.exports = (_ => {
 					render() {
 						if (this.state.hasError) return Internal.LibraryModules.React.createElement("span", {
 							style: {
-								background: Internal.DiscordConstants.Colors.PRIMARY,
+								background: Internal.DiscordConstants.Colors.PRIMARY_400,
 								borderRadius: 5,
 								color: "var(--status-danger)",
 								fontSize: 12,
@@ -6148,7 +6148,7 @@ module.exports = (_ => {
 					handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
 					handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
 					render() {
-						let color = BDFDB.ColorUtils.convert(this.props.role.colorString, "RGB") || Internal.DiscordConstants.Colors.PRIMARY_300;
+						let color = BDFDB.ColorUtils.convert(this.props.role.colorString, "RGB") || Internal.DiscordConstants.Colors.PRIMARY_400;
 						return BDFDB.ReactUtils.createElement("li", {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.userrole, this.props.className),
 							style: {borderColor: BDFDB.ColorUtils.setAlpha(color, 0.6)},

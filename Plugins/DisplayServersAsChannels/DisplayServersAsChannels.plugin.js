@@ -221,7 +221,7 @@ module.exports = (_ => {
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildBadge, {
 							size: this.settings.amounts.serverElementHeight * 0.5,
-							badgeColor: BDFDB.DiscordConstants.Colors.GREY,
+							badgeColor: BDFDB.DiscordConstants.Colors.PRIMARY_400,
 							tooltipColor: BDFDB.LibraryComponents.TooltipContainer.Colors.BLACK,
 							tooltipPosition: BDFDB.LibraryComponents.TooltipContainer.Positions.RIGHT,
 							guild: e.instance.props.guild
