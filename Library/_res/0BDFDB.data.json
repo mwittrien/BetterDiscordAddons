@@ -1473,7 +1473,7 @@
 		"GuildSettingsEmoji": {"props": ["emojiRow", "emojiAliasPlaceholder"]},
 		"GuildSettingsInvite": {"props": ["countdownColumn", "inviteSettingsInviteRow"]},
 		"GuildSettingsMember": {"props": ["member", "membersFilterPopout"]},
-		"GuildsListItem": {"props": ["listItemWrapper", "listItemTooltip"]},
+		"GuildsListItem": {"props": ["listItemWrapper", "listItemTooltip"], "length": 6, "smaller": true},
 		"GuildsItems": {"props": ["circleIcon", "guildsError"]},
 		"GuildsWrapper": {"props": ["scroller", "unreadMentionsBar", "wrapper"]},
 		"HeaderBar": {"props": ["container", "children", "toolbar"]},
