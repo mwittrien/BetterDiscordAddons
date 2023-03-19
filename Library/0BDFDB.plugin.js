@@ -4738,7 +4738,7 @@ module.exports = (_ => {
 							children: [
 								!this.props.noRemove ? BDFDB.ReactUtils.createElement(Internal.LibraryComponents.Clickable, {
 									"aria-label": BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-									className: BDFDB.disCNS.hovercardremovebutton + BDFDB.disCNS.hovercardremovebuttondefault,
+									className: BDFDB.disCNS.hovercardremovebutton + BDFDB.disCN.hovercardremovebuttondefault,
 									onClick: e => {
 										if (typeof this.props.onRemove == "function") this.props.onRemove(e, this);
 										BDFDB.ListenerUtils.stopEvent(e);
