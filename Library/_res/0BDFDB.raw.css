@@ -778,11 +778,8 @@ img:not([src]), img[src=""], img[src="null"] {
 	padding: 0 10px;
 	margin-bottom: 10px;
 }
-[REPLACE_CLASS_themedark] [REPLACE_CLASS_settingstablecard][REPLACE_CLASS_cardprimaryoutline] {
-	border: 1px solid var(--primary-400, --background-tertiary);
-}
-[REPLACE_CLASS_themelight] [REPLACE_CLASS_settingstablecard][REPLACE_CLASS_cardprimaryoutline] {
-	border: 1px solid var(--primary-300, --background-tertiary);
+[REPLACE_CLASS_settingstablecard][REPLACE_CLASS_cardprimaryoutline] {
+	border: 1px solid var(--background-tertiary);
 }
 [REPLACE_CLASS_settingstablecardlabel] {
 	display: flex;
