@@ -1090,7 +1090,7 @@ module.exports = (_ => {
 									e.instance.props.alt && {label: "Alt", text: e.instance.props.alt},
 									{label: "Source", text: url.split("?width")[0].split("?height")[0].split("?size")[0]},
 									{label: "Size", text: `${e.instance.props.width}x${e.instance.props.height}px`},
-									cachedImages && cachedImages.amount && cachedImages.amount > 1 && {label: filterForVideos ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE ? BDFDB.L, text: `${cachedImages.index + 1 || 1} of ${cachedImages.amount}`}
+									cachedImages && cachedImages.amount && cachedImages.amount > 1 && {label: filterForVideos ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE, text: `${cachedImages.index + 1 || 1} of ${cachedImages.amount}`}
 								].filter(n => n).map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 									className: BDFDB.disCN._imageutilitiesdetails,
 									children: [
