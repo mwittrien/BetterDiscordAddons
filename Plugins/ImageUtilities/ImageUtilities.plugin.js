@@ -959,11 +959,10 @@ module.exports = (_ => {
 				}
 				else {
 					let url = this.getImageSrc(viewedImage && viewedImage.proxy_url || typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})).props.src || e.instance.props.src);
-					let isVideo = this.isValid(url, "video");
 				
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.downloadlink]]});
 					if (index > -1) {
-						let type = isVideo ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
+						let type = filterForVideos ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
 						let openContext = event => BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 							children: Object.keys(this.defaults.zoomSettings).map(type => {
 								let isBoolean = typeof this.defaults.zoomSettings[type].value == "boolean";
@@ -1068,7 +1067,7 @@ module.exports = (_ => {
 										}
 									})
 								],
-								this.settings.viewerSettings.zoomMode && !isVideo && [
+								this.settings.viewerSettings.zoomMode && !filterForVideos && [
 									BDFDB.ReactUtils.createElement("span", {
 										className: BDFDB.disCN.downloadlink,
 										children: "|",
@@ -1091,7 +1090,7 @@ module.exports = (_ => {
 									e.instance.props.alt && {label: "Alt", text: e.instance.props.alt},
 									{label: "Source", text: url.split("?width")[0].split("?height")[0].split("?size")[0]},
 									{label: "Size", text: `${e.instance.props.width}x${e.instance.props.height}px`},
-									cachedImages && cachedImages.amount && cachedImages.amount > 1 && {label: "Image", text: `${cachedImages.index + 1 || 1} of ${cachedImages.amount}`}
+									cachedImages && cachedImages.amount && cachedImages.amount > 1 && {label: filterForVideos ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE ? BDFDB.L, text: `${cachedImages.index + 1 || 1} of ${cachedImages.amount}`}
 								].filter(n => n).map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 									className: BDFDB.disCN._imageutilitiesdetails,
 									children: [
