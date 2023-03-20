@@ -1544,12 +1544,17 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
     top: 16px;
     left: 16px;
 }
-.audioMetadata-1Hrt8T > *:first-child::before,
-.audioMetadata-1Hrt8T > *:first-child::after {
+.wrapperAudio-1Bzv_Z .audioMetadata-1Hrt8T > *:first-child::before,
+.wrapperAudio-1Bzv_Z .audioMetadata-1Hrt8T > *:first-child::after {
     top: 10px;
     left: 10px;
     width: 24px;
     height: 32px;
+}
+.wrapperAudio-1Bzv_Z.newMosaicStyle-31sBoZ .audioMetadata-1Hrt8T > *:first-child::before,
+.wrapperAudio-1Bzv_Z.newMosaicStyle-31sBoZ .audioMetadata-1Hrt8T > *:first-child::after {
+    top: 16px;
+    left: 16px;
 }
 .uploadContainer-TCg-Ji .icon-2bPCaV::before,
 .uploadContainer-TCg-Ji .icon-2bPCaV::after {
@@ -1669,7 +1674,8 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 }
 .filenameLinkWrapper-3Rc6sk,
 a.fileNameLink-1odyIc,
-a.metadataName-1KMZtB {
+a.metadataName-1KMZtB,
+a.metadataDownload-3IY84h {
 	color: rgb(var(--accentcolor));
 }
 
