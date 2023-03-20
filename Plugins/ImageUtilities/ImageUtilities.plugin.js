@@ -1067,7 +1067,7 @@ module.exports = (_ => {
 										}
 									})
 								],
-								this.settings.viewerSettings.zoomMode && !filterForVideos && [
+								this.settings.viewerSettings.zoomMode && !filterForVideos && !this.isValid(e.instance.props.src, "gif") && [
 									BDFDB.ReactUtils.createElement("span", {
 										className: BDFDB.disCN.downloadlink,
 										children: "|",
