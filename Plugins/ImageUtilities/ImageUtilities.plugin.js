@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.1.8
+ * @version 5.1.9
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -74,22 +74,22 @@ module.exports = (_ => {
 		};
 		
 		const fileTypes = {
-			"3gp":		{copyable: false,	searchable: false,	video: true,	signs: [[0x66, 0x74, 0x79, 0x70, 0x33, 0x67]]},
-			"avi":		{copyable: false,	searchable: false,	video: true,	signs: [[0x41, 0x56, 0x49, 0x20]]},
-			"flv":		{copyable: false,	searchable: false,	video: true,	signs: [[0x46, 0x4C, 0x56]]},
-			"jpeg":		{copyable: true,	searchable: true,	video: false,	signs: [[0xFF, 0xD8, 0xFF, 0xEE]]},
-			"jpg":		{copyable: true,	searchable: true,	video: false,	signs: [[0xFF, 0xD8, 0xFF, 0xDB], [0xFF, 0xD8, 0xFF, 0xE0], [0xFF, 0xD8, 0xFF, 0xE1]]},
-			"gif":		{copyable: false,	searchable: true,	video: false,	signs: [[0x47, 0x49, 0x46, 0x38, 0x37, 0x61], [0x47, 0x49, 0x46, 0x38, 0x39, 0x61]]},
-			"mov":		{copyable: false,	searchable: false,	video: true,	signs: [[null, null, null, null, 0x6D, 0x6F, 0x6F, 0x76], [null, null, null, null, 0x66, 0x74, 0x79, 0x70, 0x71, 0x74, 0x20, 0x20]]},
-			"mp4":		{copyable: false,	searchable: false,	video: true,	signs: [[null, null, null, null, 0x66, 0x74, 0x79, 0x70]]},
-			"mpeg-1":	{copyable: false,	searchable: false,	video: true,	signs: [[0x00, 0x00, 0x01, 0xBA]]},
-			"mpeg-2":	{copyable: false,	searchable: false,	video: true,	signs: [[0x00, 0x00, 0x01, 0xB3]]},
-			"ogg":		{copyable: false,	searchable: false,	video: true,	signs: [[0x4F, 0x67, 0x67, 0x53]]},
-			"png":		{copyable: true,	searchable: true,	video: false,	signs: [[0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]]},
-			"svg":		{copyable: false,	searchable: false,	video: false,	signs: [[0x3C]]},
-			"webm":		{copyable: false,	searchable: false,	video: true,	signs: [[0x1A, 0x45, 0xDF, 0xA3]]},
-			"webp":		{copyable: false,	searchable: true,	video: false,	signs: [[0x52, 0x49, 0x46, 0x46, null, null, null, null, 0x57, 0x45, 0x42, 0x50]]},
-			"wmv":		{copyable: false,	searchable: false,	video: true,	signs: [[0x30, 0x26, 0xB2, 0x75, 0x8E, 0x66, 0xCF, 0x11], [0xA6, 0xD9, 0x00, 0xAA, 0x00, 0x62, 0xCE, 0x6C]]}
+			"3gp":		{copyable: false,	searchable: false,	gif: false,	video: true,	signs: [[0x66, 0x74, 0x79, 0x70, 0x33, 0x67]]},
+			"avi":		{copyable: false,	searchable: false,	gif: false,	video: true,	signs: [[0x41, 0x56, 0x49, 0x20]]},
+			"flv":		{copyable: false,	searchable: false,	gif: false,	video: true,	signs: [[0x46, 0x4C, 0x56]]},
+			"jpeg":		{copyable: true,	searchable: true,	gif: false,	video: false,	signs: [[0xFF, 0xD8, 0xFF, 0xEE]]},
+			"jpg":		{copyable: true,	searchable: true,	gif: false,	video: false,	signs: [[0xFF, 0xD8, 0xFF, 0xDB], [0xFF, 0xD8, 0xFF, 0xE0], [0xFF, 0xD8, 0xFF, 0xE1]]},
+			"gif":		{copyable: false,	searchable: true,	gif: true,	video: false,	signs: [[0x47, 0x49, 0x46, 0x38, 0x37, 0x61], [0x47, 0x49, 0x46, 0x38, 0x39, 0x61]]},
+			"mov":		{copyable: false,	searchable: false,	gif: false,	video: true,	signs: [[null, null, null, null, 0x6D, 0x6F, 0x6F, 0x76], [null, null, null, null, 0x66, 0x74, 0x79, 0x70, 0x71, 0x74, 0x20, 0x20]]},
+			"mp4":		{copyable: false,	searchable: false,	gif: false,	video: true,	signs: [[null, null, null, null, 0x66, 0x74, 0x79, 0x70]]},
+			"mpeg-1":	{copyable: false,	searchable: false,	gif: false,	video: true,	signs: [[0x00, 0x00, 0x01, 0xBA]]},
+			"mpeg-2":	{copyable: false,	searchable: false,	gif: false,	video: true,	signs: [[0x00, 0x00, 0x01, 0xB3]]},
+			"ogg":		{copyable: false,	searchable: false,	gif: false,	video: true,	signs: [[0x4F, 0x67, 0x67, 0x53]]},
+			"png":		{copyable: true,	searchable: true,	gif: false,	video: false,	signs: [[0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]]},
+			"svg":		{copyable: false,	searchable: false,	gif: false,	video: false,	signs: [[0x3C]]},
+			"webm":		{copyable: false,	searchable: false,	gif: false,	video: true,	signs: [[0x1A, 0x45, 0xDF, 0xA3]]},
+			"webp":		{copyable: false,	searchable: true,	gif: false,	video: false,	signs: [[0x52, 0x49, 0x46, 0x46, null, null, null, null, 0x57, 0x45, 0x42, 0x50]]},
+			"wmv":		{copyable: false,	searchable: false,	gif: false,	video: true,	signs: [[0x30, 0x26, 0xB2, 0x75, 0x8E, 0x66, 0xCF, 0x11], [0xA6, 0xD9, 0x00, 0xAA, 0x00, 0x62, 0xCE, 0x6C]]}
 		};
 		
 		const LazyImageSiblingComponent = class LazyImageSibling extends BdApi.React.Component {
@@ -116,7 +116,7 @@ module.exports = (_ => {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._imageutilitiessibling, this.props.className),
 					onClick: event => {
 						BDFDB.ListenerUtils.stopEvent(event);
-						_this.switchImages(this.props.offset);
+						_this.switchImages(this.props.offset, _this.isValid(this.props.url, "video"));
 					},
 					children: [
 						this.props.loadedImage || BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SpinnerComponents.Spinner, {
@@ -235,18 +235,18 @@ module.exports = (_ => {
 					},
 					engines: {
 						_all: 		{value: true, 	name: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url: null},
-						Baidu: 		{value: true, 	name: "Baidu", 		url: "http://image.baidu.com/pcdutu?queryImageUrl=" + imgUrlReplaceString},
-						Bing: 		{value: true, 	name: "Bing", 		url: "https://www.bing.com/images/search?q=imgurl:" + imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
-						Google:		{value: true, 	name: "Google", 	url: "https://www.google.com/searchbyimage?sbisrc=1&image_url=" + imgUrlReplaceString},
-						GoogleLens:	{value: true, 	name: "Google Lens", 	url: "https://lens.google.com/uploadbyurl?url=" + imgUrlReplaceString},
-						ImgOps:		{value: true, 	name: "ImgOps", 	raw: true, 	url: "https://imgops.com/specialized+reverse/" + imgUrlReplaceString},
-						IQDB:		{value: true, 	name: "IQDB", 		url: "https://iqdb.org/?url=" + imgUrlReplaceString},
-						Reddit: 	{value: true, 	name: "Reddit", 	url: "http://karmadecay.com/search?q=" + imgUrlReplaceString},
-						SauceNAO: 	{value: true, 	name: "SauceNAO", 	url: "https://saucenao.com/search.php?db=999&url=" + imgUrlReplaceString},
-						Sogou: 		{value: true, 	name: "Sogou", 		url: "http://pic.sogou.com/ris?flag=1&drag=0&query=" + imgUrlReplaceString + "&flag=1"},
-						TinEye:		{value: true, 	name: "TinEye", 	url: "https://tineye.com/search?url=" + imgUrlReplaceString},
-						WhatAnime:	{value: true,	name: "WhatAnime",	url: "https://trace.moe/?url=" + imgUrlReplaceString},
-						Yandex: 	{value: true, 	name: "Yandex", 	url: "https://yandex.com/images/search?url=" + imgUrlReplaceString + "&rpt=imageview"}
+						Baidu: 		{value: true, 	name: "Baidu", 					url: "http://image.baidu.com/pcdutu?queryImageUrl=" + imgUrlReplaceString},
+						Bing: 		{value: true, 	name: "Bing", 					url: "https://www.bing.com/images/search?q=imgurl:" + imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
+						Google:		{value: true, 	name: "Google", 				url: "https://www.google.com/searchbyimage?sbisrc=1&image_url=" + imgUrlReplaceString},
+						GoogleLens:	{value: true, 	name: "Google Lens",			url: "https://lens.google.com/uploadbyurl?url=" + imgUrlReplaceString},
+						ImgOps:		{value: true, 	name: "ImgOps",		raw: true, 	url: "https://imgops.com/specialized+reverse/" + imgUrlReplaceString},
+						IQDB:		{value: true, 	name: "IQDB", 					url: "https://iqdb.org/?url=" + imgUrlReplaceString},
+						Reddit: 	{value: true, 	name: "Reddit", 				url: "http://karmadecay.com/search?q=" + imgUrlReplaceString},
+						SauceNAO: 	{value: true, 	name: "SauceNAO", 				url: "https://saucenao.com/search.php?db=999&url=" + imgUrlReplaceString},
+						Sogou: 		{value: true, 	name: "Sogou", 					url: "http://pic.sogou.com/ris?flag=1&drag=0&query=" + imgUrlReplaceString + "&flag=1"},
+						TinEye:		{value: true, 	name: "TinEye", 				url: "https://tineye.com/search?url=" + imgUrlReplaceString},
+						WhatAnime:	{value: true,	name: "WhatAnime",				url: "https://trace.moe/?url=" + imgUrlReplaceString},
+						Yandex: 	{value: true, 	name: "Yandex", 				url: "https://yandex.com/images/search?url=" + imgUrlReplaceString + "&rpt=imageview"}
 					}
 				};
 				
@@ -255,11 +255,13 @@ module.exports = (_ => {
 				this.modulePatches = {
 					before: [
 						"ImageModal",
+						"ImageVideoModal",
 						"MessageAccessories",
 						"Spoiler"
 					],
 					after: [
 						"ImageModal",
+						"ImageVideoModal",
 						"LazyImage",
 						"LazyImageZoomable",
 						"ModalCarousel",
@@ -324,6 +326,15 @@ module.exports = (_ => {
 					}
 					${BDFDB.dotCN._imageutilitiesgallery} ~ ${BDFDB.dotCN.imagemodalnavbutton} {
 						display: none;
+					}
+					${BDFDB.dotCNS.imagemodal + BDFDB.dotCNS.attachment + BDFDB.dotCN.attachmentvideocontrols},
+					${BDFDB.dotCNS.imagemodal + BDFDB.dotCN.attachment + BDFDB.dotCNS.attachmentcontrolshidden + BDFDB.dotCN.attachmentvideocontrols}:hover {
+						bottom: -10px;
+						transform: unset !important;
+						transition: bottom 0.3s ease;
+					}
+					${BDFDB.dotCNS.imagemodal + BDFDB.dotCN.attachment + BDFDB.dotCNS.attachmentcontrolshidden + BDFDB.dotCN.attachmentvideocontrols} {
+						bottom: -42px;
 					}
 					${BDFDB.dotCNS.imagemodal + BDFDB.notCN._imageutilitiessibling} > ${BDFDB.dotCN.imagewrapper} {
 						display: flex;
@@ -423,7 +434,7 @@ module.exports = (_ => {
 			}
 			
 			onStart () {
-				BDFDB.ListenerUtils.add(this, document.body, "click", BDFDB.dotCNS.message + BDFDB.dotCNS.imagewrapper + BDFDB.dotCNC.imageoriginallink + BDFDB.dotCNS.message + BDFDB.dotCNS.imagewrapper + "img", e => this.cacheClickedImage(e.target));
+				BDFDB.ListenerUtils.add(this, document.body, "click", [BDFDB.dotCN.imageoriginallink, "img", BDFDB.dotCN.attachmentcover, BDFDB.dotCN.attachmentcovericon, "video"].map(n => BDFDB.dotCNS.message + BDFDB.dotCNS.imagewrapper + n).join(", "), e => this.cacheClickedImage(e.target));
 
 				this.forceUpdateAll();
 			}
@@ -708,7 +719,7 @@ module.exports = (_ => {
 
 			onMessageContextMenu (e) {
 				if (!e.instance.props.message || !e.instance.props.channel || !e.instance.props.target) return;
-				const target = e.instance.props.target.tagName == "A" && BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.imageoriginallink) && e.instance.props.target.parentElement.querySelector("img, video") || e.instance.props.target;
+				const target = e.instance.props.target.tagName == "A" && BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.imageoriginallink) && e.instance.props.target.parentElement.querySelector("img") || (BDFDB.DOMUtils.getParent(BDFDB.dotCN.messageattachment, e.instance.props.target) || e.instance.props.target).querySelector("img, video") || e.instance.props.target;
 				if (target.tagName == "A" && e.instance.props.message.embeds && e.instance.props.message.embeds[0] && (e.instance.props.message.embeds[0].type == "image" || e.instance.props.message.embeds[0].type == "video" || e.instance.props.message.embeds[0].type == "gifv")) this.injectItem(e, [target.href], null, true);
 				else if (target.tagName == "IMG" && target.complete && target.naturalHeight) {
 					if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagewrapper, target) || BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.imagesticker)) this.injectItem(e, [{file: target.src, original: this.getTargetLink(e.instance.props.target) || this.getTargetLink(target)}], null, true);
@@ -803,16 +814,21 @@ module.exports = (_ => {
 				let enabledEngines = BDFDB.ObjectUtils.filter(this.settings.engines, n => n);
 				let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
 				let engineKeys = Object.keys(enginesWithoutAll);
+				
 				let locations = Object.keys(ownLocations).filter(n => ownLocations[n].enabled);
+				
 				let isVideo = this.isValid(urlData.file, "video");
 				let type = isVideo ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
+				
 				return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: [
 						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-link"),
 							action: _ => {
-								BDFDB.LibraryModules.WindowUtils.copy(urlData.original.split("?size")[0]);
+								let url = urlData.original.split("?width")[0].split("?height")[0].split("?size")[0];
+								url = url.indexOf("discordapp.com/avatars/") > 0 || url.indexOf("discordapp.com/icons/") > 0 ? `${url}?size=4096` : url;
+								BDFDB.LibraryModules.WindowUtils.copy(url);
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED, {type: "success"});
 							}
 						}),
@@ -820,7 +836,9 @@ module.exports = (_ => {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_MEDIA_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-media-link"),
 							action: _ => {
-								BDFDB.LibraryModules.WindowUtils.copy(urlData.file.split("?size")[0]);
+								let url = urlData.file.split("?width")[0].split("?height")[0].split("?size")[0];
+								url = url.indexOf("discordapp.com/avatars/") > 0 || url.indexOf("discordapp.com/icons/") > 0 ? `${url}?size=4096` : url;
+								BDFDB.LibraryModules.WindowUtils.copy(url);
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED, {type: "success"});
 							}
 						}),
@@ -840,33 +858,28 @@ module.exports = (_ => {
 							action: _ => {
 								const imageThrowaway = document.createElement(isVideo ? "video" : "img");
 								imageThrowaway.addEventListener(isVideo ? "loadedmetadata" : "load", function() {
+									_this.cacheClickedImage(target);
 									BDFDB.LibraryModules.ModalUtils.openModal(modalData => {
-										_this.cacheClickedImage(target);
 										return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalRoot, Object.assign({
 											className: BDFDB.disCN.imagemodal
 										}, modalData, {
 											size: BDFDB.LibraryComponents.ModalComponents.ModalSize.DYNAMIC,
 											"aria-label": BDFDB.LanguageUtils.LanguageStrings.IMAGE,
-											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
-												animated: !!isVideo,
+											children: isVideo ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageVideoModal, {
+												src: imageThrowaway.src,
+												poster: this.getPosterUrl(imageThrowaway.src),
+												width: this.videoWidth,
+												naturalWidth: this.videoWidth,
+												height: this.videoHeight,
+												naturalHeight: this.videoHeight,
+												renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
+											}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
 												src: imageThrowaway.src,
 												original: urlData.original,
-												width: isVideo ? this.videoWidth : this.width,
-												height: isVideo ? this.videoHeight : this.height,
+												width: this.width,
+												height: this.height,
 												className: BDFDB.disCN.imagemodalimage,
-												shouldAnimate: true,
-												renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props),
-												children: !isVideo ? null : (videoData => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Video, {
-													ignoreMaxSize: true,
-													poster: _this.getPosterUrl(urlData.src || urlData.file),
-													src: urlData.src || urlData.file,
-													width: videoData.size.width,
-													height: videoData.size.height,
-													naturalWidth: this.videoWidth,
-													naturalHeight: this.videoHeight,
-													play: true,
-													playOnHover: !!BDFDB.LibraryStores.AccessibilityStore.useReducedMotion
-												}))
+												renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
 											})
 										}), true);
 									});
@@ -923,7 +936,7 @@ module.exports = (_ => {
 			}
 			
 			processModalCarousel (e) {
-				if (!this.settings.viewerSettings.galleryMode || !BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ImageModal"})) return;
+				if (!this.settings.viewerSettings.galleryMode || !BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["ImageVideoModal", "ImageModal"]})) return;
 				e.returnvalue.props.className = "";
 				e.returnvalue.props.children[0] = null;
 				e.returnvalue.props.children[2] = null;
@@ -933,7 +946,11 @@ module.exports = (_ => {
 				}
 			}
 			
-			processImageModal (e) {
+			processImageVideoModal (e) {
+				this.processImageModal(e, true);
+			}
+			
+			processImageModal (e, filterForVideos) {
 				if (!e.returnvalue) {
 					if (switchedImageProps) {
 						e.instance.props = Object.assign(e.instance.props, switchedImageProps);
@@ -1118,7 +1135,7 @@ module.exports = (_ => {
 								let messages = [], index = -1;
 								if (result) {
 									messages = result.body.flat(10).reverse();
-									cachedImages = {all: this.filterMessagesForImages(messages, viewedImage)};
+									cachedImages = {all: this.filterMessagesForImages(messages, viewedImage, filterForVideos)};
 									index = this.getImageIndex(cachedImages.all, viewedImage);
 								}
 								if (index > -1) cachedImages = Object.assign(cachedImages, {
@@ -1160,8 +1177,8 @@ module.exports = (_ => {
 								this.addListener("keydown", "Gallery", event => {
 									if (!firedEvents.includes("Gallery")) {
 										firedEvents.push("Gallery");
-										if (event.keyCode == 37) this.switchImages(-1);
-										else if (event.keyCode == 39) this.switchImages(1);
+										if (event.keyCode == 37) this.switchImages(-1, filterForVideos);
+										else if (event.keyCode == 39) this.switchImages(1, filterForVideos);
 									}
 								});
 								this.addListener("keyup", "Gallery", _ => BDFDB.ArrayUtils.remove(firedEvents, "Gallery", true));
@@ -1210,9 +1227,8 @@ module.exports = (_ => {
 							}
 						}
 						
-						let isVideo = typeof e.instance.props.children == "function";
-						if (isVideo && !BDFDB.LibraryStores.AccessibilityStore.useReducedMotion) e.node.style.setProperty("pointer-events", "none");
-						if (this.settings.viewerSettings.zoomMode && !isVideo && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling)) {
+						if (this.isValid(e.instance.props.src, "gif") && !BDFDB.LibraryStores.AccessibilityStore.useReducedMotion) e.node.style.setProperty("pointer-events", "none");
+						if (this.settings.viewerSettings.zoomMode && typeof e.instance.props.children != "function" && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling)) {
 							e.node.style.setProperty("cursor", "zoom-in");
 							e.node.addEventListener("mousedown", event => {
 								if (event.which != 1 || e.node.querySelector("video")) return;
@@ -1447,7 +1463,7 @@ module.exports = (_ => {
 			
 			cacheClickedImage (target) {
 				if (!target) return;
-				const image = (BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagewrapper, target) || target).querySelector("img") || target;
+				const image = (BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagewrapper, target) || target).querySelector("img, video") || target;
 				if (!image) return;
 				const message = BDFDB.ReactUtils.findValue(image, "message", {up: true});
 				if (!message) return;
@@ -1552,20 +1568,22 @@ module.exports = (_ => {
 			}
 			
 			getImageIndex (messages, img) {
-				return messages.findIndex(i => i.messageId == img.messageId && (messages.filter(n => n.messageId == i.messageId).length < 2 || i.url && img.proxy_url.indexOf(i.url) > -1 || i.proxy_url && img.proxy_url.indexOf(i.proxy_url) > -1));
+				return messages.findIndex(i => i.messageId == img.messageId && (messages.filter(n => n.messageId == i.messageId).length < 2 || i.url && img.proxy_url && img.proxy_url.indexOf(i.url) > -1 || i.proxy_url && img.proxy_url && img.proxy_url.indexOf(i.proxy_url) > -1));
 			}
 			
-			filterMessagesForImages (messages, img) {
+			filterMessagesForImages (messages, img, filterForVideos) {
 				return messages.filter(m => m && m.channel_id == img.channelId && !BDFDB.LibraryStores.RelationshipStore.isBlocked(m.author.id) && (firstViewedImage && m.id == firstViewedImage.messageId || m.id == img.messageId || m.embeds.filter(e => e.image || e.thumbnail || e.video).length || m.attachments.filter(a => !a.filename.startsWith("SPOILER_")).length)).map(m => [m.attachments, m.embeds].flat(10).filter(n => n).map(i => Object.assign({messageId: m.id, channelId: img.channelId}, i, i.image, i.thumbnail, i.video))).flat(10).filter(n => {
 					if (!n) return false;
+					let type = (n.type || n.content_type || "").split("/")[0];
+					if (type && (filterForVideos && type != "video" || !filterForVideos && type == "video")) return false;
 					if (!n.content_type || img.proxy_url == n.proxy_url || img.proxy_url == n.url || img.proxy_url == n.href) return true;
 					let extension = (n.content_type.split("/")[1] || "").split("+")[0] || "";
-					if (extension && this.settings.galleryFilter[extension] === false) return false;
+					if (extension && (!fileTypes[extension] || this.settings.galleryFilter[extension] === false)) return false;
 					return true;
 				});
 			}
 			
-			switchImages (offset) {
+			switchImages (offset, filterForVideos) {
 				const newIndex = parseInt(cachedImages.index) + parseInt(offset);
 				if (newIndex < 0 || newIndex > (cachedImages.amount - 1)) return;
 				
@@ -1587,7 +1605,7 @@ module.exports = (_ => {
 					}).then(result => {
 						if (result && viewedImage) {
 							const messages = result.body.flat(10).reverse();
-							Object.assign(cachedImages, {all: this.filterForCopies([].concat(cachedImages.all, this.filterMessagesForImages(messages, viewedImage)))});
+							Object.assign(cachedImages, {all: this.filterForCopies([].concat(cachedImages.all, this.filterMessagesForImages(messages, viewedImage, filterForVideos)))});
 							const index = this.getImageIndex(cachedImages.all, viewedImage);
 							cachedImages = Object.assign(cachedImages, {
 								channelId: viewedImage.channelId,
@@ -1614,7 +1632,7 @@ module.exports = (_ => {
 					}).then(result => {
 						if (result && viewedImage) {
 							const messages = result.body.flat(10).reverse();
-							Object.assign(cachedImages, {all: this.filterForCopies([].concat(this.filterMessagesForImages(messages, viewedImage), cachedImages.all))});
+							Object.assign(cachedImages, {all: this.filterForCopies([].concat(this.filterMessagesForImages(messages, viewedImage, filterForVideos), cachedImages.all))});
 							const index = this.getImageIndex(cachedImages.all, viewedImage);
 							cachedImages = Object.assign(cachedImages, {
 								channelId: viewedImage.channelId,
@@ -1638,7 +1656,7 @@ module.exports = (_ => {
 					height: thisViewedImage.height,
 					children: !isVideo ? null : (videoData => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Video, {
 						ignoreMaxSize: true,
-						poster: thisViewedImage.proxy_url.replace("https://cdn.discordapp.com", "https://media.discordapp.net").split("?size=")[0] + "?format=jpeg",
+						poster: this.getPosterUrl(thisViewedImage.proxy_url),
 						src: thisViewedImage.proxy_url,
 						width: videoData.size.width,
 						height: videoData.size.height,
