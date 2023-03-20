@@ -281,7 +281,7 @@ module.exports = (_ => {
 				
 				this.css = `
 					${BDFDB.dotCNS._imageutilitiesimagedetailsadded + BDFDB.dotCN.imagewrapper} {
-						border-radius: 8px; !important;
+						border-radius: 8px !important;
 						height: calc(100% - 1rem - 16px) !important;
 						max-height: unset !important;
 					}
