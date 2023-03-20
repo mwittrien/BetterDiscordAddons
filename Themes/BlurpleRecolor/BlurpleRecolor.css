@@ -1539,6 +1539,11 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
     width: 30px;
     height: 40px;
 }
+.attachment-1PZZB2.newMosaicStyle-35X6XO .icon-1KCy88 + *::before,
+.attachment-1PZZB2.newMosaicStyle-35X6XO .icon-1KCy88 + *::after {
+    top: 16px;
+    left: 16px;
+}
 .audioMetadata-1Hrt8T > *:first-child::before,
 .audioMetadata-1Hrt8T > *:first-child::after {
     top: 10px;
