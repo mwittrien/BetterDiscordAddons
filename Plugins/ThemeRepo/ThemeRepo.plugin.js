@@ -1025,10 +1025,10 @@ module.exports = (_ => {
 			getInstalledTheme (theme) {
 				if (!theme || typeof theme.authorname != "string") return;
 				const iTheme = BDFDB.BDUtils.getTheme(theme.name, false, true);
-				if (iTheme && theme.authorname.toUpperCase() == this.getString(iTheme.author).toUpperCase()) return iTheme;
+				if (iTheme && (theme.authorname.toUpperCase().indexOf(this.getString(iTheme.author).toUpperCase()) > -1 || this.getString(iTheme.author).toUpperCase().indexOf(theme.authorname.toUpperCase()) > -1)) return iTheme;
 				else if (theme.rawSourceUrl && window.BdApi && BdApi.Themes && typeof BdApi.Themes.getAll == "function") {
 					const filename = theme.rawSourceUrl.split("/").pop();
-					for (let t of BdApi.Themes.getAll()) if (t.filename == filename && theme.authorname.toUpperCase() == this.getString(t.author).toUpperCase()) return t;
+					for (let t of BdApi.Themes.getAll()) if (t.filename == filename && (theme.authorname.toUpperCase().indexOf(this.getString(t.author).toUpperCase()) > -1 || this.getString(t.author).toUpperCase().indexOf(theme.authorname.toUpperCase()) > -1)) return t;
 				}
 			}
 

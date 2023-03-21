@@ -841,10 +841,10 @@ module.exports = (_ => {
 			getInstalledPlugin (plugin) {
 				if (!plugin || typeof plugin.authorname != "string") return;
 				const iPlugin = BDFDB.BDUtils.getPlugin(plugin.name, false, true);
-				if (iPlugin && plugin.authorname.toUpperCase() == this.getString(iPlugin.author).toUpperCase()) return iPlugin;
+				if (iPlugin && (plugin.authorname.toUpperCase().indexOf(this.getString(iPlugin.author).toUpperCase()) > -1 || this.getString(iPlugin.author).toUpperCase().indexOf(plugin.authorname.toUpperCase()) > -1)) return iPlugin;
 				else if (plugin.rawSourceUrl && window.BdApi && BdApi.Plugins && typeof BdApi.Plugins.getAll == "function") {
 					const filename = plugin.rawSourceUrl.split("/").pop();
-					for (let p of BdApi.Plugins.getAll()) if (p.filename == filename && plugin.authorname.toUpperCase() == this.getString(p.author).toUpperCase()) return p;
+					for (let p of BdApi.Plugins.getAll()) if (p.filename == filename && (plugin.authorname.toUpperCase().indexOf(this.getString(p.author).toUpperCase()) > -1 || this.getString(p.author).toUpperCase().indexOf(plugin.authorname.toUpperCase()) > -1)) return p;
 				}
 			}
 
