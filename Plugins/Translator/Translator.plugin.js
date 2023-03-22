@@ -340,7 +340,7 @@ module.exports = (_ => {
 					"zh-CN": "zh",
 					"zh-TW": "cht"
 				},
-				key: "xxxxxxxxxxxxxxxxxxxx xxxxxxxxxx"
+				key: "xxxxxxxxxx xxxxxxxxxxxxxxxxxxxx"
 			}
 		};
 		
