@@ -340,7 +340,7 @@ module.exports = (_ => {
 					"zh-CN": "zh",
 					"zh-TW": "cht"
 				},
-				key: "appId (number) key (string)"
+				key: "xxxxxxxxxxxxxxxxxxxx xxxxxxxxxx"
 			}
 		};
 		
