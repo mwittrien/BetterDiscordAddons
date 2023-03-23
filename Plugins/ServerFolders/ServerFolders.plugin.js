@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.1.2
+ * @version 7.1.3
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -770,13 +770,13 @@ module.exports = (_ => {
 				
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
 				if (index > -1) {
-					if (parseInt(data.iconID) == -1 && data.useClosedIcon && !e.instance.props.expanded) children[index] = BDFDB.ReactUtils.createElement("div", {
+					if (parseInt(data.iconID) == -1 && (e.instance.props.expanded || data.useClosedIcon && !e.instance.props.expanded)) children[index] = BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.guildfoldericonwrapper,
 						children: BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN.guildfoldericonwrapperexpanded,
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 								name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
-								style: {color: BDFDB.ColorUtils.convert(data.folderColor || BDFDB.DiscordConstants.Colors.BRAND, "RGB")}
+								style: {color: BDFDB.ColorUtils.convert(data.color1 || BDFDB.DiscordConstants.Colors.BRAND, "RGB")}
 							})
 						})
 					});
