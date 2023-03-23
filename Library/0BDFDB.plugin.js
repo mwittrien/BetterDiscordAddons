@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.8
+ * @version 3.1.9
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -3123,11 +3123,12 @@ module.exports = (_ => {
 				BDFDB.ColorUtils = {};
 				BDFDB.ColorUtils.convert = function (color, conv, type) {
 					if (BDFDB.ObjectUtils.is(color)) {
-						var newColor = {};
+						let newColor = {};
 						for (let pos in color) newColor[pos] = BDFDB.ColorUtils.convert(color[pos], conv, type);
 						return newColor;
 					}
 					else {
+						if (typeof color == "string") color = color.replace(/calc\(.+\s*\*\s*([0-9\.\%]+)\)/g, "$1");
 						conv = conv === undefined || !conv ? conv = "RGBCOMP" : conv.toUpperCase();
 						type = type === undefined || !type || !["RGB", "RGBA", "RGBCOMP", "HSL", "HSLA", "HSLCOMP", "HEX", "HEXA", "INT"].includes(type.toUpperCase()) ? BDFDB.ColorUtils.getType(color) : type.toUpperCase();
 						if (conv == "RGBCOMP") {
@@ -3157,16 +3158,10 @@ module.exports = (_ => {
 								case "HSL":
 									var hslComp = processHSL(color.replace(/\s/g, "").slice(4, -1).split(","));
 									var r, g, b, m, c, x, p, q;
-									var h = hslComp[0] / 360, l = parseInt(hslComp[1]) / 100, s = parseInt(hslComp[2]) / 100; m = Math.floor(h * 6); c = h * 6 - m; x = s * (1 - l); p = s * (1 - c * l); q = s * (1 - (1 - c) * l);
-									switch (m % 6) {
-										case 0: r = s, g = q, b = x; break;
-										case 1: r = p, g = s, b = x; break;
-										case 2: r = x, g = s, b = q; break;
-										case 3: r = x, g = p, b = s; break;
-										case 4: r = q, g = x, b = s; break;
-										case 5: r = s, g = x, b = p; break;
-									}
-									return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+									var h = hslComp[0], s = processPercentage(hslComp[1]), l = processPercentage(hslComp[2]);
+									var a = s * Math.min(l, 1-l);
+									var f = (n, k = (n+h / 30) % 12) => parseInt((l - a * Math.max(Math.min(k-3, 9-k, 1), -1)) * 255);
+									return [f(0), f(8), f(4)];
 								case "HSLA":
 									var hslComp = color.replace(/\s/g, "").slice(5, -1).split(",");
 									return BDFDB.ColorUtils.convert(`hsl(${hslComp.slice(0, 3).join(",")})`, "RGBCOMP").concat(processA(hslComp.pop()));
@@ -3244,12 +3239,48 @@ module.exports = (_ => {
 						}
 					}
 					return null;
-					function processC(c) {if (c == null) {return 255;} else {c = parseInt(c.toString().replace(/[^0-9\-]/g, ""));return isNaN(c) || c > 255 ? 255 : c < 0 ? 0 : c;}};
-					function processRGB(comp) {return [].concat(comp).map(c => {return processC(c);});};
-					function processA(a) {if (a == null) {return 1;} else {a = a.toString();a = (a.indexOf("%") > -1 ? 0.01 : 1) * parseFloat(a.replace(/[^0-9\.\-]/g, ""));return isNaN(a) || a > 1 ? 1 : a < 0 ? 0 : a;}};
-					function processSL(sl) {if (sl == null) {return "100%";} else {sl = parseFloat(sl.toString().replace(/[^0-9\.\-]/g, ""));return (isNaN(sl) || sl > 100 ? 100 : sl < 0 ? 0 : sl) + "%";}};
-					function processHSL(comp) {comp = [].concat(comp);let h = parseFloat(comp.shift().toString().replace(/[^0-9\.\-]/g, ""));h = isNaN(h) || h > 360 ? 360 : h < 0 ? 0 : h;return [h].concat(comp.map(sl => {return processSL(sl);}));};
-					function processINT(c) {if (c == null) {return 16777215;} else {c = parseInt(c.toString().replace(/[^0-9]/g, ""));return isNaN(c) || c > 16777215 ? 16777215 : c < 0 ? 0 : c;}};
+					function processC (c) {
+						if (c == null) return 255;
+						else {
+							c = parseInt(c.toString().replace(/[^0-9\-]/g, ""));
+							return isNaN(c) || c > 255 ? 255 : c < 0 ? 0 : c;
+						}
+					};
+					function processRGB (comp) {
+						return [].concat(comp).map(processC);
+					};
+					function processA (a) {
+						if (a == null) return 1;
+						else {
+							a = a.toString();
+							a = (a.indexOf("%") > -1 ? 0.01 : 1) * parseFloat(a.replace(/[^0-9\.\-]/g, ""));
+							return isNaN(a) || a > 1 ? 1 : a < 0 ? 0 : a;
+						}
+					};
+					function processPercentage (p) {
+						if (p == null) return 1;
+						else return p.indexOf("%") > -1 ? parseFloat(p)/100 : p;
+					};
+					function processSL (sl) {
+						if (sl == null) return "100%";
+						else {
+							sl = parseFloat(sl.toString().replace(/[^0-9\.\-]/g, ""));
+							return (isNaN(sl) || sl > 100 ? 100 : sl < 0 ? 0 : sl) + "%";
+						}
+					};
+					function processHSL (comp) {
+						comp = [].concat(comp);
+						let h = parseFloat(comp.shift().toString().replace(/[^0-9\.\-]/g, ""));
+						h = isNaN(h) || h > 360 ? 360 : h < 0 ? 0 : h;
+						return [h].concat(comp.map(processSL));
+					};
+					function processINT (c) {
+						if (c == null) return 16777215;
+						else {
+							c = parseInt(c.toString().replace(/[^0-9]/g, ""));
+							return isNaN(c) || c > 16777215 ? 16777215 : c < 0 ? 0 : c;
+						}
+					};
 				};
 				BDFDB.ColorUtils.setAlpha = function (color, a, conv) {
 					if (BDFDB.ObjectUtils.is(color)) {
