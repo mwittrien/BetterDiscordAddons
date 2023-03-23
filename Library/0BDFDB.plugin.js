@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.1.9
+ * @version 3.2.0
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -3371,12 +3371,13 @@ module.exports = (_ => {
 					return parseInt(compare) < Math.sqrt(0.299 * color[0]**2 + 0.587 * color[1]**2 + 0.144 * color[2]**2);
 				};
 				BDFDB.ColorUtils.getType = function (color) {
-					if (color != null) {
+					if (color !== null) {
 						if (typeof color === "object" && (color.length == 3 || color.length == 4)) {
 							if (isRGB(color)) return "RGBCOMP";
 							else if (isHSL(color)) return "HSLCOMP";
 						}
 						else if (typeof color === "string") {
+							color = color.replace(/calc\(.+\s*\*\s*([0-9\.\%]+)\)/g, "$1");
 							if (/^#[a-f\d]{3}$|^#[a-f\d]{6}$/i.test(color)) return "HEX";
 							else if (/^#[a-f\d]{4}$|^#[a-f\d]{8}$/i.test(color)) return "HEXA";
 							else {
