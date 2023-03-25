@@ -2,7 +2,7 @@
  * @name TimedLightDarkMode
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.7
+ * @version 1.1.8
  * @description Adds a Time Slider to the Appearance Settings
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -100,10 +100,10 @@ module.exports = (_ => {
 			}
 
 			processUserSettingsAppearance (e) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FormItem", filter: n => n && n.props && n.props.options && n.props.options[0] && n.props.options[0].value == "dark"});
-				if (index == -1 || !children[index] || !children[index].props) return;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: n => n && n.props && n.props.children == BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY_DARK_SIDEBAR});
+				if (index == -1) return;
 				let slider;
-				children.splice(index + 1, 0, [
+				children.splice(index, 0, [
 					BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS._timedlightdarkmodetimersettings + BDFDB.disCN.margintop20,
 						children: [
@@ -115,7 +115,7 @@ module.exports = (_ => {
 								label: `${BDFDB.LanguageUtils.LanguageStrings.THEME} Timer`,
 								tag: BDFDB.LibraryComponents.FormComponents.FormTags.H5,
 								childProps: {
-									checkedColor: BDFDB.DiscordConstants.Colors.GREEN_600
+									checkedColor: BDFDB.DiscordConstants.Colors.GREEN_360
 								},
 								onChange: (value, instance) => {
 									this.startInterval();
