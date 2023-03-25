@@ -2,7 +2,7 @@
  * @name RevealAllSpoilers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.0
+ * @version 1.1.1
  * @description Allows you to reveal all Spoilers within a Message/Status by holding the Ctrl Key and clicking a Spoiler
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -74,12 +74,11 @@ module.exports = (_ => {
 			}
 			
 			processSpoiler (e) {
-				BDFDB.PatchUtils.patch(this, e.instance, "revealSpoiler", {after: e2 => {
-					if (e2.methodArguments[0].ctrlKey) {
-						BDFDB.ListenerUtils.stopEvent(e2.methodArguments[0]);
-						let parent = BDFDB.DOMUtils.getParent(e2.methodArguments[0].shiftKey ? BDFDB.dotCN.messageswrapper : BDFDB.dotCN.message, e2.methodArguments[0].target) || e2.methodArguments[0].target.parentElement;
-						if (parent) for (let spoiler of parent.querySelectorAll(BDFDB.dotCN.spoilerhidden)) if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagerepliedmessagepreview, spoiler)) spoiler.click();
-					}
+				BDFDB.PatchUtils.patch(this, e.instance, "removeObscurity", {after: e2 => {
+					if (!e2.methodArguments[0].ctrlKey) return;
+					BDFDB.ListenerUtils.stopEvent(e2.methodArguments[0]);
+					let parent = BDFDB.DOMUtils.getParent(e2.methodArguments[0].shiftKey ? BDFDB.dotCN.messageswrapper : BDFDB.dotCN.message, e2.methodArguments[0].target) || e2.methodArguments[0].target.parentElement;
+					if (parent) for (let spoiler of parent.querySelectorAll(BDFDB.dotCN.spoilerhidden)) if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagerepliedmessagepreview, spoiler)) spoiler.click();
 				}}, {noCache: true});
 			}
 		};
