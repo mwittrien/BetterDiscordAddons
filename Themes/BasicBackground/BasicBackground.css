@@ -1468,10 +1468,10 @@ body::after {
 	backdrop-filter: blur(var(--popoutblur));
 }
 
-#app-mount .spoilerText-27bIiA {							/* messageelement		spoiler								*/
+#app-mount .spoilerText-2G40u0 {							/* messageelement		spoiler								*/
 	background-color: rgba(var(--transparencycolor), .2);
 }
-#app-mount .spoilerText-27bIiA.hidden-3B-Rum {				/* messageelement		hiddenspoiler						*/
+#app-mount .spoilerText-2G40u0.hidden-2lQZ5q {				/* messageelement		hiddenspoiler						*/
 	background-color: rgba(var(--transparencycolor), .6);
 }
 
