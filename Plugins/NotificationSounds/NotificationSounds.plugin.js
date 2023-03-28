@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.7.8
+ * @version 3.7.9
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -462,11 +462,12 @@ module.exports = (_ => {
 													{key: "streamMute", label: ["Mute while", BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {style: {marginLeft: 6}, size: 12, status: BDFDB.LibraryComponents.StatusComponents.Types.STREAMING})]},
 												].map(n => types[type][n.key] !== null && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, {
 													label: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+														align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 														children: n.label
 													}),
 													hint: n.hint,
 													id: BDFDB.ContextMenuUtils.createItemId(this.name, type, n.key),
-													checked: types[type][n.key],
+													checked: choices[type][n.key],
 													action: state => {
 														choices[type][n.key] = state;
 														this.saveChoice(type, false);
