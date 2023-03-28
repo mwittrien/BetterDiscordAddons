@@ -1108,7 +1108,7 @@ module.exports = (_ => {
 			}
 			
 			papagoTranslate (data, callback) {
-				const credentials = (authKeys.papago && authKeys.papago.key || "kUNGxtAmTJQFbaFehdjk zC70k3VhpM").split(" ");
+				const credentials = (authKeys.papago && authKeys.papago.key || "kUNGxtAmTJQFbaFehdjk zC70k3VhpM").split(/[\s_-]/g);
 				BDFDB.LibraryRequires.request("https://openapi.naver.com/v1/papago/n2mt", {
 					method: "post",
 					form: {
@@ -1145,7 +1145,7 @@ module.exports = (_ => {
 			}
 			
 			baiduTranslate (data, callback) {
-				const credentials = (authKeys.baidu && authKeys.baidu.key || "20221009001380882 TOPnUKz8jJ32AZNOuUhX").split(" ");
+				const credentials = (authKeys.baidu && authKeys.baidu.key || "20221009001380882 TOPnUKz8jJ32AZNOuUhX").split(/[\s_-]/g);
 				const salt = BDFDB.NumberUtils.generateId();
 				BDFDB.LibraryRequires.request("https://fanyi-api.baidu.com/api/trans/vip/translate", {
 					method: "post",
