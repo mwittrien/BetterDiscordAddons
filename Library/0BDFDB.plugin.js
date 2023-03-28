@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.2.0
+ * @version 3.2.1
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -4091,19 +4091,7 @@ module.exports = (_ => {
 					if (!url || typeof url != "string") return;
 					let {callback, cIndex} = args[1] && typeof args[1] == "function" ? {callback: args[1], cIndex: 1} : (args[2] && typeof args[2] == "function" ? {callback: args[2], cIndex: 2} : {callback: null, cIndex: -1});
 					if (typeof callback != "function") return;
-					
-					let config = args[0] && typeof args[0] == "object" ? args[0] : (args[1] && typeof args[1] == "object" && args[1]);
-					
-					let timeoutMs = config && !isNaN(parseInt(config.timeout)) && config.timeout > 0 ? config.timeout : 600000;
-					let timedout = false, timeout = BDFDB.TimeUtils.timeout(_ => {
-						timedout = true;
-						callback(`Request Timeout after ${timeoutMs}ms`, null)
-					}, timeoutMs);
-					Internal.LibraryModules.FileRequestUtils.getFileData(url).then(buffer => {
-						BDFDB.TimeUtils.clear(timeout);
-						if (timedout) return;
-						callback(null, buffer);
-					});
+					Internal.LibraryModules.FileRequestUtils.getFileData(url).then(buffer => callback(null, buffer)).catch(error => callback(error, null));
 				};
 				BDFDB.DiscordUtils.getSetting = function (category, key) {
 					if (!category || !key) return;

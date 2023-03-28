@@ -2,7 +2,7 @@
  * @name ThemeRepo
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.4.9
+ * @version 2.5.0
  * @description Allows you to download all Themes from BD's Website within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -632,7 +632,7 @@ module.exports = (_ => {
 														this.props.downloading = true;
 														let loadingToast = BDFDB.NotificationUtils.toast(`${BDFDB.LanguageUtils.LibraryStringsFormat("loading", this.props.data.name)} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {timeout: 0, ellipsis: true});
 														let autoloadKey = this.props.data.state == themeStates ? "startUpdated" : "startDownloaded";
-														BDFDB.DiscordUtils.requestFileData(this.props.data.rawSourceUrl, {timeout: 10000}, (error, buffer) => {
+														BDFDB.DiscordUtils.requestFileData(this.props.data.rawSourceUrl, (error, buffer) => {
 															if (error || !buffer) {
 																delete this.props.downloading;
 																loadingToast.close();
@@ -885,7 +885,7 @@ module.exports = (_ => {
 								});
 							}
 							
-							BDFDB.DiscordUtils.requestFileData("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/_res/GeneratorList.txt", {timeout: 10000}, (error, buffer) => {
+							BDFDB.DiscordUtils.requestFileData("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/_res/GeneratorList.txt", (error, buffer) => {
 								let body = !error && buffer && Buffer.from(buffer).toString();
 								if (body) for (let id of body.replace(/[\r\t]/g, "").split(" ").map(n => parseInt(n)).filter(n => n != null)) {
 									let theme = grabbedThemes.find(t => t.id == id);
@@ -893,7 +893,7 @@ module.exports = (_ => {
 								}
 							});
 							
-							BDFDB.DiscordUtils.requestFileData(document.querySelector("head link[rel='stylesheet'][integrity]").href, {timeout: 10000}, (error, buffer) => {
+							BDFDB.DiscordUtils.requestFileData(document.querySelector("head link[rel='stylesheet'][integrity]").href, (error, buffer) => {
 								let nativeCSS = !error && buffer && Buffer.from(buffer).toString();
 								if (nativeCSS) {
 									let theme = BDFDB.DiscordUtils.getTheme();
@@ -919,7 +919,7 @@ module.exports = (_ => {
 						delete theme.release_date;
 						delete theme.latest_source_url;
 						delete theme.thumbnail_url;
-						BDFDB.DiscordUtils.requestFileData(theme.rawSourceUrl, {timeout: 10000}, (error, buffer) => {
+						BDFDB.DiscordUtils.requestFileData(theme.rawSourceUrl, (error, buffer) => {
 							if (error || !buffer) theme.failed = true;
 							else {
 								let body = Buffer.from(buffer).toString();
