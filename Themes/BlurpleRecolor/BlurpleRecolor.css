@@ -1579,6 +1579,8 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 .uploadModal-2ie9O_ .icon-HW4tZ-:not(img)::after,
 .icon-HW4tZ-:not(img)::before,
 .icon-HW4tZ-:not(img)::after {
+	top: 0;
+	left: 0;
 	width: 100px;
 	height: 130px;
 	-webkit-mask-size: 72px 96px !important;
