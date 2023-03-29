@@ -2,7 +2,7 @@
  * @name LastMessageDate
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.5
+ * @version 1.3.6
  * @description Displays the Last Message Date of a Member for the current Server/DM in the UserPopout and UserModal
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,9 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"fixed": {
-			"NSFW": "Forgot to include nsfw channels in the search, resulting in false timestamps"
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -169,6 +167,13 @@ module.exports = (_ => {
 						let message = e.methodArguments[0].message;
 						let guildId = message.guild_id || message.channel_id;
 						if (guildId && loadedUsers[guildId] && loadedUsers[guildId][message.author.id]) loadedUsers[guildId][message.author.id] = message;
+					}
+					else if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == "MESSAGE_DELETE" && e.methodArguments[0].id) {
+						let guildId = e.methodArguments[0].guildId || e.methodArguments[0].channelId;
+						if (guildId && loadedUsers[guildId]) {
+							let message = (Object.entries(loadedUsers[guildId]).find(n => n[1] && n[1].id == e.methodArguments[0].id) || [])[1];
+							if (message && loadedUsers[guildId][message.author.id]) delete loadedUsers[guildId][message.author.id];
+						}
 					}
 				}});
 
