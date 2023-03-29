@@ -886,9 +886,9 @@ module.exports = (_ => {
 					case "el":		// Greek
 						return {
 							list:								"Λίστα",
-							notice_failed_plugins:				"Δεν ήταν δυνατή η φόρτωση ορισμένων Plugins [{{var0}}] ",
-							notice_new_plugins:					"Προστέθηκαν νέα Plugins [{{var0}}] στο Plugin Repo",
-							notice_outdated_plugins:			"Ορισμένα Plugins [{{var0}}] είναι παλιά"
+							notice_failed_plugins:				"Δεν ήταν δυνατή η φόρτωση ορισμένων Πρόσθετων [{{var0}}] ",
+							notice_new_plugins:					"Προστέθηκαν νέα Πρόσθετα [{{var0}}] στο Αποθετήριο Προσθέτων",
+							notice_outdated_plugins:			"Ορισμένα Πρόσθετα [{{var0}}] είναι παλαιά"
 						};
 					case "es":		// Spanish
 						return {
