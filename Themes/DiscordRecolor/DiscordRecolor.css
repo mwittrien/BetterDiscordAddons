@@ -165,6 +165,7 @@
 	--guild-header-text-shadow: 0 1px 1px rgba(var(--backgroundfloating),.5);
 	
 	--channeltextarea-background: rgba(var(--backgroundaccent),.8);
+	--channel-text-area-placeholder: rgb(var(--textdarker));
 	
 	--input-background: rgb(var(--backgroundtertiary));
 	
@@ -2939,7 +2940,7 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 	color: var(--header-secondary);
 }
 #app-mount .errorState-1R6bBt {
-	color: var(--text-muted:)
+	color: var(--text-muted);
 }
 #app-mount .notFriends-lSusTz .errorStateIcon-3y6XWh {
 	background-image: url(https://discord.com/assets/4f86d7f58df32580164fc595377c0169.svg);
