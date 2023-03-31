@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.2.0
+ * @version 5.2.1
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -870,7 +870,7 @@ module.exports = (_ => {
 											"aria-label": BDFDB.LanguageUtils.LanguageStrings.IMAGE,
 											children: isVideo ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageVideoModal, {
 												src: imageThrowaway.src,
-												poster: this.getPosterUrl(imageThrowaway.src),
+												poster: _this.getPosterUrl(imageThrowaway.src),
 												width: this.videoWidth,
 												naturalWidth: this.videoWidth,
 												height: this.videoHeight,
