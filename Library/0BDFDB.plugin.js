@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.2.1
+ * @version 3.2.2
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -158,36 +158,49 @@ module.exports = (_ => {
 				if (!url || typeof url != "string") return;
 				let {callback, cIndex} = args[1] && typeof args[1] == "function" ? {callback: args[1], cIndex: 1} : (args[2] && typeof args[2] == "function" ? {callback: args[2], cIndex: 2} : {callback: null, cIndex: -1});
 				if (typeof callback != "function") return;
-				let config = args[0] && typeof args[0] == "object" ? args[0] : (args[1] && typeof args[1] == "object" && args[1]);
-				let timeout = 600000;
-				if (config && config.form && typeof config.form == "object") {
-					let query = Object.entries(config.form).map(n => n[0] + "=" + n[1]).join("&");
-					if (query) {
-						if (uIndex == 0) args[0] += `?${query}`;
-						else if (uIndex == 1) args[1].url += `?${query}`;
+				if (url.indexOf("data:") == 0) callback(null, {
+					aborted: false,
+					complete: true,
+					end: undefined,
+					headers: {"content-type": url.slice(5).split(";")[0]},
+					method: null,
+					rawHeaders: [],
+					statusCode: 200,
+					statusMessage: "OK",
+					url: ""
+				}, url);
+				else {
+					let config = args[0] && typeof args[0] == "object" ? args[0] : (args[1] && typeof args[1] == "object" && args[1]);
+					let timeout = 600000;
+					if (config && config.form && typeof config.form == "object") {
+						let query = Object.entries(config.form).map(n => n[0] + "=" + n[1]).join("&");
+						if (query) {
+							if (uIndex == 0) args[0] += `?${query}`;
+							else if (uIndex == 1) args[1].url += `?${query}`;
+						}
 					}
+					if (config && !isNaN(parseInt(config.timeout)) && config.timeout > 0) timeout = config.timeout;
+					let killed = false, timeoutObj = BDFDB.TimeUtils.timeout(_ => {
+						killed = true;
+						BDFDB.TimeUtils.clear(timeoutObj);
+						callback(new Error(`Request Timeout after ${timeout}ms`), {
+							aborted: false,
+							complete: true,
+							end: undefined,
+							headers: {},
+							method: null,
+							rawHeaders: [],
+							statusCode: 408,
+							statusMessage: "OK",
+							url: ""
+						}, null);
+					}, timeout);
+					args[cIndex] = (...args2) => {
+						BDFDB.TimeUtils.clear(timeoutObj);
+						if (!killed) callback(...args2);
+					};
+					return request(...args);
 				}
-				if (config && !isNaN(parseInt(config.timeout)) && config.timeout > 0) timeout = config.timeout;
-				let killed = false, timeoutObj = BDFDB.TimeUtils.timeout(_ => {
-					killed = true;
-					BDFDB.TimeUtils.clear(timeoutObj);
-					callback(new Error(`Request Timeout after ${timeout}ms`), {
-						aborted: false,
-						complete: true,
-						end: undefined,
-						headers: {},
-						method: null,
-						rawHeaders: [],
-						statusCode: 408,
-						statusMessage: "OK",
-						url: ""
-					}, null);
-				}, timeout);
-				args[cIndex] = (...args2) => {
-					BDFDB.TimeUtils.clear(timeoutObj);
-					if (!killed) callback(...args2);
-				};
-				return request(...args);
 			};
 
 			BDFDB.LogUtils = {};

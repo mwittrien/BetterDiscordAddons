@@ -2,7 +2,7 @@
  * @name ImageUtilities
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 5.2.1
+ * @version 5.2.2
  * @description Adds several Utilities for Images/Videos (Gallery, Download, Reverse Search, Zoom, Copy, etc.)
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -231,6 +231,7 @@ module.exports = (_ => {
 						userAvatars: 			{value: true, 	description: "User Avatars"},
 						groupIcons: 			{value: true, 	description: "Group Icons"},
 						guildIcons: 			{value: true, 	description: "Server Icons"},
+						streamPreviews: 		{value: true, 	description: "Stream Previews"},
 						emojis: 				{value: true, 	description: "Custom Emojis/Emotes"}
 					},
 					engines: {
@@ -698,16 +699,22 @@ module.exports = (_ => {
 				if (!this.settings.places.guildIcons || !e.instance.props.guild) return;
 				if (BDFDB.DOMUtils.getParent(BDFDB.dotCNC.guildheader + BDFDB.dotCN.guildchannels, e.instance.props.target) && (!e.instance.props.target.className && e.instance.props.target.parentElement.firstElementChild == e.instance.props.target) || (e.instance.props.target.className && e.instance.props.target.className.indexOf(BDFDB.disCN.guildheaderbanneranimatedhoverlayer) > -1)) {
 					let banner = BDFDB.GuildUtils.getBanner(e.instance.props.guild.id);
-					if (banner) this.injectItem(e, [banner.replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.banner && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.banner) && banner.replace(/\.webp|\.png/, ".gif")], BDFDB.LanguageUtils.LibraryStrings.guildbanner);
+					if (banner) this.injectItem(e, [banner.replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.banner && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.banner) && banner.replace(/\.webp|\.png/, ".gif")], {prefix: BDFDB.LanguageUtils.LibraryStrings.guildbanner, id: "banner"});
 				}
-				else if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.channels, e.instance.props.target)) this.injectItem(e, [(e.instance.props.guild.getIconURL(4096) || "").replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.icon) && e.instance.props.guild.getIconURL(4096, true)], BDFDB.LanguageUtils.LibraryStrings.guildicon);
+				else if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.channels, e.instance.props.target)) this.injectItem(e, [(e.instance.props.guild.getIconURL(4096) || "").replace(/\.webp|\.gif/, ".png"), e.instance.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.guild.icon) && e.instance.props.guild.getIconURL(4096, true)], {prefix: BDFDB.LanguageUtils.LibraryStrings.guildicon, id: "icon"});
 			}
 
 			onUserContextMenu (e) {
-				if (!this.settings.places.userAvatars || !e.instance.props.user) return;
-				const guildId = BDFDB.LibraryStores.SelectedGuildStore.getGuildId();
-				const member = BDFDB.LibraryStores.GuildMemberStore.getMember(guildId, e.instance.props.user.id);
-				this.injectItem(e, [(e.instance.props.user.getAvatarURL(null, 4096) || "").replace(/\.webp|\.gif/, ".png"), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.avatar) && e.instance.props.user.getAvatarURL(null, 4096, true), (e.instance.props.user.getAvatarURL(guildId, 4096) || "").replace(/\.webp|\.gif/, ".png"), member && member.avatar && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(member.avatar) && e.instance.props.user.getAvatarURL(guildId, 4096, true)]);
+				if (this.settings.places.userAvatars && e.instance.props.user) {
+					const guildId = BDFDB.LibraryStores.SelectedGuildStore.getGuildId();
+					const member = BDFDB.LibraryStores.GuildMemberStore.getMember(guildId, e.instance.props.user.id);
+					this.injectItem(e, [(e.instance.props.user.getAvatarURL(null, 4096) || "").replace(/\.webp|\.gif/, ".png"), BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(e.instance.props.user.avatar) && e.instance.props.user.getAvatarURL(null, 4096, true), (e.instance.props.user.getAvatarURL(guildId, 4096) || "").replace(/\.webp|\.gif/, ".png"), member && member.avatar && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(member.avatar) && e.instance.props.user.getAvatarURL(guildId, 4096, true)]);
+				}
+				if (this.settings.places.streamPreviews && e.instance.props.user) {
+					let stream = BDFDB.LibraryStores.ApplicationStreamingStore.getAnyStreamForUser(e.instance.props.user.id);
+					let previewUrl = stream && BDFDB.LibraryStores.ApplicationStreamPreviewStore.getPreviewURL(stream.guildId, stream.channelId, stream.ownerId);
+					if (previewUrl) this.injectItem(e, [previewUrl], {id: "stream", label: this.labels.context_streamactions});
+				}
 			}
 
 			onGroupDMContextMenu (e) {
@@ -723,20 +730,20 @@ module.exports = (_ => {
 			onMessageContextMenu (e) {
 				if (!e.instance.props.message || !e.instance.props.channel || !e.instance.props.target) return;
 				const target = e.instance.props.target.tagName == "A" && BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.imageoriginallink) && e.instance.props.target.parentElement.querySelector("img") || (BDFDB.DOMUtils.getParent(BDFDB.dotCN.messageattachment, e.instance.props.target) || e.instance.props.target).querySelector("img, video") || e.instance.props.target;
-				if (target.tagName == "A" && e.instance.props.message.embeds && e.instance.props.message.embeds[0] && (e.instance.props.message.embeds[0].type == "image" || e.instance.props.message.embeds[0].type == "video" || e.instance.props.message.embeds[0].type == "gifv")) this.injectItem(e, [target.href], null, true);
+				if (target.tagName == "A" && e.instance.props.message.embeds && e.instance.props.message.embeds[0] && (e.instance.props.message.embeds[0].type == "image" || e.instance.props.message.embeds[0].type == "video" || e.instance.props.message.embeds[0].type == "gifv")) this.injectItem(e, [target.href], {isNative: true});
 				else if (target.tagName == "IMG" && target.complete && target.naturalHeight) {
-					if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagewrapper, target) || BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.imagesticker)) this.injectItem(e, [{file: target.src, original: this.getTargetLink(e.instance.props.target) || this.getTargetLink(target)}], null, true);
-					else if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.embedauthoricon) && this.settings.places.userAvatars) this.injectItem(e, [target.src], null, true);
-					else if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.emojiold, "emote", false) && this.settings.places.emojis) this.injectItem(e, [{file: target.src, alternativeName: target.getAttribute("data-name")}], null, true);
+					if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.imagewrapper, target) || BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.imagesticker)) this.injectItem(e, [{file: target.src, original: this.getTargetLink(e.instance.props.target) || this.getTargetLink(target)}], {isNative: true});
+					else if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.embedauthoricon) && this.settings.places.userAvatars) this.injectItem(e, [target.src], {isNative: true});
+					else if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.emojiold, "emote", false) && this.settings.places.emojis) this.injectItem(e, [{file: target.src, alternativeName: target.getAttribute("data-name")}], {isNative: true});
 				}
 				else if (target.tagName == "VIDEO") {
-					if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.embedvideo) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.attachmentvideo, target)) this.injectItem(e, [{file: target.src, original: this.getTargetLink(e.instance.props.target) || this.getTargetLink(target)}], null, true);
+					if (BDFDB.DOMUtils.containsClass(target, BDFDB.disCN.embedvideo) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.attachmentvideo, target)) this.injectItem(e, [{file: target.src, original: this.getTargetLink(e.instance.props.target) || this.getTargetLink(target)}], {isNative: true});
 				}
 				else {
 					const reaction = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagereaction, target);
 					if (reaction && this.settings.places.emojis) {
 						const emoji = reaction.querySelector(BDFDB.dotCN.emojiold);
-						if (emoji) this.injectItem(e, [{file: emoji.src, alternativeName: emoji.getAttribute("data-name")}], null, true);
+						if (emoji) this.injectItem(e, [{file: emoji.src, alternativeName: emoji.getAttribute("data-name")}], {isNative: true});
 					}
 				}
 			}
@@ -748,12 +755,12 @@ module.exports = (_ => {
 				return href || src;
 			}
 
-			injectItem (e, urls, prefix, isNative = false) {
+			injectItem (e, urls, config = {}) {
 				let validUrls = this.filterUrls(...urls);
 				if (!validUrls.length) return;
 				let [nativeParent, nativeIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "copy-native-link", group: true});
 				if (nativeIndex > -1) {
-					if (validUrls.length == 1) isNative = true;
+					if (validUrls.length == 1) config.isNative = true;
 					nativeParent.splice(nativeIndex, 1);
 					nativeIndex -= 1;
 				}
@@ -765,15 +772,15 @@ module.exports = (_ => {
 				let subMenu = this.createSubMenus({
 					instance: e.instance,
 					urls: validUrls,
-					prefix: prefix,
+					prefix: config.prefix,
 					target: e.instance.props.target
 				});
 				
-				let [children, index] = isNative && nativeIndex > -1 ? [nativeParent, nativeIndex] : BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
-				children.splice(index > -1 ? index : children.length, 0, isNative ? subMenu : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+				let [children, index] = config.isNative && nativeIndex > -1 ? [nativeParent, nativeIndex] : BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
+				children.splice(index > -1 ? index : children.length, 0, config.isNative ? subMenu : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.isValid(validUrls[0].file, "video") ? this.labels.context_videoactions : this.labels.context_imageactions,
-						id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-subitem"),
+						label: config.label || (this.isValid(validUrls[0].file, "video") ? this.labels.context_videoactions : this.labels.context_imageactions),
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, config.id, "main-subitem"),
 						children: subMenu
 					})
 				}));
@@ -797,8 +804,14 @@ module.exports = (_ => {
 			
 			isValid (url, type) {
 				if (!url) return false;
-				const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").split("%3A")[0].toLowerCase();
-				return file && (!type && (url.indexOf("discord.com/streams/guild:") > -1 || url.indexOf("discordapp.com/streams/guild:") > -1 || url.indexOf("discordapp.net/streams/guild:") > -1 || url.startsWith("https://images-ext-1.discordapp.net/") || url.startsWith("https://images-ext-2.discordapp.net/") || Object.keys(fileTypes).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`))) || type && Object.keys(fileTypes).filter(t => fileTypes[t][type]).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`)));
+				if (url && url.indexOf("data:") == 0 && url.indexOf("base64") > -1) {
+					const fileType = (url.split("/")[1] || "").split(";")[0];
+					return !type && fileTypes[fileType] || type && type != "searchable" && fileTypes[fileType] && fileTypes[fileType][type];
+				}
+				else {
+					const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").split("%3A")[0].toLowerCase();
+					return file && (!type && (url.indexOf("discord.com/streams/guild:") > -1 || url.indexOf("discordapp.com/streams/guild:") > -1 || url.indexOf("discordapp.net/streams/guild:") > -1 || url.startsWith("https://images-ext-1.discordapp.net/") || url.startsWith("https://images-ext-2.discordapp.net/") || Object.keys(fileTypes).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`))) || ((type == "copyable" || type == "searchable") && (url.indexOf("discord.com/streams/guild:") > -1 || url.indexOf("discordapp.com/streams/guild:") > -1 || url.indexOf("discordapp.net/streams/guild:") > -1)) || type && Object.keys(fileTypes).filter(t => fileTypes[t][type]).some(t => file.endsWith(`/${t}`) || file.endsWith(`.${t}`)));
+				}
 			}
 			
 			getPosterUrl (url) {
@@ -825,7 +838,7 @@ module.exports = (_ => {
 				
 				return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: [
-						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						urlData.original && urlData.original.indexOf("data:") != 0 && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.COPY_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-link"),
 							action: _ => {
@@ -845,7 +858,7 @@ module.exports = (_ => {
 								BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LanguageStrings.LINK_COPIED, {type: "success"});
 							}
 						}),
-						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						urlData.original && urlData.original.indexOf("data:") != 0 && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.OPEN_LINK,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "open-link"),
 							action: _ => BDFDB.DiscordUtils.openLink(urlData.original)
@@ -898,7 +911,7 @@ module.exports = (_ => {
 								children: locations.map((name, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "download", name, i),
 									label: name,
-									action: _ => console.log(urlData) || this.downloadFile({url: urlData.original, fallbackUrl: urlData.src}, ownLocations[name].location, urlData.alternativeName)
+									action: _ => this.downloadFile({url: urlData.original, fallbackUrl: urlData.src}, ownLocations[name].location, urlData.alternativeName)
 								}))
 							})
 						}),
@@ -1529,6 +1542,7 @@ module.exports = (_ => {
 			
 			copyFile (urls) {
 				this.requestFile(urls, (url, buffer) => {
+					let type = this.isValid(url, "video") ? BDFDB.LanguageUtils.LanguageStrings.VIDEO : BDFDB.LanguageUtils.LanguageStrings.IMAGE;
 					BDFDB.LibraryModules.WindowUtils.copyImage(url);
 					BDFDB.NotificationUtils.toast(this.labels.toast_copy_success.replace("{{var0}}", type), {type: "success"});
 				}, _ => {
@@ -1707,11 +1721,12 @@ module.exports = (_ => {
 							context_copy:						"Копирайте {{var0}}",
 							context_imageactions:				"Действия с изображения",
 							context_lenssize:					"Размер на обектива",
-							context_zoomspeed: 					"Скорост на мащабиране",
 							context_saveas:						"Запазете {{var0}} като ...",
 							context_searchwith:					"Търсете {{var0}} с ...",
+							context_streamactions:				"Действия за визуализация на потока",
 							context_videoactions:				"Видео действия",
 							context_view:						"Преглед {{var0}}",
+							context_zoomspeed:					"Скорост на мащабиране",
 							submenu_disabled:					"Всички инвалиди",
 							toast_copy_failed:					"{{var0}} не можа да бъде копиран в клипборда",
 							toast_copy_success:					"{{var0}} беше копиран в клипборда",
@@ -1723,11 +1738,12 @@ module.exports = (_ => {
 							context_copy:						"Zkopírovat {{var0}}",
 							context_imageactions:				"Akce s obrázky",
 							context_lenssize:					"Velikost lupy",
-							context_zoomspeed: 					"Rychlost zoomu",
 							context_saveas:						"Uložit {{var0}} jako...",
 							context_searchwith:					"Hledat {{var0}} pomocí...",
+							context_streamactions:				"Akce náhledu streamu",
 							context_videoactions:				"Video akce",
 							context_view:						"Zobrazit {{var0}}",
+							context_zoomspeed:					"Rychlost zoomu",
 							submenu_disabled:					"Vše zakázáno",
 							toast_copy_failed:					"{{var0}} nemohl být zkopírován do schránky",
 							toast_copy_success:					"{{var0}} byl zkopírován do schránky",
@@ -1739,11 +1755,12 @@ module.exports = (_ => {
 							context_copy:						"Kopiér {{var0}}",
 							context_imageactions:				"Billedhandlinger",
 							context_lenssize:					"Objektivstørrelse",
-							context_zoomspeed: 					"Zoomhastighed",
 							context_saveas:						"Gem {{var0}} som ...",
 							context_searchwith:					"Søg i {{var0}} med ...",
+							context_streamactions:				"Stream forhåndsvisningshandlinger",
 							context_videoactions:				"Videohandlinger",
 							context_view:						"Se {{var0}}",
+							context_zoomspeed:					"Zoomhastighed",
 							submenu_disabled:					"Alle handicappede",
 							toast_copy_failed:					"{{var0}} kunne ikke kopieres til udklipsholderen",
 							toast_copy_success:					"{{var0}} blev kopieret til udklipsholderen",
@@ -1755,11 +1772,12 @@ module.exports = (_ => {
 							context_copy:						"{{var0}} kopieren",
 							context_imageactions:				"Bildaktionen",
 							context_lenssize:					"Linsengröße",
-							context_zoomspeed: 					"Zoomgeschwindigkeit",
 							context_saveas:						"{{var0}} speichern als ...",
 							context_searchwith:					"{{var0}} suchen mit ...",
+							context_streamactions:				"Stream-Vorschau-Aktionen",
 							context_videoactions:				"Videoaktionen",
 							context_view:						"{{var0}} ansehen",
+							context_zoomspeed:					"Zoomgeschwindigkeit",
 							submenu_disabled:					"Alle deaktiviert",
 							toast_copy_failed:					"{{var0}} konnte nicht in die Zwischenablage kopiert werden",
 							toast_copy_success:					"{{var0}} wurde in die Zwischenablage kopiert",
@@ -1771,11 +1789,12 @@ module.exports = (_ => {
 							context_copy:						"Αντιγραφή {{var0}}",
 							context_imageactions:				"Ενέργειες εικόνας",
 							context_lenssize:					"Μέγεθος φακού",
-							context_zoomspeed: 					"Ταχύτητα ζουμ",
 							context_saveas:						"Αποθήκευση {{var0}} ως ...",
 							context_searchwith:					"Αναζήτηση {{var0}} με ...",
+							context_streamactions:				"Ενέργειες προεπισκόπησης ροής",
 							context_videoactions:				"Ενέργειες βίντεο",
 							context_view:						"Προβολή {{var0}}",
+							context_zoomspeed:					"Ταχύτητα ζουμ",
 							submenu_disabled:					"Όλα τα άτομα με ειδικές ανάγκες",
 							toast_copy_failed:					"Δεν ήταν δυνατή η αντιγραφή του {{var0}} στο πρόχειρο",
 							toast_copy_success:					"Το {{var0}} αντιγράφηκε στο πρόχειρο",
@@ -1787,11 +1806,12 @@ module.exports = (_ => {
 							context_copy:						"Copiar {{var0}}",
 							context_imageactions:				"Acciones de imagen",
 							context_lenssize:					"Tamaño de la lente",
-							context_zoomspeed: 					"Velocidad de zoom",
 							context_saveas:						"Guardar {{var0}} como ...",
 							context_searchwith:					"Buscar {{var0}} con ...",
+							context_streamactions:				"Acciones de vista previa de transmisión",
 							context_videoactions:				"Acciones de vídeo",
 							context_view:						"Ver {{var0}}",
+							context_zoomspeed:					"Velocidad de zoom",
 							submenu_disabled:					"Todos discapacitados",
 							toast_copy_failed:					"{{var0}} no se pudo copiar al portapapeles",
 							toast_copy_success:					"{{var0}} se copió en el portapapeles",
@@ -1803,11 +1823,12 @@ module.exports = (_ => {
 							context_copy:						"Kopioi {{var0}}",
 							context_imageactions:				"Kuvatoiminnot",
 							context_lenssize:					"Linssin koko",
-							context_zoomspeed: 					"Zoomausnopeus",
 							context_saveas:						"Tallenna {{var0}} nimellä ...",
 							context_searchwith:					"Tee haku {{var0}} ...",
+							context_streamactions:				"Streamin esikatselutoiminnot",
 							context_videoactions:				"Videotoiminnot",
 							context_view:						"Näytä {{var0}}",
+							context_zoomspeed:					"Zoomausnopeus",
 							submenu_disabled:					"Kaikki vammaiset",
 							toast_copy_failed:					"Kohdetta {{var0}} ei voitu kopioida leikepöydälle",
 							toast_copy_success:					"{{var0}} kopioitiin leikepöydälle",
@@ -1819,11 +1840,12 @@ module.exports = (_ => {
 							context_copy:						"Copier {{var0}}",
 							context_imageactions:				"Actions sur les images",
 							context_lenssize:					"Taille de l'objectif",
-							context_zoomspeed: 					"Vitesse de zoom",
 							context_saveas:						"Enregistrer {{var0}} sous ...",
 							context_searchwith:					"Rechercher {{var0}} avec ...",
+							context_streamactions:				"Actions d'aperçu de flux",
 							context_videoactions:				"Actions vidéo",
 							context_view:						"Afficher {{var0}}",
+							context_zoomspeed:					"Vitesse de zoom",
 							submenu_disabled:					"Tout désactivé",
 							toast_copy_failed:					"{{var0}} n'a pas pu être copié dans le presse-papiers",
 							toast_copy_success:					"{{var0}} a été copié dans le presse-papiers",
@@ -1835,11 +1857,12 @@ module.exports = (_ => {
 							context_copy:						"कॉपी {{var0}}",
 							context_imageactions:				"छवि क्रियाएँ",
 							context_lenssize:					"लेंस का आकार",
-							context_zoomspeed: 					"ज़ूम गति",
 							context_saveas:						"{{var0}} को इस रूप में सेव करें...",
 							context_searchwith:					"इसके साथ {{var0}} खोजें ...",
+							context_streamactions:				"स्ट्रीम पूर्वावलोकन क्रियाएं",
 							context_videoactions:				"वीडियो क्रिया",
 							context_view:						"देखें {{var0}}",
+							context_zoomspeed:					"ज़ूम गति",
 							submenu_disabled:					"सभी अक्षम",
 							toast_copy_failed:					"{{var0}} को क्लिपबोर्ड पर कॉपी नहीं किया जा सका",
 							toast_copy_success:					"{{var0}} को क्लिपबोर्ड पर कॉपी किया गया था",
@@ -1851,11 +1874,12 @@ module.exports = (_ => {
 							context_copy:						"Kopiraj {{var0}}",
 							context_imageactions:				"Radnje slike",
 							context_lenssize:					"Veličina leće",
-							context_zoomspeed: 					"Brzina zumiranja",
 							context_saveas:						"Spremi {{var0}} kao ...",
 							context_searchwith:					"Traži {{var0}} sa ...",
+							context_streamactions:				"Radnje pregleda streama",
 							context_videoactions:				"Video radnje",
 							context_view:						"Pogledajte {{var0}}",
+							context_zoomspeed:					"Brzina zumiranja",
 							submenu_disabled:					"Svi invalidi",
 							toast_copy_failed:					"{{var0}} nije moguće kopirati u međuspremnik",
 							toast_copy_success:					"{{var0}} je kopirano u međuspremnik",
@@ -1867,11 +1891,12 @@ module.exports = (_ => {
 							context_copy:						"{{var0}} másolása",
 							context_imageactions:				"Képműveletek",
 							context_lenssize:					"Lencse mérete",
-							context_zoomspeed: 					"Zoom sebesség",
 							context_saveas:						"{{var0}} mentése másként ...",
 							context_searchwith:					"Keresés a következőben: {{var0}} a következővel:",
+							context_streamactions:				"Stream előnézeti műveletek",
 							context_videoactions:				"Videóműveletek",
 							context_view:						"Megtekintés: {{var0}}",
+							context_zoomspeed:					"Zoom sebesség",
 							submenu_disabled:					"Minden fogyatékkal él",
 							toast_copy_failed:					"A {{var0}} fájl nem másolható a vágólapra",
 							toast_copy_success:					"A {{var0}} elemet a vágólapra másolta",
@@ -1883,11 +1908,12 @@ module.exports = (_ => {
 							context_copy:						"Copia {{var0}}",
 							context_imageactions:				"Azioni immagine",
 							context_lenssize:					"Dimensione della lente",
-							context_zoomspeed: 					"Velocità dello zoom",
 							context_saveas:						"Salva {{var0}} come ...",
 							context_searchwith:					"Cerca {{var0}} con ...",
+							context_streamactions:				"Azioni di anteprima del flusso",
 							context_videoactions:				"Azioni video",
 							context_view:						"Visualizza {{var0}}",
+							context_zoomspeed:					"Velocità dello zoom",
 							submenu_disabled:					"Tutti disabilitati",
 							toast_copy_failed:					"{{var0}} non può essere copiato negli appunti",
 							toast_copy_success:					"{{var0}} è stato copiato negli appunti",
@@ -1899,11 +1925,12 @@ module.exports = (_ => {
 							context_copy:						"{{var0}} をコピーします",
 							context_imageactions:				"画像アクション",
 							context_lenssize:					"レンズサイズ",
-							context_zoomspeed: 					"ズーム速度",
 							context_saveas:						"{{var0}} を...として保存します",
 							context_searchwith:					"{{var0}} を...で検索",
+							context_streamactions:				"ストリーム プレビュー アクション",
 							context_videoactions:				"ビデオ アクション",
 							context_view:						"{{var0}} を表示",
+							context_zoomspeed:					"ズーム速度",
 							submenu_disabled:					"すべて無効",
 							toast_copy_failed:					"{{var0}} をクリップボードにコピーできませんでした",
 							toast_copy_success:					"{{var0}} がクリップボードにコピーされました",
@@ -1915,11 +1942,12 @@ module.exports = (_ => {
 							context_copy:						"{{var0}} 복사",
 							context_imageactions:				"이미지 작업",
 							context_lenssize:					"렌즈 크기",
-							context_zoomspeed: 					"줌 속도",
 							context_saveas:						"{{var0}} 을 다른 이름으로 저장 ...",
 							context_searchwith:					"{{var0}} 검색 ...",
+							context_streamactions:				"스트림 미리보기 작업",
 							context_videoactions:				"비디오 작업",
 							context_view:						"{{var0}} 보기",
+							context_zoomspeed:					"줌 속도",
 							submenu_disabled:					"모두 비활성화 됨",
 							toast_copy_failed:					"{{var0}} 을 클립 보드에 복사 할 수 없습니다.",
 							toast_copy_success:					"{{var0}} 이 클립 보드에 복사되었습니다.",
@@ -1931,11 +1959,12 @@ module.exports = (_ => {
 							context_copy:						"Kopijuoti {{var0}}",
 							context_imageactions:				"Vaizdo veiksmai",
 							context_lenssize:					"Objektyvo dydis",
-							context_zoomspeed: 					"Priartinimo greitis",
 							context_saveas:						"Išsaugoti '{{var0}}' kaip ...",
 							context_searchwith:					"Ieškoti {{var0}} naudojant ...",
+							context_streamactions:				"Srauto peržiūros veiksmai",
 							context_videoactions:				"Vaizdo įrašų veiksmai",
 							context_view:						"Žiūrėti {{var0}}",
+							context_zoomspeed:					"Priartinimo greitis",
 							submenu_disabled:					"Visi neįgalūs",
 							toast_copy_failed:					"{{var0}} nepavyko nukopijuoti į mainų sritį",
 							toast_copy_success:					"{{var0}} buvo nukopijuota į mainų sritį",
@@ -1947,11 +1976,12 @@ module.exports = (_ => {
 							context_copy:						"Kopieer {{var0}}",
 							context_imageactions:				"Afbeeldingsacties",
 							context_lenssize:					"Lens Maat",
-							context_zoomspeed: 					"Zoom snelheid",
 							context_saveas:						"Bewaar {{var0}} als ...",
 							context_searchwith:					"Zoek {{var0}} met ...",
+							context_streamactions:				"Stream Preview-acties",
 							context_videoactions:				"Video-acties",
 							context_view:						"Bekijk {{var0}}",
+							context_zoomspeed:					"Zoom snelheid",
 							submenu_disabled:					"Allemaal uitgeschakeld",
 							toast_copy_failed:					"{{var0}} kan niet naar het klembord worden gekopieerd",
 							toast_copy_success:					"{{var0}} is naar het klembord gekopieerd",
@@ -1963,11 +1993,12 @@ module.exports = (_ => {
 							context_copy:						"Kopier {{var0}}",
 							context_imageactions:				"Bildehandlinger",
 							context_lenssize:					"Linsestørrelse",
-							context_zoomspeed: 					"Zoomhastighet",
 							context_saveas:						"Lagre {{var0}} som ...",
 							context_searchwith:					"Søk på {{var0}} med ...",
+							context_streamactions:				"Strøm forhåndsvisningshandlinger",
 							context_videoactions:				"Videohandlinger",
 							context_view:						"Vis {{var0}}",
+							context_zoomspeed:					"Zoomhastighet",
 							submenu_disabled:					"Alle funksjonshemmede",
 							toast_copy_failed:					"{{var0}} kunne ikke kopieres til utklippstavlen",
 							toast_copy_success:					"{{var0}} ble kopiert til utklippstavlen",
@@ -1979,11 +2010,12 @@ module.exports = (_ => {
 							context_copy:						"Kopiuj {{var0}}",
 							context_imageactions:				"Działania związane z obrazem",
 							context_lenssize:					"Rozmiar soczewki",
-							context_zoomspeed: 					"Szybkość zoomu",
 							context_saveas:						"Zapisz {{var0}} jako ...",
 							context_searchwith:					"Wyszukaj {{var0}} za pomocą ...",
+							context_streamactions:				"Akcje podglądu strumienia",
 							context_videoactions:				"Akcje wideo",
 							context_view:						"Wyświetl {{var0}}",
+							context_zoomspeed:					"Szybkość zoomu",
 							submenu_disabled:					"Wszystkie wyłączone",
 							toast_copy_failed:					"Nie można skopiować {{var0}} do schowka",
 							toast_copy_success:					"{{var0}} został skopiowany do schowka",
@@ -1995,11 +2027,12 @@ module.exports = (_ => {
 							context_copy:						"Copiar {{var0}}",
 							context_imageactions:				"Ações de imagem",
 							context_lenssize:					"Tamanho da lente",
-							context_zoomspeed: 					"Velocidade do zoom",
 							context_saveas:						"Salvar {{var0}} como ...",
 							context_searchwith:					"Pesquisar {{var0}} com ...",
+							context_streamactions:				"Ações de visualização de fluxo",
 							context_videoactions:				"Ações de vídeo",
 							context_view:						"Visualizar {{var0}}",
+							context_zoomspeed:					"Velocidade do zoom",
 							submenu_disabled:					"Todos desativados",
 							toast_copy_failed:					"{{var0}} não pôde ser copiado para a área de transferência",
 							toast_copy_success:					"{{var0}} foi copiado para a área de transferência",
@@ -2011,11 +2044,12 @@ module.exports = (_ => {
 							context_copy:						"Copiați {{var0}}",
 							context_imageactions:				"Acțiuni de imagine",
 							context_lenssize:					"Dimensiunea obiectivului",
-							context_zoomspeed: 					"Viteza de zoom",
 							context_saveas:						"Salvați {{var0}} ca ...",
 							context_searchwith:					"Căutați {{var0}} cu ...",
+							context_streamactions:				"Acțiuni de previzualizare în flux",
 							context_videoactions:				"Acțiuni video",
 							context_view:						"Vizualizați {{var0}}",
+							context_zoomspeed:					"Viteza de zoom",
 							submenu_disabled:					"Toate sunt dezactivate",
 							toast_copy_failed:					"{{var0}} nu a putut fi copiat în clipboard",
 							toast_copy_success:					"{{var0}} a fost copiat în clipboard",
@@ -2027,11 +2061,12 @@ module.exports = (_ => {
 							context_copy:						"Скопируйте {{var0}}",
 							context_imageactions:				"Действия с изображением",
 							context_lenssize:					"Размер линзы",
-							context_zoomspeed: 					"Скорость масштабирования",
 							context_saveas:						"Сохранить {{var0}} как ...",
 							context_searchwith:					"Искать {{var0}} с помощью ...",
+							context_streamactions:				"Действия предварительного просмотра трансляции",
 							context_videoactions:				"Действия с видео",
 							context_view:						"Посмотреть {{var0}}",
+							context_zoomspeed:					"Скорость масштабирования",
 							submenu_disabled:					"Все отключены",
 							toast_copy_failed:					"{{var0}} не удалось скопировать в буфер обмена",
 							toast_copy_success:					"{{var0}} скопирован в буфер обмена",
@@ -2043,11 +2078,12 @@ module.exports = (_ => {
 							context_copy:						"Kopiera {{var0}}",
 							context_imageactions:				"Bildåtgärder",
 							context_lenssize:					"Linsstorlek",
-							context_zoomspeed: 					"Zoomhastighet",
 							context_saveas:						"Spara {{var0}} som ...",
 							context_searchwith:					"Sök {{var0}} med ...",
+							context_streamactions:				"Streama förhandsgranskningsåtgärder",
 							context_videoactions:				"Videoåtgärder",
 							context_view:						"Visa {{var0}}",
+							context_zoomspeed:					"Zoomhastighet",
 							submenu_disabled:					"Alla funktionshindrade",
 							toast_copy_failed:					"{{var0}} kunde inte kopieras till Urklipp",
 							toast_copy_success:					"{{var0}} kopierades till Urklipp",
@@ -2059,11 +2095,12 @@ module.exports = (_ => {
 							context_copy:						"คัดลอก{{var0}}",
 							context_imageactions:				"การทำงานของรูปภาพ",
 							context_lenssize:					"ขนาดเลนส์",
-							context_zoomspeed: 					"ความเร็วในการซูม",
 							context_saveas:						"บันทึก{{var0}}เป็น ...",
 							context_searchwith:					"ค้นหา{{var0}} ้วย ...",
+							context_streamactions:				"การดำเนินการแสดงตัวอย่างสตรีม",
 							context_videoactions:				"การกระทำของวิดีโอ",
 							context_view:						"ดู{{var0}}",
+							context_zoomspeed:					"ความเร็วในการซูม",
 							submenu_disabled:					"ปิดใช้งานทั้งหมด",
 							toast_copy_failed:					"ไม่สามารถคัดลอก{{var0}}ไปยังคลิปบอร์ดได้",
 							toast_copy_success:					"คัดลอก{{var0}}ไปยังคลิปบอร์ดแล้ว",
@@ -2075,11 +2112,12 @@ module.exports = (_ => {
 							context_copy:						"{{var0}} kopyala",
 							context_imageactions:				"Görüntü Eylemleri",
 							context_lenssize:					"Lens Boyutu",
-							context_zoomspeed: 					"yakınlaştırma hızı",
 							context_saveas:						"{{var0}} farklı kaydet ...",
 							context_searchwith:					"{{var0}} şununla ara ...",
+							context_streamactions:				"Akış Önizleme İşlemleri",
 							context_videoactions:				"Video Eylemleri",
 							context_view:						"{{var0}} görüntüle",
+							context_zoomspeed:					"yakınlaştırma hızı",
 							submenu_disabled:					"Hepsi devre dışı",
 							toast_copy_failed:					"{{var0}} panoya kopyalanamadı",
 							toast_copy_success:					"{{var0}} panoya kopyalandı",
@@ -2091,11 +2129,12 @@ module.exports = (_ => {
 							context_copy:						"Копіювати {{var0}}",
 							context_imageactions:				"Дії із зображеннями",
 							context_lenssize:					"Розмір лінзи",
-							context_zoomspeed: 					"Швидкість масштабування",
 							context_saveas:						"Збережіть {{var0}} як ...",
 							context_searchwith:					"Шукати {{var0}} за допомогою ...",
+							context_streamactions:				"Дії попереднього перегляду потоку",
 							context_videoactions:				"Відео дії",
 							context_view:						"Переглянути {{var0}}",
+							context_zoomspeed:					"Швидкість масштабування",
 							submenu_disabled:					"Всі інваліди",
 							toast_copy_failed:					"Не вдалося скопіювати {{var0}} у буфер обміну",
 							toast_copy_success:					"{{var0}} скопійовано в буфер обміну",
@@ -2107,11 +2146,12 @@ module.exports = (_ => {
 							context_copy:						"Sao chép {{var0}}",
 							context_imageactions:				"Hành động hình ảnh",
 							context_lenssize:					"Kích thước ống kính",
-							context_zoomspeed: 					"tốc độ thu phóng",
 							context_saveas:						"Lưu {{var0}} dưới dạng ...",
 							context_searchwith:					"Tìm kiếm {{var0}} bằng ...",
+							context_streamactions:				"Tác vụ xem trước luồng",
 							context_videoactions:				"Hành động video",
 							context_view:						"Xem {{var0}}",
+							context_zoomspeed:					"tốc độ thu phóng",
 							submenu_disabled:					"Tất cả đã bị vô hiệu hóa",
 							toast_copy_failed:					"Không thể sao chép {{var0}} vào khay nhớ tạm",
 							toast_copy_success:					"{{var0}} đã được sao chép vào khay nhớ tạm",
@@ -2123,11 +2163,12 @@ module.exports = (_ => {
 							context_copy:						"复制 {{var0}}",
 							context_imageactions:				"图像动作",
 							context_lenssize:					"缩放尺寸",
-							context_zoomspeed: 					"变焦速度",
 							context_saveas:						"将 {{var0}} 另存到...",
 							context_searchwith:					"搜索 {{var0}} 使用...",
+							context_streamactions:				"流预览操作",
 							context_videoactions:				"视频动作",
 							context_view:						"查看 {{var0}}",
+							context_zoomspeed:					"变焦速度",
 							submenu_disabled:					"全部禁用",
 							toast_copy_failed:					"{{var0}} 无法复制到剪贴板",
 							toast_copy_success:					"{{var0}} 已复制到剪贴板",
@@ -2139,11 +2180,12 @@ module.exports = (_ => {
 							context_copy:						"複製 {{var0}}",
 							context_imageactions:				"圖像動作",
 							context_lenssize:					"縮放尺寸",
-							context_zoomspeed: 					"变焦速度",
 							context_saveas:						"將 {{var0}} 另存到...",
 							context_searchwith:					"搜尋 {{var0}} 使用...",
+							context_streamactions:				"流預覽操作",
 							context_videoactions:				"視頻動作",
 							context_view:						"預覽 {{var0}}",
+							context_zoomspeed:					"变焦速度",
 							submenu_disabled:					"全部關閉",
 							toast_copy_failed:					"{{var0}} 無法複製到剪貼簿",
 							toast_copy_success:					"{{var0}} 已複製到剪貼簿",
@@ -2155,11 +2197,12 @@ module.exports = (_ => {
 							context_copy:						"Copy {{var0}}",
 							context_imageactions:				"Image Actions",
 							context_lenssize:					"Lens Size",
-							context_zoomspeed: 					"Zoom speed",
 							context_saveas:						"Save {{var0}} as ...",
 							context_searchwith:					"Search {{var0}} with ...",
+							context_streamactions:				"Stream Preview Actions",
 							context_videoactions:				"Video Actions",
 							context_view:						"View {{var0}}",
+							context_zoomspeed:					"Zoom speed",
 							submenu_disabled:					"All disabled",
 							toast_copy_failed:					"{{var0}} could not be copied to the Clipboard",
 							toast_copy_success:					"{{var0}} was copied to the Clipboard",
