@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.1.3
+ * @version 7.1.4
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -721,7 +721,7 @@ module.exports = (_ => {
 						topBar.props.isVisible = BDFDB.TimeUtils.suppress((...args) => {
 							let ids = BDFDB.LibraryModules.SortedGuildUtils.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
 							args[2] = args[2].filter(id => !ids.includes(id));
-							return topIsVisible(...args) || BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(args[0]) == 0;
+							return topIsVisible(...args) || ids.includes(args[0]) && BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(args[0]) == 0;
 						}, "Error in isVisible of Top Bar in Guild List!");
 					}
 					let bottomBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.guildswrapperunreadmentionsbarbottom]]});
@@ -730,7 +730,7 @@ module.exports = (_ => {
 						bottomBar.props.isVisible = BDFDB.TimeUtils.suppress((...args) => {
 							let ids = BDFDB.LibraryModules.SortedGuildUtils.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
 							args[2] = args[2].filter(id => !ids.includes(id));
-							return bottomIsVisible(...args) || BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(args[0]) == 0;
+							return bottomIsVisible(...args) || ids.includes(args[0]) && BDFDB.LibraryStores.GuildReadStateStore.getMentionCount(args[0]) == 0;
 						}, "Error in isVisible of Bottom Bar in Guild List!");
 					}
 					e.returnvalue = [
@@ -765,7 +765,6 @@ module.exports = (_ => {
 			
 			processFolderHeader (e) {
 				if (!e.instance.props.folderNode) return;
-				
 				let data = this.getFolderConfig(e.instance.props.folderNode.id);
 				
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
