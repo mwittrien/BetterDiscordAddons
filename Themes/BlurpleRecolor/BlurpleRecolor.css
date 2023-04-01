@@ -453,7 +453,11 @@
 .embedFull-1HGV2S[style*="border-color: hsl(216, "],
 .embedFull-1HGV2S[style*="border-color: hsl(227, "],
 .embedFull-1HGV2S[style*="border-color: hsl(235, "],
-.embedFull-1HGV2S[style*="border-color: hsl(237, "] {
+.embedFull-1HGV2S[style*="border-color: hsl(237, "],
+.embedFull-1HGV2S[style*="border-color: hsla(216, "],
+.embedFull-1HGV2S[style*="border-color: hsla(227, "],
+.embedFull-1HGV2S[style*="border-color: hsla(235, "],
+.embedFull-1HGV2S[style*="border-color: hsla(237, "] {
 	border-color: rgb(var(--accentcolor)) !important;
 }
 
