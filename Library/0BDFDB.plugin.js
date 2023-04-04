@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.2.3
+ * @version 3.2.4
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1284,7 +1284,7 @@ module.exports = (_ => {
 								else return defaultExport ? r : req.c[i];
 							}
 						}
-						if (config.moduleName && m && m.__esModule && m[config.moduleName] && (typeof m[config.moduleName] == "object" || typeof m[config.moduleName] == "function")) {
+						if (config.moduleName && m && m[config.moduleName] && (typeof m[config.moduleName] == "object" || typeof m[config.moduleName] == "function")) {
 							if (!!(r = filter(m[config.moduleName]))) {
 								if (all) found.push(defaultExport ? r : req.c[i]);
 								else return defaultExport ? r : req.c[i];
@@ -2416,14 +2416,14 @@ module.exports = (_ => {
 				Internal.findModuleViaData = (moduleStorage, dataStorage, item) => {
 					if (!dataStorage[item]) return;
 					let defaultExport = typeof dataStorage[item].exported != "boolean" ? true : dataStorage[item].exported;
-					if (dataStorage[item].props) moduleStorage[item] = BDFDB.ModuleUtils.findByProperties(dataStorage[item].props, {defaultExport});
-					else if (dataStorage[item].protos) moduleStorage[item] = BDFDB.ModuleUtils.findByPrototypes(dataStorage[item].protos, {defaultExport});
-					else if (dataStorage[item].name) moduleStorage[item] = BDFDB.ModuleUtils.findByName(dataStorage[item].name, {defaultExport});
+					if (dataStorage[item].props) moduleStorage[item] = BDFDB.ModuleUtils.findByProperties(dataStorage[item].props, {defaultExport: defaultExport, moduleName: item});
+					else if (dataStorage[item].protos) moduleStorage[item] = BDFDB.ModuleUtils.findByPrototypes(dataStorage[item].protos, {defaultExport: defaultExport, moduleName: item});
+					else if (dataStorage[item].name) moduleStorage[item] = BDFDB.ModuleUtils.findByName(dataStorage[item].name, {defaultExport: defaultExport, moduleName: item});
 					else if (dataStorage[item].strings) {
 						if (dataStorage[item].nonStrings) {
 							moduleStorage[item] = Internal.findModule("strings + nonStrings", JSON.stringify([dataStorage[item].strings, dataStorage[item].nonStrings].flat(10)), m => Internal.checkModuleStrings(m, dataStorage[item].strings) && Internal.checkModuleStrings(m, dataStorage[item].nonStrings, {hasNot: true}) && m, {defaultExport: defaultExport, moduleName: item});
 						}
-						else moduleStorage[item] = BDFDB.ModuleUtils.findByString(dataStorage[item].strings, {defaultExport});
+						else moduleStorage[item] = BDFDB.ModuleUtils.findByString(dataStorage[item].strings, {defaultExport: defaultExport, moduleName: item});
 					}
 					if (dataStorage[item].value) moduleStorage[item] = (moduleStorage[item] || {})[dataStorage[item].value];
 					if (dataStorage[item].assign) moduleStorage[item] = Object.assign({}, moduleStorage[item]);
