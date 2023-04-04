@@ -152,6 +152,10 @@
 #app-mount .layer-86YKbF ~ .layer-86YKbF .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq .userPopoutInner-1hXSeY {
 	overflow: hidden !important;
 }
+#app-mount .layer-86YKbF ~ .layer-86YKbF .settingsContainer-36qZZ9,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .guildsSection-30CJxX {
+	max-width: calc(var(--settingsmodalwidth) - 356px) !important;
+}
 
 #app-mount .root-2zfUH6 {
 	position: fixed !important;
