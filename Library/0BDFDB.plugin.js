@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.2.2
+ * @version 3.2.3
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -2404,49 +2404,48 @@ module.exports = (_ => {
 					return false;
 				};
 				Internal.findModuleViaData = (moduleStorage, dataStorage, item) => {
-					if (dataStorage[item]) {
-						let defaultExport = typeof dataStorage[item].exported != "boolean" ? true : dataStorage[item].exported;
-						if (dataStorage[item].props) moduleStorage[item] = BDFDB.ModuleUtils.findByProperties(dataStorage[item].props, {defaultExport});
-						else if (dataStorage[item].protos) moduleStorage[item] = BDFDB.ModuleUtils.findByPrototypes(dataStorage[item].protos, {defaultExport});
-						else if (dataStorage[item].name) moduleStorage[item] = BDFDB.ModuleUtils.findByName(dataStorage[item].name, {defaultExport});
-						else if (dataStorage[item].strings) {
-							if (dataStorage[item].nonStrings) {
-								moduleStorage[item] = Internal.findModule("strings + nonStrings", JSON.stringify([dataStorage[item].strings, dataStorage[item].nonStrings].flat(10)), m => Internal.checkModuleStrings(m, dataStorage[item].strings) && Internal.checkModuleStrings(m, dataStorage[item].nonStrings, {hasNot: true}) && m, {defaultExport});
-							}
-							else moduleStorage[item] = BDFDB.ModuleUtils.findByString(dataStorage[item].strings, {defaultExport});
+					if (!dataStorage[item]) return;
+					let defaultExport = typeof dataStorage[item].exported != "boolean" ? true : dataStorage[item].exported;
+					if (dataStorage[item].props) moduleStorage[item] = BDFDB.ModuleUtils.findByProperties(dataStorage[item].props, {defaultExport});
+					else if (dataStorage[item].protos) moduleStorage[item] = BDFDB.ModuleUtils.findByPrototypes(dataStorage[item].protos, {defaultExport});
+					else if (dataStorage[item].name) moduleStorage[item] = BDFDB.ModuleUtils.findByName(dataStorage[item].name, {defaultExport});
+					else if (dataStorage[item].strings) {
+						if (dataStorage[item].nonStrings) {
+							moduleStorage[item] = Internal.findModule("strings + nonStrings", JSON.stringify([dataStorage[item].strings, dataStorage[item].nonStrings].flat(10)), m => Internal.checkModuleStrings(m, dataStorage[item].strings) && Internal.checkModuleStrings(m, dataStorage[item].nonStrings, {hasNot: true}) && m, {defaultExport});
 						}
-						if (dataStorage[item].value) moduleStorage[item] = (moduleStorage[item] || {})[dataStorage[item].value];
-						if (dataStorage[item].assign) moduleStorage[item] = Object.assign({}, moduleStorage[item]);
-						if (moduleStorage[item]) {
-							if (dataStorage[item].funcStrings) moduleStorage[item] = (Object.entries(moduleStorage[item]).find(n => {
-								if (!n || !n[1]) return;
-								let funcString = typeof n[1] == "function" ? n[1].toString() : (_ => {try {return JSON.stringify(n[1])}catch(err){return n[1].toString()}})();
-								let renderFuncString = typeof n[1].render == "function" && n[1].render.toString() || "";
-								return [dataStorage[item].funcStrings].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1 || renderFuncString.indexOf(string) > -1);
-							}) || [])[1];
-							if (dataStorage[item].map) {
-								dataStorage[item]._originalModule = moduleStorage[item];
-								dataStorage[item]._mappedItems = {};
-								moduleStorage[item] = new Proxy(Object.assign({}, dataStorage[item]._originalModule, dataStorage[item].map), {
-									get: function (_, item2) {
-										if (dataStorage[item]._originalModule[item2]) return dataStorage[item]._originalModule[item2];
-										if (dataStorage[item]._mappedItems[item2]) return dataStorage[item]._originalModule[dataStorage[item]._mappedItems[item2]];
-										if (!dataStorage[item].map[item2]) return dataStorage[item]._originalModule[item2];
-										let foundFunc = Object.entries(dataStorage[item]._originalModule).find(n => {
-											if (!n || !n[1]) return;
-											let funcString = typeof n[1] == "function" ? n[1].toString() : (_ => {try {return JSON.stringify(n[1])}catch(err){return n[1].toString()}})();
-											let renderFuncString = typeof n[1].render == "function" && n[1].render.toString() || "";
-											return [dataStorage[item].map[item2]].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1 || renderFuncString.indexOf(string) > -1);
-										});
-										if (foundFunc) {
-											dataStorage[item]._mappedItems[item2] = foundFunc[0];
-											return foundFunc[1];
-										}
-										return "div";
-									}
+						else moduleStorage[item] = BDFDB.ModuleUtils.findByString(dataStorage[item].strings, {defaultExport});
+					}
+					if (dataStorage[item].value) moduleStorage[item] = (moduleStorage[item] || {})[dataStorage[item].value];
+					if (dataStorage[item].assign) moduleStorage[item] = Object.assign({}, moduleStorage[item]);
+					if (!moduleStorage[item]) return;
+					if (moduleStorage[item][item]) moduleStorage[item] = moduleStorage[item][item];
+					if (dataStorage[item].funcStrings) moduleStorage[item] = (Object.entries(moduleStorage[item]).find(n => {
+						if (!n || !n[1]) return;
+						let funcString = typeof n[1] == "function" ? n[1].toString() : (_ => {try {return JSON.stringify(n[1])}catch(err){return n[1].toString()}})();
+						let renderFuncString = typeof n[1].render == "function" && n[1].render.toString() || "";
+						return [dataStorage[item].funcStrings].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1 || renderFuncString.indexOf(string) > -1);
+					}) || [])[1];
+					if (dataStorage[item].map) {
+						dataStorage[item]._originalModule = moduleStorage[item];
+						dataStorage[item]._mappedItems = {};
+						moduleStorage[item] = new Proxy(Object.assign({}, dataStorage[item]._originalModule, dataStorage[item].map), {
+							get: function (_, item2) {
+								if (dataStorage[item]._originalModule[item2]) return dataStorage[item]._originalModule[item2];
+								if (dataStorage[item]._mappedItems[item2]) return dataStorage[item]._originalModule[dataStorage[item]._mappedItems[item2]];
+								if (!dataStorage[item].map[item2]) return dataStorage[item]._originalModule[item2];
+								let foundFunc = Object.entries(dataStorage[item]._originalModule).find(n => {
+									if (!n || !n[1]) return;
+									let funcString = typeof n[1] == "function" ? n[1].toString() : (_ => {try {return JSON.stringify(n[1])}catch(err){return n[1].toString()}})();
+									let renderFuncString = typeof n[1].render == "function" && n[1].render.toString() || "";
+									return [dataStorage[item].map[item2]].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1 || renderFuncString.indexOf(string) > -1);
 								});
+								if (foundFunc) {
+									dataStorage[item]._mappedItems[item2] = foundFunc[0];
+									return foundFunc[1];
+								}
+								return "div";
 							}
-						}
+						});
 					}
 				};
 				
