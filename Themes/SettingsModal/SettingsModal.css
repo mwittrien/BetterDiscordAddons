@@ -67,6 +67,12 @@
 #app-mount .layer-86YKbF ~ .layer-86YKbF .repoHeader-2KfNvH {
 	padding-bottom: 0 !important;
 }
+#app-mount .layer-86YKbF ~ .layer-86YKbF .repoHeader-2KfNvH .tabBar-2StdUa {
+	gap: 30px !important;
+}
+#app-mount .layer-86YKbF ~ .layer-86YKbF .repoHeader-2KfNvH .quickSelectLabel-ArUyd9 {
+	font-size: 12px !important;
+}
 #app-mount .layer-86YKbF ~ .layer-86YKbF .repoScroller-9JnAPs {
 	padding-top: 0 !important;
 }
