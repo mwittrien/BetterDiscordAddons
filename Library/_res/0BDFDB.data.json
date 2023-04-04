@@ -270,11 +270,11 @@
 		"Checkmark": {"strings": ["d:\"M8.99991 16.17L4.82991"]},
 		"Emoji": {"strings": ["emojiName", "shouldAnimate", "jumboable"], "funcStrings": ["autoplay"]},
 		"EmojiButton": {"strings": ["renderButtonContents", "PickerPerRow", "SELECT_EMOJI"]},
-		"EmojiPicker": {"strings": ["emojiSize", "inExpressionPicker", ",emojiPaddingHorizontal:"], "funcStrings": ["compare"]},
+		"EmojiPicker": {"strings": ["emojiSize", "disableEmojiTutorial", ",emojiPaddingHorizontal:"], "funcStrings": ["compare"]},
 		"Flex": {"props": ["Wrap", "Direction", "Child"]},
 		"FlowerStar": {"strings": ["flowerStarContainer", ".jsx)"]},
 		"FocusRingScope": {"strings": ["FocusRing", "ringTarget was not"]},
-		"FormComponents": {"props": ["INPUT_PLACEHOLDER", "LABEL_SELECTED"], "exported": false, "value": "exports", "map": {
+		"FormComponents": {"strings": ["INPUT_PLACEHOLDER", "LABEL_SELECTED"], "exported": false, "value": "exports", "map": {
 			"FormDivider": [".divider"],
 			"FormItem": [".titleClassName", "required"],
 			"FormNotice": [".iconClassName", ".imageData"],
@@ -289,7 +289,6 @@
 			"Sizes": ["\"SMOL\"", "\"SMALLER\""]
 		}},
 		"GuildTooltipMutedText": {"strings": [".muteConfig", "color:\"text-muted\""]},
-		"Header": {"props": ["Sizes", "Tags"]},
 		"Heading": {"strings": ["data-excessive", ".defaultColor"]},
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},
 		"ImageComponents": {"strings": ["containerRef", "zoomable", "LOADING"], "exported": false, "value": "exports", "map": {
@@ -303,7 +302,6 @@
 			"LayerContainer": [".layerContainer", "missing parent"]
 		}},
 		"LazyImage": {"protos": ["loadImage", "getRatio", "getSrc"]},
-		"ListHeader": {"strings": [".container", "\"h2\"", "[\"aria-label\"]"]},
 		"Mask": {"props": "Masks"},
 		"Menu": {"strings": ["Menu API only allows Items and groups of Items as children"], "funcStrings": ["keyboardModeEnabled"]},
 		"MessageGroup": {"strings": ["renderThreadAccessory", "HAS_THREAD", "allowHeading"], "nonStrings": ["THREAD_STARTER"]},
@@ -330,7 +328,6 @@
 			"GroupDM": [".getGuildId", "selected:n,muted"],
 			"LinkButton": [".apply(this"]
 		}},
-		"RoleMention": {"strings": ["rolePopout", "inlinePreview"], "funcStrings": ["inlinePreview"]},
 		"Scrollers": {"strings": ["().thin", "().none", "().auto", "().fade)}"], "exported": false, "value": "exports"},
 		"SpinnerComponents": {"strings": ["WANDERING_CUBES", "wanderingCubes", ".spinningCircleInner"], "exported": false, "value": "exports", "map": {
 			"Spinner": [".spinningCircleInner"],
@@ -343,7 +340,6 @@
 		"Text": {"strings": ["lineClamp:", ".selectable", ".defaultColor"]},
 		"TextElement": {"strings": [".strong,", ".STANDARD"]},
 		"Timeout": {"protos": ["start", "stop", "isStarted"]},
-		"UserBadges": {"props": ["BadgeSizes"]},
 		"UserBadgeComponents": {"strings": [".PROFILE_USER_BADGES", "SIZE_24"], "exported": false, "value": "exports", "map": {
 			"UserBadges": [".PROFILE_USER_BADGES"],
 			"Sizes": ["\"SIZE_24\":"]
