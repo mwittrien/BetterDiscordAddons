@@ -6,6 +6,7 @@
 	--settingsmodalheight: 80vh;
 }
 
+
 #app-mount .baseLayer-W6S8cY {
 	opacity: 1 !important;
 	transform: unset !important;
@@ -56,6 +57,10 @@
 	margin: unset !important;
 	padding: unset !important;
 	overflow: hidden !important;
+}
+#app-mount .layer-86YKbF ~ .layer-86YKbF .sidebarRegion-1VBisG,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .sidebarRegionScroller-FXiQOh {
+	flex: 0 0 auto !important;
 }
 #app-mount .layer-86YKbF ~ .layer-86YKbF .sidebar-nqHbhN {
 	width: 218px !important;
@@ -123,17 +128,26 @@
 }
 #app-mount .layer-86YKbF ~ .layer-86YKbF .baseLayoutProfileThemes-1Jj-oN .sectionsContainer-3BlPu4,
 #app-mount .layer-86YKbF ~ .layer-86YKbF .baseLayoutProfileThemes-1Jj-oN .editor-328F1U,
-#app-mount .layer-86YKbF ~ .layer-86YKbF .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq,
-#app-mount .layer-86YKbF ~ .layer-86YKbF .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq .userPopoutOuter-3AVBmJ {
+#app-mount .layer-86YKbF ~ .layer-86YKbF .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq {
 	min-width: calc((var(--settingsmodalwidth) - 356px) / 2) !important;
 	max-width: calc((var(--settingsmodalwidth) - 356px) / 2) !important;
 }
 #app-mount .layer-86YKbF ~ .layer-86YKbF .tryItOutSection-W9qeGH .baseLayoutProfileThemes-1Jj-oN .sectionsContainer-3BlPu4,
 #app-mount .layer-86YKbF ~ .layer-86YKbF .tryItOutSection-W9qeGH .baseLayoutProfileThemes-1Jj-oN .editor-328F1U,
-#app-mount .layer-86YKbF ~ .layer-86YKbF .tryItOutSection-W9qeGH .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq,
-#app-mount .layer-86YKbF ~ .layer-86YKbF .tryItOutSection-W9qeGH .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq .userPopoutOuter-3AVBmJ {
+#app-mount .layer-86YKbF ~ .layer-86YKbF .tryItOutSection-W9qeGH .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq {
 	min-width: calc((var(--settingsmodalwidth) - 372px) / 2) !important;
 	max-width: calc((var(--settingsmodalwidth) - 372px) / 2) !important;
+}
+#app-mount .layer-86YKbF ~ .layer-86YKbF .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq .userPopoutOuter-3AVBmJ {
+	width: calc((var(--settingsmodalwidth) - 356px) / 2) !important;
+}
+#app-mount .layer-86YKbF ~ .layer-86YKbF .tryItOutSection-W9qeGH .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq .userPopoutOuter-3AVBmJ {
+	width: calc((var(--settingsmodalwidth) - 356px) / 2) !important;
+}
+#app-mount .layer-86YKbF ~ .layer-86YKbF .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq .userPopoutOuter-3AVBmJ,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .tryItOutSection-W9qeGH .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq .userPopoutOuter-3AVBmJ {
+	min-width: unset !important;
+	max-width: 340px !important;
 }
 #app-mount .layer-86YKbF ~ .layer-86YKbF .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq .userPopoutInner-1hXSeY {
 	overflow: hidden !important;
