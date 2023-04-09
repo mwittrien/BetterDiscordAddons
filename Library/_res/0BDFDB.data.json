@@ -303,7 +303,7 @@
 		}},
 		"LazyImage": {"protos": ["loadImage", "getRatio", "getSrc"]},
 		"Mask": {"props": "Masks"},
-		"Menu": {"strings": ["Menu API only allows Items and groups of Items as children"], "funcStrings": ["keyboardModeEnabled"]},
+		"Menu": {"strings": ["Menu API only allows Items and groups of Items as children"]},
 		"MessageGroup": {"strings": ["renderThreadAccessory", "HAS_THREAD", "allowHeading"], "nonStrings": ["THREAD_STARTER"]},
 		"MessagesPopoutComponents": {"strings": ["canCloseAllMessages", "loadingMore"], "exported": false, "value": "exports", "map": {
 			"EmptyState": ["emptyPlaceholder"],
