@@ -2433,7 +2433,7 @@ module.exports = (_ => {
 						if (!n || !n[1]) return;
 						let funcString = typeof n[1] == "function" ? n[1].toString() : (_ => {try {return JSON.stringify(n[1])}catch(err){return n[1].toString()}})();
 						let renderFuncString = typeof n[1].render == "function" && n[1].render.toString() || "";
-						return [dataStorage[item].funcStrings].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1 || renderFuncString.indexOf(string) > -1);
+						return [dataStorage[item].funcStrings].flat(10).filter(s => s && typeof s == "string").every(string => funcString && funcString.indexOf(string) > -1 || renderFuncString && renderFuncString.indexOf(string) > -1);
 					}) || [])[1];
 					if (dataStorage[item].map) {
 						dataStorage[item]._originalModule = moduleStorage[item];
@@ -2447,7 +2447,7 @@ module.exports = (_ => {
 									if (!n || !n[1]) return;
 									let funcString = typeof n[1] == "function" ? n[1].toString() : (_ => {try {return JSON.stringify(n[1])}catch(err){return n[1].toString()}})();
 									let renderFuncString = typeof n[1].render == "function" && n[1].render.toString() || "";
-									return [dataStorage[item].map[item2]].flat(10).filter(s => s && typeof s == "string").every(string => funcString.indexOf(string) > -1 || renderFuncString.indexOf(string) > -1);
+									return [dataStorage[item].map[item2]].flat(10).filter(s => s && typeof s == "string").every(string => funcString && funcString.indexOf(string) > -1 || renderFuncString && renderFuncString.indexOf(string) > -1);
 								});
 								if (foundFunc) {
 									dataStorage[item]._mappedItems[item2] = foundFunc[0];
