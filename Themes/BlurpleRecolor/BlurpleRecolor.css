@@ -2717,6 +2717,9 @@ input.input-2g-os5 {										/* textinput												*/
 #app-mount .tooltipBrand-uKW6Xn {
 	background-color: rgb(var(--accentcolor));
 }
+#app-mount .tooltipBrand-uKW6Xn a {
+	filter: brightness(50%);
+}
 #app-mount .tooltipBrand-uKW6Xn .tooltipPointer-sMBQqe {
 	border-top-color: rgb(var(--accentcolor));
 }

@@ -6707,6 +6707,11 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 #app-mount .tooltipBlack-3X399X .note-e4Jh6_ {
 	color: #bbb;
 }
+#app-mount .tooltipPrimary-2466a2 a,
+#app-mount .tooltipGrey-1nKbfD a,
+#app-mount .tooltipBlack-3X399X a {
+	filter: brightness(50%);
+}
 #app-mount .tooltipPrimary-2466a2 .tooltipPointer-sMBQqe,
 #app-mount .tooltipGrey-1nKbfD .tooltipPointer-sMBQqe,
 #app-mount .tooltipBlack-3X399X .tooltipPointer-sMBQqe {
