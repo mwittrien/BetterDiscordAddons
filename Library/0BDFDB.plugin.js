@@ -3153,7 +3153,7 @@ module.exports = (_ => {
 					else {
 						if (typeof color == "string") color = color.replace(/calc\(.+\s*\*\s*([0-9\.\%]+)\)/g, "$1");
 						conv = conv === undefined || !conv ? conv = "RGBCOMP" : conv.toUpperCase();
-						type = type === undefined || !type || !["RGB", "RGBA", "RGBCOMP", "HSL", "HSLA", "HSLCOMP", "HEX", "HEXA", "INT"].includes(type.toUpperCase()) ? BDFDB.ColorUtils.getType(color) : type.toUpperCase();
+						type = type === undefined || !type || !["RGB", "RGBA", "RGBCOMP", "HSL", "HSLA", "HSLCOMP", "HSV", "HSVA", "HSVCOMP", "HEX", "HEXA", "INT"].includes(type.toUpperCase()) ? BDFDB.ColorUtils.getType(color) : type.toUpperCase();
 						if (conv == "RGBCOMP") {
 							switch (type) {
 								case "RGBCOMP":
@@ -3172,14 +3172,14 @@ module.exports = (_ => {
 									return processRGB(rgbComp).concat(a);
 								case "HSLCOMP":
 									var hslComp = [].concat(color);
-									if (hslComp.length == 3) return BDFDB.ColorUtils.convert(`hsl(${processHSL(hslComp).join(",")})`, "RGBCOMP");
+									if (hslComp.length == 3) return BDFDB.ColorUtils.convert(`hsl(${processHSX(hslComp).join(",")})`, "RGBCOMP");
 									else if (hslComp.length == 4) {
 										let a = processA(hslComp.pop());
-										return BDFDB.ColorUtils.convert(`hsl(${processHSL(hslComp).join(",")})`, "RGBCOMP").concat(a);
+										return BDFDB.ColorUtils.convert(`hsl(${processHSX(hslComp).join(",")})`, "RGBCOMP").concat(a);
 									}
 									break;
 								case "HSL":
-									var hslComp = processHSL(color.replace(/\s/g, "").slice(4, -1).split(","));
+									var hslComp = processHSX(color.replace(/\s/g, "").slice(4, -1).split(","));
 									var r, g, b, m, c, x, p, q;
 									var h = hslComp[0], s = processPercentage(hslComp[1]), l = processPercentage(hslComp[2]);
 									var a = s * Math.min(l, 1-l);
@@ -3188,6 +3188,32 @@ module.exports = (_ => {
 								case "HSLA":
 									var hslComp = color.replace(/\s/g, "").slice(5, -1).split(",");
 									return BDFDB.ColorUtils.convert(`hsl(${hslComp.slice(0, 3).join(",")})`, "RGBCOMP").concat(processA(hslComp.pop()));
+								case "HSVCOMP":
+									var hsvComp = [].concat(color);
+									if (hsvComp.length == 3) return BDFDB.ColorUtils.convert(`hsv(${processHSX(hsvComp).join(",")})`, "RGBCOMP");
+									else if (hsvComp.length == 4) {
+										let a = processA(hsvComp.pop());
+										return BDFDB.ColorUtils.convert(`hsv(${processHSX(hsvComp).join(",")})`, "RGBCOMP").concat(a);
+									}
+									break;
+								case "HSV":
+									var hsvComp = processHSX(color.replace(/\s/g, "").slice(4, -1).split(","));
+									var r, g, b, i, f, p, q, t;
+									var h = hsvComp[0] / 360, s = processPercentage(hsvComp[1]), v = processPercentage(hsvComp[2]);
+									i = Math.floor(h * 6), f = h * 6 - i, p = v * (1 - s), q = v * (1 - f * s), t = v * (1 - (1 - f) * s);
+
+									switch (i % 6) {
+										case 0: r = v, g = t, b = p; break;
+										case 1: r = q, g = v, b = p; break;
+										case 2: r = p, g = v, b = t; break;
+										case 3: r = p, g = q, b = v; break;
+										case 4: r = t, g = p, b = v; break;
+										case 5: r = v, g = p, b = q; break;
+									}
+									return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+								case "HSVA":
+									var hsvComp = color.replace(/\s/g, "").slice(5, -1).split(",");
+									return BDFDB.ColorUtils.convert(`hsv(${hsvComp.slice(0, 3).join(",")})`, "RGBCOMP").concat(processA(hsvComp.pop()));
 								case "HEX":
 									var hex = /^#([a-f\d]{1})([a-f\d]{1})([a-f\d]{1})$|^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
 									return [parseInt(hex[1] + hex[1] || hex[4], 16), parseInt(hex[2] + hex[2] || hex[5], 16), parseInt(hex[3] + hex[3] || hex[6], 16)];
@@ -3202,26 +3228,27 @@ module.exports = (_ => {
 							}
 						}
 						else {
-							if (conv && type && conv.indexOf("HSL") == 0 && type.indexOf("HSL") == 0) {
-								if (type == "HSLCOMP") {
-									let hslComp = [].concat(color);
+							if (conv && type && (conv.indexOf("HSL") == 0 && type.indexOf("HSL") == 0 || conv.indexOf("HSV") == 0 && type.indexOf("HSV") == 0)) {
+								let name = type.indexOf("HSL") == 0 ? "HSL" : "HSV";
+								if (type == `${name}COMP`) {
+									let comp = [].concat(color);
 									switch (conv) {
-										case "HSLCOMP":
-											if (hslComp.length == 3) return processHSL(hslComp);
-											else if (hslComp.length == 4) {
-												var a = processA(hslComp.pop());
-												return processHSL(hslComp).concat(a);
+										case `${name}COMP`:
+											if (comp.length == 3) return processHSX(comp);
+											else if (comp.length == 4) {
+												var a = processA(comp.pop());
+												return processHSX(comp).concat(a);
 											}
 											break;
-										case "HSL":
-											return `hsl(${processHSL(hslComp.slice(0, 3)).join(",")})`;
-										case "HSLA":
-											hslComp = hslComp.slice(0, 4);
-											var a = hslComp.length == 4 ? processA(hslComp.pop()) : 1;
-											return `hsla(${processHSL(hslComp).concat(a).join(",")})`;
+										case name:
+											return `${name.toLowerCase()}(${processHSX(comp.slice(0, 3)).join(",")})`;
+										case `${name}A`:
+											comp = comp.slice(0, 4);
+											var a = comp.length == 4 ? processA(comp.pop()) : 1;
+											return `${name.toLowerCase()}a(${processHSX(comp).concat(a).join(",")})`;
 									}
 								}
-								return BDFDB.ColorUtils.convert(color.replace(/\s/g, "").slice(color.toUpperCase().indexOf("HSLA") == 0 ? 5 : 4, -1).split(","), conv, "HSLCOMP");
+								return BDFDB.ColorUtils.convert(color.replace(/\s/g, "").slice(color.toUpperCase().indexOf("A") == 3 ? 5 : 4, -1).split(","), conv, `${name}COMP`);
 							}
 							else {
 								let rgbComp = type == "RGBCOMP" ? [].concat(color) : BDFDB.ColorUtils.convert(color, "RGBCOMP", type);
@@ -3234,21 +3261,45 @@ module.exports = (_ => {
 										return `rgba(${processRGB(rgbComp).concat(a).join(",")})`;
 									case "HSLCOMP":
 										var a = rgbComp.length == 4 ? processA(rgbComp.pop()) : null;
-										var hslComp = processHSL(BDFDB.ColorUtils.convert(rgbComp, "HSL").replace(/\s/g, "").split(","));
+										var hslComp = processHSX(BDFDB.ColorUtils.convert(rgbComp, "HSL").replace(/\s/g, "").split(","));
 										return a != null ? hslComp.concat(a) : hslComp;
 									case "HSL":
+										var r = processC(rgbComp[0]) / 255, g = processC(rgbComp[1]) / 255, b = processC(rgbComp[2]) / 255;
+										var max = Math.max(r, g, b), min = Math.min(r, g, b);
+
+										var h, s, l;
+										h = s = l = (max + min) / 2;
+
+										if (max === min) return `hsl(${processHSX([0, 0, l * 100]).join(",")})`;
+
+										var dif = max - min;
+										s = l >= 0.5 ? dif / (2 - (max + min)) : dif / (max + min);
+										switch (max) {
+											case r: h = ((g - b) / dif + 0) * 60; break;
+											case g: h = ((b - r) / dif + 2) * 60; break;
+											case b: h = ((r - g) / dif + 4) * 60; break;
+										}
+										return `hsl(${processHSX([Math.round(h * 360), s * 100, l * 100]).join(",")})`;
+									case "HSLA":
+										var a = rgbComp.length == 4 ? processA(rgbComp.pop()) : 1;
+										return `hsla(${BDFDB.ColorUtils.convert(rgbComp, "HSL").slice(4, -1).split(",").concat(a).join(",")})`;
+									case "HSVCOMP":
+										var a = rgbComp.length == 4 ? processA(rgbComp.pop()) : null;
+										var hsvComp = processHSX(BDFDB.ColorUtils.convert(rgbComp, "HSV").replace(/\s/g, "").split(","));
+										return a != null ? hsvComp.concat(a) : hsvComp;
+									case "HSV":
 										var r = processC(rgbComp[0]), g = processC(rgbComp[1]), b = processC(rgbComp[2]);
-										var max = Math.max(r, g, b), min = Math.min(r, g, b), dif = max - min, h, l = max === 0 ? 0 : dif / max, s = max / 255;
+										var max = Math.max(r, g, b), min = Math.min(r, g, b), dif = max - min, h, s = max === 0 ? 0 : dif / max, v = max / 255;
 										switch (max) {
 											case min: h = 0; break;
 											case r: h = g - b + dif * (g < b ? 6 : 0); h /= 6 * dif; break;
 											case g: h = b - r + dif * 2; h /= 6 * dif; break;
 											case b: h = r - g + dif * 4; h /= 6 * dif; break;
 										}
-										return `hsl(${processHSL([Math.round(h * 360), l * 100, s * 100]).join(",")})`;
-									case "HSLA":
+										return `hsv(${processHSX([Math.round(h * 360), s * 100, v * 100]).join(",")})`;
+									case "HSVA":
 										var a = rgbComp.length == 4 ? processA(rgbComp.pop()) : 1;
-										return `hsla(${BDFDB.ColorUtils.convert(rgbComp, "HSL").slice(4, -1).split(",").concat(a).join(",")})`;
+										return `hsva(${BDFDB.ColorUtils.convert(rgbComp, "HSV").slice(4, -1).split(",").concat(a).join(",")})`;
 									case "HEX":
 										return ("#" + (0x1000000 + (rgbComp[2] | rgbComp[1] << 8 | rgbComp[0] << 16)).toString(16).slice(1)).toUpperCase();
 									case "HEXA":
@@ -3291,7 +3342,7 @@ module.exports = (_ => {
 							return (isNaN(sl) || sl > 100 ? 100 : sl < 0 ? 0 : sl) + "%";
 						}
 					};
-					function processHSL (comp) {
+					function processHSX (comp) {
 						comp = [].concat(comp);
 						let h = parseFloat(comp.shift().toString().replace(/[^0-9\.\-]/g, ""));
 						h = isNaN(h) || h > 360 ? 360 : h < 0 ? 0 : h;
@@ -3410,6 +3461,8 @@ module.exports = (_ => {
 								else if (color.indexOf("RGBA(") == 0 && comp.length == 4 && isRGB(comp)) return "RGBA";
 								else if (color.indexOf("HSL(") == 0 && comp.length == 3 && isHSL(comp)) return "HSL";
 								else if (color.indexOf("HSLA(") == 0 && comp.length == 4 && isHSL(comp)) return "HSLA";
+								else if (color.indexOf("HSV(") == 0 && comp.length == 3 && isHSL(comp)) return "HSV";
+								else if (color.indexOf("HSVA(") == 0 && comp.length == 4 && isHSL(comp)) return "HSVA";
 							}
 						}
 						else if (typeof color === "number" && parseInt(color) == color && color > -1 && color < 16777216) return "INT";
@@ -5106,13 +5159,13 @@ module.exports = (_ => {
 					render() {
 						if (this.state.isGradient) this.props.color = Object.assign({}, this.props.color);
 						
-						let hslFormat = this.props.alpha ? "HSLA" : "HSL";
+						let colorFormat = this.props.alpha ? "HSVA" : "HSV";
 						let hexRegex = this.props.alpha ? /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i : /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
 						
-						let selectedColor = BDFDB.ColorUtils.convert(this.state.isGradient ? this.props.color[this.state.selectedGradientCursor] : this.props.color, hslFormat) || BDFDB.ColorUtils.convert("#000000FF", hslFormat);
-						let currentGradient = (this.state.isGradient ? Object.entries(this.props.color, hslFormat) : [[0, selectedColor], [1, selectedColor]]);
+						let selectedColor = BDFDB.ColorUtils.convert(this.state.isGradient ? this.props.color[this.state.selectedGradientCursor] : this.props.color, colorFormat) || BDFDB.ColorUtils.convert("#000000FF", colorFormat);
+						let currentGradient = (this.state.isGradient ? Object.entries(this.props.color, colorFormat) : [[0, selectedColor], [1, selectedColor]]);
 						
-						let [h, s, l] = BDFDB.ColorUtils.convert(selectedColor, "HSLCOMP");
+						let [h, s, v] = BDFDB.ColorUtils.convert(selectedColor, "HSVCOMP");
 						let a = BDFDB.ColorUtils.getAlpha(selectedColor);
 						a = a == null ? 1 : a;
 						
@@ -5129,10 +5182,10 @@ module.exports = (_ => {
 											className: BDFDB.disCN.colorpickersaturation,
 											children: BDFDB.ReactUtils.createElement("div", {
 												className: BDFDB.disCN.colorpickersaturationcolor,
-												style: {position: "absolute", top: 0, right: 0, bottom: 0, left: 0, cursor: "crosshair", backgroundColor: BDFDB.ColorUtils.convert([h, "100%", "100%"], "RGB")},
+												style: {position: "absolute", top: 0, right: 0, bottom: 0, left: 0, cursor: "crosshair", backgroundColor: BDFDB.ColorUtils.convert([h, "100%", "50%"], "RGB")},
 												onClick: event => {
 													let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickersaturationcolor, event.target));
-													this.handleColorChange(BDFDB.ColorUtils.convert([h, BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 100], event.clientX) + "%", BDFDB.NumberUtils.mapRange([rects.top, rects.top + rects.height], [100, 0], event.clientY) + "%", a], hslFormat));
+													this.handleColorChange(BDFDB.ColorUtils.convert([h, BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 100], event.clientX) + "%", BDFDB.NumberUtils.mapRange([rects.top, rects.top + rects.height], [100, 0], event.clientY) + "%", a], colorFormat, "HSVCOMP"));
 												},
 												onMouseDown: event => {
 													let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickersaturationcolor, event.target));
@@ -5141,7 +5194,7 @@ module.exports = (_ => {
 														document.removeEventListener("mousemove", mouseMove);
 													};
 													let mouseMove = event2 => {
-														this.handleColorChange(BDFDB.ColorUtils.convert([h, BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 100], event2.clientX) + "%", BDFDB.NumberUtils.mapRange([rects.top, rects.top + rects.height], [100, 0], event2.clientY) + "%", a], hslFormat));
+														this.handleColorChange(BDFDB.ColorUtils.convert([h, BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 100], event2.clientX) + "%", BDFDB.NumberUtils.mapRange([rects.top, rects.top + rects.height], [100, 0], event2.clientY) + "%", a], colorFormat, "HSVCOMP"));
 													};
 													document.addEventListener("mouseup", mouseUp);
 													document.addEventListener("mousemove", mouseMove);
@@ -5160,7 +5213,7 @@ module.exports = (_ => {
 															}),
 															BDFDB.ReactUtils.createElement("div", {
 																className: BDFDB.disCN.colorpickersaturationcursor,
-																style: {position: "absolute", cursor: "crosshair", left: s, top: `${BDFDB.NumberUtils.mapRange([0, 100], [100, 0], parseFloat(l))}%`},
+																style: {position: "absolute", cursor: "crosshair", left: s, top: `${BDFDB.NumberUtils.mapRange([0, 100], [100, 0], parseFloat(v))}%`},
 																children: BDFDB.ReactUtils.createElement("div", {
 																	style: {width: 4, height: 4, boxShadow: "rgb(255, 255, 255) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.3) 0px 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px 0px 1px 2px", borderRadius: "50%", transform: "translate(-2px, -2px)"}
 																})
@@ -5179,7 +5232,7 @@ module.exports = (_ => {
 													style: {padding: "0px 2px", position: "relative", height: "100%"},
 													onClick: event => {
 														let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickerhuehorizontal, event.target));
-														this.handleColorChange(BDFDB.ColorUtils.convert([BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 360], event.clientX), s, l, a], hslFormat));
+														this.handleColorChange(BDFDB.ColorUtils.convert([BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 360], event.clientX), s, v, a], colorFormat, "HSVCOMP"));
 													},
 													onMouseDown: event => {
 														let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickerhuehorizontal, event.target));
@@ -5188,7 +5241,7 @@ module.exports = (_ => {
 															document.removeEventListener("mousemove", mouseMove);
 														};
 														let mouseMove = event2 => {
-															this.handleColorChange(BDFDB.ColorUtils.convert([BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 360], event2.clientX), s, l, a], hslFormat));
+															this.handleColorChange(BDFDB.ColorUtils.convert([BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 360], event2.clientX), s, v, a], colorFormat, "HSVCOMP"));
 														};
 														document.addEventListener("mouseup", mouseUp);
 														document.addEventListener("mousemove", mouseMove);
@@ -5222,10 +5275,10 @@ module.exports = (_ => {
 													style: {position: "absolute", top: 0, right: 0, bottom: 0, left: 0},
 													children: BDFDB.ReactUtils.createElement("div", {
 														className: BDFDB.disCN.colorpickeralphahorizontal,
-														style: {padding: "0px 2px", position: "relative", height: "100%", background: `linear-gradient(to right, ${BDFDB.ColorUtils.setAlpha([h, s, l], 0, "RGBA")}, ${BDFDB.ColorUtils.setAlpha([h, s, l], 1, "RGBA")}`},
+														style: {padding: "0px 2px", position: "relative", height: "100%", background: `linear-gradient(to right, ${BDFDB.ColorUtils.setAlpha([h, s, v], 0, "RGBA")}, ${BDFDB.ColorUtils.setAlpha([h, s, v], 1, "RGBA")}`},
 														onClick: event => {
 															let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickeralphahorizontal, event.target));
-															this.handleColorChange(BDFDB.ColorUtils.setAlpha([h, s, l], BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 1], event.clientX), hslFormat));
+															this.handleColorChange(BDFDB.ColorUtils.setAlpha([h, s, v], BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 1], event.clientX), colorFormat));
 														},
 														onMouseDown: event => {
 															let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickeralphahorizontal, event.target));
@@ -5237,7 +5290,7 @@ module.exports = (_ => {
 															};
 															let mouseMove = event2 => {
 																this.state.draggingAlphaCursor = true;
-																this.handleColorChange(BDFDB.ColorUtils.setAlpha([h, s, l], BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 1], event2.clientX), hslFormat));
+																this.handleColorChange(BDFDB.ColorUtils.setAlpha([h, s, v], BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 1], event2.clientX), colorFormat));
 															};
 															document.addEventListener("mouseup", mouseUp);
 															document.addEventListener("mousemove", mouseMove);
@@ -5279,7 +5332,7 @@ module.exports = (_ => {
 															let rects = BDFDB.DOMUtils.getRects(event.target);
 															let pos = BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0.01, 0.99], event.clientX);
 															if (Object.keys(this.props.color).indexOf(pos) == -1) {
-																this.props.color[pos] = BDFDB.ColorUtils.convert("#000000FF", hslFormat);
+																this.props.color[pos] = BDFDB.ColorUtils.convert("#000000FF", colorFormat);
 																this.state.selectedGradientCursor = pos;
 																this.handleColorChange();
 															}
@@ -6277,7 +6330,6 @@ module.exports = (_ => {
 						}
 						else controlRef.current && controlRef.current.blur && controlRef.current.blur(controlRef.current);
 					}), [props.isFocused]);
-					
 					return BDFDB.ReactUtils.createElement("div", Object.assign({
 						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN[`menucolor${(props.color && InternalData.DiscordClasses[`menucolor${props.color.toLowerCase()}`] || Internal.DiscordConstants.MenuItemColors.DEFAULT || "").toLowerCase()}`], props.disabled && BDFDB.disCN.menudisabled, props.showDefaultFocus && props.isFocused && BDFDB.disCN.menufocused, !props.showDefaultFocus && BDFDB.disCN.menuhideinteraction),
 						onClick: BDFDB.ReactUtils.useCallback((_ => {
