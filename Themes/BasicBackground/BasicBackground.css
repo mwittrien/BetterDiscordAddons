@@ -3646,7 +3646,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .emptyIcon-uKVxYR {											/* body					emptypic							*/
 	opacity: .5;
 }
-.profileColors-3Y0XaR .mask-1y0tyc circle {
+.profileColors-2AgAV4 .mask-1y0tyc circle {
 	fill: transparent;
 }
 
@@ -4617,26 +4617,14 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 
 /* ----		14.2.	USERPOPOUT						---- */
 
-.userPopout-2j1gM4,											/* popout				container							*/
-.userPopout-3fydSP,											/* popout new			container							*/
-.userPopout-29jUdN,											/* popout new new		container							*/
-.userPopoutOuter-3AVBmJ {									/* popout new new new	container							*/
+.userPopoutOuter-1OHwPL {									/* popout				container							*/
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), .3), 0 2px 10px 0 rgba(var(--transparencycolor), .3);
 }
-.userPopout-2j1gM4,											/* popout				container							*/
-.userPopout-3fydSP:not(.userPopoutThemed-3BZ4by),			/* popout new			container							*/
-.userPopout-29jUdN:not(.userPopoutThemed-wGuRN3),			/* popout new new		container							*/
-.userProfileOuterUnthemed-2b2rsv {									/* popout new new new	container							*/
+.userProfileOuterUnthemed-11rPfA {							/* popout				container							*/
 	background: transparent;
 }
-.userPopout-2j1gM4::before,
-.userPopout-2j1gM4::after,
-.userPopout-3fydSP:not(.userPopoutThemed-3BZ4by)::before,
-.userPopout-3fydSP:not(.userPopoutThemed-3BZ4by)::after,
-.userPopout-29jUdN:not(.userPopoutThemed-wGuRN3)::before,
-.userPopout-29jUdN:not(.userPopoutThemed-wGuRN3)::after,
-.userProfileOuterUnthemed-2b2rsv::before,
-.userProfileOuterUnthemed-2b2rsv::after {
+.userProfileOuterUnthemed-11rPfA::before,
+.userProfileOuterUnthemed-11rPfA::after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -4649,52 +4637,26 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	pointer-events: none;
 	z-index: -1;
 }
-.userPopout-2j1gM4::before,
-.userPopout-3fydSP:not(.userPopoutThemed-3BZ4by)::before,
-.userPopout-29jUdN:not(.userPopoutThemed-wGuRN3)::before,
-.userProfileOuterUnthemed-2b2rsv::before {
+.userProfileOuterUnthemed-11rPfA::before {
 	background: var(--popout) var(--popoutposition)/var(--popoutsize);
 	background-attachment: fixed;
 }
-.userPopout-2j1gM4::after,
-.userPopout-3fydSP:not(.userPopoutThemed-3BZ4by)::after,
-.userPopout-29jUdN:not(.userPopoutThemed-wGuRN3)::after,
-.userProfileOuterUnthemed-2b2rsv::after {
+.userProfileOuterUnthemed-11rPfA::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 	backdrop-filter: blur(var(--popoutblur));
 }
-.accountProfilePopoutWrapper-3GskID .overlayBackground-1KgwVi {
+.accountProfilePopoutWrapper-3GskID .overlayBackground-2aa7wt {
 	display: block !important;
 }
-.profileColors-3Y0XaR {										/* popout new			profilecolors						*/
+.profileColors-2AgAV4 {										/* popout				profilecolors						*/
     --profile-body-background-color: rgba(0,0,0,.4) !important;
     --profile-body-divider-color: var(--background-modifier-accent) !important;
     --profile-body-divider-opacity: 1 !important;
 }
-#app-mount .headerTop-3GPUSF,								/* popout				header inner						*/
-#app-mount .activity-1gTu-L,								/* popout				activity							*/
-#app-mount .aboutMeSection-PUghFQ {							/* popout				about me section					*/
-	background: transparent;
-	border: transparent;
+#app-mount .userProfileOuterThemed-2BgJCM ::-webkit-scrollbar-thumb {
+	background-color: var(--profile-gradient-secondary-color) !important;
 }
-#app-mount .activity-1gTu-L {
-	padding: 0 16px 16px;
-}
-.userPopout-2j1gM4 *:not(foreignObject) > .banner-1YaD3N,		/* popout				banner								*/
-.userPopout-3fydSP *:not(foreignObject) > .banner-2boKnS,		/* popout new			banner								*/
-.userPopout-29jUdN *:not(foreignObject) > .banner-2boKnS,		/* popout new new		banner								*/
-.userPopoutOuter-3AVBmJ *:not(foreignObject) > .banner-2boKnS,	/* popout new new new	banner								*/
-.menu-2TXYjN *:not(foreignObject) > .banner-1YaD3N {			/* status popout		banner								*/
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 16 120 A 46 46 0 0 1 62 76 A 46 46 0 0 1 108 120 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
-}
-.userPopout-3fydSP .userPopoutInnerWithTheme-71l1ON *:not(foreignObject) > .banner-2boKnS,
-.userPopout-29jUdN .userPopoutInnerWithTheme-2lKyJh *:not(foreignObject) > .banner-2boKnS,
-.userProfileOuterUnthemed-2b2rsv *:not(foreignObject) > .banner-2boKnS {
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="120" viewBox="0 0 2400 120" fill="none"><path fill="black" d="M 0 0 L 0 120 L 12 120 A 46 46 0 0 1 48 74 A 46 46 0 0 1 104 126 L 2400 120 L 2400 0 L 0 0 z"/></svg>') bottom left no-repeat;
-}
-.userPopoutInnerWithTheme-71l1ON::after,
-.userPopoutInnerWithTheme-2lKyJh::after,
-.userProfileInnerThemed-27tvAp::after {
+.userProfileInnerThemed-3dLhGM::after {
 	content: "";
 	position: absolute;
 	display: block;
@@ -4705,48 +4667,23 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	height: 60px;
 	z-index: 1;
 }
-.userPopoutInnerWithBanner-wsoegj::after,
-.userPopoutInnerWithBanner-24GX6I::after,
-.userProfileInnerWithBanner-3CJ1Og::after {
-	height: 120px;
-}
-.userPopoutInnerWithTheme-71l1ON::before,
-.userPopoutInnerWithTheme-2lKyJh::before,
-.userProfileInnerThemed-27tvAp::before {
+.userProfileInnerThemed-3dLhGM::before {
 	z-index: 2;
 }
-.userPopoutInnerWithTheme-71l1ON > *,
-.userPopoutInnerWithTheme-2lKyJh > *,
-.userProfileInnerThemed-27tvAp > * {
+.userProfileInnerThemed-3dLhGM > * {
 	z-index: 3;
 }
-.userPopoutInner-PA9zkU,									/* popout new			inner								*/
-.userPopoutInner-1v4xcM,									/* popout new new		inner								*/
-.userProfileInner-3F03PX {									/* popout new new new	inner								*/
+.userProfileInnerThemedWithBanner-25XGmz::after {
+	height: 120px;
+}
+.userProfileInner-1ngKnf {									/* popout				inner								*/
 	border-radius: 4px;
 }
-#app-mount .userProfileOuterThemed-3EfHmv ::-webkit-scrollbar-thumb {
-	background-color: var(--profile-gradient-secondary-color) !important;
-}
-.userPopout-2j1gM4 .wrapper-1VLyxH,							/* popout				avatar								*/
-.userPopout-2j1gM4 .avatarWrapper,							/* popout				status everywhere					*/
-.userPopout-3fydSP .wrapper-1VLyxH,							/* popout new			avatar								*/
-.userPopout-3fydSP .avatarWrapper,							/* popout new			status everywhere					*/
-.userPopout-29jUdN .wrapper-1VLyxH,							/* popout new new		avatar								*/
-.userPopout-29jUdN .avatarWrapper,							/* popout new new		status everywhere					*/
-.userPopoutOuter-3AVBmJ .wrapper-1VLyxH,					/* popout new new new	avatar								*/
-.userPopoutOuter-3AVBmJ .avatarWrapper,						/* popout new new new	status everywhere					*/
-.menu-2TXYjN .wrapper-1VLyxH,								/* status popout		avatar								*/
-.menu-2TXYjN .avatarWrapper {								/* status popout		status everywhere					*/
+.userPopoutOuter-1OHwPL .wrapper-3Un6-K,					/* popout				avatar								*/
+.userPopoutOuter-1OHwPL .avatarWrapper {					/* popout				status everywhere					*/
 	background-color: transparent;
 	border-color: transparent;
 	box-sizing: content-box;
-}
-#app-mount .body-2wLx-E,									/* popout				body								*/
-#app-mount .bodyInnerWrapper-2bQs1k,						/* popout				body inner							*/
-#app-mount .footer-3naVBw {									/* popout				footer								*/
-	background-color: transparent;
-	color: var(--header-secondary);
 }
 
 .root-jbEB5E {												/* body					roles								*/
@@ -4817,15 +4754,12 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 	background-color: rgba(var(--transparencycolor), .2);
 }
 
-.wumpusWrapper-2-V9io {										/* footer				wumpus new user 					*/
-	margin-top: 27px;
-}
-#app-mount .wumpusTooltip-mj7eo0 {
+#app-mount .wumpusTooltip-15kPrN {
 	background-color: rgb(var(--accentcolor));
 	color: #fff;
 	text-shadow: 1px 1px var(--textshadow);
 }
-#app-mount .wumpusTooltip-mj7eo0::after {
+#app-mount .wumpusTooltip-15kPrN::after {
 	border-color: transparent rgb(var(--accentcolor)) transparent transparent;
 }
 

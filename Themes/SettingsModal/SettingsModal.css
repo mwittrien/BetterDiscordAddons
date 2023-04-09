@@ -138,14 +138,14 @@
 	min-width: calc((var(--settingsmodalwidth) - 372px) / 2) !important;
 	max-width: calc((var(--settingsmodalwidth) - 372px) / 2) !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq .userPopoutOuter-3AVBmJ {
+#app-mount .layer-86YKbF ~ .layer-86YKbF .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq .userPopoutOuter-1OHwPL {
 	width: calc((var(--settingsmodalwidth) - 356px) / 2) !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .tryItOutSection-W9qeGH .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq .userPopoutOuter-3AVBmJ {
+#app-mount .layer-86YKbF ~ .layer-86YKbF .tryItOutSection-W9qeGH .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq .userPopoutOuter-1OHwPL {
 	width: calc((var(--settingsmodalwidth) - 356px) / 2) !important;
 }
-#app-mount .layer-86YKbF ~ .layer-86YKbF .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq .userPopoutOuter-3AVBmJ,
-#app-mount .layer-86YKbF ~ .layer-86YKbF .tryItOutSection-W9qeGH .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq .userPopoutOuter-3AVBmJ {
+#app-mount .layer-86YKbF ~ .layer-86YKbF .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq .userPopoutOuter-1OHwPL,
+#app-mount .layer-86YKbF ~ .layer-86YKbF .tryItOutSection-W9qeGH .baseLayoutProfileThemes-1Jj-oN .previewProfileThemes-ViDDkq .userPopoutOuter-1OHwPL {
 	min-width: unset !important;
 	max-width: 340px !important;
 }
