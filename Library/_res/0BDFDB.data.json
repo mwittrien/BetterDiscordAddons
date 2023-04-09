@@ -242,7 +242,7 @@
 		"PopoutContainer": {"props": ["Animation", "defaultProps"]},
 		"RadioGroup": {"strings": ["itemInfoClassName", "hasSelection", ".radioItemIconClassName"]},
 		"SearchBar": {"strings": [").inputRef", ".containerRef", ".handleOnChange"]},
-		"SearchableSelect": {"strings": ["serialize", "haspopup", ".maxVisibleItems"], "exported": false, "value": "exports", "funcStrings": [".onChange,", ".jsx)", "isSelected:function"]},
+		"SearchableSelect": {"strings": ["serialize", "haspopup", ".maxVisibleItems"]},
 		"Slider": {"strings": [".stickToMarkers", "sortedMarkers"]},
 		"TabBar": {"props": ["Item", "Header", "Panel"]},
 		"Table": {"props": ["SortDirection", "defaultProps"]},
