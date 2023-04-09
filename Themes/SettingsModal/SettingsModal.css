@@ -69,6 +69,9 @@
 #app-mount .layer-86YKbF ~ .layer-86YKbF .contentColumnDefault-3eyv5o {
 	padding: 20px 40px !important;
 }
+#app-mount .layer-86YKbF ~ .layer-86YKbF .repo-k8F4Sd {
+	max-width: calc(var(--settingsmodalwidth) - 260px) !important;
+}
 #app-mount .layer-86YKbF ~ .layer-86YKbF .repoHeader-2KfNvH {
 	padding-bottom: 0 !important;
 }
