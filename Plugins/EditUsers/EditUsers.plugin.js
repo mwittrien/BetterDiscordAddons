@@ -1883,28 +1883,28 @@ module.exports = (_ => {
 						};
 					case "el":		// Greek
 						return {
-							confirm_reset:						"Είστε βέβαιοι ότι θέλετε να επαναφέρετε αυτόν τον χρήστη,",
-							confirm_resetall:					"Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλους τους χρήστες,",
-							context_localusersettings:			"Ρυθμίσεις τοπικού χρήστη",
+							confirm_reset:						"Θέλετε την επαναφορά αυτού του χρήστη;",
+							confirm_resetall:					"Θέλετε την επαναφορά όλων των χρηστών;",
+							context_localusersettings:			"Ρυθμίσεις χρήστη (τοπικά)",
 							modal_colorpicker1:					"Χρώμα ονόματος",
 							modal_colorpicker2:					"Χρώμα μηνύματος",
 							modal_colorpicker3:					"Χρώμα ετικέτας",
 							modal_colorpicker4:					"Χρώμα γραμματοσειράς",
-							modal_header:						"Ρυθμίσεις τοπικού χρήστη",
-							modal_ignoretagcolor:				"Χρησιμοποιήστε το χρώμα του ρόλου",
+							modal_header:						"Ρυθμίσεις χρήστη (τοπικά)",
+							modal_ignoretagcolor:				"Χρήση του χρώματος του ρόλου",
 							modal_invalidurl:					"Μη έγκυρη διεύθυνση URL",
 							modal_showaccountname:				"Εμφάνιση ονόματος",
 							modal_showservernick:				"Εμφάνιση ψευδωνύμου",
 							modal_tabheader1:					"Χρήστης",
 							modal_tabheader2:					"Χρώμα ονόματος",
 							modal_tabheader3:					"Ετικέτα",
-							modal_useravatar:					"Άβαταρ",
-							modal_username:						"Τοπικό όνομα χρήστη",
-							modal_userolecolor:					"Μην αντικαθιστάτε το χρώμα του ρόλου",
+							modal_useravatar:					"Εικόνα",
+							modal_username:						"Όνομα χρήστη (τοπικά)",
+							modal_userolecolor:					"Χωρίς αντικατάσταση του χρώματος του ρόλου",
 							modal_usertag:						"Ετικέτα",
-							modal_useservernick:				"Μην αντικαθιστάτε ψευδώνυμα",
+							modal_useservernick:				"Χωρίς αντικατάσταση των ψευδωνύμων",
 							submenu_resetsettings:				"Επαναφορά χρήστη",
-							submenu_usersettings:				"Αλλαξε ρυθμίσεις"
+							submenu_usersettings:				"Αλλαγή ρυθμίσεις"
 						};
 					case "es":		// Spanish
 						return {
