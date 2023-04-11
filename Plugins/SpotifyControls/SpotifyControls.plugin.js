@@ -477,6 +477,7 @@ module.exports = (_ => {
 						display: flex;
 						flex-direction: column;
 						justify-content: center;
+						background: var(--bg-overlay-1,var(--background-secondary-alt));
 						min-height: 52px;
 						margin-bottom: 1px;
 						border-bottom: 1px solid var(--background-modifier-accent);
