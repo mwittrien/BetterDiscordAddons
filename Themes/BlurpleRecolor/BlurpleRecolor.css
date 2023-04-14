@@ -3,8 +3,8 @@
 
 :root {
 	--accentcolor:					88,101,242;
-	--accentcolor2:					255,115,250;
-	--linkcolor:					0,176,244;
+	--accentcolor2:					170, 255, 148;
+	--linkcolor:					117, 83, 255;
 	
 	--accentcolor-hover:			rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255,255,255,.15), rgba(255,255,255,.15));
 	--accentcolor-active:			rgb(var(--accentcolor)) linear-gradient(0deg, rgba(255,255,255,.3), rgba(255,255,255,.3));
