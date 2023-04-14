@@ -2,7 +2,7 @@
  * @name Translator
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 2.5.4
+ * @version 2.5.5
  * @description Allows you to translate Messages and your outgoing Messages within Discord
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -1108,7 +1108,7 @@ module.exports = (_ => {
 			}
 			
 			papagoTranslate (data, callback) {
-				const credentials = (authKeys.papago && authKeys.papago.key || "kUNGxtAmTJQFbaFehdjk zC70k3VhpM").split(/[\s_-]/g);
+				const credentials = (authKeys.papago && authKeys.papago.key || "kUNGxtAmTJQFbaFehdjk zC70k3VhpM").split(" ");
 				BDFDB.LibraryRequires.request("https://openapi.naver.com/v1/papago/n2mt", {
 					method: "post",
 					form: {
@@ -1145,7 +1145,7 @@ module.exports = (_ => {
 			}
 			
 			baiduTranslate (data, callback) {
-				const credentials = (authKeys.baidu && authKeys.baidu.key || "20221009001380882 TOPnUKz8jJ32AZNOuUhX").split(/[\s_-]/g);
+				const credentials = (authKeys.baidu && authKeys.baidu.key || "20221009001380882 TOPnUKz8jJ32AZNOuUhX").split(" ");
 				const salt = BDFDB.NumberUtils.generateId();
 				BDFDB.LibraryRequires.request("https://fanyi-api.baidu.com/api/trans/vip/translate", {
 					method: "post",
