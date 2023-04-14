@@ -2,7 +2,7 @@
  * @name SpotifyControls
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.3.3
+ * @version 1.3.4
  * @description Adds a Control Panel while listening to Spotify on a connected Account
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -479,17 +479,16 @@ module.exports = (_ => {
 						justify-content: center;
 						min-height: 52px;
 						margin-bottom: 1px;
-						background: var(--background-secondary-alt);
 						border-bottom: 1px solid var(--background-modifier-accent);
 						padding: 0 8px;
 						box-sizing: border-box;
 						order: -1;
 					}
 					${BDFDB.dotCN.themelight + BDFDB.dotCNS.themecustombackground + BDFDB.dotCN._spotifycontrolscontainer} {
-						background: var(--bg-overlay-3,var(--background-secondary-alt));
+						background: var(--bg-overlay-3);
 					}
 					${BDFDB.dotCN.themedark + BDFDB.dotCNS.themecustombackground + BDFDB.dotCN._spotifycontrolscontainer} {
-						background: var(--bg-overlay-1,var(--background-secondary-alt));
+						background: var(--bg-overlay-1);
 					}
 					${BDFDB.dotCN._spotifycontrolscontainer + BDFDB.dotCN._spotifycontrolscontainerwithtimeline} {
 						padding-top: 8px;
