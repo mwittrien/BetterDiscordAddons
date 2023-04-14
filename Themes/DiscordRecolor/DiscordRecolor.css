@@ -113,6 +113,7 @@
 	--text-normal: rgb(var(--textbrighter));
 	--text-muted: rgb(var(--textdarker));
 	--channels-default: rgb(var(--textdark));
+	--channel-icon: rgb(var(--textdark));
 	
 	--interactive-normal: rgb(var(--textbright));
 	--interactive-hover: rgb(var(--textbrighter));
