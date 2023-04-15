@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.4
+ * @version 1.1.5
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -64,15 +64,20 @@ module.exports = (_ => {
 				this.state = {fetchedOwner: false, delayed: false, repositioned: false, forced: false};
 			}
 			componentDidUpdate() {
+				let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ReactUtils.findDOMNode(this));
+				if (tooltip) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN._serverdetailstooltip);
+				else if (this.props.tooltipContainer && this.props.tooltipContainer.tooltip) BDFDB.DOMUtils.removeClass(this.props.tooltipContainer.tooltip.firstElementChild, BDFDB.disCN._serverdetailstooltip);
 				if (_this.settings.amounts.tooltipDelay && this.state.delayed && !this.state.repositioned) {
 					this.state.repositioned = true;
 					if (this.props.tooltipContainer && this.props.tooltipContainer.tooltip) this.props.tooltipContainer.tooltip.update();
 				}
 			}
+			componentDidMount() {
+				BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ReactUtils.findDOMNode(this)), BDFDB.disCN._serverdetailstooltip);
+			}
 			render() {
 				if (_this.settings.general.onlyShowOnShift) {
 					let addListener = expanded => {
-						if (this.props.tooltipContainer && this.props.tooltipContainer.tooltip) BDFDB.DOMUtils.toggleClass(this.props.tooltipContainer.tooltip.firstElementChild, BDFDB.disCN._serverdetailstooltip, expanded);
 						let triggered = false, listener = event => {
 							if (!this.updater.isMounted(this)) return document.removeEventListener(expanded ? "keyup" : "keydown", listener);
 							if (triggered) return;
@@ -102,57 +107,58 @@ module.exports = (_ => {
 				if (_this.settings.amounts.tooltipDelay && !this.state.delayed) {
 					BDFDB.TimeUtils.timeout(_ => {
 						this.state.delayed = true;
-						if (this.props.tooltipContainer && this.props.tooltipContainer.tooltip) BDFDB.DOMUtils.addClass(this.props.tooltipContainer.tooltip.firstElementChild, BDFDB.disCN._serverdetailstooltip);
 						BDFDB.ReactUtils.forceUpdate(this);
 					}, this.state.forced ? 0 : (_this.settings.amounts.tooltipDelay * 1000));
 					return null;
 				}
-				let src = this.props.guild.getIconURL(4096, this.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(this.props.guild.icon));
-				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-					direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
-					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-					children: [
-						_this.settings.items.icon && (src ? BDFDB.ReactUtils.createElement("img", {
-							className: BDFDB.disCN._serverdetailsicon,
-							src: src
-						}) : BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN._serverdetailsicon,
-							children: this.props.guild.acronym
-						})),
-						_this.settings.items.owner && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
-							prefix: BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER,
-							string: `${owner ? owner.username : "Unknown"}#${owner ? owner.discriminator : "0000"}`
-						}),
-						_this.settings.items.creationDate && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
-							prefix: _this.labels.creation_date,
-							string: BDFDB.LibraryComponents.DateInput.format(_this.settings.dates.tooltipDates, BDFDB.LibraryModules.TimestampUtils.extractTimestamp(this.props.guild.id))
-						}),
-						_this.settings.items.joinDate && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
-							prefix: _this.labels.join_date,
-							string: BDFDB.LibraryComponents.DateInput.format(_this.settings.dates.tooltipDates, this.props.guild.joinedAt)
-						}),
-						_this.settings.items.members && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
-							prefix: BDFDB.LanguageUtils.LanguageStrings.MEMBERS,
-							string: BDFDB.LibraryStores.GuildMemberCountStore.getMemberCount(this.props.guild.id)
-						}),
-						_this.settings.items.boosts && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
-							prefix: _this.labels.boosts,
-							string: this.props.guild.premiumSubscriberCount
-						}),
-						_this.settings.items.channels && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
-							prefix: BDFDB.LanguageUtils.LanguageStrings.CHANNELS,
-							string: BDFDB.LibraryStores.GuildChannelStore.getChannels(this.props.guild.id).count
-						}),
-						_this.settings.items.roles && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
-							prefix: BDFDB.LanguageUtils.LanguageStrings.ROLES,
-							string: Object.keys(this.props.guild.roles).length
-						}),
-						_this.settings.items.language && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
-							prefix: BDFDB.LanguageUtils.LanguageStrings.LANGUAGE,
-							string: BDFDB.LanguageUtils.getName(BDFDB.LanguageUtils.languages[this.props.guild.preferredLocale]) || this.props.guild.preferredLocale
-						})
-					].flat(10).filter(n => n)
-				});
+				else {
+					let src = this.props.guild.getIconURL(4096, this.props.guild.icon && BDFDB.LibraryModules.IconUtils.isAnimatedIconHash(this.props.guild.icon));
+					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+						align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+						children: [
+							_this.settings.items.icon && (src ? BDFDB.ReactUtils.createElement("img", {
+								className: BDFDB.disCN._serverdetailsicon,
+								src: src
+							}) : BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN._serverdetailsicon,
+								children: this.props.guild.acronym
+							})),
+							_this.settings.items.owner && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+								prefix: BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER,
+								string: `${owner ? owner.username : "Unknown"}#${owner ? owner.discriminator : "0000"}`
+							}),
+							_this.settings.items.creationDate && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+								prefix: _this.labels.creation_date,
+								string: BDFDB.LibraryComponents.DateInput.format(_this.settings.dates.tooltipDates, BDFDB.LibraryModules.TimestampUtils.extractTimestamp(this.props.guild.id))
+							}),
+							_this.settings.items.joinDate && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+								prefix: _this.labels.join_date,
+								string: BDFDB.LibraryComponents.DateInput.format(_this.settings.dates.tooltipDates, this.props.guild.joinedAt)
+							}),
+							_this.settings.items.members && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+								prefix: BDFDB.LanguageUtils.LanguageStrings.MEMBERS,
+								string: BDFDB.LibraryStores.GuildMemberCountStore.getMemberCount(this.props.guild.id)
+							}),
+							_this.settings.items.boosts && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+								prefix: _this.labels.boosts,
+								string: this.props.guild.premiumSubscriberCount
+							}),
+							_this.settings.items.channels && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+								prefix: BDFDB.LanguageUtils.LanguageStrings.CHANNELS,
+								string: BDFDB.LibraryStores.GuildChannelStore.getChannels(this.props.guild.id).count
+							}),
+							_this.settings.items.roles && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+								prefix: BDFDB.LanguageUtils.LanguageStrings.ROLES,
+								string: Object.keys(this.props.guild.roles).length
+							}),
+							_this.settings.items.language && BDFDB.ReactUtils.createElement(GuildDetailsRowComponent, {
+								prefix: BDFDB.LanguageUtils.LanguageStrings.LANGUAGE,
+								string: BDFDB.LanguageUtils.getName(BDFDB.LanguageUtils.languages[this.props.guild.preferredLocale]) || this.props.guild.preferredLocale
+							})
+						].flat(10).filter(n => n)
+					});
+				}
 			}
 		};
 		
@@ -180,7 +186,7 @@ module.exports = (_ => {
 						onlyShowOnShift:	{value: false,	description: "Only show the Details Tooltip, while holding 'Shift'"}
 					},
 					items: {
-						icon:				{value: true, 	description: "GUILD_CREATE_UPLOAD_ICON_LABEL"},
+						icon:				{value: true, 	description: "icon"},
 						owner:				{value: true, 	description: "GUILD_OWNER"},
 						creationDate:		{value: true, 	description: "creation_date"},
 						joinDate:			{value: true, 	description: "join_date"},
@@ -251,7 +257,7 @@ module.exports = (_ => {
 						let settingsItems = [];
 						
 						settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-							title: "Settings",
+							title: "General",
 							collapseStates: collapseStates,
 							children: Object.keys(this.defaults.general).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 								type: "Switch",
@@ -351,7 +357,6 @@ module.exports = (_ => {
 					tooltipConfig:  Object.assign({
 						backgroundColor: this.settings.colors.tooltipColor
 					}, children[index].props.tooltipConfig, {
-						className: !this.settings.amounts.tooltipDelay && BDFDB.disCN._serverdetailstooltip,
 						type: "right",
 						guild: e.instance.props.guild,
 						list: true,
@@ -371,162 +376,189 @@ module.exports = (_ => {
 						return {
 							boosts:								"Бустери",
 							creation_date:						"Дата на създаване",
+							icon:								"Икона",
 							join_date:							"Дата на присъединяване"
 						};
 					case "da":		// Danish
 						return {
 							boosts:								"Boosts",
 							creation_date:						"Oprettelsesdato",
+							icon:								"Ikon",
 							join_date:							"Deltag i dato"
 						};
 					case "de":		// German
 						return {
 							boosts:								"Boosts",
 							creation_date:						"Erstellungsdatum",
+							icon:								"Symbol",
 							join_date:							"Beitrittsdatum"
 						};
 					case "el":		// Greek
 						return {
 							boosts:								"Ενισχυτές",
 							creation_date:						"Ημερομηνία δημιουργίας",
+							icon:								"Εικόνισμα",
 							join_date:							"Ημερομηνία προσχώρησης"
 						};
 					case "es":		// Spanish
 						return {
 							boosts:								"Impulsores",
 							creation_date:						"Fecha de creación",
+							icon:								"Icono",
 							join_date:							"Fecha de Ingreso"
 						};
 					case "fi":		// Finnish
 						return {
 							boosts:								"Tehostimet",
 							creation_date:						"Luomispäivä",
+							icon:								"Kuvake",
 							join_date:							"Liittymispäivä"
 						};
 					case "fr":		// French
 						return {
 							boosts:								"Boosts",
 							creation_date:						"Date de création",
+							icon:								"Icône",
 							join_date:							"Date d'inscription"
 						};
 					case "hr":		// Croatian
 						return {
 							boosts:								"Pojačala",
 							creation_date:						"Datum stvaranja",
+							icon:								"Ikona",
 							join_date:							"Datum pridruživanja"
 						};
 					case "hu":		// Hungarian
 						return {
 							boosts:								"Emlékeztetők",
 							creation_date:						"Létrehozás dátuma",
+							icon:								"Ikon",
 							join_date:							"Csatlakozás dátuma"
 						};
 					case "it":		// Italian
 						return {
 							boosts:								"Boosts",
 							creation_date:						"Data di creazione",
+							icon:								"Icona",
 							join_date:							"Data di iscrizione"
 						};
 					case "ja":		// Japanese
 						return {
 							boosts:								"ブースター",
 							creation_date:						"作成日",
+							icon:								"アイコン",
 							join_date:							"参加日"
 						};
 					case "ko":		// Korean
 						return {
 							boosts:								"부스터",
 							creation_date:						"제작 일",
+							icon:								"상",
 							join_date:							"가입 날짜"
 						};
 					case "lt":		// Lithuanian
 						return {
 							boosts:								"Stiprintuvai",
 							creation_date:						"Sukūrimo data",
+							icon:								"Piktograma",
 							join_date:							"Įstojimo data"
 						};
 					case "nl":		// Dutch
 						return {
 							boosts:								"Boosts",
 							creation_date:						"Aanmaakdatum",
+							icon:								"Icoon",
 							join_date:							"Toetredingsdatum"
 						};
 					case "no":		// Norwegian
 						return {
 							boosts:								"Boosts",
 							creation_date:						"Opprettelsesdato",
+							icon:								"Ikon",
 							join_date:							"Bli med på dato"
 						};
 					case "pl":		// Polish
 						return {
 							boosts:								"Boosty",
 							creation_date:						"Data utworzenia",
+							icon:								"Ikona",
 							join_date:							"Data dołączenia"
 						};
 					case "pt-BR":	// Portuguese (Brazil)
 						return {
 							boosts:								"Boosts",
 							creation_date:						"Data de criação",
+							icon:								"Ícone",
 							join_date:							"Data de afiliação"
 						};
 					case "ro":		// Romanian
 						return {
 							boosts:								"Amplificatoare",
 							creation_date:						"Data crearii",
+							icon:								"Pictogramă",
 							join_date:							"Data înscrierii"
 						};
 					case "ru":		// Russian
 						return {
 							boosts:								"Бустеры",
 							creation_date:						"Дата создания",
+							icon:								"Икона",
 							join_date:							"Дате вступления"
 						};
 					case "sv":		// Swedish
 						return {
 							boosts:								"Boosts",
 							creation_date:						"Skapelsedagen",
+							icon:								"Ikon",
 							join_date:							"Gå med datum"
 						};
 					case "th":		// Thai
 						return {
 							boosts:								"บูสเตอร์",
 							creation_date:						"วันที่สร้าง",
+							icon:								"ไอคอน",
 							join_date:							"วันที่เข้าร่วม"
 						};
 					case "tr":		// Turkish
 						return {
 							boosts:								"Güçlendiriciler",
 							creation_date:						"Oluşturulma tarihi",
+							icon:								"Simge",
 							join_date:							"Üyelik Tarihi"
 						};
 					case "uk":		// Ukrainian
 						return {
 							boosts:								"Підсилювачі",
 							creation_date:						"Дата створення",
+							icon:								"Піктограма",
 							join_date:							"Дата приєднання"
 						};
 					case "vi":		// Vietnamese
 						return {
 							boosts:								"Bộ tăng tốc",
 							creation_date:						"Ngày thành lập",
+							icon:								"Biểu tượng",
 							join_date:							"Ngày tham gia"
 						};
 					case "zh-CN":	// Chinese (China)
 						return {
 							boosts:								"助推器",
 							creation_date:						"创建日期",
+							icon:								"图标",
 							join_date:							"参加日期"
 						};
 					case "zh-TW":	// Chinese (Taiwan)
 						return {
 							boosts:								"助推器",
 							creation_date:						"創建日期",
+							icon:								"圖示",
 							join_date:							"參加日期"
 						};
 					default:		// English
 						return {
 							boosts:								"Boosts",
 							creation_date:						"Creation Date",
+							icon:								"Icon",
 							join_date:							"Join Date"
 						};
 				}
