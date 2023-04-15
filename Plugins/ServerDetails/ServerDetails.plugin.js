@@ -2,7 +2,7 @@
  * @name ServerDetails
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.1.5
+ * @version 1.1.6
  * @description Shows Server Details in the Server List Tooltip
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -61,14 +61,15 @@ module.exports = (_ => {
 		const GuildDetailsComponent = class GuildDetails extends BdApi.React.Component {
 			constructor(props) {
 				super(props);
-				this.state = {fetchedOwner: false, delayed: false, repositioned: false, forced: false};
+				this.state = {fetchedOwner: false, delayed: false, repositioned: false, shouldReposition: false, forced: false};
 			}
 			componentDidUpdate() {
 				let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ReactUtils.findDOMNode(this));
 				if (tooltip) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN._serverdetailstooltip);
 				else if (this.props.tooltipContainer && this.props.tooltipContainer.tooltip) BDFDB.DOMUtils.removeClass(this.props.tooltipContainer.tooltip.firstElementChild, BDFDB.disCN._serverdetailstooltip);
-				if (_this.settings.amounts.tooltipDelay && this.state.delayed && !this.state.repositioned) {
+				if (this.state.shouldReposition || _this.settings.amounts.tooltipDelay && this.state.delayed && !this.state.repositioned) {
 					this.state.repositioned = true;
+					this.state.shouldReposition = false;
 					if (this.props.tooltipContainer && this.props.tooltipContainer.tooltip) this.props.tooltipContainer.tooltip.update();
 				}
 			}
@@ -87,6 +88,7 @@ module.exports = (_ => {
 							this.props.shiftKey = !expanded;
 							this.state.forced = !expanded;
 							this.state.repositioned = false;
+							this.state.shouldReposition = true;
 							BDFDB.ReactUtils.forceUpdate(this);
 						};
 						document.addEventListener(expanded ? "keyup" : "keydown", listener);
@@ -104,7 +106,7 @@ module.exports = (_ => {
 					this.state.fetchedOwner = true;
 					BDFDB.LibraryModules.UserProfileUtils.getUser(this.props.guild.ownerId).then(_ => BDFDB.ReactUtils.forceUpdate(this));
 				}
-				if (_this.settings.amounts.tooltipDelay && !this.state.delayed) {
+				if (_this.settings.amounts.tooltipDelay && !this.state.delayed && !this.state.shouldReposition) {
 					BDFDB.TimeUtils.timeout(_ => {
 						this.state.delayed = true;
 						BDFDB.ReactUtils.forceUpdate(this);
