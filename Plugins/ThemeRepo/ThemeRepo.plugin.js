@@ -234,7 +234,7 @@ module.exports = (_ => {
 											onClick: _ => {
 												if (loading.is) return;
 												loading = {is: false, timeout: null, amount: 0};
-												_this.loadThemes();
+												_this.loadThemes(true);
 											}
 										})
 									]
@@ -827,7 +827,7 @@ module.exports = (_ => {
 				return fullCSS;
 			}
 
-			loadThemes () {
+			loadThemes (forceBanner) {
 				BDFDB.DOMUtils.remove(BDFDB.dotCN._themerepoloadingicon);
 				cachedThemes = BDFDB.DataUtils.load(this, "cached");
 				cachedThemes = (typeof cachedThemes == "string" ? cachedThemes.split(" ") : []).map(n => parseInt(n)).filter(n => !isNaN(n));
@@ -848,7 +848,7 @@ module.exports = (_ => {
 							BDFDB.LogUtils.log("Finished fetching Themes", this);
 							BDFDB.ReactUtils.forceUpdate(list);
 							
-							if (this.settings.general.notifyOutdated && outdatedEntries > 0) {
+							if ((this.settings.general.notifyOutdated || forceBanner) && outdatedEntries > 0) {
 								let notice = document.querySelector(BDFDB.dotCN._themerepooutdatednotice);
 								if (notice) notice.close();
 								BDFDB.NotificationUtils.notice(this.labels.notice_outdated_themes.replace("{{var0}}", outdatedEntries), {

@@ -196,7 +196,7 @@ module.exports = (_ => {
 											onClick: _ => {
 												if (loading.is) return;
 												loading = {is: false, timeout: null, amount: 0};
-												_this.loadPlugins();
+												_this.loadPlugins(true);
 											}
 										})
 									]
@@ -682,7 +682,7 @@ module.exports = (_ => {
 				if (e.instance.props && e.instance.props.section == "pluginrepo") e.instance.props.contentType = "custom";
 			}
 
-			loadPlugins () {
+			loadPlugins (forceBanner) {
 				BDFDB.DOMUtils.remove(BDFDB.dotCN._pluginrepoloadingicon);
 				cachedPlugins = BDFDB.DataUtils.load(this, "cached");
 				cachedPlugins = (typeof cachedPlugins == "string" ? cachedPlugins.split(" ") : []).map(n => parseInt(n)).filter(n => !isNaN(n));
@@ -703,7 +703,7 @@ module.exports = (_ => {
 							BDFDB.LogUtils.log("Finished fetching Plugins", this);
 							BDFDB.ReactUtils.forceUpdate(list);
 							
-							if (this.settings.general.notifyOutdated && outdatedEntries > 0) {
+							if ((this.settings.general.notifyOutdated || forceBanner) && outdatedEntries > 0) {
 								let notice = document.querySelector(BDFDB.dotCN._pluginrepooutdatednotice);
 								if (notice) notice.close();
 								BDFDB.NotificationUtils.notice(this.labels.notice_outdated_plugins.replace("{{var0}}", outdatedEntries), {
