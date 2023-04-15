@@ -2,7 +2,7 @@
  * @name RemoveBlockedUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.1
+ * @version 1.6.2
  * @description Removes blocked Messages/Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"fixed": {
+			"Blocked in VC": "No longer plays audio/notifications of blocked users in voice chats"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -166,25 +168,25 @@ module.exports = (_ => {
 				
 				let muteTimeout;
 				let channelId = BDFDB.LibraryModules.RTCConnectionUtils.getChannelId();
-				let connectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryStores.SortedVoiceStateStore.getVoiceStates(BDFDB.LibraryModules.RTCConnectionUtils.getGuildId()), n => n && n.voiceState && n.voiceState.channelId == channelId && !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.voiceState.userId));
+				let connectedUsers = [BDFDB.LibraryStores.SortedVoiceStateStore.getVoiceStates(BDFDB.LibraryModules.RTCConnectionUtils.getGuildId())[channelId]].flat().filter(n => n && n.voiceState && !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.voiceState.userId));
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {before: e => {
 					let type = e.methodArguments[0];
 					if (!this.settings.notifications.voiceChat || !["disconnect", "user_join", "user_leave", "user_moved"].includes(type)) return;
 					channelId = BDFDB.LibraryModules.RTCConnectionUtils.getChannelId();
 					if (channelId) {
-						let allConnectedUsers = BDFDB.ObjectUtils.filter(BDFDB.LibraryStores.SortedVoiceStateStore.getVoiceStates(BDFDB.LibraryModules.RTCConnectionUtils.getGuildId()), n => n && n.voiceState && n.voiceState.channelId == channelId);
-						let unblockedUsers = BDFDB.ObjectUtils.filter(allConnectedUsers, n => n && !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.userId));
-						let unmutedBlockedUsers = BDFDB.ObjectUtils.toArray(allConnectedUsers).filter(n => n && BDFDB.LibraryStores.RelationshipStore.isBlocked(n.userId) && !BDFDB.LibraryStores.MediaEngineStore.isLocalMute(n.userId));
+						let allConnectedUsers = [BDFDB.LibraryStores.SortedVoiceStateStore.getVoiceStates(BDFDB.LibraryModules.RTCConnectionUtils.getGuildId())[channelId]].flat();
+						let unblockedUsers = allConnectedUsers.filter(n => n && !BDFDB.LibraryStores.RelationshipStore.isBlocked(n.userId));
+						let unmutedBlockedUsers = allConnectedUsers.filter(n => n && BDFDB.LibraryStores.RelationshipStore.isBlocked(n.userId) && !BDFDB.LibraryStores.MediaEngineStore.isLocalMute(n.userId));
 						if (unmutedBlockedUsers.length) {
 							BDFDB.TimeUtils.clear(muteTimeout);
 							muteTimeout = BDFDB.TimeUtils.timeout(_ => {
 								while (unmutedBlockedUsers.length) BDFDB.LibraryModules.MediaEngineUtils.toggleLocalMute(unmutedBlockedUsers.pop().userId);
 							}, 1000);
 						}
-						if (Object.keys(unblockedUsers).length != Object.keys(connectedUsers).length) e.methodArguments[1] = 0;
+						if (unblockedUsers.length != connectedUsers.length) e.methodArguments[1] = 0;
 						connectedUsers = unblockedUsers;
 					}
-					else connectedUsers = {};
+					else connectedUsers = [];
 				}});
 				
 				BDFDB.DiscordUtils.rerenderAll();
