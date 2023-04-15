@@ -247,7 +247,7 @@
 		"TabBar": {"props": ["Item", "Header", "Panel"]},
 		"Table": {"props": ["SortDirection", "defaultProps"]},
 		"TextArea": {"strings": ["onKeyDown=function", "defaultDirty"]},
-		"TextInput": {"strings": ["onFocus=function", "MAXIMUM_LENGTH_ERROR", "translate3d"], "exported": false, "value": "exports", "funcStrings": ["MAXIMUM_LENGTH_ERROR"]},
+		"TextInput": {"strings": ["onFocus=function", "MAXIMUM_LENGTH_ERROR", "translate3d"]},
 		"TooltipContainer": {"strings": ["handleContextMenu=function", "shouldShowTooltip", "clickable"]}
 	},
 	"LibraryComponents": {
