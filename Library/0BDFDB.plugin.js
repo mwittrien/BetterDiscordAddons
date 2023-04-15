@@ -6525,7 +6525,7 @@ module.exports = (_ => {
 									currentPage: this.state.offset + 1,
 									pageSize: this.props.amount,
 									maxVisiblePages: this.props.maxVisiblePages,
-									onPageChange: page => {this.handleJump(isNaN(parseInt(page)) ? -1 : page - 1);}
+									onPageChange: page => this.handleJump(isNaN(parseInt(page)) ? -1 : page - 1)
 								}),
 								this.props.jump && BDFDB.ReactUtils.createElement(Internal.LibraryComponents.TextInput, {
 									type: "number",
