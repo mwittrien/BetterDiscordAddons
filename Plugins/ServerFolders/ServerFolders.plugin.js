@@ -2,7 +2,7 @@
  * @name ServerFolders
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 7.1.4
+ * @version 7.1.5
  * @description Changes Discord's Folders, Servers open in a new Container, also adds extra Features to more easily organize, customize and manage your Folders
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"fixed": {
+			"DisplayServersAsChannels Compatibility": "Better works with DisplayServersAsChannels Plugin now"
+		}
 	};
 	
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -139,6 +141,7 @@ module.exports = (_ => {
 												className: BDFDB.disCN.guildouter,
 												children: BDFDB.ReactUtils.createElement("div", {
 													className: BDFDB.disCN.guildfolder,
+													"data-folder-name": folder.folderName || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER,
 													children: folderIcon
 												})
 											}),

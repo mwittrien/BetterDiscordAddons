@@ -2,7 +2,7 @@
  * @name DisplayServersAsChannels
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.7
+ * @version 1.6.8
  * @description Displays Servers in a similar way as Channels
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,7 +14,9 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		
+		"fixed": {
+			"ServerFolders Compatibility": "Better works with ServerFolders Plugin now"
+		}
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -235,12 +237,17 @@ module.exports = (_ => {
 				e.returnvalue = this.removeMask(e.returnvalue, true);
 				let folderColor = BDFDB.ColorUtils.convert(e.instance.props.folderNode.color, "HEX") || "var(--bdfdb-blurple)";
 				let folderSize = Math.round(this.settings.amounts.serverElementHeight * 0.725);
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
-				if (index > -1) children[index] = null;
+				let badge = null;
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.guildfoldericonwrapper]]});
+				if (index > -1 && children[index] && children[index].props && children[index].props.style && children[index].props.style.background) badge = children[index];
+				else {
+					[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
+					if (index > -1) children[index] = null;
+				}
 				this.addElementName(e.returnvalue, e.instance.props.folderNode.name || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER, {
 					wrap: true,
 					backgroundColor: e.instance.props.expanded && BDFDB.ColorUtils.setAlpha(folderColor, 0.2),
-					badges: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+					badges: badge || BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						color: folderColor,
 						width: folderSize,
 						height: folderSize,
@@ -487,8 +494,35 @@ module.exports = (_ => {
 						width: auto;
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolder} {
+						display: flex;
+						align-items: center;
 						height: ${this.settings.amounts.serverElementHeight}px;
 						width: ${this.settings.amounts.serverListWidth - 20}px;
+					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolder}[data-folder-name]::after {
+						content: attr(data-folder-name);
+						display: flex;
+						justify-content: flex-start;
+						align-items: center;
+						font-size: ${this.settings.amounts.serverElementHeight / 2}px;
+						font-weight: 500;
+						text-transform: capitalize;
+						padding-top: 1px;
+						padding-left: 3px;
+					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfoldericonwrapper}[style*="background"] {
+						margin-left: ${Math.round(this.settings.amounts.serverElementHeight * -0.15)}px;
+						background-position-x: ${Math.round(this.settings.amounts.serverElementHeight * 0.75) / 10}px !important;
+					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolder} > ${BDFDB.dotCN.guildfoldericonwrapper} {
+						margin-left: 6px;
+						background-size: ${Math.round(this.settings.amounts.serverElementHeight * 0.85)}px ${Math.round(this.settings.amounts.serverElementHeight * 0.85)}px !important;
+						background-position: center center !important;
+					}
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfoldericonwrapper},
+					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfoldericonwrapperexpanded} {
+						height: ${Math.round(this.settings.amounts.serverElementHeight * 0.85)}px;
+						width: ${Math.round(this.settings.amounts.serverElementHeight * 0.85)}px;
 					}
 					${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandedbackground} {
 						top: -2px;
