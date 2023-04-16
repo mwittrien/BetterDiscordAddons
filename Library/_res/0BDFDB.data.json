@@ -95,6 +95,12 @@
 		}},
 		"AppUtils": {"props": ["clipboard", "os"]},
 		"ArrayUtils": {"props": ["isArrayLike", "zipObject"]},
+		"CategoryCollapseUtils": {"strings": ["type:\"CATEGORY_EXPAND_ALL", "type:\"CATEGORY_COLLAPSE_ALL", "dispatch"], "exported": false, "value": "exports", "map": {
+			"collapse": ["\"CATEGORY_COLLAPSE\""],
+			"collapseAll": ["\"CATEGORY_COLLAPSE_ALL\""],
+			"expand": ["\"CATEGORY_EXPAND\""],
+			"expandAll": ["\"CATEGORY_EXPAND_ALL\""]
+		}},
 		"ChannelUtils": {"props": ["selectChannel", "selectPrivateChannel"]},
 		"ChatRestrictionUtils": {"strings": ["openWarningPopout", "userCanUsePremiumMessageLength"], "exported": false, "value": "exports", "map": {
 			"applyChatRestrictions": ["openWarningPopout", "userCanUsePremiumMessageLength"]
@@ -247,7 +253,7 @@
 		"TabBar": {"props": ["Item", "Header", "Panel"]},
 		"Table": {"props": ["SortDirection", "defaultProps"]},
 		"TextArea": {"strings": ["onKeyDown=function", "defaultDirty"]},
-		"TextInput": {"strings": ["onFocus=function", "MAXIMUM_LENGTH_ERROR", "translate3d"]},
+		"TextInput": {"strings": ["onFocus=function", "MAXIMUM_LENGTH_ERROR", "getIsOverFlowing"]},
 		"TooltipContainer": {"strings": ["handleContextMenu=function", "shouldShowTooltip", "clickable"]}
 	},
 	"LibraryComponents": {
@@ -522,6 +528,7 @@
 		"SystemMessageWrapper": {"strings": ["unknown message type", "\"SystemMessage\""]},
 		"TabBar": {"props": ["Item", "Header", "Panel"]},
 		"TextChannelEmptyMessage": {"strings": ["MANAGE_CHANNELS", ".BEGINNING_CHANNEL_DESCRIPTION", "topicHook:"]},
+		"TextInput": {"strings": ["onFocus=function", "MAXIMUM_LENGTH_ERROR", "getIsOverFlowing"], "noSearch": true},
 		"ThreadCard": {"strings": [".threadId", ".gotoThread", ".container", ".threadName"]},
 		"ThreadCardDescription": {"strings": [".Messages.THREAD_BROWSER_STARTED_BY", ".bullet", ".lastMessageId"]},
 		"ThreadEmptyMessage": {"strings": [",{channel:", ".name", "{channelId:", ".iconWrapper", ".icon}"]},
