@@ -117,6 +117,10 @@ module.exports = (_ => {
 					${BDFDB.dotCN._betterfriendlistnamecell} {
 						width: 200px;
 					}
+					${BDFDB.dotCNS.peoplespeoplecolumn + BDFDB.dotCN.searchbar} {
+						padding-bottom: 0;
+						margin-bottom: 0;
+					}
 					${BDFDB.dotCN.peoplesuser} {
 						flex: 1 1 auto;
 					}
