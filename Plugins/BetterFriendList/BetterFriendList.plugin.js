@@ -2,7 +2,7 @@
  * @name BetterFriendList
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.5.2
+ * @version 1.5.3
  * @description Adds extra Controls to the Friends Page, for example sort by Name/Status, Search and All/Request/Blocked Amount
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -337,7 +337,7 @@ module.exports = (_ => {
 					if (isHiddenSelected) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) > -1));
 					else if (([].concat(e.instance.props.statusSections).flat(10)[0] || {}).type == BDFDB.DiscordConstants.RelationshipTypes.FRIEND) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => [].concat(section).filter(entry => entry && entry.user && hiddenFriends.indexOf(entry.user.id) == -1));
 				}
-				if (sortKey) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => {
+				if (sortKey && e.instance.props.statusSections.flat(10).length) e.instance.props.statusSections = [].concat(e.instance.props.statusSections).map(section => {
 					let newSection = [].concat(section);
 					newSection = BDFDB.ArrayUtils.keySort(newSection.map(entry => Object.assign({}, entry, {
 						statusIndex: statusSortOrder[entry.status],
