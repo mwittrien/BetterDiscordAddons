@@ -182,6 +182,7 @@ html {
 		21.	FORUMFILTERPOPOUT
 		22.	ACTIVITYSHAREPOPOUT
 		23.	SOUNDBOARD
+		24.	SERVERSURVEY
 	15.	GENERAL
 		1.	TEXT
 		2.	BUTTONS
@@ -6040,6 +6041,19 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .picker-20lcBA::after {
 	background-color: rgba(var(--transparencycolor), calc(var(--transparencyalpha) + 0.25));
 	backdrop-filter: blur(var(--popoutblur));
+}
+
+/* ----		14.24.	SERVERSURVEY					---- */
+
+.main-243VC2 .prompt-R8SyL4 {
+	background: rgba(var(--transparencycolor), .3);
+}
+.main-243VC2 .prompt-R8SyL4 .sizeMedium-2oH5mg {
+	width: unset;
+}
+.optionButtonWrapper-2lbogO:hover,
+.optionButtonWrapper-2lbogO.selected-KQBgNS {
+	border-color: rgb(var(--accentcolor));
 }
 
 /* ~~~~		15.		GENERAL							~~~~ */
