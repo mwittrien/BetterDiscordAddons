@@ -6486,6 +6486,7 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 .select-1YfRS9 [class*="css-"][class*="-control"] {
 	background-color: rgba(var(--transparencycolor), .1);
 	border-color: rgba(var(--transparencycolor), .3);
+	color: var(--text-normal);
 }
 .lookFilled-Zz0IcO.select-Zz0IcO:hover {
 	border-color: rgb(var(--transparencycolor));
@@ -6496,12 +6497,6 @@ img[src="/assets/cef02719c12d8aaf38894c16dca7fbe6.svg"] {	/* rolesettings			addr
 }
 .lookFilled-Zz0IcO.select-Zz0IcO .searchInput-3pIoTy {
 	background: transparent;
-}
-.select-Zz0IcO,
-.select-1YfRS9 [class*="css-"][class*="-control"] {
-	background-color: var(--deprecated-text-input-bg);
-	border-color: var(--deprecated-text-input-border);
-	color: var(--text-normal);
 }
 .select-1YfRS9 [class*="css-"][class*="-control"]:hover,
 .select-1YfRS9 [class*="css-"][class*="-control"]:not(:last-child) {
