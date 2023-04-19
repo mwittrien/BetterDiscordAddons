@@ -1372,12 +1372,6 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 	background: rgb(var(--accentcolor));
 	-webkit-mask: url(https://discord.com/assets/4441e07fe0f46b3cb41b79366236fca6.svg) center/cover no-repeat;
 }
-.profileBadge-12r2Nm[src="/assets/c981e58b5ea4b7fedd3a643cf0c60564.svg"],
-.profileBadge-2YySEb[src="/assets/c981e58b5ea4b7fedd3a643cf0c60564.svg"] {
-	object-position: -999999px -999999px;
-	background: rgb(var(--accentcolor));
-	-webkit-mask: url(https://discord.com/assets/c981e58b5ea4b7fedd3a643cf0c60564.svg) center/cover no-repeat;
-}
 
 .profileBadge-12r2Nm[src="/assets/ca18353be0e57a2b3b3132fa1c08d6b4.svg"],
 .profileBadge-2YySEb[src="/assets/ca18353be0e57a2b3b3132fa1c08d6b4.svg"] {
