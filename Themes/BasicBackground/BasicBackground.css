@@ -895,6 +895,11 @@ body::after {
 
 /* ----		6.2.	MESSAGES						---- */
 
+.clickableAction-2q3H52:hover .action-3oG-si,				/* guidancechannel		options								*/
+.row--LCpto:hover {
+	background-color: rgba(var(--transparencycolor), .4);
+}
+
 .emptyChannelIcon-1YdEz2 {									/* welcomemessage		empty channelicon					*/
 	background-color: rgba(var(--transparencycolor), .4);
 }
