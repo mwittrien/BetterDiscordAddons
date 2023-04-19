@@ -1147,6 +1147,10 @@ img[src='/assets/58957d928db6fb9d4658eb882f33d7bc.svg'] {
 #app-mount .container-2IKOsH .channelRow-4X_3fi {
 	background-color: var(--background-secondary);
 }
+#app-mount .action-3oG-si,
+#app-mount .row--LCpto {
+	background-color: var(--background-secondary);
+}
 #app-mount .background-fkKrXt .icon-2IDTxf {
 	border-color: var(--background-secondary);
 }
