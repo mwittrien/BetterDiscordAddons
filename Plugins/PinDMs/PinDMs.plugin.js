@@ -1007,10 +1007,10 @@ module.exports = (_ => {
 							context_addtonewcategory:			"Προσθήκη σε νέα κατηγορία",
 							context_disablepredefined:			"Απενεργοποίηση προκαθορισμένης κατηγορίας",
 							context_pinchannel:					"Καρφίτσωμα στη λίστα καναλιών",
-							context_pindm:						"Καρφιτσώστε το άμεσο μήνυμα",
+							context_pindm:						"Καρφίτσωμα του άμεσου μηνύματος",
 							context_pinguild:					"Καρφίτσωμα στη λίστα διακομιστών",
-							context_unpinchannel:				"Αποσύνδεση από τη λίστα καναλιών",
-							context_unpinguild:					"Αποσύνδεση από τη λίστα διακομιστών",
+							context_unpinchannel:				"Ξεκαρφίτσωμα από τη λίστα καναλιών",
+							context_unpinguild:					"Ξεκαρφίτσωμα από τη λίστα διακομιστών",
 							header_pinneddms:					"Καρφιτσωμένα άμεσα μηνύματα",
 							modal_colorpicker1:					"Χρώμα κατηγορίας"
 						};

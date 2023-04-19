@@ -1070,9 +1070,9 @@ module.exports = (_ => {
 					case "el":		// Greek
 						return {
 							list:								"Λίστα",
-							notice_failed_themes:				"Δεν ήταν δυνατή η φόρτωση ορισμένων Themes [{{var0}}] ",
-							notice_new_themes:					"Προστέθηκαν νέα Themes [{{var0}}] στο Theme Repo",
-							notice_outdated_themes:				"Ορισμένα Themes [{{var0}}] είναι παλιά"
+							notice_failed_themes:				"Ορισμένα Θέματα [{{var0}}] δεν μπορούν να φορτωθούν",
+							notice_new_themes:					"Νέα Θέματα [{{var0}}] προστέθηκαν στο Απωθετήριο Θεμάτων",
+							notice_outdated_themes:				"Ορισμένα Θέματα [{{var0}}] είναι παλαιά"
 						};
 					case "es":		// Spanish
 						return {

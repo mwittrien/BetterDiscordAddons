@@ -462,12 +462,12 @@ module.exports = (_ => {
 						};
 					case "el":		// Greek
 						return {
-							context_favorizefriend:				"Προσθήκη φίλου στα αγαπημένα",
+							context_favorizefriend:				"Προσθήκη φίλου στους αγαπημένους",
 							context_hidefriend:					"Απόκρυψη φίλου",
-							context_unfavorizefriend:			"Κατάργηση φίλου από τα αγαπημένα",
-							context_unhidefriend:				"Απόκρυψη φίλου",
-							favorites:							"Αγαπημένα",
-							hidden:								"Κρυμμένος",
+							context_unfavorizefriend:			"Κατάργηση φίλου από τούς αγαπημένους",
+							context_unhidefriend:				"Επανεμφάνιση φίλου",
+							favorites:							"Αγαπημένοι",
+							hidden:								"Σε απόκρυψη",
 							incoming:							"Εισερχόμενος",
 							outgoing:							"Εξερχόμενος"
 						};

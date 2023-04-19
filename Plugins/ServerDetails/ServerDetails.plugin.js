@@ -399,7 +399,7 @@ module.exports = (_ => {
 						return {
 							boosts:								"Ενισχυτές",
 							creation_date:						"Ημερομηνία δημιουργίας",
-							icon:								"Εικόνισμα",
+							icon:								"Εικονίδιο",
 							join_date:							"Ημερομηνία προσχώρησης"
 						};
 					case "es":		// Spanish

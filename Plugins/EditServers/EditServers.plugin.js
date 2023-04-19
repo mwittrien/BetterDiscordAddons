@@ -667,20 +667,20 @@ module.exports = (_ => {
 						return {
 							confirm_reset:						"Είστε βέβαιοι ότι θέλετε να επαναφέρετε αυτόν τον διακομιστή;",
 							confirm_resetall:					"Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλους τους διακομιστές;",
-							context_localserversettings:		"Ρυθμίσεις τοπικού διακομιστή",
+							context_localserversettings:		"Ρυθμίσεις διακομιστή (τοπικά)",
 							modal_colorpicker1:					"Χρώμα εικονιδίου",
 							modal_colorpicker2:					"Χρώμα γραμματοσειράς",
 							modal_colorpicker3:					"Χρώμα επεξήγησης εργαλείου",
 							modal_colorpicker4:					"Χρώμα γραμματοσειράς",
 							modal_guildacronym:					"Τοπικό αρκτικόλεξο διακομιστή",
 							modal_guildname:					"Τοπικό όνομα διακομιστή",
-							modal_header:						"Ρυθμίσεις τοπικού διακομιστή",
+							modal_header:						"Ρυθμίσεις διακομιστή (τοπικά)",
 							modal_ignorecustomname:				"Χρησιμοποιήστε το αρχικό όνομα διακομιστή για το αρκτικόλεξο διακομιστή",
 							modal_invalidurl:					"Μη έγκυρη διεύθυνση URL",
-							modal_tabheader1:					"Υπηρέτης",
+							modal_tabheader1:					"Διακομιστής",
 							modal_tabheader2:					"Χρώμα επεξήγησης εργαλείου",
 							submenu_resetsettings:				"Επαναφορά διακομιστή",
-							submenu_serversettings:				"Αλλαξε ρυθμίσεις"
+							submenu_serversettings:				"Αλλαγή ρυθμίσεων"
 						};
 					case "es":		// Spanish
 						return {

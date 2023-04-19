@@ -479,10 +479,10 @@ module.exports = (_ => {
 						return {
 							confirm_reset:						"Είστε βέβαιοι ότι θέλετε να επαναφέρετε αυτόν τον ρόλο;",
 							confirm_resetall:					"Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλους τους ρόλους;",
-							context_localrolesettings:			"Ρυθμίσεις τοπικού ρόλου",
-							modal_header:						"Ρυθμίσεις τοπικού ρόλου",
+							context_localrolesettings:			"Ρυθμίσεις ρόλου {τοπικά)",
+							modal_header:						"Ρυθμίσεις ρόλου (τοπικά)",
 							submenu_resetsettings:				"Επαναφορά ρόλου",
-							submenu_rolesettings:				"Αλλαξε ρυθμίσεις"
+							submenu_rolesettings:				"Αλλαγή ρυθμίσεων"
 						};
 					case "es":		// Spanish
 						return {
