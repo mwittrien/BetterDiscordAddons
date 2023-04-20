@@ -2,7 +2,7 @@
  * @name BDFDB
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.2.7
+ * @version 3.2.8
  * @description Required Library for DevilBro's Plugins
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -393,6 +393,13 @@ module.exports = (_ => {
 			};
 			BDFDB.ObjectUtils.isEmpty = function (obj) {
 				return !BDFDB.ObjectUtils.is(obj) || Object.getOwnPropertyNames(obj).length == 0;
+			};
+			BDFDB.ObjectUtils.copy = function (obj) {
+				if (!BDFDB.ObjectUtils.is(obj)) return obj;
+				let copy = {};
+				for (let key in obj) copy[key] = obj[key];
+				for (let key of Reflect.ownKeys(obj.constructor.prototype)) if (!copy[key] && obj[key] !== undefined) copy[key] = obj[key];
+				return copy;
 			};
 
 			BDFDB.ArrayUtils = {};
