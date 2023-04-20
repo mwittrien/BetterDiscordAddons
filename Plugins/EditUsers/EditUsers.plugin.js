@@ -283,9 +283,7 @@ module.exports = (_ => {
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MemberDisplayUtils, "getUserProfile", {after: e => {
 					if (!e.returnValue || !changedUsers[e.methodArguments[0]] || !changedUsers[e.methodArguments[0]].color5 && !changedUsers[e.methodArguments[0]].color6 && !changedUsers[e.methodArguments[0]].color7) return;
-					let newProfileObject = {};
-					for (let key in e.returnValue) newProfileObject[key] = e.returnValue[key];
-					for (let key of Reflect.ownKeys(e.returnValue.constructor.prototype)) if (!newProfileObject[key] && e.returnValue[key] !== undefined) newProfileObject[key] = e.returnValue[key];
+					let newProfileObject = BDFDB.ObjectUtils.copy(e.returnValue);
 					if (changedUsers[e.methodArguments[0]].color5) newProfileObject.primaryColor = newProfileObject.accentColor = BDFDB.ColorUtils.convert(changedUsers[e.methodArguments[0]].color5, "INT");
 					if (changedUsers[e.methodArguments[0]].color6 || changedUsers[e.methodArguments[0]].color7) {
 						let isLightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
@@ -1284,10 +1282,8 @@ module.exports = (_ => {
 				if (!user) return new BDFDB.DiscordObjects.User({});
 				let data = change && changedUsers[user.id];
 				if (data) {
-					let newUserObject = {}, nativeObject = new BDFDB.DiscordObjects.User(user);
-					for (let key in nativeObject) newUserObject[key] = nativeObject[key];
-					newUserObject.tag = nativeObject.tag;
-					newUserObject.createdAt = nativeObject.createdAt;
+					let nativeObject = new BDFDB.DiscordObjects.User(user);
+					let newUserObject = BDFDB.ObjectUtils.copy(nativeObject);
 					newUserObject.username = !keepName && data.name || nativeObject.username;
 					newUserObject.usernameNormalized = !keepName && data.name && data.name.toLowerCase() || nativeObject.usernameNormalized;
 					if (data.removeIcon) {

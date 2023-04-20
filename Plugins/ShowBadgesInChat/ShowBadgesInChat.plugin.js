@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.7
+ * @version 1.9.8
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -135,11 +135,11 @@ module.exports = (_ => {
 					${BDFDB.dotCNS.messageheadertext + BDFDB.dotCN._showbadgesinchatbadgeschat} {
 						top: 0.2rem;
 					}
-					${BDFDB.dotCNS.messageheadertext + BDFDB.dotCN.bottag} {
-						top: 0.4rem;
-					}
 					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN._showbadgesinchatbadgeschat} {
 						top: 0;
+					}
+					${BDFDB.dotCN.messageheadertext}:has(${BDFDB.dotCN._showbadgesinchatbadges}) ${BDFDB.dotCN.bottag} {
+						top: 0.4rem;
 					}
 					${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.messageusername} ~ ${BDFDB.dotCN._showbadgesinchatbadges},
 					${BDFDB.dotCNS.messagerepliedmessage + BDFDB.dotCN.messageusername} ~ ${BDFDB.dotCN._showbadgesinchatbadges} {
@@ -226,7 +226,47 @@ module.exports = (_ => {
 				}});
 				
 				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MemberDisplayUtils, "getUserProfile", {after: e => {
-					if (typeof e.methodArguments[0] == "string" && e.methodArguments[0].indexOf("SHOWBADGES__") == 0) {
+					if (typeof e.methodArguments[0] != "string" || !e.methodArguments[0].startsWith("SHOWBADGES__")) return;
+					if (e.methodArguments[0].startsWith("SHOWBADGES__USER__")) {
+						let realUserId = e.methodArguments[0].split("__").pop();
+						if (!loadedUsers[realUserId]) return;
+						else if (!e.returnValue || e.returnValue._userProfile && e.returnValue._userProfile.profileFetchFailed) {
+							let foundBadges = [];
+							for (let key in BDFDB.DiscordConstants.UserFlags) if (BDFDB.DiscordConstants.UserFlags[key] < 100000000000) {
+								if ((loadedUsers[realUserId].flags | BDFDB.DiscordConstants.UserFlags[key]) == loadedUsers[realUserId].flags) {
+									let keyName = key.replace("_LEVEL_", "_LVL");
+									keyName = (userBadgeFlagNameMap[keyName] || keyName || "").toLowerCase();
+									if (badges[keyName]) foundBadges.push({icon: BDFDB.DiscordConstants.UserBadges[keyName], id: keyName});
+								}
+							}
+							if (loadedUsers[realUserId].premium_since) foundBadges.push({icon: BDFDB.DiscordConstants.UserBadges.premium, id: "premium"});
+							if (loadedUsers[realUserId].premium_guild_since) {
+								let level = this.getBoostLevel(new Date(loadedUsers[realUserId].premium_guild_since));
+								if (level) foundBadges.push({icon: BDFDB.DiscordConstants.UserBadges[`guild_booster_lvl${level}`], id: `guild_booster_lvl${level}`});
+							}
+							if (!foundBadges.length) return;
+							if (!e.returnValue) return {
+								getBadges: _ => foundBadges,
+								getBannerURL: _ => null,
+								premiumSince: loadedUsers[realUserId].premium_since ? new Date(loadedUsers[realUserId].premium_since) : null,
+								premiumGuildSince: loadedUsers[realUserId].premium_guild_since ? new Date(loadedUsers[realUserId].premium_guild_since) : null,
+								_userProfile: {
+									badges: foundBadges,
+									premiumSince: loadedUsers[realUserId].premium_since ? new Date(loadedUsers[realUserId].premium_since) : null,
+									premiumGuildSince: loadedUsers[realUserId].premium_guild_since ? new Date(loadedUsers[realUserId].premium_guild_since) : null
+								}
+							};
+							else {
+								let newProfileObject = BDFDB.ObjectUtils.copy(e.returnValue);
+								newProfileObject.getBadges = _ => foundBadges;
+								newProfileObject._userProfile.badges = foundBadges;
+								if (loadedUsers[realUserId].premium_since) newProfileObject.premiumSince = newProfileObject._userProfile.premiumSince = new Date(loadedUsers[realUserId].premium_since);
+								if (loadedUsers[realUserId].premium_guild_since) newProfileObject.premiumGuildSince = newProfileObject._userProfile.premiumGuildSince = new Date(loadedUsers[realUserId].premium_guild_since);
+								return newProfileObject;
+							}
+						}
+					}
+					else if (e.methodArguments[0].startsWith("SHOWBADGES__")) {
 						let keyName = "";
 						if (e.methodArguments[0] == "SHOWBADGES__NITRO") keyName = "premium";
 						else if (e.methodArguments[0].endsWith("__FLAG")) {
@@ -243,44 +283,6 @@ module.exports = (_ => {
 							getBannerURL: _ => null,
 							_userProfile: {badges: [{icon: BDFDB.DiscordConstants.UserBadges[keyName], id: keyName}]}
 						};
-					}
-					else if (!loadedUsers[e.methodArguments[0]]) return;
-					else if (!e.returnValue || e.returnValue._userProfile && e.returnValue._userProfile.profileFetchFailed) {
-						let foundBadges = [];
-						for (let key in BDFDB.DiscordConstants.UserFlags) if (BDFDB.DiscordConstants.UserFlags[key] < 100000000000) {
-							if ((loadedUsers[e.methodArguments[0]].flags | BDFDB.DiscordConstants.UserFlags[key]) == loadedUsers[e.methodArguments[0]].flags) {
-								let keyName = key.replace("_LEVEL_", "_LVL");
-								keyName = (userBadgeFlagNameMap[keyName] || keyName || "").toLowerCase();
-								if (badges[keyName]) foundBadges.push({icon: BDFDB.DiscordConstants.UserBadges[keyName], id: keyName});
-							}
-						}
-						if (loadedUsers[e.methodArguments[0]].premium_since) foundBadges.push({icon: BDFDB.DiscordConstants.UserBadges.premium, id: "premium"});
-						if (loadedUsers[e.methodArguments[0]].premium_guild_since) {
-							let level = this.getBoostLevel(new Date(loadedUsers[e.methodArguments[0]].premium_guild_since));
-							if (level) foundBadges.push({icon: BDFDB.DiscordConstants.UserBadges[`guild_booster_lvl${level}`], id: `guild_booster_lvl${level}`});
-						}
-						if (!foundBadges.length) return;
-						if (!e.returnValue) return {
-							getBadges: _ => foundBadges,
-							getBannerURL: _ => null,
-							premiumSince: loadedUsers[e.methodArguments[0]].premium_since ? new Date(loadedUsers[e.methodArguments[0]].premium_since) : null,
-							premiumGuildSince: loadedUsers[e.methodArguments[0]].premium_guild_since ? new Date(loadedUsers[e.methodArguments[0]].premium_guild_since) : null,
-							_userProfile: {
-								badges: foundBadges,
-								premiumSince: loadedUsers[e.methodArguments[0]].premium_since ? new Date(loadedUsers[e.methodArguments[0]].premium_since) : null,
-								premiumGuildSince: loadedUsers[e.methodArguments[0]].premium_guild_since ? new Date(loadedUsers[e.methodArguments[0]].premium_guild_since) : null
-							}
-						};
-						else {
-							let newProfileObject = {};
-							for (let key in e.returnValue) newProfileObject[key] = e.returnValue[key];
-							for (let key of Reflect.ownKeys(e.returnValue.constructor.prototype)) if (!newProfileObject[key] && e.returnValue[key] !== undefined) newProfileObject[key] = e.returnValue[key];
-							newProfileObject.getBadges = _ => foundBadges;
-							newProfileObject._userProfile.badges = foundBadges;
-							if (loadedUsers[e.methodArguments[0]].premium_since) newProfileObject.premiumSince = newProfileObject._userProfile.premiumSince = new Date(loadedUsers[e.methodArguments[0]].premium_since);
-							if (loadedUsers[e.methodArguments[0]].premium_guild_since) newProfileObject.premiumGuildSince = newProfileObject._userProfile.premiumGuildSince = new Date(loadedUsers[e.methodArguments[0]].premium_guild_since);
-							return newProfileObject;
-						}
 					}
 				}});
 
@@ -451,7 +453,11 @@ module.exports = (_ => {
 							if (queuedInstances[user.id].indexOf(this) == -1) queuedInstances[user.id].push(this);
 							return null;
 						}
-						else return _this.createBadges(user, guildId, place);
+						else {
+							user = BDFDB.ObjectUtils.copy(user);
+							user.id = "SHOWBADGES__USER__" + user.id;
+							return _this.createBadges(user, guildId, place);
+						}
 					}
 				}, {}, true));
 			}
@@ -481,16 +487,17 @@ module.exports = (_ => {
 						if (level == this.getBoostLevel(date)) fakeGuildBoostDate = date;
 					}
 				}
-				let member = guildId && BDFDB.LibraryStores.GuildMemberStore.getMember(guildId, user.id);
+				let realUserId = typeof user.id == "string" && user.id.startsWith("SHOWBADGES__USER__") ? user.id.split("__").pop() : user.id;
+				let member = guildId && BDFDB.LibraryStores.GuildMemberStore.getMember(guildId, realUserId);
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.UserBadgeComponents.UserBadges, {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._showbadgesinchatbadges, BDFDB.disCN[`_showbadgesinchatbadges${place.toLowerCase()}`]),
 					user: user,
 					size: BDFDB.LibraryComponents.UserBadgeComponents.Sizes.SIZE_18,
 					custom: true,
 					place: place,
-					premiumSince: loadedUsers[user.id] && loadedUsers[user.id].premium_since ? new Date(loadedUsers[user.id].premium_since) : (user.id == "SHOWBADGES__NITRO" ? new Date() : null),
-					premiumGuildSince: fakeGuildBoostDate || (loadedUsers[user.id] && loadedUsers[user.id].premium_guild_since ? new Date(loadedUsers[user.id].premium_guild_since) : null),
-					premiumCurrentGuildSince: member && member.premiumSince && new Date(member.premiumSince) || user.id == "SHOWBADGES__CURRENT_GUILD_BOOST" && new Date()
+					premiumSince: loadedUsers[realUserId] && loadedUsers[realUserId].premium_since ? new Date(loadedUsers[realUserId].premium_since) : (realUserId == "SHOWBADGES__NITRO" ? new Date() : null),
+					premiumGuildSince: fakeGuildBoostDate || (loadedUsers[realUserId] && loadedUsers[realUserId].premium_guild_since ? new Date(loadedUsers[realUserId].premium_guild_since) : null),
+					premiumCurrentGuildSince: member && member.premiumSince && new Date(member.premiumSince) || realUserId == "SHOWBADGES__CURRENT_GUILD_BOOST" && new Date()
 				});
 			}
 			
