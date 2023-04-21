@@ -2,7 +2,7 @@
  * @name NotificationSounds
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 3.7.9
+ * @version 3.8.0
  * @description Allows you to replace the native Sounds with custom Sounds
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -179,17 +179,20 @@ module.exports = (_ => {
 							src: src,
 							mute: id.startsWith("call_") ? null : false,
 							streamMute: false,
+							invisibleMute: false,
 							force: id == "message1" ? false : null,
 							focus: id == "message1" ? true : false
 						};
 						if (id == "message1") {
 							types[id].mute = true;
 							types[id].streamMute = false;
+							types[id].invisibleMute = false;
 							for (let subType in message1Types) types[subType] = {
 								name: message1Types[subType].name,
 								src: BDFDB.LibraryModules.SoundParser(message1Types[subType].src),
 								mute: true,
 								streamMute: false,
+								invisibleMute: false,
 								force: message1Types[subType].force,
 								focus: message1Types[subType].focus
 							}
@@ -439,7 +442,7 @@ module.exports = (_ => {
 										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
 											label: types[type].name
 										}),
-										["force", "focus", "mute", "streamMute"].some(n => types[type][n] !== null) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+										["force", "focus", "mute", "streamMute", "invisibleMute"].some(n => types[type][n] !== null) && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 											onClick: event => BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 												children: [
 													{key: "force", label: "Force Play", hint: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
@@ -459,7 +462,8 @@ module.exports = (_ => {
 														})
 													})},
 													{key: "mute", label: ["Mute in", BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {style: {marginLeft: 6}, size: 12, status: BDFDB.LibraryComponents.StatusComponents.Types.DND})]},
-													{key: "streamMute", label: ["Mute while", BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {style: {marginLeft: 6}, size: 12, status: BDFDB.LibraryComponents.StatusComponents.Types.STREAMING})]},
+													{key: "invisibleMute", label: ["Mute in", BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {style: {marginLeft: 6}, size: 12, status: BDFDB.LibraryComponents.StatusComponents.Types.INVISIBLE})]},
+													{key: "streamMute", label: ["Mute while", BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.StatusComponents.Status, {style: {marginLeft: 6}, size: 12, status: BDFDB.LibraryComponents.StatusComponents.Types.STREAMING})]}
 												].map(n => types[type][n.key] !== null && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, {
 													label: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 														align: BDFDB.LibraryComponents.Flex.Align.CENTER,
@@ -677,6 +681,7 @@ module.exports = (_ => {
 						volume: 100,
 						mute: types[type].mute,
 						streamMute: types[type].streamMute,
+						invisibleMute: types[type].invisibleMute,
 						focus: types[type].focus
 					};
 					choices[type] = choice;
@@ -707,7 +712,7 @@ module.exports = (_ => {
 
 			dontPlayAudio (type) {
 				let status = BDFDB.UserUtils.getStatus();
-				return choices[type] && (choices[type].mute && status == "dnd" || choices[type].streamMute && status == "streaming");
+				return choices[type] && (choices[type].mute && status == "dnd" || choices[type].streamMute && status == "streaming" || choices[type].invisibleMute && (status == "offline" || status == "invisible"));
 			}
 
 			fireEvent (type) {

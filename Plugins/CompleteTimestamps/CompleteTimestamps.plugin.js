@@ -2,7 +2,7 @@
  * @name CompleteTimestamps
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.6.6
+ * @version 1.6.7
  * @description Replaces Timestamps with your own custom Timestamps
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -14,12 +14,7 @@
 
 module.exports = (_ => {
 	const changeLog = {
-		"improved": {
-			"RelativeTimestamps": "Now works with the Plugin 'RelativeTimestamps"
-		},
-		"added": {
-			"User Member Info": "Hovering over the User Member Info (Member Since) will show a full Timestamp"
-		}
+		
 	};
 
 	return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
@@ -102,19 +97,16 @@ module.exports = (_ => {
 			
 			onStart () {
 				BDFDB.LibraryModules.MessageParser && BDFDB.LibraryModules.MessageParser.defaultRules && BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageParser.defaultRules.timestamp, "react", {after: e => {
-					const date = 1e3*Number(e.methodArguments[0].timestamp);
+					const date = 1e3 * Number(e.methodArguments[0].timestamp);
 					if (this.settings.places.markup && e.methodArguments[0].formatted == BDFDB.LibraryModules.MessageParser.defaultRules.timestamp.parse([null, e.methodArguments[0].timestamp, "f"]).formatted) {
 						if (tooltipIsSame) e.returnValue.props.delay = 99999999999999999999;
 						let timestamp = this.formatTimestamp(this.settings.dates.timestampDate, date);
-						let renderChildren = e.returnValue.props.children;
-						e.returnValue.props.children = (...args) => {
-							let renderedChildren = renderChildren(...args);
-							if (BDFDB.ArrayUtils.is(renderedChildren.props.children)) renderedChildren.props.children[1] = timestamp;
-							else renderedChildren.props.children = timestamp;
-							return renderedChildren;
-						};
+						if (e.returnValue.props.node) e.returnValue.props.node.formatted = timestamp;
 					}
-					if (this.settings.tooltips.markup) e.returnValue.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, date);
+					if (this.settings.tooltips.markup) {
+						e.returnValue.props.text = this.formatTimestamp(this.settings.dates.tooltipDate, date);
+						if (e.returnValue.props.node) e.returnValue.props.node.full = e.returnValue.props.text;
+					}
 				}});
 				
 				this.forceUpdateAll();
