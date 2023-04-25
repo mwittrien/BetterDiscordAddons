@@ -879,7 +879,7 @@
 	background: rgb(255, 255, 255) linear-gradient(195deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), 0.5));
 }
 #app-mount .ctaWrapperTier2-1hk2M8 .ctaButtonInner-2VRelf,
-#app-mount .tier2-qNjKTW .lookInverted-2mDUMi.colorBrand-I6CyqQ {
+#app-mount .tier2-qNjKTW .lookInverted-2GrLaB.colorBrand-2M3O3N {
 	color: rgb(var(--accentcolor2));
 }
 .mostPopularPill-28w8lV {
@@ -948,7 +948,7 @@ html .offerBadge-1KDtMz {									/* settingsitems		offer badge							*/
 	border-color: rgb(var(--accentcolor));
 }
 
-.background-3d_SjE .lookLink-15mFoz.colorLink-1Md3RZ {
+.background-3d_SjE .lookLink-13iF2K.colorLink-1Md3RZ {
 	color: rgb(var(--accentcolor));
 }
 .avatarUploaderInner-yEhTv5 {								/* accountsettings		avatar upload						*/
@@ -1880,7 +1880,7 @@ a.metadataDownload-3IY84h {
 	background: rgb(var(--accentcolor2));
 	-webkit-mask: url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/svgs/blurple/guildsettings_boostangel_accent2.svg) center/cover no-repeat;
 }
-#app-mount .wrapper-3Zq_cJ .lookInverted-2mDUMi.colorBrand-I6CyqQ {
+#app-mount .wrapper-3Zq_cJ .lookInverted-2GrLaB.colorBrand-2M3O3N {
 	color: rgb(var(--accentcolor)) !important;
 }
 .tierMarkerLabelPlusIcon-2zLkr7 {							/* modal				prebuy icon							*/
@@ -2062,7 +2062,7 @@ a.metadataDownload-3IY84h {
 
 /* ----		10.17.	NICKNAMEMODAL					---- */
 
-.reset-2Ufv5M.lookLink-15mFoz.colorLink-1Md3RZ {
+.reset-2Ufv5M.lookLink-13iF2K.colorLink-1Md3RZ {
 	color: rgb(var(--accentcolor));
 }
 
@@ -2347,88 +2347,88 @@ a.metadataDownload-3IY84h {
 
 /* ----		12.2.	BUTTONS							---- */
 
-#app-mount .lookInverted-2mDUMi.colorBrand-I6CyqQ .spinnerItem-3dCJpG,
-#app-mount .lookOutlined-3yKVGo.colorBrand-I6CyqQ .spinnerItem-3dCJpG,
-#app-mount .lookLink-15mFoz.colorBrand-I6CyqQ .spinnerItem-3dCJpG,
-#app-mount .lookInverted-2mDUMi.colorBrandNew-2-gGsS .spinnerItem-3dCJpG,
-#app-mount .lookOutlined-3yKVGo.colorBrandNew-2-gGsS .spinnerItem-3dCJpG,
-#app-mount .lookLink-15mFoz.colorBrandNew-2-gGsS .spinnerItem-3dCJpG {
+#app-mount .lookInverted-2GrLaB.colorBrand-2M3O3N .spinnerItem-3Y5NsU,
+#app-mount .lookOutlined-3RTC7c.colorBrand-2M3O3N .spinnerItem-3Y5NsU,
+#app-mount .lookLink-13iF2K.colorBrand-2M3O3N .spinnerItem-3Y5NsU,
+#app-mount .lookInverted-2GrLaB.colorBrandNew-abZT3v .spinnerItem-3Y5NsU,
+#app-mount .lookOutlined-3RTC7c.colorBrandNew-abZT3v .spinnerItem-3Y5NsU,
+#app-mount .lookLink-13iF2K.colorBrandNew-abZT3v .spinnerItem-3Y5NsU {
 	background-color: rgb(var(--accentcolor));
 }
 
 #app-mount .btn-115Sr0.btnPrimary-7AVO-X:hover:not(:disabled),
-#app-mount .lookFilled-yCfaCM.colorBrand-I6CyqQ:not(.buttonColor-3bP3fX):hover,
-#app-mount .lookFilled-yCfaCM.hoverBrand-9W5Bs0.hasHover-26V98q:hover,
-#app-mount .lookFilled-yCfaCM.colorBrandNew-2-gGsS:not(.buttonColor-3bP3fX):hover,
-#app-mount .lookFilled-yCfaCM.hoverBrandNew-2zxGm3.hasHover-26V98q:hover {
+#app-mount .lookFilled-1H2Jvj.colorBrand-2M3O3N:not(.buttonColor-3bP3fX):hover,
+#app-mount .lookFilled-1H2Jvj.hoverBrand-20zQAE.hasHover-3y7IPU:hover,
+#app-mount .lookFilled-1H2Jvj.colorBrandNew-abZT3v:not(.buttonColor-3bP3fX):hover,
+#app-mount .lookFilled-1H2Jvj.hoverBrandNew-3CWLfn.hasHover-3y7IPU:hover {
 	background: var(--accentcolor-hover);
 }
-#app-mount .lookFilled-yCfaCM.colorBrand-I6CyqQ:not(.buttonColor-3bP3fX):active,
-#app-mount .lookFilled-yCfaCM.hoverBrand-9W5Bs0.hasHover-26V98q:active,
-#app-mount .lookFilled-yCfaCM.colorBrandNew-2-gGsS:not(.buttonColor-3bP3fX):active,
-#app-mount .lookFilled-yCfaCM.hoverBrandNew-2zxGm3.hasHover-26V98q:active {
+#app-mount .lookFilled-1H2Jvj.colorBrand-2M3O3N:not(.buttonColor-3bP3fX):active,
+#app-mount .lookFilled-1H2Jvj.hoverBrand-20zQAE.hasHover-3y7IPU:active,
+#app-mount .lookFilled-1H2Jvj.colorBrandNew-abZT3v:not(.buttonColor-3bP3fX):active,
+#app-mount .lookFilled-1H2Jvj.hoverBrandNew-3CWLfn.hasHover-3y7IPU:active {
 	background: var(--accentcolor-active);
 }
 #app-mount .btn-115Sr0.btnPrimary-7AVO-X,
-#app-mount .lookFilled-yCfaCM.colorBrand-I6CyqQ:not(.buttonColor-3bP3fX),
-#app-mount .lookFilled-yCfaCM.colorBrand-I6CyqQ:not(.buttonColor-3bP3fX):disabled,
-#app-mount .lookFilled-yCfaCM.colorBrandNew-2-gGsS:not(.buttonColor-3bP3fX),
-#app-mount .lookFilled-yCfaCM.colorBrandNew-2-gGsS:not(.buttonColor-3bP3fX):disabled {
+#app-mount .lookFilled-1H2Jvj.colorBrand-2M3O3N:not(.buttonColor-3bP3fX),
+#app-mount .lookFilled-1H2Jvj.colorBrand-2M3O3N:not(.buttonColor-3bP3fX):disabled,
+#app-mount .lookFilled-1H2Jvj.colorBrandNew-abZT3v:not(.buttonColor-3bP3fX),
+#app-mount .lookFilled-1H2Jvj.colorBrandNew-abZT3v:not(.buttonColor-3bP3fX):disabled {
 	background: rgb(var(--accentcolor));
 }
 
-#app-mount .lookInverted-2mDUMi.colorBrand-I6CyqQ:hover,
-#app-mount .lookInverted-2mDUMi.hoverBrand-9W5Bs0.hasHover-26V98q:hover,
-#app-mount .lookInverted-2mDUMi.colorBrandNew-2-gGsS:hover,
-#app-mount .lookInverted-2mDUMi.hoverBrandNew-2zxGm3.hasHover-26V98q:hover {
+#app-mount .lookInverted-2GrLaB.colorBrand-2M3O3N:hover,
+#app-mount .lookInverted-2GrLaB.hoverBrand-20zQAE.hasHover-3y7IPU:hover,
+#app-mount .lookInverted-2GrLaB.colorBrandNew-abZT3v:hover,
+#app-mount .lookInverted-2GrLaB.hoverBrandNew-3CWLfn.hasHover-3y7IPU:hover {
 	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
 }
-#app-mount .lookInverted-2mDUMi.colorBrand-I6CyqQ:active,
-#app-mount .lookInverted-2mDUMi.hoverBrand-9W5Bs0.hasHover-26V98q:active,
-#app-mount .lookInverted-2mDUMi.colorBrandNew-2-gGsS:active,
-#app-mount .lookInverted-2mDUMi.hoverBrandNew-2zxGm3.hasHover-26V98q:active {
+#app-mount .lookInverted-2GrLaB.colorBrand-2M3O3N:active,
+#app-mount .lookInverted-2GrLaB.hoverBrand-20zQAE.hasHover-3y7IPU:active,
+#app-mount .lookInverted-2GrLaB.colorBrandNew-abZT3v:active,
+#app-mount .lookInverted-2GrLaB.hoverBrandNew-3CWLfn.hasHover-3y7IPU:active {
 	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
 }
-#app-mount .lookInverted-2mDUMi.colorBrand-I6CyqQ,
-#app-mount .lookInverted-2mDUMi.colorBrand-I6CyqQ:disabled,
-#app-mount .lookInverted-2mDUMi.colorBrandNew-2-gGsS,
-#app-mount .lookInverted-2mDUMi.colorBrand-I6CyqQ:disabled {
+#app-mount .lookInverted-2GrLaB.colorBrand-2M3O3N,
+#app-mount .lookInverted-2GrLaB.colorBrand-2M3O3N:disabled,
+#app-mount .lookInverted-2GrLaB.colorBrandNew-abZT3v,
+#app-mount .lookInverted-2GrLaB.colorBrand-2M3O3N:disabled {
 	color: rgb(var(--accentcolor));
 }
 
-#app-mount .lookOutlined-3yKVGo.colorBrand-I6CyqQ:hover,
-#app-mount .lookOutlined-3yKVGo.colorBrandNew-2-gGsS:hover,
-#app-mount .lookOutlined-3yKVGo.hoverBrand-9W5Bs0.hasHover-26V98q:hover,
-#app-mount .lookOutlined-3yKVGo.hoverBrandNew-2zxGm3.hasHover-26V98q:hover {
+#app-mount .lookOutlined-3RTC7c.colorBrand-2M3O3N:hover,
+#app-mount .lookOutlined-3RTC7c.colorBrandNew-abZT3v:hover,
+#app-mount .lookOutlined-3RTC7c.hoverBrand-20zQAE.hasHover-3y7IPU:hover,
+#app-mount .lookOutlined-3RTC7c.hoverBrandNew-3CWLfn.hasHover-3y7IPU:hover {
 	border-color: rgba(var(--accentcolor), 0.6);
 }
-#app-mount .lookOutlined-3yKVGo.colorBrand-I6CyqQ:active,
-#app-mount .lookOutlined-3yKVGo.colorBrandNew-2-gGsS:active,
-#app-mount .lookOutlined-3yKVGo.hoverBrand-9W5Bs0.hasHover-26V98q:active,
-#app-mount .lookOutlined-3yKVGo.hoverBrandNew-2zxGm3.hasHover-26V98q:active {
+#app-mount .lookOutlined-3RTC7c.colorBrand-2M3O3N:active,
+#app-mount .lookOutlined-3RTC7c.colorBrandNew-abZT3v:active,
+#app-mount .lookOutlined-3RTC7c.hoverBrand-20zQAE.hasHover-3y7IPU:active,
+#app-mount .lookOutlined-3RTC7c.hoverBrandNew-3CWLfn.hasHover-3y7IPU:active {
 	background-color: rgba(var(--accentcolor), 0.1);
 	border-color: rgb(var(--accentcolor));
 }
-#app-mount .lookOutlined-3yKVGo.colorBrand-I6CyqQ,
-#app-mount .lookOutlined-3yKVGo.colorBrand-I6CyqQ:disabled,
-#app-mount .lookOutlined-3yKVGo.colorBrandNew-2-gGsS,
-#app-mount .lookOutlined-3yKVGo.colorBrandNew-2-gGsS:disabled {
+#app-mount .lookOutlined-3RTC7c.colorBrand-2M3O3N,
+#app-mount .lookOutlined-3RTC7c.colorBrand-2M3O3N:disabled,
+#app-mount .lookOutlined-3RTC7c.colorBrandNew-abZT3v,
+#app-mount .lookOutlined-3RTC7c.colorBrandNew-abZT3v:disabled {
 	border-color: rgba(var(--accentcolor), 0.1);
 	color: rgb(var(--accentcolor));
 }
 
-#app-mount .lookLink-15mFoz.colorBrand-I6CyqQ,
-#app-mount .lookLink-15mFoz.colorBrandNew-2-gGsS {
+#app-mount .lookLink-13iF2K.colorBrand-2M3O3N,
+#app-mount .lookLink-13iF2K.colorBrandNew-abZT3v {
 	color: rgb(var(--accentcolor));
 }
-#app-mount .lookLink-15mFoz.hoverBrand-9W5Bs0.hasHover-26V98q:hover .contents-3ca1mk,
-#app-mount .lookLink-15mFoz.hoverBrandNew-2zxGm3.hasHover-26V98q:hover .contents-3ca1mk {
+#app-mount .lookLink-13iF2K.hoverBrand-20zQAE.hasHover-3y7IPU:hover .contents-3NembX,
+#app-mount .lookLink-13iF2K.hoverBrandNew-3CWLfn.hasHover-3y7IPU:hover .contents-3NembX {
 	background-image: linear-gradient(0deg, transparent, transparent 1px, rgb(var(--accentcolor)) 0, rgb(var(--accentcolor)) 2px, transparent 0);
 	color: rgb(var(--accentcolor));
 }
 
-#app-mount .borderBrand-P_n17U,
-#app-mount .borderBrandNew-W1AvIG {
+#app-mount .borderBrand-dgox0N,
+#app-mount .borderBrandNew-2SIdEy {
 	border-color: rgb(var(--accentcolor)) !important;
 }
 
@@ -2712,7 +2712,7 @@ input.input-2g-os5 {										/* textinput												*/
 .root-sJwU_u::after {
 	border-right-color: rgb(var(--accentcolor2));
 }
-.root-sJwU_u .lookFilled-yCfaCM.colorWhite-1H92hK {
+.root-sJwU_u .lookFilled-1H2Jvj.colorWhite-1H92hK {
 	color: rgb(var(--accentcolor2));
 }
 
@@ -2750,7 +2750,7 @@ input.input-2g-os5 {										/* textinput												*/
 .contentPremium-_Y0-cX {
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--accentcolor2)), rgba(var(--accentcolor2), .7))
 }
-.contentPremium-_Y0-cX .lookInverted-2mDUMi.colorBrand-I6CyqQ {
+.contentPremium-_Y0-cX .lookInverted-2GrLaB.colorBrand-2M3O3N {
 	color: rgb(var(--accentcolor2)) !important;
 }
 

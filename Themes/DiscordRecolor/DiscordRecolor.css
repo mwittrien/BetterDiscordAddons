@@ -484,62 +484,62 @@ html .iconBadge-2wi9r4 {
 
 /* ----		1.2.	BUTTONS							---- */
 
-#app-mount .lookInverted-2mDUMi.colorPrimary-2AuQVo .spinnerItem-3dCJpG {
+#app-mount .lookInverted-2GrLaB.colorPrimary-2-Lusz .spinnerItem-3Y5NsU {
 	background-color: var(--background-accent);
 }
-#app-mount .lookOutlined-3yKVGo.colorPrimary-2AuQVo .spinnerItem-3dCJpG,
-#app-mount .lookLink-15mFoz.colorPrimary-2AuQVo .spinnerItem-3dCJpG {
+#app-mount .lookOutlined-3RTC7c.colorPrimary-2-Lusz .spinnerItem-3Y5NsU,
+#app-mount .lookLink-13iF2K.colorPrimary-2-Lusz .spinnerItem-3Y5NsU {
 	background-color: var(--header-primary);
 }
 
-#app-mount .lookFilled-yCfaCM.colorPrimary-2AuQVo:hover,
-#app-mount .lookFilled-yCfaCM.hoverPrimary-2hqNIm.hasHover-26V98q:hover {
+#app-mount .lookFilled-1H2Jvj.colorPrimary-2-Lusz:hover,
+#app-mount .lookFilled-1H2Jvj.hoverPrimary-3dWXRY.hasHover-3y7IPU:hover {
 	background-image: linear-gradient(0deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, .15));
 }
-#app-mount .lookFilled-yCfaCM.colorPrimary-2AuQVo:active,
-#app-mount .lookFilled-yCfaCM.hoverPrimary-2hqNIm.hasHover-26V98q:active {
+#app-mount .lookFilled-1H2Jvj.colorPrimary-2-Lusz:active,
+#app-mount .lookFilled-1H2Jvj.hoverPrimary-3dWXRY.hasHover-3y7IPU:active {
 	background-image: linear-gradient(0deg, rgba(255, 255, 255, .3), rgba(255, 255, 255, .3));
 }
-#app-mount .lookFilled-yCfaCM.colorPrimary-2AuQVo,
-#app-mount .lookFilled-yCfaCM.colorPrimary-2AuQVo:disabled {
+#app-mount .lookFilled-1H2Jvj.colorPrimary-2-Lusz,
+#app-mount .lookFilled-1H2Jvj.colorPrimary-2-Lusz:disabled {
 	background-color: var(--background-accent);
 	color: #FFF;
 }
 
-#app-mount .lookInverted-2mDUMi.colorPrimary-2AuQVo:hover,
-#app-mount .lookInverted-2mDUMi.hoverPrimary-2hqNIm.hasHover-26V98q:hover {
+#app-mount .lookInverted-2GrLaB.colorPrimary-2-Lusz:hover,
+#app-mount .lookInverted-2GrLaB.hoverPrimary-3dWXRY.hasHover-3y7IPU:hover {
 	background-image: linear-gradient(0deg, rgba(0, 0, 0, .1), rgba(0, 0, 0, .1));
 }
-#app-mount .lookInverted-2mDUMi.colorPrimary-2AuQVo:active,
-#app-mount .lookInverted-2mDUMi.hoverPrimary-2hqNIm.hasHover-26V98q:active {
+#app-mount .lookInverted-2GrLaB.colorPrimary-2-Lusz:active,
+#app-mount .lookInverted-2GrLaB.hoverPrimary-3dWXRY.hasHover-3y7IPU:active {
 	background-image: linear-gradient(0deg, rgba(0, 0, 0, .2), rgba(0, 0, 0, .2));
 }
-#app-mount .lookInverted-2mDUMi.colorPrimary-2AuQVo,
-#app-mount .lookInverted-2mDUMi.colorPrimary-2AuQVo:disabled {
+#app-mount .lookInverted-2GrLaB.colorPrimary-2-Lusz,
+#app-mount .lookInverted-2GrLaB.colorPrimary-2-Lusz:disabled {
 	background-color: #FFF;
 	color: var(--background-accent);
 }
 
-#app-mount .lookOutlined-3yKVGo.colorPrimary-2AuQVo:hover,
-#app-mount .lookOutlined-3yKVGo.hoverPrimary-2hqNIm.hasHover-26V98q:hover {
+#app-mount .lookOutlined-3RTC7c.colorPrimary-2-Lusz:hover,
+#app-mount .lookOutlined-3RTC7c.hoverPrimary-3dWXRY.hasHover-3y7IPU:hover {
 	border-color: rgba(var(--textbrightest), .6);
 }
-#app-mount .lookOutlined-3yKVGo.colorPrimary-2AuQVo:active,
-#app-mount .lookOutlined-3yKVGo.hoverPrimary-2hqNIm.hasHover-26V98q:active {
+#app-mount .lookOutlined-3RTC7c.colorPrimary-2-Lusz:active,
+#app-mount .lookOutlined-3RTC7c.hoverPrimary-3dWXRY.hasHover-3y7IPU:active {
 	background-color: rgba(var(--textbrightest), .1);
 	border-color: var(--header-primary);
 }
-#app-mount .lookOutlined-3yKVGo.colorPrimary-2AuQVo,
-#app-mount .lookOutlined-3yKVGo.colorPrimary-2AuQVo:disabled {
+#app-mount .lookOutlined-3RTC7c.colorPrimary-2-Lusz,
+#app-mount .lookOutlined-3RTC7c.colorPrimary-2-Lusz:disabled {
 	border-color: rgba(var(--textbrightest), .1);
 	color: var(--header-primary);
 }
 
-#app-mount .lookLink-15mFoz.colorPrimary-2AuQVo {
+#app-mount .lookLink-13iF2K.colorPrimary-2-Lusz {
 	color: var(--header-primary);
 }
-#app-mount .lookLink-15mFoz.colorPrimary-2AuQVo:hover .contents-3ca1mk,
-#app-mount .lookLink-15mFoz.hoverPrimary-2hqNIm.hasHover-26V98q:hover .contents-3ca1mk {
+#app-mount .lookLink-13iF2K.colorPrimary-2-Lusz:hover .contents-3NembX,
+#app-mount .lookLink-13iF2K.hoverPrimary-3dWXRY.hasHover-3y7IPU:hover .contents-3NembX {
 	background-image: linear-gradient(0deg, transparent, transparent 1px, rgb(var(--textbrightest)) 0, rgb(var(--textbrightest)) 2px, transparent 0);
 	color: var(--header-primary);
 }
@@ -548,69 +548,69 @@ html .iconBadge-2wi9r4 {
 	border-color: var(--header-primary) !important;
 }
 
-#app-mount .lookInverted-2mDUMi.colorTransparent-13Bvvi .spinnerItem-3dCJpG {
+#app-mount .lookInverted-2GrLaB.colorTransparent-2SBJ8- .spinnerItem-3Y5NsU {
 	background-color: rgba(var(--textbrightest),.1);
 }
-#app-mount .lookFilled-yCfaCM.colorTransparent-13Bvvi .spinnerItem-3dCJpG,
-#app-mount .lookOutlined-3yKVGo.colorTransparent-13Bvvi .spinnerItem-3dCJpG,
-#app-mount .lookLink-15mFoz.colorTransparent-13Bvvi .spinnerItem-3dCJpG {
+#app-mount .lookFilled-1H2Jvj.colorTransparent-2SBJ8- .spinnerItem-3Y5NsU,
+#app-mount .lookOutlined-3RTC7c.colorTransparent-2SBJ8- .spinnerItem-3Y5NsU,
+#app-mount .lookLink-13iF2K.colorTransparent-2SBJ8- .spinnerItem-3Y5NsU {
 	background-color: var(--header-primary);
 }
 
-#app-mount .lookFilled-yCfaCM.colorTransparent-13Bvvi:hover,
-#app-mount .lookFilled-yCfaCM.hoverTransparent-1F6BzX.hasHover-26V98q:hover {
+#app-mount .lookFilled-1H2Jvj.colorTransparent-2SBJ8-:hover,
+#app-mount .lookFilled-1H2Jvj.hoverTransparent-2WkMPh.hasHover-3y7IPU:hover {
 	background-color: rgba(var(--textbrightest),.05);
 }
-#app-mount .lookFilled-yCfaCM.colorTransparent-13Bvvi:active,
-#app-mount .lookFilled-yCfaCM.hoverTransparent-1F6BzX.hasHover-26V98q:active  {
+#app-mount .lookFilled-1H2Jvj.colorTransparent-2SBJ8-:active,
+#app-mount .lookFilled-1H2Jvj.hoverTransparent-2WkMPh.hasHover-3y7IPU:active  {
 	background-color: rgba(var(--textbrightest),.01);
 }
-#app-mount .lookFilled-yCfaCM.colorTransparent-13Bvvi,
-#app-mount .lookFilled-yCfaCM.colorTransparent-13Bvvi:disabled {
+#app-mount .lookFilled-1H2Jvj.colorTransparent-2SBJ8-,
+#app-mount .lookFilled-1H2Jvj.colorTransparent-2SBJ8-:disabled {
 	background-color: rgba(var(--textbrightest),.1);
 	color: var(--header-primary);
 }
 
-#app-mount .lookInverted-2mDUMi.colorTransparent-13Bvvi:hover,
-#app-mount .lookInverted-2mDUMi.hoverTransparent-1F6BzX.hasHover-26V98q:hover {
+#app-mount .lookInverted-2GrLaB.colorTransparent-2SBJ8-:hover,
+#app-mount .lookInverted-2GrLaB.hoverTransparent-2WkMPh.hasHover-3y7IPU:hover {
 	background-color: rgba(var(--textbrightest),.05);
 }
-#app-mount .lookInverted-2mDUMi.colorTransparent-13Bvvi:active,
-#app-mount .lookInverted-2mDUMi.hoverTransparent-1F6BzX.hasHover-26V98q:active {
+#app-mount .lookInverted-2GrLaB.colorTransparent-2SBJ8-:active,
+#app-mount .lookInverted-2GrLaB.hoverTransparent-2WkMPh.hasHover-3y7IPU:active {
 	background-color: rgba(var(--textbrightest),.1);
 }
-#app-mount .lookInverted-2mDUMi.colorTransparent-13Bvvi,
-#app-mount .lookInverted-2mDUMi.colorTransparent-13Bvvi:disabled  {
+#app-mount .lookInverted-2GrLaB.colorTransparent-2SBJ8-,
+#app-mount .lookInverted-2GrLaB.colorTransparent-2SBJ8-:disabled  {
 	background-color: var(--header-primary);
 	color: rgba(var(--textbrightest),.1);
 }
 
-#app-mount .lookOutlined-3yKVGo.colorTransparent-13Bvvi:hover,
-#app-mount .lookOutlined-3yKVGo.hoverTransparent-1F6BzX.hasHover-26V98q:hover {
+#app-mount .lookOutlined-3RTC7c.colorTransparent-2SBJ8-:hover,
+#app-mount .lookOutlined-3RTC7c.hoverTransparent-2WkMPh.hasHover-3y7IPU:hover {
 	background-color: rgba(var(--textbrighter),.1);
 	border-color: var(--interactive-hover);
 }
-#app-mount .lookOutlined-3yKVGo.colorTransparent-13Bvvi:active,
-#app-mount .lookOutlined-3yKVGo.hoverTransparent-1F6BzX.hasHover-26V98q:active {
+#app-mount .lookOutlined-3RTC7c.colorTransparent-2SBJ8-:active,
+#app-mount .lookOutlined-3RTC7c.hoverTransparent-2WkMPh.hasHover-3y7IPU:active {
 	background-color: rgba(var(--textbrightest),.1);
 	border-color: var(--header-primary);
 }
-#app-mount .lookOutlined-3yKVGo.colorTransparent-13Bvvi,
-#app-mount .lookOutlined-3yKVGo.colorTransparent-13Bvvi:disabled {
+#app-mount .lookOutlined-3RTC7c.colorTransparent-2SBJ8-,
+#app-mount .lookOutlined-3RTC7c.colorTransparent-2SBJ8-:disabled {
 	background-color: transparent;
 	color: var(--text-normal);
 }
 
-#app-mount .lookLink-15mFoz.colorTransparent-13Bvvi {
+#app-mount .lookLink-13iF2K.colorTransparent-2SBJ8- {
 	color: var(--text-normal);
 }
-#app-mount .lookLink-15mFoz.colorTransparent-13Bvvi:hover .contents-3ca1mk,
-#app-mount .lookLink-15mFoz.hoverTransparent-1F6BzX.hasHover-26V98q:hover .contents-3ca1mk {
+#app-mount .lookLink-13iF2K.colorTransparent-2SBJ8-:hover .contents-3NembX,
+#app-mount .lookLink-13iF2K.hoverTransparent-2WkMPh.hasHover-3y7IPU:hover .contents-3NembX {
 	background-image: linear-gradient(0deg, transparent,transparent 1px,rgb(var(--textbrighter)) 0,rgb(var(--textbrighter)) 2px,transparent 0);
 	color: var(--text-normal);
 }
 
-#app-mount .borderTransparent-2P3AAk {
+#app-mount .borderTransparent-2adzs- {
 	border-color: var(--text-normal) !important;
 }
 
