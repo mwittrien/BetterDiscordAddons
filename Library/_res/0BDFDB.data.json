@@ -566,7 +566,7 @@
 		"TypingUsers": {"strings": ["Easing.quad", ".emphasizeSlowmodeCooldown", ".sequence("]},
 		"UnavailableGuildsButton": {"strings": [".errorInner", ".guildsError", "Messages.PARTIAL_OUTAGE"]},
 		"UnreadDMs": {"strings": ["getMutablePrivateChannels", "selectedVoiceGuildId", ".selectedVoiceChannelId"]},
-		"UseCopyIdItem": {"strings": ["\"devmode-copy-id\""]},
+		"UseCopyIdItem": {"strings": ["\"devmode-copy-id"]},
 		"UserBadges": {"strings": [".PROFILE_USER_BADGES", "SIZE_24"]},
 		"UserBanner": {"strings": [".showPremiumBadgeUpsell", ".isPremiumAtLeast", ".SETTINGS"]},
 		"UserBannerMask": {"strings": [".overrideAvatarDecorationURL", "hasBannerImage:", "foreignObject"]},

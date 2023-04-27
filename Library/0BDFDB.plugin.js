@@ -4020,7 +4020,7 @@ module.exports = (_ => {
 						if (!child) return false;
 						let props = child.stateNode ? child.stateNode.props : child.props;
 						if (!props) return false;
-						return config.id && config.id.some(key => props.id == key) || config.label && config.label.some(key => props.label == key);
+						return config.id && config.id.some(key => key == "devmode-copy-id" ? typeof props.id == "string" && props.id.startsWith(key) : props.id == key) || config.label && config.label.some(key => props.label == key);
 					}
 				};
 
@@ -8150,6 +8150,9 @@ module.exports = (_ => {
 				};
 				Internal.processMemberListItem = function (e) {
 					Internal._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
+				};
+				Internal.processMenu = function (e) {
+					if (!e.instance.props.children || BDFDB.ArrayUtils.is(e.instance.props.children) && !e.instance.props.children.length) Internal.LibraryModules.ContextMenuUtils.closeContextMenu();
 				};
 				Internal.processMessageActionsContextMenu = function (e) {
 					e.instance.props.updatePosition = _ => {};
