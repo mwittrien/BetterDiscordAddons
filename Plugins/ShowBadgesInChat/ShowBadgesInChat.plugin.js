@@ -2,7 +2,7 @@
  * @name ShowBadgesInChat
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.9.8
+ * @version 1.9.9
  * @description Displays Badges (Nitro, Hypesquad, etc...) in the Chat/MemberList/DMList
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -204,6 +204,10 @@ module.exports = (_ => {
 					userCopy.premium_guild_since = data.premium_guild_since;
 					loadedUsers[id] = BDFDB.ObjectUtils.extract(userCopy, "flags", "premium_since", "premium_guild_since");
 					loadedUsers[id].date = (new Date()).getTime();
+					if (data.badges) for (let badge of data.badges) {
+						let userFlag = BDFDB.DiscordConstants.UserFlags[(userBadgeFlagNameMap[badge.id] || badge.id || "").toUpperCase()];
+						if (userFlag && (loadedUsers[id].flags | userFlag) != loadedUsers[id].flags) loadedUsers[id].flags += userFlag;
+					}
 					
 					BDFDB.TimeUtils.clear(cacheTimeout);
 					cacheTimeout = BDFDB.TimeUtils.timeout(_ => BDFDB.DataUtils.save(loadedUsers, this, "badgeCache"), 5000);
