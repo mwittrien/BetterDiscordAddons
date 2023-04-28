@@ -569,7 +569,7 @@
 		"UseCopyIdItem": {"strings": ["\"devmode-copy-id"]},
 		"UserBadges": {"strings": [".PROFILE_USER_BADGES", "SIZE_24"]},
 		"UserBanner": {"strings": [".showPremiumBadgeUpsell", ".isPremiumAtLeast", ".SETTINGS"]},
-		"UserBannerMask": {"strings": [".overrideAvatarDecorationURL", "hasBannerImage:", "foreignObject"]},
+		"UserBannerMask": {"strings": [".overrideAvatarDecorationURL", "getAvatarSpecs", "foreignObject"]},
 		"UserBioSection": {"strings": [".isUsingGuildBio", "aboutMeGuildIcon", "GUILD_IDENTITY_BIO_TOAST"]},
 		"UserConnectionsSection": {"strings": [".applicationRoleConnections)", ".CONNECTIONS_ROLE_POPOUT_VIEW_ALL"]},
 		"UserGenericContextMenu": {"strings": ["USER_ACTIONS_MENU_LABEL", "navId:\"user", ".USER_GENERIC_MENU"]},

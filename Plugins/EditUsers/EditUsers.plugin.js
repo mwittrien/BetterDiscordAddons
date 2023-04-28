@@ -2,7 +2,7 @@
  * @name EditUsers
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 4.7.8
+ * @version 4.7.9
  * @description Allows you to locally edit Users
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -540,7 +540,11 @@ module.exports = (_ => {
 				}
 				else if (changedUsers[e.instance.props.user.id].banner) {
 					e.instance.props.bannerSrc = changedUsers[e.instance.props.user.id].banner;
-					if (e.instance.props.displayProfile) e.instance.props.displayProfile.banner = changedUsers[e.instance.props.user.id].banner;
+					if (e.instance.props.displayProfile) {
+						e.instance.props.displayProfile = BDFDB.ObjectUtils.copy(e.instance.props.displayProfile);
+						e.instance.props.displayProfile.banner = changedUsers[e.instance.props.user.id].banner;
+						e.instance.props.displayProfile.premiumType = 2;
+					}
 				}
 			}
 
@@ -560,7 +564,9 @@ module.exports = (_ => {
 					}
 					else if (changedUsers[e.instance.props.user.id].banner) {
 						e.instance.props.hasBanner = true;
+						e.instance.props.displayProfile = BDFDB.ObjectUtils.copy(e.instance.props.displayProfile);
 						e.instance.props.displayProfile.banner = changedUsers[e.instance.props.user.id].banner;
+						e.instance.props.displayProfile.premiumType = 2;
 					}
 				}
 			}
