@@ -14,7 +14,7 @@
 
 /* To change stuff like the colors, transparency and background image, change the variables inside the root {}, do NOT change the @import url() */
 
-@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/BasicBackground.css);
+@import url(https://raw.githubusercontent.com/SEELE1306/BetterDiscordAddons/master/Themes/BasicBackground/BasicBackground.css);
 
 :root {
 	--transparencycolor:			0,0,0;						/* default:	0,0,0																								*/
@@ -23,13 +23,8 @@
 	--guildchanneltransparency:		0.15;						/* default: 0.15				(additional darkness for guild/channel list)									*/
 	--chatinputtransparency:		0.0;						/* default: 0.0					(additional darkness for chat input container)									*/
 	--memberlisttransparency:		0.0;						/* default: 0.0					(additional darkness for member list)											*/
-	--accentcolor:					190,78,180;					/* default: 190,78,180			(RGB-format - blurple: 88,101,242 bd-blue: 58,113,193)							*/
 	
-	--font:							"gg sans", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;		/* font used in most places										*/
-	--textshadow:					transparent;				/* default: transparent			(textshadow for text ontop of accentcolor nodes, ONLY accepts a color, no px)	*/
-	--settingsicons:				1;							/* Use Settings Icons in User/Server/Channel Settings: 1 = yes, 0 = no											*/
-	
-	--background:					url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/_res/background.jpg);	/* general background image				*/
+	--background:					url(https://i.imgur.com/8JxHlMb.png);	/* general background image				*/
 	--backgroundposition:			center;						/* default: center				(position of background - values: [center/top/right/bottom/left])				*/
 	--backgroundsize:				cover;						/* default: cover				(sizefit of background - values: [cover/contain/auto])							*/
 	--backgroundblur:				unset;						/* default: unset				(blur in px, only works when --background is set to an image)					*/
@@ -43,13 +38,6 @@
 	--backdropposition:				center;						/* default: center				(position of backdrop - values: [center/top/right/bottom/left])					*/
 	--backdropsize:					cover;						/* default: cover				(sizefit of backdrop - values: [cover/contain/auto])							*/
 	--backdropblur:					unset;						/* default: unset				(blur in px, only works when --backdrop is set to an image)						*/
-	
-	--textbrightest: 				255,255,255;				/* default: 255,255,255			(text color for the brightest texts)											*/
-	--textbrighter: 				222,222,222;				/* default: 222,222,222			(text color for brighter texts)													*/
-	--textbright: 					200,200,200;				/* default: 200,200,200			(text color for bright texts)													*/
-	--textdark: 					160,160,160;				/* default: 160,160,160			(text color for dark texts)														*/
-	--textdarker: 					125,125,125;				/* default: 125,125,125			(text color for darker texts)													*/
-	--textdarkest: 					90,90,90;					/* default: 90,90,90			(text color for the darkest texts)												*/
 	
 	--version1_0_5:					none;						/* DO NOT CHANGE THIS VARIABLE , USED TO HIDE UPDATE NOTICE														*/
 }
