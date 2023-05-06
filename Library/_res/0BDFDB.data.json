@@ -5568,10 +5568,10 @@
 		}
 	},
 	"BDFDB_Patrons": {
-		"220161488516546561": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "taimoor"},
 		"148234730523852800": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "inbroso (MaEp)"},
 		"105509397211406336": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "samtino (SgJeff)"},
 		"323494393828999168": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "polak (SzKu)"},
+		"507464069100601363": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "cracky (MiPo)"},
 		"620397524494057513": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "FUSL"},
 		"798499176220327966": 	{"active": true,	"tier": "t2",	"text": "",											"color": "",			"id": "void (JaUt)"}
 	},
