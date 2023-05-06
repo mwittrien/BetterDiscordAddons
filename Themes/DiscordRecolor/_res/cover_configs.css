@@ -1,6 +1,6 @@
 :root { /* gray */
 	--font:						Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;					/*	General Font				*/
-	--settingsicons:			1;						/*	Use Settings Icons in User/Server/Channel Settings: 1 = yes, 0 = no			*/
+	--settingsicons:			1;						/*	Use Settings Icons in User Settings: 1 = yes, 0 = no						*/
 	
 	--accentcolor: 				88,101,242;				/*	Blurple				 - 	default:	88,101,242		 - 	hex:	#5865f2		*/
 	--accentcolor2: 			255,115,250;			/*	Boostpink			 - 	default:	255,115,250		 - 	hex:	#ff73fa		*/
@@ -27,7 +27,7 @@
 
 :root { /* purple */
 	--font:						Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;					/*	General Font				*/
-	--settingsicons:			1;						/*	Use Settings Icons in User/Server/Channel Settings: 1 = yes, 0 = no			*/
+	--settingsicons:			1;						/*	Use Settings Icons in User Settings: 1 = yes, 0 = no						*/
 	
 	--accentcolor: 				144,0,144;				/*	Blurple				 - 	default:	88,101,242		 - 	hex:	#5865f2		*/
 	--accentcolor2: 			255,115,250;			/*	Boostpink			 - 	default:	255,115,250		 - 	hex:	#ff73fa		*/
@@ -54,7 +54,7 @@
 
 :root { /* blue */
 	--font:						Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;					/*	General Font				*/
-	--settingsicons:			1;						/*	Use Settings Icons in User/Server/Channel Settings: 1 = yes, 0 = no			*/
+	--settingsicons:			1;						/*	Use Settings Icons in User Settings: 1 = yes, 0 = no						*/
 	
 	--accentcolor: 				0,0,144;				/*	Blurple				 - 	default:	88,101,242		 - 	hex:	#5865f2		*/
 	--accentcolor2: 			255,115,250;			/*	Boostpink			 - 	default:	255,115,250		 - 	hex:	#ff73fa		*/
@@ -81,7 +81,7 @@
 
 :root { /* green */
 	--font:						Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;					/*	General Font				*/
-	--settingsicons:			1;						/*	Use Settings Icons in User/Server/Channel Settings: 1 = yes, 0 = no			*/
+	--settingsicons:			1;						/*	Use Settings Icons in User Settings: 1 = yes, 0 = no						*/
 	
 	--accentcolor: 				0,144,0;				/*	Blurple				 - 	default:	88,101,242		 - 	hex:	#5865f2		*/
 	--accentcolor2: 			255,115,250;			/*	Boostpink			 - 	default:	255,115,250		 - 	hex:	#ff73fa		*/
@@ -108,7 +108,7 @@
 
 :root { /* yellow */
 	--font:						Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;					/*	General Font				*/
-	--settingsicons:			1;						/*	Use Settings Icons in User/Server/Channel Settings: 1 = yes, 0 = no			*/
+	--settingsicons:			1;						/*	Use Settings Icons in User Settings: 1 = yes, 0 = no						*/
 	
 	--accentcolor: 				144,144,0;				/*	Blurple				 - 	default:	88,101,242		 - 	hex:	#5865f2		*/
 	--accentcolor2: 			255,115,250;			/*	Boostpink			 - 	default:	255,115,250		 - 	hex:	#ff73fa		*/
@@ -135,7 +135,7 @@
 
 :root { /* orange */
 	--font:						Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;					/*	General Font				*/
-	--settingsicons:			1;						/*	Use Settings Icons in User/Server/Channel Settings: 1 = yes, 0 = no			*/
+	--settingsicons:			1;						/*	Use Settings Icons in User Settings: 1 = yes, 0 = no						*/
 	
 	--accentcolor: 				144,77,0;				/*	Blurple				 - 	default:	88,101,242		 - 	hex:	#5865f2		*/
 	--accentcolor2: 			255,115,250;			/*	Boostpink			 - 	default:	255,115,250		 - 	hex:	#ff73fa		*/
@@ -162,7 +162,7 @@
 
 :root { /* red */
 	--font:						Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;					/*	General Font				*/
-	--settingsicons:			1;						/*	Use Settings Icons in User/Server/Channel Settings: 1 = yes, 0 = no			*/
+	--settingsicons:			1;						/*	Use Settings Icons in User Settings: 1 = yes, 0 = no						*/
 	
 	--accentcolor: 				144,0,0;				/*	Blurple				 - 	default:	88,101,242		 - 	hex:	#5865f2		*/
 	--accentcolor2: 			255,115,250;			/*	Boostpink			 - 	default:	255,115,250		 - 	hex:	#ff73fa		*/

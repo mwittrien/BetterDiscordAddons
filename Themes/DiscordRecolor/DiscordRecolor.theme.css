@@ -20,7 +20,7 @@
 
 :root {
 	--font:						"gg sans", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;		/*	General Font			*/
-	--settingsicons:			1;						/*	Use Settings Icons in User/Server/Channel Settings: 1 = yes, 0 = no			*/
+	--settingsicons:			1;						/*	Use Settings Icons in User Settings: 1 = yes, 0 = no						*/
 	
 	--accentcolor: 				88,101,242;				/*	Blurple				 - 	default:	88,101,242		 - 	hex:	#5865f2		*/
 	--accentcolor2: 			255,115,250;			/*	Boostpink			 - 	default:	255,115,250		 - 	hex:	#ff73fa		*/
