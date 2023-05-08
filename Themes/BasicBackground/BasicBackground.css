@@ -7426,6 +7426,9 @@ html:only-child > head + body div.typeWindows-2-g3UY.titleBar-1it3bQ.horizontalR
 	transform: unset !important;
 	animation: unset !important;
 }
+html:only-child > head + body div.typeWindows-2-g3UY.titleBar-1it3bQ.horizontalReverse-2QssvL.flex-3BkGQD.directionRowReverse-HZatnx.justifyStart-2Mwniq.alignStretch-Uwowzr > div.wordmark-2u86JB[style*="display: none"] {
+	display: none !important;
+}
 html:only-child > head + body div.typeWindows-2-g3UY.titleBar-1it3bQ.horizontalReverse-2QssvL.flex-3BkGQD.directionRowReverse-HZatnx.justifyStart-2Mwniq.alignStretch-Uwowzr > div.wordmark-2u86JB > * {
 	display: none !important;
 }
