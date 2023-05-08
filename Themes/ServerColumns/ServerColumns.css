@@ -7,6 +7,9 @@
 	--aligndms: 1;
 }
 
+.wrapper-1_HaEi[style*="width: 0px"] {
+	width: 0px !important;
+}
 .titleBar-1it3bQ.typeMacOS-3V4xXE,
 .titleBar-1it3bQ.typeMacOS-3V4xXE .macButtons-eIdy0e,
 .wrapper-1_HaEi,
